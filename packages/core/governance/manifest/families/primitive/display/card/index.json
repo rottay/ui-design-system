@@ -17436,7 +17436,7 @@
       "sourceBindings": [
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
         "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
-        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
         "packages/core/governance/manifest/controls/profiles/expressive/index.json"
       ],
       "stressCases": [

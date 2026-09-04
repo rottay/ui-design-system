@@ -13674,7 +13674,7 @@
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
         "packages/core/src/components/primitives/inputs/button",
         "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
-        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts"
       ]
     },
@@ -14759,7 +14759,7 @@
       "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
       "sourceBindings": [
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
         "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts",
         "packages/core/governance/manifest/controls/recipes/profile/index.json"

@@ -94,10 +94,7 @@ import {
   validateTenantThemeDocument,
 } from "@/infrastructure/compilers/composition/tenant-theme";
 import { brandThemeToTheme } from "@/foundation/contracts/composition/tenants/themes/iso";
-import {
-  compileBrandTheme,
-  compileTheme,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture, lowerTheme } from "@tests/support/theme-lowering";
 
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import { evntoBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/evnto";
@@ -2068,7 +2065,7 @@ const FLOORS: Readonly<Record<string, string>> = {
   "dark|--ds-color-white": "#ffffff",
 };
 
-const compiled = compileBrandTheme({
+const compiled = lowerBrandThemeFixture({
   brandTheme: rottayBrandTheme,
   tenantSlug: "rottay",
 });
@@ -2399,7 +2396,7 @@ describe("ROTTAY EXTENSION FOUNDATION DRAIN - both transports lower migrated nam
 
   const viaBrandTheme = flatten(compiled);
   const viaTheme = flatten(
-    compileTheme(brandThemeToTheme(rottayBrandTheme)) as never
+    lowerTheme(brandThemeToTheme(rottayBrandTheme)) as never
   );
 
   it.each(
@@ -2443,9 +2440,9 @@ describe("ROTTAY EXTENSION FOUNDATION DRAIN - both transports lower migrated nam
     "%s is unaffected by the widened shadow shape",
     (slug) => {
       const brandTheme = slug === "bithire" ? bithireBrandTheme : evntoBrandTheme;
-      const a = compileBrandTheme({ brandTheme, tenantSlug: slug })
+      const a = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug })
         .cssVariables as Record<string, string | undefined>;
-      const b = compileTheme(brandThemeToTheme(brandTheme))
+      const b = lowerTheme(brandThemeToTheme(brandTheme))
         .cssVariables as Record<string, string | undefined>;
       for (const name of [
         "--ds-shadow-xs",
@@ -2922,7 +2919,7 @@ describe("ROTTAY EXTENSION FOUNDATION DRAIN - the derivations are common, not ro
     ["bithire", bithireBrandTheme],
     ["evnto", evntoBrandTheme],
   ] as const)("%s derives its own primary/secondary rgb", (slug, theme) => {
-    const vars = compileBrandTheme({
+    const vars = lowerBrandThemeFixture({
       brandTheme: theme,
       tenantSlug: slug,
     }).cssVariables;
@@ -2938,7 +2935,7 @@ describe("ROTTAY EXTENSION FOUNDATION DRAIN - the derivations are common, not ro
     ] as const;
     const derived = themes.map(
       ([slug, theme]) =>
-        compileBrandTheme({ brandTheme: theme, tenantSlug: slug }).cssVariables[
+        lowerBrandThemeFixture({ brandTheme: theme, tenantSlug: slug }).cssVariables[
           "--ds-color-primary-rgb"
         ]
     );

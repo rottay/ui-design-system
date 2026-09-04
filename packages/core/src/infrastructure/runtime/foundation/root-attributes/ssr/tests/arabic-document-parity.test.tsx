@@ -30,7 +30,7 @@ import {
   evntoBrandTheme,
   rottayBrandTheme,
 } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import type { BrandTheme } from '@/foundation/contracts';
 import { resolveDocumentRootAttributes } from '..';
@@ -76,7 +76,7 @@ describe('arabic document: shipped font stacks', () => {
   it.each(FIRST_PARTY_THEMES)(
     'compiles %s with an Arabic-capable fallback on every text-bearing channel',
     (slug, brandTheme) => {
-      const { cssVariables } = compileBrandTheme({ brandTheme, tenantSlug: slug });
+      const { cssVariables } = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });
 
       for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
         const stack = cssVariables[channel];
@@ -117,7 +117,7 @@ describe('arabic document: shipped font stacks', () => {
       },
     };
 
-    const { cssVariables } = compileBrandTheme({ brandTheme: authored, tenantSlug: 'bithire' });
+    const { cssVariables } = lowerBrandThemeFixture({ brandTheme: authored, tenantSlug: 'bithire' });
     for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
       expect(cssVariables[channel]).toContain(MANDATORY_FONT_FALLBACK_FAMILY);
       // The author's own families keep priority; the tail is appended, not swapped in.

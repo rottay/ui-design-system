@@ -128,30 +128,70 @@ export {
  * The FIRST-PARTY STATIC ingress path, beside the tenant/DB one above.
  *
  * These are the two — and only two — ways a tenant's visual channels are
- * produced: a code-owned vertical compiles a `BrandTheme` here, and a customer
- * publishes a `TenantThemeDocument` compiled by `compileTenantThemeConfig`.
+ * produced: a code-owned vertical resolves its authored `Theme` and lowers it
+ * through `compileTheme` here, and a customer publishes a
+ * `TenantThemeDocument` compiled by `compileTenantThemeConfig`.
  * Both terminate in CSS the application mounts; no provider compiles anything.
  *
  * Exported because a consumer outside this package that mounts a first-party
  * theme's CSS itself — the showroom's probe surfaces are the live case — must
  * be able to reach the SAME compiler the committed artifacts are built from.
  * Without a public seam the alternative is a second, hand-rolled projection of
- * a BrandTheme, which is precisely the shape this checkpoint removed.
+ * a theme, which is precisely the shape this checkpoint removed. Emission
+ * travels with the lowering because scope is not compiled: one compile serves a
+ * document root, a DB artifact and a preview container.
  * `brandTenantSelector` travels with it because a consumer that re-scopes the
  * compiled output must not reconstruct the selector by hand.
  */
 export {
   brandModeSelector,
   brandTenantSelector,
-  compileBrandTheme,
+  themeModeSelector,
+} from '../../infrastructure/compilers/kernel/foundation/css/tenant-selectors';
+export {
+  THEME_ENGINE_ADAPTERS,
   compileTheme,
-} from '../../infrastructure/compilers/kernel/runtime/brand-theme';
+  containerScope,
+  emitThemeCss,
+  firstPartyScope,
+  resolveAdapter,
+  resolveTheme,
+  tenantArtifactScope,
+} from '../../infrastructure/compilers/runtime/theme';
+export type {
+  ControlId,
+  EmissionScope,
+  EngineAdapter,
+  EnginePosture,
+  EngineProjection,
+  EngineThemeCompilation,
+  ThemeCompilation,
+  ThemeCompilationModeBlock,
+  ThemeCompilationRuntime,
+  ThemeIntent,
+  ThemeIntentOrigin,
+  ThemeResolution,
+} from '../../infrastructure/compilers/runtime/theme';
 export type {
   Theme,
   ThemePatch,
   ThemePatchEnvelope,
   Governed,
 } from '../../foundation/contracts/composition/tenants/themes/iso';
+/**
+ * The AUTHORING lift, not a lowering door: it wraps an authored `BrandTheme`'s
+ * governed families so the theme can reach `resolveTheme`. A consumer outside
+ * this package that holds an authored theme needs it; without it the only route
+ * is a hand-rolled lift, which is the second authority this checkpoint removed.
+ *
+ * It is the WRAP-ONLY lift on purpose. The ISO bridge also normalizes — it
+ * materializes every declared palette key and completes the chrome shape — which
+ * is right for a first-party theme that is already total and wrong for a partial
+ * one: a probe fixture that authors no `capabilities` cannot survive the
+ * normalizer, and a sparse draft lifted through it would compile channels its
+ * author never wrote.
+ */
+export { liftAuthoredTheme } from '../../infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 export type {
   NormalizedTenantThemeAppearance,
   TenantThemeAdvancedAppearance,

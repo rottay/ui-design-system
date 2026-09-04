@@ -35,11 +35,9 @@ import { describe, expect, it } from "vitest";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { contrastRatio, parseHex } from "@/foundation/kernel/color/contrast";
 
-import {
-  compileBrandTheme,
-  deriveStatusTintFloor,
-  STATUS_SEED_SHADOWING_FIELDS,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { deriveStatusTintFloor } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
+import { STATUS_SEED_SHADOWING_FIELDS } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import { evntoBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/evnto";
 
@@ -105,7 +103,7 @@ function withPaletteField(
 }
 
 function compile(theme: BrandTheme, slug: string) {
-  return compileBrandTheme({ brandTheme: theme, tenantSlug: slug });
+  return lowerBrandThemeFixture({ brandTheme: theme, tenantSlug: slug });
 }
 
 // BitHire light authors a seed for all four tones (blue success `#327CA8`)

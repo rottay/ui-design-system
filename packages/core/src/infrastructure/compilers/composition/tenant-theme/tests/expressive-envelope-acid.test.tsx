@@ -21,7 +21,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type {
@@ -94,7 +94,7 @@ function compileManagementArtifact() {
 }
 
 function compileBithireStatic(): Record<string, string> {
-  return compileBrandTheme({
+  return lowerBrandThemeFixture({
     brandTheme: bithireBrandTheme,
     tenantSlug: 'bithire',
   }).cssVariables;
@@ -274,7 +274,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // solely on `--ds-material-canvas-texture`, which is frozen the same way.
     //
     // WHY THEY ARE FROZEN. A profile's CSS-only recipe is merged inside
-    // `compileTheme` at `compilers/kernel/runtime/brand-theme/index.ts` by
+    // `compileTheme` at `compilers/runtime/theme/runtime/lowering/index.ts` by
     // `Object.assign(vars, expansion.variables)`, deliberately BELOW every
     // authored field write, so an explicitly authored channel beats a
     // profile-derived one. By the time that runs, the tenant document has
@@ -369,7 +369,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
         experienceProfile: 'rottay/management-editorial@1',
       },
     };
-    const staticCompiled = compileBrandTheme({
+    const staticCompiled = lowerBrandThemeFixture({
       brandTheme: staticTheme,
       tenantSlug: 'management-static-parity',
     });
@@ -457,7 +457,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
   it('rolls back to baseline identity when the selection is unset (static path)', () => {
     const stripped = structuredClone(bithireBrandTheme);
     delete (stripped as { expressive?: unknown }).expressive;
-    const vars = compileBrandTheme({
+    const vars = lowerBrandThemeFixture({
       brandTheme: stripped,
       tenantSlug: 'bithire',
     }).cssVariables;

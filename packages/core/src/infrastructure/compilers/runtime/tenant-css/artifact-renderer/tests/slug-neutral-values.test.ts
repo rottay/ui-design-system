@@ -1,8 +1,8 @@
 /**
  * SLUG-NEUTRAL COMPILER — the slug picks a SELECTOR, never a value.
  *
- * `kernel/runtime/brand-theme/tests/no-vertical-branch.test.ts` already pins
- * this property for `compileBrandTheme`: one theme compiles to the same
+ * `runtime/theme/runtime/lowering/tests/no-vertical-branch.test.ts` already pins
+ * this property for `compileTheme`: one theme compiles to the same
  * channels under every slug, swapping two verticals swaps their output
  * exactly, and the compiler source names no vertical outside comments. What it
  * does NOT reach is everything downstream of the channel map — the artifact
@@ -18,10 +18,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import {
-  brandModeSelector,
-  compileBrandTheme,
-} from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { brandModeSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { projectFirstPartyArtifactScopes } from '@/infrastructure/compilers/kernel/foundation/css/scope-projection';
 import {
   compileTenantThemeConfig,
@@ -56,7 +54,7 @@ function render(
   brandTheme: BrandTheme,
   tenant: { slug: string; verticalKey: string }
 ): string {
-  const compiled = compileBrandTheme({ brandTheme, tenantSlug: tenant.slug });
+  const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: tenant.slug });
   return renderVerticalArtifact({
     tenantSlug: tenant.slug,
     verticalKey: tenant.verticalKey,
@@ -121,7 +119,7 @@ describe('SLUG-NEUTRAL · the rendered artifact carries no slug-dependent value'
   });
 
   it('the slug reaches mode blocks only through brandModeSelector', () => {
-    const compiled = compileBrandTheme({
+    const compiled = lowerBrandThemeFixture({
       brandTheme: rottayBrandTheme,
       tenantSlug: ALPHA.slug,
     });
@@ -204,7 +202,7 @@ describe('SLUG-NEUTRAL · drill', () => {
       brandTheme: BrandTheme,
       tenant: { slug: string; verticalKey: string }
     ) => {
-      const compiled = compileBrandTheme({ brandTheme, tenantSlug: tenant.slug });
+      const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: tenant.slug });
       const cssVariables = {
         ...compiled.cssVariables,
         // The failure mode verbatim: one vertical gets a different ground.

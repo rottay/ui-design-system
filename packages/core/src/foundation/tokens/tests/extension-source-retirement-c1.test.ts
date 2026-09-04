@@ -17,10 +17,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import {
-  compileBrandTheme,
-  compileTheme,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture, lowerTheme } from "@tests/support/theme-lowering";
 
 import { bithireBrandTheme } from "../ts/presentation/brand-themes/bithire";
 import { evntoBrandTheme } from "../ts/presentation/brand-themes/evnto";
@@ -378,7 +375,7 @@ describe("C1 targets stay retired on the compiled surface", () => {
   // stylesheet) was excised with the corpus; the compiled half below is the
   // load-bearing one — it pins the exact percentages C1 preserved.
   it("shadowed premium-card duplicates keep the later winning values", () => {
-    const compiled = compileTheme(FIRST_PARTY_THEMES.bithire).cssVariables;
+    const compiled = lowerTheme(FIRST_PARTY_THEMES.bithire).cssVariables;
     expect(compiled["--ds-premium-card-border"]).toContain("12%");
     expect(compiled["--ds-premium-card-border-hover"]).toContain("28%");
     expect(compiled["--ds-premium-card-selected-border"]).toContain("46%");
@@ -526,7 +523,7 @@ describe("C3-c control algebra is Theme-owned for static and DB compilation", ()
 
   it("the common compiler emits every semantic control channel for all verticals", () => {
     for (const theme of Object.values(FIRST_PARTY_THEMES)) {
-      const compiled = compileTheme(theme);
+      const compiled = lowerTheme(theme);
       for (const channel of C3_CONTROL_CHANNELS) {
         expect(compiled.cssVariables[channel], `${theme.id} ${channel}`).toBe(
           theme.chrome.controls?.semantic?.[
@@ -538,7 +535,7 @@ describe("C3-c control algebra is Theme-owned for static and DB compilation", ()
   });
 
   it("BitHire preserves the exact control algebra formerly authored by extension.css", () => {
-    const semantic = compileTheme(FIRST_PARTY_THEMES.bithire).cssVariables;
+    const semantic = lowerTheme(FIRST_PARTY_THEMES.bithire).cssVariables;
     expect(semantic["--ds-control-ink"]).toBe("var(--ds-color-text-primary)");
     expect(semantic["--ds-control-surface"]).toBe("var(--ds-surface-card)");
     expect(semantic["--ds-control-surface-raised"]).toBe(
@@ -589,7 +586,7 @@ describe("exact-name deletion does not harm near-name siblings", () => {
    */
   it("bithire keeps expected homonym siblings on the compiled surface", () => {
     // The `declared === 0` stylesheet half was excised with the corpus (G2).
-    const compiled = compileTheme(FIRST_PARTY_THEMES.bithire).cssVariables;
+    const compiled = lowerTheme(FIRST_PARTY_THEMES.bithire).cssVariables;
     for (const name of [
       "--ds-premium-card-bg", // near the removed duplicate border set
       "--ds-detail-hero-spine", // near --ds-detail-radius
@@ -622,11 +619,11 @@ describe("exact-name deletion does not harm near-name siblings", () => {
   it("rottay keeps the migrated shadow homonyms on the compiled surface", () => {
     // The `declared` stylesheet set was excised with the corpus (G2); the
     // two-transport equality below is the half that was always load-bearing.
-    const viaBrandTheme = compileBrandTheme({
+    const viaBrandTheme = lowerBrandThemeFixture({
       brandTheme: rottayBrandTheme,
       tenantSlug: "rottay",
     }).cssVariables;
-    const viaTheme = compileTheme(FIRST_PARTY_THEMES.rottay).cssVariables;
+    const viaTheme = lowerTheme(FIRST_PARTY_THEMES.rottay).cssVariables;
 
     for (const name of [
       "--ds-shadow-xs", // near --ds-shadow-primary
@@ -676,11 +673,11 @@ describe("exact-name deletion does not harm near-name siblings", () => {
       return { ...result.cssVariables, ...(block?.cssVariables ?? {}) };
     };
 
-    const staticTransport = compileBrandTheme({
+    const staticTransport = lowerBrandThemeFixture({
       brandTheme: evntoBrandTheme,
       tenantSlug: "evnto",
     });
-    const dbTransport = compileTheme(FIRST_PARTY_THEMES.evnto);
+    const dbTransport = lowerTheme(FIRST_PARTY_THEMES.evnto);
 
     const expected: Record<string, string> = {
       "--ds-button-primary-hover-bg": "#F0F0E8",

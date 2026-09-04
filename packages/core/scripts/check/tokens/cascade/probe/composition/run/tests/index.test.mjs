@@ -303,10 +303,16 @@ test('positive control: the two ingress doors are compared on ONE scene', () => 
     result.arms['db-tenant-theme'].provenance.exportName,
     'the doors must be lowered by different compilers or the comparison is vacuous',
   );
-  assert.notEqual(
-    result.arms['static-brand-theme'].provenance.module,
-    result.arms['db-tenant-theme'].provenance.module,
-  );
+  /* The MODULE is deliberately no longer required to differ. C2 moved the
+   * static arm off a deep `kernel/runtime/brand-theme` path and onto the
+   * published `@rottay/design-system/server` entrypoint the DB arm already
+   * used -- one package surface, not one compiler. Sharing an entrypoint is
+   * what a published API looks like; sharing an EXPORT is what would make the
+   * comparison vacuous, and that is the assertion above. Both arms must still
+   * name a PUBLISHED module, which is the property the deep path never had. */
+  for (const arm of ['static-brand-theme', 'db-tenant-theme']) {
+    assert.equal(result.arms[arm].provenance.module, 'dist/server.js', arm);
+  }
   assert.match(result.ingressEquivalence.meaning, /same DOM/);
 });
 

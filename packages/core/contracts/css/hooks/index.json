@@ -9,8 +9,8 @@
     },
     {
       "id": "brand-theme-emitter",
-      "path": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-      "describes": "canonical static BrandTheme compiler (palette, typography, material, motion and chrome root channels)"
+      "path": "src/infrastructure/compilers/runtime/theme/runtime/lowering",
+      "describes": "canonical theme lowering (palette, typography, material, motion and chrome root channels)"
     },
     {
       "id": "appearance-emitter",
@@ -52,10 +52,10 @@
     "valueConstraint": "an assignment to a promoted hook must chain through DS/tenant tokens; a raw colour literal would pin brand paint an application user cannot re-theme"
   },
   "counts": {
-    "tenantChannel": 2189,
-    "compilerConcreteEmissions": 2249,
+    "tenantChannel": 2191,
+    "compilerConcreteEmissions": 2251,
     "compilerEmissionPatterns": 14,
-    "themeContractFiles": 41,
+    "themeContractFiles": 43,
     "ambiguousThemeContractTypes": 0,
     "unresolvedCompilerEmissions": 0,
     "interpolatedFamilies": 71,
@@ -8596,6 +8596,7 @@
     "--ds-elevation-5",
     "--ds-empty-description-color",
     "--ds-empty-icon-color",
+    "--ds-experience-profile",
     "--ds-filter-pill-active-bg",
     "--ds-filter-pill-active-border",
     "--ds-filter-pill-active-color",
@@ -9137,6 +9138,7 @@
     "--ds-radius-sm-base",
     "--ds-radius-xl-base",
     "--ds-rate-color",
+    "--ds-recipe-profile",
     "--ds-result-icon-color",
     "--ds-result-subtitle-color",
     "--ds-result-title-color",

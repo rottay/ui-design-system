@@ -31,10 +31,71 @@ import { existsSync, readFileSync } from 'node:fs';
 
 export const CHROME_VARIABLES = 'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts';
 export const APPEARANCE = 'packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts';
-export const BRAND_THEME = 'packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts';
-export const TENANT_THEME = 'packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts';
+/**
+ * The theme lowering's channel writers: one owner per concern, so a template is
+ * attributed to the writer that actually emits it rather than to whichever file
+ * the compiler happened to be collapsed into.
+ */
+const LOWERING = 'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering';
+export const LOWERING_FOUNDATION_CHROME = `${LOWERING}/foundation/chrome/index.ts`;
+export const LOWERING_FOUNDATION_FLOORS = `${LOWERING}/foundation/floors/index.ts`;
+export const LOWERING_FOUNDATION_GROUND = `${LOWERING}/foundation/ground/index.ts`;
+export const LOWERING_FOUNDATION_INTAKE = `${LOWERING}/foundation/intake/index.ts`;
+export const LOWERING_FOUNDATION_MATERIALS = `${LOWERING}/foundation/materials/index.ts`;
+export const LOWERING_FOUNDATION_MODE_OVERLAY = `${LOWERING}/foundation/mode-overlay/index.ts`;
+export const LOWERING_FOUNDATION_MOTION = `${LOWERING}/foundation/motion/index.ts`;
+export const LOWERING_FOUNDATION_PALETTE = `${LOWERING}/foundation/palette/index.ts`;
+export const LOWERING_FOUNDATION_PERSONALITY = `${LOWERING}/foundation/personality/index.ts`;
+export const LOWERING_FOUNDATION_RAMPS = `${LOWERING}/foundation/ramps/index.ts`;
+export const LOWERING_FOUNDATION_SEEDS = `${LOWERING}/foundation/seeds/index.ts`;
+export const LOWERING_FOUNDATION_SHAPE = `${LOWERING}/foundation/shape/index.ts`;
+export const LOWERING_FOUNDATION_SIDEBAR = `${LOWERING}/foundation/sidebar/index.ts`;
+export const LOWERING_FOUNDATION_TINT = `${LOWERING}/foundation/tint/index.ts`;
+export const LOWERING_FOUNDATION_TYPE_RAMP = `${LOWERING}/foundation/type-ramp/index.ts`;
+export const LOWERING_FOUNDATION_TYPOGRAPHY = `${LOWERING}/foundation/typography/index.ts`;
+export const LOWERING_RUNTIME_MODE_BLOCKS = `${LOWERING}/runtime/mode-blocks/index.ts`;
+export const LOWERING_RUNTIME_VARIABLES = `${LOWERING}/runtime/variables/index.ts`;
+export const LOWERING_ORCHESTRATION = `${LOWERING}/index.ts`;
 
-export const REACH_SOURCES = Object.freeze([CHROME_VARIABLES, APPEARANCE, BRAND_THEME, TENANT_THEME]);
+/**
+ * The lowering's canonical single owner, kept under its historical name.
+ *
+ * `scripts/check/modern-rescue/**` is a protected tree and one of its readers
+ * imports this binding by name. The name now points at the owner the C2
+ * remediation designates as canonical -- the channel assembly -- rather than at
+ * a compiler file that no longer exists. Readers that need the whole lowering
+ * take `LOWERING_SOURCES`; this one is the single-owner spelling.
+ */
+export const BRAND_THEME = LOWERING_RUNTIME_VARIABLES;
+export const TENANT_THEME = 'packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts';
+export const LOWERING_SOURCES = Object.freeze([
+  LOWERING_FOUNDATION_CHROME,
+  LOWERING_FOUNDATION_FLOORS,
+  LOWERING_FOUNDATION_GROUND,
+  LOWERING_FOUNDATION_INTAKE,
+  LOWERING_FOUNDATION_MATERIALS,
+  LOWERING_FOUNDATION_MODE_OVERLAY,
+  LOWERING_FOUNDATION_MOTION,
+  LOWERING_FOUNDATION_PALETTE,
+  LOWERING_FOUNDATION_PERSONALITY,
+  LOWERING_FOUNDATION_RAMPS,
+  LOWERING_FOUNDATION_SEEDS,
+  LOWERING_FOUNDATION_SHAPE,
+  LOWERING_FOUNDATION_SIDEBAR,
+  LOWERING_FOUNDATION_TINT,
+  LOWERING_FOUNDATION_TYPE_RAMP,
+  LOWERING_FOUNDATION_TYPOGRAPHY,
+  LOWERING_RUNTIME_MODE_BLOCKS,
+  LOWERING_RUNTIME_VARIABLES,
+  LOWERING_ORCHESTRATION,
+]);
+
+export const REACH_SOURCES = Object.freeze([
+  CHROME_VARIABLES,
+  APPEARANCE,
+  ...LOWERING_SOURCES,
+  TENANT_THEME,
+]);
 
 const read = (root, path) => readFileSync(`${root}/${path}`, 'utf8');
 
@@ -242,10 +303,10 @@ export function overrideTokens(root) {
 const CONSTANT_SOURCES = Object.freeze([
   CHROME_VARIABLES,
   APPEARANCE,
-  BRAND_THEME,
+  ...LOWERING_SOURCES,
   TENANT_THEME,
   'packages/core/src/foundation/kernel/color/oklch/ramp/index.ts',
-  // ON_TONE_ROLES: deriveStatusTintFloor (BRAND_THEME) iterates it but does not
+  // ON_TONE_ROLES: deriveStatusTintFloor (the palette writer) iterates it but does not
   // declare it -- the vocabulary lives beside the readable-ink contract it was
   // authored for, not beside this second, later emitter.
   'packages/core/src/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink/index.ts',
@@ -371,21 +432,21 @@ export function buildEnumerators(root) {
     callSiteEnumerator('premium-card', 'setPremiumCardVars', [1], ['namespace'], 'premium card namespaces'),
     callSiteEnumerator('button-variant', 'setButtonVariantVars', [1], ['prefix'], 'button variants'),
     callSiteEnumerator('button-hover-alias', 'setLegacyButtonHoverBgAlias', [1], ['prefix'], 'button hover aliases'),
-    // The tint ramps bind their scale by PARAMETER, and they live in
-    // brand-theme rather than chrome-variables.
-    callSiteEnumerator('tint-ramp', 'setTintRampVariables', [1], ['scale'], 'tint ramp scales', BRAND_THEME),
+    // The tint ramps bind their scale by PARAMETER, and they live in the
+    // lowering's tint writer rather than chrome-variables.
+    callSiteEnumerator('tint-ramp', 'setTintRampVariables', [1], ['scale'], 'tint ramp scales', LOWERING_FOUNDATION_TINT),
   ];
 
   // Everything else binds its values in a loop inside its own body.
   const loopEmitters = [
     [APPEARANCE, 'deriveAppearanceColorRamps', 'appearance colour ramps'],
     [APPEARANCE, 'appearanceToVariables', 'appearance font-family keys and chart series'],
-    [BRAND_THEME, 'deriveTenantColorRamps', 'brand colour ramps'],
-    [BRAND_THEME, 'brandThemeToCssVariables', 'brand chart colors'],
-    [BRAND_THEME, 'semanticSurfaceRolesToCssVariables', 'semantic material roles'],
-    [BRAND_THEME, 'setTypeRampVariables', 'the type ramp'],
-    [BRAND_THEME, 'setSemanticTypographyVariables', 'semantic typography roles'],
-    [BRAND_THEME, 'deriveStatusTintFloor', 'status tint floor bg/border/alpha'],
+    [LOWERING_FOUNDATION_RAMPS, 'deriveTenantColorRamps', 'brand colour ramps'],
+    [LOWERING_RUNTIME_VARIABLES, 'brandThemeToCssVariables', 'brand chart colors'],
+    [LOWERING_FOUNDATION_MATERIALS, 'semanticSurfaceRolesToCssVariables', 'semantic material roles'],
+    [LOWERING_FOUNDATION_TYPE_RAMP, 'setTypeRampVariables', 'the type ramp'],
+    [LOWERING_FOUNDATION_TYPOGRAPHY, 'setSemanticTypographyVariables', 'semantic typography roles'],
+    [LOWERING_FOUNDATION_PALETTE, 'deriveStatusTintFloor', 'status tint floor bg/border/alpha'],
     [CHROME_VARIABLES, 'chromeToVariables', 'button geometry sizes'],
   ];
 
@@ -478,7 +539,7 @@ export function tenantReach({ root }) {
   const unattributed = [];
   const perEnumerator = new Map();
 
-  for (const path of [CHROME_VARIABLES, APPEARANCE, BRAND_THEME]) {
+  for (const path of [CHROME_VARIABLES, APPEARANCE, ...LOWERING_SOURCES]) {
     const source = read(root, path);
     const bodies = new Map(functionBodies(source).map((fn) => [fn.name, fn.body]));
     for (const emission of templateEmissions(source)) {

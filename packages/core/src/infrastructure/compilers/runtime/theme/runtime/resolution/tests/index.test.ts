@@ -13,11 +13,17 @@ import {
   isTenantAuthoredOrigin,
   TENANT_AUTHORED_ORIGINS,
 } from "@/foundation/contracts/composition/tenants/themes/intent";
+import { ENGINE_NAMES } from "@/foundation/contracts/kernel/engine-identity";
 import type { ThemePatch } from "@/foundation/contracts/composition/tenants/themes/iso";
 import {
   collectPatchAuthoredPaths,
-  resolveTheme as isoResolveTheme,
+  mergeThemePatches,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { BRAND_CAPABILITY_ABSENCE_REASONS } from "@/foundation/contracts/composition/tenants/themes/iso/capability-absence";
+import {
+  themeLeafKinds,
+  themeLeafOptions,
+} from "@/foundation/contracts/composition/tenants/themes/iso/schema";
 import {
   deriveTenantStatusSeedAuthorship,
   EMPTY_PROVENANCE,
@@ -31,7 +37,7 @@ const baseline = FIRST_PARTY_THEMES.rottay;
 
 const patch: ThemePatch = {
   palette: { primaryColor: "#123456", successColor: "#0a0" },
-  surfaces: { density: "compact", elevation: "lifted" },
+  surfaces: { density: "compact", elevation: "elevated" },
 } as unknown as ThemePatch;
 
 const intentOf = (origin: ThemeIntentOrigin): ThemeIntent => ({ origin, patch });
@@ -73,7 +79,7 @@ describe("resolveTheme applies every origin's patch to the baseline", () => {
   for (const origin of ORIGINS) {
     it(`${origin} merges through the ISO resolver and changes the theme`, () => {
       const resolution = resolveTheme(baseline, intentOf(origin));
-      expect(resolution.theme).toEqual(isoResolveTheme(baseline, patch));
+      expect(resolution.theme).toEqual(mergeThemePatches(baseline, patch));
       expect(resolution.theme).not.toBe(baseline);
       expect(resolution.theme).not.toEqual(baseline);
     });
@@ -144,5 +150,670 @@ describe("a tenant-authored origin overlays with full provenance", () => {
     expect(preview.floors).toEqual(document.floors);
     expect(preview.statusSeedAuthorship).toEqual(document.statusSeedAuthorship);
     expect([...preview.authoredPaths].sort()).toEqual([...document.authoredPaths].sort());
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* the public boundary fails closed on hostile input                          */
+/* -------------------------------------------------------------------------- */
+
+describe("resolveTheme refuses an intent it cannot trust", () => {
+  const hostileBaseline = FIRST_PARTY_THEMES.bithire;
+
+  // A JS caller never saw the type. Every value below reached
+  // `isTenantAuthoredOrigin`, which answers `false` for anything it does not
+  // recognise -- so a bogus origin used to resolve SILENTLY as "not a tenant"
+  // rather than failing, which is the difference between a refused document and
+  // a customer's overlay quietly compiling with no authorship.
+  const bogusOrigins: readonly unknown[] = [
+    "tenant",
+    "TENANT-DOCUMENT",
+    "",
+    null,
+    undefined,
+    0,
+    1,
+    NaN,
+    true,
+    { origin: "tenant-document" },
+    ["tenant-document"],
+    Symbol("tenant-document"),
+  ];
+
+  for (const origin of bogusOrigins) {
+    it(`refuses origin ${String(typeof origin)} ${JSON.stringify(origin) ?? String(origin)}`, () => {
+      expect(() =>
+        resolveTheme(hostileBaseline, { origin, patch: {} } as never)
+      ).toThrow(/unknown intent origin/u);
+    });
+  }
+
+  it("refuses an intent that is not an object", () => {
+    for (const intent of [null, 1, "tenant-document", [] as never]) {
+      expect(() => resolveTheme(hostileBaseline, intent as never)).toThrow();
+    }
+  });
+
+  it("refuses a patch that is not an object", () => {
+    for (const patch of [null, 1, "x", [] as never]) {
+      expect(() =>
+        resolveTheme(hostileBaseline, { origin: "tenant-document", patch } as never)
+      ).toThrow(/intent\.patch must be an object/u);
+    }
+  });
+
+  it("accepts every origin in the closed union, and only those", () => {
+    for (const origin of ["static-vertical", "tenant-document", "preview"] as const) {
+      expect(() => resolveTheme(hostileBaseline, { origin, patch: {} })).not.toThrow();
+    }
+  });
+});
+
+describe("mergeThemePatches refuses the prototype chain", () => {
+  const hostileBaseline = FIRST_PARTY_THEMES.bithire;
+
+  // `key in baseObj` walked the prototype chain, so every one of these answered
+  // "known key" and was merged into a Theme that declares none of them.
+  const inherited = [
+    "constructor",
+    "toString",
+    "valueOf",
+    "hasOwnProperty",
+    "isPrototypeOf",
+    "propertyIsEnumerable",
+    "toLocaleString",
+  ];
+
+  for (const key of inherited) {
+    it(`refuses the inherited key "${key}"`, () => {
+      expect(() =>
+        mergeThemePatches(hostileBaseline, { [key]: "x" } as never)
+      ).toThrow(/unknown key/u);
+    });
+  }
+
+  it("refuses __proto__ even when it arrives as an own key from JSON", () => {
+    const patch = JSON.parse('{"__proto__": {"polluted": true}}');
+    expect(Object.prototype.hasOwnProperty.call(patch, "__proto__")).toBe(true);
+    expect(() => mergeThemePatches(hostileBaseline, patch as never)).toThrow(
+      /unknown key|forbidden key/u
+    );
+    expect(({} as Record<string, unknown>).polluted).toBeUndefined();
+  });
+
+  it("still accepts a real declared key, so the guard is not refusing everything", () => {
+    const merged = mergeThemePatches(hostileBaseline, {
+      palette: { primaryColor: "#123456" },
+    } as never);
+    expect(merged.palette.primaryColor).toBe("#123456");
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* the merge boundary refuses a node whose KIND the Theme does not declare     */
+/* -------------------------------------------------------------------------- */
+
+describe("mergeThemePatches refuses a mis-kinded patch node", () => {
+  const hostileBaseline = FIRST_PARTY_THEMES.bithire;
+  const merge = (patch: unknown) =>
+    mergeThemePatches(hostileBaseline, patch as never);
+  const resolve = (patch: unknown) =>
+    resolveTheme(hostileBaseline, {
+      origin: "tenant-document",
+      patch: patch as never,
+    });
+
+  // The baseline actually declares these, which is what makes the mismatch a
+  // mismatch rather than an undecidable leaf: where the base leaf is
+  // `undefined` the Theme states no kind and the merge cannot decide, so the
+  // attacks below all target a leaf the baseline really carries.
+  it("the baseline declares the leaves these attacks target", () => {
+    expect(typeof hostileBaseline.palette.primaryColor).toBe("string");
+    expect(hostileBaseline.palette).toBeTypeOf("object");
+    expect(hostileBaseline.motion).toBeTypeOf("object");
+  });
+
+  /* ---- wrong primitive on a declared string leaf ------------------------- */
+
+  const wrongPrimitives: readonly [string, unknown][] = [
+    ["number", 16],
+    ["boolean", true],
+    ["null", null],
+  ];
+
+  for (const [kind, value] of wrongPrimitives) {
+    it(`refuses a ${kind} on palette.primaryColor`, () => {
+      expect(() => merge({ palette: { primaryColor: value } })).toThrow(
+        /expected string at \$\.palette\.primaryColor|is not a ThemePatch leaf/u
+      );
+      expect(() => resolve({ palette: { primaryColor: value } })).toThrow();
+    });
+  }
+
+  it("refuses a function on a declared leaf", () => {
+    expect(() => merge({ palette: { primaryColor: () => "#fff" } })).toThrow(
+      /is not a ThemePatch leaf/u
+    );
+  });
+
+  // Refused on the leaf's own kind, before the base is consulted: `NaN` is a
+  // `number` and would otherwise agree with a declared numeric leaf.
+  it("refuses a non-finite number anywhere", () => {
+    expect(() => merge({ typography: { scale: NaN } })).toThrow(
+      /non-finite number/u
+    );
+    expect(() => merge({ typography: { scale: Infinity } })).toThrow(
+      /non-finite number/u
+    );
+    expect(() => merge({ typography: { scale: 1.05 } })).not.toThrow();
+  });
+
+  it("still accepts the RIGHT primitive on the same leaves", () => {
+    const merged = merge({
+      palette: { primaryColor: "#123456" },
+      surfaces: { density: "compact" },
+    });
+    expect(merged.palette.primaryColor).toBe("#123456");
+    expect(merged.surfaces.density).toBe("compact");
+  });
+
+  /* ---- arrays: the one node kind that replaces a container wholesale ------ */
+
+  it("refuses an array as the top-level patch", () => {
+    expect(() => merge([])).toThrow(/is not an object/u);
+    expect(() => merge([{ palette: { primaryColor: "#fff" } }])).toThrow(
+      /is not an object/u
+    );
+  });
+
+  it("refuses an array where an object family is declared", () => {
+    expect(() => merge({ palette: [] })).toThrow(
+      /expected object at \$\.palette, received array/u
+    );
+    expect(() => merge({ motion: ["fast"] })).toThrow(
+      /expected object at \$\.motion, received array/u
+    );
+  });
+
+  it("refuses an array where a scalar leaf is declared", () => {
+    expect(() => merge({ palette: { primaryColor: ["#fff"] } })).toThrow(
+      /expected string at \$\.palette\.primaryColor, received array/u
+    );
+  });
+
+  it("refuses an object element inside an array patch", () => {
+    expect(() =>
+      merge({ charts: { value: { categoryColors: [{ hex: "#fff" }] } } })
+    ).toThrow(/object element at .*\[0\]/u);
+  });
+
+  /* ---- governed dispositions --------------------------------------------- */
+
+  const bogusDispositions: readonly unknown[] = [
+    "disabled",
+    "inactive",
+    "NOT-AUTHORED",
+    "",
+    null,
+    0,
+    true,
+    ["not-authored"],
+    { reason: "not-authored" },
+  ];
+
+  for (const disposition of bogusDispositions) {
+    it(`refuses the invented disposition ${JSON.stringify(disposition) ?? String(disposition)}`, () => {
+      // An unknown disposition is not inert: every reader asks only whether it
+      // is `undefined`, so a typo DISABLES the family instead of being ignored.
+      expect(() => merge({ motion: { disposition } })).toThrow(
+        /unknown disposition/u
+      );
+      expect(() => resolve({ motion: { disposition } })).toThrow(
+        /unknown disposition/u
+      );
+    });
+  }
+
+  it("accepts every disposition in the closed vocabulary, and undefined", () => {
+    for (const disposition of BRAND_CAPABILITY_ABSENCE_REASONS) {
+      const merged = merge({ motion: { disposition } });
+      expect(merged.motion.disposition).toBe(disposition);
+    }
+    expect(() => merge({ motion: { disposition: undefined } })).not.toThrow();
+  });
+
+  it("supplying a governed value with no disposition still activates the slot", () => {
+    const merged = merge({ recipes: { value: { profile: "sharp" } } });
+    expect(merged.recipes.disposition).toBeUndefined();
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* the boundary refuses what the BASELINE alone could never decide            */
+/* -------------------------------------------------------------------------- */
+
+describe("the declaration decides, not the baseline sample", () => {
+  const hostileBaseline = FIRST_PARTY_THEMES.bithire;
+  const merge = (patch: unknown) => mergeThemePatches(hostileBaseline, patch as never);
+
+  it("refuses a boolean on an OPTIONAL string the baseline leaves undefined", () => {
+    // The exact hole a baseline-as-schema leaves: nothing to compare against.
+    expect(hostileBaseline.palette.successBgColor).toBeUndefined();
+    expect(() => merge({ palette: { successBgColor: true } })).toThrow(
+      /expected string at \$\.palette\.successBgColor/u
+    );
+    expect(() => merge({ palette: { successBgColor: 1 } })).toThrow(/expected string/u);
+    expect(() => merge({ palette: { successBgColor: "#0a0" } })).not.toThrow();
+  });
+
+  it("types the elements of an EMPTY array from the declaration", () => {
+    const charts = hostileBaseline.charts.value as { categoryColors?: readonly unknown[] };
+    expect(charts.categoryColors ?? []).toHaveLength(0);
+    expect(() =>
+      merge({ charts: { value: { categoryColors: ["#111111", "#222222"] } } })
+    ).not.toThrow();
+    expect(() =>
+      merge({ charts: { value: { categoryColors: ["#111111", 2] } } })
+    ).toThrow(/expected string at \$\.charts\.value\.categoryColors\[1\]/u);
+    expect(() => merge({ charts: { value: { categoryColors: [true] } } })).toThrow(
+      /expected string/u
+    );
+  });
+
+  it("an opaque leaf refuses no KIND, and the bridge is keyed by the roster", () => {
+    // `engineBridge` is the one place the contract declares `unknown`, so the
+    // schema refuses no kind there. Its dictionary is declared
+    // `Partial<Record<EngineName, ...>>` -- an OPEN dictionary whose legal keys
+    // are the engine roster, not the `{}` the baseline happens to hold.
+    expect(themeLeafKinds("$.engineBridge.value.modern.anything")).toBeNull();
+    expect(() =>
+      merge({ engineBridge: { value: { modern: { anything: 12 } } } })
+    ).not.toThrow();
+    expect(() =>
+      merge({ engineBridge: { value: { potato: { anything: 12 } } } })
+    ).toThrow(/unknown engine "potato"/u);
+  });
+});
+
+describe("resolveTheme refuses a baseline that is not a Theme", () => {
+  const patch = { palette: { primaryColor: "#123456" } } as unknown as ThemePatch;
+
+  // Each of these used to come back as a "resolved theme" on the no-intent
+  // fast path, which never looked at the baseline at all.
+  const bogusBaselines: readonly [string, unknown][] = [
+    ["null", null],
+    ["undefined", undefined],
+    ["an array", []],
+    ["a string", "bithire"],
+    ["an empty object", {}],
+    ["id-only", { id: "bithire" }],
+    ["an empty id", { id: "", palette: {} }],
+    ["a non-string id", { id: 7, palette: {} }],
+  ];
+
+  for (const [label, baseline] of bogusBaselines) {
+    it(`refuses ${label} with no intent`, () => {
+      expect(() => resolveTheme(baseline as never)).toThrow(
+        /resolveTheme: baseline/u
+      );
+    });
+    it(`refuses ${label} with an intent`, () => {
+      expect(() =>
+        resolveTheme(baseline as never, { origin: "tenant-document", patch })
+      ).toThrow(/resolveTheme: baseline/u);
+    });
+  }
+
+  it("accepts a total Theme on both paths", () => {
+    expect(() => resolveTheme(FIRST_PARTY_THEMES.bithire)).not.toThrow();
+    expect(() =>
+      resolveTheme(FIRST_PARTY_THEMES.bithire, { origin: "tenant-document", patch })
+    ).not.toThrow();
+  });
+
+  it("accepts the SPARSE authored draft the editors resolve", () => {
+    // Totality is deliberately not the test: `liftAuthoredTheme` carries a
+    // partially-authored draft to the compiler unchanged, and the brand studio
+    // and the tenant preview both resolve exactly that.
+    expect(() =>
+      resolveTheme({ id: "draft", palette: { primaryColor: "#123456" } } as never)
+    ).not.toThrow();
+  });
+});
+
+describe("the ThemeIntent envelope is exact and own-keyed", () => {
+  const baselineTheme = FIRST_PARTY_THEMES.bithire;
+
+  it("refuses an intent whose origin/patch are INHERITED", () => {
+    const inherited = Object.create({
+      origin: "tenant-document",
+      patch: { palette: { primaryColor: "#123456" } },
+    }) as never;
+    expect(() => resolveTheme(baselineTheme, inherited)).toThrow(
+      /must be an own property/u
+    );
+  });
+
+  it("refuses an intent carrying a key the contract does not declare", () => {
+    expect(() =>
+      resolveTheme(baselineTheme, {
+        origin: "tenant-document",
+        patch: {},
+        tenantId: "acme",
+      } as never)
+    ).toThrow(/unknown intent key/u);
+  });
+
+  it("refuses an intent missing a declared key", () => {
+    expect(() => resolveTheme(baselineTheme, { origin: "tenant-document" } as never)).toThrow(
+      /intent\.patch must be an own property/u
+    );
+    expect(() => resolveTheme(baselineTheme, { patch: {} } as never)).toThrow(
+      /intent\.origin must be an own property/u
+    );
+  });
+
+  it("accepts the exact envelope, so the guard is not refusing everything", () => {
+    expect(() =>
+      resolveTheme(baselineTheme, { origin: "preview", patch: {} })
+    ).not.toThrow();
+  });
+});
+
+
+/* -------------------------------------------------------------------------- */
+/* a closed option domain is refused where the contract declares it            */
+/* -------------------------------------------------------------------------- */
+
+describe("resolveTheme refuses a value outside a closed option domain", () => {
+  const baselineTheme = FIRST_PARTY_THEMES.bithire;
+  const resolve = (patch: unknown) =>
+    resolveTheme(baselineTheme, { origin: "tenant-document", patch: patch as never });
+
+  const invented: readonly [string, unknown, RegExp][] = [
+    [
+      "appearance.defaultMode",
+      { appearance: { defaultMode: "potato" } },
+      /\$\.appearance\.defaultMode/u,
+    ],
+    [
+      "surfaces.buttonStyle",
+      { surfaces: { buttonStyle: "potato" } },
+      /\$\.surfaces\.buttonStyle/u,
+    ],
+    ["surfaces.density", { surfaces: { density: "potato" } }, /\$\.surfaces\.density/u],
+    ["surfaces.elevation", { surfaces: { elevation: "lifted" } }, /\$\.surfaces\.elevation/u],
+    ["surfaces.rhythm", { surfaces: { rhythm: "loose" } }, /\$\.surfaces\.rhythm/u],
+    [
+      "typography.labelStyle",
+      { typography: { labelStyle: "smallcaps" } },
+      /\$\.typography\.labelStyle/u,
+    ],
+    [
+      "typography.typePairing",
+      { typography: { typePairing: "handwritten" } },
+      /\$\.typography\.typePairing/u,
+    ],
+    ["motion.entrance", { motion: { value: { entrance: "warp" } } }, /entrance/u],
+    ["charts.lineStyle", { charts: { value: { lineStyle: "wiggly" } } }, /lineStyle/u],
+    [
+      "chrome.table.anatomy",
+      { chrome: { table: { anatomy: "spreadsheet" } } },
+      /\$\.chrome\.table\.anatomy/u,
+    ],
+    [
+      "capabilities.*.status",
+      { capabilities: { motion: { status: "maybe" } } },
+      /\$\.capabilities\.motion\.status/u,
+    ],
+  ];
+
+  for (const [label, patch, path] of invented) {
+    it(`refuses an invented option at ${label}`, () => {
+      expect(() => resolve(patch)).toThrow(/is not an option at/u);
+      expect(() => resolve(patch)).toThrow(path);
+    });
+  }
+
+  it("names the closed set in the failure, so the caller can correct it", () => {
+    expect(() => resolve({ surfaces: { buttonStyle: "potato" } })).toThrow(
+      /the closed set is "pill", "sharp", "soft"/u
+    );
+  });
+
+  it("fails AT RESOLUTION with a domain error, not later as a generic TypeError", () => {
+    // `"potato"` used to survive the merge, reach the lowering and die there --
+    // when it died at all -- inside whatever reader first called a string
+    // method on it. `appearance.defaultMode` did not even do that: it compiled.
+    let thrown: unknown;
+    try {
+      resolve({ surfaces: { buttonStyle: "potato" } });
+    } catch (error) {
+      thrown = error;
+    }
+    expect(thrown).toBeInstanceOf(Error);
+    expect(thrown).not.toBeInstanceOf(TypeError);
+    expect((thrown as Error).message).not.toMatch(/trim|undefined/u);
+    expect((thrown as Error).message).toMatch(/^mergeThemePatches: "potato" is not an option/u);
+  });
+
+  it("accepts every option the contract does declare, and applies it", () => {
+    for (const mode of themeLeafOptions("$.appearance.defaultMode") ?? []) {
+      expect(resolve({ appearance: { defaultMode: mode } }).theme.appearance.defaultMode).toBe(
+        mode
+      );
+    }
+    for (const style of themeLeafOptions("$.surfaces.buttonStyle") ?? []) {
+      expect(resolve({ surfaces: { buttonStyle: style } }).theme.surfaces.buttonStyle).toBe(
+        style
+      );
+    }
+    for (const status of themeLeafOptions("$.capabilities.motion.status") ?? []) {
+      expect(
+        resolve({ capabilities: { motion: { status } } }).theme.capabilities.motion.status
+      ).toBe(status);
+    }
+  });
+
+  it("leaves an intentionally OPEN leaf open", () => {
+    // The domain map must never narrow a leaf the contract widened: these are
+    // free-form strings and a string/number union, not vocabularies.
+    expect(themeLeafOptions("$.palette.primaryColor")).toBeNull();
+    expect(() => resolve({ palette: { primaryColor: "#abcdef" } })).not.toThrow();
+    expect(() =>
+      resolve({ typography: { fontFamilyBase: "Some Unreleased Face, sans-serif" } })
+    ).not.toThrow();
+    expect(() => resolve({ chrome: { sidebar: { groupFontWeight: "600" } } })).not.toThrow();
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* only a plain record may be a ThemePatch container                           */
+/* -------------------------------------------------------------------------- */
+
+describe("mergeThemePatches refuses a container that is not a plain record", () => {
+  const baselineTheme = FIRST_PARTY_THEMES.bithire;
+  const merge = (patch: unknown) => mergeThemePatches(baselineTheme, patch as never);
+
+  class HostilePalette {
+    primaryColor = "#123456";
+  }
+
+  const containers: readonly [string, () => unknown][] = [
+    ["a Date", () => new Date()],
+    ["a RegExp", () => /hostile/u],
+    ["a Map", () => new Map()],
+    ["a class instance", () => new HostilePalette()],
+    ["an Object.create(proto) record", () => Object.create({ primaryColor: "#123456" })],
+  ];
+
+  for (const [label, make] of containers) {
+    it(`refuses ${label} as the TOP-LEVEL patch`, () => {
+      expect(() => merge(make())).toThrow(
+        /is not a ThemePatch container|is not an object/u
+      );
+    });
+
+    it(`refuses ${label} as a NESTED family`, () => {
+      expect(() => merge({ palette: make() })).toThrow(/at \$\.palette/u);
+      expect(() => merge({ chrome: { table: make() } })).toThrow(/at \$\.chrome\.table/u);
+    });
+  }
+
+  it("a class instance no longer smuggles its fields into the Theme", () => {
+    // This is the one that did not merely pass unnoticed: its own enumerable
+    // fields were merged INTO the resolved palette through a container the
+    // contract never declared.
+    expect(() => merge({ palette: new HostilePalette() })).toThrow(
+      /class instance at \$\.palette is not a ThemePatch container/u
+    );
+    expect(baselineTheme.palette.primaryColor).not.toBe("#123456");
+  });
+
+  it("a Date no longer reports as an applied family while changing nothing", () => {
+    expect(() => merge({ palette: new Date() })).toThrow(/Date at \$\.palette/u);
+  });
+
+  it("still accepts the two containers the schema does declare", () => {
+    expect(() => merge({ palette: { primaryColor: "#123456" } })).not.toThrow();
+    expect(() =>
+      merge({ charts: { value: { categoryColors: ["#111111", "#222222"] } } })
+    ).not.toThrow();
+    expect(() => merge(Object.create(null) as never)).not.toThrow();
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* the baseline is validated structurally, on its OWN keys                     */
+/* -------------------------------------------------------------------------- */
+
+describe("resolveTheme validates the baseline structurally", () => {
+  const patch = { palette: { primaryColor: "#123456" } } as unknown as ThemePatch;
+  const bothPaths = (baseline: unknown): readonly (() => unknown)[] => [
+    () => resolveTheme(baseline as never),
+    () => resolveTheme(baseline as never, { origin: "tenant-document", patch }),
+  ];
+
+  it("refuses an INHERITED id, which read back as a Theme through every access", () => {
+    const inherited = Object.create({ id: "inherited", palette: { primaryColor: "#fff" } });
+    for (const call of bothPaths(inherited)) {
+      expect(call).toThrow(/baseline\.id must be a non-empty own string/u);
+    }
+  });
+
+  it("refuses a baseline that carries an own id but is not a plain object", () => {
+    class HostileTheme {
+      id = "hostile";
+      palette = { primaryColor: "#123456" };
+    }
+    for (const call of bothPaths(new HostileTheme())) {
+      expect(call).toThrow(/baseline is a class instance, not a plain Theme object/u);
+    }
+  });
+
+  it("refuses an id that is present but empty or not a string", () => {
+    for (const call of bothPaths({ id: "", palette: {} })) {
+      expect(call).toThrow(/baseline\.id must be a non-empty own string/u);
+    }
+    for (const call of bothPaths({ id: 7, palette: {} })) {
+      expect(call).toThrow(/baseline\.id must be a non-empty own string/u);
+    }
+  });
+
+  it("refuses a family that is not a record", () => {
+    for (const call of bothPaths({ id: "x", palette: false })) {
+      expect(call).toThrow(/baseline\.palette must be a record, received boolean/u);
+    }
+    for (const call of bothPaths({ id: "x", palette: {}, chrome: "dark" })) {
+      expect(call).toThrow(/baseline\.chrome must be a record, received string/u);
+    }
+    for (const call of bothPaths({ id: "x", palette: [] })) {
+      expect(call).toThrow(/baseline\.palette must be a record, received array/u);
+    }
+  });
+
+  it("refuses a top-level key the Theme does not declare", () => {
+    for (const call of bothPaths({ id: "x", palette: {}, tenantId: "acme" })) {
+      expect(call).toThrow(/baseline carries unknown key\(s\) "tenantId"/u);
+    }
+  });
+
+  it("does NOT require every optional family: a sparse authored draft resolves", () => {
+    // `liftAuthoredTheme` exists to carry an editor draft to the compiler
+    // unchanged; normalizing it here would compile channels nobody authored.
+    for (const call of bothPaths({ id: "draft", palette: { primaryColor: "#123456" } })) {
+      expect(call).not.toThrow();
+    }
+    expect(() =>
+      resolveTheme({ id: "draft", chrome: { cardComponent: { bg: "#fff" } } } as never)
+    ).not.toThrow();
+  });
+
+  it("validates before the no-intent return, not only when a patch is present", () => {
+    expect(() => resolveTheme({ id: "x", palette: false } as never)).toThrow(
+      /resolveTheme: baseline\.palette/u
+    );
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* engineBridge matches its declared OPEN contract                             */
+/* -------------------------------------------------------------------------- */
+
+describe("engineBridge admits the engine roster and nothing else", () => {
+  const baselineTheme = FIRST_PARTY_THEMES.bithire;
+  const merge = (patch: unknown) => mergeThemePatches(baselineTheme, patch as never);
+  const bridge = (value: unknown) => ({ engineBridge: { value } });
+
+  it("starts from an EMPTY baseline dictionary, which is what closed it", () => {
+    expect(Object.keys(baselineTheme.engineBridge.value ?? {})).toEqual([]);
+  });
+
+  for (const engine of ENGINE_NAMES) {
+    it(`accepts the legal engine key "${engine}"`, () => {
+      const merged = merge(bridge({ [engine]: { anything: 12 } }));
+      expect(merged.engineBridge.value?.[engine]).toEqual({ anything: 12 });
+    });
+  }
+
+  it("refuses an engine name outside the roster", () => {
+    expect(() => merge(bridge({ potato: { anything: 12 } }))).toThrow(
+      /unknown engine "potato"/u
+    );
+    expect(() => merge(bridge({ potato: {} }))).toThrow(
+      /the closed set is "classic", "modern", "rustic", "custom"/u
+    );
+  });
+
+  it("refuses a non-plain value for a legal engine", () => {
+    expect(() => merge(bridge({ modern: new Date() }))).toThrow(
+      /at \$\.engineBridge\.value\.modern is not a plain record/u
+    );
+    expect(() => merge(bridge({ modern: "opaque" }))).toThrow(/is not a plain record/u);
+    expect(() => merge(bridge({ modern: [1, 2] }))).toThrow(/is not a plain record/u);
+    expect(() => merge(bridge({ modern: { nested: new Date() } }))).toThrow(
+      /Date at \$\.engineBridge\.value\.modern\.nested is not a plain record/u
+    );
+  });
+
+  it("refuses INHERITED engine keys rather than silently dropping them", () => {
+    expect(() => merge(bridge(Object.create({ modern: { anything: 12 } })))).toThrow(
+      /at \$\.engineBridge\.value is not a ThemePatch container/u
+    );
+  });
+
+  it("refuses prototype-chain keys at the dictionary and inside the bag", () => {
+    const polluted = JSON.parse('{"__proto__": {"polluted": true}}') as Record<string, unknown>;
+    expect(() => merge(bridge(polluted))).toThrow(/forbidden key "__proto__"/u);
+    expect(() => merge(bridge({ modern: polluted }))).toThrow(/forbidden key "__proto__"/u);
+    expect(() => merge(bridge({ constructor: {} }))).toThrow(/forbidden key "constructor"/u);
+    expect(({} as Record<string, unknown>).polluted).toBeUndefined();
+  });
+
+  it("merges over an engine's existing bag instead of replacing the dictionary", () => {
+    const first = merge(bridge({ modern: { a: 1 } }));
+    const second = mergeThemePatches(first, bridge({ classic: { b: 2 } }) as never);
+    expect(second.engineBridge.value?.modern).toEqual({ a: 1 });
+    expect(second.engineBridge.value?.classic).toEqual({ b: 2 });
   });
 });

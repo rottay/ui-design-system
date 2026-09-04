@@ -156,7 +156,7 @@ export function ThemeProvider({
   // root `data-theme` / `color-scheme` state, and nothing else. Tenant visual
   // channels reach the document through exactly one of the two ingress paths:
   //
-  //   first-party static -> compileBrandTheme -> renderFirstPartyArtifact
+  //   first-party static -> compileTheme -> renderFirstPartyArtifact
   //   tenant/DB          -> TenantThemeDocument -> compileTenantThemeConfig
   //
   // Both terminate in a compiled artifact that the application (or its SSR

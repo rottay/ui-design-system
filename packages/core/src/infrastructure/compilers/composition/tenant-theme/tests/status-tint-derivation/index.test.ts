@@ -25,7 +25,7 @@
  * family already has for its own four unreachable fields:
  * `primaryForegroundColor`/`borderFocusColor`/`linkColor`/`linkHoverColor`).
  * So guard 2 and guard 3 are exercised directly against the exported
- * `compileBrandTheme`, with a hand-built `tenantAuthoredPaths`/`tenantPatch`
+ * `compileTheme`, with a hand-built `tenantAuthoredPaths`/`tenantPatch`
  * — the same escape hatch the compiler itself uses internally, bypassing
  * only the DB-document intake layer that has nothing to test yet.
  *
@@ -39,7 +39,7 @@
  * `palette`/`modes` -- so `toneSeedIsTenantAuthored` was `false` for every
  * tenant on every vertical, and guard 1 never fired through the real door.
  * The suite below exercises guard 1 THROUGH `compileTenantThemeConfig`
- * itself (never `compileBrandTheme` directly) against ROTTAY, which still
+ * itself (never `compileTheme` directly) against ROTTAY, which still
  * bakes `successBgColor`/`successBorderColor`/`alphaSuccess{10,20}` as
  * concrete literals in both its base (dark) block and its light overlay --
  * the exact "baseline still bakes a literal" case the guard-1 mechanism test
@@ -51,7 +51,7 @@ import { describe, expect, it } from "vitest";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 
-import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 
 import {
@@ -186,11 +186,11 @@ describe("a tenant document silent on palette.status moves zero status bytes", (
 });
 
 /**
- * Guard 2 and guard 3, exercised directly against `compileBrandTheme` with a
+ * Guard 2 and guard 3, exercised directly against `compileTheme` with a
  * hand-built provenance record — see the file header for why no DB document
  * reaches these two guards today. `as never` mirrors the same cast already
  * used for synthetic input in `brand-authored-residue-retirement.test.ts`
- * (`compileBrandTheme({ brandTheme: theme as never, ... })`); the public
+ * (`compileTheme({ brandTheme: theme as never, ... })`); the public
  * `CompileBrandTheme` type is narrower than what the function actually reads
  * (`tenantAuthoredPaths`/`tenantPatch`), which is intentional — those two
  * fields are compiler-internal provenance, not part of the public contract.
@@ -201,7 +201,7 @@ function compileWithProvenance(input: {
   tenantPatch?: Partial<BrandTheme>;
   tenantAuthoredPaths?: Set<string>;
 }) {
-  return compileBrandTheme(input as never);
+  return lowerBrandThemeFixture(input as never);
 }
 
 describe("a tenant leaf on the derived channel outranks tenant seed derivation", () => {

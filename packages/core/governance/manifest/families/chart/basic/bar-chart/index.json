@@ -2650,13 +2650,13 @@
         {
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
           "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "chart/basic/bar-chart"
           ],
           "sourceBindings": [
-            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2665,13 +2665,13 @@
         {
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
           "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "chart/basic/bar-chart"
           ],
           "sourceBindings": [
-            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2680,13 +2680,13 @@
         {
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
           "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "chart/basic/bar-chart"
           ],
           "sourceBindings": [
-            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2695,13 +2695,13 @@
         {
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
           "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "chart/basic/bar-chart"
           ],
           "sourceBindings": [
-            "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
           ],
           "replacementDisposition": {
             "state": "LIVE"

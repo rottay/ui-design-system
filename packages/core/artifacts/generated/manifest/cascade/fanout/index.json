@@ -41,7 +41,7 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2490,
+    "filesScanned": 2510,
     "channels": 7514,
     "channelsDs": 7116,
     "channelsBridge": 398,
@@ -34605,7 +34605,7 @@
         "src/components/patterns/customization/brand-studio/index.tsx",
         "src/foundation/tokens/css/presentation/components/button/index.css",
         "src/infrastructure/compilers/kernel/foundation/css/color-math/palette-derivations/index.ts",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -34769,7 +34769,7 @@
         "src/components/patterns/customization/brand-studio/index.tsx",
         "src/foundation/tokens/css/presentation/components/button/index.css",
         "src/infrastructure/compilers/kernel/foundation/css/color-math/palette-derivations/index.ts",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -34860,7 +34860,7 @@
         "src/components/patterns/customization/brand-studio/index.tsx",
         "src/foundation/tokens/css/presentation/components/button/index.css",
         "src/infrastructure/compilers/kernel/foundation/css/color-math/palette-derivations/index.ts",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -35021,7 +35021,7 @@
         "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx",
         "src/foundation/tokens/css/presentation/components/button/index.css",
         "src/infrastructure/compilers/kernel/foundation/css/color-math/palette-derivations/index.ts",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -64513,7 +64513,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -64551,7 +64551,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "foundation-css"
@@ -64573,7 +64573,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -64835,7 +64835,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -64865,7 +64865,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "foundation-css"
@@ -64887,7 +64887,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -64917,7 +64917,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "foundation-css"
@@ -70701,8 +70701,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1543,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/tint/index.ts",
+          "line": 15,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -77627,7 +77627,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -87616,7 +87616,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "infrastructure-tsx",
@@ -87706,7 +87706,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "infrastructure-tsx",
@@ -89389,7 +89389,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -89570,7 +89570,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -89808,7 +89808,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -89868,7 +89868,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -105848,35 +105848,35 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 130,
+          "line": 141,
           "prop": "--ds-button-primary-bg",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 131,
+          "line": 142,
           "prop": "--ds-button-primary-bg-hover",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 132,
+          "line": 143,
           "prop": "--ds-button-primary-border",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 133,
+          "line": 144,
           "prop": "--ds-tab-border-active",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 134,
+          "line": 145,
           "prop": "--ds-input-border-focus",
           "scalars": []
         },
@@ -109603,7 +109603,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -113963,7 +113963,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -114059,7 +114059,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -127271,7 +127271,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts",
-          "line": 153,
+          "line": 175,
           "prop": "color",
           "scalars": []
         },
@@ -134932,7 +134932,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -135021,7 +135021,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -148650,7 +148650,7 @@
       "channel": "--ds-density-scale",
       "kind": "ds",
       "declaredIn": [
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -155451,8 +155451,8 @@
       "readers": [
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1222,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 48,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -156135,8 +156135,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1223,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 49,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -167288,36 +167288,36 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1308,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/type-ramp/index.ts",
+          "line": 72,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1368,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 57,
           "prop": "fontFamily",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1376,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 65,
           "prop": "fontFamily",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1385,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 74,
           "prop": "fontFamily",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1394,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 83,
           "prop": "fontFamily",
           "scalars": []
         },
@@ -167738,8 +167738,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1341,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 30,
           "prop": "fontFamily",
           "scalars": []
         }
@@ -168134,29 +168134,29 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1341,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 30,
           "prop": "fontFamily",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1350,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 39,
           "prop": "fontFamily",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1359,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 48,
           "prop": "fontFamily",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1412,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 101,
           "prop": "fontFamily",
           "scalars": []
         }
@@ -168839,8 +168839,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1403,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 92,
           "prop": "fontFamily",
           "scalars": []
         },
@@ -186960,7 +186960,7 @@
         "src/foundation/tokens/css/foundation/themes/default/index.css",
         "src/foundation/tokens/css/presentation/components/input/index.css",
         "src/infrastructure/compilers/kernel/foundation/css/color-math/palette-derivations/index.ts",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -194182,7 +194182,7 @@
       "declaredIn": [
         "src/foundation/tokens/css/presentation/components/input/index.css",
         "src/infrastructure/compilers/kernel/foundation/css/color-math/palette-derivations/index.ts",
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -200215,15 +200215,15 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1371,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 60,
           "prop": "letterSpacing",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1380,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 69,
           "prop": "letterSpacing",
           "scalars": []
         }
@@ -200294,8 +200294,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1345,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 34,
           "prop": "letterSpacing",
           "scalars": []
         }
@@ -200619,15 +200619,15 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1354,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 43,
           "prop": "letterSpacing",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1363,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 52,
           "prop": "letterSpacing",
           "scalars": []
         },
@@ -200669,8 +200669,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1407,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 96,
           "prop": "letterSpacing",
           "scalars": []
         }
@@ -201411,8 +201411,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1370,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 59,
           "prop": "lineHeight",
           "scalars": []
         },
@@ -208066,8 +208066,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 443,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts",
+          "line": 86,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -208294,8 +208294,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 446,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts",
+          "line": 89,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -208559,8 +208559,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 448,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts",
+          "line": 91,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -208630,8 +208630,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 451,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts",
+          "line": 94,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -223927,8 +223927,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1210,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 36,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -223937,8 +223937,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1212,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 38,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -223947,8 +223947,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1214,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 40,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -224059,8 +224059,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1216,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 42,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -224069,8 +224069,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1218,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 44,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -224260,8 +224260,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1208,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 34,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -224270,8 +224270,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1210,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 36,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -224280,8 +224280,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1212,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 38,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -224290,8 +224290,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1214,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 40,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -224300,8 +224300,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1216,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 42,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -224310,8 +224310,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1218,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 44,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -239331,8 +239331,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1208,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts",
+          "line": 34,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1))",
           "scalars": [
@@ -263712,7 +263712,7 @@
       "channel": "--ds-radius-scale",
       "kind": "ds",
       "declaredIn": [
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -311455,8 +311455,8 @@
       "readers": [
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 393,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts",
+          "line": 36,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -314555,8 +314555,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 441,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts",
+          "line": 84,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -317570,8 +317570,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 458,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts",
+          "line": 101,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -320727,8 +320727,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 455,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts",
+          "line": 98,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -359412,7 +359412,7 @@
       "channel": "--ds-type-scale",
       "kind": "ds",
       "declaredIn": [
-        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -359849,8 +359849,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1342,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 31,
           "prop": "fontSize",
           "decl": "calc(2rem * var(--ds-type-scale, 1))",
           "scalars": [
@@ -359859,8 +359859,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1351,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 40,
           "prop": "fontSize",
           "decl": "calc(1.5rem * var(--ds-type-scale, 1))",
           "scalars": [
@@ -359869,8 +359869,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1360,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 49,
           "prop": "fontSize",
           "decl": "calc(1.125rem * var(--ds-type-scale, 1))",
           "scalars": [
@@ -359879,8 +359879,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1377,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 66,
           "prop": "fontSize",
           "decl": "calc(0.8125rem * var(--ds-type-scale, 1))",
           "scalars": [
@@ -359889,8 +359889,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1386,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 75,
           "prop": "fontSize",
           "decl": "calc(0.75rem * var(--ds-type-scale, 1))",
           "scalars": [
@@ -359899,8 +359899,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1395,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 84,
           "prop": "fontSize",
           "decl": "calc(0.6875rem * var(--ds-type-scale, 1))",
           "scalars": [
@@ -359909,8 +359909,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1404,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 93,
           "prop": "fontSize",
           "decl": "calc(0.8125rem * var(--ds-type-scale, 1))",
           "scalars": [
@@ -359919,8 +359919,8 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "line": 1413,
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/typography/index.ts",
+          "line": 102,
           "prop": "fontSize",
           "decl": "calc(1rem * var(--ds-type-scale, 1))",
           "scalars": [

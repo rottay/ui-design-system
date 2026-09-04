@@ -8,7 +8,7 @@
  *     Current  = effective value from the committed generated artifact
  *                (packages/.../artifacts/{slug}/index.css) resolved by
  *                PostCSS cascade for the exact (slug, mode) selector.
- *     Expected = in-process compileBrandTheme(...) value, never the stale
+ *     Expected = in-process compileTheme(...) value, never the stale
  *                compiled block inside the artifact.
  *
  *   B = ledger entries with finalState=SIGHTED_PENDING (6 browser-only rows)
@@ -29,7 +29,7 @@ import { join } from "node:path";
 import postcss from "postcss";
 import { describe, expect, it } from "vitest";
 
-import { compileBrandTheme } from "../../../infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from "../ts/presentation/brand-themes/bithire";
 import { rottayBrandTheme } from "../ts/presentation/brand-themes/rottay";
 
@@ -120,18 +120,16 @@ function compileEffectiveValue(
   mode: RosterMode,
   channel: string,
 ): string {
-  const compiled = compileBrandTheme({
+  const compiled = lowerBrandThemeFixture({
     brandTheme: brandTheme as never,
     tenantSlug: slug,
-    verticalPersonality: {},
-    verticalTokenOverrides: {},
   });
   const baseVars = compiled.cssVariables;
   const modeBlock = compiled.modeBlocks?.find((b) => b.mode === mode);
   const vars = mode === "default" ? baseVars : { ...baseVars, ...(modeBlock?.cssVariables ?? {}) };
   const val = vars[channel];
   if (val === undefined) {
-    throw new Error(`compileBrandTheme(${slug}, ${mode}) did not emit ${channel}`);
+    throw new Error(`lowerBrandThemeFixture(${slug}, ${mode}) did not emit ${channel}`);
   }
   return val;
 }

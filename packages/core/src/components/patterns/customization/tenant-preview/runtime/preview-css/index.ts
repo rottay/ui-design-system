@@ -4,7 +4,7 @@
  * A preview shows what a tenant WILL look like, so it must show what a
  * compiler actually produces — not a third rendering of the same inputs. Both
  * canonical producers scope their output to a document-root selector owned by
- * TenantProvider: `compileBrandTheme` to `html[data-tenant='<slug>']`, and
+ * TenantProvider: the static arm's `compileTheme` to `html[data-tenant='<slug>']`, and
  * `compileTenantThemeConfig` to its artifact's `scopes.combinedSelector`.
  *
  * That claim is ENFORCED, not assumed. The brand-theme arm runs the compiler
@@ -45,10 +45,15 @@ import type {
   BrandTypography,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import type { TenantThemeArtifact } from '../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
+import { brandTenantSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
 import {
-  brandTenantSelector,
-  compileBrandTheme,
-} from '../../../../../../infrastructure/compilers/kernel/runtime/brand-theme';
+  THEME_ENGINE_ADAPTERS,
+  compileTheme,
+  containerScope,
+  emitThemeCss,
+  resolveTheme,
+} from '@/infrastructure/compilers/runtime/theme';
+import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { verifyTenantThemeArtifactV1 } from '../../../../../../infrastructure/runtime/theming/foundation/visual-authority';
 import {
   buildPreviewScopeSelector,
@@ -123,7 +128,7 @@ export type PreviewSource =
  * Lift an authoring draft into the BrandTheme the static compiler accepts.
  *
  * The authoring surface collects a slug and two seed colors; a BrandTheme
- * palette IS those seeds. Routing the draft through `compileBrandTheme`
+ * palette IS those seeds. Routing the draft through `compileTheme`
  * instead of a preview-only generator is what makes the preview honest: the
  * OKLCH ramps, the readable-ink floor and the palette semantics a compiled
  * tenant will actually ship are the ones on screen, derived by the same code.
@@ -160,7 +165,7 @@ export function draftBrandTheme(draft: {
 
 /**
  * Lift a full `TenantConfig`'s legacy visual fields (`branding`, `personality`,
- * `tokenOverrides`) into the `BrandTheme` shape `compileBrandTheme` accepts.
+ * `tokenOverrides`) into the `BrandTheme` shape the lowering's intake accepts.
  *
  * This is NOT `draftBrandTheme` above. That function lifts a narrow 4-field
  * AUTHORING DRAFT (slug/name/primaryColor/secondaryColor) and is genuinely
@@ -175,7 +180,7 @@ export function draftBrandTheme(draft: {
  *     -> `palette` (same field names as `BrandPalette`)
  *   - `branding.dark{Primary,Secondary,Accent,Background}Color`
  *     -> `modes.dark.palette` (compiled as an independently-scoped mode block
- *       by `compileBrandTheme`; the generic rescoping loop below re-anchors
+ *       by `compileTheme`; the generic rescoping loop below re-anchors
  *       it exactly like the base block, no special-casing needed)
  *   - `branding.fontFamily{Base,Heading,Mono,Display}` -> `typography`
  *   - `personality.typography.{headingWeightBias,headingLetterSpacing,labelStyle}`
@@ -433,8 +438,13 @@ function resolveCompiledOutput(source: PreviewSource): {
   return {
     slug: safeSlug,
     baseSelector: brandTenantSelector(safeSlug),
-    css: compileBrandTheme({ brandTheme: source.brandTheme, tenantSlug: safeSlug })
-      .cssString,
+    css: emitThemeCss(
+      compileTheme(
+        resolveTheme({ ...liftAuthoredTheme(source.brandTheme), id: safeSlug }),
+        THEME_ENGINE_ADAPTERS.modern,
+      ),
+      containerScope(brandTenantSelector(safeSlug)),
+    ),
   };
 }
 

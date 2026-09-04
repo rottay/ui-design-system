@@ -30,10 +30,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import {
-  compileBrandTheme,
-  compileTheme,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture, lowerTheme } from "@tests/support/theme-lowering";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { DEFAULT_CHROME_SHAPE } from "@/foundation/contracts/composition/tenants/themes/iso/shape";
 
@@ -374,7 +371,7 @@ const PRE_DRAIN_DARK: Readonly<Record<string, string>> = {
 
 // ── the compiled surfaces under test ───────────────────────────────────────
 
-const compiledStatic = compileBrandTheme({
+const compiledStatic = lowerBrandThemeFixture({
   brandTheme: bithireBrandTheme,
   tenantSlug: "bithire",
 });
@@ -415,7 +412,7 @@ const withoutKeypath = (keypath: string): BrandTheme => {
 };
 
 const compileWithout = (keypath: string) => {
-  const compiled = compileBrandTheme({
+  const compiled = lowerBrandThemeFixture({
     brandTheme: withoutKeypath(keypath),
     tenantSlug: "bithire",
   });
@@ -635,13 +632,13 @@ describe("BITHIRE EXTENSION DRAIN · the shell geometry deltas are graded, not s
 describe("BITHIRE EXTENSION DRAIN · static and Theme transports compile identically", () => {
   /**
    * `FIRST_PARTY_THEMES.bithire` is `brandThemeToTheme(bithireBrandTheme)`,
-   * and `compileTheme` lowers it back through `themeToBrandTheme`. So this
+   * and `compileTheme` lowers it back through its governed intake. So this
    * comparison walks the whole iso round-trip: a new contract field that was
    * added to `BrandTheme` but forgotten in either iso direction — the exact
    * way a DB-transported theme silently loses a family — drops its channels
    * here and nowhere else.
    */
-  const viaTheme = compileTheme(FIRST_PARTY_THEMES.bithire);
+  const viaTheme = lowerTheme(FIRST_PARTY_THEMES.bithire);
   const themeBase = viaTheme.cssVariables;
   const themeDark =
     viaTheme.modeBlocks?.find((block) => block.mode === "dark")?.cssVariables ??
@@ -1057,7 +1054,7 @@ describe("BITHIRE EXTENSION DRAIN · every first-party theme authors the new fam
 
   it("the common compiler emits the new families for all three verticals", () => {
     for (const [id, theme] of Object.entries(THEMES)) {
-      const vars = compileBrandTheme({
+      const vars = lowerBrandThemeFixture({
         brandTheme: theme,
         tenantSlug: id,
       }).cssVariables;

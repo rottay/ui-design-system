@@ -87,7 +87,7 @@
 
   /* Durations — the 120/200/320ms product-law cadence. --ds-motion-instant MUST
      stay equal to the 120ms the brand-theme compiler re-declares per tenant
-     (infrastructure/compilers/kernel/runtime/brand-theme setMotionVariables,
+     (infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion setMotionVariables,
      design-language section 2.6 closed set 120/200/320), so tenant-scoped and
      unscoped contexts resolve the token to the same duration. */
   --ds-motion-instant: 120ms;
@@ -128,7 +128,7 @@
   /* Fallback only: a tenant BrandTheme with spring physics (springTension +
      springFriction, useSpring !== false) overrides these with a generated
      `linear()` curve scoped to its own [data-tenant] selector (see
-     infrastructure/compilers/kernel/runtime/brand-theme's setMotionVariables / brandThemeToTokenOverrides).
+     infrastructure/compilers/runtime/theme/runtime/lowering's setMotionVariables / brandThemeToTokenOverrides).
      A tenant that declares no spring keeps this cubic-bezier approximation. */
   --ds-motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ds-motion-spring-gentle: cubic-bezier(0.25, 1.25, 0.5, 1);

@@ -4,60 +4,77 @@ import type {
   ThemeCompilationModeBlock,
 } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { EmissionScope } from "@/foundation/contracts/composition/tenants/themes/emission";
-import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
-  brandTenantSelector,
-  themeModeSelector,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+  containerScope,
+  firstPartyScope,
+  tenantArtifactScope,
+} from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
+import { admitCssVariables } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
 
-/** The static first-party artifact scope: `html[data-tenant='<slug>']`. */
-export function firstPartyScope(slug: FirstPartyVerticalId): EmissionScope {
-  const baseSelector = brandTenantSelector(slug);
-  return {
-    baseSelector,
-    modeSelector: (mode: BrandThemeMode) => themeModeSelector(baseSelector, mode),
-  };
-}
+export { containerScope, firstPartyScope, tenantArtifactScope };
 
 /**
- * The validated DB artifact scope. Requiring both tenant presence and the exact
- * tenant value is semantically redundant but yields specificity (0,4,0), so the
- * artifact always wins on its own root without `!important`.
+ * One `  name: value;` line per channel, absent and inadmissible values dropped.
+ *
+ * This owner is the sole assembler of CSS text in the theme pipeline. Every
+ * reader that needs a declaration — the first-party artifact renderer, the DB
+ * artifact renderer, the brand-studio preview, visual-authority's admission
+ * check — imports it from here rather than restating it: a drift between two
+ * copies of this grammar shows up as a mounted artifact the resolver refuses,
+ * which is indistinguishable from a compiler bug.
+ *
+ * Because it is the sole assembler, it is also where value safety is decided.
+ * `Theme` declares open string leaves, so a compiled channel can carry any
+ * string its author wrote; `admitCssVariables` refuses the ones that would
+ * terminate the declaration, close the rule or leave the `<style>` element.
+ * Omitted whole, never rewritten, and refused here rather than at each of the
+ * six emitters downstream of this line.
  */
-export function tenantArtifactScope(verticalKey: string, slug: string): EmissionScope {
-  const baseSelector = `[data-ds-root][data-vertical="${verticalKey}"][data-tenant][data-tenant="${slug}"]`;
-  return {
-    baseSelector,
-    modeSelector: (mode: BrandThemeMode) => themeModeSelector(baseSelector, mode),
-  };
+export function emitDeclarations(
+  variables: Readonly<Record<string, string>>
+): string[] {
+  return Object.entries(admitCssVariables(variables)).map(
+    ([name, value]) => `  ${name}: ${value};`
+  );
 }
 
-/** An arbitrary container scope, for the preview. */
-export function containerScope(baseSelector: string): EmissionScope {
-  return {
-    baseSelector,
-    modeSelector: (mode: BrandThemeMode) => themeModeSelector(baseSelector, mode),
-  };
-}
-
-function block(selector: string, declarations: readonly string[]): string {
+/** One CSS rule from a selector and already-formatted declarations. */
+export function emitRule(selector: string, declarations: readonly string[]): string {
   return `${selector} {\n${declarations.join("\n")}\n}`;
 }
 
-function baseBlock(compiled: ThemeCompilation, scope: EmissionScope): string {
-  const entries = Object.entries(compiled.cssVariables).filter(([, v]) => v != null);
-  if (entries.length === 0 && !compiled.colorScheme) return "";
-  return block(scope.baseSelector, [
+/**
+ * The base rule for a compiled theme at a scope.
+ *
+ * `leadingDeclarations` land immediately after `color-scheme` and before the
+ * channels. The first-party artifact needs exactly that slot for the document
+ * root's `color:` declaration, which is artifact-format semantics rather than
+ * theme content; giving it a declared position here is what keeps the renderer
+ * from assembling the rule itself.
+ */
+export function emitBaseRule(
+  compiled: ThemeCompilation,
+  scope: EmissionScope,
+  options: { leadingDeclarations?: readonly string[] } = {}
+): string {
+  const entries = emitDeclarations(compiled.cssVariables);
+  const leading = options.leadingDeclarations ?? [];
+  if (entries.length === 0 && leading.length === 0 && !compiled.colorScheme) return "";
+  return emitRule(scope.baseSelector, [
     ...(compiled.colorScheme ? [`  color-scheme: ${compiled.colorScheme};`] : []),
-    ...entries.map(([k, v]) => `  ${k}: ${v};`),
+    ...leading,
+    ...entries,
   ]);
 }
 
-function modeBlock(mode: ThemeCompilationModeBlock, scope: EmissionScope): string {
-  const entries = Object.entries(mode.cssVariables).filter(([, v]) => v != null);
-  return block(scope.modeSelector(mode.mode), [
+/** One compiled mode's rule at a scope. */
+export function emitModeRule(
+  mode: ThemeCompilationModeBlock,
+  scope: EmissionScope
+): string {
+  return emitRule(scope.modeSelector(mode.mode), [
     `  color-scheme: ${mode.colorScheme};`,
-    ...entries.map(([k, v]) => `  ${k}: ${v};`),
+    ...emitDeclarations(mode.cssVariables),
   ]);
 }
 
@@ -69,9 +86,64 @@ function modeBlock(mode: ThemeCompilationModeBlock, scope: EmissionScope): strin
  */
 export function emitThemeCss(compiled: ThemeCompilation, scope: EmissionScope): string {
   return [
-    baseBlock(compiled, scope),
-    ...compiled.modeBlocks.map((mode) => modeBlock(mode, scope)),
+    emitBaseRule(compiled, scope),
+    ...compiled.modeBlocks.map((mode) => emitModeRule(mode, scope)),
   ]
     .filter(Boolean)
     .join("\n\n");
+}
+
+/** One compiled mode overlay of a tenant artifact: the delta, not the block. */
+export interface TenantArtifactModeDelta {
+  readonly mode: BrandThemeMode;
+  readonly variables: Readonly<Record<string, string>>;
+}
+
+/** Everything the artifact format needs that the compile does not carry. */
+export interface TenantArtifactComposition {
+  readonly verticalKey: string;
+  readonly slug: string;
+  /** Stamped into the banner; injected because the version owner sits ABOVE this one. */
+  readonly compilerVersion: string;
+  readonly digest: string;
+  readonly variables: Readonly<Record<string, string>>;
+  readonly modeDeltas?: readonly TenantArtifactModeDelta[];
+  readonly backgroundMode?: "light" | "dark" | "auto";
+}
+
+/**
+ * The COMPLETE tenant artifact stylesheet: banner, base rule, mode rules and
+ * the `auto` media copy.
+ *
+ * The artifact FORMAT lives here, not only its declarations and rules: the
+ * producer writes these bytes and the verifier rebuilds them to compare, so a
+ * second spelling of the banner, the base rule or the media copy would make a
+ * drift surface as a mounted artifact the resolver refuses for no visible
+ * reason. One function; the producer and the verifier both call it.
+ *
+ * The tenant overlay stays UNLAYERED on purpose: in the author origin, normal
+ * declarations outside a cascade layer outrank every named layer, so putting
+ * this rule in `@layer tenant` would make the unlayered vertical baseline
+ * impossible to override regardless of source order or specificity.
+ */
+export function emitTenantArtifactCss(composition: TenantArtifactComposition): string {
+  const scope = tenantArtifactScope(composition.verticalKey, composition.slug);
+  const declarations = emitDeclarations(composition.variables);
+  const modeRules = (composition.modeDeltas ?? []).map((block) => {
+    const modeDeclarations = emitDeclarations(block.variables);
+    const explicitRule = emitRule(scope.modeSelector(block.mode), modeDeclarations);
+    if (composition.backgroundMode !== "auto" || block.mode !== "dark") {
+      return explicitRule;
+    }
+    const automaticRule =
+      "@media (prefers-color-scheme: dark) {\n" +
+      `${emitRule(`${scope.baseSelector}:not([data-theme='light'])`, modeDeclarations)}\n}`;
+    return `${explicitRule}\n${automaticRule}`;
+  });
+  return [
+    `/* TenantThemeArtifact v1 | ${composition.compilerVersion} | ${composition.digest} */`,
+    emitRule(scope.baseSelector, declarations),
+    ...modeRules,
+    "",
+  ].join("\n");
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/preservation/index.mjs --write",
-  "basedOnReportDigest": "370dc617b2d6a3fb60a5ad6eb22477c6f0543d299a4101fa5b25af2bf597a691",
+  "basedOnReportDigest": "2b49e8dcf565c3dc802aa921857609c9b42f594354f77af0909346fde894d296",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,11 +2153,11 @@
     ]
   },
   "deadWriters": {
-    "total": 274,
+    "total": 276,
     "byProvenance": {
       "E-reserved-frontier": 13,
       "B-modern-current": 61,
-      "D-compiler-generated": 17,
+      "D-compiler-generated": 19,
       "A-protected-premium": 183
     },
     "entries": [
@@ -2911,6 +2911,13 @@
         "status": "dead-writer"
       },
       {
+        "name": "--ds-experience-profile",
+        "provenance": "D-compiler-generated",
+        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
+        "owner": "design-system/D1-compilers",
+        "status": "dead-writer"
+      },
+      {
         "name": "--ds-input-placeholder",
         "provenance": "B-modern-current",
         "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
@@ -3111,6 +3118,13 @@
         "provenance": "A-protected-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "design-system/premium-customization",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-recipe-profile",
+        "provenance": "D-compiler-generated",
+        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
+        "owner": "design-system/D1-compilers",
         "status": "dead-writer"
       },
       {

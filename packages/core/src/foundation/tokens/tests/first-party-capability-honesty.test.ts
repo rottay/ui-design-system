@@ -27,9 +27,9 @@
 import { describe, it, expect } from "vitest";
 
 import {
-  brandThemeToTokenOverrides,
   brandThemeToPersonality,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+  brandThemeToTokenOverrides,
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
 import type { BrandCapabilityId } from "@/foundation/contracts/composition/tenants/themes";
 
 import { FIRST_PARTY_VERTICAL_ROSTER } from "@/foundation/tokens/ts/presentation/brand-themes";

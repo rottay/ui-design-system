@@ -34,7 +34,7 @@ import type {
   ActiveTenantCapabilityId,
   CapabilityStatus,
 } from "@/foundation/contracts/composition/tenants/capabilities";
-import { deriveTenantColorRamps } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { deriveTenantColorRamps } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps";
 
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: "tenant_capability_probe",

@@ -22,13 +22,15 @@ import {
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   GENERATED_ARTIFACT_BANNER,
 } from '@/infrastructure/compilers/runtime/tenant-css';
-import { brandModeSelector } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { brandModeSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
 import {
   bithireBrandTheme,
   evntoBrandTheme,
   rottayBrandTheme,
 } from '../ts/presentation/brand-themes';
 import type { BrandTheme } from '../../contracts/composition/tenants/themes';
+import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
+import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACTS_DIR = resolve(TEST_DIR, '..', 'css/facade/artifacts');
@@ -42,11 +44,11 @@ const BRAND_THEMES: Record<string, BrandTheme> = {
 function generate(slug: string): string {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((entry) => entry.slug === slug);
   if (!spec) throw new Error(`no artifact spec for ${slug}`);
-  const brandTheme = BRAND_THEMES[slug];
-  if (!brandTheme) throw new Error(`no BrandTheme registered in this test for slug ${slug}`);
+  const theme = FIRST_PARTY_THEMES[slug as FirstPartyVerticalId];
+  if (!theme) throw new Error(`no first-party theme registered for slug ${slug}`);
   return renderFirstPartyArtifact({
     spec,
-    brandTheme,
+    theme,
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   }).css;
 }

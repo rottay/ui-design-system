@@ -8,7 +8,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import CalendarModern from '../engines/modern';
 
@@ -283,8 +283,8 @@ describe('Modern Calendar remediation (K4-B)', () => {
     // Measured on the compiled BrandThemes (same method as the CodeBlock
     // gutter measurement): white ink on BOTH raw primaries clears AA with
     // margin, so the fills stay raw.
-    const bithire = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
-    const tmm = compileBrandTheme({
+    const bithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    const tmm = lowerBrandThemeFixture({
       brandTheme: themanagementmiamiBrandTheme,
       tenantSlug: 'themanagementmiami',
     });

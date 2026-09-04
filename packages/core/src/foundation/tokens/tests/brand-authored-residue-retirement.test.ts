@@ -22,7 +22,7 @@ import postcss from "postcss";
 import * as ts from "typescript";
 import { describe, expect, it } from "vitest";
 
-import { compileBrandTheme } from "../../../infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from "../ts/presentation/brand-themes/bithire";
 import { evntoBrandTheme } from "../ts/presentation/brand-themes/evnto";
 import { rottayBrandTheme } from "../ts/presentation/brand-themes/rottay";
@@ -383,11 +383,9 @@ function compileRosterEffectiveHash(
   roster: readonly string[],
   mode: RosterMode,
 ): { hash: string; pairs: string[]; vars: Record<string, string> } {
-  const compiled = compileBrandTheme({
+  const compiled = lowerBrandThemeFixture({
     brandTheme: brandTheme as never,
     tenantSlug: slug,
-    verticalPersonality: {},
-    verticalTokenOverrides: {},
   });
   const baseVars = compiled.cssVariables;
   const modeVars = compiled.modeBlocks?.find((b) => b.mode === mode)?.cssVariables ?? {};
@@ -1022,7 +1020,7 @@ describe("VERTICAL-DEAD-4 ledger receipt", () => {
 describe("the DEAD retirement spared its longer-prefix homonyms", () => {
   it("longer-prefix homonyms survive exact-name deletion", () => {
     expect(
-      compileBrandTheme({ brandTheme: rottayBrandTheme, tenantSlug: "rottay" })
+      lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: "rottay" })
         .cssVariables["--ds-calendar-day-color-other"]
     ).toBeTruthy();
   });
@@ -1046,13 +1044,11 @@ describe("the DEAD retirement spared its longer-prefix homonyms", () => {
 
 // ── VERTICAL-PALETTE-90/89 compile-time propagation ────────────────────────
 
-describe("compileBrandTheme propagates the moved PALETTE channels", () => {
+describe("compileTheme propagates the moved PALETTE channels", () => {
   function compile(slug: string, theme: unknown) {
-    return compileBrandTheme({
+    return lowerBrandThemeFixture({
       brandTheme: theme as never,
       tenantSlug: slug,
-      verticalPersonality: {},
-      verticalTokenOverrides: {},
     });
   }
 
@@ -1135,7 +1131,7 @@ describe("compileBrandTheme propagates the moved PALETTE channels", () => {
 
 // ── VERTICAL-PALETTE-90/89 full byte-equivalent parity ─────────────────────
 
-describe("compileBrandTheme full roster parity (channel=value hash)", () => {
+describe("compileTheme full roster parity (channel=value hash)", () => {
   it("R35 default (dark) matches the signed effective-value hash", () => {
     const { hash, pairs } = compileRosterEffectiveHash(rottayBrandTheme, "rottay", PALETTE_ROTTAY_35, "default");
     expect(pairs).toHaveLength(35);
@@ -1474,11 +1470,9 @@ describe("VERTICAL-PALETTE-90/89 planted mutants turn red", () => {
     const theme = JSON.parse(JSON.stringify(evntoBrandTheme)) as typeof evntoBrandTheme;
     if (!theme.modes?.dark?.palette) throw new Error("Missing evnto dark palette");
     delete (theme.modes.dark.palette as Record<string, unknown>).backgroundOverlayColor;
-    const { modeBlocks } = compileBrandTheme({
+    const { modeBlocks } = lowerBrandThemeFixture({
       brandTheme: theme as never,
       tenantSlug: "evnto",
-      verticalPersonality: {},
-      verticalTokenOverrides: {},
     });
     const dark = modeBlocks?.find((b) => b.mode === "dark");
     expect(dark!.cssVariables["--ds-color-bg-overlay"]).not.toBe("rgba(2, 6, 23, 0.88)");

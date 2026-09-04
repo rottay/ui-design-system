@@ -49,7 +49,10 @@ import {
 const postcss = postcssModule.default ?? postcssModule;
 
 const CHROME_ANCHOR = ANCHORS.tenantChannel.path;
-const BRAND_THEME_EMITTER_ANCHOR = ANCHORS.brandThemeEmitter.path;
+// The lowering's channel writers are one owner per concern, so this anchor is a
+// DIRECTORY. A planted tree therefore writes the emitter as an owner inside it,
+// exactly as the real tree does.
+const BRAND_THEME_EMITTER_ANCHOR = `${ANCHORS.brandThemeEmitter.path}/index.ts`;
 const APPEARANCE_EMITTER_ANCHOR = ANCHORS.appearanceEmitter.path;
 const APPEARANCE_POSTURE_EMITTER_ANCHOR = ANCHORS.appearancePostureEmitter.path;
 const THEME_CONTRACTS_ANCHOR = ANCHORS.themeContracts.path;
@@ -375,7 +378,7 @@ function coreFixture() {
   write(
     root,
     BRAND_THEME_EMITTER_ANCHOR,
-    `export function compileBrandTheme(vars, theme) {\n` +
+    `export function compileTheme(vars, theme) {\n` +
       `  vars["--ds-brand-generated"] = theme.palette?.primary;\n` +
       `}\n`,
   );

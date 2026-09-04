@@ -9,7 +9,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
@@ -17,6 +17,7 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from '../index';
+import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 
 const bithireSpec = () => {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === 'bithire');
@@ -25,13 +26,13 @@ const bithireSpec = () => {
 };
 
 const render = (brandTheme: BrandTheme) =>
-  renderFirstPartyArtifact({ spec: bithireSpec(), brandTheme }).css;
+  renderFirstPartyArtifact({ spec: bithireSpec(), theme: liftAuthoredTheme(brandTheme) }).css;
 
 describe('mode blocks in the rendered artifact', () => {
   it('renders one block per authored mode, scoped above the base block', () => {
     const css = render(bithireBrandTheme);
 
-    expect(css).toContain('/* === Compiled from BrandTheme.modes.dark — do not edit === */');
+    expect(css).toContain('/* === Compiled from Theme.modes.dark — do not edit === */');
     // The scope projection wraps the tenant arm; the mode attribute must stay
     // OUTSIDE that group, or the block would tie with the base block instead of
     // outranking it. `:is()` contributes the max specificity of its arguments,
@@ -42,8 +43,8 @@ describe('mode blocks in the rendered artifact', () => {
     );
     // The base block comes first and stays unconditional; the mode block is the
     // only place an explicit mode selector is written.
-    expect(css.indexOf('=== Compiled from BrandTheme via')).toBeLessThan(
-      css.indexOf('=== Compiled from BrandTheme.modes.dark'),
+    expect(css.indexOf('=== Compiled from the authored Theme via')).toBeLessThan(
+      css.indexOf('=== Compiled from Theme.modes.dark'),
     );
   });
 
@@ -80,7 +81,7 @@ describe('mode blocks in the rendered artifact', () => {
   });
 
   it('does not restate a base-block channel inside the mode block', () => {
-    const compiled = compileBrandTheme({
+    const compiled = lowerBrandThemeFixture({
       brandTheme: bithireBrandTheme,
       tenantSlug: 'bithire',
     });

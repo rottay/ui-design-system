@@ -6667,7 +6667,7 @@
         "core/src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts",
         "core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts",
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
         "core/src/infrastructure/compilers/runtime/tenant-css/visual-config/index.ts",
         "core/tests/fixtures/tenants/quality-evidence/index.ts"
       ],
@@ -6707,7 +6707,6 @@
       "shippedValue": "#A6C6DF",
       "emittedBy": [
         "core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
         "core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
         "core/src/components/patterns/customization/brand-studio/runtime/file-export/index.ts"
       ],
@@ -6722,7 +6721,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "Same live white-label contract as --ds-color-dark-primary. Ships #A6C6DF on bithire with per-vertical variants. Zero CSS readers.",
+      "note": "Same live white-label contract as --ds-color-dark-primary. Ships #A6C6DF on bithire with per-vertical variants. Zero CSS readers. C2: the retired compiler was dropped from emittedBy because it no longer exists and no owner replaced it for this channel -- the --ds-color-dark-* family has no live emitter at all; the shipped value survives only in the committed artifacts.",
       "successor": "none",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "historicalVerdict": "RECONNECT_PENDING_PART",
@@ -6740,7 +6739,6 @@
       "shippedValue": "#6BB5F5",
       "emittedBy": [
         "core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
         "core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
         "core/src/components/patterns/customization/brand-studio/runtime/file-export/index.ts"
       ],
@@ -6755,7 +6753,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "NOT retirable — this is a live public white-label channel with a capability gap. foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:137 lists it in the tenant theme contract and ui/patterns/customization/brand-studio/runtime/file-export/index.ts:135 maps the customer-facing field `darkPrimaryColor` onto it. All three artifacts declare it with genuinely different values (rottay #FFFFFF, evnto #E8E8E0, bithire #6BB5F5), so tenants are already setting it. No CSS rule anywhere reads var(--ds-color-dark-*): a customer can set a dark-mode brand colour today and it paints nothing. Needs the dark-theme consumer built, not the token removed.",
+      "note": "NOT retirable — this is a live public white-label channel with a capability gap. foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:137 lists it in the tenant theme contract and ui/patterns/customization/brand-studio/runtime/file-export/index.ts:135 maps the customer-facing field `darkPrimaryColor` onto it. All three artifacts declare it with genuinely different values (rottay #FFFFFF, evnto #E8E8E0, bithire #6BB5F5), so tenants are already setting it. No CSS rule anywhere reads var(--ds-color-dark-*): a customer can set a dark-mode brand colour today and it paints nothing. Needs the dark-theme consumer built, not the token removed. C2: the retired compiler was dropped from emittedBy because it no longer exists and no owner replaced it for this channel -- the --ds-color-dark-* family has no live emitter at all; the shipped value survives only in the committed artifacts.",
       "successor": "none",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "historicalVerdict": "RECONNECT_PENDING_PART",
@@ -6773,7 +6771,6 @@
       "shippedValue": "#7CB7E8",
       "emittedBy": [
         "core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
         "core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
         "core/src/components/patterns/customization/brand-studio/runtime/file-export/index.ts"
       ],
@@ -6788,7 +6785,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "Same live white-label contract as --ds-color-dark-primary (tenant-theme contract + brand-studio export). Ships #7CB7E8 on bithire with per-vertical variants. Zero CSS readers: the capability is sold and not wired.",
+      "note": "Same live white-label contract as --ds-color-dark-primary (tenant-theme contract + brand-studio export). Ships #7CB7E8 on bithire with per-vertical variants. Zero CSS readers: the capability is sold and not wired. C2: the retired compiler was dropped from emittedBy because it no longer exists and no owner replaced it for this channel -- the --ds-color-dark-* family has no live emitter at all; the shipped value survives only in the committed artifacts.",
       "successor": "none",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "historicalVerdict": "RECONNECT_PENDING_PART",
@@ -6805,7 +6802,7 @@
       ],
       "shippedValue": "#f4f8fd",
       "emittedBy": [
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette/index.ts"
       ],
       "declaredInSourceCss": [
         "core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
@@ -6837,7 +6834,7 @@
       ],
       "shippedValue": "#c4d2de",
       "emittedBy": [
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette/index.ts"
       ],
       "declaredInSourceCss": [
         "core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css",
@@ -15456,7 +15453,7 @@
       ],
       "shippedValue": null,
       "emittedBy": [
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/type-ramp/index.ts"
       ],
       "declaredInSourceCss": [
         "core/src/foundation/tokens/css/facade/artifacts/{bithire,evnto,rottay}/index.css"
@@ -15489,7 +15486,7 @@
       ],
       "shippedValue": null,
       "emittedBy": [
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/type-ramp/index.ts"
       ],
       "declaredInSourceCss": [
         "core/src/foundation/tokens/css/facade/artifacts/{bithire,evnto,rottay}/index.css"
@@ -15517,7 +15514,7 @@
       ],
       "shippedValue": null,
       "emittedBy": [
-        "core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+        "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/type-ramp/index.ts"
       ],
       "declaredInSourceCss": [
         "core/src/foundation/tokens/css/facade/artifacts/{bithire,evnto,rottay}/index.css"
@@ -15745,7 +15742,7 @@
         "--ds-border-color-disabled": "Source residue closed by VERTICAL-DEAD-4 (2026-08-14). Removed from foundation/themes/default/index.css:965 and from artifacts/rottay/_source/extension.css (dark + light). Zero reads in every scope, and it was a byte-identical duplicate of --ds-border-color-muted (both `var(--ds-color-border-subtle)`) declared four lines above and READ. Successor --ds-color-border-subtle is read 87/22/152. Generated artifacts still ship the value until regeneration (GENERATED-PENDING)."
       },
       "notExecuted": {
-        "--ds-text-eyebrow": "NOT DEAD. The census scores it reads {css:0, ts:0} because it counts DS-internal reads only. FASE B finds FOUR live app-bithire consumers: features/applications/surface/screens/workflows/pipeline/board/view/sections/client-view/command-panel/styles/index.css, ui/details/surface-shell/header/styles/index.css, ui/details/surface-shell/typography/styles/index.css and vertical/surface/shell/sidebar/styles/index.css (plus sidebar/index.tsx). It is emitted into all three artifacts by compilers/kernel/runtime/brand-theme/index.ts. Retiring it would break shipped app CSS. This is a KEEP, and it is the third time in this programme that a DS-internal zero turned out to be a live app contract.",
+        "--ds-text-eyebrow": "NOT DEAD. The census scores it reads {css:0, ts:0} because it counts DS-internal reads only. FASE B finds FOUR live app-bithire consumers: features/applications/surface/screens/workflows/pipeline/board/view/sections/client-view/command-panel/styles/index.css, ui/details/surface-shell/header/styles/index.css, ui/details/surface-shell/typography/styles/index.css and vertical/surface/shell/sidebar/styles/index.css (plus sidebar/index.tsx). It is emitted into all three artifacts by core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/type-ramp/index.ts:84. Retiring it would break shipped app CSS. This is a KEEP, and it is the third time in this programme that a DS-internal zero turned out to be a live app contract.",
         "--ds-text-eyebrow-line-height / --ds-text-eyebrow-weight": "Zero reads anywhere, but they are emitted by the same brand-theme compiler into all three artifacts, asserted by foundation/tokens/tests/bithire-type-ramp.test.ts, and they are the siblings of the live --ds-text-eyebrow above. Draining them is an emitter + artifact + test change over a family whose head is live, not a declaration removal. Left for the owner.",
         "--ds-text-heading-{1..6}-letter-spacing": "RE-DIAGNOSED AS A MIRROR GAP, NOT AN ALIAS. All six are declared in foundation/base/typography.css:347-372 with real authored values (var(--ds-letter-spacing-h1..h6), the block comment reads 'Premium typography with tighter tracking at larger sizes') and read by nothing. The reason nothing reads them is that the TS mirror foundation/tokens/ts/foundation/base/typography/index.ts gives textStyles.heading1..6 only {size, weight, lineHeight} while textStyles.display1, display2 and label all carry letterSpacing. The other 18 members of the same heading ramp score 'active' in the census on exactly that one TS read each. So the six are not superseded names to delete -- they are the letter-spacing leg the mirror forgot. Deleting them would destroy an authored decision and foreclose the real fix. The fix is to add letterSpacing: 'var(--ds-text-heading-N-letter-spacing)' to heading1..6 in the TS mirror, which is zero-delta TODAY because textStyles has zero importers anywhere in the DS, the showroom or the three apps. That file is outside the FASE-B fence."
       }

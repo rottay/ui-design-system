@@ -111,7 +111,7 @@ import {
   hydrateTenantThemeConfig,
   validateTenantThemeDocument,
 } from "@/infrastructure/compilers/composition/tenant-theme";
-import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
 
@@ -1314,7 +1314,7 @@ const t3Keys = new Set(T3_ROSTER.map((row) => `${row.mode}|${row.name}`));
 const darkRows = T3_ROSTER.filter((row) => row.mode === "dark");
 const lightRows = T3_ROSTER.filter((row) => row.mode === "light");
 
-const compiled = compileBrandTheme({
+const compiled = lowerBrandThemeFixture({
   brandTheme: rottayBrandTheme,
   tenantSlug: "rottay",
 });
@@ -1963,7 +1963,7 @@ describe("ROTTAY EXTENSION COMPONENT-FAMILY DRAIN - one lowering, both transport
       ).modes?.light?.chrome ?? {})[prop];
       if (body) delete body[field];
       if (light) delete light[field];
-      const stripped = compileBrandTheme({
+      const stripped = lowerBrandThemeFixture({
         brandTheme: clone,
         tenantSlug: "rottay",
       });
@@ -1983,7 +1983,7 @@ describe("ROTTAY EXTENSION COMPONENT-FAMILY DRAIN - one lowering, both transport
       family.fields.map(([, channel]) => channel)
     );
     for (const slug of ["rottay", "acme-holdings", "zzz"]) {
-      const other = compileBrandTheme({
+      const other = lowerBrandThemeFixture({
         brandTheme: rottayBrandTheme,
         tenantSlug: slug,
       });
@@ -2264,7 +2264,7 @@ describe("ROTTAY EXTENSION COMPONENT-FAMILY DRAIN - causality", () => {
     ).modes?.light?.chrome ?? {})[family.prop];
     expect(light?.[field]).toBe(divergent.value);
     if (light) delete light[field];
-    const stripped = compileBrandTheme({
+    const stripped = lowerBrandThemeFixture({
       brandTheme: clone,
       tenantSlug: "rottay",
     });

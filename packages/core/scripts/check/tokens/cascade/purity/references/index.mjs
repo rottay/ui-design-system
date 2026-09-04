@@ -29,7 +29,7 @@
  *               del catalogo. Esta clase protege a las raices del eje paso, que
  *               van a nacer en su mayoria con la cabeza sin emitir.
  *
- * UN SOLO LOWERING. Compila con `compileBrandTheme` de `dist/` bajo prueba de
+ * UN SOLO LOWERING. Compila con `compileTheme` de `dist/` bajo prueba de
  * frescura, igual que `slot-inventory` y `root-membership`. Un segundo emisor
  * seria STOP del programa.
  *
@@ -53,6 +53,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 import { assertDistFresh } from '../../../../../package/artifacts/freshness/index.mjs';
+import { loadBrandThemeLowering } from '../../../../../libraries/theme-lowering/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const CORE_ROOT = findPackageRoot(HERE);
@@ -123,11 +124,10 @@ export async function loadArm({ coreRoot = CORE_ROOT, importModule = (spec) => i
   if (!freshness?.ok) {
     throw new Error(`purity: dist/ esta rancio o su frescura no esta probada:\n  ${(freshness?.failures ?? ['sin prueba']).join('\n  ')}`);
   }
-  const compiler = await importModule(pathToFileURL(join(coreRoot, 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js')).href);
   const themes = await importModule(pathToFileURL(join(coreRoot, 'dist/foundation/tokens/ts/presentation/brand-themes/index.js')).href);
-  if (typeof compiler.compileBrandTheme !== 'function') throw new Error('purity: dist no exporta compileBrandTheme');
+  const { compile } = await loadBrandThemeLowering({ coreRoot, importModule });
   return {
-    compile: compiler.compileBrandTheme,
+    compile,
     themes: { rottay: themes.rottayBrandTheme, bithire: themes.bithireBrandTheme, evnto: themes.evntoBrandTheme },
   };
 }

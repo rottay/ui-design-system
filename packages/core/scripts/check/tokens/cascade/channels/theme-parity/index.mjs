@@ -64,9 +64,31 @@ const tenantThemeContract = join(
   'tenant-theme',
   'index.ts',
 );
+const loweringDir = join(
+  srcDir,
+  'infrastructure',
+  'compilers',
+  'runtime',
+  'theme',
+  'runtime',
+  'lowering',
+);
+/**
+ * Every emitter that can declare a chrome channel. The lowering's writers are
+ * one owner per concern since C2, so the list enumerates them rather than
+ * naming a single compiler file: a channel emitted by any one of them is
+ * emitted, and a list that saw only one owner would report the others' fields
+ * as declared-but-unemitted.
+ */
 const emitterFiles = [
   join(srcDir, 'infrastructure', 'compilers', 'kernel', 'foundation', 'css', 'chrome-variables', 'index.ts'),
-  join(srcDir, 'infrastructure', 'compilers', 'kernel', 'runtime', 'brand-theme', 'index.ts'),
+  ...readdirSync(join(loweringDir, 'foundation'))
+    .sort()
+    .map((owner) => join(loweringDir, 'foundation', owner, 'index.ts')),
+  ...readdirSync(join(loweringDir, 'runtime'))
+    .sort()
+    .map((owner) => join(loweringDir, 'runtime', owner, 'index.ts')),
+  join(loweringDir, 'index.ts'),
 ];
 const compilersDir = join(srcDir, 'infrastructure', 'compilers');
 const baselinePath = join(here, 'baseline/index.json');

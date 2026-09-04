@@ -262,8 +262,10 @@ file or a component branch.
 
 `Theme` is the single theme contract. Both transports resolve to the same complete theme
 and enter **one lowering** under
-`src/infrastructure/compilers/kernel/runtime/brand-theme/`. There is deliberately no
-second compiler.
+`src/infrastructure/compilers/runtime/theme/runtime/lowering/`, which owns the whole
+`resolveTheme -> compileTheme -> EngineAdapter.project` chain and delegates emission to
+`emitThemeCss`. There is deliberately no second compiler, and the structural gate
+`tests/architecture/theme-lowering-single-door/` fails if one reappears.
 
 The canonical custom-property prefix is `--ds-`. Component-local private variables use
 `--_ds-*` and are internal wiring, never a customization surface. The `--ds_` prefix is

@@ -24,14 +24,14 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from '../ts/presentation/brand-themes/bithire';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACT_PATH = resolve(TEST_DIR, '..', 'css/facade/artifacts/bithire/index.css');
 
 describe('bithire brand compiler emits the §2.6 motion vocabulary', () => {
-  const { cssVariables } = compileBrandTheme({
+  const { cssVariables } = lowerBrandThemeFixture({
     brandTheme: bithireBrandTheme,
     tenantSlug: 'bithire',
   });

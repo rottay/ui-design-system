@@ -31,23 +31,23 @@ export type BrandStudioSurfaceKey = 'light' | 'dark';
 /**
  * Configuration for one preview ground.
  *
- * `groundVars` is a base `--ds-*` token scaffold injected before the compiled
- * BrandTheme edit. The brand compiler emits only the overrides a theme sets, so
- * the ground supplies the neutral background/text/border/surface tokens the real
- * components read. The compiled edit is layered on top and wins. `groundVars`
- * are also the fallback source for contrast derivation when the edit does not
- * emit a background/text/surface color of its own.
+ * The ground itself is design-system-owned and selected by {@link baseTheme}:
+ * the brand compiler emits only the overrides a theme sets, so each panel needs
+ * a neutral background/text/border/surface scaffold underneath the compiled
+ * edit, and that scaffold is the DS's own. It is not a consumer input. A raw
+ * `--ds-*` map supplied here would enter AFTER compilation and be written into
+ * the panel's `<style>` block without passing the compiler that owns every
+ * other value in it; the intended ground is expressed by picking a ground, and
+ * anything beyond it by authoring the theme the panel compiles.
  */
 export interface BrandStudioSurfaceConfig {
   key: BrandStudioSurfaceKey;
-  /** Passed to `compileBrandTheme` as `baseTheme`. */
+  /** Selects which DS-owned preview ground this panel compiles against. */
   baseTheme: 'light' | 'dark';
-  /** Passed to `compileBrandTheme` as `tenantSlug` for CSS selector scoping. */
+  /** Passed to `resolveTheme` as the resolved theme's `id`, for selector scoping. */
   tenantSlug: string;
   /** Human-readable label rendered above the panel. */
   label?: string;
-  /** Base `--ds-*` token scaffold injected before the compiled edit. */
-  groundVars?: Record<string, string>;
 }
 
 /** Context handed to the galleries render slot for each preview panel. */

@@ -11,9 +11,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import {
-  compileBrandTheme,
-} from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
@@ -32,7 +30,7 @@ function specFor(slug: string): FirstPartyArtifactSpec {
 }
 
 function render(brandTheme: BrandTheme, spec: FirstPartyArtifactSpec): string {
-  const compiled = compileBrandTheme({ brandTheme, tenantSlug: spec.slug });
+  const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: spec.slug });
   return renderVerticalArtifact({
     tenantSlug: spec.slug,
     verticalKey: spec.verticalKey,

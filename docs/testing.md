@@ -15,7 +15,7 @@ Run from the repository root unless noted. `@rottay/design-system` is the
 | Script tests | Node test runner + Vitest | `packages/core/scripts/**/*.test.mjs` | `pnpm --filter @rottay/design-system run test:scripts` |
 | Type check | `tsc --noEmit` | whole package | `pnpm --filter @rottay/design-system run typecheck` |
 | Structure + ownership | custom Node scripts | source-tree conventions | `pnpm --filter @rottay/design-system run structure:check` |
-| Quality gate manifest | mixed (103 entries: 102 blocking, 1 excluded) | whole package | `pnpm --filter @rottay/design-system run gates:ci` |
+| Quality gate manifest | mixed (113 entries: 112 blocking, 1 excluded) | whole package | `pnpm --filter @rottay/design-system run gates:ci` |
 | Build | `tsc` + Vite | package output | `pnpm --filter @rottay/design-system run build` |
 | Accessibility | Playwright + axe | Showroom galleries | `pnpm --filter @rottay/showroom exec playwright test e2e/a11y` |
 | Visual regression / whitelabel / responsive | Playwright | Showroom production build | `pnpm --filter @rottay/showroom run test:gates` |

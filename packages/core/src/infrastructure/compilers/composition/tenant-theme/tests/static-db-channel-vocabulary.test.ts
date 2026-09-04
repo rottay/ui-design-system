@@ -2,7 +2,7 @@
  * STATIC/DB SAME VOCABULARY — one channel language, two authoring paths.
  *
  * A code-owned vertical authors its colors as a `BrandTheme` compiled by
- * `compileBrandTheme`; a customer authors them as a `TenantThemeDocument`
+ * `compileTheme`; a customer authors them as a `TenantThemeDocument`
  * compiled by `compileTenantThemeConfig`. Both must land in the SAME semantic
  * channel vocabulary, because the components downstream read channel names and
  * nothing else. When the two paths drift, the drift is invisible until a
@@ -49,7 +49,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
@@ -230,14 +230,14 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
 };
 
 const staticMirrorChannels = allChannels(
-  compileBrandTheme({
+  lowerBrandThemeFixture({
     brandTheme: buildStaticMirror(dbCompiled),
     tenantSlug: "static-mirror",
   })
 );
 
 const bithireChannels = allChannels(
-  compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" })
+  lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" })
 );
 
 /**

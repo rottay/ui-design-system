@@ -103,7 +103,7 @@ import {
   hydrateTenantThemeConfig,
   validateTenantThemeDocument,
 } from "@/infrastructure/compilers/composition/tenant-theme";
-import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
 
@@ -855,7 +855,7 @@ const deleteRows = T2_ROSTER.filter((row) => row.disposition === "delete");
 const t2Names = [...new Set(T2_ROSTER.map((row) => row.name))].sort();
 const t2Keys = new Set(T2_ROSTER.map((row) => `${row.mode}|${row.name}`));
 
-const compiled = compileBrandTheme({
+const compiled = lowerBrandThemeFixture({
   brandTheme: rottayBrandTheme,
   tenantSlug: "rottay",
 });
@@ -1489,7 +1489,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports"
       const light = lightControlsOf(clone)[prop];
       if (body) delete body[field];
       if (light) delete light[field];
-      const stripped = compileBrandTheme({
+      const stripped = lowerBrandThemeFixture({
         brandTheme: clone,
         tenantSlug: "rottay",
       });
@@ -1513,7 +1513,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports"
       family.fields.map(([, channel]) => channel)
     );
     for (const slug of ["rottay", "acme-holdings", "zzz"]) {
-      const other = compileBrandTheme({
+      const other = lowerBrandThemeFixture({
         brandTheme: rottayBrandTheme,
         tenantSlug: slug,
       });
@@ -1881,7 +1881,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - causality", () => {
     const clone = structuredClone(rottayBrandTheme);
     const light = lightControlsOf(clone)[family?.prop as string];
     if (light) delete light[field?.[0] as string];
-    const bled = compileBrandTheme({ brandTheme: clone, tenantSlug: "rottay" });
+    const bled = lowerBrandThemeFixture({ brandTheme: clone, tenantSlug: "rottay" });
     const bledLight = (bled.modeBlocks ?? []).find(
       (block) => block.mode === "light"
     );

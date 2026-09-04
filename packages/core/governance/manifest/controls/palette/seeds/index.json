@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
+    "registryDigest": "702d6498eae83d2a0fd8f3879b608b43b7049cf8e53c2fbb4b4c34f5045533fb"
   },
   "title": "Brand palette seeds",
   "valueType": "color-set",
@@ -80,7 +80,7 @@
       "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
       "packages/core/src/foundation/kernel/color/oklch/ramp/index.ts",
       "packages/core/src/foundation/kernel/color/oklch/index.ts",
-      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css"
     ],
@@ -152,7 +152,7 @@
       },
       {
         "familyId": "CHROME_SEED_PROVENANCE_ASYMMETRY",
-        "finding": "THE LAST THREE ROWS, and they are not a disagreement between compilers. On bithire in LIGHT, --ds-button-primary-bg reads #3A6FB0 on the static arm and var(--ds-color-primary) on the DB arm, which also moves the button background-color and border-top-color it paints. Measured cause: `applyTenantSeedDerivations` (kernel/runtime/brand-theme:1614) re-derives the primary family a TENANT seed owns, and it fires ONLY when `provenance.seedIsTenantAuthored`. bithire is the one vertical whose baseline bakes a literal colour at chrome.controls.buttonPrimary.bg (#3A6FB0; rottay and evnto author var(--ds-color-primary) and are therefore unaffected), and the rule replaces exactly that kind of value: \"a BASELINE_LEAF cannot beat a TENANT_DERIVED value\".",
+        "finding": "THE LAST THREE ROWS, and they are not a disagreement between compilers. On bithire in LIGHT, --ds-button-primary-bg reads #3A6FB0 on the static arm and var(--ds-color-primary) on the DB arm, which also moves the button background-color and border-top-color it paints. Measured cause: `applyTenantSeedDerivations` (compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts:154) re-derives the primary family a TENANT seed owns, and it fires ONLY when `provenance.seedIsTenantAuthored`. bithire is the one vertical whose baseline bakes a literal colour at chrome.controls.buttonPrimary.bg (#3A6FB0; rottay and evnto author var(--ds-color-primary) and are therefore unaffected), and the rule replaces exactly that kind of value: \"a BASELINE_LEAF cannot beat a TENANT_DERIVED value\".",
         "refutedExplanations": "TWO were checked and BOTH are false. (a) A baseline divergence: the two transports do NOT receive different verticals -- the DB baseline is FIRST_PARTY_THEMES[verticalKey] = brandThemeToTheme(bithireBrandTheme), the same source the static arm composes over. (b) A compiler defect: it is the SAME lowering; `compileTheme` and `compileBrandTheme` live in one file and share `applyTenantSeedDerivations`.",
         "decisiveExperiment": "Same compiler, same theme, same patch, one variable changed: compileBrandTheme({brandTheme: bithire, tenantPatch: {palette:{primaryColor:\"#DC2626\"}}, tenantSlug:\"bithire\"}) emits --ds-button-primary-bg = #3A6FB0; adding tenantAuthoredPaths: Set([\"palette.primaryColor\"]) to the SAME call emits var(--ds-color-primary) -- byte-identical to the DB arm. The provenance flag alone explains the divergence.",
         "adjudication": "BRANCH (c): legitimate behaviour of two transports for two tenant classes, with the caveat that it is a PROBE FIDELITY GAP rather than a permanent product truth. The compiler contract says so in its own words: tenantAuthoredPaths is \"supplied only for the tenant leg of a DB compile; a baseline compile supplies nothing and therefore compiles exactly as it did before provenance existed\", and the rule's doc adds \"every static first-party compile takes this path\". So the DB arm is right, the static arm is right about a FIRST-PARTY compile, and the probe's static arm is modelling something in between: it lowers a TENANT patch (B-1) while compiling as a baseline.",
@@ -162,7 +162,7 @@
         "owner": "the instrument (static arm provenance), not the compiler and not the baselines",
         "resolvedBy": "B-2 -- the static arm declares the authorship of the patch it lowers",
         "resolutionMeasured": "CLOSED, measured on both bithire stops: 3 divergent rows -> 0, pass=true, restore exact, negatives held. The remediation this entry named is what landed, and it landed where the entry said it belonged -- in the instrument, with no compiler and no baseline touched.",
-        "adjudicationClauseAged": "THE QUOTATION IN `adjudication` AGED, and B-2 corrected the source rather than the quote. It cited the compiler contract saying tenantAuthoredPaths is 'supplied only for the tenant leg of a DB compile'. That clause described the only producer that existed; the gate run before B-2 measured that baseline+patch is the ONLY composition production performs and that production never performs it WITHOUT a set, so an arm composing both floors silently was the defect, not the exception. The clause is amended at src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts (compileTheme.tenantAuthoredPaths). The rest of the adjudication -- branch (c), the probe fidelity gap, and `answerToOptionB` -- stands unchanged and is what B-2 executed."
+        "adjudicationClauseAged": "THE QUOTATION IN `adjudication` AGED, and B-2 corrected the source rather than the quote. It cited the compiler contract saying tenantAuthoredPaths is 'supplied only for the tenant leg of a DB compile'. That clause described the only producer that existed; the gate run before B-2 measured that baseline+patch is the ONLY composition production performs and that production never performs it WITHOUT a set, so an arm composing both floors silently was the defect, not the exception. The clause is amended at packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts (compileTheme, the resolution's provenance). The rest of the adjudication -- branch (c), the probe fidelity gap, and `answerToOptionB` -- stands unchanged and is what B-2 executed."
       },
       {
         "familyId": "ROTTAY_DB_SEED_LANDS_IN_THE_NON_DEFAULT_MODE",

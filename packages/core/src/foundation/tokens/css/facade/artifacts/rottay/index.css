@@ -4,12 +4,12 @@
  *
  * This file is a BUILD OUTPUT compiled from ONE authored source; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   foundation/tokens/ts/presentation/brand-themes/rottay/index.ts (compiled via compileBrandTheme)
+ *   foundation/tokens/ts/presentation/brand-themes/rottay/index.ts (compiled via compileTheme)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
-/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+/* === Compiled from the authored Theme via compileTheme — do not edit === */
 :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])) {
   color-scheme: dark;
   color: var(--ds-color-text-primary);
@@ -1211,7 +1211,7 @@
   --ds-watermark-color: #222226;
 }
 
-/* === Compiled from BrandTheme.modes.light — do not edit === */
+/* === Compiled from Theme.modes.light — do not edit === */
 :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay']))[data-theme='light'], :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])).light {
   color-scheme: light;
   --ds-alert-error-bg: rgba(220, 38, 38, 0.06);

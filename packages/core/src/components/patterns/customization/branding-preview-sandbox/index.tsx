@@ -47,20 +47,36 @@ import { Input } from '../../../primitives/inputs/input';
 import { Text } from '../../../primitives/display/typography/compound/text';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-// Lazy import to avoid pulling appearance compiler into main bundle
-// when sandbox is not used (tree-shaken)
-import { appearanceToVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
+import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
+import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { migrateV1 } from '@/infrastructure/compilers/composition/tenant-theme/migrate-v1';
+import {
+  THEME_ENGINE_ADAPTERS,
+  compileTheme,
+  resolveTheme,
+} from '@/infrastructure/compilers/runtime/theme';
+import { containerScope } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
+import { emitThemeCss } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
 import { isSafePreviewCssValue } from '@/infrastructure/runtime/tenant/runtime/preview-scope';
 
 interface BrandingPreviewSandboxProps {
   /** Proposed tenant appearance to preview. */
   appearance: TenantAppearance;
-  /** Additional raw CSS variables to inject. */
-  extraVars?: Record<string, string>;
   /** Show section labels. Default: true */
   showLabels?: boolean;
   /** Compact mode (fewer components). Default: false */
   compact?: boolean;
+  /**
+   * The vertical baseline the proposed appearance is resolved against.
+   *
+   * A `TenantAppearance` is a DELTA; it has no channels of its own until it is
+   * resolved over a theme, which is why the canonical pipeline takes a baseline
+   * and not an appearance. Defaults to the Rottay first-party theme — the DS's
+   * own reference vertical — so the sandbox still renders standalone; a console
+   * previewing its own tenant should pass that tenant's baseline instead.
+   */
+  baseline?: Theme;
 }
 
 /**
@@ -69,9 +85,9 @@ interface BrandingPreviewSandboxProps {
  */
 export function BrandingPreviewSandbox({
   appearance,
-  extraVars,
   showLabels = true,
   compact = false,
+  baseline = FIRST_PARTY_THEMES.rottay,
 }: BrandingPreviewSandboxProps): React.ReactElement {
   // Optional channel with an English floor: the sandbox renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
@@ -82,12 +98,41 @@ export function BrandingPreviewSandbox({
   const sandboxId = useId().replace(/:/g, '');
   const scopeAttr = `data-preview-${sandboxId}`;
 
-  // Compile appearance to CSS variables
+  /**
+   * The proposed appearance, through the ONE pipeline.
+   *
+   * The appearance is migrated into the same `ThemePatch` a stored tenant
+   * document produces, resolved over the baseline as a `preview` intent, and
+   * lowered by `compileTheme`. What the sandbox paints is the DELTA against the
+   * untouched baseline — the same rule the DB artifact uses — so the scope still
+   * carries exactly the channels the appearance moves and nothing else.
+   *
+   * Fail-closed: a document the migration refuses paints nothing rather than
+   * falling back to a second, hand-rolled projection.
+   */
   const cssVars = useMemo(() => {
-    const vars = appearanceToVariables(appearance);
-    if (extraVars) Object.assign(vars, extraVars);
+    const vars: Record<string, string> = {};
+    const document = (
+      appearance.advanced
+        ? { schemaVersion: 1, mode: 'advanced', visualFoundation: appearance }
+        : { schemaVersion: 1, mode: 'simple', appearance: appearance.general ?? {} }
+    ) as unknown as TenantThemeDocument;
+    try {
+      const patch = migrateV1(document, 'light').patch;
+      const adapter = THEME_ENGINE_ADAPTERS.modern;
+      const proposed = compileTheme(
+        resolveTheme(baseline, { origin: 'preview', patch }),
+        adapter,
+      );
+      const untouched = compileTheme(resolveTheme(baseline), adapter);
+      for (const [name, value] of Object.entries(proposed.cssVariables)) {
+        if (untouched.cssVariables[name] !== value) vars[name] = value;
+      }
+    } catch {
+      // An unmigratable appearance is a refused preview, never a second door.
+    }
     return vars;
-  }, [appearance, extraVars]);
+  }, [appearance, baseline]);
 
   // This string reaches dangerouslySetInnerHTML, so every declaration passes
   // the governed preview guard before it is emitted.
@@ -99,10 +144,18 @@ export function BrandingPreviewSandbox({
     [cssVars],
   );
 
+  // Emission is the emission owner's, not this component's: a pattern that
+  // assembles its own declarations is a second CSS grammar to keep in step.
   const scopedCss = useMemo(() => {
     if (appliedVars.length === 0) return '';
-    const declarations = appliedVars.map(([name, value]) => `  ${name}: ${value};`);
-    return `[${scopeAttr}] {\n${declarations.join('\n')}\n}`;
+    return emitThemeCss(
+      {
+        cssVariables: Object.fromEntries(appliedVars),
+        modeBlocks: [],
+        runtime: { personality: {}, tokenOverrides: {} },
+      },
+      containerScope(`[${scopeAttr}]`),
+    );
   }, [appliedVars, scopeAttr]);
 
   return (

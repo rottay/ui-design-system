@@ -134,7 +134,7 @@ export interface TortureFirstPaintPlan {
    * The governed root attribute set, or `null` when this fixture's settled
    * ground is not deterministic from bundled or compiled CSS. A null plan
    * stamps nothing: the torture fixtures compile their BrandTheme inside
-   * TortureSurface itself at render time (client-side, via `compileBrandTheme`,
+   * TortureSurface itself at render time (client-side, via `compileTheme`,
    * mounted as a `<style>` element), so an early server stamp would activate a
    * scope whose declarations do not exist yet and could not match the settled
    * render.

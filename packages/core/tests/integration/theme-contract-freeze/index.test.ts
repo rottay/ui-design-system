@@ -7,7 +7,7 @@
  * and the two transitional re-exports have exact consumer sets.
  */
 
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -15,22 +15,18 @@ import type {
   Theme,
   ThemePatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
-import {
-  resolveTheme as isoResolveTheme,
-  themeToBrandTheme,
-} from "@/foundation/contracts/composition/tenants/themes/iso";
+import { mergeThemePatches } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import type { BrandCompilerProvenanceInput } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import {
   RESOLVED_TONE_ROLES,
   tenantProvenance,
 } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
-import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
 import { migrateV1 } from "@/infrastructure/compilers/composition/tenant-theme/migrate-v1";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
   compileTheme,
+  containerScope,
   emitThemeCss,
   firstPartyScope,
   resolveAdapter,
@@ -88,51 +84,34 @@ const TENANT_FIXTURES: readonly [string, Theme, ThemePatch][] = [
 /* the new chain reproduces the compiler it wraps                             */
 /* -------------------------------------------------------------------------- */
 
-describe("the new chain reproduces the old chain, field by field", () => {
+describe("the single chain produces a total, engine-projected compilation", () => {
+  // Compiled BYTES are pinned against the committed first-party artifacts in
+  // `lowering/tests/artifact-oracle.test.ts`; this block fences the product shape.
   for (const [label, theme] of FIXTURES) {
-    it(`${label} compiles identically through both doors`, () => {
-      const before = compileBrandTheme({
-        brandTheme: themeToBrandTheme(theme),
-        tenantSlug: theme.id,
-      });
-      const after = compileTheme(resolveTheme(theme), modern);
+    it(`${label} compiles to the total product shape`, () => {
+      const compiled = compileTheme(resolveTheme(theme), modern);
 
-      expect(after.cssVariables).toEqual(before.cssVariables);
-      expect(after.modeBlocks).toEqual(before.modeBlocks ?? []);
-      expect(after.colorScheme).toBe(before.colorScheme);
-      expect(after.runtime.personality).toEqual(before.personality);
-      expect(after.runtime.tokenOverrides).toEqual(before.tokenOverrides);
-      expect(after.runtime.recipeProfile).toBe(before.recipeProfile);
-      expect(after.runtime.experienceProfile).toBe(before.experienceProfile);
-      expect(after.projection).toEqual({ seeds: {}, tokenOverrides: {}, modes: [] });
-      expect(after.engine).toBe("modern");
+      expect(Object.keys(compiled.cssVariables).length).toBeGreaterThan(0);
+      expect(Array.isArray(compiled.modeBlocks)).toBe(true);
+      expect(compiled.runtime.personality).toBeTruthy();
+      expect(compiled.runtime.tokenOverrides).toBeTruthy();
+      expect(compiled.projection).toEqual({ seeds: {}, tokenOverrides: {}, modes: [] });
+      expect(compiled.engine).toBe("modern");
+      // Scope is emission's, so the product carries neither CSS text nor slug.
+      const asRecord = compiled as unknown as Record<string, unknown>;
+      expect(asRecord.cssString).toBeUndefined();
+      expect(asRecord.tenantSlug).toBeUndefined();
     });
   }
 
   for (const [label, baseline, patch] of TENANT_FIXTURES) {
-    it(`reproduces the tenant branch for ${label}`, () => {
+    it(`${label} resolves to tenant-authored provenance`, () => {
       const resolution = resolveTheme(baseline, {
         origin: "tenant-document",
         patch,
       });
       expect(resolution.provenance.tenantAuthored).toBe(true);
       expect(resolution.provenance.authoredPaths.size).toBeGreaterThan(0);
-
-      const after = compileTheme(resolution, modern);
-      // A typed const, never an inline literal: the three provenance fields
-      // live on the widened input type, not on `BrandCompilerInput`.
-      const input: BrandCompilerProvenanceInput = {
-        brandTheme: themeToBrandTheme(resolution.theme),
-        tenantSlug: resolution.theme.id,
-        tenantAuthoredPaths: resolution.provenance.authoredPaths,
-        tenantPatch: resolution.provenance.floors,
-        tenantStatusSeedAuthorship: resolution.provenance.statusSeedAuthorship,
-      };
-      const before = compileBrandTheme(input);
-      expect(after.cssVariables).toEqual(before.cssVariables);
-      expect(after.modeBlocks).toEqual(before.modeBlocks ?? []);
-      expect(after.runtime.personality).toEqual(before.personality);
-      expect(after.runtime.tokenOverrides).toEqual(before.tokenOverrides);
     });
 
     it(`${label} really diverges from the untouched baseline`, () => {
@@ -145,15 +124,17 @@ describe("the new chain reproduces the old chain, field by field", () => {
     });
   }
 
-  it("emission still reproduces cssString for every first-party fixture", () => {
+  it("emission scopes one compile to three different roots without recompiling", () => {
     for (const slug of ["rottay", "bithire", "evnto"] as const) {
-      const theme = FIRST_PARTY_THEMES[slug];
-      const before = compileBrandTheme({
-        brandTheme: themeToBrandTheme(theme),
-        tenantSlug: theme.id,
-      });
-      const after = compileTheme(resolveTheme(theme), modern);
-      expect(emitThemeCss(after, firstPartyScope(slug))).toBe(before.cssString);
+      const compiled = compileTheme(resolveTheme(FIRST_PARTY_THEMES[slug]), modern);
+      const root = emitThemeCss(compiled, firstPartyScope(slug));
+      const container = emitThemeCss(compiled, containerScope(".preview"));
+      expect(root).toContain(`html[data-tenant='${slug}'] {`);
+      expect(container).toContain(".preview {");
+      // Same declarations, different scope: the count of emitted custom
+      // properties cannot change with the selector.
+      const count = (css: string) => css.split("\n").filter((l) => /^\s+--/u.test(l)).length;
+      expect(count(container)).toBe(count(root));
     }
   });
 });
@@ -209,16 +190,33 @@ describe("RESOLVED_TONE_ROLES restates ON_TONE_ROLES because foundation cannot i
 /* the theme owners mint no channel name                                      */
 /* -------------------------------------------------------------------------- */
 
-describe("the theme owners emit no --ds-* name, so CHROME_EMITTERS needs no row", () => {
-  const THEME_CHAIN_OWNERS = [
+describe("channel minting and CSS text have declared owners", () => {
+  /**
+   * Who may mint a `--ds-*` channel name, and who may write CSS text:
+   *
+   *   - CONTRACTS may not mint. A type that names a channel makes the contract a
+   *     second authority on what gets painted.
+   *   - ADAPTERS may not mint. An adapter projects a compiled theme onto an
+   *     engine's own seeds; a `--ds-*` key it writes would be a channel no
+   *     census attributes to the compiler.
+   *   - The DECLARED LOWERING OWNERS may mint. That is their job, and the list
+   *     is exact: a new minting owner must be added here deliberately.
+   *   - CLASSIC may READ channel names, never write them.
+   *   - EMISSION alone owns CSS text.
+   */
+  const CONTRACT_OWNERS = [
     "foundation/contracts/composition/tenants/themes/intent",
     "foundation/contracts/composition/tenants/themes/resolved",
     "foundation/contracts/composition/tenants/themes/compiled",
     "foundation/contracts/composition/tenants/themes/emission",
     "foundation/contracts/composition/tenants/themes/engine-adapter",
     "foundation/contracts/kernel/tokens/engine-tokens",
-    "infrastructure/compilers/runtime/theme",
   ];
+  const LOWERING_ROOT = "infrastructure/compilers/runtime/theme/runtime/lowering";
+  const PIPELINE_ROOT = "infrastructure/compilers/runtime/theme";
+  const EMISSION_OWNER = "infrastructure/compilers/runtime/theme/runtime/emission";
+  const CLASSIC_ADAPTER =
+    "infrastructure/compilers/runtime/theme/presentation/adapters/classic/index.ts";
 
   const productionSources = (relative: string): string[] => {
     const out: string[] = [];
@@ -236,58 +234,474 @@ describe("the theme owners emit no --ds-* name, so CHROME_EMITTERS needs no row"
     return out;
   };
 
-  it("writes no vars['--ds-*'] anywhere in the new owners", () => {
-    for (const owner of THEME_CHAIN_OWNERS) {
-      for (const file of productionSources(owner)) {
-        expect(readFileSync(file, "utf8")).not.toMatch(/vars\['--ds-[a-z0-9-]+'\]/);
-      }
-    }
-  });
-
   const withoutComments = (source: string): string =>
     source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/[^\n]*/g, "$1");
 
-  it("names a --ds-* channel in CODE in exactly one owner, and only to READ it", () => {
-    const naming = THEME_CHAIN_OWNERS.flatMap((owner) =>
-      productionSources(owner).filter((file) =>
-        /--ds-[a-z0-9-]+/.test(withoutComments(readFileSync(file, "utf8")))
-      )
-    );
-    expect(naming).toHaveLength(1);
-    expect(naming[0]?.endsWith("presentation/adapters/classic/index.ts")).toBe(true);
+  const MINTS = /vars\[["']--ds-[a-z0-9-]+["']\]|cssVariables\[["']--ds-[a-z0-9-]+["']\]/;
+  const rel = (file: string) => file.slice(SRC_ROOT.length + 1);
 
-    // The classic adapter resolves antd seeds from compiled channels: every
-    // channel name is a quoted VALUE in a lookup table, never a key it writes.
-    const code = withoutComments(readFileSync(naming[0] as string, "utf8"));
+  it("no contract owner mints a channel", () => {
+    const minting = CONTRACT_OWNERS.flatMap((owner) =>
+      productionSources(owner).filter((file) => MINTS.test(withoutComments(readFileSync(file, "utf8")))),
+    ).map(rel);
+    expect(minting).toEqual([]);
+  });
+
+  it("no adapter mints a channel", () => {
+    const minting = productionSources(`${PIPELINE_ROOT}/presentation/adapters`)
+      .filter((file) => MINTS.test(withoutComments(readFileSync(file, "utf8"))))
+      .map(rel);
+    expect(minting).toEqual([]);
+  });
+
+  it("every channel minted under the pipeline belongs to a declared lowering owner", () => {
+    const minting = productionSources(PIPELINE_ROOT)
+      .filter((file) => MINTS.test(withoutComments(readFileSync(file, "utf8"))))
+      .map(rel);
+    expect(minting.length).toBeGreaterThan(0);
+    for (const file of minting) {
+      expect(file.startsWith(LOWERING_ROOT), `${file} mints outside the lowering`).toBe(true);
+    }
+    // Exact, not "at least": a new minting owner is a deliberate addition.
+    expect(minting.sort()).toEqual([
+      `${LOWERING_ROOT}/foundation/materials/index.ts`,
+      `${LOWERING_ROOT}/foundation/motion/index.ts`,
+      `${LOWERING_ROOT}/foundation/palette/index.ts`,
+      `${LOWERING_ROOT}/foundation/type-ramp/index.ts`,
+      `${LOWERING_ROOT}/index.ts`,
+      `${LOWERING_ROOT}/runtime/variables/index.ts`,
+    ]);
+  });
+
+  it("outside the lowering, classic is the only owner that even NAMES a channel, and only to read it", () => {
+    const naming = productionSources(PIPELINE_ROOT)
+      .filter((file) => !rel(file).startsWith(LOWERING_ROOT))
+      .filter((file) => /--ds-[a-z0-9-]+/.test(withoutComments(readFileSync(file, "utf8"))))
+      .map(rel);
+    expect(naming).toEqual([CLASSIC_ADAPTER]);
+
+    // Every channel name is a quoted VALUE in a lookup table, never a key it writes.
+    const code = withoutComments(readFileSync(join(SRC_ROOT, CLASSIC_ADAPTER), "utf8"));
     expect(code).toContain("CLASSIC_SEED_CHANNELS");
     expect(code).toContain("CLASSIC_RADIUS_CHANNELS");
     expect(code.match(/--ds-[a-z0-9-]+/g) ?? []).toHaveLength(
-      (code.match(/:\s*"--ds-[a-z0-9-]+"/g) ?? []).length
+      (code.match(/:\s*"--ds-[a-z0-9-]+"/g) ?? []).length,
     );
   });
 
-  it("every other --ds-* mention in the theme owners is prose, not code", () => {
-    const mentions = THEME_CHAIN_OWNERS.flatMap((owner) =>
-      productionSources(owner).filter((file) =>
-        /--ds-[a-z0-9-]+/.test(readFileSync(file, "utf8"))
-      )
-    );
-    // engine-adapter's EngineProjection docblock and rustic's posture comments
-    // cite channel names to explain a verdict; neither reaches runtime.
-    expect(mentions.length).toBeGreaterThan(1);
-    for (const file of mentions) {
-      if (file.endsWith("presentation/adapters/classic/index.ts")) continue;
-      expect(withoutComments(readFileSync(file, "utf8"))).not.toMatch(/--ds-/);
+  it("emission alone produces CSS text", () => {
+    const emitting = productionSources(PIPELINE_ROOT)
+      .filter((file) => /color-scheme:/.test(readFileSync(file, "utf8")))
+      .map(rel);
+    expect(emitting.length).toBeGreaterThan(0);
+    for (const file of emitting) {
+      expect(file.startsWith(EMISSION_OWNER), `${file} writes CSS text`).toBe(true);
     }
   });
 
-  it("produces no CSS text outside the emission owner", () => {
-    for (const owner of THEME_CHAIN_OWNERS) {
-      for (const file of productionSources(owner)) {
-        if (file.includes("runtime/emission")) continue;
-        expect(readFileSync(file, "utf8")).not.toMatch(/color-scheme:/);
+  /* ---- fail-closed: each rule is shown refusing a planted violation ------- */
+
+  it("MUTANT: a contract that mints is caught", () => {
+    const planted = `export const t = 1;\nvars["--ds-planted"] = "red";\n`;
+    expect(MINTS.test(withoutComments(planted))).toBe(true);
+  });
+
+  it("MUTANT: an adapter that mints is caught", () => {
+    const planted = `export const a = { project() { cssVariables["--ds-planted"] = "x"; } };\n`;
+    expect(MINTS.test(withoutComments(planted))).toBe(true);
+  });
+
+  it("MUTANT: a channel name hidden in a comment is NOT a minting finding", () => {
+    const planted = `// vars['--ds-planted'] = 'red';\n/* cssVariables["--ds-x"] = "y" */\n`;
+    expect(MINTS.test(withoutComments(planted))).toBe(false);
+  });
+
+  it("MUTANT: classic writing a channel instead of reading one is caught", () => {
+    const planted = `const seeds = {};\nseeds["--ds-color-primary"] = x;\n`;
+    const names = planted.match(/--ds-[a-z0-9-]+/g) ?? [];
+    const quotedValues = planted.match(/:\s*"--ds-[a-z0-9-]+"/g) ?? [];
+    expect(names.length).not.toBe(quotedValues.length);
+  });
+
+  /** The single owner of the declaration/rule grammar, under `src/`. */
+  const EMISSION_ASSEMBLY_OWNER = `${EMISSION_OWNER}/index.ts`;
+
+  /** The one grammar that decides whether a value may become CSS text. */
+  const VALUE_AUTHORITY = "infrastructure/compilers/kernel/foundation/css/value-safety";
+
+  /** The only owner allowed to re-export that grammar under another name. */
+  const AUTHORITY_REEXPORT = "infrastructure/runtime/tenant/runtime/preview-scope";
+
+  /**
+   * A template that assembles a CSS declaration from two interpolations.
+   *
+   * Every gap is optional whitespace and nothing after the `;` is required: a
+   * member, a call, an index, an unindented template and a trailing newline are
+   * the same assembler, so all of them are findings.
+   */
+  const DECLARATION_ASSEMBLY = /`\s*\$\{[^{}]+\}\s*:\s*\$\{[^{}]+\}\s*;/;
+
+  /** The same pair with its `;` supplied outside the template. */
+  const PAIR_TEMPLATE = /`\s*\$\{[^{}]+\}\s*:\s*\$\{[^{}]+\}\s*`/;
+  const EXTERNAL_TERMINATOR = /\.join\(\s*["'];|\+\s*["'];["']/;
+
+  /** The same declaration built by concatenation instead of interpolation. */
+  const CONCATENATED_DECLARATION = /\+\s*["']\s*:\s*["']\s*\+/;
+
+  /**
+   * A file that can put text into a stylesheet. The two shape-only detectors
+   * are scoped to it, so a `:`-join in an error message is not a finding.
+   */
+  const CSS_TEXT_SINK = /__html|<style|insertRule\(|\.textContent|\.cssText|emitRule\(/;
+
+  /**
+   * Every productive assembler of a CSS declaration, and the authority symbol
+   * it routes through. The value grammar is the repository's, not emission's
+   * private policy: an emitter that assembles declaration text without
+   * consulting it is a hole whatever layer it lives in.
+   */
+  const ASSEMBLERS: readonly { file: string; symbol: string }[] = [
+    {
+      file: "components/patterns/customization/tenant-preview/runtime/preview-css/index.ts",
+      symbol: "isSafePreviewCssValue",
+    },
+    { file: EMISSION_ASSEMBLY_OWNER, symbol: "admitCssVariables" },
+    {
+      file: "infrastructure/runtime/responsive/runtime/style-properties/index.ts",
+      symbol: "isSafeCssValue",
+    },
+  ];
+
+  /**
+   * The shapes that count as assembling a declaration, each with the exact set
+   * of productive files it may report. A file any of them matches has to be a
+   * declared `ASSEMBLERS` entry and satisfy the imports-and-calls rule below.
+   */
+  const ASSEMBLER_DETECTORS: readonly {
+    id: string;
+    matches: (source: string) => boolean;
+    findings: readonly string[];
+  }[] = [
+    {
+      id: "interpolated template",
+      matches: (source) => DECLARATION_ASSEMBLY.test(source),
+      findings: ASSEMBLERS.map((entry) => entry.file),
+    },
+    {
+      id: "pair template terminated outside it",
+      matches: (source) =>
+        CSS_TEXT_SINK.test(source) &&
+        PAIR_TEMPLATE.test(source) &&
+        EXTERNAL_TERMINATOR.test(source),
+      findings: [],
+    },
+    {
+      id: "concatenated declaration",
+      matches: (source) =>
+        CSS_TEXT_SINK.test(source) && CONCATENATED_DECLARATION.test(source),
+      findings: [],
+    },
+  ];
+
+  /** True when any declared detector would report the source as an assembler. */
+  const detectsAssembly = (source: string): boolean =>
+    ASSEMBLER_DETECTORS.some(({ matches }) => matches(source));
+
+  /** Wraps a planted body in the style sink a productive assembler would feed. */
+  const feedingASink = (body: string): string =>
+    `${body}\nreturn <style dangerouslySetInnerHTML={{ __html: css }} />;\n`;
+
+  const walkSources = (dir: string, out: string[] = []): string[] => {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      if (statSync(full).isDirectory()) {
+        if (entry !== "tests" && entry !== "__tests__") walkSources(full, out);
+      } else if (/\.tsx?$/.test(entry) && !/\.test\.tsx?$/.test(entry)) {
+        out.push(full);
       }
     }
+    return out;
+  };
+
+  /**
+   * True when the source imports the authority, directly or through its single
+   * re-export, whatever specifier style it uses.
+   *
+   * Resolved rather than pattern-matched, for the reason the re-export census
+   * below already states: a consumer that switches from `@/...` to a relative
+   * path is the same consumer, and a pin that sees only one spelling is a pin
+   * that can be evaded by reformatting.
+   */
+  const reachesAuthority = (source: string, fromFile: string): boolean => {
+    const statements = source.match(/(?:import|export)[^;]*?from\s*["'][^"']+["']/gs) ?? [];
+    return statements.some((statement) => {
+      const specifier = statement.match(/from\s*["']([^"']+)["']/)?.[1];
+      if (!specifier) return false;
+      const target = specifier.startsWith("@/")
+        ? join(SRC_ROOT, specifier.slice(2))
+        : specifier.startsWith(".")
+          ? resolve(fromFile, "..", specifier)
+          : null;
+      return (
+        target !== null &&
+        [VALUE_AUTHORITY, AUTHORITY_REEXPORT].some((dir) => target === join(SRC_ROOT, dir))
+      );
+    });
+  };
+
+  it("every productive assembler of a CSS declaration is declared, repo-wide", () => {
+    // EXACT per shape, not "at least": a new assembler is a deliberate addition
+    // that has to arrive with its guard.
+    const sources = walkSources(SRC_ROOT).map(
+      (file) => [rel(file), readFileSync(file, "utf8")] as const
+    );
+    expect(sources.length).toBeGreaterThan(2000);
+    for (const { id, matches, findings } of ASSEMBLER_DETECTORS) {
+      const found = sources
+        .filter(([, source]) => matches(source))
+        .map(([file]) => file)
+        .sort();
+      expect(found, `${id} findings`).toEqual([...findings].sort());
+    }
+  });
+
+  it("every declared assembler imports the authority and calls it", () => {
+    for (const { file, symbol } of ASSEMBLERS) {
+      const source = readFileSync(join(SRC_ROOT, file), "utf8");
+      expect(
+        reachesAuthority(source, join(SRC_ROOT, file)),
+        `${file} does not import the value authority`
+      ).toBe(true);
+      expect(
+        new RegExp(`\\b${symbol}\\s*\\(`).test(withoutComments(source)),
+        `${file} imports the authority but never calls it`
+      ).toBe(true);
+    }
+  });
+
+  it("the responsive assembler routes its projected values through the authority", () => {
+    // Named on its own: its dimension props are typed as free strings and its
+    // output reaches a `<style dangerouslySetInnerHTML>` sink in every primitive.
+    const file = "infrastructure/runtime/responsive/runtime/style-properties/index.ts";
+    const source = readFileSync(join(SRC_ROOT, file), "utf8");
+    expect(source).toContain(`from '@/${VALUE_AUTHORITY}'`);
+    expect(source).toMatch(/isSafeCssValue\(/);
+    expect(DECLARATION_ASSEMBLY.test(source)).toBe(true);
+  });
+
+  it("the re-export is a forward, not a second grammar", () => {
+    const source = readFileSync(join(SRC_ROOT, AUTHORITY_REEXPORT, "index.ts"), "utf8");
+    expect(source).toMatch(
+      new RegExp(`export\\s*\\{[^}]*isSafeCssValue[^}]*\\}\\s*from\\s*["']@/${VALUE_AUTHORITY}["']`)
+    );
+    // No local grammar: the owner states the names it forwards, nothing else.
+    expect(withoutComments(source)).not.toMatch(/function isSafe(Preview)?CssValue/);
+  });
+
+  it("MUTANT: a fourth assembler is caught", () => {
+    const PLANTED: readonly [string, string][] = [
+      ["indented template", "const line = `  ${key}: ${value};`;"],
+      ["member and call", "const line = `  ${entry.cssProperty}: ${resolve(raw)};`;"],
+      ["index", "out.push(`  ${declaration[1]}: ${declaration[2]};`);"],
+      ["unindented template", "const line = `${e.p}: ${e.v};`;"],
+      ["no space after the colon", "const line = `${e.p}:${e.v};`;"],
+      ["newline inside the template", "const line = `  ${e.p}: ${e.v};\\n`;"],
+      [
+        "terminator supplied by join",
+        feedingASink('const css = rows.map((e) => `  ${e.p}: ${e.v}`).join(";\\n") + ";";'),
+      ],
+      [
+        "concatenation",
+        feedingASink("const css = rows.map((e) => '  ' + e.p + ': ' + e.v + ';').join('\\n');"),
+      ],
+    ];
+    for (const [shape, planted] of PLANTED) {
+      expect(detectsAssembly(planted), shape).toBe(true);
+    }
+    // and a rule built from the emission owner is not a finding
+    expect(detectsAssembly("emitRule(selector, emitDeclarations(vars))")).toBe(false);
+  });
+
+  it("MUTANT: an assembler that skips the authority is caught", () => {
+    const unguarded =
+      "export function emit(entries) {\n" +
+      "  return entries.map((e) => `  ${e.cssProperty}: ${String(e.value)};`);\n}\n";
+    const planted = join(SRC_ROOT, "components/planted/index.ts");
+    expect(DECLARATION_ASSEMBLY.test(unguarded)).toBe(true);
+    expect(reachesAuthority(unguarded, planted)).toBe(false);
+
+    // and an assembler that imports the authority but never calls it is caught
+    const importedOnly =
+      `import { isSafeCssValue } from '@/${VALUE_AUTHORITY}';\n` + unguarded;
+    expect(reachesAuthority(importedOnly, planted)).toBe(true);
+    expect(/\bisSafeCssValue\s*\(/.test(withoutComments(importedOnly))).toBe(false);
+  });
+
+  /** A `<style>` element whose CSS arrives as text through an identifier. */
+  const HTML_STYLE_SINK =
+    /<style\b[^>]*?dangerouslySetInnerHTML=\{\{\s*__html:\s*([^}]+?)\s*\}\}/gs;
+
+  /** A `<style>` element whose CSS arrives as a JSX child. */
+  const CHILD_STYLE_SINK = /<style\b[^>]*>\s*\{[\s\S]*?\}\s*<\/style>/;
+
+  /**
+   * Every productive `<style>` text sink, pinned as file -> the identifier that
+   * feeds it. Lines move; a new sink file or a new feeder is a new way into a
+   * stylesheet and has to arrive declared with its producer.
+   */
+  const HTML_STYLE_SINKS: Readonly<Record<string, readonly string[]>> = {
+    "components/patterns/customization/brand-studio/index.tsx": ["preview.css", "scopedCss"],
+    "components/patterns/customization/branding-preview-sandbox/index.tsx": ["scopedCss"],
+    "components/patterns/customization/tenant-preview/engines/classic/index.tsx": ["preview.css"],
+    "components/patterns/customization/tenant-preview/engines/modern/index.tsx": ["preview.css"],
+    "components/patterns/customization/tenant-preview/engines/rustic/index.tsx": ["preview.css"],
+    "components/primitives/display/badge/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/display/badge/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/display/badge/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/display/card/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/display/card/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/display/card/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/display/typography/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/display/typography/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/display/typography/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/feedback/alert/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/feedback/alert/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/feedback/alert/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/feedback/toast/compound/animated-check/index.tsx": ["keyframes"],
+    "components/primitives/inputs/button/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/inputs/button/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/inputs/button/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/inputs/input/compound/text-area/index.tsx": ["responsive.css"],
+    "components/primitives/inputs/input/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/inputs/input/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/inputs/input/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/inputs/select/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/inputs/select/engines/modern/index.tsx": ["responsiveCSS.css"],
+    "components/primitives/inputs/select/engines/rustic/index.tsx": ["responsiveCSS.css"],
+    "components/primitives/layout/box/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/layout/box/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/layout/box/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/layout/collapse/engines/modern/index.tsx": ["COLLAPSE_STYLES"],
+    "components/primitives/layout/collapse/engines/rustic/index.tsx": ["RUSTIC_REDUCED_MOTION_STYLES"],
+    "components/primitives/layout/flex/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/layout/flex/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/layout/flex/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/layout/responsive/runtime/visibility/index.tsx": ["css"],
+    "components/primitives/layout/stack/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/layout/stack/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/layout/stack/engines/rustic/index.tsx": ["responsive.css"],
+    "components/primitives/navigation/tabs/engines/classic/index.tsx": ["responsive.css"],
+    "components/primitives/navigation/tabs/engines/modern/index.tsx": ["responsive.css"],
+    "components/primitives/navigation/tabs/engines/rustic/index.tsx": ["responsive.css"],
+  };
+
+  /** The productive files whose `<style>` carries its CSS as a child. */
+  const CHILD_STYLE_SINKS: readonly string[] = [
+    "components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/sparkline/index.tsx",
+    "components/patterns/visualization/tree-view/engines/rustic/index.tsx",
+    "components/primitives/layout/box/Box.stories.tsx",
+    "graphics/motion/react/presentation/effects/aurora/index.tsx",
+    "graphics/motion/react/presentation/effects/grid-pattern/index.tsx",
+    "graphics/motion/react/presentation/effects/shimmer-text/index.tsx",
+  ];
+
+  it("every productive <style> text sink is declared with the identifier feeding it", () => {
+    const census = new Map<string, Set<string>>();
+    let occurrences = 0;
+    for (const file of walkSources(SRC_ROOT)) {
+      const source = readFileSync(file, "utf8");
+      for (const match of source.matchAll(HTML_STYLE_SINK)) {
+        occurrences += 1;
+        const feeders = census.get(rel(file)) ?? new Set<string>();
+        feeders.add(match[1].trim());
+        census.set(rel(file), feeders);
+      }
+    }
+    const declared: Record<string, string[]> = {};
+    for (const [file, feeders] of census) declared[file] = [...feeders].sort();
+    expect(declared).toEqual(HTML_STYLE_SINKS);
+    expect(occurrences).toBe(57);
+  });
+
+  it("every productive <style> that carries its CSS as a child is declared", () => {
+    const found = walkSources(SRC_ROOT)
+      .filter((file) => CHILD_STYLE_SINK.test(readFileSync(file, "utf8")))
+      .map(rel)
+      .sort();
+    expect(found).toEqual([...CHILD_STYLE_SINKS].sort());
+  });
+
+  it("MUTANT: a new sink file, and a new feeder in a declared file, are caught", () => {
+    const planted = "<style dangerouslySetInnerHTML={{ __html: plantedCss }} />";
+    expect([...planted.matchAll(HTML_STYLE_SINK)].map((match) => match[1].trim())).toEqual([
+      "plantedCss",
+    ]);
+    expect(Object.values(HTML_STYLE_SINKS).flat()).not.toContain("plantedCss");
+    expect(CHILD_STYLE_SINK.test("<style>{`body { display: none }`}</style>")).toBe(true);
+    expect(CHILD_STYLE_SINKS).not.toContain("components/planted/index.tsx");
+  });
+
+  it("emission is the ONLY productive composer of a tenant artifact", () => {
+    // One owner composes the WHOLE document -- banner, unlayered base rule,
+    // mode rules, `auto` media copy. Two spellings of one format is a drift
+    // that surfaces as a mounted artifact the resolver refuses for no reason.
+    const ARTIFACT_BANNER = /TenantThemeArtifact v1 \| \$\{/;
+    const PREFERS_DARK_COMPOSITION = /@media \(prefers-color-scheme: dark\) \{/;
+    // RAW source: the banner IS a CSS comment, so a comment stripper deletes
+    // the very marker this rule is about.
+    const composers = productionSources("")
+      .filter((file) => {
+        const source = readFileSync(file, "utf8");
+        return ARTIFACT_BANNER.test(source) && PREFERS_DARK_COMPOSITION.test(source);
+      })
+      .map(rel)
+      .sort();
+    expect(composers).toEqual([EMISSION_ASSEMBLY_OWNER]);
+  });
+
+  it("MUTANT: a second artifact composer is caught", () => {
+    const ARTIFACT_BANNER = /TenantThemeArtifact v1 \| \$\{/;
+    const PREFERS_DARK_COMPOSITION = /@media \(prefers-color-scheme: dark\) \{/;
+    const planted =
+      "const css = [`/* TenantThemeArtifact v1 | ${version} | ${digest} */`," +
+      "`@media (prefers-color-scheme: dark) {`].join('');";
+    expect(ARTIFACT_BANNER.test(planted)).toBe(true);
+    expect(PREFERS_DARK_COMPOSITION.test(planted)).toBe(true);
+    // and prose about the format is not a finding: BOTH markers are required,
+    // and a sentence naming the banner interpolates nothing.
+    const prose = "// the artifact banner is TenantThemeArtifact v1 | version | digest";
+    expect(ARTIFACT_BANNER.test(prose)).toBe(false);
+  });
+
+  it("the retired kernel grammar owner is physically gone", () => {
+    // The CSS text of a theme belongs to the owner the contract names for it,
+    // and a forwarding file is how a second owner comes back one import later.
+    expect(
+      existsSync(
+        join(SRC_ROOT, "infrastructure/compilers/kernel/foundation/css/rule-grammar")
+      )
+    ).toBe(false);
+    expect(existsSync(join(SRC_ROOT, `${EMISSION_ASSEMBLY_OWNER}`))).toBe(true);
+  });
+
+  it("MUTANT: an alternate emitter anywhere in the tree is caught", () => {
+    const DECLARATION_ASSEMBLY =
+      /`\s+\$\{[A-Za-z_$][\w$]*\}:\s*\$\{[A-Za-z_$][\w$]*\};`/;
+    expect(
+      DECLARATION_ASSEMBLY.test("const line = `  ${key}: ${value};`;"),
+    ).toBe(true);
+    expect(
+      DECLARATION_ASSEMBLY.test("const line = `  ${name}: ${v};`;"),
+    ).toBe(true);
+    // and a rule built from the emission owner is not a finding
+    expect(
+      DECLARATION_ASSEMBLY.test("emitRule(selector, emitDeclarations(vars))"),
+    ).toBe(false);
+  });
+
+  it("MUTANT: CSS text outside emission is caught", () => {
+    const planted = `const css = \`  color-scheme: dark;\`;\n`;
+    expect(/color-scheme:/.test(planted)).toBe(true);
   });
 });
 
@@ -336,44 +750,22 @@ describe("the two transitional re-exports are consumer-exact", () => {
       .map((file) => file.slice(PACKAGE_ROOT.length + 1))
       .sort();
 
-  it("brand-theme re-exports TenantStatusSeedAuthorship for exactly one consumer", () => {
-    const brandTheme = readFileSync(
-      join(SRC_ROOT, "infrastructure/compilers/kernel/runtime/brand-theme/index.ts"),
-      "utf8"
-    );
-    expect(brandTheme).toContain("export type { TenantStatusSeedAuthorship };");
+  it("the retired compiler owner is gone, with no forwarding file left behind", () => {
+    expect(
+      existsSync(join(SRC_ROOT, "infrastructure/compilers/kernel/runtime/brand-theme"))
+    ).toBe(false);
+    expect(existsSync(join(SRC_ROOT, "infrastructure/compilers/facade"))).toBe(false);
+  });
+
+  it("TenantStatusSeedAuthorship is imported from the contract owner, never re-exported", () => {
+    // The consumer names the contract owner directly, which is what keeps the
+    // re-export removable rather than load-bearing.
     expect(
       importersOf(
         "TenantStatusSeedAuthorship",
-        join(SRC_ROOT, "infrastructure/compilers/kernel/runtime/brand-theme")
+        join(SRC_ROOT, "foundation/contracts/composition/tenants/themes/resolved")
       )
-    ).toEqual(["src/infrastructure/compilers/composition/tenant-theme/index.ts"]);
-  });
-
-  it("does NOT re-export BrandCompilerProvenanceInput: that would publish a new type", () => {
-    const brandTheme = readFileSync(
-      join(SRC_ROOT, "infrastructure/compilers/kernel/runtime/brand-theme/index.ts"),
-      "utf8"
-    );
-    expect(brandTheme).not.toMatch(/export\s+type\s*\{[^}]*BrandCompilerProvenanceInput/);
-    expect(brandTheme).toMatch(/import type \{\s*\n\s*BrandCompilerProvenanceInput,/);
-  });
-
-  it("tenant-theme re-exports tenantPostureFloors for exactly two consumers", () => {
-    const tenantTheme = readFileSync(
-      join(SRC_ROOT, "infrastructure/compilers/composition/tenant-theme/index.ts"),
-      "utf8"
-    );
-    expect(tenantTheme).toContain("export { tenantPostureFloors };");
-    expect(
-      importersOf(
-        "tenantPostureFloors",
-        join(SRC_ROOT, "infrastructure/compilers/composition/tenant-theme")
-      )
-    ).toEqual([
-      "src/infrastructure/compilers/composition/tenant-theme/tests/provenance-acceptance.test.ts",
-      "src/infrastructure/compilers/kernel/runtime/brand-theme/tests/e2-composed-pairing.test.ts",
-    ]);
+    ).toContain("src/infrastructure/compilers/composition/tenant-theme/index.ts");
   });
 
   it("both relocated definitions now live in the contract owner", () => {
@@ -384,7 +776,37 @@ describe("the two transitional re-exports are consumer-exact", () => {
     expect(resolved).toContain("export function tenantPostureFloors");
     expect(resolved).toContain("export function deriveTenantStatusSeedAuthorship");
     expect(resolved).toContain("export interface TenantStatusSeedAuthorship");
-    expect(resolved).toContain("export type BrandCompilerProvenanceInput");
+    // The compile envelope is `ThemeResolution`, not a widened BrandTheme input.
+    expect(resolved).toContain("export interface ThemeResolution");
+    expect(resolved).not.toContain("BrandCompilerProvenanceInput");
+  });
+
+  it("the retired compiler contracts are gone, and the canonical ones own the shapes", () => {
+    // The shapes did not disappear with the retired owner: they belong to the
+    // contracts that describe the pipeline that actually exists.
+    const themes = readFileSync(
+      join(SRC_ROOT, "foundation/contracts/composition/tenants/themes/index.ts"),
+      "utf8"
+    );
+    for (const retired of [
+      "export interface BrandCompilerInput",
+      "export interface CompiledBrand",
+      "export interface CompiledBrandModeBlock",
+      "export type CompileBrandTheme",
+    ]) {
+      expect(themes).not.toContain(retired);
+    }
+    const compiled = readFileSync(
+      join(SRC_ROOT, "foundation/contracts/composition/tenants/themes/compiled/index.ts"),
+      "utf8"
+    );
+    expect(compiled).toContain("export interface ThemeCompilation");
+    expect(compiled).toContain("export interface ThemeCompilationModeBlock");
+    const adapter = readFileSync(
+      join(SRC_ROOT, "foundation/contracts/composition/tenants/themes/engine-adapter/index.ts"),
+      "utf8"
+    );
+    expect(adapter).toContain("export interface EngineThemeCompilation");
   });
 });
 
@@ -399,7 +821,7 @@ describe("origin decides authorship at the compiler", () => {
 
   it("a static-vertical intent compiles as the merged theme with no tenant at all", () => {
     const patch = patchOf();
-    const merged = isoResolveTheme(baseline, patch);
+    const merged = mergeThemePatches(baseline, patch);
     const viaIntent = compileTheme(
       resolveTheme(baseline, { origin: "static-vertical", patch }),
       modern

@@ -57,6 +57,8 @@ import {
 } from '@/foundation/tokens/ts/presentation/brand-themes';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import { ThemeProvider } from '@/infrastructure/runtime/theming/composition/react/provider';
+import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
+import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 
 const PROVIDER = resolve(
   process.cwd(),
@@ -151,11 +153,11 @@ const BRAND_THEMES: Record<string, BrandTheme> = {
 function freshlyDeclaredChannels(slug: string): Set<string> {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((entry) => entry.slug === slug);
   if (!spec) throw new Error(`no artifact spec for ${slug}`);
-  const brandTheme = BRAND_THEMES[slug];
-  if (!brandTheme) throw new Error(`no BrandTheme registered for slug ${slug}`);
+  const theme = FIRST_PARTY_THEMES[slug as FirstPartyVerticalId];
+  if (!theme) throw new Error(`no first-party theme registered for slug ${slug}`);
   const css = renderFirstPartyArtifact({
     spec,
-    brandTheme,
+    theme,
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   }).css;
   const declared = new Set<string>();

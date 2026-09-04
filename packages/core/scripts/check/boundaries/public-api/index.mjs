@@ -11,23 +11,33 @@ const OWNERS = new Set(['contracts', 'runtime', 'primitives', 'patterns', 'struc
 const UI_OWNERS = new Set(['primitives', 'patterns', 'structures', 'surfaces']);
 
 /**
- * EL TECHO DE BYTES ES DECRECE-SOLO, Y DESDE AQUI ES MECANICO.
+ * LOS DOS TECHOS DE UN SUBPATH SON DECRECE-SOLO, Y DESDE AQUI ES MECANICO.
  *
- * `budget.maxSourceBytes` acota cuanto codigo alcanza cada subpath publico. El
- * gate ya prohibia SUPERAR el techo; esta ancla tambien impide SUBIR EL TECHO
- * editando el manifest sin una revision medida. La politica vive como datos
- * verificables al lado del gate, no como una cronica dentro del contrato.
+ * `budget.maxSourceBytes` acota cuanto codigo alcanza cada subpath publico y
+ * `budget.maxReachableModules` acota a cuantos modulos llega. Las dos son
+ * dimensiones del mismo presupuesto y las dos ensanchan la superficie publica,
+ * asi que las dos se anclan. Gobernar solo los bytes dejaba media puerta
+ * abierta: un grafo podia sumar modulos y el ancla no tenia nada que decir.
  *
  * SE MIDE CONTRA UN ANCLA, no contra el commit anterior: el gate no tiene
  * historia, y comparar con git haria depender la ley del checkout. El ancla es
  * un archivo revisable al lado del gate, con el mismo patron que los demas
  * baselines del repo.
  *
- * FALLA EN LAS DOS DIRECCIONES. Subir es regresion salvo por la puerta
- * nombrada; bajar tambien falla, con la instruccion de bajar el ancla en el
- * mismo commit. Y los dos desacuerdos de conjunto -- un subpath con techo que
- * nadie anclo, y un ancla cuyo subpath ya no existe -- fallan tambien: un techo
- * nuevo que entra sin revision es exactamente como se pierde la ley.
+ * FALLA EN LAS DOS DIRECCIONES Y EN LAS DOS DIMENSIONES. Subir es regresion
+ * salvo por la puerta nombrada; bajar tambien falla, con la instruccion de
+ * bajar el ancla en el mismo commit. Y los desacuerdos de CONJUNTO fallan
+ * igual -- un subpath con techo que nadie anclo, un ancla cuyo subpath ya no
+ * existe, una dimension que el manifest dejo de declarar, una dimension que el
+ * ancla no cubre: un techo nuevo que entra sin revision es exactamente como se
+ * pierde la ley.
+ *
+ * NADA QUE EL GATE NO LEA VIVE EN EL ANCLA. Una clave de raiz desconocida o
+ * una dimension desconocida dentro de un techo FALLAN, no se ignoran. El
+ * defecto que cierra esta regla es literal: el ancla llego a llevar
+ * `"./runtime/visual-authority": 47190` colgando de la raiz, al lado de
+ * `ceilings`, con la pinta exacta de un techo y sin ningun lector. Un campo
+ * decorativo que se parece a la ley es peor que no tenerlo.
  */
 /* El nombre NO es cosmetico: la ley R3 del scripts-tree-gate admite en una
  * capacidad solo `index.mjs`, sus tests, y archivos que empiecen con el nombre
@@ -37,14 +47,53 @@ const UI_OWNERS = new Set(['primitives', 'patterns', 'structures', 'surfaces']);
  * convencion ES la regla. */
 export const CEILINGS_BASELINE_RELATIVE = 'scripts/check/boundaries/public-api/ceilings/index.json';
 
+/**
+ * LAS DIMENSIONES GOBERNADAS, POR NOMBRE Y EN ORDEN.
+ *
+ * `maxDirectSources` queda deliberadamente FUERA de esta lista: el gate lo
+ * compara contra el grafo vivo, pero el ancla no lo raciona. Agregarlo es
+ * agregar su nombre aqui y re-anclar; mientras no este, esta linea es la
+ * declaracion honesta de hasta donde llega la ley.
+ */
+export const GOVERNED_BUDGET_DIMENSIONS = Object.freeze(['maxReachableModules', 'maxSourceBytes']);
+
+/** La forma COMPLETA admitida en `budget`: un campo de mas no se ignora. */
+export const BUDGET_FIELDS = Object.freeze(['maxDirectSources', ...GOVERNED_BUDGET_DIMENSIONS]);
+
+/** La forma COMPLETA admitida en la raiz del ancla, en orden de escritura. */
+export const CEILINGS_ROOT_KEYS = Object.freeze([
+  'schemaVersion',
+  'law',
+  'producedBy',
+  'why',
+  'consolidationCandidates',
+  'ceilings',
+  'lastMove',
+  'lastMoveKind',
+]);
+
+function isRecord(value) {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
 export function readCeilings(manifest) {
   const out = {};
   for (const [subpath, entry] of Object.entries(manifest?.entries ?? {})) {
     /* Se copia TODO lo que el manifest declara como techo, valido o no: filtrar
      * aqui lo invalido lo volveria invisible: el subpath desapareceria del lado
      * vivo y el ancla lo veria como huerfano, con un mensaje que no dice la
-     * verdad. La forma la juzga `evaluateCeilings`, que es quien la nombra. */
-    if (entry?.budget && 'maxSourceBytes' in entry.budget) out[subpath] = entry.budget.maxSourceBytes;
+     * verdad. La forma la juzga `evaluateCeilings`, que es quien la nombra.
+     * Una dimension NO declarada se copia como ausente, no como cero: "no lo
+     * declara" y "lo declara en cero" son defectos distintos y se nombran
+     * distinto. */
+    const budget = entry?.budget;
+    if (!isRecord(budget)) continue;
+    if (!GOVERNED_BUDGET_DIMENSIONS.some((dimension) => dimension in budget)) continue;
+    const declared = {};
+    for (const dimension of GOVERNED_BUDGET_DIMENSIONS) {
+      if (dimension in budget) declared[dimension] = budget[dimension];
+    }
+    out[subpath] = declared;
   }
   return out;
 }
@@ -57,31 +106,36 @@ export function readCeilings(manifest) {
  * esas dos comparaciones son AMBAS falsas contra un string, un array, un objeto
  * o NaN. Un ancla con `"not-a-number"`, `[1000]`, `{}` o `NaN` pasaba con cero
  * errores: el verificador se volvia silencioso justo cuando su insumo estaba
- * roto, que es la forma mas cara de fallar. Un techo es un conteo de bytes:
- * entero, finito y positivo. Cualquier otra cosa es corrupcion y se nombra.
+ * roto, que es la forma mas cara de fallar. Un techo es un conteo: entero,
+ * finito y positivo. Cualquier otra cosa es corrupcion y se nombra.
  */
 /**
  * LA VERSION DEL ANCLA SE VERIFICA, O NO ES UN CONTRATO.
  *
- * El archivo declara `schemaVersion: 1` desde que nacio y nadie lo leia: un
- * ancla sin el campo, con `null`, con `999`, con el string `"1"` o con `0`
- * pasaba igual. Un `schemaVersion` que no se comprueba no versiona nada -- es
- * una etiqueta decorativa, y la primera vez que el formato cambie de verdad el
- * gate leera un archivo de otra forma creyendo que entiende lo que dice.
+ * El archivo declara su `schemaVersion` y el gate lo compara con `===`, asi que
+ * el string `"1"` tampoco pasa: si el archivo se genero con otra herramienta
+ * que serializo el numero como texto, eso ES una discrepancia de formato y es
+ * justo lo que este campo existe para atrapar.
  *
- * Se compara con `===`, asi que el string `"1"` tampoco pasa: si el archivo se
- * genero con otra herramienta que serializo el numero como texto, eso ES una
- * discrepancia de formato y es justo lo que este campo existe para atrapar.
+ * La version 2 es la que gobierna las dos dimensiones: cada techo dejo de ser
+ * un numero suelto (solo bytes) y paso a ser un registro con un valor por
+ * dimension gobernada. Un ancla de version 1 NO se compara ni se re-escribe --
+ * se migra a mano y se revisa, que es precisamente para lo que existe el campo.
  */
-export const CEILINGS_SCHEMA_VERSION = 1;
+export const CEILINGS_SCHEMA_VERSION = 2;
 
 export function isValidCeiling(value) {
   return typeof value === 'number' && Number.isInteger(value) && value > 0;
 }
 
+function describeLive(entry) {
+  return GOVERNED_BUDGET_DIMENSIONS
+    .map((dimension) => `${dimension}=${dimension in entry ? JSON.stringify(entry[dimension]) : 'ausente'}`)
+    .join(' ');
+}
+
 export function evaluateCeilings(live, baseline) {
-  if (!baseline || typeof baseline.ceilings !== 'object' || baseline.ceilings === null
-    || Array.isArray(baseline.ceilings)) {
+  if (!isRecord(baseline) || !isRecord(baseline.ceilings)) {
     return ['el ancla de techos no existe o no tiene `ceilings`'];
   }
   if (baseline.schemaVersion !== CEILINGS_SCHEMA_VERSION) {
@@ -89,30 +143,61 @@ export function evaluateCeilings(live, baseline) {
       + `y este gate lee la version ${CEILINGS_SCHEMA_VERSION}: no se compara un archivo cuyo formato no se entiende`];
   }
   const failures = [];
-  for (const [subpath, value] of Object.entries(live)) {
-    const anchored = baseline.ceilings[subpath];
-    if (!isValidCeiling(value)) {
-      failures.push(`${subpath}: el techo vivo ${JSON.stringify(value)} no es un entero positivo — un techo corrupto no se puede comparar`);
+  for (const key of Object.keys(baseline)) {
+    if (CEILINGS_ROOT_KEYS.includes(key)) continue;
+    failures.push(`clave de raiz desconocida ${JSON.stringify(key)}: el gate no la lee, asi que no gobierna nada`
+      + ` — un campo que se parece a un techo y no lo es se borra, no se tolera.`
+      + ` Las claves admitidas son ${CEILINGS_ROOT_KEYS.join(', ')}`);
+  }
+  for (const [subpath, liveEntry] of Object.entries(live)) {
+    const anchoredEntry = baseline.ceilings[subpath];
+    if (anchoredEntry === undefined) {
+      failures.push(`${subpath}: techos ${describeLive(liveEntry)} sin anclar en ${CEILINGS_BASELINE_RELATIVE}`
+        + ' — un techo nuevo entra por revision, no por omision');
       continue;
     }
-    if (anchored !== undefined && !isValidCeiling(anchored)) {
-      failures.push(`${subpath}: el techo anclado ${JSON.stringify(anchored)} no es un entero positivo — el ancla esta corrupta y no gobierna nada`);
+    if (!isRecord(anchoredEntry)) {
+      failures.push(`${subpath}: el ancla lo declara como ${JSON.stringify(anchoredEntry)} y no como un registro`
+        + ` con ${GOVERNED_BUDGET_DIMENSIONS.join(' y ')} — el ancla esta corrupta y no gobierna nada`);
       continue;
     }
-    if (anchored === undefined) {
-      failures.push(`${subpath}: techo ${value} sin anclar en ${CEILINGS_BASELINE_RELATIVE} — un techo nuevo entra por revision, no por omision`);
-      continue;
+    for (const key of Object.keys(anchoredEntry)) {
+      if (GOVERNED_BUDGET_DIMENSIONS.includes(key)) continue;
+      failures.push(`${subpath}: dimension desconocida ${JSON.stringify(key)} en el ancla: el gate no la compara`
+        + ` — las dimensiones gobernadas son ${GOVERNED_BUDGET_DIMENSIONS.join(', ')}`);
     }
-    if (value > anchored) {
-      failures.push(`${subpath}: techo ${anchored} -> ${value} SUBIO — se adelgaza el grafo, no el ancla. Si la subida esta autorizada, pedila por nombre: --write-baseline --widen --reason "..."`);
-    } else if (value < anchored) {
-      failures.push(`${subpath}: techo ${anchored} -> ${value} bajo — baja el ancla en el MISMO commit, con razon escrita: --write-baseline --reason "..."`);
+    for (const dimension of GOVERNED_BUDGET_DIMENSIONS) {
+      const anchored = anchoredEntry[dimension];
+      if (!(dimension in liveEntry)) {
+        failures.push(`${subpath} [${dimension}]: el manifest ya no declara la dimension`
+          + ' — una dimension sin declarar no se compara, y sin comparar no gobierna');
+        continue;
+      }
+      const value = liveEntry[dimension];
+      if (!isValidCeiling(value)) {
+        failures.push(`${subpath} [${dimension}]: el techo vivo ${JSON.stringify(value)} no es un entero positivo — un techo corrupto no se puede comparar`);
+        continue;
+      }
+      if (!(dimension in anchoredEntry)) {
+        failures.push(`${subpath} [${dimension}]: techo ${value} sin anclar en ${CEILINGS_BASELINE_RELATIVE}`
+          + ' — una dimension nueva entra por revision, no por omision');
+        continue;
+      }
+      if (!isValidCeiling(anchored)) {
+        failures.push(`${subpath} [${dimension}]: el techo anclado ${JSON.stringify(anchored)} no es un entero positivo — el ancla esta corrupta y no gobierna nada`);
+        continue;
+      }
+      if (value > anchored) {
+        failures.push(`${subpath} [${dimension}]: techo ${anchored} -> ${value} SUBIO — se adelgaza el grafo, no el ancla. Si la subida esta autorizada, pedila por nombre: --write-baseline --widen --reason "..."`);
+      } else if (value < anchored) {
+        failures.push(`${subpath} [${dimension}]: techo ${anchored} -> ${value} bajo — baja el ancla en el MISMO commit, con razon escrita: --write-baseline --reason "..."`);
+      }
     }
   }
-  for (const [subpath, anchored] of Object.entries(baseline.ceilings)) {
+  for (const [subpath, anchoredEntry] of Object.entries(baseline.ceilings)) {
     if (subpath in live) continue;
-    failures.push(!isValidCeiling(anchored)
-      ? `${subpath}: el ancla lo declara con ${JSON.stringify(anchored)}, que ni siquiera es un techo, y el manifest ya no le pone uno`
+    failures.push(!isRecord(anchoredEntry)
+      ? `${subpath}: el ancla lo declara con ${JSON.stringify(anchoredEntry)}, que ni siquiera es un techo, y el manifest ya no le pone uno`
       : `${subpath}: el ancla lo declara y el manifest ya no le pone techo`);
   }
   return failures;
@@ -336,6 +421,23 @@ export function runPublicEntrypointGate({ root = DEFAULT_ROOT, silent = false } 
       const graph = collectGraph(root, entryFile);
       const barrel = graph.files.find((filePath) => banned.has(filePath));
       if (barrel) throw new Error(`${subpath} reaches forbidden root/tier barrel ${relative(root, barrel)}`);
+      /* La forma del presupuesto se valida ANTES de compararla. `graph.files.length
+       * > undefined` es `false` en JavaScript: un budget al que le falta una
+       * dimension pasaba el techo en silencio, que es exactamente el fallo que el
+       * ancla viene a cerrar, un nivel mas abajo. Y un campo de mas tampoco se
+       * ignora: un `maxSourceBytes_` con guion bajo no gobierna nada y se parece
+       * a que si. */
+      if (!isRecord(entry.budget)) throw new Error(`${subpath} budget must be a record of ${BUDGET_FIELDS.join(', ')}`);
+      for (const field of Object.keys(entry.budget)) {
+        if (!BUDGET_FIELDS.includes(field)) {
+          throw new Error(`${subpath} budget declares unknown field ${JSON.stringify(field)}; the governed fields are ${BUDGET_FIELDS.join(', ')}`);
+        }
+      }
+      for (const field of BUDGET_FIELDS) {
+        if (!isValidCeiling(entry.budget[field])) {
+          throw new Error(`${subpath} budget.${field} ${JSON.stringify(entry.budget[field] ?? null)} is not a positive integer; a budget that is not a number compares to nothing`);
+        }
+      }
       if (directSources > entry.budget.maxDirectSources) {
         throw new Error(`${subpath} direct fan-out ${directSources} exceeds ${entry.budget.maxDirectSources}`);
       }
@@ -394,7 +496,8 @@ export function runPublicEntrypointGate({ root = DEFAULT_ROOT, silent = false } 
  * LA PUERTA PARA AMPLIAR, PEDIDA POR NOMBRE. Es el equivalente de
  * `--reattribution` del normalization-contract-gate, con la semantica de este
  * gate: `--widen`. Sin la bandera esta ruta se niega a ampliar, y ampliar es
- * tanto subir un techo existente como agregar un subpath nuevo.
+ * subir un techo existente, agregar un subpath nuevo o agregar una dimension
+ * que el ancla no cubria -- en CUALQUIERA de las dimensiones gobernadas.
  *
  * QUE GARANTIZA Y QUE NO. No vuelve imposible ampliar: quien edite el JSON del
  * ancla a mano consigue lo mismo, y ninguna bandera lo impide. Lo que consigue
@@ -403,6 +506,10 @@ export function runPublicEntrypointGate({ root = DEFAULT_ROOT, silent = false } 
  * ampliacion sin razon es REVISABLE en el diff, no invisible. Esa es toda la
  * pretension, y conviene no decir de mas.
  *
+ * `lastMoveKind` NOMBRA LAS DOS DIMENSIONES SIEMPRE, incluso las que no se
+ * movieron. Un resumen que solo lista lo que cambio deja al lector sin saber si
+ * la otra dimension se reviso o ni siquiera se mira.
+ *
  * Bajar no necesita bandera, pero SI razon: un ancla que baja sin decir que se
  * adelgazo no es auditable.
  */
@@ -410,17 +517,30 @@ export function writeCeilingsBaseline({ root = DEFAULT_ROOT, reason, widen = fal
   if (!reason || !String(reason).trim()) throw new Error('--write-baseline exige --reason "por que se mueve el ancla"');
   const baselinePath = path.join(root, CEILINGS_BASELINE_RELATIVE);
   const previous = readJson(baselinePath);
-  /* La escritura valida la version igual que la lectura: `previous` se esparce
-   * al documento nuevo, asi que un ancla de otro formato se propagaria intacta
-   * -- y ademas `raised`/`added` se calculan contra ella. Reparar sobre un
-   * archivo que no se entiende no es reparar. */
+  /* La escritura valida la version igual que la lectura: el documento nuevo
+   * arrastra los campos declarativos del previo, asi que un ancla de otro
+   * formato se propagaria intacta -- y ademas `raised`/`added` se calculan
+   * contra ella. Reparar sobre un archivo que no se entiende no es reparar. */
   if (previous?.schemaVersion !== CEILINGS_SCHEMA_VERSION) {
     throw new Error(`el ancla declara schemaVersion ${JSON.stringify(previous?.schemaVersion ?? null)} `
       + `y este gate escribe la version ${CEILINGS_SCHEMA_VERSION}: no se re-ancla sobre un formato que no se entiende`);
   }
+  /* Y la forma de la raiz igual que la version: si el archivo trae un campo que
+   * el gate no lee, re-anclar encima lo LAVARIA -- el `--check` enrojece, el
+   * operador re-ancla, el campo fantasma sobrevive o desaparece sin que nadie
+   * lo haya decidido. Se nombra y se para. */
+  const unknownRootKeys = Object.keys(previous).filter((key) => !CEILINGS_ROOT_KEYS.includes(key));
+  if (unknownRootKeys.length > 0) {
+    throw new Error(`el ancla trae ${unknownRootKeys.length} clave(s) de raiz que este gate no lee: `
+      + `${unknownRootKeys.map((key) => JSON.stringify(key)).join(', ')}. Se quitan a mano y se revisan; `
+      + 're-anclar encima las lavaria');
+  }
   const live = readCeilings(readJson(path.join(root, 'contracts/package/entrypoints/index.json')));
-  for (const [subpath, value] of Object.entries(live)) {
-    if (!isValidCeiling(value)) throw new Error(`${subpath}: el techo vivo ${JSON.stringify(value)} no es un entero positivo; no se ancla basura`);
+  for (const [subpath, entry] of Object.entries(live)) {
+    for (const dimension of GOVERNED_BUDGET_DIMENSIONS) {
+      if (!(dimension in entry)) throw new Error(`${subpath}: el manifest no declara ${dimension}; no se ancla una dimension ausente`);
+      if (!isValidCeiling(entry[dimension])) throw new Error(`${subpath} [${dimension}]: el techo vivo ${JSON.stringify(entry[dimension])} no es un entero positivo; no se ancla basura`);
+    }
   }
   /* SUBIR NO ES LA UNICA FORMA DE AMPLIAR. Defecto de independent code audit: un subpath NUEVO no
    * tiene ancla previa, asi que la comparacion `value > anchored` no lo veia y
@@ -442,44 +562,66 @@ export function writeCeilingsBaseline({ root = DEFAULT_ROOT, reason, widen = fal
    * y la subida entra por la puerta de bajada. El propio gate ya declaraba que un
    * ancla corrupta "no gobierna nada" -- es decir, equivale a no-ancla-- y la
    * puerta no le aplicaba su propia ley. Por eso el filtro es por VALIDEZ, no por
-   * presencia. */
-  const raised = Object.entries(live)
-    .filter(([subpath, value]) => {
-      const anchored = previous?.ceilings?.[subpath];
-      return isValidCeiling(anchored) && value > anchored;
-    })
-    .map(([subpath, value]) => `${subpath} (${previous.ceilings[subpath]} -> ${value})`);
-  const added = Object.keys(live)
-    .filter((subpath) => !isValidCeiling(previous?.ceilings?.[subpath]))
+   * presencia. Se aplica por DIMENSION: un ancla que cubre los bytes y no los
+   * modulos esta sin ancla valida en modulos, y ampliar por ahi es ampliar. */
+  const raised = [];
+  const added = [];
+  for (const [subpath, entry] of Object.entries(live)) {
+    const anchoredEntry = previous?.ceilings?.[subpath];
+    for (const dimension of GOVERNED_BUDGET_DIMENSIONS) {
+      const anchored = isRecord(anchoredEntry) ? anchoredEntry[dimension] : undefined;
+      if (!isValidCeiling(anchored)) added.push({ subpath, dimension, to: entry[dimension] });
+      else if (entry[dimension] > anchored) raised.push({ subpath, dimension, from: anchored, to: entry[dimension] });
+    }
+  }
+  const widening = [
+    ...raised.map((move) => `${move.subpath} [${move.dimension}] (${move.from} -> ${move.to})`),
     /* El texto dice "sin ancla valida", no "nuevo": un subpath con ancla corrupta
      * ya existia, y llamarlo nuevo seria describir mal lo unico que el operador
      * va a leer antes de decidir si pide `--widen`. */
-    .map((subpath) => `${subpath} (sin ancla valida, techo ${live[subpath]})`);
-  const widening = [...raised, ...added];
+    ...added.map((move) => `${move.subpath} [${move.dimension}] (sin ancla valida, techo ${move.to})`),
+  ];
   if (widening.length > 0 && !widen) {
     throw new Error(
       `me niego a AMPLIAR el ancla en ${widening.length} techo(s): ${widening.join(', ')}`
-      + '. Un grafo que engorda se adelgaza en la fuente, y un subpath sin ancla valida se revisa antes de anclarse.'
+      + '. Un grafo que engorda se adelgaza en la fuente, y un techo sin ancla valida se revisa antes de anclarse.'
       + ' Si la ampliacion esta autorizada, pedila por nombre: --widen --reason "..."',
     );
   }
-  const doc = {
-    ...previous,
-    /* Explicito despues del spread: el documento escrito lleva SIEMPRE la
-     * version que este gate entiende, sin depender de que el spread la traiga. */
+  const perDimension = GOVERNED_BUDGET_DIMENSIONS
+    .map((dimension) => `${dimension}: ${raised.filter((move) => move.dimension === dimension).length} subido(s), `
+      + `${added.filter((move) => move.dimension === dimension).length} sin ancla valida`)
+    .join('; ');
+  const ceilings = Object.fromEntries(
+    Object.entries(live)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([subpath, entry]) => [
+        subpath,
+        Object.fromEntries(GOVERNED_BUDGET_DIMENSIONS.map((dimension) => [dimension, entry[dimension]])),
+      ]),
+  );
+  /* El documento se construye desde el conjunto CERRADO de claves, en su orden,
+   * no esparciendo `previous`: un spread arrastraria cualquier campo fantasma
+   * que el `--check` acaba de prohibir. `undefined` no sobrevive a
+   * `JSON.stringify`, asi que un ancla sintetica sin `why` sigue siendo valida. */
+  const doc = {};
+  const carried = {
     schemaVersion: CEILINGS_SCHEMA_VERSION,
-    ceilings: Object.fromEntries(Object.entries(live).sort(([a], [b]) => a.localeCompare(b))),
+    law: previous.law,
+    producedBy: previous.producedBy,
+    why: previous.why,
+    consolidationCandidates: previous.consolidationCandidates,
+    ceilings,
     lastMove: reason,
     lastMoveKind: widening.length > 0
-      ? `ampliacion autorizada por nombre (--widen): ${raised.length} techo(s) subido(s), ${added.length} sin ancla valida`
-      : 'decrece-solo',
+      ? `ampliacion autorizada por nombre (--widen) — ${perDimension}`
+      : `decrece-solo — ${perDimension}`,
   };
+  for (const key of CEILINGS_ROOT_KEYS) {
+    if (carried[key] !== undefined) doc[key] = carried[key];
+  }
   fs.writeFileSync(baselinePath, `${JSON.stringify(doc, null, 2)}\n`);
-  return {
-    raised: raised.map((item) => item.split(' ')[0]),
-    added: added.map((item) => item.split(' ')[0]),
-    total: Object.keys(live).length,
-  };
+  return { raised, added, dimensions: [...GOVERNED_BUDGET_DIMENSIONS], total: Object.keys(live).length };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
@@ -491,8 +633,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         reason: reasonIndex >= 0 ? flags[reasonIndex + 1] : null,
         widen: flags.includes('--widen'),
       });
-      const widened = result.raised.length + result.added.length;
-      console.log(`ancla de techos escrita: ${result.total} subpaths${widened > 0 ? `, ${result.raised.length} subido(s) y ${result.added.length} sin ancla valida, por --widen` : ''}`);
+      const perDimension = result.dimensions
+        .map((dimension) => `${dimension}: ${result.raised.filter((move) => move.dimension === dimension).length} subido(s), `
+          + `${result.added.filter((move) => move.dimension === dimension).length} sin ancla valida`)
+        .join('; ');
+      console.log(`ancla de techos escrita: ${result.total} subpaths x ${result.dimensions.length} dimensiones — ${perDimension}`);
     } catch (error) {
       console.error(`public-entrypoint-boundary-gate: ${error.message}`);
       process.exit(1);

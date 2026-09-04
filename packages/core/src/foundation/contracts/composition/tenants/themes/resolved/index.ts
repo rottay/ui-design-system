@@ -8,7 +8,6 @@
  */
 
 import type {
-  BrandCompilerInput,
   BrandMotion,
   BrandSurfaces,
   BrandTheme,
@@ -93,25 +92,6 @@ export interface ThemeResolution {
   readonly intent?: ThemeIntent;
 }
 
-/**
- * `BrandCompilerInput` plus the optional tenant authorship record. Widened here
- * rather than on the contract because provenance is a property of one COMPILE,
- * not of the BrandTheme shape; every field is optional, so omitting them is the
- * "no provenance supplied" case that reproduces today's bytes exactly.
- */
-export type BrandCompilerProvenanceInput = BrandCompilerInput & {
-  tenantAuthoredPaths?: TenantAuthoredPaths;
-  /** The TENANT floor, separate from the vertical baseline. ABSENT => IDENTITY. */
-  tenantPatch?: Partial<BrandTheme>;
-  /**
-   * The closed boolean channel for status-seed authorship, read off the raw
-   * patch VALUE rather than `authoredPaths` membership: the migrated patch
-   * always constructs all four `{tone}Color` keys, so membership alone cannot
-   * tell authorship from construction. ABSENT => the sites fall back to
-   * reading `tenantPatch.palette` / `tenantPatch.modes` directly.
-   */
-  tenantStatusSeedAuthorship?: TenantStatusSeedAuthorship;
-};
 
 /**
  * A `ReadonlySet` view over a private copy of `values`.

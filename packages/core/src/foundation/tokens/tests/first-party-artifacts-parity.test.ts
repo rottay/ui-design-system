@@ -1,7 +1,7 @@
 /**
  * TS-to-CSS parity gate for every first-party vertical artifact (WO-TOK-01).
  *
- * Every variable emitted by `compileBrandTheme(<slug>BrandTheme)` must exist,
+ * Every variable emitted by `compileTheme(<slug>BrandTheme)` must exist,
  * with an equal value, somewhere in the committed artifact. The artifact is
  * allowed to define MORE variables than the compiler (the declared extension:
  * oklch bridge, color scales, semantic sets, dark-mode overrides) — parity is
@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import { describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { FIRST_PARTY_ARTIFACT_SPECS } from '@/infrastructure/compilers/runtime/tenant-css';
 import {
   bithireBrandTheme,
@@ -62,7 +62,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
   (slug) => {
     const brandTheme = BRAND_THEMES[slug];
     if (!brandTheme) throw new Error(`no BrandTheme registered in this test for slug ${slug}`);
-    const compiled = compileBrandTheme({ brandTheme, tenantSlug: slug });
+    const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });
     const declared = collectDeclaredValues(readFileSync(resolve(ARTIFACTS_DIR, `${slug}/index.css`), 'utf8'));
 
     it('emits a non-trivial number of BrandTheme variables', () => {
@@ -100,7 +100,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
 // Every COMPILER-side assertion survives untouched below — those are the ones
 // that pin where the four channels went, and they never read a file.
 describe('bithire channels the retired extension used to own', () => {
-  const compiledBithire = compileBrandTheme({
+  const compiledBithire = lowerBrandThemeFixture({
     brandTheme: bithireBrandTheme,
     tenantSlug: 'bithire',
   });

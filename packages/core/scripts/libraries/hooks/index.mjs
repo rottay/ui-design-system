@@ -799,10 +799,13 @@ export const ANCHORS = Object.freeze({
   }),
   brandThemeEmitter: Object.freeze({
     id: 'brand-theme-emitter',
-    path: 'src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
-    kind: 'file',
+    // The channel writers are one owner per concern under the lowering, not one
+    // file: anchoring on a single `index.ts` would pin whichever writer happened
+    // to be biggest that week.
+    path: 'src/infrastructure/compilers/runtime/theme/runtime/lowering',
+    kind: 'directory',
     describes:
-      'canonical static BrandTheme compiler (palette, typography, material, motion and chrome root channels)',
+      'canonical theme lowering (palette, typography, material, motion and chrome root channels)',
   }),
   appearanceEmitter: Object.freeze({
     id: 'appearance-emitter',
@@ -1361,9 +1364,15 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   // unowned the first time a production stylesheet consumed them. Anchor the
   // helper explicitly: ownership must follow the emitted channel, not the
   // physical file that happens to contain its assignment.
+  // The lowering's channel writers are one owner per concern, so its anchor is
+  // a DIRECTORY: every `index.ts` beneath it is a compiler author, and reading
+  // only one of them would leave the others' channels unowned -- the exact
+  // failure this anchor list exists to prevent.
   const compilerSources = [
     chromePath,
-    brandThemeEmitterPath,
+    ...collectFiles(brandThemeEmitterPath, ['.ts']).filter((file) => (
+      file.endsWith(`${sep}index.ts`) && !file.includes(`${sep}tests${sep}`)
+    )),
     appearanceEmitterPath,
     appearancePostureEmitterPath,
   ].map((file) => ({ file, text: readFileSync(file, 'utf8') }));

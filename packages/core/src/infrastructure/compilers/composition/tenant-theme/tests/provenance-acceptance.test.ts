@@ -41,7 +41,7 @@ import { describe, expect, it } from "vitest";
 import {
   CONSULTED_PROVENANCE_FIELDS,
   collectPatchAuthoredPaths,
-  resolveTheme,
+  mergeThemePatches,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
@@ -55,8 +55,7 @@ import {
   SEED_SHADOWING_FIELDS,
   STATUS_SEED_FIELDS,
   STATUS_SEED_SHADOWING_FIELDS,
-  compileTheme,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds";
 import { withExpressiveFieldDefaults } from "@/infrastructure/compilers/kernel/runtime/appearance";
 
 import {
@@ -68,6 +67,7 @@ import {
   hydrateTenantThemeConfig,
 } from "..";
 import { migrateV1 } from "../migrate-v1";
+import { lowerTheme } from "@tests/support/theme-lowering";
 
 const VERTICALS = ["rottay", "bithire", "evnto"] as const;
 type Vertical = (typeof VERTICALS)[number];
@@ -442,8 +442,8 @@ describe("case C — no contested tenant authorship changes nothing", () => {
   it("compiles every first-party theme byte-identically with and without provenance", () => {
     for (const vertical of VERTICALS) {
       const theme = FIRST_PARTY_THEMES[vertical];
-      const bare = compileTheme(theme, { tenantSlug: IDENTITY.slug });
-      const empty = compileTheme(theme, {
+      const bare = lowerTheme(theme, { tenantSlug: IDENTITY.slug });
+      const empty = lowerTheme(theme, {
         tenantSlug: IDENTITY.slug,
         tenantAuthoredPaths: new Set<string>(),
       });
@@ -505,7 +505,7 @@ describe("case C — no contested tenant authorship changes nothing", () => {
     for (const vertical of VERTICALS) {
       expect(
         Object.keys(
-          compileTheme(FIRST_PARTY_THEMES[vertical], {
+          lowerTheme(FIRST_PARTY_THEMES[vertical], {
             tenantSlug: IDENTITY.slug,
           }).cssVariables
         ).length,
@@ -533,7 +533,7 @@ describe("static and DB share one lowering", () => {
     const envelope = migrateV1(document, baseTheme.appearance.defaultMode!);
     return {
       baseTheme,
-      resolved: resolveTheme(baseTheme, envelope.patch),
+      resolved: mergeThemePatches(baseTheme, envelope.patch),
       authoredPaths: collectPatchAuthoredPaths(envelope.patch),
       // E-1: the DB leg hands the compiler the tenant's posture FLOORS as well
       // as its authorship, so a reconstruction that omits them is no longer the
@@ -559,12 +559,12 @@ describe("static and DB share one lowering", () => {
         vertical,
         POPULATED_SIMPLE_DOCUMENT as unknown as TenantThemeDocument
       );
-      const direct = compileTheme(resolved, {
+      const direct = lowerTheme(resolved, {
         tenantSlug: IDENTITY.slug,
         tenantAuthoredPaths: authoredPaths,
         tenantPatch: floors,
       });
-      const baseline = compileTheme(baseTheme, { tenantSlug: IDENTITY.slug });
+      const baseline = lowerTheme(baseTheme, { tenantSlug: IDENTITY.slug });
 
       const effective = { ...baseline.cssVariables, ...artifact.variables };
       expect(effective, `${vertical} base block`).toEqual(direct.cssVariables);
@@ -676,12 +676,12 @@ describe("static and DB share one lowering", () => {
         vertical,
         LEAF_ONLY_DOCUMENT
       );
-      const asStatic = compileTheme(resolved, { tenantSlug: IDENTITY.slug });
-      const asTenant = compileTheme(resolved, {
+      const asStatic = lowerTheme(resolved, { tenantSlug: IDENTITY.slug });
+      const asTenant = lowerTheme(resolved, {
         tenantSlug: IDENTITY.slug,
         tenantAuthoredPaths: authoredPaths,
       });
-      const baseline = compileTheme(baseTheme, { tenantSlug: IDENTITY.slug });
+      const baseline = lowerTheme(baseTheme, { tenantSlug: IDENTITY.slug });
 
       // Provenance never touches the base block. Both legs already put the
       // tenant's leaves there; the contest only exists inside a mode.
@@ -777,7 +777,7 @@ describe("static and DB share one lowering", () => {
 
     for (const vertical of VERTICALS) {
       const baseOnly = lower(vertical, LEAF_ONLY_DOCUMENT);
-      const compiled = compileTheme(baseOnly.resolved, {
+      const compiled = lowerTheme(baseOnly.resolved, {
         tenantSlug: IDENTITY.slug,
         tenantAuthoredPaths: baseOnly.authoredPaths,
       });
@@ -830,7 +830,7 @@ describe("static and DB share one lowering", () => {
         },
       };
       const qualified = {
-        resolved: resolveTheme(
+        resolved: mergeThemePatches(
           FIRST_PARTY_THEMES[vertical],
           qualifiedPatch as never
         ),
@@ -841,7 +841,7 @@ describe("static and DB share one lowering", () => {
         `${vertical} ${overlayMode} authorship recorded`
       ).toBe(true);
 
-      const withDark = compileTheme(qualified.resolved, {
+      const withDark = lowerTheme(qualified.resolved, {
         tenantSlug: IDENTITY.slug,
         tenantAuthoredPaths: qualified.authoredPaths,
       });

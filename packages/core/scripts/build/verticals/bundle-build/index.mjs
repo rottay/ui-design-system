@@ -2,7 +2,7 @@
  * Regenerate first-party vertical CSS artifacts from their authored source.
  *
  * Each artifact (`src/foundation/tokens/css/facade/artifacts/<slug>/index.css`) is a BUILD OUTPUT:
- *   index.css = compileBrandTheme(<slug>BrandTheme)
+ *   index.css = compileTheme(resolveTheme(<slug>Theme))
  *
  * The brand compiler owns every theme variable the artifact carries (palette,
  * typography, surfaces, chrome) and every mode block, so the artifact is a pure
@@ -27,14 +27,17 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { isDarkSurfaceTheme } from '../../../../dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js';
+import { isDarkSurfaceTheme } from '../../../../dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground/index.js';
 import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../../../../dist/foundation/kernel/accessibility/branding-contrast/index.js';
 import {
   renderFirstPartyArtifact,
   FIRST_PARTY_ARTIFACT_SPECS,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
 } from '../../../../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
-import { FIRST_PARTY_VERTICAL_ROSTER } from '../../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js';
+import {
+  FIRST_PARTY_THEMES,
+  FIRST_PARTY_VERTICAL_ROSTER,
+} from '../../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -52,7 +55,7 @@ const artifacts = FIRST_PARTY_VERTICAL_ROSTER.map((row, index) => {
   if (row.theme.id !== row.slug) {
     throw new Error(`First-party roster mismatch: theme.id ${row.theme.id} !== slug ${row.slug}`);
   }
-  return { ...spec, brandTheme: row.theme };
+  return { ...spec, brandTheme: row.theme, theme: FIRST_PARTY_THEMES[row.slug] };
 });
 if (artifacts.length !== FIRST_PARTY_ARTIFACT_SPECS.length) {
   throw new Error('First-party artifact projection length differs from the roster');
@@ -72,7 +75,7 @@ function firstDiff(a, b) {
 
 /**
  * WO-TOK-02 step 5: compile-time APCA pairing check on the GENERATED ramp
- * (deriveTenantColorRamps, called from compileBrandTheme). Checks each
+ * (deriveTenantColorRamps, called from the lowering). Checks each
  * role's step-900 -- the far-from-ground extreme, meant to be usable as
  * readable text/icon color -- against the tenant's own ground.
  *
@@ -156,7 +159,7 @@ for (const spec of artifacts) {
 
   const { css: output, compiled } = renderFirstPartyArtifact({
     spec,
-    brandTheme,
+    theme: spec.theme,
     regenerateCommand: REGENERATE_COMMAND,
   });
   apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled));

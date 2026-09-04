@@ -3565,7 +3565,7 @@ html.dark {
 
   /* Durations — the 120/200/320ms product-law cadence. --ds-motion-instant MUST
      stay equal to the 120ms the brand-theme compiler re-declares per tenant
-     (infrastructure/compilers/kernel/runtime/brand-theme setMotionVariables,
+     (infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion setMotionVariables,
      design-language section 2.6 closed set 120/200/320), so tenant-scoped and
      unscoped contexts resolve the token to the same duration. */
   --ds-motion-instant: 120ms;
@@ -3606,7 +3606,7 @@ html.dark {
   /* Fallback only: a tenant BrandTheme with spring physics (springTension +
      springFriction, useSpring !== false) overrides these with a generated
      `linear()` curve scoped to its own [data-tenant] selector (see
-     infrastructure/compilers/kernel/runtime/brand-theme's setMotionVariables / brandThemeToTokenOverrides).
+     infrastructure/compilers/runtime/theme/runtime/lowering's setMotionVariables / brandThemeToTokenOverrides).
      A tenant that declares no spring keeps this cubic-bezier approximation. */
   --ds-motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ds-motion-spring-gentle: cubic-bezier(0.25, 1.25, 0.5, 1);
@@ -4868,7 +4868,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      default); 0 = flat (no gradient/glass/glow). Every effect multiplies its
      alpha/length by this, so intensity 0 collapses each effect to none while
      keeping valid CSS (blur(0px), transparent stops, 0-alpha shadow).
-     Emitted per tenant by infrastructure/compilers/kernel/runtime/brand-theme from surfaces.effectIntensity.
+     Emitted per tenant by infrastructure/compilers/runtime/theme/runtime/lowering from surfaces.effectIntensity.
      ======================================================================== */
   --ds-effect-intensity: 1;
 
@@ -124217,12 +124217,12 @@ html[lang]:lang(ar) {
  *
  * This file is a BUILD OUTPUT compiled from ONE authored source; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   foundation/tokens/ts/presentation/brand-themes/rottay/index.ts (compiled via compileBrandTheme)
+ *   foundation/tokens/ts/presentation/brand-themes/rottay/index.ts (compiled via compileTheme)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
-/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+/* === Compiled from the authored Theme via compileTheme — do not edit === */
 :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])) {
   color-scheme: dark;
   color: var(--ds-color-text-primary);
@@ -125424,7 +125424,7 @@ html[lang]:lang(ar) {
   --ds-watermark-color: #222226;
 }
 
-/* === Compiled from BrandTheme.modes.light — do not edit === */
+/* === Compiled from Theme.modes.light — do not edit === */
 :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay']))[data-theme='light'], :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])).light {
   color-scheme: light;
   --ds-alert-error-bg: rgba(220, 38, 38, 0.06);
@@ -126115,12 +126115,12 @@ html[lang]:lang(ar) {
  *
  * This file is a BUILD OUTPUT compiled from ONE authored source; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   foundation/tokens/ts/presentation/brand-themes/bithire/index.ts (compiled via compileBrandTheme)
+ *   foundation/tokens/ts/presentation/brand-themes/bithire/index.ts (compiled via compileTheme)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
-/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+/* === Compiled from the authored Theme via compileTheme — do not edit === */
 :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
   color-scheme: light;
   color: var(--ds-color-text-primary);
@@ -127359,7 +127359,7 @@ html[lang]:lang(ar) {
   --ds-z-index-tooltip: 2700;
 }
 
-/* === Compiled from BrandTheme.modes.dark — do not edit === */
+/* === Compiled from Theme.modes.dark — do not edit === */
 :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'], :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])).dark {
   color-scheme: dark;
   --ds-badge-count-bg: var(--ds-surface-control);
@@ -127813,12 +127813,12 @@ html[lang]:lang(ar) {
  *
  * This file is a BUILD OUTPUT compiled from ONE authored source; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   foundation/tokens/ts/presentation/brand-themes/evnto/index.ts (compiled via compileBrandTheme)
+ *   foundation/tokens/ts/presentation/brand-themes/evnto/index.ts (compiled via compileTheme)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
-/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+/* === Compiled from the authored Theme via compileTheme — do not edit === */
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
   color-scheme: light;
   color: var(--ds-color-text-primary);
@@ -128299,7 +128299,7 @@ html[lang]:lang(ar) {
   --ds-type-supporting-text-transform: none;
 }
 
-/* === Compiled from BrandTheme.modes.dark — do not edit === */
+/* === Compiled from Theme.modes.dark — do not edit === */
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark'], :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])).dark {
   color-scheme: dark;
   --ds-button-default-bg: #1C1A16;

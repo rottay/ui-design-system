@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { brandThemeToChromeVariables } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { brandThemeToChromeVariables } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome';
 import ModernButton from '../engines/modern';
 
 describe('ModernButton Pass 1 contract', () => {

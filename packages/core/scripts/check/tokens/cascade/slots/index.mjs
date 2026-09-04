@@ -12,7 +12,7 @@
  *
  * COMO SE MIDE EL CANAL: POR DIFERENCIA, NO POR LECTURA DE CODIGO. Para cada
  * hoja evaluada del tema se compila el tema DOS veces con el UNICO lowering que
- * existe (`compileBrandTheme` de dist) -- una tal cual y otra con esa sola hoja
+ * existe (`compileTheme` de dist) -- una tal cual y otra con esa sola hoja
  * cambiada a un centinela unico -- y se declaran emitidos los canales cuyo
  * valor se movio. Es el metodo que no puede mentir: no interpreta al
  * compilador, lo interroga. Y NO nace un segundo emisor, que seria un STOP del
@@ -54,6 +54,11 @@ import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/
 import { readManifestRecords } from '../../../../libraries/manifest/index.mjs';
 import { isRefinedRoot } from '../roots/exposure/index.mjs';
 import { assertDistFresh } from '../../../../package/artifacts/freshness/index.mjs';
+import {
+  LOWERING_EXPORT,
+  LOWERING_MODULE,
+  loadBrandThemeLowering,
+} from '../../../../libraries/theme-lowering/index.mjs';
 import {
   DOMICILES,
   METADATA_EXCLUSION,
@@ -473,23 +478,19 @@ export async function loadCompiledArm({ coreRoot = CORE_ROOT, importModule = (sp
       + `${(freshness?.failures ?? ['la prueba de frescura no devolvio nada']).join('\n  ')}`,
     );
   }
-  const compilerPath = join(coreRoot, 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js');
   const themesPath = join(coreRoot, 'dist/foundation/tokens/ts/presentation/brand-themes/index.js');
-  const compiler = await importModule(pathToFileURL(compilerPath).href);
   const themes = await importModule(pathToFileURL(themesPath).href);
-  if (typeof compiler.compileBrandTheme !== 'function') {
-    throw new Error('slot-inventory: dist no exporta compileBrandTheme; me niego a fabricar el lowering.');
-  }
+  const { compile } = await loadBrandThemeLowering({ coreRoot, importModule });
   return {
-    compile: compiler.compileBrandTheme,
+    compile,
     themes: {
       rottay: themes.rottayBrandTheme,
       bithire: themes.bithireBrandTheme,
       evnto: themes.evntoBrandTheme,
     },
     provenance: {
-      compilerModule: 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js',
-      compilerExport: 'compileBrandTheme',
+      compilerModule: LOWERING_MODULE,
+      compilerExport: LOWERING_EXPORT,
       themesModule: 'dist/foundation/tokens/ts/presentation/brand-themes/index.js',
       freshnessProven: true,
     },
@@ -667,7 +668,7 @@ export async function buildInventory({
     schemaVersion: 1,
     law: {
       unit: 'un SLOT autorado del objeto evaluado del tema; el slotId es (vertical, keypath) y NO es posicional',
-      channelMethod: 'diferencial: compile(tema) vs compile(tema con esa sola hoja en centinela unico), con compileBrandTheme de dist bajo prueba de frescura. Un solo lowering; jamas un segundo emisor.',
+      channelMethod: 'diferencial: compile(tema) vs compile(tema con esa sola hoja en centinela unico), con compileTheme de dist bajo prueba de frescura. Un solo lowering; jamas un segundo emisor.',
       rootMethod: 'atribucion SOLO por cabeza declarada (roots[].channel). El catalogo publica cuantos canales regenera cada raiz, nunca cuales: la salida por canal del clasificador de F4A no quedo persistida. Sin cabeza exacta, rootId es null con motivo.',
       coincidenceLaw: 'la igualdad de valor NO es evidencia de nada. Ninguna fila puede justificar su veredicto por coincidencia textual, y R3 exige el NOMBRE del stop autorado, jamas su valor resuelto.',
       rules: 'R1 ya-colapsado | R2 colapsable por raiz con deuda de derivacion | R3 variante por vocabulario cerrado nombrado | R4 pro/expert | R5 cola de adjudicacion. En orden; la primera que matchea gana.',

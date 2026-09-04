@@ -41,7 +41,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   appearanceGeneralToVariables,
   compileAppearanceVariables,
@@ -80,7 +80,7 @@ const IDENTITY = {
  * or the compatibility `TenantConfig.brandTheme` field carries no type at all.
  */
 const staticVariables = (rhythm?: unknown): Record<string, string> =>
-  compileBrandTheme({
+  lowerBrandThemeFixture({
     brandTheme: {
       id: 'rhythm-parity',
       name: 'Rhythm Parity',

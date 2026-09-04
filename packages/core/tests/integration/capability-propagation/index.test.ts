@@ -69,7 +69,7 @@ import {
   hydrateTenantThemeConfig,
   tenantThemeAnatomyAttributes,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
@@ -326,7 +326,7 @@ const MUTATORS: Record<string, Mutators> = {
  * honest gaps in THIS leg rather than defects in the system:
  *
  *  - DATA-ONLY: the capability travels as normalized appearance / root
- *    attributes, and `compileBrandTheme().cssVariables` is the wrong instrument
+ *    attributes, and `compileTheme().cssVariables` is the wrong instrument
  *    for it (`chrome.anatomy`, `profiles.icon`, `responsive.posture`).
  *  - AUTHORING-SHAPE: the BrandTheme field that carries it is a governed
  *    selection envelope (`expressive`, `recipes`, `responsive`) or a derived
@@ -432,7 +432,7 @@ function compileDb(document: Doc) {
 const channelName = (key: string): string => key.slice(key.indexOf(':') + 1);
 
 const compileStatic = (theme: BrandTheme): Record<string, string> =>
-  compileBrandTheme({ brandTheme: theme, tenantSlug: 'propagation-probe' })
+  lowerBrandThemeFixture({ brandTheme: theme, tenantSlug: 'propagation-probe' })
     .cssVariables;
 
 function changedKeys(

@@ -4,14 +4,14 @@
   "schemaVersion": 1,
   "law": {
     "unit": "un SLOT autorado del objeto evaluado del tema; el slotId es (vertical, keypath) y NO es posicional",
-    "channelMethod": "diferencial: compile(tema) vs compile(tema con esa sola hoja en centinela unico), con compileBrandTheme de dist bajo prueba de frescura. Un solo lowering; jamas un segundo emisor.",
+    "channelMethod": "diferencial: compile(tema) vs compile(tema con esa sola hoja en centinela unico), con compileTheme de dist bajo prueba de frescura. Un solo lowering; jamas un segundo emisor.",
     "rootMethod": "atribucion SOLO por cabeza declarada (roots[].channel). El catalogo publica cuantos canales regenera cada raiz, nunca cuales: la salida por canal del clasificador de F4A no quedo persistida. Sin cabeza exacta, rootId es null con motivo.",
     "coincidenceLaw": "la igualdad de valor NO es evidencia de nada. Ninguna fila puede justificar su veredicto por coincidencia textual, y R3 exige el NOMBRE del stop autorado, jamas su valor resuelto.",
     "rules": "R1 ya-colapsado | R2 colapsable por raiz con deuda de derivacion | R3 variante por vocabulario cerrado nombrado | R4 pro/expert | R5 cola de adjudicacion. En orden; la primera que matchea gana."
   },
   "provenance": {
-    "compilerModule": "dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
-    "compilerExport": "compileBrandTheme",
+    "compilerModule": "dist/server.js",
+    "compilerExport": "compileTheme",
     "themesModule": "dist/foundation/tokens/ts/presentation/brand-themes/index.js",
     "freshnessProven": true,
     "membershipSource": "artifacts/generated/manifest/cascade/membership/index.json",
@@ -106622,5 +106622,5 @@
       }
     }
   ],
-  "digest": "8cc640fe83e545ffef8aee77f2024ff0343b67305844b389b6e68cb3e98547a8"
+  "digest": "181a5f69aea1742ba01602c194cc7a6497f6045cd10f06b637f39828eeb67ccb"
 }

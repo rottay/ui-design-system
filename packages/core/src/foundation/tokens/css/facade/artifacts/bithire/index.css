@@ -4,12 +4,12 @@
  *
  * This file is a BUILD OUTPUT compiled from ONE authored source; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   foundation/tokens/ts/presentation/brand-themes/bithire/index.ts (compiled via compileBrandTheme)
+ *   foundation/tokens/ts/presentation/brand-themes/bithire/index.ts (compiled via compileTheme)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
-/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+/* === Compiled from the authored Theme via compileTheme — do not edit === */
 :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
   color-scheme: light;
   color: var(--ds-color-text-primary);
@@ -1248,7 +1248,7 @@
   --ds-z-index-tooltip: 2700;
 }
 
-/* === Compiled from BrandTheme.modes.dark — do not edit === */
+/* === Compiled from Theme.modes.dark — do not edit === */
 :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'], :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])).dark {
   color-scheme: dark;
   --ds-badge-count-bg: var(--ds-surface-control);

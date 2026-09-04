@@ -71,13 +71,64 @@ import {
  * `index.mjs` hashes with -- not a second algorithm the drill
  * declares for itself. */
 import { sha256Hex } from '../governance/index.mjs';
+/* The reach set the build READS, taken from its owner rather than restated:
+ * `withBuildFixture` has to author every one of those files or the build dies
+ * with ENOENT, and a hand-copied list goes stale the day the roster moves. */
+import { REACH_SOURCES } from '../../../orchestration/runtime/tenant-reach/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(HERE, 'index.mjs');
+/**
+ * The live census these drills freeze, and why it moved in C2.
+ *
+ * 4877 -> 4887 is a NET +10, derived row by row rather than absorbed: 58 rows
+ * were added and 48 removed. 47 of the additions pair EXACTLY with 47 of the
+ * removals on (plane, symbol, channels, owners) -- the same producer writing
+ * the same channels for the same owner, at a new file:line. C2 split one
+ * compiler file into the nineteen lowering owners, so those 47 relocated, and
+ * 47 - 47 contributes nothing to the net.
+ *
+ * The WHOLE net is the 48th removal and the 11 additions that do not pair: one
+ * row becoming eleven, all in the same cohort -- plane `ts-compilers`, symbol
+ * `<literal-writes>`, ordinal 0, at `<file>:1`, the per-FILE pseudo-site the
+ * scanner opens for literal `--ds-*` writes no enumerator attributes to a named
+ * function. The removal is the retired compiler's single AGGREGATE row,
+ * `compilers/kernel/runtime/brand-theme/index.ts:1`, which carried all 180 of
+ * its literal channels; the eleven that replace it are the files that now
+ * contain those writes: `lowering/index.ts`, lowering/foundation/{chrome,
+ * materials, mode-overlay, motion, palette, personality, seeds, tint,
+ * type-ramp} and lowering/runtime/variables. -1 + 11 = +10, exactly.
+ *
+ * The cohort ITSELF goes 2 rows -> 12, which is the same +10 counted a second
+ * way: the aggregate above, plus `kernel/foundation/css/appearance-posture`,
+ * which did not move and is therefore neither a removal nor an addition.
+ *
+ * No slack is introduced, and this is measured, not asserted: that cohort spans
+ * the SAME 183 distinct channels before and after (0 only-in-old, 0 only-in-new)
+ * and 10338 -> 10365 is the same channels re-attributed per file (193 -> 220
+ * site/channel pairs in the cohort). `distinctChannels` is unchanged at 4585,
+ * and every acceptance and closed-cohort counter is byte-identical:
+ * ownershipConflicts 0, unknownProvenance 0, openBlocking 0, closedNonObject 69,
+ * closedZeroGoverned 627, publicBoundary 534, privateRelay 728, closedProducer
+ * 66. `precedenceMetadata` RETURNED to its 2161 (it had fallen to 2069 while the
+ * checker scanned a single owner). The css, ts-chrome-variables and
+ * tsx-inline-stamp planes did not move at all.
+ */
 const LIVE_PRODUCER_STATS = Object.freeze({
-  producerSites: 4877,
-  channelEmissions: 10338,
+  producerSites: 4887,
+  channelEmissions: 10365,
   distinctChannels: 4585,
+  /**
+   * 196 -> 197, and it is the SAME mechanism as the ten rows above rather than
+   * a new causal claim: `--ds-color-link` is written literally by two of the
+   * nineteen lowering owners (it is named in `foundation/seeds`'s shadowing
+   * table and in `foundation/palette`'s field map). Under one compiler file both
+   * spellings collapsed into a single `<literal-writes>` row; per file they are
+   * two. Measured: the delta is exactly one row, `--ds-color-link` at
+   * `lowering/foundation/palette/index.ts:1`, carrying the SAME causal root as
+   * the row that already existed. No channel and no root is new.
+   */
+  emissionsWithCausalRoot: 197,
 });
 
 function withFiles(files, run) {
@@ -652,18 +703,24 @@ function withBuildFixture(run, extra = {}) {
     writeFileSync(abs, body);
   };
   try {
-    put(
-      'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts',
-      'export function chromeToVariables(vars) { vars["--ds-fixture-a"] = 1; }\n',
-    );
-    put('packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts', 'export const x = 1;\n');
-    put('packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts', 'export const y = 1;\n');
+    /* The AUTHORED members of the closure: each one exists so the fixture's own
+     * assertions have something to find. */
+    const authored = {
+      'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts':
+        'export function chromeToVariables(vars) { vars["--ds-fixture-a"] = 1; }\n',
+      'packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts':
+        'export const TENANT_THEME_OVERRIDE_TOKENS = ["--ds-fixture-override"] as const;\n',
+    };
+    /* ...and the rest of the reach set, INERT. The closure is derived from
+     * `REACH_SOURCES`, so the day the lowering gains or loses an owner this
+     * fixture follows it instead of failing ENOENT on a file the real build
+     * reads and this one never heard of. The stubs emit no `--ds-*` literal,
+     * so they add nothing to any count the assertions below make. */
+    for (const rel of REACH_SOURCES) {
+      put(rel, authored[rel] ?? 'export const x = 1;\n');
+    }
     put('packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts', 'export const z = 1;\n');
     put('packages/core/src/foundation/kernel/color/oklch/ramp/index.ts', 'export const RAMP_STEPS = [50, 100] as const;\n');
-    put(
-      'packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts',
-      'export const TENANT_THEME_OVERRIDE_TOKENS = ["--ds-fixture-override"] as const;\n',
-    );
     put('packages/core/src/components/demo/engines/rustic/index.tsx', `export const A = () => <div style={{ '--ds-fixture-stamp': v }} />;\n`);
     for (const [rel, body] of Object.entries(extra)) put(rel, body);
     put(
@@ -1451,11 +1508,8 @@ test('T-14 the frozen counters survive this tranche untouched', () => {
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
   assert.equal(out.stats.closedZeroGoverned, 627);
 });
@@ -1787,11 +1841,8 @@ test('T-23 every frozen counter and closed cohort survives T-FINAL-352 untouched
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
   // an OPEN row may never be counted as a producer or a governed emission
   const openKeys = new Set(openRows(out).map((r) => `${r.file}|${r.ordinal}`));
@@ -2044,11 +2095,8 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -2398,11 +2446,8 @@ test('R-9 the 1114 previously classified rows are byte-equivalent', () => {
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -2621,11 +2666,8 @@ test('D-10 the drain is exactly measured and openBlocking only went down', () =>
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -2794,11 +2836,8 @@ test('E-8 the invariants the correction must not disturb', () => {
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
   // the ratified join amendment survives
   assert.equal(out.closedProducer.filter((r) => r.occurrenceProducerSiteIds).length, 15);
@@ -2908,11 +2947,8 @@ test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => 
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
   // the 9 arrivals emit a governed channel -- that is WHY they are producers,
   // not ZEROs, and they stay non-consumable
@@ -3165,11 +3201,8 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
 });
 
@@ -3514,11 +3547,8 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.distinctChannels, LIVE_PRODUCER_STATS.distinctChannels);
-  // P0 (2026-08-28): +10 en emissionsWithCausalRoot = la raiz cascade nueva palette.status-seeds
-  // declara 2 derivations (--ds-color-success-500 via deriveTenantColorRamps, --ds-color-on-success
-  // via ON_TONE_ROLES) que respaldan 10 sitios de emision preexistentes (6 de -500 + 4 de on-success);
-  // ningun canal ni sitio nuevo, solo cobertura causal => 186 + 10 = 196
-  assert.equal(out.stats.emissionsWithCausalRoot, 196);
+  // Exact live total, centralized above with its own derivation.
+  assert.equal(out.stats.emissionsWithCausalRoot, LIVE_PRODUCER_STATS.emissionsWithCausalRoot);
   assert.equal(out.stats.ownershipConflicts, 0);
   // the arrivals are exactly the 18 authored coordinates of ONE expression
   // family -- 9 source files x {member-access, spread}. The four Button rows

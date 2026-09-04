@@ -2,18 +2,20 @@
  * @fileoverview The two tenant ingress arms, on ONE scene.
  *
  * A control has two doors. A code-owned vertical writes it into a static
- * `BrandTheme` (`surfaces.rhythm`), which `compileBrandTheme` lowers into the
- * compiled tenant artifact — an unlayered block behind
+ * `BrandTheme` (`surfaces.rhythm`), which `resolveTheme` -> `compileTheme` ->
+ * `emitThemeCss` lowers into the compiled tenant artifact — an unlayered block
+ * behind
  * `:is(html[data-tenant='<slug>'], :where([data-ds-root][data-vertical='<v>']))`.
  * A customer writes it into a DB `TenantTheme` (`appearance.general.rhythm`),
  * which `compileTenantThemeConfig` compiles into a `TenantThemeArtifact` whose
  * `variables` map is applied as INLINE STYLE ON THE DOCUMENT ELEMENT.
  *
- * The DB door is `compileTenantThemeConfig` and only that;
- * `RETIRED_DB_COMPILER_EXPORTS` makes rebinding to a retired lowering a
- * load-time throw. Each retired spelling still lowers a stop to a plausible
- * number, so a rebound arm goes GREEN while measuring a door no customer theme
- * travels through.
+ * The DB door is `compileTenantThemeConfig` and only that; the static door is
+ * `resolveTheme` -> `compileTheme` -> `emitThemeCss` and only that.
+ * `assertNoRetiredCompilerBinding` makes rebinding EITHER arm to a retired
+ * lowering, or deep-importing a retired compiler tree, a load-time throw. Each
+ * retired spelling still lowers a stop to a plausible number, so a rebound arm
+ * goes GREEN while measuring a door no theme travels through.
  *
  * THOSE ARE TWO DIFFERENT POSITIONS IN THE CASCADE, and that is the whole
  * reason this unit exists. "Static and DB are equivalent" is a claim about the
@@ -52,6 +54,13 @@ import { pathToFileURL } from 'node:url';
 import { CORE_ROOT, fromCoreRoot } from '../../foundation/paths/index.mjs';
 import { VERTICALS } from '../../foundation/scope/index.mjs';
 import { assertDistFresh } from '../../../../../../package/artifacts/freshness/index.mjs';
+import {
+  LOWERING_EXPORT,
+  LOWERING_MODULE,
+  LOWERING_MODULE_SUBPATH,
+  LOWERING_SOURCE,
+  brandThemeLoweringAdapter,
+} from '../../../../../../libraries/theme-lowering/index.mjs';
 
 /**
  * THE CLOSED SET OF REASONS A STOP MAY BE PUBLISHED AS "EXCLUDED" (R-2 hardening).
@@ -198,9 +207,10 @@ export const INGRESS_ARMS = Object.freeze({
      * it does not lower the stop alone.
      *
      * Before H-1 it compiled a ONE-FIELD theme built from the ingress keypath
-     * and nothing else. `compileBrandTheme` was behaving correctly on that
-     * input -- its density seed is authored-preserving,
-     * `String(bt.surfaces?.densityScale ?? 1)` -- but with no baseline to read,
+     * and nothing else. The lowering was behaving correctly on that input -- its
+     * density seed is authored-preserving,
+     * `String(bt.surfaces?.densityScale ?? 1)`, in
+     * `lowering/runtime/variables` -- but with no baseline to read,
      * the `?? 1` branch fired and every vertical was measured as if its
      * structural scale were 1. The signature was uniformity across verticals
      * exactly where production diverges: density.mode collapsed bithire (0.9)
@@ -217,9 +227,13 @@ export const INGRESS_ARMS = Object.freeze({
      * and must never carry a receipt from this arm; keep it as an advisory,
      * non-receipted run. */
     composesOverVerticalBaseline: true,
-    compilerModule: 'dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js',
-    compilerSource: 'src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
-    compilerExport: 'compileBrandTheme',
+    // A PUBLISHED entrypoint, like the DB arm: the static lowering is
+    // `compileTheme` on `@rottay/design-system/server`. The retired
+    // `compileBrandTheme` deep path no longer exists in dist.
+    compilerModule: LOWERING_MODULE,
+    compilerModuleSubpath: LOWERING_MODULE_SUBPATH,
+    compilerSource: LOWERING_SOURCE,
+    compilerExport: LOWERING_EXPORT,
   }),
   'db-tenant-theme': Object.freeze({
     id: 'db-tenant-theme',
@@ -251,6 +265,27 @@ export const RETIRED_DB_COMPILER_EXPORTS = Object.freeze([
   'appearanceToVariables',
 ]);
 
+/**
+ * Static lowering exports that are retired and must never be bound again.
+ *
+ * The DB arm has had this guard since the appearance compiler was retired; the
+ * static arm had none, so nothing stopped it from being rebound to a lowering
+ * that no longer exists — and a missing export fails with an import error at
+ * some later moment, not with the reason. The productive static door is
+ * `resolveTheme` -> `compileTheme` -> `emitThemeCss`, all published on
+ * `@rottay/design-system/server`.
+ */
+export const RETIRED_STATIC_COMPILER_EXPORTS = Object.freeze([
+  'compileBrandTheme',
+  'compileBrandThemeDeprecated',
+]);
+
+/** Retired compiler module trees no arm may deep-import, by owner path fragment. */
+export const RETIRED_COMPILER_MODULE_PATTERNS = Object.freeze([
+  { pattern: /compilers\/kernel\/runtime\/appearance\//, owner: 'appearance compiler' },
+  { pattern: /compilers\/kernel\/runtime\/brand-theme\//, owner: 'brand-theme lowering' },
+]);
+
 /** Runs at module load: no code path reaches a browser without passing here. */
 export function assertNoRetiredCompilerBinding(arms) {
   for (const spec of Object.values(arms)) {
@@ -262,11 +297,22 @@ export function assertNoRetiredCompilerBinding(arms) {
           'static/DB parity.',
       );
     }
-    if (/compilers\/kernel\/runtime\/appearance\//.test(spec.compilerModule)) {
+    if (RETIRED_STATIC_COMPILER_EXPORTS.includes(spec.compilerExport)) {
       throw new Error(
-        `resolution-probe: ingress arm "${spec.id}" deep-imports the retired appearance ` +
-          `compiler module ("${spec.compilerModule}"). Bind a published entrypoint instead.`,
+        `resolution-probe: ingress arm "${spec.id}" binds the RETIRED static lowering ` +
+          `"${spec.compilerExport}". The productive static door is resolveTheme -> compileTheme ` +
+          '-> emitThemeCss. Rebinding to a retired lowering measures a legacy compat path and ' +
+          'reports it as static/DB parity.',
       );
+    }
+    for (const { pattern, owner } of RETIRED_COMPILER_MODULE_PATTERNS) {
+      if (pattern.test(spec.compilerModule) || pattern.test(spec.compilerSource ?? '')) {
+        throw new Error(
+          `resolution-probe: ingress arm "${spec.id}" deep-imports the retired ${owner} ` +
+            `("${spec.compilerModule}" / "${spec.compilerSource}"). Bind a published entrypoint ` +
+            'instead.',
+        );
+      }
     }
   }
 }
@@ -421,8 +467,9 @@ function composeArmCss({ armId, selector, exportName, variables, modeVariables, 
   if (modes.length > 0 && typeof themeModeSelector !== 'function') {
     throw new Error(
       `resolution-probe: the ${armId} arm lowered mode blocks but was handed no ` +
-        'themeModeSelector. The mode grammar belongs to the COMPILER (brand-theme exports it as ' +
-        'the "shared explicit-mode selector grammar for static and DB artifact renderers"), and ' +
+        'themeModeSelector. The mode grammar belongs to the COMPILER ' +
+        '(compilers/kernel/foundation/css/tenant-selectors exports it as the "shared ' +
+        'explicit-mode selector grammar for static and DB artifact renderers"), and ' +
         'spelling it in the harness would keep matching a grammar the compiler had already left.',
     );
   }
@@ -1059,9 +1106,10 @@ function ingressValueForStop({ controlManifest, stop }) {
      * lower a string the DB door would never accept and call it a measurement.
      *
      * WHY THE HARNESS VALIDATES AT ALL, and it is not caution.
-     * `compileBrandTheme` validates font families NOWHERE (verified:
-     * `isSafeFontFamily` and the font-pack pattern do not appear in the static
-     * compiler), so the string reaches the serialised stylesheet RAW. Measured,
+     * `compileTheme` validates font families NOWHERE (verified: `isSafeFontFamily`
+     * and the font-pack pattern do not appear anywhere under
+     * `compilers/runtime/theme/runtime/lowering/` outside its own tests), so the
+     * string reaches the serialised stylesheet RAW. Measured,
      * a stop carrying a closing brace emits
      * `--ds-font-family-base: Inter; } html { display:none } /*, ...` -- a
      * declaration that terminates the rule. The DB door refuses the same string.
@@ -1070,8 +1118,8 @@ function ingressValueForStop({ controlManifest, stop }) {
      * this instrument rather than found in the product.
      *
      * The asymmetry itself is a real finding and is NOT this packet's to fix: it
-     * is reachable by a code-owned BrandTheme or a caller of `compileBrandTheme`
-     * with a `tenantPatch`, not by a tenant document, and it is registered with
+     * is reachable by a code-owned BrandTheme or a caller of `compileTheme`
+     * with a tenant floor, not by a tenant document, and it is registered with
      * the other door asymmetries for the owner.
      *
      * `DOMAIN_KIND_NOT_LOWERED` is the class `color-set` already uses for a
@@ -1244,8 +1292,8 @@ function resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId
 }
 
 /**
- * B-2 — the authorship set the static arm hands `compileBrandTheme`: exactly
- * the keypath this stop wrote, or nothing at all.
+ * B-2 — the authorship set the static arm hands the lowering: exactly the
+ * keypath this stop wrote, or nothing at all.
  *
  * WHY THE ARM DECLARES ANYTHING. Since B-1 the static arm lowers a TENANT
  * PATCH over the vertical baseline, which is the same composition the DB
@@ -1326,9 +1374,11 @@ export function staticTenantAuthoredPaths({ patch, authoredPath }) {
  *           the manifest-ingress parity drill rather than by this comment.
  *       (b) identity is required and validated, and first-party slugs are
  *           RESERVED — a DB arm must compile for a customer tenant.
- *   - `compileBrandTheme(input: BrandCompilerInput)`
- *     (`infrastructure/compilers/kernel/runtime/brand-theme/index.ts`)
- *     destructures `{ brandTheme, tenantSlug, ... }` immediately.
+ *   - the static lowering, reached through `brandThemeLoweringAdapter`
+ *     (`scripts/libraries/theme-lowering`, which lifts the flat input into a
+ *     `ThemeResolution` and calls `resolveTheme` -> `compileTheme` ->
+ *     `emitThemeCss` in `infrastructure/compilers/runtime/theme`), takes
+ *     `{ brandTheme, tenantSlug, ... }` and destructures it immediately.
  *     `document` built from `staticBrandThemePath` (e.g. `surfaces.rhythm`)
  *     IS a `BrandTheme` fragment, so it becomes `input.brandTheme`;
  *     `tenantSlug` is a required SIBLING field the manifest path does not
@@ -1443,9 +1493,10 @@ function toCompilerInput({
   if (armId === 'static-brand-theme') {
     if (typeof tenantSlug !== 'string' || tenantSlug.length === 0) {
       throw new Error(
-        'resolution-probe: the static-brand-theme arm needs a tenantSlug — compileBrandTheme ' +
+        'resolution-probe: the static-brand-theme arm needs a tenantSlug — the static lowering ' +
           'destructures { brandTheme, tenantSlug } from its input and uses tenantSlug to build ' +
-          'the selector, so an arm with no vertical to lower for has nowhere to compile FOR. ' +
+          'the emitThemeCss selector, so an arm with no vertical to lower for has nowhere to ' +
+          'compile FOR. ' +
           'Pass `vertical` to lowerStop().',
       );
     }
@@ -1454,14 +1505,15 @@ function toCompilerInput({
      * `brandTheme` is the vertical baseline exactly as H-1 loaded it (its
      * provenance law is unchanged: `assertArmProvenance` still demands the
      * source and digest of that baseline, and this reshape does not touch
-     * them). `tenantPatch` is the scenario's tenant floor. `compileBrandTheme`
+     * them). `tenantPatch` is the scenario's tenant floor. The lowering
      * treats an absent patch as identity, so a caller that lowers with no base
      * -- the H-1 "without a baseline" comparison, for one -- gets exactly the
      * bytes it got before. */
     if (patch && Object.keys(patch).length > 0) {
-      /* B-2: the patch travels WITH its authorship. `compileBrandTheme` already
-       * accepts the field (`BrandCompilerProvenanceInput.tenantAuthoredPaths`);
-       * no compiler is touched by this arm learning to fill it. */
+      /* B-2: the patch travels WITH its authorship. The door already accepts the
+       * field: `tenantAuthoredPaths` becomes `ThemeProvenance.authoredPaths` on
+       * the resolution `compileTheme` lowers; no compiler is touched by this arm
+       * learning to fill it. */
       const authoredPaths = staticTenantAuthoredPaths({ patch, authoredPath: tenantAuthoredPath });
       return {
         brandTheme: base ?? {},
@@ -1521,12 +1573,12 @@ export function dbTenantIdentity(vertical) {
 /** Deterministic, non-reserved customer-tenant slug prefix for the DB arm. */
 const DB_PROBE_TENANT_PREFIX = 'probe-tenant-';
 
-/** The tenant slug `compileBrandTheme` needs, from the SAME vocabulary `tenantArmSelector` reads. */
+/** The tenant slug the static lowering needs, from the SAME vocabulary `tenantArmSelector` reads. */
 function deriveTenantSlug(vertical) {
   if (!vertical) {
     throw new Error(
       'resolution-probe: the static-brand-theme arm needs --vertical to know which tenant slug ' +
-        'compileBrandTheme should compile for.',
+        'the static lowering should compile for.',
     );
   }
   const spec = VERTICALS[vertical];
@@ -1608,7 +1660,7 @@ export function verticalDefaultMode(baseline, vertical) {
  *
  * @param {object} input
  * @param {string} [input.vertical]
- *   Required for `static-brand-theme` — the tenant `compileBrandTheme` is
+ *   Required for `static-brand-theme` — the tenant the static lowering is
  *   compiling for. Unused (and not required) for `db-tenant-theme`, which
  *   compiles a TenantAppearance document that carries no vertical concept.
  * @param {'light'|'dark'} [input.defaultMode]
@@ -1780,7 +1832,7 @@ export function lowerStop({
    * this reads BOTH -- by name, per arm, never by a `??` chain that would accept
    * whatever happened to be there.
    *
-   *   static-brand-theme  compileBrandTheme        -> modeBlocks[{mode, cssVariables}]
+   *   static-brand-theme  compileTheme             -> modeBlocks[{mode, cssVariables}]
    *   db-tenant-theme     compileTenantThemeConfig -> modeDeltas[{mode, variables}]
    *
    * M-1 read only the first, so the DB arm's `modeVariables` was `{}` even
@@ -1987,7 +2039,10 @@ export async function loadCompilerArms({
     }
     loaded[spec.id] = {
       armId: spec.id,
-      compile: exported,
+      compile:
+        spec.id === 'static-brand-theme'
+          ? await brandThemeLoweringAdapter({ module, coreRoot: CORE_ROOT, importModule })
+          : exported,
       /* M-1: the compiler's OWN mode-selector grammar, handed out with the arm.
        * Imported, never reconstructed, and it rides on the arm because that is
        * what the dist-freshness gate above has already proven fresh. */
@@ -2014,11 +2069,11 @@ export async function loadCompilerArms({
   /* W-A (H-3 phase (a)): ONE named source for the mode grammar.
    *
    * MEASURED: the tenant-theme dist module does NOT export `themeModeSelector`
-   * -- it calls it internally, from brand-theme, inside `renderArtifactCss`. So
-   * the DB arm has no grammar of its own to hand out, and the DB arm now needs
-   * one.
+   * -- it calls it internally, from `compilers/kernel/foundation/css/
+   * tenant-selectors`, inside `renderArtifactCss`. So the DB arm has no grammar
+   * of its own to hand out, and the DB arm now needs one.
    *
-   * It BORROWS the brand-theme export rather than the harness spelling
+   * It BORROWS the published export rather than the harness spelling
    * `[data-theme='<mode>']`, and the exporter itself declares that legitimate:
    * "Shared explicit-mode selector grammar for static AND DB artifact
    * renderers". Both modules are behind the same dist-freshness gate, so the

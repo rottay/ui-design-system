@@ -516,7 +516,7 @@
       "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
       "mechanismLine": 189,
       "precedence": "authored-field-wins",
-      "precedenceSite": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
       "precedenceLine": 758,
       "precedenceNote": "orden de escritura EJECUTABLE (brand-theme:758-772): el perfil expresivo escribe primero, los campos autorados sobreescriben; verbatim \"these authored fields intentionally overwrite only the channels they own\""
     }

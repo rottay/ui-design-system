@@ -34,7 +34,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
@@ -46,6 +46,7 @@ import {
   type FirstPartyArtifactSpec,
 } from '../index';
 import { channelStates, rootPropertyDeclarations } from './support';
+import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 
 /**
  * The ink channel, spelled as a literal ON PURPOSE.
@@ -75,7 +76,9 @@ function themeFor(spec: FirstPartyArtifactSpec): BrandTheme {
 function render(spec: FirstPartyArtifactSpec, brandTheme = themeFor(spec)): string {
   return renderFirstPartyArtifact({
     spec,
-    brandTheme,
+    // The wrap-only lift, so a canary theme this suite builds reaches the
+    // renderer exactly as authored instead of being replaced by the roster's.
+    theme: liftAuthoredTheme(brandTheme),
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   }).css;
 }
@@ -116,7 +119,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
     it('L3 · names one authored source and carries no extension section', () => {
       const css = render(spec);
 
-      expect(css).toContain(`${spec.authoredThemePath} (compiled via compileBrandTheme)`);
+      expect(css).toContain(`${spec.authoredThemePath} (compiled via compileTheme)`);
       expect(css).toContain('compiled from ONE authored source');
       expect(css).not.toContain('two authored sources');
       expect(css).not.toContain('Declared artifact extension');
@@ -127,7 +130,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
     });
 
     it('L4 · fails closed, naming the slug, when the theme carries no ink channel', () => {
-      const compiled = compileBrandTheme({
+      const compiled = lowerBrandThemeFixture({
         brandTheme: themeFor(spec),
         tenantSlug: spec.slug,
       });
@@ -188,7 +191,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
         ...authored,
         palette: { ...authored.palette, textPrimaryColor: CANARY_INK },
       };
-      const compiled = compileBrandTheme({
+      const compiled = lowerBrandThemeFixture({
         brandTheme: canaryTheme,
         tenantSlug: spec.slug,
       });

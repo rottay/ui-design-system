@@ -48,6 +48,14 @@ const CERTIFIED_DATA_CSS_IMPORTS = new Map([
     "useTenantThemePreview",
     "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview",
   ],
+  [
+    "emitRule",
+    "src/infrastructure/compilers/runtime/theme/runtime/emission",
+  ],
+  [
+    "emitThemeCss",
+    "src/infrastructure/compilers/runtime/theme/runtime/emission",
+  ],
 ]);
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_PACKAGE_ROOT = realpathSync(findPackageRoot(HERE));

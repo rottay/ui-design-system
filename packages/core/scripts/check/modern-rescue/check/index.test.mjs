@@ -56,19 +56,27 @@ const CLOSURE_MEMBERS = [
   // manifest under test. The sandbox is a CLOSURE: a check that reads receipts
   // needs the receipts in it.
   "packages/core/artifacts/quality",
-  // ...and the four build outputs those receipts DECLARE as their own source.
-  // Measured, not guessed: all 39 receipts name build-stamp.json and server.js,
-  // 36 name the compiled brand-theme and 3 name index.js, and nothing else of
-  // dist is referenced. With the receipts present but these absent the errors
-  // merely changed shape -- from "does not exist" to "source digest is stale"
-  // -- which is the same copy-boundary artefact wearing a different message.
-  // Listed one by one rather than as `packages/core/dist`: the whole tree is
-  // 67M against ~140K for these four, and naming them keeps the sandbox's
-  // dependency on build output legible instead of wholesale.
+  // ...and the build outputs those receipts DECLARE as their own source.
+  // Measured, not guessed: 240 receipts name build-stamp.json and server.js and
+  // 3 name index.js, and nothing else of dist that still EXISTS is referenced.
+  // With the receipts present but these absent the errors merely changed shape
+  // -- from "does not exist" to "source digest is stale" -- which is the same
+  // copy-boundary artefact wearing a different message. Listed one by one
+  // rather than as `packages/core/dist`: the whole tree is 67M against ~140K
+  // for these, and naming them keeps the sandbox's dependency on build output
+  // legible instead of wholesale.
+  //
+  // C2 retired the compiled compiler. `kernel/runtime/brand-theme/index.js` is
+  // gone from dist, and `cpSync` on a missing member throws at module load, so
+  // the obsolete member is REMOVED rather than redirected: the 237 sealed
+  // receipts that still name it are history and are not rewritten, and a
+  // missing sourceBinding hashes to the literal 'MISSING' identically inside
+  // the sandbox and in the live tree, so the baseline parity this closure
+  // protects is unaffected. Nothing in the receipt set names the replacement
+  // lowering module, so adding it would be closure the drill does not need.
   "packages/core/dist/build-stamp.json",
   "packages/core/dist/server.js",
   "packages/core/dist/index.js",
-  "packages/core/dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js",
   // R-2: the committed style mirrors. The palette.seeds receipts are the first
   // to bind a FAMILY manifest (primitive/inputs/button), and that family's
   // anatomy bindings pull the button skins, which pull these three. Measured

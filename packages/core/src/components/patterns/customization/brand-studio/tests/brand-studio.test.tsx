@@ -21,6 +21,14 @@ import {
   brandThemeToTenantAppearanceAdvanced,
   brandThemeToTenantAppearance,
 } from '../runtime/file-export';
+import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
+import { compileTheme, THEME_ENGINE_ADAPTERS } from '@/infrastructure/compilers/runtime/theme';
+import { resolveTheme } from '@/infrastructure/compilers/runtime/theme/runtime/resolution';
+import {
+  liftAuthoredTheme,
+  readGovernedTheme,
+} from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-test',
@@ -40,12 +48,11 @@ function Harness({ children }: { children: React.ReactNode }): React.ReactElemen
   );
 }
 
-/** A ground-independent surface: card chrome alone drives text/surface pairs. */
+/** Card chrome alone drives the text/surface pairs asserted against this one. */
 const BARE_SURFACE: BrandStudioSurfaceConfig = {
   key: 'light',
   baseTheme: 'light',
   tenantSlug: 'brand-studio-test',
-  groundVars: {},
 };
 
 /** Card body text nearly identical to card background — fails AA badly. */
@@ -166,8 +173,8 @@ describe('PatternBrandStudio contrast validation', () => {
 
   it('reports failing color pairs for hostile input on both grounds', () => {
     const surfaces: BrandStudioSurfaceConfig[] = [
-      { key: 'dark', baseTheme: 'dark', tenantSlug: 'd', groundVars: {} },
-      { key: 'light', baseTheme: 'light', tenantSlug: 'l', groundVars: {} },
+      { key: 'dark', baseTheme: 'dark', tenantSlug: 'd' },
+      { key: 'light', baseTheme: 'light', tenantSlug: 'l' },
     ];
     for (const surface of surfaces) {
       const report = evaluateBrandThemeContrast(applyHostileBrandTheme(RICH_THEME), surface);
@@ -273,13 +280,11 @@ const DARK_SURFACE_UNDER_TEST: BrandStudioSurfaceConfig = {
   key: 'dark',
   baseTheme: 'dark',
   tenantSlug: 'repaint-test-dark',
-  groundVars: DEFAULT_DARK_GROUND,
 };
 const LIGHT_SURFACE_UNDER_TEST: BrandStudioSurfaceConfig = {
   key: 'light',
   baseTheme: 'light',
   tenantSlug: 'repaint-test-light',
-  groundVars: DEFAULT_LIGHT_GROUND,
 };
 
 describe('PatternBrandStudio live preview repaint', () => {
@@ -432,5 +437,234 @@ describe('PatternBrandStudio contrast check grades the theme, not the scaffold',
     expect(report.colors.surfaceCard).toBe('#111111');
     expect(report.colors.text).toBe('#f2f2f2');
     expect(report.colors.textMuted).toBe('#bbbbbb');
+  });
+});
+
+
+// ---------------------------------------------------------------------------
+// The preview ground is design-system-owned: no raw post-compile CSS seam
+// ---------------------------------------------------------------------------
+
+describe('PatternBrandStudio preview ground admits no caller CSS', () => {
+  const HOSTILE_GROUND = {
+    '--ds-color-bg-primary': 'red; } body { display: none; } .x {',
+    '--evil': 'purple',
+    '} body { background: red; } .y {': 'blue',
+  };
+
+  /** A JS caller can still hand the old key over; nothing may read it. */
+  const withHostileGround = (
+    surface: BrandStudioSurfaceConfig,
+  ): BrandStudioSurfaceConfig =>
+    ({ ...surface, groundVars: HOSTILE_GROUND }) as unknown as BrandStudioSurfaceConfig;
+
+  it('drops a hostile ground map instead of compiling it into the panel variables', () => {
+    const theme: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const { vars } = buildSurfaceVariables(theme, withHostileGround(LIGHT_SURFACE_UNDER_TEST));
+
+    expect(vars['--evil']).toBeUndefined();
+    expect(Object.keys(vars).some((name) => name.includes('}'))).toBe(false);
+    expect(Object.values(vars).some((value) => value.includes('}'))).toBe(false);
+    // The DS ground is what actually grounds the panel.
+    expect(vars['--ds-color-bg-primary']).toBe(DEFAULT_LIGHT_GROUND['--ds-color-bg-primary']);
+  });
+
+  it('cannot create a body rule in the injected <style> block', async () => {
+    const theme: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    render(
+      <Harness>
+        <PatternBrandStudio
+          value={theme}
+          title="Ground Probe"
+          lightSurface={{ groundVars: HOSTILE_GROUND } as unknown as Partial<BrandStudioSurfaceConfig>}
+          darkSurface={{ groundVars: HOSTILE_GROUND } as unknown as Partial<BrandStudioSurfaceConfig>}
+        />
+      </Harness>,
+    );
+    await screen.findByText('Ground Probe');
+
+    const styleText = Array.from(document.querySelectorAll('style'))
+      .map((el) => el.textContent ?? '')
+      .join('\n');
+
+    // `body` occurs legitimately inside channel NAMES (--ds-type-body-*), so the
+    // claim is about rule selectors: the hostile value must not have closed the
+    // panel's rule and opened one of its own.
+    expect(styleText).not.toMatch(/\}\s*body\s*\{/u);
+    expect(styleText).not.toContain('display: none');
+    expect(styleText).not.toContain('--evil');
+    // Every rule the studio injects is anchored to its own panel scope.
+    for (const selector of styleText.matchAll(/(^|\})\s*([^{}]+)\{/gu)) {
+      expect(selector[2]!.trim().startsWith('.brand-studio-')).toBe(true);
+    }
+  });
+
+  it('still grounds each panel, and a theme value still wins over the ground', () => {
+    // The positive control: removing the seam did not remove the ground, and
+    // the intended visual setting continues to arrive through compileTheme.
+    const paletteOnly: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const dark = buildSurfaceVariables(paletteOnly, DARK_SURFACE_UNDER_TEST).vars;
+    const light = buildSurfaceVariables(paletteOnly, LIGHT_SURFACE_UNDER_TEST).vars;
+
+    expect(dark['--ds-color-bg-primary']).toBe(DEFAULT_DARK_GROUND['--ds-color-bg-primary']);
+    expect(light['--ds-color-bg-primary']).toBe(DEFAULT_LIGHT_GROUND['--ds-color-bg-primary']);
+
+    const authored: BrandTheme = {
+      id: 'p',
+      name: 'P',
+      palette: { primaryColor: '#4f46e5', backgroundColor: '#020202' },
+    };
+    const compiled = buildSurfaceVariables(authored, LIGHT_SURFACE_UNDER_TEST);
+    expect(compiled.vars['--ds-color-bg-primary']).toBe('#020202');
+    expect(compiled.declaredKeys.has('--ds-color-bg-primary')).toBe(true);
+  });
+
+  it('selects the ground from baseTheme, the one presentation prop that names it', () => {
+    const theme: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const asLight = buildSurfaceVariables(theme, {
+      key: 'dark',
+      baseTheme: 'light',
+      tenantSlug: 'ground-select',
+    }).vars;
+    expect(asLight['--ds-color-bg-primary']).toBe(DEFAULT_LIGHT_GROUND['--ds-color-bg-primary']);
+  });
+});
+
+
+// ---------------------------------------------------------------------------
+// A theme string cannot escape the preview rule
+//
+// `Theme` declares `palette.primaryColor` and `typography.fontFamilyBase` as
+// OPEN strings, so the option domains correctly refuse nothing there. The
+// guarantee is the emission grammar's, and these assert it end to end: through
+// the rendered component, not only through the predicate.
+// ---------------------------------------------------------------------------
+
+const THEME_ESCAPE = '#000; } body { display: none; } .fable-escape {';
+
+describe('PatternBrandStudio refuses a theme string that would escape the rule', () => {
+  const styleText = (): string =>
+    Array.from(document.querySelectorAll('style'))
+      .map((el) => el.textContent ?? '')
+      .join('\n');
+
+  const selectorsOf = (css: string): string[] =>
+    [...css.matchAll(/(^|\})\s*([^{}]+)\{/gu)].map((match) => match[2]!.trim());
+
+  const hostile: readonly [string, BrandTheme][] = [
+    [
+      'palette.primaryColor',
+      { id: 'h', name: 'H', palette: { primaryColor: THEME_ESCAPE } },
+    ],
+    [
+      'typography.fontFamilyBase',
+      {
+        id: 'h',
+        name: 'H',
+        palette: { primaryColor: '#4f46e5' },
+        typography: { fontFamilyBase: THEME_ESCAPE },
+      },
+    ],
+    [
+      'a mode overlay',
+      {
+        id: 'h',
+        name: 'H',
+        palette: { primaryColor: '#4f46e5' },
+        modes: { dark: { palette: { backgroundColor: THEME_ESCAPE } } },
+      },
+    ],
+    [
+      'a chrome leaf',
+      {
+        id: 'h',
+        name: 'H',
+        palette: { primaryColor: '#4f46e5' },
+        chrome: { cardComponent: { bg: THEME_ESCAPE } },
+      },
+    ],
+  ];
+
+  for (const [label, theme] of hostile) {
+    it(`opens no foreign rule from ${label}`, async () => {
+      render(
+        <Harness>
+          <PatternBrandStudio value={theme} title={`Escape ${label}`} />
+        </Harness>,
+      );
+      await screen.findByText(`Escape ${label}`);
+
+      const css = styleText();
+      expect(css).not.toMatch(/\}\s*body\s*\{/u);
+      expect(css).not.toContain('display: none');
+      expect(css).not.toContain('fable-escape');
+      for (const selector of selectorsOf(css)) {
+        expect(selector.startsWith('.brand-studio-'), selector).toBe(true);
+      }
+    });
+
+    it(`never publishes the hostile value from ${label} in the injected map`, () => {
+      for (const baseTheme of ['light', 'dark'] as const) {
+        const { vars, declaredKeys } = buildSurfaceVariables(theme, {
+          key: baseTheme,
+          baseTheme,
+          tenantSlug: 'escape-probe',
+        });
+        expect(Object.values(vars)).not.toContain(THEME_ESCAPE);
+        for (const value of Object.values(vars)) expect(value).not.toContain('} body {');
+        for (const name of declaredKeys) expect(vars[name]).not.toContain('} body {');
+      }
+    });
+  }
+
+  it('positive control: a normal theme still paints and is still grounded', async () => {
+    const normal: BrandTheme = {
+      id: 'p',
+      name: 'P',
+      palette: { primaryColor: '#4f46e5' },
+      typography: { fontFamilyBase: "Inter, 'Segoe UI', sans-serif" },
+    };
+    const { vars } = buildSurfaceVariables(normal, LIGHT_SURFACE_UNDER_TEST);
+    expect(vars['--ds-color-primary']).toBe('#4f46e5');
+    expect(vars['--ds-color-bg-primary']).toBe(DEFAULT_LIGHT_GROUND['--ds-color-bg-primary']);
+
+    render(
+      <Harness>
+        <PatternBrandStudio value={normal} title="Normal Paint" />
+      </Harness>,
+    );
+    await screen.findByText('Normal Paint');
+    const css = styleText();
+    expect(css).toContain('--ds-color-primary: #4f46e5;');
+    // The compiler appends the mandatory script fallback, so the authored faces
+    // are asserted as a prefix rather than as the whole value.
+    expect(css).toContain("--ds-font-family-base: Inter, 'Segoe UI',");
+  });
+
+  it('both DS grounds survive the grammar in full', () => {
+    for (const ground of [DEFAULT_DARK_GROUND, DEFAULT_LIGHT_GROUND]) {
+      const admitted = admitCssVariables(ground);
+      expect(Object.keys(admitted)).toEqual(Object.keys(ground));
+    }
+  });
+
+  it('exactness: the studio drops no channel of the first-party corpus', () => {
+    for (const [slug, theme] of Object.entries(FIRST_PARTY_THEMES)) {
+      const brand = readGovernedTheme(theme);
+      const baseTheme = brand.appearance?.defaultMode ?? 'light';
+      const tenantSlug = `exactness-${slug}`;
+      const { declaredKeys } = buildSurfaceVariables(brand, {
+        key: baseTheme,
+        baseTheme,
+        tenantSlug,
+      });
+      const compiled = compileTheme(
+        resolveTheme({ ...liftAuthoredTheme(brand), id: tenantSlug }),
+        THEME_ENGINE_ADAPTERS.modern,
+      );
+      const present = Object.entries(compiled.cssVariables).filter(([, v]) => v != null);
+      expect(present.length, slug).toBeGreaterThan(0);
+      expect(declaredKeys.size, slug).toBe(present.length);
+    }
   });
 });

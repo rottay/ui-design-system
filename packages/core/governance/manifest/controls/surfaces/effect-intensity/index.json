@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
+    "registryDigest": "702d6498eae83d2a0fd8f3879b608b43b7049cf8e53c2fbb4b4c34f5045533fb"
   },
   "title": "Decoration intensity",
   "valueType": "scale",
@@ -65,7 +65,7 @@
     ],
     "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "sourceBindings": {
-      "staticLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "staticLowerer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
       "dbLowerer": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "verticalEnvelopes": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts#TENANT_THEME_VERTICAL_ENVELOPES",
       "globalBounds": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts#TENANT_THEME_EFFECT_INTENSITY_BOUNDS",

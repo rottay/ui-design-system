@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/scripts/generate/tokens/manifest/generation/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "486b9dd1a3e6afb0f773e263f92cc5d1bb98fc6f2827b4071e8d28bd2a2991bd",
+  "inputsDigest": "13bfb6f409fa5d57d9183a5749d5f4e644c9cd583be6766b42d9ed867789a8a6",
   "denominators": {
     "canonicalFamilies": 255,
     "activeStandardControls": 14,
@@ -1862,107 +1862,107 @@
     {
       "controlId": "palette.seeds",
       "path": "governance/manifest/controls/palette/seeds/index.json",
-      "digest": "265ff48b20da73c5a0892ffd6c4f5c665a3d4a7e631ad83c9b0358265797284a"
+      "digest": "d870b1589f4c98434a3a8059221021ed7a8b812175b0043cccaf7310e9f89d0e"
     },
     {
       "controlId": "typography.pairing",
       "path": "governance/manifest/controls/typography/pairing/index.json",
-      "digest": "5cbe904c0ef5428e981a3697e719ec6d98d9f8b042a1553dd664ee1f2ef190c4"
+      "digest": "01b49cd668b5e40d8ad05288af63867b243ff4ed8c003eaedeadd1668ea862da"
     },
     {
       "controlId": "typography.families",
       "path": "governance/manifest/controls/typography/families/index.json",
-      "digest": "14eaa35b0cecafcaa140c69e917d540808a60f993db42484568ac0d8762f340c"
+      "digest": "7f1314d4090ba588227c4c471fe146097ed9601d94040c50091d97b8e660f8e8"
     },
     {
       "controlId": "typography.scale",
       "path": "governance/manifest/controls/typography/scale/index.json",
-      "digest": "732f03a4017f99a083b029d1f75620146eea64b1ce1d81d8828bc57fc828f7bd"
+      "digest": "fb089e24a9dd4c71622fdd19f1aa00ee0c8f7186d7b3dc2debf37595ccd7f0de"
     },
     {
       "controlId": "shape.radius-scale",
       "path": "governance/manifest/controls/shape/radius-scale/index.json",
-      "digest": "de1db400d730970a5b5e722dd14fb92299daf3ad8cd1403550717842dea5ab88"
+      "digest": "7cdc0d6bd1a84ac5f29b5c4380da20de9c15323e44f28ca7513bcc626b37502d"
     },
     {
       "controlId": "shape.button-style",
       "path": "governance/manifest/controls/shape/button-style/index.json",
-      "digest": "84f195175e4788148f1b05413006e36726c27efed1e8b28f9ac8587f3901525a"
+      "digest": "4378f177d054975dda0c2963aa3df90b36cace3ca5e035fd6a13011008459aaf"
     },
     {
       "controlId": "density.mode",
       "path": "governance/manifest/controls/density/mode/index.json",
-      "digest": "f135466f5f0af503bdac2a4d4768f9afa28849ca4d84a6d7e98bdf0788bfdf35"
+      "digest": "a12ee361b444d6dfaef160b0c7609a0f0291563977c12531bfb08caf00e1b973"
     },
     {
       "controlId": "spacing.rhythm",
       "path": "governance/manifest/controls/spacing/rhythm/index.json",
-      "digest": "a201cd14b3923eafa090c8dac334355554db719938bf71708a29f47cb226a809"
+      "digest": "1347663cc4ed85d6d3fb9d08048260f297ce67d3f2cc4fd4896552540527b5fc"
     },
     {
       "controlId": "motion.dial",
       "path": "governance/manifest/controls/motion/dial/index.json",
-      "digest": "6ffe16b980b9b69d0a448a13215115e8add83b1aafbd3b5400e4bbe5e5984855"
+      "digest": "5927e8f863e6441d684e54ae1ee5a6327bb79c65cac969affc707830fff3e56e"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "path": "governance/manifest/controls/surfaces/elevation-posture/index.json",
-      "digest": "b081b4e29f0278b5a4cd83c4de107e9ce8aa749921e05aefb9f1329edc085f33"
+      "digest": "30cadd2f0d2b91961abc642a74eeb9e3bc4e785d375c6afcc4a85bcc55f107ca"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "path": "governance/manifest/controls/surfaces/effect-intensity/index.json",
-      "digest": "1aac9999be3dba334dd57a9ef3c4615106d5642259ad67695d5f2749fadd1189"
+      "digest": "4fd6764131e156aa8e5fd6b8b6ef11fad6aec2b8adf04c6c570ffbd109227075"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "path": "governance/manifest/controls/navigation/sidebar-tone/index.json",
-      "digest": "a3df5fbccec1835c250ee47ca97822903783b292c1f087a046641d9fafde855f"
+      "digest": "f1528cc6a2101a43d96673080d6db3e54b78364aa7a89423b36ff181cd990fc4"
     },
     {
       "controlId": "experience.profile",
       "path": "governance/manifest/controls/experience/profile/index.json",
-      "digest": "a11a7bcea9f6933a2db1d1afb280ab11ada4d1c6e4467b09e2791086a2a7bd6f"
+      "digest": "0077e5f407d378f89f16eae454f01db74492712a03cad397a444a3ab706da200"
     },
     {
       "controlId": "chrome.families",
       "path": "governance/manifest/controls/chrome/families/index.json",
-      "digest": "7fc28830188436231c423232128a174c4ff704630e539d5538b3c581e9e6bb54"
+      "digest": "f1efd69222ef070379f1917d7392648718059a9dd3b752409fcdcf008137a12e"
     },
     {
       "controlId": "chrome.anatomy",
       "path": "governance/manifest/controls/chrome/anatomy/index.json",
-      "digest": "4e0dac4b050f21f05bf0dfb0f8ed660816cafd28bd9f125653679e873c159154"
+      "digest": "8d9ccfe8e2bdb3a40cbba418ae7a64455725d73151fd3b94e7f710bd8e83fc6a"
     },
     {
       "controlId": "token-overrides",
       "path": "governance/manifest/controls/tokens/overrides/index.json",
-      "digest": "ee82473037fab95ef51b6666561eaad6735319f24c6cdfeb7499e395ecb4ee81"
+      "digest": "4d736f292414b46142db1fccae61f69633055fffd30742ee5ff7817c041baead"
     },
     {
       "controlId": "recipe-profile",
       "path": "governance/manifest/controls/recipes/profile/index.json",
-      "digest": "038bfd9455e00b034ebc06a7e8596d53710b48602c83e872d37944c25a0f052a"
+      "digest": "525f3e35a24de5437ccbcd209cc1f2cf75a68bb96366ccbdec2d0be4d4fb4546"
     },
     {
       "controlId": "profiles.expressive",
       "path": "governance/manifest/controls/profiles/expressive/index.json",
-      "digest": "22618eee42499f5c45883d1e739a1c3e8f724bb42105cf9fff53910edfe9fa5c"
+      "digest": "1185532a6aa3aa729c673c89c5f23a30caf91531f33de8a03cc9da9f921dced7"
     },
     {
       "controlId": "palette.status-seeds",
       "path": "governance/manifest/controls/palette/status-seeds/index.json",
-      "digest": "096c02795fffc13fc818dc9daa12c38124204681f11d44321b602f919729a62c"
+      "digest": "2a01e7171e2ee2789295b5936aca75e8b4dc7d39138bc19bce114f5ab35e7ac5"
     },
     {
       "controlId": "profiles.icon",
       "path": "governance/manifest/controls/profiles/icon/index.json",
-      "digest": "1c3fc029a9faa3fae24f4eecf2c4023ad2b6fe97e14d4734bb24972ce7249dfb"
+      "digest": "f472c18622cb48705edc766638b31f57e195f82a6e2d54120996d9e87b3bd117"
     },
     {
       "controlId": "responsive.posture",
       "path": "governance/manifest/controls/responsive/posture/index.json",
-      "digest": "01e0630d6021b03948318fffaf7f225b959b096c574758ef6563912759293ce1"
+      "digest": "b1cd33d31fa1cfaf7391d576fa44a2e79caa4a91304afd90cf4de5ab610645a9"
     }
   ],
   "groups": [
@@ -1986,126 +1986,126 @@
     {
       "familyId": "chart/basic/area-chart",
       "path": "governance/manifest/families/chart/basic/area-chart/index.json",
-      "digest": "ffe99df2de9853d5dcdc0753e2d909f2f3130ff4624c98b673a68df465c3b0ee",
+      "digest": "569b3ae27c40f968976231c11d63e4e2f66f1603373fad1bc4f0e08937120b23",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/basic/bar-chart",
       "path": "governance/manifest/families/chart/basic/bar-chart/index.json",
-      "digest": "866a89cf65cf2515207bec7abc054ba52ac696d96a2173ca3927c70eaac4e6fb",
+      "digest": "e758efff9048d921acba8b2aefaccda1d6a7d6080fe7f40e502b7108b6cc3fc3",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/basic/line-chart",
       "path": "governance/manifest/families/chart/basic/line-chart/index.json",
-      "digest": "4953af777d375cd8e4f019560dc0c4f54d715f6574921ba491324e487943477a",
+      "digest": "ba477e63e5858e61aab476c31f49ea00a5b15518904c13e85c67a7d0cf1223c7",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/basic/pie-chart",
       "path": "governance/manifest/families/chart/basic/pie-chart/index.json",
-      "digest": "eea88126c7bf4aa16228ed1396c7b51ab4a50d8f331812163e597cb28e2bc3b9",
+      "digest": "6f74e74f21192a028f90e12125b878f65c0585a473c2fe3cd3ead55a70a2483c",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/basic/scatter-chart",
       "path": "governance/manifest/families/chart/basic/scatter-chart/index.json",
-      "digest": "3cdf09ca3f245f115085b2cb2c70b8ad9cd6e76e7460cfe7447ebaaa0dfe0a02",
+      "digest": "1768320fba4b96d41883028721ce58b8c9b2ec3ff7031c2773899097ab3e41c0",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/flow/funnel-chart",
       "path": "governance/manifest/families/chart/flow/funnel-chart/index.json",
-      "digest": "ca77d3ab9e88602468caa621ad9f7c0d0aa47995ed4c0cf5e60e5fe9577224d7",
+      "digest": "920f5ae46bd6082c5330b0803af66e67953013ef413dfbaca9596989a7be9364",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/flow/sankey-chart",
       "path": "governance/manifest/families/chart/flow/sankey-chart/index.json",
-      "digest": "020fe6dc12843099321935b713b68846284a61319bd0ccf53ead10430662c014",
+      "digest": "f9db7ccd44ad73c514a8e59ef1143022f09808a31d6587a4ed6a557a0bc12f31",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/flow/waterfall-chart",
       "path": "governance/manifest/families/chart/flow/waterfall-chart/index.json",
-      "digest": "e8cb25a33520d6d6979471bbb6fbd7f246ee8d74bc619814a0cb4fcf79ac1f8d",
+      "digest": "8b965c22f23deedceb321259c865138c4daa10cc0ccab219ca786328c09031b2",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/hierarchical/tree-map",
       "path": "governance/manifest/families/chart/hierarchical/tree-map/index.json",
-      "digest": "897499214949c51bf99b81ec9c5cf0b2a44870df3f13711263cd4fbf4251941c",
+      "digest": "2266935b20917477846ff4c311592500f8481831a06e2d356d38c73210b380b3",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/kpi/bullet-chart",
       "path": "governance/manifest/families/chart/kpi/bullet-chart/index.json",
-      "digest": "f481cc2dbde32acaf32c950ada399d3b3522e639014cd93c9d3d74be0a1021d8",
+      "digest": "5a077fc443ffba08f66f09e5ea525399487aac14ad65b5fa2172d864b2b26fc8",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/relational/network-graph",
       "path": "governance/manifest/families/chart/relational/network-graph/index.json",
-      "digest": "25be12d7e8c797300c986f22b880ba1499d238067fa73e12e2b15ca3910a0e90",
+      "digest": "32df631d7837b96a4d0137b4f971bfa4b9f2f56ddc049b3ffbe1e3673efe3234",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/spatial/heat-map",
       "path": "governance/manifest/families/chart/spatial/heat-map/index.json",
-      "digest": "d165cfffd2b0ec357040e120d5b78c7bdf5b64aafb461349aeff3f3cea58b1d9",
+      "digest": "f14e13f8a4be0f5f1e52f75fdfe3d42b79a5bba0bc859d499137cbf72ac9729f",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/statistical/gauge-chart",
       "path": "governance/manifest/families/chart/statistical/gauge-chart/index.json",
-      "digest": "145fb74bbb680a6dd70aab71954ab7d31d29dd4ab659c5eda30888133312ae2d",
+      "digest": "a36da8b595615593f0136a4c7f1d04a59229b4e654458b5a63f33b39ce80e72d",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/statistical/histogram",
       "path": "governance/manifest/families/chart/statistical/histogram/index.json",
-      "digest": "aa6361b75b00e4e8207003cea743dc38b98fec65a96c1cb58775cd3ba4d0a4a4",
+      "digest": "d9612fc8b02b9bdd07b540cd6f308855835ff1c61e4c237742b2acfdc0f52281",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/statistical/radar-chart",
       "path": "governance/manifest/families/chart/statistical/radar-chart/index.json",
-      "digest": "cea216ca6044f36294bc723f51416048ccae45cdc3de3bac3cccf7f40cb71939",
+      "digest": "1b7a1ea85cf9d800384040d2115a590e464c833935dbe44f3251acf6173b56e1",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/temporal/calendar-heat-map",
       "path": "governance/manifest/families/chart/temporal/calendar-heat-map/index.json",
-      "digest": "0f94c5a849cb39576441902b808c071d1e32fae656741c8c6f1583dd7953e0c0",
+      "digest": "4e69f3c21f19d09f56705d3cc6fba761f1fbeb3d17153bff267c628b98950a6f",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/temporal/gantt-chart",
       "path": "governance/manifest/families/chart/temporal/gantt-chart/index.json",
-      "digest": "3211c4ff2b8c185c0a8f614682eee888b082e61f92377c340a43803364728177",
+      "digest": "717b0d58488a1f2d502a9080a6e150c9927c740f1ecad22cf60cabf78bfbf1c7",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "chart/temporal/sparkline",
       "path": "governance/manifest/families/chart/temporal/sparkline/index.json",
-      "digest": "9cf4c39a49065e97a1c01d5209567e32a23b2ecec61e2c5f7df34b847aab5e6b",
+      "digest": "18c35b699f585602498d0a831c40c4141546a8c3f1e4a28d3b62ab48ca97863c",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2189,28 +2189,28 @@
     {
       "familyId": "pattern/data/bulk-select-toggle",
       "path": "governance/manifest/families/pattern/data/bulk-select-toggle/index.json",
-      "digest": "567fd43455e4912e01f2488a14bdcc8a60e5db1f1cd429a4d1927443f76d42df",
+      "digest": "67896407ddb8dcf31d0e7db2817da4333563d9df993325c7b0280ff388dcdb83",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/data/column-settings",
       "path": "governance/manifest/families/pattern/data/column-settings/index.json",
-      "digest": "ac44e4ddeda7ef2b09c54555959c423737205399579b87915681eda50c1a2e05",
+      "digest": "16be6604c36ef462637e179898b9373eaf17495ab08a6cffd507f5dfe5f452aa",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/data/decision-comparison",
       "path": "governance/manifest/families/pattern/data/decision-comparison/index.json",
-      "digest": "862bf2bd56e64f3a3c48223c4cbb4b3e9ffccb3094fbb5cf4017131334259d96",
+      "digest": "e568d4888c609932488c80d3a94336c8ae788f08895631fc3298b7d6a1fcc64c",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/data/decision-panorama",
       "path": "governance/manifest/families/pattern/data/decision-panorama/index.json",
-      "digest": "048697c54dd03d8c7a5e4fce62339d62631e105d110ff1eb30d3e58fb096b3ac",
+      "digest": "e3d6e635fb9f56399f5aa217e0bfbc596f74887475e9baea29d0b0abd60a1e0e",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2224,7 +2224,7 @@
     {
       "familyId": "pattern/data/file-manager",
       "path": "governance/manifest/families/pattern/data/file-manager/index.json",
-      "digest": "165561c6b62f41ecb71e2e3d6bac6d57d39a7112715fa72bc36cabc8af2ab8eb",
+      "digest": "81fb9474639ca37a47798745f6b0245c5139fbf17ad822e1a366a4a385cab06f",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2238,7 +2238,7 @@
     {
       "familyId": "pattern/data/mono-stat",
       "path": "governance/manifest/families/pattern/data/mono-stat/index.json",
-      "digest": "165abe196c1ae0062758c583912574e695b8e665e84a31504e36849c669773d5",
+      "digest": "0f072623394abf73819caaca1cba80c3d1c4566f95b10f01a43ecce038354463",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2252,28 +2252,28 @@
     {
       "familyId": "pattern/data/pattern-gallery-view",
       "path": "governance/manifest/families/pattern/data/pattern-gallery-view/index.json",
-      "digest": "047298d4a02eb2224da7cf138a9a956b3ea165a3cf59af24e41a9a7f79c573bf",
+      "digest": "4f4aabdf5301756d4b4d4c089f431ae10ff7dd3ec9e15773ffd850cc05d2965d",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/data/pattern-grid-view",
       "path": "governance/manifest/families/pattern/data/pattern-grid-view/index.json",
-      "digest": "23d4424fb4509ef87313a3e2eb2094c199c0738b9c5b0da5e297d6fbb0590670",
+      "digest": "6e80fa73caada51d22ec423b6b4a38d26d89d6bd75761bc0cedaafb0a6ca4fc8",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/data/pattern-stats-grid",
       "path": "governance/manifest/families/pattern/data/pattern-stats-grid/index.json",
-      "digest": "3818043e4cbff3545978071cc7a6b7f74a32aa15ce069da8c35d8ac73ef08df2",
+      "digest": "9fa64335f4a157cbc6badc8faa69a8064d6cf915885efe07ae22ea5e7398c659",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/data/record-facts",
       "path": "governance/manifest/families/pattern/data/record-facts/index.json",
-      "digest": "af8ea3c70be89c44d8a56b7229177732129191133e45100fd83236301b4c702a",
+      "digest": "a4d215e18ad28fef8c9773b078b7c0af81c4b54441b92f06a50eff19d02e376f",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2287,21 +2287,21 @@
     {
       "familyId": "pattern/data/status-filter-pills",
       "path": "governance/manifest/families/pattern/data/status-filter-pills/index.json",
-      "digest": "ba877b7bc6047ee050233e24118f30a1d6b300c39f60ff4b2cee0f8deb0bbf98",
+      "digest": "68287c82212f82b4c45b60016c670e937a72bd7ad14c13f28201a36b36ca0893",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/data/virtual-list",
       "path": "governance/manifest/families/pattern/data/virtual-list/index.json",
-      "digest": "58f56ae680c81d4e7ad33eabf3dd4599a96b7d8bd61ecb35fbaf8ff763a6e1cc",
+      "digest": "bf91cf089b086cd80e39489c837e898a876e37fbabc2fc7ad022de5b3a14fd6d",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "pattern/data/widget-board",
       "path": "governance/manifest/families/pattern/data/widget-board/index.json",
-      "digest": "75bb3582ad7d598f658bf5428a938492f48e1d9e17bb21cd9dbbf6fc48e2d9b5",
+      "digest": "7cdbd946a69fe908af36441e191277a2c6622b1cd7c65dad2db0400f9645bb8a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2539,7 +2539,7 @@
     {
       "familyId": "primitive/display/card",
       "path": "governance/manifest/families/primitive/display/card/index.json",
-      "digest": "83be9149eba5f1e5506bb175377dae52c69858e536e25f31d42ebedf6b299663",
+      "digest": "a5762a240ccbdf1cd3606d9c50cf2d08e474e908bc720e065615115878e66591",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2672,14 +2672,14 @@
     {
       "familyId": "primitive/display/typography",
       "path": "governance/manifest/families/primitive/display/typography/index.json",
-      "digest": "c3a66d0b08c3db792f2218390e6ca94ac21ca693ee253c3d840c31d115791ab6",
+      "digest": "7a76aff5f4635d5b28a99331a14acf4900e748fdc71a74e45319b41ee00f754a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "primitive/feedback/alert",
       "path": "governance/manifest/families/primitive/feedback/alert/index.json",
-      "digest": "25cf38a7d414f33e92cbd528db45b7d91a8ff37bb23e6bf7fdd5a46d807e6cb8",
+      "digest": "5ee66a37de20fd1467be69e9c3259add2f64cb56945b5ae886573a571ffc349f",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2798,7 +2798,7 @@
     {
       "familyId": "primitive/inputs/button",
       "path": "governance/manifest/families/primitive/inputs/button/index.json",
-      "digest": "edb1d0b311ab422b7518ec990f69ab5ab95009f942936434f04cd1d4987e70ca",
+      "digest": "d5e6a77d831676e8997d826487c18d900509edfce00ca0dccb536419fa3e7606",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -3246,14 +3246,14 @@
     {
       "familyId": "structure/dashboard/dashboard-insights",
       "path": "governance/manifest/families/structure/dashboard/dashboard-insights/index.json",
-      "digest": "4779d6c04793ab12906c96dc9ca1927a09e1a7d967f30175f03184e2229d90f9",
+      "digest": "bf7910a085481d89257b36e3eeec4eb8485523db943b5ea54bf7970fbfb8884a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "structure/dashboard/data-terminal-card",
       "path": "governance/manifest/families/structure/dashboard/data-terminal-card/index.json",
-      "digest": "eb9ffb708f2d82902e4fa5951194b661465923df92e2a84991cfe132e5151909",
+      "digest": "32652600ed4852946ba48562d2a71a4d30510124dd57defbed4f58d22c0d7d31",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -3309,35 +3309,35 @@
     {
       "familyId": "structure/headers/edit-header",
       "path": "governance/manifest/families/structure/headers/edit-header/index.json",
-      "digest": "9aef567c6aeafb121b263fee5b434fe12f747c41c37b3074019b4858d8dcca92",
+      "digest": "3308f8fe97200f0013daf0032b481465b11fb070c7869539bd65ebf5bd42cc0a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "structure/headers/form-header",
       "path": "governance/manifest/families/structure/headers/form-header/index.json",
-      "digest": "22f4c39422950c31dca788c600c16922220071473aad1c25c38fb8bf7c56524b",
+      "digest": "9e6da8fdfce668b672cfd59face261877111315a1ed97359335cd25da868dde9",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "structure/headers/header-surface",
       "path": "governance/manifest/families/structure/headers/header-surface/index.json",
-      "digest": "56c4dc6e1fc9b6b5b0155ce6b585bf0de6b4bb635a8cc8e1950461df9dabda09",
+      "digest": "5ebbf072d683ceebe51d600ebf076a70f591f8c4e368c0d7b0fd7f8ae6f0e6e9",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "structure/headers/mobile-header",
       "path": "governance/manifest/families/structure/headers/mobile-header/index.json",
-      "digest": "d5d23b7c9857cf87fface4c72b9a6c6680de0f195f0ac017ce8d23c31dc2b412",
+      "digest": "6ca779f16b940259a6f28d1802b946b2d5334dfe10507960447265f93617de24",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "structure/headers/section-frame",
       "path": "governance/manifest/families/structure/headers/section-frame/index.json",
-      "digest": "a5a785327aa207908ef1e4eaf433ac861b6b520a00cc801c63ec48e61c0805c0",
+      "digest": "6de0f2f09ecc9ca9df3905b4f4971fc57df1988f3ba6c8af4c884f2848f7adc6",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -3624,147 +3624,147 @@
     {
       "familyId": "surface/experience/auth",
       "path": "governance/manifest/families/surface/experience/auth/index.json",
-      "digest": "1da9e14e281238f7531e22d3d33e4589d6edeb861ac5b471bca6d78739fe2ee1",
+      "digest": "3b1493cac677a5daacc2a9af60f87856777d764fcad81cb8fff1d87f2140eb6a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/experience/chat",
       "path": "governance/manifest/families/surface/experience/chat/index.json",
-      "digest": "83f685e4c75a50c048f00ee5c3dbb584413267071da4efa2b6336c9d581b71bc",
+      "digest": "ce61074f344533b275abcdfee45f99a07533817d791654acfe846e6f1b75ab3d",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/experience/editor",
       "path": "governance/manifest/families/surface/experience/editor/index.json",
-      "digest": "bccf8b5e451514e8b6839fe90727ad464202fdc754841d38ffbd41f9d3df9a11",
+      "digest": "d209097252e06a08c699408e4d59d30eb359deb76ce375c7698df928a4f0b843",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/experience/empty-state",
       "path": "governance/manifest/families/surface/experience/empty-state/index.json",
-      "digest": "a4f35edd7b26dd4f9a58492b02e70ca3efdaa4568d42a2007d8fb599bfd234d4",
+      "digest": "1cecdabc90ca836521736590036cf8639493c314d4ba543c9194f5ac0dd09242",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/experience/marketing",
       "path": "governance/manifest/families/surface/experience/marketing/index.json",
-      "digest": "3e0892997870723d4ca572dd8229b0370da496c91cd00685ae51174da1ea57cf",
+      "digest": "00729b5ae17bcdced82692f696bcb06e2289c4c64390a3c7ddb6554dfa4cae9a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/experience/media",
       "path": "governance/manifest/families/surface/experience/media/index.json",
-      "digest": "eb67dd6f10a8dc82a27aed20c55b7b7887a02878f722e9c935fb53d7b95cb873",
+      "digest": "22ab7158806591b3b1f678c37e36fbda0d1b49dc8434ed3755a32ea335f4472f",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/experience/notification",
       "path": "governance/manifest/families/surface/experience/notification/index.json",
-      "digest": "574959b2fcdf86fdc60053ff63a2969e95c2c248d3d0a4427bfcf2d9ff5afc1b",
+      "digest": "1737afb9f5521915f7eaf19eefb87a3c2c7a4a10be8c0f79700937ba1eb55a9b",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/experience/oauth-transition",
       "path": "governance/manifest/families/surface/experience/oauth-transition/index.json",
-      "digest": "d2794efd4167dba2320260821bd53f657b7dcc1870cd764195dc0228c8eeab35",
+      "digest": "803ce9b01b29512aa26bfc7ef9580f3ba325226da1b66e1ba6083dc23a759338",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/experience/pricing",
       "path": "governance/manifest/families/surface/experience/pricing/index.json",
-      "digest": "59eb2d8fbf06c00ab436489f862f6ab962ae518b809c91cf0b97270fa4e86303",
+      "digest": "62a87899bff7bf6751989b9ffbfeee1eb491a2d10b72f3e7f38f5bfdfe113d9c",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/forms/detail-form",
       "path": "governance/manifest/families/surface/forms/detail-form/index.json",
-      "digest": "4a7aca73acedbabdb5081c2adccf2b3a32c2e179894d5108f202e2bec33dadaa",
+      "digest": "e84725de50810d084f83fcbc32198a8d955eaa655c1a1f2db578aeb2a9edc298",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/forms/form",
       "path": "governance/manifest/families/surface/forms/form/index.json",
-      "digest": "99867a257625a95cb4ed45c51aa1d4201997418301a7af9183d14fccb846d8f6",
+      "digest": "d5113e1581267b683ccaa2e10c7633afc97ac9dd9e9948a6434698233d5962b9",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/forms/guided-draft-form",
       "path": "governance/manifest/families/surface/forms/guided-draft-form/index.json",
-      "digest": "ce1af82873aef618d4d28baed2bed3c55f79acc627cb1e73a222cce0a41fd0c2",
+      "digest": "9c8a3396a5835b53e48b57adaaa2368df2c582ad16b7646f1e83c037083b6e9d",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/forms/wizard",
       "path": "governance/manifest/families/surface/forms/wizard/index.json",
-      "digest": "e61eab2a27a07a69e35a655171b5369e968ead3c317d4ece7b9ee621f1ad4545",
+      "digest": "36e994071aa47ca659b14e9ec2b4e3851131c6e7e63f266262e0f1d5e0e45878",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/operations/activity",
       "path": "governance/manifest/families/surface/operations/activity/index.json",
-      "digest": "2e130462eb48eb17fd06e27bd52df226ad4ee6dce55e1bf6ce46c4779fc38687",
+      "digest": "34abe78cb7ec2bc73ccbbf15ea8d9d8d3f8018b093e2bc399e4c47bdd4907c39",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/operations/kanban",
       "path": "governance/manifest/families/surface/operations/kanban/index.json",
-      "digest": "2dcd923e8c4c8d9603b53cd49ccc9a91bdc79fe4b581bf8ade7cc7d382e069ba",
+      "digest": "614ba92502a69c5650a3cca5105827361d0931cfa5a77e3eb0f8e047cea7f3a0",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/operations/operational",
       "path": "governance/manifest/families/surface/operations/operational/index.json",
-      "digest": "fefc4036e20e75e891d1b1fcc59f6f6ea4d372f66aba27e90746321b6a9619c0",
+      "digest": "b47446fed976ff0b0fa8c7ec8ef6da7794dbe10dc73e85f594b84012a52f7978",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/operations/scheduler",
       "path": "governance/manifest/families/surface/operations/scheduler/index.json",
-      "digest": "c6a72ddd11dafae8e6b0b67b22a2bedfc17db5bf5a4f4d03e54fa7cf3fb548e6",
+      "digest": "f0a322f11ad9d6242150f1342f0df7d7b6d45adfc154c65c7ec6852b4c787060",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/workspace/collection-workspace",
       "path": "governance/manifest/families/surface/workspace/collection-workspace/index.json",
-      "digest": "cebf4c531dbcc89f94d547efa49c490413c6460bc20c01bcf8de0e6efc04b5d4",
+      "digest": "52de8b0b94ba7cc8e431f5dc42825c292cb96c7b0a7edfec9999709e7a1cfc1a",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/workspace/command-center",
       "path": "governance/manifest/families/surface/workspace/command-center/index.json",
-      "digest": "d431475173aee1dafd43ed8a8991fc63107570eaff28f9d447681962385c162c",
+      "digest": "3a00e762e13912e39b931569025669e7a458dfbf08f2643635fcac2e3ae54333",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/workspace/decision-inbox",
       "path": "governance/manifest/families/surface/workspace/decision-inbox/index.json",
-      "digest": "acb22118d420cf5c39ee0e0e72d625430f3dd4352a891b6d5a26276ed5f03109",
+      "digest": "ed0b3b6ad9eb69178ebdad69a2c5c4b7eed084faf0f8379bdc499c960124faa1",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
     {
       "familyId": "surface/workspace/record-workbench",
       "path": "governance/manifest/families/surface/workspace/record-workbench/index.json",
-      "digest": "fb2d07fa09e9b82acb750a4b4a77b19fdc2aca2e2ba2716fba981804f6dbded0",
+      "digest": "812dea047ad16bc4b301a3be132f999bf035ae77e892d7f73c2e972fe2c0d8a9",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     }

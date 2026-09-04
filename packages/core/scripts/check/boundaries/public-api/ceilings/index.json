@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
-  "law": "Every public entrypoint source budget is decrease-only. Raising a ceiling requires --write-baseline --widen with a measured reason; lowering one requires updating this anchor in the same change.",
+  "schemaVersion": 2,
+  "law": "Every public entrypoint budget is decrease-only in BOTH governed dimensions (maxReachableModules, maxSourceBytes). Raising a ceiling requires --write-baseline --widen with a measured reason; lowering one requires updating this anchor in the same change. Unknown root keys and unknown ceiling dimensions fail the gate; they are never ignored.",
   "producedBy": "scripts/check/boundaries/public-api/index.mjs",
-  "why": "This file makes source-size ceilings executable and reviewable instead of relying on narrative notes.",
+  "why": "This file makes both governed entrypoint budget dimensions -- reachable modules and source bytes -- executable and reviewable instead of relying on narrative notes.",
   "consolidationCandidates": [
     "./patterns/charts",
     "./patterns/data-table",
@@ -24,84 +24,315 @@
     "./surfaces/collection-workspace"
   ],
   "ceilings": {
-    "./contracts/foundation": 1459,
-    "./contracts/i18n": 1136,
-    "./contracts/patterns": 2265,
-    "./contracts/primitives": 1612,
-    "./contracts/runtime": 1279,
-    "./contracts/structures": 1137,
-    "./contracts/surfaces": 1443,
-    "./patterns/adaptive-overlay": 338697,
-    "./patterns/charts": 2482000,
-    "./patterns/command-palette": 167162,
-    "./patterns/data-table": 2682000,
-    "./patterns/empty-state": 79647,
-    "./patterns/feature-workspace-frame": 79676,
-    "./patterns/kanban-board": 79789,
-    "./patterns/list-toolbar": 79825,
-    "./patterns/presence": 1882000,
-    "./patterns/record-facts": 79603,
-    "./patterns/shortcuts-overlay": 79718,
-    "./patterns/stats-grid": 79926,
-    "./patterns/widget-board": 165836,
-    "./primitives/alert": 113623,
-    "./primitives/avatar": 170879,
-    "./primitives/badge": 1682000,
-    "./primitives/box": 103097,
-    "./primitives/breadcrumb": 101625,
-    "./primitives/button": 2332000,
-    "./primitives/card": 1682000,
-    "./primitives/checkbox": 154655,
-    "./primitives/date-picker": 92127,
-    "./primitives/divider": 1632000,
-    "./primitives/dropdown": 86372,
-    "./primitives/empty": 84480,
-    "./primitives/flex": 92721,
-    "./primitives/float-button": 90635,
-    "./primitives/grid": 104619,
-    "./primitives/image": 195748,
-    "./primitives/input": 237877,
-    "./primitives/input-number": 87891,
-    "./primitives/message": 214867,
-    "./primitives/modal": 168791,
-    "./primitives/progress": 110795,
-    "./primitives/radio": 155628,
-    "./primitives/responsive": 12972,
-    "./primitives/segmented": 90010,
-    "./primitives/select": 103343,
-    "./primitives/skeleton": 1745316,
-    "./primitives/slider": 83935,
-    "./primitives/spinner": 85446,
-    "./primitives/stack": 93582,
-    "./primitives/steps": 91644,
-    "./primitives/switch": 83908,
-    "./primitives/table": 99685,
-    "./primitives/tabs": 98589,
-    "./primitives/tag": 1682000,
-    "./primitives/textarea": 87106,
-    "./primitives/toast": 1832000,
-    "./primitives/toggle": 88375,
-    "./primitives/tooltip": 100840,
-    "./primitives/typography": 1746069,
-    "./runtime/cross-tab-sync": 14440,
-    "./runtime/forms": 5107,
-    "./runtime/i18n": 59860,
-    "./runtime/motion": 1782000,
-    "./runtime/navigation": 5065,
-    "./runtime/provider": 2041590,
-    "./runtime/responsive": 58115,
-    "./runtime/root-attributes": 26166,
-    "./runtime/tenant": 1132000,
-    "./runtime/tenant-theme": 294,
-    "./runtime/visual-authority": 47190,
-    "./structures/action-dock": 86804,
-    "./structures/app-shell": 264215,
-    "./structures/column-menu": 2632000,
-    "./structures/dashboard-header": 2342235,
-    "./structures/record-summary": 2518403,
-    "./surfaces/collection-workspace": 3592350,
-    "./surfaces/oauth-transition": 41392
+    "./contracts/foundation": {
+      "maxReachableModules": 3,
+      "maxSourceBytes": 1459
+    },
+    "./contracts/i18n": {
+      "maxReachableModules": 3,
+      "maxSourceBytes": 1136
+    },
+    "./contracts/patterns": {
+      "maxReachableModules": 3,
+      "maxSourceBytes": 2265
+    },
+    "./contracts/primitives": {
+      "maxReachableModules": 3,
+      "maxSourceBytes": 1612
+    },
+    "./contracts/runtime": {
+      "maxReachableModules": 3,
+      "maxSourceBytes": 1279
+    },
+    "./contracts/structures": {
+      "maxReachableModules": 3,
+      "maxSourceBytes": 1137
+    },
+    "./contracts/surfaces": {
+      "maxReachableModules": 3,
+      "maxSourceBytes": 1443
+    },
+    "./patterns/adaptive-overlay": {
+      "maxReachableModules": 83,
+      "maxSourceBytes": 338697
+    },
+    "./patterns/charts": {
+      "maxReachableModules": 242,
+      "maxSourceBytes": 2482000
+    },
+    "./patterns/command-palette": {
+      "maxReachableModules": 23,
+      "maxSourceBytes": 167162
+    },
+    "./patterns/data-table": {
+      "maxReachableModules": 656,
+      "maxSourceBytes": 2682000
+    },
+    "./patterns/empty-state": {
+      "maxReachableModules": 16,
+      "maxSourceBytes": 79647
+    },
+    "./patterns/feature-workspace-frame": {
+      "maxReachableModules": 16,
+      "maxSourceBytes": 79676
+    },
+    "./patterns/kanban-board": {
+      "maxReachableModules": 16,
+      "maxSourceBytes": 79789
+    },
+    "./patterns/list-toolbar": {
+      "maxReachableModules": 16,
+      "maxSourceBytes": 79825
+    },
+    "./patterns/presence": {
+      "maxReachableModules": 179,
+      "maxSourceBytes": 1882000
+    },
+    "./patterns/record-facts": {
+      "maxReachableModules": 16,
+      "maxSourceBytes": 79603
+    },
+    "./patterns/shortcuts-overlay": {
+      "maxReachableModules": 16,
+      "maxSourceBytes": 79718
+    },
+    "./patterns/stats-grid": {
+      "maxReachableModules": 16,
+      "maxSourceBytes": 79926
+    },
+    "./patterns/widget-board": {
+      "maxReachableModules": 38,
+      "maxSourceBytes": 165836
+    },
+    "./primitives/alert": {
+      "maxReachableModules": 20,
+      "maxSourceBytes": 113623
+    },
+    "./primitives/avatar": {
+      "maxReachableModules": 50,
+      "maxSourceBytes": 170879
+    },
+    "./primitives/badge": {
+      "maxReachableModules": 133,
+      "maxSourceBytes": 1682000
+    },
+    "./primitives/box": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 103097
+    },
+    "./primitives/breadcrumb": {
+      "maxReachableModules": 19,
+      "maxSourceBytes": 101625
+    },
+    "./primitives/button": {
+      "maxReachableModules": 589,
+      "maxSourceBytes": 2332000
+    },
+    "./primitives/card": {
+      "maxReachableModules": 146,
+      "maxSourceBytes": 1682000
+    },
+    "./primitives/checkbox": {
+      "maxReachableModules": 47,
+      "maxSourceBytes": 154655
+    },
+    "./primitives/date-picker": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 92127
+    },
+    "./primitives/divider": {
+      "maxReachableModules": 132,
+      "maxSourceBytes": 1632000
+    },
+    "./primitives/dropdown": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 86372
+    },
+    "./primitives/empty": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 84480
+    },
+    "./primitives/flex": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 92721
+    },
+    "./primitives/float-button": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 90635
+    },
+    "./primitives/grid": {
+      "maxReachableModules": 18,
+      "maxSourceBytes": 104619
+    },
+    "./primitives/image": {
+      "maxReachableModules": 57,
+      "maxSourceBytes": 195748
+    },
+    "./primitives/input": {
+      "maxReachableModules": 67,
+      "maxSourceBytes": 237877
+    },
+    "./primitives/input-number": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 87891
+    },
+    "./primitives/message": {
+      "maxReachableModules": 54,
+      "maxSourceBytes": 214867
+    },
+    "./primitives/modal": {
+      "maxReachableModules": 31,
+      "maxSourceBytes": 168791
+    },
+    "./primitives/progress": {
+      "maxReachableModules": 20,
+      "maxSourceBytes": 110795
+    },
+    "./primitives/radio": {
+      "maxReachableModules": 47,
+      "maxSourceBytes": 155628
+    },
+    "./primitives/responsive": {
+      "maxReachableModules": 6,
+      "maxSourceBytes": 12972
+    },
+    "./primitives/segmented": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 90010
+    },
+    "./primitives/select": {
+      "maxReachableModules": 20,
+      "maxSourceBytes": 103343
+    },
+    "./primitives/skeleton": {
+      "maxReachableModules": 155,
+      "maxSourceBytes": 1745316
+    },
+    "./primitives/slider": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 83935
+    },
+    "./primitives/spinner": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 85446
+    },
+    "./primitives/stack": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 93582
+    },
+    "./primitives/steps": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 91644
+    },
+    "./primitives/switch": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 83908
+    },
+    "./primitives/table": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 99685
+    },
+    "./primitives/tabs": {
+      "maxReachableModules": 19,
+      "maxSourceBytes": 98589
+    },
+    "./primitives/tag": {
+      "maxReachableModules": 137,
+      "maxSourceBytes": 1682000
+    },
+    "./primitives/textarea": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 87106
+    },
+    "./primitives/toast": {
+      "maxReachableModules": 179,
+      "maxSourceBytes": 1832000
+    },
+    "./primitives/toggle": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 88375
+    },
+    "./primitives/tooltip": {
+      "maxReachableModules": 20,
+      "maxSourceBytes": 100840
+    },
+    "./primitives/typography": {
+      "maxReachableModules": 142,
+      "maxSourceBytes": 1746069
+    },
+    "./runtime/cross-tab-sync": {
+      "maxReachableModules": 4,
+      "maxSourceBytes": 14440
+    },
+    "./runtime/forms": {
+      "maxReachableModules": 4,
+      "maxSourceBytes": 5107
+    },
+    "./runtime/i18n": {
+      "maxReachableModules": 20,
+      "maxSourceBytes": 59860
+    },
+    "./runtime/motion": {
+      "maxReachableModules": 187,
+      "maxSourceBytes": 1782000
+    },
+    "./runtime/navigation": {
+      "maxReachableModules": 4,
+      "maxSourceBytes": 5065
+    },
+    "./runtime/provider": {
+      "maxReachableModules": 196,
+      "maxSourceBytes": 2041590
+    },
+    "./runtime/responsive": {
+      "maxReachableModules": 12,
+      "maxSourceBytes": 58115
+    },
+    "./runtime/root-attributes": {
+      "maxReachableModules": 2,
+      "maxSourceBytes": 26166
+    },
+    "./runtime/tenant": {
+      "maxReachableModules": 48,
+      "maxSourceBytes": 1132000
+    },
+    "./runtime/tenant-theme": {
+      "maxReachableModules": 2,
+      "maxSourceBytes": 294
+    },
+    "./runtime/visual-authority": {
+      "maxReachableModules": 9,
+      "maxSourceBytes": 62120
+    },
+    "./structures/action-dock": {
+      "maxReachableModules": 17,
+      "maxSourceBytes": 86804
+    },
+    "./structures/app-shell": {
+      "maxReachableModules": 69,
+      "maxSourceBytes": 264215
+    },
+    "./structures/column-menu": {
+      "maxReachableModules": 643,
+      "maxSourceBytes": 2632000
+    },
+    "./structures/dashboard-header": {
+      "maxReachableModules": 601,
+      "maxSourceBytes": 2342235
+    },
+    "./structures/record-summary": {
+      "maxReachableModules": 700,
+      "maxSourceBytes": 2518403
+    },
+    "./surfaces/collection-workspace": {
+      "maxReachableModules": 778,
+      "maxSourceBytes": 3592350
+    },
+    "./surfaces/oauth-transition": {
+      "maxReachableModules": 6,
+      "maxSourceBytes": 41392
+    }
   },
-  "lastMove": "ancla inicial: los techos vigentes al lote DRILL-77, sin mover ni uno.",
-  "lastMoveKind": "ancla-inicial"
+  "lastMove": "`./runtime/visual-authority` reaches the canonical CSS value guard. Its admission calls `emitTenantArtifactCss`; the sole declaration assembler underneath it is `emitDeclarations`, which admits through `compilers/kernel/foundation/css/value-safety`. That guard refuses any compiled channel whose value would terminate its declaration, close the rule or leave the `<style>` element, and it is what stops an authored theme string from closing a preview rule and opening a `body` rule in the host document; `Theme` declares most string leaves open, so a compiled channel carries whatever its author wrote. maxReachableModules 8 -> 9: the added module is `compilers/kernel/foundation/css/value-safety/index.ts`. maxSourceBytes 55290 -> 62120, exactly +6830 = +6303 (value-safety) +527 (emission/index.ts 5750 -> 6277, which takes the import and states why the boundary decides safety). The anchor is exact, not slack: the measured graph is 9 modules and 62120 bytes over the same 9 files.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 1 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

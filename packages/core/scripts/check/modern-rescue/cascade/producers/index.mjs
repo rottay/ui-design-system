@@ -67,8 +67,8 @@ import { repoRoot as findRepoRoot } from "../../../../libraries/repo-root/index.
 import { readManifestRecords } from "../../../../libraries/manifest/index.mjs";
 import { classifyCrossFileRows, dispositionIndex } from "../disposition/index.mjs";
 import {
-  BRAND_THEME,
   CHROME_VARIABLES,
+  LOWERING_SOURCES,
   buildEnumerators,
   expandTemplate,
   functionBodies,
@@ -938,7 +938,7 @@ export function buildProducers({
   const COMPILER_APPLICABILITY =
     "compiler emission: the theme document is applied at :root / [data-tenant] scope, above every engine selector, and the compiler has no engine branch -- engine-agnostic by construction, not by specificity";
 
-  for (const path of [CHROME_VARIABLES, BRAND_THEME, APPEARANCE_POSTURE].filter((p) =>
+  for (const path of [CHROME_VARIABLES, ...LOWERING_SOURCES, APPEARANCE_POSTURE].filter((p) =>
     existsSync(join(root, p)),
   )) {
     const source = read(path);

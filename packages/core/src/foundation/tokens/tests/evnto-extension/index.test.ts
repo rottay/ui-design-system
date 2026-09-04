@@ -18,7 +18,7 @@
  *
  * Every channel is graded with the three-part rule this cohort already uses:
  * ABSENT from the stylesheet, exact on the compiled surface, and EQUAL across
- * both lowerings (static `compileBrandTheme` and DB `compileTheme`). The
+ * both lowerings (static `compileTheme` and DB `compileTheme`). The
  * mutant corpus at the bottom proves each assertion is load-bearing.
  */
 import { readFileSync } from "node:fs";
@@ -26,10 +26,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import {
-  compileBrandTheme,
-  compileTheme,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture, lowerTheme } from "@tests/support/theme-lowering";
 
 import { evntoBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/evnto";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
@@ -76,14 +73,14 @@ function darkBlockOnly(result: CompiledResult): Record<string, string> {
 }
 
 function compileStatic(theme = evntoBrandTheme): CompiledResult {
-  return compileBrandTheme({
+  return lowerBrandThemeFixture({
     brandTheme: theme,
     tenantSlug: "evnto",
   }) as CompiledResult;
 }
 
 function compileDb(): CompiledResult {
-  return compileTheme(FIRST_PARTY_THEMES.evnto) as CompiledResult;
+  return lowerTheme(FIRST_PARTY_THEMES.evnto) as CompiledResult;
 }
 
 /**

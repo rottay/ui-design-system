@@ -2,7 +2,7 @@
  * @fileoverview Theme-ISO core contracts.
  *
  * T0 THEME-ISO: a single total nested `Theme`, an ingestion-only recursive
- * `ThemePatch`, and a fail-closed `resolveTheme`. Static first-party `.ts`
+ * `ThemePatch`, and a fail-closed `mergeThemePatches`. Static first-party `.ts`
  * sources and DDB tenant documents are transports only: both resolve to the
  * same complete `Theme` and enter one `compileTheme` lowering.
  *
@@ -11,7 +11,7 @@
  * without circularity.
  */
 
-import type { EngineName } from "../../../../runtime/engine";
+import { ENGINE_NAMES, type EngineName } from "../../../../kernel/engine-identity";
 import type {
   ChartPersonalityTokens,
   CardPersonalityTokens,
@@ -51,6 +51,8 @@ import type {
   TenantGradientTokens,
   TenantOverlayTokens,
 } from "../../";
+import { BRAND_CAPABILITY_ABSENCE_REASONS } from "./capability-absence";
+import { themeLeafKinds, themeLeafOptions, type ThemeLeafKind } from "./schema";
 import { DEFAULT_CHROME_SHAPE } from "./shape";
 
 /**
@@ -81,7 +83,16 @@ export type DeepPartial<T> = T extends object
  * level (every family key is present and accounted for).
  */
 export interface Theme {
-  readonly id: FirstPartyVerticalId;
+  /**
+   * The theme's own identity, used as the compile's diagnostic label.
+   *
+   * `string`, not the first-party union: a customer's resolved theme is a
+   * `Theme` too, and the DB arm labels its compile with the tenant's slug.
+   * `FirstPartyBrandTheme.id` stays narrowed — that narrowing is what makes the
+   * roster's slug derivation a compile-time fact — but narrowing it HERE would
+   * mean only three tenants in the world can be lowered.
+   */
+  readonly id: string;
   readonly name: string;
   appearance: BrandAppearance;
   modes: BrandThemeModes;
@@ -129,36 +140,6 @@ export function governedDisabled<T>(
   defaultValue: T
 ): Governed<T> {
   return { value: defaultValue, disposition: reason };
-}
-
-/**
- * Convert a complete Theme to the existing `FirstPartyBrandTheme` shape the
- * current compiler consumes. Governed fields unwrap to present/absent keys.
- */
-export function themeToBrandTheme(theme: Theme): FirstPartyBrandTheme {
-  const brand: FirstPartyBrandTheme = {
-    id: theme.id,
-    name: theme.name,
-    appearance: theme.appearance,
-    modes: theme.modes,
-    palette: theme.palette,
-    typography: theme.typography,
-    surfaces: theme.surfaces,
-    charts: isGovernedActive(theme.charts) ? theme.charts.value : {},
-    chrome: theme.chrome,
-    capabilities: theme.capabilities,
-  };
-
-  if (isGovernedActive(theme.motion)) brand.motion = theme.motion.value;
-  if (isGovernedActive(theme.recipes)) brand.recipes = theme.recipes.value;
-  if (isGovernedActive(theme.expressive))
-    brand.expressive = theme.expressive.value;
-  if (isGovernedActive(theme.responsive))
-    brand.responsive = theme.responsive.value;
-  if (isGovernedActive(theme.engineBridge))
-    brand.engineBridge = theme.engineBridge.value;
-
-  return brand;
 }
 
 function governedActiveValue<T>(g: Governed<T>): T | undefined {
@@ -848,12 +829,250 @@ export function brandThemeToTheme(brand: FirstPartyBrandTheme): Theme {
   };
 }
 
+/**
+ * What a merge node IS, for the purpose of refusing a mismatch.
+ *
+ * `typeof` alone answers `"object"` for an array and for `null`, which is the
+ * distinction the whole container rule turns on.
+ */
+function nodeKind(value: unknown): string {
+  if (value === null) return "null";
+  if (Array.isArray(value)) return "array";
+  return typeof value;
+}
+
+/** Kinds a `ThemePatch` leaf may carry. `DeepPartial<Theme>` admits no others. */
+const LEAF_KINDS = new Set<ThemeLeafKind | string>(["string", "number", "boolean"]);
+
+/**
+ * A `ThemePatch` container is a PLAIN record.
+ *
+ * `typeof value === "object"` admits `new Date()`, `/re/`, `new Map()` and
+ * every class instance. A `Date` and a `RegExp` carry no own string keys, so
+ * the merge walked zero of them and reported the family as applied while
+ * changing nothing; a class instance carries its fields as own keys, so its
+ * values were merged INTO the Theme through a container the contract never
+ * declared. An object built with `Object.create(proto)` is refused by the same
+ * rule, which is what closes inherited keys: the merge reads own keys only, so
+ * an inherited one would otherwise be dropped in silence.
+ *
+ * Arrays stay outside this predicate on purpose -- they are the one non-plain
+ * container the schema declares, and `assertArrayPatch` owns them.
+ */
+function isPlainPatchRecord(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value) as object | null;
+  return prototype === Object.prototype || prototype === null;
+}
+
+/** What to call a refused container, without reading its `constructor`. */
+function containerTag(value: unknown): string {
+  const tag = Object.prototype.toString.call(value).slice(8, -1);
+  return tag === "Object" ? "class instance" : tag;
+}
+
+/**
+ * Refuse a leaf whose kind the Theme does not declare at this keypath.
+ *
+ * `DeepPartial<Omit<Theme, "id">>` narrows every leaf to the type the Theme
+ * declares, and a JS caller never saw that type. Without this, an ingested
+ * document could put a number on `palette.primaryColor`, a `null` on a string,
+ * or a function on a boolean, and the merge would hand it straight to the
+ * lowering, which then writes it into a CSS channel.
+ *
+ * The DECLARATION decides, not the baseline value. A baseline is a sample: it
+ * says nothing about an optional leaf it leaves `undefined`, nothing about the
+ * elements of an empty array, and it wrongly narrows the 44 leaves the contract
+ * declares as `number | string` to whichever of the two that theme happened to
+ * author. `themeLeafKinds` is the canonical schema; the baseline is consulted
+ * only where the schema declares an opaque value.
+ */
+function assertLeafKind(base: unknown, patch: unknown, path: string): void {
+  const kind = nodeKind(patch);
+  if (!LEAF_KINDS.has(kind)) {
+    throw new Error(
+      `mergeThemePatches: ${kind} at ${path} is not a ThemePatch leaf; ` +
+        `the admissible kinds are ${[...LEAF_KINDS].join(", ")}`
+    );
+  }
+  if (kind === "number" && !Number.isFinite(patch as number)) {
+    throw new Error(
+      `mergeThemePatches: non-finite number at ${path}; a theme value must be finite`
+    );
+  }
+  const declared = themeLeafKinds(path);
+  if (declared) {
+    if (!declared.includes(kind as ThemeLeafKind)) {
+      throw new Error(
+        `mergeThemePatches: expected ${declared.join(" | ")} at ${path}, received ${kind}`
+      );
+    }
+    assertLeafOption(patch, path);
+    return;
+  }
+  // The schema declares an opaque value here, so the baseline is the only
+  // evidence left. A container may still never become a scalar.
+  if (base === undefined) return;
+  const baseKind = nodeKind(base);
+  if (baseKind === "object" || baseKind === "array") {
+    throw new Error(
+      `mergeThemePatches: expected ${baseKind} at ${path}, received ${kind}`
+    );
+  }
+}
+
+/**
+ * Refuse a value outside the closed option domain the Theme declares.
+ *
+ * A literal union IS a string, so the kind check cannot tell `"dark"` from
+ * `"potato"` on `appearance.defaultMode`: both were admitted, and the invented
+ * one either compiled into a channel set no reader expects or died much later
+ * as whatever generic error the first reader of it happened to raise. The
+ * domain refuses it here, where the contract that declares it is still in
+ * scope.
+ */
+function assertLeafOption(patch: unknown, path: string): void {
+  if (typeof patch !== "string") return;
+  const options = themeLeafOptions(path);
+  if (!options || options.includes(patch)) return;
+  throw new Error(
+    `mergeThemePatches: ${JSON.stringify(patch)} is not an option at ${path}; ` +
+      `the closed set is ${options.map((option) => `"${option}"`).join(", ")}`
+  );
+}
+
+/**
+ * Refuse an array whose container or element kinds the Theme does not declare.
+ *
+ * An array patch REPLACES rather than merges, so it is the one node kind that
+ * can substitute a whole container without a single key being checked. The
+ * elements are held to the same leaf law, and an array over a declared object
+ * or scalar is a container mismatch.
+ */
+function assertArrayPatch(base: unknown, patch: readonly unknown[], path: string): void {
+  if (base !== undefined && !Array.isArray(base)) {
+    throw new Error(
+      `mergeThemePatches: expected ${nodeKind(base)} at ${path}, received array`
+    );
+  }
+  patch.forEach((element, index) => {
+    const elementPath = `${path}[${index}]`;
+    if (element !== null && typeof element === "object" && !Array.isArray(element)) {
+      throw new Error(
+        `mergeThemePatches: object element at ${elementPath}; ` +
+          "an array patch replaces wholesale and carries scalars only"
+      );
+    }
+    // The element kind comes from the DECLARATION, not from `base[0]`: an empty
+    // baseline array types nothing, which is exactly the ambiguity a wholesale
+    // replacement can hide.
+    assertLeafKind(undefined, element, elementPath);
+  });
+}
+
+/** The closed absence-reason vocabulary, as a runtime membership test. */
+const ABSENCE_REASONS: ReadonlySet<unknown> = new Set(BRAND_CAPABILITY_ABSENCE_REASONS);
+
+/**
+ * Refuse a governed disposition outside the closed vocabulary.
+ *
+ * `disposition` is the only key in the Theme that decides whether a family is
+ * live, and every reader of it (`isGovernedActive`, the capability catalog, the
+ * lowering's intake) asks only whether it is `undefined`. An invented string is
+ * therefore not an inert unknown: it silently DISABLES the family, which is the
+ * failure a customer document should never be able to cause by typo.
+ */
+function assertDisposition(value: unknown, path: string): void {
+  if (value === undefined || ABSENCE_REASONS.has(value)) return;
+  throw new Error(
+    `mergeThemePatches: unknown disposition ${JSON.stringify(value)} at ${path}; ` +
+      `the closed set is ${BRAND_CAPABILITY_ABSENCE_REASONS.map((r) => `"${r}"`).join(", ")}`
+  );
+}
+
+/** The engine roster as a membership test for the bridge dictionary's keys. */
+const ENGINE_KEYS: ReadonlySet<string> = new Set<string>(ENGINE_NAMES);
+
+/** Keys that reach the prototype chain, refused wherever a patch names one. */
+const FORBIDDEN_PATCH_KEYS: ReadonlySet<string> = new Set([
+  "__proto__",
+  "constructor",
+  "prototype",
+]);
+
+function assertPatchKey(key: string, path: string): void {
+  if (!FORBIDDEN_PATCH_KEYS.has(key)) return;
+  throw new Error(
+    `mergeThemePatches: forbidden key "${key}" at ${path}; ThemePatch may not name the prototype chain`
+  );
+}
+
+/**
+ * True at the keypath of the engine-keyed bridge dictionary.
+ *
+ * `engineBridge` is declared `Governed<Partial<Record<EngineName, ...>>>`, so
+ * its governed `value` is an OPEN dictionary whose legal keys are the engine
+ * roster. The baseline holds `{}` there, which made the unknown-key rule --
+ * correct everywhere else -- refuse `modern` as hard as it refused `potato`,
+ * closing a contract the Theme declares open.
+ */
+function isEngineBridgeDictionary(path: string): boolean {
+  const segments = path.split(".").filter((segment) => segment !== "$" && segment.length > 0);
+  return segments.length === 2 && segments[0] === "engineBridge" && segments[1] === "value";
+}
+
+/**
+ * Validate one engine's opaque bridge bag.
+ *
+ * The DS neither reads nor types what an engine puts here, so no KIND is
+ * refused -- but opaque is not unchecked. What survives is data a document
+ * could have carried: plain records, arrays and scalars, with no prototype
+ * reach and no host object anywhere inside.
+ */
+function assertEngineBridgeBag(value: unknown, path: string): void {
+  if (Array.isArray(value)) {
+    value.forEach((element, index) => assertEngineBridgeBag(element, `${path}[${index}]`));
+    return;
+  }
+  if (value === null || typeof value !== "object") {
+    if (typeof value === "function" || typeof value === "symbol") {
+      throw new Error(
+        `mergeThemePatches: ${typeof value} at ${path} is not engine-bridge data`
+      );
+    }
+    return;
+  }
+  if (!isPlainPatchRecord(value)) {
+    throw new Error(
+      `mergeThemePatches: ${containerTag(value)} at ${path} is not a plain record; ` +
+        "an engine bridge carries only plain data"
+    );
+  }
+  for (const key of Object.keys(value)) {
+    assertPatchKey(key, path);
+    assertEngineBridgeBag(value[key], `${path}.${key}`);
+  }
+}
+
 /** Fail-closed deep merge. Any key in `patch` that is not in `base` throws. */
 function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
   if (patch === undefined) return base;
 
-  if (patch === null || typeof patch !== "object" || Array.isArray(patch)) {
+  if (Array.isArray(patch)) {
+    assertArrayPatch(base, patch, path);
     return patch;
+  }
+
+  if (patch === null || typeof patch !== "object") {
+    assertLeafKind(base, patch, path);
+    return patch;
+  }
+
+  if (!isPlainPatchRecord(patch)) {
+    throw new Error(
+      `mergeThemePatches: ${containerTag(patch)} at ${path} is not a ThemePatch container; ` +
+        "a patch family is a plain record"
+    );
   }
 
   if (
@@ -863,7 +1082,7 @@ function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
     Array.isArray(base)
   ) {
     throw new Error(
-      `resolveTheme: cannot patch object at ${path} over ${typeof base}`
+      `mergeThemePatches: cannot patch object at ${path} over ${nodeKind(base)}`
     );
   }
 
@@ -883,11 +1102,50 @@ function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
     result.disposition = undefined;
   }
 
+  const bridgeDictionary = isEngineBridgeDictionary(path);
+
   for (const key of Object.keys(patchObj)) {
-    if (!(key in baseObj)) {
+    if (bridgeDictionary) {
+      assertPatchKey(key, path);
+      if (!ENGINE_KEYS.has(key)) {
+        throw new Error(
+          `mergeThemePatches: unknown engine "${key}" at ${path}; ` +
+            `the closed set is ${ENGINE_NAMES.map((name) => `"${name}"`).join(", ")}`
+        );
+      }
+      const bagPath = `${path}.${key}`;
+      const bag = patchObj[key];
+      if (!isPlainPatchRecord(bag)) {
+        throw new Error(
+          `mergeThemePatches: ${nodeKind(bag) === "object" ? containerTag(bag) : nodeKind(bag)} ` +
+            `at ${bagPath} is not a plain record; an engine bridge entry is that engine's own bag`
+        );
+      }
+      assertEngineBridgeBag(bag, bagPath);
+      const existing = baseObj[key];
+      result[key] = isPlainPatchRecord(existing) ? { ...existing, ...bag } : { ...bag };
+      continue;
+    }
+    // OWN properties only. `key in baseObj` walks the prototype chain, so
+    // `constructor`, `toString`, `valueOf`, `hasOwnProperty` and `__proto__` all
+    // answered "known key" on a public runtime boundary and were merged. This is
+    // ingestion from a customer document; the shape it may name is the shape the
+    // Theme actually declares, not everything Object hands every object.
+    if (!Object.prototype.hasOwnProperty.call(baseObj, key)) {
       throw new Error(
-        `resolveTheme: unknown key "${key}" at ${path}; ThemePatch is ingestion-only`
+        `mergeThemePatches: unknown key "${key}" at ${path}; ThemePatch is ingestion-only`
       );
+    }
+    // Refused even if a base ever declared one of them as an own key: assigning
+    // to `__proto__` mutates the prototype rather than the object, and the other
+    // two are how that reach is usually laundered.
+    if (key === "__proto__" || key === "constructor" || key === "prototype") {
+      throw new Error(
+        `mergeThemePatches: forbidden key "${key}" at ${path}; ThemePatch may not name the prototype chain`
+      );
+    }
+    if (key === "disposition") {
+      assertDisposition(patchObj[key], path ? `${path}.${key}` : key);
     }
     result[key] = mergeDeep(
       baseObj[key],
@@ -905,12 +1163,20 @@ function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
  * - type mismatches throw
  * - governed fields accept either a governed shape or an active value, but
  *   a disposition that is not a known absence reason throws.
+ *
+ * Named for what it does. `resolveTheme` is the PIPELINE stage that turns an
+ * intent into a resolved theme plus the provenance the merge destroys; this is
+ * only the deep merge underneath it, and two exported functions sharing that
+ * name is how a caller ends up merging when it meant to resolve.
  */
-export function resolveTheme(base: Theme, ...patches: ThemePatch[]): Theme {
+export function mergeThemePatches(base: Theme, ...patches: ThemePatch[]): Theme {
+  assertThemeBaseline(base, "mergeThemePatches");
   let current: Theme = base;
   for (const [idx, patch] of patches.entries()) {
-    if (!patch || typeof patch !== "object") {
-      throw new Error(`resolveTheme: patch[${idx}] is not an object`);
+    // `typeof [] === "object"`, so the null/typeof pair admitted an array here
+    // and handed it to a merge that reads its numeric keys as Theme families.
+    if (!patch || typeof patch !== "object" || Array.isArray(patch)) {
+      throw new Error(`mergeThemePatches: patch[${idx}] is not an object`);
     }
     current = mergeDeep(current, patch, "$") as Theme;
   }
@@ -943,6 +1209,80 @@ const CANONICAL_THEME_KEY_ORDER: readonly (keyof Theme)[] = [
   "engineBridge",
   "capabilities",
 ];
+
+/** The visual families a Theme can carry; identity alone is not a theme. */
+const THEME_VISUAL_FAMILIES: readonly (keyof Theme)[] = CANONICAL_THEME_KEY_ORDER.filter(
+  (key) => key !== "id" && key !== "name"
+);
+
+/** Every key a Theme declares. Anything else is not part of this contract. */
+const THEME_KEYS: ReadonlySet<string> = new Set<string>(CANONICAL_THEME_KEY_ORDER);
+
+/**
+ * Refuse a baseline that is not a Theme.
+ *
+ * `resolveTheme(baseline)` used to hand an intentless baseline straight back,
+ * so `null`, an array, `{}` and `{ id: "x" }` all became "resolved themes" that
+ * the lowering then read family by family. A baseline is the FLOOR every merge
+ * and every compile stands on; validating it only when a patch happens to be
+ * present is validating it by luck.
+ *
+ * TOTALITY IS NOT THE TEST, and deliberately so: `liftAuthoredTheme` exists to
+ * carry a SPARSE authored draft to the compiler unchanged, because normalizing
+ * an editor draft would compile channels its author never wrote. What is
+ * required is what the lowering actually reads before it reads anything else —
+ * an `id` it scopes the compile by, and at least one visual family to lower.
+ */
+export function assertThemeBaseline(baseline: unknown, label: string): void {
+  if (typeof baseline !== "object" || baseline === null || Array.isArray(baseline)) {
+    throw new Error(`${label}: baseline must be a Theme object`);
+  }
+  // OWN key, and checked before the container rule so that the diagnosis names
+  // the defect: `Object.create({ id: "x", palette: {} })` reads back as a Theme
+  // through every dotted access, and none of it is on the object the compiler
+  // then scopes, serializes and hands on.
+  const id = Object.prototype.hasOwnProperty.call(baseline, "id")
+    ? (baseline as Partial<Theme>).id
+    : undefined;
+  if (typeof id !== "string" || id.length === 0) {
+    throw new Error(`${label}: baseline.id must be a non-empty own string`);
+  }
+  if (!isPlainPatchRecord(baseline)) {
+    throw new Error(
+      `${label}: baseline is a ${containerTag(baseline)}, not a plain Theme object`
+    );
+  }
+  const unknown = Object.keys(baseline).filter((key) => !THEME_KEYS.has(key));
+  if (unknown.length > 0) {
+    throw new Error(
+      `${label}: baseline carries unknown key(s) ` +
+        `${unknown.map((key) => JSON.stringify(key)).join(", ")}; ` +
+        "a Theme carries only the families it declares"
+    );
+  }
+  const families = THEME_VISUAL_FAMILIES.filter((key) =>
+    Object.prototype.hasOwnProperty.call(baseline, key)
+  );
+  if (families.length === 0) {
+    throw new Error(
+      `${label}: baseline declares no visual family; identity alone is not a Theme`
+    );
+  }
+  // STRUCTURAL, not total: a sparse authored draft legitimately omits families,
+  // and `liftAuthoredTheme` exists to carry exactly that. What a present family
+  // may not be is a scalar -- `palette: false` reached the lowering, which then
+  // read channels off a boolean.
+  for (const key of families) {
+    const value = baseline[key];
+    if (value === undefined) continue;
+    if (!isPlainPatchRecord(value)) {
+      throw new Error(
+        `${label}: baseline.${key} must be a record, received ${nodeKind(value)}`
+      );
+    }
+  }
+}
+
 
 const CANONICAL_CHROME_SECTION_ORDER: readonly (keyof BrandChrome)[] = [
   "card",
@@ -1042,13 +1382,13 @@ export function canonicalizeTheme(theme: Theme): Theme {
  * There is no separate provenance map: a `ThemePatch` IS the authorship
  * record, because the only way a path can appear in it is that the tenant
  * document put it there. Reading authorship off the patch keeps `mergeDeep`
- * and `resolveTheme` -- the most load-bearing fail-closed functions in this
+ * and `mergeThemePatches` -- the most load-bearing fail-closed functions in this
  * plane -- byte-for-byte untouched.
  */
 export type TenantAuthoredPaths = ReadonlySet<string>;
 
 /**
- * `themeToBrandTheme` unwraps `.value` for exactly these six governed roots
+ * The lowering's governed intake unwraps `.value` for exactly these six roots
  * (see :147-159), so a patch path such as `motion.value.intensity` names the
  * BrandTheme path `motion.intensity`. Collecting in one space and consuming in
  * another is how a provenance set silently stops matching, so the strip

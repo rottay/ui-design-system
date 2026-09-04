@@ -16,7 +16,7 @@ import type {
   TenantThemeDocument,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -71,7 +71,7 @@ describe('SC-7 overlay panel/scrim separation', () => {
    * sola habria pasado con el panel pintando cualquier cosa. Juntas, la prueba
    * distingue los dos modos de romperse. */
   it('static BrandTheme emits the tenant panel and veil independently', () => {
-    const compiled = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    const compiled = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
     const panel = compiled.cssVariables['--ds-surface-overlay'];
     const veil = compiled.cssVariables['--ds-color-bg-overlay'];
     // El pin duro, intacto.

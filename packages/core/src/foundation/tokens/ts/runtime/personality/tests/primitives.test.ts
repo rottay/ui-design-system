@@ -2,7 +2,7 @@
  * @fileoverview resolvePersonalityCssVariables tests - Rottay Design System
  * @description Regression coverage for WO-ENG-19. `resolvePersonalityCssVariables`
  * is the single source SystemCssVariablesBridge writes to `:root`; a tenant's
- * BrandTheme/generated chrome CSS (infrastructure/compilers/kernel/runtime/brand-theme/index.ts) can
+ * BrandTheme/generated chrome CSS (infrastructure/compilers/runtime/theme/runtime/lowering/index.ts) can
  * independently declare some of the same variable names. Cross-referencing
  * every name this function emits against every `--ds-*` name the brand-theme
  * and appearance compilers emit (WO-ENG-19 step 3) found exactly nine exact
@@ -35,7 +35,7 @@ function buildTokens(personality: PersonalityTokens = DEFAULT_PERSONALITY): Desi
 
 // Every CSS custom property resolvePersonalityCssVariables emits, as of
 // WO-ENG-19. Channels also declarable by a tenant's BrandTheme-generated
-// chrome CSS (infrastructure/compilers/kernel/runtime/brand-theme) are marked -- those are exactly the
+// chrome CSS (infrastructure/compilers/runtime/theme/runtime/lowering) are marked -- those are exactly the
 // variables whose correctness depends on SystemCssVariablesBridge staying at
 // `:root` specificity so a tenant declaration always wins.
 const EXPECTED_KEYS = [
@@ -70,7 +70,7 @@ const EXPECTED_KEYS = [
   '--ds-personality-typography-heading-letter-spacing',
   '--ds-personality-typography-heading-weight-bias',
   '--ds-personality-typography-label-style',
-  '--ds-card-shadow', // tenant-declarable: chrome.cardComponent.shadow (infrastructure/compilers/kernel/runtime/brand-theme/index.ts:815)
+  '--ds-card-shadow', // tenant-declarable: chrome.cardComponent.shadow (infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts)
   '--ds-card-shadow-hover', // tenant-declarable: chrome.cardComponent.shadow.hover (:816)
   '--ds-card-border', // tenant-declarable: chrome.cardComponent.border (:804 -- the WO-ENG-19 probe hit)
   '--ds-card-border-hover', // tenant-declarable: chrome.cardComponent.border.hover (:807)

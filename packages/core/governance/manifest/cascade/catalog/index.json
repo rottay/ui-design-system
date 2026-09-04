@@ -252,7 +252,7 @@
           ]
         }
       },
-      "derivation": "NO HAY DERIVACION: el compilador dice literal que neutral es autorado-solamente y no tiene semilla de la que derivar -- packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:353-356 (\"A role that is authored-only (`neutral` has no seed to derive from) emits nothing until authored\"). Por eso es la raiz de color mas cara del catalogo: 132 canales escritos paso por paso en los tres temas.",
+      "derivation": "NO HAY DERIVACION: el compilador dice literal que neutral es autorado-solamente y no tiene semilla de la que derivar -- packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps/index.ts:75-77 (\"A role that is authored-only (`neutral` has no seed to derive from) emits nothing until authored\"). Por eso es la raiz de color mas cara del catalogo: 132 canales escritos paso por paso en los tres temas.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:58",
       "governedBy": null,
       "governanceScope": "ninguna",
@@ -594,7 +594,7 @@
         }
       },
       "derivation": "Tinta del tier de PAGINA: sidebar, headers de tabla, labels de formulario — el mobiliario de pagina, no el contenido. Autorada en F4A-6 (nudo K3): los 42 canales que colapsaban aca no tenian raiz, y coincidian en valor con --ds-color-accent, --ds-color-neutral-500 y --ds-color-secondary. Elegir cualquiera de las tres habria sido coincidencia de valor, no derivacion (filtro (a) de F2), asi que la raiz se AUTORA en vez de re-apuntar a una rival.",
-      "evidence": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts (PALETTE.textPageColor); lowering en infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "evidence": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts (PALETTE.textPageColor); lowering en infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts:206-207",
       "governedBy": null,
       "governanceScope": "ninguna",
       "exposure": "internal-head",
@@ -852,7 +852,7 @@
           ]
         }
       },
-      "derivation": "Semilla unica -> rampa OKLCH de 10 pasos (50..900). El compilador deriva la rampa entera y los pasos autorados PISAN a los derivados: packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:350-356. Rottay usa ese derecho de pisar y fija los 10 pasos a mano contra su lienzo oscuro, y lo dice: packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1056-1061.",
+      "derivation": "Semilla unica -> rampa OKLCH de 10 pasos (50..900). El compilador deriva la rampa entera y los pasos autorados PISAN a los derivados: packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps/index.ts:68-82. Rottay usa ese derecho de pisar y fija los 10 pasos a mano contra su lienzo oscuro, y lo dice: packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts:1056-1061.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
       "governedBy": "palette.seeds",
       "governanceScope": "total",
@@ -891,7 +891,7 @@
           ]
         }
       },
-      "derivation": "Misma ley de rampa que primary: una semilla, 10 pasos derivados, pasos autorados que pisan (packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:350-356).",
+      "derivation": "Misma ley de rampa que primary: una semilla, 10 pasos derivados, pasos autorados que pisan (packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps/index.ts:68-82).",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:162",
       "governedBy": "palette.seeds",
       "governanceScope": "parcial",
@@ -1153,7 +1153,7 @@
           ]
         }
       },
-      "derivation": "Semilla -> rampa de 10 pasos, misma ley (packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:350-356).",
+      "derivation": "Semilla -> rampa de 10 pasos, misma ley (packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps/index.ts:68-82).",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:182",
       "governedBy": "palette.seeds",
       "governanceScope": "parcial",
@@ -3402,7 +3402,7 @@
         }
       ],
       "priority": [
-        "PRIMERO ramp.seed.neutral (132 canales, el mayor). Certificado en fuente: el compilador dice que neutral no tiene semilla de la que derivar (packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:353-356). Sin semilla no hay rampa, y sin rampa cada tema escribe 10 pasos por rol.",
+        "PRIMERO ramp.seed.neutral (132 canales, el mayor). Certificado en fuente: el compilador dice que neutral no tiene semilla de la que derivar (packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps/index.ts:75-77). Sin semilla no hay rampa, y sin rampa cada tema escribe 10 pasos por rol.",
         "SEGUNDO el nivel acento sin cabeza (tier.accent.bg, 63 canales): --ds-badge-bg, --ds-tag-bg y --ds-alert-bg tienen cero declaraciones en todo src/.",
         "TERCERO los dos bordes sin gobierno (tier.raised.border 56 + tier.page.border 50 = 106 canales). El de nivel elevado es especialmente caro porque bithire declara EN FUENTE que su identidad es borde-fuerte contra elevacion-fuerte (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:912-913) y no hay perilla que exprese esa eleccion."
       ]
@@ -3676,7 +3676,7 @@
       "packages/core/src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
       "packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
       "packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css",

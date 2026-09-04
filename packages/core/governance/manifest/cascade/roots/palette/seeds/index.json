@@ -8,7 +8,7 @@
     "emission": [
       {
         "kind": "compiler-emit",
-        "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
         "note": "semillas primary/secondary/accent (brand-theme ~:813-817) + grounds (~:860-862); gates APCA sobre valores despachados; sin techo numerico (color-set)"
       }
     ]
@@ -22,7 +22,7 @@
         "kind": "ramp-derive",
         "formula": "deriveTenantColorRamps OKLCH; authored step wins"
       },
-      "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
       "line": 351,
       "state": "LIVE",
       "toIsPattern": false,
@@ -35,7 +35,7 @@
         "kind": "color-mix",
         "formula": "color-mix sobre la semilla"
       },
-      "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
       "line": 1414,
       "state": "LIVE",
       "note": "representante de --ds-tint-{4,8,12,16,24}; site CORREGIDO de packages/core/src/foundation/tokens/css/foundation/themes/default/index.css a brand-theme/index.ts: default.css no declara ningun --ds-tint-* (solo lo LEE como fallback en :850), el productor es setTintRampVariables (prefijo y semilla ligados en :1390)"
@@ -49,7 +49,7 @@
       "site": "packages/core/src/infrastructure/compilers/kernel/foundation/css/color-math/interaction-floor/index.ts",
       "line": 84,
       "state": "LIVE",
-      "note": "site CORREGIDO de packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts a color-math/interaction-floor/index.ts: brand-theme solo FUSIONA el piso (deriveExtendedPaletteFloor en :852, deriveInteractionFloor en :1601) y nombra --ds-color-link como canal autorable en :515; el alias literal desde la semilla vive en interaction-floor"
+      "note": "site CORREGIDO de la bajada a color-math/interaction-floor/index.ts: la bajada solo FUSIONA el piso (deriveExtendedPaletteFloor en packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts:238, definido en packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette/index.ts:188-192 sobre deriveInteractionFloor) y nombra --ds-color-link como canal autorable en packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds/index.ts:46; el alias literal desde la semilla vive en interaction-floor"
     },
     {
       "from": "--ds-color-primary",
@@ -69,7 +69,7 @@
       "rule": {
         "kind": "ramp-derive"
       },
-      "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
       "line": 1024,
       "state": "LIVE",
       "note": "representante de series 1..10"
@@ -6063,7 +6063,7 @@
   "variantDisposition": "continuous",
   "variantsNote": "CONTINUO POR DISEÑO (adjudicado): la identidad de marca no se cierra en enum; el cierre esta en la DERIVACION (rampas OKLCH, tints, gates APCA) - clausula 7: solo difieren valores",
   "variants": [],
-  "variantsEmptyReason": "DOMINIO CONTINUO, no enumerable: la semilla es un COLOR LIBRE autorado por el tenant, no un id de un registro cerrado. El compilador la despacha VERBATIM canal por canal -- primary/secondary/accent en infrastructure/compilers/kernel/runtime/brand-theme/index.ts:812-817 y el ground de este modo en :859-863 -- sin consultar lista alguna de valores permitidos, asi que NO EXISTE EN FUENTE un conjunto cerrado que transcribir; inventarle ids seria fabricar vocabulario que el codigo no tiene. Esta vacuidad es coherente con el control: governance/manifest/controls/palette/seeds/index.json declara domain.kind 'color-set' con enumValues vacio y bounds null. El cierre de esta raiz no vive en el DOMINIO sino en la DERIVACION y en el PISO de accesibilidad: la rampa OKLCH por semilla (brand-theme :349-352, con el paso autorado ganando), los tints por color-mix (:1412-1416) y la admision de contraste APCA, que corre validateCompiledThemeContrast (infrastructure/compilers/composition/tenant-theme/index.ts:1549) sobre enforceTextContrast (:1605 y :1609; implementacion en foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts:286) contra el piso APCA_BODY_TEXT_MIN_LC = 60 (foundation/kernel/accessibility/branding-contrast/index.ts:257). Ley resultante: CUALQUIER semilla es legal, NINGUNA salida por debajo del piso lo es. Vacio DECLARADO, no tapado.",
+  "variantsEmptyReason": "DOMINIO CONTINUO, no enumerable: la semilla es un COLOR LIBRE autorado por el tenant, no un id de un registro cerrado. El compilador la despacha VERBATIM canal por canal -- primary/secondary/accent en infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts:196-201 y el ground de este modo en :248-256 -- sin consultar lista alguna de valores permitidos, asi que NO EXISTE EN FUENTE un conjunto cerrado que transcribir; inventarle ids seria fabricar vocabulario que el codigo no tiene. Esta vacuidad es coherente con el control: governance/manifest/controls/palette/seeds/index.json declara domain.kind 'color-set' con enumValues vacio y bounds null. El cierre de esta raiz no vive en el DOMINIO sino en la DERIVACION y en el PISO de accesibilidad: la rampa OKLCH por semilla (lowering/foundation/ramps/index.ts:68-74, con el paso autorado ganando en :78-82), los tints por color-mix (lowering/foundation/tint/index.ts:14-16) y la admision de contraste APCA, que corre validateCompiledThemeContrast (infrastructure/compilers/composition/tenant-theme/index.ts:1549) sobre enforceTextContrast (:1605 y :1609; implementacion en foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts:286) contra el piso APCA_BODY_TEXT_MIN_LC = 60 (foundation/kernel/accessibility/branding-contrast/index.ts:257). Ley resultante: CUALQUIER semilla es legal, NINGUNA salida por debajo del piso lo es. Vacio DECLARADO, no tapado.",
   "overlaps": [],
   "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3."
 }

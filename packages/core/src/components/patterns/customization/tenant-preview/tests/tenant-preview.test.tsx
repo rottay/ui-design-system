@@ -63,7 +63,7 @@ describe('TenantPreview', () => {
       // `buildPreviewCss` resolves a `TenantConfig` itself (see
       // `liftTenantConfigToBrandTheme`), `personality.animation.entranceDuration`
       // is lifted onto `BrandMotion.entranceDuration`, which
-      // `compileBrandTheme` feeds verbatim into `--ds-motion-calm`. Each of
+      // `compileTheme` feeds verbatim into `--ds-motion-calm`. Each of
       // the four presets authors a different `entranceDuration`
       // (formal 160, neutral 220, expressive 300, playful 400), so this
       // checks the actual differing value per preset -- see
@@ -109,7 +109,7 @@ describe('TenantPreview', () => {
     // retired the retired runtime tenant-CSS generator call the old buildPreviewCss(TenantConfig)
     // made internally. buildPreviewCss has no such option anymore, and
     // draftBrandTheme never authors a BrandTheme.modes overlay for an
-    // authoring draft -- there is nothing for compileBrandTheme to compile a
+    // authoring draft -- there is nothing for compileTheme to compile a
     // dark block FROM, so the toggle has no equivalent to migrate onto.
     // Replaced below with the structural guarantee that follows from that:
     // preview CSS never contains a dark-mode block at all -- for THIS
@@ -266,7 +266,7 @@ describe('TenantPreview', () => {
       expect(cssText).not.toContain('html[data-tenant');
       // Every selector-open line is scope-anchored -- proof no wildcard rule
       // survived. A bare `.not.toContain('*')` would also flag
-      // compileBrandTheme's legitimate `calc(var(--x) * var(--y))`
+      // compileTheme's legitimate `calc(var(--x) * var(--y))`
       // multiplication, unrelated to the injection vector under test here.
       for (const selector of styleSelectors(styleEl)) {
         expect(selector.startsWith(`[${PREVIEW_SCOPE_ATTRIBUTE}='`)).toBe(true);
@@ -303,7 +303,7 @@ describe('TenantPreview', () => {
 
     /* The other half of the same honesty contract: what the preview could not
        paint has to be readable from the rendered component, not just from the
-       builder's return value. `compileBrandTheme` renders no chart, card or
+       builder's return value. `compileTheme` renders no chart, card or
        accent personality, and every preset carries all three, so a preset-built
        preview ALWAYS has something to declare. */
     it('modern: names the axes it could not paint, on the rendered root', () => {

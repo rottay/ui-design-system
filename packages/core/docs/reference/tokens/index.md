@@ -203,7 +203,7 @@ var(--ds-color-alpha-black-50) /* rgba(0, 0, 0, 0.5) */
 
 The `-bg`/`-border` pair and the `alpha-{tone}-10`/`alpha-{tone}-20` overlays for
 each semantic tone (`success`, `warning`, `error`, `info`) are compiler-derived,
-not hand-authored: `deriveStatusTintFloor` (`infrastructure/compilers/kernel/runtime/brand-theme/`)
+not hand-authored: `deriveStatusTintFloor` (`infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette/`)
 reads each vertical's/tenant's own `--ds-color-{tone}` seed and writes the
 channel as a `color-mix()`/`-50` formula, guarded so a tone with no seed emits
 none of its four channels. This runs as a **floor**, merged beneath any

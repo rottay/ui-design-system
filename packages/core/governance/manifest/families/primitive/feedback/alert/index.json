@@ -3617,7 +3617,7 @@
       "nextAction": "OBTAIN_DT_ADJUDICATION_ON_DOMAIN_KIND_GAP_THEN_RUN_CAUSAL_MATRIX",
       "sourceBindings": [
         "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
-        "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+        "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/governance/manifest/controls/tokens/overrides/index.json"
       ],

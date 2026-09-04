@@ -1,5 +1,10 @@
 /**
  * Runtime projection of responsive prop values into scoped CSS properties.
+ *
+ * This is a productive assembler of CSS declaration text whose output every
+ * primitive injects through a `<style dangerouslySetInnerHTML>` sink, so it
+ * admits a declaration through the same value authority the theme pipeline's
+ * emission layer uses rather than through a second grammar of its own.
  */
 
 import {
@@ -12,6 +17,7 @@ import {
   type ResponsiveValue,
   type ResponsiveValueKey,
 } from '@/foundation/contracts/kernel/responsive/values';
+import { isSafeCssValue } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
 
 /** Detects a breakpoint-keyed responsive value object. */
 export function isResponsiveValue<T>(value: unknown): value is Exclude<ResponsiveValue<T>, T> {
@@ -28,6 +34,49 @@ export function isResponsiveValue<T>(value: unknown): value is Exclude<Responsiv
   ]);
 
   return Object.keys(value).some((key) => validKeys.has(key));
+}
+
+/**
+ * The property names this assembler may declare.
+ *
+ * Standard properties and vendor prefixes are `[a-z-]+`; the primitives also
+ * project custom properties, whose names carry the `_` and the digits that
+ * form cannot spell. Neither branch admits a character that could terminate a
+ * declaration, close the rule or leave the `<style>` element.
+ */
+const SAFE_PROPERTY_NAME = /^(?:[a-z-]+|--[a-z0-9_-]+)$/;
+
+/**
+ * The declaration priority flag, which CSS places after the value rather than
+ * inside it. It is separated before the value authority judges what remains,
+ * so `32px !important` is admitted exactly when `32px` is.
+ */
+const PRIORITY_FLAG = /\s*!\s*important$/i;
+
+/**
+ * True when both halves of a projected declaration are admissible.
+ *
+ * The value grammar is NOT restated here. `isSafeCssValue` is the same
+ * authority the theme pipeline's emission layer consults, so a string that
+ * cannot terminate a theme declaration cannot terminate one of these either --
+ * and this assembler feeds a `<style dangerouslySetInnerHTML>` sink in every
+ * primitive, so it needs exactly that guarantee. The dimension props are typed
+ * as free strings and resolved with `String(value)`, which is the shape a
+ * hostile value would arrive in.
+ *
+ * A resolver may also answer with something that is not a string at all: the
+ * collectors' token lookups fail closed, but a prototype-inherited member name
+ * resolves to a function, and a function body has no business in CSS text.
+ *
+ * Refuse, never repair: an inadmissible declaration is omitted whole, and an
+ * admitted one is emitted byte-for-byte as its resolver produced it.
+ */
+function admitsDeclaration(property: unknown, value: unknown): value is string {
+  if (typeof property !== 'string' || typeof value !== 'string') return false;
+  return (
+    SAFE_PROPERTY_NAME.test(property) &&
+    isSafeCssValue(value.replace(PRIORITY_FLAG, ''))
+  );
 }
 
 /** A CSS property and its breakpoint-aware source value. */
@@ -75,11 +124,14 @@ export function generateResponsiveCSS<T = string>(
       const rawValue = normalized[breakpoint];
       if (rawValue === undefined) continue;
 
+      const declaredValue = resolve(rawValue);
+      if (!admitsDeclaration(entry.cssProperty, declaredValue)) continue;
+
       if (!declarationsByBreakpoint[breakpoint]) {
         declarationsByBreakpoint[breakpoint] = [];
       }
       declarationsByBreakpoint[breakpoint]!.push(
-        `  ${entry.cssProperty}: ${resolve(rawValue)};`,
+        `  ${entry.cssProperty}: ${declaredValue};`,
       );
     }
   }

@@ -4,12 +4,12 @@
  *
  * This file is a BUILD OUTPUT compiled from ONE authored source; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   foundation/tokens/ts/presentation/brand-themes/evnto/index.ts (compiled via compileBrandTheme)
+ *   foundation/tokens/ts/presentation/brand-themes/evnto/index.ts (compiled via compileTheme)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
-/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+/* === Compiled from the authored Theme via compileTheme — do not edit === */
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
   color-scheme: light;
   color: var(--ds-color-text-primary);
@@ -490,7 +490,7 @@
   --ds-type-supporting-text-transform: none;
 }
 
-/* === Compiled from BrandTheme.modes.dark — do not edit === */
+/* === Compiled from Theme.modes.dark — do not edit === */
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark'], :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])).dark {
   color-scheme: dark;
   --ds-button-default-bg: #1C1A16;

@@ -186,7 +186,10 @@ export const CI_GATES = Object.freeze([
   // Este gate verifica DOS cosas por la misma corrida: la FORMA de los 77
   // entrypoints publicos (owner, boundary, simbolos, fan-out, barriles
   // prohibidos) y, desde el lote DRILL-77 (2026-08-28), el ANCLA DECRECE-SOLO de
-  // sus `budget.maxSourceBytes`.
+  // su presupuesto. El ancla cubre las DOS dimensiones gobernadas --
+  // `budget.maxReachableModules` y `budget.maxSourceBytes`: gobernar solo los
+  // bytes dejaba media puerta abierta, y por ahi paso una ampliacion de modulos
+  // con el gate en verde.
   //
   // POR QUE ENTRA AL BARRIDO AHORA. Hasta hoy corria SOLO en `prebuild` y
   // `prepack` (`public-entrypoints:check`): 0 entradas aca. Eso alcanzaba
@@ -218,6 +221,15 @@ export const CI_GATES = Object.freeze([
   // correct measurement of zero are indistinguishable by orphan count.
   { id: 'integration-audit-drill', run: ['node', '--test', 'scripts/check/architecture/audits/integration/tests/index.test.mjs'], blocking: true },
   { id: 'integration-audit', run: ['node', 'scripts/check/architecture/audits/integration/index.mjs'], blocking: true },
+  // ONE lowering. The property C2 exists to establish is invisible in a diff
+  // and can be lost one import at a time, so it is asserted structurally: the
+  // retired doors must not exist as productive symbols and nothing productive
+  // may reach them. The suite carries its own planted mutants, so the gate has
+  // been seen failing for each forbidden door rather than only passing.
+  { id: 'theme-lowering-single-door', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/architecture/theme-lowering-single-door/index.test.ts'], blocking: true },
+  // The lowering's bytes against the one oracle it cannot have written: the
+  // committed first-party artifacts.
+  { id: 'theme-lowering-artifact-oracle', run: ['pnpm', 'exec', 'vitest', 'run', 'src/infrastructure/compilers/runtime/theme/runtime/lowering/tests/artifact-oracle.test.ts'], blocking: true },
   { id: 'portal-substrate-gate', run: ['node', 'scripts/check/boundaries/surfaces/portals/index.mjs', '--check'], blocking: true },
   // Bidirectional identity between every `--_ds-proto-*` in the sources and its
   // row in `governance/tokens/prototypes/index.json`. It ships with NO

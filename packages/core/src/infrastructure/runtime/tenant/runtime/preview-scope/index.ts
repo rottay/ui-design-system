@@ -11,52 +11,16 @@
  * whitelist-filtered so hostile config values, names, or slugs cannot escape
  * the injected <style> tag's scope.
  *
- * The value checker mirrors the injection-safety core of the tenant-theme
- * compiler's `isSafeVisualValue` (infrastructure/compilers/composition/
- * tenant-theme, module-private there). The authored-caps tier (shadow-layer
- * counts, dimension caps, var-reference ledger) is intentionally not applied:
- * preview values are DS-computed outputs, not authored inputs.
+ * The value checker is the canonical emission grammar
+ * (`compilers/kernel/foundation/css/value-safety`), re-exported here under the
+ * name this module's consumers already use. The tenant-theme compiler's
+ * `isSafeVisualValue` remains a separate INGESTION policy with an authored-caps
+ * tier (shadow-layer counts, dimension caps, var-reference ledger); it bounds
+ * what a customer may author, not what may be assembled into CSS text.
  */
 
 /** Attribute stamped on the preview root; the only anchor preview CSS may use. */
 export const PREVIEW_SCOPE_ATTRIBUTE = 'data-ds-tenant-preview-root';
-
-const MAX_VALUE_LENGTH = 512;
-
-/** CSS value functions the tenant CSS generator may legitimately emit. */
-const ALLOWED_VALUE_FUNCTIONS = new Set([
-  'rgb',
-  'rgba',
-  'hsl',
-  'hsla',
-  'oklch',
-  'lab',
-  'lch',
-  'light-dark',
-  'color-mix',
-  'linear-gradient',
-  'radial-gradient',
-  'conic-gradient',
-  'var',
-  'calc',
-  'min',
-  'max',
-  'clamp',
-  'blur',
-  'saturate',
-  'drop-shadow',
-  'cubic-bezier',
-  'translate',
-  'translatex',
-  'translatey',
-  'scale',
-  'scalex',
-  'scaley',
-  'rotate',
-  'repeat',
-  'minmax',
-  'fit-content',
-]);
 
 /**
  * Reduce a slug to characters that are inert inside a CSS attribute selector.
@@ -75,31 +39,9 @@ export function buildPreviewScopeSelector(safeSlug: string): string {
 /**
  * True when a declaration value cannot terminate the declaration, close the
  * rule block, open a comment, close the <style> element, or trigger a fetch.
+ *
+ * Re-exported, not restated: the grammar belongs to the emission layer that
+ * assembles every declaration in the pipeline, and a second copy here would be
+ * a second grammar to keep in step.
  */
-export function isSafePreviewCssValue(value: string): boolean {
-  if (value.length === 0 || value.length > MAX_VALUE_LENGTH || value !== value.trim()) {
-    return false;
-  }
-  // eslint-disable-next-line no-control-regex
-  if (/[\u0000-\u001f\u007f{};<>[\]@\\]/.test(value)) return false;
-  if (/\/\*|\*\/|!\s*important|expression\s*\(|url\s*\(|javascript\s*:|data\s*:|-moz-binding/i.test(value)) {
-    return false;
-  }
-
-  let parenDepth = 0;
-  for (const char of value) {
-    if (char === '(') parenDepth += 1;
-    else if (char === ')') {
-      parenDepth -= 1;
-      if (parenDepth < 0) return false;
-    }
-  }
-  if (parenDepth !== 0) return false;
-  if ((value.split("'").length - 1) % 2 !== 0) return false;
-  if ((value.split('"').length - 1) % 2 !== 0) return false;
-
-  const functionNames = [...value.matchAll(/([a-z][a-z0-9-]*)\s*\(/gi)].map((match) =>
-    match[1].toLowerCase()
-  );
-  return functionNames.every((name) => ALLOWED_VALUE_FUNCTIONS.has(name));
-}
+export { isSafeCssValue as isSafePreviewCssValue } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';

@@ -187,6 +187,12 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     compilers: 0,
     runtime: 1,
   }),
+  // The theme pipeline is the product; the artifact format renders it. The
+  // renderer reads the compile, the compile has never needed an artifact.
+  'infrastructure/compilers/runtime': Object.freeze({
+    theme: 0,
+    'tenant-css': 1,
+  }),
   'graphics/icons': Object.freeze({
     glyphs: 0,
     semantic: 1,
@@ -214,6 +220,35 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
   'infrastructure/runtime/foundation/root-attributes': Object.freeze({
     registry: 0,
     presentation: 1,
+  }),
+  // The lowering's own floor is a ladder, not a bag of peers. `ground` is the
+  // canvas fact a ramp measures against, `personality` is the token/animation
+  // vocabulary the motion writer projects, and `shape` is the absent-leaf
+  // hygiene every writer applies before emitting. The three owners that read
+  // them sit one rank above; nothing on the floor reads a peer.
+  'infrastructure/compilers/runtime/theme/runtime/lowering/foundation': Object.freeze({
+    ground: 0,
+    personality: 0,
+    shape: 0,
+    intake: 0,
+    materials: 0,
+    palette: 0,
+    tint: 0,
+    'type-ramp': 0,
+    'mode-overlay': 0,
+    chrome: 0,
+    floors: 0,
+    sidebar: 0,
+    seeds: 0,
+    ramps: 1,
+    motion: 1,
+    typography: 1,
+  }),
+  // A mode block is a delta over an already-compiled base block, so the
+  // per-mode owner consumes the base channel assembly and never the reverse.
+  'infrastructure/compilers/runtime/theme/runtime/lowering/runtime': Object.freeze({
+    variables: 0,
+    'mode-blocks': 1,
   }),
   // Shade seeds and readable-ink measurement are the colour floor. The
   // interaction floor is the policy on top of them: it asks what a hover or

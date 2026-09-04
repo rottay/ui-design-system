@@ -22,6 +22,7 @@ import type {
 import { isEmbeddedCssPaintProperty } from "../../../../libraries/paint/embedded/index.mjs";
 import { packageRoot as findPackageRoot } from "../../../../libraries/repo-root/index.mjs";
 import { collectSourceFiles } from "../paint/runtime-svg/index.mjs";
+import { brandThemeToTheme } from "@/foundation/contracts/composition/tenants/themes/iso";
 
 const packageRoot = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 const componentsDir = resolve(packageRoot, "src/components");
@@ -127,7 +128,7 @@ describe("embedded CSS data producers", () => {
   });
 
   it("executes the first-party static compiler and proves its generated block is custom-property-only", () => {
-    // FIRST-PARTY STATIC producer: compileBrandTheme -> renderFirstPartyArtifact.
+    // FIRST-PARTY STATIC producer: compileTheme -> renderFirstPartyArtifact.
     // `compiled.cssVariables` / `compiled.modeBlocks[].cssVariables` are the
     // GENERATED portion of the artifact -- the certified data channel. There is
     // no longer a hand-authored source merged in alongside it: the artifact has
@@ -140,7 +141,7 @@ describe("embedded CSS data producers", () => {
       throw new Error('no first-party artifact spec for slug "bithire"');
     const { compiled } = renderFirstPartyArtifact({
       spec,
-      brandTheme: bithireBrandTheme,
+      theme: brandThemeToTheme(bithireBrandTheme),
     });
 
     const generatedBlocks = [

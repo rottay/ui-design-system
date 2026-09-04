@@ -33,7 +33,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { TENANT_THEME_EFFECT_INTENSITY_BOUNDS } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
@@ -76,7 +76,7 @@ const staticVariables = (
   vertical: FirstPartyVerticalId,
   effectIntensity?: unknown
 ): Record<string, string> =>
-  compileBrandTheme({
+  lowerBrandThemeFixture({
     brandTheme: {
       id: `ei-${vertical}`,
       name: 'Effect Intensity',

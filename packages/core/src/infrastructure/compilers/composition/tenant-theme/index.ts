@@ -10,7 +10,6 @@ import {
   type BrandMotion,
   type BrandTheme,
   type BrandThemeMode,
-  type CompiledBrand,
   type TenantAppearance,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
@@ -81,15 +80,18 @@ import type {
   ThemePatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import {
-  collectPatchAuthoredPaths,
   isTenantAuthoredField,
-  resolveTheme,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { type TenantStatusSeedAuthorship } from "@/foundation/contracts/composition/tenants/themes/resolved";
+import { tenantArtifactScope } from "@/infrastructure/compilers/runtime/theme";
+// The artifact composer is deliberately NOT on the theme barrel: it is the
+// format two internal owners share, not an API a consuming app has any use for.
+import { emitTenantArtifactCss } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
 import {
+  THEME_ENGINE_ADAPTERS,
   compileTheme,
-  themeModeSelector,
-  type TenantStatusSeedAuthorship,
-} from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+  resolveTheme,
+} from "@/infrastructure/compilers/runtime/theme";
 import { migrateV1 } from "./migrate-v1";
 
 export { TENANT_THEME_CONFIG_SCHEMA } from "../../kernel/foundation/schemas/tenant-theme";
@@ -1286,7 +1288,7 @@ function buildScopes(config: TenantThemeConfig): TenantThemeArtifact["scopes"] {
     // pseudo-classes. Requiring both tenant presence and the exact tenant value
     // is semantically redundant but yields (0,4,0), so the validated DB artifact
     // always wins on its own root without !important or insertion-order coupling.
-    combinedSelector: `[data-ds-root][data-vertical="${config.verticalKey}"][data-tenant][data-tenant="${config.slug}"]`,
+    combinedSelector: tenantArtifactScope(config.verticalKey, config.slug).baseSelector,
   };
 }
 
@@ -1441,7 +1443,7 @@ function validateCompiledChartCategories(
 }
 
 function effectiveModeVariables(
-  compiled: CompiledBrand,
+  compiled: ThemeCompilation,
   mode: BrandThemeMode
 ): Record<string, string> {
   const block = compiled.modeBlocks?.find(
@@ -1492,8 +1494,8 @@ function resolveContrastVariables(
 }
 
 function projectModeDeltas(
-  compiled: CompiledBrand,
-  baseline: CompiledBrand,
+  compiled: ThemeCompilation,
+  baseline: ThemeCompilation,
   baseDelta: Readonly<Record<string, string>>
 ): TenantThemeArtifactModeDelta[] {
   const modes = new Set<BrandThemeMode>();
@@ -1552,8 +1554,8 @@ export const SIDEBAR_CONTRAST_ATTRIBUTION: Readonly<Record<string, string>> = {
  * either its ink or its ground differs from the code-owned vertical baseline.
  */
 function validateCompiledThemeContrast(
-  compiled: CompiledBrand,
-  baseline: CompiledBrand,
+  compiled: ThemeCompilation,
+  baseline: ThemeCompilation,
   appearance: NormalizedTenantThemeAppearance,
   tenantAuthoredPaths: TenantAuthoredPaths
 ): TenantThemeValidationIssue[] {
@@ -1687,7 +1689,8 @@ function validateCompiledThemeContrast(
 }
 
 function renderArtifactCss(
-  selector: string,
+  verticalKey: string,
+  slug: string,
   variables: Readonly<Record<string, string>>,
   digest: string,
   options: {
@@ -1695,37 +1698,19 @@ function renderArtifactCss(
     backgroundMode?: "light" | "dark" | "auto";
   } = {}
 ): string {
-  const declarations = [
-    ...Object.entries(variables).map(([key, value]) => `  ${key}: ${value};`),
-  ].join("\n");
-  const modeRules = (options.modeDeltas ?? []).map((block) => {
-    const modeDeclarations = [
-      ...Object.entries(block.variables).map(
-        ([key, value]) => `  ${key}: ${value};`
-      ),
-    ].join("\n");
-    const explicitRule = `${themeModeSelector(
-      selector,
-      block.mode
-    )} {\n${modeDeclarations}\n}`;
-    if (options.backgroundMode !== "auto" || block.mode !== "dark") {
-      return explicitRule;
-    }
-    const automaticRule = `@media (prefers-color-scheme: dark) {\n${selector}:not([data-theme='light']) {\n${modeDeclarations}\n}\n}`;
-    return `${explicitRule}\n${automaticRule}`;
+  // The WHOLE artifact format is the emission owner's, not just its
+  // declarations and rules: banner, unlayered base rule, mode rules and the
+  // `auto` background mode's media-scoped copy of the dark delta. This file
+  // supplies the values and the compiler version; it spells no CSS text.
+  return emitTenantArtifactCss({
+    verticalKey,
+    slug,
+    compilerVersion: TENANT_THEME_COMPILER_VERSION,
+    digest,
+    variables,
+    modeDeltas: options.modeDeltas,
+    backgroundMode: options.backgroundMode,
   });
-  return [
-    `/* TenantThemeArtifact v1 | ${TENANT_THEME_COMPILER_VERSION} | ${digest} */`,
-    // Keep the runtime tenant overlay unlayered. In the author origin, normal
-    // declarations outside a cascade layer outrank every named layer; putting
-    // this rule in `@layer tenant` would make the unlayered vertical baseline
-    // impossible to override regardless of source order or specificity.
-    `${selector} {`,
-    declarations,
-    "}",
-    ...modeRules,
-    "",
-  ].join("\n");
 }
 
 /** Validate and deterministically compile a DB theme into one SSR/hydration artifact. */
@@ -1788,10 +1773,8 @@ function isoLowering<T>(run: () => T, path: string): T {
   }
 }
 
-import {
-  deriveTenantStatusSeedAuthorship,
-  tenantPostureFloors,
-} from "@/foundation/contracts/composition/tenants/themes/resolved";
+import { tenantPostureFloors } from "@/foundation/contracts/composition/tenants/themes/resolved";
+import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 
 export { tenantPostureFloors };
 
@@ -1950,72 +1933,27 @@ export function compileTenantThemeConfig(
   const { compiledTheme, tenantAuthoredPaths } = isoLowering(
     () => {
       const envelope = migrateV1(documentPatchSource, defaultMode);
-      const resolved = resolveTheme(baseTheme, envelope.patch);
       // The patch IS this tenant's authorship record: a path can only appear
-      // in it because the document put it there. Collected AFTER `migrateV1`
-      // so the paths are already in the canonical Theme spelling the compiler
-      // consults, and passed ONLY to this leg -- `baseCompiled` below is the
-      // code-owned vertical and has no tenant, so it stays provenance-free and
-      // keeps producing the exact baseline the delta subtracts against.
-      const authoredPaths = collectPatchAuthoredPaths(envelope.patch);
-      const tenantFloors = tenantPostureFloors(envelope.patch);
+      // in it because the document put it there. `resolveTheme` collects the
+      // authored paths, projects the tenant's posture floors and reads the
+      // status-seed authorship off the SAME raw patch, in one place, so the
+      // lowering receives one envelope instead of four hand-assembled fields.
+      // It is passed ONLY to this leg: `baseCompiled` below is the code-owned
+      // vertical and has no tenant, so it stays provenance-free and keeps
+      // producing the exact baseline the delta subtracts against.
+      //
+      // The floors matter because the merge above destroys the one fact the
+      // resolved Theme can no longer state: WHOSE a value is. The compiler
+      // lowers a vertical's own authoring and a tenant's selection at
+      // different positions -- the posture preset early, the tenant posture
+      // last -- and after a merge it cannot tell them apart.
+      const resolution = resolveTheme(
+        { ...baseTheme, id: config.slug },
+        { origin: "tenant-document", patch: envelope.patch }
+      );
       return {
-        compiledTheme: compileTheme(resolved, {
-          tenantSlug: config.slug,
-          tenantAuthoredPaths: authoredPaths,
-          /* E-1: THE TENANT'S FLOORS, handed over as well as its authorship.
-           *
-           * `resolved` already carries this patch -- that is what `resolveTheme`
-           * above did -- so this is NOT a second application of the values. It
-           * is the one thing the merge destroys: WHOSE floor they are. The
-           * compiler lowers a vertical's own authoring and a tenant's selection
-           * at different positions (the posture preset early, `tenantPosture`
-           * last), and after a merge it can no longer tell them apart. Measured
-           * before this line existed: rottay authors all six
-           * `surfaces.elevations` levels, its authored ladder overwrote the
-           * posture preset, and `surfaces.elevation` lowered ZERO variables
-           * through this door on both non-identity stops while the static arm
-           * -- which hands its patch over -- moved three. This is the second
-           * half of the symmetry B-2 opened: that packet gave the tenant leg
-           * its AUTHORSHIP, this one gives it its FLOORS, through the same door
-           * and from the same envelope.
-           *
-           * W-B -- THE CROSS-SPACE HANDOFF IS AN OMISSION, NOT AN ASSERTION.
-           * What travels is BrandTheme-space, projected out of a `ThemePatch`
-           * by `tenantPostureFloors` (its docblock carries the reasoning; this
-           * is the caller's summary, not a second copy).
-           *
-           * THERE IS NO RUNTIME GUARD HERE, and an earlier draft of this
-           * comment claimed one -- it described a peel-and-check design that
-           * was abandoned when the projection replaced it. What actually keeps
-           * Theme-space fields out is three things, none of which throws:
-           *   1. OMISSION -- the projection reads six named posture keypaths
-           *      and nothing else, so a field like `appearance` is never read
-           *      and cannot cross. Silently, by construction.
-           *   2. THE TYPE SYSTEM -- the whole patch does not assign to
-           *      `Partial<BrandTheme>` (`appearance.defaultMode`, then
-           *      `palette.primaryColor`: a pattern, not a pair), which is what
-           *      forced the projection instead of a cast.
-           *   3. CONSTRUCTION -- `migrateV1` never emits `appearance` at all;
-           *      it states as law that `backgroundMode` is runtime selection
-           *      metadata that "never reaches ThemePatch.appearance.defaultMode"
-           *      (migrate-v1/index.ts:400-402).
-           * A guard would defend a case the projection cannot express and the
-           * migrator does not produce; the honest record is that nothing stops
-           * a bad field here because nothing can deliver one.
-           *
-           * THE FENCE is the 9-field x 3-vertical sweep re-measured with this
-           * line in place: only the two rottay elevation rows may move, and
-           * every other row must read exactly as it did before. */
-          tenantPatch: tenantFloors,
-          // COH-1 D1: the status-seed authorship SIBLING `tenantFloors` above
-          // cannot carry (see `deriveTenantStatusSeedAuthorship`'s docblock).
-          // Read from the same RAW `envelope.patch`, before this projection.
-          tenantStatusSeedAuthorship: deriveTenantStatusSeedAuthorship(
-            envelope.patch
-          ),
-        }),
-        tenantAuthoredPaths: authoredPaths,
+        compiledTheme: compileTheme(resolution, THEME_ENGINE_ADAPTERS.modern),
+        tenantAuthoredPaths: resolution.provenance.authoredPaths,
       };
     },
     config.mode === "advanced" ? "$.visualFoundation" : "$.appearance"
@@ -2025,7 +1963,10 @@ export function compileTenantThemeConfig(
   // artifact only needs to carry the delta against the code-owned vertical
   // baseline. The baseline CSS is loaded separately; the overlay overrides only
   // what the tenant actually changed, keeping the artifact within its guard.
-  const baseCompiled = compileTheme(baseTheme, { tenantSlug: config.slug });
+  const baseCompiled = compileTheme(
+    resolveTheme({ ...baseTheme, id: config.slug }),
+    THEME_ENGINE_ADAPTERS.modern
+  );
   const contrastIssues = validateCompiledThemeContrast(
     compiledTheme,
     baseCompiled,
@@ -2159,7 +2100,7 @@ export function compileTenantThemeConfig(
     variables,
     ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
     ...(adjustments.length > 0 ? { adjustments } : {}),
-    css: renderArtifactCss(scopes.combinedSelector, variables, digest, {
+    css: renderArtifactCss(config.verticalKey, config.slug, variables, digest, {
       modeDeltas,
       backgroundMode:
         normalizedAppearance.general?.palette?.backgroundMode ?? "light",

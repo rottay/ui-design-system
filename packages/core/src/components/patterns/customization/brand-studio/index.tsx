@@ -4,7 +4,7 @@
  *
  * The editor exposes only the bounded BrandTheme fields (palette, typography,
  * surfaces, motion, chrome). The preview compiles the in-flight theme with
- * `compileBrandTheme` and injects the FULL resulting `cssVariables` map into two
+ * `compileTheme` and injects the FULL resulting `cssVariables` map into two
  * scoped containers — one dark ground, one light ground — via a `<style>` block
  * keyed to a per-panel class, declared directly on that class (not on `<html>`,
  * where the host page's own tenant/theme/dir attributes are anchored).
@@ -38,7 +38,17 @@ import { Input } from '../../../primitives/inputs/input';
 import { Select } from '../../../primitives/inputs/select';
 import { Stack } from '../../../primitives/layout/stack';
 import { Text } from '../../../primitives/display/typography/compound/text';
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import {
+  THEME_ENGINE_ADAPTERS,
+  compileTheme,
+  resolveTheme,
+} from '@/infrastructure/compilers/runtime/theme';
+import {
+  emitDeclarations,
+  emitRule,
+} from '@/infrastructure/compilers/runtime/theme/runtime/emission';
+import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
+import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { validateBrandingContrast, type BrandingColors } from '@/foundation/kernel/accessibility/branding-contrast';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type {
@@ -48,11 +58,11 @@ import type {
   BrandSurfaces,
   BrandTheme,
   BrandThemeMode,
-  CompiledBrand,
 } from '../../../../foundation/contracts/composition/tenants/themes';
 import { cloneBrandTheme } from './runtime/file-export';
 import { useTenantThemePreview } from './runtime/tenant-theme-preview';
 import { TenantThemePreviewReport } from './runtime/tenant-theme-preview/report';
+import type { ThemeCompilation } from '@/foundation/contracts/composition/tenants/themes/compiled';
 import type {
   BrandStudioContrastReport,
   BrandStudioSurfaceConfig,
@@ -95,7 +105,8 @@ export type { TenantThemePreviewReportProps } from './runtime/tenant-theme-previ
 // The brand compiler emits only the overrides a theme sets, so a preview panel
 // must supply the neutral background/text/border/surface tokens the real
 // components read. These grounds are generic slate neutrals with no product
-// vocabulary; a consumer may override them per surface.
+// vocabulary, and they are design-system-owned: a panel selects one through
+// `baseTheme`, and nothing outside this module contributes CSS to a preview.
 // ---------------------------------------------------------------------------
 
 // COH-1: the four `-bg` entries this scaffold used to hand-roll (a THIRD
@@ -170,12 +181,17 @@ export const DEFAULT_LIGHT_GROUND: Record<string, string> = {
   ...PRIMARY_CHROME_FALLBACK,
 };
 
+/** The ground each panel compiles against, selected by its `baseTheme`. */
+const PREVIEW_GROUNDS: Readonly<Record<BrandThemeMode, Record<string, string>>> = {
+  dark: admitCssVariables(DEFAULT_DARK_GROUND),
+  light: admitCssVariables(DEFAULT_LIGHT_GROUND),
+};
+
 const DEFAULT_DARK_SURFACE: BrandStudioSurfaceConfig = {
   key: 'dark',
   baseTheme: 'dark',
   tenantSlug: 'brand-studio-dark',
   label: 'Dark surface',
-  groundVars: DEFAULT_DARK_GROUND,
 };
 
 const DEFAULT_LIGHT_SURFACE: BrandStudioSurfaceConfig = {
@@ -183,7 +199,6 @@ const DEFAULT_LIGHT_SURFACE: BrandStudioSurfaceConfig = {
   baseTheme: 'light',
   tenantSlug: 'brand-studio-light',
   label: 'Light surface',
-  groundVars: DEFAULT_LIGHT_GROUND,
 };
 
 function resolveSurface(
@@ -191,12 +206,7 @@ function resolveSurface(
   override: Partial<BrandStudioSurfaceConfig> | undefined
 ): BrandStudioSurfaceConfig {
   if (!override) return base;
-  return {
-    ...base,
-    ...override,
-    key: base.key,
-    groundVars: override.groundVars ?? base.groundVars,
-  };
+  return { ...base, ...override, key: base.key };
 }
 
 // ---------------------------------------------------------------------------
@@ -271,7 +281,7 @@ export function deriveBrandingColors(
 /**
  * This theme's own declared default mode. Absent `appearance` means light —
  * the same fallback `isDarkSurfaceTheme` uses in the compiler
- * (`infrastructure/compilers/kernel/runtime/brand-theme`).
+ * (`infrastructure/compilers/runtime/theme/runtime/lowering`).
  */
 function themeDefaultMode(theme: BrandTheme): BrandThemeMode {
   return theme.appearance?.defaultMode ?? 'light';
@@ -279,13 +289,13 @@ function themeDefaultMode(theme: BrandTheme): BrandThemeMode {
 
 /**
  * Resolve one mode's effective compiled CSS variables from a full
- * `CompiledBrand`.
+ * `ThemeCompilation`.
  *
  * When `mode` is the theme's own declared default mode, the base block
  * (`compiled.cssVariables`) already IS that mode's values. Otherwise the base
  * block is overlaid with the matching `compiled.modeBlocks` entry — the exact
  * channels the theme's `modes.{mode}` overlay changes, compiled by the SAME
- * family compilers `compileBrandTheme` runs for the base block, under the
+ * family compilers `compileTheme` runs for the base block, under the
  * NORMAL (unprefixed) channel names. A theme that never authored
  * `modes.{mode}` has no matching block, so the base block passes through
  * unchanged — the same "leaves it unset, falls through to the already-
@@ -295,7 +305,7 @@ function themeDefaultMode(theme: BrandTheme): BrandThemeMode {
  */
 function resolveModeVariables(
   theme: BrandTheme,
-  compiled: CompiledBrand,
+  compiled: ThemeCompilation,
   mode: BrandThemeMode
 ): Record<string, string> {
   if (mode === themeDefaultMode(theme)) return compiled.cssVariables;
@@ -308,7 +318,7 @@ function resolveModeVariables(
 export interface SurfaceVariables {
   /** Ground scaffold, then the mode-resolved compiled theme — merged in that order. */
   vars: Record<string, string>;
-  /** Keys `compileBrandTheme` itself emitted for this mode (excludes ground-scaffold-only keys). */
+  /** Keys `compileTheme` itself emitted for this mode (excludes ground-scaffold-only keys). */
   declaredKeys: ReadonlySet<string>;
 }
 
@@ -319,19 +329,24 @@ export interface SurfaceVariables {
  * does the preview inject," and is exported so a test can assert on it
  * directly instead of only through rendered DOM output.
  *
- * `baseTheme` is not forwarded to `compileBrandTheme` — the compiler's own
+ * `baseTheme` is not forwarded to `compileTheme` — the compiler's own
  * light/dark split is driven entirely by the theme's `appearance.defaultMode`
  * and `modes` overlays, resolved per-panel by `resolveModeVariables` above,
  * not by an input flag the compiler reads.
  */
 export function buildSurfaceVariables(theme: BrandTheme, surface: BrandStudioSurfaceConfig): SurfaceVariables {
-  const compiled = compileBrandTheme({
-    brandTheme: theme,
-    tenantSlug: surface.tenantSlug,
-  });
-  const modeVars = resolveModeVariables(theme, compiled, surface.baseTheme);
+  const compiled = compileTheme(
+    resolveTheme({ ...liftAuthoredTheme(theme), id: surface.tenantSlug }),
+    THEME_ENGINE_ADAPTERS.modern,
+  );
+  // Admitted here as well as in the emission owner, so that the map this
+  // function publishes IS the map the panel injects: a channel the grammar
+  // refuses must not be reported as declared, or graded for contrast.
+  const modeVars = admitCssVariables(
+    resolveModeVariables(theme, compiled, surface.baseTheme)
+  );
   const declaredKeys = new Set(Object.keys(modeVars));
-  const vars = { ...(surface.groundVars ?? {}), ...modeVars };
+  const vars = { ...PREVIEW_GROUNDS[surface.baseTheme], ...modeVars };
   return { vars, declaredKeys };
 }
 
@@ -365,7 +380,7 @@ export function applyHostileBrandTheme(theme: BrandTheme): BrandTheme {
   // on the DARK preview surface specifically -- previously carried by
   // `palette.darkBackgroundColor`, now a `modes.dark` overlay. Guarded by the
   // theme's own default mode: a theme can never author `modes.<its own
-  // default>` (`compileBrandTheme` rejects it), so a dark-DEFAULT theme gets
+  // default>` (`compileTheme` rejects it), so a dark-DEFAULT theme gets
   // the hostile ground pinned on `modes.light` instead -- still "the mode
   // this theme does not already speak for in its base block," which is
   // exactly what both preview grounds compile from.
@@ -716,12 +731,11 @@ function PreviewPanel({
 
   const mergedVars = useMemo(() => buildSurfaceVariables(theme, surface).vars, [theme, surface]);
 
-  const scopedCss = useMemo(() => {
-    const declarations = Object.entries(mergedVars)
-      .map(([key, value]) => `  ${key}: ${value};`)
-      .join('\n');
-    return `.${scopeClass} {\n${declarations}\n}`;
-  }, [mergedVars, scopeClass]);
+  // The rule is the emission owner's grammar; this panel owns only its scope.
+  const scopedCss = useMemo(
+    () => emitRule(`.${scopeClass}`, emitDeclarations(mergedVars)),
+    [mergedVars, scopeClass],
+  );
 
   return (
     <Box
@@ -1398,7 +1412,8 @@ function BrandThemeEditor({
 // Tenant-theme live preview section
 //
 // An optional second preview driven by the DB-tenant compiler
-// (`compileTenantThemeConfig`) rather than `compileBrandTheme`. It compiles the
+// (`compileTenantThemeConfig`) rather than the static arm's own `compileTheme`
+// call. It compiles the
 // edited document (debounced), renders inline issues for an invalid document,
 // and on success re-skins the consumer's galleries inside the CMP-02 preview
 // scope with the anatomy attributes stamped on the same root, then reports the

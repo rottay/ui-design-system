@@ -2,7 +2,7 @@
  * preview-css unit tests -- scoping and sanitization contract (audit CMP-02).
  *
  * There are two canonical compilers, and buildPreviewCss must re-anchor
- * either one's output to the preview scope: compileBrandTheme emits rules
+ * either one's output to the preview scope: compileTheme emits rules
  * against html[data-tenant='<slug>'] (brandTenantSelector), the document-root
  * attribute owned by TenantProvider; compileTenantThemeConfig emits rules
  * against its own artifact's `scopes.combinedSelector`. Both are dead inside
@@ -28,7 +28,7 @@ import {
   buildPreviewScopeSelector,
   sanitizePreviewSlug,
 } from '../../../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
-import { compileBrandTheme } from '../../../../../../../infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -75,7 +75,7 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
       const safeSlug = sanitizePreviewSlug(draft.slug);
       // Same call `resolveCompiledOutput` makes internally, so this is a
       // faithful "raw" baseline rather than a second interpretation of it.
-      const raw = compileBrandTheme({ brandTheme, tenantSlug: safeSlug }).cssString;
+      const raw = lowerBrandThemeFixture({ brandTheme, tenantSlug: safeSlug }).cssString;
       const rawDeclarationCount = raw
         .split('\n')
         .filter((line) => /^ {2}\S.*;$/.test(line)).length;
@@ -140,28 +140,28 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     }
   });
 
-  it('rejects a selector-open line that does not start with the compiled base selector', () => {
-    // The rescope pass's REJECTION branch (`rescopeSelectorLine` returning
-    // null), reached through a real compiler.
+  it('never lets a multi-line escape reach the rescope pass at all', () => {
+    // This drill used to feed the rescope pass a REAL compiled escape -- a
+    // multi-line brand value whose emitted declaration closed the block early
+    // and opened a rule the base selector does not own -- and prove that
+    // `rescopeSelectorLine` returned null for it. Its own guard (`expect(raw)
+    // .toContain('zz9, * {')`) was written to fail loudly if the value ever
+    // stopped reaching the state machine, and that is what it now does: the
+    // emission owner refuses the value before a character is assembled, so no
+    // foreign selector line is produced for the rescope pass to reject.
     //
-    // This case used to live in the tenant-theme arm below, where hostile CSS
-    // text could simply be handed in on a hand-built artifact. That arm now
-    // verifies its input, so no unverifiable text reaches the state machine
-    // through it -- and the branch would have gone untested if the coverage
-    // had moved out with the fixtures. A multi-line brand value is the honest
-    // way in: the emitted declaration is split across lines, one of which
-    // closes the block early and the next of which opens a rule the base
-    // selector does not own.
+    // The stronger fact is asserted instead. `rescopeSelectorLine`'s rejection
+    // branch survives as defence in depth behind the emission grammar, no
+    // longer as the first line of it.
     const brandTheme: BrandTheme = {
       ...draftBrandTheme(sampleDraft),
       surfaces: { shadows: { md: 'red;\n}\nzz9, * {\n  --pwn9: 1;\n' } },
     };
     const safeSlug = sanitizePreviewSlug(sampleDraft.slug);
-    const raw = compileBrandTheme({ brandTheme, tenantSlug: safeSlug }).cssString;
-    // Guard: the drill proves nothing unless the escape actually reaches the
-    // rescope pass. If the compiler ever starts dropping the value upstream,
-    // this fails loudly instead of passing for the wrong reason.
-    expect(raw).toContain('zz9, * {');
+    const raw = lowerBrandThemeFixture({ brandTheme, tenantSlug: safeSlug }).cssString;
+    expect(raw).not.toContain('zz9');
+    expect(raw).not.toContain('--pwn9');
+    expect(raw).not.toContain('--ds-shadow-md');
 
     const { css, scopeSelector } = buildPreviewCss({
       kind: 'brand-theme',
@@ -179,13 +179,13 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
   it('never lets a hostile slug reach the selector', () => {
     // The defense moved earlier in the pipeline: `resolveCompiledOutput`
     // compiles with the SANITIZED slug (`sanitizePreviewSlug` runs before
-    // `compileBrandTheme`), so a hostile slug never reaches the compiler and
+    // `compileTheme`), so a hostile slug never reaches the compiler and
     // therefore never reaches the CSS text at all -- the rescope pass below
     // has nothing to reject here because there is nothing hostile left to
     // reject. The `x'] , * { --pwn9: 1 } [q9='`-shaped attack this used to
     // exercise via the rescope rejection is covered by the case directly
-    // above, which crafts a selector the base selector does not own and
-    // proves the rescope pass still rejects it.
+    // above, where the emission grammar refuses the hostile value before any
+    // foreign selector can be assembled.
     const hostileSlug = "x'] , * { --pwn9: 1 } [q9='";
     const brandTheme = draftBrandTheme({ ...sampleDraft, slug: hostileSlug });
     const { css, safeSlug, scopeSelector } = buildPreviewCss({
@@ -200,7 +200,7 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     expect(css).not.toContain('html[data-tenant');
     // Every selector-open line starts with the scope selector -- proof no
     // wildcard/attribute-escaping rule survived. A bare `.not.toContain('*')`
-    // would also flag compileBrandTheme's own legitimate
+    // would also flag compileTheme's own legitimate
     // `calc(var(--x) * var(--y))` multiplication, which has nothing to do
     // with the injection vector this test targets.
     for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
@@ -386,10 +386,10 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     // `personality.animation.entranceDuration` differs per preset (formal
     // 160, neutral 220, expressive 300, playful 400 -- see foundation
     // personality presets) and is lifted onto `BrandMotion.entranceDuration`,
-    // which `compileBrandTheme`'s `setMotionVariables` feeds directly (no
+    // which `compileTheme`'s `setMotionVariables` feeds directly (no
     // clamping) into `--ds-motion-calm: <ms>ms`. This is real, observed
     // compiler behavior, not an assumption -- verified against
-    // `infrastructure/compilers/kernel/runtime/brand-theme`'s source.
+    // `infrastructure/compilers/runtime/theme/runtime/lowering`'s source.
     //
     // `--ds-motion-intensity` was tried first and rejected: it IS lifted from
     // `personality.animation.intensity` and DOES feed a real CSS variable,
@@ -560,7 +560,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
   it('drops the display-name comment so a hostile name cannot open a comment breakout, via the TenantConfig arm', () => {
     // Faithful restoration of the HEAD test of the same name, adapted to the
     // new call shape (`buildPreviewCss(tenantConfig)` still works exactly as
-    // before). It holds for a stronger reason than at HEAD: `compileBrandTheme`
+    // before). It holds for a stronger reason than at HEAD: `compileTheme`
     // never writes `bt.name` into `cssString` at all (verified against the
     // compiler source), so there is no comment-emitting code path left to
     // exploit in the first place -- the assertions below guard against that

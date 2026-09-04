@@ -172,7 +172,7 @@ describe('source governance', () => {
       const dualScope = `:is(html[data-tenant='${slug}'], :where([data-ds-root][data-vertical='${slug}']))`;
       if (
         !source.includes(dualScope) ||
-        !source.includes('Compiled from BrandTheme via compileBrandTheme') ||
+        !source.includes('Compiled from the authored Theme via compileTheme') ||
         source.includes(DECLARED_EXTENSION_MARKER) ||
         source.includes('_source/extension.css')
       ) {

@@ -8,8 +8,14 @@ import {
   type TenantConfig,
 } from '@rottay/design-system';
 import {
-  compileBrandTheme,
+  THEME_ENGINE_ADAPTERS,
+  liftAuthoredTheme,
+  brandTenantSelector,
+  compileTheme,
+  containerScope,
+  emitThemeCss,
   emitTenantThemeArtifactForSsr,
+  resolveTheme,
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
 
@@ -38,10 +44,10 @@ import {
 //     registry). Because their slug is unbundled and they carry a brandTheme
 //     with no compiled artifact behind it, DesignSystemProvider has nothing to
 //     paint them with on its own (the runtime tenant-CSS generator is gone).
-//     TortureSurface itself compiles their BrandTheme with `compileBrandTheme`
+//     TortureSurface itself compiles their BrandTheme with `compileTheme`
 //     and mounts the resulting CSS as a <style> element, then hands the
 //     provider the config WITHOUT the brandTheme -- the same static ingress
-//     path a code-owned vertical takes (compileBrandTheme ->
+//     path a code-owned vertical takes (compileTheme ->
 //     renderFirstPartyArtifact, whose runtime projection also strips the
 //     theme), minus the build-time artifact step these ephemeral probe
 //     fixtures don't need. Nothing needs to be registered for this to work.
@@ -198,7 +204,7 @@ export function TortureSurface({
   // artifact and the bundled-vertical fixtures (rottay/bithire/evnto, which
   // already carry their own pre-built stylesheet inside the DS bundle) both
   // paint through a channel this surface does not own; this branch is what's
-  // left once those two are excluded. `compileBrandTheme` is the same pure
+  // left once those two are excluded. `compileTheme` is the same pure
   // static ingress path a code-owned vertical's build takes -- this surface
   // just mounts the result itself instead of persisting it to disk, since a
   // probe fixture has no build step.
@@ -206,7 +212,12 @@ export function TortureSurface({
     if (!brandTheme || !tenantConfig || compiledArtifact || KNOWN_TENANT_FIXTURES.has(fixture)) {
       return undefined;
     }
-    return compileBrandTheme({ brandTheme, tenantSlug: tenantConfig.slug }).cssString;
+    const slug = tenantConfig.slug;
+    const compiled = compileTheme(
+      resolveTheme({ ...liftAuthoredTheme(brandTheme), id: slug }),
+      THEME_ENGINE_ADAPTERS.modern,
+    );
+    return emitThemeCss(compiled, containerScope(brandTenantSelector(slug)));
   }, [brandTheme, tenantConfig, compiledArtifact, fixture]);
 
   // Once this surface compiles and mounts the BrandTheme itself, the theme is
@@ -286,7 +297,7 @@ export function TortureSurface({
       {legacyBrandCss ? (
         // The exact compiled BrandTheme, mounted once. Scoped to
         // html[data-tenant='<slug>'] (+ [data-theme='<mode>'] for the mode
-        // overlay block) by compileBrandTheme itself; TenantProvider and
+        // overlay block) by compileTheme itself; TenantProvider and
         // ThemeProvider stamp those same attributes on <html>, so no selector
         // is hand-written here.
         <style

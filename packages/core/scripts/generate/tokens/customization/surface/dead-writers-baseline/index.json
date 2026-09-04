@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "note": "Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.",
-  "lastMove": "P0 (2026-08-28): apertura de la frontera palette.status-seeds = COBERTURA GANADA, no regresion. Los 20 canales --ds-tint-{success|warning|error|info}-{step} perdieron su escudo frontier porque su capacidad paso a active; 12 de ellos tienen lector productivo y 8 no (los pasos 16 y 24 de los cuatro estados), asi que el inventario sube 266->274. Los 8 quedan como DEUDA NOMBRADA CON DUENIO (retire en cohorte futura con su propia prueba): retirarlos aqui moveria los bytes del CSS y violaria la condicion 10 del owner (cero-delta visual), y darles consumidor inventaria uso. Ninguna otra cifra del censo se movio.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen): +8 nombre(s), -0",
+  "lastMove": "C2 (the sole productive theme lowering): --ds-experience-profile and --ds-recipe-profile are not NEW dead writers. Both were emitted before this lot by compileBrandTheme, an 'export const ... = (...) => {}' arrow assigned to a const; the emitter scan reaches function declarations, so the two assignments sat outside every census. C2's orchestration is 'export function compileTheme(...)', so the same two emissions became visible. Corroborated in the same lot by the hooks contract (compilerConcreteEmissions 2249->2251, exactly this pair) and by the theme-parity census. They are provenance markers published for a JS reader, never paint: foundation/contracts/composition/tenants/capabilities/index.ts already records --ds-recipe-profile as measured NOT reaching production on either surface. Transfer of visibility, not new dead surface. Independent code-audit ratification required.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen): +2 nombre(s), -0",
   "names": [
     "--ds-action-dock-reserved-block-end",
     "--ds-action-dock-reserved-block-start",
@@ -111,6 +111,7 @@
     "--ds-error-state-bg",
     "--ds-error-state-border",
     "--ds-error-state-icon-bg",
+    "--ds-experience-profile",
     "--ds-input-placeholder",
     "--ds-input-search-clear-color",
     "--ds-input-success-message-color",
@@ -140,6 +141,7 @@
     "--ds-premium-card-footer-color",
     "--ds-premium-card-glass-bg",
     "--ds-premium-card-rim",
+    "--ds-recipe-profile",
     "--ds-result-icon-success",
     "--ds-result-icon-warning",
     "--ds-rich-card-bg",

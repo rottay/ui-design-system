@@ -77,9 +77,16 @@ const SANDBOX_APPEARANCE: TenantAppearance = {
     surfaces: { elevation: 'elevated' },
   },
   advanced: {
-    tokenOverrides: {
-      '--ds-card-bg': '#ffffff',
-      '--ds-card-title-color': '#111827',
+    // The typed canonical branch, not a raw token bag: `--ds-card-bg` and
+    // `--ds-card-title-color` are not in `TENANT_THEME_OVERRIDE_TOKENS`, so the
+    // canonical migration refuses the whole document and the preview paints
+    // nothing. The same two intentions have a declared home in
+    // `BrandCardChrome`, which is the door a customer actually has.
+    chrome: {
+      cardComponent: {
+        bg: '#ffffff',
+        titleColor: '#111827',
+      },
     },
   },
 };

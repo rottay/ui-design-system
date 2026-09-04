@@ -1382,12 +1382,14 @@ export function ComponentBehaviorScene({ only }: { only: ComponentBehaviorCase }
             <BrandingPreviewSandbox
               compact
               showLabels={false}
-              appearance={{}}
-              extraVars={{
-                '--ds-color-primary': '#2f6feb',
-                '--ds-color-accent': 'red; } [data-preview-escape] { display: none',
-                '--ds-color-border': 'url(javascript:alert(1))',
-                'color: red; --ds-color-text-primary': '#111111',
+              appearance={{
+                general: {
+                  palette: {
+                    primary: '#2f6feb',
+                    accent: 'red; } [data-preview-escape] { display: none',
+                    secondary: 'url(javascript:alert(1))',
+                  },
+                },
               }}
             />
           </div>

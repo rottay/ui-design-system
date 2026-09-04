@@ -8,16 +8,21 @@
  */
 
 import type {
-  BrandTheme,
-  CompiledBrand,
-  CompiledBrandModeBlock,
-} from '@/foundation/contracts/composition/tenants/themes';
+  ThemeCompilation,
+  ThemeCompilationModeBlock,
+} from '@/foundation/contracts/composition/tenants/themes/compiled';
+import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 import {
-  brandModeSelector,
-  compileBrandTheme,
-} from '../../../kernel/runtime/brand-theme';
+  THEME_ENGINE_ADAPTERS,
+  compileTheme,
+  containerScope,
+  emitBaseRule,
+  emitModeRule,
+  firstPartyScope,
+  resolveTheme,
+} from '../../theme';
 import { projectFirstPartyArtifactScopes } from '../../../kernel/foundation/css/scope-projection';
 
 /** Marker written at the top of every generated vertical artifact. */
@@ -101,7 +106,7 @@ export interface RenderVerticalArtifactInput {
   /** Declared default mode of the compiled values; emitted as `color-scheme`. */
   colorScheme?: 'light' | 'dark';
   /** Compiled deltas for every mode the theme authors beyond its default. */
-  modeBlocks?: readonly CompiledBrandModeBlock[];
+  modeBlocks?: readonly ThemeCompilationModeBlock[];
   regenerateCommand: string;
 }
 
@@ -126,7 +131,7 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     ' *',
     ' * This file is a BUILD OUTPUT compiled from ONE authored source; any manual',
     ' * edit is reverted by the DS artifact parity/guard gates:',
-    ` *   ${authoredThemePath} (compiled via compileBrandTheme)`,
+    ` *   ${authoredThemePath} (compiled via compileTheme)`,
     ' *',
     ` * Regenerate: ${regenerateCommand}`,
     ' */',
@@ -148,18 +153,27 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     );
   }
 
-  const compiledDecls = [
-    ...(colorScheme ? [`  color-scheme: ${colorScheme};`] : []),
-    '  color: var(--ds-color-text-primary);',
-    ...Object.keys(compiledCssVariables)
+  // The RULE is the emission owner's grammar; the artifact owns its ORDER (sorted,
+  // so a diff of two builds is readable) and the root ink, which is
+  // artifact-format semantics rather than theme content.
+  const sortedVariables = Object.fromEntries(
+    Object.keys(compiledCssVariables)
       .sort()
-      .map((key) => `  ${key}: ${compiledCssVariables[key]};`),
-  ].join('\n');
+      .map((key) => [key, compiledCssVariables[key] as string]),
+  );
+  // Two scopes, because the artifact has two: the BASE rule is scoped to the
+  // spec's own selector (a caller may re-gate it, and a test does), while the
+  // MODE rules are scoped to the slug's own mode grammar exactly as before.
+  const baseScope = containerScope(selector);
+  const modeScope = firstPartyScope(tenantSlug as FirstPartyVerticalId);
   const compiledBlock = [
-    '/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */',
-    `${selector} {`,
-    compiledDecls,
-    '}',
+    '/* === Compiled from the authored Theme via compileTheme — do not edit === */',
+    emitBaseRule(
+      { cssVariables: sortedVariables, modeBlocks: [], ...(colorScheme ? { colorScheme } : {}),
+        runtime: { personality: {}, tokenOverrides: {} } },
+      baseScope,
+      { leadingDeclarations: ['  color: var(--ds-color-text-primary);'] },
+    ),
   ].join('\n');
 
   // One block per authored non-default mode, from BrandTheme.modes. Each holds
@@ -169,15 +183,19 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
   // one. That authority no longer exists: this renderer has one authored input.
   const modeBlockSections = (modeBlocks ?? []).map((block) =>
     [
-      `/* === Compiled from BrandTheme.modes.${block.mode} — do not edit === */`,
-      `${brandModeSelector(tenantSlug, block.mode)} {`,
-      [
-        `  color-scheme: ${block.colorScheme};`,
-        ...Object.keys(block.cssVariables)
-          .sort()
-          .map((key) => `  ${key}: ${block.cssVariables[key]};`),
-      ].join('\n'),
-      '}',
+      `/* === Compiled from Theme.modes.${block.mode} — do not edit === */`,
+      emitModeRule(
+        {
+          mode: block.mode,
+          colorScheme: block.colorScheme,
+          cssVariables: Object.fromEntries(
+            Object.keys(block.cssVariables)
+              .sort()
+              .map((key) => [key, block.cssVariables[key] as string]),
+          ),
+        },
+        modeScope,
+      ),
     ].join('\n'),
   );
 
@@ -191,7 +209,8 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
 /** Inputs for {@link renderFirstPartyArtifact}. */
 export interface RenderFirstPartyArtifactInput {
   spec: FirstPartyArtifactSpec;
-  brandTheme: BrandTheme;
+  /** The vertical's authored theme, already in canonical `Theme` form. */
+  theme: Theme;
   regenerateCommand?: string;
 }
 
@@ -207,10 +226,10 @@ export interface RenderFirstPartyArtifactInput {
  */
 export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): {
   css: string;
-  compiled: CompiledBrand;
+  compiled: ThemeCompilation;
 } {
-  const { spec, brandTheme, regenerateCommand } = input;
-  const compiled = compileBrandTheme({ brandTheme, tenantSlug: spec.slug });
+  const { spec, theme, regenerateCommand } = input;
+  const compiled = compileTheme(resolveTheme(theme), THEME_ENGINE_ADAPTERS.modern);
   return {
     compiled,
     css: renderVerticalArtifact({

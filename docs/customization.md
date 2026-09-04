@@ -27,15 +27,23 @@ Re-theming is an artifact swap, not a code change.
 flowchart LR
   B["Library base tokens"] --> V["Vertical baseline"]
   V --> T["Theme<br/>static source or stored document"]
-  T --> C["compileTheme<br/>the single lowering"]
-  C --> A["CSS custom properties<br/>+ personality tokens"]
+  T --> RS["resolveTheme<br/>intent + provenance"]
+  RS --> C["compileTheme<br/>the single lowering"]
+  C --> P["EngineAdapter.project<br/>engine seeds"]
+  C --> E["emitThemeCss<br/>scope"]
+  E --> A["CSS custom properties<br/>+ personality tokens"]
   A --> R["Rendered components"]
 ```
 
 Two transports, one contract, one compiler. A theme authored in TypeScript and a theme
 stored for a published tenant both resolve to the same complete `Theme` and enter the
-same lowering under `src/infrastructure/compilers/kernel/runtime/brand-theme/`. There is
-deliberately no second compiler: a parallel path would be a second source of truth.
+same lowering under `src/infrastructure/compilers/runtime/theme/runtime/lowering/`, whose
+channel writers are one owner per concern below it. There is deliberately no second
+compiler: a parallel path would be a second source of truth.
+
+Scope is not compiled. The lowering answers with channels, never with CSS text or a
+selector, so one compile serves a document root, a stored-tenant artifact and a preview
+container; `emitThemeCss` attaches the scope afterwards.
 
 A partial patch exists only at ingestion. It never reaches the compiler — the compiler
 sees a complete theme or it sees nothing.

@@ -20,7 +20,6 @@ import type {
 } from '../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
   PatternBrandStudio,
-  DEFAULT_DARK_GROUND,
   buildSurfaceVariables,
   normalizeBrandTheme,
 } from '../index';
@@ -157,7 +156,7 @@ describe('PatternBrandStudio static/DB channel parity', () => {
   it('drives --ds-color-primary from the same tenant input on both authoring paths', () => {
     const staticVars = buildSurfaceVariables(
       { id: 'p', name: 'P', palette: { primaryColor: '#2f6b9a' } },
-      { key: 'dark', baseTheme: 'dark', tenantSlug: 'parity', groundVars: DEFAULT_DARK_GROUND }
+      { key: 'dark', baseTheme: 'dark', tenantSlug: 'parity' }
     ).vars;
     expect(staticVars['--ds-color-primary']).toBe('#2f6b9a');
 

@@ -2,6 +2,10 @@ export { resolveTheme } from "./runtime/resolution";
 export { compileTheme } from "./runtime/lowering";
 export {
   containerScope,
+  emitBaseRule,
+  emitDeclarations,
+  emitModeRule,
+  emitRule,
   emitThemeCss,
   firstPartyScope,
   tenantArtifactScope,

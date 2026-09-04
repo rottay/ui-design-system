@@ -32,10 +32,8 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const AUDIT = resolve(HERE, '../index.mjs');
 const CORE_ROOT = findPackageRoot(HERE);
-const BRAND_THEME = join(
-  CORE_ROOT,
-  'src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
-);
+const LOWERING = join(CORE_ROOT, 'src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts');
+const LOWERING_CHROME = join(CORE_ROOT, 'src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts');
 
 /**
  * Emitter trees are planted in a temp directory rather than committed under
@@ -68,34 +66,56 @@ const CONSUMER_CSS = [
   '',
 ].join('\n');
 
-function brandSource({ emitter = 'brandThemeToChromeVariables', duplicate = false, deprecatedOnly = false, stray = false } = {}) {
+/**
+ * The ORCHESTRATION owner's planted source. Since C2 it authors the compile
+ * symbol and nothing else — the chrome writer is its own owner below, which is
+ * what makes "per-symbol" also mean "per-owner" in T3.
+ */
+function brandSource({ duplicate = false, deprecatedOnly = false, stray = false } = {}) {
   const body = stray
     ? ["  const vars: Record<string, string> = {};", "  vars['--ds-fixture-orphan'] = 'red';", '  return 1;'].join('\n')
     : '  return 1;';
   if (deprecatedOnly) {
-    return ['export const compileBrandThemeDeprecated = (): number => {', body, '};', ''].join('\n');
+    return ['export const compileThemeDeprecated = (): number => {', body, '};', ''].join('\n');
   }
-  const parts = [
+  const parts = ['export const compileTheme = (): number => {', body, '};', ''];
+  if (duplicate) parts.push('export const compileTheme = (): number => {', '  return 2;', '};', '');
+  parts.push('export const compileThemeDeprecated = compileTheme;', '');
+  return parts.join('\n');
+}
+
+/**
+ * The lowering's chrome writer, as its own planted owner: C2 split the compiler
+ * into one owner per concern, so the audit reads the chrome channel here and the
+ * orchestration separately.
+ */
+function chromeOwnerSource({ emitter = 'brandThemeToChromeVariables' } = {}) {
+  return [
     `export function ${emitter}(vars: Record<string, string>): void {`,
     "  vars['--ds-fixture-chrome-bg'] = 'transparent';",
     '}',
     '',
-    'export const compileBrandTheme = (): number => {',
-    body,
-    '};',
+    'function brandThemeRadiusScale(): string {',
+    "  return '1';",
+    '}',
     '',
-  ];
-  if (duplicate) parts.push('export const compileBrandTheme = (): number => {', '  return 2;', '};', '');
-  parts.push('export const compileBrandThemeDeprecated = compileBrandTheme;', '');
-  return parts.join('\n');
+  ].join('\n');
 }
 
 const EMITTER_TREES = {
   clean: brandSource(),
-  renamed: brandSource({ emitter: 'chromeVars' }),
+  renamed: brandSource(),
   duplicated: brandSource({ duplicate: true }),
   'prefix-only': brandSource({ deprecatedOnly: true }),
   'stray-var': brandSource({ stray: true }),
+};
+
+const CHROME_OWNER_TREES = {
+  clean: chromeOwnerSource(),
+  renamed: chromeOwnerSource({ emitter: 'chromeVars' }),
+  duplicated: chromeOwnerSource(),
+  'prefix-only': chromeOwnerSource(),
+  'stray-var': chromeOwnerSource(),
 };
 
 const plantedRoots = new Map();
@@ -108,7 +128,11 @@ function plantEmitterRoot(name) {
     writeFileSync(absolute, contents);
   };
   write('infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts', CHROME_SOURCE);
-  write('infrastructure/compilers/kernel/runtime/brand-theme/index.ts', EMITTER_TREES[name]);
+  write('infrastructure/compilers/runtime/theme/runtime/lowering/index.ts', EMITTER_TREES[name]);
+  write(
+    'infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts',
+    CHROME_OWNER_TREES[name],
+  );
   write('infrastructure/compilers/kernel/runtime/appearance/index.ts', APPEARANCE_SOURCE);
   write('foundation/tokens/css/runtime/engines/modern/index.css', CONSUMER_CSS);
   plantedRoots.set(name, root);
@@ -124,18 +148,28 @@ function runAudit(fixture) {
   return { status: result.status, output: `${result.stdout ?? ''}${result.stderr ?? ''}` };
 }
 
+function chromeFixture(name) {
+  return join(
+    plantEmitterRoot(name),
+    'infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts',
+  );
+}
+
 function brandFixture(name) {
-  return join(plantEmitterRoot(name), 'infrastructure/compilers/kernel/runtime/brand-theme/index.ts');
+  return join(plantEmitterRoot(name), 'infrastructure/compilers/runtime/theme/runtime/lowering/index.ts');
 }
 
 test('T1: the three real emitters each resolve to exactly one exported declaration', () => {
-  const resolved = requireExportedDeclarations(BRAND_THEME, [
+  // The two moved apart in C2: the chrome writer is its own owner and the
+  // orchestration is the lowering's index, so each is resolved where it lives.
+  const chrome = requireExportedDeclarations(LOWERING_CHROME, [
     'brandThemeToChromeVariables',
-    'compileBrandTheme',
   ]);
-  assert.equal(resolved.size, 2);
-  assert.equal(resolved.get('brandThemeToChromeVariables').kind, 'function');
-  assert.equal(resolved.get('compileBrandTheme').kind, 'const');
+  assert.equal(chrome.size, 1);
+  assert.equal(chrome.get('brandThemeToChromeVariables').kind, 'function');
+  const resolved = requireExportedDeclarations(LOWERING, ['compileTheme']);
+  assert.equal(resolved.size, 1);
+  assert.equal(resolved.get('compileTheme').kind, 'function');
 
   const appearance = join(
     CORE_ROOT,
@@ -158,14 +192,24 @@ test('T2: renaming an emitter turns the fence RED instead of emptying it', () =>
 });
 
 test('T3: renaming the named compile symbol is the same failure', () => {
-  // `renamed/` keeps `compileBrandTheme` and drops the other symbol; this
-  // asserts the resolver is per-symbol rather than per-file.
+  // The two emitters are separate owners since C2, so "per-symbol rather than
+  // per-file" is now also "per-owner": each file answers for its own symbol and
+  // refuses the other's, and `renamed/` drops the chrome one from the owner that
+  // is supposed to have it.
+  assert.throws(
+    () => requireExactlyOneExportedDeclaration(chromeFixture('renamed'), 'brandThemeToChromeVariables'),
+    SymbolAbsentError,
+  );
   const brand = brandFixture('renamed');
   assert.throws(
     () => requireExactlyOneExportedDeclaration(brand, 'brandThemeToChromeVariables'),
     SymbolAbsentError,
   );
-  assert.equal(requireExactlyOneExportedDeclaration(brand, 'compileBrandTheme').name, 'compileBrandTheme');
+  assert.equal(requireExactlyOneExportedDeclaration(brand, 'compileTheme').name, 'compileTheme');
+  assert.equal(
+    requireExactlyOneExportedDeclaration(chromeFixture('clean'), 'brandThemeToChromeVariables').name,
+    'brandThemeToChromeVariables',
+  );
 });
 
 test('T4: two exported declarations of one name are AMBIGUOUS, never silently picked', () => {
@@ -174,12 +218,12 @@ test('T4: two exported declarations of one name are AMBIGUOUS, never silently pi
   assert.match(result.output, /emitter-symbol-ambiguous/);
 
   const brand = brandFixture('duplicated');
-  assert.throws(() => requireExactlyOneExportedDeclaration(brand, 'compileBrandTheme'), SymbolAmbiguousError);
+  assert.throws(() => requireExactlyOneExportedDeclaration(brand, 'compileTheme'), SymbolAmbiguousError);
 });
 
 test('T5: PREFIX DRILL — only the Deprecated alias present is an ABSENCE, not a match', () => {
-  // The regression this library exists for. `export const compileBrandTheme` is
-  // a literal prefix of `export const compileBrandThemeDeprecated`, so
+  // The regression this library exists for. `export const compileTheme` is
+  // a literal prefix of `export const compileThemeDeprecated`, so
   // `indexOf` matches the alias; identifier equality does not.
   const result = runAudit('prefix-only');
   assert.equal(result.status, 1, result.output);
@@ -188,14 +232,14 @@ test('T5: PREFIX DRILL — only the Deprecated alias present is an ABSENCE, not 
   const brand = brandFixture('prefix-only');
   const source = readFileSync(brand, 'utf8');
   assert.ok(
-    source.indexOf('export const compileBrandTheme') >= 0,
+    source.indexOf('export const compileTheme') >= 0,
     'precondition: substring matching WOULD find the symbol here',
   );
-  assert.throws(() => requireExactlyOneExportedDeclaration(brand, 'compileBrandTheme'), SymbolAbsentError);
+  assert.throws(() => requireExactlyOneExportedDeclaration(brand, 'compileTheme'), SymbolAbsentError);
 });
 
-test('T6: a stray var inside compileBrandTheme is now in scope and reported', () => {
-  // The gap the old window left: `compileBrandTheme`'s body is the largest
+test('T6: a stray var inside compileTheme is now in scope and reported', () => {
+  // The gap the old window left: `compileTheme`'s body is the largest
   // export in the real file and sat entirely outside the marker slice, so the
   // header's claim that a stray assignment "is caught too" was not true.
   //

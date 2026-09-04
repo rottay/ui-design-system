@@ -3,12 +3,12 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "42c41a70528505ff8382625f5e18239b36ead3cc66a309c0026d96b2a25513e3",
+    "inputsDigest": "b486747f39fc71585fdfa5d03085c957e845f79858832c9ef5ef810b009eb3ae",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
-      "productionTsFiles": 2024,
-      "testFiles": 1339,
+      "productionTsFiles": 2044,
+      "testFiles": 1343,
       "artifactFiles": 3
     }
   },
@@ -17,10 +17,10 @@
     "writers": 4668,
     "foundationTokens": 3357,
     "componentTokens": 563,
-    "tenantChannels": 2189,
+    "tenantChannels": 2191,
     "publicHooks": 91,
     "unadjudicatedReads": 2605,
-    "deadWriters": 274,
+    "deadWriters": 276,
     "frontierReserved": 0,
     "modernConsumedUnique": 3672,
     "tsReadNames": 2693,
@@ -33,7 +33,7 @@
   "deadByClass": {
     "foundation": 130,
     "component": 0,
-    "tenantChannel": 202,
+    "tenantChannel": 204,
     "authoredCssLocal": 6
   },
   "controls": {
@@ -297,6 +297,7 @@
     "--ds-error-state-bg",
     "--ds-error-state-border",
     "--ds-error-state-icon-bg",
+    "--ds-experience-profile",
     "--ds-input-placeholder",
     "--ds-input-search-clear-color",
     "--ds-input-success-message-color",
@@ -326,6 +327,7 @@
     "--ds-premium-card-footer-color",
     "--ds-premium-card-glass-bg",
     "--ds-premium-card-rim",
+    "--ds-recipe-profile",
     "--ds-result-icon-success",
     "--ds-result-icon-warning",
     "--ds-rich-card-bg",
@@ -1044,7 +1046,7 @@
       "reads": {
         "css": 1,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -1359,7 +1361,7 @@
       "reads": {
         "css": 3,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -5544,7 +5546,7 @@
       "reads": {
         "css": 0,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": false
       },
@@ -12271,7 +12273,7 @@
       "reads": {
         "css": 4,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -17011,7 +17013,7 @@
       "reads": {
         "css": 5,
         "ts": 2,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -17206,7 +17208,7 @@
       "reads": {
         "css": 1,
         "ts": 2,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -39958,9 +39960,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-experience-profile": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -42275,7 +42277,7 @@
       "reads": {
         "css": 0,
         "ts": 2,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": false
       },
@@ -46475,7 +46477,7 @@
       "reads": {
         "css": 4,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -47045,7 +47047,7 @@
       "reads": {
         "css": 5,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -47165,7 +47167,7 @@
       "reads": {
         "css": 16,
         "ts": 3,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -70063,9 +70065,9 @@
       "tsMetadataMentions": 2
     },
     "--ds-recipe-profile": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
         "css": 0,
@@ -81395,7 +81397,7 @@
       "reads": {
         "css": 24,
         "ts": 2,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -91280,7 +91282,7 @@
       "reads": {
         "css": 1,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -91325,7 +91327,7 @@
       "reads": {
         "css": 1,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },

@@ -470,7 +470,37 @@ test("mutant: a CSS field disguised as data-only is red", () => {
  */
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
-const ledger = JSON.parse(readFileSync(join(HERE, "obligations/index.json"), "utf8"));
+const shippedLedger = JSON.parse(readFileSync(join(HERE, "obligations/index.json"), "utf8"));
+
+/**
+ * The obligation the mechanism was written for is DISCHARGED: its `ownerLot`
+ * was C2, its resolution was DELETE_DECLARATION, and its expiry fired the
+ * moment C2 relocated the lowering out of `kernel/runtime/brand-theme`. The
+ * shipped ledger is therefore empty — asserted below — and the machinery keeps
+ * its full coverage against this synthetic ledger, which is what stops an
+ * emptied file from quietly retiring the drills with it.
+ */
+const ledger = {
+  version: 1,
+  obligations: [
+    {
+      id: "declared-but-unemitted.BrandSegmentedChrome",
+      count: 2,
+      fields: [
+        "BrandSegmentedChrome.itemShadowSelected",
+        "BrandSegmentedChrome.focusRing",
+      ],
+      ownerLot: "C2",
+      resolution: "DELETE_DECLARATION",
+      reason: "Synthetic fixture for the obligation drills; the shipped one is discharged.",
+      declaringOwner: "src/foundation/contracts/composition/tenants/themes/index.ts",
+      legacyEmitterOwners: [
+        "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+      ],
+      expiry: { kind: "legacy-owner-relocation", note: "Fires when the owner moves." },
+    },
+  ],
+};
 const baseline = JSON.parse(readFileSync(join(HERE, "baseline/index.json"), "utf8"));
 
 const LIVE_FIELDS = new Set([
@@ -480,7 +510,26 @@ const LIVE_FIELDS = new Set([
 const options = { resolveOwner: () => LIVE_FIELDS };
 const COUNTERS = { "declared-but-unemitted.BrandSegmentedChrome": 2 };
 
-test("Q1: the shipped obligation is complete, exact, and anchored to real owners", () => {
+test("Q1: the shipped ledger is empty because C2 discharged its only obligation", () => {
+  // The expiry was written to fire on exactly this lot, and it did: the two
+  // declarations are gone from `BrandSegmentedChrome` and the entry with them.
+  assert.deepEqual(shippedLedger.obligations, []);
+  // Scoped to the ONE interface: `focusRing` is a live field on several other
+  // chrome families, so a whole-file search would pass for the wrong reason.
+  const contracts = readFileSync(
+    join(CORE_ROOT, "src/foundation/contracts/composition/tenants/themes/index.ts"),
+    "utf8",
+  );
+  const segmented = contracts.slice(
+    contracts.indexOf("export interface BrandSegmentedChrome {"),
+  );
+  const body = segmented.slice(0, segmented.indexOf("\n}"));
+  assert.ok(body.includes("itemBgSelected"), "the interface itself must still be here");
+  assert.ok(!body.includes("itemShadowSelected"));
+  assert.ok(!body.includes("focusRing"));
+});
+
+test("Q1b: the obligation shape is still validated, against a synthetic ledger", () => {
   assert.equal(ledger.obligations.length, 1);
   const [obligation] = ledger.obligations;
   for (const field of ["id", "ownerLot", "resolution", "reason", "declaringOwner"]) {

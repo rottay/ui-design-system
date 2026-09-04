@@ -3,8 +3,8 @@
  *
  * `--ds-color-primary-foreground`, `--ds-color-border-focus`,
  * `--ds-color-link` and `--ds-color-link-hover` are channels a theme MAY
- * author and never MUST. Both ingress paths — the static
- * `compileBrandTheme` and the DB `compileTenantThemeConfig` — need the same
+ * author and never MUST. Both ingress paths — the static arm and the DB
+ * `compileTenantThemeConfig`, which now share one `compileTheme` — need the same
  * unauthored floor, and each used to carry its own copy: the static path
  * exported one it deliberately did not wire in, and the retired runtime
  * generator derived all four from an NTSC luma threshold. Two copies of one

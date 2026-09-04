@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
+    "registryDigest": "702d6498eae83d2a0fd8f3879b608b43b7049cf8e53c2fbb4b4c34f5045533fb"
   },
   "title": "Status tone seeds (success/warning/error/info) in General",
   "valueType": "color-set",
@@ -113,7 +113,7 @@
   "dependsOn": [],
   "compatibility": "opened in place (P0, 2026-08-28): schema + envelope + normalizer with a literal closed vocabulary. Additive and zero-delta — no authored override exists, and every emitter is guarded by `if (seed)`. No `dark` twin and no per-step root: the ramp steps derive from the seed. The sibling path `palette.{success,…}` stays REJECTED, so opening the axis widened nothing by accident. The declared radius was WIDENED (W-SOURCE) from 3 channels of one tone to 68, and again (COH-1, 2026-08-30) from 68 to 83: +8 bg/border and +7 alphas, once `deriveStatusTintFloor` made the four seeds reach them too. Each widening is a correction of the declaration, not a widening of the capability — no emitter, path or vocabulary moved, and an unauthored seed still emits none of the 83.",
   "productiveConsumerWitness": {
-    "consumer": "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+    "consumer": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
     "symbol": "vars[\"--ds-color-success\"]"
   },
   "calibration": {

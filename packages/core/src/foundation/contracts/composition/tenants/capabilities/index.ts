@@ -172,7 +172,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // `fontFamilyBase` to the literal string "sober", which reads back as
       // "the stop moved something", a false PASS that never exercises
       // `typePairingToTypography()` at all. The real field is
-      // `typography.typePairing` (brand-theme/index.ts:784 --
+      // `typography.typePairing` (lowering/runtime/variables/index.ts --
       // `typePairing: bt.typography?.typePairing`; themes/index.ts:566 --
       // `BrandTypography.typePairing?: "sober"|"editorial"|"geometric"|
       // "technical"`, the same four enum values this control declares).
@@ -200,7 +200,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // F4B-14 fix: derivedChannels under-declared the real surface. The
       // static ingress path already names 4 members
       // (fontFamilyBase/Heading/Mono/Display), and the compiler emits all 4
-      // as real CSS channels (brand-theme/index.ts:889-897) -- mono/display
+      // as real CSS channels (lowering/runtime/variables/index.ts) -- mono/display
       // simply have NO DB door (documentPath only carries base/heading), so
       // they are static-only, same class as an identity-only stop. Widened
       // to the full 4-channel real surface the control governs, matching
@@ -645,21 +645,23 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       status: 'active',
       // F4B-15 fix (false-INERT by PATH, same class as F4B-7/F4B-12/F4B-13):
       // `brandThemePath: 'recipeProfile'` named a field that does not exist
-      // on BrandTheme -- the only two 'recipeProfile' occurrences in
-      // themes/index.ts are OUTPUT shapes (TenantAppearance.recipeProfile,
-      // CompiledBrand.recipeProfile), never the INPUT a stop writes. The real
-      // field is nested: `recipes.profile` (BrandRecipeSelection.profile,
-      // themes/index.ts:72-77). A stop written to `patch.recipeProfile`
-      // landed on a key nothing reads.
+      // on BrandTheme -- every 'recipeProfile' in the theme contracts is an
+      // OUTPUT shape (TenantAppearance.recipeProfile in themes/index.ts,
+      // ThemeCompilationRuntime.recipeProfile in themes/compiled/index.ts),
+      // never the INPUT a stop writes. The real field is nested:
+      // `recipes.profile` (BrandRecipeSelection.profile, themes/index.ts:72).
+      // A stop written to `patch.recipeProfile` landed on a key nothing
+      // reads.
       //
       // Witness fix (DT ruling, F4B-15): the prior witness
       // (RecipeProfileProvider, symbol 'RecipeProfileProvider') implied the
       // declared channel --ds-recipe-profile reaches production. Measured:
       // it does not, on EITHER surface. (a) --ds-recipe-profile (CSS) has
-      // NO production reader -- grep-confirmed, only compilers and compiled
-      // artifacts reference it; the compiler's own comment calls it
-      // provenance of the selection, not paint
-      // (brand-theme/index.ts:2071-2072). (b) RecipeProfileProvider IS a
+      // NO production reader -- grep-confirmed, no `var(--ds-recipe-profile)`
+      // exists in source; the lowering writes it once and nothing reads it
+      // back, so it is provenance of the selection, not paint
+      // (compilers/runtime/theme/runtime/lowering writes the channel from the
+      // validated selection and no CSS consumes it). (b) RecipeProfileProvider IS a
       // real consumer, but of `resolvedRuntimeConfig.appearance?.recipeProfile`
       // (the DB-normalized shape), never of the CSS channel -- and for the 3
       // code-owned verticals (today's production, no tenant DB) it NEVER
@@ -736,7 +738,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // value alike resolve `undefined` there; select-group moves cleanly on
       // both arms, all 3 verticals -- see calibration.measuredChannelUnion).
       // One representative channel PER AXIS, each independently measured
-      // moving (compileBrandTheme + compileTenantThemeConfig sweep, this
+      // moving (compileTheme + compileTenantThemeConfig sweep, this
       // packet): the FULL real union is far larger (type alone has 8,
       // geometry cascades through the shared --ds-radius-*/--ds-*-radius
       // surface at 35 -- see the control's own calibration.measuredChannelUnion)
@@ -768,7 +770,8 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
+        consumer:
+          'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
         symbol: 'vars["--ds-color-success"]',
       },
       scope: 'tenant',
@@ -785,7 +788,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // enumerable from source, exactly like `navigation.sidebar-tone`'s
       // six-channel table above, because each of the four seeds reaches the
       // same four emitters in the single lowering
-      // (`compilers/kernel/runtime/brand-theme/index.ts`):
+      // (`compilers/runtime/theme/runtime/lowering/index.ts`):
       //   1. the seed passthrough per tone (:846-851, `if (seed)`);
       //   2. the perceptual ramp, `deriveTenantColorRamps` (:340-366) over
       //      `rampRoleSpecs` (:316-326) × the ten `RAMP_STEPS`, reached from
@@ -798,12 +801,13 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       //      is gated on the seed being authored.
       // COH-1 (2026-08-30): `--ds-color-{tone}-bg` / `-border` and seven
       // `--ds-color-alpha-{tone}-*` channels (5./6. below) are NO LONGER
-      // excluded. `deriveStatusTintFloor` (`brand-theme/index.ts`) merges a
+      // excluded. `deriveStatusTintFloor` (`lowering/foundation/palette`) merges a
       // FLOOR for these fifteen channels per tone, guarded by the same
       // `if (seed)` presence check every other emission in this family uses,
       // merged BEFORE `setExtendedPaletteVariables` so an authored
       // `successBgColor`/`alphaSuccess10`/etc. (`EXTENDED_PALETTE_CHANNELS`,
-      // :493-517) still overrides its own channel, per channel. A DB tenant's
+      // `lowering/foundation/palette`) still overrides its own channel, per
+      // channel. A DB tenant's
       // own status seed re-derives the same fifteen over a vertical baseline
       // that bakes them as literals, via the sibling
       // `applyTenantStatusSeedDerivations`/`STATUS_SEED_SHADOWING_FIELDS`.

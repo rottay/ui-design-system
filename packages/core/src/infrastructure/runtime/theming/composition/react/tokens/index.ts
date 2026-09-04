@@ -33,7 +33,7 @@ import { resolveChartPersonality } from '../../../../personality/runtime/resolut
 import {
   brandThemeToPersonality,
   brandThemeToTokenOverrides,
-} from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+} from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
 import { resolveEffectiveDensityScale } from '@/foundation/tokens/ts/foundation/base/density';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '@/foundation/contracts';
 

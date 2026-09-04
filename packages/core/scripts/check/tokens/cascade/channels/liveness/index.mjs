@@ -171,7 +171,7 @@ export const DEFAULT_TENANT_THEME_CONTRACT = resolve(
 );
 export const DEFAULT_BRAND_THEME_COMPILER = resolve(
   CORE_ROOT,
-  'src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
+  'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
 );
 export const DEFAULT_FAMILY_INVENTORY = resolve(
   CORE_ROOT,
@@ -1278,7 +1278,7 @@ export function analyzeChannelLiveness({
 
   // --- Family attribution -----------------------------------------------
   const familyIndex = buildFamilyIndex(familyRows);
-  const brandThemeRelative = 'packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts';
+  const brandThemeRelative = 'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts';
 
   function producerFor(name) {
     if (tintEmission.names.has(name)) {

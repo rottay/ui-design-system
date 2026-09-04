@@ -22,7 +22,7 @@
      default); 0 = flat (no gradient/glass/glow). Every effect multiplies its
      alpha/length by this, so intensity 0 collapses each effect to none while
      keeping valid CSS (blur(0px), transparent stops, 0-alpha shadow).
-     Emitted per tenant by infrastructure/compilers/kernel/runtime/brand-theme from surfaces.effectIntensity.
+     Emitted per tenant by infrastructure/compilers/runtime/theme/runtime/lowering from surfaces.effectIntensity.
      ======================================================================== */
   --ds-effect-intensity: 1;
 

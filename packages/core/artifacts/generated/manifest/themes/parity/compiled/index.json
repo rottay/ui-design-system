@@ -6,21 +6,21 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 93138,
+        "bytes": 93131,
         "lines": 1898,
-        "sha256": "ad0a7e580eadfdf8e9a409db5209b9ae57182d5d31e434b5a83f3e5088d4d523"
+        "sha256": "064bfd854265fcc7c700b7f9a6e36a28bcd9de246a2e97f3324e7d9a5afd5c0c"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 98399,
+        "bytes": 98392,
         "lines": 1698,
-        "sha256": "7cc8b3fd9b89480c38c9324e9cf08eb3051e5914c00491b22cdec571b6d3bbf4"
+        "sha256": "121c477d513c4bcdc018ec3361245436ad959e6d0e95dc1fc30240435a86888b"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30872,
+        "bytes": 30865,
         "lines": 586,
-        "sha256": "3ac87cae9a2356a8986a40a7b4c1e41d1f0fe5170931857e566fd82c55cdcb94"
+        "sha256": "cbc9d18638cdd8e956be02dd4ef2a3ea851408944a916fdeb11ed3e8adc4c8ac"
       }
     ],
     "sources": [
@@ -6690,7 +6690,7 @@
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 466,
       "channels": 3578,
-      "sha256": "3507a264b3fc892b25fd16fd704348656327557adc26799592263fc28fde94ae",
+      "sha256": "e49ff753a1041b905fe10046c8c58201a42e0c6c7c300f8f4b0c7e9e27ccbb2f",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },

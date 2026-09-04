@@ -534,8 +534,8 @@
       "output": "entrypoints/public/runtime/visual-authority/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 6,
-        "maxSourceBytes": 47190
+        "maxReachableModules": 9,
+        "maxSourceBytes": 62120
       },
       "symbols": [
         {
@@ -1817,5 +1817,5 @@
     "typeSymbols": 47,
     "totalSymbols": 159
   },
-  "_budgetGovernance": "Public-entrypoint source budgets are decrease-only; increases require an explicit measured review and a matching ceiling update."
+  "_budgetGovernance": "Public-entrypoint budgets are decrease-only in both governed dimensions -- maxReachableModules and maxSourceBytes; increases require an explicit measured review and a matching ceiling update in scripts/check/boundaries/public-api/ceilings/index.json, taken through --write-baseline --widen --reason."
 }

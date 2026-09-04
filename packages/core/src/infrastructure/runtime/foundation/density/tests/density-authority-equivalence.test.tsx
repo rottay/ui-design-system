@@ -33,7 +33,7 @@ import {
   DENSITY_LOCAL_FACTOR_VARIABLE,
   resolveEffectiveDensityScale,
 } from '@/foundation/tokens/ts/foundation/base/density';
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
 import {
   compileTenantThemeConfig,
@@ -58,7 +58,7 @@ import { DensityScope, useDensity } from '../index';
  * is not touched here.
  *
  * What was wrong was the fixture: the tree carried `brandTheme` while measuring
- * nothing from it. Legs (1) and (2) below call `compileBrandTheme` and
+ * nothing from it. Legs (1) and (2) below call `compileTheme` and
  * `compileAppearanceVariables` DIRECTLY, so the static-BrandTheme and
  * DB-Appearance authorities are compared without the provider ever seeing a
  * BrandTheme. The tree is needed for exactly three of the five: the `<html>`
@@ -172,7 +172,7 @@ describe('density posture equivalence across every authority', () => {
 
     // (1) Static BrandTheme vertical — the compiled artifact for a code-owned
     // product, scoped html[data-tenant='…'].
-    const brandVars = compileBrandTheme({
+    const brandVars = lowerBrandThemeFixture({
       brandTheme: {
         id: 'density-equivalence',
         name: 'Density equivalence',

@@ -9,7 +9,7 @@
  *
  * They are never registered in `KNOWN_TENANTS`, `BUNDLED_TENANT_SLUGS`, or
  * `FIRST_PARTY_ARTIFACT_SPECS` — there is no generated CSS artifact for them.
- * They compile at render time via `compileBrandTheme`, the same as any
+ * They compile at render time through the one lowering, the same as any
  * DB-driven tenant would.
  *
  * This file is runtime-pure: only a type-only import of `BrandTheme` is used,

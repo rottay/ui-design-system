@@ -12,7 +12,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from '../ts/presentation/brand-themes/bithire';
 
 /** design-language §2.1 table — size / line-height / weight / tracking, per entry. */
@@ -27,7 +27,7 @@ const RAMP = [
 const FAMILY = 'var(--ds-font-family-base)';
 
 describe('bithire brand compiler emits the composite type ramp', () => {
-  const { cssVariables } = compileBrandTheme({
+  const { cssVariables } = lowerBrandThemeFixture({
     brandTheme: bithireBrandTheme,
     tenantSlug: 'bithire',
   });

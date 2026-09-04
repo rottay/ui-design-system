@@ -64,12 +64,14 @@ const LAST_SLOT = 10;
 
 /** Sanctioned definers of the reserved channel, relative to src/. */
 export const DEFINER_ALLOWLIST = [
-  // The brand-theme compiler: the canonical `compileTheme` lowering both the
-  // static BrandTheme and the DB TenantThemeDocument transports resolve into.
+  // The canonical lowering's channel assembly: the `compileTheme` route both
+  // the static Theme and the DB TenantThemeDocument transports resolve into.
   // The palette authority moved here in dcc65ca34 (2026-08-18) and this list
   // was not updated in the same commit, so the gate flagged the canonical
-  // definer while sanctioning the compatibility one.
-  'infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
+  // definer while sanctioning the compatibility one. C2 split that compiler
+  // into one owner per concern; the series palette is written by the channel
+  // assembly, so that owner is the definer now.
+  'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
   // The tenant appearance compiler. Still a sanctioned definer, but now as the
   // compatibility projection: `appearanceToVariables()` is documented (same
   // file, above `compileAppearanceVariables`) as the raw projection kept for

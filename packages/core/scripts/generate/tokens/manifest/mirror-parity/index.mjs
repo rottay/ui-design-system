@@ -795,7 +795,7 @@ export function multiDeclaration(byTenant) {
  * Hojas de decision autoradas en una fuente `.ts` de tema.
  *
  * Las fuentes NO nombran canales `--ds-*`: los nombres los inventa
- * `compileBrandTheme`. Por eso la unidad de fuente no puede ser el canal, y es
+ * `compileTheme`. Por eso la unidad de fuente no puede ser el canal, y es
  * la RUTA DE HOJA del objeto autorado (`palette.accent.strong`). Comparar esta
  * cifra con la del artefacto seria comparar peras con manzanas; se publica
  * aparte justamente para que no se haga.

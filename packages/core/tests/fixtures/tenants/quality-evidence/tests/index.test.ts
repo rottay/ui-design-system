@@ -12,7 +12,7 @@ import {
   hydrateTenantThemeConfig,
   validateTenantThemeDocument,
 } from "@/infrastructure/compilers/composition/tenant-theme";
-import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import {
   EDITORIAL_FLAT_BRAND_THEME,
@@ -375,7 +375,7 @@ describe("DS-Q001 torture tenant mode authority", () => {
 
   it("compiles each base block as that fixture's default-mode palette", () => {
     for (const fixture of MODE_FIXTURES) {
-      const compiled = compileBrandTheme({
+      const compiled = lowerBrandThemeFixture({
         brandTheme: fixture.brandTheme,
         tenantSlug: fixture.slug,
       });
@@ -396,7 +396,7 @@ describe("DS-Q001 torture tenant mode authority", () => {
 
   it("compiles exactly one non-default mode block per fixture", () => {
     for (const fixture of MODE_FIXTURES) {
-      const compiled = compileBrandTheme({
+      const compiled = lowerBrandThemeFixture({
         brandTheme: fixture.brandTheme,
         tenantSlug: fixture.slug,
       });
@@ -412,7 +412,7 @@ describe("DS-Q001 torture tenant mode authority", () => {
 
   it("gives the non-default mode its own effective palette", () => {
     for (const fixture of MODE_FIXTURES) {
-      const compiled = compileBrandTheme({
+      const compiled = lowerBrandThemeFixture({
         brandTheme: fixture.brandTheme,
         tenantSlug: fixture.slug,
       });
@@ -441,7 +441,7 @@ describe("DS-Q001 torture tenant mode authority", () => {
     // Technical's light ground is the same hex as its dark base, so its block
     // must NOT restate the ground; Editorial's dark ground genuinely moves, so
     // its block must.
-    const technical = compileBrandTheme({
+    const technical = lowerBrandThemeFixture({
       brandTheme: TECHNICAL_DARK_BRAND_THEME,
       tenantSlug: TECHNICAL_DARK_IDENTITY.slug,
     });
@@ -455,7 +455,7 @@ describe("DS-Q001 torture tenant mode authority", () => {
     );
     expect(technicalLight.cssVariables[MODE_CHANNELS.primary]).toBe("#77B7FF");
 
-    const editorial = compileBrandTheme({
+    const editorial = lowerBrandThemeFixture({
       brandTheme: EDITORIAL_FLAT_BRAND_THEME,
       tenantSlug: EDITORIAL_FLAT_IDENTITY.slug,
     });

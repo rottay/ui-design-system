@@ -25,6 +25,8 @@ import {
   cloneJsonValueExact,
 } from "@/foundation/kernel/serialization";
 import { TENANT_THEME_COMPILER_VERSION } from "@/infrastructure/compilers/composition/tenant-theme/version";
+import { emitTenantArtifactCss } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
+import { tenantArtifactScope } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 
 /** Context-only provider state or app-mounted compiled paint. */
 export type VisualAuthority = "provider" | "compiled-artifact";
@@ -188,37 +190,25 @@ function expectedScopes(
   };
 }
 
+/**
+ * The bytes the producer would have written for this artifact.
+ *
+ * Rebuilt by CALLING the producer's own composer, not by restating it. A
+ * verifier that spells the format a second time verifies its own copy: the two
+ * agreed only for as long as nobody edited one of them, and a drift shows up as
+ * a mounted artifact this resolver refuses for no visible reason.
+ */
 function expectedArtifactCss(artifact: TenantThemeArtifact): string {
-  const declarations = Object.entries(artifact.variables)
-    .map(([key, value]) => `  ${key}: ${value};`)
-    .join("\n");
-  const backgroundMode =
-    artifact.normalizedAppearance.general?.palette?.backgroundMode ?? "light";
-  const modeRules = (artifact.modeDeltas ?? []).map((block) => {
-    const modeDeclarations = Object.entries(block.variables)
-      .map(([key, value]) => `  ${key}: ${value};`)
-      .join("\n");
-    const explicitSelector =
-      `${artifact.scopes.combinedSelector}[data-theme='${block.mode}'], ` +
-      `${artifact.scopes.combinedSelector}.${block.mode}`;
-    const explicitRule = `${explicitSelector} {\n${modeDeclarations}\n}`;
-    if (backgroundMode !== "auto" || block.mode !== "dark") {
-      return explicitRule;
-    }
-    const automaticRule =
-      `@media (prefers-color-scheme: dark) {\n` +
-      `${artifact.scopes.combinedSelector}:not([data-theme='light']) {\n` +
-      `${modeDeclarations}\n}\n}`;
-    return `${explicitRule}\n${automaticRule}`;
+  return emitTenantArtifactCss({
+    verticalKey: artifact.verticalKey,
+    slug: artifact.slug,
+    compilerVersion: TENANT_THEME_COMPILER_VERSION,
+    digest: artifact.digest,
+    variables: artifact.variables,
+    modeDeltas: artifact.modeDeltas,
+    backgroundMode:
+      artifact.normalizedAppearance.general?.palette?.backgroundMode ?? "light",
   });
-  return [
-    `/* TenantThemeArtifact v1 | ${TENANT_THEME_COMPILER_VERSION} | ${artifact.digest} */`,
-    `${artifact.scopes.combinedSelector} {`,
-    declarations,
-    "}",
-    ...modeRules,
-    "",
-  ].join("\n");
 }
 
 /** Recompute every self-contained invariant in the v1 artifact. */

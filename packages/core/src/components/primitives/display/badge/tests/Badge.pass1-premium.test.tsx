@@ -10,7 +10,7 @@ import { LOCALE_CONFIGS, TRANSLATION_CATALOG } from '@/foundation/i18n/runtime/c
 import { resolveTranslation } from '@/foundation/i18n/runtime/resolution';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import ModernBadge from '../engines/modern';
 
@@ -169,8 +169,8 @@ describe('Modern Badge / Chip / Pill premium contract — Pass 1', () => {
   });
 
   it('keeps brand and locale as independent axes while making the two real tenants diverge', () => {
-    const bithire = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
-    const management = compileBrandTheme({
+    const bithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    const management = lowerBrandThemeFixture({
       brandTheme: themanagementmiamiBrandTheme,
       tenantSlug: 'themanagementmiami',
     });

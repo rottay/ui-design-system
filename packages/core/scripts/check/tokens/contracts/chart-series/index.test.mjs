@@ -263,7 +263,7 @@ test('the real tree has zero violations and exactly two allowlisted definer hits
 
 test('the definer allowlist cannot grow without touching this test', () => {
   assert.deepEqual(DEFINER_ALLOWLIST, [
-    'infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
+    'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
     'infrastructure/compilers/kernel/runtime/appearance/index.ts',
     'foundation/kernel/color/oklch/chart-series/index.ts',
   ]);

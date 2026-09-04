@@ -24,6 +24,7 @@ import {
   validateTenantThemeConfig,
   validateTenantThemeDocument,
 } from "..";
+import { themeLeafOptions } from "@/foundation/contracts/composition/tenants/themes/iso/schema";
 import { migrateV1 } from "../migrate-v1";
 
 const IDENTITY: TenantThemeConfigIdentity = {
@@ -1431,8 +1432,27 @@ describe("closed schema and hostile input rejection", () => {
     // APCA-verified colors, and a geometry literal is correctly rejected for
     // them, which is a different law than truncation. Everything else that a
     // tenant may legally set at the cap is asserted byte-for-byte.
+    // A token whose Theme keypath carries a CLOSED OPTION DOMAIN is in the
+    // same position as the APCA colors above: `"1px"` is not a truncation
+    // there, it is a value the contract never declared. Derived from the
+    // schema rather than listed, so a new closed leaf cannot quietly reopen.
+    const closedDomain = new Set(
+      budgetTokens.filter((token) =>
+        leafKeypaths(
+          migrateV1(
+            {
+              ...boundary,
+              visualFoundation: {
+                advanced: { tokenOverrides: { [token]: "1px" } },
+              },
+            } as unknown as TenantThemeDocument,
+            "light"
+          ).patch
+        ).some((keypath) => themeLeafOptions(keypath) !== null)
+      )
+    );
     const compilable = budgetTokens.filter(
-      (token) => !/foreground|background/.test(token)
+      (token) => !/foreground|background/.test(token) && !closedDomain.has(token)
     );
     expect(compilable.length).toBeGreaterThan(100);
     const artifact = compileTenantThemeConfig(
@@ -1472,7 +1492,7 @@ describe("closed schema and hostile input rejection", () => {
   });
 
   it("never lets an untyped ISO lowering failure escape the compiler", async () => {
-    // `resolveTheme` is fail-closed and throws a PLAIN Error when a patch key
+    // `mergeThemePatches` is fail-closed and throws a PLAIN Error when a patch key
     // is absent from the total Theme shape. Callers of this compiler contract
     // on ONE typed rejection, so that leg must be renamed into a document
     // issue instead of surfacing as a raw 500. Proven by forcing the throw in
@@ -1500,9 +1520,9 @@ describe("closed schema and hostile input rejection", () => {
       const actual = await vi.importActual<Record<string, unknown>>(isoPath);
       return {
         ...actual,
-        resolveTheme: () => {
+        mergeThemePatches: () => {
           throw new Error(
-            'resolveTheme: unknown key "width" at $.chrome.sidebar; ThemePatch is ingestion-only'
+            'mergeThemePatches: unknown key "width" at $.chrome.sidebar; ThemePatch is ingestion-only'
           );
         },
       };

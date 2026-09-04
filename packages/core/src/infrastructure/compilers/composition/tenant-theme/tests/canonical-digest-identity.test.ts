@@ -23,7 +23,6 @@ import {
   FIRST_PARTY_THEMES,
   FIRST_PARTY_VERTICAL_ROSTER,
 } from "@/foundation/tokens/ts/presentation/brand-themes";
-import { compileTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
 import {
   TENANT_THEME_COMPILER_VERSION,
   TENANT_THEME_CONFIG_SCHEMA_DIGEST,
@@ -34,6 +33,7 @@ import {
   getFirstPartyTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "..";
+import { lowerTheme } from "@tests/support/theme-lowering";
 
 const FIXTURE_DIR = resolve(
   process.cwd(),
@@ -582,9 +582,7 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(Object.keys(artifact.variables)).toHaveLength(65);
     expect(artifact.variables["--ds-button-primary-bg"]).toBeUndefined();
 
-    const baseline = compileTheme(FIRST_PARTY_THEMES.bithire, {
-      tenantSlug: IDENTITY.slug,
-    }).cssVariables;
+    const baseline = lowerTheme(FIRST_PARTY_THEMES.bithire, IDENTITY.slug).cssVariables;
 
     // ...and cause 3, two-sided as well. Three of the four channels this block
     // used to pin ABSENT now carry a value derived from the TENANT's seed, and
@@ -691,7 +689,7 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(bithireDark?.text).toBe("var(--ds-color-text-secondary)");
     expect(
       FIRST_PARTY_THEMES.bithire.modes?.dark?.palette?.textSecondaryColor ??
-        compileTheme(FIRST_PARTY_THEMES.bithire, { tenantSlug: IDENTITY.slug })
+        lowerTheme(FIRST_PARTY_THEMES.bithire, IDENTITY.slug )
           .modeBlocks?.find((block) => block.mode === "dark")
           ?.cssVariables["--ds-color-text-secondary"],
     ).toBe("#9aacbf");

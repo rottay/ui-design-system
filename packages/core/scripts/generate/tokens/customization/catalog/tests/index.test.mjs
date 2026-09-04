@@ -10,7 +10,18 @@
  * rather than trusted.
  */
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  realpathSync,
+  statSync,
+  symlinkSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
@@ -46,11 +57,21 @@ function pageNames(tree) {
 
 /**
  * The EXACT residual the sibling `docs-engineering` checkout carries today, in
- * the generator's own normalized wording. Two files, named one by one: an
+ * the generator's own normalized wording. Four files, named one by one: an
  * extra, a missing, a renamed or a differently-categorized residual all fail
  * here, where a category pattern would have absorbed every one of them.
+ *
+ * C2 added the two `governance/families` pages. `--ds-experience-profile` and
+ * `--ds-recipe-profile` were always emitted, by an `export const … = (…) => {}`
+ * arrow the emitter scans could not reach; the lowering's orchestration is a
+ * function declaration, so the census now sees them and files each on its
+ * family page. Writing those pages means writing into `docs-engineering`, which
+ * is a separate repository and outside this lot's scope — so the debt is pinned
+ * here, exactly, rather than deferred by category or waved through.
  */
 const CROSS_REPO_RESIDUAL = [
+  'stale/missing generated view: tokens/governance/families/experience.md — run pnpm tokens:catalog:write',
+  'stale/missing generated view: tokens/governance/families/recipe.md — run pnpm tokens:catalog:write',
   'stale/missing generated view: tokens/README.md — run pnpm tokens:catalog:write',
   'stale/missing generated view: tokens/governance/lifecycle-and-deprecations.md — run pnpm tokens:catalog:write',
 ];
@@ -183,19 +204,97 @@ function snapshotDocs() {
   return entries.join(String.fromCharCode(10));
 }
 
+/** The one directory chain whose leaf `--write --in-repo-only` writes into. */
+const WRITE_PATH = ['scripts', 'generate', 'tokens', 'customization', 'catalog'];
+const RECONCILIATION = join(ROOT, ...WRITE_PATH, 'reconciliation', 'index.json');
+
+/**
+ * A throwaway package tree the generator can WRITE into.
+ *
+ * Everything it reads is symlinked at whatever depth is not on the write path,
+ * so the fixture costs a few dozen links instead of the ~180M the real package
+ * weighs; only the directories leading to the write target are real, because a
+ * write through a symlinked directory lands in the real tree. The generator's
+ * own module is COPIED rather than linked: Node resolves an ESM symlink to its
+ * realpath, so a linked entrypoint would compute the real package root and
+ * write there — the exact defect this fixture exists to prevent. `realpathSync`
+ * on the sandbox is what makes `import.meta.url === argv[1]` hold on macOS,
+ * where the temp directory is itself a symlink.
+ */
+function isolatedPackageTree() {
+  const sandbox = realpathSync(mkdtempSync(join(tmpdir(), 'tokens-catalog-write-')));
+  const root = join(sandbox, 'packages', 'core');
+  const link = (from, to) =>
+    symlinkSync(from, to, statSync(from).isDirectory() ? 'dir' : 'file');
+  const linkSiblings = (relDir, keep) => {
+    const from = relDir ? join(ROOT, relDir) : ROOT;
+    const to = relDir ? join(root, relDir) : root;
+    mkdirSync(to, { recursive: true });
+    for (const entry of readdirSync(from)) {
+      if (entry !== keep) link(join(from, entry), join(to, entry));
+    }
+  };
+  let prefix = '';
+  for (const segment of WRITE_PATH) {
+    linkSiblings(prefix, segment);
+    prefix = prefix ? `${prefix}/${segment}` : segment;
+  }
+  const catalogFrom = join(ROOT, ...WRITE_PATH);
+  const catalogTo = join(root, ...WRITE_PATH);
+  mkdirSync(catalogTo, { recursive: true });
+  for (const entry of readdirSync(catalogFrom)) {
+    if (entry === 'reconciliation') continue;
+    if (entry === 'index.mjs') cpSync(join(catalogFrom, entry), join(catalogTo, entry));
+    else link(join(catalogFrom, entry), join(catalogTo, entry));
+  }
+  return { sandbox, root, script: join(catalogTo, 'index.mjs'), catalogTo };
+}
+
 test('--in-repo-only writes nothing outside packages/core', () => {
-  const before = snapshotDocs();
-  const result = spawnSync(
-    process.execPath,
-    [join(HERE, '../index.mjs'), '--write', '--in-repo-only'],
-    { cwd: findPackageRoot(HERE), encoding: 'utf8' },
-  );
+  // HERMETIC: the write case runs against a throwaway tree. Running it against
+  // the worktree made a TEST the producer of a committed artifact -- a stale
+  // reconciliation would be silently rewritten here and `--check` would then
+  // pass on something no official command produced.
+  const docsBefore = snapshotDocs();
+  const committedBefore = readFileSync(RECONCILIATION, 'utf8');
+
+  const { sandbox, root, script, catalogTo } = isolatedPackageTree();
+  const result = spawnSync(process.execPath, [script, '--write', '--in-repo-only'], {
+    cwd: root,
+    encoding: 'utf8',
+  });
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /--in-repo-only — wrote .* and NOTHING under/);
+
+  // 1. it wrote INSIDE the sandbox, and the bytes are the committed artifact's,
+  //    which is what makes the worktree copy provably fresh without producing it
+  const produced = join(catalogTo, 'reconciliation', 'index.json');
+  assert.ok(existsSync(produced), 'the sandbox run produced no reconciliation');
+  assert.equal(
+    readFileSync(produced, 'utf8'),
+    committedBefore,
+    'the official reconciliation artifact is not what the generator produces',
+  );
+
+  // 2. the sandbox's OWN sibling-docs location was never created, so the
+  //    cross-repo branch did not run even where it would have been harmless
+  assert.equal(
+    existsSync(join(sandbox, 'docs-engineering')),
+    false,
+    '--in-repo-only reached the cross-repo write branch',
+  );
+
+  // 3. and the real worktree is invariant: neither the sibling documentation
+  //    tree nor the committed artifact moved a byte
   assert.equal(
     snapshotDocs(),
-    before,
+    docsBefore,
     'the sibling documentation tree must be byte-for-byte untouched',
+  );
+  assert.equal(
+    readFileSync(RECONCILIATION, 'utf8'),
+    committedBefore,
+    'the drill must not write the real reconciliation artifact',
   );
 });
 

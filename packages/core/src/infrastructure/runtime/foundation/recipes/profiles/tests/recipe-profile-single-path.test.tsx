@@ -22,7 +22,7 @@ import { join, relative, resolve, sep } from 'node:path';
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import ModernButton from '@/components/primitives/inputs/button/engines/modern';
 import { RecipeProfileProvider } from '..';
 
@@ -33,7 +33,7 @@ const STYLE_ID = 'planted-recipe-profile-variable';
 
 /** Files allowed to mention the variable: the two emitters and its declarative capability owner. */
 const ALLOWED_MENTIONS = [
-  'infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
+  'infrastructure/compilers/runtime/theme/runtime/lowering/index.ts',
   'infrastructure/compilers/composition/tenant-theme/index.ts',
   'foundation/contracts/composition/tenants/capabilities/index.ts',
 ];
@@ -85,7 +85,7 @@ describe('recipe profile — one resolution path', () => {
     // Anti-cheat for the census below: the variable must actually exist in
     // compiled output, otherwise "nobody reads it" is a statement about a
     // string that was never written.
-    const compiled = compileBrandTheme({
+    const compiled = lowerBrandThemeFixture({
       brandTheme: {
         id: 'recipe-profile-probe',
         name: 'Recipe profile probe',

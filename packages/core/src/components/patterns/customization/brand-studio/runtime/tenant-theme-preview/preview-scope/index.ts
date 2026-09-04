@@ -28,6 +28,10 @@ import {
   isSafePreviewCssValue,
   sanitizePreviewSlug,
 } from '@/infrastructure/runtime/tenant/runtime/preview-scope';
+import {
+  emitDeclarations,
+  emitRule,
+} from '@/infrastructure/compilers/runtime/theme/runtime/emission';
 
 export { PREVIEW_SCOPE_ATTRIBUTE };
 
@@ -65,12 +69,14 @@ export function buildTenantThemePreviewScope(
   const verifiedArtifact = verification.artifact;
   const safeSlug = sanitizePreviewSlug(verifiedArtifact.slug);
   const scopeSelector = buildPreviewScopeSelector(safeSlug);
-  const declarations: string[] = [];
-  for (const [name, value] of Object.entries(verifiedArtifact.variables)) {
-    if (name.startsWith('--ds-') && isSafePreviewCssValue(value)) {
-      declarations.push(`  ${name}: ${value};`);
-    }
-  }
-  const css = declarations.length > 0 ? `${scopeSelector} {\n${declarations.join('\n')}\n}` : '';
+  // The guard decides WHICH channels survive; the emission owner decides how a
+  // declaration and a rule are spelled.
+  const admitted = Object.fromEntries(
+    Object.entries(verifiedArtifact.variables).filter(
+      ([name, value]) => name.startsWith('--ds-') && isSafePreviewCssValue(value),
+    ),
+  );
+  const declarations = emitDeclarations(admitted);
+  const css = declarations.length > 0 ? emitRule(scopeSelector, declarations) : '';
   return { css, scopeSelector, safeSlug };
 }

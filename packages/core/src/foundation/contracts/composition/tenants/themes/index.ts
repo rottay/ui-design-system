@@ -188,14 +188,17 @@ export type BrandCapabilityId =
   | "responsive"
   | "engineBridge";
 
-/** Why a capability is not active. Never inferred; always authored. */
-export type BrandCapabilityAbsenceReason =
-  /** A newer authority owns this channel; the field is compatibility-only. */
-  | "superseded"
-  /** The brand deliberately ships nothing here. */
-  | "not-authored"
-  /** No governed profile exists for this brand yet; a decision is pending. */
-  | "pending-selection";
+/**
+ * Why a capability is not active. Owned by its own leaf so that `themes/iso`
+ * can read the runtime list without taking a value edge on this barrel.
+ *
+ * Only the TYPE is republished here, which is exactly what this barrel
+ * published before the vocabulary gained a runtime list: re-exporting the
+ * value would add a public runtime symbol to the package's supplier contract
+ * for the sake of one internal validator.
+ */
+export type { BrandCapabilityAbsenceReason } from "./iso/capability-absence";
+import type { BrandCapabilityAbsenceReason } from "./iso/capability-absence";
 
 /**
  * A capability is either active (the corresponding BrandTheme field is
@@ -1405,10 +1408,8 @@ export interface BrandSegmentedChrome {
   itemColorHover?: string;
   itemColorSelected?: string;
   itemRadius?: string;
-  itemShadowSelected?: string;
   itemFontWeight?: string | number;
   itemFontWeightSelected?: string | number;
-  focusRing?: string;
   sm?: BrandControlSizeChrome;
   md?: BrandControlSizeChrome;
   lg?: BrandControlSizeChrome;
@@ -3376,82 +3377,3 @@ export interface TenantAppearance {
    */
   recipeProfile?: string;
 }
-
-// ── Brand Compiler Contract ─────────────────────────────
-// Runtime theming and static generation must share one compiler.
-//
-// Implemented merge chain:
-//   DS base -> vertical baseline -> BrandTheme -> branding/tokenOverrides
-//   -> Appearance General -> Appearance Advanced -> runtime
-//
-// The brand-theme compiler operates on BrandTheme. The appearance compiler
-// (infrastructure/compilers/kernel/runtime/appearance/) resolves General and Advanced tiers into CSS
-// custom property overrides injected by ThemeProvider. useTokens() reads
-// density from appearance.general.
-
-export interface BrandCompilerInput {
-  /** The brand theme to compile */
-  brandTheme: BrandTheme;
-  /** Tenant slug used for CSS selector scoping (html[data-tenant='slug']) */
-  tenantSlug: string;
-  /** Resolved vertical baseline personality (layered before BrandTheme) */
-  verticalPersonality?: Partial<PersonalityTokens>;
-  /** Resolved vertical baseline token overrides (layered before BrandTheme) */
-  verticalTokenOverrides?: TenantTokenOverrides;
-  /** Light or dark base theme */
-  baseTheme?: "light" | "dark";
-}
-
-export interface CompiledBrand {
-  /** CSS variable map ready for injection (light + dark combined) */
-  cssVariables: Record<string, string>;
-  /** Full CSS string with tenant selectors for light, dark, and system-dark */
-  cssString: string;
-  /** Resolved personality tokens (vertical baseline merged with BrandTheme).
-   *  A merge RESULT, so it carries the same deep-partial shape the merge
-   *  consumes: a dimension may be absent, and a present dimension may be
-   *  sparse. */
-  personality: PartialPersonalityTokens;
-  /** Resolved structural token overrides (vertical baseline merged with BrandTheme) */
-  tokenOverrides: Partial<TenantTokenOverrides>;
-  /** Resolved engine-specific values (DaisyUI vars, Ant Design overrides, etc.) */
-  engineBridge: Partial<Record<EngineName, Record<string, unknown>>>;
-  /** Validated recipe-profile id (DS-S001); absent when none or invalid. */
-  recipeProfile?: string;
-  /** Validated experience-profile id (C1b); absent when none or invalid. */
-  experienceProfile?: string;
-  /**
-   * Declared default mode, emitted as `color-scheme` on the base block. Kept
-   * off `cssVariables` because it is a real CSS property, not a custom one:
-   * that map is injected as inline custom properties and merged into
-   * mode-specific blocks where a default-mode value would be a contradiction.
-   */
-  colorScheme?: "light" | "dark";
-  /**
-   * One entry per authored `BrandTheme.modes` overlay: the channels whose
-   * value differs from the base block, and nothing else. The base block still
-   * supplies every channel the mode does not restate, so a `var()` chain
-   * authored once re-resolves against the mode's own ground.
-   */
-  modeBlocks?: readonly CompiledBrandModeBlock[];
-}
-
-/** A non-default mode's compiled delta over the base block. */
-export interface CompiledBrandModeBlock {
-  mode: BrandThemeMode;
-  /** Only the channels this mode changes. */
-  cssVariables: Record<string, string>;
-  /** Always the block's own mode. */
-  colorScheme: BrandThemeMode;
-}
-
-/**
- * Brand compiler function signature.
- *
- * The first-party static ingress path — `compileBrandTheme` feeding
- * `renderFirstPartyArtifact` — conforms to this signature, and so does every
- * consumer that recompiles a theme (the tenant preview, the artifact parity
- * tests, the build). One signature keeps the merge chain identical whichever
- * of them ran.
- */
-export type CompileBrandTheme = (input: BrandCompilerInput) => CompiledBrand;

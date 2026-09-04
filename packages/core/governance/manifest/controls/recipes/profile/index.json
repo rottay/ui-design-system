@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
+    "registryDigest": "702d6498eae83d2a0fd8f3879b608b43b7049cf8e53c2fbb4b4c34f5045533fb"
   },
   "title": "Family recipe profile",
   "valueType": "profile-id",
@@ -72,7 +72,7 @@
     "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "sourceBindings": [
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-      "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
       "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts",
       "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json"

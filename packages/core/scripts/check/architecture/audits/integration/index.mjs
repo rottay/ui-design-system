@@ -78,25 +78,35 @@ function relPath(abs) {
 // ============================================================================
 
 // Chrome vars have one canonical emitter (compilers/kernel/foundation/css/chrome-variables,
-// scanned whole -- the entire file IS the chrome channel) plus the two
-// compilers that call it (kernel/runtime/brand-theme, runtime/appearance -- each
-// scanned only within its chrome-handling function, so a stray
-// vars['--ds-...'] assignment added directly to either compiler, bypassing
-// the shared module, is caught too). This is a LIST, not one file: a var
-// emitted by any one of these with no consumer is a violation, and the
-// violation names every emitter that produced it. Palette, typography, and
-// surface vars are foundational theme output and out of scope for this rule.
+// scanned whole -- the entire file IS the chrome channel) plus the compilers
+// that call it: the lowering's chrome owner and its orchestration, and the DB
+// appearance compiler. Each of those is scanned only within its
+// chrome-handling function, so a stray vars['--ds-...'] assignment added
+// directly to a compiler, bypassing the shared module, is caught too. This is
+// a LIST, not one file: a var emitted by any one of these with no consumer is a
+// violation, and the violation names every emitter that produced it. Palette,
+// typography, and surface vars are foundational theme output and out of scope.
 const CHROME_EMITTERS = [
   {
     path: join(SRC_ROOT, 'infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts'),
     whole: true,
   },
   {
-    path: join(SRC_ROOT, 'infrastructure/compilers/kernel/runtime/brand-theme/index.ts'),
-    // `compileBrandTheme` is scanned too, which closes the gap the old comment
-    // above described but the old window did not cover: its body is the largest
-    // export in the file and sat entirely outside the marker slice.
-    symbols: ['brandThemeToChromeVariables', 'compileBrandTheme'],
+    path: join(
+      SRC_ROOT,
+      'infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts',
+    ),
+    // The exported writer by NAME, not `whole`: naming it is what makes a
+    // rename fail loudly instead of emptying the scope. The owner's only other
+    // declaration is private and emits no channel — it returns the radius dial
+    // it reads — so nothing this audit measures falls outside the named symbol.
+    symbols: ['brandThemeToChromeVariables'],
+  },
+  {
+    // The orchestration assembles the chrome map into the compiled product; a
+    // channel written there sits outside every writer's own owner.
+    path: join(SRC_ROOT, 'infrastructure/compilers/runtime/theme/runtime/lowering/index.ts'),
+    symbols: ['compileTheme'],
   },
   {
     path: join(SRC_ROOT, 'infrastructure/compilers/kernel/runtime/appearance/index.ts'),

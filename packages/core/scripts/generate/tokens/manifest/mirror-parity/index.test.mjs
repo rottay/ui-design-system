@@ -11,9 +11,20 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  realpathSync,
+  rmSync,
+  statSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve as resolvePath } from 'node:path';
+import { dirname, join, relative, resolve as resolvePath, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
@@ -1146,53 +1157,137 @@ test('the document is deterministic: two independent builds agree', () => {
   assert.ok(document.summary.roots > 10);
 });
 
+/**
+ * A throwaway package tree these generators can DELETE from and WRITE into.
+ *
+ * Everything read is symlinked; only the directories on a write path are real,
+ * because a write through a symlinked directory lands in the real tree. The two
+ * generator modules are COPIED rather than linked: Node resolves an ESM symlink
+ * to its realpath, so a linked entrypoint would compute the real package root
+ * and operate there -- the exact defect this fixture exists to prevent.
+ * `realpathSync` on the sandbox is what makes `import.meta.url === argv[1]`
+ * hold on macOS, where the temp directory is itself a symlink.
+ */
+function isolatedPackageTree(realDirs) {
+  const sandbox = realpathSync(mkdtempSync(join(tmpdir(), 'ds-coverage-ownership-')));
+  const root = join(sandbox, 'packages', 'core');
+
+  // Every directory that must be a REAL directory in the sandbox: the ones
+  // named, and every ancestor of each. Built FIRST and as a set, because a
+  // symlinked ancestor makes every later write land in the real tree.
+  const realSet = new Set(['']);
+  for (const relativeDir of realDirs) {
+    const segments = relativeDir.split('/');
+    for (let index = 1; index <= segments.length; index += 1) {
+      realSet.add(segments.slice(0, index).join('/'));
+    }
+  }
+  for (const relativeDir of realSet) {
+    mkdirSync(join(root, relativeDir), { recursive: true });
+  }
+
+  // Then link every child that is not itself a real directory. A file child of
+  // a real directory is linked too, EXCEPT a generator entrypoint: Node
+  // resolves an ESM symlink to its realpath, so a linked entrypoint would
+  // compute the real package root and operate there.
+  for (const relativeDir of realSet) {
+    const from = relativeDir ? join(COVERAGE_CORE_ROOT, relativeDir) : COVERAGE_CORE_ROOT;
+    if (!existsSync(from)) continue;
+    for (const entry of readdirSync(from)) {
+      const child = relativeDir ? `${relativeDir}/${entry}` : entry;
+      if (realSet.has(child)) continue;
+      const source = join(from, entry);
+      const target = join(root, child);
+      if (existsSync(target)) continue;
+      if (entry === 'index.mjs' && realDirs.includes(relativeDir)) {
+        cpSync(source, target);
+        continue;
+      }
+      symlinkSync(source, target, statSync(source).isDirectory() ? 'dir' : 'file');
+    }
+  }
+  return { sandbox, root };
+}
+
+/** A fingerprint of everything the real tree could have lost to this drill. */
+function realTreeFingerprint() {
+  const coverageDir = dirname(COVERAGE_PATH);
+  const status = spawnSync('git', ['status', '--porcelain=v1'], {
+    cwd: COVERAGE_CORE_ROOT,
+    encoding: 'utf8',
+  });
+  return JSON.stringify({
+    coverageDirExists: existsSync(coverageDir),
+    coverage: existsSync(COVERAGE_PATH)
+      ? createHash('sha256').update(readFileSync(COVERAGE_PATH)).digest('hex')
+      : null,
+    mirror: existsSync(OUTPUT_PATH)
+      ? createHash('sha256').update(readFileSync(OUTPUT_PATH)).digest('hex')
+      : null,
+    status: status.stdout,
+  });
+}
+
 test('N-8.1: with the ignored directory deleted, the generator WRITES and --check passes', () => {
   // The regression for the missing `mkdirSync`. On a fresh clone the directory
   // is gitignored, hence absent, hence `writeFileSync` failed -- and then
   // mirror-parity failed on the file the failed write did not produce.
-  const probe = mkdtempSync(join(tmpdir(), 'ds-coverage-ownership-'));
+  //
+  // HERMETIC: the deletion, the write and both checks happen in a throwaway
+  // package tree. Removing the real ignored directory and restoring one file
+  // afterwards made a TEST the last writer of a committed artifact, and a
+  // restore that runs in a `finally` is still a window in which the worktree is
+  // wrong -- this file's own header claims no test writes.
+  const before = realTreeFingerprint();
+  const coverageRelative = relative(COVERAGE_CORE_ROOT, COVERAGE_PATH).split(sep);
+  const { sandbox, root } = isolatedPackageTree([
+    coverageRelative.slice(0, -1).join('/'),
+    'scripts/generate/tokens/manifest/root-checklists',
+    'scripts/generate/tokens/manifest/mirror-parity',
+  ]);
   try {
-    const coverageDir = dirname(COVERAGE_PATH);
-    const stash = join(probe, 'coverage-backup.json');
-    const hadArtifact = existsSync(COVERAGE_PATH);
-    if (hadArtifact) writeFileSync(stash, readFileSync(COVERAGE_PATH));
+    const sandboxCoverage = join(root, ...coverageRelative);
+    const sandboxCoverageDir = dirname(sandboxCoverage);
+    const rootChecklists = join(root, 'scripts/generate/tokens/manifest/root-checklists/index.mjs');
+    const mirrorParity = join(root, 'scripts/generate/tokens/manifest/mirror-parity/index.mjs');
+    const stashed = existsSync(sandboxCoverage) ? readFileSync(sandboxCoverage, 'utf8') : null;
 
-    // The gate runs against the real package root, so restore whatever was
-    // there before, byte for byte, whatever this drill does.
-    try {
-      rmSync(coverageDir, { recursive: true, force: true });
-      assert.equal(existsSync(coverageDir), false, 'precondition: the ignored directory is gone');
+    rmSync(sandboxCoverageDir, { recursive: true, force: true });
+    assert.equal(existsSync(sandboxCoverageDir), false, 'precondition: the ignored directory is gone');
 
-      const check = spawnSync(process.execPath, [ROOT_CHECKLISTS, '--check'], {
-        cwd: COVERAGE_CORE_ROOT,
-        encoding: 'utf8',
-      });
-      assert.equal(check.status, 0, check.stdout + check.stderr);
-      assert.match(check.stdout, /determinista/);
+    const check = spawnSync(process.execPath, [rootChecklists, '--check'], {
+      cwd: root,
+      encoding: 'utf8',
+    });
+    assert.equal(check.status, 0, check.stdout + check.stderr);
+    assert.match(check.stdout, /determinista/);
 
-      const mirror = spawnSync(process.execPath, [MIRROR_PARITY, '--check'], {
-        cwd: COVERAGE_CORE_ROOT,
-        encoding: 'utf8',
-      });
-      assert.equal(mirror.status, 0, mirror.stdout + mirror.stderr);
+    const mirror = spawnSync(process.execPath, [mirrorParity, '--check'], {
+      cwd: root,
+      encoding: 'utf8',
+    });
+    assert.equal(mirror.status, 0, mirror.stdout + mirror.stderr);
 
-      const write = spawnSync(process.execPath, [ROOT_CHECKLISTS], { cwd: COVERAGE_CORE_ROOT, encoding: 'utf8' });
-      assert.equal(write.status, 0, write.stdout + write.stderr);
-      assert.ok(existsSync(COVERAGE_PATH), 'the generator must create the directory it owns');
-      if (hadArtifact) {
-        assert.equal(
-          readFileSync(COVERAGE_PATH, 'utf8'),
-          readFileSync(stash, 'utf8'),
-          'the regenerated artifact must be byte-identical to the one that was there',
-        );
-      }
-    } finally {
-      if (hadArtifact && !existsSync(COVERAGE_PATH)) {
-        mkdirSync(coverageDir, { recursive: true });
-        writeFileSync(COVERAGE_PATH, readFileSync(stash));
-      }
+    const write = spawnSync(process.execPath, [rootChecklists], { cwd: root, encoding: 'utf8' });
+    assert.equal(write.status, 0, write.stdout + write.stderr);
+    assert.ok(existsSync(sandboxCoverage), 'the generator must create the directory it owns');
+    if (stashed !== null) {
+      assert.equal(
+        readFileSync(sandboxCoverage, 'utf8'),
+        stashed,
+        'the regenerated artifact must be byte-identical to the one that was there',
+      );
     }
+
+    // The planted negative, kept: a generator that does NOT create its own
+    // directory fails exactly here, which is what this drill was written for.
+    rmSync(sandboxCoverageDir, { recursive: true, force: true });
+    assert.equal(existsSync(sandboxCoverage), false);
   } finally {
-    rmSync(probe, { recursive: true, force: true });
+    rmSync(sandbox, { recursive: true, force: true });
   }
+
+  // And the real tree never moved: not the ignored directory, not either
+  // artifact, not the index.
+  assert.equal(realTreeFingerprint(), before, 'the drill mutated the real worktree');
 });

@@ -16,7 +16,7 @@ import { InputSearch } from "../compound/search";
 import { InputTextArea } from "../compound/text-area";
 import { renderWithEngine } from "@tests/support/engine";
 import { I18nProvider } from "@/infrastructure/runtime/i18n";
-import { compileBrandTheme } from "@/infrastructure/compilers/kernel/runtime/brand-theme";
+import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 
@@ -670,11 +670,11 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
   });
 
   it("the Input skin consumes visibly divergent values from both real brands", () => {
-    const bithire = compileBrandTheme({
+    const bithire = lowerBrandThemeFixture({
       brandTheme: bithireBrandTheme,
       tenantSlug: 'bithire',
     }).cssVariables;
-    const management = compileBrandTheme({
+    const management = lowerBrandThemeFixture({
       brandTheme: themanagementmiamiBrandTheme,
       tenantSlug: 'themanagementmiami',
     }).cssVariables;

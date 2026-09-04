@@ -152,7 +152,7 @@ type TokenOverrides = NonNullable<TenantAppearanceAdvanced['tokenOverrides']>;
  * `darkBackgroundColor` fields used to alias here onto a `--ds-color-dark-*`
  * family that nothing ever compiled or read. A theme's non-default mode now
  * lives in `BrandTheme.modes.{light,dark}.palette` and compiles to its own
- * scoped CSS block (`compileBrandTheme`'s `modeBlocks`) using the SAME
+ * scoped CSS block (`compileTheme`'s `modeBlocks`) using the SAME
  * `--ds-color-*` names as the base block — a shape `TenantAppearanceAdvanced.
  * tokenOverrides` (flat, mode-agnostic) has no way to represent. See
  * `brandThemeToTenantAppearance` below for the projection that DOES carry a
