@@ -20,9 +20,9 @@ import type { TenantConfig } from '../../../../../../foundation/contracts';
  *
  * - `features: ['*']` ensures no feature gates block rendering in fallback mode.
  * - `plan: 'starter'` is the lowest tier; callers can override via `getDefaultTenantConfig`.
- * - No `engine`: the fallback tenant holds no opinion, so the vertical (or
- *   `FALLBACK_ENGINE` in `runtime/engines/resolution.ts`) decides. A default
- *   tenant that claims an engine outranks the vertical that declares one.
+ * - No `engine`: the default tenant holds no opinion, so `resolveEngine` reads
+ *   the vertical and bottoms out at `PRIMARY_ENGINE`. A default tenant that
+ *   claimed an engine would outrank the vertical that declares one.
  */
 export const DEFAULT_TENANT_CONFIG: TenantConfig = {
   slug: 'default',

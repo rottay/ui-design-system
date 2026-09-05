@@ -32,6 +32,27 @@
  * hides it. Group A is that leg and it is the load-bearing test in this file.
  *
  * ---------------------------------------------------------------------------
+ * THE SECOND CLAIM: THE CUSTOM REALM IS FAIL-CLOSED
+ *
+ * Isolation is about the parent document. The realm inside the frame carries a
+ * separate claim, and groups E and F split it in two:
+ *
+ *   registered names   `Button` and `Card` resolve to the probe's own pack
+ *                      components, carrying the pack's witnesses and anatomy,
+ *                      and they work (group E).
+ *
+ *   unregistered names `Input` and `Select` are REFUSED BY NAME (group F). They
+ *                      do not fall through to classic, modern, rustic or any
+ *                      default; the factory has no fallback loader and the
+ *                      engine registry has no fallback engine. The refusal is
+ *                      contained by the factory's own `EngineErrorBoundary`, so
+ *                      the rest of the realm keeps rendering — which is what
+ *                      makes "fail closed" different from "fail".
+ *
+ * Group F is what a fallback of any kind would break: it asserts that no real
+ * control was rendered in the refused component's place.
+ *
+ * ---------------------------------------------------------------------------
  * WHY THE CONTROL ROUTE IS /foundations AND NOT /foundations/engines
  *
  * `/foundations/engines` renders active engine preview content bound to the
@@ -85,18 +106,77 @@
  * fails instead of coalescing into a pass. See `EXPECTED_FRAME_THEME`,
  * `EXPECTED_FRAME_LANG` and `EXPECTED_FRAME_DIR` for the source derivations.
  */
-import { expect, test, type Frame, type FrameLocator, type Page } from "@playwright/test";
+import {
+  expect,
+  test,
+  type Frame,
+  type FrameLocator,
+  type Locator,
+  type Page,
+} from "@playwright/test";
 
 const CONTROL_ROUTE = "/foundations";
 const PACK_ROUTE = "/foundations/engines/custom-component-pack";
 const PROBE_ROUTE = "/probe/custom-component-pack";
 const PROBE_INDEX_ROUTE = "/probe";
 
+/**
+ * Where group B departs TO. It is deliberately not `CONTROL_ROUTE`.
+ *
+ * The departure has to be a real client-side navigation driven by a link the
+ * shell actually renders, and the sidebar renders `Foundations` as a SECTION
+ * HEADING, not a link -- so no link with that accessible name exists and
+ * nothing can navigate back to `/foundations` from the sidebar. `Tokens` is a
+ * real sidebar link and is the nearest departure the shell offers.
+ *
+ * Leaving `CONTROL_ROUTE` where it is matters. It is the censused-clean
+ * ARRIVAL origin every group in this file shares, and group A's style-surface
+ * claim is measured against the baseline captured there; `/foundations/tokens`
+ * is not interchangeable with it for that purpose, because it mounts one
+ * runtime `<style>` fewer than the pack page and would turn A red for a reason
+ * that has nothing to do with this atom.
+ *
+ * Departing to a DIFFERENT route than the origin does not weaken group B: the
+ * root-attribute and artifact claims it makes are the shell's, and this file's
+ * stated law is that they are exactly equal across every capture point,
+ * INCLUDING across routes. B asserting them on a second route is the same
+ * claim, measured one route further from home.
+ */
+const DEPARTURE_ROUTE = "/foundations/tokens";
+
 const PACK_ID = "ds-example-pack";
 const PACK_TENANT_SLUG = "showroom-component-pack";
 
 const NAV_PACK_LINK = "Component packs";
-const NAV_CONTROL_LINK = "Foundations";
+const NAV_DEPARTURE_LINK = "Tokens";
+
+/**
+ * How much clear viewport to leave below a realm control before clicking it.
+ * See `clickInsideRealm`.
+ */
+const REALM_CLICK_MARGIN = 48;
+
+/**
+ * The two names the probe deliberately leaves OUT of the pack, and the exact
+ * text the engine refuses them with.
+ *
+ * Both strings are source-derived, not guessed. `createCustomWrapper`
+ * (`src/infrastructure/runtime/engines/runtime/customization/component-registry/index.ts`)
+ * throws
+ * `No custom implementation registered for "<name>" in pack "<pack>". Register
+ * one with registerCustomComponent; there is no fallback engine.` when the
+ * active pack has no entry, and the factory's own `EngineErrorBoundary`
+ * (`.../engines/presentation/component-factory/error-boundary/index.tsx`)
+ * renders `Engine Error:` plus that message.
+ *
+ * They are asserted as SUBSTRINGS of the refused host's text, which is the
+ * strongest claim that stays honest: the boundary also renders a Retry control
+ * whose label is not this file's business.
+ */
+const REFUSED_NAMES = ["Input", "Select"] as const;
+const REFUSAL_BOUNDARY_TEXT = "Engine Error:";
+const refusalMessage = (name: string) =>
+  `No custom implementation registered for "${name}" in pack "${PACK_ID}"`;
 
 /** The tenant-theme artifact stamp used across the whitelabel suite. */
 const ARTIFACT_SELECTOR =
@@ -296,20 +376,21 @@ function expectNoPackPaint(snapshot: RootSnapshot, label: string) {
 }
 
 /**
- * The realm's full resolution contract: bespoke Button/Card carry the pack's
- * witnesses and anatomy, Input/Select carry none, and all four still work.
+ * The realm's full resolution contract, both halves of it: the two names the
+ * pack registers resolve to the pack's own components and work, and the two it
+ * does not register are refused BY NAME.
  *
  * This exists because "the realm reported ready" is a much weaker claim than
  * "the pack resolved": a realm that came up with an unregistered pack would
- * still set `data-pack-ready="true"` and still render a ground, having quietly
- * resolved the flagship components instead. Group C asserts this whole
- * contract after its remount rather than trusting the ready flag.
+ * still set `data-pack-ready="true"` and still render a ground. The refusal
+ * half is what separates the two, because a realm resolving anything other than
+ * this pack would render a real `<input>` where a named refusal belongs.
  *
  * `startingAction` is the action output the realm is expected to be at when
  * this runs, so the interaction assertions stay causal (state CHANGED) rather
  * than merely descriptive on a realm that has already been clicked.
  */
-async function expectPackContract(realm: FrameLocator, startingAction = "none") {
+async function expectPackContract(page: Page, realm: FrameLocator, startingAction = "none") {
   const primary = realm.getByTestId("custom-pack-button-primary");
   const secondary = realm.getByTestId("custom-pack-button-secondary");
   const card = realm.getByTestId("custom-pack-card");
@@ -327,26 +408,124 @@ async function expectPackContract(realm: FrameLocator, startingAction = "none") 
   await expect(card.locator('[data-pack-part="card-rail"]')).toHaveCount(1);
   await expect(card.locator('[data-pack-part="card-body"]')).toHaveCount(1);
 
-  const inputHost = realm.getByTestId("custom-pack-fallback-input");
-  const selectHost = realm.getByTestId("custom-pack-fallback-select");
-
-  await expect(inputHost).toHaveAttribute("data-pack-entry", "absent");
-  await expect(selectHost).toHaveAttribute("data-pack-entry", "absent");
-  await expect(inputHost.locator("[data-pack]")).toHaveCount(0);
-  await expect(selectHost.locator("[data-pack]")).toHaveCount(0);
+  await expectPackRefusals(realm);
 
   await expect(realm.getByTestId("custom-pack-action-output")).toHaveText(
     `action: ${startingAction}`,
   );
-  await primary.click();
+  await clickInsideRealm(page, primary, "the pack's primary button");
   await expect(realm.getByTestId("custom-pack-action-output")).toHaveText("action: approve");
+}
 
-  await inputHost.locator("input").fill("acme");
-  await expect(realm.getByTestId("custom-pack-input-output")).toHaveText("query: acme");
+/**
+ * The refusal half, asserted the same way from group C and group F.
+ *
+ * Three separate claims per name, because they fail differently:
+ *
+ *   the boundary contained it   the host renders the factory's own
+ *                               `EngineErrorBoundary` output, which is why one
+ *                               missing entry does not take the realm down;
+ *   the refusal is BY NAME      the message names the component and the pack,
+ *                               so a generic failure cannot pass as one;
+ *   nothing rendered instead    no `input`/`select` element and no `[data-pack]`
+ *                               witness inside the host. This is the claim that
+ *                               a fallback of ANY kind would break: a component
+ *                               that fell through to classic, modern or rustic
+ *                               would put a real control here.
+ */
+async function expectPackRefusals(realm: FrameLocator) {
+  const hosts = {
+    Input: realm.getByTestId("custom-pack-refused-input"),
+    Select: realm.getByTestId("custom-pack-refused-select"),
+  } as const;
 
-  await selectHost.click();
-  await realm.getByText("Enterprise", { exact: true }).click();
-  await expect(realm.getByTestId("custom-pack-select-output")).toHaveText("plan: enterprise");
+  for (const name of REFUSED_NAMES) {
+    const host = hosts[name];
+
+    await expect(host).toHaveAttribute("data-pack-entry", "refused");
+    await expect(host).toContainText(REFUSAL_BOUNDARY_TEXT);
+    await expect(host).toContainText(refusalMessage(name));
+
+    // A refused name resolved to NOTHING -- not to another engine's module.
+    await expect(host.locator("input")).toHaveCount(0);
+    await expect(host.locator("select")).toHaveCount(0);
+    await expect(host.locator("[data-pack]")).toHaveCount(0);
+  }
+
+  await expect(realm.getByTestId("custom-pack-refusal-note")).toHaveText(
+    `refused: ${REFUSED_NAMES.join(", ")}`,
+  );
+}
+
+/**
+ * Clicks a control that lives inside the realm frame, the way a user would.
+ *
+ * The docs shell header is `position: sticky` with `z-index: 20` and is tall
+ * enough to cover the upper band of the mounted frame. A control that has been
+ * scrolled to the top of the viewport therefore sits UNDERNEATH the parent's
+ * own chrome, and a synthesized pointer click at that point is delivered to the
+ * header and never enters the frame's document at all.
+ *
+ * That failure is silent, which is why it has to be handled here rather than
+ * waited out: Playwright's hit-target interceptor is installed inside the
+ * frame, so when the event never arrives it is never consulted, and
+ * `locator.click()` reports success while nothing happened. The realm then sits
+ * at `action: none` and the interaction assertions fail describing the symptom
+ * instead of the cause.
+ *
+ * So the parent is scrolled until the control's own centre point hit-tests to
+ * the frame element, and that reachability is ASSERTED rather than assumed.
+ * Only then is the click issued -- an ordinary `locator.click()`, with no
+ * `force`, no `element.click()` and no dispatched event, so every claim that
+ * rests on this interaction still rests on a real one. A control that cannot be
+ * reached now fails loudly, naming what owns the point instead.
+ */
+async function clickInsideRealm(page: Page, target: Locator, label: string) {
+  await target.scrollIntoViewIfNeeded();
+
+  await expect
+    .poll(
+      async () => {
+        const box = await target.boundingBox();
+        if (!box) return "the control has no layout box";
+
+        const owner = await page.evaluate(
+          ([x, y]) => {
+            const hit = document.elementFromPoint(x, y);
+            if (!hit) return "nothing";
+
+            return hit.closest('[data-testid="custom-pack-frame"]')
+              ? "frame"
+              : hit.tagName.toLowerCase();
+          },
+          [box.x + box.width / 2, box.y + box.height / 2] as const,
+        );
+
+        if (owner === "frame") return "frame";
+
+        // Only the band below the parent's top-pinned chrome is reachable, so
+        // bring the control down into it and hit-test again.
+        await page.evaluate(
+          ([bottom, margin]) => {
+            window.scrollBy({
+              top: bottom - (window.innerHeight - margin),
+              left: 0,
+              behavior: "instant",
+            });
+          },
+          [box.y + box.height, REALM_CLICK_MARGIN] as const,
+        );
+
+        return owner;
+      },
+      {
+        timeout: 15_000,
+        message: `${label}: never became reachable inside the frame, so a click could not land on it`,
+      },
+    )
+    .toBe("frame");
+
+  await target.click();
 }
 
 async function packFrame(page: Page): Promise<Frame> {
@@ -438,11 +617,10 @@ test.describe("custom component pack — realm isolation", () => {
 
     await page
       .locator("aside.showroom-shell-sidebar")
-      .getByRole("link", { name: NAV_CONTROL_LINK, exact: true })
-      .first()
+      .getByRole("link", { name: NAV_DEPARTURE_LINK, exact: true })
       .click();
 
-    await page.waitForURL(`**${CONTROL_ROUTE}`);
+    await page.waitForURL(`**${DEPARTURE_ROUTE}`);
     await page.waitForLoadState("networkidle");
 
     const departure = await settledRoot(page);
@@ -492,7 +670,7 @@ test.describe("custom component pack — realm isolation", () => {
     // LOAD time; a race there would show up as a second mount that reports
     // ready and renders a ground while resolving FLAGSHIP Button and Card.
     // Only asserting the whole contract distinguishes those two outcomes.
-    await expectPackContract(page.frameLocator('[data-testid="custom-pack-frame"]'));
+    await expectPackContract(page, page.frameLocator('[data-testid="custom-pack-frame"]'));
 
     const remounted = await settledRoot(page);
     expectSameRootAttributes(remounted, preMount, "frame remounted");
@@ -664,36 +842,46 @@ test.describe("custom component pack — realm isolation", () => {
 
     // Interaction: the bespoke control is a real control, not a picture.
     await expect(realm.getByTestId("custom-pack-action-output")).toHaveText("action: none");
-    await primary.click();
+    await clickInsideRealm(page, primary, "the pack's primary button");
     await expect(realm.getByTestId("custom-pack-action-output")).toHaveText("action: approve");
-    await secondary.click();
+    await clickInsideRealm(page, secondary, "the pack's secondary button");
     await expect(realm.getByTestId("custom-pack-action-output")).toHaveText("action: dismiss");
   });
 
-  test("F. Input and Select fall through the pack and stay interactive", async ({ page }) => {
+  test("F. a name the pack does not register is refused by name, not substituted", async ({
+    page,
+  }) => {
     await arriveViaSpa(page);
     await mountFrame(page);
 
     const realm = page.frameLocator('[data-testid="custom-pack-frame"]');
 
-    const inputHost = realm.getByTestId("custom-pack-fallback-input");
-    const selectHost = realm.getByTestId("custom-pack-fallback-select");
+    // The refusal contract itself: contained, named, and nothing rendered in
+    // the refused component's place.
+    await expectPackRefusals(realm);
 
-    await expect(inputHost).toHaveAttribute("data-pack-entry", "absent");
-    await expect(selectHost).toHaveAttribute("data-pack-entry", "absent");
+    // The refusal is LOCAL. This is the claim that separates "fail closed" from
+    // "fail": the two registered names are still resolved and still live in the
+    // same realm, in the same document, after two of their siblings refused.
+    const primary = realm.getByTestId("custom-pack-button-primary");
+    await expect(primary).toHaveAttribute("data-pack", PACK_ID);
+    await expect(realm.getByTestId("custom-pack-card")).toHaveAttribute("data-pack", PACK_ID);
+    await expect(realm.getByTestId("custom-pack-ground")).toBeVisible();
 
-    // Falling through means no pack witness anywhere inside these hosts.
-    await expect(inputHost.locator("[data-pack]")).toHaveCount(0);
-    await expect(selectHost.locator("[data-pack]")).toHaveCount(0);
+    await clickInsideRealm(page, primary, "the pack's primary button");
+    await expect(realm.getByTestId("custom-pack-action-output")).toHaveText("action: approve");
 
-    // Falling through is ordinary resolution, not a degraded mode.
-    await inputHost.locator("input").fill("acme");
-    await expect(realm.getByTestId("custom-pack-input-output")).toHaveText("query: acme");
-
-    await expect(realm.getByTestId("custom-pack-select-output")).toHaveText("plan: growth");
-    await selectHost.click();
-    await realm.getByText("Enterprise", { exact: true }).click();
-    await expect(realm.getByTestId("custom-pack-select-output")).toHaveText("plan: enterprise");
+    // A refusal is not paint. It renders inside the realm and acquires no
+    // tenant artifact and no root custom property, exactly like the rest of the
+    // pack — measured on the frame's own document, which is the one a refusal
+    // could have leaked into.
+    const frame = await packFrame(page);
+    const refusedRealm = await settledRoot(frame);
+    expectNoPackPaint(refusedRealm, "frame realm with two refused names");
+    expect(
+      refusedRealm.artifacts,
+      "a refused component stamped a tenant-theme artifact",
+    ).toEqual([]);
   });
 
   test("G. a client-side exit inside the frame runs cleanup and leaves the parent exact", async ({

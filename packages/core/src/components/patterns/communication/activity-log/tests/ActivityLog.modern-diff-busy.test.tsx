@@ -1,9 +1,12 @@
 import React from 'react';
-import { act, render } from '@testing-library/react';
+import { act } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernActivityLog from '../engines/modern';
 import type { ActivityLogProps } from '../contracts';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 function buildProps(overrides: Partial<ActivityLogProps> = {}): ActivityLogProps {
   return {

@@ -1,9 +1,12 @@
 import React from "react";
-import { fireEvent, render, waitFor, within } from "@testing-library/react";
+import { fireEvent, waitFor, within } from "@testing-library/react";
+import { renderWithEngineContext } from "@tests/support/engine";
 import { describe, expect, it, vi } from "vitest";
 
 import type { WidgetBoardItem, WidgetBoardLabels } from "../contracts";
 import { WidgetBoardEngine } from "../engines/foundation";
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, "classic");
 
 const labels: WidgetBoardLabels = {
   customize: "Customize",

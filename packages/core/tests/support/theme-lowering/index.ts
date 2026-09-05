@@ -32,11 +32,12 @@ import {
   EMPTY_PROVENANCE,
   deriveTenantStatusSeedAuthorship,
 } from "@/foundation/contracts/composition/tenants/themes/resolved";
+import { PRIMARY_ENGINE } from "@/foundation/contracts/kernel/engine-identity";
 import {
   compileTheme,
   containerScope,
   emitThemeCss,
-  THEME_ENGINE_ADAPTERS,
+  resolveAdapter,
 } from "@/infrastructure/compilers/runtime/theme";
 import { brandTenantSelector } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 
@@ -87,7 +88,7 @@ export function lowerBrandThemeFixture(
             deriveTenantStatusSeedAuthorship((tenantPatch ?? {}) as ThemePatch),
         };
   const theme = { ...liftAuthoredTheme(brandTheme), id: slug };
-  const compiled = compileTheme({ theme, provenance }, THEME_ENGINE_ADAPTERS.modern);
+  const compiled = compileTheme({ theme, provenance }, resolveAdapter(PRIMARY_ENGINE));
   return {
     cssVariables: { ...compiled.cssVariables },
     cssString: emitThemeCss(compiled, containerScope(brandTenantSelector(slug))),
@@ -142,7 +143,7 @@ export function lowerTheme(
         };
   const compiled = compileTheme(
     { theme: labelled, provenance },
-    THEME_ENGINE_ADAPTERS.modern
+    resolveAdapter(PRIMARY_ENGINE)
   );
   return {
     cssVariables: { ...compiled.cssVariables },

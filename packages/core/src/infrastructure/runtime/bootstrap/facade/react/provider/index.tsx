@@ -138,6 +138,11 @@ import { SystemCssVariablesBridge } from '@/infrastructure/runtime/theming/prese
 import { ResponsiveProvider } from '../../../../responsive';
 import { MotionProvider } from '../../../../motion';
 import { AntdConfigProvider } from '../../../../engines/presentation/adapters/antd';
+import {
+  EngineVisualDeclarationProvider,
+  assertEngineVisualBelongs,
+} from '../../../../foundation/engine-visual';
+import type { EngineVisualDeclaration } from '@/foundation/contracts/composition/tenants/themes/engine-adapter';
 import { resolveEngine } from '../../../../engines/runtime/resolution';
 import { CommandRegistryProvider } from '../../../../application/commands';
 import {
@@ -191,6 +196,17 @@ export interface DesignSystemProviderProps {
    * declaration resolves `uncompiled-visual-payload` and blocks as well.
    */
   visualAuthority?: VisualAuthorityDeclaration;
+  /**
+   * The compiled engine projection for this tenant.
+   *
+   * Only an engine that seeds a third-party library needs it — `classic` seeds
+   * antd — and that engine REFUSES to render without one, because the
+   * alternative is re-deriving the same values from the live cascade after
+   * mount and painting a guess before that. Produce it from the same
+   * `compileTheme(resolution, resolveAdapter(engine))` call that produced the
+   * mounted artifact.
+   */
+  engineVisual?: EngineVisualDeclaration;
   /**
    * Runtime tenant overrides applied on top of the resolved tenant.
    *
@@ -788,6 +804,7 @@ export function DesignSystemProvider({
   tenantSlug: propTenantSlug,
   tenantConfig: propTenantConfig,
   visualAuthority: explicitVisualAuthority,
+  engineVisual,
   tenantOverrides,
   productProfile,
   vertical,
@@ -1164,6 +1181,11 @@ export function DesignSystemProvider({
     tenantEngine: resolvedRuntimeConfig.engine,
     tenantSlug: resolvedRuntimeConfig.slug,
   });
+  // A projection compiled for one engine cannot seed another, and the compile's
+  // own governed profiles cannot contradict the tenant it is mounted against.
+  if (engineVisual) {
+    assertEngineVisualBelongs(engineVisual, engine, resolvedRuntimeConfig.appearance);
+  }
   // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'.
   // tenant.theme only wins if it's explicitly set to a real mode (not the default 'base').
   const appearanceBackgroundMode = resolvedRuntimeConfig.appearance?.general?.palette?.backgroundMode;
@@ -1273,6 +1295,7 @@ export function DesignSystemProvider({
             onLocaleChange={onLocaleChange}
           >
             <EngineProvider defaultEngine={engine}>
+              <EngineVisualDeclarationProvider declaration={engineVisual}>
               <ThemeProvider
                 theme={theme}
                 tenant={resolvedRuntimeConfig.slug}
@@ -1302,6 +1325,7 @@ export function DesignSystemProvider({
                   </MotionProvider>
                 </FeatureProvider>
               </ThemeProvider>
+              </EngineVisualDeclarationProvider>
             </EngineProvider>
           </I18nProvider>
         </ProductProfileProvider>

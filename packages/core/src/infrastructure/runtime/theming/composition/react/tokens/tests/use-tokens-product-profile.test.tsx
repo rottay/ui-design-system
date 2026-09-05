@@ -39,6 +39,10 @@ import {
   censusRuntimeVisualPayload,
   emitTenantThemeArtifactForSsr,
 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
+import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
+
+/** Classic seeds antd from a compiled projection and refuses to guess one. */
+const CLASSIC_VISUAL = firstPartyEngineVisual('bithire', 'classic');
 
 /**
  * Identity only. Every visual field this fixture used to carry is now either
@@ -149,6 +153,7 @@ describe('useTokens product profile resolution', () => {
         visualAuthority={{ authority: 'compiled-artifact', artifact }}
         productProfile="events.organizer"
         forceEngine="classic"
+        engineVisual={CLASSIC_VISUAL}
         skipCssLoading
       >
         <TokenConsumer />
@@ -220,6 +225,7 @@ describe('useTokens product profile resolution', () => {
           visualAuthority={{ authority: 'compiled-artifact', artifact: normalArtifact }}
           productProfile="events.organizer"
           forceEngine="classic"
+          engineVisual={CLASSIC_VISUAL}
           skipCssLoading
         >
           <DensitySpacing testId="normal-density-spacing" />
@@ -229,6 +235,7 @@ describe('useTokens product profile resolution', () => {
           visualAuthority={{ authority: 'compiled-artifact', artifact: compactArtifact }}
           productProfile="events.organizer"
           forceEngine="classic"
+          engineVisual={CLASSIC_VISUAL}
           skipCssLoading
         >
           <DensitySpacing testId="compact-density-spacing" />

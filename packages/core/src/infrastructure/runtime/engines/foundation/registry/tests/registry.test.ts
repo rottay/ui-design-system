@@ -1,13 +1,13 @@
 /**
  * Tests for the engine registry: metadata lookup, stable/available engine
- * listing, engine name validation, and default engine selection.
+ * listing and engine name validation. Which engine renders is not this
+ * registry's question — `resolveEngine` owns it, alone.
  */
 import { describe, expect, it } from 'vitest';
 
 import {
   ENGINE_REGISTRY,
   getAvailableEngines,
-  getDefaultEngine,
   getEngine,
   getStableEngines,
   isValidEngine,
@@ -15,6 +15,13 @@ import {
 
 describe('engine registry', () => {
   it('returns known engine metadata by name', () => {
+    expect(getEngine('modern')).toEqual(
+      expect.objectContaining({
+        name: 'modern',
+        library: 'rottay-native',
+        status: 'stable',
+      })
+    );
     expect(getEngine('classic')).toEqual(
       expect.objectContaining({
         name: 'classic',
@@ -36,12 +43,11 @@ describe('engine registry', () => {
     expect(getStableEngines()).toEqual(['classic', 'modern', 'rustic']);
   });
 
-  it('validates engine names and exposes the default engine', () => {
+  it('validates engine names', () => {
     expect(isValidEngine('classic')).toBe(true);
     expect(isValidEngine('modern')).toBe(true);
     expect(isValidEngine('rustic')).toBe(true);
     expect(isValidEngine('custom')).toBe(true);
     expect(isValidEngine('legacy')).toBe(false);
-    expect(getDefaultEngine()).toBe('classic');
   });
 });

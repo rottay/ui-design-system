@@ -74,7 +74,9 @@ import {
 } from "../../kernel/foundation/schemas/tenant-theme";
 import { withExpressiveFieldDefaults } from "../../kernel/runtime/appearance";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { FIRST_PARTY_THEMES, getFirstPartyVertical } from "@/foundation/tokens/ts/presentation/brand-themes";
+import type { EngineVisualDeclaration } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
+import { engineVisualOf } from "../../runtime/theme/facade/engine-visual";
 import type {
   TenantAuthoredPaths,
   ThemePatch,
@@ -88,7 +90,8 @@ import { tenantArtifactScope } from "@/infrastructure/compilers/runtime/theme";
 // format two internal owners share, not an API a consuming app has any use for.
 import { emitTenantArtifactCss } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
 import {
-  THEME_ENGINE_ADAPTERS,
+  assertEngineSupportsActivatedControls,
+  resolveAdapter,
   compileTheme,
   resolveTheme,
 } from "@/infrastructure/compilers/runtime/theme";
@@ -1778,10 +1781,29 @@ import type { ThemeCompilation } from "@/foundation/contracts/composition/tenant
 
 export { tenantPostureFloors };
 
+/**
+ * The artifact and the compile it came from.
+ *
+ * Two projections of ONE lowering, never two compiles: an engine that seeds a
+ * third-party library needs the projection on the first frame, and re-running
+ * the door to get it would be a second answer to the same question.
+ */
+export interface TenantThemeCompilation {
+  readonly artifact: TenantThemeArtifact;
+  readonly engineVisual: EngineVisualDeclaration;
+}
+
 export function compileTenantThemeConfig(
   input: unknown,
   options: CompileTenantThemeConfigOptions = {}
 ): TenantThemeArtifact {
+  return compileTenantTheme(input, options).artifact;
+}
+
+export function compileTenantTheme(
+  input: unknown,
+  options: CompileTenantThemeConfigOptions = {}
+): TenantThemeCompilation {
   const config = parseTenantThemeConfig(input);
   assertTenantIdentityAllowed({
     slug: config.slug,
@@ -1930,6 +1952,20 @@ export function compileTenantThemeConfig(
   // (`ThemePatchMigrationError`, `resolveTheme: unknown key ...`). A caller of
   // this compiler contracts on ONE typed rejection, so an untyped throw here
   // would surface to a route as a 500 instead of a named document issue.
+  // The engine is the VERTICAL's, never the tenant's: `getFirstPartyVertical`
+  // is the roster the envelopes are already keyed on, so a document cannot
+  // contradict what product it is being rendered as.
+  const verticalEngine = getFirstPartyVertical(config.verticalKey)?.engine;
+  if (!verticalEngine) {
+    throw new TenantThemeValidationError([
+      {
+        code: "invalid_value",
+        path: "$.verticalKey",
+        message: "No first-party vertical declares an engine for this tenant",
+      },
+    ]);
+  }
+  const engineAdapter = resolveAdapter(verticalEngine);
   const { compiledTheme, tenantAuthoredPaths } = isoLowering(
     () => {
       const envelope = migrateV1(documentPatchSource, defaultMode);
@@ -1951,8 +1987,15 @@ export function compileTenantThemeConfig(
         { ...baseTheme, id: config.slug },
         { origin: "tenant-document", patch: envelope.patch }
       );
+      // A control this engine declares `unsupported` cannot be delivered, so a
+      // document that turns it on is refused rather than compiled into a dial
+      // that never moves.
+      assertEngineSupportsActivatedControls(
+        engineAdapter,
+        resolution.provenance.authoredPaths
+      );
       return {
-        compiledTheme: compileTheme(resolution, THEME_ENGINE_ADAPTERS.modern),
+        compiledTheme: compileTheme(resolution, engineAdapter),
         tenantAuthoredPaths: resolution.provenance.authoredPaths,
       };
     },
@@ -1965,7 +2008,7 @@ export function compileTenantThemeConfig(
   // what the tenant actually changed, keeping the artifact within its guard.
   const baseCompiled = compileTheme(
     resolveTheme({ ...baseTheme, id: config.slug }),
-    THEME_ENGINE_ADAPTERS.modern
+    engineAdapter
   );
   const contrastIssues = validateCompiledThemeContrast(
     compiledTheme,
@@ -2087,24 +2130,27 @@ export function compileTenantThemeConfig(
   )}`;
 
   return {
-    schemaVersion: TENANT_THEME_SCHEMA_VERSION,
-    tenantId: config.tenantId,
-    slug: config.slug,
-    verticalKey: config.verticalKey,
-    rowVersion: config.rowVersion,
-    compilerVersion: TENANT_THEME_COMPILER_VERSION,
-    verticalEnvelopeDigest,
-    digest,
-    coverage: TENANT_THEME_V1_COVERAGE,
-    normalizedAppearance,
-    variables,
-    ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
-    ...(adjustments.length > 0 ? { adjustments } : {}),
-    css: renderArtifactCss(config.verticalKey, config.slug, variables, digest, {
-      modeDeltas,
-      backgroundMode:
-        normalizedAppearance.general?.palette?.backgroundMode ?? "light",
-    }),
-    scopes,
+    artifact: {
+      schemaVersion: TENANT_THEME_SCHEMA_VERSION,
+      tenantId: config.tenantId,
+      slug: config.slug,
+      verticalKey: config.verticalKey,
+      rowVersion: config.rowVersion,
+      compilerVersion: TENANT_THEME_COMPILER_VERSION,
+      verticalEnvelopeDigest,
+      digest,
+      coverage: TENANT_THEME_V1_COVERAGE,
+      normalizedAppearance,
+      variables,
+      ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
+      ...(adjustments.length > 0 ? { adjustments } : {}),
+      css: renderArtifactCss(config.verticalKey, config.slug, variables, digest, {
+        modeDeltas,
+        backgroundMode:
+          normalizedAppearance.general?.palette?.backgroundMode ?? "light",
+      }),
+      scopes,
+    },
+    engineVisual: engineVisualOf(compiledTheme),
   };
 }

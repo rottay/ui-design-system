@@ -53,19 +53,19 @@ import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
 } from '@/foundation/tokens/ts/runtime/personality';
-import { useEngineContext } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
+import { useDeclaredEngine } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
+import type { ImplementedEngineName } from '../../../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { ParagraphProps } from '../../contracts';
 import { ClassicParagraph } from '../../engines/classic';
 import { ModernParagraph } from '../../engines/modern';
 import { RusticParagraph } from '../../engines/rustic';
 
+type ParagraphImplementation = ForwardRefExoticComponent<ParagraphProps & RefAttributes<HTMLParagraphElement>>;
+
 /**
  * Map of engine names to their respective Paragraph implementations.
  */
-const engineMap: Record<
-  string,
-  ForwardRefExoticComponent<ParagraphProps & RefAttributes<HTMLParagraphElement>>
-> = {
+const engineMap: Record<ImplementedEngineName, ParagraphImplementation> = {
   classic: ClassicParagraph,
   modern: ModernParagraph,
   rustic: RusticParagraph,
@@ -103,12 +103,19 @@ const engineMap: Record<
  */
 export const TypographyParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
   ({ engine, ...props }, ref) => {
-    const { engine: contextEngine } = useEngineContext();
-    const activeEngine = engine ?? contextEngine;
+    const declaredEngine = useDeclaredEngine();
+    const activeEngine = engine ?? declaredEngine;
     // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
-    // Fall back to ClassicParagraph if an unrecognized engine name is provided
-    const Component = engineMap[activeEngine] || ClassicParagraph;
+    const Component = engineMap[activeEngine as ImplementedEngineName] as
+      | ParagraphImplementation
+      | undefined;
+    if (!Component) {
+      throw new Error(
+        `TypographyParagraph: no implementation for engine ${JSON.stringify(activeEngine)}. ` +
+          'Pass an `engine` prop or mount a provider; there is no fallback engine.'
+      );
+    }
 
     return (
       <Component

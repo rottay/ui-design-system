@@ -8,10 +8,12 @@ import {
   type TenantConfig,
 } from '@rottay/design-system';
 import {
-  THEME_ENGINE_ADAPTERS,
+  engineVisualOf,
+  firstPartyEngineVisual,
   liftAuthoredTheme,
   brandTenantSelector,
   compileTheme,
+  resolveAdapter,
   containerScope,
   emitThemeCss,
   emitTenantThemeArtifactForSsr,
@@ -19,6 +21,7 @@ import {
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
 
+import { isShowroomTenant } from '@/components/runtime/query';
 import {
   compileCanonicalManagementArtifact,
   KNOWN_TENANT_FIXTURES,
@@ -215,10 +218,27 @@ export function TortureSurface({
     const slug = tenantConfig.slug;
     const compiled = compileTheme(
       resolveTheme({ ...liftAuthoredTheme(brandTheme), id: slug }),
-      THEME_ENGINE_ADAPTERS.modern,
+      resolveAdapter(engine),
     );
     return emitThemeCss(compiled, containerScope(brandTenantSelector(slug)));
-  }, [brandTheme, tenantConfig, compiledArtifact, fixture]);
+  }, [brandTheme, tenantConfig, compiledArtifact, fixture, engine]);
+
+  // The classic engine seeds antd from the compiled projection, so the surface
+  // publishes the same compile it paints with. A fixture whose theme this
+  // surface does not own publishes nothing, and classic refuses rather than
+  // seeding antd from a guess.
+  const engineVisual = useMemo(() => {
+    if (brandTheme && tenantConfig) {
+      return engineVisualOf(
+        compileTheme(
+          resolveTheme({ ...liftAuthoredTheme(brandTheme), id: tenantConfig.slug }),
+          resolveAdapter(engine),
+        ),
+      );
+    }
+    const slug = tenantConfig?.slug ?? null;
+    return isShowroomTenant(slug) ? firstPartyEngineVisual(slug, engine) : undefined;
+  }, [brandTheme, tenantConfig, engine]);
 
   // Once this surface compiles and mounts the BrandTheme itself, the theme is
   // no longer a payload the provider may act on -- it is CSS already in the
@@ -270,6 +290,7 @@ export function TortureSurface({
   return (
     <DesignSystemProvider
       forceEngine={engine}
+      engineVisual={engineVisual}
       forceTheme={ground ?? surfaceGroundFor(fixture)}
       tenantConfig={providerConfig}
       locale={rtl ? 'ar' : 'en'}

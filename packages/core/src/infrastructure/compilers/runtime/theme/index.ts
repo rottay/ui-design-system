@@ -10,7 +10,20 @@ export {
   firstPartyScope,
   tenantArtifactScope,
 } from "./runtime/emission";
-export { resolveAdapter, THEME_ENGINE_ADAPTERS } from "./presentation/adapters";
+export {
+  EngineControlUnsupportedError,
+  assertEngineSupportsActivatedControls,
+  controlsActivatedBy,
+  defineEngineAdapter,
+  registerEngineAdapter,
+  resolveAdapter,
+  THEME_ENGINE_ADAPTERS,
+} from "./presentation/adapters";
+export type { EngineAdapterDefinition } from "./presentation/adapters";
+export {
+  engineVisualOf,
+  firstPartyEngineVisual,
+} from "./facade/engine-visual";
 export type {
   ThemeIntent,
   ThemeIntentOrigin,
@@ -30,9 +43,14 @@ export type { EmissionScope } from "@/foundation/contracts/composition/tenants/t
 export type {
   ControlId,
   EngineAdapter,
+  EngineChannelCarrier,
+  EngineChannelEvidence,
+  EngineControlDeclaration,
+  EngineEvidence,
   EnginePosture,
   EngineProjection,
   EngineProjectionMode,
   EngineSeeds,
   EngineThemeCompilation,
+  EngineVisualDeclaration,
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";

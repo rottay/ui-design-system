@@ -35,6 +35,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DesignSystemProvider } from '../../../src/infrastructure/runtime/bootstrap';
+import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { EngineName, ProductProfileKey, TenantConfig } from '../../../src/foundation/contracts';
 import { PERSONALITY_CANONICAL_PROJECTION } from '../../../src/foundation/tokens/ts/runtime/personality';
 import {
@@ -126,6 +127,7 @@ function renderWithProfile(
     <DesignSystemProvider
       tenantConfig={{ ...tenantConfig, engine }}
       forceEngine={engine}
+      engineVisual={firstPartyEngineVisual('rottay', engine)}
       productProfile={productProfile}
       skipCssLoading
     >

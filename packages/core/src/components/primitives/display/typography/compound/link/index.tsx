@@ -47,15 +47,15 @@ import type { LinkProps } from '../../contracts';
 import { ClassicLink } from '../../engines/classic';
 import { ModernLink } from '../../engines/modern';
 import { RusticLink } from '../../engines/rustic';
-import { useEngineContext } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
+import { useDeclaredEngine } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
+import type { ImplementedEngineName } from '../../../../../../infrastructure/runtime/engines/presentation/component-factory';
+
+type LinkImplementation = ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>;
 
 /**
  * Map of engine names to their respective Link implementations.
  */
-const engineMap: Record<
-  string,
-  ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>
-> = {
+const engineMap: Record<ImplementedEngineName, LinkImplementation> = {
   classic: ClassicLink,
   modern: ModernLink,
   rustic: RusticLink,
@@ -94,10 +94,17 @@ const engineMap: Record<
  */
 export const TypographyLink = forwardRef<HTMLAnchorElement, LinkProps>(
   ({ engine, ...props }, ref) => {
-    const { engine: contextEngine } = useEngineContext();
-    const activeEngine = engine ?? contextEngine;
-    // Fall back to ClassicLink if an unrecognized engine name is provided
-    const Component = engineMap[activeEngine] || ClassicLink;
+    const declaredEngine = useDeclaredEngine();
+    const activeEngine = engine ?? declaredEngine;
+    const Component = engineMap[activeEngine as ImplementedEngineName] as
+      | LinkImplementation
+      | undefined;
+    if (!Component) {
+      throw new Error(
+        `TypographyLink: no implementation for engine ${JSON.stringify(activeEngine)}. ` +
+          'Pass an `engine` prop or mount a provider; there is no fallback engine.'
+      );
+    }
     // Link does not apply personality tokens; styling is fully engine-driven
     return <Component ref={ref} {...props} />;
   }

@@ -3,6 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 
 import { BrandingPreviewSandbox } from '..';
+import { EngineProvider } from '@/infrastructure/runtime/engines/composition/react/provider';
+
+/** DS primitives read the engine from context, and context absence is refused. */
+const mount = (ui: React.ReactElement) =>
+  render(<EngineProvider defaultEngine="modern">{ui}</EngineProvider>);
 
 /**
  * Every value the sandbox paints arrives as a typed `TenantAppearance` and is
@@ -14,7 +19,7 @@ import { BrandingPreviewSandbox } from '..';
  */
 describe('BrandingPreviewSandbox', () => {
   it('emits the compiled palette variable inside the scoped rule', () => {
-    const { container } = render(
+    const { container } = mount(
       <BrandingPreviewSandbox appearance={{ general: { palette: { primary: '#FF0000' } } }} />,
     );
 
@@ -23,7 +28,7 @@ describe('BrandingPreviewSandbox', () => {
   });
 
   it('refuses an authored value that would escape the scoped rule', () => {
-    const { container } = render(
+    const { container } = mount(
       <BrandingPreviewSandbox
         appearance={{
           general: {
@@ -39,7 +44,7 @@ describe('BrandingPreviewSandbox', () => {
   });
 
   it('refuses an authored value carrying a javascript: url', () => {
-    const { container } = render(
+    const { container } = mount(
       <BrandingPreviewSandbox
         appearance={{
           general: {
@@ -56,7 +61,7 @@ describe('BrandingPreviewSandbox', () => {
   it('keeps the safe channels in the same batch that drops the hostile ones', () => {
     // A guard that dropped the whole batch would pass every rejection check
     // above while silently disabling the preview, so the survivor is asserted.
-    const { container } = render(
+    const { container } = mount(
       <BrandingPreviewSandbox
         appearance={{
           general: {
@@ -83,7 +88,7 @@ describe('BrandingPreviewSandbox', () => {
     // Fail-closed, and the reason this component has no fallback: an ungoverned
     // raw token has no typed Theme keypath, so the whole document is refused
     // rather than half-applied.
-    const { container } = render(
+    const { container } = mount(
       <BrandingPreviewSandbox
         appearance={{
           general: { palette: { primary: '#FF0000' } },
@@ -99,7 +104,7 @@ describe('BrandingPreviewSandbox', () => {
     // The refusal above is about the TOKEN, not about the advanced door: the
     // same document shape carrying a token `TENANT_THEME_OVERRIDE_TOKENS`
     // admits migrates, compiles and paints.
-    const { container } = render(
+    const { container } = mount(
       <BrandingPreviewSandbox
         appearance={{
           general: { palette: { primary: '#FF0000' } },

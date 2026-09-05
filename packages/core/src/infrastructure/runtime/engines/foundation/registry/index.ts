@@ -8,13 +8,12 @@
  * - **Engine metadata**: Names, display names, libraries, status
  * - **Validation**: Type guards for engine names
  * - **Discovery**: List available and stable engines
- * - **Defaults**: Get default engine configuration
  *
  * Available engines:
  * - `classic`: Ant Design (stable) - Enterprise, structured
- * - `modern`: DaisyUI (stable) - Contemporary, rounded
+ * - `modern`: Rottay-native premium skin (stable) - the primary engine
  * - `rustic`: Vanilla (stable) - Minimal, spacious
- * - `custom`: Pluggable (experimental) - Custom implementations
+ * - `custom`: Pluggable (experimental) - resolved from a registered pack
  *
  * @example Get engine info
  * ```tsx
@@ -44,9 +43,9 @@ import type { EngineName, EngineConfig } from '../../../../../foundation/contrac
  *
  * Engines:
  * - classic: Ant Design - Enterprise, structured, corporate feel
- * - modern: DaisyUI/Tailwind - Contemporary, rounded, glassmorphism
+ * - modern: Rottay-native premium skin - the primary engine
  * - rustic: Pure HTML/CSS - Minimal, spacious, understated
- * - custom: Pluggable - Custom implementation support
+ * - custom: Pluggable - resolved from a registered component pack
  */
 export const ENGINE_REGISTRY: Record<EngineName, EngineConfig> = {
   classic: {
@@ -114,16 +113,4 @@ export const getStableEngines = (): EngineName[] => {
  */
 export const isValidEngine = (name: string): name is EngineName => {
   return name in ENGINE_REGISTRY;
-};
-
-/**
- * Returns the default engine used when no engine is specified.
- * Currently defaults to 'classic' (Ant Design) as the global fallback.
- * Product verticals may still target a different default engine (for example,
- * `platform` targeting `modern`) through their own runtime preset.
- *
- * @returns The default engine name ('classic')
- */
-export const getDefaultEngine = (): EngineName => {
-  return 'classic';
 };

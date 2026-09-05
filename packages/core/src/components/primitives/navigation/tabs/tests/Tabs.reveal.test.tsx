@@ -16,10 +16,13 @@
  */
 
 import React from 'react';
-import { act, render } from '@testing-library/react';
+import { act } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import ModernTabs from '../engines/modern';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 const ITEMS = [
   { key: 'a', label: 'Overview', children: <div>A</div> },

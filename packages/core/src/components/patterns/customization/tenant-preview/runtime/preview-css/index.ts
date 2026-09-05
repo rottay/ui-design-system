@@ -45,12 +45,14 @@ import type {
   BrandTypography,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import type { TenantThemeArtifact } from '../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
+import { getFirstPartyVertical } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { brandTenantSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
 import {
-  THEME_ENGINE_ADAPTERS,
   compileTheme,
   containerScope,
   emitThemeCss,
+  resolveAdapter,
   resolveTheme,
 } from '@/infrastructure/compilers/runtime/theme';
 import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
@@ -441,7 +443,9 @@ function resolveCompiledOutput(source: PreviewSource): {
     css: emitThemeCss(
       compileTheme(
         resolveTheme({ ...liftAuthoredTheme(source.brandTheme), id: safeSlug }),
-        THEME_ENGINE_ADAPTERS.modern,
+        // The previewed slug names the vertical, and the vertical owns the
+        // engine. A draft slug that is not first-party takes the DS primary.
+        resolveAdapter(getFirstPartyVertical(safeSlug)?.engine ?? PRIMARY_ENGINE),
       ),
       containerScope(brandTenantSelector(safeSlug)),
     ),

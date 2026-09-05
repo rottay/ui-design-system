@@ -12,7 +12,7 @@
  * chain to be observable at all: the sync merge, `assertProviderTenantConfig`,
  * the visual-authority census, the runtime projection in
  * `buildResolvedRuntimeConfig`, and `TenantProvider`'s deep clone-and-freeze.
- * Two drills, one each way:
+ * Three drills:
  *
  *   ADMITTED  -- an identity-only customer tenant (lower-kebab non-reserved
  *                slug, companyName-only branding, zero visual payload) reaches
@@ -21,6 +21,9 @@
  *   REFUSED   -- the same request built from a SPREAD of the exact code-owned
  *                `rottay` config fails closed before children exist, because
  *                provenance is object identity and a spread does not carry it.
+ *   INCOMPLETE -- a pack alone is not a `custom` realm. Without a registered
+ *                theme adapter the provider refuses by name instead of
+ *                borrowing another engine's tokens.
  *
  * Switching, fallback-through and pack cross-contamination stay in the factory
  * suite; repeating them here would test the factory twice and admission never.
@@ -37,6 +40,13 @@ import {
   registerCustomComponents,
 } from '@/infrastructure/runtime/engines/runtime/customization/component-registry';
 import {
+  clearRegisteredEngineAdapters,
+  defineEngineAdapter,
+  modernThemeAdapter,
+  registerEngineAdapter,
+  resolveAdapter,
+} from '@/infrastructure/compilers/runtime/theme/presentation/adapters';
+import {
   getKnownTenantConfig,
   isCodeOwnedTenantConfig,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
@@ -48,6 +58,18 @@ import {
   resetVisualAuthorityDiagnostics,
 } from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '..';
+
+/**
+ * A component pack replaces implementations; it says nothing about tokens. The
+ * `custom` engine is complete only once it also registers a theme adapter, which
+ * is the single door any engine beyond the shipped three enters by.
+ */
+const customThemeAdapter = defineEngineAdapter({
+  id: 'custom',
+  tokenBaseline: modernThemeAdapter.tokenBaseline,
+  controls: modernThemeAdapter.controls,
+  project: () => ({ seeds: {}, modes: [] }),
+});
 
 const ADMISSION_PACK = 'admission-pack';
 const CUSTOMER_SLUG = 'admission-labs';
@@ -230,6 +252,7 @@ beforeEach(() => {
   probeRenders = 0;
   caughtError = null;
   clearCustomRegistry();
+  clearRegisteredEngineAdapters();
   resetVisualAuthorityDiagnostics();
   baselineNodes = new Set(styleAndLinkNodes());
   rootSnapshot = snapshotRoot();
@@ -245,6 +268,7 @@ afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
   clearCustomRegistry();
+  clearRegisteredEngineAdapters();
   resetVisualAuthorityDiagnostics();
   for (const node of styleAndLinkNodes()) {
     if (!baselineNodes.has(node)) node.remove();
@@ -271,6 +295,7 @@ function addedStyleAndLinkNodes(): Element[] {
 describe('DesignSystemProvider component-pack admission', () => {
   it('admits an identity-only customer tenant, resolves its bespoke pack, and paints nothing', async () => {
     registerCustomComponents({ TestWidget: BespokeWidget }, ADMISSION_PACK);
+    registerEngineAdapter(customThemeAdapter);
 
     const { unmount } = render(
       <DesignSystemProvider forceEngine="custom" tenantConfig={CUSTOMER_CONFIG}>
@@ -404,6 +429,49 @@ describe('DesignSystemProvider component-pack admission', () => {
 
     // And no takeover of the document on the way out: a refused config must not
     // leave the reserved identity stamped on the root or a stylesheet behind.
+    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(
+      addedStyleAndLinkNodes().filter((node) => !ALLOWED_NON_TENANT_STYLE_IDS.has(node.id)),
+    ).toEqual([]);
+    expect(rootDsCustomProperties()).toEqual([]);
+  });
+
+  it('refuses `custom` that registers a pack but no theme adapter, naming the missing door', async () => {
+    registerCustomComponents({ TestWidget: BespokeWidget }, ADMISSION_PACK);
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    // The expected message is DERIVED from the door itself, so a reworded
+    // refusal moves this expectation instead of leaving a stale literal.
+    let expectedMessage = '';
+    try {
+      resolveAdapter('custom');
+    } catch (error) {
+      expectedMessage = (error as Error).message;
+    }
+    // "Naming the missing door" is the claim in this test's title, so assert it
+    // rather than only that some message exists.
+    expect(expectedMessage).toContain('registerEngineAdapter');
+
+    render(
+      <CapturingErrorBoundary>
+        <DesignSystemProvider forceEngine="custom" tenantConfig={CUSTOMER_CONFIG}>
+          <PackProbe />
+        </DesignSystemProvider>
+      </CapturingErrorBoundary>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId('provider-error')).toBeTruthy());
+    expect((caughtError as Error | null)?.message).toBe(expectedMessage);
+
+    // Fail-CLOSED: the pack IS registered and would have resolved, so a child
+    // here would mean the realm mounted on another engine's token baseline.
+    expect(screen.queryByTestId('pack-probe')).toBeNull();
+    expect(screen.queryByTestId('bespoke-widget')).toBeNull();
+    expect(screen.queryByTestId('fallback-widget')).toBeNull();
+    expect(probeRenders).toBe(0);
+    expect(bespokeRenders).toBe(0);
+    expect(fallbackRenders).toBe(0);
+
     expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
     expect(
       addedStyleAndLinkNodes().filter((node) => !ALLOWED_NON_TENANT_STYLE_IDS.has(node.id)),

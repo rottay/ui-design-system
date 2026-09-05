@@ -4,6 +4,7 @@ import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
+import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '../../../../../foundation/contracts';
 import type { ColumnDef } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 import { PatternDataTable } from '..';
@@ -44,6 +45,7 @@ function renderTable(columns: ColumnDef<Row>[]) {
     <DesignSystemProvider
       tenantConfig={TEST_TENANT_CONFIG}
       forceEngine="classic"
+      engineVisual={firstPartyEngineVisual('rottay', 'classic')}
       skipCssLoading
     >
       <Suspense fallback={<div>Loading...</div>}>
@@ -138,6 +140,7 @@ describe('PatternDataTable responsive columns', () => {
         <DesignSystemProvider
           tenantConfig={TEST_TENANT_CONFIG}
           forceEngine="classic"
+          engineVisual={firstPartyEngineVisual('rottay', 'classic')}
           skipCssLoading
         >
           <Suspense fallback={<div>Loading...</div>}>
@@ -201,6 +204,7 @@ describe('PatternDataTable responsive columns', () => {
         <DesignSystemProvider
           tenantConfig={TEST_TENANT_CONFIG}
           forceEngine="classic"
+          engineVisual={firstPartyEngineVisual('rottay', 'classic')}
           skipCssLoading
         >
           <Suspense fallback={<div>Loading...</div>}>

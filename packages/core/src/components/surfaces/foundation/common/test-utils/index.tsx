@@ -3,9 +3,10 @@
  * with a pre-configured DesignSystemProvider, tenant config, and product profile.
  */
 
-import React, { Suspense, type ReactElement } from 'react';
+import React, { Suspense, type ReactElement, type ReactNode } from 'react';
 import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
+import { firstPartyEngineVisual } from '../../../../../infrastructure/compilers/runtime/theme';
 import type { EngineName, ProductProfileKey, TenantConfig } from '../../../../../foundation/contracts';
 import {
   ResponsiveContext,
@@ -89,34 +90,47 @@ export function renderSurface(
     ...renderOptions
   } = options;
 
-  const content = responsiveContext ? (
-    <ResponsiveContext.Provider value={responsiveContext}>{ui}</ResponsiveContext.Provider>
-  ) : (
-    ui
-  );
+  // `classic` seeds antd from a compiled projection and refuses to guess one.
+  // The fixture tenant authors no theme, so the reference vertical's compile for
+  // the selected engine is the projection this stack renders with.
+  const engineVisual =
+    engine === 'custom' ? undefined : firstPartyEngineVisual('rottay', engine);
 
-  const providerTree = (
-    <DesignSystemProvider
-      tenantConfig={tenantConfig}
-      tenantOverrides={tenantOverrides}
-      productProfile={productProfile}
-      forceEngine={engine}
-      skipCssLoading
-    >
-      <Suspense fallback={<div data-testid="surface-loading">Loading...</div>}>
-        {content}
-      </Suspense>
-    </DesignSystemProvider>
-  );
+  // A wrapper rather than a pre-composed tree: `rerender` re-renders the CHILD,
+  // so a stack composed here by hand would leave the second render with no
+  // provider at all — and an undeclared engine is refused, not defaulted.
+  function Wrapper({ children }: { children: ReactNode }): ReactElement {
+    const content = responsiveContext ? (
+      <ResponsiveContext.Provider value={responsiveContext}>
+        {children}
+      </ResponsiveContext.Provider>
+    ) : (
+      children
+    );
 
-  return render(
-    responsiveContext ? (
+    const providerTree = (
+      <DesignSystemProvider
+        tenantConfig={tenantConfig}
+        tenantOverrides={tenantOverrides}
+        productProfile={productProfile}
+        forceEngine={engine}
+        {...(engineVisual ? { engineVisual } : {})}
+        skipCssLoading
+      >
+        <Suspense fallback={<div data-testid="surface-loading">Loading...</div>}>
+          {content}
+        </Suspense>
+      </DesignSystemProvider>
+    );
+
+    return responsiveContext ? (
       <ResponsiveContext.Provider value={responsiveContext}>
         {providerTree}
       </ResponsiveContext.Provider>
     ) : (
       providerTree
-    ),
-    renderOptions
-  );
+    );
+  }
+
+  return render(ui, { ...renderOptions, wrapper: Wrapper });
 }

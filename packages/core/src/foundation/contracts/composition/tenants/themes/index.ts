@@ -44,6 +44,13 @@ export interface ThemeConfig {
 
 export interface ThemeContextValue {
   theme: string;
+  /**
+   * The mode the root actually resolves to: `auto` collapsed against the OS
+   * preference, and `base` meaning "whatever default mode the vertical's own
+   * compile declared". Computed once, here, so a consumer that needs the mode
+   * never re-derives it from the theme string or from the DOM.
+   */
+  resolvedTheme: 'light' | 'dark' | 'base';
   setTheme: (theme: string) => void;
   config: ThemeConfig | null;
   tenant?: string;

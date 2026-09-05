@@ -41,7 +41,7 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2510,
+    "filesScanned": 2513,
     "channels": 7514,
     "channelsDs": 7116,
     "channelsBridge": 398,
@@ -63801,70 +63801,70 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 71,
+          "line": 69,
           "prop": "50",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 72,
+          "line": 70,
           "prop": "100",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 73,
+          "line": 71,
           "prop": "200",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 74,
+          "line": 72,
           "prop": "300",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 75,
+          "line": 73,
           "prop": "400",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 76,
+          "line": 74,
           "prop": "500",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 77,
+          "line": 75,
           "prop": "600",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 78,
+          "line": 76,
           "prop": "700",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 79,
+          "line": 77,
           "prop": "800",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 80,
+          "line": 78,
           "prop": "900",
           "scalars": []
         },
@@ -73135,7 +73135,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 359,
+          "line": 358,
           "prop": "black",
           "scalars": []
         },
@@ -85980,7 +85980,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 343,
+          "line": 342,
           "prop": "error",
           "scalars": []
         },
@@ -87427,7 +87427,7 @@
         {
           "plane": "infrastructure-tsx",
           "file": "src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx",
-          "line": 131,
+          "line": 123,
           "prop": "color",
           "scalars": []
         },
@@ -87632,7 +87632,7 @@
         {
           "plane": "infrastructure-tsx",
           "file": "src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx",
-          "line": 132,
+          "line": 124,
           "prop": "background",
           "scalars": []
         },
@@ -87722,14 +87722,14 @@
         {
           "plane": "infrastructure-tsx",
           "file": "src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx",
-          "line": 133,
+          "line": 125,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "infrastructure-tsx",
           "file": "src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx",
-          "line": 154,
+          "line": 143,
           "prop": "border",
           "scalars": []
         },
@@ -88694,7 +88694,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 344,
+          "line": 343,
           "prop": "info",
           "scalars": []
         },
@@ -105820,7 +105820,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 337,
+          "line": 336,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -105848,35 +105848,35 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 141,
+          "line": 143,
           "prop": "--ds-button-primary-bg",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 142,
+          "line": 144,
           "prop": "--ds-button-primary-bg-hover",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 143,
+          "line": 145,
           "prop": "--ds-button-primary-border",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 144,
+          "line": 146,
           "prop": "--ds-tab-border-active",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 145,
+          "line": 147,
           "prop": "--ds-input-border-focus",
           "scalars": []
         },
@@ -106642,15 +106642,15 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
-          "line": 77,
+          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+          "line": 45,
           "prop": "lg",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
-          "line": 78,
+          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+          "line": 46,
           "prop": "xl",
           "scalars": []
         },
@@ -107689,15 +107689,15 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
-          "line": 75,
+          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+          "line": 43,
           "prop": "sm",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
-          "line": 76,
+          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+          "line": 44,
           "prop": "md",
           "scalars": []
         },
@@ -110321,7 +110321,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 340,
+          "line": 339,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -112711,7 +112711,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 341,
+          "line": 340,
           "prop": "success",
           "scalars": []
         },
@@ -127271,7 +127271,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts",
-          "line": 175,
+          "line": 183,
           "prop": "color",
           "scalars": []
         },
@@ -133785,7 +133785,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 342,
+          "line": 341,
           "prop": "warning",
           "scalars": []
         },
@@ -135777,7 +135777,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 358,
+          "line": 357,
           "prop": "white",
           "scalars": []
         },
@@ -182093,7 +182093,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 100,
+          "line": 98,
           "prop": "bg",
           "scalars": []
         }
@@ -182114,7 +182114,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 102,
+          "line": 100,
           "prop": "bgHeavy",
           "scalars": []
         }
@@ -182135,7 +182135,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 101,
+          "line": 99,
           "prop": "bgLight",
           "scalars": []
         }
@@ -182194,7 +182194,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 96,
+          "line": 94,
           "prop": "blur",
           "scalars": []
         }
@@ -182215,7 +182215,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 98,
+          "line": 96,
           "prop": "blurLg",
           "scalars": []
         }
@@ -182277,7 +182277,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 97,
+          "line": 95,
           "prop": "blurSm",
           "scalars": []
         }
@@ -182298,7 +182298,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 99,
+          "line": 97,
           "prop": "blurXl",
           "scalars": []
         }
@@ -182328,7 +182328,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 103,
+          "line": 101,
           "prop": "border",
           "scalars": []
         }
@@ -182349,7 +182349,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 105,
+          "line": 103,
           "prop": "borderHeavy",
           "scalars": []
         }
@@ -182370,7 +182370,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 104,
+          "line": 102,
           "prop": "borderLight",
           "scalars": []
         }
@@ -182447,7 +182447,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 113,
+          "line": 111,
           "prop": "dark",
           "scalars": []
         }
@@ -182477,7 +182477,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 114,
+          "line": 112,
           "prop": "mesh",
           "scalars": []
         }
@@ -182515,7 +182515,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 110,
+          "line": 108,
           "prop": "primary",
           "scalars": []
         }
@@ -182536,7 +182536,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 111,
+          "line": 109,
           "prop": "primarySoft",
           "scalars": []
         }
@@ -182637,7 +182637,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 112,
+          "line": 110,
           "prop": "surface",
           "scalars": []
         }
@@ -243653,7 +243653,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 130,
+          "line": 128,
           "prop": "heavy",
           "scalars": []
         }
@@ -243674,7 +243674,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 128,
+          "line": 126,
           "prop": "light",
           "scalars": []
         }
@@ -243695,7 +243695,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 129,
+          "line": 127,
           "prop": "medium",
           "scalars": []
         }
@@ -243770,7 +243770,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 131,
+          "line": 129,
           "prop": "white",
           "scalars": []
         }
@@ -243789,7 +243789,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 133,
+          "line": 131,
           "prop": "whiteLight",
           "scalars": []
         }
@@ -243808,7 +243808,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 132,
+          "line": 130,
           "prop": "whiteMedium",
           "scalars": []
         }
@@ -263893,14 +263893,14 @@
         {
           "plane": "infrastructure-tsx",
           "file": "src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx",
-          "line": 134,
+          "line": 126,
           "prop": "borderRadius",
           "scalars": []
         },
         {
           "plane": "infrastructure-tsx",
           "file": "src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx",
-          "line": 155,
+          "line": 144,
           "prop": "borderRadius",
           "scalars": []
         },
@@ -354073,7 +354073,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 119,
+          "line": 117,
           "prop": "fast",
           "scalars": []
         },
@@ -354157,7 +354157,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 120,
+          "line": 118,
           "prop": "normal",
           "scalars": []
         }
@@ -354258,7 +354258,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 121,
+          "line": 119,
           "prop": "slow",
           "scalars": []
         }
@@ -354279,7 +354279,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 122,
+          "line": 120,
           "prop": "slower",
           "scalars": []
         }
@@ -354307,7 +354307,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
-          "line": 123,
+          "line": 121,
           "prop": "spring",
           "scalars": []
         }

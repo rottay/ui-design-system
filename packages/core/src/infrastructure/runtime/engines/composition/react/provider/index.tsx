@@ -3,20 +3,15 @@
 /**
  * @fileoverview EngineProvider - Rottay Design System
  * @description Provides the current UI rendering engine context, enabling
- * components to render using Classic (Ant Design), Modern (DaisyUI), or Rustic (Vanilla).
- *
- * @remarks
- * The EngineProvider is the core of the multi-engine architecture:
- * - **Classic**: Enterprise Ant Design-based engine with structured components
- * - **Modern**: Contemporary DaisyUI/Tailwind CSS engine with glassmorphism
- * - **Rustic**: Minimal vanilla HTML/CSS for maximum portability
+ * components to render using Modern (the primary Rottay-native skin), Classic
+ * (Ant Design) or Rustic (vanilla HTML/CSS).
  *
  * @example Basic usage
  * ```tsx
  * import { EngineProvider, Button } from '@rottay/design-system';
  *
- * <EngineProvider defaultEngine="classic">
- *   <Button>Uses Classic engine</Button>
+ * <EngineProvider defaultEngine="modern">
+ *   <Button>Uses the Modern engine</Button>
  * </EngineProvider>
  * ```
  *
@@ -38,8 +33,7 @@ import React, {
   useLayoutEffect,
 } from 'react';
 import type { EngineName, EngineContextValue, EngineProviderProps } from '../../../../../../foundation/contracts';
-import { getDefaultEngine, isValidEngine } from '../../../foundation/registry';
-import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
+import { isValidEngine } from '../../../foundation/registry';
 
 const EngineContext = createContext<EngineContextValue | null>(null);
 const useIsomorphicLayoutEffect =
@@ -50,28 +44,30 @@ export type { EngineProviderProps } from '../../../../../../foundation/contracts
 
 export function EngineProvider({
   children,
-  defaultEngine = getDefaultEngine(),
+  defaultEngine,
 }: EngineProviderProps): React.ReactElement {
+  if (!isValidEngine(defaultEngine)) {
+    throw new Error(
+      `EngineProvider: "${String(defaultEngine)}" is not a known engine. ` +
+        'Resolve one through resolveEngine; there is no fallback engine.'
+    );
+  }
   const [engine, setEngineState] = useState<EngineName>(defaultEngine);
 
   // Keep the controlled runtime engine in sync before paint so route changes
   // do not briefly render with the previous engine's DOM attributes.
   useIsomorphicLayoutEffect(() => {
-    if (defaultEngine !== engine && isValidEngine(defaultEngine)) {
-      setEngineState(defaultEngine);
-    }
+    if (defaultEngine !== engine) setEngineState(defaultEngine);
   }, [defaultEngine, engine]);
 
   const setEngine = useCallback((newEngine: EngineName) => {
-    if (isValidEngine(newEngine)) {
-      setEngineState(newEngine);
-    } else {
-      warnOnceInDev(
-        `engine-provider:invalid:${String(newEngine)}`,
-        `Invalid engine: ${newEngine}. Using default.`
+    if (!isValidEngine(newEngine)) {
+      throw new Error(
+        `setEngine: "${String(newEngine)}" is not a known engine. ` +
+          'Selecting an unknown engine is refused rather than resolved to a default.'
       );
-      setEngineState(getDefaultEngine());
     }
+    setEngineState(newEngine);
   }, []);
 
   // Sync engine name to DOM so CSS selectors like [data-engine='modern'] work.
@@ -100,26 +96,30 @@ export function EngineProvider({
 }
 
 /**
- * Default context value used when no EngineProvider is present.
- * This allows components to work in SSR and non-provider scenarios.
+ * Reads the active engine. Throws outside a provider, exactly as `useTenant`
+ * and `useFeatures` do: which engine renders is not a question a component may
+ * answer with a default, because the answer decides what the user sees.
  */
-const defaultContextValue: EngineContextValue = {
-  engine: getDefaultEngine(),
-  setEngine: () => {
-    warnOnceInDev(
-      'engine-provider:missing',
-      'setEngine called outside of EngineProvider. Wrap your app with EngineProvider to enable engine switching.'
-    );
-  },
-};
-
 export function useEngineContext(): EngineContextValue {
   const context = useContext(EngineContext);
-  // Unlike useTenant/useFeatures which throw when the provider is missing, the
-  // engine context falls back to a default. This is intentional: many components
-  // can render with the default engine during SSR or in unit tests without
-  // requiring the full provider tree.
-  return context || defaultContextValue;
+  if (!context) {
+    throw new Error(
+      'useEngineContext must be used within an EngineProvider. ' +
+        'Mount DesignSystemProvider, or an EngineProvider with an explicit defaultEngine.'
+    );
+  }
+  return context;
+}
+
+/**
+ * The engine a provider declares, or `null` when none is mounted.
+ *
+ * `null` is an ABSENCE, never a default. The component factory composes it with
+ * an explicit `engine` prop and refuses when neither declares one; every other
+ * consumer needs a provider and uses `useEngineContext`.
+ */
+export function useDeclaredEngine(): EngineName | null {
+  return useContext(EngineContext)?.engine ?? null;
 }
 
 export { EngineContext };

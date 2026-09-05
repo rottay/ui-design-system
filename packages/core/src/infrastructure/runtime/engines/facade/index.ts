@@ -8,7 +8,7 @@
  *
  * **Engines:**
  * - **Classic**: Ant Design - Enterprise, structured components
- * - **Modern**: DaisyUI/Tailwind - Contemporary, rounded
+ * - **Modern**: the Rottay-native premium skin - the primary engine
  * - **Rustic**: Vanilla HTML/CSS - Minimal, spacious
  * - **Custom**: Pluggable - Custom implementations
  *
@@ -21,7 +21,6 @@
  */
 export * from '../foundation/registry';
 export * from '../presentation/component-factory';
-export * from '../foundation/contracts/binding';
 export * from '../presentation/component-factory/error-boundary';
 export * from '../runtime/resolution';
 export * from '../runtime/customization/component-registry';

@@ -1,10 +1,12 @@
 import React from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
+import { renderWithEngine, renderWithEngineContext } from '@tests/support/engine';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernBreadcrumb from '../engines/modern';
 import type { BreadcrumbItem } from '../contracts';
-import { renderWithEngine } from '@tests/support/engine';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 /**
  * New-contract coverage for `BreadcrumbItem.menu` and `BreadcrumbProps.overflow`.

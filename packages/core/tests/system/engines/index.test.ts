@@ -1,7 +1,7 @@
 /**
  * @fileoverview Engine registry tests. Validates ENGINE_REGISTRY shape,
  * getEngine/getAvailableEngines/getStableEngines lookups, isValidEngine
- * guard, and getDefaultEngine return value.
+ * guard, and the absence of any second default-engine authority.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -11,7 +11,6 @@ import {
   getAvailableEngines,
   getStableEngines,
   isValidEngine,
-  getDefaultEngine,
 } from '../../../src/infrastructure/runtime/engines/foundation/registry';
 
 describe('Engine Registry', () => {
@@ -106,9 +105,17 @@ expect(ENGINE_REGISTRY.modern.library).toBe('rottay-native');
     });
   });
 
-  describe('getDefaultEngine', () => {
-    it('should return classic as default engine', () => {
-      expect(getDefaultEngine()).toBe('classic');
+  describe('default engine authority', () => {
+    it('lives in the identity contract, not in this registry', async () => {
+      const registry = (await import(
+        '../../../src/infrastructure/runtime/engines/foundation/registry'
+      )) as Record<string, unknown>;
+      expect(Object.keys(registry)).not.toContain('getDefaultEngine');
+
+      const identity = (await import(
+        '../../../src/foundation/contracts/kernel/engine-identity'
+      )) as Record<string, unknown>;
+      expect(identity.PRIMARY_ENGINE).toBe('modern');
     });
   });
 });

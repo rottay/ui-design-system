@@ -1,10 +1,13 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernColumnSettingsDropdown from '../engines/modern';
 import type { ColumnSettingsProps } from '../contracts';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 function buildProps(overrides: Partial<ColumnSettingsProps> = {}): ColumnSettingsProps {
   return {

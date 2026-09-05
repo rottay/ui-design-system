@@ -49,19 +49,19 @@ import {
   mergePersonalityStyle,
   resolveTypographyHeadingStyle,
 } from '@/foundation/tokens/ts/runtime/personality';
-import { useEngineContext } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
+import { useDeclaredEngine } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
+import type { ImplementedEngineName } from '../../../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { HeadingProps } from '../../contracts';
 import { ClassicHeading } from '../../engines/classic';
 import { ModernHeading } from '../../engines/modern';
 import { RusticHeading } from '../../engines/rustic';
 
+type HeadingImplementation = ForwardRefExoticComponent<HeadingProps & RefAttributes<HTMLHeadingElement>>;
+
 /**
  * Map of engine names to their respective Heading implementations.
  */
-const engineMap: Record<
-  string,
-  ForwardRefExoticComponent<HeadingProps & RefAttributes<HTMLHeadingElement>>
-> = {
+const engineMap: Record<ImplementedEngineName, HeadingImplementation> = {
   classic: ClassicHeading,
   modern: ModernHeading,
   rustic: RusticHeading,
@@ -96,12 +96,19 @@ const engineMap: Record<
  */
 export const TypographyHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
   ({ engine, ...props }, ref) => {
-    const { engine: contextEngine } = useEngineContext();
-    const activeEngine = engine ?? contextEngine;
+    const declaredEngine = useDeclaredEngine();
+    const activeEngine = engine ?? declaredEngine;
     // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
-    // Fall back to ClassicHeading if an unrecognized engine name is provided
-    const Component = engineMap[activeEngine] || ClassicHeading;
+    const Component = engineMap[activeEngine as ImplementedEngineName] as
+      | HeadingImplementation
+      | undefined;
+    if (!Component) {
+      throw new Error(
+        `TypographyHeading: no implementation for engine ${JSON.stringify(activeEngine)}. ` +
+          'Pass an `engine` prop or mount a provider; there is no fallback engine.'
+      );
+    }
 
     return (
       <Component

@@ -11,7 +11,7 @@
  * - **Lazy loading**: Code-splits engine implementations
  * - **Context-aware**: Respects EngineProvider settings
  * - **Override support**: Per-component engine override via prop
- * - **Error handling**: Built-in error boundary with fallbacks
+ * - **Error handling**: Built-in error boundary
  * - **Custom engine support**: Custom component registration
  *
  * @example Creating a component
@@ -20,6 +20,15 @@
  *   classic: () => import('./engines/classic'),
  *   modern: () => import('./engines/modern'),
  *   rustic: () => import('./engines/rustic'),
+ * });
+ * ```
+ *
+ * @example Declaring an absence
+ * ```tsx
+ * export const WorkbenchHeader = createEngineComponent<Props>('WorkbenchHeader', {
+ *   classic: () => import('./engines/classic'),
+ *   modern: () => import('./engines/modern'),
+ *   rustic: null,
  * });
  * ```
  *
@@ -43,25 +52,34 @@ import {
   type PropsWithoutRef,
   type RefAttributes,
 } from 'react';
-import { useEngineContext } from '../../composition/react/provider';
+import { useDeclaredEngine } from '../../composition/react/provider';
 import { createCustomWrapper } from '../../runtime/customization/component-registry';
 import { EngineErrorBoundary } from './error-boundary';
 import type { EngineName } from '../../../../../foundation/contracts';
 import { TenantContext } from '../../../tenant/foundation/context';
 
+/** The engines a component ships a physical implementation for. */
+export type ImplementedEngineName = Exclude<EngineName, 'custom'>;
+
+export type EngineImplementationLoader<P> = () => Promise<{
+  default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
+}>;
+
 /**
- * Configuration object containing dynamic import functions for each engine.
+ * One loader per implemented engine, TOTAL over the roster.
+ *
+ * `null` is a DECLARED absence, not a hole: a component with no rustic
+ * implementation says so and selecting rustic throws, instead of forwarding to
+ * another engine's directory and painting a different product's chrome under
+ * the user's chosen engine name.
+ *
+ * `custom` is deliberately not a key. A custom component is resolved from a
+ * registered component pack, never from a bundled module, so a per-component
+ * custom loader could only ever be a second answer to the same question.
  */
-export interface EngineLoaders<P> {
-  /** Loader for Classic engine (Ant Design) */
-  classic: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
-  /** Loader for Modern engine (DaisyUI/Tailwind) */
-  modern: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
-  /** Loader for Rustic engine (Vanilla HTML/CSS) */
-  rustic: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
-  /** Optional loader for Custom engine (custom implementations) */
-  custom?: () => Promise<{ default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> }>;
-}
+export type EngineLoaders<P> = Readonly<
+  Record<ImplementedEngineName, EngineImplementationLoader<P> | null>
+>;
 
 /**
  * Optional configuration for customizing engine component behavior.
@@ -69,10 +87,8 @@ export interface EngineLoaders<P> {
 export interface CreateEngineComponentOptions {
   /** Custom fallback UI displayed while the component is lazy loading */
   fallback?: React.ReactNode;
-  /** Whether to wrap with custom engine for custom component support (default: true) */
+  /** Whether the custom engine may resolve a registered pack (default: true) */
   customEnabled?: boolean;
-  /** Fallback engine to use if the primary engine fails to load */
-  fallbackEngine?: EngineName;
   /** Callback invoked when engine loading encounters an error */
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
@@ -97,19 +113,27 @@ export function createEngineComponent<P extends object>(
 ): ForwardRefExoticComponent<
   PropsWithoutRef<P> & { engine?: EngineName } & RefAttributes<any>
 > {
-  const { fallback = null, customEnabled = true, fallbackEngine, onError } = options;
+  const { fallback = null, customEnabled = true, onError } = options;
 
-  // Default custom loader (no pack) for backward compatibility
-  const defaultCustomLoader = customEnabled
-    ? createCustomWrapper<P>(displayName, loaders.custom || loaders.rustic)
-    : (loaders.custom || loaders.rustic);
+  /** A declared absence resolves to a named refusal, never to another engine. */
+  const implementation = (
+    engine: ImplementedEngineName
+  ): (() => Promise<{ default: ComponentType<any> }>) => {
+    const loader = loaders[engine];
+    if (loader) return loader as () => Promise<{ default: ComponentType<any> }>;
+    return () => {
+      throw new Error(
+        `${displayName} has no ${engine} implementation. ` +
+          'The loader declares that absence; there is no fallback engine.'
+      );
+    };
+  };
 
-  // Create lazy components for the three standard engines
   const components: Record<EngineName, LazyExoticComponent<ComponentType<any>>> = {
-    classic: lazy(loaders.classic as () => Promise<{ default: ComponentType<any> }>),
-    modern: lazy(loaders.modern as () => Promise<{ default: ComponentType<any> }>),
-    rustic: lazy(loaders.rustic as () => Promise<{ default: ComponentType<any> }>),
-    custom: lazy(defaultCustomLoader as () => Promise<{ default: ComponentType<any> }>),
+    classic: lazy(implementation('classic')),
+    modern: lazy(implementation('modern')),
+    rustic: lazy(implementation('rustic')),
+    custom: lazy(createCustomWrapper<P>(displayName, undefined, customEnabled) as () => Promise<{ default: ComponentType<any> }>),
   };
 
   // Cache of pack-scoped lazy components to avoid re-creating on every render
@@ -122,11 +146,7 @@ export function createEngineComponent<P extends object>(
   function getPackLazyComponent(pack: string): LazyExoticComponent<ComponentType<any>> {
     let cached = packLazyCache.get(pack);
     if (!cached) {
-      const packLoader = createCustomWrapper<P>(
-        displayName,
-        loaders.custom || loaders.rustic,
-        pack
-      );
+      const packLoader = createCustomWrapper<P>(displayName, pack, customEnabled);
       cached = lazy(packLoader as () => Promise<{ default: ComponentType<any> }>);
       packLazyCache.set(pack, cached);
     }
@@ -135,7 +155,7 @@ export function createEngineComponent<P extends object>(
 
   // Create the router component
   const EngineRouter = forwardRef<any, P & { engine?: EngineName }>((props, ref) => {
-    const context = useEngineContext();
+    const declaredEngine = useDeclaredEngine();
 
     // Read tenant context if available. Components can still render without a
     // TenantProvider, but in that case custom pack resolution falls back to the
@@ -143,8 +163,9 @@ export function createEngineComponent<P extends object>(
     const tenantCtx = useContext(TenantContext);
     const componentPack = tenantCtx?.config?.componentPack;
 
-    // Allow engine prop to override context engine
-    const activeEngine = props.engine || context.engine;
+    // A per-instance `engine` prop outranks the provider; with neither, nothing
+    // has declared what should render and the refusal below names that.
+    const activeEngine = props.engine ?? declaredEngine;
 
     // `componentPack` selects WHICH components render; it never paints. This
     // factory therefore holds nothing on the document — no `<style>` element,
@@ -156,20 +177,29 @@ export function createEngineComponent<P extends object>(
     // Custom engine is the only path that needs tenant-aware component lookup.
     // Standard engines are fully determined by the active engine name.
     const Component = useMemo(() => {
+      if (!activeEngine) {
+        throw new Error(
+          `${displayName}: no engine is declared. Pass an \`engine\` prop, or mount ` +
+            'DesignSystemProvider or EngineProvider; there is no fallback engine.'
+        );
+      }
       if (activeEngine === 'custom' && customEnabled && componentPack) {
         return getPackLazyComponent(componentPack);
       }
-      return components[activeEngine];
+      const resolved = components[activeEngine];
+      if (!resolved) {
+        throw new Error(
+          `${displayName}: "${String(activeEngine)}" is not a known engine.`
+        );
+      }
+      return resolved;
     }, [activeEngine, componentPack]);
 
     // Remove engine prop before passing to implementation
     const { engine: _, ...componentProps } = props;
 
     return (
-      <EngineErrorBoundary
-        fallbackEngine={fallbackEngine}
-        onError={onError}
-      >
+      <EngineErrorBoundary onError={onError}>
         <Suspense fallback={fallback}>
           <Component {...(componentProps as any)} ref={ref} />
         </Suspense>

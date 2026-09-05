@@ -7,8 +7,8 @@
  * The Custom engine enables complete component customization:
  *
  * - **Registration**: Add custom implementations for any component
- * - **Fallback**: Gracefully fall back to other engines when not registered
- * - **Configuration**: Customize fallback behavior and logging
+ * - **Refusal**: A component with no registered implementation throws
+ * - **Configuration**: Customize logging
  * - **Discovery**: Query registered components and status
  *
  * Use cases:
@@ -30,8 +30,7 @@
  * import { configureCustomEngine } from '@rottay/design-system';
  *
  * configureCustomEngine({
- *   fallbackEngine: 'rustic',
- *   warnOnFallback: false,
+ *   logger: (message, level) => report(level, message),
  * });
  * ```
  *
@@ -94,18 +93,11 @@ function getPackRegistry(pack: string): ComponentRegistry {
  * Configuration for Custom engine
  */
 export interface CustomEngineConfig {
-  /** Fallback engine when component is not registered */
-  fallbackEngine?: 'classic' | 'modern' | 'rustic';
-  /** Whether to warn when using fallback */
-  warnOnFallback?: boolean;
   /** Custom logger for debugging */
   logger?: (message: string, level: 'info' | 'warn' | 'error') => void;
 }
 
-let customConfig: CustomEngineConfig = {
-  fallbackEngine: 'classic',
-  warnOnFallback: true,
-};
+let customConfig: CustomEngineConfig = {};
 
 /**
  * Configures the Custom engine globally with custom options.
@@ -117,8 +109,6 @@ let customConfig: CustomEngineConfig = {
  *
  * // Configure at app initialization
  * configureCustomEngine({
- *   fallbackEngine: 'rustic',
- *   warnOnFallback: process.env.NODE_ENV === 'development',
  *   logger: (message, level) => {
  *     if (level === 'error') console.error(message);
  *   }
@@ -139,8 +129,7 @@ export function configureCustomEngine(config: Partial<CustomEngineConfig>): void
  * import { getCustomEngineConfig } from '@rottay/design-system';
  *
  * const config = getCustomEngineConfig();
- * console.log(config.fallbackEngine); // 'classic'
- * console.log(config.warnOnFallback); // true
+ * console.log(typeof config.logger); // 'function' once configured
  * ```
  *
  * @returns A copy of the current Custom engine configuration object
@@ -211,7 +200,7 @@ export function registerCustomComponents(
 
 /**
  * Removes a custom component from the custom engine registry.
- * After unregistering, the component will fall back to the default engine implementation.
+ * After unregistering, selecting the custom engine for it throws.
  *
  * @example
  * ```tsx
@@ -384,64 +373,49 @@ export function getRegisteredComponentCount(pack?: string): number {
 }
 
 /**
- * Creates a lazy-loadable wrapper that resolves to either a registered custom
- * component or a fallback implementation.
- * Used internally by the engine factory to support custom component overrides.
+ * Creates a lazy-loadable resolver for the custom engine.
+ *
+ * There is no fallback implementation. A component the pack does not register
+ * has no custom rendering, and the resolver refuses it by name.
  *
  * @example
  * ```tsx
- * import { createCustomWrapper } from '@rottay/design-system';
- *
- * // Internal usage in engine factory
- * const customLoader = createCustomWrapper<ButtonProps>(
- *   'Button',
- *   () => import('./engines/rustic')
- * );
- *
- * // With pack-scoped lookup
- * const customLoader = createCustomWrapper<ButtonProps>(
- *   'Button',
- *   () => import('./engines/rustic'),
- *   'acme-pack'
- * );
+ * const customLoader = createCustomWrapper<ButtonProps>('Button', 'acme-pack');
  * ```
  *
  * @param componentName - Name of the component to look up in the registry
- * @param getFallback - Function that returns a Promise for the fallback component
  * @param pack - Optional pack identifier for tenant-scoped lookup
- * @returns A function that returns a Promise resolving to the component module
+ * @param enabled - When false, the custom engine is refused outright
  */
 export function createCustomWrapper<P extends object>(
   componentName: string,
-  getFallback: () => Promise<{
-    default:
-      | ComponentType<P>
-      | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
-  }>,
-  pack?: string
+  pack?: string,
+  enabled = true
 ): () => Promise<{
   default:
     | ComponentType<P>
     | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
 }> {
   return async () => {
+    if (!enabled) {
+      throw new Error(
+        `${componentName}: the custom engine is disabled for this component.`
+      );
+    }
     // Resolution is intentionally local to a single pack. The engine factory is
     // responsible for deciding which pack to use based on tenant context.
     const registered = getCustomComponent<P>(componentName, pack);
+    if (registered) return { default: registered };
 
-    if (registered) {
-      return { default: registered };
-    }
-
-    // Warn about fallback if configured
-    if (customConfig.warnOnFallback && customConfig.logger) {
-      customConfig.logger(
-        `No custom implementation for "${componentName}"${pack ? ` [pack: ${pack}]` : ''}, using ${customConfig.fallbackEngine} fallback`,
-        'warn'
-      );
-    }
-
-    return getFallback();
+    customConfig.logger?.(
+      `No custom implementation for "${componentName}"${pack ? ` [pack: ${pack}]` : ''}`,
+      'error'
+    );
+    throw new Error(
+      `No custom implementation registered for "${componentName}"` +
+        `${pack ? ` in pack "${pack}"` : ' in the default pack'}. ` +
+        'Register one with registerCustomComponent; there is no fallback engine.'
+    );
   };
 }
 
@@ -471,12 +445,11 @@ export function getRegisteredPacks(): string[] {
  * import { useCustomStatus } from '@rottay/design-system';
  *
  * function CustomEngineDebugPanel() {
- *   const { registeredComponents, componentCount, config, hasComponent } = useCustomStatus();
+ *   const { registeredComponents, componentCount, hasComponent } = useCustomStatus();
  *
  *   return (
  *     <div>
  *       <p>Registered: {componentCount} components</p>
- *       <p>Fallback: {config.fallbackEngine}</p>
  *       <ul>
  *         {registeredComponents.map(name => (
  *           <li key={name}>{name}</li>

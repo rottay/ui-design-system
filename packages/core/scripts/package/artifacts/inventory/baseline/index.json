@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7194,
-  "unpackedSize": 41778208,
+  "entryCount": 7203,
+  "unpackedSize": 41827435,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -20,7 +20,7 @@
     },
     {
       "path": "contracts/runtime/suppliers/index.json",
-      "size": 185164
+      "size": 185926
     },
     {
       "path": "contracts/themes/canaries/index.d.ts",
@@ -388,7 +388,7 @@
     },
     {
       "path": "dist/components/patterns/customization/brand-studio/index.cjs",
-      "size": 26009
+      "size": 26241
     },
     {
       "path": "dist/components/patterns/customization/brand-studio/index.d.ts",
@@ -396,7 +396,7 @@
     },
     {
       "path": "dist/components/patterns/customization/brand-studio/index.js",
-      "size": 41510
+      "size": 41844
     },
     {
       "path": "dist/components/patterns/customization/brand-studio/runtime/file-export/index.cjs",
@@ -472,7 +472,7 @@
     },
     {
       "path": "dist/components/patterns/customization/branding-preview-sandbox/index.cjs",
-      "size": 7276
+      "size": 7418
     },
     {
       "path": "dist/components/patterns/customization/branding-preview-sandbox/index.d.ts",
@@ -480,7 +480,7 @@
     },
     {
       "path": "dist/components/patterns/customization/branding-preview-sandbox/index.js",
-      "size": 9813
+      "size": 9976
     },
     {
       "path": "dist/components/patterns/customization/index.d.ts",
@@ -540,7 +540,7 @@
     },
     {
       "path": "dist/components/patterns/customization/tenant-preview/runtime/preview-css/index.cjs",
-      "size": 4981
+      "size": 5210
     },
     {
       "path": "dist/components/patterns/customization/tenant-preview/runtime/preview-css/index.d.ts",
@@ -548,7 +548,7 @@
     },
     {
       "path": "dist/components/patterns/customization/tenant-preview/runtime/preview-css/index.js",
-      "size": 6120
+      "size": 6525
     },
     {
       "path": "dist/components/patterns/customization/token-inspector/index.cjs",
@@ -2524,7 +2524,7 @@
     },
     {
       "path": "dist/components/patterns/shell/cockpit-header/index.cjs",
-      "size": 630
+      "size": 561
     },
     {
       "path": "dist/components/patterns/shell/cockpit-header/index.d.ts",
@@ -2532,7 +2532,7 @@
     },
     {
       "path": "dist/components/patterns/shell/cockpit-header/index.js",
-      "size": 400
+      "size": 514
     },
     {
       "path": "dist/components/patterns/shell/feature-workspace-frame/contracts/index.d.ts",
@@ -2684,7 +2684,7 @@
     },
     {
       "path": "dist/components/patterns/shell/workbench-header/index.cjs",
-      "size": 634
+      "size": 565
     },
     {
       "path": "dist/components/patterns/shell/workbench-header/index.d.ts",
@@ -2692,7 +2692,7 @@
     },
     {
       "path": "dist/components/patterns/shell/workbench-header/index.js",
-      "size": 404
+      "size": 518
     },
     {
       "path": "dist/components/patterns/visualization/ascii-diagram/contracts/index.d.ts",
@@ -3892,7 +3892,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/approval-inbox/index.cjs",
-      "size": 630
+      "size": 561
     },
     {
       "path": "dist/components/patterns/workflow/approval-inbox/index.d.ts",
@@ -3900,7 +3900,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/approval-inbox/index.js",
-      "size": 400
+      "size": 514
     },
     {
       "path": "dist/components/patterns/workflow/approval-workflow/contracts/index.d.ts",
@@ -3988,7 +3988,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/moderation-gallery/index.cjs",
-      "size": 638
+      "size": 569
     },
     {
       "path": "dist/components/patterns/workflow/moderation-gallery/index.d.ts",
@@ -3996,7 +3996,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/moderation-gallery/index.js",
-      "size": 408
+      "size": 522
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/contracts/index.d.ts",
@@ -4028,7 +4028,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/index.cjs",
-      "size": 638
+      "size": 569
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/index.d.ts",
@@ -4036,7 +4036,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/index.js",
-      "size": 408
+      "size": 522
     },
     {
       "path": "dist/components/patterns/workflow/shift-matrix/contracts/index.d.ts",
@@ -4068,7 +4068,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/shift-matrix/index.cjs",
-      "size": 626
+      "size": 557
     },
     {
       "path": "dist/components/patterns/workflow/shift-matrix/index.d.ts",
@@ -4076,7 +4076,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/shift-matrix/index.js",
-      "size": 396
+      "size": 510
     },
     {
       "path": "dist/components/primitives/display/avatar/compound/badge/index.cjs",
@@ -5548,7 +5548,7 @@
     },
     {
       "path": "dist/components/primitives/display/typography/compound/heading/index.cjs",
-      "size": 963
+      "size": 1107
     },
     {
       "path": "dist/components/primitives/display/typography/compound/heading/index.d.ts",
@@ -5556,7 +5556,7 @@
     },
     {
       "path": "dist/components/primitives/display/typography/compound/heading/index.js",
-      "size": 1261
+      "size": 1443
     },
     {
       "path": "dist/components/primitives/display/typography/compound/index.d.ts",
@@ -5564,7 +5564,7 @@
     },
     {
       "path": "dist/components/primitives/display/typography/compound/link/index.cjs",
-      "size": 651
+      "size": 799
     },
     {
       "path": "dist/components/primitives/display/typography/compound/link/index.d.ts",
@@ -5572,11 +5572,11 @@
     },
     {
       "path": "dist/components/primitives/display/typography/compound/link/index.js",
-      "size": 708
+      "size": 894
     },
     {
       "path": "dist/components/primitives/display/typography/compound/paragraph/index.cjs",
-      "size": 976
+      "size": 1120
     },
     {
       "path": "dist/components/primitives/display/typography/compound/paragraph/index.d.ts",
@@ -5584,11 +5584,11 @@
     },
     {
       "path": "dist/components/primitives/display/typography/compound/paragraph/index.js",
-      "size": 1224
+      "size": 1408
     },
     {
       "path": "dist/components/primitives/display/typography/compound/text/index.cjs",
-      "size": 953
+      "size": 1097
     },
     {
       "path": "dist/components/primitives/display/typography/compound/text/index.d.ts",
@@ -5596,7 +5596,7 @@
     },
     {
       "path": "dist/components/primitives/display/typography/compound/text/index.js",
-      "size": 1226
+      "size": 1405
     },
     {
       "path": "dist/components/primitives/display/typography/contracts/index.cjs",
@@ -13872,7 +13872,7 @@
     },
     {
       "path": "dist/entrypoints/server/index.d.ts",
-      "size": 9804
+      "size": 9955
     },
     {
       "path": "dist/entrypoints/suppliers/cli/index.js",
@@ -14008,7 +14008,7 @@
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/engine-adapter/index.d.ts",
-      "size": 2597
+      "size": 6471
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/index.cjs",
@@ -14016,7 +14016,7 @@
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/index.d.ts",
-      "size": 115196
+      "size": 115564
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/index.js",
@@ -14136,15 +14136,15 @@
     },
     {
       "path": "dist/foundation/contracts/kernel/engine-identity/index.cjs",
-      "size": 151
+      "size": 187
     },
     {
       "path": "dist/foundation/contracts/kernel/engine-identity/index.d.ts",
-      "size": 622
+      "size": 915
     },
     {
       "path": "dist/foundation/contracts/kernel/engine-identity/index.js",
-      "size": 85
+      "size": 122
     },
     {
       "path": "dist/foundation/contracts/kernel/product-profile-identity/index.d.ts",
@@ -14192,7 +14192,7 @@
     },
     {
       "path": "dist/foundation/contracts/kernel/tokens/engine-tokens/index.d.ts",
-      "size": 722
+      "size": 712
     },
     {
       "path": "dist/foundation/contracts/kernel/tokens/extensions/index.d.ts",
@@ -14284,7 +14284,7 @@
     },
     {
       "path": "dist/foundation/contracts/runtime/engine/index.d.ts",
-      "size": 4044
+      "size": 2207
     },
     {
       "path": "dist/foundation/contracts/runtime/errors/index.cjs",
@@ -15044,7 +15044,7 @@
     },
     {
       "path": "dist/foundation/tokens/ts/presentation/brand-themes/index.cjs",
-      "size": 3331
+      "size": 3550
     },
     {
       "path": "dist/foundation/tokens/ts/presentation/brand-themes/index.d.ts",
@@ -15052,7 +15052,7 @@
     },
     {
       "path": "dist/foundation/tokens/ts/presentation/brand-themes/index.js",
-      "size": 4101
+      "size": 4311
     },
     {
       "path": "dist/foundation/tokens/ts/presentation/brand-themes/rottay/index.cjs",
@@ -19848,7 +19848,7 @@
     },
     {
       "path": "dist/index.cjs",
-      "size": 89838
+      "size": 90616
     },
     {
       "path": "dist/index.d.ts",
@@ -19856,7 +19856,7 @@
     },
     {
       "path": "dist/index.js",
-      "size": 96658
+      "size": 97486
     },
     {
       "path": "dist/infrastructure/compilers/composition/index.d.ts",
@@ -19864,15 +19864,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/index.cjs",
-      "size": 29780
+      "size": 30294
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/index.d.ts",
-      "size": 14374
+      "size": 15043
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/index.js",
-      "size": 39190
+      "size": 39906
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.cjs",
@@ -20076,15 +20076,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.cjs",
-      "size": 2738
+      "size": 2766
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.d.ts",
-      "size": 4021
+      "size": 4345
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js",
-      "size": 3350
+      "size": 3386
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/tests/support/index.d.ts",
@@ -20095,56 +20095,96 @@
       "size": 444
     },
     {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/engine-visual/index.cjs",
+      "size": 624
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/engine-visual/index.d.ts",
+      "size": 961
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/engine-visual/index.js",
+      "size": 642
+    },
+    {
       "path": "dist/infrastructure/compilers/runtime/theme/index.d.ts",
-      "size": 1160
+      "size": 1562
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/classic/index.cjs",
-      "size": 2199
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/facade/admission/index.cjs",
+      "size": 1125
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/classic/index.d.ts",
-      "size": 1523
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/facade/admission/index.d.ts",
+      "size": 1450
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/classic/index.js",
-      "size": 3485
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/facade/admission/index.js",
+      "size": 1309
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/index.cjs",
-      "size": 844
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry/index.cjs",
+      "size": 1199
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry/index.d.ts",
+      "size": 1055
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry/index.js",
+      "size": 1303
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/foundation/definition/index.cjs",
+      "size": 433
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/foundation/definition/index.d.ts",
+      "size": 1196
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/foundation/definition/index.js",
+      "size": 454
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/index.d.ts",
-      "size": 982
+      "size": 660
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/index.js",
-      "size": 830
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.cjs",
+      "size": 7054
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/modern/index.cjs",
-      "size": 834
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.d.ts",
+      "size": 1513
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/modern/index.d.ts",
-      "size": 428
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.js",
+      "size": 8816
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/modern/index.js",
-      "size": 922
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.cjs",
+      "size": 4978
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/rustic/index.cjs",
-      "size": 862
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.d.ts",
+      "size": 295
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/rustic/index.d.ts",
-      "size": 362
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.js",
+      "size": 6812
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/rustic/index.js",
-      "size": 1340
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.cjs",
+      "size": 5222
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.d.ts",
+      "size": 266
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.js",
+      "size": 7000
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/index.cjs",
@@ -20708,15 +20748,15 @@
     },
     {
       "path": "dist/infrastructure/runtime/bootstrap/facade/react/provider/index.cjs",
-      "size": 9285
+      "size": 9487
     },
     {
       "path": "dist/infrastructure/runtime/bootstrap/facade/react/provider/index.d.ts",
-      "size": 12051
+      "size": 12726
     },
     {
       "path": "dist/infrastructure/runtime/bootstrap/facade/react/provider/index.js",
-      "size": 12545
+      "size": 12795
     },
     {
       "path": "dist/infrastructure/runtime/bootstrap/index.d.ts",
@@ -20816,35 +20856,31 @@
     },
     {
       "path": "dist/infrastructure/runtime/engines/composition/react/provider/index.cjs",
-      "size": 1230
+      "size": 1338
     },
     {
       "path": "dist/infrastructure/runtime/engines/composition/react/provider/index.d.ts",
-      "size": 531
+      "size": 1143
     },
     {
       "path": "dist/infrastructure/runtime/engines/composition/react/provider/index.js",
-      "size": 1405
+      "size": 1545
     },
     {
       "path": "dist/infrastructure/runtime/engines/facade/index.d.ts",
-      "size": 1253
-    },
-    {
-      "path": "dist/infrastructure/runtime/engines/foundation/contracts/binding/index.d.ts",
-      "size": 462
+      "size": 1215
     },
     {
       "path": "dist/infrastructure/runtime/engines/foundation/registry/index.cjs",
-      "size": 700
+      "size": 657
     },
     {
       "path": "dist/infrastructure/runtime/engines/foundation/registry/index.d.ts",
-      "size": 1919
+      "size": 1524
     },
     {
       "path": "dist/infrastructure/runtime/engines/foundation/registry/index.js",
-      "size": 785
+      "size": 739
     },
     {
       "path": "dist/infrastructure/runtime/engines/index.d.ts",
@@ -20852,63 +20888,63 @@
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/adapters/antd/index.cjs",
-      "size": 2617
+      "size": 983
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/adapters/antd/index.d.ts",
-      "size": 263
+      "size": 1210
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/adapters/antd/index.js",
-      "size": 3839
+      "size": 1155
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.cjs",
-      "size": 1977
+      "size": 1811
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.d.ts",
-      "size": 1636
+      "size": 1454
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.js",
-      "size": 2753
+      "size": 2484
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/index.cjs",
-      "size": 1160
+      "size": 1485
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/index.d.ts",
-      "size": 2641
+      "size": 2592
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/index.js",
-      "size": 1476
+      "size": 1870
     },
     {
       "path": "dist/infrastructure/runtime/engines/runtime/customization/component-registry/index.cjs",
-      "size": 1874
+      "size": 2035
     },
     {
       "path": "dist/infrastructure/runtime/engines/runtime/customization/component-registry/index.d.ts",
-      "size": 10372
+      "size": 9463
     },
     {
       "path": "dist/infrastructure/runtime/engines/runtime/customization/component-registry/index.js",
-      "size": 2195
+      "size": 2394
     },
     {
       "path": "dist/infrastructure/runtime/engines/runtime/resolution/index.cjs",
-      "size": 341
+      "size": 400
     },
     {
       "path": "dist/infrastructure/runtime/engines/runtime/resolution/index.d.ts",
-      "size": 1976
+      "size": 1984
     },
     {
       "path": "dist/infrastructure/runtime/engines/runtime/resolution/index.js",
-      "size": 316
+      "size": 378
     },
     {
       "path": "dist/infrastructure/runtime/error-handling/composition/react/use-error-handler/index.cjs",
@@ -21021,6 +21057,18 @@
     {
       "path": "dist/infrastructure/runtime/foundation/diagnostics/development-logging/index.js",
       "size": 369
+    },
+    {
+      "path": "dist/infrastructure/runtime/foundation/engine-visual/index.cjs",
+      "size": 1556
+    },
+    {
+      "path": "dist/infrastructure/runtime/foundation/engine-visual/index.d.ts",
+      "size": 1869
+    },
+    {
+      "path": "dist/infrastructure/runtime/foundation/engine-visual/index.js",
+      "size": 1712
     },
     {
       "path": "dist/infrastructure/runtime/foundation/graphics/continuous-runtime-governor/foundation/contracts/index.cjs",
@@ -21792,7 +21840,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/tenant/foundation/configuration/defaults/index.d.ts",
-      "size": 1684
+      "size": 1681
     },
     {
       "path": "dist/infrastructure/runtime/tenant/foundation/configuration/defaults/index.js",
@@ -21972,7 +22020,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/provider/index.cjs",
-      "size": 2002
+      "size": 2240
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/provider/index.d.ts",
@@ -21980,7 +22028,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/provider/index.js",
-      "size": 2644
+      "size": 2907
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/provider/theme/index.cjs",
@@ -21996,15 +22044,15 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/tokens/index.cjs",
-      "size": 5748
+      "size": 5724
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/tokens/index.d.ts",
-      "size": 1859
+      "size": 1696
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/tokens/index.js",
-      "size": 8477
+      "size": 8404
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/tokens/sub-hooks/index.cjs",
@@ -22020,7 +22068,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/facade/index.d.ts",
-      "size": 2485
+      "size": 2431
     },
     {
       "path": "dist/infrastructure/runtime/theming/foundation/cascade-layers/index.cjs",
@@ -22033,18 +22081,6 @@
     {
       "path": "dist/infrastructure/runtime/theming/foundation/cascade-layers/index.js",
       "size": 524
-    },
-    {
-      "path": "dist/infrastructure/runtime/theming/foundation/engine-tokens/index.cjs",
-      "size": 1921
-    },
-    {
-      "path": "dist/infrastructure/runtime/theming/foundation/engine-tokens/index.d.ts",
-      "size": 881
-    },
-    {
-      "path": "dist/infrastructure/runtime/theming/foundation/engine-tokens/index.js",
-      "size": 2307
     },
     {
       "path": "dist/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission/index.cjs",
@@ -28720,7 +28756,7 @@
     },
     {
       "path": "dist/server.cjs",
-      "size": 6011
+      "size": 6256
     },
     {
       "path": "dist/server.d.ts",
@@ -28728,7 +28764,7 @@
     },
     {
       "path": "dist/server.js",
-      "size": 6339
+      "size": 6604
     },
     {
       "path": "dist/spatial-spec.cjs",

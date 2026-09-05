@@ -9,7 +9,13 @@
 import { describe, expect, it } from "vitest";
 
 import { TENANT_CAPABILITY_REGISTRY } from "../../../capabilities";
-import type { ControlId, EngineAdapter, EnginePosture } from "..";
+import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine-tokens";
+import type {
+  ControlId,
+  EngineAdapter,
+  EngineControlDeclaration,
+  EnginePosture,
+} from "..";
 
 const POSTURES: readonly EnginePosture[] = [
   "native",
@@ -18,19 +24,38 @@ const POSTURES: readonly EnginePosture[] = [
   "unsupported",
 ];
 
+const cell: EngineControlDeclaration = {
+  posture: "native",
+  evidence: { kind: "channels", read: ["--ds-color-primary"] },
+};
+
+const baseline: EngineTokenOverrides = {
+  borderRadius: { none: "0", sm: "1px", md: "2px", lg: "3px", xl: "4px", full: "9999px" },
+  shadows: { sm: "none", md: "none", lg: "none", xl: "none" },
+  surface: { borderWidth: "0", borderStyle: "none", useGradients: false, useGlass: false },
+  motion: { hover: "0ms", transform: "none", spring: "linear", durationScale: 1 },
+  densityScale: 1,
+};
+
 const total = Object.fromEntries(
+  TENANT_CAPABILITY_REGISTRY.map((control) => [control.id, cell])
+) as Record<ControlId, EngineControlDeclaration>;
+
+const posture = Object.fromEntries(
   TENANT_CAPABILITY_REGISTRY.map((control) => [control.id, "native"])
 ) as Record<ControlId, EnginePosture>;
 
 const probe: EngineAdapter = {
   id: "modern",
-  posture: total,
-  project: () => ({ seeds: {}, tokenOverrides: {}, modes: [] }),
+  tokenBaseline: baseline,
+  controls: total,
+  posture,
+  project: () => ({ seeds: {}, modes: [] }),
 };
 
-describe("EngineAdapter.posture is total over ControlId", () => {
+describe("EngineAdapter.controls is total over ControlId", () => {
   it("accepts a record with every registry id", () => {
-    expect(Object.keys(probe.posture).sort()).toEqual(
+    expect(Object.keys(probe.controls).sort()).toEqual(
       TENANT_CAPABILITY_REGISTRY.map((control) => control.id).sort()
     );
   });
@@ -39,23 +64,45 @@ describe("EngineAdapter.posture is total over ControlId", () => {
     const { "palette.seeds": _omitted, ...missingOne } = total;
     const adapter: EngineAdapter = {
       id: "modern",
-      // @ts-expect-error posture must be TOTAL: omitting a ControlId is a build error.
-      posture: missingOne,
-      project: () => ({ seeds: {}, tokenOverrides: {}, modes: [] }),
+      tokenBaseline: baseline,
+      // @ts-expect-error controls must be TOTAL: omitting a ControlId is a build error.
+      controls: missingOne,
+      posture,
+      project: () => ({ seeds: {}, modes: [] }),
     };
-    expect(Object.keys(adapter.posture)).not.toContain("palette.seeds");
+    expect(Object.keys(adapter.controls)).not.toContain("palette.seeds");
   });
 
   it("rejects a posture value outside the closed four-value set", () => {
     const adapter: EngineAdapter = {
       id: "modern",
-      // @ts-expect-error 'partial' is not an EnginePosture; absence of a route is not a fifth value.
-      posture: { ...total, "palette.seeds": "partial" },
-      project: () => ({ seeds: {}, tokenOverrides: {}, modes: [] }),
+      tokenBaseline: baseline,
+      controls: {
+        ...total,
+        // @ts-expect-error 'partial' is not an EnginePosture; absence of a route is not a fifth value.
+        "palette.seeds": { posture: "partial", evidence: cell.evidence },
+      },
+      posture,
+      project: () => ({ seeds: {}, modes: [] }),
     };
     expect(POSTURES).not.toContain(
-      adapter.posture["palette.seeds"] as unknown as EnginePosture
+      adapter.controls["palette.seeds"].posture as unknown as EnginePosture
     );
+  });
+
+  it("rejects evidence that does not match the posture it is paired with", () => {
+    const adapter: EngineAdapter = {
+      id: "modern",
+      tokenBaseline: baseline,
+      controls: {
+        ...total,
+        // @ts-expect-error an `unsupported` cell cannot carry channel evidence.
+        "palette.seeds": { posture: "unsupported", evidence: cell.evidence },
+      },
+      posture,
+      project: () => ({ seeds: {}, modes: [] }),
+    };
+    expect(adapter.controls["palette.seeds"].evidence.kind).toBe("channels");
   });
 
   it("derives ControlId from the registry rather than a hand-written list", () => {

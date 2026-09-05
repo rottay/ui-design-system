@@ -3,9 +3,12 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
+import { renderWithEngine, renderWithEngineContext } from '@tests/support/engine';
 import { NotificationProvider, useNotification } from '..';
-import { renderWithEngine } from '@tests/support/engine';
+import type { ReactElement } from 'react';
+
+const render = (ui: ReactElement) => renderWithEngineContext(ui, 'classic');
 
 const NotificationTester = ({ onMount }: { onMount: (api: any) => void }) => {
   const [notificationApi, contextHolder] = useNotification();

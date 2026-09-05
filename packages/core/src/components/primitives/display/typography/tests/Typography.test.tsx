@@ -8,9 +8,13 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 import { Typography, Heading, Text, Paragraph } from '..';
 import { EngineProvider } from '../../../../../infrastructure/runtime/engines/composition/react/provider';
+import type { ReactElement } from 'react';
+
+const render = (ui: ReactElement) => renderWithEngineContext(ui, 'classic');
 
 function stripTypographyProps(props: Record<string, unknown>) {
   const {

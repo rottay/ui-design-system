@@ -1,7 +1,8 @@
 /**
  * @fileoverview Custom (pluggable) engine tests. Validates the full lifecycle:
- * register/unregister/clear components, pack-scoped isolation, fallback
- * resolution via createCustomWrapper, config management, and useCustomStatus.
+ * register/unregister/clear components, pack-scoped isolation, the refusal
+ * `createCustomWrapper` raises for an unregistered name, config management,
+ * and useCustomStatus.
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
@@ -24,12 +25,7 @@ import {
 describe('Custom Engine', () => {
   beforeEach(() => {
     clearCustomRegistry();
-    // Reset config to defaults
-    configureCustomEngine({
-      fallbackEngine: 'classic',
-      warnOnFallback: true,
-      logger: undefined,
-    });
+    configureCustomEngine({ logger: undefined });
   });
 
   describe('registerCustomComponent', () => {
@@ -138,20 +134,15 @@ describe('Custom Engine', () => {
 
   describe('configureCustomEngine', () => {
     it('should update configuration', () => {
-      configureCustomEngine({
-        fallbackEngine: 'modern',
-        warnOnFallback: false,
-      });
-
-      const config = getCustomEngineConfig();
-      expect(config.fallbackEngine).toBe('modern');
-      expect(config.warnOnFallback).toBe(false);
+      const logger = vi.fn();
+      configureCustomEngine({ logger });
+      expect(getCustomEngineConfig().logger).toBe(logger);
     });
 
-    it('should preserve unmodified config values', () => {
-      configureCustomEngine({ warnOnFallback: false });
-      const config = getCustomEngineConfig();
-      expect(config.fallbackEngine).toBe('classic'); // default
+    it('carries no fallback knob at all', () => {
+      // The knob was configured, reported and logged, and the resolver never
+      // read it: it named one engine while another rendered.
+      expect(Object.keys(getCustomEngineConfig())).toEqual(['logger']);
     });
 
     it('should invoke the logger during register / unregister / clear flows', () => {
@@ -169,10 +160,8 @@ describe('Custom Engine', () => {
   });
 
   describe('getCustomEngineConfig', () => {
-    it('should return default config', () => {
-      const config = getCustomEngineConfig();
-      expect(config.fallbackEngine).toBe('classic');
-      expect(config.warnOnFallback).toBe(true);
+    it('should return the empty default config', () => {
+      expect(getCustomEngineConfig().logger).toBeUndefined();
     });
 
     it('should return a copy of config', () => {
@@ -184,65 +173,48 @@ describe('Custom Engine', () => {
   });
 
   describe('createCustomWrapper', () => {
-    it('should resolve registered custom components before falling back', async () => {
+    it('should resolve a registered custom component', async () => {
       const MockButton = () => null;
-      const fallbackLoader = vi.fn(async () => ({ default: (() => null) as any }));
-
       registerCustomComponent('Button', MockButton);
-      const loader = createCustomWrapper('Button', fallbackLoader);
-      const resolved = await loader();
-
+      const resolved = await createCustomWrapper('Button')();
       expect(resolved.default).toBe(MockButton);
-      expect(fallbackLoader).not.toHaveBeenCalled();
     });
 
-    it('should resolve fallback loaders and emit a warning when configured', async () => {
-      const logger = vi.fn();
-      const Fallback = () => null;
-      const fallbackLoader = vi.fn(async () => ({ default: Fallback }));
-
-      configureCustomEngine({
-        fallbackEngine: 'rustic',
-        warnOnFallback: true,
-        logger,
-      });
-
-      const loader = createCustomWrapper('Input', fallbackLoader);
-      const resolved = await loader();
-
-      expect(resolved.default).toBe(Fallback);
-      expect(fallbackLoader).toHaveBeenCalledTimes(1);
-      expect(logger).toHaveBeenCalledWith(
-        'No custom implementation for "Input", using rustic fallback',
-        'warn'
+    it('should refuse an unregistered name instead of rendering another engine', async () => {
+      await expect(createCustomWrapper('Input')()).rejects.toThrow(
+        /No custom implementation registered for "Input".*no fallback engine/s
       );
     });
 
-    it('should skip fallback warnings when warnOnFallback is disabled', async () => {
+    it('should report the refusal through the configured logger', async () => {
       const logger = vi.fn();
-      configureCustomEngine({
-        fallbackEngine: 'modern',
-        warnOnFallback: false,
-        logger,
-      });
+      configureCustomEngine({ logger });
+      await expect(createCustomWrapper('Card', 'acme-pack')()).rejects.toThrow();
+      expect(logger).toHaveBeenCalledWith(
+        'No custom implementation for "Card" [pack: acme-pack]',
+        'error'
+      );
+    });
 
-      const loader = createCustomWrapper('Card', async () => ({ default: (() => null) as any }));
-      await loader();
-
-      expect(logger).not.toHaveBeenCalled();
+    it('should refuse outright when the custom engine is disabled', async () => {
+      registerCustomComponent('Tag', () => null);
+      await expect(createCustomWrapper('Tag', undefined, false)()).rejects.toThrow(
+        /custom engine is disabled/
+      );
     });
   });
 
   describe('useCustomStatus', () => {
     it('should expose the current registry and config snapshot', () => {
       registerCustomComponent('Alert', () => null);
-      configureCustomEngine({ fallbackEngine: 'modern', warnOnFallback: false });
+      const logger = vi.fn();
+      configureCustomEngine({ logger });
 
       const status = useCustomStatus();
 
       expect(status.registeredComponents).toContain('Alert');
       expect(status.componentCount).toBe(1);
-      expect(status.config.fallbackEngine).toBe('modern');
+      expect(status.config.logger).toBe(logger);
       expect(status.hasComponent('Alert')).toBe(true);
       expect(status.hasComponent('Missing')).toBe(false);
     });
@@ -384,31 +356,19 @@ describe('Custom Engine', () => {
     it('should resolve pack-scoped components in createCustomWrapper', async () => {
       const AcmeButton = () => null;
       const GlobexButton = () => null;
-      const Fallback = () => null;
-      const fallbackLoader = vi.fn(async () => ({ default: Fallback as any }));
 
       registerCustomComponent('Button', AcmeButton, 'acme-pack');
       registerCustomComponent('Button', GlobexButton, 'globex-pack');
 
-      // Acme pack should resolve to AcmeButton
-      const acmeLoader = createCustomWrapper('Button', fallbackLoader, 'acme-pack');
-      const acmeResult = await acmeLoader();
-      expect(acmeResult.default).toBe(AcmeButton);
+      expect((await createCustomWrapper('Button', 'acme-pack')()).default).toBe(AcmeButton);
+      expect((await createCustomWrapper('Button', 'globex-pack')()).default).toBe(GlobexButton);
 
-      // Globex pack should resolve to GlobexButton
-      const globexLoader = createCustomWrapper('Button', fallbackLoader, 'globex-pack');
-      const globexResult = await globexLoader();
-      expect(globexResult.default).toBe(GlobexButton);
-
-      // Unknown pack should fall back
-      const unknownLoader = createCustomWrapper('Button', fallbackLoader, 'unknown-pack');
-      const unknownResult = await unknownLoader();
-      expect(unknownResult.default).toBe(Fallback);
-
-      // Default pack should also fall back (Button was only registered in named packs)
-      const defaultLoader = createCustomWrapper('Button', fallbackLoader);
-      const defaultResult = await defaultLoader();
-      expect(defaultResult.default).toBe(Fallback);
+      // A pack that registers nothing under this name has no custom rendering,
+      // and says so rather than borrowing another pack's or another engine's.
+      await expect(createCustomWrapper('Button', 'unknown-pack')()).rejects.toThrow(
+        /pack "unknown-pack"/
+      );
+      await expect(createCustomWrapper('Button')()).rejects.toThrow(/default pack/);
     });
 
     it('should scope useCustomStatus to a specific pack', () => {

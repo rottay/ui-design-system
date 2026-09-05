@@ -12,12 +12,15 @@ import { join } from 'node:path';
 
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { useVoiceInput } from '../../../../../infrastructure/runtime/application/automation/voice/composition/react/input';
 
 import { VoiceInputButton } from '..';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 const skin = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/presentation/components/skin/voice-input-button/index.css'),

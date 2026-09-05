@@ -12,7 +12,6 @@
  * - **Fallback UI**: Displays error message with optional custom render
  * - **Reset capability**: Allows retry after error recovery
  * - **Error reporting**: Callback for logging/monitoring integration
- * - **Fallback engine**: Option to try a different engine on failure
  *
  * This boundary is used internally by `createEngineComponent` but can also
  * be used directly for custom error handling scenarios.
@@ -47,7 +46,6 @@
  */
 
 import { Component, ErrorInfo, ReactNode } from 'react';
-import type { EngineName } from '../../../../../../foundation/contracts';
 import { errorInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import { ErrorHandler } from '../../../../error-handling/runtime/handler';
 import { ErrorCategory, ErrorSeverity } from '@/foundation/contracts/runtime/errors';
@@ -55,8 +53,6 @@ import { ErrorCategory, ErrorSeverity } from '@/foundation/contracts/runtime/err
 export interface EngineErrorBoundaryProps {
   /** Child components to render */
   children: ReactNode;
-  /** Fallback engine to try if primary fails */
-  fallbackEngine?: EngineName;
   /** Custom fallback UI render function */
   fallbackRender?: (error: Error, reset: () => void) => ReactNode;
   /** Error callback for logging/monitoring */
@@ -75,7 +71,6 @@ interface State {
  * @example
  * ```tsx
  * <EngineErrorBoundary
- *   fallbackEngine="rustic"
  *   onError={(error) => console.error('Engine failed:', error)}
  * >
  *   <Button>Click me</Button>
@@ -106,9 +101,6 @@ export class EngineErrorBoundary extends Component<EngineErrorBoundaryProps, Sta
       severity: ErrorSeverity.ERROR,
       component: 'EngineErrorBoundary',
       originalError: error,
-      metadata: {
-        fallbackEngine: this.props.fallbackEngine,
-      },
     });
   }
 
@@ -135,9 +127,6 @@ export class EngineErrorBoundary extends Component<EngineErrorBoundaryProps, Sta
           }}
         >
           <strong>Engine Error:</strong> Failed to load component.
-          {this.props.fallbackEngine && (
-            <span> Attempting fallback to {this.props.fallbackEngine}...</span>
-          )}
           {this.state.error && (
             <div style={{ marginTop: '8px', fontSize: '12px', opacity: 0.7 }}>
               {this.state.error.message}

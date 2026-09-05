@@ -59,19 +59,19 @@ import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
 } from '@/foundation/tokens/ts/runtime/personality';
-import { useEngineContext } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
+import { useDeclaredEngine } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
+import type { ImplementedEngineName } from '../../../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { TextProps } from '../../contracts';
 import { ClassicText } from '../../engines/classic';
 import { ModernText } from '../../engines/modern';
 import { RusticText } from '../../engines/rustic';
 
+type TextImplementation = ForwardRefExoticComponent<TextProps & RefAttributes<HTMLElement>>;
+
 /**
  * Map of engine names to their respective Text implementations.
  */
-const engineMap: Record<
-  string,
-  ForwardRefExoticComponent<TextProps & RefAttributes<HTMLElement>>
-> = {
+const engineMap: Record<ImplementedEngineName, TextImplementation> = {
   classic: ClassicText,
   modern: ModernText,
   rustic: RusticText,
@@ -111,12 +111,19 @@ const engineMap: Record<
  */
 export const TypographyText = forwardRef<HTMLElement, TextProps>(
   ({ engine, ...props }, ref) => {
-    const { engine: contextEngine } = useEngineContext();
-    const activeEngine = engine ?? contextEngine;
+    const declaredEngine = useDeclaredEngine();
+    const activeEngine = engine ?? declaredEngine;
     // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
-    // Fall back to ClassicText if an unrecognized engine name is provided
-    const Component = engineMap[activeEngine] || ClassicText;
+    const Component = engineMap[activeEngine as ImplementedEngineName] as
+      | TextImplementation
+      | undefined;
+    if (!Component) {
+      throw new Error(
+        `TypographyText: no implementation for engine ${JSON.stringify(activeEngine)}. ` +
+          'Pass an `engine` prop or mount a provider; there is no fallback engine.'
+      );
+    }
 
     return (
       <Component

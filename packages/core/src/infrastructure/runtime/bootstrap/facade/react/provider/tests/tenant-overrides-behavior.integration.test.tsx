@@ -17,7 +17,7 @@ import { useI18nContext } from '@/infrastructure/runtime/i18n/runtime/context/pr
 import { useFeatures } from '@/infrastructure/runtime/features/composition/react/provider/features';
 import { useThemeContext } from '@/infrastructure/runtime/theming/composition/react/provider';
 import { useEngineContext } from '@/infrastructure/runtime/engines/composition/react/provider';
-import { FALLBACK_ENGINE } from '@/infrastructure/runtime/engines/runtime/resolution';
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import { useMotionPolicy } from '../../../../../motion';
 import {
   BEHAVIOR_OVERRIDE_KEYS,
@@ -630,7 +630,7 @@ describe('tenantOverrides: engine and componentPack are config, not behavior', (
     // behavior key is delivered to its consumer by construction, which is
     // exactly the outcome the engine resolution order refuses.
     expect(observed!.config.engine).toBe('rustic');
-    expect(observed!.engine).toBe(FALLBACK_ENGINE);
+    expect(observed!.engine).toBe(PRIMARY_ENGINE);
     expect(observed!.engine).not.toBe('rustic');
   });
 });

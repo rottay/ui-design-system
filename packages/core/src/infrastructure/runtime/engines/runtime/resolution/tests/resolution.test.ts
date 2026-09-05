@@ -10,7 +10,8 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { FALLBACK_ENGINE, resolveEngine } from '..';
+import { resolveEngine } from '..';
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import { isBundledTenant } from '../../../../tenant/foundation/configuration/registry';
 
 /** A slug the registry actually bundles, so the pin branch is reachable. */
@@ -50,9 +51,17 @@ describe('engine resolution order', () => {
     expect(resolveEngine({ tenantEngine: 'rustic', tenantSlug: BUNDLED_SLUG })).toBe('rustic');
   });
 
-  it('4. nothing declared falls back', () => {
-    expect(resolveEngine({})).toBe(FALLBACK_ENGINE);
-    expect(resolveEngine({ tenantSlug: BUNDLED_SLUG })).toBe(FALLBACK_ENGINE);
+  it('4. nothing declared resolves to the primary engine, which is Modern', () => {
+    expect(resolveEngine({})).toBe(PRIMARY_ENGINE);
+    expect(resolveEngine({ tenantSlug: BUNDLED_SLUG })).toBe(PRIMARY_ENGINE);
+    expect(PRIMARY_ENGINE).toBe('modern');
+  });
+
+  it('has no second constant answering the same question', async () => {
+    const registry = (await import('../../../foundation/registry')) as Record<string, unknown>;
+    expect(Object.keys(registry)).not.toContain('getDefaultEngine');
+    const resolution = (await import('..')) as Record<string, unknown>;
+    expect(Object.keys(resolution)).not.toContain('FALLBACK_ENGINE');
   });
 });
 
@@ -62,7 +71,7 @@ describe('engine resolution fails closed on a database-driven tenant', () => {
     // bounded token overrides. `engine` is not on that list. A row that sets it
     // is not honoured, it is ignored.
     expect(resolveEngine({ tenantEngine: 'modern', tenantSlug: DB_DRIVEN_SLUG })).toBe(
-      FALLBACK_ENGINE
+      PRIMARY_ENGINE
     );
   });
 
@@ -79,6 +88,6 @@ describe('engine resolution fails closed on a database-driven tenant', () => {
   it('ignores a tenant engine when the slug is unknown to the resolver', () => {
     // No slug means the resolver cannot prove the tenant is bundled, so it must
     // not trust the pin.
-    expect(resolveEngine({ tenantEngine: 'modern' })).toBe(FALLBACK_ENGINE);
+    expect(resolveEngine({ tenantEngine: 'modern' })).toBe(PRIMARY_ENGINE);
   });
 });

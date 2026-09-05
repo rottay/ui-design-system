@@ -18,6 +18,7 @@ import { render, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { DesignSystemProvider } from '..';
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import { getKnownTenantConfig } from '../../../../../tenant/foundation/configuration/registry';
 
 function activeEngine(): string | null {
@@ -61,7 +62,7 @@ describe('the vertical owns the engine, end to end', () => {
     await waitFor(() => expect(activeEngine()).toBe('rustic'), { timeout: 15000 });
   });
 
-  it('no vertical and no tenant opinion falls back to classic', async () => {
+  it('no vertical and no honoured tenant opinion renders the primary engine', async () => {
     render(
       <DesignSystemProvider
         tenantConfig={{
@@ -78,6 +79,8 @@ describe('the vertical owns the engine, end to end', () => {
       </DesignSystemProvider>
     );
 
-    await waitFor(() => expect(activeEngine()).toBe('classic'), { timeout: 15000 });
+    // Not a fallback: PRIMARY_ENGINE is the one statement of which engine this
+    // design system renders with, and nothing in this tree declares another.
+    await waitFor(() => expect(activeEngine()).toBe(PRIMARY_ENGINE), { timeout: 15000 });
   });
 });

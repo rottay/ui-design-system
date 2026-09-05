@@ -7,6 +7,7 @@ import {
   type ProductProfileKey,
 } from '@rottay/design-system';
 import { getShowroomVerticalKey } from '@/components/showroom-context';
+import { useFirstPartyEngineVisual } from '@/components/engine-visual';
 import { ShowroomShell } from '../../shell';
 
 export function DocsProviderShell({
@@ -21,6 +22,7 @@ export function DocsProviderShell({
   tenantSlug: 'rottay' | 'bithire' | 'evnto';
 }) {
   const tenantConfig = getKnownTenantConfig(tenantSlug);
+  const engineVisual = useFirstPartyEngineVisual(tenantSlug, engine);
   const runtimeKey = `${tenantSlug}:${engine}:${productProfile}`;
 
   return (
@@ -28,6 +30,7 @@ export function DocsProviderShell({
       key={runtimeKey}
       tenantConfig={tenantConfig ?? undefined}
       forceEngine={engine}
+      engineVisual={engineVisual}
       productProfile={productProfile}
       vertical={getShowroomVerticalKey(tenantSlug)}
     >

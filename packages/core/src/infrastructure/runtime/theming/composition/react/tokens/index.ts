@@ -27,7 +27,7 @@ import { useMemo } from 'react';
 import { useTenantContext as useTenant } from '../../../../tenant/foundation/context';
 import { useProductProfileContext as useProductProfile } from '../../../../product-profiles';
 import { useEngineContext } from '../../../../engines';
-import { getEngineTokens } from '../../../foundation/engine-tokens';
+import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import { DEFAULT_PERSONALITY } from '../../../../personality/foundation/defaults';
 import { resolveChartPersonality } from '../../../../personality/runtime/resolution/chart';
 import {
@@ -37,8 +37,6 @@ import {
 import { resolveEffectiveDensityScale } from '@/foundation/tokens/ts/foundation/base/density';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '@/foundation/contracts';
 
-export { getEngineTokens, ENGINE_TOKENS } from '../../../foundation/engine-tokens';
-export type { EngineTokenOverrides } from '../../../foundation/engine-tokens';
 export { DEFAULT_PERSONALITY } from '../../../../personality/foundation/defaults';
 
 // Granular sub-hooks for subscribing to specific token slices
@@ -182,8 +180,9 @@ export function useTokens(): DesignTokens {
     const brandTheme = config.brandTheme;
     const hasBrandTheme = !!brandTheme;
 
-    // 1. Engine base tokens -- the visual foundation for classic/modern/rustic
-    const engineOverrides = getEngineTokens(engine);
+    // 1. Engine base tokens. `resolveAdapter` is the single door: an engine
+    // with no adapter has no baseline and is refused rather than substituted.
+    const engineOverrides = resolveAdapter(engine).tokenBaseline;
 
     // 2. Vertical structural overrides (new — previously only personality participated).
     // This closes the asymmetry where vertical influenced personality but not structural tokens.

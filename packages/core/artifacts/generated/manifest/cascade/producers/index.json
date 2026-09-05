@@ -18,7 +18,7 @@
     "cssEdges": "6be5af3f23544885f9550ca1547edeafd8482ddef1cfed024c5c08ca71d5c9a7",
     "cascadeRoots": "a6dfd7ef4834561240b867c7b459f4d067fdc248a4417b27277586fe36e31abc",
     "rootCatalog": "b0ac4af134c352f9ba00d8d8bae81977c707ceb2ee7767740a8611e9d9cc9287",
-    "srcTsx": "1f89b49fb5ca9711109e548d9782368c7e5a94942b082943c8b98415a766da57",
+    "srcTsx": "e9f1227ed16b84b2c5140dcf912ef6637835221221f937262eb654c895314c87",
     "srcCompilers": "6c9adeb890251288ff49ceda682706ccb2819706792315ea9d52e315a591cbaf",
     "artifacts": "0e21296429c58ad2699f36f84f8d96fdeb1625a3f55e762752e2381a07792c42"
   },
@@ -95,8 +95,8 @@
       "stampSites": 513
     },
     "measuredCensus": {
-      "scannedFiles": 1750,
-      "excludedFiles": 1637,
+      "scannedFiles": 1753,
+      "excludedFiles": 1645,
       "styleSinks": 3291,
       "stampSites": 312,
       "distinctCustomProperties": 202,
@@ -108,13 +108,13 @@
     "censusDiff": {
       "scannedFiles": {
         "authored": 1740,
-        "measured": 1750,
-        "delta": 10
+        "measured": 1753,
+        "delta": 13
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 1637,
-        "delta": -27
+        "measured": 1645,
+        "delta": -19
       },
       "styleSinks": {
         "authored": 3283,
@@ -150,7 +150,7 @@
     "censusReconciliation": {
       "method": "identity, not tolerance. This module publishes the full member lists below; the authored census published COUNTS ONLY and no member list, so the two cannot be reconciled member by member from its side. The residual is therefore expressed as unknownProvenance rows with file and symbol, never as a numeric tolerance.",
       "authoredPublishesMemberLists": false,
-      "scannedFiles": 1750,
+      "scannedFiles": 1753,
       "governedChannels": 163,
       "unresolvedSites": 0
     },
@@ -1914,11 +1914,15 @@
       "packages/core/src/infrastructure/compilers/runtime/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/tenant-css/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/facade/engine-visual/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/index.ts",
-      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/classic/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/facade/admission/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/foundation/definition/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/index.ts",
-      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/modern/index.ts",
-      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/rustic/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/floors/index.ts",
@@ -1982,7 +1986,6 @@
       "packages/core/src/infrastructure/runtime/effects/runtime/registry/resolution/index.ts",
       "packages/core/src/infrastructure/runtime/engines/composition/react/provider/index.tsx",
       "packages/core/src/infrastructure/runtime/engines/facade/index.ts",
-      "packages/core/src/infrastructure/runtime/engines/foundation/contracts/binding/index.ts",
       "packages/core/src/infrastructure/runtime/engines/foundation/registry/index.ts",
       "packages/core/src/infrastructure/runtime/engines/index.ts",
       "packages/core/src/infrastructure/runtime/engines/presentation/adapters/antd/index.tsx",
@@ -2002,6 +2005,7 @@
       "packages/core/src/infrastructure/runtime/foundation/change-key/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/density/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/diagnostics/development-logging/index.ts",
+      "packages/core/src/infrastructure/runtime/foundation/engine-visual/index.tsx",
       "packages/core/src/infrastructure/runtime/foundation/graphics/continuous-runtime-governor/foundation/contracts/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/graphics/continuous-runtime-governor/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/graphics/continuous-runtime-governor/runtime/admission/index.ts",
@@ -2105,7 +2109,6 @@
       "packages/core/src/infrastructure/runtime/theming/composition/react/tokens/sub-hooks/index.ts",
       "packages/core/src/infrastructure/runtime/theming/facade/index.ts",
       "packages/core/src/infrastructure/runtime/theming/foundation/cascade-layers/index.ts",
-      "packages/core/src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
       "packages/core/src/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission/index.ts",
       "packages/core/src/infrastructure/runtime/theming/foundation/visual-authority/index.ts",
       "packages/core/src/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention/index.ts",
@@ -2135,7 +2138,7 @@
     "closedProducer": "8ba49379804206ba321f86defe867df007ad6d42917ea5acd2c6eff0c7366356",
     "closedZeroGovernedReceipts": "a8dca853e6ebf9def836dfe9e0a6d8750b66614f53b9dbc582a3d0bef949aead",
     "publicBoundaryReceipts": "fc40285118ae5505006226728decbac53ddbcae306e5c8582bdf5410a2b25efb",
-    "privateRelayReceipts": "7332e1ad0a6ba9c68465b26f96c9a9d74a93908262d6388507084b78889ea9fc",
+    "privateRelayReceipts": "8586a0b1797737880a01c10ade5bf4a8aca8b8ac4035b2ff7ebae46c041413d4",
     "closedProducerReceipts": "6ad305f064486e48325ec30c418c7225443b63e517f09f6b072d888956575631",
     "branchCompositeOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "authoredOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -40663,10 +40666,10 @@
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/tree/engines/modern/index.tsx","symbol":"ModernTree","line":1058,"ordinal":41445,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx","symbol":"containerStyle","line":937,"ordinal":31851,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx","symbol":"containerStyle","line":937,"ordinal":31848,"template":"...style","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["div"],"relayKinds":["PRIVATE_RELAY_UNRESOLVED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/compound/heading/index.tsx","symbol":"TypographyHeading","line":114,"ordinal":3866,"template":"mergePersonalityStyle(props.style, resolveTypographyHeadingStyle(tokens))","reason":"public-style-passthrough:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["Component"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"branches","stylePassthrough":true,"path":["terminal-at-sink","callToImport","import"]},"resolvedVia":"public-style-passthrough"},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/compound/heading/index.tsx","symbol":"TypographyHeading","line":115,"ordinal":3954,"template":"props.style","reason":"public-style-passthrough:member-access","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["Component"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"callArgsPending","stylePassthrough":true,"path":["terminal-at-sink","destructuredParam","propertyLookupThroughOpaque"]},"resolvedVia":"public-style-passthrough"},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/compound/paragraph/index.tsx","symbol":"TypographyParagraph","line":117,"ordinal":3981,"template":"mergePersonalityStyle( props.style, // Pass false for isLabel since paragraphs are never label eleme","reason":"public-style-passthrough:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["Component"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"branches","stylePassthrough":true,"path":["terminal-at-sink","callToImport","import"]},"resolvedVia":"public-style-passthrough"},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/compound/text/index.tsx","symbol":"TypographyText","line":125,"ordinal":3895,"template":"mergePersonalityStyle( props.style, // When as=\"label\", resolveTypographyTextStyle applies label-spe","reason":"public-style-passthrough:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["Component"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"branches","stylePassthrough":true,"path":["terminal-at-sink","callToImport","import"]},"resolvedVia":"public-style-passthrough"},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/compound/heading/index.tsx","symbol":"TypographyHeading","line":121,"ordinal":4264,"template":"mergePersonalityStyle(props.style, resolveTypographyHeadingStyle(tokens))","reason":"public-style-passthrough:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["Component"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"branches","stylePassthrough":true,"path":["terminal-at-sink","callToImport","import"]},"resolvedVia":"public-style-passthrough"},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/compound/heading/index.tsx","symbol":"TypographyHeading","line":122,"ordinal":4352,"template":"props.style","reason":"public-style-passthrough:member-access","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["Component"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"callArgsPending","stylePassthrough":true,"path":["terminal-at-sink","destructuredParam","propertyLookupThroughOpaque"]},"resolvedVia":"public-style-passthrough"},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/compound/paragraph/index.tsx","symbol":"TypographyParagraph","line":124,"ordinal":4383,"template":"mergePersonalityStyle( props.style, // Pass false for isLabel since paragraphs are never label eleme","reason":"public-style-passthrough:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["Component"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"branches","stylePassthrough":true,"path":["terminal-at-sink","callToImport","import"]},"resolvedVia":"public-style-passthrough"},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/compound/text/index.tsx","symbol":"TypographyText","line":132,"ordinal":4287,"template":"mergePersonalityStyle( props.style, // When as=\"label\", resolveTypographyTextStyle applies label-spe","reason":"public-style-passthrough:call","consumable":false,"tenantSafe":false,"nonConsumableCause":"composition-whose-only-open-operand-is-the-callers-own-style-object","sinkTags":["Component"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"branches","stylePassthrough":true,"path":["terminal-at-sink","callToImport","import"]},"resolvedVia":"public-style-passthrough"},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/engines/classic/index.tsx","symbol":"resolvedStyle","line":383,"ordinal":11901,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["AntText","TextElement","Title","h6"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED","PRIVATE_RELAY_UNRESOLVED"],"occurrences":4,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/engines/classic/index.tsx","symbol":"resolvedStyle","line":383,"ordinal":11898,"template":"...style","reason":"private-relay-unresolved:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["AntText","TextElement","Title","h6"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED","PRIVATE_RELAY_UNRESOLVED"],"occurrences":4,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/typography/engines/classic/index.tsx","symbol":"resolvedStyle","line":383,"ordinal":11901,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["AntText","TextElement","Title","h6"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED","PRIVATE_RELAY_UNRESOLVED"],"occurrences":4,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredParam"]}},

@@ -1,8 +1,8 @@
 /**
  * @fileoverview Per-engine visual token override contract.
- * @description Moved here from `infrastructure/runtime/theming/foundation/engine-tokens`
- * so a foundation contract can name it; the three token rows and `getEngineTokens`
- * stay where they are and re-export this type.
+ * @description The shape of one engine's baseline for the JS token tree. Each
+ * engine adapter authors exactly one row of it as `tokenBaseline`; there is no
+ * lookup table and no engine-keyed record besides the adapter registry.
  *
  * @module Contracts/Tokens/EngineTokens
  * @category Types
@@ -12,9 +12,8 @@
 import type { MotionTokens, SurfaceTokens } from '..';
 
 /**
- * Token overrides that differentiate one engine from another.
- * The token resolution pipeline in `useTokens` layers these under
- * product-profile and tenant overrides.
+ * Token values that differentiate one engine from another. `useTokens` layers
+ * vertical, product-profile and tenant values on top of the active engine's row.
  */
 export interface EngineTokenOverrides {
   borderRadius: {

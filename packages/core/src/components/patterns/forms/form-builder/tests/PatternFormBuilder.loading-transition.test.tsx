@@ -1,9 +1,12 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 
 import type { FieldDef } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 import ModernFormBuilder from '../engines/modern';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 const FIELDS: FieldDef[] = [
   { name: 'email', label: 'Email', type: 'email', required: true },

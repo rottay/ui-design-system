@@ -1,11 +1,13 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 import { describe, expect, it } from 'vitest';
 
 import type { ColumnDef } from '@/foundation/contracts/runtime/components/patterns/core';
 import type { SupportedLocale } from '@/foundation/i18n/kernel/contracts';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import ModernDataTable from '../engines/modern';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 interface Row {
   id: number;

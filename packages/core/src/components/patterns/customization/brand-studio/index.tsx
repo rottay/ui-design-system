@@ -39,7 +39,7 @@ import { Select } from '../../../primitives/inputs/select';
 import { Stack } from '../../../primitives/layout/stack';
 import { Text } from '../../../primitives/display/typography/compound/text';
 import {
-  THEME_ENGINE_ADAPTERS,
+  resolveAdapter,
   compileTheme,
   resolveTheme,
 } from '@/infrastructure/compilers/runtime/theme';
@@ -48,6 +48,8 @@ import {
   emitRule,
 } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
+import { getFirstPartyVertical } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { validateBrandingContrast, type BrandingColors } from '@/foundation/kernel/accessibility/branding-contrast';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -337,7 +339,8 @@ export interface SurfaceVariables {
 export function buildSurfaceVariables(theme: BrandTheme, surface: BrandStudioSurfaceConfig): SurfaceVariables {
   const compiled = compileTheme(
     resolveTheme({ ...liftAuthoredTheme(theme), id: surface.tenantSlug }),
-    THEME_ENGINE_ADAPTERS.modern,
+    // The previewed slug names the vertical, and the vertical owns the engine.
+    resolveAdapter(getFirstPartyVertical(surface.tenantSlug)?.engine ?? PRIMARY_ENGINE),
   );
   // Admitted here as well as in the emission owner, so that the map this
   // function publishes IS the map the panel injects: a channel the grammar

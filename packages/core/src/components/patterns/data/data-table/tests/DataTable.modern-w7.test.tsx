@@ -4,10 +4,13 @@ import { fileURLToPath } from 'node:url';
 
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 
 import type { ColumnDef } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 import ModernDataTable from '../engines/modern';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 /**
  * W7 remediation suite — DataTable modern engine:

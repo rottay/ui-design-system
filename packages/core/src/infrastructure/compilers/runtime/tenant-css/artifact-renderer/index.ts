@@ -12,15 +12,16 @@ import type {
   ThemeCompilationModeBlock,
 } from '@/foundation/contracts/composition/tenants/themes/compiled';
 import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
+import type { EngineName } from '@/foundation/contracts/kernel/engine-identity';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 import {
-  THEME_ENGINE_ADAPTERS,
   compileTheme,
   containerScope,
   emitBaseRule,
   emitModeRule,
   firstPartyScope,
+  resolveAdapter,
   resolveTheme,
 } from '../../theme';
 import { projectFirstPartyArtifactScopes } from '../../../kernel/foundation/css/scope-projection';
@@ -52,6 +53,12 @@ export interface FirstPartyArtifactSpec {
   selector: string;
   /** Path to the authored theme, relative to `packages/core/src`. */
   authoredThemePath: string;
+  /**
+   * The engine this vertical renders with, projected from the roster. The
+   * compile that produces the shipped artifacts resolves its adapter from this
+   * field, never from a literal.
+   */
+  engine: EngineName;
 }
 
 /**
@@ -91,6 +98,7 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] =
         displayName: row.name,
         authoredThemePath: row.themeSourcePath,
         selector: artifactRootSelector(row.slug),
+        engine: row.engine,
       }),
     ),
   );
@@ -229,7 +237,7 @@ export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): 
   compiled: ThemeCompilation;
 } {
   const { spec, theme, regenerateCommand } = input;
-  const compiled = compileTheme(resolveTheme(theme), THEME_ENGINE_ADAPTERS.modern);
+  const compiled = compileTheme(resolveTheme(theme), resolveAdapter(spec.engine));
   return {
     compiled,
     css: renderVerticalArtifact({

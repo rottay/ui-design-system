@@ -68,7 +68,7 @@ const TestWidget = createEngineComponent<Record<never, never>>('TestWidget', {
 });
 
 // A second name, deliberately left unregistered in every pack, to prove that a
-// partial pack is a legal pack.
+// partial pack refuses by name rather than borrowing another engine.
 const UnpackedWidget = createEngineComponent<Record<never, never>>('UnpackedWidget', {
   classic: async () => ({ default: FallbackWidget }),
   modern: async () => ({ default: FallbackWidget }),
@@ -146,12 +146,36 @@ describe('componentPack resolution (custom engine)', () => {
     expect(screen.queryByTestId('globex-widget')).toBeNull();
   });
 
-  it('falls through to the fallback engine for a name the pack does not register', async () => {
+  it('refuses a name the pack does not register instead of rendering another engine', async () => {
     registerCustomComponents({ TestWidget: AcmeWidget }, 'acme-pack');
 
     render(renderWithPack('acme-pack', <UnpackedWidget />));
 
-    expect(await screen.findByTestId('fallback-widget')).toBeInTheDocument();
+    const boundary = await screen.findByText(/Engine Error:/);
+    expect(boundary).toBeInTheDocument();
+    expect(
+      await screen.findByText(/No custom implementation registered for "UnpackedWidget"/)
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId('fallback-widget')).toBeNull();
+  });
+
+  it('refuses an engine the component declares no implementation for', async () => {
+    const ModernOnlyWidget = createEngineComponent<Record<never, never>>('ModernOnlyWidget', {
+      classic: async () => ({ default: FallbackWidget }),
+      modern: async () => ({ default: FallbackWidget }),
+      rustic: null,
+    });
+
+    render(
+      <EngineProvider defaultEngine="rustic">
+        <ModernOnlyWidget />
+      </EngineProvider>
+    );
+
+    expect(
+      await screen.findByText(/ModernOnlyWidget has no rustic implementation/)
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId('fallback-widget')).toBeNull();
   });
 
   it('paints nothing: registering, activating, switching and unmounting a pack leaves the style surface identical', async () => {

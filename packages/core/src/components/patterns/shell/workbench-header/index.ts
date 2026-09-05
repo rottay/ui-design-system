@@ -21,6 +21,8 @@ export const PatternWorkbenchHeader = createEngineComponent<WorkbenchHeaderProps
   {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/classic'),
+    // No rustic implementation exists, and the engine freeze forbids writing
+    // one. A declared absence throws instead of painting classic chrome.
+    rustic: null,
   }
 );

@@ -213,6 +213,19 @@ export const CI_GATES = Object.freeze([
   // 78 written exceptions were keyed at paths git has never contained, because
   // nothing asserted that a key resolves. A detector that cannot be seen
   // refusing a planted mis-key is not evidence about the ledger.
+  { id: 'engine-wiring-drill', run: ['node', '--test', 'scripts/check/engine/wiring/index.test.mjs'], blocking: true },
+  { id: 'engine-wiring', run: ['node', 'scripts/check/engine/wiring/index.mjs'], blocking: true },
+  {
+    id: 'engine-posture',
+    run: [
+      'pnpm',
+      'exec',
+      'vitest',
+      'run',
+      'src/infrastructure/compilers/runtime/theme/presentation/adapters/tests',
+    ],
+    blocking: true,
+  },
   { id: 'engine-freeze-drill', run: ['node', '--test', 'scripts/check/engine/lifecycle/freeze/index.test.mjs'], blocking: true },
   { id: 'engine-freeze-gate', run: ['node', 'scripts/check/engine/lifecycle/freeze/index.mjs', '--check'], blocking: true },
   // The integration fence had NO manifest entry and NO test owner, so its three

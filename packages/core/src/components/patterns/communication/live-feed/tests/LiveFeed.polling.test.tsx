@@ -1,9 +1,12 @@
 import React from 'react';
-import { act, render } from '@testing-library/react';
+import { act } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ModernLiveFeed from '../engines/modern';
 import type { FeedItem, LiveFeedProps } from '../contracts';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 type Item = FeedItem & { title: string };
 

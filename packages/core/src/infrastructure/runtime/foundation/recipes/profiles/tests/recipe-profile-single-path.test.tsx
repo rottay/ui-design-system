@@ -31,11 +31,19 @@ const PROFILE_ID = 'rottay/technical-sharp@1';
 const SOURCE_ROOT = resolve(process.cwd(), 'src');
 const STYLE_ID = 'planted-recipe-profile-variable';
 
-/** Files allowed to mention the variable: the two emitters and its declarative capability owner. */
+/**
+ * Files allowed to mention the variable: the two emitters, its declarative
+ * capability owner, and the three engine adapters — which name it only inside
+ * the evidence string that states no engine surface reads it. A mention there
+ * is the opposite of a consumer: it is the recorded proof of absence.
+ */
 const ALLOWED_MENTIONS = [
   'infrastructure/compilers/runtime/theme/runtime/lowering/index.ts',
   'infrastructure/compilers/composition/tenant-theme/index.ts',
   'foundation/contracts/composition/tenants/capabilities/index.ts',
+  'infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts',
+  'infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts',
+  'infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.ts',
 ];
 
 function isProductionSource(path: string): boolean {

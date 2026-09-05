@@ -47,12 +47,13 @@ import { Input } from '../../../primitives/inputs/input';
 import { Text } from '../../../primitives/display/typography/compound/text';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { FIRST_PARTY_THEMES, getFirstPartyVertical } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { migrateV1 } from '@/infrastructure/compilers/composition/tenant-theme/migrate-v1';
 import {
-  THEME_ENGINE_ADAPTERS,
+  resolveAdapter,
   compileTheme,
   resolveTheme,
 } from '@/infrastructure/compilers/runtime/theme';
@@ -112,6 +113,9 @@ export function BrandingPreviewSandbox({
    */
   const cssVars = useMemo(() => {
     const vars: Record<string, string> = {};
+    // The baseline names the vertical, and the vertical owns the engine. A
+    // draft baseline that is not first-party is previewed with the DS primary.
+    const previewEngine = getFirstPartyVertical(baseline.id)?.engine ?? PRIMARY_ENGINE;
     const document = (
       appearance.advanced
         ? { schemaVersion: 1, mode: 'advanced', visualFoundation: appearance }
@@ -119,7 +123,7 @@ export function BrandingPreviewSandbox({
     ) as unknown as TenantThemeDocument;
     try {
       const patch = migrateV1(document, 'light').patch;
-      const adapter = THEME_ENGINE_ADAPTERS.modern;
+      const adapter = resolveAdapter(previewEngine);
       const proposed = compileTheme(
         resolveTheme(baseline, { origin: 'preview', patch }),
         adapter,

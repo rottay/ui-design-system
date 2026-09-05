@@ -1,11 +1,14 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 
 import type { DataTablePatternProps } from '../contracts';
 import ClassicDataTable from '../engines/classic';
 import ModernDataTable from '../engines/modern';
 import RusticDataTable from '../engines/rustic';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 type Row = {
   id: string;

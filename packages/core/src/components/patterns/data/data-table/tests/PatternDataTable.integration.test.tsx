@@ -5,6 +5,7 @@ import { render, screen } from '@testing-library/react';
 import { STABLE_ENGINES } from '@tests/support/engine';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
+import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '../../../../../foundation/contracts';
 import { PatternDataTable } from '..';
 
@@ -33,6 +34,7 @@ describe('PatternDataTable integration', () => {
       <DesignSystemProvider
         tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
         forceEngine={engine}
+        engineVisual={firstPartyEngineVisual('rottay', engine)}
         skipCssLoading
       >
         <Suspense fallback={<div data-testid="loading">Loading...</div>}>
@@ -69,6 +71,7 @@ describe('PatternDataTable integration', () => {
       <DesignSystemProvider
         tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
         forceEngine={engine}
+        engineVisual={firstPartyEngineVisual('rottay', engine)}
         skipCssLoading
       >
         <Suspense fallback={<div data-testid="loading">Loading...</div>}>

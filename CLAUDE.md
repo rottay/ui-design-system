@@ -197,7 +197,12 @@ The design system has 4 single-word tiers under `packages/core/src/components/`:
 ### primitives/
 Engine-switched leaf components (Button, Input, Card, Modal, Tabs, etc).
 Each engine-switched primitive has three physical implementations: classic, modern, and rustic.
-`custom` resolves a registered component pack and falls back through the engine registry.
+A `custom` realm requires a registered theme adapter and a registered component
+entry per component; an unregistered name is refused by name. There is no
+fallback engine. The typography compounds (`Text`, `Heading`, `Paragraph`,
+`Link`) are outside this model: they resolve a static three-engine map instead
+of the component factory, so they have no custom pack entry at all and refuse
+`custom` by name. Registering a pack entry called `Text` does nothing.
 6 categories: display, inputs, feedback, layout, navigation, overlay.
 
 ### patterns/

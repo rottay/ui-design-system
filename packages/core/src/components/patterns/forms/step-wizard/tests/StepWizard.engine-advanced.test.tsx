@@ -1,11 +1,14 @@
 import React from 'react';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import ClassicStepWizard from '../engines/classic';
 import ModernStepWizard from '../engines/modern';
 import RusticStepWizard from '../engines/rustic';
 import type { StepWizardProps } from '../contracts';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 const ENGINE_COMPONENTS = [
   ['classic', ClassicStepWizard],

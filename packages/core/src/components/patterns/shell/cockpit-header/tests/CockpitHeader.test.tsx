@@ -5,36 +5,41 @@ import { PatternCockpitHeader } from '../index';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
 /**
- * Pre-load the rustic engine modules used by the classic CockpitHeader engine
- * so that the lazy `createEngineComponent` import resolves synchronously
- * inside the test environment.
+ * This header declares no rustic implementation, so the suite renders the
+ * primary engine and pre-loads the modern primitives its tree composes, so
+ * the lazy `createEngineComponent` import resolves synchronously here.
  */
+const renderHeader = (
+  ui: React.ReactElement,
+  options: Parameters<typeof renderSurface>[1] = {},
+) => renderSurface(ui, { engine: 'modern', ...options });
+
 beforeAll(async () => {
   await Promise.all([
-    import('../../../../primitives/layout/box/engines/rustic'),
-    import('../../../../primitives/layout/flex/engines/rustic'),
-    import('../../../../primitives/display/typography/engines/rustic'),
-    import('../../../../primitives/display/tag/engines/rustic'),
+    import('../../../../primitives/layout/box/engines/modern'),
+    import('../../../../primitives/layout/flex/engines/modern'),
+    import('../../../../primitives/display/typography/engines/modern'),
+    import('../../../../primitives/display/tag/engines/modern'),
   ]);
 });
 
 describe('PatternCockpitHeader', () => {
   it('renders title', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader title="User Details" />,
     );
     expect(await screen.findByText('User Details')).toBeInTheDocument();
   });
 
   it('renders subtitle', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader title="User Details" subtitle="View and edit user information" />,
     );
     expect(await screen.findByText('View and edit user information')).toBeInTheDocument();
   });
 
   it('renders breadcrumbs', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader
         title="User Details"
         breadcrumbs={[
@@ -48,7 +53,7 @@ describe('PatternCockpitHeader', () => {
   });
 
   it('renders status badges', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader
         title="User Details"
         status={[
@@ -63,7 +68,7 @@ describe('PatternCockpitHeader', () => {
 
   it('renders action buttons passed as ReactNode', async () => {
     const onEdit = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader
         title="User Details"
         actions={<button onClick={onEdit}>Edit</button>}
@@ -76,7 +81,7 @@ describe('PatternCockpitHeader', () => {
 
   it('calls onBack when back button is clicked', async () => {
     const onBack = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader title="User Details" onBack={onBack} />,
     );
     // The classic/rustic engine renders the back button as a Box (div) with
@@ -93,7 +98,7 @@ describe('PatternCockpitHeader', () => {
   });
 
   it('renders title and subtitle together', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader
         title="Detail Page Title"
         subtitle="Additional context below the title"
@@ -106,7 +111,7 @@ describe('PatternCockpitHeader', () => {
 
 describe('PatternCockpitHeader (modern engine)', () => {
   it('renders premium context anatomy', async () => {
-    const { container } = renderSurface(
+    const { container } = renderHeader(
       <PatternCockpitHeader
         eyebrow="Active decision"
         icon={<span data-testid="cockpit-icon">I</span>}
@@ -121,7 +126,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
   });
 
   it('renders title with modern engine', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader title="Modern Test" />,
       { engine: 'modern' },
     );
@@ -129,7 +134,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
   });
 
   it('renders subtitle', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader title="Detail" subtitle="Extra context" />,
       { engine: 'modern' },
     );
@@ -137,7 +142,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
   });
 
   it('renders breadcrumbs', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader
         title="Detail"
         breadcrumbs={[
@@ -152,7 +157,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
   });
 
   it('renders status badges', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader
         title="Detail"
         status={[
@@ -168,7 +173,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
 
   it('renders action buttons', async () => {
     const onEdit = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader
         title="Detail"
         actions={<button onClick={onEdit}>Save</button>}
@@ -182,7 +187,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
 
   it('calls onBack when back button is clicked', async () => {
     const onBack = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader title="Detail" onBack={onBack} />,
       { engine: 'modern' },
     );
@@ -192,7 +197,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
   });
 
   it('names the breadcrumb landmark with the i18n English floor', async () => {
-    renderSurface(
+    renderHeader(
       <PatternCockpitHeader
         title="Detail"
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Current' }]}
@@ -203,7 +208,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
   });
 
   it('paints nothing inline on its own parts — the skin owns layout and paint', async () => {
-    const { container } = renderSurface(
+    const { container } = renderHeader(
       <PatternCockpitHeader
         eyebrow="Ops"
         title="Detail"
@@ -234,7 +239,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
   });
 
   it('stamps sticky state hooks without inline positioning', async () => {
-    const { container } = renderSurface(
+    const { container } = renderHeader(
       <PatternCockpitHeader title="Detail" sticky />,
       { engine: 'modern' },
     );
@@ -248,7 +253,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
   });
 
   it('renders the loading skeleton with skin-owned geometry hooks', async () => {
-    const { container } = renderSurface(
+    const { container } = renderHeader(
       <PatternCockpitHeader
         title="Detail"
         subtitle="Meta"

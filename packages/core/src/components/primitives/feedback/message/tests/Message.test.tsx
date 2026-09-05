@@ -3,9 +3,12 @@
  */
 
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
+import { renderWithEngine, renderWithEngineContext } from '@tests/support/engine';
 import { MessageProvider, useMessage } from '..';
-import { renderWithEngine } from '@tests/support/engine';
+import type { ReactElement } from 'react';
+
+const render = (ui: ReactElement) => renderWithEngineContext(ui, 'classic');
 
 const MessageTester = ({ onMount }: { onMount: (api: any) => void }) => {
   const [messageApi, contextHolder] = useMessage();

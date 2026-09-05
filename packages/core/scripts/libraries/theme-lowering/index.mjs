@@ -56,6 +56,10 @@ export const LOWERING_SOURCE =
 /** Deep dist owners the adapter needs beside the published lowering. */
 const RESOLVED_CONTRACT =
   'dist/foundation/contracts/composition/tenants/themes/resolved/index.js';
+const ENGINE_IDENTITY_CONTRACT =
+  'dist/foundation/contracts/kernel/engine-identity/index.js';
+const VERTICAL_ROSTER =
+  'dist/foundation/tokens/ts/presentation/brand-themes/index.js';
 
 /**
  * Build the flat `compile(input, options)` the readers call, over `compileTheme`.
@@ -77,7 +81,7 @@ export async function brandThemeLoweringAdapter({
     compileTheme,
     resolveTheme,
     liftAuthoredTheme,
-    THEME_ENGINE_ADAPTERS,
+    resolveAdapter,
     emitThemeCss,
     containerScope,
     brandTenantSelector,
@@ -86,7 +90,7 @@ export async function brandThemeLoweringAdapter({
     compileTheme,
     resolveTheme,
     liftAuthoredTheme,
-    THEME_ENGINE_ADAPTERS,
+    resolveAdapter,
     emitThemeCss,
     containerScope,
     brandTenantSelector,
@@ -105,7 +109,26 @@ export async function brandThemeLoweringAdapter({
       `theme-lowering: ${RESOLVED_CONTRACT} exports no provenance vocabulary.`,
     );
   }
-  const adapter = THEME_ENGINE_ADAPTERS.modern;
+  const identity = await importModule(join(coreRoot, ENGINE_IDENTITY_CONTRACT));
+  if (typeof identity.PRIMARY_ENGINE !== 'string') {
+    throw new Error(
+      `theme-lowering: ${ENGINE_IDENTITY_CONTRACT} exports no PRIMARY_ENGINE.`,
+    );
+  }
+  const roster = await importModule(join(coreRoot, VERTICAL_ROSTER));
+  if (typeof roster.getFirstPartyVertical !== 'function') {
+    throw new Error(
+      `theme-lowering: ${VERTICAL_ROSTER} exports no getFirstPartyVertical.`,
+    );
+  }
+  /* A first-party vertical's engine is its ROSTER ROW's, the field the artifact
+   * renderer compiles with; identity answers only for a slug no row claims. */
+  const adapters = new Map();
+  const adapterFor = (slug) => {
+    const engine = roster.getFirstPartyVertical(slug)?.engine ?? identity.PRIMARY_ENGINE;
+    if (!adapters.has(engine)) adapters.set(engine, resolveAdapter(engine));
+    return adapters.get(engine);
+  };
 
   return function lowerBrandTheme(input = {}) {
     const { brandTheme, tenantPatch } = input;
@@ -137,7 +160,7 @@ export async function brandThemeLoweringAdapter({
                 deriveTenantStatusSeedAuthorship(tenantPatch ?? {}),
             },
           };
-    const compiled = compileTheme(resolution, adapter);
+    const compiled = compileTheme(resolution, adapterFor(slug));
     return {
       cssVariables: compiled.cssVariables,
       modeBlocks: compiled.modeBlocks,

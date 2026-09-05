@@ -27,8 +27,6 @@ export {
   useTypographyTokens,
   useCardTokens,
   useAccentTokens,
-  getEngineTokens,
-  ENGINE_TOKENS,
   DEFAULT_PERSONALITY,
 } from '../composition/react/tokens';
 export type {
@@ -38,7 +36,6 @@ export type {
   TypographyTokenSlice,
   CardTokens,
   AccentTokens,
-  EngineTokenOverrides,
 } from '../composition/react/tokens';
 
 export { SystemCssVariablesBridge } from '../presentation/adapters/react/css-variables-bridge';

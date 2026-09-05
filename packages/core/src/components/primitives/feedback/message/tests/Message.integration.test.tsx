@@ -4,6 +4,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
+import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { EngineName, TenantConfig } from '../../../../../foundation/contracts';
 import { MessageProvider, useMessage } from '..';
 
@@ -31,7 +32,12 @@ function renderMessageHarness(engine: Exclude<EngineName, 'custom'>) {
   }
 
   render(
-    <DesignSystemProvider tenantConfig={{ ...TEST_TENANT_CONFIG, engine }} forceEngine={engine} skipCssLoading>
+    <DesignSystemProvider
+      tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+      forceEngine={engine}
+      engineVisual={firstPartyEngineVisual('rottay', engine)}
+      skipCssLoading
+    >
       <ConfigProvider theme={{ token: { motion: false } }}>
         <MessageProvider maxCount={1} placement="top">
           <Tester />

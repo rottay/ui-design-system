@@ -55,6 +55,7 @@ export {
   validateTenantThemeAgainstVerticalEnvelope,
   parseTenantThemeConfig,
   hydrateTenantThemeConfig,
+  compileTenantTheme,
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   tenantThemeArtifactRootAttributes,
@@ -63,6 +64,7 @@ export {
 export type {
   CompileTenantThemeConfigOptions,
   HydrateTenantThemeConfigOptions,
+  TenantThemeCompilation,
 } from '../../infrastructure/compilers/composition/tenant-theme';
 
 /**
@@ -153,6 +155,8 @@ export {
   compileTheme,
   containerScope,
   emitThemeCss,
+  engineVisualOf,
+  firstPartyEngineVisual,
   firstPartyScope,
   resolveAdapter,
   resolveTheme,
@@ -162,9 +166,12 @@ export type {
   ControlId,
   EmissionScope,
   EngineAdapter,
+  EngineControlDeclaration,
+  EngineEvidence,
   EnginePosture,
   EngineProjection,
   EngineThemeCompilation,
+  EngineVisualDeclaration,
   ThemeCompilation,
   ThemeCompilationModeBlock,
   ThemeCompilationRuntime,

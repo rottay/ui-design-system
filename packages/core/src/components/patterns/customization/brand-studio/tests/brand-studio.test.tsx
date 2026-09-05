@@ -23,7 +23,8 @@ import {
 } from '../runtime/file-export';
 import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
-import { compileTheme, THEME_ENGINE_ADAPTERS } from '@/infrastructure/compilers/runtime/theme';
+import { compileTheme, resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import { resolveTheme } from '@/infrastructure/compilers/runtime/theme/runtime/resolution';
 import {
   liftAuthoredTheme,
@@ -660,7 +661,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
       });
       const compiled = compileTheme(
         resolveTheme({ ...liftAuthoredTheme(brand), id: tenantSlug }),
-        THEME_ENGINE_ADAPTERS.modern,
+        resolveAdapter(PRIMARY_ENGINE),
       );
       const present = Object.entries(compiled.cssVariables).filter(([, v]) => v != null);
       expect(present.length, slug).toBeGreaterThan(0);

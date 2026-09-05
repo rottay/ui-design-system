@@ -11,13 +11,16 @@
 
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 
 import ModernListToolbar from '../engines/modern';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { TRANSLATION_CATALOG } from '@/foundation/i18n/runtime/catalog';
 import { resolveTranslation } from '@/foundation/i18n/runtime/resolution';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 /** The catalog keys consumed by the current ListToolbar contract. */
 const LIST_TOOLBAR_CATALOG_KEYS = [

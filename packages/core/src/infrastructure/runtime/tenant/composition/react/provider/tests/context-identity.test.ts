@@ -13,7 +13,7 @@
  * production source with the TypeScript AST: the singleton-owner gate counts
  * only `createContext` calls bound to the react import, and the consumer
  * inventory is DISCOVERED from real ImportDeclarations, then compared against
- * the exact registered set -- a seventh consumer, or a specifier reverted to
+ * the exact registered set -- a sixth consumer, or a specifier reverted to
  * provider or facade, fails the comparison.
  */
 
@@ -530,7 +530,7 @@ describe('production source predicate', () => {
 describe('tenant context consumer inventory', () => {
   const inventory = discoverTenantContextConsumers();
 
-  it('is exactly the six registered live consumers -- a seventh, or a reverted specifier, fails', () => {
+  it('is exactly the five registered live consumers -- a sixth, or a reverted specifier, fails', () => {
     expect(inventory).toEqual([
       // The inventory is sorted by path, and the UI tier now lives under
       // `components/`, which sorts before `infrastructure/`.
@@ -543,11 +543,6 @@ describe('tenant context consumer inventory', () => {
         file: 'components/patterns/visualization/charts/runtime/chart-engine/runtime/grammar/index.ts',
         binding: 'TenantContext',
         specifier: '@/infrastructure/runtime/tenant/foundation/context',
-      },
-      {
-        file: 'infrastructure/runtime/engines/presentation/adapters/antd/index.tsx',
-        binding: 'useTenantContext',
-        specifier: '../../../../tenant/foundation/context',
       },
       {
         file: 'infrastructure/runtime/engines/presentation/component-factory/index.tsx',

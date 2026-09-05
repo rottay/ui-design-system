@@ -4,12 +4,14 @@
  * `WidgetBoard.layout.test.tsx` continues to pin for the default path.
  */
 import React from 'react';
-import { render } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 import { describe, expect, it } from 'vitest';
 
 import { WidgetBoardEngine } from '../engines/foundation';
 import type { WidgetBoardItem, WidgetBoardLabels } from '../contracts';
 import { heightPxToRows, widgetItemsToAdaptiveInputs } from '../runtime/adaptive/policy';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 const LABELS: WidgetBoardLabels = {
   customize: 'Customize',

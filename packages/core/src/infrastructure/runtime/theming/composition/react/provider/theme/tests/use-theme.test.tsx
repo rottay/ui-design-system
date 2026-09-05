@@ -14,7 +14,7 @@ describe('useTheme hook', () => {
     const setTheme = vi.fn();
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <ThemeContext.Provider
-        value={{ theme: 'dark', setTheme, config: { name: 'dark', variables: {} } }}
+        value={{ theme: 'dark', resolvedTheme: 'dark', setTheme, config: { name: 'dark', variables: {} } }}
       >
         {children}
       </ThemeContext.Provider>
@@ -30,7 +30,7 @@ describe('useTheme hook', () => {
 
   it('keeps backwards compatibility via useThemeContext alias', () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ThemeContext.Provider value={{ theme: 'light', setTheme: vi.fn(), config: null }}>
+      <ThemeContext.Provider value={{ theme: 'light', resolvedTheme: 'base', setTheme: vi.fn(), config: null }}>
         {children}
       </ThemeContext.Provider>
     );

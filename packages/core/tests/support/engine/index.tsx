@@ -6,6 +6,8 @@
 import React, { ReactElement, Suspense } from 'react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import { DesignSystemProvider } from '../../../src/infrastructure/runtime/bootstrap';
+import { EngineProvider } from '../../../src/infrastructure/runtime/engines/composition/react/provider';
+import { firstPartyEngineVisual } from '../../../src/infrastructure/compilers/runtime/theme';
 import type { EngineName, TenantConfig } from '../../../src/foundation/contracts';
 
 /**
@@ -40,7 +42,7 @@ export type StableEngineName = (typeof STABLE_ENGINES)[number];
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'test-tenant',
   name: 'Test Tenant',
-  engine: 'classic',
+  engine: 'modern',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -69,6 +71,14 @@ function createEngineWrapper(
   engine: EngineName,
   suspenseFallback: React.ReactNode
 ): React.FC<{ children: React.ReactNode }> {
+  // `classic` seeds antd from a compiled projection and refuses to guess one.
+  // The fixture tenant authors no theme, so the reference vertical's compile for
+  // the selected engine is the projection this stack renders with. `custom` has
+  // no first-party compile, and asking for one throws here — ahead of the
+  // refusal the suite is actually testing — so it publishes none.
+  const engineVisual =
+    engine === 'custom' ? undefined : firstPartyEngineVisual('rottay', engine);
+
   return function EngineWrapper({ children }) {
     // skipCssLoading avoids fetching tenant CSS files during tests, which would
     // fail in jsdom/happy-dom environments without a real network.
@@ -78,12 +88,36 @@ function createEngineWrapper(
       <DesignSystemProvider
         tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
         forceEngine={engine}
+        {...(engineVisual ? { engineVisual } : {})}
         skipCssLoading
       >
         <Suspense fallback={suspenseFallback}>{children}</Suspense>
       </DesignSystemProvider>
     );
   };
+}
+
+/**
+ * Render with nothing but a DECLARED engine.
+ *
+ * A design-system component resolves which implementation renders from context,
+ * and an undeclared engine is refused rather than defaulted. A unit suite that
+ * asserts markup needs exactly that declaration and none of the tenant, theme
+ * or product-profile stack `renderWithEngine` mounts.
+ *
+ * `engine` is REQUIRED. A default here would be the same silent substitution
+ * the runtime refuses, reintroduced in the one tier no gate sweeps, and it
+ * would let a suite claim an engine it never declared.
+ */
+export function renderWithEngineContext(
+  ui: ReactElement,
+  engine: EngineName,
+  options: RenderOptions = {}
+): RenderResult {
+  const Wrapper = ({ children }: { children: React.ReactNode }): ReactElement => (
+    <EngineProvider defaultEngine={engine}>{children}</EngineProvider>
+  );
+  return render(ui, { wrapper: Wrapper, ...options });
 }
 
 /**
@@ -225,8 +259,8 @@ export function isStableEngine(engine: string): engine is StableEngineName {
 export function getEngineDisplayName(engine: EngineName): string {
   const names: Record<EngineName, string> = {
     classic: 'Classic (Ant Design)',
-    modern: 'Modern (DaisyUI)',
-    rustic: 'Rustic (Vanilla)',
+    modern: 'Modern',
+    rustic: 'Rustic (HTML)',
     custom: 'Custom (Pluggable)',
   };
   return names[engine];

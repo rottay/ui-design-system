@@ -95,7 +95,7 @@ describe("the single chain produces a total, engine-projected compilation", () =
       expect(Array.isArray(compiled.modeBlocks)).toBe(true);
       expect(compiled.runtime.personality).toBeTruthy();
       expect(compiled.runtime.tokenOverrides).toBeTruthy();
-      expect(compiled.projection).toEqual({ seeds: {}, tokenOverrides: {}, modes: [] });
+      expect(compiled.projection).toEqual({ seeds: {}, modes: [] });
       expect(compiled.engine).toBe("modern");
       // Scope is emission's, so the product carries neither CSS text nor slug.
       const asRecord = compiled as unknown as Record<string, unknown>;
@@ -215,8 +215,12 @@ describe("channel minting and CSS text have declared owners", () => {
   const LOWERING_ROOT = "infrastructure/compilers/runtime/theme/runtime/lowering";
   const PIPELINE_ROOT = "infrastructure/compilers/runtime/theme";
   const EMISSION_OWNER = "infrastructure/compilers/runtime/theme/runtime/emission";
-  const CLASSIC_ADAPTER =
-    "infrastructure/compilers/runtime/theme/presentation/adapters/classic/index.ts";
+  const ADAPTER_ROOT =
+    "infrastructure/compilers/runtime/theme/presentation/adapters/presentation";
+  const CLASSIC_ADAPTER = `${ADAPTER_ROOT}/classic/index.ts`;
+  const ENGINE_ADAPTERS = ["classic", "modern", "rustic"].map(
+    (engine) => `${ADAPTER_ROOT}/${engine}/index.ts`,
+  );
 
   const productionSources = (relative: string): string[] => {
     const out: string[] = [];
@@ -236,6 +240,13 @@ describe("channel minting and CSS text have declared owners", () => {
 
   const withoutComments = (source: string): string =>
     source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/[^\n]*/g, "$1");
+
+  /** Blank every string literal, so what remains is code rather than data. */
+  const withoutStrings = (source: string): string =>
+    source
+      .replace(/"(?:[^"\\]|\\.)*"/g, '""')
+      .replace(/'(?:[^'\\]|\\.)*'/g, "''")
+      .replace(/`(?:[^`\\]|\\.)*`/g, "``");
 
   const MINTS = /vars\[["']--ds-[a-z0-9-]+["']\]|cssVariables\[["']--ds-[a-z0-9-]+["']\]/;
   const rel = (file: string) => file.slice(SRC_ROOT.length + 1);
@@ -273,20 +284,25 @@ describe("channel minting and CSS text have declared owners", () => {
     ]);
   });
 
-  it("outside the lowering, classic is the only owner that even NAMES a channel, and only to read it", () => {
+  it("outside the lowering, only the engine adapters NAME a channel, and only as data", () => {
     const naming = productionSources(PIPELINE_ROOT)
       .filter((file) => !rel(file).startsWith(LOWERING_ROOT))
       .filter((file) => /--ds-[a-z0-9-]+/.test(withoutComments(readFileSync(file, "utf8"))))
       .map(rel);
-    expect(naming).toEqual([CLASSIC_ADAPTER]);
+    // Exact, not "at least": an adapter states the channels its posture cites
+    // and the values its baseline carries; any other owner naming one is new.
+    expect(naming.sort()).toEqual([...ENGINE_ADAPTERS].sort());
 
-    // Every channel name is a quoted VALUE in a lookup table, never a key it writes.
-    const code = withoutComments(readFileSync(join(SRC_ROOT, CLASSIC_ADAPTER), "utf8"));
-    expect(code).toContain("CLASSIC_SEED_CHANNELS");
-    expect(code).toContain("CLASSIC_RADIUS_CHANNELS");
-    expect(code.match(/--ds-[a-z0-9-]+/g) ?? []).toHaveLength(
-      (code.match(/:\s*"--ds-[a-z0-9-]+"/g) ?? []).length,
-    );
+    // A channel name is DATA in an adapter — a table entry, an evidence string
+    // or a value — never an identifier the adapter computes with.
+    for (const file of naming) {
+      const code = withoutStrings(withoutComments(readFileSync(join(SRC_ROOT, file), "utf8")));
+      expect(code, `${file} names a channel outside a string literal`).not.toMatch(/--ds-/);
+    }
+
+    const classic = withoutComments(readFileSync(join(SRC_ROOT, CLASSIC_ADAPTER), "utf8"));
+    expect(classic).toContain("CLASSIC_SEED_CHANNELS");
+    expect(classic).toContain("CLASSIC_RADIUS_CHANNELS");
   });
 
   it("emission alone produces CSS text", () => {

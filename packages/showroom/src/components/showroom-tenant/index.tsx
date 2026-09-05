@@ -89,7 +89,9 @@ import {
 import { resolveVisualAuthority } from "@rottay/design-system/runtime/visual-authority";
 import {
   censusRuntimeVisualPayload,
-  compileTenantThemeConfig,
+  compileTenantTheme,
+  firstPartyEngineVisual,
+  type EngineVisualDeclaration,
   emitTenantThemeArtifactForSsr,
   getKnownTenantConfig,
   getTenantThemeVerticalEnvelope,
@@ -386,6 +388,11 @@ export interface ShowroomTenantIdentity {
 
 export interface ShowroomTenantGround {
   readonly tenantConfig: TenantConfig;
+  /**
+   * The compiled projection for the engine that seeds a library. Absent on the
+   * static path, whose CSS is bundled and whose compile this ground never runs.
+   */
+  readonly engineVisual?: EngineVisualDeclaration;
   /** Present only on the DB path; the static path's CSS is bundled. */
   readonly emission: TenantThemeArtifactSsrEmission | null;
   /** Required for the DB path and required to be ABSENT for the static one. */
@@ -460,7 +467,7 @@ export function compileShowroomTenantGround(input: {
   }
 
   const hydrated = hydrateTenantThemeConfig(validation.data, identity);
-  const artifact = compileTenantThemeConfig(hydrated, {
+  const { artifact, engineVisual } = compileTenantTheme(hydrated, {
     verticalEnvelope: getTenantThemeVerticalEnvelope(identity.verticalKey),
   });
   // The style element AND the receipt come from one call, so the bytes the
@@ -474,6 +481,7 @@ export function compileShowroomTenantGround(input: {
   });
 
   return {
+    engineVisual,
     tenantConfig: {
       slug: artifact.slug,
       name,
@@ -680,6 +688,21 @@ export function ShowroomTenantProvider({
     [source, density, recipeProfile, theme, seedPrimary],
   );
 
+  // The projection classic seeds antd from. The static vertical is code-owned,
+  // so it can be compiled for whichever engine the probe is sweeping; a DB
+  // tenant's compile belongs to its vertical's engine, so a probe that forces a
+  // different one publishes nothing and classic refuses by name rather than
+  // seeding antd from another engine's numbers.
+  const engineVisual = useMemo(
+    () =>
+      ground.emission === null
+        ? firstPartyEngineVisual("bithire", engine)
+        : ground.engineVisual?.engine === engine
+          ? ground.engineVisual
+          : undefined,
+    [ground, engine],
+  );
+
   // Lease written by the commit-phase resolver and revalidated every render.
   const [lease, setLease] = useState<ShowroomTenantLease | null>(null);
 
@@ -779,6 +802,7 @@ export function ShowroomTenantProvider({
           tenantConfig={ground.tenantConfig}
           vertical="bithire"
           forceEngine={engine}
+          {...(engineVisual ? { engineVisual } : {})}
           forceTheme={theme}
           {...(locale ? { locale } : {})}
           {...(customTranslations ? { customTranslations } : {})}

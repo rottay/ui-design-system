@@ -1,10 +1,13 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { renderWithEngineContext } from '@tests/support/engine';
 
 import ClassicFormBuilder from '../engines/classic';
 import ModernFormBuilder from '../engines/modern';
 import RusticFormBuilder from '../engines/rustic';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 const ENGINE_COMPONENTS = [
   ['classic', ClassicFormBuilder],

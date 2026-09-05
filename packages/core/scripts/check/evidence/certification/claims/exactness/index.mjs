@@ -670,7 +670,7 @@ function measureVerticals() {
     tenancy: roster.map((entry) => `| \`${entry.slug}\` | ${entry.name} | not set |`),
     engines: [
       '| Classic | `classic` | Ant Design 5 (`antd`) | Stable | -- |',
-      `| ${engineLabel} | \`${rosterEngine}\` | Rottay-native/Tailwind bridge | Stable | ${roster.map((entry) => entry.name).join(', ')} vertical presets |`,
+      `| ${engineLabel} | \`${rosterEngine}\` | Rottay-native premium skin | Stable, **PRIMARY** | ${roster.map((entry) => entry.name).join(', ')} vertical presets |`,
     ],
   };
   const documentation = {};

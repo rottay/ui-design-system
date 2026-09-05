@@ -46,12 +46,29 @@ import React, {
   useLayoutEffect,
   useCallback,
   useMemo,
+  useSyncExternalStore,
   ReactNode,
 } from 'react';
 import type { ThemeContextValue, ThemeConfig } from '../../../../../../foundation/contracts';
 
 const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+const DARK_PREFERENCE_QUERY = '(prefers-color-scheme: dark)';
+
+function subscribeToDarkPreference(onStoreChange: () => void): () => void {
+  const mediaQuery = window.matchMedia(DARK_PREFERENCE_QUERY);
+  mediaQuery.addEventListener('change', onStoreChange);
+  return () => mediaQuery.removeEventListener('change', onStoreChange);
+}
+
+function readDarkPreference(): boolean {
+  return window.matchMedia(DARK_PREFERENCE_QUERY).matches;
+}
+
+function readServerDarkPreference(): boolean {
+  return false;
+}
 
 // ─────────────────────────────────────────────────────────────────
 // CONFIGURATION
@@ -152,6 +169,28 @@ export function ThemeProvider({
     setThemeState(newTheme);
   }, []);
 
+  // `auto` is the only mode the theme string cannot answer on its own, so the
+  // OS preference is read through an external store whose server snapshot is
+  // `false`: the server and the hydrating client resolve the same mode, and a
+  // dark OS preference lands in the post-hydration pass instead of diverging
+  // from the server markup.
+  const systemPrefersDark = useSyncExternalStore(
+    subscribeToDarkPreference,
+    readDarkPreference,
+    readServerDarkPreference
+  );
+
+  const resolvedTheme: 'light' | 'dark' | 'base' =
+    theme === 'auto'
+      ? systemPrefersDark
+        ? 'dark'
+        : 'light'
+      : theme === 'dark'
+        ? 'dark'
+        : theme === 'light'
+          ? 'light'
+          : 'base';
+
   // NO VISUAL PAINT HERE. This provider owns theme/tenant CONTEXT and the
   // root `data-theme` / `color-scheme` state, and nothing else. Tenant visual
   // channels reach the document through exactly one of the two ingress paths:
@@ -175,15 +214,6 @@ export function ThemeProvider({
    */
   useIsomorphicLayoutEffect(() => {
     const rootElement = document.documentElement;
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    const resolveTheme = (): 'dark' | 'light' | 'base' => {
-      if (theme === 'auto') {
-        return mediaQuery.matches ? 'dark' : 'light';
-      }
-
-      return theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : 'base';
-    };
 
     // Claims replace bare writes so cleanup can restore the SSR stamp instead
     // of deleting it. Re-applying (an `auto` media change) releases the prior
@@ -191,7 +221,7 @@ export function ThemeProvider({
     let release: ReleaseRootAttribute | null = null;
 
     const applyThemeToDom = () => {
-      const nextResolvedTheme = resolveTheme();
+      const nextResolvedTheme = resolvedTheme;
 
       release?.();
 
@@ -232,23 +262,10 @@ export function ThemeProvider({
 
     applyThemeToDom();
 
-    if (theme !== 'auto') {
-      return () => {
-        release?.();
-      };
-    }
-
-    const handleMediaChange = () => {
-      applyThemeToDom();
-    };
-
-    mediaQuery.addEventListener('change', handleMediaChange);
-
     return () => {
-      mediaQuery.removeEventListener('change', handleMediaChange);
       release?.();
     };
-  }, [theme]);
+  }, [resolvedTheme, tenant]);
 
   // Memoize context value to prevent unnecessary re-renders in consumers.
   // Every field in the dependency array is either a primitive or a stable
@@ -256,6 +273,7 @@ export function ThemeProvider({
   const value: ThemeContextValue = useMemo(
     () => ({
       theme,
+      resolvedTheme,
       setTheme,
       config,
       tenant,
@@ -263,7 +281,7 @@ export function ThemeProvider({
       isLoading: false,
       isFallback: false,
     }),
-    [theme, setTheme, config, tenant, setTenant]
+    [theme, resolvedTheme, setTheme, config, tenant, setTenant]
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 
 import { STABLE_ENGINES } from '@tests/support/engine';
 import { renderWithEngine } from '@tests/support/engine';
+import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '../../../../../foundation/contracts';
 
 const OPTIONS = [
@@ -33,6 +34,7 @@ describe('Select integration', () => {
       <DesignSystemProvider
         tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
         forceEngine={engine}
+        engineVisual={firstPartyEngineVisual('rottay', engine)}
         skipCssLoading
       >
         <Suspense fallback={<div data-testid="loading">Loading...</div>}>
@@ -53,6 +55,7 @@ describe('Select integration', () => {
       <DesignSystemProvider
         tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
         forceEngine={engine}
+        engineVisual={firstPartyEngineVisual('rottay', engine)}
         skipCssLoading
       >
         <Suspense fallback={<div data-testid="loading">Loading...</div>}>

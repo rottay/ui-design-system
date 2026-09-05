@@ -5,45 +5,50 @@ import { PatternWorkbenchHeader } from '../index';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
 /**
- * Pre-load the rustic engine modules used by the classic WorkbenchHeader engine
- * so that the lazy `createEngineComponent` import resolves synchronously
- * inside the test environment.
+ * This header declares no rustic implementation, so the suite renders the
+ * primary engine and pre-loads the modern primitives its tree composes, so
+ * the lazy `createEngineComponent` import resolves synchronously here.
  */
+const renderHeader = (
+  ui: React.ReactElement,
+  options: Parameters<typeof renderSurface>[1] = {},
+) => renderSurface(ui, { engine: 'modern', ...options });
+
 beforeAll(async () => {
   await Promise.all([
-    import('../../../../primitives/layout/box/engines/rustic'),
-    import('../../../../primitives/layout/flex/engines/rustic'),
-    import('../../../../primitives/display/typography/engines/rustic'),
-    import('../../../../primitives/display/badge/engines/rustic'),
-    import('../../../../primitives/inputs/button/engines/rustic'),
-    import('../../../../primitives/inputs/select/engines/rustic'),
+    import('../../../../primitives/layout/box/engines/modern'),
+    import('../../../../primitives/layout/flex/engines/modern'),
+    import('../../../../primitives/display/typography/engines/modern'),
+    import('../../../../primitives/display/badge/engines/modern'),
+    import('../../../../primitives/inputs/button/engines/modern'),
+    import('../../../../primitives/inputs/select/engines/modern'),
   ]);
 });
 
 describe('PatternWorkbenchHeader', () => {
   it('renders title', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader title="Manager Hub" />,
     );
     expect(await screen.findByText('Manager Hub')).toBeInTheDocument();
   });
 
   it('renders subtitle', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader title="Manager Hub" subtitle="Morning briefing" />,
     );
     expect(await screen.findByText('Morning briefing')).toBeInTheDocument();
   });
 
   it('renders exception badge when count > 0', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader title="Manager Hub" exceptionCount={5} />,
     );
     expect(await screen.findByText('5')).toBeInTheDocument();
   });
 
   it('does not render exception badge when count is 0', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader title="Manager Hub" exceptionCount={0} />,
     );
     await screen.findByText('Manager Hub');
@@ -52,7 +57,7 @@ describe('PatternWorkbenchHeader', () => {
 
   it('renders quick actions and handles click', async () => {
     const onClick = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader
         title="Manager Hub"
         quickActions={[
@@ -66,7 +71,7 @@ describe('PatternWorkbenchHeader', () => {
   });
 
   it('renders with savedViews config without crashing', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader
         title="Manager Hub"
         savedViews={[
@@ -84,7 +89,7 @@ describe('PatternWorkbenchHeader', () => {
 
   it('calls onViewChange when a saved view is selected', async () => {
     const onViewChange = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader
         title="Manager Hub"
         savedViews={[
@@ -104,7 +109,7 @@ describe('PatternWorkbenchHeader', () => {
   it('renders a complete workbench header with all features', async () => {
     const onAction = vi.fn();
     const onViewChange = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader
         title="Operations Dashboard"
         subtitle="3 items need your attention today"
@@ -131,7 +136,7 @@ describe('PatternWorkbenchHeader', () => {
 
 describe('PatternWorkbenchHeader (modern engine)', () => {
   it('renders premium context anatomy', async () => {
-    const { container } = renderSurface(
+    const { container } = renderHeader(
       <PatternWorkbenchHeader
         eyebrow="Talent intelligence"
         icon={<span data-testid="workbench-icon">I</span>}
@@ -146,7 +151,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
   });
 
   it('renders title with modern engine', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader title="Modern Hub" />,
       { engine: 'modern' },
     );
@@ -154,7 +159,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
   });
 
   it('renders subtitle', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader title="Modern Hub" subtitle="Morning briefing" />,
       { engine: 'modern' },
     );
@@ -162,7 +167,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
   });
 
   it('renders exception badge when count > 0', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader title="Modern Hub" exceptionCount={7} />,
       { engine: 'modern' },
     );
@@ -170,7 +175,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
   });
 
   it('exposes the exception badge parametric name to assistive tech', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader title="Modern Hub" exceptionCount={7} />,
       { engine: 'modern' },
     );
@@ -179,7 +184,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
 
   it('renders quick actions and handles click', async () => {
     const onClick = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader
         title="Modern Hub"
         quickActions={[
@@ -196,7 +201,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
 
   it('renders saved views as tabs', async () => {
     const onViewChange = vi.fn();
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader
         title="Modern Hub"
         savedViews={[
@@ -216,7 +221,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
   });
 
   it('names the saved-views tablist with the i18n English floor', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader
         title="Modern Hub"
         savedViews={[{ id: 'v1', label: 'Overview' }]}
@@ -229,7 +234,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
   });
 
   it('marks the active saved view with aria-selected and data-active', async () => {
-    renderSurface(
+    renderHeader(
       <PatternWorkbenchHeader
         title="Modern Hub"
         savedViews={[
@@ -252,7 +257,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
   });
 
   it('paints nothing inline on its own parts — the skin owns layout and paint', async () => {
-    const { container } = renderSurface(
+    const { container } = renderHeader(
       <PatternWorkbenchHeader
         eyebrow="Intel"
         title="Modern Hub"
@@ -283,7 +288,7 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
   });
 
   it('renders the loading skeleton with skin-owned geometry hooks', async () => {
-    const { container } = renderSurface(
+    const { container } = renderHeader(
       <PatternWorkbenchHeader
         title="Modern Hub"
         subtitle="Briefing"

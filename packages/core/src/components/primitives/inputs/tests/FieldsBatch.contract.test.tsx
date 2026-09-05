@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, expect, it, vi, beforeAll } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
+import { renderWithEngine, renderWithEngineContext } from '@tests/support/engine';
 
 import { Input } from '../input';
 import { Slider } from '../slider';
@@ -17,7 +18,8 @@ import { Textarea } from '../textarea';
 import { FormField } from '../form-field';
 import { Button } from '../button';
 import { VoiceInputButton } from '../voice-input-button';
-import { renderWithEngine } from '@tests/support/engine';
+
+const render = (ui: React.ReactElement) => renderWithEngineContext(ui, 'classic');
 
 // ---------------------------------------------------------------------------
 // WO-SKIN-02 checkpoint A -- the field family (15 input components)

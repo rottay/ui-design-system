@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { TenantConfig } from '../../../foundation/contracts';
 import type { BrandTheme, TenantAppearance } from '../../../foundation/contracts/composition/tenants/themes';
 import { DesignSystemProvider } from '../../../infrastructure/runtime/bootstrap';
+import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import { PatternBrandStudio } from '../customization/brand-studio';
 import { BrandingPreviewSandbox } from '../customization/branding-preview-sandbox';
 import ModernTenantPreview from '../customization/tenant-preview/engines/modern';
@@ -99,7 +100,12 @@ function StudioHarness({
   engine?: 'modern' | 'rustic' | 'classic';
 }): React.ReactElement {
   return (
-    <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine={engine} skipCssLoading>
+    <DesignSystemProvider
+      tenantConfig={TEST_TENANT}
+      forceEngine={engine}
+      engineVisual={firstPartyEngineVisual('rottay', engine)}
+      skipCssLoading
+    >
       {children}
     </DesignSystemProvider>
   );

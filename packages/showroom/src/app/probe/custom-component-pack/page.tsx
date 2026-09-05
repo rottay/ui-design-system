@@ -35,17 +35,38 @@
  * provider, and the DS baseline stylesheet still applies because base tokens
  * are declared on plain `:root` / `html.dark`.
  *
- * WHAT THIS REALM PROVES. `Button` and `Card` resolve to this file's bespoke
- * implementations under `ds-example-pack`; `Input` and `Select` have no entry
- * in that pack and resolve through their own fallback loader, and stay fully
- * interactive.
+ * WHAT THIS REALM PROVES. `custom` is FAIL-CLOSED in both of its halves, and
+ * this file demonstrates both halves in one document.
  *
- * WHAT "PAINTS NOTHING" ACTUALLY MEANS HERE, STATED NARROWLY. An earlier
- * version of this comment claimed the realm writes no `<style>` and no
- * `<link>` at all. That was an overclaim and it is withdrawn: a
- * `DesignSystemProvider` may legitimately mount subordinate or global styles
- * of its own, and Next mounts route CSS regardless. Those are not the pack's
- * doing and this file has no business asserting their absence.
+ *   the theme half     `custom` ships no theme adapter, so `resolveAdapter`
+ *                      throws for it until one is registered through
+ *                      `registerEngineAdapter`. A `DesignSystemProvider`
+ *                      resolves that adapter while it renders, so a custom
+ *                      realm with a component pack and no theme adapter does
+ *                      not mount at all. This file registers exactly one.
+ *
+ *   the component half a name the active pack does not register is REFUSED BY
+ *                      NAME. It does not fall through to classic, modern,
+ *                      rustic or any default: there is no fallback engine and
+ *                      no fallback loader. `Button` and `Card` are registered
+ *                      here and resolve to this file's bespoke implementations;
+ *                      `Input` and `Select` are deliberately not registered,
+ *                      and the two hosts marked `data-pack-entry="refused"`
+ *                      show the named refusal the engine factory's own
+ *                      `EngineErrorBoundary` renders.
+ *
+ * Everything else inside the custom realm is native markup on purpose. A DS
+ * primitive is engine-switched, so under `custom` it too would have to be a
+ * registered pack entry, and the compound typography owners (`Text`,
+ * `Heading`, `Paragraph`, `Link`) are not pack-resolvable at all. Chrome is
+ * therefore plain HTML, and the only DS components inside the realm are the
+ * four that make the two claims above: `Button`, `Card`, `Input`, `Select`.
+ *
+ * WHAT "PAINTS NOTHING" ACTUALLY MEANS HERE, STATED NARROWLY. The realm does
+ * not claim to write no `<style>` and no `<link>` at all: a
+ * `DesignSystemProvider` may legitimately mount subordinate or global styles of
+ * its own, and Next mounts route CSS regardless. Those are not the pack's doing
+ * and this file has no business asserting their absence.
  *
  * The accurate law, and the one the isolation spec measures, is narrower and
  * is about the PACK: because the tenant config is identity-only, it carries no
@@ -58,19 +79,17 @@
 import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import Link from 'next/link';
 import {
-  Badge,
-  Box,
   Button,
   Card,
-  Flex,
+  DesignSystemProvider,
   Input,
   Select,
-  Stack,
-  Text,
-  DesignSystemProvider,
+  defineEngineAdapter,
   getCustomComponent,
   registerCustomComponent,
   registerCustomComponents,
+  registerEngineAdapter,
+  resolveAdapter,
   unregisterCustomComponent,
   type TenantConfig,
 } from '@rottay/design-system';
@@ -85,6 +104,55 @@ const PACK_ID = 'ds-example-pack';
  */
 const PACK_COMPONENT_NAMES = ['Button', 'Card'] as const;
 
+/**
+ * The names deliberately left OUT of the pack, so the realm can show what a
+ * miss actually does. Kept next to the registered list because the two are one
+ * decision: everything the realm renders is on exactly one of them.
+ */
+const PACK_REFUSED_NAMES = ['Input', 'Select'] as const;
+
+/**
+ * The theme adapter for `custom`.
+ *
+ * An engine adapter is a token baseline plus the per-control posture cells the
+ * lowering reads; `custom` ships none, which is a DECLARED absence rather than
+ * an oversight, and `registerEngineAdapter` is the single door any engine
+ * beyond the shipped three enters by. This realm borrows `modern`'s baseline
+ * and posture — a component pack has no opinion about tokens — and projects
+ * nothing, because an identity-only tenant has nothing to project.
+ *
+ * `resolveAdapter('modern')` is the public read for the shipped row; the
+ * adapter objects themselves are not on the package's public surface.
+ */
+const MODERN_ADAPTER = resolveAdapter('modern');
+
+const CUSTOM_THEME_ADAPTER = defineEngineAdapter({
+  id: 'custom',
+  tokenBaseline: MODERN_ADAPTER.tokenBaseline,
+  controls: MODERN_ADAPTER.controls,
+  project: () => ({ seeds: {}, modes: [] }),
+});
+
+/**
+ * Register the adapter at most once per document.
+ *
+ * `registerEngineAdapter` refuses a second registration for the same id, and
+ * the registry publishes no teardown on the package's public surface — so
+ * there is nothing to clean up and nothing may re-register. Existence is probed
+ * through `resolveAdapter`, which is the same door, because that is the only
+ * public statement of whether the id is already answered: it returns the
+ * adapter when one is registered and throws when none is. A module re-evaluated
+ * by fast refresh therefore finds the live registration instead of colliding
+ * with it.
+ */
+function ensureCustomThemeAdapter(): void {
+  try {
+    resolveAdapter('custom');
+  } catch {
+    registerEngineAdapter(CUSTOM_THEME_ADAPTER);
+  }
+}
+
 interface PackComponentProps {
   children?: ReactNode;
   style?: CSSProperties;
@@ -95,9 +163,11 @@ interface PackComponentProps {
  * A pack's bespoke Button.
  *
  * It renders its own anatomy — a state dot plus a tracked label — instead of the
- * flagship one. It must not render the DS `Button`: this component IS `Button`
- * under this pack, so doing so would re-enter the factory forever. `Box
- * as="button"` gives a real, focusable, clickable control.
+ * flagship one, out of native elements. It must not render the DS `Button`:
+ * this component IS `Button` under this pack, so doing so would re-enter the
+ * factory forever. It must not render any other DS primitive either, because
+ * the active engine is `custom` and every engine-switched name resolves against
+ * this pack, which registers only `Button` and `Card`.
  *
  * Prop ownership is explicit, and the order in the JSX is what enforces it:
  *
@@ -112,10 +182,7 @@ interface PackComponentProps {
  *      named prop the component owns, not through the spread. Left before the
  *      spread it would have been silently overwritable, which is the opposite
  *      of the guarantee this file claims.
- *   3. `as` is published after the spread with no escape hatch: this component
- *      IS the pack's Button, and it decides that its host element is a real
- *      `<button>`. A caller cannot spread it into a `<div>`.
- *   4. The pack's own witnesses are written AFTER `{...rest}`. A consumer prop
+ *   3. The pack's own witnesses are written AFTER `{...rest}`. A consumer prop
  *      named `data-pack` or `data-pack-part` cannot forge or erase the evidence
  *      that this component came from the pack. Consumer-owned attributes such
  *      as `data-testid` and `onClick` arrive through `...rest` and survive
@@ -148,19 +215,19 @@ function PackButton({
   };
 
   return (
-    <Box
+    <button
       style={{ ...packBase, ...(style ?? {}) }}
       {...rest}
-      as="button"
       type={type ?? 'button'}
       data-pack={PACK_ID}
       data-pack-part="button"
       data-pack-variant={variant}
     >
-      <Box
+      <span
         aria-hidden
         data-pack-part="button-dot"
         style={{
+          display: 'block',
           width: 6,
           height: 6,
           borderRadius: '50%',
@@ -168,17 +235,16 @@ function PackButton({
           background: isPrimary ? 'var(--ds-color-primary)' : 'var(--ds-color-text-muted)',
         }}
       />
-      <Box as="span" data-pack-part="button-label">
-        {children}
-      </Box>
-    </Box>
+      <span data-pack-part="button-label">{children}</span>
+    </button>
   );
 }
 
 /**
  * A pack's bespoke Card: a left accent rail the flagship card does not have.
- * Same two rules as `PackButton` — consumer style merges over the pack base,
- * and the pack's witnesses are written after the consumer's props.
+ * Same rules as `PackButton` — native elements only, consumer style merges over
+ * the pack base, and the pack's witnesses are written after the consumer's
+ * props.
  */
 function PackCard({ children, style, ...rest }: PackComponentProps) {
   const packBase: CSSProperties = {
@@ -190,21 +256,16 @@ function PackCard({ children, style, ...rest }: PackComponentProps) {
   };
 
   return (
-    <Box
-      style={{ ...packBase, ...(style ?? {}) }}
-      {...rest}
-      data-pack={PACK_ID}
-      data-pack-part="card"
-    >
-      <Box
+    <div style={{ ...packBase, ...(style ?? {}) }} {...rest} data-pack={PACK_ID} data-pack-part="card">
+      <div
         aria-hidden
         data-pack-part="card-rail"
         style={{ width: 3, flex: '0 0 3px', background: 'var(--ds-color-primary)' }}
       />
-      <Box data-pack-part="card-body" style={{ flex: 1, padding: 16 }}>
+      <div data-pack-part="card-body" style={{ flex: 1, padding: 16 }}>
         {children}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }
 
@@ -249,174 +310,245 @@ const SELECT_OPTIONS = [
   { value: 'enterprise', label: 'Enterprise' },
 ];
 
+const NOTE_STYLE: CSSProperties = {
+  margin: 0,
+  fontSize: 12,
+  lineHeight: 1.55,
+  color: 'var(--ds-color-text-secondary)',
+};
+
+const MUTED_NOTE_STYLE: CSSProperties = {
+  ...NOTE_STYLE,
+  color: 'var(--ds-color-text-muted)',
+};
+
 /**
  * The live ground. Everything inside it resolves through the custom engine
- * against `ds-example-pack`: `Button` and `Card` hit the pack, `Input` and
- * `Select` miss it and resolve through the component's own fallback loader.
+ * against `ds-example-pack`: `Button` and `Card` hit the pack; `Input` and
+ * `Select` miss it and are refused by name inside the engine factory's own
+ * error boundary, which is why the realm around them keeps rendering.
  *
- * Every control writes to a visible output, so "it rendered" and "it works" are
- * two different, separately observable claims.
+ * The button writes to a visible output, so "it rendered" and "it works" are
+ * two different, separately observable claims. The refused hosts have no such
+ * output by construction: a refused component has no behaviour to observe, and
+ * the refusal text IS the observation.
  */
 function PackDemoGround() {
-  const [selectValue, setSelectValue] = useState('growth');
-  const [inputValue, setInputValue] = useState('');
   const [lastAction, setLastAction] = useState('none');
 
   const onApprove = useCallback(() => setLastAction('approve'), []);
   const onDismiss = useCallback(() => setLastAction('dismiss'), []);
 
   return (
-    <Box
+    <div
       data-testid="custom-pack-ground"
       data-pack={PACK_ID}
       data-demo-engine="custom"
       style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 16,
         padding: 20,
         border: '1px solid var(--ds-color-border-secondary)',
         borderRadius: 4,
         background: 'linear-gradient(180deg, var(--ds-color-bg-elevated), var(--ds-color-bg-primary))',
       }}
     >
-      <Stack spacing="md">
-        <Flex align="center" justify="between" style={{ flexWrap: 'wrap', gap: 12 }}>
-          <Stack spacing={1}>
-            <Text as={'h1' as never} size="lg" weight="bold">
-              custom + ds-example-pack
-            </Text>
-            <Text size="xs" style={{ color: 'var(--ds-color-text-muted)', lineHeight: 1.55 }}>
-              Bespoke Button and Card; fallback Input and Select. One provider, one document root.
-            </Text>
-          </Stack>
-          <Badge variant="primary">custom</Badge>
-        </Flex>
-
-        <Flex gap={8} style={{ flexWrap: 'wrap' }}>
-          {/*
-            The `letterSpacing` here is a deliberate causal probe, not decoration.
-
-            `PackButton` builds `{ ...packBase, ...(style ?? {}) }`, and
-            `packBase` sets `letterSpacing: '0.08em'` AND
-            `textTransform: 'uppercase'`. So this one declaration produces two
-            separately observable facts on the same element: the consumer's
-            value WINS on the property it names, and the pack's own base
-            SURVIVES on the property it does not. A pack that replaced the
-            consumer style would show 0.08em; a pack that let the consumer
-            style replace its base would lose the uppercase. The value is odd
-            on purpose so nothing else in the tree can produce it by accident.
-          */}
-          <Button
-            variant="primary"
-            data-testid="custom-pack-button-primary"
-            onClick={onApprove}
-            style={{ letterSpacing: '0.42em' }}
-          >
-            Approve
-          </Button>
-          <Button variant="secondary" data-testid="custom-pack-button-secondary" onClick={onDismiss}>
-            Dismiss
-          </Button>
-        </Flex>
-
-        <Text size="xs" data-testid="custom-pack-action-output" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          action: {lastAction}
-        </Text>
-
-        <Box data-testid="custom-pack-fallback-input" data-pack-entry="absent">
-          <Input
-            placeholder="Search tenant or company..."
-            value={inputValue}
-            onChange={(value) => setInputValue(value)}
-          />
-        </Box>
-
-        <Text size="xs" data-testid="custom-pack-input-output" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          query: {inputValue}
-        </Text>
-
-        <Box data-testid="custom-pack-fallback-select" data-pack-entry="absent">
-          <Select
-            options={SELECT_OPTIONS}
-            value={selectValue}
-            onChange={(value) => setSelectValue(String(value))}
-            placeholder="Choose a plan"
-          />
-        </Box>
-
-        <Text size="xs" data-testid="custom-pack-select-output" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          plan: {selectValue}
-        </Text>
-
-        <Card
-          data-testid="custom-pack-card"
-          style={{
-            border: '1px solid var(--ds-color-border-secondary)',
-            background: 'var(--ds-color-bg-primary)',
-          }}
-        >
-          <Stack spacing="sm">
-            <Flex align="center" justify="between">
-              <Text size="sm" weight="semibold">
-                Workflow module
-              </Text>
-              <Badge variant="success">Active</Badge>
-            </Flex>
-            <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
-              Selected plan: {selectValue}. This card is the pack&apos;s own card -- the accent rail
-              on its left edge is anatomy the flagship card does not have, and the style passed by
-              this caller merges over the pack&apos;s own base without removing it.
-            </Text>
-          </Stack>
-        </Card>
-
-        {/*
-          The client-side exit.
-
-          Tearing this realm down by loading a different document proves nothing
-          about the cleanup effect: a document teardown releases everything
-          whether or not the effect is correct. Only a Next client-side route
-          transition keeps the same document and the same module-global registry
-          alive while React unmounts this subtree, which is the one condition
-          under which the unregister/restore path in this page's effect is
-          actually exercised and observable.
-
-          So this is a real `next/link`, not a plain href and not `ShowroomLink`
-          (which rewrites hrefs with an engine/tenant override read from
-          localStorage and would move the realm out from under the test).
-        */}
-        <Box>
-          <Link
-            href="/probe"
-            data-testid="custom-pack-exit"
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 12,
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <h1
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              fontSize: 12,
-              color: 'var(--ds-color-text-secondary)',
-              textDecoration: 'underline',
+              margin: 0,
+              fontSize: 18,
+              fontWeight: 700,
+              color: 'var(--ds-color-text-primary)',
             }}
           >
-            Leave this realm (client-side)
-          </Link>
-        </Box>
-      </Stack>
-    </Box>
+            custom + ds-example-pack
+          </h1>
+          <p style={NOTE_STYLE}>
+            Bespoke Button and Card. Input and Select have no pack entry and are refused by name --
+            there is no fallback engine.
+          </p>
+        </div>
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: '2px 10px',
+            borderRadius: 999,
+            border: '1px solid var(--ds-color-border-secondary)',
+            background: 'var(--ds-color-bg-elevated)',
+            color: 'var(--ds-color-text-primary)',
+            fontSize: 11,
+            fontWeight: 600,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }}
+        >
+          custom
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        {/*
+          The `letterSpacing` here is a deliberate causal probe, not decoration.
+
+          `PackButton` builds `{ ...packBase, ...(style ?? {}) }`, and
+          `packBase` sets `letterSpacing: '0.08em'` AND
+          `textTransform: 'uppercase'`. So this one declaration produces two
+          separately observable facts on the same element: the consumer's
+          value WINS on the property it names, and the pack's own base
+          SURVIVES on the property it does not. A pack that replaced the
+          consumer style would show 0.08em; a pack that let the consumer
+          style replace its base would lose the uppercase. The value is odd
+          on purpose so nothing else in the tree can produce it by accident.
+        */}
+        <Button
+          variant="primary"
+          data-testid="custom-pack-button-primary"
+          onClick={onApprove}
+          style={{ letterSpacing: '0.42em' }}
+        >
+          Approve
+        </Button>
+        <Button variant="secondary" data-testid="custom-pack-button-secondary" onClick={onDismiss}>
+          Dismiss
+        </Button>
+      </div>
+
+      <p data-testid="custom-pack-action-output" style={NOTE_STYLE}>
+        action: {lastAction}
+      </p>
+
+      {/*
+        The two refusals.
+
+        `createEngineComponent` resolves a `custom` name through the active
+        pack and throws `No custom implementation registered for "<name>" in
+        pack "ds-example-pack"` when the pack has no entry. That throw is
+        raised inside the loader the factory hands to `React.lazy`, and the
+        factory wraps every one of its routers in its own `EngineErrorBoundary`
+        — so the refusal is named, contained to the component that was asked
+        for, and does not take the realm down with it. The boundary is the DS's
+        own; this page adds none, because an outer boundary would never see the
+        error and pretending otherwise would misdescribe where containment
+        lives.
+
+        No `value`/`onChange` is passed. A refused component never mounts, so a
+        controlled-input contract here would be decoration for something that
+        does not exist; the props kept are the ones that name what was asked
+        for.
+      */}
+      <div data-testid="custom-pack-refused-input" data-pack-entry="refused">
+        <Input placeholder="Search tenant or company..." />
+      </div>
+
+      <div data-testid="custom-pack-refused-select" data-pack-entry="refused">
+        <Select options={SELECT_OPTIONS} placeholder="Choose a plan" />
+      </div>
+
+      <p data-testid="custom-pack-refusal-note" style={MUTED_NOTE_STYLE}>
+        refused: {PACK_REFUSED_NAMES.join(', ')}
+      </p>
+
+      <Card
+        data-testid="custom-pack-card"
+        style={{
+          border: '1px solid var(--ds-color-border-secondary)',
+          background: 'var(--ds-color-bg-primary)',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: 'var(--ds-color-text-primary)',
+              }}
+            >
+              Workflow module
+            </span>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                color: 'var(--ds-color-success-700, var(--ds-color-text-primary))',
+              }}
+            >
+              Active
+            </span>
+          </div>
+          <p style={NOTE_STYLE}>
+            This card is the pack&apos;s own card -- the accent rail on its left edge is anatomy the
+            flagship card does not have, and the style passed by this caller merges over the
+            pack&apos;s own base without removing it.
+          </p>
+        </div>
+      </Card>
+
+      {/*
+        The client-side exit.
+
+        Tearing this realm down by loading a different document proves nothing
+        about the cleanup effect: a document teardown releases everything
+        whether or not the effect is correct. Only a Next client-side route
+        transition keeps the same document and the same module-global registry
+        alive while React unmounts this subtree, which is the one condition
+        under which the unregister/restore path in this page's effect is
+        actually exercised and observable.
+
+        So this is a real `next/link`, not a plain href and not `ShowroomLink`
+        (which rewrites hrefs with an engine/tenant override read from
+        localStorage and would move the realm out from under the test).
+      */}
+      <div>
+        <Link
+          href="/probe"
+          data-testid="custom-pack-exit"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            fontSize: 12,
+            color: 'var(--ds-color-text-secondary)',
+            textDecoration: 'underline',
+          }}
+        >
+          Leave this realm (client-side)
+        </Link>
+      </div>
+    </div>
   );
 }
+
+const REALM_STYLE: CSSProperties = { padding: 24, minHeight: 240 };
 
 export default function CustomComponentPackProbePage() {
   /**
    * Registration is a client effect, never a module side effect.
    *
-   * `createCustomWrapper` reads the pack registry at COMPONENT LOAD time, so a
-   * `Button` that begins loading before the pack is registered can legally
-   * resolve the fallback and never look again. Registering at module scope
-   * would appear to work and would be a race: on this route the module and the
-   * provider are in the same client bundle, and load order is not a contract.
+   * `createCustomWrapper` reads the pack registry at COMPONENT LOAD time and
+   * `React.lazy` caches whatever that read produced, so a `Button` that begins
+   * loading before the pack is registered caches a refusal and never looks
+   * again. Registering at module scope would appear to work and would be a
+   * race: on this route the module and the provider are in the same client
+   * bundle, and load order is not a contract.
    *
    * So: register, then flip `packReady`, and only then mount the provider. The
    * gate makes "the pack is registered" a precondition of rendering rather than
-   * a hope about ordering.
+   * a hope about ordering. The theme adapter rides the same gate for a
+   * different reason — the provider resolves it while it renders, so it has to
+   * exist before the provider is in the tree at all.
    *
    * Cleanup is deliberately not "delete the two keys". A registry is shared
    * mutable state, so this effect records what each key held BEFORE it wrote,
@@ -432,6 +564,11 @@ export default function CustomComponentPackProbePage() {
    * on the same name in the same pack. `getCustomComponent` is the public read
    * that makes the check available, so the restraint costs nothing.
    *
+   * The theme adapter has no matching teardown, and that asymmetry is the
+   * registry contract rather than an omission: `registerEngineAdapter` is the
+   * only door on the public surface and it publishes no inverse, so an engine
+   * id is answered for the life of the document once it is answered at all.
+   *
    * Under React Strict Mode the effect runs, tears down and runs again. The
    * teardown restores exactly what was there before the first run, the second
    * run re-records it and re-registers, and the final state is registered. No
@@ -440,6 +577,8 @@ export default function CustomComponentPackProbePage() {
   const [packReady, setPackReady] = useState(false);
 
   useEffect(() => {
+    ensureCustomThemeAdapter();
+
     const ownedImplementations: Record<string, unknown> = {
       Button: PackButton,
       Card: PackCard,
@@ -479,27 +618,27 @@ export default function CustomComponentPackProbePage() {
     };
   }, []);
 
+  /*
+    Both branches are native markup, and they have to be: this element is
+    OUTSIDE the provider, so no engine is declared for it, and an engine-switched
+    DS primitive refuses to render without one. That refusal is the same law the
+    realm below demonstrates, seen from the other side.
+  */
   if (!packReady) {
     return (
-      <Box
-        data-testid="custom-pack-realm"
-        data-pack-ready="false"
-        style={{ padding: 24, minHeight: 240 }}
-      >
-        <Text size="sm">Registering ds-example-pack...</Text>
-      </Box>
+      <div data-testid="custom-pack-realm" data-pack-ready="false" style={REALM_STYLE}>
+        <p style={{ margin: 0, fontSize: 13, color: 'var(--ds-color-text-primary)' }}>
+          Registering ds-example-pack...
+        </p>
+      </div>
     );
   }
 
   return (
-    <Box
-      data-testid="custom-pack-realm"
-      data-pack-ready="true"
-      style={{ padding: 24, minHeight: 240 }}
-    >
+    <div data-testid="custom-pack-realm" data-pack-ready="true" style={REALM_STYLE}>
       <DesignSystemProvider forceEngine="custom" tenantConfig={PACK_TENANT_CONFIG}>
         <PackDemoGround />
       </DesignSystemProvider>
-    </Box>
+    </div>
   );
 }

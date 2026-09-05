@@ -77,7 +77,7 @@ describe("compileTheme", () => {
   it("stamps the adapter's engine and projection onto the product", () => {
     const compiled = compileTheme(resolveTheme(baseline), modern);
     expect(compiled.engine).toBe("modern");
-    expect(compiled.projection).toEqual({ seeds: {}, tokenOverrides: {}, modes: [] });
+    expect(compiled.projection).toEqual({ seeds: {}, modes: [] });
   });
 
   it("carries the runtime half rather than leaving it to be re-derived", () => {

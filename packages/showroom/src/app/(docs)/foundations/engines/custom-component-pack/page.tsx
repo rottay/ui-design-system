@@ -26,7 +26,10 @@ const PACK_FRAME_SRC = '/probe/custom-component-pack';
 
 const REGISTRATION_CODE = `import {
   DesignSystemProvider,
+  defineEngineAdapter,
   registerCustomComponents,
+  registerEngineAdapter,
+  resolveAdapter,
   unregisterCustomComponent,
   type TenantConfig,
 } from '@rottay/design-system';
@@ -34,10 +37,10 @@ const REGISTRATION_CODE = `import {
 // 1. A pack carries bespoke React components and nothing else. The key is the
 //    flagship component's name; the second argument is the pack id. Register in
 //    a client effect, not at module scope: the component factory reads the
-//    registry at component LOAD time, so a Button that starts loading before
-//    registration can legally resolve the fallback and never look again. Gate
-//    the provider on packReady so registration is a precondition of rendering
-//    rather than a hope about module order.
+//    registry at component LOAD time and React.lazy caches that read, so a
+//    Button that starts loading before registration caches a refusal and never
+//    looks again. Gate the provider on packReady so registration is a
+//    precondition of rendering rather than a hope about module order.
 //
 //    This is the SIMPLE case: your app owns the pack id and nothing else writes
 //    to it, so unregistering the names you wrote is safe. The registry is
@@ -47,6 +50,16 @@ const REGISTRATION_CODE = `import {
 //    unmount deletes somebody else's registration. The probe page behind the
 //    frame below does exactly that, and restores a predecessor if there was one.
 useEffect(() => {
+  // The theme adapter from step 2, registered here and guarded: resolveAdapter
+  // is the only public statement of whether 'custom' is already answered, so a
+  // module re-evaluated by fast refresh adopts the live registration instead of
+  // colliding with it.
+  try {
+    resolveAdapter('custom');
+  } catch {
+    registerEngineAdapter(customThemeAdapter);
+  }
+
   registerCustomComponents({ Button: PackButton, Card: PackCard }, 'ds-example-pack');
   setPackReady(true);
 
@@ -56,7 +69,28 @@ useEffect(() => {
   };
 }, []);
 
-// 2. Activate it with a full CUSTOMER tenant config -- authored, never spread
+// 2. A pack replaces components; it says nothing about tokens. 'custom' ships
+//    no theme adapter, so resolveAdapter('custom') throws until one is
+//    registered -- and DesignSystemProvider resolves it while it renders, so a
+//    custom realm without one does not mount at all. Register exactly one,
+//    through the single door any engine beyond the shipped three enters by.
+//
+//    Defining the adapter is pure, so it belongs at module scope. REGISTERING
+//    it is not: registerEngineAdapter refuses a second registration for the
+//    same id and the registry publishes no public teardown, so an unguarded
+//    module-scope call throws on the first fast refresh, and again if two
+//    modules in one document both make it. Do it in the effect above, behind
+//    the resolveAdapter probe, which is what the probe page below does.
+const modern = resolveAdapter('modern');
+
+const customThemeAdapter = defineEngineAdapter({
+  id: 'custom',
+  tokenBaseline: modern.tokenBaseline,
+  controls: modern.controls,
+  project: () => ({ seeds: {}, modes: [] }),
+});
+
+// 3. Activate it with a full CUSTOMER tenant config -- authored, never spread
 //    from another tenant. Identity is the customer's own: a slug, name or
 //    companyName that folds onto a reserved first-party identity is rejected,
 //    and the slug must be canonical lower-kebab. The config is identity-only:
@@ -74,14 +108,15 @@ const tenantConfig: TenantConfig = {
   componentPack: 'ds-example-pack',
 };
 
-// 3. One provider per document. The provider claims the document root's tenant,
+// 4. One provider per document. The provider claims the document root's tenant,
 //    theme, engine and language channels, so it belongs at the root of a
 //    document nothing else owns -- your app shell, or a frame. No
 //    visualAuthority prop, because the config paints nothing and there is
 //    nothing to declare; a config that DID carry visual payload would need a
 //    verified compiled artifact declaration, and without one the provider
-//    blocks. Names with no entry in the pack resolve through the component's
-//    own fallback loader, so a partial pack is a legal pack.
+//    blocks. Every engine-switched name rendered inside this realm must have an
+//    entry in the pack: a name with none is refused by name, with no fallback
+//    engine and no fallback loader behind it.
 <DesignSystemProvider forceEngine="custom" tenantConfig={tenantConfig}>
   <Button variant="primary">Approve</Button>
 </DesignSystemProvider>`;
@@ -113,14 +148,15 @@ export default function CustomComponentPackPage() {
             body: 'Not a visual layer. Tenant styling is compiled on the server and embedded for SSR; the client hydrates that exact artifact and nothing may paint over it. A pack ships no CSS and no token overrides.',
           },
           {
-            title: 'Partial packs are legal',
-            body: "A name with no pack entry falls through to the component's own fallback loader. In the frame below, only Button and Card are overridden -- Input and Select resolve the fallback.",
+            title: 'A partial pack is a partial realm',
+            body: 'A name with no pack entry is refused by name -- there is no fallback engine and no fallback loader behind it. In the frame below, Button and Card resolve from the pack; Input and Select are refused, inside the engine factory\'s own error boundary.',
             tone: 'dark',
           },
         ]}
         stats={[
           { label: 'Pack payload', value: 'Components', detail: 'Registered under a pack id' },
-          { label: 'Overridden here', value: '2', detail: 'Button, Card -- Input/Select fall through' },
+          { label: 'Overridden here', value: '2', detail: 'Button, Card -- Input/Select are refused' },
+          { label: 'Theme adapters', value: '1', detail: "custom must register one; it ships none" },
           { label: 'Visual authority', value: 'None', detail: 'Tenant paint is the compiled artifact' },
           { label: 'Providers per document', value: '1', detail: 'The live pack owns a frame, not this page' },
         ]}
@@ -134,7 +170,8 @@ export default function CustomComponentPackPage() {
                 registerCustomComponents
               </Text>
               <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
-                Registered in a client effect, activated per tenant via componentPack.
+                Components registered in a client effect, activated per tenant via componentPack;
+                the engine&apos;s own theme adapter registered alongside them.
               </Text>
             </Box>
             <Badge variant="secondary">customization/component-registry</Badge>
@@ -220,15 +257,23 @@ export default function CustomComponentPackPage() {
             <code>Card</code> resolve to the probe&apos;s <code>PackButton</code>/<code>PackCard</code>,
             which render an anatomy the flagship components do not have -- a state dot, a left accent
             rail -- and which merge a caller&apos;s style over the pack&apos;s own base rather than
-            replacing it. <code>Input</code> and <code>Select</code> have no entry under{' '}
-            <code>ds-example-pack</code>, so they resolve through the component&apos;s own fallback
-            loader: no pack witness anywhere in their markup, and full behaviour -- you can type in
-            the input and change the plan in the select, because falling through is ordinary
-            resolution and not a degraded mode. That is a claim about resolution and behaviour only.
-            How a fallback component is skinned while the active engine is <code>custom</code> is a
-            separate question this page does not answer and does not measure. Every control writes to
-            a visible output, so &quot;it rendered&quot; and &quot;it works&quot; stay two separate
-            claims.
+            replacing it. The bespoke button writes to a visible output, so &quot;it rendered&quot;
+            and &quot;it works&quot; stay two separate claims.
+          </Text>
+          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.6 }}>
+            <code>Input</code> and <code>Select</code> have no entry under{' '}
+            <code>ds-example-pack</code>, and that is the second thing the frame shows. They do not
+            fall through to classic, modern, rustic or any default: the factory refuses them by name
+            with{' '}
+            <code>No custom implementation registered for &quot;Input&quot; in pack
+            &quot;ds-example-pack&quot;</code>, and the engine factory&apos;s own{' '}
+            <code>EngineErrorBoundary</code> renders that refusal in place, which is why one missing
+            entry does not take the realm down with it. A refused component never mounts, so there is
+            no behaviour to try: the refusal text is the whole observation. Everything else inside
+            the realm is native markup, because under <code>custom</code> every engine-switched name
+            resolves against the pack, and the compound typography owners (<code>Text</code>,{' '}
+            <code>Heading</code>, <code>Paragraph</code>, <code>Link</code>) are not pack-resolvable
+            at all.
           </Text>
           <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.6 }}>
             The pack acquires no paint. Stated precisely, because the loose version of this
@@ -249,8 +294,8 @@ export default function CustomComponentPackPage() {
             <code>custom-pack-button-primary</code>, <code>custom-pack-button-secondary</code>,{' '}
             <code>custom-pack-card</code> (each carrying <code>data-pack=&quot;ds-example-pack&quot;</code>{' '}
             and a <code>data-pack-part</code> anatomy witness) and{' '}
-            <code>custom-pack-fallback-input</code> / <code>custom-pack-fallback-select</code>, marked{' '}
-            <code>data-pack-entry=&quot;absent&quot;</code>, in the frame.
+            <code>custom-pack-refused-input</code> / <code>custom-pack-refused-select</code>, marked{' '}
+            <code>data-pack-entry=&quot;refused&quot;</code>, in the frame.
           </Text>
         </Stack>
       </Card>
