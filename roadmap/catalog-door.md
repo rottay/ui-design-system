@@ -1,0 +1,76 @@
+---
+title: "Design System Catalog and door: typed decision catalog, tiers, single admission"
+date: 2026-09-05
+status: canonical (adopted 2026-09-05 from audit/70-plan/roadmap-draft; state lives in roadmap/registry.json)
+audience: ai-agent
+sources:
+  - audit/README.md (verdict, guide for the executor)
+  - audit/30-findings/** (closure criteria of every F-nn cited below)
+  - audit/70-plan/index.md (blocks, waves, indicators)
+  - audit/50-matrices/customization-inventory/index.md §5 (identity kit, approved as-is by the owner on 2026-09-05, D-27)
+---
+
+# Catalog and door: typed decision catalog, tiers, single admission
+
+Station 2 and station 5 of the tenant route. One typed catalog (the approved identity kit) is the only list of what a tenant can decide; one admission applies tier, envelope, contrast and limits to every origin. Nothing here derives channels yet.
+
+Lane-wide rules (binding on every WO):
+
+- Repo: `/Users/daniel/Developer/Rottay/ui-design-system` (macOS, pnpm). Paths are relative to the repo root unless prefixed; "logical path" means the target-tree grammar of `audit/40-architecture/target` §5. D-21 is decided (owner, 2026-09-05): grammar (b), first level — `packages/core/src/{contracts,kernel,tokens,graphics,compilers,runtime,components,entrypoints}`. A logical path written `.../src/infrastructure/compilers/theme/**` therefore materializes as `.../src/compilers/theme/**`, `.../src/foundation/contracts/theme/**` as `.../src/contracts/theme/**`, and `.../src/infrastructure/runtime/<x>/**` as `.../src/runtime/<x>/**`. New code is born with this grammar from WO-CAT-02; what is not rewritten is normalized in WO-RET-04. `packages/core/scripts/check/architecture/audits/structure/index.mjs` and `CLAUDE.md` still pin the four-tier grammar, so WO-CAT-02 — the first WO that materializes a new first-level root — also amends that gate, its test and the written law.
+- Engines: Modern is the only admitted engine; Classic and Rustic stay in the package frozen and fail-closed; no WO in any lane adds content, tokens, tests or a11y work to them (owner decision 2026-09-05).
+- Every WO names the audit findings it closes (`Closes`) and is done only when the closure criterion of each cited `F-nn` (`audit/30-findings`) passes on the working tree, in addition to its own acceptance gate and a green DS build/test.
+- Uniqueness: a WO that leaves two files or two processes with the same responsibility is not done.
+- Executors are edit-only; the coordinator certifies and commits one lot at a time; never push.
+- Write sets are declared before claiming; two in-flight WOs never share a file; the coordinator integrates shared files (`package.json`, CI, gate manifests).
+
+
+### WO-CAT-01 Owner decisions D-27 and D-28: identity kit and vertical envelope
+- **Outcome** — The owner approved the 29-decision identity kit as is and the envelope policy (b) on 2026-09-05 (D-27, D-28); this WO checks the approved tables in. Reference text of what was approved: the 29-decision identity kit (`audit/50-matrices/customization-inventory` §5: rows, tiers, closed domains, fan-out targets, absolute minimum families) and the envelope policy (`VerticalEnvelope` = available capabilities, bounds and defaults; `locked` exists as a mechanism in every case; the audit recommends the closed default list of D-28 (b); every locked entry needs a written functional reason; `PlanEntitlement` decides tiers). The approved tables are checked in as the catalog input.
+- **Why** — Every station after the door depends on the list of decisions. Codex and the audit agree these two are the only decisions that require the owner; the rest is decided by the contract (`audit/70-plan/decisions` D-01…D-26 with dispositions).
+- **Closes** — (decision / enabling WO; closes no finding by itself) (closure criteria in `audit/30-findings`).
+- **Wave** — 1 (owner decision; it does not depend on the C4 commit and should be taken now, because WO-CON-03 needs it).
+- **Depends on** — none.
+- **Steps** —
+  1. Publish the approved kit as `roadmap/kit-2026-09.md` (single source until the typed catalog exists in code), copied from `audit/50-matrices/customization-inventory` §5 with the envelope list of D-28 (b).
+  2. Record the sha256 digest of the published file inside `roadmap/kit-2026-09.md` itself (a `Digest` line covering the body below it) and in the `notes` of WO-CAT-01 in `roadmap/registry.json`. Do not write to `audit/**`: the audit tree is evidence and rubric, never a target of this programme.
+- **Files** — `roadmap/kit-2026-09.md (new)`.
+- **Acceptance gate** — The kit file exists and lists every decision with tier, domain, fan-out target and minimum families, plus the D-28 (b) envelope list; its sha256 digest is recorded in the file itself and in the WO-CAT-01 `notes` of `roadmap/registry.json`, and recomputing the digest over the body reproduces the recorded value.
+- **Do NOT** — Do not start WO-CAT-02 on an unapproved kit.
+- **Size** — S (hours).
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-CAT-01 (Owner decisions D-27 and D-28: identity kit and vertical envelope) exactly as specified in `roadmap/catalog-door.md`: read first `audit/README.md` (guide for the executor) and the fiches of the decisions it enables in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
+
+### WO-CAT-02 Typed catalog, ThemeDecisions, document v2 and the end of the five catalogs
+- **Outcome** — `contracts/theme/{decisions,catalog}` is the only list of controls (id, tier, closed domain, keypath, declared fan-out, minimum families); `ThemePatch = DeepPartial<ThemeDecisions & SanctionedOverrides>`; `TenantThemeDocument` v2 `{ decisions, overrides?, plan }` with a total, fail-closed `migrate v1→v2`; the DB schema is generated from the catalog; `customization-model`, `governance/manifest/controls` and the generated docs are replaced by generated views; raw `tokenOverrides` become `SanctionedOverrides` (D-03); the naming is Standard/Pro/Internal only.
+- **Why** — F-04: five listings of the catalog and 5,355 UNKNOWN cells; F-03: nobody reads `tier`; F-06: the document reaches 28 % of the Theme keypaths and 519 keypaths have no door; F-25/F-70: `BrandTheme`, `TenantAppearance*`, four `chrome` vocabularies and a hand-made `DEFAULT_CHROME_SHAPE` coexist.
+- **Closes** — F-03, F-04, F-06, F-25, F-70, F-35 (closure criteria in `audit/30-findings`).
+- **Wave** — 2; parallel with the other WOs of the same wave whose write sets are disjoint.
+- **Depends on** — WO-CAT-01, WO-CAN-02, WO-CON-03 (whose types and v2 document this WO completes; it deletes the WO-CON-03 decision→keypath adapter).
+- **Steps** —
+  1. Write `contracts/theme/decisions` (domains as enums/bounds) and `contracts/theme/catalog` (`satisfies` rows from the approved kit, with `consumes`/`produces` declarations and `minimumFamilies`).
+  2. `ThemePatch` typed over decisions + sanctioned overrides; `ThemeIntent.entitlement` carries the plan; `assertThemeIntent` rejects `id`/`name` and `static-vertical` with a non-empty patch.
+  3. `TenantThemeDocument` v2 + `migrate v1→v2` with fixtures from the real documents (app-platform); schema generated (`--check`).
+  4. Point the 7 gates that read `governance/manifest/controls/**` at the catalog; delete `customization-model/index.json`; regenerate `docs/generated/customization-controls` from the catalog.
+  5. Gate `theme-keypath-coverage` created here (three disjoint sets decision / derived / internal covering 100 % of the Theme); it passes only after the derivation lane lands.
+  6. D-21 (b) lands with this WO because it is the first code born under the new grammar: amend `ARCHITECTURE_TIERS`/`CLASSIFIED_SUPPORT_ROOTS` in `packages/core/scripts/check/architecture/audits/structure/index.mjs`, its focal test and the non-negotiable root list in `CLAUDE.md` so the first-level roots are admitted, and re-run `structure:check` with the identity baseline decrease-only. Without this step the new `contracts/` root reddens `structure:check` and wave 2 opens on a red gate.
+- **Files** — `packages/core/src/contracts/theme/** (new; D-21 (b) first-level grammar, logical path `foundation/contracts/theme/**` in the audit tree)`; `packages/core/src/foundation/contracts/composition/tenants/{capabilities,themes/tenant-theme,themes/iso}/**`; `packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/** (generated)`; `packages/core/scripts/check/modern-rescue/customization-model/index.json (deleted)`; `packages/core/governance/manifest/controls/** (deleted after gates migrate)`; `packages/core/docs/generated/customization-controls/**`; `packages/core/scripts/check/architecture/audits/structure/index.mjs`; `packages/core/scripts/check/architecture/audits/structure/index.test.mjs`; `CLAUDE.md`.
+- **Acceptance gate** — `grep -rn "Expert\|frontier" packages/core/src packages/core/scripts` = 0; one listing (the others are generated with `--check`); `migrate v1→v2` fixtures green; `ThemePatch` rejects a key outside decisions/overrides; the schema generator `--check` green; `pnpm --filter @rottay/design-system structure:check` is 0 with the new first-level root admitted and the identity baseline not widened, and its focal test fails against a planted undeclared root.
+- **Do NOT** — Do not keep `customization-model` "for reference"; do not let the catalog import anything from `infrastructure`; do not leave the WO-CON-03 adapter alive once the catalog fan-out exists. Do not widen the structure baseline to absorb the new root: admit the root by name in `ARCHITECTURE_TIERS` and keep the baseline decrease-only.
+- **Size** — L.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-CAT-02 (Typed catalog, ThemeDecisions, document v2 and the end of the five catalogs) exactly as specified in `roadmap/catalog-door.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-03, F-04, F-06, F-25, F-70, F-35 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
+
+### WO-CAT-03 Single admission for every origin and a closed public door
+- **Outcome** — `compilers/theme/admission/{tier,engine,envelope,contrast,limits}` applies the same policy to static, document, preview and draft origins (today envelope/APCA/limits live only in `compileTenantTheme`); `entrypoints/server` exports only `compileThemeIntent`, the intent producers and the emitters (`compileTheme`, `resolveTheme`, `liftAuthoredTheme`, `THEME_ENGINE_ADAPTERS` removed); one engine law everywhere; invalid values are refused by name (never silently dropped or clamped); baselines frozen and cloned per request; the ingress and the door have a real suite plus an AST gate with a planted intent literal.
+- **Why** — F-13: preview accepts what publish rejects (scale 100, radius 9, `notacolor`, APCA); F-24: the door is bypassable from outside the package; F-61: an invalid `experienceProfile` deletes 12 channels; F-02: `compileThemeIntent` had zero tests and the ingress claimed a gate that did not exist.
+- **Closes** — F-13, F-24, F-61, F-27, F-60, F-02 (closure criteria in `audit/30-findings`).
+- **Wave** — 2; parallel with the other WOs of the same wave whose write sets are disjoint.
+- **Depends on** — WO-CAT-02, WO-CAN-06.
+- **Steps** —
+  1. Move the policy out of `compileTenantTheme` (and the envelope/APCA/limits helpers it calls) in `packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts` into `admission/*` — cite the symbol, not a line range: the file is 2,133 lines post-C4 and `compileTenantTheme` starts at line 1801, so any pinned range rots on the next edit; `compileThemeIntent` runs it for every origin; tier check against `ThemeIntent.entitlement` and `VerticalEnvelope`.
+  2. Recut `entrypoints/server/index.ts`; adjust the showroom probes that used `compileTheme`/`liftAuthoredTheme` (TortureSurface goes through `draftPreviewThemeIntent`).
+  3. `admitCssVariables` and `experienceProfile`: refusal by name; `Object.freeze` + clone for `FIRST_PARTY_THEMES`/`baselineFor`.
+  4. Suites: `ingress/tests` (3 producers × valid/invalid), `admission/tests` (same document rejected identically by preview and document origins; tier rejection), `single-door` extended with the AST census of intent literals and a mutant.
+- **Files** — `packages/core/src/infrastructure/compilers/runtime/theme/{facade,runtime/ingress,runtime/resolution}/**`; `packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts`; `packages/core/src/entrypoints/server/index.ts`; `packages/core/tests/architecture/theme-lowering-single-door/**`; `packages/showroom/src/components/torture-surface/**`.
+- **Acceptance gate** — Test: the same invalid document throws the same named error via `previewThemeIntent` and `documentThemeIntent`; test: a `standard` tenant activating a `pro` decision is refused by both doors; `grep -n "compileTheme\b\|resolveTheme\b\|liftAuthoredTheme\|THEME_ENGINE_ADAPTERS" src/entrypoints/server/index.ts` = 0; `single-door` fails on a planted `origin: "preview"` literal outside `ingress/`.
+- **Do NOT** — Do not leave a `report-only` mode without an end date; do not keep `compileTenantTheme` as a second admission.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-CAT-03 (Single admission for every origin and a closed public door) exactly as specified in `roadmap/catalog-door.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-13, F-24, F-61, F-27, F-60, F-02 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

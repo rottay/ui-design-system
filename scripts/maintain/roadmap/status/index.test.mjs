@@ -12,6 +12,7 @@ import {
   reassignInProgressWorkOrder,
   summarizeDsImprovements,
   summarizeDsSupportMilestones,
+  summarizeProgramMilestones,
   validateDoneTransition,
   validateCrossProgramConvergenceLedger,
   validateDsImprovementsTraceability,
@@ -2012,4 +2013,51 @@ test("the closed registry schema rejects shadow state outside the DS program sub
   assert.ok(validateRegistryMutationIntegrity(milestoneState, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("workOrders.WO-GAT-07.milestone.status is not part of the closed DS-improvements schema"),
   ));
+});
+
+test("programme milestones are derived from their gate work orders, never stored", () => {
+  const registry = liveRegistry();
+  const milestones = summarizeProgramMilestones(registry);
+  assert.deepEqual(milestones.map((milestone) => milestone.id), ["A", "A2", "B", "C"]);
+
+  // No milestone may be an authored registry field.
+  for (const workOrder of registry.workOrders) {
+    assert.ok(!Object.hasOwn(workOrder, "milestoneId"));
+  }
+  assert.ok(!Object.hasOwn(registry, "milestones"));
+
+  const milestoneA = milestones.find((milestone) => milestone.id === "A");
+  assert.deepEqual(milestoneA.gates, ["WO-CON-04", "WO-CON-05"]);
+  assert.equal(milestoneA.reached, false);
+  assert.deepEqual(milestoneA.outstanding, ["WO-CON-04", "WO-CON-05"]);
+
+  // Milestone C is programme-scoped: its gate set is every audit-2026-09-05 work order.
+  const milestoneC = milestones.find((milestone) => milestone.id === "C");
+  const programWorkOrders = registry.workOrders
+    .filter((workOrder) => (workOrder.programs || []).includes("audit-2026-09-05"))
+    .map((workOrder) => workOrder.id);
+  assert.equal(milestoneC.gates.length, programWorkOrders.length);
+  assert.ok(milestoneC.gates.length > 0);
+  assert.equal(milestoneC.reached, false);
+});
+
+test("a milestone is reached only when every gate work order is done", () => {
+  const registry = liveRegistry();
+  for (const id of ["WO-CON-04", "WO-CON-05"]) {
+    const workOrder = registry.workOrders.find((candidate) => candidate.id === id);
+    workOrder.status = "done";
+    workOrder.claimedBy = "test";
+    workOrder.claimedAt = "2026-09-05";
+    workOrder.doneAt = "2026-09-05";
+    workOrder.evidence = "fixture";
+  }
+  const milestoneA = summarizeProgramMilestones(registry).find((milestone) => milestone.id === "A");
+  assert.equal(milestoneA.reached, true);
+  assert.deepEqual(milestoneA.outstanding, []);
+
+  // One gate regressing is enough to lose the milestone.
+  registry.workOrders.find((candidate) => candidate.id === "WO-CON-05").status = "in-progress";
+  const regressed = summarizeProgramMilestones(registry).find((milestone) => milestone.id === "A");
+  assert.equal(regressed.reached, false);
+  assert.deepEqual(regressed.outstanding, ["WO-CON-05"]);
 });

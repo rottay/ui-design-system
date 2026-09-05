@@ -206,8 +206,11 @@ be fixed or deliberately respecified in its own work order.
 
 ## State model (this plan cannot rot silently)
 
-- **The spec** lives in the lane files (`engine-modern.md`, `craft.md`, `gates.md`, `tokens.md`,
-  `architecture.md`, `showroom.md`). **State** lives
+- **The spec** lives in the lane files: the six original lanes (`engine-modern.md`, `craft.md`,
+  `gates.md`, `tokens.md`, `architecture.md`, `skin-adoption.md`) plus the nine post-C4 audit lanes
+  adopted on 2026-09-05 (`canon-close.md`, `consumer-contract.md`, `catalog-door.md`,
+  `derivation.md`, `family-cuts.md`, `emission-mount.md`, `platform-invariants.md`, `retire.md`,
+  `evidence-graph.md`). **State** lives
   in [`registry.json`](./registry.json) — the ONLY place a WO status exists. **[`STATUS.md`](./STATUS.md)
   is generated** (`pnpm roadmap:status`); never hand-edit either.
 - Statuses change ONLY through `scripts/maintain/roadmap/status/index.mjs` (`claim` / `progress` / `done` / `reopen`), which
@@ -220,6 +223,14 @@ be fixed or deliberately respecified in its own work order.
   If a doc is not the lane, the registry, generated STATUS, or the spec, it does not exist. The ONE
   sanctioned exception is [`proposals.md`](./proposals.md) — the owner-review inbox (owner request
   2026-07-07): items there are NOT work until the owner approves them 1:1 and they become WO blocks.
+- Dispositions of superseded WOs live in `notes` (`ABSORBED by`, `REFORMULATED by`, `REPLACED by`,
+  `PAUSED until`) and in `dependsOn`; they are not statuses. `STATUSES` stays `todo | in-progress | done`.
+  A superseded WO is closed when its replacement lands: `claim WO-old`, then
+  `done WO-old --evidence "closed by WO-XXX-nn <commit>"`, in the same certified lot.
+- `new_work` exception (owner-ordered spec/contract artifacts, 2026-09-05): `roadmap/kit-2026-09.md`
+  (WO-CAT-01), `roadmap/family-cut-template.md` (WO-FAM-00) and
+  `packages/core/docs/consumer-contract/index.md` (WO-CON-01) are specifications and a consumed
+  contract, not plan documents. Nothing else may be added outside a lane file.
 
 ### DS-improvements authority, milestones and wave locks
 
@@ -258,7 +269,10 @@ be fixed or deliberately respecified in its own work order.
 > `../../docs-engineering/engineering/design-system/runtime/engines/modern/README.md` (Quiet Premium,
 > sections 1-13) — READ IT FULLY FIRST; every WO implements a numbered section. THE OPERATIVE BACKLOG
 > is `ui-design-system/roadmap/` — start with `pnpm roadmap:status`, then read `roadmap/README.md`
-> (this file) and `roadmap/engine-modern.md` in full.
+> (this file) and `roadmap/engine-modern.md` in full. If your WO belongs to one of the nine
+> post-C4 audit lanes (`WO-CAN/CON/CAT/DER/FAM/EMI/INV/RET/EVI-*`), read `audit/README.md` FIRST —
+> it fixes the order of authority inside `audit/**` and the rule that every change cites the `F-nn`
+> it closes and is done only by the closure criterion of that fiche in `audit/30-findings`.
 >
 > HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/maintain/roadmap/status/index.mjs` (claim/progress/done/reopen;
 > deps, mustLandWith hazards, and evidence are enforced). `node scripts/maintain/roadmap/status/index.mjs delegate
@@ -410,6 +424,62 @@ any fleet-wide prop sweep). **WO-ARC-02** (headless pilot) after WO-ENG-04 + WO-
 recommended to claim only after WO-ENG-11 certifies unless the orchestrator coordinates disjoint Files
 windows. **WO-ARC-03** only after WO-ARC-02 AND WO-ENG-11 are done. **WO-ARC-04** (skin pack API) and
 **WO-ARC-05** (container queries + fluid scales) after WO-ARC-03.
+
+### Post-C4 program start order (2026-09-05)
+
+The nine lanes adopted from `audit/70-plan/roadmap-draft` on 2026-09-05 (55 WOs) run on their own
+wave order. **No WO of these nine lanes may be claimed before `WO-CAN-01` is `done`, with one
+exception: `WO-CAT-01`** (owner decision — the identity kit and the vertical envelope are already
+approved as D-27/D-28 and WO-CON-03 needs them). The registry enforces this: every new WO except
+`WO-CAT-01` depends transitively on `WO-CAN-01`, so `next` offers exactly those two today.
+
+| Wave | Work orders | Parallelism |
+| --- | --- | --- |
+| 0 | `WO-CAN-01` | sequential; closes the C4 residuals on the committed tree |
+| 1 | `WO-CAN-02..06`, `WO-EVI-04` in parallel with `WO-CON-01/02/03` -> `WO-CON-04` -> `WO-CON-05`; `WO-CAT-01` beside them | up to 9 disjoint write sets + 1 auditor |
+| 2 | `WO-CAT-02` -> `WO-CAT-03` | sequential (shared contracts, singleton owners) |
+| 3 | `WO-DER-01` -> {`WO-DER-02`, `WO-DER-03`, `WO-DER-04`}, in parallel with `WO-EMI-01`, `WO-FAM-00`, `WO-EVI-01`, `WO-EVI-03` | `WO-DER-01` first: it is the contract |
+| 4 | `WO-FAM-01..13`, `WO-INV-01..08`, `WO-DER-05` -> `WO-DER-06`, `WO-EMI-02/03`, `WO-EVI-02` | one write set per family directory; the coordinator serialises `WO-FAM-13` against `WO-RET-01` (both touch `infrastructure/runtime/application/interaction/drag-and-drop/**`) |
+| 5 | `WO-RET-01..05` | after the consumer census |
+
+Order rules that may not be reordered: the engine policy (`WO-CAN-06`) lands before the door
+(`WO-CAT-03`); derivation (`WO-DER-01`) lands before any family cut; the theme-graph (`WO-EVI-01`)
+comes after `WO-DER-01`; retirement is last. The dated facades of `WO-CON-02/03` are explicit
+exceptions to the uniqueness rule and are deleted by `WO-EMI-02`, `WO-CAT-02` and `WO-DER-06`
+without changing a signature.
+
+### Programme milestones (published by `status`, never stored)
+
+`pnpm roadmap:status` derives each milestone from its gate work orders; there is no milestone field
+in the registry, so a milestone cannot be claimed without the work that proves it.
+
+| Milestone | Gate | What it enables |
+| --- | --- | --- |
+| A · the apps can build | `WO-CON-04` + `WO-CON-05` | BitHire builds against `packages/core/docs/consumer-contract/index.md` while the DS continues behind the contract |
+| A2 · architecture validated in one vertical cut | `WO-CAT-02`, `WO-CAT-03`, `WO-DER-01`, `WO-FAM-00`, `WO-FAM-01`, `WO-EVI-02` | the cascade is proven end to end on one family; the autonomous APP and DS lanes start (D-29) |
+| B · real cascade in Modern | `WO-DER-05`, `WO-DER-07`, `WO-FAM-01`, `WO-FAM-02`, `WO-FAM-06` | two tenants of the same vertical differ in shape, rhythm, states and mode, not only colour |
+| C · 116/116 | every `audit-2026-09-05` work order done | re-audit with `audit/20-rubric`; the off-registry conditions (every `audit/30-findings` closure criterion green, every indicator at target) are stated in the STATUS row and are not derivable from WO status alone |
+
+### Dispositions of the 26 pre-existing open work orders (2026-09-05)
+
+None was deleted; none changed status except `WO-CRA-23`, sealed with `done --evidence "SEALED: …"`.
+The other 25 received a `notes` disposition prefix and `dependsOn` edges to the new WO that unblocks
+them. Their DS-improvements authorities, `sourceIds`, `programs` and phases are unchanged (A/A
+resolution, 2026-09-05), so the burn-down denominator of 82 execute items is intact and advances only
+when a superseded WO is closed with real evidence.
+
+| Disposition | Count | Work orders |
+| --- | --- | --- |
+| absorbed | 9 | `WO-ARC-12/13/15/16/20`, `WO-TOK-11`, `WO-CRA-18/19`, `WO-GAT-12` |
+| reformulated | 8 | `WO-GAT-09/11`, `WO-CRA-17`, `WO-ARC-14/17/18/19`, `WO-ENG-25` |
+| conserved | 4 | `WO-ARC-21`, `WO-CRA-20/22`, `WO-GAT-10` |
+| paused | 3 | `WO-CRA-15/21`, `WO-ENG-24` |
+| replaced | 1 | `WO-SKIN-08` |
+| sealed | 1 | `WO-CRA-23` |
+
+`AGENTS.md`, `CLAUDE.md` and `packages/core/scripts/check/modern-rescue/program/index.json` still
+describe `WO-CRA-23` as the active Modern Rescue programme; `WO-RET-03` retires those documents.
+Until it lands, `roadmap/registry.json` is the authority on its status.
 
 ## Commands
 

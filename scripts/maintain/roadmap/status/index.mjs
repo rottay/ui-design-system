@@ -7,6 +7,7 @@
 // - Divergence (2026-07-06, owner request): `progress` command + progressLog — step-level mid-WO handoff trail (STATUS shows the last entry; show/delegate print the full trail). Upstream-later candidate for app-bithire.
 // - Divergence (2026-07-07, owner approval): added the `craft` lane (LANES = ['engine-modern','craft']) — DS interaction/craft/brand-tooling WOs (WO-CRA-01..05) converted from the approved proposals inbox.
 // - Divergence (2026-07-07, owner approval: full-program conversion): three new lanes (LANES = ['engine-modern','craft','gates','tokens','architecture']) — WO-GAT-01..04, WO-TOK-01..03, WO-ARC-01..05, and the craft extension WO-CRA-06..10 converted from the approved proposals inbox.
+// - Divergence (2026-09-05, owner approval): nine lanes from audit/70-plan/roadmap-draft (WO-CAN/CON/CAT/DER/FAM/EMI/INV/RET/EVI); Modern-only productive engine; indicators replace metrics; `status` publishes the A/A2/B/C programme milestones derived from their gate work orders.
 // - Divergence (2026-07-07, owner approval then EXTRACTION): the `showroom` lane (WO-SHW-01..05, the commercial Monochrome Signature relaunch + the shared `@rottay/design-system/commercial` kit) was added 2026-07-07 and then EXTRACTED the same day (owner isolation decision) into the isolated `roadmap/commercial/` program with its own machinery (scripts/maintain/roadmap/commercial-status/index.mjs, `pnpm roadmap:commercial`). LANES here reverts to ['engine-modern','craft','gates','tokens','architecture']; the showroom lane is no longer part of this graph.
 /**
  * Roadmap work-order orchestrator.
@@ -67,7 +68,11 @@ const ROOT = findRepoRoot(path.dirname(fileURLToPath(import.meta.url)));
 const ROADMAP = path.join(ROOT, "roadmap");
 const REGISTRY_PATH = path.join(ROADMAP, "registry.json");
 const STATUS_PATH = path.join(ROADMAP, "STATUS.md");
-const LANES = ["engine-modern", "craft", "gates", "tokens", "architecture", "skin-adoption"];
+const LANES = [
+  "engine-modern", "craft", "gates", "tokens", "architecture", "skin-adoption",
+  "canon-close", "consumer-contract", "catalog-door", "derivation", "family-cuts",
+  "emission-mount", "platform-invariants", "retire", "evidence-graph",
+];
 const STATUSES = ["todo", "in-progress", "done"];
 const DS_IMPROVEMENTS_KEY = "ds-improvements";
 const DS_IMPROVEMENTS_PREFIX = "DS-IMP";
@@ -94,7 +99,13 @@ const DS_IMPROVEMENTS_PHASE_INDEX = new Map(
 // Owner-approved wave mapping update 2026-07-18: overnight deferred adjudication
 // landed (94 items -> 56 execute on 22 new WOs, 37 rejected, 1 absorbed; deferred 0);
 // source revision advanced to the anchored adjudication doc commit.
-const DS_IMPROVEMENTS_PLAN_SHA256 = "333f82d54717128673a18ec79e163a078e7c917113cd1b6f60cde1e7924a31b8";
+// Owner-approved wave mapping update 2026-09-05 (audit/70-plan/roadmap-draft,
+// A/A resolution): the 25 open DS-improvements work orders superseded by the
+// audit programme gained dependsOn edges to the new work order that unblocks
+// each one. dependsOn is part of the fingerprint, so the lock is re-sealed.
+// Items, authorities, sourceIds, programs, phases and phaseControls are
+// unchanged; no execute item was re-routed and no phase was opened or closed.
+const DS_IMPROVEMENTS_PLAN_SHA256 = "712c7352b8166a05b2ef8f3081e8517a015839cc9e2d4c5523d680db51dc7ad4";
 const DS_IMPROVEMENTS_SOURCE_REVISION = "8b618ab000b784fc7fa05bca96a1dcc9de80b3b9";
 const DS_IMPROVEMENTS_DOC_ROOT = path.resolve(
   ROOT,
@@ -2719,6 +2730,59 @@ const saveRegistry = (reg) => {
 };
 const byId = (reg) => Object.fromEntries(reg.workOrders.map((w) => [w.id, w]));
 
+// Programme milestones of the 2026-09-05 audit roadmap. A milestone is derived
+// from the state of its gate work orders; it is never a registry field, so it
+// cannot be asserted independently of the work that proves it.
+const PROGRAM_MILESTONE_PROGRAM = "audit-2026-09-05";
+const PROGRAM_MILESTONES = [
+  {
+    id: "A",
+    title: "The apps can build",
+    gates: ["WO-CON-04", "WO-CON-05"],
+    enables: "BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract.",
+  },
+  {
+    id: "A2",
+    title: "Architecture validated in one vertical cut",
+    gates: ["WO-CAT-02", "WO-CAT-03", "WO-DER-01", "WO-FAM-00", "WO-FAM-01", "WO-EVI-02"],
+    enables: "Decisions -> derivation -> channels -> skin proven end to end on one family; the autonomous APP and DS lanes start.",
+  },
+  {
+    id: "B",
+    title: "Real cascade in Modern",
+    gates: ["WO-DER-05", "WO-DER-07", "WO-FAM-01", "WO-FAM-02", "WO-FAM-06"],
+    enables: "Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography.",
+  },
+  {
+    id: "C",
+    title: "116/116",
+    programGate: PROGRAM_MILESTONE_PROGRAM,
+    enables: "Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target.",
+  },
+];
+
+/** Derive the programme milestones from their gate work orders. */
+export function summarizeProgramMilestones(reg) {
+  const map = byId(reg);
+  return PROGRAM_MILESTONES.map((milestone) => {
+    const gates = milestone.programGate
+      ? reg.workOrders
+        .filter((workOrder) => (workOrder.programs || []).includes(milestone.programGate))
+        .map((workOrder) => workOrder.id)
+        .sort()
+      : milestone.gates;
+    const outstanding = gates.filter((id) => map[id]?.status !== "done");
+    return {
+      id: milestone.id,
+      title: milestone.title,
+      enables: milestone.enables,
+      gates,
+      outstanding,
+      reached: gates.length > 0 && outstanding.length === 0,
+    };
+  });
+}
+
 function laneHeadings(lane) {
   const text = fs.readFileSync(path.join(ROADMAP, `${lane}.md`), "utf8");
   return [...text.matchAll(/^### (WO-[A-Z]+-\d+)\s+(.+)$/gm)].map((m) => ({ id: m[1], title: m[2].trim() }));
@@ -2935,6 +2999,26 @@ function generateStatus() {
   for (const lane of LANES) {
     const c = counts(lane);
     lines.push(`| [${lane}](./${lane}.md) | ${c.done} | ${c["in-progress"]} | ${c.todo} | ${c.total} |`);
+  }
+  lines.push("");
+  const programMilestones = summarizeProgramMilestones(reg);
+  lines.push("## Programme milestones (derived from their gate work orders)");
+  lines.push("");
+  lines.push("| Milestone | State | Gate work orders | Outstanding | What it enables |");
+  lines.push("| --- | --- | --- | --- | --- |");
+  for (const milestone of programMilestones) {
+    const enumerated = milestone.gates.length > 0 && milestone.gates.length <= 8;
+    const gateLabel = milestone.gates.length
+      ? (enumerated ? milestone.gates.join(", ") : `all ${milestone.gates.length} work orders of the ${PROGRAM_MILESTONE_PROGRAM} programme`)
+      : "(no gate work orders in the registry)";
+    const outstandingLabel = !milestone.gates.length
+      ? "n/a"
+      : milestone.outstanding.length === 0
+        ? "none"
+        : enumerated
+          ? milestone.outstanding.join(", ")
+          : `${milestone.outstanding.length} of ${milestone.gates.length}`;
+    lines.push(`| ${milestone.id} · ${milestone.title} | ${milestone.reached ? "reached" : "not reached"} | ${gateLabel} | ${outstandingLabel} | ${milestone.enables.replace(/\|/g, "/")} |`);
   }
   lines.push("");
   const dsImprovements = summarizeDsImprovements(reg);

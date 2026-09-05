@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-08-31",
+ "updated": "2026-09-05",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -10,74 +10,81 @@
  },
  "metrics": [
   {
-   "name": "cubic-bezier literals in modern components",
-   "baseline": "43 (33 + 10)",
+   "name": "Decisions lit (full effect in at least one family, computed-style probe)",
+   "baseline": "7 / 22 (+0 / 10 new)",
+   "target": "29 / 29",
+   "measure": "n/a until WO-CON-03 (decisions-lit gate)",
+   "asOf": "2026-09-05"
+  },
+  {
+   "name": "Root reach per vertical (derived channels / total)",
+   "baseline": "rottay 8 % / bithire 33 % / evnto 8 %",
+   "target": ">= 80 % per vertical",
+   "measure": "n/a until WO-EVI-01 (ds:derive --check, theme-graph by family)",
+   "asOf": "2026-09-05"
+  },
+  {
+   "name": "Channels read without producer (Modern skins)",
+   "baseline": "honest baseline pending; today the counter is fail-open",
    "target": "0",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs (cubic-bezier counter)",
-   "asOf": "2026-07-06"
+   "measure": "n/a until WO-CAN-02 (read-without-producer gate, once the fail-open counter is fixed)",
+   "asOf": "2026-09-05"
   },
   {
-   "name": "Raw duration literals in modern components",
-   "baseline": "39",
+   "name": "Material roots emitted per artifact",
+   "baseline": "0 / 65 / 2 of 71",
+   "target": "71 / 71 / 71",
+   "measure": "n/a until WO-EVI-02 (artifact-coverage gate)",
+   "asOf": "2026-09-05"
+  },
+  {
+   "name": "Modern skins consuming typographic roles",
+   "baseline": "14 / 123",
+   "target": "123 / 123",
+   "measure": "n/a until WO-EVI-01 (theme-graph by control)",
+   "asOf": "2026-09-05"
+  },
+  {
+   "name": "Modern skins deciding state by [data-state]",
+   "baseline": "3 / 24 (13 %)",
+   "target": "24 / 24",
+   "measure": "n/a until WO-FAM-00 (family-cut gate)",
+   "asOf": "2026-09-05"
+  },
+  {
+   "name": "Tenant-difference probe by axis excluding colour (6 axes)",
+   "baseline": "0 / 6 at >= 80 %; negative test n/a",
+   "target": "6 / 6 and the negative test green",
+   "measure": "n/a until WO-EVI-02 (capability-propagation by axis)",
+   "asOf": "2026-09-05"
+  },
+  {
+   "name": "Blocking gates green without a dist/ pre-build",
+   "baseline": "0 of 13",
+   "target": "13 of 13",
+   "measure": "n/a until WO-CAN-02 (gates manifest validateManifest())",
+   "asOf": "2026-09-05"
+  },
+  {
+   "name": "CSS text emitters outside emission/",
+   "baseline": ">= 7",
    "target": "0",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs (raw-duration counter)",
-   "asOf": "2026-07-06"
+   "measure": "n/a until WO-EMI-01 (emitter census)",
+   "asOf": "2026-09-05"
   },
   {
-   "name": "Consumed-but-undefined motion tokens",
-   "baseline": "6 names",
+   "name": "Authored files over 800 lines (pipeline over 250)",
+   "baseline": "141 (pipeline: chrome-variables 3,012)",
    "target": "0",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs (undefined-motion-name counter)",
-   "asOf": "2026-07-06"
+   "measure": "pnpm --filter @rottay/design-system structure:check",
+   "asOf": "2026-09-05"
   },
   {
-   "name": "Hardcoded hex / rgba in modern components",
-   "baseline": "78 / 30 (31 rgba on 2026-07-06 re-measure; WO-ENG-01 pins the counting method and re-baselines in engine-baseline/index.json)",
-   "target": "0 / 0",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs (hex + rgba counters)",
-   "asOf": "2026-07-06"
-  },
-  {
-   "name": "Shadow scales",
-   "baseline": "2 (parallel)",
-   "target": "1 (dark-aware)",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs (shadow-scale counter)",
-   "asOf": "2026-07-06"
-  },
-  {
-   "name": "Files consuming --ds-gradient-* / --ds-glass-* / --ds-shadow-glow-*",
-   "baseline": "1 / 0 / 0",
-   "target": "sanctioned-role consumers only, > 0",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs (effect-consumer counters)",
-   "asOf": "2026-07-06"
-  },
-  {
-   "name": "modern/theme.css lines",
-   "baseline": "4563",
-   "target": "< 800, all selectors consumer-proven",
-   "measure": "wc -l packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css; node scripts/check/engine/tokens/audit/index.mjs (selector-consumer gate)",
-   "asOf": "2026-07-06"
-  },
-  {
-   "name": "Radius scale declarations",
-   "baseline": "2",
-   "target": "1",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs (radius-declaration counter)",
-   "asOf": "2026-07-06"
-  },
-  {
-   "name": "Cross-engine layout divergences (unintended)",
-   "baseline": ">= 1 (StatsGrid)",
+   "name": "LOC without a productive consumer",
+   "baseline": "~17,000",
    "target": "0",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs (cross-engine-layout counter)",
-   "asOf": "2026-07-06"
-  },
-  {
-   "name": "Responsive counters (fixed-width literals / 360px overflow probes)",
-   "baseline": "to-measure (WO-ENG-12 step 5)",
-   "target": "0 above allowlist / 0",
-   "measure": "node scripts/check/engine/tokens/audit/index.mjs --check (responsive counters, added by WO-ENG-12)",
-   "asOf": "2026-07-07"
+   "measure": "n/a until WO-RET-01 (consumer-census gate)",
+   "asOf": "2026-09-05"
   }
  ],
  "workOrders": [
@@ -2004,7 +2011,9 @@
     "WO-GAT-05",
     "WO-GAT-06",
     "WO-GAT-07",
-    "WO-CRA-15"
+    "WO-CRA-15",
+    "WO-EVI-02",
+    "WO-EVI-04"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2014,7 +2023,7 @@
     "DS-IMP-060"
    ],
    "phase": "6",
-   "notes": "Final authority for DS-IMP-060. Phase 0 only supplies a bounded milestone through WO-GAT-07; this WO remains phase-locked until the Wave-6 checkpoint is explicitly opened and its dependency set is revalidated against the then-live registry.",
+   "notes": "REFORMULATED by WO-EVI-02 + WO-EVI-04: claim-integrity certification stays, but it is re-founded on causal gates and on adjudication published in STATUS instead of the decorative gates it certifies today (audit F-23). Its DS-improvements authority, sourceIds, programs and phase are unchanged (A/A resolution, 2026-09-05). Original spec: Final authority for DS-IMP-060. Phase 0 only supplies a bounded milestone through WO-GAT-07; this WO remains phase-locked until the Wave-6 checkpoint is explicitly opened and its dependency set is revalidated against the then-live registry.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2492,7 +2501,8 @@
     "WO-GAT-06",
     "WO-CRA-12",
     "WO-CRA-13",
-    "WO-CRA-14"
+    "WO-CRA-14",
+    "WO-RET-01"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2504,7 +2514,7 @@
     "DS-IMP-108"
    ],
    "phase": "2C",
-   "notes": "Final authority for DS-IMP-106. WO-CRA-14 is only the Phase-0 quarantine milestone; this hardening WO remains phase-locked until the owner approves Phase 2C.",
+   "notes": "PAUSED until WO-RET-01 (D-19): ParticleField/Canvas have no productive consumer (audit F-42/F-94); adopt-or-retire is decided in the retirement census before any hardening effort is spent. Original spec: Final authority for DS-IMP-106. WO-CRA-14 is only the Phase-0 quarantine milestone; this hardening WO remains phase-locked until the owner approves Phase 2C.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2619,7 +2629,8 @@
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
-    "WO-CRA-16"
+    "WO-CRA-16",
+    "WO-RET-01"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2630,7 +2641,7 @@
     "DS-IMP-091"
    ],
    "phase": "2B",
-   "notes": "Final authority for DS-IMP-090 and DS-IMP-091. WO-CRA-16 remains only a Phase-0 support milestone for the bounded Semantic Icon v2 Global Search and v3 Auth/Login plus Google BrandMark canaries; this WO remains phase-locked until the owner opens Phase 2B. Fleet supplier migration (DS-IMP-092) and vertical recipes/signature glyphs (DS-IMP-093) remain separate authorities.",
+   "notes": "REFORMULATED by WO-RET-01: what stays alive is the end-of-life of the legacy icon subpath and per-preset packs; the legacy catalog and the bithire pack already live in the shared corpus (audit F-110/F-113), so the supplier decision itself is settled. Original spec: Final authority for DS-IMP-090 and DS-IMP-091. WO-CRA-16 remains only a Phase-0 support milestone for the bounded Semantic Icon v2 Global Search and v3 Auth/Login plus Google BrandMark canaries; this WO remains phase-locked until the owner opens Phase 2B. Fleet supplier migration (DS-IMP-092) and vertical recipes/signature glyphs (DS-IMP-093) remain separate authorities.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2671,7 +2682,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-FAM-00"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2681,7 +2693,7 @@
     "DS-IMP-015"
    ],
    "phase": "1",
-   "notes": "Landed by W1 (commits 09367145, 1c5d58c7, W1.2 classic stampDataPart); done at the cascade open-1 step with that evidence.",
+   "notes": "ABSORBED by WO-FAM-00 (audit F-67): the per-family cut gate censuses the TSX-to-skin contract and therefore covers stamped attributes that nothing reads. Original spec: Landed by W1 (commits 09367145, 1c5d58c7, W1.2 classic stampDataPart); done at the cascade open-1 step with that evidence.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2713,7 +2725,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-EVI-01"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2723,7 +2736,7 @@
     "DS-IMP-011"
    ],
    "phase": "1",
-   "notes": "W1 landed css-layer-paint gate and unlayered twins; the written cascade certification rides W4-D.",
+   "notes": "ABSORBED by WO-EVI-01 (audit F-04, F-53): theme-graph is exactly the certified cascade-order graph, derived from source with a byte-exact --check. Original spec: W1 landed css-layer-paint gate and unlayered twins; the written cascade certification rides W4-D.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2756,7 +2769,9 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-EMI-02",
+    "WO-CAT-02"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2772,7 +2787,7 @@
     "DS-IMP-010"
    ],
    "phase": "1",
-   "notes": "W4 landlord family: provider scoping, identity split, anatomy manifest, portal bridge, generated skin imports.",
+   "notes": "REFORMULATED by WO-EMI-02 + WO-CAT-02: mount and identity move to the single mount law (provider-scoped identity contradicts mountTenantTheme) and the anatomy manifest becomes a derived view of the typed catalog instead of an authored file. Original spec: W4 landlord family: provider scoping, identity split, anatomy manifest, portal bridge, generated skin imports.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2805,7 +2820,9 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-INV-03",
+    "WO-FAM-00"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2816,7 +2833,7 @@
     "DS-IMP-014"
    ],
    "phase": "1",
-   "notes": "W4 a11y lane; absorbs the MD-DEF-08 P-27 pending-button accessible-name fix.",
+   "notes": "ABSORBED by WO-INV-03 + the family cuts WO-FAM-01..11 (audit F-40): with Modern as the only productive engine there is no EngineParity to certify, so the focus/keyboard floor is a platform invariant plus a per-family cut assertion. WO-FAM-00 freezes the cut template that carries it. Original spec: W4 a11y lane; absorbs the MD-DEF-08 P-27 pending-button accessible-name fix.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2848,7 +2865,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-CON-04"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2858,7 +2876,7 @@
     "DS-IMP-061"
    ],
    "phase": "1",
-   "notes": "W4 divergence exit cert plus the app-side plumb; satisfies the DS-IMP-061 phase-1 pin.",
+   "notes": "W4 divergence exit cert plus the app-side plumb; satisfies the DS-IMP-061 phase-1 pin. Post-C4 programme (2026-09-05): conserved unchanged; it is consumer migration, so it hangs off WO-CON-04 (milestone A: document v2 + mountTenantTheme + the per-app migration packages) and its scope narrows to app-bithire under owner scope D-31.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2894,7 +2912,9 @@
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
-    "WO-ARC-14"
+    "WO-ARC-14",
+    "WO-CAT-02",
+    "WO-FAM-00"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2909,7 +2929,7 @@
     "DS-IMP-024"
    ],
    "phase": "2A",
-   "notes": "W4-A anatomy-variant enums are the Card/DataTable/Workspace pilots and the typed grammar vehicle.",
+   "notes": "REFORMULATED by WO-CAT-02 + WO-FAM-00: typed anatomy variants stay (data-variant is part of the cut contract); the extension pilots do not, because they have no productive consumer (D-19). Original spec: W4-A anatomy-variant enums are the Card/DataTable/Workspace pilots and the typed grammar vehicle.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2941,7 +2961,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-RET-01"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2951,7 +2972,7 @@
     "DS-IMP-021"
    ],
    "phase": "2A",
-   "notes": "W4 dead-channel lane; W1.2 containment forensics already recorded the exclusion carve-out.",
+   "notes": "ABSORBED by WO-RET-01 (audit F-91): component-extensions are part of the retirement lot and its consumer census. Original spec: W4 dead-channel lane; W1.2 containment forensics already recorded the exclusion carve-out.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -2983,7 +3004,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-FAM-11"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2994,7 +3016,7 @@
     "DS-IMP-038"
    ],
    "phase": "2A",
-   "notes": "FieldFiltersPanel multi-select round-trip and preset-chip type=button.",
+   "notes": "ABSORBED by WO-FAM-11 (audit F-56): collection-workspace is rewritten in its family cut without global state or domain knowledge, which is the same scope. Original spec: FieldFiltersPanel multi-select round-trip and preset-chip type=button.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3026,7 +3048,9 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-DER-03",
+    "WO-EVI-02"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3036,7 +3060,7 @@
     "DS-IMP-048"
    ],
    "phase": "2A",
-   "notes": "W4-C1 APCA autocorrect closes the 6 failed and 5 skipped pairs.",
+   "notes": "ABSORBED by WO-DER-03 + WO-EVI-02: text contrast is derived from contrast-posture rather than patched per token, and the empty APCA baseline becomes a gate instead of a task. Original spec: W4-C1 APCA autocorrect closes the 6 failed and 5 skipped pairs.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3068,7 +3092,9 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-INV-04",
+    "WO-FAM-11"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3082,7 +3108,7 @@
     "DS-IMP-081"
    ],
    "phase": "2B",
-   "notes": "W6: named containers, AppShellTopology v2, CollectionProjection, adaptive filters/preview/header, breakpoint governance.",
+   "notes": "REFORMULATED by WO-INV-04 + WO-FAM-11: today there are six responsive authorities and 43 self-declared @container thresholds (audit F-35/F-46), so the contract lands first and the container-adaptive shells are rebuilt inside the collection-workspace cut. Original spec: W6: named containers, AppShellTopology v2, CollectionProjection, adaptive filters/preview/header, breakpoint governance.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3114,7 +3140,9 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-DER-04",
+    "WO-INV-05"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3127,7 +3155,7 @@
     "DS-IMP-089"
    ],
    "phase": "2B",
-   "notes": "W3 motion adoption wave wires recipes, presence/continuity, the governor extension and the AI kit.",
+   "notes": "REFORMULATED by WO-DER-04 + WO-INV-05: semantic motion becomes the motion.character decision and the single motion vocabulary (audit F-31 records two competing vocabularies today). The AI state-motion kit is paused: no productive consumer (D-19). Original spec: W3 motion adoption wave wires recipes, presence/continuity, the governor extension and the AI kit.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3159,7 +3187,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-CAN-05"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3169,7 +3198,7 @@
     "DS-IMP-078"
    ],
    "phase": "2B",
-   "notes": "W5 layer-stack: z authority, single Escape router, focus restore, scroll-lock refcount.",
+   "notes": "ABSORBED by WO-CAN-05 (audit F-21): the overlay layer kernel is the same scope. Original spec: W5 layer-stack: z authority, single Escape router, focus restore, scroll-lock refcount.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3201,7 +3230,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-FAM-09"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3216,7 +3246,7 @@
     "DS-IMP-104"
    ],
    "phase": "2C",
-   "notes": "W5 Part 1: families onto the engine, states, CSV/a11y, annotation/streaming, census gate and budgets.",
+   "notes": "ABSORBED by WO-FAM-09 (audit F-22, F-83, F-85): the chart-system convergence is the chart family cut, same scope. Original spec: W5 Part 1: families onto the engine, states, CSV/a11y, annotation/streaming, census gate and budgets.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3248,7 +3278,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-CAN-06"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3258,7 +3289,7 @@
     "DS-IMP-117"
    ],
    "phase": "2C",
-   "notes": "W5 SizeType retirement plus the classic boundary shrink execute the recorded antd end-state decision.",
+   "notes": "PAUSED until WO-CAN-06 (owner decision D-06/D-15, 2026-09-05: zero effort on Classic/Rustic, compatibility frozen). Only its fail-closed part survives, inside the engine policy of WO-CAN-06. Original spec: W5 SizeType retirement plus the classic boundary shrink execute the recorded antd end-state decision.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3290,7 +3321,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-RET-01"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3300,7 +3332,7 @@
     "DS-IMP-110"
    ],
    "phase": "2C",
-   "notes": "W3 generalizes the icon license/provenance gate over the effect registry.",
+   "notes": "W3 generalizes the icon license/provenance gate over the effect registry. Post-C4 programme (2026-09-05): conserved unchanged; it only makes sense if the effects are adopted rather than retired (D-19), which WO-RET-01 decides.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3332,7 +3364,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-RET-01"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3350,7 +3383,7 @@
     "finalPhase": "6"
    },
    "phase": "2C",
-   "notes": "Generator emits only preset-used weights; promised in the CRA-17 R2 retention evidence. Modeled as a non-completing support milestone against the final claim-integrity certification (DS-IMP-060 / WO-GAT-09), per the WO-GAT-07 support pattern.",
+   "notes": "Generator emits only preset-used weights; promised in the CRA-17 R2 retention evidence. Modeled as a non-completing support milestone against the final claim-integrity certification (DS-IMP-060 / WO-GAT-09), per the WO-GAT-07 support pattern. Post-C4 programme (2026-09-05): conserved unchanged; it becomes valid only once WO-RET-01 decides the legacy icon subpath, so it hangs off it.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3382,7 +3415,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-RET-01"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3400,7 +3434,7 @@
     "finalPhase": "6"
    },
    "phase": "2C",
-   "notes": "Sighted-review finding: variant selection keys to local surface ground, not the scheme flag. Modeled as a non-completing support milestone against the final claim-integrity certification (DS-IMP-060 / WO-GAT-09), per the WO-GAT-07 support pattern.",
+   "notes": "PAUSED until WO-RET-01 decides the commercial marks (audit F-113: brand marks leave the shared corpus and move to per-preset packs); a ground-keyed contrast variant on a corpus that is being split would be work thrown away. Original spec: Sighted-review finding: variant selection keys to local surface ground, not the scheme flag. Modeled as a non-completing support milestone against the final claim-integrity certification (DS-IMP-060 / WO-GAT-09), per the WO-GAT-07 support pattern.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3432,7 +3466,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-RET-02"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3450,7 +3485,7 @@
     "finalPhase": "6"
    },
    "phase": "2C",
-   "notes": "Migrate the ~30 ui files off catalog names to the semantic facade; W2 pinned 13 root-reachable importers. Modeled as a non-completing support milestone against the final claim-integrity certification (DS-IMP-060 / WO-GAT-09), per the WO-GAT-07 support pattern.",
+   "notes": "Migrate the ~30 ui files off catalog names to the semantic facade; W2 pinned 13 root-reachable importers. Modeled as a non-completing support milestone against the final claim-integrity certification (DS-IMP-060 / WO-GAT-09), per the WO-GAT-07 support pattern. Post-C4 programme (2026-09-05): conserved unchanged; aligned with the supplier retirement from the root entrypoints, so it hangs off WO-RET-02.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3479,7 +3514,7 @@
    "lane": "craft",
    "order": 23,
    "size": "XL",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -3638,8 +3673,8 @@
    ],
    "claimedBy": "kimi-k3-dt",
    "claimedAt": "2026-08-04",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-09-05",
+   "evidence": "SEALED: R0 instrumentación retenida; R1+ sustituidas por derivation/family-cuts; métrica 0/255 reemplazada por indicadores",
    "execution": {
     "decisionOwner": "design-system-program",
     "touchedRepos": [
@@ -3673,7 +3708,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-EVI-02"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3684,7 +3720,7 @@
     "DS-IMP-029"
    ],
    "phase": "3",
-   "notes": "W4 bithire divergence demo plus W7 evnto/platform proofs through the showroom vertical pages.",
+   "notes": "REFORMULATED by WO-EVI-02: the two-tenant divergence proof becomes the by-axis difference probe excluding colour, with its negative test, over Modern x bithire only (owner scope D-31). Original spec: W4 bithire divergence demo plus W7 evnto/platform proofs through the showroom vertical pages.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3719,7 +3755,10 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-INV-01",
+    "WO-INV-03",
+    "WO-EVI-02"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3729,7 +3768,7 @@
     "DS-IMP-054"
    ],
    "phase": "6",
-   "notes": "W7/W8 window; extends the optical-matrix machinery to the robustness axes.",
+   "notes": "REFORMULATED by WO-INV-01 + WO-INV-03 + WO-EVI-02: forced-colors, RTL, zoom and long-content stay, as platform invariants plus a Modern x bithire matrix. Classic and Rustic leave the matrix (owner decision 2026-09-05). Original spec: W7/W8 window; extends the optical-matrix machinery to the robustness axes.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3761,7 +3800,9 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-EVI-01",
+    "WO-RET-03"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3779,7 +3820,7 @@
     "finalPhase": "6"
    },
    "phase": "6",
-   "notes": "Closes test 253 by regenerating arc-11 artifacts against pinned app checkouts. Modeled as a non-completing support milestone against the final claim-integrity certification (DS-IMP-060 / WO-GAT-09), per the WO-GAT-07 support pattern.",
+   "notes": "ABSORBED by WO-EVI-01 + WO-RET-03: the capability census becomes the derived theme-graph and the pinned-sibling receipts move to quarantine (D-09). Original spec: Closes test 253 by regenerating arc-11 artifacts against pinned app checkouts. Modeled as a non-completing support milestone against the final claim-integrity certification (DS-IMP-060 / WO-GAT-09), per the WO-GAT-07 support pattern.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3814,7 +3855,19 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-FAM-01",
+    "WO-FAM-02",
+    "WO-FAM-03",
+    "WO-FAM-04",
+    "WO-FAM-05",
+    "WO-FAM-06",
+    "WO-FAM-07",
+    "WO-FAM-08",
+    "WO-FAM-09",
+    "WO-FAM-10",
+    "WO-FAM-11",
+    "WO-EVI-02"
    ],
    "mustLandWith": [],
    "programs": [
@@ -3834,7 +3887,7 @@
     "DS-IMP-050"
    ],
    "phase": "6",
-   "notes": "W8 residue: adjudicate recorded residues; absorbs MD-DEF-04 asymmetry and the MD-DEF-05 CK-I scope audit.",
+   "notes": "REPLACED by WO-FAM-01..11 + WO-EVI-02: the premise changed. Stage-2 residue is adjudicated family by family inside each vertical cut and measured by the hardcode census gate, not by one global sweep. Original spec: W8 residue: adjudicate recorded residues; absorbs MD-DEF-04 asymmetry and the MD-DEF-05 CK-I scope audit.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -3856,6 +3909,1133 @@
      "acceptance gate cannot pass without weakening a floor"
     ]
    }
+  },
+  {
+   "id": "WO-CAN-01",
+   "title": "C4 landing: green tree, gates matrix and single commit",
+   "lane": "canon-close",
+   "order": 1,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 0; closes F-01, F-96",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CAN-02",
+   "title": "Honest verification: pre/post-build gate manifest, mandatory drills, fail-open counters, tautological tests removed",
+   "lane": "canon-close",
+   "order": 2,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1; closes F-23, F-49, F-57, F-97, F-103, F-104, F-107",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CAN-03",
+   "title": "CSS layers in tier order and a single entrypoint",
+   "lane": "canon-close",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1; closes F-16, F-95, F-62, F-64",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CAN-04",
+   "title": "Remove the parallel customization paths",
+   "lane": "canon-close",
+   "order": 4,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1; closes F-18, F-56, F-17",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CAN-05",
+   "title": "Overlay kernel adoption and one z-index scale",
+   "lane": "canon-close",
+   "order": 5,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1; closes F-21; supersedes: WO-CRA-19",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CAN-06",
+   "title": "Engine policy: Modern is the only admitted engine, structure stays N-engine, Classic/Rustic frozen and fail-closed",
+   "lane": "canon-close",
+   "order": 6,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1; closes F-14, F-28, F-29, F-65, F-100, F-15, F-79; supersedes: WO-ENG-24",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CAT-01",
+   "title": "Owner decisions D-27 and D-28: identity kit and vertical envelope",
+   "lane": "catalog-door",
+   "order": 1,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1 (owner decision; can be taken before the C4 commit); closes n/a",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CAT-02",
+   "title": "Typed catalog, ThemeDecisions, document v2 and the end of the five catalogs",
+   "lane": "catalog-door",
+   "order": 2,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAT-01",
+    "WO-CAN-02",
+    "WO-CON-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 2; closes F-03, F-04, F-06, F-25, F-70, F-35; supersedes: WO-ARC-14, WO-ARC-17",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CAT-03",
+   "title": "Single admission for every origin and a closed public door",
+   "lane": "catalog-door",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAT-02",
+    "WO-CAN-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 2; closes F-13, F-24, F-61, F-27, F-60, F-02",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-DER-01",
+   "title": "FamilyDeriver contract, pipeline orchestrator and ranked merge",
+   "lane": "derivation",
+   "order": 1,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAT-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 3; closes F-71, F-34, F-90, F-43, F-09",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-DER-02",
+   "title": "States and materials as derived roots",
+   "lane": "derivation",
+   "order": 2,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 3; closes F-10",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-DER-03",
+   "title": "Shape and palette derived once",
+   "lane": "derivation",
+   "order": 3,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 3; closes F-07, F-08, F-32; supersedes: WO-TOK-11",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-DER-04",
+   "title": "Typography roles, density, rhythm, elevation and motion as derived families",
+   "lane": "derivation",
+   "order": 4,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 3; closes F-30, F-31, F-36, F-26, F-35, F-21, F-84; supersedes: WO-ENG-25",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-DER-05",
+   "title": "Modes derived from decisions and one default-mode law",
+   "lane": "derivation",
+   "order": 5,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-05, F-73",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-DER-06",
+   "title": "Vertical presets as decisions; BrandTheme retired; neutral foundation without opinion",
+   "lane": "derivation",
+   "order": 6,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-05",
+    "WO-CAT-02",
+    "WO-CON-03",
+    "WO-DER-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-11, F-25, F-54, F-108",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-EMI-01",
+   "title": "One emitter family, one artifact for every origin, one preview",
+   "lane": "emission-mount",
+   "order": 1,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAT-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 3; closes F-17, F-59, F-05",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-EMI-02",
+   "title": "mountTenantTheme: one mount law, complete SSR projection, runtime that never recompiles",
+   "lane": "emission-mount",
+   "order": 2,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-EMI-01",
+    "WO-CON-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-19, F-20, F-46, F-112, F-89, F-12; supersedes: WO-ARC-14",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-EMI-03",
+   "title": "Non-CSS token emitter for mobile readiness",
+   "lane": "emission-mount",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-EMI-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes n/a",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-00",
+   "title": "Family cut template and per-family gate",
+   "lane": "family-cuts",
+   "order": 1,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 3; closes F-67, F-66, F-37, F-09; supersedes: WO-ARC-12, WO-ARC-17",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-01",
+   "title": "Family cut: button, checkbox, radio, switch/toggle, segmented",
+   "lane": "family-cuts",
+   "order": 2,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-41, F-33, F-63, F-15",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-02",
+   "title": "Family cut: input, textarea, password, otp, tag-input, input-number, form-field and the form runtime",
+   "lane": "family-cuts",
+   "order": 3,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-78, F-26, F-39, F-33",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-03",
+   "title": "Family cut: select, auto-complete, cascader, tree-select, mentions, transfer, pickers and color-picker with shared listbox and calendar kernels",
+   "lane": "family-cuts",
+   "order": 4,
+   "size": "XL",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-77, F-21, F-39",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-04",
+   "title": "Family cut: modal, drawer, sheet, dialogs, popover, dropdown, hover-card, tooltip, tour and one Notifier",
+   "lane": "family-cuts",
+   "order": 5,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-41, F-68, F-40",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-05",
+   "title": "Family cut: menu, tabs, breadcrumb, pagination, steps and sidebar navigation",
+   "lane": "family-cuts",
+   "order": 6,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-41",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-06",
+   "title": "Family cut: card, table, badge, tag, avatar, tree, list, descriptions and typography compounds",
+   "lane": "family-cuts",
+   "order": 7,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-30, F-63",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-07",
+   "title": "Family cut: layout primitives with one implementation and a logical API",
+   "lane": "family-cuts",
+   "order": 8,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-41, F-38, F-80",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-08",
+   "title": "Family cut: data-table, toolbars, column settings, saved views, widget-board, kanban, calendar-view, file-manager and shared DnD/export kernels",
+   "lane": "family-cuts",
+   "order": 9,
+   "size": "XL",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-22, F-81, F-69, F-82",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-09",
+   "title": "Family cut: charts with one series paint resolver and pure geometry",
+   "lane": "family-cuts",
+   "order": 10,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-22, F-83, F-85; supersedes: WO-CRA-18",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-10",
+   "title": "Family cut: forms and record surfaces on the ledger doctrine, headers with one contract",
+   "lane": "family-cuts",
+   "order": 11,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-55, F-41, F-64",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-11",
+   "title": "Family cut: shells and workspace (app-shell regions, page-shell, workspace-shell, search, command palette, keyboard owner)",
+   "lane": "family-cuts",
+   "order": 12,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-00",
+    "WO-DER-02",
+    "WO-DER-03",
+    "WO-DER-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-56, F-40, F-105; supersedes: WO-ARC-20, WO-ARC-18",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-INV-01",
+   "title": "One direction authority and logical geometry everywhere",
+   "lane": "platform-invariants",
+   "order": 1,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-38; supersedes: WO-GAT-11",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-INV-02",
+   "title": "One i18n catalog with an English floor, locale-aware formatting and IME-safe submit",
+   "lane": "platform-invariants",
+   "order": 2,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-39",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-INV-03",
+   "title": "Global accessibility floor: forced-colors, contrast posture, axe per family, no critical baseline",
+   "lane": "platform-invariants",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-40, F-47; supersedes: WO-ARC-15, WO-GAT-11",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-INV-04",
+   "title": "One responsive mechanism: contract-driven CSS first, JS behind useSyncExternalStore",
+   "lane": "platform-invariants",
+   "order": 4,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-04",
+    "WO-EMI-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-46, F-35; supersedes: WO-ARC-18",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-INV-05",
+   "title": "Motion invariant: one vocabulary, zero inline literals, lint over every modern surface",
+   "lane": "platform-invariants",
+   "order": 5,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-04"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-31, F-114; supersedes: WO-ENG-25",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-RET-01",
+   "title": "Retire code without productive consumers and the legacy public API (changeset 3.0)",
+   "lane": "retire",
+   "order": 1,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-EMI-02",
+    "WO-FAM-01",
+    "WO-FAM-02",
+    "WO-FAM-03",
+    "WO-FAM-04",
+    "WO-FAM-05",
+    "WO-FAM-06",
+    "WO-FAM-07",
+    "WO-FAM-08",
+    "WO-FAM-09",
+    "WO-FAM-10",
+    "WO-FAM-11"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 5; closes F-42, F-94, F-91, F-88, F-109, F-110, F-111, F-113, F-115, F-84; supersedes: WO-CRA-15, WO-CRA-17, WO-ARC-16, WO-CRA-21",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-RET-02",
+   "title": "Retire legacy CSS: DaisyUI projection, dead Daisy rules, framework bridge, emitter-less selectors, showroom Tailwind, engine bundle split",
+   "lane": "retire",
+   "order": 2,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-02",
+    "WO-CAN-03",
+    "WO-FAM-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 5; closes F-52, F-62",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-RET-03",
+   "title": "Quarantine the manifest and historical evidence; move agent orchestration out of the package",
+   "lane": "retire",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-EVI-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 5; closes F-04, F-53, F-58, F-102, F-87; supersedes: WO-GAT-12",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-RET-04",
+   "title": "Physical tree normalization: D-21 grammar applied to what remains, monoliths split, repeated path words removed",
+   "lane": "retire",
+   "order": 4,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-06",
+    "WO-EMI-02",
+    "WO-RET-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 5; closes F-44, F-96, F-98, F-99, F-101, F-116, F-82",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-RET-05",
+   "title": "Showroom and Storybook through the mount law; probes as configurations",
+   "lane": "retire",
+   "order": 5,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-EMI-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 5; closes F-45, F-92, F-93",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-EVI-01",
+   "title": "theme-graph: derived cascade graph with a byte-exact check",
+   "lane": "evidence-graph",
+   "order": 1,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-04, F-53; supersedes: WO-ARC-13, WO-GAT-12",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-EVI-02",
+   "title": "Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness",
+   "lane": "evidence-graph",
+   "order": 2,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAT-03",
+    "WO-DER-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-23, F-72, F-74, F-75, F-76, F-86, F-54; supersedes: WO-GAT-09, WO-ARC-19, WO-GAT-11, WO-SKIN-08",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-EVI-03",
+   "title": "Tests through the door: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines",
+   "lane": "evidence-graph",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAT-03",
+    "WO-DER-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-48",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-EVI-04",
+   "title": "Roadmap and documentation truth: STATUS indicators, fingerprint re-seal, Modern Rescue sealed, docs regenerated",
+   "lane": "evidence-graph",
+   "order": 4,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1; closes F-50, F-51, F-106; supersedes: WO-GAT-09",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CON-01",
+   "title": "Sanctioned import surface: consumer contract document and lint rule",
+   "lane": "consumer-contract",
+   "order": 1,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1 (milestone A); closes n/a (enables WO-RET-01)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CON-02",
+   "title": "mountTenantTheme facade with the final signature over the current pipeline",
+   "lane": "consumer-contract",
+   "order": 2,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1 (milestone A); closes n/a (dated facade, deleted by WO-EMI-02)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CON-03",
+   "title": "Tenant document v2 accepted at the door, decisions mapped to today's fan-out, \"decisions lit\" indicator",
+   "lane": "consumer-contract",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CAN-01",
+    "WO-CAT-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1 (milestone A); closes F-06 (partial; dated adapter, deleted by WO-DER-06/WO-CAT-02)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CON-04",
+   "title": "Milestone A exit gate: a consumer proof and the app migration packets",
+   "lane": "consumer-contract",
+   "order": 4,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CON-01",
+    "WO-CON-02",
+    "WO-CON-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1 (milestone A); closes n/a",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-CON-05",
+   "title": "Two-track operating protocol: versioned releases, capability-request path, no app-side DS forks",
+   "lane": "consumer-contract",
+   "order": 5,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CON-04"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 1 (milestone A); closes n/a",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-DER-07",
+   "title": "BitHire reference identity: three candidate decision sets rendered for the owner to pick",
+   "lane": "derivation",
+   "order": 7,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-01",
+    "WO-CON-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 3; closes n/a (enables WO-DER-06 F-11; D-30)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-INV-06",
+   "title": "Surface posture contract: phone, tablet and desktop postures as app-owned configuration with a correct first paint",
+   "lane": "platform-invariants",
+   "order": 6,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-INV-04",
+    "WO-FAM-10",
+    "WO-FAM-11"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-46 (partial)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-12",
+   "title": "Adaptive layout kit: auto-fit grids and card scale presets that absorb empty space",
+   "lane": "family-cuts",
+   "order": 13,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-06",
+    "WO-FAM-07",
+    "WO-DER-04",
+    "WO-INV-04",
+    "WO-INV-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-81 (partial)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-INV-07",
+   "title": "Adaptation slots: one typed `adapt` contract per family for viewport and container postures",
+   "lane": "platform-invariants",
+   "order": 7,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-04",
+    "WO-FAM-00"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 3; closes F-35 (partial)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-INV-08",
+   "title": "Layout animation kernel: FLIP reflow, animated size, shared-element transitions, a perfection budget",
+   "lane": "platform-invariants",
+   "order": 8,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-04",
+    "WO-INV-05"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes n/a (enables F-31 closure)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-FAM-13",
+   "title": "Widget board: resize and drag with animated reflow, content that adapts to its own size, snapping and persistence hooks",
+   "lane": "family-cuts",
+   "order": 14,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-FAM-08",
+    "WO-FAM-12",
+    "WO-INV-07",
+    "WO-INV-08"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "wave 4; closes F-69 (partial)",
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
   }
  ],
  "traceability": {
