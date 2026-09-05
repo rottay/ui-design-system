@@ -332,15 +332,22 @@ Servidor (layout raíz de cada app):
 ```ts
 import { mountTenantTheme, staticThemeIntent, documentThemeIntent } from "@rottay/design-system/server";
 // vertical fijo (identidad estática, D-28): sin patch
-const mounted = await mountTenantTheme(staticThemeIntent({ vertical: "bithire" }));
-// tenant con documento en DB (v2, §3)
-const mounted = await mountTenantTheme(documentThemeIntent({ vertical: "bithire", slug, document }));
+const mounted = await mountTenantTheme(staticThemeIntent("bithire"));
+// tenant con documento en DB (v2, §3): el intent nombra al tenant y la app pasa
+// el artifact que ya compiló. Es obligatorio para el origen `tenant-document`:
+// un ThemeIntent no lleva el tenantId/rowVersion sobre los que se calcula el
+// digest, y el cliente admite el montaje contra ese digest. WO-EMI-02 sigue
+// aceptando el artifact y lo verifica contra su propio compile.
+const mounted = await mountTenantTheme(
+  documentThemeIntent({ vertical: "bithire", slug, document }),
+  { artifact },
+);
 // mounted = { rootAttributes, styleElements, artifactDigest, hydrationProof }
 ```
 
 Cliente: `DesignSystemProvider` con `visualAuthority="compiled-artifact"` y nada más (sin `brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`). Preview en app-platform: componente `TenantPreview` del DS (WO-EMI-01) alimentado con `previewThemeIntent`; nunca `compileTenantTheme` ni reescritura textual de CSS en la app.
 
-Nombres que las apps usan hoy y que quedan **prohibidos** en código nuevo: `compileTenantTheme`, `compileTheme`, `resolveTheme`, `liftAuthoredTheme`, `THEME_ENGINE_ADAPTERS`, `BrandTheme`, `TenantAppearance*`, `tokenOverrides`, `getTenantBranding()` con campos visuales fuera de `companyName/logo/logoMark/favicon/locale`. Hasta que WO-CON-02 entregue `mountTenantTheme`, cada app mantiene sus tres archivos actuales (`runtime-tenant-theme/{ssr,contracts,artifact-resolution}`) sin ampliarlos; el codemod de WO-CON-02 los reemplaza por la llamada única.
+Nombres que las apps usan hoy y que quedan **prohibidos** en código nuevo: `compileTenantTheme`, `compileTheme`, `resolveTheme`, `liftAuthoredTheme`, `THEME_ENGINE_ADAPTERS`, `BrandTheme`, `TenantAppearance*`, `tokenOverrides`, `getTenantBranding()` con campos visuales fuera de `companyName/logo/logoMark/favicon/locale`. `mountTenantTheme` está publicado (WO-CON-02). Hasta que cada app ejecute su paquete de migración (WO-CON-04), mantiene sus tres archivos actuales (`runtime-tenant-theme/{ssr,contracts,artifact-resolution}`) sin ampliarlos; el codemod de WO-CON-02 los reemplaza por la llamada única.
 
 ## 3. Documento de tenant v2 (lo que escribe app-platform)
 

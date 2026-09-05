@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7227,
-  "unpackedSize": 41878640,
+  "entryCount": 7230,
+  "unpackedSize": 41891974,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -20,7 +20,7 @@
     },
     {
       "path": "contracts/runtime/suppliers/index.json",
-      "size": 187330
+      "size": 187386
     },
     {
       "path": "contracts/themes/canaries/index.d.ts",
@@ -13900,7 +13900,7 @@
     },
     {
       "path": "dist/entrypoints/server/index.d.ts",
-      "size": 10981
+      "size": 12585
     },
     {
       "path": "dist/entrypoints/suppliers/cli/index.js",
@@ -22115,6 +22115,18 @@
       "size": 834
     },
     {
+      "path": "dist/infrastructure/runtime/theming/composition/mount/index.cjs",
+      "size": 2554
+    },
+    {
+      "path": "dist/infrastructure/runtime/theming/composition/mount/index.d.ts",
+      "size": 5642
+    },
+    {
+      "path": "dist/infrastructure/runtime/theming/composition/mount/index.js",
+      "size": 3232
+    },
+    {
       "path": "dist/infrastructure/runtime/theming/composition/react/provider/index.cjs",
       "size": 2240
     },
@@ -28852,7 +28864,7 @@
     },
     {
       "path": "dist/server.cjs",
-      "size": 7302
+      "size": 7420
     },
     {
       "path": "dist/server.d.ts",
@@ -28860,7 +28872,7 @@
     },
     {
       "path": "dist/server.js",
-      "size": 7728
+      "size": 7856
     },
     {
       "path": "dist/spatial-spec.cjs",

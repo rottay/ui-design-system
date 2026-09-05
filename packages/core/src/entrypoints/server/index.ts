@@ -304,3 +304,33 @@ export {
 export {
   resolveActiveIconExpressiveProfile,
 } from '../../infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
+
+/**
+ * THE MOUNT, as one call.
+ *
+ * `mountTenantTheme` is the whole server-side theme integration an application
+ * performs: it returns the root attributes to stamp, the style elements to
+ * emit, the artifact's digest and the proof of the bytes it is authoritative
+ * for. It replaces the three files each app wrote around the pieces above
+ * (`runtime-tenant-theme/{ssr,contracts,artifact-resolution}`); the codemod
+ * `scripts/maintain/codemods/mount-tenant-theme` performs the replacement.
+ *
+ * DATED EXCEPTION, AND WHAT IT COVERS. The BODY is a thin adapter over the
+ * pipeline exported above and emits no byte that pipeline does not already
+ * emit; WO-EMI-02 replaces that body with the real mount and deletes the
+ * adapter. The SIGNATURE is not part of the exception and does not change:
+ * `(intent, options?)`, the whole of `MountTenantThemeOptions` — `themeMode`,
+ * `autoFallback`, `locale` and `artifact` — and the return shape all survive
+ * that landing, so an application that calls it today is not touched by it.
+ * `artifact` in particular stays accepted, and the real mount verifies the
+ * supplied artifact against its own compile rather than ignoring it. Any input
+ * here is retired only by a versioned breaking change with a codemod (the 3.0
+ * changeset of WO-RET-01 under the WO-CON-05 protocol).
+ */
+export { mountTenantTheme } from '../../infrastructure/runtime/theming/composition/mount';
+export type {
+  MountTenantThemeOptions,
+  MountedTenantTheme,
+  MountedThemeHydrationProof,
+  MountedThemeStyleElement,
+} from '../../infrastructure/runtime/theming/composition/mount';
