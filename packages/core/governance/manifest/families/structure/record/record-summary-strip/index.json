@@ -610,8 +610,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
-              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
             ],
             "declarationSiteCount": 6
           },
@@ -710,8 +709,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
-              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
             ],
             "declarationSiteCount": 6
           },
@@ -835,8 +833,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
-              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
             ],
             "declarationSiteCount": 6
           },
@@ -935,8 +932,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
-              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
             ],
             "declarationSiteCount": 6
           },
@@ -960,8 +956,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
-              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
             ],
             "declarationSiteCount": 6
           },
@@ -1159,7 +1154,7 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:508",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:178"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:194"
             ],
             "declarationSiteCount": 2
           },
@@ -1293,7 +1288,7 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:508",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:178"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:194"
             ],
             "declarationSiteCount": 2
           },

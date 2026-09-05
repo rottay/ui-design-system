@@ -945,7 +945,7 @@
             "declarationSites": [
               "ui/patterns/customization/brand-studio/index.tsx:106",
               "foundation/tokens/css/foundation/themes/default.css:177",
-              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+              "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
             ],
             "readSiteCount": 3,
             "readSites": [
@@ -1007,7 +1007,7 @@
             "declarationSites": [
               "ui/patterns/customization/brand-studio/index.tsx:108",
               "foundation/tokens/css/foundation/themes/default.css:179",
-              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130"
+              "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:146"
             ],
             "readSiteCount": 1,
             "readSites": [
@@ -1091,7 +1091,7 @@
             "declaration": "DECLARED_IN_AUTHORED_SOURCE",
             "declarationSites": [
               "foundation/tokens/css/foundation/themes/default.css:156",
-              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+              "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
               "infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
             ],
             "readSiteCount": 2,
@@ -1145,7 +1145,7 @@
             "declarationSites": [
               "ui/patterns/customization/brand-studio/index.tsx:102",
               "foundation/tokens/css/foundation/themes/default.css:175",
-              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:127"
+              "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:143"
             ],
             "readSiteCount": 1,
             "readSites": [
@@ -1233,7 +1233,7 @@
             "declarationSites": [
               "ui/patterns/customization/brand-studio/index.tsx:104",
               "foundation/tokens/css/foundation/themes/default.css:176",
-              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:128"
+              "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:144"
             ],
             "readSiteCount": 2,
             "readSites": [

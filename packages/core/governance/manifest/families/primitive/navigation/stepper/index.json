@@ -1327,7 +1327,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -1957,7 +1957,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -2007,8 +2007,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:225",
-                "src/foundation/tokens/css/foundation/themes/default/index.css:2132",
-                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -2058,7 +2057,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -2108,7 +2107,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -2158,7 +2157,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -2266,7 +2265,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -2316,7 +2315,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -2396,7 +2395,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -2504,7 +2503,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -2554,7 +2553,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -2634,7 +2633,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -2995,8 +2994,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:225",
-                "src/foundation/tokens/css/foundation/themes/default/index.css:2132",
-                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -3046,7 +3044,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -3097,7 +3095,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -3256,7 +3254,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -3503,7 +3501,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -3610,7 +3608,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -4864,7 +4862,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -4912,7 +4910,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -5205,7 +5203,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -5518,7 +5516,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -5564,8 +5562,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:225",
-                "src/foundation/tokens/css/foundation/themes/default/index.css:2132",
-                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -5638,7 +5635,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -5684,7 +5681,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -5730,8 +5727,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:225",
-                "src/foundation/tokens/css/foundation/themes/default/index.css:2132",
-                "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -5804,7 +5800,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -5925,7 +5921,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -5971,7 +5967,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -6402,7 +6398,7 @@
               "declaredAt": [
                 "src/components/patterns/customization/brand-studio/index.tsx:106",
                 "src/foundation/tokens/css/foundation/themes/default/index.css:177",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:145"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
@@ -6583,7 +6579,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -6758,7 +6754,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
@@ -6856,7 +6852,7 @@
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
                 "src/foundation/tokens/css/foundation/themes/default/index.css:156",
-                "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+                "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,

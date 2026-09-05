@@ -451,7 +451,7 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:179",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:146",
               "packages/core/src/components/patterns/customization/brand-studio/index.tsx:108",
               "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:29"
             ],
@@ -474,7 +474,7 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:179",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:146",
               "packages/core/src/components/patterns/customization/brand-studio/index.tsx:108",
               "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:29"
             ],
@@ -538,7 +538,7 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:179",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:146",
               "packages/core/src/components/patterns/customization/brand-studio/index.tsx:108",
               "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:29"
             ],

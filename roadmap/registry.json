@@ -3916,7 +3916,7 @@
    "lane": "canon-close",
    "order": 1,
    "size": "S",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
@@ -3925,7 +3925,9 @@
    "notes": "wave 0; closes F-01, F-96",
    "claimedBy": "claude-opus-5-can-01",
    "claimedAt": "2026-09-05",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-05",
+   "evidence": "C4 certified on committed baseline through 58-path governance residual closure: 820 stale references across 53 governance files reduced to 0; independent Claude Fable 5.1 audit PASS, matrix 115/115 blocking gates with 1 declared SKIP, Modern Rescue 48/48, roadmap 79/79; report /private/tmp/rottay-wo-can-01-fable.md SHA256 13219027e817fa46da57e43f4ee9f74f66ab0362a7598cdd34571ea071294842."
   },
   {
    "id": "WO-CAN-02",

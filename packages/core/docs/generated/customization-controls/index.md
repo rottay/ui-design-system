@@ -8,7 +8,7 @@
 > Rollback: each control is an INPUT — removing the authored value restores the vertical's baseline
 > (proven by the restore-equals-default legs of the no-loss harness).
 
-digest: 1e13f7e2051a3dd4b2d5d89b237b803b18567124f45b00acc5a700ea95fb9e84
+digest: 170897e8de0b923a874ff83496110c1293a009b388ba6d25d47d7334f0666b6e
 
 ## STANDARD — 14 controls (few dials, broad surface)
 

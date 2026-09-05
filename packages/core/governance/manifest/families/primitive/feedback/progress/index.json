@@ -1056,8 +1056,7 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/foundation/animations/transitions/index.css:98",
-              "src/infrastructure/compilers/kernel/runtime/brand-theme/tests/theme-iso.test.ts:415",
-              "src/infrastructure/compilers/kernel/runtime/appearance/tests/appearance.test.ts:244"
+              "src/infrastructure/compilers/kernel/runtime/brand-theme/tests/theme-iso.test.ts:415"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,

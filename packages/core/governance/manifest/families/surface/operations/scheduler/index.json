@@ -416,7 +416,7 @@
             "declarationSites": [
               "ui/patterns/customization/brand-studio/index.tsx:104",
               "foundation/tokens/css/foundation/themes/default.css:176",
-              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:128"
+              "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:144"
             ],
             "readSiteCount": 1,
             "readSites": [

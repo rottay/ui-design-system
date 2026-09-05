@@ -6666,7 +6666,6 @@
         "core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
         "core/src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts",
         "core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
-        "core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts",
         "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
         "core/src/infrastructure/compilers/runtime/tenant-css/visual-config/index.ts",
         "core/tests/fixtures/tenants/quality-evidence/index.ts"
@@ -6862,8 +6861,7 @@
       "declaredInBundles": [],
       "shippedValue": null,
       "emittedBy": [
-        "core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-        "core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts"
+        "core/src/foundation/contracts/composition/tenants/capabilities/index.ts"
       ],
       "declaredInSourceCss": [],
       "readers": {
@@ -12448,8 +12446,7 @@
       ],
       "shippedValue": "#5a7085",
       "emittedBy": [
-        "core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-        "core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts"
+        "core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts"
       ],
       "declaredInSourceCss": [
         "core/src/foundation/tokens/css/facade/artifacts/bithire/index.css",

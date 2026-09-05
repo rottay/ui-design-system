@@ -1893,7 +1893,7 @@
             "declaration": "DECLARED_IN_AUTHORED_SOURCE",
             "declarationSites": [
               "foundation/tokens/css/foundation/themes/default.css:156",
-              "infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
+              "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
               "infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
             ],
             "readSiteCount": 42,
@@ -2036,8 +2036,7 @@
             "declaration": "DECLARED_IN_AUTHORED_SOURCE",
             "declarationSites": [
               "foundation/tokens/css/foundation/themes/default.css:225",
-              "foundation/tokens/css/foundation/themes/default.css:2132",
-              "infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
+              "foundation/tokens/css/foundation/themes/default.css:2132"
             ],
             "readSiteCount": 2,
             "readSites": [

@@ -520,8 +520,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
-              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
             ],
             "declarationSiteCount": 6
           },
@@ -568,7 +567,7 @@
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:295",
               "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:37",
               "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:97",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:237"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:253"
             ],
             "declarationSiteCount": 4
           },
@@ -615,7 +614,7 @@
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:295",
               "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:37",
               "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:97",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:237"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:253"
             ],
             "declarationSiteCount": 4
           },
@@ -1626,8 +1625,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
               "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
-              "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
-              "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
             ],
             "declarationSiteCount": 6
           },
