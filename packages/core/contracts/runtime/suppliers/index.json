@@ -7512,12 +7512,22 @@
     },
     "./eslint": {
       "exports": [
+        "CONTRACT_DOCUMENT_PATH",
+        "CONTRACT_PACKAGE",
+        "PUBLISHED_SUBPATHS",
+        "UNPUBLISHED_SUBPATHS",
+        "classifySubpath",
         "configs",
         "plugin",
         "rules"
       ],
       "symbols": {},
       "supplierFreeExports": [
+        "CONTRACT_DOCUMENT_PATH",
+        "CONTRACT_PACKAGE",
+        "PUBLISHED_SUBPATHS",
+        "UNPUBLISHED_SUBPATHS",
+        "classifySubpath",
         "configs",
         "plugin",
         "rules"

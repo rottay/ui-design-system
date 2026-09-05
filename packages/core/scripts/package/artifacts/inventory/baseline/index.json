@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7220,
-  "unpackedSize": 41844591,
+  "entryCount": 7227,
+  "unpackedSize": 41878640,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -20,7 +20,7 @@
     },
     {
       "path": "contracts/runtime/suppliers/index.json",
-      "size": 187028
+      "size": 187330
     },
     {
       "path": "contracts/themes/canaries/index.d.ts",
@@ -12788,11 +12788,11 @@
     },
     {
       "path": "dist/entrypoints/eslint/index.d.ts",
-      "size": 385
+      "size": 3525
     },
     {
       "path": "dist/entrypoints/eslint/plugin/index.cjs",
-      "size": 1193
+      "size": 1104
     },
     {
       "path": "dist/entrypoints/eslint/plugin/index.d.ts",
@@ -12800,7 +12800,7 @@
     },
     {
       "path": "dist/entrypoints/eslint/plugin/index.js",
-      "size": 1697
+      "size": 1560
     },
     {
       "path": "dist/entrypoints/eslint/rules/index.d.ts",
@@ -12877,6 +12877,34 @@
     {
       "path": "dist/entrypoints/eslint/rules/no-size-type-outside-classic/index.js",
       "size": 2076
+    },
+    {
+      "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.cjs",
+      "size": 10279
+    },
+    {
+      "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.d.ts",
+      "size": 1876
+    },
+    {
+      "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.js",
+      "size": 11549
+    },
+    {
+      "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/parse/index.d.ts",
+      "size": 951
+    },
+    {
+      "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/index.cjs",
+      "size": 2395
+    },
+    {
+      "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/index.d.ts",
+      "size": 128
+    },
+    {
+      "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/index.js",
+      "size": 2963
     },
     {
       "path": "dist/entrypoints/graphics/effects/index.d.ts",
@@ -13880,7 +13908,7 @@
     },
     {
       "path": "dist/eslint.cjs",
-      "size": 210
+      "size": 901
     },
     {
       "path": "dist/eslint.d.ts",
@@ -13888,7 +13916,7 @@
     },
     {
       "path": "dist/eslint.js",
-      "size": 150
+      "size": 1091
     },
     {
       "path": "dist/evnto.css",
@@ -13980,15 +14008,15 @@
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/capabilities/index.cjs",
-      "size": 22928
+      "size": 22940
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/capabilities/index.d.ts",
-      "size": 33126
+      "size": 32691
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/capabilities/index.js",
-      "size": 46303
+      "size": 45786
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/index.d.ts",
