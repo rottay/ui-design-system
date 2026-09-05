@@ -10,15 +10,15 @@ import {
 import {
   engineVisualOf,
   firstPartyEngineVisual,
-  liftAuthoredTheme,
   brandTenantSelector,
-  compileTheme,
-  resolveAdapter,
+  compileThemeIntent,
+  draftPreviewThemeIntent,
   containerScope,
   emitThemeCss,
   emitTenantThemeArtifactForSsr,
-  resolveTheme,
+  isFirstPartyVerticalId,
   type TenantThemeArtifact,
+  type ThemeIntent,
 } from '@rottay/design-system/server';
 
 import { isShowroomTenant } from '@/components/runtime/query';
@@ -96,6 +96,7 @@ function tortureTenantConfig(fixture: TortureFixture): TenantConfig | undefined 
       theme: 'dark',
       plan: 'enterprise',
       features: ['*'],
+      vertical: 'rottay',
       branding: { companyName: 'Torture Dark' },
       brandTheme: tortureDarkBrandTheme,
     };
@@ -122,9 +123,28 @@ function tortureTenantConfig(fixture: TortureFixture): TenantConfig | undefined 
     theme: 'light',
     plan: 'enterprise',
     features: ['*'],
+    vertical: 'rottay',
     branding: { companyName: 'Torture Light' },
     brandTheme: tortureLightBrandTheme,
   };
+}
+
+/**
+ * The intent a fixture BrandTheme compiles under.
+ *
+ * A fixture theme is a DRAFT — a patch over the vertical it is a fixture of —
+ * exactly like a brand-studio draft. It used to be lifted into a baseline of
+ * its own and compiled with no vertical at all, which is a shape no publish
+ * path can produce. A fixture that names no first-party vertical has no
+ * baseline, so this surface compiles nothing for it rather than inventing one.
+ */
+function tortureDraftIntent(
+  tenantConfig: TenantConfig,
+  draft: BrandTheme,
+): ThemeIntent | undefined {
+  const vertical = tenantConfig.vertical;
+  if (!isFirstPartyVerticalId(vertical)) return undefined;
+  return draftPreviewThemeIntent({ vertical, slug: tenantConfig.slug, draft });
 }
 
 /** The window key the whitelabel probe reads the active fixture's BrandTheme from. */
@@ -216,10 +236,12 @@ export function TortureSurface({
       return undefined;
     }
     const slug = tenantConfig.slug;
-    const compiled = compileTheme(
-      resolveTheme({ ...liftAuthoredTheme(brandTheme), id: slug }),
-      resolveAdapter(engine),
-    );
+    const intent = tortureDraftIntent(tenantConfig, brandTheme);
+    if (!intent) return undefined;
+    // The explicit engine is the SANCTIONED override: this surface exists to
+    // render one fixture under all three engines side by side. A productive
+    // compile passes none and takes the vertical's roster row.
+    const compiled = compileThemeIntent(intent, { engine }).compiled;
     return emitThemeCss(compiled, containerScope(brandTenantSelector(slug)));
   }, [brandTheme, tenantConfig, compiledArtifact, fixture, engine]);
 
@@ -229,12 +251,10 @@ export function TortureSurface({
   // seeding antd from a guess.
   const engineVisual = useMemo(() => {
     if (brandTheme && tenantConfig) {
-      return engineVisualOf(
-        compileTheme(
-          resolveTheme({ ...liftAuthoredTheme(brandTheme), id: tenantConfig.slug }),
-          resolveAdapter(engine),
-        ),
-      );
+      const intent = tortureDraftIntent(tenantConfig, brandTheme);
+      if (intent) {
+        return engineVisualOf(compileThemeIntent(intent, { engine }).compiled);
+      }
     }
     const slug = tenantConfig?.slug ?? null;
     return isShowroomTenant(slug) ? firstPartyEngineVisual(slug, engine) : undefined;

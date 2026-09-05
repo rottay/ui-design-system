@@ -96,7 +96,6 @@ const FIELD_TO_SLOT_ROOT = Object.freeze({
   recipes: 'RECIPES',
   expressive: 'EXPRESSIVE',
   responsive: 'RESPONSIVE',
-  engineBridge: 'ENGINE_BRIDGE',
 });
 
 export function jsPathToSlot(path) {

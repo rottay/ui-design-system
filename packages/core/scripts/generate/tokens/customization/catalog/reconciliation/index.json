@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/catalog/index.mjs --write",
-  "basedOnReportDigest": "e1268f3a90ac3b044848bd81fb3fd3b43ecdd6b2c93587e60f628e65b85ad154",
+  "basedOnReportDigest": "d1f0c544a7ccb6ea593155b8349462aaf20efafd115d575b4d742efecd15b172",
   "normative": {
-    "writers": 4668,
-    "deadWriters": 276,
+    "writers": 4667,
+    "deadWriters": 275,
     "definition": "writer names and productive reads are derived by the customization surface census"
   },
   "familyAdjudication": [
@@ -86,7 +86,7 @@
     {
       "family": "remainder",
       "disposition": "KEEP_INTERNAL",
-      "count": 91
+      "count": 90
     }
   ],
   "preservationManifest": "../preservation/manifest/index.json"

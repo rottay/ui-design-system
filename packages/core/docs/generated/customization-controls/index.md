@@ -8,17 +8,17 @@
 > Rollback: each control is an INPUT — removing the authored value restores the vertical's baseline
 > (proven by the restore-equals-default legs of the no-loss harness).
 
-digest: 947455fcd26baf3132038bce85db2114e1a572e152dafe7b55589670b2dbe9f5
+digest: 1e13f7e2051a3dd4b2d5d89b237b803b18567124f45b00acc5a700ea95fb9e84
 
 ## STANDARD — 14 controls (few dials, broad surface)
 
 | id | control | domain/type | default | channel | static path (BrandTheme) | DB path (TenantThemeDocument) | live reads | proven consumer |
 |---|---|---|---|---|---|---|---|---|
-| `palette.seeds` | Brand palette seeds | color-set | vertical baseline palette | 5 ch | `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` | `appearance.general.palette.{primary,secondary,accent,background}` | 1930 | `index.css` |
+| `palette.seeds` | Brand palette seeds | color-set | vertical baseline palette | 5 ch | `palette.{primaryColor,secondaryColor,accentColor,backgroundColor}` | `appearance.general.palette.{primary,secondary,accent,background}` | 1929 | `index.css` |
 | `typography.pairing` | Type pairing personality | enum | vertical baseline families | 2 ch | `typography.typePairing` | `appearance.general.typography.typePairing` | 218 | `index.css` |
 | `typography.families` | Explicit font stacks | font-stack | pairing (or vertical baseline) decides | 4 ch | `typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}` | `appearance.general.typography.{fontFamilyBase,fontFamilyHeading}` | 340 | `index.css` |
 | `typography.scale` | Type scale dial | scale | 1 (vertical envelope may clamp tighter) | 1 ch | `typography.scale` | `appearance.general.typography.scale` | 60 | `index.ts` |
-| `shape.radius-scale` | Radius scale dial | scale | 1 (vertical envelope may clamp tighter) | 2 ch | `surfaces.radiusScale` | `appearance.general.shape.radiusScale` | 423 | `index.css` |
+| `shape.radius-scale` | Radius scale dial | scale | 1 (vertical envelope may clamp tighter) | 2 ch | `surfaces.radiusScale` | `appearance.general.shape.radiusScale` | 421 | `index.css` |
 | `shape.button-style` | Button silhouette | enum | vertical baseline silhouette | 1 ch | `surfaces.buttonStyle` | `appearance.general.shape.buttonStyle` | 2 | `index.css` |
 | `density.mode` | Density posture | enum | normal (structural density scale is a separate channel) | 2 ch | `surfaces.density` | `appearance.general.density` | 8 | `index.ts` |
 | `spacing.rhythm` | Layout rhythm | enum | normal (factor 1) — byte-identical to the pre-rhythm cascade in every vertical, because the DS floor already resolves --ds-rhythm-effective-scale to 1 | 2 ch | `surfaces.rhythm` | `appearance.general.rhythm` | 112 | `index.css` |
@@ -37,7 +37,7 @@ digest: 947455fcd26baf3132038bce85db2114e1a572e152dafe7b55589670b2dbe9f5
 | `chrome.anatomy` | Anatomy variants | enum | default anatomy; fails closed unless the vertical envelope opts in | data → compiler → families | `chrome.{cardComponent,table,sidebar,layout}.anatomy` | `visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy` | via compiler (evidence →) | `index.css` |
 | `token-overrides` | Bounded raw channel overrides | token-map | none; closed allowlist, max 200 entries, fails closed | 3 ch | `tokenOverrides` | `visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}` | 834 | `index.ts` |
 | `recipe-profile` | Family recipe profile | profile-id | no profile: family recipe defaults apply | 1 ch | `recipes.profile` | `visualFoundation.recipeProfile` | 0 | `index.tsx` |
-| `profiles.expressive` | Explicit expressive axes | enum | each axis independently overrides the experience composition; an unset axis falls back to it, then to baseline | 6 ch | `expressive.profiles.{type,geometry,edge,material,elevation,motif}` | `visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}` | 35 | `index.tsx` |
+| `profiles.expressive` | Explicit expressive axes | enum | each axis independently overrides the experience composition; an unset axis falls back to it, then to baseline | 6 ch | `expressive.profiles.{type,geometry,edge,material,elevation,motif}` | `visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}` | 33 | `index.tsx` |
 | `profiles.icon` | Icon posture profile | enum | baseline role/state weight tables. A posture only selects among the governed PROFILE_ROLE_WEIGHT tables in the icon policy — never a supplier, glyph or local SVG; state weights stay supreme (feedback over decoration). Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design. | data → compiler → families | `expressive.profiles.icon` | `visualFoundation.advanced.profiles.icon` | via compiler (evidence →) | `index.tsx` |
 | `responsive.posture` | Responsive posture profile | profile-id | the balanced ladder, whose container thresholds (compact ≤639px, standard ≤839px) and `preferred` span resolution ARE the constants the adaptive runtime and pure solver used before this axis opened — so an absent selection is byte-for-byte the pre-capability layout, and "unset it" is a true rollback rather than an approximate one | data → compiler → families | `responsive.posture` | `visualFoundation.advanced.responsivePosture` | via compiler (evidence →) | `index.ts` |
 

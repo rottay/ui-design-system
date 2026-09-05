@@ -56,25 +56,23 @@ function pageNames(tree) {
 }
 
 /**
- * The EXACT residual the sibling `docs-engineering` checkout carries today, in
- * the generator's own normalized wording. Four files, named one by one: an
+ * The EXACT residual the sibling `docs-engineering` checkout carries, in the
+ * generator's own normalized wording. It is EMPTY, and empty is the law: an
  * extra, a missing, a renamed or a differently-categorized residual all fail
  * here, where a category pattern would have absorbed every one of them.
  *
- * C2 added the two `governance/families` pages. `--ds-experience-profile` and
- * `--ds-recipe-profile` were always emitted, by an `export const … = (…) => {}`
- * arrow the emitter scans could not reach; the lowering's orchestration is a
- * function declaration, so the census now sees them and files each on its
- * family page. Writing those pages means writing into `docs-engineering`, which
- * is a separate repository and outside this lot's scope — so the debt is pinned
- * here, exactly, rather than deferred by category or waved through.
+ * It used to pin four files. C2 added the two `governance/families` pages, and
+ * `--ds-experience-profile` / `--ds-recipe-profile` were always emitted by an
+ * `export const … = (…) => {}` arrow the emitter scans could not reach; the
+ * lowering's orchestration is a function declaration, so the census saw them
+ * and filed each on its family page. Writing those pages meant writing into
+ * `docs-engineering`, a separate repository, so the debt was pinned here rather
+ * than deferred by category or waved through. The C4 documentation lot ran the
+ * full cross-repo producer and completed that separate-repo write, so the debt
+ * is paid and the list is closed at zero. A residual appearing here again is a
+ * REGRESSION -- the two checkouts have drifted apart -- not a debt to re-pin.
  */
-const CROSS_REPO_RESIDUAL = [
-  'stale/missing generated view: tokens/governance/families/experience.md — run pnpm tokens:catalog:write',
-  'stale/missing generated view: tokens/governance/families/recipe.md — run pnpm tokens:catalog:write',
-  'stale/missing generated view: tokens/README.md — run pnpm tokens:catalog:write',
-  'stale/missing generated view: tokens/governance/lifecycle-and-deprecations.md — run pnpm tokens:catalog:write',
-];
+const CROSS_REPO_RESIDUAL = [];
 
 test('positive: the catalog check passes on the real tree', () => {
   // The IN-REPO check is the one this package owns, and it must be green.
@@ -82,9 +80,9 @@ test('positive: the catalog check passes on the real tree', () => {
   assert.equal(status, 0, out);
 
   // The full `--check` additionally audits the sibling `docs-engineering`
-  // checkout, whose freshness this package cannot write. It is still RUN and
-  // nothing is deferred: the residual it reports is pinned file by file, so it
-  // can neither grow nor change category without reddening this gate.
+  // checkout. It is still RUN and nothing is deferred: the residual it reports
+  // is compared file by file, so it can neither grow nor change category
+  // without reddening this gate.
   const full = run('--check');
   assert.equal(full.out.includes('DEFERRED (cross-repo'), false, full.out);
 
@@ -94,7 +92,7 @@ test('positive: the catalog check passes on the real tree', () => {
     .map((line) => line.replace(/^.*FAIL — /, ''));
 
   assert.deepEqual(failures, CROSS_REPO_RESIDUAL, full.out);
-  assert.equal(full.status, 1, full.out);
+  assert.equal(full.status, 0, full.out);
 });
 
 test('positive: the two trees cover the census exactly once, and never mix', () => {

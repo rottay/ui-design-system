@@ -115551,7 +115551,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *     sample reads the mono channel).
  * Geometry values were transcribed from the component's former runtime
  * style props onto canonical steps; instance-scoped appearance variables
- * remain owned by appearanceToVariables().
+ * remain owned by the theme lowering.
  */
 
 /* ---- root frame + rhythm (padding/font drained from inline) ---- */

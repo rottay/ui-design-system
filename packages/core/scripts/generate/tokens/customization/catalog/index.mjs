@@ -898,6 +898,9 @@ ${entries
   // ---- exposure-tiers.md ----
   const byTier = (tier, status = 'active') => registry.filter((r) => r.tier === tier && r.status === status);
   const capRow = (r) => `| \`${r.id}\` | ${r.title} | ${r.valueType} | \`${r.documentPath}\` | ${r.derivedChannels.slice(0, 3).map((c) => `\`${c}\``).join(', ')}${r.derivedChannels.length > 3 ? ', …' : ''} | ${r.evidence ? `\`${r.evidence.consumer.split('/').pop()}\`` : '—'} |`;
+  const frontierRows = registry
+    .filter((r) => r.status === 'frontier')
+    .map((r) => `- \`${r.id}\` — opens per its registry row (\`${r.documentPath}\`)`);
   views['exposure-tiers.md'] = `${GEN_HEADER('TENANT_CAPABILITY_REGISTRY + allowlist + hooks-manifest')}# Exposure Tiers — Who May Change What
 
 Two ORTHOGONAL dimensions govern every name: its technical layer (census
@@ -952,10 +955,11 @@ debt (program D2), not an API.
 Foundation primitives, component channels, compiler plumbing. No tenant or
 app contract; reachable only through the capabilities above.
 
-## Frontier — ${registry.filter((r) => r.status === 'frontier').length} reserved
-
-${registry.filter((r) => r.status === 'frontier').map((r) => `- \`${r.id}\` — opens per its registry row (\`${r.documentPath}\`)`).join('\n')}
-`;
+## Frontier — ${frontierRows.length} reserved${
+    // An empty tier ends at its header: interpolating the empty join would still
+    // emit the separating blank line, and no generated page may end in a blank.
+    frontierRows.length > 0 ? `\n\n${frontierRows.join('\n')}\n` : '\n'
+  }`;
 
   // ---- impact-map.md (three-valued, nothing hidden) ----
   const impactRows = registry.filter((r) => r.status === 'active').map((r) => {

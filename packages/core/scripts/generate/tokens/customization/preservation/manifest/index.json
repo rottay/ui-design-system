@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/preservation/index.mjs --write",
-  "basedOnReportDigest": "e1268f3a90ac3b044848bd81fb3fd3b43ecdd6b2c93587e60f628e65b85ad154",
+  "basedOnReportDigest": "d1f0c544a7ccb6ea593155b8349462aaf20efafd115d575b4d742efecd15b172",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,11 +2153,11 @@
     ]
   },
   "deadWriters": {
-    "total": 276,
+    "total": 275,
     "byProvenance": {
       "E-reserved-frontier": 13,
       "B-modern-current": 61,
-      "D-compiler-generated": 19,
+      "D-compiler-generated": 18,
       "A-protected-premium": 183
     },
     "entries": [
@@ -2495,13 +2495,6 @@
         "provenance": "B-modern-current",
         "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
         "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-color-scheme",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
         "status": "dead-writer"
       },
       {

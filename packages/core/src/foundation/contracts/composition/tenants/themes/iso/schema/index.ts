@@ -169,12 +169,10 @@ export const THEME_LEAF_OPTIONS: Readonly<Record<string, readonly string[]>> =
 
 /**
  * Keypaths whose value the Theme declares as `unknown`, where no kind can be
- * refused. `engineBridge` is an engine's own opaque bag: the DS neither reads
- * nor types what an engine puts in it.
+ * refused. Empty since `engineBridge` — the only such family — was retired:
+ * every Theme leaf now has a declared kind.
  */
-export const THEME_ANY_LEAF_PATTERNS: readonly string[] = Object.freeze([
-  "engineBridge.*.*",
-]);
+export const THEME_ANY_LEAF_PATTERNS: readonly string[] = Object.freeze([]);
 
 /** The kind every leaf carries unless the map above says otherwise. */
 export const THEME_DEFAULT_LEAF_KINDS = STRING;
@@ -195,7 +193,6 @@ const GOVERNED_FAMILIES: ReadonlySet<string> = new Set([
   "recipes",
   "expressive",
   "responsive",
-  "engineBridge",
 ]);
 
 export function normalizeThemeLeafPath(path: string): string {

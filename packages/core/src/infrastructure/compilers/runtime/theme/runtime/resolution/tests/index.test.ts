@@ -13,7 +13,6 @@ import {
   isTenantAuthoredOrigin,
   TENANT_AUTHORED_ORIGINS,
 } from "@/foundation/contracts/composition/tenants/themes/intent";
-import { ENGINE_NAMES } from "@/foundation/contracts/kernel/engine-identity";
 import type { ThemePatch } from "@/foundation/contracts/composition/tenants/themes/iso";
 import {
   collectPatchAuthoredPaths,
@@ -31,7 +30,9 @@ import {
 } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 
-import { resolveTheme } from "..";
+import { assertThemeBaseline } from "@/foundation/contracts/composition/tenants/themes/iso";
+
+import { baselineFor, resolveTheme } from "..";
 
 const baseline = FIRST_PARTY_THEMES.rottay;
 
@@ -40,7 +41,12 @@ const patch: ThemePatch = {
   surfaces: { density: "compact", elevation: "elevated" },
 } as unknown as ThemePatch;
 
-const intentOf = (origin: ThemeIntentOrigin): ThemeIntent => ({ origin, patch });
+const intentOf = (origin: ThemeIntentOrigin): ThemeIntent => ({
+  vertical: "rottay",
+  slug: "rottay",
+  origin,
+  patch,
+});
 
 const ORIGINS: readonly ThemeIntentOrigin[] = [
   "static-vertical",
@@ -65,20 +71,71 @@ describe("origin classification", () => {
   });
 });
 
-describe("resolveTheme without an intent", () => {
-  it("returns the baseline and the frozen empty provenance", () => {
-    const resolution = resolveTheme(baseline);
-    expect(resolution.theme).toBe(baseline);
-    expect(resolution.provenance).toBe(EMPTY_PROVENANCE);
-    expect(resolution.provenance.tenantAuthored).toBe(false);
-    expect(resolution.intent).toBeUndefined();
+describe("there is no intentless arm", () => {
+  // The optional intent was a FOURTH origin with no name: it returned before
+  // `assertThemeIntent` ran, so the one path nobody declared was also the one
+  // path nothing validated. It is gone, and the resolver takes one argument.
+  it("takes exactly one argument", () => {
+    expect(resolveTheme.length).toBe(1);
   });
+
+  it("refuses a call with no intent at all", () => {
+    expect(() => (resolveTheme as (i?: ThemeIntent) => unknown)()).toThrow(
+      /intent must be an object/u
+    );
+  });
+
+  it("resolves the roster baseline for a vertical, with the intent's slug", () => {
+    const resolution = resolveTheme({
+      vertical: "rottay",
+      slug: "rottay",
+      origin: "static-vertical",
+      patch: {},
+    });
+    expect(resolution.theme).toEqual(baseline);
+    expect(resolution.provenance).toBe(EMPTY_PROVENANCE);
+    expect(resolution.theme.id).toBe("rottay");
+    expect(
+      resolveTheme({
+        vertical: "rottay",
+        slug: "acme",
+        origin: "static-vertical",
+        patch: {},
+      }).theme.id
+    ).toBe("acme");
+  });
+
+  it("names the baseline through one owner, not a caller's spread", () => {
+    expect(baselineFor("bithire", "bithire")).toBe(FIRST_PARTY_THEMES.bithire);
+    expect(baselineFor("bithire", "acme")).toEqual({
+      ...FIRST_PARTY_THEMES.bithire,
+      id: "acme",
+    });
+  });
+});
+
+describe("the intent's vertical is the closed roster set", () => {
+  for (const vertical of ["platform", "", "acme", null, 7, {}, []]) {
+    it(`refuses vertical ${JSON.stringify(vertical) ?? String(vertical)}`, () => {
+      expect(() =>
+        resolveTheme({ vertical, slug: "acme", origin: "preview", patch: {} } as never)
+      ).toThrow(/unknown intent vertical/u);
+    });
+  }
+
+  for (const slug of ["", null, 7, {}]) {
+    it(`refuses slug ${JSON.stringify(slug) ?? String(slug)}`, () => {
+      expect(() =>
+        resolveTheme({ vertical: "rottay", slug, origin: "preview", patch: {} } as never)
+      ).toThrow(/intent\.slug must be a non-empty string/u);
+    });
+  }
 });
 
 describe("resolveTheme applies every origin's patch to the baseline", () => {
   for (const origin of ORIGINS) {
     it(`${origin} merges through the ISO resolver and changes the theme`, () => {
-      const resolution = resolveTheme(baseline, intentOf(origin));
+      const resolution = resolveTheme(intentOf(origin));
       expect(resolution.theme).toEqual(mergeThemePatches(baseline, patch));
       expect(resolution.theme).not.toBe(baseline);
       expect(resolution.theme).not.toEqual(baseline);
@@ -86,13 +143,13 @@ describe("resolveTheme applies every origin's patch to the baseline", () => {
 
     it(`${origin} carries its intent for diagnostics`, () => {
       const intent = intentOf(origin);
-      expect(resolveTheme(baseline, intent).intent).toBe(intent);
+      expect(resolveTheme(intent).intent).toBe(intent);
     });
   }
 });
 
 describe("a static-vertical intent is a baseline layer, not tenant authorship", () => {
-  const resolution = resolveTheme(baseline, intentOf("static-vertical"));
+  const resolution = resolveTheme(intentOf("static-vertical"));
 
   it("changes the resolved theme while staying non-tenant", () => {
     expect(resolution.theme).not.toEqual(baseline);
@@ -119,7 +176,7 @@ describe("a static-vertical intent is a baseline layer, not tenant authorship", 
 
 describe("a tenant-authored origin overlays with full provenance", () => {
   for (const origin of ["tenant-document", "preview"] as const) {
-    const resolution = resolveTheme(baseline, intentOf(origin));
+    const resolution = resolveTheme(intentOf(origin));
 
     it(`${origin} marks the resolution authored`, () => {
       expect(resolution.provenance.tenantAuthored).toBe(true);
@@ -145,8 +202,8 @@ describe("a tenant-authored origin overlays with full provenance", () => {
   }
 
   it("resolves preview and tenant-document to the same provenance", () => {
-    const preview = resolveTheme(baseline, intentOf("preview")).provenance;
-    const document = resolveTheme(baseline, intentOf("tenant-document")).provenance;
+    const preview = resolveTheme(intentOf("preview")).provenance;
+    const document = resolveTheme(intentOf("tenant-document")).provenance;
     expect(preview.floors).toEqual(document.floors);
     expect(preview.statusSeedAuthorship).toEqual(document.statusSeedAuthorship);
     expect([...preview.authoredPaths].sort()).toEqual([...document.authoredPaths].sort());
@@ -183,28 +240,35 @@ describe("resolveTheme refuses an intent it cannot trust", () => {
   for (const origin of bogusOrigins) {
     it(`refuses origin ${String(typeof origin)} ${JSON.stringify(origin) ?? String(origin)}`, () => {
       expect(() =>
-        resolveTheme(hostileBaseline, { origin, patch: {} } as never)
+        resolveTheme({ vertical: "bithire", slug: "bithire", origin, patch: {} } as never)
       ).toThrow(/unknown intent origin/u);
     });
   }
 
   it("refuses an intent that is not an object", () => {
     for (const intent of [null, 1, "tenant-document", [] as never]) {
-      expect(() => resolveTheme(hostileBaseline, intent as never)).toThrow();
+      expect(() => resolveTheme(intent as never)).toThrow();
     }
   });
 
   it("refuses a patch that is not an object", () => {
     for (const patch of [null, 1, "x", [] as never]) {
       expect(() =>
-        resolveTheme(hostileBaseline, { origin: "tenant-document", patch } as never)
+        resolveTheme({
+          vertical: "bithire",
+          slug: "bithire",
+          origin: "tenant-document",
+          patch,
+        } as never)
       ).toThrow(/intent\.patch must be an object/u);
     }
   });
 
   it("accepts every origin in the closed union, and only those", () => {
     for (const origin of ["static-vertical", "tenant-document", "preview"] as const) {
-      expect(() => resolveTheme(hostileBaseline, { origin, patch: {} })).not.toThrow();
+      expect(() =>
+        resolveTheme({ vertical: "bithire", slug: "bithire", origin, patch: {} })
+      ).not.toThrow();
     }
   });
 });
@@ -258,7 +322,9 @@ describe("mergeThemePatches refuses a mis-kinded patch node", () => {
   const merge = (patch: unknown) =>
     mergeThemePatches(hostileBaseline, patch as never);
   const resolve = (patch: unknown) =>
-    resolveTheme(hostileBaseline, {
+    resolveTheme({
+      vertical: "bithire",
+      slug: "bithire",
       origin: "tenant-document",
       patch: patch as never,
     });
@@ -420,26 +486,27 @@ describe("the declaration decides, not the baseline sample", () => {
     );
   });
 
-  it("an opaque leaf refuses no KIND, and the bridge is keyed by the roster", () => {
-    // `engineBridge` is the one place the contract declares `unknown`, so the
-    // schema refuses no kind there. Its dictionary is declared
-    // `Partial<Record<EngineName, ...>>` -- an OPEN dictionary whose legal keys
-    // are the engine roster, not the `{}` the baseline happens to hold.
-    expect(themeLeafKinds("$.engineBridge.value.modern.anything")).toBeNull();
+  it("no leaf is opaque any more, so the unknown-key rule has no exception", () => {
+    // `engineBridge` was the one place the contract declared `unknown`: the
+    // schema refused no kind there, and its dictionary had to admit
+    // engine-roster keys the closed-vocabulary rule would otherwise reject.
+    // The family is retired at source -- it had no reader in any adapter or
+    // compiler -- so every declared leaf now answers with a kind, and naming
+    // the family is just an unknown key like any other.
+    expect(themeLeafKinds("$.chrome.card.hoverTint")).not.toBeNull();
     expect(() =>
       merge({ engineBridge: { value: { modern: { anything: 12 } } } })
-    ).not.toThrow();
-    expect(() =>
-      merge({ engineBridge: { value: { potato: { anything: 12 } } } })
-    ).toThrow(/unknown engine "potato"/u);
+    ).toThrow(/unknown key "engineBridge"/u);
   });
 });
 
-describe("resolveTheme refuses a baseline that is not a Theme", () => {
-  const patch = { palette: { primaryColor: "#123456" } } as unknown as ThemePatch;
-
-  // Each of these used to come back as a "resolved theme" on the no-intent
-  // fast path, which never looked at the baseline at all.
+describe("a baseline that is not a Theme is refused by its own guard", () => {
+  // These used to be reachable through `resolveTheme`, because the caller
+  // supplied the baseline. It cannot any more: the intent NAMES a roster
+  // vertical and the resolver reads the baseline itself, so the only bad
+  // baseline a caller can now express is a bad vertical, which the intent guard
+  // above refuses by name. The structural guard still runs on every resolve and
+  // is asserted here directly, where its subject actually lives.
   const bogusBaselines: readonly [string, unknown][] = [
     ["null", null],
     ["undefined", undefined],
@@ -451,32 +518,39 @@ describe("resolveTheme refuses a baseline that is not a Theme", () => {
     ["a non-string id", { id: 7, palette: {} }],
   ];
 
-  for (const [label, baseline] of bogusBaselines) {
-    it(`refuses ${label} with no intent`, () => {
-      expect(() => resolveTheme(baseline as never)).toThrow(
+  for (const [label, bogus] of bogusBaselines) {
+    it(`refuses ${label}`, () => {
+      expect(() => assertThemeBaseline(bogus, "resolveTheme")).toThrow(
         /resolveTheme: baseline/u
       );
     });
-    it(`refuses ${label} with an intent`, () => {
-      expect(() =>
-        resolveTheme(baseline as never, { origin: "tenant-document", patch })
-      ).toThrow(/resolveTheme: baseline/u);
-    });
   }
 
-  it("accepts a total Theme on both paths", () => {
-    expect(() => resolveTheme(FIRST_PARTY_THEMES.bithire)).not.toThrow();
-    expect(() =>
-      resolveTheme(FIRST_PARTY_THEMES.bithire, { origin: "tenant-document", patch })
-    ).not.toThrow();
+  it("accepts every roster Theme, which is the only baseline a caller can name", () => {
+    for (const vertical of ["rottay", "bithire", "evnto"] as const) {
+      expect(() =>
+        assertThemeBaseline(baselineFor(vertical, vertical), "resolveTheme")
+      ).not.toThrow();
+      expect(() =>
+        resolveTheme({
+          vertical,
+          slug: vertical,
+          origin: "tenant-document",
+          patch: { palette: { primaryColor: "#123456" } } as unknown as ThemePatch,
+        })
+      ).not.toThrow();
+    }
   });
 
-  it("accepts the SPARSE authored draft the editors resolve", () => {
-    // Totality is deliberately not the test: `liftAuthoredTheme` carries a
-    // partially-authored draft to the compiler unchanged, and the brand studio
-    // and the tenant preview both resolve exactly that.
+  it("still accepts the SPARSE authored draft the compiler's own intake carries", () => {
+    // Totality is deliberately not the guard's test: `liftAuthoredTheme` carries
+    // a partially-authored draft to the compiler unchanged, and the guard has to
+    // keep letting that through even though no INTENT can name it any more.
     expect(() =>
-      resolveTheme({ id: "draft", palette: { primaryColor: "#123456" } } as never)
+      assertThemeBaseline(
+        { id: "draft", palette: { primaryColor: "#123456" } },
+        "resolveTheme"
+      )
     ).not.toThrow();
   });
 });
@@ -489,14 +563,14 @@ describe("the ThemeIntent envelope is exact and own-keyed", () => {
       origin: "tenant-document",
       patch: { palette: { primaryColor: "#123456" } },
     }) as never;
-    expect(() => resolveTheme(baselineTheme, inherited)).toThrow(
-      /must be an own property/u
-    );
+    expect(() => resolveTheme(inherited)).toThrow(/must be an own property/u);
   });
 
   it("refuses an intent carrying a key the contract does not declare", () => {
     expect(() =>
-      resolveTheme(baselineTheme, {
+      resolveTheme({
+        vertical: "bithire",
+        slug: "bithire",
         origin: "tenant-document",
         patch: {},
         tenantId: "acme",
@@ -505,17 +579,32 @@ describe("the ThemeIntent envelope is exact and own-keyed", () => {
   });
 
   it("refuses an intent missing a declared key", () => {
-    expect(() => resolveTheme(baselineTheme, { origin: "tenant-document" } as never)).toThrow(
-      /intent\.patch must be an own property/u
-    );
-    expect(() => resolveTheme(baselineTheme, { patch: {} } as never)).toThrow(
-      /intent\.origin must be an own property/u
-    );
+    expect(() =>
+      resolveTheme({
+        vertical: "bithire",
+        slug: "bithire",
+        origin: "tenant-document",
+      } as never)
+    ).toThrow(/intent\.patch must be an own property/u);
+    expect(() =>
+      resolveTheme({ vertical: "bithire", slug: "bithire", patch: {} } as never)
+    ).toThrow(/intent\.origin must be an own property/u);
+    expect(() =>
+      resolveTheme({ slug: "bithire", origin: "preview", patch: {} } as never)
+    ).toThrow(/intent\.vertical must be an own property/u);
+    expect(() =>
+      resolveTheme({ vertical: "bithire", origin: "preview", patch: {} } as never)
+    ).toThrow(/intent\.slug must be an own property/u);
   });
 
   it("accepts the exact envelope, so the guard is not refusing everything", () => {
     expect(() =>
-      resolveTheme(baselineTheme, { origin: "preview", patch: {} })
+      resolveTheme({
+        vertical: "bithire",
+        slug: "bithire",
+        origin: "preview",
+        patch: {},
+      })
     ).not.toThrow();
   });
 });
@@ -528,7 +617,12 @@ describe("the ThemeIntent envelope is exact and own-keyed", () => {
 describe("resolveTheme refuses a value outside a closed option domain", () => {
   const baselineTheme = FIRST_PARTY_THEMES.bithire;
   const resolve = (patch: unknown) =>
-    resolveTheme(baselineTheme, { origin: "tenant-document", patch: patch as never });
+    resolveTheme({
+      vertical: "bithire",
+      slug: "bithire",
+      origin: "tenant-document",
+      patch: patch as never,
+    });
 
   const invented: readonly [string, unknown, RegExp][] = [
     [
@@ -687,11 +781,10 @@ describe("mergeThemePatches refuses a container that is not a plain record", () 
 /* the baseline is validated structurally, on its OWN keys                     */
 /* -------------------------------------------------------------------------- */
 
-describe("resolveTheme validates the baseline structurally", () => {
-  const patch = { palette: { primaryColor: "#123456" } } as unknown as ThemePatch;
-  const bothPaths = (baseline: unknown): readonly (() => unknown)[] => [
-    () => resolveTheme(baseline as never),
-    () => resolveTheme(baseline as never, { origin: "tenant-document", patch }),
+describe("the baseline guard validates structurally, on OWN keys", () => {
+  const bothPaths = (bogus: unknown): readonly (() => unknown)[] => [
+    () => assertThemeBaseline(bogus, "resolveTheme"),
+    () => mergeThemePatches(bogus as never, { palette: { primaryColor: "#123456" } } as never),
   ];
 
   it("refuses an INHERITED id, which read back as a Theme through every access", () => {
@@ -745,75 +838,28 @@ describe("resolveTheme validates the baseline structurally", () => {
       expect(call).not.toThrow();
     }
     expect(() =>
-      resolveTheme({ id: "draft", chrome: { cardComponent: { bg: "#fff" } } } as never)
+      assertThemeBaseline(
+        { id: "draft", chrome: { cardComponent: { bg: "#fff" } } },
+        "resolveTheme"
+      )
     ).not.toThrow();
   });
 
-  it("validates before the no-intent return, not only when a patch is present", () => {
-    expect(() => resolveTheme({ id: "x", palette: false } as never)).toThrow(
+  it("runs on every resolve, including the empty-patch static one", () => {
+    // The guard used to be skipped on the intentless fast path. There is no
+    // fast path now, and the static intent is the one that carries no patch.
+    for (const vertical of ["rottay", "bithire", "evnto"] as const) {
+      expect(() =>
+        resolveTheme({
+          vertical,
+          slug: vertical,
+          origin: "static-vertical",
+          patch: {},
+        })
+      ).not.toThrow();
+    }
+    expect(() => assertThemeBaseline({ id: "x", palette: false }, "resolveTheme")).toThrow(
       /resolveTheme: baseline\.palette/u
     );
-  });
-});
-
-/* -------------------------------------------------------------------------- */
-/* engineBridge matches its declared OPEN contract                             */
-/* -------------------------------------------------------------------------- */
-
-describe("engineBridge admits the engine roster and nothing else", () => {
-  const baselineTheme = FIRST_PARTY_THEMES.bithire;
-  const merge = (patch: unknown) => mergeThemePatches(baselineTheme, patch as never);
-  const bridge = (value: unknown) => ({ engineBridge: { value } });
-
-  it("starts from an EMPTY baseline dictionary, which is what closed it", () => {
-    expect(Object.keys(baselineTheme.engineBridge.value ?? {})).toEqual([]);
-  });
-
-  for (const engine of ENGINE_NAMES) {
-    it(`accepts the legal engine key "${engine}"`, () => {
-      const merged = merge(bridge({ [engine]: { anything: 12 } }));
-      expect(merged.engineBridge.value?.[engine]).toEqual({ anything: 12 });
-    });
-  }
-
-  it("refuses an engine name outside the roster", () => {
-    expect(() => merge(bridge({ potato: { anything: 12 } }))).toThrow(
-      /unknown engine "potato"/u
-    );
-    expect(() => merge(bridge({ potato: {} }))).toThrow(
-      /the closed set is "classic", "modern", "rustic", "custom"/u
-    );
-  });
-
-  it("refuses a non-plain value for a legal engine", () => {
-    expect(() => merge(bridge({ modern: new Date() }))).toThrow(
-      /at \$\.engineBridge\.value\.modern is not a plain record/u
-    );
-    expect(() => merge(bridge({ modern: "opaque" }))).toThrow(/is not a plain record/u);
-    expect(() => merge(bridge({ modern: [1, 2] }))).toThrow(/is not a plain record/u);
-    expect(() => merge(bridge({ modern: { nested: new Date() } }))).toThrow(
-      /Date at \$\.engineBridge\.value\.modern\.nested is not a plain record/u
-    );
-  });
-
-  it("refuses INHERITED engine keys rather than silently dropping them", () => {
-    expect(() => merge(bridge(Object.create({ modern: { anything: 12 } })))).toThrow(
-      /at \$\.engineBridge\.value is not a ThemePatch container/u
-    );
-  });
-
-  it("refuses prototype-chain keys at the dictionary and inside the bag", () => {
-    const polluted = JSON.parse('{"__proto__": {"polluted": true}}') as Record<string, unknown>;
-    expect(() => merge(bridge(polluted))).toThrow(/forbidden key "__proto__"/u);
-    expect(() => merge(bridge({ modern: polluted }))).toThrow(/forbidden key "__proto__"/u);
-    expect(() => merge(bridge({ constructor: {} }))).toThrow(/forbidden key "constructor"/u);
-    expect(({} as Record<string, unknown>).polluted).toBeUndefined();
-  });
-
-  it("merges over an engine's existing bag instead of replacing the dictionary", () => {
-    const first = merge(bridge({ modern: { a: 1 } }));
-    const second = mergeThemePatches(first, bridge({ classic: { b: 2 } }) as never);
-    expect(second.engineBridge.value?.modern).toEqual({ a: 1 });
-    expect(second.engineBridge.value?.classic).toEqual({ b: 2 });
   });
 });

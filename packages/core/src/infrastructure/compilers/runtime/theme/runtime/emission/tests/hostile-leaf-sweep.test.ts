@@ -47,7 +47,8 @@ function patchFor(path: readonly string[]): Record<string, unknown> {
 
 describe("no open string leaf can escape the preview rule", () => {
   it("sweeps every string leaf of a first-party theme through the public door", () => {
-    const theme = FIRST_PARTY_THEMES.bithire;
+    const vertical = "bithire" as const;
+    const theme = FIRST_PARTY_THEMES[vertical];
     const modern = resolveAdapter("modern");
     const paths = stringLeafPaths(theme).filter(
       (path) => path[0] !== "id" && path[0] !== "name"
@@ -62,7 +63,12 @@ describe("no open string leaf can escape the preview rule", () => {
       let compiled;
       try {
         compiled = compileTheme(
-          resolveTheme(theme, { origin: "preview", patch: patchFor(path) as never }),
+          resolveTheme({
+            vertical,
+            slug: vertical,
+            origin: "preview",
+            patch: patchFor(path) as never,
+          }),
           modern
         );
       } catch {

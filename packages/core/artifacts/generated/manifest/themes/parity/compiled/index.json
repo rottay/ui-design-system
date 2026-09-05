@@ -26,21 +26,21 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 344767,
-        "lines": 9346,
-        "sha256": "82fddbb0a7967653b6985c2a00da21f0fcd1dead7503c0a314033e6c9afcca87"
+        "bytes": 344374,
+        "lines": 9333,
+        "sha256": "ca6e9517a61bba599eb1195f9668b2da59a6774f24026e905e7bba2cb7c36bdb"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 339373,
-        "lines": 9324,
-        "sha256": "1fbd5aaa296ce52a37a05ddf2753a10b524378f7d70dfdb82af3d521bfe181ca"
+        "bytes": 338980,
+        "lines": 9311,
+        "sha256": "12fc548ee2d943fdbb0f9322a87a166f199ced5bf69e09d8cb3eca96f4b7befa"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 214705,
-        "lines": 4976,
-        "sha256": "c0d734220d03f18e47dfba998a04f006e0eabe931da60d10138b21d2b05ca3d1"
+        "bytes": 214312,
+        "lines": 4963,
+        "sha256": "a4aa897f0c756e7c70f276800cca2f7f57530979a85739fec396c8e0cad1a923"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch y rompe --check sin que el contenido se mueva."
@@ -6690,7 +6690,7 @@
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 466,
       "channels": 3578,
-      "sha256": "e49ff753a1041b905fe10046c8c58201a42e0c6c7c300f8f4b0c7e9e27ccbb2f",
+      "sha256": "92991d3d2f98c8517288bbd1dbe85db24a2f08307e7b0ec51b81a231310d3e58",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },
@@ -19107,32 +19107,32 @@
     "unit": "authored-decision-leaf-path",
     "note": "Unidad distinta de la del artefacto. NUNCA fusionar con `surface`.",
     "authors": {
-      "rottay": 1725,
-      "bithire": 1485,
-      "evnto": 387
+      "rottay": 1722,
+      "bithire": 1482,
+      "evnto": 384
     },
-    "union": 2542,
-    "intersection": 313,
-    "intersectionPct": 12.3,
-    "intersectionPctOfSmallest": 80.9,
+    "union": 2539,
+    "intersection": 310,
+    "intersectionPct": 12.2,
+    "intersectionPctOfSmallest": 80.7,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 671,
-        "union": 2539,
-        "pctOfUnion": 26.4,
-        "pctOfSmaller": 45.2
+        "shared": 668,
+        "union": 2536,
+        "pctOfUnion": 26.3,
+        "pctOfSmaller": 45.1
       },
       "rottay+evnto": {
-        "shared": 359,
-        "union": 1753,
-        "pctOfUnion": 20.5,
-        "pctOfSmaller": 92.8
+        "shared": 356,
+        "union": 1750,
+        "pctOfUnion": 20.3,
+        "pctOfSmaller": 92.7
       },
       "bithire+evnto": {
-        "shared": 338,
-        "union": 1534,
-        "pctOfUnion": 22,
-        "pctOfSmaller": 87.3
+        "shared": 335,
+        "union": 1531,
+        "pctOfUnion": 21.9,
+        "pctOfSmaller": 87.2
       }
     },
     "exclusive": {

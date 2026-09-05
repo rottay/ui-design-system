@@ -21,7 +21,7 @@
  * GUARD 2 (tenant leaf outranks tenant-derived) has no real DB intake path
  * today: no v1 document field lowers into `palette.{tone}BgColor` (only the
  * seed, `palette.status.{tone}` -> `palette.{tone}Color`, has a door —
- * confirmed by grep over `migrate-v1/index.ts`, same situation the PRIMARY
+ * confirmed by grep over `ingress/foundation/document-patch`, same situation the PRIMARY
  * family already has for its own four unreachable fields:
  * `primaryForegroundColor`/`borderFocusColor`/`linkColor`/`linkHoverColor`).
  * So guard 2 and guard 3 are exercised directly against the exported

@@ -42,10 +42,6 @@
 import { describe, expect, it } from 'vitest';
 
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import {
-  appearanceGeneralToVariables,
-  compileAppearanceVariables,
-} from '@/infrastructure/compilers/kernel/runtime/appearance';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
@@ -201,10 +197,8 @@ describe('spacing.rhythm · absent input is the untouched baseline', () => {
 });
 
 /**
- * Module scope on purpose: the same hostile matrix is consumed twice — once
- * against the DB DOCUMENT pipeline (schema-gated) and once against the DB
- * LOWERING itself (ungated). Two copies could drift, and the second block
- * exists precisely because the first one cannot see the lowering.
+ * Module scope on purpose: the same hostile matrix is consumed by the
+ * refusal block and by the counterfactual below, and two copies could drift.
  */
 const HOSTILE: readonly { label: string; value: unknown }[] = [
   { label: 'unknown posture', value: 'cavernous' },
@@ -243,9 +237,11 @@ describe('spacing.rhythm · invalid input fails closed identically on both paths
    *     into a numeric channel before the own-property guard landed; the DB
    *     path always rejected them at the enum.
    *
-   * SCOPE LIMIT, stated rather than implied: `dbOutcome` consults
-   * `validateTenantThemeDocument` first, so this block compares a compiler
-   * against a validator. The compiler-to-compiler block below closes that.
+   * `dbOutcome` consults `validateTenantThemeDocument` first, so the DB column
+   * is the document pipeline end to end. That used to be a stated scope limit,
+   * closed by a second block driving a separate DB lowering; there is no
+   * separate DB lowering any more — both doors resolve into one `compileTheme`
+   * — so the pipeline IS the compiler here.
    */
 
   it('refuses every hostile input on BOTH paths, with no path-specific escape', () => {
@@ -298,102 +294,32 @@ describe('spacing.rhythm · invalid input fails closed identically on both paths
   });
 });
 
-describe('spacing.rhythm · COMPILER versus COMPILER, with no validator in between', () => {
+describe('spacing.rhythm · the counterfactual that keeps the drills load-bearing', () => {
   /**
-   * WHY THIS BLOCK EXISTS, AND WHY THE BLOCK ABOVE WAS NOT ENOUGH.
+   * WHY THIS SURVIVED AND THE BLOCK AROUND IT DID NOT.
    *
-   * `dbOutcome` asks `validateTenantThemeDocument` first and returns
-   * `{accepted:false}` the moment the schema refuses. That makes the hostile
-   * matrix above a comparison between a COMPILER (static) and a VALIDATOR
-   * (DB) — so it proves the DB *document pipeline* fails closed, and says
-   * nothing about the DB *lowering* itself.
+   * This file used to carry a COMPILER-versus-COMPILER block: it drove the
+   * static lowering and `appearanceGeneralToVariables` on the same matrix with
+   * no schema on either side, because the block above compares a compiler
+   * against a validator and could not see the DB LOWERING itself.
    *
-   * That gap was not hypothetical. `appearanceGeneralToVariables` is exported
-   * and reachable without the schema through the legacy `TenantConfig.
-   * appearance` compat path, and at the time this block was written it read
-   * the factor table with a bare `TABLE[key]`. An inherited member name
-   * resolved to a FUNCTION, `factor != null` passed, `clampValue` coerced it
-   * to `NaN`, and the literal text `NaN` was written into the channel — the
-   * exact defect the static path had already been hardened against in the same
-   * working tree. A validator-gated comparison could never see it.
+   * That premise is gone. `appearanceGeneralToVariables` was a second lowering
+   * with zero productive consumers and it is deleted at source; the DB
+   * document and the static BrandTheme now resolve into the SAME `compileTheme`
+   * call, so "the two lowerings agree" is an identity rather than a claim, and
+   * a block asserting it would be green by construction.
    *
-   * So this block drives BOTH REAL LOWERERS on the same inputs, with no schema
-   * on either side, and demands identical valid / absent / hostile behaviour.
+   * What that block owned that nothing else does is the COUNTERFACTUAL below:
+   * proof that the own-property guard is load-bearing rather than vacuously
+   * green. It is kept, re-anchored on the surviving lowering and on the DB
+   * outcome the document pipeline actually produces.
    */
   const staticLowering = (rhythm?: unknown): string | undefined =>
     staticVariables(rhythm)[CHANNEL];
 
-  /** The DB lowering itself — the function `compileTenantThemeConfig` calls. */
-  const dbLowering = (rhythm?: unknown): string | undefined =>
-    appearanceGeneralToVariables(
-      (rhythm === undefined ? {} : { rhythm }) as never
-    )[CHANNEL];
-
-  it('agrees on every VALID posture', () => {
-    const measured = Object.entries(TENANT_THEME_RHYTHM_FACTORS).map(
-      ([posture, factor]) => ({
-        posture,
-        fromStatic: staticLowering(posture),
-        fromDb: dbLowering(posture),
-        expected: String(factor),
-      })
-    );
-    expect(measured).toEqual(
-      measured.map(({ posture, expected }) => ({
-        posture,
-        fromStatic: expected,
-        fromDb: expected,
-        expected,
-      }))
-    );
-  });
-
-  it('agrees that ABSENT emits nothing', () => {
-    expect({ fromStatic: staticLowering(), fromDb: dbLowering() }).toEqual({
-      fromStatic: undefined,
-      fromDb: undefined,
-    });
-  });
-
-  it('agrees on every HOSTILE input, compiler to compiler', () => {
-    const measured = HOSTILE.map(({ label, value }) => ({
-      label,
-      fromStatic: staticLowering(value),
-      fromDb: dbLowering(value),
-    }));
-
-    // One object so a failure prints the whole matrix and names the leaking
-    // path. `undefined` on both sides is the only acceptable row: a hostile
-    // posture must leave the channel unwritten, not written-and-clamped.
-    expect(measured).toEqual(
-      HOSTILE.map(({ label }) => ({
-        label,
-        fromStatic: undefined,
-        fromDb: undefined,
-      }))
-    );
-  });
-
-  it('DRILL: never emits the string NaN, on either path', () => {
-    // The specific corruption. `NaN` in the channel makes
-    // `clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)` invalid at computed-value
-    // time for every consumer, which is strictly worse than an ignored input.
-    for (const { label, value } of HOSTILE) {
-      expect({ label, fromStatic: staticLowering(value) }).toEqual({
-        label,
-        fromStatic: undefined,
-      });
-      expect({ label, fromDb: dbLowering(value) }).toEqual({
-        label,
-        fromDb: undefined,
-      });
-    }
-  });
-
   it('COUNTERFACTUAL: the unguarded lowering really did produce NaN', () => {
-    // Proof that the drills above are load-bearing rather than vacuously
-    // green. This reproduces the exact arithmetic both lowerings used before
-    // the own-property guard: a bare bracket read, a `!= null` check that a
+    // This reproduces the exact arithmetic the lowering used before the
+    // own-property guard: a bare bracket read, a `!= null` check that a
     // function satisfies, and a clamp that coerces through ToNumber.
     const unguarded = (rhythm: unknown): string | undefined => {
       const factor = (TENANT_THEME_RHYTHM_FACTORS as Record<string, unknown>)[
@@ -411,19 +337,19 @@ describe('spacing.rhythm · COMPILER versus COMPILER, with no validator in betwe
     // The inherited-member family is what escaped, and it escaped as NaN.
     for (const name of ['toString', 'constructor', 'valueOf', '__proto__']) {
       expect({ name, emitted: unguarded(name) }).toEqual({ name, emitted: 'NaN' });
-      // ...and the guarded lowerings refuse the very same input.
+      // ...and the surviving path refuses the very same input, on both doors.
       expect({ name, emitted: staticLowering(name) }).toEqual({
         name,
         emitted: undefined,
       });
-      expect({ name, emitted: dbLowering(name) }).toEqual({
+      expect({ name, accepted: dbOutcome(name).accepted }).toEqual({
         name,
-        emitted: undefined,
+        accepted: false,
       });
     }
 
-    // The counterfactual must still agree with the real lowerings on the
-    // VALID stops, or it would be a strawman rather than the prior behaviour.
+    // The counterfactual must still agree with the real lowering on the VALID
+    // stops, or it would be a strawman rather than the prior behaviour.
     for (const posture of Object.keys(TENANT_THEME_RHYTHM_FACTORS)) {
       expect({ posture, emitted: unguarded(posture) }).toEqual({
         posture,
@@ -487,25 +413,25 @@ describe('spacing.rhythm · the expert token-overrides path cannot acquire the c
     expect(validateTenantThemeDocument(listed).success).toBe(true);
   });
 
-  it('FINDING: the unvalidated compat seam still lowers it, and is bounded only by the CSS envelope', () => {
-    // Measured, and recorded as the open gap it is rather than asserted away.
-    // `compileAppearanceVariables` is the normalized compiler/compat entry —
-    // reachable from the legacy `TenantConfig.appearance` path — and it
-    // filters raw overrides by the `--ds-` PREFIX alone. No published DB
-    // document can arrive here with this name (the test above is the gate),
-    // but a hand-built compat payload can.
-    const seam = compileAppearanceVariables({
-      advanced: { tokenOverrides: { [CHANNEL]: 1.9 } },
-    } as never).variables;
-
-    expect(seam[CHANNEL]).toBe('1.9');
-
-    // The envelope claim survives that gap, and the distinction matters: the
-    // raw value escapes the tight/normal/airy VOCABULARY but not the 0.8-1.25
-    // ENVELOPE, because the clamp lives in the derived channel
-    // (`--ds-rhythm-effective-scale`) in the DS floor rather than in the
-    // compiler. So the reachable damage is an arbitrary in-envelope factor,
-    // never an out-of-envelope one.
+  it('CLOSED FINDING: no unvalidated compat seam lowers it any more', () => {
+    // This used to be recorded as an open gap: `compileAppearanceVariables`
+    // was reachable from the legacy `TenantConfig.appearance` path and
+    // filtered raw overrides by the `--ds-` PREFIX alone, so a hand-built
+    // compat payload could put an arbitrary in-envelope factor on this
+    // channel. That lowering is deleted at source, so the only way in is the
+    // document schema — which refuses the name, as the case above measures.
+    //
+    // The envelope claim the finding rested on is kept, because it is what
+    // bounded the damage while the seam existed: the clamp lives in the
+    // derived channel (`--ds-rhythm-effective-scale`) in the DS floor rather
+    // than in the compiler.
     expect(1.9).toBeGreaterThan(TENANT_THEME_RHYTHM_SCALE_BOUNDS.max);
+    expect(
+      validateTenantThemeDocument({
+        schemaVersion: 1,
+        mode: 'advanced',
+        visualFoundation: { advanced: { tokenOverrides: { [CHANNEL]: 1.9 } } },
+      }).success
+    ).toBe(false);
   });
 });

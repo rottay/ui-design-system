@@ -4,6 +4,17 @@
  * This is a total function: every supported v1 dial maps to a typed ThemePatch
  * keypath; every unsupported/unknown dial fails closed. The envelope carries
  * transport metadata (`source: "tenant-document-v1"`) outside the patch.
+ *
+ * It is the ONE document-to-patch owner. It used to sit inside the DB
+ * composition compiler, which meant a preview surface that wanted the same
+ * migration had to deep-import a composition-tier module from a pattern and
+ * then guess the mode argument. It lives under the ingress owner now, beside
+ * the producers that call it, and the mode argument is no longer a caller's to
+ * guess -- see {@link documentThemePatch}.
+ *
+ * @module Compilers/Theme/Ingress/Foundation/DocumentPatch
+ * @category Compilers
+ * @package @rottay/design-system
  */
 
 import type {
@@ -30,6 +41,11 @@ import {
   buttonStyleRadius,
   typePairingToTypography,
 } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
+import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
+import {
+  FIRST_PARTY_THEMES,
+  isFirstPartyVerticalId,
+} from "@/foundation/tokens/ts/presentation/brand-themes";
 
 const V1_SCHEMA_VERSION = "1";
 
@@ -675,4 +691,38 @@ export function migrateV1(
   if (doc.mode === "simple") return migrateSimpleDocument(doc, defaultMode);
   if (doc.mode === "advanced") return migrateAdvancedDocument(doc, defaultMode);
   throw new ThemePatchMigrationError(`unsupported document mode`);
+}
+
+/**
+ * The patch a persisted or previewed document contributes, over the baseline
+ * the vertical names.
+ *
+ * The default mode is READ FROM THE ROSTER, never passed in. `migrateV1` routes
+ * a top-level palette seed to `palette` when the document's background mode
+ * matches the baseline's own default and to `modes.<mode>.palette` otherwise,
+ * so the mode argument decides WHICH block a customer's colour lands in. The DB
+ * terminal passed the baseline's `appearance.defaultMode`; the preview sandbox
+ * passed the literal `"light"`. On Rottay, whose default mode is `dark`, that
+ * made the preview repaint the dark canvas for a change publish would write
+ * into the light block -- the preview and the artifact disagreed about the same
+ * document. One reader, one answer.
+ */
+export function documentThemePatch(input: {
+  vertical: FirstPartyVerticalId;
+  document: TenantThemeDocument;
+}): ThemePatch {
+  // A JS caller is not held to the type. Refuse an off-roster vertical with the
+  // owner's own error rather than indexing the roster and throwing a TypeError.
+  if (!isFirstPartyVerticalId(input.vertical)) {
+    throw new ThemePatchMigrationError(
+      `${String(input.vertical)} is not a first-party vertical`
+    );
+  }
+  const defaultMode = FIRST_PARTY_THEMES[input.vertical].appearance?.defaultMode;
+  if (!defaultMode) {
+    throw new ThemePatchMigrationError(
+      `the ${input.vertical} baseline declares no default mode`
+    );
+  }
+  return migrateV1(input.document, defaultMode).patch;
 }

@@ -25,7 +25,7 @@ import {
   validateTenantThemeDocument,
 } from "..";
 import { themeLeafOptions } from "@/foundation/contracts/composition/tenants/themes/iso/schema";
-import { migrateV1 } from "../migrate-v1";
+import { migrateV1 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: "tenant_01",

@@ -79,8 +79,9 @@ function relPath(abs) {
 
 // Chrome vars have one canonical emitter (compilers/kernel/foundation/css/chrome-variables,
 // scanned whole -- the entire file IS the chrome channel) plus the compilers
-// that call it: the lowering's chrome owner and its orchestration, and the DB
-// appearance compiler. Each of those is scanned only within its
+// that call it: the lowering's chrome owner and its orchestration. The
+// compatibility appearance compiler used to be a third; it is retired at
+// source. Each of those is scanned only within its
 // chrome-handling function, so a stray vars['--ds-...'] assignment added
 // directly to a compiler, bypassing the shared module, is caught too. This is
 // a LIST, not one file: a var emitted by any one of these with no consumer is a
@@ -107,10 +108,6 @@ const CHROME_EMITTERS = [
     // channel written there sits outside every writer's own owner.
     path: join(SRC_ROOT, 'infrastructure/compilers/runtime/theme/runtime/lowering/index.ts'),
     symbols: ['compileTheme'],
-  },
-  {
-    path: join(SRC_ROOT, 'infrastructure/compilers/kernel/runtime/appearance/index.ts'),
-    symbols: ['appearanceAdvancedToVariables'],
   },
 ];
 

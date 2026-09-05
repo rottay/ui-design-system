@@ -13,6 +13,7 @@
 
 import type { ReactNode } from 'react';
 import type { BrandTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
+import type { FirstPartyVerticalId } from '../../../../../foundation/contracts/kernel/verticals';
 import type {
   TenantThemeArtifact,
   TenantThemeConfigIdentity,
@@ -44,7 +45,17 @@ export interface BrandStudioSurfaceConfig {
   key: BrandStudioSurfaceKey;
   /** Selects which DS-owned preview ground this panel compiles against. */
   baseTheme: 'light' | 'dark';
-  /** Passed to `resolveTheme` as the resolved theme's `id`, for selector scoping. */
+  /**
+   * The first-party vertical the edited draft is resolved over.
+   *
+   * A draft is a patch, not a baseline, so the panel has to say which product's
+   * theme it is a patch OF — the same question the publish path answers with
+   * `verticalKey`. The DS-owned default panels declare `rottay`, the reference
+   * vertical; a console editing a bithire tenant's brand passes `bithire` and
+   * previews what that tenant would actually get.
+   */
+  vertical: FirstPartyVerticalId;
+  /** The tenant the compile is scoped for. */
   tenantSlug: string;
   /** Human-readable label rendered above the panel. */
   label?: string;
@@ -120,6 +131,15 @@ export interface PatternBrandStudioProps {
    * value in place and emits the next theme through {@link onChange}.
    */
   value: BrandTheme | Partial<BrandTheme>;
+  /**
+   * The first-party vertical the edited draft is a tenant of.
+   *
+   * Required, and deliberately without a default: a draft is a PATCH over a
+   * vertical's theme, so "which vertical" is the one fact the studio cannot
+   * infer and must not invent. Both preview panels share it, so the light and
+   * dark grounds are always a delta against the same baseline.
+   */
+  vertical: FirstPartyVerticalId;
   /** Called with the next full BrandTheme after any edit. */
   onChange?: (next: BrandTheme) => void;
   /** Render slot for the live preview galleries. */

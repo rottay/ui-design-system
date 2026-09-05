@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "702d6498eae83d2a0fd8f3879b608b43b7049cf8e53c2fbb4b4c34f5045533fb"
+    "registryDigest": "8ae1640429f88583a4a7930b6ae024354c7ec3324646ee408b0f82d3ac85923e"
   },
   "title": "Density posture",
   "valueType": "enum",
@@ -71,7 +71,7 @@
       "packages/core/src/foundation/tokens/ts/foundation/base/density/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
-      "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts",
       "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "packages/core/src/foundation/tokens/css/foundation/base/density/index.css",
       "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",

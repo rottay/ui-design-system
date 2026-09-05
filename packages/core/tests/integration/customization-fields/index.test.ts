@@ -162,11 +162,8 @@ const BRAND_THEMES: Record<string, BrandTheme> = {
 function freshArtifactCss(slug: string): string {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((entry) => entry.slug === slug);
   if (!spec) throw new Error(`no artifact spec for ${slug}`);
-  const theme = FIRST_PARTY_THEMES[slug as FirstPartyVerticalId];
-  if (!theme) throw new Error(`no first-party theme registered for slug ${slug}`);
   return renderFirstPartyArtifact({
     spec,
-    theme,
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   }).css;
 }

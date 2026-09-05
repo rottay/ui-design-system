@@ -46,7 +46,7 @@ describe('PatternBrandStudio stable anatomy', () => {
   it('resolves every structural data-part to exactly one node', async () => {
     const { container, findByText } = render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
-        <PatternBrandStudio value={THEME} />
+        <PatternBrandStudio vertical="bithire" value={THEME} />
       </DesignSystemProvider>
     );
     // Engine components resolve lazily; wait for the tree to settle.
@@ -61,7 +61,7 @@ describe('PatternBrandStudio stable anatomy', () => {
   it('keeps the action Button distinct from the panel that frames it', async () => {
     const { container, findByText } = render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
-        <PatternBrandStudio value={THEME} />
+        <PatternBrandStudio vertical="bithire" value={THEME} />
       </DesignSystemProvider>
     );
     await findByText('Run check');
@@ -90,7 +90,7 @@ describe('PatternBrandStudio stable anatomy', () => {
   it('keeps the two-column track distinct from the preview column it contains', async () => {
     const { container, findByText } = render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
-        <PatternBrandStudio value={THEME} />
+        <PatternBrandStudio vertical="bithire" value={THEME} />
       </DesignSystemProvider>
     );
     await findByText('Run check');

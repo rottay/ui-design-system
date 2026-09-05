@@ -1850,6 +1850,7 @@ export function ComponentBehaviorScene({ only }: { only: ComponentBehaviorCase }
         <SpecimenRow axis="BRANDSTUDIO - editor and preview share one tenant theme">
           <div data-testid="lab-brandstudio" style={{ inlineSize: '100%' }}>
             <PatternBrandStudio
+              vertical="bithire"
               value={{ palette: { primaryColor: '#2f6feb' } }}
               onChange={() => undefined}
             />

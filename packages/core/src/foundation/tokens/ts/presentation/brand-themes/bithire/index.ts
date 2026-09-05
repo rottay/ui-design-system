@@ -9197,19 +9197,6 @@ const CAPABILITIES: BrandCapabilityCatalog = {
     reason: 'not-authored',
     note: 'BitHire rides the baseline container ladder; no posture override.',
   },
-  engineBridge: {
-    /**
-     * @domicile pro-expert
-     * @governor capability: engineBridge (estado autorado: disabled)
-     */
-    status: 'disabled',
-    /**
-     * @domicile pro-expert
-     * @governor capability: engineBridge (estado autorado: disabled)
-     */
-    reason: 'not-authored',
-    note: 'No engine-specific bridge values; modern reads the compiled tokens directly.',
-  },
 };
 
 // ────────────────────── END AUTHORED DECISIONS ──────────────────────

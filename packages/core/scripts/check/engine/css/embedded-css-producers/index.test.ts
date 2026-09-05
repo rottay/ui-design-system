@@ -141,7 +141,6 @@ describe("embedded CSS data producers", () => {
       throw new Error('no first-party artifact spec for slug "bithire"');
     const { compiled } = renderFirstPartyArtifact({
       spec,
-      theme: brandThemeToTheme(bithireBrandTheme),
     });
 
     const generatedBlocks = [

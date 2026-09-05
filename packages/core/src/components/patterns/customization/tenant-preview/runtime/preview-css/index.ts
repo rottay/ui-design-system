@@ -45,17 +45,15 @@ import type {
   BrandTypography,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import type { TenantThemeArtifact } from '../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
-import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
-import { getFirstPartyVertical } from '@/foundation/tokens/ts/presentation/brand-themes';
+import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
+import { isFirstPartyVerticalId } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { brandTenantSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
 import {
-  compileTheme,
+  compileThemeIntent,
   containerScope,
+  draftPreviewThemeIntent,
   emitThemeCss,
-  resolveAdapter,
-  resolveTheme,
 } from '@/infrastructure/compilers/runtime/theme';
-import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { verifyTenantThemeArtifactV1 } from '../../../../../../infrastructure/runtime/theming/foundation/visual-authority';
 import {
   buildPreviewScopeSelector,
@@ -123,7 +121,18 @@ export interface PreviewCss {
  * knows how to re-scope.
  */
 export type PreviewSource =
-  | { kind: 'brand-theme'; slug: string; brandTheme: BrandTheme }
+  | {
+      kind: 'brand-theme';
+      /**
+       * The first-party vertical the draft is a patch of. A BrandTheme is not
+       * a baseline of its own: the publish path resolves it over the vertical's
+       * theme, so a preview that does not name one is previewing a compile that
+       * cannot be published.
+       */
+      vertical: FirstPartyVerticalId;
+      slug: string;
+      brandTheme: BrandTheme;
+    }
   | { kind: 'tenant-theme'; artifact: TenantThemeArtifact };
 
 /**
@@ -303,12 +312,14 @@ function liftTenantConfigToBrandTheme(
     ...(motion ? { motion } : {}),
     ...(charts ? { charts } : {}),
     ...(Object.keys(chrome).length > 0 ? { chrome } : {}),
-    ...(hasDarkPalette
-      ? {
-          appearance: { defaultMode: 'light' as const },
-          modes: { dark: { palette: darkPalette } },
-        }
-      : {}),
+    // The overlay only. `appearance.defaultMode` used to be stamped `'light'`
+    // here so that a standalone draft could legally carry a `modes.dark`
+    // overlay. A draft is a patch over a vertical now, and the vertical
+    // declares its own default mode; restating it would let a legacy branding
+    // lift silently flip the mode of the product it is a tenant of. A dark
+    // overlay on a dark-default vertical is refused by the overlay law, which
+    // is the correct answer: there, a tenant's dark seeds ARE the base palette.
+    ...(hasDarkPalette ? { modes: { dark: { palette: darkPalette } } } : {}),
   };
 
   return { brandTheme, unsupportedAxes };
@@ -359,9 +370,24 @@ function resolvePreviewInput(
     return { source: input, unsupportedAxes: [] };
   }
 
+  // A draft compiles as a patch over the vertical it belongs to, so a config
+  // that does not name a first-party vertical names no baseline. It used to be
+  // previewed under `PRIMARY_ENGINE` over its own sparse theme, which produced
+  // CSS for a compile the publish path would have refused outright. Reported as
+  // a lost axis, on the same channel every other unsupported axis uses.
+  if (!isFirstPartyVerticalId(input.vertical)) {
+    return { source: null, unsupportedAxes: ['vertical'] };
+  }
+  const vertical: FirstPartyVerticalId = input.vertical;
+
   if (input.brandTheme) {
     return {
-      source: { kind: 'brand-theme', slug: input.slug, brandTheme: input.brandTheme },
+      source: {
+        kind: 'brand-theme',
+        vertical,
+        slug: input.slug,
+        brandTheme: input.brandTheme,
+      },
       unsupportedAxes: [],
     };
   }
@@ -373,7 +399,12 @@ function resolvePreviewInput(
     return { source: null, unsupportedAxes: ['palette'] };
   }
   return {
-    source: { kind: 'brand-theme', slug: input.slug, brandTheme: lifted.brandTheme },
+    source: {
+      kind: 'brand-theme',
+      vertical,
+      slug: input.slug,
+      brandTheme: lifted.brandTheme,
+    },
     unsupportedAxes: lifted.unsupportedAxes,
   };
 }
@@ -441,12 +472,15 @@ function resolveCompiledOutput(source: PreviewSource): {
     slug: safeSlug,
     baseSelector: brandTenantSelector(safeSlug),
     css: emitThemeCss(
-      compileTheme(
-        resolveTheme({ ...liftAuthoredTheme(source.brandTheme), id: safeSlug }),
-        // The previewed slug names the vertical, and the vertical owns the
-        // engine. A draft slug that is not first-party takes the DS primary.
-        resolveAdapter(getFirstPartyVertical(safeSlug)?.engine ?? PRIMARY_ENGINE),
-      ),
+      // The intent names the vertical; the vertical owns the baseline and the
+      // engine, and the door refuses a vertical the roster does not declare.
+      compileThemeIntent(
+        draftPreviewThemeIntent({
+          vertical: source.vertical,
+          slug: safeSlug,
+          draft: source.brandTheme,
+        }),
+      ).compiled,
       containerScope(brandTenantSelector(safeSlug)),
     ),
   };

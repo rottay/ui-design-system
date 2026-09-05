@@ -17,12 +17,19 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { mergeThemePatches } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import type { ThemeIntentOrigin } from "@/foundation/contracts/composition/tenants/themes/intent";
+import type { ThemeResolution } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import {
+  EMPTY_PROVENANCE,
   RESOLVED_TONE_ROLES,
   tenantProvenance,
 } from "@/foundation/contracts/composition/tenants/themes/resolved";
+import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
-import { migrateV1 } from "@/infrastructure/compilers/composition/tenant-theme/migrate-v1";
+import {
+  documentThemePatch,
+  migrateV1,
+} from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
   compileTheme,
@@ -31,6 +38,7 @@ import {
   firstPartyScope,
   resolveAdapter,
   resolveTheme,
+  staticThemeIntent,
 } from "@/infrastructure/compilers/runtime/theme";
 import {
   DIVERGENCE_EDITORIAL_DOCUMENT,
@@ -52,31 +60,51 @@ const modern = resolveAdapter("modern");
  * are plain `BrandTheme` literals with no `capabilities` catalog, so they are
  * not `FirstPartyBrandTheme` and cannot honestly become a `Theme`.
  */
-const FIXTURES: readonly [string, Theme][] = [
-  ["rottay", FIRST_PARTY_THEMES.rottay],
-  ["bithire", FIRST_PARTY_THEMES.bithire],
-  ["evnto", FIRST_PARTY_THEMES.evnto],
-  ["rottay-no-modes", { ...FIRST_PARTY_THEMES.rottay, modes: undefined } as unknown as Theme],
-  ["evnto-no-modes", { ...FIRST_PARTY_THEMES.evnto, modes: undefined } as unknown as Theme],
+const noModes = (vertical: FirstPartyVerticalId): ThemeResolution => ({
+  // A family removed from a roster theme is not a roster theme, so no intent
+  // can name it. The resolution is the door's own no-tenant shape.
+  theme: { ...FIRST_PARTY_THEMES[vertical], modes: undefined } as unknown as Theme,
+  provenance: EMPTY_PROVENANCE,
+});
+
+const FIXTURES: readonly [string, ThemeResolution][] = [
+  ["rottay", resolveTheme(staticThemeIntent("rottay"))],
+  ["bithire", resolveTheme(staticThemeIntent("bithire"))],
+  ["evnto", resolveTheme(staticThemeIntent("evnto"))],
+  ["rottay-no-modes", noModes("rottay")],
+  ["evnto-no-modes", noModes("evnto")],
 ];
 
-/** The real DB ingress: a v1 document migrated to the patch the door lowers. */
-const tenantPatchOf = (document: unknown, identity: unknown): ThemePatch =>
-  migrateV1(
-    { ...(document as object), ...(identity as object) } as TenantThemeDocument,
-    FIRST_PARTY_THEMES.bithire.appearance.defaultMode ?? "light"
-  ).patch;
+/**
+ * The real DB ingress: a v1 document migrated to the patch the door lowers.
+ *
+ * Through `documentThemePatch`, so the default mode is the baseline's own and
+ * not a literal this file chose -- the exact divergence that made the preview
+ * sandbox and the publish path disagree on a dark-default vertical.
+ */
+const tenantPatchOf = (
+  vertical: FirstPartyVerticalId,
+  document: unknown,
+  identity: unknown
+): ThemePatch =>
+  documentThemePatch({
+    vertical,
+    document: {
+      ...(document as object),
+      ...(identity as object),
+    } as TenantThemeDocument,
+  });
 
-const TENANT_FIXTURES: readonly [string, Theme, ThemePatch][] = [
+const TENANT_FIXTURES: readonly [string, FirstPartyVerticalId, ThemePatch][] = [
   [
     "divergence-editorial over bithire",
-    FIRST_PARTY_THEMES.bithire,
-    tenantPatchOf(DIVERGENCE_EDITORIAL_DOCUMENT, DIVERGENCE_EDITORIAL_IDENTITY),
+    "bithire",
+    tenantPatchOf("bithire", DIVERGENCE_EDITORIAL_DOCUMENT, DIVERGENCE_EDITORIAL_IDENTITY),
   ],
   [
     "divergence-sober over bithire",
-    FIRST_PARTY_THEMES.bithire,
-    tenantPatchOf(DIVERGENCE_SOBER_DOCUMENT, DIVERGENCE_SOBER_IDENTITY),
+    "bithire",
+    tenantPatchOf("bithire", DIVERGENCE_SOBER_DOCUMENT, DIVERGENCE_SOBER_IDENTITY),
   ],
 ];
 
@@ -87,9 +115,9 @@ const TENANT_FIXTURES: readonly [string, Theme, ThemePatch][] = [
 describe("the single chain produces a total, engine-projected compilation", () => {
   // Compiled BYTES are pinned against the committed first-party artifacts in
   // `lowering/tests/artifact-oracle.test.ts`; this block fences the product shape.
-  for (const [label, theme] of FIXTURES) {
+  for (const [label, resolution] of FIXTURES) {
     it(`${label} compiles to the total product shape`, () => {
-      const compiled = compileTheme(resolveTheme(theme), modern);
+      const compiled = compileTheme(resolution, modern);
 
       expect(Object.keys(compiled.cssVariables).length).toBeGreaterThan(0);
       expect(Array.isArray(compiled.modeBlocks)).toBe(true);
@@ -104,9 +132,11 @@ describe("the single chain produces a total, engine-projected compilation", () =
     });
   }
 
-  for (const [label, baseline, patch] of TENANT_FIXTURES) {
+  for (const [label, vertical, patch] of TENANT_FIXTURES) {
     it(`${label} resolves to tenant-authored provenance`, () => {
-      const resolution = resolveTheme(baseline, {
+      const resolution = resolveTheme({
+        vertical,
+        slug: vertical,
         origin: "tenant-document",
         patch,
       });
@@ -116,17 +146,17 @@ describe("the single chain produces a total, engine-projected compilation", () =
 
     it(`${label} really diverges from the untouched baseline`, () => {
       const tenant = compileTheme(
-        resolveTheme(baseline, { origin: "tenant-document", patch }),
+        resolveTheme({ vertical, slug: vertical, origin: "tenant-document", patch }),
         modern
       );
-      const plain = compileTheme(resolveTheme(baseline), modern);
+      const plain = compileTheme(resolveTheme(staticThemeIntent(vertical)), modern);
       expect(tenant.cssVariables).not.toEqual(plain.cssVariables);
     });
   }
 
   it("emission scopes one compile to three different roots without recompiling", () => {
     for (const slug of ["rottay", "bithire", "evnto"] as const) {
-      const compiled = compileTheme(resolveTheme(FIRST_PARTY_THEMES[slug]), modern);
+      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
       const root = emitThemeCss(compiled, firstPartyScope(slug));
       const container = emitThemeCss(compiled, containerScope(".preview"));
       expect(root).toContain(`html[data-tenant='${slug}'] {`);
@@ -145,10 +175,11 @@ describe("the single chain produces a total, engine-projected compilation", () =
 
 describe("the slug is a diagnostic label, not a visual input", () => {
   it("compiling the same theme under two ids yields identical channels", () => {
-    const theme = FIRST_PARTY_THEMES.evnto;
-    const renamed = { ...theme, id: "rottay" } as Theme;
-    const a = compileTheme(resolveTheme(theme), modern);
-    const b = compileTheme(resolveTheme(renamed), modern);
+    const a = compileTheme(resolveTheme(staticThemeIntent("evnto")), modern);
+    const b = compileTheme(
+      resolveTheme(staticThemeIntent("evnto", "rottay")),
+      modern
+    );
 
     expect(b.cssVariables).toEqual(a.cssVariables);
     expect(b.modeBlocks).toEqual(a.modeBlocks);
@@ -157,8 +188,7 @@ describe("the slug is a diagnostic label, not a visual input", () => {
   });
 
   it("only the emitted SELECTOR moves with the slug", () => {
-    const theme = FIRST_PARTY_THEMES.evnto;
-    const compiled = compileTheme(resolveTheme(theme), modern);
+    const compiled = compileTheme(resolveTheme(staticThemeIntent("evnto")), modern);
     expect(emitThemeCss(compiled, firstPartyScope("evnto"))).not.toBe(
       emitThemeCss(compiled, firstPartyScope("rottay"))
     );
@@ -221,6 +251,10 @@ describe("channel minting and CSS text have declared owners", () => {
   const ENGINE_ADAPTERS = ["classic", "modern", "rustic"].map(
     (engine) => `${ADAPTER_ROOT}/${engine}/index.ts`,
   );
+  // The v1 override-token allowlist maps channel NAMES to theme keypaths as a
+  // lookup table; it reads channels as data and mints none.
+  const INGRESS_DOCUMENT_PATCH =
+    "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts";
 
   const productionSources = (relative: string): string[] => {
     const out: string[] = [];
@@ -247,6 +281,16 @@ describe("channel minting and CSS text have declared owners", () => {
       .replace(/"(?:[^"\\]|\\.)*"/g, '""')
       .replace(/'(?:[^'\\]|\\.)*'/g, "''")
       .replace(/`(?:[^`\\]|\\.)*`/g, "``");
+
+  /**
+   * Blank a regex literal anchored on a channel name, e.g.
+   * `/^--ds-radius-(sm|md|lg|xl)$/`. Such a literal MATCHES an incoming token
+   * name, so the name is data exactly as a table key is; a matcher can read a
+   * channel but never mint one. Anchored on the literal opening `/^--ds-` and
+   * stopped at the closing `/`, so it can never swallow surrounding code.
+   */
+  const withoutChannelMatchers = (source: string): string =>
+    source.replace(/\/\^--ds-[^/\n]*\/[dgimsuvy]*/g, "/ /");
 
   const MINTS = /vars\[["']--ds-[a-z0-9-]+["']\]|cssVariables\[["']--ds-[a-z0-9-]+["']\]/;
   const rel = (file: string) => file.slice(SRC_ROOT.length + 1);
@@ -290,14 +334,17 @@ describe("channel minting and CSS text have declared owners", () => {
       .filter((file) => /--ds-[a-z0-9-]+/.test(withoutComments(readFileSync(file, "utf8"))))
       .map(rel);
     // Exact, not "at least": an adapter states the channels its posture cites
-    // and the values its baseline carries; any other owner naming one is new.
-    expect(naming.sort()).toEqual([...ENGINE_ADAPTERS].sort());
+    // and the values its baseline carries, and the document-patch ingress
+    // states the override tokens it accepts; any other owner naming one is new.
+    expect(naming.sort()).toEqual([...ENGINE_ADAPTERS, INGRESS_DOCUMENT_PATCH].sort());
 
-    // A channel name is DATA in an adapter — a table entry, an evidence string
-    // or a value — never an identifier the adapter computes with.
+    // A channel name is DATA — a table entry, a name matcher, an evidence
+    // string or a value — never an identifier the owner computes with.
     for (const file of naming) {
-      const code = withoutStrings(withoutComments(readFileSync(join(SRC_ROOT, file), "utf8")));
-      expect(code, `${file} names a channel outside a string literal`).not.toMatch(/--ds-/);
+      const code = withoutChannelMatchers(
+        withoutStrings(withoutComments(readFileSync(join(SRC_ROOT, file), "utf8"))),
+      );
+      expect(code, `${file} names a channel outside a literal`).not.toMatch(/--ds-/);
     }
 
     const classic = withoutComments(readFileSync(join(SRC_ROOT, CLASSIC_ADAPTER), "utf8"));
@@ -330,6 +377,26 @@ describe("channel minting and CSS text have declared owners", () => {
   it("MUTANT: a channel name hidden in a comment is NOT a minting finding", () => {
     const planted = `// vars['--ds-planted'] = 'red';\n/* cssVariables["--ds-x"] = "y" */\n`;
     expect(MINTS.test(withoutComments(planted))).toBe(false);
+  });
+
+  it("MUTANT: a channel named outside an anchored matcher is still caught", () => {
+    // Only a literal opening `/^--ds-` is a declared name matcher. A channel
+    // reached any other way stays a finding.
+    for (const planted of [
+      `const t = /prefix--ds-radius-(sm|md)/.exec(k);\n`,
+      `const t = /^ --ds-radius-(sm|md)$/.exec(k);\n`,
+      `<div style={{ width: var(--ds-space-4) }} />;\n`,
+    ]) {
+      const code = withoutChannelMatchers(withoutStrings(withoutComments(planted)));
+      expect(code, planted).toMatch(/--ds-/);
+    }
+  });
+
+  it("MUTANT: the channel matcher strip blanks only the matcher, not its neighbours", () => {
+    const planted = `const t = /^--ds-radius-(sm|md)$/.exec(k);\nvars["--ds-planted"] = y;\n`;
+    expect(withoutChannelMatchers(planted)).toContain('vars["--ds-planted"] = y;');
+    expect(withoutChannelMatchers(planted)).not.toContain("radius-(sm|md)");
+    expect(MINTS.test(withoutComments(withoutChannelMatchers(planted)))).toBe(true);
   });
 
   it("MUTANT: classic writing a channel instead of reading one is caught", () => {
@@ -833,16 +900,20 @@ describe("the two transitional re-exports are consumer-exact", () => {
 describe("origin decides authorship at the compiler", () => {
   const baseline = FIRST_PARTY_THEMES.bithire;
   const patchOf = () =>
-    tenantPatchOf(DIVERGENCE_EDITORIAL_DOCUMENT, DIVERGENCE_EDITORIAL_IDENTITY);
+    tenantPatchOf("bithire", DIVERGENCE_EDITORIAL_DOCUMENT, DIVERGENCE_EDITORIAL_IDENTITY);
+  const withOrigin = (origin: ThemeIntentOrigin, patch: ThemePatch) =>
+    compileTheme(
+      resolveTheme({ vertical: "bithire", slug: "bithire", origin, patch }),
+      modern
+    );
 
   it("a static-vertical intent compiles as the merged theme with no tenant at all", () => {
     const patch = patchOf();
-    const merged = mergeThemePatches(baseline, patch);
-    const viaIntent = compileTheme(
-      resolveTheme(baseline, { origin: "static-vertical", patch }),
+    const viaIntent = withOrigin("static-vertical", patch);
+    const asPlainTheme = compileTheme(
+      { theme: mergeThemePatches(baseline, patch), provenance: EMPTY_PROVENANCE },
       modern
     );
-    const asPlainTheme = compileTheme(resolveTheme(merged), modern);
 
     expect(viaIntent.cssVariables).toEqual(asPlainTheme.cssVariables);
     expect(viaIntent.modeBlocks).toEqual(asPlainTheme.modeBlocks);
@@ -850,27 +921,15 @@ describe("origin decides authorship at the compiler", () => {
 
   it("the same patch as a static layer and as a tenant document are not the same compile", () => {
     const patch = patchOf();
-    const asStatic = compileTheme(
-      resolveTheme(baseline, { origin: "static-vertical", patch }),
-      modern
+    expect(withOrigin("tenant-document", patch).cssVariables).not.toEqual(
+      withOrigin("static-vertical", patch).cssVariables
     );
-    const asTenant = compileTheme(
-      resolveTheme(baseline, { origin: "tenant-document", patch }),
-      modern
-    );
-    expect(asTenant.cssVariables).not.toEqual(asStatic.cssVariables);
   });
 
   it("a preview compiles exactly as the persisted tenant document", () => {
     const patch = patchOf();
-    const preview = compileTheme(
-      resolveTheme(baseline, { origin: "preview", patch }),
-      modern
-    );
-    const persisted = compileTheme(
-      resolveTheme(baseline, { origin: "tenant-document", patch }),
-      modern
-    );
+    const preview = withOrigin("preview", patch);
+    const persisted = withOrigin("tenant-document", patch);
     expect(preview.cssVariables).toEqual(persisted.cssVariables);
     expect(preview.modeBlocks).toEqual(persisted.modeBlocks);
   });
@@ -881,10 +940,16 @@ describe("provenance is a snapshot the caller cannot reach back into", () => {
 
   it("mutating the patch afterwards moves no compiled channel", () => {
     const patch = tenantPatchOf(
+      "bithire",
       DIVERGENCE_EDITORIAL_DOCUMENT,
       DIVERGENCE_EDITORIAL_IDENTITY
     );
-    const { provenance } = resolveTheme(baseline, { origin: "tenant-document", patch });
+    const { provenance } = resolveTheme({
+      vertical: "bithire",
+      slug: "bithire",
+      origin: "tenant-document",
+      patch,
+    });
     const before = compileTheme({ theme: baseline, provenance }, modern);
 
     const raw = patch as unknown as Record<string, Record<string, unknown>>;
@@ -904,8 +969,17 @@ describe("provenance is a snapshot the caller cannot reach back into", () => {
   });
 
   it("mutation attempted through the returned provenance throws and changes nothing", () => {
-    const patch = tenantPatchOf(DIVERGENCE_SOBER_DOCUMENT, DIVERGENCE_SOBER_IDENTITY);
-    const { provenance } = resolveTheme(baseline, { origin: "tenant-document", patch });
+    const patch = tenantPatchOf(
+      "bithire",
+      DIVERGENCE_SOBER_DOCUMENT,
+      DIVERGENCE_SOBER_IDENTITY
+    );
+    const { provenance } = resolveTheme({
+      vertical: "bithire",
+      slug: "bithire",
+      origin: "tenant-document",
+      patch,
+    });
     const before = compileTheme({ theme: baseline, provenance }, modern);
 
     const reach = (value: unknown) => value as Record<string, unknown>;

@@ -102,6 +102,7 @@ export default function ThemeBuilderPage() {
         }}
       >
         <PatternBrandStudio
+          vertical="bithire"
           value={theme}
           onChange={setTheme}
           galleries={() => (

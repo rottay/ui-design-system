@@ -17,6 +17,10 @@ import RusticTenantPreview from '../customization/tenant-preview/engines/rustic'
 
 const TENANT_CONFIG = {
   slug: 'ck-h1-preview',
+  // A draft is a patch over the vertical it belongs to; `bithire` because this
+  // fixture is light-default with a `modes.dark` overlay, and only a
+  // light-default vertical can accept a dark overlay.
+  vertical: 'bithire',
   name: 'customization anatomy Preview',
   primaryColor: '#3b82f6',
   secondaryColor: '#10b981',
@@ -176,7 +180,7 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
   it('preserves instance scoping while exposing the full and compact state trees', async () => {
     const { container, rerender, unmount } = render(
       <StudioHarness engine="modern">
-        <BrandingPreviewSandbox appearance={SANDBOX_APPEARANCE} />
+        <BrandingPreviewSandbox vertical="bithire" appearance={SANDBOX_APPEARANCE} />
       </StudioHarness>,
     );
 
@@ -234,6 +238,7 @@ describe('PatternBrandStudio customization anatomy anatomy and behavior', () => 
       const { container, unmount } = render(
         <StudioHarness engine={engine}>
           <PatternBrandStudio
+            vertical="bithire"
             value={STUDIO_THEME}
             title={`customization anatomy ${engine} host probe`}
             description="Host forwarding probe"
@@ -280,7 +285,7 @@ describe('PatternBrandStudio customization anatomy anatomy and behavior', () => 
     const onChange = vi.fn();
     const { container, unmount } = render(
       <StudioHarness>
-        <PatternBrandStudio value={STUDIO_THEME} onChange={onChange} title="customization anatomy Brand Studio" />
+        <PatternBrandStudio vertical="bithire" value={STUDIO_THEME} onChange={onChange} title="customization anatomy Brand Studio" />
       </StudioHarness>
     );
 

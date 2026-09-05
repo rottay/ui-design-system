@@ -31,8 +31,8 @@ const defaultThemeCss = source('src/foundation/tokens/css/foundation/themes/defa
 const useTokensSource = source(
   'src/infrastructure/runtime/theming/composition/react/tokens/index.ts',
 );
-const appearanceSource = source(
-  'src/infrastructure/compilers/kernel/runtime/appearance/index.ts',
+const loweringVariablesSource = source(
+  'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
 );
 const appearancePostureSource = source(
   'src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts',
@@ -156,10 +156,10 @@ describe('density authority contract', () => {
     );
   });
 
-  it('requires useTokens and appearance to consume the canonical resolver', () => {
+  it('requires useTokens and the theme lowering to consume the canonical resolver', () => {
     expect(useTokensSource).toContain('resolveEffectiveDensityScale');
     expect(useTokensSource).not.toContain('appearanceDensityFactor');
-    expect(appearanceSource).toContain('appearancePostureToVariables');
+    expect(loweringVariablesSource).toContain('appearancePostureToVariables');
     expect(appearancePostureSource).toContain('resolveDensityModeFactor');
     expect(appearancePostureSource).toContain('DENSITY_MODE_FACTOR_VARIABLE');
   });

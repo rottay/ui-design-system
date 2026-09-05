@@ -18,8 +18,8 @@
     "cssEdges": "6be5af3f23544885f9550ca1547edeafd8482ddef1cfed024c5c08ca71d5c9a7",
     "cascadeRoots": "a6dfd7ef4834561240b867c7b459f4d067fdc248a4417b27277586fe36e31abc",
     "rootCatalog": "b0ac4af134c352f9ba00d8d8bae81977c707ceb2ee7767740a8611e9d9cc9287",
-    "srcTsx": "e9f1227ed16b84b2c5140dcf912ef6637835221221f937262eb654c895314c87",
-    "srcCompilers": "6c9adeb890251288ff49ceda682706ccb2819706792315ea9d52e315a591cbaf",
+    "srcTsx": "d4c4e0939171cfdee289d59a7d1dfa0cfbe886179d4bf824db11d4aaf011d41b",
+    "srcCompilers": "cf5bca466a35f2af70c93d5e8de13f88f94d580ce85b28d1a3753e760532dd8f",
     "artifacts": "0e21296429c58ad2699f36f84f8d96fdeb1625a3f55e762752e2381a07792c42"
   },
   "stats": {
@@ -95,8 +95,8 @@
       "stampSites": 513
     },
     "measuredCensus": {
-      "scannedFiles": 1753,
-      "excludedFiles": 1645,
+      "scannedFiles": 1758,
+      "excludedFiles": 1643,
       "styleSinks": 3291,
       "stampSites": 312,
       "distinctCustomProperties": 202,
@@ -108,13 +108,13 @@
     "censusDiff": {
       "scannedFiles": {
         "authored": 1740,
-        "measured": 1753,
-        "delta": 13
+        "measured": 1758,
+        "delta": 18
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 1645,
-        "delta": -19
+        "measured": 1643,
+        "delta": -21
       },
       "styleSinks": {
         "authored": 3283,
@@ -150,7 +150,7 @@
     "censusReconciliation": {
       "method": "identity, not tolerance. This module publishes the full member lists below; the authored census published COUNTS ONLY and no member list, so the two cannot be reconciled member by member from its side. The residual is therefore expressed as unknownProvenance rows with file and symbol, never as a numeric tolerance.",
       "authoredPublishesMemberLists": false,
-      "scannedFiles": 1753,
+      "scannedFiles": 1758,
       "governedChannels": 163,
       "unresolvedSites": 0
     },
@@ -1890,7 +1890,6 @@
       "packages/core/src/index.ts",
       "packages/core/src/infrastructure/compilers/composition/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
-      "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/version/index.ts",
       "packages/core/src/infrastructure/compilers/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
@@ -1908,13 +1907,12 @@
       "packages/core/src/infrastructure/compilers/kernel/foundation/motion/spring-easing/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/foundation/schemas/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts",
-      "packages/core/src/infrastructure/compilers/kernel/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts",
-      "packages/core/src/infrastructure/compilers/kernel/runtime/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/tenant-css/index.ts",
-      "packages/core/src/infrastructure/compilers/runtime/theme/facade/engine-visual/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/facade/presentation/engine-visual/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/facade/runtime/compile/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/facade/admission/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry/index.ts",
@@ -1924,6 +1922,13 @@
       "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/draft-patch/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/engine/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/document/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/preview/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/static/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/floors/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground/index.ts",

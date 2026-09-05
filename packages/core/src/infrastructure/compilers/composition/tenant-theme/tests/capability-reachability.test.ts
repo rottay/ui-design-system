@@ -215,7 +215,7 @@ const ACTIVE_CAPABILITY_PROBES = {
     );
     // `error` es el caso que separa "el override gana el canal" de "el override
     // gana la SEMILLA", y es lo segundo: `migrateTokenOverride` mapea
-    // `--ds-color-error` -> `palette.errorColor` (migrate-v1/index.ts:129), de
+    // `--ds-color-error` -> `palette.errorColor` (the document-patch migration), de
     // modo que la rampa ENTERA se re-deriva desde el override y no desde la
     // semilla General. Se pinea en las dos direcciones -- coincide con la
     // derivacion desde el override y NO coincide con la derivacion desde la

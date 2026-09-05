@@ -21,15 +21,15 @@ import {
   brandThemeToTenantAppearanceAdvanced,
   brandThemeToTenantAppearance,
 } from '../runtime/file-export';
+import { FIRST_PARTY_VERTICAL_SLUGS } from '@/foundation/contracts/kernel/verticals';
 import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
-import { compileTheme, resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
-import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
-import { resolveTheme } from '@/infrastructure/compilers/runtime/theme/runtime/resolution';
 import {
-  liftAuthoredTheme,
-  readGovernedTheme,
-} from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
+  compileThemeIntent,
+  draftPreviewThemeIntent,
+  staticThemeIntent,
+} from '@/infrastructure/compilers/runtime/theme';
+import { readGovernedTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-test',
@@ -53,6 +53,7 @@ function Harness({ children }: { children: React.ReactNode }): React.ReactElemen
 const BARE_SURFACE: BrandStudioSurfaceConfig = {
   key: 'light',
   baseTheme: 'light',
+  vertical: 'bithire',
   tenantSlug: 'brand-studio-test',
 };
 
@@ -174,8 +175,8 @@ describe('PatternBrandStudio contrast validation', () => {
 
   it('reports failing color pairs for hostile input on both grounds', () => {
     const surfaces: BrandStudioSurfaceConfig[] = [
-      { key: 'dark', baseTheme: 'dark', tenantSlug: 'd' },
-      { key: 'light', baseTheme: 'light', tenantSlug: 'l' },
+      { key: 'dark', baseTheme: 'dark', vertical: 'bithire', tenantSlug: 'd' },
+      { key: 'light', baseTheme: 'light', vertical: 'bithire', tenantSlug: 'l' },
     ];
     for (const surface of surfaces) {
       const report = evaluateBrandThemeContrast(applyHostileBrandTheme(RICH_THEME), surface);
@@ -252,7 +253,7 @@ describe('PatternBrandStudio invokes contrast validation on edit', () => {
   it('surfaces the text-on-surfaceCard failure only after the value degrades', async () => {
     const { rerender } = render(
       <Harness>
-        <PatternBrandStudio value={HIGH_CONTRAST_THEME} title="Brand Studio Under Test" />
+        <PatternBrandStudio vertical="bithire" value={HIGH_CONTRAST_THEME} title="Brand Studio Under Test" />
       </Harness>,
     );
 
@@ -262,7 +263,7 @@ describe('PatternBrandStudio invokes contrast validation on edit', () => {
 
     rerender(
       <Harness>
-        <PatternBrandStudio value={LOW_CONTRAST_THEME} title="Brand Studio Under Test" />
+        <PatternBrandStudio vertical="bithire" value={LOW_CONTRAST_THEME} title="Brand Studio Under Test" />
       </Harness>,
     );
 
@@ -280,11 +281,13 @@ describe('PatternBrandStudio invokes contrast validation on edit', () => {
 const DARK_SURFACE_UNDER_TEST: BrandStudioSurfaceConfig = {
   key: 'dark',
   baseTheme: 'dark',
+  vertical: 'bithire',
   tenantSlug: 'repaint-test-dark',
 };
 const LIGHT_SURFACE_UNDER_TEST: BrandStudioSurfaceConfig = {
   key: 'light',
   baseTheme: 'light',
+  vertical: 'bithire',
   tenantSlug: 'repaint-test-light',
 };
 
@@ -331,7 +334,7 @@ describe('PatternBrandStudio live preview repaint', () => {
 
     const { rerender } = render(
       <Harness>
-        <PatternBrandStudio value={initial} title="Repaint Probe" />
+        <PatternBrandStudio vertical="bithire" value={initial} title="Repaint Probe" />
       </Harness>,
     );
     await screen.findByText('Repaint Probe');
@@ -346,7 +349,7 @@ describe('PatternBrandStudio live preview repaint', () => {
 
     rerender(
       <Harness>
-        <PatternBrandStudio value={edited} title="Repaint Probe" />
+        <PatternBrandStudio vertical="bithire" value={edited} title="Repaint Probe" />
       </Harness>,
     );
 
@@ -393,9 +396,18 @@ describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () 
   });
 
   it('resolves the OTHER direction too: a dark-default theme drives --ds-color-primary from modes.light.palette on the light surface only', () => {
-    // platform/rottay's real shape: appearance.defaultMode 'dark', with a
-    // `modes.light` overlay carrying the light variant. The base palette IS
-    // the dark surface's value; only the light surface pulls from the overlay.
+    // rottay's real shape: appearance.defaultMode 'dark', with a `modes.light`
+    // overlay carrying the light variant. The base palette IS the dark
+    // surface's value; only the light surface pulls from the overlay.
+    //
+    // Previewed over ROTTAY, and it has to be: a draft is a patch, so a
+    // dark-default draft over a light-default vertical would leave the merged
+    // theme claiming `dark` while still carrying the vertical's own
+    // `modes.dark` overlay -- which the overlay law refuses by name.
+    const darkVerticalSurfaces = {
+      dark: { ...DARK_SURFACE_UNDER_TEST, vertical: 'rottay' } as BrandStudioSurfaceConfig,
+      light: { ...LIGHT_SURFACE_UNDER_TEST, vertical: 'rottay' } as BrandStudioSurfaceConfig,
+    };
     const theme: BrandTheme = {
       id: 'p',
       name: 'P',
@@ -404,8 +416,8 @@ describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () 
       modes: { light: { palette: { primaryColor: '#f4f4f0' } } },
     };
 
-    const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST).vars;
-    const light = buildSurfaceVariables(theme, LIGHT_SURFACE_UNDER_TEST).vars;
+    const dark = buildSurfaceVariables(theme, darkVerticalSurfaces.dark).vars;
+    const light = buildSurfaceVariables(theme, darkVerticalSurfaces.light).vars;
 
     expect(dark['--ds-color-primary']).toBe('#0b0f1a');
     expect(light['--ds-color-primary']).toBe('#f4f4f0');
@@ -433,7 +445,14 @@ describe('PatternBrandStudio contrast check grades the theme, not the scaffold',
       palette: { primaryColor: '#4f46e5' },
       chrome: { cardComponent: { bg: '#111111', color: '#f2f2f2', colorMuted: '#bbbbbb' } },
     };
-    const report = evaluateBrandThemeContrast(declared, DARK_SURFACE_UNDER_TEST);
+    // Graded on the ground that IS the vertical's own default mode, so no mode
+    // overlay of the vertical's sits above the draft's base chrome. On the
+    // other ground the vertical's overlay legitimately wins -- which is what
+    // the tenant would see, and therefore what the studio must show.
+    const report = evaluateBrandThemeContrast(declared, {
+      ...DARK_SURFACE_UNDER_TEST,
+      vertical: 'rottay',
+    });
 
     expect(report.colors.surfaceCard).toBe('#111111');
     expect(report.colors.text).toBe('#f2f2f2');
@@ -475,6 +494,7 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
     render(
       <Harness>
         <PatternBrandStudio
+          vertical="bithire"
           value={theme}
           title="Ground Probe"
           lightSurface={{ groundVars: HOSTILE_GROUND } as unknown as Partial<BrandStudioSurfaceConfig>}
@@ -525,6 +545,7 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
     const asLight = buildSurfaceVariables(theme, {
       key: 'dark',
       baseTheme: 'light',
+      vertical: 'bithire',
       tenantSlug: 'ground-select',
     }).vars;
     expect(asLight['--ds-color-bg-primary']).toBe(DEFAULT_LIGHT_GROUND['--ds-color-bg-primary']);
@@ -590,7 +611,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
     it(`opens no foreign rule from ${label}`, async () => {
       render(
         <Harness>
-          <PatternBrandStudio value={theme} title={`Escape ${label}`} />
+          <PatternBrandStudio vertical="bithire" value={theme} title={`Escape ${label}`} />
         </Harness>,
       );
       await screen.findByText(`Escape ${label}`);
@@ -609,6 +630,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
         const { vars, declaredKeys } = buildSurfaceVariables(theme, {
           key: baseTheme,
           baseTheme,
+          vertical: 'bithire',
           tenantSlug: 'escape-probe',
         });
         expect(Object.values(vars)).not.toContain(THEME_ESCAPE);
@@ -631,7 +653,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
 
     render(
       <Harness>
-        <PatternBrandStudio value={normal} title="Normal Paint" />
+        <PatternBrandStudio vertical="bithire" value={normal} title="Normal Paint" />
       </Harness>,
     );
     await screen.findByText('Normal Paint');
@@ -649,23 +671,46 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
     }
   });
 
-  it('exactness: the studio drops no channel of the first-party corpus', () => {
-    for (const [slug, theme] of Object.entries(FIRST_PARTY_THEMES)) {
-      const brand = readGovernedTheme(theme);
-      const baseTheme = brand.appearance?.defaultMode ?? 'light';
-      const tenantSlug = `exactness-${slug}`;
-      const { declaredKeys } = buildSurfaceVariables(brand, {
+  it('exactness: the studio publishes every channel the draft actually moves', () => {
+    // Every first-party corpus, edited the way the studio edits: the vertical's
+    // own theme with a handful of leaves moved. Cross-vertical drafting is not
+    // the fixture here because a draft is a PATCH -- a dark-default draft over
+    // a light-default vertical leaves the merged theme carrying that vertical's
+    // `modes.dark` overlay against its own declared default, which the overlay
+    // law refuses. The property under test is exactness of publication, and a
+    // same-vertical edit states it without that confound.
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      const authored = readGovernedTheme(FIRST_PARTY_THEMES[vertical]);
+      const brand: BrandTheme = {
+        ...authored,
+        palette: { ...authored.palette, primaryColor: '#FE01DC', accentColor: '#01FE7A' },
+        typography: { ...authored.typography, scale: 1.125 },
+        surfaces: { ...authored.surfaces, radiusScale: 1.4 },
+      };
+      const baseTheme = authored.appearance?.defaultMode ?? 'light';
+      const tenantSlug = `exactness-${vertical}`;
+      const surface: BrandStudioSurfaceConfig = {
         key: baseTheme,
         baseTheme,
+        vertical,
         tenantSlug,
-      });
-      const compiled = compileTheme(
-        resolveTheme({ ...liftAuthoredTheme(brand), id: tenantSlug }),
-        resolveAdapter(PRIMARY_ENGINE),
-      );
-      const present = Object.entries(compiled.cssVariables).filter(([, v]) => v != null);
-      expect(present.length, slug).toBeGreaterThan(0);
-      expect(declaredKeys.size, slug).toBe(present.length);
+      };
+      const { declaredKeys } = buildSurfaceVariables(brand, surface);
+
+      // Recomputed independently from the same door: the studio's published
+      // key set must be exactly the channels the draft moves off the baseline.
+      const proposed = compileThemeIntent(
+        draftPreviewThemeIntent({ vertical, slug: tenantSlug, draft: brand }),
+      ).compiled;
+      const untouched = compileThemeIntent(
+        staticThemeIntent(vertical, tenantSlug),
+      ).compiled;
+      const moved = Object.entries(proposed.cssVariables)
+        .filter(([name, value]) => untouched.cssVariables[name] !== value)
+        .map(([name]) => name);
+
+      expect(moved.length, vertical).toBeGreaterThan(0);
+      expect([...declaredKeys].sort(), vertical).toEqual(moved.sort());
     }
   });
 });

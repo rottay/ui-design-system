@@ -47,6 +47,12 @@ import {
 } from '../index';
 import { channelStates, rootPropertyDeclarations } from './support';
 import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
+import { EMPTY_PROVENANCE } from '@/foundation/contracts/composition/tenants/themes/resolved';
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
+import {
+  compileTheme,
+  resolveAdapter,
+} from '@/infrastructure/compilers/runtime/theme';
 
 /**
  * The ink channel, spelled as a literal ON PURPOSE.
@@ -73,14 +79,38 @@ function themeFor(spec: FirstPartyArtifactSpec): BrandTheme {
   return theme;
 }
 
-function render(spec: FirstPartyArtifactSpec, brandTheme = themeFor(spec)): string {
+function render(spec: FirstPartyArtifactSpec): string {
   return renderFirstPartyArtifact({
     spec,
-    // The wrap-only lift, so a canary theme this suite builds reaches the
-    // renderer exactly as authored instead of being replaced by the roster's.
-    theme: liftAuthoredTheme(brandTheme),
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   }).css;
+}
+
+/**
+ * The same artifact, compiled from a theme this suite authored.
+ *
+ * `renderFirstPartyArtifact` no longer accepts a theme: the intent names the
+ * vertical and the door reads the roster, which is the whole point of the
+ * single door. A canary is therefore compiled here and handed to the artifact
+ * COMPOSER, so the suite still exercises the real format while the productive
+ * entry keeps exactly one baseline authority.
+ */
+function renderCanary(spec: FirstPartyArtifactSpec, brandTheme: BrandTheme): string {
+  const compiled = compileTheme(
+    { theme: liftAuthoredTheme(brandTheme), provenance: EMPTY_PROVENANCE },
+    resolveAdapter(PRIMARY_ENGINE),
+  );
+  return renderVerticalArtifact({
+    tenantSlug: spec.slug,
+    verticalKey: spec.verticalKey,
+    authoredThemePath: spec.authoredThemePath,
+    displayName: spec.displayName,
+    selector: spec.selector,
+    compiledCssVariables: compiled.cssVariables,
+    colorScheme: compiled.colorScheme,
+    modeBlocks: compiled.modeBlocks,
+    regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
+  });
 }
 
 describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
@@ -203,7 +233,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
 
       // (ii) the artifact points at that channel by NAME and never inlines its
       // value — so moving the seed moves the paint without moving this line.
-      const css = render(spec, canaryTheme);
+      const css = renderCanary(spec, canaryTheme);
       const inks = rootPropertyDeclarations(css, 'color');
       expect(inks).toHaveLength(1);
       expect(inks[0].value).toBe(`var(${INK_CHANNEL})`);

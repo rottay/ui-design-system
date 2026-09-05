@@ -50,8 +50,24 @@
 import { describe, expect, it } from "vitest";
 
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { TENANT_CAPABILITY_REGISTRY } from "@/foundation/contracts/composition/tenants/capabilities";
+import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
+import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presentation/expressive-profiles";
+import { buttonStyleRadius } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
+import {
+  FIRST_PARTY_THEMES,
+} from "@/foundation/tokens/ts/presentation/brand-themes";
+import {
+  compileThemeIntent,
+  documentThemeIntent,
+  draftPreviewThemeIntent,
+  migrateV1,
+  previewThemeIntent,
+  staticThemeIntent,
+} from "@/infrastructure/compilers/runtime/theme";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
 import {
@@ -474,5 +490,418 @@ describe("STATIC/DB VOCABULARY · drill", () => {
     // The baseline is zero, so the plant is the ENTIRE difference — the drill
     // measures itself and not ambient divergence.
     expect(dbOnly).toEqual([`${victim}-db`]);
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* TRANSPORT EQUALITY · one control, two transports, one compile               */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The vocabulary law above asks whether the two paths speak the same language.
+ * This block asks the harder question C4 exists to answer: for ONE control set
+ * to ONE value, do the two productive doors produce the SAME channels?
+ *
+ * Both arms are tenant-authored, so both carry a tenant floor and lower the
+ * tenant posture last. The only structural difference left is the transport:
+ * a `TenantThemeDocument` through `compileTenantThemeConfig`, versus a
+ * `BrandTheme` draft through `draftPreviewThemeIntent`. Anything that differs
+ * is a transport artefact, and every one of them has to be named here rather
+ * than absorbed.
+ *
+ * The denominator is the registry: every ACTIVE `standard` row must have a case
+ * below, so a control added without a transport case reddens this file.
+ */
+interface TransportCase {
+  /** The `appearance.general` fragment a customer document would carry. */
+  readonly general: Record<string, unknown>;
+  /** The same intent expressed in the static authoring language. */
+  readonly draft: Partial<BrandTheme>;
+}
+
+/**
+ * Placeholders resolved per vertical, so one case table can state one intent
+ * for three products.
+ *
+ * `__DEFAULT_MODE__` is the vertical's own body mode; `__SEED__` is a primary
+ * that clears the governed APCA floor against that mode's ground. A single
+ * literal cannot: a seed readable on a light canvas is unreadable on a dark
+ * one, and the DB door refuses it -- correctly, and before this test can
+ * compare anything.
+ */
+function resolvePlaceholders<T>(value: T, defaultMode: "light" | "dark"): T {
+  const seed = defaultMode === "dark" ? "#8FD3FF" : "#1D4ED8";
+  return JSON.parse(
+    JSON.stringify(value)
+      .replace(/__DEFAULT_MODE__/g, defaultMode)
+      .replace(/__SEED__/g, seed)
+  ) as T;
+}
+
+/**
+ * The one control whose two doors legitimately declare different channel sets.
+ *
+ * A named difference is a superset claim, never a licence: the DB door must
+ * still declare every channel the static door does, value for value.
+ */
+const NAMED_TRANSPORT_DIFFERENCES: Readonly<Record<string, string>> = {
+  "experience.profile":
+    "the DB door expands the selected profile's field defaults into the document before migrating it, so the profile arrives as an id plus the keypaths it implies; the static draft carries the id alone and the lowering expands it. One selection, two expansion points -- unifying them is the next packet.",
+};
+
+const TRANSPORT_CASES: Readonly<Record<string, TransportCase>> = {
+  "palette.seeds": {
+    // `backgroundMode` names WHICH block a seed is authored for. Absent, the
+    // migration defaults to `light`, which on a dark-default vertical means
+    // `modes.light.palette` -- a different statement from the base palette the
+    // static language writes. Stated explicitly here so the two arms express
+    // the same intent rather than accidentally comparing two of them.
+    general: {
+      palette: {
+        backgroundMode: "__DEFAULT_MODE__",
+        primary: "__SEED__",
+        secondary: "#8C6D46",
+        accent: "#E2725B",
+      },
+    },
+    draft: {
+      palette: {
+        primaryColor: "__SEED__",
+        secondaryColor: "#8C6D46",
+        accentColor: "#E2725B",
+      },
+    },
+  },
+  "palette.status-seeds": {
+    general: {
+      palette: {
+        backgroundMode: "__DEFAULT_MODE__",
+        status: {
+          success: "#2E7D5B",
+          warning: "#B4761E",
+          error: "#B23B3B",
+          info: "#2F6B9A",
+        },
+      },
+    },
+    draft: {
+      palette: {
+        successColor: "#2E7D5B",
+        warningColor: "#B4761E",
+        errorColor: "#B23B3B",
+        infoColor: "#2F6B9A",
+      } as BrandTheme["palette"],
+    },
+  },
+  "typography.pairing": {
+    general: { typography: { typePairing: "editorial" } },
+    draft: { typography: { typePairing: "editorial" } },
+  },
+  "typography.families": {
+    general: {
+      typography: { fontFamilyBase: "Inter", fontFamilyHeading: "Inter Tight" },
+    },
+    draft: { typography: { fontFamilyBase: "Inter", fontFamilyHeading: "Inter Tight" } },
+  },
+  "typography.scale": {
+    general: { typography: { scale: 1.05 } },
+    draft: { typography: { scale: 1.05 } },
+  },
+  "shape.radius-scale": {
+    general: { shape: { radiusScale: 1.2 } },
+    draft: { surfaces: { radiusScale: 1.2 } },
+  },
+  "shape.button-style": {
+    general: { shape: { buttonStyle: "pill" } },
+    // The document language DERIVES the button geometry from the style word;
+    // the static language states both. Same intent, stated at two levels, so
+    // the static side spells the derivation out rather than being reported as
+    // a transport difference it is not.
+    draft: {
+      surfaces: { buttonStyle: "pill" },
+      chrome: { controls: { buttonGeometry: { radius: buttonStyleRadius("pill") } } },
+    },
+  },
+  "density.mode": {
+    general: { density: "compact" },
+    draft: { surfaces: { density: "compact" } },
+  },
+  "spacing.rhythm": {
+    general: { rhythm: "airy" },
+    draft: { surfaces: { rhythm: "airy" } },
+  },
+  "motion.dial": {
+    general: { motion: { intensity: 0.7, durationScale: 1.2 } },
+    draft: { motion: { intensity: 0.7, durationScale: 1.2 } },
+  },
+  "surfaces.elevation-posture": {
+    general: { surfaces: { elevation: "elevated" } },
+    draft: { surfaces: { elevation: "elevated" } },
+  },
+  "surfaces.effect-intensity": {
+    general: { surfaces: { effectIntensity: 0.6 } },
+    draft: { surfaces: { effectIntensity: 0.6 } as BrandTheme["surfaces"] },
+  },
+  "navigation.sidebar-tone": {
+    general: { navigation: { sidebarTone: "strong" } },
+    draft: { chrome: { sidebar: { tone: "strong" } } },
+  },
+  "experience.profile": {
+    // `management-editorial`, because no first-party theme selects it: a
+    // profile a vertical already carries would produce an empty delta on the
+    // static side and the case would assert nothing.
+    general: { experienceProfile: "rottay/management-editorial@1" },
+    draft: {
+      expressive: {
+        schemaVersion: EXPRESSIVE_PROFILE_SCHEMA_VERSION,
+        experienceProfile: "rottay/management-editorial@1",
+      },
+    },
+  },
+};
+
+const STANDARD_ACTIVE_CONTROLS = TENANT_CAPABILITY_REGISTRY.filter(
+  (control) => control.tier === "standard" && control.status === "active"
+).map((control) => control.id);
+
+/** The identity a persisted row carries into the DB door. */
+function identityFor(vertical: string, slug: string) {
+  return { tenantId: `id-${slug}`, slug, verticalKey: vertical, rowVersion: 1 };
+}
+
+/** The channels a compile moves off the untouched vertical, base block only. */
+function movedChannels(
+  proposed: Record<string, string>,
+  baseline: Record<string, string>
+): Record<string, string> {
+  const moved: Record<string, string> = {};
+  for (const [name, value] of Object.entries(proposed)) {
+    if (baseline[name] !== value) moved[name] = value;
+  }
+  return moved;
+}
+
+/** A mode's effective values: the base block with that mode's overlay applied. */
+function effectiveMode(
+  compiled: ThemeCompilation,
+  mode: "light" | "dark"
+): Record<string, string> {
+  const block = compiled.modeBlocks.find((entry) => entry.mode === mode);
+  return { ...compiled.cssVariables, ...(block?.cssVariables ?? {}) };
+}
+
+/**
+ * The modes a compile needs a delta for, projected exactly as the artifact
+ * projects them: a mode appears when its effective values differ from the
+ * baseline's effective values ALREADY corrected by the base delta.
+ *
+ * Replicated here rather than approximated by "the mode block moved", because
+ * those are different questions and comparing two different questions is how a
+ * parity test passes while the two arms disagree.
+ */
+function projectedModes(
+  compiled: ThemeCompilation,
+  baseline: ThemeCompilation,
+  baseDelta: Record<string, string>
+): ("light" | "dark")[] {
+  const modes = new Set<"light" | "dark">();
+  for (const block of compiled.modeBlocks) modes.add(block.mode);
+  for (const block of baseline.modeBlocks) modes.add(block.mode);
+  const out: ("light" | "dark")[] = [];
+  for (const mode of ["light", "dark"] as const) {
+    if (!modes.has(mode)) continue;
+    const expected = effectiveMode(compiled, mode);
+    const withBaseDelta = { ...effectiveMode(baseline, mode), ...baseDelta };
+    if (Object.keys(movedChannels(expected, withBaseDelta)).length > 0) out.push(mode);
+  }
+  return out;
+}
+
+describe("TRANSPORT EQUALITY · every Standard control has a case on both doors", () => {
+  it("the registry is the denominator: no active Standard row is unexercised", () => {
+    expect([...STANDARD_ACTIVE_CONTROLS].sort()).toEqual(
+      Object.keys(TRANSPORT_CASES).sort()
+    );
+  });
+
+  it("every named difference names a live control and states its reason", () => {
+    for (const [id, reason] of Object.entries(NAMED_TRANSPORT_DIFFERENCES)) {
+      expect(STANDARD_ACTIVE_CONTROLS, id).toContain(id);
+      expect(reason.length, id).toBeGreaterThan(40);
+    }
+  });
+});
+
+describe.each(FIRST_PARTY_VERTICAL_SLUGS)(
+  "TRANSPORT EQUALITY · %s",
+  (vertical) => {
+    const slug = `transport-${vertical}`;
+    const defaultMode = FIRST_PARTY_THEMES[vertical].appearance?.defaultMode ?? "light";
+
+    /** `__DEFAULT_MODE__` stands for "this vertical's own body mode". */
+    const documentOf = (general: Record<string, unknown>): TenantThemeDocument =>
+      resolvePlaceholders(
+        { schemaVersion: 1, mode: "simple", appearance: general },
+        defaultMode
+      ) as unknown as TenantThemeDocument;
+
+    const compileDocument = (general: Record<string, unknown>) =>
+      compileTenantThemeConfig(
+        hydrateTenantThemeConfig(documentOf(general), identityFor(vertical, slug))
+      );
+
+    /**
+     * The DB door's own footprint, independent of any control.
+     *
+     * `compileTenantThemeConfig` expands the vertical's experience-profile
+     * FIELD DEFAULTS into the document before migrating it, so a customer
+     * document arrives at the compiler carrying keypaths the customer never
+     * wrote. That expansion is the one structural difference left between the
+     * two transports, and an empty document isolates it: whatever it adds here
+     * is what it adds to every document, for every control.
+     */
+    const transportFootprint = Object.keys(compileDocument({}).variables);
+
+    /**
+     * The second transport artefact, measured rather than asserted away.
+     *
+     * `migrateV1` constructs ALL FOUR palette seed fields whenever a document
+     * names its `palette` group at all, so a customer who set only the status
+     * seeds still arrives claiming authorship of the primary seed -- and the
+     * seed derivations then run in tenant mode and re-derive every
+     * primary-dependent channel. The static language claims only what it
+     * states, so this widening is DB-only by construction.
+     *
+     * A document that names the palette group and nothing inside it isolates
+     * exactly that widening: no value changes, only the authorship claim.
+     */
+    const paletteWidening = Object.keys(
+      compileDocument({ palette: { backgroundMode: "__DEFAULT_MODE__" } }).variables
+    );
+
+    it("both transport artefacts are bounded and real", () => {
+      // Measured, not waived: a control-owned channel appearing in either of
+      // these would let a per-control assertion below pass on a difference it
+      // was written to catch, so both stay small and both stay stated.
+      expect(transportFootprint.length).toBeLessThan(40);
+      expect(paletteWidening.length).toBeLessThan(40);
+    });
+
+    for (const [control, transportCase] of Object.entries(TRANSPORT_CASES)) {
+      it(`${control}: the static door's channels are the DB door's, value for value`, () => {
+        const artifact = compileDocument(transportCase.general);
+        const intentCompiled = compileThemeIntent(
+          draftPreviewThemeIntent({
+            vertical,
+            slug,
+            draft: resolvePlaceholders(transportCase.draft, defaultMode) as BrandTheme,
+          })
+        ).compiled;
+        const untouched = compileThemeIntent(staticThemeIntent(vertical, slug)).compiled;
+        const intentMoved = movedChannels(
+          intentCompiled.cssVariables,
+          untouched.cssVariables
+        );
+
+        expect(Object.keys(intentMoved).length, control).toBeGreaterThan(0);
+        for (const [channel, value] of Object.entries(intentMoved)) {
+          expect(artifact.variables[channel], `${control} · ${channel}`).toBe(value);
+        }
+
+        // and the remainder is the transport's own footprint, never a channel
+        // the control reached on one door and not the other
+        const named = NAMED_TRANSPORT_DIFFERENCES[control];
+        if (named) {
+          expect(named.length).toBeGreaterThan(40);
+          return;
+        }
+        const dbOnly = Object.keys(artifact.variables).filter(
+          (channel) => !(channel in intentMoved)
+        );
+        const explained = new Set([...transportFootprint, ...paletteWidening]);
+        expect(dbOnly.filter((channel) => !explained.has(channel)), control).toEqual([]);
+      });
+
+      it(`${control}: the static door's projected modes are the DB door's`, () => {
+        const artifact = compileDocument(transportCase.general);
+        const intentCompiled = compileThemeIntent(
+          draftPreviewThemeIntent({
+            vertical,
+            slug,
+            draft: resolvePlaceholders(transportCase.draft, defaultMode) as BrandTheme,
+          })
+        ).compiled;
+        const untouched = compileThemeIntent(staticThemeIntent(vertical, slug)).compiled;
+        const baseDelta = movedChannels(
+          intentCompiled.cssVariables,
+          untouched.cssVariables
+        );
+        const staticModes = projectedModes(intentCompiled, untouched, baseDelta);
+        const dbModes = (artifact.modeDeltas ?? []).map((delta) => delta.mode);
+
+        for (const mode of staticModes) {
+          expect(dbModes, `${control} · ${mode}`).toContain(mode);
+        }
+      });
+    }
+  }
+);
+
+/* -------------------------------------------------------------------------- */
+/* PREVIEW/PUBLISH EQUALITY on a dark-default vertical                         */
+/* -------------------------------------------------------------------------- */
+
+describe("PREVIEW/PUBLISH · the preview door migrates with the baseline's own mode", () => {
+  // The sandbox used to migrate with a hardcoded `'light'` while the publish
+  // door used the baseline's `appearance.defaultMode`. On rottay, whose default
+  // is dark, that put the same authored seed in two different blocks: the
+  // preview repainted the dark canvas for a change the artifact wrote into the
+  // light one. One reader, one answer.
+  it("rottay is the dark-default vertical this case exists for", () => {
+    expect(FIRST_PARTY_THEMES.rottay.appearance?.defaultMode).toBe("dark");
+  });
+
+  it("a preview intent and a persisted document produce the identical patch", () => {
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { palette: { primary: "#123456" } },
+    } as unknown as TenantThemeDocument;
+
+    const preview = previewThemeIntent({
+      vertical: "rottay",
+      slug: "preview-publish",
+      document,
+    });
+    const persisted = documentThemeIntent({
+      vertical: "rottay",
+      slug: "preview-publish",
+      document,
+    });
+    expect(preview.patch).toEqual(persisted.patch);
+    // and it is the DARK-default routing, not the retired `'light'` literal
+    expect(preview.patch).toEqual(migrateV1(document, "dark").patch);
+    expect(preview.patch).not.toEqual(migrateV1(document, "light").patch);
+  });
+
+  it("the preview's compiled delta is the published artifact's delta", () => {
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { palette: { primary: "#123456" } },
+    } as unknown as TenantThemeDocument;
+    const slug = "preview-publish";
+
+    const artifact = compileTenantThemeConfig(
+      hydrateTenantThemeConfig(document, identityFor("rottay", slug))
+    );
+    const proposed = compileThemeIntent(
+      previewThemeIntent({ vertical: "rottay", slug, document })
+    ).compiled;
+    const untouched = compileThemeIntent(staticThemeIntent("rottay", slug)).compiled;
+
+    expect(movedChannels(proposed.cssVariables, untouched.cssVariables)).toEqual(
+      artifact.variables
+    );
   });
 });

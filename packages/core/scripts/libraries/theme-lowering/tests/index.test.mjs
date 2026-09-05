@@ -33,7 +33,6 @@ function harness() {
         experienceProfile: undefined,
       },
     }),
-    resolveTheme: (theme) => ({ theme, provenance: {} }),
     liftAuthoredTheme: (theme) => theme,
     resolveAdapter: (engine) => {
       resolvedEngines.push(engine);

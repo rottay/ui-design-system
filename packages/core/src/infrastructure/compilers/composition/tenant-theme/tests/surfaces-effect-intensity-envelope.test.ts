@@ -26,10 +26,10 @@
  *    so the envelope is a closed interval rather than a one-sided ceiling.
  *
  * The DB door under test is `compileTenantThemeConfig` and only that. The
- * retired lowerings (`compileAppearanceVariables`,
- * `appearanceGeneralToVariables`, ...) each still lower this field to a
- * plausible number, so binding one would go green while measuring a door no
- * customer theme travels through.
+ * compatibility appearance lowerings that used to sit beside it each lowered
+ * this field to a plausible number, so binding one would have gone green while
+ * measuring a door no customer theme travels through; they are retired at
+ * source now, and this comment records why the binding was ever a choice.
  */
 import { describe, expect, it } from 'vitest';
 

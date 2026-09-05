@@ -3,8 +3,8 @@
   "law": "decrece-solo, sin excepcion tacita. Jamas se re-ancla un hallazgo nuevo.",
   "counters": {
     "unassignedSlots": {
-      "value": 278,
-      "reason": "Reconciliacion exacta con los artefactos oficiales. Antes de este WIP el baseline ya sobrecontaba el arbol de HEAD en 11 unassigned, 6 grupos divergentes y 16 slots divergentes (baseline 297/242/1630 frente a artifacts HEAD 286/236/1614). El arbol actual retira exactamente 10 slotIds y agrega 0: ocho hojas Rottay de estado ahora derivadas desde semillas y dos hojas BitHire de Segmented sin lector. Contra los artifacts de HEAD, unassigned baja 286->278, grupos 236->235 y slots divergentes 1614->1609; no aparece ninguna decision nueva."
+      "value": 275,
+      "reason": "278 -> 275: mismo movimiento medido que el ancla del inventario de slots (ley L3: las dos anclas de unassigned son la misma cifra y bajan juntas). El lote C4 retiro la familia `engineBridge` del contrato Theme/BrandTheme; de sus 9 hojas autoradas retiradas (3 por vertical x rottay/bithire/evnto), 3 estaban sin domicilio -- los THEME.capabilities.engineBridge.note -- y 6 estaban en pro-expert. Medido contra artifacts/generated/manifest/cascade/slots/index.json contando las filas removidas por currentDomicile, no citado de prosa. Reconciliacion exacta con los artefactos oficiales. Antes de este WIP el baseline ya sobrecontaba el arbol de HEAD en 11 unassigned, 6 grupos divergentes y 16 slots divergentes (baseline 297/242/1630 frente a artifacts HEAD 286/236/1614). El arbol actual retira exactamente 10 slotIds y agrega 0: ocho hojas Rottay de estado ahora derivadas desde semillas y dos hojas BitHire de Segmented sin lector. Contra los artifacts de HEAD, unassigned baja 286->278, grupos 236->235 y slots divergentes 1614->1609; no aparece ninguna decision nueva."
     },
     "governorsNamingMissingAuthority": {
       "value": 10,

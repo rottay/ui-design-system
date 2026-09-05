@@ -131,6 +131,7 @@ describe("PatternBrandStudio tenant-theme preview composition", () => {
     const { container } = render(
       <Harness>
         <PatternBrandStudio
+          vertical="bithire"
           value={{
             id: "p",
             name: "Preview",
@@ -169,6 +170,7 @@ describe("PatternBrandStudio tenant-theme preview composition", () => {
     const { container } = render(
       <Harness>
         <PatternBrandStudio
+          vertical="bithire"
           value={{
             id: "p",
             name: "Preview",

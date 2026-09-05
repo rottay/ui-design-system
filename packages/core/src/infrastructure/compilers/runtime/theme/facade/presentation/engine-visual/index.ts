@@ -17,10 +17,8 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import type { EngineName } from "@/foundation/contracts/kernel/engine-identity";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
-import { compileTheme } from "../../runtime/lowering";
-import { resolveTheme } from "../../runtime/resolution";
-import { resolveAdapter } from "../../presentation/adapters";
+import { staticThemeIntent } from "../../../runtime/ingress";
+import { compileThemeIntent } from "../../runtime/compile";
 
 /** Project a compile onto the declaration the provider forwards. */
 export function engineVisualOf(
@@ -46,6 +44,6 @@ export function firstPartyEngineVisual(
   engine: EngineName
 ): EngineVisualDeclaration {
   return engineVisualOf(
-    compileTheme(resolveTheme(FIRST_PARTY_THEMES[slug]), resolveAdapter(engine))
+    compileThemeIntent(staticThemeIntent(slug), { engine }).compiled
   );
 }

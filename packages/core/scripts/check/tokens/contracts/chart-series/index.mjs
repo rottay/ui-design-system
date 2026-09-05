@@ -37,7 +37,7 @@
  *   - test files and tests/ folders (fixtures may stub tenant scopes)
  *   - generated tenant artifacts (they ARE compiler output)
  * Allowlisted definers (the sanctioned emission path only):
- *   - infrastructure/compilers/kernel/runtime/appearance (the emitter)
+ *   - the theme lowering's channel assembly (the emitter)
  *   - foundation/kernel/color/oklch/chart-series (derives the emitted values)
  *
  * Usage:
@@ -70,20 +70,9 @@ export const DEFINER_ALLOWLIST = [
   // was not updated in the same commit, so the gate flagged the canonical
   // definer while sanctioning the compatibility one. C2 split that compiler
   // into one owner per concern; the series palette is written by the channel
-  // assembly, so that owner is the definer now.
+  // assembly, so that owner is the definer now — and since the compatibility
+  // appearance projection was deleted at source, it is the only one.
   'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
-  // The tenant appearance compiler. Still a sanctioned definer, but now as the
-  // compatibility projection: `appearanceToVariables()` is documented (same
-  // file, above `compileAppearanceVariables`) as the raw projection kept for
-  // low-level compiler tests and compatibility consumers.
-  //
-  // BOTH emit at the tenant root scope, so neither shadows the other the way
-  // CHT-03 describes -- the hazard this gate exists for is a definition BELOW
-  // the tenant scope (component skin CSS, an inline style key), and that is
-  // still zero. The residual duplication is that two call sites now derive the
-  // same ten slots with different ground resolution; collapsing them to one
-  // definer is an open unification, not something this allowlist decides.
-  'infrastructure/compilers/kernel/runtime/appearance/index.ts',
   // Derives the ten emitted slot colors for the compiler; names the channel
   // in its documentation and derivation API.
   'foundation/kernel/color/oklch/chart-series/index.ts',

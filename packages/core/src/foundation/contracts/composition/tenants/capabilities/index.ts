@@ -143,7 +143,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
         'the tenant palette remains authoritative; optional mode data stays an internal compatibility surface',
       documentPath: 'appearance.general.palette.{backgroundMode,dark.*}',
       brandThemePath: 'modes.dark.palette.*',
-      derivedChannels: ['--ds-color-scheme', '--ds-color-primary-500'],
+      derivedChannels: ['--ds-color-primary-500'],
       compat:
         'compatibility-only; not rendered in Standard or Pro tenant editors unless product explicitly enables a mode feature',
     },

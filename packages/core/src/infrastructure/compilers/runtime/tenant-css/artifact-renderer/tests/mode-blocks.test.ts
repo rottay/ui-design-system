@@ -15,9 +15,13 @@ import type { BrandTheme } from '@/foundation/contracts/composition/tenants/them
 
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
-  renderFirstPartyArtifact,
+  renderVerticalArtifact,
+  FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
 } from '../index';
 import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
+import { EMPTY_PROVENANCE } from '@/foundation/contracts/composition/tenants/themes/resolved';
+import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
+import { compileTheme, resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
 
 const bithireSpec = () => {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === 'bithire');
@@ -25,8 +29,32 @@ const bithireSpec = () => {
   return spec;
 };
 
-const render = (brandTheme: BrandTheme) =>
-  renderFirstPartyArtifact({ spec: bithireSpec(), theme: liftAuthoredTheme(brandTheme) }).css;
+/**
+ * The artifact FORMAT, over a theme this suite edits.
+ *
+ * `renderFirstPartyArtifact` names its vertical and reads the roster, so it
+ * cannot render an edited theme any more. What is under test here is the mode
+ * block layout, not the baseline authority, so the compile happens here and the
+ * artifact composer is called directly.
+ */
+const render = (brandTheme: BrandTheme) => {
+  const spec = bithireSpec();
+  const compiled = compileTheme(
+    { theme: liftAuthoredTheme(brandTheme), provenance: EMPTY_PROVENANCE },
+    resolveAdapter(PRIMARY_ENGINE),
+  );
+  return renderVerticalArtifact({
+    tenantSlug: spec.slug,
+    verticalKey: spec.verticalKey,
+    authoredThemePath: spec.authoredThemePath,
+    displayName: spec.displayName,
+    selector: spec.selector,
+    compiledCssVariables: compiled.cssVariables,
+    colorScheme: compiled.colorScheme,
+    modeBlocks: compiled.modeBlocks,
+    regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
+  });
+};
 
 describe('mode blocks in the rendered artifact', () => {
   it('renders one block per authored mode, scoped above the base block', () => {

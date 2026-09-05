@@ -19,6 +19,7 @@ import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-th
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 
 import { resolveTheme } from "../../resolution";
+import { staticThemeIntent } from "../../ingress";
 import { resolveAdapter } from "../../../presentation/adapters";
 import { compileTheme } from "..";
 
@@ -51,7 +52,7 @@ describe("the lowering reproduces the committed artifact channels", () => {
     const css = readFileSync(resolve(ARTIFACTS, slug, "index.css"), "utf-8");
 
     it(`${slug}: every base-block channel compiles to the artifact's value`, () => {
-      const compiled = compileTheme(resolveTheme(FIRST_PARTY_THEMES[slug]), modern);
+      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
       const artifact = declarations(
         css,
         (selector) => selector.includes(`data-tenant='${slug}'`) && !selector.includes("data-theme")
@@ -66,7 +67,7 @@ describe("the lowering reproduces the committed artifact channels", () => {
     });
 
     it(`${slug}: every artifact channel is still produced by the lowering`, () => {
-      const compiled = compileTheme(resolveTheme(FIRST_PARTY_THEMES[slug]), modern);
+      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
       const artifact = declarations(
         css,
         (selector) => selector.includes(`data-tenant='${slug}'`) && !selector.includes("data-theme")
@@ -78,7 +79,7 @@ describe("the lowering reproduces the committed artifact channels", () => {
     });
 
     it(`${slug}: each authored mode block compiles to the artifact's mode values`, () => {
-      const compiled = compileTheme(resolveTheme(FIRST_PARTY_THEMES[slug]), modern);
+      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
       for (const block of compiled.modeBlocks) {
         const artifact = declarations(
           css,

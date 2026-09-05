@@ -2,7 +2,7 @@
  * Regenerate first-party vertical CSS artifacts from their authored source.
  *
  * Each artifact (`src/foundation/tokens/css/facade/artifacts/<slug>/index.css`) is a BUILD OUTPUT:
- *   index.css = compileTheme(resolveTheme(<slug>Theme))
+ *   index.css = compileThemeIntent(staticThemeIntent(<slug>))
  *
  * The brand compiler owns every theme variable the artifact carries (palette,
  * typography, surfaces, chrome) and every mode block, so the artifact is a pure
@@ -35,7 +35,6 @@ import {
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
 } from '../../../../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
 import {
-  FIRST_PARTY_THEMES,
   FIRST_PARTY_VERTICAL_ROSTER,
 } from '../../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
@@ -55,7 +54,7 @@ const artifacts = FIRST_PARTY_VERTICAL_ROSTER.map((row, index) => {
   if (row.theme.id !== row.slug) {
     throw new Error(`First-party roster mismatch: theme.id ${row.theme.id} !== slug ${row.slug}`);
   }
-  return { ...spec, brandTheme: row.theme, theme: FIRST_PARTY_THEMES[row.slug] };
+  return { ...spec, brandTheme: row.theme };
 });
 if (artifacts.length !== FIRST_PARTY_ARTIFACT_SPECS.length) {
   throw new Error('First-party artifact projection length differs from the roster');
@@ -159,7 +158,6 @@ for (const spec of artifacts) {
 
   const { css: output, compiled } = renderFirstPartyArtifact({
     spec,
-    theme: spec.theme,
     regenerateCommand: REGENERATE_COMMAND,
   });
   apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled));

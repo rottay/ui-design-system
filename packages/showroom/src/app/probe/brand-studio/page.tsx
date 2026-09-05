@@ -70,6 +70,7 @@ export default function BrandStudioProbePage() {
             Brand Studio probe
           </Heading>
           <PatternBrandStudio
+            vertical="bithire"
             value={CAPTURE_BRAND_THEME}
             galleries={() => (
               <Stack spacing="lg" fullWidth>

@@ -153,14 +153,20 @@ export {
 export {
   THEME_ENGINE_ADAPTERS,
   compileTheme,
+  compileThemeIntent,
   containerScope,
+  documentThemeIntent,
+  draftPreviewThemeIntent,
   emitThemeCss,
   engineVisualOf,
   firstPartyEngineVisual,
   firstPartyScope,
+  previewThemeIntent,
   resolveAdapter,
   resolveTheme,
+  staticThemeIntent,
   tenantArtifactScope,
+  verticalEngine,
 } from '../../infrastructure/compilers/runtime/theme';
 export type {
   ControlId,
@@ -176,6 +182,7 @@ export type {
   ThemeCompilationModeBlock,
   ThemeCompilationRuntime,
   ThemeIntent,
+  ThemeIntentCompilation,
   ThemeIntentOrigin,
   ThemeResolution,
 } from '../../infrastructure/compilers/runtime/theme';
@@ -186,10 +193,28 @@ export type {
   Governed,
 } from '../../foundation/contracts/composition/tenants/themes/iso';
 /**
- * The AUTHORING lift, not a lowering door: it wraps an authored `BrandTheme`'s
- * governed families so the theme can reach `resolveTheme`. A consumer outside
- * this package that holds an authored theme needs it; without it the only route
- * is a hand-rolled lift, which is the second authority this checkpoint removed.
+ * The vertical vocabulary the intent producers above take.
+ *
+ * A `ThemeIntent` NAMES its baseline instead of carrying one, so a consumer
+ * outside this package cannot build one without the closed set of names and a
+ * guard to narrow an untrusted string into it. Publishing the compile door
+ * without them would leave the only route back to a hand-assembled baseline.
+ */
+export {
+  FIRST_PARTY_VERTICAL_SLUGS,
+} from '../../foundation/contracts/kernel/verticals';
+export type {
+  FirstPartyVerticalId,
+} from '../../foundation/contracts/kernel/verticals';
+export { isFirstPartyVerticalId } from '../../foundation/tokens/ts/presentation/brand-themes';
+/**
+ * The AUTHORING lift, not a lowering door, and not a path to `resolveTheme`:
+ * that door takes a `ThemeIntent` and produces its own baseline. This wraps an
+ * authored `BrandTheme`'s governed families into a `Theme`, and it is published
+ * for CLOSED TOOLING SUPPORT -- the repository's own theme-lowering adapter,
+ * which binds it out of `dist/server.js` to compile a synthesized resolution
+ * for gate probes. A product consumer holding an authored draft uses
+ * `draftPreviewThemeIntent` instead; nothing here re-opens a second authority.
  *
  * It is the WRAP-ONLY lift on purpose. The ISO bridge also normalizes — it
  * materializes every declared palette key and completes the chrome shape — which

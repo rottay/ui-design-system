@@ -192,8 +192,7 @@ export type BrandCapabilityId =
   | "motion"
   | "recipes"
   | "expressive"
-  | "responsive"
-  | "engineBridge";
+  | "responsive";
 
 /**
  * Why a capability is not active. Owned by its own leaf so that `themes/iso`
@@ -243,8 +242,6 @@ export interface BrandTheme {
   id: string;
   /** Display name */
   name: string;
-  /** Optional preset key to inherit defaults from (e.g. 'corporate-clean') */
-  extends?: string;
 
   /** Which mode this theme's values are; drives the emitted `color-scheme`. */
   appearance?: BrandAppearance;
@@ -271,8 +268,6 @@ export interface BrandTheme {
   responsive?: BrandResponsiveSelection;
   /** Card and accent visual chrome */
   chrome?: BrandChrome;
-  /** DaisyUI variables, engine-specific values */
-  engineBridge?: Partial<Record<EngineName, Record<string, unknown>>>;
   /**
    * Explicit disposition for every optional capability family.
    *
@@ -319,8 +314,8 @@ export type FirstPartyBrandThemeRequiredKey =
  *
  * Narrows `BrandTheme`'s all-optional visual families to required for the three
  * first-party identities. Product-specific EXTRAS (`recipes`, `expressive`,
- * `responsive`, `engineBridge`) stay optional on purpose — the law is equality
- * of the common required inventory, not equality of extras count. What makes
+ * `responsive`) stay optional on purpose — the law is equality of the common
+ * required inventory, not equality of extras count. What makes
  * their absence honest is `capabilities`, which must state a disposition for
  * each of them regardless.
  */

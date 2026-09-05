@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "702d6498eae83d2a0fd8f3879b608b43b7049cf8e53c2fbb4b4c34f5045533fb"
+    "registryDigest": "8ae1640429f88583a4a7930b6ae024354c7ec3324646ee408b0f82d3ac85923e"
   },
   "title": "Explicit font stacks",
   "valueType": "font-stack",

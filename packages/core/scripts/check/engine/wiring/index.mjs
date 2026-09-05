@@ -65,6 +65,11 @@ export const FALLBACK_SHAPES = Object.freeze([
   '|| MODERN_TOKENS',
   '|| RUSTIC_TOKENS',
   '?? THEME_ENGINE_ADAPTERS',
+  // C4: the roster engine fallback. Four preview and tooling sites answered
+  // `getFirstPartyVertical(slug)?.engine ?? PRIMARY_ENGINE` for a question the
+  // DB door threw on. One law now, and it refuses.
+  '?? PRIMARY_ENGINE',
+  '|| PRIMARY_ENGINE',
   '|| defaultContextValue',
   '?? defaultContextValue',
 ]);
@@ -82,6 +87,26 @@ export const TOKEN_BASELINE_OWNERS = Object.freeze([
   'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts',
   'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts',
   'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.ts',
+]);
+
+/**
+ * The only owners allowed to READ `PRIMARY_ENGINE` in code.
+ *
+ * The constant answers exactly one question -- which engine renders when a
+ * RUNTIME has no declaration at all -- and that question belongs to the engine
+ * resolver. It is not the answer to "which engine does this vertical render
+ * with": the roster row answers that, and a vertical with no row is refused
+ * rather than substituted. Naming it in a comment is not a read; the sweep
+ * strips comments before it looks.
+ */
+export const PRIMARY_ENGINE_READERS = Object.freeze([
+  'src/foundation/contracts/kernel/engine-identity/index.ts',
+  'src/infrastructure/runtime/engines/runtime/resolution/index.ts',
+  // NON-PRODUCTIVE SUPPORT, and it says so in its own ownership record: the
+  // cascade probes measure the compiler over mutated roster leaves and probe
+  // fixtures, which are tenants of no vertical. Refusing them the way the
+  // productive door does would leave the compiler unmeasured.
+  'scripts/libraries/theme-lowering/index.mjs',
 ]);
 
 /** Symbols whose very existence is a second answer to a settled question. */
@@ -138,6 +163,7 @@ export function auditEngineWiring(root) {
   const owners = new Set(REGISTRY_OWNERS);
   const doorOwners = new Set(COMPILE_DOOR_OWNERS);
   const baselineOwners = new Set(TOKEN_BASELINE_OWNERS);
+  const primaryReaders = new Set(PRIMARY_ENGINE_READERS);
   let primaryDeclarations = 0;
 
   for (const file of files) {
@@ -172,6 +198,13 @@ export function auditEngineWiring(root) {
     for (const shape of FALLBACK_SHAPES)
       if (body.includes(shape))
         findings.push({ rule: 'fallback-shape', file: rel, detail: shape });
+
+    if (/\bPRIMARY_ENGINE\b/.test(body) && !primaryReaders.has(rel))
+      findings.push({
+        rule: 'primary-engine-read',
+        file: rel,
+        detail: 'reads PRIMARY_ENGINE outside the engine resolver',
+      });
 
     for (const match of body.matchAll(
       /(classic|modern|rustic)\s*:\s*\(\)\s*=>\s*import\(\s*['"]\.\/engines\/(classic|modern|rustic)['"]/g

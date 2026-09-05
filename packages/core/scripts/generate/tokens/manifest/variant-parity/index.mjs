@@ -86,7 +86,6 @@ export const BASELINE_PATH = path.join(HERE, 'baseline/index.json');
  * GOBERNADA: solo crece con adjudicacion escrita del DT.
  */
 export const METADATA_EXCLUSION = [
-  { tenant: 'bithire', path: 'CAPABILITIES.engineBridge.note' },
   { tenant: 'bithire', path: 'CAPABILITIES.responsive.note' },
   { tenant: 'bithire', path: 'CHARTS.animateOnMount' },
   { tenant: 'bithire', path: 'CHARTS.showDots' },
@@ -97,7 +96,6 @@ export const METADATA_EXCLUSION = [
   { tenant: 'bithire', path: 'MOTION.useSpring' },
   { tenant: 'bithire', path: 'THEME.id' },
   { tenant: 'bithire', path: 'THEME.name' },
-  { tenant: 'evnto', path: 'CAPABILITIES.engineBridge.note' },
   { tenant: 'evnto', path: 'CAPABILITIES.expressive.note' },
   { tenant: 'evnto', path: 'CAPABILITIES.recipes.note' },
   { tenant: 'evnto', path: 'CAPABILITIES.responsive.note' },
@@ -110,7 +108,6 @@ export const METADATA_EXCLUSION = [
   { tenant: 'evnto', path: 'MOTION.useSpring', via: 'EVNTO_CANONICAL_MOTION' },
   { tenant: 'evnto', path: 'THEME.id' },
   { tenant: 'evnto', path: 'THEME.name' },
-  { tenant: 'rottay', path: 'CAPABILITIES.engineBridge.note' },
   { tenant: 'rottay', path: 'CAPABILITIES.expressive.note' },
   { tenant: 'rottay', path: 'CAPABILITIES.responsive.note' },
   { tenant: 'rottay', path: 'CHARTS.animateOnMount' },

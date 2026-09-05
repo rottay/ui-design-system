@@ -26,21 +26,21 @@
     ]
   },
   "stats": {
-    "rows": 3603,
+    "rows": 3594,
     "byVertical": {
-      "bithire": 1475,
-      "evnto": 412,
-      "rottay": 1716
+      "bithire": 1472,
+      "evnto": 409,
+      "rottay": 1713
     },
     "byDomicile": {
-      "pro-expert": 24,
+      "pro-expert": 18,
       "seed": 2494,
       "derived": 782,
-      "unassigned": 278,
+      "unassigned": 275,
       "untagged": 25
     },
     "byValueKind": {
-      "string": 418,
+      "string": 409,
       "number": 96,
       "dimension": 246,
       "hex": 1454,
@@ -52,19 +52,19 @@
     "rowsReadingVar": 1076,
     "expressionsCarryingLiteral": 71,
     "byRule": {
-      "R4": 189,
-      "R5": 1475,
+      "R4": 183,
+      "R5": 1472,
       "R1": 782,
       "R2": 1157
     },
     "byVerdict": {
-      "pro-expert": 189,
-      "adjudicate": 1475,
+      "pro-expert": 183,
+      "adjudicate": 1472,
       "already-collapsed": 782,
       "collapse": 1157
     },
     "byRootAttribution": {
-      "emits-no-channel": 149,
+      "emits-no-channel": 140,
       "no-persisted-membership": 1433,
       "declared-fallback": 784,
       "governed-owner-table": 1057,
@@ -72,12 +72,12 @@
       "head-exact": 148
     },
     "rowsWithRoot": 1989,
-    "rowsEmittingNoChannel": 149,
+    "rowsEmittingNoChannel": 140,
     "channelEmissions": 4049,
     "distinctChannelsReached": 1607,
-    "metadataRows": 36,
-    "paintDenominator": 3567,
-    "metadataRosterSize": 36,
+    "metadataRows": 33,
+    "paintDenominator": 3561,
+    "metadataRosterSize": 33,
     "metadataRosterUnmatched": 0,
     "literalSeedRows": 1836,
     "distinctLiteralSeedValues": 537,
@@ -87,52 +87,6 @@
   "unmappedTagScopes": [],
   "compileFailures": [],
   "rows": [
-    {
-      "slotId": "bithire:CAPABILITIES.engineBridge.reason",
-      "vertical": "bithire",
-      "slotPath": "CAPABILITIES.engineBridge.reason",
-      "evaluatedPath": "capabilities.engineBridge.reason",
-      "authoredValue": "not-authored",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "pro-expert",
-      "governor": "capability: engineBridge (estado autorado: disabled)",
-      "taggedAtLine": 9206,
-      "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R4",
-      "verdict": "pro-expert",
-      "evidence": {
-        "basis": "domicile"
-      }
-    },
-    {
-      "slotId": "bithire:CAPABILITIES.engineBridge.status",
-      "vertical": "bithire",
-      "slotPath": "CAPABILITIES.engineBridge.status",
-      "evaluatedPath": "capabilities.engineBridge.status",
-      "authoredValue": "disabled",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "pro-expert",
-      "governor": "capability: engineBridge (estado autorado: disabled)",
-      "taggedAtLine": 9201,
-      "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R4",
-      "verdict": "pro-expert",
-      "evidence": {
-        "basis": "domicile"
-      }
-    },
     {
       "slotId": "bithire:CAPABILITIES.expressive.status",
       "vertical": "bithire",
@@ -40849,32 +40803,8 @@
       "readsVar": false,
       "currentDomicile": "seed",
       "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — selecciona qué bloque del tema se emite por defecto",
-      "taggedAtLine": 9228,
+      "taggedAtLine": 9215,
       "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R5",
-      "verdict": "adjudicate",
-      "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible"
-      }
-    },
-    {
-      "slotId": "bithire:THEME.capabilities.engineBridge.note",
-      "vertical": "bithire",
-      "slotPath": "THEME.capabilities.engineBridge.note",
-      "evaluatedPath": "capabilities.engineBridge.note",
-      "authoredValue": "No engine-specific bridge values; modern reads the compiled tokens directly.",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "unassigned",
-      "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9298,
-      "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
       "rootId": null,
@@ -40897,7 +40827,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9298,
+      "taggedAtLine": 9285,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -40921,7 +40851,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -40945,7 +40875,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -40969,7 +40899,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -40993,7 +40923,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9249,
+      "taggedAtLine": 9236,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-edge-emphasis-width",
@@ -41049,7 +40979,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9249,
+      "taggedAtLine": 9236,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-badge-chip-radius",
@@ -41150,7 +41080,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9249,
+      "taggedAtLine": 9236,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-menu-group-text-transform",
@@ -41189,7 +41119,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9249,
+      "taggedAtLine": 9236,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-badge-chip-radius",
@@ -41355,7 +41285,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9235,
+      "taggedAtLine": 9222,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-card-bg-hover"
@@ -41386,7 +41316,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9235,
+      "taggedAtLine": 9222,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-table-cell-color"
@@ -41417,7 +41347,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41441,7 +41371,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41465,7 +41395,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-motion-calm"
@@ -41493,7 +41423,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41517,7 +41447,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41541,7 +41471,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-motion-intensity"
@@ -41572,7 +41502,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41596,7 +41526,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41620,7 +41550,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41644,7 +41574,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41668,7 +41598,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41692,7 +41622,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -41716,7 +41646,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9277,
+      "taggedAtLine": 9264,
       "isMetadata": true,
       "emitsChannels": [
         "--ds-motion-spring-gentle",
@@ -41770,7 +41700,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent",
@@ -41832,7 +41762,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-hover"
@@ -41860,7 +41790,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-100",
@@ -42065,7 +41995,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-elevated"
@@ -42093,7 +42023,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-overlay"
@@ -42123,7 +42053,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-secondary"
@@ -42151,7 +42081,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-surface"
@@ -42179,7 +42109,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-tertiary"
@@ -42207,7 +42137,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-border-secondary"
@@ -42237,7 +42167,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-border-subtle"
@@ -42268,7 +42198,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-border-tertiary"
@@ -42296,7 +42226,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info",
@@ -42356,7 +42286,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-interactive-bg-active"
@@ -42386,7 +42316,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-interactive-bg-hover"
@@ -42416,7 +42346,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-interactive-bg-muted"
@@ -42444,7 +42374,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-link-hover"
@@ -42472,7 +42402,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-link-visited"
@@ -42500,7 +42430,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-on-primary"
@@ -42528,7 +42458,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-hover"
@@ -42558,7 +42488,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-100"
@@ -42586,7 +42516,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-200"
@@ -42614,7 +42544,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-300"
@@ -42642,7 +42572,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-400"
@@ -42670,7 +42600,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-50"
@@ -42698,7 +42628,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-500"
@@ -42728,7 +42658,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-600"
@@ -42756,7 +42686,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-700"
@@ -42784,7 +42714,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-800"
@@ -42812,7 +42742,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-900"
@@ -42840,7 +42770,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary",
@@ -42894,7 +42824,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-hover"
@@ -42922,7 +42852,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success",
@@ -42982,7 +42912,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-disabled"
@@ -43013,7 +42943,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-muted"
@@ -43044,7 +42974,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-primary"
@@ -43075,7 +43005,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-secondary"
@@ -43106,7 +43036,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-tertiary"
@@ -43137,7 +43067,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9256,
+      "taggedAtLine": 9243,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-on-warning",
@@ -43200,7 +43130,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9242,
+      "taggedAtLine": 9229,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-recipe-profile"
@@ -43228,7 +43158,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9242,
+      "taggedAtLine": 9229,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-recipe-profile"
@@ -43716,52 +43646,6 @@
         "channels": [
           "base|--ds-line-height-tight"
         ]
-      }
-    },
-    {
-      "slotId": "evnto:CAPABILITIES.engineBridge.reason",
-      "vertical": "evnto",
-      "slotPath": "CAPABILITIES.engineBridge.reason",
-      "evaluatedPath": "capabilities.engineBridge.reason",
-      "authoredValue": "not-authored",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "pro-expert",
-      "governor": "capability: engineBridge (estado autorado: disabled)",
-      "taggedAtLine": 4837,
-      "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R4",
-      "verdict": "pro-expert",
-      "evidence": {
-        "basis": "domicile"
-      }
-    },
-    {
-      "slotId": "evnto:CAPABILITIES.engineBridge.status",
-      "vertical": "evnto",
-      "slotPath": "CAPABILITIES.engineBridge.status",
-      "evaluatedPath": "capabilities.engineBridge.status",
-      "authoredValue": "disabled",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "pro-expert",
-      "governor": "capability: engineBridge (estado autorado: disabled)",
-      "taggedAtLine": 4832,
-      "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R4",
-      "verdict": "pro-expert",
-      "evidence": {
-        "basis": "domicile"
       }
     },
     {
@@ -53598,32 +53482,8 @@
       "readsVar": false,
       "currentDomicile": "seed",
       "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — selecciona qué bloque del tema se emite por defecto",
-      "taggedAtLine": 4859,
+      "taggedAtLine": 4846,
       "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R5",
-      "verdict": "adjudicate",
-      "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible"
-      }
-    },
-    {
-      "slotId": "evnto:THEME.capabilities.engineBridge.note",
-      "vertical": "evnto",
-      "slotPath": "THEME.capabilities.engineBridge.note",
-      "evaluatedPath": "capabilities.engineBridge.note",
-      "authoredValue": "No engine-specific bridge values; modern reads the compiled tokens directly.",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "unassigned",
-      "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4925,
-      "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
       "rootId": null,
@@ -53646,7 +53506,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4925,
+      "taggedAtLine": 4912,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53670,7 +53530,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4925,
+      "taggedAtLine": 4912,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53694,7 +53554,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4925,
+      "taggedAtLine": 4912,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53718,7 +53578,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4911,
+      "taggedAtLine": 4898,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53742,7 +53602,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4911,
+      "taggedAtLine": 4898,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53766,7 +53626,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4911,
+      "taggedAtLine": 4898,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53814,7 +53674,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53838,7 +53698,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53862,7 +53722,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-motion-calm"
@@ -53890,7 +53750,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53914,7 +53774,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53938,7 +53798,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53962,7 +53822,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -53986,7 +53846,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -54010,7 +53870,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-motion-spring-gentle"
@@ -54038,7 +53898,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-motion-spring-gentle"
@@ -54066,7 +53926,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -54090,7 +53950,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -54114,7 +53974,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4904,
+      "taggedAtLine": 4891,
       "isMetadata": true,
       "emitsChannels": [
         "--ds-motion-spring-gentle",
@@ -54168,7 +54028,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent",
@@ -54230,7 +54090,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-hover"
@@ -54258,7 +54118,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-chart-series-1",
@@ -54500,7 +54360,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-elevated"
@@ -54528,7 +54388,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-overlay"
@@ -54558,7 +54418,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-secondary"
@@ -54586,7 +54446,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-tertiary"
@@ -54614,7 +54474,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-border"
@@ -54645,7 +54505,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-border-secondary"
@@ -54675,7 +54535,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info",
@@ -54734,7 +54594,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-link-hover"
@@ -54762,7 +54622,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-link-visited"
@@ -54790,7 +54650,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-on-primary"
@@ -54818,7 +54678,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-hover"
@@ -54848,7 +54708,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-100"
@@ -54876,7 +54736,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-200"
@@ -54904,7 +54764,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-300"
@@ -54932,7 +54792,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-400"
@@ -54960,7 +54820,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-50"
@@ -54988,7 +54848,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-500"
@@ -55018,7 +54878,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-600"
@@ -55046,7 +54906,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-700"
@@ -55074,7 +54934,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-800"
@@ -55102,7 +54962,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-900"
@@ -55130,7 +54990,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary",
@@ -55194,7 +55054,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-hover"
@@ -55222,7 +55082,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success",
@@ -55284,7 +55144,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-disabled"
@@ -55315,7 +55175,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-muted"
@@ -55346,7 +55206,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-primary"
@@ -55377,7 +55237,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-secondary"
@@ -55408,7 +55268,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-tertiary"
@@ -55439,7 +55299,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 4887,
+      "taggedAtLine": 4874,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning",
@@ -55967,52 +55827,6 @@
         "channels": [
           "base|--ds-line-height-tight"
         ]
-      }
-    },
-    {
-      "slotId": "rottay:CAPABILITIES.engineBridge.reason",
-      "vertical": "rottay",
-      "slotPath": "CAPABILITIES.engineBridge.reason",
-      "evaluatedPath": "capabilities.engineBridge.reason",
-      "authoredValue": "not-authored",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "pro-expert",
-      "governor": "capability: engineBridge (estado autorado: disabled)",
-      "taggedAtLine": 9213,
-      "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R4",
-      "verdict": "pro-expert",
-      "evidence": {
-        "basis": "domicile"
-      }
-    },
-    {
-      "slotId": "rottay:CAPABILITIES.engineBridge.status",
-      "vertical": "rottay",
-      "slotPath": "CAPABILITIES.engineBridge.status",
-      "evaluatedPath": "capabilities.engineBridge.status",
-      "authoredValue": "disabled",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "pro-expert",
-      "governor": "capability: engineBridge (estado autorado: disabled)",
-      "taggedAtLine": 9208,
-      "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R4",
-      "verdict": "pro-expert",
-      "evidence": {
-        "basis": "domicile"
       }
     },
     {
@@ -101494,7 +101308,7 @@
       "readsVar": false,
       "currentDomicile": "seed",
       "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — selecciona qué bloque del tema se emite por defecto",
-      "taggedAtLine": 9235,
+      "taggedAtLine": 9222,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-chart-series-1",
@@ -101541,30 +101355,6 @@
       }
     },
     {
-      "slotId": "rottay:THEME.capabilities.engineBridge.note",
-      "vertical": "rottay",
-      "slotPath": "THEME.capabilities.engineBridge.note",
-      "evaluatedPath": "capabilities.engineBridge.note",
-      "authoredValue": "No engine-specific bridge values; modern reads the compiled tokens directly.",
-      "valueKind": "string",
-      "readsVar": false,
-      "currentDomicile": "unassigned",
-      "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9305,
-      "isMetadata": true,
-      "emitsChannels": [],
-      "emitsScoped": [],
-      "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
-      "rule": "R5",
-      "verdict": "adjudicate",
-      "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible"
-      }
-    },
-    {
       "slotId": "rottay:THEME.capabilities.expressive.note",
       "vertical": "rottay",
       "slotPath": "THEME.capabilities.expressive.note",
@@ -101574,7 +101364,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9305,
+      "taggedAtLine": 9292,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101598,7 +101388,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9305,
+      "taggedAtLine": 9292,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101622,7 +101412,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9291,
+      "taggedAtLine": 9278,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101646,7 +101436,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9291,
+      "taggedAtLine": 9278,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101670,7 +101460,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9291,
+      "taggedAtLine": 9278,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101718,7 +101508,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9242,
+      "taggedAtLine": 9229,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-sidebar-footer-bg"
@@ -101749,7 +101539,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": true,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101773,7 +101563,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101797,7 +101587,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-motion-calm"
@@ -101825,7 +101615,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101849,7 +101639,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101873,7 +101663,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101897,7 +101687,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101921,7 +101711,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -101945,7 +101735,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-motion-spring-gentle"
@@ -101973,7 +101763,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-motion-spring-gentle"
@@ -102001,7 +101791,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -102025,7 +101815,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": false,
       "emitsChannels": [],
       "emitsScoped": [],
@@ -102049,7 +101839,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9284,
+      "taggedAtLine": 9271,
       "isMetadata": true,
       "emitsChannels": [
         "--ds-motion-spring-gentle",
@@ -102103,7 +101893,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent"
@@ -102135,7 +101925,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-hover"
@@ -102163,7 +101953,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-border-color"
@@ -102191,7 +101981,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-border-color-default"
@@ -102219,7 +102009,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-border-color-focus"
@@ -102247,7 +102037,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-border-color-hover"
@@ -102275,7 +102065,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-border-color-muted"
@@ -102303,7 +102093,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-border-color-strong"
@@ -102331,7 +102121,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-text-disabled"
@@ -102359,7 +102149,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-text-inverse"
@@ -102387,7 +102177,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-text-primary"
@@ -102418,7 +102208,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-text-secondary"
@@ -102446,7 +102236,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-text-tertiary"
@@ -102474,7 +102264,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-black-100"
@@ -102505,7 +102295,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-black-50"
@@ -102533,7 +102323,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-error-20"
@@ -102561,7 +102351,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-primary-10"
@@ -102589,7 +102379,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-primary-20"
@@ -102617,7 +102407,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-secondary-10"
@@ -102645,7 +102435,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-secondary-20"
@@ -102673,7 +102463,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-success-20"
@@ -102701,7 +102491,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-warning-20"
@@ -102729,7 +102519,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-alpha-white-50"
@@ -102757,7 +102547,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-chart-series-10",
@@ -102805,7 +102595,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-elevated"
@@ -102833,7 +102623,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-overlay"
@@ -102863,7 +102653,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-secondary"
@@ -102891,7 +102681,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-surface"
@@ -102919,7 +102709,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-tertiary"
@@ -102947,7 +102737,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-info"
@@ -102975,7 +102765,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-bg-subtle"
@@ -103003,7 +102793,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-border-secondary"
@@ -103033,7 +102823,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-border-subtle"
@@ -103064,7 +102854,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-border-tertiary"
@@ -103092,7 +102882,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info",
@@ -103127,7 +102917,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-interactive-bg-active"
@@ -103157,7 +102947,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-interactive-bg-hover"
@@ -103187,7 +102977,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-interactive-bg-muted"
@@ -103215,7 +103005,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-link-visited"
@@ -103243,7 +103033,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-0"
@@ -103271,7 +103061,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-on-primary"
@@ -103299,7 +103089,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-foreground"
@@ -103327,7 +103117,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-hover"
@@ -103357,7 +103147,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-subtle"
@@ -103385,7 +103175,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-100"
@@ -103413,7 +103203,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-200"
@@ -103441,7 +103231,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-300"
@@ -103469,7 +103259,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-400"
@@ -103497,7 +103287,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-50"
@@ -103525,7 +103315,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-500"
@@ -103553,7 +103343,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-600"
@@ -103581,7 +103371,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-700"
@@ -103609,7 +103399,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-800"
@@ -103637,7 +103427,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-accent-900"
@@ -103665,7 +103455,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-100"
@@ -103693,7 +103483,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-200"
@@ -103721,7 +103511,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-300"
@@ -103749,7 +103539,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-400"
@@ -103777,7 +103567,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-50"
@@ -103805,7 +103595,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-500"
@@ -103835,7 +103625,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-600"
@@ -103863,7 +103653,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-700"
@@ -103891,7 +103681,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-800"
@@ -103919,7 +103709,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-error-900"
@@ -103947,7 +103737,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-100"
@@ -103975,7 +103765,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-200"
@@ -104003,7 +103793,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-300"
@@ -104031,7 +103821,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-400"
@@ -104059,7 +103849,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-50"
@@ -104087,7 +103877,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-500"
@@ -104115,7 +103905,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-600"
@@ -104143,7 +103933,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-700"
@@ -104171,7 +103961,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-800"
@@ -104199,7 +103989,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-info-900"
@@ -104227,7 +104017,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-100"
@@ -104255,7 +104045,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-200"
@@ -104283,7 +104073,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-300"
@@ -104311,7 +104101,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-400"
@@ -104339,7 +104129,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-50"
@@ -104367,7 +104157,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-500"
@@ -104397,7 +104187,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-600"
@@ -104425,7 +104215,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-700"
@@ -104453,7 +104243,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-800"
@@ -104481,7 +104271,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-neutral-900"
@@ -104509,7 +104299,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-100"
@@ -104537,7 +104327,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-200"
@@ -104565,7 +104355,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-300"
@@ -104595,7 +104385,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-400"
@@ -104625,7 +104415,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-50"
@@ -104653,7 +104443,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-500"
@@ -104683,7 +104473,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-600"
@@ -104711,7 +104501,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-700"
@@ -104741,7 +104531,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-800"
@@ -104769,7 +104559,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-primary-900"
@@ -104797,7 +104587,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-100"
@@ -104825,7 +104615,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-200"
@@ -104853,7 +104643,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-300"
@@ -104883,7 +104673,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-400"
@@ -104911,7 +104701,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-50"
@@ -104939,7 +104729,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-500"
@@ -104967,7 +104757,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-600"
@@ -104995,7 +104785,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-700"
@@ -105023,7 +104813,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-800"
@@ -105051,7 +104841,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-900"
@@ -105079,7 +104869,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-100"
@@ -105107,7 +104897,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-200"
@@ -105135,7 +104925,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-300"
@@ -105163,7 +104953,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-400"
@@ -105191,7 +104981,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-50"
@@ -105219,7 +105009,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-500"
@@ -105249,7 +105039,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-600"
@@ -105279,7 +105069,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-700"
@@ -105307,7 +105097,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-800"
@@ -105335,7 +105125,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-success-900"
@@ -105363,7 +105153,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-100"
@@ -105391,7 +105181,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-200"
@@ -105419,7 +105209,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-300"
@@ -105447,7 +105237,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-400"
@@ -105475,7 +105265,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-50"
@@ -105503,7 +105293,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-500"
@@ -105531,7 +105321,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-600"
@@ -105559,7 +105349,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-700"
@@ -105587,7 +105377,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-800"
@@ -105615,7 +105405,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-warning-900"
@@ -105643,7 +105433,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary",
@@ -105677,7 +105467,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-secondary-hover"
@@ -105705,7 +105495,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-shadow"
@@ -105733,7 +105523,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-on-success",
@@ -105768,7 +105558,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-surface"
@@ -105798,7 +105588,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-surface-muted"
@@ -105826,7 +105616,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-surface-secondary"
@@ -105854,7 +105644,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text"
@@ -105885,7 +105675,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-disabled"
@@ -105916,7 +105706,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-inverse"
@@ -105944,7 +105734,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-muted"
@@ -105975,7 +105765,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-primary"
@@ -106006,7 +105796,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-secondary"
@@ -106037,7 +105827,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-text-tertiary"
@@ -106068,7 +105858,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9263,
+      "taggedAtLine": 9250,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-color-on-warning",
@@ -106103,7 +105893,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9249,
+      "taggedAtLine": 9236,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-recipe-profile"
@@ -106131,7 +105921,7 @@
       "readsVar": false,
       "currentDomicile": "unassigned",
       "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
-      "taggedAtLine": 9249,
+      "taggedAtLine": 9236,
       "isMetadata": false,
       "emitsChannels": [
         "--ds-recipe-profile"
@@ -106622,5 +106412,5 @@
       }
     }
   ],
-  "digest": "181a5f69aea1742ba01602c194cc7a6497f6045cd10f06b637f39828eeb67ccb"
+  "digest": "8bd1b6df9251fe983a14ef7b1643325c12cdcbd2fd6c0c9f592e3b1e66ee8f9d"
 }

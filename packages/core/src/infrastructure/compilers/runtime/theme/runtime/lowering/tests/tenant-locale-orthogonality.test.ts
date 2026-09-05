@@ -9,7 +9,11 @@ import { resolveTranslation } from "@/foundation/i18n/runtime/resolution";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 import { brandThemeToTenantAppearance } from "@/components/patterns/customization/brand-studio/runtime/file-export";
-import { appearanceToVariables } from "@/infrastructure/compilers/kernel/runtime/appearance";
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from "@/infrastructure/compilers/composition/tenant-theme";
 
 const LOCALES = ["en", "es", "ar"] as const;
 type Locale = (typeof LOCALES)[number];
@@ -31,26 +35,51 @@ const managementProjectedAppearance = brandThemeToTenantAppearance(
 );
 
 const managementAppearance: NonNullable<TenantConfig["appearance"]> = {
-  general: {
-    ...managementProjectedAppearance.general,
+  general: managementProjectedAppearance.general,
+};
+
+/**
+ * The DB transport, authored the way the document schema admits it: the
+ * migration projection above emits a `var(--ds-font-pack-…)` heading stack and
+ * an absent `palette.dark.background`, both refused by name at the document
+ * boundary, and `radiusScale` 0.76 sits below the BitHire envelope floor.
+ * `typePairing: 'editorial'` is what carries the editorial display pack here,
+ * which is the same channel through the door a customer travels.
+ */
+const managementDocument = {
+  schemaVersion: 1,
+  mode: "simple",
+  appearance: {
+    palette: {
+      primary: "#0F766E",
+      secondary: "#8C6D46",
+      accent: "#B44F3C",
+      background: "#FBF6EC",
+      foreground: {
+        primary: "#2E261C",
+        secondary: "#5C4F3D",
+        muted: "#6B5B48",
+        disabled: "#74644F",
+      },
+      border: { primary: "#C8B9A5", secondary: "#E2D9CC" },
+    },
     typography: {
-      ...managementProjectedAppearance.general?.typography,
       fontFamilyBase: themanagementmiamiBrandTheme.typography?.fontFamilyBase,
-      fontFamilyHeading:
-        themanagementmiamiBrandTheme.typography?.fontFamilyHeading,
       typePairing: "editorial",
     },
-    shape: { buttonStyle: "soft", radiusScale: 0.76 },
+    shape: { buttonStyle: "soft", radiusScale: 0.8 },
   },
-  advanced: {
-    ...managementProjectedAppearance.advanced,
-    tokenOverrides: {
-      ...managementProjectedAppearance.advanced?.tokenOverrides,
-      "--ds-color-bg-secondary": "#FBF3E7",
-      "--ds-color-surface": "#FFFEFB",
-    },
-  },
-};
+} as const;
+
+const managementDbVariables = compileTenantThemeConfig(
+  hydrateTenantThemeConfig(managementDocument, {
+    tenantId: "tenant_themanagementmiami",
+    slug: "themanagementmiami",
+    verticalKey: "bithire",
+    rowVersion: 1,
+  }),
+  { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire")! }
+).variables;
 
 const bithireStaticConfig = {
   slug: "bithire",
@@ -86,19 +115,18 @@ function resolveEmptyCopy(
 }
 
 describe("tenant identity and locale are independent runtime axes", () => {
-  it("uses static BrandTheme for BitHire and DB Appearance for The Management", () => {
+  it("uses static BrandTheme for BitHire and a DB document for The Management", () => {
     const management = managementDbConfig("en");
-    const variables = appearanceToVariables(management.appearance);
 
     expect(bithireStaticConfig.brandTheme).toBe(bithireBrandTheme);
     expect(bithireStaticConfig).not.toHaveProperty("appearance");
     expect(management.appearance).toBe(managementAppearance);
     expect(management).not.toHaveProperty("brandTheme");
-    expect(variables["--ds-color-primary"]).toBe("#0F766E");
-    expect(variables["--ds-font-family-heading"]).toContain(
+    expect(managementDbVariables["--ds-color-primary"]).toBe("#0F766E");
+    expect(managementDbVariables["--ds-font-family-heading"]).toContain(
       "--ds-font-pack-editorial-display"
     );
-    expect(variables["--ds-radius-scale"]).toBe("0.76");
+    expect(managementDbVariables["--ds-radius-scale"]).toBe("0.8");
     expect(bithireStaticConfig.vertical).toBe(management.vertical);
   });
 

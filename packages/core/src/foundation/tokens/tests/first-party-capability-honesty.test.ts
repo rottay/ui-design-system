@@ -47,7 +47,6 @@ const LIVENESS_PROBES: Partial<
       brandThemeToTokenOverrides(theme as never).motion ?? null,
       brandThemeToPersonality(theme as never).animation ?? null,
     ]),
-  engineBridge: (theme) => JSON.stringify(theme.engineBridge ?? null),
 };
 
 describe("first-party capability dispositions are honest", () => {
@@ -116,7 +115,6 @@ describe("first-party capability dispositions are honest", () => {
         "recipes",
         "expressive",
         "responsive",
-        "engineBridge",
       ] as const) {
         expect(
           row.theme.capabilities[id],

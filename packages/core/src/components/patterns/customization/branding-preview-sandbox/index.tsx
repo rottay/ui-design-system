@@ -47,15 +47,12 @@ import { Input } from '../../../primitives/inputs/input';
 import { Text } from '../../../primitives/display/typography/compound/text';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
-import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
+import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { FIRST_PARTY_THEMES, getFirstPartyVertical } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { migrateV1 } from '@/infrastructure/compilers/composition/tenant-theme/migrate-v1';
 import {
-  resolveAdapter,
-  compileTheme,
-  resolveTheme,
+  compileThemeIntent,
+  previewThemeIntent,
+  staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import { containerScope } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
 import { emitThemeCss } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
@@ -69,15 +66,23 @@ interface BrandingPreviewSandboxProps {
   /** Compact mode (fewer components). Default: false */
   compact?: boolean;
   /**
-   * The vertical baseline the proposed appearance is resolved against.
+   * The first-party vertical the proposed appearance is resolved against.
    *
    * A `TenantAppearance` is a DELTA; it has no channels of its own until it is
-   * resolved over a theme, which is why the canonical pipeline takes a baseline
-   * and not an appearance. Defaults to the Rottay first-party theme — the DS's
-   * own reference vertical — so the sandbox still renders standalone; a console
-   * previewing its own tenant should pass that tenant's baseline instead.
+   * resolved over a vertical's theme, which is why the canonical pipeline takes
+   * an intent naming a vertical and not an appearance. It used to take the
+   * baseline `Theme` itself, which made every caller an authority on what a
+   * baseline is; naming the vertical leaves that to the roster. Defaults to
+   * Rottay — the DS's own reference vertical — so the sandbox still renders
+   * standalone; a console previewing its own tenant passes that tenant's
+   * vertical instead.
    */
-  baseline?: Theme;
+  vertical?: FirstPartyVerticalId;
+  /**
+   * The tenant the preview is scoped for. Defaults to the vertical, which is
+   * the standalone case: nobody's tenant in particular.
+   */
+  slug?: string;
 }
 
 /**
@@ -88,7 +93,8 @@ export function BrandingPreviewSandbox({
   appearance,
   showLabels = true,
   compact = false,
-  baseline = FIRST_PARTY_THEMES.rottay,
+  vertical = 'rottay',
+  slug = vertical,
 }: BrandingPreviewSandboxProps): React.ReactElement {
   // Optional channel with an English floor: the sandbox renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
@@ -113,22 +119,24 @@ export function BrandingPreviewSandbox({
    */
   const cssVars = useMemo(() => {
     const vars: Record<string, string> = {};
-    // The baseline names the vertical, and the vertical owns the engine. A
-    // draft baseline that is not first-party is previewed with the DS primary.
-    const previewEngine = getFirstPartyVertical(baseline.id)?.engine ?? PRIMARY_ENGINE;
     const document = (
       appearance.advanced
         ? { schemaVersion: 1, mode: 'advanced', visualFoundation: appearance }
         : { schemaVersion: 1, mode: 'simple', appearance: appearance.general ?? {} }
     ) as unknown as TenantThemeDocument;
     try {
-      const patch = migrateV1(document, 'light').patch;
-      const adapter = resolveAdapter(previewEngine);
-      const proposed = compileTheme(
-        resolveTheme(baseline, { origin: 'preview', patch }),
-        adapter,
-      );
-      const untouched = compileTheme(resolveTheme(baseline), adapter);
+      // The engine, the baseline and the migration's default mode are the
+      // door's. This block used to state all three itself, and got the third
+      // wrong: it migrated with a hardcoded `'light'` while the publish path
+      // used the baseline's own default mode. On Rottay, whose default is dark,
+      // that put the same authored seed in two different blocks — the preview
+      // repainted the dark canvas for a change the artifact wrote into light.
+      const proposed = compileThemeIntent(
+        previewThemeIntent({ vertical, slug, document }),
+      ).compiled;
+      const untouched = compileThemeIntent(
+        staticThemeIntent(vertical, slug),
+      ).compiled;
       for (const [name, value] of Object.entries(proposed.cssVariables)) {
         if (untouched.cssVariables[name] !== value) vars[name] = value;
       }
@@ -136,7 +144,7 @@ export function BrandingPreviewSandbox({
       // An unmigratable appearance is a refused preview, never a second door.
     }
     return vars;
-  }, [appearance, baseline]);
+  }, [appearance, vertical, slug]);
 
   // This string reaches dangerouslySetInnerHTML, so every declaration passes
   // the governed preview guard before it is emitted.

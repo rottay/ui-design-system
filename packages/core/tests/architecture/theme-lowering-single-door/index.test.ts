@@ -162,6 +162,78 @@ function code(source: string): string {
 
 const SOURCES = productiveSources();
 
+/** The single owner allowed to produce a `ThemeIntent`. */
+const INGRESS_OWNER =
+  "src/infrastructure/compilers/runtime/theme/runtime/ingress/";
+
+/** The only productive sources allowed to select an engine adapter. */
+const ADAPTER_SELECTION_OWNERS: readonly string[] = [
+  "src/infrastructure/compilers/runtime/theme/facade/runtime/compile/index.ts",
+  // The runtime token baseline: it reads the engine's own `tokenBaseline`,
+  // which is a property of the adapter and not a compile's engine choice.
+  "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
+  // The `custom` fail-closed drill. It resolves an adapter to DEMONSTRATE the
+  // refusal and then the registration, which is the registry's own public
+  // contract being exercised, not a compile choosing an engine.
+  "showroom/src/app/probe/custom-component-pack/page.tsx",
+];
+
+/** The only productive sources allowed to name the v1 document migration. */
+const MIGRATION_IMPORTERS: readonly string[] = [
+  "src/infrastructure/compilers/runtime/theme/index.ts",
+  "src/infrastructure/compilers/runtime/theme/runtime/ingress/index.ts",
+  "src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts",
+];
+
+/** A `ThemeIntentOrigin` written as a literal. */
+const ORIGIN_LITERAL = /["'`](?:static-vertical|tenant-document|preview)["'`]/u;
+
+/** The retired engine fallback, in the shape every one of its four copies had. */
+const ENGINE_FALLBACK = /\?\?\s*PRIMARY_ENGINE/u;
+
+/** Every call of `name` in this source, from the TypeScript AST. */
+function callsTo(source: string, file: string, name: string): ts.CallExpression[] {
+  const parsed = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true);
+  const calls: ts.CallExpression[] = [];
+  const visit = (node: ts.Node): void => {
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === name) {
+      calls.push(node);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(parsed);
+  return calls;
+}
+
+/**
+ * Object literals whose own keys are a ThemeIntent's.
+ *
+ * Keyed on the envelope rather than on a name, because the shape is what a
+ * caller reintroduces: `{ origin, patch }` at a call site is the exact literal
+ * the two transports each carried before the ingress owner existed.
+ */
+function intentLiterals(source: string, file: string): ts.ObjectLiteralExpression[] {
+  const parsed = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true);
+  const found: ts.ObjectLiteralExpression[] = [];
+  const visit = (node: ts.Node): void => {
+    if (ts.isObjectLiteralExpression(node)) {
+      const keys = new Set(
+        node.properties
+          .map((property) =>
+            property.name && (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name))
+              ? property.name.text
+              : undefined
+          )
+          .filter((key): key is string => key !== undefined)
+      );
+      if (keys.has("origin") && keys.has("patch")) found.push(node);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(parsed);
+  return found;
+}
+
 describe("the theme lowering has exactly one productive door", () => {
   it("the retired doors are not defined anywhere in the source tree", () => {
     const definitions: string[] = [];
@@ -190,7 +262,6 @@ describe("the theme lowering has exactly one productive door", () => {
   it("the appearance door has no productive caller at all", () => {
     const callers = SOURCES.filter(({ label, source }) =>
       label.startsWith("src/") &&
-      !label.startsWith("src/infrastructure/compilers/kernel/runtime/appearance/") &&
       new RegExp(`\\b${APPEARANCE_DOOR}\\b`, "u").test(code(source))
     ).map(({ label }) => label);
     expect(callers.sort()).toEqual([...APPEARANCE_DOOR_KNOWN_CALLERS].sort());
@@ -255,19 +326,101 @@ describe("the theme lowering has exactly one productive door", () => {
     expect(importers).toEqual([]);
   });
 
-  it("the tooling adapter declares itself non-productive, with a sunset", () => {
-    // The adapter synthesizes a `ThemeResolution` for the one case
-    // `resolveTheme` cannot express (a tenant floor with no merged patch), so
-    // it has to say out loud that it is support and not a second door. Bound to
-    // the exported object rather than to the comment's wording: a comment can
-    // be edited without anything noticing.
+  /* ---------------------------------------------------------------------- */
+  /* C4 · the ingress above the lowering also has exactly one door           */
+  /* ---------------------------------------------------------------------- */
+
+  it("resolveTheme takes exactly ONE argument at every productive call site", () => {
+    // The optional second argument was a fourth, unnamed origin: it returned
+    // before `assertThemeIntent` ran, so the only unvalidated ingress was also
+    // the only one nobody had declared.
+    const findings: string[] = [];
+    for (const { path, source, label } of SOURCES) {
+      for (const call of callsTo(source, path, "resolveTheme")) {
+        if (call.arguments.length !== 1) {
+          findings.push(`${label}: resolveTheme called with ${call.arguments.length} arguments`);
+        }
+      }
+    }
+    expect(findings).toEqual([]);
+  });
+
+  it("no productive source outside the ingress owner assembles a ThemeIntent", () => {
+    const findings = SOURCES.filter(
+      ({ label, source, path }) =>
+        !label.startsWith(INGRESS_OWNER) && intentLiterals(source, path).length > 0
+    ).map(({ label }) => label);
+    expect(findings).toEqual([]);
+  });
+
+  it("the ingress owner is the only productive source that names an origin", () => {
+    const findings = SOURCES.filter(
+      ({ label, source }) =>
+        !label.startsWith(INGRESS_OWNER) &&
+        ORIGIN_LITERAL.test(code(source))
+    ).map(({ label }) => label);
+    expect(findings).toEqual([]);
+  });
+
+  it("the roster engine fallback exists in exactly one owner, and it is not a fallback", () => {
+    // `getFirstPartyVertical(x)?.engine ?? PRIMARY_ENGINE` was written at four
+    // sites while the DB door threw for the same question. There is one law now
+    // and it refuses.
+    const findings = SOURCES.filter(({ source }) =>
+      ENGINE_FALLBACK.test(code(source))
+    ).map(({ label }) => label);
+    expect(findings).toEqual([]);
+  });
+
+  it("adapter selection is not distributed across the tree", () => {
+    // `resolveAdapter` is the registry's own reader. Every productive compile
+    // reaches it through the one facade; a component, a pattern or a terminal
+    // calling it directly is a second selection point.
+    const callers = SOURCES.filter(
+      ({ source, path }) => callsTo(source, path, "resolveAdapter").length > 0
+    ).map(({ label }) => label);
+    expect(callers.sort()).toEqual([...ADAPTER_SELECTION_OWNERS].sort());
+  });
+
+  it("the document migration has exactly one owner and bounded importers", () => {
+    const importers = SOURCES.filter(({ source }) =>
+      /\bmigrateV1\b/u.test(code(source))
+    ).map(({ label }) => label);
+    expect(importers.sort()).toEqual([...MIGRATION_IMPORTERS].sort());
+  });
+
+  it("the wrap-only lift is not reached from a component, a pattern or the showroom", () => {
+    const importers = SOURCES.filter(({ source }) =>
+      /\bliftAuthoredTheme\b/u.test(code(source))
+    ).map(({ label }) => label);
+    for (const label of importers) {
+      expect(
+        label.startsWith("src/infrastructure/compilers/") ||
+          label.startsWith("src/entrypoints/"),
+        label
+      ).toBe(true);
+    }
+  });
+
+  it("the tooling adapter declares itself non-productive, with a closed domain", () => {
+    // The adapter synthesizes a `ThemeResolution` for the inputs the productive
+    // door cannot NAME -- a mutated roster leaf and a tenant floor applied as
+    // posture -- so it has to say out loud that it is support and not a second
+    // door. Bound to the exported object rather than to the comment's wording:
+    // a comment can be edited without anything noticing.
+    //
+    // It declares a DOMAIN, not a sunset. The sunset it used to declare ("the
+    // readers take a ThemeResolution directly") was debt that could not be
+    // paid: moving the synthesis into three readers is three constructors
+    // instead of one. A stated permanent domain is the honest record.
     const ownership = JSON.parse(
       JSON.stringify(THEME_LOWERING_OWNERSHIP)
     ) as Record<string, unknown>;
     expect(ownership.disposition).toBe("non-productive-support");
     expect(ownership.productiveConsumers).toBe(0);
-    expect(typeof ownership.sunset).toBe("string");
-    expect(String(ownership.sunset).length).toBeGreaterThan(0);
+    expect(ownership.sunset).toBeUndefined();
+    expect(typeof ownership.domain).toBe("string");
+    expect(String(ownership.domain).length).toBeGreaterThan(40);
     // and the count it declares is the count this file measured above
     const importers = SOURCES.filter(({ source }) =>
       /theme-lowering|lowerBrandThemeFixture/u.test(code(source))
@@ -436,7 +589,6 @@ describe("planted mutants make the single-door gate go red", () => {
     const callers = withPlanted(victim, `appearanceToVariables(appearance);\n`)
       .filter(({ label, source }) =>
         label.startsWith("src/") &&
-        !label.startsWith("src/infrastructure/compilers/kernel/runtime/appearance/") &&
         new RegExp(`\\b${APPEARANCE_DOOR}\\b`, "u").test(code(source))
       )
       .map(({ label }) => label);
@@ -457,5 +609,91 @@ describe("planted mutants make the single-door gate go red", () => {
       .filter(({ source }) => /theme-lowering|lowerBrandThemeFixture/u.test(code(source)))
       .map(({ label }) => label);
     expect(importers).toEqual([victim]);
+  });
+
+  /* ---------------------------------------------------------------------- */
+  /* C4 · the ingress laws go red on the exact shapes they retired          */
+  /* ---------------------------------------------------------------------- */
+
+  it("a reinstated two-argument resolveTheme is caught", () => {
+    const planted = `resolveTheme(baseline, { origin: "preview", patch });\n`;
+    const found = withPlanted(victim, planted).flatMap(({ path, source, label }) =>
+      callsTo(source, path, "resolveTheme")
+        .filter((call) => call.arguments.length !== 1)
+        .map(() => label)
+    );
+    expect(found).toEqual([victim]);
+    // and the unmutated tree has none, so the finding came from the mutant
+    expect(
+      SOURCES.flatMap(({ path, source }) =>
+        callsTo(source, path, "resolveTheme").filter((call) => call.arguments.length !== 1)
+      )
+    ).toHaveLength(0);
+  });
+
+  it("a hand-assembled ThemeIntent outside the ingress owner is caught", () => {
+    const planted =
+      `const intent = { vertical: "rottay", slug: "acme", origin: "preview", patch: {} };\n`;
+    const found = withPlanted(victim, planted)
+      .filter(
+        ({ label, source, path }) =>
+          !label.startsWith(INGRESS_OWNER) && intentLiterals(source, path).length > 0
+      )
+      .map(({ label }) => label);
+    expect(found).toEqual([victim]);
+  });
+
+  it("the shorter two-key literal — the shape both transports actually had — is caught", () => {
+    const planted = `compile(resolveTheme({ origin: "tenant-document", patch }));\n`;
+    const found = withPlanted(victim, planted)
+      .filter(
+        ({ label, source, path }) =>
+          !label.startsWith(INGRESS_OWNER) && intentLiterals(source, path).length > 0
+      )
+      .map(({ label }) => label);
+    expect(found).toEqual([victim]);
+  });
+
+  it("a reinstated roster engine fallback is caught", () => {
+    const planted =
+      `const engine = getFirstPartyVertical(slug)?.engine ?? PRIMARY_ENGINE;\n`;
+    const found = withPlanted(victim, planted)
+      .filter(({ source }) => ENGINE_FALLBACK.test(code(source)))
+      .map(({ label }) => label);
+    expect(found).toEqual([victim]);
+    expect(SOURCES.filter(({ source }) => ENGINE_FALLBACK.test(code(source)))).toHaveLength(0);
+  });
+
+  it("an extra adapter selection point is caught", () => {
+    const planted = `const adapter = resolveAdapter("modern");\n`;
+    const callers = withPlanted(victim, planted)
+      .filter(({ source, path }) => callsTo(source, path, "resolveAdapter").length > 0)
+      .map(({ label }) => label);
+    expect(callers).toContain(victim);
+    expect(callers.sort()).not.toEqual([...ADAPTER_SELECTION_OWNERS].sort());
+  });
+
+  it("a deep import of the document migration is caught", () => {
+    const planted = `const envelope = migrateV1(document, "light");\n`;
+    const importers = withPlanted(victim, planted)
+      .filter(({ source }) => /\bmigrateV1\b/u.test(code(source)))
+      .map(({ label }) => label);
+    expect(importers).toContain(victim);
+    expect(importers.sort()).not.toEqual([...MIGRATION_IMPORTERS].sort());
+  });
+
+  it("an origin named only in a comment or a string is NOT a finding", () => {
+    // The origin sweep reads code, not prose: `static-vertical` appears in
+    // docblocks all over this tree and none of those is an ingress.
+    const planted =
+      `// the "preview" origin resolves like a tenant document\n` +
+      `/* origin: "static-vertical" */\n`;
+    const found = withPlanted(victim, planted)
+      .filter(
+        ({ label, source }) =>
+          !label.startsWith(INGRESS_OWNER) && ORIGIN_LITERAL.test(code(source))
+      )
+      .map(({ label }) => label);
+    expect(found).toEqual([]);
   });
 });

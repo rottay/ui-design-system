@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "702d6498eae83d2a0fd8f3879b608b43b7049cf8e53c2fbb4b4c34f5045533fb"
+    "registryDigest": "8ae1640429f88583a4a7930b6ae024354c7ec3324646ee408b0f82d3ac85923e"
   },
   "title": "Layout rhythm",
   "valueType": "enum",
@@ -62,7 +62,7 @@
       "factorTable": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts#TENANT_THEME_RHYTHM_FACTORS",
       "bounds": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts#TENANT_THEME_RHYTHM_SCALE_BOUNDS",
       "staticLowerer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
-      "dbLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts",
+      "dbLowerer": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "effectiveClamp": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "computedMounts": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
       "existingFivePlaneHarness": "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"

@@ -388,10 +388,14 @@ describe("the canonical Theme leaf schema", () => {
   it("the derivation is non-vacuous and total", () => {
     expect(DERIVED.size).toBeGreaterThan(4000);
     const kinds = [...DERIVED.values()].map((leaf) => leaf.kind);
-    for (const kind of ["string", "number", "boolean", "number|string", "any"]) {
+    for (const kind of ["string", "number", "boolean", "number|string"]) {
       expect(kinds.includes(kind), `no leaf resolves to ${kind}`).toBe(true);
     }
     expect(kinds.filter((kind) => kind === "unknown")).toEqual([]);
+    // `any` used to appear here too, carried by the single `engineBridge`
+    // leaf. That family is retired, so the Theme declares no opaque value at
+    // all; the opaque-pattern law below is what keeps the two in agreement.
+    expect(kinds.filter((kind) => kind === "any")).toEqual([]);
   });
 
   it("every non-string leaf is declared, and nothing else is", () => {
@@ -413,6 +417,9 @@ describe("the canonical Theme leaf schema", () => {
   });
 
   it("the opaque patterns are exactly the leaves declared `unknown`", () => {
+    // Both sides are empty today, and that is the claim rather than a
+    // coincidence: re-introducing an `unknown` leaf without declaring its
+    // pattern moves one side of this equality and not the other.
     const opaque = [...DERIVED]
       .filter(([, leaf]) => leaf.kind === "any")
       .map(([path]) => normalizeThemeLeafPath(path))
@@ -444,7 +451,6 @@ describe("the canonical Theme leaf schema", () => {
     expect(themeLeafOptions("$.palette.primaryColor")).toBeNull();
     expect(themeLeafOptions("$.typography.fontFamilyBase")).toBeNull();
     expect(themeLeafOptions("$.chrome.sidebar.groupFontWeight")).toBeNull();
-    expect(themeLeafOptions("$.engineBridge.value.modern.anything")).toBeNull();
     expect(Object.keys(THEME_LEAF_OPTIONS).length).toBeGreaterThan(25);
   });
 
@@ -479,6 +485,5 @@ describe("the canonical Theme leaf schema", () => {
     expect(themeLeafKinds("$.charts.value.categoryColors[0]")).toEqual(
       THEME_DEFAULT_LEAF_KINDS
     );
-    expect(themeLeafKinds("$.engineBridge.value.modern.anything")).toBeNull();
   });
 });

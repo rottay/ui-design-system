@@ -14,15 +14,21 @@
  * nothing else — and it exists so that a reader keeps measuring the compiler
  * instead of measuring an adapter of its own.
  *
- * It SYNTHESIZES a `ThemeResolution` for exactly one case, and only because
- * `resolveTheme` cannot express it: a reader supplies a tenant FLOOR without a
- * merged patch, and resolving the floor as an intent would merge it into the
- * theme at the vertical's position instead of applying it last as a posture.
- * The no-tenant case has no such problem and goes through `resolveTheme`.
+ * It SYNTHESIZES the `ThemeResolution` it lowers, because the productive door
+ * cannot express what these readers measure, and that is a CLOSED domain rather
+ * than debt awaiting a sunset:
  *
- * SUNSET: this adapter is retired the day the readers take a `ThemeResolution`
- * directly. `THEME_LOWERING_OWNERSHIP` states the rule the architecture gate
- * asserts; a productive import of this module is a defect, not a shortcut.
+ *   - the slot inventory compiles MUTANTS. It replaces one authored leaf of a
+ *     roster theme with a sentinel and diffs the emitted channels, which is how
+ *     it learns which leaf feeds which channel. A mutated theme is not a roster
+ *     baseline and not a patch over one -- a `ThemeIntent` names a baseline it
+ *     cannot name.
+ *   - the ingress probe supplies a tenant FLOOR with no merged patch. Resolving
+ *     the floor as an intent would merge it at the vertical's position instead
+ *     of applying it last as a posture, which is a different compile.
+ *
+ * A productive import of this module is a defect, not a shortcut, and
+ * `THEME_LOWERING_OWNERSHIP` states the rule the architecture gate asserts.
  */
 
 import { join } from 'node:path';
@@ -42,8 +48,8 @@ const importByPath = (absolutePath) => import(pathToFileURL(absolutePath).href);
 export const THEME_LOWERING_OWNERSHIP = Object.freeze({
   disposition: "non-productive-support",
   productiveConsumers: 0,
-  synthesizesResolution: "tenant-floor-without-merged-patch",
-  sunset: "readers take a ThemeResolution directly",
+  synthesizesResolution: "mutant-fixture-theme-or-tenant-floor-without-merged-patch",
+  domain: "compiles inputs no ThemeIntent can name: a mutated roster leaf, and a tenant floor applied as posture",
 });
 
 /** Published entrypoint the lowering is read from, and the export's name. */
@@ -79,7 +85,6 @@ export async function brandThemeLoweringAdapter({
 }) {
   const {
     compileTheme,
-    resolveTheme,
     liftAuthoredTheme,
     resolveAdapter,
     emitThemeCss,
@@ -88,7 +93,6 @@ export async function brandThemeLoweringAdapter({
   } = module;
   for (const [name, value] of Object.entries({
     compileTheme,
-    resolveTheme,
     liftAuthoredTheme,
     resolveAdapter,
     emitThemeCss,
@@ -121,8 +125,11 @@ export async function brandThemeLoweringAdapter({
       `theme-lowering: ${VERTICAL_ROSTER} exports no getFirstPartyVertical.`,
     );
   }
-  /* A first-party vertical's engine is its ROSTER ROW's, the field the artifact
-   * renderer compiles with; identity answers only for a slug no row claims. */
+  /* A first-party vertical's engine is its ROSTER ROW's -- the same row the
+   * productive door reads. A fixture slug that no row claims takes the primary
+   * engine here and ONLY here: these readers measure the compiler over mutants
+   * and probe fixtures that are not tenants of any vertical, so refusing them
+   * the way the productive door does would leave the compiler unmeasured. */
   const adapters = new Map();
   const adapterFor = (slug) => {
     const engine = roster.getFirstPartyVertical(slug)?.engine ?? identity.PRIMARY_ENGINE;
@@ -143,12 +150,14 @@ export async function brandThemeLoweringAdapter({
       input.tenantAuthoredPaths ?? (tenantPatch !== undefined ? new Set() : undefined);
     const slug = input.tenantSlug ?? brandTheme?.id;
     const theme = { ...liftAuthoredTheme(brandTheme ?? {}), id: slug };
-    /* The no-tenant case IS `resolveTheme` with no intent, so it takes the
-     * canonical door rather than a hand-built `EMPTY_PROVENANCE` twin. Only the
-     * floor case below is synthesized, for the reason stated at the top. */
+    /* Both legs are synthesized because the theme the readers hand in is not a
+     * roster baseline: `resolveTheme` now takes a `ThemeIntent`, which NAMES its
+     * baseline, and a mutant or probe fixture has no name in the roster. The
+     * provenance is the same vocabulary the door produces -- EMPTY_PROVENANCE
+     * when there is no tenant, the floor claim set when there is. */
     const resolution =
       tenantAuthoredPaths === undefined
-        ? resolveTheme(theme)
+        ? { theme, provenance: EMPTY_PROVENANCE }
         : {
             theme,
             provenance: {

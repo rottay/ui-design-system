@@ -99,6 +99,7 @@ export function TenantBrandingStates() {
             Brand Studio — live swatches, dark/light grounds and contrast reports
           </Text>
           <PatternBrandStudio
+            vertical="bithire"
             value={theme}
             title={`${theme.name} Brand Studio`}
             description="Deterministic tenant branding migration baseline"

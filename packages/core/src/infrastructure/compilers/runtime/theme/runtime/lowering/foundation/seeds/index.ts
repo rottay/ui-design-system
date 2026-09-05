@@ -185,7 +185,7 @@ export function applyTenantSeedDerivations(
  *
  * Same defect as the primary family, one tier down: a DB tenant that sets
  * only `palette.status.success` (lowered to `palette.successColor` before
- * this compiler runs -- `migrate-v1/index.ts`, the same door the seed
+ * this compiler runs -- `ingress/foundation/document-patch`, the same door the seed
  * passthrough already uses) must get a `-bg`/`-border`/alpha family derived
  * from ITS seed, not left resolving to the vertical baseline's baked-in
  * literal. `deriveStatusTintFloor` alone cannot fix this: it merges under
@@ -220,7 +220,7 @@ export function applyTenantStatusSeedDerivations(
          * value, never from `authoredPaths` membership alone.
          * `collectPatchAuthoredPaths` enumerates a keypath the moment it
          * exists as an object key, even when its value is `undefined`
-         * (`migrate-v1`'s `paletteFields()` always constructs all four
+         * (`document-patch`'s `paletteFields()` always constructs all four
          * status-color keys on its returned object, tenant-set or not), so
          * `authoredPaths.has("...palette.errorColor")` can be true for a
          * tenant that never touched error at all. Measured: a document that

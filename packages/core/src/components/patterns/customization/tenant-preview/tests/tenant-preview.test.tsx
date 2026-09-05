@@ -29,6 +29,10 @@ const normalizedRusticSkin = rusticSkin.replace(/"/g, "'");
 describe('TenantPreview', () => {
   const sampleConfig: TenantCreationConfig = {
     slug: 'test-tenant',
+    // A draft is a patch over the vertical it belongs to; a config that names
+    // none names no baseline, and the preview reports `vertical` as a lost axis
+    // rather than compiling one under the primary engine by default.
+    vertical: 'rottay',
     name: 'Test Tenant',
     primaryColor: '#3B82F6',
     personality: 'formal',
@@ -121,9 +125,13 @@ describe('TenantPreview', () => {
     // selector block"). The distinction is real, not an inconsistency: an
     // authoring draft structurally has no field to carry a dark seed in the
     // first place, so there is nothing to lift.
-    it('never emits a dark-mode selector block, because an authoring draft has no mode overlay', () => {
+    it('emits no dark overlay of its own: an authoring draft has no mode field', () => {
+      // Rottay's own default mode is dark, so its overlay is the LIGHT one.
+      // What the draft must not do is add a dark block, and it structurally
+      // cannot: `draftBrandTheme` has no field a dark seed could arrive in.
       const { css } = buildPreviewCss({
         kind: 'brand-theme',
+        vertical: 'rottay',
         slug: sampleConfig.slug,
         brandTheme: draftBrandTheme(sampleConfig),
       });
@@ -136,6 +144,7 @@ describe('TenantPreview', () => {
       const draft = { ...sampleConfig, secondaryColor: '#10B981' };
       const { css } = buildPreviewCss({
         kind: 'brand-theme',
+      vertical: 'rottay',
         slug: draft.slug,
         brandTheme: draftBrandTheme(draft),
       });
@@ -224,11 +233,21 @@ describe('TenantPreview', () => {
 
       const root = container.querySelector(`[${PREVIEW_SCOPE_ATTRIBUTE}]`) as HTMLElement;
       const outside = screen.getByTestId(`outside-${_name}`);
+      const scope = `[${PREVIEW_SCOPE_ATTRIBUTE}='${sampleConfig.slug}']`;
+
+      // Containment is the law, and it is stated as a PREFIX. `root.matches`
+      // was the old phrasing and it is too strong now that a draft is a patch
+      // over a vertical: the vertical's own mode overlays compile too, and a
+      // `<scope>[data-theme='light']` rule is correctly scoped while a root
+      // carrying no mode attribute legitimately does not match it.
       for (const selector of selectors) {
-        expect(root.matches(selector)).toBe(true);
+        expect(selector.startsWith(scope)).toBe(true);
         expect(outside.matches(selector)).toBe(false);
         expect(document.documentElement.matches(selector)).toBe(false);
       }
+      // and the unqualified scope rule is there, and does reach the root
+      expect(selectors).toContain(scope);
+      expect(root.matches(scope)).toBe(true);
     });
 
     it('emits no document-root rule when previewing the ACTIVE tenant slug', () => {
@@ -330,6 +349,7 @@ describe('TenantPreview', () => {
       const config = createTenantConfig(sampleConfig);
       const { unsupportedAxes } = buildPreviewCss({
         kind: 'brand-theme',
+      vertical: 'rottay',
         slug: config.slug,
         brandTheme: draftBrandTheme(sampleConfig),
       });

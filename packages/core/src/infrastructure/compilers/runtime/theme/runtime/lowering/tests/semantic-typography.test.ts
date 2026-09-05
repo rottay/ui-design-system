@@ -10,6 +10,7 @@ import type { SemanticTypographyRoleTokens } from "@/foundation/contracts/kernel
 
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { resolveTheme } from "../../resolution";
 import { resolveAdapter } from "../../../presentation/adapters";
 import { containerScope, emitThemeCss } from "../../emission";
@@ -115,10 +116,11 @@ const FIRST_PARTY = [
 // the property this file actually exists to defend.
 //
 // C2 re-anchor, with its cause measured rather than asserted. The lowering
-// stopped carrying `engineBridge` through its product -- it was produced by the
-// compiler and read by nobody -- so the digest's payload lost exactly one key.
-// PROOF that nothing else moved: re-adding `engineBridge` to this payload,
-// taken from the theme where it always came from, reproduces the PREVIOUS pins
+// stopped carrying the engine-bridge family through its product -- it was
+// produced by the compiler and read by nobody, and the family is retired from
+// the Theme contract entirely now -- so the digest's payload lost exactly one
+// key. PROOF that nothing else moved: re-adding that key to this payload,
+// taken from the theme where it always came from, reproduced the PREVIOUS pins
 // byte for byte (rottay 16d10f6d…, bithire cdff418d…, evnto 4a6019fb…). Every
 // other member of the surface -- cssVariables, cssString, colorScheme,
 // modeBlocks, personality, tokenOverrides and both profile ids -- is identical.
@@ -165,8 +167,11 @@ function legA(brandTheme: FirstPartyBrandTheme): Compiled {
  */
 function legB(brandTheme: FirstPartyBrandTheme): Compiled {
   const slug = brandTheme.id;
+  // The normalizer's own output, lowered directly. It cannot go through the
+  // intent door: the door reads the roster, so it would compare the roster's
+  // theme to itself instead of comparing the two lifts.
   const compiled = compileTheme(
-    resolveTheme({ ...brandThemeToTheme(brandTheme), id: slug }),
+    { theme: brandThemeToTheme(brandTheme), provenance: EMPTY_PROVENANCE },
     resolveAdapter("modern")
   );
   return {

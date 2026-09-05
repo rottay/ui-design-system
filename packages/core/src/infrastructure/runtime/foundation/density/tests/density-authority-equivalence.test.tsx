@@ -34,7 +34,6 @@ import {
   resolveEffectiveDensityScale,
 } from '@/foundation/tokens/ts/foundation/base/density';
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -58,10 +57,10 @@ import { DensityScope, useDensity } from '../index';
  * is not touched here.
  *
  * What was wrong was the fixture: the tree carried `brandTheme` while measuring
- * nothing from it. Legs (1) and (2) below call `compileTheme` and
- * `compileAppearanceVariables` DIRECTLY, so the static-BrandTheme and
- * DB-Appearance authorities are compared without the provider ever seeing a
- * BrandTheme. The tree is needed for exactly three of the five: the `<html>`
+ * nothing from it. Legs (1) and (2) below read the compiled products of
+ * `compileTheme` and `compileTenantThemeConfig` DIRECTLY, so the
+ * static-BrandTheme and DB-Appearance authorities are compared without the
+ * provider ever seeing a BrandTheme. The tree is needed for exactly three of the five: the `<html>`
  * boundary, the JS context, and the nested scope -- and those need the
  * appearance posture, which arrives the way production delivers it, as a
  * compiled artifact with a matching declaration (the same shape
@@ -185,11 +184,10 @@ describe('density posture equivalence across every authority', () => {
       undefined,
     ) * Number(brandVars[DENSITY_MODE_FACTOR_VARIABLE]);
 
-    // (2) DB Appearance document — the same field, the same channel.
+    // (2) DB Appearance document — the same field, the same channel, read off
+    // the artifact the productive DB door compiled and the tree mounted.
     const appearanceFactor = Number(
-      compileAppearanceVariables({ general: { density: POSTURE } }).variables[
-        DENSITY_MODE_FACTOR_VARIABLE
-      ],
+      POSTURE_ARTIFACT.variables[DENSITY_MODE_FACTOR_VARIABLE],
     );
     const dbScale = STRUCTURAL_SCALE * appearanceFactor;
 
@@ -217,9 +215,9 @@ describe('density posture equivalence across every authority', () => {
   });
 
   it('cannot double-apply the tenant posture when CSS and the DB compiler are both active', async () => {
-    // Both authorities are fed by the SAME `appearance.general.density` field:
-    // the appearance compiler resolves the factor, and the provider derives the
-    // root posture from it. If the root boundary wrote the LOCAL channel, :root
+    // Both authorities are fed by the SAME `appearance.density` field: the DB
+    // compiler resolves the factor into the artifact, and the provider derives
+    // the root posture from it. If the root boundary wrote the LOCAL channel, :root
     // would multiply mode × local and produce 0.85² — the regression the
     // :not(:root) guard was protecting against.
     mountPostureArtifact();
@@ -247,11 +245,9 @@ describe('density posture equivalence across every authority', () => {
     expect(
       document.documentElement.style.getPropertyValue(DENSITY_MODE_FACTOR_VARIABLE),
     ).toBe('');
-    expect(
-      compileAppearanceVariables({ general: { density: POSTURE } }).variables[
-        DENSITY_MODE_FACTOR_VARIABLE
-      ],
-    ).toBe(String(DENSITY_MODE_FACTORS.compact));
+    expect(POSTURE_ARTIFACT.variables[DENSITY_MODE_FACTOR_VARIABLE]).toBe(
+      String(DENSITY_MODE_FACTORS.compact),
+    );
     expect(cssRootModeFactor(POSTURE)).toBe(DENSITY_MODE_FACTORS.compact);
 
     // And the root never contributes a local multiplier, so the second factor

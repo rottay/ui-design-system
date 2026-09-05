@@ -1165,13 +1165,13 @@ export function DesignSystemProvider({
   );
 
   // Appearance is READ here (density posture, motion dial, backgroundMode,
-  // recipe profile, icon posture) and COMPILED nowhere. `compileAppearanceVariables`
-  // used to run in this provider and hand its output to ThemeProvider as
-  // inline root variables — a third compiler, competing with whichever
-  // artifact the application had already mounted. The appearance a tenant
-  // paints with is compiled once, by `compileTenantThemeConfig`, into the
-  // artifact; this provider consumes the artifact's `normalizedAppearance`
-  // through the config it is given.
+  // recipe profile, icon posture) and COMPILED nowhere. A second appearance
+  // compiler used to run in this provider and hand its output to ThemeProvider
+  // as inline root variables — competing with whichever artifact the
+  // application had already mounted. The appearance a tenant paints with is
+  // compiled once, by `compileTenantThemeConfig`, into the artifact; this
+  // provider consumes the artifact's `normalizedAppearance` through the config
+  // it is given.
 
   // Final precedence used by the runtime:
   // force props -> explicit tenant theme (light/dark/auto) -> appearance.backgroundMode -> DS fallback.

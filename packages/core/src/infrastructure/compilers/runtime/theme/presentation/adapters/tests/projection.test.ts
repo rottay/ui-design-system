@@ -16,13 +16,14 @@ import {
   CLASSIC_SEED_CHANNELS,
   classicThemeAdapter,
 } from "../presentation/classic";
+import { staticThemeIntent } from "../../../runtime/ingress";
 import { modernThemeAdapter } from "../presentation/modern";
 import { rusticThemeAdapter } from "../presentation/rustic";
 
 const SLUGS = ["rottay", "bithire", "evnto"] as const;
 
 const compiledFor = (slug: (typeof SLUGS)[number]): ThemeCompilation =>
-  compileTheme(resolveTheme(FIRST_PARTY_THEMES[slug]), modernThemeAdapter);
+  compileTheme(resolveTheme(staticThemeIntent(slug)), modernThemeAdapter);
 
 const COMPILED: Readonly<Record<(typeof SLUGS)[number], ThemeCompilation>> = Object.freeze({
   rottay: compiledFor("rottay"),
@@ -154,7 +155,12 @@ describe("classic projects the antd seed vocabulary, base and per mode", () => {
 describe("a real tenant radius reaches antd in the unit the tenant wrote", () => {
   const tenantSeed = (patch: ThemePatch): number =>
     compileTheme(
-      resolveTheme(FIRST_PARTY_THEMES.rottay, { origin: "tenant-document", patch }),
+      resolveTheme({
+        vertical: "rottay",
+        slug: "rottay",
+        origin: "tenant-document",
+        patch,
+      }),
       classicThemeAdapter
     ).projection.seeds.borderRadius as number;
 
@@ -165,7 +171,9 @@ describe("a real tenant radius reaches antd in the unit the tenant wrote", () =>
 
   it("reproduces the authored radius at a non-1 dial", () => {
     const compiled = compileTheme(
-      resolveTheme(FIRST_PARTY_THEMES.rottay, {
+      resolveTheme({
+        vertical: "rottay",
+        slug: "rottay",
         origin: "tenant-document",
         patch: { surfaces: { borderRadius: { md: "0.5rem" }, radiusScale: 1.25 } },
       }),
@@ -242,7 +250,7 @@ describe("adapters project, they never mint a channel name or emit CSS", () => {
 
   it("compiles engine-invariant channels: the three adapters agree exactly", () => {
     for (const slug of SLUGS) {
-      const resolution = resolveTheme(FIRST_PARTY_THEMES[slug]);
+      const resolution = resolveTheme(staticThemeIntent(slug));
       const [modern, classic, rustic] = SHIPPED.map(([, adapter]) =>
         compileTheme(resolution, adapter)
       );

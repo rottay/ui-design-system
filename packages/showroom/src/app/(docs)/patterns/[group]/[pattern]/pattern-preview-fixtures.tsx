@@ -1244,7 +1244,7 @@ function BrandStudioPreview() {
     palette: { primaryColor: '#2f6feb' },
   });
 
-  return <PatternBrandStudio value={theme} onChange={(next) => setTheme(next)} />;
+  return <PatternBrandStudio vertical="bithire" value={theme} onChange={(next) => setTheme(next)} />;
 }
 
 /**

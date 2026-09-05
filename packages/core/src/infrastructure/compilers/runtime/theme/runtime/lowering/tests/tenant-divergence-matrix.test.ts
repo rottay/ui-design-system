@@ -17,7 +17,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { appearanceToVariables } from "@/infrastructure/compilers/kernel/runtime/appearance";
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from "@/infrastructure/compilers/composition/tenant-theme";
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
@@ -34,42 +38,68 @@ const themanagementProjectedAppearance = brandThemeToTenantAppearance(
 /**
  * DB representation of The Management. The BrandTheme fixture above remains
  * the deterministic authoring/migration source, but a customer runtime never
- * receives it via TenantConfig.brandTheme: it receives this bounded Appearance
- * projection layered on top of the BitHire vertical.
+ * receives it via TenantConfig.brandTheme: it receives a bounded tenant theme
+ * DOCUMENT layered on top of the BitHire vertical.
+ *
+ * Authored by hand rather than projected from the BrandTheme, and that is a
+ * measurement rather than a convenience: `brandThemeToTenantAppearance` emits
+ * `typography.fontFamilyHeading` as a `var(--ds-font-pack-…)` reference and an
+ * absent `palette.dark.background`, both of which the document schema refuses
+ * by name. The projection is a migration aid; the document below is what the
+ * productive door actually admits.
+ *
+ * `shape.radiusScale` is 0.8 because that is the BitHire envelope's floor. The
+ * 0.76 this fixture used to carry never reached a customer: it was only ever
+ * lowered by a compatibility compiler that sat outside the document schema.
  */
-const themanagementDbAppearance: TenantAppearance = {
-  general: {
-    ...themanagementProjectedAppearance.general,
+const themanagementDbDocument = {
+  schemaVersion: 1,
+  mode: 'simple',
+  appearance: {
+    palette: {
+      primary: '#0F766E',
+      secondary: '#8C6D46',
+      accent: '#B44F3C',
+      background: '#FBF6EC',
+      foreground: {
+        primary: '#2E261C',
+        secondary: '#5C4F3D',
+        muted: '#6B5B48',
+        disabled: '#74644F',
+      },
+      border: { primary: '#C8B9A5', secondary: '#E2D9CC' },
+    },
     typography: {
-      ...themanagementProjectedAppearance.general?.typography,
       fontFamilyBase: themanagementmiamiBrandTheme.typography?.fontFamilyBase,
-      fontFamilyHeading: themanagementmiamiBrandTheme.typography?.fontFamilyHeading,
       typePairing: 'editorial',
       scale: 1.04,
     },
-    shape: { buttonStyle: 'soft', radiusScale: 0.76 },
+    shape: { buttonStyle: 'soft', radiusScale: 0.8 },
     density: 'spacious',
     motion: { intensity: 0.62, durationScale: 1.08, ambient: 'subtle' },
-    surfaces: { elevation: 'elevated' },
+    surfaces: { elevation: 'elevated', effectIntensity: 0.45 },
     navigation: { sidebarTone: 'strong' },
   },
-  advanced: {
-    ...themanagementProjectedAppearance.advanced,
-    tokenOverrides: {
-      ...themanagementProjectedAppearance.advanced?.tokenOverrides,
-      '--ds-color-bg-secondary': '#FBF3E7',
-      '--ds-color-surface': '#FFFEFB',
-    },
-  },
-};
+} as const;
 
 const themanagementDbTenant = {
   slug: 'themanagementmiami',
   vertical: 'bithire',
-  appearance: themanagementDbAppearance,
+  appearance: {
+    general: themanagementProjectedAppearance.general,
+  } satisfies TenantAppearance,
 } satisfies Pick<TenantConfig, 'slug' | 'vertical' | 'appearance'>;
 
-const themanagementDbVariables = appearanceToVariables(themanagementDbAppearance);
+/** The productive DB door: one document, one compile, one artifact. */
+const themanagementDbVariables = compileTenantThemeConfig(
+  hydrateTenantThemeConfig(themanagementDbDocument, {
+    tenantId: 'tenant_themanagementmiami',
+    slug: 'themanagementmiami',
+    verticalKey: 'bithire',
+    rowVersion: 1,
+  }),
+  { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire')! }
+).variables;
 
 /**
  * The bounded channels a tenant owns. Every one must differ, or the tenant is
@@ -154,11 +184,11 @@ describe('two tenants of the bithire vertical diverge on every bounded channel',
   });
 });
 
-describe('The Management traverses the bounded DB Appearance path', () => {
+describe('The Management traverses the bounded DB document path', () => {
   it('does not smuggle a customer theme through the static brandTheme field', () => {
     expect(themanagementDbTenant).not.toHaveProperty('brandTheme');
-    expect(themanagementDbTenant.appearance).toBe(themanagementDbAppearance);
     expect(themanagementDbTenant.vertical).toBe('bithire');
+    expect(themanagementDbDocument.mode).toBe('simple');
   });
 
   it.each([
@@ -169,24 +199,31 @@ describe('The Management traverses the bounded DB Appearance path', () => {
     '--ds-radius-scale',
     '--ds-elevation-1',
     '--ds-color-bg-primary',
-    '--ds-card-bg',
-  ])('%s is emitted by the DB-safe compiler and overrides the vertical baseline', (channel) => {
+  ])('%s is emitted by the DB door and overrides the vertical baseline', (channel) => {
     const dbValue = themanagementDbVariables[channel];
-    expect(dbValue, `DB Appearance does not emit ${channel}`).toBeDefined();
+    expect(dbValue, `the DB document does not emit ${channel}`).toBeDefined();
     expect(dbValue, `${channel} leaves The Management wearing BitHire defaults`).not.toBe(
       bithire.cssVariables[channel]
     );
   });
 
-  it('keeps the DB override surface bounded', () => {
-    expect(themanagementDbAppearance).not.toHaveProperty('vertical');
-    expect(themanagementDbAppearance).not.toHaveProperty('engine');
-    expect(themanagementDbAppearance).not.toHaveProperty('productProfile');
-    expect(
-      Object.keys(themanagementDbAppearance.advanced?.tokenOverrides ?? {}).every((key) =>
-        key.startsWith('--ds-')
-      )
-    ).toBe(true);
+  it('does NOT reach card chrome from the Simple tier, and says so', () => {
+    // `--ds-card-bg` used to sit in the list above and passed for the wrong
+    // reason: the compatibility lowering emitted it from a raw
+    // `--ds-color-surface` override that the document schema does not admit,
+    // so "differs from bithire" was satisfied by a channel no customer
+    // document could ever have written. Card chrome is a Pro-tier control
+    // (`visualFoundation.advanced.chrome.cardComponent`); a Simple document
+    // leaves it to the vertical baseline, which is the honest outcome.
+    expect(themanagementDbVariables['--ds-card-bg']).toBeUndefined();
+    expect(bithire.cssVariables['--ds-card-bg']).toBe('var(--ds-surface-card)');
+  });
+
+  it('keeps the DB document surface bounded', () => {
+    expect(themanagementDbDocument.appearance).not.toHaveProperty('vertical');
+    expect(themanagementDbDocument.appearance).not.toHaveProperty('engine');
+    expect(themanagementDbDocument.appearance).not.toHaveProperty('productProfile');
+    expect(themanagementDbDocument).not.toHaveProperty('visualFoundation');
   });
 });
 
@@ -215,8 +252,8 @@ describe('and converge on the identity of the product they both are', () => {
       expect(theme).not.toHaveProperty('engine');
       expect(theme).not.toHaveProperty('productProfile');
     }
-    expect(themanagementDbAppearance).not.toHaveProperty('vertical');
-    expect(themanagementDbAppearance).not.toHaveProperty('engine');
-    expect(themanagementDbAppearance).not.toHaveProperty('productProfile');
+    expect(themanagementDbDocument.appearance).not.toHaveProperty('vertical');
+    expect(themanagementDbDocument.appearance).not.toHaveProperty('engine');
+    expect(themanagementDbDocument.appearance).not.toHaveProperty('productProfile');
   });
 });

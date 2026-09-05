@@ -48,8 +48,6 @@ export function readGovernedTheme(theme: Theme): BrandTheme {
     brand.expressive = theme.expressive.value;
   if (isGovernedActive(theme.responsive))
     brand.responsive = theme.responsive.value;
-  if (isGovernedActive(theme.engineBridge))
-    brand.engineBridge = theme.engineBridge.value;
 
   return brand;
 }
@@ -84,6 +82,5 @@ export function liftAuthoredTheme(brand: BrandTheme): Theme {
     recipes: wrap(brand.recipes),
     expressive: wrap(brand.expressive),
     responsive: wrap(brand.responsive),
-    engineBridge: wrap(brand.engineBridge),
   };
 }

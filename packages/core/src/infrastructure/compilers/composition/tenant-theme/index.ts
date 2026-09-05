@@ -74,9 +74,9 @@ import {
 } from "../../kernel/foundation/schemas/tenant-theme";
 import { withExpressiveFieldDefaults } from "../../kernel/runtime/appearance";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
-import { FIRST_PARTY_THEMES, getFirstPartyVertical } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type { EngineVisualDeclaration } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
-import { engineVisualOf } from "../../runtime/theme/facade/engine-visual";
+import { engineVisualOf } from "../../runtime/theme/facade/presentation/engine-visual";
 import type {
   TenantAuthoredPaths,
   ThemePatch,
@@ -90,12 +90,10 @@ import { tenantArtifactScope } from "@/infrastructure/compilers/runtime/theme";
 // format two internal owners share, not an API a consuming app has any use for.
 import { emitTenantArtifactCss } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
 import {
-  assertEngineSupportsActivatedControls,
-  resolveAdapter,
-  compileTheme,
-  resolveTheme,
+  compileThemeIntent,
+  documentThemeIntent,
+  staticThemeIntent,
 } from "@/infrastructure/compilers/runtime/theme";
-import { migrateV1 } from "./migrate-v1";
 
 export { TENANT_THEME_CONFIG_SCHEMA } from "../../kernel/foundation/schemas/tenant-theme";
 export type { TenantThemeSchemaNode } from "../../kernel/foundation/schemas/tenant-theme";
@@ -1887,9 +1885,12 @@ export function compileTenantTheme(
   // typed ThemePatch, is resolved over the code-owned vertical Theme, and the
   // resulting variables are flattened (base + authored mode overrides) into the
   // single SSR/hydration artifact map the runtime expects.
-  const baseTheme =
-    FIRST_PARTY_THEMES[config.verticalKey as FirstPartyVerticalId];
-  if (!baseTheme) {
+  // The typed refusal for an unknown vertical, stated ONCE and before the door.
+  // The ingress door refuses the same value with a plain `Error`, which
+  // `isoLowering` would retype -- but a caller of this compiler contracts on a
+  // named document issue, and the vertical is an identity fact this terminal
+  // already owns, not a lowering fact.
+  if (!isFirstPartyVerticalId(config.verticalKey)) {
     throw new TenantThemeValidationError([
       {
         code: "invalid_value",
@@ -1898,6 +1899,7 @@ export function compileTenantTheme(
       },
     ]);
   }
+  const vertical: FirstPartyVerticalId = config.verticalKey;
   // The expansion above reached `normalizedAppearance` -- the shape
   // MotionProvider and useTokens read -- but the CSS is lowered from the
   // DOCUMENT below, and the document never learned the profile's field
@@ -1937,65 +1939,41 @@ export function compileTenantTheme(
           },
         }),
   } as unknown as TenantThemeDocument;
-  const defaultMode = baseTheme.appearance.defaultMode;
-  if (!defaultMode) {
-    throw new TenantThemeValidationError([
-      {
-        code: "invalid_value",
-        path: "$.verticalKey",
-        message: "The first-party Theme has no canonical default mode",
-      },
-    ]);
-  }
   // The ISO leg is the only place a persisted row meets the fail-closed
   // ThemePatch/mergeDeep/compileTheme lowering, and those throw plain Errors
   // (`ThemePatchMigrationError`, `resolveTheme: unknown key ...`). A caller of
   // this compiler contracts on ONE typed rejection, so an untyped throw here
   // would surface to a route as a 500 instead of a named document issue.
-  // The engine is the VERTICAL's, never the tenant's: `getFirstPartyVertical`
-  // is the roster the envelopes are already keyed on, so a document cannot
-  // contradict what product it is being rendered as.
-  const verticalEngine = getFirstPartyVertical(config.verticalKey)?.engine;
-  if (!verticalEngine) {
-    throw new TenantThemeValidationError([
-      {
-        code: "invalid_value",
-        path: "$.verticalKey",
-        message: "No first-party vertical declares an engine for this tenant",
-      },
-    ]);
-  }
-  const engineAdapter = resolveAdapter(verticalEngine);
+  // The engine is the VERTICAL's, never the tenant's: the door reads the same
+  // roster row the envelopes are keyed on, so a document cannot contradict what
+  // product it is being rendered as.
   const { compiledTheme, tenantAuthoredPaths } = isoLowering(
     () => {
-      const envelope = migrateV1(documentPatchSource, defaultMode);
-      // The patch IS this tenant's authorship record: a path can only appear
-      // in it because the document put it there. `resolveTheme` collects the
-      // authored paths, projects the tenant's posture floors and reads the
+      // The intent IS this tenant's authorship record: a path can only appear
+      // in its patch because the document put it there. `resolveTheme` collects
+      // the authored paths, projects the tenant's posture floors and reads the
       // status-seed authorship off the SAME raw patch, in one place, so the
       // lowering receives one envelope instead of four hand-assembled fields.
-      // It is passed ONLY to this leg: `baseCompiled` below is the code-owned
-      // vertical and has no tenant, so it stays provenance-free and keeps
-      // producing the exact baseline the delta subtracts against.
       //
-      // The floors matter because the merge above destroys the one fact the
-      // resolved Theme can no longer state: WHOSE a value is. The compiler
-      // lowers a vertical's own authoring and a tenant's selection at
-      // different positions -- the posture preset early, the tenant posture
-      // last -- and after a merge it cannot tell them apart.
-      const resolution = resolveTheme(
-        { ...baseTheme, id: config.slug },
-        { origin: "tenant-document", patch: envelope.patch }
-      );
-      // A control this engine declares `unsupported` cannot be delivered, so a
-      // document that turns it on is refused rather than compiled into a dial
-      // that never moves.
-      assertEngineSupportsActivatedControls(
-        engineAdapter,
-        resolution.provenance.authoredPaths
+      // The floors matter because the merge destroys the one fact the resolved
+      // Theme can no longer state: WHOSE a value is. The compiler lowers a
+      // vertical's own authoring and a tenant's selection at different
+      // positions -- the posture preset early, the tenant posture last -- and
+      // after a merge it cannot tell them apart.
+      //
+      // The engine, the baseline, the migration's default mode and the engine
+      // admission are all the door's. This terminal used to state each of them
+      // itself; the `preview` origin, which reaches the same channels, stated
+      // none of them the same way.
+      const { resolution, compiled } = compileThemeIntent(
+        documentThemeIntent({
+          vertical,
+          slug: config.slug,
+          document: documentPatchSource,
+        })
       );
       return {
-        compiledTheme: compileTheme(resolution, engineAdapter),
+        compiledTheme: compiled,
         tenantAuthoredPaths: resolution.provenance.authoredPaths,
       };
     },
@@ -2006,10 +1984,9 @@ export function compileTenantTheme(
   // artifact only needs to carry the delta against the code-owned vertical
   // baseline. The baseline CSS is loaded separately; the overlay overrides only
   // what the tenant actually changed, keeping the artifact within its guard.
-  const baseCompiled = compileTheme(
-    resolveTheme({ ...baseTheme, id: config.slug }),
-    engineAdapter
-  );
+  const baseCompiled = compileThemeIntent(
+    staticThemeIntent(vertical, config.slug)
+  ).compiled;
   const contrastIssues = validateCompiledThemeContrast(
     compiledTheme,
     baseCompiled,

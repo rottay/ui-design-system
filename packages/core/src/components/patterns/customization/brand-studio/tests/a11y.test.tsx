@@ -31,7 +31,7 @@ const THEME: BrandTheme = { id: 'a11y', name: 'A11y', palette: { primaryColor: '
 async function renderStudio(): Promise<void> {
   render(
     <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
-      <PatternBrandStudio value={THEME} />
+      <PatternBrandStudio vertical="bithire" value={THEME} />
     </DesignSystemProvider>
   );
   await screen.findByText('Run check');

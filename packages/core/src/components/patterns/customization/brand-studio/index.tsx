@@ -3,11 +3,13 @@
  * dual-ground preview and inline WCAG contrast validation.
  *
  * The editor exposes only the bounded BrandTheme fields (palette, typography,
- * surfaces, motion, chrome). The preview compiles the in-flight theme with
- * `compileTheme` and injects the FULL resulting `cssVariables` map into two
- * scoped containers — one dark ground, one light ground — via a `<style>` block
- * keyed to a per-panel class, declared directly on that class (not on `<html>`,
- * where the host page's own tenant/theme/dir attributes are anchored).
+ * surfaces, motion, chrome). The preview resolves the in-flight theme as a
+ * PATCH over the vertical it is a draft for — the same door a tenant document
+ * takes — and injects the channels that draft actually MOVES off the untouched
+ * vertical into two scoped containers, one dark ground and one light ground,
+ * via a `<style>` block keyed to a per-panel class, declared directly on that
+ * class (not on `<html>`, where the host page's own tenant/theme/dir attributes
+ * are anchored).
  *
  * A value declared directly on the scoped class always wins over an inherited
  * one, regardless of the host page's selector specificity — but a component
@@ -39,18 +41,15 @@ import { Select } from '../../../primitives/inputs/select';
 import { Stack } from '../../../primitives/layout/stack';
 import { Text } from '../../../primitives/display/typography/compound/text';
 import {
-  resolveAdapter,
-  compileTheme,
-  resolveTheme,
+  compileThemeIntent,
+  draftPreviewThemeIntent,
+  staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import {
   emitDeclarations,
   emitRule,
 } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
-import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
-import { getFirstPartyVertical } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { validateBrandingContrast, type BrandingColors } from '@/foundation/kernel/accessibility/branding-contrast';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type {
@@ -65,6 +64,7 @@ import { cloneBrandTheme } from './runtime/file-export';
 import { useTenantThemePreview } from './runtime/tenant-theme-preview';
 import { TenantThemePreviewReport } from './runtime/tenant-theme-preview/report';
 import type { ThemeCompilation } from '@/foundation/contracts/composition/tenants/themes/compiled';
+import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import type {
   BrandStudioContrastReport,
   BrandStudioSurfaceConfig,
@@ -189,14 +189,21 @@ const PREVIEW_GROUNDS: Readonly<Record<BrandThemeMode, Record<string, string>>> 
   light: admitCssVariables(DEFAULT_LIGHT_GROUND),
 };
 
-const DEFAULT_DARK_SURFACE: BrandStudioSurfaceConfig = {
+/**
+ * The DS-owned preview grounds. They carry no `vertical`: there is no honest
+ * default for "which product is this draft a tenant of", and inventing one
+ * would put a silent vertical back in the door C4 closed. The studio's own
+ * `vertical` prop fills it, for both panels, so the two grounds can never
+ * disagree about the baseline they are a delta against.
+ */
+const DEFAULT_DARK_SURFACE: Omit<BrandStudioSurfaceConfig, 'vertical'> = {
   key: 'dark',
   baseTheme: 'dark',
   tenantSlug: 'brand-studio-dark',
   label: 'Dark surface',
 };
 
-const DEFAULT_LIGHT_SURFACE: BrandStudioSurfaceConfig = {
+const DEFAULT_LIGHT_SURFACE: Omit<BrandStudioSurfaceConfig, 'vertical'> = {
   key: 'light',
   baseTheme: 'light',
   tenantSlug: 'brand-studio-light',
@@ -204,11 +211,12 @@ const DEFAULT_LIGHT_SURFACE: BrandStudioSurfaceConfig = {
 };
 
 function resolveSurface(
-  base: BrandStudioSurfaceConfig,
+  base: Omit<BrandStudioSurfaceConfig, 'vertical'>,
+  vertical: FirstPartyVerticalId,
   override: Partial<BrandStudioSurfaceConfig> | undefined
 ): BrandStudioSurfaceConfig {
-  if (!override) return base;
-  return { ...base, ...override, key: base.key };
+  if (!override) return { ...base, vertical };
+  return { ...base, vertical, ...override, key: base.key };
 }
 
 // ---------------------------------------------------------------------------
@@ -305,15 +313,23 @@ function themeDefaultMode(theme: BrandTheme): BrandThemeMode {
  * fields had, now generalized to every channel a mode overlay can move
  * instead of two hardcoded ones.
  */
-function resolveModeVariables(
-  theme: BrandTheme,
+function modeOverlayOf(
   compiled: ThemeCompilation,
   mode: BrandThemeMode
 ): Record<string, string> {
-  if (mode === themeDefaultMode(theme)) return compiled.cssVariables;
-  const block = compiled.modeBlocks?.find((entry) => entry.mode === mode);
-  if (!block) return compiled.cssVariables;
-  return { ...compiled.cssVariables, ...block.cssVariables };
+  return compiled.modeBlocks?.find((entry) => entry.mode === mode)?.cssVariables ?? {};
+}
+
+/** The channels `proposed` states differently from `baseline`. */
+function movedChannels(
+  proposed: Record<string, string>,
+  baseline: Record<string, string>
+): Record<string, string> {
+  const moved: Record<string, string> = {};
+  for (const [name, value] of Object.entries(proposed)) {
+    if (baseline[name] !== value) moved[name] = value;
+  }
+  return moved;
 }
 
 /** `buildSurfaceVariables` result: the merged map plus which keys the compiled theme itself declared. */
@@ -337,17 +353,56 @@ export interface SurfaceVariables {
  * not by an input flag the compiler reads.
  */
 export function buildSurfaceVariables(theme: BrandTheme, surface: BrandStudioSurfaceConfig): SurfaceVariables {
-  const compiled = compileTheme(
-    resolveTheme({ ...liftAuthoredTheme(theme), id: surface.tenantSlug }),
-    // The previewed slug names the vertical, and the vertical owns the engine.
-    resolveAdapter(getFirstPartyVertical(surface.tenantSlug)?.engine ?? PRIMARY_ENGINE),
+  // The draft is a PATCH over the vertical it is authored for, never a baseline
+  // of its own: it used to be lifted wrap-only and compiled as if it were the
+  // whole theme, which is a compile no publish path can produce.
+  //
+  // What the panel PAINTS is the DELTA against the untouched vertical — the
+  // same rule the DB artifact and the branding sandbox already use. Painting
+  // the full compile instead would bury the studio's own light/dark ground
+  // scaffold under the vertical's total channel set, so a draft that states
+  // nothing would still repaint the panel, and the contrast report would grade
+  // the vertical rather than the theme being edited.
+  const intent = draftPreviewThemeIntent({
+    vertical: surface.vertical,
+    slug: surface.tenantSlug,
+    draft: theme,
+  });
+  const { compiled } = compileThemeIntent(intent);
+  const { compiled: untouched } = compileThemeIntent(
+    staticThemeIntent(surface.vertical, surface.tenantSlug),
   );
+  // The base block and the mode overlay are differenced SEPARATELY, then
+  // overlaid. Differencing the merged `base + overlay` instead would let the
+  // vertical's own overlay mask the draft: on a ground the vertical pins, both
+  // sides carry the vertical's value, the delta is empty, and a palette edit
+  // stops repainting the panel it was made on.
+  const moved: Record<string, string> = {
+    ...movedChannels(compiled.cssVariables, untouched.cssVariables),
+  };
+  // Every roster baseline declares `appearance.defaultMode` and the draft is a
+  // patch over one, so the compile always states its mode. Defaulting to
+  // `'light'` here would silently overlay the wrong ground on a dark-default
+  // vertical -- the exact shape this door removed everywhere else.
+  const compiledMode = compiled.colorScheme;
+  if (!compiledMode) {
+    throw new TypeError(
+      `[design-system] Brand Studio: the ${surface.vertical} compile declares no colorScheme.`,
+    );
+  }
+  if (surface.baseTheme !== compiledMode) {
+    Object.assign(
+      moved,
+      movedChannels(
+        modeOverlayOf(compiled, surface.baseTheme),
+        modeOverlayOf(untouched, surface.baseTheme),
+      ),
+    );
+  }
   // Admitted here as well as in the emission owner, so that the map this
   // function publishes IS the map the panel injects: a channel the grammar
   // refuses must not be reported as declared, or graded for contrast.
-  const modeVars = admitCssVariables(
-    resolveModeVariables(theme, compiled, surface.baseTheme)
-  );
+  const modeVars = admitCssVariables(moved);
   const declaredKeys = new Set(Object.keys(modeVars));
   const vars = { ...PREVIEW_GROUNDS[surface.baseTheme], ...modeVars };
   return { vars, declaredKeys };
@@ -1495,6 +1550,7 @@ function TenantThemePreviewSection({
 
 export function PatternBrandStudio({
   value,
+  vertical,
   onChange,
   galleries,
   lightSurface,
@@ -1519,8 +1575,11 @@ export function PatternBrandStudio({
   );
 
   const surfaces = useMemo<BrandStudioSurfaceConfig[]>(
-    () => [resolveSurface(DEFAULT_DARK_SURFACE, darkSurface), resolveSurface(DEFAULT_LIGHT_SURFACE, lightSurface)],
-    [darkSurface, lightSurface]
+    () => [
+      resolveSurface(DEFAULT_DARK_SURFACE, vertical, darkSurface),
+      resolveSurface(DEFAULT_LIGHT_SURFACE, vertical, lightSurface),
+    ],
+    [vertical, darkSurface, lightSurface]
   );
 
   const reports = useMemo(

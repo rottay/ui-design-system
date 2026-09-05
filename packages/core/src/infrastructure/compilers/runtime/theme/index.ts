@@ -1,6 +1,27 @@
 export { resolveTheme } from "./runtime/resolution";
 export { compileTheme } from "./runtime/lowering";
 export {
+  ThemePatchMigrationError,
+  authoredThemePatch,
+  documentThemeIntent,
+  documentThemePatch,
+  draftPreviewThemeIntent,
+  migrateV1,
+  previewThemeIntent,
+  staticThemeIntent,
+  verticalEngine,
+} from "./runtime/ingress";
+export type {
+  DocumentThemeIntentInput,
+  DraftPreviewThemeIntentInput,
+  PreviewThemeIntentInput,
+} from "./runtime/ingress";
+export { compileThemeIntent } from "./facade/runtime/compile";
+export type {
+  CompileThemeIntentOptions,
+  ThemeIntentCompilation,
+} from "./facade/runtime/compile";
+export {
   containerScope,
   emitBaseRule,
   emitDeclarations,
@@ -23,7 +44,7 @@ export type { EngineAdapterDefinition } from "./presentation/adapters";
 export {
   engineVisualOf,
   firstPartyEngineVisual,
-} from "./facade/engine-visual";
+} from "./facade/presentation/engine-visual";
 export type {
   ThemeIntent,
   ThemeIntentOrigin,

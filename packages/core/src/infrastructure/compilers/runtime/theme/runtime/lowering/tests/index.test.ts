@@ -15,11 +15,13 @@ import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/the
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 
 import { resolveTheme } from "../../resolution";
+import { staticThemeIntent } from "../../ingress";
 import { resolveAdapter } from "../../../presentation/adapters";
 import { compileTheme } from "..";
 
 const modern = resolveAdapter("modern");
 const baseline = FIRST_PARTY_THEMES.bithire;
+const bithire = staticThemeIntent("bithire");
 
 const authoredEmpty: ThemeProvenance = {
   tenantAuthored: true,
@@ -30,7 +32,7 @@ const authoredEmpty: ThemeProvenance = {
 
 describe("compileTheme", () => {
   it("always yields modeBlocks as an array, never undefined", () => {
-    const compiled = compileTheme(resolveTheme(baseline), modern);
+    const compiled = compileTheme(resolveTheme(bithire), modern);
     expect(Array.isArray(compiled.modeBlocks)).toBe(true);
   });
 
@@ -38,7 +40,7 @@ describe("compileTheme", () => {
     const clone: ThemeProvenance = { ...EMPTY_PROVENANCE };
     expect(clone).not.toBe(EMPTY_PROVENANCE);
     const viaClone = compileTheme({ theme: baseline, provenance: clone }, modern);
-    const viaSingleton = compileTheme(resolveTheme(baseline), modern);
+    const viaSingleton = compileTheme(resolveTheme(bithire), modern);
     expect(viaClone.cssVariables).toEqual(viaSingleton.cssVariables);
   });
 
@@ -51,7 +53,7 @@ describe("compileTheme", () => {
       { theme: baseline, provenance: authoredEmpty },
       modern
     );
-    const asVertical = compileTheme(resolveTheme(baseline), modern);
+    const asVertical = compileTheme(resolveTheme(bithire), modern);
     expect(asTenant.cssVariables).toEqual(asVertical.cssVariables);
     expect(asTenant.modeBlocks).toEqual(asVertical.modeBlocks);
   });
@@ -70,44 +72,50 @@ describe("compileTheme", () => {
       },
       modern
     );
-    const asVertical = compileTheme(resolveTheme(baseline), modern);
+    const asVertical = compileTheme(resolveTheme(bithire), modern);
     expect(claimed.cssVariables).not.toEqual(asVertical.cssVariables);
   });
 
   it("stamps the adapter's engine and projection onto the product", () => {
-    const compiled = compileTheme(resolveTheme(baseline), modern);
+    const compiled = compileTheme(resolveTheme(bithire), modern);
     expect(compiled.engine).toBe("modern");
     expect(compiled.projection).toEqual({ seeds: {}, modes: [] });
   });
 
   it("carries the runtime half rather than leaving it to be re-derived", () => {
-    const compiled = compileTheme(resolveTheme(baseline), modern);
+    const compiled = compileTheme(resolveTheme(bithire), modern);
     expect(compiled.runtime.personality).toBeTruthy();
     expect(compiled.runtime.tokenOverrides).toBeTruthy();
     expect(Object.keys(compiled.runtime.personality).length).toBeGreaterThan(0);
   });
 
-  it("emits no cssString, no slug and no engineBridge: scope is emission's", () => {
-    const compiled = compileTheme(resolveTheme(baseline), modern) as unknown as Record<
+  it("emits no cssString and no slug: scope is emission's", () => {
+    const compiled = compileTheme(resolveTheme(bithire), modern) as unknown as Record<
       string,
       unknown
     >;
     expect(compiled.cssString).toBeUndefined();
-    expect(compiled.engineBridge).toBeUndefined();
     expect(compiled.tenantSlug).toBeUndefined();
   });
 
   it("reads the diagnostic slug off the resolved theme, not off a second input", () => {
-    const renamed = { ...baseline, id: "themanagementmiami" } as typeof baseline;
-    const compiled = compileTheme(resolveTheme(renamed), modern);
-    const original = compileTheme(resolveTheme(baseline), modern);
+    const compiled = compileTheme(
+      resolveTheme(staticThemeIntent("bithire", "themanagementmiami")),
+      modern
+    );
+    const original = compileTheme(resolveTheme(bithire), modern);
     // The id is a diagnostic label only: no channel may key on it.
     expect(compiled.cssVariables).toEqual(original.cssVariables);
   });
 
   it("keeps a zero-mode theme's modeBlocks empty rather than absent", () => {
     const noModes = { ...baseline, modes: undefined } as unknown as typeof baseline;
-    const compiled = compileTheme(resolveTheme(noModes), modern);
+    // A theme with a family removed is not a roster baseline and no intent can
+    // name it, so the resolution is built here -- the same shape the door emits.
+    const compiled = compileTheme(
+      { theme: noModes, provenance: EMPTY_PROVENANCE },
+      modern
+    );
     expect(compiled.modeBlocks).toEqual([]);
   });
 });

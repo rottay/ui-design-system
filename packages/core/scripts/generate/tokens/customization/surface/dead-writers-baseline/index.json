@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "note": "Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.",
-  "lastMove": "C2 (the sole productive theme lowering): --ds-experience-profile and --ds-recipe-profile are not NEW dead writers. Both were emitted before this lot by compileBrandTheme, an 'export const ... = (...) => {}' arrow assigned to a const; the emitter scan reaches function declarations, so the two assignments sat outside every census. C2's orchestration is 'export function compileTheme(...)', so the same two emissions became visible. Corroborated in the same lot by the hooks contract (compilerConcreteEmissions 2249->2251, exactly this pair) and by the theme-parity census. They are provenance markers published for a JS reader, never paint: foundation/contracts/composition/tenants/capabilities/index.ts already records --ds-recipe-profile as measured NOT reaching production on either surface. Transfer of visibility, not new dead surface. Independent code-audit ratification required.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen): +2 nombre(s), -0",
+  "lastMove": "C4 (one ThemeIntent door + dead-path cleanup): --ds-color-scheme stops being a dead writer because its ONLY emitter is gone. At HEAD the retired appearance compiler wrote it at kernel/runtime/appearance/index.ts:340,598; C4 deletes those lowerings, so no source emits the channel any more. This is a strict DECREASE (276 -> 275, +0/-1), recorded in the same lot per the anchor law. No reader lost anything: the productive door emits the real CSS color-scheme PROPERTY (facade/artifacts/rottay/index.css:14,1216), never this custom property.",
+  "lastMoveKind": "decrece-solo: -1 nombre(s)",
   "names": [
     "--ds-action-dock-reserved-block-end",
     "--ds-action-dock-reserved-block-start",
@@ -52,7 +52,6 @@
     "--ds-color-mono-200",
     "--ds-color-mono-800",
     "--ds-color-mono-900",
-    "--ds-color-scheme",
     "--ds-color-surface-subtle",
     "--ds-command-font",
     "--ds-command-grid-bg",

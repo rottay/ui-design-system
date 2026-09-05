@@ -48,20 +48,9 @@ const CHROME_SOURCE = [
   '',
 ].join('\n');
 
-const APPEARANCE_SOURCE = [
-  'export function appearanceAdvancedToVariables(vars: Record<string, string>): void {',
-  "  vars['--ds-fixture-appearance-bg'] = 'transparent';",
-  '}',
-  '',
-  '// \u2500\u2500 Combined',
-  'export const combined = 1;',
-  '',
-].join('\n');
-
 const CONSUMER_CSS = [
   '.fixture {',
   '  background: var(--ds-fixture-chrome-bg);',
-  '  color: var(--ds-fixture-appearance-bg);',
   '}',
   '',
 ].join('\n');
@@ -133,7 +122,6 @@ function plantEmitterRoot(name) {
     'infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts',
     CHROME_OWNER_TREES[name],
   );
-  write('infrastructure/compilers/kernel/runtime/appearance/index.ts', APPEARANCE_SOURCE);
   write('foundation/tokens/css/runtime/engines/modern/index.css', CONSUMER_CSS);
   plantedRoots.set(name, root);
   return root;
@@ -159,7 +147,7 @@ function brandFixture(name) {
   return join(plantEmitterRoot(name), 'infrastructure/compilers/runtime/theme/runtime/lowering/index.ts');
 }
 
-test('T1: the three real emitters each resolve to exactly one exported declaration', () => {
+test('T1: the two real emitters each resolve to exactly one exported declaration', () => {
   // The two moved apart in C2: the chrome writer is its own owner and the
   // orchestration is the lowering's index, so each is resolved where it lives.
   const chrome = requireExportedDeclarations(LOWERING_CHROME, [
@@ -170,15 +158,6 @@ test('T1: the three real emitters each resolve to exactly one exported declarati
   const resolved = requireExportedDeclarations(LOWERING, ['compileTheme']);
   assert.equal(resolved.size, 1);
   assert.equal(resolved.get('compileTheme').kind, 'function');
-
-  const appearance = join(
-    CORE_ROOT,
-    'src/infrastructure/compilers/kernel/runtime/appearance/index.ts',
-  );
-  assert.equal(
-    requireExactlyOneExportedDeclaration(appearance, 'appearanceAdvancedToVariables').name,
-    'appearanceAdvancedToVariables',
-  );
 
   const audit = spawnSync(process.execPath, [AUDIT], { encoding: 'utf8' });
   assert.equal(audit.status, 0, audit.stdout + audit.stderr);

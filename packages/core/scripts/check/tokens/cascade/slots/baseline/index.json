@@ -5,12 +5,12 @@
   "unit": "fila del inventario = un SLOT autorado del objeto evaluado de un tema. NO es la unidad de anotacion de variant-parity ni la de canal del catalogo de cascada.",
   "counters": {
     "rows": {
-      "value": 3603,
-      "reason": "3613 -> 3603: se retiraron ocho hojas de estado de Rottay ahora derivadas desde las semillas y dos canales BitHire de Segmented sin lector productivo. No se agregaron hojas autoradas."
+      "value": 3594,
+      "reason": "3603 -> 3594: el lote C4 retiro la familia `engineBridge` del contrato Theme/BrandTheme (contracts, ISO, schema, intake y los tres temas de primera parte). Eran 9 hojas autoradas, 3 por vertical (CAPABILITIES.engineBridge.reason, CAPABILITIES.engineBridge.status y THEME.capabilities.engineBridge.note) x rottay/bithire/evnto. Medido contra el inventario, no citado de prosa: 9 filas removidas, 0 agregadas. Ningun adaptador leia engineBridge, y los tres artifacts CSS de primera parte quedan byte-identicos, asi que no se perdio capacidad."
     },
     "unassignedRows": {
-      "value": 278,
-      "reason": "286 -> 278: las ocho hojas de estado retiradas de Rottay estaban sin domicilio; ahora su resultado se deriva desde las semillas."
+      "value": 275,
+      "reason": "278 -> 275: de las 9 hojas engineBridge retiradas por C4, 3 estaban sin domicilio (los THEME.capabilities.engineBridge.note de rottay/bithire/evnto) y 6 estaban en pro-expert (24 -> 18, contador que este ledger no ancla). El desglose sale de stats.byDomicile del inventario anterior, contando las filas removidas por currentDomicile."
     },
     "untaggedRows": {
       "value": 25,

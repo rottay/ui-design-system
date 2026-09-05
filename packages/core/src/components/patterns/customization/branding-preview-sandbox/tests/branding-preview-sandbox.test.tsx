@@ -18,9 +18,15 @@ const mount = (ui: React.ReactElement) =>
  * through the door a customer actually has.
  */
 describe('BrandingPreviewSandbox', () => {
+  // Every case below names `bithire`: it is LIGHT-default, so a simple
+  // document with no `backgroundMode` lands its seed on the base block, which
+  // is the block an unqualified preview scope paints. On a dark-default
+  // vertical the same document targets `modes.light` instead -- and paints
+  // nothing here, exactly as the published artifact would. That equality is
+  // pinned in its own case at the bottom of this file.
   it('emits the compiled palette variable inside the scoped rule', () => {
     const { container } = mount(
-      <BrandingPreviewSandbox appearance={{ general: { palette: { primary: '#FF0000' } } }} />,
+      <BrandingPreviewSandbox vertical="bithire" appearance={{ general: { palette: { primary: '#FF0000' } } }} />,
     );
 
     const style = container.querySelector('style');
@@ -30,6 +36,7 @@ describe('BrandingPreviewSandbox', () => {
   it('refuses an authored value that would escape the scoped rule', () => {
     const { container } = mount(
       <BrandingPreviewSandbox
+        vertical="bithire"
         appearance={{
           general: {
             palette: { primary: '#FF0000', accent: 'red} body { display: none; ' },
@@ -46,6 +53,7 @@ describe('BrandingPreviewSandbox', () => {
   it('refuses an authored value carrying a javascript: url', () => {
     const { container } = mount(
       <BrandingPreviewSandbox
+        vertical="bithire"
         appearance={{
           general: {
             palette: { primary: '#FF0000', accent: 'url(javascript:alert(1))' },
@@ -63,6 +71,7 @@ describe('BrandingPreviewSandbox', () => {
     // above while silently disabling the preview, so the survivor is asserted.
     const { container } = mount(
       <BrandingPreviewSandbox
+        vertical="bithire"
         appearance={{
           general: {
             palette: {
@@ -90,6 +99,7 @@ describe('BrandingPreviewSandbox', () => {
     // rather than half-applied.
     const { container } = mount(
       <BrandingPreviewSandbox
+        vertical="bithire"
         appearance={{
           general: { palette: { primary: '#FF0000' } },
           advanced: { tokenOverrides: { '--ds-card-bg': '#ffffff' } },
@@ -106,6 +116,7 @@ describe('BrandingPreviewSandbox', () => {
     // admits migrates, compiles and paints.
     const { container } = mount(
       <BrandingPreviewSandbox
+        vertical="bithire"
         appearance={{
           general: { palette: { primary: '#FF0000' } },
           advanced: { tokenOverrides: { '--ds-radius-md': '10px' } },

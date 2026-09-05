@@ -8,7 +8,11 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 
-import { PRIMARY_ENGINE_OWNER, auditEngineWiring } from './index.mjs';
+import {
+  PRIMARY_ENGINE_OWNER,
+  PRIMARY_ENGINE_READERS,
+  auditEngineWiring,
+} from './index.mjs';
 
 /** A tree that satisfies every rule, so a plant is the only difference. */
 const CLEAN = {
@@ -181,4 +185,59 @@ test('deleting the only primary-engine declaration is caught', () => {
   const found = auditEngineWiring(root).findings.map((finding) => finding.rule);
   rmSync(root, { recursive: true, force: true });
   assert.ok(found.includes('second-primary'));
+});
+
+/* -------------------------------------------------------------------------- */
+/* C4 · the roster engine has one law, and PRIMARY_ENGINE is not it            */
+/* -------------------------------------------------------------------------- */
+
+test('a reinstated roster engine fallback is caught', () => {
+  const found = rules(
+    fixture({
+      'src/components/preview/index.ts':
+        "import { getFirstPartyVertical } from 'x';\n" +
+        'export const engine = getFirstPartyVertical(slug)?.engine ?? PRIMARY_ENGINE;\n',
+    })
+  );
+  assert.ok(found.includes('fallback-shape'));
+  assert.ok(found.includes('primary-engine-read'));
+});
+
+test('the `||` spelling of the same fallback is caught', () => {
+  const found = rules(
+    fixture({
+      'src/components/preview/index.ts':
+        'export const engine = rosterEngine(slug) || PRIMARY_ENGINE;\n',
+    })
+  );
+  assert.ok(found.includes('fallback-shape'));
+});
+
+test('a bare PRIMARY_ENGINE read outside the resolver is caught', () => {
+  const found = rules(
+    fixture({ 'src/components/preview/index.ts': 'export const e = PRIMARY_ENGINE;\n' })
+  );
+  assert.ok(found.includes('primary-engine-read'));
+});
+
+test('the declared readers may read it, so the rule is not refusing everything', () => {
+  const overrides = {};
+  for (const reader of PRIMARY_ENGINE_READERS) {
+    if (reader === PRIMARY_ENGINE_OWNER) continue;
+    overrides[reader] = 'export const e = PRIMARY_ENGINE;\n';
+  }
+  assert.deepEqual(
+    rules(fixture(overrides)).filter((rule) => rule === 'primary-engine-read'),
+    []
+  );
+});
+
+test('PRIMARY_ENGINE named only in a comment is not a read', () => {
+  const found = rules(
+    fixture({
+      'src/components/preview/index.ts':
+        '// falls back to PRIMARY_ENGINE\n/* PRIMARY_ENGINE */\nexport const e = 1;\n',
+    })
+  );
+  assert.ok(!found.includes('primary-engine-read'));
 });

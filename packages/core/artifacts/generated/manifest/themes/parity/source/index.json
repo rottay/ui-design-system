@@ -6,33 +6,29 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 344767,
-        "lines": 9346,
-        "sha256": "82fddbb0a7967653b6985c2a00da21f0fcd1dead7503c0a314033e6c9afcca87"
+        "bytes": 344374,
+        "lines": 9333,
+        "sha256": "ca6e9517a61bba599eb1195f9668b2da59a6774f24026e905e7bba2cb7c36bdb"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
-        "bytes": 339373,
-        "lines": 9324,
-        "sha256": "1fbd5aaa296ce52a37a05ddf2753a10b524378f7d70dfdb82af3d521bfe181ca"
+        "bytes": 338980,
+        "lines": 9311,
+        "sha256": "12fc548ee2d943fdbb0f9322a87a166f199ced5bf69e09d8cb3eca96f4b7befa"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts",
-        "bytes": 214705,
-        "lines": 4976,
-        "sha256": "c0d734220d03f18e47dfba998a04f006e0eabe931da60d10138b21d2b05ca3d1"
+        "bytes": 214312,
+        "lines": 4963,
+        "sha256": "a4aa897f0c756e7c70f276800cca2f7f57530979a85739fec396c8e0cad1a923"
       }
     ],
     "mtimeExcluded": "Se registra sha256 y no mtime: el mtime cambia con un clon o un touch."
   },
   "metadataExclusion": {
     "law": "The exclusion is an explicit list of non-paint leaves.",
-    "count": 36,
+    "count": 33,
     "entries": [
-      {
-        "tenant": "bithire",
-        "path": "CAPABILITIES.engineBridge.note"
-      },
       {
         "tenant": "bithire",
         "path": "CAPABILITIES.responsive.note"
@@ -72,10 +68,6 @@
       {
         "tenant": "bithire",
         "path": "THEME.name"
-      },
-      {
-        "tenant": "evnto",
-        "path": "CAPABILITIES.engineBridge.note"
       },
       {
         "tenant": "evnto",
@@ -129,10 +121,6 @@
       },
       {
         "tenant": "rottay",
-        "path": "CAPABILITIES.engineBridge.note"
-      },
-      {
-        "tenant": "rottay",
         "path": "CAPABILITIES.expressive.note"
       },
       {
@@ -177,14 +165,14 @@
       }
     ],
     "paintDenominator": {
-      "value": 3563,
+      "value": 3557,
       "unit": "authored-paint-leaf",
       "derivation": "sum(matrix.paintLeaves)"
     }
   },
   "tagRegistry": {
     "law": "Vocabulario CERRADO: seed | derived | pro-expert | unassigned. @governor obligatorio, de una linea.",
-    "count": 4207,
+    "count": 4201,
     "entries": [
       {
         "tenant": "rottay",
@@ -14417,30 +14405,12 @@
       },
       {
         "tenant": "rottay",
-        "scope": "CAPABILITIES.engineBridge.status",
-        "kind": "scope",
-        "domicile": "pro-expert",
-        "governor": "capability: engineBridge (estado autorado: disabled)",
-        "governorClass": "capability",
-        "line": 9208
-      },
-      {
-        "tenant": "rottay",
-        "scope": "CAPABILITIES.engineBridge.reason",
-        "kind": "scope",
-        "domicile": "pro-expert",
-        "governor": "capability: engineBridge (estado autorado: disabled)",
-        "governorClass": "capability",
-        "line": 9213
-      },
-      {
-        "tenant": "rottay",
         "scope": "THEME.appearance",
         "kind": "scope",
         "domicile": "seed",
         "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — selecciona qué bloque del tema se emite por defecto",
         "governorClass": "dial",
-        "line": 9235
+        "line": 9222
       },
       {
         "tenant": "rottay",
@@ -14449,7 +14419,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9242
+        "line": 9229
       },
       {
         "tenant": "rottay",
@@ -14458,7 +14428,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9249
+        "line": 9236
       },
       {
         "tenant": "rottay",
@@ -14467,7 +14437,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: capability expressive no autorada en rottay (capabilities.expressive dice por que)",
         "governorClass": "capability-o-gap",
-        "line": 9256
+        "line": 9243
       },
       {
         "tenant": "rottay",
@@ -14476,7 +14446,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9263
+        "line": 9250
       },
       {
         "tenant": "rottay",
@@ -14485,7 +14455,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9270
+        "line": 9257
       },
       {
         "tenant": "rottay",
@@ -14494,7 +14464,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9277
+        "line": 9264
       },
       {
         "tenant": "rottay",
@@ -14503,7 +14473,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9284
+        "line": 9271
       },
       {
         "tenant": "rottay",
@@ -14512,7 +14482,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9291
+        "line": 9278
       },
       {
         "tenant": "rottay",
@@ -14521,7 +14491,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9298
+        "line": 9285
       },
       {
         "tenant": "rottay",
@@ -14530,7 +14500,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9305
+        "line": 9292
       },
       {
         "tenant": "rottay",
@@ -14539,7 +14509,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9310
+        "line": 9297
       },
       {
         "tenant": "rottay",
@@ -14548,7 +14518,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9315
+        "line": 9302
       },
       {
         "tenant": "rottay",
@@ -14557,7 +14527,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9320
+        "line": 9307
       },
       {
         "tenant": "rottay",
@@ -14566,7 +14536,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9325
+        "line": 9312
       },
       {
         "tenant": "rottay",
@@ -14575,7 +14545,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9330
+        "line": 9317
       },
       {
         "tenant": "rottay",
@@ -14584,7 +14554,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9335
+        "line": 9322
       },
       {
         "tenant": "rottay",
@@ -14593,7 +14563,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9340
+        "line": 9327
       },
       {
         "tenant": "rottay",
@@ -29656,30 +29626,12 @@
       },
       {
         "tenant": "bithire",
-        "scope": "CAPABILITIES.engineBridge.status",
-        "kind": "scope",
-        "domicile": "pro-expert",
-        "governor": "capability: engineBridge (estado autorado: disabled)",
-        "governorClass": "capability",
-        "line": 9201
-      },
-      {
-        "tenant": "bithire",
-        "scope": "CAPABILITIES.engineBridge.reason",
-        "kind": "scope",
-        "domicile": "pro-expert",
-        "governor": "capability: engineBridge (estado autorado: disabled)",
-        "governorClass": "capability",
-        "line": 9206
-      },
-      {
-        "tenant": "bithire",
         "scope": "THEME.appearance",
         "kind": "scope",
         "domicile": "seed",
         "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — selecciona qué bloque del tema se emite por defecto",
         "governorClass": "dial",
-        "line": 9228
+        "line": 9215
       },
       {
         "tenant": "bithire",
@@ -29688,7 +29640,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9235
+        "line": 9222
       },
       {
         "tenant": "bithire",
@@ -29697,7 +29649,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9242
+        "line": 9229
       },
       {
         "tenant": "bithire",
@@ -29706,7 +29658,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9249
+        "line": 9236
       },
       {
         "tenant": "bithire",
@@ -29715,7 +29667,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9256
+        "line": 9243
       },
       {
         "tenant": "bithire",
@@ -29724,7 +29676,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9263
+        "line": 9250
       },
       {
         "tenant": "bithire",
@@ -29733,7 +29685,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9270
+        "line": 9257
       },
       {
         "tenant": "bithire",
@@ -29742,7 +29694,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9277
+        "line": 9264
       },
       {
         "tenant": "bithire",
@@ -29751,7 +29703,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9284
+        "line": 9271
       },
       {
         "tenant": "bithire",
@@ -29760,7 +29712,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9291
+        "line": 9278
       },
       {
         "tenant": "bithire",
@@ -29769,7 +29721,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 9298
+        "line": 9285
       },
       {
         "tenant": "bithire",
@@ -29778,7 +29730,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9303
+        "line": 9290
       },
       {
         "tenant": "bithire",
@@ -29787,7 +29739,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9308
+        "line": 9295
       },
       {
         "tenant": "bithire",
@@ -29796,7 +29748,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9313
+        "line": 9300
       },
       {
         "tenant": "bithire",
@@ -29805,7 +29757,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 9318
+        "line": 9305
       },
       {
         "tenant": "bithire",
@@ -37449,30 +37401,12 @@
       },
       {
         "tenant": "evnto",
-        "scope": "CAPABILITIES.engineBridge.status",
-        "kind": "scope",
-        "domicile": "pro-expert",
-        "governor": "capability: engineBridge (estado autorado: disabled)",
-        "governorClass": "capability",
-        "line": 4832
-      },
-      {
-        "tenant": "evnto",
-        "scope": "CAPABILITIES.engineBridge.reason",
-        "kind": "scope",
-        "domicile": "pro-expert",
-        "governor": "capability: engineBridge (estado autorado: disabled)",
-        "governorClass": "capability",
-        "line": 4837
-      },
-      {
-        "tenant": "evnto",
         "scope": "THEME.appearance",
         "kind": "scope",
         "domicile": "seed",
         "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a) — selecciona qué bloque del tema se emite por defecto",
         "governorClass": "dial",
-        "line": 4859
+        "line": 4846
       },
       {
         "tenant": "evnto",
@@ -37481,7 +37415,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 4866
+        "line": 4853
       },
       {
         "tenant": "evnto",
@@ -37490,7 +37424,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: capability recipes no autorada en evnto (capabilities.recipes dice por que)",
         "governorClass": "capability-o-gap",
-        "line": 4873
+        "line": 4860
       },
       {
         "tenant": "evnto",
@@ -37499,7 +37433,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: capability expressive no autorada en evnto (capabilities.expressive dice por que)",
         "governorClass": "capability-o-gap",
-        "line": 4880
+        "line": 4867
       },
       {
         "tenant": "evnto",
@@ -37508,7 +37442,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 4887
+        "line": 4874
       },
       {
         "tenant": "evnto",
@@ -37517,7 +37451,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 4894
+        "line": 4881
       },
       {
         "tenant": "evnto",
@@ -37526,7 +37460,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 4904
+        "line": 4891
       },
       {
         "tenant": "evnto",
@@ -37535,7 +37469,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 4911
+        "line": 4898
       },
       {
         "tenant": "evnto",
@@ -37544,7 +37478,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 4918
+        "line": 4905
       },
       {
         "tenant": "evnto",
@@ -37553,7 +37487,7 @@
         "domicile": "unassigned",
         "governor": "el esqueleto cablea los planos, no autora pintura (ley F4A-3b hecha por hoja)",
         "governorClass": "capability-o-gap",
-        "line": 4925
+        "line": 4912
       },
       {
         "tenant": "evnto",
@@ -37562,7 +37496,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4930
+        "line": 4917
       },
       {
         "tenant": "evnto",
@@ -37571,7 +37505,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4935
+        "line": 4922
       },
       {
         "tenant": "evnto",
@@ -37580,7 +37514,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4940
+        "line": 4927
       },
       {
         "tenant": "evnto",
@@ -37589,7 +37523,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4945
+        "line": 4932
       },
       {
         "tenant": "evnto",
@@ -37598,7 +37532,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4950
+        "line": 4937
       },
       {
         "tenant": "evnto",
@@ -37607,7 +37541,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4955
+        "line": 4942
       },
       {
         "tenant": "evnto",
@@ -37616,7 +37550,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora esta familia localmente; delega en el preset congelado EVNTO_CANONICAL_MOTION (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4960
+        "line": 4947
       },
       {
         "tenant": "evnto",
@@ -37625,7 +37559,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4965
+        "line": 4952
       },
       {
         "tenant": "evnto",
@@ -37634,7 +37568,7 @@
         "domicile": "unassigned",
         "governor": "none — gap aceptado: el tema no autora este slot en ningun plano; lo resuelve el piso del design system (posture unassigned, roster F4A-1c)",
         "governorClass": "capability-o-gap",
-        "line": 4970
+        "line": 4957
       },
       {
         "tenant": "evnto",
@@ -37886,27 +37820,27 @@
   "matrix": {
     "unit": "authored-decision-leaf-path (importada de mirror-parity/authoredLeafPaths)",
     "leaves": {
-      "rottay": 1725,
-      "bithire": 1485,
-      "evnto": 387
+      "rottay": 1722,
+      "bithire": 1482,
+      "evnto": 384
     },
-    "universe": 2542,
-    "union": 2542,
-    "intersection": 313,
-    "positionIntersection": 2478,
+    "universe": 2539,
+    "union": 2539,
+    "intersection": 310,
+    "positionIntersection": 2475,
     "positions": {
       "rottay": {
-        "authored": 1725,
+        "authored": 1722,
         "placeholder": 772,
         "silent": 45
       },
       "bithire": {
-        "authored": 1485,
+        "authored": 1482,
         "placeholder": 1052,
         "silent": 5
       },
       "evnto": {
-        "authored": 387,
+        "authored": 384,
         "placeholder": 2119,
         "silent": 36
       }
@@ -37918,14 +37852,14 @@
     },
     "orphanPlaceholders": [],
     "paintLeaves": {
-      "rottay": 1713,
-      "bithire": 1474,
-      "evnto": 376
+      "rottay": 1711,
+      "bithire": 1472,
+      "evnto": 374
     },
     "taggedPaintLeaves": {
-      "rottay": 1712,
-      "bithire": 1472,
-      "evnto": 376
+      "rottay": 1710,
+      "bithire": 1470,
+      "evnto": 374
     },
     "declaredAbsent": {
       "rottay": 44,

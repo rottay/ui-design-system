@@ -2,8 +2,8 @@
  * @fileoverview The two tenant ingress arms, on ONE scene.
  *
  * A control has two doors. A code-owned vertical writes it into a static
- * `BrandTheme` (`surfaces.rhythm`), which `resolveTheme` -> `compileTheme` ->
- * `emitThemeCss` lowers into the compiled tenant artifact — an unlayered block
+ * `BrandTheme` (`surfaces.rhythm`), which `compileTheme` -> `emitThemeCss`
+ * lowers into the compiled tenant artifact — an unlayered block
  * behind
  * `:is(html[data-tenant='<slug>'], :where([data-ds-root][data-vertical='<v>']))`.
  * A customer writes it into a DB `TenantTheme` (`appearance.general.rhythm`),
@@ -11,7 +11,11 @@
  * `variables` map is applied as INLINE STYLE ON THE DOCUMENT ELEMENT.
  *
  * The DB door is `compileTenantThemeConfig` and only that; the static door is
- * `resolveTheme` -> `compileTheme` -> `emitThemeCss` and only that.
+ * `compileTheme` -> `emitThemeCss` and only that. A first-party vertical
+ * reaches that lowering through `compileThemeIntent`, which resolves its own
+ * baseline from a `ThemeIntent`; this probe's readers hold a mutant or fixture
+ * theme that no intent can name, so the adapter SYNTHESIZES the
+ * `ThemeResolution` and calls the same `compileTheme` directly.
  * `assertNoRetiredCompilerBinding` makes rebinding EITHER arm to a retired
  * lowering, or deep-importing a retired compiler tree, a load-time throw. Each
  * retired spelling still lowers a stop to a plausible number, so a rebound arm
@@ -257,12 +261,21 @@ export const INGRESS_ARMS = Object.freeze({
   }),
 });
 
-/** DB compiler exports that are retired and must never be bound again. */
+/**
+ * DB compiler exports that are retired and must never be bound again.
+ *
+ * Every name below is now absent from source as well as from every published
+ * entrypoint: the compatibility appearance lowering was deleted, not
+ * deprecated. The list survives the deletion on purpose — it is what makes a
+ * re-introduction fail by NAME at load time instead of failing later as an
+ * import error with no reason attached.
+ */
 export const RETIRED_DB_COMPILER_EXPORTS = Object.freeze([
   'compileAppearanceVariables',
   'appearanceGeneralToVariables',
   'appearanceAdvancedToVariables',
   'appearanceToVariables',
+  'deriveAppearanceColorRamps',
 ]);
 
 /**
@@ -271,9 +284,10 @@ export const RETIRED_DB_COMPILER_EXPORTS = Object.freeze([
  * The DB arm has had this guard since the appearance compiler was retired; the
  * static arm had none, so nothing stopped it from being rebound to a lowering
  * that no longer exists — and a missing export fails with an import error at
- * some later moment, not with the reason. The productive static door is
- * `resolveTheme` -> `compileTheme` -> `emitThemeCss`, all published on
- * `@rottay/design-system/server`.
+ * some later moment, not with the reason. The productive static lowering is
+ * `compileTheme` -> `emitThemeCss` — reached by a first-party vertical through
+ * `compileThemeIntent`, and here through a synthesized resolution — all
+ * published on `@rottay/design-system/server`.
  */
 export const RETIRED_STATIC_COMPILER_EXPORTS = Object.freeze([
   'compileBrandTheme',
@@ -300,7 +314,7 @@ export function assertNoRetiredCompilerBinding(arms) {
     if (RETIRED_STATIC_COMPILER_EXPORTS.includes(spec.compilerExport)) {
       throw new Error(
         `resolution-probe: ingress arm "${spec.id}" binds the RETIRED static lowering ` +
-          `"${spec.compilerExport}". The productive static door is resolveTheme -> compileTheme ` +
+          `"${spec.compilerExport}". The productive static lowering is compileTheme ` +
           '-> emitThemeCss. Rebinding to a retired lowering measures a legacy compat path and ' +
           'reports it as static/DB parity.',
       );
@@ -1376,8 +1390,8 @@ export function staticTenantAuthoredPaths({ patch, authoredPath }) {
  *           RESERVED — a DB arm must compile for a customer tenant.
  *   - the static lowering, reached through `brandThemeLoweringAdapter`
  *     (`scripts/libraries/theme-lowering`, which lifts the flat input into a
- *     `ThemeResolution` and calls `resolveTheme` -> `compileTheme` ->
- *     `emitThemeCss` in `infrastructure/compilers/runtime/theme`), takes
+ *     synthesized `ThemeResolution` and calls `compileTheme` -> `emitThemeCss`
+ *     in `infrastructure/compilers/runtime/theme`), takes
  *     `{ brandTheme, tenantSlug, ... }` and destructures it immediately.
  *     `document` built from `staticBrandThemePath` (e.g. `surfaces.rhythm`)
  *     IS a `BrandTheme` fragment, so it becomes `input.brandTheme`;
@@ -1434,7 +1448,7 @@ function toCompilerInput({
      * THE SCENARIO ALREADY WROTE, and only there.
      *
      * `backgroundMode` is the field `migratePalette` reads to route a top-level
-     * seed (`migrate-v1:396`). Declaring it makes the DB door write the same
+     * seed (`ingress/foundation/document-patch`). Declaring it makes the DB door write the same
      * mode scope the static door writes, which is what makes a parity run
      * compare one question instead of two.
      *
@@ -1598,7 +1612,7 @@ function deriveTenantSlug(vertical) {
  * writes `palette.primaryColor` into the BrandTheme BODY, which is the
  * vertical's DEFAULT mode. The DB door writes `appearance.general.palette.*`
  * into a v1 document, and `migratePalette` routes a top-level seed by
- * `palette.backgroundMode ?? "light"` (`migrate-v1:396`, `:404-418`) — so on a
+ * `palette.backgroundMode ?? "light"` (`ingress/foundation/document-patch`) — so on a
  * vertical whose default is LIGHT the seed lands in the body too, and on a
  * vertical whose default is DARK it lands in `modes.light` instead. Measured:
  * rottay is the only first-party vertical with a dark default, and its DB seed
@@ -1867,7 +1881,7 @@ export function lowerStop({
    * (`--ds-color-primary: #DC2626`, `--ds-chart-series-1: #B33831`). rottay is
    * the only first-party vertical with a dark `defaultMode`, so the v1
    * transport routes a top-level seed into its NON-default mode
-   * (`migrate-v1:396`, `?? "light"`). The base delta is legitimately empty and
+   * (`ingress/foundation/document-patch`, `?? "light"`). The base delta is legitimately empty and
    * the door is not inert -- the guard was reading one of two scopes and
    * reporting a full lowering as a finding.
    *

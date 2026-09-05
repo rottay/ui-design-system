@@ -45,14 +45,14 @@ import {
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { readGovernedTheme } from "../foundation/intake";
 import { DEFAULT_CHROME_SHAPE } from "@/foundation/contracts/composition/tenants/themes/iso/shape";
-import { migrateV1 as migrateV1WithMode } from "@/infrastructure/compilers/composition/tenant-theme/migrate-v1";
+import { migrateV1 as migrateV1WithMode } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { resolveTheme } from "@/infrastructure/compilers/runtime/theme/runtime/resolution";
+import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { resolveAdapter } from "@/infrastructure/compilers/runtime/theme/presentation/adapters";
 import {
   brandTenantSelector,
@@ -71,7 +71,14 @@ import {
  */
 function lower(theme: Theme, tenantSlug: string = theme.id) {
   const labelled = tenantSlug === theme.id ? theme : { ...theme, id: tenantSlug };
-  const compiled = compileTheme(resolveTheme(labelled), resolveAdapter("modern"));
+  // Hand-merged fixture themes, not roster baselines: this suite compares two
+  // TRANSPORTS by pre-merging both to the same Theme, which is exactly the
+  // input no `ThemeIntent` can name. The provenance is the door's own
+  // no-tenant value.
+  const compiled = compileTheme(
+    { theme: labelled, provenance: EMPTY_PROVENANCE },
+    resolveAdapter("modern")
+  );
   return {
     ...compiled,
     cssString: emitThemeCss(compiled, containerScope(brandTenantSelector(tenantSlug))),

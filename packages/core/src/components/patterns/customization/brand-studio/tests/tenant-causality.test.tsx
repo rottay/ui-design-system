@@ -71,6 +71,7 @@ function ControlledStudio({
   const [theme, setTheme] = useState<BrandTheme>(initial);
   return (
     <PatternBrandStudio
+      vertical="bithire"
       value={theme}
       title="Causality Studio"
       onChange={(next) => {
@@ -156,7 +157,7 @@ describe('PatternBrandStudio static/DB channel parity', () => {
   it('drives --ds-color-primary from the same tenant input on both authoring paths', () => {
     const staticVars = buildSurfaceVariables(
       { id: 'p', name: 'P', palette: { primaryColor: '#2f6b9a' } },
-      { key: 'dark', baseTheme: 'dark', tenantSlug: 'parity' }
+      { key: 'dark', baseTheme: 'dark', vertical: 'bithire', tenantSlug: 'parity' }
     ).vars;
     expect(staticVars['--ds-color-primary']).toBe('#2f6b9a');
 

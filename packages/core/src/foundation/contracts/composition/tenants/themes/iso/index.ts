@@ -11,7 +11,6 @@
  * without circularity.
  */
 
-import { ENGINE_NAMES, type EngineName } from "../../../../kernel/engine-identity";
 import type {
   ChartPersonalityTokens,
   CardPersonalityTokens,
@@ -105,7 +104,6 @@ export interface Theme {
   expressive: Governed<BrandExpressiveSelection>;
   responsive: Governed<BrandResponsiveSelection>;
   chrome: BrandChrome;
-  engineBridge: Governed<Partial<Record<EngineName, Record<string, unknown>>>>;
   capabilities: BrandCapabilityCatalog;
 }
 
@@ -371,7 +369,6 @@ const DEFAULT_CAPABILITY_IDS: readonly BrandCapabilityId[] = [
   "recipes",
   "expressive",
   "responsive",
-  "engineBridge",
 ];
 
 function normalizeCapabilities(
@@ -650,10 +647,6 @@ const DEFAULT_RESPONSIVE_SHAPE: BrandResponsiveSelection = {
   posture: undefined,
 } as unknown as BrandResponsiveSelection;
 
-const DEFAULT_ENGINE_BRIDGE_SHAPE: Partial<
-  Record<EngineName, Record<string, unknown>>
-> = {};
-
 const DEFAULT_MODE_OVERLAY_SHAPE: BrandThemeModeOverlay = {
   palette: withAllKeys({} as BrandPalette, DEFAULT_PALETTE_KEYS),
   typography: withAllKeys({} as BrandTypography, DEFAULT_TYPOGRAPHY_KEYS),
@@ -820,11 +813,6 @@ export function brandThemeToTheme(brand: FirstPartyBrandTheme): Theme {
       DEFAULT_CHROME_SHAPE as unknown as BrandChrome,
       brand.chrome
     ),
-    engineBridge: governedFor(
-      brand.engineBridge,
-      DEFAULT_ENGINE_BRIDGE_SHAPE,
-      "engineBridge"
-    ),
     capabilities: normalizeCapabilities(brand.capabilities),
   };
 }
@@ -990,9 +978,6 @@ function assertDisposition(value: unknown, path: string): void {
   );
 }
 
-/** The engine roster as a membership test for the bridge dictionary's keys. */
-const ENGINE_KEYS: ReadonlySet<string> = new Set<string>(ENGINE_NAMES);
-
 /** Keys that reach the prototype chain, refused wherever a patch names one. */
 const FORBIDDEN_PATCH_KEYS: ReadonlySet<string> = new Set([
   "__proto__",
@@ -1005,53 +990,6 @@ function assertPatchKey(key: string, path: string): void {
   throw new Error(
     `mergeThemePatches: forbidden key "${key}" at ${path}; ThemePatch may not name the prototype chain`
   );
-}
-
-/**
- * True at the keypath of the engine-keyed bridge dictionary.
- *
- * `engineBridge` is declared `Governed<Partial<Record<EngineName, ...>>>`, so
- * its governed `value` is an OPEN dictionary whose legal keys are the engine
- * roster. The baseline holds `{}` there, which made the unknown-key rule --
- * correct everywhere else -- refuse `modern` as hard as it refused `potato`,
- * closing a contract the Theme declares open.
- */
-function isEngineBridgeDictionary(path: string): boolean {
-  const segments = path.split(".").filter((segment) => segment !== "$" && segment.length > 0);
-  return segments.length === 2 && segments[0] === "engineBridge" && segments[1] === "value";
-}
-
-/**
- * Validate one engine's opaque bridge bag.
- *
- * The DS neither reads nor types what an engine puts here, so no KIND is
- * refused -- but opaque is not unchecked. What survives is data a document
- * could have carried: plain records, arrays and scalars, with no prototype
- * reach and no host object anywhere inside.
- */
-function assertEngineBridgeBag(value: unknown, path: string): void {
-  if (Array.isArray(value)) {
-    value.forEach((element, index) => assertEngineBridgeBag(element, `${path}[${index}]`));
-    return;
-  }
-  if (value === null || typeof value !== "object") {
-    if (typeof value === "function" || typeof value === "symbol") {
-      throw new Error(
-        `mergeThemePatches: ${typeof value} at ${path} is not engine-bridge data`
-      );
-    }
-    return;
-  }
-  if (!isPlainPatchRecord(value)) {
-    throw new Error(
-      `mergeThemePatches: ${containerTag(value)} at ${path} is not a plain record; ` +
-        "an engine bridge carries only plain data"
-    );
-  }
-  for (const key of Object.keys(value)) {
-    assertPatchKey(key, path);
-    assertEngineBridgeBag(value[key], `${path}.${key}`);
-  }
 }
 
 /** Fail-closed deep merge. Any key in `patch` that is not in `base` throws. */
@@ -1102,30 +1040,7 @@ function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
     result.disposition = undefined;
   }
 
-  const bridgeDictionary = isEngineBridgeDictionary(path);
-
   for (const key of Object.keys(patchObj)) {
-    if (bridgeDictionary) {
-      assertPatchKey(key, path);
-      if (!ENGINE_KEYS.has(key)) {
-        throw new Error(
-          `mergeThemePatches: unknown engine "${key}" at ${path}; ` +
-            `the closed set is ${ENGINE_NAMES.map((name) => `"${name}"`).join(", ")}`
-        );
-      }
-      const bagPath = `${path}.${key}`;
-      const bag = patchObj[key];
-      if (!isPlainPatchRecord(bag)) {
-        throw new Error(
-          `mergeThemePatches: ${nodeKind(bag) === "object" ? containerTag(bag) : nodeKind(bag)} ` +
-            `at ${bagPath} is not a plain record; an engine bridge entry is that engine's own bag`
-        );
-      }
-      assertEngineBridgeBag(bag, bagPath);
-      const existing = baseObj[key];
-      result[key] = isPlainPatchRecord(existing) ? { ...existing, ...bag } : { ...bag };
-      continue;
-    }
     // OWN properties only. `key in baseObj` walks the prototype chain, so
     // `constructor`, `toString`, `valueOf`, `hasOwnProperty` and `__proto__` all
     // answered "known key" on a public runtime boundary and were merged. This is
@@ -1206,7 +1121,6 @@ const CANONICAL_THEME_KEY_ORDER: readonly (keyof Theme)[] = [
   "expressive",
   "responsive",
   "chrome",
-  "engineBridge",
   "capabilities",
 ];
 
@@ -1400,7 +1314,6 @@ const GOVERNED_UNWRAPPED_ROOTS: readonly string[] = [
   "recipes",
   "expressive",
   "responsive",
-  "engineBridge",
 ];
 
 /**

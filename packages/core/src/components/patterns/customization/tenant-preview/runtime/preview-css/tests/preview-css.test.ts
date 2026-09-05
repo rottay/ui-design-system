@@ -30,6 +30,14 @@ import {
 } from '../../../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
+  compileThemeIntent,
+  containerScope,
+  draftPreviewThemeIntent,
+  emitThemeCss,
+  staticThemeIntent,
+} from '@/infrastructure/compilers/runtime/theme';
+import { brandTenantSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
+import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
@@ -47,6 +55,12 @@ function baseTenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
   return {
     slug: 'acme',
     name: 'Acme Corp',
+    // The vertical the draft is a patch of. A config that names none names no
+    // baseline, and `buildPreviewCss` reports `vertical` as a lost axis rather
+    // than compiling the draft as a baseline of its own. `bithire` because
+    // these fixtures carry LIGHT-default legacy branding with dark seeds in a
+    // `modes.dark` overlay, which only a light-default vertical can accept.
+    vertical: 'bithire',
     theme: 'base',
     plan: 'starter',
     features: [],
@@ -74,14 +88,26 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
       const brandTheme = draftBrandTheme(draft);
       const safeSlug = sanitizePreviewSlug(draft.slug);
       // Same call `resolveCompiledOutput` makes internally, so this is a
-      // faithful "raw" baseline rather than a second interpretation of it.
-      const raw = lowerBrandThemeFixture({ brandTheme, tenantSlug: safeSlug }).cssString;
+      // faithful "raw" baseline rather than a second interpretation of it. The
+      // draft is a PATCH over the vertical now, so the raw side has to resolve
+      // the same way or it would compare two different compiles.
+      const raw = emitThemeCss(
+        compileThemeIntent(
+          draftPreviewThemeIntent({
+            vertical: 'rottay',
+            slug: safeSlug,
+            draft: brandTheme,
+          }),
+        ).compiled,
+        containerScope(brandTenantSelector(safeSlug)),
+      );
       const rawDeclarationCount = raw
         .split('\n')
         .filter((line) => /^ {2}\S.*;$/.test(line)).length;
 
       const { css, safeSlug: outSlug, scopeSelector } = buildPreviewCss({
         kind: 'brand-theme',
+      vertical: 'rottay',
         slug: draft.slug,
         brandTheme,
       });
@@ -102,7 +128,8 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
 
   it('emits no html[data-tenant] rule even when previewing the active tenant slug', () => {
     const brandTheme = draftBrandTheme({ ...sampleDraft, slug: 'bithire' });
-    const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme', slug: 'bithire', brandTheme });
+    const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme',
+      vertical: 'rottay', slug: 'bithire', brandTheme });
 
     expect(css).not.toContain('html');
     expect(css).toContain('--ds-color-primary');
@@ -119,11 +146,22 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
       surfaces: { shadows: { md: 'red;} html{background:black}' } },
     };
 
-    const { css } = buildPreviewCss({ kind: 'brand-theme', slug: sampleDraft.slug, brandTheme });
+    const { css } = buildPreviewCss({ kind: 'brand-theme',
+      vertical: 'rottay', slug: sampleDraft.slug, brandTheme });
     expect(css).not.toContain('background:black');
     expect(css).not.toContain('html');
-    expect(css).not.toContain('--ds-shadow-md');
     expect(css).toContain('--ds-color-primary');
+    // The channel is still declared, because a draft is a patch over the
+    // vertical and the vertical authors its own shadows. What must not survive
+    // is the hostile VALUE, on any block that emits the channel.
+    const shadowLines = css
+      .split('\n')
+      .filter((line) => line.trim().startsWith('--ds-shadow-md:'));
+    expect(shadowLines.length).toBeGreaterThan(0);
+    for (const line of shadowLines) {
+      expect(line).not.toContain('red;');
+      expect(line).not.toContain('}');
+    }
   });
 
   it('contains multi-line hostile values inside the scoped block', () => {
@@ -132,7 +170,8 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
       surfaces: { borderRadius: { md: 'red;\n} zz9{--pwn9:1}\n' } },
     };
 
-    const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme', slug: sampleDraft.slug, brandTheme });
+    const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme',
+      vertical: 'rottay', slug: sampleDraft.slug, brandTheme });
     expect(css).not.toContain('zz9');
     expect(css).not.toContain('--pwn9');
     for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
@@ -165,6 +204,7 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
 
     const { css, scopeSelector } = buildPreviewCss({
       kind: 'brand-theme',
+      vertical: 'rottay',
       slug: sampleDraft.slug,
       brandTheme,
     });
@@ -190,6 +230,7 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     const brandTheme = draftBrandTheme({ ...sampleDraft, slug: hostileSlug });
     const { css, safeSlug, scopeSelector } = buildPreviewCss({
       kind: 'brand-theme',
+      vertical: 'rottay',
       slug: hostileSlug,
       brandTheme,
     });
@@ -371,8 +412,8 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
   // `css.length > 0`).
 
   it('palette: emitted custom-property values differ when branding.primaryColor differs', () => {
-    const blue = createTenantConfig({ slug: 'acme', name: 'Acme', primaryColor: '#3B82F6' });
-    const red = createTenantConfig({ slug: 'acme', name: 'Acme', primaryColor: '#EF4444' });
+    const blue = createTenantConfig({ slug: 'acme', vertical: 'rottay', name: 'Acme', primaryColor: '#3B82F6' });
+    const red = createTenantConfig({ slug: 'acme', vertical: 'rottay', name: 'Acme', primaryColor: '#EF4444' });
 
     const cssBlue = buildPreviewCss(blue).css;
     const cssRed = buildPreviewCss(red).css;
@@ -406,6 +447,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     const lines = presets.map((personality) => {
       const config = createTenantConfig({
         slug: 'acme',
+        vertical: 'rottay',
         name: 'Acme',
         primaryColor: '#3B82F6',
         personality,
@@ -423,12 +465,14 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
   it('density: emitted --ds-density-scale differs between compact and spacious', () => {
     const compact = createTenantConfig({
       slug: 'acme',
+      vertical: 'rottay',
       name: 'Acme',
       primaryColor: '#3B82F6',
       density: 'compact',
     });
     const spacious = createTenantConfig({
       slug: 'acme',
+      vertical: 'rottay',
       name: 'Acme',
       primaryColor: '#3B82F6',
       density: 'spacious',
@@ -464,11 +508,22 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     }
   });
 
-  it('dark/modes: no dark branding seeds -> no dark selector block is emitted', () => {
-    const config = createTenantConfig({ slug: 'acme', name: 'Acme', primaryColor: '#3B82F6' });
+  it('dark/modes: no dark branding seeds -> the draft contributes no mode block of its own', () => {
+    // The vertical's own overlays are still compiled -- a draft is a patch over
+    // it, not a theme on its own -- so absence is measured as a DELTA: the
+    // preview's mode blocks are exactly the untouched vertical's.
+    const config = createTenantConfig({ slug: 'acme', vertical: 'bithire', name: 'Acme', primaryColor: '#3B82F6' });
     const { css } = buildPreviewCss(config);
+    const untouched = emitThemeCss(
+      compileThemeIntent(staticThemeIntent('bithire', 'acme')).compiled,
+      containerScope(brandTenantSelector('acme')),
+    );
+    // The MODES, not the selectors: the two sides are scoped differently by
+    // construction (a preview container versus the tenant root).
+    const modes = (text: string) =>
+      [...text.matchAll(/\[data-theme='([a-z]+)'\]/g)].map((m) => m[1]).sort();
 
-    expect(css).not.toContain("data-theme='dark'");
+    expect(modes(css)).toEqual(modes(untouched));
     expect(css).not.toContain('prefers-color-scheme');
   });
 
@@ -482,17 +537,21 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
       brandTheme,
       // Legacy fields present alongside brandTheme; per TenantConfig's own
       // doc comment these are superseded and must not leak into the output.
-      branding: { companyName: 'Acme Corp', primaryColor: '#3B82F6' },
+      // A canary hex: no first-party theme authors it, so its absence proves
+      // the legacy field was ignored rather than merely coinciding with a
+      // baseline value the vertical happens to declare.
+      branding: { companyName: 'Acme Corp', primaryColor: '#FE01DC' },
       personality: { animation: { intensity: 1.5 } },
     });
 
-    const direct = buildPreviewCss({ kind: 'brand-theme', slug: config.slug, brandTheme });
+    const direct = buildPreviewCss({ kind: 'brand-theme',
+      vertical: 'bithire', slug: config.slug, brandTheme });
     const viaConfig = buildPreviewCss(config);
 
     expect(viaConfig.css).toBe(direct.css);
     expect(viaConfig.unsupportedAxes).toEqual([]);
     expect(viaConfig.css).toContain('#111827');
-    expect(viaConfig.css).not.toContain('#3B82F6');
+    expect(viaConfig.css).not.toContain('#FE01DC');
   });
 
   it('neither a brandTheme nor a branding.primaryColor: returns the typed empty/unsupported result instead of inventing a preview', () => {
@@ -567,6 +626,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     // regressing back in.
     const config = createTenantConfig({
       slug: 'acme',
+      vertical: 'rottay',
       name: 'Evil */ zz9{--pwn9:1} /*',
       primaryColor: '#3B82F6',
     });

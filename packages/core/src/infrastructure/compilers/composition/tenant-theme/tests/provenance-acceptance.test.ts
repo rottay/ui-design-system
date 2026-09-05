@@ -66,7 +66,7 @@ import {
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "..";
-import { migrateV1 } from "../migrate-v1";
+import { migrateV1 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { lowerTheme } from "@tests/support/theme-lowering";
 
 const VERTICALS = ["rottay", "bithire", "evnto"] as const;
@@ -1063,7 +1063,7 @@ describe("the consulted-provenance authority is closed", () => {
     const contaminatedHits = [
       ...collectPatchAuthoredPaths(contaminated.patch),
     ].filter((path) => CONSULTED_PROVENANCE_FIELDS.has(path));
-    // `migrateV1`'s `paletteFields()` always constructs all four
+    // The migration's `paletteFields()` always constructs all four
     // `{tone}Color` keys the moment `general.palette.status` is present at
     // all (own-key presence, `undefined` value for the three untouched
     // tones) -- `collectPatchAuthoredPaths` collects by key presence, not

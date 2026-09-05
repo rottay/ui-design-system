@@ -497,6 +497,9 @@ test('negative drill: stale compiled arms are refused before they can be importe
 });
 
 test('loadCompilerArms claims freshness only after the dist gate proves it', async () => {
+  // The registry the double publishes, and the resolver that reads it: the real
+  // `resolveAdapter` refuses an unknown engine and has no fallback, so this does too.
+  const adapters = { modern: { id: 'modern', project: () => ({}) } };
   const loaded = await loadCompilerArms({
     importModule: async () => ({
       // The static arm's adapter reads the whole canonical pipeline off the
@@ -504,14 +507,23 @@ test('loadCompilerArms claims freshness only after the dist gate proves it', asy
       // answered less would prove the gate passed a module the real arm cannot
       // use.
       compileTheme: () => ({ cssVariables: {}, modeBlocks: [], runtime: {} }),
-      resolveTheme: (theme) => ({ theme, provenance: {} }),
       liftAuthoredTheme: (brand) => brand,
-      THEME_ENGINE_ADAPTERS: { modern: { id: 'modern', project: () => ({}) } },
+      THEME_ENGINE_ADAPTERS: adapters,
+      resolveAdapter: (engine) => {
+        const adapter = adapters[engine];
+        if (!adapter)
+          throw new Error(`resolveAdapter: no theme adapter for engine "${engine}".`);
+        return adapter;
+      },
       emitThemeCss: () => '',
       containerScope: () => ({}),
       brandTenantSelector: () => '',
       EMPTY_PROVENANCE: {},
       deriveTenantStatusSeedAuthorship: () => ({ base: {}, modes: {} }),
+      // `importModule` answers every path with this one double, so it also
+      // stands in for the engine-identity and roster contracts the adapter reads.
+      PRIMARY_ENGINE: 'modern',
+      getFirstPartyVertical: (slug) => (slug === 'rottay' ? { slug, engine: 'modern' } : undefined),
       compileTenantThemeConfig: () => ({}),
       TENANT_THEME_SCHEMA_VERSION: 1,
       // FASE-A: the DB arm now also refuses to load without the envelope
@@ -588,7 +600,7 @@ test('negative drill: the DB arm may never be rebound to a retired compiler', ()
   );
 });
 
-test('the STATIC arm binds the current door: resolveTheme -> compileTheme -> emitThemeCss', () => {
+test('the STATIC arm binds the current lowering: compileTheme -> emitThemeCss', () => {
   /* The arm's declared binding is the thing every other static assertion in this
    * file trusts, so it is pinned to the CURRENT owner by name rather than left
    * to be read out of prose. */

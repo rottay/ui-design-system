@@ -11,18 +11,15 @@ import type {
   ThemeCompilation,
   ThemeCompilationModeBlock,
 } from '@/foundation/contracts/composition/tenants/themes/compiled';
-import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
-import type { EngineName } from '@/foundation/contracts/kernel/engine-identity';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 import {
-  compileTheme,
+  compileThemeIntent,
   containerScope,
   emitBaseRule,
   emitModeRule,
   firstPartyScope,
-  resolveAdapter,
-  resolveTheme,
+  staticThemeIntent,
 } from '../../theme';
 import { projectFirstPartyArtifactScopes } from '../../../kernel/foundation/css/scope-projection';
 
@@ -53,12 +50,6 @@ export interface FirstPartyArtifactSpec {
   selector: string;
   /** Path to the authored theme, relative to `packages/core/src`. */
   authoredThemePath: string;
-  /**
-   * The engine this vertical renders with, projected from the roster. The
-   * compile that produces the shipped artifacts resolves its adapter from this
-   * field, never from a literal.
-   */
-  engine: EngineName;
 }
 
 /**
@@ -98,7 +89,6 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] =
         displayName: row.name,
         authoredThemePath: row.themeSourcePath,
         selector: artifactRootSelector(row.slug),
-        engine: row.engine,
       }),
     ),
   );
@@ -217,8 +207,6 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
 /** Inputs for {@link renderFirstPartyArtifact}. */
 export interface RenderFirstPartyArtifactInput {
   spec: FirstPartyArtifactSpec;
-  /** The vertical's authored theme, already in canonical `Theme` form. */
-  theme: Theme;
   regenerateCommand?: string;
 }
 
@@ -236,8 +224,13 @@ export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): 
   css: string;
   compiled: ThemeCompilation;
 } {
-  const { spec, theme, regenerateCommand } = input;
-  const compiled = compileTheme(resolveTheme(theme), resolveAdapter(spec.engine));
+  const { spec, regenerateCommand } = input;
+  // The intent NAMES the vertical; the baseline and the engine are both read
+  // off that one roster row. The theme used to arrive as an input and the
+  // engine as `spec.engine`, which let the two disagree -- a caller could
+  // render one vertical's theme under another's spec and the artifact header
+  // would say the spec's name over the theme's channels.
+  const { compiled } = compileThemeIntent(staticThemeIntent(spec.verticalKey, spec.slug));
   return {
     compiled,
     css: renderVerticalArtifact({

@@ -30,7 +30,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 
 export const CHROME_VARIABLES = 'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts';
-export const APPEARANCE = 'packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts';
 /**
  * The theme lowering's channel writers: one owner per concern, so a template is
  * attributed to the writer that actually emits it rather than to whichever file
@@ -92,7 +91,6 @@ export const LOWERING_SOURCES = Object.freeze([
 
 export const REACH_SOURCES = Object.freeze([
   CHROME_VARIABLES,
-  APPEARANCE,
   ...LOWERING_SOURCES,
   TENANT_THEME,
 ]);
@@ -302,7 +300,6 @@ export function overrideTokens(root) {
  */
 const CONSTANT_SOURCES = Object.freeze([
   CHROME_VARIABLES,
-  APPEARANCE,
   ...LOWERING_SOURCES,
   TENANT_THEME,
   'packages/core/src/foundation/kernel/color/oklch/ramp/index.ts',
@@ -439,8 +436,6 @@ export function buildEnumerators(root) {
 
   // Everything else binds its values in a loop inside its own body.
   const loopEmitters = [
-    [APPEARANCE, 'deriveAppearanceColorRamps', 'appearance colour ramps'],
-    [APPEARANCE, 'appearanceToVariables', 'appearance font-family keys and chart series'],
     [LOWERING_FOUNDATION_RAMPS, 'deriveTenantColorRamps', 'brand colour ramps'],
     [LOWERING_RUNTIME_VARIABLES, 'brandThemeToCssVariables', 'brand chart colors'],
     [LOWERING_FOUNDATION_MATERIALS, 'semanticSurfaceRolesToCssVariables', 'semantic material roles'],
@@ -539,7 +534,7 @@ export function tenantReach({ root }) {
   const unattributed = [];
   const perEnumerator = new Map();
 
-  for (const path of [CHROME_VARIABLES, APPEARANCE, ...LOWERING_SOURCES]) {
+  for (const path of [CHROME_VARIABLES, ...LOWERING_SOURCES]) {
     const source = read(root, path);
     const bodies = new Map(functionBodies(source).map((fn) => [fn.name, fn.body]));
     for (const emission of templateEmissions(source)) {

@@ -11,8 +11,8 @@
  * That carrier is gone. The provider compiles nothing and writes no visual
  * variable; a tenant's appearance is compiled once, into an artifact, and the
  * artifact is the only style owner. So each case below now asserts BOTH
- * halves of the current law on the same input:
- *   - the channel IS produced, by the compiler, into `artifact.css`
+ * halves of the current law on the SAME artifact the tree renders:
+ *   - the channel IS produced, by `compileTenantThemeConfig`, into the artifact
  *   - the provider does NOT also stamp it inline
  * Asserting only the first would let a second emitter come back unnoticed;
  * asserting only the second would pass for an appearance that reaches
@@ -29,7 +29,6 @@ import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '@/foundation/contracts';
 import type { TenantAppearance } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -58,8 +57,14 @@ function admittedArtifact(): TenantThemeArtifact {
         schemaVersion: 1,
         mode: 'simple',
         appearance: {
-          palette: { primary: '#FF5500', backgroundMode: 'dark' },
+          palette: {
+            primary: '#FF5500',
+            backgroundMode: 'dark',
+            status: { success: '#00FF00' },
+          },
           density: 'compact',
+          shape: { buttonStyle: 'pill' },
+          navigation: { sidebarTone: 'inverse' },
         },
       },
       {
@@ -71,6 +76,18 @@ function admittedArtifact(): TenantThemeArtifact {
     ),
     { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
   );
+}
+
+/**
+ * The plane that owns a channel for THIS tenant. It declares
+ * `backgroundMode: 'dark'`, so its palette compiles into the artifact's own
+ * dark mode delta while mode-blind geometry and chrome stay on the flat map.
+ * Naming the plane is the point: reading both and taking whichever answers
+ * would let a palette channel silently move planes without failing.
+ */
+function darkPlaneChannel(name: string): string | undefined {
+  return admittedArtifact().modeDeltas?.find((delta) => delta.mode === 'dark')
+    ?.variables[name];
 }
 
 const mountedArtifacts: HTMLStyleElement[] = [];
@@ -161,14 +178,8 @@ afterEach(() => {
 });
 
 describe('TenantAppearance via DesignSystemProvider', () => {
-  it('appearance.general.palette.primary compiles --ds-color-primary, and the provider does not restate it', async () => {
-    const appearance: TenantAppearance = {
-      general: { palette: { primary: '#FF5500' } },
-    };
-
-    expect(compileAppearanceVariables(appearance).variables['--ds-color-primary']).toBe(
-      '#FF5500',
-    );
+  it('appearance.palette.primary compiles --ds-color-primary, and the provider does not restate it', async () => {
+    expect(darkPlaneChannel('--ds-color-primary')).toBe('#FF5500');
 
     const rootStyle = await renderAdmitted();
     expect(rootStyle.getPropertyValue('--ds-color-primary')).toBe('');
@@ -194,28 +205,20 @@ describe('TenantAppearance via DesignSystemProvider', () => {
     expect(root.getAttribute('data-theme')).toBe('light');
   });
 
-  it('appearance.general.shape.buttonStyle=pill compiles --ds-radius-button, and the provider does not restate it', async () => {
-    const appearance: TenantAppearance = {
-      general: { shape: { buttonStyle: 'pill' } },
-    };
-
+  it('appearance.shape.buttonStyle=pill compiles --ds-radius-button, and the provider does not restate it', async () => {
     // The pill silhouette reaches the channel as its own product with the
-    // radius dial, so a tenant scale still moves it; at rest it is the
-    // authored 9999px.
-    expect(compileAppearanceVariables(appearance).variables['--ds-radius-button']).toBe(
-      'calc(9999px * var(--ds-radius-scale, 1))',
+    // radius dial, so a tenant scale still moves it; the authored 9999px is
+    // divided by the dial the compiled block declares.
+    expect(admittedArtifact().variables['--ds-radius-button']).toBe(
+      'calc(9999px / 1.25 * var(--ds-radius-scale, 1))',
     );
 
     const rootStyle = await renderAdmitted();
     expect(rootStyle.getPropertyValue('--ds-radius-button')).toBe('');
   });
 
-  it('appearance.general.navigation.sidebarTone=inverse compiles sidebar vars, and the provider does not restate them', async () => {
-    const appearance: TenantAppearance = {
-      general: { navigation: { sidebarTone: 'inverse' } },
-    };
-
-    expect(compileAppearanceVariables(appearance).variables['--ds-sidebar-bg']).toBe(
+  it('appearance.navigation.sidebarTone=inverse compiles sidebar vars, and the provider does not restate them', async () => {
+    expect(admittedArtifact().variables['--ds-sidebar-bg']).toBe(
       'var(--ds-color-neutral-900)',
     );
 
@@ -223,16 +226,8 @@ describe('TenantAppearance via DesignSystemProvider', () => {
     expect(rootStyle.getPropertyValue('--ds-sidebar-bg')).toBe('');
   });
 
-  it('appearance.advanced.tokenOverrides compile through, and the provider does not restate them', async () => {
-    const appearance: TenantAppearance = {
-      advanced: {
-        tokenOverrides: { '--ds-color-success': '#00FF00' },
-      },
-    };
-
-    expect(compileAppearanceVariables(appearance).variables['--ds-color-success']).toBe(
-      '#00FF00',
-    );
+  it('an authored status tone compiles through, and the provider does not restate it', async () => {
+    expect(darkPlaneChannel('--ds-color-success')).toBe('#00FF00');
 
     const rootStyle = await renderAdmitted();
     expect(rootStyle.getPropertyValue('--ds-color-success')).toBe('');

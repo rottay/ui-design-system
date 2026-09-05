@@ -345,20 +345,6 @@ describe("compileTheme", () => {
     expect(overrides.borderRadius?.xl).toBe("16px");
     expect(overrides.densityScale).toBe(1.1);
   });
-
-  it("does not project engineBridge into the compiled product", () => {
-    // `engineBridge` was carried through the retired compiler's return value
-    // and read by nobody. The canonical product is CSS channels plus the
-    // runtime half; an engine's own library seeds are the ADAPTER's business,
-    // which is why the lowering has no passthrough for them.
-    const bt: BrandTheme = {
-      ...MOCK_BRAND_THEME,
-      engineBridge: { modern: { "--p": "oklch(0.5 0.2 250)" } },
-    };
-    const result = lowerBrandThemeFixture({ brandTheme: bt, tenantSlug: "test" });
-    expect((result as unknown as Record<string, unknown>).engineBridge).toBeUndefined();
-    expect(bt.engineBridge?.modern).toEqual({ "--p": "oklch(0.5 0.2 250)" });
-  });
 });
 
 describe("brandThemeToChromeVariables", () => {

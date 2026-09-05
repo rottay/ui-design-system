@@ -236,35 +236,33 @@ test('each definition is reported exactly once', () => {
 /* Integration against the real tree                                   */
 /* ------------------------------------------------------------------ */
 
-test('the real tree has zero violations and exactly two allowlisted definer hits', () => {
+test('the real tree has zero violations and exactly one allowlisted definer hit', () => {
   const { findings, scanned, allowlistedHits } = runGate();
   assert.deepEqual(findings, []);
   assert.ok(scanned > 100, `expected a real scan, saw ${scanned} files`);
-  // Two template assignments are sanctioned today: the brand-theme compiler
-  // (the canonical `compileTheme` lowering, which took the palette authority
-  // in dcc65ca34) and the appearance compiler (the compatibility projection).
-  // Both emit at the tenant root scope, so neither is the CHT-03 hazard, which
-  // is a definition BELOW that scope.
+  // One template assignment is sanctioned today: the canonical `compileTheme`
+  // lowering, which took the palette authority in dcc65ca34. It emits at the
+  // tenant root scope, so it is not the CHT-03 hazard, which is a definition
+  // BELOW that scope.
   //
-  // The number is pinned at 2 on purpose and is NOT an endorsement of the
-  // duplication: collapsing the two derivations to one definer is an open
-  // unification, and when it lands this assertion must go to 1 rather than
-  // drift silently. Zero would mean both emitters moved and the allowlist is
-  // stale; three would mean a definer slipped into an allowlisted path. The
-  // oklch derivation file names the channel only in prose, so it is not a hit
-  // under syntactic adjudication — it stays allowlisted so a future emission
-  // there is a reviewed change, not a silent one.
+  // This was pinned at 2 while the appearance compiler carried a second,
+  // compatibility derivation of the same channels. That unification has landed
+  // — the compatibility projection is deleted — so the count is 1. Zero would
+  // mean the emitter moved and the allowlist is stale; two would mean a definer
+  // slipped into an allowlisted path. The oklch derivation file names the
+  // channel only in prose, so it is not a hit under syntactic adjudication — it
+  // stays allowlisted so a future emission there is a reviewed change, not a
+  // silent one.
   assert.equal(
     allowlistedHits,
-    2,
-    `expected exactly the two compiler emissions, saw ${allowlistedHits}`,
+    1,
+    `expected exactly the one compiler emission, saw ${allowlistedHits}`,
   );
 });
 
 test('the definer allowlist cannot grow without touching this test', () => {
   assert.deepEqual(DEFINER_ALLOWLIST, [
     'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
-    'infrastructure/compilers/kernel/runtime/appearance/index.ts',
     'foundation/kernel/color/oklch/chart-series/index.ts',
   ]);
 });
@@ -275,5 +273,5 @@ test('--check exits 0 on the current tree', () => {
   });
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /violations: 0/);
-  assert.match(result.stdout, /allowlisted definer occurrences: 2/);
+  assert.match(result.stdout, /allowlisted definer occurrences: 1/);
 });
