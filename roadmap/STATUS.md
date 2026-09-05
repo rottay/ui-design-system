@@ -4,7 +4,7 @@
 
 > **Phase scope**: Phase 0 open; Phases 1, 2A, 2B, 2C, 3, 4, 5, 6 locked, ownerGo pending; 0/128 findings deferred to later phases. The burn-down figures below certify only the open phase's adjudicated scope; later functional waves remain owner-gated.
 
-## Burn-down — 75/155 done (48%)
+## Burn-down — 76/155 done (49%)
 
 | Lane | Done | In progress | Todo | Total |
 | --- | --- | --- | --- | --- |
@@ -14,9 +14,9 @@
 | [tokens](./tokens.md) | 10 | 0 | 1 | 11 |
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
-| [canon-close](./canon-close.md) | 0 | 0 | 6 | 6 |
+| [canon-close](./canon-close.md) | 0 | 1 | 5 | 6 |
 | [consumer-contract](./consumer-contract.md) | 0 | 0 | 5 | 5 |
-| [catalog-door](./catalog-door.md) | 0 | 0 | 3 | 3 |
+| [catalog-door](./catalog-door.md) | 1 | 0 | 2 | 3 |
 | [derivation](./derivation.md) | 0 | 0 | 7 | 7 |
 | [family-cuts](./family-cuts.md) | 0 | 0 | 14 | 14 |
 | [emission-mount](./emission-mount.md) | 0 | 0 | 3 | 3 |
@@ -31,7 +31,7 @@
 | A · The apps can build | not reached | WO-CON-04, WO-CON-05 | WO-CON-04, WO-CON-05 | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2 · Architecture validated in one vertical cut | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | Decisions -> derivation -> channels -> skin proven end to end on one family; the autonomous APP and DS lanes start. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography. |
-| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 55 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 54 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -55,14 +55,14 @@
 
 ## In progress
 
-(none)
+| WO | Title | Claimed by | Since | Last progress |
+| --- | --- | --- | --- | --- |
+| WO-CAN-01 | C4 landing: green tree, gates matrix and single commit | claude-opus-5-can-01 | 2026-09-05 | (no entries — log via `progress`) |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-CAN-01 | C4 landing: green tree, gates matrix and single commit | S | canon-close | audit-2026-09-05 |
-| WO-CAT-01 | Owner decisions D-27 and D-28: identity kit and vertical envelope | S | catalog-door | audit-2026-09-05 |
 
 ## Blocked (dependencies or phase claim lock)
 
@@ -98,7 +98,7 @@
 | WO-CAN-04 | dependencies: WO-CAN-01 |
 | WO-CAN-05 | dependencies: WO-CAN-01 |
 | WO-CAN-06 | dependencies: WO-CAN-01 |
-| WO-CAT-02 | dependencies: WO-CAT-01, WO-CAN-02, WO-CON-03 |
+| WO-CAT-02 | dependencies: WO-CAN-02, WO-CON-03 |
 | WO-CAT-03 | dependencies: WO-CAT-02, WO-CAN-06 |
 | WO-DER-01 | dependencies: WO-CAT-03 |
 | WO-DER-02 | dependencies: WO-DER-01 |
@@ -137,7 +137,7 @@
 | WO-EVI-04 | dependencies: WO-CAN-01 |
 | WO-CON-01 | dependencies: WO-CAN-01 |
 | WO-CON-02 | dependencies: WO-CAN-01 |
-| WO-CON-03 | dependencies: WO-CAN-01, WO-CAT-01 |
+| WO-CON-03 | dependencies: WO-CAN-01 |
 | WO-CON-04 | dependencies: WO-CON-01, WO-CON-02, WO-CON-03 |
 | WO-CON-05 | dependencies: WO-CON-04 |
 | WO-DER-07 | dependencies: WO-DER-01, WO-CON-03 |
@@ -246,3 +246,4 @@
 | WO-CRA-14 | 2026-07-17 | Published @rottay/design-system@2.19.29 passes the public-barrel quarantine gate with zero static-runtime requests, dynamic opt-in preserved and fallback CSS present. Platform 998f2f15 pins the exact registry package; its five-route fail-closed quarantine passes 53/53 adversarial tests, supplier honesty and global typecheck. The unrelated legacy branding draft type boundary was repaired in 47cbefaf. Stage A remains support-only and does not claim CRA-15/DS-IMP-106 completion. |
 | WO-CRA-16 | 2026-07-17 | Bounded canary certification is recorded in test-artifacts/craft/cra-16/certification.json. Published registry package @rottay/design-system@2.19.28 at d609b519 provides the fixed 50-name v3 public corpus, deterministic 263-role generated catalog, pinned Phosphor 2.1.10 adapter and BrandMark facade. DS semantic/mark SSR coverage is green at 33/33, generator adversarial coverage at 8/8, and icons:check proves 263 roles/272 files current. BitHire a7d7d8a40 pins and installs exact 2.19.28; its four focused architecture suites are green at 21/21, typecheck and installed-canonical supplier honesty are green with zero direct suppliers. The AST guards fail closed on aliases, dynamic supplier imports and Icon/BrandMark/CloudServiceMark/FeaturePictogram conflation. This support milestone does not complete DS-IMP-090/091, the supplier decision, four-facade family, fleet migration or vertical recipes. |
 | WO-CRA-23 | 2026-09-05 | SEALED: R0 instrumentación retenida; R1+ sustituidas por derivation/family-cuts; métrica 0/255 reemplazada por indicadores |
+| WO-CAT-01 | 2026-09-05 | Published roadmap/kit-2026-09.md (SHA256 3a18b42a0101c44cf35857e2bdaca15eb1a5320c2d5ca3c53256674257b2b3d7; body digest 0f25b32c6d0842b20736a514d9794e6294a8b13f718aa4de9d368ca9bbd8e09c); independent Claude Fable 5.1 re-audit PASS in /private/tmp/rottay-wo-cat-01-fable-reaudit.md (SHA256 67637f13132e8fc1fae1cbf932f4220d134d1f5b8135d3c6e8a5fcfca246de7e). |

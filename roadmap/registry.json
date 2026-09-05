@@ -3916,15 +3916,15 @@
    "lane": "canon-close",
    "order": 1,
    "size": "S",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "audit-2026-09-05"
    ],
    "notes": "wave 0; closes F-01, F-96",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "claude-opus-5-can-01",
+   "claimedAt": "2026-09-05",
    "progressLog": []
   },
   {
@@ -4028,16 +4028,18 @@
    "lane": "catalog-door",
    "order": 1,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 1 (owner decision; can be taken before the C4 commit); closes n/a",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "notes": "wave 1 (owner decision; can be taken before the C4 commit); closes n/a; kit published as roadmap/kit-2026-09.md (29 decisions: 19 Standard, 10 Pro; D-28 (b) envelope: 5 locked-by-default, 5 never-lockable); kit body digest sha256:0f25b32c6d0842b20736a514d9794e6294a8b13f718aa4de9d368ca9bbd8e09c (digest law and recompute command: roadmap/kit-2026-09.md section 6)",
+   "claimedBy": "claude-opus-5-cat-01",
+   "claimedAt": "2026-09-05",
+   "progressLog": [],
+   "doneAt": "2026-09-05",
+   "evidence": "Published roadmap/kit-2026-09.md (SHA256 3a18b42a0101c44cf35857e2bdaca15eb1a5320c2d5ca3c53256674257b2b3d7; body digest 0f25b32c6d0842b20736a514d9794e6294a8b13f718aa4de9d368ca9bbd8e09c); independent Claude Fable 5.1 re-audit PASS in /private/tmp/rottay-wo-cat-01-fable-reaudit.md (SHA256 67637f13132e8fc1fae1cbf932f4220d134d1f5b8135d3c6e8a5fcfca246de7e)."
   },
   {
    "id": "WO-CAT-02",
