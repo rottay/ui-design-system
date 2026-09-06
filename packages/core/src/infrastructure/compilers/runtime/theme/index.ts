@@ -2,19 +2,27 @@ export { resolveTheme } from "./runtime/resolution";
 export { compileTheme } from "./runtime/lowering";
 export {
   ThemePatchMigrationError,
+  admitDocument,
   authoredThemePatch,
+  documentThemeAdmission,
   documentThemeIntent,
   documentThemePatch,
   draftPreviewThemeIntent,
+  migrateAndAdmitDocument,
+  migrateDocumentV1ToV2,
   migrateV1,
+  previewThemeAdmission,
   previewThemeIntent,
   staticThemeIntent,
   verticalEngine,
 } from "./runtime/ingress";
 export type {
+  DecisionProjection,
+  DocumentAdmission,
   DocumentThemeIntentInput,
   DraftPreviewThemeIntentInput,
   PreviewThemeIntentInput,
+  UnlitReason,
 } from "./runtime/ingress";
 export { compileThemeIntent } from "./facade/runtime/compile";
 export type {

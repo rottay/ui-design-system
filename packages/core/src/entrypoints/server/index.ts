@@ -186,6 +186,47 @@ export type {
   ThemeIntentOrigin,
   ThemeResolution,
 } from '../../infrastructure/compilers/runtime/theme';
+/**
+ * THE ADMISSION HALF OF THE SAME DOOR, and the migration that reaches it.
+ *
+ * `documentThemeIntent` and `previewThemeIntent` above answer "what compiles";
+ * these answer "what did the tenant's document actually move". A v2 document
+ * may activate a decision whose fan-out has not landed, and the door records
+ * that as `unlit` instead of refusing a decision the published catalog names.
+ * A surface that must tell the tenant which of its decisions moved nothing has
+ * exactly one place to read it; reconstructing it by diffing a patch would be a
+ * second, weaker answer to a question the door already answered.
+ *
+ * `admitDocument` is the version-agnostic admission the two producers above run
+ * internally, published for the caller that holds a document but no slug yet.
+ * It is NOT a second compile route: it returns the same `ThemePatch` those
+ * producers put in their `ThemeIntent`, and a compile still goes through
+ * `compileThemeIntent`. The patch-level projections behind it
+ * (`documentAnyThemePatch`, `projectDecisionsToV1`, `v1KeypathOf`) stay
+ * unpublished on purpose -- they are the dated adapter WO-DER-06/WO-CAT-02
+ * delete, and publishing them would open a route around the intent.
+ *
+ * `ThemePatchMigrationError` is the migration's fail-closed refusal and is
+ * exported with it: `migrateDocumentV1ToV2` is total in the sense that it is
+ * defined on every v1 document -- each one either becomes a v2 document or is
+ * refused BY THE NAME of the field that could not be carried -- so a caller
+ * that cannot name the error cannot tell a refusal from a crash.
+ */
+export {
+  ThemePatchMigrationError,
+  admitDocument,
+  documentThemeAdmission,
+  migrateAndAdmitDocument,
+  migrateDocumentV1ToV2,
+  previewThemeAdmission,
+} from '../../infrastructure/compilers/runtime/theme';
+export type {
+  DecisionProjection,
+  DocumentAdmission,
+  DocumentThemeIntentInput,
+  PreviewThemeIntentInput,
+  UnlitReason,
+} from '../../infrastructure/compilers/runtime/theme';
 export type {
   Theme,
   ThemePatch,
@@ -264,6 +305,104 @@ export {
   TENANT_THEME_V1_COVERAGE,
   TENANT_VISUAL_CHANNELS,
 } from '../../foundation/contracts/composition/tenants/themes/tenant-theme';
+/**
+ * THE v2 DECISION DOCUMENT, beside the v1 transport it does not replace.
+ *
+ * `TenantThemeDocument` above stays the v1 name and ~45 modules narrow it on
+ * `schemaVersion`/`mode`; `TenantThemeDocumentV2` is the shape a customer
+ * writes from day one and `TenantThemeDocumentAny` is what the intent producers
+ * accept. Only the INPUT position is widened, so no reader of the v1 name is
+ * touched.
+ *
+ * The whole contract owner is published as one unit because that is what
+ * authoring a document costs: a writer that can name the document but not the
+ * closed domain of a decision it carries re-declares those domains on its side,
+ * and a re-declared domain is a domain that drifts. `THEME_DECISION_IDS` and
+ * `THEME_DECISION_TIER_BY_ID` are the kit's 29 rows in kit order,
+ * `THEME_PLAN_TIERS` is what a plan entitles, and `assertTenantThemeDocumentV2`
+ * is the same fail-closed validator the door runs -- an editor that wants to
+ * refuse before it saves calls it rather than approximating it.
+ *
+ * `internal` is a PLAN, not a customer tier: it entitles standard and pro, and
+ * `THEME_DECISION_TIERS` stays the two customer-visible tiers. Raw `--ds-*`
+ * authorship has no name here at all; v2 refuses it structurally at every depth
+ * (D-03), and `SanctionedOverrides` names `chrome.<family>.<channel>` instead.
+ *
+ * `TENANT_THEME_FONT_PACK_IDS` and `TenantThemeChrome` belong to this contract
+ * too and are already exported above from the v1 owner they are shared with.
+ */
+export {
+  CHROME_ANATOMY_FAMILIES,
+  DENSITY_MODES,
+  EXPRESSIVE_AXIS_KEYS,
+  KEPT_THEME_DECISION_IDS,
+  MOTION_CHARACTERS,
+  MOTION_DIAL_KEYS,
+  NAVIGATION_SIDEBAR_TONES,
+  NEW_THEME_DECISION_IDS,
+  PALETTE_CONTRAST_POSTURES,
+  PALETTE_DARK_MODES,
+  PALETTE_NEUTRAL_TEMPERATURES,
+  PALETTE_SEED_ROLES,
+  PALETTE_STATUS_SEED_ROLES,
+  SHAPE_BUTTON_STYLES,
+  SHAPE_CONTROL_HEIGHTS,
+  SHAPE_NESTING_POSTURES,
+  STATE_EMPHASIS_POSTURES,
+  STATE_FOCUS_STYLES,
+  SURFACE_BORDER_STYLES,
+  SURFACE_ELEVATION_POSTURES,
+  TENANT_THEME_DOCUMENT_VERSION_V2,
+  THEME_DECISION_BOUNDS,
+  THEME_DECISION_IDS,
+  THEME_DECISION_TIERS,
+  THEME_DECISION_TIER_BY_ID,
+  THEME_PLANS,
+  THEME_PLAN_TIERS,
+  TYPOGRAPHY_FAMILY_ROLES,
+  TYPOGRAPHY_NUMERIC_POSTURES,
+  TYPOGRAPHY_PAIRINGS,
+  TYPOGRAPHY_ROLE_WEIGHTS,
+  TenantThemeDocumentV2Error,
+  activatedDecisionIds,
+  assertTenantThemeDocumentV2,
+  isTenantThemeDocumentV2,
+} from '../../foundation/contracts/composition/tenants/themes/tenant-theme/decision-document';
+export type {
+  ChromeAnatomy,
+  DensityMode,
+  ExpressiveProfiles,
+  MotionCharacter,
+  MotionDial,
+  NavigationSidebarTone,
+  PaletteContrastPosture,
+  PaletteDarkMode,
+  PaletteNeutralTemperature,
+  PaletteSeedRole,
+  PaletteSeeds,
+  PaletteStatusSeedRole,
+  PaletteStatusSeeds,
+  SanctionedOverrides,
+  ShapeButtonStyle,
+  ShapeControlHeight,
+  ShapeNestingPosture,
+  StateEmphasisPosture,
+  StateFocusStyle,
+  SurfaceBorderStyle,
+  SurfaceElevationPosture,
+  TenantThemeDocumentAny,
+  TenantThemeDocumentV1,
+  TenantThemeDocumentV2,
+  ThemeDecisionId,
+  ThemeDecisionTier,
+  ThemeDecisions,
+  ThemePlan,
+  TypographyFamilies,
+  TypographyFamilyRole,
+  TypographyNumericPosture,
+  TypographyPairing,
+  TypographyRoleWeight,
+} from '../../foundation/contracts/composition/tenants/themes/tenant-theme/decision-document';
 // A11y: branding contrast validation (Wave 6.2 Accessibility Guardian)
 export {
   validateBrandingContrast,
