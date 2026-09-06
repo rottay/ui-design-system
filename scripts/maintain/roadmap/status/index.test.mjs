@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import test from "node:test";
 
 import {
@@ -10,7 +11,12 @@ import {
   readDecisionsLitIndicator,
   localDate,
   localDateTime,
+  familyAcceptanceLines,
   phaseClaimBlocker,
+  programIndicatorBindingErrors,
+  programIndicatorLines,
+  readFamilyAcceptance,
+  readProgramIndicatorMeasurement,
   reassignInProgressWorkOrder,
   summarizeDsImprovements,
   summarizeDsSupportMilestones,
@@ -2131,4 +2137,124 @@ test("decisions-lit indicator republishes a refused run as refused", () => {
   assert.ok(lines.includes("REFUSED"));
   assert.ok(lines.includes("states.emphasis"));
   assert.ok(lines.includes("navigation.sidebar-tone"));
+});
+
+
+const registryForIndicators = () => JSON.parse(
+  fs.readFileSync(new URL("../../../../roadmap/registry.json", import.meta.url), "utf8"),
+);
+
+test("every programme indicator binds to exactly one registry metric, both ways", () => {
+  assert.deepEqual(programIndicatorBindingErrors(registryForIndicators()), []);
+});
+
+test("a metric with no indicator to publish it is refused", () => {
+  const registry = registryForIndicators();
+  registry.metrics.push({
+    name: "Invented metric nobody publishes",
+    baseline: "0",
+    target: "0",
+    measure: "WO-EVI-02",
+    asOf: "2026-09-06",
+  });
+  const errors = programIndicatorBindingErrors(registry);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /no programme indicator to publish it/);
+});
+
+test("a metric whose declared source hides its owing work order is refused", () => {
+  const registry = registryForIndicators();
+  const metric = registry.metrics.find(
+    (candidate) => candidate.name === "Authored files over 800 lines (pipeline over 250)",
+  );
+  metric.measure = "pnpm --filter @rottay/design-system structure:check";
+  const errors = programIndicatorBindingErrors(registry);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /does not name WO-RET-04/);
+});
+
+test("an indicator with no published artifact reads NOT MEASURED, never a zero", () => {
+  const measurement = readProgramIndicatorMeasurement("root-reach", "/nonexistent/indicators");
+  assert.equal(measurement.measured, false);
+  const lines = programIndicatorLines(registryForIndicators(), () => measurement).join("\n");
+  assert.ok(lines.includes("NOT MEASURED"));
+  assert.ok(!/\| \*\*0\*\*/.test(lines), "a gate that has not run must never publish a zero");
+});
+
+test("an indicator artifact without a gate or a run is not a measurement", () => {
+  const directory = fs.mkdtempSync(`${os.tmpdir()}/roadmap-indicators-`);
+  fs.mkdirSync(`${directory}/root-reach`, { recursive: true });
+  fs.writeFileSync(`${directory}/root-reach/index.json`, JSON.stringify({ value: "91 %" }));
+  const measurement = readProgramIndicatorMeasurement("root-reach", directory);
+  assert.equal(measurement.measured, false);
+  assert.match(measurement.reason, /does not name its gate and run/);
+  fs.rmSync(directory, { recursive: true, force: true });
+});
+
+test("an indicator with a published artifact reads MEASURED with its own provenance", () => {
+  const directory = fs.mkdtempSync(`${os.tmpdir()}/roadmap-indicators-`);
+  fs.mkdirSync(`${directory}/root-reach`, { recursive: true });
+  fs.writeFileSync(`${directory}/root-reach/index.json`, JSON.stringify({
+    value: "rottay 84 % / bithire 88 % / evnto 81 %",
+    gate: "ds:derive --check",
+    producedAt: "2026-09-06T00:00:00.000Z",
+  }));
+  const measurement = readProgramIndicatorMeasurement("root-reach", directory);
+  assert.equal(measurement.measured, true);
+  assert.equal(measurement.gate, "ds:derive --check");
+  const lines = programIndicatorLines(registryForIndicators(), () => measurement).join("\n");
+  assert.ok(lines.includes("rottay 84 % / bithire 88 % / evnto 81 %"));
+  assert.ok(lines.includes("run of 2026-09-06T00:00:00.000Z"));
+  fs.rmSync(directory, { recursive: true, force: true });
+});
+
+test("the indicator table publishes readiness, and the burn-down is not it", () => {
+  const lines = programIndicatorLines(registryForIndicators()).join("\n");
+  for (const name of [
+    "Root reach per vertical (derived channels / total)",
+    "Channels read without producer (Modern skins)",
+    "Material roots emitted per artifact",
+    "Modern skins consuming typographic roles",
+    "Modern skins deciding state by [data-state]",
+    "Tenant-difference probe by axis excluding colour (6 axes)",
+    "Blocking gates green without a dist/ pre-build",
+    "CSS text emitters outside emission/",
+    "Authored files over 800 lines (pipeline over 250)",
+    "LOC without a productive consumer",
+  ]) {
+    assert.ok(lines.includes(name), `${name} must be published as an indicator`);
+  }
+  assert.ok(!/work orders done/.test(lines), "the indicator table must not carry the work-order percentage");
+});
+
+test("the one indicator whose gate exists is measured from that gate, not restated", () => {
+  const lines = programIndicatorLines(registryForIndicators()).join("\n");
+  const decisionsLit = readDecisionsLitIndicator();
+  assert.equal(decisionsLit.measured, true);
+  assert.ok(lines.includes(decisionsLit.headline), "row 1 must carry the probe's own headline");
+  assert.ok(lines.includes(decisionsLit.producedAt), "row 1 must carry the probe's own run time");
+});
+
+test("a disagreement between two recorded denominators is published, not resolved", () => {
+  const lines = programIndicatorLines(registryForIndicators()).join("\n");
+  assert.match(lines, /count different skin populations/);
+});
+
+test("family acceptance republishes the manifest's own rollup and never elevates it", () => {
+  const acceptance = readFamilyAcceptance();
+  assert.equal(acceptance.measured, true);
+  assert.equal(acceptance.families, 255);
+  const lines = familyAcceptanceLines(acceptance).join("\n");
+  assert.ok(lines.includes(`${acceptance.accepted}/${acceptance.families} families accepted`));
+  assert.match(lines, /SEALED/);
+  assert.match(lines, /historical evidence, not runtime truth/);
+  assert.match(lines, /WO-FAM-00/);
+});
+
+test("family acceptance says NOT MEASURED when the manifest is absent", () => {
+  const acceptance = readFamilyAcceptance("/nonexistent/manifest/index.json");
+  assert.equal(acceptance.measured, false);
+  const lines = familyAcceptanceLines(acceptance).join("\n");
+  assert.ok(lines.includes("NOT MEASURED"));
+  assert.ok(!/0\/255/.test(lines), "an absent manifest must not publish a ratio");
 });

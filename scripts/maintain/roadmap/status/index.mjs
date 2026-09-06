@@ -2946,6 +2946,7 @@ function check() {
     errors.push(`registry has ${w.id} but no heading in ${w.lane}.md`);
   }
   errors.push(...validateRegistryMutationIntegrity(reg));
+  errors.push(...programIndicatorBindingErrors(reg));
   if (errors.length) {
     console.error(`roadmap:check FAILED (${errors.length}):`);
     for (const e of errors) console.error("  - " + e);
@@ -3055,9 +3056,280 @@ export function decisionsLitLines(indicator) {
   return lines;
 }
 
+/**
+ * The ten programme indicators of `audit/70-plan/index.md` §3.
+ *
+ * `metric` binds a row to its `registry.json` metric by exact name, so the
+ * baseline and the target keep exactly one authority: the registry. `owner` is
+ * the work order that owes the gate; `gate` is what that gate will be. `id`
+ * names the evidence file the owning gate must write.
+ */
+const PROGRAM_INDICATOR_EVIDENCE_ROOT = path.join(ROOT, "packages/core/artifacts/quality/indicators");
+const PROGRAM_INDICATORS = [
+  {
+    id: "decisions-lit",
+    metric: "Decisions lit (full effect in at least one family, computed-style probe)",
+    owner: "WO-CON-03",
+    gate: "the `decisions-lit` probe",
+    section: true,
+  },
+  {
+    id: "root-reach",
+    metric: "Root reach per vertical (derived channels / total)",
+    owner: "WO-EVI-01",
+    gate: "`ds:derive --check`, theme-graph by family",
+  },
+  {
+    id: "channels-without-producer",
+    metric: "Channels read without producer (Modern skins)",
+    owner: "WO-CAN-02",
+    gate: "`read-without-producer`, once its fail-open counter is fixed",
+  },
+  {
+    id: "material-roots-per-artifact",
+    metric: "Material roots emitted per artifact",
+    owner: "WO-EVI-02",
+    gate: "`artifact-coverage` per family",
+  },
+  {
+    id: "typographic-roles-in-skins",
+    metric: "Modern skins consuming typographic roles",
+    owner: "WO-EVI-01",
+    gate: "theme-graph by control",
+  },
+  {
+    id: "data-state-coverage",
+    metric: "Modern skins deciding state by [data-state]",
+    owner: "WO-FAM-00",
+    gate: "the per-family cut gate",
+    note: "the registry baseline (3/24) and `audit/70-plan/index.md` §3 (16/123) count different skin populations; "
+      + "neither is re-derived here, and WO-FAM-00's gate settles the denominator when it measures the row",
+  },
+  {
+    id: "tenant-difference-by-axis",
+    metric: "Tenant-difference probe by axis excluding colour (6 axes)",
+    owner: "WO-EVI-02",
+    gate: "`capability-propagation` by axis, with its negative test",
+  },
+  {
+    id: "gates-green-without-dist",
+    metric: "Blocking gates green without a dist/ pre-build",
+    owner: "WO-CAN-02",
+    gate: "the gate manifest's `validateManifest()` pre/post-build split",
+  },
+  {
+    id: "emitters-outside-emission",
+    metric: "CSS text emitters outside emission/",
+    owner: "WO-EMI-01",
+    gate: "the emitter census",
+  },
+  {
+    id: "files-over-800-lines",
+    metric: "Authored files over 800 lines (pipeline over 250)",
+    owner: "WO-RET-04",
+    gate: "`structure:check` extended with the line-count law",
+  },
+  {
+    id: "loc-without-consumer",
+    metric: "LOC without a productive consumer",
+    owner: "WO-RET-01",
+    gate: "the consumer-census gate",
+  },
+];
+
+/**
+ * Fail closed on a broken binding: an indicator whose metric is not in the
+ * registry, or a duplicated metric name, would silently publish an empty row.
+ */
+export function programIndicatorBindingErrors(reg) {
+  const errors = [];
+  const metrics = Array.isArray(reg?.metrics) ? reg.metrics : [];
+  for (const indicator of PROGRAM_INDICATORS) {
+    const matches = metrics.filter((metric) => metric?.name === indicator.metric);
+    if (matches.length !== 1) {
+      errors.push(
+        `programme indicator ${indicator.id} binds to metric "${indicator.metric}", found ${matches.length} in registry.metrics`,
+      );
+    }
+  }
+  for (const indicator of PROGRAM_INDICATORS) {
+    const metric = metrics.find((candidate) => candidate?.name === indicator.metric);
+    if (metric && !String(metric.measure ?? "").includes(indicator.owner)) {
+      errors.push(
+        `registry metric "${indicator.metric}" declares source "${metric.measure}", which does not name ${indicator.owner}, the work order that owes its gate`,
+      );
+    }
+  }
+  const bound = new Set(PROGRAM_INDICATORS.map((indicator) => indicator.metric));
+  for (const metric of metrics) {
+    if (!bound.has(metric?.name)) {
+      errors.push(`registry.metrics carries "${metric?.name}" with no programme indicator to publish it`);
+    }
+  }
+  const ids = PROGRAM_INDICATORS.map((indicator) => indicator.id);
+  if (new Set(ids).size !== ids.length) errors.push("programme indicator ids are not unique");
+  return errors;
+}
+
+/**
+ * A measured indicator, read from the artifact its owning gate writes.
+ *
+ * STATUS does not compute an indicator and must never appear to. Until the
+ * owning gate publishes `<evidence root>/<id>/index.json`, the row is NOT
+ * MEASURED and names the work order that owes it — never a zero, which would be
+ * a measurement nobody took.
+ */
+export function readProgramIndicatorMeasurement(
+  id,
+  evidenceRoot = PROGRAM_INDICATOR_EVIDENCE_ROOT,
+) {
+  const artifactPath = path.join(evidenceRoot, id, "index.json");
+  if (!fs.existsSync(artifactPath)) {
+    return { measured: false, reason: "no gate has published an artifact yet" };
+  }
+  let artifact;
+  try {
+    artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
+  } catch (error) {
+    return { measured: false, reason: `artifact is unreadable: ${error.message}` };
+  }
+  if (!isNonEmptyString(artifact?.value)) {
+    return { measured: false, reason: "artifact carries no value" };
+  }
+  if (!isNonEmptyString(artifact?.gate) || !isNonEmptyString(artifact?.producedAt)) {
+    return { measured: false, reason: "artifact does not name its gate and run" };
+  }
+  return {
+    measured: true,
+    value: artifact.value,
+    gate: artifact.gate,
+    producedAt: artifact.producedAt,
+  };
+}
+
+/**
+ * The measurement of the one indicator whose gate already exists: it is read
+ * from the `decisions-lit` artifact through the same reader that publishes the
+ * detailed block below, so the table and that block can never disagree.
+ */
+function decisionsLitMeasurement(indicator = readDecisionsLitIndicator()) {
+  if (!indicator.measured) return { measured: false, reason: indicator.reason };
+  return {
+    measured: true,
+    value: indicator.headline,
+    gate: "decisions-lit probe",
+    producedAt: indicator.producedAt,
+  };
+}
+
+/** The STATUS block for the programme indicators, as lines. */
+export function programIndicatorLines(
+  reg,
+  read = readProgramIndicatorMeasurement,
+  readDecisionsLit = decisionsLitMeasurement,
+) {
+  const metrics = Array.isArray(reg?.metrics) ? reg.metrics : [];
+  const cell = (value) => String(value ?? "").replace(/\|/g, "/");
+  const lines = ["## Programme indicators — architectural readiness (`audit/70-plan/index.md` §3)", ""];
+  lines.push(
+    "> These rows, and not the work-order burn-down below, are how this programme measures readiness. " +
+      "Baselines and targets have one authority, `registry.json`; every metric it carries appears here exactly once. " +
+      "A row reads MEASURED only when the work order that owes its gate has published that gate's artifact — for " +
+      "rows 2-11, `packages/core/artifacts/quality/indicators/<id>/index.json`. Until then it reads NOT MEASURED and " +
+      "names the work order that owes it. STATUS never computes an indicator itself, and a gate that has not run is " +
+      "never published as a zero, because a zero would be a measurement nobody took.",
+  );
+  lines.push("");
+  lines.push("| # | Indicator | Audit baseline | Target | Measured now | Owed by |");
+  lines.push("| --- | --- | --- | --- | --- | --- |");
+  PROGRAM_INDICATORS.forEach((indicator, index) => {
+    const metric = metrics.find((candidate) => candidate?.name === indicator.metric);
+    const measurement = indicator.section ? readDecisionsLit() : read(indicator.id);
+    const measured = measurement.measured
+      ? `**${cell(measurement.value)}** — ${cell(measurement.gate)}, run of ${cell(measurement.producedAt)}`
+      : `n/a — NOT MEASURED (${cell(measurement.reason)})`;
+    lines.push(
+      `| ${index + 1} | ${cell(indicator.metric)} | ${cell(metric?.baseline ?? "(unbound)")} (as of ${cell(metric?.asOf ?? "?")}) ` +
+        `| ${cell(metric?.target ?? "(unbound)")} | ${measured} | ${cell(indicator.owner)} — ${cell(indicator.gate)} |`,
+    );
+  });
+  lines.push("");
+  const noted = PROGRAM_INDICATORS.filter((indicator) => indicator.note);
+  if (noted.length) {
+    for (const indicator of noted) lines.push(`- Row \`${indicator.metric}\`: ${indicator.note}.`);
+    lines.push("");
+  }
+  return lines;
+}
+
+/**
+ * Family acceptance, read from the governance manifest's own rollups.
+ *
+ * The historical Modern Rescue manifest is evidence, not runtime truth: the
+ * runtime chain is typed catalog -> family derivators -> roles/adapters ->
+ * emitter. This block republishes the manifest's sealed adjudication so the
+ * 0/255 figure stays visible rather than quietly retired, and states which
+ * work order owns family acceptance from here.
+ */
+export function readFamilyAcceptance(
+  manifestPath = path.join(ROOT, "packages/core/governance/manifest/index.json"),
+) {
+  if (!fs.existsSync(manifestPath)) {
+    return { measured: false, reason: "the governance manifest is not in this checkout" };
+  }
+  let manifest;
+  try {
+    manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+  } catch (error) {
+    return { measured: false, reason: `the governance manifest is unreadable: ${error.message}` };
+  }
+  const reviews = manifest?.rollups?.familyReviews;
+  const families = manifest?.denominators?.canonicalFamilies;
+  if (!reviews || !Number.isInteger(families)) {
+    return { measured: false, reason: "the governance manifest carries no family-review rollup" };
+  }
+  return {
+    measured: true,
+    families,
+    accepted: reviews.accepted ?? null,
+    assessedNotElevated: reviews.assessedNotElevated ?? null,
+    unreviewed: reviews.unreviewed ?? null,
+    blockedOwnerDecision: reviews.blockedOwnerDecision ?? null,
+    controlFamilyCells: manifest?.denominators?.controlFamilyCells ?? null,
+  };
+}
+
+/** The STATUS block for family acceptance, as lines. */
+export function familyAcceptanceLines(acceptance) {
+  const lines = ["## Family acceptance — the sealed Modern Rescue adjudication", ""];
+  if (!acceptance.measured) {
+    lines.push(`NOT MEASURED — ${acceptance.reason}.`);
+    lines.push("");
+    return lines;
+  }
+  lines.push(
+    `**${acceptance.accepted}/${acceptance.families} families accepted** — ${acceptance.assessedNotElevated} assessed and not elevated, ` +
+      `${acceptance.unreviewed} unreviewed, ${acceptance.blockedOwnerDecision} blocked on an owner decision. ` +
+      `Read live from \`packages/core/governance/manifest/index.json\` (${acceptance.controlFamilyCells} control x family cells).`,
+  );
+  lines.push("");
+  lines.push(
+    "> WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are " +
+      "superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance " +
+      "metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain " +
+      "is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from " +
+      "here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.",
+  );
+  lines.push("");
+  return lines;
+}
+
 function generateStatus() {
   const reg = loadRegistry();
-  const registryErrors = validateRegistryMutationIntegrity(reg);
+  const registryErrors = [
+    ...validateRegistryMutationIntegrity(reg),
+    ...programIndicatorBindingErrors(reg),
+  ];
   if (registryErrors.length) {
     console.error(`roadmap:status REFUSED — registry validation is invalid (${registryErrors.length}):`);
     for (const error of registryErrors) console.error("  - " + error);
@@ -3091,9 +3363,27 @@ function generateStatus() {
       : "no phases locked";
     lines.push("");
     lines.push(`> **Phase scope**: ${openLabel}; ${lockedLabel}; ${deferredCount}/${traceItems.length} findings deferred to later phases. The burn-down figures below certify only the open phase's adjudicated scope; later functional waves remain owner-gated.`);
+    lines.push("");
+    lines.push(
+      "> **Why one phase, not eight**: the DS-improvements phase keys are the legacy claim control of that plan, not "
+        + "this programme's execution order. Execution is governed by the programme waves and by each work order's "
+        + "`dependsOn`, which is what `roadmap:check` and the claim rules actually enforce. Opening the remaining eight "
+        + "phase keys would need a separate, isolated change to the phase machinery and its test suite, declared as its "
+        + "own candidate; encoding eight simultaneously open phases here to match older prose would assert an owner GO "
+        + "that was never given.",
+    );
   }
   lines.push("");
-  lines.push(`## Burn-down — ${overallDone}/${reg.workOrders.length} done (${pct}%)`);
+  lines.push(...programIndicatorLines(reg));
+  lines.push(...decisionsLitLines(readDecisionsLitIndicator()));
+  lines.push(...familyAcceptanceLines(readFamilyAcceptance()));
+  lines.push(`## Work-order burn-down — ${overallDone}/${reg.workOrders.length} work orders done (${pct}%)`);
+  lines.push("");
+  lines.push(
+    "> Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; "
+      + "it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. "
+      + "Readiness is the indicator table above.",
+  );
   lines.push("");
   lines.push("| Lane | Done | In progress | Todo | Total |");
   lines.push("| --- | --- | --- | --- | --- |");
@@ -3102,7 +3392,6 @@ function generateStatus() {
     lines.push(`| [${lane}](./${lane}.md) | ${c.done} | ${c["in-progress"]} | ${c.todo} | ${c.total} |`);
   }
   lines.push("");
-  lines.push(...decisionsLitLines(readDecisionsLitIndicator()));
   const programMilestones = summarizeProgramMilestones(reg);
   lines.push("## Programme milestones (derived from their gate work orders)");
   lines.push("");
@@ -3193,12 +3482,6 @@ function generateStatus() {
   for (const w of reg.workOrders) for (const p of w.mustLandWith || []) pairs.add([w.id, p].sort().join(" + "));
   for (const p of pairs) lines.push(`- ${p} must land in the same certified window (\`done\` on either requires the other >= in-progress).`);
   if (!pairs.size) lines.push("(none)");
-  lines.push("");
-  lines.push("## North-star metrics");
-  lines.push("");
-  lines.push("| Metric | Baseline | Target | How to re-measure | As of |");
-  lines.push("| --- | --- | --- | --- | --- |");
-  for (const m of reg.metrics || []) lines.push(`| ${m.name} | ${m.baseline} | ${m.target} | ${m.measure} | ${m.asOf} |`);
   lines.push("");
   const doneList = reg.workOrders.filter((w) => w.status === "done");
   lines.push("## Done ledger");

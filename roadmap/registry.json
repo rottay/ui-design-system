@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-05",
+ "updated": "2026-09-06",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -13,7 +13,7 @@
    "name": "Decisions lit (full effect in at least one family, computed-style probe)",
    "baseline": "7 / 22 (+0 / 10 new)",
    "target": "29 / 29",
-   "measure": "n/a until WO-CON-03 (decisions-lit gate)",
+   "measure": "node packages/core/scripts/check/decisions-lit/public/cli/index.mjs run (WO-CON-03; the gate exists and writes its own headline)",
    "asOf": "2026-09-05"
   },
   {
@@ -76,7 +76,7 @@
    "name": "Authored files over 800 lines (pipeline over 250)",
    "baseline": "141 (pipeline: chrome-variables 3,012)",
    "target": "0",
-   "measure": "pnpm --filter @rottay/design-system structure:check",
+   "measure": "n/a until WO-RET-04 (structure:check has no authored-file line-count law today, so it does not measure this row)",
    "asOf": "2026-09-05"
   },
   {
@@ -4822,7 +4822,7 @@
    "lane": "evidence-graph",
    "order": 4,
    "size": "S",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4831,9 +4831,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-50, F-51, F-106; supersedes: WO-GAT-09",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "claude-opus-5-evi-04",
+   "claimedAt": "2026-09-06",
+   "progressLog": [
+    {
+     "at": "2026-09-06 01:36",
+     "by": "claude-opus-5-evi-04",
+     "note": "STATUS now publishes the audit 70-plan section-3 indicators as the readiness headline, sourced from gate artifacts and fail-closed: 11 rows bound one-to-one to registry.metrics (both directions), row 1 MEASURED live from the decisions-lit artifact, rows 2-11 NOT MEASURED naming the WO that owes each gate (packages/core/artifacts/quality/indicators/<id>/index.json). Work-order burn-down demoted and relabelled delivery throughput, NOT architectural readiness; North-star table removed as a duplicate publication. Family-acceptance section reads governance/manifest rollups live (0/255) and states the manifest is historical evidence, not runtime truth. Two false declared sources corrected in registry.metrics (files>800 claimed structure:check, which has no line-count law; decisions-lit still said n/a until WO-CON-03) and a new rule fails check when a metric source omits its owing WO. Fingerprint NOT re-sealed: the adjudicated plan mapping did not move, 82 execute source IDs preserved, roadmap:check green on the pinned 712c7352. Phase model kept: phase 0 open, 1/2A/2B/2C/3/4/5/6 locked with ownerGo pending, and STATUS now states why waves plus dependsOn govern execution. WO-CRA-23 verified already sealed. F-50 closed: CLAUDE.md cites 0 retired brand-theme compiler paths and docs-engineering DS README no longer defines modern as DaisyUI. 95/95 roadmap status tests green."
+    }
+   ]
   },
   {
    "id": "WO-CON-01",
@@ -4908,6 +4914,11 @@
      "at": "2026-09-05 20:36",
      "by": "codex/root",
      "note": "landed: v2 door + decisions-lit (commit 722fd05bfd692b22d1866cb3ffd1a4868b988752). open before WO-CON-04: public naming surface (theme index + server entrypoint), docs-engineering foundations/contracts + runtime/tenancy chapters; package scripts + gate registration before milestone A"
+    },
+    {
+     "at": "2026-09-06 00:58",
+     "by": "codex/root",
+     "note": "landed public server naming surface and generated supplier/inventory truth in 214192208c588231ef8283e4201a908ba2281d07 after independent Fable 5.1 PASS (/private/tmp/rottay-con-03-public-surface-fable.md); open before WO-CON-04: docs-engineering foundations/contracts + runtime/tenancy, then package scripts/gate registration and freshness guard in the shared-owner lot"
     }
    ]
   },

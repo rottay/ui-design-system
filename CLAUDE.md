@@ -2,12 +2,21 @@
 
 ## Bootstrap — read before acting
 
-1. If you are working on the Modern Rescue programme (WO-CRA-23), read
-   `AGENTS.md` first, then the canonical authorities it lists. No section in
-   this file overrides `packages/core/scripts/check/modern-rescue/README.md`,
-   `program/index.json`, `customization-model/index.json` or `orchestration/index.json`.
-2. General project rules below apply only where the programme contracts are
-   silent.
+1. **The Modern Rescue programme (WO-CRA-23) is SEALED** (2026-09-05): its R0
+   instrumentation is retained, its R1+ rounds are superseded by the derivation
+   and family-cut lanes, and its 0/255 family metric is replaced by the
+   programme indicators in `roadmap/STATUS.md`. Its contracts —
+   `packages/core/scripts/check/modern-rescue/README.md`, `program/index.json`,
+   `customization-model/index.json`, `orchestration/index.json` — and
+   `packages/core/governance/manifest/` are preserved as historical evidence.
+   They are not runtime truth and not an acceptance authority: the runtime chain
+   is the typed catalog, the per-family derivators, the roles/adapters and the
+   emitter. Do not restart a Modern Rescue round against them. `AGENTS.md`
+   remains the entry point to those preserved contracts.
+2. Start operative work at `roadmap/README.md` and `pnpm roadmap:status`; the
+   lane files and `roadmap/registry.json` are the current backlog. Read
+   `audit/README.md` for the evidence and closure criteria behind them.
+3. General project rules below apply only where those contracts are silent.
 
 ## Operating model (owner decree; execution amended 2026-08-30)
 
@@ -50,7 +59,7 @@ Apps, verticals, and modules must never query tables owned by another module/sch
 - **Capability Map (read first)**: `/docs-engineering/engineering/design-system/capability-map/README.md` — the full DS surface in two orientations (what a tenant can white-label; what an app can consume, with the app-bithire reference adoption per row). Read it BEFORE building new UI, adding a tenant knob, or hand-rolling anything the DS already ships.
 - **Catálogo Central**: `/docs-engineering/README.md`
 - **Component Reference**: `/docs-engineering/engineering/design-system/`
-- **Architecture (target law)**: [`docs/ARCHITECTURE.md`](docs/architecture/index.md) —
+- **Architecture (target law)**: [`docs/architecture/index.md`](docs/architecture/index.md) —
   the normative definition of what this repository must be: doctrine, the full
   target tree with every owner's purpose and relations, and the delta against
   the current tree. Read it before moving, renaming or deleting anything.
@@ -103,12 +112,16 @@ Update the hub `README.md` inventory counts when component totals change.
 
 ## Project Context
 
-- Multi-engine design system with three built-in physical engines plus a custom registry:
-  - **classic** — Ant Design 5.21 wrapper
-  - **modern** — the Rottay-native premium skin. The residual DaisyUI class layer is
-    fully drained (`daisy.classConsumers: 0`, WO-TOK-03); the ratchet stays
-    decrease-only so it never comes back
-  - **rustic** — Vanilla CSS fallback
+- Multi-engine design system with three built-in physical engines plus a custom registry.
+  **Modern is the only productive engine** (owner decision 2026-09-05): Classic and
+  Rustic stay in the package, frozen and fail-closed, and no work order adds content,
+  tokens, tests or accessibility work to them.
+  - **classic** — Ant Design 5.21 wrapper; frozen
+  - **modern** — the Rottay-native premium skin, and the only engine under active work.
+    It is not a DaisyUI skin: the residual DaisyUI class layer measures
+    `daisy.classConsumers: 0` in `engine-token-audit`, and the ratchet stays
+    decrease-only so it never comes back. Read the counter, not this sentence
+  - **rustic** — Vanilla CSS fallback; frozen
   - **custom** — White-label component packs registered at runtime; not a fourth physical
     implementation copied into every component owner
 - Components in `packages/core/src/components/`
@@ -288,9 +301,10 @@ evidence are specialized; its production owner still lives physically below
   a number depend on a pinned number; if you need today's value, read it from
   `program/index.json` rather than from prose.
 
-Before the Modern Rescue point-zero freeze, recursively audit every folder and
-subfolder below `packages/core/src` and the Showroom registries. The audit is a
-blocking architecture gate and must prove:
+The Modern Rescue point-zero freeze is past and its programme is sealed, but the
+audit it required stands as the structure law, now owed by WO-RET-04. Recursively
+audit every folder and subfolder below `packages/core/src` and the Showroom
+registries. The audit is a blocking architecture gate and must prove:
 
 1. every authored production owner has one stated purpose and a live consumer;
 2. every reusable UI owner maps to exactly one allowed tier/layer and family;
@@ -333,11 +347,15 @@ wrongly marked as orphans.
 
 ## Premium white-label model (BrandTheme / Theme-ISO)
 
-> **Authority remit:** the Modern Rescue programme owns the operational control
-> model, namespace lifecycle and acceptance law. For WO-CRA-23 read
-> `packages/core/scripts/check/modern-rescue/README.md`,
-> `customization-model/index.json`, `program/index.json` and `orchestration/index.json`.
-> This section only restates project-wide invariants.
+> **Authority remit:** WO-CRA-23 is sealed, so the Modern Rescue contracts
+> (`packages/core/scripts/check/modern-rescue/README.md`,
+> `customization-model/index.json`, `program/index.json`,
+> `orchestration/index.json`) are historical evidence for how that control model
+> was built — not the current acceptance law and not runtime truth. The live
+> control model, namespace lifecycle and acceptance law are owned by the
+> catalog-door, derivation and family-cuts lanes in `roadmap/`, and readiness is
+> published by the programme indicators in `roadmap/STATUS.md`. This section
+> only restates project-wide invariants.
 
 The canonical visual source of truth is the total nested **Theme** under
 `foundation/contracts/composition/tenants/themes/`. `BrandTheme` may survive
@@ -363,8 +381,13 @@ Visual merge chain: `DS base -> vertical baseline -> Theme -> compileTheme -> ar
   DB and the provider must not emit a competing visual layer.
 - Domain-specific tokens (`--ds-ticket-*`, `--ds-event-*`, `--rt-*`, or any
   product/vertical-derived name) belong in consuming apps, not DS core.
-- The brand compiler (`packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/`)
-  is the single lowering from Theme to CSS variables and personality tokens.
+- The single lowering from `Theme` to CSS variables and personality tokens lives
+  under `packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/`
+  and owns the whole `resolveTheme -> compileTheme -> EngineAdapter.project`
+  chain. `docs/architecture/index.md` §"No second compiler" is the law; this
+  file links to it rather than restating it, and the structural gate
+  `tests/architecture/theme-lowering-single-door/` fails if a second compiler
+  reappears.
 
 ## Icon system (semantic facade + compatibility catalog)
 
@@ -601,10 +624,13 @@ compile into these chrome sections:
 - `chrome.shell` -- grid overlay
 - `tokenOverrides` -- raw `--ds-*` vars (max 200)
 
-These fields compile through the single Theme→CSS lowering
-(`packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/`); the
-legacy `appearance/` compiler is being absorbed into it. Production DB themes
-are server compiled; provider-side emission is the compatibility/preview path.
+These fields compile through the single Theme→CSS lowering named above
+(`packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/`),
+which shares its chrome mapping with the legacy `appearance/` compiler through
+`kernel/foundation/css/chrome-variables`. For the state of that retirement read
+`docs/architecture/index.md`; do not infer a direction from this file.
+Production DB themes are server compiled; provider-side emission is the
+compatibility/preview path.
 
 ---
 
