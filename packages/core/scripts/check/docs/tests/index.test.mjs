@@ -40,6 +40,7 @@ import {
 } from '../index.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../../../..');
+const PACKAGE_ROOT = path.join(REPO_ROOT, 'packages/core');
 
 /** A fixture repository containing every required document, all valid. */
 function makeFixture(overrides = {}) {
@@ -236,17 +237,61 @@ test('VERIFIED-BY-CI names the owning step verbatim and spawns nothing', () => {
   assert.match(result.generated[0].detail, /CI step "Customization controls table freshness"/u);
 });
 
-test('the shipped controls row is CI-owned and names the real workflow step', () => {
+test('the shipped controls row names a CI step that really executes its gate', () => {
+  // A row that names a CI step is a CLAIM about the workflow, and this file is
+  // where that claim is settled. Naming a step is not enough: the chain from the
+  // step to the generator that writes THIS document has to close, link by link,
+  // or the row is the decorative reference the whole inventory exists against.
+  // (It was: the step this row used to name, `Customization controls table
+  // freshness`, was removed when the check moved into the gate manifest.)
   const controls = GENERATED_DOCUMENTS.find((row) => row.document.includes('customization-controls'));
   assert.equal(controls.verification, 'ci');
-  assert.equal(controls.step, 'Customization controls table freshness');
-  assert.equal(controls.owner, undefined, 'no gate id may be claimed');
+  assert.equal(controls.step, 'Quality gates (manifest-driven, post-build)');
+  assert.equal(controls.gate, 'customization-controls-freshness');
 
-  // The step named here must be the step that actually exists in the workflow.
+  // LINK 1 — the step exists, and exactly once. A second step named the same
+  // would be the duplicate inventory (audit F-103), so the count is asserted,
+  // not merely the presence.
   const workflow = fs.readFileSync(path.join(REPO_ROOT, '.github/workflows/ci.yml'), 'utf8');
+  const stepHeadings = workflow.split('\n').filter((line) => line.trim() === `- name: ${controls.step}`);
+  assert.equal(stepHeadings.length, 1, `expected exactly one CI step named "${controls.step}"`);
+
+  // LINK 1b — and no SECOND step is named after this one document, which is what
+  // moving the check into the manifest was for.
   assert.ok(
-    workflow.includes(`- name: ${controls.step}`),
-    'the named CI step must exist in .github/workflows/ci.yml',
+    !workflow.includes('- name: Customization controls table freshness'),
+    'the per-document step must not be recreated alongside the manifest phase',
+  );
+
+  // LINK 2 — that step runs the post-build phase of the inventory.
+  const heading = `- name: ${controls.step}`;
+  const stepBody = workflow.slice(workflow.indexOf(heading) + heading.length).split('- name:')[0];
+  assert.match(stepBody, /gates:ci:post-build/u, 'the named step must run the post-build gate phase');
+
+  // LINK 3 — the alias it invokes is the runner, restricted to that phase.
+  const corePackage = JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8'));
+  assert.match(corePackage.scripts['gates:ci:post-build'], /automation\/runner\/index\.mjs.*--phase=post-build/u);
+
+  // LINK 4 — the phase contains this row's gate, blocking, with a drill.
+  const manifest = fs.readFileSync(
+    path.join(PACKAGE_ROOT, 'scripts/check/automation/gates/manifest/index.mjs'),
+    'utf8',
+  );
+  const entry = manifest.split('\n').find((line) => line.includes(`id: '${controls.gate}'`));
+  assert.ok(entry, `the manifest must declare a gate called ${controls.gate}`);
+  assert.match(entry, /phase: 'post-build'/u, 'the gate must live in the phase the named step runs');
+  assert.match(entry, /blocking: true/u, 'a non-blocking gate proves no freshness');
+  assert.match(entry, /drillId:/u, 'the gate must carry a drill');
+
+  // LINK 5 — and that gate runs the generator that WRITES THIS DOCUMENT. This is
+  // the link that makes the row about this file rather than about CI in general.
+  const runScript = /run: \['node', '([^']+)', '--check'\]/u.exec(entry)?.[1];
+  assert.ok(runScript, `expected ${controls.gate} to run a generator with --check; got ${entry}`);
+  const generator = fs.readFileSync(path.join(PACKAGE_ROOT, runScript), 'utf8');
+  const outputDir = path.dirname(controls.document).replace('packages/core/', '');
+  assert.ok(
+    generator.includes(outputDir),
+    `${runScript} must be the generator that writes ${outputDir}`,
   );
 });
 

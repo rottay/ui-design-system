@@ -32,16 +32,25 @@ const CORE_ROOT = findPackageRoot(HERE);
  * `repo-root`, so the copy has to sit at the same depth for its relative
  * import of `libraries/repo-root` to resolve.
  */
-function plantPackage({ scripts = {}, manifest = 'export const CI_GATES = [];\n', files = {} }) {
+function plantPackage({ scripts = {}, manifest = 'export const CI_GATES = [];\n', files = {}, workflow = null }) {
   const repo = mkdtempSync(join(tmpdir(), 'ds-wiring-drill-'));
   const core = join(repo, 'packages/core');
   mkdirSync(core, { recursive: true });
   writeFileSync(join(repo, 'pnpm-workspace.yaml'), "packages:\n  - 'packages/*'\n");
+  if (workflow !== null) {
+    mkdirSync(join(repo, '.github/workflows'), { recursive: true });
+    writeFileSync(join(repo, '.github/workflows/ci.yml'), `jobs:\n  core:\n    steps:\n${workflow}`);
+  }
   writeFileSync(join(repo, 'package.json'), JSON.stringify({ name: 'workspace-root' }, null, 2));
   // The fixture carries the gate, the manifest and the repo-root library, so
   // each is a production script the fixture must itself wire; otherwise every
   // case would report the harness rather than the planted subject.
   const baseline = {
+    // `pretest` is a real lifecycle chain, so the two harness scripts are wired
+    // the way a real one would be. Defining the aliases alone stopped wiring
+    // anything when WO-CAN-02 removed the alias channel -- which is the point:
+    // an alias nobody invokes runs never.
+    pretest: 'pnpm run gates:ci && pnpm run wiring:check',
     'gates:ci': 'node scripts/check/automation/gates/manifest/index.mjs',
     'wiring:check': 'node scripts/check/automation/wiring/gate-coverage/index.mjs',
   };
@@ -62,6 +71,15 @@ function plantPackage({ scripts = {}, manifest = 'export const CI_GATES = [];\n'
   // depths so its relative specifier resolves inside the fixture.
   write('scripts/check/automation/wiring/gate-coverage/index.mjs', readGate());
   write('scripts/libraries/repo-root/index.mjs', readRepoRootLibrary());
+  // The manual-tool register, empty unless a case plants entries: an empty
+  // register is the honest default, so a case that passes does so because the
+  // channels wired it and not because everything was excused.
+  if (!Object.hasOwn(files, 'scripts/check/automation/wiring/gate-coverage/manual-tools/index.json')) {
+    write(
+      'scripts/check/automation/wiring/gate-coverage/manual-tools/index.json',
+      JSON.stringify({ law: 'fixture', tools: [] }, null, 2),
+    );
+  }
   return { repo, core, gate: join(core, 'scripts/check/automation/wiring/gate-coverage/index.mjs') };
 }
 
@@ -99,7 +117,7 @@ test('DRILL: a script reachable only through the test:scripts glob counts as wir
   });
   const result = runGate(planted.gate);
   assert.equal(result.status, 0, `expected the glob channel to wire the owner, got:\n${result.output}`);
-  assert.match(result.output, /every one wired through a declared channel/);
+  assert.match(result.output, /wired through a declared channel/);
 });
 
 test('DRILL: an unreferenced script is still reported, so the glob channel is not a blanket pass', () => {
@@ -162,4 +180,143 @@ test('the live tree is fully wired, and the census is not vacuous', () => {
   const census = /OK — (\d+) production scripts/.exec(result.output);
   assert.ok(census, `expected a census count in: ${result.output}`);
   assert.ok(Number(census[1]) > 100, `expected the real census, got ${census[1]}`);
+});
+
+// ---------------------------------------------------------------------------
+// WO-CAN-02: the alias channel is gone, and the register that replaces it
+// ---------------------------------------------------------------------------
+
+test('DRILL: defining an alias for a script wires nothing', () => {
+  // The removed channel, reproduced. `constitution:check`, `claim-integrity:*`,
+  // `lane-control:*` and ~17 others were defined in package.json, invoked by no
+  // chain and no workflow, and counted as wired for it.
+  const planted = plantPackage({
+    scripts: { 'orphan:check': 'node scripts/check/orphan/index.mjs' },
+    files: { 'scripts/check/orphan/index.mjs': 'process.exit(0);\n' },
+  });
+  const result = runGate(planted.gate);
+  assert.equal(result.status, 1, 'an alias nobody invokes must not wire its script');
+  assert.match(result.output, /scripts\/check\/orphan\/index\.mjs/);
+
+  // The positive half: the SAME alias, once a lifecycle chain invokes it, does
+  // wire the script -- so the refusal is about invocation, not about aliases.
+  const chained = plantPackage({
+    scripts: {
+      'orphan:check': 'node scripts/check/orphan/index.mjs',
+      pretest: 'pnpm run gates:ci && pnpm run wiring:check && pnpm run orphan:check',
+    },
+    files: { 'scripts/check/orphan/index.mjs': 'process.exit(0);\n' },
+  });
+  assert.equal(runGate(chained.gate).status, 0, 'an alias a chain invokes wires what it runs');
+});
+
+test('DRILL: an alias a CI job invokes by name is a channel', () => {
+  const planted = plantPackage({
+    scripts: { 'orphan:check': 'node scripts/check/orphan/index.mjs' },
+    files: { 'scripts/check/orphan/index.mjs': 'process.exit(0);\n' },
+    workflow: '      - name: Orphan\n        run: pnpm --filter @rottay/design-system run orphan:check\n',
+  });
+  assert.equal(runGate(planted.gate).status, 0, 'a workflow step naming an alias runs what the alias runs');
+});
+
+test('DRILL: the manual-tool register needs a reason, an owner and a real file', () => {
+  const files = { 'scripts/check/orphan/index.mjs': 'process.exit(0);\n' };
+  const registerAt = 'scripts/check/automation/wiring/gate-coverage/manual-tools/index.json';
+
+  const bare = plantPackage({
+    files: { ...files, [registerAt]: JSON.stringify({ tools: [{ path: 'scripts/check/orphan/index.mjs' }] }) },
+  });
+  assert.match(runGate(bare.gate).output, /needs a written reason/, 'a bare path is not an exception');
+
+  const dead = plantPackage({
+    files: {
+      ...files,
+      [registerAt]: JSON.stringify({
+        tools: [{ path: 'scripts/check/deleted/index.mjs', reason: 'a'.repeat(50), owner: 'someone' }],
+      }),
+    },
+  });
+  assert.match(runGate(dead.gate).output, /no such production script exists/, 'a register may not accumulate ghosts');
+
+  const shadowing = plantPackage({
+    scripts: { pretest: 'pnpm run gates:ci && pnpm run wiring:check && node scripts/check/orphan/index.mjs' },
+    files: {
+      ...files,
+      [registerAt]: JSON.stringify({
+        tools: [{ path: 'scripts/check/orphan/index.mjs', reason: 'a'.repeat(50), owner: 'someone' }],
+      }),
+    },
+  });
+  assert.match(
+    runGate(shadowing.gate).output,
+    /registered as a manual tool AND named by a channel/,
+    'registering something CI already runs would hide the real wiring',
+  );
+
+  // The positive half: a well-formed entry for a genuinely unwired tool passes.
+  const good = plantPackage({
+    files: {
+      ...files,
+      [registerAt]: JSON.stringify({
+        tools: [{
+          path: 'scripts/check/orphan/index.mjs',
+          reason: 'a hand-run tool whose written reason is long enough to be a real sentence',
+          owner: 'WO-RET-03',
+        }],
+      }),
+    },
+  });
+  assert.equal(runGate(good.gate).status, 0, 'a complete registration must remain expressible');
+});
+
+test('DRILL: a workspaceTools declaration must be true, and cannot excuse anything', () => {
+  // The third state introduced for `packages/showroom/scripts/*` capture tools
+  // (audit F-107). It excuses nothing -- those files were never in this
+  // package's census -- so the only thing it can be is TRUE or FALSE, and the
+  // gate decides which.
+  const registerAt = 'scripts/check/automation/wiring/gate-coverage/manual-tools/index.json';
+  const declare = (entry, extra = {}) => plantPackage({
+    ...extra,
+    files: {
+      'tools/capture.mjs': 'process.exit(0);\n',
+      [registerAt]: JSON.stringify({ law: 'fixture', tools: [], workspaceTools: [entry] }),
+      ...(extra.files ?? {}),
+    },
+  });
+
+  const bare = declare({ package: 'core', path: 'tools/capture.mjs' });
+  assert.match(runGate(bare.gate).output, /needs a written reason/, 'a bare declaration is not a declaration');
+
+  const ghost = declare({
+    package: 'core',
+    path: 'tools/deleted.mjs',
+    reason: 'a'.repeat(50),
+    owner: 'someone',
+  });
+  assert.match(runGate(ghost.gate).output, /the file does not exist/, 'a declaration may not outlive its file');
+
+  const named = declare(
+    {
+      package: 'core',
+      path: 'tools/capture.mjs',
+      reason: 'a hand-run capture tool whose written reason is long enough to be a real sentence',
+      owner: 'someone',
+    },
+    { workflow: '      - name: Capture\n        run: node tools/capture.mjs\n' },
+  );
+  assert.match(
+    runGate(named.gate).output,
+    /declared hand-run but named by a channel/,
+    'a tool CI runs is not hand-run, and saying so must fail',
+  );
+
+  const honest = declare({
+    package: 'core',
+    path: 'tools/capture.mjs',
+    reason: 'a hand-run capture tool whose written reason is long enough to be a real sentence',
+    owner: 'someone',
+  });
+  const result = runGate(honest.gate);
+  assert.equal(result.status, 0, `a true declaration must remain expressible; got:\n${result.output}`);
+  assert.match(result.output, /hand-run \(workspace, outside this census\)/, 'it must be printed, not silent');
 });

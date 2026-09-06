@@ -50,7 +50,17 @@ const TEST_OR_SUPPORT =
   /(?:^|[\\/])(?:tests?|__tests__|__test__|fixtures|_fixtures|__fixtures__|stories)[\\/]|\.(?:test|spec|stories)\.[cm]?tsx?$/u;
 
 function walk(root: string): string[] {
-  if (!existsSync(root)) return [];
+  // A required source root that is absent used to yield an empty list, and an
+  // empty list satisfies every "no productive caller" assertion in this file.
+  // Moving `packages/showroom/src` would therefore have retired half this gate
+  // in silence, with 0 findings and a green run (audit F-23, the same fail-open
+  // shape as the vacuous `if (!distCSS) return`). A missing input is a failure.
+  if (!existsSync(root)) {
+    throw new Error(
+      `single-door gate: required source root is absent: ${root}. `
+        + 'An absent root scans nothing, and scanning nothing cannot certify that the door is single.',
+    );
+  }
   const out: string[] = [];
   const visit = (dir: string) => {
     for (const entry of readdirSync(dir)) {
@@ -162,6 +172,17 @@ function code(source: string): string {
 
 const SOURCES = productiveSources();
 
+/**
+ * A census that finds nothing satisfies every assertion below for the worst
+ * possible reason, so the walk is required to have found BOTH trees. The floors
+ * are deliberately low: they exist to catch a census that collapsed, not to pin
+ * a file count that legitimate work moves.
+ */
+const CENSUS_FLOOR: ReadonlyArray<readonly [string, number]> = [
+  ["src/", 100],
+  ["showroom/src/", 10],
+];
+
 /** The single owner allowed to produce a `ThemeIntent`. */
 const INGRESS_OWNER =
   "src/infrastructure/compilers/runtime/theme/runtime/ingress/";
@@ -235,6 +256,17 @@ function intentLiterals(source: string, file: string): ts.ObjectLiteralExpressio
 }
 
 describe("the theme lowering has exactly one productive door", () => {
+  it("the census actually reached both source trees", () => {
+    for (const [prefix, floor] of CENSUS_FLOOR) {
+      const found = SOURCES.filter(({ label }) => label.startsWith(prefix)).length;
+      expect(
+        found,
+        `${prefix} contributed ${found} productive sources; a collapsed census makes every `
+          + "assertion below pass for the wrong reason",
+      ).toBeGreaterThanOrEqual(floor);
+    }
+  });
+
   it("the retired doors are not defined anywhere in the source tree", () => {
     const definitions: string[] = [];
     for (const { label, path, source } of SOURCES) {

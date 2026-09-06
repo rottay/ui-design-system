@@ -13,7 +13,7 @@ test.use({
   launchOptions: {
     args: ['--enable-webgl', '--ignore-gpu-blocklist', '--use-angle=swiftshader'],
   },
-  reducedMotion: 'no-preference',
+  contextOptions: { reducedMotion: 'no-preference' },
 });
 
 test.describe('SpatialExperience real-browser lifecycle budget', () => {

@@ -180,16 +180,21 @@ jobs:
       - name: Build + ParticleField quarantine gate
         run: pnpm --filter @rottay/design-system run build
 
-      # The published controls table is regenerated from the compiled tenant
-      # capability registry, so both its drill suite and its freshness check
-      # need `dist/` and cannot run in the pre-build `gates:ci` chain above.
-      # Runs here, immediately after Build, before any step that assumes
-      # fresh dist.
-      - name: Customization controls table freshness
-        working-directory: packages/core
-        run: |
-          node --test scripts/generate/tokens/customization/controls/tests/index.test.mjs
-          node scripts/generate/tokens/customization/controls/index.mjs --check
+      # The post-build half of the SAME inventory. Everything that needs
+      # `dist/` -- the controls table, the four cascade gates whose module
+      # graph reaches `dist/server.js`, the prepack chain, the packaging
+      # ratchets and the showroom diagnostics -- is declared in
+      # `scripts/check/automation/gates/manifest/index.mjs` with
+      # `phase: 'post-build'`. It used to be a hand-written list of named steps
+      # here, which is a SECOND inventory: that is how
+      # `runtime-hardening:structural` and `public-declarations:check` ended up
+      # wired only to `prepack`, a hook that fires on `npm pack` and therefore
+      # never in CI.
+      - name: Quality gates (manifest-driven, post-build)
+        env:
+          APP_BITHIRE_ROOT: ${{ github.workspace }}/.corpora/app-bithire
+          DOCS_ENGINEERING_ROOT: ${{ github.workspace }}/.gat07/docs-engineering
+        run: pnpm --filter @rottay/design-system run gates:ci:post-build
 
       - name: Audit machinery regression tests
         run: pnpm --filter @rottay/design-system run test:scripts
@@ -207,28 +212,8 @@ jobs:
       - name: Packed artifact and non-consuming bundle honesty
         run: node scripts/check/dependencies/index.mjs pack
 
-      # Prepack precondition proven in-band: the build immediately above must have
-      # written dist/build-stamp.json, and it must match the current source. This
-      # is the same gate prepack runs on `npm pack`/`npm publish`; running it here
-      # fails the pipeline (before any pack/publish) if the build did not produce a
-      # fresh, source-matching dist. It never builds.
-      - name: Dist freshness (prepack precondition)
-        run: pnpm --filter @rottay/design-system run distfresh:check
 
-      # Packaging honesty: the npm pack file list + total size are pinned against a
-      # committed baseline (additions need explicit review, size is decrease-only),
-      # and every shipped path + file body is scanned so no fixtures, tenant
-      # proof-fixture names, or lucide taint can ship. Sequenced after Build so it
-      # sees the exact dist that would be packed, and before any pack/publish job.
-      - name: Pack inventory gate (size ratchet + forbidden content)
-        run: pnpm --filter @rottay/design-system run packinv:check
 
-      # Vendored-supplier ceiling: counts the logical supplier modules embedded
-      # under dist/node_modules after the build and fails above the committed
-      # decrease-only ceiling. Complementary to the pack gate: this one bounds
-      # HOW MUCH supplier code ships, not which paths or tokens.
-      - name: Icon embed inventory gate (vendored supplier ceiling)
-        run: pnpm --filter @rottay/design-system run iconembed:check
 
       - name: Bundle budgets
         run: |
@@ -316,12 +301,6 @@ jobs:
       - name: Typecheck test files (GAT-03 ratchet)
         run: pnpm --filter @rottay/showroom run typecheck:tests
 
-      # GAT-01: proves the dead-selector audit's collectRules() reads the real
-      # skin corpus (thousands of selectors) rather than scanning relocated paths
-      # and asserting nothing. Node-only, no browser — the Playwright audit itself
-      # runs in the visual job against the production build.
-      - name: Skin-rule collection non-vacuity (GAT-01 unit)
-        run: pnpm --filter @rottay/showroom run test:diagnostics
 
       - name: Lint
         run: pnpm --filter @rottay/showroom run lint
@@ -486,23 +465,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Structure real-tree check
-        run: pnpm --filter @rottay/design-system run structure:check
 
-      # P-76: unlayered paint twins must stay unlayered and the layered bridge
-      # files must never regrow preflight-killable paint (decrease-only ceilings).
-      - name: CSS layer paint gate (P-76)
-        run: pnpm --filter @rottay/design-system run csspaint:check
 
-      # W6-A: every @container <name> query must name a container some skin
-      # actually declares (dead-name protection), and presentation/components/**
-      # may not regrow @media (max-width|min-width) breakpoints past the
-      # decrease-only residual baseline.
-      - name: Container query gate (W6-A)
-        run: pnpm --filter @rottay/design-system run containerquery:check
-
-      - name: Integration audit (brand-compiler emitter closure)
-        run: pnpm --filter @rottay/design-system run lint:integration
 
       - name: Vertical compliance
         run: pnpm --filter @rottay/design-system run lint:vertical

@@ -231694,7 +231694,7 @@
         {
           "plane": "ts-other",
           "file": "src/entrypoints/eslint/rules/no-motion-literals/index.ts",
-          "line": 40,
+          "line": 50,
           "prop": "cubicBezier",
           "scalars": []
         },
@@ -237093,7 +237093,7 @@
         {
           "plane": "ts-other",
           "file": "src/entrypoints/eslint/rules/no-motion-literals/index.ts",
-          "line": 42,
+          "line": 52,
           "prop": "rawDuration",
           "scalars": []
         },

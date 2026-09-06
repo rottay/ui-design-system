@@ -20,7 +20,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { CI_GATES, manifestScriptTargets, validateManifest } from '../index.mjs';
+import { CI_GATES, PHASES, manifestScriptTargets, validateManifest } from '../index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -85,8 +85,8 @@ test('folder naming is a blocking structural gate backed by the live package ali
   assert.ok(existsSync(join(CORE_ROOT, target)), 'folder-naming points at a missing target');
 
   const index = CI_GATES.indexOf(gate);
-  assert.equal(CI_GATES[index - 1]?.id, 'first-party-single-author-render-laws');
-  assert.equal(CI_GATES[index + 1]?.id, 'engine-token-audit');
+  assert.equal(CI_GATES[index - 1]?.id, 'folder-naming-drill', 'the drill runs first');
+  assert.equal(CI_GATES[index + 1]?.id, 'eslint-config-drill');
 });
 
 test('no gate passes a flag its target script does not recognise', () => {
@@ -120,7 +120,13 @@ test('DRILL: a planted missing path makes validateManifest refuse the inventory'
   // structural validation, so the runner refuses the manifest before running
   // anything.
   const planted = validateManifest([
-    { id: 'ghost', run: ['node', 'scripts/check/automation/does-not-exist/index.mjs'], blocking: true },
+    {
+      id: 'ghost',
+      run: ['node', 'scripts/check/automation/does-not-exist/index.mjs'],
+      blocking: true,
+      phase: 'pre-build',
+      noDrillReason: 'a fixture entry that exists only to be refused for its missing path',
+    },
   ]);
   assert.ok(
     planted.some((problem) => problem.includes('names a script that does not exist')),
@@ -131,7 +137,13 @@ test('DRILL: a planted missing path makes validateManifest refuse the inventory'
   // refusal above is about existence and not about the argv shape.
   assert.deepEqual(
     validateManifest([
-      { id: 'real', run: ['node', 'scripts/check/automation/gates/manifest/index.mjs'], blocking: true },
+      {
+        id: 'real',
+        run: ['node', 'scripts/check/automation/gates/manifest/index.mjs'],
+        blocking: true,
+        phase: 'pre-build',
+        noDrillReason: 'a fixture entry that exists only to prove the positive half of the existence law',
+      },
     ]),
     [],
   );
@@ -185,4 +197,118 @@ test('the recreated evidence-framework drills are carried by exactly one gate, a
       ['quality-evidence-v2-drills'],
     );
   }
+});
+
+// ---------------------------------------------------------------------------
+// WO-CAN-02: the two laws that make a green matrix mean something
+// ---------------------------------------------------------------------------
+
+/**
+ * A manifest entry the fixtures below reuse. Everything the laws under test do
+ * not care about is filled in, so a refusal can only be about the one field
+ * the fixture perturbs.
+ */
+function wellFormedEntry(overrides = {}) {
+  return {
+    id: 'fixture',
+    run: ['node', 'scripts/check/automation/gates/manifest/index.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    noDrillReason: 'a fixture entry whose written reason is long enough to be a real sentence',
+    ...overrides,
+  };
+}
+
+test('DRILL: a gate with neither a drill nor a written reason is refused', () => {
+  const entry = wellFormedEntry();
+  delete entry.noDrillReason;
+  assert.ok(
+    validateManifest([entry]).some((problem) => problem.includes('must declare drillId, drillFor or noDrillReason')),
+    'a gate nothing has ever been seen failing may not enter the inventory silently',
+  );
+
+  // The positive half, so the refusal is about the missing declaration and not
+  // about the fixture shape.
+  assert.deepEqual(validateManifest([wellFormedEntry()]), []);
+});
+
+test('DRILL: a drill pointer must resolve BOTH ways', () => {
+  const dangling = validateManifest([wellFormedEntry({ noDrillReason: undefined, drillId: 'nobody' })]);
+  assert.ok(
+    dangling.some((problem) => problem.includes('drillId names no manifest entry')),
+    'a pointer at nothing is a decorative reference',
+  );
+
+  const oneWay = validateManifest([
+    wellFormedEntry({ id: 'gate', noDrillReason: undefined, drillId: 'drill' }),
+    wellFormedEntry({ id: 'drill', noDrillReason: undefined, drillFor: ['someone-else'] }),
+  ]);
+  assert.ok(
+    oneWay.some((problem) => problem.includes("does not declare drillFor: ['gate']")),
+    'a drill that does not name the gate back does not drill it',
+  );
+
+  assert.deepEqual(
+    validateManifest([
+      wellFormedEntry({ id: 'gate', noDrillReason: undefined, drillId: 'drill' }),
+      wellFormedEntry({ id: 'drill', noDrillReason: undefined, drillFor: ['gate'] }),
+    ]),
+    [],
+  );
+});
+
+test('DRILL: a placeholder is not a written reason', () => {
+  assert.ok(
+    validateManifest([wellFormedEntry({ noDrillReason: 'n/a' })])
+      .some((problem) => problem.includes('must be a written sentence')),
+    'an empty excuse is how the drill-first law gets applied selectively',
+  );
+});
+
+test('DRILL: a pre-build gate whose module graph reaches dist/ is refused', () => {
+  // The real shape, not a synthetic one: the slot inventory dynamically
+  // imports `dist/server.js`, and the membership gate imports the inventory.
+  // Both were declared blocking in a chain that runs before the build.
+  const planted = validateManifest([
+    wellFormedEntry({ run: ['node', 'scripts/check/tokens/cascade/slots/index.mjs', '--check'] }),
+  ]);
+  assert.ok(
+    planted.some((problem) => problem.includes('pre-build gate reaches dist/')),
+    `expected a dist-reachability problem, got: ${JSON.stringify(planted)}`,
+  );
+
+  // The same entry is legal once it declares the phase it really belongs to.
+  assert.deepEqual(
+    validateManifest([
+      wellFormedEntry({
+        run: ['node', 'scripts/check/tokens/cascade/slots/index.mjs', '--check'],
+        phase: 'post-build',
+        prerequisites: ['fresh-dist'],
+      }),
+    ]),
+    [],
+  );
+});
+
+test('DRILL: a declared dist prerequisite cannot hide in the pre-build phase', () => {
+  assert.ok(
+    validateManifest([wellFormedEntry({ prerequisites: ['fresh-dist'] })])
+      .some((problem) => problem.includes('must not require a built dist/')),
+    'declaring the input and then running before it exists is the same defect written down',
+  );
+});
+
+test('DRILL: an undeclared prerequisite name is a malformed manifest, not a skip', () => {
+  assert.ok(
+    validateManifest([wellFormedEntry({ prerequisites: ['some-corpus-nobody-defined'] })])
+      .some((problem) => problem.includes('unknown prerequisite')),
+    'an unknown prerequisite would make PREREQ-MISSING unfalsifiable',
+  );
+});
+
+test('every phase is declared and every post-build gate says why it needs the build', () => {
+  for (const gate of CI_GATES) {
+    assert.ok(PHASES.includes(gate.phase), `${gate.id}: undeclared phase`);
+  }
+  assert.ok(CI_GATES.some((gate) => gate.phase === 'post-build'), 'the split must not be decorative');
 });

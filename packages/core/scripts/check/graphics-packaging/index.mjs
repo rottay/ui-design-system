@@ -79,6 +79,16 @@ const SOURCE_EXTENSIONS = /\.(?:cjs|css|js|json|jsx|mjs|ts|tsx)$/u;
 const TEST_PATH = /(?:^|\/)(?:__tests__|tests|stories)(?:\/|$)|\.(?:spec|stories|test)\.[^.]+$/u;
 const LUCIDE_TEXT = /lucide/iu;
 const LUCIDE_RULE_PATH = /packages\/core\/src\/entrypoints\/eslint\//u;
+/**
+ * The package's own ESLint configuration. It is NOT path-exempt: only the
+ * identifier of the ban it switches on is neutralised before the scan, exactly
+ * as the suppliers contract has one sanctioned `supplierPackages` entry removed
+ * below. A configuration that enables `@rottay/no-direct-lucide` has to be able
+ * to name it; a real `lucide-react` specifier in the same file is still supplier
+ * reintroduction and still fails.
+ */
+const CORE_ESLINT_CONFIG = /^packages\/core\/eslint\.config\.(?:cjs|js|mjs|ts)$/u;
+const LUCIDE_BAN_RULE_TOKEN = /(?:@rottay\/)?no-direct-lucide/gu;
 const CONFIG_PATH = /(?:^|\/)(?:\.npmrc|package\.json|supplier-contract\.json|tsconfig(?:\.[^/]+)?\.json|(?:[^/]+\.)?config\.(?:cjs|js|json|mjs|ts))$/u;
 
 function portable(path, root) {
@@ -238,8 +248,14 @@ export function auditNoLucideBoundary({ repoRoot, paths } = {}) {
       }
     }
     if (SOURCE_EXTENSIONS.test(display)) scanned = blankComments(scanned);
+    if (CORE_ESLINT_CONFIG.test(display)) {
+      scanned = scanned.replace(LUCIDE_BAN_RULE_TOKEN, (token) => ' '.repeat(token.length));
+    }
     if (!LUCIDE_TEXT.test(scanned)) continue;
-    const lines = lineNumbers(source, LUCIDE_TEXT);
+    // `blankComments` and the rule-token blanking both preserve offsets, so a
+    // source file's surviving lines are exact. The contract's JSON is
+    // re-serialised, so that one keeps reporting against the original text.
+    const lines = lineNumbers(SOURCE_EXTENSIONS.test(display) ? scanned : source, LUCIDE_TEXT);
     violations.push({
       path: display,
       occurrences: lines.length,

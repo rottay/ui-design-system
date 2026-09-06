@@ -75,7 +75,7 @@ async function waitForAtlas(
 test.describe.configure({ mode: 'serial' });
 
 test.describe('CRA17 exact mobile optical matrix', () => {
-  test.use({ reducedMotion: 'reduce', viewport: MOBILE_VIEWPORT });
+  test.use({ contextOptions: { reducedMotion: 'reduce' }, viewport: MOBILE_VIEWPORT });
 
   test('covers all 1,920 canonical role cells across tenant, engine and scheme axes', async ({ page }) => {
     test.setTimeout(240_000);

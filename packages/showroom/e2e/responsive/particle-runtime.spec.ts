@@ -107,7 +107,7 @@ function partitionLongTasks(metrics: RafMetrics): LongTaskPartition {
 }
 
 test.describe('ParticleField real-browser lifecycle budget', () => {
-  test.use({ reducedMotion: 'no-preference' });
+  test.use({ contextOptions: { reducedMotion: 'no-preference' } });
 
   test('bounds one live context, hands it across viewports and recovers from context loss', async ({ page }) => {
     await installRafMeasurement(page);

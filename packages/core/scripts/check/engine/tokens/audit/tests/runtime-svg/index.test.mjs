@@ -14,15 +14,6 @@ const tokenAudit = resolve(scriptsDir, '../../index.mjs');
 const baseline = JSON.parse(readFileSync(resolve(scriptsDir, '../../baseline/index.json'), 'utf8'));
 const exemptions = JSON.parse(readFileSync(resolve(packageRoot, '../..', 'roadmap/skin-exemptions.json'), 'utf8'));
 
-function countersFromOutput(output) {
-  const counters = {};
-  for (const line of output.split('\n')) {
-    const match = /^  ([^:]+): (-?\d+(?:\.\d+)?)$/.exec(line);
-    if (match) counters[match[1]] = Number(match[2]);
-  }
-  return counters;
-}
-
 function collectMissingPrefixedCounters(counters, baseline, prefix) {
   return Object.keys(baseline).filter(
     (key) => key.startsWith(prefix) && !(key in counters),
@@ -50,14 +41,23 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   assert.equal(census.classifiedPaint, census.total);
   assert.equal(census.unclassified, 0);
 
-  const run = spawnSync(process.execPath, [tokenAudit, '--check'], {
+  // `--current-json`, not `--check`. What this drill asserts is that the three
+  // censuses are WIRED and that no baselined key has vanished from the emitted
+  // set -- a question about the measurement. `--check` answers a different
+  // question, whether every ceiling still holds, and reading its exit code
+  // here coupled the two: one owned ratchet debt elsewhere in the file
+  // (`themeCss.unreferencedSelectors`, drained by WO-RET-02) turned this
+  // classifier drill red for a reason it does not measure, and a drill that is
+  // red for someone else's reason is a drill people stop reading. The ratchet
+  // verdict is still enforced, by the `engine-token-audit` gate itself.
+  const run = spawnSync(process.execPath, [tokenAudit, '--current-json', '--quiet'], {
     cwd: packageRoot,
     encoding: 'utf8',
-    maxBuffer: 4 * 1024 * 1024,
+    maxBuffer: 8 * 1024 * 1024,
   });
   assert.equal(run.status, 0, `engine audit failed\nstdout:\n${run.stdout}\nstderr:\n${run.stderr}`);
 
-  const counters = countersFromOutput(run.stdout);
+  const counters = JSON.parse(run.stdout);
   const baselineRuntimeKeys = Object.keys(baseline).filter((key) => key.startsWith('runtimeSvgPaint.'));
   const runtimeAggregateKeys = new Set([
     'runtimeSvgPaint.filesScanned',

@@ -5,8 +5,10 @@
  * literals and raw sub-second duration literals (`150ms`, `0.2s`). Motion must reference the
  * foundation `--ds-motion-*` canon (WO-ENG-01) so cadence and easing tune centrally.
  *
- * Scoped to `**\/engines/modern*` files only — classic (Ant Design) and rustic legitimately
- * use the legacy `--transition-*`/`--duration-*` catalog and are not linted by this rule.
+ * Scoped to the two owners that author interaction motion: every file under a
+ * `engines/modern/` subtree, and the motion vocabulary itself under
+ * `graphics/motion/`. Classic (Ant Design) and rustic legitimately use the legacy
+ * `--transition-*`/`--duration-*` catalog and are not linted by this rule.
  * Loop/long-form durations >= 1s (shimmer, spinner) are allowed: they sit outside the
  * 120/200/320 interaction cadence.
  */
@@ -17,8 +19,16 @@ const MS_RE = /\b\d+(?:\.\d+)?ms\b/;
 /** Sub-second seconds only (>= 1s loop/shimmer tempos are allowed). */
 const SUBSECOND_RE = /(?<![\w.])0?\.\d+s(?![\w])/;
 
-function isModernEngineFile(filename: string): boolean {
-  return /engines\/modern(\/[^/]+)?\.[jt]sx?$/.test(filename.replace(/\\/g, '/'));
+/**
+ * The rule's subject. `engines/modern(/[^/]+)?` matched one level below the
+ * engine only, so `engines/modern/cell-editor/index.tsx` was unlinted; and the
+ * motion vocabulary the rule points every engine AT was itself outside the
+ * subject, so the canon could hard-code the cadence it publishes (audit F-57).
+ */
+function isMotionAuthoringFile(filename: string): boolean {
+  const path = filename.replace(/\\/g, '/');
+  return /(?:^|\/)engines\/modern(?:\/.+)?\.[jt]sx?$/.test(path)
+    || /(?:^|\/)graphics\/motion\/.+\.[jt]sx?$/.test(path);
 }
 
 function classify(value: string): 'cubicBezier' | 'rawDuration' | null {
@@ -32,7 +42,7 @@ export const noMotionLiterals: Rule = {
     type: 'problem',
     docs: {
       description:
-        'Disallow cubic-bezier and raw sub-second duration literals in modern-engine style values; use the --ds-motion-* canon',
+        'Disallow cubic-bezier and raw sub-second duration literals in modern-engine and graphics/motion style values; use the --ds-motion-* canon',
     },
     schema: [],
     messages: {
@@ -45,7 +55,7 @@ export const noMotionLiterals: Rule = {
 
   create(context): Record<string, (node: any) => void> {
     const filename: string = context.filename ?? context.getFilename?.() ?? '';
-    if (!isModernEngineFile(filename)) return {};
+    if (!isMotionAuthoringFile(filename)) return {};
 
     return {
       Literal(node) {

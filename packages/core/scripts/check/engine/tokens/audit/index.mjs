@@ -913,20 +913,20 @@ function findVarRHS(text, name) {
   return text.slice(re.lastIndex, k);
 }
 
-/** Every `{...}` range in `text` (content between a `{` and its matching
- * `}`), via a brace stack -- used to find the smallest enclosing block
- * around a `.join(` call. */
-function collectBraceRanges(text) {
-  const stack = [];
-  const ranges = [];
-  for (let i = 0; i < text.length; i++) {
-    if (text[i] === '{') stack.push(i);
-    else if (text[i] === '}') {
-      const start = stack.pop();
-      if (start !== undefined) ranges.push({ start: start + 1, end: i });
-    }
-  }
-  return ranges;
+/**
+ * Resolve a same-file `function NAME(...) { ... }` to its body source text.
+ * The `const/let/var` resolver above cannot see a function declaration, and a
+ * `className={getFloatButtonClassName(className)}` site reaches its class
+ * list only through one. Returns null when no such declaration exists.
+ */
+function findFunctionBody(text, name) {
+  const re = new RegExp(`\\bfunction\\s+${name}\\b`, 'g');
+  const m = re.exec(text);
+  if (!m) return null;
+  const openIdx = text.indexOf('{', re.lastIndex);
+  if (openIdx === -1) return null;
+  const endIdx = matchBrace(text, openIdx);
+  return text.slice(openIdx + 1, endIdx - 1);
 }
 
 /**
@@ -944,71 +944,73 @@ function collectBraceRanges(text) {
  *  2. `className={...}` / `class={...}` (balanced-brace-scanned) -- covers
  *     ternaries and inline arrays written directly in the JSX attribute.
  *  3. Every bare identifier referenced inside one of those `{...}`
- *     expressions is resolved one hop against a same-file `const/let/var`
- *     declaration (`findVarRHS`) -- covers a local built earlier in the
- *     component and referenced by name (e.g. Avatar's `const containerClass
- *     = \`avatar ${status ? 'online' : ''} ${className}\`;`, later
- *     `className={containerClass}`).
- *  4. The smallest enclosing `{...}` block around every `.join(` call --
- *     covers the `[...].filter(Boolean).join(' ')` idiom even when it sits
- *     inside a helper function several hops from the JSX `className={...}`
- *     site (e.g. FloatButton's `getFloatButtonClassName()` builds
- *     `btn-primary`/`btn-ghost`/`btn-circle` through two chained
- *     const-ternary locals before the array join -- scoping to the
- *     function's own block picks up those locals without pulling in
- *     unrelated text from sibling components in the same file).
+ *     expressions is resolved against its same-file declaration -- a
+ *     `const/let/var` initializer (`findVarRHS`) or a `function NAME(...)
+ *     {...}` body (`findFunctionBody`) -- and the resolved text is scanned
+ *     the same way, to a bounded depth. That covers a local built earlier in
+ *     the component (Avatar's `const containerClass = \`avatar ${status ?
+ *     'online' : ''} ${className}\`;`, later `className={containerClass}`)
+ *     AND the `[...].filter(Boolean).join(' ')` idiom inside a helper several
+ *     hops away (FloatButton's `getFloatButtonClassName()`).
+ *
+ * WHY THERE IS NO FILE-WIDE PASS. An earlier version also scanned the
+ * smallest enclosing `{...}` block around EVERY `.join(` call in the file,
+ * whether or not that block was reachable from a `className`. That is how the
+ * gate certified the opposite of what it measures: FloatButton's
+ * `getFloatButtonClassName` documents the DaisyUI DRAIN in a `//` comment that
+ * names `btn`, `btn-primary`, `btn-ghost`; the comment sits inside the block
+ * the join scan picked up, so ten dead `.btn*` rules in `modern/theme.css`
+ * read as consumed and `themeCss.unreferencedSelectors` was 0 next to
+ * `daisy.classConsumers: 0`. Both halves are closed here: comments are
+ * removed by the TypeScript-scanner-backed `stripScriptComments` (the
+ * offset-preserving stripper this file already uses elsewhere) instead of the
+ * block-comment-only `stripBlockComments`, and every remaining reader starts
+ * at a `className`/`class` expression.
  */
 /** JS literals/keywords that can appear as a bare identifier inside a
  * `className={...}` expression but are never a same-file variable
  * declaration worth resolving. */
 const JS_KEYWORDS = new Set(['true', 'false', 'null', 'undefined', 'this', 'typeof', 'void']);
 
+/** How many declaration hops a `className` expression is followed through.
+ * Two is what the corpus needs: `className={getX()}` -> the helper body ->
+ * the chained locals that body composes. Unbounded following would walk back
+ * into unrelated module text and reintroduce the leak this scoping removes. */
+const CLASS_RESOLUTION_DEPTH = 2;
+
 function buildConsumedClassSet(files) {
   const consumed = new Set();
   for (const file of files) {
-    const text = stripBlockComments(readFileSync(file, 'utf8'));
+    const text = stripScriptComments(readFileSync(file, 'utf8'), file);
 
     const attrStringRe = /class(?:Name)?\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
     for (const m of text.matchAll(attrStringRe)) {
       addTokensFromContent(m[1] !== undefined ? m[1] : m[2], consumed);
     }
 
-    const attrBraceRe = /class(?:Name)?\s*=\s*\{/g;
-    let am;
-    while ((am = attrBraceRe.exec(text))) {
-      const openIdx = attrBraceRe.lastIndex - 1;
-      const endIdx = matchBrace(text, openIdx);
-      const exprText = text.slice(openIdx + 1, endIdx - 1);
+    const resolvedDeclarations = new Set();
+    const scanExpression = (exprText, depth) => {
       extractClassTokens(exprText, consumed);
+      if (depth === 0) return;
       const seenIdents = new Set();
       for (const im of exprText.matchAll(/[A-Za-z_$][\w$]*/g)) {
         const ident = im[0];
         if (JS_KEYWORDS.has(ident) || seenIdents.has(ident)) continue;
         seenIdents.add(ident);
-        const rhs = findVarRHS(text, ident);
-        if (rhs) extractClassTokens(rhs, consumed);
+        if (resolvedDeclarations.has(ident)) continue;
+        const declaration = findVarRHS(text, ident) ?? findFunctionBody(text, ident);
+        if (!declaration) continue;
+        resolvedDeclarations.add(ident);
+        scanExpression(declaration, depth - 1);
       }
-    }
+    };
 
-    const braceRanges = collectBraceRanges(text);
-    const joinIdxs = [...text.matchAll(/\.join\(/g)].map((m) => m.index);
-    if (joinIdxs.length > 0) {
-      const seen = new Set();
-      for (const idx of joinIdxs) {
-        let best = null;
-        for (const r of braceRanges) {
-          if (r.start <= idx && idx <= r.end) {
-            if (!best || r.end - r.start < best.end - best.start) best = r;
-          }
-        }
-        if (best) {
-          const key = `${best.start}:${best.end}`;
-          if (!seen.has(key)) {
-            seen.add(key);
-            extractClassTokens(text.slice(best.start, best.end), consumed);
-          }
-        }
-      }
+    const attrBraceRe = /class(?:Name)?\s*=\s*\{/g;
+    let am;
+    while ((am = attrBraceRe.exec(text))) {
+      const openIdx = attrBraceRe.lastIndex - 1;
+      const endIdx = matchBrace(text, openIdx);
+      scanExpression(text.slice(openIdx + 1, endIdx - 1), CLASS_RESOLUTION_DEPTH);
     }
   }
   return consumed;
@@ -2084,6 +2086,30 @@ function renderApcaMarkdown(apca) {
 }
 
 const files = modernFiles(componentsDir);
+
+/**
+ * Adversarial fixture seam for the `themeCss.*` counter family, the twin of
+ * the `--gat07-evasion-fixture` seam below and used by this gate's own
+ * injection drill (`tests/theme-css-consumers`).
+ *
+ * The fixture is appended to the modern-engine consumer corpus and read by the
+ * SAME `buildConsumedClassSet()` the production counter uses -- no toy second
+ * scanner, and no test-only counter in the baseline. It exists because
+ * `themeCss.unreferencedSelectors` is a computed classification: a scanner
+ * that stopped classifying, or one that classified a `//` comment as a render
+ * site, reports a plausible number and looks exactly like a clean tree. It
+ * reported 0 for months for precisely that reason.
+ *
+ * Normal runs pass no fixture and behave identically.
+ */
+const themeCssConsumerFixture = argumentValue('--themecss-consumer-fixture');
+if (themeCssConsumerFixture) {
+  const fixturePath = resolve(themeCssConsumerFixture);
+  if (!existsSync(fixturePath) || !statSync(fixturePath).isFile()) {
+    throw new Error(`themeCss consumer fixture does not exist: ${fixturePath}`);
+  }
+  files.push(fixturePath);
+}
 
 // `DEBUG_DAISY_CONSUMERS=1` prints the per-file inventory behind
 // `daisy.classConsumers`: every counted file, the classes it renders, and the

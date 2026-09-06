@@ -44,7 +44,10 @@ export default defineConfig({
     },
     testTimeout: 15000,
     hookTimeout: 15000,
-    retry: 1,
+    // A retry turns a flaky suite into a green one. The whole point of this
+    // programme is that a green run means a law holds, so a test that only
+    // passes on the second attempt is a finding, not a nuisance.
+    retry: 0,
     reporters: ['verbose'],
     coverage: {
       provider: 'v8',

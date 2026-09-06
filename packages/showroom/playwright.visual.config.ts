@@ -81,7 +81,9 @@ export default defineConfig({
     trace: 'retain-on-failure',
     // The DS honors prefers-reduced-motion (entrance transitions disabled),
     // so galleries settle into their final state without an animation tail.
-    reducedMotion: 'reduce',
+    // `contextOptions` because Playwright 1.61 removed the top-level test
+    // option; see the note in playwright.config.ts.
+    contextOptions: { reducedMotion: 'reduce' },
   },
   projects: [
     {

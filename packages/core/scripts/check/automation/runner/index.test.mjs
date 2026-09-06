@@ -90,9 +90,14 @@ test('DRILL: a malformed run argv is rejected', () => {
 
 test('every excluded gate names its reason and its owner', () => {
   const excluded = CI_GATES.filter((g) => !g.blocking);
+  // The pin is deliberate and adjudicated. `engine-token-audit` joined the
+  // list on 2026-09-05 (WO-CAN-02): closing the fail-open comment leak in its
+  // consumed-class scanner made `themeCss.unreferencedSelectors` measure the
+  // 18 dead DaisyUI rules it had been certifying as alive, and the ceiling
+  // stays at 0 rather than being widened to 18. Its drain is WO-RET-02.
   assert.deepEqual(
     excluded.map((g) => g.id).sort(),
-    ['channel-liveness'],
+    ['channel-liveness', 'engine-token-audit'],
     'la lista de exclusiones cambio; adjudicala antes de moverla',
   );
   for (const gate of excluded) {
@@ -128,6 +133,8 @@ test('a fully specified excluded gate is still representable', () => {
       // tree does not carry, and an exclusion is not a licence to rot.
       run: ['node', 'scripts/check/automation/gates/manifest/index.mjs'],
       blocking: false,
+      phase: 'pre-build',
+      noDrillReason: 'the fixture exists to prove a complete exclusion is still expressible',
       excluded: {
         reason: 'the corpus it audits lives in a sibling repo that CI does not check out',
         owner: 'design-system-program',
@@ -143,7 +150,11 @@ test('the runner --list plan matches the manifest and runs nothing', () => {
     encoding: 'utf8',
   });
   assert.equal(result.status, 0);
-  for (const gate of blockingGates()) {
+  // `--list` defaults to the pre-build phase, which is what `pretest` and the
+  // pre-build CI step run. The post-build plan is asserted separately below:
+  // one plan that silently mixed the phases is exactly the second inventory
+  // this split exists to remove.
+  for (const gate of blockingGates('pre-build')) {
     assert.ok(result.stdout.includes(gate.id), `--list omitted ${gate.id}`);
   }
   // El plan tiene que anunciar exactamente las exclusiones que el manifiesto
@@ -152,7 +163,7 @@ test('the runner --list plan matches the manifest and runs nothing', () => {
   const excludedMarkers = result.stdout.split('[excluded]').length - 1;
   assert.equal(
     excludedMarkers,
-    CI_GATES.filter((g) => !g.blocking).length,
+    CI_GATES.filter((g) => !g.blocking && g.phase === 'pre-build').length,
     'the rendered plan does not advertise exactly the exclusions the manifest declares',
   );
 
@@ -165,9 +176,26 @@ test('the runner --list plan matches the manifest and runs nothing', () => {
   // duplicate-marker false-green this count exists to rule out.
   assert.equal(
     result.stdout.split('[blocking]').length - 1,
-    blockingGates().length,
+    blockingGates('pre-build').length,
     'the rendered plan does not carry exactly one [blocking] marker per blocking gate',
   );
+
+  // The post-build plan is a real plan, not an empty phase that would make the
+  // split decorative, and it is disjoint from the pre-build one.
+  const post = spawnSync(process.execPath, [runner, '--phase=post-build', '--list'], {
+    cwd: findPackageRoot(scriptsDir),
+    encoding: 'utf8',
+  });
+  assert.equal(post.status, 0);
+  assert.equal(
+    post.stdout.split('[blocking]').length - 1,
+    blockingGates('post-build').length,
+    'the post-build plan does not carry exactly one [blocking] marker per post-build gate',
+  );
+  assert.ok(blockingGates('post-build').length > 0, 'an empty post-build phase would make the split decorative');
+  for (const gate of blockingGates('post-build')) {
+    assert.ok(!result.stdout.includes(`[blocking] ${gate.id}:`), `${gate.id} leaked into the pre-build plan`);
+  }
 });
 
 test('the taxonomy chain is enforced, and freshness runs ahead of it', () => {
@@ -344,15 +372,38 @@ function plantRunnerFixture(gates) {
     [
       `export const CI_GATES = Object.freeze(${JSON.stringify(gates)});`,
       'export function validateManifest() { return []; }',
-      'export function blockingGates() { return CI_GATES.filter((gate) => gate.blocking); }',
+      "export const PHASES = Object.freeze(['pre-build', 'post-build']);",
+      'export const PREREQUISITES = Object.freeze({',
+      "  'planted-input': { describe: 'an input the fixture never provides', satisfied: () => false },",
+      "  'always-there': { describe: 'an input that is always present', satisfied: () => true },",
+      '});',
+      'export function missingPrerequisites(gate) {',
+      '  return (gate.prerequisites ?? []).filter((id) => !PREREQUISITES[id]?.satisfied());',
+      '}',
+      'export function blockingGates(phase) {',
+      '  return CI_GATES.filter((gate) => gate.blocking && (phase === undefined || gate.phase === phase));',
+      '}',
       '',
     ].join('\n'),
   );
   return join(runnerDir, 'index.mjs');
 }
 
-const PASSING_GATE = (id) => ({ id, run: [process.execPath, '-e', 'process.exit(0)'], blocking: true });
-const FAILING_GATE = (id) => ({ id, run: [process.execPath, '-e', 'process.exit(3)'], blocking: true });
+const FIXTURE_REASON = 'a synthetic fixture gate that exists only to exercise the runner itself';
+const PASSING_GATE = (id) => ({
+  id, run: [process.execPath, '-e', 'process.exit(0)'], blocking: true, phase: 'pre-build', noDrillReason: FIXTURE_REASON,
+});
+const FAILING_GATE = (id) => ({
+  id, run: [process.execPath, '-e', 'process.exit(3)'], blocking: true, phase: 'pre-build', noDrillReason: FIXTURE_REASON,
+});
+const PREREQ_GATE = (id) => ({
+  id,
+  run: [process.execPath, '-e', 'process.exit(0)'],
+  blocking: true,
+  phase: 'pre-build',
+  noDrillReason: FIXTURE_REASON,
+  prerequisites: ['planted-input'],
+});
 
 test('DRILL: --continue runs every blocking gate instead of stopping at the first red', () => {
   const fixture = plantRunnerFixture([
@@ -381,7 +432,7 @@ test('DRILL: --continue runs every blocking gate instead of stopping at the firs
     '--continue must leave no gate unreached',
   );
   assert.ok(
-    full.stdout.includes('ci-gates matrix: 2 PASS, 1 FAIL, of 3 blocking gate(s).'),
+    full.stdout.includes('ci-gates matrix: 2 PASS, 1 FAIL, 0 PREREQ-MISSING, of 3 blocking gate(s).'),
     `--continue must print the derived matrix totals, got: ${full.stdout}`,
   );
 });
@@ -399,7 +450,47 @@ test('DRILL: --continue exits non-zero when any blocking gate failed', () => {
   const green = plantRunnerFixture([PASSING_GATE('green-one'), PASSING_GATE('green-two')]);
   const greenRun = spawnSync(process.execPath, [green, '--continue'], { encoding: 'utf8' });
   assert.equal(greenRun.status, 0, '--continue must exit 0 on a fully green matrix');
-  assert.ok(greenRun.stdout.includes('ci-gates matrix: 2 PASS, 0 FAIL, of 2 blocking gate(s).'));
+  assert.ok(greenRun.stdout.includes('ci-gates matrix: 2 PASS, 0 FAIL, 0 PREREQ-MISSING, of 2 blocking gate(s).'));
+});
+
+test('DRILL: a missing prerequisite is PREREQ-MISSING, is named, and still exits 1', () => {
+  // The two diagnoses must be distinguishable AND equally fatal. A runner that
+  // reported them identically taught the reader to ignore both; one that
+  // downgraded PREREQ-MISSING to a pass would be the fail-open this whole
+  // inventory exists against.
+  const fixture = plantRunnerFixture([
+    PASSING_GATE('green-one'),
+    PREREQ_GATE('needs-an-input'),
+    PASSING_GATE('after-the-prereq'),
+  ]);
+
+  const full = spawnSync(process.execPath, [fixture, '--continue'], { encoding: 'utf8' });
+  assert.equal(full.status, 1, 'a missing declared input must fail the run, not soften it');
+  assert.ok(
+    full.stdout.includes('PREREQ-MISSING'),
+    `the summary must carry the distinct state, got: ${full.stdout}`,
+  );
+  assert.ok(
+    !full.stdout.includes('FAIL            needs-an-input'),
+    'a missing input must not be reported as a failed law',
+  );
+  assert.ok(
+    full.stderr.includes('needs-an-input') && full.stderr.includes('an input the fixture never provides'),
+    'the missing input must be named, with what would satisfy it',
+  );
+  assert.ok(
+    full.stdout.includes('ci-gates matrix: 2 PASS, 0 FAIL, 1 PREREQ-MISSING, of 3 blocking gate(s).'),
+    `the matrix must count the state separately, got: ${full.stdout}`,
+  );
+
+  // The positive half: a satisfied prerequisite runs the gate normally, so the
+  // refusal above is about the probe and not about carrying a prerequisite.
+  const satisfied = plantRunnerFixture([
+    { ...PASSING_GATE('has-its-input'), prerequisites: ['always-there'] },
+  ]);
+  const green = spawnSync(process.execPath, [satisfied, '--continue'], { encoding: 'utf8' });
+  assert.equal(green.status, 0, 'a satisfied prerequisite must not block the gate');
+  assert.ok(green.stdout.includes('PASS'), 'the gate must actually have run');
 });
 
 test('DRILL: --continue reports every failure, not only the first', () => {

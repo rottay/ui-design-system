@@ -1,0 +1,137 @@
+{
+  "law": "A production script under scripts/ is either wired through a declared channel (the gate manifest, an npm lifecycle chain, or a job in ci.yml) or it is registered HERE as a hand-run tool, with a reason and an owner. There is no third state. Before WO-CAN-02 there was one: the wiring gate counted every package.json alias as a channel, so twenty-plus checks nobody had ever run counted as covered, and this gate's own docblock claimed exclusions (tests, lib/, codemods/, quality-evidence/) that its walk never applied.",
+  "rules": [
+    "An entry must name a file that exists; a dead entry fails the gate.",
+    "An entry must carry a reason and an owner; a bare path is not an exception.",
+    "An entry must NOT also be named by a channel: registering something CI already runs would hide the real wiring.",
+    "Registration is not permission to rot. Every owner below is a work order that either wires the tool or deletes it."
+  ],
+  "tools": [
+    {
+      "path": "scripts/build/dev/index.mjs",
+      "reason": "The local dev server. It starts a watch process; running it in CI would never terminate.",
+      "owner": "developer tooling (permanent)"
+    },
+    {
+      "path": "scripts/maintain/engine/baseline-relocation/index.mjs",
+      "reason": "A maintenance codemod that rewrites path-keyed counter names after a physical move. It is invoked by hand with an explicit --old-root/--new-root and reviewed as a rename inventory; running it unattended would rewrite a governed baseline.",
+      "owner": "developer tooling (permanent)"
+    },
+    {
+      "path": "scripts/check/tokens/cascade/probe/public/cli/index.mjs",
+      "reason": "The interactive cascade probe CLI. It drives a browser probe against a running showroom; the automated slice of the same machinery is wired through the tenant-reachability drill.",
+      "owner": "developer tooling (permanent)"
+    },
+    {
+      "path": "scripts/generate/surface-capabilities/index.mjs",
+      "reason": "A generator run by hand when the surface capability census is regenerated. Its output has no freshness gate yet, which is why wiring it into CI would prove nothing.",
+      "owner": "WO-CAT-02 (typed catalog) -- gives the artifact a freshness check or retires the generator"
+    },
+    {
+      "path": "scripts/check/evidence/framework/cli/index.mjs",
+      "reason": "The quality-evidence v2 CLI (inventory / round-evidence). It writes sealed evidence under artifacts/quality and is driven by an operator, never by CI. Its invariants ARE gated, through quality-evidence-v2-drills.",
+      "owner": "WO-EVI-01 (evidence graph) -- decides what survives as a gate"
+    },
+    {
+      "path": "scripts/check/evidence/framework/rounds/sealing/index.mjs",
+      "reason": "Seals a review round. Sealing is a deliberate, signed act; a CI job that sealed rounds automatically would destroy the meaning of a seal.",
+      "owner": "WO-EVI-01 (evidence graph)"
+    },
+    {
+      "path": "scripts/check/modern-rescue/check/index.mjs",
+      "reason": "The Modern Rescue programme contract (`constitution:check`). It reads the programme's own JSON authorities, not the product, and it is excluded from the manifest by REV-C; the runner's drill asserts it stays out.",
+      "owner": "WO-RET-03 -- moves the programme machinery out of the published package"
+    },
+    {
+      "path": "scripts/check/orchestration/foundation/glob/index.mjs",
+      "reason": "Agent-orchestration machinery: write-set globbing for work-order fences. It governs how agents divide work, not what the design system ships.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/plans/index.mjs",
+      "reason": "Agent-orchestration machinery: the plan reader behind the lane-control commands.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/public/containment/index.mjs",
+      "reason": "Agent-orchestration machinery (`lane-control:containment`). Wired to no channel since it was written; the runner's drill asserts it stays out of the manifest because its transitive graph reaches an excluded tree.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/public/program-state/index.mjs",
+      "reason": "Agent-orchestration machinery (`lane-control:program-state`), same exclusion as containment.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/public/work-order/index.mjs",
+      "reason": "Agent-orchestration machinery (`lane-control:work-order`), same exclusion as containment.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/public/write-set-intersection/index.mjs",
+      "reason": "Agent-orchestration machinery (`lane-control:write-set-intersection`), same exclusion as containment.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/runtime/ownership-rows/index.mjs",
+      "reason": "Agent-orchestration machinery: ownership rows behind the lane-control commands.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/runtime/shared-files/index.mjs",
+      "reason": "Agent-orchestration machinery: shared-file detection behind the lane-control commands.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/tests/drills/index.mjs",
+      "reason": "Agent-orchestration machinery: the lane-control drill entrypoint (`lane-control:drills`).",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/tests/drills/containment/index.mjs",
+      "reason": "Agent-orchestration machinery: a lane-control drill.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/tests/drills/intersection/index.mjs",
+      "reason": "Agent-orchestration machinery: a lane-control drill.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/tests/drills/program-state/index.mjs",
+      "reason": "Agent-orchestration machinery: a lane-control drill.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/tests/drills/reserved-paths/index.mjs",
+      "reason": "Agent-orchestration machinery: a lane-control drill.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    },
+    {
+      "path": "scripts/check/orchestration/tests/drills/work-order/index.mjs",
+      "reason": "Agent-orchestration machinery: a lane-control drill.",
+      "owner": "WO-RET-03 -- scripts/check/orchestration leaves the package (D-09)"
+    }
+  ],
+  "workspaceLaw": "A hand-run tool that lives OUTSIDE this package's scripts/ census is declared here as a workspaceTool. The declaration grants no exemption in any census -- there is nothing to excuse, because the file was never counted -- so it cannot become a laundering channel. What it does is make the claim CHECKABLE: the file must exist, it must carry a reason and an owner, and it must be named by NO channel (the gate manifest, any package.json script in the workspace, or ci.yml). Wire one of these into CI and this gate fails until the declaration is removed; delete one and it fails on the ghost.",
+  "workspaceTools": [
+    {
+      "package": "showroom",
+      "path": "scripts/showroom-visual-matrix.mjs",
+      "reason": "A hand-run capture matrix: it drives `pnpm dlx playwright screenshot` over a running showroom and writes PNGs for a human to look at. It asserts nothing, so wiring it into CI would produce images no gate reads (audit F-107).",
+      "owner": "developer tooling (permanent) -- the mechanical half of showroom visual QA is e2e/visual, which playwright.visual.config.ts runs in the `visual` CI job"
+    },
+    {
+      "package": "showroom",
+      "path": "scripts/showroom-visual-matrix.config.mjs",
+      "reason": "The route/viewport/tenant matrix the capture runner reads. It is data for a hand-run tool and has no entrypoint of its own; it is listed so the pair is declared together rather than one half of it looking wired.",
+      "owner": "developer tooling (permanent) -- moves or dies with showroom-visual-matrix.mjs"
+    },
+    {
+      "package": "showroom",
+      "path": "scripts/causal-canary-capture.mjs",
+      "reason": "A 2,397-line operator capture tool for the causal-canary investigation. It produces evidence for a human reviewer, takes no baseline and returns no verdict; the canary CONTRACT that CI does enforce is e2e/whitelabel/canary-contracts.spec.ts (audit F-107).",
+      "owner": "WO-EVI-01 (evidence graph) -- decides whether this capture becomes sealed evidence machinery or is deleted"
+    }
+  ]
+}

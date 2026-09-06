@@ -22,6 +22,12 @@ export const defaultRegistryPath = resolve(HERE, 'registry/index.json');
 export const DEFAULT_REPOSITORIES = Object.freeze([
   {
     name: 'ui-design-system',
+    // The design system is not a sibling to be found by name: it is THIS
+    // checkout. Resolving it as `<workspaceRoot>/ui-design-system` made the gate
+    // throw `CRA12 missing repository` from any worktree with another directory
+    // name -- so it only ever ran where CI happened to clone it (audit F-97).
+    // `name` stays the registry key; `self` decides where the tree is read.
+    self: true,
     sourceRoots: ['packages/core/src', 'packages/showroom/src'],
     manifests: ['packages/core/package.json', 'packages/showroom/package.json'],
     prefix: 'ds-',
@@ -365,13 +371,29 @@ function allowedDirectImport(record, registry) {
   ));
 }
 
-function allowedDynamicDefinition(record, registry, workspaceRoot) {
+function allowedDynamicDefinition(record, registry, workspaceRoot, repositories = DEFAULT_REPOSITORIES) {
+  const specs = new Map(repositories.map((spec) => [spec.name, spec]));
   return (registry.policy?.allowedDynamicKeyframes ?? []).some((entry) => {
     if (entry.repo !== record.repo || entry.path !== record.path || entry.symbol !== record.symbol) return false;
-    const sourcePath = resolve(workspaceRoot, entry.repo, entry.path);
+    // Same resolution as the scan: a policy exemption must read the file the
+    // scan read, not a same-named path under a directory that may not exist.
+    const spec = specs.get(entry.repo) ?? { name: entry.repo };
+    const sourcePath = resolve(repositoryRoot(spec, workspaceRoot), entry.path);
     if (!existsSync(sourcePath)) return false;
     return !entry.requiresSourcePattern || new RegExp(entry.requiresSourcePattern).test(readFileSync(sourcePath, 'utf8'));
   });
+}
+
+/**
+ * Where a repository's tree is read from.
+ *
+ * A caller that names a workspace root EXPLICITLY is pointing at another tree on
+ * purpose (the sandbox drills do exactly that), so that still wins. On the
+ * default path the self repository is this checkout, whatever it is called.
+ */
+export function repositoryRoot(spec, workspaceRoot) {
+  if (spec.self && workspaceRoot === defaultWorkspaceRoot) return designSystemRoot;
+  return resolve(workspaceRoot, spec.name);
 }
 
 export function scanWorkspace({ workspaceRoot = defaultWorkspaceRoot, registry, repositories = DEFAULT_REPOSITORIES }) {
@@ -380,7 +402,7 @@ export function scanWorkspace({ workspaceRoot = defaultWorkspaceRoot, registry, 
   let findings = [];
 
   for (const spec of repositories) {
-    const repoRoot = resolve(workspaceRoot, spec.name);
+    const repoRoot = repositoryRoot(spec, workspaceRoot);
     if (!existsSync(repoRoot)) throw new Error(`CRA12 missing repository: ${spec.name} (${repoRoot})`);
     for (const sourceRoot of spec.sourceRoots) {
       const absoluteRoot = resolve(repoRoot, sourceRoot);
@@ -500,7 +522,7 @@ export function scanWorkspace({ workspaceRoot = defaultWorkspaceRoot, registry, 
 
   findings = findings.filter((record) => {
     if (record.channel === 'direct-motion-import' && allowedDirectImport(record, registry)) return false;
-    if (record.kind === 'dynamic-keyframe-definition' && allowedDynamicDefinition(record, registry, workspaceRoot)) return false;
+    if (record.kind === 'dynamic-keyframe-definition' && allowedDynamicDefinition(record, registry, workspaceRoot, repositories)) return false;
     return true;
   });
   return findings.sort((a, b) => (

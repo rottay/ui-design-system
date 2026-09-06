@@ -3,9 +3,19 @@
  * one legitimate channel, or it does not exist.
  *
  * ARCHITECTURE §1.10 declares the three legitimate wiring channels:
- * `ci-gates.manifest.mjs`, the npm lifecycle hooks (`prebuild` / `postbuild` /
- * `prepack` / `pretest` and the aliases they chain to) and
- * `.github/workflows/ci.yml`. This gate walks every production `.mjs` under
+ * the gate manifest, the npm lifecycle hooks (`prebuild` / `postbuild` /
+ * `prepack` / `pretest` and the aliases they CHAIN TO) and
+ * `.github/workflows/ci.yml`.
+ *
+ * WHAT IS NOT A CHANNEL (WO-CAN-02, audit F-23/F-49). Until now this walk also
+ * did `for (const command of Object.values(scripts)) addMatches(command)` --
+ * every npm alias in package.json counted as wiring. An alias is a way to TYPE
+ * a command, not a thing that runs: twenty-plus of them (`constitution:check`,
+ * `claim-integrity:*`, `lane-control:*`, `cascade:*`,
+ * `runtime-hardening:final` ...) were named by no chain and no workflow, so
+ * twenty-plus checks that nobody had ever run counted as covered. Defining an
+ * alias for a script now wires nothing; only a chain, the manifest or the
+ * workflow does. This gate walks every production `.mjs` under
  * `scripts/` RECURSIVELY (the folder/index law of §1.2: each capability lives
  * at `<family>/<capability>/index.mjs`), skipping tests, `lib/`, `codemods/`
  * and `quality-evidence/` (that subtree has its own program wiring), and
@@ -19,7 +29,7 @@
  * census.
  */
 
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
@@ -59,15 +69,18 @@ function collectWiredPaths() {
     }
   };
 
-  // Channel 1: the CI gates manifest. Resolved from the package root (not
-  // from HERE) so the gate keeps working from any depth; Paso B lot F updates
-  // this path when the manifest itself graduates to its capability folder.
-  addMatches(readFileSync(join(CORE_ROOT, 'scripts/check/automation/gates/manifest/index.mjs'), 'utf8'));
-
-  // Channel 2: package.json lifecycle chains (aliases expanded transitively).
   const pkg = JSON.parse(readFileSync(join(CORE_ROOT, 'package.json'), 'utf8'));
   const scripts = pkg.scripts ?? {};
   const seen = new Set();
+
+  /**
+   * Follow an alias to the commands it really runs, transitively.
+   *
+   * An alias is expanded ONLY when a channel names it. That is the whole
+   * difference between this and the removed alias channel: `pnpm run lint` in
+   * `ci.yml` is a real invocation and everything it chains to really runs;
+   * an alias sitting in package.json that nothing invokes runs never.
+   */
   const expand = (name) => {
     if (seen.has(name)) return;
     seen.add(name);
@@ -79,15 +92,34 @@ function collectWiredPaths() {
       if (!/^(run|--)/.test(target)) expand(target);
     }
   };
+
+  /** Every package.json alias a channel's text invokes by name. */
+  const expandAliasesNamedIn = (text) => {
+    for (const match of text.matchAll(/(?:pnpm|npm)(?:\s+run)?\s+(?:--filter\s+\S+\s+(?:run\s+)?)?([\w:.-]+)/g)) {
+      const name = match[1];
+      if (Object.hasOwn(scripts, name)) expand(name);
+    }
+    for (const match of text.matchAll(/'(?:pnpm|npm)',\s*'run',\s*'([\w:.-]+)'/g)) {
+      if (Object.hasOwn(scripts, match[1])) expand(match[1]);
+    }
+  };
+
+  // Channel 1: the CI gates manifest. Resolved from the package root (not
+  // from HERE) so the gate keeps working from any depth.
+  const manifestText = readFileSync(join(CORE_ROOT, 'scripts/check/automation/gates/manifest/index.mjs'), 'utf8');
+  addMatches(manifestText);
+  expandAliasesNamedIn(manifestText);
+
+  // Channel 2: the npm lifecycle chains.
   for (const entry of ['prebuild', 'postbuild', 'prepack', 'pretest', 'build', 'gates:ci', 'test:scripts']) {
     expand(entry);
   }
-  // Any alias whose command runs a script directly also wires it.
-  for (const command of Object.values(scripts)) addMatches(command);
 
-  // Channel 3: the CI workflow.
+  // Channel 3: the CI workflow, including the aliases its steps invoke.
   try {
-    addMatches(readFileSync(join(REPO_ROOT, '.github/workflows/ci.yml'), 'utf8'));
+    const workflow = readFileSync(join(REPO_ROOT, '.github/workflows/ci.yml'), 'utf8');
+    addMatches(workflow);
+    expandAliasesNamedIn(workflow);
   } catch {
     /* workflow absent locally; channels 1-2 still apply */
   }
@@ -160,13 +192,127 @@ if (production.length === 0) {
   process.exit(1);
 }
 
-const orphans = production.filter((path) => !wired.has(path));
+/**
+ * The hand-run tools, each with a reason and an owner.
+ *
+ * Registration is the ONLY third state, and it is a written one. It replaces
+ * the docblock this gate used to carry, which claimed the walk skipped tests,
+ * `lib/`, `codemods/` and `quality-evidence/` -- a claim the walk never
+ * implemented and nothing ever checked.
+ */
+// A missing register is an EMPTY register, never a skip: with no entries every
+// unwired script is an orphan, so the absence makes the gate louder rather than
+// quieter. (It also lets the synthetic-tree drills in `gates/honesty` exercise
+// the walk without carrying a register they have nothing to say about.)
+const registerPath = join(HERE, 'manual-tools/index.json');
+const register = existsSync(registerPath)
+  ? JSON.parse(readFileSync(registerPath, 'utf8'))
+  : { tools: [], workspaceTools: [] };
+const registryProblems = [];
+const registered = new Set();
+for (const tool of register.tools ?? []) {
+  if (typeof tool?.path !== 'string' || tool.path.length === 0) {
+    registryProblems.push('a manual-tool entry has no path');
+    continue;
+  }
+  if (registered.has(tool.path)) registryProblems.push(`duplicate manual-tool entry: ${tool.path}`);
+  registered.add(tool.path);
+  if (typeof tool.reason !== 'string' || tool.reason.trim().length < 40) {
+    registryProblems.push(`${tool.path}: a manual-tool entry needs a written reason`);
+  }
+  if (typeof tool.owner !== 'string' || tool.owner.trim().length === 0) {
+    registryProblems.push(`${tool.path}: a manual-tool entry needs an owner`);
+  }
+  if (!production.includes(tool.path)) {
+    registryProblems.push(`${tool.path}: registered as a manual tool but no such production script exists`);
+  }
+  if (wired.has(tool.path)) {
+    registryProblems.push(`${tool.path}: registered as a manual tool AND named by a channel; the registration hides the real wiring`);
+  }
+}
+
+/**
+ * Workspace hand-run tools: declared files that live OUTSIDE this package's
+ * `scripts/` census.
+ *
+ * WHY THEY ARE NOT AN EXEMPTION. A workspaceTool excuses nothing, because the
+ * file was never in the census there is nothing to excuse it from — which is
+ * precisely why it cannot become a laundering channel. What the declaration
+ * buys is that the claim becomes CHECKABLE: the file must exist, it must carry
+ * a reason and an owner, and it must be named by NO channel in the workspace.
+ * `packages/showroom/scripts/causal-canary-capture.mjs` is 2,397 lines that
+ * looked like a test and ran in no job (audit F-107); saying so in prose is
+ * what let that stand for months.
+ */
+const WORKSPACE_MANIFESTS = ['packages/core/package.json', 'packages/showroom/package.json'];
+const channelText = [
+  readFileSync(join(CORE_ROOT, 'scripts/check/automation/gates/manifest/index.mjs'), 'utf8'),
+  ...WORKSPACE_MANIFESTS.map((relative) => {
+    try {
+      return readFileSync(join(REPO_ROOT, relative), 'utf8');
+    } catch {
+      return '';
+    }
+  }),
+  (() => {
+    try {
+      return readFileSync(join(REPO_ROOT, '.github/workflows/ci.yml'), 'utf8');
+    } catch {
+      return '';
+    }
+  })(),
+].join('\n');
+
+const workspaceTools = register.workspaceTools ?? [];
+const declaredWorkspace = new Set();
+for (const tool of workspaceTools) {
+  const label = `${tool?.package ?? '?'}:${tool?.path ?? '?'}`;
+  if (typeof tool?.package !== 'string' || typeof tool?.path !== 'string' || tool.path.length === 0) {
+    registryProblems.push(`a workspaceTools entry needs a package and a path (got ${label})`);
+    continue;
+  }
+  if (declaredWorkspace.has(label)) registryProblems.push(`duplicate workspaceTools entry: ${label}`);
+  declaredWorkspace.add(label);
+  if (typeof tool.reason !== 'string' || tool.reason.trim().length < 40) {
+    registryProblems.push(`${label}: a workspaceTools entry needs a written reason`);
+  }
+  if (typeof tool.owner !== 'string' || tool.owner.trim().length === 0) {
+    registryProblems.push(`${label}: a workspaceTools entry needs an owner`);
+  }
+  const absolute = join(REPO_ROOT, 'packages', tool.package, tool.path);
+  if (!existsSync(absolute)) {
+    registryProblems.push(`${label}: declared as a hand-run tool but the file does not exist (${absolute})`);
+  }
+  if (channelText.includes(tool.path)) {
+    registryProblems.push(
+      `${label}: declared hand-run but named by a channel (a package.json script, the gate manifest or ci.yml); `
+      + 'wire it and delete the declaration, or stop naming it',
+    );
+  }
+}
+
+if (registryProblems.length > 0) {
+  console.error('wiring-coverage-gate: FAIL — the manual-tool register is malformed:');
+  for (const problem of registryProblems.sort()) console.error(`  ${problem}`);
+  process.exit(1);
+}
+
+const orphans = production.filter((path) => !wired.has(path) && !registered.has(path));
 
 if (orphans.length > 0) {
   console.error('wiring-coverage-gate: FAIL — production scripts with no wiring channel:');
   for (const orphan of orphans.sort()) console.error(`  ${orphan}`);
-  console.error('Wire each into the manifest, a lifecycle chain or ci.yml — or delete it.');
+  console.error('Wire each into the manifest, a lifecycle chain or ci.yml, register it as a');
+  console.error('hand-run tool in manual-tools/index.json with a reason and an owner — or delete it.');
   process.exit(1);
 }
 
-console.log(`wiring-coverage-gate: OK — ${production.length} production scripts, every one wired through a declared channel.`);
+console.log(
+  `wiring-coverage-gate: OK — ${production.length} production scripts: `
+  + `${production.length - registered.size} wired through a declared channel, `
+  + `${registered.size} registered hand-run tools, each with a reason and an owner.`,
+);
+for (const tool of register.tools ?? []) console.log(`  hand-run: ${tool.path} — owner=${tool.owner}`);
+for (const tool of workspaceTools) {
+  console.log(`  hand-run (workspace, outside this census): packages/${tool.package}/${tool.path} — owner=${tool.owner}`);
+}

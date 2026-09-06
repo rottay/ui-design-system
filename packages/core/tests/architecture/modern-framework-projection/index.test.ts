@@ -24,7 +24,7 @@
 
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 const TOKENS_ROOT = join(process.cwd(), 'src', 'foundation', 'tokens', 'css');
 const MODERN_ROOT = join(TOKENS_ROOT, 'runtime', 'engines', 'modern');
@@ -96,6 +96,18 @@ describe('modern engine bridge contract', () => {
   const projectionCSS = existsSync(MODERN_PROJECTION)
     ? readFileSync(MODERN_PROJECTION, 'utf8')
     : '';
+
+  // Both sources default to '' when the file is absent, and a `.toBe(false)`
+  // assertion over '' passes for the wrong reason. This hook makes an absent or
+  // truncated input fail EVERY assertion below instead of quietly greening the
+  // four blocks that only look for what must not be there.
+  beforeAll(() => {
+    expect(themeCSS, `${MODERN_THEME} is missing or empty; an absent input cannot certify anything`).not.toBe('');
+    expect(
+      projectionCSS,
+      `${MODERN_PROJECTION} is missing or empty; an absent input cannot certify anything`,
+    ).not.toBe('');
+  });
 
   it('theme.css file should exist', () => {
     expect(existsSync(MODERN_THEME)).toBe(true);
@@ -173,7 +185,10 @@ describe('modern engine bridge contract', () => {
       const tenantFile = join(TOKENS_ROOT, 'facade', 'artifacts', tenant, 'index.css');
 
       it(`${tenant}/index.css should not define legacy DaisyUI 4 variables`, () => {
-        if (!existsSync(tenantFile)) return;
+        expect(
+          existsSync(tenantFile),
+          `${tenant}/index.css is a committed first-party artifact; a missing input is a failure, not a pass`,
+        ).toBe(true);
         const css = readFileSync(tenantFile, 'utf8');
 
         for (const varName of LEGACY_DAISY4_VARS) {
@@ -199,7 +214,11 @@ describe('modern engine bridge contract', () => {
     it.each(LEGACY_DAISY4_VARS)(
       'dist artifact should not contain legacy %s definition',
       (varName) => {
-        if (!distCSS) return;
+        expect(
+          distCSS,
+          'dist/modern-engine.css is not built. Run `pnpm -C packages/core build`: this block asserts about the '
+            + 'COMPILED artifact and cannot pass without one.',
+        ).not.toBe('');
         expect(
           definitionPattern(varName).test(distCSS),
           `Found legacy variable "${varName}:" in dist/modern-engine.css`,

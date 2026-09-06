@@ -407,11 +407,15 @@ export function classifyGeneratorFailure(error) {
 export const GENERATED_DOCUMENTS = Object.freeze([
   {
     document: 'packages/core/docs/generated/customization-controls/index.md',
-    // Byte freshness is owned by the CI step named below, which runs the
-    // generator's own --check after the build. This gate proves presence and
-    // banner only, and never spawns the generator.
+    // Byte freshness needs `dist/`, so it is owned post-build by ONE manifest
+    // gate, `customization-controls-freshness`, executed by the CI step named
+    // below. That step runs the whole post-build phase of the gate inventory;
+    // there is deliberately no second step named after this one document, which
+    // is the duplicate-inventory defect the manifest exists to remove. This gate
+    // proves presence and banner only, and never spawns the generator.
     verification: 'ci',
-    step: 'Customization controls table freshness',
+    step: 'Quality gates (manifest-driven, post-build)',
+    gate: 'customization-controls-freshness',
   },
   {
     document: 'packages/core/docs/generated/component-taxonomy/index.md',
@@ -508,7 +512,9 @@ export function auditPublicDocs({
       generated.push({
         document: entry.document,
         state: 'VERIFIED-BY-CI',
-        detail: `CI step "${entry.step}" owns byte freshness; presence and banner verified here`,
+        detail: entry.gate
+          ? `CI step "${entry.step}" runs gate "${entry.gate}", which owns byte freshness; presence and banner verified here`
+          : `CI step "${entry.step}" owns byte freshness; presence and banner verified here`,
       });
       continue;
     }

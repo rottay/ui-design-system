@@ -114,6 +114,40 @@ test('a functional fallback wrapped in color-mix still counts as wired (rule b)'
   );
 });
 
+test('INJECTION: un canal nombrado SOLO dentro de un comentario CSS no mueve el contador', () => {
+  // El drill de evasion de la familia `cascade-wiring`, gemelo del de
+  // `themeCss.*`. Alli el contador leia tokens dentro de comentarios `//` y una
+  // frase que anunciaba el DRENAJE de unas clases las certificaba como vivas
+  // (auditoria F-23). Aqui la evasion equivalente es un `var(--ds-…)` escrito
+  // dentro de `/* … */`: si `stripComments` dejara de correr, ese nombre
+  // entraria al denominador y a la deuda sin que ninguna regla lo pinte.
+  const name = '--ds-cascade-ratchet-injection-orphan';
+  withPlantedCss(`/* .ds-x { color: var(${name}); } */\n.ds-y { color: var(--ds-color-primary); }\n`, (files) => {
+    const result = classifyCascadeWiring(files);
+    assert.ok(
+      !result.denominator.includes(name),
+      'un nombre que solo vive en un comentario no es pintura y no puede entrar al denominador',
+    );
+    assert.deepEqual(
+      collectFindings({ files }).filter((finding) => finding.includes('debt GREW')),
+      [],
+      'un comentario no puede subir la deuda',
+    );
+  });
+
+  // El control que impide que este drill pase por no medir nada: EL MISMO
+  // nombre, fuera del comentario, si tiene que entrar y enrojecer.
+  withPlantedCss(`.ds-x { color: var(${name}); }\n`, (files) => {
+    const result = classifyCascadeWiring(files);
+    assert.ok(result.denominator.includes(name), 'el mismo nombre, pintado de verdad, si cuenta');
+    expectFinding(
+      collectFindings({ files }),
+      'debt GREW from',
+      'el control tiene que enrojecer, o el drill de arriba no prueba nada',
+    );
+  });
+});
+
 test('rewiring an existing debt name to a root shrinks the debt and fails until the baseline follows', () => {
   const result = classifyCascadeWiring();
   const victim = result.debt[0];

@@ -42,7 +42,13 @@ export default defineConfig({
     // Settle the galleries for deterministic axe/focus reads: the DS honors
     // prefers-reduced-motion, so entrance transitions are disabled and computed
     // colors/rings are stable rather than mid-animation.
-    reducedMotion: 'reduce',
+    //
+    // It has to be a `contextOptions` entry. Playwright 1.61 removed the
+    // top-level `reducedMotion` test option, and the removal is silent: the
+    // runner has no such fixture any more, so `use: { reducedMotion }` type-errors
+    // and is then IGNORED at runtime. These suites were running with motion on
+    // while this block claimed otherwise (audit F-97).
+    contextOptions: { reducedMotion: 'reduce' },
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
