@@ -2,6 +2,7 @@
 
 import { Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import { isImplementedEngineName } from "@rottay/design-system";
 
 import {
   P1ListToolbarProbe,
@@ -25,7 +26,7 @@ function sanitizeDensity(value: string | null): P1ListToolbarDensity {
 }
 
 function sanitizeEngine(value: string | null): P1ListToolbarEngine {
-  return value === "classic" || value === "rustic" ? value : "modern";
+  return isImplementedEngineName(value) ? value : "modern";
 }
 
 function sanitizeState(value: string | null): P1ListToolbarState {

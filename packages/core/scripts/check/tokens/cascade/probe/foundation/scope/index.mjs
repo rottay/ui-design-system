@@ -34,6 +34,7 @@ import { resolve } from 'node:path';
 
 import { readFirstPartyRosterSource } from '../../../../../../libraries/roster/index.mjs';
 import { CORE_ROOT } from '../paths/index.mjs';
+import { CASCADE_ENGINE_ORDER } from '../../../../../../libraries/engine/roster/index.mjs';
 
 const rosterPath = resolve(
   CORE_ROOT,
@@ -97,7 +98,7 @@ export const SCOPE_KEYS = Object.freeze(Object.keys(VERTICALS));
 export const THEMES = Object.freeze(['light', 'dark']);
 
 /** Engines whose scope class appears in the bundles. */
-export const ENGINES = Object.freeze(['modern', 'rustic', 'classic']);
+export const ENGINES = CASCADE_ENGINE_ORDER;
 
 /**
  * The complete governed root attribute set for one scope.

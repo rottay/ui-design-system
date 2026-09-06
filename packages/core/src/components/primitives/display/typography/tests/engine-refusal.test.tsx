@@ -1,16 +1,20 @@
 /**
- * The four compounds resolve their implementation from a TOTAL map, and refuse
- * anything the map does not answer for.
+ * The four compounds resolve their implementation through the SYNC engine
+ * factory, and refuse anything it cannot answer for.
  *
- * These owners bypass `createEngineComponent`, so the factory's own fail-closed
- * drills say nothing about them: their engine selection is a plain lookup in a
- * module-local record. That lookup has to keep two properties at once — every
- * implemented engine resolves, and `custom`, an unknown name and an undeclared
- * engine each refuse BY NAME rather than falling through to classic. A shape
- * that satisfied only the first would still render, silently, on the wrong
- * engine, which is the exact defect the compounds were rewritten to end.
+ * They used to bypass the factory entirely: engine selection was a plain lookup
+ * in a module-local three-name record, so the factory's fail-closed drills said
+ * nothing about them and `custom` could not resolve AT ALL -- a white-label pack
+ * that registered `Text` rendered nothing while the same pack's `Button`
+ * rendered. `createSyncEngineComponent` answers the same three questions the
+ * lazy factory answers, synchronously, because typography renders inside every
+ * other component's tree and a Suspense boundary around it would flash the page.
  *
- * The refusal message is asserted to carry the offending engine, so a future
+ * Three properties, at once: every implemented engine resolves; a registered
+ * pack resolves under `custom`; and an unregistered pack, an unknown name and an
+ * undeclared engine each refuse BY NAME rather than falling through to classic.
+ *
+ * The refusal message is asserted to carry the offending name, so a future
  * rewrite cannot satisfy this file with a bare `throw new Error()`.
  */
 
@@ -19,57 +23,76 @@ import { render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { EngineName } from '@/foundation/contracts';
+import {
+  EXTENSION_ENGINE,
+  IMPLEMENTED_ENGINE_NAMES,
+  PRIMARY_ENGINE,
+} from '@/foundation/contracts/kernel/engine-identity';
 import { EngineProvider } from '@/infrastructure/runtime/engines/composition/react/provider';
+import {
+  clearCustomRegistry,
+  registerCustomComponent,
+} from '@/infrastructure/runtime/engines/runtime/customization/component-registry';
 import { Heading, Link, Paragraph, Text } from '..';
 
-const IMPLEMENTED: readonly EngineName[] = ['classic', 'modern', 'rustic'];
-
+/**
+ * `[displayName, packName, build]`. The pack name is the identity the factory
+ * looks up, and it is deliberately the SHORT one: a pack author registers
+ * `Text`, not `TypographyText`.
+ */
 const COMPOUNDS = [
-  ['TypographyText', (engine?: EngineName) => <Text engine={engine}>t</Text>],
-  ['TypographyHeading', (engine?: EngineName) => <Heading engine={engine}>h</Heading>],
-  ['TypographyParagraph', (engine?: EngineName) => <Paragraph engine={engine}>p</Paragraph>],
-  ['TypographyLink', (engine?: EngineName) => <Link engine={engine} href="/x">l</Link>],
+  ['Text', (engine?: EngineName) => <Text engine={engine}>t</Text>],
+  ['Heading', (engine?: EngineName) => <Heading engine={engine}>h</Heading>],
+  ['Paragraph', (engine?: EngineName) => <Paragraph engine={engine}>p</Paragraph>],
+  ['Link', (engine?: EngineName) => <Link engine={engine} href="/x">l</Link>],
 ] as const satisfies readonly (readonly [string, (engine?: EngineName) => ReactElement])[];
 
 afterEach(() => {
+  clearCustomRegistry();
   vi.restoreAllMocks();
 });
 
 /** React logs a render throw; the assertion is the throw, not the log. */
-function expectRefusal(element: ReactElement, name: string, engine: unknown): void {
+function expectRefusal(element: ReactElement, pattern: RegExp): void {
   vi.spyOn(console, 'error').mockImplementation(() => undefined);
-  expect(() => render(element)).toThrow(
-    `${name}: no implementation for engine ${JSON.stringify(engine)}.`,
-  );
+  expect(() => render(element)).toThrow(pattern);
 }
 
 describe.each(COMPOUNDS)('%s engine resolution', (name, build) => {
-  it.each(IMPLEMENTED)('renders the %s implementation', (engine) => {
+  it.each(IMPLEMENTED_ENGINE_NAMES)('renders the %s implementation', (engine) => {
     const { container } = render(
       <EngineProvider defaultEngine={engine}>{build()}</EngineProvider>,
     );
     expect(container.firstElementChild).not.toBeNull();
   });
 
-  it('refuses `custom`, which packs cannot register a compound for', () => {
+  it('renders a registered pack under `custom`', () => {
+    registerCustomComponent(name, () => <b data-testid="pack">pack</b>);
+    const { getByTestId } = render(
+      <EngineProvider defaultEngine={EXTENSION_ENGINE}>{build()}</EngineProvider>,
+    );
+    expect(getByTestId('pack')).toBeTruthy();
+  });
+
+  it('refuses `custom` when the pack registered no implementation for it', () => {
     expectRefusal(
-      <EngineProvider defaultEngine="modern">{build('custom')}</EngineProvider>,
-      name,
-      'custom',
+      <EngineProvider defaultEngine={PRIMARY_ENGINE}>
+        {build(EXTENSION_ENGINE)}
+      </EngineProvider>,
+      new RegExp(`No custom implementation registered for "${name}"`),
     );
   });
 
   it('refuses an engine name outside the roster instead of substituting one', () => {
     expectRefusal(
-      <EngineProvider defaultEngine="modern">
+      <EngineProvider defaultEngine={PRIMARY_ENGINE}>
         {build('titan' as EngineName)}
       </EngineProvider>,
-      name,
-      'titan',
+      new RegExp(`${name} has no titan implementation`),
     );
   });
 
   it('refuses an undeclared engine rather than defaulting to classic', () => {
-    expectRefusal(build(), name, null);
+    expectRefusal(build(), new RegExp(`${name}: no engine is declared`));
   });
 });

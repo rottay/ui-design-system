@@ -78,18 +78,49 @@ const isArtifact = (file: string): boolean => file.startsWith(ARTIFACT_ROOT);
 const engineOf = (file: string): MeasuredEngine | undefined =>
   (ENGINE_SEGMENT.exec(file)?.[1] as MeasuredEngine | undefined);
 
-const surfaceText: Record<MeasuredEngine, string> = {
+/**
+ * TWO surfaces, not one.
+ *
+ * An engine's ENGINE surface is its stylesheets: what the engine paints as an
+ * engine, tenant-reachable through the cascade. Its COMPONENT surface is the
+ * TSX under the same folder, where a `style={{}}` read paints one element and
+ * nothing else. Joining them made `native` mean "somebody, somewhere under this
+ * folder, mentioned the channel", and two classic cells rested entirely on the
+ * second surface: `classic/theme/index.css` reads `--ds-color-primary` zero
+ * times, and the drill's own canary passed through inline TSX. They are
+ * measured apart now, and the canary below asserts the split rather than the
+ * union.
+ */
+const engineCssSurface: Record<MeasuredEngine, string> = {
+  modern: "",
+  classic: "",
+  rustic: "",
+};
+const engineComponentSurface: Record<MeasuredEngine, string> = {
   modern: "",
   classic: "",
   rustic: "",
 };
 for (const engine of MEASURED_ENGINES) {
-  surfaceText[engine] = files
-    .filter((file) => !isArtifact(file) && engineOf(file) === engine)
+  const own = files.filter((file) => !isArtifact(file) && engineOf(file) === engine);
+  engineCssSurface[engine] = own
+    .filter((file) => file.endsWith(".css"))
+    .map((file) => text.get(file) as string)
+    .join("\n");
+  engineComponentSurface[engine] = own
+    .filter((file) => !file.endsWith(".css"))
     .map((file) => text.get(file) as string)
     .join("\n");
 }
-surfaceText.classic += text.get(ANTD_BRIDGE) ?? readFileSync(ANTD_BRIDGE, "utf8");
+engineComponentSurface.classic +=
+  text.get(ANTD_BRIDGE) ?? readFileSync(ANTD_BRIDGE, "utf8");
+
+/** The union both postures are still judged against; the split is what is new. */
+const surfaceText: Record<MeasuredEngine, string> = {
+  modern: `${engineCssSurface.modern}\n${engineComponentSurface.modern}`,
+  classic: `${engineCssSurface.classic}\n${engineComponentSurface.classic}`,
+  rustic: `${engineCssSurface.rustic}\n${engineComponentSurface.rustic}`,
+};
 
 export const ENGINE_SURFACE_FILES: Record<MeasuredEngine, number> = {
   modern: files.filter((f) => !isArtifact(f) && engineOf(f) === "modern").length,
@@ -107,6 +138,24 @@ export function readsChannel(engine: MeasuredEngine, channel: string): boolean {
 export function countReads(engine: MeasuredEngine, channel: string): number {
   return (
     surfaceText[engine].match(new RegExp(`var\\(\\s*${escape(channel)}\\s*[,)]`, "g")) ?? []
+  ).length;
+}
+
+/** Reads on the engine's STYLESHEETS: what it paints as an engine. */
+export function countCssReads(engine: MeasuredEngine, channel: string): number {
+  return (
+    engineCssSurface[engine].match(
+      new RegExp(`var\\(\\s*${escape(channel)}\\s*[,)]`, "g")
+    ) ?? []
+  ).length;
+}
+
+/** Reads on the engine's TSX: one element's inline paint, not a cascade. */
+export function countComponentReads(engine: MeasuredEngine, channel: string): number {
+  return (
+    engineComponentSurface[engine].match(
+      new RegExp(`var\\(\\s*${escape(channel)}\\s*[,)]`, "g")
+    ) ?? []
   ).length;
 }
 
@@ -371,6 +420,51 @@ describe("`unsupported` means the engine reads none of it, and says how much it 
   }
 });
 
+describe("`mapped` means the projection carries it, and the projection really does", () => {
+  for (const [engine, adapter] of ADAPTERS) {
+    for (const id of REGISTRY_IDS) {
+      const cell = adapter.controls[id];
+      if (cell.posture !== "mapped") continue;
+
+      it(`${engine}/${id}: it maps from this control's own declared output`, () => {
+        // A projection may also seed from a compiler operand no control
+        // declares -- the radius ramp seeds from `--ds-radius-md-base` -- so
+        // the requirement is that every source is a DS channel and that at
+        // least one of them is this control's, or the cell is mapped from
+        // somewhere else's inputs and says nothing about this control.
+        for (const channel of cell.evidence.from) expect(channel).toMatch(/^--ds-/);
+        expect(
+          cell.evidence.from.some((channel) =>
+            (DECLARED.get(id)?.channels ?? []).includes(channel)
+          )
+        ).toBe(true);
+      });
+
+      it(`${engine}/${id}: the projection actually emits every named seed`, () => {
+        // A `mapped` claim is only as real as the seeds it names. Feed the
+        // adapter a compilation that declares exactly the `from` channels and
+        // read what comes out; a seed the projection never emits is a claim.
+        // `1` is a legal unitless length, a finite multiplier and an opaque
+        // string, so one probe value serves every projection without teaching
+        // this drill what any individual seed means.
+        const cssVariables = Object.fromEntries(
+          cell.evidence.from.map((channel) => [channel, "1"])
+        );
+        const projected = adapter.project({
+          cssVariables,
+          modeBlocks: [],
+        } as unknown as Parameters<typeof adapter.project>[0]);
+        for (const seed of cell.evidence.seeds)
+          expect(Object.keys(projected.seeds)).toContain(seed);
+      });
+
+      it(`${engine}/${id}: it says why, at more than a label's length`, () => {
+        expect(cell.evidence.reason.length).toBeGreaterThan(20);
+      });
+    }
+  }
+});
+
 describe("`invariant` means the engine does not participate, and names what does", () => {
   for (const [engine, adapter] of ADAPTERS) {
     for (const id of REGISTRY_IDS) {
@@ -401,8 +495,8 @@ describe("the measured matrix, so a relabelling cannot pass unnoticed", () => {
     );
     expect(cells).toHaveLength(66);
     const count = (posture: EnginePosture) => cells.filter((value) => value === posture).length;
-    expect(count("native")).toBe(32);
-    expect(count("mapped")).toBe(1);
+    expect(count("native")).toBe(30);
+    expect(count("mapped")).toBe(3);
     expect(count("invariant")).toBe(9);
     expect(count("unsupported")).toBe(24);
     expect(count("native") + count("mapped") + count("invariant") + count("unsupported")).toBe(66);
@@ -415,9 +509,40 @@ describe("the measured matrix, so a relabelling cannot pass unnoticed", () => {
   it("agrees with the engine surfaces it measured", () => {
     // A canary on the walker itself: if the surface census silently collapsed
     // to nothing, every `unsupported` cell above would pass for the wrong
-    // reason.
-    expect(countReads("modern", "--ds-color-primary")).toBeGreaterThan(0);
-    expect(countReads("rustic", "--ds-elevation-1")).toBeGreaterThan(0);
-    expect(countReads("classic", "--ds-color-primary")).toBeGreaterThan(0);
+    // reason. Both halves are canaried, because the union is what used to hide
+    // the difference between them.
+    expect(countCssReads("modern", "--ds-color-primary")).toBeGreaterThan(0);
+    expect(countCssReads("rustic", "--ds-elevation-1")).toBeGreaterThan(0);
+    expect(countComponentReads("classic", "--ds-color-primary")).toBeGreaterThan(0);
+  });
+
+  it("states where classic's brand and status seeds are actually read", () => {
+    // The fact that made two classic cells false: the classic ENGINE stylesheet
+    // reads none of these, so `native` was measuring inline component paint.
+    // They are `mapped` now, and this pins the measurement that says so.
+    for (const channel of [
+      "--ds-color-primary",
+      "--ds-color-text-on-primary",
+      "--ds-color-success",
+      "--ds-color-warning",
+      "--ds-color-error",
+      "--ds-color-info",
+    ]) {
+      expect(countCssReads("classic", channel)).toBe(0);
+      expect(countComponentReads("classic", channel)).toBeGreaterThan(0);
+    }
+  });
+
+  it("keeps every `native` cell anchored on a real read, whichever surface it is on", () => {
+    for (const [engine, adapter] of ADAPTERS) {
+      for (const id of REGISTRY_IDS) {
+        const cell = adapter.controls[id];
+        if (cell.posture !== "native") continue;
+        for (const channel of cell.evidence.read)
+          expect(
+            countCssReads(engine, channel) + countComponentReads(engine, channel)
+          ).toBeGreaterThan(0);
+      }
+    }
   });
 });

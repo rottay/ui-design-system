@@ -34,6 +34,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 /**
  * Dropdown placement options for the suggestions popup.
@@ -142,7 +143,7 @@ export interface MentionsProps {
   /** Popup class name */
   popupClassName?: string;
   /** Rendering engine override */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 }
 
 /**

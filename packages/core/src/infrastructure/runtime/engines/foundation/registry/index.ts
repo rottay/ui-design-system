@@ -10,10 +10,13 @@
  * - **Discovery**: List available and stable engines
  *
  * Available engines:
- * - `classic`: Ant Design (stable) - Enterprise, structured
- * - `modern`: Rottay-native premium skin (stable) - the primary engine
- * - `rustic`: Vanilla (stable) - Minimal, spacious
- * - `custom`: Pluggable (experimental) - resolved from a registered pack
+ * - `classic`: Ant Design - shipped, FROZEN, not admitted
+ * - `modern`: Rottay-native premium skin - the one productive engine
+ * - `rustic`: Vanilla - shipped, FROZEN, not admitted
+ * - `custom`: Pluggable - resolved from a registered pack
+ *
+ * `status` is what the package SHIPS; whether an engine may be SELECTED is
+ * answered once by `ADMITTED_ENGINE_NAMES` in the identity contract.
  *
  * @example Get engine info
  * ```tsx
@@ -36,15 +39,33 @@
  * @package @rottay/design-system
  */
 
+import {
+  ENGINE_NAMES,
+  FROZEN_ENGINE_NAMES,
+  isValidEngineName,
+} from '../../../../../foundation/contracts/kernel/engine-identity';
 import type { EngineName, EngineConfig } from '../../../../../foundation/contracts';
+
+/** The roster, republished so consumers derive instead of restating it. */
+export {
+  ADMITTED_ENGINE_NAMES,
+  ENGINE_NAMES,
+  EXTENSION_ENGINE,
+  FROZEN_ENGINE_NAMES,
+  IMPLEMENTED_ENGINE_NAMES,
+  isAdmittedEngineName,
+  isFrozenEngineName,
+  isImplementedEngineName,
+} from '../../../../../foundation/contracts/kernel/engine-identity';
+export type { ImplementedEngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 /**
  * Registry of all available engines
  *
  * Engines:
- * - classic: Ant Design - Enterprise, structured, corporate feel
- * - modern: Rottay-native premium skin - the primary engine
- * - rustic: Pure HTML/CSS - Minimal, spacious, understated
+ * - classic: Ant Design - Enterprise, structured, corporate feel (frozen)
+ * - modern: Rottay-native premium skin - the one productive engine
+ * - rustic: Pure HTML/CSS - Minimal, spacious, understated (frozen)
  * - custom: Pluggable - resolved from a registered component pack
  */
 export const ENGINE_REGISTRY: Record<EngineName, EngineConfig> = {
@@ -90,7 +111,7 @@ export const getEngine = (name: EngineName): EngineConfig => {
  * @returns Array of all engine names including experimental ones
  */
 export const getAvailableEngines = (): EngineName[] => {
-  return Object.keys(ENGINE_REGISTRY) as EngineName[];
+  return [...ENGINE_NAMES];
 };
 
 /**
@@ -112,5 +133,15 @@ export const getStableEngines = (): EngineName[] => {
  * @returns True if the name is a valid EngineName, false otherwise
  */
 export const isValidEngine = (name: string): name is EngineName => {
-  return name in ENGINE_REGISTRY;
+  return isValidEngineName(name);
+};
+
+/** The engines a tenant, an intent or a runtime may select. */
+export const getAdmittedEngines = (): EngineName[] => {
+  return getAvailableEngines().filter((name) => !FROZEN_ENGINE_NAMES.includes(name));
+};
+
+/** Shipped for compatibility, closed to content work and to admission. */
+export const getFrozenEngines = (): EngineName[] => {
+  return getAvailableEngines().filter((name) => FROZEN_ENGINE_NAMES.includes(name));
 };

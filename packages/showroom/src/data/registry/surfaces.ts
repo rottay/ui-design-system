@@ -5,6 +5,7 @@
  * Surfaces are grouped by domain: admin, data, experience, forms, operations, workspace.
  */
 
+import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system';
 import type { EngineName } from './primitives';
 
 export type SurfaceGroup =
@@ -23,7 +24,7 @@ export interface SurfaceEntry {
   engines: EngineName[];
 }
 
-const allEngines: EngineName[] = ['classic', 'modern', 'rustic'];
+const allEngines: EngineName[] = [...IMPLEMENTED_ENGINE_NAMES];
 
 // ---------------------------------------------------------------------------
 // Admin

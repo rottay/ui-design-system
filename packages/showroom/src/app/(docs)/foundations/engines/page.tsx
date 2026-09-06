@@ -13,9 +13,10 @@ import {
 import { useTokens } from '@rottay/design-system';
 import { CodeBlock } from '@/components/playground';
 import { useShowroom } from '@/components/showroom-context';
+import type { RuntimeQueryEngine } from '@/components/runtime/query';
 import { FoundationTopRail } from '../foundation-top-rail';
 
-type EngineName = 'classic' | 'modern' | 'rustic';
+type EngineName = RuntimeQueryEngine;
 
 interface EngineInfo {
   name: EngineName;

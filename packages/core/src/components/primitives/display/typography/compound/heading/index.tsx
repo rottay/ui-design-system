@@ -49,8 +49,10 @@ import {
   mergePersonalityStyle,
   resolveTypographyHeadingStyle,
 } from '@/foundation/tokens/ts/runtime/personality';
-import { useDeclaredEngine } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
-import type { ImplementedEngineName } from '../../../../../../infrastructure/runtime/engines/presentation/component-factory';
+import {
+  createSyncEngineComponent,
+  type SyncEngineImplementations,
+} from '../../../../../../infrastructure/runtime/engines/presentation/component-factory/sync';
 import type { HeadingProps } from '../../contracts';
 import { ClassicHeading } from '../../engines/classic';
 import { ModernHeading } from '../../engines/modern';
@@ -59,13 +61,21 @@ import { RusticHeading } from '../../engines/rustic';
 type HeadingImplementation = ForwardRefExoticComponent<HeadingProps & RefAttributes<HTMLHeadingElement>>;
 
 /**
- * Map of engine names to their respective Heading implementations.
+ * Engine resolution goes through the factory, so `custom` reaches a registered
+ * component pack under the name `Heading` exactly as every lazy family does. The
+ * SYNC factory is what keeps typography out of a Suspense boundary: it renders
+ * inside every other component's tree and must not flash on first paint.
  */
-const engineMap: Record<ImplementedEngineName, HeadingImplementation> = {
+const HeadingImplementations: SyncEngineImplementations<HeadingProps> = {
   classic: ClassicHeading,
   modern: ModernHeading,
   rustic: RusticHeading,
 };
+
+const ResolvedHeading = createSyncEngineComponent<HeadingProps>(
+  'Heading',
+  HeadingImplementations
+);
 
 /**
  * Typography Heading component with engine-aware rendering.
@@ -95,23 +105,12 @@ const engineMap: Record<ImplementedEngineName, HeadingImplementation> = {
  * @returns The engine-specific heading element with optional personality token styles applied
  */
 export const TypographyHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ engine, ...props }, ref) => {
-    const declaredEngine = useDeclaredEngine();
-    const activeEngine = engine ?? declaredEngine;
+  (props, ref) => {
     // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
-    const Component = engineMap[activeEngine as ImplementedEngineName] as
-      | HeadingImplementation
-      | undefined;
-    if (!Component) {
-      throw new Error(
-        `TypographyHeading: no implementation for engine ${JSON.stringify(activeEngine)}. ` +
-          'Pass an `engine` prop or mount a provider; there is no fallback engine.'
-      );
-    }
 
     return (
-      <Component
+      <ResolvedHeading
         ref={ref}
         {...props}
         style={

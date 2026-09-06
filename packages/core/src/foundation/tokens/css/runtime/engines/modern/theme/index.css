@@ -9,7 +9,7 @@
  * All tenant CSS must provide --color-* in oklch format.
  *
  * Architecture:
- * - Uses [data-tenant] selector for tenant-scoped overrides
+ * - Gated on [data-engine='modern'], the CSS engine-selection authority (D-18)
  * - All values reference --ds-* variables from default.css
  * - Covers all interactive states: hover, focus, active, disabled
  * - Maintains visual parity with the Classic engine
@@ -23,7 +23,7 @@
    BUTTON - .btn
    ============================================================================= */
 
-[data-tenant] .btn {
+[data-engine='modern'] .btn {
   font-family: var(--ds-font-family-base);
   font-weight: var(--ds-button-font-weight);
   border-radius: var(--ds-button-md-radius);
@@ -38,28 +38,28 @@
   will-change: transform;
 }
 
-[data-tenant] .btn:focus-visible {
+[data-engine='modern'] .btn:focus-visible {
   box-shadow: var(--ds-button-focus-ring);
   outline: none;
 }
 
-[data-tenant] .btn:hover:not(:disabled) {
+[data-engine='modern'] .btn:hover:not(:disabled) {
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
-[data-tenant] .btn:active:not(:disabled) {
+[data-engine='modern'] .btn:active:not(:disabled) {
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
 /* Primary Button */
-[data-tenant] .btn-primary {
+[data-engine='modern'] .btn-primary {
   background-color: var(--ds-button-primary-bg);
   border-color: var(--ds-button-primary-border);
   color: var(--ds-button-primary-color);
   box-shadow: var(--ds-button-primary-shadow);
 }
 
-[data-tenant] .btn-primary:hover:not(:disabled) {
+[data-engine='modern'] .btn-primary:hover:not(:disabled) {
   background-color: var(--ds-button-primary-bg-hover);
   border-color: var(--ds-button-primary-bg-hover);
   /* Not every artifact declares the hover shadow, and a bare read would drop the whole
@@ -68,25 +68,25 @@
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
-[data-tenant] .btn-primary:active:not(:disabled) {
+[data-engine='modern'] .btn-primary:active:not(:disabled) {
   background-color: var(--ds-button-primary-bg-active);
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
 /* Ghost Button */
-[data-tenant] .btn-ghost {
+[data-engine='modern'] .btn-ghost {
   background-color: var(--ds-button-ghost-bg);
   border-color: var(--ds-button-ghost-border);
   color: var(--ds-button-ghost-color);
 }
 
-[data-tenant] .btn-ghost:hover:not(:disabled) {
+[data-engine='modern'] .btn-ghost:hover:not(:disabled) {
   background-color: var(--ds-button-ghost-bg-hover);
   color: var(--ds-button-ghost-color-hover);
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
-[data-tenant] .btn-ghost:active:not(:disabled) {
+[data-engine='modern'] .btn-ghost:active:not(:disabled) {
   background-color: var(--ds-button-ghost-bg-active);
   color: var(--ds-button-ghost-color-active);
   transform: var(--ds-button-active-transform, scale(0.98));
@@ -96,7 +96,7 @@
    CHECKBOX - .checkbox
    ============================================================================= */
 
-[data-tenant] .checkbox {
+[data-engine='modern'] .checkbox {
   width: var(--ds-checkbox-size);
   height: var(--ds-checkbox-size);
   border-color: var(--ds-checkbox-border);
@@ -104,16 +104,16 @@
   transition: var(--ds-transition-fast);
 }
 
-[data-tenant] .checkbox:hover:not(:disabled) {
+[data-engine='modern'] .checkbox:hover:not(:disabled) {
   border-color: var(--ds-checkbox-border-hover);
 }
 
-[data-tenant] .checkbox:checked {
+[data-engine='modern'] .checkbox:checked {
   background-color: var(--ds-checkbox-checked-bg);
   border-color: var(--ds-checkbox-checked-border);
 }
 
-[data-tenant] .checkbox:focus-visible {
+[data-engine='modern'] .checkbox:focus-visible {
   box-shadow: var(--ds-checkbox-focus-ring);
   outline: none;
 }
@@ -122,23 +122,23 @@
    RADIO - .radio
    ============================================================================= */
 
-[data-tenant] .radio {
+[data-engine='modern'] .radio {
   width: var(--ds-radio-size);
   height: var(--ds-radio-size);
   border-color: var(--ds-radio-border);
   transition: var(--ds-transition-fast);
 }
 
-[data-tenant] .radio:hover:not(:disabled) {
+[data-engine='modern'] .radio:hover:not(:disabled) {
   border-color: var(--ds-radio-border-hover);
 }
 
-[data-tenant] .radio:checked {
+[data-engine='modern'] .radio:checked {
   background-color: var(--ds-radio-checked-bg);
   border-color: var(--ds-radio-checked-border);
 }
 
-[data-tenant] .radio:focus-visible {
+[data-engine='modern'] .radio:focus-visible {
   box-shadow: var(--ds-radio-focus-ring);
   outline: none;
 }
@@ -154,7 +154,7 @@
    LOADING / SPINNER - .loading
    ============================================================================= */
 
-[data-tenant] .loading {
+[data-engine='modern'] .loading {
   color: var(--ds-spinner-color);
 }
 
@@ -162,19 +162,19 @@
    MENU - .menu (Sidebar Navigation)
    ============================================================================= */
 
-[data-tenant] .rottay-menu {
+[data-engine='modern'] .rottay-menu {
   list-style: none;
   padding: var(--ds-sidebar-shell-padding-inline, 14px);
   margin: 0;
 }
 
-[data-tenant] .rottay-menu li {
+[data-engine='modern'] .rottay-menu li {
   list-style: none;
   margin-bottom: 2px;
 }
 
-[data-tenant] .rottay-menu li > a,
-[data-tenant] .rottay-menu li > button {
+[data-engine='modern'] .rottay-menu li > a,
+[data-engine='modern'] .rottay-menu li > button {
   display: flex;
   align-items: center;
   gap: var(--ds-sidebar-item-gap, 10px);
@@ -197,8 +197,8 @@
   line-height: 1.28;
 }
 
-[data-tenant] .rottay-menu li > a:hover,
-[data-tenant] .rottay-menu li > button:hover {
+[data-engine='modern'] .rottay-menu li > a:hover,
+[data-engine='modern'] .rottay-menu li > button:hover {
   background-color: color-mix(
     in srgb,
     var(--ds-color-neutral-100) 92%,
@@ -207,8 +207,8 @@
   color: var(--ds-text-primary);
 }
 
-[data-tenant] .rottay-menu li > a.active,
-[data-tenant] .rottay-menu li > button.active {
+[data-engine='modern'] .rottay-menu li > a.active,
+[data-engine='modern'] .rottay-menu li > button.active {
   background-color: color-mix(
     in srgb,
     var(--ds-color-primary-50) 78%,
@@ -219,8 +219,8 @@
 }
 
 /* Menu Icons */
-[data-tenant] .rottay-menu li > a > span:first-child,
-[data-tenant] .rottay-menu li > button > span:first-child {
+[data-engine='modern'] .rottay-menu li > a > span:first-child,
+[data-engine='modern'] .rottay-menu li > button > span:first-child {
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
@@ -229,11 +229,11 @@
 }
 
 /* Submenu (details/summary) */
-[data-tenant] .rottay-menu details {
+[data-engine='modern'] .rottay-menu details {
   margin-bottom: 2px;
 }
 
-[data-tenant] .rottay-menu details > summary {
+[data-engine='modern'] .rottay-menu details > summary {
   display: flex;
   align-items: center;
   gap: var(--ds-sidebar-item-gap, 10px);
@@ -253,11 +253,11 @@
   list-style: none;
 }
 
-[data-tenant] .rottay-menu details > summary::-webkit-details-marker {
+[data-engine='modern'] .rottay-menu details > summary::-webkit-details-marker {
   display: none;
 }
 
-[data-tenant] .rottay-menu details > summary:hover {
+[data-engine='modern'] .rottay-menu details > summary:hover {
   background-color: color-mix(
     in srgb,
     var(--ds-color-neutral-100) 92%,
@@ -266,31 +266,31 @@
   color: var(--ds-text-primary);
 }
 
-[data-tenant] .rottay-menu details[open] > summary {
+[data-engine='modern'] .rottay-menu details[open] > summary {
   color: var(--ds-text-primary);
   font-weight: 600;
 }
 
-[data-tenant] .rottay-menu details > ul {
+[data-engine='modern'] .rottay-menu details > ul {
   padding-left: var(--ds-sidebar-child-padding-inline, 8px);
   margin-top: 1px;
   margin-bottom: 3px;
 }
 
 /* Disabled state */
-[data-tenant] .rottay-menu li > a.disabled,
-[data-tenant] .rottay-menu li > button.disabled,
-[data-tenant] .rottay-menu details > summary.disabled {
+[data-engine='modern'] .rottay-menu li > a.disabled,
+[data-engine='modern'] .rottay-menu li > button.disabled,
+[data-engine='modern'] .rottay-menu details > summary.disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 /* Table cells and rows should not clip dropdown */
-[data-tenant] table,
-[data-tenant] tbody,
-[data-tenant] tr,
-[data-tenant] td {
+[data-engine='modern'] table,
+[data-engine='modern'] tbody,
+[data-engine='modern'] tr,
+[data-engine='modern'] td {
   overflow: visible;
 }
 
@@ -299,21 +299,21 @@
    ============================================================================= */
 
 /* Bridge: .rottay-collapse (modern engine) */
-[data-tenant] .rottay-collapse {
+[data-engine='modern'] .rottay-collapse {
   border-color: var(--ds-collapse-border);
   border-radius: var(--ds-collapse-radius);
 }
 
-[data-tenant] .rottay-collapse .rottay-collapse-content {
+[data-engine='modern'] .rottay-collapse .rottay-collapse-content {
   background-color: var(--ds-collapse-content-bg);
   color: var(--ds-text-primary);
 }
 
-[data-tenant] .rottay-collapse--ghost {
+[data-engine='modern'] .rottay-collapse--ghost {
   background-color: transparent;
 }
 
-[data-tenant] .rottay-collapse--borderless {
+[data-engine='modern'] .rottay-collapse--borderless {
   border: none;
 }
 
@@ -352,17 +352,17 @@
    ============================================================================= */
 
 /* Bridge: .rottay-tree (modern engine) */
-[data-tenant] .rottay-tree {
+[data-engine='modern'] .rottay-tree {
   background-color: var(--ds-tree-bg);
 }
 
-[data-tenant] .rottay-tree .rottay-tree-node {
+[data-engine='modern'] .rottay-tree .rottay-tree-node {
   padding: var(--ds-tree-node-padding);
   color: var(--ds-tree-node-color);
   transition: var(--ds-transition-fast);
 }
 
-[data-tenant] .rottay-tree .rottay-tree-node:hover {
+[data-engine='modern'] .rottay-tree .rottay-tree-node:hover {
   background-color: var(--ds-tree-node-bg-hover);
 }
 
@@ -371,7 +371,7 @@
    ============================================================================= */
 
 /* Bridge: .rottay-empty (modern engine) */
-[data-tenant] .rottay-empty {
+[data-engine='modern'] .rottay-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -380,7 +380,7 @@
   color: var(--ds-text-secondary);
 }
 
-[data-tenant] .rottay-empty__footer {
+[data-engine='modern'] .rottay-empty__footer {
   margin-top: 0.5rem;
 }
 
@@ -389,29 +389,29 @@
    ============================================================================= */
 
 /* Bridge: .rottay-qrcode (modern engine) */
-[data-tenant] .rottay-qrcode {
+[data-engine='modern'] .rottay-qrcode {
   border-radius: var(--ds-qrcode-border-radius);
   border-color: var(--ds-qrcode-border-color);
   background-color: var(--ds-qrcode-background-color);
 }
 
-[data-tenant] .rottay-qrcode[data-status="loading"] {
+[data-engine='modern'] .rottay-qrcode[data-status="loading"] {
   opacity: var(--ds-qrcode-loading-opacity);
   background-color: var(--ds-qrcode-loading-bg);
 }
 
-[data-tenant] .rottay-qrcode[data-status="expired"] {
+[data-engine='modern'] .rottay-qrcode[data-status="expired"] {
   opacity: var(--ds-qrcode-status-expired-opacity);
 }
 
-[data-tenant] .rottay-qrcode[data-status="scanned"] {
+[data-engine='modern'] .rottay-qrcode[data-status="scanned"] {
   opacity: var(--ds-qrcode-status-scanned-opacity);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-tenant] .rottay-menu li > a,
-  [data-tenant] .rottay-menu li > button,
-  [data-tenant] .rottay-menu details > summary {
+  [data-engine='modern'] .rottay-menu li > a,
+  [data-engine='modern'] .rottay-menu li > button,
+  [data-engine='modern'] .rottay-menu details > summary {
     transition: none;
   }
 }

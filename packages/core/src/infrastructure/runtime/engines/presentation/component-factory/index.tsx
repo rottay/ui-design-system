@@ -56,10 +56,15 @@ import { useDeclaredEngine } from '../../composition/react/provider';
 import { createCustomWrapper } from '../../runtime/customization/component-registry';
 import { EngineErrorBoundary } from './error-boundary';
 import type { EngineName } from '../../../../../foundation/contracts';
+import {
+  EXTENSION_ENGINE,
+  IMPLEMENTED_ENGINE_NAMES,
+  type ImplementedEngineName,
+} from '../../../../../foundation/contracts/kernel/engine-identity';
 import { TenantContext } from '../../../tenant/foundation/context';
 
-/** The engines a component ships a physical implementation for. */
-export type ImplementedEngineName = Exclude<EngineName, 'custom'>;
+/** Derived in the identity contract; this file states no roster of its own. */
+export type { ImplementedEngineName };
 
 export type EngineImplementationLoader<P> = () => Promise<{
   default: ComponentType<P> | ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>>;
@@ -129,12 +134,16 @@ export function createEngineComponent<P extends object>(
     };
   };
 
-  const components: Record<EngineName, LazyExoticComponent<ComponentType<any>>> = {
-    classic: lazy(implementation('classic')),
-    modern: lazy(implementation('modern')),
-    rustic: lazy(implementation('rustic')),
-    custom: lazy(createCustomWrapper<P>(displayName, undefined, customEnabled) as () => Promise<{ default: ComponentType<any> }>),
-  };
+  const components = {
+    ...(Object.fromEntries(
+      IMPLEMENTED_ENGINE_NAMES.map((engine) => [engine, lazy(implementation(engine))])
+    ) as Record<ImplementedEngineName, LazyExoticComponent<ComponentType<any>>>),
+    [EXTENSION_ENGINE]: lazy(
+      createCustomWrapper<P>(displayName, undefined, customEnabled) as () => Promise<{
+        default: ComponentType<any>;
+      }>
+    ),
+  } as Record<EngineName, LazyExoticComponent<ComponentType<any>>>;
 
   // Cache of pack-scoped lazy components to avoid re-creating on every render
   const packLazyCache = new Map<string, LazyExoticComponent<ComponentType<any>>>();
@@ -183,7 +192,7 @@ export function createEngineComponent<P extends object>(
             'DesignSystemProvider or EngineProvider; there is no fallback engine.'
         );
       }
-      if (activeEngine === 'custom' && customEnabled && componentPack) {
+      if (activeEngine === EXTENSION_ENGINE && customEnabled && componentPack) {
         return getPackLazyComponent(componentPack);
       }
       const resolved = components[activeEngine];

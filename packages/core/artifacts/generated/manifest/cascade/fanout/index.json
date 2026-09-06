@@ -41,7 +41,7 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2525,
+    "filesScanned": 2526,
     "channels": 7514,
     "channelsDs": 7116,
     "channelsBridge": 398,
@@ -86525,7 +86525,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 271,
+          "line": 272,
           "prop": "hoverColor",
           "scalars": []
         },
@@ -87144,7 +87144,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 271,
+          "line": 272,
           "prop": "color",
           "scalars": []
         },
@@ -107348,14 +107348,14 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 266,
+          "line": 267,
           "prop": "hoverColor",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 267,
+          "line": 268,
           "prop": "hoverColor",
           "scalars": []
         },
@@ -108671,14 +108671,14 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 266,
+          "line": 267,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 267,
+          "line": 268,
           "prop": "color",
           "scalars": []
         },
@@ -110459,7 +110459,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 268,
+          "line": 269,
           "prop": "hoverColor",
           "scalars": []
         },
@@ -110639,7 +110639,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 268,
+          "line": 269,
           "prop": "color",
           "scalars": []
         },
@@ -113194,7 +113194,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 269,
+          "line": 270,
           "prop": "hoverColor",
           "scalars": []
         },
@@ -113551,7 +113551,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 269,
+          "line": 270,
           "prop": "color",
           "scalars": []
         },
@@ -134095,7 +134095,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 270,
+          "line": 271,
           "prop": "hoverColor",
           "scalars": []
         },
@@ -134495,7 +134495,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/navigation/link/contracts/index.ts",
-          "line": 270,
+          "line": 271,
           "prop": "color",
           "scalars": []
         },
@@ -266201,7 +266201,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/feedback/rate/contracts/index.ts",
-          "line": 432,
+          "line": 433,
           "prop": "lg",
           "scalars": []
         },
@@ -266253,7 +266253,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/feedback/rate/contracts/index.ts",
-          "line": 430,
+          "line": 431,
           "prop": "md",
           "scalars": []
         },
@@ -266316,7 +266316,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/feedback/rate/contracts/index.ts",
-          "line": 428,
+          "line": 429,
           "prop": "sm",
           "scalars": []
         },
@@ -266553,7 +266553,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/feedback/rate/contracts/index.ts",
-          "line": 434,
+          "line": 435,
           "prop": "xl",
           "scalars": []
         },
@@ -266597,7 +266597,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/feedback/rate/contracts/index.ts",
-          "line": 426,
+          "line": 427,
           "prop": "xs",
           "scalars": []
         },
@@ -269155,7 +269155,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 235,
+          "line": 236,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -290536,7 +290536,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 137,
+          "line": 138,
           "prop": "xs",
           "scalars": []
         },
@@ -290813,7 +290813,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 142,
+          "line": 143,
           "prop": "2xl",
           "scalars": []
         },
@@ -291101,7 +291101,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 143,
+          "line": 144,
           "prop": "3xl",
           "scalars": []
         },
@@ -291263,7 +291263,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 144,
+          "line": 145,
           "prop": "4xl",
           "scalars": []
         },
@@ -294991,7 +294991,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 138,
+          "line": 139,
           "prop": "sm",
           "scalars": []
         },
@@ -300214,7 +300214,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 139,
+          "line": 140,
           "prop": "md",
           "scalars": []
         },
@@ -301997,7 +301997,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 140,
+          "line": 141,
           "prop": "lg",
           "scalars": []
         },
@@ -302581,7 +302581,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/layout/flex/contracts/index.ts",
-          "line": 141,
+          "line": 142,
           "prop": "xl",
           "scalars": []
         },

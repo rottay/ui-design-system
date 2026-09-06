@@ -18,7 +18,9 @@ describe('PatternListToolbar integration', () => {
     });
   });
 
-  it.each(STABLE_ENGINES)(
+  // Rustic is a declared absence for this pattern (WO-CAN-06): its engine file
+  // used to alias Classic, which is why it once rendered here.
+  it.each(STABLE_ENGINES.filter((engine) => engine !== 'rustic'))(
     'renders the compact mobile toolbar through the %s engine',
     async (engine) => {
       mockMatchMedia(390);

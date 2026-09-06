@@ -13,6 +13,44 @@ import { CollectionWorkspaceSurface } from '../index';
 import type { CollectionWorkspaceSurfaceProps } from '../index';
 import type { ColumnDef } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
 import { renderSurface } from '../../../../../foundation/common/test-utils';
+import type { ResponsiveContextValue } from '../../../../../../../infrastructure/runtime/responsive';
+
+/**
+ * `PatternListToolbar` declares NO rustic implementation (`rustic: null`,
+ * WO-CAN-06), so a toolbar assertion is measured on Modern -- the one
+ * productive engine -- and awaits the lazily loaded toolbar before querying.
+ */
+const RESOLVED_DESKTOP_TEST_CONTEXT: ResponsiveContextValue = {
+  hasResolvedViewport: true,
+  deviceClass: 'desktop',
+  activeBreakpoint: 'lg',
+  isPhone: false,
+  isTablet: false,
+  isDesktop: true,
+  pointer: 'fine',
+  orientation: 'landscape',
+  prefersReducedMotion: false,
+  isPhoneOrTablet: false,
+  isTabletOrDesktop: true,
+  isTouchDevice: false,
+  virtualKeyboardInset: 0,
+  isVirtualKeyboardOpen: false,
+};
+
+async function renderToolbarSurface(
+  ui: React.ReactElement,
+  options: Parameters<typeof renderSurface>[1] = {}
+): Promise<ReturnType<typeof renderSurface>> {
+  const result = renderSurface(ui, {
+    engine: 'modern',
+    responsiveContext: RESOLVED_DESKTOP_TEST_CONTEXT,
+    ...options,
+  });
+  await waitFor(() =>
+    expect(result.container.querySelector('.ds-pattern-list-toolbar')).not.toBeNull()
+  );
+  return result;
+}
 import { VIEW_TRANSITION_DIRECTION_ATTRIBUTE } from '@/graphics/motion/react/runtime/view-transition';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 
@@ -83,14 +121,14 @@ afterEach(() => {
 
 describe('CollectionWorkspaceSurface view-mode transition seam', () => {
   it('names the collection container as a per-instance panel group', async () => {
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface {...buildProps()} />,
     );
 
     // The Suspense boundary wraps the whole surface (test-utils renderSurface),
     // so the engine-switched (lazily-loaded) toolbar sibling must settle before
     // the rest of the tree -- including this Box -- is present in the DOM.
-    await screen.findByRole('button', { name: 'Cards' }, { timeout: 10000 });
+    await screen.findByRole('radio', { name: 'Card view' }, { timeout: 10000 });
 
     // Class, not data-part: a surface's anatomy is its classNames (engines may
     // not forward data-part). waitFor: engine components resolve async.
@@ -114,13 +152,13 @@ describe('CollectionWorkspaceSurface view-mode transition seam', () => {
 
   it('runs the internal view-mode switch through a forward-stamped view transition', async () => {
     const { start, directionsSeen } = installNativeStartViewTransition();
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface {...buildProps()} />,
     );
 
     const cardButton = await screen.findByRole(
-      'button',
-      { name: 'Cards' },
+      'radio',
+      { name: 'Card view' },
       { timeout: 10000 },
     );
     fireEvent.click(cardButton);
@@ -142,13 +180,13 @@ describe('CollectionWorkspaceSurface view-mode transition seam', () => {
   it('swaps the view mode instantly under reduced motion', async () => {
     mockMatchMedia(1024, true);
     const { start } = installNativeStartViewTransition();
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface {...buildProps()} />,
     );
 
     const cardButton = await screen.findByRole(
-      'button',
-      { name: 'Cards' },
+      'radio',
+      { name: 'Card view' },
       { timeout: 10000 },
     );
     fireEvent.click(cardButton);

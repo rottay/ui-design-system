@@ -33,7 +33,7 @@ import React, {
   useLayoutEffect,
 } from 'react';
 import type { EngineName, EngineContextValue, EngineProviderProps } from '../../../../../../foundation/contracts';
-import { isValidEngine } from '../../../foundation/registry';
+import { isValidEngineName } from '../../../../../../foundation/contracts/kernel/engine-identity';
 
 const EngineContext = createContext<EngineContextValue | null>(null);
 const useIsomorphicLayoutEffect =
@@ -46,7 +46,7 @@ export function EngineProvider({
   children,
   defaultEngine,
 }: EngineProviderProps): React.ReactElement {
-  if (!isValidEngine(defaultEngine)) {
+  if (!isValidEngineName(defaultEngine)) {
     throw new Error(
       `EngineProvider: "${String(defaultEngine)}" is not a known engine. ` +
         'Resolve one through resolveEngine; there is no fallback engine.'
@@ -61,7 +61,7 @@ export function EngineProvider({
   }, [defaultEngine, engine]);
 
   const setEngine = useCallback((newEngine: EngineName) => {
-    if (!isValidEngine(newEngine)) {
+    if (!isValidEngineName(newEngine)) {
       throw new Error(
         `setEngine: "${String(newEngine)}" is not a known engine. ` +
           'Selecting an unknown engine is refused rather than resolved to a default.'
@@ -70,7 +70,8 @@ export function EngineProvider({
     setEngineState(newEngine);
   }, []);
 
-  // Sync engine name to DOM so CSS selectors like [data-engine='modern'] work.
+  // `[data-engine]` on the root is the engine-selection authority in CSS (D-18):
+  // every engine stylesheet gates on it, never on `[data-tenant]`.
   //
   // The bare `removeAttribute` this replaces deleted the SERVER's stamp: an app
   // that renders `data-engine` in its root layout (so engine-scoped CSS applies

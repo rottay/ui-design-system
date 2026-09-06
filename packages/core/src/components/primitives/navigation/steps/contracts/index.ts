@@ -47,6 +47,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 // ============================================================================
 // Status Types
@@ -355,7 +356,7 @@ export interface StepsProps {
    * Rendering engine override.
    * Overrides the global engine setting for this component.
    */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 }
 
 // ============================================================================

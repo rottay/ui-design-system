@@ -640,6 +640,15 @@ export function auditGovernedFilesAreReachable({
   return failures;
 }
 
+/**
+ * `[data-engine='modern']` on the root is the CSS engine-selection authority
+ * (D-18). The modern framework projection and bridge gate on it, never on
+ * `[data-tenant]`: a tenant is who is looking, an engine is what is rendering,
+ * and a tenant-gated engine sheet is inert on every tenant-less mount and live
+ * on every mount running a different engine.
+ */
+const MODERN_ENGINE_ROOT = "[data-engine='modern']";
+
 export function auditModernThemeOwnership({
   projectionPath = modernFrameworkProjection,
   paintPath = modernThemePaint,
@@ -661,9 +670,9 @@ export function auditModernThemeOwnership({
   const bridgeRoot = postcss.parse(bridgeCss, { from: bridgePath });
 
   projectionRoot.walkRules((rule) => {
-    if (rule.selector !== "[data-tenant]") {
+    if (rule.selector !== MODERN_ENGINE_ROOT) {
       failures.push(
-        `modern framework projection has non-tenant selector: ${rule.selector}`
+        `modern framework projection is not gated on the engine root ${MODERN_ENGINE_ROOT}: ${rule.selector}`
       );
     }
   });
@@ -687,9 +696,9 @@ export function auditModernThemeOwnership({
     }
   });
   bridgeRoot.walkRules((rule) => {
-    if (!rule.selector.includes("[data-tenant]")) {
+    if (!rule.selector.includes(MODERN_ENGINE_ROOT)) {
       failures.push(
-        `modern framework bridge has unscoped selector: ${rule.selector}`
+        `modern framework bridge has a selector not gated on ${MODERN_ENGINE_ROOT}: ${rule.selector}`
       );
     }
   });

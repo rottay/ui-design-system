@@ -3,6 +3,7 @@
 import { ShowroomLink as Link } from '@/components/navigation/link';
 import { ComponentPreview, EngineComparison } from '@/components/playground';
 import { useShowroomRuntime } from '@/components/showroom-context';
+import type { RuntimeQueryEngine } from '@/components/runtime/query';
 import {
   Badge,
   Box,
@@ -121,7 +122,7 @@ const ENGINE_COMPARE_NOTES = [
   'If the scene looks identical everywhere, the runtime signal is too weak.',
 ] as const;
 
-const ENGINE_LABELS: Record<'classic' | 'modern' | 'rustic', string> = {
+const ENGINE_LABELS: Record<RuntimeQueryEngine, string> = {
   classic: 'Classic',
   modern: 'Modern',
   rustic: 'Rustic',

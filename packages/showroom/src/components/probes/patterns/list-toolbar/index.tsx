@@ -41,6 +41,7 @@ import {
   Text,
   type DensityKey,
   type FilterPillConfig,
+  type ImplementedEngineName,
   type ListToolbarProps,
   type ViewMode,
 } from "@rottay/design-system";
@@ -51,7 +52,7 @@ import { ShowroomTenantProvider } from "@/components/showroom-tenant";
 export type P1ListToolbarSource = "bithire-static" | "themanagement-db";
 export type P1ListToolbarLocale = "en" | "es" | "ar";
 export type P1ListToolbarDensity = "compact" | "comfortable" | "spacious";
-export type P1ListToolbarEngine = "modern" | "classic" | "rustic";
+export type P1ListToolbarEngine = ImplementedEngineName;
 export type P1ListToolbarState = "rest";
 
 export interface P1ListToolbarProbeProps {

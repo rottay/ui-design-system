@@ -2,7 +2,18 @@
 
 import { Suspense, createContext, useContext, useMemo, type ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Box, Stack, Text, Button, Badge, Input, Card, Table, Toast } from '@rottay/design-system';
+import {
+  Box,
+  Stack,
+  Text,
+  Button,
+  Badge,
+  Input,
+  Card,
+  Table,
+  Toast,
+  isImplementedEngineName,
+} from '@rottay/design-system';
 import { StateGallery, FLAGSHIP_SLUGS } from '@/components/state-gallery';
 import { TortureSurface, TORTURE_FIXTURES, type TortureFixture, type ProbeEngine } from '@/components/torture-surface';
 
@@ -91,7 +102,7 @@ function TortureFrameContent({ children }: TortureFrameProps) {
   // WO-ENG-11 compares engines on an otherwise identical surface.
   const engine = useMemo<ProbeEngine>(() => {
     const raw = searchParams.get('engine');
-    return raw === 'rustic' || raw === 'classic' ? raw : 'modern';
+    return isImplementedEngineName(raw) ? raw : 'modern';
   }, [searchParams]);
 
   const contentWidth = useMemo(() => {

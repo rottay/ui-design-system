@@ -22,6 +22,17 @@ const MODERN_SKIN_PATH = resolve(
   'src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css',
 );
 
+/**
+ * Rustic is a DECLARED ABSENCE for this pattern (WO-CAN-06).
+ *
+ * `engines/rustic/index.tsx` was `export { default } from '../classic'` -- a
+ * silent alias that painted Classic chrome under the Rustic name, which is
+ * exactly why these arms used to pass. Rustic is frozen and ships no toolbar,
+ * so the contract is now measured over the engines that implement it, and the
+ * absence is asserted once, by name.
+ */
+const IMPLEMENTING_ENGINES = STABLE_ENGINES.filter((engine) => engine !== 'rustic');
+
 const PILLS = [
   {
     key: 'status',
@@ -74,7 +85,7 @@ describe('PatternListToolbar contract', () => {
     });
   });
 
-  it.each(STABLE_ENGINES)(
+  it.each(IMPLEMENTING_ENGINES)(
     'stamps pattern scope classes and data-part=root through the %s engine',
     async (engine) => {
       mockMatchMedia(1280);
@@ -88,7 +99,7 @@ describe('PatternListToolbar contract', () => {
     45000,
   );
 
-  it.each(STABLE_ENGINES)(
+  it.each(IMPLEMENTING_ENGINES)(
     'honors messages chrome copy through the %s engine',
     async (engine) => {
       mockMatchMedia(1280);
@@ -139,7 +150,7 @@ describe('PatternListToolbar contract', () => {
     45000,
   );
 
-  it.each(STABLE_ENGINES)(
+  it.each(IMPLEMENTING_ENGINES)(
     'hides the title cluster when showTitleSection=false through the %s engine',
     async (engine) => {
       mockMatchMedia(1280);
@@ -159,7 +170,7 @@ describe('PatternListToolbar contract', () => {
     45000,
   );
 
-  it.each(STABLE_ENGINES)(
+  it.each(IMPLEMENTING_ENGINES)(
     'gives the search input an accessible name through the %s engine',
     async (engine) => {
       mockMatchMedia(1280);
@@ -177,7 +188,7 @@ describe('PatternListToolbar contract', () => {
     45000,
   );
 
-  it.each(STABLE_ENGINES)(
+  it.each(IMPLEMENTING_ENGINES)(
     'prefers messages.searchLabel over the placeholder for the %s engine',
     async (engine) => {
       mockMatchMedia(1280);
@@ -194,7 +205,7 @@ describe('PatternListToolbar contract', () => {
     45000,
   );
 
-  it.each(['classic', 'rustic'] as const)(
+  it.each(['classic'] as const)(
     'exposes type=button and pressed state on classic-family controls (%s)',
     async (engine) => {
       mockMatchMedia(1280);
@@ -235,7 +246,7 @@ describe('PatternListToolbar contract', () => {
     45000,
   );
 
-  it.each(['classic', 'rustic'] as const)(
+  it.each(['classic'] as const)(
     'uses logical (RTL-safe) geometry on classic-family controls (%s)',
     async (engine) => {
       document.documentElement.setAttribute('dir', 'rtl');
@@ -325,6 +336,16 @@ describe('PatternListToolbar contract', () => {
     fireEvent.click(trigger);
     await waitFor(() => {
       expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    });
+  });
+
+  it('refuses the rustic engine by name instead of painting classic chrome', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    mockMatchMedia(1280);
+    renderWithEngine(<PatternListToolbar engine="rustic" {...baseProps()} />, 'rustic');
+
+    await waitFor(() => {
+      expect(document.querySelector('.ds-pattern-list-toolbar')).toBeNull();
     });
   });
 });

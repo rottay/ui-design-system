@@ -7,6 +7,7 @@
 import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../../../../foundation/contracts';
 import type { SupportedLocale } from '@/foundation/i18n/kernel/contracts';
 import { isTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { isValidEngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 /**
  * Branding is intentionally permissive: only `companyName` is required.
@@ -25,13 +26,8 @@ export function isValidPlan(plan: unknown): plan is TenantPlan {
   return plan === 'starter' || plan === 'pro' || plan === 'enterprise';
 }
 
-/**
- * Engine validation guards the runtime boundary between config data and lazy
- * engine loading.
- */
-export function isValidEngineName(engine: unknown): engine is EngineName {
-  return engine === 'classic' || engine === 'modern' || engine === 'rustic' || engine === 'custom';
-}
+/** Re-exported, not re-implemented: the roster guard is spelled once. */
+export { isValidEngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 const LOWER_KEBAB_TENANT_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 

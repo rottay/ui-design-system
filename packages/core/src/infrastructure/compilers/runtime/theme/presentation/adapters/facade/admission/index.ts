@@ -4,7 +4,11 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { TENANT_CAPABILITY_REGISTRY } from "@/foundation/contracts/composition/tenants/capabilities";
-import type { EngineName } from "@/foundation/contracts/kernel/engine-identity";
+import {
+  FROZEN_ENGINE_NAMES,
+  isAdmittedEngineName,
+  type EngineName,
+} from "@/foundation/contracts/kernel/engine-identity";
 
 /** Expand the registry's brace/star authoring path into concrete BrandTheme prefixes. */
 function authoringPrefixes(brandThemePath: string): readonly string[] {
@@ -57,8 +61,59 @@ export class EngineControlUnsupportedError extends Error {
   }
 }
 
+/** A tenant or intent selected an engine the design system no longer admits. */
+export class EngineNotAdmittedForCompileError extends Error {
+  readonly engine: EngineName;
+
+  constructor(engine: EngineName) {
+    super(
+      `Engine "${engine}" is not admitted. Modern is the only productive engine; ` +
+        `${FROZEN_ENGINE_NAMES.join(", ")} stay in the package for compatibility, ` +
+        "frozen, and no tenant document or preview may select one. A white-label " +
+        "product renders through a registered `custom` pack. There is no fallback engine."
+    );
+    this.name = "EngineNotAdmittedForCompileError";
+    this.engine = engine;
+  }
+}
+
 /**
- * Refuse a tenant selection the active engine cannot deliver.
+ * Refuse a frozen engine BY NAME, before any control is looked at.
+ *
+ * This runs on the tenant-authored path only, which is the whole point: the
+ * DS still COMPILES a frozen engine for its own shipped verticals, its
+ * comparison captures and its posture evidence, and no customer document,
+ * saved or previewed, can select one. `preview` and `tenant-document` are the
+ * same origin class by the intent contract's own definition, so one check
+ * covers both and a preview can never show a publish that would be refused.
+ */
+export function assertEngineAdmitted(engine: EngineName): void {
+  if (!isAdmittedEngineName(engine)) throw new EngineNotAdmittedForCompileError(engine);
+}
+
+/**
+ * The controls this selection activates that the engine declares `unsupported`.
+ *
+ * Pure, and total over every engine including the frozen ones: the posture
+ * evidence for Classic and Rustic is still measured, which is what keeps their
+ * declared contract honest while nobody may select them.
+ */
+export function refusedControls(
+  adapter: EngineAdapter,
+  authoredPaths: TenantAuthoredPaths
+): readonly ControlId[] {
+  return controlsActivatedBy(authoredPaths).filter(
+    (id) => adapter.posture[id] === "unsupported"
+  );
+}
+
+/**
+ * Refuse a tenant selection: first the engine, then the controls.
+ *
+ * The engine check runs FIRST because it is the coarser fact. An engine nobody
+ * may select cannot produce an actionable control-level message -- "classic
+ * does not support typography.scale" invites the reader to pick a control, when
+ * the answer is that the engine is not on offer.
  *
  * `unsupported` is the one posture that means "activating this changes
  * nothing here". Compiling it silently is how a tenant pays for a dial that
@@ -68,9 +123,8 @@ export function assertEngineSupportsActivatedControls(
   adapter: EngineAdapter,
   authoredPaths: TenantAuthoredPaths
 ): void {
-  const refused = controlsActivatedBy(authoredPaths).filter(
-    (id) => adapter.posture[id] === "unsupported"
-  );
+  assertEngineAdmitted(adapter.id);
+  const refused = refusedControls(adapter, authoredPaths);
   if (refused.length === 0) return;
   throw new EngineControlUnsupportedError(
     adapter.id,

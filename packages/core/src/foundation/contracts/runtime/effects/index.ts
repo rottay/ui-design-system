@@ -6,7 +6,7 @@
  * catalog and tenant input cannot add definitions or alter their behavior.
  */
 
-import type { EngineName } from '../../kernel/engine-identity';
+import type { EngineName, ImplementedEngineName } from '../../kernel/engine-identity';
 import type { VerticalId } from '../../kernel/verticals';
 
 export const EFFECT_IDS = Object.freeze([
@@ -47,7 +47,7 @@ export type EffectAriaStrategy =
   | 'described-alternative';
 export type EffectVertical = VerticalId;
 /** Built-in render engines; tenant-defined `custom` is not registry-certifiable. */
-export type EffectEngine = Exclude<EngineName, 'custom'>;
+export type EffectEngine = ImplementedEngineName;
 
 export type NonEmptyReadonlyArray<T> = readonly [T, ...T[]];
 

@@ -16,6 +16,10 @@
  */
 
 import {
+  isImplementedEngineName,
+  type ImplementedEngineName,
+} from '@rottay/design-system';
+import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
@@ -42,7 +46,7 @@ export const TORTURE_FIXTURES: TortureFixture[] = [
 ];
 
 /** Engines the probe may render. The spec's own test compares modern against rustic. */
-export type ProbeEngine = 'modern' | 'rustic' | 'classic';
+export type ProbeEngine = ImplementedEngineName;
 
 export type ManagementFixtureSource = 'legacy-brand-fixture' | 'canonical-db';
 
@@ -121,7 +125,7 @@ export function sanitizeFixture(raw: string | null): TortureFixture {
 }
 
 export function sanitizeEngine(raw: string | null): ProbeEngine {
-  return raw === 'rustic' || raw === 'classic' ? raw : 'modern';
+  return isImplementedEngineName(raw) ? raw : 'modern';
 }
 
 export interface TortureFirstPaintPlan {

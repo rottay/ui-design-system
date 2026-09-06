@@ -65,6 +65,7 @@ import ts from "typescript";
 
 import { repoRoot as findRepoRoot } from "../../../../libraries/repo-root/index.mjs";
 import { readManifestRecords } from "../../../../libraries/manifest/index.mjs";
+import { CASCADE_ENGINE_ORDER } from "../../../../libraries/engine/roster/index.mjs";
 import { classifyCrossFileRows, dispositionIndex } from "../disposition/index.mjs";
 import {
   CHROME_VARIABLES,
@@ -540,7 +541,7 @@ export function authoredCausalRoots(cascadeRootsDir) {
  * three engines: it gets `unknown`, and the site is published in
  * `unknownProvenance`.
  * ========================================================================== */
-export const ENGINES = ["modern", "rustic", "classic"];
+export const ENGINES = CASCADE_ENGINE_ORDER;
 
 export function engineScopeOfPath(rel) {
   for (const engine of ENGINES) {

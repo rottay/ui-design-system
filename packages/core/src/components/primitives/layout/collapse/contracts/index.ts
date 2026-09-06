@@ -32,12 +32,13 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 import type { Size } from '../../../../../foundation/contracts/kernel/common';
 
 /**
  * Supported rendering engines for Collapse components.
  */
-type CollapseEngine = 'classic' | 'modern' | 'rustic';
+type CollapseEngine = EngineName;
 
 /** Collapse size, derived from the canonical {@link Size} scale. */
 export type CollapseSize = Extract<Size, 'sm' | 'md' | 'lg'>;

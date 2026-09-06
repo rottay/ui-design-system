@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot } from '../../repo-root/index.mjs';
 import postcss from 'postcss';
 import ts from 'typescript';
+import { IMPLEMENTED_ENGINE_NAMES } from '../../engine/roster/index.mjs';
 
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 
@@ -1709,7 +1710,7 @@ export function extractRosterProjectedRegistryFacts(text, fileName, options) {
  * recorded as provenance, never hidden.
  */
 const UI_TIER_SEGMENTS = ['primitives', 'patterns', 'structures', 'surfaces'];
-const CANONICAL_ENGINE_NAMES = ['classic', 'modern', 'rustic'];
+const CANONICAL_ENGINE_NAMES = IMPLEMENTED_ENGINE_NAMES;
 const FORWARDER_MAX_DEPTH = 16;
 const FORWARDER_MAX_CARRIER_PASSES = 8;
 

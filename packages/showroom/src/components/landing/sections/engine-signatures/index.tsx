@@ -1,4 +1,6 @@
-export type EngineSignatureId = 'classic' | 'modern' | 'rustic';
+import type { ImplementedEngineName } from '@rottay/design-system';
+
+export type EngineSignatureId = ImplementedEngineName;
 
 export interface EngineSignaturesSectionProps {
   className?: string;

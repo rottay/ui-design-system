@@ -34,11 +34,12 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 /**
  * Supported rendering engines for Layout components.
  */
-type LayoutEngine = 'classic' | 'modern' | 'rustic';
+type LayoutEngine = EngineName;
 
 /**
  * Props for the main Layout container component.

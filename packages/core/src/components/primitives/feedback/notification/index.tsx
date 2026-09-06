@@ -20,6 +20,7 @@
 import React from 'react';
 import { useEngineContext } from '../../../../infrastructure/runtime/engines/composition/react/provider';
 import type { EngineName } from '../../../../foundation/contracts';
+import type { ImplementedEngineName } from '../../../../foundation/contracts/kernel/engine-identity';
 import * as classicEngine from './engines/classic';
 import * as modernEngine from './engines/modern';
 import * as rusticEngine from './engines/rustic';
@@ -42,15 +43,18 @@ const notificationEngines = {
   classic: classicEngine,
   modern: modernEngine,
   rustic: rusticEngine,
-} as const satisfies Record<Exclude<EngineName, 'custom'>, typeof classicEngine>;
+} as const satisfies Record<ImplementedEngineName, typeof classicEngine>;
 
 /**
- * Resolve the notification runtime for the active engine.
- * Custom packs fall back to classic until they register their own provider.
+ * Resolve the notification runtime for the active engine. A pack that registers
+ * no notification provider gets a named refusal, not Ant Design.
  */
 function resolveNotificationEngine(engine: EngineName) {
   if (engine === 'custom') {
-    return classicEngine;
+    throw new Error(
+      'Notification has no custom implementation. A component pack must register ' +
+        'its own notification runtime; there is no fallback engine.'
+    );
   }
 
   return notificationEngines[engine];

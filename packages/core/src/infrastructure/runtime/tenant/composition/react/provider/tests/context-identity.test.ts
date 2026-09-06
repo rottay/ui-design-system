@@ -530,7 +530,7 @@ describe('production source predicate', () => {
 describe('tenant context consumer inventory', () => {
   const inventory = discoverTenantContextConsumers();
 
-  it('is exactly the five registered live consumers -- a sixth, or a reverted specifier, fails', () => {
+  it('is exactly the six registered live consumers -- a seventh, or a reverted specifier, fails', () => {
     expect(inventory).toEqual([
       // The inventory is sorted by path, and the UI tier now lives under
       // `components/`, which sorts before `infrastructure/`.
@@ -548,6 +548,14 @@ describe('tenant context consumer inventory', () => {
         file: 'infrastructure/runtime/engines/presentation/component-factory/index.tsx',
         binding: 'TenantContext',
         specifier: '../../../tenant/foundation/context',
+      },
+      // The SYNC sibling of the factory above (WO-CAN-06). Typography renders
+      // inside every other component's tree, so it cannot suspend; it asks the
+      // same three questions and therefore reads the same one context.
+      {
+        file: 'infrastructure/runtime/engines/presentation/component-factory/sync/index.tsx',
+        binding: 'TenantContext',
+        specifier: '../../../../tenant/foundation/context',
       },
       {
         file: 'infrastructure/runtime/personality/presentation/resolution/chart-personality/index.ts',

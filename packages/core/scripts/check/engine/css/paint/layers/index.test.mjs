@@ -74,7 +74,9 @@ test("Modern projects framework tokens from canonical DS authority before paint"
   const bridgeCss = readFileSync(bridgePath, "utf8");
   const bridge = postcss.parse(bridgeCss);
 
-  projection.walkRules((rule) => assert.equal(rule.selector, "[data-tenant]"));
+  projection.walkRules((rule) =>
+    assert.equal(rule.selector, "[data-engine='modern']")
+  );
   projection.walkDecls((declaration) => {
     assert.doesNotMatch(declaration.prop, /^--ds-/);
     assert.match(declaration.value.trim(), /^var\(--ds-[a-z0-9-]+\)$/);
@@ -82,7 +84,9 @@ test("Modern projects framework tokens from canonical DS authority before paint"
   paint.walkDecls((declaration) =>
     assert.doesNotMatch(declaration.prop, /^--/)
   );
-  bridge.walkRules((rule) => assert.match(rule.selector, /\[data-tenant\]/));
+  bridge.walkRules((rule) =>
+    assert.match(rule.selector, /\[data-engine='modern'\]/)
+  );
   bridge.walkDecls((declaration) =>
     assert.doesNotMatch(declaration.prop, /^--/)
   );

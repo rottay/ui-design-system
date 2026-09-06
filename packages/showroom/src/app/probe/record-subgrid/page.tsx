@@ -2,7 +2,13 @@
 
 import { Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Box, Stack, Text, Descriptions } from '@rottay/design-system';
+import {
+  Box,
+  Stack,
+  Text,
+  Descriptions,
+  isImplementedEngineName,
+} from '@rottay/design-system';
 import { TortureSurface, type TortureFixture, type ProbeEngine } from '@/components/torture-surface';
 
 // ---------------------------------------------------------------------------
@@ -19,15 +25,13 @@ import { TortureSurface, type TortureFixture, type ProbeEngine } from '@/compone
 // visible signature of the subgrid upgrade over the old fixed one-third split.
 // The row stays a padded/bordered box, which is why subgrid (not
 // display:contents) is required. Query params:
-//   ?engine=modern|rustic    which engine renders (default modern)
+//   ?engine=<implemented>    which engine renders (default modern)
 //   ?fixture=rottay|bithire  which palette/ground owns the page (rottay = dark,
 //                            bithire = light); default rottay
 // ---------------------------------------------------------------------------
 
-const ENGINES: ProbeEngine[] = ['modern', 'rustic'];
-
 function sanitizeEngine(raw: string | null): ProbeEngine {
-  return raw && (ENGINES as string[]).includes(raw) ? (raw as ProbeEngine) : 'modern';
+  return isImplementedEngineName(raw) ? raw : 'modern';
 }
 
 function sanitizeFixture(raw: string | null): TortureFixture {

@@ -47,19 +47,29 @@ import type { LinkProps } from '../../contracts';
 import { ClassicLink } from '../../engines/classic';
 import { ModernLink } from '../../engines/modern';
 import { RusticLink } from '../../engines/rustic';
-import { useDeclaredEngine } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
-import type { ImplementedEngineName } from '../../../../../../infrastructure/runtime/engines/presentation/component-factory';
+import {
+  createSyncEngineComponent,
+  type SyncEngineImplementations,
+} from '../../../../../../infrastructure/runtime/engines/presentation/component-factory/sync';
 
 type LinkImplementation = ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>;
 
 /**
- * Map of engine names to their respective Link implementations.
+ * Engine resolution goes through the factory, so `custom` reaches a registered
+ * component pack under the name `Link` exactly as every lazy family does. The
+ * SYNC factory is what keeps typography out of a Suspense boundary: it renders
+ * inside every other component's tree and must not flash on first paint.
  */
-const engineMap: Record<ImplementedEngineName, LinkImplementation> = {
+const LinkImplementations: SyncEngineImplementations<LinkProps> = {
   classic: ClassicLink,
   modern: ModernLink,
   rustic: RusticLink,
 };
+
+const ResolvedLink = createSyncEngineComponent<LinkProps>(
+  'Link',
+  LinkImplementations
+);
 
 /**
  * Typography Link component with engine-aware rendering.
@@ -93,20 +103,9 @@ const engineMap: Record<ImplementedEngineName, LinkImplementation> = {
  * @returns The engine-specific anchor element with consistent link styling
  */
 export const TypographyLink = forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ engine, ...props }, ref) => {
-    const declaredEngine = useDeclaredEngine();
-    const activeEngine = engine ?? declaredEngine;
-    const Component = engineMap[activeEngine as ImplementedEngineName] as
-      | LinkImplementation
-      | undefined;
-    if (!Component) {
-      throw new Error(
-        `TypographyLink: no implementation for engine ${JSON.stringify(activeEngine)}. ` +
-          'Pass an `engine` prop or mount a provider; there is no fallback engine.'
-      );
-    }
+  (props, ref) => {
     // Link does not apply personality tokens; styling is fully engine-driven
-    return <Component ref={ref} {...props} />;
+    return <ResolvedLink ref={ref} {...props} />;
   }
 );
 

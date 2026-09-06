@@ -1,6 +1,7 @@
 import {
   EFFECT_IDS,
   type EffectDefinition,
+  type EffectEngine,
   type EffectId,
   type EffectProvenance,
   type NonEmptyReadonlyArray,
@@ -8,15 +9,16 @@ import {
 } from '../../../../../foundation/contracts/runtime/effects';
 import { FIRST_PARTY_VERTICAL_SLUGS } from '../../../../../foundation/contracts/kernel/verticals';
 import { isEffectDefinition } from '../../foundation/validation';
+import { IMPLEMENTED_ENGINE_NAMES } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 const CANONICAL_EFFECT_AUDIT =
   'docs-engineering/engineering/audits/ds-improvements/12-data-visualization-spatial-and-expressive-system.md';
 const OWNER_CONTINUATION = 'roadmap/craft.md#owner-continuation--efx-01a-effect-registry';
 
-// Derived from the roster so "every vertical" cannot mean a different set here
-// than it does in the validator two modules away.
+// Derived from the rosters so "every vertical" and "every engine" cannot mean a
+// different set here than they do in the validator two modules away.
 const ALL_VERTICALS = FIRST_PARTY_VERTICAL_SLUGS;
-const ALL_ENGINES = ['classic', 'modern', 'rustic'] as const;
+const ALL_ENGINES = IMPLEMENTED_ENGINE_NAMES as NonEmptyReadonlyArray<EffectEngine>;
 const UNMEASURED_BUDGET = {
   status: 'unmeasured',
   evidence: OWNER_CONTINUATION,

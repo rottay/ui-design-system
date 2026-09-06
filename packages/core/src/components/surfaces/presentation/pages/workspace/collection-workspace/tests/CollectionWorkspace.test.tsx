@@ -17,6 +17,43 @@ import {
   type ResponsiveContextValue,
 } from '../../../../../../../infrastructure/runtime/responsive';
 
+/**
+ * `PatternListToolbar` declares NO rustic implementation (`rustic: null`,
+ * WO-CAN-06), so a toolbar assertion is measured on Modern -- the one
+ * productive engine -- and awaits the lazily loaded toolbar before querying.
+ */
+const RESOLVED_DESKTOP_TEST_CONTEXT: ResponsiveContextValue = {
+  hasResolvedViewport: true,
+  deviceClass: 'desktop',
+  activeBreakpoint: 'lg',
+  isPhone: false,
+  isTablet: false,
+  isDesktop: true,
+  pointer: 'fine',
+  orientation: 'landscape',
+  prefersReducedMotion: false,
+  isPhoneOrTablet: false,
+  isTabletOrDesktop: true,
+  isTouchDevice: false,
+  virtualKeyboardInset: 0,
+  isVirtualKeyboardOpen: false,
+};
+
+async function renderToolbarSurface(
+  ui: React.ReactElement,
+  options: Parameters<typeof renderSurface>[1] = {}
+): Promise<ReturnType<typeof renderSurface>> {
+  const result = renderSurface(ui, {
+    engine: 'modern',
+    responsiveContext: RESOLVED_DESKTOP_TEST_CONTEXT,
+    ...options,
+  });
+  await waitFor(() =>
+    expect(result.container.querySelector('.ds-pattern-list-toolbar')).not.toBeNull()
+  );
+  return result;
+}
+
 // ---------------------------------------------------------------------------
 // Test data helpers
 // ---------------------------------------------------------------------------
@@ -100,6 +137,19 @@ function queryDensityControl(container: HTMLElement): HTMLButtonElement | null {
   return (
     queryButtonByAriaOrText(container, 'Compact density', /^compact$/i) ??
     container.querySelector<HTMLButtonElement>('button[aria-label="Settings"]') ??
+    // Modern names the same dropdown "Column settings"; density lives inside it.
+    container.querySelector<HTMLButtonElement>('button[aria-label="Column settings"]') ??
+    container.querySelector<HTMLButtonElement>('button[aria-label="More options"]')
+  );
+}
+
+/**
+ * The view-mode affordance, in whichever arm the engine renders: an inline
+ * switch when the toolbar has room, the overflow trigger when it does not.
+ */
+function queryViewModeControl(container: HTMLElement): HTMLButtonElement | null {
+  return (
+    queryButtonByAriaOrText(container, 'Card view', /^cards$/i) ??
     container.querySelector<HTMLButtonElement>('button[aria-label="More options"]')
   );
 }
@@ -1416,7 +1466,7 @@ describe('CollectionWorkspaceSurface', () => {
   // -------------------------------------------------------------------------
 
   it('renders a search input when search is enabled', async () => {
-    renderSurface(
+    await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -1431,7 +1481,7 @@ describe('CollectionWorkspaceSurface', () => {
   });
 
   it('uses default placeholder when none is specified', async () => {
-    renderSurface(
+    await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -1448,7 +1498,7 @@ describe('CollectionWorkspaceSurface', () => {
   it('calls search onChange when typing in the search input', async () => {
     const onSearchChange = vi.fn();
 
-    renderSurface(
+    await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -1480,7 +1530,7 @@ describe('CollectionWorkspaceSurface', () => {
 
   it('renders a direct Export button when a single format is configured', async () => {
     const onExport = vi.fn();
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -1502,7 +1552,7 @@ describe('CollectionWorkspaceSurface', () => {
   it('calls onExport directly when a single format button is clicked', async () => {
     const onExport = vi.fn();
 
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -1527,7 +1577,7 @@ describe('CollectionWorkspaceSurface', () => {
   it('defaults to csv when no formats are specified', async () => {
     const onExport = vi.fn();
 
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -1550,7 +1600,7 @@ describe('CollectionWorkspaceSurface', () => {
   it('uses the first configured export format for the toolbar export action', async () => {
     const onExport = vi.fn();
 
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -1646,7 +1696,7 @@ describe('CollectionWorkspaceSurface', () => {
   // -------------------------------------------------------------------------
 
   it('renders view mode toggle buttons when viewMode is enabled', async () => {
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -1677,7 +1727,7 @@ describe('CollectionWorkspaceSurface', () => {
     }));
 
     try {
-      const { container } = renderSurface(
+      const { container } = await renderToolbarSurface(
         <ResponsiveContext.Provider value={TABLET_RESPONSIVE_CONTEXT}>
           <CollectionWorkspaceSurface
             {...buildProps({
@@ -1707,11 +1757,13 @@ describe('CollectionWorkspaceSurface', () => {
       );
 
       await screen.findByText('Test Collection');
-      const root = container.querySelector('[data-component="collection-workspace"]');
+      // By CLASS: `data-component` belongs to the engine's own root primitive,
+      // so the surface's anatomy is its className, not that attribute.
+      const root = container.querySelector('.ds-collection-workspace');
       expect(root).toHaveAttribute('data-view-mode', 'table');
       expect(container.querySelector('table')).toBeInTheDocument();
       expect(screen.queryByTestId('adaptive-card-1')).not.toBeInTheDocument();
-      const cardsButton = queryButtonByAriaOrText(container, 'Card view', /^cards$/i);
+      const cardsButton = queryViewModeControl(container);
       expect(cardsButton).toBeInTheDocument();
       if (!cardsButton) throw new Error('Cards view button not found');
       fireEvent.click(cardsButton);
@@ -1814,7 +1866,7 @@ describe('CollectionWorkspaceSurface', () => {
   it('switches to cards view and renders card content', async () => {
     const onViewChange = vi.fn();
 
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -2475,7 +2527,7 @@ describe('CollectionWorkspaceSurface', () => {
   // -------------------------------------------------------------------------
 
   it('renders a density control when density control is enabled', async () => {
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -2492,7 +2544,7 @@ describe('CollectionWorkspaceSurface', () => {
   it('exposes density changes when the active engine renders inline density options', async () => {
     const onDensityChange = vi.fn();
 
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {
@@ -2639,7 +2691,7 @@ describe('CollectionWorkspaceSurface', () => {
   // -------------------------------------------------------------------------
 
   it('renders multiple controls together in the toolbar', async () => {
-    const { container } = renderSurface(
+    const { container } = await renderToolbarSurface(
       <CollectionWorkspaceSurface
         {...buildProps({
           controls: {

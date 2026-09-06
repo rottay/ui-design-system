@@ -93,6 +93,12 @@ const ENGINE_LABELS: Record<PrimitiveEntry['engines'][number], string> = {
   modern: 'Modern',
   rustic: 'Rustic',
 };
+/** Dot colour per engine. TOTAL over the roster: a new engine is a type error. */
+const ENGINE_DOTS: Record<PrimitiveEntry['engines'][number], string> = {
+  classic: 'var(--ds-color-info-500)',
+  modern: 'var(--ds-color-success-500)',
+  rustic: 'var(--ds-color-warning-500)',
+};
 const CATEGORY_PREVIEW_COPY: Record<
   PrimitiveCategory,
   {
@@ -544,12 +550,7 @@ function PrimitiveReferenceCard({
                             width: 7,
                             height: 7,
                             borderRadius: 999,
-                            background:
-                              engine === 'classic'
-                                ? 'var(--ds-color-info-500)'
-                                : engine === 'modern'
-                                  ? 'var(--ds-color-success-500)'
-                                  : 'var(--ds-color-warning-500)',
+                            background: ENGINE_DOTS[engine],
                             flexShrink: 0,
                           }}
                         />

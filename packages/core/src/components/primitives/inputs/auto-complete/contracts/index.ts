@@ -34,6 +34,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 import type { Size } from '../../../../../foundation/contracts/kernel/common';
 
 /**
@@ -166,7 +167,7 @@ export interface AutoCompleteProps {
   /** Additional styles */
   style?: CSSProperties;
   /** Rendering engine override */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 }
 
 /**

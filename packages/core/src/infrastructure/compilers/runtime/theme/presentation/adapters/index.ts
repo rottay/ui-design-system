@@ -1,9 +1,12 @@
 export { defineEngineAdapter } from "./foundation/definition";
 export type { EngineAdapterDefinition } from "./foundation/definition";
 export {
+  assertEngineAdmitted,
   assertEngineSupportsActivatedControls,
   controlsActivatedBy,
   EngineControlUnsupportedError,
+  EngineNotAdmittedForCompileError,
+  refusedControls,
 } from "./facade/admission";
 export {
   clearRegisteredEngineAdapters,

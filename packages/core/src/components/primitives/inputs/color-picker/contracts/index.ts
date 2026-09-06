@@ -35,6 +35,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 import type { Size } from '../../../../../foundation/contracts/kernel/common';
 
 /**
@@ -161,7 +162,7 @@ export interface ColorPickerProps {
   /** Custom render function for the color panel */
   panelRender?: (panel: ReactNode) => ReactNode;
   /** Rendering engine override */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 }
 
 /**

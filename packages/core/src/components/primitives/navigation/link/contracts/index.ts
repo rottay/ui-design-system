@@ -31,6 +31,7 @@
  */
 
 import type { ReactNode, CSSProperties, AnchorHTMLAttributes } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 // ============================================================================
 // Link Type Enum
@@ -184,7 +185,7 @@ export interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>,
    * <Link engine="rustic" href="/about">Vanilla CSS Link</Link>
    * ```
    */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 
   /**
    * Additional CSS class names to apply to the link element.

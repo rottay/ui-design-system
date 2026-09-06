@@ -194,10 +194,11 @@ describe('PatternListToolbar behavior', () => {
   });
 
   // ------------------------------------------------------------------
-  // Classic engine (desktop posture; rustic shares the implementation)
+  // Classic engine (desktop posture). Rustic is a declared absence for this
+  // pattern since WO-CAN-06: it used to be an alias of this very file.
   // ------------------------------------------------------------------
 
-  it.each(['classic', 'rustic'] as const)(
+  it.each(['classic'] as const)(
     'forwards classic-family filter pill and view toggle clicks (%s)',
     async (engine) => {
       mockMatchMedia(1280);

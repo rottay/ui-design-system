@@ -2,17 +2,21 @@
 
 import { Box, Flex, Stack, Text, useTokens } from '@rottay/design-system';
 import { SHOWROOM_SURFACES } from '../tokens/surfaces';
+import { IMPLEMENTED_ENGINE_NAMES, type ImplementedEngineName } from '@rottay/design-system';
 
 export interface EngineSwitcherProps {
-  value: 'classic' | 'modern' | 'rustic';
-  onChange: (engine: 'classic' | 'modern' | 'rustic') => void;
+  value: ImplementedEngineName;
+  onChange: (engine: ImplementedEngineName) => void;
 }
 
-const ENGINES = [
-  { id: 'classic' as const, label: 'Classic', subtitle: 'Ant Design' },
-  { id: 'modern' as const, label: 'Modern', subtitle: 'DaisyUI' },
-  { id: 'rustic' as const, label: 'Rustic', subtitle: 'Vanilla CSS' },
-];
+/** Copy per engine. TOTAL over the roster: a new engine is a type error here. */
+const ENGINE_COPY: Record<ImplementedEngineName, { label: string; subtitle: string }> = {
+  classic: { label: 'Classic', subtitle: 'Ant Design' },
+  modern: { label: 'Modern', subtitle: 'Rottay-native' },
+  rustic: { label: 'Rustic', subtitle: 'Vanilla CSS' },
+};
+
+const ENGINES = IMPLEMENTED_ENGINE_NAMES.map((id) => ({ id, ...ENGINE_COPY[id] }));
 
 export function EngineSwitcher({ value, onChange }: EngineSwitcherProps) {
   const tokens = useTokens();
@@ -28,7 +32,7 @@ export function EngineSwitcher({ value, onChange }: EngineSwitcherProps) {
         boxShadow: SHOWROOM_SURFACES.shadow,
       }}
     >
-      {ENGINES.map((engine) => {
+      {ENGINES.map((engine, index) => {
         const isActive = value === engine.id;
         return (
           <Box
@@ -44,7 +48,7 @@ export function EngineSwitcher({ value, onChange }: EngineSwitcherProps) {
               background: isActive ? SHOWROOM_SURFACES.subtle : SHOWROOM_SURFACES.surface,
               color: SHOWROOM_SURFACES.text,
               border: 'none',
-              borderRight: engine.id !== 'rustic' ? `1px solid ${SHOWROOM_SURFACES.border}` : 'none',
+              borderRight: index < ENGINES.length - 1 ? `1px solid ${SHOWROOM_SURFACES.border}` : 'none',
               transition: 'background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease',
               outline: 'none',
               boxShadow: isActive

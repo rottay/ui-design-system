@@ -53,8 +53,10 @@ import {
   mergePersonalityStyle,
   resolveTypographyTextStyle,
 } from '@/foundation/tokens/ts/runtime/personality';
-import { useDeclaredEngine } from '../../../../../../infrastructure/runtime/engines/composition/react/provider';
-import type { ImplementedEngineName } from '../../../../../../infrastructure/runtime/engines/presentation/component-factory';
+import {
+  createSyncEngineComponent,
+  type SyncEngineImplementations,
+} from '../../../../../../infrastructure/runtime/engines/presentation/component-factory/sync';
 import type { ParagraphProps } from '../../contracts';
 import { ClassicParagraph } from '../../engines/classic';
 import { ModernParagraph } from '../../engines/modern';
@@ -63,13 +65,21 @@ import { RusticParagraph } from '../../engines/rustic';
 type ParagraphImplementation = ForwardRefExoticComponent<ParagraphProps & RefAttributes<HTMLParagraphElement>>;
 
 /**
- * Map of engine names to their respective Paragraph implementations.
+ * Engine resolution goes through the factory, so `custom` reaches a registered
+ * component pack under the name `Paragraph` exactly as every lazy family does. The
+ * SYNC factory is what keeps typography out of a Suspense boundary: it renders
+ * inside every other component's tree and must not flash on first paint.
  */
-const engineMap: Record<ImplementedEngineName, ParagraphImplementation> = {
+const ParagraphImplementations: SyncEngineImplementations<ParagraphProps> = {
   classic: ClassicParagraph,
   modern: ModernParagraph,
   rustic: RusticParagraph,
 };
+
+const ResolvedParagraph = createSyncEngineComponent<ParagraphProps>(
+  'Paragraph',
+  ParagraphImplementations
+);
 
 /**
  * Typography Paragraph component with engine-aware rendering.
@@ -102,23 +112,12 @@ const engineMap: Record<ImplementedEngineName, ParagraphImplementation> = {
  * @returns The engine-specific paragraph element with personality token styles merged in
  */
 export const TypographyParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
-  ({ engine, ...props }, ref) => {
-    const declaredEngine = useDeclaredEngine();
-    const activeEngine = engine ?? declaredEngine;
+  (props, ref) => {
     // Resolve optional personality tokens from context (if a PersonalityProvider is present)
     const tokens = useOptionalTokens();
-    const Component = engineMap[activeEngine as ImplementedEngineName] as
-      | ParagraphImplementation
-      | undefined;
-    if (!Component) {
-      throw new Error(
-        `TypographyParagraph: no implementation for engine ${JSON.stringify(activeEngine)}. ` +
-          'Pass an `engine` prop or mount a provider; there is no fallback engine.'
-      );
-    }
 
     return (
-      <Component
+      <ResolvedParagraph
         ref={ref}
         {...props}
         style={mergePersonalityStyle(

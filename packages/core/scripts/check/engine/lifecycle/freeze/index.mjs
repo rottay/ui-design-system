@@ -1,7 +1,38 @@
 #!/usr/bin/env node
 /**
- * engine-freeze-gate — Classic/Rustic are FROZEN (engine policy 2026-07-25,
- * independent code audit): implementation and visual-excellence effort is exclusively Modern.
+ * engine-freeze-gate — Classic/Rustic are FROZEN.
+ *
+ * THE POLICY (owner decision 2026-09-05, restating and widening the 2026-07-25
+ * engine policy; WO-CAN-06)
+ * -------------------------------------------------------------------------
+ * Modern is the only PRODUCTIVE engine. Classic and Rustic stay in the package
+ * for compatibility, frozen, and no work order in any lane adds content,
+ * tokens, skins, tests or accessibility work to them. What is still asserted
+ * about them is their DECLARED CONTRACT and nothing else: the adapter posture
+ * the drill measures, the roster membership, the loader totality, and the
+ * absence of forwarding. Nobody may SELECT them either -- `ADMITTED_ENGINE_NAMES`
+ * in the identity contract excludes them, and the engine resolver and the
+ * compile-door admission refuse a vertical or tenant that names one, by name.
+ * The one remaining door is an explicit `forceEngine` written in code, for the
+ * engine comparison and the capture routes.
+ *
+ * This gate is the WRITE half of that policy: it makes a frozen-engine edit
+ * impossible without a named, reasoned, content-pinned exception. Two things
+ * follow that a reader should not have to infer:
+ *
+ *   - A FAMILY CUT may not touch them. Removing or reshaping a family is
+ *     content work on whatever engines implement it, so a cut that reaches
+ *     `engines/classic/` or `engines/rustic/` needs an exception per file and
+ *     will not get one for a reshape.
+ *   - Retiring a forwarding ALIAS is not content work, and is authorizable. A
+ *     file whose whole body is `export { default } from '../classic'` is not a
+ *     Rustic implementation; it is Classic wearing Rustic's name, and
+ *     `engine-wiring-gate`'s `forwarding-engine` rule now says so.
+ *   - `styles.css` may keep shipping both engines to external consumers until
+ *     WO-RET-02 decides the bundle split. Bundling is not content work either.
+ *
+ * The 2026-07-25 wording, kept because the sealed base predates the decision
+ * above: implementation and visual-excellence effort is exclusively Modern;
  * Classic/Rustic are read-only except a minimal shared-contract compile fix.
  *
  * WHAT THIS GATE AUDITS

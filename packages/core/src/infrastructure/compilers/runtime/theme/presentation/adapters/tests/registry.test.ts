@@ -10,15 +10,22 @@ import type {
   ControlId,
   EngineAdapter,
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
-import { ENGINE_NAMES, type EngineName } from "@/foundation/contracts/kernel/engine-identity";
+import {
+  ENGINE_NAMES,
+  FROZEN_ENGINE_NAMES,
+  type EngineName,
+} from "@/foundation/contracts/kernel/engine-identity";
 
 import { classicThemeAdapter } from "../presentation/classic";
 import { defineEngineAdapter } from "../foundation/definition";
 import { modernThemeAdapter } from "../presentation/modern";
 import {
   EngineControlUnsupportedError,
+  EngineNotAdmittedForCompileError,
+  assertEngineAdmitted,
   assertEngineSupportsActivatedControls,
   controlsActivatedBy,
+  refusedControls,
 } from "../facade/admission";
 import {
   THEME_ENGINE_ADAPTERS,
@@ -109,33 +116,69 @@ describe("activation is read off the tenant's own authored paths", () => {
   });
 });
 
-describe("activating an unsupported control is refused, never quietly compiled", () => {
-  it("refuses a rustic tenant that dials motion", () => {
-    expect(() =>
-      assertEngineSupportsActivatedControls(rusticThemeAdapter, new Set(["motion.intensity"]))
-    ).toThrow(EngineControlUnsupportedError);
+describe("a frozen engine is refused by name before any control is looked at", () => {
+  it("refuses every frozen roster entry on the tenant-authored path", () => {
+    for (const frozen of FROZEN_ENGINE_NAMES) {
+      const adapter = THEME_ENGINE_ADAPTERS[frozen];
+      expect(adapter).not.toBeNull();
+      expect(() =>
+        assertEngineSupportsActivatedControls(
+          adapter as EngineAdapter,
+          new Set(["palette.primaryColor"])
+        )
+      ).toThrow(EngineNotAdmittedForCompileError);
+      expect(() =>
+        assertEngineSupportsActivatedControls(
+          adapter as EngineAdapter,
+          new Set(["palette.primaryColor"])
+        )
+      ).toThrow(new RegExp(`Engine "${frozen}" is not admitted`));
+    }
   });
 
-  it("refuses a classic tenant that selects an anatomy variant", () => {
+  it("refuses the engine even for a control that engine natively supports", () => {
+    // `palette.primaryColor` is native on classic. The refusal is not about the
+    // control: it is about the engine, and reporting the control instead would
+    // invite the reader to pick a different dial.
     expect(() =>
-      assertEngineSupportsActivatedControls(
-        classicThemeAdapter,
-        new Set(["chrome.cardComponent.anatomy"])
-      )
-    ).toThrow(/chrome.anatomy/);
+      assertEngineSupportsActivatedControls(classicThemeAdapter, new Set(["palette.primaryColor"]))
+    ).toThrow(EngineNotAdmittedForCompileError);
+  });
+
+  it("does not refuse the admitted engine", () => {
+    expect(() => assertEngineAdmitted(modernThemeAdapter.id)).not.toThrow();
+  });
+});
+
+describe("activating an unsupported control is refused, never quietly compiled", () => {
+  it("names a rustic tenant's motion dial as unsupported", () => {
+    expect(refusedControls(rusticThemeAdapter, new Set(["motion.intensity"]))).toContain(
+      "motion.dial" as ControlId
+    );
+  });
+
+  it("names a classic tenant's anatomy selection as unsupported", () => {
+    expect(
+      refusedControls(classicThemeAdapter, new Set(["chrome.cardComponent.anatomy"]))
+    ).toContain("chrome.anatomy" as ControlId);
   });
 
   it("names the engine and the reason, so the refusal is actionable", () => {
     try {
-      assertEngineSupportsActivatedControls(classicThemeAdapter, new Set(["typography.scale"]));
-      expect.unreachable("expected a refusal");
-    } catch (error) {
-      expect(error).toBeInstanceOf(EngineControlUnsupportedError);
-      const refusal = error as EngineControlUnsupportedError;
-      expect(refusal.engine).toBe("classic");
-      expect(refusal.controls).toContain("typography.scale" as ControlId);
-      expect(refusal.message).toMatch(/antd sizes from its own fontSize token/);
+      assertEngineSupportsActivatedControls(modernThemeAdapter, new Set(["typography.scale"]));
+    } catch {
+      expect.unreachable("modern is native for every control");
     }
+    // The message shape is exercised on the engine that can still reach it: an
+    // adapter registered by a pack, whose posture the DS does not author.
+    const refusal = new EngineControlUnsupportedError(
+      classicThemeAdapter.id,
+      ["typography.scale" as ControlId],
+      ["typography.scale: antd sizes from its own fontSize token."]
+    );
+    expect(refusal.engine).toBe("classic");
+    expect(refusal.controls).toContain("typography.scale" as ControlId);
+    expect(refusal.message).toMatch(/antd sizes from its own fontSize token/);
   });
 
   it("admits the same selection under modern, which is native for every control", () => {
@@ -147,9 +190,7 @@ describe("activating an unsupported control is refused, never quietly compiled",
     ).not.toThrow();
   });
 
-  it("admits a control the engine supports", () => {
-    expect(() =>
-      assertEngineSupportsActivatedControls(classicThemeAdapter, new Set(["palette.primaryColor"]))
-    ).not.toThrow();
+  it("leaves a control the engine supports out of the refusal list", () => {
+    expect(refusedControls(classicThemeAdapter, new Set(["palette.primaryColor"]))).toEqual([]);
   });
 });

@@ -4,6 +4,7 @@ import {
   type EffectId,
 } from '../../../../../foundation/contracts/runtime/effects';
 import { FIRST_PARTY_VERTICAL_SLUGS } from '../../../../../foundation/contracts/kernel/verticals';
+import { IMPLEMENTED_ENGINE_NAMES } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 const PURPOSES = new Set([
   'state',
@@ -42,7 +43,7 @@ const ARIA_STRATEGIES = new Set([
 // and this one kept silently rejecting `rottay` as an unknown vertical,
 // throwing `Invalid effect definition in closed registry` at module load.
 const VERTICALS: ReadonlySet<string> = new Set(FIRST_PARTY_VERTICAL_SLUGS);
-const ENGINES = new Set(['classic', 'modern', 'rustic']);
+const ENGINES: ReadonlySet<string> = new Set(IMPLEMENTED_ENGINE_NAMES);
 const REDUCED_FALLBACKS = new Set([
   'final-state',
   'static-alternative',

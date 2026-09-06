@@ -47,6 +47,7 @@ import { join, dirname, relative } from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
+import { CASCADE_ENGINE_ORDER } from '../../../../libraries/engine/roster/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ABS = findRepoRoot(HERE);
@@ -572,7 +573,7 @@ const DERIVATION_KINDS = [
  * `scopeContradictions`. Both lists must be empty to close PRE_F4B.
  * ========================================================================== */
 
-const ENGINE_VOCABULARY = ["modern", "rustic", "classic"];
+const ENGINE_VOCABULARY = CASCADE_ENGINE_ORDER;
 
 /**
  * The CLOSED grammar, seeded BY PATTERN FAMILY and never by a literal census

@@ -14,7 +14,7 @@
  *   recipes and scoped semantic tokens.
  */
 
-[data-tenant] {
+[data-engine='modern'] {
   /* DaisyUI colour vocabulary projected from the compiled DS authority. */
   --color-primary: var(--ds-color-primary);
   --color-primary-content: var(--ds-button-primary-color);

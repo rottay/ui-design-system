@@ -20021,7 +20021,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  *   recipes and scoped semantic tokens.
  */
 
-[data-tenant] {
+[data-engine='modern'] {
   /* DaisyUI colour vocabulary projected from the compiled DS authority. */
   --color-primary: var(--ds-color-primary);
   --color-primary-content: var(--ds-button-primary-color);
@@ -20067,7 +20067,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * All tenant CSS must provide --color-* in oklch format.
  *
  * Architecture:
- * - Uses [data-tenant] selector for tenant-scoped overrides
+ * - Gated on [data-engine='modern'], the CSS engine-selection authority (D-18)
  * - All values reference --ds-* variables from default.css
  * - Covers all interactive states: hover, focus, active, disabled
  * - Maintains visual parity with the Classic engine
@@ -20081,7 +20081,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    BUTTON - .btn
    ============================================================================= */
 
-[data-tenant] .btn {
+[data-engine='modern'] .btn {
   font-family: var(--ds-font-family-base);
   font-weight: var(--ds-button-font-weight);
   border-radius: var(--ds-button-md-radius);
@@ -20096,28 +20096,28 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   will-change: transform;
 }
 
-[data-tenant] .btn:focus-visible {
+[data-engine='modern'] .btn:focus-visible {
   box-shadow: var(--ds-button-focus-ring);
   outline: none;
 }
 
-[data-tenant] .btn:hover:not(:disabled) {
+[data-engine='modern'] .btn:hover:not(:disabled) {
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
-[data-tenant] .btn:active:not(:disabled) {
+[data-engine='modern'] .btn:active:not(:disabled) {
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
 /* Primary Button */
-[data-tenant] .btn-primary {
+[data-engine='modern'] .btn-primary {
   background-color: var(--ds-button-primary-bg);
   border-color: var(--ds-button-primary-border);
   color: var(--ds-button-primary-color);
   box-shadow: var(--ds-button-primary-shadow);
 }
 
-[data-tenant] .btn-primary:hover:not(:disabled) {
+[data-engine='modern'] .btn-primary:hover:not(:disabled) {
   background-color: var(--ds-button-primary-bg-hover);
   border-color: var(--ds-button-primary-bg-hover);
   /* Not every artifact declares the hover shadow, and a bare read would drop the whole
@@ -20126,25 +20126,25 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
-[data-tenant] .btn-primary:active:not(:disabled) {
+[data-engine='modern'] .btn-primary:active:not(:disabled) {
   background-color: var(--ds-button-primary-bg-active);
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
 /* Ghost Button */
-[data-tenant] .btn-ghost {
+[data-engine='modern'] .btn-ghost {
   background-color: var(--ds-button-ghost-bg);
   border-color: var(--ds-button-ghost-border);
   color: var(--ds-button-ghost-color);
 }
 
-[data-tenant] .btn-ghost:hover:not(:disabled) {
+[data-engine='modern'] .btn-ghost:hover:not(:disabled) {
   background-color: var(--ds-button-ghost-bg-hover);
   color: var(--ds-button-ghost-color-hover);
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
-[data-tenant] .btn-ghost:active:not(:disabled) {
+[data-engine='modern'] .btn-ghost:active:not(:disabled) {
   background-color: var(--ds-button-ghost-bg-active);
   color: var(--ds-button-ghost-color-active);
   transform: var(--ds-button-active-transform, scale(0.98));
@@ -20154,7 +20154,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    CHECKBOX - .checkbox
    ============================================================================= */
 
-[data-tenant] .checkbox {
+[data-engine='modern'] .checkbox {
   width: var(--ds-checkbox-size);
   height: var(--ds-checkbox-size);
   border-color: var(--ds-checkbox-border);
@@ -20162,16 +20162,16 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   transition: var(--ds-transition-fast);
 }
 
-[data-tenant] .checkbox:hover:not(:disabled) {
+[data-engine='modern'] .checkbox:hover:not(:disabled) {
   border-color: var(--ds-checkbox-border-hover);
 }
 
-[data-tenant] .checkbox:checked {
+[data-engine='modern'] .checkbox:checked {
   background-color: var(--ds-checkbox-checked-bg);
   border-color: var(--ds-checkbox-checked-border);
 }
 
-[data-tenant] .checkbox:focus-visible {
+[data-engine='modern'] .checkbox:focus-visible {
   box-shadow: var(--ds-checkbox-focus-ring);
   outline: none;
 }
@@ -20180,23 +20180,23 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    RADIO - .radio
    ============================================================================= */
 
-[data-tenant] .radio {
+[data-engine='modern'] .radio {
   width: var(--ds-radio-size);
   height: var(--ds-radio-size);
   border-color: var(--ds-radio-border);
   transition: var(--ds-transition-fast);
 }
 
-[data-tenant] .radio:hover:not(:disabled) {
+[data-engine='modern'] .radio:hover:not(:disabled) {
   border-color: var(--ds-radio-border-hover);
 }
 
-[data-tenant] .radio:checked {
+[data-engine='modern'] .radio:checked {
   background-color: var(--ds-radio-checked-bg);
   border-color: var(--ds-radio-checked-border);
 }
 
-[data-tenant] .radio:focus-visible {
+[data-engine='modern'] .radio:focus-visible {
   box-shadow: var(--ds-radio-focus-ring);
   outline: none;
 }
@@ -20212,7 +20212,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    LOADING / SPINNER - .loading
    ============================================================================= */
 
-[data-tenant] .loading {
+[data-engine='modern'] .loading {
   color: var(--ds-spinner-color);
 }
 
@@ -20220,19 +20220,19 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    MENU - .menu (Sidebar Navigation)
    ============================================================================= */
 
-[data-tenant] .rottay-menu {
+[data-engine='modern'] .rottay-menu {
   list-style: none;
   padding: var(--ds-sidebar-shell-padding-inline, 14px);
   margin: 0;
 }
 
-[data-tenant] .rottay-menu li {
+[data-engine='modern'] .rottay-menu li {
   list-style: none;
   margin-bottom: 2px;
 }
 
-[data-tenant] .rottay-menu li > a,
-[data-tenant] .rottay-menu li > button {
+[data-engine='modern'] .rottay-menu li > a,
+[data-engine='modern'] .rottay-menu li > button {
   display: flex;
   align-items: center;
   gap: var(--ds-sidebar-item-gap, 10px);
@@ -20255,8 +20255,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   line-height: 1.28;
 }
 
-[data-tenant] .rottay-menu li > a:hover,
-[data-tenant] .rottay-menu li > button:hover {
+[data-engine='modern'] .rottay-menu li > a:hover,
+[data-engine='modern'] .rottay-menu li > button:hover {
   background-color: color-mix(
     in srgb,
     var(--ds-color-neutral-100) 92%,
@@ -20265,8 +20265,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   color: var(--ds-text-primary);
 }
 
-[data-tenant] .rottay-menu li > a.active,
-[data-tenant] .rottay-menu li > button.active {
+[data-engine='modern'] .rottay-menu li > a.active,
+[data-engine='modern'] .rottay-menu li > button.active {
   background-color: color-mix(
     in srgb,
     var(--ds-color-primary-50) 78%,
@@ -20277,8 +20277,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* Menu Icons */
-[data-tenant] .rottay-menu li > a > span:first-child,
-[data-tenant] .rottay-menu li > button > span:first-child {
+[data-engine='modern'] .rottay-menu li > a > span:first-child,
+[data-engine='modern'] .rottay-menu li > button > span:first-child {
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
@@ -20287,11 +20287,11 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* Submenu (details/summary) */
-[data-tenant] .rottay-menu details {
+[data-engine='modern'] .rottay-menu details {
   margin-bottom: 2px;
 }
 
-[data-tenant] .rottay-menu details > summary {
+[data-engine='modern'] .rottay-menu details > summary {
   display: flex;
   align-items: center;
   gap: var(--ds-sidebar-item-gap, 10px);
@@ -20311,11 +20311,11 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   list-style: none;
 }
 
-[data-tenant] .rottay-menu details > summary::-webkit-details-marker {
+[data-engine='modern'] .rottay-menu details > summary::-webkit-details-marker {
   display: none;
 }
 
-[data-tenant] .rottay-menu details > summary:hover {
+[data-engine='modern'] .rottay-menu details > summary:hover {
   background-color: color-mix(
     in srgb,
     var(--ds-color-neutral-100) 92%,
@@ -20324,31 +20324,31 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   color: var(--ds-text-primary);
 }
 
-[data-tenant] .rottay-menu details[open] > summary {
+[data-engine='modern'] .rottay-menu details[open] > summary {
   color: var(--ds-text-primary);
   font-weight: 600;
 }
 
-[data-tenant] .rottay-menu details > ul {
+[data-engine='modern'] .rottay-menu details > ul {
   padding-left: var(--ds-sidebar-child-padding-inline, 8px);
   margin-top: 1px;
   margin-bottom: 3px;
 }
 
 /* Disabled state */
-[data-tenant] .rottay-menu li > a.disabled,
-[data-tenant] .rottay-menu li > button.disabled,
-[data-tenant] .rottay-menu details > summary.disabled {
+[data-engine='modern'] .rottay-menu li > a.disabled,
+[data-engine='modern'] .rottay-menu li > button.disabled,
+[data-engine='modern'] .rottay-menu details > summary.disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 /* Table cells and rows should not clip dropdown */
-[data-tenant] table,
-[data-tenant] tbody,
-[data-tenant] tr,
-[data-tenant] td {
+[data-engine='modern'] table,
+[data-engine='modern'] tbody,
+[data-engine='modern'] tr,
+[data-engine='modern'] td {
   overflow: visible;
 }
 
@@ -20357,21 +20357,21 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ============================================================================= */
 
 /* Bridge: .rottay-collapse (modern engine) */
-[data-tenant] .rottay-collapse {
+[data-engine='modern'] .rottay-collapse {
   border-color: var(--ds-collapse-border);
   border-radius: var(--ds-collapse-radius);
 }
 
-[data-tenant] .rottay-collapse .rottay-collapse-content {
+[data-engine='modern'] .rottay-collapse .rottay-collapse-content {
   background-color: var(--ds-collapse-content-bg);
   color: var(--ds-text-primary);
 }
 
-[data-tenant] .rottay-collapse--ghost {
+[data-engine='modern'] .rottay-collapse--ghost {
   background-color: transparent;
 }
 
-[data-tenant] .rottay-collapse--borderless {
+[data-engine='modern'] .rottay-collapse--borderless {
   border: none;
 }
 
@@ -20410,17 +20410,17 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ============================================================================= */
 
 /* Bridge: .rottay-tree (modern engine) */
-[data-tenant] .rottay-tree {
+[data-engine='modern'] .rottay-tree {
   background-color: var(--ds-tree-bg);
 }
 
-[data-tenant] .rottay-tree .rottay-tree-node {
+[data-engine='modern'] .rottay-tree .rottay-tree-node {
   padding: var(--ds-tree-node-padding);
   color: var(--ds-tree-node-color);
   transition: var(--ds-transition-fast);
 }
 
-[data-tenant] .rottay-tree .rottay-tree-node:hover {
+[data-engine='modern'] .rottay-tree .rottay-tree-node:hover {
   background-color: var(--ds-tree-node-bg-hover);
 }
 
@@ -20429,7 +20429,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ============================================================================= */
 
 /* Bridge: .rottay-empty (modern engine) */
-[data-tenant] .rottay-empty {
+[data-engine='modern'] .rottay-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20438,7 +20438,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   color: var(--ds-text-secondary);
 }
 
-[data-tenant] .rottay-empty__footer {
+[data-engine='modern'] .rottay-empty__footer {
   margin-top: 0.5rem;
 }
 
@@ -20447,29 +20447,29 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ============================================================================= */
 
 /* Bridge: .rottay-qrcode (modern engine) */
-[data-tenant] .rottay-qrcode {
+[data-engine='modern'] .rottay-qrcode {
   border-radius: var(--ds-qrcode-border-radius);
   border-color: var(--ds-qrcode-border-color);
   background-color: var(--ds-qrcode-background-color);
 }
 
-[data-tenant] .rottay-qrcode[data-status="loading"] {
+[data-engine='modern'] .rottay-qrcode[data-status="loading"] {
   opacity: var(--ds-qrcode-loading-opacity);
   background-color: var(--ds-qrcode-loading-bg);
 }
 
-[data-tenant] .rottay-qrcode[data-status="expired"] {
+[data-engine='modern'] .rottay-qrcode[data-status="expired"] {
   opacity: var(--ds-qrcode-status-expired-opacity);
 }
 
-[data-tenant] .rottay-qrcode[data-status="scanned"] {
+[data-engine='modern'] .rottay-qrcode[data-status="scanned"] {
   opacity: var(--ds-qrcode-status-scanned-opacity);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-tenant] .rottay-menu li > a,
-  [data-tenant] .rottay-menu li > button,
-  [data-tenant] .rottay-menu details > summary {
+  [data-engine='modern'] .rottay-menu li > a,
+  [data-engine='modern'] .rottay-menu li > button,
+  [data-engine='modern'] .rottay-menu details > summary {
     transition: none;
   }
 }
@@ -20487,7 +20487,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    INPUT - Mejoras adicionales
    ============================================================================= */
 
-[data-tenant] .input {
+[data-engine='modern'] .input {
   width: 100%;
   height: var(--ds-input-md-height, 40px);
   padding: 0 12px;
@@ -20500,20 +20500,20 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   outline: none;
 }
 
-[data-tenant] .input::placeholder {
+[data-engine='modern'] .input::placeholder {
   color: var(--ds-text-tertiary);
 }
 
-[data-tenant] .input:hover:not(:disabled):not(:focus) {
+[data-engine='modern'] .input:hover:not(:disabled):not(:focus) {
   border-color: var(--ds-input-border-hover);
 }
 
-[data-tenant] .input:focus {
+[data-engine='modern'] .input:focus {
   border-color: var(--ds-color-primary-500);
   box-shadow: 0 0 0 3px var(--ds-color-primary-100);
 }
 
-[data-tenant] .input:disabled {
+[data-engine='modern'] .input:disabled {
   background-color: var(--ds-input-bg-disabled);
   color: var(--ds-text-tertiary);
   cursor: not-allowed;
@@ -20523,7 +20523,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    BUTTON - Mejoras adicionales
    ============================================================================= */
 
-[data-tenant] .btn {
+[data-engine='modern'] .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20541,37 +20541,37 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   letter-spacing: normal;
 }
 
-[data-tenant] .btn:focus-visible {
+[data-engine='modern'] .btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--ds-color-primary-100);
 }
 
 /* Primary button */
-[data-tenant] .btn-primary {
+[data-engine='modern'] .btn-primary {
   background-color: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
   color: var(--ds-button-primary-color);
 }
 
-[data-tenant] .btn-primary:hover:not(:disabled) {
+[data-engine='modern'] .btn-primary:hover:not(:disabled) {
   background-color: var(--ds-color-primary-700);
   border-color: var(--ds-color-primary-700);
 }
 
 /* Ghost button */
-[data-tenant] .btn-ghost {
+[data-engine='modern'] .btn-ghost {
   background-color: transparent;
   border-color: transparent;
   color: var(--ds-text-primary);
 }
 
-[data-tenant] .btn-ghost:hover:not(:disabled) {
+[data-engine='modern'] .btn-ghost:hover:not(:disabled) {
   background-color: var(--ds-color-neutral-100);
 }
 
 /* Disabled button */
-[data-tenant] .btn:disabled,
-[data-tenant] .btn[disabled] {
+[data-engine='modern'] .btn:disabled,
+[data-engine='modern'] .btn[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
@@ -20581,11 +20581,11 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    SPACE - Utility for vertical/horizontal spacing
    ============================================================================= */
 
-[data-tenant] .space-y-4 > * + * {
+[data-engine='modern'] .space-y-4 > * + * {
   margin-top: 16px;
 }
 
-[data-tenant] .space-y-2 > * + * {
+[data-engine='modern'] .space-y-2 > * + * {
   margin-top: 8px;
 }
 
@@ -20593,7 +20593,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    AVATAR - User avatars
    ============================================================================= */
 
-[data-tenant] .avatar {
+[data-engine='modern'] .avatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20607,7 +20607,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   overflow: hidden;
 }
 
-[data-tenant] .avatar img {
+[data-engine='modern'] .avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -20617,7 +20617,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    LOADING SPINNER
    ============================================================================= */
 
-[data-tenant] .loading {
+[data-engine='modern'] .loading {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -20631,44 +20631,44 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    FLEX UTILITIES - For Space component and general layout
    ============================================================================= */
 
-[data-tenant] .inline-flex {
+[data-engine='modern'] .inline-flex {
   display: inline-flex;
 }
 
-[data-tenant] .flex {
+[data-engine='modern'] .flex {
   display: flex;
 }
 
-[data-tenant] .flex-row {
+[data-engine='modern'] .flex-row {
   flex-direction: row;
 }
 
-[data-tenant] .flex-col {
+[data-engine='modern'] .flex-col {
   flex-direction: column;
 }
 
-[data-tenant] .flex-wrap {
+[data-engine='modern'] .flex-wrap {
   flex-wrap: wrap;
 }
 
 /* Alignment */
-[data-tenant] .items-start {
+[data-engine='modern'] .items-start {
   align-items: flex-start;
 }
 
-[data-tenant] .items-center {
+[data-engine='modern'] .items-center {
   align-items: center;
 }
 
-[data-tenant] .justify-end {
+[data-engine='modern'] .justify-end {
   justify-content: flex-end;
 }
 
-[data-tenant] .justify-center {
+[data-engine='modern'] .justify-center {
   justify-content: center;
 }
 
-[data-tenant] .justify-between {
+[data-engine='modern'] .justify-between {
   justify-content: space-between;
 }
 
@@ -20676,112 +20676,112 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    GRID - Responsive grid system
    ============================================================================= */
 
-[data-tenant] .rottay-grid {
+[data-engine='modern'] .rottay-grid {
   display: grid;
   width: 100%;
 }
-[data-tenant] .gap-1 {
+[data-engine='modern'] .gap-1 {
   gap: 4px;
 }
-[data-tenant] .gap-2 {
+[data-engine='modern'] .gap-2 {
   gap: 8px;
 }
-[data-tenant] .gap-4 {
+[data-engine='modern'] .gap-4 {
   gap: 16px;
 }
-[data-tenant] .grid-cols-2 {
+[data-engine='modern'] .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-[data-tenant] .grid-cols-3 {
+[data-engine='modern'] .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 /* Responsive grid - Default columns based on data attributes */
-[data-tenant] .rottay-grid[data-cols-xs="1"] {
+[data-engine='modern'] .rottay-grid[data-cols-xs="1"] {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
-[data-tenant] .rottay-grid[data-cols-xs="2"] {
+[data-engine='modern'] .rottay-grid[data-cols-xs="2"] {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-[data-tenant] .rottay-grid[data-cols-xs="3"] {
+[data-engine='modern'] .rottay-grid[data-cols-xs="3"] {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-[data-tenant] .rottay-grid[data-cols-xs="4"] {
+[data-engine='modern'] .rottay-grid[data-cols-xs="4"] {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 /* SM breakpoint (640px) */
 @media (min-width: 640px) {
-  [data-tenant] .rottay-grid[data-cols-sm="1"] {
+  [data-engine='modern'] .rottay-grid[data-cols-sm="1"] {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-sm="2"] {
+  [data-engine='modern'] .rottay-grid[data-cols-sm="2"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-sm="3"] {
+  [data-engine='modern'] .rottay-grid[data-cols-sm="3"] {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-sm="4"] {
+  [data-engine='modern'] .rottay-grid[data-cols-sm="4"] {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
 /* MD breakpoint (768px) */
 @media (min-width: 768px) {
-  [data-tenant] .rottay-grid[data-cols-md="1"] {
+  [data-engine='modern'] .rottay-grid[data-cols-md="1"] {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-md="2"] {
+  [data-engine='modern'] .rottay-grid[data-cols-md="2"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-md="3"] {
+  [data-engine='modern'] .rottay-grid[data-cols-md="3"] {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-md="4"] {
+  [data-engine='modern'] .rottay-grid[data-cols-md="4"] {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
 /* LG breakpoint (1024px) */
 @media (min-width: 1024px) {
-  [data-tenant] .rottay-grid[data-cols-lg="1"] {
+  [data-engine='modern'] .rottay-grid[data-cols-lg="1"] {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-lg="2"] {
+  [data-engine='modern'] .rottay-grid[data-cols-lg="2"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-lg="3"] {
+  [data-engine='modern'] .rottay-grid[data-cols-lg="3"] {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-lg="4"] {
+  [data-engine='modern'] .rottay-grid[data-cols-lg="4"] {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-lg="5"] {
+  [data-engine='modern'] .rottay-grid[data-cols-lg="5"] {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-lg="6"] {
+  [data-engine='modern'] .rottay-grid[data-cols-lg="6"] {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 
 /* XL breakpoint (1280px) */
 @media (min-width: 1280px) {
-  [data-tenant] .rottay-grid[data-cols-xl="1"] {
+  [data-engine='modern'] .rottay-grid[data-cols-xl="1"] {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-xl="2"] {
+  [data-engine='modern'] .rottay-grid[data-cols-xl="2"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-xl="3"] {
+  [data-engine='modern'] .rottay-grid[data-cols-xl="3"] {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-xl="4"] {
+  [data-engine='modern'] .rottay-grid[data-cols-xl="4"] {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-xl="5"] {
+  [data-engine='modern'] .rottay-grid[data-cols-xl="5"] {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
-  [data-tenant] .rottay-grid[data-cols-xl="6"] {
+  [data-engine='modern'] .rottay-grid[data-cols-xl="6"] {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
@@ -20791,8 +20791,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ============================================================================= */
 
 /* When Input has prefix/suffix, outer label has .input class, inner input should be plain */
-[data-tenant] label.input input,
-[data-tenant] .input input {
+[data-engine='modern'] label.input input,
+[data-engine='modern'] .input input {
   border: none !important;
   background: transparent !important;
   outline: none !important;
@@ -20808,7 +20808,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ============================================================================= */
 
 /* Form container - vertical layout */
-[data-tenant] form {
+[data-engine='modern'] form {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -20819,7 +20819,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    SELECT / DROPDOWN - Styling
    ============================================================================= */
 
-[data-tenant] select {
+[data-engine='modern'] select {
   display: flex;
   height: 40px;
   min-height: 40px;
@@ -20841,24 +20841,24 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   width: 100%;
 }
 
-[data-tenant] select:hover {
+[data-engine='modern'] select:hover {
   border-color: var(--ds-color-primary-400);
 }
 
-[data-tenant] select:focus {
+[data-engine='modern'] select:focus {
   outline: none;
   border-color: var(--ds-color-primary-500);
   box-shadow: 0 0 0 2px var(--ds-color-primary-100);
 }
 
-[data-tenant] select:disabled {
+[data-engine='modern'] select:disabled {
   background-color: var(--ds-color-neutral-100);
   cursor: not-allowed;
   opacity: var(--ds-input-disabled-opacity);
 }
 
 /* Textarea specific */
-[data-tenant] textarea {
+[data-engine='modern'] textarea {
   min-height: 100px;
   padding: 10px 12px;
   resize: vertical;
@@ -20869,13 +20869,13 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ============================================================================= */
 
 /* Ensure buttons have gap when in flex/inline containers */
-[data-tenant] .btn + .btn {
+[data-engine='modern'] .btn + .btn {
   margin-left: 8px;
 }
 
 /* Generic flex gap for button parents */
-[data-tenant] div:has(> .btn + .btn),
-[data-tenant] span:has(> .btn + .btn) {
+[data-engine='modern'] div:has(> .btn + .btn),
+[data-engine='modern'] span:has(> .btn + .btn) {
   display: inline-flex;
   gap: 8px;
 }
@@ -20884,7 +20884,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    COLOR INPUT / COLOR PICKER - Styling
    ============================================================================= */
 
-[data-tenant] input[type="color"] {
+[data-engine='modern'] input[type="color"] {
   width: 60px;
   height: 40px;
   padding: 4px;
@@ -20894,16 +20894,16 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-color-white);
 }
 
-[data-tenant] input[type="color"]::-webkit-color-swatch-wrapper {
+[data-engine='modern'] input[type="color"]::-webkit-color-swatch-wrapper {
   padding: 2px;
 }
 
-[data-tenant] input[type="color"]::-webkit-color-swatch {
+[data-engine='modern'] input[type="color"]::-webkit-color-swatch {
   border: none;
   border-radius: var(--ds-radius-sm);
 }
 
-[data-tenant] input[type="color"]::-moz-color-swatch {
+[data-engine='modern'] input[type="color"]::-moz-color-swatch {
   border: none;
   border-radius: var(--ds-radius-sm);
 }
@@ -20920,7 +20920,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    per-render hashed class, so `.rottay-input--modern` is its stable hook
    for this floor. */
 @media (pointer: coarse) {
-  [data-tenant] .rottay-input--modern {
+  [data-engine='modern'] .rottay-input--modern {
     min-height: var(--ds-touch-target-min);
   }
 }
@@ -20928,9 +20928,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
    relaid out, or left waiting on an event that never arrives. */
 @media (prefers-reduced-motion: reduce) {
-  [data-tenant] .btn,
-  [data-tenant] .input,
-  [data-tenant] .loading {
+  [data-engine='modern'] .btn,
+  [data-engine='modern'] .input,
+  [data-engine='modern'] .loading {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

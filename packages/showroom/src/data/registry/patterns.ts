@@ -6,6 +6,7 @@
  * identity, navigation, shell, visualization, workflow.
  */
 
+import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system';
 import type { EngineName } from './primitives';
 
 export type PatternGroup =
@@ -29,7 +30,7 @@ export interface PatternEntry {
   engines: EngineName[];
 }
 
-const allEngines: EngineName[] = ['classic', 'modern', 'rustic'];
+const allEngines: EngineName[] = [...IMPLEMENTED_ENGINE_NAMES];
 
 // ---------------------------------------------------------------------------
 // Data

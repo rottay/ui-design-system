@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { isImplementedEngineName } from '@rottay/design-system';
 
 const ENGINE_STORAGE_KEY = 'rottay-showroom-engine';
 const THEME_STORAGE_KEY = 'rottay-showroom-theme';
@@ -13,9 +14,7 @@ function sanitizeTenant(value: string | null) {
 }
 
 function sanitizeEngine(value: string | null) {
-  return value === 'classic' || value === 'modern' || value === 'rustic'
-    ? value
-    : 'modern';
+  return isImplementedEngineName(value) ? value : 'modern';
 }
 
 function sanitizePath(value: string | null) {

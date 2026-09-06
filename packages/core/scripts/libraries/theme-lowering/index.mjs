@@ -90,6 +90,7 @@ export async function brandThemeLoweringAdapter({
     emitThemeCss,
     containerScope,
     brandTenantSelector,
+    verticalEngine,
   } = module;
   for (const [name, value] of Object.entries({
     compileTheme,
@@ -98,6 +99,7 @@ export async function brandThemeLoweringAdapter({
     emitThemeCss,
     containerScope,
     brandTenantSelector,
+    verticalEngine,
   })) {
     if (value === undefined) {
       throw new Error(
@@ -125,14 +127,19 @@ export async function brandThemeLoweringAdapter({
       `theme-lowering: ${VERTICAL_ROSTER} exports no getFirstPartyVertical.`,
     );
   }
-  /* A first-party vertical's engine is its ROSTER ROW's -- the same row the
-   * productive door reads. A fixture slug that no row claims takes the primary
-   * engine here and ONLY here: these readers measure the compiler over mutants
-   * and probe fixtures that are not tenants of any vertical, so refusing them
-   * the way the productive door does would leave the compiler unmeasured. */
+  /* A first-party vertical's engine is answered by `verticalEngine`, the same
+   * law the productive door calls -- not by re-reading the roster row here,
+   * which is how four sites once grew four spellings of one question. The
+   * roster is consulted only for MEMBERSHIP: a fixture slug that no row claims
+   * takes the primary engine here and ONLY here, because these readers measure
+   * the compiler over mutants and probe fixtures that are tenants of no
+   * vertical, and refusing them the way the productive door does would leave
+   * the compiler unmeasured. */
   const adapters = new Map();
   const adapterFor = (slug) => {
-    const engine = roster.getFirstPartyVertical(slug)?.engine ?? identity.PRIMARY_ENGINE;
+    const engine = roster.getFirstPartyVertical(slug)
+      ? verticalEngine(slug)
+      : identity.PRIMARY_ENGINE;
     if (!adapters.has(engine)) adapters.set(engine, resolveAdapter(engine));
     return adapters.get(engine);
   };

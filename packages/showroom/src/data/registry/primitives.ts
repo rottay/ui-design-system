@@ -16,6 +16,11 @@
  * `primitives/foundation/`, which stays legal as a support layer.
  */
 
+import {
+  IMPLEMENTED_ENGINE_NAMES,
+  type ImplementedEngineName,
+} from '@rottay/design-system';
+
 export type PrimitiveCategory =
   | 'display'
   | 'inputs'
@@ -24,7 +29,7 @@ export type PrimitiveCategory =
   | 'navigation'
   | 'overlay';
 
-export type EngineName = 'classic' | 'modern' | 'rustic';
+export type EngineName = ImplementedEngineName;
 
 export interface PrimitiveEntry {
   slug: string;
@@ -34,7 +39,7 @@ export interface PrimitiveEntry {
   engines: EngineName[];
 }
 
-const allEngines: EngineName[] = ['classic', 'modern', 'rustic'];
+const allEngines: EngineName[] = [...IMPLEMENTED_ENGINE_NAMES];
 
 // ---------------------------------------------------------------------------
 // Display

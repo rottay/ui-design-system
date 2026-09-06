@@ -40,6 +40,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 import type { Size } from '../../../../../foundation/contracts/kernel/common';
 
 /**
@@ -208,7 +209,7 @@ export interface CascaderProps {
   /** Popup class name */
   popupClassName?: string;
   /** Rendering engine override */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 }
 
 /**

@@ -15,7 +15,9 @@ export const PatternColumnSettings = createEngineComponent<ColumnSettingsProps>(
   {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/rustic'),
+    // Rustic is frozen and ships no implementation for this pattern; the
+    // declared absence refuses by name at resolution, with no module loaded.
+    rustic: null,
   }
 );
 

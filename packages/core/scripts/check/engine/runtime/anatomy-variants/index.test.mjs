@@ -8,7 +8,7 @@
  */
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,11 +23,14 @@ import {
   checkForwardCoverage,
   checkReverseDeadSelectors,
   checkClassicManifest,
+  checkAdapterAgreement,
+  parseAdapterPosture,
   runAnatomyGate,
 } from './index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const gate = join(scriptDir, 'index.mjs');
+const CORE_ROOT = join(scriptDir, '..', '..', '..', '..', '..');
 
 // Local literal copy of the vocabulary (design 1.2), used for unit assertions.
 const VOCAB = {
@@ -193,10 +196,53 @@ test('checkClassicManifest flags missing row, bad support, empty reason, dead en
   assert.ok(issues.some((i) => /cardComponent\.outline is not a registered/.test(i)));
 });
 
+// ---- unit: one anatomy truth ----------------------------------------------
+
+test('parseAdapterPosture reads the declared posture, and only a declared one', () => {
+  const source = `
+    "chrome.families": { posture: "native", evidence: {} },
+    "chrome.anatomy": {
+      posture: "unsupported",
+      evidence: { kind: "absent" },
+    },
+  `;
+  assert.equal(parseAdapterPosture(source, 'chrome.anatomy'), 'unsupported');
+  assert.equal(parseAdapterPosture(source, 'chrome.families'), 'native');
+  assert.equal(parseAdapterPosture(source, 'chrome.absent'), null);
+});
+
+test('checkAdapterAgreement fires on every row that outranks the adapter', () => {
+  const manifest = {
+    variants: {
+      table: {
+        ruled: { support: 'supported', reason: 'x' },
+        zebra: { support: 'approximated', reason: 'x' },
+        open: { support: 'unsupported', reason: 'x' },
+      },
+    },
+  };
+  const issues = checkAdapterAgreement('unsupported', manifest);
+  assert.equal(issues.length, 2);
+  assert.ok(issues.some((i) => /table\.ruled claims 'supported'/.test(i)));
+  assert.ok(issues.some((i) => /table\.zebra claims 'approximated'/.test(i)));
+});
+
+test('checkAdapterAgreement is silent when the adapter grants the axis', () => {
+  const manifest = { variants: { table: { ruled: { support: 'supported', reason: 'x' } } } };
+  assert.deepEqual(checkAdapterAgreement('native', manifest), []);
+  assert.deepEqual(checkAdapterAgreement('mapped', manifest), []);
+});
+
+test('checkAdapterAgreement fails closed when the adapter declares nothing', () => {
+  const issues = checkAdapterAgreement(null, { variants: {} });
+  assert.equal(issues.length, 1);
+  assert.ok(/no chrome\.anatomy posture found/.test(issues[0]));
+});
+
 // ---- integration: real tree ------------------------------------------------
 
-test('runAnatomyGate passes against the committed tree', () => {
-  const { ok, sections, vocab } = runAnatomyGate();
+test('runAnatomyGate parses the committed vocabulary and keeps every selector law green', () => {
+  const { sections, vocab } = runAnatomyGate();
   assert.ok(vocab, 'vocabulary must parse from the real CONTRACT');
   assert.deepEqual(Object.keys(vocab).sort(), [
     'cardComponent',
@@ -204,10 +250,44 @@ test('runAnatomyGate passes against the committed tree', () => {
     'sidebar',
     'table',
   ]);
-  assert.equal(ok, true, JSON.stringify(sections, null, 2));
+  // Every section this gate has always owned stays clean.
+  for (const section of ['vocabulary', 'familyMapping', 'forward', 'reverse', 'classic'])
+    assert.deepEqual(sections[section], [], `${section}: ${JSON.stringify(sections[section])}`);
 });
 
-test('CLI --check exits 0 on the real tree', () => {
+/**
+ * ONE TRUTH, on the committed tree.
+ *
+ * WO-CAN-06 made the classic adapter the single truth for `chrome.anatomy`. The
+ * adapter declares `unsupported`, admission refuses the tenant that would select
+ * a variant, and all ten manifest rows now say the same. The gate's four
+ * fixture drills above (`checkAdapterAgreement` fires on every outranking row,
+ * is silent when the adapter grants the axis, and fails closed when the adapter
+ * declares nothing) are what keep this pair honest: they still fail on a planted
+ * disagreement, so a green tree here is a measurement, not an exemption.
+ */
+test('the committed tree carries no adapter/manifest disagreement', () => {
+  const { ok, sections } = runAnatomyGate();
+  assert.deepEqual(sections.adapterAgreement, []);
+  assert.equal(ok, true);
+});
+
+test('a planted manifest row that outranks the adapter reddens the committed tree', () => {
+  const manifestPath = join(
+    CORE_ROOT,
+    'src/foundation/tokens/css/runtime/engines/classic/classic-anatomy-support.json'
+  );
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  const [family] = Object.keys(manifest.variants);
+  const [variant] = Object.keys(manifest.variants[family]);
+  manifest.variants[family][variant].support = 'supported';
+  const planted = join(mkdtempSync(join(tmpdir(), 'anatomy-planted-')), 'manifest.json');
+  writeFileSync(planted, JSON.stringify(manifest));
+  const result = runGate(['--check', '--quiet', '--manifest', planted]);
+  assert.equal(result.status, 1, result.stderr || result.stdout);
+});
+
+test('CLI --check exits 0 now that the manifest agrees with the adapter', () => {
   const result = runGate(['--check', '--quiet']);
   assert.equal(result.status, 0, result.stderr || result.stdout);
 });

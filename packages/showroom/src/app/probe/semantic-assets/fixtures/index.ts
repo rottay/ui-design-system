@@ -1,9 +1,10 @@
 import type { IconName } from '@rottay/design-system/icons';
+import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system';
 
 export const CRA17_TENANTS = ['bithire', 'themanagementmiami'] as const;
 export type Cra17Tenant = (typeof CRA17_TENANTS)[number];
 
-export const CRA17_ENGINES = ['classic', 'modern', 'rustic'] as const;
+export const CRA17_ENGINES = IMPLEMENTED_ENGINE_NAMES;
 export type Cra17Engine = (typeof CRA17_ENGINES)[number];
 
 export const CRA17_THEMES = ['light', 'dark'] as const;

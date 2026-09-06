@@ -36,6 +36,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 import type { LegacySizeAlias, Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
 
 /**
@@ -154,7 +155,7 @@ export interface TimePickerProps {
   /** Custom renderer for time cells */
   cellRender?: (current: number, info: { type: 'hour' | 'minute' | 'second' }) => ReactNode;
   /** Rendering engine override */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 }
 
 /**

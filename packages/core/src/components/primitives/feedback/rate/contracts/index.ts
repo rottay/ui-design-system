@@ -58,6 +58,7 @@
  */
 
 import type { ReactNode, CSSProperties, HTMLAttributes } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 // ============================================================================
 // Type Definitions
@@ -91,7 +92,7 @@ export type RateSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
  * | `modern` | DaisyUI/Tailwind | Utility-first styling |
  * | `rustic` | Vanilla HTML/CSS | Zero dependencies, max accessibility |
  */
-export type RateEngine = 'classic' | 'modern' | 'rustic';
+export type RateEngine = EngineName;
 
 /**
  * Props passed to custom character render functions.
@@ -324,7 +325,7 @@ export interface RateProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
   /**
    * Engine override for this component instance.
    * Overrides the global engine setting from EngineProvider.
-   * @example 'classic' | 'modern' | 'rustic'
+   * @example engine="modern"
    */
   engine?: RateEngine;
 }

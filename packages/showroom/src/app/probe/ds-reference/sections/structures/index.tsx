@@ -5,6 +5,7 @@
 
 import type { ReactNode } from 'react';
 import { EngineProvider } from '@rottay/design-system';
+import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system';
 import {
   ActionDock,
   ActiveFiltersBar,
@@ -54,7 +55,7 @@ import {
 } from '@rottay/design-system';
 import type { StructureCase } from './cases';
 
-const ENGINES = ['modern', 'classic', 'rustic'] as const;
+const ENGINES = IMPLEMENTED_ENGINE_NAMES;
 
 function Family({ only }: { only: StructureCase }): ReactNode {
   switch (only) {

@@ -5,6 +5,7 @@
  * Grouped by: headers, workspace, record, dashboard, feedback.
  */
 
+import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system';
 import type { EngineName } from './primitives';
 
 export type StructureGroup =
@@ -23,7 +24,7 @@ export interface StructureEntry {
   engines: EngineName[];
 }
 
-const allEngines: EngineName[] = ['classic', 'modern', 'rustic'];
+const allEngines: EngineName[] = [...IMPLEMENTED_ENGINE_NAMES];
 
 // ---------------------------------------------------------------------------
 // Headers

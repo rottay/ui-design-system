@@ -15,8 +15,8 @@
  * - **Modern** (token skin): Lightweight self-contained form with custom validation
  * - **Rustic** (Vanilla HTML/CSS): Headless form with full accessibility
  * - **Custom**: White-label packs do not expose a form runtime contract today;
- *   `Form`, its compounds and `useForm` resolve to the Classic binding so the
- *   imperative API stays available (pinned in `resolveFormEngine`).
+ *   `Form`, its compounds and `useForm` refuse `custom` by name rather than
+ *   mounting the Classic binding (pinned in `resolveFormEngine`).
  *
  * **Multi-Tenant Support:**
  * Form appearance adapts to tenant themes via CSS custom properties
@@ -106,6 +106,7 @@ import React from 'react';
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import { useEngineContext } from '../../../../infrastructure/runtime/engines/composition/react/provider';
 import type { EngineName } from '../../../../foundation/contracts';
+import type { ImplementedEngineName } from '../../../../foundation/contracts/kernel/engine-identity';
 import type {
   FormProps,
   FormItemProps,
@@ -155,16 +156,15 @@ const FORM_ENGINES = {
   classic: classicEngine as unknown as FormEngineBinding,
   modern: modernEngine as unknown as FormEngineBinding,
   rustic: rusticEngine as unknown as FormEngineBinding,
-} as const satisfies Record<Exclude<EngineName, 'custom'>, FormEngineBinding>;
+} as const satisfies Record<ImplementedEngineName, FormEngineBinding>;
 
 function resolveFormEngine(engine: EngineName) {
   if (engine === 'custom') {
-    /**
-     * Custom packs do not currently expose their own form runtime contract.
-     * Falling back to Classic keeps `Form` and `useForm` available instead of
-     * leaving callers without a stable imperative API.
-     */
-    return classicEngine;
+    /** Custom packs expose no form runtime contract; the absence is declared. */
+    throw new Error(
+      'Form has no custom implementation. A component pack must register its own ' +
+        'form runtime; there is no fallback engine.'
+    );
   }
 
   return FORM_ENGINES[engine];
@@ -197,8 +197,8 @@ const EngineAwareFormErrorList: React.FC<FormErrorListProps> = (props) => {
 
 /**
  * `useForm` must also resolve against the active engine to keep the same
- * contract as the `Form` component. Outside a provider it falls back to
- * classic via `useEngineContext()`.
+ * contract as the `Form` component; `useEngineContext()` states which engine
+ * that is, and an engine with no form runtime is refused by name.
  */
 export function useForm<T = unknown>(): [FormInstance<T>] {
   const { engine } = useEngineContext();

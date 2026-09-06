@@ -41,6 +41,14 @@ function harness() {
     emitThemeCss: () => '',
     containerScope: (selector) => selector,
     brandTenantSelector: (slug) => `[data-tenant="${slug}"]`,
+    // The productive law, verbatim: the roster row's engine or a refusal. The
+    // adapter must CALL it rather than re-read the row, so a stub that throws
+    // for an unclaimed slug is the only shape a re-reader could not pass.
+    verticalEngine: (slug) => {
+      const row = ROSTER[slug];
+      if (!row) throw new Error(`verticalEngine: no first-party vertical for "${slug}"`);
+      return row.engine;
+    },
   };
 
   const importModule = async (absolutePath) => {
@@ -99,6 +107,36 @@ test('resolves one adapter per engine, not one per compile', async () => {
   compile({ tenantSlug: 'rottay' });
   compile({ tenantSlug: 'bithire' });
   assert.deepEqual(resolvedEngines, ['classic', 'rustic']);
+});
+
+test('asks `verticalEngine` for the answer instead of re-reading the row', async () => {
+  const { module, importModule, compiledWith } = harness();
+  const asked = [];
+  const compile = await brandThemeLoweringAdapter({
+    module: {
+      ...module,
+      verticalEngine: (slug) => {
+        asked.push(slug);
+        return module.verticalEngine(slug);
+      },
+    },
+    coreRoot: '/core',
+    importModule,
+  });
+
+  compile({ tenantSlug: 'rottay' });
+  compile({ tenantSlug: 'acme-labs' });
+  assert.deepEqual(asked, ['rottay']);
+  assert.deepEqual(compiledWith, ['classic', PRIMARY_ENGINE]);
+});
+
+test('refuses a published module that exports no verticalEngine', async () => {
+  const { module, importModule } = harness();
+  const { verticalEngine: _absent, ...withoutLaw } = module;
+  await assert.rejects(
+    brandThemeLoweringAdapter({ module: withoutLaw, coreRoot: '/core', importModule }),
+    /exports no verticalEngine/,
+  );
 });
 
 test('refuses a roster module that cannot answer for a vertical', async () => {

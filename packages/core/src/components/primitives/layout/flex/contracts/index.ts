@@ -35,6 +35,7 @@
  */
 
 import type { ReactNode, CSSProperties, AriaRole, HTMLAttributes } from "react";
+import type { EngineName } from "../../../../../foundation/contracts/kernel/engine-identity";
 import type { BaseComponentProps } from "@/foundation/contracts/kernel/common";
 import type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 
@@ -89,7 +90,7 @@ export interface FlexProps
   /** Inline styles */
   style?: CSSProperties;
   /** Rendering engine override */
-  engine?: "classic" | "modern" | "rustic";
+  engine?: EngineName;
   /** Semantic landmark or grouping role forwarded to the owned root element. */
   role?: AriaRole;
   /** Width of the flex formatting context. */

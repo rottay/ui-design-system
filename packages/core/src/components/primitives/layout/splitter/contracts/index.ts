@@ -33,11 +33,12 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 /**
  * Supported rendering engines for Splitter components.
  */
-type SplitterEngine = 'classic' | 'modern' | 'rustic';
+type SplitterEngine = EngineName;
 
 /**
  * Props for the Splitter.Panel sub-component.

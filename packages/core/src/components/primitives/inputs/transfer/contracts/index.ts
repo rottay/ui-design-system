@@ -34,6 +34,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 /**
  * Structure for a transfer list item.
@@ -126,7 +127,7 @@ export interface TransferProps {
   /** Additional styles */
   style?: CSSProperties;
   /** Rendering engine override */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 }
 
 /**

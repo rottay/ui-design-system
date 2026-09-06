@@ -148,15 +148,13 @@ export const classicThemeAdapter = defineEngineAdapter({
   tokenBaseline: CLASSIC_TOKENS,
   controls: {
     "palette.seeds": {
-      posture: "native",
+      posture: "mapped",
       evidence: {
-        kind: "channels",
-        read: [
-          "--ds-color-primary",
-          "--ds-color-primary-500",
-          "--ds-button-primary-bg",
-          "--ds-color-text-on-primary",
-        ],
+        kind: "projection",
+        seeds: ["colorPrimary", "colorLink", "colorTextLightSolid"],
+        from: ["--ds-color-primary", "--ds-color-text-on-primary"],
+        reason:
+          "classic/theme/index.css reads neither channel; the brand seed reaches Ant through the projection table above, and the handful of inline reads on the classic TSX surface are component paint, not an engine stylesheet",
       },
     },
     "palette.dark-mode": {
@@ -304,20 +302,18 @@ export const classicThemeAdapter = defineEngineAdapter({
       },
     },
     "palette.status-seeds": {
-      posture: "native",
+      posture: "mapped",
       evidence: {
-        kind: "channels",
-        read: [
+        kind: "projection",
+        seeds: ["colorSuccess", "colorWarning", "colorError", "colorInfo"],
+        from: [
           "--ds-color-success",
           "--ds-color-warning",
           "--ds-color-error",
           "--ds-color-info",
         ],
-        family: {
-          minimumRead: 18,
-          reason:
-            "83 declared names are the ramp, tint and on-tone family derived from four authored seeds; the floor is decrease-only",
-        },
+        reason:
+          "classic/theme/index.css reads none of the four status seeds; they reach Ant's own status vocabulary through the projection table above, and the ramp family is derived by Ant rather than consumed from the DS channels",
       },
     },
     "profiles.icon": { posture: "invariant", evidence: INVARIANT_ICON },

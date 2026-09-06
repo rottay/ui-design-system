@@ -42,6 +42,7 @@
  */
 
 import type { ReactNode, CSSProperties, Key } from 'react';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 /**
  * Represents a single node in the tree data structure.
@@ -320,7 +321,7 @@ export interface TreeProps {
    * Engine override for rendering
    * @example engine="modern"
    */
-  engine?: 'classic' | 'modern' | 'rustic';
+  engine?: EngineName;
 }
 
 /**

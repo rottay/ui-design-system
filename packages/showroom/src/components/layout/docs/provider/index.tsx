@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import type { ImplementedEngineName } from '@rottay/design-system';
 import {
   DesignSystemProvider,
   getKnownTenantConfig,
@@ -17,7 +18,7 @@ export function DocsProviderShell({
   tenantSlug,
 }: {
   children: ReactNode;
-  engine: 'classic' | 'modern' | 'rustic';
+  engine: ImplementedEngineName;
   productProfile: ProductProfileKey;
   tenantSlug: 'rottay' | 'bithire' | 'evnto';
 }) {

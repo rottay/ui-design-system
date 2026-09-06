@@ -23,6 +23,12 @@
  *   4. Classic: assert classic-anatomy-support.json declares one valid row
  *      (support level + non-empty reason) for every (family, non-'default'
  *      variant), and no rows for unregistered/`default` variants.
+ *   5. ONE TRUTH: the classic engine adapter declares a `chrome.anatomy`
+ *      posture, admission refuses on it, and it is measured against the tree by
+ *      the posture drill. The manifest is prose beside it. When the two
+ *      disagree the manifest is the one that is wrong, and this gate says so by
+ *      name -- a normative document that CI validates while admission refuses
+ *      the tenant it documents is worse than no document.
  *
  * COORDINATION: `FAMILY_ATTRIBUTE` maps each CONTRACT family key to its
  * `data-anatomy-<attr>` suffix. It MUST stay in lockstep with the compiler's
@@ -58,7 +64,14 @@ const DEFAULT_PATHS = {
   modernSkin: join(ENGINES_ROOT, 'modern/skin'),
   rusticSkin: join(ENGINES_ROOT, 'rustic/skin'),
   manifest: join(ENGINES_ROOT, 'classic/classic-anatomy-support.json'),
+  classicAdapter: join(
+    packageRoot,
+    'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts',
+  ),
 };
+
+/** The control the classic adapter declares a posture for, and this gate reads. */
+const ANATOMY_CONTROL = 'chrome.anatomy';
 
 const VOCABULARY_EXPORT = 'TENANT_THEME_ANATOMY_VARIANTS';
 const DEFAULT_VARIANT = 'default';
@@ -258,6 +271,48 @@ export function checkClassicManifest(vocab, manifest) {
   return issues;
 }
 
+/**
+ * Read the adapter's declared posture for one control out of its source.
+ *
+ * Source, not `import`: this gate is a `.mjs` in the pre-build phase and the
+ * adapter is TypeScript. Parsing the declaration is what keeps the gate honest
+ * without a build, exactly as `parseAnatomyVocabulary` does for the contract.
+ */
+export function parseAdapterPosture(source, control) {
+  const block = new RegExp(
+    `["']${control.replace(/\./g, '\\.')}["']\\s*:\\s*\\{\\s*posture\\s*:\\s*["']([a-z]+)["']`,
+  ).exec(source);
+  return block ? block[1] : null;
+}
+
+/**
+ * The one truth: an engine whose adapter declares `unsupported` renders no
+ * anatomy variant, so every manifest row for it must say the same. A row that
+ * claims `supported` or `approximated` documents a tenant that admission
+ * refuses by name.
+ */
+export function checkAdapterAgreement(posture, manifest) {
+  const issues = [];
+  if (posture === null) {
+    issues.push(
+      `classic adapter: no ${ANATOMY_CONTROL} posture found (the manifest below has nothing to agree with)`,
+    );
+    return issues;
+  }
+  if (posture !== 'unsupported') return issues;
+  const variantsByFamily = (manifest && manifest.variants) || {};
+  for (const [family, rows] of Object.entries(variantsByFamily)) {
+    for (const [variant, row] of Object.entries(rows)) {
+      if (row && row.support !== 'unsupported') {
+        issues.push(
+          `classic manifest: ${family}.${variant} claims '${row.support}' while the classic adapter declares ${ANATOMY_CONTROL} 'unsupported' — admission refuses the tenant this row documents`,
+        );
+      }
+    }
+  }
+  return issues;
+}
+
 function short(file) {
   const idx = file.indexOf('/src/');
   return idx >= 0 ? file.slice(idx + 1) : file;
@@ -271,6 +326,7 @@ export function runAnatomyGate(paths = DEFAULT_PATHS) {
     forward: [],
     reverse: [],
     classic: [],
+    adapterAgreement: [],
   };
 
   if (!existsSync(paths.contract)) {
@@ -301,7 +357,19 @@ export function runAnatomyGate(paths = DEFAULT_PATHS) {
     } catch (err) {
       sections.classic.push(`classic manifest is not valid JSON: ${err.message}`);
     }
-    if (manifest) sections.classic = checkClassicManifest(vocab, manifest);
+    if (manifest) {
+      sections.classic = checkClassicManifest(vocab, manifest);
+      const adapterSource = existsSync(paths.classicAdapter)
+        ? readFileSync(paths.classicAdapter, 'utf8')
+        : null;
+      sections.adapterAgreement =
+        adapterSource === null
+          ? [`classic adapter not found at ${short(paths.classicAdapter)}`]
+          : checkAdapterAgreement(
+              parseAdapterPosture(adapterSource, ANATOMY_CONTROL),
+              manifest,
+            );
+    }
   }
 
   const ok = Object.values(sections).every((list) => list.length === 0);
@@ -318,6 +386,7 @@ function parseArgs(argv) {
     else if (a === '--modern-skin') opts.paths.modernSkin = resolve(argv[++i]);
     else if (a === '--rustic-skin') opts.paths.rusticSkin = resolve(argv[++i]);
     else if (a === '--manifest') opts.paths.manifest = resolve(argv[++i]);
+    else if (a === '--classic-adapter') opts.paths.classicAdapter = resolve(argv[++i]);
   }
   return opts;
 }
@@ -334,7 +403,7 @@ function main() {
         0,
       );
       process.stdout.write(
-        `anatomy-variant-gate: ${Object.keys(vocab).length} families, ${pairs} non-default variants x {modern, rustic} + classic manifest\n`,
+        `anatomy-variant-gate: ${Object.keys(vocab).length} families, ${pairs} non-default variants x {modern, rustic} + classic manifest derived from the adapter posture\n`,
       );
     }
     if (ok) {

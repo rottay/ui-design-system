@@ -4,6 +4,12 @@
   "schemaVersion": 3,
   "baseRevision": "ef269d71db916d0063ea8a87b08240f8b13e99ca",
   "entries": {
+    "packages/core/src/components/patterns/data/column-settings/engines/rustic/index.tsx": {
+      "blob": "3d667d0ae993d67483e61049a4b79048020b9944deb89e58531f652db471f05d",
+      "relocationDigest": "a19bdd8ac0032234cc2fc15158e039a83367bf36c6940d39ad23aa5b87dad450",
+      "reason": "WO-CAN-06 engine policy: these two files were silent forwarding aliases (export { default } from '../classic'), not Rustic content. They painted Classic chrome under the Rustic name, invisible to the forwarding-engine rule until this WO extended it. Converted to declared absences that refuse by name; no Rustic implementation was added, removed or improved.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/components/patterns/data/data-table/engines/classic/index.tsx": {
       "blob": "bd5a4574a0a02cb9d0ccec425a08e822944a50ecdc194053d70c434c2328cf68",
       "relocationDigest": "11f034645be3cbde962a594a1aa7a3881fc1aa295da29b22e6b26cd22d6eda0e",
@@ -44,6 +50,12 @@
       "blob": "d780d64d5b13b76fd9857079e37254e4db51bc0b62f24e46705b78f24cc676ad",
       "relocationDigest": "a40bc8d93bb36b142e07fb0141cf6cad7d220a8e0adbc4fe4b8fe80e179b6c33",
       "reason": "Re-authorized after the governed direct-entrypoint migration (fa0efd3b6) rewrote its barrel import into per-family deep imports. Mechanical import-path change plus a header comment; no classic behaviour, markup or paint was altered.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/patterns/data/list-toolbar/engines/rustic/index.tsx": {
+      "blob": "8d0fdce7b9e77297fbee9f6ffa9ec9d14593bcbd4a3c12bb3db4379109c5928b",
+      "relocationDigest": "bcc6383a80fa9cece2de94b3a6a600329445bc2170381ba684e33273cb12eb1a",
+      "reason": "WO-CAN-06 engine policy: these two files were silent forwarding aliases (export { default } from '../classic'), not Rustic content. They painted Classic chrome under the Rustic name, invisible to the forwarding-engine rule until this WO extended it. Converted to declared absences that refuse by name; no Rustic implementation was added, removed or improved.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/record-facts/engines/classic/index.tsx": {
@@ -362,6 +374,12 @@
       "blob": "7141e7a0592f3eab60798529f9b0eb1e24899256ee57840538ae12bde46cee66",
       "relocationDigest": "f40650e3b322646ab397a1954b702f2458f0d1e4ee3b81afee629548e47a72d0",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/classic/classic-anatomy-support.json": {
+      "blob": "c7ff268378873fcd97e51ebf28b743e8718934f61ca8589efaef79edb5b6a173",
+      "relocationDigest": "1b65eeb62da7cca27557010a933f126c2a722e9ce835ec5e170c30d4fb157865",
+      "reason": "WO-CAN-06 one-anatomy-truth (F-29): this file is a prose SUPPORT MANIFEST with zero runtime consumers -- its only readers are anatomy-variant-gate and that gate's self-test -- and it claimed 'supported'/'approximated' for all ten rows while the classic theme adapter declares chrome.anatomy 'unsupported' and admission refuses by name any tenant that would select a variant. CI was validating a document the runtime contradicts. All ten support values are set to the adapter's truth; every original Ant-wrapper sentence is preserved verbatim as supplierNote, so no evidence is destroyed. No Classic implementation, skin, token, test or a11y work was added, removed or improved: the classic surface stamps no data-anatomy-* attribute and accepts no anatomy prop before or after this edit.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css": {

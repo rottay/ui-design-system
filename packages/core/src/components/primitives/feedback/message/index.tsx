@@ -22,6 +22,7 @@
 import React from 'react';
 import { useEngineContext } from '../../../../infrastructure/runtime/engines/composition/react/provider';
 import type { EngineName } from '../../../../foundation/contracts';
+import type { ImplementedEngineName } from '../../../../foundation/contracts/kernel/engine-identity';
 import * as classicEngine from './engines/classic';
 import * as modernEngine from './engines/modern';
 import * as rusticEngine from './engines/rustic';
@@ -46,16 +47,18 @@ const messageEngines = {
   classic: classicEngine,
   modern: modernEngine,
   rustic: rusticEngine,
-} as const satisfies Record<Exclude<EngineName, 'custom'>, typeof classicEngine>;
+} as const satisfies Record<ImplementedEngineName, typeof classicEngine>;
 
 /**
- * Resolve the imperative message runtime for the active engine.
- * Custom engine packs don't register a message provider contract yet,
- * so classic is used as a stable fallback.
+ * Resolve the imperative message runtime for the active engine. A pack that
+ * registers no message runtime gets a named refusal, not Ant Design.
  */
 function resolveMessageEngine(engine: EngineName) {
   if (engine === 'custom') {
-    return classicEngine;
+    throw new Error(
+      'Message has no custom implementation. A component pack must register its ' +
+        'own message runtime; there is no fallback engine.'
+    );
   }
 
   return messageEngines[engine];

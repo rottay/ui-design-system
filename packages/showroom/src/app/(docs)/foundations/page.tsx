@@ -1,6 +1,7 @@
 import { ShowroomLink as Link } from '@/components/navigation/link';
 import { Badge, Box, Card, Flex, Stack, Text } from '@/components/showroom-ui';
 import { iconCategories } from '@/data/registry/icons';
+import { SHOWROOM_ENGINES } from '@/components/runtime/query';
 import {
   BracesIcon,
   LayersIcon,
@@ -72,7 +73,7 @@ const FOUNDATION_AREAS: FoundationArea[] = [
       'Classic, Modern, and Rustic keep the same API while changing silhouette, depth, and motion.',
     whenToUse:
       'Teams want to compare rendering direction without rewriting application code.',
-    samples: ['classic', 'modern', 'rustic', 'runtime switching'],
+    samples: [...SHOWROOM_ENGINES, 'runtime switching'],
     icon: <SettingsIcon size={22} />,
     tint: 'var(--ds-color-success-bg)',
     accent: 'var(--ds-color-success)',
@@ -189,7 +190,7 @@ function TrackVisual({ area }: { area: FoundationArea }) {
   if (area.title === 'Engines') {
     return (
       <Flex gap={8} style={{ flexWrap: 'wrap' }}>
-        {['classic', 'modern', 'rustic'].map((engine) => (
+        {SHOWROOM_ENGINES.map((engine) => (
           <Box
             key={engine}
             style={{
