@@ -9,7 +9,7 @@
  *
  * @remarks
  * **Positioning:**
- * - `useOverlayPosition` resolves the strategy per instance: `anchor-css`
+ * - `useFieldOverlay` resolves the strategy per instance: `anchor-css`
  *   promotes the panel to the top layer (popover + CSS anchor positioning)
  *   in place; `js` pins it at a measured fixed position. Both branches keep
  *   the panel in-tree as a child of the trigger wrapper -- this engine never
@@ -40,8 +40,7 @@ import { POPCONFIRM_DEFAULTS, POPCONFIRM_TO_OVERLAY_PLACEMENT } from '../../cont
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
 import { ModernButton as Button } from '../../../../facade';
-import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
-import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 
 /**
  * Popconfirm implementation that stamps the panel anatomy; card and button
@@ -122,43 +121,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       onOpenChange?.(newOpen);
     }, [isControlled, onOpenChange]);
 
-    // Dismiss the popconfirm when clicking anywhere outside the trigger. The
-    // panel renders in-tree as a descendant of the anchor, so one containment
-    // check covers both.
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (anchorEl && !anchorEl.contains(event.target as Node)) {
-          handleOpenChange(false);
-        }
-      };
-
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [isOpen, anchorEl, handleOpenChange]);
-
-    // Escape only when this panel is the top-most blocking layer; the shared
-    // stack is the single Escape router the rest of the overlay family joins.
-    const { isTopMost, layerProps } = useOverlayLayer({
-      kind: 'popover',
-      active: isOpen,
-      modal: true,
-      lockScroll: false,
-      restoreFocus: false,
-    });
-
-    useEffect(() => {
-      if (!isOpen) return;
-      const onKey = (event: KeyboardEvent) => {
-        if (event.key === 'Escape' && isTopMost()) handleOpenChange(false);
-      };
-      document.addEventListener('keydown', onKey);
-      return () => document.removeEventListener('keydown', onKey);
-    }, [isOpen, isTopMost, handleOpenChange]);
+    const dismiss = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
     // Focus contract: on open, the dialog's initial focus goes to the confirm
     // action -- or to CANCEL when the confirm is destructive (okType danger),
@@ -213,15 +176,31 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       handleOpenChange(false);
     };
 
-    // Single-panel overlay: the trigger wrapper is the anchor, the panel is
-    // the positioned overlay. `overlay` is null while closed (the ref
+    // One overlay contract: the trigger wrapper is the anchor, the panel is
+    // the positioned overlay. The shared Escape router and the shared
+    // outside-pointer watcher replace this engine's two private document
+    // listeners; both are gated on top-most, so a stacked overlay above the
+    // panel is not "outside". `surfaceEl` is null while closed (the ref
     // callback below only attaches while the panel is mounted).
-    const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+    const overlay = useFieldOverlay({
+      kind: 'popover',
+      open: isOpen,
       anchor: anchorEl,
-      overlay: surfaceEl,
+      panel: surfaceEl,
       placement: POPCONFIRM_TO_OVERLAY_PLACEMENT[placement ?? 'top'],
       flip: true,
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: dismiss,
+      dismissOnOutsidePointer: true,
     });
+    const {
+      isTopMost,
+      strategy,
+      anchorProps: anchorAttrs,
+      layerProps,
+    } = overlay;
 
     // Chrome (padding, min-width) is skin-owned (popconfirm.css); only the
     // z-index token channel, consumer overrides and measured positioning stay
@@ -231,7 +210,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
     const surfaceStyle: React.CSSProperties = {
       zIndex: 'var(--ds-z-popover)',
       ...overlayStyle,
-      ...positionStyle,
+      ...overlay.positionStyle,
     };
 
     // APG dialog wiring: the panel's accessible name/description are the

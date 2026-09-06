@@ -39,13 +39,11 @@ import React, {
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { SelectProps, SelectOption, SelectSize } from '../../contracts';
 import { SELECT_DEFAULTS } from '../../contracts';
-import { Portal } from '../../../../runtime/overlay/portal';
-import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import {
-  OverlayPortalBoundary,
-  useOverlayPosition,
-} from '../../../../runtime/overlay/positioning';
-import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+  FieldOverlayPanel,
+  useFieldOverlay,
+  type FieldOverlayDismissReason,
+} from '../../../../runtime/overlay/field-overlay';
 import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 import { resolveComboboxListState } from '../../../../runtime/collection/combobox';
@@ -801,27 +799,48 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   // Registered as a blocking layer (like Popover/Tooltip, but without scroll
   // lock or focus restore) so a nested select blocks lower dialogs from
   // consuming the same Escape press.
-  const { isTopMost, layerProps } = useOverlayLayer({
-    kind: 'dropdown',
-    active: isOpen,
-    modal: true,
-    lockScroll: false,
-    restoreFocus: false,
-    onEscape: closeDropdown,
-  });
+  // Outside interaction dismisses the dropdown; the kernel's watcher is
+  // capture-phase and top-most only (a nested overlay above the select keeps
+  // it open). Focus is reclaimed ONLY when the dropdown still holds it
+  // (searchable): the press is about to move focus somewhere the user chose,
+  // and yanking it back to the trigger would fight them.
+  const dismissFromOutside = useCallback(() => {
+    const focusWasInside = dropdownRef.current?.contains(document.activeElement);
+    setIsOpen(false);
+    if (focusWasInside) focusTrigger();
+  }, [focusTrigger]);
 
-  // Shared measured positioning: fixed coordinates pinned to the trigger,
-  // flipped to `top` near the viewport bottom edge.
-  const { style: positionStyle } = useOverlayPosition({
+  const handleDismiss = useCallback(
+    (reason: FieldOverlayDismissReason) => {
+      if (reason === 'escape') closeDropdown();
+      else dismissFromOutside();
+    },
+    [closeDropdown, dismissFromOutside],
+  );
+
+  // One overlay contract: canonical dropdown band, the single Escape router,
+  // the shared outside-pointer watcher, measured positioning pinned to the
+  // trigger (flipped to `top` near the viewport bottom edge) and the
+  // tenant/locale/DS-variable context re-stamped onto the portaled dropdown.
+  // Registered as a blocking layer (like Popover/Tooltip, but without scroll
+  // lock or focus restore) so a nested select blocks lower dialogs from
+  // consuming the same Escape press.
+  const overlay = useFieldOverlay({
+    kind: 'dropdown',
+    open: isOpen,
     anchor: containerEl,
-    overlay: isOpen ? dropdownEl : null,
+    panel: dropdownEl,
     placement: 'bottom-start',
     offset: 6,
     flip: true,
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onDismiss: handleDismiss,
+    dismissOnOutsidePointer: true,
   });
-
-  // Tenant/locale/DS-variable context re-stamped onto the portaled dropdown.
-  const portalScope = usePortalScope(containerEl);
+  const { isTopMost, panelProps, layerProps, scope: portalScope } = overlay;
+  const positionStyle = panelProps.style;
 
   // Dropdown width: at least the trigger width, clamped to the viewport
   // gutter and the rich-options band (unchanged from the previous ad-hoc
@@ -877,32 +896,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       window.removeEventListener('scroll', update, true);
     };
   }, [isOpen, containerEl, dropdownEl]);
-
-  // Outside interaction dismisses the dropdown (capture-phase pointerdown,
-  // top-most layer only -- a nested overlay above the select keeps it open).
-  useEffect(() => {
-    if (!isOpen || typeof document === 'undefined') return undefined;
-
-    const onPointerDown = (event: PointerEvent): void => {
-      if (!isTopMost()) return;
-      const target = event.target as Node | null;
-      if (
-        target &&
-        (containerRef.current?.contains(target) ||
-          dropdownRef.current?.contains(target))
-      )
-        return;
-      // Only reclaim focus when the dropdown still holds it (searchable): the
-      // press is about to move focus somewhere the user chose, and yanking it
-      // back to the trigger would fight them.
-      const focusWasInside = dropdownRef.current?.contains(document.activeElement);
-      setIsOpen(false);
-      if (focusWasInside) focusTrigger();
-    };
-
-    document.addEventListener('pointerdown', onPointerDown, true);
-    return () => document.removeEventListener('pointerdown', onPointerDown, true);
-  }, [isOpen, isTopMost, focusTrigger]);
 
   // Display value
   const displayValue = useMemo(() => {
@@ -1256,9 +1249,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
       {/* Dropdown -- shared overlay portal with tenant scope re-stamped */}
       {isOpen && (
-        <Portal>
-          <OverlayPortalBoundary>
-            <PortalScope snapshot={portalScope}>
+        <FieldOverlayPanel overlay={overlay}>
               <div
                 ref={setDropdownNode}
                 {...layerProps}
@@ -1275,7 +1266,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 style={{
                   width: dropdownWidth || undefined,
                   ...positionStyle,
-                  ...layerProps.style,
                 }}
               >
             {/* Search input inside dropdown */}
@@ -1452,9 +1442,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               )}
             </div>
               </div>
-            </PortalScope>
-          </OverlayPortalBoundary>
-        </Portal>
+        </FieldOverlayPanel>
       )}
     </div>
   );

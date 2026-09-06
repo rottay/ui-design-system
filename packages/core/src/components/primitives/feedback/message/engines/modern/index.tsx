@@ -69,6 +69,7 @@ import type {
 } from '../../contracts';
 import { MESSAGE_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusInfoIcon } from '@/graphics/icons/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
@@ -152,6 +153,22 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
   const [messages, setMessages] = useState<InternalMessage[]>([]);
 
   const stackRef = useRef<HTMLDivElement>(null);
+
+  // One overlay contract, declared INLINE: the modern message skin still
+  // selects the stack as an in-tree descendant and owns its own fixed
+  // placement and `--ds-z-message` tier, so the kernel supplies stack
+  // membership and the shared Escape route only -- it does not repaint the
+  // band. A transient stack claims no Escape slot, no scroll lock and no
+  // focus restore.
+  const overlay = useFieldOverlay({
+    kind: 'toast',
+    open: messages.length > 0,
+    surface: 'viewport',
+    render: 'inline',
+    modal: false,
+    lockScroll: false,
+    restoreFocus: false,
+  });
   /** Where focus came from when it first entered the stack from outside. */
   const returnFocusRef = useRef<HTMLElement | null>(null);
   /** Set when the card that just left the stack was the one holding focus. */
@@ -317,6 +334,8 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
           technologies announce arriving messages without interrupting the
           user's current task. The items themselves keep role="alert". */}
       <div
+        data-overlay-layer={overlay.panelProps['data-overlay-layer']}
+        data-overlay-kind={overlay.panelProps['data-overlay-kind']}
         ref={stackRef}
         data-part="stack-container"
         data-placement={placement}

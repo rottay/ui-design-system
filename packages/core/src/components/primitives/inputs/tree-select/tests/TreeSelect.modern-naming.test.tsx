@@ -17,6 +17,28 @@ const treeData = [
 
 const PLACEHOLDER = 'Select department';
 
+/**
+ * The Modern panel is PORTALED (WO-CAN-05): it renders through the overlay
+ * kernel into `#rottay-portal-root`, so the tree it contains is a SIBLING of
+ * the render container, never a descendant. This resolves it the only honest
+ * way -- from the trigger's `aria-controls`, which is now the sole link
+ * between field and panel -- and proves it is this field's panel and came
+ * through the kernel before any name is read out of it.
+ */
+const ownedPanel = (container: HTMLElement): HTMLElement => {
+  const trigger = within(container).getByRole('combobox');
+  const panelId = trigger.getAttribute('aria-controls');
+  expect(panelId).toBeTruthy();
+  const panel = document.getElementById(panelId as string);
+  expect(panel).not.toBeNull();
+  expect(container.contains(panel)).toBe(false);
+  expect((panel as HTMLElement).closest('#rottay-portal-root')).not.toBeNull();
+  expect((panel as HTMLElement).getAttribute('data-part')).toBe('dropdown');
+  expect((panel as HTMLElement).getAttribute('data-overlay-layer')).toMatch(/^ds-overlay-/);
+  expect((panel as HTMLElement).getAttribute('data-overlay-kind')).toBe('dropdown');
+  return panel as HTMLElement;
+};
+
 /** Every naming-bearing node, so an ignored prop cannot hide anywhere. */
 const namingSurface = (root: HTMLElement): string[] =>
   Array.from(root.querySelectorAll('[aria-label], [aria-labelledby]')).map((node) =>
@@ -83,7 +105,10 @@ describe('TreeSelect modern naming', () => {
       'modern'
     );
 
-    expect(within(container).getByRole('tree', { name: 'Org' })).toBeDefined();
+    // The external name still reaches the tree after the panel left the field
+    // subtree: the mirror travels WITH the panel, it is not inherited by DOM
+    // ancestry.
+    expect(within(ownedPanel(container)).getByRole('tree', { name: 'Org' })).toBeDefined();
   });
 
   it('mirrors the placeholder fallback on the open popup', () => {
@@ -92,7 +117,9 @@ describe('TreeSelect modern naming', () => {
       'modern'
     );
 
-    expect(within(container).getByRole('tree', { name: PLACEHOLDER })).toBeDefined();
+    expect(
+      within(ownedPanel(container)).getByRole('tree', { name: PLACEHOLDER }),
+    ).toBeDefined();
   });
 });
 

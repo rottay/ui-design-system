@@ -1,10 +1,11 @@
 /**
  * Modern Message skin (WO-SKIN-03 checkpoint O; K1 Lane C exit-lifecycle pass).
  *
- * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. Personality
- * contributes only the opacity/transform transition; decorative one-sided
- * borders are forbidden (semantic tone comes from the governed icon well,
- * tinted surface and progress line -- never a left accent bar).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SPECIFICITY (4th-wave de-hack): every rule that paints a border COLOR is
  * LIFTED under the stack scope -- `.rottay-message-stack--modern[data-part=
@@ -21,8 +22,9 @@
  * `--ds-toast-*` tokens declared nowhere; the fixed positioning/flex stack
  * below is the single paint owner. The provider's `top` prop reaches the
  * paint through the engine-stamped `--ds-message-stack-offset` channel
- * (skin-declared consumer), and `--ds-z-message` keeps its family-local
- * (1590): it is declared nowhere globally. Centring is
+ * (skin-declared consumer). `--ds-z-message` resolves from the single
+ * z-index scale (`foundation/base/z-index`) one step below the notification
+ * band; the local fallback mirrors it exactly (fallback-parity rule). Centring is
  * direction-neutral `inset-inline: 0` + `margin-inline: auto` -- unlike the
  * former half-offset-plus-translate centering, it creates no transform
  * containing block (notification.css precedent).
@@ -44,7 +46,7 @@
 
 .rottay-message-stack--modern[data-part='stack-container'] {
   position: fixed;
-  z-index: var(--ds-z-message, 1590);
+  z-index: var(--ds-z-message, 1790);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,14 +1,11 @@
 /**
  * Modern Notification skin (WO-SKIN-03 checkpoint O; K4-A drain 2026-07-24).
  *
- * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. Neither the
- * item nor the stack container carries a DaisyUI class: the item tree never
- * emitted one, and the container's `toast`/`toast-top`/`toast-bottom`/
- * `toast-center`/`toast-start`/`toast-end` placement classes were drained in
- * K4-A. This skin is the single paint owner for container placement and item
- * surface alike. feedback/Message's identical placement classes were drained
- * in the same wave (its stack is skin-owned via message.css), and theme.css's
- * `[data-tenant] .toast` bridge was removed with both drains complete.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * PLACEMENT: keyed on `data-placement` (stamped by the provider). Inline-axis
  * placement is LOGICAL -- `topLeft`/`bottomLeft` anchor at `inset-inline-start`
@@ -17,8 +14,9 @@
  * former half-offset-plus-translate centering it creates no transform
  * containing block. The provider's `top`/`bottom` props reach the paint
  * through the engine-stamped `--ds-notification-stack-offset` channel
- * (skin-declared consumer), and `--ds-z-notification` keeps its family-local
- * fallback (1600): it is declared nowhere globally.
+ * (skin-declared consumer). `--ds-z-notification` resolves from the single
+ * z-index scale (`foundation/base/z-index`) at the notification band; the
+ * local fallback mirrors it exactly (fallback-parity rule).
  *
  * SPECIFICITY (4th-wave de-hack): every rule that paints a border COLOR is
  * LIFTED under the stack scope, reaching (0,5,0)+ with NO repeated class or
@@ -59,7 +57,7 @@
 /* ---- fixed placement and stacking: self-contained, no utility dependency ---- */
 .rottay-notification-stack--modern[data-part='stack-container'] {
   position: fixed;
-  z-index: var(--ds-z-notification, 1600);
+  z-index: var(--ds-z-notification, 1800);
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-3);

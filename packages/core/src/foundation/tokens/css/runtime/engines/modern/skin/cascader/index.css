@@ -1,10 +1,11 @@
 /**
  * Modern Cascader skin (lane-A Quiet Premium pass over WO-SKIN-02 checkpoint B).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
- * rule loses to preflight regardless of specificity. Unlayered outranks
- * preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the outer `<div>` carrying `ds-cascader ds-cascader--modern` +
  * `data-part='root'`. **NO PORTAL**: the trigger, dropdown, search input,
@@ -114,7 +115,7 @@
   position: relative;
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"] {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -128,35 +129,35 @@
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="trigger"]:where(:hover):not([data-disabled="true"]) {
     border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border. */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="trigger"]:active:not([data-disabled="true"]) {
   border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="trigger"]:focus-visible {
   border-color: var(--ds-cascader-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="trigger"][data-disabled="true"] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="placeholder"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="placeholder"] {
   color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
 }
 
 /* Trigger text takes the remaining track and truncates with ellipsis
    (drained from the `flex-1 truncate` utility). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="value"],
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="placeholder"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="value"],
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="placeholder"] {
   flex: 1;
   min-inline-size: 0;
   overflow: hidden;
@@ -167,7 +168,7 @@
 /* Clear lives outside the combobox (APG: no nested interactives); the skin
    overlays it between the value and the arrow zone, and the arrow keeps a
    gap so the two never collide (drained 24px inline geometry). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="clear-button"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="clear-button"] {
   position: absolute;
   inset-inline-end: var(--ds-cascader-clear-inset-inline-end, 30px);
   inset-block-start: 50%;
@@ -193,7 +194,7 @@
   margin-inline-start: var(--ds-cascader-clear-gap, 20px);
 }
 @media (hover: hover) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="clear-button"]:hover {
     color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
   }
@@ -201,11 +202,11 @@
 /* Touch/active equivalent. The clear reset is a NEUTRAL action: it reads the
    Input clear grammar's ink step, never the error hue (a destructive
    miscue). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="clear-button"]:active {
   color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="clear-button"]:focus-visible {
   outline: none;
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
@@ -213,11 +214,11 @@
 
 /* Trigger chevron: open rotation drained from the `rotate-180` utility +
    inline transition. The glyph is vertically symmetric -- no RTL mirror. */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="arrow-icon"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="arrow-icon"] {
   transition: transform var(--ds-motion-fast)
     var(--ds-motion-ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="trigger"][data-open="true"]
   [data-part="arrow-icon"] {
   transform: rotate(180deg);
@@ -228,11 +229,8 @@
         narrow instead of overflowing. z rides the token scale (dropdown
         tier); the dark-aware luminance step is its own layer above the fill
         (lane overlay register). ---- */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="dropdown"] {
-  position: absolute;
-  inset-inline-start: 0;
+.ds-cascader.ds-cascader--modern.ds-cascader-panel[data-part="dropdown"] {
   z-index: var(--ds-cascader-dropdown-z, var(--ds-z-index-dropdown));
-  margin-block-start: var(--ds-spacing-1);
   max-inline-size: calc(100vw - 2 * var(--ds-spacing-4));
   border-radius: var(--ds-radius-lg);
   background: linear-gradient(
@@ -248,13 +246,11 @@
     var(--ds-motion-ease-out);
 }
 /* The columns wrap is a horizontal track (drained from the `flex` utility). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
-  [data-part="dropdown"]
+.ds-cascader.ds-cascader--modern[data-part="dropdown"]
   div[data-part="option-list"] {
   display: flex;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
-  [data-part="dropdown"]
+.ds-cascader.ds-cascader--modern[data-part="dropdown"]
   [data-part="option-list"] {
   max-inline-size: calc(
     100vw - 2 * var(--ds-spacing-4) - 2 * var(--ds-spacing-1)
@@ -262,13 +258,13 @@
   overflow-x: auto;
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="search-input-wrapper"] {
   padding: var(--ds-spacing-2);
   border-bottom: 1px solid var(--ds-color-border);
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="search-input"] {
   inline-size: 100%;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
@@ -279,30 +275,30 @@
       var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="search-input"]:focus-visible {
   border-color: var(--ds-cascader-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
 @media (hover: hover) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="search-input"]:where(:hover):not(:disabled):not(:focus-visible) {
     border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border (4th-tanda law). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="search-input"]:active:not(:disabled):not(:focus-visible) {
   border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"]::placeholder {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="search-input"]::placeholder {
   color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
 }
 
 /* Empty posture: the dropdown family's empty-well spatial contract (dashed
    hairline, 4.5rem min-block, radius, muted helper ink) -- never a bare
    padded string (AutoComplete/Select idiom). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="empty"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="empty"] {
   display: grid;
   place-items: center;
   min-block-size: 4.5rem;
@@ -318,7 +314,7 @@
 /* ---- menu columns: geometry drained from inline. The divider was physical
         `border-right` -- logical `border-inline-end` flips it under RTL. The
         non-first column entrance is sibling-selected (no new data attr). ---- */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="menu-column"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="menu-column"] {
   list-style: none;
   margin: 0;
   padding: var(--ds-spacing-1);
@@ -327,18 +323,18 @@
   max-block-size: var(--ds-cascader-column-max-height, 240px);
   overflow-y: auto;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="menu-column"]
   + [data-part="menu-column"] {
   animation: ds-cascader-panel-in var(--ds-motion-fast)
     var(--ds-motion-ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="menu-column"]
   + [data-part="menu-column"]:dir(rtl) {
   animation-name: ds-cascader-panel-in-rtl;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="menu-column"]:not([data-last="true"]) {
   border-inline-end: 1px solid var(--ds-color-border);
 }
@@ -356,7 +352,7 @@
         The selected frame mirrors TreeSelect's quiet tint. Layout drained from
         the `flex justify-between` utility: the label truncates on the inline
         track, the chevron/loading dock at the inline end. ---- */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="option"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -375,7 +371,7 @@
       var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="option"]:where(:hover):not([data-selected="true"]):not(
       [data-disabled="true"]
     ) {
@@ -384,23 +380,23 @@
 }
 /* Touch/active equivalent of the hover wash (4th-tanda law: every hover
    paints an equivalent active state). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"]:active:not([data-selected="true"]):not(
     [data-disabled="true"]
   ) {
   background: var(--ds-color-bg-hover);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"]:focus-visible {
   outline: none;
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"][data-disabled="true"] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"][data-selected="true"] {
   background: var(
     --ds-color-bg-selected,
@@ -411,7 +407,7 @@
 }
 
 /* Option label truncation (never wraps mid-word). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"]
   > [data-part="option-label"] {
   min-inline-size: 0;
@@ -422,13 +418,13 @@
 
 /* Child chevron: governed icon (icon facade autoMirror flips it under RTL --
    no skin transform needed). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="chevron"] {
   display: inline-flex;
   margin-inline-start: var(--ds-spacing-2);
   color: var(--ds-color-text-muted);
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading"] {
   inline-size: 12px;
   block-size: 12px;
   border: 2px solid var(--ds-color-border);
@@ -442,9 +438,9 @@
 /* ---- coarse pointer: rows/trigger/clear reach the 44px floor via
         min-block-size (wins over inline heights, fine pointers untouched). ---- */
 @media (hover: none) and (pointer: coarse) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"],
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="option"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="clear-button"] {
     min-block-size: var(--ds-cascader-touch-target-min, var(--ds-touch-target-min, 44px));
   }
@@ -453,18 +449,18 @@
 /* ---- reduced motion: panel/column entrances, spinner and every state
         transition go quiet. ---- */
 @media (prefers-reduced-motion: reduce) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="dropdown"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="menu-column"] {
+  .ds-cascader.ds-cascader--modern.ds-cascader-panel[data-part="dropdown"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="menu-column"] {
     animation: none;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading"] {
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading"] {
     animation: none;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="arrow-icon"],
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="search-input"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="option"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="arrow-icon"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="clear-button"] {
     transition: none;
   }
@@ -475,33 +471,33 @@
         box-shadow rings drop); the column hairline and chevron inherit the
         forced palette. ---- */
 @media (forced-colors: active) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="option"][data-selected="true"] {
     background: Highlight;
     border-color: Highlight;
     color: HighlightText;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="trigger"]:focus-visible,
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="search-input"]:focus-visible,
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="option"]:focus-visible,
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="clear-button"]:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="option"][data-disabled="true"] {
     color: GrayText;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="menu-column"]:not([data-last="true"]) {
     border-inline-end-color: ButtonText;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="chevron"] {
     color: ButtonText;
   }
 }
@@ -512,7 +508,7 @@
    historical getSizeStyle map, mirrored 1:1 on the --ds-input-* channels so a
    token-layer outage cannot shift the field). The coarse-pointer
    min-block-size floor above still wins over these block sizes. */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"] {
   box-sizing: border-box;
 }
 .ds-cascader.ds-cascader--modern[data-part="root"][data-size="small"] [data-part="trigger"] {
@@ -535,7 +531,7 @@
 }
 
 /* Search input geometry, drained from inline (same channels, small step). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="search-input"] {
   box-sizing: border-box;
   block-size: var(--ds-input-sm-height);
   padding-block: var(--ds-spacing-1);
@@ -556,8 +552,8 @@
 
 /* Root loading: the suffix spinner replaces the chevron in flow (same dock),
    and the panel loading-state keeps the empty state's rhythm. */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger-loading"],
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-spinner"] {
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -565,12 +561,12 @@
     var(--ds-cascader-spinner-duration, var(--ds-motion-glacial)) linear
     infinite;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger-loading"] {
   inline-size: 12px;
   block-size: 12px;
   flex-shrink: 0;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-spinner"] {
   inline-size: 14px;
   block-size: 14px;
   flex-shrink: 0;
@@ -582,7 +578,7 @@
   [data-part="trigger-loading"] {
   margin-inline-start: var(--ds-cascader-clear-gap, 20px);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-state"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-state"] {
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-2);
@@ -592,15 +588,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger-loading"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-spinner"] {
     animation: none;
   }
 }
 
 @media (forced-colors: active) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger-loading"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-spinner"] {
     border-color: ButtonText;
     border-top-color: Highlight;
   }

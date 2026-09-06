@@ -56,16 +56,32 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
     expect(textarea).not.toHaveAttribute('data-autosize');
 
     typeMention(textarea, '@a');
+    // The panel is PORTALED (WO-CAN-05): it renders through the overlay
+    // kernel into `#rottay-portal-root`, so it is a sibling of the render
+    // container rather than a descendant of the field.
     const dropdown = (await waitFor(() => {
-      const el = container.querySelector('[data-part="dropdown"]');
+      const el = document.querySelector('[data-part="dropdown"]');
       expect(el).not.toBeNull();
       return el;
     })) as HTMLElement;
 
-    expect(dropdown.getAttribute('style')).toBeNull();
+    expect(container.contains(dropdown)).toBe(false);
+    expect(dropdown.closest('#rottay-portal-root')).not.toBeNull();
+    expect(dropdown.closest('[data-portal-scope="true"]')).not.toBeNull();
+    // The panel's ONLY inline declarations are the ones the kernel owns:
+    // fixed placement coordinates, the measured anchor width and the band.
+    // No paint reaches the style attribute -- that is the geometry law this
+    // test has always enforced, now stated against the portaled shape.
+    expect(new Set(Array.from(dropdown.style)).size).toBeGreaterThan(0);
+    for (const property of Array.from(dropdown.style)) {
+      expect(
+        ['position', 'top', 'left', 'visibility', 'inline-size', 'z-index'],
+        `${property} is not a kernel-owned geometry key`,
+      ).toContain(property);
+    }
     expect(dropdown).toHaveAttribute('data-placement', 'top');
 
-    const option = container.querySelector('[data-part="option"]') as HTMLElement;
+    const option = document.querySelector('[data-part="option"]') as HTMLElement;
     expect(option.getAttribute('style')).toBeNull();
   });
 
@@ -122,15 +138,20 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
     expect(/\[data-part='textarea'\]\[data-autosize='true'\]\s*\{[^}]*resize:\s*none/.test(SKIN)).toBe(true);
   });
 
-  it('skin pins: dropdown placement is logical (inset-block/margin-block), token channels intact', () => {
-    expect(/\[data-part='dropdown'\]\s*\{[^}]*position:\s*absolute/.test(SKIN)).toBe(true);
+  it('skin pins: the panel keeps its chrome and drops the in-tree placement it no longer owns', () => {
+    // Chrome the skin still owns.
     expect(/\[data-part='dropdown'\]\s*\{[^}]*z-index:\s*50/.test(SKIN)).toBe(true);
     expect(/\[data-part='dropdown'\]\s*\{[^}]*max-block-size:\s*var\(--ds-dropdown-max-height,\s*192px\)/.test(SKIN)).toBe(true);
     expect(/\[data-part='dropdown'\]\s*\{[^}]*padding:\s*var\(--ds-dropdown-padding\)/.test(SKIN)).toBe(true);
-    expect(/\[data-placement='top'\]\s*\{[^}]*inset-block-end:\s*100%/.test(SKIN)).toBe(true);
-    expect(/\[data-placement='top'\]\s*\{[^}]*margin-block-end:\s*var\(--ds-spacing-1\)/.test(SKIN)).toBe(true);
-    expect(/\[data-placement='bottom'\]\s*\{[^}]*inset-block-start:\s*100%/.test(SKIN)).toBe(true);
-    expect(/\[data-placement='bottom'\]\s*\{[^}]*margin-block-start:\s*var\(--ds-spacing-1\)/.test(SKIN)).toBe(true);
+    // Placement is the overlay kernel's, not the skin's: a portaled panel has
+    // no `inset-block: 100%` relationship with the field it left, and a skin
+    // `position` would fight the kernel's measured `position: fixed`.
+    expect(/\[data-part='dropdown'\][^{]*\{[^}]*position:\s*absolute/.test(SKIN)).toBe(false);
+    expect(SKIN).not.toContain('inset-block-end: 100%');
+    expect(SKIN).not.toContain('inset-block-start: 100%');
+    // What data-placement still drives is the DIRECTION of the entry motion.
+    expect(/\[data-placement='top'\]\s*\{[^}]*--_ds-mentions-dropdown-enter-offset:\s*-0\.25rem/.test(SKIN)).toBe(true);
+    expect(/\[data-placement='bottom'\]\s*\{[^}]*--_ds-mentions-dropdown-enter-offset:\s*0\.25rem/.test(SKIN)).toBe(true);
   });
 
   it('skin pins: empty state owns padding + centering (former p-3 text-center utilities)', () => {
@@ -138,7 +159,7 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
     // complete selector group so either state cannot silently lose geometry
     // while a loose declaration grep stays green.
     const quietStateBlock =
-      /\[data-part='empty'\],\s*\.ds-mentions\.ds-mentions--modern\[data-part='root'\]\s+\[data-part='loading'\]\s*\{[^}]*\}/
+      /\[data-part='empty'\],\s*\.ds-mentions\.ds-mentions--modern\[data-part='dropdown'\]\s+\[data-part='loading'\]\s*\{[^}]*\}/
         .exec(SKIN)?.[0] ?? '';
     expect(quietStateBlock).toContain('padding: var(--ds-spacing-3');
     expect(quietStateBlock).toContain('text-align: center');
@@ -215,7 +236,7 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
     expect(/\[data-part='option'\]\s*\{[^}]*overflow-wrap:\s*break-word/.test(SKIN_NC)).toBe(true);
     // Hover AND keyboard-active repaint as a primary tint over the dropdown surface.
     expect(
-      /\[data-part='option'\]:not\(\[data-disabled='true'\]\):hover,\s*\n\.ds-mentions\.ds-mentions--modern\[data-part='root'\] \[data-part='option'\]\[data-active='true'\]\s*\{[^}]*background:\s*var\(--ds-mentions-option-bg-hover,\s*color-mix\(in srgb,\s*var\(--ds-color-primary\) 9%,\s*var\(--ds-surface-card\)\)\)/.test(SKIN_NC)
+      /\[data-part='option'\]:not\(\[data-disabled='true'\]\):hover,\s*\n\.ds-mentions\.ds-mentions--modern\[data-part='dropdown'\] \[data-part='option'\]\[data-active='true'\]\s*\{[^}]*background:\s*var\(--ds-mentions-option-bg-hover,\s*color-mix\(in srgb,\s*var\(--ds-color-primary\) 9%,\s*var\(--ds-surface-card\)\)\)/.test(SKIN_NC)
     ).toBe(true);
     // Disabled posture via channels.
     expect(/\[data-part='option'\]\[data-disabled='true'\]\s*\{[^}]*opacity:\s*var\(--ds-mentions-option-disabled-opacity,/.test(SKIN_NC)).toBe(true);

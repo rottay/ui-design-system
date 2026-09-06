@@ -18,6 +18,10 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useId } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { AutoCompleteProps, AutoCompleteOption } from '../../contracts';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { AUTOCOMPLETE_DEFAULTS } from '../../contracts';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -57,6 +61,12 @@ function useAutoCompleteTranslation() {
  * @param ref   - Forwarded ref attached to the outer wrapper div.
  * @returns A Rottay-skinned autocomplete input with dropdown suggestion list.
  */
+/**
+ * Scope class the portaled panel carries so the skin can address it and its
+ * subtree at the SAME specificity they had as descendants of the field root.
+ */
+const PANEL_SCOPE = 'ds-autocomplete ds-autocomplete--modern ds-autocomplete-panel';
+
 export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
   (props, ref) => {
     const { tOr } = useAutoCompleteTranslation();
@@ -127,6 +137,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    // The kernel needs the field root as state (a ref never re-renders when
+    // it lands), so the container publishes to both.
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     // APG combobox wiring: the input owns focus permanently; the active
     // option is announced via aria-activedescendant against the listbox id.
@@ -223,20 +236,40 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       handleOpenChange(true);
     }, [handleOpenChange]);
 
-    // Dismiss the dropdown when the user clicks outside the component.
-    // The listener is only attached while the dropdown is open to avoid
-    // unnecessary event overhead on every mousedown.
-    useEffect(() => {
-      const handleClickOutside = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-          handleOpenChange(false);
-        }
-      };
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleOpenChange]);
+    const dismissPanel = useCallback(() => {
+      handleOpenChange(false);
+    }, [handleOpenChange]);
+
+    // One overlay contract, on the canonical portal path: the panel leaves the
+    // field subtree through `FieldOverlayPanel`, so it cannot be clipped by an
+    // ancestor's overflow. That buys the canonical dropdown band, the single
+    // Escape router (top-most layer only) and the shared capture-phase
+    // outside-pointer watcher, which replaces this engine's private
+    // `mousedown` listener. The skin selects the panel from its own root-level
+    // class instead of by descendancy.
+    const overlay = useFieldOverlay({
+      kind: 'dropdown',
+      open: isOpen,
+      anchor: anchorEl,
+      // The panel matches the field width by default, which `inset-inline: 0`
+      // used to give it for free in-tree; `popupMatchSelectWidth={false}`
+      // switches to content width bounded by the family dial, so the anchor
+      // is then only a floor.
+      anchorWidth: popupMatchSelectWidth === false ? 'min' : 'match',
+      placement: 'bottom-start',
+      offset: 4,
+      flip: true,
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: dismissPanel,
+      // Escape stays with this engine's own key handler: it closes AND returns
+      // focus to the trigger, a component-scoped contract the shared router
+      // cannot express. The layer still declares `modal: true`, so the router
+      // keeps a lower dialog from claiming the same press.
+      dismissOnEscape: false,
+      dismissOnOutsidePointer: true,
+    });
 
     // Keyboard-originated focus moves mark themselves so the scroll effect
     // below can tell them apart from hover: hover must never drag the
@@ -341,6 +374,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
         // the click-outside effect and the consumer can reference this node.
         ref={(node) => {
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          setAnchorEl(node);
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
@@ -406,19 +440,22 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             number is sanctioned instance geometry -- a pixel width only the
             consumer knows, documented inline (no paint travels with it). */}
         {isOpen && (
+          <FieldOverlayPanel overlay={overlay}>
           <ul
+            {...overlay.panelProps}
             data-part="dropdown"
             role={listboxProps.role}
             id={listboxProps.id}
             aria-busy={listboxProps['aria-busy']}
             aria-multiselectable={listboxProps['aria-multiselectable']}
-            className={popupClassName || undefined}
+            className={`${PANEL_SCOPE} ${popupClassName || ''}`.trim()}
             data-match-width={popupMatchSelectWidth === false ? 'false' : undefined}
-            style={
-              typeof popupMatchSelectWidth === 'number'
+            style={{
+              ...overlay.panelProps.style,
+              ...(typeof popupMatchSelectWidth === 'number'
                 ? { inlineSize: popupMatchSelectWidth }
-                : undefined
-            }
+                : null),
+            }}
           >
             {listState === 'loading' ? (
               /* Async posture, same listbox-child contract as the empty one.
@@ -484,6 +521,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
               })
             )}
           </ul>
+          </FieldOverlayPanel>
         )}
       </div>
     );

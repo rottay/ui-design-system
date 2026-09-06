@@ -52,10 +52,8 @@
 import React, { useState, useEffect, useCallback, useId, useRef } from 'react';
 import type { TourProps, TourStepProps } from '../../contracts';
 import { TOUR_DEFAULTS } from '../../contracts';
-import {
-  OverlayPortalBoundary,
-  useOverlayPosition,
-} from '../../../../runtime/overlay/positioning';
+import { OverlayPortalBoundary } from '../../../../runtime/overlay/positioning';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { Portal } from '../../../../runtime/overlay/portal';
 import {
   usePortalScope,
@@ -150,18 +148,13 @@ const ModernTourChrome = ({
     surfaceEl?.focus();
   }, [surfaceEl, currentStep]);
 
-  // Keyboard contract: Escape closes (parity with the mask click), and the
-  // horizontal arrows walk the steps when the focus is inside the surface
-  // (forward = next along the reading direction; mirrored under RTL).
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.stopPropagation();
-        onClose?.();
-      }
-    };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
+  // Keyboard contract: Escape closes (parity with the mask click) through the
+  // kernel's single Escape router, so a tour opened over a dialog dismisses
+  // itself and not the dialog underneath. The horizontal arrows walk the
+  // steps when the focus is inside the surface (forward = next along the
+  // reading direction; mirrored under RTL) -- see handleSurfaceKeyDown.
+  const handleTourEscape = useCallback(() => {
+    onClose?.();
   }, [onClose]);
 
   const handleSurfaceKeyDown = (e: React.KeyboardEvent) => {
@@ -211,12 +204,22 @@ const ModernTourChrome = ({
   // The `placement` prop is inert in this engine (the classic engine honors
   // it): the surface is fixed to bottom-center, the shipped behavior. The
   // offset clears the spotlight's padded edge (cutout padding + gap).
-  const { strategy, style: positionStyle } = useOverlayPosition({
+  const overlay = useFieldOverlay({
+    kind: 'modal',
+    open: true,
     anchor: targetEl,
-    overlay: targetEl ? surfaceEl : null,
+    panel: targetEl ? surfaceEl : null,
     placement: 'bottom',
     offset: SPOTLIGHT_PADDING + SURFACE_GAP,
+    // The tour masks the page, so it blocks Escape for lower layers, but it
+    // scrolls the highlighted target into view and therefore takes no lock.
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onDismiss: handleTourEscape,
   });
+  const { strategy, panelProps, layerProps } = overlay;
+  const positionStyle = panelProps.style;
 
   const maskStyle = typeof mask === 'object' ? mask.style : {};
   // Written as a statement, not a ternary: `mask.color : <default>` reads as an
@@ -288,6 +291,7 @@ const ModernTourChrome = ({
           The runtime's positioning keys spread last so they win. Chrome
           (padding/max-inline-size) is skin-owned. */}
       <div
+        {...layerProps}
         ref={setSurfaceEl}
         data-part="surface"
         data-open="true"

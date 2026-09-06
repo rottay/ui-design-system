@@ -22,7 +22,7 @@ import type { DrawerProps, DrawerSize } from '../../contracts';
 import { DRAWER_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
-import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
@@ -60,15 +60,6 @@ const SIZE_MAP: Record<DrawerSize, string> = {
   xl: '736px',
   full: '100%',
 };
-
-/**
- * Width of the viewport scrollbar, used to compensate the body scroll lock so
- * the page behind does not reflow when the drawer opens (Modal engine idiom).
- */
-function getScrollbarWidth(): number {
-  if (typeof window === 'undefined') return 0;
-  return window.innerWidth - document.documentElement.clientWidth;
-}
 
 // ============================================================================
 // Close Button (shared visual with Modal/Sheet)
@@ -137,18 +128,20 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   // vanishing the instant `open` changes.
   const { shouldRender, dataState, ref: presenceRef } = usePresence(open ?? false);
 
-  // Overlay stack participation for canonical z-index + nested stacking (static
-  // zIndex seam only; this engine keeps its own Escape and scroll-lock). The
-  // resolved value equals `--ds-z-drawer` for a lone drawer and offsets when
-  // several overlays stack.
-  const overlayLayer = useOverlayLayer({
+  // Shared overlay contract: canonical `--ds-z-drawer` band with a stack
+  // offset, the single Escape router (top-most blocking layer only), and the
+  // ref-counted body scroll lock. Registration follows `shouldRender` so the
+  // page behind stays locked through the slide-out animation, and the refcount
+  // keeps it locked when an alert-dialog stacked on top of this drawer closes.
+  const overlayLayer = useFieldOverlay({
     kind: 'drawer',
-    active: open ?? false,
-    modal: false,
-    lockScroll: false,
+    open: shouldRender,
+    surface: 'viewport',
+    modal: true,
+    lockScroll: true,
     restoreFocus: false,
+    ...(closeOnEscape ? { onDismiss: handleClose } : {}),
   });
-  const { isTopMost } = overlayLayer;
 
   // overlay.sheet recipe (motion canon): a drawer is a side panel, so its
   // enter/exit timing resolves from the sheet recipe's stamped `--ds-recipe-*`
@@ -157,42 +150,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   // declared, and usePresence unmounts immediately on close.
   const overlayMotion = useMotionRecipePresentation('overlay.sheet');
   const motionIsFinal = overlayMotion.recipe.state === 'final';
-
-  // -- escape key -------------------------------------------------------------
-
-  useEffect(() => {
-    if (!open || !closeOnEscape) return;
-    const onKey = (e: KeyboardEvent) => {
-      // Escape belongs to the top-most layer: stacked drawers must not all
-      // dismiss on one keypress (Popover/Select/tooltip modern idiom).
-      if (e.key === 'Escape' && isTopMost()) handleClose();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open, closeOnEscape, handleClose, isTopMost]);
-
-  // -- body scroll lock (with scrollbar-width compensation) -------------------
-
-  useEffect(() => {
-    // Gated on shouldRender (not `open`) so the page behind stays locked
-    // through the exit animation rather than unlocking while the drawer is
-    // still visibly sliding out.
-    if (!shouldRender) return;
-    const scrollbarWidth = getScrollbarWidth();
-    const originalOverflow = document.body.style.overflow;
-    const originalPaddingInlineEnd = document.body.style.paddingInlineEnd;
-    document.body.style.overflow = 'hidden';
-    if (scrollbarWidth > 0) {
-      // Logical property (Modal idiom): the scrollbar sits on the inline-END
-      // edge in both LTR and RTL documents, so the compensation follows
-      // direction instead of hardcoding the physical right side.
-      document.body.style.paddingInlineEnd = `${scrollbarWidth}px`;
-    }
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      document.body.style.paddingInlineEnd = originalPaddingInlineEnd;
-    };
-  }, [shouldRender]);
 
   // -- early return -----------------------------------------------------------
 

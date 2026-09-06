@@ -3324,5 +3324,8 @@
   "embeddedCssPaint.structures/shell/page-shell-surface/index.tsx": 0,
   "embeddedCssPaint.structures/shell/surface-chrome/index.tsx": 0,
   "embeddedCssPaint.structures/shell/workspace-shell/index.tsx": 0,
-  "embeddedCssPaint.structures/workspace/search-command-bar/index.tsx": 0
+  "embeddedCssPaint.structures/workspace/search-command-bar/index.tsx": 0,
+  "fleet.inlinePaint.primitives/runtime/overlay/field-overlay/index.tsx": 0,
+  "runtimeSvgPaint.primitives/runtime/overlay/field-overlay/index.tsx": 0,
+  "embeddedCssPaint.primitives/runtime/overlay/field-overlay/index.tsx": 0
 }

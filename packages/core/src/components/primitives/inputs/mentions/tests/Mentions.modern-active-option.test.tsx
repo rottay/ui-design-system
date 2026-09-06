@@ -52,7 +52,7 @@ describe('Mentions modern active option', () => {
 
     rerender(<ModernMentions options={TWO} />);
 
-    expect(container.querySelectorAll('[data-part="option"][data-active]')).toHaveLength(1);
+    expect(document.querySelectorAll('[data-part="option"][data-active]')).toHaveLength(1);
   });
 
   it('keeps the option role off the wrapper so no option contains a focusable child', () => {
@@ -65,7 +65,7 @@ describe('Mentions modern active option', () => {
       expect(option.tagName).toBe('BUTTON');
       expect(option.querySelector('button, a[href], input, select, textarea')).toBeNull();
     }
-    for (const li of Array.from(container.querySelectorAll('[data-part="dropdown"] > li'))) {
+    for (const li of Array.from(document.querySelectorAll('[data-part="dropdown"] > li'))) {
       expect(li).toHaveAttribute('role', 'none');
     }
   });

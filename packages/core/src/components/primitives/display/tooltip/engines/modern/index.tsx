@@ -15,7 +15,7 @@
  * - `onVisibleChange` callback for external state sync
  *
  * **Positioning:**
- * - `useOverlayPosition` resolves the strategy per instance:
+ * - `useFieldOverlay` resolves the strategy per instance:
  *   `anchor-css` renders the bubble inline and promotes it to the top layer
  *   (popover + CSS anchor positioning); `js` renders it through the shared
  *   overlay portal at a measured fixed position.
@@ -70,11 +70,11 @@ import {
   readDsPortalVariables,
   type DsPortalVariableStyle,
 } from "../../../../runtime/overlay/foundation/portal-theme";
-import { useOverlayLayer } from "../../../../runtime/overlay/layer-stack";
+import { OverlayPortalBoundary } from "../../../../runtime/overlay/positioning";
 import {
-  OverlayPortalBoundary,
-  useOverlayPosition,
-} from "../../../../runtime/overlay/positioning";
+  useFieldOverlay,
+  type FieldOverlayDismissReason,
+} from "../../../../runtime/overlay/field-overlay";
 import { resolveExitFallbackMs } from "@/graphics/motion/react/runtime/presence/duration";
 
 type OpenReason = "hover" | "focus" | "click" | "content" | "touch";
@@ -452,21 +452,6 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     [ref]
   );
 
-  // The wrapper is the anchor; the bubble is the positioned overlay. The
-  // bubble only mounts while visible, so element presence drives the
-  // positioning lifecycle.
-  const {
-    strategy,
-    style: positionStyle,
-    anchorAttrs,
-  } = useOverlayPosition({
-    anchor: anchorEl,
-    overlay: bubbleEl,
-    placement: positioningPlacement,
-    offset,
-    flip: true,
-  });
-
   // Portals leave the trigger's DOM ancestry. Carry the two locale
   // attributes that affect reading direction, hyphenation and pronunciation
   // onto the bubble so RTL/i18n behavior is identical in both branches.
@@ -631,14 +616,52 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     [anchorEl, bubbleEl]
   );
 
-  const { isTopMost, zIndex: layerZIndex, layerProps } = useOverlayLayer({
+  const handleDismiss = useCallback(
+    (reason: FieldOverlayDismissReason) => {
+      if (reason === "escape") {
+        handleEscape();
+        return;
+      }
+      if (
+        !activeReasonsRef.current.has("click") &&
+        !activeReasonsRef.current.has("touch")
+      )
+        return;
+      closeAll();
+    },
+    [closeAll, handleEscape],
+  );
+
+  // One overlay contract: the wrapper is the anchor, the bubble is the
+  // positioned overlay. The bubble only mounts while visible, so element
+  // presence drives the positioning lifecycle; the tooltip band and the
+  // shared Escape router come from the same call.
+  const overlay = useFieldOverlay({
     kind: "tooltip",
-    active: Boolean(isVisible && !disabled && hasRenderableContent),
+    open: Boolean(isVisible && !disabled && hasRenderableContent),
+    anchor: anchorEl,
+    panel: bubbleEl,
+    measure: true,
+    placement: positioningPlacement,
+    offset,
+    flip: true,
     modal: true,
     lockScroll: false,
     restoreFocus: false,
-    onEscape: handleEscape,
+    onDismiss: handleDismiss,
+    // A tooltip opened by hover must not close on an unrelated press: only a
+    // click/touch-latched bubble light-dismisses.
+    dismissOnOutsidePointer: true,
   });
+  const {
+    isTopMost,
+    zIndex: layerZIndex,
+    strategy,
+    anchorProps: anchorAttrs,
+    layerProps,
+  } = overlay;
+  // The bubble element stays in this engine's own state (arrow + placement
+  // resolvers measure it), so the kernel's ref is unused here.
 
   const toggle = useCallback(() => {
     if (disabled) return;
@@ -654,28 +677,6 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       show("click");
     }
   }, [closeAll, disabled, hide, show]);
-
-  useEffect(() => {
-    if (!isVisible || typeof document === "undefined") return undefined;
-
-    const onPointerDown = (event: PointerEvent): void => {
-      if (!isTopMost()) return;
-      if (
-        !activeReasonsRef.current.has("click") &&
-        !activeReasonsRef.current.has("touch")
-      )
-        return;
-      const target = event.target as Node | null;
-      if (target && (anchorEl?.contains(target) || bubbleEl?.contains(target)))
-        return;
-      closeAll();
-    };
-
-    document.addEventListener("pointerdown", onPointerDown, true);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown, true);
-    };
-  }, [anchorEl, bubbleEl, closeAll, isTopMost, isVisible]);
 
   useLayoutEffect(() => {
     if (!present || !anchorEl || !bubbleEl || typeof window === "undefined")
@@ -720,8 +721,8 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     anchorEl,
     bubbleEl,
     placement,
-    positionStyle.left,
-    positionStyle.top,
+    overlay.positionStyle.left,
+    overlay.positionStyle.top,
     present,
     direction,
   ]);
@@ -826,7 +827,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       : { "--ds-tooltip-arrow-anchor-offset": arrowOffset }),
     // The skin neutralizes UA [popover] border/overflow for the top-layer
     // branch, keyed on data-ds-position-strategy.
-    ...positionStyle,
+    ...overlay.positionStyle,
   };
 
   const describedTrigger = describeTrigger(

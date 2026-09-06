@@ -60,13 +60,19 @@ describe('Cascader modern controlled value and popup wiring', () => {
 
     const popupId = trigger.getAttribute('aria-controls');
     expect(popupId).toBeTruthy();
-    const popup = container.querySelector(`#${CSS.escape(popupId as string)}`);
+    // The panel is PORTALED (WO-CAN-05) into `#rottay-portal-root`, so the
+    // id has to resolve in the document, not inside the render container.
+    // `aria-controls` is now the ONLY link between field and panel, which is
+    // exactly why it is asserted here.
+    const popup = document.getElementById(popupId as string);
     expect(popup).not.toBeNull();
+    expect(container.contains(popup)).toBe(false);
+    expect(popup?.closest('#rottay-portal-root')).not.toBeNull();
     expect(popup).toHaveAttribute('data-part', 'dropdown');
   });
 
   it('scopes the popup id per instance', () => {
-    const { container } = renderWithEngine(
+    renderWithEngine(
       <>
         <ModernCascader options={options} open />
         <ModernCascader options={options} open />
@@ -74,8 +80,14 @@ describe('Cascader modern controlled value and popup wiring', () => {
       'modern'
     );
 
-    const ids = Array.from(container.querySelectorAll('[data-part="dropdown"]')).map((n) => n.id);
-    expect(ids).toHaveLength(2);
-    expect(new Set(ids).size).toBe(2);
+    // Two portaled panels, two distinct ids, both in the shared portal root.
+    const panels = Array.from(
+      document.querySelectorAll('[data-part="dropdown"]'),
+    ) as HTMLElement[];
+    expect(panels).toHaveLength(2);
+    expect(new Set(panels.map((n) => n.id)).size).toBe(2);
+    for (const panel of panels) {
+      expect(panel.closest('#rottay-portal-root')).not.toBeNull();
+    }
   });
 });

@@ -190,7 +190,15 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
     'entrypoints/eslint': { contracts: 0, rules: 1, plugin: 2 },
     'components/primitives/runtime/overlay': {
       'top-layer-host': 0,
+      foundation: 0,
+      'dialog-attributes': 0,
+      'focus-management': 0,
+      backdrop: 0,
       portal: 1,
+      'portal-scope': 1,
+      positioning: 1,
+      'layer-stack': 1,
+      'field-overlay': 2,
     },
     'components/primitives/feedback/toast/runtime/state': {
       'method-registry': 0,
@@ -229,7 +237,7 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
   assert.equal(owners.length, 23);
-  assert.equal(rankedChildren.length, 75);
+  assert.equal(rankedChildren.length, 83);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(
@@ -509,6 +517,52 @@ test('Toast provider consumes its method registry without making UI peers global
     ));
     assert(ids.has(
       `local-layer-inversion:${owner}/method-registry/index.ts->${owner}/provider/index.ts`,
+    ));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('the overlay contract composes its substrate without making UI peers globally permissive', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'components/primitives/runtime/overlay';
+    write(
+      resolve(sourceRoot, `${owner}/field-overlay/index.ts`),
+      [
+        "import { layer } from '../layer-stack';",
+        "import { portal } from '../portal';",
+        "import { scope } from '../portal-scope';",
+        "import { position } from '../positioning';",
+        'export const contract = [layer, portal, scope, position];',
+      ].join('\n') + '\n',
+    );
+    for (const mechanism of ['layer-stack', 'portal', 'portal-scope', 'positioning']) {
+      write(
+        resolve(sourceRoot, `${owner}/${mechanism}/index.ts`),
+        "import { contract } from '../field-overlay';\nexport const mechanism = contract;\n",
+      );
+    }
+    write(
+      resolve(sourceRoot, `${owner}/top-layer-host/index.ts`),
+      "import { portal } from '../portal';\nexport const host = portal;\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    // Downstream -> upstream is the declared ladder, not sibling debt.
+    for (const mechanism of ['layer-stack', 'portal', 'portal-scope', 'positioning']) {
+      assert(!ids.has(
+        `sibling-owner-dependency:${owner}/field-overlay/index.ts->${owner}/${mechanism}/index.ts`,
+      ));
+      assert(ids.has(
+        `local-layer-inversion:${owner}/${mechanism}/index.ts->${owner}/field-overlay/index.ts`,
+      ));
+    }
+    // The substrate floor stays below the mechanisms that consume it.
+    assert(ids.has(
+      `local-layer-inversion:${owner}/top-layer-host/index.ts->${owner}/portal/index.ts`,
     ));
   } finally {
     rmSync(packageRoot, { recursive: true, force: true });

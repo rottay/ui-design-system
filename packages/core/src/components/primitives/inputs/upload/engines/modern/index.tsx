@@ -44,6 +44,7 @@
  */
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadListType } from '../../contracts';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { UPLOAD_DEFAULTS } from '../../contracts';
 import { filterDroppedFiles, removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
 import { Progress } from '../../../../facade';
@@ -249,16 +250,25 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
     return () => previouslyFocused?.focus();
   }, []);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [onClose]);
+  // One overlay contract: the preview is a page-blocking dialog, so it takes
+  // the modal band, the single Escape router (top-most layer only) and the
+  // ref-counted scroll lock. Focus restore stays with the effect above, which
+  // also lands focus on the close button.
+  const overlay = useFieldOverlay({
+    kind: 'modal',
+    open: true,
+    surface: 'viewport',
+    render: 'inline',
+    modal: true,
+    lockScroll: true,
+    restoreFocus: false,
+    onDismiss: onClose,
+  });
 
   return (
     <div
+      data-overlay-layer={overlay.panelProps['data-overlay-layer']}
+      data-overlay-kind={overlay.panelProps['data-overlay-kind']}
       data-part="preview-modal"
       onClick={onClose}
       onKeyDown={(e) => {

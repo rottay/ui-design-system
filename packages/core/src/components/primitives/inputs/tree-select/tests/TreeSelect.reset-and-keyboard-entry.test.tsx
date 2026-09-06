@@ -21,6 +21,26 @@ const nodes: TreeSelectNode[] = [
   { title: 'Design', value: 'design' },
 ];
 
+/**
+ * The Modern panel is PORTALED (WO-CAN-05) into `#rottay-portal-root`, so the
+ * search box and the rows are siblings of the render container rather than its
+ * descendants. Resolve the panel from the trigger's `aria-controls` -- the one
+ * remaining link between field and panel -- and prove it came through the
+ * kernel, so a panel that merely escaped the container by some other route
+ * would not satisfy these tests.
+ */
+const ownedPanel = (container: HTMLElement): HTMLElement => {
+  const trigger = container.querySelector('[data-part="trigger"]') as HTMLElement;
+  const panelId = trigger.getAttribute('aria-controls');
+  expect(panelId).toBeTruthy();
+  const panel = document.getElementById(panelId as string) as HTMLElement;
+  expect(panel).not.toBeNull();
+  expect(container.contains(panel)).toBe(false);
+  expect(panel.closest('#rottay-portal-root')).not.toBeNull();
+  expect(panel.getAttribute('data-overlay-layer')).toMatch(/^ds-overlay-/);
+  return panel;
+};
+
 describe('TreeSelect modern engine reset + keyboard entry', () => {
   it('falls back to the placeholder when a controlled value is cleared to an empty string', () => {
     const { container, rerender } = renderWithEngine(
@@ -47,14 +67,18 @@ describe('TreeSelect modern engine reset + keyboard entry', () => {
       'modern',
     );
 
-    const search = container.querySelector('[data-part="search-input"]') as HTMLInputElement;
+    const panel = ownedPanel(container);
+    const search = panel.querySelector('[data-part="search-input"]') as HTMLInputElement;
     expect(search).toBeTruthy();
 
     fireEvent.keyDown(search, { key: 'ArrowDown' });
 
+    // Focus crosses the portal boundary: the row it lands on lives in the
+    // panel, and the panel is no longer inside the field.
     const active = container.ownerDocument.activeElement as HTMLElement | null;
     expect(active?.getAttribute('data-part')).toBe('option');
     expect(active?.getAttribute('data-key')).toBe('eng');
+    expect(panel.contains(active)).toBe(true);
   });
 
   it('moves focus to the last row from the search input on End', () => {
@@ -63,11 +87,13 @@ describe('TreeSelect modern engine reset + keyboard entry', () => {
       'modern',
     );
 
-    const search = container.querySelector('[data-part="search-input"]') as HTMLInputElement;
+    const panel = ownedPanel(container);
+    const search = panel.querySelector('[data-part="search-input"]') as HTMLInputElement;
     fireEvent.keyDown(search, { key: 'End' });
 
     const active = container.ownerDocument.activeElement as HTMLElement | null;
     expect(active?.getAttribute('data-key')).toBe('design');
+    expect(panel.contains(active)).toBe(true);
   });
 
   it('keeps the placeholder when a controlled multi-select is cleared to an empty list', () => {

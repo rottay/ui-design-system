@@ -56,10 +56,12 @@ import {
 } from '../../contracts';
 import {
   OverlayPortalBoundary,
-  useOverlayPosition,
   type OverlayPlacement,
 } from '../../../../runtime/overlay/positioning';
-import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+import {
+  useFieldOverlay,
+  type FieldOverlayDismissReason,
+} from '../../../../runtime/overlay/field-overlay';
 import { Portal } from '../../../../runtime/overlay/portal';
 import {
   readDsPortalVariables,
@@ -501,24 +503,44 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       }, 0);
     }, [anchorEl, closeAll]);
 
-    const { isTopMost, zIndex: layerZIndex, layerProps } = useOverlayLayer({
-      kind: 'popover',
-      active: Boolean(isOpen),
-      // Lightweight layers still join the shared Escape route so a nested
-      // popover blocks lower dialogs from consuming the same key press.
-      modal: true,
-      lockScroll: false,
-      restoreFocus: false,
-      onEscape: closeOnEscape ? handleEscape : undefined,
-    });
+    const handleDismiss = useCallback(
+      (reason: FieldOverlayDismissReason) => {
+        if (reason === 'escape') handleEscape();
+        else closeAll();
+      },
+      [handleEscape, closeAll],
+    );
 
-    const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+    // One overlay contract: canonical popover band + shared Escape router +
+    // shared capture-phase outside-pointer watcher (top-most layer only) +
+    // branch-resolved positioning. Lightweight layers still declare
+    // `modal: true` so a nested popover blocks lower dialogs from consuming
+    // the same key press; they take no scroll lock and no focus restore.
+    const overlay = useFieldOverlay({
+      kind: 'popover',
+      open: Boolean(isOpen),
       anchor: anchorEl,
-      overlay: positioningActive ? surfaceEl : null,
+      panel: surfaceEl,
+      measure: positioningActive,
       placement: physicalPlacement,
       offset,
       flip: true,
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: handleDismiss,
+      dismissOnEscape: closeOnEscape,
+      dismissOnOutsidePointer: closeOnInteractOutside,
     });
+    const {
+      isTopMost,
+      zIndex: layerZIndex,
+      strategy,
+      anchorProps: anchorAttrs,
+      layerProps,
+    } = overlay;
+    // The surface element stays in this engine's own state (the arrow and
+    // placement resolvers measure it), so the kernel's ref is unused here.
 
     useLayoutEffect(() => {
       if (!isOpen || !anchorEl || !surfaceEl || typeof window === 'undefined')
@@ -560,34 +582,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       isOpen,
       physicalPlacement,
       preferredOverlayPlacement,
-      positionStyle.left,
-      positionStyle.top,
-      surfaceEl,
-    ]);
-
-    useEffect(() => {
-      if (!isOpen || typeof document === 'undefined') return undefined;
-
-      const onPointerDown = (event: PointerEvent): void => {
-        if (!closeOnInteractOutside || !isTopMost()) return;
-        const target = event.target as Node | null;
-        if (
-          target &&
-          (anchorEl?.contains(target) || surfaceEl?.contains(target))
-        )
-          return;
-        closeAll();
-      };
-      document.addEventListener('pointerdown', onPointerDown, true);
-      return () => {
-        document.removeEventListener('pointerdown', onPointerDown, true);
-      };
-    }, [
-      anchorEl,
-      closeAll,
-      closeOnInteractOutside,
-      isTopMost,
-      isOpen,
+      overlay.positionStyle.left,
+      overlay.positionStyle.top,
       surfaceEl,
     ]);
 
@@ -747,7 +743,10 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         ? {}
         : { '--ds-popover-arrow-anchor-offset': arrowOffset }),
       ...overlayStyle,
-      ...positionStyle,
+      /* FAB-17: this surface's positioning block is position + coordinates
+         only. The band travels on `--ds-popover-instance-z-index`, so a
+         caller's `zIndex` scalar never competes with the layer manager. */
+      ...overlay.positionStyle,
     };
 
     const resolvedRole = (role ?? 'dialog') as PopoverRole;

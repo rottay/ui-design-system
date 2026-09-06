@@ -40,7 +40,7 @@
 import React, { useState, useRef, useCallback, useEffect, useId, isValidElement, cloneElement } from 'react';
 import type { HoverCardProps } from '../../contracts';
 import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
-import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { usePresence } from '@/graphics/motion/react/runtime';
 
 /**
@@ -158,26 +158,17 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     [isOpen, handleOpen, anchorEl],
   );
 
-  // Touch parity (Popover's outside-pointerdown idiom, composed): coarse
-  // pointers synthesize mouseenter on tap but produce no reliable mouseleave,
-  // so without an outside dismiss a tapped-open card stayed stuck until
-  // Escape. A pointerdown landing outside BOTH the trigger wrapper and the
-  // card closes immediately, cancelling any pending open/close debounce.
+  // Touch parity: coarse pointers synthesize mouseenter on tap but produce no
+  // reliable mouseleave, so without an outside dismiss a tapped-open card
+  // stayed stuck until Escape. The kernel's shared outside-pointer watcher
+  // supplies it; this handler only cancels the pending open/close debounce.
   // Mouse users are unaffected: moving the pointer to the tap target already
-  // started the close debounce, so this only changes the touch posture.
-  useEffect(() => {
-    if (!isOpen) return;
-    const onPointerDown = (event: PointerEvent) => {
-      const target = event.target as Node | null;
-      if (!target) return;
-      if (anchorEl?.contains(target) || surfaceEl?.contains(target)) return;
-      clearTimeout(openTimerRef.current);
-      clearTimeout(closeTimerRef.current);
-      handleOpen(false);
-    };
-    document.addEventListener('pointerdown', onPointerDown, true);
-    return () => document.removeEventListener('pointerdown', onPointerDown, true);
-  }, [isOpen, anchorEl, surfaceEl, handleOpen]);
+  // started the close debounce.
+  const dismissOutside = useCallback(() => {
+    clearTimeout(openTimerRef.current);
+    clearTimeout(closeTimerRef.current);
+    handleOpen(false);
+  }, [handleOpen]);
 
   // The trigger wrapper is the anchor; the surface is the positioned
   // overlay. The surface only mounts while open, so element presence drives
@@ -206,11 +197,27 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       : placement.replace('-end', '-start')) as ReturnType<typeof resolveOverlayPlacement>;
   }, [anchorEl, placement]);
 
-  const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+  const overlay = useFieldOverlay({
+    kind: 'hover',
+    open: isOpen,
     anchor: anchorEl,
-    overlay: surfaceEl,
+    panel: surfaceEl,
+    measure: true,
     placement: logicalPlacement,
+    // The card claims no Escape slot (its own trigger-scoped handler owns
+    // that, keeping focus return to the trigger) and takes no scroll lock.
+    modal: false,
+    lockScroll: false,
+    restoreFocus: false,
+    onDismiss: dismissOutside,
+    dismissOnEscape: false,
+    dismissOnOutsidePointer: true,
   });
+  const {
+    strategy,
+    anchorProps: anchorAttrs,
+    layerProps,
+  } = overlay;
 
   // Disclosure semantics live on the consumer's trigger ELEMENT (Popover's
   // describeTrigger precedent): this role-less wrapper may not carry
@@ -233,7 +240,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     ...overlayStyle,
     // Positioning keys come from the shared overlay runtime and spread last
     // so they win over a caller's overlayStyle.
-    ...positionStyle,
+    ...overlay.positionStyle,
   };
 
   return (
@@ -253,6 +260,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       {describedTrigger}
       {shouldRender && mounted && (
         <div
+          {...layerProps}
           ref={setSurfaceRef}
           id={surfaceId}
           data-part="surface"

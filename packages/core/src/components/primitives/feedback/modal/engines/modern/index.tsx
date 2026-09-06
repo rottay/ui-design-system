@@ -26,7 +26,7 @@ import { Portal } from '../../../../runtime/overlay/portal';
 import { usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
-import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive/composition/react/provider/phone-state';
@@ -52,14 +52,6 @@ const RADIUS_MAP = {
 function getOverlayBackground(overlayOpacity: number): string {
   const clampedPercent = Math.min(Math.max(overlayOpacity, 0), 1) * 100;
   return `color-mix(in srgb, var(--ds-color-black) ${clampedPercent}%, transparent)`;
-}
-
-/**
- * Calculate scrollbar width for body padding compensation.
- */
-function getScrollbarWidth(): number {
-  if (typeof window === 'undefined') return 0;
-  return window.innerWidth - document.documentElement.clientWidth;
 }
 
 // ============================================================================
@@ -223,16 +215,19 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   useModalInertSiblings(shouldRender);
 
-  // Overlay stack participation for canonical z-index + nested stacking. This
-  // is the static-zIndex seam only (modal: false) -- this engine keeps its own
-  // Escape and scroll-lock handling; the manager just supplies the z band and
-  // stack offset. An explicit `zIndex` prop still wins. MODAL_DEFAULTS.zIndex
-  // stays exported for API stability.
-  const overlayLayer = useOverlayLayer({
+  // Shared overlay contract. `modal: false` because a native <dialog> promoted
+  // with showModal() receives Escape as its own `cancel` event, so this engine
+  // must not also claim the router's Escape slot. The scroll lock IS the
+  // kernel's: it is ref-counted, so a lower drawer stays locked when this
+  // modal closes. Registration follows `shouldRender`, keeping the page locked
+  // through the exit animation. An explicit `zIndex` prop still wins;
+  // MODAL_DEFAULTS.zIndex stays exported for API stability.
+  const overlayLayer = useFieldOverlay({
     kind: 'modal',
-    active: open,
+    open: shouldRender,
+    surface: 'viewport',
     modal: false,
-    lockScroll: false,
+    lockScroll: preventScroll,
     restoreFocus: false,
   });
   const resolvedZIndex = zIndex ?? overlayLayer.zIndex;
@@ -303,31 +298,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
       setTopLayerHost(null);
     };
   }, [open, shouldRender, dialogEl]);
-
-  // -- scroll lock with scrollbar compensation --------------------------------
-
-  useEffect(() => {
-    if (!preventScroll) return;
-    // Gated on shouldRender (not `open`) so the page behind stays locked
-    // through the exit animation instead of becoming scrollable while the
-    // modal is still visibly fading out.
-    if (shouldRender) {
-      const scrollbarWidth = getScrollbarWidth();
-      const originalOverflow = document.body.style.overflow;
-      const originalPaddingInlineEnd = document.body.style.paddingInlineEnd;
-      document.body.style.overflow = 'hidden';
-      if (scrollbarWidth > 0) {
-        // Logical property: the scrollbar sits on the inline-END edge in both
-        // LTR and RTL documents, so the compensation must follow direction
-        // instead of hardcoding the physical right side.
-        document.body.style.paddingInlineEnd = `${scrollbarWidth}px`;
-      }
-      return () => {
-        document.body.style.overflow = originalOverflow;
-        document.body.style.paddingInlineEnd = originalPaddingInlineEnd;
-      };
-    }
-  }, [shouldRender, preventScroll]);
 
   // -- backdrop click ---------------------------------------------------------
 

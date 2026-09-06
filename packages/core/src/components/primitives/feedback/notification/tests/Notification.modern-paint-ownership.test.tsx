@@ -145,7 +145,7 @@ describe('Notification modern engine — the skin owns placement and surface', (
   it('declares the fixed stack container with a family-local z-index fallback', () => {
     expect(SKIN).toContain(".rottay-notification-stack--modern[data-part='stack-container']");
     expect(SKIN).toContain('position: fixed;');
-    expect(SKIN).toContain('z-index: var(--ds-z-notification, 1600);');
+    expect(SKIN).toContain('z-index: var(--ds-z-notification, 1800);');
   });
 
   it('consumes the engine-stamped offset channel on the block edge', () => {

@@ -472,6 +472,30 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
   [
+    // The single overlay contract (`useFieldOverlay`) composes the certified
+    // stack, positioning and portal-scope producers below and adds nothing
+    // but a z-index string and a measured anchor width. Its returned style
+    // paths are therefore positioning + band only -- `panelProps.style` is
+    // position/size/z, `positionStyle` is position alone -- and its prop bags
+    // (`panelProps`, `layerProps`, `anchorProps`) carry `data-overlay-*` and
+    // `data-ds-anchor` attributes. zeroPaint is verified against the hook's
+    // own source, which is why that source builds its bags as plain literals
+    // rather than through an opaque `useMemo`.
+    "components/primitives/runtime/overlay/field-overlay/index",
+    new Map([
+      [
+        "useFieldOverlay",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["panelProps.style", "positionStyle"]),
+          nonStylePaths: new Set(["panelProps", "layerProps", "anchorProps"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
     // The overlay stack returns a spreadable `layerProps` bag whose only style
     // declaration is z-index geometry. Certify the complete bag so consumers
     // do not treat its JSX spread as opaque component paint.

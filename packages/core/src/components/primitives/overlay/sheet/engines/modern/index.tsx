@@ -20,12 +20,12 @@
  * @package @rottay/design-system
  */
 
-import React, { useEffect, useCallback, useId } from 'react';
+import React, { useCallback, useId } from 'react';
 import type { SheetProps } from '../../contracts';
 import { SHEET_DEFAULTS } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
-import { useSheetOverlayRuntime } from '../../runtime/overlay-stack';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -133,11 +133,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
   // immediately.
   const { shouldRender, dataState, ref: presenceRef } = usePresence(open);
 
-  // Stack registration and the body scroll lock stay held through the exit
-  // animation (gated on shouldRender, Drawer's posture) — the page behind
-  // must not reflow while the panel is still visibly sliding out.
-  const { isTopmost } = useSheetOverlayRuntime(shouldRender);
-
   // overlay.sheet recipe (motion canon): entrance timing/easing resolve from
   // the stamped `--ds-recipe-*` variables. The slide TRAVEL stays the skin's
   // anatomical 100% (the panel enters from its own edge), so the recipe's
@@ -150,20 +145,20 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     onOpenChange(false);
   }, [onOpenChange]);
 
-  const handleEscape = useCallback((e: KeyboardEvent) => {
-    if (closeOnEscape && e.key === 'Escape' && isTopmost()) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      onOpenChange(false);
-    }
-  }, [closeOnEscape, isTopmost, onOpenChange]);
-
-  // Stack-aware Escape handling; the shared runtime owns body scroll locking.
-  useEffect(() => {
-    if (!open) return;
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [open, handleEscape]);
+  // Shared overlay contract: the sheet tier of the canonical band scale plus a
+  // stack offset, the single Escape router, and the ref-counted body scroll
+  // lock. Gated on shouldRender (Drawer's posture) so the page behind does not
+  // reflow while the panel is still visibly sliding out. `restoreFocus` is off
+  // because the FocusTrap below already restores.
+  const overlay = useFieldOverlay({
+    kind: 'sheet',
+    open: shouldRender,
+    surface: 'viewport',
+    modal: true,
+    lockScroll: true,
+    restoreFocus: false,
+    ...(closeOnEscape ? { onDismiss: handleClose } : {}),
+  });
 
   // Bail early when closed AND the exit finished -- no DOM footprint remains
   if (!shouldRender) return <></>;
@@ -203,10 +198,10 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         className={`rottay-sheet--modern ${className || ''} ${rootClassName || ''}`}
         style={{
           ...overlayMotion.variables,
-          // Tokenized overlay stack (spec section 9), matching Drawer's
-          // backdrop/panel pair instead of a magic 50. The fixed inset lives
-          // in the skin.
-          zIndex: 'var(--ds-z-overlay)',
+          // Canonical band from the shared layer manager: the sheet tier plus
+          // a stack offset, so two stacked sheets order instead of tying. The
+          // fixed inset lives in the skin.
+          zIndex: overlay.zIndex,
           ...style,
           ...rootStyle,
         }}

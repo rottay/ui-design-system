@@ -264,12 +264,26 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     rules: 1,
     plugin: 2,
   }),
-  // The top-layer host is the overlay substrate a portal resolves against:
-  // it decides whether portaled content stays inside an open dialog's
-  // top-layer subtree or falls back to the shared portal root.
+  // The overlay runtime is a three-step ladder, not a bag of peers.
+  // 0 = substrate with no sibling of its own: the top-layer host a portal
+  // resolves against (it decides whether portaled content stays inside an
+  // open dialog's top-layer subtree or falls back to the shared root), the
+  // portal-theme foundation, the dialog attribute sync, the focus owners and
+  // the backdrop element. 1 = the four mechanisms that consume that
+  // substrate. 2 = `field-overlay`, the single `useFieldOverlay` contract
+  // every panel-bearing family adopts; it composes the mechanisms below it
+  // and nothing in this owner may depend back up on it.
   'components/primitives/runtime/overlay': Object.freeze({
     'top-layer-host': 0,
+    foundation: 0,
+    'dialog-attributes': 0,
+    'focus-management': 0,
+    backdrop: 0,
     portal: 1,
+    'portal-scope': 1,
+    positioning: 1,
+    'layer-stack': 1,
+    'field-overlay': 2,
   }),
   'components/primitives/feedback/toast/runtime/state': Object.freeze({
     'method-registry': 0,

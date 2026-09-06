@@ -27,11 +27,12 @@ import { StatusInfoIcon } from '@/graphics/icons/semantic/generated/roles/status
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
 import { ModernButton as Button } from '../../../../facade';
-import { Portal } from '../../../../runtime/overlay/portal';
-import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
-import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
 /**
  * Maps each variant to its governed semantic status role (the icon facade
@@ -62,7 +63,7 @@ const VARIANT_BUTTON_MAP: Record<ConfirmDialogVariant, 'primary' | 'warning' | '
 /**
  * ConfirmDialog implementation on the shared overlay substrate.
  *
- * Same substrate as the modern AlertDialog: `<Portal>` + `<PortalScope>` for
+ * Same substrate as the modern AlertDialog: `useFieldOverlay` for
  * tenant-safe rendering, native `<dialog>` + `showModal()` for the top layer
  * and focus trap, `useModalInertSiblings` for background inertness, and
  * `useOverlayLayer` for the canonical z band (replacing the ad-hoc
@@ -120,7 +121,6 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
   // Inline anchor: the component's DOM position carries the tenant/locale
   // lineage that PortalScope re-stamps onto the portaled dialog.
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
-  const portalScope = usePortalScope(anchorEl);
   // State (not a ref): the Portal mounts the dialog one commit later, and the
   // promotion effect below must re-run when the element actually appears.
   const [dialogEl, setDialogEl] = useState<HTMLDialogElement | null>(null);
@@ -138,14 +138,30 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
   // Shared stack: canonical modal z band, single Escape router (top-most
   // blocking layer only), scroll-lock refcount and LIFO focus restore.
   // Escape dismisses via onCancel (parity with the rustic engine).
-  const { layerProps } = useOverlayLayer({
+  const overlay = useFieldOverlay({
     kind: 'modal',
-    active: open,
+    open,
+    // The anchor is the lineage source only: a viewport surface takes no
+    // anchor measurement, but the kernel re-stamps the anchor's tenant/locale
+    // context around the portaled dialog.
+    anchor: anchorEl,
+    surface: 'viewport',
     modal: true,
     lockScroll: true,
     restoreFocus: true,
-    onEscape: handleCancel,
+    onDismiss: handleCancel,
   });
+  const { panelProps, setPanel } = overlay;
+
+  // The dialog root carries the engine's own ref AND the kernel's panel ref;
+  // spreading `panelProps` alone would replace the former.
+  const setDialogNode = useCallback(
+    (element: HTMLDialogElement | null) => {
+      setDialogEl(element);
+      setPanel(element);
+    },
+    [setPanel],
+  );
 
   // Promote to the native top layer while open. Unmounting on close releases
   // it; the layer-stack restores focus to the previously focused element.
@@ -197,12 +213,11 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
     <>
       <span ref={setAnchorEl} data-part="anchor" />
       {open ? (
-        <Portal>
-          <PortalScope snapshot={portalScope}>
+        <FieldOverlayPanel overlay={overlay}>
             <TopLayerHostProvider host={topLayerHost}>
             <dialog
-              ref={setDialogEl}
-              {...layerProps}
+              {...panelProps}
+              ref={setDialogNode}
               data-part="backdrop"
               className={`rottay-confirm-dialog--modern ${className}`}
               style={{
@@ -218,7 +233,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                ...layerProps.style,
+                ...panelProps.style,
                 ...style,
               }}
               data-testid={dataTestId}
@@ -287,8 +302,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
               </div>
             </dialog>
           </TopLayerHostProvider>
-          </PortalScope>
-        </Portal>
+        </FieldOverlayPanel>
       ) : null}
     </>
   );

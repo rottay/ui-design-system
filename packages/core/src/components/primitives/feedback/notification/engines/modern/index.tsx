@@ -72,8 +72,10 @@ import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/d
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useReducedMotion } from '@/graphics/motion/react/runtime';
 import { governedExitMs } from '@/graphics/motion/react/runtime/presence/duration';
-import { Portal } from '../../../../runtime/overlay/portal';
-import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { StatusInfoIcon } from '@/graphics/icons/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
@@ -231,7 +233,22 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   // trap their fixed placement, and the portal scope re-stamps the
   // tenant/locale/direction lineage the portal boundary would otherwise cut.
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
-  const portalScope = usePortalScope(anchorEl);
+  const hasStacks = notifications.length > 0;
+
+  // One overlay contract: the stacks join the shared layer registry at the
+  // canonical notification band and portal through the single kernel door,
+  // with the provider anchor's tenant/locale lineage re-stamped around them.
+  // A transient stack claims no Escape slot, no scroll lock and no focus
+  // restore -- it must never take the page away from the user.
+  const overlay = useFieldOverlay({
+    kind: 'toast',
+    open: hasStacks,
+    anchor: anchorEl,
+    surface: 'viewport',
+    modal: false,
+    lockScroll: false,
+    restoreFocus: false,
+  });
   const reducedMotion = useReducedMotion();
 
   // Graceful exit bookkeeping: ids currently playing their exit animation.
@@ -438,15 +455,19 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
           stack is alive (a leaving item is still alive until its exit timer
           drops it, so exits never lose their stage). */}
       {Object.keys(groupedNotifications).length === 0 ? null : (
-        <Portal>
-          <PortalScope snapshot={portalScope}>
+        <FieldOverlayPanel overlay={overlay}>
             {Object.entries(groupedNotifications).map(([p, items]) => (
               <div
                 key={p}
+                data-overlay-layer={overlay.panelProps['data-overlay-layer']}
+                data-overlay-kind={overlay.panelProps['data-overlay-kind']}
                 data-part="stack-container"
                 data-placement={p}
                 className="rottay-notification-stack--modern"
-                style={placementStyles[p as NotificationPlacement]}
+                style={{
+                  ...placementStyles[p as NotificationPlacement],
+                  ...overlay.panelProps.style,
+                }}
               >
                 {items.map((notification) => {
                   const { key: _notificationKey, ...notificationProps } = notification;
@@ -467,8 +488,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
                 })}
               </div>
             ))}
-          </PortalScope>
-        </Portal>
+        </FieldOverlayPanel>
       )}
     </NotificationContext.Provider>
   );

@@ -21,6 +21,10 @@
 import React, { useState, useRef, useEffect, useCallback, useId, useMemo } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../../contracts';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { CASCADER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -147,6 +151,14 @@ function resolvePathAndColumns(
  * @param props - {@link CascaderProps}
  * @returns A positioned cascader dropdown with search and async-load support
  */
+/**
+ * Scope class the portaled panel carries: the family pair the skin scopes
+ * every panel-subtree rule through, plus a panel marker for the panel's own
+ * rules. `:is([data-part="root"], [data-part="dropdown"])` in the skin keeps
+ * every one of those rules at its original specificity.
+ */
+const PANEL_SCOPE = 'ds-cascader ds-cascader--modern ds-cascader-panel';
+
 export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
   (props, ref) => {
     const { tOr } = useCascaderTranslation();
@@ -205,9 +217,19 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const popupId = `cascader-popup-${useId().replace(/:/g, '')}`;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    // The kernel needs the field root as state (a ref never re-renders when
+    // it lands), so the container publishes to both.
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
+    // The panel carries both this engine's column-walking ref and the
+    // kernel's measured element.
+    const setPanelNode = useCallback((node: HTMLDivElement | null) => {
+      (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      setPanelEl(node);
+    }, []);
     // After a keyboard-driven expansion, DOM focus lands on the first option
     // of the freshly appended column (see handleDropdownKeyDown).
     const pendingColumnFocusRef = useRef(false);
@@ -473,18 +495,40 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       }
     };
 
-    // Close the dropdown when clicking outside the container
-    useEffect(() => {
-      const handleClickOutside = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-          closeWithoutCommit();
-        }
-      };
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, closeWithoutCommit]);
+    const dismissPanel = useCallback(() => {
+      closeWithoutCommit();
+    }, [closeWithoutCommit]);
+
+    // One overlay contract, on the canonical portal path: the panel leaves the
+    // field subtree through `FieldOverlayPanel`, so it cannot be clipped by an
+    // ancestor's overflow. That buys the canonical dropdown band, the single
+    // Escape router (top-most layer only) and the shared capture-phase
+    // outside-pointer watcher, which replaces this engine's private
+    // `mousedown` listener. The skin selects the panel from its own root-level
+    // class instead of by descendancy.
+    const overlay = useFieldOverlay({
+      kind: 'dropdown',
+      open: isOpen,
+      anchor: anchorEl,
+      panel: panelEl,
+      // The columns track grows past the field, so the trigger width is a
+      // FLOOR here, not a fixed size (`inset-inline-start: 0` gave the panel
+      // its start edge in-tree; portaled, the edge is measured).
+      anchorWidth: 'min',
+      placement: 'bottom-start',
+      offset: 4,
+      flip: true,
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: dismissPanel,
+      // Escape stays with this engine's own key handler: it closes AND returns
+      // focus to the trigger, a component-scoped contract the shared router
+      // cannot express. The layer still declares `modal: true`, so the router
+      // keeps a lower dialog from claiming the same press.
+      dismissOnEscape: false,
+      dismissOnOutsidePointer: true,
+    });
 
     const getDisplayValue = () => {
       if (selectedPath.length === 0) return '';
@@ -519,6 +563,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       <div
         ref={(node) => {
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          setAnchorEl(node);
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
@@ -599,7 +644,15 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                 role="option" rows. Root `loading` masks the panel content
                 with a loading-state that keeps the empty state's spatial
                 contract (never a spinner floating in a blank panel). */}
-            <div id={popupId} data-part="dropdown" className={popupClassName || undefined} ref={dropdownRef} onKeyDown={handleDropdownKeyDown}>
+            <FieldOverlayPanel overlay={overlay}>
+            <div
+              {...overlay.panelProps}
+              ref={setPanelNode}
+              id={popupId}
+              data-part="dropdown"
+              className={`${PANEL_SCOPE} ${popupClassName || ''}`.trim()}
+              onKeyDown={handleDropdownKeyDown}
+            >
             {loading ? (
               <div data-part="loading-state" role="status">
                 <span data-part="loading-spinner" aria-hidden="true" />
@@ -721,6 +774,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             </>
             )}
             </div>
+            </FieldOverlayPanel>
           </>
         )}
       </div>

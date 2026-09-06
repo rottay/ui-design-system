@@ -168,12 +168,29 @@ function getServerSnapshot(): readonly LayerRecord[] {
 
 let scrollLockCount = 0;
 let restoreBodyOverflow: string | null = null;
+let restoreBodyPaddingInlineEnd: string | null = null;
+
+/**
+ * Width the viewport scrollbar occupies. Locking `overflow` removes it, so the
+ * page behind reflows by exactly this much unless it is compensated.
+ */
+function scrollbarWidth(): number {
+  if (typeof window === 'undefined') return 0;
+  return window.innerWidth - document.documentElement.clientWidth;
+}
 
 function acquireScrollLock(): void {
   if (typeof document === 'undefined') return;
   if (scrollLockCount === 0) {
+    const gutter = scrollbarWidth();
     restoreBodyOverflow = document.body.style.overflow;
+    restoreBodyPaddingInlineEnd = document.body.style.paddingInlineEnd;
     document.body.style.overflow = 'hidden';
+    if (gutter > 0) {
+      // Logical property: the scrollbar sits on the inline-END edge in both
+      // LTR and RTL documents.
+      document.body.style.paddingInlineEnd = `${gutter}px`;
+    }
   }
   scrollLockCount += 1;
 }
@@ -183,8 +200,20 @@ function releaseScrollLock(): void {
   scrollLockCount -= 1;
   if (scrollLockCount === 0) {
     document.body.style.overflow = restoreBodyOverflow ?? '';
+    document.body.style.paddingInlineEnd = restoreBodyPaddingInlineEnd ?? '';
     restoreBodyOverflow = null;
+    restoreBodyPaddingInlineEnd = null;
   }
+}
+
+/**
+ * Test-only helper: the current scroll-lock refcount. Lets a contract test
+ * assert the refcount law (a lower layer keeps the page locked after an upper
+ * layer closes) without reaching into module internals.
+ * @internal
+ */
+export function getScrollLockCount(): number {
+  return scrollLockCount;
 }
 
 // ---------------------------------------------------------------------------

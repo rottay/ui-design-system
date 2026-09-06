@@ -150,7 +150,7 @@ describe('Message modern engine — the skin owns placement and surface', () => 
   it('declares the fixed stack container with a family-local z-index fallback', () => {
     expect(SKIN).toContain(".rottay-message-stack--modern[data-part='stack-container']");
     expect(SKIN).toContain('position: fixed;');
-    expect(SKIN).toContain('z-index: var(--ds-z-message, 1590);');
+    expect(SKIN).toContain('z-index: var(--ds-z-message, 1790);');
   });
 
   it('consumes the engine-stamped offset channel on the top block edge', () => {

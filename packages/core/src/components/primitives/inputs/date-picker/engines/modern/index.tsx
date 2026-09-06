@@ -34,8 +34,10 @@ import React, {
   useMemo,
 } from 'react';
 import type { DatePickerMode, DatePickerProps, RangePickerProps } from '../../contracts';
-import { Portal } from '../../../../runtime/overlay/portal';
-import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
@@ -846,9 +848,16 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
     // Refs
     const triggerRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
+    const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
+    // The panel carries both this engine's measuring ref and the kernel's
+    // containment element.
+    const setPanelNode = useCallback((node: HTMLDivElement | null) => {
+      panelRef.current = node;
+      setPanelEl(node);
+    }, []);
     const inputRef = useRef<HTMLInputElement>(null);
     // The calendar leaves the trigger's DOM ancestry when it portals, so the
-    // tenant/locale scope has to be re-stamped around it. `usePortalScope`
+    // tenant/locale scope has to be re-stamped around it. The kernel
     // needs the anchor as state (a ref would not re-render when it lands), so
     // the trigger publishes to both.
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -856,7 +865,6 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       setAnchorEl(node);
     }, []);
-    const portalScope = usePortalScope(anchorEl);
 
     // Merge refs
     const setInputRef = useCallback(
@@ -882,38 +890,31 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
     // Click-outside dismissal. Uses mousedown (not click) so the popover
     // closes before the external element's click handler fires -- this avoids
-    // a flash where both the popover and the clicked element are active.
-    useEffect(() => {
-      if (!isOpen) return;
-      const handler = (e: MouseEvent) => {
-        const target = e.target as Node;
-        if (
-          triggerRef.current && !triggerRef.current.contains(target) &&
-          panelRef.current && !panelRef.current.contains(target)
-        ) {
-          setOpen(false);
-        }
-      };
-      document.addEventListener('mousedown', handler);
-      return () => document.removeEventListener('mousedown', handler);
-    }, [isOpen, setOpen]);
+    // One overlay contract. The kernel owns the shared Escape router (top-most
+    // layer only) and the shared capture-phase outside-pointer watcher, which
+    // replaces this engine's two private document listeners; Escape and an
+    // outside press both RETURN FOCUS to the trigger input, because the panel
+    // unmounts on close and focus would otherwise drop to <body>. The measured
+    // placement below stays this engine's own (its viewport clamp and
+    // placement vocabulary are product behaviour), so the surface is declared
+    // `viewport` and the kernel contributes the canonical dropdown band.
+    const dismissPanel = useCallback(() => {
+      setOpen(false);
+      inputRef.current?.focus();
+    }, [setOpen]);
 
-    // Global Escape key listener -- separate from click-outside so both
-    // keyboard and pointer users get a consistent dismiss experience.
-    // Escape also RETURNS FOCUS to the trigger input (Dropdown/Popover
-    // precedent): the panel unmounts on close, so without this the focus
-    // would drop to <body>.
-    useEffect(() => {
-      if (!isOpen) return;
-      const handler = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          setOpen(false);
-          inputRef.current?.focus();
-        }
-      };
-      document.addEventListener('keydown', handler);
-      return () => document.removeEventListener('keydown', handler);
-    }, [isOpen, setOpen]);
+    const overlay = useFieldOverlay({
+      kind: 'dropdown',
+      open: isOpen,
+      anchor: anchorEl,
+      panel: panelEl,
+      surface: 'viewport',
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: dismissPanel,
+      dismissOnOutsidePointer: true,
+    });
 
     // When showTime is active, we merge the time portion from the time picker
     // state into the selected calendar date. Without this, selecting a new day
@@ -1067,21 +1068,21 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             to avoid ancestor overflow:hidden clipping. The target resolves as
             explicit container > active top-layer host > shared
             `#rottay-portal-root`, so the calendar stays visible when the field
-            sits inside a `showModal()` dialog. `PortalScope` carries the
+            sits inside a `showModal()` dialog. The kernel carries the
             tenant/theme/direction lineage across the boundary. Positioning
             stays fixed off the trigger rect; zIndex 1050 matches the DS
             overlay stacking layer (above modals at 1040). */}
         {isOpen && (
-          <Portal>
-            <PortalScope snapshot={portalScope}>
+          <FieldOverlayPanel overlay={overlay}>
           <div
-            ref={panelRef}
+            {...overlay.panelProps}
+            ref={setPanelNode}
             data-placement={placement}
             style={{
               position: 'fixed',
               top: popPos.top,
               left: popPos.left,
-              zIndex: 'var(--ds-datepicker-z-index, 1050)',
+              ...overlay.panelProps.style,
             }}
           >
             <CalendarPanel
@@ -1114,8 +1115,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
               superNextIcon={superNextIcon}
             />
           </div>
-            </PortalScope>
-          </Portal>
+          </FieldOverlayPanel>
         )}
       </>
     );
@@ -1218,13 +1218,19 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
     // Refs
     const triggerRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
+    const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
+    // The panel carries both this engine's measuring ref and the kernel's
+    // containment element.
+    const setPanelNode = useCallback((node: HTMLDivElement | null) => {
+      panelRef.current = node;
+      setPanelEl(node);
+    }, []);
     // See DatePickerBase: the portaled calendar needs the anchor as state so
     // the scope snapshot re-resolves once the trigger lands. The callback must
     // be stable -- an inline ref arrow is re-created every render, so React
     // would detach (null) and re-attach it each commit and the setState would
     // loop.
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-    const portalScope = usePortalScope(anchorEl);
     const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
       (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       setAnchorEl(node);
@@ -1242,38 +1248,27 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       [isOpenControlled, onOpenChange],
     );
 
-    // Click outside
-    useEffect(() => {
-      if (!isOpen) return;
-      const handler = (e: MouseEvent) => {
-        const target = e.target as Node;
-        if (
-          triggerRef.current && !triggerRef.current.contains(target) &&
-          panelRef.current && !panelRef.current.contains(target)
-        ) {
-          setOpen(false);
-        }
-      };
-      document.addEventListener('mousedown', handler);
-      return () => document.removeEventListener('mousedown', handler);
-    }, [isOpen, setOpen]);
+    // One overlay contract (single-picker rationale above). Dismissal returns
+    // focus to the range input currently being filled.
+    const dismissPanel = useCallback(() => {
+      setOpen(false);
+      triggerRef.current
+        ?.querySelector<HTMLElement>(`[data-range-input='${activeInput}']`)
+        ?.focus();
+    }, [setOpen, activeInput]);
 
-    // Escape: closes and RETURNS FOCUS to the range input currently being
-    // filled (the panel unmounts on close; without this focus drops to <body>).
-    useEffect(() => {
-      if (!isOpen) return;
-      const handler = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          setOpen(false);
-          const active = triggerRef.current?.querySelector<HTMLElement>(
-            `[data-range-input='${activeInput}']`,
-          );
-          active?.focus();
-        }
-      };
-      document.addEventListener('keydown', handler);
-      return () => document.removeEventListener('keydown', handler);
-    }, [isOpen, setOpen, activeInput]);
+    const overlay = useFieldOverlay({
+      kind: 'dropdown',
+      open: isOpen,
+      anchor: anchorEl,
+      panel: panelEl,
+      surface: 'viewport',
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: dismissPanel,
+      dismissOnOutsidePointer: true,
+    });
 
     // Emit change
     const emitChange = useCallback(
@@ -1426,16 +1421,16 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
 
         {/* Shared overlay substrate -- see DatePickerBase. */}
         {isOpen && (
-          <Portal>
-            <PortalScope snapshot={portalScope}>
+          <FieldOverlayPanel overlay={overlay}>
           <div
-            ref={panelRef}
+            {...overlay.panelProps}
+            ref={setPanelNode}
             data-placement={placement}
             style={{
               position: 'fixed',
               top: popPos.top,
               left: popPos.left,
-              zIndex: 'var(--ds-datepicker-z-index, 1050)',
+              ...overlay.panelProps.style,
             }}
           >
             <CalendarPanel
@@ -1472,8 +1467,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
               superNextIcon={superNextIcon}
             />
           </div>
-            </PortalScope>
-          </Portal>
+          </FieldOverlayPanel>
         )}
       </>
     );

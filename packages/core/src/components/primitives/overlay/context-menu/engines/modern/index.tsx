@@ -4,7 +4,7 @@
  * @fileoverview Modern engine for the ContextMenu overlay component. The menu
  * is positioned by the shared overlay positioning runtime
  * (`runtime/overlay/positioning`): a right-click captures the cursor's viewport
- * point, a ZERO-SIZE anchor is rendered there, and `useOverlayPosition` pins
+ * point, a ZERO-SIZE anchor is rendered there, and `useFieldOverlay` pins
  * the panel to it with a zero offset so the panel's near corner lands on the
  * cursor. The runtime's `start`/`end` are physical, so the engine captures the
  * reading direction at open time and picks `bottom-start` (LTR: top-left
@@ -43,7 +43,7 @@
 import React, { useState, useRef, useEffect, useCallback, useId, isValidElement, cloneElement } from 'react';
 import type { ContextMenuProps, ContextMenuItem } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
-import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
+import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { resolveTypeaheadPrefix } from '../../../../runtime/collection/typeahead';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 
@@ -313,15 +313,26 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   // The <ul> is BOTH the presence-animated node and the positioned overlay, so
   // its ref fans out to presence (exit animation), click-outside, and the
   // shared positioning hook.
+  const dismissMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   const setMenuRef = useCallback((node: HTMLUListElement | null) => {
     menuRef.current = node;
     presenceRef(node);
     setMenuEl(node);
   }, [presenceRef]);
 
-  const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
+  // One overlay contract: canonical popover band (context menus share that
+  // tier), the shared Escape router, the shared outside-pointer watcher and
+  // branch-resolved positioning. `modal: true` claims Escape only while
+  // top-most, so a submenu level collapses before the root menu closes.
+  const overlay = useFieldOverlay({
+    kind: 'popover',
+    open: isOpen,
     anchor: anchorEl,
-    overlay: menuEl,
+    panel: menuEl,
+    measure: true,
     // `start`/`end` in the shared runtime are PHYSICAL (bottom-start spans
     // right). The panel must open toward the reading-START side -- leftward
     // under RTL, like a native context menu -- so the physical placement is
@@ -329,7 +340,22 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     placement: direction === 'rtl' ? 'bottom-end' : 'bottom-start',
     offset: 0,
     flip: true,
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onDismiss: dismissMenu,
+    // Escape is LEVEL-scoped here: an open submenu collapses one level before
+    // the root menu closes, so the surface's own key handler owns it. The
+    // layer still declares `modal: true`, which keeps the router inert for
+    // this press instead of letting a lower dialog claim it.
+    dismissOnEscape: false,
+    dismissOnOutsidePointer: true,
   });
+  const {
+    strategy,
+    anchorProps: anchorAttrs,
+    layerProps,
+  } = overlay;
 
   // Every open path funnels here: pointer (contextmenu event) or keyboard
   // (Shift+F10 / the Menu key), so the direction capture stays single-source.
@@ -369,22 +395,6 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     setIsOpen(false);
     triggerRef.current?.focus();
   }, [onSelect]);
-
-  // Dismiss the menu when clicking anywhere outside of it
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
 
   // APG menu keyboard contract: on open the first enabled item takes focus.
   // Arrows/Home/End/typeahead live in the shared level handler below; Escape
@@ -454,15 +464,14 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
       : trigger;
 
   const surfaceStyle: React.CSSProperties = {
-    // Tokenized overlay stack (spec section 9): context menus share the popover
-    // tier (matches the canonical --ds-z-index-context-menu alias), not a magic
-    // 50. The top layer ignores z-index; this only orders the js path.
+    // Tokenized overlay stack (spec section 9): context menus share the
+    // popover tier (matching the canonical --ds-z-index-context-menu alias).
     zIndex: 'var(--ds-z-popover)',
     animation: `${dataState === 'open' ? 'ds-context-menu-popover-enter-modern' : 'ds-context-menu-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
     // Panel chrome (width, padding, list reset) is skin-owned. Positioning
     // comes from the shared runtime; consumer overlayStyle spreads last and
     // wins.
-    ...positionStyle,
+    ...overlay.positionStyle,
     ...overlayStyle,
   };
 
@@ -487,6 +496,7 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
             {...anchorAttrs}
           />
           <ul
+            {...layerProps}
             ref={setMenuRef}
             id={surfaceId}
             role="menu"

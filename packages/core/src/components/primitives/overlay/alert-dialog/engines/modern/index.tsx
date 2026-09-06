@@ -25,16 +25,18 @@ import { ALERT_DIALOG_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
 import { ModernButton as Button } from '../../../../facade';
-import { Portal } from '../../../../runtime/overlay/portal';
-import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
-import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
 /**
  * AlertDialog implementation on the shared overlay substrate.
  *
- * - `<Portal>` moves the dialog into `#rottay-portal-root`; `<PortalScope>`
+ * - `useFieldOverlay` + `<FieldOverlayPanel>` move the dialog into
+ *   `#rottay-portal-root` and re-stamp the anchor's lineage;
  *   re-stamps the tenant/locale/DS-variable context of the inline anchor so
  *   white-labelled shells keep their theme inside the dialog.
  * - The native `<dialog>` + `showModal()` owns the top layer and the browser
@@ -89,7 +91,6 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
   // Inline anchor: the component's DOM position carries the tenant/locale
   // lineage that PortalScope re-stamps onto the portaled dialog.
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
-  const portalScope = usePortalScope(anchorEl);
   // State (not a ref): the Portal mounts the dialog one commit later, and the
   // promotion effect below must re-run when the element actually appears.
   const [dialogEl, setDialogEl] = useState<HTMLDialogElement | null>(null);
@@ -103,14 +104,30 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
   // Shared stack: canonical modal z band, single Escape router (top-most
   // blocking layer only), scroll-lock refcount and LIFO focus restore. Escape
   // always closes, matching the engine's previous behaviour.
-  const { layerProps } = useOverlayLayer({
+  const overlay = useFieldOverlay({
     kind: 'modal',
-    active: open,
+    open,
+    // The anchor is the lineage source only: a viewport surface takes no
+    // anchor measurement, but the kernel re-stamps the anchor's tenant/locale
+    // context around the portaled dialog.
+    anchor: anchorEl,
+    surface: 'viewport',
     modal: true,
     lockScroll: true,
     restoreFocus: true,
-    onEscape: handleCancel,
+    onDismiss: handleCancel,
   });
+  const { panelProps, setPanel } = overlay;
+
+  // The dialog root carries the engine's own ref AND the kernel's panel ref;
+  // spreading `panelProps` alone would replace the former.
+  const setDialogNode = useCallback(
+    (element: HTMLDialogElement | null) => {
+      setDialogEl(element);
+      setPanel(element);
+    },
+    [setPanel],
+  );
 
   // Promote to the native top layer while open. Unmounting on close releases
   // it; the layer-stack restores focus to the previously focused element.
@@ -164,12 +181,11 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
           so no inline style is declared here. */}
       <span ref={setAnchorEl} data-part="anchor" />
       {open ? (
-        <Portal>
-          <PortalScope snapshot={portalScope}>
+        <FieldOverlayPanel overlay={overlay}>
             <TopLayerHostProvider host={topLayerHost}>
             <dialog
-              ref={setDialogEl}
-              {...layerProps}
+              {...panelProps}
+              ref={setDialogNode}
               data-part="root"
               className={`rottay-alert-dialog rottay-alert-dialog--modern ${className}`}
               style={{
@@ -185,7 +201,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                ...layerProps.style,
+                ...panelProps.style,
                 ...style,
               }}
               data-testid={dataTestId}
@@ -244,8 +260,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
               </div>
             </dialog>
           </TopLayerHostProvider>
-          </PortalScope>
-        </Portal>
+        </FieldOverlayPanel>
       ) : null}
     </>
   );

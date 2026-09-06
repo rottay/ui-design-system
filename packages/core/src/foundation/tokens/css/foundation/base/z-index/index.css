@@ -1,25 +1,58 @@
 /**
- * Base Z-Index Tokens - Rottay Design System
+ * Z-Index Scale - Rottay Design System
  *
- * Z-index layering system for consistent element stacking.
- * Uses a scale that leaves room for component-specific adjustments.
+ * THE single declaration site of the `--ds-z-index-*` and `--ds-z-*`
+ * namespaces. The scale used to be split: the numeric bands lived in
+ * `foundation/themes/default/index.css` while the derived component aliases
+ * lived here under an empty "SCALE" header, and four short aliases
+ * (`--ds-z-notification`, `--ds-z-message`, `--ds-z-floatbutton`,
+ * `--ds-z-affix`) were read by skins but declared nowhere -- so they painted
+ * from their own fallback literals, which contradicted the bands they were
+ * named after.
+ *
+ * Both entrypoints (`facade/entrypoints/base` and `.../styles`) import this
+ * file inside `layer(rottay-tokens)` BEFORE the default theme, and a compiled
+ * tenant artifact is appended unlayered after both, so a tenant may still
+ * raise a single band (bithire raises `--ds-z-index-tooltip`) without
+ * reintroducing a second scale.
+ *
+ * The runtime enforcement point for the same namespace is
+ * `components/primitives/runtime/overlay/layer-stack`: it maps an overlay
+ * kind to its band and adds the stack offset. Nothing else in the DS may
+ * author a z-index number.
  */
 
 :root {
   /* ========================================================================
-     Z-INDEX SCALE - Layering System
-     Organized from bottom to top of the stack
+     THE SCALE - bottom to top of the stack
+     One band per stacking role. Overlay bands are 100 apart so the layer
+     manager's per-stack offset can order siblings without leaving the band.
      ======================================================================== */
+  --ds-z-index-base: 0;
+  --ds-z-index-dropdown: 1000;
+  --ds-z-index-sticky: 1100;
+  --ds-z-index-fixed: 1200;
+  --ds-z-index-overlay: 1300;
+  --ds-z-index-drawer: 1400;
+  --ds-z-index-modal: 1500;
+  --ds-z-index-popover: 1600;
+  --ds-z-index-tooltip: 1700;
+  --ds-z-index-notification: 1800;
+  --ds-z-index-max: 9999;
 
   /* ========================================================================
      COMPONENT-SPECIFIC Z-INDEX
-     Specific layers for common component scenarios
+     Specific layers for common component scenarios. Every entry is an alias
+     onto a band above -- never a new number.
      ======================================================================== */
 
   /* Navigation */
   --ds-z-index-navbar: var(--ds-z-index-fixed);
   --ds-z-index-sidebar: var(--ds-z-index-drawer);
   --ds-z-index-navbar-dropdown: calc(var(--ds-z-index-navbar) + 10);
+  /* In-page floating chrome: an affixed block rises above page content but
+     stays below every overlay band. */
+  --ds-z-index-affix: 100;
 
   /* Menus */
   --ds-z-index-menu: var(--ds-z-index-dropdown);
@@ -34,6 +67,11 @@
 
   /* Feedback */
   --ds-z-index-toast: var(--ds-z-index-notification);
+  /* A message is the lighter-weight sibling of a notification and orders
+     immediately below it INSIDE the same band. Written as the literal step
+     rather than a calc() so the fallback-parity gate can compare a skin's
+     fallback against it; a calc() resolves to nothing it can check. */
+  --ds-z-index-message: 1790;
   --ds-z-index-alert: calc(var(--ds-z-index-base) + 1);
   --ds-z-index-banner: var(--ds-z-index-sticky);
 
@@ -45,6 +83,37 @@
   /* Utility */
   --ds-z-index-loading-overlay: calc(var(--ds-z-index-modal) + 100);
   --ds-z-index-skip-link: var(--ds-z-index-max);
+
+  /* ========================================================================
+     SHORT OVERLAY-STACK ALIASES (WO-ENG-09, modern spec section 9)
+     Thin aliases onto the bands above so modern-engine skins route `z-index`
+     through one short namespace instead of ad-hoc magic numbers. Fallback
+     literals mirror the canonical values (fallback-parity rule, spec section
+     7) so a var()-unaware consumer still resolves the same tier. Do not add a
+     second literal scale here -- these are aliases only.
+     ======================================================================== */
+  --ds-z-dropdown: var(--ds-z-index-dropdown, 1000);
+  --ds-z-sticky: var(--ds-z-index-sticky, 1100);
+  --ds-z-fixed: var(--ds-z-index-fixed, 1200);
+  --ds-z-overlay: var(--ds-z-index-overlay, 1300);
+  --ds-z-drawer: var(--ds-z-index-drawer, 1400);
+  --ds-z-modal: var(--ds-z-index-modal, 1500);
+  --ds-z-popover: var(--ds-z-index-popover, 1600);
+  --ds-z-tooltip: var(--ds-z-index-tooltip, 1700);
+  --ds-z-toast: var(--ds-z-index-notification, 1800);
+  /* All four were read by Modern skins and declared nowhere, so each painted
+     from its own fallback literal. `--ds-z-notification` resolved to 1600 --
+     the POPOVER band -- and rendered UNDER a popover it must outrank; the
+     pair now sits inside the notification band. `--ds-z-floatbutton` and
+     `--ds-z-affix` keep the value their skin already resolved to, sourced
+     from the scale instead of a per-site literal; `--ds-z-affix`
+     additionally settles the skin (100) / engine TSX (10) disagreement in
+     favour of the skin. Every fallback literal below equals the value the
+     scale resolves, so `scale.fallbackParityViolations` stays at zero. */
+  --ds-z-notification: var(--ds-z-index-notification, 1800);
+  --ds-z-message: var(--ds-z-index-message, 1790);
+  --ds-z-floatbutton: var(--ds-z-index-dropdown, 1000);
+  --ds-z-affix: var(--ds-z-index-affix, 100);
 
   /* ========================================================================
      RELATIVE Z-INDEX

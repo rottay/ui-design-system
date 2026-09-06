@@ -73,7 +73,11 @@ describe('ColorPicker runtime engine coverage', () => {
     fireEvent.blur(hexInput);
     expect(handleChange).toHaveBeenCalledWith(expect.any(Object), '#333333');
 
-    fireEvent.click(container.querySelectorAll('button')[0] as HTMLButtonElement);
+    // The panel is portaled: its buttons live in `#rottay-portal-root`, and
+    // the first one is still the first PRESET swatch (the format switcher is
+    // a `<select>`, the trigger stays a div).
+    const panel = document.querySelector('[data-part="dropdown"]') as HTMLElement;
+    fireEvent.click(panel.querySelectorAll('button')[0] as HTMLButtonElement);
     expect(handleChange).toHaveBeenCalledWith(expect.any(Object), '#111111');
 
     fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
@@ -148,10 +152,17 @@ describe('ColorPicker runtime engine coverage', () => {
 
   it('places the modern dropdown above the trigger for top placements', () => {
     const { container } = render(<ModernColorPicker open placement="topLeft" />);
-    const dropdown = container.querySelector('[data-part="dropdown"]') as HTMLElement;
+    // The panel is PORTALED (WO-CAN-05): it renders through the overlay
+    // kernel into `#rottay-portal-root`, so it is a sibling of the render
+    // container. `data-placement` survives as the declared preference the
+    // kernel positions from; the panel itself carries no placement utility.
+    const dropdown = document.querySelector('[data-part="dropdown"]') as HTMLElement;
     expect(dropdown).not.toBeNull();
+    expect(container.contains(dropdown)).toBe(false);
+    expect(dropdown.closest('#rottay-portal-root')).not.toBeNull();
     expect(dropdown).toHaveAttribute('data-placement', 'topLeft');
     expect(dropdown.className).not.toContain('bottom-full');
+    expect(dropdown.style.position).toBe('fixed');
   });
 
   it('rides the tenant mono channel on the hex input via the skin, not a Tailwind utility (K4-C Pass-2 live finding)', () => {
@@ -161,20 +172,16 @@ describe('ColorPicker runtime engine coverage', () => {
     );
     expect(skin).toContain('font-family: var(--ds-font-family-mono);');
     // The engine no longer relies on the shadowed Tailwind font-mono utility.
-    const { container } = render(<ModernColorPicker open />);
-    const hex = container.querySelector('[data-part="hex-input"]') as HTMLElement;
+    render(<ModernColorPicker open />);
+    const hex = document.querySelector('[data-part="hex-input"]') as HTMLElement;
     expect(hex.className).not.toContain('font-mono');
   });
 
-  it('end-aligns the dropdown when it would overflow the viewport inline-end (K4-C Pass 2)', () => {
-    // Default (happy-dom zero rects): start-aligned, no edge flip.
-    const { container, unmount } = render(<ModernColorPicker open />);
-    const startDropdown = container.querySelector('[data-part="dropdown"]') as HTMLElement;
-    expect(startDropdown.getAttribute('data-edge')).toBe('start');
-    expect(startDropdown.className).not.toContain('end-0');
-    unmount();
-
-    // Force the panel to cross the viewport's inline-end edge.
+  it('keeps the dropdown inside the viewport when it would overflow the inline-end', () => {
+    // The private `data-edge` pass is gone: viewport collision is the overlay
+    // kernel's measured branch, which clamps the panel inside an 8px margin
+    // on BOTH axes instead of only end-aligning on the inline one. The law is
+    // the same and now stated as the geometry it actually produces.
     const original = Element.prototype.getBoundingClientRect;
     Element.prototype.getBoundingClientRect = function getBoundingClientRect() {
       return {
@@ -185,16 +192,28 @@ describe('ColorPicker runtime engine coverage', () => {
       } as DOMRect;
     };
     try {
-      const { container: c2 } = render(<ModernColorPicker open />);
-      const endDropdown = c2.querySelector('[data-part="dropdown"]') as HTMLElement;
-      expect(endDropdown.getAttribute('data-edge')).toBe('end');
-      expect(endDropdown.className).not.toContain('end-0');
+      render(<ModernColorPicker open />);
+      const dropdown = document.querySelector('[data-part="dropdown"]') as HTMLElement;
+      expect(dropdown).not.toBeNull();
+      expect(dropdown.style.position).toBe('fixed');
+
+      const left = Number.parseFloat(dropdown.style.left);
+      expect(Number.isNaN(left)).toBe(false);
+      // Clamped inside the viewport: never past the inline-end edge, never
+      // before the inline-start margin.
+      expect(left).toBeGreaterThanOrEqual(8);
+      expect(left + 200).toBeLessThanOrEqual(window.innerWidth - 8);
+
+      // The retired edge mechanism leaves nothing behind, in the DOM or the skin.
+      expect(dropdown.hasAttribute('data-edge')).toBe(false);
       const skin = readFileSync(
         resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css'),
         'utf8',
       );
-      expect(skin).toContain("[data-part='dropdown'][data-edge='end']");
-      expect(skin).toContain('inset-inline-end: 0');
+      expect(skin).not.toContain("[data-part='dropdown'][data-edge='end']");
+      expect(skin).not.toContain('inset-inline-end: 0');
+      // Nor does the skin keep a position that would fight the kernel's.
+      expect(/\[data-part='dropdown'\][^{]*\{[^}]*position:\s*absolute/.test(skin)).toBe(false);
     } finally {
       Element.prototype.getBoundingClientRect = original;
     }

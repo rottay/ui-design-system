@@ -1,7 +1,11 @@
 /**
  * Modern ColorPicker skin (WO-SKIN-02 checkpoint C, pickers batch).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT: the outer `<div data-part='root'>` was Tailwind-only before
  * this migration (no component class at all). `rottay-colorpicker
@@ -151,14 +155,13 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- dropdown shell (utilities fully drained: placement/edge travel ONLY
-        via data-placement/data-edge; the `bottom-full`/`end-0` utilities are
-        retired and their test pin is queued for repin). ---- */
+/* ---- dropdown shell. The panel is PORTALED: the overlay kernel owns its
+        position, the trigger gap and viewport collision (it clamps inside an
+        8px margin and flips the block side), so no placement or edge rule
+        lives here. data-placement survives as the declared preference the
+        kernel positions from. ---- */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
-  position: absolute;
   z-index: var(--ds-colorpicker-dropdown-z, var(--ds-z-popover));
-  inset-block-start: calc(100% + var(--ds-spacing-1));
-  inset-inline-start: 0;
   /* Density: the panel's own padding scales with the governed density
      channel; internal section rhythm stays on the spacing scale. */
   padding: calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
@@ -178,29 +181,11 @@
   animation: ds-color-picker-appear var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-/* Top placement: the panel hangs above the trigger with the same gap. */
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
-  inset-block-start: auto;
-  inset-block-end: calc(100% + var(--ds-spacing-1));
-}
-
-/* Edge collision alignment: flush with the trigger's inline-end. */
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-edge='end'] {
-  inset-inline-start: auto;
-  inset-inline-end: 0;
-}
-/* The panel's hairline frame (overlay register) rides the root-scoped rule:
-   border-color paint needs (0,4,0) against the tenant `*` floor (P-48). */
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='root'] [data-part='dropdown'] {
+/* The panel's hairline frame (overlay register) keeps its (0,4,0) weight
+   against the tenant `*` floor (P-48). The panel is portaled, so the third
+   class -- not the field root -- carries that weight. */
+.rottay-colorpicker.rottay-colorpicker--modern.rottay-colorpicker-panel[data-part='dropdown'] {
   border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
-}
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
-  inset-block-start: auto;
-  inset-block-end: calc(100% + var(--ds-spacing-1));
-}
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-edge='end'] {
-  inset-inline-start: auto;
-  inset-inline-end: 0;
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='native-color-input'] {

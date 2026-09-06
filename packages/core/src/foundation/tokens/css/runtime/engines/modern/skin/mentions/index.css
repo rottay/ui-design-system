@@ -2,7 +2,11 @@
  * Modern Mentions skin (WO-SKIN-02 checkpoint B, dropdown family;
  * K4-D Pass 1: geometry/layout drained from the engine's inline styles).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. SCOPE ROOT is the wrapper `<div>`, carrying the pair
  * `ds-mentions ds-mentions--modern` + `data-part='root'`; the textarea and its
@@ -154,14 +158,12 @@
   border-color: var(--ds-input-readonly-border, var(--ds-color-border));
 }
 
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
-  position: absolute;
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] {
   /* z bridge (pre-flag 7): the legacy literal stays for the paint-ownership
      test pin and old engines; the channel wins and maps the layer to the
      governed popover scale. */
   z-index: 50;
   z-index: var(--ds-mentions-dropdown-z, var(--ds-z-popover));
-  inline-size: 100%;
   list-style: none;
   margin: 0;
   padding: var(--ds-dropdown-padding);
@@ -191,21 +193,17 @@
     transform: translateY(0);
   }
 }
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='top'] {
+.ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'][data-placement='top'] {
   --_ds-mentions-dropdown-enter-offset: -0.25rem;
-  inset-block-end: 100%;
-  margin-block-end: var(--ds-spacing-1);
 }
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='bottom'] {
+.ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'][data-placement='bottom'] {
   --_ds-mentions-dropdown-enter-offset: 0.25rem;
-  inset-block-start: 100%;
-  margin-block-start: var(--ds-spacing-1);
 }
 
 /* Trigger feedback: while a mention session is armed the popup frame takes
    a quiet primary accent, so the trigger keystroke reads as "listening"
    even before the first filtered match lands. */
-.ds-mentions.ds-mentions--modern[data-part='root'][data-mention-active='true'] [data-part='dropdown'] {
+.ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'][data-mention-active='true'] {
   border-color: var(--_ds-mentions-trigger-accent, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border-subtle)));
 }
 
@@ -215,7 +213,7 @@
    option idiom, light): block layout, start-aligned, wrapped long words,
    hover/active repaint as a primary tint over the dropdown surface,
    disabled posture, motion guarded below. */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'] {
   display: block;
   inline-size: 100%;
   min-inline-size: 0;
@@ -237,39 +235,39 @@
    the exact `hover,\n.ds-mentions...` selector pair -- indenting it would
    break the pin. Keyboard/touch active is re-asserted always-on below. */
 @media (hover: hover) {
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):hover,
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option']:not([data-disabled='true']):hover,
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
   background: var(--ds-mentions-option-bg-hover, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
 }
 }
 /* Keyboard-active stays painted where no hover exists (touch + hardware
    keyboards): the same tint, plus a quiet frame so the active row is never
    a hue-only signal. */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
   background: var(--ds-mentions-option-bg-hover, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
   border-color: var(--_ds-mentions-option-active-border, color-mix(in srgb, var(--ds-color-primary) 28%, transparent));
 }
 /* Pointer-focused rows (real click targets) keep a visible ring inside the
    popup's overflow clip (inset outline, splitter idiom). */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:focus-visible {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-width));
 }
 /* Option label slot (B1.1): the stable addressable part for the option's
    primary content; wraps long words like the row and composes rich
    ReactNode labels (avatar/meta anatomy is contract debt, see batch log). */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option-label'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option-label'] {
   display: block;
   min-inline-size: 0;
   overflow-wrap: break-word;
 }
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
   cursor: var(--ds-mentions-option-disabled-cursor, not-allowed);
   opacity: var(--ds-mentions-option-disabled-opacity, var(--ds-button-disabled-opacity));
 }
 
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='empty'],
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='empty'],
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='loading'] {
   padding: var(--ds-spacing-3);
   text-align: center;
   color: var(--ds-color-text-secondary);
@@ -278,7 +276,7 @@
 /* Loading quiet-state gets a progress cue (B2.3): a decorative CSS spinner
    on the Spinner family's own channels/cadence -- painted as a pseudo so
    the `loading` hook keeps its text-node contract verbatim. */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='loading']::before {
   content: '';
   display: inline-block;
   inline-size: 0.8125em;
@@ -298,7 +296,7 @@
 
 /* Coarse pointers: option rows meet the physical 44px touch floor. */
 @media (pointer: coarse) {
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'] {
     min-block-size: var(--ds-mentions-option-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -316,21 +314,21 @@
     color: GrayText;
     opacity: 1;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):hover,
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option']:not([data-disabled='true']):hover,
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
     opacity: 1;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='loading']::before {
     border-color: CanvasText;
     border-block-start-color: Highlight;
   }
@@ -338,14 +336,14 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'],
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'] {
     transition-duration: 0.01ms;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] {
     animation: none;
   }
   /* The progress cue rests as a static two-tone arc (Spinner grammar). */
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='loading']::before {
     animation: none;
   }
 }

@@ -21,9 +21,13 @@ import { renderWithEngine } from '@tests/support/engine';
 // open state exists, and pins portal posture -- which is per-component and
 // NOT symmetric (DatePicker portals in both engines; TimePicker portals only
 // in modern, rustic has no panel at all -- native <input type="time">;
-// Upload's PreviewModal portals in neither engine; ColorPicker portals only
-// in rustic, matching the checkpoint contract's documented cross-engine
-// asymmetry). It does not assert paint (that is pickers-batch.spec.ts's job).
+// Upload's PreviewModal portals in neither engine; ColorPicker portals in
+// both, by two DIFFERENT routes -- modern through the overlay kernel's shared
+// portal root, rustic through its own `createPortal(document.body)`). The
+// ColorPicker case tells the two doors apart and proves the trigger still
+// owns the panel through `aria-controls`, so "portaled" is never asserted as
+// "not in container" alone. It does not assert paint (that is
+// pickers-batch.spec.ts's job).
 //
 // Every render goes through `createEngineComponent`'s Suspense-wrapped lazy
 // engine loader, so a synchronous `container.querySelector(...)` right after
@@ -48,6 +52,17 @@ async function waitForDocumentPanel(): Promise<HTMLElement> {
   });
   return document.querySelector('[data-part="panel"]') as HTMLElement;
 }
+
+/** Same, for the families whose panel part is `dropdown` (ColorPicker). */
+async function waitForDocumentDropdown(): Promise<HTMLElement> {
+  await waitFor(() => {
+    expect(document.querySelectorAll('[data-part="dropdown"]').length).toBeGreaterThan(0);
+  });
+  return document.querySelector('[data-part="dropdown"]') as HTMLElement;
+}
+
+/** The overlay kernel's shared portal root -- the ONLY door a Modern panel uses. */
+const KERNEL_PORTAL_ROOT = '[data-rottay-portal]';
 
 const UPLOAD_FILES = [
   { uid: 'f-done', name: 'report.pdf', status: 'done' as const, percent: 100 },
@@ -196,26 +211,34 @@ describe('Pickers-and-movers data-part contract (WO-SKIN-02 checkpoint C)', () =
   });
 
   describe('ColorPicker', () => {
-    it('modern: stamps root/trigger/swatch; open on trigger click: stamps dropdown in-tree', async () => {
+    it('modern: stamps root/trigger/swatch; open on trigger click: stamps dropdown, portaled through the overlay kernel', async () => {
       const { container } = renderWithEngine(<ColorPicker defaultValue="#1677ff" onChange={vi.fn()} />, 'modern');
 
       await waitForPart(container, 'root');
       expect(container.querySelectorAll('[data-part="trigger"]')).toHaveLength(1);
       expect(container.querySelectorAll('[data-part="swatch"]')).toHaveLength(1);
-      expect(container.querySelectorAll('[data-part="dropdown"]')).toHaveLength(0);
+      expect(document.querySelectorAll('[data-part="dropdown"]')).toHaveLength(0);
 
       const trigger = container.querySelector('[data-part="trigger"]') as HTMLElement;
       fireEvent.click(trigger);
 
-      await waitFor(() => {
-        expect(container.querySelectorAll('[data-part="dropdown"]').length).toBeGreaterThan(0);
-      });
-      // Modern never portals its dropdown -- it stays in-tree.
-      const dropdown = container.querySelector('[data-part="dropdown"]') as HTMLElement;
-      expect(container.contains(dropdown)).toBe(true);
+      const dropdown = await waitForDocumentDropdown();
+      // Modern's panel leaves the field subtree through `FieldOverlayPanel`
+      // (WO-CAN-05): it lands inside the kernel's shared portal root with the
+      // layer stamp, and the trigger keeps naming it via aria-controls.
+      expect(container.contains(dropdown)).toBe(false);
+      expect(dropdown.closest(KERNEL_PORTAL_ROOT)).not.toBeNull();
+      expect(dropdown.getAttribute('data-overlay-layer')).toMatch(/^ds-overlay-/);
+      expect(dropdown.getAttribute('data-overlay-kind')).toBe('dropdown');
+      expect(dropdown.getAttribute('role')).toBe('dialog');
+      expect(dropdown.id).not.toBe('');
+      expect(trigger.getAttribute('aria-controls')).toBe(dropdown.id);
+      expect(trigger.getAttribute('aria-expanded')).toBe('true');
+      // The panel content came with it -- portaling must not strand the field.
+      expect(dropdown.querySelector('[data-part="hex-input"]')).not.toBeNull();
     });
 
-    it('rustic: stamps the fused root (trigger+swatch); open on root click: stamps dropdown, portaled', async () => {
+    it('rustic: stamps the fused root (trigger+swatch); open on root click: stamps dropdown, self-portaled to body', async () => {
       const { container } = renderWithEngine(<ColorPicker defaultValue="#1677ff" onChange={vi.fn()} />, 'rustic');
 
       const root = await waitForPart(container, 'root');
@@ -224,15 +247,13 @@ describe('Pickers-and-movers data-part contract (WO-SKIN-02 checkpoint C)', () =
 
       fireEvent.click(root);
 
-      await waitFor(() => {
-        expect(document.querySelectorAll('[data-part="dropdown"]').length).toBeGreaterThan(0);
-      });
-      // Rustic portals its dropdown -- the documented cross-engine asymmetry
-      // (decision 2 in the checkpoint contract): rustic portals, modern
-      // stays in-tree. Nowhere else in this batch do the two engines
-      // disagree on portal usage this way.
-      const dropdown = document.querySelector('[data-part="dropdown"]') as HTMLElement;
+      const dropdown = await waitForDocumentDropdown();
+      // Rustic is frozen: it still calls `createPortal(document.body)` itself,
+      // so it carries neither the kernel portal root nor a layer stamp. Both
+      // engines now portal, but never through the same door.
       expect(container.contains(dropdown)).toBe(false);
+      expect(dropdown.closest(KERNEL_PORTAL_ROOT)).toBeNull();
+      expect(dropdown.getAttribute('data-overlay-layer')).toBeNull();
     });
   });
 });

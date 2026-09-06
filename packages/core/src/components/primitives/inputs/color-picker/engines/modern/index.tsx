@@ -37,6 +37,10 @@
  */
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { ColorPickerProps, Color, ColorFormat } from '../../contracts';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { COLORPICKER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { resolveCssColor } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
@@ -99,6 +103,15 @@ const createColor = (hex: string): Color => ({
  * @param props - {@link ColorPickerProps} unified color picker props shared across engines.
  * @returns A ref-forwarding color picker with Tailwind/token styling.
  */
+/**
+ * Scope class the portaled panel carries: the family pair the skin already
+ * scopes every panel-subtree rule through, so those rules keep matching at
+ * identical specificity once the panel leaves the field, plus a panel marker
+ * for the two rules that used to reach it through `[data-part='root']`.
+ */
+const PANEL_SCOPE =
+  'rottay-colorpicker rottay-colorpicker--modern rottay-colorpicker-panel';
+
 export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
   (props, ref) => {
     const {
@@ -157,7 +170,17 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    // The kernel needs the field root as state (a ref never re-renders when
+    // it lands), so the container publishes to both.
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
+    // The panel carries both this engine's focus/containment ref and the
+    // kernel's measured element.
+    const setPanelNode = useCallback((node: HTMLDivElement | null) => {
+      (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      setPanelEl(node);
+    }, []);
     const triggerRef = useRef<HTMLDivElement>(null);
     /** Set only by the trigger's own key handlers, so a pointer (and, under
      *  `trigger='hover'`, a passing cursor) never steals focus. */
@@ -169,33 +192,18 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
      * and a keyboard user had to Tab past the trigger to reach the controls
      * they had just asked for.
      */
+    // Keyed on the panel ELEMENT, not on `isOpen`: the panel is portaled, so
+    // it mounts a commit after `isOpen` flips and an `[isOpen]`-only effect
+    // would read a null ref and never land the focus.
     useEffect(() => {
       if (!isOpen) {
         keyboardOpenRef.current = false;
         return;
       }
-      if (!keyboardOpenRef.current) return;
+      if (!keyboardOpenRef.current || !panelEl) return;
       keyboardOpenRef.current = false;
-      dropdownRef.current
-        ?.querySelector<HTMLElement>('input, select, button')
-        ?.focus();
-    }, [isOpen]);
-
-    // Viewport collision handling (K4-C Pass 2): the in-tree dropdown is
-    // start-aligned by default, which overflows narrow viewports when the
-    // trigger sits near the inline-end edge (measured 6px horizontal overflow
-    // at 390px). On open, measure once and end-align when the panel would
-    // cross the viewport's inline-end edge. Logical `inset-inline-end` keeps
-    // it correct in RTL. No portal, no dependency — bounded and testable.
-    const [alignEdge, setAlignEdge] = useState<'start' | 'end'>('start');
-    useEffect(() => {
-      if (!isOpen) return;
-      const dropdown = dropdownRef.current;
-      if (!dropdown || typeof window === 'undefined') return;
-      const rect = dropdown.getBoundingClientRect();
-      const overflowEnd = rect.right - (window.innerWidth - 8);
-      setAlignEdge(overflowEnd > 0 ? 'end' : 'start');
-    }, [isOpen]);
+      panelEl.querySelector<HTMLElement>('input, select, button')?.focus();
+    }, [isOpen, panelEl]);
 
     // A controlled `open` can close the panel outside this component's own handlers, so an
     // unresolved draft must be cleared or the next open shows stale text.
@@ -247,6 +255,21 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       }
       onOpenChange?.(newOpen);
     }, [controlledOpen, onOpenChange]);
+
+    const hoverDisclosure = trigger === 'hover' && !disabled;
+
+    const handleHoverLeave = useCallback(
+      (event: React.MouseEvent<HTMLDivElement>) => {
+        // React reports leaving the root the moment the pointer crosses into
+        // the PORTALED panel, which is no longer a DOM descendant. The panel
+        // is still "inside" the disclosure, so the close decision is a
+        // containment test against both real elements.
+        const next = event.relatedTarget as Node | null;
+        if (next && panelEl?.contains(next)) return;
+        handleOpenChange(false);
+      },
+      [panelEl, handleOpenChange],
+    );
 
     /**
      * Keyboard disclosure contract (B2.5): the trigger is a real focusable
@@ -316,18 +339,40 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       handleOpenChange(false);
     };
 
-    // Close dropdown when clicking outside the container
-    useEffect(() => {
-      const handleClickOutside = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-          handleOpenChange(false);
-        }
-      };
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleOpenChange]);
+    const dismissPanel = useCallback(() => {
+      handleOpenChange(false);
+    }, [handleOpenChange]);
+
+    // One overlay contract, on the canonical portal path: the panel leaves the
+    // field subtree through `FieldOverlayPanel`, so it cannot be clipped by an
+    // ancestor's overflow. That buys the canonical dropdown band, the single
+    // Escape router (top-most layer only) and the shared capture-phase
+    // outside-pointer watcher, which replaces this engine's private
+    // `mousedown` listener. The skin selects the panel from its own root-level
+    // class instead of by descendancy.
+    // Viewport collision handling is the overlay kernel's: the measured
+    // branch clamps the panel inside the viewport with an 8px margin and
+    // flips the block side, which is what the private `data-edge` pass used
+    // to approximate for the inline axis only.
+    const overlay = useFieldOverlay({
+      kind: 'dropdown',
+      open: isOpen,
+      anchor: anchorEl,
+      panel: panelEl,
+      placement: placement?.includes('top') ? 'top-start' : 'bottom-start',
+      offset: 4,
+      flip: true,
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: dismissPanel,
+      // Escape stays with this engine's own key handler: it closes AND returns
+      // focus to the trigger, a component-scoped contract the shared router
+      // cannot express. The layer still declares `modal: true`, so the router
+      // keeps a lower dialog from claiming the same press.
+      dismissOnEscape: false,
+      dismissOnOutsidePointer: true,
+    });
 
     // Resolve a token-backed uncontrolled value (e.g. the `var(--ds-color-primary)`
     // default) against the provider-owned root. The swatch consumes the var()
@@ -367,7 +412,9 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
      */
     const dropdownPanel = (
       <div
-        ref={dropdownRef}
+        {...overlay.panelProps}
+        ref={setPanelNode}
+        className={PANEL_SCOPE}
         data-part="dropdown"
         /* The trigger has always advertised `aria-haspopup="dialog"`, but the
            surface it opened was an anonymous div: AT was promised a named
@@ -375,8 +422,8 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
         id={panelId}
         role="dialog"
         aria-label={panelLabel}
-        data-edge={alignEdge}
         data-placement={placement}
+        style={overlay.panelProps.style}
       >
         {/* Color input: geometry drained to the skin (the
             `--ds-color-picker-height` hook keeps its fallback there --
@@ -485,6 +532,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       <div
         ref={(node) => {
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          setAnchorEl(node);
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
@@ -492,12 +540,13 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
         className={`rottay-colorpicker rottay-colorpicker--modern ${className || ''}`}
         style={style}
         onKeyDown={handleRootKeyDown}
-        /* Hover disclosure is owned by the root, not the trigger: the panel is
-           the trigger's SIBLING, so a trigger-scoped mouseleave closed the
-           panel the moment the pointer travelled toward it, making the hex
-           input, presets and clear control unreachable by pointer. */
-        onMouseEnter={trigger === 'hover' && !disabled ? () => handleOpenChange(true) : undefined}
-        onMouseLeave={trigger === 'hover' && !disabled ? () => handleOpenChange(false) : undefined}
+        /* Hover disclosure spans the field AND the panel. A trigger-scoped
+           mouseleave closed the panel the moment the pointer travelled toward
+           it, making the hex input, presets and clear control unreachable by
+           pointer. The panel is now PORTALED, so leaving the root no longer
+           means leaving the disclosure -- see handleHoverLeave. */
+        onMouseEnter={hoverDisclosure ? () => handleOpenChange(true) : undefined}
+        onMouseLeave={hoverDisclosure ? handleHoverLeave : undefined}
       >
         {/* Trigger area: opens/closes dropdown on click or hover depending on
             `trigger` prop. A real focusable disclosure button (keyboard law):
@@ -526,7 +575,11 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           {displayText && <span data-part="display-text">{displayText}</span>}
         </div>
 
-        {isOpen && (panelRender ? panelRender(dropdownPanel) : dropdownPanel)}
+        {isOpen && (
+          <FieldOverlayPanel overlay={overlay}>
+            {panelRender ? panelRender(dropdownPanel) : dropdownPanel}
+          </FieldOverlayPanel>
+        )}
       </div>
     );
   }

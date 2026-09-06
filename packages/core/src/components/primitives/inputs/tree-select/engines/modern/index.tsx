@@ -35,6 +35,7 @@ import type {
   TreeSelectMappedNode,
 } from '../../contracts';
 import { TREESELECT_DEFAULTS } from '../../contracts';
+import { FieldOverlayPanel, useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
@@ -43,6 +44,12 @@ import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
+
+/**
+ * Scope class the portaled panel carries so the skin can address it and its
+ * subtree at the SAME specificity they had as descendants of the field root.
+ */
+const PANEL_SCOPE = 'ds-tree-select ds-tree-select--modern ds-tree-select-panel';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -560,9 +567,19 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     }, [treeData, searchValue, filterFn]);
 
     const containerRef = useRef<HTMLDivElement>(null);
+    // The kernel needs the field root as state (a ref never re-renders when
+    // it lands), so the container publishes to both.
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
+    // The panel carries both this engine's row-walking ref and the kernel's
+    // measured element; spreading `panelProps` alone would replace the former.
+    const setPanelNode = useCallback((node: HTMLDivElement | null) => {
+      (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      setPanelEl(node);
+    }, []);
 
     // Reading-direction probe (Tree/Segmented engine idiom).
     const isRtl = (el: HTMLElement): boolean => {
@@ -854,19 +871,39 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       }
     };
 
-    // Close the dropdown when the user clicks outside the component boundary.
-    // The listener is only active while the dropdown is open.
-    useEffect(() => {
-      const handleClickOutside = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-          handleOpenChange(false);
-        }
-      };
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleOpenChange]);
+    const dismissPanel = useCallback(() => {
+      handleOpenChange(false);
+    }, [handleOpenChange]);
+
+    // One overlay contract, on the canonical portal path: the panel leaves the
+    // field subtree through `FieldOverlayPanel`, so it cannot be clipped by an
+    // ancestor's overflow. That buys the canonical dropdown band, the single
+    // Escape router (top-most layer only) and the shared capture-phase
+    // outside-pointer watcher, which replaces this engine's private
+    // `mousedown` listener. The skin selects the panel from its own root-level
+    // class instead of by descendancy.
+    const overlay = useFieldOverlay({
+      kind: 'dropdown',
+      open: isOpen,
+      anchor: anchorEl,
+      panel: panelEl,
+      // The panel used to take the field's width from `inset-inline: 0` as an
+      // in-tree child; portaled, that relationship is gone and the width is
+      // measured from the trigger instead.
+      anchorWidth: 'match',
+      placement: 'bottom-start',
+      offset: 4,
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: dismissPanel,
+      // Escape stays with this engine's own key handler: it closes AND returns
+      // focus to the trigger, a component-scoped contract the shared router
+      // cannot express. The layer still declares `modal: true`, so the router
+      // keeps a lower dialog from claiming the same press.
+      dismissOnEscape: false,
+      dismissOnOutsidePointer: true,
+    });
 
     const selectedTitles = Array.from(selectedKeys)
       .map((v) => findTitleByValue(treeData, v))
@@ -902,6 +939,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       <div
         ref={(node) => {
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          setAnchorEl(node);
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
@@ -978,12 +1016,14 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           /* The dropdown is a plain container (no role): APG forbids
              interactive content inside a listbox, so the search input sits
              OUTSIDE the tree, and the tree itself owns the roles. */
+          <FieldOverlayPanel overlay={overlay}>
           <div
+            {...overlay.panelProps}
+            ref={setPanelNode}
             data-part="dropdown"
-            ref={dropdownRef}
             onKeyDown={handleDropdownKeyDown}
             id={dropdownId}
-            className={popupClassName || undefined}
+            className={`${PANEL_SCOPE} ${popupClassName || ''}`.trim()}
             aria-busy={loading || undefined}
           >
             {/* Search input */}
@@ -1043,6 +1083,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
               </div>
             )}
           </div>
+          </FieldOverlayPanel>
         )}
       </div>
     );

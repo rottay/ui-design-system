@@ -2,10 +2,11 @@
  * Modern AutoComplete skin (lane-A Quiet Premium pass over WO-SKIN-02
  * checkpoint B; Phase-B second pass 2026-07-31).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
- * rule loses to preflight regardless of specificity. Unlayered outranks
- * preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the wrapper `<div>`, which carries the pair
  * `ds-autocomplete ds-autocomplete--modern` + `data-part='root'` plus the
@@ -229,12 +230,9 @@
    (pre-flag 7): dropdown tier, not a magic 50. The dark-aware luminance step
    is its own layer directly above the fill (lane overlay register) -- the
    same surface/elevation register as the Select dropdown. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
-  position: absolute;
-  inset-inline: 0;
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] {
   z-index: var(--ds-autocomplete-dropdown-z, var(--ds-z-index-dropdown));
   margin: 0;
-  margin-block-start: var(--ds-spacing-1);
   padding: var(--ds-spacing-1);
   max-block-size: var(--ds-autocomplete-dropdown-max-height, 240px);
   overflow-y: auto;
@@ -262,9 +260,8 @@
    than the field, bounded by the family dial (Select's 28rem register) and
    the viewport. A numeric prop is sanctioned instance geometry and arrives
    inline from the engine (no skin rule needed). */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'][data-match-width='false'] {
+.ds-autocomplete.ds-autocomplete--modern.ds-autocomplete-panel[data-part='dropdown'][data-match-width='false'] {
   inline-size: max-content;
-  min-inline-size: 100%;
   max-inline-size: min(var(--_ds-autocomplete-dropdown-max-width, 28rem), calc(100vw - 1rem));
 }
 
@@ -273,7 +270,7 @@
    the Select dropdown's option grammar: transparent hairline at rest (state
    changes never move geometry), hairline + primary-tinted wash + ink step on
    hover/keyboard-active, density-scaled floor. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'] {
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -296,14 +293,14 @@
 }
 /* Governed label slot (Cascader/Mentions parity): the ellipsis lives on the
    flex child, never on the row (a flex container cannot ellipsis its span). */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'] > [data-part='option-label'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'] > [data-part='option-label'] {
   min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 @media (hover: hover) {
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:where(:hover):not([data-disabled='true']) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option']:where(:hover):not([data-disabled='true']) {
     color: var(--ds-color-text-primary);
     border-color: var(--ds-color-border-subtle);
     background: var(
@@ -314,7 +311,7 @@
 }
 /* Touch/active equivalent of the hover wash (4th-tanda law: every hover
    paints an equivalent active state). */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:active:not([data-disabled='true']) {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option']:active:not([data-disabled='true']) {
   color: var(--ds-color-text-primary);
   border-color: var(--ds-color-border-subtle);
   background: var(
@@ -322,7 +319,7 @@
     color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
   );
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
   color: var(--ds-color-text-primary);
   border-color: var(--ds-color-border-subtle);
   background: var(
@@ -330,11 +327,11 @@
     color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
   );
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:focus-visible {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option']:focus-visible {
   outline: none;
   box-shadow: var(--ds-autocomplete-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -342,7 +339,7 @@
 /* Empty posture: the Select empty well's spatial contract (dashed hairline,
    4.5rem min-block, radius, muted helper ink) -- never a bare centered
    string. Ink rides the pre-existing tenant channel. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='empty'] {
   display: grid;
   place-items: center;
   min-block-size: 4.5rem;
@@ -360,7 +357,7 @@
    cadence from the canonical spinner skin, so nothing is restated here. Ink
    rides the empty posture's channel -- it is the same well, in the same
    muted register. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='loading-state'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='loading-state'] {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,7 +376,7 @@
    floor via min-block-size (wins over inline heights, fine pointers untouched). */
 @media (hover: none) and (pointer: coarse) {
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'],
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'],
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
     min-block-size: var(--ds-autocomplete-touch-target-min, var(--ds-touch-target-min, 44px));
   }
@@ -387,11 +384,11 @@
 
 /* Reduced motion: dropdown entrance and every state transition go quiet. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] {
     animation: none;
   }
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'],
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'],
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
     transition: none;
   }
@@ -402,22 +399,22 @@
    dropped); disabled options read GrayText; the empty well keeps its frame
    so the posture survives the stripped fill. */
 @media (forced-colors: active) {
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:focus-visible,
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option']:focus-visible,
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:focus-visible,
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
   }
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'],
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='loading-state'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='empty'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='loading-state'] {
     border-color: ButtonText;
   }
 }

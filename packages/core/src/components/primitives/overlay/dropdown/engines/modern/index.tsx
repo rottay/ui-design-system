@@ -23,7 +23,10 @@ import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../c
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { resolveTypeaheadPrefix } from '../../../../runtime/collection/typeahead';
-import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+import {
+  useFieldOverlay,
+  type FieldOverlayDismissReason,
+} from '../../../../runtime/overlay/field-overlay';
 import { DROPDOWN_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
@@ -534,35 +537,34 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     focusTarget?.focus();
   }, [dismissChain, handleOpenChange]);
 
-  // Joining the shared stack makes the open menu top-most, so Escape dismisses it
-  // and not an enclosing dialog. `layerProps` is unspread: FAB-17 owns z-index.
-  const { isTopMost } = useOverlayLayer({
+  // Joining the shared stack makes the open menu top-most, so Escape dismisses
+  // it and not an enclosing dialog. The surface is declared `viewport`: this
+  // engine measures its own popup geometry and owns its z-index by the FAB-17
+  // ruling, so it takes the stack and the Escape route only.
+  const handleDismiss = useCallback(
+    (reason: FieldOverlayDismissReason) => {
+      if (reason === 'escape') handleEscapeDismiss();
+      else handleOpenChange(false);
+    },
+    [handleEscapeDismiss, handleOpenChange],
+  );
+
+  const { isTopMost } = useFieldOverlay({
     kind: 'dropdown',
-    active: Boolean(isOpen),
+    open: Boolean(isOpen),
+    anchor: containerEl,
+    panel: surfaceEl,
+    surface: 'viewport',
     // Blocking for ESCAPE ROUTING only (Popover's precedent): a nested menu
-    // must stop lower dialogs claiming the same key press.
+    // must stop lower dialogs claiming the same key press. Only the top-most
+    // layer light-dismisses: a pointer landing in an overlay stacked above
+    // this menu is not "outside".
     modal: true,
     lockScroll: false,
     restoreFocus: false,
-    onEscape: handleEscapeDismiss,
+    onDismiss: handleDismiss,
+    dismissOnOutsidePointer: true,
   });
-
-  useEffect(() => {
-    if (!isOpen) return undefined;
-    const handlePointerDown = (event: MouseEvent) => {
-      // Only the top-most layer light-dismisses (Popover's precedent): a
-      // pointer landing in an overlay stacked above this menu is not "outside".
-      if (!isTopMost()) return;
-      const target = event.target as Node;
-      if (!containerRef.current?.contains(target) && !surfaceRef.current?.contains(target)) {
-        handleOpenChange(false);
-      }
-    };
-    document.addEventListener('mousedown', handlePointerDown);
-    return () => {
-      document.removeEventListener('mousedown', handlePointerDown);
-    };
-  }, [handleOpenChange, isOpen, isTopMost]);
 
   const handleItemClick = (key: string) => {
     menu?.onClick?.({ key });

@@ -23,6 +23,10 @@ import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffe
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { MentionsProps, MentionsOption } from '../../contracts';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { MENTIONS_DEFAULTS } from '../../contracts';
 
 /**
@@ -42,12 +46,19 @@ const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffec
  * role). `aria-expanded` is NOT emitted: the textbox role does not support it
  * (axe `aria-allowed-attr`/critical), and the combobox role that would carry
  * it forbids `aria-multiline`, which a textarea requires. The expanded state
- * remains perceivable through the in-tree labelled listbox.
+ * remains perceivable through the labelled listbox the textarea names with
+ * `aria-controls`, which survives the panel's move across the portal.
  *
  * @param props - Unified MentionsProps from the design system contract.
  * @param ref - Forwarded ref attached to the underlying `<textarea>` element.
  * @returns A skin-painted textarea with a suggestion dropdown overlay.
  */
+/**
+ * Scope class the portaled panel carries so the skin can address it and its
+ * subtree at the SAME specificity they had as descendants of the field root.
+ */
+const PANEL_SCOPE = 'ds-mentions ds-mentions--modern ds-mentions-panel';
+
 export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
   (props, ref) => {
     const {
@@ -113,6 +124,9 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const value = isControlled ? controlledValue : internalValue;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    // The kernel needs the field root as state (a ref never re-renders when
+    // it lands), so the container publishes to both.
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     // Normalize prefix to array so multi-prefix detection logic stays uniform
@@ -303,22 +317,45 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       }
     };
 
-    // Dismiss dropdown when clicking outside the component boundary
-    useEffect(() => {
-      const handleClickOutside = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-          setIsOpen(false);
-        }
-      };
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen]);
+    const dismissPanel = useCallback(() => {
+      setIsOpen(false);
+    }, []);
+
+    // One overlay contract, on the canonical portal path: the panel leaves the
+    // field subtree through `FieldOverlayPanel`, so it cannot be clipped by an
+    // ancestor's overflow. That buys the canonical dropdown band, the single
+    // Escape router (top-most layer only) and the shared capture-phase
+    // outside-pointer watcher, which replaces this engine's private
+    // `mousedown` listener. The skin selects the panel from its own root-level
+    // class instead of by descendancy.
+    const overlay = useFieldOverlay({
+      kind: 'dropdown',
+      open: isOpen,
+      anchor: anchorEl,
+      // `inline-size: 100%` used to tie the popup to the field; portaled, the
+      // relationship has to be measured.
+      anchorWidth: 'match',
+      placement: placement === 'top' ? 'top-start' : 'bottom-start',
+      offset: 4,
+      flip: true,
+      modal: true,
+      lockScroll: false,
+      restoreFocus: false,
+      onDismiss: dismissPanel,
+      // Escape stays with this engine's own key handler: it closes AND returns
+      // focus to the trigger, a component-scoped contract the shared router
+      // cannot express. The layer still declares `modal: true`, so the router
+      // keeps a lower dialog from claiming the same press.
+      dismissOnEscape: false,
+      dismissOnOutsidePointer: true,
+    });
 
     return (
       <div
-        ref={containerRef}
+        ref={(node) => {
+          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          setAnchorEl(node);
+        }}
         className={`ds-mentions ds-mentions--modern ${className || ''}`}
         style={style}
         data-part="root"
@@ -355,13 +392,27 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         />
 
         {isOpen && (
+          <FieldOverlayPanel overlay={overlay}>
           <ul
+            {...overlay.panelProps}
             id={listboxId}
-            className={['rottay-mentions__popup', `rottay-mentions__popup--${placement}`, popupClassName].filter(Boolean).join(' ')}
+            className={[
+              PANEL_SCOPE,
+              'rottay-mentions__popup',
+              `rottay-mentions__popup--${placement}`,
+              popupClassName,
+            ]
+              .filter(Boolean)
+              .join(' ')}
             data-placement={placement}
             data-part="dropdown"
+            /* The mention-session accent used to be read off the field root;
+               a portaled panel is no longer its descendant, so the state
+               travels with the panel. */
+            data-mention-active={isOpen ? 'true' : undefined}
             role="listbox"
             aria-label={suggestionsLabel}
+            style={overlay.panelProps.style}
           >
             {loading ? (
               <li role="option" aria-disabled="true" data-part="loading">
@@ -403,6 +454,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
               </li>
             )}
           </ul>
+          </FieldOverlayPanel>
         )}
       </div>
     );

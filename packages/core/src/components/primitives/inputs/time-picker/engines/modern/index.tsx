@@ -18,8 +18,10 @@
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { TimePickerProps, TimeRangePickerProps, TimePickerPlacement } from '../../contracts';
-import { Portal } from '../../../../runtime/overlay/portal';
-import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import {
+  FieldOverlayPanel,
+  useFieldOverlay,
+} from '../../../../runtime/overlay/field-overlay';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
@@ -456,9 +458,16 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
 
   const triggerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
+  // The panel carries both this engine's measuring ref and the kernel's
+  // containment element.
+  const setPanelNode = useCallback((node: HTMLDivElement | null) => {
+    panelRef.current = node;
+    setPanelEl(node);
+  }, []);
   const inputRef = useRef<HTMLInputElement>(null);
   // The panel leaves the trigger's DOM ancestry when it portals, so the
-  // tenant/locale scope has to be re-stamped around it. `usePortalScope`
+  // tenant/locale scope has to be re-stamped around it. The kernel
   // needs the anchor as state (a ref would not re-render when it lands), so
   // the trigger publishes to both.
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -466,7 +475,6 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
     setAnchorEl(node);
   }, []);
-  const portalScope = usePortalScope(anchorEl);
 
   const setInputRef = useCallback(
     (node: HTMLInputElement | null) => {
@@ -512,36 +520,29 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     };
   }, [isOpen, placement]);
 
-  // Click-outside dismissal
-  useEffect(() => {
-    if (!isOpen) return;
-    const handler = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        triggerRef.current && !triggerRef.current.contains(target) &&
-        panelRef.current && !panelRef.current.contains(target)
-      ) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [isOpen, setOpen]);
+  // One overlay contract: the kernel's shared Escape router and shared
+  // capture-phase outside-pointer watcher replace this engine's two private
+  // document listeners. Both dismissals RETURN FOCUS to the trigger input --
+  // the panel unmounts on close, so focus would otherwise drop to <body>. The
+  // measured placement below stays this engine's own, so the surface is
+  // declared `viewport` and the kernel contributes the canonical band.
+  const dismissPanel = useCallback(() => {
+    setOpen(false);
+    inputRef.current?.focus();
+  }, [setOpen]);
 
-  // Escape key: closes and RETURNS FOCUS to the trigger input (DatePicker/
-  // Dropdown precedent) -- the panel unmounts on close, so without this the
-  // focus would drop to <body>.
-  useEffect(() => {
-    if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setOpen(false);
-        inputRef.current?.focus();
-      }
-    };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [isOpen, setOpen]);
+  const overlay = useFieldOverlay({
+    kind: 'dropdown',
+    open: isOpen,
+    anchor: anchorEl,
+    panel: panelEl,
+    surface: 'viewport',
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onDismiss: dismissPanel,
+    dismissOnOutsidePointer: true,
+  });
 
   const handleSelect = useCallback((h: number, m: number, s: number) => {
     const today = new Date();
@@ -654,17 +655,22 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
       {/* Panel goes through the shared overlay substrate: the target resolves
           as explicit container > active top-layer host > shared
           `#rottay-portal-root`, so the panel stays visible when the field is
-          inside a `showModal()` dialog. `PortalScope` carries the tenant/
+          inside a `showModal()` dialog. The kernel carries the tenant/
           theme/direction lineage across the portal boundary. */}
       {isOpen && (
-        <Portal>
-          <PortalScope snapshot={portalScope}>
+        <FieldOverlayPanel overlay={overlay}>
             <div
-              ref={panelRef}
+              {...overlay.panelProps}
+              ref={setPanelNode}
               data-part="popup"
               data-placement={placement}
               className={popupClassName}
-              style={{ top: pos.top, left: pos.left, ...popupStyle }}
+              style={{
+                top: pos.top,
+                left: pos.left,
+                ...overlay.panelProps.style,
+                ...popupStyle,
+              }}
             >
               <TimePanel
                 hours={selectedTime?.h ?? 0}
@@ -689,8 +695,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
                 renderExtraFooter={renderExtraFooter}
               />
             </div>
-          </PortalScope>
-        </Portal>
+        </FieldOverlayPanel>
       )}
     </>
   );
@@ -832,12 +837,18 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
 
   const triggerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
+  // The panel carries both this engine's measuring ref and the kernel's
+  // containment element.
+  const setPanelNode = useCallback((node: HTMLDivElement | null) => {
+    panelRef.current = node;
+    setPanelEl(node);
+  }, []);
   // See TimePickerBase: the portaled panel needs the anchor as state so the
   // scope snapshot re-resolves once the trigger lands. The callback must be
   // stable -- an inline ref arrow is re-created every render, so React would
   // detach (null) and re-attach it each commit and the setState would loop.
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const portalScope = usePortalScope(anchorEl);
   const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
     (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
     setAnchorEl(node);
@@ -875,37 +886,27 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     };
   }, [isOpen, placement]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const handler = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        triggerRef.current && !triggerRef.current.contains(target) &&
-        panelRef.current && !panelRef.current.contains(target)
-      ) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [isOpen, setOpen]);
+  // One overlay contract (TimePickerBase rationale above). Dismissal returns
+  // focus to the range input currently being filled.
+  const dismissPanel = useCallback(() => {
+    setOpen(false);
+    triggerRef.current
+      ?.querySelector<HTMLElement>(`[data-range-input='${activeInput}']`)
+      ?.focus();
+  }, [setOpen, activeInput]);
 
-  // Escape: closes and RETURNS FOCUS to the range input currently being
-  // filled (DatePicker precedent; the panel unmounts on close).
-  useEffect(() => {
-    if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setOpen(false);
-        const active = triggerRef.current?.querySelector<HTMLElement>(
-          `[data-range-input='${activeInput}']`,
-        );
-        active?.focus();
-      }
-    };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [isOpen, activeInput, setOpen]);
+  const overlay = useFieldOverlay({
+    kind: 'dropdown',
+    open: isOpen,
+    anchor: anchorEl,
+    panel: panelEl,
+    surface: 'viewport',
+    modal: true,
+    lockScroll: false,
+    restoreFocus: false,
+    onDismiss: dismissPanel,
+    dismissOnOutsidePointer: true,
+  });
 
   const commitTime = useCallback((which: 'start' | 'end', time: { h: number; m: number; s: number }) => {
     let newValue = which === 'start'
@@ -1043,14 +1044,19 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
 
       {/* Shared overlay substrate -- see TimePickerBase. */}
       {isOpen && (
-        <Portal>
-          <PortalScope snapshot={portalScope}>
+        <FieldOverlayPanel overlay={overlay}>
             <div
-              ref={panelRef}
+              {...overlay.panelProps}
+              ref={setPanelNode}
               data-part="popup"
               data-placement={placement}
               className={popupClassName}
-              style={{ top: pos.top, left: pos.left, ...popupStyle }}
+              style={{
+                top: pos.top,
+                left: pos.left,
+                ...overlay.panelProps.style,
+                ...popupStyle,
+              }}
             >
               <TimePanel
                 hours={activeTime0?.h ?? 0}
@@ -1075,8 +1081,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
                 renderExtraFooter={renderExtraFooter}
               />
             </div>
-          </PortalScope>
-        </Portal>
+        </FieldOverlayPanel>
       )}
     </>
   );
