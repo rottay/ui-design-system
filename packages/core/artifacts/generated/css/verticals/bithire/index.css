@@ -1076,27 +1076,60 @@
 }
 
 /**
- * Base Z-Index Tokens - Rottay Design System
+ * Z-Index Scale - Rottay Design System
  *
- * Z-index layering system for consistent element stacking.
- * Uses a scale that leaves room for component-specific adjustments.
+ * THE single declaration site of the `--ds-z-index-*` and `--ds-z-*`
+ * namespaces. The scale used to be split: the numeric bands lived in
+ * `foundation/themes/default/index.css` while the derived component aliases
+ * lived here under an empty "SCALE" header, and four short aliases
+ * (`--ds-z-notification`, `--ds-z-message`, `--ds-z-floatbutton`,
+ * `--ds-z-affix`) were read by skins but declared nowhere -- so they painted
+ * from their own fallback literals, which contradicted the bands they were
+ * named after.
+ *
+ * Both entrypoints (`facade/entrypoints/base` and `.../styles`) import this
+ * file inside `layer(rottay-tokens)` BEFORE the default theme, and a compiled
+ * tenant artifact is appended unlayered after both, so a tenant may still
+ * raise a single band (bithire raises `--ds-z-index-tooltip`) without
+ * reintroducing a second scale.
+ *
+ * The runtime enforcement point for the same namespace is
+ * `components/primitives/runtime/overlay/layer-stack`: it maps an overlay
+ * kind to its band and adds the stack offset. Nothing else in the DS may
+ * author a z-index number.
  */
 
 :root {
   /* ========================================================================
-     Z-INDEX SCALE - Layering System
-     Organized from bottom to top of the stack
+     THE SCALE - bottom to top of the stack
+     One band per stacking role. Overlay bands are 100 apart so the layer
+     manager's per-stack offset can order siblings without leaving the band.
      ======================================================================== */
+  --ds-z-index-base: 0;
+  --ds-z-index-dropdown: 1000;
+  --ds-z-index-sticky: 1100;
+  --ds-z-index-fixed: 1200;
+  --ds-z-index-overlay: 1300;
+  --ds-z-index-drawer: 1400;
+  --ds-z-index-modal: 1500;
+  --ds-z-index-popover: 1600;
+  --ds-z-index-tooltip: 1700;
+  --ds-z-index-notification: 1800;
+  --ds-z-index-max: 9999;
 
   /* ========================================================================
      COMPONENT-SPECIFIC Z-INDEX
-     Specific layers for common component scenarios
+     Specific layers for common component scenarios. Every entry is an alias
+     onto a band above -- never a new number.
      ======================================================================== */
 
   /* Navigation */
   --ds-z-index-navbar: var(--ds-z-index-fixed);
   --ds-z-index-sidebar: var(--ds-z-index-drawer);
   --ds-z-index-navbar-dropdown: calc(var(--ds-z-index-navbar) + 10);
+  /* In-page floating chrome: an affixed block rises above page content but
+     stays below every overlay band. */
+  --ds-z-index-affix: 100;
 
   /* Menus */
   --ds-z-index-menu: var(--ds-z-index-dropdown);
@@ -1111,6 +1144,11 @@
 
   /* Feedback */
   --ds-z-index-toast: var(--ds-z-index-notification);
+  /* A message is the lighter-weight sibling of a notification and orders
+     immediately below it INSIDE the same band. Written as the literal step
+     rather than a calc() so the fallback-parity gate can compare a skin's
+     fallback against it; a calc() resolves to nothing it can check. */
+  --ds-z-index-message: 1790;
   --ds-z-index-alert: calc(var(--ds-z-index-base) + 1);
   --ds-z-index-banner: var(--ds-z-index-sticky);
 
@@ -1122,6 +1160,37 @@
   /* Utility */
   --ds-z-index-loading-overlay: calc(var(--ds-z-index-modal) + 100);
   --ds-z-index-skip-link: var(--ds-z-index-max);
+
+  /* ========================================================================
+     SHORT OVERLAY-STACK ALIASES (WO-ENG-09, modern spec section 9)
+     Thin aliases onto the bands above so modern-engine skins route `z-index`
+     through one short namespace instead of ad-hoc magic numbers. Fallback
+     literals mirror the canonical values (fallback-parity rule, spec section
+     7) so a var()-unaware consumer still resolves the same tier. Do not add a
+     second literal scale here -- these are aliases only.
+     ======================================================================== */
+  --ds-z-dropdown: var(--ds-z-index-dropdown, 1000);
+  --ds-z-sticky: var(--ds-z-index-sticky, 1100);
+  --ds-z-fixed: var(--ds-z-index-fixed, 1200);
+  --ds-z-overlay: var(--ds-z-index-overlay, 1300);
+  --ds-z-drawer: var(--ds-z-index-drawer, 1400);
+  --ds-z-modal: var(--ds-z-index-modal, 1500);
+  --ds-z-popover: var(--ds-z-index-popover, 1600);
+  --ds-z-tooltip: var(--ds-z-index-tooltip, 1700);
+  --ds-z-toast: var(--ds-z-index-notification, 1800);
+  /* All four were read by Modern skins and declared nowhere, so each painted
+     from its own fallback literal. `--ds-z-notification` resolved to 1600 --
+     the POPOVER band -- and rendered UNDER a popover it must outrank; the
+     pair now sits inside the notification band. `--ds-z-floatbutton` and
+     `--ds-z-affix` keep the value their skin already resolved to, sourced
+     from the scale instead of a per-site literal; `--ds-z-affix`
+     additionally settles the skin (100) / engine TSX (10) disagreement in
+     favour of the skin. Every fallback literal below equals the value the
+     scale resolves, so `scale.fallbackParityViolations` stays at zero. */
+  --ds-z-notification: var(--ds-z-index-notification, 1800);
+  --ds-z-message: var(--ds-z-index-message, 1790);
+  --ds-z-floatbutton: var(--ds-z-index-dropdown, 1000);
+  --ds-z-affix: var(--ds-z-index-affix, 100);
 
   /* ========================================================================
      RELATIVE Z-INDEX
@@ -2072,38 +2141,12 @@
 
   /* ─────────────────────────────────────────────────────────────────────────────
      6. Z-INDEX
+     Moved to foundation/base/z-index/index.css, the ONE declaration site of
+     the --ds-z-index-* bands and the short --ds-z-* aliases (WO-CAN-05).
+     That file is imported by both facades inside layer(rottay-tokens) before
+     this theme, so a tenant artifact still overrides a single band without a
+     second scale existing anywhere.
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-z-index-base: 0;
-  --ds-z-index-dropdown: 1000;
-  --ds-z-index-sticky: 1100;
-  --ds-z-index-fixed: 1200;
-  --ds-z-index-overlay: 1300;
-  --ds-z-index-drawer: 1400;
-  --ds-z-index-modal: 1500;
-  --ds-z-index-popover: 1600;
-  --ds-z-index-tooltip: 1700;
-  --ds-z-index-notification: 1800;
-  --ds-z-index-max: 9999;
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     6b. Z-INDEX — SHORT OVERLAY-STACK ALIASES (WO-ENG-09, spec section 9)
-     Thin aliases onto the canonical --ds-z-index-* scale above (section 6) so
-     modern-engine overlay/tooltip/callout/modal/drawer/dropdown components
-     route `zIndex` through one short namespace instead of ad-hoc magic
-     numbers (audit 4: "Floating tooltip / callout overlaps live content").
-     Fallback literals mirror the canonical values (fallback-parity rule,
-     spec section 7) so a var()-unaware consumer still resolves the same
-     tier. Do not add a second literal scale here -- these are aliases only.
-     ───────────────────────────────────────────────────────────────────────────── */
-  --ds-z-dropdown: var(--ds-z-index-dropdown, 1000);
-  --ds-z-sticky: var(--ds-z-index-sticky, 1100);
-  --ds-z-fixed: var(--ds-z-index-fixed, 1200);
-  --ds-z-overlay: var(--ds-z-index-overlay, 1300);
-  --ds-z-drawer: var(--ds-z-index-drawer, 1400);
-  --ds-z-modal: var(--ds-z-index-modal, 1500);
-  --ds-z-popover: var(--ds-z-index-popover, 1600);
-  --ds-z-tooltip: var(--ds-z-index-tooltip, 1700);
-  --ds-z-toast: var(--ds-z-index-notification, 1800);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      7. TRANSITIONS
@@ -42408,7 +42451,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern ColorPicker skin (WO-SKIN-02 checkpoint C, pickers batch).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT: the outer `<div data-part='root'>` was Tailwind-only before
  * this migration (no component class at all). `rottay-colorpicker
@@ -42558,14 +42605,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- dropdown shell (utilities fully drained: placement/edge travel ONLY
-        via data-placement/data-edge; the `bottom-full`/`end-0` utilities are
-        retired and their test pin is queued for repin). ---- */
+/* ---- dropdown shell. The panel is PORTALED: the overlay kernel owns its
+        position, the trigger gap and viewport collision (it clamps inside an
+        8px margin and flips the block side), so no placement or edge rule
+        lives here. data-placement survives as the declared preference the
+        kernel positions from. ---- */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
-  position: absolute;
   z-index: var(--ds-colorpicker-dropdown-z, var(--ds-z-popover));
-  inset-block-start: calc(100% + var(--ds-spacing-1));
-  inset-inline-start: 0;
   /* Density: the panel's own padding scales with the governed density
      channel; internal section rhythm stays on the spacing scale. */
   padding: calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
@@ -42585,29 +42631,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   animation: ds-color-picker-appear var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-/* Top placement: the panel hangs above the trigger with the same gap. */
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
-  inset-block-start: auto;
-  inset-block-end: calc(100% + var(--ds-spacing-1));
-}
-
-/* Edge collision alignment: flush with the trigger's inline-end. */
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-edge='end'] {
-  inset-inline-start: auto;
-  inset-inline-end: 0;
-}
-/* The panel's hairline frame (overlay register) rides the root-scoped rule:
-   border-color paint needs (0,4,0) against the tenant `*` floor (P-48). */
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='root'] [data-part='dropdown'] {
+/* The panel's hairline frame (overlay register) keeps its (0,4,0) weight
+   against the tenant `*` floor (P-48). The panel is portaled, so the third
+   class -- not the field root -- carries that weight. */
+.rottay-colorpicker.rottay-colorpicker--modern.rottay-colorpicker-panel[data-part='dropdown'] {
   border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
-}
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
-  inset-block-start: auto;
-  inset-block-end: calc(100% + var(--ds-spacing-1));
-}
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-edge='end'] {
-  inset-inline-start: auto;
-  inset-inline-end: 0;
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='native-color-input'] {
@@ -44818,22 +44846,35 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern AutoComplete skin (lane-A Quiet Premium pass over WO-SKIN-02
  * checkpoint B; Phase-B second pass 2026-07-31).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
- * rule loses to preflight regardless of specificity. Unlayered outranks
- * preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
- * SCOPE ROOT is the wrapper `<div>`, which carries the pair
+ * TWO SCOPES. The FIELD scope is the wrapper `<div>`, which carries the pair
  * `ds-autocomplete ds-autocomplete--modern` + `data-part='root'` plus the
- * `data-size`/`data-status` state axes; every painted element is an IN-TREE
- * descendant with a `data-part` (AutoComplete never portals in either engine).
- * The `input` border reaches (0,4,0) via the two root classes (0,2,0) +
- * `[data-part='root']` + the descendant `[data-part]`.
+ * `data-size`/`data-status` state axes; the input, its wrapper and the clear
+ * button are in-tree descendants with a `data-part`. The suggestion listbox is
+ * PORTALED through the overlay kernel in this engine and is therefore NOT a
+ * descendant of the field: it carries its own
+ * `ds-autocomplete ds-autocomplete--modern ds-autocomplete-panel` scope, and
+ * every part inside it is addressed through that panel. The Rustic engine is
+ * unchanged and keeps its popup in the field subtree.
+ *
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered `*` border floor
+ * at (0,3,1), so a rule that sets a border COLOR must reach (0,4,0). A field
+ * part reaches it as the two root classes (0,2,0) + `[data-part='root']` + the
+ * descendant `[data-part]`; a part inside the panel reaches it the same way
+ * through `[data-part='dropdown']`. The panel ELEMENT has no descendant hop,
+ * so every rule whose target is the panel itself names `.ds-autocomplete-panel`
+ * to stand on the same floor.
  *
  * LANE-A PASS:
- * - The dropdown's position/z-index/padding/max-height and the clear button's
+ * - The dropdown's z-index/padding/max-height and the clear button's
  *   positioning lived inline (the clear button rode the PHYSICAL `right-2`
- *   utility -- RTL broke it; now `inset-inline-end`). Both are skin-owned.
+ *   utility -- RTL broke it; now `inset-inline-end`). Both are skin-owned; the
+ *   dropdown's placement itself belongs to the overlay kernel.
  * - The option rows' hover/active highlight used to ride the dead DaisyUI
  *   `active`/`disabled` class tokens (removed from the engine); the states
  *   are real rules below keyed on `data-active`/`data-disabled`, matching the
@@ -45045,12 +45086,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    (pre-flag 7): dropdown tier, not a magic 50. The dark-aware luminance step
    is its own layer directly above the fill (lane overlay register) -- the
    same surface/elevation register as the Select dropdown. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
-  position: absolute;
-  inset-inline: 0;
+.ds-autocomplete.ds-autocomplete--modern.ds-autocomplete-panel[data-part='dropdown'] {
   z-index: var(--ds-autocomplete-dropdown-z, var(--ds-z-index-dropdown));
   margin: 0;
-  margin-block-start: var(--ds-spacing-1);
   padding: var(--ds-spacing-1);
   max-block-size: var(--ds-autocomplete-dropdown-max-height, 240px);
   overflow-y: auto;
@@ -45078,9 +45116,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    than the field, bounded by the family dial (Select's 28rem register) and
    the viewport. A numeric prop is sanctioned instance geometry and arrives
    inline from the engine (no skin rule needed). */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'][data-match-width='false'] {
+.ds-autocomplete.ds-autocomplete--modern.ds-autocomplete-panel[data-part='dropdown'][data-match-width='false'] {
   inline-size: max-content;
-  min-inline-size: 100%;
   max-inline-size: min(var(--_ds-autocomplete-dropdown-max-width, 28rem), calc(100vw - 1rem));
 }
 
@@ -45089,7 +45126,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    the Select dropdown's option grammar: transparent hairline at rest (state
    changes never move geometry), hairline + primary-tinted wash + ink step on
    hover/keyboard-active, density-scaled floor. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'] {
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -45112,14 +45149,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 /* Governed label slot (Cascader/Mentions parity): the ellipsis lives on the
    flex child, never on the row (a flex container cannot ellipsis its span). */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'] > [data-part='option-label'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'] > [data-part='option-label'] {
   min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 @media (hover: hover) {
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:where(:hover):not([data-disabled='true']) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option']:where(:hover):not([data-disabled='true']) {
     color: var(--ds-color-text-primary);
     border-color: var(--ds-color-border-subtle);
     background: var(
@@ -45130,7 +45167,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 /* Touch/active equivalent of the hover wash (4th-tanda law: every hover
    paints an equivalent active state). */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:active:not([data-disabled='true']) {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option']:active:not([data-disabled='true']) {
   color: var(--ds-color-text-primary);
   border-color: var(--ds-color-border-subtle);
   background: var(
@@ -45138,7 +45175,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
   );
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
   color: var(--ds-color-text-primary);
   border-color: var(--ds-color-border-subtle);
   background: var(
@@ -45146,11 +45183,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
   );
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:focus-visible {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option']:focus-visible {
   outline: none;
   box-shadow: var(--ds-autocomplete-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -45158,7 +45195,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Empty posture: the Select empty well's spatial contract (dashed hairline,
    4.5rem min-block, radius, muted helper ink) -- never a bare centered
    string. Ink rides the pre-existing tenant channel. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='empty'] {
   display: grid;
   place-items: center;
   min-block-size: 4.5rem;
@@ -45176,7 +45213,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    cadence from the canonical spinner skin, so nothing is restated here. Ink
    rides the empty posture's channel -- it is the same well, in the same
    muted register. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='loading-state'] {
+.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='loading-state'] {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45195,7 +45232,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    floor via min-block-size (wins over inline heights, fine pointers untouched). */
 @media (hover: none) and (pointer: coarse) {
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'],
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'],
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
     min-block-size: var(--ds-autocomplete-touch-target-min, var(--ds-touch-target-min, 44px));
   }
@@ -45203,11 +45240,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* Reduced motion: dropdown entrance and every state transition go quiet. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
+  .ds-autocomplete.ds-autocomplete--modern.ds-autocomplete-panel[data-part='dropdown'] {
     animation: none;
   }
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'],
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'],
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
     transition: none;
   }
@@ -45218,22 +45255,22 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    dropped); disabled options read GrayText; the empty well keeps its frame
    so the posture survives the stripped fill. */
 @media (forced-colors: active) {
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:focus-visible,
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option']:focus-visible,
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:focus-visible,
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
   }
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'],
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='loading-state'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='empty'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] [data-part='loading-state'] {
     border-color: ButtonText;
   }
 }
@@ -45320,14 +45357,30 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern Mentions skin (WO-SKIN-02 checkpoint B, dropdown family;
  * K4-D Pass 1: geometry/layout drained from the engine's inline styles).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
- * SINGLE PAINT OWNER. SCOPE ROOT is the wrapper `<div>`, carrying the pair
- * `ds-mentions ds-mentions--modern` + `data-part='root'`; the textarea and its
- * suggestion popup are IN-TREE descendants with a `data-part` (Mentions never
- * portals -- the popup anchors to the textarea box, not the caret). The root
- * also owns `position: relative` (the popup's absolute anchor), drained from
- * the engine's former `relative` utility class.
+ * SINGLE PAINT OWNER, TWO SCOPES. The FIELD scope is the wrapper `<div>`,
+ * carrying the pair `ds-mentions ds-mentions--modern` + `data-part='root'`;
+ * the textarea is an in-tree descendant with a `data-part`. The suggestion
+ * popup is PORTALED through the overlay kernel in this engine -- it anchors to
+ * the textarea box, never the caret -- and is therefore NOT a descendant of
+ * the field: it carries its own
+ * `ds-mentions ds-mentions--modern ds-mentions-panel` scope, and every part
+ * inside it is addressed through that panel. The Rustic engine is unchanged
+ * and keeps its popup in the field subtree. The root still declares
+ * `position: relative`, drained from the engine's former `relative` utility
+ * class.
+ *
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered `*` border floor
+ * at (0,3,1), so a rule that sets a border COLOR must reach (0,4,0). A part in
+ * either scope reaches it as the two root classes (0,2,0) + the scope's
+ * `[data-part]` + its own `[data-part]`. The panel ELEMENT has no descendant
+ * hop, so every rule whose target is the panel itself names `.ds-mentions-panel`
+ * to stand on the same floor.
  *
  * The textarea border reproduces `getStatusBorderColor()`'s 3-way chain
  * error > warning > default, read off the textarea's `data-status`. The
@@ -45363,14 +45416,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * GEOMETRY drained from the engine (K4-D): textarea inline-size/padding/
  * font-size (`--ds-input-md-*` channels) and the auto-size `resize: none`
- * (keyed on `data-autosize`); the popup's absolute placement (`position`,
- * `z-index`, logical inset/margin keyed on `data-placement`, list reset,
- * `--ds-dropdown-*` padding/max-block-size channels); the empty state's
- * padding/centering (former `p-3 text-center` utilities). Physical top/bottom
- * became LOGICAL `inset-block-start/end` + `margin-block-start/end` (RTL-safe
- * by construction; block direction is what top/bottom meant here). What stays
- * in JS: the auto-size `style.height`/`overflowY` measurements -- truly
- * dynamic per keystroke.
+ * (keyed on `data-autosize`); the popup's `z-index`, list reset,
+ * `--ds-dropdown-*` padding/max-block-size channels and its
+ * `data-placement`-keyed entrance offset; the empty state's padding/centering
+ * (former `p-3 text-center` utilities). The popup's placement itself belongs
+ * to the overlay kernel, not to this skin. What stays in JS: the auto-size
+ * `style.height`/`overflowY` measurements -- truly dynamic per keystroke.
  *
  * Values are transcribed verbatim from `engines/modern/index.tsx`.
  *
@@ -45472,14 +45523,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-color: var(--ds-input-readonly-border, var(--ds-color-border));
 }
 
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
-  position: absolute;
+.ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'] {
   /* z bridge (pre-flag 7): the legacy literal stays for the paint-ownership
      test pin and old engines; the channel wins and maps the layer to the
      governed popover scale. */
   z-index: 50;
   z-index: var(--ds-mentions-dropdown-z, var(--ds-z-popover));
-  inline-size: 100%;
   list-style: none;
   margin: 0;
   padding: var(--ds-dropdown-padding);
@@ -45509,21 +45558,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     transform: translateY(0);
   }
 }
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='top'] {
+.ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'][data-placement='top'] {
   --_ds-mentions-dropdown-enter-offset: -0.25rem;
-  inset-block-end: 100%;
-  margin-block-end: var(--ds-spacing-1);
 }
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='bottom'] {
+.ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'][data-placement='bottom'] {
   --_ds-mentions-dropdown-enter-offset: 0.25rem;
-  inset-block-start: 100%;
-  margin-block-start: var(--ds-spacing-1);
 }
 
 /* Trigger feedback: while a mention session is armed the popup frame takes
    a quiet primary accent, so the trigger keystroke reads as "listening"
    even before the first filtered match lands. */
-.ds-mentions.ds-mentions--modern[data-part='root'][data-mention-active='true'] [data-part='dropdown'] {
+.ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'][data-mention-active='true'] {
   border-color: var(--_ds-mentions-trigger-accent, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border-subtle)));
 }
 
@@ -45533,7 +45578,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    option idiom, light): block layout, start-aligned, wrapped long words,
    hover/active repaint as a primary tint over the dropdown surface,
    disabled posture, motion guarded below. */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'] {
   display: block;
   inline-size: 100%;
   min-inline-size: 0;
@@ -45555,39 +45600,39 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    the exact `hover,\n.ds-mentions...` selector pair -- indenting it would
    break the pin. Keyboard/touch active is re-asserted always-on below. */
 @media (hover: hover) {
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):hover,
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option']:not([data-disabled='true']):hover,
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
   background: var(--ds-mentions-option-bg-hover, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
 }
 }
 /* Keyboard-active stays painted where no hover exists (touch + hardware
    keyboards): the same tint, plus a quiet frame so the active row is never
    a hue-only signal. */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
   background: var(--ds-mentions-option-bg-hover, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
   border-color: var(--_ds-mentions-option-active-border, color-mix(in srgb, var(--ds-color-primary) 28%, transparent));
 }
 /* Pointer-focused rows (real click targets) keep a visible ring inside the
    popup's overflow clip (inset outline, splitter idiom). */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:focus-visible {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-width));
 }
 /* Option label slot (B1.1): the stable addressable part for the option's
    primary content; wraps long words like the row and composes rich
    ReactNode labels (avatar/meta anatomy is contract debt, see batch log). */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option-label'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option-label'] {
   display: block;
   min-inline-size: 0;
   overflow-wrap: break-word;
 }
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
   cursor: var(--ds-mentions-option-disabled-cursor, not-allowed);
   opacity: var(--ds-mentions-option-disabled-opacity, var(--ds-button-disabled-opacity));
 }
 
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='empty'],
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading'] {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='empty'],
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='loading'] {
   padding: var(--ds-spacing-3);
   text-align: center;
   color: var(--ds-color-text-secondary);
@@ -45596,7 +45641,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Loading quiet-state gets a progress cue (B2.3): a decorative CSS spinner
    on the Spinner family's own channels/cadence -- painted as a pseudo so
    the `loading` hook keeps its text-node contract verbatim. */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
+.ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='loading']::before {
   content: '';
   display: inline-block;
   inline-size: 0.8125em;
@@ -45616,7 +45661,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* Coarse pointers: option rows meet the physical 44px touch floor. */
 @media (pointer: coarse) {
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'] {
     min-block-size: var(--ds-mentions-option-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -45634,21 +45679,21 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     color: GrayText;
     opacity: 1;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+  .ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):hover,
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option']:not([data-disabled='true']):hover,
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
     opacity: 1;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='loading']::before {
     border-color: CanvasText;
     border-block-start-color: Highlight;
   }
@@ -45656,14 +45701,14 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 @media (prefers-reduced-motion: reduce) {
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'],
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'] {
     transition-duration: 0.01ms;
   }
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+  .ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'] {
     animation: none;
   }
   /* The progress cue rests as a static two-tone arc (Spinner grammar). */
-  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
+  .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='loading']::before {
     animation: none;
   }
 }
@@ -46966,16 +47011,20 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern TreeSelect skin (WO-SKIN-02 checkpoint B, dropdown family;
  * lane-A Quiet Premium pass).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
- * rule loses to preflight regardless of specificity. Unlayered outranks
- * preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
- * SCOPE ROOT is the outer `<div>`, which carries the pair
- * `ds-tree-select ds-tree-select--modern` + `data-part='root'`. The trigger,
- * dropdown, tree list, and every node row are IN-TREE descendants with their
- * own `data-part` (TreeSelect modern never portals -- the mirror image of
- * Select, whose custom-dropdown branch does).
+ * TWO SCOPE ROOTS. The field root is the outer `<div>` carrying
+ * `ds-tree-select ds-tree-select--modern` + `data-part='root'`; the trigger,
+ * value/placeholder, clear button and arrow are its descendants. The panel is
+ * PORTALED through the overlay kernel (WO-CAN-05) and is therefore NOT a
+ * descendant of the field: it carries its own
+ * `ds-tree-select ds-tree-select--modern ds-tree-select-panel` scope, and the
+ * search box, tree list and every node row are addressed through that class.
+ * Both prefixes are (0,3,0), so every rule below kept the specificity it had.
  *
  * SPECIFICITY (P-48): the Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
@@ -46983,8 +47032,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * already reach (0,4,0) with a single descendant hop, so no part here needs
  * the repeated-`[data-part]` trick.
  *
- * GEOMETRY DRAIN (lane-A pass): the dropdown's position/z-index/max-height/
- * slide-in animation, the option-row transitions, the arrow/chevron rotations
+ * GEOMETRY DRAIN (lane-A pass): the dropdown's z-index/max-height/slide-in
+ * animation, the option-row transitions, the arrow/chevron rotations
  * and the loading spinner's animation all lived inline; they are skin-owned
  * now so the reduced-motion block has full authority. The per-level indent
  * stays in the engine as a runtime calc over governed channels
@@ -47174,15 +47223,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   transform: rotate(180deg);
 }
 
-/* ---- dropdown panel (in-tree): geometry drained from the inline style. z
-        rides the token scale (dropdown tier); the dark-aware luminance step
-        is its own layer above the fill (lane overlay register). ---- */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="dropdown"] {
-  position: absolute;
-  inset-inline: 0;
+/* ---- dropdown panel: the PORTALED panel root, addressed by its own scope
+        class rather than as a descendant of the field. Placement, the band
+        and the measured trigger width are the overlay kernel's inline style;
+        the skin owns the surface, the cap and the entrance only. ---- */
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel[data-part="dropdown"] {
   z-index: var(--ds-tree-select-dropdown-z, var(--ds-z-index-dropdown));
-  margin-block-start: var(--ds-spacing-1);
   max-block-size: var(--ds-tree-select-dropdown-max-height, 240px);
   overflow-y: auto;
   border-radius: var(--ds-radius-lg);
@@ -47199,7 +47245,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Search wrapper: padding drained from `p-2`; the sticky top bar (was the
    `sticky top-0 z-10` utilities) keeps the field visible over long trees,
    stacked one step above the local base (token scale). */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="search-input-wrapper"] {
   position: sticky;
   inset-block-start: 0;
@@ -47209,7 +47255,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-surface-card);
 }
 
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="search-input"] {
   inline-size: 100%;
   box-sizing: border-box;
@@ -47228,13 +47274,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="search-input"]:focus-visible {
   border-color: var(--ds-tree-select-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
 }
 
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="empty"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="empty"] {
   padding: var(--ds-spacing-4);
   text-align: center;
   color: var(--ds-color-text-secondary);
@@ -47243,7 +47289,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Contract `loading` posture (B6-02): the governed Spinner centered in the
    empty well's spatial contract (Select loading-state grammar); the Spinner
    primitive owns ring/cadence/reduced-motion/forced-colors. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="loading-state"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="loading-state"] {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47254,13 +47300,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /* Tree list rhythm (drained from the `p-2` utility). */
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="tree-list"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="tree-list"] {
   padding: var(--ds-spacing-2);
 }
 
 /* ---- tree node row (layout drained from `flex items-center py-1
         cursor-pointer` and the toggle's inline geometry) ---- */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="option"] {
   display: flex;
   align-items: center;
@@ -47278,27 +47324,27 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
     [data-part="option"]:where(:hover):not([data-selected='true']):not([data-disabled='true']) {
     background: var(--ds-color-bg-hover);
   }
 }
 /* Touch/active equivalent of the hover wash. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="option"]:active:not([data-selected='true']):not([data-disabled='true']) {
   background: var(--ds-color-bg-hover);
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="option"]:focus-visible {
   outline: none;
   box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="option"][data-disabled='true'] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="option"][data-selected="true"] {
   background: var(
     --ds-color-bg-selected,
@@ -47311,7 +47357,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* Long taxonomy labels truncate -- never wrap mid-word (content-integrity).
    Layout drained from the `flex-1` utility. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="tree-node-label"] {
   flex: 1;
   min-inline-size: 0;
@@ -47322,13 +47368,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* Match highlight: quiet semibold primary ink (the `font-semibold` utility
    is drained here). */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="tree-node-highlight"] {
   color: var(--ds-color-primary);
   font-weight: var(--ds-font-weight-semibold);
 }
 
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="tree-node-toggle"] {
   block-size: 24px;
   padding-block: 0;
@@ -47343,17 +47389,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
     [data-part="tree-node-toggle"]:hover {
     background: var(--ds-color-bg-hover);
   }
 }
 /* Touch/active equivalent of the hover wash. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="tree-node-toggle"]:active {
   background: var(--ds-color-bg-hover);
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="tree-node-toggle"]:focus-visible {
   outline: none;
   box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
@@ -47363,22 +47409,22 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    RTL, so the skin only owns the expansion rotation (collapsed = inline-end,
    expanded = rotated down). The former manual `scaleX(-1)` rules are gone:
    they would have double-mirrored the autoMirror. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="chevron"] {
   display: inline-flex;
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="chevron"][data-expanded='true'] {
   transform: rotate(90deg);
 }
 
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="leaf-spacer"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="leaf-spacer"] {
   inline-size: 24px;
   flex-shrink: 0;
 }
 
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="loading"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="loading"] {
   inline-size: 12px;
   block-size: 12px;
   border: 2px solid var(--ds-color-border);
@@ -47388,7 +47434,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   animation: ds-foundation-spin var(--ds-tree-select-spinner-duration, var(--ds-motion-glacial)) linear infinite;
 }
 
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="option-icon"] {
   accent-color: var(--ds-color-primary);
   /* Box + cursor drained from the engine's inline style (B6-02); the
@@ -47400,7 +47446,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   /* Logical gap after the checkbox (was the physical `mr-2` utility). */
   margin-inline-end: var(--ds-spacing-2);
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="option-icon"]:disabled {
   cursor: not-allowed;
 }
@@ -47408,7 +47454,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* treeLine guide: physical border-left -> logical inline-start (RTL flips it
    to the correct side); 1px hairline, the tree connector idiom (tree.css).
    The indent (was the `ml-4` utility) is skin-owned. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
   [data-part="tree-list"][data-tree-line="true"] {
   margin-inline-start: var(--ds-spacing-4);
   border-inline-start: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
@@ -47418,8 +47464,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
         min-block-size (wins over inline heights, fine pointers untouched). ---- */
 @media (hover: none) and (pointer: coarse) {
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="option"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="tree-node-toggle"],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="option"],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="tree-node-toggle"],
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"] {
     min-block-size: var(--ds-tree-select-touch-target-min, var(--ds-touch-target-min, 44px));
   }
@@ -47428,17 +47474,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ---- reduced motion: dropdown entrance, spinner, chevron/arrow rotations
         and every state transition go quiet. ---- */
 @media (prefers-reduced-motion: reduce) {
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="dropdown"] {
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel[data-part="dropdown"] {
     animation: none;
   }
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="loading"] {
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="loading"] {
     animation: none;
   }
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="search-input"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="option"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="tree-node-toggle"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="chevron"],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="search-input"],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="option"],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="tree-node-toggle"],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="chevron"],
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="arrow-icon"],
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"] {
     transition: none;
@@ -47450,40 +47496,40 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
         box-shadow rings drop); the tree connector and chevron inherit the
         forced palette. ---- */
 @media (forced-colors: active) {
-  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
     [data-part="option"][data-selected="true"] {
     background: Highlight;
     border-color: Highlight;
     color: HighlightText;
   }
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:focus-visible,
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="search-input"]:focus-visible,
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="option"]:focus-visible,
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="tree-node-toggle"]:focus-visible,
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="search-input"]:focus-visible,
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="option"]:focus-visible,
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="tree-node-toggle"]:focus-visible,
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"]:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
     [data-part="option"][data-disabled='true'] {
     color: GrayText;
   }
-  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
     [data-part="tree-list"][data-tree-line="true"] {
     border-inline-start-color: ButtonText;
   }
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="chevron"] {
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="chevron"] {
     color: ButtonText;
   }
-  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
     [data-part="tree-node-highlight"] {
     color: CanvasText;
   }
   /* Per-node lazy spinner: authored border colors are forced away, which
      would leave a uniform static ring -- the arc re-expresses in system
      colors so the activity cue keeps its shape. */
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="loading"] {
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="loading"] {
     border-color: ButtonText;
     border-top-color: Highlight;
   }
@@ -47718,10 +47764,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern Cascader skin (lane-A Quiet Premium pass over WO-SKIN-02 checkpoint B).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
- * rule loses to preflight regardless of specificity. Unlayered outranks
- * preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the outer `<div>` carrying `ds-cascader ds-cascader--modern` +
  * `data-part='root'`. **NO PORTAL**: the trigger, dropdown, search input,
@@ -47831,7 +47878,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   position: relative;
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"] {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -47845,35 +47892,35 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="trigger"]:where(:hover):not([data-disabled="true"]) {
     border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border. */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="trigger"]:active:not([data-disabled="true"]) {
   border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="trigger"]:focus-visible {
   border-color: var(--ds-cascader-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="trigger"][data-disabled="true"] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="placeholder"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="placeholder"] {
   color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
 }
 
 /* Trigger text takes the remaining track and truncates with ellipsis
    (drained from the `flex-1 truncate` utility). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="value"],
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="placeholder"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="value"],
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="placeholder"] {
   flex: 1;
   min-inline-size: 0;
   overflow: hidden;
@@ -47884,7 +47931,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Clear lives outside the combobox (APG: no nested interactives); the skin
    overlays it between the value and the arrow zone, and the arrow keeps a
    gap so the two never collide (drained 24px inline geometry). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="clear-button"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="clear-button"] {
   position: absolute;
   inset-inline-end: var(--ds-cascader-clear-inset-inline-end, 30px);
   inset-block-start: 50%;
@@ -47910,7 +47957,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   margin-inline-start: var(--ds-cascader-clear-gap, 20px);
 }
 @media (hover: hover) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="clear-button"]:hover {
     color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
   }
@@ -47918,11 +47965,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Touch/active equivalent. The clear reset is a NEUTRAL action: it reads the
    Input clear grammar's ink step, never the error hue (a destructive
    miscue). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="clear-button"]:active {
   color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="clear-button"]:focus-visible {
   outline: none;
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
@@ -47930,11 +47977,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* Trigger chevron: open rotation drained from the `rotate-180` utility +
    inline transition. The glyph is vertically symmetric -- no RTL mirror. */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="arrow-icon"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="arrow-icon"] {
   transition: transform var(--ds-motion-fast)
     var(--ds-motion-ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="trigger"][data-open="true"]
   [data-part="arrow-icon"] {
   transform: rotate(180deg);
@@ -47945,11 +47992,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
         narrow instead of overflowing. z rides the token scale (dropdown
         tier); the dark-aware luminance step is its own layer above the fill
         (lane overlay register). ---- */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="dropdown"] {
-  position: absolute;
-  inset-inline-start: 0;
+.ds-cascader.ds-cascader--modern.ds-cascader-panel[data-part="dropdown"] {
   z-index: var(--ds-cascader-dropdown-z, var(--ds-z-index-dropdown));
-  margin-block-start: var(--ds-spacing-1);
   max-inline-size: calc(100vw - 2 * var(--ds-spacing-4));
   border-radius: var(--ds-radius-lg);
   background: linear-gradient(
@@ -47965,13 +48009,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     var(--ds-motion-ease-out);
 }
 /* The columns wrap is a horizontal track (drained from the `flex` utility). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
-  [data-part="dropdown"]
+.ds-cascader.ds-cascader--modern[data-part="dropdown"]
   div[data-part="option-list"] {
   display: flex;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
-  [data-part="dropdown"]
+.ds-cascader.ds-cascader--modern[data-part="dropdown"]
   [data-part="option-list"] {
   max-inline-size: calc(
     100vw - 2 * var(--ds-spacing-4) - 2 * var(--ds-spacing-1)
@@ -47979,13 +48021,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   overflow-x: auto;
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="search-input-wrapper"] {
   padding: var(--ds-spacing-2);
   border-bottom: 1px solid var(--ds-color-border);
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="search-input"] {
   inline-size: 100%;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
@@ -47996,30 +48038,30 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
       var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="search-input"]:focus-visible {
   border-color: var(--ds-cascader-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
 @media (hover: hover) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="search-input"]:where(:hover):not(:disabled):not(:focus-visible) {
     border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
   }
 }
 /* Touch/active equivalent of the hover border (4th-tanda law). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="search-input"]:active:not(:disabled):not(:focus-visible) {
   border-color: var(--ds-cascader-border-hover, var(--ds-material-control-border-hover));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"]::placeholder {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="search-input"]::placeholder {
   color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
 }
 
 /* Empty posture: the dropdown family's empty-well spatial contract (dashed
    hairline, 4.5rem min-block, radius, muted helper ink) -- never a bare
    padded string (AutoComplete/Select idiom). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="empty"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="empty"] {
   display: grid;
   place-items: center;
   min-block-size: 4.5rem;
@@ -48035,7 +48077,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ---- menu columns: geometry drained from inline. The divider was physical
         `border-right` -- logical `border-inline-end` flips it under RTL. The
         non-first column entrance is sibling-selected (no new data attr). ---- */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="menu-column"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="menu-column"] {
   list-style: none;
   margin: 0;
   padding: var(--ds-spacing-1);
@@ -48044,18 +48086,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   max-block-size: var(--ds-cascader-column-max-height, 240px);
   overflow-y: auto;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="menu-column"]
   + [data-part="menu-column"] {
   animation: ds-cascader-panel-in var(--ds-motion-fast)
     var(--ds-motion-ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="menu-column"]
   + [data-part="menu-column"]:dir(rtl) {
   animation-name: ds-cascader-panel-in-rtl;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="menu-column"]:not([data-last="true"]) {
   border-inline-end: 1px solid var(--ds-color-border);
 }
@@ -48073,7 +48115,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
         The selected frame mirrors TreeSelect's quiet tint. Layout drained from
         the `flex justify-between` utility: the label truncates on the inline
         track, the chevron/loading dock at the inline end. ---- */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="option"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48092,7 +48134,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
       var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="option"]:where(:hover):not([data-selected="true"]):not(
       [data-disabled="true"]
     ) {
@@ -48101,23 +48143,23 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 /* Touch/active equivalent of the hover wash (4th-tanda law: every hover
    paints an equivalent active state). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"]:active:not([data-selected="true"]):not(
     [data-disabled="true"]
   ) {
   background: var(--ds-color-bg-hover);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"]:focus-visible {
   outline: none;
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"][data-disabled="true"] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"][data-selected="true"] {
   background: var(
     --ds-color-bg-selected,
@@ -48128,7 +48170,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /* Option label truncation (never wraps mid-word). */
-.ds-cascader.ds-cascader--modern[data-part="root"]
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
   [data-part="option"]
   > [data-part="option-label"] {
   min-inline-size: 0;
@@ -48139,13 +48181,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* Child chevron: governed icon (icon facade autoMirror flips it under RTL --
    no skin transform needed). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="chevron"] {
   display: inline-flex;
   margin-inline-start: var(--ds-spacing-2);
   color: var(--ds-color-text-muted);
 }
 
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading"] {
   inline-size: 12px;
   block-size: 12px;
   border: 2px solid var(--ds-color-border);
@@ -48159,9 +48201,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ---- coarse pointer: rows/trigger/clear reach the 44px floor via
         min-block-size (wins over inline heights, fine pointers untouched). ---- */
 @media (hover: none) and (pointer: coarse) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"],
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="option"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="clear-button"] {
     min-block-size: var(--ds-cascader-touch-target-min, var(--ds-touch-target-min, 44px));
   }
@@ -48170,18 +48212,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ---- reduced motion: panel/column entrances, spinner and every state
         transition go quiet. ---- */
 @media (prefers-reduced-motion: reduce) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="dropdown"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="menu-column"] {
+  .ds-cascader.ds-cascader--modern.ds-cascader-panel[data-part="dropdown"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="menu-column"] {
     animation: none;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading"] {
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading"] {
     animation: none;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="arrow-icon"],
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="search-input"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="option"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="arrow-icon"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="clear-button"] {
     transition: none;
   }
@@ -48192,33 +48234,33 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
         box-shadow rings drop); the column hairline and chevron inherit the
         forced palette. ---- */
 @media (forced-colors: active) {
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="option"][data-selected="true"] {
     background: Highlight;
     border-color: Highlight;
     color: HighlightText;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="trigger"]:focus-visible,
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="search-input"]:focus-visible,
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="option"]:focus-visible,
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="clear-button"]:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="option"][data-disabled="true"] {
     color: GrayText;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"]
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"])
     [data-part="menu-column"]:not([data-last="true"]) {
     border-inline-end-color: ButtonText;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="chevron"] {
     color: ButtonText;
   }
 }
@@ -48229,7 +48271,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    historical getSizeStyle map, mirrored 1:1 on the --ds-input-* channels so a
    token-layer outage cannot shift the field). The coarse-pointer
    min-block-size floor above still wins over these block sizes. */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"] {
   box-sizing: border-box;
 }
 .ds-cascader.ds-cascader--modern[data-part="root"][data-size="small"] [data-part="trigger"] {
@@ -48252,7 +48294,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /* Search input geometry, drained from inline (same channels, small step). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="search-input"] {
   box-sizing: border-box;
   block-size: var(--ds-input-sm-height);
   padding-block: var(--ds-spacing-1);
@@ -48273,8 +48315,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* Root loading: the suffix spinner replaces the chevron in flow (same dock),
    and the panel loading-state keeps the empty state's rhythm. */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger-loading"],
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-spinner"] {
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -48282,12 +48324,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     var(--ds-cascader-spinner-duration, var(--ds-motion-glacial)) linear
     infinite;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger-loading"] {
   inline-size: 12px;
   block-size: 12px;
   flex-shrink: 0;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-spinner"] {
   inline-size: 14px;
   block-size: 14px;
   flex-shrink: 0;
@@ -48299,7 +48341,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   [data-part="trigger-loading"] {
   margin-inline-start: var(--ds-cascader-clear-gap, 20px);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-state"] {
+.ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-state"] {
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-2);
@@ -48309,15 +48351,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger-loading"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-spinner"] {
     animation: none;
   }
 }
 
 @media (forced-colors: active) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger-loading"],
+  .ds-cascader.ds-cascader--modern:is([data-part="root"], [data-part="dropdown"]) [data-part="loading-spinner"] {
     border-color: ButtonText;
     border-top-color: Highlight;
   }
@@ -52233,10 +52275,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern Message skin (WO-SKIN-03 checkpoint O; K1 Lane C exit-lifecycle pass).
  *
- * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. Personality
- * contributes only the opacity/transform transition; decorative one-sided
- * borders are forbidden (semantic tone comes from the governed icon well,
- * tinted surface and progress line -- never a left accent bar).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SPECIFICITY (4th-wave de-hack): every rule that paints a border COLOR is
  * LIFTED under the stack scope -- `.rottay-message-stack--modern[data-part=
@@ -52253,8 +52296,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `--ds-toast-*` tokens declared nowhere; the fixed positioning/flex stack
  * below is the single paint owner. The provider's `top` prop reaches the
  * paint through the engine-stamped `--ds-message-stack-offset` channel
- * (skin-declared consumer), and `--ds-z-message` keeps its family-local
- * (1590): it is declared nowhere globally. Centring is
+ * (skin-declared consumer). `--ds-z-message` resolves from the single
+ * z-index scale (`foundation/base/z-index`) one step below the notification
+ * band; the local fallback mirrors it exactly (fallback-parity rule). Centring is
  * direction-neutral `inset-inline: 0` + `margin-inline: auto` -- unlike the
  * former half-offset-plus-translate centering, it creates no transform
  * containing block (notification.css precedent).
@@ -52276,7 +52320,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .rottay-message-stack--modern[data-part='stack-container'] {
   position: fixed;
-  z-index: var(--ds-z-message, 1590);
+  z-index: var(--ds-z-message, 1790);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52773,14 +52817,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern Notification skin (WO-SKIN-03 checkpoint O; K4-A drain 2026-07-24).
  *
- * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. Neither the
- * item nor the stack container carries a DaisyUI class: the item tree never
- * emitted one, and the container's `toast`/`toast-top`/`toast-bottom`/
- * `toast-center`/`toast-start`/`toast-end` placement classes were drained in
- * K4-A. This skin is the single paint owner for container placement and item
- * surface alike. feedback/Message's identical placement classes were drained
- * in the same wave (its stack is skin-owned via message.css), and theme.css's
- * `[data-tenant] .toast` bridge was removed with both drains complete.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * PLACEMENT: keyed on `data-placement` (stamped by the provider). Inline-axis
  * placement is LOGICAL -- `topLeft`/`bottomLeft` anchor at `inset-inline-start`
@@ -52789,8 +52830,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * former half-offset-plus-translate centering it creates no transform
  * containing block. The provider's `top`/`bottom` props reach the paint
  * through the engine-stamped `--ds-notification-stack-offset` channel
- * (skin-declared consumer), and `--ds-z-notification` keeps its family-local
- * fallback (1600): it is declared nowhere globally.
+ * (skin-declared consumer). `--ds-z-notification` resolves from the single
+ * z-index scale (`foundation/base/z-index`) at the notification band; the
+ * local fallback mirrors it exactly (fallback-parity rule).
  *
  * SPECIFICITY (4th-wave de-hack): every rule that paints a border COLOR is
  * LIFTED under the stack scope, reaching (0,5,0)+ with NO repeated class or
@@ -52831,7 +52873,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ---- fixed placement and stacking: self-contained, no utility dependency ---- */
 .rottay-notification-stack--modern[data-part='stack-container'] {
   position: fixed;
-  z-index: var(--ds-z-notification, 1600);
+  z-index: var(--ds-z-notification, 1800);
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-3);

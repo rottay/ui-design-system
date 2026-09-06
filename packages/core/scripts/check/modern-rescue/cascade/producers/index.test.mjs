@@ -115,9 +115,9 @@ const SCRIPT = join(HERE, 'index.mjs');
  * tsx-inline-stamp planes did not move at all.
  */
 const LIVE_PRODUCER_STATS = Object.freeze({
-  producerSites: 4887,
-  channelEmissions: 10365,
-  distinctChannels: 4585,
+  producerSites: 4893,
+  channelEmissions: 10371,
+  distinctChannels: 4591,
   /**
    * 196 -> 197, and it is the SAME mechanism as the ten rows above rather than
    * a new causal claim: `--ds-color-link` is written literally by two of the

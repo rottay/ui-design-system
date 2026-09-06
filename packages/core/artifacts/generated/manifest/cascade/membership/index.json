@@ -2637,7 +2637,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:147",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:160",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-autocomplete-border-focus",
         "coincidenceGuard": "no-value-match-used"
@@ -2664,7 +2664,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-muted",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:209",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:222",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-autocomplete-clear-color",
         "coincidenceGuard": "no-value-match-used"
@@ -2691,7 +2691,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-card",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:253",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:263",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-autocomplete-dropdown-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -2744,7 +2744,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-muted",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:352",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:361",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-autocomplete-empty-color",
         "coincidenceGuard": "no-value-match-used"
@@ -2771,7 +2771,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-error",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:161",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:174",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-autocomplete-error-border",
         "coincidenceGuard": "no-value-match-used"
@@ -2830,7 +2830,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-warning",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:169",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:182",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-autocomplete-warning-border",
         "coincidenceGuard": "no-value-match-used"
@@ -23192,7 +23192,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:178",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:191",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-autofill-color",
         "coincidenceGuard": "no-value-match-used"
@@ -23219,7 +23219,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-control",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:97",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:110",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -23674,7 +23674,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:179",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:192",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-caret-color",
         "coincidenceGuard": "no-value-match-used"
@@ -23858,7 +23858,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:216",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:229",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-clear-color-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -23945,7 +23945,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-muted",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:129",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:142",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-color-placeholder",
         "coincidenceGuard": "no-value-match-used"
@@ -25601,7 +25601,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:133",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:146",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-selection-color",
         "coincidenceGuard": "no-value-match-used"
@@ -39232,7 +39232,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:289",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:297",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-spinner-color",
         "coincidenceGuard": "no-value-match-used"
@@ -48510,5 +48510,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "5d0d4335e1eb7a450bdb98db4f5dbadb53db3ba6a24366e9cd4135844269a46a"
+  "digest": "35d8c05fdb5055454e427fab88d91c45f97ff4eaabc3b6b9a5911230aee83d71"
 }
