@@ -20,9 +20,11 @@
  * prop). Consuming it here is what makes the illustration the emphasis and
  * gives the declared channel a modern reader.
  *
- * DELIBERATELY UNLAYERED (P-47): layered rules sort before Tailwind preflight
- * and lose to it; unlayered paint outranks the reset and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  */
 
 .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'] {

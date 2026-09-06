@@ -2,9 +2,11 @@
  * Modern Spinner skin (R2+R3 ownership pass; supersedes the WO-SKIN-03
  * checkpoint-S split).
  *
- * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
- * layer and loses to preflight; unlayered outranks it and still yields to the
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-spinner rottay-spinner--modern` + `data-part='root'`;
  * the ring is `[data-part='indicator']`, the caption `[data-part='label']`.

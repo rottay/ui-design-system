@@ -1,8 +1,11 @@
 /**
  * Modern Watermark skin (WO-SKIN-04 checkpoint P; geometry drain).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * This component is structurally unlike every other one in this family: its visible
  * content — the repeating text or image tile — is drawn to an off-screen `<canvas>`

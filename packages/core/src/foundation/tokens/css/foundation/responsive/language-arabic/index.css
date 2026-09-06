@@ -17,13 +17,13 @@
  * rendered with the full Latin tracking ramp applied to it.
  *
  * WHICH @LAYER, AND WHY IT CANNOT BE ACCIDENTALLY OVERRIDDEN.
- * This file is reached through `foundation/responsive/index.css`, which both
- * public entrypoints import as `layer(rottay-responsive)` — the LAST
+ * This file is reached through `foundation/responsive/index.css`, which the
+ * one public entrypoint imports as `layer(rottay-responsive)` — the LAST
  * design-system layer in the canonical order:
  *
  *   theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion,
- *   rottay-components, rottay-engines, rottay-personality,
- *   rottay-responsive, components, utilities
+ *   rottay-components, rottay-engines, rottay-structures, rottay-surfaces,
+ *   rottay-personality, rottay-responsive, components, utilities
  *
  * Layer precedence outranks specificity, so nothing LAYERED inside the design
  * system can beat these rules at any selector weight: not the base token scale

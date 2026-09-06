@@ -1,10 +1,11 @@
 /**
  * Modern UserProfileCard skin (cross-capability anatomy, premium wave uplift).
  *
- * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
- * unnamed base layer. The private BEM landing classes keep consumer-provided
- * slots from being painted when they happen to reuse a public data-part name.
- * Border-color rules reach at least (0,4,0) to clear the tenant border floor.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * OWNERSHIP (premium wave): all geometry, the size ramp, typography color and
  * every interactive state now live here, keyed on the root's

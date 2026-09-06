@@ -2,10 +2,13 @@
  * Responsive Tokens Index - Rottay Design System
  *
  * Central import file for adjustments conditioned on the rendering
- * environment: screen size, and the language the text is written in. Both
- * entrypoints import this file as `layer(rottay-responsive)`, the last
- * design-system layer, so these adjustments outrank every token, skin, and
- * tenant artifact they correct.
+ * environment: screen size, and the language the text is written in.
+ *
+ * LAYER: `layer(rottay-responsive)`, the last design-system layer, imported by
+ * `facade/entrypoints/base/index.css`. That rank puts these adjustments over
+ * every token and skin they correct. Compiled tenant paint is unlayered and
+ * therefore sits over this layer as well, which is why the Arabic root floor
+ * has to be imported unlayered rather than from here.
  */
 
 @import "./avatar/index.css";

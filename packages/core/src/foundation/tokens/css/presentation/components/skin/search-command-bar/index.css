@@ -608,14 +608,14 @@
 }
 
 /* command input typography — the exact per-engine paint node (P-79):
- * modern wraps the native input, rustic IS the input root. */
+ * modern wraps the native input, rustic IS the input root. Tracking is NOT
+ * refined here: it is primitive/inputs/input's --ds-input-letter-spacing. */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__input
   .rottay-input,
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__input.rottay-input {
   font-size: var(--ds-font-size-sm);
-  letter-spacing: -0.01em;
 }
 
 /* Reduced motion: the pulse, the spin and the drawer entrance stop outright. */

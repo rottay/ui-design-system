@@ -1,11 +1,11 @@
 /**
  * Modern Toast skin (WO-SKIN-03 checkpoint O).
  *
- * DELIBERATELY UNLAYERED (P-47), and here that is the whole point of the file.
- * The root carries NO DaisyUI class -- the structural `alert` class was drained
- * from the modern engine (Toast.modern-variant-tokens.test pins its absence),
- * so this skin is the single paint owner for every tone. Unlayered keeps these
- * rules above the tenant artifacts' layered paint without !important.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
  * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`

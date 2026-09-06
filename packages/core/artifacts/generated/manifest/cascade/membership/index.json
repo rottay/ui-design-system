@@ -3162,7 +3162,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:82",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:84",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-avatar-ring-color",
         "coincidenceGuard": "no-value-match-used"
@@ -3367,7 +3367,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/back-top/index.css:63",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/back-top/index.css:65",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-backtop-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -9853,7 +9853,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-disabled",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:166",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:168",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-calendar-day-color-other",
         "coincidenceGuard": "no-value-match-used"
@@ -9907,7 +9907,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-card",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css:47",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css:46",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-card-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -12657,7 +12657,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css:114",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css:113",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-collection-card-shadow",
         "coincidenceGuard": "no-value-match-used"
@@ -12682,7 +12682,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css:229",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css:222",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-collection-card-shadow-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -13763,7 +13763,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-control",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:395",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:397",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-bg-input",
         "coincidenceGuard": "no-value-match-used"
@@ -14999,7 +14999,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:440",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:442",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-interactive-bg-active",
         "coincidenceGuard": "no-value-match-used"
@@ -15028,7 +15028,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:429",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:431",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-interactive-bg-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -15110,7 +15110,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:129",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:130",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-link",
         "coincidenceGuard": "no-value-match-used"
@@ -15730,7 +15730,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:276",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:278",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-primary-300",
         "coincidenceGuard": "no-value-match-used"
@@ -16031,7 +16031,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:718",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:720",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-primary-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -21135,7 +21135,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-secondary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:67",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:69",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-empty-icon-color",
         "coincidenceGuard": "no-value-match-used"
@@ -23597,7 +23597,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-border",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:230",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:232",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-border-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -23886,7 +23886,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:210",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css:212",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-color",
         "coincidenceGuard": "no-value-match-used"
@@ -24082,7 +24082,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-error",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:157",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:159",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-input-error-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -27452,7 +27452,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-border",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css:58",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css:60",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-list-border-color",
         "coincidenceGuard": "no-value-match-used"
@@ -27581,7 +27581,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-secondary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css:367",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css:369",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-list-meta-description-color",
         "coincidenceGuard": "no-value-match-used"
@@ -29223,7 +29223,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-control",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:470",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:471",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-material-control-background-active",
         "coincidenceGuard": "no-value-match-used"
@@ -29718,7 +29718,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-elevation-1",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:199",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:201",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-material-control-shadow-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -30095,7 +30095,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:125",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:126",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-material-panel-border-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -30325,7 +30325,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-elevation-1",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:106",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:107",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-material-panel-shadow",
         "coincidenceGuard": "no-value-match-used"
@@ -32126,7 +32126,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-bg-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/drawer/index.css:378",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/drawer/index.css:380",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-modal-overlay-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -32655,7 +32655,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css:178",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css:180",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-pagination-item-bg-active",
         "coincidenceGuard": "no-value-match-used"
@@ -32680,7 +32680,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css:167",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css:169",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-pagination-item-bg-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -32737,7 +32737,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css:116",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css:118",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-pagination-item-color",
         "coincidenceGuard": "no-value-match-used"
@@ -32796,7 +32796,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css:171",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css:173",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-pagination-item-color-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -32823,7 +32823,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-card",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:1035",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:1011",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-popover-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -32884,7 +32884,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:1034",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:1010",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-popover-content-color",
         "coincidenceGuard": "no-value-match-used"
@@ -34261,7 +34261,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-control",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:903",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:904",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-search-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -34288,7 +34288,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-border",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:904",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:905",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-search-border",
         "coincidenceGuard": "no-value-match-used"
@@ -34315,7 +34315,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-muted",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:147",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:148",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-search-category-color",
         "coincidenceGuard": "no-value-match-used"
@@ -34342,7 +34342,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-muted",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:908",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:909",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-search-clear-color",
         "coincidenceGuard": "no-value-match-used"
@@ -34369,7 +34369,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-secondary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:909",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:910",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-search-clear-color-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -34396,7 +34396,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:905",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:906",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-search-color",
         "coincidenceGuard": "no-value-match-used"
@@ -34586,7 +34586,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-muted",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:906",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:907",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-search-placeholder-color",
         "coincidenceGuard": "no-value-match-used"
@@ -34969,7 +34969,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:323",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:325",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-segmented-item-bg-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -35029,7 +35029,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-secondary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:314",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:316",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-segmented-item-color",
         "coincidenceGuard": "no-value-match-used"
@@ -35057,7 +35057,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:327",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:329",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-segmented-item-color-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -35083,7 +35083,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:352",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:354",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-segmented-item-color-selected",
         "coincidenceGuard": "no-value-match-used"
@@ -35111,7 +35111,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-font-weight-medium",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:265",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:267",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-segmented-item-font-weight",
         "coincidenceGuard": "no-value-match-used"
@@ -35160,7 +35160,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-button-md-radius",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:235",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:237",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-segmented-item-radius",
         "coincidenceGuard": "no-value-match-used"
@@ -35545,7 +35545,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-radius-md",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:93",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css:95",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-segmented-radius",
         "coincidenceGuard": "no-value-match-used"
@@ -38258,7 +38258,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-spacing-2",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css:381",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css:382",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-sidebar-shell-padding-inline",
         "coincidenceGuard": "no-value-match-used"
@@ -38919,7 +38919,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton/index.css:63",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton/index.css:64",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-skeleton-wave-gradient",
         "coincidenceGuard": "no-value-match-used"
@@ -39343,7 +39343,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-secondary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:63",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:64",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-statistic-title-color",
         "coincidenceGuard": "no-value-match-used"
@@ -39368,7 +39368,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:132",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:133",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-statistic-value-color",
         "coincidenceGuard": "no-value-match-used"
@@ -39974,7 +39974,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-secondary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/steps/index.css:141",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/steps/index.css:143",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-steps-item-color",
         "coincidenceGuard": "no-value-match-used"
@@ -40468,7 +40468,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1286",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1287",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-surface-panel",
         "coincidenceGuard": "no-value-match-used"
@@ -41757,7 +41757,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1221",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1222",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-table-reorder-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -41782,7 +41782,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-border",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1278",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1279",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-table-resize-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -41832,7 +41832,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-card",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1781",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1782",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-table-row-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -41963,7 +41963,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:2143",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:2144",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-table-row-bg-striped",
         "coincidenceGuard": "no-value-match-used"
@@ -42029,7 +42029,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1326",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1327",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-table-row-focus-shadow",
         "coincidenceGuard": "no-value-match-used"
@@ -42054,7 +42054,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1346",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1347",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-table-row-hover-shadow",
         "coincidenceGuard": "no-value-match-used"
@@ -42213,7 +42213,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-elevation-1",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:346",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:347",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-tabs-active-shadow",
         "coincidenceGuard": "no-value-match-used"
@@ -42398,7 +42398,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-spacing-2",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:648",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:649",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-tabs-gap",
         "coincidenceGuard": "no-value-match-used"
@@ -42622,7 +42622,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-radius-md",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:329",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:330",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-tabs-item-radius",
         "coincidenceGuard": "no-value-match-used"
@@ -44395,7 +44395,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/timeline/index.css:108",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/timeline/index.css:110",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-text-primary",
         "coincidenceGuard": "no-value-match-used"
@@ -45260,7 +45260,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/time-picker/index.css:173",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/time-picker/index.css:175",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-timepicker-border-focus",
         "coincidenceGuard": "no-value-match-used"
@@ -46237,7 +46237,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-elevation-1",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:162",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:163",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-toolbar-shadow",
         "coincidenceGuard": "no-value-match-used"
@@ -46840,7 +46840,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:157",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:159",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-tree-node-bg-selected",
         "coincidenceGuard": "no-value-match-used"
@@ -46897,7 +46897,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:158",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:160",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-tree-node-color-selected",
         "coincidenceGuard": "no-value-match-used"
@@ -47726,7 +47726,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-card",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:541",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:542",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-workspace-card-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -47921,7 +47921,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-border",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:682",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:683",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-workspace-card-footer-border",
         "coincidenceGuard": "no-value-match-used"
@@ -48510,5 +48510,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "35d8c05fdb5055454e427fab88d91c45f97ff4eaabc3b6b9a5911230aee83d71"
+  "digest": "ac89cbbe4250ca6dfa9a7a8450eeab27ef5d6c551baae65a09808431d4006165"
 }

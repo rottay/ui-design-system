@@ -1,10 +1,11 @@
 /**
- * Modern ListToolbar skin — deliberately unlayered (P-47).
- * Layered rules sort before Tailwind's base layer and cannot reliably paint
- * these elements. The two root classes plus repeated target parts give every
- * real border colour at least (0,4,0), above the tenant floor at (0,3,1).
- * Text colour rules repeat the target part three times to reach (0,5,0) and
- * outrank the Typography engine skin.
+ * Modern ListToolbar skin.
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * Primitive paint remains owned by Button/Input/Badge. Toolbar selectors below
  * only tune their composition through pattern classes and semantic data state.

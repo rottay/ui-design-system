@@ -339,7 +339,6 @@ describe("CRA17 four-facade asset certification", () => {
     expect(pictogramCss).toContain("forced-color-adjust: auto");
 
     const cssEntrypoints = [
-      "src/foundation/tokens/css/facade/entrypoints/styles/index.css",
       "src/foundation/tokens/css/facade/entrypoints/base/index.css",
       "src/foundation/tokens/css/presentation/components/index.css",
     ].map(readSource);

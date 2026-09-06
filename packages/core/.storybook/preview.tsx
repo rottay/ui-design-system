@@ -6,7 +6,9 @@ import React from "react";
 
 // Exercise the same public source facade used by symlinked consumers. Importing
 // token fragments here hid missing skins and made Storybook diverge from apps.
-import "../src/foundation/tokens/css/facade/entrypoints/styles/index.css";
+// `base` is the one authored entrypoint; the vertical font packs below are what
+// the retired per-vertical entrypoints used to add on top of it.
+import "../src/foundation/tokens/css/facade/entrypoints/base/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/humanist-text/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/grotesk-display/index.css";
 import "../src/foundation/tokens/css/foundation/typography/font-packs/plex-mono/index.css";

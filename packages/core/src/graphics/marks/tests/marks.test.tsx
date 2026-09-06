@@ -364,13 +364,12 @@ describe('mark provenance and supplier boundary', () => {
     expect(decorative.decorative).toBe(true);
   });
 
-  it('ships the minimal forced-colors CSS through all three CSS entrypoints', () => {
+  it('ships the minimal forced-colors CSS through both CSS aggregators', () => {
     const markCss = readFileSync(
       resolve(process.cwd(), 'src/foundation/tokens/css/presentation/components/mark/index.css'),
       'utf8',
     );
     const cssEntrypoints = [
-      'src/foundation/tokens/css/facade/entrypoints/styles/index.css',
       'src/foundation/tokens/css/facade/entrypoints/base/index.css',
       'src/foundation/tokens/css/presentation/components/index.css',
     ].map((path) => readFileSync(resolve(process.cwd(), path), 'utf8'));

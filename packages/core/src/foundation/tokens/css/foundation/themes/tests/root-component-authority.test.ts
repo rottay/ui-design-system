@@ -22,10 +22,7 @@ const LEDGER_PATH = resolve(
   CSS_ROOT,
   "foundation/themes/tests/root-component-authority-ledger.json",
 );
-const ENTRYPOINTS = [
-  resolve(CSS_ROOT, "facade/entrypoints/base/index.css"),
-  resolve(CSS_ROOT, "facade/entrypoints/styles/index.css"),
-] as const;
+const ENTRYPOINT = resolve(CSS_ROOT, "facade/entrypoints/base/index.css");
 
 const FOUNDATION_CHANNEL = /^--ds-(?:color|spacing|radius|shadow|font|motion|z-index)-/;
 
@@ -184,22 +181,18 @@ describe("root component-token authority", () => {
     }
   });
 
-  it("ships every declared owner after the default foundation in both facades", () => {
-    for (const entrypoint of ENTRYPOINTS) {
-      const source = read(entrypoint);
-      const defaultIndex = source.indexOf(
-        '@import "../../../foundation/themes/default/index.css"',
-      );
-      expect(defaultIndex, basename(entrypoint)).toBeGreaterThan(-1);
+  it("ships every declared owner after the default foundation", () => {
+    const source = read(ENTRYPOINT);
+    const defaultIndex = source.indexOf(
+      '@import "../../../foundation/themes/default/index.css"',
+    );
+    expect(defaultIndex, basename(ENTRYPOINT)).toBeGreaterThan(-1);
 
-      for (const filename of Object.keys(ledger.owners)) {
-        const ownerIndex = source.indexOf(
-          `@import "../../../presentation/components/${filename}"`,
-        );
-        expect(ownerIndex, `${basename(entrypoint)} -> ${filename}`).toBeGreaterThan(
-          defaultIndex,
-        );
-      }
+    for (const filename of Object.keys(ledger.owners)) {
+      const ownerIndex = source.indexOf(
+        `@import "../../../presentation/components/${filename}"`,
+      );
+      expect(ownerIndex, filename).toBeGreaterThan(defaultIndex);
     }
   });
 

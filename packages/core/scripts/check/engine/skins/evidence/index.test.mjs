@@ -10,10 +10,7 @@ const CORE_ROOT = findPackageRoot(HERE);
 const REPO_ROOT = findRepoRoot(HERE);
 
 const CSS_ROOT = path.join(CORE_ROOT, 'src/foundation/tokens/css');
-const ENTRYPOINTS = [
-  path.join(CSS_ROOT, 'facade/entrypoints/base/index.css'),
-  path.join(CSS_ROOT, 'facade/entrypoints/styles/index.css'),
-];
+const ENTRYPOINTS = [path.join(CSS_ROOT, 'facade/entrypoints/base/index.css')];
 const FAMILIES = path.join(
   CORE_ROOT,
   'governance/manifest/families',

@@ -9,8 +9,11 @@
  * packs a tenant's envelope enables, without importing the css.
  *
  * The pack css itself lives at ../<id>/index.css and is published as the opt-in
- * subpath @rottay/design-system/fonts/<id>.css. The css is never imported by
- * styles.css or any default bundle; consumers pay only for the packs they load.
+ * subpath @rottay/design-system/fonts/<id>.css. A pack a FIRST-PARTY vertical
+ * declares in `FIRST_PARTY_VERTICAL_ROSTER.fontPacks` is injected into that
+ * vertical's bundle by `scripts/build/verticals/css-build`, and the union of
+ * all declared packs is injected into dist/styles.css. Every other pack is
+ * opt-in: a consumer pays only for what it loads.
  *
  * `variable` faces carry a weight RANGE (a single variable woff2 covers it);
  * `static` faces carry a single instance weight. `path` is relative to the pack

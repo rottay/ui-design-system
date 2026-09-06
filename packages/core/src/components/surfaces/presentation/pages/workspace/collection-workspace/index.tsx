@@ -1854,6 +1854,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       <Button
         id={`${compactPreviewId}-trigger`}
         variant="ghost"
+        radius="none"
         block
         aria-expanded={compactPreviewOpen}
         aria-controls={`${compactPreviewId}-region`}

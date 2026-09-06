@@ -2024,7 +2024,7 @@ const ROSTER: readonly RosterRow[] = [
 /**
  * Root floors for the channels the DELETE rows resolve through, recorded from
  * a static cascade walk of the 453 stylesheets reachable from
- * `facade/entrypoints/styles/index.css` for the rottay root element in each mode.
+ * the sole authored entrypoint for the rottay root element in each mode.
  *
  * Only the transitive closure the 68 deleted rows actually need is kept --
  * 32 entries, keyed `mode|name`. The compiler's own emission always wins over

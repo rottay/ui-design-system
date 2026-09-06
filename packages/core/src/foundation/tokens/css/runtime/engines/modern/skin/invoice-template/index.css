@@ -1,11 +1,11 @@
 /**
  * Modern InvoiceTemplate skin (skin ownership migration checkpoint record anatomy/F; PT22 rebuild).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * unnamed `base` layer, so a layered rule loses to preflight regardless of
- * specificity. Unlayered outranks preflight and still yields to a caller's inline
- * `style`, which the root relies on (`{ ...panelCardStyle, ...style }` -- the
- * shared kit stays inline, shared with ten consumers fleet-wide).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-invoice-template
  * ds-engine-modern` + `data-part='root'`. The loading branch carries the same

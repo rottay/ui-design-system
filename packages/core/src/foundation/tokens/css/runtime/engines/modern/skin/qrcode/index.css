@@ -1,10 +1,11 @@
 /**
  * Modern QRCode skin (WO-SKIN-05 checkpoint D1).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight, DaisyUI and Tailwind's utilities, and still yields
- * to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT already carried `rottay-qrcode rottay-qrcode--modern`; no classname is
  * minted or dropped here. That matters: `engines/modern/theme.css:479` is a live

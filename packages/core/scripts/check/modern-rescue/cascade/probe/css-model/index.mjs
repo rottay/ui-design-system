@@ -20,11 +20,11 @@
  * authority on who wins.
  *
  * ARTIFACT MASK is the one cascade fact leg 1 does decide, because it needs no
- * matching at all: tenant artifacts are imported WITHOUT `layer(...)`
- * (facade/entrypoints/{rottay,bithire,evnto}.css), and an unlayered
- * declaration beats every layered one regardless of specificity. So a channel
- * redeclared inside `facade/artifacts/<tenant>/index.css` is MASKED under that
- * tenant: the edit in presentation/components is dead paint there.
+ * matching at all: compiled tenant paint is emitted WITHOUT `layer(...)`, and
+ * an unlayered declaration beats every layered one regardless of specificity.
+ * So a channel redeclared inside `facade/artifacts/<tenant>/index.css` is
+ * MASKED under that tenant: the edit in presentation/components is dead paint
+ * there.
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
@@ -39,11 +39,27 @@ export const REPO_ROOT = findRepoRoot(HERE);
 export const CORE_ROOT = join(REPO_ROOT, "packages/core");
 export const CSS_ROOT = join(CORE_ROOT, "src/foundation/tokens/css");
 
+/**
+ * Sheet roots this model can assemble.
+ *
+ * All four entries used to name flat files -- `facade/entrypoints/base.css`
+ * and friends -- that had not existed since the entrypoint folder migration.
+ * `buildSheet` reports an unreadable entry in `unresolved` and returns an
+ * EMPTY sheet, so every caller that asked for a tenant was measuring blank
+ * CSS while the run still completed.
+ *
+ * `base` is the one authored entrypoint. A tenant sheet has no authored file
+ * at all: the build composes it from `base` plus the compiled artifact named
+ * by `FIRST_PARTY_VERTICAL_ROSTER`. The committed vertical bundle IS that
+ * composition -- `scripts/build/verticals/css-build` writes it and `dist/`
+ * from one in-memory buffer and `--check` diffs them byte for byte -- so a
+ * tenant entry resolves to the bundle, which is what a browser actually sorts.
+ */
 export const ENTRYPOINTS = {
-  base: join(CSS_ROOT, "facade/entrypoints/base.css"),
-  rottay: join(CSS_ROOT, "facade/entrypoints/rottay.css"),
-  bithire: join(CSS_ROOT, "facade/entrypoints/bithire.css"),
-  evnto: join(CSS_ROOT, "facade/entrypoints/evnto.css"),
+  base: join(CSS_ROOT, "facade/entrypoints/base/index.css"),
+  rottay: join(CORE_ROOT, "artifacts/generated/css/verticals/rottay/index.css"),
+  bithire: join(CORE_ROOT, "artifacts/generated/css/verticals/bithire/index.css"),
+  evnto: join(CORE_ROOT, "artifacts/generated/css/verticals/evnto/index.css"),
 };
 
 const ROOT_EQUIVALENT = new Set([":root", "html", ":host", ":host(*)"]);

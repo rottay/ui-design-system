@@ -1,18 +1,19 @@
 /**
  * @fileoverview Canonical cascade-layer contract - Rottay Design System
- * @description Mirrors the `@layer` order declared by the CSS entrypoints so
+ * @description Mirrors the `@layer` order declared by the CSS entrypoint so
  * runtime emitters can join the designed cascade instead of escaping it.
  *
  * @remarks
  * The order below is the single cascade contract of the design system. It is
- * declared in CSS at `foundation/tokens/css/facade/entrypoints/base/index.css` and
- * `.../styles.css`; this module restates it in TypeScript for the one emitter
- * that writes CSS at runtime (`SystemCssVariablesBridge`).
+ * declared once in CSS, at
+ * `foundation/tokens/css/facade/entrypoints/base/index.css`; this module
+ * restates it in TypeScript for the one emitter that writes CSS at runtime
+ * (`SystemCssVariablesBridge`).
  *
  * Restating it creates a drift risk, so the parity is executable: the tests in
- * this folder parse both CSS entrypoints and fail when either side changes
- * without the other. Treat the CSS files as the source and this array as the
- * mirror.
+ * this folder parse that entrypoint and the committed vertical bundles, and
+ * fail when either side changes without the other. Treat the CSS as the source
+ * and this array as the mirror.
  *
  * WHY a runtime emitter must restate the order: cascade layers are ordered by
  * first appearance in the document. If a runtime `<style>` used a layer name
@@ -45,10 +46,29 @@ export const ROTTAY_CASCADE_LAYER_ORDER = [
   'rottay-motion',
   'rottay-components',
   'rottay-engines',
+  'rottay-structures',
+  'rottay-surfaces',
   'rottay-personality',
   'rottay-responsive',
   'components',
   'utilities',
+] as const;
+
+/**
+ * The DS paint layers in tier order, low to high.
+ *
+ * `rottay-components` is the ENGINE-AGNOSTIC base coat for primitives and
+ * patterns and `rottay-engines` is the engine-specific paint that refines it,
+ * so those two keep their order -- it is a dependency relation, not a tier
+ * inversion. The structure and surface tiers sit ABOVE both, which is what
+ * lets a structure or a surface override an engine skin by layer ownership
+ * alone, with no specificity race and no escape to an inline `style`.
+ */
+export const ROTTAY_PAINT_TIER_ORDER = [
+  'rottay-components',
+  'rottay-engines',
+  'rottay-structures',
+  'rottay-surfaces',
 ] as const;
 
 /**

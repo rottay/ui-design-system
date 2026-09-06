@@ -162,6 +162,16 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/check/engine/cascade-wiring/index.mjs'],
     blocking: true,
   },
+  // The layer statement in facade/entrypoints/base/index.css is a claim about
+  // how a browser sorts the shipped bundle; only a browser settles it. The
+  // probe's `--self-check` leg re-runs the same three subjects against the
+  // REVERSED tier order and requires every one to flip, so a probe that reads
+  // source order instead of the statement fails here.
+  {
+    id: 'cascade-tier-order-probe',
+    run: ['node', 'scripts/check/engine/css/paint/layers/layers.cascade-tier-order.probe.mjs', '--self-check'],
+    blocking: true,
+  },
   // Generated manifest views must match their live sources.
   { id: 'fanout-facts-freshness', run: ['node', 'scripts/generate/tokens/manifest/fanout/index.mjs', '--check'], blocking: true },
   { id: 'root-checklists-freshness', run: ['node', 'scripts/generate/tokens/manifest/root-checklists/index.mjs', '--check'], blocking: true },

@@ -377,9 +377,10 @@ test("NEGATIVE 5b — the same channel with no artifact redeclaration is PASS", 
  * has no declaration. That sentence is true of two opposite situations, and
  * collapsing them cost this programme seven false FAILs on the `--ds-collapse-*`
  * matrix: those channels are declared at :root in
- * presentation/components/collapse.css, which only facade/entrypoints/styles.css
- * imports. The controls below plant BOTH situations against the SAME probed
- * side, so any future change that merges the two verdicts goes red.
+ * presentation/components/collapse.css, which no entrypoint imported until
+ * WO-CAN-03 wired it into `base`. The controls below plant BOTH situations
+ * against the SAME probed side, so any future change that merges the two
+ * verdicts goes red.
  */
 
 /** A side where the channel is read but nothing declares it. */
@@ -545,15 +546,18 @@ test("tree scan finds root declarations, records scope, and recurses", () => {
 });
 
 test("entrypoint reach is measured on the real import graph, not assumed", () => {
+  // This assertion used to encode the DEFECT as the expectation: the collapse
+  // token sheet reached the retired `styles` entrypoint and NOT `base`, so the
+  // bridge shipped in every bundle reading channels with no producer. It now
+  // pins the repair.
   const rel = "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css";
   const reach = entrypointsReaching([rel]);
-  assert.ok(reach.get(rel).includes("styles"), "styles entrypoint imports presentation/components/collapse");
-  assert.equal(reach.get(rel).includes("base"), false, "base entrypoint does not import the component skin");
+  assert.deepEqual(reach.get(rel), ["base"], "base is the one entrypoint, and it imports the collapse token sheet");
 });
 
 test("--entry accepts every entrypoint the probe can recommend", () => {
-  assert.match(resolveEntry("styles"), /facade\/entrypoints\/styles\/index\.css$/);
   assert.match(resolveEntry("base"), /facade\/entrypoints\/base\/index\.css$/);
+  assert.equal(resolveEntry("styles"), "styles", "the retired styles entrypoint no longer resolves");
   assert.equal(resolveEntry("not-an-entrypoint"), "not-an-entrypoint");
 });
 

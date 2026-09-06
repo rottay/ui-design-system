@@ -121,11 +121,13 @@ export function parseArgs(argv) {
 
 /**
  * Resolve `--entry <name>` against the entrypoint directory rather than a
- * hardcoded list of four. Naming an uncovered entrypoint in an OUT-OF-GRAPH
- * message is only honest if that name is actually runnable, and
- * `facade/entrypoints/styles.css` — the one file that imports the
- * presentation components — was not in the list. `base`/`rottay`/`bithire`/
- * `evnto` resolve to exactly the same paths as before.
+ * hardcoded list. Naming an uncovered entrypoint in an OUT-OF-GRAPH message is
+ * only honest if that name is actually runnable.
+ *
+ * WO-CAN-03 left `base` as the only authored entrypoint, so this now resolves
+ * one name from disk instead of four. It is still a directory lookup rather
+ * than a constant: a name that no longer exists must fail as an unresolved
+ * entry, not silently resolve to something else.
  */
 export function resolveEntry(entry, { dir = ENTRYPOINT_DIR } = {}) {
   if (!entry || entry.includes("/") || entry.includes("\\")) return entry;
@@ -245,10 +247,13 @@ export function treeDigest(files, cwd = REPO_ROOT) {
  *   (b) something declares it in a file this     -> OUT-OF-GRAPH, not a FAIL,
  *       entrypoint never imports                    a hole in the coverage
  *
- * Case (b) is not hypothetical: `presentation/components/collapse.css` is
- * imported by `facade/entrypoints/styles.css` alone, so every `--ds-collapse-*`
- * root declaration is invisible to `--entry base` while being perfectly
- * present in the tree. Emitting FAIL there is noise on top of correct work.
+ * Case (b) was not hypothetical: `presentation/components/collapse.css` used
+ * to be imported by the retired `styles` entrypoint alone, so every
+ * `--ds-collapse-*` root declaration was invisible to `--entry base` while
+ * being perfectly present in the tree. Emitting FAIL there is noise on top of
+ * correct work. WO-CAN-03 wired that sheet into `base`, which closes this
+ * instance; the distinction below is what keeps the next one from being
+ * misread.
  *
  * The distinction is decided by evidence, never by a name pattern: the tree is
  * scanned for a ROOT-SCOPE declaration (the same admission rule the root

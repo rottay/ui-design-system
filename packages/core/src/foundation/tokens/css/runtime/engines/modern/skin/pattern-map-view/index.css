@@ -1,10 +1,11 @@
 /**
  * Modern MapView pattern skin (visualization skin ownership).
  *
- * LAYER: imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
- * "deliberately unlayered" note predates the wiring). Caller inline styles
- * still win.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * ARCHITECTURE: the pattern is an integration PLACEHOLDER (no map library);
  * this file paints the metadata region, the marker list and the layout. The

@@ -12,7 +12,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import '@/foundation/tokens/css/facade/entrypoints/styles/index.css';
+import '@/foundation/tokens/css/facade/entrypoints/base/index.css';
 
 import {
   Fab17StaticHatchScene,

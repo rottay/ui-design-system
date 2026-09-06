@@ -3,10 +3,11 @@
  * K4-D Pass 1: geometry/layout drained from the engine's inline styles and
  * Tailwind utilities).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
- * rule can't paint these elements at all; unlayered outranks preflight and
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. SCOPE ROOT: the outer `<div data-part='root'>`, carrying
  * `rottay-transfer rottay-transfer--modern` (the same

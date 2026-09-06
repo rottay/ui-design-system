@@ -717,7 +717,7 @@
   color: var(--_ds-oauth-muted);
 }
 
-.rottay-progress {
+.rottay-transition-root .rottay-progress {
   display: grid;
   gap: 12px;
   width: min(100%, 430px);
@@ -831,7 +831,7 @@
   opacity: 0.94;
 }
 
-.rottay-progress--quiet {
+.rottay-transition-root .rottay-progress--quiet {
   gap: 10px;
 }
 
@@ -916,7 +916,7 @@
     color-mix(in srgb, var(--_ds-oauth-ink) 7%, transparent);
 }
 
-.rottay-progress--watchtower {
+.rottay-transition-root .rottay-progress--watchtower {
   gap: 10px;
 }
 
@@ -974,7 +974,7 @@
   opacity: 0.42;
 }
 
-.rottay-progress--signal {
+.rottay-transition-root .rottay-progress--signal {
   gap: 0;
 }
 
@@ -1035,7 +1035,7 @@
     0 0 0 8px color-mix(in srgb, var(--_ds-oauth-accent) 10%, transparent);
 }
 
-.rottay-progress--halo {
+.rottay-transition-root .rottay-progress--halo {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   width: min(100%, 460px);
@@ -2210,12 +2210,12 @@
     justify-content: center;
   }
 
-  .rottay-progress,
-  .rottay-progress--halo {
+  .rottay-transition-root .rottay-progress,
+  .rottay-transition-root .rottay-progress--halo {
     width: 100%;
   }
 
-  .rottay-progress--halo {
+  .rottay-transition-root .rottay-progress--halo {
     grid-template-columns: 1fr;
   }
 

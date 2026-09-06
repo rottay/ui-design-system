@@ -26,10 +26,6 @@
 /* Queue header                                                                */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__muted-text[data-part='root'] {
-  color: var(--ds-color-text-muted);
-}
-
 .ds-surface.ds-decision-inbox .ds-decision-inbox__subtitle[data-part='root'] {
   display: block;
   margin-block-start: var(--ds-spacing-xs, 4px);

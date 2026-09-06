@@ -1,9 +1,11 @@
 /**
  * Modern BackTop skin (WO-SKIN-04 checkpoint N; expanded in K3-C pass 1).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE: the button carries `rottay-backtop rottay-backtop--modern` +
  * `data-part='trigger'`. It IS the painted element, so the rule is COMPOUND (no

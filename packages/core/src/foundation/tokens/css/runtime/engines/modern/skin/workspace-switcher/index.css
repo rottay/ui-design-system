@@ -1,8 +1,11 @@
 /**
- * WorkspaceSwitcher — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
- * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
- * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
- * still yields to a caller's inline `style`.
+ * WorkspaceSwitcher — Modern engine skin.
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
  * two root classes (0,2,0) + the root's own `data-part` + the target's

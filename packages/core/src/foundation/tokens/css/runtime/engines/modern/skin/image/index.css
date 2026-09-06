@@ -2,10 +2,11 @@
  * Modern Image skin (WO-SKIN-05 checkpoint D1; full geometry drain from the
  * engine's Tailwind utilities).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight and Tailwind's utilities, and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-image rottay-image--modern` (fresh mints,
  * grep-verified free across CSS and CSS-in-JS). Radius, object-fit, bordered

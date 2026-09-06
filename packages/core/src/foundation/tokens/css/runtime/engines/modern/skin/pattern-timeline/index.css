@@ -1,10 +1,11 @@
 /**
  * Modern Timeline pattern skin.
  *
- * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
- * rottay-engines)` — this file does not control its own layering (the older
- * "deliberately unlayered" note predates that wiring). Caller inline `style`
- * still wins over every rule here.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. The engine no longer emits the DaisyUI `timeline`,
  * `timeline-vertical`, `timeline-start`, `timeline-middle`, `timeline-end` or

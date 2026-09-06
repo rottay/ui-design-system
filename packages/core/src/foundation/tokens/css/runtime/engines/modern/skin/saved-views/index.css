@@ -1,10 +1,11 @@
 /**
  * Modern SavedViews skin — filled-pill engine treatment (Lote 2 rewrite).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so layered paint loses to preflight regardless of
- * specificity. Unlayered rules outrank preflight and still yield to caller
- * inline styles.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SPECIFICITY (P-48): the root's two classes contribute (0,2,0). Rules that
  * paint a border color repeat the target data-part or pair it with a contract

@@ -1,5 +1,11 @@
 /**
- * Modern TreeView pattern skin (visualization skin ownership), deliberately unlayered.
+ * Modern TreeView pattern skin (visualization skin ownership).
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * MERGE / RETIRE NOTE (p613 wave): since the Lote-2 composition the tree
  * itself is the DS Tree primitive's modern engine — every node row, toggle,

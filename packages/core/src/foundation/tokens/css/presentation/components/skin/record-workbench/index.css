@@ -35,12 +35,6 @@
 /* Shared text hooks                                                           */
 /* -------------------------------------------------------------------------- */
 
-/* Color source only where the Typography skin leaves the part unpainted
-   (same layer-truth idiom as list.css / decision-inbox.css). */
-.ds-surface.ds-record-workbench .ds-record-workbench__muted-text[data-part='root'] {
-  color: var(--ds-color-text-muted);
-}
-
 /* -------------------------------------------------------------------------- */
 /* Header: identity cluster                                                    */
 /* -------------------------------------------------------------------------- */
@@ -139,10 +133,6 @@
   background: transparent;
   border-radius: var(--ds-radius-full, 9999px);
   transition: background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
-}
-
-.ds-surface.ds-record-workbench .ds-record-workbench__tab[data-active='true'] {
-  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
 .ds-surface.ds-record-workbench .ds-record-workbench__tab[data-active='true'] .ds-record-workbench__tab-underline[data-part='tab-underline'] {

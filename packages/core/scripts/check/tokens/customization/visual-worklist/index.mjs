@@ -54,10 +54,11 @@ const drill = drillArg?.includes('=') ? drillArg.split('=')[1] : undefined;
 
 function reachableSet() {
   const seen = new Set();
-  for (const name of ['base/index.css', 'styles/index.css']) {
-    const entry = join(ENTRY_DIR, name);
-    if (existsSync(entry)) collectReachable(entry, CSS_ROOT, seen);
-  }
+  // One authored entrypoint since WO-CAN-03. The second name this walked was
+  // a byte-for-byte second copy of the same graph, so widening the walk never
+  // added a file -- it only hid that the copy existed.
+  const entry = join(ENTRY_DIR, 'base/index.css');
+  if (existsSync(entry)) collectReachable(entry, CSS_ROOT, seen);
   // Positive control: the walker must clear a known shipper and refuse the
   // known orphan, or every zero below is untrustworthy.
   const tails = new Set(

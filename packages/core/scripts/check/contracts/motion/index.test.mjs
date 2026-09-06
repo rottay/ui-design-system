@@ -427,7 +427,7 @@ test('the retired TableCheckboxStyles bodies cannot come back under the lowered 
     {
       maxCount: 346,
       maxFiles: 139,
-      digest: 'a8d87249f1f8d9aa1054d37dc9d5cc7fe71df38e1058379a5170b7bf72f922f0',
+      digest: '0a3dc1c331f84136c256b017c6690273a480e9ecea1b5487ceb043980b3e60f9',
     },
   );
 

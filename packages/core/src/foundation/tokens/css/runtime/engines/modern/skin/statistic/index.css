@@ -3,10 +3,11 @@
  * `engines/modern.tsx` -- Statistic and its sibling Countdown -- which share one
  * anatomy and one set of values.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style` --
- * which is what keeps the `valueStyle` prop overriding the trend color.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-statistic rottay-statistic--modern` +
  * `data-part='root'`. The engine suffix is load-bearing: rustic and the

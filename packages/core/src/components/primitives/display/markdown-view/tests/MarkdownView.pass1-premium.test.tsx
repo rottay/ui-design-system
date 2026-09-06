@@ -220,14 +220,14 @@ describe('MarkdownView remediation (K4-B)', () => {
     // contract: correct registration and no resurrection of the legacy
     // cross-family anchor paint.
     expect(modernTheme).not.toMatch(/\[data-tenant\]\s+a\.link(?:\W|$)/);
-    for (const entry of ['base', 'styles'] as const) {
-      const entrypoint = readFileSync(
-        join(__dirname, '../../../../../foundation/tokens/css/facade/entrypoints', entry, 'index.css'),
-        'utf8',
-      );
-      expect(entrypoint, entry).toMatch(
-        /@import "\.\.\/\.\.\/\.\.\/presentation\/components\/skin\/markdown-view\/index\.css"\s+layer\(rottay-components\);/,
-      );
-    }
+    // `base` is the only authored entrypoint (WO-CAN-03); the retired `styles`
+    // copy this assertion used to sweep alongside it no longer exists.
+    const entrypoint = readFileSync(
+      join(__dirname, '../../../../../foundation/tokens/css/facade/entrypoints/base/index.css'),
+      'utf8',
+    );
+    expect(entrypoint).toMatch(
+      /@import "\.\.\/\.\.\/\.\.\/presentation\/components\/skin\/markdown-view\/index\.css"\s+layer\(rottay-components\);/,
+    );
   });
 });

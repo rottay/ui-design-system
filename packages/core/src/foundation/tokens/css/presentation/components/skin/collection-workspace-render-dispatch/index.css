@@ -12,9 +12,8 @@
  * the hand-rolled markup.
  *
  * SPECIFICITY: single class + single attribute hooks; no repetition, no
- * !important. LAYER TRUTH: typography.css sorts in `rottay-engines` (after
- * this file), so `.ds-collection-render-dispatch__muted-text` is the color
- * source only where Typography leaves the part unpainted.
+ * !important. OWNERSHIP: this file sorts above `rottay-engines`, so text
+ * color stays with Typography's own `color` axis and is never restated here.
  *
  * The pagination footer is intentionally preserved (replacing it with the
  * Pagination primitive is a later, contract-level refactor); its controls
@@ -115,11 +114,6 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__muted-text {
-  color: var(--ds-color-text-muted);
-}
-
-.ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__fallback-heading {
   min-inline-size: 0;
 }
@@ -171,7 +165,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--ds-color-text-secondary, var(--ds-color-text-primary));
 }
 
 .ds-surface.ds-collection-render-dispatch
@@ -325,20 +318,11 @@
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
   .ds-collection-render-dispatch__incremental-end[data-part="incremental-end"] {
   font-size: var(--ds-font-size-xs, 12px);
-  color: inherit;
 }
 
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
   .ds-collection-render-dispatch__incremental-count[data-part="incremental-count"] {
   font-variant-numeric: tabular-nums;
-}
-
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
-  .ds-collection-render-dispatch__load-more[data-part="load-more"] {
-  border-radius: var(--ds-radius-full, 9999px);
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-secondary));
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg, var(--ds-surface-card)));
-  color: var(--ds-color-primary);
 }
 
 /* Forced colors: surface-owned affordances re-keyed to system colors. */

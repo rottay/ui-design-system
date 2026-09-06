@@ -12,11 +12,9 @@
  * AdaptiveOverlay, render-dispatch patterns) keep their own chrome.
  *
  * SPECIFICITY: single class + single attribute hooks; no repetition, no
- * !important in new rules. LAYER TRUTH (same as list.css): typography.css
- * sorts in `rottay-engines` (after this file), so wherever the Typography
- * skin paints a color it governs regardless of selector weight here; the
- * `.ds-collection-workspace__muted-text` rule below is the color source only
- * where Typography leaves the part unpainted.
+ * !important in new rules. OWNERSHIP: this file sorts above `rottay-engines`,
+ * so text color stays with Typography's own `color` axis and control chrome
+ * with the Button family; neither is restated here.
  *
  * MOTION: every transition consumes `--ds-motion-*` channels (the authority
  * zeroes them under reduced motion); no duration/easing literals.
@@ -242,7 +240,6 @@
   font-weight: var(--ds-font-weight-semibold, 600);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  color: var(--ds-color-text-muted);
 }
 
 .ds-surface.ds-collection-workspace
@@ -276,7 +273,6 @@
   font-size: var(--ds-font-size-xs, 12px);
   font-weight: var(--ds-font-weight-semibold, 600);
   line-height: 1;
-  color: var(--ds-color-text-secondary);
 }
 
 .ds-surface.ds-collection-workspace
@@ -321,7 +317,6 @@
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: 0;
   line-height: 1;
-  color: var(--ds-color-text-muted);
 }
 
 .ds-surface.ds-collection-workspace
@@ -380,14 +375,10 @@
   block-size: var(--ds-spacing-8, 32px);
   padding: 0;
   cursor: pointer;
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"][data-active="false"] {
-  border-radius: var(--ds-radius-md, 8px);
   border: 1px solid transparent;
   background: transparent;
   color: var(--ds-color-text-muted);
@@ -395,7 +386,6 @@
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"][data-active="true"] {
-  border-radius: var(--ds-radius-md, 8px);
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   color: var(--ds-color-primary);
@@ -546,7 +536,6 @@
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ds-color-text-muted) 74%, white 6%);
 }
 
 .ds-surface.ds-collection-workspace
@@ -851,14 +840,8 @@
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__muted-text[data-part="root"] {
-  color: var(--ds-color-text-muted);
-}
-
-.ds-surface.ds-collection-workspace
   .ds-collection-workspace__filter-reset[data-part="filter-reset"] {
   flex-shrink: 0;
-  color: var(--ds-color-text-muted);
 }
 
 /* -------------------------------------------------------------------------
@@ -940,8 +923,6 @@
 .ds-surface.ds-collection-workspace
   [data-part="preview-accordion"]
   > [data-part="trigger"] {
-  min-block-size: var(--ds-size-touch-target, 44px);
-  border-radius: 0;
   text-align: start;
 }
 
@@ -969,7 +950,6 @@
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__compact-action {
-  min-block-size: var(--ds-size-touch-target, 44px);
   justify-content: flex-start;
 }
 
@@ -989,7 +969,6 @@
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__dock-more {
-  min-block-size: var(--ds-size-touch-target, 44px);
   flex: 0 0 auto;
 }
 
@@ -1000,16 +979,13 @@
   white-space: nowrap;
 }
 
+/* Layout only. Fill, text, edge, corner and the coarse-pointer touch floor stay
+   on primitive/inputs/button so the tenant's control ramps keep reaching it. */
 .ds-surface.ds-collection-workspace
   .rottay-button.ds-collection-workspace__sticky-primary-action {
   min-inline-size: 0;
-  min-block-size: var(--ds-size-touch-target, 44px);
   flex: 1 1 auto;
   justify-content: center;
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border: none;
-  border-radius: var(--ds-radius-sm, 6px);
 }
 
 /* Fixed, in-tree filter disclosure. Its standalone scope is intentional: the

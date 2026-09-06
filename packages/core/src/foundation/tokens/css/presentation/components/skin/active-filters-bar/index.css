@@ -177,16 +177,8 @@
 }
 
 /* ---- the overflow affordance is an ACTION: the Button primitive owns its
-        chrome and its focus ring; the rail states only the voice, so it
-        never reads as one more removable object ---- */
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
-  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
-  text-decoration-line: underline;
-  text-decoration-thickness: from-font;
-  text-underline-offset: 0.25em;
-  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
-}
+        chrome, its type ramp and its focus ring. A link-style toggle is the
+        `link` variant, never a text-decoration re-stated here ---- */
 
 /* ---- chip content typography INSIDE the composed Tag (the primitive owns
         the chip chrome; the label is the tracked mini-eyebrow, the value is
@@ -353,10 +345,6 @@
   .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
     border-inline-end-color: ButtonText;
     color: CanvasText;
-  }
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
-    text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
     [data-part="chip"][data-state="draft"]

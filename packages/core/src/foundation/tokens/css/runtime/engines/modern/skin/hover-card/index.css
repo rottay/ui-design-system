@@ -2,8 +2,11 @@
  * Modern HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C;
  * K4-A geometry drain 2026-07-24).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * This engine applies NO DaisyUI class (its file header used to claim it rides
  * DaisyUI's `card` — it does not, and the comment is corrected) and NO

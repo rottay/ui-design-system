@@ -200,6 +200,48 @@ const baseCssPath = resolve(srcCss, "facade/entrypoints/base/index.css");
 let baseCss = readFile(baseCssPath);
 baseCss = resolveImports(baseCss, dirname(baseCssPath));
 
+// The bundle is the only artifact a consumer's browser sorts, so the tier
+// order has to survive resolution -- not merely be declared in the source. A
+// bundle whose statement lost a tier, or whose blocks name a layer the
+// statement never declares, sorts by an order nobody wrote.
+const baseCssWithoutComments = baseCss.replace(/\/\*[\s\S]*?\*\//g, "");
+const layerStatements = baseCssWithoutComments.match(/@layer\s+[^;{]+;/g) ?? [];
+if (layerStatements.length !== 1) {
+  console.error(
+    `  ERROR: resolved base bundle declares ${layerStatements.length} @layer statements; expected exactly 1`
+  );
+  process.exit(1);
+}
+const declaredLayers = layerStatements[0]
+  .replace(/^@layer\s+/, "")
+  .replace(/;$/, "")
+  .split(",")
+  .map((name) => name.trim());
+const tierOrder = [
+  "rottay-components",
+  "rottay-engines",
+  "rottay-structures",
+  "rottay-surfaces",
+];
+const tierPositions = tierOrder.map((name) => declaredLayers.indexOf(name));
+if (
+  tierPositions.some((position) => position < 0) ||
+  tierPositions.some((position, index) => index > 0 && position < tierPositions[index - 1])
+) {
+  console.error(
+    `  ERROR: resolved base bundle must declare ${tierOrder.join(" -> ")} in that order; got ${declaredLayers.join(", ")}`
+  );
+  process.exit(1);
+}
+for (const match of baseCssWithoutComments.matchAll(/@layer\s+([a-z0-9-]+)\s*\{/g)) {
+  if (!declaredLayers.includes(match[1])) {
+    console.error(
+      `  ERROR: resolved base bundle opens @layer ${match[1]}, which the canonical order never declares`
+    );
+    process.exit(1);
+  }
+}
+
 // Vertical definitions, PROJECTED from the roster rather than restated.
 //
 // This was a hand-maintained table, and every field in it had drifted:
@@ -310,10 +352,11 @@ for (const vertical of verticals) {
   //
   // This bundle is the ONLY thing that ships: every `./styles/*` package
   // export resolves to dist/, and this script reads base.css plus the artifact
-  // by path, never the vertical entrypoints. Those entrypoints used to import
-  // the artifact `layer(rottay-tenants)` -- a layer no shipped bundle ever
-  // had -- so the source described a cascade that did not exist rather than a
-  // cascade that differed. They are now unlayered to match.
+  // by path. Three per-vertical source entrypoints used to sit beside it
+  // importing the artifact `layer(rottay-tenants)` -- a layer no shipped
+  // bundle ever had -- so the source described a cascade that did not exist
+  // rather than a cascade that differed. WO-CAN-03 deleted them: nothing read
+  // them, so they could only restate this composition or contradict it.
   // The earlier rationale here cited overriding DaisyUI defaults;
   // DaisyUI is gone, and it was never the reason this had to be unlayered.
   // See infrastructure/runtime/theming/foundation/cascade-layers:

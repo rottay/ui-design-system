@@ -275,7 +275,6 @@ describe('semantic Icon accessibility and rendering', () => {
       'utf8',
     );
     const cssEntrypoints = [
-      'src/foundation/tokens/css/facade/entrypoints/styles/index.css',
       'src/foundation/tokens/css/facade/entrypoints/base/index.css',
       'src/foundation/tokens/css/presentation/components/index.css',
     ].map((path) => readFileSync(resolve(process.cwd(), path), 'utf8'));

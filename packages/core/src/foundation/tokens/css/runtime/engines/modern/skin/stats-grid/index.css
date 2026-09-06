@@ -1,11 +1,11 @@
 /**
  * Modern StatsGrid skin (long-tail skin ownership).
- * Deliberately unlayered. Modern keeps its generic surface-token vocabulary
- * and exposes only these opt-in channels: `--ds-stats-grid-accent` (per-stat
- * accent hatch), `--ds-stats-grid-card-padding`, `--ds-stats-grid-icon-size`
- * and the `--ds-stats-grid-value-*` metric channels forwarded to the composed
- * Statistic primitive. The rest of the `--ds-stats-grid-*` vocabulary remains
- * rustic-only exactly as before this extraction.
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * Second premium pass (roadmap 6.10): the sparkline's stroke and gradient
  * stops are painted here through the per-stat `--ds-stats-grid-accent`

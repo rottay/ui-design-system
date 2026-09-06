@@ -26,11 +26,12 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import {
   ROTTAY_CASCADE_LAYER_ORDER,
+  ROTTAY_PAINT_TIER_ORDER,
   PERSONALITY_CASCADE_LAYER,
   buildCascadeLayerOrderStatement,
   buildPersonalityRootRuleText,
@@ -50,33 +51,40 @@ function parseDeclaredLayerOrder(css: string): string[] {
   return match[1].split(',').map((name) => name.trim());
 }
 
-/** The three first-party vertical entrypoints and the artifact each mounts. */
-const VERTICAL_ENTRYPOINTS = [
-  { entrypoint: 'rottay/index.css', artifact: 'rottay' },
-  { entrypoint: 'bithire/index.css', artifact: 'bithire' },
-  { entrypoint: 'evnto/index.css', artifact: 'evnto' },
-] as const;
+/** The three first-party verticals and the compiled artifact each one mounts. */
+const VERTICALS = ['rottay', 'bithire', 'evnto'] as const;
 
 describe('cascade layer order', () => {
-  it.each(['base/index.css', 'styles/index.css'])(
-    'mirrors the order declared by %s',
-    (file) => {
-      const declared = parseDeclaredLayerOrder(readCss(`${ENTRYPOINTS}/${file}`));
+  it('mirrors the order declared by the one authored entrypoint', () => {
+    const declared = parseDeclaredLayerOrder(readCss(`${ENTRYPOINTS}/base/index.css`));
 
-      expect(declared).toEqual([...ROTTAY_CASCADE_LAYER_ORDER]);
-    },
-  );
+    expect(declared).toEqual([...ROTTAY_CASCADE_LAYER_ORDER]);
+  });
 
-  it('ranks personality directly above the engine skins it completes', () => {
+  it('orders the DS paint layers by tier, low to high', () => {
+    // The whole point of the tier layers: a structure or a surface outranks an
+    // engine skin by layer ownership, so it never has to escape to an inline
+    // `style` to win a channel it legitimately owns.
+    const positions = ROTTAY_PAINT_TIER_ORDER.map((layer) =>
+      ROTTAY_CASCADE_LAYER_ORDER.indexOf(layer),
+    );
+
+    expect(positions).not.toContain(-1);
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
+  });
+
+  it('ranks personality directly above the paint tiers it completes', () => {
     // Personality's job is to finish what the engine baseline leaves open, so
-    // it sits immediately above `rottay-engines`. It does NOT sit above tenant
-    // paint: tenant paint is unlayered and outranks every layer here, which is
-    // what makes the bridge subordinate to a compiled artifact.
-    const engines = ROTTAY_CASCADE_LAYER_ORDER.indexOf('rottay-engines');
+    // it sits immediately above the highest paint tier. It does NOT sit above
+    // tenant paint: tenant paint is unlayered and outranks every layer here,
+    // which is what makes the bridge subordinate to a compiled artifact.
+    const topTier = ROTTAY_CASCADE_LAYER_ORDER.indexOf(
+      ROTTAY_PAINT_TIER_ORDER[ROTTAY_PAINT_TIER_ORDER.length - 1],
+    );
     const personality = ROTTAY_CASCADE_LAYER_ORDER.indexOf(PERSONALITY_CASCADE_LAYER);
 
-    expect(engines).toBeGreaterThan(-1);
-    expect(personality).toBe(engines + 1);
+    expect(topTier).toBeGreaterThan(-1);
+    expect(personality).toBe(topTier + 1);
   });
 
   it('builds a statement that re-declares the full order', () => {
@@ -92,58 +100,48 @@ describe('cascade layer order', () => {
   });
 });
 
-describe('vertical entrypoint parity', () => {
-  // The regression guard, inverted from what it used to assert.
+describe('tenant artifact parity', () => {
+  // The regression guard, twice re-pointed.
   //
-  // These entrypoints previously mounted the artifact `layer(rottay-tenants)`,
-  // which the build then STRIPPED -- so dev resolved the cascade one way and
-  // production another. Worse, the declared order put `rottay-personality`
-  // ABOVE `rottay-tenants`, so in dev the subordinate personality bridge
-  // outranked the compiled tenant artifact it is supposed to complete. Under
-  // the coverage model the artifact must win every channel it declares, and it
-  // can only do that unlayered.
-  it.each(VERTICAL_ENTRYPOINTS)(
-    '$entrypoint mounts the $artifact artifact UNLAYERED',
-    ({ entrypoint, artifact }) => {
-      const css = readCss(`${ENTRYPOINTS}/${entrypoint}`);
-      const importLine = css
-        .split('\n')
-        .find((line) => line.includes(`artifacts/${artifact}/index.css`));
+  // Three per-vertical entrypoints used to mount the artifact
+  // `layer(rottay-tenants)`, which the build then STRIPPED -- so dev resolved
+  // the cascade one way and production another. Worse, the declared order put
+  // `rottay-personality` ABOVE `rottay-tenants`, so in dev the subordinate
+  // personality bridge outranked the compiled tenant artifact it is supposed
+  // to complete. Under the coverage model the artifact must win every channel
+  // it declares, and it can only do that unlayered.
+  //
+  // WO-CAN-03 removed those entrypoints: no build ever read them, so they
+  // could only ever restate the cascade or contradict it. The property now
+  // reads the artifacts themselves, which is where the law actually lives.
+  it.each(VERTICALS)('the %s artifact declares no cascade layer of its own', (vertical) => {
+    const css = readCss(`${ARTIFACTS}/${vertical}/index.css`);
 
-      expect(importLine).toBeDefined();
-      expect(importLine).not.toMatch(/layer\(/);
-    },
-  );
+    expect(css).not.toMatch(/@layer/);
+  });
 
   it('declares no layer that nothing writes into', () => {
     // A declared-but-empty layer publishes a precedence position no emitter
     // occupies, and readers reason about the cascade from it. `rottay-tenants`
     // was exactly that in every shipped bundle.
+    const css = readCss(`${ENTRYPOINTS}/base/index.css`);
+
     expect(ROTTAY_CASCADE_LAYER_ORDER).not.toContain('rottay-tenants');
-    for (const file of ['base/index.css', 'styles/index.css']) {
-      const css = readCss(`${ENTRYPOINTS}/${file}`);
-      expect(parseDeclaredLayerOrder(css), file).not.toContain('rottay-tenants');
-      // An @import DIRECTIVE, not a mention. Prose explaining why the layer
-      // was removed necessarily names it, and forbidding that would make the
-      // defect undocumentable.
-      expect(css, file).not.toMatch(/@import[^;]*layer\(rottay-tenants\)/);
-    }
+    expect(parseDeclaredLayerOrder(css)).not.toContain('rottay-tenants');
+    // An @import DIRECTIVE, not a mention. Prose explaining why the layer
+    // was removed necessarily names it, and forbidding that would make the
+    // defect undocumentable.
+    expect(css).not.toMatch(/@import[^;]*layer\(rottay-tenants\)/);
   });
 
-  it('resolves identically no matter which vertical entrypoint is loaded', () => {
-    // Import-order independence now comes from every artifact being unlayered
-    // and scoped to its own vertical, not from a shared layer.
-    const mountedLayers = VERTICAL_ENTRYPOINTS.map(({ entrypoint, artifact }) => {
-      const css = readCss(`${ENTRYPOINTS}/${entrypoint}`);
-      const importLine = css
-        .split('\n')
-        .find((line) => line.includes(`artifacts/${artifact}/index.css`))!;
-      const layerMatch = importLine.match(/layer\(([^)]+)\)/);
-      return layerMatch ? layerMatch[1] : 'UNLAYERED';
-    });
+  it('leaves exactly one authored entrypoint to mount them from', () => {
+    // The death proof for the retired copies, restated where a TypeScript
+    // reader of the cascade contract will see it.
+    const authored = readdirSync(resolve(process.cwd(), ENTRYPOINTS), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && entry.name !== 'tests')
+      .map((entry) => entry.name);
 
-    expect(new Set(mountedLayers).size).toBe(1);
-    expect(mountedLayers[0]).toBe('UNLAYERED');
+    expect(authored).toEqual(['base']);
   });
 });
 

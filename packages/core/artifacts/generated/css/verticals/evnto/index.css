@@ -103,8 +103,24 @@
  * dependency, not consumer chrome. First-party tokens and skins therefore win
  * over the bundled framework by layer ownership, while product components and
  * utilities remain intentionally above the bounded DS skins.
+ *
+ * THE DS PAINT LAYERS ARE ORDERED BY TIER, LOW TO HIGH:
+ * `rottay-components` -> `rottay-engines` -> `rottay-structures` ->
+ * `rottay-surfaces`. `rottay-components` is the ENGINE-AGNOSTIC base coat for
+ * primitives and patterns and `rottay-engines` is the engine-specific paint
+ * that refines it, so those two keep their order; the structure and surface
+ * tiers sit ABOVE both, which is what lets a structure or a surface override
+ * an engine skin by layer ownership alone -- no specificity race, and no
+ * escape to an inline `style` to win a channel the tier above legitimately
+ * owns.
+ *
+ * The tier of a first-party skin is read from the marker class its own
+ * selectors carry (`.ds-surface` -> `rottay-surfaces`, `.ds-structure` ->
+ * `rottay-structures`, otherwise `rottay-components`), which is exactly the
+ * marker the component stamps on its root node;
+ * `scripts/check/engine/css/paint/layers` enforces the mapping.
  */
-@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities;
+@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-structures, rottay-surfaces, rottay-personality, rottay-responsive, components, utilities;
 
 /* Layer 0: antd reset */
 @import "antd/dist/reset.css" layer(rottay-reset);
@@ -17098,6 +17114,193 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 }
+/* Collapse token authorship. The bridge below reads 50 `--ds-collapse-*`
+   channels this sheet declares; without it the bridge paints from nothing. */
+@layer rottay-components {
+/**
+ * Collapse Component Tokens - Rottay Design System
+ *
+ * Design tokens for the Collapse component following the engine-agnostic architecture.
+ *
+ * Naming Convention: --ds-collapse-{slot}-{variant}-{state}-{property}
+ *
+ * Slots:
+ * - root: Main collapse container
+ * - header: Panel header/trigger area
+ * - content: Panel content area
+ * - icon: Expand/collapse icon
+ *
+ * Variants: default, bordered, ghost
+ * States: idle, hover, focus, active, disabled, expanded
+ */
+
+:root {
+  /* ========================================================================
+     ROOT SLOT - Main Container
+     ======================================================================== */
+
+  /* Root - Default Variant - Idle State */
+  --ds-collapse-root-default-idle-bg: var(--ds-color-white);
+  --ds-collapse-root-default-idle-border-color: var(--ds-color-neutral-200);
+  --ds-collapse-root-default-idle-border-width: var(--ds-border-width-1, 1px);
+  --ds-collapse-root-default-idle-border-style: solid;
+  --ds-collapse-root-default-idle-border-radius: var(--ds-radius-lg);
+  --ds-collapse-root-default-idle-shadow: var(--ds-shadow-sm);
+
+  /* Root - Bordered Variant - Idle State */
+  --ds-collapse-root-bordered-idle-bg: transparent;
+  --ds-collapse-root-bordered-idle-border-color: var(--ds-color-neutral-300);
+  --ds-collapse-root-bordered-idle-border-width: var(--ds-border-width-1, 1px);
+  --ds-collapse-root-bordered-idle-border-style: solid;
+  --ds-collapse-root-bordered-idle-border-radius: var(--ds-radius-lg);
+  --ds-collapse-root-bordered-idle-shadow: none;
+
+  /* Root - Ghost Variant - Idle State */
+  --ds-collapse-root-ghost-idle-bg: transparent;
+  --ds-collapse-root-ghost-idle-border-color: transparent;
+  --ds-collapse-root-ghost-idle-border-width: var(--ds-border-width-0, 0);
+  --ds-collapse-root-ghost-idle-border-style: none;
+  --ds-collapse-root-ghost-idle-border-radius: var(--ds-radius-none, 0);
+  --ds-collapse-root-ghost-idle-shadow: none;
+
+  /* ========================================================================
+     HEADER SLOT - Panel Header
+     ======================================================================== */
+
+  /* Header - Default Variant - Idle State */
+  --ds-collapse-header-default-idle-bg: var(--ds-color-neutral-50);
+  --ds-collapse-header-default-idle-color: var(--ds-color-neutral-900);
+  --ds-collapse-header-default-idle-border-color: var(--ds-color-neutral-200);
+  --ds-collapse-header-default-idle-border-width: 0 0 1px 0;
+  --ds-collapse-header-default-idle-padding-x: var(--ds-spacing-4);
+  --ds-collapse-header-default-idle-padding-y: var(--ds-spacing-3);
+  --ds-collapse-header-default-idle-font-size: var(--ds-font-size-base);
+  --ds-collapse-header-default-idle-font-weight: var(--ds-font-weight-medium);
+  --ds-collapse-header-default-idle-line-height: var(--ds-line-height-normal);
+  --ds-collapse-header-default-idle-cursor: pointer;
+
+  /* Header - Default Variant - Hover State */
+  --ds-collapse-header-default-hover-bg: var(--ds-color-neutral-100);
+  --ds-collapse-header-default-hover-color: var(--ds-color-neutral-900);
+
+  /* Header - Default Variant - Focus State */
+  --ds-collapse-header-default-focus-outline: 2px solid var(--ds-color-primary-500);
+  --ds-collapse-header-default-focus-outline-offset: -2px;
+
+  /* Header - Default Variant - Active State (pressing) */
+  --ds-collapse-header-default-active-bg: var(--ds-color-neutral-200);
+
+  /* Header - Default Variant - Disabled State */
+  --ds-collapse-header-default-disabled-bg: var(--ds-color-neutral-100);
+  --ds-collapse-header-default-disabled-color: var(--ds-color-neutral-400);
+  --ds-collapse-header-default-disabled-cursor: not-allowed;
+  --ds-collapse-header-default-disabled-opacity: 0.6;
+
+  /* Header - Default Variant - Expanded State */
+  --ds-collapse-header-default-expanded-bg: var(--ds-color-neutral-50);
+  --ds-collapse-header-default-expanded-color: var(--ds-color-primary-600);
+  --ds-collapse-header-default-expanded-border-color: var(--ds-color-neutral-200);
+
+  /* Header - Ghost Variant - Idle State */
+  --ds-collapse-header-ghost-idle-bg: transparent;
+  --ds-collapse-header-ghost-idle-color: var(--ds-color-neutral-800);
+  --ds-collapse-header-ghost-idle-border-color: transparent;
+  --ds-collapse-header-ghost-idle-border-width: var(--ds-border-width-0, 0);
+  --ds-collapse-header-ghost-idle-padding-x: var(--ds-spacing-3);
+  --ds-collapse-header-ghost-idle-padding-y: var(--ds-spacing-2);
+
+  /* Header - Ghost Variant - Hover State */
+  --ds-collapse-header-ghost-hover-bg: var(--ds-color-neutral-100);
+  --ds-collapse-header-ghost-hover-color: var(--ds-color-neutral-900);
+
+  /* ========================================================================
+     CONTENT SLOT - Panel Content
+     ======================================================================== */
+
+  /* Content - Default Variant - Idle State */
+  --ds-collapse-content-default-idle-bg: var(--ds-color-white);
+  --ds-collapse-content-default-idle-color: var(--ds-color-neutral-700);
+  --ds-collapse-content-default-idle-border-color: var(--ds-color-neutral-200);
+  --ds-collapse-content-default-idle-border-width: 0 0 1px 0;
+  --ds-collapse-content-default-idle-padding-x: var(--ds-spacing-4);
+  --ds-collapse-content-default-idle-padding-y: var(--ds-spacing-4);
+  --ds-collapse-content-default-idle-font-size: var(--ds-font-size-base);
+  --ds-collapse-content-default-idle-line-height: var(--ds-line-height-relaxed);
+
+  /* Content - Ghost Variant - Idle State */
+  --ds-collapse-content-ghost-idle-bg: transparent;
+  --ds-collapse-content-ghost-idle-color: var(--ds-color-neutral-700);
+  --ds-collapse-content-ghost-idle-border-color: transparent;
+  --ds-collapse-content-ghost-idle-border-width: var(--ds-border-width-0, 0);
+  --ds-collapse-content-ghost-idle-padding-x: var(--ds-spacing-3);
+  --ds-collapse-content-ghost-idle-padding-y: var(--ds-spacing-2);
+
+  /* ========================================================================
+     ICON SLOT - Expand/Collapse Icon
+     ======================================================================== */
+
+  /* Icon - Default Variant - Idle State */
+  --ds-collapse-icon-default-idle-size: 1rem;
+  --ds-collapse-icon-default-idle-color: var(--ds-color-neutral-500);
+  --ds-collapse-icon-default-idle-margin-right: var(--ds-spacing-3);
+  --ds-collapse-icon-default-idle-transform: rotate(0deg);
+  --ds-collapse-icon-default-idle-transition: transform 0.2s ease-in-out;
+
+  /* Icon - Default Variant - Hover State */
+  --ds-collapse-icon-default-hover-color: var(--ds-color-neutral-700);
+
+  /* Icon - Default Variant - Disabled State */
+  --ds-collapse-icon-default-disabled-color: var(--ds-color-neutral-300);
+
+  /* Icon - Default Variant - Expanded State */
+  --ds-collapse-icon-default-expanded-transform: rotate(90deg);
+  --ds-collapse-icon-default-expanded-color: var(--ds-color-primary-600);
+
+  /* Icon Position */
+  --ds-collapse-icon-position-start-order: -1;
+  --ds-collapse-icon-position-end-order: 1;
+  --ds-collapse-icon-position-end-margin-left: auto;
+  --ds-collapse-icon-position-end-margin-right: var(--ds-spacing-0, 0);
+
+  /* ========================================================================
+     SIZES - Small, Middle, Large
+     ======================================================================== */
+
+  /* Small Size */
+  --ds-collapse-size-small-header-padding-x: var(--ds-spacing-3);
+  --ds-collapse-size-small-header-padding-y: var(--ds-spacing-2);
+  --ds-collapse-size-small-header-font-size: var(--ds-font-size-sm);
+  --ds-collapse-size-small-content-padding-x: var(--ds-spacing-3);
+  --ds-collapse-size-small-content-padding-y: var(--ds-spacing-3);
+  --ds-collapse-size-small-icon-size: 0.875rem;
+
+  /* Middle Size (Default) */
+  --ds-collapse-size-middle-header-padding-x: var(--ds-spacing-4);
+  --ds-collapse-size-middle-header-padding-y: var(--ds-spacing-3);
+  --ds-collapse-size-middle-header-font-size: var(--ds-font-size-base);
+  --ds-collapse-size-middle-content-padding-x: var(--ds-spacing-4);
+  --ds-collapse-size-middle-content-padding-y: var(--ds-spacing-4);
+  --ds-collapse-size-middle-icon-size: 1rem;
+
+  /* Large Size */
+  --ds-collapse-size-large-header-padding-x: var(--ds-spacing-5);
+  --ds-collapse-size-large-header-padding-y: var(--ds-spacing-4);
+  --ds-collapse-size-large-header-font-size: var(--ds-font-size-lg);
+  --ds-collapse-size-large-content-padding-x: var(--ds-spacing-5);
+  --ds-collapse-size-large-content-padding-y: var(--ds-spacing-5);
+  --ds-collapse-size-large-icon-size: 1.25rem;
+
+  /* ========================================================================
+     TRANSITIONS - Animation
+     ======================================================================== */
+  --ds-collapse-transition-duration: 0.2s;
+  --ds-collapse-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-collapse-transition: all var(--ds-collapse-transition-duration) var(--ds-collapse-transition-timing);
+  --ds-collapse-content-transition: height var(--ds-collapse-transition-duration) var(--ds-collapse-transition-timing),
+                                    opacity var(--ds-collapse-transition-duration) var(--ds-collapse-transition-timing);
+}
+
+}
 @layer rottay-components {
 /**
  * Collapse Engine Styles - Rottay Design System
@@ -26809,10 +27012,11 @@ input.rottay-input.rottay-input--modern[type='number'] {
  * Phase B P2: filter-row pinning, pinned-fill transition continuity, sighted-RTL
  * expand turn, coarse selection hit area, forced-colors hairline re-expression).
  *
- * DELIBERATELY UNLAYERED, for the reason button.css states in full: every
- * `rottay-*` layer sorts before Tailwind's `base` layer, so a layered rule loses
- * to preflight regardless of specificity (P-47). Unlayered outranks preflight +
- * DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. This file owns every painted channel AND every static
  * geometry channel of the modern Table: cell padding per `data-size`, text
@@ -27820,7 +28024,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * FieldFiltersPanel skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/field-filters-panel.css — the structures/
@@ -28668,7 +28872,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * SelectionPreviewRail skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/selection-preview-rail.css — the second
@@ -29010,10 +29214,11 @@ input.rottay-input.rottay-input--modern[type='number'] {
 /**
  * Modern DetailPanel skin (WO-ARC-09 checkpoint 5; 4th-wave consolidation).
  *
- * DELIBERATELY UNLAYERED, same rationale as the other engine skins (P-47):
- * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
- * rule loses to preflight regardless of specificity. Unlayered outranks
- * preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the panel's outer `<div>`, which carries the pair
  * `ds-pattern-detail-panel ds-engine-modern` + `data-part='root'` +
@@ -29988,10 +30193,11 @@ input.rottay-input.rottay-input--modern[type='number'] {
 /**
  * Modern DataTable skin (WO-ARC-09 checkpoint 6).
  *
- * DELIBERATELY UNLAYERED, same rationale the other engine skins state in full
- * (P-47): every `rottay-*` cascade layer sorts before Tailwind's `base` layer,
- * so a layered rule loses to preflight regardless of specificity. Unlayered
- * outranks preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the engine's outer `<div>`, which carries the pair
  * `ds-pattern-data-table ds-engine-modern` (plus a third `ds-table-density-*`
@@ -38224,9 +38430,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern OTPInput skin (WO-SKIN-02 checkpoint A, fields batch;
  * K4-D Pass 1: geometry/layout drained from the engine's inline styles).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule can't paint these elements; unlayered outranks
- * preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. SCOPE ROOT is `.ds-otp-input.ds-otp-input--modern
  * [data-part='root']`, carrying `data-disabled` and `data-size`
@@ -41773,10 +41981,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * K4-D Pass 1: geometry/layout drained from the engine's inline styles and
  * Tailwind utilities).
  *
- * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
- * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
- * rule can't paint these elements at all; unlayered outranks preflight and
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. SCOPE ROOT: the outer `<div data-part='root'>`, carrying
  * `rottay-transfer rottay-transfer--modern` (the same
@@ -43072,9 +43281,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern TimePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule can't paint these elements at all; unlayered
- * outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * TWO SCOPE ROOTS:
  * - The trigger (`TimePickerBase`/`TimeRangePicker` root `<div data-part='root'>`)
@@ -43707,9 +43918,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern DatePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule can't paint these elements at all; unlayered
- * outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * TWO SCOPE ROOTS:
  * - The trigger (`DatePickerBase` root `<div data-part='root'>`, `RangePicker`
@@ -48930,9 +49143,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern Progress skin (K1 Lane C Daisy-drain pass; supersedes the WO-SKIN-03
  * checkpoint-S split).
  *
- * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
- * layer and loses to preflight/DaisyUI; unlayered outranks them and still yields
- * to the caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * DAISY DRAIN: the engine no longer renders `progress`, `progress-primary`,
  * `progress-success`, `progress-error` or `radial-progress`. Every paint those
@@ -49427,9 +49642,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern Spinner skin (R2+R3 ownership pass; supersedes the WO-SKIN-03
  * checkpoint-S split).
  *
- * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
- * layer and loses to preflight; unlayered outranks it and still yields to the
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-spinner rottay-spinner--modern` + `data-part='root'`;
  * the ring is `[data-part='indicator']`, the caption `[data-part='label']`.
@@ -49617,8 +49834,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * bundled Tailwind/DaisyUI artifact, preflight included). Skin rules therefore
  * beat preflight and every framework utility by layer ownership, while still
  * yielding to a caller's inline `style` and to the tenant/personality layers
- * above. (The old "DELIBERATELY UNLAYERED" header described the pre-layer-
- * ownership wiring and was corrected in the K2-V pass.)
+ * above.
  *
  * DAISY DRAIN (K2-V): until this wave the root carried the DaisyUI `rating`
  * + `rating-{size}` classes and they were the DE-FACTO sizing owner -- the
@@ -49902,10 +50118,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern Skeleton skin (TASK S canon-shimmer pass; supersedes the WO-SKIN-03
  * DaisyUI-owned split).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer and DaisyUI's own
- * `.skeleton` sort before Tailwind's base layer, so a layered rule cannot paint
- * these blocks. Unlayered outranks preflight + DaisyUI and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * The modern Skeleton no longer rides DaisyUI's `.skeleton` class -- that class
  * is gone from the engine, so this file decrements daisy.classConsumers. Anatomy
@@ -50696,9 +50913,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern Drawer skin (WO-SKIN-03 checkpoint O).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * ===========================================================================
  * PERSONALITY FLOOR (the load-bearing constraint in this file)
@@ -51469,11 +51688,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern Toast skin (WO-SKIN-03 checkpoint O).
  *
- * DELIBERATELY UNLAYERED (P-47), and here that is the whole point of the file.
- * The root carries NO DaisyUI class -- the structural `alert` class was drained
- * from the modern engine (Toast.modern-variant-tokens.test pins its absence),
- * so this skin is the single paint owner for every tone. Unlayered keeps these
- * rules above the tenant artifacts' layered paint without !important.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
  * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
@@ -53378,9 +53597,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * Modern Result skin (K1 Lane C premium pass; supersedes the WO-SKIN-03
  * checkpoint-O color-only rules).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * LAYOUT OWNERSHIP: the engine used to render raw utilities (`flex flex-col
  * items-center justify-center text-center py-12 px-6`, `text-2xl font-bold`,
@@ -53646,9 +53867,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern Affix skin (WO-SKIN-04 checkpoint N; expanded in K3-C pass 1).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-affix rottay-affix--modern` + `data-part='root'`.
  * `data-sticky` is stamped ONLY in advanced (onChange) mode while affixed; the
@@ -53795,8 +54018,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /**
  * Modern AlertDialog skin (WO-SKIN-04 checkpoint P; Quiet Premium uplift).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. The engine stamps `data-part`s and structural geometry
  * only; every color, elevation, typography and interaction state channel is
@@ -54157,9 +54383,11 @@ html[data-ds-motion='reduced']
 /**
  * Modern Anchor skin (WO-SKIN-04 checkpoint N; expanded in K3-C pass 1).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE: the link `<a>` carries `rottay-anchor-link rottay-anchor-link--modern`
  * + `data-part='item'` + `data-selected`. It IS the painted element, so the
@@ -54421,9 +54649,11 @@ html[data-ds-motion='reduced']
 /**
  * Modern BackTop skin (WO-SKIN-04 checkpoint N; expanded in K3-C pass 1).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE: the button carries `rottay-backtop rottay-backtop--modern` +
  * `data-part='trigger'`. It IS the painted element, so the rule is COMPOUND (no
@@ -54963,8 +55193,11 @@ html[data-ds-motion='reduced']
 /**
  * Modern ConfirmDialog skin (WO-SKIN-04 checkpoint P; Quiet Premium uplift).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. The engine stamps `data-part`s and structural geometry
  * only; every color, elevation, typography and interaction state channel is
@@ -55386,8 +55619,11 @@ html[data-ds-motion='reduced']
 /**
  * Modern ContextMenu skin (WO-SKIN-04 checkpoint P; K4-A ownership drain 2026-07-24).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SAME WIDGET CLASS as Dropdown, with one paint owner each. Dropdown modern
  * renders NO DaisyUI class (an earlier revision of this header claimed it
@@ -56602,9 +56838,11 @@ html[data-ds-motion='reduced']
 /**
  * Modern FloatButton skin (WO-SKIN-04 checkpoint N; K4-C Pass 1 consolidation).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule loses to preflight/DaisyUI regardless of
- * specificity. Unlayered still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * ============================================================================
  * K4-C OWNERSHIP DECISION: THIS FILE IS NOW THE SINGLE PAINT OWNER — INCLUDING
@@ -56991,8 +57229,11 @@ html[data-ds-motion='reduced']
  * Modern HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C;
  * K4-A geometry drain 2026-07-24).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * This engine applies NO DaisyUI class (its file header used to claim it rides
  * DaisyUI's `card` — it does not, and the comment is corrected) and NO
@@ -57251,10 +57492,11 @@ html[data-ds-motion='reduced']
 /**
  * Modern Link skin (WO-SKIN-04 checkpoint N; K1-Lane-A state ownership pass).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight/DaisyUI regardless of
- * specificity. Unlayered also out-ranks any tenant `.link-*` artifact paint and
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-link-shell rottay-link-shell--modern` alongside
  * `data-part='root'` + `data-variant`. The `-shell` scope (not bare
@@ -59090,9 +59332,11 @@ html[data-ds-motion='reduced']
 /**
  * Modern Pagination skin (K3-B Pass 1: single paint owner).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. The modern engine stamps anatomy only (`data-part`
  * hooks, `data-size`, `data-current`, `aria-current`); no inline styles, no
@@ -59592,8 +59836,11 @@ html[data-ds-motion='reduced']
 /**
  * Modern Popconfirm skin (WO-SKIN-04 checkpoint P; Quiet Premium uplift).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. The engine stamps `data-part`s and positioning only
  * (z-index channel, consumer overlayStyle, measured geometry stay inline so
@@ -60854,10 +61101,11 @@ html[data-ds-motion="reduced"]
  * family; previously the family's only paint lived in the engine-agnostic
  * `presentation/components/skin/scroll-area.css`).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so a layered rule loses to preflight regardless
- * of specificity. Unlayered outranks preflight and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-scroll-area rottay-scroll-area--modern` +
  * `data-part='root'` (minted in K3-C; the legacy `.rottay-scroll-area-modern`
@@ -61104,9 +61352,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern Segmented skin (WO-SKIN-04 checkpoint N).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * NO DaisyUI HERE, despite the file's own header comment: modern Segmented's
  * doc block claims it "uses DaisyUI's `join` component", but the render carries
@@ -61569,8 +61819,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern Sheet skin (WO-SKIN-04 checkpoint P).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * PORTAL: both production engines portal so the sheet escapes ancestor clipping.
  * Modern uses the shared `#rottay-portal-root`; rustic portals directly to body.
@@ -62103,9 +62356,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern Stepper skin (K3-B Pass 1: single paint owner, Daisy drained).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * ============================================================================
  * SINGLE PAINT OWNER — THE SKIN NOW PAINTS THE CIRCLE AND THE CONNECTOR.
@@ -62817,9 +63072,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern Steps skin (K3-B Pass 1: single paint owner, Daisy drained).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * ============================================================================
  * SINGLE PAINT OWNER — THE SKIN NOW PAINTS THE CIRCLE AND THE CONNECTOR.
@@ -64564,8 +64821,11 @@ html[data-ds-motion='reduced'] .rottay-tabs--modern[data-part='root'] [data-part
  * bithire's #FFFFFF equals its on-primary). Every channel keeps a
  * `--ds-tour-*` raw escape hatch.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * GEOMETRY (K4-A): backdrop fixed positioning, spotlight fixed/radius/
  * pointer-events, surface padding + logical `max-inline-size`, close-button
@@ -65036,8 +65296,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Watermark skin (WO-SKIN-04 checkpoint P; geometry drain).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * This component is structurally unlike every other one in this family: its visible
  * content — the repeating text or image tile — is drawn to an off-screen `<canvas>`
@@ -65132,7 +65395,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ActionDock skin (WO-SKIN-04 checkpoint N; P1 elevation 2026-07-24).
  *
@@ -65442,7 +65705,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  */
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * BottomTabBar skin (WO-SKIN-04 checkpoint N; R2+R3 modern premium pass).
  *
@@ -66208,7 +66471,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * MobileHeader skin (WO-SKIN-04 checkpoint N).
  *
@@ -66512,7 +66775,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * AppShell structure and paint contract.
  *
@@ -67559,9 +67822,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Avatar skin (WO-SKIN-05 checkpoint D1).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * The modern engine stamps the resolved token size on both root and mask. This
  * prevents the legacy `[data-tenant] .avatar` 40px utility from clipping large
@@ -68024,9 +68289,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Calendar skin (WO-SKIN-05 checkpoint D2).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-calendar rottay-calendar--modern` + `data-part` +
  * `data-mode` (grep-verified free: Calendar was fully greenfield -- no
@@ -68927,9 +69194,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Carousel skin (WO-SKIN-05 checkpoint D1; K4-C Pass 1 consolidation).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER (K4-C): the engine previously emitted DaisyUI's
  * `carousel` / `carousel-vertical` / `carousel-inner` / `carousel-item`
@@ -69274,10 +69543,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Collapse skin (WO-SKIN-05 checkpoint L).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so a layered rule loses to preflight regardless
- * of specificity. Unlayered outranks preflight and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT keeps the component's existing bare `rottay-collapse` class
  * (plus conditional `--ghost`/`--borderless` modifiers) -- this is the SAME
@@ -69728,11 +69998,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Descriptions skin (WO-SKIN-05 checkpoint D2).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style` --
- * which is what keeps the `styles.label` / `styles.content` / per-item override
- * props working: they land inline and therefore still beat these rules.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-descriptions rottay-descriptions--modern` +
  * `data-part='root'` + `data-engine` + `data-bordered`. The engine suffix is
@@ -70534,9 +70804,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * prop). Consuming it here is what makes the illustration the emphasis and
  * gives the declared channel a modern reader.
  *
- * DELIBERATELY UNLAYERED (P-47): layered rules sort before Tailwind preflight
- * and lose to it; unlayered paint outranks the reset and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  */
 
 .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'] {
@@ -70686,10 +70958,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * Modern Image skin (WO-SKIN-05 checkpoint D1; full geometry drain from the
  * engine's Tailwind utilities).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight and Tailwind's utilities, and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-image rottay-image--modern` (fresh mints,
  * grep-verified free across CSS and CSS-in-JS). Radius, object-fit, bordered
@@ -71022,9 +71295,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Kbd skin (WO-SKIN-05 checkpoint D1; K1-Lane-A key-cap craft pass).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-kbd rottay-kbd--modern` + `data-part='root'`. Both
  * classnames are fresh mints (grep-verified free across CSS and CSS-in-JS): this
@@ -71186,10 +71461,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Layout skin (WO-SKIN-05 checkpoint L).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so a layered rule loses to preflight regardless
- * of specificity. Unlayered outranks preflight and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE: `Layout`'s own root carries `rottay-layout rottay-layout--modern`
  * (minted in the WO-SKIN-05 pre-step, 0bd687ea -- neither engine carried any
@@ -71774,9 +72050,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * in a compounds file; and they are usable STANDALONE, so each carries its own
  * scope class instead of hanging off the List root's.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPES: `rottay-list rottay-list--modern` + `data-part='root'` +
  * `data-bordered` + `data-loading`; `rottay-list-item rottay-list-item--modern`;
@@ -72251,10 +72529,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern QRCode skin (WO-SKIN-05 checkpoint D1).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight, DaisyUI and Tailwind's utilities, and still yields
- * to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT already carried `rottay-qrcode rottay-qrcode--modern`; no classname is
  * minted or dropped here. That matters: `engines/modern/theme.css:479` is a live
@@ -72600,10 +72879,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Splitter skin (WO-SKIN-05 checkpoint L).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so a layered rule loses to preflight regardless
- * of specificity. Unlayered outranks preflight and still yields to a
- * caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-splitter rottay-splitter--modern` +
  * `data-part='root'` + `data-orientation`, minted in the WO-SKIN-05
@@ -72869,10 +73149,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * `engines/modern.tsx` -- Statistic and its sibling Countdown -- which share one
  * anatomy and one set of values.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style` --
- * which is what keeps the `valueStyle` prop overriding the trend color.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-statistic rottay-statistic--modern` +
  * `data-part='root'`. The engine suffix is load-bearing: rustic and the
@@ -73200,9 +73481,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 /**
  * Modern Tag skin (WO-SKIN-05 checkpoint D1).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
- * Tailwind's base layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `rottay-tag-shell rottay-tag-shell--modern` — a fresh mint
  * (grep-verified free across CSS and CSS-in-JS). The bare `rottay-tag` name that
@@ -73727,9 +74010,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * Modern Timeline skin (WO-SKIN-05 checkpoint D2; K3-A Pass 1: Daisy drain,
  * single paint owner).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER (K3-A). The engine no longer emits the DaisyUI
  * `timeline` / `timeline-start` / `timeline-middle` / `timeline-end` classes,
@@ -75001,9 +75286,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern Tree skin (WO-SKIN-05 checkpoint D2).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * HOVER IS SINGLE-LAYER, ON THE ROW. Historically an `engines/modern/theme.css`
  * bridge co-painted the full-column wrapper (`[data-part='node']`) so the
@@ -75648,9 +75935,11 @@ html[data-ds-motion="reduced"]
  *
  * Modern Typography skin (WO-SKIN-05 checkpoint D2).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE: all four exports (Heading, Text, Paragraph, Link) share the pair
  * `rottay-typography rottay-typography--modern` + `data-part='root'` +
@@ -78140,10 +78429,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern FilterBuilder skin (Lote 2 rebuild).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * unnamed `base` layer, so a layered rule loses to preflight regardless of
- * specificity. Unlayered outranks preflight and still yields to a caller's inline
- * `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-filter-builder
  * ds-engine-modern` + `data-part='root'` (optionally `data-loading` /
@@ -78569,10 +78859,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern FormBuilder skin.
  *
- * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
- * rottay-engines)` — this file does not control its own layering (the older
- * "deliberately unlayered" note predates that wiring). Caller inline `style`
- * still wins over every rule here, which the root max-inline-size DEPENDS on.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the `<form>` carrying `ds-pattern-form-builder
  * ds-engine-modern` + `data-part='root'` (the loading early-return is a
@@ -79145,11 +79436,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern InvoiceTemplate skin (skin ownership migration checkpoint record anatomy/F; PT22 rebuild).
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * unnamed `base` layer, so a layered rule loses to preflight regardless of
- * specificity. Unlayered outranks preflight and still yields to a caller's inline
- * `style`, which the root relies on (`{ ...panelCardStyle, ...style }` -- the
- * shared kit stays inline, shared with ten consumers fleet-wide).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-invoice-template
  * ds-engine-modern` + `data-part='root'`. The loading branch carries the same
@@ -80410,10 +80701,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern PageShell skin (skin ownership migration shell-header anatomy).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * `base` layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
- * `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the shell's outer `<div>`, carrying the pair
  * `ds-pattern-page-shell ds-engine-modern` + `data-part='root'`. The loading root
@@ -81865,10 +82157,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern CommandPalette skin.
  *
- * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
- * rottay-engines)` — this file does not control its own layering (the older
- * "deliberately unlayered" note predates that wiring). Caller inline `style`
- * still wins over every rule here.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT: the pattern now composes the certified Modal, so the scope
  * classes `ds-pattern-command-palette ds-engine-modern` ride Modal's
@@ -82200,10 +82493,12 @@ html[data-ds-motion="reduced"]
 @layer rottay-engines {
 /**
  * EnvironmentToggle — Modern engine skin (Lote-2 composition uplift).
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before
- * Tailwind's base layer, so a layered rule cannot paint these elements;
- * unlayered outranks preflight + DaisyUI and still yields to a caller's
- * inline `style`.
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * COMPOSITION LAW (Lote 2): every control is a composed Button primitive
  * (trigger + options across the three variants) and the production
@@ -82490,10 +82785,13 @@ html[data-ds-motion="reduced"]
 }
 @layer rottay-engines {
 /**
- * WorkspaceSwitcher — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
- * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
- * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
- * still yields to a caller's inline `style`.
+ * WorkspaceSwitcher — Modern engine skin.
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
  * two root classes (0,2,0) + the root's own `data-part` + the target's
@@ -83091,10 +83389,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern ShortcutsOverlay skin.
  *
- * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
- * rottay-engines)` — this file does not control its own layering (the older
- * "deliberately unlayered" note predates that wiring). Caller inline `style`
- * still wins over every rule here.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT: the overlay's outer `<div>` carries
  * `ds-pattern-shortcuts-overlay ds-engine-modern` + `data-part='root'` (two
@@ -83765,8 +84064,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern NotificationCenter skin (communication-pattern anatomy unit F1; Lote-2 composition uplift).
  *
- * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
- * `base` layer, so a layered rule cannot paint these elements at all.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT: the root `<div>` carries `ds-pattern-notification-center
  * ds-engine-modern` + `data-part='root'`; every painted element is a descendant
@@ -84133,10 +84435,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern ActivityLog skin (communication-pattern anatomy; PT12 composition uplift).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * `base` layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
- * `style` (the root forwards the caller's `style`/`className`).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT: the outer `<div>` carries `ds-pattern-activity-log ds-engine-modern`
  * + `data-part='root'` in both the loading and loaded branches; every painted
@@ -84388,9 +84691,11 @@ html[data-ds-motion="reduced"]
 /**
  * Modern LiveFeed skin.
  *
- * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
- * rottay-engines)` — this file does not control its own layering (the older
- * "deliberately unlayered" note predates that wiring).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT: the outer `<div>` carries `ds-pattern-live-feed
  * ds-engine-modern` + `data-part='root'`, identical in the loading-skeleton
@@ -86694,7 +86999,7 @@ html[data-ds-motion="reduced"]
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * DetailFormSurface skin (record-and-form skin ownership, premium pass 2026-07-30).
  *
@@ -86751,7 +87056,7 @@ html[data-ds-motion="reduced"]
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * edit-fields skin (record-and-form skin ownership). Engine-agnostic: this structures family
  * renders ONE DOM tree under every engine, so one file serves all four.
@@ -87218,7 +87523,7 @@ html[data-ds-motion="reduced"]
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * form-sections skin (record-and-form skin ownership). Engine-agnostic: this structures
  * family renders ONE DOM tree under every engine, so one file serves all four.
@@ -87960,7 +88265,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * FormSurface skin (record-and-form skin ownership, premium pass 2026-07-30).
  *
@@ -88027,7 +88332,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * GuidedDraftFormSurface skin (record-and-form skin ownership, premium pass 2026-07-30).
  *
@@ -88496,7 +88801,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * record skin. Engine-agnostic: this structures family renders ONE DOM tree
  * under every engine, so one file serves all four.
@@ -89201,7 +89506,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * WizardSurface skin (record-and-form skin ownership, premium pass 2026-07-30).
  *
@@ -89260,7 +89565,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * DetailHeader skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/detail-header.css — DetailHeader renders one DOM
@@ -90026,7 +90331,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * Shared EditHeader + FormHeader hero paint — engine-agnostic.
  *
@@ -90220,7 +90525,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * EditHeader skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/edit-header.css —
@@ -90645,7 +90950,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * FormHeader skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/form-header.css — FormHeader renders one DOM
@@ -90987,7 +91292,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * CollectionHeader skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/collection-header.css — CollectionHeader renders
@@ -91645,7 +91950,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * DashboardHeader skin.
  *
@@ -92194,7 +92499,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ActivityTicker skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/activity-ticker.css — ActivityTicker renders
@@ -92611,7 +92916,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ActivityTimeline skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/activity-timeline.css — single DOM tree under
@@ -92961,7 +93266,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ActivityCompact skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/activity-compact.css — single DOM tree under
@@ -93259,7 +93564,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ActivityCards skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/activity-cards.css — single DOM tree under
@@ -93543,7 +93848,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * Dashboard activity interaction recovery.
  *
@@ -93874,7 +94179,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * MetricsMinimal skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/metrics-minimal.css — single DOM tree under
@@ -94212,7 +94517,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * MetricsCards skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/metrics-cards.css — single DOM tree under
@@ -94587,7 +94892,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * MetricsChart skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/metrics-chart.css — single DOM tree under
@@ -94838,7 +95143,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * MetricsRows skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/metrics-rows.css — single DOM tree under
@@ -95114,7 +95419,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * Dashboard metrics interaction recovery.
  *
@@ -95495,7 +95800,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * StatsHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Scope root carries the single class `ds-stats-header` + `data-part='root'`
@@ -95811,7 +96116,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /** StatsHeader keyframes formerly emitted once per rendered instance.
  *
  * `pulse-card-skeleton` is retired: the loading placeholder is now the
@@ -95845,7 +96150,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * DataTerminalCard skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/data-terminal-card.css.
@@ -97280,7 +97585,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * DataTerminalCard animation contract.
  *
@@ -98058,12 +98363,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* workspace-chrome anatomy: workspace chrome paints from layered skins. */
 @layer rottay-engines {
 /**
- * Modern ListToolbar skin — deliberately unlayered (P-47).
- * Layered rules sort before Tailwind's base layer and cannot reliably paint
- * these elements. The two root classes plus repeated target parts give every
- * real border colour at least (0,4,0), above the tenant floor at (0,3,1).
- * Text colour rules repeat the target part three times to reach (0,5,0) and
- * outrank the Typography engine skin.
+ * Modern ListToolbar skin.
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * Primitive paint remains owned by Button/Input/Badge. Toolbar selectors below
  * only tune their composition through pattern classes and semantic data state.
@@ -99546,10 +99852,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * Modern SavedViews skin — filled-pill engine treatment (Lote 2 rewrite).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so layered paint loses to preflight regardless of
- * specificity. Unlayered rules outrank preflight and still yield to caller
- * inline styles.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SPECIFICITY (P-48): the root's two classes contribute (0,2,0). Rules that
  * paint a border color repeat the target data-part or pair it with a contract
@@ -100243,10 +100550,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * Modern TreeView skin (Lote 2 — composition pass).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so layered paint loses to preflight regardless of
- * specificity. Unlayered rules outrank preflight and still yield to caller
- * inline styles.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT carries `ds-pattern-tree-view ds-engine-modern` + `data-part`.
  *
@@ -100481,7 +100789,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ActiveFiltersBar skin — engine-agnostic and deliberately unlayered.
  * Unlayered paint outranks Tailwind preflight while caller inline styles keep
@@ -100661,16 +100969,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* ---- the overflow affordance is an ACTION: the Button primitive owns its
-        chrome and its focus ring; the rail states only the voice, so it
-        never reads as one more removable object ---- */
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
-  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
-  text-decoration-line: underline;
-  text-decoration-thickness: from-font;
-  text-underline-offset: 0.25em;
-  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
-}
+        chrome, its type ramp and its focus ring. A link-style toggle is the
+        `link` variant, never a text-decoration re-stated here ---- */
 
 /* ---- chip content typography INSIDE the composed Tag (the primitive owns
         the chip chrome; the label is the tracked mini-eyebrow, the value is
@@ -100838,10 +101138,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     border-inline-end-color: ButtonText;
     color: CanvasText;
   }
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
-    text-decoration-color: CanvasText;
-  }
   .ds-structure.ds-active-filters-bar[data-part="root"]
     [data-part="chip"][data-state="draft"]
     [data-part="chip-value"] {
@@ -100869,7 +101165,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ColumnMenu skin — engine-agnostic structure chrome.
  *
@@ -101334,7 +101630,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ExportButton skin — engine-agnostic.
  * The dropdown is portaled under document.body and therefore owns a standalone
@@ -101489,7 +101785,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * SavedViewsMenu skin — engine-agnostic.
  * LAYERING: imported by `facade/entrypoints/base.css` into
@@ -102180,7 +102476,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ScopeSwitcher skin — engine-agnostic and deliberately unlayered.
  *
@@ -102305,7 +102601,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * SearchCommandBar skin — engine-agnostic and deliberately unlayered.
  * Border rules clear the tenant floor at (0,4,0) or higher; composed Text
@@ -102916,14 +103212,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* command input typography — the exact per-engine paint node (P-79):
- * modern wraps the native input, rustic IS the input root. */
+ * modern wraps the native input, rustic IS the input root. Tracking is NOT
+ * refined here: it is primitive/inputs/input's --ds-input-letter-spacing. */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__input
   .rottay-input,
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__input.rottay-input {
   font-size: var(--ds-font-size-sm);
-  letter-spacing: -0.01em;
 }
 
 /* Reduced motion: the pulse, the spin and the drawer entrance stop outright. */
@@ -103186,7 +103482,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * TableToolbar skin — engine-agnostic.
  * LAYERING: imported by `facade/entrypoints/base.css` and `styles.css` into
@@ -103436,7 +103732,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * ViewModeSwitcher skin — engine-agnostic and deliberately unlayered.
  *
@@ -103576,10 +103872,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * Modern FileManager skin (cross-capability anatomy; Lote-2 composition uplift).
  *
- * DELIBERATELY UNLAYERED (P-47): layered component rules sort before
- * Tailwind's base layer. Real border colours use the two scope classes plus
- * a private ownership class and repeated part, clearing the tenant border
- * floor at (0,3,1).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * COMPOSITION LAW (Lote 2): the pattern COMPOSES public DS primitives —
  * Button (toolbar / view-toggle / item actions), Checkbox (row selection),
@@ -104137,10 +104434,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * Modern UserProfileCard skin (cross-capability anatomy, premium wave uplift).
  *
- * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
- * unnamed base layer. The private BEM landing classes keep consumer-provided
- * slots from being painted when they happen to reuse a public data-part name.
- * Border-color rules reach at least (0,4,0) to clear the tenant border floor.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * OWNERSHIP (premium wave): all geometry, the size ramp, typography color and
  * every interactive state now live here, keyed on the root's
@@ -105632,12 +105930,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @layer rottay-engines {
 /**
  * Modern StatsGrid skin (long-tail skin ownership).
- * Deliberately unlayered. Modern keeps its generic surface-token vocabulary
- * and exposes only these opt-in channels: `--ds-stats-grid-accent` (per-stat
- * accent hatch), `--ds-stats-grid-card-padding`, `--ds-stats-grid-icon-size`
- * and the `--ds-stats-grid-value-*` metric channels forwarded to the composed
- * Statistic primitive. The rest of the `--ds-stats-grid-*` vocabulary remains
- * rustic-only exactly as before this extraction.
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * Second premium pass (roadmap 6.10): the sparkline's stroke and gradient
  * stops are painted here through the per-stat `--ds-stats-grid-accent`
@@ -106339,9 +106637,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * Modern ColumnSettings skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so a layered rule cannot paint a component at all.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is `.ds-column-settings.ds-column-settings--modern[data-part='root']`.
  * The engine composes the certified Checkbox/Input/Button/Tooltip/Empty
@@ -106603,7 +106903,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * Retired SurfaceAccentBar compatibility skin.
  *
@@ -106617,7 +106917,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * SurfaceSectionCard skin (long-tail skin ownership; R2+R3 quiet-premium pass).
  * Engine-agnostic.
@@ -106761,7 +107061,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * Shared surface lifecycle-state skin (long-tail skin ownership; R2+R3 ownership
  * pass). Engine-agnostic: every export renders one tree under every engine.
@@ -107512,7 +107812,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * WorkspaceShell skin (long-tail skin ownership). Engine-agnostic and deliberately
  * unlayered so its extracted paint keeps precedence over resets while a caller
@@ -107795,7 +108095,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * CollectionWorkspaceSurface skin (long-tail skin ownership, SU32 pass 2026-07-30).
  *
@@ -107810,11 +108110,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * AdaptiveOverlay, render-dispatch patterns) keep their own chrome.
  *
  * SPECIFICITY: single class + single attribute hooks; no repetition, no
- * !important in new rules. LAYER TRUTH (same as list.css): typography.css
- * sorts in `rottay-engines` (after this file), so wherever the Typography
- * skin paints a color it governs regardless of selector weight here; the
- * `.ds-collection-workspace__muted-text` rule below is the color source only
- * where Typography leaves the part unpainted.
+ * !important in new rules. OWNERSHIP: this file sorts above `rottay-engines`,
+ * so text color stays with Typography's own `color` axis and control chrome
+ * with the Button family; neither is restated here.
  *
  * MOTION: every transition consumes `--ds-motion-*` channels (the authority
  * zeroes them under reduced motion); no duration/easing literals.
@@ -108040,7 +108338,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-weight: var(--ds-font-weight-semibold, 600);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  color: var(--ds-color-text-muted);
 }
 
 .ds-surface.ds-collection-workspace
@@ -108074,7 +108371,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-size: var(--ds-font-size-xs, 12px);
   font-weight: var(--ds-font-weight-semibold, 600);
   line-height: 1;
-  color: var(--ds-color-text-secondary);
 }
 
 .ds-surface.ds-collection-workspace
@@ -108119,7 +108415,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: 0;
   line-height: 1;
-  color: var(--ds-color-text-muted);
 }
 
 .ds-surface.ds-collection-workspace
@@ -108178,14 +108473,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   block-size: var(--ds-spacing-8, 32px);
   padding: 0;
   cursor: pointer;
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"][data-active="false"] {
-  border-radius: var(--ds-radius-md, 8px);
   border: 1px solid transparent;
   background: transparent;
   color: var(--ds-color-text-muted);
@@ -108193,7 +108484,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"][data-active="true"] {
-  border-radius: var(--ds-radius-md, 8px);
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   color: var(--ds-color-primary);
@@ -108344,7 +108634,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ds-color-text-muted) 74%, white 6%);
 }
 
 .ds-surface.ds-collection-workspace
@@ -108649,14 +108938,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__muted-text[data-part="root"] {
-  color: var(--ds-color-text-muted);
-}
-
-.ds-surface.ds-collection-workspace
   .ds-collection-workspace__filter-reset[data-part="filter-reset"] {
   flex-shrink: 0;
-  color: var(--ds-color-text-muted);
 }
 
 /* -------------------------------------------------------------------------
@@ -108738,8 +109021,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-surface.ds-collection-workspace
   [data-part="preview-accordion"]
   > [data-part="trigger"] {
-  min-block-size: var(--ds-size-touch-target, 44px);
-  border-radius: 0;
   text-align: start;
 }
 
@@ -108767,7 +109048,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__compact-action {
-  min-block-size: var(--ds-size-touch-target, 44px);
   justify-content: flex-start;
 }
 
@@ -108787,7 +109067,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__dock-more {
-  min-block-size: var(--ds-size-touch-target, 44px);
   flex: 0 0 auto;
 }
 
@@ -108798,16 +109077,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   white-space: nowrap;
 }
 
+/* Layout only. Fill, text, edge, corner and the coarse-pointer touch floor stay
+   on primitive/inputs/button so the tenant's control ramps keep reaching it. */
 .ds-surface.ds-collection-workspace
   .rottay-button.ds-collection-workspace__sticky-primary-action {
   min-inline-size: 0;
-  min-block-size: var(--ds-size-touch-target, 44px);
   flex: 1 1 auto;
   justify-content: center;
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border: none;
-  border-radius: var(--ds-radius-sm, 6px);
 }
 
 /* Fixed, in-tree filter disclosure. Its standalone scope is intentional: the
@@ -108905,7 +109181,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * CollectionRenderDispatch skin (long-tail skin ownership, SU32 pass 2026-07-30).
  *
@@ -108920,9 +109196,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * the hand-rolled markup.
  *
  * SPECIFICITY: single class + single attribute hooks; no repetition, no
- * !important. LAYER TRUTH: typography.css sorts in `rottay-engines` (after
- * this file), so `.ds-collection-render-dispatch__muted-text` is the color
- * source only where Typography leaves the part unpainted.
+ * !important. OWNERSHIP: this file sorts above `rottay-engines`, so text
+ * color stays with Typography's own `color` axis and is never restated here.
  *
  * The pagination footer is intentionally preserved (replacing it with the
  * Pagination primitive is a later, contract-level refactor); its controls
@@ -109023,11 +109298,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__muted-text {
-  color: var(--ds-color-text-muted);
-}
-
-.ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__fallback-heading {
   min-inline-size: 0;
 }
@@ -109079,7 +109349,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--ds-color-text-secondary, var(--ds-color-text-primary));
 }
 
 .ds-surface.ds-collection-render-dispatch
@@ -109233,20 +109502,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
   .ds-collection-render-dispatch__incremental-end[data-part="incremental-end"] {
   font-size: var(--ds-font-size-xs, 12px);
-  color: inherit;
 }
 
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
   .ds-collection-render-dispatch__incremental-count[data-part="incremental-count"] {
   font-variant-numeric: tabular-nums;
-}
-
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
-  .ds-collection-render-dispatch__load-more[data-part="load-more"] {
-  border-radius: var(--ds-radius-full, 9999px);
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-secondary));
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg, var(--ds-surface-card)));
-  color: var(--ds-color-primary);
 }
 
 /* Forced colors: surface-owned affordances re-keyed to system colors. */
@@ -109278,7 +109538,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * CommandCenterSurface skin (long-tail skin ownership).
  *
@@ -109461,7 +109721,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * DecisionInboxSurface skin (long-tail skin ownership, SU34 pass 2026-07-30).
  *
@@ -109489,10 +109749,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* -------------------------------------------------------------------------- */
 /* Queue header                                                                */
 /* -------------------------------------------------------------------------- */
-
-.ds-surface.ds-decision-inbox .ds-decision-inbox__muted-text[data-part='root'] {
-  color: var(--ds-color-text-muted);
-}
 
 .ds-surface.ds-decision-inbox .ds-decision-inbox__subtitle[data-part='root'] {
   display: block;
@@ -109644,7 +109900,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * HeaderSurface skin (long-tail skin ownership; premium deep pass 2026-08-02).
  *
@@ -109683,7 +109939,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * SidebarSurface skin (long-tail skin ownership; premium deep pass 2026-08-02).
  *
@@ -109759,7 +110015,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * RecordWorkbenchSurface skin (long-tail skin ownership, SU35 pass 2026-07-30).
  *
@@ -109796,12 +110052,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* -------------------------------------------------------------------------- */
 /* Shared text hooks                                                           */
 /* -------------------------------------------------------------------------- */
-
-/* Color source only where the Typography skin leaves the part unpainted
-   (same layer-truth idiom as list.css / decision-inbox.css). */
-.ds-surface.ds-record-workbench .ds-record-workbench__muted-text[data-part='root'] {
-  color: var(--ds-color-text-muted);
-}
 
 /* -------------------------------------------------------------------------- */
 /* Header: identity cluster                                                    */
@@ -109901,10 +110151,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: transparent;
   border-radius: var(--ds-radius-full, 9999px);
   transition: background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
-}
-
-.ds-surface.ds-record-workbench .ds-record-workbench__tab[data-active='true'] {
-  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
 .ds-surface.ds-record-workbench .ds-record-workbench__tab[data-active='true'] .ds-record-workbench__tab-underline[data-part='tab-underline'] {
@@ -110052,7 +110298,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * AuditSurface skin (long-tail skin ownership; SU01 wave 2026-07-30).
  *
@@ -110090,7 +110336,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * BillingSurface skin (long-tail skin ownership; SU02 wave 2026-07-30).
  *
@@ -110145,7 +110391,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * FileBrowserSurface skin (wave KIMI Modern Surfaces 2026-07-30).
  *
@@ -110245,7 +110491,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * ImportExportSurface skin (long-tail skin ownership; SU04 wave 2026-07-30).
  *
@@ -110306,7 +110552,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * IntegrationSurface skin (long-tail skin ownership; SU05 wave 2026-07-30).
  *
@@ -110363,7 +110609,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * ProfileSurface skin (long-tail skin ownership, premium wave 2026-07-30).
  *
@@ -110393,7 +110639,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  */
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * SettingsSurface skin (long-tail skin ownership).
  *
@@ -110436,7 +110682,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * TeamSurface skin (long-tail skin ownership; SU08 wave 2026-07-30).
  *
@@ -110501,7 +110747,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * CompareSurface skin (long-tail skin ownership; SU09 refine).
  *
@@ -110629,7 +110875,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * DashboardSurface skin (long-tail skin ownership).
  *
@@ -110714,7 +110960,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * DetailSurface skin.
  *
@@ -110742,7 +110988,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * ListSurface skin (long-tail skin ownership).
  *
@@ -110796,7 +111042,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * ReportSurface skin (long-tail skin ownership).
  *
@@ -110889,7 +111135,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * SearchSurface skin (long-tail skin ownership).
  *
@@ -111051,7 +111297,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * VisualizationSurface skin (long-tail skin ownership).
  *
@@ -111155,7 +111401,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * AuthSurface skin (long-tail skin ownership; grown KIMI Modern wave 2026-07-30, SU16).
  *
@@ -111302,7 +111548,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * ChatSurface skin (KIMI Modern wave 2026-07-30, SU17).
  *
@@ -111562,7 +111808,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * EmptyStateSurface skin (KIMI Modern wave 2026-07-30, SU19).
  *
@@ -111624,7 +111870,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * KanbanSurface skin (wave KIMI Modern Surfaces 2026-07-30, SU29).
  *
@@ -111730,7 +111976,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * SchedulerSurface skin (wave KIMI Modern Surfaces 2026-07-30, SU31).
  *
@@ -111882,7 +112128,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * EditorSurface skin (KIMI Modern wave 2026-07-30, SU18).
  *
@@ -111963,7 +112209,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * MarketingSurface skin (long-tail skin ownership; grown KIMI Modern wave 2026-07-30, SU20).
  *
@@ -112164,7 +112410,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * MediaSurface skin (KIMI Modern wave 2026-07-30, SU21; originally long-tail skin ownership).
  *
@@ -112258,7 +112504,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * NotificationSurface skin (long-tail skin ownership; grown KIMI Modern wave
  * 2026-07-30, SU22).
@@ -112373,7 +112619,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * PricingSurface skin (long-tail skin ownership; grown KIMI Modern wave 2026-07-30, SU23).
  *
@@ -112470,7 +112716,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * ActivitySurface skin (wave KIMI Modern Surfaces 2026-07-30, SU28).
  *
@@ -112524,7 +112770,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-surfaces {
 /**
  * OperationalSurface skin (wave KIMI Modern Surfaces 2026-07-30, SU30).
  *
@@ -112602,7 +112848,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* Hidden-channel recovery: byte-exact component CSS, deliberately unlayered. */
-@layer rottay-components {
+@layer rottay-surfaces {
 
 /**
  * OAuth transition surface.
@@ -113322,7 +113568,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--_ds-oauth-muted);
 }
 
-.rottay-progress {
+.rottay-transition-root .rottay-progress {
   display: grid;
   gap: 12px;
   width: min(100%, 430px);
@@ -113436,7 +113682,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   opacity: 0.94;
 }
 
-.rottay-progress--quiet {
+.rottay-transition-root .rottay-progress--quiet {
   gap: 10px;
 }
 
@@ -113521,7 +113767,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     color-mix(in srgb, var(--_ds-oauth-ink) 7%, transparent);
 }
 
-.rottay-progress--watchtower {
+.rottay-transition-root .rottay-progress--watchtower {
   gap: 10px;
 }
 
@@ -113579,7 +113825,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   opacity: 0.42;
 }
 
-.rottay-progress--signal {
+.rottay-transition-root .rottay-progress--signal {
   gap: 0;
 }
 
@@ -113640,7 +113886,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     0 0 0 8px color-mix(in srgb, var(--_ds-oauth-accent) 10%, transparent);
 }
 
-.rottay-progress--halo {
+.rottay-transition-root .rottay-progress--halo {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   width: min(100%, 460px);
@@ -114815,12 +115061,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     justify-content: center;
   }
 
-  .rottay-progress,
-  .rottay-progress--halo {
+  .rottay-transition-root .rottay-progress,
+  .rottay-transition-root .rottay-progress--halo {
     width: 100%;
   }
 
-  .rottay-progress--halo {
+  .rottay-transition-root .rottay-progress--halo {
     grid-template-columns: 1fr;
   }
 
@@ -114882,7 +115128,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * LoadingOverlay skin — engine-agnostic.
  *
@@ -120095,7 +120341,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
-@layer rottay-components {
+@layer rottay-structures {
 /**
  * SectionFrame — numbered mono section label + framing rules (spec section 5).
  *
@@ -120603,10 +120849,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * Modern CalendarView pattern skin.
  *
- * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
- * rottay-engines)` — this file does not control its own layering (the older
- * "deliberately unlayered" note predates that wiring). Caller inline `style`
- * still wins over every rule here.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is `.ds-pattern-calendar-view.ds-engine-modern[data-part='root']`
  * (two distinct classes + one attribute, (0,3,0); class/attribute repetition
@@ -121001,7 +121248,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @layer rottay-engines {
 /**
  * Modern KanbanBoard pattern skin (visualization skin ownership; PT34 rebuild),
- * deliberately unlayered (P-47).
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * COMPOSITION LAW (PT34): Button (add item, variant dashed), Badge (WIP
  * count, neutral/danger tone by limit state), Spinner (loading status) and
@@ -121457,10 +121709,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * Modern MapView pattern skin (visualization skin ownership).
  *
- * LAYER: imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
- * "deliberately unlayered" note predates the wiring). Caller inline styles
- * still win.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * ARCHITECTURE: the pattern is an integration PLACEHOLDER (no map library);
  * this file paints the metadata region, the marker list and the layout. The
@@ -121684,10 +121937,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * Modern Timeline pattern skin.
  *
- * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
- * rottay-engines)` — this file does not control its own layering (the older
- * "deliberately unlayered" note predates that wiring). Caller inline `style`
- * still wins over every rule here.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SINGLE PAINT OWNER. The engine no longer emits the DaisyUI `timeline`,
  * `timeline-vertical`, `timeline-start`, `timeline-middle`, `timeline-end` or
@@ -122107,7 +122361,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 @layer rottay-engines {
 /**
- * Modern TreeView pattern skin (visualization skin ownership), deliberately unlayered.
+ * Modern TreeView pattern skin (visualization skin ownership).
+ *
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * MERGE / RETIRE NOTE (p613 wave): since the Lote-2 composition the tree
  * itself is the DS Tree primitive's modern engine — every node row, toggle,
@@ -123516,10 +123776,13 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
  * Responsive Tokens Index - Rottay Design System
  *
  * Central import file for adjustments conditioned on the rendering
- * environment: screen size, and the language the text is written in. Both
- * entrypoints import this file as `layer(rottay-responsive)`, the last
- * design-system layer, so these adjustments outrank every token, skin, and
- * tenant artifact they correct.
+ * environment: screen size, and the language the text is written in.
+ *
+ * LAYER: `layer(rottay-responsive)`, the last design-system layer, imported by
+ * `facade/entrypoints/base/index.css`. That rank puts these adjustments over
+ * every token and skin they correct. Compiled tenant paint is unlayered and
+ * therefore sits over this layer as well, which is why the Arabic root floor
+ * has to be imported unlayered rather than from here.
  */
 
 /**
@@ -123789,13 +124052,13 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
  * rendered with the full Latin tracking ramp applied to it.
  *
  * WHICH @LAYER, AND WHY IT CANNOT BE ACCIDENTALLY OVERRIDDEN.
- * This file is reached through `foundation/responsive/index.css`, which both
- * public entrypoints import as `layer(rottay-responsive)` — the LAST
+ * This file is reached through `foundation/responsive/index.css`, which the
+ * one public entrypoint imports as `layer(rottay-responsive)` — the LAST
  * design-system layer in the canonical order:
  *
  *   theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion,
- *   rottay-components, rottay-engines, rottay-personality,
- *   rottay-responsive, components, utilities
+ *   rottay-components, rottay-engines, rottay-structures, rottay-surfaces,
+ *   rottay-personality, rottay-responsive, components, utilities
  *
  * Layer precedence outranks specificity, so nothing LAYERED inside the design
  * system can beat these rules at any selector weight: not the base token scale

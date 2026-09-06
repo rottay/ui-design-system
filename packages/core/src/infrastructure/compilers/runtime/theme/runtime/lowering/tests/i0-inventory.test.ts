@@ -9,7 +9,7 @@
 
 import { describe, it, expect } from "vitest";
 import { createHash } from "crypto";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 import {
   rottayBrandTheme,
@@ -268,15 +268,27 @@ describe("first-party artifact integrity", () => {
     ).toBe(false);
   });
 
-  it("public entrypoint source files exist in facade/entrypoints/", () => {
-    for (const f of [
-      "facade/entrypoints/styles/index.css",
-      "facade/entrypoints/rottay/index.css",
-      "facade/entrypoints/bithire/index.css",
-      "facade/entrypoints/evnto/index.css",
-    ]) {
-      expect(existsSync(resolve(CSS_SRC, f)), `${f} must exist`).toBe(true);
-    }
+  it("facade/entrypoints/ holds exactly one authored entrypoint", () => {
+    // This assertion used to require four MORE entrypoints to exist. They were
+    // a second authored copy of the same import graph that no build read, and
+    // requiring them is what kept the divergence alive. Every `./styles/*`
+    // package export is built from `base` plus one compiled tenant artifact.
+    expect(existsSync(resolve(CSS_SRC, "facade/entrypoints/base/index.css"))).toBe(true);
+
+    const authored = readdirSync(resolve(CSS_SRC, "facade/entrypoints"), {
+      withFileTypes: true,
+    })
+      .filter((entry) => entry.isDirectory() && entry.name !== "tests")
+      .map((entry) => entry.name);
+
+    expect(authored).toEqual(["base"]);
+  });
+
+  it.each(TENANTS)("%s ships the compiled artifact the build mounts", (tenant) => {
+    expect(
+      existsSync(resolve(CSS_SRC, `facade/artifacts/${tenant}/index.css`)),
+      `facade/artifacts/${tenant}/index.css must exist`
+    ).toBe(true);
   });
 });
 

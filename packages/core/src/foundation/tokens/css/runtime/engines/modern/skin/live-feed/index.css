@@ -1,9 +1,11 @@
 /**
  * Modern LiveFeed skin.
  *
- * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
- * rottay-engines)` — this file does not control its own layering (the older
- * "deliberately unlayered" note predates that wiring).
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT: the outer `<div>` carries `ds-pattern-live-feed
  * ds-engine-modern` + `data-part='root'`, identical in the loading-skeleton

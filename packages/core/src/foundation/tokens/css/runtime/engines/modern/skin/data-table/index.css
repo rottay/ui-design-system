@@ -1,10 +1,11 @@
 /**
  * Modern DataTable skin (WO-ARC-09 checkpoint 6).
  *
- * DELIBERATELY UNLAYERED, same rationale the other engine skins state in full
- * (P-47): every `rottay-*` cascade layer sorts before Tailwind's `base` layer,
- * so a layered rule loses to preflight regardless of specificity. Unlayered
- * outranks preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`. The canonical order lives in
+ * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
+ * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
+ * component base and is in turn overridden by the structure and surface tiers;
+ * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT is the engine's outer `<div>`, which carries the pair
  * `ds-pattern-data-table ds-engine-modern` (plus a third `ds-table-density-*`

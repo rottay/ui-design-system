@@ -406,7 +406,7 @@ function rootScopedDeclarations(text) {
 
 /** Build a name -> raw-value map from every foundation CSS file's base :root block.
  * `themes/default.css` is read first and wins ties: it is the file the CSS entrypoint
- * imports LAST among the foundation layer (entrypoints/styles.css), so for any name
+ * imports LAST among the foundation layer (entrypoints/base/index.css), so for any name
  * declared in more than one foundation file, its value is the one that actually wins
  * the cascade (e.g. base/spacing.css's semantic --ds-spacing-xs..xl ladder duplicates
  * different values than default.css's - default.css is the one real pages render). */
@@ -2521,10 +2521,9 @@ const counters = {
   // comment silently voided an entire migrated skin this way. Exact-0.
   'skins.parseErrors': countSkinParseErrors(),
   // WO-SKIN-03: a skin nobody imports paints nothing, and it fails exactly as
-  // quietly as one that does not parse. Every skin must reach BOTH entrypoints:
-  // foundation/base/index.css
-  // (which feeds the per-tenant bundles the apps actually load) and
-  // entrypoints/styles.css (which feeds dist/styles.css). Exact-0.
+  // quietly as one that does not parse. Every skin must reach the one authored
+  // entrypoint, facade/entrypoints/base/index.css, which is inlined into every
+  // shipped bundle including dist/styles.css. Exact-0.
   'skins.unwired': countUnwiredSkins(),
   // skin ownership migration: sites whose PAINT VALUE is runtime data (a tenant's chosen hex, a
   // per-datum chart colour, a per-user identity colour) cannot live in a skin. They
@@ -2624,21 +2623,23 @@ function countSkinParseErrors() {
 }
 
 /**
- * WO-SKIN-03: every skin stylesheet must be imported by BOTH entrypoints.
+ * WO-SKIN-03: every skin stylesheet must be imported by the one entrypoint.
  *
  * A skin file that exists but is imported nowhere is bytes on disk: the browser
  * never sees it, the component it was written for ships unpainted, and every
  * other signal stays green (the counter reads the component's TSX, `tsc` does
- * not read CSS, jsdom does not read stylesheets). The two entrypoints are not
- * interchangeable -- `facade/entrypoints/base/index.css` is inlined into the
- * per-tenant bundles (dist/rottay.css, dist/bithire.css) that the apps
- * actually load, while `facade/entrypoints/styles/index.css` feeds dist/styles.css. A skin wired into only
- * one of them is dark for half the fleet.
+ * not read CSS, jsdom does not read stylesheets).
+ *
+ * This check used to sweep two entrypoints because a second authored copy of
+ * the same graph existed and a skin could be wired into only one of them --
+ * dark for half the fleet. WO-CAN-03 removed the copy: `base/index.css` is
+ * inlined into every shipped bundle (dist/rottay.css, dist/bithire.css,
+ * dist/evnto.css and dist/styles.css), so wiring is now a single fact.
  *
  * Exact-0: the first unwired skin fails the build.
  */
 function countUnwiredSkins() {
-  const entrypoints = ['src/foundation/tokens/css/facade/entrypoints/base/index.css', 'src/foundation/tokens/css/facade/entrypoints/styles/index.css'].map((rel) => ({
+  const entrypoints = ['src/foundation/tokens/css/facade/entrypoints/base/index.css'].map((rel) => ({
     rel,
     css: readFileSync(join(root, rel), 'utf8'),
   }));

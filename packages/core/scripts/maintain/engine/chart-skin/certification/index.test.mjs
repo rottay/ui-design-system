@@ -68,7 +68,6 @@ const skins = [
 ];
 
 const entrypoints = [
-  { name: 'styles.css', path: join(cssRoot, 'facade/entrypoints/styles/index.css') },
   { name: 'facade/entrypoints/base/index.css', path: join(cssRoot, 'facade/entrypoints/base/index.css') },
 ];
 

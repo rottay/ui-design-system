@@ -12,8 +12,7 @@
  * bundled Tailwind/DaisyUI artifact, preflight included). Skin rules therefore
  * beat preflight and every framework utility by layer ownership, while still
  * yielding to a caller's inline `style` and to the tenant/personality layers
- * above. (The old "DELIBERATELY UNLAYERED" header described the pre-layer-
- * ownership wiring and was corrected in the K2-V pass.)
+ * above.
  *
  * DAISY DRAIN (K2-V): until this wave the root carried the DaisyUI `rating`
  * + `rating-{size}` classes and they were the DE-FACTO sizing owner -- the
