@@ -4828,7 +4828,7 @@
    "lane": "evidence-graph",
    "order": 4,
    "size": "S",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4845,7 +4845,9 @@
      "by": "claude-opus-5-evi-04",
      "note": "STATUS now publishes the audit 70-plan section-3 indicators as the readiness headline, sourced from gate artifacts and fail-closed: 11 rows bound one-to-one to registry.metrics (both directions), row 1 MEASURED live from the decisions-lit artifact, rows 2-11 NOT MEASURED naming the WO that owes each gate (packages/core/artifacts/quality/indicators/<id>/index.json). Work-order burn-down demoted and relabelled delivery throughput, NOT architectural readiness; North-star table removed as a duplicate publication. Family-acceptance section reads governance/manifest rollups live (0/255) and states the manifest is historical evidence, not runtime truth. Two false declared sources corrected in registry.metrics (files>800 claimed structure:check, which has no line-count law; decisions-lit still said n/a until WO-CON-03) and a new rule fails check when a metric source omits its owing WO. Fingerprint NOT re-sealed: the adjudicated plan mapping did not move, 82 execute source IDs preserved, roadmap:check green on the pinned 712c7352. Phase model kept: phase 0 open, 1/2A/2B/2C/3/4/5/6 locked with ownerGo pending, and STATUS now states why waves plus dependsOn govern execution. WO-CRA-23 verified already sealed. F-50 closed: CLAUDE.md cites 0 retired brand-theme compiler paths and docs-engineering DS README no longer defines modern as DaisyUI. 95/95 roadmap status tests green."
     }
-   ]
+   ],
+   "doneAt": "2026-09-06",
+   "evidence": "Scout-measured closure (K2.7 report /private/tmp/rottay-closures-scout.md, HEAD fc841757): STATUS publishes the 11 indicator rows bound 1:1 to registry.metrics (row1 measured 7/22, rows 2-11 honestly NOT MEASURED with owing WO); fingerprint seal verifies green on pinned 712c7352 after CAN-02 landing; phase model kept with written reason; WO-CRA-23 sealed; F-50 clean (0 retired-path citations). Two adjudications by kimi-k3-dt: (1) outcome fingerprint re-seal satisfied by verification+documented deliberate non-reseal (mapping unmoved, 82 source IDs preserved, empty re-seal would be ceremony); (2) README DaisyUI lines are negations/residual-layer statements, not Modern-as-DaisyUI — acceptance intent satisfied. roadmap:check green, 95/95 roadmap tests."
   },
   {
    "id": "WO-CON-01",
@@ -4869,6 +4871,11 @@
      "at": "2026-09-05 18:49",
      "by": "codex-root",
      "note": "DS lot committed as 3a9873f4fc069c4be8d7a043cc7decb098724e7f (9 paths). Closure dependency: docs-engineering hub + app-integration reconciliation preserved at refs/codex-safety/wave1/con-01-docs in docs-engineering (19e0ec03b2c31e1e138aa1f649a5f0faa0421f0d; blobs 3f38514, 75532d9). Land as a separate docs-engineering commit, then regenerate claim-exactness seal/artifacts once the engine-token audit is green. Do not mark WO-CON-01 done before that."
+    },
+    {
+     "at": "2026-09-06 18:24",
+     "by": "kimi-k3-dt",
+     "note": "2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): DS lot 3a9873f4 landed, docs commit 893bce77 on docs-engineering main, rule 20/20 with 121/121 subpaths, app wiring: bithire+evnto wired, platform DEFERRED by owner scope 2026-09-05. Closure BLOCKED on one item: claim-exactness seal regeneration is physically impossible while engine-token-audit exits 1 (declared themeCss.unreferencedSelectors=18 debt owned by WO-RET-02 + pre-existing fleet.inlinePaint tour/overlay ceiling=1). No text defines excluded-with-owner as green; no redefinition attempted. Unblock path: drain lot (RET-02 scope subset) -> audit exit 0 -> seal regen."
     }
    ]
   },
@@ -4894,6 +4901,11 @@
      "at": "2026-09-05 19:36",
      "by": "Codex/root",
      "note": "DS lot committed on main as 072f71cb5220469961579dba43c40505573ca0f2 after independent Fable PASS. Docs reconciliation was preserved at refs/codex-safety/wave1/con-02-docs bc2803e9d70bfb4da23941d097dbd72e79eeade9 (tenancy blob 048ab1140dcfa493a4d8571b99758c1bdf8a30d7) and committed in docs-engineering as 893bce770c470f71f8299d4419c92715e57365e5. WO-CON-02 remains in-progress until engine-token-audit is green and WO-GAT-07 documentationRevision/exactness-live are resealed in one verified DS lot; do not mark done before that evidence commit."
+    },
+    {
+     "at": "2026-09-06 18:25",
+     "by": "kimi-k3-dt",
+     "note": "2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): DS lot 072f71cb landed, docs 893bce77 on docs main, facade 15/15, codemod suite green. Closure BLOCKED on two items, both downstream of engine-token-audit exit 1 (declared 18-debt owned by WO-RET-02 + pre-existing inlinePaint ceiling=1): (1) audit green, (2) WO-GAT-07 documentationRevision/exactness-live reseal in one verified DS lot — reseal also needs docs pin advance 674474cb -> 8944a4f. No redefinition of green; unblock path: drain lot -> audit exit 0 -> combined seal lot."
     }
    ]
   },
@@ -4925,6 +4937,11 @@
      "at": "2026-09-06 00:58",
      "by": "codex/root",
      "note": "landed public server naming surface and generated supplier/inventory truth in 214192208c588231ef8283e4201a908ba2281d07 after independent Fable 5.1 PASS (/private/tmp/rottay-con-03-public-surface-fable.md); open before WO-CON-04: docs-engineering foundations/contracts + runtime/tenancy, then package scripts/gate registration and freshness guard in the shared-owner lot"
+    },
+    {
+     "at": "2026-09-06 18:25",
+     "by": "kimi-k3-dt",
+     "note": "2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): code+docs+probe all landed and measured green (decisions-lit 7/22 (+0/10 new) exit 0, door suites 57/57, own tests pass). REMAINING before close: package script + gate-manifest registration + freshness guard for decisions-lit — one small shared-owner lot, serialized AFTER WO-CAN-04 lands (gate manifest owner)."
     }
    ]
   },
