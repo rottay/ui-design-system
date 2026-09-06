@@ -8,17 +8,29 @@
  * component base and is in turn overridden by the structure and surface tiers;
  * the unlayered compiled tenant artifact wins over all of them.
  *
- * SCOPE ROOT is the wrapper `<div>`, which carries the pair
+ * TWO SCOPES. The FIELD scope is the wrapper `<div>`, which carries the pair
  * `ds-autocomplete ds-autocomplete--modern` + `data-part='root'` plus the
- * `data-size`/`data-status` state axes; every painted element is an IN-TREE
- * descendant with a `data-part` (AutoComplete never portals in either engine).
- * The `input` border reaches (0,4,0) via the two root classes (0,2,0) +
- * `[data-part='root']` + the descendant `[data-part]`.
+ * `data-size`/`data-status` state axes; the input, its wrapper and the clear
+ * button are in-tree descendants with a `data-part`. The suggestion listbox is
+ * PORTALED through the overlay kernel in this engine and is therefore NOT a
+ * descendant of the field: it carries its own
+ * `ds-autocomplete ds-autocomplete--modern ds-autocomplete-panel` scope, and
+ * every part inside it is addressed through that panel. The Rustic engine is
+ * unchanged and keeps its popup in the field subtree.
+ *
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered `*` border floor
+ * at (0,3,1), so a rule that sets a border COLOR must reach (0,4,0). A field
+ * part reaches it as the two root classes (0,2,0) + `[data-part='root']` + the
+ * descendant `[data-part]`; a part inside the panel reaches it the same way
+ * through `[data-part='dropdown']`. The panel ELEMENT has no descendant hop,
+ * so every rule whose target is the panel itself names `.ds-autocomplete-panel`
+ * to stand on the same floor.
  *
  * LANE-A PASS:
- * - The dropdown's position/z-index/padding/max-height and the clear button's
+ * - The dropdown's z-index/padding/max-height and the clear button's
  *   positioning lived inline (the clear button rode the PHYSICAL `right-2`
- *   utility -- RTL broke it; now `inset-inline-end`). Both are skin-owned.
+ *   utility -- RTL broke it; now `inset-inline-end`). Both are skin-owned; the
+ *   dropdown's placement itself belongs to the overlay kernel.
  * - The option rows' hover/active highlight used to ride the dead DaisyUI
  *   `active`/`disabled` class tokens (removed from the engine); the states
  *   are real rules below keyed on `data-active`/`data-disabled`, matching the
@@ -230,7 +242,7 @@
    (pre-flag 7): dropdown tier, not a magic 50. The dark-aware luminance step
    is its own layer directly above the fill (lane overlay register) -- the
    same surface/elevation register as the Select dropdown. */
-.ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] {
+.ds-autocomplete.ds-autocomplete--modern.ds-autocomplete-panel[data-part='dropdown'] {
   z-index: var(--ds-autocomplete-dropdown-z, var(--ds-z-index-dropdown));
   margin: 0;
   padding: var(--ds-spacing-1);
@@ -384,7 +396,7 @@
 
 /* Reduced motion: dropdown entrance and every state transition go quiet. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-autocomplete.ds-autocomplete--modern[data-part='dropdown'] {
+  .ds-autocomplete.ds-autocomplete--modern.ds-autocomplete-panel[data-part='dropdown'] {
     animation: none;
   }
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'],

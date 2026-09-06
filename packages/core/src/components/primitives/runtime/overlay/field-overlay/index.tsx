@@ -28,10 +28,11 @@
  * - `viewport` -- the panel owns the viewport (modal, drawer, sheet, toast
  *   region). No anchor measurement; the layer style carries the z band.
  *
- * `render: 'inline'` is an explicit, declared exception for a family whose
- * Modern skin still selects its panel as a DESCENDANT of the field root; it
- * keeps the panel in the DOM subtree while still joining the shared stack,
- * Escape route and z band. It is not a second overlay mechanism.
+ * `render: 'inline'` is an explicit, declared mode for the two families whose
+ * panel is in-tree BY DESIGN: Upload's preview scrim is a full-viewport child
+ * of the field it belongs to, and Message's stack is skin-placed in-tree on
+ * its own `--ds-z-message` tier. Both still join the shared stack, Escape
+ * route and z band. It is not a second overlay mechanism.
  */
 
 import React, {
@@ -85,8 +86,9 @@ export type FieldOverlaySurface = 'anchored' | 'viewport';
 
 /**
  * `auto` follows the positioning branch (top layer renders inline, measured
- * renders through the portal). `inline` is a declared exception for panels
- * whose skin still requires DOM descendancy.
+ * renders through the portal). `inline` is the declared mode for a panel that
+ * is in-tree by design (Upload's field-child scrim, Message's skin-placed
+ * stack).
  */
 export type FieldOverlayRenderMode = 'auto' | 'inline';
 
@@ -464,11 +466,14 @@ export interface FieldOverlayPanelProps_ {
 
 /**
  * Renders a panel where its resolved mode says it belongs: inline for the top
- * layer and for declared skin-descendant exceptions, otherwise through the
+ * layer and for the declared in-tree-by-design modes, otherwise through the
  * shared portal with the nested-chain boundary and the anchor's tenant/locale
  * lineage re-stamped around it.
  *
- * This is the ONLY place a DS overlay crosses the portal boundary.
+ * This is the only place a FAMILY-AUTHORED panel crosses the portal boundary.
+ * Page-blocking and instance-channel families (modal, sheet, dropdown, tour,
+ * popover, tooltip) render their own subtree through the kernel's `Portal`
+ * directly, so they cross it without passing through this component.
  */
 export function FieldOverlayPanel({
   overlay,

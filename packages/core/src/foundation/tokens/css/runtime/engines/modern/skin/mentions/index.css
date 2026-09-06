@@ -8,12 +8,24 @@
  * component base and is in turn overridden by the structure and surface tiers;
  * the unlayered compiled tenant artifact wins over all of them.
  *
- * SINGLE PAINT OWNER. SCOPE ROOT is the wrapper `<div>`, carrying the pair
- * `ds-mentions ds-mentions--modern` + `data-part='root'`; the textarea and its
- * suggestion popup are IN-TREE descendants with a `data-part` (Mentions never
- * portals -- the popup anchors to the textarea box, not the caret). The root
- * also owns `position: relative` (the popup's absolute anchor), drained from
- * the engine's former `relative` utility class.
+ * SINGLE PAINT OWNER, TWO SCOPES. The FIELD scope is the wrapper `<div>`,
+ * carrying the pair `ds-mentions ds-mentions--modern` + `data-part='root'`;
+ * the textarea is an in-tree descendant with a `data-part`. The suggestion
+ * popup is PORTALED through the overlay kernel in this engine -- it anchors to
+ * the textarea box, never the caret -- and is therefore NOT a descendant of
+ * the field: it carries its own
+ * `ds-mentions ds-mentions--modern ds-mentions-panel` scope, and every part
+ * inside it is addressed through that panel. The Rustic engine is unchanged
+ * and keeps its popup in the field subtree. The root still declares
+ * `position: relative`, drained from the engine's former `relative` utility
+ * class.
+ *
+ * SPECIFICITY (P-48): the Rottay artifact ships an unlayered `*` border floor
+ * at (0,3,1), so a rule that sets a border COLOR must reach (0,4,0). A part in
+ * either scope reaches it as the two root classes (0,2,0) + the scope's
+ * `[data-part]` + its own `[data-part]`. The panel ELEMENT has no descendant
+ * hop, so every rule whose target is the panel itself names `.ds-mentions-panel`
+ * to stand on the same floor.
  *
  * The textarea border reproduces `getStatusBorderColor()`'s 3-way chain
  * error > warning > default, read off the textarea's `data-status`. The
@@ -49,14 +61,12 @@
  *
  * GEOMETRY drained from the engine (K4-D): textarea inline-size/padding/
  * font-size (`--ds-input-md-*` channels) and the auto-size `resize: none`
- * (keyed on `data-autosize`); the popup's absolute placement (`position`,
- * `z-index`, logical inset/margin keyed on `data-placement`, list reset,
- * `--ds-dropdown-*` padding/max-block-size channels); the empty state's
- * padding/centering (former `p-3 text-center` utilities). Physical top/bottom
- * became LOGICAL `inset-block-start/end` + `margin-block-start/end` (RTL-safe
- * by construction; block direction is what top/bottom meant here). What stays
- * in JS: the auto-size `style.height`/`overflowY` measurements -- truly
- * dynamic per keystroke.
+ * (keyed on `data-autosize`); the popup's `z-index`, list reset,
+ * `--ds-dropdown-*` padding/max-block-size channels and its
+ * `data-placement`-keyed entrance offset; the empty state's padding/centering
+ * (former `p-3 text-center` utilities). The popup's placement itself belongs
+ * to the overlay kernel, not to this skin. What stays in JS: the auto-size
+ * `style.height`/`overflowY` measurements -- truly dynamic per keystroke.
  *
  * Values are transcribed verbatim from `engines/modern/index.tsx`.
  *
@@ -158,7 +168,7 @@
   border-color: var(--ds-input-readonly-border, var(--ds-color-border));
 }
 
-.ds-mentions.ds-mentions--modern[data-part='dropdown'] {
+.ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'] {
   /* z bridge (pre-flag 7): the legacy literal stays for the paint-ownership
      test pin and old engines; the channel wins and maps the layer to the
      governed popover scale. */
@@ -314,7 +324,7 @@
     color: GrayText;
     opacity: 1;
   }
-  .ds-mentions.ds-mentions--modern[data-part='dropdown'] {
+  .ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
@@ -339,7 +349,7 @@
   .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'] {
     transition-duration: 0.01ms;
   }
-  .ds-mentions.ds-mentions--modern[data-part='dropdown'] {
+  .ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'] {
     animation: none;
   }
   /* The progress cue rests as a static two-tone arc (Spinner grammar). */

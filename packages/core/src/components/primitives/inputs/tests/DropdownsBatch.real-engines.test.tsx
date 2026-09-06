@@ -20,14 +20,29 @@ import { renderWithEngine } from '@tests/support/engine';
 // identical at rest, in every open popup and in the photographed interaction
 // states; they cannot prove the STRUCTURAL contract this migration created:
 // that the paint lives in the skins (not inline), that every painting border
-// rule clears the P-48 tenant `*` floor at (0,4,0), that the PORTALED popup
-// trees (Select modern, TreeSelect rustic, Cascader rustic) are skinned by
-// STANDALONE selectors on their popup class rather than root-descendant rules
-// (which cannot match a body-mounted portal), that the removed imperative
-// hover/focus handlers now live as `:hover`/`:focus` rules carrying the same
-// literals, that per-mount keyframes were renamed into the skins, and that the
-// DOM carries no inline paint on the migrated parts -- closed or OPEN. This
-// mirrors FieldsBatch.real-engines.test.tsx.
+// rule clears the P-48 tenant `*` floor at (0,4,0), that every PORTALED popup
+// tree is skinned by STANDALONE selectors on its own panel/popup scope rather
+// than root-descendant rules (which cannot match a body-mounted portal), that
+// the removed imperative hover/focus handlers now live as `:hover`/`:focus`
+// rules carrying the same literals, that per-mount keyframes were renamed into
+// the skins, and that the DOM carries no inline paint on the migrated parts --
+// closed or OPEN. This mirrors FieldsBatch.real-engines.test.tsx.
+//
+// WO-CAN-05 moved the five Modern panels onto the overlay kernel, so the
+// posture table this file pins is now (identical to the one
+// DropdownsBatch.contract.test.tsx asserts on the DOM):
+//
+//   Select        modern kernel-portals, rustic in-tree
+//   TreeSelect    both portal, by two DIFFERENT doors
+//   Cascader      both portal, by two DIFFERENT doors
+//   AutoComplete  modern kernel-portals, rustic in-tree
+//   Mentions      modern kernel-portals, rustic in-tree
+//
+// A Modern panel is no longer a descendant of the field root, so its skin
+// addresses it through the standalone `.ds-<family>-panel` scope class the
+// engine stamps, and every painted part inside it still reaches (0,4,0) as
+// two root classes + the panel class (or the panel's own `[data-part]`) plus
+// the part's `[data-part]`.
 // ---------------------------------------------------------------------------
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -62,16 +77,103 @@ function cssRules(css: string): Array<{ selector: string; body: string }> {
   return rules;
 }
 
-/** The specificity "b" column (classes + attrs + pseudo-classes) for one comma-free selector. */
+/**
+ * Split a selector LIST on top-level commas only. `:is([data-part="root"],
+ * [data-part="dropdown"])` -- the two-door idiom a portaled panel needs so the
+ * same chrome paints in the field and inside the panel -- is one selector, not
+ * two; splitting inside it invents fragments that belong to no rule.
+ */
+function splitSelectorList(selector: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const ch of selector) {
+    if (ch === '(' || ch === '[') depth += 1;
+    else if (ch === ')' || ch === ']') depth -= 1;
+    if (ch === ',' && depth === 0) {
+      parts.push(current);
+      current = '';
+      continue;
+    }
+    current += ch;
+  }
+  parts.push(current);
+  return parts.map((part) => part.trim()).filter(Boolean);
+}
+
+/** Functional pseudo-classes whose specificity is the MAX of their arguments. */
+const ARG_MAX_PSEUDOS = new Set([':is', ':matches', ':-moz-any', ':-webkit-any', ':has', ':not']);
+
+/**
+ * The specificity "b" column (classes + attributes + pseudo-classes) for one
+ * comma-free selector, per the CSS selector-specificity rules rather than a
+ * token count: `:is()`/`:not()`/`:has()` contribute the MAX of their argument
+ * list, `:where()` contributes nothing, and a `::pseudo-element` lives in the
+ * "c" column and contributes nothing here.
+ */
 function bColumn(selector: string): number {
-  const classes = (selector.match(/\.[A-Za-z_-][\w-]*/g) || []).length;
-  const attrs = (selector.match(/\[[^\]]*\]/g) || []).length;
-  const pseudos = (selector.match(/(?<!:):[A-Za-z-]+/g) || []).length;
-  const notArgs = (selector.match(/:not\(([^)]*)\)/g) || []).reduce(
-    (n, frag) => n + bColumn(frag.slice(5, -1)),
-    0,
-  );
-  return classes + attrs + pseudos + notArgs;
+  let total = 0;
+  let i = 0;
+  while (i < selector.length) {
+    const ch = selector[i];
+    if (ch === '[') {
+      const end = selector.indexOf(']', i);
+      total += 1;
+      i = end === -1 ? selector.length : end + 1;
+      continue;
+    }
+    if (ch === '.') {
+      const klass = /^\.[A-Za-z_-][\w-]*/.exec(selector.slice(i));
+      if (klass) {
+        total += 1;
+        i += klass[0].length;
+        continue;
+      }
+      i += 1;
+      continue;
+    }
+    if (ch === ':') {
+      const isElement = selector[i + 1] === ':';
+      const head = /^:{1,2}([A-Za-z-]+)/.exec(selector.slice(i));
+      if (!head) {
+        i += 1;
+        continue;
+      }
+      let j = i + head[0].length;
+      let args: string | null = null;
+      if (selector[j] === '(') {
+        const start = j;
+        let depth = 0;
+        while (j < selector.length) {
+          if (selector[j] === '(') depth += 1;
+          else if (selector[j] === ')') {
+            depth -= 1;
+            if (depth === 0) {
+              j += 1;
+              break;
+            }
+          }
+          j += 1;
+        }
+        args = selector.slice(start + 1, j - 1);
+      }
+      const name = `:${head[1].toLowerCase()}`;
+      if (isElement) {
+        // pseudo-element: "c" column, contributes nothing to "b".
+      } else if (name === ':where') {
+        // :where() is specificity-zero by definition.
+      } else if (args !== null && ARG_MAX_PSEUDOS.has(name)) {
+        const inner = splitSelectorList(args).map(bColumn);
+        total += inner.length ? Math.max(...inner) : 0;
+      } else {
+        total += 1;
+      }
+      i = j;
+      continue;
+    }
+    i += 1;
+  }
+  return total;
 }
 
 /** True if the declaration block sets a border COLOR (paints), not a `none`/`0` reset. */
@@ -96,6 +198,37 @@ function paintsSurface(body: string): boolean {
   );
 }
 
+// The floor above is only as trustworthy as the model that measures it: a
+// checker that miscounts `:is()` invents offenders, and one that credits
+// `:where()` hides real ones. Both directions are pinned here.
+describe('dropdown skin specificity model', () => {
+  it('splits a selector list on top-level commas only', () => {
+    expect(splitSelectorList('.a, .b')).toEqual(['.a', '.b']);
+    expect(
+      splitSelectorList('.x:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"]'),
+    ).toEqual(['.x:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"]']);
+    expect(splitSelectorList('.x:is(.a, .b), .y')).toEqual(['.x:is(.a, .b)', '.y']);
+  });
+
+  it('scores :is()/:not()/:has() as the max of their arguments and :where() as zero', () => {
+    expect(bColumn('.a.b[data-part="x"]')).toBe(3);
+    // The two-door idiom keeps the floor: 2 classes + :is(...) + the part.
+    expect(
+      bColumn('.a.b:is([data-part="root"], [data-part="dropdown"]) [data-part="trigger"]'),
+    ).toBe(4);
+    expect(bColumn(':is(.a.b.c, .d)')).toBe(3);
+    expect(bColumn(':where(.a.b.c)')).toBe(0);
+    expect(bColumn(':not(.a[data-x])')).toBe(2);
+    expect(bColumn('[data-part="x"]::placeholder')).toBe(1);
+    expect(bColumn('[data-part="x"]:focus-visible')).toBe(2);
+  });
+
+  it('still refuses a selector that only reaches the floor through :where()', () => {
+    // :where() is specificity-zero, so it can never buy the 4th unit.
+    expect(bColumn('.a.b[data-part="x"]:where([data-open="true"])')).toBeLessThan(4);
+  });
+});
+
 describe.each(Object.keys(SKINS))('dropdown skin %s -- structural contract', (label) => {
   const rules = cssRules(SKINS[label]);
 
@@ -107,13 +240,13 @@ describe.each(Object.keys(SKINS))('dropdown skin %s -- structural contract', (la
     const offenders: string[] = [];
     for (const { selector, body } of rules) {
       if (!paintsBorder(body)) continue;
-      for (const part of selector.split(',')) {
-        if (bColumn(part) < 4) offenders.push(part.trim());
+      for (const part of splitSelectorList(selector)) {
+        if (bColumn(part) < 4) offenders.push(part);
       }
     }
     expect(
       offenders,
-      `these border rules sit below (0,4,0) and lose their color to the tenant * floor (P-48):\n${offenders.join('\n')}`,
+      `these border rules sit below (0,4,0) and lose their color to the tenant * floor (P-48).\nA portaled Modern panel reaches the floor the same way an in-tree part does: the two root classes + the standalone \`.ds-<family>-panel\` scope class (or the panel's own \`[data-part]\`) + the painted part's \`[data-part]\`.\n${offenders.join('\n')}`,
     ).toEqual([]);
   });
 
@@ -134,10 +267,24 @@ const NC: Record<string, string> = Object.fromEntries(
 
 // ---------------------------------------------------------------------------
 // Portal posture is a per-engine, per-component parameter, not symmetric within
-// a component. The THREE portaled popup trees must be painted by STANDALONE
-// selectors on their popup class; a root-descendant selector cannot reach a
-// body-mounted portal. The IN-TREE popups must NOT be reached that way.
+// a component. Every portaled popup tree must be painted by STANDALONE
+// selectors on its own panel/popup scope; a root-descendant selector cannot
+// reach a body-mounted portal. The IN-TREE popups must NOT be reached that way.
 // ---------------------------------------------------------------------------
+
+/** A root-descendant dropdown rule -- the shape an in-tree popup needs and a
+ *  portaled one can never match. Quote-agnostic: the skins use both. */
+const ROOT_DESCENDANT_DROPDOWN =
+  /\[data-part=["']root["']\][^,{]*\[data-part=["']dropdown["']\]/;
+
+/** The standalone scope class each kernel-portaled Modern panel carries. */
+const MODERN_PANEL_SCOPE: Record<string, RegExp> = {
+  'modern/tree-select': /\.ds-tree-select\.ds-tree-select--modern\.ds-tree-select-panel/,
+  'modern/cascader': /\.ds-cascader\.ds-cascader--modern\.ds-cascader-panel/,
+  'modern/autocomplete': /\.ds-autocomplete\.ds-autocomplete--modern\.ds-autocomplete-panel/,
+  'modern/mentions': /\.ds-mentions\.ds-mentions--modern\.ds-mentions-panel/,
+};
+
 describe('dropdown skins -- portal posture selector pins', () => {
   it('Select modern portals its custom dropdown: standalone `.ds-select-shell__dropdown`, never root-descendant', () => {
     expect(/\.ds-select-shell__dropdown\[data-part='dropdown'\]/.test(NC['modern/select'])).toBe(true);
@@ -154,8 +301,16 @@ describe('dropdown skins -- portal posture selector pins', () => {
     expect(/\[data-part='root'\][^,{]*\[data-part='dropdown'\]/.test(NC['rustic/tree-select'])).toBe(false);
   });
 
-  it('TreeSelect modern dropdown is in-tree: reached as a root descendant', () => {
-    expect(/\[data-part=["']root["']\][^,{]*\[data-part=["']dropdown["']\]/.test(NC['modern/tree-select'])).toBe(true);
+  it('TreeSelect modern kernel-portals (WO-CAN-05): standalone `.ds-tree-select-panel` scope, never root-descendant', () => {
+    expect(MODERN_PANEL_SCOPE['modern/tree-select'].test(NC['modern/tree-select'])).toBe(true);
+    expect(
+      /\.ds-tree-select\.ds-tree-select--modern\.ds-tree-select-panel\[data-part="dropdown"\]/.test(
+        NC['modern/tree-select'],
+      ),
+    ).toBe(true);
+    expect(ROOT_DESCENDANT_DROPDOWN.test(NC['modern/tree-select'])).toBe(false);
+    // Rustic's self-portal class stays out of the Modern skin: two doors, two
+    // anatomies.
     expect(/\.rottay-treeselect__dropdown/.test(NC['modern/tree-select'])).toBe(false);
   });
 
@@ -164,12 +319,34 @@ describe('dropdown skins -- portal posture selector pins', () => {
     expect(/\[data-part='root'\][^,{]*\[data-part='dropdown'\]/.test(NC['rustic/cascader'])).toBe(false);
   });
 
-  it('Cascader modern dropdown is in-tree: reached as a root descendant, no standalone popup class', () => {
-    expect(/\[data-part=["']root["']\][^,{]*\[data-part=["']dropdown["']\]/.test(NC['modern/cascader'])).toBe(true);
+  it('Cascader modern kernel-portals: standalone `.ds-cascader-panel` scope, never root-descendant, trigger chrome addresses both doors', () => {
+    expect(MODERN_PANEL_SCOPE['modern/cascader'].test(NC['modern/cascader'])).toBe(true);
+    expect(
+      /\.ds-cascader\.ds-cascader--modern\.ds-cascader-panel\[data-part="dropdown"\]/.test(
+        NC['modern/cascader'],
+      ),
+    ).toBe(true);
+    expect(ROOT_DESCENDANT_DROPDOWN.test(NC['modern/cascader'])).toBe(false);
     expect(/\.rottay-cascader__dropdown/.test(NC['modern/cascader'])).toBe(false);
+    // Cascader renders its trigger chrome BOTH in the field and inside the
+    // portaled panel, so the shared rules select both doors in one `:is()`
+    // rather than duplicating the block.
+    expect(
+      /:is\(\[data-part="root"\],\s*\[data-part="dropdown"\]\)/.test(NC['modern/cascader']),
+    ).toBe(true);
   });
 
-  it('AutoComplete + Mentions never portal: the dropdown is always a root descendant, no popup class', () => {
+  it('AutoComplete + Mentions modern kernel-portal, rustic stays in-tree', () => {
+    for (const label of ['modern/autocomplete', 'modern/mentions']) {
+      expect(MODERN_PANEL_SCOPE[label].test(NC[label]), `${label} panel scope`).toBe(true);
+      expect(ROOT_DESCENDANT_DROPDOWN.test(NC[label]), `${label} root-descendant`).toBe(false);
+    }
+    for (const label of ['rustic/autocomplete', 'rustic/mentions']) {
+      expect(ROOT_DESCENDANT_DROPDOWN.test(NC[label]), `${label} root-descendant`).toBe(true);
+    }
+    // Neither family adopted a rustic-style `__dropdown`/`__popup` popup class
+    // in either engine: the Modern door is the panel scope class, the Rustic
+    // popup is still the field's own descendant.
     for (const label of ['modern/autocomplete', 'rustic/autocomplete', 'modern/mentions', 'rustic/mentions']) {
       expect(/__dropdown|__popup/.test(NC[label]), label).toBe(false);
     }
@@ -186,8 +363,8 @@ describe('dropdown skins -- Select container is left to the field-filters-panel'
     it(`${label}: no rule paints a bare container -- every selector's target is a non-root data-part`, () => {
       const offenders: string[] = [];
       for (const { selector, body } of cssRules(SKINS[label])) {
-        for (const part of selector.split(',')) {
-          const p = part.trim();
+        for (const part of splitSelectorList(selector)) {
+          const p = part;
           // the RIGHTMOST compound is the painted target; the container is the
           // root part -- a target ending at [data-part='root'] paints the box
           // the FFP owns.
@@ -255,8 +432,10 @@ describe('dropdown skins -- interaction literal pins', () => {
 
 // ---------------------------------------------------------------------------
 // The DOM carries the data-part contract, not the paint -- closed AND open, on
-// every part the migration moved, both engines. Portaled popups render under
-// document.body, so the open-state probe searches `document`, not the container.
+// every part the migration moved, both engines. A popup that left the field
+// subtree is never found by walking the container: it is resolved the way a
+// consumer resolves it, through the trigger's `aria-controls` and the kernel's
+// own portal root and layer stamp.
 // ---------------------------------------------------------------------------
 const ENGINES = ['modern', 'rustic'] as const;
 
@@ -270,6 +449,67 @@ function expectNoPaint(el: HTMLElement, label: string) {
   expect(el.style.color, `${label}: color inline`).toBe('');
   expect(el.style.boxShadow, `${label}: box-shadow inline`).toBe('');
   expect(el.style.outline, `${label}: outline inline`).toBe('');
+}
+
+/** Where a family's open panel lives, per engine. Two portal doors, plus in-tree. */
+type PanelDoor = 'kernel-portal' | 'self-portal' | 'in-tree';
+
+/**
+ * The per-family, per-engine posture WO-CAN-05 left behind -- the same table
+ * DropdownsBatch.contract.test.tsx pins on the DOM. Modern panels cross the
+ * overlay kernel's boundary; Rustic either portals itself
+ * (`createPortal(document.body)`, no kernel ancestor, no layer stamp) or keeps
+ * the popup inside the field.
+ */
+const PANEL_DOOR: Record<string, Record<(typeof ENGINES)[number], PanelDoor>> = {
+  'tree-select': { modern: 'kernel-portal', rustic: 'self-portal' },
+  cascader: { modern: 'kernel-portal', rustic: 'self-portal' },
+  'auto-complete': { modern: 'kernel-portal', rustic: 'in-tree' },
+  mentions: { modern: 'kernel-portal', rustic: 'in-tree' },
+};
+
+/** The overlay kernel's shared portal root -- the only door a Modern panel uses. */
+const KERNEL_PORTAL_ROOT = '[data-rottay-portal]';
+
+/**
+ * Resolve the OPEN panel through its public door and prove the door on the way:
+ * a kernel-portaled panel is reached from the trigger's `aria-controls`, sits
+ * outside the render container, inside the kernel portal root and carries the
+ * layer stamp; a self-portaled panel is outside the container with neither;
+ * an in-tree panel is still a descendant of the field.
+ */
+async function resolveOpenPanel(
+  container: HTMLElement,
+  owner: HTMLElement,
+  door: PanelDoor,
+): Promise<HTMLElement> {
+  await waitFor(() => {
+    expect(document.querySelectorAll('[data-part="dropdown"]').length).toBeGreaterThan(0);
+  });
+
+  if (door === 'kernel-portal') {
+    const panelId = owner.getAttribute('aria-controls');
+    expect(panelId, 'the trigger must still own its panel through aria-controls').toBeTruthy();
+    const panel = document.getElementById(panelId as string);
+    expect(panel, `no panel with id ${panelId}`).not.toBeNull();
+    const resolved = panel as HTMLElement;
+    expect(resolved.getAttribute('data-part')).toBe('dropdown');
+    expect(container.contains(resolved)).toBe(false);
+    expect(resolved.closest(KERNEL_PORTAL_ROOT)).not.toBeNull();
+    expect(resolved.getAttribute('data-overlay-layer')).toMatch(/^ds-overlay-/);
+    expect(resolved.getAttribute('data-overlay-kind')).toBe('dropdown');
+    return resolved;
+  }
+
+  const panel = document.querySelector('[data-part="dropdown"]') as HTMLElement;
+  if (door === 'self-portal') {
+    expect(container.contains(panel)).toBe(false);
+    expect(panel.closest(KERNEL_PORTAL_ROOT)).toBeNull();
+    expect(panel.getAttribute('data-overlay-layer')).toBeNull();
+  } else {
+    expect(container.contains(panel)).toBe(true);
+  }
+  return panel;
 }
 
 const SELECT_OPTIONS = [
@@ -312,21 +552,27 @@ describe.each(ENGINES)('dropdown DOM carries the contract, not the paint -- %s e
   it('TreeSelect trigger + open tree node paint nothing inline', async () => {
     const { container } = renderWithEngine(<TreeSelect treeData={TREE_DATA} onChange={vi.fn()} />, engine);
     await waitFor(() => expect(container.querySelector('[data-part="trigger"]')).not.toBeNull());
-    expectNoPaint(container.querySelector('[data-part="trigger"]') as HTMLElement, `treeselect ${engine} trigger`);
+    const trigger = container.querySelector('[data-part="trigger"]') as HTMLElement;
+    expectNoPaint(trigger, `treeselect ${engine} trigger`);
 
-    fireEvent.click(container.querySelector('[data-part="trigger"]') as HTMLElement);
-    await waitFor(() => expect(document.querySelector('[data-part="dropdown"]')).not.toBeNull());
-    expectNoPaint(document.querySelector('[data-part="option"]') as HTMLElement, `treeselect ${engine} option`);
+    fireEvent.click(trigger);
+    const panel = await resolveOpenPanel(container, trigger, PANEL_DOOR['tree-select'][engine]);
+    expectNoPaint(panel, `treeselect ${engine} panel`);
+    expect(panel.querySelectorAll('[data-part="option"]').length).toBeGreaterThan(0);
+    expectNoPaint(panel.querySelector('[data-part="option"]') as HTMLElement, `treeselect ${engine} option`);
   });
 
   it('Cascader trigger + open menu option paint nothing inline', async () => {
     const { container } = renderWithEngine(<Cascader options={CASCADER_OPTIONS} onChange={vi.fn()} />, engine);
     await waitFor(() => expect(container.querySelector('[data-part="trigger"]')).not.toBeNull());
-    expectNoPaint(container.querySelector('[data-part="trigger"]') as HTMLElement, `cascader ${engine} trigger`);
+    const trigger = container.querySelector('[data-part="trigger"]') as HTMLElement;
+    expectNoPaint(trigger, `cascader ${engine} trigger`);
 
-    fireEvent.click(container.querySelector('[data-part="trigger"]') as HTMLElement);
-    await waitFor(() => expect(document.querySelector('[data-part="menu-column"]')).not.toBeNull());
-    expectNoPaint(document.querySelector('[data-part="option"]') as HTMLElement, `cascader ${engine} option`);
+    fireEvent.click(trigger);
+    const panel = await resolveOpenPanel(container, trigger, PANEL_DOOR.cascader[engine]);
+    expectNoPaint(panel, `cascader ${engine} panel`);
+    await waitFor(() => expect(panel.querySelector('[data-part="menu-column"]')).not.toBeNull());
+    expectNoPaint(panel.querySelector('[data-part="option"]') as HTMLElement, `cascader ${engine} option`);
   });
 
   it('AutoComplete input + open option paint nothing inline', async () => {
@@ -335,9 +581,13 @@ describe.each(ENGINES)('dropdown DOM carries the contract, not the paint -- %s e
     const input = container.querySelector('[data-part="input"]') as HTMLElement;
     expectNoPaint(input, `autocomplete ${engine} input`);
 
+    // The combobox opens on focus in both engines; only Modern's listbox left
+    // the field subtree.
     fireEvent.focus(input);
-    await waitFor(() => expect(container.querySelector('[data-part="dropdown"]')).not.toBeNull());
-    expectNoPaint(container.querySelector('[data-part="option"]') as HTMLElement, `autocomplete ${engine} option`);
+    const panel = await resolveOpenPanel(container, input, PANEL_DOOR['auto-complete'][engine]);
+    expectNoPaint(panel, `autocomplete ${engine} panel`);
+    expect(panel.querySelectorAll('[data-part="option"]').length).toBeGreaterThan(0);
+    expectNoPaint(panel.querySelector('[data-part="option"]') as HTMLElement, `autocomplete ${engine} option`);
   });
 
   it('Mentions textarea + open option paint nothing inline', async () => {
@@ -346,8 +596,11 @@ describe.each(ENGINES)('dropdown DOM carries the contract, not the paint -- %s e
     const textarea = container.querySelector('[data-part="textarea"]') as HTMLTextAreaElement;
     expectNoPaint(textarea, `mentions ${engine} textarea`);
 
+    // Mentions only opens on an active `@mention` session, never on focus.
     fireEvent.change(textarea, { target: { value: '@a' } });
-    await waitFor(() => expect(container.querySelector('[data-part="dropdown"]')).not.toBeNull());
-    expectNoPaint(container.querySelector('[data-part="option"]') as HTMLElement, `mentions ${engine} option`);
+    const panel = await resolveOpenPanel(container, textarea, PANEL_DOOR.mentions[engine]);
+    expectNoPaint(panel, `mentions ${engine} panel`);
+    expect(panel.querySelectorAll('[data-part="option"]').length).toBeGreaterThan(0);
+    expectNoPaint(panel.querySelector('[data-part="option"]') as HTMLElement, `mentions ${engine} option`);
   });
 });
