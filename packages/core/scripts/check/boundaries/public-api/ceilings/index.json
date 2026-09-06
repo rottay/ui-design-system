@@ -178,7 +178,7 @@
     },
     "./primitives/message": {
       "maxReachableModules": 54,
-      "maxSourceBytes": 214867
+      "maxSourceBytes": 256096
     },
     "./primitives/modal": {
       "maxReachableModules": 31,
@@ -333,6 +333,6 @@
       "maxSourceBytes": 41392
     }
   },
-  "lastMove": "`./runtime/visual-authority` reaches the canonical CSS value guard. Its admission calls `emitTenantArtifactCss`; the sole declaration assembler underneath it is `emitDeclarations`, which admits through `compilers/kernel/foundation/css/value-safety`. That guard refuses any compiled channel whose value would terminate its declaration, close the rule or leave the `<style>` element, and it is what stops an authored theme string from closing a preview rule and opening a `body` rule in the host document; `Theme` declares most string leaves open, so a compiled channel carries whatever its author wrote. maxReachableModules 8 -> 9: the added module is `compilers/kernel/foundation/css/value-safety/index.ts`. maxSourceBytes 55290 -> 62120, exactly +6830 = +6303 (value-safety) +527 (emission/index.ts 5750 -> 6277, which takes the import and states why the boundary decides safety). The anchor is exact, not slack: the measured graph is 9 modules and 62120 bytes over the same 9 files.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 1 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "`./primitives/message` enrolls in the ONE overlay kernel (WO-CAN-05, 24/24 families). Modern Message calls `useFieldOverlay({ kind: 'toast', surface: 'viewport', render: 'inline' })` for stack identity alone -- it never anchors, never positions, never portals, and it consumes only the layer data-attributes -- but `useFieldOverlay` calls `useOverlayPosition` and `usePortalScope` unconditionally, as the rules of hooks require, so the kernel's static module set enters the subpath graph whole. maxReachableModules stays 54: the measured graph goes 47 -> 54 and lands exactly on the anchored ceiling, so that dimension does not move. maxSourceBytes 214867 -> 256096, exactly +69532 = +68725 over the seven added modules (positioning 19134, field-overlay 18409, layer-stack 13254, portal-scope 7722, portal 5909, top-layer-host 3027, foundation/portal-theme 1270) +807 (feedback/message/engines/modern/index.tsx 25519 -> 26326, which takes the kernel and drops the private stacking). Splitting `FieldOverlayPanel` out of the kernel module would return only portal + top-layer-host (8936 bytes, still 32293 over the old ceiling); shedding the rest means Message leaving the single contract for a second overlay hook, which is the architecture WO-CAN-05 removed. The anchor is exact, not slack: the measured graph is 54 modules and 256096 bytes.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

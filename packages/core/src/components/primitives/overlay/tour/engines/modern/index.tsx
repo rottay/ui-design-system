@@ -218,8 +218,7 @@ const ModernTourChrome = ({
     restoreFocus: false,
     onDismiss: handleTourEscape,
   });
-  const { strategy, panelProps, layerProps } = overlay;
-  const positionStyle = panelProps.style;
+  const { strategy, positionStyle, layerProps } = overlay;
 
   const maskStyle = typeof mask === 'object' ? mask.style : {};
   // Written as a statement, not a ternary: `mask.color : <default>` reads as an
