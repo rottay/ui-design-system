@@ -49,7 +49,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 79/155 work orders done (51%)
+## Work-order burn-down — 80/155 work orders done (52%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -61,7 +61,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | [tokens](./tokens.md) | 10 | 0 | 1 | 11 |
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
-| [canon-close](./canon-close.md) | 3 | 3 | 0 | 6 |
+| [canon-close](./canon-close.md) | 4 | 2 | 0 | 6 |
 | [consumer-contract](./consumer-contract.md) | 0 | 3 | 2 | 5 |
 | [catalog-door](./catalog-door.md) | 1 | 0 | 2 | 3 |
 | [derivation](./derivation.md) | 0 | 0 | 7 | 7 |
@@ -78,7 +78,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | A · The apps can build | not reached | WO-CON-04, WO-CON-05 | WO-CON-04, WO-CON-05 | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2 · Architecture validated in one vertical cut | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | Decisions -> derivation -> channels -> skin proven end to end on one family; the autonomous APP and DS lanes start. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography. |
-| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 51 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 50 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -106,7 +106,6 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | --- | --- | --- | --- | --- |
 | WO-CAN-02 | Honest verification: pre/post-build gate manifest, mandatory drills, fail-open counters, tautological tests removed | claude-opus-5-can-02 | 2026-09-05 | (no entries — log via `progress`) |
 | WO-CAN-04 | Remove the parallel customization paths | claude-opus-5-can-04 | 2026-09-05 | (no entries — log via `progress`) |
-| WO-CAN-06 | Engine policy: Modern is the only admitted engine, structure stays N-engine, Classic/Rustic frozen and fail-closed | claude-opus-5-can-06 | 2026-09-05 | (no entries — log via `progress`) |
 | WO-EVI-04 | Roadmap and documentation truth: STATUS indicators, fingerprint re-seal, Modern Rescue sealed, docs regenerated | claude-opus-5-evi-04 | 2026-09-06 | 2026-09-06 01:36 — STATUS now publishes the audit 70-plan section-3 indicators as the readiness headline, sourced from gate artifacts and fail-closed: 11 rows bound one-to-one to registry.metrics (both directions), row 1 MEASURED live from the decisions-lit artifact, rows 2-11 NOT MEASURED naming the WO that owes each gate (packages/core/artifacts/quality/indicators/<id>/index.json). Work-order burn-down demoted and relabelled delivery throughput, NOT architectural readiness; North-star table removed as a duplicate publication. Family-acceptance section reads governance/manifest rollups live (0/255) and states the manifest is historical evidence, not runtime truth. Two false declared sources corrected in registry.metrics (files>800 claimed structure:check, which has no line-count law; decisions-lit still said n/a until WO-CON-03) and a new rule fails check when a metric source omits its owing WO. Fingerprint NOT re-sealed: the adjudicated plan mapping did not move, 82 execute source IDs preserved, roadmap:check green on the pinned 712c7352. Phase model kept: phase 0 open, 1/2A/2B/2C/3/4/5/6 locked with ownerGo pending, and STATUS now states why waves plus dependsOn govern execution. WO-CRA-23 verified already sealed. F-50 closed: CLAUDE.md cites 0 retired brand-theme compiler paths and docs-engineering DS README no longer defines modern as DaisyUI. 95/95 roadmap status tests green. |
 | WO-CON-01 | Sanctioned import surface: consumer contract document and lint rule | claude-opus-5-con-01 | 2026-09-05 | 2026-09-05 18:49 — DS lot committed as 3a9873f4fc069c4be8d7a043cc7decb098724e7f (9 paths). Closure dependency: docs-engineering hub + app-integration reconciliation preserved at refs/codex-safety/wave1/con-01-docs in docs-engineering (19e0ec03b2c31e1e138aa1f649a5f0faa0421f0d; blobs 3f38514, 75532d9). Land as a separate docs-engineering commit, then regenerate claim-exactness seal/artifacts once the engine-token audit is green. Do not mark WO-CON-01 done before that. |
 | WO-CON-02 | mountTenantTheme facade with the final signature over the current pipeline | claude-opus-5-con-02 | 2026-09-05 | 2026-09-05 19:36 — DS lot committed on main as 072f71cb5220469961579dba43c40505573ca0f2 after independent Fable PASS. Docs reconciliation was preserved at refs/codex-safety/wave1/con-02-docs bc2803e9d70bfb4da23941d097dbd72e79eeade9 (tenancy blob 048ab1140dcfa493a4d8571b99758c1bdf8a30d7) and committed in docs-engineering as 893bce770c470f71f8299d4419c92715e57365e5. WO-CON-02 remains in-progress until engine-token-audit is green and WO-GAT-07 documentationRevision/exactness-live are resealed in one verified DS lot; do not mark done before that evidence commit. |
@@ -137,7 +136,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | WO-ENG-25 | dependencies: WO-DER-04, WO-INV-05; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
 | WO-CRA-19 | phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
 | WO-CRA-18 | dependencies: WO-FAM-09; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
-| WO-ENG-24 | dependencies: WO-CAN-06; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
+| WO-ENG-24 | phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-GAT-10 | dependencies: WO-RET-01; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-CRA-20 | dependencies: WO-RET-01; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-CRA-21 | dependencies: WO-RET-01; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
@@ -147,7 +146,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | WO-GAT-12 | dependencies: WO-EVI-01, WO-RET-03; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-SKIN-08 | dependencies: WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-CAT-02 | dependencies: WO-CAN-02, WO-CON-03 |
-| WO-CAT-03 | dependencies: WO-CAT-02, WO-CAN-06 |
+| WO-CAT-03 | dependencies: WO-CAT-02 |
 | WO-DER-01 | dependencies: WO-CAT-03 |
 | WO-DER-02 | dependencies: WO-DER-01 |
 | WO-DER-03 | dependencies: WO-DER-01 |
@@ -277,4 +276,5 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | WO-CAN-01 | 2026-09-05 | C4 certified on committed baseline through 58-path governance residual closure: 820 stale references across 53 governance files reduced to 0; independent Claude Fable 5.1 audit PASS, matrix 115/115 blocking gates with 1 declared SKIP, Modern Rescue 48/48, roadmap 79/79; report /private/tmp/rottay-wo-can-01-fable.md SHA256 13219027e817fa46da57e43f4ee9f74f66ab0362a7598cdd34571ea071294842. |
 | WO-CAN-03 | 2026-09-06 | Closed by 79ffd71711c78f04a028f6f73cdeb44b89b6d8f0; exact 123-path source+derived lot; independent Kimi K3 PASS at /private/tmp/rottay-can03-exact-kimi-k3.md; 94/116 candidate versus 93/115 base, identical 22-red historical set, motion drill 6/6, zero new real reds; owner keeps radius=none as the recommended flush-header treatment. |
 | WO-CAN-05 | 2026-09-05 | CAN-05 complete: ui commits b1134dded071946f336271d1c962a1413ea98446, 5d189f9fedf506d2821203ce72ae394b34bec255, 188b38e75166a164c0adbd430eaba6b5282bb30d; docs commit aa0f24e3913925d9cb47828628543b7e043b9845; independent Fable 5.1 PASS reports /private/tmp/rottay-wo-can-05-final-fable.md, /private/tmp/rottay-can-05-source-close-fable.md, /private/tmp/rottay-can-05-docs-fable.md, /private/tmp/rottay-can-05-derived-fable.md |
+| WO-CAN-06 | 2026-09-06 | Landed f7cb572e on main (99 paths, tree 7e288b0a, sole parent 706d4c644). Independent K3 audit: round 1 HOLD on 3 stale derived cascade artifacts, fixed by coordinator regeneration in mandated order (extraction-fanout-producers); round 2 delta audit PASS on exact candidate refs/kimi-k3/candidates/can-06-poststack-v2 (5898570d) with all freshness and artifact-consuming gates green, zero collateral gate movement. |
 | WO-CAT-01 | 2026-09-05 | Published roadmap/kit-2026-09.md (SHA256 3a18b42a0101c44cf35857e2bdaca15eb1a5320c2d5ca3c53256674257b2b3d7; body digest 0f25b32c6d0842b20736a514d9794e6294a8b13f718aa4de9d368ca9bbd8e09c); independent Claude Fable 5.1 re-audit PASS in /private/tmp/rottay-wo-cat-01-fable-reaudit.md (SHA256 67637f13132e8fc1fae1cbf932f4220d134d1f5b8135d3c6e8a5fcfca246de7e). |

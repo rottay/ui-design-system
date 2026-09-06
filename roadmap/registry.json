@@ -4031,7 +4031,7 @@
    "lane": "canon-close",
    "order": 6,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4042,7 +4042,9 @@
    "notes": "wave 1; closes F-14, F-28, F-29, F-65, F-100, F-15, F-79; supersedes: WO-ENG-24",
    "claimedBy": "claude-opus-5-can-06",
    "claimedAt": "2026-09-05",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-06",
+   "evidence": "Landed f7cb572e on main (99 paths, tree 7e288b0a, sole parent 706d4c644). Independent K3 audit: round 1 HOLD on 3 stale derived cascade artifacts, fixed by coordinator regeneration in mandated order (extraction-fanout-producers); round 2 delta audit PASS on exact candidate refs/kimi-k3/candidates/can-06-poststack-v2 (5898570d) with all freshness and artifact-consuming gates green, zero collateral gate movement."
   },
   {
    "id": "WO-CAT-01",
