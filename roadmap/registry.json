@@ -3935,7 +3935,7 @@
    "lane": "canon-close",
    "order": 2,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -3944,8 +3944,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-23, F-49, F-57, F-97, F-103, F-104, F-107",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "claude-opus-5-can-02",
+   "claimedAt": "2026-09-05",
    "progressLog": []
   },
   {
@@ -3954,7 +3954,7 @@
    "lane": "canon-close",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -3963,8 +3963,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-16, F-95, F-62, F-64",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "claude-opus-5-can-03",
+   "claimedAt": "2026-09-05",
    "progressLog": []
   },
   {
@@ -3973,7 +3973,7 @@
    "lane": "canon-close",
    "order": 4,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -3982,8 +3982,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-18, F-56, F-17",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "claude-opus-5-can-04",
+   "claimedAt": "2026-09-05",
    "progressLog": []
   },
   {
@@ -3992,7 +3992,7 @@
    "lane": "canon-close",
    "order": 5,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4001,9 +4001,27 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-21; supersedes: WO-CRA-19",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "claude-opus-5-can-05",
+   "claimedAt": "2026-09-05",
+   "progressLog": [
+    {
+     "at": "2026-09-05 20:49",
+     "by": "codex/root",
+     "note": "landed: overlay kernel + single z-index scale (commit b1134dded071946f336271d1c962a1413ea98446). open before done/milestone A: correct adoption-test/kernel ownership wording, docs-engineering foundations/hooks + runtime/engines + foundations/tokens; shared engine-token audit remains red at themeCss.unreferencedSelectors=18 from WO-CAN-02's honest counter pending WO-RET-02, not a CAN-05 regression"
+    },
+    {
+     "at": "2026-09-05 21:10",
+     "by": "codex/root",
+     "note": "post-commit clean-HEAD closure: prebuild remains red until CAN-05 derived outputs land — hooks contract regeneration, pack inventory +3 field-overlay outputs, and reviewed ./primitives/message source-graph budget/architecture decision. Opus closure active; no WO completion or CON-04 claim before green canonical build."
+    },
+    {
+     "at": "2026-09-05 23:38",
+     "by": "codex/root",
+     "note": "closure audited and locally landed: kernel adoption b1134dded071946f336271d1c962a1413ea98446; source truth/border floor 5d189f9fedf506d2821203ce72ae394b34bec255; derived outputs/Tour 188b38e75166a164c0adbd430eaba6b5282bb30d; docs-engineering aa0f24e3913925d9cb47828628543b7e043b9845. Reviewed ./primitives/message ceiling 214867 -> 256096 for the single overlay kernel; six z-index tokens promoted; pack inventory 7244 -> 7247 entries and 41936857 -> 41975727 bytes. Compiler evidence uses pinned ./node_modules/.bin/tsc 5.9.3; network npx tsc is not authoritative."
+    }
+   ],
+   "doneAt": "2026-09-05",
+   "evidence": "CAN-05 complete: ui commits b1134dded071946f336271d1c962a1413ea98446, 5d189f9fedf506d2821203ce72ae394b34bec255, 188b38e75166a164c0adbd430eaba6b5282bb30d; docs commit aa0f24e3913925d9cb47828628543b7e043b9845; independent Fable 5.1 PASS reports /private/tmp/rottay-wo-can-05-final-fable.md, /private/tmp/rottay-can-05-source-close-fable.md, /private/tmp/rottay-can-05-docs-fable.md, /private/tmp/rottay-can-05-derived-fable.md"
   },
   {
    "id": "WO-CAN-06",
@@ -4011,7 +4029,7 @@
    "lane": "canon-close",
    "order": 6,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4020,8 +4038,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-14, F-28, F-29, F-65, F-100, F-15, F-79; supersedes: WO-ENG-24",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "claude-opus-5-can-06",
+   "claimedAt": "2026-09-05",
    "progressLog": []
   },
   {
@@ -4823,7 +4841,7 @@
    "lane": "consumer-contract",
    "order": 1,
    "size": "S",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4832,9 +4850,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1 (milestone A); closes n/a (enables WO-RET-01)",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "claude-opus-5-con-01",
+   "claimedAt": "2026-09-05",
+   "progressLog": [
+    {
+     "at": "2026-09-05 18:49",
+     "by": "codex-root",
+     "note": "DS lot committed as 3a9873f4fc069c4be8d7a043cc7decb098724e7f (9 paths). Closure dependency: docs-engineering hub + app-integration reconciliation preserved at refs/codex-safety/wave1/con-01-docs in docs-engineering (19e0ec03b2c31e1e138aa1f649a5f0faa0421f0d; blobs 3f38514, 75532d9). Land as a separate docs-engineering commit, then regenerate claim-exactness seal/artifacts once the engine-token audit is green. Do not mark WO-CON-01 done before that."
+    }
+   ]
   },
   {
    "id": "WO-CON-02",
@@ -4842,7 +4866,7 @@
    "lane": "consumer-contract",
    "order": 2,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4851,9 +4875,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1 (milestone A); closes n/a (dated facade, deleted by WO-EMI-02)",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "claude-opus-5-con-02",
+   "claimedAt": "2026-09-05",
+   "progressLog": [
+    {
+     "at": "2026-09-05 19:36",
+     "by": "Codex/root",
+     "note": "DS lot committed on main as 072f71cb5220469961579dba43c40505573ca0f2 after independent Fable PASS. Docs reconciliation was preserved at refs/codex-safety/wave1/con-02-docs bc2803e9d70bfb4da23941d097dbd72e79eeade9 (tenancy blob 048ab1140dcfa493a4d8571b99758c1bdf8a30d7) and committed in docs-engineering as 893bce770c470f71f8299d4419c92715e57365e5. WO-CON-02 remains in-progress until engine-token-audit is green and WO-GAT-07 documentationRevision/exactness-live are resealed in one verified DS lot; do not mark done before that evidence commit."
+    }
+   ]
   },
   {
    "id": "WO-CON-03",
@@ -4861,7 +4891,7 @@
    "lane": "consumer-contract",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAN-01",
     "WO-CAT-01"
@@ -4871,9 +4901,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1 (milestone A); closes F-06 (partial; dated adapter, deleted by WO-DER-06/WO-CAT-02)",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "claude-opus-5-con-03",
+   "claimedAt": "2026-09-05",
+   "progressLog": [
+    {
+     "at": "2026-09-05 20:36",
+     "by": "codex/root",
+     "note": "landed: v2 door + decisions-lit (commit 722fd05bfd692b22d1866cb3ffd1a4868b988752). open before WO-CON-04: public naming surface (theme index + server entrypoint), docs-engineering foundations/contracts + runtime/tenancy chapters; package scripts + gate registration before milestone A"
+    }
+   ]
   },
   {
    "id": "WO-CON-04",

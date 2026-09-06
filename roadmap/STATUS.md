@@ -4,7 +4,7 @@
 
 > **Phase scope**: Phase 0 open; Phases 1, 2A, 2B, 2C, 3, 4, 5, 6 locked, ownerGo pending; 0/128 findings deferred to later phases. The burn-down figures below certify only the open phase's adjudicated scope; later functional waves remain owner-gated.
 
-## Burn-down — 77/155 done (50%)
+## Burn-down — 78/155 done (50%)
 
 | Lane | Done | In progress | Todo | Total |
 | --- | --- | --- | --- | --- |
@@ -14,8 +14,8 @@
 | [tokens](./tokens.md) | 10 | 0 | 1 | 11 |
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
-| [canon-close](./canon-close.md) | 1 | 0 | 5 | 6 |
-| [consumer-contract](./consumer-contract.md) | 0 | 0 | 5 | 5 |
+| [canon-close](./canon-close.md) | 2 | 4 | 0 | 6 |
+| [consumer-contract](./consumer-contract.md) | 0 | 3 | 2 | 5 |
 | [catalog-door](./catalog-door.md) | 1 | 0 | 2 | 3 |
 | [derivation](./derivation.md) | 0 | 0 | 7 | 7 |
 | [family-cuts](./family-cuts.md) | 0 | 0 | 14 | 14 |
@@ -24,6 +24,23 @@
 | [retire](./retire.md) | 0 | 0 | 5 | 5 |
 | [evidence-graph](./evidence-graph.md) | 0 | 0 | 4 | 4 |
 
+## Consumer contract — decisions lit (WO-CON-03)
+
+**decisions lit = 7/22 (+0/10 new)** — RECORDED; run of 2026-09-06T00:01:07.111Z.
+
+**measured on the 8-family sample: 10/22 move at least one sampled family** — MEASURED by that run.
+
+> Two halves, two statuses. The `n/22` figure is the audit's recorded effect class for today's control catalog, carried in the probe's catalog with its provenance; the `+m/10 new` figure and the measured line are derived by the run itself. Family movement is a sample of 8 of the 25 cascade families (`button`, `card`, `flex`, `grid`, `input`, `skeleton`, `space`, `stack`), so a decision can move a real family the sample does not carry; the whole-artifact comparison beside it is not a sample.
+
+Whole artifact: 17/29 kit decisions change the compiled tenant artifact today.
+
+Recorded vs measured — 5 row(s) disagree; neither side is authority, and the disagreement is published rather than resolved:
+- `palette.status-seeds` — recorded-full-moved-nothing: 0 channels moved, 0 sampled families
+- `shape.radius-scale` — recorded-none-moved: skeleton-card-line, skeleton-form-action
+- `spacing.rhythm` — recorded-none-moved: flex-modern-preset-gap, grid-modern-preset-gap, space-modern-preset-gap, stack-modern-preset-gap
+- `navigation.sidebar-tone` — recorded-full-moved-nothing: 6 channels moved, 0 sampled families
+- `profiles.expressive` — recorded-full-moved-nothing: 3 channels moved, 0 sampled families
+
 ## Programme milestones (derived from their gate work orders)
 
 | Milestone | State | Gate work orders | Outstanding | What it enables |
@@ -31,7 +48,7 @@
 | A · The apps can build | not reached | WO-CON-04, WO-CON-05 | WO-CON-04, WO-CON-05 | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2 · Architecture validated in one vertical cut | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | Decisions -> derivation -> channels -> skin proven end to end on one family; the autonomous APP and DS lanes start. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography. |
-| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 53 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 52 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -55,21 +72,21 @@
 
 ## In progress
 
-(none)
+| WO | Title | Claimed by | Since | Last progress |
+| --- | --- | --- | --- | --- |
+| WO-CAN-02 | Honest verification: pre/post-build gate manifest, mandatory drills, fail-open counters, tautological tests removed | claude-opus-5-can-02 | 2026-09-05 | (no entries — log via `progress`) |
+| WO-CAN-03 | CSS layers in tier order and a single entrypoint | claude-opus-5-can-03 | 2026-09-05 | (no entries — log via `progress`) |
+| WO-CAN-04 | Remove the parallel customization paths | claude-opus-5-can-04 | 2026-09-05 | (no entries — log via `progress`) |
+| WO-CAN-06 | Engine policy: Modern is the only admitted engine, structure stays N-engine, Classic/Rustic frozen and fail-closed | claude-opus-5-can-06 | 2026-09-05 | (no entries — log via `progress`) |
+| WO-CON-01 | Sanctioned import surface: consumer contract document and lint rule | claude-opus-5-con-01 | 2026-09-05 | 2026-09-05 18:49 — DS lot committed as 3a9873f4fc069c4be8d7a043cc7decb098724e7f (9 paths). Closure dependency: docs-engineering hub + app-integration reconciliation preserved at refs/codex-safety/wave1/con-01-docs in docs-engineering (19e0ec03b2c31e1e138aa1f649a5f0faa0421f0d; blobs 3f38514, 75532d9). Land as a separate docs-engineering commit, then regenerate claim-exactness seal/artifacts once the engine-token audit is green. Do not mark WO-CON-01 done before that. |
+| WO-CON-02 | mountTenantTheme facade with the final signature over the current pipeline | claude-opus-5-con-02 | 2026-09-05 | 2026-09-05 19:36 — DS lot committed on main as 072f71cb5220469961579dba43c40505573ca0f2 after independent Fable PASS. Docs reconciliation was preserved at refs/codex-safety/wave1/con-02-docs bc2803e9d70bfb4da23941d097dbd72e79eeade9 (tenancy blob 048ab1140dcfa493a4d8571b99758c1bdf8a30d7) and committed in docs-engineering as 893bce770c470f71f8299d4419c92715e57365e5. WO-CON-02 remains in-progress until engine-token-audit is green and WO-GAT-07 documentationRevision/exactness-live are resealed in one verified DS lot; do not mark done before that evidence commit. |
+| WO-CON-03 | Tenant document v2 accepted at the door, decisions mapped to today's fan-out, "decisions lit" indicator | claude-opus-5-con-03 | 2026-09-05 | 2026-09-05 20:36 — landed: v2 door + decisions-lit (commit 722fd05bfd692b22d1866cb3ffd1a4868b988752). open before WO-CON-04: public naming surface (theme index + server entrypoint), docs-engineering foundations/contracts + runtime/tenancy chapters; package scripts + gate registration before milestone A |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-CAN-02 | Honest verification: pre/post-build gate manifest, mandatory drills, fail-open counters, tautological tests removed | M | canon-close | audit-2026-09-05 |
-| WO-CAN-03 | CSS layers in tier order and a single entrypoint | M | canon-close | audit-2026-09-05 |
-| WO-CAN-04 | Remove the parallel customization paths | M | canon-close | audit-2026-09-05 |
-| WO-CAN-05 | Overlay kernel adoption and one z-index scale | M | canon-close | audit-2026-09-05 |
-| WO-CAN-06 | Engine policy: Modern is the only admitted engine, structure stays N-engine, Classic/Rustic frozen and fail-closed | M | canon-close | audit-2026-09-05 |
 | WO-EVI-04 | Roadmap and documentation truth: STATUS indicators, fingerprint re-seal, Modern Rescue sealed, docs regenerated | S | evidence-graph | audit-2026-09-05 |
-| WO-CON-01 | Sanctioned import surface: consumer contract document and lint rule | S | consumer-contract | audit-2026-09-05 |
-| WO-CON-02 | mountTenantTheme facade with the final signature over the current pipeline | M | consumer-contract | audit-2026-09-05 |
-| WO-CON-03 | Tenant document v2 accepted at the door, decisions mapped to today's fan-out, "decisions lit" indicator | M | consumer-contract | audit-2026-09-05 |
 
 ## Blocked (dependencies or phase claim lock)
 
@@ -89,7 +106,7 @@
 | WO-TOK-11 | dependencies: WO-DER-03, WO-EVI-02; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-ARC-18 | dependencies: WO-INV-04, WO-FAM-11; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
 | WO-ENG-25 | dependencies: WO-DER-04, WO-INV-05; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
-| WO-CRA-19 | dependencies: WO-CAN-05; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
+| WO-CRA-19 | phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
 | WO-CRA-18 | dependencies: WO-FAM-09; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-ENG-24 | dependencies: WO-CAN-06; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-GAT-10 | dependencies: WO-RET-01; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
@@ -245,4 +262,5 @@
 | WO-CRA-16 | 2026-07-17 | Bounded canary certification is recorded in test-artifacts/craft/cra-16/certification.json. Published registry package @rottay/design-system@2.19.28 at d609b519 provides the fixed 50-name v3 public corpus, deterministic 263-role generated catalog, pinned Phosphor 2.1.10 adapter and BrandMark facade. DS semantic/mark SSR coverage is green at 33/33, generator adversarial coverage at 8/8, and icons:check proves 263 roles/272 files current. BitHire a7d7d8a40 pins and installs exact 2.19.28; its four focused architecture suites are green at 21/21, typecheck and installed-canonical supplier honesty are green with zero direct suppliers. The AST guards fail closed on aliases, dynamic supplier imports and Icon/BrandMark/CloudServiceMark/FeaturePictogram conflation. This support milestone does not complete DS-IMP-090/091, the supplier decision, four-facade family, fleet migration or vertical recipes. |
 | WO-CRA-23 | 2026-09-05 | SEALED: R0 instrumentación retenida; R1+ sustituidas por derivation/family-cuts; métrica 0/255 reemplazada por indicadores |
 | WO-CAN-01 | 2026-09-05 | C4 certified on committed baseline through 58-path governance residual closure: 820 stale references across 53 governance files reduced to 0; independent Claude Fable 5.1 audit PASS, matrix 115/115 blocking gates with 1 declared SKIP, Modern Rescue 48/48, roadmap 79/79; report /private/tmp/rottay-wo-can-01-fable.md SHA256 13219027e817fa46da57e43f4ee9f74f66ab0362a7598cdd34571ea071294842. |
+| WO-CAN-05 | 2026-09-05 | CAN-05 complete: ui commits b1134dded071946f336271d1c962a1413ea98446, 5d189f9fedf506d2821203ce72ae394b34bec255, 188b38e75166a164c0adbd430eaba6b5282bb30d; docs commit aa0f24e3913925d9cb47828628543b7e043b9845; independent Fable 5.1 PASS reports /private/tmp/rottay-wo-can-05-final-fable.md, /private/tmp/rottay-can-05-source-close-fable.md, /private/tmp/rottay-can-05-docs-fable.md, /private/tmp/rottay-can-05-derived-fable.md |
 | WO-CAT-01 | 2026-09-05 | Published roadmap/kit-2026-09.md (SHA256 3a18b42a0101c44cf35857e2bdaca15eb1a5320c2d5ca3c53256674257b2b3d7; body digest 0f25b32c6d0842b20736a514d9794e6294a8b13f718aa4de9d368ca9bbd8e09c); independent Claude Fable 5.1 re-audit PASS in /private/tmp/rottay-wo-cat-01-fable-reaudit.md (SHA256 67637f13132e8fc1fae1cbf932f4220d134d1f5b8135d3c6e8a5fcfca246de7e). |
