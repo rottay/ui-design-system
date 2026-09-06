@@ -3954,7 +3954,7 @@
    "lane": "canon-close",
    "order": 3,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -3965,7 +3965,9 @@
    "notes": "wave 1; closes F-16, F-95, F-62, F-64",
    "claimedBy": "claude-opus-5-can-03",
    "claimedAt": "2026-09-05",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-06",
+   "evidence": "Closed by 79ffd71711c78f04a028f6f73cdeb44b89b6d8f0; exact 123-path source+derived lot; independent Kimi K3 PASS at /private/tmp/rottay-can03-exact-kimi-k3.md; 94/116 candidate versus 93/115 base, identical 22-red historical set, motion drill 6/6, zero new real reds; owner keeps radius=none as the recommended flush-header treatment."
   },
   {
    "id": "WO-CAN-04",
