@@ -7,9 +7,13 @@
  */
 
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
-import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import type { TenantThemeDocumentAny } from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { documentThemePatch } from "../../foundation/document-patch";
+import {
+  admitDocument,
+  documentAnyThemePatch,
+  type DocumentAdmission,
+} from "../../runtime/document-v2";
 
 /** What a stored document needs to name a compile. */
 export interface DocumentThemeIntentInput {
@@ -17,8 +21,14 @@ export interface DocumentThemeIntentInput {
   vertical: FirstPartyVerticalId;
   /** The tenant the compile is for; the scope the artifact is written against. */
   slug: string;
-  /** The validated, expanded document the tenant persisted. */
-  document: TenantThemeDocument;
+  /**
+   * The document the tenant persisted, in either version.
+   *
+   * v2 `{ version: 2, plan, decisions, overrides? }` is the shape app-platform
+   * writes from day one; v1 stays accepted so no stored row has to be rewritten
+   * before its migration lands.
+   */
+  document: TenantThemeDocumentAny;
 }
 
 /**
@@ -32,9 +42,36 @@ export function documentThemeIntent(input: DocumentThemeIntentInput): ThemeInten
     vertical: input.vertical,
     slug: input.slug,
     origin: "tenant-document",
-    patch: documentThemePatch({
+    patch: documentAnyThemePatch({
       vertical: input.vertical,
       document: input.document,
     }),
+  };
+}
+
+/**
+ * The same admission, with the report a writer needs.
+ *
+ * `documentThemeIntent` returns an intent because that is what the compiler
+ * takes. A surface that must TELL the tenant which of its decisions moved
+ * nothing needs more than the patch, and reconstructing that by diffing the
+ * patch would be a second, weaker answer to a question the door already
+ * answered.
+ */
+export function documentThemeAdmission(
+  input: DocumentThemeIntentInput
+): { intent: ThemeIntent; admission: DocumentAdmission } {
+  const admission = admitDocument({
+    vertical: input.vertical,
+    document: input.document,
+  });
+  return {
+    intent: {
+      vertical: input.vertical,
+      slug: input.slug,
+      origin: "tenant-document",
+      patch: admission.patch,
+    },
+    admission,
   };
 }

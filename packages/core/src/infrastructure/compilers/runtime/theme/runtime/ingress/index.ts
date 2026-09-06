@@ -15,13 +15,30 @@ export {
   documentThemePatch,
   migrateV1,
 } from "./foundation/document-patch";
+export {
+  admitDocument,
+  documentAnyThemePatch,
+  migrateAndAdmitDocument,
+  migrateDocumentV1ToV2,
+  projectDecisionsToV1,
+  v1KeypathOf,
+} from "./runtime/document-v2";
+export type {
+  DecisionProjection,
+  DocumentAdmission,
+  UnlitReason,
+} from "./runtime/document-v2";
 export { authoredThemePatch } from "./foundation/draft-patch";
 export { verticalEngine } from "./foundation/engine";
 export { staticThemeIntent } from "./presentation/static";
-export { documentThemeIntent } from "./presentation/document";
+export {
+  documentThemeAdmission,
+  documentThemeIntent,
+} from "./presentation/document";
 export type { DocumentThemeIntentInput } from "./presentation/document";
 export {
   draftPreviewThemeIntent,
+  previewThemeAdmission,
   previewThemeIntent,
 } from "./presentation/preview";
 export type {

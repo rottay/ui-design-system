@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7230,
-  "unpackedSize": 41891974,
+  "entryCount": 7244,
+  "unpackedSize": 41936857,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -14135,6 +14135,30 @@
       "size": 339
     },
     {
+      "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document/decisions/index.cjs",
+      "size": 2202
+    },
+    {
+      "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document/decisions/index.d.ts",
+      "size": 9744
+    },
+    {
+      "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document/decisions/index.js",
+      "size": 2439
+    },
+    {
+      "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document/index.cjs",
+      "size": 4456
+    },
+    {
+      "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document/index.d.ts",
+      "size": 3137
+    },
+    {
+      "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document/index.js",
+      "size": 4986
+    },
+    {
       "path": "dist/foundation/contracts/composition/tenants/themes/tenant-theme/index.cjs",
       "size": 4609
     },
@@ -20256,31 +20280,31 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/index.d.ts",
-      "size": 1015
+      "size": 1323
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/document/index.cjs",
-      "size": 321
+      "size": 341
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/document/index.d.ts",
-      "size": 1099
+      "size": 1930
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/document/index.js",
-      "size": 309
+      "size": 329
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/preview/index.cjs",
-      "size": 505
+      "size": 525
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/preview/index.d.ts",
-      "size": 1716
+      "size": 2258
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/preview/index.js",
-      "size": 536
+      "size": 556
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/static/index.cjs",
@@ -20293,6 +20317,38 @@
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/static/index.js",
       "size": 135
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/foundation/adapter/index.cjs",
+      "size": 4396
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/foundation/adapter/index.d.ts",
+      "size": 1370
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/foundation/adapter/index.js",
+      "size": 5179
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/foundation/migrate/index.d.ts",
+      "size": 883
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/index.d.ts",
+      "size": 539
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/presentation/admission/index.cjs",
+      "size": 796
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/presentation/admission/index.d.ts",
+      "size": 2124
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/presentation/admission/index.js",
+      "size": 871
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.cjs",

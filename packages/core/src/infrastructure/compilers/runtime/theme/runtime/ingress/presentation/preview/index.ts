@@ -8,16 +8,20 @@
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
-import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import type { TenantThemeDocumentAny } from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { documentThemePatch } from "../../foundation/document-patch";
+import {
+  admitDocument,
+  documentAnyThemePatch,
+  type DocumentAdmission,
+} from "../../runtime/document-v2";
 import { authoredThemePatch } from "../../foundation/draft-patch";
 
 /** What an unsaved document preview needs to name a compile. */
 export interface PreviewThemeIntentInput {
   vertical: FirstPartyVerticalId;
   slug: string;
-  document: TenantThemeDocument;
+  document: TenantThemeDocumentAny;
 }
 
 /** What an unsaved BrandTheme draft needs to name a compile. */
@@ -40,10 +44,35 @@ export function previewThemeIntent(input: PreviewThemeIntentInput): ThemeIntent 
     vertical: input.vertical,
     slug: input.slug,
     origin: "preview",
-    patch: documentThemePatch({
+    patch: documentAnyThemePatch({
       vertical: input.vertical,
       document: input.document,
     }),
+  };
+}
+
+/**
+ * The preview admission, with the same report the persisted door emits.
+ *
+ * Preview and publish share the admission for the same reason they share the
+ * patch: an editor that showed a tenant a different "not lit" list from the one
+ * publish records would be a second answer about the same document.
+ */
+export function previewThemeAdmission(
+  input: PreviewThemeIntentInput
+): { intent: ThemeIntent; admission: DocumentAdmission } {
+  const admission = admitDocument({
+    vertical: input.vertical,
+    document: input.document,
+  });
+  return {
+    intent: {
+      vertical: input.vertical,
+      slug: input.slug,
+      origin: "preview",
+      patch: admission.patch,
+    },
+    admission,
   };
 }
 

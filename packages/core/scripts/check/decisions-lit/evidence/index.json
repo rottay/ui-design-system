@@ -1,0 +1,2402 @@
+{
+  "tool": "decisions-lit",
+  "producedAt": "2026-09-06T00:01:07.111Z",
+  "headline": "decisions lit = 7/22 (+0/10 new)",
+  "measuredHeadline": "measured on the 8-family sample: 10/22 move at least one sampled family",
+  "denominators": {
+    "todayControlCatalog": 22,
+    "newDecisions": 10,
+    "kitRows": 29,
+    "measuredFamilySample": [
+      "button",
+      "card",
+      "flex",
+      "grid",
+      "input",
+      "skeleton",
+      "space",
+      "stack"
+    ],
+    "cascadeMatrixFamilies": 25
+  },
+  "provenance": {
+    "build": {
+      "dist": "packages/core/dist/server.js",
+      "builtAt": "2026-09-05T23:58:27.686Z"
+    },
+    "browser": {
+      "specifier": "@playwright/test",
+      "root": "packages/showroom/package.json",
+      "resolved": "node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+      "browserVersion": "149.0.7827.55"
+    },
+    "roster": {
+      "rottay": {
+        "matched": [
+          "card-modern-md",
+          "button-modern-md",
+          "input-modern-md",
+          "skeleton-card-line",
+          "skeleton-form-action",
+          "token-readout",
+          "flex-modern-preset-gap",
+          "grid-modern-preset-gap",
+          "stack-modern-preset-gap",
+          "space-modern-preset-gap",
+          "flex-modern-numeric-gap",
+          "grid-modern-numeric-gap",
+          "stack-modern-numeric-gap",
+          "space-modern-numeric-gap"
+        ],
+        "unmatched": [],
+        "bundleSha": "b7ec5a493d0ffd4c7fb333873f4fd3a26f01b09f3271c4e3627a5f0528f94b5d",
+        "bundleMode": "fresh"
+      },
+      "bithire": {
+        "matched": [
+          "card-modern-md",
+          "button-modern-md",
+          "input-modern-md",
+          "skeleton-card-line",
+          "skeleton-form-action",
+          "token-readout",
+          "flex-modern-preset-gap",
+          "grid-modern-preset-gap",
+          "stack-modern-preset-gap",
+          "space-modern-preset-gap",
+          "flex-modern-numeric-gap",
+          "grid-modern-numeric-gap",
+          "stack-modern-numeric-gap",
+          "space-modern-numeric-gap"
+        ],
+        "unmatched": [],
+        "bundleSha": "67d417a554312f10fed83af28229f8674495f6dc6f9f4b9d51853893ff93c79e",
+        "bundleMode": "fresh"
+      },
+      "evnto": {
+        "matched": [
+          "card-modern-md",
+          "button-modern-md",
+          "input-modern-md",
+          "skeleton-card-line",
+          "skeleton-form-action",
+          "token-readout",
+          "flex-modern-preset-gap",
+          "grid-modern-preset-gap",
+          "stack-modern-preset-gap",
+          "space-modern-preset-gap",
+          "flex-modern-numeric-gap",
+          "grid-modern-numeric-gap",
+          "stack-modern-numeric-gap",
+          "space-modern-numeric-gap"
+        ],
+        "unmatched": [],
+        "bundleSha": "caada2b67cf08105bec9fa4c57cbbc0cc7d1c80696cc8a587c430b2c5d6d3a15",
+        "bundleMode": "fresh"
+      }
+    },
+    "recordedClassSource": "audit/50-matrices/cascade section 1 crossed with audit/70-plan/roadmap-draft/consumer-contract.md section 4",
+    "derivedHere": [
+      "artifactBytesDiffer",
+      "movedFamilies",
+      "movedChannelCount",
+      "newLit",
+      "measuredLit",
+      "discrepancies"
+    ]
+  },
+  "summary": {
+    "lit": 7,
+    "partial": 6,
+    "inert": 6,
+    "measuredLit": 10,
+    "discrepancies": [
+      {
+        "id": "palette.status-seeds",
+        "kind": "recorded-full-moved-nothing",
+        "detail": "0 channels moved, 0 sampled families"
+      },
+      {
+        "id": "shape.radius-scale",
+        "kind": "recorded-none-moved",
+        "detail": "skeleton-card-line, skeleton-form-action"
+      },
+      {
+        "id": "spacing.rhythm",
+        "kind": "recorded-none-moved",
+        "detail": "flex-modern-preset-gap, grid-modern-preset-gap, space-modern-preset-gap, stack-modern-preset-gap"
+      },
+      {
+        "id": "navigation.sidebar-tone",
+        "kind": "recorded-full-moved-nothing",
+        "detail": "6 channels moved, 0 sampled families"
+      },
+      {
+        "id": "profiles.expressive",
+        "kind": "recorded-full-moved-nothing",
+        "detail": "3 channels moved, 0 sampled families"
+      }
+    ],
+    "newLit": 0,
+    "newlyMovingIds": [],
+    "decisions": [
+      {
+        "id": "palette.seeds",
+        "tier": "standard",
+        "recordedClass": "full",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md",
+          "card-modern-md"
+        ],
+        "movedChannelCount": 6,
+        "excludedIn": []
+      },
+      {
+        "id": "palette.status-seeds",
+        "tier": "standard",
+        "recordedClass": "full",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "palette.neutral-temperature",
+        "tier": "standard",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "palette.contrast-posture",
+        "tier": "pro",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "palette.dark-mode",
+        "tier": "pro",
+        "recordedClass": "none",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "typography.families",
+        "tier": "pro",
+        "recordedClass": "full",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md",
+          "card-modern-md",
+          "input-modern-md"
+        ],
+        "movedChannelCount": 1,
+        "excludedIn": []
+      },
+      {
+        "id": "typography.pairing",
+        "tier": "standard",
+        "recordedClass": "full",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md",
+          "card-modern-md",
+          "input-modern-md"
+        ],
+        "movedChannelCount": 3,
+        "excludedIn": []
+      },
+      {
+        "id": "typography.scale",
+        "tier": "standard",
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md",
+          "card-modern-md",
+          "flex-modern-preset-gap",
+          "grid-modern-preset-gap",
+          "input-modern-md",
+          "skeleton-card-line",
+          "skeleton-form-action",
+          "space-modern-preset-gap",
+          "stack-modern-preset-gap"
+        ],
+        "movedChannelCount": 2,
+        "excludedIn": []
+      },
+      {
+        "id": "typography.role-weights",
+        "tier": "standard",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "typography.numeric",
+        "tier": "pro",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "shape.radius-scale",
+        "tier": "standard",
+        "recordedClass": "none",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "skeleton-card-line",
+          "skeleton-form-action"
+        ],
+        "movedChannelCount": 15,
+        "excludedIn": []
+      },
+      {
+        "id": "shape.nesting",
+        "tier": "pro",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "shape.button-style",
+        "tier": "standard",
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md"
+        ],
+        "movedChannelCount": 2,
+        "excludedIn": []
+      },
+      {
+        "id": "shape.control-height",
+        "tier": "standard",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "density.mode",
+        "tier": "standard",
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md",
+          "flex-modern-preset-gap",
+          "grid-modern-preset-gap",
+          "space-modern-preset-gap",
+          "stack-modern-preset-gap"
+        ],
+        "movedChannelCount": 3,
+        "excludedIn": []
+      },
+      {
+        "id": "spacing.rhythm",
+        "tier": "standard",
+        "recordedClass": "none",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "flex-modern-preset-gap",
+          "grid-modern-preset-gap",
+          "space-modern-preset-gap",
+          "stack-modern-preset-gap"
+        ],
+        "movedChannelCount": 2,
+        "excludedIn": []
+      },
+      {
+        "id": "surfaces.elevation-posture",
+        "tier": "standard",
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [],
+        "movedChannelCount": 3,
+        "excludedIn": []
+      },
+      {
+        "id": "surfaces.border-style",
+        "tier": "standard",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "surfaces.effect-intensity",
+        "tier": "standard",
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "card-modern-md"
+        ],
+        "movedChannelCount": 1,
+        "excludedIn": []
+      },
+      {
+        "id": "states.emphasis",
+        "tier": "standard",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "states.focus-style",
+        "tier": "standard",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "motion.dial",
+        "tier": "standard",
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [],
+        "movedChannelCount": 2,
+        "excludedIn": []
+      },
+      {
+        "id": "motion.character",
+        "tier": "pro",
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "navigation.sidebar-tone",
+        "tier": "standard",
+        "recordedClass": "full",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [],
+        "movedChannelCount": 6,
+        "excludedIn": []
+      },
+      {
+        "id": "experience.profile",
+        "tier": "standard",
+        "recordedClass": "full",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md",
+          "card-modern-md",
+          "flex-modern-preset-gap",
+          "grid-modern-preset-gap",
+          "skeleton-card-line",
+          "skeleton-form-action",
+          "space-modern-preset-gap",
+          "stack-modern-preset-gap"
+        ],
+        "movedChannelCount": 30,
+        "excludedIn": []
+      },
+      {
+        "id": "profiles.expressive",
+        "tier": "pro",
+        "recordedClass": "full",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [],
+        "movedChannelCount": 3,
+        "excludedIn": []
+      },
+      {
+        "id": "recipe-profile",
+        "tier": "pro",
+        "recordedClass": "none",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [],
+        "movedChannelCount": 1,
+        "excludedIn": []
+      },
+      {
+        "id": "chrome.anatomy",
+        "tier": "pro",
+        "recordedClass": "none",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      },
+      {
+        "id": "responsive.posture",
+        "tier": "pro",
+        "recordedClass": "none",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
+        "excludedIn": []
+      }
+    ]
+  },
+  "rows": [
+    {
+      "id": "palette.seeds",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/root": [
+          "background-color"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-primary-bg",
+          "--ds-chart-series-1",
+          "--ds-color-primary",
+          "--ds-sidebar-item-color-active"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-primary-bg",
+        "--ds-chart-series-1",
+        "--ds-color-primary",
+        "--ds-sidebar-item-color-active"
+      ]
+    },
+    {
+      "id": "palette.status-seeds",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.neutral-temperature",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.contrast-posture",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.dark-mode",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "typography.families",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-family-base"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-family-base"
+      ]
+    },
+    {
+      "id": "typography.pairing",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
+          "--ds-letter-spacing-heading"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
+        "--ds-letter-spacing-heading"
+      ]
+    },
+    {
+      "id": "typography.scale",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "input-modern-md",
+        "skeleton-card-line",
+        "skeleton-form-action",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-size"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-size"
+        ],
+        "button-modern-md/root": [
+          "font-size"
+        ],
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height",
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-size"
+        ],
+        "skeleton-card-line/line": [
+          "height"
+        ],
+        "skeleton-form-action/action": [
+          "height"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-size-xs",
+          "--ds-type-scale"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-size-xs",
+        "--ds-type-scale"
+      ]
+    },
+    {
+      "id": "typography.role-weights",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "typography.numeric",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "shape.radius-scale",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "skeleton-card-line",
+        "skeleton-form-action"
+      ],
+      "movedTargets": {
+        "skeleton-card-line/line": [
+          "border-top-left-radius"
+        ],
+        "skeleton-form-action/action": [
+          "border-top-left-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-md-border-radius",
+          "--ds-button-md-radius",
+          "--ds-card-border-radius",
+          "--ds-card-radius",
+          "--ds-input-md-border-radius",
+          "--ds-radius-button",
+          "--ds-radius-lg",
+          "--ds-radius-lg-base",
+          "--ds-radius-md",
+          "--ds-radius-md-base",
+          "--ds-radius-scale",
+          "--ds-radius-sm",
+          "--ds-radius-sm-base",
+          "--ds-radius-xl",
+          "--ds-radius-xl-base"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-md-border-radius",
+        "--ds-button-md-radius",
+        "--ds-card-border-radius",
+        "--ds-card-radius",
+        "--ds-input-md-border-radius",
+        "--ds-radius-button",
+        "--ds-radius-lg",
+        "--ds-radius-lg-base",
+        "--ds-radius-md",
+        "--ds-radius-md-base",
+        "--ds-radius-scale",
+        "--ds-radius-sm",
+        "--ds-radius-sm-base",
+        "--ds-radius-xl",
+        "--ds-radius-xl-base"
+      ]
+    },
+    {
+      "id": "shape.nesting",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "shape.button-style",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/root": [
+          "border-top-left-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-md-radius",
+          "--ds-radius-button"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-md-radius",
+        "--ds-radius-button"
+      ]
+    },
+    {
+      "id": "shape.control-height",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "density.mode",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height",
+          "inline-size",
+          "width"
+        ],
+        "token-readout/tokens": [
+          "--ds-density-effective-scale",
+          "--ds-density-global-effective-scale",
+          "--ds-density-mode-factor"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-density-effective-scale",
+        "--ds-density-global-effective-scale",
+        "--ds-density-mode-factor"
+      ]
+    },
+    {
+      "id": "spacing.rhythm",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-rhythm-effective-scale",
+          "--ds-rhythm-scale"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-rhythm-effective-scale",
+        "--ds-rhythm-scale"
+      ]
+    },
+    {
+      "id": "surfaces.elevation-posture",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-elevation-1",
+          "--ds-elevation-2",
+          "--ds-elevation-3"
+        ]
+      },
+      "movedChannels": [
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3"
+      ]
+    },
+    {
+      "id": "surfaces.border-style",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "surfaces.effect-intensity",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "card-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "background-image"
+        ],
+        "token-readout/tokens": [
+          "--ds-effect-intensity"
+        ]
+      },
+      "movedChannels": [
+        "--ds-effect-intensity"
+      ]
+    },
+    {
+      "id": "states.emphasis",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "states.focus-style",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "motion.dial",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-motion-duration-scale",
+          "--ds-motion-intensity"
+        ]
+      },
+      "movedChannels": [
+        "--ds-motion-duration-scale",
+        "--ds-motion-intensity"
+      ]
+    },
+    {
+      "id": "motion.character",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "navigation.sidebar-tone",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-sidebar-bg",
+          "--ds-sidebar-item-bg-active",
+          "--ds-sidebar-item-bg-hover",
+          "--ds-sidebar-item-color-active",
+          "--ds-sidebar-text",
+          "--ds-sidebar-text-muted"
+        ]
+      },
+      "movedChannels": [
+        "--ds-sidebar-bg",
+        "--ds-sidebar-item-bg-active",
+        "--ds-sidebar-item-bg-hover",
+        "--ds-sidebar-item-color-active",
+        "--ds-sidebar-text",
+        "--ds-sidebar-text-muted"
+      ]
+    },
+    {
+      "id": "experience.profile",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "skeleton-card-line",
+        "skeleton-form-action",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "background-image"
+        ],
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height",
+          "inline-size",
+          "width"
+        ],
+        "skeleton-card-line/line": [
+          "border-top-left-radius"
+        ],
+        "skeleton-form-action/action": [
+          "border-top-left-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-md-border-radius",
+          "--ds-button-md-radius",
+          "--ds-card-border-radius",
+          "--ds-card-radius",
+          "--ds-density-effective-scale",
+          "--ds-density-global-effective-scale",
+          "--ds-density-mode-factor",
+          "--ds-edge-emphasis-width",
+          "--ds-elevation-1",
+          "--ds-elevation-2",
+          "--ds-elevation-3",
+          "--ds-elevation-lift-strength",
+          "--ds-experience-profile",
+          "--ds-input-md-border-radius",
+          "--ds-material-canvas-texture",
+          "--ds-material-card-highlight",
+          "--ds-motion-duration-scale",
+          "--ds-radius-button",
+          "--ds-radius-lg",
+          "--ds-radius-lg-base",
+          "--ds-radius-md",
+          "--ds-radius-md-base",
+          "--ds-radius-scale",
+          "--ds-radius-sm",
+          "--ds-radius-sm-base",
+          "--ds-radius-xl",
+          "--ds-radius-xl-base",
+          "--ds-select-group-text-transform",
+          "--ds-table-header-text-transform"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-md-border-radius",
+        "--ds-button-md-radius",
+        "--ds-card-border-radius",
+        "--ds-card-radius",
+        "--ds-density-effective-scale",
+        "--ds-density-global-effective-scale",
+        "--ds-density-mode-factor",
+        "--ds-edge-emphasis-width",
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
+        "--ds-elevation-lift-strength",
+        "--ds-experience-profile",
+        "--ds-input-md-border-radius",
+        "--ds-material-canvas-texture",
+        "--ds-material-card-highlight",
+        "--ds-motion-duration-scale",
+        "--ds-radius-button",
+        "--ds-radius-lg",
+        "--ds-radius-lg-base",
+        "--ds-radius-md",
+        "--ds-radius-md-base",
+        "--ds-radius-scale",
+        "--ds-radius-sm",
+        "--ds-radius-sm-base",
+        "--ds-radius-xl",
+        "--ds-radius-xl-base",
+        "--ds-select-group-text-transform",
+        "--ds-table-header-text-transform"
+      ]
+    },
+    {
+      "id": "profiles.expressive",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-select-group-text-transform",
+          "--ds-table-header-text-transform"
+        ]
+      },
+      "movedChannels": [
+        "--ds-select-group-text-transform",
+        "--ds-table-header-text-transform"
+      ]
+    },
+    {
+      "id": "recipe-profile",
+      "vertical": "rottay",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-recipe-profile"
+        ]
+      },
+      "movedChannels": [
+        "--ds-recipe-profile"
+      ]
+    },
+    {
+      "id": "chrome.anatomy",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "responsive.posture",
+      "vertical": "rottay",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.seeds",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "border-top-color"
+        ],
+        "button-modern-md/root": [
+          "background-color",
+          "border-top-color"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-primary-bg",
+          "--ds-chart-series-1",
+          "--ds-color-primary",
+          "--ds-color-primary-500",
+          "--ds-sidebar-item-bg-active",
+          "--ds-sidebar-item-color-active"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-primary-bg",
+        "--ds-chart-series-1",
+        "--ds-color-primary",
+        "--ds-color-primary-500",
+        "--ds-sidebar-item-bg-active",
+        "--ds-sidebar-item-color-active"
+      ]
+    },
+    {
+      "id": "palette.status-seeds",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.neutral-temperature",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.contrast-posture",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.dark-mode",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "typography.families",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-family-base"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-family-base"
+      ]
+    },
+    {
+      "id": "typography.pairing",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
+          "--ds-letter-spacing-heading"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
+        "--ds-letter-spacing-heading"
+      ]
+    },
+    {
+      "id": "typography.scale",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "input-modern-md",
+        "skeleton-card-line",
+        "skeleton-form-action",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-size"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-size"
+        ],
+        "button-modern-md/root": [
+          "font-size"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-size"
+        ],
+        "skeleton-card-line/line": [
+          "height"
+        ],
+        "skeleton-form-action/action": [
+          "height"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-size-xs",
+          "--ds-type-scale"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-size-xs",
+        "--ds-type-scale"
+      ]
+    },
+    {
+      "id": "typography.role-weights",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "typography.numeric",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "shape.radius-scale",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "skeleton-card-line",
+        "skeleton-form-action"
+      ],
+      "movedTargets": {
+        "skeleton-card-line/line": [
+          "border-top-left-radius"
+        ],
+        "skeleton-form-action/action": [
+          "border-top-left-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-md-border-radius",
+          "--ds-button-md-radius",
+          "--ds-card-border-radius",
+          "--ds-card-radius",
+          "--ds-input-md-border-radius",
+          "--ds-radius-button",
+          "--ds-radius-lg",
+          "--ds-radius-lg-base",
+          "--ds-radius-md",
+          "--ds-radius-md-base",
+          "--ds-radius-scale",
+          "--ds-radius-sm",
+          "--ds-radius-sm-base",
+          "--ds-radius-xl",
+          "--ds-radius-xl-base"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-md-border-radius",
+        "--ds-button-md-radius",
+        "--ds-card-border-radius",
+        "--ds-card-radius",
+        "--ds-input-md-border-radius",
+        "--ds-radius-button",
+        "--ds-radius-lg",
+        "--ds-radius-lg-base",
+        "--ds-radius-md",
+        "--ds-radius-md-base",
+        "--ds-radius-scale",
+        "--ds-radius-sm",
+        "--ds-radius-sm-base",
+        "--ds-radius-xl",
+        "--ds-radius-xl-base"
+      ]
+    },
+    {
+      "id": "shape.nesting",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "shape.button-style",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-radius-button"
+        ]
+      },
+      "movedChannels": [
+        "--ds-radius-button"
+      ]
+    },
+    {
+      "id": "shape.control-height",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "density.mode",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height",
+          "inline-size",
+          "width"
+        ],
+        "token-readout/tokens": [
+          "--ds-density-effective-scale",
+          "--ds-density-global-effective-scale",
+          "--ds-density-mode-factor"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-density-effective-scale",
+        "--ds-density-global-effective-scale",
+        "--ds-density-mode-factor"
+      ]
+    },
+    {
+      "id": "spacing.rhythm",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-rhythm-effective-scale",
+          "--ds-rhythm-scale"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-rhythm-effective-scale",
+        "--ds-rhythm-scale"
+      ]
+    },
+    {
+      "id": "surfaces.elevation-posture",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-elevation-1",
+          "--ds-elevation-2",
+          "--ds-elevation-3"
+        ]
+      },
+      "movedChannels": [
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3"
+      ]
+    },
+    {
+      "id": "surfaces.border-style",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "surfaces.effect-intensity",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-effect-intensity"
+        ]
+      },
+      "movedChannels": [
+        "--ds-effect-intensity"
+      ]
+    },
+    {
+      "id": "states.emphasis",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "states.focus-style",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "motion.dial",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-motion-duration-scale",
+          "--ds-motion-intensity"
+        ]
+      },
+      "movedChannels": [
+        "--ds-motion-duration-scale",
+        "--ds-motion-intensity"
+      ]
+    },
+    {
+      "id": "motion.character",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "navigation.sidebar-tone",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-sidebar-bg",
+          "--ds-sidebar-item-bg-active",
+          "--ds-sidebar-item-bg-hover",
+          "--ds-sidebar-item-color-active",
+          "--ds-sidebar-text",
+          "--ds-sidebar-text-muted"
+        ]
+      },
+      "movedChannels": [
+        "--ds-sidebar-bg",
+        "--ds-sidebar-item-bg-active",
+        "--ds-sidebar-item-bg-hover",
+        "--ds-sidebar-item-color-active",
+        "--ds-sidebar-text",
+        "--ds-sidebar-text-muted"
+      ]
+    },
+    {
+      "id": "experience.profile",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "background-image"
+        ],
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height",
+          "inline-size",
+          "width"
+        ],
+        "token-readout/tokens": [
+          "--ds-density-effective-scale",
+          "--ds-density-global-effective-scale",
+          "--ds-density-mode-factor",
+          "--ds-edge-emphasis-width",
+          "--ds-elevation-lift-strength",
+          "--ds-experience-profile",
+          "--ds-motion-duration-scale"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-density-effective-scale",
+        "--ds-density-global-effective-scale",
+        "--ds-density-mode-factor",
+        "--ds-edge-emphasis-width",
+        "--ds-elevation-lift-strength",
+        "--ds-experience-profile",
+        "--ds-motion-duration-scale"
+      ]
+    },
+    {
+      "id": "profiles.expressive",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-select-group-text-transform"
+        ]
+      },
+      "movedChannels": [
+        "--ds-select-group-text-transform"
+      ]
+    },
+    {
+      "id": "recipe-profile",
+      "vertical": "bithire",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-recipe-profile"
+        ]
+      },
+      "movedChannels": [
+        "--ds-recipe-profile"
+      ]
+    },
+    {
+      "id": "chrome.anatomy",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "responsive.posture",
+      "vertical": "bithire",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.seeds",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/root": [
+          "background-color"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-primary-bg",
+          "--ds-chart-series-1",
+          "--ds-color-primary",
+          "--ds-color-primary-500"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-primary-bg",
+        "--ds-chart-series-1",
+        "--ds-color-primary",
+        "--ds-color-primary-500"
+      ]
+    },
+    {
+      "id": "palette.status-seeds",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.neutral-temperature",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.contrast-posture",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "palette.dark-mode",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "typography.families",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-family-base"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-family-base"
+      ]
+    },
+    {
+      "id": "typography.pairing",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
+          "--ds-letter-spacing-heading"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
+        "--ds-letter-spacing-heading"
+      ]
+    },
+    {
+      "id": "typography.scale",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "input-modern-md",
+        "skeleton-card-line",
+        "skeleton-form-action",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "font-size"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-size"
+        ],
+        "button-modern-md/root": [
+          "font-size"
+        ],
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height",
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-size"
+        ],
+        "skeleton-card-line/line": [
+          "height"
+        ],
+        "skeleton-form-action/action": [
+          "height"
+        ],
+        "token-readout/tokens": [
+          "--ds-font-size-xs",
+          "--ds-type-scale"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-size-xs",
+        "--ds-type-scale"
+      ]
+    },
+    {
+      "id": "typography.role-weights",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "typography.numeric",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "shape.radius-scale",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "skeleton-card-line",
+        "skeleton-form-action"
+      ],
+      "movedTargets": {
+        "skeleton-card-line/line": [
+          "border-top-left-radius"
+        ],
+        "skeleton-form-action/action": [
+          "border-top-left-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-md-border-radius",
+          "--ds-button-md-radius",
+          "--ds-card-border-radius",
+          "--ds-card-radius",
+          "--ds-input-md-border-radius",
+          "--ds-radius-button",
+          "--ds-radius-lg",
+          "--ds-radius-lg-base",
+          "--ds-radius-md",
+          "--ds-radius-md-base",
+          "--ds-radius-scale",
+          "--ds-radius-sm",
+          "--ds-radius-sm-base",
+          "--ds-radius-xl",
+          "--ds-radius-xl-base"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-md-border-radius",
+        "--ds-button-md-radius",
+        "--ds-card-border-radius",
+        "--ds-card-radius",
+        "--ds-input-md-border-radius",
+        "--ds-radius-button",
+        "--ds-radius-lg",
+        "--ds-radius-lg-base",
+        "--ds-radius-md",
+        "--ds-radius-md-base",
+        "--ds-radius-scale",
+        "--ds-radius-sm",
+        "--ds-radius-sm-base",
+        "--ds-radius-xl",
+        "--ds-radius-xl-base"
+      ]
+    },
+    {
+      "id": "shape.nesting",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "shape.button-style",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/root": [
+          "border-top-left-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-md-radius",
+          "--ds-radius-button"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-md-radius",
+        "--ds-radius-button"
+      ]
+    },
+    {
+      "id": "shape.control-height",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "density.mode",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height",
+          "inline-size",
+          "width"
+        ],
+        "token-readout/tokens": [
+          "--ds-density-effective-scale",
+          "--ds-density-global-effective-scale",
+          "--ds-density-mode-factor"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-density-effective-scale",
+        "--ds-density-global-effective-scale",
+        "--ds-density-mode-factor"
+      ]
+    },
+    {
+      "id": "spacing.rhythm",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-rhythm-effective-scale",
+          "--ds-rhythm-scale"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-rhythm-effective-scale",
+        "--ds-rhythm-scale"
+      ]
+    },
+    {
+      "id": "surfaces.elevation-posture",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-elevation-1",
+          "--ds-elevation-2",
+          "--ds-elevation-3"
+        ]
+      },
+      "movedChannels": [
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3"
+      ]
+    },
+    {
+      "id": "surfaces.border-style",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "surfaces.effect-intensity",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "card-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "background-image"
+        ],
+        "token-readout/tokens": [
+          "--ds-effect-intensity"
+        ]
+      },
+      "movedChannels": [
+        "--ds-effect-intensity"
+      ]
+    },
+    {
+      "id": "states.emphasis",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "states.focus-style",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "motion.dial",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-motion-duration-scale",
+          "--ds-motion-intensity"
+        ]
+      },
+      "movedChannels": [
+        "--ds-motion-duration-scale",
+        "--ds-motion-intensity"
+      ]
+    },
+    {
+      "id": "motion.character",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "navigation.sidebar-tone",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-sidebar-bg",
+          "--ds-sidebar-item-bg-active",
+          "--ds-sidebar-item-bg-hover",
+          "--ds-sidebar-item-color-active",
+          "--ds-sidebar-text"
+        ]
+      },
+      "movedChannels": [
+        "--ds-sidebar-bg",
+        "--ds-sidebar-item-bg-active",
+        "--ds-sidebar-item-bg-hover",
+        "--ds-sidebar-item-color-active",
+        "--ds-sidebar-text"
+      ]
+    },
+    {
+      "id": "experience.profile",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "flex-modern-preset-gap",
+        "grid-modern-preset-gap",
+        "skeleton-card-line",
+        "skeleton-form-action",
+        "space-modern-preset-gap",
+        "stack-modern-preset-gap"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "background-image"
+        ],
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height",
+          "inline-size",
+          "width"
+        ],
+        "skeleton-card-line/line": [
+          "border-top-left-radius"
+        ],
+        "skeleton-form-action/action": [
+          "border-top-left-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-button-md-border-radius",
+          "--ds-button-md-radius",
+          "--ds-card-border-radius",
+          "--ds-card-radius",
+          "--ds-density-effective-scale",
+          "--ds-density-global-effective-scale",
+          "--ds-density-mode-factor",
+          "--ds-edge-emphasis-width",
+          "--ds-elevation-1",
+          "--ds-elevation-2",
+          "--ds-elevation-3",
+          "--ds-elevation-lift-strength",
+          "--ds-experience-profile",
+          "--ds-input-md-border-radius",
+          "--ds-material-canvas-texture",
+          "--ds-material-card-highlight",
+          "--ds-motion-duration-scale",
+          "--ds-radius-button",
+          "--ds-radius-lg",
+          "--ds-radius-lg-base",
+          "--ds-radius-md",
+          "--ds-radius-md-base",
+          "--ds-radius-scale",
+          "--ds-radius-sm",
+          "--ds-radius-sm-base",
+          "--ds-radius-xl",
+          "--ds-radius-xl-base",
+          "--ds-select-group-text-transform",
+          "--ds-table-header-letter-spacing",
+          "--ds-table-header-text-transform"
+        ],
+        "flex-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "grid-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "stack-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ],
+        "space-modern-preset-gap/root": [
+          "gap",
+          "column-gap",
+          "row-gap"
+        ]
+      },
+      "movedChannels": [
+        "--ds-button-md-border-radius",
+        "--ds-button-md-radius",
+        "--ds-card-border-radius",
+        "--ds-card-radius",
+        "--ds-density-effective-scale",
+        "--ds-density-global-effective-scale",
+        "--ds-density-mode-factor",
+        "--ds-edge-emphasis-width",
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
+        "--ds-elevation-lift-strength",
+        "--ds-experience-profile",
+        "--ds-input-md-border-radius",
+        "--ds-material-canvas-texture",
+        "--ds-material-card-highlight",
+        "--ds-motion-duration-scale",
+        "--ds-radius-button",
+        "--ds-radius-lg",
+        "--ds-radius-lg-base",
+        "--ds-radius-md",
+        "--ds-radius-md-base",
+        "--ds-radius-scale",
+        "--ds-radius-sm",
+        "--ds-radius-sm-base",
+        "--ds-radius-xl",
+        "--ds-radius-xl-base",
+        "--ds-select-group-text-transform",
+        "--ds-table-header-letter-spacing",
+        "--ds-table-header-text-transform"
+      ]
+    },
+    {
+      "id": "profiles.expressive",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-select-group-text-transform",
+          "--ds-table-header-letter-spacing",
+          "--ds-table-header-text-transform"
+        ]
+      },
+      "movedChannels": [
+        "--ds-select-group-text-transform",
+        "--ds-table-header-letter-spacing",
+        "--ds-table-header-text-transform"
+      ]
+    },
+    {
+      "id": "recipe-profile",
+      "vertical": "evnto",
+      "artifactBytesDiffer": true,
+      "movedFamilies": [],
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-recipe-profile"
+        ]
+      },
+      "movedChannels": [
+        "--ds-recipe-profile"
+      ]
+    },
+    {
+      "id": "chrome.anatomy",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    },
+    {
+      "id": "responsive.posture",
+      "vertical": "evnto",
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
+    }
+  ],
+  "violations": []
+}

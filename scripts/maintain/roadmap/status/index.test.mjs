@@ -5,7 +5,9 @@ import test from "node:test";
 import {
   actionableWorkOrders,
   canonicalCrossProgramConvergenceLedger,
+  decisionsLitLines,
   dsImprovementsPlanFingerprint,
+  readDecisionsLitIndicator,
   localDate,
   localDateTime,
   phaseClaimBlocker,
@@ -2060,4 +2062,73 @@ test("a milestone is reached only when every gate work order is done", () => {
   const regressed = summarizeProgramMilestones(registry).find((milestone) => milestone.id === "A");
   assert.equal(regressed.reached, false);
   assert.deepEqual(regressed.outstanding, ["WO-CON-05"]);
+});
+
+
+test("decisions-lit indicator publishes the probe's own headline, never its own", () => {
+  const indicator = readDecisionsLitIndicator();
+  assert.equal(indicator.measured, true, "the committed probe artifact must be readable");
+  assert.match(indicator.headline, /^decisions lit = \d+\/22 \(\+\d+\/10 new\)$/);
+  assert.match(
+    indicator.measuredHeadline,
+    /^measured on the \d+-family sample: \d+\/22 move at least one sampled family$/,
+  );
+  const lines = decisionsLitLines(indicator).join("\n");
+  assert.ok(lines.includes(indicator.headline));
+  assert.ok(lines.includes(indicator.measuredHeadline));
+  assert.ok(
+    lines.includes("cascade families"),
+    "the block must state the family sample denominator, not just the count",
+  );
+});
+
+test("decisions-lit indicator labels which half is recorded and which is measured", () => {
+  const lines = decisionsLitLines(readDecisionsLitIndicator()).join("\n");
+  assert.match(lines, /RECORDED/);
+  assert.match(lines, /MEASURED by that run/);
+});
+
+test("decisions-lit indicator publishes every recorded-vs-measured disagreement", () => {
+  const indicator = readDecisionsLitIndicator();
+  const lines = decisionsLitLines(indicator).join("\n");
+  if (indicator.discrepancies.length === 0) {
+    assert.match(lines, /Recorded vs measured: every row agrees\./);
+    return;
+  }
+  assert.match(lines, /Recorded vs measured — \d+ row\(s\) disagree/);
+  for (const row of indicator.discrepancies) {
+    assert.ok(lines.includes(row.id), `discrepancy ${row.id} must be named in STATUS`);
+    assert.ok(lines.includes(row.kind));
+  }
+});
+
+test("decisions-lit indicator says NOT MEASURED rather than zero when no run exists", () => {
+  const missing = readDecisionsLitIndicator("/nonexistent/decisions-lit.json");
+  assert.equal(missing.measured, false);
+  const lines = decisionsLitLines(missing).join("\n");
+  assert.ok(lines.includes("NOT MEASURED"));
+  assert.ok(!/decisions lit = 0/.test(lines), "a missing run must never publish a zero");
+  assert.ok(!/measured on the/.test(lines), "a missing run must publish no measured half either");
+});
+
+test("decisions-lit indicator republishes a refused run as refused", () => {
+  const refused = {
+    measured: true,
+    headline: "decisions lit = 7/22 (+1/10 new)",
+    producedAt: "2026-09-05T00:00:00.000Z",
+    measuredHeadline: "measured on the 1-family sample: 4/22 move at least one sampled family",
+    discrepancies: [
+      { id: "navigation.sidebar-tone", kind: "recorded-full-moved-nothing", detail: "6 channels moved, 0 sampled families" },
+    ],
+    refused: true,
+    violations: ["recorded as new but MEASURED MOVING: states.emphasis"],
+    sample: ["card"],
+    cascadeFamilies: 25,
+    movedArtifact: 18,
+    kitRows: 29,
+  };
+  const lines = decisionsLitLines(refused).join("\n");
+  assert.ok(lines.includes("REFUSED"));
+  assert.ok(lines.includes("states.emphasis"));
+  assert.ok(lines.includes("navigation.sidebar-tone"));
 });

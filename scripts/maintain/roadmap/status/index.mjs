@@ -2954,6 +2954,107 @@ function check() {
   console.log(`roadmap:check OK — ${reg.workOrders.length} WOs consistent across registry + ${LANES.length} lane files`);
 }
 
+/**
+ * The measured `decisions lit` indicator (WO-CON-03).
+ *
+ * STATUS does not compute this number and must never appear to: it reads the
+ * artifact `packages/core/scripts/check/decisions-lit` writes and republishes
+ * that file's own headline, producer time and refusals. A missing artifact is
+ * published as NOT MEASURED rather than as a zero, because a zero would be a
+ * measurement nobody took.
+ */
+export function readDecisionsLitIndicator(
+  artifactPath = path.join(
+    ROOT,
+    "packages/core/scripts/check/decisions-lit/evidence/index.json",
+  ),
+) {
+  if (!fs.existsSync(artifactPath)) {
+    return { measured: false, reason: "no run has published an artifact yet" };
+  }
+  let artifact;
+  try {
+    artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
+  } catch (error) {
+    return { measured: false, reason: `artifact is unreadable: ${error.message}` };
+  }
+  if (typeof artifact?.headline !== "string" || !artifact.summary) {
+    return { measured: false, reason: "artifact carries no headline" };
+  }
+  const violations = Array.isArray(artifact.violations) ? artifact.violations : [];
+  return {
+    measured: true,
+    headline: artifact.headline,
+    measuredHeadline: artifact.measuredHeadline ?? null,
+    discrepancies: Array.isArray(artifact.summary?.discrepancies)
+      ? artifact.summary.discrepancies
+      : [],
+    producedAt: artifact.producedAt ?? "unknown",
+    refused: violations.length > 0,
+    violations,
+    sample: artifact.denominators?.measuredFamilySample ?? [],
+    cascadeFamilies: artifact.denominators?.cascadeMatrixFamilies ?? null,
+    movedArtifact: Array.isArray(artifact.summary?.decisions)
+      ? artifact.summary.decisions.filter((row) => row.artifactBytesDiffer).length
+      : null,
+    kitRows: Array.isArray(artifact.summary?.decisions)
+      ? artifact.summary.decisions.length
+      : null,
+  };
+}
+
+/** The STATUS block for the indicator, as lines. */
+export function decisionsLitLines(indicator) {
+  const lines = ["## Consumer contract — decisions lit (WO-CON-03)", ""];
+  if (!indicator.measured) {
+    lines.push(
+      `NOT MEASURED — ${indicator.reason}. Run \`node packages/core/scripts/check/decisions-lit/public/cli/index.mjs run\` ` +
+        "(needs a current `packages/core` build; the probe refuses a stale one).",
+    );
+    lines.push("");
+    return lines;
+  }
+  lines.push(`**${indicator.headline}** — RECORDED; run of ${indicator.producedAt}.`);
+  if (indicator.measuredHeadline) {
+    lines.push("");
+    lines.push(`**${indicator.measuredHeadline}** — MEASURED by that run.`);
+  }
+  lines.push("");
+  lines.push(
+    `> Two halves, two statuses. The \`n/22\` figure is the audit's recorded effect class for today's control ` +
+      "catalog, carried in the probe's catalog with its provenance; the `+m/10 new` figure and the measured line " +
+      `are derived by the run itself. Family movement is a sample of ${indicator.sample.length} of the ` +
+      `${indicator.cascadeFamilies} cascade families (\`` + indicator.sample.join("`, `") +
+      "`), so a decision can move a real family the sample does not carry; the whole-artifact comparison beside it " +
+      "is not a sample.",
+  );
+  lines.push("");
+  if (indicator.movedArtifact !== null) {
+    lines.push(
+      `Whole artifact: ${indicator.movedArtifact}/${indicator.kitRows} kit decisions change the compiled tenant artifact today.`,
+    );
+    lines.push("");
+  }
+  if (indicator.discrepancies.length > 0) {
+    lines.push(
+      `Recorded vs measured — ${indicator.discrepancies.length} row(s) disagree; neither side is authority, and the disagreement is published rather than resolved:`,
+    );
+    for (const row of indicator.discrepancies) {
+      lines.push(`- \`${row.id}\` — ${row.kind}: ${row.detail}`);
+    }
+    lines.push("");
+  } else if (indicator.measuredHeadline) {
+    lines.push("Recorded vs measured: every row agrees.");
+    lines.push("");
+  }
+  if (indicator.refused) {
+    lines.push("REFUSED — the last run did not certify:");
+    for (const violation of indicator.violations) lines.push(`- ${violation}`);
+    lines.push("");
+  }
+  return lines;
+}
+
 function generateStatus() {
   const reg = loadRegistry();
   const registryErrors = validateRegistryMutationIntegrity(reg);
@@ -3001,6 +3102,7 @@ function generateStatus() {
     lines.push(`| [${lane}](./${lane}.md) | ${c.done} | ${c["in-progress"]} | ${c.todo} | ${c.total} |`);
   }
   lines.push("");
+  lines.push(...decisionsLitLines(readDecisionsLitIndicator()));
   const programMilestones = summarizeProgramMilestones(reg);
   lines.push("## Programme milestones (derived from their gate work orders)");
   lines.push("");
