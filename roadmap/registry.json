@@ -3935,7 +3935,7 @@
    "lane": "canon-close",
    "order": 2,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -3946,7 +3946,9 @@
    "notes": "wave 1; closes F-23, F-49, F-57, F-97, F-103, F-104, F-107",
    "claimedBy": "claude-opus-5-can-02",
    "claimedAt": "2026-09-05",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-06",
+   "evidence": "Landed cbe58225 on main (45 paths, tree 6e0584d4, sole parent bacb6a4e). Reconstructed from prior audited candidate f10d0b90 onto post-CAN-06 stack; audit round 1 FAIL on conflict-resolution law violation (probe entry + manual-tools double registration), Opus consolidated fix (phase/noDrillReason/prerequisites + register removal), delta audit round 2 PASS on exact candidate refs/kimi-k3/candidates/can-02-poststack-v2 (86e49844): validateManifest 0 problems, runner exit 0, suites 13/13+18/18+10/10, freshness trio green, debt exactly 18 no widening."
   },
   {
    "id": "WO-CAN-03",
