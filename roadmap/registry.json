@@ -4075,7 +4075,7 @@
    "lane": "catalog-door",
    "order": 2,
    "size": "L",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-01",
     "WO-CAN-02",
@@ -4086,9 +4086,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 2; closes F-03, F-04, F-06, F-25, F-70, F-35; supersedes: WO-ARC-14, WO-ARC-17",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-k3-dt",
+   "claimedAt": "2026-09-07",
+   "progressLog": [],
+   "doneAt": "2026-09-07",
+   "evidence": "Typed catalog at contracts/theme (29 rows from the approved kit) + decision-typed ThemePatch with runtime refusals + TenantThemeDocument v2 with total fail-closed migrate v1->v2 over 7 verbatim app-platform fixtures (76/76); the 7 controls-reading gates repointed to the catalog, customization-model deleted, D-21(b) first-level roots admitted with the identity baseline untouched; new gates theme-single-listing + theme-decision-schema (--check green) and theme-keypath-coverage (honest red, excluded with written reason, blocking drill with teeth). Landed 3eaefc9cb (tree adfbc9b9) after fresh independent K3 audit PASS: 117 paths, gate matrix 150 blocking with FAIL set unchanged, focused suites 1508 pass, all 7 deviations adjudicated justified."
   },
   {
    "id": "WO-CAT-03",
