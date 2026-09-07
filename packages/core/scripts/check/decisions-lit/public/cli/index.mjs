@@ -4,6 +4,8 @@
  *
  *   run [--out <path>] [--vertical <k>]...   measure and write the artifact
  *   report [--in <path>]                     re-print the headline of an artifact
+ *   check [--in <path>]                      refuse a published artifact that no
+ *                                            longer describes this tree
  *
  * WHAT THE HEADLINE MEANS, EXACTLY. `decisions lit = n/22 (+m/10 new)`:
  *   n   decisions of TODAY's 22-control catalog whose recorded class is `full`
@@ -46,6 +48,12 @@ import {
   compileDecisionArms,
   repoRelative,
 } from '../../runtime/compile/index.mjs';
+import {
+  RERUN_COMMAND,
+  freshnessFailures,
+  readArtifact,
+  sourceFingerprints,
+} from '../../runtime/freshness/index.mjs';
 import { measure } from '../../runtime/measure/index.mjs';
 
 /**
@@ -247,6 +255,10 @@ async function commandRun(options) {
     },
     provenance: {
       build,
+      // What this run is a measurement OF. `check` recomputes both digests from
+      // the tree and refuses the artifact when either has moved, so the STATUS
+      // row cannot keep publishing a number whose subject is gone.
+      sources: sourceFingerprints(),
       browser: { ...browser, resolved: repoRelative(browser.resolved), root: repoRelative(browser.root) },
       roster,
       recordedClassSource:
@@ -291,6 +303,39 @@ function printReport(artifact, path) {
   for (const problem of artifact.violations) process.stderr.write(`REFUSED — ${problem}\n`);
 }
 
+/**
+ * The published artifact still describes this tree, or it is refused by name.
+ *
+ * This is the CI-visible half of the probe: the run itself needs a browser and
+ * a built door, which the gate job provides for neither, so what CI enforces is
+ * that the committed measurement has not silently stopped being one.
+ */
+function commandCheck(options) {
+  assertCatalogCensus();
+  const path = options.in ? resolve(process.cwd(), options.in) : DEFAULT_ARTIFACT;
+  const artifact = readArtifact(path);
+  const fingerprints = sourceFingerprints();
+  const failures = freshnessFailures({
+    artifact,
+    fingerprints,
+    artifactPath: repoRelative(path),
+  });
+  if (failures.length > 0) {
+    for (const failure of failures) process.stderr.write(`REFUSED — ${failure}\n`);
+    return 1;
+  }
+  process.stdout.write(
+    `decisions-lit freshness: ${repoRelative(path)} still describes this tree\n` +
+      `  ${artifact.headline} — run of ${artifact.producedAt}\n` +
+      `  door ${fingerprints.door.roots.join(', ')} — ${fingerprints.door.fileCount} files, ` +
+      `digest ${fingerprints.door.digest.slice(0, 12)}\n` +
+      `  instrument ${fingerprints.instrument.fileCount} files, ` +
+      `digest ${fingerprints.instrument.digest.slice(0, 12)}\n` +
+      `  a red here is answered by \`${RERUN_COMMAND}\`, never by editing the artifact\n`,
+  );
+  return 0;
+}
+
 function commandReport(options) {
   const path = options.in ? resolve(process.cwd(), options.in) : DEFAULT_ARTIFACT;
   const artifact = JSON.parse(readFileSync(path, 'utf-8'));
@@ -315,7 +360,8 @@ export async function main(argv) {
   const options = parse(rest);
   if (command === 'run') return commandRun(options);
   if (command === 'report') return commandReport(options);
-  process.stderr.write('usage: decisions-lit run|report [--vertical k] [--out p] [--in p]\n');
+  if (command === 'check') return commandCheck(options);
+  process.stderr.write('usage: decisions-lit run|report|check [--vertical k] [--out p] [--in p]\n');
   return 2;
 }
 

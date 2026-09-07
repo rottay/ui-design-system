@@ -267,6 +267,28 @@ export const CI_GATES = Object.freeze([
   { id: 'fanout-facts-freshness', run: ['node', 'scripts/generate/tokens/manifest/fanout/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'fanout-facts-drill', },
   { id: 'root-checklists-freshness', run: ['node', 'scripts/generate/tokens/manifest/root-checklists/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'root-checklists-clean-checkout-drill', },
   { id: 'mirror-parity-freshness', run: ['node', 'scripts/generate/tokens/manifest/mirror-parity/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'cascade-coverage-ownership-drill', },
+  // The `decisions lit` indicator, which STATUS republishes verbatim from
+  // `scripts/check/decisions-lit/evidence/index.json`.
+  //
+  // WHAT IS GATED HERE IS THE ARTIFACT, NOT THE RUN. The measurement drives a
+  // Chromium through Playwright, and the job that runs this inventory installs
+  // no browser -- only the a11y and visual jobs do. A blocking entry for the
+  // run would therefore be red for a missing input on every CI run, which is
+  // how a gate gets downgraded; and a run that CI could not perform would leave
+  // the committed artifact unguarded either way. So the run stays a hand-run
+  // measurement (`pnpm run decisions-lit`) and what CI enforces is that the
+  // published measurement still describes this tree: the artifact carries a
+  // content digest of the door roots it was measured through and of the
+  // instrument that measured it, and `check` recomputes both. A stale artifact
+  // is refused by name rather than republished as MEASURED.
+  //
+  // Source-and-artifact only, so it is valid on a clean checkout and declared
+  // pre-build: the door digest is taken from `src/`, never from `dist/`.
+  // Drill first, and here with a reason of its own: the guard's whole verdict
+  // is a digest comparison, and a digest that stopped covering a file reports
+  // agreement and looks exactly like a fresh artifact.
+  { id: 'decisions-lit-drill', run: ['node', '--test', 'scripts/check/decisions-lit/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['decisions-lit-freshness'], },
+  { id: 'decisions-lit-freshness', run: ['pnpm', 'run', 'decisions-lit:check'], blocking: true, phase: 'pre-build', drillId: 'decisions-lit-drill', },
   { id: 'variant-parity-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/variant-parity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['variant-parity'], },
   // El cuarto mide la FUENTE, no el artefacto: variant-parity es el canon
   // estructural de los 3 themes y corre sin build. Su `--check` es frescura Y

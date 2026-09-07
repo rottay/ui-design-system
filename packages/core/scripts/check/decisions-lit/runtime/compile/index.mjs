@@ -50,13 +50,33 @@ export const DOOR_SOURCES = Object.freeze([
 ]);
 
 /**
- * The newest FILE under a path. Directory mtimes are deliberately ignored:
- * they move when any entry is added or removed, which would make the guard red
- * after a `mkdir` that changed no source the build reads.
+ * Build OUTPUTS that happen to live under a door root.
+ *
+ * `build:vertical-css` rewrites the compiled tenant stylesheets under
+ * `facade/artifacts/` AFTER `vite build` has produced `dist/server.js`, so a
+ * complete, correct build always ends with a door source newer than the dist it
+ * produced. The guard below then refused every freshly built tree and the only
+ * way past it was to touch the dist -- a guard answerable only by falsifying
+ * its own input. These paths are generated, not authored (the same reading
+ * `check/tokens/cascade/roots/catalog-freshness` applies to them), so they are
+ * out of the mtime walk. They stay inside the CONTENT fingerprint that
+ * `runtime/freshness` computes, where a hand-edited artifact is still caught.
+ */
+const GENERATED_UNDER_DOOR = ['tokens/css/facade/artifacts'];
+
+function isGenerated(path) {
+  const portable = relativePath(CORE_ROOT, path).split('\\').join('/');
+  return GENERATED_UNDER_DOOR.some((fragment) => portable.includes(fragment));
+}
+
+/**
+ * The newest AUTHORED file under a path. Directory mtimes are deliberately
+ * ignored: they move when any entry is added or removed, which would make the
+ * guard red after a `mkdir` that changed no source the build reads.
  */
 function newestMtime(path) {
   const stat = statSync(path);
-  if (!stat.isDirectory()) return { at: stat.mtimeMs, path };
+  if (!stat.isDirectory()) return isGenerated(path) ? { at: 0, path } : { at: stat.mtimeMs, path };
   let newest = { at: 0, path };
   for (const entry of readdirSync(path, { withFileTypes: true })) {
     const child = newestMtime(resolve(path, entry.name));

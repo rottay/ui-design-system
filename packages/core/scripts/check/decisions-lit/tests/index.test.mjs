@@ -8,7 +8,7 @@
 import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import test from 'node:test';
 
 import {
@@ -28,6 +28,14 @@ import {
   violations,
 } from '../public/cli/index.mjs';
 import { assertDoorBuildIsFresh, repoRelative } from '../runtime/compile/index.mjs';
+import {
+  INSTRUMENT_ENTRY,
+  digestOf,
+  doorFiles,
+  freshnessFailures,
+  instrumentFiles,
+  sourceFingerprints,
+} from '../runtime/freshness/index.mjs';
 
 test('the catalog states the kit census: 29 rows, 19 standard, 10 pro, 10 new', () => {
   assert.deepEqual(censusErrors(), []);
@@ -256,4 +264,241 @@ test('the guard covers the compiler tree, not only the two door owners', () => {
 
 test('repoRelative strips the machine prefix from a tracked path', () => {
   assert.ok(!repoRelative(process.cwd()).startsWith('/'));
+});
+
+
+/**
+ * The freshness guard's own drills.
+ *
+ * Every one plants the failure it claims to catch: a digest that stopped
+ * covering a file, a fingerprint set that stopped covering a borrowed owner, an
+ * artifact that binds itself to nothing, and a refused run republished as
+ * fresh would each let STATUS print a number whose subject is gone.
+ */
+
+/** A throwaway core tree carrying an instrument entry and the files it imports. */
+function tempInstrument() {
+  const root = mkdtempSync(join(tmpdir(), 'decisions-lit-instrument-'));
+  const write = (relative, body) => {
+    const absolute = join(root, relative);
+    mkdirSync(dirname(absolute), { recursive: true });
+    writeFileSync(absolute, body);
+    return relative;
+  };
+  write('probe/public/cli/index.mjs', [
+    "import { x } from '../../foundation/catalog/index.mjs';",
+    "import { y } from '../../../borrowed/roster/index.mjs';",
+    'export { x, y };\n',
+  ].join('\n'));
+  write('probe/foundation/catalog/index.mjs', "export const x = 1;\n");
+  write('probe/foundation/catalog/data/index.json', '{"rows":1}\n');
+  write('borrowed/roster/index.mjs', "export const y = 2;\n");
+  write('borrowed/roster/fixtures/index.json', '{"fixtures":[]}\n');
+  write('probe/evidence/index.json', '{"headline":"published"}\n');
+  write('probe/tests/index.test.mjs', "import '../public/cli/index.mjs';\n");
+  write('probe/foundation/catalog/tests/index.test.mjs', "export {};\n");
+  return { root, cleanup: () => rmSync(root, { recursive: true, force: true }) };
+}
+
+test('the instrument set is the module closure, and it carries each owner\'s data', () => {
+  const tree = tempInstrument();
+  try {
+    assert.deepEqual(instrumentFiles({ coreRoot: tree.root, entry: 'probe/public/cli/index.mjs' }), [
+      'borrowed/roster/fixtures/index.json',
+      'borrowed/roster/index.mjs',
+      'probe/foundation/catalog/data/index.json',
+      'probe/foundation/catalog/index.mjs',
+      'probe/public/cli/index.mjs',
+    ]);
+  } finally {
+    tree.cleanup();
+  }
+});
+
+test('the instrument set EXCLUDES tests and the published artifact it is written into', () => {
+  const tree = tempInstrument();
+  try {
+    const files = instrumentFiles({ coreRoot: tree.root, entry: 'probe/public/cli/index.mjs' });
+    assert.ok(
+      !files.some((file) => file.includes('/tests/')),
+      'a test edit must not invalidate a measurement it cannot change',
+    );
+    assert.ok(
+      !files.includes('probe/evidence/index.json'),
+      'a digest that hashed the file it is written into cannot exist',
+    );
+  } finally {
+    tree.cleanup();
+  }
+});
+
+test('a NEW borrowed owner enters the instrument set the moment it is imported', () => {
+  const tree = tempInstrument();
+  try {
+    const before = instrumentFiles({ coreRoot: tree.root, entry: 'probe/public/cli/index.mjs' });
+    mkdirSync(join(tree.root, 'borrowed/scope'), { recursive: true });
+    writeFileSync(join(tree.root, 'borrowed/scope/index.mjs'), 'export const z = 3;\n');
+    writeFileSync(
+      join(tree.root, 'borrowed/roster/index.mjs'),
+      "import { z } from '../scope/index.mjs';\nexport const y = z;\n",
+    );
+    const after = instrumentFiles({ coreRoot: tree.root, entry: 'probe/public/cli/index.mjs' });
+    assert.deepEqual(
+      after.filter((file) => !before.includes(file)),
+      ['borrowed/scope/index.mjs'],
+      'a hand-listed root set would have missed the new owner; the closure must not',
+    );
+  } finally {
+    tree.cleanup();
+  }
+});
+
+test('the digest MOVES when one covered byte moves, and is order-independent', () => {
+  const tree = tempInstrument();
+  try {
+    const files = instrumentFiles({ coreRoot: tree.root, entry: 'probe/public/cli/index.mjs' });
+    const before = digestOf(files, { coreRoot: tree.root });
+    assert.equal(
+      digestOf([...files].reverse(), { coreRoot: tree.root }),
+      before,
+      'the digest must not depend on the order the walk happened to produce',
+    );
+    writeFileSync(join(tree.root, 'borrowed/roster/fixtures/index.json'), '{"fixtures":["a"]}\n');
+    assert.notEqual(
+      digestOf(files, { coreRoot: tree.root }),
+      before,
+      'a fixture edit changes what the probe measures and must change the digest',
+    );
+  } finally {
+    tree.cleanup();
+  }
+});
+
+test('the digest distinguishes a DELETED covered file from an unchanged tree', () => {
+  const tree = tempInstrument();
+  try {
+    const files = instrumentFiles({ coreRoot: tree.root, entry: 'probe/public/cli/index.mjs' });
+    const before = digestOf(files, { coreRoot: tree.root });
+    rmSync(join(tree.root, 'borrowed/roster/fixtures/index.json'));
+    assert.notEqual(digestOf(files, { coreRoot: tree.root }), before);
+  } finally {
+    tree.cleanup();
+  }
+});
+
+const FINGERPRINTS = {
+  door: { roots: ['src/foundation'], fileCount: 2, digest: 'a'.repeat(64) },
+  instrument: { entry: INSTRUMENT_ENTRY, fileCount: 3, digest: 'b'.repeat(64) },
+};
+
+function publishedArtifact(overrides = {}) {
+  return {
+    headline: 'decisions lit = 7/22 (+0/10 new)',
+    producedAt: '2026-09-07T00:00:00.000Z',
+    summary: { decisions: [], discrepancies: [] },
+    violations: [],
+    provenance: { sources: FINGERPRINTS },
+    ...overrides,
+  };
+}
+
+test('a published artifact whose two digests match this tree is fresh', () => {
+  assert.deepEqual(
+    freshnessFailures({ artifact: publishedArtifact(), fingerprints: FINGERPRINTS }),
+    [],
+  );
+});
+
+test('REFUSES an artifact that binds itself to no tree at all', () => {
+  const failures = freshnessFailures({
+    artifact: publishedArtifact({ provenance: { build: {} } }),
+    fingerprints: FINGERPRINTS,
+  });
+  assert.equal(failures.length, 2);
+  assert.ok(failures.every((failure) => failure.includes('records no')));
+});
+
+test('REFUSES a door that moved since the run, and says which side moved', () => {
+  const failures = freshnessFailures({
+    artifact: publishedArtifact(),
+    fingerprints: {
+      ...FINGERPRINTS,
+      door: { ...FINGERPRINTS.door, fileCount: 3, digest: 'c'.repeat(64) },
+    },
+  });
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^the door moved since the published run/);
+  assert.match(failures[0], /run decisions-lit/);
+});
+
+test('REFUSES an instrument that moved since the run', () => {
+  const failures = freshnessFailures({
+    artifact: publishedArtifact(),
+    fingerprints: {
+      ...FINGERPRINTS,
+      instrument: { ...FINGERPRINTS.instrument, digest: 'd'.repeat(64) },
+    },
+  });
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^the instrument moved since the published run/);
+});
+
+test('REFUSES a run that never certified itself, however fresh its digests are', () => {
+  const failures = freshnessFailures({
+    artifact: publishedArtifact({ violations: ['positive control moved no family in bithire'] }),
+    fingerprints: FINGERPRINTS,
+  });
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /did not certify itself/);
+});
+
+test('a MISSING artifact is refused, never read as a fresh zero', () => {
+  const failures = freshnessFailures({
+    artifact: null,
+    fingerprints: FINGERPRINTS,
+    artifactPath: 'packages/core/scripts/check/decisions-lit/evidence/index.json',
+  });
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /no run has published an artifact/);
+  assert.ok(!/0\/22/.test(failures[0]), 'a missing run must never be published as a zero');
+});
+
+test('the real tree fingerprints are non-empty and cover both door roots', () => {
+  const fingerprints = sourceFingerprints();
+  assert.ok(fingerprints.door.fileCount > 0, 'a vacuous door set would make every artifact fresh');
+  assert.ok(fingerprints.instrument.fileCount > 0);
+  assert.equal(fingerprints.instrument.entry, INSTRUMENT_ENTRY);
+  const files = doorFiles();
+  for (const root of fingerprints.door.roots) {
+    assert.ok(
+      files.some((file) => file.startsWith(`${root}/`)),
+      `the door digest covers no file under ${root}`,
+    );
+  }
+  assert.ok(
+    !files.some((file) => /\.(test|spec|stories)\./.test(file)),
+    'a test edit must not force a re-measurement it cannot change',
+  );
+});
+
+test('the build guard ignores GENERATED output under a door root, and only that', () => {
+  const now = Date.now();
+  const tree = tempCore({ distMs: now, sourceMs: now - 60_000 });
+  const generated = join(tree.root, 'src/foundation/tokens/css/facade/artifacts/evnto/index.css');
+  mkdirSync(dirname(generated), { recursive: true });
+  writeFileSync(generated, ':root{}\n');
+  utimesSync(generated, (now + 60_000) / 1000, (now + 60_000) / 1000);
+  try {
+    // `build:vertical-css` rewrites these AFTER vite build, so every correct
+    // build ends in this state and the guard must not refuse it.
+    assert.doesNotThrow(() => assertDoorBuildIsFresh({ coreRoot: tree.root }));
+    utimesSync(tree.source, (now + 60_000) / 1000, (now + 60_000) / 1000);
+    assert.throws(
+      () => assertDoorBuildIsFresh({ coreRoot: tree.root }),
+      /older than the door it must measure/,
+      'an AUTHORED door source newer than the dist is still a stale build',
+    );
+  } finally {
+    tree.cleanup();
+  }
 });
