@@ -13,7 +13,7 @@ import { describe, expect, it } from "vitest";
 
 import type {
   Theme,
-  ThemePatch,
+  ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { mergeThemePatches } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
@@ -86,7 +86,7 @@ const tenantPatchOf = (
   vertical: FirstPartyVerticalId,
   document: unknown,
   identity: unknown
-): ThemePatch =>
+): ThemeLayerPatch =>
   documentThemePatch({
     vertical,
     document: {
@@ -95,7 +95,7 @@ const tenantPatchOf = (
     } as TenantThemeDocument,
   });
 
-const TENANT_FIXTURES: readonly [string, FirstPartyVerticalId, ThemePatch][] = [
+const TENANT_FIXTURES: readonly [string, FirstPartyVerticalId, ThemeLayerPatch][] = [
   [
     "divergence-editorial over bithire",
     "bithire",
@@ -255,6 +255,12 @@ describe("channel minting and CSS text have declared owners", () => {
   // lookup table; it reads channels as data and mints none.
   const INGRESS_DOCUMENT_PATCH =
     "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts";
+  // The v1 -> v2 migration carries the same shape for the opposite direction:
+  // `TOKEN_TO_SEED` maps a retired raw token NAME to the decision that now owns
+  // it, so a published tenant is migrated instead of silently repainted. Data,
+  // like the allowlist above, and it mints nothing.
+  const INGRESS_DOCUMENT_MIGRATE =
+    "infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/foundation/migrate/index.ts";
 
   const productionSources = (relative: string): string[] => {
     const out: string[] = [];
@@ -336,7 +342,9 @@ describe("channel minting and CSS text have declared owners", () => {
     // Exact, not "at least": an adapter states the channels its posture cites
     // and the values its baseline carries, and the document-patch ingress
     // states the override tokens it accepts; any other owner naming one is new.
-    expect(naming.sort()).toEqual([...ENGINE_ADAPTERS, INGRESS_DOCUMENT_PATCH].sort());
+    expect(naming.sort()).toEqual(
+      [...ENGINE_ADAPTERS, INGRESS_DOCUMENT_PATCH, INGRESS_DOCUMENT_MIGRATE].sort(),
+    );
 
     // A channel name is DATA — a table entry, a name matcher, an evidence
     // string or a value — never an identifier the owner computes with.
@@ -901,17 +909,16 @@ describe("origin decides authorship at the compiler", () => {
   const baseline = FIRST_PARTY_THEMES.bithire;
   const patchOf = () =>
     tenantPatchOf("bithire", DIVERGENCE_EDITORIAL_DOCUMENT, DIVERGENCE_EDITORIAL_IDENTITY);
-  const withOrigin = (origin: ThemeIntentOrigin, patch: ThemePatch) =>
+  const withOrigin = (origin: ThemeIntentOrigin, patch: ThemeLayerPatch) =>
     compileTheme(
       resolveTheme({ vertical: "bithire", slug: "bithire", origin, patch }),
       modern
     );
 
-  it("a static-vertical intent compiles as the merged theme with no tenant at all", () => {
-    const patch = patchOf();
-    const viaIntent = withOrigin("static-vertical", patch);
+  it("a static-vertical intent compiles as the baseline itself, with no tenant at all", () => {
+    const viaIntent = withOrigin("static-vertical", {});
     const asPlainTheme = compileTheme(
-      { theme: mergeThemePatches(baseline, patch), provenance: EMPTY_PROVENANCE },
+      { theme: baseline, provenance: EMPTY_PROVENANCE },
       modern
     );
 
@@ -919,11 +926,21 @@ describe("origin decides authorship at the compiler", () => {
     expect(viaIntent.modeBlocks).toEqual(asPlainTheme.modeBlocks);
   });
 
-  it("the same patch as a static layer and as a tenant document are not the same compile", () => {
-    const patch = patchOf();
-    expect(withOrigin("tenant-document", patch).cssVariables).not.toEqual(
-      withOrigin("static-vertical", patch).cssVariables
+  it("a static-vertical intent cannot carry a patch at all (WO-CAT-02)", () => {
+    // The stronger law replaces the comparison that used to live here. There is
+    // no static compile of a tenant patch to compare against a tenant compile:
+    // the combination is refused, so a second authoring surface for vertical
+    // identity is unrepresentable rather than merely discouraged.
+    expect(() => withOrigin("static-vertical", patchOf())).toThrow(
+      /static-vertical intent carries an empty patch/u
     );
+  });
+
+  it("the same patch is a tenant compile through either tenant origin, and never a baseline", () => {
+    const patch = patchOf();
+    const asTenant = withOrigin("tenant-document", patch);
+    expect(asTenant.cssVariables).not.toEqual(withOrigin("static-vertical", {}).cssVariables);
+    expect(mergeThemePatches(baseline, patch)).not.toEqual(baseline);
   });
 
   it("a preview compiles exactly as the persisted tenant document", () => {

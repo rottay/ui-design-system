@@ -1,15 +1,16 @@
 /**
- * @fileoverview DATED ADAPTER (2026-09-05) — decisions to today's keypaths.
+ * @fileoverview Projects a v2 decision document onto the v1 authoring shape.
  *
- * DELETED BY: WO-DER-06 (real derivation) and WO-CAT-02 (typed catalog with
- * per-decision fan-out). A dated exception to the single-path rule without a
- * work order that deletes it is not accepted.
+ * It derives no channel and adds no second compiler: it writes the keypaths the
+ * CATALOG declares and hands the result to the same `migrateV1` the persisted
+ * transport uses. A decision the catalog gives no keypath is reported unlit.
  *
- * It projects the decisions onto the v1 authoring shape and hands that shape to
- * the same `migrateV1` the persisted transport uses, so it derives no channel
- * and adds no second compiler. A decision with no v1 keypath is reported unlit.
+ * IT OWNS NO KEYPATH TABLE. The dated WO-CON-03 adapter carried its own
+ * decision -> keypath column beside the catalog's; that column is deleted and
+ * `keypath.document` in `contracts/theme/runtime/catalog` is the only one left,
+ * which is what makes this owner a mechanism rather than a second listing.
  *
- * @module Compilers/Theme/Ingress/Runtime/DocumentV2/Foundation/Adapter
+ * @module Compilers/Theme/Ingress/Runtime/DocumentV2/Foundation/Projection
  * @category Compilers
  * @package @rottay/design-system
  */
@@ -31,8 +32,9 @@ import {
   type ThemeDecisionId,
   type ThemeDecisionTier,
   type ThemeDecisions,
-} from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
-import type { TenantThemeDocumentV2 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
+} from "@/contracts/theme/presentation/document";
+import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
+import { themeControl } from "@/contracts/theme/runtime/catalog";
 import { FONT_PACK_MANIFEST } from "@/foundation/tokens/css/foundation/typography/font-packs/manifest";
 
 /** Why an activated decision moved nothing. */
@@ -44,7 +46,7 @@ export interface DecisionProjection {
   /** True when this activation contributed at least one v1 keypath. */
   lit: boolean;
   reason?: UnlitReason;
-  /** The v1 keypath this activation wrote, for the admission report. */
+  /** The v1 document keypath the catalog declares, for the admission report. */
   keypaths: readonly string[];
 }
 
@@ -55,36 +57,33 @@ type AnatomyFamily = (typeof CHROME_ANATOMY_FAMILIES)[number];
 interface ProjectionTarget { general: Bag; advanced: Bag; visualFoundation: Bag }
 
 /**
- * The 19 kept decisions, the v1 keypath each one owns TODAY, and the write. A
- * row absent from this table is one of the ten the kit marks `(new)`.
+ * How each decision WRITES its catalog keypath. Keys only, no paths: a row
+ * missing here is a decision this projection cannot write yet, and a row whose
+ * catalog keypath is `null` is one the v1 shape has nowhere to put.
  */
-const ADAPTER_TABLE: ReadonlyArray<
-  readonly [
-    ThemeDecisionId,
-    string,
-    (target: ProjectionTarget, value: unknown) => boolean,
-  ]
-> = Object.freeze([
-  ["palette.seeds", "general.palette", (t, v) => writeSeeds(t, v)],
-  ["palette.status-seeds", "general.palette.status", (t, v) => wrote(nest(t.general, "palette").status = v)],
-  ["palette.dark-mode", "general.palette.backgroundMode", (t, v) => wrote(nest(t.general, "palette").backgroundMode = v)],
-  ["typography.pairing", "general.typography.typePairing", (t, v) => wrote(nest(t.general, "typography").typePairing = v)],
-  ["typography.scale", "general.typography.scale", (t, v) => wrote(nest(t.general, "typography").scale = v)],
-  ["shape.radius-scale", "general.shape.radiusScale", (t, v) => wrote(nest(t.general, "shape").radiusScale = v)],
-  ["shape.button-style", "general.shape.buttonStyle", (t, v) => wrote(nest(t.general, "shape").buttonStyle = v)],
-  ["density.mode", "general.density", (t, v) => wrote(t.general.density = v)],
-  ["spacing.rhythm", "general.rhythm", (t, v) => wrote(t.general.rhythm = v)],
-  ["motion.dial", "general.motion", (t, v) => wrote(t.general.motion = v)],
-  ["surfaces.elevation-posture", "general.surfaces.elevation", (t, v) => wrote(nest(t.general, "surfaces").elevation = v)],
-  ["surfaces.effect-intensity", "general.surfaces.effectIntensity", (t, v) => wrote(nest(t.general, "surfaces").effectIntensity = v)],
-  ["navigation.sidebar-tone", "general.navigation.sidebarTone", (t, v) => wrote(nest(t.general, "navigation").sidebarTone = v)],
-  ["experience.profile", "general.experienceProfile", (t, v) => wrote(t.general.experienceProfile = v)],
-  ["profiles.expressive", "advanced.profiles", (t, v) => wrote(t.advanced.profiles = v)],
-  ["responsive.posture", "advanced.responsivePosture", (t, v) => wrote(t.advanced.responsivePosture = v)],
-  ["recipe-profile", "recipeProfile", (t, v) => wrote(t.visualFoundation.recipeProfile = v)],
-  ["chrome.anatomy", "advanced.chrome.*.anatomy", (t, v) => writeAnatomy(t, v)],
-  ["typography.families", "general.typography", writeFamilies],
-]);
+const WRITERS: Partial<
+  Record<ThemeDecisionId, (target: ProjectionTarget, value: unknown) => boolean>
+> = Object.freeze({
+  "palette.seeds": (t, v) => writeSeeds(t, v),
+  "palette.status-seeds": (t, v) => wrote((nest(t.general, "palette").status = v)),
+  "palette.dark-mode": (t, v) => wrote((nest(t.general, "palette").backgroundMode = v)),
+  "typography.pairing": (t, v) => wrote((nest(t.general, "typography").typePairing = v)),
+  "typography.scale": (t, v) => wrote((nest(t.general, "typography").scale = v)),
+  "typography.families": writeFamilies,
+  "shape.radius-scale": (t, v) => wrote((nest(t.general, "shape").radiusScale = v)),
+  "shape.button-style": (t, v) => wrote((nest(t.general, "shape").buttonStyle = v)),
+  "density.mode": (t, v) => wrote((t.general.density = v)),
+  "spacing.rhythm": (t, v) => wrote((t.general.rhythm = v)),
+  "motion.dial": (t, v) => wrote((t.general.motion = v)),
+  "surfaces.elevation-posture": (t, v) => wrote((nest(t.general, "surfaces").elevation = v)),
+  "surfaces.effect-intensity": (t, v) => wrote((nest(t.general, "surfaces").effectIntensity = v)),
+  "navigation.sidebar-tone": (t, v) => wrote((nest(t.general, "navigation").sidebarTone = v)),
+  "experience.profile": (t, v) => wrote((t.general.experienceProfile = v)),
+  "profiles.expressive": (t, v) => wrote((t.advanced.profiles = v)),
+  "responsive.posture": (t, v) => wrote((t.advanced.responsivePosture = v)),
+  "recipe-profile": (t, v) => wrote((t.visualFoundation.recipeProfile = v)),
+  "chrome.anatomy": (t, v) => writeAnatomy(t, v),
+});
 
 /** Every table writer returns "did this write a keypath"; these always do. */
 function wrote(_: unknown): boolean {
@@ -187,9 +186,12 @@ export function projectDecisionsToV1(document: TenantThemeDocumentV2): {
   };
   const written = new Map<ThemeDecisionId, string>();
 
-  for (const [id, keypath, write] of ADAPTER_TABLE) {
+  for (const id of THEME_DECISION_IDS) {
     const value = decisions[id];
     if (value === undefined) continue;
+    const keypath = v1KeypathOf(id);
+    const write = WRITERS[id];
+    if (keypath === null || !write) continue;
     if (!write(target, value)) continue;
     written.set(id, keypath);
   }
@@ -241,7 +243,13 @@ export function projectDecisionsToV1(document: TenantThemeDocumentV2): {
   };
 }
 
-/** The v1 keypath a decision owns today, or `undefined` for the ten new rows. */
-export function v1KeypathOf(id: ThemeDecisionId): string | undefined {
-  return ADAPTER_TABLE.find((row) => row[0] === id)?.[1];
+/**
+ * The v1 keypath a decision owns today, read from the catalog.
+ *
+ * `null` -- not `undefined` -- for the ten rows the kit marks `(new)`: the
+ * catalog declares the absence, so the projection reports it instead of
+ * discovering it.
+ */
+export function v1KeypathOf(id: ThemeDecisionId): string | null {
+  return themeControl(id).keypath.document;
 }

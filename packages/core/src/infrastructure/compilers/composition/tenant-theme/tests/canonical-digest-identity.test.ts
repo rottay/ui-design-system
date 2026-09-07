@@ -363,7 +363,7 @@ describe("digest identity across the canonicalization extraction", () => {
     );
     // P0 re-anchor (2026-08-28): the envelope gained `general.palette.status`
     // -- the four status tone seeds of the `palette.status-seeds` dial, opened
-    // in place from its frontier row. Same law as the F4A-6 note directly
+    // in place from its declared-but-closed row. Same law as the F4A-6 note directly
     // above: an AMPLIATION of the closed field set, not a narrowing. The
     // previous positive pin drops to `not.toBe` so the ratchet keeps every
     // superseded value asserted, and the two new values are re-derived from the

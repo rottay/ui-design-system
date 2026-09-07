@@ -12,8 +12,9 @@ import type {
 import {
   isTenantAuthoredOrigin,
   TENANT_AUTHORED_ORIGINS,
+  THEME_PLANS,
 } from "@/foundation/contracts/composition/tenants/themes/intent";
-import type { ThemePatch } from "@/foundation/contracts/composition/tenants/themes/iso";
+import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
 import {
   collectPatchAuthoredPaths,
   mergeThemePatches,
@@ -36,10 +37,10 @@ import { baselineFor, resolveTheme } from "..";
 
 const baseline = FIRST_PARTY_THEMES.rottay;
 
-const patch: ThemePatch = {
+const patch: ThemeLayerPatch = {
   palette: { primaryColor: "#123456", successColor: "#0a0" },
   surfaces: { density: "compact", elevation: "elevated" },
-} as unknown as ThemePatch;
+} as unknown as ThemeLayerPatch;
 
 const intentOf = (origin: ThemeIntentOrigin): ThemeIntent => ({
   vertical: "rottay",
@@ -132,8 +133,10 @@ describe("the intent's vertical is the closed roster set", () => {
   }
 });
 
-describe("resolveTheme applies every origin's patch to the baseline", () => {
-  for (const origin of ORIGINS) {
+describe("resolveTheme applies every patch-bearing origin's patch to the baseline", () => {
+  // `static-vertical` is deliberately absent: WO-CAT-02 refuses a patch on that
+  // origin outright, and its own describe block below owns that law.
+  for (const origin of TENANT_AUTHORED_ORIGINS) {
     it(`${origin} merges through the ISO resolver and changes the theme`, () => {
       const resolution = resolveTheme(intentOf(origin));
       expect(resolution.theme).toEqual(mergeThemePatches(baseline, patch));
@@ -146,31 +149,108 @@ describe("resolveTheme applies every origin's patch to the baseline", () => {
       expect(resolveTheme(intent).intent).toBe(intent);
     });
   }
+
+  it("static-vertical carries its (empty) intent for diagnostics too", () => {
+    const intent = {
+      vertical: "rottay",
+      slug: "rottay",
+      origin: "static-vertical",
+      patch: {},
+    } as const;
+    expect(resolveTheme(intent).intent).toBe(intent);
+  });
 });
 
-describe("a static-vertical intent is a baseline layer, not tenant authorship", () => {
-  const resolution = resolveTheme(intentOf("static-vertical"));
+describe("the intent refuses identity in the patch and an ungranted plan", () => {
+  const tenantIntent = (over: Record<string, unknown>) => ({
+    vertical: "rottay",
+    slug: "acme",
+    origin: "tenant-document",
+    patch: {},
+    ...over,
+  });
 
-  it("changes the resolved theme while staying non-tenant", () => {
-    expect(resolution.theme).not.toEqual(baseline);
+  for (const key of ["id", "name"] as const) {
+    it(`refuses a patch that carries "${key}" (F-70)`, () => {
+      expect(() =>
+        resolveTheme(tenantIntent({ patch: { [key]: "smuggled" } }) as never)
+      ).toThrow(new RegExp(`patch may not carry "${key}"`, "u"));
+    });
+  }
+
+  it("accepts an intent with no entitlement at all", () => {
+    expect(() => resolveTheme(tenantIntent({}) as never)).not.toThrow();
+  });
+
+  it("accepts each plan of the closed set", () => {
+    for (const plan of THEME_PLANS) {
+      expect(() =>
+        resolveTheme(tenantIntent({ entitlement: { plan } }) as never)
+      ).not.toThrow();
+    }
+  });
+
+  it("refuses a plan outside the closed set BY NAME", () => {
+    expect(() =>
+      resolveTheme(tenantIntent({ entitlement: { plan: "enterprise" } }) as never)
+    ).toThrow(/unknown plan "enterprise"; the closed set is "standard", "pro", "internal"/u);
+  });
+
+  it("refuses an entitlement carrying anything but `plan`", () => {
+    expect(() =>
+      resolveTheme(
+        tenantIntent({ entitlement: { plan: "pro", grantedBy: "me" } }) as never
+      )
+    ).toThrow(/entitlement carries exactly `plan`/u);
+    expect(() =>
+      resolveTheme(tenantIntent({ entitlement: {} }) as never)
+    ).toThrow(/entitlement carries exactly `plan`/u);
+    expect(() =>
+      resolveTheme(tenantIntent({ entitlement: "pro" }) as never)
+    ).toThrow(/entitlement must be an object/u);
+  });
+
+  it("still refuses a key the envelope never declared", () => {
+    expect(() =>
+      resolveTheme(tenantIntent({ plan: "pro" }) as never)
+    ).toThrow(/unknown intent key\(s\) "plan"/u);
+  });
+});
+
+describe("a static-vertical intent is the baseline itself, never a patch on it", () => {
+  const resolution = resolveTheme({
+    vertical: "rottay",
+    slug: "rottay",
+    origin: "static-vertical",
+    patch: {},
+  });
+
+  it("resolves to the baseline and stays non-tenant", () => {
+    expect(resolution.theme).toEqual(baseline);
     expect(resolution.provenance.tenantAuthored).toBe(false);
     expect(resolution.provenance).toBe(EMPTY_PROVENANCE);
   });
 
-  it("creates no tenant floor", () => {
+  it("creates no tenant floor, no status-seed authorship and no authored path", () => {
     expect(resolution.provenance.floors).toEqual({});
-    expect(resolution.provenance.floors).not.toEqual(tenantPostureFloors(patch));
-  });
-
-  it("creates no tenant status-seed authorship", () => {
     expect(resolution.provenance.statusSeedAuthorship.base.success).toBe(false);
     expect(resolution.provenance.statusSeedAuthorship.modes).toEqual({});
+    expect(resolution.provenance.authoredPaths.size).toBe(0);
+    // The same patch, offered through a TENANT origin, does produce all three:
+    // the difference is the origin, which is what makes the refusal below a
+    // law about authorship rather than about an empty object.
+    expect(tenantPostureFloors(patch)).not.toEqual({});
     expect(deriveTenantStatusSeedAuthorship(patch).base.success).toBe(true);
+    expect(collectPatchAuthoredPaths(patch).size).toBeGreaterThan(0);
   });
 
-  it("claims no authored path even though the patch has them", () => {
-    expect(resolution.provenance.authoredPaths.size).toBe(0);
-    expect(collectPatchAuthoredPaths(patch).size).toBeGreaterThan(0);
+  it("REFUSES a non-empty patch by name, listing the keys it refused", () => {
+    // WO-CAT-02. A patch on top of the vertical's own baseline is a second,
+    // unnamed authoring surface for vertical identity: the vertical authors its
+    // theme, it does not patch it.
+    expect(() => resolveTheme(intentOf("static-vertical"))).toThrow(
+      /static-vertical intent carries an empty patch.*"palette", "surfaces"/su
+    );
   });
 });
 
@@ -196,7 +276,7 @@ describe("a tenant-authored origin overlays with full provenance", () => {
     it(`${origin} does not derive the floor from the merged theme`, () => {
       // The merge is total, so every posture keypath is populated afterwards;
       // a floor derived from it would out-rank the tenant's own selection.
-      const merged = resolution.theme as unknown as ThemePatch;
+      const merged = resolution.theme as unknown as ThemeLayerPatch;
       expect(resolution.provenance.floors).not.toEqual(tenantPostureFloors(merged));
     });
   }
@@ -350,7 +430,7 @@ describe("mergeThemePatches refuses a mis-kinded patch node", () => {
   for (const [kind, value] of wrongPrimitives) {
     it(`refuses a ${kind} on palette.primaryColor`, () => {
       expect(() => merge({ palette: { primaryColor: value } })).toThrow(
-        /expected string at \$\.palette\.primaryColor|is not a ThemePatch leaf/u
+        /expected string at \$\.palette\.primaryColor|is not a ThemeLayerPatch leaf/u
       );
       expect(() => resolve({ palette: { primaryColor: value } })).toThrow();
     });
@@ -358,7 +438,7 @@ describe("mergeThemePatches refuses a mis-kinded patch node", () => {
 
   it("refuses a function on a declared leaf", () => {
     expect(() => merge({ palette: { primaryColor: () => "#fff" } })).toThrow(
-      /is not a ThemePatch leaf/u
+      /is not a ThemeLayerPatch leaf/u
     );
   });
 
@@ -536,7 +616,7 @@ describe("a baseline that is not a Theme is refused by its own guard", () => {
           vertical,
           slug: vertical,
           origin: "tenant-document",
-          patch: { palette: { primaryColor: "#123456" } } as unknown as ThemePatch,
+          patch: { palette: { primaryColor: "#123456" } } as unknown as ThemeLayerPatch,
         })
       ).not.toThrow();
     }
@@ -722,7 +802,7 @@ describe("resolveTheme refuses a value outside a closed option domain", () => {
 });
 
 /* -------------------------------------------------------------------------- */
-/* only a plain record may be a ThemePatch container                           */
+/* only a plain record may be a ThemeLayerPatch container                           */
 /* -------------------------------------------------------------------------- */
 
 describe("mergeThemePatches refuses a container that is not a plain record", () => {
@@ -744,7 +824,7 @@ describe("mergeThemePatches refuses a container that is not a plain record", () 
   for (const [label, make] of containers) {
     it(`refuses ${label} as the TOP-LEVEL patch`, () => {
       expect(() => merge(make())).toThrow(
-        /is not a ThemePatch container|is not an object/u
+        /is not a ThemeLayerPatch container|is not an object/u
       );
     });
 
@@ -759,7 +839,7 @@ describe("mergeThemePatches refuses a container that is not a plain record", () 
     // fields were merged INTO the resolved palette through a container the
     // contract never declared.
     expect(() => merge({ palette: new HostilePalette() })).toThrow(
-      /class instance at \$\.palette is not a ThemePatch container/u
+      /class instance at \$\.palette is not a ThemeLayerPatch container/u
     );
     expect(baselineTheme.palette.primaryColor).not.toBe("#123456");
   });

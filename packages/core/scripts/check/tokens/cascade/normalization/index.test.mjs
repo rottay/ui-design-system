@@ -62,6 +62,7 @@ const tree = (over = {}) => ({
   catalog: CATALOG,
   literalPins: [],
   controlIds: new Set(['density.mode', 'palette.seeds']),
+  authorableControls: 2,
   controlsWithDbDoor: 2,
   allowlistTotal: ALLOWLIST_TOTAL,
   contractSource: CONTRACT_OK,
@@ -204,6 +205,13 @@ test('L5 — achicar el allowlist falla', () => {
 test('L5 — un control que pierde su puerta DB falla (clase anti-puerta, decision 19)', () => {
   const result = analyse(tree({ controlsWithDbDoor: 1 }));
   assert.ok(result.findings.some((finding) => finding.law === 'L5' && /perdieron su puerta DB/.test(finding.detail)));
+});
+
+test('L5 — una fila del kit sin ninguna puerta todavia NO cuenta como puerta perdida', () => {
+  // Las 10 filas nuevas del kit no tienen camino estatico ni de documento: no
+  // entran en `authorableControls`, y por eso el denominador no las cuenta.
+  const result = analyse(tree({ controlIds: new Set(['density.mode', 'palette.seeds', 'states.emphasis']) }));
+  assert.equal(result.findings.filter((finding) => /perdieron su puerta DB/.test(finding.detail)).length, 0);
 });
 
 /* ── 7. el trinquete no admite la subida ni por la puerta de escritura ──── */

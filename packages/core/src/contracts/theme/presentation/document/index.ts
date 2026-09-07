@@ -4,7 +4,7 @@
  * The discriminant is `version`, not v1's `schemaVersion`, so no v1 reader can
  * narrow a v2 payload. v2 admits no raw `--ds-*` override at all (D-03).
  *
- * @module Contracts/Tenants/Themes/TenantTheme/DecisionDocument
+ * @module Contracts/Theme/Document
  * @category Types
  * @package @rottay/design-system
  */
@@ -25,14 +25,14 @@ import {
   type ThemeDecisionId,
   type ThemeDecisions,
   type ThemePlan,
-} from "./decisions";
-import type { TenantThemeDocument } from "..";
+} from "@/contracts/theme/foundation/decisions";
+import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
 /**
  * The decision contract travels with the document, so a writer needs ONE
  * subpath to name a v2 document and the decisions it may carry.
  */
-export * from "./decisions";
+export * from "@/contracts/theme/foundation/decisions";
 
 /** The only document version this contract introduces. */
 export const TENANT_THEME_DOCUMENT_VERSION_V2 = 2 as const;

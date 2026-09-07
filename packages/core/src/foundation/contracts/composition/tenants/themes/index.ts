@@ -114,7 +114,7 @@ export interface BrandExpressiveAxisOverrides {
   material?: string;
   elevation?: string;
   motif?: string;
-  /** Declared vocabulary; carries no v1 expansion rows (frontier axis). */
+  /** Declared vocabulary; carries no v1 expansion rows (not open yet). */
   icon?: string;
 }
 
@@ -3244,7 +3244,7 @@ export interface TenantAppearanceGeneral {
 }
 
 /**
- * Expert-level, fine-grained customization for DB-driven tenants.
+ * Pro-tier, fine-grained customization for DB-driven tenants.
  *
  * Every field maps directly to a CSS variable compiled by the appearance
  * compiler. All fields are optional and additive - tenants only set what

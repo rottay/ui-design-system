@@ -92,10 +92,27 @@ const CLASSIFIED_SUPPORT_ROOT_SET = new Set(CLASSIFIED_SUPPORT_ROOTS);
  * closed makes a new root-level domain fail instead of silently becoming a new
  * peer. Physical migration can happen tier by tier without changing the public
  * API because package entrypoints remain at src/.
+ *
+ * D-21 (b) admits the first-level roots `contracts`, `kernel`, `tokens`,
+ * `compilers` and `runtime` beside the legacy aggregate roots `foundation` and
+ * `infrastructure`, which still hold the unmigrated tree.
+ *
+ * Key order is the MEASURED dependency order, not the target one. `contracts/`
+ * ranks above `foundation/` because it still consumes the vocabularies parked
+ * in `foundation/contracts/**` until WO-RET-04 moves them; the compensating law
+ * is that nothing under `foundation/` may import `contracts/`, which this same
+ * rank makes a red inversion rather than a convention. The legacy roots keep
+ * their previous relative order (foundation < infrastructure < graphics <
+ * components) so no existing edge changes verdict.
  */
 export const ARCHITECTURE_TIERS = Object.freeze({
-  foundation: Object.freeze(['behavior', 'contracts', 'i18n', 'kernel', 'presets', 'tokens']),
-  infrastructure: Object.freeze(['compilers', 'runtime']),
+  foundation: Object.freeze(['behavior', 'i18n', 'presets']),
+  contracts: Object.freeze([]),
+  kernel: Object.freeze([]),
+  tokens: Object.freeze([]),
+  compilers: Object.freeze([]),
+  infrastructure: Object.freeze([]),
+  runtime: Object.freeze([]),
   graphics: Object.freeze(['icons', 'marks', 'motion', 'pictograms']),
   components: Object.freeze(['primitives', 'patterns', 'structures', 'surfaces']),
 });

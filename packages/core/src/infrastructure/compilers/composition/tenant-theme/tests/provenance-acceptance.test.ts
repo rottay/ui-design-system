@@ -2,7 +2,7 @@
  * PROVENANCE ACCEPTANCE — a tenant's accepted intent must reach CSS, or be
  * rejected at ingestion. Never accepted, normalized, digested and discarded.
  *
- * The DB path lowers a `TenantThemeDocument` into a `ThemePatch`, resolves that
+ * The DB path lowers a `TenantThemeDocument` into a `ThemeLayerPatch`, resolves that
  * patch onto the code-owned vertical `Theme`, and compiles the result through
  * the single `compileTheme`. `resolveTheme` is a total merge: the Theme it
  * returns carries no record of WHICH layer authored a field. That erasure was
@@ -808,7 +808,7 @@ describe("static and DB share one lowering", () => {
       // Limit case, on the transport that can express it. The DB document
       // reaches a mode value through `palette.dark` and `light-dark()`; only
       // the static patch carries a literal `modes.<mode>` chrome leaf. Both
-      // transports land on the same `ThemePatch`, which is the authorship
+      // transports land on the same `ThemeLayerPatch`, which is the authorship
       // record either way, so the rank being tested is the same rank.
       //
       // The overlay mode is read from the vertical, not assumed: bithire and

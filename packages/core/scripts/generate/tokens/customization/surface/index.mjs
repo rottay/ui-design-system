@@ -304,13 +304,14 @@ export const FRONTIER_FAMILIES = Object.freeze([
 
 /**
  * Una familia esta escudada SII su capacidad existe en el registro y su
- * `status` es `frontier`. Falla cerrado en los dos sentidos que importan: una
- * familia que nombra una capacidad INEXISTENTE no escuda nada (no se escuda
+ * `status` es `declared` (el valor que WO-CAT-02 dejo en `CapabilityStatus` en
+ * lugar del nombre retirado). Falla cerrado en los dos sentidos que importan:
+ * una familia que nombra una capacidad INEXISTENTE no escuda nada (no se escuda
  * contra un fantasma), y una capacidad ACTIVA deja de escudar en el acto.
  */
 export function buildFrontierShield(families, registryRows) {
   const statusOf = new Map((registryRows ?? []).map((row) => [row.id, row.status]));
-  const shielded = (families ?? []).filter((family) => statusOf.get(family.capability) === 'frontier');
+  const shielded = (families ?? []).filter((family) => statusOf.get(family.capability) === 'declared');
   const prefixes = shielded.flatMap((family) => family.prefixes ?? []);
   return {
     shielded,
@@ -647,7 +648,7 @@ function buildReport({ drill } = {}) {
     tenantBasic: registry.filter((r) => r.tier === 'standard' && r.status === 'active').map((r) => r.id),
     tenantPro: registry.filter((r) => r.tier === 'pro' && r.status === 'active').map((r) => r.id),
     internal: registry.filter((r) => r.tier === 'internal').map((r) => r.id),
-    frontier: registry.filter((r) => r.status === 'frontier').map((r) => r.id),
+    frontier: registry.filter((r) => r.status === 'declared').map((r) => r.id),
     tenantRawAllowlist: allowlist.length,
     tenantRawAllowlistSource: allowlistResolved.source,
     tenantRawDomains: classifyAllowlistDomains(allowlist),

@@ -2,7 +2,7 @@
  * @fileoverview Theme-ISO core contracts.
  *
  * T0 THEME-ISO: a single total nested `Theme`, an ingestion-only recursive
- * `ThemePatch`, and a fail-closed `mergeThemePatches`. Static first-party `.ts`
+ * `ThemeLayerPatch`, and a fail-closed `mergeThemePatches`. Static first-party `.ts`
  * sources and DDB tenant documents are transports only: both resolve to the
  * same complete `Theme` and enter one `compileTheme` lowering.
  *
@@ -107,14 +107,22 @@ export interface Theme {
   capabilities: BrandCapabilityCatalog;
 }
 
-/** Ingestion-only recursive patch. Never reaches the compiler directly. */
-export type ThemePatch = DeepPartial<Omit<Theme, "id">>;
+/**
+ * Ingestion-only recursive patch over the resolved `Theme`. It is a LAYER the
+ * resolver merges, not a thing a tenant authors: what a tenant authors is
+ * `ThemePatch` (decisions and sanctioned overrides) in `contracts/theme`.
+ *
+ * `id` and `name` are excluded. A patch that could restate the identity of the
+ * theme it patches would let a document rename the tenant it belongs to, which
+ * `assertThemeIntent` also refuses at runtime for a patch that arrives as JSON.
+ */
+export type ThemeLayerPatch = DeepPartial<Omit<Theme, "id" | "name">>;
 
 /** Envelope carrying a patch plus transport metadata outside the patch. */
 export interface ThemePatchEnvelope {
   schemaVersion: string;
-  source: "static" | "tenant-document-v1" | "appearance-compat";
-  patch: ThemePatch;
+  source: "static" | "tenant-document-v1";
+  patch: ThemeLayerPatch;
 }
 
 /** True if the governed slot is active (no disposition is present). */
@@ -829,11 +837,11 @@ function nodeKind(value: unknown): string {
   return typeof value;
 }
 
-/** Kinds a `ThemePatch` leaf may carry. `DeepPartial<Theme>` admits no others. */
+/** Kinds a `ThemeLayerPatch` leaf may carry. `DeepPartial<Theme>` admits no others. */
 const LEAF_KINDS = new Set<ThemeLeafKind | string>(["string", "number", "boolean"]);
 
 /**
- * A `ThemePatch` container is a PLAIN record.
+ * A `ThemeLayerPatch` container is a PLAIN record.
  *
  * `typeof value === "object"` admits `new Date()`, `/re/`, `new Map()` and
  * every class instance. A `Date` and a `RegExp` carry no own string keys, so
@@ -879,7 +887,7 @@ function assertLeafKind(base: unknown, patch: unknown, path: string): void {
   const kind = nodeKind(patch);
   if (!LEAF_KINDS.has(kind)) {
     throw new Error(
-      `mergeThemePatches: ${kind} at ${path} is not a ThemePatch leaf; ` +
+      `mergeThemePatches: ${kind} at ${path} is not a ThemeLayerPatch leaf; ` +
         `the admissible kinds are ${[...LEAF_KINDS].join(", ")}`
     );
   }
@@ -988,7 +996,7 @@ const FORBIDDEN_PATCH_KEYS: ReadonlySet<string> = new Set([
 function assertPatchKey(key: string, path: string): void {
   if (!FORBIDDEN_PATCH_KEYS.has(key)) return;
   throw new Error(
-    `mergeThemePatches: forbidden key "${key}" at ${path}; ThemePatch may not name the prototype chain`
+    `mergeThemePatches: forbidden key "${key}" at ${path}; ThemeLayerPatch may not name the prototype chain`
   );
 }
 
@@ -1008,7 +1016,7 @@ function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
 
   if (!isPlainPatchRecord(patch)) {
     throw new Error(
-      `mergeThemePatches: ${containerTag(patch)} at ${path} is not a ThemePatch container; ` +
+      `mergeThemePatches: ${containerTag(patch)} at ${path} is not a ThemeLayerPatch container; ` +
         "a patch family is a plain record"
     );
   }
@@ -1048,7 +1056,7 @@ function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
     // Theme actually declares, not everything Object hands every object.
     if (!Object.prototype.hasOwnProperty.call(baseObj, key)) {
       throw new Error(
-        `mergeThemePatches: unknown key "${key}" at ${path}; ThemePatch is ingestion-only`
+        `mergeThemePatches: unknown key "${key}" at ${path}; ThemeLayerPatch is ingestion-only`
       );
     }
     // Refused even if a base ever declared one of them as an own key: assigning
@@ -1056,7 +1064,7 @@ function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
     // two are how that reach is usually laundered.
     if (key === "__proto__" || key === "constructor" || key === "prototype") {
       throw new Error(
-        `mergeThemePatches: forbidden key "${key}" at ${path}; ThemePatch may not name the prototype chain`
+        `mergeThemePatches: forbidden key "${key}" at ${path}; ThemeLayerPatch may not name the prototype chain`
       );
     }
     if (key === "disposition") {
@@ -1084,7 +1092,7 @@ function mergeDeep(base: unknown, patch: unknown, path: string): unknown {
  * only the deep merge underneath it, and two exported functions sharing that
  * name is how a caller ends up merging when it meant to resolve.
  */
-export function mergeThemePatches(base: Theme, ...patches: ThemePatch[]): Theme {
+export function mergeThemePatches(base: Theme, ...patches: ThemeLayerPatch[]): Theme {
   assertThemeBaseline(base, "mergeThemePatches");
   let current: Theme = base;
   for (const [idx, patch] of patches.entries()) {
@@ -1293,7 +1301,7 @@ export function canonicalizeTheme(theme: Theme): Theme {
 /**
  * The set of Theme keypaths a tenant actually authored, in BRANDTHEME space.
  *
- * There is no separate provenance map: a `ThemePatch` IS the authorship
+ * There is no separate provenance map: a `ThemeLayerPatch` IS the authorship
  * record, because the only way a path can appear in it is that the tenant
  * document put it there. Reading authorship off the patch keeps `mergeDeep`
  * and `mergeThemePatches` -- the most load-bearing fail-closed functions in this
@@ -1326,7 +1334,7 @@ const GOVERNED_UNWRAPPED_ROOTS: readonly string[] = [
  * paths never intersect them.
  */
 export function collectPatchAuthoredPaths(
-  patch: ThemePatch
+  patch: ThemeLayerPatch
 ): TenantAuthoredPaths {
   const authored = new Set<string>();
   for (const path of collectThemeKeypaths(patch)) {

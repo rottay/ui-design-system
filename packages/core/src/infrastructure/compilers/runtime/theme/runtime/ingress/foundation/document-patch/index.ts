@@ -1,7 +1,7 @@
 /**
  * @fileoverview Migrate a v1 TenantThemeDocument into an ISO ThemePatchEnvelope.
  *
- * This is a total function: every supported v1 dial maps to a typed ThemePatch
+ * This is a total function: every supported v1 dial maps to a typed ThemeLayerPatch
  * keypath; every unsupported/unknown dial fails closed. The envelope carries
  * transport metadata (`source: "tenant-document-v1"`) outside the patch.
  *
@@ -18,7 +18,7 @@
  */
 
 import type {
-  ThemePatch,
+  ThemeLayerPatch,
   ThemePatchEnvelope,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type {
@@ -134,7 +134,7 @@ function numericOverride(value: string | number, token: string): number {
 function migrateTokenOverride(
   token: TenantThemeOverrideToken,
   value: string | number
-): ThemePatch {
+): ThemeLayerPatch {
   const text = String(value);
   const paletteFields: Partial<Record<TenantThemeOverrideToken, string>> = {
     "--ds-color-primary": "primaryColor",
@@ -157,7 +157,7 @@ function migrateTokenOverride(
   };
   const paletteField = paletteFields[token];
   if (paletteField) {
-    return { palette: { [paletteField]: text } } as ThemePatch;
+    return { palette: { [paletteField]: text } } as ThemeLayerPatch;
   }
 
   const surfaceAlias =
@@ -169,7 +169,7 @@ function migrateTokenOverride(
       surfaces: {
         surfaceRoles: { [surfaceAlias[1]]: { background: text } },
       },
-    } as ThemePatch;
+    } as ThemeLayerPatch;
   }
 
   const material =
@@ -184,7 +184,7 @@ function migrateTokenOverride(
         surfaces: {
           surfaceRoles: { [material[1]]: { [field]: text } },
         },
-      } as ThemePatch;
+      } as ThemeLayerPatch;
     }
   }
 
@@ -196,7 +196,7 @@ function migrateTokenOverride(
   };
   const typographyField = typographyFields[token];
   if (typographyField) {
-    return { typography: { [typographyField]: text } } as ThemePatch;
+    return { typography: { [typographyField]: text } } as ThemeLayerPatch;
   }
 
   const letterSpacing =
@@ -204,7 +204,7 @@ function migrateTokenOverride(
   if (letterSpacing) {
     return {
       typography: { letterSpacing: { [letterSpacing[1]]: text } },
-    } as ThemePatch;
+    } as ThemeLayerPatch;
   }
   const lineHeight =
     /^--ds-line-height-(display|heading|body|tight|relaxed)$/.exec(token);
@@ -213,7 +213,7 @@ function migrateTokenOverride(
       typography: {
         lineHeight: { [lineHeight[1]]: numericOverride(value, token) },
       },
-    } as ThemePatch;
+    } as ThemeLayerPatch;
   }
 
   const typeRole =
@@ -227,7 +227,7 @@ function migrateTokenOverride(
     if (role && facet) {
       return {
         typography: { roles: { [role]: { [facet]: value } } },
-      } as ThemePatch;
+      } as ThemeLayerPatch;
     }
   }
 
@@ -235,11 +235,11 @@ function migrateTokenOverride(
   if (radius) {
     return {
       surfaces: { borderRadius: { [radius[1]]: text } },
-    } as ThemePatch;
+    } as ThemeLayerPatch;
   }
   const shadow = /^--ds-shadow-(sm|md|lg|xl)$/.exec(token);
   if (shadow) {
-    return { surfaces: { shadows: { [shadow[1]]: text } } } as ThemePatch;
+    return { surfaces: { shadows: { [shadow[1]]: text } } } as ThemeLayerPatch;
   }
 
   const surfaceFields: Partial<
@@ -262,7 +262,7 @@ function migrateTokenOverride(
   if (surfaceField) {
     return {
       surfaces: { [surfaceField[0]]: { [surfaceField[1]]: text } },
-    } as ThemePatch;
+    } as ThemeLayerPatch;
   }
   if (token === "--ds-density-scale") {
     return { surfaces: { densityScale: numericOverride(value, token) } };
@@ -278,14 +278,14 @@ function migrateTokenOverride(
 
 function migrateTokenOverrides(
   overrides: Record<string, string | number> | undefined
-): ThemePatch {
+): ThemeLayerPatch {
   if (!overrides) return {};
-  const patches: ThemePatch[] = [];
+  const patches: ThemeLayerPatch[] = [];
   const categoryColors: string[] = [];
   for (const [key, value] of Object.entries(overrides)) {
     if (!OVERRIDE_TOKEN_SET.has(key)) {
       throw new ThemePatchMigrationError(
-        `unsupported tokenOverride "${key}"; ThemePatch requires a typed keypath`
+        `unsupported tokenOverride "${key}"; ThemeLayerPatch requires a typed keypath`
       );
     }
     const category = /^--ds-chart-category-(10|[1-9])$/.exec(key);
@@ -303,7 +303,7 @@ function migrateTokenOverrides(
 
 function migrateTypography(
   typography: TenantAppearanceGeneral["typography"] | undefined
-): ThemePatch {
+): ThemeLayerPatch {
   if (!typography) return {};
   assertExactKeys(
     typography,
@@ -326,7 +326,7 @@ function migrateTypography(
 function migratePalette(
   palette: TenantAppearanceGeneral["palette"] | undefined,
   defaultMode: BrandThemeMode
-): ThemePatch {
+): ThemeLayerPatch {
   if (!palette) return {};
 
   type Palette = NonNullable<TenantAppearanceGeneral["palette"]>;
@@ -387,7 +387,7 @@ function migratePalette(
   for (const key of Object.keys(palette)) {
     if (!supported.has(key)) {
       throw new ThemePatchMigrationError(
-        `unsupported general.palette.${key}; ThemePatch requires an exact typed keypath`
+        `unsupported general.palette.${key}; ThemeLayerPatch requires an exact typed keypath`
       );
     }
   }
@@ -417,7 +417,7 @@ function migratePalette(
 
   const paletteFields = (
     source: PaletteSeeds
-  ): NonNullable<ThemePatch["palette"]> => ({
+  ): NonNullable<ThemeLayerPatch["palette"]> => ({
     primaryColor: source.primary,
     secondaryColor: source.secondary,
     accentColor: source.accent,
@@ -443,7 +443,7 @@ function migratePalette(
   const darkPalette = palette.dark ? paletteFields(palette.dark) : undefined;
 
   // backgroundMode is runtime selection metadata, not Theme authority. It
-  // therefore never reaches ThemePatch.appearance.defaultMode and never
+  // therefore never reaches ThemeLayerPatch.appearance.defaultMode and never
   // restructures the code-owned Theme. The v1 transport semantics are:
   // - light: top-level seeds customize the light/body mode; dark seeds inert
   // - dark: top-level seeds customize the selected dark mode; dark seeds inert
@@ -468,7 +468,7 @@ function migratePalette(
 function migrateGeneral(
   general: TenantAppearanceGeneral | undefined,
   defaultMode: BrandThemeMode
-): ThemePatch {
+): ThemeLayerPatch {
   if (!general) return {};
   assertExactKeys(
     general,
@@ -485,7 +485,7 @@ function migrateGeneral(
     ],
     "general"
   );
-  const patches: ThemePatch[] = [
+  const patches: ThemeLayerPatch[] = [
     migratePalette(general.palette, defaultMode),
     migrateTypography(general.typography),
   ];
@@ -578,13 +578,13 @@ function migrateGeneral(
 
 function migrateAdvanced(
   advanced: TenantThemeAdvancedAppearance | undefined
-): ThemePatch {
+): ThemeLayerPatch {
   if (!advanced) return {};
-  const patches: ThemePatch[] = [
+  const patches: ThemeLayerPatch[] = [
     migrateTokenOverrides(advanced.tokenOverrides),
   ];
   if (advanced.chrome) {
-    patches.push({ chrome: advanced.chrome as ThemePatch["chrome"] });
+    patches.push({ chrome: advanced.chrome as ThemeLayerPatch["chrome"] });
   }
   if (advanced.profiles) {
     patches.push({
@@ -612,9 +612,9 @@ function migrateAdvanced(
 function migrateVisualFoundation(
   vf: TenantVisualFoundation | undefined,
   defaultMode: BrandThemeMode
-): ThemePatch {
+): ThemeLayerPatch {
   if (!vf) return {};
-  const patches: ThemePatch[] = [
+  const patches: ThemeLayerPatch[] = [
     migrateGeneral(vf.general, defaultMode),
     migrateAdvanced(vf.advanced),
   ];
@@ -628,27 +628,27 @@ function migrateVisualFoundation(
   return mergePatches(patches);
 }
 
-function mergePatches(patches: ThemePatch[]): ThemePatch {
-  const out: ThemePatch = {};
+function mergePatches(patches: ThemeLayerPatch[]): ThemeLayerPatch {
+  const out: ThemeLayerPatch = {};
   for (const p of patches) deepMergeInto(out, p);
   return out;
 }
 
-function deepMergeInto(target: ThemePatch, source: ThemePatch): void {
+function deepMergeInto(target: ThemeLayerPatch, source: ThemeLayerPatch): void {
   for (const [key, val] of Object.entries(source)) {
     if (val === undefined) continue;
     if (
       val !== null &&
       typeof val === "object" &&
       !Array.isArray(val) &&
-      target[key as keyof ThemePatch] !== undefined &&
-      target[key as keyof ThemePatch] !== null &&
-      typeof target[key as keyof ThemePatch] === "object" &&
-      !Array.isArray(target[key as keyof ThemePatch])
+      target[key as keyof ThemeLayerPatch] !== undefined &&
+      target[key as keyof ThemeLayerPatch] !== null &&
+      typeof target[key as keyof ThemeLayerPatch] === "object" &&
+      !Array.isArray(target[key as keyof ThemeLayerPatch])
     ) {
       deepMergeInto(
-        target[key as keyof ThemePatch] as ThemePatch,
-        val as ThemePatch
+        target[key as keyof ThemeLayerPatch] as ThemeLayerPatch,
+        val as ThemeLayerPatch
       );
     } else {
       (target as Record<string, unknown>)[key] = val;
@@ -710,7 +710,7 @@ export function migrateV1(
 export function documentThemePatch(input: {
   vertical: FirstPartyVerticalId;
   document: TenantThemeDocument;
-}): ThemePatch {
+}): ThemeLayerPatch {
   // A JS caller is not held to the type. Refuse an off-roster vertical with the
   // owner's own error rather than indexing the roster and throwing a TypeError.
   if (!isFirstPartyVerticalId(input.vertical)) {

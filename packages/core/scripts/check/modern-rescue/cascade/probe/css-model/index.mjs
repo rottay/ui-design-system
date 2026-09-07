@@ -315,17 +315,17 @@ export function findReadingSites(decls, channels, { maxDepth = 6, filter = null 
   for (const ch of channels) {
     const found = [];
     const seenDecl = new Set();
-    let frontier = [{ name: ch, hops: [] }];
+    let boundary = [{ name: ch, hops: [] }];
     const visitedNames = new Set([ch]);
-    for (let depth = 0; depth < maxDepth && frontier.length; depth += 1) {
-      const nextFrontier = [];
-      for (const node of frontier) {
+    for (let depth = 0; depth < maxDepth && boundary.length; depth += 1) {
+      const nextBoundary = [];
+      for (const node of boundary) {
         for (const d of readers.get(node.name) || []) {
           const key = `${d.rel}:${d.line}:${d.prop}`;
           if (d.isCustom) {
             if (visitedNames.has(d.prop)) continue;
             visitedNames.add(d.prop);
-            nextFrontier.push({ name: d.prop, hops: [...node.hops, d.prop] });
+            nextBoundary.push({ name: d.prop, hops: [...node.hops, d.prop] });
             continue;
           }
           if (seenDecl.has(key)) continue;
@@ -334,7 +334,7 @@ export function findReadingSites(decls, channels, { maxDepth = 6, filter = null 
           found.push({ decl: d, hops: node.hops });
         }
       }
-      frontier = nextFrontier;
+      boundary = nextBoundary;
     }
     sites.set(ch, found);
   }

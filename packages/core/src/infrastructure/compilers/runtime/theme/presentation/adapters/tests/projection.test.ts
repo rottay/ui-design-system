@@ -6,7 +6,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
-import type { ThemePatch } from "@/foundation/contracts/composition/tenants/themes/iso";
+import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 
 import { compileTheme } from "../../../runtime/lowering";
@@ -153,7 +153,7 @@ describe("classic projects the antd seed vocabulary, base and per mode", () => {
 });
 
 describe("a real tenant radius reaches antd in the unit the tenant wrote", () => {
-  const tenantSeed = (patch: ThemePatch): number =>
+  const tenantSeed = (patch: ThemeLayerPatch): number =>
     compileTheme(
       resolveTheme({
         vertical: "rottay",

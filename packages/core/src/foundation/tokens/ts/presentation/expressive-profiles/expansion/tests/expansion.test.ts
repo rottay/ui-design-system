@@ -1,6 +1,6 @@
 /**
  * Expansion laws (C1b): deterministic, key-order-stable, vocabulary-bounded
- * output; frontier and slot-less values expand to nothing; the type table's
+ * output; declared-but-closed and slot-less values expand to nothing; the type table's
  * two projections (DB channel rows vs static role overlay) can never drift.
  */
 import { describe, expect, it } from 'vitest';
@@ -72,7 +72,7 @@ describe('expandExpressiveProfiles', () => {
     }
   });
 
-  it('pins the boundaries: icon is frontier, slot-less motifs expand to nothing', () => {
+  it('pins the boundaries: icon is declared but closed, slot-less motifs expand to nothing', () => {
     const icon = expandExpressiveProfiles({ icon: 'duotone' });
     expect(icon.variables).toEqual({});
     expect(icon.fieldDefaults).toEqual({});

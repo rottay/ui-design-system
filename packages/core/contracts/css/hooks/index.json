@@ -28,6 +28,11 @@
       "describes": "typed BrandTheme/TenantAppearance ownership graph used to expand mapped compiler emissions"
     },
     {
+      "id": "theme-contracts-first-level",
+      "path": "src/contracts",
+      "describes": "the D-21 (b) first-level contract root: the typed control catalog, the decision vocabulary and the v2 document"
+    },
+    {
       "id": "authored-ds-css",
       "path": "src/foundation/tokens/css",
       "describes": "authored DS stylesheets (root declarations = DS-owned foundation tokens)"
@@ -55,7 +60,7 @@
     "tenantChannel": 2190,
     "compilerConcreteEmissions": 2247,
     "compilerEmissionPatterns": 13,
-    "themeContractFiles": 45,
+    "themeContractFiles": 47,
     "ambiguousThemeContractTypes": 0,
     "unresolvedCompilerEmissions": 0,
     "interpolatedFamilies": 71,

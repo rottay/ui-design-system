@@ -36,17 +36,18 @@ import type {
   TenantVisualFoundation,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
+  CHROME_ANATOMY_FAMILIES,
   THEME_DECISION_TIER_BY_ID,
   type ThemeDecisionId,
   type ThemeDecisions,
   type ThemePlan,
-} from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
+} from "@/contracts/theme/presentation/document";
 import {
   TENANT_THEME_DOCUMENT_VERSION_V2,
   assertTenantThemeDocumentV2,
   type SanctionedOverrides,
   type TenantThemeDocumentV2,
-} from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
+} from "@/contracts/theme/presentation/document";
 import { ThemePatchMigrationError } from "../../../../foundation/document-patch";
 
 /**
@@ -72,7 +73,8 @@ const TOKEN_TO_SEED: Readonly<
   "--ds-color-info": ["status", "info"],
 });
 
-const ANATOMY_FAMILIES = ["cardComponent", "table", "sidebar", "layout"] as const;
+/** The anatomy families, read from the contract that owns them (F-70). */
+const ANATOMY_FAMILIES = CHROME_ANATOMY_FAMILIES;
 
 function generalOf(document: TenantThemeDocument): TenantAppearanceGeneral | undefined {
   return document.mode === "simple"

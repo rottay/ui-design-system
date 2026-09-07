@@ -13,9 +13,19 @@ import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
+  APP_PLATFORM_ROW_REMEDIATIONS,
+  APP_PLATFORM_TENANT_ROWS,
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/app-platform-rows";
+import { THEME_DECISION_DOMAIN_SCHEMA } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
+import {
+  THEME_DECISION_IDS,
+  THEME_DECISION_TIER_BY_ID,
+} from "@/contracts/theme/foundation/decisions";
+import { themeControlTier } from "@/contracts/theme/runtime/catalog";
+import {
   TenantThemeDocumentV2Error,
   type TenantThemeDocumentV2,
-} from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
+} from "@/contracts/theme/presentation/document";
 import { projectDecisionsToV1 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import {
@@ -100,7 +110,9 @@ describe("accepted but not lit", () => {
       },
     ]);
     expect(admission.unlit.map((row) => row.id)).toEqual(["states.emphasis"]);
-    expect(v1KeypathOf("states.emphasis")).toBeUndefined();
+    // The catalog DECLARES the absence with `null`, so the projection reports
+    // it instead of discovering it from a missing table row.
+    expect(v1KeypathOf("states.emphasis")).toBeNull();
   });
 
   it("moves nothing in the compiled CSS when only unlit decisions are activated", () => {
@@ -119,7 +131,7 @@ describe("accepted but not lit", () => {
         id: "navigation.sidebar-tone",
         tier: "standard",
         lit: true,
-        keypaths: ["general.navigation.sidebarTone"],
+        keypaths: ["appearance.general.navigation.sidebarTone"],
       },
     ]);
     expect(admission.unlit).toEqual([]);
@@ -619,4 +631,161 @@ describe("migration is proven at the COMPILE door, not only structurally", () =>
     const migrated = migrateDocumentV1ToV2(rejected);
     expect(() => css("bithire", migrated)).toThrow(/radius/);
   });
+});
+
+/**
+ * The migration against the documents app-platform actually seeds.
+ *
+ * THE RESULT IS A FINDING, not a formality: all SEVEN live rows are refused
+ * today, six of them for the same reason (a free font stack, which kit row 6
+ * closes to a registered pack id) and the seventh for per-mode seeds. That is
+ * the migration being TOTAL and fail-closed, and it is also the exact work
+ * app-platform owes before its rows can become v2 documents. The second block
+ * proves the remediation is sufficient rather than merely stated.
+ */
+describe("the tier is not decorative (F-03)", () => {
+  const proUnderStandard = v2(
+    { "profiles.expressive": { type: "editorial" } },
+    "standard"
+  );
+
+  it("refuses a Pro decision under a standard plan, IDENTICALLY at both doors", () => {
+    // The same document, the same refusal, the same words. Preview accepting
+    // what publish rejects is the shape F-13 measured; the tier check runs in
+    // the contract both producers pass through, so there is one answer.
+    const message = (run: () => unknown) => {
+      try {
+        run();
+        return "accepted";
+      } catch (error) {
+        return (error as Error).message;
+      }
+    };
+    const persisted = message(() =>
+      documentThemeIntent({ vertical: "bithire", slug: "acme", document: proUnderStandard })
+    );
+    const preview = message(() =>
+      previewThemeIntent({ vertical: "bithire", slug: "acme", document: proUnderStandard })
+    );
+    expect(persisted).toBe(preview);
+    expect(persisted).toMatch(
+      /decision "profiles\.expressive" is tier pro; plan standard entitles standard/u
+    );
+  });
+
+  it("accepts the same decision once the plan entitles it", () => {
+    const proPlan = v2({ "profiles.expressive": { type: "editorial" } }, "pro");
+    expect(() =>
+      documentThemeIntent({ vertical: "bithire", slug: "acme", document: proPlan })
+    ).not.toThrow();
+  });
+
+  it("reads the tier from the catalog, which is its only source", () => {
+    for (const id of THEME_DECISION_IDS) {
+      expect(themeControlTier(id)).toBe(THEME_DECISION_TIER_BY_ID[id]);
+    }
+  });
+});
+
+describe("the generated schema closes the values the contract leaves open", () => {
+  it("refuses an enum value outside the catalog's closed domain, by name", () => {
+    expect(() =>
+      admitDocument({
+        vertical: "bithire",
+        document: v2({ "density.mode": "roomy" as never }),
+      })
+    ).toThrow(
+      /decision "density\.mode" value "roomy" is outside its closed domain compact \| normal \| spacious/u
+    );
+  });
+
+  it("refuses a scale outside its closed range, by name", () => {
+    expect(() =>
+      admitDocument({
+        vertical: "bithire",
+        document: v2({ "typography.scale": 1.4 }),
+      })
+    ).toThrow(/decision "typography\.scale" value 1\.4 is outside its closed range \[0\.9, 1\.1\]/u);
+    expect(() =>
+      admitDocument({
+        vertical: "bithire",
+        document: v2({ "typography.scale": "1" as never }),
+      })
+    ).toThrow(/decision "typography\.scale" must be a finite number/u);
+  });
+
+  it("refuses a seed that is not a hex colour", () => {
+    expect(() =>
+      admitDocument({
+        vertical: "bithire",
+        document: v2({ "palette.seeds": { primary: "notacolor" } }),
+      })
+    ).toThrow(/decision "palette\.seeds" role "primary" must be a hex colour/u);
+  });
+
+  it("leaves registered and record domains to their own owners", () => {
+    // `experience.profile` is a REGISTERED id and `motion.dial` a record: the
+    // schema declares neither, so it must not invent a verdict about them.
+    expect(THEME_DECISION_DOMAIN_SCHEMA["experience.profile"]).toBeUndefined();
+    expect(THEME_DECISION_DOMAIN_SCHEMA["motion.dial"]).toBeUndefined();
+    expect(THEME_DECISION_DOMAIN_SCHEMA["recipe-profile"]).toBeUndefined();
+  });
+
+  it("admits every value the six live verticals' remediated rows carry", () => {
+    for (const { document } of APP_PLATFORM_ROW_REMEDIATIONS) {
+      expect(() =>
+        migrateAndAdmitDocument({ vertical: "bithire", document })
+      ).not.toThrow();
+    }
+  });
+});
+
+describe("migrate v1 -> v2 over the real app-platform rows", () => {
+  it("covers the seven seeded rows and nothing else", () => {
+    expect(APP_PLATFORM_TENANT_ROWS).toHaveLength(7);
+    expect(APP_PLATFORM_ROW_REMEDIATIONS.map((row) => row.tenant)).toEqual(
+      APP_PLATFORM_TENANT_ROWS.map((row) => row.tenant)
+    );
+  });
+
+  for (const { tenant, document } of APP_PLATFORM_TENANT_ROWS) {
+    it(`refuses "${tenant}" by naming the exact v1 field that has no counterpart`, () => {
+      const refusal = APP_PLATFORM_ROW_REMEDIATIONS.find(
+        (row) => row.tenant === tenant
+      )!;
+      expect(() => migrateDocumentV1ToV2(document)).toThrow(
+        ThemePatchMigrationError
+      );
+      expect(() => migrateDocumentV1ToV2(document)).toThrow(
+        new RegExp(
+          `v1 ${refusal.refusedField.replace(/\./gu, "\\.")} has no v2 counterpart`,
+          "u"
+        )
+      );
+    });
+  }
+
+  for (const { tenant, document } of APP_PLATFORM_ROW_REMEDIATIONS) {
+    it(`migrates the remediated "${tenant}" row and derives its minimum plan`, () => {
+      const migrated = migrateDocumentV1ToV2(document);
+      expect(migrated.version).toBe(2);
+      // Every seeded row authors `backgroundMode`, which is kit row 5 (Pro), so
+      // the derived minimum is `pro`. It is DERIVED, never defaulted: a plan a
+      // v1 row never had would be an entitlement nobody granted.
+      expect(migrated.plan).toBe("pro");
+      expect(Object.keys(migrated.decisions).length).toBeGreaterThan(0);
+    });
+
+    it(`admits the remediated "${tenant}" row through the same door as its v1 self`, () => {
+      const admission = migrateAndAdmitDocument({
+        vertical: "bithire",
+        document,
+      });
+      expect(admission.version).toBe(2);
+      // Everything the migration carried is LIT: the remediation removes only
+      // fields v2 retires, so nothing survives the migration without a keypath.
+      expect(admission.unlit).toEqual([]);
+      expect(css("bithire", admission.migrated)).toEqual(css("bithire", document));
+    });
+  }
 });

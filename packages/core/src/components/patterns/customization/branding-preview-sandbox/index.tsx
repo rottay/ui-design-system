@@ -108,7 +108,7 @@ export function BrandingPreviewSandbox({
   /**
    * The proposed appearance, through the ONE pipeline.
    *
-   * The appearance is migrated into the same `ThemePatch` a stored tenant
+   * The appearance is migrated into the same `ThemeLayerPatch` a stored tenant
    * document produces, resolved over the baseline as a `preview` intent, and
    * lowered by `compileTheme`. What the sandbox paints is the DELTA against the
    * untouched baseline — the same rule the DB artifact uses — so the scope still

@@ -95,10 +95,14 @@ test('every excluded gate names its reason and its owner', () => {
   // correction packet #2): the 18 dead DaisyUI rules its honest scanner had
   // started measuring are deleted, `themeCss.unreferencedSelectors` reads 0,
   // and the ceiling was never widened -- so the stated return condition was met
-  // and the gate blocks again.
+  // and the gate blocks again. `theme-keypath-coverage` joined on 2026-09-07
+  // (WO-CAT-02): the law is registered the day it is written, but its derived
+  // set is empty by construction until the derivation lane lands, so it cannot
+  // pass yet. Its DRILL is blocking and green, which is what keeps the
+  // exclusion from becoming an unmeasured hole.
   assert.deepEqual(
     excluded.map((g) => g.id).sort(),
-    ['channel-liveness'],
+    ['channel-liveness', 'theme-keypath-coverage'],
     'la lista de exclusiones cambio; adjudicala antes de moverla',
   );
   for (const gate of excluded) {

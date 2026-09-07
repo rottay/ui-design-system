@@ -339,8 +339,8 @@
         "--ds-color-error",
         "--ds-color-info"
       ],
-      "frontierRequiredForR1": false,
-      "frontierAdmission": "Open palette.status-seeds only if the ordinary Standard editor must expose independently authored status seeds with shared compiler derivation and contrast enforcement. It is not an architecture prerequisite for the Advanced TMM canary."
+      "boundaryRequiredForR1": false,
+      "boundaryAdmission": "Open palette.status-seeds only if the ordinary Standard editor must expose independently authored status seeds with shared compiler derivation and contrast enforcement. It is not an architecture prerequisite for the Advanced TMM canary."
     },
     "profileRegistries": {
       "recipeSelection": "visualFoundation.recipeProfile",

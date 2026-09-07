@@ -15,7 +15,7 @@ import type {
   BrandTypography,
 } from "..";
 import type { ThemeIntent } from "../intent";
-import type { TenantAuthoredPaths, Theme, ThemePatch } from "../iso";
+import type { TenantAuthoredPaths, Theme, ThemeLayerPatch } from "../iso";
 import { collectPatchAuthoredPaths } from "../iso";
 
 /**
@@ -162,7 +162,7 @@ export const EMPTY_PROVENANCE: ThemeProvenance = Object.freeze({
  * mutation of the caller's patch — or of anything reachable from the returned
  * value — cannot change what a subsequent compile sees.
  */
-export function tenantProvenance(patch: ThemePatch): ThemeProvenance {
+export function tenantProvenance(patch: ThemeLayerPatch): ThemeProvenance {
   return Object.freeze({
     tenantAuthored: true,
     authoredPaths: immutableAuthoredPaths(collectPatchAuthoredPaths(patch)),
@@ -185,7 +185,7 @@ export function tenantProvenance(patch: ThemePatch): ThemeProvenance {
  * or bare (on a leaf-built probe patch). The posture reader consults
  * `patch.motion` as-is and never unwraps, so the unwrap has to happen here.
  */
-export function tenantPostureFloors(patch: ThemePatch): ThemeFloors {
+export function tenantPostureFloors(patch: ThemeLayerPatch): ThemeFloors {
   const ty = patch.typography;
   const su = patch.surfaces;
   const mo = patch.motion;
@@ -213,10 +213,10 @@ export function tenantPostureFloors(patch: ThemePatch): ThemeFloors {
  * tenant's choice from the builder's construction.
  */
 export function deriveTenantStatusSeedAuthorship(
-  patch: ThemePatch
+  patch: ThemeLayerPatch
 ): TenantStatusSeedAuthorship {
   const toneRecord = (
-    palette: ThemePatch["palette"]
+    palette: ThemeLayerPatch["palette"]
   ): Record<ResolvedToneRole, boolean> =>
     Object.fromEntries(
       RESOLVED_TONE_ROLES.map((role) => [

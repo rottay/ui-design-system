@@ -43,7 +43,6 @@ The tree is deliberately small:
 | `governance/manifest/index.json` | generated index of the segmented control, recipe and per-family customization manifest |
 | `rounds/index.json` | R0–R6 execution boundaries; R7 is future and disabled |
 | `family-inventory/index.json` | canonical family identity and ownership; the active denominator |
-| `customization-model/index.json` | operational controls, proposed target model and control-to-family evidence contract |
 | `quality-rubric/index.json` | DONE, test-truth and acceptance vocabulary |
 | `evidence-contract/index.json` | source binding, computed, restore and sighted receipts |
 | `art-direction/index.json` | same-tree tenant outcomes, not another compiler |
@@ -78,14 +77,15 @@ prose reinterpretation:
 - **Control tiers.** The operational Standard set is not a number typed here:
   it is every row the capability registry
   (`packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts`)
-  declares `tier: 'standard'` with `status: 'active'`. `customization-model/index.json`
+  declares `tier: 'standard'` with `status: 'active'`. The retired customization-model contract
   records that set id by id, `program/index.json` records its size, and
   `index.mjs` derives the count from the registry and refuses any of the
   three — including this file — that disagrees with it. 7 Pro capabilities are
   recorded the same way. The proposed 9 Standard + 7 Pro taxonomy is a design target
   with `implementationState: PROPOSED_NOT_IMPLEMENTED`; it never counts as
-  coverage and may not coexist with an equivalent operational control. Expert
-  is the closed exact allowlist that TENANT_THEME_OVERRIDE_TOKENS resolves to in
+  coverage and may not coexist with an equivalent operational control. The
+  raw-override allowlist (the tier this file used to name with a fourth word,
+  retired by D-03) is the closed exact set TENANT_THEME_OVERRIDE_TOKENS resolves to in
   the live tenant-theme contract — literals plus resolved spreads; the count is
   derived from that source by index.mjs, never typed here — with at most
   200 overrides per document; it is frozen during the drain unless the owner
@@ -133,7 +133,7 @@ applicable.
 ## Operational controls versus the target model
 
 The capability registry is the only operational product-control authority.
-`customization-model/index.json` records, id by id, the Standard controls that source
+The retired customization-model contract recorded, id by id, the Standard controls that source
 declares active, and the seven Pro capabilities beside them; the baseline in
 `program/index.json` is the size of that same set, derived by `index.mjs` from
 the registry and never typed by hand. The proposed 9 Standard + 7 Pro model is a
@@ -473,7 +473,7 @@ first cleanup batch. Remaining execution order is:
 2. Run `git status --short`, `git rev-parse HEAD`, the programme check and
    the checkpoint check.
 3. Read `program/index.json`, `checkpoint/index.json`,
-   `customization-model/index.json`, and only the active round/slice records.
+   the retired customization-model contract, and only the active round/slice records.
 4. Verify the family inventory and current control registry from source.
 5. Inspect the latest source-bound receipts; never trust a prose percentage.
 6. Classify any red test before changing it.

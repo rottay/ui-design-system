@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import type { ThemePatch } from "../../iso";
+import type { ThemeLayerPatch } from "../../iso";
 import {
   deriveTenantStatusSeedAuthorship,
   EMPTY_PROVENANCE,
@@ -16,7 +16,7 @@ import {
   tenantProvenance,
 } from "..";
 
-const patchLiteral = (): ThemePatch =>
+const patchLiteral = (): ThemeLayerPatch =>
   ({
     typography: {
       typePairing: "editorial",
@@ -33,7 +33,7 @@ const patchLiteral = (): ThemePatch =>
     motion: { value: { intensity: "expressive" } },
     palette: { successColor: "#0f0" },
     modes: { dark: { palette: { errorColor: "#f00" } } },
-  }) as unknown as ThemePatch;
+  }) as unknown as ThemeLayerPatch;
 
 const patch = patchLiteral();
 
@@ -188,7 +188,7 @@ describe("the projections behind the provenance", () => {
 
   it("tenantPostureFloors unwraps a governed motion to the bare spec", () => {
     expect(tenantPostureFloors(patch).motion).toEqual({ intensity: "expressive" });
-    const bare = { motion: { intensity: "calm" } } as unknown as ThemePatch;
+    const bare = { motion: { intensity: "calm" } } as unknown as ThemeLayerPatch;
     expect(tenantPostureFloors(bare).motion).toEqual({ intensity: "calm" });
   });
 
@@ -221,7 +221,7 @@ describe("the projections behind the provenance", () => {
   });
 
   it("deriveTenantStatusSeedAuthorship is total over the tone vocabulary", () => {
-    const empty = deriveTenantStatusSeedAuthorship({} as ThemePatch);
+    const empty = deriveTenantStatusSeedAuthorship({} as ThemeLayerPatch);
     expect(Object.keys(empty.base).sort()).toEqual([...RESOLVED_TONE_ROLES].sort());
     expect(Object.values(empty.base).every((v) => v === false)).toBe(true);
   });
@@ -229,7 +229,7 @@ describe("the projections behind the provenance", () => {
   it("a constructed-but-unset key is not authorship", () => {
     const constructed = {
       palette: { successColor: undefined, warningColor: undefined },
-    } as unknown as ThemePatch;
+    } as unknown as ThemeLayerPatch;
     expect(deriveTenantStatusSeedAuthorship(constructed).base.success).toBe(false);
   });
 

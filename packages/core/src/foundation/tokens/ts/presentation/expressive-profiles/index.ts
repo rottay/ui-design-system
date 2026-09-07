@@ -143,7 +143,7 @@ const EXPERIENCE_PROFILE_ID_PATTERN = /^[a-z0-9-]+\/[a-z0-9-]+@[0-9]+$/;
  *
  * The v1 pair is the C1b acid-test matrix: a technical/sharp/hairline static
  * identity against an editorial/soft/ruled/paper DB identity. Neither
- * composition authors an `icon` axis while the axis is frontier.
+ * composition authors an `icon` axis while the axis is declared but closed.
  */
 export const EXPERIENCE_PROFILES = [
   {

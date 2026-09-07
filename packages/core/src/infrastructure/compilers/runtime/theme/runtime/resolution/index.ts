@@ -8,6 +8,7 @@
 
 import {
   TENANT_AUTHORED_ORIGINS,
+  THEME_PLANS,
   isTenantAuthoredOrigin,
   type ThemeIntent,
   type ThemeIntentOrigin,
@@ -43,8 +44,17 @@ const ORIGINS: readonly ThemeIntentOrigin[] = Object.freeze([
   ...TENANT_AUTHORED_ORIGINS,
 ]);
 
-/** The envelope is EXACTLY these four keys: not fewer, not more, not inherited. */
-const INTENT_KEYS: readonly string[] = ["vertical", "slug", "origin", "patch"];
+/** The envelope is EXACTLY these keys: not fewer, not more, not inherited. */
+const INTENT_KEYS: readonly string[] = [
+  "vertical",
+  "slug",
+  "origin",
+  "patch",
+  "entitlement",
+];
+
+/** `entitlement` is the only optional key; every other one must be present. */
+const OPTIONAL_INTENT_KEYS: readonly string[] = ["entitlement"];
 
 /**
  * Reject the intent before it can decide anything.
@@ -75,6 +85,7 @@ function assertThemeIntent(intent: ThemeIntent): void {
     );
   }
   for (const key of INTENT_KEYS) {
+    if (OPTIONAL_INTENT_KEYS.includes(key)) continue;
     if (!Object.prototype.hasOwnProperty.call(intent, key)) {
       throw new Error(`resolveTheme: intent.${key} must be an own property`);
     }
@@ -101,6 +112,55 @@ function assertThemeIntent(intent: ThemeIntent): void {
   const { patch } = intent;
   if (typeof patch !== "object" || patch === null || Array.isArray(patch)) {
     throw new Error("resolveTheme: intent.patch must be an object");
+  }
+  // F-70: the patch could name `id` and `name`. The type excludes them, but a
+  // patch reaches here from a database row and an HTTP body, where the type is
+  // gone. A patch that restates identity renames the theme it is patching.
+  for (const key of ["id", "name"] as const) {
+    if (Object.prototype.hasOwnProperty.call(patch, key)) {
+      throw new Error(
+        `resolveTheme: intent.patch may not carry "${key}"; theme identity comes ` +
+          "from the roster row and the slug, never from a patch"
+      );
+    }
+  }
+  // A `static-vertical` intent IS the vertical's own baseline. A patch on top
+  // of it would be a second, unnamed authoring surface for vertical identity,
+  // which is the shape the static-first branding law exists to prevent.
+  if (intent.origin === "static-vertical" && Object.keys(patch).length > 0) {
+    throw new Error(
+      "resolveTheme: a static-vertical intent carries an empty patch; the " +
+        `vertical's baseline is authored in its own theme, not patched (got ${
+          Object.keys(patch).map((key) => JSON.stringify(key)).join(", ")
+        })`
+    );
+  }
+  // D-02: the plan decides what a tenant may activate, so it travels ON the
+  // intent. It is refused by name here rather than defaulted, because a
+  // defaulted plan is an entitlement nobody granted.
+  const { entitlement } = intent;
+  if (entitlement !== undefined) {
+    if (
+      typeof entitlement !== "object" ||
+      entitlement === null ||
+      Array.isArray(entitlement)
+    ) {
+      throw new Error("resolveTheme: intent.entitlement must be an object");
+    }
+    const keys = Object.keys(entitlement);
+    if (keys.length !== 1 || keys[0] !== "plan") {
+      throw new Error(
+        `resolveTheme: intent.entitlement carries exactly \`plan\`; got ${
+          keys.map((key) => JSON.stringify(key)).join(", ") || "no key"
+        }`
+      );
+    }
+    if (!(THEME_PLANS as readonly string[]).includes(entitlement.plan)) {
+      throw new Error(
+        `resolveTheme: unknown plan ${JSON.stringify(entitlement.plan)}; ` +
+          `the closed set is ${THEME_PLANS.map((plan) => `"${plan}"`).join(", ")}`
+      );
+    }
   }
 }
 

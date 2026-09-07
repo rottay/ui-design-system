@@ -20,7 +20,7 @@ import type {
 import type { BrandThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   TenantAuthoredPaths,
-  ThemePatch,
+  ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { liftAuthoredTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake";
 import type {
@@ -85,7 +85,7 @@ export function lowerBrandThemeFixture(
           floors: (tenantPatch ?? {}) as ThemeFloors,
           statusSeedAuthorship:
             input.tenantStatusSeedAuthorship ??
-            deriveTenantStatusSeedAuthorship((tenantPatch ?? {}) as ThemePatch),
+            deriveTenantStatusSeedAuthorship((tenantPatch ?? {}) as ThemeLayerPatch),
         };
   const theme = { ...liftAuthoredTheme(brandTheme), id: slug };
   const compiled = compileTheme({ theme, provenance }, resolveAdapter(PRIMARY_ENGINE));
@@ -138,7 +138,7 @@ export function lowerTheme(
           statusSeedAuthorship:
             options.tenantStatusSeedAuthorship ??
             deriveTenantStatusSeedAuthorship(
-              (options.tenantPatch ?? {}) as ThemePatch
+              (options.tenantPatch ?? {}) as ThemeLayerPatch
             ),
         };
   const compiled = compileTheme(

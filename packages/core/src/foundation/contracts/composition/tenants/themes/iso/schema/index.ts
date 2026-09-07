@@ -7,7 +7,7 @@
  */
 
 /**
- * The kinds a `ThemePatch` leaf may carry at one keypath.
+ * The kinds a `ThemeLayerPatch` leaf may carry at one keypath.
  *
  * WHY THIS OWNER EXISTS. `mergeThemePatches` used the BASELINE VALUE as its
  * only schema: it refused a patch whose kind disagreed with whatever the base

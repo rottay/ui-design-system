@@ -8,11 +8,16 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PROGRAM_ROOT = path.resolve(HERE, '../../../modern-rescue');
 export const REPOSITORY_ROOT = findRepoRoot(HERE);
 
+/**
+ * `customization-model/index.json` is deliberately absent: WO-CAT-02 deleted it
+ * and the typed catalog (`src/contracts/theme/runtime/catalog`) is the only list
+ * of controls. A loader entry for a file that no longer exists would make every
+ * evidence gate throw on a fact none of them read.
+ */
 const CONTRACT_FILES = Object.freeze({
   program: 'program/index.json',
   inventory: 'family-inventory/index.json',
   rubric: 'quality-rubric/index.json',
-  customization: 'customization-model/index.json',
   artDirection: 'art-direction/index.json',
   visualCraft: 'visual-craft/index.json',
   rounds: 'rounds/index.json',

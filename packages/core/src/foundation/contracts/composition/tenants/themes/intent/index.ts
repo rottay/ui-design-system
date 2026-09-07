@@ -8,7 +8,7 @@
  */
 
 import type { FirstPartyVerticalId } from "../../../../kernel/verticals";
-import type { ThemePatch } from "../iso";
+import type { ThemeLayerPatch } from "../iso";
 
 /**
  * Which transport authored this intent. Transport only; never a visual input.
@@ -55,5 +55,42 @@ export interface ThemeIntent {
   readonly vertical: FirstPartyVerticalId;
   readonly slug: string;
   readonly origin: ThemeIntentOrigin;
-  readonly patch: ThemePatch;
+  readonly patch: ThemeLayerPatch;
+  /**
+   * The plan the intent is compiled under. D-02: the vertical envelope decides
+   * what EXISTS, the plan decides what the tenant may ACTIVATE.
+   *
+   * Optional at the type level and only at the type level: a `static-vertical`
+   * intent is the vertical's own baseline and carries no plan, and a v1
+   * document row carries none either until its migration derives one. Every
+   * origin that CAN activate a tiered decision is required to carry it by
+   * `assertThemeIntent`, so absence is never read as "entitled".
+   */
+  readonly entitlement?: PlanEntitlement;
+}
+
+/**
+ * The plans a tenant document may be written under. `internal` is the
+ * DS/vertical seat, not a customer plan.
+ *
+ * This is the authority for the vocabulary; `contracts/theme` aliases it as
+ * `ThemePlan` and never restates it.
+ */
+export const THEME_PLANS = Object.freeze([
+  "standard",
+  "pro",
+  "internal",
+] as const);
+
+export type ThemePlan = (typeof THEME_PLANS)[number];
+
+/**
+ * The plan an intent is compiled under (D-02).
+ *
+ * The vertical envelope decides what EXISTS for a vertical's tenants; the plan
+ * decides which tier of what exists the tenant may ACTIVATE. An envelope may
+ * not grant a tier, and an entitlement may not create a capability.
+ */
+export interface PlanEntitlement {
+  readonly plan: ThemePlan;
 }

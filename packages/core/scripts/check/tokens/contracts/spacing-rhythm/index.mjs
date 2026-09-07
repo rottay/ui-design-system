@@ -4,7 +4,7 @@
  * Fail-closed contract gate for reads of the tenant rhythm channel.
  *
  * THE RULING THIS MECHANIZES (owner-decided; see
- * `governance/manifest/controls/spacing/rhythm/index.json`,
+ * the `spacing.rhythm` row of `src/contracts/theme/runtime/catalog`,
  * fields `compatibility` and `calibration.openContractQuestions`):
  *
  *   Density sizes the CONTROL. Rhythm sizes the ROOM AROUND it.
@@ -1485,12 +1485,12 @@ function traceTypeScriptCarrierTargets(corpus, binding) {
 
   for (let changed = true; changed; ) {
     changed = false;
-    // A stable frontier is essential. Symbols discovered while visiting one
+    // A stable boundary is essential. Symbols discovered while visiting one
     // function must not immediately taint its callers before the next pass has
     // had a chance to recognize aliases and terminal `cssProperty` sinks.
-    const frontier = [...tainted];
+    const boundary = [...tainted];
     for (const { file, source } of corpus) {
-      if (!frontier.some((name) => identifierOccurs(source, name))) continue;
+      if (!boundary.some((name) => identifierOccurs(source, name))) continue;
       const { spans, variables } = rangesFor(file, source);
       // Resolve local aliases first. Otherwise a function containing
       // `const resolver = condition ? taintedResolver : plainResolver` is
@@ -1498,7 +1498,7 @@ function traceTypeScriptCarrierTargets(corpus, binding) {
       // concrete `cssProperty` sinks, exploding the graph through every caller.
       for (const variable of variables) {
         if (
-          frontier.some((name) => identifierOccurs(variable.initializer, name))
+          boundary.some((name) => identifierOccurs(variable.initializer, name))
           && !tainted.has(variable.name)
         ) {
           tainted.add(variable.name);
@@ -1506,7 +1506,7 @@ function traceTypeScriptCarrierTargets(corpus, binding) {
         }
       }
       for (const span of spans) {
-        const carriesIntoReturn = frontier.some((name) => {
+        const carriesIntoReturn = boundary.some((name) => {
           const occurrences = new RegExp(`(?<![\\w$])${regexEscape(name)}(?![\\w$])`, 'gu');
           for (const match of source.slice(span.open + 1, span.close).matchAll(occurrences)) {
             const absolute = span.open + 1 + match.index;

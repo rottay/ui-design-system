@@ -368,11 +368,11 @@ export function segmentWitness(positives, negatives = []) {
     [...positiveStates, ...negativeStates].map((state) => [...state].sort((a, b) => a - b).join(',')).join('|');
 
   const seen = new Set([key(startPositive, startNegative)]);
-  let frontier = [{ positiveStates: startPositive, negativeStates: startNegative, text: '' }];
+  let boundary = [{ positiveStates: startPositive, negativeStates: startNegative, text: '' }];
 
-  for (let depth = 0; depth < WITNESS_LENGTH_CAP && frontier.length > 0; depth += 1) {
+  for (let depth = 0; depth < WITNESS_LENGTH_CAP && boundary.length > 0; depth += 1) {
     const next = [];
-    for (const state of frontier) {
+    for (const state of boundary) {
       for (const ch of alphabet) {
         const positiveStates = state.positiveStates.map((set, index) => advanceSet(pos[index], set, ch));
         if (positiveStates.some((set) => set.size === 0)) continue;
@@ -386,7 +386,7 @@ export function segmentWitness(positives, negatives = []) {
         next.push({ positiveStates, negativeStates, text });
       }
     }
-    frontier = next;
+    boundary = next;
   }
   return null;
 }

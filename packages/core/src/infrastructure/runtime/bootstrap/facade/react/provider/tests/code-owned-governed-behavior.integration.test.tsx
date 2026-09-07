@@ -94,7 +94,7 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     // strip destroyed, but neither is END-TO-END observable today: bithire's
     // composition resolves `density: 'normal'` (posture `comfortable`, which
     // is also the no-selection default) and authors no `icon` axis at all
-    // (the axis is still frontier). A rendered assertion on either value
+    // (the axis is still declared but closed). A rendered assertion on either value
     // therefore passes with the seam UNWIRED -- a false green.
     //
     // So the payload is proven here, at the slice, where the assertion does

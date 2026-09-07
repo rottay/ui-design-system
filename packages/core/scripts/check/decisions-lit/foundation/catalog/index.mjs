@@ -18,6 +18,22 @@
  * @module Tooling/DecisionsLit/Foundation/Catalog
  */
 
+import { readThemeCatalog } from '../../../../libraries/theme-catalog/index.mjs';
+
+const CATALOG_TIERS = new Map(readThemeCatalog().map((row) => [row.id, row.tier]));
+
+/** The tier of a decision, read from the catalog and never restated here. */
+function themeControlTier(id) {
+  const tier = CATALOG_TIERS.get(id);
+  if (!tier) {
+    throw new Error(
+      `decisions-lit: "${id}" is not a row of the typed catalog; the probe cannot`
+        + ' measure a decision the catalog does not declare',
+    );
+  }
+  return tier;
+}
+
 /** Today's control catalog: the 21 manifest controls plus `palette.dark-mode`. */
 export const TODAY_CONTROL_DENOMINATOR = 22;
 
@@ -33,46 +49,54 @@ export const NEW_DECISION_DENOMINATOR = 10;
 export const RECORDED_CLASSES = Object.freeze(['full', 'partial', 'none', 'new']);
 
 export const DECISIONS = Object.freeze([
-  ['palette.seeds', 'standard', 'full', [{ primary: '#4F46E5' }, { primary: '#DC2626' }]],
-  ['palette.status-seeds', 'standard', 'full', [{ success: '#10B981' }, { success: '#0EA5E9' }]],
-  ['palette.neutral-temperature', 'standard', 'new', ['cool', 'warm']],
-  ['palette.contrast-posture', 'pro', 'new', ['soft', 'high']],
-  ['palette.dark-mode', 'pro', 'none', ['light', 'dark']],
-  ['typography.families', 'pro', 'full', [{ base: 'humanist-text' }, { base: 'editorial-text' }]],
-  ['typography.pairing', 'standard', 'full', ['sober', 'editorial']],
-  ['typography.scale', 'standard', 'partial', [0.9, 1.1]],
-  ['typography.role-weights', 'standard', 'new', ['light', 'strong']],
-  ['typography.numeric', 'pro', 'new', ['proportional', 'tabular']],
-  ['shape.radius-scale', 'standard', 'none', [0.75, 1.25]],
-  ['shape.nesting', 'pro', 'new', ['concentric', 'uniform']],
-  ['shape.button-style', 'standard', 'partial', ['sharp', 'pill']],
-  ['shape.control-height', 'standard', 'new', ['compact', 'tall']],
-  ['density.mode', 'standard', 'partial', ['compact', 'spacious']],
-  ['spacing.rhythm', 'standard', 'none', ['tight', 'airy']],
-  ['surfaces.elevation-posture', 'standard', 'partial', ['flat', 'elevated']],
-  ['surfaces.border-style', 'standard', 'new', ['none', 'strong']],
-  ['surfaces.effect-intensity', 'standard', 'partial', [0, 1]],
-  ['states.emphasis', 'standard', 'new', ['subtle', 'strong']],
-  ['states.focus-style', 'standard', 'new', ['ring', 'glow']],
-  ['motion.dial', 'standard', 'partial', [
+  ['palette.seeds', 'full', [{ primary: '#4F46E5' }, { primary: '#DC2626' }]],
+  ['palette.status-seeds', 'full', [{ success: '#10B981' }, { success: '#0EA5E9' }]],
+  ['palette.neutral-temperature', 'new', ['cool', 'warm']],
+  ['palette.contrast-posture', 'new', ['soft', 'high']],
+  ['palette.dark-mode', 'none', ['light', 'dark']],
+  ['typography.families', 'full', [{ base: 'humanist-text' }, { base: 'editorial-text' }]],
+  ['typography.pairing', 'full', ['sober', 'editorial']],
+  ['typography.scale', 'partial', [0.9, 1.1]],
+  ['typography.role-weights', 'new', ['light', 'strong']],
+  ['typography.numeric', 'new', ['proportional', 'tabular']],
+  ['shape.radius-scale', 'none', [0.75, 1.25]],
+  ['shape.nesting', 'new', ['concentric', 'uniform']],
+  ['shape.button-style', 'partial', ['sharp', 'pill']],
+  ['shape.control-height', 'new', ['compact', 'tall']],
+  ['density.mode', 'partial', ['compact', 'spacious']],
+  ['spacing.rhythm', 'none', ['tight', 'airy']],
+  ['surfaces.elevation-posture', 'partial', ['flat', 'elevated']],
+  ['surfaces.border-style', 'new', ['none', 'strong']],
+  ['surfaces.effect-intensity', 'partial', [0, 1]],
+  ['states.emphasis', 'new', ['subtle', 'strong']],
+  ['states.focus-style', 'new', ['ring', 'glow']],
+  ['motion.dial', 'partial', [
     { intensity: 0, durationScale: 0.5 },
     { intensity: 1, durationScale: 2 },
   ]],
-  ['motion.character', 'pro', 'new', ['mechanical', 'playful']],
-  ['navigation.sidebar-tone', 'standard', 'full', ['subtle', 'inverse']],
-  ['experience.profile', 'standard', 'full', [
+  ['motion.character', 'new', ['mechanical', 'playful']],
+  ['navigation.sidebar-tone', 'full', ['subtle', 'inverse']],
+  ['experience.profile', 'full', [
     'rottay/bithire-technical@1',
     'rottay/management-editorial@1',
   ]],
-  ['profiles.expressive', 'pro', 'full', [{ type: 'technical' }, { type: 'editorial' }]],
-  ['recipe-profile', 'pro', 'none', [
+  ['profiles.expressive', 'full', [{ type: 'technical' }, { type: 'editorial' }]],
+  ['recipe-profile', 'none', [
     'rottay/technical-sharp@1',
     'rottay/editorial-round@1',
   ]],
-  ['chrome.anatomy', 'pro', 'none', [{ cardComponent: 'default' }, { cardComponent: 'framed' }]],
-  ['responsive.posture', 'pro', 'none', ['compact', 'expansive']],
-].map(([id, tier, recordedClass, values]) =>
-  Object.freeze({ id, tier, recordedClass, values: Object.freeze(values) }),
+  ['chrome.anatomy', 'none', [{ cardComponent: 'default' }, { cardComponent: 'framed' }]],
+  ['responsive.posture', 'none', ['compact', 'expansive']],
+].map(([id, recordedClass, values]) =>
+  Object.freeze({
+    id,
+    // THE TIER IS NOT RESTATED. It is read from the typed catalog, which is the
+    // only place a control's tier is declared since WO-CAT-02; a second column
+    // here is exactly the drift F-03 recorded.
+    tier: themeControlTier(id),
+    recordedClass,
+    values: Object.freeze(values),
+  }),
 ));
 
 /** The positive control: if THIS does not move, the instrument is not measuring. */
@@ -114,6 +138,16 @@ export function censusErrors(rows = DECISIONS) {
   }
   if (new Set(rows.map((r) => r.id)).size !== rows.length) {
     errors.push('duplicate decision id');
+  }
+  // The probe measures the CATALOG's rows, in the catalog's order. A row here
+  // that the catalog does not declare is a probe measuring something nobody
+  // published, and a catalog row missing here is a decision nobody measures.
+  const catalogIds = [...CATALOG_TIERS.keys()];
+  if (rows === DECISIONS && rows.map((r) => r.id).join('|') !== catalogIds.join('|')) {
+    errors.push(
+      'the probe rows disagree with the typed catalog: '
+        + `probe [${rows.map((r) => r.id).join(', ')}] vs catalog [${catalogIds.join(', ')}]`,
+    );
   }
   return errors;
 }

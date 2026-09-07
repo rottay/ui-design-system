@@ -11,7 +11,6 @@
   "evidenceRoot": "packages/core/artifacts/quality/programs/modern-rescue",
   "artDirectionContract": "packages/core/scripts/check/modern-rescue/art-direction/index.json",
   "visualCraftContract": "packages/core/scripts/check/modern-rescue/visual-craft/index.json",
-  "r7CustomizationContract": "packages/core/scripts/check/modern-rescue/customization-model/index.json",
   "r7Enabled": false,
   "referenceLab": {
     "route": "/probe/ds-reference",

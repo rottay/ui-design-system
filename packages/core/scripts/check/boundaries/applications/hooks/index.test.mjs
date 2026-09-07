@@ -56,6 +56,9 @@ const BRAND_THEME_EMITTER_ANCHOR = `${ANCHORS.brandThemeEmitter.path}/index.ts`;
 const APPEARANCE_EMITTER_ANCHOR = ANCHORS.appearanceEmitter.path;
 const APPEARANCE_POSTURE_EMITTER_ANCHOR = ANCHORS.appearancePostureEmitter.path;
 const THEME_CONTRACTS_ANCHOR = ANCHORS.themeContracts.path;
+// D-21 (b) gave the ownership graph a second root. A planted tree writes both,
+// because a sandbox that omits one is testing a tree the real one is not.
+const THEME_CONTRACTS_FIRST_LEVEL_ANCHOR = ANCHORS.themeContractsFirstLevel.path;
 const STYLE_ANCHOR = ANCHORS.styleRoots.path;
 const COMPONENT_ANCHOR = ANCHORS.componentReads.path;
 
@@ -374,6 +377,11 @@ function coreFixture() {
     `${THEME_CONTRACTS_ANCHOR}/index.ts`,
     `export interface BrandTheme { palette?: { primary?: string } }\n` +
       `export interface TenantAppearance { primaryColor?: string }\n`,
+  );
+  write(
+    root,
+    `${THEME_CONTRACTS_FIRST_LEVEL_ANCHOR}/theme/foundation/decisions/index.ts`,
+    `export interface ThemeDecisions { "palette.seeds"?: { primary?: string } }\n`,
   );
   write(
     root,

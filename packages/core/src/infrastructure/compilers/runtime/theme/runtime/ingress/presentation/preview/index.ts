@@ -8,7 +8,7 @@
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
-import type { TenantThemeDocumentAny } from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
+import type { TenantThemeDocumentAny } from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
   admitDocument,

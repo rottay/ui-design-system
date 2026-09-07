@@ -50,7 +50,6 @@ const PROGRAM_ROOT = join(PACKAGE_ROOT, 'scripts/check/modern-rescue');
 const REPOSITORY_ROOT = findRepoRoot(HERE);
 const INDEX = JSON.parse(readFileSync(join(MANIFEST_ROOT, 'index.json'), 'utf8'));
 const SCHEMA = JSON.parse(readFileSync(join(MANIFEST_ROOT, 'schema/index.json'), 'utf8'));
-const MODEL = JSON.parse(readFileSync(join(PROGRAM_ROOT, 'customization-model/index.json'), 'utf8'));
 const PROGRAM = JSON.parse(readFileSync(join(PROGRAM_ROOT, 'program/index.json'), 'utf8'));
 const EVIDENCE_CONTRACT = JSON.parse(
   readFileSync(join(PROGRAM_ROOT, 'evidence-contract/index.json'), 'utf8'),
@@ -72,7 +71,7 @@ test('the segmented manifest is structurally complete without treating UNKNOWN a
   // Same law for the control denominators: DERIVED from the registry TS the
   // generator itself reads (`activePublicControls()`), never restated as a
   // literal here. A hand-pinned 13, then 14, is exactly what went stale when
-  // `palette.status-seeds` opened its last frontier row to tier Standard.
+  // `palette.status-seeds` opened its last declared-but-closed row to tier Standard.
   const controls = activePublicControls();
   const standardControls = controls.filter((entry) => entry.tier === 'standard').length;
   const proCapabilities = controls.filter((entry) => entry.tier === 'pro').length;
@@ -84,11 +83,11 @@ test('the segmented manifest is structurally complete without treating UNKNOWN a
   assert.equal(INDEX.rollups.skeletonsCountAsProgress, false);
 });
 
-test('frontier, internal and proposed controls never create R0-R6 family cells', () => {
+test('declared-but-closed, internal and proposed controls never create R0-R6 family cells', () => {
   // DERIVED from the registry: only active Standard/Pro rows create cells, so
   // the excluded set is whatever is left over once activePublicControls() has
   // taken its cut. A pinned id list is exactly what went stale when
-  // palette.status-seeds opened its frontier row to tier Standard.
+  // palette.status-seeds opened its declared-but-closed row to tier Standard.
   const controls = activePublicControls();
   const expectedExcluded = parseRegistry()
     .filter((entry) => !controls.some((control) => control.id === entry.id))
@@ -995,7 +994,7 @@ test('two controls above the 0.80 consumer Jaccard ceiling must derive, merge or
 // Vocabulary agreement — the schema documents exactly what the generator enforces
 // ---------------------------------------------------------------------------
 
-test('schema.json, customization-model/index.json and the generator vocabularies agree', () => {
+test('schema.json and the generator vocabularies agree', () => {
   assert.deepEqual(SCHEMA.vocabulary.cellMechanisms, [...CELL_MECHANISMS]);
   assert.deepEqual(SCHEMA.vocabulary.channelPrefixes, [...CHANNEL_PREFIXES]);
   assert.deepEqual(SCHEMA.vocabulary.rootChannelAuthorities, [...ROOT_CHANNEL_AUTHORITIES]);
@@ -1006,30 +1005,23 @@ test('schema.json, customization-model/index.json and the generator vocabularies
   assert.deepEqual(SCHEMA.vocabulary.evidenceProofRoles, JSON.parse(JSON.stringify(EVIDENCE_PROOF_ROLES)));
   assert.deepEqual(SCHEMA.vocabulary.maximumClaimByAssessmentState, { ...MAXIMUM_CLAIM_BY_ASSESSMENT_STATE });
 
-  // The field spellings are owned by customization-model/index.json, not minted here.
-  assert.deepEqual(SCHEMA.vocabulary.applicableFamilyFields, MODEL.controlImpactContract.applicableFamilyFields);
-  assert.deepEqual(SCHEMA.vocabulary.internalChannelFields, MODEL.controlImpactContract.internalChannelFields);
-  assert.deepEqual([...APPLICABLE_FAMILY_FIELDS], MODEL.controlImpactContract.applicableFamilyFields);
-  assert.deepEqual([...INTERNAL_CHANNEL_FIELDS], MODEL.controlImpactContract.internalChannelFields);
+  // The field spellings have ONE owner: schema/index.json. They used to have
+  // two -- the schema and the retired customization-model contract -- and this
+  // test's job was to keep the copies in step. WO-CAT-02 deleted the second
+  // copy, so the assertion is now the generator against the schema, which is
+  // the shape the two-copy version was approximating.
+  assert.deepEqual([...APPLICABLE_FAMILY_FIELDS], SCHEMA.vocabulary.applicableFamilyFields);
+  assert.deepEqual([...INTERNAL_CHANNEL_FIELDS], SCHEMA.vocabulary.internalChannelFields);
 
   // The forbidden family-edge set had THREE different spellings: the schema
-  // listed three names, the generator checked two, and the model REQUIRED the
-  // very fields the other two forbade. One owner now, mirrored into both.
+  // listed three names, the generator checked two, and the retired contract
+  // REQUIRED the very fields the other two forbade. One owner now.
   assert.deepEqual(
     [...FORBIDDEN_CONTROL_FAMILY_EDGE_FIELDS],
-    MODEL.controlImpactContract.forbiddenControlSegmentFields,
-  );
-  assert.deepEqual(
     SCHEMA.segments.control.forbidden,
-    MODEL.controlImpactContract.forbiddenControlSegmentFields,
   );
-  assert.equal(
-    Object.hasOwn(MODEL.controlImpactContract, 'requiredFields'),
-    false,
-    'requiredFields described the generated view while reading as an authored-segment requirement',
-  );
-  // The projection must not silently drop a field the model promises.
-  for (const field of MODEL.controlImpactContract.generatedControlViewFields) {
+  // The projection must not silently drop a field the generated view promises.
+  for (const field of ['controlId', 'declaredFamilies', 'unknownCells', 'applicableFamilyIds']) {
     assert.ok(
       Object.hasOwn(INDEX.generatedControlFamilyView.controls[0], field),
       `the generated view is missing ${field}`,
@@ -1037,10 +1029,9 @@ test('schema.json, customization-model/index.json and the generator vocabularies
   }
   assert.deepEqual(
     [...SCHEMA.vocabulary.controlDispositions].sort(),
-    [...MODEL.controlImpactContract.familyDispositionVocabulary].sort(),
+    ['APPLICABLE', 'INVARIANT_WITH_REASON', 'NOT_APPLICABLE_WITH_REASON', 'UNKNOWN'],
   );
   assert.equal(SCHEMA.orthogonalityLaw.jaccardCeiling, 0.8);
-  assert.match(MODEL.orthogonality.duplicateControlRule, /0\.80/);
 
   // The progress law the structural check depends on must not drift.
   assert.equal(SCHEMA.progressLaw.structuralCheckAllowsUnknown, true);

@@ -7,8 +7,10 @@
    and family-cut lanes, and its 0/255 family metric is replaced by the
    programme indicators in `roadmap/STATUS.md`. Its contracts —
    `packages/core/scripts/check/modern-rescue/README.md`, `program/index.json`,
-   `customization-model/index.json`, `orchestration/index.json` — and
-   `packages/core/governance/manifest/` are preserved as historical evidence.
+   `orchestration/index.json` — and `packages/core/governance/manifest/` are
+   preserved as historical evidence. `customization-model/index.json` is NOT:
+   WO-CAT-02 deleted it, because it was a hand-written fifth copy of the control
+   catalog and a listing is not evidence.
    They are not runtime truth and not an acceptance authority: the runtime chain
    is the typed catalog, the per-family derivators, the roles/adapters and the
    emitter. Do not restart a Modern Rescue round against them. `AGENTS.md`
@@ -141,12 +143,20 @@ Update the hub `README.md` inventory counts when component totals change.
 catalog. Its physical hierarchy must make architectural importance and
 dependency direction visible.
 
-The five canonical physical roots are `foundation/`, `infrastructure/`,
-`graphics/`, `components/`, and `entrypoints/`. `components/` owns the four UI
-tiers; `entrypoints/` owns classified package boundaries. Every public subpath
-boundary lives below it as `folder/index.ts`; `src/index.ts` is the only file
-allowed directly at the source root. A top-level `composition/` owner is
+D-21 (b) (owner, 2026-09-05) fixes the first level as `contracts/`, `kernel/`,
+`tokens/`, `graphics/`, `compilers/`, `runtime/`, `components/` and
+`entrypoints/`. The legacy aggregate roots `foundation/` and `infrastructure/`
+remain declared while they still hold the unmigrated tree; WO-RET-04 normalizes
+them. New code is born under the first-level grammar. `components/` owns the
+four UI tiers; `entrypoints/` owns classified package boundaries. Every public
+subpath boundary lives below it as `folder/index.ts`; `src/index.ts` is the only
+file allowed directly at the source root. A top-level `composition/` owner is
 forbidden.
+
+The admitted set is declared by name in `ARCHITECTURE_TIERS` /
+`CLASSIFIED_SUPPORT_ROOTS` of
+`packages/core/scripts/check/architecture/audits/structure/index.mjs`; a root
+outside it fails `structure:check` rather than widening the identity baseline.
 
 `packages/core/scripts/` has exactly six intent roots: `build/`, `check/`,
 `generate/`, `libraries/`, `maintain/`, and `package/`. Source-layout names are
@@ -348,14 +358,23 @@ wrongly marked as orphans.
 ## Premium white-label model (BrandTheme / Theme-ISO)
 
 > **Authority remit:** WO-CRA-23 is sealed, so the Modern Rescue contracts
-> (`packages/core/scripts/check/modern-rescue/README.md`,
-> `customization-model/index.json`, `program/index.json`,
+> (`packages/core/scripts/check/modern-rescue/README.md`, `program/index.json`,
 > `orchestration/index.json`) are historical evidence for how that control model
 > was built — not the current acceptance law and not runtime truth. The live
 > control model, namespace lifecycle and acceptance law are owned by the
 > catalog-door, derivation and family-cuts lanes in `roadmap/`, and readiness is
 > published by the programme indicators in `roadmap/STATUS.md`. This section
 > only restates project-wide invariants.
+>
+> **The control catalog** is `packages/core/src/contracts/theme/runtime/catalog`
+> and nothing else (WO-CAT-02): one typed row per approved kit decision, with
+> its tier, closed domain, keypath, declared fan-out and minimum families. The
+> DB decision schema, the public control document and every gate that used to
+> read `governance/manifest/controls/**` are views of it, and
+> `theme-single-listing` is the gate that keeps them views. What a tenant
+> authors is `ThemePatch = DeepPartial<ThemeDecisions & SanctionedOverrides>`;
+> the Theme-shaped layer the resolver merges is `ThemeLayerPatch`, which is
+> ingestion-only and may not carry `id` or `name`.
 
 The canonical visual source of truth is the total nested **Theme** under
 `foundation/contracts/composition/tenants/themes/`. `BrandTheme` may survive

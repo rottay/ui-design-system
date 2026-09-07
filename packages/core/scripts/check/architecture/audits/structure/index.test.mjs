@@ -78,17 +78,19 @@ test('the CLI explicitly recognises the --check mode used by lint:folders', () =
 test('default macro roots match the governed graphics and UI taxonomy', () => {
   assert.deepEqual(Object.keys(ARCHITECTURE_TIERS), [
     'foundation',
+    'contracts',
+    'kernel',
+    'tokens',
+    'compilers',
     'infrastructure',
+    'runtime',
     'graphics',
     'components',
   ]);
   assert.deepEqual(ARCHITECTURE_TIERS.foundation, [
     'behavior',
-    'contracts',
     'i18n',
-    'kernel',
     'presets',
-    'tokens',
   ]);
   assert.deepEqual(ARCHITECTURE_TIERS.graphics, [
     'icons',
@@ -105,6 +107,13 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
   assert.equal(Object.hasOwn(ARCHITECTURE_TIERS, 'composition'), false);
   assert.equal(Object.hasOwn(ARCHITECTURE_TIERS, 'entrypoints'), false);
   assert.deepEqual(CLASSIFIED_SUPPORT_ROOTS, ['entrypoints']);
+  // D-21 (b): the first-level roots are admitted BY NAME, and the legacy
+  // aggregate roots no longer claim them as flat destinations.
+  for (const root of ['contracts', 'kernel', 'tokens', 'compilers', 'runtime']) {
+    assert.equal(Object.hasOwn(ARCHITECTURE_TIERS, root), true);
+    assert.equal(ARCHITECTURE_TIERS.foundation.includes(root), false);
+    assert.equal(ARCHITECTURE_TIERS.infrastructure.includes(root), false);
+  }
   assert.deepEqual(UI_LAYER_RANKS, {
     primitives: 0,
     patterns: 1,
@@ -1095,6 +1104,22 @@ test('identity baseline is a strict subset ratchet: reductions pass and new path
     const increasedComparison = compareStructureBaseline(increased, baseline);
     assert.equal(increasedComparison.passed, false);
     assert(increasedComparison.added.includes('flat-authored-module:feature/NewPeer.ts'));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('D-21 (b): the shipped tier map admits contracts/ and still refuses an undeclared root', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    write(resolve(sourceRoot, 'contracts/theme/catalog/index.ts'), 'export const catalog = [];\n');
+    write(resolve(sourceRoot, 'undeclared/index.ts'), 'export const undeclared = true;\n');
+    // The SHIPPED map, not TEST_TIERS: this is the drill for the amendment.
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    const ids = new Set(result.findings.map(({ id }) => id));
+    assert.equal(ids.has('unclassified-root-domain:contracts'), false);
+    assert.equal(ids.has('flat-architecture-domain:contracts'), false);
+    assert.equal(ids.has('unclassified-root-domain:undeclared'), true);
   } finally {
     rmSync(packageRoot, { recursive: true, force: true });
   }

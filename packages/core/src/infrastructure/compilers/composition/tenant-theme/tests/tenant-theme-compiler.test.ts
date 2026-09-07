@@ -202,7 +202,7 @@ const hydrate = (
 ) => hydrateTenantThemeConfig(document, identity);
 
 /**
- * Every terminal keypath of a ThemePatch. Used to count what survives the v1
+ * Every terminal keypath of a ThemeLayerPatch. Used to count what survives the v1
  * migration: an authored dial that collides with another one, or that the
  * migration silently drops, changes this cardinality even though the document
  * itself still validates.
@@ -1522,7 +1522,7 @@ describe("closed schema and hostile input rejection", () => {
         ...actual,
         mergeThemePatches: () => {
           throw new Error(
-            'mergeThemePatches: unknown key "width" at $.chrome.sidebar; ThemePatch is ingestion-only'
+            'mergeThemePatches: unknown key "width" at $.chrome.sidebar; ThemeLayerPatch is ingestion-only'
           );
         },
       };

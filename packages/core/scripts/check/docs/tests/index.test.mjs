@@ -246,7 +246,7 @@ test('the shipped controls row names a CI step that really executes its gate', (
   // freshness`, was removed when the check moved into the gate manifest.)
   const controls = GENERATED_DOCUMENTS.find((row) => row.document.includes('customization-controls'));
   assert.equal(controls.verification, 'ci');
-  assert.equal(controls.step, 'Quality gates (manifest-driven, post-build)');
+  assert.equal(controls.step, 'Quality gates (manifest-driven, blocking)');
   assert.equal(controls.gate, 'customization-controls-freshness');
 
   // LINK 1 — the step exists, and exactly once. A second step named the same
@@ -263,14 +263,16 @@ test('the shipped controls row names a CI step that really executes its gate', (
     'the per-document step must not be recreated alongside the manifest phase',
   );
 
-  // LINK 2 — that step runs the post-build phase of the inventory.
+  // LINK 2 — that step runs the pre-build phase of the inventory. The gate moved
+  // there with WO-CAT-02: the generator is a view of the typed catalog and no
+  // longer imports the built package, so its freshness is provable before Build.
   const heading = `- name: ${controls.step}`;
   const stepBody = workflow.slice(workflow.indexOf(heading) + heading.length).split('- name:')[0];
-  assert.match(stepBody, /gates:ci:post-build/u, 'the named step must run the post-build gate phase');
+  assert.match(stepBody, /run: pnpm --filter @rottay\/design-system run gates:ci$/mu, 'the named step must run the pre-build gate phase');
 
   // LINK 3 — the alias it invokes is the runner, restricted to that phase.
   const corePackage = JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8'));
-  assert.match(corePackage.scripts['gates:ci:post-build'], /automation\/runner\/index\.mjs.*--phase=post-build/u);
+  assert.match(corePackage.scripts['gates:ci'], /automation\/runner\/index\.mjs/u);
 
   // LINK 4 — the phase contains this row's gate, blocking, with a drill.
   const manifest = fs.readFileSync(
@@ -279,7 +281,7 @@ test('the shipped controls row names a CI step that really executes its gate', (
   );
   const entry = manifest.split('\n').find((line) => line.includes(`id: '${controls.gate}'`));
   assert.ok(entry, `the manifest must declare a gate called ${controls.gate}`);
-  assert.match(entry, /phase: 'post-build'/u, 'the gate must live in the phase the named step runs');
+  assert.match(entry, /phase: 'pre-build'/u, 'the gate must live in the phase the named step runs');
   assert.match(entry, /blocking: true/u, 'a non-blocking gate proves no freshness');
   assert.match(entry, /drillId:/u, 'the gate must carry a drill');
 
@@ -326,9 +328,9 @@ test('the shipped table never invokes the controls generator', () => {
   assert.ok(controls, 'the controls catalog must still be represented');
   assert.equal(controls.check, undefined, 'no command may be configured for it');
 
-  // The controls generator specifically must never be spawned: it imports the
-  // built package, which is what produced a false STALE in an unbuilt tree.
-  // Other rows may legitimately own a checker.
+  // The controls generator is not spawned from here: byte freshness is the
+  // manifest gate's, and this gate proves presence and banner. Other rows may
+  // legitimately own a checker.
   for (const row of GENERATED_DOCUMENTS) {
     const command = (row.check ?? []).join(' ');
     assert.equal(
@@ -389,7 +391,8 @@ test('no shipped row needs a build, which is why a dist-less tree is clean', () 
 
   // The taxonomy row does spawn, but its checker reads the component tree and
   // never imports the built package — which is what made the old controls
-  // invocation report a false STALE in an unbuilt checkout.
+  // invocation, back when it loaded `dist/`, report a false STALE in an unbuilt
+  // checkout.
   const taxonomy = GENERATED_DOCUMENTS.find((row) => row.document.includes('component-taxonomy'));
   assert.equal(taxonomy.verification, 'command');
   assert.deepEqual(taxonomy.check, ['node', 'scripts/generate/taxonomy/index.mjs', '--check']);

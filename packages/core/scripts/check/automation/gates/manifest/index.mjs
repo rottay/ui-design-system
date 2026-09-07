@@ -874,8 +874,35 @@ export const CI_GATES = Object.freeze([
 
   // The published controls table is regenerated from the compiled tenant
   // capability registry, so both the freshness check and its drill need dist.
-  { id: 'customization-controls-drill', run: ['node', '--test', 'scripts/generate/tokens/customization/controls/tests/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['customization-controls-freshness'], prerequisites: ['fresh-dist'], },
-  { id: 'customization-controls-freshness', run: ['node', 'scripts/generate/tokens/customization/controls/index.mjs', '--check'], blocking: true, phase: 'post-build', drillId: 'customization-controls-drill', prerequisites: ['fresh-dist'], },
+  // WO-CAT-02. The typed catalog is the only list of controls, so three entries
+  // guard it: the listing law itself, the schema it generates, and the coverage
+  // law that cannot pass until the derivation lane lands.
+  { id: 'theme-single-listing-drill', run: ['node', '--test', 'scripts/check/theme/single-listing/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-single-listing'], },
+  { id: 'theme-single-listing', run: ['node', 'scripts/check/theme/single-listing/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'theme-single-listing-drill', },
+  { id: 'theme-decision-schema-drill', run: ['node', '--test', 'scripts/generate/theme/schema/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-decision-schema'], },
+  { id: 'theme-decision-schema', run: ['node', 'scripts/generate/theme/schema/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'theme-decision-schema-drill', },
+  // The DRILL is blocking and green; the GATE is registered non-blocking with a
+  // written reason because it cannot pass before the derivation lane exists.
+  // That is the sanctioned shape, and the only alternative -- leaving the law
+  // unregistered, or letting it report PASS on a partition that covers 30 of
+  // 2531 keypaths -- is the fail-open this manifest exists to make
+  // unrepresentable. The drill is what stops the measurement from rotting while
+  // the gate waits.
+  { id: 'theme-keypath-coverage-drill', run: ['node', '--test', 'scripts/check/theme/keypath-coverage/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-keypath-coverage'], },
+  {
+    id: 'theme-keypath-coverage',
+    run: ['node', 'scripts/check/theme/keypath-coverage/index.mjs'],
+    blocking: false,
+    excluded: {
+      reason: 'The three sets can only be total once a family derivator owns the subtrees no decision authors: the derived set is EMPTY by construction until the derivation lane lands, so the gate measures 2501 uncovered keypaths of 2531 and is RED by design, not by defect. It is registered here rather than left out so the debt is visible in the matrix, and its drill stays BLOCKING so the measurement cannot silently stop measuring. It flips to blocking in the lane that fills DERIVED_PREFIXES.',
+      owner: 'derivation lane (WO-DER-*), roadmap/registry.json',
+      trackedSince: '2026-09-07',
+    },
+    phase: 'pre-build',
+    drillId: 'theme-keypath-coverage-drill',
+  },
+  { id: 'customization-controls-drill', run: ['node', '--test', 'scripts/generate/theme/controls-doc/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['customization-controls-freshness'], },
+  { id: 'customization-controls-freshness', run: ['node', 'scripts/generate/theme/controls-doc/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'customization-controls-drill', },
 
   // The prepack chain, which `npm pack` fires and CI never did.
   { id: 'dist-freshness', run: ['pnpm', 'run', 'distfresh:check'], blocking: true, phase: 'post-build', drillId: 'dist-freshness-drill', prerequisites: ['fresh-dist'], },

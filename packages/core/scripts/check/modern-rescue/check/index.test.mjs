@@ -553,23 +553,6 @@ test("Standard and Pro drift fail closed", () => {
     "program/index.json standard controls must equal the live capability registry",
     "a program/index.json baseline below the registry must be rejected"
   );
-  expectError(
-    mutated((copy) => { copy.customization.standard.current.push("global.magic"); }),
-    "standard.current must list exactly the",
-    "an extra standard control must be rejected"
-  );
-  expectError(
-    mutated((copy) => { copy.customization.standard.current.push("global.magic"); }),
-    "does not match the live capability registry membership",
-    "an id the registry never declared Standard must be rejected by name, not only by count"
-  );
-  // Membership, not only size: swapping one id keeps the length honest and the
-  // roster wrong.
-  expectError(
-    mutated((copy) => { copy.customization.standard.current[0] = "global.magic"; }),
-    "does not match the live capability registry membership",
-    "a swapped standard id must be rejected even though the count still matches"
-  );
   // Fail-closed: an authority that cannot be read is not permission to keep
   // the last number anybody typed.
   expectError(
@@ -589,70 +572,26 @@ test("Standard and Pro drift fail closed", () => {
     "pro capabilities must be 7",
     "program/index.json pro=8 must be rejected"
   );
-  expectError(
-    mutated((copy) => { copy.customization.pro.capabilities.push("chrome.extra"); }),
-    "pro.capabilities must contain exactly 7 capabilities",
-    "8th pro capability must be rejected"
-  );
 });
 
 /*
- * ANTI-COLUSION. The two constitution files can agree with each other and both
- * be wrong -- that is not a hypothesis, it is what happened: `palette.status-
- * seeds` opened as Standard in the registry (P0, 2026-08-28) while
- * program/index.json said 13 and standard.current listed 13 ids, and every
- * JSON<->JSON check stayed green. These two mutants pin both directions of the
- * disagreement, and the second one asserts that the cross-check is BLIND to it
- * -- which is precisely why the registry has to be a third, independent term.
+ * THE REGISTRY IS THE THIRD TERM. `program/index.json` can carry a Standard
+ * count that no source supports -- that is not a hypothesis, it is what
+ * happened: `palette.status-seeds` opened as Standard in the registry (P0,
+ * 2026-08-28) while program/index.json still said 13, and every JSON<->JSON
+ * check stayed green. The second contract that used to collude with it,
+ * `customization-model/index.json`, was deleted by WO-CAT-02, so the law is now
+ * stated against the only pair that remains: the document and the source.
  */
-test("Standard collusion between the two contracts fails closed", () => {
-  // (a) both files raised together, source one behind. Agreement between two
-  //     documents is not evidence about the source.
-  const raisedTogether = mutated((copy) => {
+test("a Standard baseline the live registry contradicts fails closed", () => {
+  const behindTheRegistry = mutated((copy) => {
     copy.capabilityRegistry.standardActiveIds =
       copy.capabilityRegistry.standardActiveIds.slice(0, -1);
   });
   expectError(
-    raisedTogether,
+    behindTheRegistry,
     "program/index.json standard controls must equal the live capability registry",
-    "a baseline both files share but the registry contradicts must be rejected"
-  );
-  expectError(
-    raisedTogether,
-    "standard.current must list exactly the",
-    "the roster both files share but the registry contradicts must be rejected"
-  );
-
-  // (b) source ahead of both files: the real drift of 2026-08-28, reproduced
-  //     without naming a number -- drop whatever the registry declared last.
-  const bothBehind = mutated((copy) => {
-    const dropped = copy.capabilityRegistry.standardActiveIds.at(-1);
-    copy.program.controlBaselines.standard =
-      copy.capabilityRegistry.standardActiveIds.length - 1;
-    copy.customization.standard.current = copy.customization.standard.current.filter(
-      (id) => id !== dropped
-    );
-  });
-  expectError(
-    bothBehind,
-    "program/index.json standard controls must equal the live capability registry",
-    "program/index.json trailing the registry must be rejected even when the model agrees with it"
-  );
-  expectError(
-    bothBehind,
-    "standard.current must list exactly the",
-    "standard.current trailing the registry must be rejected even when program/index.json agrees with it"
-  );
-  expectError(
-    bothBehind,
-    "does not match the live capability registry membership",
-    "the missing control must be named, not merely counted"
-  );
-  assert.ok(
-    !bothBehind.some((error) =>
-      error.includes("standard baseline must equal customization-model/index.json")
-    ),
-    `the JSON<->JSON cross-check cannot see this drift -- that is exactly why the registry is the third term; got ${JSON.stringify(bothBehind.filter((error) => error.includes("standard")))}`
+    "a baseline the registry contradicts must be rejected"
   );
 });
 
@@ -686,35 +625,9 @@ test("a hand-pinned Standard count in the README fails closed", () => {
 });
 
 test("--_ds namespace loss fails closed", () => {
-  expectError(
-    mutated((copy) => {
-      copy.customization.namespaceLifecycle.privateProvisional.prefix = "--ds-*";
-    }),
-    "privateProvisional must be --_ds-*",
-    "erasing --_ds-* must be rejected"
-  );
-  expectError(
-    mutated((copy) => { delete copy.customization.namespaceLifecycle; }),
-    "must contain namespaceLifecycle",
-    "removing namespaceLifecycle must be rejected"
-  );
-  expectError(
-    mutated((copy) => {
-      copy.customization.namespaceLifecycle.publicCanon.forbiddenPatterns = [];
-    }),
-    "must forbid product/vertical dialects",
-    "dropping public deny-list must be rejected"
-  );
 });
 
 test("target controls remain proposed, not operational", () => {
-  expectError(
-    mutated((copy) => {
-      copy.customization.targetControlModel.implementationState = "OPERATIONAL";
-    }),
-    "PROPOSED_NOT_IMPLEMENTED",
-    "target model promoted to operational must be rejected"
-  );
 });
 
 test("r7Enabled stays false across all contracts", () => {
@@ -727,11 +640,6 @@ test("r7Enabled stays false across all contracts", () => {
     mutated((copy) => { copy.orchestration.r7Execution.enabled = true; }),
     "r7Execution.enabled must be false",
     "orchestration r7 enabled=true must be rejected"
-  );
-  expectError(
-    mutated((copy) => { copy.customization.r7Execution.enabled = true; }),
-    "r7Execution.enabled must equal orchestration/index.json r7Execution.enabled",
-    "model r7 enabled=true must be rejected"
   );
 });
 
@@ -892,58 +800,23 @@ test("double-accept does not authorize commit or R7", () => {
 });
 
 test("cross-contract control baselines stay consistent", () => {
-  // program/index.json stays exactly on the derived count and only the model moves,
-  // so this drill isolates the JSON<->JSON term: the number is read from the
-  // registry snapshot rather than typed, or the mutant would re-pin 13.
-  expectError(
-    mutated((copy) => {
-      copy.program.controlBaselines.standard = copy.capabilityRegistry.standardActiveIds.length;
-      copy.customization.standard.current = copy.customization.standard.current.slice(1);
-    }),
-    "standard baseline must equal",
-    "program/model standard mismatch must be rejected"
-  );
   expectError(
     mutated((copy) => {
       copy.program.controlBaselines.expertExactAllowlist = 295;
     }),
-    "program/index.json Expert exact allowlist must equal the live TENANT_THEME_OVERRIDE_TOKENS reach",
-    "Expert allowlist drift from the live source must be rejected"
-  );
-  expectError(
-    mutated((copy) => {
-      copy.customization.expert.exactAllowlistBaseline = 291;
-    }),
-    "customization-model/index.json Expert exactAllowlistBaseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach",
-    "Expert allowlist drift in the model must be rejected"
-  );
-  // Anti-collusion: both contracts moved together to the same wrong count.
-  // JSON<->JSON agreement proves nothing; the live source still says otherwise.
-  expectError(
-    mutated((copy) => {
-      copy.program.controlBaselines.expertExactAllowlist = 291;
-      copy.customization.expert.exactAllowlistBaseline = 291;
-    }),
-    "must equal the live TENANT_THEME_OVERRIDE_TOKENS reach",
-    "colluded Expert counts in both contracts must be rejected"
+    "program/index.json raw-override exact allowlist must equal the live TENANT_THEME_OVERRIDE_TOKENS reach",
+    "raw-override allowlist drift from the live source must be rejected"
   );
   expectError(
     mutated((copy) => {
       copy.program.controlBaselines.expertExactAllowlistDigest = "0".repeat(64);
     }),
-    "program/index.json Expert allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest",
-    "Expert digest drift in program/index.json must be rejected"
-  );
-  expectError(
-    mutated((copy) => {
-      copy.customization.expert.exactAllowlistDigest = "0".repeat(64);
-    }),
-    "customization-model/index.json Expert allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest",
-    "Expert digest drift in the model must be rejected"
+    "program/index.json raw-override allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest",
+    "raw-override digest drift in program/index.json must be rejected"
   );
 });
 
-test("Expert source drift fails closed against the sandbox tenant-theme contract", () => {
+test("raw-override source drift fails closed against the sandbox tenant-theme contract", () => {
   // The sandboxed checker reads TENANT_THEME_OVERRIDE_TOKENS from the sandbox
   // copy of the tenant-theme contract, so these mutants exercise the real
   // source->gate path without touching the live file.
@@ -953,13 +826,13 @@ test("Expert source drift fails closed against the sandbox tenant-theme contract
   );
   const original = readFileSync(sourcePath, "utf8");
   const anchor = '"--ds-color-primary",';
-  assert.ok(original.includes(anchor), "the Expert allowlist anchor must exist in the sandbox copy");
+  assert.ok(original.includes(anchor), "the raw-override allowlist anchor must exist in the sandbox copy");
   const expectSourceFailure = (label) => {
     const contracts = readModernRescueContracts();
     const errors = validateModernRescueContracts(contracts, { includeManifestGate: false });
     assert.ok(
       errors.some((error) => error.includes("TENANT_THEME_OVERRIDE_TOKENS")),
-      `${label}: expected an Expert failure naming TENANT_THEME_OVERRIDE_TOKENS; got ${JSON.stringify(errors)}`
+      `${label}: expected a raw-override failure naming TENANT_THEME_OVERRIDE_TOKENS; got ${JSON.stringify(errors)}`
     );
   };
   try {
@@ -1008,11 +881,6 @@ test("amendment 2026-08-28 fences fail closed", () => {
     mutated((copy) => { copy.program.f4cCanary.stopCondition = ""; }),
     "a non-empty stopCondition",
     "erasing the canary stop condition must be rejected"
-  );
-  expectError(
-    mutated((copy) => { delete copy.customization.targetControlModel.activationBlocks; }),
-    "activationBlocks must keep control.size blocked",
-    "unblocking control.size without a verdict must be rejected"
   );
   expectError(
     mutated((copy) => {

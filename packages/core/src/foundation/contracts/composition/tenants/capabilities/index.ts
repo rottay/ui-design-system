@@ -22,8 +22,25 @@
  *   tenant capabilities: tenants move seeds; derivations follow.
  */
 
-export type CapabilityTier = 'standard' | 'pro' | 'internal';
-export type CapabilityStatus = 'active' | 'frontier';
+/**
+ * The access vocabulary: Standard, Pro, Internal. There is no fourth level. The
+ * name the raw `tokenOverrides` allowlist used to carry is retired with the
+ * allowlist itself (D-03); it is not a tier, and it never was.
+ *
+ * The AUTHORITY over this vocabulary is `ThemePlan` in the theme-intent
+ * contract, which `contracts/theme` aliases. This array is this registry's own
+ * copy because `tenants/capabilities` and `tenants/themes` are sibling owners
+ * and may not import each other until WO-RET-04 unifies the tree; the equality
+ * of the two is asserted, not assumed.
+ */
+export const CAPABILITY_TIERS = Object.freeze([
+  'standard',
+  'pro',
+  'internal',
+] as const);
+
+export type CapabilityTier = (typeof CAPABILITY_TIERS)[number];
+export type CapabilityStatus = 'active' | 'declared';
 export type CapabilityValueType =
   | 'color'
   | 'color-set'
@@ -90,7 +107,7 @@ export interface TenantCapabilityDeclaration {
    * D0 productive-consumer proof: a PRODUCTION file (never a test) that
    * consumes this capability's output, plus a literal the census gate
    * verifies inside it. Required for every `active` row — a capability
-   * without a productive consumer is frontier by definition.
+   * without a productive consumer is `declared`, never `active`.
    */
   readonly evidence?: {
     readonly consumer: string;
@@ -757,8 +774,8 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       compat:
         'closed per-axis vocabularies; both compilers sanitize fail-closed; unset-to-rollback per axis',
     },
-    // ── LATER WAVES: rows declared as frontier, opened in place ────────────
-    // Rows below were authored as frontier boundaries and are opened by the
+    // ── LATER WAVES: rows authored as declared boundaries, opened in place ─
+    // Rows below were authored as declared-but-closed boundaries and are opened by the
     // wave that lands their runtime, keeping each id at its original index
     // rather than migrating it up into the tier blocks. Read `status`, never
     // the position: `profiles.icon` (C2), `responsive.posture` (E2) and

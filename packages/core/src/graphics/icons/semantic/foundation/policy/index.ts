@@ -16,7 +16,7 @@ const ROLE_WEIGHT: Readonly<Record<IconRole, AdapterIconWeight>> = {
 /**
  * Expressive icon postures (C1b substrate). Every Phosphor glyph module
  * already bundles all weights, so a posture is pure table selection — no
- * pack regeneration. The axis is LIVE, not frontier: C2 opened the tenant
+ * pack regeneration. The axis is LIVE, not merely declared: C2 opened the tenant
  * schema and C2c wired the render, so `create-icon` resolves the active
  * expressive profile in RSC, on the client and through SSR. The capabilities
  * ledger has said so since; this comment claimed the opposite and would have

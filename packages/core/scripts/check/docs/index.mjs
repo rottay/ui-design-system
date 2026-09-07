@@ -407,14 +407,16 @@ export function classifyGeneratorFailure(error) {
 export const GENERATED_DOCUMENTS = Object.freeze([
   {
     document: 'packages/core/docs/generated/customization-controls/index.md',
-    // Byte freshness needs `dist/`, so it is owned post-build by ONE manifest
-    // gate, `customization-controls-freshness`, executed by the CI step named
-    // below. That step runs the whole post-build phase of the gate inventory;
-    // there is deliberately no second step named after this one document, which
-    // is the duplicate-inventory defect the manifest exists to remove. This gate
-    // proves presence and banner only, and never spawns the generator.
+    // Byte freshness is owned by ONE manifest gate,
+    // `customization-controls-freshness`, executed by the CI step named below.
+    // That step runs a whole phase of the gate inventory; there is deliberately
+    // no second step named after this one document, which is the
+    // duplicate-inventory defect the manifest exists to remove. This gate
+    // proves presence and banner only, and never spawns the generator. The
+    // generator no longer imports the built package -- WO-CAT-02 made it a view
+    // of the typed catalog -- so the gate also moved to the pre-build phase.
     verification: 'ci',
-    step: 'Quality gates (manifest-driven, post-build)',
+    step: 'Quality gates (manifest-driven, blocking)',
     gate: 'customization-controls-freshness',
   },
   {

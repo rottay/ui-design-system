@@ -147,7 +147,7 @@ export function brandThemeToCssVariables(
   // type pairing, button silhouette, elevation and motion were DB-only.
   Object.assign(vars, appearancePostureToVariables(expansion.fieldDefaults));
   // Every Standard posture, regardless of whether it arrived from a static
-  // Theme or a DB ThemePatch, lowers through this one canonical table. The
+  // Theme or a DB ThemeLayerPatch, lowers through this one canonical table. The
   // expressive profile already wrote its defaults above; these authored fields
   // intentionally overwrite only the channels they own.
   Object.assign(

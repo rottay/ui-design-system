@@ -402,7 +402,7 @@ function sortedRecord(
 
 /**
  * Lower a resolved axis set into field defaults plus no-other-writer channel
- * values. Pure; key-order stable; unknown or frontier axis values expand to
+ * values. Pure; key-order stable; unknown or declared-but-closed axis values expand to
  * nothing.
  */
 export function expandExpressiveProfiles(

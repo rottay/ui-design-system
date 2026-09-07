@@ -899,7 +899,7 @@ ${entries
   const byTier = (tier, status = 'active') => registry.filter((r) => r.tier === tier && r.status === status);
   const capRow = (r) => `| \`${r.id}\` | ${r.title} | ${r.valueType} | \`${r.documentPath}\` | ${r.derivedChannels.slice(0, 3).map((c) => `\`${c}\``).join(', ')}${r.derivedChannels.length > 3 ? ', …' : ''} | ${r.evidence ? `\`${r.evidence.consumer.split('/').pop()}\`` : '—'} |`;
   const frontierRows = registry
-    .filter((r) => r.status === 'frontier')
+    .filter((r) => r.status === 'declared')
     .map((r) => `- \`${r.id}\` — opens per its registry row (\`${r.documentPath}\`)`);
   views['exposure-tiers.md'] = `${GEN_HEADER('TENANT_CAPABILITY_REGISTRY + allowlist + hooks-manifest')}# Exposure Tiers — Who May Change What
 
@@ -1112,7 +1112,7 @@ The live surface is **[catalog.md](./catalog.md)**.
 | generated | ${statusCount('generated')} | governance | artifact emitters |
 | generated-unread | ${statusCount('generated-unread')} | governance | emitter batch, never the D1 baseline |
 | test-only | ${statusCount('test-only')} | governance | test corpus |
-| frontier | ${statusCount('frontier')} names + ${registry.filter((r) => r.status === 'frontier').length} capabilities | governance | registry opening conditions |
+| frontier | ${statusCount('frontier')} names + ${registry.filter((r) => r.status === 'declared').length} capabilities | governance | registry opening conditions |
 | prototype | ${ledgerEntries} ledger entries (${ledgerRetired} retired, ${ledgerEntries - ledgerRetired} live) | (ledger) | prototype-ledger gate |
 
 Per-name rows for every governance status: **[README.md](./README.md)** →

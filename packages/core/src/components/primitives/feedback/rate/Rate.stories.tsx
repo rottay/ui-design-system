@@ -524,7 +524,7 @@ export const FeedbackForm: Story = {
 export const DifficultySelector: Story = {
   render: () => {
     const [difficulty, setDifficulty] = useState(2);
-    const labels = ['Very Easy', 'Easy', 'Medium', 'Hard', 'Expert'];
+    const labels = ['Very Easy', 'Easy', 'Medium', 'Hard', 'Punishing'];
     const colors = ['#22c55e', '#84cc16', '#eab308', '#f97316', '#ef4444'];
 
     return (

@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "8ae1640429f88583a4a7930b6ae024354c7ec3324646ee408b0f82d3ac85923e"
+    "registryDigest": "7c2e010775a07b9db713d711d6b67bcedb045f4878742bfbaba2f0b8b8d019ed"
   },
   "title": "Per-family chrome",
   "valueType": "chrome-map",

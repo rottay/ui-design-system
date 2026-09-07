@@ -1,5 +1,5 @@
 /**
- * @fileoverview The v2 document owner: adapter, migration, admission.
+ * @fileoverview The v2 document owner: projection, migration, admission.
  *
  * @module Compilers/Theme/Ingress/Runtime/DocumentV2
  * @category Compilers
@@ -11,7 +11,7 @@ export {
   v1KeypathOf,
   type DecisionProjection,
   type UnlitReason,
-} from "./foundation/adapter";
+} from "./foundation/projection";
 export { migrateDocumentV1ToV2 } from "./foundation/migrate";
 export {
   admitDocument,

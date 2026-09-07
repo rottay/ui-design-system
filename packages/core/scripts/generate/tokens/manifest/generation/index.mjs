@@ -544,7 +544,7 @@ function buildIndex(inventory, controls, familyRecords, controlRecords, groups) 
       .map((entry) => ({
         controlId: entry.id,
         tier: entry.tier,
-        lifecycleState: entry.status === 'frontier' ? 'FRONTIER_NON_CERTIFYING' : 'INTERNAL_NON_CERTIFYING',
+        lifecycleState: entry.status === 'declared' ? 'FRONTIER_NON_CERTIFYING' : 'INTERNAL_NON_CERTIFYING',
         reason: 'Only active Standard and Pro controls create R0-R6 family certification cells.',
       })),
     rollups: {
@@ -865,7 +865,7 @@ export function validateCustomizationManifest() {
   /* RE-ANCLA P0 (2026-08-28): la ley es derivacion, nunca un pin (decision 32
    * del owner, docs/history/programs/architecture-refactor/2026-08/execution/index.md:722-726). Este bloque
    * pineaba primero 13 y despues 14 cuando `palette.status-seeds` abrio la
-   * ultima fila `frontier` del registro a tier Standard -- y la proxima
+   * ultima fila declarada-pero-cerrada del registro a tier Standard -- y la proxima
    * apertura hubiera vuelto a dejar un numero escrito a mano quedarse atras.
    * La invariante de abajo no nombra ninguna cifra: exige que el denominador ya
    * escrito en governance/manifest/index.json siga de acuerdo con el mismo registry TS que

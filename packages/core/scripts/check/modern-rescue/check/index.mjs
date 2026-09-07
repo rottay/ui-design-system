@@ -46,7 +46,6 @@ const FILES = {
   claude: 'CLAUDE.md',
   readme: join(PROGRAM_DIR, 'README.md'),
   program: join(PROGRAM_DIR, 'program/index.json'),
-  model: join(PROGRAM_DIR, 'customization-model/index.json'),
   orchestration: join(PROGRAM_DIR, 'orchestration/index.json'),
   schema: join(MANIFEST_DIR, 'schema/index.json'),
   rules: 'packages/core/scripts/libraries/manifest/rules/index.mjs',
@@ -202,8 +201,8 @@ function standardTruth(contracts) {
   return ids;
 }
 
-// The Expert tier has the same derived-denominator law (decision 32) as
-// Standard: the exact allowlist is the set TENANT_THEME_OVERRIDE_TOKENS
+// The raw-override allowlist has the same derived-denominator law (decision
+// 32) as Standard: the exact allowlist is the set TENANT_THEME_OVERRIDE_TOKENS
 // resolves to in the live tenant-theme contract — literals PLUS the resolved
 // cross-product spreads, counted by the same reader the reach analysis uses —
 // never a number typed into the constitution. The historical pin (294) and
@@ -213,7 +212,7 @@ const TENANT_THEME_CONTRACT_PATH =
   'packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts';
 
 /**
- * Count + membership identity of an Expert name set. Count alone cannot see a
+ * Count + membership identity of a raw-override name set. Count alone cannot see a
  * count-preserving swap (a valid name replaced by a fake one at the same
  * cardinality), so membership travels as the SHA-256 of the sorted names.
  * Exported so the drills can prove the math distinguishes ±1 growth, a
@@ -227,7 +226,7 @@ export function expertAllowlistIdentity(names) {
   };
 }
 
-function readExpertAllowlistSnapshot() {
+function readRawOverrideAllowlistSnapshot() {
   const unreadable = (reason) => ({
     source: TENANT_THEME_CONTRACT_PATH,
     readable: false,
@@ -252,7 +251,7 @@ function readExpertAllowlistSnapshot() {
 }
 
 /**
- * The live Expert truth — count and membership digest of the names
+ * The live raw-override truth — count and membership digest of the names
  * TENANT_THEME_OVERRIDE_TOKENS resolves to — or `null` when the contract
  * could not be read. `null` never means "assume the old number": every caller
  * either blocks or skips a comparison that the contract-unreadable failure
@@ -275,7 +274,7 @@ export function readModernRescueContracts({ root = PROGRAM_ROOT } = {}) {
     contracts.checkpoint = null;
   }
   contracts.capabilityRegistry = readCapabilityRegistrySnapshot();
-  contracts.expertAllowlist = readExpertAllowlistSnapshot();
+  contracts.expertAllowlist = readRawOverrideAllowlistSnapshot();
   return contracts;
 }
 
@@ -334,7 +333,6 @@ function collectTextualFailures(contracts) {
     'CLAUDE.md',
     'packages/core/scripts/check/modern-rescue/README.md',
     'packages/core/scripts/check/modern-rescue/program/index.json',
-    'packages/core/scripts/check/modern-rescue/customization-model/index.json',
     'packages/core/scripts/check/modern-rescue/orchestration/index.json',
     'packages/core/scripts/check/modern-rescue/check/index.mjs',
   ];
@@ -355,7 +353,6 @@ function collectTextualFailures(contracts) {
   const requiredClaudePointers = [
     'packages/core/scripts/check/modern-rescue/README.md',
     'program/index.json',
-    'customization-model/index.json',
     'orchestration/index.json',
   ];
   for (const pointer of requiredClaudePointers) {
@@ -591,7 +588,7 @@ function collectTextualFailures(contracts) {
       // admits, somewhere a reader can find them. Two domiciles are legal and
       // only two: `domain.enumValues` for a flat single-axis vocabulary, and
       // `calibration.catalog` for a per-axis map -- the domicile the owner
-      // ruled in `customization-model/index.json#vocabularyDomicile`, which exists
+      // ruled in the retired customization-model contract, which existed
       // because `TenantCapabilityDeclaration.enumValues` is a flat
       // `readonly string[]` and cannot express a map. Declaring NEITHER is what
       // this rule refuses: an enum whose vocabulary lives nowhere at all.
@@ -765,7 +762,7 @@ function collectTextualFailures(contracts) {
 function collectContractFailures(contracts) {
   const failures = [];
 
-  const { program, customization: model, orchestration, evidence } = contracts;
+  const { program, orchestration, evidence } = contracts;
 
   // THE THIRD TERM. Both constitution files below are checked against the live
   // capability registry, never against each other alone and never against a
@@ -785,8 +782,8 @@ function collectContractFailures(contracts) {
   if (expert === null) {
     failures.push(
       `tenant-theme override contract ${contracts?.expertAllowlist?.source ?? TENANT_THEME_CONTRACT_PATH} could not be ` +
-        `read as the Expert authority (${contracts?.expertAllowlist?.reason ?? 'no snapshot'}): the ` +
-        'Expert baseline is derived from it and must never fall back to a pinned number',
+        `read as the raw-override authority (${contracts?.expertAllowlist?.reason ?? 'no snapshot'}): the ` +
+        'allowlist baseline is derived from it and must never fall back to a pinned number',
     );
   }
 
@@ -813,20 +810,20 @@ function collectContractFailures(contracts) {
     }
     if (expert !== null && program.controlBaselines?.expertExactAllowlist !== expert.count) {
       failures.push(
-        'program/index.json Expert exact allowlist must equal the live TENANT_THEME_OVERRIDE_TOKENS reach: the source declares ' +
+        'program/index.json raw-override exact allowlist must equal the live TENANT_THEME_OVERRIDE_TOKENS reach: the source declares ' +
           `${expert.count} names, program/index.json says ` +
           `${JSON.stringify(program.controlBaselines?.expertExactAllowlist ?? null)}`,
       );
     }
     if (expert !== null && program.controlBaselines?.expertExactAllowlistDigest !== expert.digest) {
       failures.push(
-        'program/index.json Expert allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest: ' +
+        'program/index.json raw-override allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest: ' +
           'a count-preserving swap keeps the number honest and the roster wrong, so membership travels as the ' +
           'SHA-256 of the sorted name set, derived from source on every run',
       );
     }
     if (program.controlBaselines?.expertMaximumOverridesPerDocument !== 200) {
-      failures.push('program/index.json Expert maximumOverridesPerDocument must be 200');
+      failures.push('program/index.json raw-override maximumOverridesPerDocument must be 200');
     }
     // Amendment 2026-08-28 fences (owner decisions 22/23/31), machine-checked.
     const scope = program.verticalScope;
@@ -846,111 +843,10 @@ function collectContractFailures(contracts) {
     }
   }
 
-  // customization-model/index.json namespace lifecycle and target state
-  if (model) {
-    if (!model.namespaceLifecycle) {
-      failures.push('customization-model/index.json must contain namespaceLifecycle');
-    } else {
-      const ns = model.namespaceLifecycle;
-      if (!ns.publicCanon || ns.publicCanon.prefix !== '--ds-*') {
-        failures.push('namespaceLifecycle publicCanon must be --ds-*');
-      }
-      if (!ns.publicCanon?.forbiddenPatterns || !ns.publicCanon.forbiddenPatterns.includes('dashboard')) {
-        failures.push('namespaceLifecycle publicCanon must forbid product/vertical dialects');
-      }
-      if (!ns.privateProvisional || ns.privateProvisional.prefix !== '--_ds-*') {
-        failures.push('namespaceLifecycle privateProvisional must be --_ds-*');
-      }
-      if (!ns.privateProvisional?.forbidden || !ns.privateProvisional.forbidden.includes('Theme keypaths')) {
-        failures.push('namespaceLifecycle privateProvisional must forbid Theme keypaths');
-      }
-      if (!ns.attributeAxis || ns.attributeAxis.prefix !== 'data-*') {
-        failures.push('namespaceLifecycle attributeAxis must be data-*');
-      }
-      if (!ns.drainLaw || !ns.drainLaw.includes('extension')) {
-        failures.push('namespaceLifecycle drainLaw must forbid extension-as-deferral');
-      }
-    }
-    if (!model.transportEquality) {
-      failures.push('customization-model/index.json must contain transportEquality');
-    } else {
-      const te = model.transportEquality;
-      if (!te.law || !te.law.includes('compileTheme')) {
-        failures.push('transportEquality law must name compileTheme');
-      }
-      const forbidden = te.forbidden ?? [];
-      for (const required of ['second compiler', 'subset/intersection parity fixture', 'invented neutral Theme', 'silent default vertical', 'slug or product branch']) {
-        if (!forbidden.some((entry) => entry.includes(required))) {
-          failures.push(`transportEquality must forbid ${required}`);
-        }
-      }
-    }
-    if (model.targetControlModel?.implementationState !== 'PROPOSED_NOT_IMPLEMENTED') {
-      failures.push('customization-model/index.json targetControlModel must be PROPOSED_NOT_IMPLEMENTED');
-    }
-    // Owner decision 26: control.size stays blocked until a written
-    // orthogonality verdict against density.mode exists.
-    const sizeBlock = model.targetControlModel?.activationBlocks?.['control.size'];
-    if (typeof sizeBlock !== 'string' || !sizeBlock.includes('density.mode')) {
-      failures.push('customization-model/index.json targetControlModel.activationBlocks must keep control.size blocked on a density.mode orthogonality verdict');
-    }
-    if (standardIds) {
-      if (model.standard?.current?.length !== standardIds.length) {
-        failures.push(
-          `customization-model/index.json standard.current must list exactly the ${standardIds.length} active ` +
-            'Standard controls of the live capability registry, got ' +
-            `${model.standard?.current?.length ?? 0}`,
-        );
-      }
-      // Membership, not only size: a swapped id keeps the length honest and
-      // the roster wrong, which is how a tier swap hides behind a count.
-      const declared = new Set(model.standard?.current ?? []);
-      const missing = standardIds.filter((id) => !declared.has(id));
-      const foreign = [...declared].filter((id) => !standardIds.includes(id));
-      if (missing.length > 0 || foreign.length > 0) {
-        failures.push(
-          'customization-model/index.json standard.current does not match the live capability registry membership: ' +
-            `missing ${JSON.stringify(missing)}, not active Standard ${JSON.stringify(foreign)}`,
-        );
-      }
-    }
-    if (model.pro?.capabilities?.length !== 7) {
-      failures.push('customization-model/index.json pro.capabilities must contain exactly 7 capabilities');
-    }
-    if (expert !== null && model.expert?.exactAllowlistBaseline !== expert.count) {
-      failures.push(
-        'customization-model/index.json Expert exactAllowlistBaseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach: the source declares ' +
-          `${expert.count} names, customization-model/index.json says ` +
-          `${JSON.stringify(model.expert?.exactAllowlistBaseline ?? null)}`,
-      );
-    }
-    if (expert !== null && model.expert?.exactAllowlistDigest !== expert.digest) {
-      failures.push(
-        'customization-model/index.json Expert allowlist digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest: ' +
-          'a count-preserving swap keeps the number honest and the roster wrong, so membership travels as the ' +
-          'SHA-256 of the sorted name set, derived from source on every run',
-      );
-    }
-    // rounds/index.json R7 scope carries the same baselines as forward-looking
-    // contract: unchecked copies drift in silence (the 294 class). They are
-    // compared against the live authorities, never against another copy.
-    const r7Scope = contracts.rounds?.rounds?.find((round) => round.id === 'R7')?.scope;
-    if (r7Scope && standardIds && r7Scope.standardControlsBaseline !== standardIds.length) {
-      failures.push(
-        'rounds/index.json R7 scope standardControlsBaseline must equal the live capability registry: the registry declares ' +
-          `${standardIds.length} active Standard controls, rounds/index.json says ${JSON.stringify(r7Scope.standardControlsBaseline ?? null)}`,
-      );
-    }
-    if (r7Scope && expert !== null && r7Scope.expertExactAllowlistBaseline !== expert.count) {
-      failures.push(
-        'rounds/index.json R7 scope expertExactAllowlistBaseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach: the source declares ' +
-          `${expert.count} names, rounds/index.json says ${JSON.stringify(r7Scope.expertExactAllowlistBaseline ?? null)}`,
-      );
-    }
-    if (model.expert?.maximumOverridesPerDocument !== 200) {
-      failures.push('customization-model/index.json Expert maximumOverridesPerDocument must be 200');
-    }
-  }
+  // The customization-model contract was DELETED by WO-CAT-02: the typed
+  // catalog (`src/contracts/theme/runtime/catalog`) is the only list of
+  // controls, and the gate that keeps it that way is `theme-single-listing`.
+  // Nothing replaces its checks here; a control law belongs to the catalog.
 
   // orchestration/index.json exact roles (T-1 rewrite)
   if (orchestration) {
@@ -1133,37 +1029,12 @@ function collectContractFailures(contracts) {
     }
   }
 
-  // Cross-contract consistency
-  if (program && model) {
-    if (program.controlBaselines?.standard !== model.standard?.current?.length) {
-      failures.push('program/index.json standard baseline must equal customization-model/index.json standard.current length');
-    }
-    if (program.controlBaselines?.proCapabilities !== model.pro?.capabilities?.length) {
-      failures.push('program/index.json pro baseline must equal customization-model/index.json pro.capabilities length');
-    }
-    if (program.controlBaselines?.expertExactAllowlist !== model.expert?.exactAllowlistBaseline) {
-      failures.push('program/index.json Expert allowlist baseline must equal customization-model/index.json expert.exactAllowlistBaseline');
-    }
-    if (program.controlBaselines?.expertExactAllowlistDigest !== model.expert?.exactAllowlistDigest) {
-      failures.push('program/index.json Expert allowlist digest must equal customization-model/index.json expert.exactAllowlistDigest');
-    }
-    if (program.controlBaselines?.expertMaximumOverridesPerDocument !== model.expert?.maximumOverridesPerDocument) {
-      failures.push('program/index.json Expert override maximum must equal customization-model/index.json expert.maximumOverridesPerDocument');
-    }
-    if (program.r7Enabled !== model.r7Execution?.enabled) {
-      failures.push('program/index.json r7Enabled must equal customization-model/index.json r7Execution.enabled');
-    }
-  }
-
+  // Cross-contract consistency. The control-baseline cross-checks lived here
+  // and were deleted with the contract they compared against; `r7Enabled` keeps
+  // its two remaining witnesses.
   if (program && orchestration) {
     if (program.r7Enabled !== orchestration.r7Execution?.enabled) {
       failures.push('program/index.json r7Enabled must equal orchestration/index.json r7Execution.enabled');
-    }
-  }
-
-  if (model && orchestration) {
-    if (model.r7Execution?.enabled !== orchestration.r7Execution?.enabled) {
-      failures.push('customization-model/index.json r7Execution.enabled must equal orchestration/index.json r7Execution.enabled');
     }
   }
 
@@ -1255,10 +1126,8 @@ function collectHistoricalContractFailures(contracts) {
   for (const contractPath of [
     program?.humanEntry,
     program?.checkpointIntent,
-    program?.customizationManifest,
     program?.artDirectionContract,
     program?.visualCraftContract,
-    program?.r7CustomizationContract,
     program?.referenceLab?.page,
     program?.referenceLab?.substrate,
   ]) {
@@ -1528,71 +1397,11 @@ function collectHistoricalContractFailures(contracts) {
     errors.push('CSS ownership and tenant authority must remain binary contracts');
   }
 
-  const historicalStandardIds = standardTruth(contracts);
-  if (
-    historicalStandardIds &&
-    customization?.standard?.current?.length !== historicalStandardIds.length
-  ) {
-    errors.push(
-      'customization Standard baseline must contain the ' +
-        `${historicalStandardIds.length} controls the live capability registry declares active`,
-    );
-  }
-  if (customization?.pro?.capabilities?.length !== 7) {
-    errors.push('customization Pro baseline must contain 7 capabilities');
-  }
-  const historicalExpert = expertTruth(contracts);
-  if (historicalExpert !== null && customization?.expert?.exactAllowlistBaseline !== historicalExpert.count) {
-    errors.push('customization Expert baseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach');
-  }
-  if (historicalExpert !== null && customization?.expert?.exactAllowlistDigest !== historicalExpert.digest) {
-    errors.push('customization Expert digest must equal the live TENANT_THEME_OVERRIDE_TOKENS membership digest');
-  }
-  if (customization?.expert?.maximumOverridesPerDocument !== 200) {
-    errors.push('Expert document maximum must remain 200');
-  }
-  for (const metric of ['coverage', 'resilience', 'canonClosure', 'pathParity']) {
-    if (customization?.kpis?.[metric]?.roundExit !== 1) {
-      errors.push(`customization KPI ${metric} must exit at 1`);
-    }
-  }
-  if (customization?.kpis?.unknownTargetedImpact?.roundExit !== 0) {
-    errors.push('unknown targeted impact must exit at zero');
-  }
-  const r7Customization = customization?.r7Execution;
-  if (r7Customization?.familyDispositionDenominator !== EXPECTED_FAMILY_TOTAL) {
-    errors.push(`R7 customization model must disposition ${EXPECTED_FAMILY_TOTAL} families`);
-  }
-  if (r7Customization?.targetRecipeGroups !== 14) {
-    errors.push('R7 customization model must target fourteen recipe groups');
-  }
-  if (!r7Customization?.benchmarkLaw?.includes('no wholesale')) {
-    errors.push('R7 customization benchmark must prohibit wholesale copying');
-  }
-  if ((r7Customization?.familyAnatomyDispositionRequiredFields?.length ?? 0) < 18) {
-    errors.push('R7 family anatomy disposition contract is incomplete');
-  }
-  if (
-    r7Customization?.referencePostures?.count !== 5 ||
-    r7Customization?.referencePostures?.pairCount !== 10 ||
-    r7Customization?.referencePostures?.minimumNonColorAxesPerPair !== 6
-  ) {
-    errors.push('R7 must retain five postures, ten pairs and six non-color axes');
-  }
-  for (const [metric, expected] of Object.entries({
-    deadOrUnownedModernCss: 0,
-    dormantPublicChannels: 0,
-    unknownTargetedImpact: 0,
-    coverage: 1,
-    resilience: 1,
-    canonClosure: 1,
-    pathParity: 1,
-    staticDbAndExactRestore: 1,
-  })) {
-    if (r7Customization?.exit?.[metric] !== expected) {
-      errors.push(`R7 customization exit ${metric} must equal ${expected}`);
-    }
-  }
+  // The customization-model contract these checks compared against was deleted
+  // by WO-CAT-02. Its control laws move to the typed catalog and the gates that
+  // read it; nothing is restated here, because a second statement of a control
+  // law is the defect the deletion removes.
+
   for (const binary of [
     `r7-${EXPECTED_FAMILY_TOTAL}-family-anatomy-disposition-complete`,
     'r7-reference-parity-without-copy',
@@ -1645,8 +1454,8 @@ function collectHistoricalContractFailures(contracts) {
   if (mechanism?.exactRadius?.verticalEnvelopeChangeRequired !== false) {
     errors.push('exact premium radius must not require widening the Standard envelope');
   }
-  if (mechanism?.semanticToneSeeds?.frontierRequiredForR1 !== false) {
-    errors.push('status-seeds frontier must not be treated as an R1 prerequisite');
+  if (mechanism?.semanticToneSeeds?.boundaryRequiredForR1 !== false) {
+    errors.push('the status-seeds boundary must not be treated as an R1 prerequisite');
   }
   if (mechanism?.profileRegistries?.mustRemainIndependent !== true) {
     errors.push('recipe and expressive profile registries must remain independent');

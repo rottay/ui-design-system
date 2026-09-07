@@ -10,7 +10,7 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
 import type {
   Governed,
   Theme,
-  ThemePatch,
+  ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 
 /**
@@ -63,7 +63,7 @@ const IDENTITY_FAMILIES = ["id", "name"] as const;
  * declared. A family the draft omits is absent from the patch, so the
  * baseline's own value survives untouched.
  */
-export function authoredThemePatch(draft: BrandTheme): ThemePatch {
+export function authoredThemePatch(draft: BrandTheme): ThemeLayerPatch {
   const patch: Record<string, unknown> = {};
   const governed = new Set<string>(GOVERNED_FAMILIES);
   const identity = new Set<string>(IDENTITY_FAMILIES);
@@ -71,5 +71,5 @@ export function authoredThemePatch(draft: BrandTheme): ThemePatch {
     if (value === undefined || identity.has(family)) continue;
     patch[family] = governed.has(family) ? { value } : value;
   }
-  return patch as ThemePatch;
+  return patch as ThemeLayerPatch;
 }

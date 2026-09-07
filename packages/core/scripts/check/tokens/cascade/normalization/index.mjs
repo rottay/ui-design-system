@@ -91,7 +91,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
-import { readManifestRecords } from '../../../../libraries/manifest/index.mjs';
+import { readThemeCatalogRecords } from '../../../../libraries/theme-catalog/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const CORE_ROOT = findPackageRoot(HERE);
@@ -192,7 +192,7 @@ export function findDivergentGroups(rows, membershipByChannel) {
   return divergent;
 }
 
-export function analyse({ inventory, membership, catalog, literalPins, controlIds, controlsWithDbDoor, allowlistTotal, contractSource, knownChannels }) {
+export function analyse({ inventory, membership, catalog, literalPins, controlIds, controlsWithDbDoor, authorableControls, allowlistTotal, contractSource, knownChannels }) {
   const membershipByChannel = new Map((membership.rows ?? []).map((row) => [row.channel, row]));
   const rootById = new Map((catalog.roots ?? []).map((root) => [root.rootId, root]));
   const rows = inventory.rows ?? [];
@@ -217,8 +217,17 @@ export function analyse({ inventory, membership, catalog, literalPins, controlId
   if (allowlistTotal !== ALLOWLIST_TOTAL) {
     findings.push({ law: 'L5', detail: `el allowlist de tenant compone ${allowlistTotal} nombres y la ley pina ${ALLOWLIST_TOTAL}: la superficie sobreescribible se movio` });
   }
-  if (controlsWithDbDoor !== controlIds.size) {
-    findings.push({ law: 'L5', detail: `${controlIds.size - controlsWithDbDoor} de ${controlIds.size} controles perdieron su puerta DB (ingress.dbTenantThemePath)` });
+  /* L5, puerta DB. La ley mide ASIMETRIA entre transportes, no poblacion: un
+   * control AUTORABLE (tiene camino estatico o de documento) que no tiene
+   * `ingress.dbTenantThemePath` perdio su puerta DB. Un control que todavia no
+   * tiene NINGUN camino no perdio nada -- el catalogo lo declara por nombre
+   * (`effect: "not-yet-derived"`) y la derivacion es la que le abre la puerta.
+   * Antes de WO-CAT-02 el denominador era la poblacion entera porque las 21
+   * filas del manifest tenian las dos puertas; contar las 10 filas nuevas del
+   * kit contra ese denominador reportaria como perdida una puerta que nunca
+   * existio. */
+  if (controlsWithDbDoor !== authorableControls) {
+    findings.push({ law: 'L5', detail: `${authorableControls - controlsWithDbDoor} de ${authorableControls} controles autorables perdieron su puerta DB (ingress.dbTenantThemePath)` });
   }
 
   return {
@@ -249,13 +258,19 @@ export function readTree(coreRoot = CORE_ROOT) {
   const tenantSource = readFileSync(
     join(coreRoot, 'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts'), 'utf8');
 
-  const controlsDir = join(coreRoot, 'governance/manifest/controls');
-  const controlIds = new Set();
-  let controlsWithDbDoor = 0;
-  for (const { document: control } of readManifestRecords(controlsDir, 'controlId')) {
-    controlIds.add(control.controlId);
-    if (control?.ingress?.dbTenantThemePath) controlsWithDbDoor += 1;
-  }
+  /* El catalogo tipado (`src/contracts/theme/runtime/catalog`) es la unica
+   * lista de controles desde WO-CAT-02. La vista de manifest que reemplaza era
+   * una proyeccion generada de la misma poblacion y ya no esta en la ruta de
+   * lectura de ningun gate. */
+  const controlRecords = readThemeCatalogRecords();
+  const controlIds = new Set(controlRecords.map((record) => record.controlId));
+  const authorable = controlRecords.filter(
+    (record) => record.ingress.staticBrandThemePath || record.ingress.dbTenantThemePath,
+  );
+  const authorableControls = authorable.length;
+  const controlsWithDbDoor = authorable.filter(
+    (record) => record.ingress.dbTenantThemePath,
+  ).length;
 
   /* El allowlist se COMPONE, no se cuenta a ojo: 67 literales mas dos productos
    * cartesianos. Si alguien borra un rol o una faceta, el total cae y L5 lo ve. */
@@ -280,7 +295,7 @@ export function readTree(coreRoot = CORE_ROOT) {
 
   return {
     inventory, membership, catalog, literalPins: edges.literalPins,
-    controlIds, controlsWithDbDoor, allowlistTotal, contractSource, knownChannels,
+    controlIds, controlsWithDbDoor, authorableControls, allowlistTotal, contractSource, knownChannels,
   };
 }
 

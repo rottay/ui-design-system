@@ -11,12 +11,15 @@ these files in order and obey the machine checks before editing.
    fixed scope, lifecycle, resume algorithm, test-truth policy, fences.
 3. `packages/core/scripts/check/modern-rescue/program/index.json` —
    programme identity, fences, denominators and invariants.
-4. `packages/core/scripts/check/modern-rescue/customization-model/index.json` —
-   operational controls, namespace lifecycle, target/proposed distinction.
-5. `packages/core/scripts/check/modern-rescue/orchestration/index.json` —
+4. `packages/core/scripts/check/modern-rescue/orchestration/index.json` —
    exact roles, commit policy and routing for this programme.
-6. `packages/core/scripts/check/modern-rescue/check/index.mjs` —
+5. `packages/core/scripts/check/modern-rescue/check/index.mjs` —
    run this to verify the constitution is internally consistent.
+
+The `customization-model/index.json` contract that used to sit at step 4 was
+deleted by WO-CAT-02: the typed catalog
+(`packages/core/src/contracts/theme/runtime/catalog`) is the only list of
+controls, and `theme-single-listing` is the gate that keeps it that way.
 
 
 

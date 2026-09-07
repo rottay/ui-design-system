@@ -59,13 +59,15 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packageRoot } from '../../../../libraries/repo-root/index.mjs';
-import { readManifestRecords } from '../../../../libraries/manifest/index.mjs';
+import { readThemeCatalogRecords } from '../../../../libraries/theme-catalog/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE = packageRoot(HERE);
 const CSS = join(CORE, 'src/foundation/tokens/css');
 const ARTIFACTS = join(CSS, 'facade/artifacts');
-const CONTROLS = join(CORE, 'governance/manifest/controls');
+/* WO-CAT-02: el catalogo tipado es la unica lista de controles. Este gate solo
+ * necesita el universo de canales DECLARADOS, y el catalogo lo declara con la
+ * misma poblacion que la vista de manifest que reemplaza. */
 const INVENTORY = join(HERE, 'inventory/index.json');
 
 const VERTICALS = Object.freeze(['rottay', 'bithire', 'evnto']);
@@ -111,7 +113,7 @@ function walkCss(dir, map, skip) {
 /** A factor dial: declared by a control AND used as a calc() operand in the base. */
 function factorDials(base) {
   const declared = new Set();
-  for (const { document: control } of readManifestRecords(CONTROLS, 'controlId')) {
+  for (const control of readThemeCatalogRecords()) {
     for (const channel of control.declaredOutputs?.channels ?? []) declared.add(channel);
   }
   if (declared.size === 0) throw new Error('no declared control channels were loaded');

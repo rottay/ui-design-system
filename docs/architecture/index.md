@@ -42,26 +42,45 @@ reports. Which files in them may be edited by hand is settled in
 
 ## 3. Source ownership
 
-`packages/core/src` is a dependency and ownership tree, not a flat catalog. It has
-exactly five physical roots plus the package facade:
+`packages/core/src` is a dependency and ownership tree, not a flat catalog. D-21
+(b) (owner, 2026-09-05) fixes the target first level; the two legacy aggregate
+roots stay declared while they still hold the unmigrated tree, and WO-RET-04
+normalizes them:
 
 ```text
 src/
-  foundation/       Contracts, kernels, presets, i18n and tokens
-  infrastructure/   Compilers and browser/React runtime orchestration
+  contracts/        Typed contracts, born under the target grammar (WO-CAT-02)
+  kernel/           Reserved by D-21 (b); not materialized yet
+  tokens/           Reserved by D-21 (b); not materialized yet
+  compilers/        Reserved by D-21 (b); not materialized yet
+  runtime/          Reserved by D-21 (b); not materialized yet
   graphics/         Icons, brand marks, pictograms and motion
   components/       The four UI tiers
   entrypoints/      Classified package-subpath boundaries
   index.ts          Package-root facade; the only loose file at the source root
+
+  foundation/       LEGACY aggregate: contracts, kernels, presets, i18n, tokens
+  infrastructure/   LEGACY aggregate: compilers and runtime orchestration
 ```
+
+The admitted set is declared by name in `ARCHITECTURE_TIERS` /
+`CLASSIFIED_SUPPORT_ROOTS` of
+`packages/core/scripts/check/architecture/audits/structure/index.mjs`. A root
+outside it fails `structure:check` instead of widening the identity baseline.
 
 At the macro level, dependencies flow toward the product edge:
 
 ```text
-foundation -> infrastructure/compilers -> infrastructure/runtime
-foundation + infrastructure + graphics -> components
+foundation -> contracts -> infrastructure/compilers -> infrastructure/runtime
+foundation + contracts + infrastructure + graphics -> components
 primitives -> patterns -> structures -> surfaces -> consuming app
 ```
+
+`contracts/` ranks ABOVE `foundation/` and not below it, and the rank is the
+measured direction rather than the target one: `contracts/theme` still consumes
+the vocabularies parked in `foundation/contracts/**`. The compensating law is
+that nothing under `foundation/` may import `contracts/`, which that same rank
+makes a red inversion rather than a convention.
 
 Within a single capability, lower branches precede higher ones:
 

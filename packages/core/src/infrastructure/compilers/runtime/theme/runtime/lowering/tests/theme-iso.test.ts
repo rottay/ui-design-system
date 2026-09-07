@@ -2,7 +2,7 @@
  * @fileoverview T0 THEME-ISO executable evidence.
  *
  * Required evidence:
- * 1. Theme/ThemePatch/mergeThemePatches contracts and fail-closed behavior.
+ * 1. Theme/ThemeLayerPatch/mergeThemePatches contracts and fail-closed behavior.
  * 2. Exact transport equality: same Theme produces identical keypaths/order/CSS/digest.
  * 3. Three first-party Themes are structural mirrors (canonical keypaths equal).
  * 4. v1 document migration is golden and unknown keys/missing vertical fail.
@@ -30,7 +30,7 @@ import {
 } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type {
   Theme,
-  ThemePatch,
+  ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { BrandMotion } from "@/foundation/contracts/composition/tenants/themes";
 import {
@@ -311,9 +311,9 @@ describe("T0 ISO contracts", () => {
   });
 
   it("mergeThemePatches fails closed on unknown keys", () => {
-    const badPatch: ThemePatch = {
+    const badPatch: ThemeLayerPatch = {
       unknownFamily: { backgroundColor: "#000" },
-    } as ThemePatch;
+    } as ThemeLayerPatch;
     expect(() => mergeThemePatches(FIRST_PARTY_THEMES.bithire, badPatch)).toThrow(
       /unknown key/
     );
@@ -382,7 +382,7 @@ describe("T0 v1 migration", () => {
     } as const satisfies TenantThemeDocument;
 
     const dbPatch = migrateV1WithMode(document, "light").patch;
-    const staticPatch: ThemePatch = { chrome: { controls: { semantic } } };
+    const staticPatch: ThemeLayerPatch = { chrome: { controls: { semantic } } };
     const dbCompiled = lower(
       mergeThemePatches(FIRST_PARTY_THEMES.bithire, dbPatch)
     );
@@ -1389,9 +1389,9 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
     } as unknown as TenantThemeDocument;
 
     const dbPatch = migrateV1(document).patch;
-    // The v1 migration forwards `advanced.chrome` as the typed ThemePatch, so
+    // The v1 migration forwards `advanced.chrome` as the typed ThemeLayerPatch, so
     // the static transport authoring the same chrome must be byte-identical.
-    const staticPatch = { chrome } as unknown as ThemePatch;
+    const staticPatch = { chrome } as unknown as ThemeLayerPatch;
 
     const dbCompiled = lower(
       mergeThemePatches(FIRST_PARTY_THEMES.bithire, dbPatch)
@@ -1422,7 +1422,7 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
         if (field === "anatomy" || leaf.alternatives.length === 0) continue;
         const wrong = wrongKindFor(leaf);
         if (wrong === undefined) continue;
-        const patch = { chrome: { [family]: { [field]: wrong } } } as unknown as ThemePatch;
+        const patch = { chrome: { [family]: { [field]: wrong } } } as unknown as ThemeLayerPatch;
         try {
           mergeThemePatches(FIRST_PARTY_THEMES.bithire, patch);
           accepted.push(`${family}.${field} accepted ${typeof wrong}`);
@@ -1454,7 +1454,7 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
     const merge = (value: unknown) =>
       mergeThemePatches(baseline, {
         chrome: { sidebar: { groupFontWeight: value } },
-      } as unknown as ThemePatch);
+      } as unknown as ThemeLayerPatch);
     expect(
       (merge("600").chrome as unknown as Record<string, Record<string, unknown>>).sidebar!
         .groupFontWeight
@@ -1486,7 +1486,7 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
     const patchOptional = (value: unknown) =>
       mergeThemePatches(baseline, {
         chrome: { [family]: { [field]: value } },
-      } as unknown as ThemePatch);
+      } as unknown as ThemeLayerPatch);
     expect(() => patchOptional(2700)).not.toThrow();
     expect(() => patchOptional("2700")).not.toThrow();
     expect(() => patchOptional(true)).toThrow(/expected number \| string/u);
@@ -1503,7 +1503,7 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
     expect(() =>
       mergeThemePatches(base, {
         chrome: { tooltip: { zIndex: 2700 } },
-      } as unknown as ThemePatch)
+      } as unknown as ThemeLayerPatch)
     ).toThrow(/unknown key "zIndex"/);
   });
 });

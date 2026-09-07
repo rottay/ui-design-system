@@ -20,7 +20,7 @@
  * `normalizedAppearance` still records the authored families verbatim.
  *
  * ISO wave: the DB transport no longer runs its own appearance compiler. It
- * migrates to a ThemePatch, resolves that patch onto the code-owned vertical
+ * migrates to a ThemeLayerPatch, resolves that patch onto the code-owned vertical
  * Theme, and lowers the result through the single `compileTheme`. `variables`
  * is therefore a DELTA against the compiled vertical baseline: a channel the
  * tenant does not move is inherited, not restated. That changes which channels

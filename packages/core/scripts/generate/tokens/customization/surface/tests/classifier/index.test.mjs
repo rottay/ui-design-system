@@ -194,7 +194,7 @@ const FAMILIES = [
 
 test('ESCUDO — solo escuda mientras la capacidad sea frontier', async () => {
   const { buildFrontierShield } = await import('../../index.mjs');
-  const rows = [{ id: 'palette.status-seeds', status: 'frontier' }, { id: 'otra.capacidad', status: 'frontier' }];
+  const rows = [{ id: 'palette.status-seeds', status: 'declared' }, { id: 'otra.capacidad', status: 'declared' }];
   const shield = buildFrontierShield(FAMILIES, rows);
   assert.equal(shield.shielded.length, 2);
   assert.equal(shield.covers('--ds-tint-success-8'), true);
@@ -208,7 +208,7 @@ test('ESCUDO — flipear la fila a ACTIVE quita el escudo SOLO de esa familia', 
    * a mano: el dia que la capacidad se abra, seguiria escudando canales de una
    * capacidad ACTIVA -- el censo diria "reservado para una frontera" de algo que
    * ya no lo es, y esos writers quedarian invisibles en vez de contarse. */
-  const rows = [{ id: 'palette.status-seeds', status: 'active' }, { id: 'otra.capacidad', status: 'frontier' }];
+  const rows = [{ id: 'palette.status-seeds', status: 'active' }, { id: 'otra.capacidad', status: 'declared' }];
   const shield = buildFrontierShield(FAMILIES, rows);
   assert.deepEqual(shield.shielded.map((f) => f.capability), ['otra.capacidad'], 'solo la que sigue siendo frontera');
   assert.equal(shield.covers('--ds-tint-success-8'), false, 'la capacidad abierta ya no escuda');
@@ -219,7 +219,7 @@ test('ESCUDO — flipear la fila a ACTIVE quita el escudo SOLO de esa familia', 
 test('ESCUDO — una familia que nombra una capacidad INEXISTENTE no escuda nada', async () => {
   const { buildFrontierShield } = await import('../../index.mjs');
   // No se escuda contra un fantasma: si la fila no esta, el escudo no aplica.
-  const shield = buildFrontierShield(FAMILIES, [{ id: 'otra.capacidad', status: 'frontier' }]);
+  const shield = buildFrontierShield(FAMILIES, [{ id: 'otra.capacidad', status: 'declared' }]);
   assert.equal(shield.covers('--ds-tint-success-8'), false);
   assert.deepEqual(buildFrontierShield(FAMILIES, []).prefixes, []);
   assert.deepEqual(buildFrontierShield(FAMILIES, null).prefixes, []);

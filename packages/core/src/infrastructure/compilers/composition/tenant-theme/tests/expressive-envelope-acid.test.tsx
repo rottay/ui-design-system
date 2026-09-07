@@ -7,7 +7,7 @@
  * selects `rottay/management-editorial@1` on the same vertical envelope.
  * The test COMPUTES divergence per expressive axis over representative
  * channels and requires at least 7 of the 9 axes to differ. `icon` is the
- * declared frontier axis and is excluded from measurement by design — the
+ * declared declared-but-closed axis and is excluded from measurement by design — the
  * remaining 8 must carry the threshold.
  *
  * This is computed evidence over the artifacts, deliberately NOT a sighted

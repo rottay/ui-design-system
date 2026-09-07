@@ -20,14 +20,14 @@
 
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { BASELINE_PATH, CATALOG_PATH, CONTROLS_DIR, collectFindings, countByExposure, isRefinedRoot } from './index.mjs';
-import { pathForManifestId } from '../../../../../libraries/manifest/index.mjs';
+import { BASELINE_PATH, CATALOG_PATH, collectFindings, countByExposure, isRefinedRoot } from './index.mjs';
+import { readThemeCatalogRecords } from '../../../../../libraries/theme-catalog/index.mjs';
 
 const MODULE_URL = new URL('./index.mjs', import.meta.url).href;
 const BANNER = /root-exposure-gate OK/;
@@ -54,21 +54,23 @@ function withCatalog(mutate, run) {
   }
 }
 
-/** Same, for one control inside a byte-exact copy of the LIVE controls tree. */
+/**
+ * Same, for one control of the LIVE typed catalog.
+ *
+ * The catalog is TypeScript source, so the mutant is planted on the RECORDS the
+ * gate reads, not on a rewritten copy of a JSON tree: the law under test is
+ * "a control declares this channel", never "a file was edited".
+ */
 function withControl(controlId, mutate, run) {
-  const box = mkdtempSync(join(tmpdir(), 'root-exposure-controls-'));
-  const controlsDir = join(box, 'controls');
-  try {
-    cpSync(CONTROLS_DIR, controlsDir, { recursive: true });
-    const target = join(controlsDir, pathForManifestId(controlId), 'index.json');
-    const doc = JSON.parse(readFileSync(target, 'utf8'));
-    mutate(doc);
-    mkdirSync(join(target, '..'), { recursive: true });
-    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    run(collectFindings({ controlsDir }));
-  } finally {
-    rmSync(box, { recursive: true, force: true });
-  }
+  const records = readThemeCatalogRecords().map((record) =>
+    record.controlId === controlId
+      ? JSON.parse(JSON.stringify(record))
+      : record,
+  );
+  const target = records.find((record) => record.controlId === controlId);
+  assert.ok(target, `the live catalog must still carry ${controlId}`);
+  mutate(target);
+  run(collectFindings({ controlRecords: records }));
 }
 
 const findRoot = (doc, exposure) => doc.roots.find((root) => root.exposure === exposure);
@@ -86,7 +88,7 @@ test('the live snapshot is the measured one, not a guess', () => {
   // type.family.display reclasificados gap->tenant-dial bajo
   // typography.families (medido; calibrado F4B-14) -- 10->8 gaps, 26->28
   // tenant-dial.
-  // P0 (2026-08-28): se abrio la ultima fila `frontier`, `palette.status-seeds`
+  // P0 (2026-08-28): se abrio la ultima fila declarada-pero-cerrada, `palette.status-seeds`
   // (tier Standard), y las 4 raices ramp.seed.{error,info,success,warning}
   // pasaron de gap a tenant-dial. gap BAJA 8->4, la direccion legal. neutral NO
   // acompanio: no tiene semilla en ninguna via, asi que un dial suyo seria una
@@ -168,7 +170,7 @@ test('LAW 1: a tenant-dial root pointing at a control that does not exist fails'
       findRoot(doc, 'tenant-dial').governedBy = 'chrome.imaginary';
     },
     (findings) =>
-      expectFinding(findings, 'is not a control in governance/manifest/controls/', 'a ghost owner must fail'),
+      expectFinding(findings, 'is not a control in src/contracts/theme/runtime/catalog', 'a ghost owner must fail'),
   );
 });
 

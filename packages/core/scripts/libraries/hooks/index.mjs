@@ -828,6 +828,17 @@ export const ANCHORS = Object.freeze({
     describes:
       'typed BrandTheme/TenantAppearance ownership graph used to expand mapped compiler emissions',
   }),
+  // D-21 (b) put new contracts at the first level, so the ownership graph has
+  // TWO roots until WO-RET-04 unifies them. Scanning only the legacy one made
+  // `themeContractFiles` fall 45 -> 43 the moment the decision contracts moved,
+  // which is a coverage loss that reads as a smaller number.
+  themeContractsFirstLevel: Object.freeze({
+    id: 'theme-contracts-first-level',
+    path: 'src/contracts',
+    kind: 'directory',
+    describes:
+      'the D-21 (b) first-level contract root: the typed control catalog, the decision vocabulary and the v2 document',
+  }),
   styleRoots: Object.freeze({
     id: 'authored-ds-css',
     path: 'src/foundation/tokens/css',
@@ -1321,6 +1332,10 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
     ANCHORS.appearancePostureEmitter,
   );
   const themeContractsRoot = assertAnchorExists(coreRoot, ANCHORS.themeContracts);
+  const themeContractsFirstLevelRoot = assertAnchorExists(
+    coreRoot,
+    ANCHORS.themeContractsFirstLevel,
+  );
   const stylesRoot = assertAnchorExists(coreRoot, ANCHORS.styleRoots);
   const componentRoot = assertAnchorExists(coreRoot, ANCHORS.componentReads);
 
@@ -1352,7 +1367,10 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   const interpolated = deriveInterpolatedEmissions(chromeSource);
   for (const name of interpolated.names) tenantChannel.add(name);
 
-  const contractFiles = collectFiles(themeContractsRoot, ['.ts']);
+  const contractFiles = [
+    ...collectFiles(themeContractsRoot, ['.ts']),
+    ...collectFiles(themeContractsFirstLevelRoot, ['.ts']),
+  ];
   const contractSources = contractFiles.map((file) => ({
     file,
     text: readFileSync(file, 'utf8'),

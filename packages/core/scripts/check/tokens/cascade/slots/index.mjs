@@ -51,7 +51,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
-import { readManifestRecords } from '../../../../libraries/manifest/index.mjs';
+import { readThemeCatalogRecords, CATALOG_SOURCE } from '../../../../libraries/theme-catalog/index.mjs';
 import { isRefinedRoot } from '../roots/exposure/index.mjs';
 import { assertDistFresh } from '../../../../package/artifacts/freshness/index.mjs';
 import {
@@ -72,7 +72,10 @@ export const CORE_ROOT = findPackageRoot(HERE);
 export const OUT_PATH = join(CORE_ROOT, 'artifacts/generated/manifest/cascade/slots/index.json');
 export const BASELINE_PATH = join(HERE, 'baseline/index.json');
 export const CATALOG_PATH = join(CORE_ROOT, 'governance/manifest/cascade/catalog/index.json');
-export const CONTROLS_DIR = join(CORE_ROOT, 'governance/manifest/controls');
+/* La unica lista de controles desde WO-CAT-02: el catalogo tipado. La vista de
+ * manifest que reemplaza era una proyeccion generada de la misma poblacion y ya
+ * no esta en la ruta de lectura de ningun gate. */
+export const CONTROLS_DIR = CATALOG_SOURCE;
 
 export const VERTICALS = Object.freeze(['rottay', 'bithire', 'evnto']);
 
@@ -288,7 +291,7 @@ export function readMembership(path) {
 
 export function readControls(controlsDir = CONTROLS_DIR) {
   const byId = new Map();
-  for (const { document: control } of readManifestRecords(controlsDir, 'controlId')) {
+  for (const control of readThemeCatalogRecords(controlsDir)) {
     byId.set(control.controlId, control);
   }
   return byId;
@@ -515,7 +518,7 @@ export async function buildInventory({
     ?? JSON.parse(readFileSync(join(coreRoot, 'governance/manifest/cascade/catalog/index.json'), 'utf8'));
   const { index: headIndex, ambiguous } = headChannelIndex(catalog);
   const rootById = new Map((catalog.roots ?? []).map((root) => [root.rootId, root]));
-  const controls = injectedControls ?? readControls(join(coreRoot, 'governance/manifest/controls'));
+  const controls = injectedControls ?? readControls();
   const overrideTokens = injectedOverrides ?? (await loadOverrideTokens(coreRoot));
   const sources = injectedSources ?? readSources(coreRoot);
   const membership = injectedMembership === undefined

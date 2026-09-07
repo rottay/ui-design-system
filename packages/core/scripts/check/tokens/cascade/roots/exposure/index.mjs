@@ -50,14 +50,18 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
-import { readManifestRecords } from '../../../../../libraries/manifest/index.mjs';
+import { readThemeCatalogRecords, CATALOG_SOURCE } from '../../../../../libraries/theme-catalog/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 
 export const EXPOSURES = Object.freeze(['tenant-dial', 'internal-head', 'gap']);
 export const CATALOG_PATH = join(CORE_ROOT, 'governance/manifest/cascade/catalog/index.json');
-export const CONTROLS_DIR = join(CORE_ROOT, 'governance/manifest/controls');
+/* La unica lista de controles desde WO-CAT-02. La vista de manifest que
+ * reemplaza era una proyeccion generada de la misma poblacion y ya no esta en
+ * la ruta de lectura de ningun gate; el nombre del parametro se conserva para
+ * que los tests que inyectan un catalogo de prueba no cambien de forma. */
+export const CONTROLS_DIR = CATALOG_SOURCE;
 export const BASELINE_PATH = join(HERE, 'baseline/index.json');
 
 function readJson(path) {
@@ -68,17 +72,21 @@ function readJson(path) {
   }
 }
 
-/** control id -> the head channels it declares. `representativeOnly`, by contract. */
-export function declaredChannelOwners(controlsDir = CONTROLS_DIR) {
+export function channelOwnersOf(records) {
   const owners = new Map();
-  if (!existsSync(controlsDir)) return owners;
-  for (const { document: control } of readManifestRecords(controlsDir, 'controlId')) {
+  for (const control of records) {
     for (const channel of control.declaredOutputs?.channels ?? []) {
       if (!owners.has(channel)) owners.set(channel, []);
       owners.get(channel).push(control.controlId);
     }
   }
   return owners;
+}
+
+/** control id -> the head channels it declares. `representativeOnly`, by contract. */
+export function declaredChannelOwners(controlsDir = CONTROLS_DIR) {
+  if (!existsSync(controlsDir)) return new Map();
+  return channelOwnersOf(readThemeCatalogRecords(controlsDir));
 }
 
 /**
@@ -124,6 +132,11 @@ export function countByExposure(roots) {
 export function collectFindings({
   catalogPath = CATALOG_PATH,
   controlsDir = CONTROLS_DIR,
+  /* Injected control records. The drills plant a mutated control in memory
+   * rather than a mutated copy of a JSON tree: the catalog is TypeScript
+   * source, and a drill that had to rewrite an array literal would be testing
+   * a text edit instead of the law. */
+  controlRecords = null,
   baselinePath = BASELINE_PATH,
 } = {}) {
   const findings = [];
@@ -133,12 +146,10 @@ export function collectFindings({
   if (!baseline) return ['baseline/index.json is missing or is not valid JSON'];
 
   const roots = Array.isArray(catalog.roots) ? catalog.roots : [];
-  const controlIds = new Set(
-    existsSync(controlsDir)
-      ? readManifestRecords(controlsDir, 'controlId').map(({ id }) => id)
-      : [],
-  );
-  const owners = declaredChannelOwners(controlsDir);
+  const records = controlRecords
+    ?? (existsSync(controlsDir) ? readThemeCatalogRecords(controlsDir) : []);
+  const controlIds = new Set(records.map(({ controlId }) => controlId));
+  const owners = channelOwnersOf(records);
 
   // 0. closed vocabulary. An unknown exposure is not a new category: it is a typo
   //    that would silently drop a root out of every law below.
@@ -217,7 +228,7 @@ export function collectFindings({
       if (!root.governedBy) {
         findings.push(`${rootId}: exposure 'tenant-dial' but governedBy is ${JSON.stringify(root.governedBy ?? null)}`);
       } else if (!controlIds.has(root.governedBy)) {
-        findings.push(`${rootId}: governedBy ${JSON.stringify(root.governedBy)} is not a control in governance/manifest/controls/`);
+        findings.push(`${rootId}: governedBy ${JSON.stringify(root.governedBy)} is not a control in src/contracts/theme/runtime/catalog`);
       }
       continue;
     }

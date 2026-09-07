@@ -14,22 +14,23 @@
  * @package @rottay/design-system
  */
 
-import type { ThemePatch } from "@/foundation/contracts/composition/tenants/themes/iso";
+import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
   assertTenantThemeDocumentV2,
   isTenantThemeDocumentV2,
   type TenantThemeDocumentAny,
   type TenantThemeDocumentV2,
-} from "@/foundation/contracts/composition/tenants/themes/tenant-theme/decision-document";
+} from "@/contracts/theme/presentation/document";
+import { assertThemeDecisionDomains } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
 import { documentThemePatch } from "../../../../foundation/document-patch";
-import { projectDecisionsToV1, type DecisionProjection } from "../../foundation/adapter";
+import { projectDecisionsToV1, type DecisionProjection } from "../../foundation/projection";
 import { migrateDocumentV1ToV2 } from "../../foundation/migrate";
 
 export interface DocumentAdmission {
   /** `1` for the persisted v1 transport, `2` for the decision document. */
   version: 1 | 2;
-  patch: ThemePatch;
+  patch: ThemeLayerPatch;
   /** Empty for v1: a v1 document has no decision ids to report against. */
   decisions: readonly DecisionProjection[];
   /** Activated decisions that moved no keypath today, in kit row order. */
@@ -59,6 +60,9 @@ export function admitDocument(input: {
     };
   }
   const document = assertTenantThemeDocumentV2(input.document);
+  // The contract closed the key sets; the generated schema closes the VALUES of
+  // every domain the catalog states in full. Two owners, one table.
+  assertThemeDecisionDomains(document.decisions);
   const { v1, projections } = projectDecisionsToV1(document);
   return {
     version: 2,
@@ -92,6 +96,6 @@ export function migrateAndAdmitDocument(input: {
 export function documentAnyThemePatch(input: {
   vertical: FirstPartyVerticalId;
   document: TenantThemeDocumentAny;
-}): ThemePatch {
+}): ThemeLayerPatch {
   return admitDocument(input).patch;
 }

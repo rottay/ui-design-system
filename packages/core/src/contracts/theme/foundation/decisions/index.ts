@@ -11,7 +11,11 @@
  */
 
 import type { AmbientMotion } from "@/foundation/contracts/runtime/motion";
-import type { BrandExpressiveAxisOverrides } from "../../..";
+import {
+  THEME_PLANS as INTENT_THEME_PLANS,
+  type ThemePlan as PlanOfIntent,
+} from "@/foundation/contracts/composition/tenants/themes/intent";
+import type { BrandExpressiveAxisOverrides } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   TenantThemeCardAnatomy,
   TenantThemeChrome,
@@ -20,13 +24,13 @@ import type {
   TenantThemeRhythmPosture,
   TenantThemeSidebarAnatomy,
   TenantThemeTableAnatomy,
-} from "../..";
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
   TENANT_THEME_FONT_PACK_IDS,
   TENANT_THEME_RADIUS_SCALE_BOUNDS,
   TENANT_THEME_TYPE_SCALE_BOUNDS,
-} from "../..";
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
 export { TENANT_THEME_FONT_PACK_IDS };
 
@@ -36,14 +40,14 @@ export { TENANT_THEME_FONT_PACK_IDS };
  * `PlanEntitlement` owns tiers (kit section 4): the vertical envelope decides
  * what exists, the plan decides which tier the tenant may activate. `internal`
  * is the DS/vertical seat, not a customer plan.
+ *
+ * The vocabulary is ALIASED, never restated: `CAPABILITY_TIERS` is its single
+ * owner. Two arrays of the same three words are how a fourth level appears in
+ * one of them and nobody notices.
  */
-export const THEME_PLANS = Object.freeze([
-  "standard",
-  "pro",
-  "internal",
-] as const);
+export const THEME_PLANS = INTENT_THEME_PLANS;
 
-export type ThemePlan = (typeof THEME_PLANS)[number];
+export type { ThemePlan } from "@/foundation/contracts/composition/tenants/themes/intent";
 
 /** The two customer-visible tiers of the kit. `internal` is a plan, not a tier. */
 export const THEME_DECISION_TIERS = Object.freeze(["standard", "pro"] as const);
@@ -52,7 +56,7 @@ export type ThemeDecisionTier = (typeof THEME_DECISION_TIERS)[number];
 
 /** Which plans may activate a decision of a given tier. */
 export const THEME_PLAN_TIERS: Readonly<
-  Record<ThemePlan, readonly ThemeDecisionTier[]>
+  Record<PlanOfIntent, readonly ThemeDecisionTier[]>
 > = Object.freeze({
   standard: Object.freeze(["standard"] as const),
   pro: Object.freeze(["standard", "pro"] as const),
@@ -235,7 +239,7 @@ export interface MotionDial {
 }
 
 /**
- * Row 26: the six expressive axes plus the declared `icon` frontier axis.
+ * Row 26: the six expressive axes plus the declared, not-yet-open `icon` axis.
  *
  * Each axis value is a REGISTERED id, closed by the expressive-profile registry
  * and re-resolved fail-closed by the compiler that consumes it. The registry

@@ -199,12 +199,13 @@ export type {
  *
  * `admitDocument` is the version-agnostic admission the two producers above run
  * internally, published for the caller that holds a document but no slug yet.
- * It is NOT a second compile route: it returns the same `ThemePatch` those
+ * It is NOT a second compile route: it returns the same `ThemeLayerPatch` those
  * producers put in their `ThemeIntent`, and a compile still goes through
  * `compileThemeIntent`. The patch-level projections behind it
  * (`documentAnyThemePatch`, `projectDecisionsToV1`, `v1KeypathOf`) stay
- * unpublished on purpose -- they are the dated adapter WO-DER-06/WO-CAT-02
- * delete, and publishing them would open a route around the intent.
+ * unpublished on purpose: they are the projection onto the v1 authoring shape
+ * that WO-DER-06 replaces with real derivation, and publishing them would open
+ * a route around the intent.
  *
  * `ThemePatchMigrationError` is the migration's fail-closed refusal and is
  * exported with it: `migrateDocumentV1ToV2` is total in the sense that it is
@@ -229,10 +230,19 @@ export type {
 } from '../../infrastructure/compilers/runtime/theme';
 export type {
   Theme,
-  ThemePatch,
+  ThemeLayerPatch,
   ThemePatchEnvelope,
   Governed,
 } from '../../foundation/contracts/composition/tenants/themes/iso';
+/**
+ * `ThemePatch` is what a TENANT authors: a partial set of the catalog's
+ * decisions plus the one sanctioned override group of D-03. It is not the
+ * Theme-shaped layer the resolver merges -- that keeps its own name,
+ * `ThemeLayerPatch`, above. Before WO-CAT-02 one name carried both meanings,
+ * which is how a patch could reach 28 % of the Theme keypaths and name `id`.
+ */
+export { assertThemePatch, ThemePatchError } from '../../contracts/theme/runtime/patch';
+export type { ThemePatch } from '../../contracts/theme/runtime/patch';
 /**
  * The vertical vocabulary the intent producers above take.
  *
@@ -367,7 +377,7 @@ export {
   activatedDecisionIds,
   assertTenantThemeDocumentV2,
   isTenantThemeDocumentV2,
-} from '../../foundation/contracts/composition/tenants/themes/tenant-theme/decision-document';
+} from '../../contracts/theme/presentation/document';
 export type {
   ChromeAnatomy,
   DensityMode,
@@ -402,7 +412,7 @@ export type {
   TypographyNumericPosture,
   TypographyPairing,
   TypographyRoleWeight,
-} from '../../foundation/contracts/composition/tenants/themes/tenant-theme/decision-document';
+} from '../../contracts/theme/presentation/document';
 // A11y: branding contrast validation (Wave 6.2 Accessibility Guardian)
 export {
   validateBrandingContrast,

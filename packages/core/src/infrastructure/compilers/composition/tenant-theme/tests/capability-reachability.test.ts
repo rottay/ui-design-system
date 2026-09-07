@@ -6,7 +6,7 @@
  * every ACTIVE tenant capability is actually expressible on the DB path and
  * every FRONTIER capability is actually rejected. This test proves both
  * executable properties against the real schema, envelope and compiler — a
- * registry row that the compiler cannot honor fails here, and a frontier row
+ * registry row that the compiler cannot honor fails here, and a declared-but-closed row
  * that the schema silently accepts fails here too.
  */
 import { describe, expect, it } from "vitest";
@@ -378,14 +378,14 @@ describe("tenant capability registry reachability", () => {
     // Frontier rows never leak into a rendered manifest.
     for (const capability of TENANT_CAPABILITY_REGISTRY) {
       // Read through the DECLARED union, not the literal the registry happens
-      // to narrow to today: P0 flipped the last `frontier` row to `active`, so
+      // to narrow to today: P0 flipped the last declared-but-closed row to `active`, so
       // a direct comparison stopped compiling ("no overlap"). The rule is the
-      // mechanism for the NEXT frontier row, so it is widened instead of
+      // mechanism for the NEXT declared-but-closed row, so it is widened instead of
       // deleted — deleting it would trade a standing law for today's census.
       // The widening is an ASSERTION, not an annotation: an annotated local
       // still narrows to its initializer's literal on assignment, so it does
       // not lift the comparison.
-      if ((capability.status as CapabilityStatus) !== "frontier") continue;
+      if ((capability.status as CapabilityStatus) !== "declared") continue;
       expect(TENANT_STANDARD_MANIFEST).not.toContain(capability.id);
       expect(TENANT_PRO_MANIFEST).not.toContain(capability.id);
       expect(TENANT_INTERNAL_MANIFEST).not.toContain(capability.id);
@@ -415,7 +415,7 @@ describe("tenant capability registry reachability", () => {
       "typography.pairing",
       "typography.scale",
     ]);
-    // E2 written reason: `responsive.posture` moves frontier → PRO. It is a
+    // E2 written reason: `responsive.posture` moves declared-but-closed → PRO. It is a
     // bounded selection from a closed first-party ladder registry, not a
     // free dial, and it changes layout capacity rather than brand surface —
     // which is Pro's remit, not Standard's. Its absent value resolves to the
@@ -491,7 +491,7 @@ describe("tenant capability registry reachability", () => {
     expect(declarations(laddered.css)).toEqual(declarations(bare.css));
   });
 
-  it("drill: frontier paths stay rejected and every opened vocabulary stays closed", () => {
+  it("drill: declared-but-closed paths stay rejected and every opened vocabulary stays closed", () => {
     // P0: el eje de tonos de estado esta ABIERTO, asi que este drill pasa de
     // rechazo-de-camino a CIERRE DE VOCABULARIO, igual que hicieron
     // responsive.posture (E2) y profiles.icon (C2) al abrirse.
@@ -551,9 +551,9 @@ describe("tenant capability registry reachability", () => {
     ).responsivePosture = "cavernous";
     expect(validateTenantThemeDocument(hostilePosture).success).toBe(false);
 
-    // The OLD frontier path stays rejected. The capability opened at
+    // The OLD declared-but-closed path stays rejected. The capability opened at
     // `advanced.responsivePosture`; a document that authors it one level up —
-    // the exact shape this drill asserted while the row was frontier — is
+    // the exact shape this drill asserted while the row was closed — is
     // still an unknown key, so opening the axis widened nothing by accident.
     const misplacedPosture = structuredClone(FULL_SURFACE_DOCUMENT);
     if (misplacedPosture.mode !== "advanced")

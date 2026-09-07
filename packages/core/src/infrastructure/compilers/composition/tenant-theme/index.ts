@@ -79,7 +79,7 @@ import type { EngineVisualDeclaration } from "@/foundation/contracts/composition
 import { engineVisualOf } from "../../runtime/theme/facade/presentation/engine-visual";
 import type {
   TenantAuthoredPaths,
-  ThemePatch,
+  ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import {
   isTenantAuthoredField,
@@ -1882,7 +1882,7 @@ export function compileTenantTheme(
   // artifact, provider and generated-CSS paths cannot drift.
   // ISO T0: the DB path must resolve through the same total Theme and single
   // compileTheme lowering as the static path. The v1 document migrates to a
-  // typed ThemePatch, is resolved over the code-owned vertical Theme, and the
+  // typed ThemeLayerPatch, is resolved over the code-owned vertical Theme, and the
   // resulting variables are flattened (base + authored mode overrides) into the
   // single SSR/hydration artifact map the runtime expects.
   // The typed refusal for an unknown vertical, stated ONCE and before the door.
@@ -1940,7 +1940,7 @@ export function compileTenantTheme(
         }),
   } as unknown as TenantThemeDocument;
   // The ISO leg is the only place a persisted row meets the fail-closed
-  // ThemePatch/mergeDeep/compileTheme lowering, and those throw plain Errors
+  // ThemeLayerPatch/mergeDeep/compileTheme lowering, and those throw plain Errors
   // (`ThemePatchMigrationError`, `resolveTheme: unknown key ...`). A caller of
   // this compiler contracts on ONE typed rejection, so an untyped throw here
   // would surface to a route as a 500 instead of a named document issue.
