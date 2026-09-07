@@ -898,6 +898,12 @@ export const CI_GATES = Object.freeze([
     noDrillReason:
       'This entry IS a suite set: eleven-plus node-only diagnostics over the showroom registries and the skin-rule corpus, each with its own assertions. The glob is what makes the set complete; `wiring-coverage` is what proves the glob names real files.',
     prerequisites: ['showroom-workspace'], },
+
+  // The milestone A exit gate: an application that builds. The five static legs
+  // prove the fixture is admissible; the sixth runs it. `published` reads the
+  // export map and the BUILT modules, which is why this pair is post-build.
+  { id: 'consumer-proof-drill', run: ['node', '--test', 'scripts/check/consumer-proof/tests/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['consumer-proof'], prerequisites: ['fresh-dist'], },
+  { id: 'consumer-proof', run: ['node', 'scripts/check/consumer-proof/index.mjs'], blocking: true, phase: 'post-build', drillId: 'consumer-proof-drill', prerequisites: ['fresh-dist'], },
 ]);
 
 const MANIFEST_PACKAGE_ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
