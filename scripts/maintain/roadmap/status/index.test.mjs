@@ -2037,7 +2037,7 @@ test("programme milestones are derived from their gate work orders, never stored
   const milestoneA = milestones.find((milestone) => milestone.id === "A");
   assert.deepEqual(milestoneA.gates, ["WO-CON-04", "WO-CON-05"]);
   assert.equal(milestoneA.reached, false);
-  assert.deepEqual(milestoneA.outstanding, ["WO-CON-04", "WO-CON-05"]);
+  assert.deepEqual(milestoneA.outstanding, ["WO-CON-05"]);
 
   // Milestone C is programme-scoped: its gate set is every audit-2026-09-05 work order.
   const milestoneC = milestones.find((milestone) => milestone.id === "C");
