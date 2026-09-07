@@ -4921,7 +4921,7 @@
    "lane": "consumer-contract",
    "order": 3,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01",
     "WO-CAT-01"
@@ -4949,7 +4949,9 @@
      "by": "kimi-k3-dt",
      "note": "2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): code+docs+probe all landed and measured green (decisions-lit 7/22 (+0/10 new) exit 0, door suites 57/57, own tests pass). REMAINING before close: package script + gate-manifest registration + freshness guard for decisions-lit — one small shared-owner lot, serialized AFTER WO-CAN-04 lands (gate manifest owner)."
     }
-   ]
+   ],
+   "doneAt": "2026-09-07",
+   "evidence": "tenant document v2 door + decisions-lit complete: v2 door/migrate/adapter landed 722fd05b; public naming surface 2141922a (independent PASS); docs chapters in docs-engineering e421aa5; probe prints decisions lit = 7/22 (+0/10 new) (independently reproduced by the auditor with Chromium); registration lot 94117928 landed: 3 package scripts + decisions-lit-freshness gate with two-way drill pair (pre-build blocking, 142/1 runner, validateManifest 0 problems) + content-digest freshness guard (door 693 files + instrument 16 files, all refusal paths drilled incl. borrowed-fixture) + 13 new drills (32/32) + adjudicated consumer-contract §2 visualAuthority typed-declaration correction. Adjudications: gate registers the freshness guard (CI gates job installs no browser; run stays hand-run measurement) and mtime guard excludes generated facade/artifacts (content digest still covers them). Audits: PASS + rebase delta PASS"
   },
   {
    "id": "WO-CON-04",
