@@ -228,9 +228,13 @@ be fixed or deliberately respecified in its own work order.
   A superseded WO is closed when its replacement lands: `claim WO-old`, then
   `done WO-old --evidence "closed by WO-XXX-nn <commit>"`, in the same certified lot.
 - `new_work` exception (owner-ordered spec/contract artifacts, 2026-09-05): `roadmap/kit-2026-09.md`
-  (WO-CAT-01), `roadmap/family-cut-template.md` (WO-FAM-00) and
-  `packages/core/docs/consumer-contract/index.md` (WO-CON-01) are specifications and a consumed
-  contract, not plan documents. Nothing else may be added outside a lane file.
+  (WO-CAT-01), `roadmap/family-cut-template.md` (WO-FAM-00), and the consumer contract —
+  `packages/core/docs/consumer-contract/index.md` (WO-CON-01) with its
+  [`protocol/index.md`](../packages/core/docs/consumer-contract/protocol/index.md) (WO-CON-05, the
+  two-track operating protocol: release discipline, version pinning, and the ONE path by which an
+  application asks for a capability — a `### WO-` block in its lane file, never a `_shared/` bridge)
+  — are specifications and a consumed contract, not plan documents. Nothing else may be added
+  outside a lane file.
 
 ### DS-improvements authority, milestones and wave locks
 

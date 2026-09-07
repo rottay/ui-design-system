@@ -3056,6 +3056,109 @@ export function decisionsLitLines(indicator) {
   return lines;
 }
 
+const CONTRACT_DIFF_PRODUCER = "packages/core/scripts/check/contract-changeset/index.mjs";
+
+/**
+ * The contract diff since the version an application can pin.
+ *
+ * STATUS does not parse a changeset and must never appear to: it runs the gate
+ * that owns the `contract-diff` grammar and republishes what that producer
+ * emits. One grammar, one owner, two readers -- and the package boundary stays
+ * a boundary, exactly as `findRepoRoot` above keeps it.
+ *
+ * FAIL-CLOSED. A producer that exits non-zero, prints nothing, or prints
+ * something this function cannot read is an ERROR that stops generation. The
+ * alternative is a section that silently drops a declaration, which is worse
+ * than no section: an application would read "nothing moved" and upgrade.
+ */
+export function readContractDiff({ root = ROOT, producer = CONTRACT_DIFF_PRODUCER } = {}) {
+  const producerPath = path.join(root, producer);
+  if (!fs.existsSync(producerPath)) {
+    throw new Error(`contract diff: the producer is absent at ${producer}`);
+  }
+  const run = spawnSync(process.execPath, [producerPath, "--emit-pending"], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  if (run.status !== 0) {
+    throw new Error(
+      `contract diff: ${producer} --emit-pending exited ${run.status}: ${(run.stderr || "").trim() || "no diagnostic"}`,
+    );
+  }
+  let emitted;
+  try {
+    emitted = JSON.parse(run.stdout);
+  } catch (error) {
+    throw new Error(`contract diff: ${producer} emitted unreadable output — ${error.message}`);
+  }
+  return validateContractDiff(emitted, producer);
+}
+
+/** The shape the producer promises, checked before a single row is published. */
+export function validateContractDiff(emitted, producer = CONTRACT_DIFF_PRODUCER) {
+  const refuse = (reason) => {
+    throw new Error(`contract diff: ${producer} emitted ${reason}`);
+  };
+  if (!emitted || typeof emitted !== "object" || Array.isArray(emitted)) refuse("a non-object payload");
+  if (typeof emitted.version !== "string" || emitted.version.length === 0) refuse("no pinned version");
+  if (!Array.isArray(emitted.rows)) refuse("no rows array");
+  if (!Array.isArray(emitted.changesets)) refuse("no changesets array");
+  for (const row of emitted.rows) {
+    if (!row || typeof row !== "object") refuse("a row that is not an object");
+    for (const field of ["kind", "target", "detail", "changeset"]) {
+      if (typeof row[field] !== "string" || row[field].length === 0) {
+        refuse(`a row with no ${field}: ${JSON.stringify(row)}`);
+      }
+    }
+  }
+  for (const entry of emitted.changesets) {
+    if (!entry || typeof entry.name !== "string" || typeof entry.level !== "string") {
+      refuse(`a changeset entry with no name or level: ${JSON.stringify(entry)}`);
+    }
+    if (!Number.isInteger(entry.declares) || entry.declares < 0) {
+      refuse(`a changeset entry with no declaration count: ${JSON.stringify(entry)}`);
+    }
+  }
+  return emitted;
+}
+
+/** The STATUS block for the contract diff, as lines. */
+export function contractDiffLines(diff) {
+  const lines = [`## Contract diff since \`${diff.version}\` (WO-CON-05)`, ""];
+  lines.push(
+    "> What an application pinned to that version must read before it upgrades. Rows are the "
+      + "`contract-diff` declarations of the changesets pending since it, republished from "
+      + `\`${CONTRACT_DIFF_PRODUCER}\`; STATUS never parses a changeset itself. A changeset without a block `
+      + "declares no public surface movement — only a signature change is required to carry one.",
+  );
+  lines.push("");
+  if (diff.rows.length === 0) {
+    const pending = diff.changesets.length === 0
+      ? "no changeset is pending"
+      : `${diff.changesets.length} pending changeset(s) scanned and none carries a block: `
+        + diff.changesets.map((entry) => `\`${entry.name}\` (${entry.level})`).join(", ");
+    lines.push(`EMPTY — no pending changeset declares a subpath, signature or export change since \`${diff.version}\`; ${pending}.`);
+    lines.push("");
+    return lines;
+  }
+  lines.push("| Kind | Target | Change | Bump | Changeset |");
+  lines.push("| --- | --- | --- | --- | --- |");
+  for (const row of diff.rows) {
+    lines.push(
+      `| ${row.kind} | \`${row.target}\` | ${row.detail.replace(/\|/g, "/")} | ${row.level ?? "?"} | \`${row.changeset}\` |`,
+    );
+  }
+  lines.push("");
+  const undeclared = diff.changesets.filter((entry) => entry.declares === 0);
+  if (undeclared.length > 0) {
+    lines.push(
+      `Also pending, declaring no public surface movement: ${undeclared.map((entry) => `\`${entry.name}\` (${entry.level})`).join(", ")}.`,
+    );
+    lines.push("");
+  }
+  return lines;
+}
+
 /**
  * The ten programme indicators of `audit/70-plan/index.md` §3.
  *
@@ -3376,6 +3479,7 @@ function generateStatus() {
   lines.push("");
   lines.push(...programIndicatorLines(reg));
   lines.push(...decisionsLitLines(readDecisionsLitIndicator()));
+  lines.push(...contractDiffLines(readContractDiff()));
   lines.push(...familyAcceptanceLines(readFamilyAcceptance()));
   lines.push(`## Work-order burn-down — ${overallDone}/${reg.workOrders.length} work orders done (${pct}%)`);
   lines.push("");

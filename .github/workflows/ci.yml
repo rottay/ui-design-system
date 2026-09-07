@@ -493,22 +493,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate changeset
+      # The gate is dependency-free (node builtins and one repo-local import),
+      # so it needs a runtime but no install. Without this step the job would
+      # have kept running shell only and the check would never execute.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # The inline shell this replaces asked whether ANY `.changeset/*.md`
+      # existed. One is committed on main by design (the retained 3.0 changeset
+      # of WO-RET-01), so the condition was satisfied on every branch, forever.
+      # The script counts only the changesets THIS range adds, and separates the
+      # guaranteed surface from the rest of the package.
+      - name: Contract changeset drills
         run: |
-          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '^packages/core/' || true)
-          if [ -n "$CHANGED" ]; then
-            CHANGESETS=$(ls .changeset/*.md 2>/dev/null | grep -v README || true)
-            if [ -z "$CHANGESETS" ]; then
-              echo "::error::Core library changes detected but no changeset found. Run: pnpm changeset"
-              echo ""
-              echo "Changed files:"
-              echo "$CHANGED"
-              exit 1
-            fi
-            echo "Changeset found: $CHANGESETS"
-          else
-            echo "No core library changes, changeset not required"
-          fi
+          for drill in $(node packages/core/scripts/check/contract-changeset/index.mjs --list-drills | cut -f1); do
+            node packages/core/scripts/check/contract-changeset/index.mjs --drill="$drill"
+          done
+
+      - name: Validate changeset
+        run: node packages/core/scripts/check/contract-changeset/index.mjs --base=origin/${{ github.base_ref }} --head=HEAD
 
   # ─────────────────────────────────────────────────────
   #  Summary

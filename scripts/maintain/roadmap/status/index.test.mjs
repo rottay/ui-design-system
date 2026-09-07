@@ -6,8 +6,10 @@ import test from "node:test";
 import {
   actionableWorkOrders,
   canonicalCrossProgramConvergenceLedger,
+  contractDiffLines,
   decisionsLitLines,
   dsImprovementsPlanFingerprint,
+  readContractDiff,
   readDecisionsLitIndicator,
   localDate,
   localDateTime,
@@ -22,6 +24,7 @@ import {
   summarizeDsSupportMilestones,
   summarizeProgramMilestones,
   validateDoneTransition,
+  validateContractDiff,
   validateCrossProgramConvergenceLedger,
   validateDsImprovementsTraceability,
   validateGat09CompletionBarrier,
@@ -2257,4 +2260,84 @@ test("family acceptance says NOT MEASURED when the manifest is absent", () => {
   const lines = familyAcceptanceLines(acceptance).join("\n");
   assert.ok(lines.includes("NOT MEASURED"));
   assert.ok(!/0\/255/.test(lines), "an absent manifest must not publish a ratio");
+});
+
+test("the contract diff is read from its producer, not parsed here", () => {
+  const diff = readContractDiff();
+  assert.equal(diff.package, "@rottay/design-system");
+  assert.match(diff.version, /^\d+\.\d+\.\d+$/);
+  assert.ok(Array.isArray(diff.rows));
+  assert.ok(Array.isArray(diff.changesets));
+  // Deterministic: the producer is the only authority, so two reads agree.
+  assert.deepEqual(readContractDiff(), diff);
+});
+
+test("the contract diff section says EMPTY out loud, and names what it scanned", () => {
+  const lines = contractDiffLines({
+    version: "2.19.36",
+    rows: [],
+    changesets: [{ name: "major-canonical-tree.md", level: "major", declares: 0 }],
+  }).join("\n");
+  assert.match(lines, /## Contract diff since `2\.19\.36`/);
+  assert.match(lines, /EMPTY —/);
+  assert.match(lines, /major-canonical-tree\.md` \(major\)/);
+  // An empty section must not publish a table a reader would take for rows.
+  assert.equal(/\| Kind \| Target \|/.test(lines), false);
+});
+
+test("the contract diff section with no pending changeset at all still says EMPTY", () => {
+  const lines = contractDiffLines({ version: "3.0.0", rows: [], changesets: [] }).join("\n");
+  assert.match(lines, /EMPTY —/);
+  assert.match(lines, /no changeset is pending/);
+});
+
+test("contract diff rows publish every declaration, in the producer's order", () => {
+  const lines = contractDiffLines({
+    version: "2.19.36",
+    changesets: [
+      { name: "a.md", level: "major", declares: 2 },
+      { name: "b.md", level: "patch", declares: 0 },
+    ],
+    rows: [
+      { kind: "subpath", target: "./commercial", detail: "removed", level: "major", changeset: "a.md" },
+      {
+        kind: "signature",
+        target: "./server#mountTenantTheme",
+        detail: "accepts the retained | artifact input",
+        level: "major",
+        changeset: "a.md",
+      },
+    ],
+  }).join("\n");
+  assert.match(lines, /\| subpath \| `\.\/commercial` \| removed \| major \| `a\.md` \|/);
+  // A pipe inside a detail would split the row into a wrong number of cells.
+  assert.match(lines, /accepts the retained \/ artifact input/);
+  assert.match(lines, /Also pending, declaring no public surface movement: `b\.md` \(patch\)/);
+});
+
+test("the contract diff refuses every payload it cannot certify", () => {
+  assert.throws(() => validateContractDiff(null), /non-object payload/);
+  assert.throws(() => validateContractDiff([]), /non-object payload/);
+  assert.throws(() => validateContractDiff({ rows: [], changesets: [] }), /no pinned version/);
+  assert.throws(() => validateContractDiff({ version: "1.0.0", changesets: [] }), /no rows array/);
+  assert.throws(() => validateContractDiff({ version: "1.0.0", rows: [] }), /no changesets array/);
+  assert.throws(
+    () => validateContractDiff({ version: "1.0.0", rows: [{ kind: "subpath" }], changesets: [] }),
+    /a row with no target/,
+  );
+  assert.throws(
+    () => validateContractDiff({ version: "1.0.0", rows: [], changesets: [{ name: "a.md" }] }),
+    /no name or level/,
+  );
+  assert.throws(
+    () => validateContractDiff({ version: "1.0.0", rows: [], changesets: [{ name: "a.md", level: "patch" }] }),
+    /no declaration count/,
+  );
+});
+
+test("an absent producer stops generation instead of publishing an empty diff", () => {
+  assert.throws(
+    () => readContractDiff({ producer: "packages/core/scripts/check/no-such-producer/index.mjs" }),
+    /the producer is absent/,
+  );
 });
