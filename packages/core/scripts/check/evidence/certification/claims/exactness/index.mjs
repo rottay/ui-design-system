@@ -593,6 +593,29 @@ function literalEquals(state, value) {
   return state?.kind === 'literal' && state.value === value;
 }
 
+/**
+ * The code-derived lines the vertical/tenancy/engine documentation must carry
+ * verbatim. Everything the roster can author IS authored from the roster; only
+ * the engine-role wording is a literal, because the role a frozen engine plays
+ * is a product decision the roster does not carry. Those literals track the
+ * documentation, not the other way round: the doc is the live truth, and this
+ * function is what the seal pins it against.
+ */
+export function verticalDocumentationRequirements(roster, rosterEngine) {
+  const engineLabel = `${String(rosterEngine).charAt(0).toUpperCase()}${String(rosterEngine).slice(1)}`;
+  return {
+    verticals: [
+      `| **Vertical preset engine** | ${roster.map((entry) => entry.engine).join(' | ')} |`,
+      `| **First-party tenant explicit engine** | ${roster.map(() => 'not set').join(' | ')} |`,
+    ],
+    tenancy: roster.map((entry) => `| \`${entry.slug}\` | ${entry.name} | not set |`),
+    engines: [
+      '| Classic | `classic` | Ant Design 5 (`antd`) | Frozen, fail-closed | -- |',
+      `| ${engineLabel} | \`${rosterEngine}\` | Rottay-native premium skin | **PRIMARY, and the only productive engine** | ${roster.map((entry) => entry.name).join(', ')} vertical presets |`,
+    ],
+  };
+}
+
 function measureVerticals() {
   const verticalPath = join(
     CORE_ROOT,
@@ -660,19 +683,7 @@ function measureVerticals() {
   if (rosterEngines.length !== 1) {
     errors.push(`first-party roster must declare exactly one engine: ${JSON.stringify(rosterEngines)}`);
   }
-  const [rosterEngine] = rosterEngines;
-  const engineLabel = `${rosterEngine.charAt(0).toUpperCase()}${rosterEngine.slice(1)}`;
-  const docRequirements = {
-    verticals: [
-      `| **Vertical preset engine** | ${roster.map((entry) => entry.engine).join(' | ')} |`,
-      `| **First-party tenant explicit engine** | ${roster.map(() => 'not set').join(' | ')} |`,
-    ],
-    tenancy: roster.map((entry) => `| \`${entry.slug}\` | ${entry.name} | not set |`),
-    engines: [
-      '| Classic | `classic` | Ant Design 5 (`antd`) | Stable | -- |',
-      `| ${engineLabel} | \`${rosterEngine}\` | Rottay-native premium skin | Stable, **PRIMARY** | ${roster.map((entry) => entry.name).join(', ')} vertical presets |`,
-    ],
-  };
+  const docRequirements = verticalDocumentationRequirements(roster, rosterEngines[0]);
   const documentation = {};
   for (const [name, path] of Object.entries(VERTICAL_DOCS)) {
     const text = read(path);

@@ -34,6 +34,7 @@ import {
   projectGat07RegistryDefinition,
   readSealedArchive,
   sealedDocumentationContentMatches,
+  verticalDocumentationRequirements,
 } from './index.mjs';
 import {
   packageRoot as findPackageRoot,
@@ -2103,5 +2104,156 @@ test('the archive/live input diff is exact in both directions', () => {
   assert.deepEqual(
     diffInputManifests([], [row('b', 'z')]),
     [{ path: 'b', archive: null, live: { bytes: 1, sha256: 'z' } }],
+  );
+});
+
+test('B-1 sync engine switch: the pinned factory is descended per engine, and every short record is refused', () => {
+  const FACTORY_OWNER = '/repo/src/infrastructure/runtime/engines/presentation/component-factory/sync';
+  const FAMILY = '/repo/src/components/primitives/layout/switched';
+  // The shape the productive factory has: the caller's bag reaches the render
+  // root with the part still on it, and the ONLY unproven step is the switched
+  // tag -- which the call site then supplies, engine by engine.
+  const CANONICAL_FACTORY = `
+    import { forwardRef } from 'react';
+    export function createSyncEngineComponent(displayName: string, implementations: Record<string, any>) {
+      const Resolved = forwardRef((props: any, ref: any) => {
+        const { engine: _engine, ...componentProps } = props;
+        const Component = implementations[props.engine];
+        return <Component {...componentProps} ref={ref} />;
+      });
+      Resolved.displayName = displayName;
+      return Resolved;
+    }
+  `;
+  const engineImplementation = (engine) => [`${FAMILY}/engines/${engine}`, {
+    path: `${FAMILY}/engines/${engine}/index.tsx`,
+    text: 'export const Implementation = (props: any) => <div {...props} />;',
+  }];
+  const probe = ({
+    factory = CANONICAL_FACTORY,
+    factoryOwner = FACTORY_OWNER,
+    record = '{ classic: ClassicSwitched, modern: ModernSwitched, rustic: RusticSwitched }',
+    named = true,
+  } = {}) => {
+    const specifier = factoryOwner.replace('/repo/src', '@');
+    const family = named
+      ? `const Implementations = ${record};\n` +
+        "export const Switched = createSyncEngineComponent('Switched', Implementations);"
+      : `export const Switched = createSyncEngineComponent('Switched', ${record});`;
+    const modules = new Map([
+      [factoryOwner, { path: `${factoryOwner}/index.tsx`, text: factory }],
+      engineImplementation('classic'),
+      engineImplementation('modern'),
+      engineImplementation('rustic'),
+      [FAMILY, {
+        path: `${FAMILY}/index.tsx`,
+        text: `import { createSyncEngineComponent } from '${specifier}';\n` +
+          "import { Implementation as ClassicSwitched } from './engines/classic';\n" +
+          "import { Implementation as ModernSwitched } from './engines/modern';\n" +
+          "import { Implementation as RusticSwitched } from './engines/rustic';\n" +
+          family,
+      }],
+    ]);
+    return collectDataPartStampsFromText(
+      "import { Switched } from '@/components/primitives/layout/switched';\n" +
+      'export const Probe = () => <Switched data-part="caller" />;',
+      '/repo/src/components/structures/probe.tsx',
+      { moduleReader: (base) => modules.get(base) ?? null },
+    );
+  };
+  const provenBy = (result) => {
+    assert.equal(result.unresolved.length, 0, JSON.stringify(result.unresolved));
+    assert.deepEqual(result.stamps.map(({ part, sinkKind }) => [part, sinkKind]), [['caller', 'canonical-forwarder']]);
+    return result.stamps[0].provenance.forwardingProof;
+  };
+  const rejectedFor = (result) => {
+    assert.deepEqual(result.stamps, []);
+    assert.equal(result.unresolved.length, 1, JSON.stringify(result.unresolved));
+    const { reason } = result.unresolved[0].provenance;
+    assert.doesNotMatch(reason, /sync-engine-switch-complete/);
+    assert.equal(evaluateDataPartUnresolved(result.unresolved).ok, false);
+    return reason;
+  };
+
+  // Each engine keeps its OWN terminal (C3), so the aggregate never launders a
+  // weaker member. A named record and an inline literal are the same proof.
+  const expected = 'sync-engine-switch-complete:' +
+    'classic=rest-spread-intrinsic:div+modern=rest-spread-intrinsic:div+rustic=rest-spread-intrinsic:div';
+  assert.equal(provenBy(probe()), expected);
+  assert.equal(provenBy(probe({ named: false })), expected);
+
+  // A record short of the implemented roster, carrying a foreign key, or
+  // declaring an absence is not a switch over the roster.
+  assert.match(
+    rejectedFor(probe({ record: '{ classic: ClassicSwitched, modern: ModernSwitched }' })),
+    /factory-return-unproven/,
+  );
+  assert.match(
+    rejectedFor(probe({
+      record: '{ classic: ClassicSwitched, modern: ModernSwitched, rustic: RusticSwitched, custom: ModernSwitched }',
+    })),
+    /factory-return-unproven/,
+  );
+  assert.match(
+    rejectedFor(probe({ record: '{ classic: ClassicSwitched, modern: ModernSwitched, rustic: null }' })),
+    /sync-engine-switch-incomplete\[rustic:unsupported-NullKeyword\]/,
+  );
+
+  // The pin holds the factory to its own obligation: a factory that strips the
+  // part out of its bag, or overrides it at the root, stops being trustworthy
+  // for every family that switches through it.
+  assert.match(
+    rejectedFor(probe({
+      factory: CANONICAL_FACTORY.replace(
+        'const { engine: _engine, ...componentProps } = props;',
+        "const { engine: _engine, 'data-part': _part, ...componentProps } = props;",
+      ),
+    })),
+    /part-stripped-carrier-spread/,
+  );
+  assert.match(
+    rejectedFor(probe({
+      factory: CANONICAL_FACTORY.replace(
+        '<Component {...componentProps} ref={ref} />',
+        '<Component {...componentProps} data-part="factory" ref={ref} />',
+      ),
+    })),
+    /spread-overridden-by-literal/,
+  );
+
+  // And the pin is by OWNER MODULE, not by the imported name: the identical
+  // source declared anywhere else proves nothing.
+  assert.match(
+    rejectedFor(probe({ factoryOwner: '/repo/src/components/primitives/layout/switched/local-factory' })),
+    /factory-return-unproven/,
+  );
+});
+
+test('GAT07 engine documentation requirements are roster-derived and discriminating', () => {
+  const roster = [
+    { slug: 'rottay', name: 'Rottay', engine: 'modern' },
+    { slug: 'bithire', name: 'BitHire', engine: 'modern' },
+    { slug: 'evnto', name: 'Evnto', engine: 'modern' },
+  ];
+  const requirements = verticalDocumentationRequirements(roster, 'modern');
+  const doc = readFileSync(join(DOCS_ROOT, 'engineering/design-system/runtime/engines/README.md'), 'utf8');
+  const occurrences = (haystack, needle) => haystack.split(needle).length - 1;
+  // Each required line must be present EXACTLY once: a marker that matches more
+  // than one row is not a fence, it is a coincidence.
+  for (const line of requirements.engines) {
+    assert.equal(occurrences(doc, line), 1, line);
+  }
+  // Modern is the only productive engine and Classic is frozen: the pre-WO-EVI-04
+  // "Stable" roles must never come back without this gate being re-adjudicated.
+  assert.equal(occurrences(doc, '| Classic | `classic` | Ant Design 5 (`antd`) | Stable | -- |'), 0);
+  assert.equal(occurrences(doc, 'Rottay-native premium skin | Stable, **PRIMARY** |'), 0);
+  // The requirement is discriminating in both directions: drift the doc and the
+  // line stops being found, which is exactly how measureVerticals fails closed.
+  const drifted = doc.replace('Frozen, fail-closed', 'Stable');
+  assert.equal(occurrences(drifted, requirements.engines[0]), 0);
+  // The roster authors everything it can author; only the engine ROLE is literal.
+  assert.deepEqual(
+    verticalDocumentationRequirements([{ slug: 'solo', name: 'Solo', engine: 'modern' }], 'modern').engines[1],
+    '| Modern | `modern` | Rottay-native premium skin | **PRIMARY, and the only productive engine** | Solo vertical presets |',
   );
 });

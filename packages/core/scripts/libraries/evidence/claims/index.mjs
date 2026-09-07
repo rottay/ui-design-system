@@ -1665,6 +1665,15 @@ export function extractRosterProjectedRegistryFacts(text, fileName, options) {
  *      reaches a rendered element, descending every engine of an
  *      engine-switched component.
  *
+ * A family reaches its engines through one of two switches, and both are
+ * descended per engine. The lazy factory carries an inline
+ * `{ engine: () => import('./engines/<engine>') }` literal and is recognised by
+ * that shape. The synchronous factory carries a named implementation record and
+ * has no self-identifying shape, so it is recognised by a pin instead: the
+ * callee must resolve to the owning declaration, that declaration must still
+ * carry the caller's part to its own render root, and the record must be TOTAL
+ * over the implemented roster.
+ *
  * Forwarding evidence terminates at the render root the carrier is spread onto.
  * An intrinsic DOM element is the strong terminal. A render root that provably
  * originates in a third-party package (a bare specifier this package cannot
@@ -1729,6 +1738,37 @@ const PINNED_STAMP_HELPERS = {
     partArgumentIndex: 0,
   },
 };
+
+/**
+ * The synchronous engine-switch factory, pinned by the module that owns the
+ * declaration rather than by the imported name. It is the non-suspending
+ * sibling of the lazy `() => import()` map: the switch reaches the same
+ * per-engine implementations, so it proves the same thing, but the record is a
+ * named const rather than an inline literal and the call carries no shape a
+ * reader could recognise on its own.
+ *
+ * The pin is therefore stricter than the lazy path in two ways: the callee must
+ * resolve to THIS module's declaration, and the record must be TOTAL over the
+ * implemented roster. A record short of the roster, carrying a foreign key, or
+ * declaring an absence (`null`) proves nothing.
+ */
+const PINNED_ENGINE_SWITCH_FACTORIES = {
+  createSyncEngineComponent: {
+    ownerModule: '/src/infrastructure/runtime/engines/presentation/component-factory/sync',
+    implementationsArgumentIndex: 1,
+  },
+};
+
+/**
+ * The factory's OWN forwarding obligation, checked once at the pin: the
+ * caller's part-carrying bag must still reach the render root, leaving the
+ * switched tag as the single unproven step the call site then supplies. A
+ * factory that strips `data-part` out of its rest bag, or overrides it at the
+ * root, defeats the root instead and stops matching — so the pin refuses and
+ * every family that switches through it falls to the unresolved channel.
+ */
+const SYNC_ENGINE_FACTORY_TAG_GAP =
+  /^factory-return-unproven\[no-forwarding-evidence\[root-drops-part:spread-tag:/;
 
 const ANALYSIS_PACKAGE_ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url))).replaceAll('\\', '/');
 
@@ -1958,6 +1998,70 @@ function createForwarderProver({ workspacePackageRoot, readModule }) {
     const binding = valueBinding(module.bindings, callee.text);
     if (binding?.kind !== 'import') return null;
     return resolveHelperPin(module.dir, binding.importSource, binding.importedName);
+  }
+
+  /**
+   * Resolve a pinned engine-switch factory import to its owning declaration,
+   * then hold that declaration to its own forwarding obligation before the
+   * switch it performs may be trusted.
+   */
+  function resolveEngineSwitchFactoryPin(module, callee, depth) {
+    const binding = valueBinding(module.bindings, callee.text);
+    if (binding?.kind !== 'import') return null;
+    const pin = PINNED_ENGINE_SWITCH_FACTORIES[binding.importedName];
+    if (!pin) return null;
+    const base = resolveSpecifier(module.dir, binding.importSource ?? '');
+    const target = base ? loadModule(base) : null;
+    const resolved = target ? resolveExportValue(target, binding.importedName, depth + 1) : null;
+    if (!resolved) return null;
+    const owner = resolved.module.path.replace(/\.(?:ts|tsx)$/, '').replace(/\/index$/, '');
+    if (!owner.endsWith(pin.ownerModule)) return null;
+    const declaration = unwrap(resolved.node);
+    if (
+      !declaration || !(ts.isFunctionDeclaration(declaration) || ts.isFunctionExpression(declaration) ||
+        ts.isArrowFunction(declaration))
+    ) {
+      return null;
+    }
+    const forwarding = proveFactoryReturn(resolved.module, declaration, depth + 1);
+    if (!forwarding.proven && !SYNC_ENGINE_FACTORY_TAG_GAP.test(forwarding.reason)) return null;
+    return { ...pin, ownerModule: owner };
+  }
+
+  /**
+   * `createSyncEngineComponent(name, implementations)`. The record must be a
+   * static object literal — inline or a resolvable const — that is TOTAL over
+   * the implemented roster; every value is then proven as a component in its
+   * own right, so each engine's terminal stays visible (C3).
+   */
+  function syncEngineSwitchImplementations(module, call, depth) {
+    const callee = unwrap(call.expression);
+    if (!callee || !ts.isIdentifier(callee)) return null;
+    const pin = resolveEngineSwitchFactoryPin(module, callee, depth);
+    if (!pin) return null;
+    const argument = call.arguments[pin.implementationsArgumentIndex];
+    const record = argument ? unwrap(argument) : null;
+    if (!record) return null;
+    let owner = module;
+    let literal = record;
+    if (ts.isIdentifier(record)) {
+      const resolved = resolveValueDeclaration(module, record.text, depth + 1);
+      if (!resolved) return null;
+      owner = resolved.module;
+      literal = unwrap(resolved.node);
+    }
+    if (!literal || !ts.isObjectLiteralExpression(literal)) return null;
+    const entries = [];
+    for (const property of literal.properties) {
+      if (!ts.isPropertyAssignment(property)) return null;
+      const engine = staticPropertyName(property.name);
+      if (!engine || !CANONICAL_ENGINE_NAMES.includes(engine)) return null;
+      entries.push({ engine, node: property.initializer });
+    }
+    const covered = new Set(entries.map((entry) => entry.engine));
+    if (covered.size !== entries.length) return null;
+    if (!CANONICAL_ENGINE_NAMES.every((engine) => covered.has(engine))) return null;
+    return { module: owner, entries };
   }
 
   function referencesCarrier(node, carriers, seen = new Set()) {
@@ -2707,6 +2811,24 @@ function createForwarderProver({ workspacePackageRoot, readModule }) {
           : {
             proven: false,
             reason: `engine-switch-incomplete[${engines[failed].engine}:${results[failed].reason}]`,
+          };
+      }
+      const sync = syncEngineSwitchImplementations(module, expression, depth);
+      if (sync) {
+        const results = sync.entries.map((entry) => proveComponentValue(sync.module, entry.node, depth + 1));
+        const failed = results.findIndex((result) => !result.proven);
+        return failed === -1
+          ? {
+            proven: true,
+            mechanism: 'sync-engine-switch-complete',
+            detail: sync.entries
+              .map((entry, index) => `${entry.engine}=${proofSummary(results[index])}`)
+              .sort()
+              .join('+'),
+          }
+          : {
+            proven: false,
+            reason: `sync-engine-switch-incomplete[${sync.entries[failed].engine}:${results[failed].reason}]`,
           };
       }
       const callee = unwrap(expression.expression);
