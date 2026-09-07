@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "600dff3a72931c87e2c9734b6f981314ec32f779ab1caafea6137c02d0be0919",
+    "authorityDigest": "3454b1c1315dbdda190347d44664bbe536e3e232b20d52e6afa6abf8a57c16ce",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "8944a4f90baf1bd719ed20e1eed17c2700136466",
+    "documentationRevision": "e048d2f9b5c5bf1684445792f5d7b732d6f3ba5b",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -125,8 +125,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 22484,
-        "sha256": "0974ba29dfb8d1009338de8f41552d052ac450ec704036d6463c294fc13008ad"
+        "bytes": 21655,
+        "sha256": "fa35e72052392752b0c7317db69e3e41e1ef7941166f80650f2a8598a21831c5"
       },
       {
         "path": "docs-engineering/engineering/design-system/components/surfaces/README.md",
@@ -134,8 +134,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 7396,
-        "sha256": "ee2fe80eefb3b4e4a7125ca93724c98b90b476927819b0171c073a74bde03b2a"
+        "bytes": 7411,
+        "sha256": "e314d2c46a2ca4750f38a0bad7dad49a5241ce27d8d8c18a4ad24d2823d158a7"
       },
       {
         "path": "docs-engineering/engineering/design-system/foundations/contracts/README.md",
@@ -187,8 +187,8 @@
           "data-part-corpus",
           "documentation-seal"
         ],
-        "bytes": 176694,
-        "sha256": "5419f7a5b9ecfe31a3ea92dec20a447dede7e2aa0dfb13162ffd89336c2a6cff"
+        "bytes": 176180,
+        "sha256": "b250fc68cb5edd5db210c56538ab94221f726213326b740bc07680579032a739"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/tenancy/README.md",
@@ -324,7 +324,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "898cb5b46bf891e54481443755c4bca7110dd6100cd55786ffd99763d37e12af"
+        "sha256": "90015868f2fcecabc309794b26b5bee878b0c64d6680d88a68667008d2745530"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -40517,7 +40517,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "600dff3a72931c87e2c9734b6f981314ec32f779ab1caafea6137c02d0be0919"
+    "digest": "3454b1c1315dbdda190347d44664bbe536e3e232b20d52e6afa6abf8a57c16ce"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (3318 counters; 3219 completed zeros locked exactly; 90 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
@@ -41883,7 +41883,7 @@
           "claims": [
             "surface-profile-overrides"
           ],
-          "sha256": "ee2fe80eefb3b4e4a7125ca93724c98b90b476927819b0171c073a74bde03b2a",
+          "sha256": "e314d2c46a2ca4750f38a0bad7dad49a5241ce27d8d8c18a4ad24d2823d158a7",
           "blocks": [
             {
               "claimId": "surface-profile-overrides",
@@ -41919,16 +41919,16 @@
           "claims": [
             "surface-profile-overrides"
           ],
-          "sha256": "0974ba29dfb8d1009338de8f41552d052ac450ec704036d6463c294fc13008ad",
+          "sha256": "fa35e72052392752b0c7317db69e3e41e1ef7941166f80650f2a8598a21831c5",
           "blocks": [
             {
               "claimId": "surface-profile-overrides",
-              "line": 253,
+              "line": 241,
               "sha256": "1d9f7f72afb78b9f32a880ed0682034c1b1a8f8d44cac0fe9761a325e54960df"
             },
             {
               "claimId": "surface-profile-overrides",
-              "line": 251,
+              "line": 239,
               "sha256": "e17d652eb1f683e087cb8f1feb30a91c8c7d2d7024fd76ea85ccb999946a9aef"
             }
           ]
@@ -42090,7 +42090,7 @@
     ],
     "documentation": {
       "path": "docs-engineering/engineering/design-system/runtime/skins/data-part-contracts/README.md",
-      "sha256": "5419f7a5b9ecfe31a3ea92dec20a447dede7e2aa0dfb13162ffd89336c2a6cff"
+      "sha256": "b250fc68cb5edd5db210c56538ab94221f726213326b740bc07680579032a739"
     },
     "documentedEntries": 542,
     "inspectedSourceFiles": 404,
@@ -113879,8 +113879,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "1e172e4f4a7965bf3cc654eb99ba2dbc7bb5b9da7c52700a01ecbba1e3e931d0",
-      "1e172e4f4a7965bf3cc654eb99ba2dbc7bb5b9da7c52700a01ecbba1e3e931d0"
+      "7b5e4c22be0ca2b1a4aff8bf71f10f59ea40b8c5fdfa0957731513abb2794f23",
+      "7b5e4c22be0ca2b1a4aff8bf71f10f59ea40b8c5fdfa0957731513abb2794f23"
     ],
     "agree": true
   }
