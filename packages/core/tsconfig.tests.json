@@ -16,7 +16,15 @@
       "@types/*": ["./src/foundation/contracts/*"],
       "@ui/*": ["./src/components/*"],
       "@checks/*": ["./scripts/check/*"],
-      "@tests/*": ["./tests/*"]
+      "@tests/*": ["./tests/*"],
+      // The consumer fixture (tests/integration/consumer) is authored against
+      // the PACKAGE NAME, the way an application authors it. Inside the package
+      // the same three names resolve to the sources the published entrypoints
+      // are built from, so `typecheck:tests` reads the fixture against the real
+      // signatures instead of an unresolved module.
+      "@rottay/design-system": ["./src/index.ts"],
+      "@rottay/design-system/server": ["./src/entrypoints/server/index.ts"],
+      "@rottay/design-system/icons": ["./src/entrypoints/icons/index.ts"]
     }
   },
   "include": [

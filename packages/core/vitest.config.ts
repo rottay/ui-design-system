@@ -105,6 +105,14 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      // The two PUBLIC specifiers, first so the '@' prefix below cannot claim
+      // them. The consumer fixture (tests/integration/consumer) is written the
+      // way an application writes it, against the package name; inside the
+      // package that name resolves to the sources the published entrypoints
+      // are built from, so a signature change is red without a build.
+      '@rottay/design-system/icons': resolve(__dirname, './src/entrypoints/icons/index.ts'),
+      '@rottay/design-system/server': resolve(__dirname, './src/entrypoints/server/index.ts'),
+      '@rottay/design-system': resolve(__dirname, './src/index.ts'),
       '@': resolve(__dirname, './src'),
       '@ui': resolve(__dirname, './src/components'),
       '@checks': resolve(__dirname, './scripts/check'),
