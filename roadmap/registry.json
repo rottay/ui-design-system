@@ -4959,7 +4959,7 @@
    "lane": "consumer-contract",
    "order": 4,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CON-01",
     "WO-CON-02",
@@ -4970,9 +4970,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1 (milestone A); closes n/a",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-k3-dt",
+   "claimedAt": "2026-09-07",
+   "progressLog": [],
+   "doneAt": "2026-09-07",
+   "evidence": "milestone A exit gate complete: consumer fixture (tests/integration/consumer — a real application: mounts via mountTenantTheme, writes a v2 document through the door, sanctioned surface only, passes the lint rule) landed 87d19b9e; bithire migration packet (X-01..X-06 restricted to bithire, codemods named and verified, root-specifier truth per auditor correction, PNG visual evidence pinned to ref dbe18dea) + evnto/platform deferral stubs; post-build consumer-proof gate (6 legs, 4 drilled classes) registered blocking in b607cef60 (post-build 21->23, both entries PASS in the runner inventory); planted mountTenantTheme signature change turns fixture and gate red (independently reproduced by the auditor); orphaned Playwright baselines removed per auditor condition. docs-engineering e048d2f9 retires OAuthTransitionScreen/OnboardingSurface from current docs (delta audit PASS). Audits: main PASS, docs v2 PASS, rebase delta PASS, registration delta PASS"
   },
   {
    "id": "WO-CON-05",
