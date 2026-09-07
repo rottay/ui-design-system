@@ -72,6 +72,28 @@ describe('Tour modern engine — chrome carries no static inline geometry or uti
     expect(el.style.maxWidth).toBe('');
   });
 
+  it('declares only measured geometry inline on the surface, never paint', () => {
+    render(
+      <div>
+        <div id="ret02-tour-anchor">Anchor</div>
+        <ModernTour open steps={[{ target: '#ret02-tour-anchor', title: 'Anchored step' }]} />
+      </div>,
+    );
+
+    // The surface spreads the certified `overlay.positionStyle` (position/inset
+    // only) beside its z-index band. Anything from the paint vocabulary landing
+    // here means the skin stopped owning the material.
+    const el = surface();
+    const declared = Array.from({ length: el.style.length }, (_, i) => el.style.item(i));
+    for (const property of declared) {
+      expect(property).not.toMatch(
+        /^(background|border|outline|color|box-shadow|text-shadow|fill|stroke|accent-color|filter|backdrop-filter|-webkit-backdrop-filter|transform)/,
+      );
+    }
+    // Non-vacuity: an empty declaration list would satisfy the loop above.
+    expect(declared).toContain('z-index');
+  });
+
   it('renders the close button with an accessible name and no inline geometry', () => {
     render(<ModernTour open mask={false} steps={[{ title: 'Only step' }]} />);
 

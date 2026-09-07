@@ -218,7 +218,7 @@ const ModernTourChrome = ({
     restoreFocus: false,
     onDismiss: handleTourEscape,
   });
-  const { strategy, positionStyle, layerProps } = overlay;
+  const { strategy, layerProps } = overlay;
 
   const maskStyle = typeof mask === 'object' ? mask.style : {};
   // Written as a statement, not a ternary: `mask.color : <default>` reads as an
@@ -312,7 +312,7 @@ const ModernTourChrome = ({
         style={{
           zIndex: zIndex + 2,
           ...(targetEl
-            ? positionStyle
+            ? overlay.positionStyle
             : { position: 'fixed' as const, top: '50%', left: '50%' }),
         }}
       >

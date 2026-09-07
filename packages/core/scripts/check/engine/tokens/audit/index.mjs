@@ -2092,24 +2092,29 @@ const files = modernFiles(componentsDir);
  * the `--gat07-evasion-fixture` seam below and used by this gate's own
  * injection drill (`tests/theme-css-consumers`).
  *
- * The fixture is appended to the modern-engine consumer corpus and read by the
- * SAME `buildConsumedClassSet()` the production counter uses -- no toy second
- * scanner, and no test-only counter in the baseline. It exists because
- * `themeCss.unreferencedSelectors` is a computed classification: a scanner
+ * The fixture is appended to ONE engine's consumer corpus -- chosen by
+ * `--themecss-consumer-engine=modern|classic|rustic`, default `modern` -- and
+ * read by the SAME `buildConsumedClassSet()` the production counter uses (the
+ * shared `auditEngineTheme()` scan, for every engine): no toy second scanner,
+ * and no test-only counter in the baseline. It exists because every
+ * `themeCss.*` dead-selector figure is a computed classification: a scanner
  * that stopped classifying, or one that classified a `//` comment as a render
  * site, reports a plausible number and looks exactly like a clean tree. It
  * reported 0 for months for precisely that reason.
  *
- * Normal runs pass no fixture and behave identically.
+ * The engine selector exists because the modern plane is now DRAINED
+ * (`themeCss.unreferencedSelectors === 0`, WO-RET-02, 2026-09-07), so a
+ * modern-plane injection has nothing left to lower and a drill anchored there
+ * can only assert a floor. The frozen engines still carry a large, stable
+ * dead-selector population, which is a measurement plane that stays usable
+ * without ever asking anyone to keep dead rules alive on the productive one.
+ *
+ * The flags are read here and applied where every engine corpus exists, through
+ * a record keyed by engine name -- never a branch chain, which would be a second
+ * roster. Normal runs pass no fixture and behave identically.
  */
 const themeCssConsumerFixture = argumentValue('--themecss-consumer-fixture');
-if (themeCssConsumerFixture) {
-  const fixturePath = resolve(themeCssConsumerFixture);
-  if (!existsSync(fixturePath) || !statSync(fixturePath).isFile()) {
-    throw new Error(`themeCss consumer fixture does not exist: ${fixturePath}`);
-  }
-  files.push(fixturePath);
-}
+const themeCssConsumerEngine = argumentValue('--themecss-consumer-engine') ?? 'modern';
 
 // `DEBUG_DAISY_CONSUMERS=1` prints the per-file inventory behind
 // `daisy.classConsumers`: every counted file, the classes it renders, and the
@@ -2154,9 +2159,26 @@ const motion = countMotionLiterals(files);
 const effects = countEffectConsumers();
 const colorFiles = modernColorFiles(componentsDir);
 const color = countColorLiterals(colorFiles);
-const themeCssAudit = auditThemeCss(files);
 const classicFiles = collectEngineFiles(componentsDir, 'classic');
 const rusticFiles = collectEngineFiles(componentsDir, 'rustic');
+// Keyed by engine name rather than branched on it: a record is not a second
+// roster, and this seam must not restate one (engine-wiring-gate, ROSTER_OWNER).
+const themeCssConsumerCorpora = { modern: files, classic: classicFiles, rustic: rusticFiles };
+if (themeCssConsumerFixture) {
+  const corpus = themeCssConsumerCorpora[themeCssConsumerEngine];
+  if (!corpus) {
+    throw new Error(
+      `--themecss-consumer-engine must name one of the swept corpora ` +
+        `(${Object.keys(themeCssConsumerCorpora).join(', ')}), got: ${themeCssConsumerEngine}`,
+    );
+  }
+  const fixturePath = resolve(themeCssConsumerFixture);
+  if (!existsSync(fixturePath) || !statSync(fixturePath).isFile()) {
+    throw new Error(`themeCss consumer fixture does not exist: ${fixturePath}`);
+  }
+  corpus.push(fixturePath);
+}
+const themeCssAudit = auditThemeCss(files);
 const classicThemeAudit = auditEngineTheme(classicThemeCssPath, classicFiles, {
   // "ant-" (Ant Design 5.x component classes), "anticon" (Ant Design's icon-font class -- no
   // hyphen after "ant"), "slick-" (react-slick, vendored internally by antd's Carousel). All

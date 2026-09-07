@@ -6690,7 +6690,7 @@
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 461,
       "channels": 3584,
-      "sha256": "0183718b5e724bd0244d36f51b8b8c254ff25a8c98a6b417bd02135f58a99d8e",
+      "sha256": "17f2cb48464f23124bae80199873102ff7cdf670e76f021c39106867b3655e7e",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },

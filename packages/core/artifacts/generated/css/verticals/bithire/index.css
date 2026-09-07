@@ -20103,126 +20103,29 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* =============================================================================
    BUTTON - .btn
    ============================================================================= */
-
-[data-engine='modern'] .btn {
-  font-family: var(--ds-font-family-base);
-  font-weight: var(--ds-button-font-weight);
-  border-radius: var(--ds-button-md-radius);
-  transition: var(--ds-button-transition);
-  height: var(--ds-button-md-height);
-  min-height: var(--ds-button-md-height);
-  padding-left: var(--ds-button-md-padding-x);
-  padding-right: var(--ds-button-md-padding-x);
-  font-size: var(--ds-button-md-font-size);
-  text-transform: none;
-  letter-spacing: normal;
-  will-change: transform;
-}
-
-[data-engine='modern'] .btn:focus-visible {
-  box-shadow: var(--ds-button-focus-ring);
-  outline: none;
-}
-
-[data-engine='modern'] .btn:hover:not(:disabled) {
-  transform: var(--ds-button-hover-transform, translateY(0) scale(1));
-}
-
-[data-engine='modern'] .btn:active:not(:disabled) {
-  transform: var(--ds-button-active-transform, scale(0.98));
-}
-
-/* Primary Button */
-[data-engine='modern'] .btn-primary {
-  background-color: var(--ds-button-primary-bg);
-  border-color: var(--ds-button-primary-border);
-  color: var(--ds-button-primary-color);
-  box-shadow: var(--ds-button-primary-shadow);
-}
-
-[data-engine='modern'] .btn-primary:hover:not(:disabled) {
-  background-color: var(--ds-button-primary-bg-hover);
-  border-color: var(--ds-button-primary-bg-hover);
-  /* Not every artifact declares the hover shadow, and a bare read would drop the whole
-     declaration rather than fall back to the governed elevation. */
-  box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-shadow-md));
-  transform: var(--ds-button-hover-transform, translateY(0) scale(1));
-}
-
-[data-engine='modern'] .btn-primary:active:not(:disabled) {
-  background-color: var(--ds-button-primary-bg-active);
-  transform: var(--ds-button-active-transform, scale(0.98));
-}
-
-/* Ghost Button */
-[data-engine='modern'] .btn-ghost {
-  background-color: var(--ds-button-ghost-bg);
-  border-color: var(--ds-button-ghost-border);
-  color: var(--ds-button-ghost-color);
-}
-
-[data-engine='modern'] .btn-ghost:hover:not(:disabled) {
-  background-color: var(--ds-button-ghost-bg-hover);
-  color: var(--ds-button-ghost-color-hover);
-  transform: var(--ds-button-hover-transform, translateY(0) scale(1));
-}
-
-[data-engine='modern'] .btn-ghost:active:not(:disabled) {
-  background-color: var(--ds-button-ghost-bg-active);
-  color: var(--ds-button-ghost-color-active);
-  transform: var(--ds-button-active-transform, scale(0.98));
-}
+/* Bridge removed (WO-RET-02 drain): no modern engine emits the Daisy
+   `.btn`/`.btn-primary`/`.btn-ghost` classes. Button paints from
+   `skin/button.css` (`.rottay-button--modern`) and FloatButton from
+   `skin/float-button.css`; both keep the `--ds-button-*` channels this bridge
+   referenced (size, radius, transition, focus ring, hover/active transforms
+   and the primary/ghost colour ramps) in their fallback chains. */
 
 /* =============================================================================
    CHECKBOX - .checkbox
    ============================================================================= */
-
-[data-engine='modern'] .checkbox {
-  width: var(--ds-checkbox-size);
-  height: var(--ds-checkbox-size);
-  border-color: var(--ds-checkbox-border);
-  border-radius: var(--ds-checkbox-radius);
-  transition: var(--ds-transition-fast);
-}
-
-[data-engine='modern'] .checkbox:hover:not(:disabled) {
-  border-color: var(--ds-checkbox-border-hover);
-}
-
-[data-engine='modern'] .checkbox:checked {
-  background-color: var(--ds-checkbox-checked-bg);
-  border-color: var(--ds-checkbox-checked-border);
-}
-
-[data-engine='modern'] .checkbox:focus-visible {
-  box-shadow: var(--ds-checkbox-focus-ring);
-  outline: none;
-}
+/* Bridge removed (WO-RET-02 drain): the modern Checkbox engine emits
+   `.ds-checkbox--modern`, never the Daisy `.checkbox` class — skin/checkbox.css
+   is the single paint owner. It reads a finer channel set than this bridge did
+   (`--ds-checkbox-focus-ring-{color,width,offset}` rather than the composite
+   `--ds-checkbox-focus-ring`). */
 
 /* =============================================================================
    RADIO - .radio
    ============================================================================= */
-
-[data-engine='modern'] .radio {
-  width: var(--ds-radio-size);
-  height: var(--ds-radio-size);
-  border-color: var(--ds-radio-border);
-  transition: var(--ds-transition-fast);
-}
-
-[data-engine='modern'] .radio:hover:not(:disabled) {
-  border-color: var(--ds-radio-border-hover);
-}
-
-[data-engine='modern'] .radio:checked {
-  background-color: var(--ds-radio-checked-bg);
-  border-color: var(--ds-radio-checked-border);
-}
-
-[data-engine='modern'] .radio:focus-visible {
-  box-shadow: var(--ds-radio-focus-ring);
-  outline: none;
-}
+/* Bridge removed (WO-RET-02 drain): the modern Radio engine emits
+   `.ds-radio--modern`, never the Daisy `.radio` class — skin/radio.css is the
+   single paint owner. It reads a finer channel set than this bridge did
+   (`--ds-radio-checked-dot` and `--ds-radio-focus-ring-{color,width,offset}`). */
 
 /* MODAL — bridge drained. AlertDialog was the last modern consumer of the
    Daisy `.modal-box`/`.modal-backdrop`/`.modal-action` classes; it now paints

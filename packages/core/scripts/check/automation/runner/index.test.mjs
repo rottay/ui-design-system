@@ -91,13 +91,14 @@ test('DRILL: a malformed run argv is rejected', () => {
 test('every excluded gate names its reason and its owner', () => {
   const excluded = CI_GATES.filter((g) => !g.blocking);
   // The pin is deliberate and adjudicated. `engine-token-audit` joined the
-  // list on 2026-09-05 (WO-CAN-02): closing the fail-open comment leak in its
-  // consumed-class scanner made `themeCss.unreferencedSelectors` measure the
-  // 18 dead DaisyUI rules it had been certifying as alive, and the ceiling
-  // stays at 0 rather than being widened to 18. Its drain is WO-RET-02.
+  // list on 2026-09-05 (WO-CAN-02) and LEFT it on 2026-09-07 (WO-RET-02 drain,
+  // correction packet #2): the 18 dead DaisyUI rules its honest scanner had
+  // started measuring are deleted, `themeCss.unreferencedSelectors` reads 0,
+  // and the ceiling was never widened -- so the stated return condition was met
+  // and the gate blocks again.
   assert.deepEqual(
     excluded.map((g) => g.id).sort(),
-    ['channel-liveness', 'engine-token-audit'],
+    ['channel-liveness'],
     'la lista de exclusiones cambio; adjudicala antes de moverla',
   );
   for (const gate of excluded) {

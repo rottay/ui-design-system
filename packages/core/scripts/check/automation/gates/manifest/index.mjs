@@ -204,40 +204,29 @@ export const CI_GATES = Object.freeze([
     'scripts/check/engine/tokens/audit/tests/runtime-svg/index.test.mjs',
     'scripts/check/engine/tokens/audit/tests/theme-css-consumers/index.test.mjs',
   ], blocking: true, phase: 'pre-build', drillFor: ['engine-token-audit'], },
-  // EXCLUDED 2026-09-05, WO-CAN-02, and this is a DEBT RECORD rather than a
-  // downgrade. `themeCss.unreferencedSelectors` read 0 next to
-  // `daisy.classConsumers: 0` -- two counters asserting opposite facts about
-  // the same stylesheet -- because the consumed-class scanner stripped only
-  // block comments and then swept every `.join(` block in a file whether or
-  // not it was reachable from a `className`. FloatButton's
-  // `getFloatButtonClassName` announces the DaisyUI DRAIN in a `//` comment
-  // naming `btn`, `btn-primary`, `btn-ghost`; that sentence certified the very
-  // rules it was announcing the death of.
+  // RE-ARMED 2026-09-07 (WO-RET-02 drain, correction packet #2). This entry was
+  // excluded on 2026-09-05 (WO-CAN-02) as a debt record, never as a downgrade:
+  // `themeCss.unreferencedSelectors` had read 0 next to `daisy.classConsumers:
+  // 0` -- two counters asserting opposite facts about the same stylesheet --
+  // because the consumed-class scanner stripped only block comments and then
+  // swept every `.join(` block in a file whether or not it was reachable from a
+  // `className`. FloatButton's `getFloatButtonClassName` announced the DaisyUI
+  // DRAIN in a `//` comment naming `btn`, `btn-primary`, `btn-ghost`; that
+  // sentence certified the very rules it was announcing the death of. With the
+  // scanner honest the counter measured 18.
   //
-  // With the scanner honest the counter measures 18: the `.btn*`, `.checkbox*`
-  // and `.radio*` rules still shipping in `modern/theme.css`. The ceiling in
-  // `baseline/index.json` STAYS AT 0 -- widening it to 18 would launder the
-  // finding the fix exists to expose, and WO-CAN-02's acceptance gate requires
-  // the counter to be positive until the rules are gone. Deleting them is
-  // WO-RET-02's write set, not this one's.
-  //
-  // The cost is stated rather than hidden: while this entry is excluded the
-  // other 3,325 counters are MEASURED and PRINTED on every run but do not
-  // block. The drill stays blocking, so the classifier itself cannot rot in
-  // the meantime. Return to blocking = the 18 rules drained, not the ceiling
-  // raised.
+  // The stated return condition was "the 18 rules drained, not the ceiling
+  // raised", and that is exactly what happened: the `.btn*`, `.checkbox*` and
+  // `.radio*` rules are gone from the modern engine's `theme/index.css`, the
+  // counter reads 0, and the ceiling in `baseline/index.json` is still 0 -- it
+  // was never widened. So the exclusion is retired rather than re-worded.
   {
     id: 'engine-token-audit',
     run: ['node', 'scripts/check/engine/tokens/audit/index.mjs', '--check'],
-    blocking: false,
+    blocking: true,
     phase: 'pre-build',
     drillId: 'engine-token-audit-drill',
     ratchet: 'scripts/check/engine/tokens/audit/baseline/index.json',
-    excluded: {
-      reason: 'themeCss.unreferencedSelectors measures 18 dead DaisyUI rules in modern/theme.css now that the fail-open comment leak is closed (WO-CAN-02). The ceiling stays 0 and is NOT widened; the drain is WO-RET-02. Every other counter still runs and is printed.',
-      owner: 'WO-RET-02 (roadmap/retire.md) -- delete the Daisy rules in modern/theme',
-      trackedSince: '2026-09-05',
-    },
   },
   // ARCHITECTURE §1.6: "a per-component channel with no path to any root is
   // debt, and the orphan count is a decrease-only ratchet". Este es ese

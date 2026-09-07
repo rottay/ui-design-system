@@ -240,3 +240,28 @@ test('the recovered static paint lives in wired, logical-property skins', () => 
     /\.ds-surface\.ds-accent-bar\[data-part='bar'\]\s*\{\s*display: none;\s*\}/
   );
 });
+
+test('the tour modern surface spreads its geometry through the certified overlay contract', () => {
+  const tour = component('primitives/overlay/tour/engines/modern/index.tsx');
+  assert.equal(countArc09PaintInFile(tour.source, tour.file), 0);
+
+  // What this pins. `useFieldOverlay` is a certified zero-paint producer whose
+  // `positionStyle` path carries positioning only, but the certification is
+  // path-keyed: pulling that path into a local binding
+  // (`const { positionStyle } = overlay`) severs it, the JSX spread becomes an
+  // opaque root and measured geometry is counted as component paint. Every
+  // sibling overlay -- popover, popconfirm, hover-card, context-menu --
+  // spreads `overlay.positionStyle` at the style site for this reason.
+  assert.match(tour.source, /\?\s*overlay\.positionStyle\b/);
+  assert.doesNotMatch(tour.source, /const\s*\{[^}]*\bpositionStyle\b[^}]*\}\s*=\s*overlay;/);
+
+  // Non-vacuity: the zero above must come from a counter that still classifies
+  // this file, not from one that stopped reading it. Real paint planted in the
+  // same style object has to be seen.
+  const painted = tour.source.replace(
+    '          zIndex: zIndex + 2,\n',
+    "          zIndex: zIndex + 2,\n          background: 'red',\n"
+  );
+  assert.notEqual(painted, tour.source);
+  assert.equal(countArc09PaintInFile(painted, tour.file), 1);
+});

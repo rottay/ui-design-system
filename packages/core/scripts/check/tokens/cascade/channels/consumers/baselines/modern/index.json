@@ -99,6 +99,14 @@
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
+    "--ds-checkbox-border-hover": {
+      "state": "consumed-frozen-only",
+      "reason": "composite channel superseded by the per-part channels the modern skin reads (finer set); the only Modern references were the dead Daisy bridge rules drained under WO-RET-02 on 2026-09-07; Classic/Rustic readers unaffected; never delete the channel"
+    },
+    "--ds-checkbox-checked-border": {
+      "state": "consumed-frozen-only",
+      "reason": "composite channel superseded by the per-part channels the modern skin reads (finer set); the only Modern references were the dead Daisy bridge rules drained under WO-RET-02 on 2026-09-07; Classic/Rustic readers unaffected; never delete the channel"
+    },
     "--ds-checkbox-checked-color": {
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
@@ -106,6 +114,10 @@
     "--ds-checkbox-error-color": {
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-checkbox-focus-ring": {
+      "state": "consumed-frozen-only",
+      "reason": "composite channel superseded by the per-part channels the modern skin reads (finer set); the only Modern references were the dead Daisy bridge rules drained under WO-RET-02 on 2026-09-07; Classic/Rustic readers unaffected; never delete the channel"
     },
     "--ds-checkbox-label-color-disabled": {
       "state": "consumed-frozen-only",
@@ -631,9 +643,17 @@
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
     },
+    "--ds-radio-checked-bg": {
+      "state": "consumed-frozen-only",
+      "reason": "composite channel superseded by the per-part channels the modern skin reads (finer set); the only Modern references were the dead Daisy bridge rules drained under WO-RET-02 on 2026-09-07; Classic/Rustic readers unaffected; never delete the channel"
+    },
     "--ds-radio-error-color": {
       "state": "consumed-frozen-only",
       "reason": "consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (contract/chrome channel emitted with no var() consumer in src; accepted debt pending a skin/component consumer or a contract removal)"
+    },
+    "--ds-radio-focus-ring": {
+      "state": "consumed-frozen-only",
+      "reason": "composite channel superseded by the per-part channels the modern skin reads (finer set); the only Modern references were the dead Daisy bridge rules drained under WO-RET-02 on 2026-09-07; Classic/Rustic readers unaffected; never delete the channel"
     },
     "--ds-radio-label-color-disabled": {
       "state": "consumed-frozen-only",
