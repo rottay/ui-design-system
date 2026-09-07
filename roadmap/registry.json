@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-06",
+ "updated": "2026-09-07",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -3977,7 +3977,7 @@
    "lane": "canon-close",
    "order": 4,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -3988,7 +3988,9 @@
    "notes": "wave 1; closes F-18, F-56, F-17",
    "claimedBy": "claude-opus-5-can-04",
    "claimedAt": "2026-09-05",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-07",
+   "evidence": "landed 64ff990b from audited candidate can-04-v2 a509f324 (tree 92661e9b, 118 paths, sole parent); independent K3 audit PASS after F1-F5 delta (rottay-can04-v2-kimi-k3-audit.md); acceptance 4/4, 3 new gates+drills non-vacuous, battery 119/18/2 vs HEAD 112/19/2 reproduced, all ratchets decrease-only, producers suite 185/33 set-exact, derived artifacts byte-identical; parallel customization paths removed: oauth-transition skin+bridge+probe deleted with death proofs"
   },
   {
    "id": "WO-CAN-05",
