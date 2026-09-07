@@ -2246,7 +2246,9 @@ test("a disagreement between two recorded denominators is published, not resolve
 test("family acceptance republishes the manifest's own rollup and never elevates it", () => {
   const acceptance = readFamilyAcceptance();
   assert.equal(acceptance.measured, true);
-  assert.equal(acceptance.families, 255);
+  assert.equal(acceptance.families, JSON.parse(fs.readFileSync(
+    new URL("../../../../packages/core/governance/manifest/index.json", import.meta.url), "utf8",
+  )).denominators.canonicalFamilies);
   const lines = familyAcceptanceLines(acceptance).join("\n");
   assert.ok(lines.includes(`${acceptance.accepted}/${acceptance.families} families accepted`));
   assert.match(lines, /SEALED/);

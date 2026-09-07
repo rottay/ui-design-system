@@ -37,8 +37,10 @@
  *              to open empty changesets, which is how the signal dies.
  *
  * THE `contract-diff` BLOCK is the single source for the STATUS "Contract diff"
- * section: the roadmap status tool imports the parser below rather than reading
- * the same grammar a second time. One grammar, one owner, two readers.
+ * section: the roadmap status tool spawns this file with `--emit-pending` and
+ * validates every field it republishes — it does NOT import the parser below,
+ * and it never reads the grammar a second time. One grammar, one owner, one
+ * boundary between them.
  *
  *   ```contract-diff
  *   subpath ./commercial — removed; the root barrel is the public way

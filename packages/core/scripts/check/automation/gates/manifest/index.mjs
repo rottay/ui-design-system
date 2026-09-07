@@ -45,6 +45,12 @@ export const CI_GATES = Object.freeze([
   // First: a workflow that references a script which does not exist cannot be
   // trusted to run anything below.
   { id: 'workflow-script-wiring', run: ['node', 'scripts/check/automation/wiring/workflows/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'workflow-script-wiring-drill', },
+  // Release discipline. The graded check is range-scoped — it needs the pull
+  // request merge base — so it runs in the `changeset` job of ci.yml. What
+  // belongs here is the proof that it has teeth, which needs no range at all.
+  { id: 'contract-changeset-drill', run: ['node', '--test', 'scripts/check/contract-changeset/tests/index.test.mjs'], blocking: true, phase: 'pre-build',
+    noDrillReason:
+      'This entry IS the drill for `contract-changeset`: it plants eight ranges in throwaway git repositories — a guaranteed-surface change with no changeset, one covered only by the changeset the base branch already carries, one with an unparseable declaration, one with a bump that declares nothing, a shipped change with no changeset, and the three that must stay green — and asserts each lands in the direction it declares. The graded check itself is range-scoped and lives in the `changeset` job of .github/workflows/ci.yml; registering it here would compare main to itself on every checkout and pass vacuously.', },
   // A named import of a binding the target module never publishes is `undefined`
   // at runtime and renders an invalid element. A deep-path import rewrite landed
   // 22 of them at once because the short alias for a compound primitive lives in
