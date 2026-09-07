@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "denominator": 255,
+  "denominator": 254,
   "authority": "source tree and public barrels; Showroom is a projection",
   "resolutionLaw": "Resolved by packages/core/scripts/check/evidence/framework/inventory-correspondence/index.mjs; regenerate with `node scripts/check/evidence/framework/cli/index.mjs inventory --write` rather than hand-editing a row.",
   "notes": [
     "OnboardingSurface is retired, not relocated. Its own source called it a \"thin onboarding specialization over WizardSurface\": it rendered nothing, mapped one config shape onto WizardSurfaceConfig and delegated the whole render. That is a config preset, not a family, and it made surface/forms/wizard declare two components for one owner. Source, contracts, tests, barrel export and the Showroom entry are gone; the Showroom slot it occupied now carries the real OAuthTransitionScreen row it had been substituting for.",
     "SemanticSurface is a canonical public primitive and occupies the former deprecated OverlayModal-alias row so the primitive denominator stays source-bound.",
-    "TreeViewConnector is the tree-view family’s static, server-safe presentation, not a second tree family. It used to be published from the visualization GROUP barrel through a deep path because the family barrel carried the family’s `use client` directive — a group barrel appropriating a grandchild’s export. The directive moved down to `tree-view/presentation/interactive`, the only presentation that needs it, so both presentations now publish through their own family owner and a server page still reaches the connector without crossing into client code.",
+    "TreeViewConnector is the tree-view family\u2019s static, server-safe presentation, not a second tree family. It used to be published from the visualization GROUP barrel through a deep path because the family barrel carried the family\u2019s `use client` directive \u2014 a group barrel appropriating a grandchild\u2019s export. The directive moved down to `tree-view/presentation/interactive`, the only presentation that needs it, so both presentations now publish through their own family owner and a server page still reaches the connector without crossing into client code.",
     "The former `commercial` layer is retired. `commercial` is a marketing adjective, and CLAUDE.md fixes exactly five family layers; its eleven rows were adjudicated individually rather than relabelled in bulk. Nine were reclassified by what they do (five primitives, three patterns, one structure), TreeView merged into the canonical tree-view family as TreeViewConnector, and ProductWindow left packages/core for the Showroom because it renders a product chrome mock, which is showcase material rather than reusable domain-agnostic capability.",
     "TableCheckboxStyles is retired, not relocated. It had no productive consumer anywhere in the monorepo, its own source declared itself a merge/retire candidate, and it shipped global CSS and keyframes from a mounted component -- a paint channel outside the token authority. Source, tests and barrel export are gone; the Showroom was deliberately NOT backfilled.",
-    "RecordContent was never a component. The retired row declared a `RecordContent` symbol that no module exports, and one `record/content` file published five separately consumed structures instead. The five rows briefly shared that generic owner, which forced every one of them to attribute all fourteen of the file's exports. The file is now split into five family folders under `structures/record` — summary-strip, field-grid, field, action-bar, panel — one owner per row, while the canonical family IDs remain record-summary-strip, record-field-grid, record-field, record-action-bar, record-panel. The seven pre-Checkpoint-D `Surface*` aliases were cut rather than carried: a production sweep found zero consumers.",
+    "RecordContent was never a component. The retired row declared a `RecordContent` symbol that no module exports, and one `record/content` file published five separately consumed structures instead. The five rows briefly shared that generic owner, which forced every one of them to attribute all fourteen of the file's exports. The file is now split into five family folders under `structures/record` \u2014 summary-strip, field-grid, field, action-bar, panel \u2014 one owner per row, while the canonical family IDs remain record-summary-strip, record-field-grid, record-field, record-action-bar, record-panel. The seven pre-Checkpoint-D `Surface*` aliases were cut rather than carried: a production sweep found zero consumers.",
     "primitive/feedback/notification is a composed capability, not a single component. No module exports a `Notification` symbol; the owner publishes the provider, the item, the hook and the imperative `notification` handle, and a consumer needs the set. The row names those four exactly rather than a fictitious umbrella name.",
     "OverlayModal is retired. The R0 census proved it JS-reference-identical to feedback/modal with no productive app consumer, so the alias export, its compatibility module and the Showroom entry are gone; portal, overlay and focus-trap utilities are now published from their real runtime owners."
   ],
@@ -18,7 +18,7 @@
     "pattern": 57,
     "primitive": 105,
     "structure": 39,
-    "surface": 36
+    "surface": 35
   },
   "rows": [
     {
@@ -6685,50 +6685,6 @@
       ],
       "declaredComponentsPublic": [
         "NotificationSurface"
-      ],
-      "declaredComponentsNotPubliclyNamed": [],
-      "sourceResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT"
-    },
-    {
-      "id": "surface/experience/oauth-transition",
-      "layer": "surface",
-      "category": "experience",
-      "family": "OAuthTransitionScreen",
-      "components": [
-        "OAuthTransitionScreen"
-      ],
-      "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/experience",
-      "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/experience/oauth-transition",
-      "resolvedBy": "folder-slug",
-      "layerProfile": "surface",
-      "layerProfileSignal": "page surface",
-      "divergenceProfile": "surface-canary",
-      "publicExports": [
-        "OAuthTransitionScreen",
-        "getOAuthTransitionApp",
-        "getOAuthTransitionDefaultVariant",
-        "getOAuthTransitionPool",
-        "getOAuthTransitionProvider",
-        "getOAuthTransitionVariant",
-        "isOAuthTransitionVariantId",
-        "isOAuthProvider",
-        "OAUTH_TRANSITION_VARIANT_ORDER",
-        "pickOAuthTransitionVariant",
-        "OAuthProvider",
-        "OAuthTransitionAppDefinition",
-        "OAuthTransitionAppId",
-        "OAuthTransitionFamily",
-        "OAuthTransitionPhase",
-        "OAuthTransitionPalette",
-        "OAuthTransitionProviderDefinition",
-        "OAuthTransitionScreenProps",
-        "OAuthTransitionState",
-        "OAuthTransitionTone",
-        "OAuthTransitionVariantDefinition",
-        "OAuthTransitionVariantId"
-      ],
-      "declaredComponentsPublic": [
-        "OAuthTransitionScreen"
       ],
       "declaredComponentsNotPubliclyNamed": [],
       "sourceResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT"

@@ -5,17 +5,21 @@
  * @description Runtime merge helper consumed by every config-driven surface.
  *
  * Merge precedence:
- * 1. Surface visual overrides (highest -- per-surface instance)
- * 2. Personality tokens
+ * 1. Tenant decisions (highest -- the resolved theme)
+ * 2. Admitted surface visual selections (per-surface instance)
  * 3. Product profile
  * 4. Fallback defaults (lowest)
  *
- * When no overrides are provided, the hook returns the base profile defaults unchanged.
+ * An instance selection is admitted only when the catalog models its value and
+ * the tenant left the channel it speaks for undecided, so a surface config can
+ * narrow a default but can never contradict the tenant. When nothing is
+ * admitted the hook returns the base profile defaults unchanged.
  *
- * @see wave-5-surface-expansion.md section 4
+ * @see SURFACE_VISUAL_OVERRIDE_CATALOG for the admitted domains and channels.
  */
 
 import { useMemo } from 'react';
+import { useTenantContext } from '@/infrastructure/runtime/tenant/foundation/context';
 import type { SurfaceVisualOverrides } from '../../../contracts';
 import {
   useSurfaceProfileDefaults,
@@ -24,32 +28,75 @@ import {
   type ResolvedSurfaceProfileDefaults,
   type SurfaceSectionSpacing,
 } from '..';
+import {
+  admitInstanceOverrides,
+  adjudicateInstanceOverrides,
+  resolveTenantDecidedChannels,
+  type SurfaceVisualOverrideVerdict,
+} from './catalog';
+
+export {
+  SURFACE_VISUAL_OVERRIDE_CATALOG,
+  SURFACE_VISUAL_OVERRIDE_FIELDS,
+  SURFACE_VISUAL_OVERRIDE_TENANT_CHANNELS,
+  adjudicateInstanceOverrides,
+  admitInstanceOverrides,
+  isAdmittedOverrideValue,
+  resolveTenantDecidedChannels,
+  type SurfaceVisualOverrideAdmission,
+  type SurfaceVisualOverrideVerdict,
+  type TenantPersonalityChannel,
+} from './catalog';
 
 /**
- * Resolve surface profile defaults with per-surface visual overrides.
+ * Adjudicate a surface's declared visual selections against the catalog and
+ * the active tenant, without applying them.
  *
- * When `overrides` is `undefined` or empty, the hook short-circuits and returns
- * the base defaults without allocating a new object.
+ * Exposed because a refusal is a product fact a customization surface has to
+ * be able to show ("this tenant already decided entrance motion"), and because
+ * the alternative is every caller re-deriving the tenant's decisions.
+ */
+export function useSurfaceVisualOverrideVerdicts(
+  overrides?: SurfaceVisualOverrides,
+): readonly SurfaceVisualOverrideVerdict[] {
+  const { config } = useTenantContext();
+  return useMemo(
+    () => adjudicateInstanceOverrides(overrides, resolveTenantDecidedChannels(config)),
+    [config, overrides],
+  );
+}
+
+/**
+ * Resolve surface profile defaults with the admitted per-surface visual
+ * selections applied.
  *
- * @param overrides - Optional visual overrides from a surface config's `visual.profileOverrides`.
- * @returns A memoized `ResolvedSurfaceProfileDefaults` with overrides applied.
+ * When `overrides` is `undefined`, or when every selection it declares is
+ * refused, the hook returns the base defaults without allocating a new object.
  *
+ * @param overrides - Optional visual selections from a surface config's `visual.profileOverrides`.
+ * @returns A memoized `ResolvedSurfaceProfileDefaults`.
  */
 export function useSurfaceProfileDefaultsWithOverrides(
   overrides?: SurfaceVisualOverrides
 ): ResolvedSurfaceProfileDefaults {
   const base = useSurfaceProfileDefaults();
+  const { config } = useTenantContext();
+
+  const admitted = useMemo(
+    () => admitInstanceOverrides(overrides, resolveTenantDecidedChannels(config)),
+    [config, overrides],
+  );
 
   return useMemo(() => {
-    if (!overrides) return base;
+    if (Object.keys(admitted).length === 0) return base;
 
-    // When density is overridden, derived values must be recalculated
+    // When density is admitted, derived values must be recalculated
     // to stay consistent with the new density level.
-    const density = overrides.density ?? base.density;
-    const densityChanged = overrides.density != null && overrides.density !== base.density;
+    const density = admitted.density ?? base.density;
+    const densityChanged = admitted.density != null && admitted.density !== base.density;
 
     const sectionSpacing: SurfaceSectionSpacing =
-      overrides.sectionSpacing ??
+      admitted.sectionSpacing ??
       (densityChanged
         ? (density === 'compact' ? 'sm' : density === 'spacious' ? 'lg' : 'md')
         : base.sectionSpacing);
@@ -64,21 +111,22 @@ export function useSurfaceProfileDefaultsWithOverrides(
       listCardMinWidth: densityChanged ? resolveListCardMinWidth(density) : base.listCardMinWidth,
       compareCompact: densityChanged ? density === 'compact' : base.compareCompact,
 
-      // Personality-token-driven visual hints (overridable per-surface)
-      cardVariant: overrides.cardVariant ?? base.cardVariant,
+      // Personality-token-driven visual hints (narrowable per-surface only on
+      // channels the tenant left open)
+      cardVariant: admitted.cardVariant ?? base.cardVariant,
       sectionSpacing,
-      headerWeight: overrides.headerWeight ?? base.headerWeight,
-      animateEntrance: overrides.animateEntrance ?? base.animateEntrance,
-      badgeShape: overrides.badgeShape ?? base.badgeShape,
-      labelStyle: overrides.labelStyle ?? base.labelStyle,
+      headerWeight: admitted.headerWeight ?? base.headerWeight,
+      animateEntrance: admitted.animateEntrance ?? base.animateEntrance,
+      badgeShape: admitted.badgeShape ?? base.badgeShape,
+      labelStyle: admitted.labelStyle ?? base.labelStyle,
       accentPosition: base.accentPosition,
       accentBarThickness: base.accentBarThickness,
       accentBarStyle: base.accentBarStyle,
-      entranceStyle: overrides.entranceStyle ?? base.entranceStyle,
-      entranceDuration: overrides.entranceDuration ?? base.entranceDuration,
-      staggerDelay: overrides.staggerDelay ?? base.staggerDelay,
-      countUpEnabled: overrides.countUpEnabled ?? base.countUpEnabled,
-      pulseSpeed: overrides.pulseSpeed ?? base.pulseSpeed,
+      entranceStyle: admitted.entranceStyle ?? base.entranceStyle,
+      entranceDuration: admitted.entranceDuration ?? base.entranceDuration,
+      staggerDelay: admitted.staggerDelay ?? base.staggerDelay,
+      countUpEnabled: admitted.countUpEnabled ?? base.countUpEnabled,
+      pulseSpeed: admitted.pulseSpeed ?? base.pulseSpeed,
     };
-  }, [base, overrides]);
+  }, [admitted, base]);
 }

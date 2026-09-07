@@ -121,7 +121,7 @@ const EXPECTED_COUNTS = Object.freeze({
   pattern: 57,
   chart: 18,
   structure: 39,
-  surface: 36,
+  surface: 35,
 });
 
 const EXPECTED_FAMILY_TOTAL = Object.values(EXPECTED_COUNTS).reduce((sum, n) => sum + n, 0);
@@ -798,8 +798,8 @@ function collectContractFailures(contracts) {
     if (program.status) {
       failures.push('program/index.json must not contain a shadow-state key status');
     }
-    if (program.denominators?.visibleFamilies !== 255) {
-      failures.push('program/index.json visibleFamilies must be 255');
+    if (program.denominators?.visibleFamilies !== EXPECTED_FAMILY_TOTAL) {
+      failures.push(`program/index.json visibleFamilies must be ${EXPECTED_FAMILY_TOTAL}`);
     }
     if (standardIds && program.controlBaselines?.standard !== standardIds.length) {
       failures.push(

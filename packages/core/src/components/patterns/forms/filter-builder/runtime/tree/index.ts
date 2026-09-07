@@ -27,12 +27,19 @@ export function isFilterRule(
 }
 
 /**
+ * A module counter, not a die roll: an id that differs between the server
+ * render and the client render is a hydration mismatch, and a filter tree is
+ * rendered from a config the server already knows.
+ */
+let filterIdSequence = 0;
+
+/**
  * Generates a unique string ID for new filter rules and groups.
- * Uses a timestamp + random suffix to avoid collisions without requiring
- * an external UUID library.
  *
- * @returns A unique string in the format `"f-{timestamp}-{random}"`.
+ * @returns A unique string in the format `"f-{n}"`, stable for a given
+ * sequence of creations.
  */
 export function generateFilterId(): string {
-  return `f-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  filterIdSequence += 1;
+  return `f-${filterIdSequence}`;
 }

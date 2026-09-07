@@ -44,12 +44,27 @@
     "law": "The DS and its reference lab are the only build and visual-certification target; deferred is a sequencing state, not a removal, and generic guarantees (fail-closed transport, exports contract) are preserved intact.",
     "bithire": {
       "role": "consumer-readiness-only",
-      "readiness": ["install-pin", "exports-imports", "build", "typecheck", "smoke"],
-      "forbiddenLots": ["migration", "adoption", "hardcode-drain", "canary-over-current-ui"],
+      "readiness": [
+        "install-pin",
+        "exports-imports",
+        "build",
+        "typecheck",
+        "smoke"
+      ],
+      "forbiddenLots": [
+        "migration",
+        "adoption",
+        "hardcode-drain",
+        "canary-over-current-ui"
+      ],
       "note": "BitHire will be fully rebuilt; no screen of its current UI is a destination or visual reference, and no BitHire semantics enter the DS."
     },
-    "appPlatform": { "disposition": "DEFERRED" },
-    "appEvnto": { "disposition": "DEFERRED" }
+    "appPlatform": {
+      "disposition": "DEFERRED"
+    },
+    "appEvnto": {
+      "disposition": "DEFERRED"
+    }
   },
   "f4cCanary": {
     "visibilityHours": 48,
@@ -69,12 +84,12 @@
     "preservation": "packages/core/scripts/generate/tokens/customization/preservation/manifest/index.json"
   },
   "denominators": {
-    "visibleFamilies": 255,
+    "visibleFamilies": 254,
     "primitives": 105,
     "patternsExcludingCharts": 57,
     "charts": 18,
     "structures": 39,
-    "pageSurfaces": 36
+    "pageSurfaces": 35
   },
   "controlBaselines": {
     "standard": 14,

@@ -266,11 +266,11 @@ const PLANES_NOT_SCANNED = [
       detail: [
         "ui/primitives/runtime/overlay/portal-scope/index.tsx:217 y ui/primitives/feedback/Modal/engines/modern/index.tsx:427 — `snapshot.variables` / `portalScope.variables`, construidos por readDsPortalVariables (ui/primitives/runtime/overlay/foundation/portal-theme/index.ts:11), que recorre el linaje del DOM y copia TODA custom property --ds-* resuelta.",
         "ui/primitives/display/Tooltip/engines/modern/index.tsx:401 y ui/primitives/overlay/Popover/engines/modern/index.tsx:328 — el mismo snapshot guardado en useState<DsPortalVariableStyle>.",
-        "infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx:571 — setProperty(name, value) iterando Object.entries(declarations), es decir la salida ya compilada de ts-compilers/ts-chrome-variables.",
+        "infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx:571 — setProperty(name, value) iterando Object.entries(declarations), es decir la salida ya compilada de ts-compilers/ts-chrome-variables. RETIRADO por WO-CAN-04: ese archivo ya no existe, asi que hoy quedan 6 relevos vivos; la fila se conserva porque el censo es del 2026-08-18 y no se reescribe.",
         "ui/patterns/visualization/charts/runtime/exporting/foundation/file/index.ts:205 y :208 — setProperty(prop, value) copiando estilo computado sobre un clon SVG de exportacion.",
       ],
       ruling:
-        "los siete son RELEVOS con dominio abierto en runtime: reestampan nombres que ya existen, y por construccion no pueden ORIGINAR un nombre que ningun plano produzca (el portal copia del DOM ya pintado; el bridge copia el mapa compilado; el exportador copia estilo computado). Por eso el censo 183 se declara CERRADO para origen, y no como cota inferior al estilo de las 3 emisiones interpoladas sin enumerador de ts-compilers/ts-chrome-variables. La premisa unica sobre la que descansa ese cierre queda escrita aqui: un relevo no origina.",
+        "los siete son RELEVOS con dominio abierto en runtime: reestampan nombres que ya existen, y por construccion no pueden ORIGINAR un nombre que ningun plano produzca (el portal copia del DOM ya pintado; el bridge copiaba el mapa compilado hasta que WO-CAN-04 lo borro; el exportador copia estilo computado). Por eso el censo 183 se declara CERRADO para origen, y no como cota inferior al estilo de las 3 emisiones interpoladas sin enumerador de ts-compilers/ts-chrome-variables. La premisa unica sobre la que descansa ese cierre queda escrita aqui: un relevo no origina.",
     },
     adjudicatedNonStamps: {
       sites: 19,
@@ -509,7 +509,7 @@ const AUTHORED_CENSUS = {
       status: "CERRADO PARA ORIGEN, no cota inferior",
       unresolvedSites: 7,
       why:
-        "los 7 sitios que el resolvedor no pudo cerrar tienen dominio abierto en runtime, pero los 7 son RELEVOS: el snapshot de portal copia custom properties ya resueltas del linaje del DOM (readDsPortalVariables), el bridge de css-variables reestampa el mapa ya compilado por los dos planos TS, y el exportador de charts copia estilo computado sobre un clon SVG. Un relevo no puede ORIGINAR un nombre que ningun plano produzca, asi que no pueden esconder canales sin productor. El listado esta en PLANES_NOT_SCANNED[2].unenumerableRelays.",
+        "los 7 sitios que el resolvedor no pudo cerrar tienen dominio abierto en runtime, pero los 7 son RELEVOS: el snapshot de portal copia custom properties ya resueltas del linaje del DOM (readDsPortalVariables), el bridge de css-variables reestampaba el mapa ya compilado por los dos planos TS hasta que WO-CAN-04 lo borro (quedan 6 sitios vivos), y el exportador de charts copia estilo computado sobre un clon SVG. Un relevo no puede ORIGINAR un nombre que ningun plano produzca, asi que no pueden esconder canales sin productor. El listado esta en PLANES_NOT_SCANNED[2].unenumerableRelays.",
       singlePremise:
         "todo el cierre descansa en una sola premisa, escrita para que se pueda atacar: un relevo no origina. Si alguien encuentra un canal vivo cuyo unico productor es uno de esos 7 sitios, la premisa cae y 183 pasa a ser cota inferior.",
       measuredZeroHole:

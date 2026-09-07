@@ -87,8 +87,8 @@ export const WithInitials: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-      {(['xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const).map((size) => (
-        <Avatar key={size} size={size} src={`https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 10)}`}>
+      {(['xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const).map((size, index) => (
+        <Avatar key={size} size={size} src={`https://i.pravatar.cc/150?img=${index + 1}`}>
           {size}
         </Avatar>
       ))}

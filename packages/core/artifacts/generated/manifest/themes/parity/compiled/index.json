@@ -3299,7 +3299,7 @@
       },
       {
         "root": "--ds-color-primary",
-        "channelsInCascade": 375,
+        "channelsInCascade": 370,
         "declaredByAny": 193,
         "declaredByAll": 34,
         "byTenant": {
@@ -6677,7 +6677,7 @@
     ]
   },
   "cascadeSeverance": {
-    "universe": 1026,
+    "universe": 1021,
     "roots": 38,
     "partition": "declaredInCascade = rootPinned + rootFrozen + severs + reDerives, por tenant",
     "exclusionRule": "Una raiz declarada por el tema queda fuera del reparto severs/reDerives, pero NO fuera de la medicion. Una semilla continua Standard autorada por tenant es rootPinned por autoridad del manifest. Fuera de esa autoridad, piso DERIVADO + al menos un modo sin var() = rootFrozen; piso LITERAL, piso AUSENTE o todos los modos parametricos = rootPinned.",
@@ -6688,9 +6688,9 @@
       "dir": "src/foundation/tokens/css",
       "excludes": "src/foundation/tokens/css/facade/artifacts/",
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
-      "files": 466,
-      "channels": 3578,
-      "sha256": "92991d3d2f98c8517288bbd1dbe85db24a2f08307e7b0ec51b81a231310d3e58",
+      "files": 461,
+      "channels": 3584,
+      "sha256": "0183718b5e724bd0244d36f51b8b8c254ff25a8c98a6b417bd02135f58a99d8e",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },
@@ -6965,7 +6965,7 @@
               "readerCount": 2,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 1005,
+                "line": 979,
                 "value": "var(--ds-color-primary-900)"
               }
             }
@@ -10873,7 +10873,7 @@
               "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 1005,
+                "line": 979,
                 "value": "var(--ds-color-primary-900)"
               }
             }
@@ -17174,7 +17174,7 @@
               "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 1005,
+                "line": 979,
                 "value": "var(--ds-color-primary-900)"
               }
             }

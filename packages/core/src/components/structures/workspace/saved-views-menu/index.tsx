@@ -94,6 +94,18 @@ export interface SavedViewsMenuProps {
    * the original Rottay-app extraction.
    */
   externalToggleEventName?: string;
+  /**
+   * Absolute base the shared snapshot links back to, e.g.
+   * `https://app.example.com/candidates`.
+   *
+   * The menu used to read the document location for this. A design-system
+   * structure that reads the document location assumes it is mounted on the
+   * page the view belongs to, which is false in a modal, an iframe, a preview
+   * and every server render; the app is the only owner that knows the
+   * canonical URL of its own screen. Without this prop the snapshot carries
+   * the query string alone, which still restores the view.
+   */
+  shareBaseUrl?: string;
 }
 
 const DEFAULT_TOGGLE_EVENT = 'entity-table-workspace:toggle-views-menu';
@@ -171,7 +183,11 @@ function cloneViewState(view: SavedViewsMenuEntry): SavedViewsMenuEntry['state']
   };
 }
 
-function buildShareSnapshot(view: SavedViewsMenuEntry, labels: SavedViewsMenuLabels): string {
+function buildShareSnapshot(
+  view: SavedViewsMenuEntry,
+  labels: SavedViewsMenuLabels,
+  baseUrl?: string,
+): string {
   const lines = [
     `${labels.shareViewPrefix}: ${view.label}`,
     `${labels.shareTypePrefix}: ${getViewKindLabel(view, labels)}`,
@@ -213,7 +229,9 @@ function buildShareSnapshot(view: SavedViewsMenuEntry, labels: SavedViewsMenuLab
   if (view.state.scope) query.set('scope', view.state.scope);
   if (view.state.query) query.set('query', view.state.query);
 
-  return `${lines.join('\n')}\n\n${typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}?${query.toString()}` : ''}`.trim();
+  const link = `${baseUrl ?? ''}?${query.toString()}`;
+
+  return `${lines.join('\n')}\n\n${link}`.trim();
 }
 
 export function SavedViewsMenu({
@@ -224,6 +242,7 @@ export function SavedViewsMenu({
   onViewSave,
   onSaveCurrentView,
   externalToggleEventName = DEFAULT_TOGGLE_EVENT,
+  shareBaseUrl,
 }: SavedViewsMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [panelPosition, setPanelPosition] = useState({ top: 0, left: 0, width: 420 });
@@ -356,7 +375,7 @@ export function SavedViewsMenu({
     if (!activeView || typeof navigator === 'undefined' || !navigator.clipboard?.writeText) return;
 
     try {
-      await navigator.clipboard.writeText(buildShareSnapshot(activeView, labels));
+      await navigator.clipboard.writeText(buildShareSnapshot(activeView, labels, shareBaseUrl));
       setShareState('copied');
 
       if (shareTimerRef.current) {
@@ -370,7 +389,7 @@ export function SavedViewsMenu({
     } catch {
       setShareState('idle');
     }
-  }, [activeView, labels]);
+  }, [activeView, labels, shareBaseUrl]);
 
   const updatePanelPosition = useCallback(() => {
     const trigger = triggerRef.current;

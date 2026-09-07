@@ -942,12 +942,20 @@ test('C-a3 byReason DROPS unresolved-expression at zero and freezes the other bu
   assert.equal(openRows(out).length, 0);
   /* The last dynamic sink is closed, so no OPEN row carries that form any
    * more -- but the form itself did not evaporate either. It survives on the
-   * closed row that inherited it, which is what "the reasons moved" means. */
+   * closed rows that inherited it, which is what "the reasons moved" means.
+   * WO-CAN-04 deleted the one that closed as a PRODUCER (css-variables-bridge),
+   * so what is pinned here is the surviving three -- the two chart-export sinks
+   * and the public root-attributes writer -- together with its absence. */
   assert.equal(openRows(out).filter((r) => r.reason.endsWith(':dynamic-setProperty')).length, 0);
   assert.equal(
-    out.closedProducer.filter((r) => r.reason.endsWith(':dynamic-setProperty')).length,
-    1,
-    'the dynamic-setProperty form is preserved on the row that closed, not discarded',
+    ALL_COLLECTIONS.flatMap((name) => out[name]).filter((r) => r.reason.endsWith(':dynamic-setProperty')).length,
+    3,
+    'the dynamic-setProperty form is preserved on the rows that closed, not discarded',
+  );
+  assert.equal(
+    ALL_COLLECTIONS.flatMap((name) => out[name]).filter((r) => r.file.includes('css-variables-bridge')).length,
+    0,
+    'and the deleted writer does not come back into any bucket',
   );
 });
 
@@ -4165,8 +4173,13 @@ test('CL-9 the rows CLOSURE-11 excluded were each closed, and by WHICH route', (
     'the package-public writer became a boundary, not a pending sink');
   assert.equal(out.dynamicSinkPending.filter((r) => r.file.includes('css-variables-bridge')).length, 0,
     'the private writer is no longer pending');
-  assert.equal(out.closedProducer.filter((r) => r.file.includes('css-variables-bridge') && r.evidence.entriesRecordDomain).length, 1,
-    'it closed as a PRODUCER by enumerating its record -- not by drifting into a softer bucket');
+  /* WO-CAN-04 deleted that private writer together with its file, so the route
+   * that closed it has no subject left. Its absence is pinned instead, and it
+   * is a real negative: a reappearance in ANY bucket fails here. */
+  assert.equal(ALL_COLLECTIONS.flatMap((name) => out[name]).filter((r) => r.file.includes('css-variables-bridge')).length, 0,
+    'the deleted private writer must not reappear in any bucket');
+  assert.equal(out.publicBoundary.filter((r) => r.file.includes('root-attributes') && r.evidence?.publicGenericWriter).length, 1,
+    'and the survivor stays pinned to the route that closed it -- not drifting into a softer bucket');
   assert.equal(out.callArgsPending.filter((r) => r.file.includes('Typography/compound/Heading')).length, 0);
   // and nothing is left open anywhere in the inventory
   assert.equal(openRows(out).length, 0);
@@ -4288,33 +4301,27 @@ test('GW-1 POSITIVE: a package-public writer is a BOUNDARY carrying its export p
 
 test('GW-2 NEGATIVE: a writer that is NOT publicly reachable is never elevated', () => {
   const out = buildProducers();
-  // `writePersonalityDeclarations` is module-private: it must stay a pending
-  // dynamic sink, not become a boundary on the strength of a nearby export.
-  /* T-ENTRIES-RECORD later closed this row -- by enumerating its name domain,
-   * which is a claim about the RECORD. That must not be confused with the
-   * claim this negative guards: that a module-private writer is never handed
-   * a public export contract. So the row is required to be closed by the
-   * enumeration route and by nothing that asserts reachability. */
-  const closed = [...out.closedProducer, ...out.closedZeroGoverned, ...out.publicBoundary, ...out.privateRelay]
-    .filter((r) => r.file.includes('css-variables-bridge'));
-  assert.equal(closed.length, 1);
-  assert.ok(closed[0].evidence.entriesRecordDomain, 'closed by enumerating the record');
-  assert.equal(closed[0].evidence.publicGenericWriter, undefined, 'never by a reachability claim');
-  assert.equal(out.dynamicSinkPending.length, 0);
+  /* `writePersonalityDeclarations`, the module-private writer this negative
+   * used to read, was deleted with its file by WO-CAN-04. The claim outlives
+   * it, pinned on the live inventory rather than on that one row: the deleted
+   * writer may not reappear anywhere, nothing may be pending in its place, and
+   * the generic-writer route may elevate exactly the one owner whose public
+   * reachability the predicate can actually prove. */
   assert.equal(
-    out.publicBoundary.filter((r) => r.file.includes('css-variables-bridge') && r.evidence?.publicGenericWriter).length,
+    ALL_COLLECTIONS.flatMap((name) => out[name]).filter((r) => r.file.includes('css-variables-bridge')).length,
     0,
-    'a private writer must never be elevated to a public boundary',
+    'a deleted private writer must not reappear in any bucket',
   );
-  // the unit predicate says the same thing on its own
-  assert.equal(
-    publicGenericWriterProofOf(
-      'packages/core/src/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge/index.tsx',
-      'writePersonalityDeclarations',
-    ),
-    null,
-    'the predicate must refuse a non-exported owner',
-  );
+  assert.equal(out.dynamicSinkPending.length, 0);
+  const elevated = out.publicBoundary.filter((r) => r.evidence?.publicGenericWriter);
+  assert.equal(elevated.length, 1, 'exactly one row is elevated by the generic-writer route');
+  assert.equal(elevated[0].file, 'packages/core/src/infrastructure/runtime/foundation/root-attributes/presentation/index.ts');
+  assert.equal(elevated[0].evidence.publicGenericWriter.writer, 'claimRootStyleProperty');
+  // the unit predicate says the same thing on its own, on that same real owner
+  const proof = publicGenericWriterProofOf(elevated[0].file, 'claimRootStyleProperty');
+  assert.ok(proof, 'the predicate must prove the exported owner the inventory elevated');
+  assert.equal(proof.receipt.writer, 'claimRootStyleProperty');
+  assert.equal(proof.exportEvidence.entrypoint, 'packages/core/src/index.ts');
 });
 
 test('GW-3 NEGATIVE: only a PARAMETER name qualifies -- literals and locals do not', () => {
@@ -4540,35 +4547,24 @@ const erCall = (code, file = 'packages/core/src/components/probe/entries-writer.
   return { call, source, file };
 };
 
-test('ER-1 the live repo closes its last dynamic sink as a PRODUCER, never as silence', () => {
+test('ER-1 the live repo has no entries-record row left, and nothing pending in its place', () => {
   const out = buildProducers();
-  /* The row that motivated the rule. It emits 65 custom properties through a
-   * dynamic name; the one verdict it must never receive is ZERO. */
+  /* The row that motivated the rule -- 65 custom properties stamped through a
+   * dynamic name in css-variables-bridge -- was deleted with its file by
+   * WO-CAN-04. What the live repo must show is the absence, and it is a real
+   * negative on both halves: either the route or the file coming back fails
+   * here. The route itself stays fenced, on fixtures, by ER-2..ER-4. */
   const rows = [...out.closedProducer, ...out.closedZeroGoverned, ...out.publicBoundary, ...out.privateRelay, ...out.closedNonObject]
     .filter((r) => r.evidence?.entriesRecordDomain);
-  assert.equal(rows.length, 1, 'the route must not have swept anything else in');
-  const [row] = rows;
-  assert.ok(out.closedProducer.includes(row), 'an all-custom-property record is a PRODUCER');
-  assert.equal(row.reason, 'governed-producer-object:dynamic-setProperty');
-
-  const d = row.evidence.entriesRecordDomain;
-  assert.equal(d.nameCount, d.names.length);
-  assert.equal(d.nameCount, 65);
-  // every enumerated name is a custom property -- the exact case T-DYNAMIC-DOMAIN refuses
-  assert.equal(d.customPropertyCount, 65);
-  assert.ok(d.names.every((n) => n.startsWith('--')));
-  assert.ok(d.record.length > 0 && d.recordAt.includes(':'), 'the record and its site are named');
-
-  /* The key union is published in full and split by namespace, so the emission
-   * can be audited without re-running the resolver. */
-  assert.equal(row.evidence.customPropertyScanComplete, true);
-  assert.equal(row.evidence.governedChannelKeys.length + row.evidence.internalSocketKeys.length, 65);
-  assert.ok(row.evidence.governedChannelKeys.every((k) => k.startsWith('--ds-')));
-  assert.ok(row.evidence.internalSocketKeys.every((k) => k.startsWith('--_ds-')));
-  assert.equal(row.evidence.ungovernedCustomPropertyKeys, undefined);
+  assert.equal(rows.length, 0, 'no live row rides the entries-record route any more');
+  assert.equal(
+    ALL_COLLECTIONS.flatMap((name) => out[name]).filter((r) => r.file.includes('css-variables-bridge')).length,
+    0,
+    'and the file that carried it is gone from every bucket',
+  );
+  assert.equal(out.dynamicSinkPending.length, 0, 'nothing is pending in its place');
 
   // the two routes stay separable in the artifact
-  assert.equal(row.evidence.dynamicDomain, undefined);
   for (const z of out.closedZeroGoverned) assert.equal(z.evidence?.entriesRecordDomain, undefined);
 });
 
@@ -4646,10 +4642,26 @@ test('ER-4 NEGATIVE: the rule can never manufacture silence', () => {
 });
 
 test('ER-5 NEGATIVE: forging the enumeration receipt moves the bound digest', () => {
-  const out = buildProducers();
+  /* WO-CAN-04 deleted the live row this drill used to read, so the receipt
+   * under test is produced by the same route from the fixture ER-2 proves.
+   * What is fenced here is the DIGEST law rather than the census: identity
+   * alone cannot see a receipt, and any edit to one must move the bound
+   * digest. */
+  const { call, source, file } = erCall(
+    `const R = { '--ds-a': '1', '--ds-b': '2' };\nexport function w(el: HTMLElement) { for (const [k, v] of Object.entries(R)) el.style.setProperty(k, v); }`,
+  );
+  const domain = entriesRecordSetPropertyDomain(call, source, file);
+  assert.ok(domain, 'the fixture must enumerate, or this drill fences nothing');
   const bound = (rs) => JSON.stringify(rs.map((r) => [r.file, r.ordinal, r.evidence ?? null]));
   const identity = (rs) => JSON.stringify(rs.map((r) => [r.plane, r.file, r.symbol, r.reason]));
-  const rows = out.closedProducer.filter((r) => r.evidence?.entriesRecordDomain);
+  const rows = [{
+    plane: 'tsx-inline-stamp',
+    file,
+    ordinal: 0,
+    symbol: 'w',
+    reason: 'governed-producer-object:dynamic-setProperty',
+    evidence: { entriesRecordDomain: domain.receipt },
+  }];
   assert.equal(rows.length, 1);
   const mutations = {
     'a name added': rows.map((r) => ({ ...r, evidence: { ...r.evidence, entriesRecordDomain: { ...r.evidence.entriesRecordDomain, names: [...r.evidence.entriesRecordDomain.names, '--ds-forged'] } } })),

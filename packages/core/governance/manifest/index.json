@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/scripts/generate/tokens/manifest/generation/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "6cb3ed943a4874d23c15032eabb4d890ac8d20fa229107ad56f513f5cf65f14b",
+  "inputsDigest": "1a3a8053230ec94224aaa784ce1d27ff9124fec3b01df89e0abc890a1b88be40",
   "denominators": {
-    "canonicalFamilies": 255,
+    "canonicalFamilies": 254,
     "activeStandardControls": 14,
     "activeProCapabilities": 7,
     "activePublicControls": 21,
-    "controlFamilyCells": 5355,
+    "controlFamilyCells": 5334,
     "recipeGroups": 3
   },
   "excludedRegistryRows": [
@@ -22,19 +22,19 @@
   "rollups": {
     "familyMaximumClaims": {
       "INVENTORIED_ONLY": 3,
-      "SOURCE_BOUND": 252,
+      "SOURCE_BOUND": 251,
       "ASSESSED": 0,
       "COMPUTED_VERIFIED": 0,
       "SIGHTED_ACCEPTED": 0
     },
     "familyReviews": {
-      "unreviewed": 255,
+      "unreviewed": 254,
       "accepted": 0,
       "assessedNotElevated": 0,
       "blockedOwnerDecision": 0
     },
     "controlFamilyDispositions": {
-      "UNKNOWN": 5355,
+      "UNKNOWN": 5334,
       "APPLICABLE": 0,
       "INVARIANT_WITH_REASON": 0,
       "NOT_APPLICABLE_WITH_REASON": 0
@@ -47,7 +47,7 @@
       {
         "controlId": "palette.seeds",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [
           "divider",
@@ -368,7 +368,7 @@
       {
         "controlId": "typography.pairing",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -435,7 +435,7 @@
       {
         "controlId": "typography.families",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -502,7 +502,7 @@
       {
         "controlId": "typography.scale",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [
           "root",
@@ -596,7 +596,7 @@
       {
         "controlId": "shape.radius-scale",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [
           "root"
@@ -686,7 +686,7 @@
       {
         "controlId": "shape.button-style",
         "declaredFamilies": 4,
-        "unknownCells": 251,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -737,7 +737,7 @@
       {
         "controlId": "density.mode",
         "declaredFamilies": 4,
-        "unknownCells": 251,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [
           "root"
@@ -867,7 +867,7 @@
       {
         "controlId": "spacing.rhythm",
         "declaredFamilies": 4,
-        "unknownCells": 251,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [
           "divider",
@@ -1017,7 +1017,7 @@
       {
         "controlId": "motion.dial",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1118,7 +1118,7 @@
       {
         "controlId": "surfaces.elevation-posture",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [
           "root"
@@ -1213,7 +1213,7 @@
       {
         "controlId": "surfaces.effect-intensity",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [
           "root"
@@ -1293,7 +1293,7 @@
       {
         "controlId": "navigation.sidebar-tone",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1368,7 +1368,7 @@
       {
         "controlId": "experience.profile",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [
           "root",
@@ -1446,7 +1446,7 @@
       {
         "controlId": "chrome.families",
         "declaredFamilies": 4,
-        "unknownCells": 251,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1497,7 +1497,7 @@
       {
         "controlId": "chrome.anatomy",
         "declaredFamilies": 4,
-        "unknownCells": 251,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1548,7 +1548,7 @@
       {
         "controlId": "token-overrides",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1609,7 +1609,7 @@
       {
         "controlId": "recipe-profile",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1670,7 +1670,7 @@
       {
         "controlId": "profiles.expressive",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1731,7 +1731,7 @@
       {
         "controlId": "palette.status-seeds",
         "declaredFamilies": 0,
-        "unknownCells": 255,
+        "unknownCells": 254,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1741,7 +1741,7 @@
       {
         "controlId": "profiles.icon",
         "declaredFamilies": 4,
-        "unknownCells": 251,
+        "unknownCells": 250,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -1792,7 +1792,7 @@
       {
         "controlId": "responsive.posture",
         "declaredFamilies": 5,
-        "unknownCells": 250,
+        "unknownCells": 249,
         "applicableFamilyIds": [],
         "parts": [],
         "propertyGroups": [],
@@ -3667,13 +3667,6 @@
       "familyId": "surface/experience/notification",
       "path": "governance/manifest/families/surface/experience/notification/index.json",
       "digest": "1737afb9f5521915f7eaf19eefb87a3c2c7a4a10be8c0f79700937ba1eb55a9b",
-      "maximumClaim": "SOURCE_BOUND",
-      "reviewVerdict": null
-    },
-    {
-      "familyId": "surface/experience/oauth-transition",
-      "path": "governance/manifest/families/surface/experience/oauth-transition/index.json",
-      "digest": "803ce9b01b29512aa26bfc7ef9580f3ba325226da1b66e1ba6083dc23a759338",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

@@ -24,8 +24,9 @@
  *    labels are localized chrome, but the affordance itself is a contract
  *    gap.
  *  - ActivityIndicator "simulates data activity" — decorative, not data.
- *  - The variant falls back to a Math.random page seed when neither the
- *    prop nor the provider pins one (nondeterministic theming by design).
+ *  - The variant falls back to the canonical anatomy when neither the prop
+ *    nor the provider pins one. It used to fall back to a per-page die roll
+ *    cached on `window`, which made the server and the client disagree.
  *
  * PAINT + GEOMETRY LAW: every static declaration — paint tones, typography,
  * layout geometry, spacing — is owned by the skin
@@ -138,18 +139,16 @@ const DS = {
 // Context for consistent variant
 const VariantContext = createContext<1 | 2 | 3 | 4 | null>(null);
 
-function getPageVariant(): 1 | 2 | 3 | 4 {
-  if (typeof window === 'undefined') return 1;
-  let seed = (window as unknown as { __cardVariantSeed?: number }).__cardVariantSeed;
-  if (!seed) {
-    seed = Math.floor(Math.random() * 4) + 1;
-    (window as unknown as { __cardVariantSeed?: number }).__cardVariantSeed = seed;
-  }
-  return seed as 1 | 2 | 3 | 4;
-}
+/**
+ * The anatomy a page gets when nothing pins one. A constant, not a seed: the
+ * card renders on the server first, so any value the client can disagree with
+ * is a hydration mismatch, and a dashboard whose cards differ per visit is not
+ * a tenant's product.
+ */
+const DEFAULT_PAGE_VARIANT = 1 as const;
 
 export function DataTerminalCardProvider({ children, variant }: { children: ReactNode; variant?: 1 | 2 | 3 | 4 }) {
-  const pageVariant = useMemo(() => variant ?? getPageVariant(), [variant]);
+  const pageVariant = useMemo(() => variant ?? DEFAULT_PAGE_VARIANT, [variant]);
   return <VariantContext.Provider value={pageVariant}>{children}</VariantContext.Provider>;
 }
 
@@ -179,7 +178,7 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
 
 // Activity indicator - simulates data activity (DECORATIVE, see header debts)
 // Per-bar heights are skin-owned (keyed on data-bar-index); heights are stable
-// across renders to avoid impure Math.random() during render.
+// across renders so nothing impure runs during render.
 function ActivityIndicator() {
   return (
     <Flex align="center" gap={2}>
@@ -732,7 +731,7 @@ export function DataTerminalCard({
   const variant = useMemo(() => {
     if (propVariant) return propVariant;
     if (contextVariant) return contextVariant;
-    return getPageVariant();
+    return DEFAULT_PAGE_VARIANT;
   }, [propVariant, contextVariant]);
 
   if (shouldHide) return null;

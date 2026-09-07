@@ -287,7 +287,6 @@ Support: `shell/contracts/`.
 - `presentation/pages/experience/marketing/`
 - `presentation/pages/experience/media/`
 - `presentation/pages/experience/notification/`
-- `presentation/pages/experience/oauth-transition/`
 - `presentation/pages/experience/pricing/`
 
 **forms/**
@@ -313,4 +312,4 @@ Support: `shell/contracts/`.
 
 ---
 
-**Summary**: 6 primitive categories (98 components), 133 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (98 components), 132 families across structures/patterns/surfaces.

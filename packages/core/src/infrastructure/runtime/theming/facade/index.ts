@@ -38,8 +38,6 @@ export type {
   AccentTokens,
 } from '../composition/react/tokens';
 
-export { SystemCssVariablesBridge } from '../presentation/adapters/react/css-variables-bridge';
-
 export {
   censusRuntimeVisualPayload,
   resolveVisualAuthority,

@@ -41,17 +41,17 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2526,
-    "channels": 7514,
+    "filesScanned": 2519,
+    "channels": 7501,
     "channelsDs": 7116,
-    "channelsBridge": 398,
+    "channelsBridge": 385,
     "channelsWithoutReaders": 191,
     "channelsPaintsFalse": 925,
     "channelsPaintsInModernFalse": 1975,
-    "readers": 37134,
+    "readers": 36938,
     "readersByPlane": {
       "modern-skin-css": 14737,
-      "presentation-css": 10611,
+      "presentation-css": 10415,
       "foundation-css": 1122,
       "runtime-css": 261,
       "facade-entrypoints-css": 2,
@@ -66,7 +66,7 @@
     },
     "channelsByPlane": {
       "modern-skin-css": 3840,
-      "presentation-css": 2042,
+      "presentation-css": 2029,
       "foundation-css": 361,
       "runtime-css": 137,
       "facade-entrypoints-css": 1,
@@ -6487,1469 +6487,6 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/notification/index.css",
           "line": 215,
           "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-accent",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 87,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 253,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 344,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 471,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 500,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 550,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 626,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 699,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 700,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 705,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 710,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 777,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 858,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 906,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 961,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1022,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1023,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1035,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1145,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1152,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1153,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1194,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1195,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1365,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1418,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1639,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1640,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1924,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1925,
-          "prop": "box-shadow",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-accent-soft",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 222,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 240,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 847,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 915,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1888,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-bg",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 41,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-bg-alt",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 41,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-glow",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 39,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 136,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1390,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1491,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1898,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-glow-soft",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 38,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 40,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 146,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 223,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 254,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 469,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 741,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1034,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1057,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1126,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1261,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1437,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-ink",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 42,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 158,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 166,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 283,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 333,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 343,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 458,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 470,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 526,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 540,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 597,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 612,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 632,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 663,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 681,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 740,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 848,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 889,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 916,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 933,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 952,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 970,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1058,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1127,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1138,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1144,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1161,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1175,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1408,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1517,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1685,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 2093,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 2097,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-line",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 104,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 105,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 116,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 117,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 119,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 189,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 221,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 282,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 332,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 455,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 486,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 596,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 662,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 736,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 845,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 930,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1011,
-          "prop": "border-left",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1055,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1137,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1248,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1260,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1316,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1435,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1459,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1469,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1503,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1516,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1537,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1601,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1684,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1861,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1966,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 2033,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 2092,
-          "prop": "border-color",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-line-strong",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 115,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 118,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 342,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 467,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 497,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 618,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 631,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 680,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 897,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 913,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 967,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1002,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1029,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1077,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1124,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1143,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1357,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1448,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1623,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1661,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1913,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 2037,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 2096,
-          "prop": "border-color",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-muted",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 323,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 401,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 423,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 520,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 601,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 692,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 717,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 879,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1213,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1335,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1521,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1570,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1689,
-          "prop": "color",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-panel",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 192,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 487,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 737,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1251,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1317,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1439,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1504,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1538,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1602,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1868,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1967,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-panel-soft",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 191,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 457,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 932,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 969,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1250,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1438,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1462,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--_ds-oauth-shadow",
-      "kind": "bridge",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 60,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 193,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 493,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 499,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1318,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1507,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1544,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1603,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 1968,
-          "prop": "box-shadow",
           "scalars": []
         }
       ]
@@ -65767,13 +64304,6 @@
           "scalars": []
         },
         {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 24,
-          "prop": "--_ds-oauth-bg",
-          "scalars": []
-        },
-        {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/foundation/common/story-helpers/index.tsx",
           "line": 100,
@@ -67243,13 +65773,6 @@
           "file": "src/foundation/tokens/css/presentation/components/skin/header-hero-shared/index.css",
           "line": 115,
           "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 22,
-          "prop": "--_ds-oauth-panel",
           "scalars": []
         },
         {
@@ -71748,13 +70271,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 23,
-          "prop": "--_ds-oauth-panel-soft",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/operational-surface/index.css",
           "line": 33,
           "prop": "background",
@@ -72955,13 +71471,6 @@
           "file": "src/foundation/tokens/css/presentation/components/skin/metrics-minimal/index.css",
           "line": 222,
           "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 25,
-          "prop": "--_ds-oauth-bg-alt",
           "scalars": []
         },
         {
@@ -75979,13 +74488,6 @@
           "file": "src/foundation/tokens/css/presentation/components/skin/mobile-header/index.css",
           "line": 135,
           "prop": "border-bottom",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 20,
-          "prop": "--_ds-oauth-line",
           "scalars": []
         },
         {
@@ -80395,13 +78897,6 @@
           "file": "src/foundation/tokens/css/presentation/components/skin/metrics-rows/index.css",
           "line": 127,
           "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 21,
-          "prop": "--_ds-oauth-line-strong",
           "scalars": []
         },
         {
@@ -86195,7 +84690,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/dashboard/data-terminal-card/index.tsx",
-          "line": 134,
+          "line": 135,
           "prop": "error",
           "scalars": []
         },
@@ -102761,34 +101256,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 26,
-          "prop": "--_ds-oauth-accent",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 28,
-          "prop": "--_ds-oauth-accent-soft",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 29,
-          "prop": "--_ds-oauth-glow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 30,
-          "prop": "--_ds-oauth-glow-soft",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/progress-compounds/index.css",
           "line": 32,
           "prop": "background-color",
@@ -112860,7 +111327,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/dashboard/data-terminal-card/index.tsx",
-          "line": 133,
+          "line": 134,
           "prop": "success",
           "scalars": []
         },
@@ -117846,13 +116313,6 @@
           "file": "src/foundation/tokens/css/presentation/components/skin/metrics-minimal/index.css",
           "line": 172,
           "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 19,
-          "prop": "--_ds-oauth-muted",
           "scalars": []
         },
         {
@@ -125212,13 +123672,6 @@
           "file": "src/foundation/tokens/css/presentation/components/skin/modal-compounds/index.css",
           "line": 132,
           "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 18,
-          "prop": "--_ds-oauth-ink",
           "scalars": []
         },
         {
@@ -133836,7 +132289,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/dashboard/data-terminal-card/index.tsx",
-          "line": 135,
+          "line": 136,
           "prop": "warning",
           "scalars": []
         },
@@ -168781,7 +167234,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 71,
+          "line": 72,
           "prop": "fontFamily",
           "scalars": []
         },
@@ -265819,7 +264272,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/feedback/rate/engines/modern/index.tsx",
-          "line": 347,
+          "line": 346,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -266143,14 +264596,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/feedback/rate/engines/modern/index.tsx",
-          "line": 348,
+          "line": 347,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/feedback/rate/engines/modern/index.tsx",
-          "line": 437,
+          "line": 436,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -279670,13 +278123,6 @@
           "file": "src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "line": 39,
           "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-          "line": 27,
-          "prop": "--_ds-oauth-shadow",
           "scalars": []
         },
         {
@@ -347514,14 +345960,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 214,
+          "line": 215,
           "prop": "width",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 215,
+          "line": 216,
           "prop": "height",
           "scalars": []
         }
@@ -348613,7 +347059,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 192,
+          "line": 193,
           "prop": "fontSize",
           "scalars": []
         }
@@ -348974,7 +347420,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 193,
+          "line": 194,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -349318,28 +347764,28 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 180,
+          "line": 181,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 183,
+          "line": 184,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 186,
+          "line": 187,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 189,
+          "line": 190,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -349383,7 +347829,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 191,
+          "line": 192,
           "prop": "padding",
           "scalars": []
         }
@@ -350630,7 +349076,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/tooltip/engines/rustic/index.tsx",
-          "line": 194,
+          "line": 195,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -350655,14 +349101,14 @@
         {
           "plane": "facade-entrypoints-css",
           "file": "src/foundation/tokens/css/facade/entrypoints/base/index.css",
-          "line": 771,
+          "line": 769,
           "prop": "min-height",
           "scalars": []
         },
         {
           "plane": "facade-entrypoints-css",
           "file": "src/foundation/tokens/css/facade/entrypoints/base/index.css",
-          "line": 772,
+          "line": 770,
           "prop": "min-width",
           "scalars": []
         },

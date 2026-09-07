@@ -333,8 +333,6 @@
         "NotificationItem",
         "NotificationProvider",
         "NotificationSurface",
-        "OAUTH_TRANSITION_VARIANT_ORDER",
-        "OAuthTransitionScreen",
         "OPERATOR_DEFINITIONS",
         "OTPINPUT_DEFAULTS",
         "OTPInput",
@@ -531,7 +529,6 @@
         "SurfaceStaleBanner",
         "SurfaceTabbedLabel",
         "Switch",
-        "SystemCssVariablesBridge",
         "TAB_PANEL_TRANSITION_CLASS",
         "TAGINPUT_DEFAULTS",
         "TENANT_CAPABILITY_REGISTRY",
@@ -753,11 +750,6 @@
         "getKeyboardNavDate",
         "getKnownTenantConfig",
         "getKnownTenantSlugs",
-        "getOAuthTransitionApp",
-        "getOAuthTransitionDefaultVariant",
-        "getOAuthTransitionPool",
-        "getOAuthTransitionProvider",
-        "getOAuthTransitionVariant",
         "getOperatorsForField",
         "getOperatorsForFieldWithCustom",
         "getProductProfile",
@@ -787,8 +779,6 @@
         "isFrozenEngineName",
         "isImplementedEngineName",
         "isKnownTenant",
-        "isOAuthProvider",
-        "isOAuthTransitionVariantId",
         "isResolvedSurfaceAccess",
         "isSameDay",
         "isValidBranding",
@@ -813,7 +803,6 @@
         "parseMarkdown",
         "parseTenantThemeConfig",
         "parseTenantThemeDocument",
-        "pickOAuthTransitionVariant",
         "placementsToGridStyles",
         "preloadTenantConfig",
         "previewThemeAdmission",
@@ -2358,9 +2347,6 @@
         "Switch": [
           "antd"
         ],
-        "SystemCssVariablesBridge": [
-          "antd"
-        ],
         "TAB_PANEL_TRANSITION_CLASS": [
           "motion"
         ],
@@ -2792,8 +2778,6 @@
         "NAV_LINK_TYPE_COLORS",
         "NavigationLinkProvider",
         "NoiseTexture",
-        "OAUTH_TRANSITION_VARIANT_ORDER",
-        "OAuthTransitionScreen",
         "OPERATOR_DEFINITIONS",
         "OTPINPUT_DEFAULTS",
         "OTPInput",
@@ -3046,11 +3030,6 @@
         "getKeyboardNavDate",
         "getKnownTenantConfig",
         "getKnownTenantSlugs",
-        "getOAuthTransitionApp",
-        "getOAuthTransitionDefaultVariant",
-        "getOAuthTransitionPool",
-        "getOAuthTransitionProvider",
-        "getOAuthTransitionVariant",
         "getOperatorsForField",
         "getOperatorsForFieldWithCustom",
         "getProductProfile",
@@ -3079,8 +3058,6 @@
         "isFrozenEngineName",
         "isImplementedEngineName",
         "isKnownTenant",
-        "isOAuthProvider",
-        "isOAuthTransitionVariantId",
         "isResolvedSurfaceAccess",
         "isSameDay",
         "isValidBranding",
@@ -3102,7 +3079,6 @@
         "parseMarkdown",
         "parseTenantThemeConfig",
         "parseTenantThemeDocument",
-        "pickOAuthTransitionVariant",
         "placementsToGridStyles",
         "preloadTenantConfig",
         "previewThemeAdmission",
@@ -4530,23 +4506,6 @@
         ]
       },
       "supplierFreeExports": []
-    },
-    "./surfaces/oauth-transition": {
-      "exports": [
-        "OAuthTransitionScreen",
-        "getOAuthTransitionDefaultVariant",
-        "getOAuthTransitionProvider",
-        "isOAuthProvider",
-        "isOAuthTransitionVariantId"
-      ],
-      "symbols": {},
-      "supplierFreeExports": [
-        "OAuthTransitionScreen",
-        "getOAuthTransitionDefaultVariant",
-        "getOAuthTransitionProvider",
-        "isOAuthProvider",
-        "isOAuthTransitionVariantId"
-      ]
     },
     "./icons": {
       "exports": [

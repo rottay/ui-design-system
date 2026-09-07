@@ -1,9 +1,10 @@
 /**
  * Personality CSS Overrides - Rottay Design System
  *
- * Cross-engine rules that consume personality CSS custom properties pushed
- * by SystemCssVariablesBridge. The bridge publishes namespaced data only;
- * this file is the single projection into canonical component channels.
+ * Cross-engine rules that consume the namespaced personality CSS custom
+ * properties. This file is the single projection into canonical component
+ * channels; every namespaced input reaches it from the compiled artifact, not
+ * from a runtime JS writer.
  *
  * These compatibility selectors project personality tokens across the
  * supported engine DOM contracts. Modern is first-party; Classic and Rustic
@@ -29,10 +30,9 @@
    --ds-letter-spacing-heading override when one is set and no personality
    preset value overrides the namespace var.
 
-   SystemCssVariablesBridge writes namespaced inputs into this same declared
-   personality layer. These aliases are static and therefore exist for SSR;
-   once the bridge mounts, the referenced namespaced values update without
-   creating another writer for a canonical component channel.
+   These aliases are static and therefore exist for SSR and for every render
+   after it; a tenant moves them by compiling a namespaced value into its
+   artifact, never by a second runtime writer.
    ======================================================================== */
 
 :root {

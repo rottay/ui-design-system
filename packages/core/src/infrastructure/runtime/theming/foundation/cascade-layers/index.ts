@@ -7,8 +7,7 @@
  * The order below is the single cascade contract of the design system. It is
  * declared once in CSS, at
  * `foundation/tokens/css/facade/entrypoints/base/index.css`; this module
- * restates it in TypeScript for the one emitter that writes CSS at runtime
- * (`SystemCssVariablesBridge`).
+ * restates it in TypeScript for any emitter that has to name a layer.
  *
  * Restating it creates a drift risk, so the parity is executable: the tests in
  * this folder parse that entrypoint and the committed vertical bundles, and

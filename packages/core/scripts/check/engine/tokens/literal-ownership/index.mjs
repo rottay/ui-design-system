@@ -90,7 +90,17 @@ export function checkOwnership({ registryRows, discovered, pin, drillCase }) {
   let rows = registryRows.map((r) => ({ ...r }));
   let found = discovered.map((s) => ({ ...s }));
 
-  if (drillCase === 'duplicate-one' && rows.length > 5) rows[5] = { ...rows[0] };
+  // A copy-pasted row makes the corpus claim one site twice. Written against
+  // rows[0] and the corpus SIZE rather than a fixed index 5: the oauth-transition
+  // skin carried 40 of the 41 sites and left the package with WO-CAN-04, and a
+  // drill that silently plants nothing once the corpus shrinks is the fail-open
+  // shape this whole file exists against. With two or more rows the copy also
+  // DISPLACES a real site; with one, it can only be appended.
+  if (drillCase === 'duplicate-one' && rows.length > 0) {
+    rows = rows.length > 1
+      ? [...rows.slice(0, -1), { ...rows[0] }]
+      : [...rows, { ...rows[0] }];
+  }
   if (drillCase === 'drop-one') rows = rows.slice(0, -1);
   if (drillCase === 'missing-real-site' || drillCase === 'planted-literal') {
     found.push({ file: 'runtime/engines/modern/skin/button/index.css', value: normValue('14px'), line: 1 });
@@ -98,7 +108,7 @@ export function checkOwnership({ registryRows, discovered, pin, drillCase }) {
   if (drillCase === 'stale-extra-row') {
     rows.push({ file: 'runtime/engines/modern/skin/button/index.css', value: '99px', cls: 'EXACT_RUNG', owner: 'x', reason: 'x', proof: 'x' });
   }
-  if (drillCase === 'duplicate-key' && rows.length > 1) rows.push({ ...rows[1] });
+  if (drillCase === 'duplicate-key' && rows.length > 0) rows.push({ ...rows[0] });
   if (drillCase === 'broken-without-owner') {
     const t = rows.find((r) => BROKEN.has(r.cls));
     if (t) { t.owner = ''; t.reason = ''; }

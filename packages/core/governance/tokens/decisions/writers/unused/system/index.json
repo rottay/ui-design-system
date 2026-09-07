@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedBy": "FASE H residue drain — per-token, resolved against the shipped bundles styles/{bithire,platform,evnto}.css, and against real consumers in app-bithire/app-evnto/app-platform and packages/showroom",
+  "generatedBy": "FASE H residue drain \u2014 per-token, resolved against the shipped bundles styles/{bithire,platform,evnto}.css, and against real consumers in app-bithire/app-evnto/app-platform and packages/showroom",
   "law": "A census dead-writer verdict is never a deletion license. RETIRE is only ever RETIRE_PROPOSED and never executed without owner sign-off.",
   "laws": [
     "A multiplier (density/effect scale) NEVER counts as an upstream connection.",
@@ -19,7 +19,7 @@
     "testsSeparated": "Test files are counted apart from production files; a token read only by tests is not a live consumer.",
     "harnessCaveat": "scripts/check/tokens/cascade/preservation hasConsumer() matches text.includes(`var(${channel}`) against the raw bundle, so it carries the same comment blind spot. It is fine for the undeclared-channel case it was written for, but it must not be used alone to prove a channel is consumed."
   },
-  "harness": "scripts/check/tokens/cascade/preservation — every RECONNECT must pass defaultIsUnchanged per shipped bundle plus upstreamMovesDownstream before it is marked executed.",
+  "harness": "scripts/check/tokens/cascade/preservation \u2014 every RECONNECT must pass defaultIsUnchanged per shipped bundle plus upstreamMovesDownstream before it is marked executed.",
   "dispositionVocabulary": {
     "KEEP_PUBLIC_READ_FLOORED": "Live consumers in product code AND a declaration in all three shipped bundles. Retiring the emitter would break shipped app CSS. No action.",
     "KEEP_RAMP_MEMBER_FLOOR_RELOCATED": "A rung of the monochrome grayscale ramp. Its floor used to live in a private per-kit bundle; that bundle and its producer were deleted in the taxonomy clean cut, and the ramp is now @imported by facade/entrypoints/base.css, which the vertical CSS build inlines into every shipped bundle. declaredInBundles stays empty on these rows because that is a MEASURED field and no build has been run since the relocation -- the floor is wired in source, not yet re-measured.",
@@ -49,7 +49,7 @@
     "lossMeasured": {
       "method": "postcss parse of the orphan and of each shipped bundle; compared as (class, property) pairs so that paint re-homed under a different selector text still counts as present.",
       "orphan": "111 rules, 258 declarations, 298 distinct (class, property) pairs.",
-      "missingPerVertical": "269 of 298 pairs are absent from artifacts/generated/css/verticals/bithire/index.css, artifacts/generated/css/verticals/rottay/index.css AND artifacts/generated/css/verticals/evnto/index.css alike — identical in all three. Every one of the 269 is a preflight-killable channel (padding/margin/border/background/box-shadow).",
+      "missingPerVertical": "269 of 298 pairs are absent from artifacts/generated/css/verticals/bithire/index.css, artifacts/generated/css/verticals/rottay/index.css AND artifacts/generated/css/verticals/evnto/index.css alike \u2014 identical in all three. Every one of the 269 is a preflight-killable channel (padding/margin/border/background/box-shadow).",
       "ruleLevel": "103 of 111 rules have no equivalent paint anywhere in the bundle; 6 are partially covered; 2 are fully covered elsewhere.",
       "classesTotallyUnpainted": [
         ".ds-ai-chat-message--assistant",
@@ -68,13 +68,13 @@
       "notSkinRehomed": "No skin owns them: grep for .ds-metric-card across runtime/engines/ returns nothing, and the only source files declaring .ds-metric-card__status-dot are patterns.css (geometry) and patterns-paint.css (paint)."
     },
     "splitLawIsDead": "patterns.css's header still claims it may carry ONLY custom properties, keyframes, !important declarations and non-killable properties. That law is no longer true and is no longer enforced: patterns.css already carries 60 killable-paint declarations (42 of them without !important) and collapse.css carries 40. css-layer-paint-gate.mjs contains no killable-paint check at all.",
-    "routeASockets": "ANSWER FOR ROUTE A: sockets must land in presentation/components/patterns.css, which is imported at facade/entrypoints/base.css:71 and facade/entrypoints/styles.css:87 under layer(rottay-components). They must NOT land in patterns-paint.css — an edit there ships nowhere, and the harness cannot prove a socket that never reaches a bundle (defaultIsUnchanged on an undeclared channel is trivially green whether or not the consumer exists).",
+    "routeASockets": "ANSWER FOR ROUTE A: sockets must land in presentation/components/patterns.css, which is imported at facade/entrypoints/base.css:71 and facade/entrypoints/styles.css:87 under layer(rottay-components). They must NOT land in patterns-paint.css \u2014 an edit there ships nowhere, and the harness cannot prove a socket that never reaches a bundle (defaultIsUnchanged on an undeclared channel is trivially green whether or not the consumer exists).",
     "executed": {
       "date": "2026-08-02",
       "what": "Migrated 109 rules / 246 declarations from patterns-paint.css into presentation/components/patterns.css, which the entrypoints import under layer(rottay-components). Two rules were NOT migrated and 12 declarations were dropped because those channels already ship from a layered skin.",
-      "whySafeInThatLayer": "The canonical order both entrypoints declare is `@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, ...`. It names Tailwind's own `base` BEFORE rottay-components, so preflight sorts earlier and LOSES to this layer. That is the same outcome the unlayered bridge was invented to produce, which is why the bridge could be retired. Engine skins sit in rottay-engines, a later layer, so any skin contesting one of these channels still wins regardless of source order inside patterns.css — the original header's cascade promise is preserved.",
+      "whySafeInThatLayer": "The canonical order both entrypoints declare is `@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, ...`. It names Tailwind's own `base` BEFORE rottay-components, so preflight sorts earlier and LOSES to this layer. That is the same outcome the unlayered bridge was invented to produce, which is why the bridge could be retired. Engine skins sit in rottay-engines, a later layer, so any skin contesting one of these channels still wins regardless of source order inside patterns.css \u2014 the original header's cascade promise is preserved.",
       "verificationPerVertical": "Re-ran the (class, property) diff after regenerating: artifacts/generated/css/verticals/bithire/index.css, artifacts/generated/css/verticals/rottay/index.css and artifacts/generated/css/verticals/evnto/index.css each went from 269 missing of 298 to 0 missing of 298, killable-paint channels missing 0. Zero rules showed per-vertical divergent coverage before the migration, so one migration served all three identically.",
-      "dropped": "The 2 already-shipped rules did not ship as a side effect: :is(.ds-command-home-next-move):hover and :is(.ds-command-home-search-lane):hover appear once each in the bundle, and that single occurrence is the pre-existing patterns.css rule carrying transform: translateY(-1px) — a non-killable property that never left. Their border-color/box-shadow twins stayed out.",
+      "dropped": "The 2 already-shipped rules did not ship as a side effect: :is(.ds-command-home-next-move):hover and :is(.ds-command-home-search-lane):hover appear once each in the bundle, and that single occurrence is the pre-existing patterns.css rule carrying transform: translateY(-1px) \u2014 a non-killable property that never left. Their border-color/box-shadow twins stayed out.",
       "classification": "GENUINELY_NOT_SHIPPED 103 rules, PARTIAL 6 rules (missing channels migrated, already-shipped channels dropped), ALREADY_SHIPPED_VIA_SKIN 2 rules (dropped whole).",
       "atRuleFidelity": "The one @media-scoped rule in the orphan, @media (max-width: 640px) { :is(.ds-command-home-console) { padding: 14px } }, is nested in patterns.css exactly as authored. Verified structurally: 0 occurrences at top level, 1 inside the query.",
       "baselineRelocation": "baseline/index.json: the single viewportQueries entry for patterns-paint.css was RELOCATED to patterns.css, not added as new debt. It is the same @media (max-width: 640px) rule; shipped viewport-query debt stays at 1 because the tombstone reaches no bundle, and the duplicate entry retires with the file. The gate's other two failures -- skin/command-center.css carrying an unbaselined query, and a stale baseline entry for skin/button-group.css -- are PRE-EXISTING and not mine: both files are unmodified against HEAD, and reading them at HEAD shows command-center.css already had 1 query and button-group.css already had 0. Left untouched; they need their own owner.",
@@ -1255,7 +1255,7 @@
         "rottay artifact + its _source/extension.css (12)": "RETIRED source-only by SEV-DEAD-21 (12 names, 24 declarations across dark+light). --ds-avatar-{bg,color}, --ds-collapse-content-color and the full --ds-color-alpha-{black,white}-{200,300,400,500} ladder. The 100 stop of each ladder IS read; stops 200-500 were the unread rungs removed.",
         "bithire artifact + its _source/extension.css (8)": "PARTIALLY RETIRED source-only by SEV-DEAD-21 (7 of 8 names, 8 declarations). Retired: --ds-premium-card-header-top-line-display, --ds-shell-breadcrumb-height, --ds-surface-chip-text, --ds-surface-radius-{lg,sm}, --ds-table-header-bubble-bg and --rt-premium-card-grid. NOT part of SEV-DEAD-21: --ds-global-search-results-width (stays listed, goes with THEME-ISO).",
         "evnto artifact + its _source/extension.css (2)": "RETIRED source-only by SEV-DEAD-21 (2 names, 2 declarations): --ds-input-focus-border, --ds-input-text.",
-        "single-artifact profile markers (2)": "--ds-experience-profile (bithire) and --ds-recipe-profile (bithire + rottay) — these are profile MARKERS, likely read by TS rather than CSS; confirm before draining.",
+        "single-artifact profile markers (2)": "--ds-experience-profile (bithire) and --ds-recipe-profile (bithire + rottay) \u2014 these are profile MARKERS, likely read by TS rather than CSS; confirm before draining.",
         "malformed prefixes (6)": "not tokens, see dataQuality."
       },
       "disposition": "The rottay, bithire (except --ds-global-search-results-width), and evnto groups were RETIRED source-only by SEV-DEAD-21. --ds-global-search-results-width remains listed (THEME-ISO). The remaining groups (all-three-verticals 18, single-artifact profile markers 2, malformed prefixes 6) still need their emitters read before a RETIRE_EMITTER_PROPOSED can carry the required death-proof."
@@ -1264,7 +1264,7 @@
   },
   "gateHardening": {
     "law": "A gate that certifies a split without verifying that BOTH halves ship can certify an orphan indefinitely. patterns-paint.css passed every gate for eight days while reaching no bundle.",
-    "added": "scripts/css-layer-paint-gate.mjs now exports auditGovernedFilesAreReachable(). It walks the @import graph from every entrypoint under facade/entrypoints and FAILS on any .css file below foundation/tokens/css that no entrypoint reaches, unless that file is declared in the new UNREACHABLE_BY_DESIGN map with a written reason. It also fails on a STALE entry — a file declared unreachable that is in fact imported — so the allowlist cannot rot into a rubber stamp.",
+    "added": "scripts/css-layer-paint-gate.mjs now exports auditGovernedFilesAreReachable(). It walks the @import graph from every entrypoint under facade/entrypoints and FAILS on any .css file below foundation/tokens/css that no entrypoint reaches, unless that file is declared in the new UNREACHABLE_BY_DESIGN map with a written reason. It also fails on a STALE entry \u2014 a file declared unreachable that is in fact imported \u2014 so the allowlist cannot rot into a rubber stamp.",
     "allowlistedToday": "10 files: 3 artifact _source/extension.css build inputs, 3 unselected font packs, presentation/components/index.css (alternative aggregator), the 2 paint tombstones, and runtime/engines/modern/compiled.css (build product).",
     "drills": "scripts/css-layer-paint-gate.test.mjs gained 3 tests: the real tree has no undeclared orphan; a synthetic tree reproducing the exact 2026-07-25 shape (live.css imported, live-paint.css imported by nothing) FAILS with the orphan named, and passes once declared; a stale declaration FAILS. Suite is 12/12.",
     "alsoChanged": "The CLI body is now guarded by an isCli check so the audits can be imported by a drill without the module exiting the test process."
@@ -1275,7 +1275,7 @@
       "--ds-action-dock-reserved-block-start",
       "--ds-bottom-tab-bar-reserved-block-end"
     ],
-    "decision": "KEEP_RESERVED — no change.",
+    "decision": "KEEP_RESERVED \u2014 no change.",
     "finding": "The phase brief described these as 'frontier not shipping'. That is inverted: all three ARE declared in all three shipped bundles. What they lack is a consumer, which is the intended state of a reserved public hook awaiting its opening (census decision INTERNAL_ROADMAP_UNTIL_OPENING, owner design-system/frontier).",
     "evidence": "Declared at skin/action-dock.css:146 and skin/bottom-tab-bar.css. Their apparent consumers were comment prose only (skin/action-dock.css:108, skin/bottom-tab-bar.css:57), which is also why they survive into the bundle text at artifacts/generated/css/verticals/bithire/index.css:59660 as a comment. With comments stripped: zero reads in DS source, apps, showroom and every bundle."
   },
@@ -1286,7 +1286,7 @@
     "Two token lists were concatenated with `cat` where the first file had no trailing newline, silently gluing --ds-empty-title-font-size to --ds-empty-title-font-weight into one non-existent name. The glued name still matched a ^--ds-[a-z0-9-]*$ sanity check, so the shape test passed while the payload was wrong. Lists are now emitted directly from the manifest.",
     "JSON.stringify(obj, Object.keys(obj).sort(), 2) was used to sort keys. The second argument is a REPLACER, not a sort order: it filtered every nested object down to keys matching token names and produced a structurally valid but gutted file.",
     "--ds-empty-title-color / --ds-empty-title-margin-top were first adjudicated RECONNECT on the assumption that empty.css owns an Empty part. postcss shows empty.css contains exactly one rule (:root) and no part selector at all; the live part is .ds-empty-state__* on a different token vocabulary. Both were re-adjudicated to RETIRE_PROPOSED.",
-    "--ds-table-action-slots-width was first adjudicated RECONNECT on the assumption the action column exists. The string 'action-slots' occurs exactly once in the entire CSS tree — its own declaration. Re-adjudicated to RECONNECT_PENDING_PART.",
+    "--ds-table-action-slots-width was first adjudicated RECONNECT on the assumption the action column exists. The string 'action-slots' occurs exactly once in the entire CSS tree \u2014 its own declaration. Re-adjudicated to RECONNECT_PENDING_PART.",
     "The first pass of the patterns-paint migration used postcss walkRules(), which descends INTO at-rules. It hoisted :is(.ds-command-home-console){padding:14px} out of its @media (max-width: 640px) block, so a mobile-only padding would have applied at every width and beaten the desktop rule on source order. Caught by asking whether the orphan had nested rules before trusting the migration; rewritten to iterate top-level nodes and clone at-rules with their queries intact. The rewrite matches the classification by DOCUMENT ORDER with a per-rule selector assertion, because the tombstone header had already shifted every line number the first table recorded.",
     "Read detection missed JavaScript consumers entirely. It matched var() in CSS and setProperty() in TS, but not getComputedStyle().getPropertyValue(), which is how four tokens are actually consumed: --ds-async-spinner-delay and --ds-async-skeleton-after via the useDeferredPending hook (deferred-pending/index.ts:47), and --ds-toast-enter-duration and --ds-toast-enter-easing via Toast/runtime/animation/index.ts:46. The toast pair was additionally mis-filed as test-only because the TEST uses setProperty() while production uses getPropertyValue(). All four are KEEP, not retire candidates.",
     "Five grayscale-ramp rungs were first scored as floored in NO bundle, because the floor check only looked at the three vertical bundles while the ramp shipped from a private per-kit artifact. A floor gap is only a gap once every bundle that could carry the floor has been named. Superseded 2026-08-12: the clean cut deleted that private artifact, renamed the rungs to --ds-color-mono-*, and moved their floor into base.css -- see dispositionRetirements.KEEP_COMMERCIAL_KIT.",
@@ -1319,12 +1319,12 @@
         "sites": "presentation/components/skin/card-compounds.css (card image reveal)",
         "before": "transition: opacity var(--ds-motion-reveal) var(--ds-motion-ease-enter);",
         "after": "transition: var(--ds-transition-fade);",
-        "resolved": "bithire opacity calc(0ms * 1) cubic-bezier(0.16, 1, 0.3, 1) / platform 300ms / evnto 350ms — identical before and after.",
+        "resolved": "bithire opacity calc(0ms * 1) cubic-bezier(0.16, 1, 0.3, 1) / platform 300ms / evnto 350ms \u2014 identical before and after.",
         "caveat": "NOT text-identical: the site named --ds-motion-ease-enter and the token names --ds-motion-ease-out. Those two tokens resolve to the SAME cubic-bezier(0.16, 1, 0.3, 1) in all three bundles today, which is why this passes. The swap does couple the card image reveal to the out-easing channel; if a future theme diverges enter from out, this site follows out. Cheap to reverse."
       },
       {
         "token": "--ds-state-hover-shift",
-        "sites": "foundation/themes/default/index.css — --ds-material-card-background-hover and --ds-material-control-background-hover",
+        "sites": "foundation/themes/default/index.css \u2014 --ds-material-card-background-hover and --ds-material-control-background-hover",
         "before": "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card|control))",
         "after": "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-card|control))",
         "resolved": "Declaration and both consumption sites are all on :root, and the token is 4%, so the literal fallback is never reached. Expansion identical in all three verticals.",
@@ -1341,7 +1341,7 @@
     "executedDefectFix": [
       {
         "token": "--ds-input-placeholder",
-        "site": "runtime/engines/modern/skin/input.css — the ::placeholder rule",
+        "site": "runtime/engines/modern/skin/input.css \u2014 the ::placeholder rule",
         "before": "color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));",
         "after": "color: var(--ds-input-placeholder, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));",
         "defect": "The authored canonical name was never read, so every decision published under it was inert.",
@@ -1350,7 +1350,7 @@
           "bithire + platform, dark": "RESTORED. The dark block's var(--ds-color-text-tertiary) now actually paints instead of being dead text.",
           "evnto, light AND dark": "BROADER THAN THE BRIEF. evnto's tenant artifact declares --ds-input-placeholder: #686858 UNCONDITIONALLY and unlayered, so it outranks the dark block and now applies in both themes. evnto placeholders move from #737373 (via --ds-input-color-placeholder -> --ds-color-text-muted, with --ds-search-placeholder-color unset) to #686858. This is evnto's own authored brand placeholder finally taking effect -- same defect class -- but it is a visible evnto light delta, and the brief predicted light would be zero everywhere. Flagged for owner review."
         },
-        "ownerDisposition": "OWNER DECISION 2026-08-02: STAYS EXECUTED. Same defect class — an authored decision that was inert now governs; the brief not predicting the evnto light case does not change the nature of the fix. Carried into the owner summary and queued for sighted review in FASE M. Revert is one line: drop the --ds-input-placeholder tier from the ::placeholder rule in runtime/engines/modern/skin/input.css.",
+        "ownerDisposition": "OWNER DECISION 2026-08-02: STAYS EXECUTED. Same defect class \u2014 an authored decision that was inert now governs; the brief not predicting the evnto light case does not change the nature of the fix. Carried into the owner summary and queued for sighted review in FASE M. Revert is one line: drop the --ds-input-placeholder tier from the ::placeholder rule in runtime/engines/modern/skin/input.css.",
         "scope": "Only input.css was changed. The sibling skins (textarea, mentions, transfer, input-number, autocomplete) read --ds-input-placeholder-opacity, a different token; whether their colour rules should also nest the canonical name was not authorised here."
       },
       {
@@ -1368,15 +1368,15 @@
     "refusedWithEvidence": [
       {
         "token": "--ds-result-icon-success / --ds-result-icon-warning",
-        "briefSaid": "\"valores idénticos verificados\" — execute as pure zero-delta.",
+        "briefSaid": "\"valores id\u00e9nticos verificados\" \u2014 execute as pure zero-delta.",
         "finding": "NOT identical, and reconnecting would regress all three verticals. runtime/engines/modern/skin/result.css reads var(--ds-color-success) / var(--ds-color-warning) directly; there is no inline literal to swap. Resolved per vertical: --ds-color-success is #5ca6cf on bithire, #16A34A on platform, #15803D on evnto, while --ds-result-icon-success is #22c55e everywhere. Warning likewise: #d4943a / #D97706 / #A16207 against a flat #f59e0b. Making the skin read the result-icon token would overwrite each tenant's brand semantic colour with a generic green/amber.",
-        "disposition": "Registered as DERIVE (redefine the dead tokens as var(--ds-color-success|warning) so they stop drifting from the canon) — not executed, since DERIVE is register-only this round.",
+        "disposition": "Registered as DERIVE (redefine the dead tokens as var(--ds-color-success|warning) so they stop drifting from the canon) \u2014 not executed, since DERIVE is register-only this round.",
         "howTheSliceGotItWrong": "The H2b slice called this a zero-delta swap because it compared --ds-result-icon-success against --ds-color-success as resolved in the DEFAULT theme, where both are #22c55e. The law is that byte-identical is proven PER VERTICAL, and per vertical they diverge in all three. Its sibling verdicts for --ds-result-icon-error and -info (DERIVE, on the grounds that the hardcoded value drifted from the canon after the W8 dark-contrast fix) are the correct reading, and apply to success and warning too."
       },
       {
         "token": "--ds-density-card-padding",
         "briefSaid": "middle tier at card.css:377/396, pattern proven by --ds-density-cell-padding.",
-        "finding": "CORRECTED after the H2a slice arrived. My first refusal said the host site does not exist; that was wrong. engines/modern/skin/card.css:377 and :396 paint padding: var(--ds-card-instance-padding, var(--ds-card-padding-current)) and CAN take this token as a middle tier — I had looked at .ds-data-table__mobile-card, which declares no padding, and concluded too fast. The real reason it is not pure zero-delta is narrower and worse: it is zero-delta only where the token is UNSET, and three known emitters set it — collection-workspace/index.tsx:103, metrics/cards/index.tsx:178 and data-table-mobile.css:102-131 — so every card body inside those contexts would repaint.",
+        "finding": "CORRECTED after the H2a slice arrived. My first refusal said the host site does not exist; that was wrong. engines/modern/skin/card.css:377 and :396 paint padding: var(--ds-card-instance-padding, var(--ds-card-padding-current)) and CAN take this token as a middle tier \u2014 I had looked at .ds-data-table__mobile-card, which declares no padding, and concluded too fast. The real reason it is not pure zero-delta is narrower and worse: it is zero-delta only where the token is UNSET, and three known emitters set it \u2014 collection-workspace/index.tsx:103, metrics/cards/index.tsx:178 and data-table-mobile.css:102-131 \u2014 so every card body inside those contexts would repaint.",
         "disposition": "OWNER_MENU. Wiring it is a real capability (density-aware card padding) but it lands a visible change at three live call sites, so it is an owner call, not a silent swap."
       },
       {
@@ -1394,9 +1394,9 @@
         "token": "--ds-color-accent-live",
         "question": "Let the live accent paint, replacing the current --ds-color-accent?",
         "resolved": {
-          "bithire": "accent-live #69a6d5 vs accent #86A6C2 — WOULD CHANGE",
-          "platform": "accent-live #16A34A vs accent #6B6B6B — WOULD CHANGE (grey to green)",
-          "evnto": "accent-live var(--ds-color-success) vs accent #A89880 — WOULD CHANGE"
+          "bithire": "accent-live #69a6d5 vs accent #86A6C2 \u2014 WOULD CHANGE",
+          "platform": "accent-live #16A34A vs accent #6B6B6B \u2014 WOULD CHANGE (grey to green)",
+          "evnto": "accent-live var(--ds-color-success) vs accent #A89880 \u2014 WOULD CHANGE"
         },
         "why": "One rule, three outcomes. Two verticals would visibly repaint today, so this cannot ride in as zero-delta even though the third is cheap."
       },
@@ -1409,7 +1409,7 @@
           "evnto": "same primary-tinted pair as bithire"
         },
         "note": "The three verticals do not agree on what this token MEANS, which is the real blocker: bithire and evnto carry a primary-tinted colour pair, platform carries neutral rgba. Adopting it would not be one decision applied three times.",
-        "why": "Carried over from the slice as UNSURE: tests guard its semantics but no zero-delta host site exists. Note platform's value is NOT primary-tinted at all — it is a neutral rgba pair — so the three verticals do not even agree on what this token means."
+        "why": "Carried over from the slice as UNSURE: tests guard its semantics but no zero-delta host site exists. Note platform's value is NOT primary-tinted at all \u2014 it is a neutral rgba pair \u2014 so the three verticals do not even agree on what this token means."
       },
       {
         "token": "--ds-input-success-message-*",
@@ -1428,9 +1428,9 @@
         "token": "--ds-popover-title-gap-current",
         "question": "Let the popover title padding follow the density tiers?",
         "resolved": {
-          "default": "--ds-spacing-sm — identical to today",
-          "compact": "--ds-spacing-xs — CHANGES",
-          "spacious": "--ds-spacing-md — CHANGES"
+          "default": "--ds-spacing-sm \u2014 identical to today",
+          "compact": "--ds-spacing-xs \u2014 CHANGES",
+          "spacious": "--ds-spacing-md \u2014 CHANGES"
         },
         "why": "Moved here from the execute list; see faseHExecution.refusedWithEvidence."
       },
@@ -1536,7 +1536,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "default.css:2113/2218; modern/anchor.css:22-25,130,153 — idle-item border dropped, selected-only accent keeps same fallback",
+      "note": "default.css:2113/2218; modern/anchor.css:22-25,130,153 \u2014 idle-item border dropped, selected-only accent keeps same fallback",
       "successor": "--ds-color-border-secondary",
       "adjudicatedBy": "H1 slice (per-token, read individually)",
       "executedAs": "RETIRE",
@@ -5657,7 +5657,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -5688,7 +5688,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -6752,7 +6752,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "NOT retirable — this is a live public white-label channel with a capability gap. foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:137 lists it in the tenant theme contract and ui/patterns/customization/brand-studio/runtime/file-export/index.ts:135 maps the customer-facing field `darkPrimaryColor` onto it. All three artifacts declare it with genuinely different values (rottay #FFFFFF, evnto #E8E8E0, bithire #6BB5F5), so tenants are already setting it. No CSS rule anywhere reads var(--ds-color-dark-*): a customer can set a dark-mode brand colour today and it paints nothing. Needs the dark-theme consumer built, not the token removed. C2: the retired compiler was dropped from emittedBy because it no longer exists and no owner replaced it for this channel -- the --ds-color-dark-* family has no live emitter at all; the shipped value survives only in the committed artifacts.",
+      "note": "NOT retirable \u2014 this is a live public white-label channel with a capability gap. foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:137 lists it in the tenant theme contract and ui/patterns/customization/brand-studio/runtime/file-export/index.ts:135 maps the customer-facing field `darkPrimaryColor` onto it. All three artifacts declare it with genuinely different values (rottay #FFFFFF, evnto #E8E8E0, bithire #6BB5F5), so tenants are already setting it. No CSS rule anywhere reads var(--ds-color-dark-*): a customer can set a dark-mode brand colour today and it paints nothing. Needs the dark-theme consumer built, not the token removed. C2: the retired compiler was dropped from emittedBy because it no longer exists and no owner replaced it for this channel -- the --ds-color-dark-* family has no live emitter at all; the shipped value survives only in the committed artifacts.",
       "successor": "none",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "historicalVerdict": "RECONNECT_PENDING_PART",
@@ -6890,7 +6890,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "executedAs": "RETIRE_EMITTER",
       "executedBy": "FASE-B-night",
       "executedOn": "2026-08-02",
@@ -6989,7 +6989,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -7018,7 +7018,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -7078,7 +7078,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -7502,7 +7502,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "Same shape: default.css + rottay extension, ships #525252, zero reads anywhere including classic/theme.css (positive control 848 reads). No Modern equivalent needed — Modern's datepicker skin owns its clear affordance.",
+      "note": "Same shape: default.css + rottay extension, ships #525252, zero reads anywhere including classic/theme.css (positive control 848 reads). No Modern equivalent needed \u2014 Modern's datepicker skin owns its clear affordance.",
       "successor": "none",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "executedAs": "RETIRE",
@@ -7653,7 +7653,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "agent named engines/modern/skin/card.css:377,396 as a valid host; REFUSED as zero-delta because it is only zero where the token is unset — 3 known emitters set it (collection-workspace/index.tsx:103, metrics/cards/index.tsx:178, data-table-mobile.css:102-131) and would repaint",
+      "note": "agent named engines/modern/skin/card.css:377,396 as a valid host; REFUSED as zero-delta because it is only zero where the token is unset \u2014 3 known emitters set it (collection-workspace/index.tsx:103, metrics/cards/index.tsx:178, data-table-mobile.css:102-131) and would repaint",
       "successor": "card.css [data-part='body'] padding middle tier",
       "adjudicatedBy": "H2a slice (per-token, read individually)",
       "historicalVerdict": "OWNER_MENU",
@@ -8363,7 +8363,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "CORRECTED after checking the part rather than the name. presentation/components/empty.css is a pure token file — postcss finds exactly ONE rule in it (:root) and no part selector at all — so there is nothing in that file to reconnect to. The live part is .ds-empty-state__* (ui/patterns/feedback/empty-state/engines/modern/index.tsx renders data-part='title'), skinned in runtime/engines/modern/skin/empty-state.css, and that skin reads a DIFFERENT vocabulary: 26 var(--ds-empty-state-*) reads including --ds-empty-state-title-size at line 119. --ds-empty-title-* is the older --ds-empty-* (Ant-era Empty primitive) vocabulary, superseded by --ds-empty-state-*. Nothing is lost; the capability moved namespace.",
+      "note": "CORRECTED after checking the part rather than the name. presentation/components/empty.css is a pure token file \u2014 postcss finds exactly ONE rule in it (:root) and no part selector at all \u2014 so there is nothing in that file to reconnect to. The live part is .ds-empty-state__* (ui/patterns/feedback/empty-state/engines/modern/index.tsx renders data-part='title'), skinned in runtime/engines/modern/skin/empty-state.css, and that skin reads a DIFFERENT vocabulary: 26 var(--ds-empty-state-*) reads including --ds-empty-state-title-size at line 119. --ds-empty-title-* is the older --ds-empty-* (Ant-era Empty primitive) vocabulary, superseded by --ds-empty-state-*. Nothing is lost; the capability moved namespace.",
       "successor": "--ds-empty-state-* family (modern/skin/empty-state.css)",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "faseBBlocked": "NOT EXECUTED. foundation/themes/tests/root-component-authority.test.ts asserts that every channel listed in root-component-authority-ledger.json is still declared in its named component owner; --ds-empty-title-color is listed under empty.css. Removing it also requires deleting its ledger row AND decrementing measurement.sourceBeforeThisDrain.shared 343->342 and .same 98->97, or the length assertion goes red. That ledger is a gate fixture outside the FASE-B fence. Its sibling --ds-empty-title-margin-top carried no ledger row and WAS executed.",
@@ -9894,7 +9894,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "executedAs": "RETIRE_EMITTER",
       "executedBy": "FASE-B-night",
       "executedOn": "2026-08-02",
@@ -9932,7 +9932,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -9958,7 +9958,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "error-message sibling fully wired (form-field.css:118,146); success authored in lockstep but no selector ever added — needs a NEW rule, so it paints something new",
+      "note": "error-message sibling fully wired (form-field.css:118,146); success authored in lockstep but no selector ever added \u2014 needs a NEW rule, so it paints something new",
       "successor": "new [data-part='success-message'] rule in modern/skin/form-field.css",
       "adjudicatedBy": "H2b slice (per-token, read individually)",
       "historicalVerdict": "OWNER_MENU",
@@ -10615,7 +10615,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "CORRECTED after measuring the would-be consumer. The part DOES exist — foundation/animations/keyframes.css:80 @keyframes ds-foundation-scale-in and :612 @keyframes ds-foundation-modal-scale-in — but both hardcode transform: scale(0.95), while the token at foundation/animations/transitions.css:137 declares 0.98. Wiring scale(var(--ds-motion-scale-in)) is therefore NOT zero-delta: it moves every scale-in entrance from 0.95 to 0.98 in all three verticals. The token is also a registered typed custom property (foundation/base/properties.css:40) pinned by foundation/base/tests/property-registration-drift.test.ts:116,178, so it is canon on paper while the keyframes ignore it. Owner must decide which value is the canon before this is lit.",
+      "note": "CORRECTED after measuring the would-be consumer. The part DOES exist \u2014 foundation/animations/keyframes.css:80 @keyframes ds-foundation-scale-in and :612 @keyframes ds-foundation-modal-scale-in \u2014 but both hardcode transform: scale(0.95), while the token at foundation/animations/transitions.css:137 declares 0.98. Wiring scale(var(--ds-motion-scale-in)) is therefore NOT zero-delta: it moves every scale-in entrance from 0.95 to 0.98 in all three verticals. The token is also a registered typed custom property (foundation/base/properties.css:40) pinned by foundation/base/tests/property-registration-drift.test.ts:116,178, so it is canon on paper while the keyframes ignore it. Owner must decide which value is the canon before this is lit.",
       "successor": "none",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "historicalVerdict": "DELIBERATE_DELTA_PENDING_OWNER",
@@ -11809,7 +11809,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "agent called this zero-delta against the DEFAULT theme value; measured PER VERTICAL it is not — --ds-color-success is #5ca6cf/#16A34A/#15803D against a flat #22c55e, so reconnecting overrides each tenant's brand colour",
+      "note": "agent called this zero-delta against the DEFAULT theme value; measured PER VERTICAL it is not \u2014 --ds-color-success is #5ca6cf/#16A34A/#15803D against a flat #22c55e, so reconnecting overrides each tenant's brand colour",
       "successor": "modern/skin/result.css:86",
       "adjudicatedBy": "H2b slice (per-token, read individually)",
       "historicalVerdict": "OWNER_MENU",
@@ -12316,7 +12316,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -12373,7 +12373,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -12401,7 +12401,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -12429,7 +12429,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY — needs owner sign-off.",
+      "note": "No production consumer in the DS, the showroom, or any app once build output (.vercel/.next chunks, which inline the DS bundle itself) and comment text are excluded. Emitter named in emittedBy. PROPOSAL ONLY \u2014 needs owner sign-off.",
       "proposedDecision": "RETIRE_EMITTER_PROPOSED",
       "faseBReAdjudication": "REFUSED WITH EVIDENCE. The emission in infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts is written `if (<tenantField>) vars[\"<name>\"] = <tenantField>` -- it fires only when a tenant AUTHORS the value, so the line is not dead code: it is a sold white-label capability whose CONSUMER is missing. Retiring the emitter alone would leave the contract field in the tenant theme schema silently doing nothing, which is a worse defect than an inert channel. This is the same shape the registry already refused to retire for --ds-color-dark-primary ('a live public white-label channel with a capability gap'). The owner decision is WIRE THE PART or remove field+emitter together as a contract change.",
       "historicalVerdict": "KEEP_TENANT_CHANNEL_GAP_PENDING_OWNER",
@@ -13065,7 +13065,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "WO-ENG-04 doc claims components consume this and do not invent per-component inline state styling — demonstrably false; no byte-exact zero-delta site found",
+      "note": "WO-ENG-04 doc claims components consume this and do not invent per-component inline state styling \u2014 demonstrably false; no byte-exact zero-delta site found",
       "successor": "none found",
       "adjudicatedBy": "H2b slice (per-token, read individually)",
       "historicalVerdict": "UNSURE",
@@ -13479,7 +13479,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "CORRECTED after checking the part rather than the name. presentation/components/patterns.css:436 declares 88px inside the table token block, but grep for 'action-slots' across the entire CSS tree returns exactly ONE hit: that declaration itself. No rule anywhere selects a table action-slot column, and the modern table.css / data-table.css skins have no actions part. So there is no rule to wire it to — the part would have to be built first, which is a design call, not a reconnection. Not RETIRE either: the token names a real intent (a fixed action-column width) that the table chrome may still owe.",
+      "note": "CORRECTED after checking the part rather than the name. presentation/components/patterns.css:436 declares 88px inside the table token block, but grep for 'action-slots' across the entire CSS tree returns exactly ONE hit: that declaration itself. No rule anywhere selects a table action-slot column, and the modern table.css / data-table.css skins have no actions part. So there is no rule to wire it to \u2014 the part would have to be built first, which is a design call, not a reconnection. Not RETIRE either: the token names a real intent (a fixed action-column width) that the table chrome may still owe.",
       "successor": "none",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "historicalVerdict": "RECONNECT_PENDING_PART",
@@ -13505,7 +13505,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "presentation/components/tag.css:40 declares it as a pure alias `var(--ds-tag-md-padding)`. The alias target IS live (tag.css:25 = `0 0.625rem`) and is what the engines actually read; the alias itself has zero readers. Retiring the alias loses nothing — the successor is its own definition.",
+      "note": "presentation/components/tag.css:40 declares it as a pure alias `var(--ds-tag-md-padding)`. The alias target IS live (tag.css:25 = `0 0.625rem`) and is what the engines actually read; the alias itself has zero readers. Retiring the alias loses nothing \u2014 the successor is its own definition.",
       "successor": "--ds-tag-md-padding",
       "adjudicatedBy": "orchestrator (individually read, not by family)",
       "executedAs": "RETIRE",
@@ -13944,7 +13944,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "button's own duration/timing already alias the canon but cover 8 properties vs the shorthand's fixed 5 — the shorthand shape does not fit",
+      "note": "button's own duration/timing already alias the canon but cover 8 properties vs the shorthand's fixed 5 \u2014 the shorthand shape does not fit",
       "successor": "presentation/components/button.css:335-336",
       "adjudicatedBy": "H2b slice (per-token, read individually)",
       "executedAs": "RETIRE",
@@ -15994,417 +15994,14 @@
       "pinAction": "The decrease-only pin should move 43 -> 41. Both deltas are drains in the sanctioned direction; neither is new debt.",
       "remainingSafeDerives": "ZERO. time-picker has no real literal at all (both instances are comment prose, not '1 real post-comment'); stats-header's single site is 1.75rem = 28px with no 28px rung; oauth-transition stays refused as a unit. The font-size population is fully adjudicated.",
       "ownershipGateCorpus": {
-        "total": 41,
+        "total": 1,
         "byClass": {
-          "BESPOKE_CLAMP": 4,
-          "NO_RUNG_SCALE_EXTENSION": 13,
-          "EXACT_RUNG": 8,
-          "SUB_RUNG_DELIBERATE": 16
+          "NO_RUNG_SCALE_EXTENSION": 1
         },
         "note": "This is the corpus for the literal-ownership gate. A legitimate literal is SUB_RUNG_DELIBERATE or BESPOKE_CLAMP; a sold-control-that-does-not-work is EXACT_RUNG or NO_RUNG_SCALE_EXTENSION, because in both cases the declaration ignores typography.scale while a rung could or should carry it.",
         "drillSuggestion": "Plant `font-size: 14px` in any governed skin file -> the gate must go RED, because 14px IS --ds-font-size-sm and the declaration would opt out of a control the tenant bought.",
-        "crossValidation": "The SUB_RUNG_DELIBERATE count independently lands on 16 (8px x1, 9px x2, 10px x8, 11px x5), matching catalog's '16 sub-rung 8-11px' routing exactly.",
+        "crossValidation": "The corpus is one site: stats-header.css 1.75rem = 28px, NO_RUNG_SCALE_EXTENSION. The 40 oauth-transition sites that made up the rest left the package with that surface (WO-CAN-04, F-18: a parallel design system with product identity and a --rh-* namespace), so the count is a source-bound decrease, not a re-adjudication: no literal was tokenised, reclassified or forgiven.",
         "sites": [
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 113,
-            "value": "clamp(120px, 18vw, 260px)",
-            "px": null,
-            "cls": "BESPOKE_CLAMP",
-            "owner": "design-system/typography (fluid ramp)",
-            "reason": "A viewport-interpolated clamp() with its own curve. The --ds-font-size-fluid-* rungs are rem/cqi based and none matches; deriving would change the interpolation, not just the value.",
-            "proof": "Compared against every --ds-font-size-fluid-* rung in the three bundles; no match on min, max or curve."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 258,
-            "value": "22px",
-            "px": 22.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 272,
-            "value": "14px",
-            "px": 14.0,
-            "cls": "EXACT_RUNG",
-            "owner": "design-system/typography (blocked by the oauth-transition unit decision)",
-            "reason": "A rung carries this px exactly, so the swap is individually provable -- but the FILE is 0/40 governed and tokenising only these eight would make the type hierarchy scale unevenly at any typography.scale != 1. Held by the unit decision, not by the value.",
-            "proof": "Rung px verified identical in bithire, platform and evnto; file governance measured at 0/40 var(--ds-*) uses."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 279,
-            "value": "11px",
-            "px": 11.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 357,
-            "value": "12px",
-            "px": 12.0,
-            "cls": "EXACT_RUNG",
-            "owner": "design-system/typography (blocked by the oauth-transition unit decision)",
-            "reason": "A rung carries this px exactly, so the swap is individually provable -- but the FILE is 0/40 governed and tokenising only these eight would make the type hierarchy scale unevenly at any typography.scale != 1. Held by the unit decision, not by the value.",
-            "proof": "Rung px verified identical in bithire, platform and evnto; file governance measured at 0/40 var(--ds-*) uses."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 365,
-            "value": "clamp(44px, 6vw, 88px)",
-            "px": null,
-            "cls": "BESPOKE_CLAMP",
-            "owner": "design-system/typography (fluid ramp)",
-            "reason": "A viewport-interpolated clamp() with its own curve. The --ds-font-size-fluid-* rungs are rem/cqi based and none matches; deriving would change the interpolation, not just the value.",
-            "proof": "Compared against every --ds-font-size-fluid-* rung in the three bundles; no match on min, max or curve."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 373,
-            "value": "clamp(22px, 3.4vw, 34px)",
-            "px": null,
-            "cls": "BESPOKE_CLAMP",
-            "owner": "design-system/typography (fluid ramp)",
-            "reason": "A viewport-interpolated clamp() with its own curve. The --ds-font-size-fluid-* rungs are rem/cqi based and none matches; deriving would change the interpolation, not just the value.",
-            "proof": "Compared against every --ds-font-size-fluid-* rung in the three bundles; no match on min, max or curve."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 380,
-            "value": "15px",
-            "px": 15.0,
-            "cls": "EXACT_RUNG",
-            "owner": "design-system/typography (blocked by the oauth-transition unit decision)",
-            "reason": "A rung carries this px exactly, so the swap is individually provable -- but the FILE is 0/40 governed and tokenising only these eight would make the type hierarchy scale unevenly at any typography.scale != 1. Held by the unit decision, not by the value.",
-            "proof": "Rung px verified identical in bithire, platform and evnto; file governance measured at 0/40 var(--ds-*) uses."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 386,
-            "value": "12px",
-            "px": 12.0,
-            "cls": "EXACT_RUNG",
-            "owner": "design-system/typography (blocked by the oauth-transition unit decision)",
-            "reason": "A rung carries this px exactly, so the swap is individually provable -- but the FILE is 0/40 governed and tokenising only these eight would make the type hierarchy scale unevenly at any typography.scale != 1. Held by the unit decision, not by the value.",
-            "proof": "Rung px verified identical in bithire, platform and evnto; file governance measured at 0/40 var(--ds-*) uses."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 449,
-            "value": "22px",
-            "px": 22.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 476,
-            "value": "10px",
-            "px": 10.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 483,
-            "value": "14px",
-            "px": 14.0,
-            "cls": "EXACT_RUNG",
-            "owner": "design-system/typography (blocked by the oauth-transition unit decision)",
-            "reason": "A rung carries this px exactly, so the swap is individually provable -- but the FILE is 0/40 governed and tokenising only these eight would make the type hierarchy scale unevenly at any typography.scale != 1. Held by the unit decision, not by the value.",
-            "proof": "Rung px verified identical in bithire, platform and evnto; file governance measured at 0/40 var(--ds-*) uses."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 535,
-            "value": "19px",
-            "px": 19.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 539,
-            "value": "12px",
-            "px": 12.0,
-            "cls": "EXACT_RUNG",
-            "owner": "design-system/typography (blocked by the oauth-transition unit decision)",
-            "reason": "A rung carries this px exactly, so the swap is individually provable -- but the FILE is 0/40 governed and tokenising only these eight would make the type hierarchy scale unevenly at any typography.scale != 1. Held by the unit decision, not by the value.",
-            "proof": "Rung px verified identical in bithire, platform and evnto; file governance measured at 0/40 var(--ds-*) uses."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 557,
-            "value": "10px",
-            "px": 10.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 605,
-            "value": "9px",
-            "px": 9.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 648,
-            "value": "10px",
-            "px": 10.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 673,
-            "value": "11px",
-            "px": 11.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 722,
-            "value": "17px",
-            "px": 17.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 835,
-            "value": "10px",
-            "px": 10.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 845,
-            "value": "13px",
-            "px": 13.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1117,
-            "value": "11px",
-            "px": 11.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1164,
-            "value": "12px",
-            "px": 12.0,
-            "cls": "EXACT_RUNG",
-            "owner": "design-system/typography (blocked by the oauth-transition unit decision)",
-            "reason": "A rung carries this px exactly, so the swap is individually provable -- but the FILE is 0/40 governed and tokenising only these eight would make the type hierarchy scale unevenly at any typography.scale != 1. Held by the unit decision, not by the value.",
-            "proof": "Rung px verified identical in bithire, platform and evnto; file governance measured at 0/40 var(--ds-*) uses."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1170,
-            "value": "13px",
-            "px": 13.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1180,
-            "value": "11px",
-            "px": 11.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1283,
-            "value": "30px",
-            "px": 30.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1291,
-            "value": "10px",
-            "px": 10.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1477,
-            "value": "10px",
-            "px": 10.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1500,
-            "value": "34px",
-            "px": 34.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1522,
-            "value": "13px",
-            "px": 13.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1526,
-            "value": "10px",
-            "px": 10.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1568,
-            "value": "28px",
-            "px": 28.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1645,
-            "value": "10px",
-            "px": 10.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1702,
-            "value": "11px",
-            "px": 11.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1707,
-            "value": "9px",
-            "px": 9.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1768,
-            "value": "8px",
-            "px": 8.0,
-            "cls": "SUB_RUNG_DELIBERATE",
-            "owner": "design-system/typography + Kimi (legibility)",
-            "reason": "Below the smallest rung (--ds-font-size-2xs = 11px). The type scale deliberately stops at 11px, so 8-10px cannot be derived without minting sub-11px rungs, which is a legibility decision and not a normalisation.",
-            "proof": "Rung table measured from the three shipped bundles: smallest step is 11px (--ds-font-size-2xs). 8/9/10px have no representation."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 1933,
-            "value": "30px",
-            "px": 30.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 2133,
-            "value": "clamp(24px, 13vw, 52px)",
-            "px": null,
-            "cls": "BESPOKE_CLAMP",
-            "owner": "design-system/typography (fluid ramp)",
-            "reason": "A viewport-interpolated clamp() with its own curve. The --ds-font-size-fluid-* rungs are rem/cqi based and none matches; deriving would change the interpolation, not just the value.",
-            "proof": "Compared against every --ds-font-size-fluid-* rung in the three bundles; no match on min, max or curve."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 2138,
-            "value": "13px",
-            "px": 13.0,
-            "cls": "NO_RUNG_SCALE_EXTENSION",
-            "owner": "design-system/typography (FASE 4 scale extension)",
-            "reason": "No rung carries this px. Deriving would send the declaration to the NEAREST rung, which is approximating a value to make it a token -- forbidden. Needs a scale extension first.",
-            "proof": "Rung table measured from the three shipped bundles: available px are 11,12,14,15,16,18,20,24,32,40,48,72,96,128. This value is absent."
-          },
-          {
-            "file": "presentation/components/skin/oauth-transition/index.css",
-            "line": 2162,
-            "value": "96px",
-            "px": 96.0,
-            "cls": "EXACT_RUNG",
-            "owner": "design-system/typography (blocked by the oauth-transition unit decision)",
-            "reason": "A rung carries this px exactly, so the swap is individually provable -- but the FILE is 0/40 governed and tokenising only these eight would make the type hierarchy scale unevenly at any typography.scale != 1. Held by the unit decision, not by the value.",
-            "proof": "Rung px verified identical in bithire, platform and evnto; file governance measured at 0/40 var(--ds-*) uses."
-          },
           {
             "file": "presentation/components/skin/stats-header/index.css",
             "line": 192,
@@ -16742,8 +16339,8 @@
     "rosterSha256": "7d9ea09aed4297978cb2e789f6e242a63fb2978639204b371f415dd68ce78cfb",
     "seedChanges": {
       "rottay": {
-        "errorColor": "#EF4444 → #F87171 (error ramp 400)",
-        "infoColor": "#3B82F6 → #60A5FA (info ramp 400)",
+        "errorColor": "#EF4444 \u2192 #F87171 (error ramp 400)",
+        "infoColor": "#3B82F6 \u2192 #60A5FA (info ramp 400)",
         "lightErrorColor": "unchanged #DC2626",
         "lightInfoColor": "unchanged #2563EB"
       }

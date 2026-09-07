@@ -170,9 +170,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 111,
-          "maxFiles": 14,
-          "digest": "c5d9d928adf324c6194de9c455850b7139646a89764b111ba18ab43463106e9d"
+          "maxCount": 64,
+          "maxFiles": 13,
+          "digest": "ca6633ea54fe1580cacff9e15332c42e4182b35c4037e7c8783f715ac313a63c"
         },
         {
           "repo": "ui-design-system",
@@ -232,7 +232,8 @@
             "doNotRepeat": "This is a one-off reconciliation against a named commit, NOT the routine way to update a baseline. A future count that exceeds these rows is a real regression: fix the code, do not re-run --print-baseline."
           }
         ]
-      }
+      },
+      "woCan04SkinRemoval": "WO-CAN-04 (F-18) deleted packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css with the surface it painted: 2,278 lines, 13 `var(--ds-` reads, its own private token namespace and 6 hardcoded hex palettes. ds-internal global-keyframes therefore goes 111 -> 64 findings and 14 -> 13 files. The delta is PROVEN, not asserted: the finding multiset (path+kind+symbol+evidence) was computed on the pristine parent commit fc8417574 and on the working tree, and the difference is exactly 47 removed rows, ALL of them in that one file, with 0 additions and 0 rows moved in any other file. No keyframe was renamed, re-scoped or forgiven; a file left the package and took its own rows with it."
     },
     "raw-motion-timing": {
       "owner": "design-system",
@@ -298,9 +299,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 346,
-          "maxFiles": 139,
-          "digest": "0a3dc1c331f84136c256b017c6690273a480e9ecea1b5487ceb043980b3e60f9"
+          "maxCount": 304,
+          "maxFiles": 138,
+          "digest": "6706a3a6571003a50a42a029da35fd1eb4cf40b81262e9e1a2714c434a8c356e"
         },
         {
           "repo": "ui-design-system",
@@ -429,7 +430,8 @@
         "verifiedBy": "scanSource() run against the pre-commit content of packages/core/src/components/structures/dashboard/tests/DashboardEmbeddedCssRecovery.contract.test.ts (extracted via `git show aee0d5daaa^:<path>`) compared to the working tree's current content of the same single file -- the only file in this row whose content changed since the last anchor (confirmed: the other 15 files in the ui-design-system/test row are unchanged since 2026-07-17..2026-08-24, none touching raw-motion-timing-relevant syntax). Exact finding multiset (kind, symbol, evidence) for that one file: 28 -> 24, 4 removals, 0 additions: `animation: 'ds-metrics-minimal-slide-in 0.4s ease-out both'` (line 187), `animation: 'ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both'` (line 201), `animation: 'ds-metrics-chart-slide-in 0.4s ease-out both'` (line 215), `animation: 'ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both'` (line 229). The row-wide count moves 47 -> 43 (-4), exactly matching this one file's delta; maxFiles stays 16 (no file entered or left the row).",
         "reason": "Already-committed CI-1 work (test(modern-rescue): CI-1 -- mechanical burn-down of the CI backlog, aee0d5daaa, 2026-08-24) moved four metrics entrance-animation shorthand values from a literal duration+easing pair to the tokenized `var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out)` form, three new RTL keyframe mirrors were added alongside them (bare keyframe-name values, no raw duration literal, so they do not enter this channel), and nobody ran gates:ci end-to-end since the 2026-08-23 DT succession to re-anchor this row against that legitimate change. This entry closes that gap. The DT's initial hypothesis for this row (a resolution-probe/C5 test file) was checked and rejected before writing: none of the C5-touched resolution-probe files contain any transition/animation-timing syntax at all, and none appear anywhere in this channel's 16-file ui-design-system/test set.",
         "notAnImprovement": "43 ui-design-system/test raw-motion-timing findings remain inherited debt across the same 16 files. The lower row is a permanent ratchet, not a claim that these tests' motion coverage is complete, and not permission to add a raw timing literal to any of the 16 files."
-      }
+      },
+      "woCan04SkinRemoval": "Same removal, same proof, other channel: ds-internal raw-motion-timing goes 346 -> 304 findings and 139 -> 138 files. The measured difference against fc8417574 is exactly 41 removed rows, ALL in packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css, with 0 additions anywhere. 47 + 41 = 88 removed rows total, which is the whole file's motion inventory; nothing else in the tree moved."
     },
     "transition-all": {
       "owner": "design-system",

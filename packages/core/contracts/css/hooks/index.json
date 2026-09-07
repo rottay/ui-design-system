@@ -67,8 +67,8 @@
     "hooks": 91,
     "unadjudicatedReads": 2599,
     "promoted": 91,
-    "styleFiles": 462,
-    "componentFiles": 1320
+    "styleFiles": 461,
+    "componentFiles": 1316
   },
   "declaredSlots": {
     "--ds-command-grid-opacity": {

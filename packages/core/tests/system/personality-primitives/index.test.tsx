@@ -37,7 +37,11 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { DesignSystemProvider } from '../../../src/infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { EngineName, ProductProfileKey, TenantConfig } from '../../../src/foundation/contracts';
-import { PERSONALITY_CANONICAL_PROJECTION } from '../../../src/foundation/tokens/ts/runtime/personality';
+import {
+  PERSONALITY_CANONICAL_PROJECTION,
+  resolvePersonalityBridgeCssVariables,
+} from '../../../src/foundation/tokens/ts/runtime/personality';
+import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import {
   Badge,
   Button,
@@ -131,27 +135,39 @@ function renderWithProfile(
       productProfile={productProfile}
       skipCssLoading
     >
+      <PersonalityProbe />
       <Suspense fallback={<div data-testid="loading">Loading...</div>}>{ui}</Suspense>
     </DesignSystemProvider>
   );
 }
 
 /**
- * Reads the personality input from the `:root` rule the bridge owns.
+ * Reads the personality input the mounted provider stack resolves.
  *
- * The bridge publishes namespaced inputs, never canonical component channels.
- * `runtime/personality/index.css` is the sole projection from those private inputs
- * back to public component channels, keeping the product-profile axis from
- * becoming a second paint authority beside a tenant artifact.
+ * This used to read the `:root` rule a runtime bridge wrote into the document.
+ * WO-CAN-04 deleted that writer -- a JS painter beside the compiled artifact on
+ * the same channel -- so the namespaced inputs now travel as compiled data and
+ * `runtime/personality/index.css` projects them onto public component channels.
+ *
+ * The measurement is unchanged in strength and in subject: the SAME namespaced
+ * names, resolved from the SAME live provider stack (engine, vertical, product
+ * profile and tenant, through `useTokens`), asserted against the SAME expected
+ * values. What is gone is only the DOM write, and its absence is asserted
+ * separately below rather than assumed.
  */
+let resolvedPersonalityInputs: Record<string, string> = {};
+
+function PersonalityProbe(): null {
+  resolvedPersonalityInputs = resolvePersonalityBridgeCssVariables(useTokens()) as Record<string, string>;
+  return null;
+}
+
 function personalityToken(name: string): string {
-  const styleElement = document.getElementById('ds-personality-tokens') as HTMLStyleElement | null;
-  const rule = styleElement?.sheet?.cssRules?.[0] as CSSStyleRule | undefined;
   const projectedName =
     PERSONALITY_CANONICAL_PROJECTION[
       name as keyof typeof PERSONALITY_CANONICAL_PROJECTION
     ] ?? name;
-  return rule?.style.getPropertyValue(projectedName) ?? '';
+  return resolvedPersonalityInputs[projectedName] ?? '';
 }
 
 /**
@@ -208,7 +224,7 @@ describe('primitive personality integration', () => {
   });
 
   it.each(['classic', 'modern', 'rustic'] as const)(
-    'bridges personality into runtime styles for %s, and paints nothing inline',
+    'resolves personality onto the component channels for %s, and paints nothing at runtime',
     async (engine) => {
       const buttonView = renderWithProfile(
         <Button>Primary action</Button>,
@@ -228,6 +244,15 @@ describe('primitive personality integration', () => {
       // style attribute would outrank every tenant-scoped rule in the cascade.
       expect(inlineToken('--ds-card-shadow')).toBe('');
       expect(inlineToken('--ds-badge-radius')).toBe('');
+      // And no runtime stylesheet either. The provider used to mount a bridge
+      // that wrote these very names into a `:root` rule on every render, which
+      // is the second painter WO-CAN-04 removed; the singleton it owned must
+      // never appear again for ANY tenant, not only for a refused one.
+      expect(document.getElementById('ds-personality-tokens')).toBeNull();
+      expect(
+        [...document.querySelectorAll('style')]
+          .filter((node) => (node.textContent ?? '').includes('--ds-personality-')),
+      ).toEqual([]);
       // And the provider paints no tenant channel there either, which is the
       // other half of the same rule. This tenant authors no color at all, so a
       // value appearing here could only have been invented by the runtime.
@@ -356,6 +381,7 @@ describe('primitive personality integration', () => {
         productProfile="recruiting.operator"
         skipCssLoading
       >
+        <PersonalityProbe />
         <div>
           <Button>Primary action</Button>
           <Card>
@@ -372,10 +398,12 @@ describe('primitive personality integration', () => {
     expect(personalityToken('--ds-personality-animation-entrance')).toBe('fade');
     expect(personalityToken('--ds-skeleton-animation-duration')).toBe('1.9s');
 
-    // Still nothing inline. A profile switch is a personality event, and it
-    // must not become a paint event on the way through.
+    // Still nothing painted. A profile switch is a personality event, and it
+    // must not become a paint event on the way through -- not inline, and not
+    // as a runtime stylesheet.
     expect(inlineToken('--ds-card-shadow')).toBe('');
     expect(inlineToken('--ds-color-primary')).toBe('');
+    expect(document.getElementById('ds-personality-tokens')).toBeNull();
   });
 
   it('refuses a tenant whose colors have no compiled artifact behind them', async () => {

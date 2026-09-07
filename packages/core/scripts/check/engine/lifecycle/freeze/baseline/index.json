@@ -137,9 +137,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx": {
-      "blob": "b5f6d5fb28d3fabf042ff1865fe607515f8975776bfd3b20bda8dead2797e8de",
-      "relocationDigest": "f5fff6bb8ee2c719d3f57fae4c6d8a9df44fc6d2e77aa79c098a8784f528aac7",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "b8e4892567a73e7bf5273b6534ee9155874ace771d45b028cf9c36de2268ba39",
+      "relocationDigest": "2d09139fe3b254b8658401e9e42dae3446affda2ccfb1e279a9948a2634e4696",
+      "reason": "WO-CAN-04 / F-18 determinism: the tooltip id was allocated with a random suffix inside useRef, so the server and the client produced different values for an aria-describedby target and every hydration mismatched. Replaced by React useId(), which is the same allocator the modern sibling already uses (classic allocates no id of its own). This is a correctness fix demanded by a cross-cutting blocking gate (component-determinism-gate, closure criterion of F-18: zero occurrences under src/components), not engine content work: no token, no style, no anatomy and no accessibility affordance moved.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx": {

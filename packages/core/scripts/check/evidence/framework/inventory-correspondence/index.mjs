@@ -908,11 +908,12 @@ export function checkInventoryCorrespondence(options = {}) {
   }
 
   // Acronym-slug law. A family id's last segment is a SPELLING of the folder that owns it,
-  // never a re-derivation of the component name. `surface/experience/o-auth-transition`
-  // owned `.../experience/oauth-transition`: the same letters, with a dash driven into the
-  // middle of the OAuth acronym by a per-capital slugger reading `OAuthTransitionScreen`.
-  // normalizeSlug() erases punctuation, so the row still resolved and the drift survived a
-  // full round labelled "cosmetic id-generator drift".
+  // never a re-derivation of the component name. The defect that produced this law was
+  // `surface/experience/o-auth-transition` owning `.../experience/oauth-transition`: the same
+  // letters, with a dash driven into the middle of the OAuth acronym by a per-capital slugger
+  // reading `OAuthTransitionScreen`. normalizeSlug() erases punctuation, so the row still
+  // resolved and the drift survived a full round labelled "cosmetic id-generator drift". That
+  // family has since left the DS (WO-CAN-04); `OTPInput` and `QRCode` are the live subjects.
   //
   // Two preconditions keep this exact rather than stylistic. The folder must already be
   // written in the id's own vocabulary -- lowercase kebab -- so it is authoritative about
@@ -931,7 +932,7 @@ export function checkInventoryCorrespondence(options = {}) {
     if (folderName !== folderName.toLowerCase()) continue;
     if (idSlug !== folderName && normalizeSlug(idSlug) === normalizeSlug(folderName)) {
       blockers.push(
-        `family ${row.id} punctuates its own owner differently: id slug '${idSlug}' vs folder '${folderName}'. An id spells its folder exactly, so an acronym stays whole (oauth, never o-auth).`,
+        `family ${row.id} punctuates its own owner differently: id slug '${idSlug}' vs folder '${folderName}'. An id spells its folder exactly, so an acronym stays whole (otp, never o-tp).`,
       );
     }
   }

@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 9,
-      "maxSourceBytes": 62120
+      "maxSourceBytes": 62115
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -327,12 +327,8 @@
     "./surfaces/collection-workspace": {
       "maxReachableModules": 778,
       "maxSourceBytes": 3592350
-    },
-    "./surfaces/oauth-transition": {
-      "maxReachableModules": 6,
-      "maxSourceBytes": 41392
     }
   },
-  "lastMove": "`./primitives/message` enrolls in the ONE overlay kernel (WO-CAN-05, 24/24 families). Modern Message calls `useFieldOverlay({ kind: 'toast', surface: 'viewport', render: 'inline' })` for stack identity alone -- it never anchors, never positions, never portals, and it consumes only the layer data-attributes -- but `useFieldOverlay` calls `useOverlayPosition` and `usePortalScope` unconditionally, as the rules of hooks require, so the kernel's static module set enters the subpath graph whole. maxReachableModules stays 54: the measured graph goes 47 -> 54 and lands exactly on the anchored ceiling, so that dimension does not move. maxSourceBytes 214867 -> 256096, exactly +69532 = +68725 over the seven added modules (positioning 19134, field-overlay 18409, layer-stack 13254, portal-scope 7722, portal 5909, top-layer-host 3027, foundation/portal-theme 1270) +807 (feedback/message/engines/modern/index.tsx 25519 -> 26326, which takes the kernel and drops the private stacking). Splitting `FieldOverlayPanel` out of the kernel module would return only portal + top-layer-host (8936 bytes, still 32293 over the old ceiling); shedding the rest means Message leaving the single contract for a second overlay hook, which is the architecture WO-CAN-05 removed. The anchor is exact, not slack: the measured graph is 54 modules and 256096 bytes.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-CAN-04: the mount door shrank. The provider stopped importing and mounting SystemCssVariablesBridge (the runtime personality painter this lot deleted) and now names the fail-closed adapter door directly, and the artifact-protocol channel docblock lost two lines; net -5 source bytes on the ./runtime/visual-authority graph, reachable modules unchanged at 9. Lowered in the same lot that produced it, per the anchor law. ./surfaces/oauth-transition is gone from the roster with the surface it published, so the seat is 76 subpaths.",
+  "lastMoveKind": "decrece-solo — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 0 subido(s), 0 sin ancla valida"
 }

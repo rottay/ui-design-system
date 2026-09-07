@@ -37,11 +37,16 @@ test.afterEach(() => {
 // --- Acronym-slug law ---------------------------------------------------------------------
 //
 // A family id's last segment spells the folder that owns it. It is not re-derived from the
-// component name, because a per-capital slugger reading `OAuthTransitionScreen` emits
-// `o-auth-transition` for a folder named `oauth-transition`, and `normalizeSlug()` erases the
-// punctuation that separates the two -- so the row resolves, the gate stays green, and the
-// drift survives review as cosmetic. These drills pin both directions of the defect and both
-// preconditions that keep the law exact.
+// component name, because a per-capital slugger reading `OTPInput` emits `o-tp-input` for a
+// folder named `otp-input`, and `normalizeSlug()` erases the punctuation that separates the
+// two -- so the row resolves, the gate stays green, and the drift survives review as
+// cosmetic. These drills pin both directions of the defect and both preconditions that keep
+// the law exact.
+//
+// The subject used to be `OAuthTransitionScreen`/`oauth-transition`. That family left the DS
+// with WO-CAN-04 (F-18: a parallel design system with product identity), so the law is now
+// pinned on the acronym families that remain -- `OTPInput` and `QRCode` -- rather than on a
+// row a planted mutation could no longer find.
 
 const ACRONYM_BLOCKER = 'punctuates its own owner differently';
 
@@ -244,17 +249,18 @@ test('POSITIVE EXAMPLE: a compound name keeps its word boundary in id AND folder
   assert.equal(ownerOf('chart/spatial/heat-map'), 'heat-map');
   assert.equal(ownerOf('chart/temporal/calendar-heat-map'), 'calendar-heat-map');
   assert.equal(ownerOf('chart/hierarchical/tree-map'), 'tree-map');
-  assert.equal(ownerOf('surface/experience/oauth-transition'), 'oauth-transition');
+  assert.equal(ownerOf('primitive/inputs/otp-input'), 'otp-input');
+  assert.equal(ownerOf('primitive/display/qr-code'), 'qr-code');
 });
 
-test('NEGATIVE DRILL: a dash driven into an acronym is caught (o-auth over oauth-transition)', () => {
+test('NEGATIVE DRILL: a dash driven into an acronym is caught (o-tp over otp-input)', () => {
   const result = checkInventoryCorrespondence({
-    contracts: withPlantedId('surface/experience/oauth-transition', 'surface/experience/o-auth-transition'),
+    contracts: withPlantedId('primitive/inputs/otp-input', 'primitive/inputs/o-tp-input'),
   });
   const found = acronymBlockers(result);
   assert.equal(found.length, 1);
-  assert.match(found[0], /surface\/experience\/o-auth-transition/);
-  assert.match(found[0], /id slug 'o-auth-transition' vs folder 'oauth-transition'/);
+  assert.match(found[0], /primitive\/inputs\/o-tp-input/);
+  assert.match(found[0], /id slug 'o-tp-input' vs folder 'otp-input'/);
   assert.equal(result.valid, false);
 });
 

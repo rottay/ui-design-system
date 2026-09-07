@@ -104,7 +104,6 @@ export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: './structures/action-dock', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
   { subpath: './structures/column-menu', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
   { subpath: './surfaces/collection-workspace', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
-  { subpath: './surfaces/oauth-transition', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
   { subpath: './public-entrypoints-manifest', disposition: 'retire-by', retiredBy: 'WO-RET-01' },
   { subpath: './icons', disposition: 'guaranteed', retiredBy: null },
   { subpath: './icons/full', disposition: 'retire-by', retiredBy: 'WO-RET-01' },

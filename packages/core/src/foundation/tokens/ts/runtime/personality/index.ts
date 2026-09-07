@@ -378,7 +378,7 @@ export function resolvePartialPersonalityCssVariables(
 }
 
 /**
- * Resolve the full CSS-variable map injected by `SystemCssVariablesBridge`.
+ * Resolve the full personality CSS-variable map.
  * Translates every personality token into a namespaced CSS custom property
  * and derives component-level shorthand variables (card, badge, button,
  * skeleton, divider, typography, toast, modal, notification).
@@ -404,11 +404,11 @@ export function resolvePersonalityCssVariables(tokens: DesignTokens): CssVariabl
 /**
  * Canonical component channels derived from personality data.
  *
- * `SystemCssVariablesBridge` must not write these names directly: doing so
- * would turn a product/vertical axis into a second paint authority beside the
- * static or DB tenant artifact. The bridge publishes the corresponding
- * namespaced value and `foundation/tokens/css/runtime/personality/index.css` is the
- * single projection that maps it back to the canonical component channel.
+ * No emitter may write these names directly: doing so would turn a
+ * product/vertical axis into a second paint authority beside the static or DB
+ * tenant artifact. An emitter publishes the corresponding namespaced value and
+ * `foundation/tokens/css/runtime/personality/index.css` is the single
+ * projection that maps it back to the canonical component channel.
  *
  * This explicit table is intentionally closed. Adding a new canonical output
  * to `resolvePartialPersonalityCssVariables` without assigning it a projection

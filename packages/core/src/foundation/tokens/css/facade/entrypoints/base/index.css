@@ -618,8 +618,6 @@
 @import "../../../presentation/components/skin/operational-surface/index.css" layer(rottay-surfaces);
 
 /* Hidden-channel recovery: byte-exact component CSS, deliberately unlayered. */
-@import "../../../presentation/components/skin/oauth-transition/index.css"
-  layer(rottay-surfaces);
 @import "../../../presentation/components/skin/loading-overlay/index.css"
   layer(rottay-structures);
 

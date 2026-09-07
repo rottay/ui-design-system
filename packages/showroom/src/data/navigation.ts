@@ -489,7 +489,6 @@ const surfacesNav: NavSection = {
         { slug: 'empty-state', label: 'EmptyStateSurface', path: '/surfaces/experience/empty-state' },
         { slug: 'marketing', label: 'MarketingSurface', path: '/surfaces/experience/marketing' },
         { slug: 'media', label: 'MediaSurface', path: '/surfaces/experience/media' },
-        { slug: 'oauth-transition', label: 'OAuthTransitionScreen', path: '/surfaces/experience/oauth-transition' },
         { slug: 'notification', label: 'NotificationSurface', path: '/surfaces/experience/notification' },
         { slug: 'pricing', label: 'PricingSurface', path: '/surfaces/experience/pricing' },
       ],

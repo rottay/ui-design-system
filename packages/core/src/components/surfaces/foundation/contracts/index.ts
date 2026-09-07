@@ -347,7 +347,7 @@ export interface ListSurfaceVisualConfig {
   /** Callback when visible columns change (e.g., from a column settings panel). */
   onColumnVisibilityChange?: (visibleKeys: string[]) => void;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -503,7 +503,7 @@ export interface DashboardSurfaceVisualConfig {
    */
   adaptivePacking?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -624,7 +624,7 @@ export interface DetailSurfaceVisualConfig {
   /** Move the sidebar content below the main detail content on mobile. Defaults to `true`. */
   collapseSidebarOnMobile?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -673,7 +673,7 @@ export interface FormSurfaceVisualConfig {
   /** Keep the submit/cancel action cluster visible near the bottom on mobile. */
   mobileActionsSticky?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -803,7 +803,7 @@ export interface WizardSurfaceVisualConfig {
   /** Keep wizard navigation and draft/cancel actions visible on mobile. */
   mobileActionsSticky?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -888,7 +888,7 @@ export interface DetailFormSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -953,7 +953,7 @@ export interface VisualizationSurfaceVisualConfig {
   /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
   compactChartsOnMobile?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1029,7 +1029,7 @@ export interface SearchSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1102,7 +1102,7 @@ export interface EditorSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1209,7 +1209,7 @@ export interface OperationalSurfaceVisualConfig {
   /** Stack the dashboard-style sections into a single column on mobile. Defaults to `true`. */
   stackSectionsOnMobile?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1297,7 +1297,7 @@ export interface MediaSurfaceVisualConfig {
   /** Maximum number of gallery columns on mobile. */
   mobileColumnsLimit?: number;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1388,7 +1388,7 @@ export interface ChatSurfaceVisualConfig {
   /** Keep the message composer input sticky at the bottom on mobile. */
   stickyInputOnMobile?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1457,7 +1457,7 @@ export interface SchedulerSurfaceVisualConfig {
   /** Hide the timeline sidebar on mobile. */
   hideTimelineOnMobile?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1549,7 +1549,7 @@ export interface CompareSurfaceVisualConfig {
   /** Render the comparison in compact mode (smaller cells, tighter spacing). */
   compact?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1600,7 +1600,7 @@ export interface AuthSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1658,7 +1658,7 @@ export interface MarketingSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1710,7 +1710,7 @@ export interface MarketingSurfaceConfig {
 export interface EmptyStateSurfaceVisualConfig {
   maxWidth?: number | string;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1757,7 +1757,7 @@ export interface SettingsSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1844,7 +1844,7 @@ export interface AuditSurfaceVisualConfig {
   /** Constrain table height and enable vertical scrolling. */
   maxHeight?: string;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1932,7 +1932,7 @@ export interface BillingSurfaceVisualConfig {
   /** 'tabs' groups plan/usage/invoices into tabs; 'sections' stacks them vertically. */
   layout?: 'tabs' | 'sections';
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2000,7 +2000,7 @@ export interface ProfileSurfaceVisualConfig {
   /** 'sidebar' shows section nav on the side; 'stacked' renders all sections vertically. */
   layout?: 'sidebar' | 'stacked';
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2074,7 +2074,7 @@ export interface NotificationSurfaceVisualConfig {
   /** 'tabs' separates feed and preferences into tabs; 'sections' stacks them. */
   layout?: 'tabs' | 'sections';
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2167,7 +2167,7 @@ export interface ImportExportHistoryEntry {
 export interface ImportExportSurfaceVisualConfig {
   maxWidth?: number | string;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2261,7 +2261,7 @@ export interface ReportSurfaceVisualConfig {
   layout?: 'sidebar-filters' | 'top-filters';
   maxWidth?: number | string;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2335,7 +2335,7 @@ export interface TeamSurfaceVisualConfig {
   maxWidth?: number | string;
   layout?: 'table' | 'cards';
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2417,7 +2417,7 @@ export interface IntegrationSurfaceVisualConfig {
   /** 'tabs' separates keys/webhooks/apps into tabs; 'sections' stacks them. */
   layout?: 'tabs' | 'sections';
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2503,7 +2503,7 @@ export interface KanbanSurfaceVisualConfig {
   /** Stack columns vertically on mobile instead of horizontal scroll. */
   stackColumnsOnMobile?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2577,7 +2577,7 @@ export interface ActivitySurfaceFilter {
 export interface ActivitySurfaceVisualConfig {
   maxWidth?: number | string;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2651,7 +2651,7 @@ export interface FileBrowserSurfaceVisualConfig {
   /** 'grid' shows thumbnails; 'list' shows a detailed table. */
   viewMode?: 'grid' | 'list';
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2733,7 +2733,7 @@ export interface PricingSurfaceFeature {
 export interface PricingSurfaceVisualConfig {
   maxWidth?: number | string;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 

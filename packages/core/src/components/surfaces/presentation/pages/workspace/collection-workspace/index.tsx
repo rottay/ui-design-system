@@ -395,47 +395,6 @@ function getPreviewRailViewportMax(minWidth: number, maxWidth: number): number {
   return Math.max(minWidth, Math.min(maxWidth, window.innerWidth - 360));
 }
 
-function readStoredPreviewRailWidth(storageKey: string): number | null {
-  if (typeof window === 'undefined') return null;
-
-  try {
-    const storedWidth = window.localStorage.getItem(storageKey);
-    if (storedWidth == null) return null;
-    const parsedStoredWidth = Number(storedWidth);
-    return Number.isFinite(parsedStoredWidth) ? parsedStoredWidth : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeStoredPreviewRailWidth(storageKey: string, width: number): void {
-  if (typeof window === 'undefined') return;
-
-  try {
-    window.localStorage.setItem(storageKey, String(width));
-  } catch {
-    // Storage can be unavailable in private or embedded browser contexts.
-  }
-}
-
-const HIGH_VALUE_SCOPE_KEYS = [
-  'open',
-  'active',
-  'published',
-  'pending',
-  'pending_approval',
-  'urgent',
-  'high-risk',
-  'watchlist',
-  'draft',
-  'paused',
-  'closed',
-  'completed',
-  'approved',
-  'overloaded',
-  'open-capacity',
-];
-
 function formatHeaderMetaCount(value: number, locale?: string): string {
   if (!Number.isFinite(value)) return '0';
   return new Intl.NumberFormat(locale, {
@@ -450,43 +409,6 @@ function normalizeHeaderMetaLabel(value: string): string {
     .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase();
-}
-
-function readHeaderMetaValue(row: object, keys: string[]): unknown {
-  for (const key of keys) {
-    const value = readCollectionRecordValue(row, key);
-    if (value != null) return value;
-  }
-  return undefined;
-}
-
-function buildStatusMetaItems<T extends object>(data: T[], locale?: string): CollectionHeaderMetaItem[] {
-  const counts = new Map<string, number>();
-
-  data.forEach((row) => {
-    const value = readHeaderMetaValue(row, ['status', 'state', 'stage']);
-    if (typeof value !== 'string' || !value.trim()) return;
-    const key = normalizeHeaderMetaLabel(value);
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  });
-
-  return [...counts.entries()]
-    .sort(([leftKey, leftCount], [rightKey, rightCount]) => {
-      const leftPriority = HIGH_VALUE_SCOPE_KEYS.indexOf(leftKey);
-      const rightPriority = HIGH_VALUE_SCOPE_KEYS.indexOf(rightKey);
-      if (leftPriority !== -1 || rightPriority !== -1) {
-        return (leftPriority === -1 ? 999 : leftPriority) - (rightPriority === -1 ? 999 : rightPriority);
-      }
-      return rightCount - leftCount;
-    })
-    .slice(0, 2)
-    .map(([key, count]) => ({
-      key: `status-${key}`,
-      label: `${formatHeaderMetaCount(count, locale)} ${key}`,
-      tone: ['open', 'active', 'published', 'completed', 'approved'].includes(key)
-        ? 'success'
-        : 'neutral',
-    }));
 }
 
 type SurfaceTranslator = (
@@ -537,24 +459,20 @@ function buildDefaultHeaderMetaItems<T extends object>({
     },
   ];
 
+  // The scopes a config DECLARES, ranked by their own counts. The DS used to
+  // rank them against a hardcoded list of recruiting/events words ('open',
+  // 'published', 'watchlist', 'high-risk'…) and to tint five of those green,
+  // which made a generic surface assert what a status MEANS in someone's
+  // product. Rank is a number the config already carries; meaning is not.
   const scopes = controls?.scopes?.scopes ?? [];
   const scopedItems = scopes
     .filter((scope) => scope.key !== 'all' && typeof scope.count === 'number')
-    .sort((left, right) => {
-      const leftPriority = HIGH_VALUE_SCOPE_KEYS.indexOf(left.key);
-      const rightPriority = HIGH_VALUE_SCOPE_KEYS.indexOf(right.key);
-      if (leftPriority !== -1 || rightPriority !== -1) {
-        return (leftPriority === -1 ? 999 : leftPriority) - (rightPriority === -1 ? 999 : rightPriority);
-      }
-      return (right.count ?? 0) - (left.count ?? 0);
-    })
+    .sort((left, right) => (right.count ?? 0) - (left.count ?? 0))
     .slice(0, 3)
     .map((scope) => ({
       key: `scope-${scope.key}`,
       label: `${formatHeaderMetaCount(scope.count ?? 0, locale)} ${normalizeHeaderMetaLabel(scope.label)}`,
-      tone: ['open', 'active', 'published', 'completed', 'approved'].includes(scope.key)
-        ? 'success'
-        : 'neutral',
+      tone: 'neutral',
     } satisfies CollectionHeaderMetaItem));
 
   for (const item of scopedItems) {
@@ -562,19 +480,8 @@ function buildDefaultHeaderMetaItems<T extends object>({
     items.push(item);
   }
 
-  if (items.length < 3) {
-    for (const item of buildStatusMetaItems(rows, locale)) {
-      if (items.length >= 4) break;
-      if (!items.some((existing) => existing.label === item.label)) {
-        items.push(item);
-      }
-    }
-  }
-
   return items;
 }
-
-const COLLECTION_WORKSPACE_COLUMNS_EVENT = 'collection-workspace:toggle-columns-menu';
 
 // ---------------------------------------------------------------------------
 // Compact utility button (inline in controls row)
@@ -1043,8 +950,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const previewRailResizable = behavior?.previewRail?.resizable ?? true;
   const previewRailMinWidth = behavior?.previewRail?.minWidth ?? DEFAULT_PREVIEW_RAIL_MIN_WIDTH;
   const previewRailMaxWidth = behavior?.previewRail?.maxWidth ?? DEFAULT_PREVIEW_RAIL_MAX_WIDTH;
-  const previewRailStorageKey = behavior?.previewRail?.storageKey
-    ?? `ds:collection-preview-rail:${title}`;
   const previewRailDefaultWidth = useMemo(
     () => clampRailWidth(
       parseRailWidth(behavior?.previewRail?.width, DEFAULT_PREVIEW_RAIL_WIDTH),
@@ -1061,6 +966,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     previewRailWidthRef.current = previewRailWidth;
   }, [previewRailWidth]);
 
+  // RAIL WIDTH IS CONFIG-OWNED, NOT SURFACE-OWNED. This effect used to read a
+  // remembered width out of browser storage under a key derived from the
+  // surface TITLE, so two collections that shared a heading shared a rail and
+  // the DS carried a browser dependency no consumer could see. The declared
+  // width wins; a consumer that wants the width remembered persists it with
+  // `useLayoutPreference` and feeds it back through `previewRail.width`.
   useEffect(() => {
     if (!previewRailResizable || typeof window === 'undefined') {
       setPreviewRailWidth(previewRailDefaultWidth);
@@ -1068,20 +979,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     }
 
     const viewportMax = getPreviewRailViewportMax(previewRailMinWidth, previewRailMaxWidth);
-    const storedWidth = readStoredPreviewRailWidth(previewRailStorageKey);
-    const nextWidth = clampRailWidth(
-      storedWidth ?? previewRailDefaultWidth,
-      previewRailMinWidth,
-      viewportMax,
+    setPreviewRailWidth(
+      clampRailWidth(previewRailDefaultWidth, previewRailMinWidth, viewportMax),
     );
-
-    setPreviewRailWidth(nextWidth);
   }, [
     previewRailDefaultWidth,
     previewRailMaxWidth,
     previewRailMinWidth,
     previewRailResizable,
-    previewRailStorageKey,
   ]);
 
   const commitPreviewRailWidth = useCallback(
@@ -1092,13 +997,11 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       previewRailWidthRef.current = clampedWidth;
       setPreviewRailWidth(clampedWidth);
       behavior?.previewRail?.onWidthChange?.(clampedWidth);
-      writeStoredPreviewRailWidth(previewRailStorageKey, clampedWidth);
     },
     [
       behavior?.previewRail,
       previewRailMaxWidth,
       previewRailMinWidth,
-      previewRailStorageKey,
     ],
   );
 
@@ -1481,9 +1384,15 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       // `route` is the named navigation posture. Keep hidden + mobileNavigation
       // as a compatibility alias until apps migrate their adaptive configs.
+      //
+      // NAVIGATION OWNERSHIP: `href` is rendered as a real record link by
+      // `resolveRowHref`, so the browser performs the navigation and the row
+      // keeps middle-click, copy-link and open-in-new-tab. The surface does not
+      // also assign the document location: a component that navigates by side
+      // effect takes a decision the app never handed it and defeats every
+      // client router the DS is meant to be agnostic of.
       if (usesDeclaredRoute || usesLegacyHiddenRoute) {
         if (usesEnabledNavigation && mobileNav?.href) {
-          window.location.href = mobileNav.href(item);
           return;
         }
         if (usesEnabledNavigation && mobileNav?.onClick) {
@@ -1664,43 +1573,13 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     else closeFilterDisclosure();
   }, [closeFilterDisclosure, openFilterDisclosure]);
 
-  useEffect(() => {
-    if (!isPremium || typeof window === 'undefined') return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      const tagName = target?.tagName?.toLowerCase();
-      const isTypingContext =
-        tagName === 'input' ||
-        tagName === 'textarea' ||
-        tagName === 'select' ||
-        Boolean(target?.isContentEditable);
-
-      if (isTypingContext) return;
-
-      const key = event.key.toLowerCase();
-      if (key === 'f' && hasFilters) {
-        event.preventDefault();
-        handleFiltersToggle();
-      } else if (key === 'c' && hasColumnMenu) {
-        event.preventDefault();
-        window.dispatchEvent(new CustomEvent(COLLECTION_WORKSPACE_COLUMNS_EVENT));
-      } else if (key === 's' && canToggleSelectionMode) {
-        event.preventDefault();
-        handleSelectionModeToggle();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [
-    canToggleSelectionMode,
-    handleSelectionModeToggle,
-    handleFiltersToggle,
-    hasColumnMenu,
-    hasFilters,
-    isPremium,
-  ]);
+  // KEYBOARD OWNERSHIP. The `f` / `c` / `s` shortcuts used to be a document
+  // keydown listener this surface installed for itself, and the `c` branch
+  // reached the column menu by dispatching an untyped DOM event on `window`.
+  // Two workspaces on one page therefore raced for the same three letters
+  // through a channel with no owner, no types and no way for a consuming app
+  // to opt out. Shortcut ownership belongs to the interaction runtime
+  // (WO-FAM-11); it is not re-created here as a second one.
 
   const previousUsesFilterDisclosureRef = useRef(usesFilterDisclosure);
   useEffect(() => {
@@ -2485,7 +2364,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 groups={controls?.columnSettings?.groups}
                 onReset={handleColumnsReset}
                 compact
-                externalToggleEventName={COLLECTION_WORKSPACE_COLUMNS_EVENT}
               />
             )}
 

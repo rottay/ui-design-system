@@ -402,7 +402,9 @@ test('TECHO — el arbol REAL esta en su ancla, techo por techo y dimension por 
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'contracts/package/entrypoints/index.json'), 'utf8'));
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
   const live = readCeilings(manifest);
-  assert.equal(Object.keys(live).length, 77, 'los 77 subpaths del asiento E-2, medidos');
+  // 77 -> 76 (WO-CAN-04): `./surfaces/oauth-transition` left the package with
+  // the surface it published. Decrece-solo, como los dos techos que gobierna.
+  assert.equal(Object.keys(live).length, 76, 'los 76 subpaths del asiento E-2, medidos');
   assert.deepEqual(evaluateCeilings(live, baseline), []);
   // Cada techo real cubre las DOS dimensiones: ni una entrada a medias.
   for (const [subpath, anchored] of Object.entries(baseline.ceilings)) {
@@ -424,10 +426,10 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 62120 },
+    { reachableModules: 9, sourceBytes: 62115 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 62120), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 62115), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */
@@ -684,7 +686,7 @@ test('SCHEMA — el ancla REAL declara la version que el gate lee', () => {
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
   assert.equal(baseline.schemaVersion, CEILINGS_SCHEMA_VERSION);
-  assert.equal(Object.keys(baseline.ceilings).length, 77, 'los 77 techos, intactos');
+  assert.equal(Object.keys(baseline.ceilings).length, 76, 'los 76 techos, intactos');
   assert.deepEqual(Object.keys(baseline).filter((key) => !CEILINGS_ROOT_KEYS.includes(key)), [],
     'el ancla real no lleva ninguna clave de raiz que el gate no lea');
 });

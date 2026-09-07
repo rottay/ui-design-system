@@ -9820,13 +9820,6 @@
       "count": 1
     },
     {
-      "id": "3f4f9daaa444f03b2e80",
-      "path": "src/components/surfaces/presentation/pages/experience/oauth-transition/presentation/screen/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-a",
-      "count": 1
-    },
-    {
       "id": "76b8f9215530d3bb6b77",
       "path": "src/components/surfaces/presentation/pages/operations/scheduler/index.tsx",
       "category": "native-interactive",

@@ -1192,11 +1192,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-oauth-transition-section-rule-style",
-      "familyId": "surface/experience/oauth-transition",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-operational-ledger-focus-ring-color",
       "familyId": "pattern/workflow/operational-ledger",
       "state": "PRESCRIPCION"

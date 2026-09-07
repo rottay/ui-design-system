@@ -578,10 +578,11 @@ Import the CSS stylesheet in your application entry:
 import "@rottay/design-system/styles.css";
 ```
 
-In provider-owned modes, `SystemCssVariablesBridge` handles runtime personality
-tokens; the base layer still comes from the CSS file. In
-`compiled-artifact` mode the server artifact is authoritative and the provider
-does not emit a competing bridge.
+In provider-owned modes, personality tokens travel as data through the provider
+stack (`useTokens()`) and `runtime/personality/index.css` projects them onto the
+component channels; the base layer still comes from the CSS file. In
+`compiled-artifact` mode the server artifact is authoritative. The provider
+paints no personality custom property in either mode.
 
 ---
 

@@ -137,7 +137,7 @@
 
    The complete guard for stylesheet-declared tracking, including the literal
    values hard-coded in skins (widget-board, record-facts, markdown-view,
-   surface-section-card, decision-*, oauth-transition) that ride no token at
+   surface-section-card, decision-*) that ride no token at
    all, and including tracking tokens added after this file was written. It
    needs no specificity arms race: `rottay-responsive` outranks every layer
    those declarations live in.

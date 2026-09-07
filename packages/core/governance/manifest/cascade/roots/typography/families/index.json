@@ -269,11 +269,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-oauth-transition-heading-family",
-      "familyId": "surface/experience/oauth-transition",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-pricing-heading-family",
       "familyId": "surface/experience/pricing",
       "state": "PRESCRIPCION"

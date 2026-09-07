@@ -9,6 +9,5 @@
  */
 export { DesignSystemProvider } from './react/provider';
 export type { DesignSystemProviderProps } from './react/provider';
-export { SystemCssVariablesBridge } from '@/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge';
 export { DSErrorBoundary } from '../presentation/boundaries/system-error';
 export type { DSErrorBoundaryProps } from '../presentation/boundaries/system-error';

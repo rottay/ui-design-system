@@ -195,7 +195,7 @@ export interface HeaderSurfaceVisualConfig {
   /** Hide secondary (non-primary) actions on mobile to reduce clutter. */
   hideSecondaryActionsOnMobile?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -254,7 +254,7 @@ export interface SidebarSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Highest-precedence visual defaults for this surface instance. */
+  /** Instance visual selections, admitted only where the tenant is undecided. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -294,9 +294,14 @@ export interface SidebarSurfaceConfig {
 }
 
 /**
- * Instance-level visual configuration applied after the resolved tenant artifact.
- * This is the highest typed DS configuration layer before app-local class rules
- * and the narrowly allowed runtime-geometry inline escape hatch.
+ * Instance-level visual selections, SUBORDINATE to the resolved tenant.
+ *
+ * A field declared here is applied only when the catalog models its value AND
+ * the tenant left the personality channel it speaks for undecided
+ * (`SURFACE_VISUAL_OVERRIDE_CATALOG` /
+ * `SURFACE_VISUAL_OVERRIDE_TENANT_CHANNELS`). It can narrow a DS or
+ * product-profile default; it can never contradict a tenant decision, and an
+ * unmodelled value is refused rather than passed through.
  */
 export interface SurfaceVisualOverrides {
   density?: 'compact' | 'comfortable' | 'spacious';

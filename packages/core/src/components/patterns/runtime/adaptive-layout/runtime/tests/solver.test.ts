@@ -270,7 +270,7 @@ describe('resolveAdaptiveLayout', () => {
   });
 
   it('property sweep: 60 seeded random boards keep every invariant', () => {
-    // Deterministic LCG — no Math.random in solver land, tests included.
+    // Deterministic LCG — no nondeterministic randomness in solver land, tests included.
     let seed = 0x2f6e2b1;
     const next = (): number => {
       seed = (seed * 48271) % 0x7fffffff;

@@ -340,16 +340,27 @@ export interface WorkspacePreviewRailConfig<T> {
   minWidth?: number;
   /** Maximum rail width in pixels when resizable. */
   maxWidth?: number;
-  /** Optional localStorage key used to persist the resized rail width. */
-  storageKey?: string;
-  /** Called whenever the user resizes the rail. */
+  /**
+   * Called whenever the user resizes the rail.
+   *
+   * The surface does NOT remember the width for you. It used to, in browser
+   * storage, under a key derived from the surface title — so two collections
+   * that shared a heading shared a rail. Persist it where the rest of your
+   * layout state lives (`useLayoutPreference`) and feed the remembered value
+   * back through `width`.
+   */
   onWidthChange?: (width: number) => void;
   render?: (item: T, context: WorkspacePreviewRenderContext) => ReactNode;
   /** Declarative mobile navigation when pane is hidden. */
   mobileNavigation?: {
     /** Enable mobile auto-routing. Default: false. */
     enabled: boolean;
-    /** URL builder from item. When pane='hidden', clicking a row navigates here instead of opening panel. */
+    /**
+     * URL builder from item. When the pane posture is `route`, the row renders
+     * as a real record link and the browser navigates: the surface never
+     * assigns the document location itself, so client routers, middle-click
+     * and open-in-new-tab all keep working.
+     */
     href?: (item: T) => string;
     /** Custom click handler for mobile. Alternative to href. */
     onClick?: (item: T) => void;

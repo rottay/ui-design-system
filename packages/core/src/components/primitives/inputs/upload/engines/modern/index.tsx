@@ -42,7 +42,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useId } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadListType } from '../../contracts';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { UPLOAD_DEFAULTS } from '../../contracts';
@@ -632,7 +632,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     const [previewImage, setPreviewImage] = useState<{ src: string; alt: string } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const actualFileList = controlledFileList ?? fileList;
-    const inputId = useRef(`upload-input-${Date.now()}-${Math.random().toString(36).slice(2)}`).current;
+    const inputId = `upload-input-${useId()}`;
 
     // showUploadList's object form gates which per-item actions render
     // (download stays contract debt -- see the family report).

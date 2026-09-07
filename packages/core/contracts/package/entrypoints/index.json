@@ -535,7 +535,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 9,
-        "maxSourceBytes": 62120
+        "maxSourceBytes": 62115
       },
       "symbols": [
         {
@@ -1775,47 +1775,12 @@
         }
       ],
       "budgetNote": "decrease-only; scheduled-for-consolidation"
-    },
-    "./surfaces/oauth-transition": {
-      "owner": "surfaces",
-      "family": "oauth-transition",
-      "boundary": "runtime",
-      "client": true,
-      "source": "src/entrypoints/public/surfaces/oauth-transition/index.ts",
-      "output": "entrypoints/public/surfaces/oauth-transition/index",
-      "budget": {
-        "maxDirectSources": 2,
-        "maxReachableModules": 6,
-        "maxSourceBytes": 41392
-      },
-      "symbols": [
-        {
-          "name": "OAuthTransitionScreen",
-          "kind": "value"
-        },
-        {
-          "name": "getOAuthTransitionDefaultVariant",
-          "kind": "value"
-        },
-        {
-          "name": "getOAuthTransitionProvider",
-          "kind": "value"
-        },
-        {
-          "name": "isOAuthProvider",
-          "kind": "value"
-        },
-        {
-          "name": "isOAuthTransitionVariantId",
-          "kind": "value"
-        }
-      ]
     }
   },
   "coverage": {
-    "runtimeSymbols": 112,
+    "runtimeSymbols": 107,
     "typeSymbols": 47,
-    "totalSymbols": 159
+    "totalSymbols": 154
   },
   "_budgetGovernance": "Public-entrypoint budgets are decrease-only in both governed dimensions -- maxReachableModules and maxSourceBytes; increases require an explicit measured review and a matching ceiling update in scripts/check/boundaries/public-api/ceilings/index.json, taken through --write-baseline --widen --reason."
 }

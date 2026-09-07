@@ -5,6 +5,10 @@ import { ConnectedCommandPalette } from '..';
 import { useRegisterCommands, useRegisterCommandSource } from '../../../../../infrastructure/runtime/application/commands';
 import { ShortcutProvider, useGlobalShortcut } from '../../../../../infrastructure/runtime/application/interaction/shortcuts';
 import { renderWithEngine } from '@tests/support/engine';
+import {
+  clearLayoutPreferenceRecords,
+  readLayoutPreferenceRecord,
+} from '@tests/support/browser/layout-preference-record';
 
 // ConnectedCommandPalette renders engine-switched children (PatternCommandPalette,
 // PatternShortcutsOverlay), so every render must go through renderWithEngine and
@@ -141,7 +145,7 @@ describe('ConnectedCommandPalette -- keyboard shortcuts cheatsheet (WO-CRA-03)',
 
 describe('ConnectedCommandPalette -- registry sources + frecency (W6-G)', () => {
   it('records command use through the layout-preference storage when a command is selected', async () => {
-    window.localStorage.clear();
+    clearLayoutPreferenceRecords();
 
     function AppCommands() {
       useRegisterCommands([
@@ -169,15 +173,15 @@ describe('ConnectedCommandPalette -- registry sources + frecency (W6-G)', () => 
     // The layout-preference mechanism flushes its debounced write on unmount.
     unmount();
 
-    const raw = window.localStorage.getItem('ds-layout-command-palette');
-    expect(raw).not.toBeNull();
-    const stored = JSON.parse(raw as string);
-    expect(stored.commandUsage['go-home']).toBeDefined();
-    expect(stored.commandUsage['go-home'].score).toBeGreaterThan(0);
+    const stored = readLayoutPreferenceRecord('command-palette');
+    expect(stored).not.toBeNull();
+    const commandUsage = (stored as { commandUsage: Record<string, { score: number }> }).commandUsage;
+    expect(commandUsage['go-home']).toBeDefined();
+    expect(commandUsage['go-home'].score).toBeGreaterThan(0);
   });
 
   it('renders a registered command source as its own section once the query reaches it', async () => {
-    window.localStorage.clear();
+    clearLayoutPreferenceRecords();
 
     function AppSource() {
       useRegisterCommandSource({

@@ -421,11 +421,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-oauth-transition-section-gap",
-      "familyId": "surface/experience/oauth-transition",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-pricing-section-gap",
       "familyId": "surface/experience/pricing",
       "state": "PRESCRIPCION"

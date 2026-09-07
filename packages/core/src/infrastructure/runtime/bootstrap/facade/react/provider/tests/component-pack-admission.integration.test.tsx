@@ -180,18 +180,17 @@ function styleAndLinkNodes(): Element[] {
 }
 
 /**
- * The one non-tenant stylesheet the composed tree is allowed to hold.
+ * The non-tenant stylesheets the composed tree is allowed to hold: NONE.
  *
- * `SystemCssVariablesBridge` is mounted unconditionally and publishes
- * namespaced `--ds-personality-*` INPUTS into the named `rottay-personality`
- * cascade layer. It is a subordinate product/vertical data axis, deliberately
- * outside tenant v1 coverage, and it is not tenant paint -- so it is named here
- * explicitly instead of being waved through by a loose assertion. Anything else
- * appearing under a pack is a new painter and fails.
+ * This set used to name `ds-personality-tokens`, the singleton the personality
+ * bridge mounted unconditionally to publish namespaced `--ds-personality-*`
+ * inputs from JS. WO-CAN-04 deleted that writer -- personality reaches CSS
+ * through the compiled artifact and the static projection -- so the allowance
+ * would now permit a painter that must not exist. The set stays as an empty
+ * set rather than disappearing: the assertion below is "every stylesheet the
+ * tree holds is named", and an empty roster is the strongest form of it.
  */
-const ALLOWED_NON_TENANT_STYLE_IDS: ReadonlySet<string> = new Set([
-  'ds-personality-tokens',
-]);
+const ALLOWED_NON_TENANT_STYLE_IDS: ReadonlySet<string> = new Set([]);
 
 const ARTIFACT_SCOPE_ATTRIBUTES = [
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,

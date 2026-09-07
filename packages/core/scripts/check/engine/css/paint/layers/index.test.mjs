@@ -701,7 +701,12 @@ test("a family that moves tier retiers its skin with no roster edit", () => {
 
 test("every shared skin the entrypoint binds agrees with its owning family", () => {
   const rows = skinTierCensus();
-  assert.equal(rows.length, 157);
+  // 157 -> 156 (WO-CAN-04): `skin/oauth-transition/index.css` left the package
+  // with the surface it painted -- 2,277 lines, 13 `var(--ds-` reads and its
+  // own `--rh-*` namespace. The count is a census floor, not a target: it must
+  // move down with a real removal and must never be raised to absorb a new
+  // shared skin that skipped tier review.
+  assert.equal(rows.length, 156);
   const mismatched = rows.filter((row) => row.bound !== row.tier);
   assert.deepEqual(mismatched, [], JSON.stringify(mismatched, null, 2));
   // Nothing is classified by a route that reads no source at all.

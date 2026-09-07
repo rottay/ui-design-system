@@ -44,6 +44,7 @@ import React, {
   useRef,
   useEffect,
   useCallback,
+  useId,
 } from "react";
 import type { TooltipProps } from "../../contracts";
 import { TOOLTIP_DEFAULTS, PLACEMENT_MAP } from "../../contracts";
@@ -110,9 +111,9 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   const [isVisible, setIsVisible] = useState(defaultVisible);
   const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const tooltipId = useRef(
-    `tooltip-${Math.random().toString(36).substr(2, 9)}`
-  );
+  // React's own allocator: the same id on the server and on the client, which
+  // an `aria-describedby` target has to be to survive hydration.
+  const tooltipId = useId();
 
   // Controlled mode: external prop overrides internal state.
   // Uncontrolled mode: internal state drives visibility.
@@ -247,7 +248,7 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       {children}
       {content && (
         <div
-          id={tooltipId.current}
+          id={tooltipId}
           role="tooltip"
           className="rottay-tooltip-bubble rottay-tooltip-bubble--rustic"
           data-part="bubble"

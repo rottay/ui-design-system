@@ -134,7 +134,6 @@ import {
 } from '../../../../tenant/foundation/configuration/registry';
 import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { getUnresolvedTenantConfig } from '../../../../tenant/foundation/configuration/defaults';
-import { SystemCssVariablesBridge } from '@/infrastructure/runtime/theming/presentation/adapters/react/css-variables-bridge';
 import { ResponsiveProvider } from '../../../../responsive';
 import { MotionProvider } from '../../../../motion';
 import { AntdConfigProvider } from '../../../../engines/presentation/adapters/antd';
@@ -144,6 +143,7 @@ import {
 } from '../../../../foundation/engine-visual';
 import type { EngineVisualDeclaration } from '@/foundation/contracts/composition/tenants/themes/engine-adapter';
 import { resolveEngine } from '../../../../engines/runtime/resolution';
+import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import { CommandRegistryProvider } from '../../../../application/commands';
 import {
   RecipeProfileProvider,
@@ -1181,6 +1181,11 @@ export function DesignSystemProvider({
     tenantEngine: resolvedRuntimeConfig.engine,
     tenantSlug: resolvedRuntimeConfig.slug,
   });
+  // FAIL-CLOSED ENGINE BASELINE. An engine with no registered adapter has no
+  // token baseline, so a realm that mounts anyway renders on another engine's.
+  // The refusal used to be a side effect of the personality bridge calling
+  // `useTokens()`; deleting that painter would have deleted the law with it.
+  resolveAdapter(engine);
   // A projection compiled for one engine cannot seed another, and the compile's
   // own governed profiles cannot contradict the tenant it is mounted against.
   if (engineVisual) {
@@ -1306,18 +1311,14 @@ export function DesignSystemProvider({
                       <CommandRegistryProvider>
                         <AntdConfigProvider>
                           {/*
-                            Personality is a subordinate product/vertical data
-                            axis, never a second tenant authority, so the bridge
-                            is mounted unconditionally: it publishes namespaced
-                            inputs only and the static projection owns canonical
-                            aliases. It is not conditional on
-                            `suppressedChannels` because it cannot be -- an
-                            artifact is admitted only when its coverage is the
-                            exact ordered v1 coverage, and `personality` is
-                            deliberately outside that set. A guard here would
-                            read as a suppression that no input can produce.
+                            The provider paints nothing. It used to mount a
+                            personality bridge here that wrote ~60 `:root`
+                            custom properties on every render, unconditionally,
+                            which made "the provider does not paint under
+                            `compiled-artifact`" false. Personality now reaches
+                            CSS only through the static projection and the
+                            compiled artifact.
                           */}
-                          <SystemCssVariablesBridge />
                           <MemoizedChildren>{children}</MemoizedChildren>
                         </AntdConfigProvider>
                       </CommandRegistryProvider>

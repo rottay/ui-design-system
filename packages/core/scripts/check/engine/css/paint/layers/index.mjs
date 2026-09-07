@@ -1368,7 +1368,10 @@ export function auditHeaderLayerClaims({
  */
 export const INLINE_STYLE_ESCAPE_CEILINGS = new Map([
   ["structures", 158],
-  ["surfaces", 24],
+  // 24 -> 23 (WO-CAN-04): the `oauth-transition` surface left the package with
+  // its inline escape. Decrease-only, and the gate refuses a ceiling that sits
+  // above the measurement, so this is lowered rather than left slack.
+  ["surfaces", 23],
 ]);
 
 const INLINE_STYLE_RE = /style=\{\{/g;

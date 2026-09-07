@@ -450,7 +450,7 @@
         ["structure-headers-8", "structure-workspace-12"],
         ["structure-record-7", "structure-dashboard-3", "structure-feedback-3", "structure-shell-6"],
         ["surface-admin-8", "surface-data-7"],
-        ["surface-experience-9", "surface-forms-4"],
+        ["surface-experience-8", "surface-forms-4"],
         ["surface-operations-4", "surface-workspace-4"]
       ],
       "R7": [
@@ -467,7 +467,7 @@
         ["structure-headers-8", "structure-workspace-12"],
         ["structure-record-7", "structure-dashboard-3", "structure-feedback-3", "structure-shell-6"],
         ["surface-admin-8", "surface-data-7"],
-        ["surface-experience-9", "surface-forms-4"],
+        ["surface-experience-8", "surface-forms-4"],
         ["surface-operations-4", "surface-workspace-4"]
       ]
     }

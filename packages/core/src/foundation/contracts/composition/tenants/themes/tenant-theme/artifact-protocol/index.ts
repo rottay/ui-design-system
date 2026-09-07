@@ -19,9 +19,9 @@ export const TENANT_THEME_SCHEMA_VERSION = 1 as const;
  * emitters must stay silent). A channel names an EMITTER, not a token family:
  * `appearance` is the provider's compiled-appearance variable block,
  * `brand-chrome` is the generated tenant chrome stylesheet, and `personality`
- * is the `SystemCssVariablesBridge` namespaced `--ds-personality-*` data rule.
- * The personality channel does not own canonical component variables: the
- * static personality projection maps its namespaced inputs to those aliases.
+ * is the namespaced `--ds-personality-*` data rule, carried by the compiled
+ * artifact since the runtime JS writer was deleted. The channel does not own
+ * canonical component variables: the static projection maps its inputs.
  */
 export const TENANT_VISUAL_CHANNELS = Object.freeze([
   "visual-branding",

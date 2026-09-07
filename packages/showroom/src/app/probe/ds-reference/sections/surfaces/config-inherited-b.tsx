@@ -16,7 +16,6 @@ import {
   Input,
   KanbanSurface,
   MarketingSurface,
-  OAuthTransitionScreen,
   PricingSurface,
   SchedulerSurface,
   Stack,
@@ -570,20 +569,6 @@ export function ConfigInheritedBSurface({ only }: { only: string }): ReactNode {
               ],
             },
           }}
-        />
-      );
-    case 'o-auth-transition':
-      return (
-        <OAuthTransitionScreen
-          appId="evnto"
-          appName="Evnto Studio"
-          appLabel="Event operations workspace"
-          provider="microsoft"
-          variantId="signal-line-dark"
-          phase="return"
-          statusLabel="Reopening Evnto Studio"
-          stepLabels={['Microsoft confirmed', 'Workspace session restoring', 'Evnto Studio reopening']}
-          activeStep={2}
         />
       );
     case 'pricing':

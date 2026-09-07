@@ -9,7 +9,6 @@ import {
   MarketingSurface,
   MediaSurface,
   NotificationSurface,
-  OAuthTransitionScreen,
   PricingSurface,
   createAuthSurfaceConfig,
   createMarketingSurfaceConfig,
@@ -23,23 +22,6 @@ import {
 import { createThumbnail, noop } from './surfaces-preview-shared';
 
 export const EXPERIENCE_SURFACE_PREVIEWS: Record<string, ReactNode> = {
-  // `compact` is the surface's own embedded contract (a 560px-tall rounded
-  // panel instead of the 100vh full-bleed page), so this is the real screen at
-  // an embeddable size -- not a mock of it. It carries its own --rh-* variant
-  // palette by design, which is why it does not follow the docs theme.
-  'oauth-transition': (
-    <Box style={{ width: '100%' }}>
-      <OAuthTransitionScreen
-        appId="rottay"
-        provider="google"
-        variantId="quiet-beam-light"
-        phase="redirect"
-        activeStep={1}
-        transitionState="idle"
-        compact
-      />
-    </Box>
-  ),
   auth: (
     <Box style={{ width: '100%' }}>
       <AuthSurface

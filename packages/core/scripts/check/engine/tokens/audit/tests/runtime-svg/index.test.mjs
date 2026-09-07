@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
@@ -83,12 +83,12 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
 
   assert.equal(baseline['runtimeSvgPaint.unclassified'], 0);
   assert.equal(baseline['runtimeSvgPaint.patterns/communication/presence/index.tsx'], 1);
-  assert.equal(
-    baseline[
-      'runtimeSvgPaint.surfaces/presentation/pages/experience/oauth-transition/presentation/screen/provider-icons/index.tsx'
-    ],
-    9
-  );
+  // The provider-mark file that used to be pinned here (9 authored paint sites
+  // for the Google/LinkedIn/Microsoft glyphs) left the package with
+  // `oauth-transition` in WO-CAN-04, and its exemption left the ledger in the
+  // same lot. Nothing is unpinned by its departure: `presence` above and the
+  // seven `ckERuntimeFloors` below still pin a non-zero counter against its
+  // exemption floor, which is the pairing this assertion exists for.
   const runtimeExemptions = exemptions['SKIN-EXEMPT-RUNTIME-VALUE'].files;
   assert.equal(runtimeExemptions['patterns/communication/presence/index.tsx'].runtimeSvgFloor, 1);
   assert.equal(runtimeExemptions['patterns/visualization/charts/presentation/crosshair/index.ts'].runtimeSvgFloor, 1);
@@ -119,12 +119,17 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     ].floor,
     4
   );
-  assert.equal(
-    runtimeExemptions[
-      'surfaces/presentation/pages/experience/oauth-transition/presentation/screen/provider-icons/index.tsx'
-    ].runtimeSvgFloor,
-    9
-  );
+  // Every runtime-value exemption names a file the package still carries. The
+  // ledger is a set of paint FLOORS, so an entry whose file is gone is a floor
+  // nothing can breach and a ceiling nothing can lower -- exactly the shape a
+  // stale exemption takes when a family is deleted.
+  for (const file of Object.keys(runtimeExemptions)) {
+    assert.ok(
+      existsSync(resolve(packageRoot, 'src/components', file))
+        || existsSync(resolve(packageRoot, 'src', file)),
+      `runtime-value exemption names a file that does not exist: ${file}`
+    );
+  }
   // The baseline stores one zero-or-positive entry for every file present
   // when the ratchet was authored. Discovery is intentionally allowed to
   // grow so new zero-paint source files are still scanned; paint itself

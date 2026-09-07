@@ -1270,11 +1270,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-oauth-transition-panel-radius",
-      "familyId": "surface/experience/oauth-transition",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-pricing-panel-radius",
       "familyId": "surface/experience/pricing",
       "state": "PRESCRIPCION"

@@ -51,7 +51,7 @@
   },
   "executionTraversal": {
     "strategy": "calibrate-controls-then-parallel-cross-layer-product-slices",
-    "designFirst": "The manifest is the generated edge and acceptance authority, not a manual prerequisite that delays product source. Calibrate an active control on representative source, then implement conflict-free cross-layer slices and project their proven edges into all 255 canonical family IDs. Every certifying cell is APPLICABLE, INVARIANT_WITH_REASON, NOT_APPLICABLE_WITH_REASON or UNKNOWN; UNKNOWN blocks that family's completion, not unrelated source work.",
+    "designFirst": "The manifest is the generated edge and acceptance authority, not a manual prerequisite that delays product source. Calibrate an active control on representative source, then implement conflict-free cross-layer slices and project their proven edges into all 254 canonical family IDs. Every certifying cell is APPLICABLE, INVARIANT_WITH_REASON, NOT_APPLICABLE_WITH_REASON or UNKNOWN; UNKNOWN blocks that family's completion, not unrelated source work.",
     "controlCalibration": "For each operational control, prove domain, stops, static and DB lowering, representative computed deltas, negative controls and exact restore before parallel propagation. Reuse the existing harness; do not build another census or script unless a named blocker is unmeasurable.",
     "familyClosure": "Close product journeys and their primitives, patterns, structures, surfaces and skins together. The unit of scheduling is a disjoint cross-layer slice, not one primitive at a time and not one manual manifest cell at a time.",
     "parallelism": "PatternDataTable/workflow, AppShell/navigation and forms/surfaces advance concurrently where exact read/write sets do not collide; compiler, contracts, shared roots/recipes, manifest, i18n, generated artifacts, builds and browser remain singleton or serialized.",
@@ -149,7 +149,7 @@
     "enabled": false,
     "contract": "rounds/index.json#R7",
     "entryLaw": "R7 begins only from a DT-accepted R6 frozen baseline and cannot silently reclassify R0-R6 history.",
-    "familyDispositionDenominator": 255,
+    "familyDispositionDenominator": 254,
     "benchmarkLaw": "External systems provide ideas, edge cases and capability comparisons only. Existing Rottay semantic names and authorities win; no wholesale source, styling, markup, naming or trade-dress copy.",
     "benchmarkDispositions": [
       "ALREADY_EQUIVALENT",
@@ -194,7 +194,7 @@
       "minimumNonColorAxesPerPair": 6,
       "grayscaleAndNeutralizedPrimaryRequired": true
     },
-    "catalogLaw": "The certified 255-family denominator remains fixed during R7. A genuine missing-family proposal requires a separate owner-approved follow-on.",
+    "catalogLaw": "The certified 254-family denominator remains fixed during R7. A genuine missing-family proposal requires a separate owner-approved follow-on.",
     "exit": {
       "deadOrUnownedModernCss": 0,
       "dormantPublicChannels": 0,
@@ -388,7 +388,7 @@
   },
   "controlImpactContract": {
     "familyDispositionAuthority": "family-inventory/index.json rows[].id",
-    "requiredFamilyDispositionCountPerControl": 255,
+    "requiredFamilyDispositionCountPerControl": 254,
     "familyDispositionVocabulary": [
       "APPLICABLE",
       "INVARIANT_WITH_REASON",

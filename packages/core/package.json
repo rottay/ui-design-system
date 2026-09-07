@@ -404,11 +404,6 @@
       "import": "./dist/entrypoints/public/surfaces/collection-workspace/index.js",
       "require": "./dist/entrypoints/public/surfaces/collection-workspace/index.cjs"
     },
-    "./surfaces/oauth-transition": {
-      "types": "./dist/entrypoints/public/surfaces/oauth-transition/index.d.ts",
-      "import": "./dist/entrypoints/public/surfaces/oauth-transition/index.js",
-      "require": "./dist/entrypoints/public/surfaces/oauth-transition/index.cjs"
-    },
     "./public-entrypoints-manifest": {
       "default": "./contracts/package/entrypoints/index.json"
     },
@@ -818,7 +813,6 @@
       "./structures/action-dock": "entrypoints/public/structures/action-dock/index.ts",
       "./structures/column-menu": "entrypoints/public/structures/column-menu/index.ts",
       "./surfaces/collection-workspace": "entrypoints/public/surfaces/collection-workspace/index.ts",
-      "./surfaces/oauth-transition": "entrypoints/public/surfaces/oauth-transition/index.ts",
       "./icons": "entrypoints/icons/index.ts",
       "./icons/full": "entrypoints/icons/full/index.ts",
       "./icons/presets/bithire": "entrypoints/icons/presets/bithire/index.ts",

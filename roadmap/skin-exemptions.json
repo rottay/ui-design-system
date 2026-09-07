@@ -134,7 +134,7 @@
       },
       "patterns/visualization/charts/presentation/tooltip/index.tsx": {
         "floor": 2,
-        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE ×5, SWATCH_STYLE ×1, label colors ×3) are all static tokens."
+        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE \u00d75, SWATCH_STYLE \u00d71, label colors \u00d73) are all static tokens."
       },
       "patterns/visualization/charts/presentation/crosshair/index.ts": {
         "runtimeSvgFloor": 1,
@@ -159,10 +159,6 @@
       "patterns/forms/form-builder/engines/modern/index.tsx": {
         "floor": 1,
         "why": "form-builder/engines/modern/index.tsx:282 -- the color field's read-only swatch paints `background: String(val)`, the hex the USER PICKED in that field. A value computed from data; no token set can hold it. No rustic twin (rustic renders no swatch)."
-      },
-      "surfaces/presentation/pages/experience/oauth-transition/presentation/screen/provider-icons/index.tsx": {
-        "runtimeSvgFloor": 9,
-        "why": "Nine intrinsic-SVG JSX paint attributes encode the canonical Google, LinkedIn and Microsoft provider marks. These colours are external brand identity, not tenant chrome; tokenizing them would make a skin incorrectly recolour the providers. The AST census measures exactly 9 authored paint sites in this file."
       }
     },
     "$excluded": "use-chart-theme's four background-shaped domain fields belong to SKIN-EXEMPT-NOT-PAINT below. Static chart paint is intentionally absent from this family and must migrate to scoped skins."

@@ -1,10 +1,5 @@
 [
   {
-    "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
-    "maxUnnamespaced": 20,
-    "reason": "OAuth transition scene keyframes (rottay-transition-*/rottay-progress-*/rottay-phase-trace-*/rottay-flow-*), pre-existing at the W6-H scope-extension boundary (that lane owns only the 7 runtime/engines/{modern,rustic}/skin files). Ratchet ceiling only, never raise."
-  },
-  {
     "file": "src/foundation/tokens/css/presentation/components/skin/primitive-motion/index.css",
     "maxUnnamespaced": 4,
     "reason": "Shared Timeline/Tree primitive keyframes (rottay-timeline-pulse, rottay-drop-indicator, rottay-tree-spin, rottay-tree-drop-line-in), pre-existing at the W6-H scope-extension boundary (that lane owns only the 7 runtime/engines/{modern,rustic}/skin files). Ratchet ceiling only, never raise."

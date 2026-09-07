@@ -1,7 +1,7 @@
 /**
  * @fileoverview resolvePersonalityCssVariables tests - Rottay Design System
  * @description Regression coverage for WO-ENG-19. `resolvePersonalityCssVariables`
- * is the single source SystemCssVariablesBridge writes to `:root`; a tenant's
+ * is the single source of the personality `:root` names; a tenant's
  * BrandTheme/generated chrome CSS (infrastructure/compilers/runtime/theme/runtime/lowering/index.ts) can
  * independently declare some of the same variable names. Cross-referencing
  * every name this function emits against every `--ds-*` name the brand-theme
@@ -36,7 +36,7 @@ function buildTokens(personality: PersonalityTokens = DEFAULT_PERSONALITY): Desi
 // Every CSS custom property resolvePersonalityCssVariables emits, as of
 // WO-ENG-19. Channels also declarable by a tenant's BrandTheme-generated
 // chrome CSS (infrastructure/compilers/runtime/theme/runtime/lowering) are marked -- those are exactly the
-// variables whose correctness depends on SystemCssVariablesBridge staying at
+// variables whose correctness depends on the personality names staying at
 // `:root` specificity so a tenant declaration always wins.
 const EXPECTED_KEYS = [
   '--ds-personality-animation-intensity',

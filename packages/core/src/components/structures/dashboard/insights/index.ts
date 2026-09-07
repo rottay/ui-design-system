@@ -12,9 +12,9 @@
  *   - 4 activity variants: ActivityTimeline, ActivityCompact,
  *     ActivityCards, ActivityTicker
  *
- * Plus the shared `useVariant` hook (random metrics + activity variant
- * picker, persisted across re-renders via useState init) and the
- * shared variant types.
+ * Plus the shared `useVariant` hook (deterministic metrics + activity variant
+ * resolution: a declared variant, or the canonical one) and the shared variant
+ * types.
  *
  * This family is framework-agnostic:
  *   - Renderers compose DS primitives (`Box`, `Text`, `Stack`, `Flex`,

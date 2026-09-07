@@ -530,7 +530,7 @@ describe('production source predicate', () => {
 describe('tenant context consumer inventory', () => {
   const inventory = discoverTenantContextConsumers();
 
-  it('is exactly the six registered live consumers -- a seventh, or a reverted specifier, fails', () => {
+  it('is exactly the seven registered live consumers -- an eighth, or a reverted specifier, fails', () => {
     expect(inventory).toEqual([
       // The inventory is sorted by path, and the UI tier now lives under
       // `components/`, which sorts before `infrastructure/`.
@@ -542,6 +542,16 @@ describe('tenant context consumer inventory', () => {
       {
         file: 'components/patterns/visualization/charts/runtime/chart-engine/runtime/grammar/index.ts',
         binding: 'TenantContext',
+        specifier: '@/infrastructure/runtime/tenant/foundation/context',
+      },
+      // WO-CAN-04. Instance visual selections are adjudicated against the
+      // tenant's DECLARED personality, which the resolved token graph cannot
+      // answer: `useTokens()` returns the merged result, where a DS default
+      // and a tenant decision are indistinguishable. The subordination law
+      // needs the tenant's own delta, so it reads the same one context.
+      {
+        file: 'components/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts',
+        binding: 'useTenantContext',
         specifier: '@/infrastructure/runtime/tenant/foundation/context',
       },
       {

@@ -407,11 +407,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-oauth-transition-control-radius",
-      "familyId": "surface/experience/oauth-transition",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-pricing-control-radius",
       "familyId": "surface/experience/pricing",
       "state": "PRESCRIPCION"

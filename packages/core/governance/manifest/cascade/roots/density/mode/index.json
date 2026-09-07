@@ -4811,11 +4811,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-oauth-transition-density-factor",
-      "familyId": "surface/experience/oauth-transition",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-pricing-density-factor",
       "familyId": "surface/experience/pricing",
       "state": "PRESCRIPCION"

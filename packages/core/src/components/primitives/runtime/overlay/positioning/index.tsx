@@ -377,7 +377,7 @@ function computeMeasuredPosition(
 // Hook
 // ---------------------------------------------------------------------------
 
-/** Deterministic anchor-name allocator: a module counter, never Math.random. */
+/** Deterministic anchor-name allocator: a module counter, never a die roll. */
 let overlayInstanceCounter = 0;
 
 /** Stable empty attrs for the js branch (no anchor registration to expose). */

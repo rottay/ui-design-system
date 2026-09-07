@@ -197,6 +197,13 @@ const ADAPTER_SELECTION_OWNERS: readonly string[] = [
   // refusal and then the registration, which is the registry's own public
   // contract being exercised, not a compile choosing an engine.
   "showroom/src/app/probe/custom-component-pack/page.tsx",
+  // The mount door. It does not CHOOSE an adapter -- `resolveEngine` above it
+  // already chose the engine -- it asserts that the chosen engine HAS one,
+  // before a single child renders. The refusal used to happen only as a side
+  // effect of the personality bridge calling `useTokens()` deep inside this
+  // tree; WO-CAN-04 deleted that painter, which would have deleted the law
+  // with it, so the door is named rather than inherited.
+  "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
 ];
 
 /** The only productive sources allowed to name the v1 document migration. */

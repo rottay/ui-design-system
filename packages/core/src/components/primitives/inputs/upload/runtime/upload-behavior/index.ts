@@ -6,12 +6,21 @@
 'use client';
 
 import type { UploadFile, UploadProps } from '../../contracts';
+
+/**
+ * A module counter, not a die roll: an upload descriptor is a React list key,
+ * and a key that differs between two renders of the same list remounts the row
+ * it identifies.
+ */
+let uploadUidSequence = 0;
+
 export function createUploadFile(
   file: File,
   originalFile: File = file
 ): UploadFile {
+  uploadUidSequence += 1;
   return {
-    uid: `${Date.now()}-${Math.random()}`,
+    uid: `upload-${uploadUidSequence}`,
     name: file.name,
     status: 'done',
     size: file.size,

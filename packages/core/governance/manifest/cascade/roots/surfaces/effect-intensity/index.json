@@ -336,11 +336,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-oauth-transition-screen-gradient-mesh",
-      "familyId": "surface/experience/oauth-transition",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-pricing-surface-gradient-mesh",
       "familyId": "surface/experience/pricing",
       "state": "PRESCRIPCION"

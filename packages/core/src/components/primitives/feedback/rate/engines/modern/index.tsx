@@ -151,9 +151,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const starRefs = useRef<Array<HTMLSpanElement | null>>([]);
     // Stable group name for the hidden form carrier (native form
-    // participation). The old `Math.random()`-in-render name changed identity
-    // every render and used the deprecated `substr`; `useId` is stable and
-    // SSR-safe.
+    // participation). The old die-rolled name changed identity every render
+    // and used the deprecated `substr`; `useId` is stable and SSR-safe.
     const radioGroupId = useId();
     const radioGroupName = `rottay-rate-${radioGroupId}`;
 

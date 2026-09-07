@@ -445,6 +445,27 @@ export const CI_GATES = Object.freeze([
   { id: 'literal-ownership-drill', run: ['node', '--test', 'scripts/check/engine/tokens/literal-ownership/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['literal-ownership'], },
   { id: 'literal-ownership', run: ['node', 'scripts/check/engine/tokens/literal-ownership/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'literal-ownership-drill', },
 
+  // WO-CAN-04 / F-18 / F-56: the three laws that keep a SECOND customization
+  // path from reopening beside the compiler. Each is a census over authored
+  // component source, so each is a classifier that can rot into a permanent
+  // green -- drill first, in every case.
+  //
+  // Anatomy is never drawn by a die roll: `data-terminal-card` and `insights`
+  // chose their skin with a random number, so the server rendered one product
+  // and the client another.
+  { id: 'component-determinism-drill', run: ['node', '--test', 'scripts/check/components/determinism/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['component-determinism'], },
+  { id: 'component-determinism', run: ['node', 'scripts/check/components/determinism/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'component-determinism-drill', },
+  // An app cannot outrank the tenant from its own config: every declared
+  // `SurfaceVisualOverrides` field is catalog-modelled, mapped to the tenant
+  // channel it speaks for, and applied only through the admission door.
+  { id: 'instance-override-subordination-drill', run: ['node', '--test', 'scripts/check/components/instance-override-subordination/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['instance-override-subordination'], },
+  { id: 'instance-override-subordination', run: ['node', 'scripts/check/components/instance-override-subordination/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'instance-override-subordination-drill', },
+  // Structures and surfaces reach the browser through the declared runtime,
+  // never around it: no `window.location`, no `localStorage`, no `CustomEvent`
+  // channel with no owner and no types.
+  { id: 'component-runtime-boundary-drill', run: ['node', '--test', 'scripts/check/components/runtime-boundary/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['component-runtime-boundary'], },
+  { id: 'component-runtime-boundary', run: ['node', 'scripts/check/components/runtime-boundary/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'component-runtime-boundary-drill', },
+
   // The published controls table is generated from current product contracts.
   // Both its freshness check and its drill suite need `dist/` -- the drill
   // suite imports `check()`/`build()` from the generator module, which loads

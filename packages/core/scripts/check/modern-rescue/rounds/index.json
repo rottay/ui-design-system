@@ -21,7 +21,7 @@
       "enabled": true,
       "name": "Truth, instrumentation and baseline",
       "scope": {
-        "families": 255,
+        "families": 254,
         "writes": "quality tooling and contracts only; no broad family styling"
       },
       "objectives": [
@@ -393,7 +393,7 @@
       "name": "Structures and surfaces",
       "scope": {
         "structures": 39,
-        "pageSurfaces": 36
+        "pageSurfaces": 35
       },
       "objectives": [
         "compose complete resilient screens without product-domain leakage",
@@ -416,7 +416,7 @@
       "enabled": true,
       "name": "Cross-system canon and propagation closure",
       "scope": {
-        "families": 255,
+        "families": 254,
         "controls": "all active Standard and Pro plus Expert entries changed by R1-R4"
       },
       "objectives": [
@@ -444,7 +444,7 @@
       "enabled": true,
       "name": "Independent DT certification",
       "scope": {
-        "families": 255,
+        "families": 254,
         "tenants": [
           "bithire-static",
           "themanagement-db"
@@ -479,7 +479,7 @@
         "all R7 external references are non-normative benchmarks rather than naming visual or architectural authorities"
       ],
       "scope": {
-        "families": 255,
+        "families": 254,
         "standardControlsBaseline": 14,
         "proCapabilitiesBaseline": 7,
         "expertExactAllowlistBaseline": 290,

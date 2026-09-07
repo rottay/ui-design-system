@@ -2037,11 +2037,6 @@
       "state": "PRESCRIPCION"
     },
     {
-      "channelId": "--_ds-oauth-transition-heading-size",
-      "familyId": "surface/experience/oauth-transition",
-      "state": "PRESCRIPCION"
-    },
-    {
       "channelId": "--_ds-pricing-heading-size",
       "familyId": "surface/experience/pricing",
       "state": "PRESCRIPCION"

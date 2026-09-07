@@ -32,15 +32,24 @@ function readCadenceTimeMs(node: HTMLElement | null, axis: string, fallbackMs: n
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallbackMs;
 }
 
-function randomDecodeChar(): string {
-  return DECODE_CHARS[Math.floor(Math.random() * DECODE_CHARS.length)];
+/**
+ * The decode noise is DETERMINISTIC: a 32-bit mixer over `(charCode, position,
+ * step)`. It still looks like noise — every step re-scrambles every unsettled
+ * glyph — but the same text produces the same reveal on the server, on the
+ * client and in a test, so the effect is reproducible instead of merely
+ * observed once.
+ */
+function decodeCharAt(source: string, index: number, step: number): string {
+  let hash = (source.charCodeAt(index) ^ (index * 0x9e3779b1) ^ (step * 0x85ebca6b)) >>> 0;
+  hash = Math.imul(hash ^ (hash >>> 15), 0x2545f491) >>> 0;
+  return DECODE_CHARS[hash % DECODE_CHARS.length];
 }
 
 /** A copy of `source` from `from` onward with every non-space character replaced by noise. */
 function scrambledSuffix(source: string, from: number): string {
   let out = "";
   for (let i = from; i < source.length; i += 1) {
-    out += source[i] === " " ? " " : randomDecodeChar();
+    out += source[i] === " " ? " " : decodeCharAt(source, i, from);
   }
   return out;
 }
