@@ -49,7 +49,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 83/155 work orders done (54%)
+## Work-order burn-down — 85/155 work orders done (55%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -62,7 +62,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
-| [consumer-contract](./consumer-contract.md) | 0 | 3 | 2 | 5 |
+| [consumer-contract](./consumer-contract.md) | 2 | 1 | 2 | 5 |
 | [catalog-door](./catalog-door.md) | 1 | 0 | 2 | 3 |
 | [derivation](./derivation.md) | 0 | 0 | 7 | 7 |
 | [family-cuts](./family-cuts.md) | 0 | 0 | 14 | 14 |
@@ -78,7 +78,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | A · The apps can build | not reached | WO-CON-04, WO-CON-05 | WO-CON-04, WO-CON-05 | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2 · Architecture validated in one vertical cut | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | Decisions -> derivation -> channels -> skin proven end to end on one family; the autonomous APP and DS lanes start. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography. |
-| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 47 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 45 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -104,8 +104,6 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-CON-01 | Sanctioned import surface: consumer contract document and lint rule | claude-opus-5-con-01 | 2026-09-05 | 2026-09-06 18:24 — 2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): DS lot 3a9873f4 landed, docs commit 893bce77 on docs-engineering main, rule 20/20 with 121/121 subpaths, app wiring: bithire+evnto wired, platform DEFERRED by owner scope 2026-09-05. Closure BLOCKED on one item: claim-exactness seal regeneration is physically impossible while engine-token-audit exits 1 (declared themeCss.unreferencedSelectors=18 debt owned by WO-RET-02 + pre-existing fleet.inlinePaint tour/overlay ceiling=1). No text defines excluded-with-owner as green; no redefinition attempted. Unblock path: drain lot (RET-02 scope subset) -> audit exit 0 -> seal regen. |
-| WO-CON-02 | mountTenantTheme facade with the final signature over the current pipeline | claude-opus-5-con-02 | 2026-09-05 | 2026-09-06 18:25 — 2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): DS lot 072f71cb landed, docs 893bce77 on docs main, facade 15/15, codemod suite green. Closure BLOCKED on two items, both downstream of engine-token-audit exit 1 (declared 18-debt owned by WO-RET-02 + pre-existing inlinePaint ceiling=1): (1) audit green, (2) WO-GAT-07 documentationRevision/exactness-live reseal in one verified DS lot — reseal also needs docs pin advance 674474cb -> 8944a4f. No redefinition of green; unblock path: drain lot -> audit exit 0 -> combined seal lot. |
 | WO-CON-03 | Tenant document v2 accepted at the door, decisions mapped to today's fan-out, "decisions lit" indicator | claude-opus-5-con-03 | 2026-09-05 | 2026-09-06 18:25 — 2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): code+docs+probe all landed and measured green (decisions-lit 7/22 (+0/10 new) exit 0, door suites 57/57, own tests pass). REMAINING before close: package script + gate-manifest registration + freshness guard for decisions-lit — one small shared-owner lot, serialized AFTER WO-CAN-04 lands (gate manifest owner). |
 
 ## Next up (todo, dependencies satisfied)
@@ -151,7 +149,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | WO-DER-05 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04 |
 | WO-DER-06 | dependencies: WO-DER-05, WO-CAT-02, WO-CON-03, WO-DER-07 |
 | WO-EMI-01 | dependencies: WO-CAT-03 |
-| WO-EMI-02 | dependencies: WO-EMI-01, WO-CON-02 |
+| WO-EMI-02 | dependencies: WO-EMI-01 |
 | WO-EMI-03 | dependencies: WO-EMI-01 |
 | WO-FAM-00 | dependencies: WO-DER-01 |
 | WO-FAM-01 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
@@ -178,7 +176,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | WO-EVI-01 | dependencies: WO-DER-01 |
 | WO-EVI-02 | dependencies: WO-CAT-03, WO-DER-01 |
 | WO-EVI-03 | dependencies: WO-CAT-03, WO-DER-07 |
-| WO-CON-04 | dependencies: WO-CON-01, WO-CON-02, WO-CON-03 |
+| WO-CON-04 | dependencies: WO-CON-03 |
 | WO-CON-05 | dependencies: WO-CON-04 |
 | WO-DER-07 | dependencies: WO-DER-01, WO-CON-03 |
 | WO-INV-06 | dependencies: WO-INV-04, WO-FAM-10, WO-FAM-11 |
@@ -278,3 +276,5 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | WO-CAN-06 | 2026-09-06 | Landed f7cb572e on main (99 paths, tree 7e288b0a, sole parent 706d4c644). Independent K3 audit: round 1 HOLD on 3 stale derived cascade artifacts, fixed by coordinator regeneration in mandated order (extraction-fanout-producers); round 2 delta audit PASS on exact candidate refs/kimi-k3/candidates/can-06-poststack-v2 (5898570d) with all freshness and artifact-consuming gates green, zero collateral gate movement. |
 | WO-CAT-01 | 2026-09-05 | Published roadmap/kit-2026-09.md (SHA256 3a18b42a0101c44cf35857e2bdaca15eb1a5320c2d5ca3c53256674257b2b3d7; body digest 0f25b32c6d0842b20736a514d9794e6294a8b13f718aa4de9d368ca9bbd8e09c); independent Claude Fable 5.1 re-audit PASS in /private/tmp/rottay-wo-cat-01-fable-reaudit.md (SHA256 67637f13132e8fc1fae1cbf932f4220d134d1f5b8135d3c6e8a5fcfca246de7e). |
 | WO-EVI-04 | 2026-09-06 | Scout-measured closure (K2.7 report /private/tmp/rottay-closures-scout.md, HEAD fc841757): STATUS publishes the 11 indicator rows bound 1:1 to registry.metrics (row1 measured 7/22, rows 2-11 honestly NOT MEASURED with owing WO); fingerprint seal verifies green on pinned 712c7352 after CAN-02 landing; phase model kept with written reason; WO-CRA-23 sealed; F-50 clean (0 retired-path citations). Two adjudications by kimi-k3-dt: (1) outcome fingerprint re-seal satisfied by verification+documented deliberate non-reseal (mapping unmoved, 82 source IDs preserved, empty re-seal would be ceremony); (2) README DaisyUI lines are negations/residual-layer statements, not Modern-as-DaisyUI — acceptance intent satisfied. roadmap:check green, 95/95 roadmap tests. |
+| WO-CON-01 | 2026-09-07 | sanctioned import surface complete: consumer-contract doc + lint rule landed (3a9873f4; rule 20/20 incl fail-closed cases; roster now 120/120 after WO-CAN-04's carried count change with death proof); pnpm --filter @rottay/design-system lint exit 0 measured on landed tree d0f54693 with REAL sibling app dirs (lint:vertical included, only non-blocking warnings); claim-exactness seal/artifacts regenerated green in audited lot d0f54693 (candidate d7d00aaa, independent K3 audit PASS: proof chain repaired, corpus drained 19 missing paths to 0, deterministic double-run); docs reconciled in docs-engineering 893bce77 (safety ref 19e0ec03). Adjudication: app-platform wiring out of scope per standing contract (only app-bithire is the productive consumer; app-evnto/app-platform are do-not-modify; evnto was already wired) — the rule runs in showroom+bithire+evnto, baselined per app, decrease-only |
+| WO-CON-02 | 2026-09-07 | mountTenantTheme facade complete: DS lot 072f71cb landed after independent PASS; facade bytes-equal to compileTenantTheme path for the three verticals (15/15 tests); showroom SSR mounts through one call; codemod applied to app-bithire trio compiles (16s green); docs reconciled in docs-engineering 893bce77 (safety ref bc2803e9). Closure conditions now met: (1) engine-token-audit GREEN and BLOCKING — 18 dead Daisy rules + tour inlinePaint drained in dbe18dea (audited candidate 34b7b738, K3 PASS; ceiling untouched, exact invariant satisfied; runner 140 blocking/1 excluded); (2) WO-GAT-07 documentationRevision/exactness-live resealed in the verified DS lot d0f54693 (documentationRevision 674474cb to 8944a4f = live docs main; inspectedDocsMatchRevision true; sealingErrors none; deterministic double-run 1e172e4f) — same lot, as required |

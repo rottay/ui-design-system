@@ -4857,7 +4857,7 @@
    "lane": "consumer-contract",
    "order": 1,
    "size": "S",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4879,7 +4879,9 @@
      "by": "kimi-k3-dt",
      "note": "2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): DS lot 3a9873f4 landed, docs commit 893bce77 on docs-engineering main, rule 20/20 with 121/121 subpaths, app wiring: bithire+evnto wired, platform DEFERRED by owner scope 2026-09-05. Closure BLOCKED on one item: claim-exactness seal regeneration is physically impossible while engine-token-audit exits 1 (declared themeCss.unreferencedSelectors=18 debt owned by WO-RET-02 + pre-existing fleet.inlinePaint tour/overlay ceiling=1). No text defines excluded-with-owner as green; no redefinition attempted. Unblock path: drain lot (RET-02 scope subset) -> audit exit 0 -> seal regen."
     }
-   ]
+   ],
+   "doneAt": "2026-09-07",
+   "evidence": "sanctioned import surface complete: consumer-contract doc + lint rule landed (3a9873f4; rule 20/20 incl fail-closed cases; roster now 120/120 after WO-CAN-04's carried count change with death proof); pnpm --filter @rottay/design-system lint exit 0 measured on landed tree d0f54693 with REAL sibling app dirs (lint:vertical included, only non-blocking warnings); claim-exactness seal/artifacts regenerated green in audited lot d0f54693 (candidate d7d00aaa, independent K3 audit PASS: proof chain repaired, corpus drained 19 missing paths to 0, deterministic double-run); docs reconciled in docs-engineering 893bce77 (safety ref 19e0ec03). Adjudication: app-platform wiring out of scope per standing contract (only app-bithire is the productive consumer; app-evnto/app-platform are do-not-modify; evnto was already wired) — the rule runs in showroom+bithire+evnto, baselined per app, decrease-only"
   },
   {
    "id": "WO-CON-02",
@@ -4887,7 +4889,7 @@
    "lane": "consumer-contract",
    "order": 2,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4909,7 +4911,9 @@
      "by": "kimi-k3-dt",
      "note": "2026-09-06 K3-DT adjudication (scout evidence /private/tmp/rottay-closures-scout.md): DS lot 072f71cb landed, docs 893bce77 on docs main, facade 15/15, codemod suite green. Closure BLOCKED on two items, both downstream of engine-token-audit exit 1 (declared 18-debt owned by WO-RET-02 + pre-existing inlinePaint ceiling=1): (1) audit green, (2) WO-GAT-07 documentationRevision/exactness-live reseal in one verified DS lot — reseal also needs docs pin advance 674474cb -> 8944a4f. No redefinition of green; unblock path: drain lot -> audit exit 0 -> combined seal lot."
     }
-   ]
+   ],
+   "doneAt": "2026-09-07",
+   "evidence": "mountTenantTheme facade complete: DS lot 072f71cb landed after independent PASS; facade bytes-equal to compileTenantTheme path for the three verticals (15/15 tests); showroom SSR mounts through one call; codemod applied to app-bithire trio compiles (16s green); docs reconciled in docs-engineering 893bce77 (safety ref bc2803e9). Closure conditions now met: (1) engine-token-audit GREEN and BLOCKING — 18 dead Daisy rules + tour inlinePaint drained in dbe18dea (audited candidate 34b7b738, K3 PASS; ceiling untouched, exact invariant satisfied; runner 140 blocking/1 excluded); (2) WO-GAT-07 documentationRevision/exactness-live resealed in the verified DS lot d0f54693 (documentationRevision 674474cb to 8944a4f = live docs main; inspectedDocsMatchRevision true; sealingErrors none; deterministic double-run 1e172e4f) — same lot, as required"
   },
   {
    "id": "WO-CON-03",
