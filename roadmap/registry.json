@@ -4982,7 +4982,7 @@
    "lane": "consumer-contract",
    "order": 5,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CON-04"
    ],
@@ -4991,9 +4991,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1 (milestone A); closes n/a",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-k3-dt",
+   "claimedAt": "2026-09-07",
+   "progressLog": [],
+   "doneAt": "2026-09-07",
+   "evidence": "Two-track operating protocol + contract-diff block landed at 17a9babb (fresh K3 audit PASS); follow-up d9d826f5b registers contract-changeset-drill in the gates manifest (142->143 blocking, drill PASSes, FAIL set unchanged) and derives the test-94 family-rollup expectation from the governance manifest (delta K3 audit PASS); contract-changeset graded check carries 8 planted throwaway-range drills; STATUS contract-diff EMPTY on first run."
   },
   {
    "id": "WO-DER-07",
