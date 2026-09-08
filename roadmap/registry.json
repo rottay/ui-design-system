@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-07",
+ "updated": "2026-09-08",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -4120,7 +4120,7 @@
    "lane": "derivation",
    "order": 1,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-03"
    ],
@@ -4129,9 +4129,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-71, F-34, F-90, F-43, F-09",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "claude-opus-5-der01",
+   "claimedAt": "2026-09-08",
+   "progressLog": [],
+   "doneAt": "2026-09-08",
+   "evidence": "Landed 59439fa13ba78f47f1a076963f2dddad65265bea (170 paths, parent 1f8de11e6): FamilyDeriver contract + single pipeline orchestrator + ranked merge (tenant>verticalOverride>derived>profile); lowering/runtime/variables and kernel/runtime/appearance retired; one color owner (contrastRatio/parseHex single definitions); read-without-producer ratchet (baseline 2096) + cascade-wiring transitive arm (2161/2205) registered blocking pre-build; byte-equivalence 3 verticals (1196/1233/475 keys, 0 diffs); governance/manifest 510 rows repointed to owning families via executable registry probe. Independent K3 audits PASS: v1 /private/tmp/rottay-der01-kimi-k3-audit.md + v2 delta /private/tmp/rottay-der01-v2-kimi-k3-audit.md; writer report /private/tmp/rottay-der01-opus.md SHA256 a555ee766a338207d399b334467c380d4c5cc6281e8a00f4b31839214bdc31fc. F-71+F-43 closed; F-34 duplicate-producer clause closed; F-09 structural clause only (drain routed to DER-02/03/04+family cuts); F-90 absence-encoding closed, dead-branch residual ruled by DT: landed B-1 drills are authority, tenant expressive.experienceProfile stays live, dead-read removal queued."
   },
   {
    "id": "WO-DER-02",
