@@ -4098,7 +4098,7 @@
    "lane": "catalog-door",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-02",
     "WO-CAN-06"
@@ -4108,9 +4108,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 2; closes F-13, F-24, F-61, F-27, F-60, F-02",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "claude-opus-5-cat-03",
+   "claimedAt": "2026-09-07",
+   "progressLog": [],
+   "doneAt": "2026-09-07",
+   "evidence": "One admission for all four origins (tier/engine/envelope/contrast/limits, intent+emission two-phase) under facade/foundation/admission; door closed on server AND root entrypoints (grep=0, supplier contract regenerated); refusal-by-name (F-61); baselines frozen+cloned (F-60); F-13 preview/publish parity, F-24, F-02 (9 test files); single-door 54 incl .measured census with mutants. F-27 closed in DT-adjudicated strengthened form: fiche slug-form stale post-CAN-06 (customer tenants rosterless by construction); adapterFor(vertical,slug) fails closed on vertical, PRIMARY_ENGINE fallback branch deleted, wiring allowlist entry removed. Landed 555cbb074 (56 paths, tree 35e65218, sole parent 9101adfb0). Independent K3 audits: v1 HOLD (4 defects) -> fixed -> v2 PASS, v3 delta PASS (pack-inventory adjudication of the lot's 27 dist entries, baseline untouched). Coordinator gates: full vitest 16694 pass / 12 fail = 11 inherited base-red + 1 flaky (SpatialExperience green isolated both trees); gates:ci red set identical to base. Owner-decision queued: playful preset (intensity 1.2) vs tenant motion cap 0.8. Standing debt queued: scripts-tree baseline drift, pack-inventory baseline regen (needs the 10 missing .d.ts restored first), typecheck:tests TS2739x2 CollectionWorkspace."
   },
   {
    "id": "WO-DER-01",
