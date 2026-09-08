@@ -47,7 +47,7 @@
 
   --ds-list-background-color: var(--ds-color-white, #ffffff);
   --ds-list-item-background-color: transparent;
-  --ds-list-item-hover-background-color: var(--ds-color-neutral-50, #f9fafb);
+  --ds-list-item-hover-background-color: var(--ds-material-card-background-hover);
 
   --ds-list-text-color: var(--ds-color-neutral-900, #111827);
   --ds-list-secondary-text-color: var(--ds-color-neutral-500, #6b7280);

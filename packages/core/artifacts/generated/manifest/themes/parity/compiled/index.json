@@ -6,21 +6,21 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 93131,
-        "lines": 1898,
-        "sha256": "064bfd854265fcc7c700b7f9a6e36a28bcd9de246a2e97f3324e7d9a5afd5c0c"
+        "bytes": 99417,
+        "lines": 1978,
+        "sha256": "b44657b104c1f3d026a468d3a4b04efbac9aa560c0564b0ee381fb356d6dc0c0"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 98392,
-        "lines": 1698,
-        "sha256": "121c477d513c4bcdc018ec3361245436ad959e6d0e95dc1fc30240435a86888b"
+        "bytes": 99329,
+        "lines": 1713,
+        "sha256": "6d71f48ad58117af1b6e08a40073f47bd0969baac1056672500b9a3351117c3b"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 30865,
-        "lines": 586,
-        "sha256": "cbc9d18638cdd8e956be02dd4ef2a3ea851408944a916fdeb11ed3e8adc4c8ac"
+        "bytes": 36865,
+        "lines": 664,
+        "sha256": "b361c3bd46dcb8e48a950b958e260004e6e76ca413c6b90dabf9f9a74ebdf7d7"
       }
     ],
     "sources": [
@@ -47,46 +47,46 @@
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1876,
-      "distinctChannels": 1212
+      "occurrences": 1956,
+      "distinctChannels": 1292
     },
     "bithire": {
-      "occurrences": 1674,
-      "distinctChannels": 1236
+      "occurrences": 1689,
+      "distinctChannels": 1251
     },
     "evnto": {
-      "occurrences": 564,
-      "distinctChannels": 477
+      "occurrences": 642,
+      "distinctChannels": 555
     }
   },
   "surface": {
     "declares": {
-      "rottay": 1212,
-      "bithire": 1236,
-      "evnto": 477
+      "rottay": 1292,
+      "bithire": 1251,
+      "evnto": 555
     },
-    "union": 1757,
-    "intersection": 439,
-    "intersectionPct": 25,
-    "intersectionPctOfSmallest": 92,
+    "union": 1772,
+    "intersection": 519,
+    "intersectionPct": 29.3,
+    "intersectionPctOfSmallest": 93.5,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 691,
-        "union": 1757,
-        "pctOfUnion": 39.3,
-        "pctOfSmaller": 57
+        "shared": 771,
+        "union": 1772,
+        "pctOfUnion": 43.5,
+        "pctOfSmaller": 61.6
       },
       "rottay+evnto": {
-        "shared": 475,
-        "union": 1214,
-        "pctOfUnion": 39.1,
-        "pctOfSmaller": 99.6
+        "shared": 555,
+        "union": 1292,
+        "pctOfUnion": 43,
+        "pctOfSmaller": 100
       },
       "bithire+evnto": {
-        "shared": 441,
-        "union": 1272,
-        "pctOfUnion": 34.7,
-        "pctOfSmaller": 92.5
+        "shared": 519,
+        "union": 1287,
+        "pctOfUnion": 40.3,
+        "pctOfSmaller": 93.5
       }
     },
     "venn": {
@@ -841,79 +841,16 @@
         "--ds-listing-grid-min-tall-width",
         "--ds-listing-grid-selected-ring",
         "--ds-listing-grid-skeleton-bg",
-        "--ds-material-canvas-background",
-        "--ds-material-canvas-foreground",
         "--ds-material-canvas-texture",
-        "--ds-material-card-background",
-        "--ds-material-card-background-active",
-        "--ds-material-card-background-disabled",
-        "--ds-material-card-background-selected",
-        "--ds-material-card-border",
-        "--ds-material-card-border-active",
-        "--ds-material-card-border-disabled",
-        "--ds-material-card-border-hover",
-        "--ds-material-card-border-selected",
-        "--ds-material-card-border-strong",
-        "--ds-material-card-focus-ring",
-        "--ds-material-card-foreground",
-        "--ds-material-card-foreground-disabled",
-        "--ds-material-card-foreground-muted",
         "--ds-material-card-highlight",
-        "--ds-material-card-shadow",
-        "--ds-material-card-shadow-active",
-        "--ds-material-card-shadow-hover",
-        "--ds-material-card-shadow-selected",
         "--ds-material-card-texture",
-        "--ds-material-control-background",
-        "--ds-material-control-background-active",
-        "--ds-material-control-background-disabled",
-        "--ds-material-control-background-selected",
-        "--ds-material-control-border",
-        "--ds-material-control-border-active",
-        "--ds-material-control-border-disabled",
-        "--ds-material-control-border-hover",
-        "--ds-material-control-border-selected",
-        "--ds-material-control-border-strong",
-        "--ds-material-control-focus-ring",
-        "--ds-material-control-foreground",
-        "--ds-material-control-foreground-disabled",
-        "--ds-material-control-foreground-muted",
-        "--ds-material-control-shadow",
-        "--ds-material-control-shadow-active",
-        "--ds-material-control-shadow-hover",
-        "--ds-material-control-shadow-selected",
-        "--ds-material-inset-background",
         "--ds-material-inset-border",
-        "--ds-material-inset-foreground",
-        "--ds-material-overlay-background",
         "--ds-material-overlay-foreground",
-        "--ds-material-panel-background",
-        "--ds-material-panel-background-active",
-        "--ds-material-panel-background-disabled",
-        "--ds-material-panel-background-hover",
-        "--ds-material-panel-background-selected",
-        "--ds-material-panel-border",
-        "--ds-material-panel-border-active",
-        "--ds-material-panel-border-disabled",
-        "--ds-material-panel-border-hover",
-        "--ds-material-panel-border-selected",
-        "--ds-material-panel-border-strong",
-        "--ds-material-panel-focus-ring",
-        "--ds-material-panel-foreground",
-        "--ds-material-panel-foreground-disabled",
-        "--ds-material-panel-foreground-muted",
         "--ds-material-panel-highlight",
-        "--ds-material-panel-shadow",
-        "--ds-material-panel-shadow-active",
-        "--ds-material-panel-shadow-hover",
-        "--ds-material-panel-shadow-selected",
         "--ds-material-panel-texture",
-        "--ds-material-raised-background",
         "--ds-material-raised-border",
         "--ds-material-raised-shadow",
-        "--ds-material-shell-background",
         "--ds-material-shell-border",
-        "--ds-material-shell-foreground",
         "--ds-menu-group-text-transform",
         "--ds-metric-card-bg",
         "--ds-metric-card-border",
@@ -1415,10 +1352,7 @@
         "--ds-button-warning-shadow-hover",
         "--ds-motion-spring-gentle"
       ],
-      "bithire+evnto-not-rottay": [
-        "--ds-material-card-background-hover",
-        "--ds-material-control-background-hover"
-      ],
+      "bithire+evnto-not-rottay": [],
       "all-three": [
         "--ds-button-default-bg",
         "--ds-button-default-bg-hover",
@@ -1610,7 +1544,10 @@
         "--ds-ease-exit",
         "--ds-ease-standard",
         "--ds-effect-intensity",
+        "--ds-focus-ring",
         "--ds-focus-ring-color",
+        "--ds-focus-ring-offset",
+        "--ds-focus-ring-width",
         "--ds-font-family-base",
         "--ds-font-family-display",
         "--ds-font-family-heading",
@@ -1641,6 +1578,77 @@
         "--ds-line-height-heading",
         "--ds-line-height-relaxed",
         "--ds-line-height-tight",
+        "--ds-material-canvas-background",
+        "--ds-material-canvas-foreground",
+        "--ds-material-card-background",
+        "--ds-material-card-background-active",
+        "--ds-material-card-background-disabled",
+        "--ds-material-card-background-hover",
+        "--ds-material-card-background-selected",
+        "--ds-material-card-border",
+        "--ds-material-card-border-active",
+        "--ds-material-card-border-disabled",
+        "--ds-material-card-border-hover",
+        "--ds-material-card-border-selected",
+        "--ds-material-card-border-strong",
+        "--ds-material-card-focus-ring",
+        "--ds-material-card-foreground",
+        "--ds-material-card-foreground-disabled",
+        "--ds-material-card-foreground-muted",
+        "--ds-material-card-shadow",
+        "--ds-material-card-shadow-active",
+        "--ds-material-card-shadow-hover",
+        "--ds-material-card-shadow-selected",
+        "--ds-material-control-background",
+        "--ds-material-control-background-active",
+        "--ds-material-control-background-disabled",
+        "--ds-material-control-background-hover",
+        "--ds-material-control-background-selected",
+        "--ds-material-control-border",
+        "--ds-material-control-border-active",
+        "--ds-material-control-border-disabled",
+        "--ds-material-control-border-hover",
+        "--ds-material-control-border-selected",
+        "--ds-material-control-border-strong",
+        "--ds-material-control-focus-ring",
+        "--ds-material-control-foreground",
+        "--ds-material-control-foreground-disabled",
+        "--ds-material-control-foreground-muted",
+        "--ds-material-control-shadow",
+        "--ds-material-control-shadow-active",
+        "--ds-material-control-shadow-hover",
+        "--ds-material-control-shadow-selected",
+        "--ds-material-inset-background",
+        "--ds-material-inset-foreground",
+        "--ds-material-inset-shadow",
+        "--ds-material-inset-shadow-active",
+        "--ds-material-inset-shadow-hover",
+        "--ds-material-inset-shadow-selected",
+        "--ds-material-overlay-background",
+        "--ds-material-overlay-opaque",
+        "--ds-material-panel-background",
+        "--ds-material-panel-background-active",
+        "--ds-material-panel-background-disabled",
+        "--ds-material-panel-background-hover",
+        "--ds-material-panel-background-selected",
+        "--ds-material-panel-border",
+        "--ds-material-panel-border-active",
+        "--ds-material-panel-border-disabled",
+        "--ds-material-panel-border-hover",
+        "--ds-material-panel-border-selected",
+        "--ds-material-panel-border-strong",
+        "--ds-material-panel-focus-ring",
+        "--ds-material-panel-foreground",
+        "--ds-material-panel-foreground-disabled",
+        "--ds-material-panel-foreground-muted",
+        "--ds-material-panel-shadow",
+        "--ds-material-panel-shadow-active",
+        "--ds-material-panel-shadow-hover",
+        "--ds-material-panel-shadow-selected",
+        "--ds-material-raised-background",
+        "--ds-material-raised-foreground",
+        "--ds-material-shell-background",
+        "--ds-material-shell-foreground",
         "--ds-motion-attention",
         "--ds-motion-calm",
         "--ds-motion-deliberate",
@@ -1716,6 +1724,12 @@
         "--ds-sidebar-item-padding",
         "--ds-sidebar-text",
         "--ds-sidebar-text-muted",
+        "--ds-state-active-shift",
+        "--ds-state-disabled-mix",
+        "--ds-state-disabled-opacity",
+        "--ds-state-hover-shift",
+        "--ds-state-press-scale",
+        "--ds-state-selected-shift",
         "--ds-surface-card-grid-bg",
         "--ds-surface-card-grid-line",
         "--ds-surface-card-grid-size",
@@ -1863,11 +1877,11 @@
     }
   },
   "valueParity": {
-    "commonChannels": 439,
-    "identicalValue": 157,
-    "divergentValue": 282,
-    "identicalRoleShape": 283,
-    "divergentRoleShape": 156,
+    "commonChannels": 519,
+    "identicalValue": 184,
+    "divergentValue": 335,
+    "identicalRoleShape": 310,
+    "divergentRoleShape": 209,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -2686,6 +2700,430 @@
         }
       },
       {
+        "channel": "--ds-material-card-background-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-background-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-background-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-background-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-border",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-border-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-border-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-border-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-border-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-border-strong",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-focus-ring",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-foreground-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-foreground-muted",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-shadow",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-shadow-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-shadow-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-card-shadow-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-background-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-background-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-background-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-background-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-border",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-border-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-border-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-border-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-border-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-border-strong",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-focus-ring",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-foreground-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-foreground-muted",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-shadow",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-shadow-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-shadow-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-control-shadow-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-inset-foreground",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-background-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-background-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-background-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-background-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-border",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-border-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-border-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-border-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-border-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-border-strong",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-focus-ring",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-foreground-disabled",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-foreground-muted",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-shadow",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-shadow-active",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-shadow-hover",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-panel-shadow-selected",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
+        "channel": "--ds-material-shell-foreground",
+        "roles": {
+          "rottay": "base",
+          "bithire": "base,overlay-mode",
+          "evnto": "base"
+        }
+      },
+      {
         "channel": "--ds-premium-card-bg",
         "roles": {
           "rottay": "base",
@@ -3121,7 +3559,7 @@
   },
   "cascadePresence": {
     "notSeverity": "Presencia, NO severidad. Un canal declarado puede re-derivar y dejar pasar el dial. La severidad esta en `cascadeSeverance`.",
-    "distinctChannelsDeclared": 310,
+    "distinctChannelsDeclared": 346,
     "roots": [
       {
         "root": "--ds-alert-dialog-motion-scale",
@@ -3299,17 +3737,23 @@
       },
       {
         "root": "--ds-color-primary",
-        "channelsInCascade": 370,
-        "declaredByAny": 193,
-        "declaredByAll": 34,
+        "channelsInCascade": 414,
+        "declaredByAny": 228,
+        "declaredByAll": 65,
         "byTenant": {
-          "rottay": 80,
-          "bithire": 156,
-          "evnto": 38
+          "rottay": 138,
+          "bithire": 172,
+          "evnto": 67
         },
         "channels": [
           {
             "channel": "--ds-autocomplete-dropdown-shadow",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-autocomplete-option-bg-hover",
             "tenants": [
               "rottay"
             ]
@@ -3322,6 +3766,27 @@
           },
           {
             "channel": "--ds-border-color-focus",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-button-default-bg-active",
+            "tenants": [
+              "rottay",
+              "bithire"
+            ]
+          },
+          {
+            "channel": "--ds-button-default-bg-hover",
+            "tenants": [
+              "rottay",
+              "bithire",
+              "evnto"
+            ]
+          },
+          {
+            "channel": "--ds-button-default-border-active",
             "tenants": [
               "rottay"
             ]
@@ -3429,6 +3894,27 @@
             ]
           },
           {
+            "channel": "--ds-button-text-bg-active",
+            "tenants": [
+              "rottay",
+              "bithire"
+            ]
+          },
+          {
+            "channel": "--ds-button-text-bg-hover",
+            "tenants": [
+              "rottay",
+              "bithire"
+            ]
+          },
+          {
+            "channel": "--ds-card-bg-hover",
+            "tenants": [
+              "rottay",
+              "bithire"
+            ]
+          },
+          {
             "channel": "--ds-card-border",
             "tenants": [
               "rottay",
@@ -3491,6 +3977,12 @@
           },
           {
             "channel": "--ds-checkbox-focus-ring-color",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-collapse-header-bg-hover",
             "tenants": [
               "rottay"
             ]
@@ -3694,6 +4186,12 @@
             ]
           },
           {
+            "channel": "--ds-command-palette-item-hover-bg",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
             "channel": "--ds-compact-card-border",
             "tenants": [
               "bithire"
@@ -3749,6 +4247,18 @@
           },
           {
             "channel": "--ds-drawer-shadow",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-dropdown-item-bg-active",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-dropdown-item-bg-hover",
             "tenants": [
               "rottay"
             ]
@@ -3825,6 +4335,13 @@
             ]
           },
           {
+            "channel": "--ds-input-bg-hover",
+            "tenants": [
+              "rottay",
+              "bithire"
+            ]
+          },
+          {
             "channel": "--ds-input-border-focus",
             "tenants": [
               "rottay",
@@ -3839,6 +4356,12 @@
             ]
           },
           {
+            "channel": "--ds-input-clear-bg-hover",
+            "tenants": [
+              "bithire"
+            ]
+          },
+          {
             "channel": "--ds-input-loading-color",
             "tenants": [
               "bithire"
@@ -3848,6 +4371,18 @@
             "channel": "--ds-input-selection-bg",
             "tenants": [
               "bithire"
+            ]
+          },
+          {
+            "channel": "--ds-list-item-bg-hover",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-list-item-hover-background-color",
+            "tenants": [
+              "rottay"
             ]
           },
           {
@@ -3895,12 +4430,15 @@
           {
             "channel": "--ds-material-card-background-active",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-card-background-hover",
             "tenants": [
+              "rottay",
               "bithire",
               "evnto"
             ]
@@ -3908,25 +4446,33 @@
           {
             "channel": "--ds-material-card-background-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-card-border-active",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-card-border-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-card-focus-ring",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -3938,36 +4484,47 @@
           {
             "channel": "--ds-material-card-shadow",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-card-shadow-active",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-card-shadow-hover",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-card-shadow-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-control-background-active",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-control-background-hover",
             "tenants": [
+              "rottay",
               "bithire",
               "evnto"
             ]
@@ -3975,89 +4532,149 @@
           {
             "channel": "--ds-material-control-background-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-control-border-active",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-control-border-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-control-focus-ring",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-control-shadow-hover",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-control-shadow-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
+            ]
+          },
+          {
+            "channel": "--ds-material-inset-shadow-selected",
+            "tenants": [
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-background-active",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-background-hover",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-background-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-border-active",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-border-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-focus-ring",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-shadow-hover",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-shadow-selected",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-menu-focus-ring-color",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-menu-item-bg-active",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-menu-item-bg-hover",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-menu-item-hover-bg",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-menu-item-selected-bg",
             "tenants": [
               "rottay"
             ]
@@ -4141,6 +4758,13 @@
             ]
           },
           {
+            "channel": "--ds-modal-close-bg-hover",
+            "tenants": [
+              "rottay",
+              "bithire"
+            ]
+          },
+          {
             "channel": "--ds-modal-shadow",
             "tenants": [
               "rottay",
@@ -4149,6 +4773,18 @@
           },
           {
             "channel": "--ds-notification-shadow",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-pagination-item-bg-active",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-pagination-item-bg-hover",
             "tenants": [
               "rottay"
             ]
@@ -4219,7 +4855,31 @@
             ]
           },
           {
+            "channel": "--ds-select-bg-hover",
+            "tenants": [
+              "rottay",
+              "bithire",
+              "evnto"
+            ]
+          },
+          {
             "channel": "--ds-select-dropdown-shadow",
+            "tenants": [
+              "rottay",
+              "bithire",
+              "evnto"
+            ]
+          },
+          {
+            "channel": "--ds-select-option-bg-hover",
+            "tenants": [
+              "rottay",
+              "bithire",
+              "evnto"
+            ]
+          },
+          {
+            "channel": "--ds-select-option-bg-selected",
             "tenants": [
               "rottay",
               "bithire",
@@ -4282,6 +4942,18 @@
             "channel": "--ds-shadow-xs",
             "tenants": [
               "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-shell-active-bg",
+            "tenants": [
+              "bithire"
+            ]
+          },
+          {
+            "channel": "--ds-shell-active-gradient",
+            "tenants": [
+              "bithire"
             ]
           },
           {
@@ -4381,6 +5053,12 @@
             ]
           },
           {
+            "channel": "--ds-steps-item-bg-active",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
             "channel": "--ds-surface-card-grid-bg",
             "tenants": [
               "rottay",
@@ -4470,6 +5148,20 @@
             ]
           },
           {
+            "channel": "--ds-table-row-bg-hover",
+            "tenants": [
+              "rottay",
+              "bithire"
+            ]
+          },
+          {
+            "channel": "--ds-table-row-bg-selected",
+            "tenants": [
+              "rottay",
+              "bithire"
+            ]
+          },
+          {
             "channel": "--ds-table-row-hover-shadow",
             "tenants": [
               "bithire"
@@ -4501,6 +5193,30 @@
           },
           {
             "channel": "--ds-tooltip-shadow",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-tree-node-bg-hover",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-tree-node-bg-selected",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-upload-dragger-bg-hover",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-upload-dragger-border-active",
             "tenants": [
               "rottay"
             ]
@@ -5588,11 +6304,11 @@
         "root": "--ds-elevation-1",
         "channelsInCascade": 34,
         "declaredByAny": 19,
-        "declaredByAll": 3,
+        "declaredByAll": 7,
         "byTenant": {
-          "rottay": 9,
+          "rottay": 13,
           "bithire": 15,
-          "evnto": 5
+          "evnto": 9
         },
         "channels": [
           {
@@ -5659,25 +6375,33 @@
           {
             "channel": "--ds-material-card-shadow",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-card-shadow-active",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-control-shadow-hover",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
             "channel": "--ds-material-panel-shadow-hover",
             "tenants": [
-              "bithire"
+              "rottay",
+              "bithire",
+              "evnto"
             ]
           },
           {
@@ -6390,14 +7114,23 @@
       {
         "root": "--ds-state-press-scale",
         "channelsInCascade": 3,
-        "declaredByAny": 0,
-        "declaredByAll": 0,
+        "declaredByAny": 1,
+        "declaredByAll": 1,
         "byTenant": {
-          "rottay": 0,
-          "bithire": 0,
-          "evnto": 0
+          "rottay": 1,
+          "bithire": 1,
+          "evnto": 1
         },
-        "channels": []
+        "channels": [
+          {
+            "channel": "--ds-state-press-scale",
+            "tenants": [
+              "rottay",
+              "bithire",
+              "evnto"
+            ]
+          }
+        ]
       },
       {
         "root": "--ds-toolbar-control-pressed-scale",
@@ -6677,7 +7410,7 @@
     ]
   },
   "cascadeSeverance": {
-    "universe": 1021,
+    "universe": 1065,
     "roots": 38,
     "partition": "declaredInCascade = rootPinned + rootFrozen + severs + reDerives, por tenant",
     "exclusionRule": "Una raiz declarada por el tema queda fuera del reparto severs/reDerives, pero NO fuera de la medicion. Una semilla continua Standard autorada por tenant es rootPinned por autoridad del manifest. Fuera de esa autoridad, piso DERIVADO + al menos un modo sin var() = rootFrozen; piso LITERAL, piso AUSENTE o todos los modos parametricos = rootPinned.",
@@ -6690,20 +7423,20 @@
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 461,
       "channels": 3584,
-      "sha256": "17f2cb48464f23124bae80199873102ff7cdf670e76f021c39106867b3655e7e",
+      "sha256": "4240e5467d8bf22cda763ffd5f7459e76da4f755e542d87df2b1c87d89a7653f",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },
     "perTenant": {
       "rottay": {
-        "declaredInCascade": 156,
-        "severedTotal": 64,
+        "declaredInCascade": 215,
+        "severedTotal": 91,
         "rootPinned": {
-          "count": 9,
+          "count": 10,
           "byReason": {
             "tenant-seed": 2,
             "tenant-parametric": 3,
-            "floor-literal": 1,
+            "floor-literal": 2,
             "floor-absent": 3
           },
           "channels": [
@@ -6791,6 +7524,18 @@
                 "base=1"
               ],
               "floor": null
+            },
+            {
+              "channel": "--ds-state-press-scale",
+              "reason": "floor-literal",
+              "values": [
+                "base=0.98"
+              ],
+              "floor": {
+                "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+                "line": 822,
+                "value": "0.98"
+              }
             },
             {
               "channel": "--ds-type-scale",
@@ -6927,7 +7672,7 @@
               "readerCount": 3,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 807,
+                "line": 747,
                 "value": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)"
               }
             },
@@ -6965,20 +7710,31 @@
               "readerCount": 2,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 979,
+                "line": 925,
                 "value": "var(--ds-color-primary-900)"
               }
             }
           ]
         },
         "severs": {
-          "count": 47,
+          "count": 73,
           "channels": [
             {
               "channel": "--ds-autocomplete-dropdown-shadow",
               "values": [
                 "base=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
                 "overlay-mode=0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-autocomplete-option-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.04)",
+                "overlay-mode=#FAFAF9"
               ],
               "severedRoles": [
                 "default-mode",
@@ -7001,6 +7757,39 @@
               "values": [
                 "base=rgba(255, 255, 255, 0.40)",
                 "overlay-mode=rgba(10, 10, 10, 0.40)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-button-default-bg-active",
+              "values": [
+                "base=#2A2A2F",
+                "overlay-mode=#F4F4F3"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-button-default-bg-hover",
+              "values": [
+                "base=#222226",
+                "overlay-mode=#FAFAF9"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-button-default-border-active",
+              "values": [
+                "base=rgba(255, 255, 255, 0.22)",
+                "overlay-mode=#C4C4C2"
               ],
               "severedRoles": [
                 "default-mode",
@@ -7092,6 +7881,39 @@
               ]
             },
             {
+              "channel": "--ds-button-text-bg-active",
+              "values": [
+                "base=rgba(255, 255, 255, 0.08)",
+                "overlay-mode=rgba(0, 0, 0, 0.08)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-button-text-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.05)",
+                "overlay-mode=rgba(0, 0, 0, 0.04)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-card-bg-hover",
+              "values": [
+                "base=#1A1A1E",
+                "overlay-mode=#FAFAF9"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-card-border",
               "values": [
                 "base=#2A2A2F",
@@ -7147,6 +7969,17 @@
               ]
             },
             {
+              "channel": "--ds-collapse-header-bg-hover",
+              "values": [
+                "base=#1A1A1E",
+                "overlay-mode=#FAFAF9"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-color-border-focus",
               "values": [
                 "base=rgba(255, 255, 255, 0.20)",
@@ -7169,10 +8002,43 @@
               ]
             },
             {
+              "channel": "--ds-command-palette-item-hover-bg",
+              "values": [
+                "base=rgba(255, 255, 255, 0.04)",
+                "overlay-mode=#FAFAF9"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-drawer-shadow",
               "values": [
                 "base=0 16px 48px rgba(0, 0, 0, 0.50)",
                 "overlay-mode=0 12px 40px rgba(0, 0, 0, 0.12)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-dropdown-item-bg-active",
+              "values": [
+                "base=#2A2A2F",
+                "overlay-mode=#F4F4F3"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-dropdown-item-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.04)",
+                "overlay-mode=#FAFAF9"
               ],
               "severedRoles": [
                 "default-mode",
@@ -7202,10 +8068,32 @@
               ]
             },
             {
+              "channel": "--ds-input-bg-hover",
+              "values": [
+                "base=#1A1A1E",
+                "overlay-mode=#FAFAF9"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-input-border-focus",
               "values": [
                 "base=rgba(255, 255, 255, 0.36)",
                 "overlay-mode=rgba(10, 10, 10, 0.40)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-list-item-bg-hover",
+              "values": [
+                "base=#222226",
+                "overlay-mode=#FAFAF9"
               ],
               "severedRoles": [
                 "default-mode",
@@ -7224,6 +8112,28 @@
               ]
             },
             {
+              "channel": "--ds-menu-item-bg-active",
+              "values": [
+                "base=#2A2A2F",
+                "overlay-mode=rgba(0, 0, 0, 0.06)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-menu-item-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.04)",
+                "overlay-mode=rgba(0, 0, 0, 0.03)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-menu-item-danger-color",
               "values": [
                 "base=#EF4444",
@@ -7235,10 +8145,43 @@
               ]
             },
             {
+              "channel": "--ds-menu-item-hover-bg",
+              "values": [
+                "base=rgba(255, 255, 255, 0.04)",
+                "overlay-mode=rgba(0, 0, 0, 0.03)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-menu-item-selected-bg",
+              "values": [
+                "base=#2A2A2F",
+                "overlay-mode=rgba(0, 0, 0, 0.06)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-menu-item-selected-color",
               "values": [
                 "base=#ECECEC",
                 "overlay-mode=#1A1A1A"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-modal-close-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.05)",
+                "overlay-mode=rgba(0, 0, 0, 0.04)"
               ],
               "severedRoles": [
                 "default-mode",
@@ -7261,6 +8204,17 @@
               "values": [
                 "base=0 4px 24px rgba(0, 0, 0, 0.50), 0 0 0 1px #2A2A2F",
                 "overlay-mode=0 4px 24px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(0, 0, 0, 0.04)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-pagination-item-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.04)",
+                "overlay-mode=#FAFAF9"
               ],
               "severedRoles": [
                 "default-mode",
@@ -7327,6 +8281,28 @@
               "values": [
                 "base=0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F",
                 "overlay-mode=0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-select-option-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.04)",
+                "overlay-mode=#FAFAF9"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-select-option-bg-selected",
+              "values": [
+                "base=#2A2A2F",
+                "overlay-mode=#F4F4F3"
               ],
               "severedRoles": [
                 "default-mode",
@@ -7444,6 +8420,28 @@
               ]
             },
             {
+              "channel": "--ds-table-row-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.025)",
+                "overlay-mode=#FAFAF9"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-table-row-bg-selected",
+              "values": [
+                "base=rgba(255, 255, 255, 0.05)",
+                "overlay-mode=rgba(10, 10, 10, 0.04)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-toggle-focus-ring",
               "values": [
                 "base=0 0 0 2px rgba(255, 255, 255, 0.20)",
@@ -7459,6 +8457,39 @@
               "values": [
                 "base=0 4px 16px rgba(0, 0, 0, 0.40)",
                 "overlay-mode=0 4px 12px rgba(0, 0, 0, 0.12)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-tree-node-bg-hover",
+              "values": [
+                "base=rgba(255, 255, 255, 0.04)",
+                "overlay-mode=#FAFAF9"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-tree-node-bg-selected",
+              "values": [
+                "base=#2A2A2F",
+                "overlay-mode=#F4F4F3"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-upload-dragger-bg-hover",
+              "values": [
+                "base=#1A1A1E",
+                "overlay-mode=#F4F4F3"
               ],
               "severedRoles": [
                 "default-mode",
@@ -7490,8 +8521,8 @@
           ]
         },
         "partiallySevered": {
-          "count": 14,
-          "roleEdges": 14,
+          "count": 15,
+          "roleEdges": 15,
           "channels": [
             {
               "channel": "--ds-button-ghost-color-hover",
@@ -7542,6 +8573,12 @@
               ]
             },
             {
+              "channel": "--ds-list-item-hover-background-color",
+              "severedRoles": [
+                "default-mode"
+              ]
+            },
+            {
               "channel": "--ds-shadow-2xl",
               "severedRoles": [
                 "overlay-mode"
@@ -7580,12 +8617,12 @@
           ]
         },
         "reDerives": {
-          "count": 97,
-          "reachingRoot": 47,
-          "reachingLiveRoot": 44,
-          "mixedRoleValues": 14,
-          "blockedUpstream": 9,
-          "blockedUpstreamRoles": 9,
+          "count": 129,
+          "reachingRoot": 65,
+          "reachingLiveRoot": 62,
+          "mixedRoleValues": 15,
+          "blockedUpstream": 14,
+          "blockedUpstreamRoles": 14,
           "channels": [
             {
               "channel": "--ds-button-default-shadow",
@@ -8779,6 +9816,29 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-list-item-hover-background-color",
+              "reads": [
+                "--ds-color-neutral-50"
+              ],
+              "readsByRole": [
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-neutral-50"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "default-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-live-feed-badge-bg",
               "reads": [
                 "--ds-color-primary"
@@ -8806,6 +9866,856 @@
               ],
               "blockedRoles": [],
               "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-background-active",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-active-shift",
+                "--ds-surface-card"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-card"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-card"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-background-hover",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-hover-shift",
+                "--ds-surface-card"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-hover-shift",
+                    "--ds-surface-card"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-hover-shift",
+                    "--ds-surface-card"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-background-selected",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-selected-shift",
+                "--ds-surface-card"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-card"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-card"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-border-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-border-selected",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-focus-ring",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-shadow",
+              "reads": [
+                "--ds-shadow-sm"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-card-shadow-active",
+              "reads": [
+                "--ds-shadow-sm"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-card-shadow-hover",
+              "reads": [
+                "--ds-shadow-md"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-md"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-md"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-card-shadow-selected",
+              "reads": [
+                "--ds-material-card-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-material-card-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-card-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-background-active",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-active-shift",
+                "--ds-surface-control"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-control"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-control"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-background-hover",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-hover-shift",
+                "--ds-surface-control"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-hover-shift",
+                    "--ds-surface-control"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-hover-shift",
+                    "--ds-surface-control"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-background-selected",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-selected-shift",
+                "--ds-surface-control"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-control"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-control"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-border-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-border-selected",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-focus-ring",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-shadow-hover",
+              "reads": [
+                "--ds-shadow-sm"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-control-shadow-selected",
+              "reads": [
+                "--ds-material-control-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-material-control-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-control-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-inset-shadow-selected",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-background-active",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-active-shift",
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-panel"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-background-hover",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-hover-shift",
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-hover-shift",
+                    "--ds-surface-panel"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-hover-shift",
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-background-selected",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-selected-shift",
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-panel"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-border-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-border-selected",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-focus-ring",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-shadow-hover",
+              "reads": [
+                "--ds-shadow-sm"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-panel-shadow-selected",
+              "reads": [
+                "--ds-material-panel-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-material-panel-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-panel-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
               "blockedUpstream": false
             },
             {
@@ -9037,6 +10947,36 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-pagination-item-bg-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-premium-card-border",
               "reads": [
                 "--ds-card-border-color",
@@ -9208,6 +11148,39 @@
               ],
               "blockedRoles": [],
               "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-select-bg-hover",
+              "reads": [
+                "--ds-color-bg-input",
+                "--ds-color-white",
+                "--ds-surface-control"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-bg-input",
+                    "--ds-color-white",
+                    "--ds-surface-control"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-bg-input",
+                    "--ds-color-white",
+                    "--ds-surface-control"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
               "blockedUpstream": false
             },
             {
@@ -9387,6 +11360,36 @@
             },
             {
               "channel": "--ds-spinner-color",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-steps-item-bg-active",
               "reads": [
                 "--ds-color-primary"
               ],
@@ -10448,6 +12451,36 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-upload-dragger-border-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-upload-progress-bar",
               "reads": [
                 "--ds-color-primary"
@@ -10481,14 +12514,14 @@
         }
       },
       "bithire": {
-        "declaredInCascade": 262,
-        "severedTotal": 140,
+        "declaredInCascade": 279,
+        "severedTotal": 150,
         "rootPinned": {
-          "count": 11,
+          "count": 12,
           "byReason": {
             "tenant-seed": 2,
             "tenant-parametric": 3,
-            "floor-literal": 3,
+            "floor-literal": 4,
             "floor-absent": 3
           },
           "channels": [
@@ -10544,7 +12577,7 @@
               ],
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 736,
+                "line": 676,
                 "value": "1px"
               }
             },
@@ -10600,6 +12633,18 @@
                 "base=1.25"
               ],
               "floor": null
+            },
+            {
+              "channel": "--ds-state-press-scale",
+              "reason": "floor-literal",
+              "values": [
+                "base=0.98"
+              ],
+              "floor": {
+                "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+                "line": 822,
+                "value": "0.98"
+              }
             },
             {
               "channel": "--ds-type-scale",
@@ -10843,7 +12888,7 @@
               "readerCount": 0,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 807,
+                "line": 747,
                 "value": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)"
               }
             },
@@ -10873,14 +12918,14 @@
               "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 979,
+                "line": 925,
                 "value": "var(--ds-color-primary-900)"
               }
             }
           ]
         },
         "severs": {
-          "count": 75,
+          "count": 76,
           "channels": [
             {
               "channel": "--ds-button-ghost-bg",
@@ -11580,6 +13625,17 @@
               ]
             },
             {
+              "channel": "--ds-table-row-bg-selected",
+              "values": [
+                "base=#E8F3FF",
+                "overlay-mode=#112840"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-tall-card-border-hover",
               "values": [
                 "base=color-mix(in srgb, #3A6FB0 25%, #D4E0EA)"
@@ -11642,9 +13698,15 @@
           ]
         },
         "partiallySevered": {
-          "count": 61,
-          "roleEdges": 61,
+          "count": 70,
+          "roleEdges": 70,
           "channels": [
+            {
+              "channel": "--ds-card-bg-hover",
+              "severedRoles": [
+                "overlay-mode"
+              ]
+            },
             {
               "channel": "--ds-card-border",
               "severedRoles": [
@@ -11757,6 +13819,12 @@
               "channel": "--ds-input-border-focus",
               "severedRoles": [
                 "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-input-clear-bg-hover",
+              "severedRoles": [
+                "default-mode"
               ]
             },
             {
@@ -11952,7 +14020,43 @@
               ]
             },
             {
+              "channel": "--ds-modal-close-bg-hover",
+              "severedRoles": [
+                "default-mode"
+              ]
+            },
+            {
+              "channel": "--ds-select-bg-hover",
+              "severedRoles": [
+                "default-mode"
+              ]
+            },
+            {
+              "channel": "--ds-select-option-bg-hover",
+              "severedRoles": [
+                "default-mode"
+              ]
+            },
+            {
+              "channel": "--ds-select-option-bg-selected",
+              "severedRoles": [
+                "default-mode"
+              ]
+            },
+            {
               "channel": "--ds-shadow-popover",
+              "severedRoles": [
+                "default-mode"
+              ]
+            },
+            {
+              "channel": "--ds-shell-active-bg",
+              "severedRoles": [
+                "default-mode"
+              ]
+            },
+            {
+              "channel": "--ds-shell-active-gradient",
               "severedRoles": [
                 "default-mode"
               ]
@@ -11994,6 +14098,12 @@
               ]
             },
             {
+              "channel": "--ds-table-row-bg-hover",
+              "severedRoles": [
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-tall-card-border",
               "severedRoles": [
                 "default-mode"
@@ -12014,10 +14124,10 @@
           ]
         },
         "reDerives": {
-          "count": 172,
-          "reachingRoot": 110,
-          "reachingLiveRoot": 110,
-          "mixedRoleValues": 61,
+          "count": 187,
+          "reachingRoot": 111,
+          "reachingLiveRoot": 111,
+          "mixedRoleValues": 70,
           "blockedUpstream": 6,
           "blockedUpstreamRoles": 7,
           "channels": [
@@ -12049,6 +14159,63 @@
               ],
               "blockedRoles": [],
               "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-button-default-bg-active",
+              "reads": [
+                "--ds-control-surface",
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-control-surface",
+                    "--ds-surface-panel"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-control-surface",
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-button-default-bg-hover",
+              "reads": [
+                "--ds-control-surface-raised"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-control-surface-raised"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-control-surface-raised"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
               "blockedUpstream": false
             },
             {
@@ -12398,6 +14565,60 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-button-text-bg-active",
+              "reads": [
+                "--ds-control-brand-tint-hover"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-control-brand-tint-hover"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-control-brand-tint-hover"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-button-text-bg-hover",
+              "reads": [
+                "--ds-control-brand-tint"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-control-brand-tint"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-control-brand-tint"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-button-xl-font-size",
               "reads": [
                 "--ds-type-scale"
@@ -12512,6 +14733,33 @@
               "liveRootRoles": [
                 "default-mode",
                 "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-card-bg-hover",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-surface-card"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-surface-card"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "overlay-mode"
+              ],
+              "reachesRoot": true,
+              "mixed": true,
+              "liveRootRoles": [
+                "default-mode"
               ],
               "blockedRoles": [],
               "reachesLiveRoot": true,
@@ -13769,6 +16017,33 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-input-bg-hover",
+              "reads": [
+                "--ds-surface-inset"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-surface-inset"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-surface-inset"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-input-border-focus",
               "reads": [
                 "--ds-material-control-border-active"
@@ -13821,6 +16096,29 @@
               ],
               "blockedRoles": [],
               "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-input-clear-bg-hover",
+              "reads": [
+                "--ds-material-control-background-hover"
+              ],
+              "readsByRole": [
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-control-background-hover"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "default-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
               "blockedUpstream": false
             },
             {
@@ -14576,6 +16874,36 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-material-inset-shadow-selected",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-material-panel-background-active",
               "reads": [
                 "--ds-color-bg-surface",
@@ -14830,6 +17158,29 @@
               "severedRoles": [],
               "reachesRoot": false,
               "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-modal-close-bg-hover",
+              "reads": [
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "default-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
               "liveRootRoles": [],
               "blockedRoles": [],
               "reachesLiveRoot": false,
@@ -15279,6 +17630,33 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-select-bg-hover",
+              "reads": [
+                "--ds-color-bg-input",
+                "--ds-color-white",
+                "--ds-surface-control"
+              ],
+              "readsByRole": [
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-bg-input",
+                    "--ds-color-white",
+                    "--ds-surface-control"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "default-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-select-dropdown-shadow",
               "reads": [
                 "--ds-shadow-lg",
@@ -15310,6 +17688,52 @@
               "blockedUpstream": true
             },
             {
+              "channel": "--ds-select-option-bg-hover",
+              "reads": [
+                "--ds-color-neutral-100"
+              ],
+              "readsByRole": [
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-neutral-100"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "default-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-select-option-bg-selected",
+              "reads": [
+                "--ds-color-primary-50"
+              ],
+              "readsByRole": [
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary-50"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "default-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-shadow-popover",
               "reads": [
                 "--ds-shadow-md"
@@ -15333,6 +17757,52 @@
               ],
               "reachesLiveRoot": false,
               "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-shell-active-bg",
+              "reads": [
+                "--ds-material-card-background-active"
+              ],
+              "readsByRole": [
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-card-background-active"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "default-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-shell-active-gradient",
+              "reads": [
+                "--ds-material-card-background-active"
+              ],
+              "readsByRole": [
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-card-background-active"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "default-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-signal-card-badge-bg",
@@ -15820,6 +18290,29 @@
               "severedRoles": [],
               "reachesRoot": false,
               "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-table-row-bg-hover",
+              "reads": [
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "overlay-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
               "liveRootRoles": [],
               "blockedRoles": [],
               "reachesLiveRoot": false,
@@ -16949,14 +19442,14 @@
         }
       },
       "evnto": {
-        "declaredInCascade": 79,
-        "severedTotal": 17,
+        "declaredInCascade": 109,
+        "severedTotal": 18,
         "rootPinned": {
-          "count": 9,
+          "count": 10,
           "byReason": {
             "tenant-seed": 2,
             "tenant-parametric": 3,
-            "floor-literal": 1,
+            "floor-literal": 2,
             "floor-absent": 3
           },
           "channels": [
@@ -17043,6 +19536,18 @@
                 "base=1"
               ],
               "floor": null
+            },
+            {
+              "channel": "--ds-state-press-scale",
+              "reason": "floor-literal",
+              "values": [
+                "base=0.98"
+              ],
+              "floor": {
+                "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+                "line": 822,
+                "value": "0.98"
+              }
             },
             {
               "channel": "--ds-type-scale",
@@ -17174,15 +19679,26 @@
               "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 979,
+                "line": 925,
                 "value": "var(--ds-color-primary-900)"
               }
             }
           ]
         },
         "severs": {
-          "count": 14,
+          "count": 15,
           "channels": [
+            {
+              "channel": "--ds-button-default-bg-hover",
+              "values": [
+                "base=#FAFAFA",
+                "overlay-mode=#24221C"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
             {
               "channel": "--ds-button-ghost-bg",
               "values": [
@@ -17342,12 +19858,12 @@
           ]
         },
         "reDerives": {
-          "count": 54,
-          "reachingRoot": 36,
-          "reachingLiveRoot": 36,
+          "count": 82,
+          "reachingRoot": 49,
+          "reachingLiveRoot": 49,
           "mixedRoleValues": 1,
-          "blockedUpstream": 2,
-          "blockedUpstreamRoles": 4,
+          "blockedUpstream": 7,
+          "blockedUpstreamRoles": 14,
           "channels": [
             {
               "channel": "--ds-button-default-shadow",
@@ -17609,6 +20125,42 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-material-card-background-active",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-active-shift",
+                "--ds-surface-card"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-card"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-card"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-material-card-background-hover",
               "reads": [
                 "--ds-color-bg-elevated",
@@ -17627,6 +20179,285 @@
                   "reads": [
                     "--ds-color-bg-elevated",
                     "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-background-selected",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-selected-shift",
+                "--ds-surface-card"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-card"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-card"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-border-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-border-selected",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-focus-ring",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-card-shadow",
+              "reads": [
+                "--ds-shadow-sm"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-card-shadow-active",
+              "reads": [
+                "--ds-shadow-sm"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-card-shadow-hover",
+              "reads": [
+                "--ds-shadow-md"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-md"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-md"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-card-shadow-selected",
+              "reads": [
+                "--ds-material-card-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-material-card-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-card-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-background-active",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-active-shift",
+                "--ds-surface-control"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-control"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-control"
                   ]
                 }
               ],
@@ -17672,6 +20503,474 @@
               ],
               "blockedRoles": [],
               "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-background-selected",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-selected-shift",
+                "--ds-surface-control"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-control"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-control"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-border-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-border-selected",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-focus-ring",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-control-shadow-hover",
+              "reads": [
+                "--ds-shadow-sm"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-control-shadow-selected",
+              "reads": [
+                "--ds-material-control-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-material-control-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-control-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-inset-shadow-selected",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-background-active",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-active-shift",
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-panel"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-active-shift",
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-background-hover",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-hover-shift",
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-hover-shift",
+                    "--ds-surface-panel"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-hover-shift",
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-background-selected",
+              "reads": [
+                "--ds-color-primary",
+                "--ds-state-selected-shift",
+                "--ds-surface-panel"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-panel"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary",
+                    "--ds-state-selected-shift",
+                    "--ds-surface-panel"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-border-active",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-border-selected",
+              "reads": [
+                "--ds-color-primary"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": true,
+              "mixed": false,
+              "liveRootRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "blockedRoles": [],
+              "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-focus-ring",
+              "reads": [
+                "--ds-focus-ring",
+                "--ds-shadow-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-focus-ring",
+                    "--ds-shadow-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-panel-shadow-hover",
+              "reads": [
+                "--ds-shadow-sm"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-sm"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-material-panel-shadow-selected",
+              "reads": [
+                "--ds-material-panel-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-material-panel-focus-ring"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-material-panel-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
               "blockedUpstream": false
             },
             {
@@ -18047,6 +21346,39 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-select-bg-hover",
+              "reads": [
+                "--ds-color-bg-input",
+                "--ds-color-white",
+                "--ds-surface-control"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-bg-input",
+                    "--ds-color-white",
+                    "--ds-surface-control"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-bg-input",
+                    "--ds-color-white",
+                    "--ds-surface-control"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
               "channel": "--ds-select-dropdown-shadow",
               "reads": [
                 "--ds-shadow-lg"
@@ -18075,6 +21407,60 @@
               ],
               "reachesLiveRoot": false,
               "blockedUpstream": true
+            },
+            {
+              "channel": "--ds-select-option-bg-hover",
+              "reads": [
+                "--ds-color-neutral-100"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-neutral-100"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-neutral-100"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-select-option-bg-selected",
+              "reads": [
+                "--ds-color-primary-50"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-color-primary-50"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-color-primary-50"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
             },
             {
               "channel": "--ds-shadow-popover",

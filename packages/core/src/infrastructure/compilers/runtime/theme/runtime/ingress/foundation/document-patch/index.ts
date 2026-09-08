@@ -510,6 +510,7 @@ function migrateGeneral(
       "rhythm",
       "motion",
       "surfaces",
+      "states",
       "navigation",
       "experienceProfile",
     ],
@@ -578,6 +579,19 @@ function migrateGeneral(
       surfaces: {
         elevation: general.surfaces.elevation,
         effectIntensity: general.surfaces.effectIntensity,
+      },
+    });
+  }
+  if (general.states) {
+    assertExactKeys(
+      general.states,
+      ["emphasis", "focusStyle"],
+      "general.states"
+    );
+    patches.push({
+      surfaces: {
+        stateEmphasis: general.states.emphasis,
+        focusStyle: general.states.focusStyle,
       },
     });
   }

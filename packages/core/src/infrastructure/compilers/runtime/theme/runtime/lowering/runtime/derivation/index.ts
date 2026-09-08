@@ -11,11 +11,13 @@ import { axesDeriver } from "./axes";
 import { chartsDeriver } from "./charts";
 import { chromeDeriver } from "./chrome";
 import { expressiveDeriver } from "./expressive";
+import { materialsDeriver } from "./materials";
 import { motionDeriver } from "./motion";
 import { paletteDeriver } from "./palette";
 import { rampsDeriver } from "./ramps";
 import { recipesDeriver } from "./recipes";
 import { seedsDeriver } from "./seeds";
+import { statesDeriver } from "./states";
 import { surfacesDeriver } from "./surfaces";
 import { tenantDeriver } from "./tenant";
 import { tintDeriver } from "./tint";
@@ -36,7 +38,9 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   axesDeriver,
   typographyDeriver,
   paletteDeriver,
+  statesDeriver,
   surfacesDeriver,
+  materialsDeriver,
   rampsDeriver,
   chartsDeriver,
   tintDeriver,

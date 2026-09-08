@@ -43,7 +43,7 @@
   );
   --ds-card-shadow-hover: var(
     --_ds-personality-resolved-card-shadow-hover,
-    var(--ds-shadow-card-hover)
+    var(--ds-material-card-shadow-hover)
   );
   --ds-card-border: var(
     --_ds-personality-resolved-card-border,
@@ -51,7 +51,7 @@
   );
   --ds-card-border-hover: var(
     --_ds-personality-resolved-card-border-hover,
-    initial
+    var(--ds-material-card-border-hover)
   );
   --ds-card-header-padding: var(
     --_ds-personality-resolved-card-header-padding,
@@ -67,7 +67,7 @@
   );
   --ds-card-bg-hover: var(
     --_ds-personality-resolved-card-bg-hover,
-    var(--ds-color-neutral-50)
+    var(--ds-material-card-background-hover)
   );
   --ds-card-hover-transform: var(
     --_ds-personality-resolved-card-hover-transform,

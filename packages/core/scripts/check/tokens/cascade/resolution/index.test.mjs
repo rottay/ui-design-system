@@ -230,6 +230,13 @@ test('sobre el arbol real: ninguna custom property compilada usa inherit/unset/r
 });
 
 test('el mapa vivo y el pineado coinciden (la ley cero-delta, hecha continua)', async () => {
+  /* WO-DER-02 (2026-09-08, K3 audit HOLD adjudication): el pin se re-anclo con
+   * el propio `--write` de la puerta. El delta es integramente del lote: los
+   * canales que `derivation/states` y `derivation/materials` ahora emiten
+   * (--ds-state-*, --ds-focus-ring*, --ds-material-*) y los fallbacks que
+   * dejan de enganchar porque la raiz material ya existe (p.ej.
+   * --ds-input-shadow-hover: la declaracion es identica a la del padre; lo que
+   * cambia es que --ds-material-inset-shadow-hover ya resuelve). */
   const { readFileSync } = await import('node:fs');
   const pinned = JSON.parse(readFileSync(new URL('../../../../../artifacts/generated/manifest/cascade/values/index.json', import.meta.url), 'utf8'));
   const live = await buildResolvedMap();

@@ -688,6 +688,28 @@ export interface BrandSurfaces {
    * `TENANT_THEME_RHYTHM_FACTORS`.
    */
   rhythm?: "tight" | "normal" | "airy";
+  /**
+   * Interaction-state emphasis: how far a resting ground travels toward the
+   * brand when a surface is hovered, pressed, selected or disabled.
+   *
+   * A CHARACTER decision, not a value: it moves `--ds-state-*`, and every
+   * material root expresses its state facets in terms of those deltas, so one
+   * posture reaches every family instead of the ~370 per-component channels
+   * F-10 measured. Absent -> `medium`, which is byte-identical to the
+   * foundation defaults that predate the decision.
+   *
+   * The vocabulary is spelled out here rather than imported because
+   * `contracts/theme/foundation/decisions` already imports this module; its
+   * `STATE_EMPHASIS_POSTURES` is the closed list and the catalog test compares
+   * the two.
+   */
+  stateEmphasis?: "subtle" | "medium" | "strong";
+  /**
+   * Focus signature: the shape of the affordance every focusable surface
+   * wears. Moves `--ds-focus-ring` and its two operands; absent -> `ring`,
+   * the double ring the interaction contract already specifies.
+   */
+  focusStyle?: "ring" | "underline" | "glow";
 }
 
 /**
@@ -3221,6 +3243,15 @@ export interface TenantAppearanceGeneral {
    * tenants cannot inject choreography, loops, keyframes or spring physics.
    */
   motion?: TenantMotionDial;
+  /**
+   * The two interaction-state decisions (kit rows 20 and 21). Emphasis is the
+   * delta every state expresses; focus is the signature every focusable
+   * surface wears. Both lower through `derivation/states`.
+   */
+  states?: {
+    emphasis?: "subtle" | "medium" | "strong";
+    focusStyle?: "ring" | "underline" | "glow";
+  };
   surfaces?: {
     elevation?: "flat" | "soft" | "elevated";
     /**

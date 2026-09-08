@@ -6,7 +6,7 @@
 > Rollback: every control is an INPUT — removing the authored value restores the vertical's baseline.
 > `effect today` is MEASURED, not intended: `not-yet-derived` means the row has no producer anywhere yet.
 
-digest: 2f0fe5e6c71be5d28a481485e269e81f39d392bbfb74ac4087930e799dcc0eaa
+digest: 9d87d46663134bab57851f7874b533dad93442c64c9ebd1dee2a1cce708f44a1
 
 ## STANDARD — 19 controls
 
@@ -26,8 +26,8 @@ digest: 2f0fe5e6c71be5d28a481485e269e81f39d392bbfb74ac4087930e799dcc0eaa
 | `surfaces.elevation-posture` | 17 | Elevation posture | `flat` \| `soft` \| `elevated` | `appearance.general.surfaces.elevation` | 3 channels | 25/25 (declared fan-out) | open | css-channels |
 | `surfaces.border-style` | 18 | Border style | `none` \| `hairline` \| `strong` | — | — | declared fan-out: card, input, table, panel | open | not-yet-derived |
 | `surfaces.effect-intensity` | 19 | Decoration intensity | [0 – 1] | `appearance.general.surfaces.effectIntensity` | 1 channel | declared fan-out: glass, blur, glow | open | css-channels |
-| `states.emphasis` | 20 | Interaction-state emphasis | `subtle` \| `medium` \| `strong` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
-| `states.focus-style` | 21 | Focus signature | `ring` \| `underline` \| `glow` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | not-yet-derived |
+| `states.emphasis` | 20 | Interaction-state emphasis | `subtle` \| `medium` \| `strong` | `appearance.general.states.emphasis` | 18 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
+| `states.focus-style` | 21 | Focus signature | `ring` \| `underline` \| `glow` | `appearance.general.states.focusStyle` | 10 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
 | `motion.dial` | 22 | Motion intensity and duration | 3 keys (intensity, durationScale, ambient) | `appearance.general.motion.{intensity,durationScale,ambient}` | 2 channels | 25/25 (declared fan-out) | open | css-channels |
 | `navigation.sidebar-tone` | 24 | Sidebar tone | `subtle` \| `strong` \| `inverse` | `appearance.general.navigation.sidebarTone` | 6 channels | 2/25 (declared fan-out) | open | css-channels |
 | `experience.profile` | 25 | Experience profile | registered ids (`EXPERIENCE_PROFILE_REGISTRY`) | `appearance.general.experienceProfile` | 5 channels | declared fan-out (the row names no separate family list) | locked-by-default | css-channels |

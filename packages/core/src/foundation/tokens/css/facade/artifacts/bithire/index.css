@@ -486,7 +486,10 @@
   --ds-filter-pill-hover-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-control-surface));
   --ds-filter-pill-hover-border: color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border));
   --ds-filter-pill-shadow: 0 1px 2px rgba(20, 40, 59, 0.03);
+  --ds-focus-ring: 0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary), 0 0 0 calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)) var(--ds-focus-ring-color);
   --ds-focus-ring-color: var(--ds-color-primary);
+  --ds-focus-ring-offset: 2px;
+  --ds-focus-ring-width: 2px;
   --ds-font-family-base: var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
   --ds-font-family-display: var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
   --ds-font-family-heading: var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
@@ -718,8 +721,13 @@
   --ds-material-inset-background: var(--ds-surface-inset);
   --ds-material-inset-border: #D7E2EA;
   --ds-material-inset-foreground: #31506B;
+  --ds-material-inset-shadow: var(--ds-shadow-inner);
+  --ds-material-inset-shadow-active: inset 0 3px 8px 0 color-mix(in srgb, var(--ds-color-neutral-900) 9%, transparent);
+  --ds-material-inset-shadow-hover: inset 0 2px 6px 0 color-mix(in srgb, var(--ds-color-neutral-900) 7%, transparent);
+  --ds-material-inset-shadow-selected: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
   --ds-material-overlay-background: var(--ds-surface-overlay);
   --ds-material-overlay-foreground: #14283B;
+  --ds-material-overlay-opaque: var(--ds-surface-card);
   --ds-material-panel-background: var(--ds-surface-panel);
   --ds-material-panel-background-active: linear-gradient(180deg, #F6FAFC 0%, #EBF3F8 100%);
   --ds-material-panel-background-disabled: #EFF3F6;
@@ -743,6 +751,7 @@
   --ds-material-panel-texture: none;
   --ds-material-raised-background: var(--ds-surface-raised);
   --ds-material-raised-border: #C7D6E2;
+  --ds-material-raised-foreground: var(--ds-color-text-primary);
   --ds-material-raised-shadow: 0 16px 36px -24px rgba(20, 40, 59, 0.36), 0 4px 12px rgba(20, 40, 59, 0.08);
   --ds-material-shell-background: var(--ds-surface-shell);
   --ds-material-shell-border: #D4E0EA;
@@ -948,6 +957,12 @@
   --ds-signal-card-shadow: 0 1px 2px rgba(20, 40, 59, 0.06);
   --ds-signal-card-title-color: var(--ds-color-text-primary);
   --ds-signal-card-top-line-display: none;
+  --ds-state-active-shift: 7%;
+  --ds-state-disabled-mix: 82%;
+  --ds-state-disabled-opacity: 0.6;
+  --ds-state-hover-shift: 4%;
+  --ds-state-press-scale: 0.98;
+  --ds-state-selected-shift: 9%;
   --ds-surface-canvas: #f8fbff;
   --ds-surface-card: #FFFFFF;
   --ds-surface-card-bg: var(--ds-surface-card);

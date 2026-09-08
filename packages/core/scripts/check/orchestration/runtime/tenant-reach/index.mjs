@@ -63,11 +63,19 @@ export const LOWERING_RUNTIME_DERIVATION = Object.freeze([
   LOWERING_DERIVATION_CHARTS,
   `${DERIVATION}/chrome/index.ts`,
   `${DERIVATION}/expressive/index.ts`,
+  // WO-DER-02 (2026-09-08, K3 audit HOLD adjudication): the states and
+  // materials derivers emit literal, non-interpolated `vars["--ds-…"]`
+  // assignments driven by the typed `states.emphasis` / `states.focus-style`
+  // decisions, so they belong in the reach corpus; every emission attributes
+  // as `typed-literal` and no interpolated emitter is added, so the E0
+  // totality law is untouched.
+  `${DERIVATION}/materials/index.ts`,
   `${DERIVATION}/motion/index.ts`,
   `${DERIVATION}/palette/index.ts`,
   `${DERIVATION}/ramps/index.ts`,
   `${DERIVATION}/recipes/index.ts`,
   `${DERIVATION}/seeds/index.ts`,
+  `${DERIVATION}/states/index.ts`,
   `${DERIVATION}/surfaces/index.ts`,
   `${DERIVATION}/tenant/index.ts`,
   `${DERIVATION}/tint/index.ts`,

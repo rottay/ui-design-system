@@ -585,13 +585,49 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "standard",
     title: "Interaction-state emphasis",
     domain: { kind: "enum", values: ["subtle", "medium", "strong"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.states.emphasis",
+      brandTheme: "surfaces.stateEmphasis",
+    },
     consumes: ["palette.seeds"],
-    produces: { channels: [], rootAttributes: [] },
+    produces: {
+      channels: [
+        "--ds-state-hover-shift",
+        "--ds-state-active-shift",
+        "--ds-state-selected-shift",
+        "--ds-state-disabled-mix",
+        "--ds-state-disabled-opacity",
+        "--ds-state-press-scale",
+        "--ds-material-panel-background-hover",
+        "--ds-material-panel-background-active",
+        "--ds-material-panel-background-selected",
+        "--ds-material-panel-background-disabled",
+        "--ds-material-card-background-hover",
+        "--ds-material-card-background-active",
+        "--ds-material-card-background-selected",
+        "--ds-material-card-background-disabled",
+        "--ds-material-control-background-hover",
+        "--ds-material-control-background-active",
+        "--ds-material-control-background-selected",
+        "--ds-material-control-background-disabled",
+      ],
+      rootAttributes: [],
+    },
+    // The families whose root-scope state channels resolve through a material
+    // background root, measured by `scripts/check/tokens/states/material-arm`
+    // rather than asserted here. WO-DER-02 declared this floor
+    // `declared-fan-out` over a 25-family proposal (autocomplete, button,
+    // card, checkbox, collapse, collection, command, datepicker, dropdown,
+    // input, inputnumber, list, menu, modal, pagination, premium, radio,
+    // segmented, select, shell, table, textarea, timepicker, tree, upload),
+    // but the K3 audit HOLD of WO-DER-02 (2026-09-08, WIP-02 adjudication)
+    // found no owner decision recorded for it: resolution by declaration is
+    // not a floor. The 25-family list stays as the proposal, and the row
+    // returns to `owner-pending` until the owner records the value.
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "open",
-    effect: "not-yet-derived",
-    defaultBehavior: "the hand-written per-family state channels",
+    effect: "css-channels",
+    defaultBehavior: "the `medium` posture, which is the foundation's own deltas",
   },
   {
     id: "states.focus-style",
@@ -600,13 +636,37 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "standard",
     title: "Focus signature",
     domain: { kind: "enum", values: ["ring", "underline", "glow"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.states.focusStyle",
+      brandTheme: "surfaces.focusStyle",
+    },
     consumes: ["palette.seeds"],
-    produces: { channels: [], rootAttributes: [] },
+    produces: {
+      channels: [
+        "--ds-focus-ring",
+        "--ds-focus-ring-width",
+        "--ds-focus-ring-offset",
+        "--ds-material-panel-focus-ring",
+        "--ds-material-card-focus-ring",
+        "--ds-material-control-focus-ring",
+        "--ds-material-panel-shadow-selected",
+        "--ds-material-card-shadow-selected",
+        "--ds-material-control-shadow-selected",
+        "--ds-material-inset-shadow-selected",
+      ],
+      rootAttributes: [],
+    },
+    // Every family that paints a focus affordance reads the ring through one
+    // of the three material focus rings or `--ds-focus-ring` itself.
+    // WO-DER-02 declared this floor `declared-fan-out` over the four material
+    // focus roles (card, control, panel, inset), but the K3 audit HOLD of
+    // WO-DER-02 (2026-09-08, WIP-02 adjudication) found no owner decision
+    // recorded for it: the list stays as the proposal and the row returns to
+    // `owner-pending` until the owner records the value.
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "never-lockable",
-    effect: "not-yet-derived",
-    defaultBehavior: "the engine's authored focus ring",
+    effect: "css-channels",
+    defaultBehavior: "the `ring` signature: the double ring of the interaction contract",
   },
   {
     id: "motion.dial",

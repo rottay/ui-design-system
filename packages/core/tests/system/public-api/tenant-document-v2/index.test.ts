@@ -163,12 +163,23 @@ describe('tenant document v2 is nameable through @rottay/design-system/server', 
     expect(lit.decisions[0]?.lit).toBe(true);
     expect(lit.unlit).toHaveLength(0);
 
-    const unlit = admitDocument({
+    // `states.emphasis` is lit since WO-DER-02; the unlit arm reads a decision
+    // the catalog still gives no keypath.
+    const alsoLit = admitDocument({
       vertical: 'rottay',
       document: v2({ 'states.emphasis': 'strong' }),
     });
+    expect(alsoLit.unlit).toHaveLength(0);
+    expect(alsoLit.decisions[0]?.keypaths).toEqual([
+      'appearance.general.states.emphasis',
+    ]);
+
+    const unlit = admitDocument({
+      vertical: 'rottay',
+      document: v2({ 'surfaces.border-style': 'hairline' }),
+    });
     expect(unlit.unlit.map((projection) => projection.id)).toEqual([
-      'states.emphasis',
+      'surfaces.border-style',
     ]);
     expect(unlit.unlit[0]?.reason).toBe('no-keypath-today');
   });

@@ -61,18 +61,18 @@
      outranked the tenant for every customer that did not hand-write a select
      colour into its artifact, which is all of them. */
   --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
-  --ds-select-bg-hover: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
+  --ds-select-bg-hover: var(--ds-material-control-background-hover);
   --ds-select-bg-focus: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
-  --ds-select-bg-disabled: var(--ds-color-neutral-50);
+  --ds-select-bg-disabled: var(--ds-material-control-background-disabled);
 
   --ds-select-color: var(--ds-color-neutral-900);
   --ds-select-color-placeholder: var(--ds-color-neutral-400);
-  --ds-select-color-disabled: var(--ds-color-neutral-400);
+  --ds-select-color-disabled: var(--ds-material-control-foreground-disabled);
 
   --ds-select-border-color: var(--ds-color-neutral-300);
-  --ds-select-border-color-hover: var(--ds-color-neutral-400);
+  --ds-select-border-color-hover: var(--ds-material-control-border-hover);
   --ds-select-border-color-focus: var(--ds-color-primary-500);
-  --ds-select-border-color-disabled: var(--ds-color-neutral-200);
+  --ds-select-border-color-disabled: var(--ds-material-control-border-disabled);
 
   --ds-select-border-width: var(--ds-border-width-1, 1px);
   --ds-select-border-style: solid;
@@ -137,14 +137,14 @@
   --ds-select-option-border-radius: var(--ds-radius-sm);
 
   --ds-select-option-bg: transparent;
-  --ds-select-option-bg-hover: var(--ds-color-neutral-100);
-  --ds-select-option-bg-selected: var(--ds-color-primary-50);
+  --ds-select-option-bg-hover: var(--ds-material-card-background-hover);
+  --ds-select-option-bg-selected: var(--ds-material-card-background-selected);
   --ds-select-option-bg-focused: var(--ds-color-neutral-100);
   --ds-select-option-bg-disabled: transparent;
 
   --ds-select-option-color: var(--ds-color-neutral-900);
   --ds-select-option-color-selected: var(--ds-color-primary-700);
-  --ds-select-option-color-disabled: var(--ds-color-neutral-400);
+  --ds-select-option-color-disabled: var(--ds-material-card-foreground-disabled);
 
   /* ========================================================================
      ICONS - Arrow and Clear Icons
@@ -158,7 +158,7 @@
   --ds-select-clear-color: var(--ds-color-neutral-400);
   --ds-select-clear-color-hover: var(--ds-color-neutral-600);
   --ds-select-clear-size: 0.875rem;
-  --ds-select-clear-bg-hover: var(--ds-color-neutral-100);
+  --ds-select-clear-bg-hover: var(--ds-material-control-background-hover);
   --ds-select-clear-radius: var(--ds-radius-full);
 
   /* ========================================================================

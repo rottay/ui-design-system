@@ -23,9 +23,9 @@
     "c2Reanchor": "2026-09-04 (C2, the sole productive theme lowering): re-anclaje mecanico, mismo metodo que F4A-6 y F4B-14. El lote movio el compilador a runtime/theme/runtime/lowering y el ancla del emisor en scripts/libraries/hooks paso de un archivo a un directorio, de modo que contracts/css/hooks/index.json se regenero. Contra HEAD el manifest movio exactamente tres cifras: compilerConcreteEmissions 2249->2251 (--ds-experience-profile y --ds-recipe-profile, que ya se emitian desde un arrow-const que el escaneo de declaraciones no alcanzaba), tenantChannel 2189->2191 (el mismo par) y themeContractFiles 41->43 (los dos owners nuevos del contrato: iso/capability-absence e iso/schema). unadjudicatedReads NO cambio: 2605 antes y 2605 ahora, 0 agregados y 0 quitados contra HEAD. Verificado en ambas direcciones contra el manifest vigente: 2605/2605, 0 missing, 0 extra, 0 duplicados; byClass intacto (MODERN_PRIVATE 2007, FROZEN_ENGINE_SCOPED 518, TENANT_FACING_CANDIDATE 70, FOUNDATION_SHARED 10). basedOnManifestDigest recalculado; cero filas agregadas, quitadas o reclasificadas."
   },
   "counts": {
-    "total": 2605,
+    "total": 2603,
     "byClass": {
-      "MODERN_PRIVATE": 2007,
+      "MODERN_PRIVATE": 2005,
       "FROZEN_ENGINE_SCOPED": 518,
       "TENANT_FACING_CANDIDATE": 70,
       "FOUNDATION_SHARED": 10
@@ -7342,24 +7342,6 @@
       }
     },
     {
-      "name": "--ds-color-bg-active",
-      "family": "--ds-color-bg",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:331  --ds-material-card-background-active: var(",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-css": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-color-bg-base",
       "family": "--ds-color-bg",
       "class": "MODERN_PRIVATE",
@@ -7377,24 +7359,6 @@
         "declBuckets": {},
         "withFallback": 1,
         "bare": 13,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-color-bg-disabled",
-      "family": "--ds-color-bg",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:339  --ds-material-card-background-disabled: var(",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-css": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
         "testStoryReads": 0
       }
     },

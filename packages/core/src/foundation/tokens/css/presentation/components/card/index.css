@@ -22,20 +22,16 @@
      Base appearance for cards
      ======================================================================== */
   --ds-card-bg: var(--ds-color-white);
-  --ds-card-bg-hover: var(--ds-color-neutral-50);
-  --ds-card-bg-active: var(--ds-color-neutral-100);
-  --ds-card-bg-selected: color-mix(
-    in srgb,
-    var(--ds-color-primary) 8%,
-    var(--ds-card-bg)
-  );
-  --ds-card-bg-disabled: var(--ds-color-neutral-50);
+  --ds-card-bg-hover: var(--ds-material-card-background-hover);
+  --ds-card-bg-active: var(--ds-material-card-background-active);
+  --ds-card-bg-selected: var(--ds-material-card-background-selected);
+  --ds-card-bg-disabled: var(--ds-material-card-background-disabled);
 
   --ds-card-color: var(--ds-color-neutral-900);
   --ds-card-color-hover: var(--ds-card-color);
   --ds-card-color-active: var(--ds-card-color);
   --ds-card-color-selected: var(--ds-card-color);
-  --ds-card-color-disabled: var(--ds-color-text-disabled);
+  --ds-card-color-disabled: var(--ds-material-card-foreground-disabled);
   --ds-card-color-muted: var(--ds-color-neutral-600);
 
   /* ========================================================================
@@ -44,18 +40,10 @@
      ======================================================================== */
   --ds-card-border-width: var(--ds-border-width-1, 1px);
   --ds-card-border-color: var(--ds-color-neutral-200);
-  --ds-card-border-color-hover: var(--ds-color-neutral-300);
-  --ds-card-border-color-active: var(--ds-card-border-color-hover);
-  --ds-card-border-color-selected: color-mix(
-    in srgb,
-    var(--ds-color-primary) 52%,
-    var(--ds-card-border-color)
-  );
-  --ds-card-border-color-disabled: color-mix(
-    in srgb,
-    var(--ds-card-border-color) 58%,
-    transparent
-  );
+  --ds-card-border-color-hover: var(--ds-material-card-border-hover);
+  --ds-card-border-color-active: var(--ds-material-card-border-active);
+  --ds-card-border-color-selected: var(--ds-material-card-border-selected);
+  --ds-card-border-color-disabled: var(--ds-material-card-border-disabled);
   --ds-card-border-active: var(--ds-card-border-color-active);
   --ds-card-border-selected: var(--ds-card-border-color-selected);
   --ds-card-border-disabled: var(--ds-card-border-color-disabled);
@@ -80,9 +68,9 @@
   --ds-card-shadow-xl: var(--ds-shadow-xl);
 
   /* Interactive shadows */
-  --ds-card-shadow-hover: var(--ds-shadow-card-hover);
-  --ds-card-shadow-active: var(--ds-shadow-card-active);
-  --ds-card-shadow-selected: var(--ds-shadow-focus-ring);
+  --ds-card-shadow-hover: var(--ds-material-card-shadow-hover);
+  --ds-card-shadow-active: var(--ds-material-card-shadow-active);
+  --ds-card-shadow-selected: var(--ds-material-card-shadow-selected);
 
   /* Default shadow */
   --ds-card-shadow-default: var(--ds-card-shadow-sm);

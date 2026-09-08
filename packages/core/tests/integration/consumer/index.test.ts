@@ -258,13 +258,21 @@ describe('the application writes a tenant document v2 through the door', () => {
       'density.mode',
       'palette.seeds',
       'states.emphasis',
+      'surfaces.border-style',
       'typography.pairing',
     ]);
   });
 
   it('accepts a decision with no fan-out yet and names it unlit', async () => {
     const { admission } = await mountTenant();
-    expect(admission.unlit.map((decision) => decision.id)).toEqual(['states.emphasis']);
+    expect(admission.unlit.map((decision) => decision.id)).toEqual([
+      'surfaces.border-style',
+    ]);
+    // `states.emphasis` was this example until WO-DER-02 derived it; it is
+    // asserted LIT here so the two halves of the report stay honest together.
+    expect(
+      admission.decisions.find((decision) => decision.id === 'states.emphasis')?.keypaths
+    ).toEqual(['appearance.general.states.emphasis']);
   });
 
   it('refuses a decision id outside the published catalog, by name', () => {

@@ -135,10 +135,21 @@ const FIRST_PARTY = [
 // identical for all three. The only component of the digest that moved is
 // `cssString`, and only in the order its lines appear -- `stable()` sorts
 // `cssVariables`, so the value map contributes nothing to the move.
+//
+// MATERIALS/STATES re-anchor, all three, ADDITIVE-ONLY and measured rather
+// than asserted. `derivation/materials` emits all 71 `--ds-material-*` roots
+// for every vertical instead of only the facets a theme authored, and
+// `derivation/states` emits the interaction deltas and the focus ring. Across
+// the edit NOTHING was removed and NO existing value moved: rottay 1196 ->
+// 1276 keys (+80), bithire 1233 -> 1248 (+15), evnto 475 -> 553 (+78),
+// removed 0 and changed 0 on all three, measured against the committed
+// artifacts the previous compiler wrote. Every added key is `--ds-material-*`,
+// `--ds-state-*` or `--ds-focus-ring*`; bithire adds only 15 because it had
+// already authored 65 of the 71 roots by hand.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "ec07f45c956111a3271d34ddc5ed04ee00d5f66561b6b1c8507855b844a5bae4",
-  bithire: "93e9c7b51fd9efa61f15efde80bc65ea4638af5467c38768054356afc90f1954",
-  evnto: "497d853e84caea374a7ad208c838b8109730bc1add5faeeb941e5b383be3eac3",
+  rottay: "1dcb5e41ae9fb507fe36ebec443a12fa4ce01134a595c12f7b97f5ff5709b8cd",
+  bithire: "923841257d0ced991bf34859eae089a2120fd31d601a191e62e90cd3c54ddac6",
+  evnto: "9a0e01724c0589a75bce69793441ccfa0afbef1cbd9f18721af58e3d0445565c",
 };
 
 /**

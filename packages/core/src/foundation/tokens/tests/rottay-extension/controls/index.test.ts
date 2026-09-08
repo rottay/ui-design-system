@@ -1328,11 +1328,13 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the 41 deletes were derivation
   });
 
   it("keeps --ds-upload-dragger-bg-hover a MIGRATE in both modes, causally", () => {
-    // The mandatory causal finding. The floor is `var(--ds-color-bg-hover)`,
-    // which resolves to #131316 dark and #f0efee light -- neither equals the
-    // authored #1A1A1E / #F4F4F3, so neither tuple could be deleted. If this
-    // channel is ever re-adjudicated as a delete, this test is the reason it
-    // must not be.
+    // The mandatory causal finding, restated in the vocabulary WO-DER-02 gave
+    // it. The floor is the CONTROL MATERIAL's hover ground, which is the
+    // resting control surface travelled toward the brand by
+    // `--ds-state-hover-shift`; it is a mix, not a literal, so it cannot equal
+    // the authored #1A1A1E / #F4F4F3 in either mode and neither tuple could be
+    // deleted. If this channel is ever re-adjudicated as a delete, this test
+    // is the reason it must not be.
     const name = "--ds-upload-dragger-bg-hover";
     const rows = T2_ROSTER.filter((row) => row.name === name);
     expect(rows).toHaveLength(2);
@@ -1341,12 +1343,18 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the 41 deletes were derivation
     expect(lightControls.upload?.draggerBgHover).toBe("#F4F4F3");
     for (const row of rows) {
       const floor = lookup(row.mode, name, name);
-      expect(floor?.value).toBe("var(--ds-color-bg-hover)");
+      expect(floor?.value).toBe("var(--ds-material-control-background-hover)");
       const resolved = resolveValue(row.mode, (floor as Resolution).value);
       expect(resolved).not.toBe(bare(row.value));
+      expect(resolved).toMatch(/^color-mix\(/u);
     }
-    expect(resolveValue("dark", "var(--ds-color-bg-hover)")).toBe("#131316");
-    expect(resolveValue("light", "var(--ds-color-bg-hover)")).toBe("#f0efee");
+    // The two resolutions, stated so a reader sees WHY neither is deletable.
+    expect(resolveValue("dark", "var(--ds-material-control-background-hover)")).toBe(
+      "color-mix(insrgb,#ffffff4%,#131316)"
+    );
+    expect(resolveValue("light", "var(--ds-material-control-background-hover)")).toBe(
+      "color-mix(insrgb,#0a0a0a4%,#ffffff)"
+    );
   });
 });
 

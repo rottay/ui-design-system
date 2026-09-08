@@ -153,7 +153,7 @@
   --ds-modal-close-icon-size: 1.25rem;     /* 20px */
   --ds-modal-close-color: var(--ds-color-neutral-500);
   --ds-modal-close-color-hover: var(--ds-color-neutral-700);
-  --ds-modal-close-bg-hover: var(--ds-color-neutral-100);
+  --ds-modal-close-bg-hover: var(--ds-material-control-background-hover);
   --ds-modal-close-border-radius: var(--ds-radius-md);
   --ds-modal-close-position-top: 1rem;
   --ds-modal-close-position-right: 1rem;

@@ -27,11 +27,11 @@
      ======================================================================== */
   --ds-tree-node-padding: 4px 8px;
   --ds-tree-node-bg: transparent;
-  --ds-tree-node-bg-hover: #f5f5f5;
-  --ds-tree-node-bg-selected: #f5f5f5;
+  --ds-tree-node-bg-hover: var(--ds-material-panel-background-hover);
+  --ds-tree-node-bg-selected: var(--ds-material-panel-background-selected);
   --ds-tree-node-color: #525252;
   --ds-tree-node-color-selected: #171717;
-  --ds-tree-node-color-disabled: var(--ds-color-neutral-400, #a3a3a3);
+  --ds-tree-node-color-disabled: var(--ds-material-panel-foreground-disabled);
 
   /* ========================================================================
      ICON - Node icon

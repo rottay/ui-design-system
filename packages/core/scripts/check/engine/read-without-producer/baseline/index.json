@@ -7,7 +7,8 @@
   "denominator": 3649,
   "produced": 1553,
   "debt": 2096,
-  "producers": 3610,
+  "producers": 3613,
   "modernSkinFiles": 123,
+  "producersNote": "3610 -> 3613 en WO-DER-02: `derivation/states` da productor a --ds-state-{active,selected}-shift y a --ds-state-disabled-mix, que antes no los tenia nadie. `debt` (2096) y `denominator` (3649) no se mueven: los tres nombres nuevos no los lee ningun skin Modern todavia.",
   "honesty": "El numero es la MEDIDA de hoy, no una meta. WO-DER-01 crea el instrumento; bajarlo es el trabajo de las WO-DER-02..04 y de los cortes por familia, que son las que dan productor a los nombres que hoy no lo tienen."
 }

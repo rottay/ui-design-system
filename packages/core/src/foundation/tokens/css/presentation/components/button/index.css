@@ -120,20 +120,20 @@
 
   /* DEFAULT - Neutral actions */
   --ds-button-default-bg: var(--ds-color-white);
-  --ds-button-default-bg-hover: var(--ds-color-neutral-50);
-  --ds-button-default-bg-active: var(--ds-color-neutral-100);
+  --ds-button-default-bg-hover: var(--ds-material-control-background-hover);
+  --ds-button-default-bg-active: var(--ds-material-control-background-active);
   --ds-button-default-color: var(--ds-color-neutral-900);
   --ds-button-default-color-hover: var(--ds-button-default-color);
   --ds-button-default-color-active: var(--ds-button-default-color);
   --ds-button-default-border: var(--ds-color-neutral-300);
-  --ds-button-default-border-hover: var(--ds-color-neutral-400);
-  --ds-button-default-border-active: var(--ds-color-neutral-500);
+  --ds-button-default-border-hover: var(--ds-material-control-border-hover);
+  --ds-button-default-border-active: var(--ds-material-control-border-active);
   --ds-button-default-shadow: var(--ds-shadow-sm);
 
   /* GHOST - Minimal appearance */
   --ds-button-ghost-bg: transparent;
-  --ds-button-ghost-bg-hover: var(--ds-color-neutral-100);
-  --ds-button-ghost-bg-active: var(--ds-color-neutral-200);
+  --ds-button-ghost-bg-hover: var(--ds-material-control-background-hover);
+  --ds-button-ghost-bg-active: var(--ds-material-control-background-active);
   --ds-button-ghost-color: var(--ds-color-neutral-700);
   --ds-button-ghost-color-hover: var(--ds-color-neutral-900);
   --ds-button-ghost-color-active: var(--ds-color-neutral-900);
@@ -143,20 +143,20 @@
 
   /* DASHED - Outlined with dashed border */
   --ds-button-dashed-bg: transparent;
-  --ds-button-dashed-bg-hover: var(--ds-color-neutral-50);
-  --ds-button-dashed-bg-active: var(--ds-color-neutral-100);
+  --ds-button-dashed-bg-hover: var(--ds-material-control-background-hover);
+  --ds-button-dashed-bg-active: var(--ds-material-control-background-active);
   --ds-button-dashed-color: var(--ds-color-neutral-700);
   --ds-button-dashed-color-hover: var(--ds-button-dashed-color);
   --ds-button-dashed-color-active: var(--ds-button-dashed-color);
   --ds-button-dashed-border: var(--ds-color-neutral-300);
-  --ds-button-dashed-border-hover: var(--ds-color-neutral-400);
-  --ds-button-dashed-border-active: var(--ds-color-neutral-500);
+  --ds-button-dashed-border-hover: var(--ds-material-control-border-hover);
+  --ds-button-dashed-border-active: var(--ds-material-control-border-active);
   --ds-button-dashed-border-style: dashed;
 
   /* TEXT - Text-only button */
   --ds-button-text-bg: transparent;
-  --ds-button-text-bg-hover: var(--ds-color-neutral-100);
-  --ds-button-text-bg-active: var(--ds-color-neutral-200);
+  --ds-button-text-bg-hover: var(--ds-material-control-background-hover);
+  --ds-button-text-bg-active: var(--ds-material-control-background-active);
   --ds-button-text-color: var(--ds-color-primary-600);
   --ds-button-text-color-hover: var(--ds-color-primary-700);
   --ds-button-text-color-active: var(--ds-color-primary-800);
@@ -248,9 +248,9 @@
      ======================================================================== */
 
   /* Disabled state */
-  --ds-button-disabled-bg: var(--ds-color-neutral-100);
-  --ds-button-disabled-color: var(--ds-color-neutral-400);
-  --ds-button-disabled-border-color: var(--ds-color-neutral-200);
+  --ds-button-disabled-bg: var(--ds-material-control-background-disabled);
+  --ds-button-disabled-color: var(--ds-material-control-foreground-disabled);
+  --ds-button-disabled-border-color: var(--ds-material-control-border-disabled);
   --ds-button-disabled-opacity: 0.58;
   --ds-button-disabled-cursor: not-allowed;
   --ds-button-disabled-shadow: none;

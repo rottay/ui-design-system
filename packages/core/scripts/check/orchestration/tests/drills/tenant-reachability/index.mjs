@@ -63,11 +63,15 @@ const REACH_CORPUS = Object.freeze([
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/charts/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/expressive/index.ts',
+  // WO-DER-02 (2026-09-08, K3 audit HOLD adjudication): the reach corpus grew
+  // the states/materials derivers, so this mirror grows the same two files.
+  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/materials/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/ramps/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/seeds/index.ts',
+  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/states/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tenant/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tint/index.ts',

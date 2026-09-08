@@ -13,7 +13,7 @@
  * derived by this probe and must never be read as if it were: deriving it
  * needs the per-decision minimum families, which the kit fixes in the typed
  * catalog of WO-CAT-02. What this probe DOES derive, and fails closed on, is
- * `movesSomething` -- and the ten `new` rows must all measure false.
+ * `movesSomething` -- and the rows recorded `new` must all measure false.
  *
  * @module Tooling/DecisionsLit/Foundation/Catalog
  */
@@ -37,8 +37,12 @@ function themeControlTier(id) {
 /** Today's control catalog: the 21 manifest controls plus `palette.dark-mode`. */
 export const TODAY_CONTROL_DENOMINATOR = 22;
 
-/** The kit rows that do not exist in today's catalog at all. */
-export const NEW_DECISION_DENOMINATOR = 10;
+/**
+ * The kit rows that do not exist in today's catalog at all. 10 -> 8 on
+ * 2026-09-08 (K3 audit HOLD adjudication of WO-DER-02): `states.emphasis` and
+ * `states.focus-style` gained a real producer and moved to `partial`.
+ */
+export const NEW_DECISION_DENOMINATOR = 8;
 
 /**
  * `full`    the audit measured full, coherent effect in static and DB
@@ -83,8 +87,14 @@ export const DECISIONS = Object.freeze([
   ['surfaces.elevation-posture', 'partial', ['flat', 'elevated']],
   ['surfaces.border-style', 'new', ['none', 'strong']],
   ['surfaces.effect-intensity', 'partial', [0, 0.6]],
-  ['states.emphasis', 'new', ['subtle', 'strong']],
-  ['states.focus-style', 'new', ['ring', 'glow']],
+  // WO-DER-02 (2026-09-08, K3 audit HOLD adjudication): both state decisions
+  // now have a real producer (`derivation/states`) and the probe MEASURES them
+  // moving, so `new` is a lie the run refuses to publish. The class is
+  // `partial`: measured effect, bounded by the verticals' own hand-authored
+  // material roots (the emphasis probe measures 13/25 families at best, in
+  // evnto), below the fan-out the rows declare.
+  ['states.emphasis', 'partial', ['subtle', 'strong']],
+  ['states.focus-style', 'partial', ['ring', 'glow']],
   ['motion.dial', 'partial', [
     { intensity: 0, durationScale: 0.8 },
     { intensity: 0.8, durationScale: 1.3 },

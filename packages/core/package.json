@@ -690,6 +690,8 @@
     "lane-control:work-order": "node scripts/check/orchestration/public/work-order/index.mjs",
     "lane-control:write-set-intersection": "node scripts/check/orchestration/public/write-set-intersection/index.mjs",
     "cascade-probe:cli": "node scripts/check/tokens/cascade/probe/public/cli/index.mjs",
+    "state-material-arm:check": "node scripts/check/tokens/states/material-arm/index.mjs",
+    "states-emphasis-probe": "node scripts/check/tokens/states/emphasis-probe/index.mjs",
     "daisy:generate": "node scripts/generate/framework-class-paint/index.mjs",
     "surface-census:generate": "node scripts/generate/surface-capabilities/index.mjs",
     "quality-evidence:v2:inventory": "node scripts/check/evidence/framework/cli/index.mjs inventory",

@@ -289,32 +289,26 @@
   --ds-overlay-scrim: var(--ds-color-bg-overlay, rgba(0, 0, 0, 0.5));
   --ds-surface-highlight: var(--ds-color-bg-hover, rgba(255, 255, 255, 0.06));
 
+  /* ──────────────────────────────────────────────────────────────────────────
+     1a. MATERIAL ROOTS — DERIVED, NOT AUTHORED
+     The 71 roots below are the tenant-neutral fallback of the SAME table the
+     compiler emits per vertical (`compilers/.../derivation/materials`), and
+     `tests/material-root-authority.test.ts` fails if the two ever disagree.
+     Their state facets are expressed as `--ds-state-*` deltas, so the
+     `states.emphasis` decision moves the whole stack through one number per
+     state instead of through a per-component channel.
+     ────────────────────────────────────────────────────────────────────────── */
   --ds-material-canvas-background: var(--ds-surface-canvas);
   --ds-material-canvas-foreground: var(--ds-color-text-primary);
+
   --ds-material-shell-background: var(--ds-surface-shell);
   --ds-material-shell-foreground: var(--ds-color-text-primary);
 
   --ds-material-panel-background: var(--ds-surface-panel);
-  --ds-material-panel-background-hover: color-mix(
-    in srgb,
-    var(--ds-color-primary) 3%,
-    var(--ds-surface-panel)
-  );
-  --ds-material-panel-background-active: color-mix(
-    in srgb,
-    var(--ds-color-primary) 5%,
-    var(--ds-surface-panel)
-  );
-  --ds-material-panel-background-selected: color-mix(
-    in srgb,
-    var(--ds-color-primary) 7%,
-    var(--ds-surface-panel)
-  );
-  --ds-material-panel-background-disabled: color-mix(
-    in srgb,
-    var(--ds-surface-panel) 82%,
-    var(--ds-surface-canvas)
-  );
+  --ds-material-panel-background-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-panel));
+  --ds-material-panel-background-active: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-panel));
+  --ds-material-panel-background-selected: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-selected-shift, 9%), var(--ds-surface-panel));
+  --ds-material-panel-background-disabled: color-mix(in srgb, var(--ds-surface-panel) var(--ds-state-disabled-mix, 82%), var(--ds-surface-canvas));
   --ds-material-panel-foreground: var(--ds-color-text-primary);
   --ds-material-panel-foreground-muted: var(--ds-color-text-secondary);
   --ds-material-panel-foreground-disabled: var(--ds-color-text-disabled);
@@ -323,55 +317,28 @@
   --ds-material-panel-border-hover: var(--ds-color-border-secondary);
   --ds-material-panel-border-active: var(--ds-color-primary);
   --ds-material-panel-border-selected: var(--ds-color-primary);
-  --ds-material-panel-border-disabled: var(
-    --ds-color-border-disabled,
-    var(--ds-color-border-subtle)
-  );
-  --ds-material-panel-focus-ring: var(
-    --ds-focus-ring,
-    var(--ds-shadow-focus-ring)
-  );
+  --ds-material-panel-border-disabled: var(--ds-color-border-disabled, var(--ds-color-border-subtle));
+  --ds-material-panel-focus-ring: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
   --ds-material-panel-shadow: none;
   --ds-material-panel-shadow-hover: var(--ds-shadow-sm);
   --ds-material-panel-shadow-active: none;
   --ds-material-panel-shadow-selected: var(--ds-material-panel-focus-ring);
 
   --ds-material-card-background: var(--ds-surface-card);
-  --ds-material-card-background-hover: var(
-    --ds-color-bg-hover,
-    color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-card))
-  );
-  --ds-material-card-background-active: var(
-    --ds-color-bg-active,
-    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
-  );
-  --ds-material-card-background-selected: var(
-    --ds-color-bg-selected,
-    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
-  );
-  --ds-material-card-background-disabled: var(
-    --ds-color-bg-disabled,
-    color-mix(in srgb, var(--ds-surface-card) 82%, var(--ds-surface-panel))
-  );
+  --ds-material-card-background-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-card));
+  --ds-material-card-background-active: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-card));
+  --ds-material-card-background-selected: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-selected-shift, 9%), var(--ds-surface-card));
+  --ds-material-card-background-disabled: color-mix(in srgb, var(--ds-surface-card) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel));
   --ds-material-card-foreground: var(--ds-color-text-primary);
   --ds-material-card-foreground-muted: var(--ds-color-text-secondary);
   --ds-material-card-foreground-disabled: var(--ds-color-text-disabled);
   --ds-material-card-border: var(--ds-color-border-primary);
   --ds-material-card-border-strong: var(--ds-color-border-secondary);
-  --ds-material-card-border-hover: var(
-    --ds-color-border-hover,
-    var(--ds-color-border-secondary)
-  );
+  --ds-material-card-border-hover: var(--ds-color-border-hover, var(--ds-color-border-secondary));
   --ds-material-card-border-active: var(--ds-color-primary);
   --ds-material-card-border-selected: var(--ds-color-primary);
-  --ds-material-card-border-disabled: var(
-    --ds-color-border-disabled,
-    var(--ds-color-border-subtle)
-  );
-  --ds-material-card-focus-ring: var(
-    --ds-focus-ring,
-    var(--ds-shadow-focus-ring)
-  );
+  --ds-material-card-border-disabled: var(--ds-color-border-disabled, var(--ds-color-border-subtle));
+  --ds-material-card-focus-ring: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
   --ds-material-card-shadow: var(--ds-shadow-sm);
   --ds-material-card-shadow-hover: var(--ds-shadow-md);
   --ds-material-card-shadow-active: var(--ds-shadow-sm);
@@ -379,51 +346,26 @@
 
   --ds-material-inset-background: var(--ds-surface-inset);
   --ds-material-inset-foreground: var(--ds-color-text-primary);
-  /* An inset surface is recessed, so its states deepen the inner shadow rather
-     than lifting the way the card material does. These were read by
-     semantic-surface.css and by the runtime token map while being declared
-     nowhere, which left the whole inset depth axis dormant. */
   --ds-material-inset-shadow: var(--ds-shadow-inner);
-  --ds-material-inset-shadow-hover: inset 0 2px 6px 0 rgba(0, 0, 0, 0.07);
-  --ds-material-inset-shadow-active: inset 0 3px 8px 0 rgba(0, 0, 0, 0.09);
+  --ds-material-inset-shadow-hover: inset 0 2px 6px 0 color-mix(in srgb, var(--ds-color-neutral-900) 7%, transparent);
+  --ds-material-inset-shadow-active: inset 0 3px 8px 0 color-mix(in srgb, var(--ds-color-neutral-900) 9%, transparent);
   --ds-material-inset-shadow-selected: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
 
   --ds-material-control-background: var(--ds-surface-control);
-  --ds-material-control-background-hover: var(
-    --ds-color-bg-hover,
-    color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-control))
-  );
-  --ds-material-control-background-active: var(
-    --ds-color-bg-active,
-    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-control))
-  );
-  --ds-material-control-background-selected: var(
-    --ds-color-bg-selected,
-    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-control))
-  );
-  --ds-material-control-background-disabled: var(
-    --ds-color-bg-disabled,
-    color-mix(in srgb, var(--ds-surface-control) 82%, var(--ds-surface-panel))
-  );
+  --ds-material-control-background-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-control));
+  --ds-material-control-background-active: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-control));
+  --ds-material-control-background-selected: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-selected-shift, 9%), var(--ds-surface-control));
+  --ds-material-control-background-disabled: color-mix(in srgb, var(--ds-surface-control) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel));
   --ds-material-control-foreground: var(--ds-color-text-primary);
   --ds-material-control-foreground-muted: var(--ds-color-text-secondary);
   --ds-material-control-foreground-disabled: var(--ds-color-text-disabled);
   --ds-material-control-border: var(--ds-color-border-primary);
   --ds-material-control-border-strong: var(--ds-color-border-secondary);
-  --ds-material-control-border-hover: var(
-    --ds-color-border-hover,
-    var(--ds-color-border-secondary)
-  );
+  --ds-material-control-border-hover: var(--ds-color-border-hover, var(--ds-color-border-secondary));
   --ds-material-control-border-active: var(--ds-color-primary);
   --ds-material-control-border-selected: var(--ds-color-primary);
-  --ds-material-control-border-disabled: var(
-    --ds-color-border-disabled,
-    var(--ds-color-border-subtle)
-  );
-  --ds-material-control-focus-ring: var(
-    --ds-focus-ring,
-    var(--ds-shadow-focus-ring)
-  );
+  --ds-material-control-border-disabled: var(--ds-color-border-disabled, var(--ds-color-border-subtle));
+  --ds-material-control-focus-ring: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
   --ds-material-control-shadow: none;
   --ds-material-control-shadow-hover: var(--ds-shadow-sm);
   --ds-material-control-shadow-active: none;
@@ -431,10 +373,8 @@
 
   --ds-material-raised-background: var(--ds-surface-raised);
   --ds-material-raised-foreground: var(--ds-color-text-primary);
+
   --ds-material-overlay-background: var(--ds-surface-overlay);
-  /* Opaque counterpart every translucent overlay material collapses to under
-     prefers-reduced-transparency; family skins chain their reduced-
-     transparency hooks here instead of picking a surface ad hoc. */
   --ds-material-overlay-opaque: var(--ds-surface-card);
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -872,6 +812,12 @@
      and the generator darkSemanticVariables() dark path. Light-default tenants
      whose dark mode already brightens the primary inherit it correctly.
      ───────────────────────────────────────────────────────────────────────────── */
+  /* The interaction deltas `derivation/states` emits per vertical from
+     `states.emphasis`, at the `medium` posture. Only the three channels that
+     predate the decision are declared here: `active`, `selected` and the
+     disabled mix are read exclusively through the material roots above, which
+     carry the same neutral as their `var()` fallback, so declaring them again
+     would give one value two authors for no reader. */
   --ds-state-hover-shift: 4%;
   --ds-state-press-scale: 0.98;
   --ds-state-disabled-opacity: 0.6;
@@ -1012,7 +958,7 @@
   /* Button Semantic Variants */
 
   /* Button States */
-  --ds-button-disabled-border: #e5e5e5;
+  --ds-button-disabled-border: var(--ds-material-control-border-disabled);
   /* Canonical disabled dim (WO-ENG-04 state contract). */
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1269,9 +1215,9 @@
 
   /* Checkbox Base */
   --ds-checkbox-bg: #ffffff;
-  --ds-checkbox-bg-disabled: #f5f5f5;
+  --ds-checkbox-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-checkbox-border: #d4d4d4;
-  --ds-checkbox-border-hover: #a3a3a3;
+  --ds-checkbox-border-hover: var(--ds-material-control-border-hover);
   --ds-checkbox-radius: var(--ds-radius-xs);
 
   /* Checkbox Checked State */
@@ -1287,7 +1233,7 @@
 
   /* Checkbox Label */
   --ds-checkbox-label-color: #171717;
-  --ds-checkbox-label-color-disabled: #a3a3a3;
+  --ds-checkbox-label-color-disabled: var(--ds-material-control-foreground-disabled);
 
   /* Radio Sizes */
   --ds-radio-size-sm: 0.875rem;
@@ -1297,9 +1243,9 @@
 
   /* Radio Base */
   --ds-radio-bg: #ffffff;
-  --ds-radio-bg-disabled: #f5f5f5;
+  --ds-radio-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-radio-border: #d4d4d4;
-  --ds-radio-border-hover: #a3a3a3;
+  --ds-radio-border-hover: var(--ds-material-control-border-hover);
 
   /* Radio Checked State */
   --ds-radio-checked-bg: #ffffff;
@@ -1314,7 +1260,7 @@
 
   /* Radio Label */
   --ds-radio-label-color: #171717;
-  --ds-radio-label-color-disabled: #a3a3a3;
+  --ds-radio-label-color-disabled: var(--ds-material-control-foreground-disabled);
   --ds-radio-description-color: #737373;
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1336,13 +1282,13 @@
 
   /* Switch Base */
   --ds-switch-bg: #d4d4d4;
-  --ds-switch-bg-hover: #a3a3a3;
+  --ds-switch-bg-hover: var(--ds-color-neutral-400);
   --ds-switch-radius: 9999px;
   --ds-switch-transition: var(--ds-transition-fast);
 
   /* Switch Checked State */
   --ds-switch-checked-bg: #171717;
-  --ds-switch-checked-bg-hover: #000000;
+  --ds-switch-checked-bg-hover: var(--ds-color-primary-700);
 
   /* Switch Thumb */
   --ds-switch-thumb-bg: #ffffff;
@@ -1362,7 +1308,7 @@
 
   /* Slider Track & Rail */
   --ds-slider-track-color: #171717;
-  --ds-slider-track-color-disabled: #a3a3a3;
+  --ds-slider-track-color-disabled: var(--ds-material-control-foreground-disabled);
   --ds-slider-rail-color: #e5e5e5;
   --ds-slider-track-height: 4px;
   --ds-slider-track-radius: var(--ds-radius-full);
@@ -1370,7 +1316,7 @@
   /* Slider Handle */
   --ds-slider-handle-size: 16px;
   --ds-slider-handle-bg: #171717;
-  --ds-slider-handle-bg-disabled: #a3a3a3;
+  --ds-slider-handle-bg-disabled: var(--ds-color-neutral-400);
   --ds-slider-handle-border: #ffffff;
   --ds-slider-handle-border-width: 2px;
   --ds-slider-handle-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
@@ -1390,7 +1336,7 @@
      literal here painted every un-customized select white, including on this
      file's own dark ground. See `foundation/tokens/css/presentation/components/select.css`. */
   --ds-select-border: #e5e5e5;
-  --ds-select-border-hover: #d4d4d4;
+  --ds-select-border-hover: var(--ds-material-control-border-hover);
   --ds-select-border-focus: #171717;
   --ds-select-radius: var(--ds-radius-md);
   --ds-select-shadow-focus: 0 0 0 1px #171717;
@@ -1420,10 +1366,10 @@
 
   /* DatePicker Base */
   --ds-datepicker-bg: #ffffff;
-  --ds-datepicker-bg-disabled: #fafafa;
+  --ds-datepicker-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-datepicker-color: #171717;
   --ds-datepicker-border: #e5e5e5;
-  --ds-datepicker-border-hover: #d4d4d4;
+  --ds-datepicker-border-hover: var(--ds-material-control-border-hover);
   --ds-datepicker-border-focus: #171717;
   --ds-datepicker-radius: var(--ds-radius-md);
   --ds-datepicker-shadow-focus: 0 0 0 1px #171717;
@@ -1454,7 +1400,7 @@
 
   /* InputNumber Base */
   --ds-inputnumber-bg: #ffffff;
-  --ds-inputnumber-bg-disabled: #fafafa;
+  --ds-inputnumber-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-inputnumber-color: #171717;
   --ds-inputnumber-border: #e5e5e5;
   --ds-inputnumber-border-focus: #171717;
@@ -1495,11 +1441,11 @@
 
   /* Textarea Base */
   --ds-textarea-bg: #ffffff;
-  --ds-textarea-bg-disabled: #fafafa;
+  --ds-textarea-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-textarea-color: #171717;
   --ds-textarea-color-placeholder: #a3a3a3;
   --ds-textarea-border: #e5e5e5;
-  --ds-textarea-border-hover: #d4d4d4;
+  --ds-textarea-border-hover: var(--ds-material-control-border-hover);
   --ds-textarea-border-focus: #171717;
   --ds-textarea-shadow-focus: 0 0 0 1px #171717;
   --ds-textarea-transition: var(--ds-transition-fast);
@@ -1534,7 +1480,7 @@
 
   /* TimePicker Base */
   --ds-timepicker-bg: #ffffff;
-  --ds-timepicker-bg-disabled: #fafafa;
+  --ds-timepicker-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-timepicker-color: #171717;
   --ds-timepicker-border: #e5e5e5;
   --ds-timepicker-border-focus: #171717;
@@ -1600,9 +1546,9 @@
 
   /* Upload Dragger */
   --ds-upload-dragger-bg: var(--ds-color-bg-secondary);
-  --ds-upload-dragger-bg-hover: var(--ds-color-bg-hover);
+  --ds-upload-dragger-bg-hover: var(--ds-material-control-background-hover);
   --ds-upload-dragger-border: var(--ds-color-border);
-  --ds-upload-dragger-border-active: var(--ds-color-text-primary);
+  --ds-upload-dragger-border-active: var(--ds-material-control-border-active);
   --ds-upload-dragger-radius: var(--ds-radius-lg);
   --ds-upload-dragger-icon-color: var(--ds-color-text-muted);
   --ds-upload-dragger-text-color: var(--ds-color-text-secondary);
@@ -1644,7 +1590,7 @@
   --ds-autocomplete-dropdown-bg: #ffffff;
   --ds-autocomplete-dropdown-shadow: var(--ds-shadow-lg);
   --ds-autocomplete-dropdown-radius: var(--ds-radius-md);
-  --ds-autocomplete-option-bg-hover: #f5f5f5;
+  --ds-autocomplete-option-bg-hover: var(--ds-material-card-background-hover);
   --ds-autocomplete-empty-color: #a3a3a3;
   --ds-autocomplete-clear-color: #a3a3a3;
 
@@ -1690,9 +1636,9 @@
 
   /* Table Row */
   --ds-table-row-bg: #ffffff;
-  --ds-table-row-bg-hover: #fafafa;
+  --ds-table-row-bg-hover: var(--ds-material-panel-background-hover);
   --ds-table-row-bg-striped: #fafafa;
-  --ds-table-row-bg-selected: #f5f5f5;
+  --ds-table-row-bg-selected: var(--ds-material-panel-background-selected);
   --ds-table-row-border: #e5e5e5;
   --ds-table-loading-overlay-bg: rgba(255, 255, 255, 0.7);
 
@@ -1710,7 +1656,7 @@
   --ds-tab-color-hover: var(--ds-color-text-primary);
   --ds-tab-color-active: var(--ds-color-text-primary);
   --ds-tab-bg-hover: transparent;
-  --ds-tab-border-active: #171717;
+  --ds-tab-border-active: var(--ds-color-primary);
   --ds-tab-font-weight: 500;
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1796,9 +1742,9 @@
   --ds-dropdown-item-padding: 0.5rem 0.75rem;
   --ds-dropdown-item-radius: var(--ds-radius-md);
   --ds-dropdown-item-color: #525252;
-  --ds-dropdown-item-bg-hover: #f5f5f5;
+  --ds-dropdown-item-bg-hover: var(--ds-material-card-background-hover);
   --ds-dropdown-item-color-hover: #171717;
-  --ds-dropdown-item-bg-active: #f5f5f5;
+  --ds-dropdown-item-bg-active: var(--ds-material-card-background-active);
   --ds-dropdown-item-color-active: #171717;
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1833,8 +1779,8 @@
      PAGINATION
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-pagination-item-bg: transparent;
-  --ds-pagination-item-bg-hover: #f5f5f5;
-  --ds-pagination-item-bg-active: #171717;
+  --ds-pagination-item-bg-hover: var(--ds-material-control-background-hover);
+  --ds-pagination-item-bg-active: var(--ds-color-primary);
   --ds-pagination-item-color: #525252;
   --ds-pagination-item-color-hover: #171717;
   --ds-pagination-item-color-active: #ffffff;
@@ -1853,8 +1799,8 @@
      MENU / NAVIGATION
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-menu-bg: #ffffff;
-  --ds-menu-item-bg-hover: #f5f5f5;
-  --ds-menu-item-bg-active: #f5f5f5;
+  --ds-menu-item-bg-hover: var(--ds-material-panel-background-hover);
+  --ds-menu-item-bg-active: var(--ds-material-panel-background-active);
   --ds-menu-item-color: #525252;
   --ds-menu-item-color-hover: #171717;
   --ds-menu-item-color-active: #171717;
@@ -1865,8 +1811,8 @@
   --ds-menu-item-gap: 0.5rem;
   --ds-menu-item-padding: 0.5rem 1rem;
   --ds-menu-item-height: 2.5rem;
-  --ds-menu-item-hover-bg: var(--ds-color-bg-hover);
-  --ds-menu-item-selected-bg: var(--ds-color-alpha-primary-10);
+  --ds-menu-item-hover-bg: var(--ds-material-panel-background-hover);
+  --ds-menu-item-selected-bg: var(--ds-material-panel-background-selected);
   --ds-menu-item-selected-color: var(--ds-color-primary);
   --ds-menu-item-danger-color: var(--ds-color-error);
   --ds-menu-submenu-bg: var(--ds-color-bg-secondary);
@@ -1885,7 +1831,7 @@
   --ds-steps-connector-color: #e5e5e5;
   --ds-steps-connector-color-active: #171717;
   --ds-steps-item-bg: #f5f5f5;
-  --ds-steps-item-bg-active: #171717;
+  --ds-steps-item-bg-active: var(--ds-color-primary);
   --ds-steps-item-color: #737373;
   --ds-steps-item-color-active: #ffffff;
 
@@ -1893,7 +1839,7 @@
      COLLAPSE / ACCORDION
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-collapse-header-bg: #fafafa;
-  --ds-collapse-header-bg-hover: #f5f5f5;
+  --ds-collapse-header-bg-hover: var(--ds-material-panel-background-hover);
   --ds-collapse-header-color: #171717;
   --ds-collapse-content-bg: #ffffff;
   --ds-collapse-border: #e5e5e5;
@@ -1946,7 +1892,7 @@
      fallback so nothing moves where no tenant authors it. */
   --ds-segmented-bg: var(--ds-surface-control, #f5f5f5);
   --ds-segmented-item-bg: transparent;
-  --ds-segmented-item-bg-selected: var(--ds-color-bg-elevated, #ffffff);
+  --ds-segmented-item-bg-selected: var(--ds-material-card-background);
   --ds-segmented-item-color: var(--ds-color-text-secondary, #525252);
   --ds-segmented-item-color-selected: var(--ds-color-text-primary, #171717);
   --ds-segmented-radius: var(--ds-radius-md);
@@ -1973,7 +1919,7 @@
      LIST
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-list-bg: #ffffff;
-  --ds-list-item-bg-hover: #fafafa;
+  --ds-list-item-bg-hover: var(--ds-material-panel-background-hover);
   --ds-list-skeleton-bg: var(--ds-color-bg-tertiary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1996,7 +1942,7 @@
   --ds-command-palette-bg: var(--ds-color-bg-elevated);
   --ds-command-palette-shadow: var(--ds-shadow-dialog);
   --ds-command-palette-border: var(--ds-color-border);
-  --ds-command-palette-item-hover-bg: var(--ds-color-bg-hover);
+  --ds-command-palette-item-hover-bg: var(--ds-material-card-background-hover);
   --ds-command-palette-group-color: var(--ds-color-text-muted);
   --ds-command-palette-empty-color: var(--ds-color-text-muted);
   --ds-command-palette-shortcut-border: var(--ds-color-border);
@@ -2154,7 +2100,7 @@ html.dark {
 
   --ds-list-background-color: var(--ds-color-bg-elevated);
   --ds-list-item-background-color: var(--ds-color-bg-elevated);
-  --ds-list-item-hover-background-color: color-mix(in srgb, var(--ds-color-primary-500) 10%, var(--ds-color-bg-elevated));
+  --ds-list-item-hover-background-color: var(--ds-material-card-background-hover);
   --ds-list-border-color: var(--ds-color-border-secondary);
   --ds-list-text-color: var(--ds-color-text-primary);
   --ds-list-secondary-text-color: var(--ds-color-text-secondary);
@@ -2169,8 +2115,8 @@ html.dark {
   --ds-menu-dark-item-color: var(--ds-color-text-secondary);
   --ds-menu-item-color: var(--ds-color-text-secondary);
   --ds-menu-item-color-hover: var(--ds-color-text-primary);
-  --ds-menu-item-bg-hover: color-mix(in srgb, var(--ds-color-primary-500) 14%, transparent);
-  --ds-menu-item-bg-active: color-mix(in srgb, var(--ds-color-primary-500) 18%, transparent);
+  --ds-menu-item-bg-hover: var(--ds-material-panel-background-hover);
+  --ds-menu-item-bg-active: var(--ds-material-panel-background-active);
 
   --ds-descriptions-label-color: var(--ds-color-text-tertiary);
   --ds-descriptions-content-color: var(--ds-color-text-primary);

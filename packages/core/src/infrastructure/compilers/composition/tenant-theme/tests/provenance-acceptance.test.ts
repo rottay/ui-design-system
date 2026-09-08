@@ -489,10 +489,18 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // foundation literal); error/info additionally correct the resolved
       // colour to rottay's own dark seed. Either way, the KEY is new, so the
       // count moves regardless of which of the four also changed a byte.
-      rottay: 1196,
+      // WO-DER-02 (measured): 1196 -> 1276. `derivation/materials` emits all 71
+      // material roots for every vertical instead of only the authored facets,
+      // and `derivation/states` adds the six interaction deltas and the three
+      // focus-ring channels. rottay had authored none of the 71, so it gains
+      // 71 + 9 = 80. Nothing was removed and no existing value moved.
+      rottay: 1276,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
-      bithire: 1233,
+      // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
+      // the 71 material roots by hand, so it gains only the 6 it was missing
+      // plus the same 9 state/focus channels.
+      bithire: 1248,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -500,7 +508,8 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // literals do not move this count (measured directly): each was
       // already an explicit compiled key before retirement (authored) and
       // remains one now (derived) -- same channel, different producer.
-      evnto: 475,
+      // WO-DER-02 (measured): 475 -> 553. evnto had authored 2 of the 71.
+      evnto: 553,
     };
     for (const vertical of VERTICALS) {
       expect(

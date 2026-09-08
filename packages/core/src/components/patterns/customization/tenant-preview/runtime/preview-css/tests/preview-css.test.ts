@@ -223,7 +223,10 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     const raw = lowerBrandThemeFixture({ brandTheme, tenantSlug: safeSlug }).cssString;
     expect(raw).not.toContain('zz9');
     expect(raw).not.toContain('--pwn9');
-    expect(raw).not.toContain('--ds-shadow-md');
+    // The DECLARATION, not the name: the material roots READ `--ds-shadow-md`
+    // by design, so a bare substring check would confuse "the hostile value
+    // was refused" with "the channel is never mentioned".
+    expect(raw).not.toMatch(/--ds-shadow-md\s*:/u);
 
     // And the layer above it: the compile door refuses the draft outright, so
     // `buildPreviewCss` produces no CSS for the rescope pass to read. Both

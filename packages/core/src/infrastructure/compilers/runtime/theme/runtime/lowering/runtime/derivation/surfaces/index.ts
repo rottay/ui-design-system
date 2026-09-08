@@ -1,6 +1,8 @@
 /**
- * @fileoverview The surfaces family: materials, radius operands, shadows, the
- * elevation ladder, the decorative layer and its intensity dial.
+ * @fileoverview The surfaces family: the semantic surface grounds, radius
+ * operands, shadows, the elevation ladder, the decorative layer and its
+ * intensity dial. The material roots ON those grounds are the materials
+ * family's, so a theme's state stack has one producer instead of two.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/surfaces
  * @category Compilers
@@ -12,7 +14,7 @@ import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/ex
 import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { ELEVATION_PRESET_CHANNELS } from "../../../foundation/contract";
-import { semanticSurfaceRolesToCssVariables } from "../../../foundation/materials";
+import { semanticSurfaceRolesToSurfaceVariables } from "../../../foundation/materials";
 
 const ELEVATION_CHANNELS: ReadonlySet<string> = new Set<string>(
   ELEVATION_PRESET_CHANNELS
@@ -33,8 +35,8 @@ function elevationPresetVariables(
 }
 
 /**
- * Everything a surface states: its materials, its geometry operands, its
- * shadow and elevation ladders and its decorative layer.
+ * Everything a surface states: its grounds, its geometry operands, its shadow
+ * and elevation ladders and its decorative layer.
  *
  * The elevation preset a posture implies is emitted here rather than with the
  * scale axes, because the authored ladder that outranks it is a surfaces
@@ -48,7 +50,6 @@ export const surfacesDeriver: FamilyDeriver = {
   produces: [
     "--ds-elevation-*",
     "--ds-surface-*",
-    "--ds-material-*",
     "--ds-radius-*",
     "--ds-shadow-*",
     "--ds-glass-*",
@@ -78,7 +79,7 @@ export function deriveSurfaceChannels(
   );
   Object.assign(
     vars,
-    semanticSurfaceRolesToCssVariables(su.surfaceRoles ?? su.materials)
+    semanticSurfaceRolesToSurfaceVariables(su.surfaceRoles ?? su.materials)
   );
   if (su.borderRadius) {
     // sm/md/lg/xl are emitted as the `-base` OPERANDS of the foundation dial,

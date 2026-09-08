@@ -185,7 +185,7 @@
     var(--ds-surface-highlight-strong),
     transparent
   );
-  --ds-shell-active-bg: var(--ds-color-neutral-100, var(--ds-surface-panel-bg));
+  --ds-shell-active-bg: var(--ds-material-panel-background-active);
   --ds-shell-active-gradient: linear-gradient(
     90deg,
     var(--ds-shell-active-bg),
@@ -402,11 +402,7 @@
   );
 
   /* Tables and compact collection chrome */
-  --ds-table-header-bg-hover: color-mix(
-    in srgb,
-    var(--ds-color-primary) 5%,
-    var(--ds-table-header-bg)
-  );
+  --ds-table-header-bg-hover: var(--ds-material-panel-background-hover);
   --ds-table-header-border: color-mix(
     in srgb,
     var(--ds-table-border) 82%,

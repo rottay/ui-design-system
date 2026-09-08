@@ -95,9 +95,9 @@
       },
       "derivation": "DELTA, no valor: hover = mezcla del fondo de reposo hacia la tinta (o hacia la marca) en un porcentaje fijo. La forma correcta ya existe en fundacion para otro eje -- la autoridad interaction-wash define --ds-wash-band como \"color-mix ramp over --ds-color-primary\" (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:620-626). Censo medido: de 579 canales con sufijo de estado en los tres temas, 478 (82,6%) tienen hermano base en el mismo objeto, y 296 ya estan escritos como mezcla o alfa.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:207",
-      "governedBy": null,
+      "governedBy": "states.emphasis",
       "governanceScope": "ninguna",
-      "exposure": "internal-head",
+      "exposure": "tenant-dial",
       "exposureNote": "NO DEBE SER PERILLA (el delta es ley de interaccion, no identidad) PERO NO TIENE CABEZA: --ds-color-bg-hover existe (packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:207) y es un VALOR, no un delta; --ds-state-hover-mix y --ds-interactive-bg-hover tienen cero declaraciones en src/. Es la mayor deuda de derivacion del catalogo despues de tier.control.fg.",
       "derivationDebt": true,
       "collapsesLegacy": {
@@ -292,9 +292,9 @@
       },
       "derivation": "Mismo delta que hover, una parada mas de la escalera de alfa.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:207",
-      "governedBy": null,
+      "governedBy": "states.emphasis",
       "governanceScope": "ninguna",
-      "exposure": "internal-head",
+      "exposure": "tenant-dial",
       "exposureNote": "VERIFICADO: --ds-color-bg-active tiene cero declaraciones en packages/core/src. 118 canales a mano. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/artifacts/generated/css/**/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/history/programs/foundation-measurements/2026-08/phase-two/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1). VETO REGISTRADO (foundation/tokens/governance/tokens/decisions/writers/unused/system/index.json:1326-1332): \"Only the two HOVER sites were touched. The sibling active sites use 7% and were left alone: a --ds-state-active-shift swap was not authorised.\" El sitio de aterrizaje es conocido -- los sitios `active` que hoy llevan el literal 7%, hermanos de los sitios `hover` ya cableados a --ds-state-hover-shift (default.css:875, leido en :342 y :394) -- asi que el canal queda por-crear por VETO explicito, no por falta de sitio identificado.",
       "derivationDebt": true,
       "collapsesLegacy": {
@@ -1000,9 +1000,9 @@
       },
       "derivation": "Plantilla de anillo con dos anchos medidos: \"0 0 0 2px COLOR\" aparece 27 veces y \"0 0 0 3px COLOR\" 15 veces en el corpus de los tres temas; el ancho ya tiene canal (--ds-focus-ring-width, packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:872) y el color tambien (--ds-focus-ring-color, :879).",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:880",
-      "governedBy": null,
+      "governedBy": "states.focus-style",
       "governanceScope": "ninguna",
-      "exposure": "internal-head",
+      "exposure": "tenant-dial",
       "exposureNote": "Ley de accesibilidad, no identidad de marca. La cabeza existe y esta bien puesta; lo que falta es que los 53 canales la usen en vez de reescribir la plantilla. F2A-1 Lote C (2026-08-26): PRUEBA de cascada intencional antes de anotar -- --ds-focus-ring se declara UNA sola vez, en la capa foundation (default.css:887, box-shadow que compone --ds-focus-ring-offset + --ds-focus-ring-color), nunca redeclarado en ningun artefacto de tenant (grep exacto sobre facade/artifacts/*/index.css: 0 ocurrencias de `--ds-focus-ring:`). Todo tema y modo resuelve al mismo canal foundation; sus sub-variables siempre tienen valor real (propio o default), nunca cae a unset/vacio. La asimetria es de catalogo (assignments cuenta modos de --ds-focus-ring-color, la variable dependiente, no de este canal), no de ejecucion. Cierre de disposicion, sin escritura de artefacto. Conteo canonico (data-v2.json): 58 lectores de produccion (58 core, 0 showroom).",
       "derivationDebt": true,
       "collapsesLegacy": {
@@ -1308,9 +1308,9 @@
       },
       "derivation": "Delta unico: opacidad y desaturacion sobre el reposo. Una parada, no una tabla.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
-      "governedBy": null,
+      "governedBy": "states.emphasis",
       "governanceScope": "ninguna",
-      "exposure": "internal-head",
+      "exposure": "tenant-dial",
       "exposureNote": "VERIFICADO: --ds-opacity-disabled y --ds-color-bg-disabled tienen cero declaraciones en packages/core/src. 43 canales a mano para expresar una sola constante.",
       "derivationDebt": true,
       "collapsesLegacy": {
@@ -1563,9 +1563,9 @@
       },
       "derivation": "Delta de seleccion: mezcla hacia la marca. Misma figura que interaction-wash (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:620-626).",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:207",
-      "governedBy": null,
+      "governedBy": "states.emphasis",
       "governanceScope": "ninguna",
-      "exposure": "internal-head",
+      "exposure": "tenant-dial",
       "exposureNote": "VERIFICADO: --ds-color-bg-selected tiene cero declaraciones en src/. Clase 1 congelada (F2A-1 Lote A, medido 2026-08-26): cero ocurrencias de cualquier tipo -- ni var(), ni declaracion, ni espejo TS, ni estampado inline JSX, ni fixture -- en packages/core/src + packages/showroom/src (prod=0, test=0, showroom=0), y tampoco en los 3 artefactos compilados ni en packages/core/artifacts/generated/css/**/*.css. Disposicion por-crear queda congelada por esta medicion. Fuente: docs/history/programs/foundation-measurements/2026-08/phase-two/medicion-f2a0/data.json + /private/tmp/opus-f2a1-tabla-medida.md (Verificacion 1).",
       "derivationDebt": true,
       "collapsesLegacy": {
@@ -3330,8 +3330,8 @@
     "statement": "Las 64 cabezas internas contra los 21 controles de tenant. Ninguna de las dos capas se subordina a la otra: se cruzan.",
     "byExposure": {
       "counts": {
-        "internal-head": 28,
-        "tenant-dial": 32,
+        "internal-head": 23,
+        "tenant-dial": 37,
         "gap": 4
       },
       "channels": {

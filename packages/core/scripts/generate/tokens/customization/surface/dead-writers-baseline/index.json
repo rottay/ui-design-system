@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "note": "Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.",
-  "lastMove": "C4 (one ThemeIntent door + dead-path cleanup): --ds-color-scheme stops being a dead writer because its ONLY emitter is gone. At HEAD the retired appearance compiler wrote it at kernel/runtime/appearance/index.ts:340,598; C4 deletes those lowerings, so no source emits the channel any more. This is a strict DECREASE (276 -> 275, +0/-1), recorded in the same lot per the anchor law. No reader lost anything: the productive door emits the real CSS color-scheme PROPERTY (facade/artifacts/rottay/index.css:14,1216), never this custom property.",
-  "lastMoveKind": "decrece-solo: -1 nombre(s)",
+  "lastMove": "WO-DER-02 regenera el censo de superficie, que estaba STALE desde WO-DER-01; con el censo fresco --ds-experience-profile y --ds-recipe-profile ya no son dead-writers (los gano el derivador de recipes de WO-DER-01). Es una BAJADA del ancla, 275 -> 273, y no amplia nada.",
+  "lastMoveKind": "decrece-solo: -2 nombre(s)",
   "names": [
     "--ds-action-dock-reserved-block-end",
     "--ds-action-dock-reserved-block-start",
@@ -110,7 +110,6 @@
     "--ds-error-state-bg",
     "--ds-error-state-border",
     "--ds-error-state-icon-bg",
-    "--ds-experience-profile",
     "--ds-input-placeholder",
     "--ds-input-search-clear-color",
     "--ds-input-success-message-color",
@@ -140,7 +139,6 @@
     "--ds-premium-card-footer-color",
     "--ds-premium-card-glass-bg",
     "--ds-premium-card-rim",
-    "--ds-recipe-profile",
     "--ds-result-icon-success",
     "--ds-result-icon-warning",
     "--ds-rich-card-bg",

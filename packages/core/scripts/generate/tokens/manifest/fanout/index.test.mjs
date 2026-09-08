@@ -115,13 +115,15 @@ test('ORACULO --ds-input-success-message-margin-top: cero lectores → paints=fa
 
 /* ── ORACULO 5 ─────────────────────────────────────────────────────────── */
 
-test('ORACULO --ds-card-grid-gap: lector presentation-css en patterns.css:500 con escalar de ritmo', () => {
+// WO-DER-02 (2026-09-08, K3 audit HOLD adjudication): the lot's own edit to
+// patterns.css moved this read from :500 to :496; the oracle follows the read.
+test('ORACULO --ds-card-grid-gap: lector presentation-css en patterns.css:496 con escalar de ritmo', () => {
   const row = channel('--ds-card-grid-gap');
   const hit = readersOn(row, 'presentation-css').find(
     (r) =>
-      r.file === 'src/foundation/tokens/css/presentation/components/patterns/index.css' && r.line === 500,
+      r.file === 'src/foundation/tokens/css/presentation/components/patterns/index.css' && r.line === 496,
   );
-  assert.ok(hit, 'debe haber una lectura presentation-css en patterns.css:500');
+  assert.ok(hit, 'debe haber una lectura presentation-css en patterns.css:496');
   assert.ok(
     hit.scalars.includes('--ds-rhythm-effective-scale'),
     `scalars debe contener --ds-rhythm-effective-scale, tiene ${JSON.stringify(hit.scalars)}`,

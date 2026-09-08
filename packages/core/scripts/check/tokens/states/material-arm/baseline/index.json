@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "law": "A component state channel declared at ROOT SCOPE must resolve through the material vocabulary. F-10: 488 hand-authored state channels, material coverage 0 % / 3 % / 92 % across the three artifacts, and one hover meaning ~370 edits. Decrease-only: the baseline follows the tree DOWN, never up.",
+  "scope": "authored CSS under src/foundation/tokens/css and src/components. Generated artifacts are outputs, and Classic/Rustic are frozen (owner, 2026-09-05), so neither is debt this lane lowers.",
+  "exclusions": "tone-scoped (name or value reaches a tone ramp), structural (transparent/none/currentColor/inherit/initial/unset), family-governed (--ds-sidebar-* <- navigation.sidebar-tone), governed-alias (a var() to a governed sibling of the same component). Each is a RULE, not an entry: a material root cannot express those values.",
+  "population": 137,
+  "governed": 122,
+  "ungoverned": 15,
+  "ratioFloor": 0.85,
+  "corpusFloor": 300,
+  "measuredCorpus": 348,
+  "families": 36,
+  "governedFamilies": 33,
+  "honesty": "WO-DER-02 took this from 22/134 governed to 122/137. The 15 that remain are measured debt, not an allowlist: filled/track variants whose resting ground is not a surface role (input-filled, select-filled, switch track, slider handle, toggle track), depth channels that belong to the elevation ladder rather than to a material (avatar, float button, button elevated), and three self-aliases. Each closes with its family's cut."
+}

@@ -425,6 +425,8 @@ const DEFAULT_SURFACES_KEYS: readonly (keyof BrandSurfaces)[] = [
   "density",
   "effectIntensity",
   "rhythm",
+  "stateEmphasis",
+  "focusStyle",
 ];
 
 const DEFAULT_SURFACE_TOKENS_SHAPE: Partial<SurfaceTokens> = {
@@ -568,6 +570,8 @@ function normalizeSurfaces(surfaces: BrandSurfaces | undefined): BrandSurfaces {
     density: undefined,
     effectIntensity: undefined,
     rhythm: undefined,
+    stateEmphasis: undefined,
+    focusStyle: undefined,
   };
   if (!surfaces) return base;
   return {

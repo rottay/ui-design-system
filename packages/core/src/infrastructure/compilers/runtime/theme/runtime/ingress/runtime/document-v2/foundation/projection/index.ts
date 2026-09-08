@@ -77,6 +77,8 @@ const WRITERS: Partial<
   "motion.dial": (t, v) => wrote((t.general.motion = v)),
   "surfaces.elevation-posture": (t, v) => wrote((nest(t.general, "surfaces").elevation = v)),
   "surfaces.effect-intensity": (t, v) => wrote((nest(t.general, "surfaces").effectIntensity = v)),
+  "states.emphasis": (t, v) => wrote((nest(t.general, "states").emphasis = v)),
+  "states.focus-style": (t, v) => wrote((nest(t.general, "states").focusStyle = v)),
   "navigation.sidebar-tone": (t, v) => wrote((nest(t.general, "navigation").sidebarTone = v)),
   "experience.profile": (t, v) => wrote((t.general.experienceProfile = v)),
   "profiles.expressive": (t, v) => wrote((t.advanced.profiles = v)),

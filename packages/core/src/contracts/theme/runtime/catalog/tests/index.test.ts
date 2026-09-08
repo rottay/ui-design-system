@@ -25,6 +25,10 @@ import {
  * derives its own expectation from the subject proves nothing.
  */
 const DECLARED_RATIO_ROWS = [1, 11, 15, 16, 17, 22, 24];
+// Rows 20 and 21 sat in this set under WO-DER-02, whose declared floors had
+// no recorded owner decision; the K3 audit HOLD of WO-DER-02 (2026-09-08,
+// WIP-02 adjudication) returned both rows to `owner-pending`, with their
+// family lists kept in the catalog as proposals only.
 const DECLARED_FAN_OUT_ROWS = [18, 19, 25, 26, 27, 28, 29];
 
 describe("theme control catalog", () => {
@@ -144,11 +148,29 @@ describe("theme control catalog", () => {
     ).toEqual(["signature.accent-bar", "signature.texture"]);
   });
 
-  it("marks the ten new rows as not-yet-derived and nothing else", () => {
+  it("marks the still-underived new rows as not-yet-derived and nothing else", () => {
+    // WO-DER-02 derives two of the ten `(new)` rows. The list they came from
+    // is a KIT fact -- which rows the kit added -- and stays as authored; what
+    // moves is the measured `effect`, which is what this row asserts.
+    const derivedByWoDer02: Parameters<typeof themeControl>[0][] = [
+      "states.emphasis",
+      "states.focus-style",
+    ];
     const notDerived = THEME_CONTROL_CATALOG.filter(
       (row) => row.effect === "not-yet-derived"
     ).map((row) => row.id);
-    expect([...notDerived].sort()).toEqual([...NEW_THEME_DECISION_IDS].sort());
+    expect([...notDerived].sort()).toEqual(
+      [...NEW_THEME_DECISION_IDS]
+        .filter((id) => !derivedByWoDer02.includes(id))
+        .sort()
+    );
+    for (const id of derivedByWoDer02) {
+      const row = themeControl(id);
+      expect(row.effect).toBe("css-channels");
+      expect(row.produces.channels.length).toBeGreaterThan(0);
+      expect(row.keypath.document).not.toBeNull();
+      expect(row.keypath.brandTheme).not.toBeNull();
+    }
     for (const row of THEME_CONTROL_CATALOG) {
       if (row.effect !== "not-yet-derived") continue;
       expect(row.produces.channels).toHaveLength(0);

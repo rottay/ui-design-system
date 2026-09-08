@@ -112,6 +112,36 @@ export function semanticSurfaceRolesToCssVariables(
 }
 
 /**
+ * The `--ds-material-*` half of the map above.
+ *
+ * The two halves are FILTERS over one writer, never a second writer: the role
+ * table, the facet list and the alias rules stay in exactly one function, so
+ * the materials family and the surfaces family cannot drift about what a role
+ * emits. Each family then declares only the channels it owns, which is what
+ * keeps them out of the ranked merge's duplicate-producer refusal.
+ */
+export function semanticSurfaceRolesToMaterialVariables(
+  surfaceRoles: SemanticSurfaceRoleMap | undefined
+): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(semanticSurfaceRolesToCssVariables(surfaceRoles)).filter(
+      ([channel]) => channel.startsWith("--ds-material-")
+    )
+  );
+}
+
+/** The `--ds-surface-*` half, including the four compatibility aliases. */
+export function semanticSurfaceRolesToSurfaceVariables(
+  surfaceRoles: SemanticSurfaceRoleMap | undefined
+): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(semanticSurfaceRolesToCssVariables(surfaceRoles)).filter(
+      ([channel]) => !channel.startsWith("--ds-material-")
+    )
+  );
+}
+
+/**
  * @deprecated Use `semanticSurfaceRolesToCssVariables`.
  * Kept for one compatibility cycle; this does not represent Material UI.
  */

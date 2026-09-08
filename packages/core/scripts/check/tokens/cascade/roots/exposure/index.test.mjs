@@ -93,7 +93,10 @@ test('the live snapshot is the measured one, not a guess', () => {
   // pasaron de gap a tenant-dial. gap BAJA 8->4, la direccion legal. neutral NO
   // acompanio: no tiene semilla en ninguna via, asi que un dial suyo seria una
   // perilla que no mueve nada -- su adjudicacion subio al owner.
-  assert.deepEqual(counts, { 'tenant-dial': 32, 'internal-head': 28, gap: 4 });
+  // WO-DER-02 (2026-09-08): el kit D-27/D-28 hace decisiones Standard a
+  // states.emphasis y states.focus-style; las cinco raices state.delta.{hover,
+  // active,selected,disabled,focus} pasan de internal-head a tenant-dial.
+  assert.deepEqual(counts, { 'tenant-dial': 37, 'internal-head': 23, gap: 4 });
 });
 
 /* ------- LAW 0b: the premise that makes the refined-root discount honest ------ */

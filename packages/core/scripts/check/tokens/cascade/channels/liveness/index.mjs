@@ -969,6 +969,13 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-overlay-/, () => 'surfaces.overlay'],
   [/^--ds-density-/, () => 'surfaces.density'],
   [/^--ds-effect-/, () => 'surfaces.effect'],
+  // The interaction vocabulary: the deltas `states.emphasis` moves, and the
+  // ring `states.focus-style` shapes. They are a family of their own rather
+  // than a `surfaces.*` sub-owner: a state is a moment of an interaction, not
+  // a property of the surface it happens on, and the material roots read them
+  // instead of restating them.
+  [/^--ds-state-/, () => 'states'],
+  [/^--ds-focus-ring/, () => 'states.focus'],
   // Provenance, not paint. The two governed selection ids are emitted so the
   // compiled block records WHICH profile was admitted; the engines declare in
   // their own adapters that no surface reads them, and the selection itself is

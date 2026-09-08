@@ -293,6 +293,24 @@ export const CI_GATES = Object.freeze([
     drillId: 'family-cut-drill',
     ratchet: 'scripts/check/family-cut/baseline/index.json',
   },
+  // WO-DER-02: un canal de estado de componente declarado a raiz sin brazo
+  // material es rojo bloqueante aqui; el resto de la poblacion es ratchet
+  // decrease-only, no deuda invisible.
+  {
+    id: 'state-material-arm-drill',
+    run: ['node', '--test', 'scripts/check/tokens/states/material-arm/index.test.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillFor: ['state-material-arm'],
+  },
+  {
+    id: 'state-material-arm',
+    run: ['node', 'scripts/check/tokens/states/material-arm/index.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillId: 'state-material-arm-drill',
+    ratchet: 'scripts/check/tokens/states/material-arm/baseline/index.json',
+  },
   // The layer statement in facade/entrypoints/base/index.css is a claim about
   // how a browser sorts the shipped bundle; only a browser settles it. The
   // probe's `--self-check` leg re-runs the same three subjects against the
@@ -753,6 +771,25 @@ export const CI_GATES = Object.freeze([
     blocking: true,
     phase: 'post-build',
     drillId: 'root-membership-drill',
+    prerequisites: ['fresh-dist'],
+  },
+  // WO-DER-02: la sonda de computed-style corre contra el artefacto compilado,
+  // por eso va post-build con fresh-dist; su drill cierra la puerta a un
+  // veredicto que no lee pintura real.
+  {
+    id: 'states-emphasis-probe-drill',
+    run: ['node', '--test', 'scripts/check/tokens/states/emphasis-probe/index.test.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    drillFor: ['states-emphasis-probe'],
+    prerequisites: ['fresh-dist'],
+  },
+  {
+    id: 'states-emphasis-probe',
+    run: ['node', 'scripts/check/tokens/states/emphasis-probe/index.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    drillId: 'states-emphasis-probe-drill',
     prerequisites: ['fresh-dist'],
   },
   // El `--check` del inventario verifica DOS cosas por la misma puerta: que el

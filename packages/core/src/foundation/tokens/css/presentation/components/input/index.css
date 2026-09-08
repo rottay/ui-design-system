@@ -67,18 +67,18 @@
      Default input styling
      ======================================================================== */
   --ds-input-bg: var(--ds-color-white);
-  --ds-input-bg-hover: var(--ds-color-white);
+  --ds-input-bg-hover: var(--ds-material-control-background-hover);
   --ds-input-bg-focus: var(--ds-color-white);
-  --ds-input-bg-disabled: var(--ds-color-neutral-50);
+  --ds-input-bg-disabled: var(--ds-material-control-background-disabled);
 
   --ds-input-color: var(--ds-color-neutral-900);
   --ds-input-color-placeholder: var(--ds-color-neutral-400);
-  --ds-input-color-disabled: var(--ds-color-neutral-400);
+  --ds-input-color-disabled: var(--ds-material-control-foreground-disabled);
 
   --ds-input-border-color: var(--ds-color-neutral-300);
-  --ds-input-border-color-hover: var(--ds-color-neutral-400);
+  --ds-input-border-color-hover: var(--ds-material-control-border-hover);
   --ds-input-border-color-focus: var(--ds-color-primary-500);
-  --ds-input-border-color-disabled: var(--ds-color-neutral-200);
+  --ds-input-border-color-disabled: var(--ds-material-control-border-disabled);
 
   /* Canonical runtime aliases. Kept separate from the legacy `*-color`
      names so BrandTheme/TenantTheme can override the complete control without
@@ -172,7 +172,7 @@
   --ds-input-clear-size: 1rem;
   --ds-input-clear-color: var(--ds-color-neutral-400);
   --ds-input-clear-color-hover: var(--ds-color-neutral-600);
-  --ds-input-clear-bg-hover: var(--ds-color-neutral-100);
+  --ds-input-clear-bg-hover: var(--ds-material-control-background-hover);
   --ds-input-clear-bg: transparent;
   --ds-input-clear-border: 1px solid transparent;
   --ds-input-clear-border-hover: var(--ds-input-border);
@@ -203,7 +203,7 @@
      Settings for input labels
      ======================================================================== */
   --ds-input-label-color: var(--ds-color-neutral-700);
-  --ds-input-label-color-disabled: var(--ds-color-neutral-400);
+  --ds-input-label-color-disabled: var(--ds-material-control-foreground-disabled);
   --ds-input-label-font-size: var(--ds-font-size-sm);
   --ds-input-label-font-weight: var(--ds-font-weight-medium);
   --ds-input-label-margin-bottom: 0.375rem;

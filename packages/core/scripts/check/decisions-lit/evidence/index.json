@@ -1,11 +1,11 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-08T12:34:14.764Z",
-  "headline": "decisions lit = 7/22 (+0/10 new)",
+  "producedAt": "2026-09-08T21:40:19.262Z",
+  "headline": "decisions lit = 7/22 (+0/8 new)",
   "measuredHeadline": "measured on the 8-family sample: 10/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
-    "newDecisions": 10,
+    "newDecisions": 8,
     "kitRows": 29,
     "measuredFamilySample": [
       "button",
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-08T10:36:55.267Z"
+      "builtAt": "2026-09-08T21:25:42.802Z"
     },
     "sources": {
       "door": {
@@ -30,19 +30,19 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 717,
-        "digest": "b42880796f75117e4644f19c215339db63bd91aeb192cebd08f8e7277a8855c1"
+        "fileCount": 719,
+        "digest": "48771b5d8a4680db18081e26d9a4a108bc8760adbe2bf8b026c245bd55a33240"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "5015e2cd5a2ffcffb56656305ee0b55e11ae50b3dcb9048b6d75deb353c992ea"
+        "digest": "794eacc3d358724b3099b47154431a9a57dc3f7a5565b23d16395b1a5e50220a"
       }
     },
     "browser": {
       "specifier": "@playwright/test",
       "root": "packages/showroom/package.json",
-      "resolved": "node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+      "resolved": "../../../Users/daniel/Developer/Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
       "browserVersion": "149.0.7827.55"
     },
     "roster": {
@@ -64,7 +64,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "6809db533824c73345116e18d15256f17bff1a753a4c3a5338369da2d7bb7812",
+        "bundleSha": "eab0e78302640069a5ae58cc78c450a75eac320c12e040a3312b9a502964b9c4",
         "bundleMode": "fresh"
       },
       "bithire": {
@@ -85,7 +85,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "0537f7b1d99da8d94d711985752034dbf1006b17a70f332c7eac69a917e3b853",
+        "bundleSha": "bd12833e402bdc30836882b3289561718d0f4890ae20fe8f41411ed63a4918c7",
         "bundleMode": "fresh"
       },
       "evnto": {
@@ -106,7 +106,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "54d7ba6363c17886f12c356157290105ed415a6e7472da8b5bb7d6510f95827c",
+        "bundleSha": "81cdbc85bd3ac74c637971eef65d826cbb825e4a7d8107a77d2f4fc628ad2b3a",
         "bundleMode": "fresh"
       }
     },
@@ -122,7 +122,7 @@
   },
   "summary": {
     "lit": 7,
-    "partial": 6,
+    "partial": 8,
     "inert": 6,
     "measuredLit": 10,
     "discrepancies": [
@@ -368,8 +368,8 @@
       {
         "id": "states.emphasis",
         "tier": "standard",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -377,8 +377,8 @@
       {
         "id": "states.focus-style",
         "tier": "standard",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -908,7 +908,7 @@
     {
       "id": "states.emphasis",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -916,7 +916,7 @@
     {
       "id": "states.focus-style",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1569,7 +1569,7 @@
     {
       "id": "states.emphasis",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1577,7 +1577,7 @@
     {
       "id": "states.focus-style",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -2183,7 +2183,7 @@
     {
       "id": "states.emphasis",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -2191,7 +2191,7 @@
     {
       "id": "states.focus-style",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []

@@ -96,28 +96,67 @@ describe("v2 accepted at the door", () => {
 });
 
 describe("accepted but not lit", () => {
-  it("accepts states.emphasis, records it, and reports it unlit", () => {
-    const document = v2({ "states.emphasis": "strong" });
+  it("accepts surfaces.border-style, records it, and reports it unlit", () => {
+    const document = v2({ "surfaces.border-style": "hairline" });
     const admission = admitDocument({ vertical: "bithire", document });
     expect(admission.version).toBe(2);
     expect(admission.decisions).toEqual([
       {
-        id: "states.emphasis",
+        id: "surfaces.border-style",
         tier: "standard",
         lit: false,
         reason: "no-keypath-today",
         keypaths: [],
       },
     ]);
-    expect(admission.unlit.map((row) => row.id)).toEqual(["states.emphasis"]);
+    expect(admission.unlit.map((row) => row.id)).toEqual([
+      "surfaces.border-style",
+    ]);
     // The catalog DECLARES the absence with `null`, so the projection reports
     // it instead of discovering it from a missing table row.
-    expect(v1KeypathOf("states.emphasis")).toBeNull();
+    expect(v1KeypathOf("surfaces.border-style")).toBeNull();
   });
 
   it("moves nothing in the compiled CSS when only unlit decisions are activated", () => {
-    expect(css("bithire", v2({ "states.emphasis": "strong" }))).toEqual(
+    expect(css("bithire", v2({ "surfaces.border-style": "hairline" }))).toEqual(
       css("bithire", v2({}))
+    );
+  });
+
+  it("lights states.emphasis and moves the material stack with it", () => {
+    const admission = admitDocument({
+      vertical: "bithire",
+      document: v2({ "states.emphasis": "strong" }),
+    });
+    expect(admission.decisions).toEqual([
+      {
+        id: "states.emphasis",
+        tier: "standard",
+        lit: true,
+        keypaths: ["appearance.general.states.emphasis"],
+      },
+    ]);
+    expect(admission.unlit).toEqual([]);
+    const strong = css("bithire", v2({ "states.emphasis": "strong" }));
+    expect(strong).not.toEqual(css("bithire", v2({})));
+    expect(strong).toContain("--ds-state-hover-shift: 8%");
+  });
+
+  it("lights states.focus-style and rewrites the focus signature", () => {
+    const admission = admitDocument({
+      vertical: "bithire",
+      document: v2({ "states.focus-style": "underline" }),
+    });
+    expect(admission.decisions).toEqual([
+      {
+        id: "states.focus-style",
+        tier: "standard",
+        lit: true,
+        keypaths: ["appearance.general.states.focusStyle"],
+      },
+    ]);
+    expect(css("bithire", v2({ "states.focus-style": "underline" }))).toContain(
+      "--ds-focus-ring: inset 0 calc(-1 * var(--ds-focus-ring-width)) 0 0 var(--ds-focus-ring-color)"
     );
   });
 

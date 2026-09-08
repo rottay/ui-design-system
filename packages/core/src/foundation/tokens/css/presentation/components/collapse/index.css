@@ -61,7 +61,7 @@
   --ds-collapse-header-default-idle-cursor: pointer;
 
   /* Header - Default Variant - Hover State */
-  --ds-collapse-header-default-hover-bg: var(--ds-color-neutral-100);
+  --ds-collapse-header-default-hover-bg: var(--ds-material-panel-background-hover);
   --ds-collapse-header-default-hover-color: var(--ds-color-neutral-900);
 
   /* Header - Default Variant - Focus State */
@@ -69,11 +69,11 @@
   --ds-collapse-header-default-focus-outline-offset: -2px;
 
   /* Header - Default Variant - Active State (pressing) */
-  --ds-collapse-header-default-active-bg: var(--ds-color-neutral-200);
+  --ds-collapse-header-default-active-bg: var(--ds-material-panel-background-active);
 
   /* Header - Default Variant - Disabled State */
-  --ds-collapse-header-default-disabled-bg: var(--ds-color-neutral-100);
-  --ds-collapse-header-default-disabled-color: var(--ds-color-neutral-400);
+  --ds-collapse-header-default-disabled-bg: var(--ds-material-panel-background-disabled);
+  --ds-collapse-header-default-disabled-color: var(--ds-material-panel-foreground-disabled);
   --ds-collapse-header-default-disabled-cursor: not-allowed;
   --ds-collapse-header-default-disabled-opacity: 0.6;
 
@@ -91,7 +91,7 @@
   --ds-collapse-header-ghost-idle-padding-y: var(--ds-spacing-2);
 
   /* Header - Ghost Variant - Hover State */
-  --ds-collapse-header-ghost-hover-bg: var(--ds-color-neutral-100);
+  --ds-collapse-header-ghost-hover-bg: var(--ds-material-panel-background-hover);
   --ds-collapse-header-ghost-hover-color: var(--ds-color-neutral-900);
 
   /* ========================================================================
@@ -131,7 +131,7 @@
   --ds-collapse-icon-default-hover-color: var(--ds-color-neutral-700);
 
   /* Icon - Default Variant - Disabled State */
-  --ds-collapse-icon-default-disabled-color: var(--ds-color-neutral-300);
+  --ds-collapse-icon-default-disabled-color: var(--ds-material-panel-foreground-disabled);
 
   /* Icon - Default Variant - Expanded State */
   --ds-collapse-icon-default-expanded-transform: rotate(90deg);
