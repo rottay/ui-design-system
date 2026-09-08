@@ -55,7 +55,7 @@ EMPTY — no pending changeset declares a subpath, signature or export change si
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 91/155 work orders done (59%)
+## Work-order burn-down — 92/155 work orders done (59%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -71,7 +71,7 @@ EMPTY — no pending changeset declares a subpath, signature or export change si
 | [consumer-contract](./consumer-contract.md) | 5 | 0 | 0 | 5 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
 | [derivation](./derivation.md) | 1 | 0 | 6 | 7 |
-| [family-cuts](./family-cuts.md) | 0 | 0 | 14 | 14 |
+| [family-cuts](./family-cuts.md) | 1 | 0 | 13 | 14 |
 | [emission-mount](./emission-mount.md) | 0 | 0 | 3 | 3 |
 | [platform-invariants](./platform-invariants.md) | 0 | 0 | 8 | 8 |
 | [retire](./retire.md) | 0 | 0 | 5 | 5 |
@@ -82,9 +82,9 @@ EMPTY — no pending changeset declares a subpath, signature or export change si
 | Milestone | State | Gate work orders | Outstanding | What it enables |
 | --- | --- | --- | --- | --- |
 | A · The apps can build | reached | WO-CON-04, WO-CON-05 | none | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
-| A2 · Architecture validated in one vertical cut | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | WO-FAM-00, WO-FAM-01, WO-EVI-02 | Decisions -> derivation -> channels -> skin proven end to end on one family; the autonomous APP and DS lanes start. |
+| A2 · Architecture validated in one vertical cut | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-02 | WO-FAM-01, WO-EVI-02 | Decisions -> derivation -> channels -> skin proven end to end on one family; the autonomous APP and DS lanes start. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography. |
-| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 39 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 55 work orders of the audit-2026-09-05 programme | 38 of 55 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -118,7 +118,6 @@ EMPTY — no pending changeset declares a subpath, signature or export change si
 | WO-DER-03 | Shape and palette derived once | L | derivation | audit-2026-09-05 |
 | WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | L | derivation | audit-2026-09-05 |
 | WO-EMI-01 | One emitter family, one artifact for every origin, one preview | L | emission-mount | audit-2026-09-05 |
-| WO-FAM-00 | Family cut template and per-family gate | S | family-cuts | audit-2026-09-05 |
 | WO-INV-01 | One direction authority and logical geometry everywhere | M | platform-invariants | audit-2026-09-05 |
 | WO-INV-02 | One i18n catalog with an English floor, locale-aware formatting and IME-safe submit | M | platform-invariants | audit-2026-09-05 |
 | WO-EVI-01 | theme-graph: derived cascade graph with a byte-exact check | M | evidence-graph | audit-2026-09-05 |
@@ -132,12 +131,12 @@ EMPTY — no pending changeset declares a subpath, signature or export change si
 | WO-GAT-09 | dependencies: WO-CRA-15, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-CRA-15 | dependencies: WO-RET-01; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-CRA-17 | dependencies: WO-RET-01; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
-| WO-ARC-12 | dependencies: WO-FAM-00; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
+| WO-ARC-12 | phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
 | WO-ARC-13 | dependencies: WO-EVI-01; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
 | WO-ARC-14 | dependencies: WO-EMI-02; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
-| WO-ARC-15 | dependencies: WO-INV-03, WO-FAM-00; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
+| WO-ARC-15 | dependencies: WO-INV-03; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
 | WO-ARC-21 | phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
-| WO-ARC-17 | dependencies: WO-ARC-14, WO-FAM-00; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
+| WO-ARC-17 | dependencies: WO-ARC-14; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-ARC-16 | dependencies: WO-RET-01; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-ARC-20 | dependencies: WO-FAM-11; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-TOK-11 | dependencies: WO-DER-03, WO-EVI-02; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
@@ -158,17 +157,17 @@ EMPTY — no pending changeset declares a subpath, signature or export change si
 | WO-DER-06 | dependencies: WO-DER-05, WO-DER-07 |
 | WO-EMI-02 | dependencies: WO-EMI-01 |
 | WO-EMI-03 | dependencies: WO-EMI-01 |
-| WO-FAM-01 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-02 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-03 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-04 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-05 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-06 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-07 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-08 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-09 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-10 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-11 | dependencies: WO-FAM-00, WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-01 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-02 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-03 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-04 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-05 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-06 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-07 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-08 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-09 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-10 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
+| WO-FAM-11 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
 | WO-INV-03 | dependencies: WO-DER-03 |
 | WO-INV-04 | dependencies: WO-DER-04, WO-EMI-02 |
 | WO-INV-05 | dependencies: WO-DER-04 |
@@ -180,7 +179,7 @@ EMPTY — no pending changeset declares a subpath, signature or export change si
 | WO-EVI-03 | dependencies: WO-DER-07 |
 | WO-INV-06 | dependencies: WO-INV-04, WO-FAM-10, WO-FAM-11 |
 | WO-FAM-12 | dependencies: WO-FAM-06, WO-FAM-07, WO-DER-04, WO-INV-04, WO-INV-07 |
-| WO-INV-07 | dependencies: WO-DER-04, WO-FAM-00 |
+| WO-INV-07 | dependencies: WO-DER-04 |
 | WO-INV-08 | dependencies: WO-DER-04, WO-INV-05 |
 | WO-FAM-13 | dependencies: WO-FAM-08, WO-FAM-12, WO-INV-07, WO-INV-08 |
 
@@ -277,6 +276,7 @@ EMPTY — no pending changeset declares a subpath, signature or export change si
 | WO-CAT-02 | 2026-09-07 | Typed catalog at contracts/theme (29 rows from the approved kit) + decision-typed ThemePatch with runtime refusals + TenantThemeDocument v2 with total fail-closed migrate v1->v2 over 7 verbatim app-platform fixtures (76/76); the 7 controls-reading gates repointed to the catalog, customization-model deleted, D-21(b) first-level roots admitted with the identity baseline untouched; new gates theme-single-listing + theme-decision-schema (--check green) and theme-keypath-coverage (honest red, excluded with written reason, blocking drill with teeth). Landed 3eaefc9cb (tree adfbc9b9) after fresh independent K3 audit PASS: 117 paths, gate matrix 150 blocking with FAIL set unchanged, focused suites 1508 pass, all 7 deviations adjudicated justified. |
 | WO-CAT-03 | 2026-09-07 | One admission for all four origins (tier/engine/envelope/contrast/limits, intent+emission two-phase) under facade/foundation/admission; door closed on server AND root entrypoints (grep=0, supplier contract regenerated); refusal-by-name (F-61); baselines frozen+cloned (F-60); F-13 preview/publish parity, F-24, F-02 (9 test files); single-door 54 incl .measured census with mutants. F-27 closed in DT-adjudicated strengthened form: fiche slug-form stale post-CAN-06 (customer tenants rosterless by construction); adapterFor(vertical,slug) fails closed on vertical, PRIMARY_ENGINE fallback branch deleted, wiring allowlist entry removed. Landed 555cbb074 (56 paths, tree 35e65218, sole parent 9101adfb0). Independent K3 audits: v1 HOLD (4 defects) -> fixed -> v2 PASS, v3 delta PASS (pack-inventory adjudication of the lot's 27 dist entries, baseline untouched). Coordinator gates: full vitest 16694 pass / 12 fail = 11 inherited base-red + 1 flaky (SpatialExperience green isolated both trees); gates:ci red set identical to base. Owner-decision queued: playful preset (intensity 1.2) vs tenant motion cap 0.8. Standing debt queued: scripts-tree baseline drift, pack-inventory baseline regen (needs the 10 missing .d.ts restored first), typecheck:tests TS2739x2 CollectionWorkspace. |
 | WO-DER-01 | 2026-09-08 | Landed 59439fa13ba78f47f1a076963f2dddad65265bea (170 paths, parent 1f8de11e6): FamilyDeriver contract + single pipeline orchestrator + ranked merge (tenant>verticalOverride>derived>profile); lowering/runtime/variables and kernel/runtime/appearance retired; one color owner (contrastRatio/parseHex single definitions); read-without-producer ratchet (baseline 2096) + cascade-wiring transitive arm (2161/2205) registered blocking pre-build; byte-equivalence 3 verticals (1196/1233/475 keys, 0 diffs); governance/manifest 510 rows repointed to owning families via executable registry probe. Independent K3 audits PASS: v1 /private/tmp/rottay-der01-kimi-k3-audit.md + v2 delta /private/tmp/rottay-der01-v2-kimi-k3-audit.md; writer report /private/tmp/rottay-der01-opus.md SHA256 a555ee766a338207d399b334467c380d4c5cc6281e8a00f4b31839214bdc31fc. F-71+F-43 closed; F-34 duplicate-producer clause closed; F-09 structural clause only (drain routed to DER-02/03/04+family cuts); F-90 absence-encoding closed, dead-branch residual ruled by DT: landed B-1 drills are authority, tenant expressive.experienceProfile stays live, dead-read removal queued. |
+| WO-FAM-00 | 2026-09-08 | Landed 3a6fb8edd8b62ec6ee8f85917c3c3972777bc4dc (5 paths: family-cut gate + 30-drill suite + baseline + template, plus the coordinator's gates-manifest registration as blocking pre-build at indices 45/46). Gate green on button (10 blocking arms, 9 pinned ratchets, 4 OWED arms printed with owners); both acceptance drills proven red live by writer and re-planted independently by the auditor; one producer set shared with the global read-without-producer ratchet proven in vivo. Independent K3 audits: v1 PASS (/private/tmp/rottay-fam00-kimi-k3-audit.md), v2 delta HOLD for a retired-identity comment residue (fixed by writer round 1), v3 delta PASS (/private/tmp/rottay-fam00-v3-kimi-k3-audit.md — runner reaches family-cut PASS, stops only at the EVI-04-owned claim-exactness standing red, byte-identical with/without the lot). Writer report /private/tmp/rottay-fam00-opus.md SHA256 3b13199c7a8c9f5a27d02b9712f1d0057b87185d4bcc71a83781a03957a8c655. F-37(a) + F-09(a)(d) closed; F-66/F-67(a)/F-09(c) instruments delivered, drains routed to WO-FAM-01..11; skeleton-renderer arm OWED/UNASSIGNED recorded for owner adjudication. |
 | WO-EVI-04 | 2026-09-06 | Scout-measured closure (K2.7 report /private/tmp/rottay-closures-scout.md, HEAD fc841757): STATUS publishes the 11 indicator rows bound 1:1 to registry.metrics (row1 measured 7/22, rows 2-11 honestly NOT MEASURED with owing WO); fingerprint seal verifies green on pinned 712c7352 after CAN-02 landing; phase model kept with written reason; WO-CRA-23 sealed; F-50 clean (0 retired-path citations). Two adjudications by kimi-k3-dt: (1) outcome fingerprint re-seal satisfied by verification+documented deliberate non-reseal (mapping unmoved, 82 source IDs preserved, empty re-seal would be ceremony); (2) README DaisyUI lines are negations/residual-layer statements, not Modern-as-DaisyUI — acceptance intent satisfied. roadmap:check green, 95/95 roadmap tests. |
 | WO-CON-01 | 2026-09-07 | sanctioned import surface complete: consumer-contract doc + lint rule landed (3a9873f4; rule 20/20 incl fail-closed cases; roster now 120/120 after WO-CAN-04's carried count change with death proof); pnpm --filter @rottay/design-system lint exit 0 measured on landed tree d0f54693 with REAL sibling app dirs (lint:vertical included, only non-blocking warnings); claim-exactness seal/artifacts regenerated green in audited lot d0f54693 (candidate d7d00aaa, independent K3 audit PASS: proof chain repaired, corpus drained 19 missing paths to 0, deterministic double-run); docs reconciled in docs-engineering 893bce77 (safety ref 19e0ec03). Adjudication: app-platform wiring out of scope per standing contract (only app-bithire is the productive consumer; app-evnto/app-platform are do-not-modify; evnto was already wired) — the rule runs in showroom+bithire+evnto, baselined per app, decrease-only |
 | WO-CON-02 | 2026-09-07 | mountTenantTheme facade complete: DS lot 072f71cb landed after independent PASS; facade bytes-equal to compileTenantTheme path for the three verticals (15/15 tests); showroom SSR mounts through one call; codemod applied to app-bithire trio compiles (16s green); docs reconciled in docs-engineering 893bce77 (safety ref bc2803e9). Closure conditions now met: (1) engine-token-audit GREEN and BLOCKING — 18 dead Daisy rules + tour inlinePaint drained in dbe18dea (audited candidate 34b7b738, K3 PASS; ceiling untouched, exact invariant satisfied; runner 140 blocking/1 excluded); (2) WO-GAT-07 documentationRevision/exactness-live resealed in the verified DS lot d0f54693 (documentationRevision 674474cb to 8944a4f = live docs main; inspectedDocsMatchRevision true; sealingErrors none; deterministic double-run 1e172e4f) — same lot, as required |

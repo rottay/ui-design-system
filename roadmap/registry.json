@@ -4299,7 +4299,7 @@
    "lane": "family-cuts",
    "order": 1,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4308,9 +4308,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-67, F-66, F-37, F-09; supersedes: WO-ARC-12, WO-ARC-17",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "claude-opus-5-fam00",
+   "claimedAt": "2026-09-08",
+   "progressLog": [],
+   "doneAt": "2026-09-08",
+   "evidence": "Landed 3a6fb8edd8b62ec6ee8f85917c3c3972777bc4dc (5 paths: family-cut gate + 30-drill suite + baseline + template, plus the coordinator's gates-manifest registration as blocking pre-build at indices 45/46). Gate green on button (10 blocking arms, 9 pinned ratchets, 4 OWED arms printed with owners); both acceptance drills proven red live by writer and re-planted independently by the auditor; one producer set shared with the global read-without-producer ratchet proven in vivo. Independent K3 audits: v1 PASS (/private/tmp/rottay-fam00-kimi-k3-audit.md), v2 delta HOLD for a retired-identity comment residue (fixed by writer round 1), v3 delta PASS (/private/tmp/rottay-fam00-v3-kimi-k3-audit.md — runner reaches family-cut PASS, stops only at the EVI-04-owned claim-exactness standing red, byte-identical with/without the lot). Writer report /private/tmp/rottay-fam00-opus.md SHA256 3b13199c7a8c9f5a27d02b9712f1d0057b87185d4bcc71a83781a03957a8c655. F-37(a) + F-09(a)(d) closed; F-66/F-67(a)/F-09(c) instruments delivered, drains routed to WO-FAM-01..11; skeleton-renderer arm OWED/UNASSIGNED recorded for owner adjudication."
   },
   {
    "id": "WO-FAM-01",
