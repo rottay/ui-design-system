@@ -2,6 +2,7 @@ import type {
   ParticleFieldFocalArea,
   ParticleFieldProps,
 } from '../..';
+import { parseHex } from '@/foundation/kernel/color/contrast';
 import { resolveCssColor } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
 
 export const PARTICLE_RUNTIME_LIMITS = Object.freeze({
@@ -297,19 +298,25 @@ interface RgbaColor {
   a: number;
 }
 
-function parseHexColor(value: string): RgbaColor | null {
-  const match = /^#([\da-f]{3,8})$/i.exec(value.trim());
+/**
+ * The opaque arms (#RGB, #RRGGBB) go through the design system's one hex
+ * parser; only the alpha arms (#RGBA, #RRGGBBAA), which that parser does not
+ * accept and no other consumer needs, are read here.
+ */
+function parseRgbaHex(value: string): RgbaColor | null {
+  const opaque = parseHex(value);
+  if (opaque) return { ...opaque, a: 1 };
+  const match = /^#([\da-f]{4}|[\da-f]{8})$/i.exec(value.trim());
   if (!match) return null;
   const digits = match[1];
-  const expanded = digits.length <= 4
+  const expanded = digits.length === 4
     ? digits.split('').map((digit) => `${digit}${digit}`).join('')
     : digits;
-  if (expanded.length !== 6 && expanded.length !== 8) return null;
   return {
     r: Number.parseInt(expanded.slice(0, 2), 16),
     g: Number.parseInt(expanded.slice(2, 4), 16),
     b: Number.parseInt(expanded.slice(4, 6), 16),
-    a: expanded.length === 8 ? Number.parseInt(expanded.slice(6, 8), 16) / 255 : 1,
+    a: Number.parseInt(expanded.slice(6, 8), 16) / 255,
   };
 }
 
@@ -330,7 +337,7 @@ function parseConcreteColor(value: string): RgbaColor | null {
   if (value.trim().toLowerCase() === 'transparent') {
     return { r: 0, g: 0, b: 0, a: 0 };
   }
-  return parseHexColor(value) ?? parseRgbColor(value);
+  return parseRgbaHex(value) ?? parseRgbColor(value);
 }
 
 function formatRgba(color: RgbaColor): string {

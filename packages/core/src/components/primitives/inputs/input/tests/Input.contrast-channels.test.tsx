@@ -2,6 +2,12 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import {
+  ratioFromLuminance as contrastRatio,
+  parseHex,
+  relativeLuminanceOf,
+} from '@/foundation/kernel/color/contrast';
+
 const SKIN = readFileSync(
   resolve(
     __dirname,
@@ -16,26 +22,20 @@ const SKIN = readFileSync(
  * counter: muted ink deepened 35% toward primary text ink; state hues deepened
  * toward black per the solid-fill contrast grammar.
  */
-function channelLuminance(channel: number): number {
-  const s = channel / 255;
-  return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-}
-
+/**
+ * The colour math is the design system's one owner. `luminanceOf` and
+ * `hexToRgb` stay as local ADAPTERS -- this file measures colour-mix results,
+ * whose channels are a weighted mean with no hex of its own -- but neither the
+ * transfer curve nor the ratio is restated here.
+ */
 function luminanceOf(r: number, g: number, b: number): number {
-  return (
-    0.2126 * channelLuminance(r) +
-    0.7152 * channelLuminance(g) +
-    0.0722 * channelLuminance(b)
-  );
+  return relativeLuminanceOf({ r, g, b });
 }
 
 function hexToRgb(hex: string): [number, number, number] {
-  const h = hex.replace('#', '');
-  return [
-    parseInt(h.slice(0, 2), 16),
-    parseInt(h.slice(2, 4), 16),
-    parseInt(h.slice(4, 6), 16),
-  ];
+  const rgb = parseHex(hex);
+  if (!rgb) throw new Error(`Expected a hex color, received: ${hex}`);
+  return [rgb.r, rgb.g, rgb.b];
 }
 
 function mixHex(hexA: string, hexB: string, pctA: number): number {
@@ -50,10 +50,6 @@ function hexLuminance(hex: string): number {
   return luminanceOf(r, g, b);
 }
 
-function contrastRatio(l1: number, l2: number): number {
-  const [hi, lo] = l1 >= l2 ? [l1, l2] : [l2, l1];
-  return (hi + 0.05) / (lo + 0.05);
-}
 
 const MUTED_CASES: Array<{ source: string; ink: string; primary: string; surface: string }> = [
   { source: 'bithire', ink: '#71869A', primary: '#14283B', surface: '#FFFFFF' },

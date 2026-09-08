@@ -347,14 +347,22 @@ describe("channel minting and CSS text have declared owners", () => {
     for (const file of minting) {
       expect(file.startsWith(LOWERING_ROOT), `${file} mints outside the lowering`).toBe(true);
     }
-    // Exact, not "at least": a new minting owner is a deliberate addition.
+    // Exact, not "at least": a new minting owner is a deliberate addition. The
+    // channel assembly that used to mint most of this list is one deriver per
+    // family now, so the minting owners are the families themselves.
     expect(minting.sort()).toEqual([
       `${LOWERING_ROOT}/foundation/materials/index.ts`,
       `${LOWERING_ROOT}/foundation/motion/index.ts`,
       `${LOWERING_ROOT}/foundation/palette/index.ts`,
       `${LOWERING_ROOT}/foundation/type-ramp/index.ts`,
-      `${LOWERING_ROOT}/index.ts`,
-      `${LOWERING_ROOT}/runtime/variables/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/axes/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/charts/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/chrome/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/palette/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/recipes/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/surfaces/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/tenant/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/typography/index.ts`,
     ]);
   });
 

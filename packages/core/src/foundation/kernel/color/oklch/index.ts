@@ -18,6 +18,8 @@
  * disruptive single-axis reduction.
  */
 
+import { parseHex } from '../contrast';
+
 export interface Oklab {
   /** Perceptual lightness, nominally 0 (black) to 1 (white). */
   l: number;
@@ -51,15 +53,15 @@ function clamp01(v: number): number {
 // hex <-> RGB float
 // ---------------------------------------------------------------------------
 
+/**
+ * Non-hex input yields NaN channels, exactly as the local parse it replaced
+ * did: every caller guards with `isHexColor` first, and a NaN that propagates
+ * is visible where a silently-substituted colour would not be.
+ */
 export function hexToRgbFloat(hex: string): RgbFloat {
-  const cleaned = hex.trim().replace(/^#/, '');
-  const full = cleaned.length === 3 ? cleaned.split('').map((ch) => ch + ch).join('') : cleaned;
-  const int = parseInt(full, 16);
-  return {
-    r: ((int >> 16) & 255) / 255,
-    g: ((int >> 8) & 255) / 255,
-    b: (int & 255) / 255,
-  };
+  const rgb = parseHex(hex);
+  if (!rgb) return { r: NaN, g: NaN, b: NaN };
+  return { r: rgb.r / 255, g: rgb.g / 255, b: rgb.b / 255 };
 }
 
 export function rgbFloatToHex({ r, g, b }: RgbFloat): string {

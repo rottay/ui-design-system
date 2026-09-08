@@ -3294,7 +3294,7 @@
       "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
       "sourceBindings": [
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
-        "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+        "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/src/foundation/tokens/ts/presentation/typography/pairings/index.ts",
         "packages/core/governance/manifest/controls/typography/pairing/index.json"
@@ -3379,7 +3379,7 @@
       "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
       "sourceBindings": [
         "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
-        "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+        "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
         "packages/core/governance/manifest/controls/typography/families/index.json"
@@ -3420,13 +3420,13 @@
         {
           "channelId": "--ds-font-family-display",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/typography"
           ],
           "sourceBindings": [
-            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"
           ],
           "replacementDisposition": {
             "state": "LIVE"

@@ -72,7 +72,7 @@ export const DEFINER_ALLOWLIST = [
   // into one owner per concern; the series palette is written by the channel
   // assembly, so that owner is the definer now — and since the compatibility
   // appearance projection was deleted at source, it is the only one.
-  'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
+  'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/charts/index.ts',
   // Derives the ten emitted slot colors for the compiler; names the channel
   // in its documentation and derivation API.
   'foundation/kernel/color/oklch/chart-series/index.ts',

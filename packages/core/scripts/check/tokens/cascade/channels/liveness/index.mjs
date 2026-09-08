@@ -169,10 +169,49 @@ export const DEFAULT_TENANT_THEME_CONTRACT = resolve(
   CORE_ROOT,
   'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts',
 );
-export const DEFAULT_BRAND_THEME_COMPILER = resolve(
+/**
+ * The channel assembly is one deriver per family behind a ranked merge, so the
+ * compiler corpus is a DIRECTORY: every `<family>/index.ts` under the
+ * derivation registry is a producer, and reading only one of them would leave
+ * the others' channels unowned. A new family is covered the moment it lands.
+ */
+export const DEFAULT_BRAND_THEME_COMPILER_ROOT = resolve(
   CORE_ROOT,
-  'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
+  'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation',
 );
+/**
+ * Every family deriver under the registry, with the rank it declares.
+ *
+ * The rank is read from the source because it is what makes a repeated channel
+ * legible: two families naming one channel at DIFFERENT ranks is precedence
+ * (a tenant statement over a derivation), while two families naming it at the
+ * SAME rank is a duplicate producer with no answer.
+ */
+export function collectBrandThemeCompilerSources(
+  root = DEFAULT_BRAND_THEME_COMPILER_ROOT,
+) {
+  const sources = [];
+  let entries;
+  try {
+    entries = readdirSync(root, { withFileTypes: true });
+  } catch {
+    return sources;
+  }
+  for (const entry of entries.filter((item) => item.isDirectory())) {
+    const file = join(root, entry.name, 'index.ts');
+    if (!existsSync(file)) continue;
+    const text = readFileSync(file, 'utf8');
+    const rank = /\brank:\s*["']([a-zA-Z-]+)["']/.exec(text)?.[1] ?? 'unranked';
+    sources.push({
+      path: file,
+      relativePath: `packages/core/${relative(CORE_ROOT, file).split(sep).join('/')}`,
+      text,
+      rank,
+    });
+  }
+  return sources.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
+}
+
 export const DEFAULT_FAMILY_INVENTORY = resolve(
   CORE_ROOT,
   'scripts/check/modern-rescue/family-inventory/index.json',
@@ -601,11 +640,26 @@ export function findDuplicateTintScales(callSites) {
   return duplicates;
 }
 
-/** Any channel name assigned by more than one direct `vars["--ds-x"] = ...` site. */
+/**
+ * Any channel name assigned by more than one direct `vars["--ds-x"] = ...` site
+ * AT THE SAME RANK.
+ *
+ * Two sites at different ranks are the ranked merge doing its job: the tenant
+ * family restates the five type channels the vertical's typography family
+ * derives, and the merge decides between them by authority. Two sites at ONE
+ * rank have no such answer, which is what this reports.
+ */
 export function findDuplicateDirectAssignments(directEmission) {
   const duplicates = [];
   for (const [name, sites] of directEmission) {
-    if (sites.length > 1) duplicates.push({ name, sites });
+    const byRank = new Map();
+    for (const site of sites) {
+      const rank = site.rank ?? 'unranked';
+      byRank.set(rank, [...(byRank.get(rank) ?? []), site]);
+    }
+    for (const [rank, ranked] of byRank) {
+      if (ranked.length > 1) duplicates.push({ name, rank, sites: ranked });
+    }
   }
   return duplicates;
 }
@@ -915,6 +969,12 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-overlay-/, () => 'surfaces.overlay'],
   [/^--ds-density-/, () => 'surfaces.density'],
   [/^--ds-effect-/, () => 'surfaces.effect'],
+  // Provenance, not paint. The two governed selection ids are emitted so the
+  // compiled block records WHICH profile was admitted; the engines declare in
+  // their own adapters that no surface reads them, and the selection itself is
+  // consumed as data. They still get an owner, because an unclassified row is
+  // a hole in the census rather than a decision.
+  [/^--ds-(?:recipe|experience)-profile$/, () => 'provenance.selection'],
 ]);
 
 export function classifySemanticOwner(name) {
@@ -1045,7 +1105,7 @@ export function computeInputsDigest({
   ciGatesManifestRaw,
   packageJsonRaw,
   tenantThemeSource,
-  brandThemeSource,
+  brandThemeSources = [],
   familyInventoryRaw,
   cssStylesheets,
   tsStylesheets,
@@ -1057,9 +1117,11 @@ export function computeInputsDigest({
     `ci-gates-manifest:${sha256(ciGatesManifestRaw)}`,
     `package-json:${sha256(packageJsonRaw)}`,
     `tenant-theme-contract:${sha256(tenantThemeSource)}`,
-    `brand-theme-compiler:${sha256(brandThemeSource)}`,
     `family-inventory:${sha256(familyInventoryRaw)}`,
   ];
+  for (const source of brandThemeSources) {
+    parts.push(`brand-theme-compiler:${source.relativePath}:${sha256(source.text)}`);
+  }
   for (const { file, text } of cssStylesheets) parts.push(`css:${file}:${sha256(text)}`);
   for (const { file, text } of tsStylesheets) parts.push(`ts:${file}:${sha256(text)}`);
   for (const consumer of consumerCorpora) {
@@ -1190,6 +1252,7 @@ const CONSUMER_SITE_CAP = 20;
 export function analyzeChannelLiveness({
   tenantThemeSource,
   brandThemeSource,
+  brandThemeSources,
   familyRows,
   cssStylesheets,
   tsStylesheets,
@@ -1222,21 +1285,60 @@ export function analyzeChannelLiveness({
   }
 
   // --- EMITTED --------------------------------------------------------
-  const tintEmission = extractTintRampEmissions(brandThemeSource);
-  const directEmission = extractDirectVarsAssignments(brandThemeSource);
-  const unresolvedInterpolated = findUnresolvedInterpolatedAssignments(brandThemeSource);
-  const duplicateTintScales = findDuplicateTintScales(tintEmission.callSites);
+  // One entry per family deriver. A single `brandThemeSource` string is still
+  // accepted, and behaves as one unranked producer, so every drill fixture in
+  // this gate's own test keeps its shape.
+  const compilerSources =
+    brandThemeSources ??
+    (brandThemeSource === undefined
+      ? []
+      : [{ relativePath: 'brand-theme/index.ts', text: brandThemeSource, rank: 'unranked' }]);
+
+  const tintNames = new Set();
+  const tintCallSites = [];
+  let tintSuffixes = [];
+  let tintDefinitionSite = null;
+  const directEmission = new Map();
+  const unresolvedInterpolated = [];
+  for (const source of compilerSources) {
+    const tint = extractTintRampEmissions(source.text);
+    for (const name of tint.names) tintNames.add(name);
+    for (const site of tint.callSites) {
+      tintCallSites.push({ ...site, file: source.relativePath, rank: source.rank });
+    }
+    if (tint.suffixes.length > 0) tintSuffixes = tint.suffixes;
+    if (tint.definitionLine !== null && tintDefinitionSite === null) {
+      tintDefinitionSite = `${source.relativePath}:${tint.definitionLine}`;
+    }
+    for (const [name, sites] of extractDirectVarsAssignments(source.text)) {
+      const merged = directEmission.get(name) ?? [];
+      for (const site of sites) {
+        merged.push({ ...site, file: source.relativePath, rank: source.rank });
+      }
+      directEmission.set(name, merged);
+    }
+    for (const site of findUnresolvedInterpolatedAssignments(source.text)) {
+      unresolvedInterpolated.push({ ...site, file: source.relativePath });
+    }
+  }
+  const tintEmission = {
+    names: tintNames,
+    suffixes: tintSuffixes,
+    callSites: tintCallSites,
+    definitionSite: tintDefinitionSite,
+  };
+  const duplicateTintScales = findDuplicateTintScales(tintCallSites);
   const duplicateDirectAssignments = findDuplicateDirectAssignments(directEmission);
   const tintDirectOverlap = findTintDirectOverlap(tintEmission.names, directEmission);
 
   for (const duplicate of duplicateTintScales) {
     failures.push(
-      `duplicate owner: tint scale "${duplicate.scale}" is registered by setTintRampVariables at ${duplicate.sites.length} call sites (lines ${duplicate.sites.map((s) => s.line).join(', ')}) -- a channel family may have exactly one producer`,
+      `duplicate owner: tint scale "${duplicate.scale}" is registered by setTintRampVariables at ${duplicate.sites.length} call sites (${duplicate.sites.map((s) => `${s.file ?? 'brand-theme/index.ts'}:${s.line}`).join(', ')}) -- a channel family may have exactly one producer`,
     );
   }
   for (const duplicate of duplicateDirectAssignments) {
     failures.push(
-      `duplicate producer: ${duplicate.name} is assigned by ${duplicate.sites.length} direct \`vars[...]\` sites (lines ${duplicate.sites.map((s) => s.line).join(', ')}) in the brand-theme compiler -- a channel may have exactly one producer`,
+      `duplicate producer: ${duplicate.name} is assigned by ${duplicate.sites.length} direct \`vars[...]\` sites at rank "${duplicate.rank}" (${duplicate.sites.map((s) => `${s.file ?? 'brand-theme/index.ts'}:${s.line}`).join(', ')}) -- a channel has exactly one producing family per rank`,
     );
   }
   if (tintDirectOverlap.length > 0) {
@@ -1246,7 +1348,7 @@ export function analyzeChannelLiveness({
   }
   for (const site of unresolvedInterpolated) {
     failures.push(
-      `unresolved emission pattern: vars[\`${site.raw}\`] at brand-theme/index.ts:${site.line} is an interpolated template assignment this producer cannot resolve to concrete channel names -- the corpus is never shrunk to avoid this finding`,
+      `unresolved emission pattern: vars[\`${site.raw}\`] at ${site.file ?? 'brand-theme/index.ts'}:${site.line} is an interpolated template assignment this producer cannot resolve to concrete channel names -- the corpus is never shrunk to avoid this finding`,
     );
   }
 
@@ -1278,7 +1380,8 @@ export function analyzeChannelLiveness({
 
   // --- Family attribution -----------------------------------------------
   const familyIndex = buildFamilyIndex(familyRows);
-  const brandThemeRelative = 'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts';
+  const siteLabel = (site) =>
+    `${site.file ?? 'brand-theme/index.ts'}:${site.line}`;
 
   function producerFor(name) {
     if (tintEmission.names.has(name)) {
@@ -1289,14 +1392,16 @@ export function analyzeChannelLiveness({
         kind: 'tint-ramp',
         scale: site?.scale ?? null,
         colorVar: site?.colorVar ?? null,
-        callSite: site ? `${brandThemeRelative}:${site.line}` : null,
-        definitionSite: tintEmission.definitionLine ? `${brandThemeRelative}:${tintEmission.definitionLine}` : null,
+        callSite: site ? siteLabel(site) : null,
+        definitionSite: tintEmission.definitionSite,
       };
     }
     if (directEmission.has(name)) {
+      const sites = directEmission.get(name);
       return {
         kind: 'direct-literal',
-        sites: directEmission.get(name).map((site) => `${brandThemeRelative}:${site.line}`),
+        family: [...new Set(sites.map((site) => site.rank ?? 'unranked'))].sort(),
+        sites: sites.map(siteLabel),
       };
     }
     return null;
@@ -1464,7 +1569,7 @@ export function analyzeChannelLiveness({
     ciGatesManifestRaw: readFileSync(DEFAULT_CI_GATES_MANIFEST, 'utf8'),
     packageJsonRaw: readFileSync(DEFAULT_PACKAGE_JSON, 'utf8'),
     tenantThemeSource,
-    brandThemeSource,
+    brandThemeSources: compilerSources,
     familyInventoryRaw: JSON.stringify(familyRows),
     cssStylesheets,
     tsStylesheets,
@@ -1546,7 +1651,7 @@ export function defaultArtifactPath({ evidenceRoot = DEFAULT_EVIDENCE_ROOT, roun
 
 export function runGate({
   tenantThemeContractPath = DEFAULT_TENANT_THEME_CONTRACT,
-  brandThemeCompilerPath = DEFAULT_BRAND_THEME_COMPILER,
+  brandThemeCompilerRoot = DEFAULT_BRAND_THEME_COMPILER_ROOT,
   familyInventoryPath = DEFAULT_FAMILY_INVENTORY,
   cssRoots = DEFAULT_CSS_ROOTS,
   consumerRoots = DEFAULT_CONSUMER_ROOTS,
@@ -1557,7 +1662,7 @@ export function runGate({
   drill = null,
 } = {}) {
   const tenantThemeSource = readFileSync(tenantThemeContractPath, 'utf8');
-  const brandThemeSource = readFileSync(brandThemeCompilerPath, 'utf8');
+  const brandThemeSources = collectBrandThemeCompilerSources(brandThemeCompilerRoot);
   const { rows: familyRows } = loadFamilyRows(familyInventoryPath);
 
   const cssFiles = collectSourceFiles(cssRoots, ['.css'], CORE_ROOT);
@@ -1595,7 +1700,7 @@ export function runGate({
 
   const result = analyzeChannelLiveness({
     tenantThemeSource,
-    brandThemeSource,
+    brandThemeSources,
     familyRows,
     cssStylesheets,
     tsStylesheets,
@@ -1612,7 +1717,11 @@ export function runGate({
     evidenceNote,
     result,
     resolvedArtifactPath,
-    corpus: { cssFileCount: cssFiles.length, tsFileCount: tsFiles.length },
+    corpus: {
+      cssFileCount: cssFiles.length,
+      tsFileCount: tsFiles.length,
+      compilerFileCount: brandThemeSources.length,
+    },
   };
 }
 
@@ -1631,7 +1740,7 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
       'Tenant-channel liveness ledger scoped to TENANT_THEME_OVERRIDE_TOKENS ∪ TENANT_THEME_REFERENCE_TOKENS ∪ brand-theme-compiler-emitted names, plus the app-bithire external consumerRoot. NOT the customization-surface-census.mjs dead-writer census. NOT tenant-channel-consumer-gate.mjs. NOT theme-channel-parity-gate.mjs. No classification asserts a channel is dead, but membership on TENANT_THEME_REFERENCE_TOKENS never protects a row from a NO-GO finding by itself -- only a proven finite terminal-paint chain (in-repo or via a required consumerRoot) does that.',
     inputs: {
       tenantThemeContract: relative(CORE_ROOT, DEFAULT_TENANT_THEME_CONTRACT).split(sep).join('/'),
-      brandThemeCompiler: relative(CORE_ROOT, DEFAULT_BRAND_THEME_COMPILER).split(sep).join('/'),
+      brandThemeCompiler: relative(CORE_ROOT, DEFAULT_BRAND_THEME_COMPILER_ROOT).split(sep).join('/'),
       familyInventory: relative(CORE_ROOT, DEFAULT_FAMILY_INVENTORY).split(sep).join('/'),
       evidenceContract: relative(CORE_ROOT, DEFAULT_EVIDENCE_CONTRACT).split(sep).join('/'),
       ciGatesManifest: relative(CORE_ROOT, DEFAULT_CI_GATES_MANIFEST).split(sep).join('/'),

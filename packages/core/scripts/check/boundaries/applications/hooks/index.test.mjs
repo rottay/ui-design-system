@@ -53,7 +53,12 @@ const CHROME_ANCHOR = ANCHORS.tenantChannel.path;
 // DIRECTORY. A planted tree therefore writes the emitter as an owner inside it,
 // exactly as the real tree does.
 const BRAND_THEME_EMITTER_ANCHOR = `${ANCHORS.brandThemeEmitter.path}/index.ts`;
-const APPEARANCE_EMITTER_ANCHOR = ANCHORS.appearanceEmitter.path;
+// A SECOND owner inside the same directory anchor. The anchor list used to name
+// a separate appearance-compiler file here; that compiler is retired, and the
+// property under test never depended on it being a separate anchor -- it is
+// that a second compiler owner's emissions are tenant-owned, which is exactly
+// what one deriver per family makes routine.
+const SECOND_EMITTER_ANCHOR = `${ANCHORS.brandThemeEmitter.path}/runtime/derivation/probe/index.ts`;
 const APPEARANCE_POSTURE_EMITTER_ANCHOR = ANCHORS.appearancePostureEmitter.path;
 const THEME_CONTRACTS_ANCHOR = ANCHORS.themeContracts.path;
 // D-21 (b) gave the ownership graph a second root. A planted tree writes both,
@@ -392,8 +397,8 @@ function coreFixture() {
   );
   write(
     root,
-    APPEARANCE_EMITTER_ANCHOR,
-    `export function compileAppearance(vars, appearance) {\n` +
+    SECOND_EMITTER_ANCHOR,
+    `export function deriveProbe(vars, appearance) {\n` +
       `  vars["--ds-db-generated"] = appearance.primaryColor;\n` +
       `}\n`,
   );
@@ -458,7 +463,7 @@ test('the manifest derives tenant, foundation, internal, explicit-hook and unadj
   assert.equal(
     manifest.hookSet.has('--ds-db-generated'),
     false,
-    'DB appearance output must not be a hook',
+    'a second compiler owner\'s output must not be a hook',
   );
   assert.equal(manifest.hookSet.has('--ds-foundation-7'), false, 'root-declared must not be a hook');
 });

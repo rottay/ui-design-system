@@ -254,6 +254,26 @@ export const CI_GATES = Object.freeze([
     drillId: 'cascade-wiring-ratchet-drill',
     ratchet: 'scripts/check/engine/cascade-wiring/baseline/index.json',
   },
+  // El gemelo del contador de arriba: aquel pregunta si un canal tiene CAMINO a
+  // una raiz, este si el nombre que la pintura lee EXISTE. Un `var(--ds-x,
+  // LITERAL)` sin productor resuelve siempre al literal, asi que el canal
+  // parece personalizable y no lo es -- y ningun token nuevo lo mueve. Ambos
+  // leen el mismo conjunto de productores, importado, nunca medido dos veces.
+  {
+    id: 'read-without-producer-ratchet-drill',
+    run: ['node', '--test', 'scripts/check/engine/read-without-producer/index.test.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillFor: ['read-without-producer-ratchet'],
+  },
+  {
+    id: 'read-without-producer-ratchet',
+    run: ['node', 'scripts/check/engine/read-without-producer/index.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillId: 'read-without-producer-ratchet-drill',
+    ratchet: 'scripts/check/engine/read-without-producer/baseline/index.json',
+  },
   // The layer statement in facade/entrypoints/base/index.css is a claim about
   // how a browser sorts the shipped bundle; only a browser settles it. The
   // probe's `--self-check` leg re-runs the same three subjects against the

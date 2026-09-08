@@ -10,6 +10,7 @@ import type {
   BrandPalette,
   BrandPaletteAliases,
 } from "@/foundation/contracts/composition/tenants/themes";
+import { parseHex } from "@/foundation/kernel/color/contrast";
 import { deriveInteractionFloor } from "@/infrastructure/compilers/kernel/foundation/css/color-math/interaction-floor";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 
@@ -119,21 +120,9 @@ const PALETTE_ALIAS_CHANNELS = {
  */
 function seedRgbTriplet(seed: string | undefined): string | undefined {
   if (typeof seed !== "string") return undefined;
-  const hex = seed.trim();
-  const match = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex);
-  if (!match) return undefined;
-  const digits = match[1];
-  const full =
-    digits.length === 3
-      ? digits
-          .split("")
-          .map((d) => d + d)
-          .join("")
-      : digits;
-  const r = Number.parseInt(full.slice(0, 2), 16);
-  const g = Number.parseInt(full.slice(2, 4), 16);
-  const b = Number.parseInt(full.slice(4, 6), 16);
-  return `${r}, ${g}, ${b}`;
+  const rgb = parseHex(seed);
+  if (!rgb) return undefined;
+  return `${rgb.r}, ${rgb.g}, ${rgb.b}`;
 }
 
 function setSeedRgbVariables(

@@ -47,6 +47,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { collectSkinFiles } from '../../../libraries/engine/skins/files/index.mjs';
+import { collectChannelProducers } from '../../../libraries/tokens/producers/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const BASELINE_PATH = join(HERE, 'baseline/index.json');
@@ -87,10 +88,12 @@ export function* varCalls(text) {
 const DS_IN_FALLBACK = /var\(\s*(--ds-[a-zA-Z0-9_-]+)/g;
 
 /** La clasificacion completa, en una pasada sobre el corpus. */
-export function classifyCascadeWiring(files = collectSkinFiles()) {
+export function classifyCascadeWiring(files = collectSkinFiles(), producers) {
+  const producerSet = producers ?? collectChannelProducers().producers;
   const read = new Set();
   const fallbackTargets = new Set();
   const reachesRoot = new Set();
+  const fallbackEdges = new Map();
 
   for (const file of files) {
     const text = stripComments(readFileSync(file, 'utf8'));
@@ -101,6 +104,9 @@ export function classifyCascadeWiring(files = collectSkinFiles()) {
       let found = false;
       for (const target of call.fallback.matchAll(DS_IN_FALLBACK)) {
         fallbackTargets.add(target[1]);
+        const edges = fallbackEdges.get(call.name) ?? new Set();
+        edges.add(target[1]);
+        fallbackEdges.set(call.name, edges);
         found = true;
       }
       if (found) reachesRoot.add(call.name);
@@ -111,17 +117,52 @@ export function classifyCascadeWiring(files = collectSkinFiles()) {
   const denominator = [...read].filter((name) => !fallbackTargets.has(name)).sort();
   // Regla (b): cableado = algun sitio de lectura alcanza raiz.
   const debt = denominator.filter((name) => !reachesRoot.has(name));
+  const transitivelyUnwired = denominator.filter(
+    (name) => !reachesTerminalRoot(name, fallbackEdges, producerSet),
+  );
 
   return {
     files: files.length,
     read: read.size,
     roots: fallbackTargets.size,
     fallbackTargets,
+    fallbackEdges,
     reachesRoot,
     denominator,
     wired: denominator.length - debt.length,
     debt,
+    transitivelyUnwired,
   };
+}
+
+/**
+ * "Cableado" NO ES TRANSITIVO, y por eso `debt` es una COTA INFERIOR.
+ *
+ * La regla (b) pregunta si el fallback de un nombre menciona ALGUNA raiz. No
+ * pregunta si esa raiz EXISTE: `var(--ds-a, var(--ds-b))` cuenta como cableado
+ * aunque `--ds-b` no lo escriba nadie y la cadena muera ahi. Esta funcion la
+ * sigue hasta el final y responde la pregunta completa.
+ *
+ * TERMINAL = un nombre CON PRODUCTOR (`libraries/tokens/producers`): declarado
+ * en el CSS autorado o emitido por un derivador de familia. Ese es el punto
+ * donde la cascada aterriza en un valor real en vez de en otro nombre vacio.
+ * El propio nombre de partida no cuenta como su terminal: se empieza por sus
+ * aristas, nunca por el.
+ *
+ * A prueba de ciclos por conjunto de visitados: `--ds-a -> --ds-b -> --ds-a` no
+ * alcanza terminal y se declara deuda, que es lo correcto -- un ciclo no pinta.
+ */
+export function reachesTerminalRoot(name, edges, producers) {
+  const seen = new Set([name]);
+  const queue = [...(edges.get(name) ?? [])];
+  while (queue.length > 0) {
+    const next = queue.shift();
+    if (seen.has(next)) continue;
+    seen.add(next);
+    if (producers.has(next)) return true;
+    for (const target of edges.get(next) ?? []) queue.push(target);
+  }
+  return false;
 }
 
 /** Los dos invariantes de forma. Un clasificador roto no puede pasar por sano. */
@@ -146,6 +187,23 @@ export function shapeFailures(result) {
   }
   if (result.debt.length > result.denominator.length) {
     failures.push('shape: the debt set is larger than the denominator it comes from');
+  }
+  // Invariante del arma transitiva: un nombre sin NINGUN fallback a raiz
+  // tampoco puede alcanzar un terminal, asi que la deuda de la regla (b) es un
+  // SUBCONJUNTO de la transitiva. Si esto se rompe, el walk transitivo esta
+  // dando por buena una cadena que la regla (b) ya declaro rota.
+  const transitiveSet = new Set(result.transitivelyUnwired ?? []);
+  for (const name of result.debt) {
+    if (!transitiveSet.has(name)) {
+      failures.push(
+        `shape: ${name} is debt under rule (b) but is reported transitively wired -- the transitive walk cannot be laxer than the direct rule`,
+      );
+    }
+  }
+  for (const name of transitiveSet) {
+    if (!denominatorSet.has(name)) {
+      failures.push(`shape: ${name} is counted as transitively unwired but is not in the denominator`);
+    }
   }
   return { failures };
 }
@@ -183,6 +241,22 @@ export function collectFindings({ baselinePath = BASELINE_PATH, files } = {}) {
         '(decrease-only means the baseline follows the tree DOWN, never up)',
     );
   }
+  const pinnedTransitive = baseline.transitivelyUnwired;
+  if (typeof pinnedTransitive !== 'number') {
+    findings.push(
+      `baseline/index.json does not pin a numeric transitivelyUnwired (got ${JSON.stringify(pinnedTransitive ?? null)})`,
+    );
+  } else if (result.transitivelyUnwired.length > pinnedTransitive) {
+    findings.push(
+      `transitivelyUnwired GREW from ${pinnedTransitive} to ${result.transitivelyUnwired.length}: a fallback chain that used to land on a produced root now dies on a name nobody writes. ` +
+        'Give it a producer instead of raising the baseline',
+    );
+  } else if (result.transitivelyUnwired.length < pinnedTransitive) {
+    findings.push(
+      `transitivelyUnwired SHRANK from ${pinnedTransitive} to ${result.transitivelyUnwired.length} -- good news that still has to be written down: ` +
+        'lower `transitivelyUnwired` in scripts/check/engine/cascade-wiring/baseline/index.json',
+    );
+  }
   if (typeof baseline.denominator === 'number' && baseline.denominator !== result.denominator.length) {
     findings.push(
       `denominator moved from ${baseline.denominator} to ${result.denominator.length}; re-read the census ` +
@@ -204,6 +278,11 @@ function main() {
     `cascade-wiring-ratchet OK -- ${result.debt.length} names still unwired of ${result.denominator.length} ` +
       `(${result.wired} reach a root; ${result.roots} roots/ramps excluded from the denominator; ` +
       `${result.files} skin files)`,
+  );
+  console.log(
+    `  transitive: ${result.transitivelyUnwired.length} of ${result.denominator.length} names never reach a PRODUCED root ` +
+      `(the direct count above is a lower bound; the gap is ${result.transitivelyUnwired.length - result.debt.length} ` +
+      'names whose fallback chain dies on a name nobody writes)',
   );
 }
 

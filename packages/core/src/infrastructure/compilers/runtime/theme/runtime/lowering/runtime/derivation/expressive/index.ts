@@ -1,14 +1,15 @@
 /**
- * @fileoverview Expressive field defaults for a tenant's general appearance.
+ * @fileoverview The expressive-profile family: profile channels and the field
+ * defaults a profile fills in before any authored value.
  *
- * The appearance-to-CSS lowering that used to live here is gone: every
- * transport now resolves a total Theme and lowers it once through
- * `compileTheme`. What remains is the field-default expansion the DB
- * composition compiler applies before that lowering.
+ * @module Compilers/Theme/Lowering/Runtime/derivation/expressive
+ * @category Compilers
+ * @package @rottay/design-system
  */
 
 import type { TenantAppearanceGeneral } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveFieldDefaultSet } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import type { FamilyDeriver } from "../../../foundation/contract";
 
 /** Envelope ranges a caller may clamp expressive field defaults against. */
 export interface ExpressiveClampRanges {
@@ -18,7 +19,7 @@ export interface ExpressiveClampRanges {
 }
 
 /**
- * Apply expressive-profile FIELD defaults to the general appearance —
+ * Apply expressive-profile FIELD defaults to the general appearance --
  * only where the tenant left the field unset, so authored dials always win.
  *
  * Density, motion and the pairing/silhouette/posture enums ride fields
@@ -99,3 +100,43 @@ export function withExpressiveFieldDefaults(
   }
   return next ?? general;
 }
+
+/**
+ * The channels a selected profile fills that no other family claims.
+ *
+ * Rank `profile`: the weakest statement in the merge. Every `--ds-type-<role>`
+ * facet it writes is restated by the type-roles family one rank up, and every
+ * material texture by the surfaces family, so a profile only ever paints a
+ * channel nobody else claimed for this theme.
+ */
+export const expressiveDeriver: FamilyDeriver = {
+  family: "expressive",
+  rank: "profile",
+  consumes: ["expressive.*"],
+  produces: [
+    "--ds-divider-style",
+    "--ds-divider-width",
+    "--ds-edge-emphasis-width",
+    "--ds-edge-hairline-width",
+    "--ds-edge-standard-style",
+    "--ds-edge-standard-width",
+    "--ds-elevation-lift-strength",
+    "--ds-material-canvas-texture",
+    "--ds-material-card-highlight",
+    "--ds-material-card-texture",
+    "--ds-material-overlay-texture",
+    "--ds-material-panel-texture",
+    "--ds-material-raised-highlight",
+    "--ds-menu-group-text-transform",
+    "--ds-page-header-bg",
+    "--ds-page-header-eyebrow-text-transform",
+    "--ds-select-group-text-transform",
+    "--ds-shadow-ambient-strength",
+    "--ds-shadow-key-strength",
+    "--ds-shadow-tint",
+    "--ds-table-header-letter-spacing",
+    "--ds-table-header-text-transform",
+    "--ds-type-*",
+  ],
+  derive: (context) => context.expressive.expansion.variables,
+};

@@ -1,17 +1,15 @@
 /**
- * @fileoverview Shared color math utilities.
+ * @fileoverview CSS-value hygiene and the surface-lightness question.
  *
- * Canonical implementation of color manipulation used by both the runtime
- * ThemeProvider (inline CSS variable injection) and the static generator
- * (CSS file generation). Previously duplicated in both locations.
- *
- * Consolidation target for R2.
+ * The colorimetry itself is NOT here. `foundation/kernel/color` is the one
+ * color owner: this module re-exports its hex predicate and parses through its
+ * parser, so a compiler and an accessibility check can never disagree about
+ * whether a string is a hex colour or about what its channels are.
  */
 
-/** Validate that a color is a short or full hex code. */
-export function isHexColor(value: string): boolean {
-  return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
-}
+import { isHexColor, parseHex } from '@/foundation/kernel/color/contrast';
+
+export { isHexColor };
 
 /**
  * Validate that a value is a valid CSS color.
@@ -63,12 +61,9 @@ function clampChannel(value: number): number {
   return Math.max(0, Math.min(255, Math.round(value)));
 }
 
-/** Parse hex -> RGB. Returns null for non-hex inputs. */
+/** Parse hex -> RGB, through the one color owner. Null for non-hex inputs. */
 export function hexToRgb(value: string): { r: number; g: number; b: number } | null {
-  const normalized = normalizeHexColor(value);
-  if (!isHexColor(normalized)) return null;
-  const n = Number.parseInt(normalized.slice(1), 16);
-  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  return parseHex(value);
 }
 
 /** RGB -> 6-digit hex string. */

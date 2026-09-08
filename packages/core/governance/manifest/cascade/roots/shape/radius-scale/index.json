@@ -1379,11 +1379,10 @@
       "mechanism": "la postura pro co-suministra radiusScale como DEFAULT de perfil (sharp .85 / soft 1.15 / rounded 1.25 / pill-accented 1.1)",
       "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
       "precedence": "authored-field-wins",
-      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts",
       "precedenceNote": "R7: orden de escritura ejecutable del compilador (brand-theme:758-772, comentario verbatim: the expressive profile already wrote its defaults above; these authored fields intentionally overwrite only the channels they own). Corroboracion secundaria: capabilities/index.ts:365.",
       "line": 189,
-      "mechanismLine": 189,
-      "precedenceLine": 758
+      "mechanismLine": 189
     }
   ],
   "terminalReachLaw": "state = alcance en la cascada. Mi deteccion es de UN SALTO en sitio de lectura (var(--_ds-X, var(--ds-Y)) con Y en {scale,sm,md,lg,xl,input}): da 1 LIVE (datepicker-trigger-radius via radius-input) y es COTA INFERIOR. La verdad de campo del adjudicador (grafo transitivo de 3883 declaraciones: 102 canales/113 aristas desde la raiz, 5 sockets) es la metrica autoritativa y pertenece a la capa GENERADA (cascade-extract/materialized, ley R1: los hechos se generan). Este archivo autorado NO mantiene el alcance transitivo a mano; el extractor lo emite y el diff con estas prescripciones ES el backlog de fase 3."

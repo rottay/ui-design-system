@@ -3,6 +3,8 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { contrastRatio } from '@/foundation/kernel/color/contrast';
+
 import type { ChartPersonalityTokens } from '@/foundation/contracts';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
@@ -33,33 +35,6 @@ const REPRESENTATIVE_SURFACES = Object.freeze({
   }),
 });
 
-function relativeLuminance(hex: string): number {
-  const channels = hex
-    .slice(1)
-    .match(/.{2}/g)
-    ?.map((channel) => Number.parseInt(channel, 16) / 255);
-
-  if (!channels || channels.length !== 3) {
-    throw new Error(`Expected a six-digit hex color, received: ${hex}`);
-  }
-
-  const [red, green, blue] = channels.map((channel) => (
-    channel <= 0.04045
-      ? channel / 12.92
-      : ((channel + 0.055) / 1.055) ** 2.4
-  ));
-
-  return (0.2126 * red) + (0.7152 * green) + (0.0722 * blue);
-}
-
-function contrastRatio(foreground: string, background: string): number {
-  const foregroundLuminance = relativeLuminance(foreground);
-  const backgroundLuminance = relativeLuminance(background);
-  const lighter = Math.max(foregroundLuminance, backgroundLuminance);
-  const darker = Math.min(foregroundLuminance, backgroundLuminance);
-
-  return (lighter + 0.05) / (darker + 0.05);
-}
 
 function readModeColors(scheme: typeof SCHEMES[number]): { light: string[]; dark: string[] } {
   const light: string[] = [];

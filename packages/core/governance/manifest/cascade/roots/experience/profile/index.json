@@ -8,7 +8,7 @@
     "emission": [
       {
         "kind": "compiler-emit",
-        "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+        "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.ts",
         "note": "marcador de procedencia (cero lectores css POR DISEÑO); la realidad del control es el VECTOR: expansion.variables + fieldDefaults via appearancePostureToVariables (brand-theme:758-772)"
       }
     ]
@@ -48,8 +48,7 @@
       "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
       "mechanismLine": 144,
       "precedence": "authored-field-wins",
-      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
-      "precedenceLine": 760,
+      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
       "precedenceNote": "perfil :760, autorados :770+; comentario :752-756 verbatim",
       "note": "ASIMETRIA DELIBERADA - NO HOMOGENEIZAR: display va envuelto en var(--ds-letter-spacing-display, literal) - el perfil CEDE por fallback css; heading va literal pelado - el perfil ESCRIBE y decide el orden del compilador. expansion:86-89 declara que esa divergencia es exactamente lo que mide el acid test. Ambos llegan a authored-wins por mecanismos distintos."
     }

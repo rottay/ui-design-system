@@ -788,7 +788,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       status: 'active',
       evidence: {
         consumer:
-          'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
+          'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts',
         symbol: 'vars["--ds-color-success"]',
       },
       scope: 'tenant',

@@ -8,7 +8,7 @@
     "emission": [
       {
         "kind": "compiler-emit",
-        "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+        "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts",
         "clampSite": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
         "note": "emision con clamp INLINE a TENANT_THEME_RHYTHM_SCALE_BOUNDS {0.8,1.25} (brand-theme:745-750); doctrina verbatim del contrato: \"a value outside this range is clamped, never honoured\" (tenant-theme:520-524); sin fila T3 numerica - el tenant elige el enum"
       }

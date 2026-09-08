@@ -2,6 +2,8 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import { contrastRatio } from '@/foundation/kernel/color/contrast';
+
 const SKIN = readFileSync(
   resolve(
     __dirname,
@@ -29,30 +31,6 @@ const DEFAULT_THEME = readFileSync(
  * 2.4.11 (focus appearance) require the focus indicator to reach >= 3:1
  * against the adjacent surface.
  */
-function channelLuminance(channel: number): number {
-  const s = channel / 255;
-  return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-}
-
-function hexLuminance(hex: string): number {
-  const h = hex.replace('#', '');
-  const r = parseInt(h.slice(0, 2), 16);
-  const g = parseInt(h.slice(2, 4), 16);
-  const b = parseInt(h.slice(4, 6), 16);
-  return (
-    0.2126 * channelLuminance(r) +
-    0.7152 * channelLuminance(g) +
-    0.0722 * channelLuminance(b)
-  );
-}
-
-function contrastRatio(a: string, b: string): number {
-  const l1 = hexLuminance(a);
-  const l2 = hexLuminance(b);
-  const [hi, lo] = l1 >= l2 ? [l1, l2] : [l2, l1];
-  return (hi + 0.05) / (lo + 0.05);
-}
-
 /**
  * Ring color vs page ground per first-party family (W8). The ring color is
  * each family's `--ds-focus-ring-color` resolved against its own default

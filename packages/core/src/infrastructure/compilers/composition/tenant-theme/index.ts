@@ -63,7 +63,7 @@ import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
-import { withExpressiveFieldDefaults } from "../../kernel/runtime/appearance";
+import { withExpressiveFieldDefaults } from "../../runtime/theme/runtime/lowering/runtime/derivation/expressive";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
 import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type { EngineVisualDeclaration } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";

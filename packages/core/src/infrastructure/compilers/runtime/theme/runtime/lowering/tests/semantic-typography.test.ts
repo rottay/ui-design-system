@@ -124,10 +124,21 @@ const FIRST_PARTY = [
 // byte for byte (rottay 16d10f6d…, bithire cdff418d…, evnto 4a6019fb…). Every
 // other member of the surface -- cssVariables, cssString, colorScheme,
 // modeBlocks, personality, tokenOverrides and both profile ids -- is identical.
+//
+// DERIVATION re-anchor, all three, ORDER-ONLY and measured rather than
+// asserted. The channel assembly is now one deriver per family behind a ranked
+// merge, so a family emits its whole block in one place instead of in the two
+// or three positions its statements used to be spread across. Across the edit
+// the emitted KEYSET is identical (rottay 1196, bithire 1233, evnto 475 keys,
+// none added, none removed), every VALUE is identical (0 diffs on all three,
+// base block and every mode block), and the sorted `cssString` line multiset is
+// identical for all three. The only component of the digest that moved is
+// `cssString`, and only in the order its lines appear -- `stable()` sorts
+// `cssVariables`, so the value map contributes nothing to the move.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "861c1a987d7e1ca8106797a7ef05fabb1c2280904b21f8939a1a32b586837ece",
-  bithire: "1bd8bc6809e9d4b20232a195dddc8300833d33b1e444cc39d9544b48362eec83",
-  evnto: "859ae1d3a42a7769affaa9fb087ecb3c06417ccd0f3e6f6fd13c3d0b879a8301",
+  rottay: "ec07f45c956111a3271d34ddc5ed04ee00d5f66561b6b1c8507855b844a5bae4",
+  bithire: "93e9c7b51fd9efa61f15efde80bc65ea4638af5467c38768054356afc90f1954",
+  evnto: "497d853e84caea374a7ad208c838b8109730bc1add5faeeb941e5b383be3eac3",
 };
 
 /**

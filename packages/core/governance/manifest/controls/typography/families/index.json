@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "7c2e010775a07b9db713d711d6b67bcedb045f4878742bfbaba2f0b8b8d019ed"
+    "registryDigest": "8e7257afae81b3a7d8c9d9e3868f5ad31897e1dfc7406d41b1ef854765994127"
   },
   "title": "Explicit font stacks",
   "valueType": "font-stack",
@@ -76,7 +76,7 @@
     "monoDisplayNote": "mono and display carry NO DB door at all (TenantAppearanceGeneral.typography only has fontFamilyBase/fontFamilyHeading, themes/index.ts:3164-3166), and unlike base/heading's identity stops they are NOT declared as `normalizedStops` entries at all: `assertStopDiscrimination` (runtime/ingress/index.mjs:2009-2049, the instrument, frozen for this packet) iterates EVERY stop in this array against EACH requested arm unconditionally, and a plain (non-identity) stop whose role has zero members on an arm's ingress SET throws a generic Error from `resolveIngressMember` that is not on the closed, publishable STOP_EXCLUSION_CLASSES list (verified this packet: attempting `mono-value`/`display-value` as regular stops crashes discrimination on the DB arm for the WHOLE control, including base/heading's own receipted scenarios, since the guard sweeps the full stop set before measuring the one requested). `IDENTITY_NEEDS_A_BASELINE` does not cover this either -- that class is for 'the baseline authors nothing here', not 'this arm has no member for this role at all'. Fixing the guard would touch the instrument, out of this packet's closed write-set (the font-stack branch is Fase B's, frozen). Verified instead by a direct, out-of-band compile (dist/server.js, compileTheme on a rottay clone with fontFamilyMono/fontFamilyDisplay authored): `--ds-font-family-mono` emits the value VERBATIM, no Arabic-safe tail (brand-theme/index.ts:894, `if (ty.fontFamilyMono) vars[...] = ty.fontFamilyMono` -- unlike base/heading/display, no `withArabicSafeFallback` wrap); `--ds-font-family-display` DOES get the tail (`Outfit, \"Noto Sans Arabic\", sans-serif`), matching base/heading's own asymmetry. Documented as a compiled fact, same class as an identity stop's own law text, not as a receipted or CLI-run stop.",
     "sourceBindings": [
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
       "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json"

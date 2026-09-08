@@ -28,6 +28,7 @@ import {
   BASELINE_PATH,
   classifyCascadeWiring,
   collectFindings,
+  reachesTerminalRoot,
   shapeFailures,
   varCalls,
 } from './index.mjs';
@@ -111,6 +112,80 @@ test('a functional fallback wrapped in color-mix still counts as wired (rule b)'
         `un fallback que alcanza raiz dentro de color-mix() esta cableado; got ${JSON.stringify(findings)}`,
       );
     },
+  );
+});
+
+test('the pinned transitivelyUnwired is the measured one, and never below the direct debt', () => {
+  const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
+  const result = classifyCascadeWiring();
+  assert.equal(result.transitivelyUnwired.length, baseline.transitivelyUnwired);
+  assert.ok(
+    result.transitivelyUnwired.length >= result.debt.length,
+    'la cota superior no puede quedar por debajo de la inferior',
+  );
+});
+
+test('TRANSITIVO: una cadena que muere en un nombre sin productor NO esta cableada', () => {
+  // El defecto que la regla (b) no ve: `--ds-a` tiene fallback, asi que la
+  // regla (b) lo declara cableado; pero el fallback nombra `--ds-b`, que no lo
+  // escribe nadie, y la cadena muere ahi.
+  withPlantedCss(
+    '.ds-x { color: var(--ds-cascade-transitive-drill-a, var(--ds-cascade-transitive-drill-b)); }\n',
+    (files) => {
+      const result = classifyCascadeWiring(files);
+      assert.ok(
+        result.reachesRoot.has('--ds-cascade-transitive-drill-a'),
+        'la regla (b) tiene que declararlo cableado: es exactamente el punto ciego que el arma transitiva cubre',
+      );
+      assert.ok(
+        result.transitivelyUnwired.includes('--ds-cascade-transitive-drill-a'),
+        'la cadena muere en un nombre sin productor, asi que el arma transitiva tiene que contarlo',
+      );
+      expectFinding(
+        collectFindings({ files }),
+        'transitivelyUnwired GREW from',
+        'una cadena rota tiene que subir el contador transitivo y enrojecer',
+      );
+    },
+  );
+});
+
+test('TRANSITIVO: la MISMA cadena que aterriza en un nombre con productor si esta cableada', () => {
+  // El control. `--ds-color-primary` esta declarado en el CSS autorado, asi que
+  // la cadena de dos saltos llega a un valor real y no es deuda.
+  withPlantedCss(
+    '.ds-x { color: var(--ds-cascade-transitive-drill-a, var(--ds-cascade-transitive-drill-b)); }\n' +
+      '.ds-y { color: var(--ds-cascade-transitive-drill-b, var(--ds-color-primary)); }\n',
+    (files) => {
+      const result = classifyCascadeWiring(files);
+      assert.ok(
+        !result.transitivelyUnwired.includes('--ds-cascade-transitive-drill-a'),
+        'dos saltos hasta una raiz producida es una cadena entera, no deuda',
+      );
+      assert.deepEqual(
+        collectFindings({ files }).filter((finding) => finding.includes('transitivelyUnwired GREW')),
+        [],
+        'cablear bien no puede subir el contador transitivo',
+      );
+    },
+  );
+});
+
+test('TRANSITIVO: un ciclo de fallbacks termina el walk y no cuenta como cableado', () => {
+  // Se comprueba sobre el walk directamente y no plantando CSS, porque la regla
+  // (a) saca del denominador a los dos nombres del ciclo -- ambos son destino de
+  // fallback del otro. Lo que hay que pinnear es el walk: que TERMINE y que no
+  // declare cableada una cadena que no aterriza en ningun valor.
+  const edges = new Map([
+    ['--ds-cycle-a', new Set(['--ds-cycle-b'])],
+    ['--ds-cycle-b', new Set(['--ds-cycle-a'])],
+  ]);
+  assert.equal(reachesTerminalRoot('--ds-cycle-a', edges, new Set()), false);
+  // El control: el mismo ciclo con una salida a un nombre con productor SI llega.
+  edges.set('--ds-cycle-b', new Set(['--ds-cycle-a', '--ds-color-primary']));
+  assert.equal(
+    reachesTerminalRoot('--ds-cycle-a', edges, new Set(['--ds-color-primary'])),
+    true,
   );
 });
 

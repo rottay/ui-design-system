@@ -2,6 +2,12 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import {
+  ratioFromLuminance as contrastRatio,
+  relativeLuminance,
+  relativeLuminanceOf,
+} from '@/foundation/kernel/color/contrast';
+
 const SKIN = readFileSync(
   resolve(
     __dirname,
@@ -55,31 +61,18 @@ describe('Badge modern skin resilience', () => {
  * on solid chromatic badges that pairing collapses toward 1:1). The channel
  * now pairs the variant's dark soft tone with a light raised chip.
  */
-function channelLuminance(channel: number): number {
-  const s = channel / 255;
-  return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-}
-
+/**
+ * The colour math is the design system's one owner. `luminanceOf` stays as a
+ * local ADAPTER -- this file measures colour-mix results, whose channels are a
+ * weighted mean with no hex of its own -- but neither the transfer curve nor
+ * the ratio is restated here.
+ */
 function luminanceOf(r: number, g: number, b: number): number {
-  return (
-    0.2126 * channelLuminance(r) +
-    0.7152 * channelLuminance(g) +
-    0.0722 * channelLuminance(b)
-  );
+  return relativeLuminanceOf({ r, g, b });
 }
 
 function hexLuminance(hex: string): number {
-  const h = hex.replace('#', '');
-  return luminanceOf(
-    parseInt(h.slice(0, 2), 16),
-    parseInt(h.slice(2, 4), 16),
-    parseInt(h.slice(4, 6), 16)
-  );
-}
-
-function contrastRatio(l1: number, l2: number): number {
-  const [hi, lo] = l1 >= l2 ? [l1, l2] : [l2, l1];
-  return (hi + 0.05) / (lo + 0.05);
+  return relativeLuminance(hex);
 }
 
 /**

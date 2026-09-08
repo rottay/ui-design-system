@@ -3,6 +3,8 @@ import { join } from 'node:path';
 
 import React from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
+
+import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
@@ -11,23 +13,6 @@ import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/thema
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import CalendarModern from '../engines/modern';
-
-// --- WCAG helpers for the contrast measurements ----------------------------
-
-function relativeLuminance(hex: string): number {
-  const c = hex.replace('#', '');
-  const f = (i: number) => {
-    const v = parseInt(c.slice(i, i + 2), 16) / 255;
-    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-  };
-  return 0.2126 * f(0) + 0.7152 * f(2) + 0.0722 * f(4);
-}
-
-function contrastRatio(a: string, b: string): number {
-  const x = relativeLuminance(a);
-  const y = relativeLuminance(b);
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-}
 
 // The modern skin is the single paint owner for this engine. These assertions
 // pin the Pass-1 ownership contract: header-control geometry and the

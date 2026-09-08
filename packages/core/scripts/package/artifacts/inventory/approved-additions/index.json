@@ -112,6 +112,234 @@
     {
       "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/tier/index.js",
       "reason": "WO-CAT-03: admission tier station -- the plan/decision comparison that makes tier decide which decisions a tenant may move."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contract/index.cjs",
+      "reason": "WO-DER-01: the FamilyDeriver contract -- the merge-rank lattice, the LoweringContext every family reads and the channel-ownership tables -- consumed by every deriver and by the pipeline."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contract/index.d.ts",
+      "reason": "WO-DER-01: the FamilyDeriver contract -- the merge-rank lattice, the LoweringContext every family reads and the channel-ownership tables -- consumed by every deriver and by the pipeline."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contract/index.js",
+      "reason": "WO-DER-01: the FamilyDeriver contract -- the merge-rank lattice, the LoweringContext every family reads and the channel-ownership tables -- consumed by every deriver and by the pipeline."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.cjs",
+      "reason": "WO-DER-01: the radius dial a block resolves once, so the chrome emitter and the surfaces family divide radius operands by the same number instead of each re-deriving it."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.d.ts",
+      "reason": "WO-DER-01: the radius dial a block resolves once, so the chrome emitter and the surfaces family divide radius operands by the same number instead of each re-deriving it."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.js",
+      "reason": "WO-DER-01: the radius dial a block resolves once, so the chrome emitter and the surfaces family divide radius operands by the same number instead of each re-deriving it."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/expressive/index.cjs",
+      "reason": "WO-DER-01: the ONE expressive expansion of the lowering; it used to run four times inside the compile with three different version policies."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/expressive/index.d.ts",
+      "reason": "WO-DER-01: the ONE expressive expansion of the lowering; it used to run four times inside the compile with three different version policies."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/expressive/index.js",
+      "reason": "WO-DER-01: the ONE expressive expansion of the lowering; it used to run four times inside the compile with three different version policies."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/pipeline/index.cjs",
+      "reason": "WO-DER-01: the single orchestrator -- it builds the lowering context once, runs every family deriver and resolves the channels by rank. Replaces the 489-line second orchestrator that shipped at lowering/runtime/variables."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/pipeline/index.d.ts",
+      "reason": "WO-DER-01: the single orchestrator -- it builds the lowering context once, runs every family deriver and resolves the channels by rank. Replaces the 489-line second orchestrator that shipped at lowering/runtime/variables."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/pipeline/index.js",
+      "reason": "WO-DER-01: the single orchestrator -- it builds the lowering context once, runs every family deriver and resolves the channels by rank. Replaces the 489-line second orchestrator that shipped at lowering/runtime/variables."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/index.cjs",
+      "reason": "WO-DER-01: the family registry the one orchestrator runs, in emission order."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/index.d.ts",
+      "reason": "WO-DER-01: the family registry the one orchestrator runs, in emission order."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/index.js",
+      "reason": "WO-DER-01: the family registry the one orchestrator runs, in emission order."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.cjs",
+      "reason": "WO-DER-01: the scale-axis family (type/radius/density/rhythm dials and the bounded posture channels)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.d.ts",
+      "reason": "WO-DER-01: the scale-axis family (type/radius/density/rhythm dials and the bounded posture channels)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.js",
+      "reason": "WO-DER-01: the scale-axis family (type/radius/density/rhythm dials and the bounded posture channels)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/charts/index.cjs",
+      "reason": "WO-DER-01: the chart family (the derived series palette and the ten authored category slots)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/charts/index.d.ts",
+      "reason": "WO-DER-01: the chart family (the derived series palette and the ten authored category slots)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/charts/index.js",
+      "reason": "WO-DER-01: the chart family (the derived series palette and the ten authored category slots)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/index.cjs",
+      "reason": "WO-DER-01: the chrome family, the single producer at rank vertical-override."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/index.d.ts",
+      "reason": "WO-DER-01: the chrome family, the single producer at rank vertical-override."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/index.js",
+      "reason": "WO-DER-01: the chrome family, the single producer at rank vertical-override."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/expressive/index.cjs",
+      "reason": "WO-DER-01: the expressive-profile family, plus the field-default expansion the DB composition compiler applies before the lowering (moved out of the retired kernel/runtime/appearance)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/expressive/index.d.ts",
+      "reason": "WO-DER-01: the expressive-profile family, plus the field-default expansion the DB composition compiler applies before the lowering (moved out of the retired kernel/runtime/appearance)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/expressive/index.js",
+      "reason": "WO-DER-01: the expressive-profile family, plus the field-default expansion the DB composition compiler applies before the lowering (moved out of the retired kernel/runtime/appearance)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.cjs",
+      "reason": "WO-DER-01: the motion family (the closed duration and easing vocabulary)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.d.ts",
+      "reason": "WO-DER-01: the motion family (the closed duration and easing vocabulary)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.js",
+      "reason": "WO-DER-01: the motion family (the closed duration and easing vocabulary)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.cjs",
+      "reason": "WO-DER-01: the palette family (seeds, semantics, readable inks and the two floors)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.d.ts",
+      "reason": "WO-DER-01: the palette family (seeds, semantics, readable inks and the two floors)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.js",
+      "reason": "WO-DER-01: the palette family (seeds, semantics, readable inks and the two floors)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/ramps/index.cjs",
+      "reason": "WO-DER-01: the ramp family (one perceptually-even ramp per seeded role)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/ramps/index.d.ts",
+      "reason": "WO-DER-01: the ramp family (one perceptually-even ramp per seeded role)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/ramps/index.js",
+      "reason": "WO-DER-01: the ramp family (one perceptually-even ramp per seeded role)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.cjs",
+      "reason": "WO-DER-01: the recipe family (the two governed selection provenance channels and the validated ids the compiled runtime payload states)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.d.ts",
+      "reason": "WO-DER-01: the recipe family (the two governed selection provenance channels and the validated ids the compiled runtime payload states)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.js",
+      "reason": "WO-DER-01: the recipe family (the two governed selection provenance channels and the validated ids the compiled runtime payload states)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/seeds/index.cjs",
+      "reason": "WO-DER-01: the seed family (the primary and status families a tenant seed owns, re-derived over the assembled block)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/seeds/index.d.ts",
+      "reason": "WO-DER-01: the seed family (the primary and status families a tenant seed owns, re-derived over the assembled block)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/seeds/index.js",
+      "reason": "WO-DER-01: the seed family (the primary and status families a tenant seed owns, re-derived over the assembled block)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.cjs",
+      "reason": "WO-DER-01: the surfaces family (materials, radius operands, shadows, the elevation ladder and the decorative layer)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.d.ts",
+      "reason": "WO-DER-01: the surfaces family (materials, radius operands, shadows, the elevation ladder and the decorative layer)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.js",
+      "reason": "WO-DER-01: the surfaces family (materials, radius operands, shadows, the elevation ladder and the decorative layer)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tenant/index.cjs",
+      "reason": "WO-DER-01: the tenant family (the white-label floor's own posture and type, at the rank that outranks every vertical statement)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tenant/index.d.ts",
+      "reason": "WO-DER-01: the tenant family (the white-label floor's own posture and type, at the rank that outranks every vertical statement)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tenant/index.js",
+      "reason": "WO-DER-01: the tenant family (the white-label floor's own posture and type, at the rank that outranks every vertical statement)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tint/index.cjs",
+      "reason": "WO-DER-01: the tint family (the closed five-step interaction scale)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tint/index.d.ts",
+      "reason": "WO-DER-01: the tint family (the closed five-step interaction scale)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tint/index.js",
+      "reason": "WO-DER-01: the tint family (the closed five-step interaction scale)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/type-roles/index.cjs",
+      "reason": "WO-DER-01: the type-role family (the named ramp and the nine semantic roles)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/type-roles/index.d.ts",
+      "reason": "WO-DER-01: the type-role family (the named ramp and the nine semantic roles)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/type-roles/index.js",
+      "reason": "WO-DER-01: the type-role family (the named ramp and the nine semantic roles)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.cjs",
+      "reason": "WO-DER-01: the type-family family (font families and the two metrics a governed pairing shares with an authored typography block)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.d.ts",
+      "reason": "WO-DER-01: the type-family family (font families and the two metrics a governed pairing shares with an authored typography block)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.js",
+      "reason": "WO-DER-01: the type-family family (font families and the two metrics a governed pairing shares with an authored typography block)."
     }
   ]
 }

@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "7c2e010775a07b9db713d711d6b67bcedb045f4878742bfbaba2f0b8b8d019ed"
+    "registryDigest": "8e7257afae81b3a7d8c9d9e3868f5ad31897e1dfc7406d41b1ef854765994127"
   },
   "title": "Icon posture profile",
   "valueType": "enum",

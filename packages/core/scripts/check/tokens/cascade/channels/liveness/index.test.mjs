@@ -21,7 +21,8 @@ import {
   findDuplicateTintScales,
   findDuplicateDirectAssignments,
   findTintDirectOverlap,
-  DEFAULT_BRAND_THEME_COMPILER,
+  DEFAULT_BRAND_THEME_COMPILER_ROOT,
+  collectBrandThemeCompilerSources,
   // corpus
   isScannableCorpusFile,
   collectSourceFiles,
@@ -231,9 +232,29 @@ test('defect 5: findTintDirectOverlap fires when a name is emitted by BOTH mecha
 });
 
 test('LIVE: the real brand-theme compiler registers zero duplicate tint-scale producers', () => {
-  const source = readFileSync(DEFAULT_BRAND_THEME_COMPILER, 'utf8');
-  const { callSites } = extractTintRampEmissions(source);
+  const callSites = collectBrandThemeCompilerSources().flatMap(
+    (source) => extractTintRampEmissions(source.text).callSites,
+  );
   assert.deepEqual(findDuplicateTintScales(callSites), []);
+});
+
+test('LIVE: every family deriver declares a rank, and none is unranked', () => {
+  const sources = collectBrandThemeCompilerSources();
+  assert.ok(sources.length > 0, 'the derivation registry resolved to zero families');
+  const unranked = sources.filter((source) => source.rank === 'unranked').map((s) => s.relativePath);
+  assert.deepEqual(unranked, [], `every family deriver must declare a merge rank, unranked: ${unranked.join(', ')}`);
+});
+
+test('LIVE: no channel is produced twice at one rank across the derivation registry', () => {
+  const directEmission = new Map();
+  for (const source of collectBrandThemeCompilerSources()) {
+    for (const [name, sites] of extractDirectVarsAssignments(source.text)) {
+      const merged = directEmission.get(name) ?? [];
+      for (const site of sites) merged.push({ ...site, file: source.relativePath, rank: source.rank });
+      directEmission.set(name, merged);
+    }
+  }
+  assert.deepEqual(findDuplicateDirectAssignments(directEmission), []);
 });
 
 /* ---------------------------------------------------------------------- */
@@ -430,10 +451,12 @@ test('LIVE: every real declared/emitted channel name resolves to a non-null sema
   const tenantThemeSource = readFileSync(DEFAULT_TENANT_THEME_CONTRACT, 'utf8');
   const { names: overrideNames } = extractOverrideTokens(tenantThemeSource);
   const { names: referenceNames } = extractReferenceTokens(tenantThemeSource, overrideNames);
-  const brandThemeSource = readFileSync(DEFAULT_BRAND_THEME_COMPILER, 'utf8');
-  const { names: tintNames } = extractTintRampEmissions(brandThemeSource);
-  const directNames = extractDirectVarsAssignments(brandThemeSource);
-  const universe = new Set([...overrideNames, ...referenceNames, ...tintNames, ...directNames.keys()]);
+  const sources = collectBrandThemeCompilerSources();
+  const tintNames = new Set(sources.flatMap((source) => [...extractTintRampEmissions(source.text).names]));
+  const directNames = new Set(
+    sources.flatMap((source) => [...extractDirectVarsAssignments(source.text).keys()]),
+  );
+  const universe = new Set([...overrideNames, ...referenceNames, ...tintNames, ...directNames]);
   const unmapped = [...universe].filter((name) => classifySemanticOwner(name) === null);
   assert.deepEqual(unmapped, [], `expected zero unmapped channel names against SEMANTIC_OWNER_RULES, found: ${unmapped.join(', ')}`);
 });
@@ -937,10 +960,12 @@ test('GREEN: runGate accepts a present, valid, fresh artifact and uses it as the
   const evidenceRoot = join(workDir, 'evidence');
   mkdirSync(join(evidenceRoot, 'R1'), { recursive: true });
   const tenantThemeContractPath = join(workDir, 'tenant-theme.ts');
-  const brandThemeCompilerPath = join(workDir, 'brand-theme.ts');
+  const brandThemeCompilerRoot = join(workDir, 'derivation');
+  const brandThemeCompilerPath = join(brandThemeCompilerRoot, 'fixture/index.ts');
   const familyInventoryPath = join(workDir, 'family-inventory/index.json');
   const cssRoot = join(workDir, 'css-root');
   mkdirSync(dirname(familyInventoryPath), { recursive: true });
+  mkdirSync(dirname(brandThemeCompilerPath), { recursive: true });
   mkdirSync(cssRoot, { recursive: true });
   writeFileSync(tenantThemeContractPath, FIXTURE_TENANT_THEME_SOURCE);
   writeFileSync(brandThemeCompilerPath, FIXTURE_BRAND_THEME_SOURCE);
@@ -950,7 +975,7 @@ test('GREEN: runGate accepts a present, valid, fresh artifact and uses it as the
 
   const gateArgs = {
     tenantThemeContractPath,
-    brandThemeCompilerPath,
+    brandThemeCompilerRoot,
     familyInventoryPath,
     cssRoots: [cssRoot],
     consumerRoots: [],

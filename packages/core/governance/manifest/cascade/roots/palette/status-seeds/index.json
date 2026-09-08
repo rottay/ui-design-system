@@ -8,7 +8,7 @@
     "emission": [
       {
         "kind": "compiler-emit",
-        "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+        "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts",
         "note": "semillas success/warning/error/info (brand-theme :846-851), cada una guardada por su propio truthy check sobre bt.palette.{tone}Color (por ejemplo :846 `if (bt.palette.successColor) vars[\"--ds-color-success\"] = ...`); --ds-color-success es el representante de las 4 hermanas del control palette.status-seeds. La semilla estatica (BrandPalette.{tone}Color) y la semilla DB (appearance.general.palette.status.{tone}) confluyen en BrandPalette ANTES de este emisor -- no hay un segundo emisor por transporte."
       }
     ]
@@ -22,8 +22,7 @@
         "kind": "ramp-derive",
         "formula": "deriveTenantColorRamps OKLCH; authored step wins"
       },
-      "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
-      "line": 354,
+      "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/ramps/index.ts",
       "state": "LIVE",
       "toIsPattern": false,
       "note": "representante de la rampa 50..900 derivada de la semilla success (misma funcion y misma ley que palette.seeds -> --ds-color-primary-500, rampRoleSpecs incluye success/warning/error/info junto a primary/secondary/accent en la misma iteracion, :316-326); la lista completa de pasos es de la capa generada"
@@ -35,8 +34,7 @@
         "kind": "ramp-derive",
         "formula": "deriveReadableInk: tinta legible derivada por contraste sobre la semilla hex"
       },
-      "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
-      "line": 859,
+      "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts",
       "state": "LIVE",
       "toIsPattern": false,
       "note": "ON_TONE_ROLES itera success/warning/error/info (foundation/css/color-math/readable-ink/index.ts:106) y emite --ds-color-on-{tone} (onToneChannel, :111-113) guardado por `if (seed && isHexColor(seed))` (:858); representante de las 4 hermanas -on-{tone}. primary queda deliberadamente fuera de ON_TONE_ROLES (su tinta es --ds-color-text-on-primary, ver readable-ink/index.ts:99-105) asi que este canal no colisiona con la cascada de palette.seeds"

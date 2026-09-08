@@ -807,13 +807,6 @@ export const ANCHORS = Object.freeze({
     describes:
       'canonical theme lowering (palette, typography, material, motion and chrome root channels)',
   }),
-  appearanceEmitter: Object.freeze({
-    id: 'appearance-emitter',
-    path: 'src/infrastructure/compilers/kernel/runtime/appearance/index.ts',
-    kind: 'file',
-    describes:
-      'canonical DB appearance compiler (tenant-authored runtime root channels)',
-  }),
   appearancePostureEmitter: Object.freeze({
     id: 'appearance-posture-emitter',
     path: 'src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts',
@@ -1326,7 +1319,6 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
 
   const chromePath = assertAnchorExists(coreRoot, ANCHORS.tenantChannel);
   const brandThemeEmitterPath = assertAnchorExists(coreRoot, ANCHORS.brandThemeEmitter);
-  const appearanceEmitterPath = assertAnchorExists(coreRoot, ANCHORS.appearanceEmitter);
   const appearancePostureEmitterPath = assertAnchorExists(
     coreRoot,
     ANCHORS.appearancePostureEmitter,
@@ -1391,7 +1383,6 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
     ...collectFiles(brandThemeEmitterPath, ['.ts']).filter((file) => (
       file.endsWith(`${sep}index.ts`) && !file.includes(`${sep}tests${sep}`)
     )),
-    appearanceEmitterPath,
     appearancePostureEmitterPath,
   ].map((file) => ({ file, text: readFileSync(file, 'utf8') }));
   const compilerGraph = parseEmitterMappings(compilerSources, registry);

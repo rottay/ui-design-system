@@ -238,14 +238,15 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     registry: 0,
     presentation: 1,
   }),
-  // The lowering's own floor is a ladder, not a bag of peers. `ground` is the
-  // canvas fact a ramp measures against, `personality` is the token/animation
-  // vocabulary the motion writer projects, and `shape` is the absent-leaf
-  // hygiene every writer applies before emitting. The three owners that read
-  // them sit one rank above; nothing on the floor reads a peer.
+  // The lowering's own floor is a ladder, not a bag of peers. `contract` is the
+  // vocabulary every family is written against, `ground` is the canvas fact a
+  // ramp measures against, and `shape` is the absent-leaf hygiene every writer
+  // applies before emitting. `expressive` and `dial` are the two facts the
+  // pipeline resolves once and hands to everyone; the owners that read them sit
+  // above, and nothing on a rank reads a peer.
   'infrastructure/compilers/runtime/theme/runtime/lowering/foundation': Object.freeze({
+    contract: 0,
     ground: 0,
-    personality: 0,
     shape: 0,
     intake: 0,
     materials: 0,
@@ -253,19 +254,25 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     tint: 0,
     'type-ramp': 0,
     'mode-overlay': 0,
-    chrome: 0,
-    floors: 0,
     sidebar: 0,
     seeds: 0,
+    expressive: 1,
+    dial: 1,
     ramps: 1,
-    motion: 1,
     typography: 1,
+    chrome: 2,
+    floors: 2,
+    personality: 2,
+    motion: 3,
   }),
   // A mode block is a delta over an already-compiled base block, so the
   // per-mode owner consumes the base channel assembly and never the reverse.
+  // The families derive, the pipeline merges them by rank, and a mode block is
+  // a delta over an already-merged base block. Nothing reads back up the ladder.
   'infrastructure/compilers/runtime/theme/runtime/lowering/runtime': Object.freeze({
-    variables: 0,
-    'mode-blocks': 1,
+    derivation: 0,
+    pipeline: 1,
+    'mode-blocks': 2,
   }),
   // Shade seeds and readable-ink measurement are the colour floor. The
   // interaction floor is the policy on top of them: it asks what a hover or

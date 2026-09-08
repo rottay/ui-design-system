@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "7c2e010775a07b9db713d711d6b67bcedb045f4878742bfbaba2f0b8b8d019ed"
+    "registryDigest": "8e7257afae81b3a7d8c9d9e3868f5ad31897e1dfc7406d41b1ef854765994127"
   },
   "title": "Radius scale dial",
   "valueType": "scale",
@@ -72,7 +72,7 @@
     "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "axisSeparationLaw": "DECISION (b) ejecutada: el eje geometry del preset expresivo (sharp .85 / soft 1.15 / rounded 1.25 / pill-accented 1.1, expansion:193-196) co-suministra buttonStyle+radiusScale como POSTURA COMPUESTA y puede aterrizar entre stops (puntos nombrados, no rejilla); los dos juegos de nombres son DISJUNTOS (stops: recto/sutil/suave/amplio; posturas: sharp/soft/rounded/pill-accented) y la precedencia raiz-explicita > composite resuelve toda coexistencia en el tema espejo",
     "sourceBindings": {
-      "staticLowerer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+      "staticLowerer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts",
       "dbLowerer": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "semanticAuthority": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "staticField": "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts#BrandSurfaces",

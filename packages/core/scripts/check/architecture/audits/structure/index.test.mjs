@@ -170,8 +170,8 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       presentation: 1,
     },
     'infrastructure/compilers/runtime/theme/runtime/lowering/foundation': {
+      contract: 0,
       ground: 0,
-      personality: 0,
       shape: 0,
       intake: 0,
       materials: 0,
@@ -179,17 +179,21 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       tint: 0,
       'type-ramp': 0,
       'mode-overlay': 0,
-      chrome: 0,
-      floors: 0,
       sidebar: 0,
       seeds: 0,
+      expressive: 1,
+      dial: 1,
       ramps: 1,
-      motion: 1,
       typography: 1,
+      chrome: 2,
+      floors: 2,
+      personality: 2,
+      motion: 3,
     },
     'infrastructure/compilers/runtime/theme/runtime/lowering/runtime': {
-      variables: 0,
-      'mode-blocks': 1,
+      derivation: 0,
+      pipeline: 1,
+      'mode-blocks': 2,
     },
     'infrastructure/compilers/kernel/foundation/css/color-math': {
       'palette-derivations': 0,
@@ -246,7 +250,7 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
   assert.equal(owners.length, 23);
-  assert.equal(rankedChildren.length, 83);
+  assert.equal(rankedChildren.length, 87);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(

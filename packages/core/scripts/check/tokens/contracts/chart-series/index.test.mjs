@@ -236,33 +236,35 @@ test('each definition is reported exactly once', () => {
 /* Integration against the real tree                                   */
 /* ------------------------------------------------------------------ */
 
-test('the real tree has zero violations and exactly one allowlisted definer hit', () => {
+test('the real tree has zero violations and exactly ten allowlisted definer hits', () => {
   const { findings, scanned, allowlistedHits } = runGate();
   assert.deepEqual(findings, []);
   assert.ok(scanned > 100, `expected a real scan, saw ${scanned} files`);
-  // One template assignment is sanctioned today: the canonical `compileTheme`
-  // lowering, which took the palette authority in dcc65ca34. It emits at the
-  // tenant root scope, so it is not the CHT-03 hazard, which is a definition
-  // BELOW that scope.
+  // The sanctioned emissions are the chart family's ten reserved slots, in the
+  // one deriver that owns them. They emit at the tenant root scope, so they are
+  // not the CHT-03 hazard, which is a definition BELOW that scope.
   //
-  // This was pinned at 2 while the appearance compiler carried a second,
-  // compatibility derivation of the same channels. That unification has landed
-  // — the compatibility projection is deleted — so the count is 1. Zero would
-  // mean the emitter moved and the allowlist is stale; two would mean a definer
-  // slipped into an allowlisted path. The oklch derivation file names the
-  // channel only in prose, so it is not a hit under syntactic adjudication — it
-  // stays allowlisted so a future emission there is a reviewed change, not a
-  // silent one.
+  // Pinned at 2 while the appearance compiler carried a second, compatibility
+  // derivation; at 1 once that projection was deleted and the single template
+  // assignment `vars[\`--ds-chart-series-${index + 1}\`]` was the only emission;
+  // at 10 now that the slots are assigned under their own literal names. The
+  // count moved because the NAMES became readable, not because a definer was
+  // added: this gate resolves an assignment KEY, and a name assembled behind an
+  // interpolation is a name it cannot resolve. Zero would mean the emitter moved
+  // and the allowlist is stale; eleven would mean a definer slipped into an
+  // allowlisted path. The oklch derivation file names the channel only in prose,
+  // so it is not a hit under syntactic adjudication — it stays allowlisted so a
+  // future emission there is a reviewed change, not a silent one.
   assert.equal(
     allowlistedHits,
-    1,
-    `expected exactly the one compiler emission, saw ${allowlistedHits}`,
+    10,
+    `expected exactly the ten reserved slot emissions, saw ${allowlistedHits}`,
   );
 });
 
 test('the definer allowlist cannot grow without touching this test', () => {
   assert.deepEqual(DEFINER_ALLOWLIST, [
-    'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
+    'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/charts/index.ts',
     'foundation/kernel/color/oklch/chart-series/index.ts',
   ]);
 });

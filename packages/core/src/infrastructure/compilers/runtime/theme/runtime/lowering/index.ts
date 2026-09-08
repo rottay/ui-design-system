@@ -6,6 +6,7 @@
  * @package @rottay/design-system
  */
 
+import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type {
   EngineAdapter,
@@ -13,10 +14,9 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import type { ThemeResolution } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { assertMandatoryFontFallback } from "@/foundation/kernel/typography";
-import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
-import { validateExperienceProfileSelection } from "@/foundation/tokens/ts/presentation/expressive-profiles";
-import { ON_TONE_ROLES, type OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
-import { brandThemeToChromeVariables } from "./foundation/chrome";
+import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
+import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
+import type { TenantFacts } from "./foundation/contract";
 import { mergeBrandThemeFloors, resolveTenantPosture } from "./foundation/floors";
 import { readGovernedTheme } from "./foundation/intake";
 import {
@@ -25,14 +25,10 @@ import {
   deepMergeTokenOverrides,
   mergePartialPersonality,
 } from "./foundation/personality";
-import {
-  PRIMARY_SEED_FIELD,
-  applyTenantSeedDerivations,
-  applyTenantStatusSeedDerivations,
-} from "./foundation/seeds";
+import { PRIMARY_SEED_FIELD } from "./foundation/seeds";
+import { resolveGovernedSelections } from "./runtime/derivation/recipes";
 import { compileModeBlocks } from "./runtime/mode-blocks";
-import { brandThemeToCssVariables } from "./runtime/variables";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { lowerBlock } from "./runtime/pipeline";
 
 /**
  * Lower one resolved theme, then project it onto an engine.
@@ -43,9 +39,10 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
  * clone or any transport.
  *
  * The tenant floor enters TWICE on purpose. `effectiveTheme` is what every
- * channel writer below reads, while `tenantPosture` is lowered LAST inside
- * `brandThemeToCssVariables`, so a tenant's posture outranks every
- * vertical-authored writer instead of merging into their position.
+ * family deriver reads, while `tenantFacts` carries the tenant's own posture
+ * and type into the pipeline at the `tenant` RANK -- so a tenant's statement
+ * outranks every vertical writer instead of merging into their position, and
+ * it no longer depends on which writer happened to run last.
  *
  * Scope is not lowered here: no `cssString` and no selector. `emitThemeCss`
  * owns emission, which is what lets one compile serve a document root, a DB
@@ -80,87 +77,36 @@ export function compileTheme(
   const effectiveTheme = tenantPatch
     ? (mergeBrandThemeFloors(brandTheme, tenantPatch) as BrandTheme)
     : brandTheme;
-  const tenantPosture = tenantPatch
-    ? resolveTenantPosture(tenantPatch)
-    : undefined;
-  const tenantTypography = tenantPatch?.typography;
 
-  const paletteVars = brandThemeToCssVariables(
-    effectiveTheme,
-    undefined,
-    tenantPosture,
-    tenantTypography
-  );
-  const chromeVars = brandThemeToChromeVariables(
-    effectiveTheme,
-    undefined,
-    tenantAuthoredPaths
-  );
-  const cssVariables = { ...paletteVars, ...chromeVars };
   // The base block's seed is the tenant's exactly when the tenant stated it;
-  // there is no overlay above this block to restate it.
-  applyTenantSeedDerivations(
-    cssVariables,
-    effectiveTheme.palette?.primaryColor,
-    tenantAuthoredPaths === undefined
-      ? undefined
-      : {
-          authoredPaths: tenantAuthoredPaths,
-          modePrefix: "",
-          seedIsTenantAuthored: tenantAuthoredPaths.has(PRIMARY_SEED_FIELD),
-        }
-  );
-  // The status-tint sibling. Seed authorship here is whether the raw tenant
-  // patch's own palette carried this tone's seed -- see the function's
-  // docblock for why that must read the raw value rather than `authoredPaths`
-  // membership. Prefer the closed `tenantStatusSeedAuthorship` channel; fall
-  // back to `tenantPatch` for callers that supply only the floor.
-  applyTenantStatusSeedDerivations(
-    cssVariables,
-    effectiveTheme.palette,
-    tenantAuthoredPaths === undefined
-      ? undefined
-      : {
-          authoredPaths: tenantAuthoredPaths,
-          modePrefix: "",
-          toneSeedIsTenantAuthored: Object.fromEntries(
-            ON_TONE_ROLES.map((role) => [
-              role,
-              tenantStatusSeedAuthorship
-                ? tenantStatusSeedAuthorship.base[role]
-                : tenantPatch?.palette?.[`${role}Color`] !== undefined,
-            ])
-          ) as Record<OnToneRole, boolean>,
-        }
-  );
-
-  // DS-S001: governed recipe-profile selection. Fail-closed -- an unknown id,
-  // malformed id or foreign schema version compiles to engine defaults.
-  const recipeProfileValidation = validateRecipeProfileSelection(
-    effectiveTheme.recipes?.profile,
-    effectiveTheme.recipes?.schemaVersion
-  );
-  const recipeProfile = recipeProfileValidation.ok
-    ? recipeProfileValidation.profile?.id
+  // there is no overlay above this block to restate it. Status-seed authorship
+  // reads the RAW patch value rather than `authoredPaths` membership -- see
+  // `applyTenantStatusSeedDerivations` for why the Set alone answers yes for a
+  // tenant that never touched the tone.
+  const tenantFacts: TenantFacts | undefined = tenantPatch
+    ? {
+        posture: resolveTenantPosture(tenantPatch),
+        typography: tenantPatch.typography,
+        authoredPaths: tenantAuthoredPaths,
+        statusSeedAuthorship: tenantStatusSeedAuthorship,
+        seedIsTenantAuthored:
+          tenantAuthoredPaths !== undefined &&
+          tenantAuthoredPaths.has(PRIMARY_SEED_FIELD),
+        toneSeedIsTenantAuthored: Object.fromEntries(
+          ON_TONE_ROLES.map((role) => [
+            role,
+            tenantStatusSeedAuthorship
+              ? tenantStatusSeedAuthorship.base[role]
+              : tenantPatch?.palette?.[`${role}Color`] !== undefined,
+          ])
+        ) as Record<OnToneRole, boolean>,
+      }
     : undefined;
-  if (recipeProfile) {
-    cssVariables["--ds-recipe-profile"] = `"${recipeProfile}"`;
-  }
 
-  // The expansion itself already ran inside `brandThemeToCssVariables` (so
-  // mode overlays re-expand); this block only publishes the validated
-  // selection id as provenance, exactly like the recipe channel above. Same
-  // fail-closed posture: invalid ids compile to baseline identity, unmarked.
-  const experienceProfileValidation = validateExperienceProfileSelection(
-    effectiveTheme.expressive?.experienceProfile,
-    effectiveTheme.expressive?.schemaVersion
-  );
-  const experienceProfile = experienceProfileValidation.ok
-    ? experienceProfileValidation.profile?.id
-    : undefined;
-  if (experienceProfile) {
-    cssVariables["--ds-experience-profile"] = `"${experienceProfile}"`;
-  }
+  const cssVariables = lowerBlock({
+    theme: effectiveTheme,
+    tenant: tenantFacts,
+  });
 
   assertMandatoryFontFallback(cssVariables, tenantSlug);
 
@@ -170,11 +116,8 @@ export function compileTheme(
   const modeBlocks = compileModeBlocks(
     effectiveTheme,
     cssVariables,
-    tenantAuthoredPaths,
-    tenantPosture,
-    tenantTypography,
-    tenantPatch,
-    tenantStatusSeedAuthorship
+    tenantFacts,
+    tenantPatch
   );
   for (const block of modeBlocks) {
     // A mode may restyle type; it may not drop the mandatory fallback while
@@ -185,6 +128,8 @@ export function compileTheme(
     );
   }
 
+  const { recipeProfile, experienceProfile } =
+    resolveGovernedSelections(effectiveTheme);
   const compiled: ThemeCompilation = {
     cssVariables,
     modeBlocks,

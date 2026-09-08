@@ -45,7 +45,7 @@ const STYLE_ID = 'planted-recipe-profile-variable';
  * declaring what a control produces is not reading it.
  */
 const ALLOWED_MENTIONS = [
-  'infrastructure/compilers/runtime/theme/runtime/lowering/index.ts',
+  'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.ts',
   'infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.ts',
   'contracts/theme/runtime/catalog/index.ts',
   'foundation/contracts/composition/tenants/capabilities/index.ts',

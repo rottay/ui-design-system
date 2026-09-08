@@ -70,6 +70,19 @@ export function linearizeSrgbChannel(channel: number): number {
 export function relativeLuminance(hex: string): number {
   const rgb = parseHex(hex);
   if (!rgb) return 0;
+  return relativeLuminanceOf(rgb);
+}
+
+/**
+ * WCAG 2.2 relative luminance of an sRGB triplet whose channels are already
+ * known (0-255, fractional allowed).
+ *
+ * The colour-mix a skin performs has no hex of its own -- its channels are the
+ * weighted mean of two colours -- so a consumer that must measure a mixed
+ * surface needs the transfer function without the parse in front of it. This
+ * is the same arithmetic `relativeLuminance` runs, one step later.
+ */
+export function relativeLuminanceOf(rgb: Rgb255): number {
   return (
     0.2126 * linearizeSrgbChannel(rgb.r) +
     0.7152 * linearizeSrgbChannel(rgb.g) +
@@ -78,13 +91,25 @@ export function relativeLuminance(hex: string): number {
 }
 
 /**
+ * Contrast ratio between two already-measured relative luminances.
+ *
+ * The symmetric ratio itself, so a caller measuring a mixed or computed
+ * surface never restates `(lighter + 0.05) / (darker + 0.05)` -- the one place
+ * that formula is written down is here.
+ */
+export function ratioFromLuminance(l1: number, l2: number): number {
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+/**
  * Contrast ratio between two colors (1:1 to 21:1).
  * Returns the ratio as a number >= 1.
  */
 export function contrastRatio(color1: string, color2: string): number {
-  const l1 = relativeLuminance(color1);
-  const l2 = relativeLuminance(color2);
-  const lighter = Math.max(l1, l2);
-  const darker = Math.min(l1, l2);
-  return (lighter + 0.05) / (darker + 0.05);
+  return ratioFromLuminance(
+    relativeLuminance(color1),
+    relativeLuminance(color2)
+  );
 }

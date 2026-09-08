@@ -3,6 +3,8 @@ import { join } from 'node:path';
 
 import React from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
+
+import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
@@ -32,20 +34,6 @@ function srgbMix(a: string, b: string, weight: number): string {
     A[1] * weight + B[1] * (1 - weight),
     A[2] * weight + B[2] * (1 - weight),
   ]);
-}
-
-function relativeLuminance(hex: string): number {
-  const [r, g, b] = hexToRgb(hex).map((v) => {
-    const s = v / 255;
-    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-
-function contrastRatio(a: string, b: string): number {
-  const x = relativeLuminance(a);
-  const y = relativeLuminance(b);
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
 }
 
 // The inline style objects own the STATIC parts; the interactive copy-button

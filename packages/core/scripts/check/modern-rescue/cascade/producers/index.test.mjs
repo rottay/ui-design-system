@@ -114,9 +114,27 @@ const SCRIPT = join(HERE, 'index.mjs');
  * checker scanned a single owner). The css, ts-chrome-variables and
  * tsx-inline-stamp planes did not move at all.
  */
+/*
+ * WO-DER-01 re-anchor, measured rather than asserted. The channel assembly that
+ * used to be one 489-line file is one deriver per family behind a ranked merge,
+ * and the ten chart series slots plus the ten category slots are assigned under
+ * their own literal names instead of behind `${index + 1}`.
+ *
+ * producerSites 4893 -> 4900 (+7): one compiler file became fourteen family
+ * derivers plus the pipeline, and a producer SITE is counted per file.
+ * channelEmissions 10371 -> 10427 (+56): the same writes, now readable per file
+ * and per literal slot instead of collapsed behind one file and two templates.
+ * emissionsWithCausalRoot 197 -> 205 (+8): the same causal roots, attributed to
+ * the family that states them.
+ *
+ * THE LOAD-BEARING NUMBER DID NOT MOVE: `distinctChannels` is 4591 before and
+ * after, so no channel name entered or left the tree, and `ownershipConflicts`
+ * stays 0. What moved is where the census can SEE each write, which is the
+ * point of the decomposition.
+ */
 const LIVE_PRODUCER_STATS = Object.freeze({
-  producerSites: 4893,
-  channelEmissions: 10371,
+  producerSites: 4900,
+  channelEmissions: 10427,
   distinctChannels: 4591,
   /**
    * 196 -> 197, and it is the SAME mechanism as the ten rows above rather than
@@ -128,7 +146,7 @@ const LIVE_PRODUCER_STATS = Object.freeze({
    * `lowering/foundation/palette/index.ts:1`, carrying the SAME causal root as
    * the row that already existed. No channel and no root is new.
    */
-  emissionsWithCausalRoot: 197,
+  emissionsWithCausalRoot: 205,
 });
 
 function withFiles(files, run) {

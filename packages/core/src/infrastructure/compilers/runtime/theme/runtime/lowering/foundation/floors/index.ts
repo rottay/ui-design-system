@@ -7,12 +7,8 @@
  */
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
-import {
-  resolveExpressiveAxes,
-  sanitizeExpressiveOverrides,
-} from "@/foundation/tokens/ts/presentation/expressive-profiles";
-import { expandExpressiveProfiles } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
+import { resolveExpressiveFacts } from "../expressive";
 
 /**
  * Deep-merges the tenant floor over the vertical baseline, mirroring
@@ -48,12 +44,7 @@ export function resolveTenantPosture(
 ): AppearancePostureFields | undefined {
   const selection = patch.expressive?.experienceProfile;
   const profile = selection
-    ? expandExpressiveProfiles(
-        resolveExpressiveAxes(
-          selection,
-          sanitizeExpressiveOverrides(patch.expressive?.profiles)
-        )
-      ).fieldDefaults
+    ? resolveExpressiveFacts(patch.expressive).expansion.fieldDefaults
     : undefined;
   const posture: AppearancePostureFields = {
     typePairing: patch.typography?.typePairing ?? profile?.typePairing,

@@ -369,11 +369,10 @@
       "mechanism": "la postura pro co-suministra radiusScale como DEFAULT de perfil (sharp .85 / soft 1.15 / rounded 1.25 / pill-accented 1.1)",
       "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
       "precedence": "authored-field-wins",
-      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts",
       "precedenceNote": "R7: orden de escritura ejecutable del compilador (brand-theme:758-772): el perfil escribe primero, los campos autorados sobrescriben solo los canales que poseen.",
       "line": 189,
-      "mechanismLine": 189,
-      "precedenceLine": 758
+      "mechanismLine": 189
     },
     {
       "withRoot": "shape.button-style",
@@ -383,11 +382,10 @@
       "mechanism": "la postura pro co-suministra buttonStyle (sharp 2px / soft var(--ds-radius-md,8px) / pill 9999px; BUTTON_STYLE_RADIUS appearance-posture:47-53, plegado dial-reachable :145-154)",
       "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
       "precedence": "authored-field-wins",
-      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts",
       "precedenceNote": "Mismo orden ejecutable (brand-theme:758-772). RECIPROCIDAD PENDIENTE: roots/shape.button-style.json aun no existe (lo autora independent audit); validateCascadeSet la exigira cuando aterrice (C4).",
       "line": 189,
-      "mechanismLine": 189,
-      "precedenceLine": 758
+      "mechanismLine": 189
     }
   ],
   "terminalReachLaw": "terminalReach es el cross-ref mecanico de internalChannels (semanticOwner = esta raiz), bidireccional fail-closed por validateCascadeRoot. Estado PRESCRIPCION: fase 1 es spec objetivo; la verdad transitiva la emite la capa GENERADA (cascade-extract/materialized), no se mantiene a mano (R1)."

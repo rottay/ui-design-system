@@ -130,8 +130,8 @@ export interface TenantTokenOverrides {
 //   -> Appearance General -> Appearance Advanced -> runtime
 //
 // TenantAppearance is wired: DesignSystemProvider resolves config.appearance
-// via infrastructure/compilers/kernel/runtime/appearance, ThemeProvider injects vars inline, useTokens()
-// reads density from appearance.general.
+// into the Theme every transport lowers through `compileTheme`, ThemeProvider
+// injects vars inline, useTokens() reads density from appearance.general.
 //
 // The canonical premium source is `brandTheme` (embedded in TenantConfig).
 // Legacy fields `branding`, `personality`, and `tokenOverrides` remain

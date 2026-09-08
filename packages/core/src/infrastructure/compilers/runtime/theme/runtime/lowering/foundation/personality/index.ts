@@ -12,12 +12,8 @@ import type {
   PartialPersonalityTokens,
   PersonalityTokens,
 } from "@/foundation/contracts/kernel/tokens/personality";
-import {
-  resolveExpressiveAxes,
-  sanitizeExpressiveOverrides,
-} from "@/foundation/tokens/ts/presentation/expressive-profiles";
-import { expandExpressiveProfiles } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import { springLinearEasing } from "@/infrastructure/compilers/kernel/foundation/motion/spring-easing";
+import { resolveExpressiveFacts } from "../expressive";
 
 /**
  * A BrandTheme opts into generated spring physics only when it declares BOTH
@@ -80,13 +76,8 @@ export function brandThemeToPersonality(
   bt: BrandTheme
 ): Partial<PersonalityTokens> {
   const result: Partial<PersonalityTokens> = {};
-  const expressiveMotion = expandExpressiveProfiles(
-    resolveExpressiveAxes(
-      bt.expressive?.experienceProfile,
-      sanitizeExpressiveOverrides(bt.expressive?.profiles),
-      bt.expressive?.schemaVersion
-    )
-  ).fieldDefaults.motion;
+  const expressiveMotion = resolveExpressiveFacts(bt.expressive).expansion
+    .fieldDefaults.motion;
 
   if (bt.motion || expressiveMotion) {
     result.animation = {

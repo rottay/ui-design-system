@@ -3,14 +3,17 @@
   "law": "Deuda de cascada por NOMBRE (ARCHITECTURE §1.6): un canal de componente sin camino a raiz es deuda. Decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba.",
   "rules": {
     "a": "las raices/rampas (destinos de fallback) quedan FUERA del denominador",
-    "b": "un fallback funcional que alcanza raiz -- incluso envuelto en color-mix() -- cuenta como cableado"
+    "b": "un fallback funcional que alcanza raiz -- incluso envuelto en color-mix() -- cuenta como cableado",
+    "c": "cableado NO es transitivo: `transitivelyUnwired` sigue la cadena de fallbacks hasta un nombre CON PRODUCTOR (declarado en CSS autorado o emitido por un derivador de familia). Es la cota superior de la misma deuda; `debt` es la inferior"
   },
   "producedOn": "cascade-wiring-census",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() -- un solo walker, importado",
   "denominator": 4365,
   "wired": 2204,
   "debt": 2161,
+  "transitivelyUnwired": 2205,
   "rootsExcluded": 774,
   "skinFiles": 391,
-  "rootsExcludedNote": "rootsExcluded is measured from the exact fallback-target set. --ds-input-md-icon-size remains a positional fallback target without a root-reaching fallback of its own, so it is excluded from the denominator. The executable shape drill keeps that distinction fail-closed."
+  "rootsExcludedNote": "rootsExcluded is measured from the exact fallback-target set. --ds-input-md-icon-size remains a positional fallback target without a root-reaching fallback of its own, so it is excluded from the denominator. The executable shape drill keeps that distinction fail-closed.",
+  "transitivelyUnwiredNote": "2205 >= debt 2161 por construccion: un nombre sin fallback a raiz tampoco alcanza terminal. La diferencia (44) son los nombres cuyo fallback nombra otra cosa que nadie escribe. El invariante de forma lo comprueba en cada corrida."
 }

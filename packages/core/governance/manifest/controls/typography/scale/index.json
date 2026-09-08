@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "7c2e010775a07b9db713d711d6b67bcedb045f4878742bfbaba2f0b8b8d019ed"
+    "registryDigest": "8e7257afae81b3a7d8c9d9e3868f5ad31897e1dfc7406d41b1ef854765994127"
   },
   "title": "Type scale dial",
   "valueType": "scale",
@@ -66,7 +66,7 @@
     "sourceBindings": [
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
-      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css"

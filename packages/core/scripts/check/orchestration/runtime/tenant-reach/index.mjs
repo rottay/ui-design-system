@@ -53,19 +53,40 @@ export const LOWERING_FOUNDATION_TINT = `${LOWERING}/foundation/tint/index.ts`;
 export const LOWERING_FOUNDATION_TYPE_RAMP = `${LOWERING}/foundation/type-ramp/index.ts`;
 export const LOWERING_FOUNDATION_TYPOGRAPHY = `${LOWERING}/foundation/typography/index.ts`;
 export const LOWERING_RUNTIME_MODE_BLOCKS = `${LOWERING}/runtime/mode-blocks/index.ts`;
-export const LOWERING_RUNTIME_VARIABLES = `${LOWERING}/runtime/variables/index.ts`;
+export const LOWERING_FOUNDATION_CONTRACT = `${LOWERING}/foundation/contract/index.ts`;
+export const LOWERING_FOUNDATION_DIAL = `${LOWERING}/foundation/dial/index.ts`;
+export const LOWERING_FOUNDATION_EXPRESSIVE = `${LOWERING}/foundation/expressive/index.ts`;
+const DERIVATION = `${LOWERING}/runtime/derivation`;
+export const LOWERING_DERIVATION_CHARTS = `${DERIVATION}/charts/index.ts`;
+export const LOWERING_RUNTIME_DERIVATION = Object.freeze([
+  `${DERIVATION}/axes/index.ts`,
+  LOWERING_DERIVATION_CHARTS,
+  `${DERIVATION}/chrome/index.ts`,
+  `${DERIVATION}/expressive/index.ts`,
+  `${DERIVATION}/motion/index.ts`,
+  `${DERIVATION}/palette/index.ts`,
+  `${DERIVATION}/ramps/index.ts`,
+  `${DERIVATION}/recipes/index.ts`,
+  `${DERIVATION}/seeds/index.ts`,
+  `${DERIVATION}/surfaces/index.ts`,
+  `${DERIVATION}/tenant/index.ts`,
+  `${DERIVATION}/tint/index.ts`,
+  `${DERIVATION}/type-roles/index.ts`,
+  `${DERIVATION}/typography/index.ts`,
+]);
+export const LOWERING_RUNTIME_PIPELINE = `${LOWERING}/runtime/pipeline/index.ts`;
 export const LOWERING_ORCHESTRATION = `${LOWERING}/index.ts`;
 
 /**
  * The lowering's canonical single owner, kept under its historical name.
  *
  * `scripts/check/modern-rescue/**` is a protected tree and one of its readers
- * imports this binding by name. The name now points at the owner the C2
- * remediation designates as canonical -- the channel assembly -- rather than at
- * a compiler file that no longer exists. Readers that need the whole lowering
- * take `LOWERING_SOURCES`; this one is the single-owner spelling.
+ * imports this binding by name. The channel assembly it used to name is one
+ * deriver per family behind a ranked merge now, so the single-owner spelling
+ * points at the orchestrator that runs them. Readers that need every channel
+ * writer take `LOWERING_SOURCES`.
  */
-export const BRAND_THEME = LOWERING_RUNTIME_VARIABLES;
+export const BRAND_THEME = LOWERING_RUNTIME_PIPELINE;
 export const TENANT_THEME = 'packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts';
 export const LOWERING_SOURCES = Object.freeze([
   LOWERING_FOUNDATION_CHROME,
@@ -84,8 +105,12 @@ export const LOWERING_SOURCES = Object.freeze([
   LOWERING_FOUNDATION_TINT,
   LOWERING_FOUNDATION_TYPE_RAMP,
   LOWERING_FOUNDATION_TYPOGRAPHY,
+  LOWERING_FOUNDATION_CONTRACT,
+  LOWERING_FOUNDATION_DIAL,
+  LOWERING_FOUNDATION_EXPRESSIVE,
+  ...LOWERING_RUNTIME_DERIVATION,
+  LOWERING_RUNTIME_PIPELINE,
   LOWERING_RUNTIME_MODE_BLOCKS,
-  LOWERING_RUNTIME_VARIABLES,
   LOWERING_ORCHESTRATION,
 ]);
 
@@ -437,7 +462,6 @@ export function buildEnumerators(root) {
   // Everything else binds its values in a loop inside its own body.
   const loopEmitters = [
     [LOWERING_FOUNDATION_RAMPS, 'deriveTenantColorRamps', 'brand colour ramps'],
-    [LOWERING_RUNTIME_VARIABLES, 'brandThemeToCssVariables', 'brand chart colors'],
     [LOWERING_FOUNDATION_MATERIALS, 'semanticSurfaceRolesToCssVariables', 'semantic material roles'],
     [LOWERING_FOUNDATION_TYPE_RAMP, 'setTypeRampVariables', 'the type ramp'],
     [LOWERING_FOUNDATION_TYPOGRAPHY, 'setSemanticTypographyVariables', 'semantic typography roles'],

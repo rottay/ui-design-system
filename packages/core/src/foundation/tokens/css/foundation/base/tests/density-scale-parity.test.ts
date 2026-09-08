@@ -32,7 +32,7 @@ const useTokensSource = source(
   'src/infrastructure/runtime/theming/composition/react/tokens/index.ts',
 );
 const loweringVariablesSource = source(
-  'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts',
+  'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts',
 );
 const appearancePostureSource = source(
   'src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts',
