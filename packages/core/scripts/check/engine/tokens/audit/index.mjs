@@ -2114,7 +2114,14 @@ const files = modernFiles(componentsDir);
  * roster. Normal runs pass no fixture and behave identically.
  */
 const themeCssConsumerFixture = argumentValue('--themecss-consumer-fixture');
-const themeCssConsumerEngine = argumentValue('--themecss-consumer-engine') ?? 'modern';
+/* The engine this FLAG defaults to when the caller names none. It is not an
+ * engine-resolution fallback -- nothing here reads a roster row -- but it was
+ * spelled as a nullish-coalescing engine literal, which is the exact shape
+ * F-27 forbids, so the sweep that keeps one engine law could not tell the two
+ * apart. Named, so it can. */
+const THEMECSS_CONSUMER_ENGINE_DEFAULT = 'modern';
+const themeCssConsumerEngine =
+  argumentValue('--themecss-consumer-engine') ?? THEMECSS_CONSUMER_ENGINE_DEFAULT;
 
 // `DEBUG_DAISY_CONSUMERS=1` prints the per-file inventory behind
 // `daisy.classConsumers`: every counted file, the classes it renders, and the

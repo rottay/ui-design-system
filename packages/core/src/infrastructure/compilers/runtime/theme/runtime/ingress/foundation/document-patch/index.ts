@@ -276,6 +276,36 @@ function migrateTokenOverride(
   );
 }
 
+/**
+ * Every override token, with the Theme patch it migrates into.
+ *
+ * The forward map above is the only statement of which channel becomes which
+ * keypath, so a reader that needs the INVERSE -- "the tenant authored this
+ * keypath; which channel was that?" -- derives it from this table rather than
+ * transcribing a second copy. The single admission uses it to attribute an
+ * APCA pair to the tenant that authored one side of it.
+ *
+ * Chart categories are absent on purpose: they are collected into
+ * `charts.categoryColors` by the plural function below rather than migrated
+ * one at a time, and `migrateTokenOverride` refuses them by name.
+ */
+export const OVERRIDE_TOKEN_PATCHES: ReadonlyMap<
+  TenantThemeOverrideToken,
+  ThemeLayerPatch
+> = (() => {
+  const index = new Map<TenantThemeOverrideToken, ThemeLayerPatch>();
+  for (const token of TENANT_THEME_OVERRIDE_TOKENS) {
+    try {
+      // `1` rather than a colour: the VALUE is irrelevant to the keypath, and
+      // the two numeric tokens refuse a non-numeric one.
+      index.set(token, migrateTokenOverride(token, 1));
+    } catch {
+      continue;
+    }
+  }
+  return index;
+})();
+
 function migrateTokenOverrides(
   overrides: Record<string, string | number> | undefined
 ): ThemeLayerPatch {

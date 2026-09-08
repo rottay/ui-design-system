@@ -225,7 +225,7 @@ export async function buildResolvedMap({ coreRoot = CORE_ROOT, arm = null } = {}
   const themes = {};
   const unresolvedAll = [];
   for (const [vertical, theme] of Object.entries(loaded.themes)) {
-    const scopes = scopesOf(loaded.compile({ brandTheme: theme, tenantSlug: vertical }));
+    const scopes = scopesOf(loaded.compile({ brandTheme: theme, vertical, tenantSlug: vertical }));
     themes[vertical] = {};
     for (const [scopeName, scope] of Object.entries(scopes)) {
       const { resolved, unresolved } = resolveScope(scope);

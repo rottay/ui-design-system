@@ -140,7 +140,7 @@ export async function buildPurity({ coreRoot = CORE_ROOT, arm = null, inventory 
 
   const scopes = {};
   for (const [vertical, theme] of Object.entries(loaded.themes)) {
-    scopes[vertical] = scopesOf(loaded.compile({ brandTheme: theme, tenantSlug: vertical }));
+    scopes[vertical] = scopesOf(loaded.compile({ brandTheme: theme, vertical, tenantSlug: vertical }));
   }
   const overlayNameOf = (vertical) => Object.keys(scopes[vertical]).find((name) => name !== 'base') ?? 'base';
 

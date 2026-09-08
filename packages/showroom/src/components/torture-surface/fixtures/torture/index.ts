@@ -24,8 +24,10 @@
  *
  * They are never registered in `KNOWN_TENANTS`, `BUNDLED_TENANT_SLUGS`, or
  * `FIRST_PARTY_ARTIFACT_SPECS` — there is no generated CSS artifact for them.
- * They compile at render time via `compileTheme`, the same as any
- * DB-driven tenant would.
+ * They compile at render time through the ONE door (`draftPreviewThemeIntent`
+ * -> `compileThemeIntent`), the same as any DB-driven tenant would -- and are
+ * held to the same admission, so a fixture that authors a pair under the
+ * governed APCA floor is refused here exactly as a publish would refuse it.
  *
  * This file is runtime-pure: only a type-only import of `BrandTheme` is used,
  * so it carries zero side effects and can be imported from a plain Node or
@@ -118,7 +120,12 @@ export const tortureDarkBrandTheme: BrandTheme = {
   },
 
   surfaces: {
-    densityScale: 0.72,
+    // The DENSEST a tenant may publish, not the densest a number can be. The
+    // compile door applies the vertical envelope to every origin since
+    // WO-CAT-03, so a probe fixture outside it would measure a compile
+    // production cannot produce -- which is the opposite of what a torture
+    // fixture is for. Rottay's envelope bounds density at 0.85..1.15.
+    densityScale: 0.85,
     borderRadius: { sm: '0px', md: '26px', lg: '2px', xl: '44px' },
     shadows: {
       sm: '0 2px 6px rgba(255, 0, 170, 0.55)',
@@ -140,7 +147,8 @@ export const tortureDarkBrandTheme: BrandTheme = {
   },
 
   motion: {
-    intensity: 1.6,
+    /** The loudest motion the rottay envelope admits (0..0.8). */
+    intensity: 0.8,
     entrance: 'bounce',
     entranceDuration: 900,
     hoverLift: 8,
@@ -454,7 +462,8 @@ export const tortureLightBrandTheme: BrandTheme = {
   },
 
   surfaces: {
-    densityScale: 0.68,
+    /** The densest the rottay envelope admits; see the dark fixture above. */
+    densityScale: 0.85,
     borderRadius: { sm: '1px', md: '32px', lg: '3px', xl: '48px' },
     shadows: {
       sm: '0 2px 6px rgba(122, 0, 255, 0.45)',

@@ -107,11 +107,54 @@ describe("there is no intentless arm", () => {
   });
 
   it("names the baseline through one owner, not a caller's spread", () => {
-    expect(baselineFor("bithire", "bithire")).toBe(FIRST_PARTY_THEMES.bithire);
+    expect(baselineFor("bithire", "bithire")).toEqual(FIRST_PARTY_THEMES.bithire);
     expect(baselineFor("bithire", "acme")).toEqual({
       ...FIRST_PARTY_THEMES.bithire,
       id: "acme",
     });
+  });
+
+  it("the roster is frozen all the way down", () => {
+    // F-60: three module singletons every SSR request in a process reads. A
+    // request that mutated a leaf changed the product for every request after
+    // it, in the same process, with no trace.
+    expect(Object.isFrozen(FIRST_PARTY_THEMES.rottay)).toBe(true);
+    expect(Object.isFrozen(FIRST_PARTY_THEMES.bithire.palette)).toBe(true);
+    expect(Object.isFrozen(FIRST_PARTY_THEMES.evnto.chrome)).toBe(true);
+  });
+
+  it("hands every caller its OWN baseline, sharing no interior", () => {
+    const first = baselineFor("bithire", "bithire");
+    const second = baselineFor("bithire", "bithire");
+    expect(first).not.toBe(FIRST_PARTY_THEMES.bithire);
+    expect(first).not.toBe(second);
+    expect(first.palette).not.toBe(second.palette);
+    expect(first).toEqual(second);
+    // and the clone is writable, which is the point of cloning a frozen source
+    first.palette.primaryColor = "#123456";
+    expect(second.palette.primaryColor).not.toBe("#123456");
+    expect(FIRST_PARTY_THEMES.bithire.palette.primaryColor).not.toBe("#123456");
+  });
+
+  it("two concurrent resolutions of different patches do not contaminate", () => {
+    // The SSR shape of F-60: one process, two tenants, one roster object.
+    const left = resolveTheme({
+      vertical: "bithire",
+      slug: "left",
+      origin: "preview",
+      patch: { palette: { primaryColor: "#111111" } },
+    });
+    const right = resolveTheme({
+      vertical: "bithire",
+      slug: "right",
+      origin: "preview",
+      patch: { palette: { primaryColor: "#222222" } },
+    });
+    expect(left.theme.palette.primaryColor).toBe("#111111");
+    expect(right.theme.palette.primaryColor).toBe("#222222");
+    expect(baselineFor("bithire", "bithire").palette.primaryColor).toBe(
+      FIRST_PARTY_THEMES.bithire.palette.primaryColor
+    );
   });
 });
 

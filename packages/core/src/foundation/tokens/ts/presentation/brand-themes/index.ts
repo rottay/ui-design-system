@@ -380,8 +380,28 @@ export function getFirstPartyVertical(
  * folders, and nothing else. Folded in, with no compatibility re-export left
  * behind.
  */
-export const FIRST_PARTY_THEMES: Record<FirstPartyVerticalId, Theme> = {
-  rottay: brandThemeToTheme(rottayBrandTheme),
-  bithire: brandThemeToTheme(bithireBrandTheme),
-  evnto: brandThemeToTheme(evntoBrandTheme),
-};
+/**
+ * FROZEN, all the way down.
+ *
+ * These three objects are module singletons that every SSR request in a process
+ * reads. Unfrozen, one request that mutated a leaf of the baseline it resolved
+ * changed the product for every request after it, in the same process, with no
+ * trace (F-60). Freezing does not stop the resolver -- `mergeThemePatches`
+ * builds a new object -- it stops the accident.
+ */
+function deepFreezeTheme<T>(value: T): T {
+  if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const child of Object.values(value as Record<string, unknown>)) {
+      deepFreezeTheme(child);
+    }
+  }
+  return value;
+}
+
+export const FIRST_PARTY_THEMES: Record<FirstPartyVerticalId, Theme> =
+  deepFreezeTheme({
+    rottay: brandThemeToTheme(rottayBrandTheme),
+    bithire: brandThemeToTheme(bithireBrandTheme),
+    evnto: brandThemeToTheme(evntoBrandTheme),
+  });

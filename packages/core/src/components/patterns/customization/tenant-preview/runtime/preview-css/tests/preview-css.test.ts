@@ -69,19 +69,28 @@ function baseTenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
   };
 }
 
+/**
+ * An ADMISSIBLE draft, and that is now part of the fixture's job.
+ *
+ * WO-CAT-03 made the compile door apply one admission to every origin, so a
+ * draft whose derived on-tone ink misses the governed APCA floor on the rottay
+ * dark canvas is refused here exactly as a publish refuses it (F-13). These
+ * seeds are the same hues the fixture always used, lifted to a lightness the
+ * floor admits; nothing below reads the hue, only that the compile happened.
+ */
 const sampleDraft = {
   slug: 'acme',
   name: 'ACME Corp',
-  primaryColor: '#3B82F6',
-  secondaryColor: '#10B981',
+  primaryColor: '#93BAFA',
+  secondaryColor: '#34C494',
 };
 
 describe('buildPreviewCss scoping (brand-theme source)', () => {
   it('re-anchors every rule to the preview scope selector and keeps all generated declarations', () => {
     const drafts = [
       sampleDraft,
-      { slug: 'bravo', name: 'Bravo Inc', primaryColor: '#EF4444' },
-      { slug: 'charlie-co', name: 'Charlie Co', primaryColor: '#111827', secondaryColor: '#F59E0B' },
+      { slug: 'bravo', name: 'Bravo Inc', primaryColor: '#F69898' },
+      { slug: 'charlie-co', name: 'Charlie Co', primaryColor: '#C4C5C9', secondaryColor: '#F59E0B' },
     ];
 
     for (const draft of drafts) {
@@ -140,43 +149,57 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
 });
 
 describe('buildPreviewCss hostile input neutralization (brand-theme source)', () => {
-  it('drops declarations whose value could close the block and restyle the document', () => {
+  /**
+   * THE DEFENCE MOVED EARLIER AGAIN, and these two cases are where it shows.
+   *
+   * It used to be the rescope pass that dropped a block-closing value; then the
+   * emission grammar refused it before a character was assembled; since
+   * WO-CAT-03 the compile door refuses the whole compile BY NAME, on every
+   * origin, because the value grammar that only the DB terminal used to run now
+   * runs for the draft too (F-13, F-61). A preview that silently dropped what a
+   * publish refused was the defect; a preview that refuses what a publish
+   * refuses, naming the channel, is the fix.
+   *
+   * The residual property is asserted with it: nothing is emitted at all, so
+   * there is no CSS for a later pass to have to neutralize.
+   */
+  const refusalOf = (brandTheme: BrandTheme) => {
+    try {
+      buildPreviewCss({
+        kind: 'brand-theme',
+        vertical: 'rottay',
+        slug: sampleDraft.slug,
+        brandTheme,
+      });
+    } catch (error) {
+      return error as Error;
+    }
+    return undefined;
+  };
+
+  it('refuses BY NAME a value that could close the block and restyle the document', () => {
     const brandTheme: BrandTheme = {
       ...draftBrandTheme(sampleDraft),
       surfaces: { shadows: { md: 'red;} html{background:black}' } },
     };
 
-    const { css } = buildPreviewCss({ kind: 'brand-theme',
-      vertical: 'rottay', slug: sampleDraft.slug, brandTheme });
-    expect(css).not.toContain('background:black');
-    expect(css).not.toContain('html');
-    expect(css).toContain('--ds-color-primary');
-    // The channel is still declared, because a draft is a patch over the
-    // vertical and the vertical authors its own shadows. What must not survive
-    // is the hostile VALUE, on any block that emits the channel.
-    const shadowLines = css
-      .split('\n')
-      .filter((line) => line.trim().startsWith('--ds-shadow-md:'));
-    expect(shadowLines.length).toBeGreaterThan(0);
-    for (const line of shadowLines) {
-      expect(line).not.toContain('red;');
-      expect(line).not.toContain('}');
-    }
+    const refusal = refusalOf(brandTheme);
+    expect(refusal?.name).toBe('ThemeAdmissionError');
+    expect(refusal?.message).toContain('--ds-shadow-md');
+    expect(refusal?.message).toContain('unsafe variable declaration');
   });
 
-  it('contains multi-line hostile values inside the scoped block', () => {
+  it('refuses BY NAME a multi-line value, naming the channel it was authored on', () => {
     const brandTheme: BrandTheme = {
       ...draftBrandTheme(sampleDraft),
       surfaces: { borderRadius: { md: 'red;\n} zz9{--pwn9:1}\n' } },
     };
 
-    const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme',
-      vertical: 'rottay', slug: sampleDraft.slug, brandTheme });
-    expect(css).not.toContain('zz9');
-    expect(css).not.toContain('--pwn9');
-    for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
-      expect(line.startsWith(scopeSelector)).toBe(true);
-    }
+    const refusal = refusalOf(brandTheme);
+    expect(refusal?.name).toBe('ThemeAdmissionError');
+    expect(refusal?.message).toContain('unsafe variable declaration');
+    // The channel is named, so an author is told WHICH value to fix.
+    expect(refusal?.message).toMatch(/--ds-radius-md/u);
   });
 
   it('never lets a multi-line escape reach the rescope pass at all', () => {
@@ -202,18 +225,28 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     expect(raw).not.toContain('--pwn9');
     expect(raw).not.toContain('--ds-shadow-md');
 
-    const { css, scopeSelector } = buildPreviewCss({
-      kind: 'brand-theme',
-      vertical: 'rottay',
-      slug: sampleDraft.slug,
-      brandTheme,
-    });
-
-    expect(css).not.toContain('zz9');
-    expect(css).not.toContain('--pwn9');
-    for (const line of css.split('\n').filter((l) => l.endsWith('{'))) {
-      expect(line.startsWith(scopeSelector)).toBe(true);
+    // And the layer above it: the compile door refuses the draft outright, so
+    // `buildPreviewCss` produces no CSS for the rescope pass to read. Both
+    // layers are asserted because both survive -- the emission grammar is
+    // still the last line behind the admission, not replaced by it.
+    let refusal: Error | undefined;
+    try {
+      buildPreviewCss({
+        kind: 'brand-theme',
+        vertical: 'rottay',
+        slug: sampleDraft.slug,
+        brandTheme,
+      });
+    } catch (error) {
+      refusal = error as Error;
     }
+    expect(refusal?.name).toBe('ThemeAdmissionError');
+    // The refusal NAMES the channel and QUOTES the value it refused, which is
+    // the point of refusing by name: an author is told what to fix. It is a
+    // JSON-quoted string in an error message, never CSS text -- no stylesheet
+    // was produced at all, so there is nothing for the rescope pass to read.
+    expect(refusal?.message).toContain('--ds-shadow-md');
+    expect(refusal?.message).toContain(JSON.stringify(brandTheme.surfaces?.shadows?.md));
   });
 
   it('never lets a hostile slug reach the selector', () => {
@@ -412,14 +445,14 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
   // `css.length > 0`).
 
   it('palette: emitted custom-property values differ when branding.primaryColor differs', () => {
-    const blue = createTenantConfig({ slug: 'acme', vertical: 'rottay', name: 'Acme', primaryColor: '#3B82F6' });
-    const red = createTenantConfig({ slug: 'acme', vertical: 'rottay', name: 'Acme', primaryColor: '#EF4444' });
+    const blue = createTenantConfig({ slug: 'acme', vertical: 'rottay', name: 'Acme', primaryColor: '#93BAFA' });
+    const red = createTenantConfig({ slug: 'acme', vertical: 'rottay', name: 'Acme', primaryColor: '#F69898' });
 
     const cssBlue = buildPreviewCss(blue).css;
     const cssRed = buildPreviewCss(red).css;
 
-    expect(cssBlue).toContain('--ds-color-primary: #3B82F6;');
-    expect(cssRed).toContain('--ds-color-primary: #EF4444;');
+    expect(cssBlue).toContain('--ds-color-primary: #93BAFA;');
+    expect(cssRed).toContain('--ds-color-primary: #F69898;');
     expect(cssBlue).not.toBe(cssRed);
   });
 
@@ -440,7 +473,12 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     // property. `entranceDuration` has no such clamp and is pairwise unique
     // across all four presets, so it is the honest choice for a per-preset
     // matrix rather than a coincidentally-passing one.
-    const presets = ['formal', 'neutral', 'playful', 'expressive'] as const;
+    // Only the presets a tenant may actually select. `playful` (intensity 1.2)
+    // and `expressive` (1.0) sit ABOVE every vertical's `motionIntensity` cap
+    // of 0.8, so since WO-CAT-03 the door refuses them by name on the preview
+    // path exactly as it would on publish -- asserted immediately below rather
+    // than left as a surprise at save time.
+    const presets = ['formal', 'neutral'] as const;
     const calmLine = (css: string) =>
       css.split('\n').find((line) => line.trim().startsWith('--ds-motion-calm:'));
 
@@ -449,7 +487,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
         slug: 'acme',
         vertical: 'rottay',
         name: 'Acme',
-        primaryColor: '#3B82F6',
+        primaryColor: '#93BAFA',
         personality,
       });
       const { css } = buildPreviewCss(config);
@@ -462,19 +500,45 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     expect(new Set(lines).size).toBe(presets.length);
   });
 
+  it('personality preset: one above the vertical motion envelope is refused BY NAME', () => {
+    // The collision this records is real and pre-dates WO-CAT-03: the DS's own
+    // personality presets carry `animation.intensity` 1.2 (`playful`) and 1.0
+    // (`expressive`), while every vertical envelope caps a TENANT's
+    // `motionIntensity` at 0.8. Nothing compared the two until one admission
+    // ran for every origin. Whether the cap rises or the presets stop being a
+    // tenant-selectable axis is an owner decision; that it is now visible
+    // instead of silently painted is not.
+    // `playful` alone: `expressive` also carries intensity 1.0, which is the
+    // value rottay's own theme already declares, and a tenant that restates the
+    // vertical's value has decided nothing. That distinction is the admission's
+    // -- it measures what a tenant MOVED -- and it is why the studio can open a
+    // vertical's own theme at all.
+    expect(() =>
+      buildPreviewCss(
+        createTenantConfig({
+          slug: 'acme',
+          vertical: 'rottay',
+          name: 'Acme',
+          primaryColor: '#93BAFA',
+          personality: 'playful',
+        }),
+      ),
+    ).toThrow(/motion\.intensity: Value 1\.2 exceeds the rottay envelope for motionIntensity/);
+  });
+
   it('density: emitted --ds-density-scale differs between compact and spacious', () => {
     const compact = createTenantConfig({
       slug: 'acme',
       vertical: 'rottay',
       name: 'Acme',
-      primaryColor: '#3B82F6',
+      primaryColor: '#93BAFA',
       density: 'compact',
     });
     const spacious = createTenantConfig({
       slug: 'acme',
       vertical: 'rottay',
       name: 'Acme',
-      primaryColor: '#3B82F6',
+      primaryColor: '#93BAFA',
       density: 'spacious',
     });
 
@@ -489,8 +553,12 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     const config = baseTenantConfig({
       branding: {
         companyName: 'Acme Corp',
-        primaryColor: '#3B82F6',
-        darkPrimaryColor: '#60A5FA',
+        // `baseTenantConfig` is a BITHIRE config, and bithire is light-default:
+        // the seeds the governed floor admits there are the DARK end of a hue,
+        // where rottay's dark canvas admits the light end. One seed cannot
+        // serve both, so each fixture carries its own vertical's.
+        primaryColor: '#2F6B9A',
+        darkPrimaryColor: '#1B4A6E',
       },
     });
 
@@ -499,7 +567,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     const darkLine = css.split('\n').find((line) => line.includes("[data-theme='dark']"));
     expect(darkLine).toBeDefined();
     expect(darkLine).toContain(scopeSelector);
-    expect(css).toContain('--ds-color-primary: #60A5FA;');
+    expect(css).toContain('--ds-color-primary: #1B4A6E;');
     expect(unsupportedAxes).not.toContain('modes.dark');
 
     // The base (light) block is still scoped correctly alongside the dark one.
@@ -512,7 +580,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     // The vertical's own overlays are still compiled -- a draft is a patch over
     // it, not a theme on its own -- so absence is measured as a DELTA: the
     // preview's mode blocks are exactly the untouched vertical's.
-    const config = createTenantConfig({ slug: 'acme', vertical: 'bithire', name: 'Acme', primaryColor: '#3B82F6' });
+    const config = createTenantConfig({ slug: 'acme', vertical: 'bithire', name: 'Acme', primaryColor: '#2F6B9A' });
     const { css } = buildPreviewCss(config);
     const untouched = emitThemeCss(
       compileThemeIntent(staticThemeIntent('bithire', 'acme')).compiled,
@@ -628,7 +696,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
       slug: 'acme',
       vertical: 'rottay',
       name: 'Evil */ zz9{--pwn9:1} /*',
-      primaryColor: '#3B82F6',
+      primaryColor: '#93BAFA',
     });
 
     const { css } = buildPreviewCss(config);

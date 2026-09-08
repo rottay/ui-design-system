@@ -1392,11 +1392,14 @@ export function staticTenantAuthoredPaths({ patch, authoredPath }) {
  *     (`scripts/libraries/theme-lowering`, which lifts the flat input into a
  *     synthesized `ThemeResolution` and calls `compileTheme` -> `emitThemeCss`
  *     in `infrastructure/compilers/runtime/theme`), takes
- *     `{ brandTheme, tenantSlug, ... }` and destructures it immediately.
- *     `document` built from `staticBrandThemePath` (e.g. `surfaces.rhythm`)
- *     IS a `BrandTheme` fragment, so it becomes `input.brandTheme`;
- *     `tenantSlug` is a required SIBLING field the manifest path does not
- *     carry at all, so the caller must supply it.
+ *     `{ brandTheme, vertical, tenantSlug, ... }` and destructures it
+ *     immediately. `document` built from `staticBrandThemePath` (e.g.
+ *     `surfaces.rhythm`) IS a `BrandTheme` fragment, so it becomes
+ *     `input.brandTheme`; `vertical` and `tenantSlug` are required SIBLING
+ *     fields the manifest path does not carry at all, so the caller must supply
+ *     them. They are two fields because they answer two questions: the vertical
+ *     picks the ENGINE and is refused if the roster does not claim it, the slug
+ *     builds the emission SELECTOR.
  */
 function toCompilerInput({
   armId,
@@ -1532,6 +1535,7 @@ function toCompilerInput({
       return {
         brandTheme: base ?? {},
         tenantPatch: patch,
+        vertical,
         tenantSlug,
         ...(authoredPaths === undefined ? {} : { tenantAuthoredPaths: authoredPaths }),
       };
@@ -1545,7 +1549,7 @@ function toCompilerInput({
      * writing a parallel guard that no caller could reach) keeps the refusal
      * on the one exported unit a drill can actually exercise. */
     staticTenantAuthoredPaths({ patch: {}, authoredPath: tenantAuthoredPath });
-    return { brandTheme: document, tenantSlug };
+    return { brandTheme: document, vertical, tenantSlug };
   }
   throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
 }

@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-07T15:39:59.423Z",
+  "producedAt": "2026-09-07T21:49:17.449Z",
   "headline": "decisions lit = 7/22 (+0/10 new)",
   "measuredHeadline": "measured on the 8-family sample: 10/22 move at least one sampled family",
   "denominators": {
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-07T15:39:37.616Z"
+      "builtAt": "2026-09-07T21:47:48.201Z"
     },
     "sources": {
       "door": {
@@ -30,19 +30,19 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 693,
-        "digest": "3d0497a284a9454baf4b0fd3400d424e8c05e0e5ff668823f97daf8661046d18"
+        "fileCount": 701,
+        "digest": "68e5818aceb1c9fe98b38799fac7d1ae8f65f6e687f79783ee811294ee45b40d"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public/cli/index.mjs",
         "fileCount": 17,
-        "digest": "e0027afa7501ba617284ccd0af7ba48cf593313b4a50b15058f91f853118bf57"
+        "digest": "8207513a71b5051fb45595091d2c7d4831f4072ba8a0fd670aba1b0f9bf5c634"
       }
     },
     "browser": {
       "specifier": "@playwright/test",
       "root": "packages/showroom/package.json",
-      "resolved": "../ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+      "resolved": "node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
       "browserVersion": "149.0.7827.55"
     },
     "roster": {
@@ -621,10 +621,6 @@
           "font-size"
         ],
         "button-modern-md/hitbox": [
-          "block-size",
-          "height",
-          "min-block-size",
-          "min-height",
           "inline-size",
           "width"
         ],

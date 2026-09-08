@@ -12,6 +12,7 @@ import {
   evaluateBrandThemeContrast,
   applyHostileBrandTheme,
   buildSurfaceVariables,
+  tryBuildSurfaceVariables,
   DEFAULT_DARK_GROUND,
   DEFAULT_LIGHT_GROUND,
 } from '../index';
@@ -30,6 +31,7 @@ import {
   staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import { readGovernedTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
+import { ThemeAdmissionError } from '@/infrastructure/compilers/runtime/theme';
 
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-test',
@@ -364,13 +366,13 @@ describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () 
       id: 'p',
       name: 'P',
       palette: { primaryColor: '#4f46e5' },
-      modes: { dark: { palette: { primaryColor: '#a5b4fc' } } },
+      modes: { dark: { palette: { primaryColor: '#747EB0' } } },
     };
 
     const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST).vars;
     const light = buildSurfaceVariables(theme, LIGHT_SURFACE_UNDER_TEST).vars;
 
-    expect(dark['--ds-color-primary']).toBe('#a5b4fc');
+    expect(dark['--ds-color-primary']).toBe('#747EB0');
     expect(light['--ds-color-primary']).toBe('#4f46e5');
   });
 
@@ -412,15 +414,20 @@ describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () 
       id: 'p',
       name: 'P',
       appearance: { defaultMode: 'dark' },
-      palette: { primaryColor: '#0b0f1a' },
-      modes: { light: { palette: { primaryColor: '#f4f4f0' } } },
+      // Admissible on both surfaces: the compile door holds a draft to the same
+      // governed floor a publish holds it to (WO-CAT-03), and rottay's dark
+      // canvas admits the light end of a hue while its light overlay admits the
+      // dark end. The property under test is which OVERLAY drives the channel,
+      // not which hue does.
+      palette: { primaryColor: '#93BAFA' },
+      modes: { light: { palette: { primaryColor: '#1B4A6E' } } },
     };
 
     const dark = buildSurfaceVariables(theme, darkVerticalSurfaces.dark).vars;
     const light = buildSurfaceVariables(theme, darkVerticalSurfaces.light).vars;
 
-    expect(dark['--ds-color-primary']).toBe('#0b0f1a');
-    expect(light['--ds-color-primary']).toBe('#f4f4f0');
+    expect(dark['--ds-color-primary']).toBe('#93BAFA');
+    expect(light['--ds-color-primary']).toBe('#1B4A6E');
   });
 });
 
@@ -530,13 +537,19 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
     expect(dark['--ds-color-bg-primary']).toBe(DEFAULT_DARK_GROUND['--ds-color-bg-primary']);
     expect(light['--ds-color-bg-primary']).toBe(DEFAULT_LIGHT_GROUND['--ds-color-bg-primary']);
 
+    // A near-black ground used to be the fixture here. On a LIGHT-default
+    // vertical it leaves the product's own reading ink at APCA Lc 0, which the
+    // compile door now refuses on this path exactly as it refuses it at publish
+    // -- correctly: a tenant that repaints the canvas and not the ink ships
+    // unreadable text. The property under test is that an AUTHORED ground wins
+    // over the studio's scaffold ground, which any distinguishable value states.
     const authored: BrandTheme = {
       id: 'p',
       name: 'P',
-      palette: { primaryColor: '#4f46e5', backgroundColor: '#020202' },
+      palette: { primaryColor: '#4f46e5', backgroundColor: '#FAFAFF' },
     };
     const compiled = buildSurfaceVariables(authored, LIGHT_SURFACE_UNDER_TEST);
-    expect(compiled.vars['--ds-color-bg-primary']).toBe('#020202');
+    expect(compiled.vars['--ds-color-bg-primary']).toBe('#FAFAFF');
     expect(compiled.declaredKeys.has('--ds-color-bg-primary')).toBe(true);
   });
 
@@ -625,14 +638,32 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
       }
     });
 
-    it(`never publishes the hostile value from ${label} in the injected map`, () => {
+    it(`refuses the hostile value from ${label} BY NAME, publishing nothing`, () => {
+      // The defence moved one step earlier. `buildSurfaceVariables` reaches the
+      // one compile door, and since WO-CAT-03 that door refuses the draft
+      // outright instead of compiling it and leaving the value to be dropped
+      // downstream (F-13, F-61): a colour that is not a colour is named at the
+      // keypath its author wrote, and a value that could close the block is
+      // named at the channel it would have been emitted on.
+      //
+      // The property the studio still owes is asserted with it: the panel
+      // publishes NO variables for a refused draft, so there is nothing for the
+      // hostile value to survive in.
       for (const baseTheme of ['light', 'dark'] as const) {
-        const { vars, declaredKeys } = buildSurfaceVariables(theme, {
+        const surface = {
           key: baseTheme,
           baseTheme,
           vertical: 'bithire',
           tenantSlug: 'escape-probe',
-        });
+        } as const;
+        expect(() => buildSurfaceVariables(theme, surface)).toThrow(ThemeAdmissionError);
+        // The studio keeps rendering, and the hostile value still never reaches
+        // the injected map: an INTENT-stage refusal has no compile to project
+        // (the door refused before a channel was written), and an EMISSION-stage
+        // one projects a compile whose hostile channel the emission grammar has
+        // already dropped. Either way the author sees the refusal, not the value.
+        const { vars, declaredKeys, refusal } = tryBuildSurfaceVariables(theme, surface);
+        expect(refusal).toBeDefined();
         expect(Object.values(vars)).not.toContain(THEME_ESCAPE);
         for (const value of Object.values(vars)) expect(value).not.toContain('} body {');
         for (const name of declaredKeys) expect(vars[name]).not.toContain('} body {');
@@ -679,13 +710,25 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
     // `modes.dark` overlay against its own declared default, which the overlay
     // law refuses. The property under test is exactness of publication, and a
     // same-vertical edit states it without that confound.
+    // The moved leaves are ADMISSIBLE ones, and per vertical, because the door
+    // holds this draft to the same law a publish is held to (WO-CAT-03). The
+    // dials sit inside every vertical's envelope (typeScale 0.92..1.08,
+    // radiusScale 0.8..1.2), and the seeds sit where the governed floor admits
+    // them: the LIGHT end of a hue on rottay's dark canvas, the DARK end on the
+    // two light-default verticals. The property under test is exactness of
+    // publication -- which channels move -- not which hue moves them.
+    const seeds = {
+      rottay: { primaryColor: '#93BAFA', accentColor: '#B7F0DC' },
+      bithire: { primaryColor: '#2F6B9A', accentColor: '#1F7A5A' },
+      evnto: { primaryColor: '#2F6B9A', accentColor: '#1F7A5A' },
+    } as const;
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
       const authored = readGovernedTheme(FIRST_PARTY_THEMES[vertical]);
       const brand: BrandTheme = {
         ...authored,
-        palette: { ...authored.palette, primaryColor: '#FE01DC', accentColor: '#01FE7A' },
-        typography: { ...authored.typography, scale: 1.125 },
-        surfaces: { ...authored.surfaces, radiusScale: 1.4 },
+        palette: { ...authored.palette, ...seeds[vertical] },
+        typography: { ...authored.typography, scale: 1.05 },
+        surfaces: { ...authored.surfaces, radiusScale: 1.15 },
       };
       const baseTheme = authored.appearance?.defaultMode ?? 'light';
       const tenantSlug = `exactness-${vertical}`;

@@ -541,7 +541,7 @@ export async function buildInventory({
     const scopes = tagIndexFor(analysis);
     const covered = new Set();
 
-    const baseline = flattenCompiled(loaded.compile({ brandTheme: theme, tenantSlug: vertical }));
+    const baseline = flattenCompiled(loaded.compile({ brandTheme: theme, vertical, tenantSlug: vertical }));
     const leaves = evaluatedLeaves(theme, '', []);
 
     leaves.forEach((jsPath, ordinal) => {
@@ -562,7 +562,7 @@ export async function buildInventory({
       let emitted = [];
       try {
         const mutated = withLeaf(theme, jsPath, sentinelFor(authoredValue, ordinal + 1));
-        const after = flattenCompiled(loaded.compile({ brandTheme: mutated, tenantSlug: vertical }));
+        const after = flattenCompiled(loaded.compile({ brandTheme: mutated, vertical, tenantSlug: vertical }));
         emitted = diffKeys(baseline, after);
       } catch (error) {
         compileFailures.push({ vertical, slotPath, reason: String(error?.message ?? error).slice(0, 200) });

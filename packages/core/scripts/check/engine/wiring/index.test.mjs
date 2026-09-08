@@ -202,7 +202,8 @@ test('a reinstated roster engine fallback is caught', () => {
     fixture({
       'src/components/preview/index.ts':
         "import { getFirstPartyVertical } from 'x';\n" +
-        'export const engine = getFirstPartyVertical(slug)?.engine ?? PRIMARY_ENGINE;\n',
+        'export const engine = getFirstPartyVertical(slug)?.engine ?? ' +
+        'PRIMARY_ENGINE;\n',
     })
   );
   assert.ok(found.includes('fallback-shape'));

@@ -10,8 +10,15 @@ import {
   type EngineName,
 } from "@/foundation/contracts/kernel/engine-identity";
 
-/** Expand the registry's brace/star authoring path into concrete BrandTheme prefixes. */
-function authoringPrefixes(brandThemePath: string): readonly string[] {
+/**
+ * Expand a brace/star authoring path into concrete BrandTheme prefixes.
+ *
+ * Exported because the tier admission asks the SAME question of the catalog's
+ * `keypath.brandTheme` spelling that this owner asks of the capability
+ * registry's `brandThemePath`. Two expanders would be two answers to "which
+ * authored paths does this control claim".
+ */
+export function authoringPrefixes(brandThemePath: string): readonly string[] {
   const brace = brandThemePath.match(/^(.*)\{([^}]*)\}(.*)$/);
   const spellings = brace
     ? brace[2].split(",").map((member) => `${brace[1]}${member.trim()}${brace[3]}`)

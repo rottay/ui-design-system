@@ -114,10 +114,9 @@ export const FALLBACK_SHAPES = Object.freeze([
   '|| MODERN_TOKENS',
   '|| RUSTIC_TOKENS',
   '?? THEME_ENGINE_ADAPTERS',
-  // C4: the roster engine fallback. Four preview and tooling sites answered
-  // `getFirstPartyVertical(slug)?.engine ?? PRIMARY_ENGINE` for a question the
-  // DB door threw on. One law now, and it refuses.
-  '?? PRIMARY_ENGINE',
+  // C4: the roster engine's nullish default for a question the DB door threw
+  // on. Joined so this gate is not itself a hit in the sweep it enforces.
+  '?? ' + 'PRIMARY_ENGINE',
   '|| PRIMARY_ENGINE',
   '|| defaultContextValue',
   '?? defaultContextValue',
@@ -151,11 +150,12 @@ export const TOKEN_BASELINE_OWNERS = Object.freeze([
 export const PRIMARY_ENGINE_READERS = Object.freeze([
   'src/foundation/contracts/kernel/engine-identity/index.ts',
   'src/infrastructure/runtime/engines/runtime/resolution/index.ts',
-  // NON-PRODUCTIVE SUPPORT, and it says so in its own ownership record: the
-  // cascade probes measure the compiler over mutated roster leaves and probe
-  // fixtures, which are tenants of no vertical. Refusing them the way the
-  // productive door does would leave the compiler unmeasured.
-  'scripts/libraries/theme-lowering/index.mjs',
+  // `scripts/libraries/theme-lowering/index.mjs` used to sit here. It took the
+  // primary engine for a slug the roster did not claim, because it asked one
+  // value two questions -- which tenant, and which vertical. It now takes the
+  // VERTICAL beside the slug and refuses one the roster does not claim, so it
+  // reads no default at all and needs no permission to.
+  //
   // The scripts layer's single roster reader. A pre-build `.mjs` cannot import
   // the TypeScript contract, so this one PARSES it, by name, and fails closed;
   // naming the symbol it parses is the read, and it is the whole point.

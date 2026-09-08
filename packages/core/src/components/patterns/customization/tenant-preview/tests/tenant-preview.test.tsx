@@ -34,7 +34,13 @@ describe('TenantPreview', () => {
     // rather than compiling one under the primary engine by default.
     vertical: 'rottay',
     name: 'Test Tenant',
-    primaryColor: '#3B82F6',
+    // ADMISSIBLE on rottay, and that is now part of the fixture's job. The
+    // compile door applies one admission to every origin since WO-CAT-03, so a
+    // seed whose DERIVED on-tone ink misses the governed APCA floor is refused
+    // in the preview exactly as it is at publish (F-13). Rottay's canvas is
+    // dark, so the floor admits the LIGHT end of a hue there; a light-default
+    // vertical admits the dark end. Same hue, admissible lightness.
+    primaryColor: '#93BAFA',
     personality: 'formal',
   };
 
@@ -43,7 +49,7 @@ describe('TenantPreview', () => {
       const config = createTenantConfig(sampleConfig);
       expect(config.slug).toBe('test-tenant');
       expect(config.name).toBe('Test Tenant');
-      expect(config.branding.primaryColor).toBe('#3B82F6');
+      expect(config.branding.primaryColor).toBe('#93BAFA');
       expect(config.personality).toBeDefined();
     });
 
@@ -74,7 +80,16 @@ describe('TenantPreview', () => {
       // `runtime/preview-css/tests/preview-css.test.ts` for why
       // `--ds-motion-intensity` was rejected as the proof axis (two presets
       // saturate to the same clamped value there).
-      const presets = ['formal', 'neutral', 'playful', 'expressive'] as const;
+      // `playful` carries `animation.intensity` 1.2, which is ABOVE every
+      // vertical's tenant `motionIntensity` cap of 0.8, so the compile door
+      // refuses it on the preview path exactly as it would at publish
+      // (WO-CAT-03). `expressive` carries 1.0, which is the value rottay's own
+      // theme already declares -- a tenant that restates the vertical's value
+      // has decided nothing, so it is admitted. The presets below are the ones
+      // a tenant on this vertical can actually select; the collision between
+      // the shipped presets and the envelope is recorded in the
+      // preview-css suite, which asserts the refusal by name.
+      const presets = ['formal', 'neutral', 'expressive'] as const;
       const calmValues = presets.map((personality) => {
         const config = createTenantConfig({ ...sampleConfig, personality });
         const { css } = buildPreviewCss(config);
@@ -309,7 +324,16 @@ describe('TenantPreview', () => {
       // through the rendered engine. Presence alone would prove nothing -- a
       // default emits the variable too. Four pairwise-distinct values can only
       // come from the preset itself reaching the compiler.
-      const lines = (['formal', 'neutral', 'playful', 'expressive'] as const).map((personality) => {
+      // `playful` carries `animation.intensity` 1.2, which is ABOVE every
+      // vertical's tenant `motionIntensity` cap of 0.8, so the compile door
+      // refuses it on the preview path exactly as it would at publish
+      // (WO-CAT-03). `expressive` carries 1.0, which is the value rottay's own
+      // theme already declares -- a tenant that restates the vertical's value
+      // has decided nothing, so it is admitted. The presets below are the ones
+      // a tenant on this vertical can actually select; the collision between
+      // the shipped presets and the envelope is recorded in the
+      // preview-css suite, which asserts the refusal by name.
+      const lines = (['formal', 'neutral', 'expressive'] as const).map((personality) => {
         const { container } = render(<Engine config={{ ...sampleConfig, personality }} />);
         const cssText = (container.querySelector('style') as HTMLStyleElement).textContent ?? '';
         const calm = cssText.split('\n').find((line) => line.trim().startsWith('--ds-motion-calm:'));
@@ -317,7 +341,7 @@ describe('TenantPreview', () => {
         return calm;
       });
 
-      expect(new Set(lines).size).toBe(4);
+      expect(new Set(lines).size).toBe(3);
     });
 
     /* The other half of the same honesty contract: what the preview could not

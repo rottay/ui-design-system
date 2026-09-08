@@ -3,6 +3,7 @@ export type { EngineAdapterDefinition } from "./foundation/definition";
 export {
   assertEngineAdmitted,
   assertEngineSupportsActivatedControls,
+  authoringPrefixes,
   controlsActivatedBy,
   EngineControlUnsupportedError,
   EngineNotAdmittedForCompileError,

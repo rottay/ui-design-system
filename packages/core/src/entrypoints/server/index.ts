@@ -127,23 +127,28 @@ export {
 } from '../../infrastructure/runtime/tenant/foundation/configuration/registry';
 
 /**
- * The FIRST-PARTY STATIC ingress path, beside the tenant/DB one above.
+ * THE ONE COMPILE DOOR, and nothing beside it.
  *
- * These are the two — and only two — ways a tenant's visual channels are
- * produced: a code-owned vertical resolves its authored `Theme` and lowers it
- * through `compileTheme` here, and a customer publishes a
- * `TenantThemeDocument` compiled by `compileTenantThemeConfig`.
- * Both terminate in CSS the application mounts; no provider compiles anything.
+ * A tenant's visual channels are produced exactly one way from outside this
+ * package: name an intent with one of the three producers, hand it to
+ * `compileThemeIntent`, and emit the result. The door runs the whole admission
+ * -- tier, engine, envelope, contrast, limits -- for every origin.
  *
- * Exported because a consumer outside this package that mounts a first-party
- * theme's CSS itself — the showroom's probe surfaces are the live case — must
- * be able to reach the SAME compiler the committed artifacts are built from.
- * Without a public seam the alternative is a second, hand-rolled projection of
- * a theme, which is precisely the shape this checkpoint removed. Emission
- * travels with the lowering because scope is not compiled: one compile serves a
- * document root, a DB artifact and a preview container.
- * `brandTenantSelector` travels with it because a consumer that re-scopes the
- * compiled output must not reconstruct the selector by hand.
+ * WHAT THIS ENTRY POINT NO LONGER PUBLISHES, and why (F-24). It used to also
+ * export the raw lowering, the raw resolver, the authoring lift and the adapter
+ * table, which together are a complete second route: hand-assemble a
+ * `ThemeResolution` with the lift, pick an adapter out of the table, call the
+ * lowering, and every one of those five stations is skipped. "One door" was
+ * true only inside the package. The names are gone rather than deprecated,
+ * because a deprecated bypass is a bypass (D-07: APIs break here).
+ *
+ * A consumer that mounted a first-party theme's CSS itself -- the showroom's
+ * probe surfaces are the live case -- reaches the same compiler through
+ * `staticThemeIntent` + `compileThemeIntent`, which is the same lowering with
+ * the admission in front of it. Emission travels with the door because scope is
+ * not compiled: one compile serves a document root, a DB artifact and a preview
+ * container. `brandTenantSelector` travels with it because a consumer that
+ * re-scopes the compiled output must not reconstruct the selector by hand.
  */
 export {
   brandModeSelector,
@@ -151,8 +156,6 @@ export {
   themeModeSelector,
 } from '../../infrastructure/compilers/kernel/foundation/css/tenant-selectors';
 export {
-  THEME_ENGINE_ADAPTERS,
-  compileTheme,
   compileThemeIntent,
   containerScope,
   documentThemeIntent,
@@ -163,7 +166,6 @@ export {
   firstPartyScope,
   previewThemeIntent,
   resolveAdapter,
-  resolveTheme,
   staticThemeIntent,
   tenantArtifactScope,
   verticalEngine,
@@ -258,23 +260,6 @@ export type {
   FirstPartyVerticalId,
 } from '../../foundation/contracts/kernel/verticals';
 export { isFirstPartyVerticalId } from '../../foundation/tokens/ts/presentation/brand-themes';
-/**
- * The AUTHORING lift, not a lowering door, and not a path to `resolveTheme`:
- * that door takes a `ThemeIntent` and produces its own baseline. This wraps an
- * authored `BrandTheme`'s governed families into a `Theme`, and it is published
- * for CLOSED TOOLING SUPPORT -- the repository's own theme-lowering adapter,
- * which binds it out of `dist/server.js` to compile a synthesized resolution
- * for gate probes. A product consumer holding an authored draft uses
- * `draftPreviewThemeIntent` instead; nothing here re-opens a second authority.
- *
- * It is the WRAP-ONLY lift on purpose. The ISO bridge also normalizes — it
- * materializes every declared palette key and completes the chrome shape — which
- * is right for a first-party theme that is already total and wrong for a partial
- * one: a probe fixture that authors no `capabilities` cannot survive the
- * normalizer, and a sparse draft lifted through it would compile channels its
- * author never wrote.
- */
-export { liftAuthoredTheme } from '../../infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 export type {
   NormalizedTenantThemeAppearance,
   TenantThemeAdvancedAppearance,

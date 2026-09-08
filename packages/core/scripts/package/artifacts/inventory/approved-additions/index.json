@@ -4,6 +4,114 @@
     {
       "path": "dist/entrypoints/suppliers/cli/index.js",
       "reason": "Publish the supplier-honesty CLI from the compiled package boundary instead of shipping its source tree."
+    },
+    {
+      "path": "dist/contracts/theme/runtime/envelopes/index.cjs",
+      "reason": "WO-CAT-03: the vertical envelope table -- what a vertical lets a tenant reach -- extracted into contracts so the single admission at the compile door can read it without a module cycle."
+    },
+    {
+      "path": "dist/contracts/theme/runtime/envelopes/index.d.ts",
+      "reason": "WO-CAT-03: the vertical envelope table -- what a vertical lets a tenant reach -- extracted into contracts so the single admission at the compile door can read it without a module cycle."
+    },
+    {
+      "path": "dist/contracts/theme/runtime/envelopes/index.js",
+      "reason": "WO-CAT-03: the vertical envelope table -- what a vertical lets a tenant reach -- extracted into contracts so the single admission at the compile door can read it without a module cycle."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/authorship/index.cjs",
+      "reason": "WO-CAT-03: admission authorship -- the narrower defined-value keypath question the door asks, so no tenant is refused for an ink it never wrote."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/authorship/index.d.ts",
+      "reason": "WO-CAT-03: admission authorship -- the narrower defined-value keypath question the door asks, so no tenant is refused for an ink it never wrote."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/authorship/index.js",
+      "reason": "WO-CAT-03: admission authorship -- the narrower defined-value keypath question the door asks, so no tenant is refused for an ink it never wrote."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/issues/index.cjs",
+      "reason": "WO-CAT-03: the admission refusal vocabulary -- one error type for every origin, re-thrown by the DB terminal under its own published name."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/issues/index.d.ts",
+      "reason": "WO-CAT-03: the admission refusal vocabulary -- one error type for every origin, re-thrown by the DB terminal under its own published name."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/issues/index.js",
+      "reason": "WO-CAT-03: the admission refusal vocabulary -- one error type for every origin, re-thrown by the DB terminal under its own published name."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/index.cjs",
+      "reason": "WO-CAT-03: the single admission -- one origin policy, asked once by compileThemeIntent instead of four of its five stations living only inside compileTenantTheme."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/index.d.ts",
+      "reason": "WO-CAT-03: the single admission -- one origin policy, asked once by compileThemeIntent instead of four of its five stations living only inside compileTenantTheme."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/index.js",
+      "reason": "WO-CAT-03: the single admission -- one origin policy, asked once by compileThemeIntent instead of four of its five stations living only inside compileTenantTheme."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/contrast/index.cjs",
+      "reason": "WO-CAT-03: admission contrast station -- the APCA and categorical chart floors applied for every tenant-authored origin, not only on the DB terminal."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/contrast/index.d.ts",
+      "reason": "WO-CAT-03: admission contrast station -- the APCA and categorical chart floors applied for every tenant-authored origin, not only on the DB terminal."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/contrast/index.js",
+      "reason": "WO-CAT-03: admission contrast station -- the APCA and categorical chart floors applied for every tenant-authored origin, not only on the DB terminal."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/engine/index.cjs",
+      "reason": "WO-CAT-03: admission engine station -- the engine question asked at the door, beside tier, envelope, contrast and limits."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/engine/index.d.ts",
+      "reason": "WO-CAT-03: admission engine station -- the engine question asked at the door, beside tier, envelope, contrast and limits."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/engine/index.js",
+      "reason": "WO-CAT-03: admission engine station -- the engine question asked at the door, beside tier, envelope, contrast and limits."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/envelope/index.cjs",
+      "reason": "WO-CAT-03: admission envelope station -- the vertical bounds and closed domains refused by name on the resolved theme, never dropped, repaired or clamped."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/envelope/index.d.ts",
+      "reason": "WO-CAT-03: admission envelope station -- the vertical bounds and closed domains refused by name on the resolved theme, never dropped, repaired or clamped."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/envelope/index.js",
+      "reason": "WO-CAT-03: admission envelope station -- the vertical bounds and closed domains refused by name on the resolved theme, never dropped, repaired or clamped."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.cjs",
+      "reason": "WO-CAT-03: admission limits station -- the value grammar and payload ceilings run by the compile door, retiring the second copy on the DB terminal."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.d.ts",
+      "reason": "WO-CAT-03: admission limits station -- the value grammar and payload ceilings run by the compile door, retiring the second copy on the DB terminal."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.js",
+      "reason": "WO-CAT-03: admission limits station -- the value grammar and payload ceilings run by the compile door, retiring the second copy on the DB terminal."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/tier/index.cjs",
+      "reason": "WO-CAT-03: admission tier station -- the plan/decision comparison that makes tier decide which decisions a tenant may move."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/tier/index.d.ts",
+      "reason": "WO-CAT-03: admission tier station -- the plan/decision comparison that makes tier decide which decisions a tenant may move."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/tier/index.js",
+      "reason": "WO-CAT-03: admission tier station -- the plan/decision comparison that makes tier decide which decisions a tenant may move."
     }
   ]
 }

@@ -172,6 +172,28 @@ test('the shipped lucide allowlist covers the ban-rule subtree and the honesty c
   assert.ok(!/lucide/iu.test(cliSource), 'shipped consumer CLI must stay lucide-free');
 });
 
+test('every shipped approved-addition carries an exact path and a stated reason', () => {
+  // The gate reads `a.path` and never reads `reason`, so nothing in the audit
+  // notices a review entry that reviews nothing. This list is the ONLY way a new
+  // published file gets past the additions check, so a reasonless or duplicated
+  // entry is an unreviewed publication wearing the review's clothes.
+  const raw = JSON.parse(readFileSync(resolve(scriptDir, '../approved-additions/index.json'), 'utf8'));
+  assert.ok(Array.isArray(raw.additions), 'additions must be an array');
+
+  const seen = new Set();
+  for (const entry of raw.additions) {
+    assert.equal(typeof entry.path, 'string', `addition needs a path: ${JSON.stringify(entry)}`);
+    assert.ok(entry.path.length > 0, 'addition path must not be empty');
+    // Matching is exact-path, never a prefix: a glob would silently admit every
+    // future file under it.
+    assert.ok(!entry.path.includes('*'), `addition path must be exact, not a glob: ${entry.path}`);
+    assert.equal(typeof entry.reason, 'string', `addition needs a reason: ${entry.path}`);
+    assert.ok(entry.reason.trim().length > 0, `addition reason must not be blank: ${entry.path}`);
+    assert.ok(!seen.has(entry.path), `duplicate addition entry: ${entry.path}`);
+    seen.add(entry.path);
+  }
+});
+
 const STALE_DIST_HERE = dirname(fileURLToPath(import.meta.url));
 
 /* -------------------------------------------------------------------------- */

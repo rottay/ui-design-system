@@ -8,7 +8,10 @@
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
-import type { TenantThemeDocumentAny } from "@/contracts/theme/presentation/document";
+import {
+  isTenantThemeDocumentV2,
+  type TenantThemeDocumentAny,
+} from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
   admitDocument,
@@ -32,6 +35,18 @@ export interface DraftPreviewThemeIntentInput {
 }
 
 /**
+ * The entitlement a document carries, or none. Identical to the persisted
+ * producer's, because preview and publish read one document.
+ */
+function entitlementOf(
+  document: TenantThemeDocumentAny
+): Pick<ThemeIntent, "entitlement"> {
+  return isTenantThemeDocumentV2(document)
+    ? { entitlement: { plan: document.plan } }
+    : {};
+}
+
+/**
  * The intent an unsaved document preview compiles under.
  *
  * Identical to the persisted producer except for the origin, and deliberately
@@ -48,6 +63,7 @@ export function previewThemeIntent(input: PreviewThemeIntentInput): ThemeIntent 
       vertical: input.vertical,
       document: input.document,
     }),
+    ...entitlementOf(input.document),
   };
 }
 
@@ -71,6 +87,7 @@ export function previewThemeAdmission(
       slug: input.slug,
       origin: "preview",
       patch: admission.patch,
+      ...entitlementOf(input.document),
     },
     admission,
   };

@@ -48,7 +48,10 @@ import { Text } from '../../../primitives/display/typography/compound/text';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
-import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import {
+  TENANT_THEME_SCHEMA_VERSION,
+  type TenantThemeDocument,
+} from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
   compileThemeIntent,
   previewThemeIntent,
@@ -119,11 +122,17 @@ export function BrandingPreviewSandbox({
    */
   const cssVars = useMemo(() => {
     const vars: Record<string, string> = {};
-    const document = (
-      appearance.advanced
-        ? { schemaVersion: 1, mode: 'advanced', visualFoundation: appearance }
-        : { schemaVersion: 1, mode: 'simple', appearance: appearance.general ?? {} }
-    ) as unknown as TenantThemeDocument;
+    const document: TenantThemeDocument = appearance.advanced
+      ? {
+          schemaVersion: TENANT_THEME_SCHEMA_VERSION,
+          mode: 'advanced',
+          visualFoundation: appearance,
+        }
+      : {
+          schemaVersion: TENANT_THEME_SCHEMA_VERSION,
+          mode: 'simple',
+          appearance: appearance.general ?? {},
+        };
     try {
       // The engine, the baseline and the migration's default mode are the
       // door's. This block used to state all three itself, and got the third

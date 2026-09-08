@@ -47,13 +47,14 @@ import {
 //     registry). Because their slug is unbundled and they carry a brandTheme
 //     with no compiled artifact behind it, DesignSystemProvider has nothing to
 //     paint them with on its own (the runtime tenant-CSS generator is gone).
-//     TortureSurface itself compiles their BrandTheme with `compileTheme`
-//     and mounts the resulting CSS as a <style> element, then hands the
-//     provider the config WITHOUT the brandTheme -- the same static ingress
-//     path a code-owned vertical takes (compileTheme ->
-//     renderFirstPartyArtifact, whose runtime projection also strips the
-//     theme), minus the build-time artifact step these ephemeral probe
-//     fixtures don't need. Nothing needs to be registered for this to work.
+//     TortureSurface itself compiles their BrandTheme through the ONE door
+//     (`draftPreviewThemeIntent` -> `compileThemeIntent`) and mounts the
+//     resulting CSS as a <style> element, then hands the provider the config
+//     WITHOUT the brandTheme -- minus the build-time artifact step these
+//     ephemeral probe fixtures don't need. Nothing needs to be registered for
+//     this to work, and nothing compiles outside the admission: WO-CAT-03
+//     retired the published `compileTheme`/`liftAuthoredTheme` pair this
+//     surface used to reach around it with (F-24).
 //   - rottay: the real first-party tenant, used as the differential reference
 //     the Playwright spec compares the torture fixtures against.
 //   - bithire / themanagementmiami: the bithire vertical baseline and one
@@ -227,23 +228,36 @@ export function TortureSurface({
   // artifact and the bundled-vertical fixtures (rottay/bithire/evnto, which
   // already carry their own pre-built stylesheet inside the DS bundle) both
   // paint through a channel this surface does not own; this branch is what's
-  // left once those two are excluded. `compileTheme` is the same pure
-  // static ingress path a code-owned vertical's build takes -- this surface
-  // just mounts the result itself instead of persisting it to disk, since a
-  // probe fixture has no build step.
-  const legacyBrandCss = useMemo(() => {
+  // left once those two are excluded. `compileThemeIntent` is the same door a
+  // tenant's own publish takes -- this surface just mounts the result itself
+  // instead of persisting it, since a probe fixture has no build step.
+  //
+  // WHY THIS CAN REFUSE, AND WHY THAT IS THE POINT. Since WO-CAT-03 the door
+  // applies one admission to every origin, so a fixture that authors a pair
+  // under the governed APCA floor is refused here exactly as a customer's
+  // document is refused at publish. A torture fixture exists to be hostile, so
+  // some of them ARE refused -- and the honest rendering of "this theme is not
+  // publishable" is to mount no stylesheet and say which floors it violated,
+  // never to compile it through a second route with the admission skipped.
+  // That second route is F-24, and it is what this surface used to be.
+  const legacyBrand = useMemo((): { css?: string; refusal?: string } => {
     if (!brandTheme || !tenantConfig || compiledArtifact || KNOWN_TENANT_FIXTURES.has(fixture)) {
-      return undefined;
+      return {};
     }
     const slug = tenantConfig.slug;
     const intent = tortureDraftIntent(tenantConfig, brandTheme);
-    if (!intent) return undefined;
-    // The explicit engine is the SANCTIONED override: this surface exists to
-    // render one fixture under all three engines side by side. A productive
-    // compile passes none and takes the vertical's roster row.
-    const compiled = compileThemeIntent(intent, { engine }).compiled;
-    return emitThemeCss(compiled, containerScope(brandTenantSelector(slug)));
+    if (!intent) return {};
+    try {
+      // The explicit engine is the SANCTIONED override: this surface exists to
+      // render one fixture under all three engines side by side. A productive
+      // compile passes none and takes the vertical's roster row.
+      const compiled = compileThemeIntent(intent, { engine }).compiled;
+      return { css: emitThemeCss(compiled, containerScope(brandTenantSelector(slug))) };
+    } catch (error) {
+      return { refusal: error instanceof Error ? error.message : String(error) };
+    }
   }, [brandTheme, tenantConfig, compiledArtifact, fixture, engine]);
+  const legacyBrandCss = legacyBrand.css;
 
   // The classic engine seeds antd from the compiled projection, so the surface
   // publishes the same compile it paints with. A fixture whose theme this
@@ -253,7 +267,14 @@ export function TortureSurface({
     if (brandTheme && tenantConfig) {
       const intent = tortureDraftIntent(tenantConfig, brandTheme);
       if (intent) {
-        return engineVisualOf(compileThemeIntent(intent, { engine }).compiled);
+        try {
+          return engineVisualOf(compileThemeIntent(intent, { engine }).compiled);
+        } catch {
+          // A refused fixture publishes no projection: the surface above
+          // already reports the refusal, and seeding a third-party library
+          // from a compile the door rejected is the bypass in miniature.
+          return undefined;
+        }
       }
     }
     const slug = tenantConfig?.slug ?? null;
@@ -338,12 +359,25 @@ export function TortureSurface({
       {legacyBrandCss ? (
         // The exact compiled BrandTheme, mounted once. Scoped to
         // html[data-tenant='<slug>'] (+ [data-theme='<mode>'] for the mode
-        // overlay block) by compileTheme itself; TenantProvider and
+        // overlay block) by the lowering itself; TenantProvider and
         // ThemeProvider stamp those same attributes on <html>, so no selector
         // is hand-written here.
         <style
           data-testid="torture-legacy-brand-style"
           dangerouslySetInnerHTML={{ __html: legacyBrandCss }}
+        />
+      ) : null}
+      {legacyBrand.refusal ? (
+        // The door refused this fixture. Rendering the refusal rather than
+        // swallowing it is what keeps the probe honest: an unstyled surface
+        // with no explanation is indistinguishable from a compile that never
+        // ran, which is the failure mode the whole single-door law exists to
+        // remove. The attribute is machine-readable so the whitelabel spec can
+        // assert on WHICH floors a fixture violates.
+        <div
+          hidden
+          data-testid="torture-admission-refusal"
+          data-torture-admission={legacyBrand.refusal}
         />
       ) : null}
       {children}

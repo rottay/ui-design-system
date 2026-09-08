@@ -21,7 +21,8 @@ import {
 import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { EMPTY_PROVENANCE } from '@/foundation/contracts/composition/tenants/themes/resolved';
 import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
-import { compileTheme, resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
+import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
+import { compileTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering';
 
 const bithireSpec = () => {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === 'bithire');

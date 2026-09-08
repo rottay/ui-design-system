@@ -48,6 +48,21 @@ export const NEW_DECISION_DENOMINATOR = 10;
  */
 export const RECORDED_CLASSES = Object.freeze(['full', 'partial', 'none', 'new']);
 
+/**
+ * THE ARM VALUES SIT INSIDE THE VERTICAL ENVELOPE, and that is load-bearing.
+ *
+ * Four numeric rows used to probe values the envelope refuses -- `scale 0.9`
+ * against a 0.92 floor, `radiusScale 0.75` against 0.8, `effectIntensity 1`
+ * against 0.65, `durationScale 0.5` against 0.75. Nothing noticed, because
+ * before WO-CAT-03 only the DB terminal applied the envelope and this probe
+ * goes through the compile door. It was therefore measuring a compile no tenant
+ * could publish -- F-27's complaint, in a new place -- and the door now says so
+ * by refusing the arm.
+ *
+ * The arms are inside the envelope for every vertical, so each row still
+ * contrasts two DIFFERENT admissible values and the measurement is of something
+ * a tenant can actually do.
+ */
 export const DECISIONS = Object.freeze([
   ['palette.seeds', 'full', [{ primary: '#4F46E5' }, { primary: '#DC2626' }]],
   ['palette.status-seeds', 'full', [{ success: '#10B981' }, { success: '#0EA5E9' }]],
@@ -56,10 +71,10 @@ export const DECISIONS = Object.freeze([
   ['palette.dark-mode', 'none', ['light', 'dark']],
   ['typography.families', 'full', [{ base: 'humanist-text' }, { base: 'editorial-text' }]],
   ['typography.pairing', 'full', ['sober', 'editorial']],
-  ['typography.scale', 'partial', [0.9, 1.1]],
+  ['typography.scale', 'partial', [0.95, 1.05]],
   ['typography.role-weights', 'new', ['light', 'strong']],
   ['typography.numeric', 'new', ['proportional', 'tabular']],
-  ['shape.radius-scale', 'none', [0.75, 1.25]],
+  ['shape.radius-scale', 'none', [0.85, 1.15]],
   ['shape.nesting', 'new', ['concentric', 'uniform']],
   ['shape.button-style', 'partial', ['sharp', 'pill']],
   ['shape.control-height', 'new', ['compact', 'tall']],
@@ -67,12 +82,12 @@ export const DECISIONS = Object.freeze([
   ['spacing.rhythm', 'none', ['tight', 'airy']],
   ['surfaces.elevation-posture', 'partial', ['flat', 'elevated']],
   ['surfaces.border-style', 'new', ['none', 'strong']],
-  ['surfaces.effect-intensity', 'partial', [0, 1]],
+  ['surfaces.effect-intensity', 'partial', [0, 0.6]],
   ['states.emphasis', 'new', ['subtle', 'strong']],
   ['states.focus-style', 'new', ['ring', 'glow']],
   ['motion.dial', 'partial', [
-    { intensity: 0, durationScale: 0.5 },
-    { intensity: 1, durationScale: 2 },
+    { intensity: 0, durationScale: 0.8 },
+    { intensity: 0.8, durationScale: 1.3 },
   ]],
   ['motion.character', 'new', ['mechanical', 'playful']],
   ['navigation.sidebar-tone', 'full', ['subtle', 'inverse']],

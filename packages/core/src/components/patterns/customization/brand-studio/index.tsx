@@ -40,7 +40,9 @@ import { Input } from '../../../primitives/inputs/input';
 import { Select } from '../../../primitives/inputs/select';
 import { Stack } from '../../../primitives/layout/stack';
 import { Text } from '../../../primitives/display/typography/compound/text';
+import type { RefusedThemeCompilation } from '../../../../infrastructure/compilers/runtime/theme';
 import {
+  ThemeAdmissionError,
   compileThemeIntent,
   draftPreviewThemeIntent,
   staticThemeIntent,
@@ -372,6 +374,22 @@ export function buildSurfaceVariables(theme: BrandTheme, surface: BrandStudioSur
   const { compiled: untouched } = compileThemeIntent(
     staticThemeIntent(surface.vertical, surface.tenantSlug),
   );
+  return projectSurfaceVariables(compiled, untouched, surface);
+}
+
+/**
+ * The panel's map, from the two compiles the door produced.
+ *
+ * Split out so the refusal path can reach it: `tryBuildSurfaceVariables` below
+ * grades a draft the door REFUSED, and grading needs the same projection over
+ * the same two compiles. One projector, so a refused draft and an admitted one
+ * are described the same way.
+ */
+function projectSurfaceVariables(
+  compiled: ThemeCompilation,
+  untouched: ThemeCompilation,
+  surface: BrandStudioSurfaceConfig,
+): SurfaceVariables {
   // The base block and the mode overlay are differenced SEPARATELY, then
   // overlaid. Differencing the merged `base + overlay` instead would let the
   // vertical's own overlay mask the draft: on a ground the vertical pins, both
@@ -409,6 +427,47 @@ export function buildSurfaceVariables(theme: BrandTheme, surface: BrandStudioSur
 }
 
 /**
+ * The same compile, for a surface that must keep rendering while an author
+ * types.
+ *
+ * `buildSurfaceVariables` reaches the one compile door, and since WO-CAT-03
+ * that door applies the whole admission to every origin -- so a draft carrying
+ * a value the vertical envelope refuses, a colour that is not a colour, or a
+ * pair under the governed APCA floor is REFUSED rather than compiled (F-13).
+ * That is right for a publish and fatal for an editor: an authoring surface
+ * that throws mid-edit shows the author nothing at all.
+ *
+ * So the surfaces below ask for the compile through here. A refused draft
+ * yields NO variables -- the panel paints the ground and nothing else, which is
+ * the honest rendering of "this cannot be published" -- and the refusal travels
+ * with it so the studio can say why. Nothing is compiled around the door.
+ */
+export function tryBuildSurfaceVariables(
+  theme: BrandTheme,
+  surface: BrandStudioSurfaceConfig
+): SurfaceVariables & { refusal?: string } {
+  try {
+    return buildSurfaceVariables(theme, surface);
+  } catch (error) {
+    if (!(error instanceof ThemeAdmissionError)) throw error;
+    const measured = error.measured as RefusedThemeCompilation | undefined;
+    // An EMISSION-stage refusal graded a compile before it refused it, and that
+    // compile is what the author is looking at. Projecting it is how the studio
+    // shows the draft AND says what is wrong with it; nothing is published, and
+    // `buildSurfaceVariables` still throws for every caller that is not this
+    // one. An INTENT-stage refusal has no compile -- the door refused before a
+    // channel was written -- so the panel paints its ground and nothing else.
+    if (!measured) {
+      return { vars: {}, declaredKeys: new Set<string>(), refusal: error.message };
+    }
+    return {
+      ...projectSurfaceVariables(measured.compiled, measured.baseline, surface),
+      refusal: error.message,
+    };
+  }
+}
+
+/**
  * Compile a BrandTheme against one preview ground and validate the derived
  * colors. This is the exact evaluation the component runs on every edit.
  */
@@ -416,7 +475,7 @@ export function evaluateBrandThemeContrast(
   theme: BrandTheme,
   surface: BrandStudioSurfaceConfig
 ): BrandStudioContrastReport {
-  const { vars, declaredKeys } = buildSurfaceVariables(theme, surface);
+  const { vars, declaredKeys } = tryBuildSurfaceVariables(theme, surface);
   const colors = deriveBrandingColors(vars, surface.key, declaredKeys);
   const { valid, violations, suggestions } = validateBrandingContrast(colors);
   return { surface: surface.key, colors, valid, violations, suggestions };
@@ -451,10 +510,17 @@ export function applyHostileBrandTheme(theme: BrandTheme): BrandTheme {
     color: '#fbfbfb',
     colorMuted: '#fcfcfc',
   };
+  // `effectIntensity` is 0.65 rather than 3, and that is not a softening: the
+  // vertical envelope bounds this dial, so a value outside it is refused at the
+  // INTENT stage -- before a channel is written and before a single colour pair
+  // exists to grade. This helper's whole job is to produce failing COLOUR
+  // pairs, so it stays inside the dials the envelope bounds and pushes only the
+  // axes the contrast report reads. The out-of-envelope case is a different
+  // refusal, asserted where it belongs.
   draft.surfaces = {
     ...(draft.surfaces ?? {}),
     borderRadius: { sm: '40px', md: '48px', lg: '64px', xl: '80px' },
-    effectIntensity: 3,
+    effectIntensity: 0.65,
   };
   draft.motion = {
     ...(draft.motion ?? {}),
@@ -787,7 +853,10 @@ function PreviewPanel({
   const t = useBrandStudioCopy();
   const scopeClass = `brand-studio-${surface.key}-${scopeSalt}`;
 
-  const mergedVars = useMemo(() => buildSurfaceVariables(theme, surface).vars, [theme, surface]);
+  const mergedVars = useMemo(
+    () => tryBuildSurfaceVariables(theme, surface).vars,
+    [theme, surface],
+  );
 
   // The rule is the emission owner's grammar; this panel owns only its scope.
   const scopedCss = useMemo(

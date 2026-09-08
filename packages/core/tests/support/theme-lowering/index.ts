@@ -34,11 +34,11 @@ import {
 } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { PRIMARY_ENGINE } from "@/foundation/contracts/kernel/engine-identity";
 import {
-  compileTheme,
   containerScope,
   emitThemeCss,
   resolveAdapter,
 } from "@/infrastructure/compilers/runtime/theme";
+import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
 import { brandTenantSelector } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 
 /** The legacy compile input shape the suites still spell. */

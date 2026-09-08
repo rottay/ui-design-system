@@ -1,5 +1,22 @@
-export { resolveTheme } from "./runtime/resolution";
-export { compileTheme } from "./runtime/lowering";
+/**
+ * THE LOWERING AND THE RESOLVER ARE NOT ON THIS BARREL.
+ *
+ * They used to be, and this barrel is re-exported by
+ * `infrastructure/compilers/index.ts`, which the ROOT package entrypoint
+ * re-exports in turn -- so `compileTheme`, `resolveTheme` and
+ * `THEME_ENGINE_ADAPTERS` were public from `@rottay/design-system` as well as
+ * from `/server`. Closing only `/server` would have been cosmetic: the same
+ * three names on the root entrypoint are the same complete second route with no
+ * admission on it (F-24).
+ *
+ * Every productive caller inside the package already reached them at their own
+ * owners -- `./runtime/lowering`, `./runtime/resolution`,
+ * `./presentation/adapters` -- so nothing internal is inconvenienced, and
+ * `theme-lowering-single-door` asserts the lowering keeps exactly one owner.
+ *
+ * `baselineFor` stays: it names a vertical's own Theme and lowers nothing.
+ */
+export { baselineFor } from "./runtime/resolution";
 export {
   ThemePatchMigrationError,
   admitDocument,
@@ -25,6 +42,19 @@ export type {
   UnlitReason,
 } from "./runtime/ingress";
 export { compileThemeIntent } from "./facade/runtime/compile";
+/**
+ * The door's refusal, published so a surface can tell one apart from a crash.
+ *
+ * An authoring surface must keep rendering while an author types, and the only
+ * way to do that without compiling around the admission is to CATCH its named
+ * refusal. A caller that cannot name the error has to catch everything, which
+ * is how a real bug gets rendered as an invalid draft.
+ */
+export { ThemeAdmissionError } from "./facade/foundation/admission";
+export type {
+  RefusedThemeCompilation,
+  ThemeAdmissionIssue,
+} from "./facade/foundation/admission";
 export type {
   CompileThemeIntentOptions,
   ThemeIntentCompilation,
@@ -46,7 +76,6 @@ export {
   defineEngineAdapter,
   registerEngineAdapter,
   resolveAdapter,
-  THEME_ENGINE_ADAPTERS,
 } from "./presentation/adapters";
 export type { EngineAdapterDefinition } from "./presentation/adapters";
 export {

@@ -174,7 +174,7 @@ test('sobre el arbol real: NINGUNA fila pure difiere de su cabeza solo por el ca
   const arm = await loadArm({ coreRoot: CORE_ROOT });
   const scopes = {};
   for (const [vertical, theme] of Object.entries(arm.themes)) {
-    scopes[vertical] = scopesOf(arm.compile({ brandTheme: theme, tenantSlug: vertical }));
+    scopes[vertical] = scopesOf(arm.compile({ brandTheme: theme, vertical, tenantSlug: vertical }));
   }
   const overlayNameOf = (vertical) => Object.keys(scopes[vertical]).find((name) => name !== 'base') ?? 'base';
 

@@ -19,7 +19,11 @@ import { describe, expect, it } from "vitest";
 
 // A .mjs tooling module: this test asserts on its ownership record, which is
 // the module's own statement that it is support and not a second door.
-import { THEME_LOWERING_OWNERSHIP } from "../../../scripts/libraries/theme-lowering/index.mjs";
+import {
+  THEME_LOWERING_OWNERSHIP,
+  wrapGovernedFamilies,
+} from "../../../scripts/libraries/theme-lowering/index.mjs";
+import { liftAuthoredTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake";
 
 const PACKAGE_ROOT = resolve(__dirname, "../../..");
 const SRC_ROOT = join(PACKAGE_ROOT, "src");
@@ -216,6 +220,85 @@ const MIGRATION_IMPORTERS: readonly string[] = [
 /** A `ThemeIntentOrigin` written as a literal. */
 const ORIGIN_LITERAL = /["'`](?:static-vertical|tenant-document|preview)["'`]/u;
 
+/** The public server entrypoint, and the four names it may never publish. */
+const SERVER_ENTRYPOINT = "src/entrypoints/server/index.ts";
+
+/**
+ * The complete bypass, spelled out. Each of these four was published from
+ * `entrypoints/server` before WO-CAT-03, and together they ARE a second door:
+ * `liftAuthoredTheme` builds a resolution, `THEME_ENGINE_ADAPTERS` supplies an
+ * adapter, `compileTheme` lowers it, and `resolveTheme` skips the producers.
+ * A consumer holding all four never meets tier, engine, envelope, contrast or
+ * limits (F-24).
+ */
+const CLOSED_PUBLIC_NAMES = [
+  "compileTheme",
+  "resolveTheme",
+  "liftAuthoredTheme",
+  "THEME_ENGINE_ADAPTERS",
+] as const;
+
+/** The word-boundary sweep the acceptance gate runs, in code AND in prose. */
+const closedNameHits = (source: string): readonly string[] =>
+  CLOSED_PUBLIC_NAMES.filter((name) =>
+    new RegExp(`${name}\\b`, "u").test(source)
+  );
+
+/** The single admission owner: the only place a policy station may live. */
+const ADMISSION_OWNER =
+  "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/";
+
+/** The one door that composes resolution, admission and lowering. */
+const COMPILE_DOOR =
+  "src/infrastructure/compilers/runtime/theme/facade/runtime/compile/index.ts";
+
+/**
+ * The admission stations, by the symbol each one owns.
+ *
+ * Every one of these was a private function inside `compileTenantTheme` before
+ * WO-CAT-03, which is why the DB transport had a policy the preview and draft
+ * transports did not. The census below asserts that each name is DECLARED in
+ * exactly one productive source, and that the source is under the admission
+ * owner -- a second declaration anywhere is a second policy.
+ */
+const ADMISSION_STATIONS = [
+  "tierIssues",
+  "admitEngine",
+  "envelopeIssues",
+  "contrastIssues",
+  "chartCategoryIssues",
+  "limitIssues",
+  "isSafeVisualValue",
+  "themeChannelDelta",
+] as const;
+
+/**
+ * `ThemeAdmissionError.measured` — the graded compilation a refusal carries.
+ *
+ * It is the one field on the refusal that hands an author back the compile the
+ * emission stations refused, and it exists for exactly one consumer: the
+ * authoring studio, which must paint the draft it is telling the author it
+ * cannot publish. A SECOND reader is a publisher reading around the admission:
+ * `compileThemeIntent` still throws, so the only way to obtain compiled
+ * channels from a refused intent is to catch the named error and read this
+ * field. The field's own docblock promises this census; without it the promise
+ * was prose.
+ *
+ * The census admits the definition site because a property sweep cannot help
+ * seeing `this.measured = measured`, and naming it is more honest than writing
+ * a regex that excludes its own owner.
+ */
+const MEASURED_FIELD_DEFINITION =
+  "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/issues/index.ts";
+
+/** The sole authoring surface allowed to read the graded compilation. */
+const MEASURED_FIELD_READERS: readonly string[] = [
+  "src/components/patterns/customization/brand-studio/index.tsx",
+];
+
+/** A `.measured` property access, in code only — prose names it constantly. */
+const MEASURED_ACCESS = /\.measured\b/u;
+
 /** The retired engine fallback, in the shape every one of its four copies had. */
 const ENGINE_FALLBACK = /\?\?\s*PRIMARY_ENGINE/u;
 
@@ -320,16 +403,40 @@ describe("the theme lowering has exactly one productive door", () => {
     expect(owners).toEqual([LOWERING_OWNER]);
   });
 
-  it("every other publication of compileTheme is a re-export of that one owner", () => {
+  it("NOTHING re-publishes compileTheme: it is reached at its owner or not at all", () => {
     const publishers = SOURCES.filter(({ path, source }) =>
       reExportedNames(source, path).has("compileTheme")
     ).map(({ label }) => label);
-    // The package barrel and the server entrypoint, and nothing else: a third
-    // publisher would mean a second surface a consumer could reach.
-    expect(publishers.sort()).toEqual([
-      "src/entrypoints/server/index.ts",
-      "src/infrastructure/compilers/runtime/theme/index.ts",
-    ]);
+    // Two publishers survived until WO-CAT-03, and both were doors: the
+    // `/server` entrypoint, and the `runtime/theme` barrel -- which
+    // `infrastructure/compilers/index.ts` re-exports and the ROOT package
+    // entrypoint re-exports in turn. Closing only `/server` would have been
+    // cosmetic, because `compileTheme` + `resolveTheme` +
+    // `THEME_ENGINE_ADAPTERS` were equally public from
+    // `@rottay/design-system`, and those three ARE the second route: assemble a
+    // resolution, pick an adapter, lower it, and every admission station is
+    // skipped (F-24).
+    //
+    // So the lowering has no publisher at all now. Every productive caller
+    // reaches `runtime/lowering` directly, which is one import instead of one
+    // door, and a consumer outside the package cannot reach it through any
+    // subpath the `exports` map resolves.
+    expect(publishers).toEqual([]);
+  });
+
+  it("no public entrypoint publishes any of the four bypass names", () => {
+    // The `/server` sweep above, widened to every entrypoint under
+    // `src/entrypoints/` and to the root barrel. A name reachable from ONE
+    // public entrypoint is public.
+    const entrypoints = SOURCES.filter(
+      ({ label }) =>
+        label === "src/index.ts" || /^src\/entrypoints\/[^/]+\/index\.tsx?$/u.test(label)
+    );
+    expect(entrypoints.length).toBeGreaterThanOrEqual(2);
+    const findings = entrypoints
+      .filter(({ source }) => closedNameHits(code(source)).length > 0)
+      .map(({ label, source }) => `${label}: ${closedNameHits(code(source)).join(", ")}`);
+    expect(findings).toEqual([]);
   });
 
   it("the lowering owner imports no other compiler", () => {
@@ -401,6 +508,91 @@ describe("the theme lowering has exactly one productive door", () => {
     expect(findings).toEqual([]);
   });
 
+  it("the intent-literal census is not vacuous: the ingress owner HAS literals", () => {
+    // Every "no productive source assembles an intent" assertion below is
+    // satisfied for free by a detector that finds nothing. The producers are
+    // where the literals must be, so the census proves it can see them before
+    // it certifies that nobody else has any.
+    const producers = SOURCES.filter(
+      ({ label, source, path }) =>
+        label.startsWith(INGRESS_OWNER) && intentLiterals(source, path).length > 0
+    ).map(({ label }) => label);
+    expect(producers.length).toBeGreaterThanOrEqual(3);
+    for (const label of producers) expect(label).toContain("/presentation/");
+  });
+
+  it("the public server entrypoint publishes none of the four bypass names", () => {
+    // The acceptance grep of WO-CAT-03, as an executable assertion. It sweeps
+    // PROSE as well as code on purpose: a docblock that still tells a reader to
+    // call `compileTheme` from `/server` is an instruction to reach a door that
+    // is not there.
+    const entrypoint = SOURCES.find(({ label }) => label === SERVER_ENTRYPOINT);
+    expect(entrypoint, `${SERVER_ENTRYPOINT} must be in the census`).toBeDefined();
+    expect(closedNameHits(entrypoint!.source)).toEqual([]);
+  });
+
+  it("every admission station is declared exactly once, under the admission owner", () => {
+    for (const station of ADMISSION_STATIONS) {
+      const owners = SOURCES.filter(({ path, source }) =>
+        declaredNames(source, path).has(station)
+      ).map(({ label }) => label);
+      expect(owners, `${station} owners`).toHaveLength(1);
+      expect(owners[0], `${station} owner`).toContain(ADMISSION_OWNER);
+    }
+  });
+
+  it("the door runs the admission, and is the only productive source that does", () => {
+    const callers = SOURCES.filter(
+      ({ source, path }) =>
+        callsTo(source, path, "admitThemeIntent").length > 0 ||
+        callsTo(source, path, "admitThemeCompilation").length > 0
+    ).map(({ label }) => label);
+    expect(callers).toEqual([COMPILE_DOOR]);
+  });
+
+  it("the DB terminal is no longer a second admission", () => {
+    // WO-CAT-03's "do NOT": `compileTenantTheme` keeps the artifact -- delta,
+    // digest, CSS, scopes -- and decides nothing. It may still NAME the
+    // admission's rule to supply the one input the intent cannot carry (the v1
+    // document's declared canvas), but it may not declare a station of its own.
+    const terminal = SOURCES.find(({ label }) =>
+      label.endsWith("compilers/composition/tenant-theme/index.ts")
+    );
+    expect(terminal, "the DB terminal must be in the census").toBeDefined();
+    const declared = declaredNames(terminal!.source, terminal!.path);
+    for (const station of ADMISSION_STATIONS) {
+      expect(declared.has(station), `${station} redeclared by the terminal`).toBe(false);
+    }
+  });
+
+  it("the graded compilation on a refusal has exactly one reader", () => {
+    // F-27/D-4: `ThemeAdmissionError.measured` is the ONLY way compiled
+    // channels leave a refused intent, so who touches it is the whole
+    // containment. The expected set is the declared authoring seam plus the
+    // class that assigns the field; anything else is a second consumer of a
+    // compile the door refused to publish.
+    const touching = SOURCES.filter(({ source }) =>
+      MEASURED_ACCESS.test(code(source))
+    ).map(({ label }) => label);
+    expect(touching.sort()).toEqual(
+      [MEASURED_FIELD_DEFINITION, ...MEASURED_FIELD_READERS].sort()
+    );
+  });
+
+  it("the one reader reaches the field only through the named error", () => {
+    // The containment is not the field name, it is the guard in front of it: a
+    // caller that reads `.measured` off an unnarrowed `catch` binding is
+    // reading it off anything that throws.
+    for (const label of MEASURED_FIELD_READERS) {
+      const reader = SOURCES.find((row) => row.label === label);
+      expect(reader, `${label} must be in the census`).toBeDefined();
+      expect(
+        /instanceof\s+ThemeAdmissionError/u.test(code(reader!.source)),
+        `${label} must narrow on ThemeAdmissionError before reading .measured`
+      ).toBe(true);
+    }
+  });
+
   it("the roster engine fallback exists in exactly one owner, and it is not a fallback", () => {
     // `getFirstPartyVertical(x)?.engine ?? PRIMARY_ENGINE` was written at four
     // sites while the DB door threw for the same question. There is one law now
@@ -438,6 +630,36 @@ describe("the theme lowering has exactly one productive door", () => {
           label.startsWith("src/entrypoints/"),
         label
       ).toBe(true);
+    }
+  });
+
+  it("the tooling adapter's synthesized wrap IS the contract's own lift", () => {
+    // WO-CAT-03 closed the public entry point, and `liftAuthoredTheme` had no
+    // other consumer, so the bundler shakes it out of every non-entry chunk and
+    // the dist-bound adapter has nothing left to bind. It synthesizes the wrap
+    // instead -- inside the domain it already declares -- and re-publishing the
+    // lift to feed it would re-open the exact route F-24 measured.
+    //
+    // Two spellings of one wrap is debt only if nothing proves they agree.
+    // This does, over the shapes the readers actually hand in: an empty
+    // fixture, a sparse one, and one that authors every governed family.
+    const fixtures = [
+      {},
+      { id: "sparse", palette: { primaryColor: "#2F6B9A" } },
+      {
+        id: "total",
+        motion: { intensity: 0.5 },
+        charts: { lineStyle: "smooth" },
+        recipes: { schemaVersion: 1, profile: "rottay/technical-sharp@1" },
+        expressive: { schemaVersion: 1, experienceProfile: "management-editorial" },
+        responsive: { schemaVersion: 1, posture: "comfortable" },
+      },
+    ] as const;
+    for (const fixture of fixtures) {
+      expect(
+        wrapGovernedFamilies(fixture),
+        `wrap diverged from liftAuthoredTheme for ${JSON.stringify(fixture)}`
+      ).toEqual(liftAuthoredTheme(fixture as never));
     }
   });
 
@@ -693,6 +915,31 @@ describe("planted mutants make the single-door gate go red", () => {
     expect(found).toEqual([victim]);
   });
 
+  it("a second reader of the graded compilation is caught", () => {
+    // The exact shape a bypass takes: catch the refusal, keep the compile.
+    const planted =
+      `const compiled = (error as ThemeAdmissionError).measured?.compiled;\n`;
+    const touching = withPlanted(victim, planted)
+      .filter(({ source }) => MEASURED_ACCESS.test(code(source)))
+      .map(({ label }) => label);
+    expect(touching).toContain(victim);
+    expect(touching.sort()).not.toEqual(
+      [MEASURED_FIELD_DEFINITION, ...MEASURED_FIELD_READERS].sort()
+    );
+  });
+
+  it("`measured` named only in a comment or a string is NOT a finding", () => {
+    const planted =
+      `// error.measured carries the graded compile\n` +
+      `const note = "error.measured";\n`;
+    const touching = withPlanted(victim, planted)
+      .filter(({ source }) => MEASURED_ACCESS.test(code(source)))
+      .map(({ label }) => label);
+    expect(touching.sort()).toEqual(
+      [MEASURED_FIELD_DEFINITION, ...MEASURED_FIELD_READERS].sort()
+    );
+  });
+
   it("a reinstated roster engine fallback is caught", () => {
     const planted =
       `const engine = getFirstPartyVertical(slug)?.engine ?? PRIMARY_ENGINE;\n`;
@@ -719,6 +966,62 @@ describe("planted mutants make the single-door gate go red", () => {
       .map(({ label }) => label);
     expect(importers).toContain(victim);
     expect(importers.sort()).not.toEqual([...MIGRATION_IMPORTERS].sort());
+  });
+
+  it('a planted `origin: "preview"` literal outside the ingress owner is caught', () => {
+    // The acceptance mutant of WO-CAT-03, stated as its own case: the shortest
+    // shape a second producer takes is one object literal at a call site.
+    const planted =
+      `const intent = { vertical: "bithire", slug: "acme", origin: "preview", patch: {} };\n` +
+      `compileThemeIntent(intent);\n`;
+    const found = withPlanted(victim, planted)
+      .filter(
+        ({ label, source, path }) =>
+          !label.startsWith(INGRESS_OWNER) && intentLiterals(source, path).length > 0
+      )
+      .map(({ label }) => label);
+    expect(found).toEqual([victim]);
+    // and the unmutated tree has none, so the finding came from the mutant
+    expect(
+      SOURCES.filter(
+        ({ label, source, path }) =>
+          !label.startsWith(INGRESS_OWNER) && intentLiterals(source, path).length > 0
+      )
+    ).toHaveLength(0);
+  });
+
+  it("a reinstated public export of the lowering is caught", () => {
+    const planted =
+      `export { compileTheme } from '../../infrastructure/compilers/runtime/theme';\n`;
+    const mutated = withPlanted(SERVER_ENTRYPOINT, planted).find(
+      ({ label }) => label === SERVER_ENTRYPOINT
+    );
+    expect(closedNameHits(mutated!.source)).toEqual(["compileTheme"]);
+  });
+
+  it("a reinstated public export of the authoring lift is caught", () => {
+    const planted = `export { liftAuthoredTheme } from '../../somewhere';\n`;
+    const mutated = withPlanted(SERVER_ENTRYPOINT, planted).find(
+      ({ label }) => label === SERVER_ENTRYPOINT
+    );
+    expect(closedNameHits(mutated!.source)).toEqual(["liftAuthoredTheme"]);
+  });
+
+  it("a second declaration of an admission station is caught", () => {
+    const planted = `export function envelopeIssues(theme, paths) { return []; }\n`;
+    const owners = withPlanted(victim, planted)
+      .filter(({ path, source }) => declaredNames(source, path).has("envelopeIssues"))
+      .map(({ label }) => label);
+    expect(owners).toContain(victim);
+    expect(owners).toHaveLength(2);
+  });
+
+  it("a second caller of the admission is caught", () => {
+    const planted = `admitThemeIntent({ intent, resolution, adapter });\n`;
+    const callers = withPlanted(victim, planted)
+      .filter(({ source, path }) => callsTo(source, path, "admitThemeIntent").length > 0)
+      .map(({ label }) => label);
+    expect(callers.sort()).toEqual([COMPILE_DOOR, victim].sort());
   });
 
   it("an origin named only in a comment or a string is NOT a finding", () => {

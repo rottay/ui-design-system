@@ -32,14 +32,17 @@ import {
 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
-  compileTheme,
   containerScope,
   emitThemeCss,
   firstPartyScope,
   resolveAdapter,
-  resolveTheme,
   staticThemeIntent,
 } from "@/infrastructure/compilers/runtime/theme";
+// The lowering and the resolver left the barrel with WO-CAT-03: the root
+// package entrypoint re-exports it, so publishing them there kept the second
+// route open on `@rottay/design-system` after `/server` was closed (F-24).
+import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
+import { resolveTheme } from "@/infrastructure/compilers/runtime/theme/runtime/resolution";
 import {
   DIVERGENCE_EDITORIAL_DOCUMENT,
   DIVERGENCE_EDITORIAL_IDENTITY,
@@ -261,6 +264,18 @@ describe("channel minting and CSS text have declared owners", () => {
   // like the allowlist above, and it mints nothing.
   const INGRESS_DOCUMENT_MIGRATE =
     "infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/foundation/migrate/index.ts";
+  // WO-CAT-03 moved the APCA floor, the categorical chart floor, the value
+  // grammar and the payload ceilings out of `compileTenantTheme` and into the
+  // single admission at the door. They arrived NAMING channels because that is
+  // what those rules measure -- the chart surfaces a mark must clear, the
+  // sidebar pair a tenant can author, the two compiler-generated profile
+  // channels the value parser exempts -- and every one of those names is a
+  // table entry, an anchored matcher or a string, never an identifier the owner
+  // computes with. The second half of this test is what holds them to that.
+  const ADMISSION_CONTRAST =
+    "infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/contrast/index.ts";
+  const ADMISSION_LIMITS =
+    "infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.ts";
 
   const productionSources = (relative: string): string[] => {
     const out: string[] = [];
@@ -296,7 +311,16 @@ describe("channel minting and CSS text have declared owners", () => {
    * stopped at the closing `/`, so it can never swallow surrounding code.
    */
   const withoutChannelMatchers = (source: string): string =>
-    source.replace(/\/\^--ds-[^/\n]*\/[dgimsuvy]*/g, "/ /");
+    source
+      .replace(/\/\^--ds-[^/\n]*\/[dgimsuvy]*/g, "/ /")
+      // The same rule for the same reason, in the one other shape a matcher
+      // takes: `/^var\(\s*(--ds-[a-z0-9-]+)...\)$/` reads an incoming `var()`
+      // REFERENCE out of a compiled value. It matches a token name exactly as
+      // the form above does -- it can read a channel, never mint one -- and it
+      // only became visible to this sweep when WO-CAT-03 moved the contrast
+      // admission under the pipeline root. Anchored on the literal opening
+      // `/^var\(` and stopped at the closing `/`, so it cannot swallow code.
+      .replace(/\/\^var\\\([^/\n]*\/[dgimsuvy]*/g, "/ /");
 
   const MINTS = /vars\[["']--ds-[a-z0-9-]+["']\]|cssVariables\[["']--ds-[a-z0-9-]+["']\]/;
   const rel = (file: string) => file.slice(SRC_ROOT.length + 1);
@@ -343,7 +367,13 @@ describe("channel minting and CSS text have declared owners", () => {
     // and the values its baseline carries, and the document-patch ingress
     // states the override tokens it accepts; any other owner naming one is new.
     expect(naming.sort()).toEqual(
-      [...ENGINE_ADAPTERS, INGRESS_DOCUMENT_PATCH, INGRESS_DOCUMENT_MIGRATE].sort(),
+      [
+        ...ENGINE_ADAPTERS,
+        INGRESS_DOCUMENT_PATCH,
+        INGRESS_DOCUMENT_MIGRATE,
+        ADMISSION_CONTRAST,
+        ADMISSION_LIMITS,
+      ].sort(),
     );
 
     // A channel name is DATA — a table entry, a name matcher, an evidence
@@ -385,6 +415,22 @@ describe("channel minting and CSS text have declared owners", () => {
   it("MUTANT: a channel name hidden in a comment is NOT a minting finding", () => {
     const planted = `// vars['--ds-planted'] = 'red';\n/* cssVariables["--ds-x"] = "y" */\n`;
     expect(MINTS.test(withoutComments(planted))).toBe(false);
+  });
+
+  it("MUTANT: the var() matcher blanking does not swallow surrounding code", () => {
+    // The widening above must remove a MATCHER and nothing else. A channel
+    // reached through anything but that exact literal opening stays a finding.
+    const matcher = `const m = /^var\\(\\s*(--ds-[a-z0-9-]+)\\)$/i.exec(v);\n`;
+    expect(withoutChannelMatchers(matcher)).not.toMatch(/--ds-/u);
+    for (const planted of [
+      `const t = notVar(/^var2\\(--ds-radius-md\\)/);\n`,
+      `const t = --ds-radius-md;\n`,
+    ]) {
+      expect(
+        withoutChannelMatchers(withoutStrings(planted)),
+        planted
+      ).toMatch(/--ds-/u);
+    }
   });
 
   it("MUTANT: a channel named outside an anchored matcher is still caught", () => {

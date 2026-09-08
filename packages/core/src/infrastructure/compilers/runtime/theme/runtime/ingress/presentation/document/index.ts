@@ -7,7 +7,10 @@
  */
 
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
-import type { TenantThemeDocumentAny } from "@/contracts/theme/presentation/document";
+import {
+  isTenantThemeDocumentV2,
+  type TenantThemeDocumentAny,
+} from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
   admitDocument,
@@ -32,6 +35,22 @@ export interface DocumentThemeIntentInput {
 }
 
 /**
+ * The entitlement a document carries, or none.
+ *
+ * A v2 document states its `plan`; a v1 document has no such field and gets no
+ * invented one. D-02: a defaulted plan is an entitlement nobody granted, so the
+ * tier station declines to judge an intent that names no plan rather than
+ * guessing the cheapest.
+ */
+function entitlementOf(
+  document: TenantThemeDocumentAny
+): Pick<ThemeIntent, "entitlement"> {
+  return isTenantThemeDocumentV2(document)
+    ? { entitlement: { plan: document.plan } }
+    : {};
+}
+
+/**
  * The intent a persisted `TenantThemeDocument` compiles under.
  *
  * The migration's mode argument is not a parameter here on purpose: it is the
@@ -46,6 +65,7 @@ export function documentThemeIntent(input: DocumentThemeIntentInput): ThemeInten
       vertical: input.vertical,
       document: input.document,
     }),
+    ...entitlementOf(input.document),
   };
 }
 
@@ -71,6 +91,7 @@ export function documentThemeAdmission(
       slug: input.slug,
       origin: "tenant-document",
       patch: admission.patch,
+      ...entitlementOf(input.document),
     },
     admission,
   };

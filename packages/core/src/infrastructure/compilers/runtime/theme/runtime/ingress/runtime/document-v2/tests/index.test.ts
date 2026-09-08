@@ -564,11 +564,27 @@ describe("sanctioned overrides are Pro, and never carry an anatomy", () => {
   });
 
   it("accepts it under pro, and it moves bytes", () => {
-    const document = withOverrides("pro", { sidebar: { bg: "#101010" } }) as never;
+    // The ink travels WITH the ground. A near-black sidebar under the
+    // vertical's own ink is a sub-floor pair, and since WO-CAT-03 the compile
+    // door applies the APCA admission to every origin -- so a document that
+    // paints a ground and leaves the ink behind is refused here exactly as
+    // `compileTenantThemeConfig` already refused it.
+    const document = withOverrides("pro", {
+      sidebar: { bg: "#101010", text: "#F5F5F5" },
+    }) as never;
     expect(() =>
       admitDocument({ vertical: "bithire", document })
     ).not.toThrow();
     expect(css("bithire", document)).not.toEqual(css("bithire", v2({})));
+  });
+
+  it("REFUSES a ground that leaves the vertical's ink under the floor", () => {
+    // The same override group WITHOUT the ink. Before WO-CAT-03 this compiled
+    // silently through `compileThemeIntent` while `compileTenantThemeConfig`
+    // refused it: one document, two answers (F-13).
+    expect(() =>
+      css("bithire", withOverrides("pro", { sidebar: { bg: "#101010" } }) as never)
+    ).toThrow(/authored tenant colors must meet the governed floor/);
   });
 
   it("tolerates an EMPTY override group under standard: nothing is entitled", () => {

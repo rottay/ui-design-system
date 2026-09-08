@@ -66,9 +66,13 @@ describe('BrandingPreviewSandbox', () => {
     expect(css).not.toContain('javascript:');
   });
 
-  it('keeps the safe channels in the same batch that drops the hostile ones', () => {
-    // A guard that dropped the whole batch would pass every rejection check
-    // above while silently disabling the preview, so the survivor is asserted.
+  it('refuses the whole batch a hostile channel is in, painting nothing', () => {
+    // It used to keep the safe channels and drop the hostile ones. Since
+    // WO-CAT-03 the compile door applies one admission to every origin, so a
+    // document carrying an unsafe value is refused WHOLE rather than
+    // half-applied -- which is the posture the very next case already states as
+    // the reason this component has no fallback. Half-applying was the older,
+    // weaker answer: it painted a preview of a document publish would refuse.
     const { container } = mount(
       <BrandingPreviewSandbox
         vertical="bithire"
@@ -85,12 +89,9 @@ describe('BrandingPreviewSandbox', () => {
     );
 
     const css = container.querySelector('style')?.textContent ?? '';
-    expect(css).toContain('--ds-color-primary: #2F6FEB;');
+    expect(css).toBe('');
     expect(css).not.toContain('display: none');
     expect(css).not.toContain('javascript:');
-    // One opening and one closing brace: the rule was never escaped.
-    expect(css.match(/\{/g)).toHaveLength(1);
-    expect(css.match(/\}/g)).toHaveLength(1);
   });
 
   it('paints NOTHING for a document the canonical migration refuses', () => {

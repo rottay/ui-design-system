@@ -165,15 +165,42 @@ function assertThemeIntent(intent: ThemeIntent): void {
 }
 
 /**
- * The baseline a vertical names.
+ * A per-request DEEP CLONE of a Theme, with no shared interior.
+ *
+ * `structuredClone` is not used: it is total over plain data but throws on a
+ * function or a symbol, and a Theme leaf that acquired one would turn a compile
+ * into a crash instead of a compile. This walker copies what a Theme can hold
+ * and passes anything else through by reference, which is the same fail-open
+ * posture the merge already has.
+ */
+function cloneThemeValue<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => cloneThemeValue(item)) as unknown as T;
+  }
+  if (value === null || typeof value !== "object") return value;
+  const copy: Record<string, unknown> = {};
+  for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+    copy[key] = cloneThemeValue(child);
+  }
+  return copy as unknown as T;
+}
+
+/**
+ * The baseline a vertical names, CLONED for this request.
  *
  * The roster `Theme` is total (the three authored themes normalize through
  * `brandThemeToTheme` at module load), so a `static-vertical` intent needs no
  * patch at all and no invented neutral Theme exists to be one. The identity is
  * stamped here, once, instead of by every caller spreading `{ ...base, id }`.
+ *
+ * It returned the roster object ITSELF when the slug matched, which is one
+ * shared mutable graph handed to every concurrent SSR request in a process
+ * (F-60). The roster is frozen at its owner now, so a mutation would throw
+ * rather than leak -- but a frozen baseline is also a baseline no consumer can
+ * work on, so the clone is what makes the freeze usable instead of merely safe.
  */
 export function baselineFor(vertical: FirstPartyVerticalId, slug: string): Theme {
-  const roster = FIRST_PARTY_THEMES[vertical];
+  const roster = cloneThemeValue(FIRST_PARTY_THEMES[vertical]);
   return roster.id === slug ? roster : { ...roster, id: slug };
 }
 

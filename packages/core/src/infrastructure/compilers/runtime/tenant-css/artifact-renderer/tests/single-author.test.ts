@@ -49,10 +49,8 @@ import { channelStates, rootPropertyDeclarations } from './support';
 import { liftAuthoredTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { EMPTY_PROVENANCE } from '@/foundation/contracts/composition/tenants/themes/resolved';
 import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
-import {
-  compileTheme,
-  resolveAdapter,
-} from '@/infrastructure/compilers/runtime/theme';
+import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
+import { compileTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering';
 
 /**
  * The ink channel, spelled as a literal ON PURPOSE.

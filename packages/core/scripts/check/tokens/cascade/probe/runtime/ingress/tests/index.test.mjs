@@ -281,9 +281,9 @@ test('positive control: lowerStop reshapes the document into the REAL compiler a
   assert.notEqual(dbSeen.slug, 'rottay');
 
   // the lowering adapter's input shape destructures
-  // { brandTheme, tenantSlug } immediately -- so the compiler must see the
-  // BrandTheme fragment wrapped under `brandTheme`, alongside the tenant slug
-  // the manifest path never carries.
+  // { brandTheme, vertical, tenantSlug } immediately -- so the compiler must
+  // see the BrandTheme fragment wrapped under `brandTheme`, alongside the
+  // vertical and the tenant slug the manifest path never carries.
   let staticSeen = null;
   lowerStop({
     armId: 'static-brand-theme',
@@ -310,9 +310,15 @@ test('positive control: lowerStop reshapes the document into the REAL compiler a
   // asserting that the arm still tells the compiler no tenant exists. Pinned
   // deeply rather than loosely on purpose -- this drill's whole value is that
   // it notices a shape change instead of tolerating one.
+  //
+  // AGED A THIRD TIME, same good kind: the shape gained a FIFTH field. The
+  // vertical now travels beside the slug because it answers a different
+  // question -- which engine -- and the adapter refuses a vertical the roster
+  // does not claim instead of defaulting one.
   assert.deepEqual(staticSeen, {
     brandTheme: {},
     tenantPatch: { surfaces: { rhythm: 'airy' } },
+    vertical: 'rottay',
     tenantSlug: 'rottay',
     tenantAuthoredPaths: new Set(['surfaces.rhythm']),
   });
@@ -819,6 +825,7 @@ test('counterfactual: writing the stop NAME into the bounded field is a FALSE NE
 
   const withName = compile({
     brandTheme: { surfaces: { effectIntensity: 'mate' } },
+    vertical: 'rottay',
     tenantSlug: 'rottay',
   });
   // Same resolution `lowerStop` performs: the lowering returns its map as
@@ -2015,6 +2022,10 @@ test('H-2 drill 10 (profiles.expressive): the flat enumValues union cannot catch
   const baselines = await loadStaticBaselines();
   const baselineVars = arms['static-brand-theme'].compile({
     brandTheme: baselines.rottay.theme,
+    // The slug is the scenario's own label and only names the emission
+    // selector; the ENGINE comes from the vertical, which the roster must
+    // claim. Two fields, two questions.
+    vertical: 'rottay',
     tenantSlug: 'h2-drill-10-baseline',
     tenantPatch: {},
     tenantAuthoredPaths: new Set(),
@@ -2680,6 +2691,7 @@ async function compiledBaseline(vertical) {
   const { compile: lowerBrandTheme } = await loadBrandThemeLowering({ coreRoot: CORE_ROOT });
   const compiled = lowerBrandTheme({
     brandTheme: baselines[vertical].theme,
+    vertical,
     tenantSlug: vertical,
   });
   return {
@@ -2938,7 +2950,7 @@ test('B-2 drill 1 [needs dist]: the authorship IS the stop path, read back from 
   assert.deepEqual(lowered.producedBy.input.compilerInput.tenantAuthoredPaths, declared);
   assert.deepEqual(
     Object.keys(lowered.producedBy.input.compilerInput).sort(),
-    ['brandTheme', 'tenantAuthoredPaths', 'tenantPatch', 'tenantSlug'],
+    ['brandTheme', 'tenantAuthoredPaths', 'tenantPatch', 'tenantSlug', 'vertical'],
   );
   // The DB arm declares nothing HERE, and that is honest rather than missing:
   // `compileTenantThemeConfig` collects its own authorship inside itself.
@@ -2957,10 +2969,13 @@ test('B-2 drill 2 [needs dist]: a BASELINE compile is untouched — production i
   for (const spec of FIRST_PARTY_ARTIFACT_SPECS) {
     const brandTheme = baselines[spec.slug];
     assert.ok(brandTheme, `no baseline for ${spec.slug}`);
-    // The production shape, exactly as `renderFirstPartyArtifact:213` calls it.
-    const bare = lowerBrandTheme({ brandTheme, tenantSlug: spec.slug });
+    // The production shape, exactly as `renderFirstPartyArtifact:213` calls it
+    // -- plus the vertical this support adapter now requires, which the
+    // production renderer never needed because it resolves its own adapter.
+    const bare = lowerBrandTheme({ brandTheme, vertical: spec.slug, tenantSlug: spec.slug });
     const explicitlyAbsent = lowerBrandTheme({
       brandTheme,
+      vertical: spec.slug,
       tenantSlug: spec.slug,
       tenantAuthoredPaths: undefined,
     });
@@ -2982,6 +2997,7 @@ test('B-2 drill 2 [needs dist]: a BASELINE compile is untouched — production i
     const withTenant = lowerBrandTheme({
       brandTheme,
       tenantPatch: { palette: { primaryColor: '#DC2626' } },
+      vertical: spec.slug,
       tenantSlug: spec.slug,
       tenantAuthoredPaths: new Set(['palette.primaryColor']),
     });
@@ -3023,7 +3039,7 @@ test('B-2 drill 4 [needs dist]: a VERTICAL editing its own theme still does not 
     ...baselines.bithire,
     palette: { ...baselines.bithire.palette, primaryColor: '#DC2626' },
   };
-  const compiled = lowerBrandTheme({ brandTheme: edited, tenantSlug: 'bithire' });
+  const compiled = lowerBrandTheme({ brandTheme: edited, vertical: 'bithire', tenantSlug: 'bithire' });
   assert.equal(compiled.cssVariables['--ds-color-primary'], '#DC2626', 'the seed itself moved');
   assert.equal(
     compiled.cssVariables['--ds-button-primary-bg'],
@@ -3227,7 +3243,7 @@ test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship'
   const { compile: lowerBrandTheme } = await loadBrandThemeLowering({ coreRoot: CORE_ROOT });
   for (const [vertical, theme] of Object.entries(baselines)) {
     const patch = { palette: { primaryColor: theme.palette.primaryColor } };
-    const baseline = lowerBrandTheme({ brandTheme: theme, tenantSlug: vertical });
+    const baseline = lowerBrandTheme({ brandTheme: theme, vertical, tenantSlug: vertical });
     /* A FLOOR WITH NO AUTHORSHIP is not a state the canonical provenance can
      * express, and it never was a production one: a value nobody claims is
      * simply part of the resolved theme. So the identity stop is the merged
@@ -3235,6 +3251,7 @@ test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship'
      * baseline's own input. */
     const asLowered = lowerBrandTheme({
       brandTheme: { ...theme, palette: { ...theme.palette, ...patch.palette } },
+      vertical,
       tenantSlug: vertical,
     });
     assert.deepEqual(
@@ -3249,6 +3266,7 @@ test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship'
     const asAuthored = lowerBrandTheme({
       brandTheme: theme,
       tenantPatch: patch,
+      vertical,
       tenantSlug: vertical,
       tenantAuthoredPaths: new Set(['palette.primaryColor']),
     });
@@ -3261,6 +3279,7 @@ test('B-2 drill 7 [needs dist]: W-B — an IDENTITY stop declares NO authorship'
   const authoredIdentity = lowerBrandTheme({
     brandTheme: bithire,
     tenantPatch: { palette: { primaryColor: bithire.palette.primaryColor } },
+    vertical: 'bithire',
     tenantSlug: 'bithire',
     tenantAuthoredPaths: new Set(['palette.primaryColor']),
   });
@@ -4069,6 +4088,7 @@ test('B2: the emitted channel is NOT the written string -- assert discrimination
   const written = 'Inter, system-ui, sans-serif';
   const compiled = lowerBrandTheme({
     brandTheme: main.bithireBrandTheme,
+    vertical: 'bithire',
     tenantSlug: 'bithire',
     tenantPatch: { typography: { fontFamilyBase: written } },
     tenantAuthoredPaths: new Set(['typography.fontFamilyBase']),
@@ -4082,6 +4102,7 @@ test('B2: the emitted channel is NOT the written string -- assert discrimination
   assert.ok(emitted.startsWith('Inter,'), 'contains the leading family');
   const other = lowerBrandTheme({
     brandTheme: main.bithireBrandTheme,
+    vertical: 'bithire',
     tenantSlug: 'bithire',
     tenantPatch: { typography: { fontFamilyBase: "'Fira Sans', Arial, sans-serif" } },
     tenantAuthoredPaths: new Set(['typography.fontFamilyBase']),
@@ -4100,9 +4121,10 @@ test('B4: the asymmetry is of EMISSION, not of movement (all three verticals)', 
   };
   const stack = 'Inter, system-ui, sans-serif';
   for (const [vertical, brandTheme] of Object.entries(themes)) {
-    const before = lowerBrandTheme({ brandTheme, tenantSlug: vertical }).cssVariables;
+    const before = lowerBrandTheme({ brandTheme, vertical, tenantSlug: vertical }).cssVariables;
     const after = lowerBrandTheme({
       brandTheme,
+      vertical,
       tenantSlug: vertical,
       tenantPatch: { typography: { fontFamilyBase: stack } },
       tenantAuthoredPaths: new Set(['typography.fontFamilyBase']),
@@ -4393,9 +4415,18 @@ const chromeDoors = async (family, field, value, vertical = 'rottay') => {
   const server = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href);
   const { compile: lowerBrandTheme } = await loadBrandThemeLowering({ coreRoot: CORE_ROOT });
   const chrome = { [family]: { [field]: value } };
+  /* The slug MUST stay the customer one -- `assertTenantIdentityAllowed`
+   * refuses a reserved first-party slug, so the DB half of this parity drill
+   * cannot compile under `rottay`. That customer tenant has no roster row by
+   * construction, which is exactly why the static half names its VERTICAL
+   * separately: the engine question is answered by the vertical, the selector
+   * question by the slug. */
   const staticArm = (nested) =>
-    lowerBrandTheme({ brandTheme: { chrome: nested }, tenantSlug: `probe-tenant-${vertical}` })
-      .cssVariables;
+    lowerBrandTheme({
+      brandTheme: { chrome: nested },
+      vertical,
+      tenantSlug: `probe-tenant-${vertical}`,
+    }).cssVariables;
   const dbArm = (nested) => {
     const cfg = server.hydrateTenantThemeConfig(
       { schemaVersion: 1, mode: 'advanced', visualFoundation: { advanced: { chrome: nested } } },

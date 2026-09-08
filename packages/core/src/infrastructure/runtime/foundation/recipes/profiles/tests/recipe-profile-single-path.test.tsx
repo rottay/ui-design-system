@@ -32,14 +32,22 @@ const SOURCE_ROOT = resolve(process.cwd(), 'src');
 const STYLE_ID = 'planted-recipe-profile-variable';
 
 /**
- * Files allowed to mention the variable: the two emitters, its declarative
- * capability owner, and the three engine adapters — which name it only inside
+ * Files allowed to mention the variable: the emitter, the admission that
+ * exempts the emitted channel from the general value parser, its two
+ * declarative owners, and the three engine adapters — which name it only inside
  * the evidence string that states no engine surface reads it. A mention there
  * is the opposite of a consumer: it is the recorded proof of absence.
+ *
+ * `composition/tenant-theme` left the list in WO-CAT-03: the exemption it named
+ * moved with the rest of the admission to the compile door, so the DB terminal
+ * no longer mentions the channel at all. `contracts/theme/runtime/catalog` is
+ * WO-CAT-02's typed catalog, which DECLARES the channel as the row's fan-out;
+ * declaring what a control produces is not reading it.
  */
 const ALLOWED_MENTIONS = [
   'infrastructure/compilers/runtime/theme/runtime/lowering/index.ts',
-  'infrastructure/compilers/composition/tenant-theme/index.ts',
+  'infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.ts',
+  'contracts/theme/runtime/catalog/index.ts',
   'foundation/contracts/composition/tenants/capabilities/index.ts',
   'infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts',
   'infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts',
