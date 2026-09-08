@@ -17,7 +17,7 @@ import {
   POSITIVE_CONTROL_ID,
   assertCatalogCensus,
   censusErrors,
-} from '../foundation/catalog/index.mjs';
+} from '../foundation-catalog/index.mjs';
 import {
   discrepanciesOf,
   headline,
@@ -26,7 +26,7 @@ import {
   measuredHeadline,
   summarize,
   violations,
-} from '../public/cli/index.mjs';
+} from '../public-cli/index.mjs';
 import { assertDoorBuildIsFresh, repoRelative } from '../runtime/compile/index.mjs';
 import {
   INSTRUMENT_ENTRY,
@@ -295,7 +295,7 @@ function tempInstrument() {
   write('borrowed/roster/index.mjs', "export const y = 2;\n");
   write('borrowed/roster/fixtures/index.json', '{"fixtures":[]}\n');
   write('probe/evidence/index.json', '{"headline":"published"}\n');
-  write('probe/tests/index.test.mjs', "import '../public/cli/index.mjs';\n");
+  write('probe/tests/index.test.mjs', "import '../public-cli/index.mjs';\n");
   write('probe/foundation/catalog/tests/index.test.mjs', "export {};\n");
   return { root, cleanup: () => rmSync(root, { recursive: true, force: true }) };
 }

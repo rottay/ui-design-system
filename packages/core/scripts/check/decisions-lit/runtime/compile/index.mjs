@@ -28,8 +28,8 @@ import { pathToFileURL } from 'node:url';
 
 const require = createRequire(import.meta.url);
 export const CORE_ROOT = resolve(
-  require.resolve('../../foundation/catalog/index.mjs'),
-  '../../../../../..',
+  require.resolve('../../foundation-catalog/index.mjs'),
+  '../../../../..',
 );
 export const REPO_ROOT = resolve(CORE_ROOT, '../..');
 

@@ -41,20 +41,20 @@ import {
   POSITIVE_CONTROL_ID,
   TODAY_CONTROL_DENOMINATOR,
   assertCatalogCensus,
-} from '../../foundation/catalog/index.mjs';
-import { VERTICAL_KEYS } from '../../../tokens/cascade/probe/foundation/scope/index.mjs';
+} from '../foundation-catalog/index.mjs';
+import { VERTICAL_KEYS } from '../../tokens/cascade/probe/foundation/scope/index.mjs';
 import {
   assertDoorBuildIsFresh,
   compileDecisionArms,
   repoRelative,
-} from '../../runtime/compile/index.mjs';
+} from '../runtime/compile/index.mjs';
 import {
   RERUN_COMMAND,
   freshnessFailures,
   readArtifact,
   sourceFingerprints,
-} from '../../runtime/freshness/index.mjs';
-import { measure } from '../../runtime/measure/index.mjs';
+} from '../runtime/freshness/index.mjs';
+import { measure } from '../runtime/measure/index.mjs';
 
 /**
  * Where a run publishes, resolved from THIS module and not from `cwd`.
@@ -65,7 +65,7 @@ import { measure } from '../../runtime/measure/index.mjs';
  */
 export const DEFAULT_ARTIFACT = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  '../../evidence/index.json',
+  '../evidence/index.json',
 );
 
 /**

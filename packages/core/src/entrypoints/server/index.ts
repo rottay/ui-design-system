@@ -447,7 +447,7 @@ export {
  * emit, the artifact's digest and the proof of the bytes it is authoritative
  * for. It replaces the three files each app wrote around the pieces above
  * (`runtime-tenant-theme/{ssr,contracts,artifact-resolution}`); the codemod
- * `scripts/maintain/codemods/mount-tenant-theme` performs the replacement.
+ * `scripts/maintain/mount-tenant-theme` performs the replacement.
  *
  * DATED EXCEPTION, AND WHAT IT COVERS. The BODY is a thin adapter over the
  * pipeline exported above and emits no byte that pipeline does not already

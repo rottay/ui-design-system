@@ -125,7 +125,7 @@ repository against a file path in the app, and it never writes without
 ```bash
 # dry run first; it prints the operations it would perform and refuses anything
 # whose shape it does not recognise
-node packages/core/scripts/maintain/codemods/mount-tenant-theme/index.mjs \
+node packages/core/scripts/maintain/mount-tenant-theme/index.mjs \
   --file /absolute/path/to/app-bithire/src/app/layout.tsx \
   --vertical bithire \
   --artifact runtimeArtifact \
@@ -134,14 +134,14 @@ node packages/core/scripts/maintain/codemods/mount-tenant-theme/index.mjs \
   --locale lang
 
 # then, once the diff is what you expect
-node packages/core/scripts/maintain/codemods/mount-tenant-theme/index.mjs \
+node packages/core/scripts/maintain/mount-tenant-theme/index.mjs \
   --file /absolute/path/to/app-bithire/src/app/layout.tsx \
   --vertical bithire --artifact runtimeArtifact --document runtimeDocument \
   --theme-mode configuredTheme --locale lang --write
 ```
 
 What it does, and what it refuses, is the codemod's own contract
-(`packages/core/scripts/maintain/codemods/mount-tenant-theme/index.mjs`): it
+(`packages/core/scripts/maintain/mount-tenant-theme/index.mjs`): it
 replaces the `resolveDocumentRootAttributes(...)` call and the hand-written
 tenant `<style>` element with `const { rootAttributes, styleElements } = await
 mountTenantTheme(...)`, removes `resolveDocumentRootAttributes` from the server

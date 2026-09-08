@@ -41,7 +41,7 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2522,
+    "filesScanned": 2547,
     "channels": 7501,
     "channelsDs": 7116,
     "channelsBridge": 385,
@@ -71342,7 +71342,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/composition/tenant-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/contrast/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -104016,35 +104016,35 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 143,
+          "line": 145,
           "prop": "--ds-button-primary-bg",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 144,
+          "line": 146,
           "prop": "--ds-button-primary-bg-hover",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 145,
+          "line": 147,
           "prop": "--ds-button-primary-border",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 146,
+          "line": 148,
           "prop": "--ds-tab-border-active",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/customization/brand-studio/index.tsx",
-          "line": 147,
+          "line": 149,
           "prop": "--ds-input-border-focus",
           "scalars": []
         },
@@ -133252,7 +133252,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/infrastructure/compilers/composition/tenant-theme/index.ts"
+        "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/contrast/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -146696,7 +146696,7 @@
       "channel": "--ds-density-scale",
       "kind": "ds",
       "declaredIn": [
-        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -261629,7 +261629,7 @@
       "channel": "--ds-radius-scale",
       "kind": "ds",
       "declaredIn": [
-        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -357193,7 +357193,7 @@
       "channel": "--ds-type-scale",
       "kind": "ds",
       "declaredIn": [
-        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts"
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/axes/index.ts"
       ],
       "planes": [
         "foundation-css",

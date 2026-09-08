@@ -26,7 +26,7 @@ function fixture(...segments) {
 }
 
 test("app-bithire's real root layout mounts through one call after the transform", () => {
-  const before = fixture('app-bithire', 'layout.input.tsx');
+  const before = fixture('app-bithire', 'layout', 'index.tsx');
   const { source, operations } = transformRootLayout(before, BITHIRE_OPTIONS);
 
   assert.deepEqual(operations.slice().sort(), [
@@ -55,7 +55,7 @@ test("app-bithire's real root layout mounts through one call after the transform
 });
 
 test('the transform is idempotent by refusal, never by a second rewrite', () => {
-  const once = transformRootLayout(fixture('app-bithire', 'layout.input.tsx'), BITHIRE_OPTIONS).source;
+  const once = transformRootLayout(fixture('app-bithire', 'layout', 'index.tsx'), BITHIRE_OPTIONS).source;
   assert.throws(
     () => transformRootLayout(once, BITHIRE_OPTIONS),
     /expected exactly one resolveDocumentRootAttributes\(\.\.\.\) call to replace, found 0/,
@@ -63,7 +63,7 @@ test('the transform is idempotent by refusal, never by a second rewrite', () => 
 });
 
 test('a layout that is not async is refused rather than half-migrated', () => {
-  const source = fixture('app-bithire', 'layout.input.tsx').replace(
+  const source = fixture('app-bithire', 'layout', 'index.tsx').replace(
     'export default async function RootLayout',
     'export default function RootLayout',
   );
@@ -75,7 +75,7 @@ test('a layout that is not async is refused rather than half-migrated', () => {
 
 test('an artifact with no document expression is refused by name', () => {
   assert.throws(
-    () => transformRootLayout(fixture('app-bithire', 'layout.input.tsx'), {
+    () => transformRootLayout(fixture('app-bithire', 'layout', 'index.tsx'), {
       ...BITHIRE_OPTIONS,
       document: undefined,
     }),
@@ -84,7 +84,7 @@ test('an artifact with no document expression is refused by name', () => {
 });
 
 test('a second hand-written artifact style element is refused rather than guessed', () => {
-  const source = fixture('app-bithire', 'layout.input.tsx').replace(
+  const source = fixture('app-bithire', 'layout', 'index.tsx').replace(
     '      </head>',
     '        <style dangerouslySetInnerHTML={{ __html: "" }} />\n      </head>',
   );
@@ -95,7 +95,7 @@ test('a second hand-written artifact style element is refused rather than guesse
 });
 
 test('a bundled-only layout migrates to the static intent with no artifact option', () => {
-  const { source } = transformRootLayout(fixture('compile', 'layout.tsx'), {
+  const { source } = transformRootLayout(fixture('compile', 'index.tsx'), {
     vertical: 'bithire',
     themeMode: 'configuredTheme',
     locale: 'lang',
@@ -126,7 +126,7 @@ test('the transformed layout and a copy of the app-bithire trio typecheck', { ti
     );
   }
 
-  const { source } = transformRootLayout(fixture('compile', 'layout.tsx'), BITHIRE_OPTIONS);
+  const { source } = transformRootLayout(fixture('compile', 'index.tsx'), BITHIRE_OPTIONS);
   fs.mkdirSync(path.join(appSrc, 'app'), { recursive: true });
   fs.writeFileSync(path.join(appSrc, 'app/layout.tsx'), source);
 

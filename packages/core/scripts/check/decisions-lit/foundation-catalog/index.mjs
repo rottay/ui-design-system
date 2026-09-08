@@ -18,7 +18,7 @@
  * @module Tooling/DecisionsLit/Foundation/Catalog
  */
 
-import { readThemeCatalog } from '../../../../libraries/theme-catalog/index.mjs';
+import { readThemeCatalog } from '../../../libraries/theme-catalog/index.mjs';
 
 const CATALOG_TIERS = new Map(readThemeCatalog().map((row) => [row.id, row.tier]));
 

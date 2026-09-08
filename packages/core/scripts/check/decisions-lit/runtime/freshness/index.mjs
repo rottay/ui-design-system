@@ -39,7 +39,7 @@ import { collectBuildInputFiles } from '../../../../libraries/build/input-hash/i
 import { CORE_ROOT, DOOR_SOURCES, repoRelative } from '../compile/index.mjs';
 
 /** The module the instrument's closure is walked from: its one public door. */
-export const INSTRUMENT_ENTRY = 'scripts/check/decisions-lit/public/cli/index.mjs';
+export const INSTRUMENT_ENTRY = 'scripts/check/decisions-lit/public-cli/index.mjs';
 
 /** The command a red verdict must name; a guard that cannot be answered is noise. */
 export const RERUN_COMMAND = 'pnpm --filter @rottay/design-system run decisions-lit';
