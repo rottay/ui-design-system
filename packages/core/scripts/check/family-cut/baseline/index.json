@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "law": "a family under the cut contract holds every BLOCKING arm of scripts/check/family-cut and never grows a pinned counter",
+  "policy": "decrease-only: a pinned counter may shrink -- and must then be lowered here -- but may never grow",
+  "roster": "a family enters this file when its cut work order opens and leaves the debt columns at 0 when the cut closes; `cut` names the owning work order",
+  "families": {
+    "button": {
+      "cut": "WO-FAM-01",
+      "calibratedBy": "WO-FAM-00",
+      "denominators": {
+        "skinFiles": 3,
+        "sourceFiles": 6,
+        "channelsRead": 252,
+        "classTokens": 14,
+        "partsStamped": 13,
+        "partsConsumed": 11
+      },
+      "readWithoutProducer": 34,
+      "classVocabularies": 2,
+      "legacyNamespaceClasses": 13,
+      "partsStampedNotConsumed": 2,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 1,
+      "unpairedStatePseudoSelectors": 1,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 1
+    }
+  }
+}

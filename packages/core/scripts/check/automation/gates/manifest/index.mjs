@@ -274,6 +274,25 @@ export const CI_GATES = Object.freeze([
     drillId: 'read-without-producer-ratchet-drill',
     ratchet: 'scripts/check/engine/read-without-producer/baseline/index.json',
   },
+  // El corte por familia comparte el mismo conjunto de productores (importado,
+  // nunca medido dos veces) y baja la ley del template a cada familia: un canal
+  // leido sin productor, pintura inline o una segunda clase de vocabulario en la
+  // familia calibrada es rojo bloqueante aqui, no deuda global.
+  {
+    id: 'family-cut-drill',
+    run: ['node', '--test', 'scripts/check/family-cut/index.test.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillFor: ['family-cut'],
+  },
+  {
+    id: 'family-cut',
+    run: ['node', 'scripts/check/family-cut/index.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillId: 'family-cut-drill',
+    ratchet: 'scripts/check/family-cut/baseline/index.json',
+  },
   // The layer statement in facade/entrypoints/base/index.css is a claim about
   // how a browser sorts the shipped bundle; only a browser settles it. The
   // probe's `--self-check` leg re-runs the same three subjects against the
