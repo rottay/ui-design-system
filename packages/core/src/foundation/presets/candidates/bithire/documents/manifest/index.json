@@ -1,0 +1,25 @@
+{
+  "workOrder": "WO-DER-07",
+  "vertical": "bithire",
+  "plan": "pro",
+  "candidates": [
+    {
+      "id": "editorial-quiet",
+      "slug": "bithire-editorial-quiet",
+      "title": "Editorial quiet",
+      "intent": "A hiring record that reads like a well-set document: warm paper ground, serif voice, airy rhythm, flat surfaces, states that whisper."
+    },
+    {
+      "id": "product-dense",
+      "slug": "bithire-product-dense",
+      "title": "Product dense",
+      "intent": "An operator instrument: cool neutrals, high contrast, compact controls, ruled edges, decisive states and short mechanical motion."
+    },
+    {
+      "id": "warm-humanist",
+      "slug": "bithire-warm-humanist",
+      "title": "Warm humanist",
+      "intent": "An approachable product: warm violet brand, geometric headings, pill controls, lifted surfaces, glow focus and unhurried playful motion."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "version": 2,
+  "plan": "pro",
+  "decisions": {
+    "palette.seeds": {
+      "primary": "#7A4BC4",
+      "secondary": "#3F3350",
+      "accent": "#E08A3C",
+      "background": "#FCFAF7"
+    },
+    "palette.status-seeds": {
+      "success": "#3E8A5A",
+      "warning": "#C98A22",
+      "error": "#C0503F",
+      "info": "#4A72A8"
+    },
+    "palette.neutral-temperature": "warm",
+    "palette.contrast-posture": "soft",
+    "palette.dark-mode": "auto",
+    "typography.families": {
+      "base": "humanist-text",
+      "heading": "geometric-display",
+      "display": "geometric-display",
+      "mono": "plex-mono"
+    },
+    "typography.pairing": "geometric",
+    "typography.scale": 1.0,
+    "typography.role-weights": "regular",
+    "typography.numeric": "proportional",
+    "shape.radius-scale": 1.2,
+    "shape.nesting": "concentric",
+    "shape.button-style": "pill",
+    "shape.control-height": "standard",
+    "density.mode": "normal",
+    "spacing.rhythm": "normal",
+    "surfaces.elevation-posture": "elevated",
+    "surfaces.border-style": "none",
+    "surfaces.effect-intensity": 0.55,
+    "states.emphasis": "medium",
+    "states.focus-style": "glow",
+    "motion.dial": { "intensity": 0.75, "durationScale": 1.1, "ambient": "subtle" },
+    "motion.character": "playful",
+    "navigation.sidebar-tone": "strong",
+    "experience.profile": "rottay/management-editorial@1",
+    "profiles.expressive": {
+      "type": "humanist",
+      "geometry": "rounded",
+      "edge": "borderless-shadow",
+      "material": "soft-depth",
+      "elevation": "soft-depth",
+      "motif": "dots",
+      "icon": "duotone"
+    },
+    "recipe-profile": "rottay/network-professional@1",
+    "chrome.anatomy": {
+      "cardComponent": "default",
+      "table": "open",
+      "sidebar": "default",
+      "layout": "floating"
+    },
+    "responsive.posture": "balanced"
+  }
+}
