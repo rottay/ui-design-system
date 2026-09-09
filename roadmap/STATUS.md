@@ -61,14 +61,14 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 83/159 work orders done (52%)
+## Work-order burn-down — 84/159 work orders done (53%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
 | Lane | Done | In progress | Todo | Total |
 | --- | --- | --- | --- | --- |
 | [engine-modern](./engine-modern.md) | 23 | 0 | 2 | 25 |
-| [craft](./craft.md) | 16 | 0 | 8 | 24 |
+| [craft](./craft.md) | 17 | 0 | 7 | 24 |
 | [gates](./gates.md) | 8 | 0 | 4 | 12 |
 | [tokens](./tokens.md) | 10 | 0 | 1 | 11 |
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
@@ -90,7 +90,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | A · The apps can build | not reached | WO-CON-04, WO-CON-05 | WO-CON-04, WO-CON-05 | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 51 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 50 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -122,7 +122,6 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-CRA-24 | Restored-record identity safety for filter-builder and upload | S | craft | audit-2026-09-05 |
 | WO-CAN-02 | Honest verification: pre/post-build gate manifest, mandatory drills, fail-open counters, tautological tests removed | M | canon-close | audit-2026-09-05 |
 | WO-CAN-04 | Remove the parallel customization paths | M | canon-close | audit-2026-09-05 |
 | WO-EVI-04 | Roadmap and documentation truth: STATUS indicators, fingerprint re-seal, Modern Rescue sealed, docs regenerated | S | evidence-graph | audit-2026-09-05 |
@@ -286,6 +285,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-CRA-14 | 2026-07-17 | Published @rottay/design-system@2.19.29 passes the public-barrel quarantine gate with zero static-runtime requests, dynamic opt-in preserved and fallback CSS present. Platform 998f2f15 pins the exact registry package; its five-route fail-closed quarantine passes 53/53 adversarial tests, supplier honesty and global typecheck. The unrelated legacy branding draft type boundary was repaired in 47cbefaf. Stage A remains support-only and does not claim CRA-15/DS-IMP-106 completion. |
 | WO-CRA-16 | 2026-07-17 | Bounded canary certification is recorded in test-artifacts/craft/cra-16/certification.json. Published registry package @rottay/design-system@2.19.28 at d609b519 provides the fixed 50-name v3 public corpus, deterministic 263-role generated catalog, pinned Phosphor 2.1.10 adapter and BrandMark facade. DS semantic/mark SSR coverage is green at 33/33, generator adversarial coverage at 8/8, and icons:check proves 263 roles/272 files current. BitHire a7d7d8a40 pins and installs exact 2.19.28; its four focused architecture suites are green at 21/21, typecheck and installed-canonical supplier honesty are green with zero direct suppliers. The AST guards fail closed on aliases, dynamic supplier imports and Icon/BrandMark/CloudServiceMark/FeaturePictogram conflation. This support milestone does not complete DS-IMP-090/091, the supplier decision, four-facade family, fleet migration or vertical recipes. |
 | WO-CRA-23 | 2026-09-05 | SEALED: R0 instrumentación retenida; R1+ sustituidas por derivation/family-cuts; métrica 0/255 reemplazada por indicadores |
+| WO-CRA-24 | 2026-09-08 | landed 8f4d6e9ce; independent K3 audit LANDING PASS (/private/tmp/rottay-cra24-kimi-k3-audit.md): CD-01 probe measured both sides — base {filterCollision:true,remaining:0} → tip {filterCollision:false,remaining:1}; 9/9 acceptance tests; reserve-step mutation turns the 4 restored-identity tests red; no new reds; frozen engines + public surface untouched |
 | WO-CAN-01 | 2026-09-05 | C4 certified on committed baseline through 58-path governance residual closure: 820 stale references across 53 governance files reduced to 0; independent Claude Fable 5.1 audit PASS, matrix 115/115 blocking gates with 1 declared SKIP, Modern Rescue 48/48, roadmap 79/79; report /private/tmp/rottay-wo-can-01-fable.md SHA256 13219027e817fa46da57e43f4ee9f74f66ab0362a7598cdd34571ea071294842. |
 | WO-CAN-03 | 2026-09-06 | Closed by 79ffd71711c78f04a028f6f73cdeb44b89b6d8f0; exact 123-path source+derived lot; independent Kimi K3 PASS at /private/tmp/rottay-can03-exact-kimi-k3.md; 94/116 candidate versus 93/115 base, identical 22-red historical set, motion drill 6/6, zero new real reds; owner keeps radius=none as the recommended flush-header treatment. |
 | WO-CAN-05 | 2026-09-05 | CAN-05 complete: ui commits b1134dded071946f336271d1c962a1413ea98446, 5d189f9fedf506d2821203ce72ae394b34bec255, 188b38e75166a164c0adbd430eaba6b5282bb30d; docs commit aa0f24e3913925d9cb47828628543b7e043b9845; independent Fable 5.1 PASS reports /private/tmp/rottay-wo-can-05-final-fable.md, /private/tmp/rottay-can-05-source-close-fable.md, /private/tmp/rottay-can-05-docs-fable.md, /private/tmp/rottay-can-05-derived-fable.md |

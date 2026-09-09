@@ -3705,7 +3705,7 @@
    "lane": "craft",
    "order": 24,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
@@ -3713,10 +3713,10 @@
    ],
    "notes": "OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (CD-01). wave 1; repair of a defect introduced by WO-CAN-04's module-counter identities. Acceptance is the R1b bar. Belongs to the audit-2026-09-05 programme, NOT to ds-improvements: it carries no DS-IMP source or support id and no phase. Dependency adjusted 2026-09-08 (DT ruling under the owner GO): the WO-CAN-04 edge was provenance (CD-01 was introduced by CAN-04), not technical — the repair write-set (filter-builder/upload runtimes) is disjoint from CAN-04's provider-boundary files, as this WO's own wave-1 line states; acceptance unchanged.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
-   "doneAt": null,
-   "evidence": null
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-08",
+   "doneAt": "2026-09-08",
+   "evidence": "landed 8f4d6e9ce; independent K3 audit LANDING PASS (/private/tmp/rottay-cra24-kimi-k3-audit.md): CD-01 probe measured both sides — base {filterCollision:true,remaining:0} → tip {filterCollision:false,remaining:1}; 9/9 acceptance tests; reserve-step mutation turns the 4 restored-identity tests red; no new reds; frozen engines + public surface untouched"
   },
   {
    "id": "WO-ARC-19",
