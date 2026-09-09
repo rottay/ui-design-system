@@ -3706,14 +3706,12 @@
    "order": 24,
    "size": "S",
    "status": "todo",
-   "dependsOn": [
-    "WO-CAN-04"
-   ],
+   "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "NEEDS-OWNER-APPROVAL — need identified by the 2026-09-08 re-audit (CD-01); owner activates 1:1 per anti-sprawl law. wave 1; repair of a defect introduced by WO-CAN-04's module-counter identities. Acceptance is the R1b bar. Belongs to the audit-2026-09-05 programme, NOT to ds-improvements: it carries no DS-IMP source or support id and no phase.",
+   "notes": "OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (CD-01). wave 1; repair of a defect introduced by WO-CAN-04's module-counter identities. Acceptance is the R1b bar. Belongs to the audit-2026-09-05 programme, NOT to ds-improvements: it carries no DS-IMP source or support id and no phase. Dependency adjusted 2026-09-08 (DT ruling under the owner GO): the WO-CAN-04 edge was provenance (CD-01 was introduced by CAN-04), not technical — the repair write-set (filter-builder/upload runtimes) is disjoint from CAN-04's provider-boundary files, as this WO's own wave-1 line states; acceptance unchanged.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -4943,7 +4941,7 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "NEEDS-OWNER-APPROVAL — need identified by the 2026-09-08 re-audit (A2-vs-fleet scope, recommendations lot R4); owner activates 1:1 per anti-sprawl law. wave 4; gate of milestone A2-pilot in PROGRAM_MILESTONES. Pilot instrument + drills + the pilot cut's families green; explicitly NOT the fleet >= 80 % threshold, which stays WO-EVI-02 and now gates milestone B.",
+   "notes": "OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (A2-vs-fleet scope, recommendations lot R4). wave 4; gate of milestone A2-pilot in PROGRAM_MILESTONES. Pilot instrument + drills + the pilot cut's families green; explicitly NOT the fleet >= 80 % threshold, which stays WO-EVI-02 and now gates milestone B.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -5123,7 +5121,7 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "NEEDS-OWNER-APPROVAL — need identified by the 2026-09-08 re-audit (DEL-06, plus the migrateDocumentV1ToV2 states gap disclosed by .changeset/der-02-states-materials.md); owner activates 1:1 per anti-sprawl law. wave 4; DEL-06 ONLY (distinct scope, not dependency pressure): the v2 seam's stale ownership, plus carrying general.states through migrate v1->v2 or refusing it by name. Not a gate of milestone A: DEL-06 never belonged to A's constrained static/v1 interpretation.",
+   "notes": "OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (DEL-06, plus the migrateDocumentV1ToV2 states gap disclosed by .changeset/der-02-states-materials.md). wave 4; DEL-06 ONLY (distinct scope, not dependency pressure): the v2 seam's stale ownership, plus carrying general.states through migrate v1->v2 or refusing it by name. Not a gate of milestone A: DEL-06 never belonged to A's constrained static/v1 interpretation.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
@@ -5271,7 +5269,7 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "NEEDS-OWNER-APPROVAL — need identified by the 2026-09-08 re-audit (missing skeleton owner; family-cut-template.md 4.2 and family-cut/index.mjs:106-109 both reported UNASSIGNED); owner activates 1:1 per anti-sprawl law. wave 3; must close BEFORE WO-FAM-01 closes and therefore before A2-pilot, and the same clause blocks every later cut. Stated as a per-cut close condition in WO-FAM-01..13 rather than as registry edges, so a cut may start in parallel and only its closure waits. Flipping the anatomy-derived-skeleton arm OWED->BLOCKING is this WO's own close act.",
+   "notes": "OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (missing skeleton owner; family-cut-template.md 4.2 and family-cut/index.mjs:106-109 both reported UNASSIGNED). wave 3; must close BEFORE WO-FAM-01 closes and therefore before A2-pilot, and the same clause blocks every later cut. Stated as a per-cut close condition in WO-FAM-01..13 rather than as registry edges, so a cut may start in parallel and only its closure waits. Flipping the anatomy-derived-skeleton arm OWED->BLOCKING is this WO's own close act.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,

@@ -122,6 +122,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
+| WO-CRA-24 | Restored-record identity safety for filter-builder and upload | S | craft | audit-2026-09-05 |
 | WO-CAN-02 | Honest verification: pre/post-build gate manifest, mandatory drills, fail-open counters, tautological tests removed | M | canon-close | audit-2026-09-05 |
 | WO-CAN-04 | Remove the parallel customization paths | M | canon-close | audit-2026-09-05 |
 | WO-EVI-04 | Roadmap and documentation truth: STATUS indicators, fingerprint re-seal, Modern Rescue sealed, docs regenerated | S | evidence-graph | audit-2026-09-05 |
@@ -152,7 +153,6 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-CRA-20 | dependencies: WO-RET-01; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-CRA-21 | dependencies: WO-RET-01; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-CRA-22 | dependencies: WO-RET-02; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
-| WO-CRA-24 | dependencies: WO-CAN-04 |
 | WO-ARC-19 | dependencies: WO-EVI-02; phase 3 is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-GAT-11 | dependencies: WO-INV-01, WO-INV-03, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-GAT-12 | dependencies: WO-EVI-01, WO-RET-03; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |

@@ -183,7 +183,7 @@ named container queries, with a `ResizeObserver` only where structure changes.
 A family does not invent its own posture names, its own thresholds, or a second
 component for the small posture. `adapt` is not a tenant decision.
 
-### 4.2 Loading skeletons derived from the anatomy — owner WO-FAM-14 (NEEDS-OWNER-APPROVAL)
+### 4.2 Loading skeletons derived from the anatomy — owner WO-FAM-14 (OWNER-RATIFIED 2026-09-08)
 
 A family does not hand-write a skeleton. One shared skeleton renderer reads the
 family's `data-part` anatomy and builds the loading state from it, so the
@@ -207,7 +207,7 @@ A family that adds its own animation library, or its own FLIP, has not adopted
 the kernel — it has forked it.
 
 > **AMENDMENT (R4, 2026-09-08) — §4.2 now has an owning work order: `WO-FAM-14`**
-> (`roadmap/family-cuts.md`), registered NEEDS-OWNER-APPROVAL. It owns the shared
+> (`roadmap/family-cuts.md`), registered NEEDS-OWNER-APPROVAL and ratified by the owner on 2026-09-08 (GO post-checkpoint DER-02). It owns the shared
 > renderer, the retirement of the nine hand-made compounds, this section's owner
 > line, and the flip of the gate's `anatomy-derived-skeleton` arm from OWED to
 > BLOCKING — which is that work order's own close act, not a coordinator edit.
