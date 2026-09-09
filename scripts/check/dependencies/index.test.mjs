@@ -217,6 +217,11 @@ test('runtime edge policy is fail-closed for loader transport and scope-aware fo
     "const S = Symbol; S.for = () => 'require'; globalThis[Symbol.for('node:fs')]('node:fs');",
     "function mutate(s) { s.for = () => 'require'; } mutate(Symbol); globalThis[Symbol.for('node:fs')]('node:fs');",
     "[Symbol.for] = [() => 'require']; globalThis[Symbol.for('node:fs')]('node:fs');",
+    "for (Symbol.for of [() => 'require']) {} globalThis[Symbol.for('node:fs')]('node:fs');",
+    "for (Symbol.for in { x: 1 }) {} globalThis[Symbol.for('node:fs')]('node:fs');",
+    "for ([Symbol.for] of [[() => 'require']]) {} globalThis[Symbol.for('node:fs')]('node:fs');",
+    "async function m() { for await (Symbol.for of feed) {} } globalThis[Symbol.for('node:fs')]('node:fs');",
+    "for (globalThis.Symbol of [FakeSymbol]) {} globalThis[Symbol.for('node:fs')]('node:fs');",
     "delete Symbol.for; globalThis[Symbol.for('node:fs')]('node:fs');",
     "globalThis[Symbol['for']('node:fs')]('node:fs');",
     "globalThis[Symbol?.for('node:fs')]('node:fs');",
@@ -468,6 +473,7 @@ test('packaged app scanner fails closed when suppliers or the DS hide behind run
       "const req = module['require']; req(supplier);",
       "const RuntimeFunction = globalThis.Function; RuntimeFunction(source);",
       "const indirectEval = eval; indirectEval(source);",
+      "for (Symbol.for of [() => 'require']) {}\nglobalThis[Symbol.for('rottay.slot')]('node:fs');",
     ]) {
       writeFileSync(resolve(fixtureRoot, 'src/fixture.ts'), source);
       assert.throws(

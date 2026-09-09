@@ -546,8 +546,10 @@ function analyzeRuntimeModuleEdges(
   // intrinsic, so the admission also demands evidence of that. The key shape is
   // narrowed to a direct unshadowed `Symbol.for` member call -- no element
   // access, no optional chain, no global-container path -- and the whole file
-  // must leave the intrinsic intact: writing or deleting `Symbol`, `Symbol.for`
-  // or `<global>.Symbol`, and letting `Symbol` escape as a value (a call
+  // must leave the intrinsic intact: writing `Symbol`, `Symbol.for` or
+  // `<global>.Symbol` -- by assignment, by update, or as the target of a
+  // `for...of`/`for...in` head, which is an assignment without an operator --
+  // deleting it, and letting `Symbol` escape as a value (a call
   // argument such as `Object.defineProperty(Symbol, 'for', ...)`, an alias
   // binding, a return) all withdraw the admission for the file and return its
   // computed keys to the refused default.
@@ -615,6 +617,11 @@ function analyzeRuntimeModuleEdges(
           node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
           node.operatorToken.kind <= ts.SyntaxKind.LastAssignment &&
           symbolIntrinsicTouch(node.left)
+        ) symbolIntrinsicIntegrity = false;
+        if (
+          (ts.isForOfStatement(node) || ts.isForInStatement(node)) &&
+          !ts.isVariableDeclarationList(node.initializer) &&
+          symbolIntrinsicTouch(node.initializer)
         ) symbolIntrinsicIntegrity = false;
         if (ts.isDeleteExpression(node) && symbolIntrinsicTouch(node.expression)) {
           symbolIntrinsicIntegrity = false;
