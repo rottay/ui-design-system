@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="448" viewBox="0 0 1040 448" role="img" aria-labelledby="title description">
+  <title id="title">Rottay Design System — One platform. Every brand.</title>
+  <desc id="description">SaaS is how it is delivered. Your brand is how it is experienced. Two overlapping typographic specimens express editorial and technical identities through different type, shape and spacing. Tenant-first by design.</desc>
+  <defs>
+    <filter id="paper-shadow" x="-35%" y="-35%" width="180%" height="190%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#17222e" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+      .serif { font-family: Georgia, 'Times New Roman', serif; }
+      .mono { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; }
+    </style>
+  </defs>
+
+  <rect width="1040" height="448" rx="18" fill="#f3f0e9"/>
+  <rect x="0.5" y="0.5" width="1039" height="447" rx="17.5" fill="none" stroke="#dedad1"/>
+
+  <text x="51" y="66" fill="#192630" font-size="36" font-weight="700" letter-spacing="-1.8">rottay</text>
+  <line x1="174" y1="41" x2="174" y2="67" stroke="#bcbdb6"/>
+  <text x="194" y="58" fill="#43515a" font-size="13" font-weight="500" letter-spacing="2.3">DESIGN SYSTEM</text>
+  <text x="989" y="58" text-anchor="end" class="mono" fill="#657078" font-size="11" letter-spacing="1.1">SHARED FOUNDATION. INDIVIDUAL EXPRESSION.</text>
+  <line x1="52" y1="91" x2="988" y2="91" stroke="#d6d5cc"/>
+
+  <text x="48" y="180" fill="#192630" font-size="72" font-weight="600" letter-spacing="-3.2">One platform.</text>
+  <text x="48" y="265" class="serif" fill="#344e60" font-size="78" font-style="italic" letter-spacing="-3.1">Every brand.</text>
+  <text x="52" y="311" fill="#54626a" font-size="18">SaaS is how it is delivered.</text>
+  <text x="52" y="338" fill="#192630" font-size="18" font-weight="500">Your brand is how it is experienced.</text>
+
+  <circle cx="809" cy="239" r="128" fill="none" stroke="#dfded5"/>
+  <circle cx="809" cy="239" r="153" fill="none" stroke="#e5e3db"/>
+
+  <g transform="translate(658 124) rotate(-11 110 104)" filter="url(#paper-shadow)">
+    <rect width="220" height="208" rx="26" fill="#fffcf5" stroke="#c6c9bf"/>
+    <text x="23" y="31" class="mono" fill="#677369" font-size="10" letter-spacing="1.8">Aa / EDITORIAL</text>
+    <text x="22" y="117" class="serif" fill="#26392f" font-size="84" letter-spacing="-4">Aa</text>
+    <line x1="24" y1="140" x2="193" y2="140" stroke="#d8ddd1"/>
+    <rect x="24" y="158" width="80" height="27" rx="13.5" fill="#dfe6d5"/>
+    <text x="64" y="176" text-anchor="middle" fill="#3b5141" font-size="11">Your brand</text>
+    <line x1="121" y1="166" x2="194" y2="166" stroke="#bac5b3" stroke-width="3" stroke-linecap="round"/>
+    <line x1="121" y1="178" x2="175" y2="178" stroke="#d3d9ca" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(782 165) rotate(9 97 98)" filter="url(#paper-shadow)">
+    <rect width="194" height="196" rx="5" fill="#1a2935"/>
+    <text x="19" y="29" class="mono" fill="#b9c5ce" font-size="9.5" letter-spacing="1.5">Aa / TECHNICAL</text>
+    <text x="16" y="112" fill="#f5f1e8" font-size="78" font-weight="600" letter-spacing="-5">Aa</text>
+    <line x1="20" y1="134" x2="174" y2="134" stroke="#51616b"/>
+    <rect x="20" y="151" width="79" height="25" rx="2" fill="#d5dfbd"/>
+    <text x="59.5" y="168" text-anchor="middle" class="mono" fill="#213324" font-size="9.5">YOUR BRAND</text>
+    <line x1="111" y1="157" x2="174" y2="157" stroke="#7c909d" stroke-width="2"/>
+    <line x1="111" y1="168" x2="157" y2="168" stroke="#516775" stroke-width="2"/>
+  </g>
+
+  <line x1="52" y1="387" x2="988" y2="387" stroke="#d6d5cc"/>
+  <text x="52" y="418" class="mono" fill="#43515a" font-size="11" letter-spacing="1.5">TENANT-FIRST BY DESIGN</text>
+  <text x="988" y="418" text-anchor="end" fill="#54626a" font-size="14">Typography / Shape / Rhythm / Motion</text>
+</svg>

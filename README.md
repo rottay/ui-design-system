@@ -1,8 +1,6 @@
-<h1 align="center">Rottay Design System</h1>
-
-<p align="center"><strong>SaaS is how it is delivered. Your brand is how it is experienced.</strong></p>
-
-<p align="center">Tenant-first customization · Shared product capabilities · Distinct brand identities</p>
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/header/index.png" width="1040" alt="Rottay Design System — One platform. Every brand. SaaS is how it is delivered. Your brand is how it is experienced." />
+</h1>
 
 <p align="center">
   <a href="#overview">Overview</a> ·
@@ -13,39 +11,42 @@
   <a href="#explore-the-project">Explore</a>
 </p>
 
-![Concept illustration: the same application expressed as editorial and technical tenant identities, using the same neutral palette and shared capabilities.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/tenant-identities/index.png)
-
 > **The destination, not a release announcement.** This README presents the completed
 > product vision. The [roadmap](roadmap/README.md) and [live status](roadmap/STATUS.md)
 > track what is implemented and verified; their contracts remain authoritative.
 
+<sub>01 / THE VISION</sub>
+
 ## Overview
 
-### The software can be shared. The identity should be yours.
+> ### The software can be shared.<br>The identity should be yours.
 
-**Our belief: the generic, one-look-fits-all SaaS experience is no longer the destination.**
-Even when customers use the same underlying product, each should be able to make it feel
-like their own brand. Their identity should shape the experience, not stop at the logo.
+**The generic, one-look-fits-all SaaS experience is no longer the destination.**
+Customers may share the same product. They should not have to share the same identity.
+Their brand should shape the experience, **not stop at the logo**.
 
-Rottay is a React and TypeScript design system built around that vision. It turns a
-bounded set of tenant decisions into a coherent visual language: typography, shape,
-spacing, surfaces, interaction states and motion, from a checkbox to an entire dashboard.
+Rottay is a **React and TypeScript design system** built around that vision. A bounded
+set of tenant decisions becomes a coherent visual language — typography, shape, spacing,
+surfaces, interaction states and motion — from a checkbox to an entire dashboard.
 
-**One application. Many identities. One shared quality standard.**
+![For customers: make it their own, with a complete branded experience. For product teams: build once and evolve together through shared components and behavior. For the business: sell more freedom through governed customization, not a quality paywall.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/benefits/index.png)
 
-| For your customers | For your product team | For your business |
-|---|---|---|
-| A product that feels like their brand | Shared components and behavior across tenants | Offer differentiated white-label experiences |
-| Personalization they can understand and preview | One place to improve a reusable capability | Expand customization without a code fork per customer |
-| A complete experience at every plan | Brand changes expressed through governed decisions | Monetize editing freedom, not basic visual quality |
+**The practical difference**
 
-This is deeper than swapping a primary color. A tenant changes design decisions; the
-system derives their consequences across the relevant families. Shared engineering stays
-shared, while the customer's visual identity remains their own.
+- **For customers:** a complete inherited identity, with understandable controls and a preview of their changes.
+- **For teams:** reusable capabilities that improve in one place, without a code fork per customer.
+- **For the business:** differentiated white-label experiences; monetize editing freedom, not basic quality.
+
+This is **deeper than swapping a primary color**. A tenant changes design decisions;
+the system derives their consequences across the relevant families.
 
 ---
 
+<sub>02 / THE POSSIBILITIES</sub>
+
 ## What you can build
+
+### One foundation. A different experience for every customer.
 
 The primary setting is Rottay's multi-tenant applications, with BitHire as the reference
 product for proving the experience. A **vertical** supplies a product baseline and its
@@ -61,7 +62,13 @@ allowed customization boundaries; a **tenant** is a customer organization using 
 | Create a new vertical or internal brand profile | Define defaults, registered resources and policy boundaries on the common architecture | Expand the product family without cloning the design system |
 | Serve different devices and languages | Adapt layout, interaction, text direction and formatting while retaining the tenant's identity | A product that remains usable beyond the original desktop mockup |
 
+---
+
+<sub>03 / IDENTITY, NOT JUST COLOR</sub>
+
 ## What “distinct identities” means
+
+![Concept illustration: the same application expressed as editorial and technical tenant identities, using the same neutral palette and shared capabilities.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/tenant-identities/index.png)
 
 Imagine two customers of the **same BitHire application**. They use the same workflows
 and component families, but want a different character:
@@ -78,15 +85,18 @@ and component families, but want a different character:
 These are illustrative art directions, not preset names or a new control specification.
 Their available combinations remain subject to the approved catalog and vertical policy.
 
-**Both identities must remain recognizable when color is held constant.** They also owe
-the same accessibility, interaction and responsive-quality requirements. A more expressive
-skin is not a more functional product, and a quieter skin is not a reduced one.
+> ### Take color away. The identities should still differ.
+>
+> Both owe the **same accessibility, interaction and responsive quality**.
+> An expressive skin is not a more functional product; a quieter skin is not a reduced one.
 
 ---
 
+<sub>04 / CUSTOMIZATION RIGHTS</sub>
+
 ## Personalization without a quality paywall
 
-### More freedom to customize. The same commitment to quality.
+![Plans change editing freedom. Not the quality of the experience. Every tenant inherits a complete identity; the plan governs which decisions they may edit.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/customization-promise/index.png)
 
 | | Standard | Pro | Internal |
 |---|---|---|---|
@@ -103,10 +113,9 @@ A tenant inherits the complete effective values it needs from its vertical and p
 including values it cannot edit directly. Derived defaults are not mistaken for a user's
 attempt to override a restricted control.
 
-**The same effective configuration produces the same visual result, regardless of plan.**
-
-An upgrade unlocks more editing freedom. It does not unlock a better-rendered button,
-a complete set of interaction states, or a more accessible interface.
+> **The rule:** the same effective configuration produces the same visual result,
+> regardless of plan. An upgrade unlocks editing freedom — not a better-rendered button,
+> a complete set of states, or a more accessible interface.
 
 Controls use named choices, registered resources, validated values and bounded ranges
 appropriate to their purpose. They are not a free-form CSS editor. Any permitted
@@ -115,6 +124,8 @@ Vertical policy can constrain designated decisions, but cannot arbitrarily lock 
 identity controls the [customization contract](roadmap/kit-2026-09.md) reserves to tenants.
 
 ---
+
+<sub>05 / THE CASCADE</sub>
 
 ## How a decision becomes an interface
 
@@ -132,7 +143,7 @@ the shared rule. The full path keeps inputs, permissions and output aligned:
 
 ![Static configuration and tenant documents share validation, resolution, compilation, artifact emission and the preview, publish and hydration mount contract.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/theme-pipeline/index.png)
 
-The responsibilities are explicit:
+### Five stations. One owner for each responsibility.
 
 1. **The catalog defines the choices.** Each decision declares its type, valid domain,
    editing tier and intended impact. Static and database-backed inputs enter the same
@@ -156,11 +167,14 @@ the catalog states intended impact; each deriver declares what it consumes and p
 A source-derived graph connects those declarations to actual skin and component readers.
 Rendered tests verify that changing a decision really changes the promised families.
 
-Documentation and dependency views are generated from those owners. A separate,
-hand-maintained manifest is not a competing source of truth. This makes “what will
-change if I edit this?” a traceable question rather than tribal knowledge.
+> **“What will change if I edit this?” should be a traceable question.**
+>
+> Documentation and dependency views are generated from those owners. A separate,
+> hand-maintained manifest is not a competing source of truth.
 
 ---
+
+<sub>06 / UNDER THE HOOD</sub>
 
 ## Architecture for developers
 
@@ -206,9 +220,11 @@ Tests live with their owner. Shared behavior has one implementation; a barrel ag
 owners without becoming a second implementation. Generated artifacts and exceptional
 toolchain files have explicit ownership too.
 
-**Canonical means one responsibility in the real application flow.** Being imported is
-not enough: a duplicate implementation does not become legitimate merely because it
-has a caller. Retirement removes the competing path and migrates its real consumers.
+> **Canonical is not a synonym for “imported.”**
+>
+> It means one responsibility in the real application flow. A duplicate implementation
+> does not become legitimate because it has a caller. Retirement removes the competing
+> path and migrates its real consumers.
 
 The [normalization plan](roadmap/retire.md) defines how the remaining tree reaches this
 layout; this sketch describes the destination, not today's directory inventory.
@@ -243,7 +259,11 @@ widgets, or offline/PWA infrastructure supplied by the design system.
 
 ---
 
+<sub>07 / THE QUALITY BAR</sub>
+
 ## What “done” means
+
+> ### Proven in the product. Not just counted in the code.
 
 Completion is demonstrated on consumers, not inferred from token counts, screenshots at
 rest, or the number of closed work orders. The acceptance contract requires:
@@ -261,12 +281,14 @@ rest, or the number of closed work orders. The acceptance contract requires:
 - **A truthful release boundary:** consumer tests use the built package and its declarations,
   and negative tests prove that the checks detect the defects they claim to prevent.
 
-There is a deliberate distinction between **proving one end-to-end family** and **proving
-the whole supported population**. A successful pilot does not certify the fleet. The
+**A successful pilot does not certify the fleet.** Proving one end-to-end family and
+proving the whole supported population are different obligations. The
 [evidence plan](roadmap/evidence-graph.md) owns the detailed thresholds and required proofs;
 this README does not invent or relax them.
 
 ---
+
+<sub>08 / GO DEEPER</sub>
 
 ## Explore the project
 

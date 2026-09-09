@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="236" viewBox="0 0 1040 236" role="img" aria-labelledby="title description">
+  <title id="title">Three reasons to build with Rottay</title>
+  <desc id="description">For customers: make it their own with a complete branded experience. For product teams: build once and evolve together through shared components and behavior. For the business: sell more freedom through governed customization, not a quality paywall.</desc>
+  <style>
+    text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    .serif { font-family: Georgia, 'Times New Roman', serif; }
+    .label { font-family: 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 1.4px; }
+  </style>
+  <rect x="0.5" y="0.5" width="334" height="235" rx="14" fill="#edf0e6" stroke="#d6ddc9"/>
+  <text x="28" y="37" class="label" fill="#536550">01 / FOR YOUR CUSTOMERS</text>
+  <text x="27" y="95" class="serif" fill="#273d2e" font-size="35">Make it</text>
+  <text x="27" y="139" class="serif" fill="#273d2e" font-size="35" font-style="italic">their own.</text>
+  <line x1="28" y1="163" x2="307" y2="163" stroke="#cbd4be"/>
+  <text x="28" y="192" fill="#536550" font-size="16">A complete experience.</text>
+  <text x="28" y="215" fill="#536550" font-size="16">Their unmistakable identity.</text>
+
+  <rect x="352.5" y="0.5" width="334" height="235" rx="14" fill="#f3f0e9" stroke="#dedad1"/>
+  <text x="380" y="37" class="label" fill="#61636a">02 / FOR YOUR PRODUCT TEAM</text>
+  <text x="380" y="95" fill="#263543" font-size="33" font-weight="600" letter-spacing="-1">Build once.</text>
+  <text x="380" y="139" fill="#263543" font-size="33" font-weight="600" letter-spacing="-1">Evolve together.</text>
+  <line x1="380" y1="163" x2="659" y2="163" stroke="#d6d5cc"/>
+  <text x="380" y="192" fill="#61636a" font-size="16">Shared components and behavior.</text>
+  <text x="380" y="215" fill="#61636a" font-size="16">No code fork per customer.</text>
+
+  <rect x="705" width="335" height="236" rx="14" fill="#1a2935"/>
+  <text x="733" y="37" class="label" fill="#bdc9d1">03 / FOR YOUR BUSINESS</text>
+  <text x="733" y="95" fill="#f5f1e8" font-size="35" font-weight="500" letter-spacing="-1">Sell more</text>
+  <text x="733" y="139" class="serif" fill="#d5dfbd" font-size="37" font-style="italic">freedom.</text>
+  <line x1="733" y1="163" x2="1012" y2="163" stroke="#425460"/>
+  <text x="733" y="192" fill="#c1cdd5" font-size="16">Governed customization.</text>
+  <text x="733" y="215" fill="#c1cdd5" font-size="16">Never a quality paywall.</text>
+</svg>
