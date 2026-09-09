@@ -7,6 +7,8 @@
  * @package @rottay/design-system
  */
 
+import type { DecisionProvenanceLedger } from "@/contracts/theme/foundation/provenance";
+
 import type { FirstPartyVerticalId } from "../../../../kernel/verticals";
 import type { ThemeLayerPatch } from "../iso";
 
@@ -67,6 +69,23 @@ export interface ThemeIntent {
    * `assertThemeIntent`, so absence is never read as "entitled".
    */
   readonly entitlement?: PlanEntitlement;
+  /**
+   * What the gate captured about the patch: which raw selection caused each
+   * effective leaf, and under which provenance class.
+   *
+   * A SIBLING of `patch`, never a field inside it. Provenance inside the patch
+   * would have to survive every deep merge, and the merge is exactly what
+   * destroys "whose is this value"; carried beside it, the merge cannot touch
+   * it. It is also the reason the patch stays a pure visual input.
+   *
+   * Optional at the type level because a `static-vertical` intent is not
+   * tenant authorship at all, and because a transport that does not yet
+   * capture provenance must be distinguishable from one that captured none:
+   * absence means "this transport reported nothing", never "nothing was
+   * authored". A tenant-authored station that needs the ledger requires it by
+   * name rather than reading absence as an empty answer.
+   */
+  readonly ledger?: DecisionProvenanceLedger;
 }
 
 /**

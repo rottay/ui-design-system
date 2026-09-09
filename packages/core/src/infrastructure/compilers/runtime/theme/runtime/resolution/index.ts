@@ -7,6 +7,10 @@
  */
 
 import {
+  assertDecisionProvenanceLedger,
+  snapshotDecisionProvenanceLedger,
+} from "@/contracts/theme/foundation/provenance";
+import {
   TENANT_AUTHORED_ORIGINS,
   THEME_PLANS,
   isTenantAuthoredOrigin,
@@ -51,10 +55,11 @@ const INTENT_KEYS: readonly string[] = [
   "origin",
   "patch",
   "entitlement",
+  "ledger",
 ];
 
-/** `entitlement` is the only optional key; every other one must be present. */
-const OPTIONAL_INTENT_KEYS: readonly string[] = ["entitlement"];
+/** The optional keys; every other one must be present. */
+const OPTIONAL_INTENT_KEYS: readonly string[] = ["entitlement", "ledger"];
 
 /**
  * Reject the intent before it can decide anything.
@@ -162,6 +167,23 @@ function assertThemeIntent(intent: ThemeIntent): void {
       );
     }
   }
+  // The ledger is refused by name rather than dropped: it reaches here from a
+  // database row and an HTTP body, where the type is gone, and a ledger that
+  // is quietly ignored is authorship that silently disappears between the gate
+  // that captured it and the station that judges it.
+  const { ledger } = intent;
+  if (ledger !== undefined) {
+    assertDecisionProvenanceLedger(ledger, "resolveTheme: intent.ledger");
+    // A static-vertical intent IS the vertical's baseline, so it has no tenant
+    // authorship to record. Carrying entries there would be the one shape in
+    // which vertical identity could enter as tenant authorship.
+    if (intent.origin === "static-vertical" && ledger.entries.length > 0) {
+      throw new Error(
+        "resolveTheme: a static-vertical intent carries no provenance entries; " +
+          `the vertical's baseline is not tenant authorship (got ${ledger.entries.length})`
+      );
+    }
+  }
 }
 
 /**
@@ -204,6 +226,21 @@ export function baselineFor(vertical: FirstPartyVerticalId, slug: string): Theme
   return roster.id === slug ? roster : { ...roster, id: slug };
 }
 
+/**
+ * The ledger is frozen HERE, at the boundary that validated it, because the
+ * contract that declares the field may reference the ledger's owner as a type
+ * only. An intent reaches the resolver from a database row and from a caller's
+ * object graph, and a resolution sharing interior with either is a resolution
+ * a later mutation rewrites.
+ */
+function snapshotLedger(
+  ledger: ThemeIntent["ledger"]
+): ThemeIntent["ledger"] {
+  return ledger === undefined
+    ? undefined
+    : snapshotDecisionProvenanceLedger(ledger, "resolveTheme: intent.ledger");
+}
+
 export function resolveTheme(intent: ThemeIntent): ThemeResolution {
   assertThemeIntent(intent);
   const baseline = baselineFor(intent.vertical, intent.slug);
@@ -211,7 +248,7 @@ export function resolveTheme(intent: ThemeIntent): ThemeResolution {
   return {
     theme: mergeThemePatches(baseline, intent.patch),
     provenance: isTenantAuthoredOrigin(intent.origin)
-      ? tenantProvenance(intent.patch)
+      ? tenantProvenance(intent.patch, snapshotLedger(intent.ledger))
       : EMPTY_PROVENANCE,
     intent,
   };

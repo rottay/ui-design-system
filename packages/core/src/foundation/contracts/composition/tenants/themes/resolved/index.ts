@@ -7,6 +7,8 @@
  * @package @rottay/design-system
  */
 
+import type { DecisionProvenanceLedger } from "@/contracts/theme/foundation/provenance";
+
 import type {
   BrandMotion,
   BrandSurfaces,
@@ -75,6 +77,21 @@ export interface ThemeProvenance {
   readonly authoredPaths: TenantAuthoredPaths;
   readonly floors: ThemeFloors;
   readonly statusSeedAuthorship: TenantStatusSeedAuthorship;
+  /**
+   * The decision-provenance ledger the intent carried, snapshotted here.
+   *
+   * `authoredPaths` answers "which leaves did the patch move"; the ledger
+   * answers "which raw selection caused each of them, and at which tier",
+   * which a set of leaves structurally cannot: a font-family leaf looks
+   * identical whether a Pro families selection or a Standard pairing produced
+   * it.
+   *
+   * Absent exactly when the intent carried none, so the pair is a faithful
+   * transport and never an invented empty answer. A station that judges
+   * authorship requires it by name rather than reading absence as "nothing was
+   * authored".
+   */
+  readonly ledger?: DecisionProvenanceLedger;
 }
 
 /**
@@ -161,13 +178,21 @@ export const EMPTY_PROVENANCE: ThemeProvenance = Object.freeze({
  * The tenant-authored provenance for one raw patch, snapshotted so that later
  * mutation of the caller's patch — or of anything reachable from the returned
  * value — cannot change what a subsequent compile sees.
+ *
+ * `ledger` is the exception, and is stored as given: it is validated and frozen
+ * by the transport boundary that admitted it, because this contract may
+ * reference the ledger's owner as a type only.
  */
-export function tenantProvenance(patch: ThemeLayerPatch): ThemeProvenance {
+export function tenantProvenance(
+  patch: ThemeLayerPatch,
+  ledger?: DecisionProvenanceLedger
+): ThemeProvenance {
   return Object.freeze({
     tenantAuthored: true,
     authoredPaths: immutableAuthoredPaths(collectPatchAuthoredPaths(patch)),
     floors: freezeFloors(tenantPostureFloors(patch)),
     statusSeedAuthorship: freezeAuthorship(deriveTenantStatusSeedAuthorship(patch)),
+    ledger,
   });
 }
 
