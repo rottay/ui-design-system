@@ -23,6 +23,7 @@ import {
   parseModuleSpecifiers,
   repositoryRoot,
   requiredSuppliersForDesignSystemImports,
+  SLOT_WITNESS_SCOPE,
   runtimeExportFixtures,
   supplierFamilyForSpecifier,
   traceSourceEntry,
@@ -959,6 +960,130 @@ test('a global root-property name is a container root for the slot witness', () 
     }
   } finally {
     rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
+test('an invocation-delivered container is a container root for the slot witness', () => {
+  const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+  const typescript = requireFromCore('typescript');
+  const slot = "globalThis[Symbol.for('rottay.slot')]('node:fs');";
+  const poison = "function p(x) { x.Symbol.for = () => 'require'; }";
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-invocation-root-'));
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    for (const [name, body] of [
+  ['resume-next', "function* g() { const c = yield 0; c.Symbol.for = () => 'require'; } const it = g(); it.next(); it.next(self);"],
+  ['resume-next-direct', "function* g() { const c = yield 0; c.Symbol.for = () => 'require'; } g().next(self);"],
+  ['resume-next-alias', "const s = self; function* g() { const c = yield 0; c.Symbol.for = () => 'require'; } const it = g(); it.next(s);"],
+  ['resume-next-collection', "function* g() { const c = yield 0; c.Symbol.for = () => 'require'; } const it = g(); it.next([self][0]);"],
+  ['resume-destructured', "function* g() { const [c] = yield 0; c.Symbol.for = () => 'require'; } const it = g(); it.next([self]);"],
+  ['call-argument', `${poison} p.call(null, self);`],
+  ['call-second-argument', "function p(a, b) { b.Symbol.for = () => 'require'; } p.call(null, 0, self);"],
+  ['call-this', "function p() { this.Symbol.for = () => 'require'; } p.call(self);"],
+  ['call-this-alias', "function p() { const c = this; c.Symbol.for = () => 'require'; } const s = self; p.call(s);"],
+  ['call-function-expression', "const p = function (x) { x.Symbol.for = () => 'require'; }; p.call(null, self);"],
+  ['call-arrow', "const p = (x) => { x.Symbol.for = () => 'require'; }; p.call(null, self);"],
+  ['apply-argument', `${poison} p.apply(null, [self]);`],
+  ['apply-argument-variable', `${poison} const args = [self]; p.apply(null, args);`],
+  ['apply-this', "function p() { this.Symbol.for = () => 'require'; } p.apply(self, []);"],
+  ['bind-argument', `${poison} p.bind(null, self)();`],
+  ['bind-argument-stored', `${poison} const q = p.bind(null, self); q();`],
+  ['bind-offset-later', `${poison} const q = p.bind(null); q(self);`],
+  ['bind-this', "function p() { this.Symbol.for = () => 'require'; } p.bind(self)();"],
+  ['bind-chain', `${poison} const q = p.bind(null); const r = q.bind(null, self); r();`],
+  ['settled-then', "Promise.resolve(self).then((x) => { x.Symbol.for = () => 'require'; });"],
+  ['settled-then-named', `${poison} Promise.resolve(self).then(p);`],
+  ['settled-then-chained', "Promise.resolve(self).then((v) => v).then((x) => { x.Symbol.for = () => 'require'; });"],
+  ['settled-catch', "Promise.reject(self).catch((x) => { x.Symbol.for = () => 'require'; });"],
+  ['settled-rejection-arm', "Promise.reject(self).then(null, (x) => { x.Symbol.for = () => 'require'; });"],
+  ['settled-stored', "const pending = Promise.resolve(self); pending.then((x) => { x.Symbol.for = () => 'require'; });"],
+  ['settled-awaited', "async function run() { const c = await Promise.resolve(self); c.Symbol.for = () => 'require'; }"],
+  ['settled-all', "Promise.all([self]).then(([x]) => { x.Symbol.for = () => 'require'; });"],
+  ['settled-executor', "new Promise((settle) => settle(self)).then((x) => { x.Symbol.for = () => 'require'; });"],
+  ['arguments-index', "function p() { const x = arguments[0]; x.Symbol.for = () => 'require'; } p(self);"],
+  ['arguments-direct', "function p() { arguments[0].Symbol.for = () => 'require'; } p(self);"],
+  ['arguments-destructured', "function p() { const [x] = arguments; x.Symbol.for = () => 'require'; } p(self);"],
+  ['arguments-through-call', "function p() { const x = arguments[0]; x.Symbol.for = () => 'require'; } p.call(null, self);"],
+  ['arguments-spread', "function p() { const bag = [...arguments]; bag[0].Symbol.for = () => 'require'; } p(self);"],
+  ['compose-call-into-resume', "function* g() { const c = yield 0; c.Symbol.for = () => 'require'; } function feed(x) { const it = g(); it.next(); it.next(x); } feed.call(null, self);"],
+  ['compose-this-into-resume', "function* g() { const c = yield 0; c.Symbol.for = () => 'require'; } function feed() { const it = g(); it.next(); it.next(this); } feed.call(self);"],
+  ['compose-settled-into-call', `${poison} Promise.resolve(self).then((x) => { p.call(null, x); });`],
+  ['compose-arguments-into-apply', `${poison} function relay() { p.apply(null, [arguments[0]]); } relay(self);`],
+    ]) {
+      const source = `${body} ${slot}`;
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.throws(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            /unresolved runtime module edge/,
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.throws(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          /unresolved runtime module edge/,
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+
+    for (const [name, source] of [
+  ['plain-call', "function p(x) { x.trim(); } p.call(null, label); void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-apply', "function p(x) { x.trim(); } p.apply(null, [label]); void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-bind', "function p(x) { x.trim(); } p.bind(null, label)(); void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-then', "fetchThing().then((r) => r.json()); void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-arguments', "function p() { void arguments.length; } p(1, 2); void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-resume', "function* g() { const c = yield 0; void c.length; } const it = g(); it.next(3); void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-this', "function p() { void this.marker; } p.call(host); void globalThis[Symbol.for('rottay.slot')];"],
+  ['call-expando', "function p(c) { c.marker = 1; } p.call(null, self); void globalThis[Symbol.for('rottay.slot')];"],
+  ['then-slot-store', "Promise.resolve(seed).then((x) => { self[Symbol.for('rottay.slot')] = x; }); void globalThis[Symbol.for('rottay.slot')];"],
+  ['call-well-known-read', "function p(c) { const iterate = c.Symbol.iterator; void iterate; } p.call(null, self); void globalThis[Symbol.for('rottay.slot')];"],
+    ]) {
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.doesNotThrow(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.doesNotThrow(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
+test('the slot witness states the boundary of what it proves', () => {
+  assert.match(SLOT_WITNESS_SCOPE, /syntactic bindings plus enumerated invocation channels/);
+  for (const channel of ['`call`/`apply`/`bind`', '`next(value)` resume', '`then`/`catch`', '`arguments`']) {
+    assert.ok(SLOT_WITNESS_SCOPE.includes(channel), channel);
+  }
+  assert.match(SLOT_WITNESS_SCOPE, /not interprocedural dataflow/);
+  assert.match(SLOT_WITNESS_SCOPE, /not that nothing reachable can touch it/);
+  const stated = 'not that nothing\n  // reachable can touch it.';
+  for (const witness of [
+    resolve(repositoryRoot, 'scripts/check/dependencies/index.mjs'),
+    resolve(coreRoot, 'src/entrypoints/suppliers/cli/index.mjs'),
+  ]) {
+    assert.ok(readFileSync(witness, 'utf8').includes(stated), witness);
   }
 });
 

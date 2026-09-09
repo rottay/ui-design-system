@@ -488,6 +488,19 @@ function createRuntimeAnalysisProgram(
 }
 
 /**
+ * What the slot witness proves and what it does NOT, in the sentence a reader
+ * needs before treating an admitted computed key as an untouched intrinsic.
+ */
+export const SLOT_WITNESS_SCOPE =
+  'syntactic bindings plus enumerated invocation channels: the container is followed through every binding this '
+  + 'walk can see (declaration, default, assignment, destructuring, iteration head, collection member, extraction) '
+  + 'and through four invocations that bind without one (`call`/`apply`/`bind` parameters and `this`, a generator '
+  + '`next(value)` resume, a `then`/`catch` callback parameter, and `arguments` at any call site it resolves). It is '
+  + 'not interprocedural dataflow: a container handed to a callee this file cannot resolve -- an import, a method '
+  + 'read off a value, a callback stored where the walk cannot follow -- reaches that body unseen. So the admission '
+  + 'proves the intrinsic is untouched along those channels, not that nothing reachable can touch it.';
+
+/**
  * Classify runtime module edges with TypeScript binding identities. Alias
  * propagation is a fixed point over symbols, so declaration order cannot hide
  * require/eval/Function/createRequire while local parameters and shadowing do
@@ -542,6 +555,12 @@ export function analyzeRuntimeModuleEdges(
   const globalContainerNames = new Set(['globalThis', 'global', 'window']);
   const globalContainerRootProperties = new Set([
     ...globalContainerNames, 'frames', 'parent', 'self', 'top',
+  ]);
+  const invocationMethods = new Set(['apply', 'bind', 'call']);
+  const settlementMethods = new Set(['catch', 'then']);
+  const settledPromiseMethods = new Set(['catch', 'finally', 'then']);
+  const promiseValueMethods = new Set([
+    'all', 'allSettled', 'any', 'race', 'reject', 'resolve',
   ]);
   const safeDescriptorMethods = new Set(['defineProperty', 'getOwnPropertyDescriptor', 'hasOwn']);
   const safeReflectMethods = new Set([
@@ -724,6 +743,74 @@ export function analyzeRuntimeModuleEdges(
     return globalContainerExpression(expression, globalContainerRootProperties);
   }
 
+  // A container also arrives without a binding this walk can see, delivered by
+  // the invocation itself: `fn.call/apply/bind` hand it to a parameter and to
+  // `this`, `generator.next(value)` hands it to whatever a `yield` resumes into,
+  // `promise.then/catch` hand it to a callback parameter, and every resolved
+  // call site hands its arguments to `arguments`. Those receivers have no
+  // symbol, so each is given a token the same fixpoint resolves, and a poison
+  // written through one withdraws the admission exactly as a named alias does.
+  //
+  // Those channels are also the boundary of the whole witness, and therefore of
+  // what an admitted file may be read to prove. The container is followed
+  // through the bindings this walk sees and through the invocations above; this
+  // is not interprocedural dataflow. A container handed to a callee the file
+  // cannot resolve -- an import, a method read off a value, a callback stored
+  // where the walk cannot follow -- reaches that body unseen. So the admission
+  // proves the intrinsic is untouched along those channels, not that nothing
+  // reachable can touch it.
+  const thisReceivers = new Map();
+  const argumentReceivers = new Map();
+  const resumeReceivers = new Map();
+  let containerCollections = null;
+
+  function receiverToken(receivers, host) {
+    if (!host) return null;
+    const known = receivers.get(host);
+    if (known) return known;
+    const token = { host };
+    receivers.set(host, token);
+    return token;
+  }
+
+  function thisReceiverHost(node) {
+    for (let current = node.parent; current; current = current.parent) {
+      if (ts.isArrowFunction(current)) continue;
+      if (ts.isFunctionLike(current)) return current;
+    }
+    return null;
+  }
+
+  function resumeReceiverHost(node) {
+    for (let current = node.parent; current; current = current.parent) {
+      if (ts.isFunctionLike(current)) return current.asteriskToken ? current : null;
+    }
+    return null;
+  }
+
+  function implicitArguments(expression) {
+    return Boolean(
+      expression && ts.isIdentifier(expression) && expression.text === 'arguments' &&
+      !sourceDeclared(expression),
+    );
+  }
+
+  function argumentReceiverToken(expression) {
+    const current = expression ? unwrapRuntimeExpression(expression) : null;
+    return current && implicitArguments(current)
+      ? argumentReceivers.get(thisReceiverHost(current))
+      : null;
+  }
+
+  function deliveredReceiverToken(expression) {
+    const current = expression ? unwrapRuntimeExpression(expression) : null;
+    if (!current) return null;
+    if (current.kind === ts.SyntaxKind.ThisKeyword) {
+      return thisReceivers.get(thisReceiverHost(current));
+    }
+    return ts.isYieldExpression(current) ? resumeReceivers.get(resumeReceiverHost(current)) : null;
+  }
+
   let globalContainerBindings = null;
   let containerMembership = null;
 
@@ -735,6 +822,10 @@ export function analyzeRuntimeModuleEdges(
     const iterations = [];
     const extractions = [];
     const memberStores = [];
+    const invocations = [];
+    const generators = [];
+    const deliveries = [];
+    const callables = new Map();
     const collections = new Set();
     const shortCircuitOperators = new Map([
       [ts.SyntaxKind.AmpersandAmpersandToken, ts.SyntaxKind.AmpersandAmpersandEqualsToken],
@@ -870,19 +961,140 @@ export function analyzeRuntimeModuleEdges(
         rememberMemberStore(node.expression, node.arguments.map((argument) => (
           ts.isSpreadElement(argument) ? argument.expression : argument
         )));
+        invocations.push(node);
       }
-      if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
-        const fn = localFunctionBindings.get(symbolAt(node.expression));
-        if (fn) {
-          node.arguments.forEach((argument, index) => {
-            const parameter = arrayValueAt(fn.parameters, index);
-            if (parameter) remember(parameter.name, argument);
-          });
-        }
-      }
+      if (localFunction(node) && node.asteriskToken) generators.push(node);
       ts.forEachChild(node, collect);
     }
     collect(sourceFile);
+    function callableOf(expression, reached = new Set()) {
+      const current = expression ? unwrapRuntimeExpression(expression) : null;
+      if (!current || reached.has(current)) return null;
+      reached.add(current);
+      if (localFunction(current)) return { fn: current, offset: 0 };
+      if (ts.isIdentifier(current)) {
+        const symbol = symbolAt(current);
+        const declared = localFunctionBindings.get(symbol);
+        return declared ? { fn: declared, offset: 0 } : callables.get(symbol) ?? null;
+      }
+      if (!ts.isCallExpression(current)) return null;
+      const callee = unwrapRuntimeExpression(current.expression);
+      if (
+        !(ts.isPropertyAccessExpression(callee) || ts.isElementAccessExpression(callee)) ||
+        propertyText(callee) !== 'bind'
+      ) return null;
+      const target = callableOf(callee.expression, reached);
+      return target ? {
+        fn: target.fn,
+        offset: target.offset + Math.max(current.arguments.length - 1, 0),
+      } : null;
+    }
+    let learnedCallable = true;
+    while (learnedCallable) {
+      learnedCallable = false;
+      for (const { symbol, value } of globalAliasAssignments) {
+        if (!symbol || callables.has(symbol) || localFunctionBindings.has(symbol)) continue;
+        const target = callableOf(value);
+        if (!target) continue;
+        callables.set(symbol, target);
+        learnedCallable = true;
+      }
+    }
+    function deliverPositional(target, passed) {
+      let position = target.offset;
+      for (const argument of passed) {
+        if (!argument || ts.isOmittedExpression(argument)) {
+          position += 1;
+          continue;
+        }
+        if (ts.isSpreadElement(argument)) {
+          for (let index = position; index < target.fn.parameters.length; index += 1) {
+            const spilled = arrayValueAt(target.fn.parameters, index);
+            if (spilled) remember(spilled.name, argument.expression);
+          }
+          return;
+        }
+        const parameter = arrayValueAt(target.fn.parameters, position);
+        if (parameter) remember(parameter.name, argument);
+        position += 1;
+      }
+    }
+    function deliverArguments(target, passed) {
+      const token = receiverToken(argumentReceivers, target.fn);
+      if (!token) return;
+      const values = passed
+        .filter((argument) => argument && !ts.isOmittedExpression(argument))
+        .map((argument) => (ts.isSpreadElement(argument) ? argument.expression : argument));
+      if (values.length > 0) deliveries.push({ symbol: token, values });
+    }
+    function deliverThis(target, value) {
+      if (!value || ts.isArrowFunction(target.fn)) return;
+      const token = receiverToken(thisReceivers, target.fn);
+      if (token) bindings.push({ symbol: token, value });
+    }
+    function deliverResume(host, value) {
+      const token = receiverToken(resumeReceivers, host);
+      if (token && value) bindings.push({ symbol: token, value });
+    }
+    function resumedGenerators(receiver) {
+      const current = receiver ? unwrapRuntimeExpression(receiver) : null;
+      if (!current) return [];
+      const sources = ts.isIdentifier(current)
+        ? globalAliasAssignments
+          .filter((assignment) => assignment.symbol === symbolAt(current))
+          .map((assignment) => assignment.value)
+        : [current];
+      const hosts = [];
+      for (const source of sources) {
+        const value = source ? unwrapRuntimeExpression(source) : null;
+        if (!value || !ts.isCallExpression(value)) continue;
+        const target = callableOf(value.expression);
+        if (target && target.fn.asteriskToken) hosts.push(target.fn);
+      }
+      return hosts.length > 0 ? hosts : generators;
+    }
+    for (const invocation of invocations) {
+      const callee = unwrapRuntimeExpression(invocation.expression);
+      const method = ts.isPropertyAccessExpression(callee) || ts.isElementAccessExpression(callee)
+        ? propertyText(callee)
+        : null;
+      const passed = [...invocation.arguments];
+      if (method === 'next') {
+        for (const host of resumedGenerators(callee.expression)) deliverResume(host, passed[0]);
+        continue;
+      }
+      if (settlementMethods.has(method)) {
+        for (const callback of passed) {
+          const target = callableOf(callback);
+          if (target) deliverPositional(target, [callee.expression]);
+        }
+        continue;
+      }
+      if (invocationMethods.has(method)) {
+        const target = callableOf(callee.expression);
+        if (!target) continue;
+        deliverThis(target, passed[0]);
+        if (method !== 'apply') {
+          deliverPositional(target, passed.slice(1));
+          deliverArguments(target, passed.slice(1));
+          continue;
+        }
+        const list = passed[1] ? unwrapRuntimeExpression(passed[1]) : null;
+        if (!list) continue;
+        if (ts.isArrayLiteralExpression(list)) {
+          deliverPositional(target, [...list.elements]);
+          deliverArguments(target, [...list.elements]);
+          continue;
+        }
+        for (const parameter of target.fn.parameters) remember(parameter.name, list);
+        deliverArguments(target, [list]);
+        continue;
+      }
+      const target = callableOf(invocation.expression);
+      if (!target) continue;
+      deliverPositional(target, passed);
+      deliverArguments(target, passed);
+    }
     const storedValues = new Map();
     for (const { symbol, value } of bindings) {
       storedValues.set(symbol, [...(storedValues.get(symbol) ?? []), value]);
@@ -912,7 +1124,30 @@ export function analyzeRuntimeModuleEdges(
         for (const target of targets) remember(target, value);
       }
     }
+    function promiseCarriedValues(current) {
+      const callee = unwrapRuntimeExpression(current.expression);
+      if (!ts.isPropertyAccessExpression(callee) && !ts.isElementAccessExpression(callee)) return [];
+      const method = propertyText(callee);
+      if (settledPromiseMethods.has(method)) return [callee.expression];
+      const host = unwrapRuntimeExpression(callee.expression);
+      return promiseValueMethods.has(method) && ts.isIdentifier(host) && unshadowed(host, 'Promise')
+        ? [...current.arguments]
+        : [];
+    }
+    function promiseExecutorValues(current) {
+      const host = unwrapRuntimeExpression(current.expression);
+      if (!ts.isIdentifier(host) || !unshadowed(host, 'Promise')) return [];
+      const published = [];
+      function publish(node) {
+        if (ts.isCallExpression(node)) published.push(...node.arguments);
+        ts.forEachChild(node, publish);
+      }
+      for (const argument of current.arguments ?? []) publish(argument);
+      return published;
+    }
     function evaluationPaths(current) {
+      if (ts.isCallExpression(current)) return promiseCarriedValues(current);
+      if (ts.isNewExpression(current)) return promiseExecutorValues(current);
       if (ts.isBinaryExpression(current)) {
         const operator = current.operatorToken.kind;
         if (branchingOperators.has(operator)) return [current.left, current.right];
@@ -950,7 +1185,10 @@ export function analyzeRuntimeModuleEdges(
         member && (boundToContainer(member, scope) || containsContainer(member, scope))
       ))) return true;
       if (evaluationPaths(current).some((path) => containsContainer(path, scope))) return true;
-      if (ts.isIdentifier(current)) return collections.has(symbolAt(current));
+      if (ts.isIdentifier(current)) {
+        return collections.has(argumentReceiverToken(current) ?? symbolAt(current));
+      }
+      if (collections.has(deliveredReceiverToken(current))) return true;
       if (ts.isCallExpression(current)) {
         return containsContainer(current.expression, scope) ||
           current.arguments.some((argument) => containsContainer(argument, scope));
@@ -965,6 +1203,7 @@ export function analyzeRuntimeModuleEdges(
       const current = unwrapRuntimeExpression(value);
       if (scope.bound.has(current)) return false;
       scope.bound.add(current);
+      if (resolved.has(deliveredReceiverToken(current))) return true;
       if (evaluationPaths(current).some((path) => boundToContainer(path, scope))) return true;
       if (ts.isIdentifier(current) && resolved.has(symbolAt(current))) return true;
       return containsContainer(current, scope);
@@ -994,7 +1233,16 @@ export function analyzeRuntimeModuleEdges(
         if (!containsContainer(extraction.value)) continue;
         if (bindCollection(extraction.symbol)) boundAnother = true;
       }
+      for (const delivery of deliveries) {
+        if (collections.has(delivery.symbol)) continue;
+        if (!delivery.values.some((value) => (
+          boundToContainer(value) || containsContainer(value)
+        ))) continue;
+        bindCollection(delivery.symbol);
+        boundAnother = true;
+      }
     }
+    containerCollections = collections;
     containerMembership = (expression) => (
       boundToContainer(expression) || containsContainer(expression)
     );
@@ -1005,8 +1253,12 @@ export function analyzeRuntimeModuleEdges(
     if (!expression) return false;
     if (witnessContainerRoot(expression)) return true;
     const current = unwrapRuntimeExpression(expression);
+    const bound = globalContainerBindingSymbols();
+    if (ts.isIdentifier(current)) return bound.has(symbolAt(current));
+    if (bound.has(deliveredReceiverToken(current))) return true;
     return Boolean(
-      ts.isIdentifier(current) && globalContainerBindingSymbols().has(symbolAt(current)),
+      (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
+      containerCollections && containerCollections.has(argumentReceiverToken(current.expression)),
     );
   }
 
