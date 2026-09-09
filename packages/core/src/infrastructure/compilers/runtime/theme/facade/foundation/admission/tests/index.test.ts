@@ -27,7 +27,7 @@ import {
 import {
   ThemeAdmissionError,
   authoredLeaves,
-  decisionsActivatedBy,
+  decisionsAuthoredBy,
   tierIssues,
 } from "..";
 
@@ -194,9 +194,7 @@ describe("the plan decides what a tenant may activate", () => {
     const intent = documentThemeIntent({
       vertical: VERTICAL,
       slug: SLUG,
-      document: document({
-        palette: { backgroundMode: "auto", dark: { primary: "#17415F" } },
-      }),
+      document: document({ palette: { backgroundMode: "auto" } }),
     });
     expect(intent.entitlement).toBeUndefined();
     expect(() => compileThemeIntent(intent)).not.toThrow();
@@ -208,19 +206,26 @@ describe("the plan decides what a tenant may activate", () => {
     ).not.toThrow();
   });
 
-  it("reads activation off the CATALOG, and only from defined leaves", () => {
+  it("reads activation off the LEDGER, never off the merged patch's leaves", () => {
     // The over-approximating `authoredPaths` reports every palette field of a
-    // v1 migration, most of them `undefined`. Charging a tenant for a `pro`
+    // v1 migration, most of them `undefined`, and even the narrow leaf set
+    // cannot say WHICH selection wrote a leaf. Charging a tenant for a `pro`
     // decision it never activated is the failure mode this guards.
-    const seedsOnly = authoredLeaves(
-      documentThemeIntent({
-        vertical: VERTICAL,
-        slug: SLUG,
-        document: document({ palette: { primary: "#2F6B9A" } }),
-      }).patch
-    );
-    expect(decisionsActivatedBy(seedsOnly)).toEqual(["palette.seeds"]);
-    expect(tierIssues(seedsOnly, { plan: "standard" })).toEqual([]);
+    const intent = documentThemeIntent({
+      vertical: VERTICAL,
+      slug: SLUG,
+      document: document({ palette: { primary: "#2F6B9A" } }),
+    });
+    expect(decisionsAuthoredBy(intent.ledger)).toEqual(["palette.seeds"]);
+    expect(tierIssues(intent.ledger, { plan: "standard" })).toEqual([]);
+  });
+
+  it("refuses an entitled intent that reports no provenance at all", () => {
+    // Silence is not "authored nothing": an intent that names a plan and
+    // carries no ledger is one no gate captured, so it cannot be judged.
+    const issues = tierIssues(undefined, { plan: "standard" });
+    expect(issues).toHaveLength(1);
+    expect(issues[0].path).toBe("$.ledger");
   });
 });
 

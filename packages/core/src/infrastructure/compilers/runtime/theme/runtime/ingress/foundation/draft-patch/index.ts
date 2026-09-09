@@ -12,6 +12,7 @@ import type {
   Theme,
   ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/expressive-profiles";
 
 /**
  * The families the `Theme` wraps in a governed slot, read off the contract
@@ -64,6 +65,9 @@ const IDENTITY_FAMILIES = ["id", "name"] as const;
  * baseline's own value survives untouched.
  */
 export function authoredThemePatch(draft: BrandTheme): ThemeLayerPatch {
+  // The draft is a public tenant-authored transport like the two documents, so
+  // it answers to the same closed axis domains and the same named refusal.
+  assertExpressiveOverrides(draft.expressive?.profiles, "$.expressive.profiles");
   const patch: Record<string, unknown> = {};
   const governed = new Set<string>(GOVERNED_FAMILIES);
   const identity = new Set<string>(IDENTITY_FAMILIES);

@@ -386,6 +386,91 @@ const includesValue = (
 ): value is string => typeof value === 'string' && vocabulary.includes(value);
 
 /**
+ * The seven closed axis vocabularies, keyed by axis. One table: the sanitizer
+ * on the paint path and the validator on the authored path read it, so a
+ * refusal and a drop can never disagree about what the vocabulary is.
+ */
+export const EXPRESSIVE_AXIS_VOCABULARIES = Object.freeze({
+  type: EXPRESSIVE_TYPE_PROFILES,
+  geometry: EXPRESSIVE_GEOMETRY_PROFILES,
+  edge: EXPRESSIVE_EDGE_PROFILES,
+  material: EXPRESSIVE_MATERIAL_PROFILES,
+  elevation: EXPRESSIVE_ELEVATION_PROFILES,
+  motif: EXPRESSIVE_MOTIF_PROFILES,
+  icon: EXPRESSIVE_ICON_PROFILES,
+}) as Readonly<Record<string, readonly string[]>>;
+
+/** A refusal names the axis, the value it carried and the keypath it sat at. */
+export class ExpressiveAxisDomainError extends Error {
+  readonly path: string;
+  readonly axis: string;
+  readonly value: unknown;
+
+  constructor(input: {
+    readonly path: string;
+    readonly axis: string;
+    readonly value: unknown;
+    readonly message: string;
+  }) {
+    super(`Expressive axis: ${input.message}`);
+    this.name = 'ExpressiveAxisDomainError';
+    this.path = input.path;
+    this.axis = input.axis;
+    this.value = input.value;
+  }
+}
+
+/**
+ * Refuse an out-of-domain expressive axis BY NAME, on the authored path.
+ *
+ * The sibling sanitizer drops silently on purpose: it defends the paint path,
+ * where a throw would blank a live tenant. That posture is wrong at the gate,
+ * where dropping means a writer is told its Pro selection was accepted and
+ * then sees the baseline. Validate first, sanitize later -- same vocabularies,
+ * two different jobs.
+ *
+ * `path` is the ORIGINAL transport keypath, so the refusal points at what the
+ * author wrote rather than at the shape it was projected into.
+ */
+export function assertExpressiveOverrides(raw: unknown, path: string): void {
+  if (raw === undefined) return;
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
+    throw new ExpressiveAxisDomainError({
+      path,
+      axis: '*',
+      value: raw,
+      message: `${path} must be an object of ${Object.keys(
+        EXPRESSIVE_AXIS_VOCABULARIES
+      ).join(' | ')}; got ${JSON.stringify(raw)}`,
+    });
+  }
+  for (const [axis, value] of Object.entries(raw as Record<string, unknown>)) {
+    if (value === undefined) continue;
+    const vocabulary = EXPRESSIVE_AXIS_VOCABULARIES[axis];
+    if (!vocabulary) {
+      throw new ExpressiveAxisDomainError({
+        path,
+        axis,
+        value,
+        message:
+          `unsupported axis "${axis}" at ${path}.${axis}; the closed set is ` +
+          Object.keys(EXPRESSIVE_AXIS_VOCABULARIES).join(' | '),
+      });
+    }
+    if (typeof value !== 'string' || !vocabulary.includes(value)) {
+      throw new ExpressiveAxisDomainError({
+        path,
+        axis,
+        value,
+        message:
+          `axis "${axis}" value ${JSON.stringify(value)} at ${path}.${axis} is ` +
+          `outside its closed domain ${vocabulary.join(' | ')}`,
+      });
+    }
+  }
+}
+
+/**
  * Sanitize raw per-axis overrides (contract `string` fields on the static
  * path; defense-in-depth on the schema-validated DB path) against the closed
  * vocabularies. Fail-closed per axis: an unknown key or an out-of-vocabulary

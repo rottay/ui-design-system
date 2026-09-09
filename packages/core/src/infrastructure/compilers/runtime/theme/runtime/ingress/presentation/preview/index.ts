@@ -13,11 +13,7 @@ import {
   type TenantThemeDocumentAny,
 } from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import {
-  admitDocument,
-  documentAnyThemePatch,
-  type DocumentAdmission,
-} from "../../runtime/document-v2";
+import { admitDocument, type DocumentAdmission } from "../../runtime/document-v2";
 import { authoredThemePatch } from "../../foundation/draft-patch";
 
 /** What an unsaved document preview needs to name a compile. */
@@ -55,16 +51,7 @@ function entitlementOf(
  * thing a preview must never be is a cheaper path with fewer laws on it.
  */
 export function previewThemeIntent(input: PreviewThemeIntentInput): ThemeIntent {
-  return {
-    vertical: input.vertical,
-    slug: input.slug,
-    origin: "preview",
-    patch: documentAnyThemePatch({
-      vertical: input.vertical,
-      document: input.document,
-    }),
-    ...entitlementOf(input.document),
-  };
+  return previewThemeAdmission(input).intent;
 }
 
 /**
@@ -88,6 +75,7 @@ export function previewThemeAdmission(
       origin: "preview",
       patch: admission.patch,
       ...entitlementOf(input.document),
+      ledger: admission.ledger,
     },
     admission,
   };

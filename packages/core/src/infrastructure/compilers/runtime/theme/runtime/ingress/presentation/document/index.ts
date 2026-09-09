@@ -12,11 +12,7 @@ import {
   type TenantThemeDocumentAny,
 } from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import {
-  admitDocument,
-  documentAnyThemePatch,
-  type DocumentAdmission,
-} from "../../runtime/document-v2";
+import { admitDocument, type DocumentAdmission } from "../../runtime/document-v2";
 
 /** What a stored document needs to name a compile. */
 export interface DocumentThemeIntentInput {
@@ -57,16 +53,7 @@ function entitlementOf(
  * baseline's, and the baseline is the vertical's. See `documentThemePatch`.
  */
 export function documentThemeIntent(input: DocumentThemeIntentInput): ThemeIntent {
-  return {
-    vertical: input.vertical,
-    slug: input.slug,
-    origin: "tenant-document",
-    patch: documentAnyThemePatch({
-      vertical: input.vertical,
-      document: input.document,
-    }),
-    ...entitlementOf(input.document),
-  };
+  return documentThemeAdmission(input).intent;
 }
 
 /**
@@ -92,6 +79,7 @@ export function documentThemeAdmission(
       origin: "tenant-document",
       patch: admission.patch,
       ...entitlementOf(input.document),
+      ledger: admission.ledger,
     },
     admission,
   };

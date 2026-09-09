@@ -309,6 +309,24 @@ describe("migrate v1 -> v2", () => {
     expect(migrated.overrides).toEqual({ chrome: { tag: { defaultBg: "#101010" } } });
   });
 
+  it("derives `standard` for a pairing-only v1, and says so in the ledger", () => {
+    // D-02: the plan is DERIVED, never guessed, and a pairing is tier
+    // `standard`. The tier station reads this selection off the ledger rather
+    // than off the font leaves the pairing expands into, which is what refused
+    // every legal Standard pairing as Pro font authorship (RA01).
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { typography: { typePairing: "editorial" } },
+    } as unknown as TenantThemeDocument;
+    expect(migrateDocumentV1ToV2(document).plan).toBe("standard");
+    const { ledger } = admitDocument({ vertical: "bithire", document });
+    expect(ledger.entries.map((entry) => entry.ref)).toEqual([
+      { kind: "decision", id: "typography.pairing" },
+    ]);
+    expect(ledger.entries[0].tier).toBe("standard");
+  });
+
   it("carries the raw tokens that ARE a decision", () => {
     const document = {
       schemaVersion: 1,

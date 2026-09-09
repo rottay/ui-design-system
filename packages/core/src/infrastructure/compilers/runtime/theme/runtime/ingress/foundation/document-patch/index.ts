@@ -46,6 +46,7 @@ import {
   FIRST_PARTY_THEMES,
   isFirstPartyVerticalId,
 } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/expressive-profiles";
 
 const V1_SCHEMA_VERSION = "1";
 
@@ -631,6 +632,12 @@ function migrateAdvanced(
     patches.push({ chrome: advanced.chrome as ThemeLayerPatch["chrome"] });
   }
   if (advanced.profiles) {
+    // v1 types every axis as an open `string`. Refused by name here, on the
+    // authored path, rather than dropped by the paint-path sanitizer later.
+    assertExpressiveOverrides(
+      advanced.profiles,
+      "$.visualFoundation.advanced.profiles"
+    );
     patches.push({
       expressive: {
         value: {

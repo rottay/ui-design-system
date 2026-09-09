@@ -37,7 +37,7 @@ import { admitEngine } from "./runtime/engine";
 import { chartCategoryIssues, compiledChartGrounds, contrastIssues } from "./runtime/contrast";
 import { envelopeIssues } from "./runtime/envelope";
 import { ThemeAdmissionError, refuse, type ThemeAdmissionIssue } from "./foundation/issues";
-import { limitIssues, themeChannelDelta } from "./runtime/limits";
+import { authoredValueIssues, limitIssues, themeChannelDelta } from "./runtime/limits";
 import type { ThemeChannelDelta } from "./runtime/limits";
 import { tierIssues } from "./runtime/tier";
 
@@ -67,13 +67,19 @@ export {
 } from "./runtime/envelope";
 export {
   assertExpressiveEdgeWidthInvariant,
+  authoredValueIssues,
   isSafeVisualValue,
   limitIssues,
   sortedThemeVariables,
   themeChannelDelta,
 } from "./runtime/limits";
 export type { ThemeChannelDelta } from "./runtime/limits";
-export { decisionsAboveTier, decisionsActivatedBy, tierIssues } from "./runtime/tier";
+export {
+  decisionsAboveTier,
+  decisionsAuthoredBy,
+  tierIssues,
+  type ThemeAdmissionLedger,
+} from "./runtime/tier";
 export { admitEngine } from "./runtime/engine";
 export {
   authoredLeaves,
@@ -113,8 +119,10 @@ export function admitThemeIntent(input: {
   // single channel is written.
   const baseline = baselineFor(intent.vertical, intent.slug);
   const leaves = movedLeaves(intent.patch, baseline);
+  const ledger = resolution.provenance.ledger;
   refuse([
-    ...tierIssues(leaves, intent.entitlement),
+    ...tierIssues(ledger, intent.entitlement),
+    ...authoredValueIssues(intent.patch, leaves, ledger),
     ...envelopeIssues(
       resolution.theme,
       leaves,

@@ -23,7 +23,16 @@ import {
   type TenantThemeDocumentV2,
 } from "@/contracts/theme/presentation/document";
 import { assertThemeDecisionDomains } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
-import { documentThemePatch } from "../../../../foundation/document-patch";
+import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/expressive-profiles";
+import {
+  ThemePatchMigrationError,
+  documentThemePatch,
+} from "../../../../foundation/document-patch";
+import {
+  documentProvenanceLedger,
+  type ThemeProvenanceLedger,
+} from "../../../../foundation/provenance";
+import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { projectDecisionsToV1, type DecisionProjection } from "../../foundation/projection";
 import { migrateDocumentV1ToV2 } from "../../foundation/migrate";
 
@@ -35,6 +44,12 @@ export interface DocumentAdmission {
   decisions: readonly DecisionProjection[];
   /** Activated decisions that moved no keypath today, in kit row order. */
   unlit: readonly DecisionProjection[];
+  /**
+   * Which raw selection caused each effective leaf, captured HERE and never
+   * re-derived. Empty is a real answer ("this document authored nothing the
+   * ledger models"), never a missing one.
+   */
+  ledger: ThemeProvenanceLedger;
 }
 
 /**
@@ -44,6 +59,36 @@ export interface DocumentAdmission {
  * shape to the SAME `documentThemePatch` the v1 path uses -- one lowering, one
  * default-mode reader, one roster lookup.
  */
+/**
+ * What a v1 row authored, read through the ONE owner that can say so.
+ *
+ * The migration is the only reader that knows `general.typography.typePairing`
+ * was the authored dial and the font families are its expansion, so the v1
+ * decisions are ITS answer rather than a second v1 -> decision table. Where it
+ * cannot express the document -- a v1 that authors a font stack, a raw token
+ * override or per-mode seeds is legal v1 and inexpressible v2 -- the document
+ * is still admissible here, and the ledger reports the sanctioned chrome
+ * authorship it can still name rather than refusing a door that admits it.
+ * Only the migration's own named refusal is caught; anything else propagates.
+ *
+ * Chrome is claimed at the V1 transport path, not the migrated `overrides.`
+ * one, so a refusal points at what the author actually wrote.
+ */
+function v1Ledger(document: TenantThemeDocument): ThemeProvenanceLedger {
+  const chrome =
+    document.mode === "advanced"
+      ? document.visualFoundation?.advanced?.chrome
+      : undefined;
+  const chromeTransportPrefix = "visualFoundation.advanced.chrome";
+  let decisions: Readonly<Record<string, unknown>> = {};
+  try {
+    decisions = migrateDocumentV1ToV2(document).decisions as Record<string, unknown>;
+  } catch (error) {
+    if (!(error instanceof ThemePatchMigrationError)) throw error;
+  }
+  return documentProvenanceLedger({ decisions, chrome, chromeTransportPrefix });
+}
+
 export function admitDocument(input: {
   vertical: FirstPartyVerticalId;
   document: TenantThemeDocumentAny;
@@ -57,18 +102,31 @@ export function admitDocument(input: {
       }),
       decisions: [],
       unlit: [],
+      ledger: v1Ledger(input.document),
     };
   }
   const document = assertTenantThemeDocumentV2(input.document);
   // The contract closed the key sets; the generated schema closes the VALUES of
   // every domain the catalog states in full. Two owners, one table.
   assertThemeDecisionDomains(document.decisions);
+  // A `record` domain's VALUES are its family contract's, which is why the
+  // generated schema skips the row. Skipping it here too is what let seven
+  // invalid axes through both public producers and be dropped in silence.
+  assertExpressiveOverrides(
+    document.decisions["profiles.expressive"],
+    '$.decisions["profiles.expressive"]'
+  );
   const { v1, projections } = projectDecisionsToV1(document);
   return {
     version: 2,
     patch: documentThemePatch({ vertical: input.vertical, document: v1 }),
     decisions: projections,
     unlit: projections.filter((projection) => !projection.lit),
+    ledger: documentProvenanceLedger({
+      decisions: document.decisions as Record<string, unknown>,
+      chrome: document.overrides?.chrome,
+      chromeTransportPrefix: "overrides.chrome",
+    }),
   };
 }
 
