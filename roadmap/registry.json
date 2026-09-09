@@ -4231,6 +4231,11 @@
      "at": "2026-09-09 19:21",
      "by": "kimi-k3",
      "note": "2026-09-09 PASS-PARTIAL landed (merge c08da7d23; Fable /private/tmp/fable-der03-audit.md + integracion /private/tmp/fable-der03-integration-audit.md). Residuales: (1) mitad palette sin entregar — derivers de tints/inks/semantica, decisiones neutral-temperature/contrast-posture inertes, accent ramp emitida con 0 lectores, mono desde dos constantes; (2) precedencia pill + override de radio sancionado — el valor pintado y su procedencia deben coincidir (resolver antes de aceptar la combinacion); (3) liveness census blind spot — productores anidados/emisiones de shape invisibles (lote gatefix en vuelo cubre productores anidados); (4) tenant-reach corpus gap — los 10 derivers nuevos de DER-04 no enumerados; (5) normalization-contract 10->11 duplicado rottay:CHROME.table.cellFontSize; (6) customization-preservation manifest stale vs censo regenerado."
+    },
+    {
+     "at": "2026-09-09 19:53",
+     "by": "kimi-k3",
+     "note": "2026-09-09 hallazgos sistemicos de la auditoria Fable de DER-07 (/private/tmp/fable-der07-audit.md): (a) el dial radius-scale NO mueve los canales en el camino de los candidatos — calc(N/s * var(--ds-radius-scale)) con scale=s computa identico a 0.85/0.8/1.2 (la sonda de DER-03 movia --ds-radius-md entre dials; verificar si el documento de candidato no baja el dial al CSS var o si el calc se auto-cancela en ese path); (b) el canal de button-style no tiene lector en el Button moderno. Ambos van al lote de conexion/paleta, previo a FAM-01."
     }
    ]
   },
@@ -4261,6 +4266,11 @@
      "at": "2026-09-09 19:21",
      "by": "kimi-k3",
      "note": "2026-09-09 ampliacion de residuales por reauditoria 96-checkpoint (CC-01): cuatro decisiones del catalogo admitidas pero sin efecto siguen sin ruta tipada ni consumidor real y NO estaban nombradas: typography.role-weights (weights/index.ts lee el legacy headingWeightBias, no la decision), typography.numeric (export fijo, no entra al merge de roles), surfaces.border-style (elevation consume elevation/elevations solamente), motion.character. Mas CC-02: metadata del catalogo responsive stale (posture ya emite 4 canales; sigue sin lector productivo — la adopcion real es INV-07/FAM, sin lectores sinteticos)."
+    },
+    {
+     "at": "2026-09-09 19:53",
+     "by": "kimi-k3",
+     "note": "2026-09-09 hallazgos sistemicos de la auditoria Fable de DER-07: (a) elevation-posture flat/soft compilan a NADA (mismas salidas que el baseline — presets vacios o elididos; verificar tabla posturePreset); (b) motion ambient sin productor. Van al lote de conexion previo a FAM-01."
     }
    ]
   },
