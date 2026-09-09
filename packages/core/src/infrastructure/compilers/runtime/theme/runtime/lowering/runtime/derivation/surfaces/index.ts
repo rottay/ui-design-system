@@ -1,8 +1,8 @@
 /**
- * @fileoverview The surfaces family: the semantic surface grounds, radius
- * operands, shadows, the elevation ladder, the decorative layer and its
- * intensity dial. The material roots ON those grounds are the materials
- * family's, so a theme's state stack has one producer instead of two.
+ * @fileoverview The surfaces family: the semantic surface grounds, shadows, the
+ * elevation ladder, the decorative layer and its intensity dial. The material
+ * roots ON those grounds are the materials family's and the geometry is the
+ * shape family's, so a theme's state stack has one producer instead of two.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/surfaces
  * @category Compilers
@@ -35,8 +35,8 @@ function elevationPresetVariables(
 }
 
 /**
- * Everything a surface states: its grounds, its geometry operands, its shadow
- * and elevation ladders and its decorative layer.
+ * Everything a surface states: its grounds, its shadow and elevation ladders
+ * and its decorative layer.
  *
  * The elevation preset a posture implies is emitted here rather than with the
  * scale axes, because the authored ladder that outranks it is a surfaces
@@ -50,7 +50,6 @@ export const surfacesDeriver: FamilyDeriver = {
   produces: [
     "--ds-elevation-*",
     "--ds-surface-*",
-    "--ds-radius-*",
     "--ds-shadow-*",
     "--ds-glass-*",
     "--ds-gradient-*",
@@ -58,16 +57,11 @@ export const surfacesDeriver: FamilyDeriver = {
     "--ds-effect-intensity",
   ],
   derive: (context) =>
-    deriveSurfaceChannels(
-      context.theme,
-      context.radiusScale,
-      context.expressive.expansion
-    ),
+    deriveSurfaceChannels(context.theme, context.expressive.expansion),
 };
 
 export function deriveSurfaceChannels(
   bt: BrandTheme,
-  radiusScaleChannel: string,
   expansion: ExpressiveExpansion
 ): Record<string, string> {
   const su = bt.surfaces;
@@ -81,34 +75,6 @@ export function deriveSurfaceChannels(
     vars,
     semanticSurfaceRolesToSurfaceVariables(su.surfaceRoles ?? su.materials)
   );
-  if (su.borderRadius) {
-    // sm/md/lg/xl are emitted as the `-base` OPERANDS of the foundation dial,
-    // never as resolved radii: `themes/default.css` computes each step as
-    // `calc(base * var(--ds-radius-scale, 1))`, and a flat `--ds-radius-*` at
-    // tenant scope replaces that calc entirely, which is how the dial stops
-    // being able to move them. The division is expressed in CSS rather than
-    // evaluated here so the browser multiplies and divides in one pass, which
-    // is exact for any scale instead of correct only for the ones that divide
-    // evenly. Written as explicit per-step assignments, not a loop: the typed
-    // graph both parity gates share seeds identifier domains from
-    // initializers, so a `for…of` binding degrades to a wildcard that
-    // resolves to no concrete channel.
-    const radiusScale = Number(radiusScaleChannel);
-    const dialed =
-      Number.isFinite(radiusScale) && radiusScale > 0 && radiusScale !== 1;
-    const radiusBase = (authored: string) =>
-      dialed ? `calc(${authored} / ${radiusScale})` : authored;
-    if (su.borderRadius.sm)
-      vars["--ds-radius-sm-base"] = radiusBase(su.borderRadius.sm);
-    if (su.borderRadius.md)
-      vars["--ds-radius-md-base"] = radiusBase(su.borderRadius.md);
-    if (su.borderRadius.lg)
-      vars["--ds-radius-lg-base"] = radiusBase(su.borderRadius.lg);
-    if (su.borderRadius.xl)
-      vars["--ds-radius-xl-base"] = radiusBase(su.borderRadius.xl);
-    // `full` is a pill radius, outside the dial ramp (themes/default.css).
-    if (su.borderRadius.full) vars["--ds-radius-full"] = su.borderRadius.full;
-  }
   if (su.shadows) {
     if (su.shadows.sm) vars["--ds-shadow-sm"] = su.shadows.sm;
     if (su.shadows.md) vars["--ds-shadow-md"] = su.shadows.md;

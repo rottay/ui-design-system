@@ -62,12 +62,13 @@ import { applyRadiusDial } from "@/foundation/kernel/geometry/radius-dial";
 /** Compile-time context this emitter needs beyond the chrome object itself. */
 export interface ChromeVariableContext {
   /**
-   * The `--ds-radius-scale` this same compilation emits for the tenant. It is
-   * the divisor that lets an authored radius literal reproduce today's pixel
-   * exactly while remaining reachable by the dial. Absent means the tenant
-   * declares no scale, so the baseline is the channel's own identity of 1.
+   * The `--ds-radius-scale` the VERTICAL BASELINE resolves to -- never the dial
+   * this compilation emits. It is the divisor that lets an authored radius
+   * literal reproduce the vertical's own pixel exactly while a tenant's dial
+   * still moves it. Absent means no baseline was supplied, so the divisor is
+   * the channel's own identity of 1.
    */
-  radiusScale?: string | number;
+  radiusBaseline?: string | number;
   /** Effective Theme mode for semantic posture lowering. */
   mode?: BrandThemeMode;
   /**
@@ -3006,7 +3007,7 @@ export function chromeToVariables(
 
   // Last, over the composed map: one owner for the law, and a radius channel
   // added to any block above inherits it without a second edit.
-  applyRadiusDial(vars, context.radiusScale);
+  applyRadiusDial(vars, context.radiusBaseline);
 
   return vars;
 }

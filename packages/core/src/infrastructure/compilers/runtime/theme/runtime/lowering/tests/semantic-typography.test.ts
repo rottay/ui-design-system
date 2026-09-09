@@ -146,10 +146,20 @@ const FIRST_PARTY = [
 // artifacts the previous compiler wrote. Every added key is `--ds-material-*`,
 // `--ds-state-*` or `--ds-focus-ring*`; bithire adds only 15 because it had
 // already authored 65 of the 71 roots by hand.
+// SHAPE re-anchor, all three, ORDER-ONLY and measured rather than asserted.
+// The radius operands and the button-silhouette alias moved out of the
+// `surfaces` and `axes` families into the new `shape` family, which sits
+// earlier in the deriver registry. The digest covers `cssString`, and
+// `cssString` preserves declaration order, so it moves. NOTHING ELSE DOES:
+// compiling all three themes on both sides of the edit gives 0 value
+// differences, identical key sets (rottay 1276, bithire 1248, evnto 553 on
+// both sides) and byte-identical `modeBlocks`, and the three committed
+// artifacts stay byte-identical (`first-party-artifacts-generated`). Zero
+// pixel, one order.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "1dcb5e41ae9fb507fe36ebec443a12fa4ce01134a595c12f7b97f5ff5709b8cd",
-  bithire: "923841257d0ced991bf34859eae089a2120fd31d601a191e62e90cd3c54ddac6",
-  evnto: "9a0e01724c0589a75bce69793441ccfa0afbef1cbd9f18721af58e3d0445565c",
+  rottay: "96fe4c054934ead4d1fcffe49fa13075fe7a50a6a96d76b20cfc44a6845dde26",
+  bithire: "fde58efc74691dbb372a564d682f0d24a89af8b1190ee6cdde654790ae3a39a5",
+  evnto: "6414ecda032c85ee3bfff225e23c2d934e0843f86f055fc694c8102418f7efb4",
 };
 
 /**

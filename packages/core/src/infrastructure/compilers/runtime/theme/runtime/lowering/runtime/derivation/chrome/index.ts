@@ -129,7 +129,7 @@ export const chromeDeriver: FamilyDeriver = {
     deriveChromeChannels(
       context.theme,
       context.mode,
-      context.radiusScale,
+      context.radiusBaseline,
       context.modePrefix,
       context.tenant?.authoredPaths
     ),
@@ -138,7 +138,7 @@ export const chromeDeriver: FamilyDeriver = {
 export function deriveChromeChannels(
   bt: BrandTheme,
   mode: BrandThemeMode,
-  radiusScale: string,
+  radiusBaseline: string,
   modePrefix: string,
   tenantAuthoredPaths: TenantAuthoredPaths | undefined
 ): Record<string, string> {
@@ -152,7 +152,7 @@ export function deriveChromeChannels(
       mode,
       tenantAuthoredPaths,
       modePrefix,
-      radiusScale
+      radiusBaseline
     )
   );
   return vars;

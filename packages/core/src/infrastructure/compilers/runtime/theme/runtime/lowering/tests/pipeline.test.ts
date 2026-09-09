@@ -108,7 +108,7 @@ describe("the real registry", () => {
     const context = buildLoweringContext({ theme: bithireBrandTheme });
     const second = buildLoweringContext({ theme: bithireBrandTheme });
     expect(context.expressive.expansion).toEqual(second.expressive.expansion);
-    expect(context.radiusScale).toBe(second.radiusScale);
+    expect(context.radiusBaseline).toBe(second.radiusBaseline);
   });
 
   it("compiles a tenant-less theme without any tenant-ranked channel", () => {

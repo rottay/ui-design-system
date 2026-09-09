@@ -15,10 +15,6 @@ import {
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { MOTION_DIAL_BOUNDS } from "@/foundation/contracts/runtime/motion";
-import {
-  dialReachableRadius,
-  resolveRadiusScale,
-} from "@/foundation/kernel/geometry/radius-dial";
 import { clamp } from "@/foundation/kernel/math";
 import { withArabicSafeFallback } from "@/foundation/kernel/typography";
 import {
@@ -70,7 +66,7 @@ export function typePairingToTypography(
   };
 }
 
-/** Raw silhouette radius; radius-dial folding remains compiler-owned. */
+/** Raw silhouette radius; the `shape` family folds it against the baseline. */
 export function buttonStyleRadius(
   buttonStyle: AppearancePostureFields["buttonStyle"]
 ): string | undefined {
@@ -142,16 +138,6 @@ export function appearancePostureToVariables(
         )
       : undefined;
 
-  if (posture.buttonStyle) {
-    // Two of the three presets are literals, and a literal at tenant scope is
-    // unreachable by the very dial declared beside it. `soft` already reads the
-    // ramp, so the helper leaves it alone. The divisor is the scale this same
-    // posture emits below, so a silhouette keeps its exact resting geometry.
-    vars["--ds-radius-button"] = dialReachableRadius(
-      buttonStyleRadius(posture.buttonStyle)!,
-      resolveRadiusScale(clampedRadiusScale)
-    );
-  }
   if (clampedRadiusScale !== undefined) {
     vars["--ds-radius-scale"] = String(clampedRadiusScale);
   }

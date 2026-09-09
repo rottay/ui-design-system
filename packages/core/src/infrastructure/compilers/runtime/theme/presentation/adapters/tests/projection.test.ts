@@ -169,7 +169,7 @@ describe("a real tenant radius reaches antd in the unit the tenant wrote", () =>
     expect(tenantSeed({ surfaces: { borderRadius: { md: "1em" } } })).toBe(16);
   });
 
-  it("reproduces the authored radius at a non-1 dial", () => {
+  it("normalizes the authored radius against the VERTICAL dial, not the tenant's own", () => {
     const compiled = compileTheme(
       resolveTheme({
         vertical: "rottay",
@@ -179,9 +179,15 @@ describe("a real tenant radius reaches antd in the unit the tenant wrote", () =>
       }),
       classicThemeAdapter
     );
-    expect(compiled.cssVariables["--ds-radius-md-base"]).toBe("calc(0.5rem / 1.25)");
-    expect(compiled.projection.seeds.borderRadius).toBeCloseTo(8, 10);
-    for (const entry of compiled.projection.modes) expect(entry.seeds.borderRadius).toBe(8);
+    // rottay rests at 1, so the operand is the authored unit unchanged and the
+    // tenant's own 1.25 multiplies it in the browser: the corner MOVES. The
+    // divisor used to be the tenant's dial, which reproduced 0.5rem at every
+    // dial position and is exactly the self-cancellation F-07 measured.
+    expect(compiled.cssVariables["--ds-radius-md-base"]).toBe("0.5rem");
+    // 8 -> 10: antd's numeric seed follows the corner. 0.5rem at a 1.25 dial
+    // IS 10px; the old 8 was the cancellation reported as a seed.
+    expect(compiled.projection.seeds.borderRadius).toBeCloseTo(10, 10);
+    for (const entry of compiled.projection.modes) expect(entry.seeds.borderRadius).toBe(10);
   });
 });
 

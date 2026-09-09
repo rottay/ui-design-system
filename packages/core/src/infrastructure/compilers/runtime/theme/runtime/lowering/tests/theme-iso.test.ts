@@ -461,7 +461,17 @@ describe("T0 v1 migration", () => {
       "--ds-sidebar-bg": "var(--ds-color-neutral-900)",
       "--ds-sidebar-item-color-active": "var(--ds-color-white)",
     });
-    expect(compiled.cssVariables["--ds-radius-button"]).toContain("9999px");
+    // The silhouette is derived by the `shape` family, at the `derived` rank.
+    // This fixture pre-merges the migrated patch into the Theme and compiles it
+    // with EMPTY provenance, so there is no tenant rank in this block and
+    // bithire's own authored button chrome legitimately outranks the pill --
+    // and, for the same reason, the merged 1.2 IS this block's baseline dial.
+    // The tenant-rank behaviour, pill reaching all six channels on BOTH
+    // transports, is proven by `theme-transport-parity.test.ts`; what this line
+    // grades is that the migration produced the decision, above.
+    expect(compiled.cssVariables["--ds-radius-button"]).toBe(
+      "calc(9px / 1.2 * var(--ds-radius-scale, 1))"
+    );
     expect(compiled.cssVariables["--ds-elevation-2"]).toBe(
       "0 4px 8px rgba(0,0,0,0.1)"
     );

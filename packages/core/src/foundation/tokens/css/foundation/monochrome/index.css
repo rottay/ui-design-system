@@ -2,13 +2,16 @@
  * Monochrome ramp — the grayscale token contract.
  *
  * Spec: docs-engineering/engineering/design-system/commercial-surfaces/README.md section 2.
- * Rottay's brand colors ARE this grayscale ramp; emphasis comes from inversion, scale,
- * weight, texture, framing, and motion — never hue.
+ * Rottay's brand identity IS this grayscale ramp; emphasis comes from inversion, scale,
+ * weight, texture, framing, and motion — never hue. So the ramp carries no hue of its own
+ * and no literal of its own: it is DERIVED from the tenant's two neutral anchors, and a
+ * tenant that re-points its ink or paper re-points every step with it.
  *
- * The 11 numeric steps (mono-0 = black .. mono-1000 = white) are PERCEPTUALLY EVEN:
- * each step is +10 in CIE L*, converted to sRGB gray. This makes contrast between any two
- * adjacent steps feel uniform, unlike a naive linear-RGB ramp. The values are deliberately
- * distinct from `--ds-color-neutral-*`, which is a 10-step hue-tinted UI scale.
+ * The 11 numeric steps (mono-0 = ink .. mono-1000 = paper) stay PERCEPTUALLY EVEN:
+ * `color-mix(in lab, …)` interpolates CIE L* linearly, so N% of the ink anchor is exactly
+ * L* (100 − N) between two neutral anchors — the same +10 L* cadence the ramp shipped as
+ * literals, now reachable. The steps stay deliberately distinct from `--ds-color-neutral-*`,
+ * which is a 10-step hue-tinted UI scale.
  *
  * Motion, mono type and focus width are NOT re-declared here: those roles already have
  * canonical DS channels (`--ds-duration-*`, `--ds-ease-out`, `--ds-font-mono`,
@@ -17,22 +20,26 @@
  */
 
 :root {
-  /* Perceptually-even grayscale ramp (CIE L* 0..100 in steps of 10). */
-  --ds-color-mono-0: #000000; /* L* 0  */
-  --ds-color-mono-100: #1b1b1b; /* L* 10 */
-  --ds-color-mono-200: #303030; /* L* 20 */
-  --ds-color-mono-300: #474747; /* L* 30 */
-  --ds-color-mono-400: #5e5e5e; /* L* 40 */
-  --ds-color-mono-500: #777777; /* L* 50 */
-  --ds-color-mono-600: #919191; /* L* 60 */
-  --ds-color-mono-700: #ababab; /* L* 70 */
-  --ds-color-mono-800: #c6c6c6; /* L* 80 */
-  --ds-color-mono-900: #e2e2e2; /* L* 90 */
-  --ds-color-mono-1000: #ffffff; /* L* 100 */
+  /* The two anchors. Both are tenant channels (themes/default.css), so the whole
+     ramp is white-labelable without a second authority. */
+  --ds-color-mono-0: var(--ds-color-black);
+  --ds-color-mono-1000: var(--ds-color-white);
 
-  /* Semantic anchors. */
-  --ds-color-surface-ink: #0a0a0c; /* the flagship dark surface (spec section 2) */
-  --ds-color-surface-paper: #ffffff; /* the flagship light surface */
+  /* Perceptually-even grayscale ramp (CIE L* 0..100 in steps of 10). */
+  --ds-color-mono-100: color-mix(in lab, var(--ds-color-mono-0) 90%, var(--ds-color-mono-1000));
+  --ds-color-mono-200: color-mix(in lab, var(--ds-color-mono-0) 80%, var(--ds-color-mono-1000));
+  --ds-color-mono-300: color-mix(in lab, var(--ds-color-mono-0) 70%, var(--ds-color-mono-1000));
+  --ds-color-mono-400: color-mix(in lab, var(--ds-color-mono-0) 60%, var(--ds-color-mono-1000));
+  --ds-color-mono-500: color-mix(in lab, var(--ds-color-mono-0) 50%, var(--ds-color-mono-1000));
+  --ds-color-mono-600: color-mix(in lab, var(--ds-color-mono-0) 40%, var(--ds-color-mono-1000));
+  --ds-color-mono-700: color-mix(in lab, var(--ds-color-mono-0) 30%, var(--ds-color-mono-1000));
+  --ds-color-mono-800: color-mix(in lab, var(--ds-color-mono-0) 20%, var(--ds-color-mono-1000));
+  --ds-color-mono-900: color-mix(in lab, var(--ds-color-mono-0) 10%, var(--ds-color-mono-1000));
+
+  /* Semantic anchors. The flagship dark surface sits one L* step below mono-100
+     (spec section 2); paper is the light anchor itself. */
+  --ds-color-surface-ink: color-mix(in lab, var(--ds-color-mono-0) 97%, var(--ds-color-mono-1000));
+  --ds-color-surface-paper: var(--ds-color-mono-1000);
   --ds-color-hairline: var(--ds-color-mono-300); /* 1px rules */
   --ds-color-hairline-strong: var(--ds-color-mono-500);
 

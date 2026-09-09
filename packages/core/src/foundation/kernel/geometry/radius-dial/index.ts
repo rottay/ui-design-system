@@ -3,25 +3,32 @@
  *
  * A radius literal emitted for a tenant lands in the tenant block, which is
  * unlayered and therefore outranks the foundation's
- * `calc(base * var(--ds-radius-scale, 1))` arithmetic. The dial then moves the
- * surface ramp while every corner the tenant authored stays pinned — measured
- * on BitHire, whose button and input held 9px at every dial position.
+ * `calc(base * var(--ds-radius-scale, 1))` arithmetic. Left as a literal the
+ * dial moves the surface ramp while every corner the vertical authored stays
+ * pinned -- measured on BitHire, whose button and input held 9px at every dial
+ * position.
  *
- * Dividing by the scale the same compilation emits makes the product reproduce
- * the authored value at rest, so no resting pixel moves. The division is
- * expressed for the browser rather than evaluated here, exactly as the surface
- * ramp's `-base` operands are: one multiply-divide pass is exact for any scale
- * instead of correct only for the scales that divide evenly.
+ * So the literal is expressed as a RATIO against the vertical's own dial
+ * position: `calc(9px / 1.25 * var(--ds-radius-scale, 1))` where `1.25` is the
+ * BASELINE the vertical itself resolves to, never the dial the block being
+ * compiled emits. At rest the two coincide and the authored pixel reproduces
+ * exactly; a tenant that re-dials replaces only the multiplicand, so the corner
+ * moves by the tenant's ratio. Folding the block's OWN dial into the divisor is
+ * what made the control self-cancel: the product was constant for every scale.
+ *
+ * The division is expressed for the browser rather than evaluated here, exactly
+ * as the surface ramp's `-base` operands are: one multiply-divide pass is exact
+ * for any scale instead of correct only for the scales that divide evenly.
  *
  * Shared by every emitter that can write a radius, so the rule has one owner:
- * `chrome-variables` (authored chrome) and `appearance-posture` (the bounded
- * `buttonStyle` presets).
+ * `chrome-variables` (authored chrome) and the `shape` family (the ramp
+ * operands and the bounded `buttonStyle` silhouettes).
  */
 
 /**
  * A corner radius, in either spelling that reaches a painted corner: the
  * `--ds-<family>-radius` suffix and the `--ds-radius-<family>` alias the
- * control families publish — `--ds-radius-input` is what BitHire's input
+ * control families publish -- `--ds-radius-input` is what BitHire's input
  * actually paints through, so a suffix-only match leaves it pinned.
  */
 const RADIUS_CHANNEL = /-radius$|^--ds-radius-[a-z0-9-]+$/;
@@ -49,15 +56,15 @@ export function resolveRadiusScale(radiusScale: string | number | undefined): nu
 }
 
 /**
- * Express one authored radius as its own product with the dial, or return it
- * untouched when it is not a foldable literal.
+ * Express one authored radius as a ratio against the vertical baseline, or
+ * return it untouched when it is not a foldable literal.
  */
 export function dialReachableRadius(
   authored: string,
-  scale: number
+  baseline: number
 ): string {
   if (!SINGLE_LENGTH.test(authored.trim())) return authored;
-  const operand = scale === 1 ? authored : `${authored} / ${scale}`;
+  const operand = baseline === 1 ? authored : `${authored} / ${baseline}`;
   return `calc(${operand} * var(--ds-radius-scale, 1))`;
 }
 
@@ -68,12 +75,12 @@ export function dialReachableRadius(
  */
 export function applyRadiusDial(
   vars: Record<string, string>,
-  radiusScale: string | number | undefined
+  radiusBaseline: string | number | undefined
 ): void {
-  const scale = resolveRadiusScale(radiusScale);
+  const baseline = resolveRadiusScale(radiusBaseline);
   for (const [channel, authored] of Object.entries(vars)) {
     if (!RADIUS_CHANNEL.test(channel)) continue;
     if (NOT_A_RADIUS_LENGTH.test(channel)) continue;
-    vars[channel] = dialReachableRadius(authored, scale);
+    vars[channel] = dialReachableRadius(authored, baseline);
   }
 }

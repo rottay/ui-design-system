@@ -86,6 +86,7 @@ export function compileTheme(
   const tenantFacts: TenantFacts | undefined = tenantPatch
     ? {
         posture: resolveTenantPosture(tenantPatch),
+        chosenButtonStyle: tenantPatch.surfaces?.buttonStyle,
         typography: tenantPatch.typography,
         authoredPaths: tenantAuthoredPaths,
         statusSeedAuthorship: tenantStatusSeedAuthorship,

@@ -587,7 +587,18 @@ describe("digest identity across the canonicalization extraction", () => {
     // census below is asserted unchanged beside it.
     const POST_V1_FONT_AUTHORSHIP_DIGEST =
       "sha256-e112fb0ca6a954623224a13c9302386251fd92ab68ceaba75ebb3b6f73c9b8fb";
-    expect(artifact.digest).toBe(POST_V1_FONT_AUTHORSHIP_DIGEST);
+    expect(artifact.digest).not.toBe(POST_V1_FONT_AUTHORSHIP_DIGEST);
+    // Eighth declared move, and the first that PAINTS: `shape.button-style`
+    // stopped expanding into a `chrome.controls` geometry leaf inside the DB
+    // ingress and is derived by the `shape` family at the tenant rank, for both
+    // transports (F-08). The tenant's chosen silhouette therefore reaches the
+    // five per-size button radii instead of losing to bithire's own authored
+    // chrome, so five channels join the delta and the digest moves with them.
+    // The channel census is owned by `tenant-theme-artifact-stability.test.ts`,
+    // which pins the five by name.
+    const POST_SILHOUETTE_DERIVATION_DIGEST =
+      "sha256-e107362bf70032643043d85c6c2d0d85d56a4edd8e580d13edafa16da2918404";
+    expect(artifact.digest).toBe(POST_SILHOUETTE_DERIVATION_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -600,7 +611,9 @@ describe("digest identity across the canonicalization extraction", () => {
     // subtraction removes it while the tenant seed still reaches it through the
     // root. Pinned two-sided so a channel that stopped tracking the seed and a
     // channel that merely stopped being restated cannot be confused.
-    expect(Object.keys(artifact.variables)).toHaveLength(65);
+    // 65 -> 70: the five per-size button radii the chosen silhouette now
+    // reaches at the tenant rank (the eighth declared move above).
+    expect(Object.keys(artifact.variables)).toHaveLength(70);
     expect(artifact.variables["--ds-button-primary-bg"]).toBeUndefined();
 
     const baseline = lowerTheme(FIRST_PARTY_THEMES.bithire, IDENTITY.slug).cssVariables;
@@ -695,7 +708,18 @@ describe("digest identity across the canonicalization extraction", () => {
     // transport, so the ledger names the row that wrote them.
     const POST_V1_FONT_AUTHORSHIP_W4_DIGEST =
       "sha256-16eaef281dd7ea6898bc81f3079a311a92b79f347f5d13486ddb2fb4fc8fe2e6";
-    expect(artifact.digest).toBe(POST_V1_FONT_AUTHORSHIP_W4_DIGEST);
+    expect(artifact.digest).not.toBe(POST_V1_FONT_AUTHORSHIP_W4_DIGEST);
+    // Eighth declared move, and the first that PAINTS: `shape.button-style`
+    // stopped expanding into a `chrome.controls` geometry leaf inside the DB
+    // ingress and is derived by the `shape` family at the tenant rank, for both
+    // transports (F-08). The tenant's chosen silhouette therefore reaches the
+    // five per-size button radii instead of losing to bithire's own authored
+    // chrome, so five channels join the delta and the digest moves with them.
+    // The channel census is owned by `tenant-theme-artifact-stability.test.ts`,
+    // which pins the five by name.
+    const POST_SILHOUETTE_DERIVATION_W4_DIGEST =
+      "sha256-3e9b4c5cb940842c70c7a3620437756fe34cf5f80cf82ad4ae276b434875e776";
+    expect(artifact.digest).toBe(POST_SILHOUETTE_DERIVATION_W4_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -742,7 +766,8 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(artifact.variables["--ds-card-radius"]).toBe(
       "calc(10px / 1.25 * var(--ds-radius-scale, 1))"
     );
-    expect(Object.keys(artifact.variables)).toHaveLength(20);
+    // 20 -> 25: the same five per-size button radii.
+    expect(Object.keys(artifact.variables)).toHaveLength(25);
   });
 
   it("produces one digest for a document authored in any key order", () => {

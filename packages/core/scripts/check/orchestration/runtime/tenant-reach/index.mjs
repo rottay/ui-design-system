@@ -54,7 +54,7 @@ export const LOWERING_FOUNDATION_TYPE_RAMP = `${LOWERING}/foundation/type-ramp/i
 export const LOWERING_FOUNDATION_TYPOGRAPHY = `${LOWERING}/foundation/typography/index.ts`;
 export const LOWERING_RUNTIME_MODE_BLOCKS = `${LOWERING}/runtime/mode-blocks/index.ts`;
 export const LOWERING_FOUNDATION_CONTRACT = `${LOWERING}/foundation/contract/index.ts`;
-export const LOWERING_FOUNDATION_DIAL = `${LOWERING}/foundation/dial/index.ts`;
+export const LOWERING_FOUNDATION_GEOMETRY = `${LOWERING}/foundation/geometry/index.ts`;
 export const LOWERING_FOUNDATION_EXPRESSIVE = `${LOWERING}/foundation/expressive/index.ts`;
 const DERIVATION = `${LOWERING}/runtime/derivation`;
 export const LOWERING_DERIVATION_CHARTS = `${DERIVATION}/charts/index.ts`;
@@ -75,6 +75,12 @@ export const LOWERING_RUNTIME_DERIVATION = Object.freeze([
   `${DERIVATION}/ramps/index.ts`,
   `${DERIVATION}/recipes/index.ts`,
   `${DERIVATION}/seeds/index.ts`,
+  // WO-DER-03: the shape family emits the radius ramp operands and the button
+  // silhouette from the typed `shape.*` decisions, with the same
+  // literal, non-interpolated assignments the states/materials derivers use.
+  `${DERIVATION}/shape/index.ts`,
+  `${DERIVATION}/shape/button/index.ts`,
+  `${DERIVATION}/shape/radius/index.ts`,
   `${DERIVATION}/states/index.ts`,
   `${DERIVATION}/surfaces/index.ts`,
   `${DERIVATION}/tenant/index.ts`,
@@ -114,7 +120,7 @@ export const LOWERING_SOURCES = Object.freeze([
   LOWERING_FOUNDATION_TYPE_RAMP,
   LOWERING_FOUNDATION_TYPOGRAPHY,
   LOWERING_FOUNDATION_CONTRACT,
-  LOWERING_FOUNDATION_DIAL,
+  LOWERING_FOUNDATION_GEOMETRY,
   LOWERING_FOUNDATION_EXPRESSIVE,
   ...LOWERING_RUNTIME_DERIVATION,
   LOWERING_RUNTIME_PIPELINE,

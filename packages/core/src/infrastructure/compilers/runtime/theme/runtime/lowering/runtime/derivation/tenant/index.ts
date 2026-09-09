@@ -10,6 +10,10 @@
 import { withArabicSafeFallback } from "@/foundation/kernel/typography";
 import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FamilyDeriver } from "../../../foundation/contract";
+import {
+  buttonSilhouetteAlias,
+  buttonSilhouetteChannels,
+} from "../../../foundation/geometry";
 
 /**
  * The tenant floor: tenant override > tenant profile > vertical theme > DS
@@ -34,6 +38,11 @@ export const tenantDeriver: FamilyDeriver = {
     "--ds-type-scale",
     "--ds-radius-scale",
     "--ds-radius-button",
+    "--ds-button-xs-radius",
+    "--ds-button-sm-radius",
+    "--ds-button-md-radius",
+    "--ds-button-lg-radius",
+    "--ds-button-xl-radius",
     "--ds-density-mode-factor",
     "--ds-motion-intensity",
     "--ds-motion-duration-scale",
@@ -51,17 +60,16 @@ export const tenantDeriver: FamilyDeriver = {
     const posture = tenant.posture;
     if (posture) {
       Object.assign(vars, appearancePostureToVariables(posture));
-      // The silhouette is the tenant's statement; the dial the operand is
-      // folded against is not. A tenant that restyles the button without
-      // re-dialling radius must keep the block's resolved dial in the operand,
-      // or `--ds-radius-button` ships a literal the dial can never move.
-      if (posture.buttonStyle !== undefined && posture.radiusScale === undefined) {
-        const dialed = appearancePostureToVariables({
-          buttonStyle: posture.buttonStyle,
-          radiusScale: Number(context.radiusScale),
-        })["--ds-radius-button"];
-        if (dialed !== undefined) vars["--ds-radius-button"] = dialed;
-      }
+      // The silhouette is the tenant's statement, at the tenant's rank: it has
+      // to outrank the vertical's authored button chrome, which is exactly what
+      // the DB transport used to buy by expanding the word into a chrome leaf
+      // of its own. It reaches the same six channels here, on both transports.
+      // A word the tenant's PROFILE filled reaches the ramp alias only.
+      Object.assign(
+        vars,
+        buttonSilhouetteAlias(posture.buttonStyle, context.radiusBaseline),
+        buttonSilhouetteChannels(tenant.chosenButtonStyle, context.radiusBaseline)
+      );
     }
     const tl = tenant.typography;
     if (tl) {

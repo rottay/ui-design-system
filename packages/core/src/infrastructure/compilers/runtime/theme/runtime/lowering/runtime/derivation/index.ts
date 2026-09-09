@@ -17,6 +17,7 @@ import { paletteDeriver } from "./palette";
 import { rampsDeriver } from "./ramps";
 import { recipesDeriver } from "./recipes";
 import { seedsDeriver } from "./seeds";
+import { shapeDeriver } from "./shape";
 import { statesDeriver } from "./states";
 import { surfacesDeriver } from "./surfaces";
 import { tenantDeriver } from "./tenant";
@@ -38,6 +39,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   axesDeriver,
   typographyDeriver,
   paletteDeriver,
+  shapeDeriver,
   statesDeriver,
   surfacesDeriver,
   materialsDeriver,

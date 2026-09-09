@@ -10,7 +10,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { analyse, measure } from './index.mjs';
+import { analyse, measure, selfCancelling } from './index.mjs';
 
 const DIALS = new Set(['--ds-effect-intensity', '--ds-type-scale']);
 
@@ -130,4 +130,46 @@ test('drill 7 [prueba negativa de la excepcion]: un pill no escala, y por eso qu
 
   // ...y el dial conserva autoridad donde SI hay geometria real.
   assert.ok(base['--ds-radius-md'][0].includes('--ds-radius-scale'), 'radius-scale gobierna los radios con geometria');
+});
+
+test('drill 8 [F-07]: a calc() that divides and multiplies by the same dial is refused', () => {
+  /* The exact string the Standard geometry control shipped as, across all three
+   * verticals: the dial is textually present inside the calc(), which is what
+   * the reachability rule reads, and the product is 9px at every dial position.
+   * Presence is not causality, and this clause is the difference. */
+  const dials = new Set(['--ds-radius-scale']);
+  const cancelled = selfCancelling(
+    {
+      bithire: {
+        '--ds-button-md-radius': [
+          'calc(9px / var(--ds-radius-scale) * var(--ds-radius-scale, 1))',
+        ],
+      },
+    },
+    dials
+  );
+  assert.equal(cancelled.length, 1, 'the self-cancelling product is named');
+  assert.deepEqual(
+    { c: cancelled[0].channel, d: cancelled[0].dial, s: cancelled[0].scope },
+    { c: '--ds-button-md-radius', d: '--ds-radius-scale', s: 'bithire' }
+  );
+});
+
+test('drill 9 [F-07]: normalizing against a LITERAL baseline is not a cancellation', () => {
+  /* The shape the fix takes. The divisor is the vertical's own dial position, a
+   * compile-time constant, so the corner still moves with the tenant's dial. A
+   * clause that flagged every `/` beside a `*` would forbid the repair. */
+  const dials = new Set(['--ds-radius-scale']);
+  assert.deepEqual(
+    selfCancelling(
+      { bithire: { '--ds-button-md-radius': ['calc(9px / 1.25 * var(--ds-radius-scale, 1))'] } },
+      dials
+    ),
+    []
+  );
+});
+
+test('drill 10 [F-07]: the real tree carries no self-cancelling dial', () => {
+  const { cancellations } = measure();
+  assert.deepEqual(cancellations, [], 'a dial that cancels itself is present and inert');
 });

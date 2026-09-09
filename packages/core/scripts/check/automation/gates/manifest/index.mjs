@@ -794,6 +794,25 @@ export const CI_GATES = Object.freeze([
     drillId: 'states-emphasis-probe-drill',
     prerequisites: ['fresh-dist'],
   },
+  // WO-DER-03: la misma disciplina para F-07. El gate textual `dial-authority`
+  // certificaba un dial presente dentro de un calc() que se auto-cancelaba;
+  // solo computed-style distingue "presente" de "causal".
+  {
+    id: 'shape-radius-probe-drill',
+    run: ['node', '--test', 'scripts/check/tokens/shape/radius-probe/index.test.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    drillFor: ['shape-radius-probe'],
+    prerequisites: ['fresh-dist'],
+  },
+  {
+    id: 'shape-radius-probe',
+    run: ['node', 'scripts/check/tokens/shape/radius-probe/index.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    drillId: 'shape-radius-probe-drill',
+    prerequisites: ['fresh-dist'],
+  },
   // El `--check` del inventario verifica DOS cosas por la misma puerta: que el
   // artefacto sea byte-identico a su recomputo, y que sus seis contadores esten
   // en `baseline/index.json`. Lo segundo se cableo el 2026-08-28 y no

@@ -545,10 +545,21 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     });
     expect(additions.filter((token) => CHART_SERIES_TOKEN.test(token))).toHaveLength(10);
     expect([...additions].sort()).toEqual([
+      // The five per-size button radii the CHOSEN silhouette now reaches.
+      // `shape.button-style` used to expand into a `chrome.controls`
+      // geometry leaf inside the DB ingress, at the vertical's own rank, where
+      // bithire's authored per-size radii outranked it and the tenant's word
+      // painted nothing. The `shape` family derives it at the tenant rank for
+      // both transports, so the tenant's silhouette wins and appears here.
+      "--ds-button-lg-radius",
+      "--ds-button-md-radius",
       // The seed-derived six. Their VALUES are pinned by
       // `POPULATED_SEED_DERIVED`; what this list adds is exactness — no seventh
       // channel may join the family without being declared there first.
       "--ds-button-primary-bg-hover",
+      "--ds-button-sm-radius",
+      "--ds-button-xl-radius",
+      "--ds-button-xs-radius",
       "--ds-chart-series-1",
       "--ds-chart-series-10",
       "--ds-chart-series-2",
@@ -598,7 +609,16 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       retired: W4_RETIRED,
       restored: W4_RESTORED,
     });
-    expect(additions).toEqual([DENSITY_MODE_FACTOR_TOKEN]);
+    expect(additions).toEqual([
+      // The chosen silhouette's five per-size radii; see the populated-simple
+      // block above for why they moved from the vertical rank to the tenant's.
+      "--ds-button-lg-radius",
+      "--ds-button-md-radius",
+      "--ds-button-sm-radius",
+      "--ds-button-xl-radius",
+      "--ds-button-xs-radius",
+      DENSITY_MODE_FACTOR_TOKEN,
+    ]);
     expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("0.85");
     // `--ds-radius-md` leaving the delta must mean "equal to the baseline",
     // never "the override stopped arriving". The same document with a radius
@@ -661,7 +681,24 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     // With the sidebar pair restored, the css body needs no value rewrite at
     // all: retirements and the radius dial are the only two things still
     // standing between this document and the frozen fixture, byte for byte.
-    expect(withoutModeDeltaBlocks(withoutDensityModeFactor(cssBody(artifact)))).toBe(
+    expect(
+      withoutTokens(
+        withoutModeDeltaBlocks(withoutDensityModeFactor(cssBody(artifact))),
+        // The chosen silhouette's five per-size radii, trimmed on the ARTIFACT
+        // side because the frozen fixture predates them: `shape.button-style`
+        // now derives at the tenant rank instead of expanding into a vertical
+        // chrome leaf that bithire's own per-size radii outranked. Their values
+        // are pinned by the `additions` list above, so trimming them here hides
+        // nothing.
+        [
+          "--ds-button-xs-radius",
+          "--ds-button-sm-radius",
+          "--ds-button-md-radius",
+          "--ds-button-lg-radius",
+          "--ds-button-xl-radius",
+        ]
+      )
+    ).toBe(
       withoutTokens(
         withDialedRadius(
           withoutBehaviorOnlyAmbient(cssBody(fixture)),

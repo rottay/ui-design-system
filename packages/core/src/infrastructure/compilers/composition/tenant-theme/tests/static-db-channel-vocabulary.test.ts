@@ -53,7 +53,6 @@ import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { TENANT_CAPABILITY_REGISTRY } from "@/foundation/contracts/composition/tenants/capabilities";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presentation/expressive-profiles";
-import { buttonStyleRadius } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import {
   FIRST_PARTY_THEMES,
 } from "@/foundation/tokens/ts/presentation/brand-themes";
@@ -231,6 +230,13 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
       warningColor: seed(seeds.status?.warning, "status.warning"),
       errorColor: seed(seeds.status?.error, "status.error"),
       infoColor: seed(seeds.status?.info, "status.info"),
+    },
+    // The bounded posture the document states as a decision. It is a static
+    // FIELD, which is the whole claim this mirror grades: the silhouette is
+    // reachable from the static contract without a chrome leaf standing in for
+    // a derivation the lowering now owns.
+    surfaces: {
+      buttonStyle: compiled.normalizedAppearance.general?.shape?.buttonStyle,
     },
     chrome: {
       ...chrome,
@@ -613,14 +619,11 @@ const TRANSPORT_CASES: Readonly<Record<string, TransportCase>> = {
   },
   "shape.button-style": {
     general: { shape: { buttonStyle: "pill" } },
-    // The document language DERIVES the button geometry from the style word;
-    // the static language states both. Same intent, stated at two levels, so
-    // the static side spells the derivation out rather than being reported as
-    // a transport difference it is not.
-    draft: {
-      surfaces: { buttonStyle: "pill" },
-      chrome: { controls: { buttonGeometry: { radius: buttonStyleRadius("pill") } } },
-    },
+    // One word, one field, both transports. The static side used to have to
+    // spell the geometry expansion out because only the DB ingress performed
+    // it; the `shape` family performs it for both, so the mirror states the
+    // decision and nothing else.
+    draft: { surfaces: { buttonStyle: "pill" } },
   },
   "density.mode": {
     general: { density: "compact" },

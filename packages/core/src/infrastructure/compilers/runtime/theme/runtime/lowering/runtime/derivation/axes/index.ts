@@ -96,7 +96,6 @@ export const axesDeriver: FamilyDeriver = {
     "--ds-radius-scale",
     "--ds-density-scale",
     "--ds-rhythm-scale",
-    "--ds-radius-button",
     "--ds-density-mode-factor",
     "--ds-motion-intensity",
     "--ds-motion-duration-scale",

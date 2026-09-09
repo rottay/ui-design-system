@@ -69,6 +69,15 @@ export interface ExpressiveFacts {
  */
 export interface TenantFacts {
   readonly posture: AppearancePostureFields | undefined;
+  /**
+   * The silhouette the tenant CHOSE, read from the raw patch.
+   *
+   * `posture.buttonStyle` cannot answer this: it is the `??` chain that lets
+   * the tenant's own profile fill the word nobody picked, and a profile filling
+   * a default is not the tenant deciding one. The distinction is what keeps a
+   * profile from flattening the five per-size button radii a skin varies.
+   */
+  readonly chosenButtonStyle: AppearancePostureFields["buttonStyle"];
   readonly typography: BrandTheme["typography"] | undefined;
   readonly authoredPaths: TenantAuthoredPaths | undefined;
   readonly statusSeedAuthorship: TenantStatusSeedAuthorship | undefined;
@@ -94,11 +103,11 @@ export interface LoweringContext {
   readonly modePrefix: string;
   readonly expressive: ExpressiveFacts;
   /**
-   * The `--ds-radius-scale` the VERTICAL dial resolves to. Radius literals are
-   * emitted as `-base` operands divided by this exact number, so every reader
-   * of the divisor reads the same one instead of re-deriving it.
+   * The `--ds-radius-scale` the VERTICAL BASELINE resolves to. Every authored
+   * radius is normalized against this exact number, so the divisor is a
+   * constant of the vertical instead of the dial the block itself emits.
    */
-  readonly radiusScale: string;
+  readonly radiusBaseline: string;
   readonly tenant: TenantFacts | undefined;
 }
 
