@@ -377,6 +377,30 @@ function createRuntimeAnalysisProgram(
   };
 }
 
+// TypeScript models a heritage entry as a type node, but `class D extends
+// <expr>` evaluates <expr>: only interface `extends` and `implements` erase.
+function heritageRuntimeExpression(ts, parent, child) {
+  if (!ts.isExpressionWithTypeArguments(parent) || parent.expression !== child) return false;
+  const clause = parent.parent;
+  const owner = clause?.parent;
+  return Boolean(
+    clause && ts.isHeritageClause(clause) && clause.token === ts.SyntaxKind.ExtendsKeyword &&
+    owner && (ts.isClassDeclaration(owner) || ts.isClassExpression(owner)),
+  );
+}
+
+function runtimePosition(ts, node, sourceFile) {
+  let child = node;
+  for (
+    let current = node.parent;
+    current && current !== sourceFile;
+    child = current, current = current.parent
+  ) {
+    if (ts.isTypeNode(current) && !heritageRuntimeExpression(ts, current, child)) return false;
+  }
+  return true;
+}
+
 function analyzeRuntimeModuleEdges(
   source,
   fileName,
@@ -414,12 +438,19 @@ function analyzeRuntimeModuleEdges(
   const globalFactoryNodes = new Set();
   const globalFactoryAssignments = [];
   const localFunctionBindings = new Map();
+  const localClassBindings = new Map();
   const parameterSafetyCache = new WeakMap();
   const loaderNames = new Set(['require', 'module', 'createRequire', 'eval', 'Function', 'process']);
   const toolingModuleSpecifiers = new Set(['module', 'node:module']);
   const globalContainerNames = new Set(['globalThis', 'global', 'window']);
   const globalContainerRootProperties = new Set([
     ...globalContainerNames, 'frames', 'parent', 'self', 'top',
+  ]);
+  const invocationMethods = new Set(['apply', 'bind', 'call']);
+  const settlementMethods = new Set(['catch', 'then']);
+  const settledPromiseMethods = new Set(['catch', 'finally', 'then']);
+  const promiseValueMethods = new Set([
+    'all', 'allSettled', 'any', 'race', 'reject', 'resolve',
   ]);
   const safeDescriptorMethods = new Set(['defineProperty', 'getOwnPropertyDescriptor', 'hasOwn']);
   const safeReflectMethods = new Set([
@@ -459,10 +490,19 @@ function analyzeRuntimeModuleEdges(
     );
   }
 
+  // Cause 2026-09-09 (WO-CRA-24): in a JS source kind TypeScript binds
+  // `<container>.member = value` as an expando declaration of the container
+  // itself, so a single global assignment made every `globalThis`/`window`
+  // reference in the file look locally declared and dissolved the whole
+  // container fence -- container replacement, and even `globalThis.require`,
+  // were accepted in `.mjs`. Only a lexical binding shadows a global; an
+  // expression-shaped declaration node is that expando and never shadows.
   function sourceDeclared(identifier) {
     const symbol = symbolAt(identifier);
     return Boolean(symbol && (symbol.declarations ?? []).some(
-      (declaration) => declaration.getSourceFile() === sourceFile,
+      (declaration) => declaration.getSourceFile() === sourceFile &&
+        !ts.isIdentifier(declaration) && !ts.isPropertyAccessExpression(declaration) &&
+        !ts.isElementAccessExpression(declaration) && !ts.isBinaryExpression(declaration),
     ));
   }
 
@@ -535,10 +575,861 @@ function analyzeRuntimeModuleEdges(
     return null;
   }
 
-  function runtimeIdentifier(identifier) {
-    for (let current = identifier.parent; current && current !== sourceFile; current = current.parent) {
-      if (ts.isTypeNode(current)) return false;
+  // Cause 2026-09-09 (WO-CRA-24): a runtime-owned slot keyed by
+  // `Symbol.for(<static string>)` is admitted on the global container because a
+  // registry symbol is never any of the string-keyed loader properties this scan
+  // fences; `Symbol.for('require')` is a different key from `require`, and the
+  // registry never returns a well-known symbol. Every key that is not statically
+  // one of these calls stays refused, so computed transport remains fail-closed.
+  //
+  // Those registry semantics hold only while the call reaches the genuine
+  // intrinsic, so the admission also demands evidence of that, and the evidence
+  // is a whitelist: enumerating mutation shapes lost one vector per round. The
+  // key shape is narrowed to a direct unshadowed `Symbol.for` member call -- no
+  // element access, no optional chain, no global-container path -- and across
+  // the whole file the resolved intrinsic (`Symbol`, the container's `Symbol`
+  // member, and the container carried by any local binding -- stored by a
+  // declaration, a default, an assignment, a call argument or an iteration
+  // head, held as a member of a collection, or extracted back out of one,
+  // directly or through a chain of them) may appear only as the receiver
+  // of that admitted call and as a read of a well-known symbol member in one of
+  // the listed value positions. Every other appearance -- value, argument,
+  // alias, return, assignment/update/delete/loop target, receiver of any other
+  // member call or access, operand of a descriptor, prototype or proxy
+  // operation -- withdraws the admission, as does any call that names `Symbol`
+  // as a property of the container. A mutation is judged by the receiver chain
+  // it reaches through rather than by the name it happens to use: an assignment,
+  // a compound assignment, an update, a delete, a destructuring or loop target
+  // and any member call walk their receiver to its root, and a root that is the
+  // container, a resolved alias or an expression a collection poisons withdraws
+  // the admission as well. Two members survive that walk: a member of a
+  // registered slot key, and a member the scan can name -- a readable key other
+  // than `Symbol` taken directly off the container -- which is how a file keeps
+  // its own expandos and the container's own methods. The container the witness
+  // judges is not only `globalThis`/`global`/`window`: in a browser the global
+  // object is itself reachable as `self`, `top`, `parent` and `frames`, so those
+  // unshadowed names -- and their aliases, through the same fixpoint -- are
+  // container roots here too. That widening is the witness's alone; the admitted
+  // shape stays a static registered key read off the named global container. A
+  // withdrawn file returns its computed keys to the refused default.
+  const wellKnownSymbolMembers = new Set([
+    'asyncDispose', 'asyncIterator', 'dispose', 'hasInstance', 'isConcatSpreadable',
+    'iterator', 'match', 'matchAll', 'metadata', 'replace', 'search',
+    'species', 'split', 'toPrimitive', 'toStringTag', 'unscopables',
+  ]);
+
+  function genuineSymbolForCall(expression) {
+    const call = unwrapRuntimeExpression(expression);
+    if (!ts.isCallExpression(call) || call.questionDotToken) return false;
+    const member = call.expression;
+    return Boolean(
+      ts.isPropertyAccessExpression(member) && !member.questionDotToken &&
+      member.name.text === 'for' && ts.isIdentifier(member.expression) &&
+      unshadowed(member.expression, 'Symbol'),
+    );
+  }
+
+  function witnessContainerRoot(expression) {
+    return globalContainerExpression(expression, globalContainerRootProperties);
+  }
+
+  // A container also arrives without a binding this walk can see, delivered by
+  // the invocation itself, and these six forms are the whole enumeration:
+  // `fn.call/apply/bind` hand it to a parameter and to `this`,
+  // `generator.next(value)` hands it to whatever a `yield` resumes into,
+  // `promise.then/catch` hand it to a callback parameter, every resolved call
+  // site hands its arguments to the callee's parameters and to `arguments`, a
+  // tagged template hands each substitution to the tag after the strings array,
+  // and `new C()` or `super()` hands its arguments to the constructor the class
+  // or its base declares. Those receivers have no symbol, so each is given a
+  // token the same fixpoint resolves, and a poison written through one
+  // withdraws the admission exactly as a named alias does.
+  //
+  // Those six channels are the boundary of the whole witness, and therefore of
+  // what an admitted file may be read to prove. The container is followed
+  // through the bindings this walk sees and through the invocations above, and
+  // it is judged in every runtime position: a `class D extends <expr>` heritage
+  // expression is runtime code TypeScript models as a type node, so pruning
+  // skips only genuinely erased type children and no syntactic position hides a
+  // write. This is not interprocedural dataflow. Every channel resolves inside
+  // this file, so the escape is the unresolvable callee: a container handed to
+  // an import, to a method read off a value, or to a callback stored where the
+  // walk cannot follow reaches that body unseen. What escapes is a callee, never
+  // a position. So the admission proves the intrinsic is untouched along those
+  // channels, not that nothing
+  // reachable can touch it.
+  const thisReceivers = new Map();
+  const argumentReceivers = new Map();
+  const resumeReceivers = new Map();
+  let containerCollections = null;
+
+  function receiverToken(receivers, host) {
+    if (!host) return null;
+    const known = receivers.get(host);
+    if (known) return known;
+    const token = { host };
+    receivers.set(host, token);
+    return token;
+  }
+
+  function thisReceiverHost(node) {
+    for (let current = node.parent; current; current = current.parent) {
+      if (ts.isArrowFunction(current)) continue;
+      if (ts.isFunctionLike(current)) return current;
     }
+    return null;
+  }
+
+  function resumeReceiverHost(node) {
+    for (let current = node.parent; current; current = current.parent) {
+      if (ts.isFunctionLike(current)) return current.asteriskToken ? current : null;
+    }
+    return null;
+  }
+
+  function implicitArguments(expression) {
+    return Boolean(
+      expression && ts.isIdentifier(expression) && expression.text === 'arguments' &&
+      !sourceDeclared(expression),
+    );
+  }
+
+  function argumentReceiverToken(expression) {
+    const current = expression ? unwrapRuntimeExpression(expression) : null;
+    return current && implicitArguments(current)
+      ? argumentReceivers.get(thisReceiverHost(current))
+      : null;
+  }
+
+  function deliveredReceiverToken(expression) {
+    const current = expression ? unwrapRuntimeExpression(expression) : null;
+    if (!current) return null;
+    if (current.kind === ts.SyntaxKind.ThisKeyword) {
+      return thisReceivers.get(thisReceiverHost(current));
+    }
+    return ts.isYieldExpression(current) ? resumeReceivers.get(resumeReceiverHost(current)) : null;
+  }
+
+  let globalContainerBindings = null;
+  let containerMembership = null;
+
+  function globalContainerBindingSymbols() {
+    if (globalContainerBindings) return globalContainerBindings;
+    const resolved = new Set();
+    globalContainerBindings = resolved;
+    const bindings = [];
+    const iterations = [];
+    const extractions = [];
+    const memberStores = [];
+    const invocations = [];
+    const constructions = [];
+    const generators = [];
+    const deliveries = [];
+    const callables = new Map();
+    const collections = new Set();
+    const shortCircuitOperators = new Map([
+      [ts.SyntaxKind.AmpersandAmpersandToken, ts.SyntaxKind.AmpersandAmpersandEqualsToken],
+      [ts.SyntaxKind.BarBarToken, ts.SyntaxKind.BarBarEqualsToken],
+      [ts.SyntaxKind.QuestionQuestionToken, ts.SyntaxKind.QuestionQuestionEqualsToken],
+    ]);
+    const branchingOperators = new Set([
+      ...shortCircuitOperators.keys(), ...shortCircuitOperators.values(),
+    ]);
+    const carriedValueOperators = new Set([ts.SyntaxKind.CommaToken, ts.SyntaxKind.EqualsToken]);
+    const storageOperators = new Set([
+      ts.SyntaxKind.EqualsToken, ...shortCircuitOperators.values(),
+    ]);
+    function boundPropertyName(name) {
+      if (!name) return null;
+      if (ts.isIdentifier(name)) return name.text;
+      if (ts.isComputedPropertyName(name)) return staticPropertyText(name.expression);
+      return staticPropertyText(name);
+    }
+    function destructuredElements(pattern) {
+      if (ts.isObjectBindingPattern(pattern) || ts.isArrayBindingPattern(pattern)) {
+        const named = ts.isObjectBindingPattern(pattern);
+        return pattern.elements.map((element, index) => (
+          ts.isOmittedExpression(element) || element.dotDotDotToken ? null : {
+            fallback: element.initializer ?? null,
+            index: named ? null : index,
+            property: named ? boundPropertyName(element.propertyName ?? element.name) : null,
+            target: element.name,
+          }
+        ));
+      }
+      if (ts.isObjectLiteralExpression(pattern)) {
+        return pattern.properties.map((declared) => {
+          if (ts.isPropertyAssignment(declared)) {
+            return {
+              fallback: null, index: null,
+              property: boundPropertyName(declared.name), target: declared.initializer,
+            };
+          }
+          if (!ts.isShorthandPropertyAssignment(declared)) return null;
+          return {
+            fallback: declared.objectAssignmentInitializer ?? null, index: null,
+            property: boundPropertyName(declared.name), target: declared.name,
+          };
+        });
+      }
+      if (ts.isArrayLiteralExpression(pattern)) {
+        return pattern.elements.map((element, index) => (
+          ts.isOmittedExpression(element) || ts.isSpreadElement(element)
+            ? null : { fallback: null, index, property: null, target: element }
+        ));
+      }
+      return [];
+    }
+    function patternTargets(pattern) {
+      if (ts.isObjectBindingPattern(pattern) || ts.isArrayBindingPattern(pattern)) {
+        return pattern.elements.map((element) => (
+          ts.isOmittedExpression(element) ? null : element.name
+        ));
+      }
+      if (ts.isObjectLiteralExpression(pattern)) {
+        return pattern.properties.map((declared) => {
+          if (ts.isPropertyAssignment(declared)) return declared.initializer;
+          if (ts.isShorthandPropertyAssignment(declared)) return declared.name;
+          return ts.isSpreadAssignment(declared) ? declared.expression : null;
+        });
+      }
+      if (!ts.isArrayLiteralExpression(pattern)) return [];
+      return pattern.elements.map((element) => {
+        if (ts.isOmittedExpression(element)) return null;
+        return ts.isSpreadElement(element) ? element.expression : element;
+      });
+    }
+    function selectedMember(value, property, index) {
+      const current = unwrapRuntimeExpression(value);
+      if (property !== null && ts.isObjectLiteralExpression(current)) {
+        let selected = null;
+        for (const declared of current.properties) {
+          if (ts.isSpreadAssignment(declared)) return null;
+          if (boundPropertyName(declared.name) !== property) continue;
+          if (ts.isPropertyAssignment(declared)) selected = declared.initializer;
+          else selected = ts.isShorthandPropertyAssignment(declared) ? declared.name : null;
+        }
+        return selected;
+      }
+      if (index === null || !ts.isArrayLiteralExpression(current)) return null;
+      const reached = current.elements.slice(0, index + 1);
+      if (reached.some((element) => ts.isSpreadElement(element))) return null;
+      const element = arrayValueAt(reached, index);
+      return !element || ts.isOmittedExpression(element) ? null : element;
+    }
+    function remember(target, value, membership = false) {
+      if (!target || !value) return;
+      const current = unwrapRuntimeExpression(target);
+      if (ts.isIdentifier(current)) {
+        const symbol = symbolAt(current);
+        if (symbol) (membership ? extractions : bindings).push({ symbol, value });
+        return;
+      }
+      if (
+        ts.isBinaryExpression(current) && current.operatorToken.kind === ts.SyntaxKind.EqualsToken
+      ) {
+        remember(current.left, value, membership);
+        return;
+      }
+      for (const element of destructuredElements(current)) {
+        if (!element) continue;
+        remember(element.target, element.fallback);
+        remember(element.target, selectedMember(value, element.property, element.index));
+        if (globalContainerRootProperties.has(element.property)) remember(element.target, value);
+      }
+      for (const member of patternTargets(current)) remember(member, value, true);
+    }
+    function rememberMemberStore(access, values) {
+      const current = unwrapRuntimeExpression(access);
+      if (!ts.isPropertyAccessExpression(current) && !ts.isElementAccessExpression(current)) return;
+      const host = unwrapRuntimeExpression(current.expression);
+      if (!ts.isIdentifier(host) || !sourceDeclared(host)) return;
+      const symbol = symbolAt(host);
+      if (symbol) memberStores.push({ host, symbol, values });
+    }
+    function collect(node) {
+      if (
+        (ts.isVariableDeclaration(node) || ts.isParameter(node) || ts.isBindingElement(node)) &&
+        node.initializer
+      ) remember(node.name, node.initializer);
+      if (ts.isBinaryExpression(node) && storageOperators.has(node.operatorToken.kind)) {
+        remember(node.left, node.right);
+        rememberMemberStore(node.left, [node.right]);
+      }
+      if (ts.isForOfStatement(node) || ts.isForInStatement(node)) iterations.push(node);
+      if (ts.isCallExpression(node)) {
+        rememberMemberStore(node.expression, node.arguments.map((argument) => (
+          ts.isSpreadElement(argument) ? argument.expression : argument
+        )));
+        invocations.push(node);
+      }
+      if (ts.isNewExpression(node) || ts.isTaggedTemplateExpression(node)) {
+        constructions.push(node);
+      }
+      if (localFunction(node) && node.asteriskToken) generators.push(node);
+      ts.forEachChild(node, collect);
+    }
+    collect(sourceFile);
+    function baseClassExpression(declaration) {
+      for (const clause of declaration.heritageClauses ?? []) {
+        if (clause.token === ts.SyntaxKind.ExtendsKeyword && clause.types.length > 0) {
+          return clause.types[0].expression;
+        }
+      }
+      return null;
+    }
+    function inheritedConstruction(node) {
+      for (let current = node.parent; current; current = current.parent) {
+        if (ts.isClassLike(current)) return baseClassExpression(current);
+      }
+      return null;
+    }
+    function constructorOf(declaration, reached) {
+      for (const member of declaration.members) {
+        if (ts.isConstructorDeclaration(member) && member.body) return { fn: member, offset: 0 };
+      }
+      return callableOf(baseClassExpression(declaration), reached);
+    }
+    function templateSubstitutions(template) {
+      return ts.isTemplateExpression(template)
+        ? template.templateSpans.map((span) => span.expression)
+        : [];
+    }
+    function callableOf(expression, reached = new Set()) {
+      const current = expression ? unwrapRuntimeExpression(expression) : null;
+      if (!current || reached.has(current)) return null;
+      reached.add(current);
+      if (localFunction(current)) return { fn: current, offset: 0 };
+      if (ts.isClassLike(current)) return constructorOf(current, reached);
+      if (current.kind === ts.SyntaxKind.SuperKeyword) {
+        return callableOf(inheritedConstruction(current), reached);
+      }
+      if (ts.isIdentifier(current)) {
+        const symbol = symbolAt(current);
+        const declared = localFunctionBindings.get(symbol);
+        if (declared) return { fn: declared, offset: 0 };
+        const constructed = localClassBindings.get(symbol);
+        if (constructed) return constructorOf(constructed, reached);
+        return callables.get(symbol) ?? null;
+      }
+      if (!ts.isCallExpression(current)) return null;
+      const callee = unwrapRuntimeExpression(current.expression);
+      if (
+        !(ts.isPropertyAccessExpression(callee) || ts.isElementAccessExpression(callee)) ||
+        propertyText(callee) !== 'bind'
+      ) return null;
+      const target = callableOf(callee.expression, reached);
+      return target ? {
+        fn: target.fn,
+        offset: target.offset + Math.max(current.arguments.length - 1, 0),
+      } : null;
+    }
+    let learnedCallable = true;
+    while (learnedCallable) {
+      learnedCallable = false;
+      for (const { symbol, value } of globalAliasAssignments) {
+        if (!symbol || callables.has(symbol) || localFunctionBindings.has(symbol)) continue;
+        const target = callableOf(value);
+        if (!target) continue;
+        callables.set(symbol, target);
+        learnedCallable = true;
+      }
+    }
+    function deliverPositional(target, passed) {
+      let position = target.offset;
+      for (const argument of passed) {
+        if (!argument || ts.isOmittedExpression(argument)) {
+          position += 1;
+          continue;
+        }
+        if (ts.isSpreadElement(argument)) {
+          for (let index = position; index < target.fn.parameters.length; index += 1) {
+            const spilled = arrayValueAt(target.fn.parameters, index);
+            if (spilled) remember(spilled.name, argument.expression);
+          }
+          return;
+        }
+        const parameter = arrayValueAt(target.fn.parameters, position);
+        if (parameter) remember(parameter.name, argument);
+        position += 1;
+      }
+    }
+    function deliverArguments(target, passed) {
+      const token = receiverToken(argumentReceivers, target.fn);
+      if (!token) return;
+      const values = passed
+        .filter((argument) => argument && !ts.isOmittedExpression(argument))
+        .map((argument) => (ts.isSpreadElement(argument) ? argument.expression : argument));
+      if (values.length > 0) deliveries.push({ symbol: token, values });
+    }
+    function deliverThis(target, value) {
+      if (!value || ts.isArrowFunction(target.fn)) return;
+      const token = receiverToken(thisReceivers, target.fn);
+      if (token) bindings.push({ symbol: token, value });
+    }
+    function deliverResume(host, value) {
+      const token = receiverToken(resumeReceivers, host);
+      if (token && value) bindings.push({ symbol: token, value });
+    }
+    function resumedGenerators(receiver) {
+      const current = receiver ? unwrapRuntimeExpression(receiver) : null;
+      if (!current) return [];
+      const sources = ts.isIdentifier(current)
+        ? globalAliasAssignments
+          .filter((assignment) => assignment.symbol === symbolAt(current))
+          .map((assignment) => assignment.value)
+        : [current];
+      const hosts = [];
+      for (const source of sources) {
+        const value = source ? unwrapRuntimeExpression(source) : null;
+        if (!value || !ts.isCallExpression(value)) continue;
+        const target = callableOf(value.expression);
+        if (target && target.fn.asteriskToken) hosts.push(target.fn);
+      }
+      return hosts.length > 0 ? hosts : generators;
+    }
+    for (const invocation of invocations) {
+      const callee = unwrapRuntimeExpression(invocation.expression);
+      const method = ts.isPropertyAccessExpression(callee) || ts.isElementAccessExpression(callee)
+        ? propertyText(callee)
+        : null;
+      const passed = [...invocation.arguments];
+      if (method === 'next') {
+        for (const host of resumedGenerators(callee.expression)) deliverResume(host, passed[0]);
+        continue;
+      }
+      if (settlementMethods.has(method)) {
+        for (const callback of passed) {
+          const target = callableOf(callback);
+          if (target) deliverPositional(target, [callee.expression]);
+        }
+        continue;
+      }
+      if (invocationMethods.has(method)) {
+        const target = callableOf(callee.expression);
+        if (!target) continue;
+        deliverThis(target, passed[0]);
+        if (method !== 'apply') {
+          deliverPositional(target, passed.slice(1));
+          deliverArguments(target, passed.slice(1));
+          continue;
+        }
+        const list = passed[1] ? unwrapRuntimeExpression(passed[1]) : null;
+        if (!list) continue;
+        if (ts.isArrayLiteralExpression(list)) {
+          deliverPositional(target, [...list.elements]);
+          deliverArguments(target, [...list.elements]);
+          continue;
+        }
+        for (const parameter of target.fn.parameters) remember(parameter.name, list);
+        deliverArguments(target, [list]);
+        continue;
+      }
+      const target = callableOf(invocation.expression);
+      if (!target) continue;
+      deliverPositional(target, passed);
+      deliverArguments(target, passed);
+    }
+    for (const construction of constructions) {
+      const tagged = ts.isTaggedTemplateExpression(construction);
+      const target = callableOf(tagged ? construction.tag : construction.expression);
+      if (!target) continue;
+      const passed = tagged
+        ? [null, ...templateSubstitutions(construction.template)]
+        : [...(construction.arguments ?? [])];
+      deliverPositional(target, passed);
+      deliverArguments(target, passed);
+    }
+    const storedValues = new Map();
+    for (const { symbol, value } of bindings) {
+      storedValues.set(symbol, [...(storedValues.get(symbol) ?? []), value]);
+    }
+    function iteratedValues(iterable, reached = new Set()) {
+      const current = iterable ? unwrapRuntimeExpression(iterable) : null;
+      if (!current || ts.isOmittedExpression(current) || reached.has(current)) return [];
+      reached.add(current);
+      const members = ts.isArrayLiteralExpression(current)
+        ? current.elements.map((element) => (
+          ts.isSpreadElement(element) ? element.expression : element
+        ))
+        : [];
+      if (ts.isIdentifier(current)) members.push(...(storedValues.get(symbolAt(current)) ?? []));
+      const values = [current];
+      for (const reachable of [...evaluationPaths(current), ...members]) {
+        values.push(...iteratedValues(reachable, reached));
+      }
+      return values;
+    }
+    for (const iteration of iterations) {
+      const declared = iteration.initializer;
+      const targets = ts.isVariableDeclarationList(declared)
+        ? declared.declarations.map((declaration) => declaration.name)
+        : [declared];
+      for (const value of iteratedValues(iteration.expression)) {
+        for (const target of targets) remember(target, value);
+      }
+    }
+    function promiseCarriedValues(current) {
+      const callee = unwrapRuntimeExpression(current.expression);
+      if (!ts.isPropertyAccessExpression(callee) && !ts.isElementAccessExpression(callee)) return [];
+      const method = propertyText(callee);
+      if (settledPromiseMethods.has(method)) return [callee.expression];
+      const host = unwrapRuntimeExpression(callee.expression);
+      return promiseValueMethods.has(method) && ts.isIdentifier(host) && unshadowed(host, 'Promise')
+        ? [...current.arguments]
+        : [];
+    }
+    function promiseExecutorValues(current) {
+      const host = unwrapRuntimeExpression(current.expression);
+      if (!ts.isIdentifier(host) || !unshadowed(host, 'Promise')) return [];
+      const published = [];
+      function publish(node) {
+        if (ts.isCallExpression(node)) published.push(...node.arguments);
+        ts.forEachChild(node, publish);
+      }
+      for (const argument of current.arguments ?? []) publish(argument);
+      return published;
+    }
+    function evaluationPaths(current) {
+      if (ts.isCallExpression(current)) return promiseCarriedValues(current);
+      if (ts.isNewExpression(current)) return promiseExecutorValues(current);
+      if (ts.isBinaryExpression(current)) {
+        const operator = current.operatorToken.kind;
+        if (branchingOperators.has(operator)) return [current.left, current.right];
+        return carriedValueOperators.has(operator) ? [current.right] : [];
+      }
+      if (ts.isConditionalExpression(current)) return [current.whenTrue, current.whenFalse];
+      if (ts.isAwaitExpression(current)) return [current.expression];
+      if (
+        (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
+        globalContainerRootProperties.has(propertyText(current))
+      ) return [current.expression];
+      return [];
+    }
+    function collectionMembers(current) {
+      if (ts.isArrayLiteralExpression(current)) {
+        return current.elements.map((element) => (
+          ts.isSpreadElement(element) ? element.expression : element
+        ));
+      }
+      if (!ts.isObjectLiteralExpression(current)) return [];
+      return current.properties.map((declared) => {
+        if (ts.isPropertyAssignment(declared)) return declared.initializer;
+        if (ts.isShorthandPropertyAssignment(declared)) return declared.name;
+        return ts.isSpreadAssignment(declared) ? declared.expression : null;
+      });
+    }
+    function identityScope() {
+      return { bound: new Set(), holds: new Set() };
+    }
+    function containsContainer(value, scope = identityScope()) {
+      const current = value ? unwrapRuntimeExpression(value) : null;
+      if (!current || ts.isOmittedExpression(current) || scope.holds.has(current)) return false;
+      scope.holds.add(current);
+      if (collectionMembers(current).some((member) => (
+        member && (boundToContainer(member, scope) || containsContainer(member, scope))
+      ))) return true;
+      if (evaluationPaths(current).some((path) => containsContainer(path, scope))) return true;
+      if (ts.isIdentifier(current)) {
+        return collections.has(argumentReceiverToken(current) ?? symbolAt(current));
+      }
+      if (collections.has(deliveredReceiverToken(current))) return true;
+      if (ts.isCallExpression(current)) {
+        return containsContainer(current.expression, scope) ||
+          current.arguments.some((argument) => containsContainer(argument, scope));
+      }
+      return Boolean(
+        (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
+        containsContainer(current.expression, scope),
+      );
+    }
+    function boundToContainer(value, scope = identityScope()) {
+      if (witnessContainerRoot(value)) return true;
+      const current = unwrapRuntimeExpression(value);
+      if (scope.bound.has(current)) return false;
+      scope.bound.add(current);
+      if (resolved.has(deliveredReceiverToken(current))) return true;
+      if (evaluationPaths(current).some((path) => boundToContainer(path, scope))) return true;
+      if (ts.isIdentifier(current) && resolved.has(symbolAt(current))) return true;
+      return containsContainer(current, scope);
+    }
+    function bindCollection(symbol) {
+      if (collections.has(symbol)) return false;
+      collections.add(symbol);
+      resolved.add(symbol);
+      return true;
+    }
+    let boundAnother = true;
+    while (boundAnother) {
+      boundAnother = false;
+      for (const binding of bindings) {
+        if (containsContainer(binding.value) && bindCollection(binding.symbol)) boundAnother = true;
+        if (resolved.has(binding.symbol) || !boundToContainer(binding.value)) continue;
+        resolved.add(binding.symbol);
+        boundAnother = true;
+      }
+      for (const store of memberStores) {
+        if (collections.has(store.symbol) || boundToContainer(store.host)) continue;
+        if (!store.values.some((value) => boundToContainer(value))) continue;
+        bindCollection(store.symbol);
+        boundAnother = true;
+      }
+      for (const extraction of extractions) {
+        if (!containsContainer(extraction.value)) continue;
+        if (bindCollection(extraction.symbol)) boundAnother = true;
+      }
+      for (const delivery of deliveries) {
+        if (collections.has(delivery.symbol)) continue;
+        if (!delivery.values.some((value) => (
+          boundToContainer(value) || containsContainer(value)
+        ))) continue;
+        bindCollection(delivery.symbol);
+        boundAnother = true;
+      }
+    }
+    containerCollections = collections;
+    containerMembership = (expression) => (
+      boundToContainer(expression) || containsContainer(expression)
+    );
+    return resolved;
+  }
+
+  function symbolIntrinsicContainer(expression) {
+    if (!expression) return false;
+    if (witnessContainerRoot(expression)) return true;
+    const current = unwrapRuntimeExpression(expression);
+    const bound = globalContainerBindingSymbols();
+    if (ts.isIdentifier(current)) return bound.has(symbolAt(current));
+    if (bound.has(deliveredReceiverToken(current))) return true;
+    return Boolean(
+      (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
+      containerCollections && containerCollections.has(argumentReceiverToken(current.expression)),
+    );
+  }
+
+  function containerCarrier(expression) {
+    globalContainerBindingSymbols();
+    return Boolean(expression && containerMembership && containerMembership(expression));
+  }
+
+  function symbolIntrinsicRoot(expression) {
+    if (!expression) return false;
+    const current = unwrapRuntimeExpression(expression);
+    if (ts.isIdentifier(current)) {
+      const parent = current.parent;
+      if (
+        (ts.isPropertyAccessExpression(parent) || ts.isQualifiedName(parent)) &&
+        parent.name === current
+      ) return false;
+      return unshadowed(current, 'Symbol');
+    }
+    return Boolean(
+      (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
+      propertyText(current) === 'Symbol' && symbolIntrinsicContainer(current.expression),
+    );
+  }
+
+  function symbolMemberValuePosition(access) {
+    const parent = access.parent;
+    if (!parent) return false;
+    if (ts.isVariableDeclaration(parent) && parent.initializer === access) return true;
+    if (ts.isReturnStatement(parent) && parent.expression === access) return true;
+    if (ts.isVoidExpression(parent) || ts.isTypeOfExpression(parent)) return true;
+    if (ts.isComputedPropertyName(parent)) return true;
+    if (ts.isElementAccessExpression(parent) && parent.argumentExpression === access) return true;
+    if (
+      (ts.isCallExpression(parent) || ts.isNewExpression(parent)) &&
+      (parent.arguments ?? []).includes(access)
+    ) return true;
+    return Boolean(
+      ts.isBinaryExpression(parent) &&
+      (parent.left !== access ||
+       parent.operatorToken.kind < ts.SyntaxKind.FirstAssignment ||
+       parent.operatorToken.kind > ts.SyntaxKind.LastAssignment),
+    );
+  }
+
+  function symbolIntrinsicAdmittedUse(reference) {
+    const member = reference.parent;
+    if (
+      !member || !(ts.isPropertyAccessExpression(member) || ts.isElementAccessExpression(member)) ||
+      member.expression !== reference || member.questionDotToken
+    ) return false;
+    const property = propertyText(member);
+    if (property === 'for') {
+      const call = member.parent;
+      return Boolean(
+        ts.isPropertyAccessExpression(member) && ts.isCallExpression(call) &&
+        call.expression === member && !call.questionDotToken &&
+        call.arguments.length === 1 && staticStringText(call.arguments[0]) !== null,
+      );
+    }
+    return Boolean(
+      property && wellKnownSymbolMembers.has(property) && symbolMemberValuePosition(member),
+    );
+  }
+
+  function assignmentTargets(target) {
+    const current = target ? unwrapRuntimeExpression(target) : null;
+    if (!current || ts.isOmittedExpression(current)) return [];
+    if (ts.isArrayLiteralExpression(current)) {
+      return current.elements.flatMap((element) => assignmentTargets(
+        ts.isSpreadElement(element) ? element.expression : element,
+      ));
+    }
+    if (ts.isObjectLiteralExpression(current)) {
+      return current.properties.flatMap((declared) => {
+        if (ts.isPropertyAssignment(declared)) return assignmentTargets(declared.initializer);
+        return ts.isSpreadAssignment(declared) ? assignmentTargets(declared.expression) : [];
+      });
+    }
+    if (
+      ts.isBinaryExpression(current) && current.operatorToken.kind === ts.SyntaxKind.EqualsToken
+    ) return assignmentTargets(current.left);
+    return [current];
+  }
+
+  function mutationTargets(node) {
+    if (
+      ts.isBinaryExpression(node) &&
+      node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+      node.operatorToken.kind <= ts.SyntaxKind.LastAssignment
+    ) return assignmentTargets(node.left);
+    if (ts.isDeleteExpression(node)) return assignmentTargets(node.expression);
+    if (
+      (ts.isPrefixUnaryExpression(node) || ts.isPostfixUnaryExpression(node)) &&
+      [ts.SyntaxKind.PlusPlusToken, ts.SyntaxKind.MinusMinusToken].includes(node.operator)
+    ) return assignmentTargets(node.operand);
+    if (
+      (ts.isForOfStatement(node) || ts.isForInStatement(node)) && node.initializer &&
+      !ts.isVariableDeclarationList(node.initializer)
+    ) return assignmentTargets(node.initializer);
+    return [];
+  }
+
+  function containerReceiverChain(expression) {
+    const current = expression ? unwrapRuntimeExpression(expression) : null;
+    if (!current) return false;
+    if (symbolIntrinsicContainer(current) || containerCarrier(current)) return true;
+    return Boolean(
+      (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current) ||
+       ts.isCallExpression(current) || ts.isNewExpression(current)) &&
+      containerReceiverChain(current.expression),
+    );
+  }
+
+  function readableContainerMember(member) {
+    if (
+      ts.isElementAccessExpression(member) &&
+      registeredSymbolKeyShape(member.argumentExpression)
+    ) return true;
+    const property = propertyText(member);
+    return Boolean(
+      property !== null && property !== 'Symbol' &&
+      symbolIntrinsicContainer(member.expression),
+    );
+  }
+
+  function containerReach(member) {
+    return Boolean(
+      member && (ts.isPropertyAccessExpression(member) || ts.isElementAccessExpression(member)) &&
+      !symbolIntrinsicRoot(member.expression) && !readableContainerMember(member) &&
+      containerReceiverChain(member.expression),
+    );
+  }
+
+  function containerReachedMutation(node) {
+    const written = mutationTargets(node);
+    if (ts.isCallExpression(node) || ts.isNewExpression(node)) written.push(node.expression);
+    return written.some((target) => containerReach(unwrapRuntimeExpression(target)));
+  }
+
+  function symbolPropertyName(name) {
+    if (!name) return false;
+    if (ts.isIdentifier(name) || ts.isStringLiteralLike(name)) return name.text === 'Symbol';
+    if (ts.isComputedPropertyName(name)) return staticPropertyText(name.expression) === 'Symbol';
+    return false;
+  }
+
+  function namesContainerSymbolProperty(argument) {
+    const current = unwrapRuntimeExpression(argument);
+    if (staticStringText(current) === 'Symbol') return true;
+    return Boolean(
+      ts.isObjectLiteralExpression(current) &&
+      current.properties.some((property) => symbolPropertyName(property.name)),
+    );
+  }
+
+  function containerSymbolPropertyOperation(node) {
+    if (!ts.isCallExpression(node) && !ts.isNewExpression(node)) return false;
+    const callArguments = node.arguments ?? [];
+    const callee = unwrapRuntimeExpression(node.expression);
+    const containerSubject = (
+      (ts.isPropertyAccessExpression(callee) || ts.isElementAccessExpression(callee)) &&
+      symbolIntrinsicContainer(callee.expression)
+    ) || callArguments.some((argument) => symbolIntrinsicContainer(argument));
+    return containerSubject && callArguments.some(namesContainerSymbolProperty);
+  }
+
+  let symbolIntrinsicIntegrity = null;
+
+  function symbolIntrinsicIntact() {
+    if (symbolIntrinsicIntegrity !== null) return symbolIntrinsicIntegrity;
+    symbolIntrinsicIntegrity = true;
+    function inspect(node) {
+      if (!symbolIntrinsicIntegrity) return;
+      if (runtimeNode(node)) {
+        if (symbolIntrinsicRoot(node) && !symbolIntrinsicAdmittedUse(node)) {
+          symbolIntrinsicIntegrity = false;
+        }
+        if (containerSymbolPropertyOperation(node)) symbolIntrinsicIntegrity = false;
+        if (containerReachedMutation(node)) symbolIntrinsicIntegrity = false;
+      }
+      ts.forEachChild(node, inspect);
+    }
+    inspect(sourceFile);
+    return symbolIntrinsicIntegrity;
+  }
+
+  function registeredSymbolKeyShape(expression, resolvingSymbols = new Set()) {
+    if (!expression) return false;
+    const current = unwrapRuntimeExpression(expression);
+    if (ts.isIdentifier(current)) {
+      const symbol = symbolAt(current);
+      if (!symbol || resolvingSymbols.has(symbol)) return false;
+      const declarations = symbol.declarations ?? [];
+      if (declarations.length !== 1) return false;
+      const declaration = declarations[0];
+      if (
+        declaration.getSourceFile() !== sourceFile ||
+        !ts.isVariableDeclaration(declaration) || !ts.isIdentifier(declaration.name) ||
+        !declaration.initializer || !ts.isVariableDeclarationList(declaration.parent) ||
+        !(declaration.parent.flags & ts.NodeFlags.Const)
+      ) return false;
+      resolvingSymbols.add(symbol);
+      const registered = registeredSymbolKeyShape(declaration.initializer, resolvingSymbols);
+      resolvingSymbols.delete(symbol);
+      return registered;
+    }
+    return Boolean(
+      ts.isCallExpression(current) && current.arguments.length === 1 &&
+      genuineSymbolForCall(current) && staticStringText(current.arguments[0]) !== null,
+    );
+  }
+
+  function staticRegisteredSymbolKey(expression) {
+    return registeredSymbolKeyShape(expression) && symbolIntrinsicIntact();
+  }
+
+  function registeredSymbolContainerProperty(access) {
+    return Boolean(
+      ts.isElementAccessExpression(access) &&
+      staticRegisteredSymbolKey(access.argumentExpression),
+    );
+  }
+
+  function runtimeIdentifier(identifier) {
+    if (!runtimePosition(ts, identifier, sourceFile)) return false;
     const parent = identifier.parent;
     if (ts.isPropertyAccessExpression(parent) && parent.name === identifier) return false;
     if (ts.isQualifiedName(parent) && parent.right === identifier) return false;
@@ -611,6 +1502,10 @@ function analyzeRuntimeModuleEdges(
       globalFactoryAssignments.push({ node, symbol });
       if (symbol) localFunctionBindings.set(symbol, node);
     }
+    if (ts.isClassDeclaration(node) && node.name) {
+      const symbol = symbolAt(node.name);
+      if (symbol) localClassBindings.set(symbol, node);
+    }
     if (
       ts.isImportDeclaration(node) && ts.isStringLiteralLike(node.moduleSpecifier) &&
       ['module', 'node:module'].includes(node.moduleSpecifier.text) &&
@@ -668,7 +1563,7 @@ function analyzeRuntimeModuleEdges(
 
   rememberAuthorityBindings(sourceFile);
 
-  function globalContainerExpression(expression) {
+  function globalContainerExpression(expression, roots = globalContainerNames) {
     let current = expression;
     while (
       ts.isParenthesizedExpression(current) || ts.isAsExpression(current) ||
@@ -677,12 +1572,12 @@ function analyzeRuntimeModuleEdges(
     ) current = current.expression;
     if (ts.isIdentifier(current)) {
       return globalAliasSymbols.has(symbolAt(current)) ||
-        [...globalContainerNames].some((name) => unshadowed(current, name));
+        [...roots].some((name) => unshadowed(current, name));
     }
     if (
       (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
       globalContainerRootProperties.has(propertyText(current))
-    ) return globalContainerExpression(current.expression);
+    ) return globalContainerExpression(current.expression, roots);
     if (
       ts.isCallExpression(current) && ts.isIdentifier(current.expression) &&
       globalFactorySymbols.has(symbolAt(current.expression))
@@ -690,9 +1585,10 @@ function analyzeRuntimeModuleEdges(
     if (
       ts.isBinaryExpression(current) &&
       [ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken].includes(current.operatorToken.kind)
-    ) return globalContainerExpression(current.left) || globalContainerExpression(current.right);
+    ) return globalContainerExpression(current.left, roots) || globalContainerExpression(current.right, roots);
     if (ts.isConditionalExpression(current)) {
-      return globalContainerExpression(current.whenTrue) || globalContainerExpression(current.whenFalse);
+      return globalContainerExpression(current.whenTrue, roots) ||
+        globalContainerExpression(current.whenFalse, roots);
     }
     return false;
   }
@@ -751,10 +1647,7 @@ function analyzeRuntimeModuleEdges(
   }
 
   function runtimeNode(node) {
-    for (let current = node.parent; current && current !== sourceFile; current = current.parent) {
-      if (ts.isTypeNode(current)) return false;
-    }
-    return true;
+    return runtimePosition(ts, node, sourceFile);
   }
 
   function bindingPropertyText(node) {
@@ -1241,7 +2134,8 @@ function analyzeRuntimeModuleEdges(
       parent.expression === value
     ) {
       const property = propertyText(parent);
-      return property !== null && !loaderNames.has(property) && property !== 'Reflect';
+      if (property === null) return registeredSymbolContainerProperty(parent);
+      return !loaderNames.has(property) && property !== 'Reflect';
     }
     if (
       ts.isBinaryExpression(parent) &&
