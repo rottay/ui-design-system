@@ -13,7 +13,7 @@
   <a href="#explore-the-project">Explore</a>
 </p>
 
-![Concept illustration: the same application expressed as editorial and technical tenant identities, using the same neutral palette and shared capabilities.](docs/readme/tenant-identities/index.svg)
+![Concept illustration: the same application expressed as editorial and technical tenant identities, using the same neutral palette and shared capabilities.](docs/readme/tenant-identities/index.png)
 
 > **The destination, not a release announcement.** This README presents the completed
 > product vision. The [roadmap](roadmap/README.md) and [live status](roadmap/STATUS.md)
