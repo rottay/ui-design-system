@@ -146,10 +146,23 @@ const FIRST_PARTY = [
 // artifacts the previous compiler wrote. Every added key is `--ds-material-*`,
 // `--ds-state-*` or `--ds-focus-ring*`; bithire adds only 15 because it had
 // already authored 65 of the 71 roots by hand.
+// WO-DER-04 re-anchor, ADDITIVE plus one intentional value move, measured
+// rather than asserted. Five axes gained an owner and emit what they used to
+// withhold: rottay 1276 -> 1315 keys (+39), bithire 1248 -> 1291 (+43), evnto
+// 553 -> 592 (+39), removed 0 on all three. Every added key is a
+// `--ds-z-index-*` band, a `--ds-font-weight-*` step, a `--ds-breakpoint-*`
+// step, a `--ds-posture-*` channel or a `--ds-motion-*` role that had no
+// resting value; bithire adds four more because a `flat` posture now states
+// the whole 0..6 elevation ladder and the border weight it implies instead of
+// levels 1..3. 18 existing values moved on all three, all of them the named
+// ramp: `--ds-text-*` size and leading now carry `var(--ds-type-scale, 1)` and
+// each entry is expressed on its own facets instead of repeating the same
+// literals. At the default scale of 1 the ramp computes byte-identically --
+// the change is that a tenant's `typography.scale` finally reaches it.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "1dcb5e41ae9fb507fe36ebec443a12fa4ce01134a595c12f7b97f5ff5709b8cd",
-  bithire: "923841257d0ced991bf34859eae089a2120fd31d601a191e62e90cd3c54ddac6",
-  evnto: "9a0e01724c0589a75bce69793441ccfa0afbef1cbd9f18721af58e3d0445565c",
+  rottay: "75338511e450d38723c2125c406a76a9c6db6fe000cb4721530b3974eaebbf5b",
+  bithire: "67f8a9a2ca7d30aca416179ab806d345d37f3d5e41d4a5df571525ca5870f517",
+  evnto: "e706e29bfb0a685cb838addd4227af3aaf30834afe7efe828bcd8afcb421e944",
 };
 
 /**

@@ -7,28 +7,9 @@
  */
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
-import type {
-  SemanticTypographyRole,
-  SemanticTypographyTokens,
-} from "@/foundation/contracts/kernel/tokens/typography";
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import { omitUndefined } from "../../../../foundation/shape";
 import { setSemanticTypographyVariables } from "../../../../foundation/typography";
-import { NUMERIC_POSTURE } from "../numeric";
-
-/** Per-facet merge: the right-hand role wins facet by facet, never wholesale. */
-function mergeRoles(
-  under: SemanticTypographyTokens | undefined,
-  over: SemanticTypographyTokens | undefined
-): SemanticTypographyTokens | undefined {
-  if (!under) return over;
-  if (!over) return under;
-  const merged: SemanticTypographyTokens = { ...under };
-  for (const key of Object.keys(over) as SemanticTypographyRole[]) {
-    merged[key] = { ...under[key], ...omitUndefined(over[key]) };
-  }
-  return merged;
-}
 
 /**
  * The nine roles a component binds instead of a size/weight/tracking triple.
@@ -62,10 +43,6 @@ export function deriveTypeRoleChannels(
             ...omitUndefined(bt.typography?.roles?.label),
           },
         };
-  setSemanticTypographyVariables(
-    vars,
-    mergeRoles(NUMERIC_POSTURE, authoredRoles),
-    typeRoleOverlay
-  );
+  setSemanticTypographyVariables(vars, authoredRoles, typeRoleOverlay);
   return vars;
 }

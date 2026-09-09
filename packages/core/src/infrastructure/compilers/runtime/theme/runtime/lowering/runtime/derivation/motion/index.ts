@@ -39,8 +39,9 @@ function motionDialVariables(
  * `instant/calm/deliberate` are the product-law cadence; `fast/normal/slow/
  * glacial` are the same three steps under the names the token sheet and the
  * skins already read. They are ALIASES of the cadence, not a second ladder:
- * expressing them as `var()` onto the cadence is what keeps the second
- * vocabulary from becoming a second authority the way `--ds-transition-*` did.
+ * expressing them as `var()` onto the cadence is what keeps a second spelling
+ * from becoming a second authority, which is how the retired pre-composed
+ * transition catalog drifted from the cadence it was supposed to restate.
  */
 const DURATION_ALIASES: Readonly<Record<string, string>> = {
   "--ds-motion-fast": "var(--ds-motion-instant)",

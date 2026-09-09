@@ -1,6 +1,6 @@
 /**
- * @fileoverview Elevation sub-owner: the seven-role ladder and the three
- * postures that scale it.
+ * @fileoverview Elevation sub-owner: the seven-role ladder a governed posture
+ * states, and the authored ladder that refines it.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/elevation/ladder
  * @category Compilers
@@ -9,7 +9,9 @@
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
+import { ELEVATION_PRESET_CHANNELS } from "../../../../foundation/contract";
 
 export type ElevationPosture = NonNullable<
   AppearancePostureFields["elevation"]
@@ -18,67 +20,41 @@ export type ElevationPosture = NonNullable<
 /** The seven canonical roles, from the resting ground to the deepest overlay. */
 export const ELEVATION_ROLES = [0, 1, 2, 3, 4, 5, 6] as const;
 
-/**
- * Per-role KEY and AMBIENT depth, in the same units the foundation ramp uses.
- * `soft` is the identity posture: it states no override, so the derived
- * foundation ramp stands.
- */
-const POSTURE_LADDER: Readonly<
-  Record<Exclude<ElevationPosture, "soft">, readonly string[]>
-> = {
-  flat: [
-    "none",
-    "none",
-    "none",
-    "0 1px 2px rgba(0,0,0,0.05)",
-    "0 1px 3px rgba(0,0,0,0.06)",
-    "0 2px 4px rgba(0,0,0,0.07)",
-    "0 2px 6px rgba(0,0,0,0.08)",
-  ],
-  elevated: [
-    "none",
-    "0 2px 4px rgba(0,0,0,0.08)",
-    "0 4px 8px rgba(0,0,0,0.1)",
-    "0 8px 16px rgba(0,0,0,0.12)",
-    "0 16px 32px rgba(0,0,0,0.14)",
-    "0 24px 48px rgba(0,0,0,0.16)",
-    "0 32px 64px rgba(0,0,0,0.18)",
-  ],
-};
+const ELEVATION_CHANNELS: ReadonlySet<string> = new Set<string>(
+  ELEVATION_PRESET_CHANNELS
+);
 
-/** Border weight the posture implies; a flat ladder leans on the edge instead. */
-const POSTURE_BORDER_STYLE: Readonly<Record<ElevationPosture, string>> = {
-  flat: "solid",
-  soft: "solid",
-  elevated: "none",
-};
+/** The ladder a bounded posture presets, and nothing else the table computes. */
+function posturePreset(
+  elevation: ElevationPosture | undefined
+): Record<string, string> {
+  if (!elevation) return {};
+  const vars: Record<string, string> = {};
+  for (const [channel, value] of Object.entries(
+    appearancePostureToVariables({ elevation })
+  )) {
+    if (ELEVATION_CHANNELS.has(channel)) vars[channel] = value;
+  }
+  return vars;
+}
 
 /**
- * The ladder a posture presets, over all seven roles.
+ * The posture floor, then the authored ceiling.
  *
- * The preset table used to state levels 1..3 only, so `flat` left roles 4..6
- * carrying the full derived ramp: a theme that asked for a flat product still
- * got a deep modal shadow, and the ladder it published was three steps of one
- * posture on top of four of another. A posture is a statement about the whole
- * ladder or it is not a posture.
+ * The posture table is the ONE place the seven roles of each preset are
+ * written, so a tenant floor and a vertical baseline state the same ladder
+ * rather than two truncations of it. An authored `surfaces.elevations` refines
+ * the vertical's own ladder at this rank; a tenant posture outranks both from
+ * the tenant family above.
  */
 export function deriveElevationLadder(
   bt: BrandTheme,
   expansion: ExpressiveExpansion
 ): Record<string, string> {
   const su = bt.surfaces;
-  const posture = su ? su.elevation ?? expansion.fieldDefaults.elevation : undefined;
-  const vars: Record<string, string> = {};
-  if (posture) {
-    vars["--ds-elevation-border-style"] = POSTURE_BORDER_STYLE[posture];
-    const ladder = posture === "soft" ? undefined : POSTURE_LADDER[posture];
-    if (ladder) {
-      for (const role of ELEVATION_ROLES) {
-        vars[`--ds-elevation-${role}`] = ladder[role]!;
-      }
-    }
-  }
-  const authored = su?.elevations;
+  if (!su) return {};
+  const vars = posturePreset(su.elevation ?? expansion.fieldDefaults.elevation);
+  const authored = su.elevations;
   if (authored) {
     if (authored.level0) vars["--ds-elevation-0"] = authored.level0;
     if (authored.level1) vars["--ds-elevation-1"] = authored.level1;

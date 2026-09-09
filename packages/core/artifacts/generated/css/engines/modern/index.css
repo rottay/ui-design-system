@@ -172,6 +172,17 @@
     border-width: 0;
   }
 }
+:root {
+  --ds-motion-instant: 120ms;
+  --ds-motion-calm: 200ms;
+  --ds-motion-deliberate: 320ms;
+  --ds-motion-fast: var(--ds-motion-instant);
+  --ds-motion-normal: var(--ds-motion-calm);
+  --ds-motion-slow: var(--ds-motion-deliberate);
+  --ds-motion-glacial: 500ms;
+  --ds-motion-duration-scale: 1;
+  --ds-motion-intensity: 1;
+}
 }
 
 /* === Global reduced-motion guard (sourced from runtime/personality/index.css) === */

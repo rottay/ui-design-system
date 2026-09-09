@@ -12,7 +12,6 @@ import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/ex
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { deriveTypePairingChannels } from "./pairing";
-import { deriveTypePackChannels } from "./packs";
 import { deriveTypeRoleChannels } from "./roles";
 import { deriveTypeScaleChannels } from "./scale";
 import { deriveTypeWeightChannels } from "./weights";
@@ -33,10 +32,9 @@ export { NUMERIC_POSTURE } from "./numeric";
  * given surface spoke before it could bind to it. The sub-owners below are
  * layers of one authority, not competing ones: pairing states the families,
  * scale states the ramp on the type dial, weights states the ladder the roles
- * bind, numeric states the figure posture the roles wear, roles states what a
- * surface actually binds, and packs states which registered pack a role
- * resolved to. They are composed in that order, so a later layer refines an
- * earlier one instead of contradicting it.
+ * bind, numeric states the figure posture the roles wear, and roles states
+ * what a surface actually binds. They are composed in that order, so a later
+ * layer refines an earlier one instead of contradicting it.
  */
 export const typographyDeriver: FamilyDeriver = {
   family: "typography",
@@ -51,7 +49,6 @@ export const typographyDeriver: FamilyDeriver = {
   produces: [
     "--ds-font-family-*",
     "--ds-font-weight-*",
-    "--ds-font-pack-role-*",
     "--ds-letter-spacing-*",
     "--ds-line-height-*",
     "--ds-text-*",
@@ -75,6 +72,5 @@ export function deriveTypographyChannels(
     ...deriveTypeScaleChannels(),
     ...deriveTypeWeightChannels(bt),
     ...deriveTypeRoleChannels(bt, typeRoleOverlay),
-    ...deriveTypePackChannels(bt),
   };
 }

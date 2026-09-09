@@ -494,13 +494,35 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // and `derivation/states` adds the six interaction deltas and the three
       // focus-ring channels. rottay had authored none of the 71, so it gains
       // 71 + 9 = 80. Nothing was removed and no existing value moved.
-      rottay: 1276,
+      // WO-DER-04 (measured, additive-only): rottay 1276 -> 1315, added
+      // 39, removed 0. Every added key is one of the five families that
+      // gained an owner -- the 11 `--ds-z-index-*` bands the compiler
+      // never carried, the 8 `--ds-font-weight-*` steps `headingWeightBias`
+      // now reaches, the 6 `--ds-breakpoint-*` steps, the 4 `--ds-posture-*`
+      // channels `responsive.posture` used to withhold, and the 10
+      // `--ds-motion-*` roles that had no resting value. 18 EXISTING values
+      // also moved, all of them ramp entries: `--ds-text-*` size and leading
+      // now carry `var(--ds-type-scale, 1)` and each entry is expressed on its
+      // own facets. At the default scale of 1 they compute byte-identically;
+      // what changed is that a tenant's type scale finally reaches the ramp.
+      rottay: 1315,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
       // the 71 material roots by hand, so it gains only the 6 it was missing
       // plus the same 9 state/focus channels.
-      bithire: 1248,
+      // WO-DER-04 (measured, additive-only): bithire 1248 -> 1291, added
+      // 43, removed 0. Every added key is one of the five families that
+      // gained an owner -- the 4 elevation roles and the border style a `flat` posture now states over the whole ladder, the 11 `--ds-z-index-*` bands the compiler
+      // never carried, the 8 `--ds-font-weight-*` steps `headingWeightBias`
+      // now reaches, the 6 `--ds-breakpoint-*` steps, the 4 `--ds-posture-*`
+      // channels `responsive.posture` used to withhold, and the 10
+      // `--ds-motion-*` roles that had no resting value. 18 EXISTING values
+      // also moved, all of them ramp entries: `--ds-text-*` size and leading
+      // now carry `var(--ds-type-scale, 1)` and each entry is expressed on its
+      // own facets. At the default scale of 1 they compute byte-identically;
+      // what changed is that a tenant's type scale finally reaches the ramp.
+      bithire: 1291,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -509,7 +531,18 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // already an explicit compiled key before retirement (authored) and
       // remains one now (derived) -- same channel, different producer.
       // WO-DER-02 (measured): 475 -> 553. evnto had authored 2 of the 71.
-      evnto: 553,
+      // WO-DER-04 (measured, additive-only): evnto 553 -> 592, added
+      // 39, removed 0. Every added key is one of the five families that
+      // gained an owner -- the 11 `--ds-z-index-*` bands the compiler
+      // never carried, the 8 `--ds-font-weight-*` steps `headingWeightBias`
+      // now reaches, the 6 `--ds-breakpoint-*` steps, the 4 `--ds-posture-*`
+      // channels `responsive.posture` used to withhold, and the 10
+      // `--ds-motion-*` roles that had no resting value. 18 EXISTING values
+      // also moved, all of them ramp entries: `--ds-text-*` size and leading
+      // now carry `var(--ds-type-scale, 1)` and each entry is expressed on its
+      // own facets. At the default scale of 1 they compute byte-identically;
+      // what changed is that a tenant's type scale finally reaches the ramp.
+      evnto: 592,
     };
     for (const vertical of VERTICALS) {
       expect(
@@ -604,16 +637,29 @@ describe("static and DB share one lowering", () => {
     // ZERO variables on both non-identity stops while the static arm moved
     // three. The values below are the static arm's, reproduced through the DB
     // door.
+    // WO-DER-04: a posture now states the WHOLE seven-role ladder plus the
+    // border weight it implies. It used to state levels 1..3 only, so a flat
+    // product still got a deep modal shadow from roles 4..6.
     const PRESET = {
       flat: {
+        // Role 0 is `none` in rottay's own baseline too, so it is correctly
+        // absent from a delta that carries only what MOVED.
         "--ds-elevation-1": "none",
         "--ds-elevation-2": "none",
         "--ds-elevation-3": "0 1px 2px rgba(0,0,0,0.05)",
+        "--ds-elevation-4": "0 1px 3px rgba(0,0,0,0.06)",
+        "--ds-elevation-5": "0 2px 4px rgba(0,0,0,0.07)",
+        "--ds-elevation-6": "0 2px 6px rgba(0,0,0,0.08)",
+        "--ds-elevation-border-style": "solid",
       },
       elevated: {
         "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
         "--ds-elevation-2": "0 4px 8px rgba(0,0,0,0.1)",
         "--ds-elevation-3": "0 8px 16px rgba(0,0,0,0.12)",
+        "--ds-elevation-4": "0 16px 32px rgba(0,0,0,0.14)",
+        "--ds-elevation-5": "0 24px 48px rgba(0,0,0,0.16)",
+        "--ds-elevation-6": "0 32px 64px rgba(0,0,0,0.18)",
+        "--ds-elevation-border-style": "none",
       },
     } as const;
     const elevationDoc = (elevation: string) => ({

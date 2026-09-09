@@ -25,19 +25,15 @@ import type { FamilyDeriver } from "../../../foundation/contract";
  * path rejects all of them at document validation, so an own-property plus
  * numeric guard is what makes the two ingress paths fail closed the same way.
  *
- * The clamp is emitted beside the scale rather than left to the theme layer:
- * the bounds are a compiler decision, and a consumer that reads only the
- * effective channel cannot be handed an out-of-range rhythm by any transport.
+ * The seed is clamped HERE and the derived `--ds-rhythm-effective-scale`
+ * clamps again in the theme layer, which is what binds a raw tokenOverride
+ * too. Only the seed is a compiler statement, so only the seed is emitted.
  */
 export const rhythmDeriver: FamilyDeriver = {
   family: "rhythm",
   rank: "derived",
   consumes: ["surfaces.rhythm"],
-  produces: [
-    "--ds-rhythm-posture",
-    "--ds-rhythm-scale",
-    "--ds-rhythm-effective-scale",
-  ],
+  produces: ["--ds-rhythm-scale"],
   derive: (context) => deriveRhythmChannels(context.theme),
 };
 
@@ -58,9 +54,5 @@ export function deriveRhythmChannels(bt: BrandTheme): Record<string, string> {
     TENANT_THEME_RHYTHM_SCALE_BOUNDS.max,
     Math.max(TENANT_THEME_RHYTHM_SCALE_BOUNDS.min, factor)
   );
-  return {
-    "--ds-rhythm-posture": authored,
-    "--ds-rhythm-scale": String(scale),
-    "--ds-rhythm-effective-scale": `clamp(${TENANT_THEME_RHYTHM_SCALE_BOUNDS.min}, ${scale}, ${TENANT_THEME_RHYTHM_SCALE_BOUNDS.max})`,
-  };
+  return { "--ds-rhythm-scale": String(scale) };
 }

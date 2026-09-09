@@ -198,17 +198,23 @@ describe('density authority contract', () => {
 
   it.each([
     ['base spacing', spacingCss],
-    ['default theme spacing', defaultThemeCss],
+    ['the density-boundary projection', densityCss],
   ])('%s multiplies every step by the effective-scale channel', (_label, css) => {
     // What each declaring file owns: its steps must READ the channel. Whether
     // the file also DECLARES the channel is a cascade question, settled once
     // below -- requiring it per file demanded three copies of one declaration,
     // and `edf91a41f` deleted the copy in spacing.css that never won.
+    // `themes/default` is no longer in this list: WO-DER-04 gave the ramp one
+    // :root owner and it is base/spacing.
     const declarations = spacingDeclarations(css);
     expect(declarations.length).toBeGreaterThan(0);
     for (const declaration of declarations) {
       expect(declaration).toContain('var(--ds-density-effective-scale, 1)');
     }
+  });
+
+  it('leaves the default theme without a second spacing ramp', () => {
+    expect(spacingDeclarations(defaultThemeCss)).toEqual([]);
   });
 
   it('authors the effective-scale clamp in exactly two places, both canonical', () => {

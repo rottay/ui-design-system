@@ -519,7 +519,7 @@
   --ds-type-numeric-line-height: var(--ds-line-height-snug);
   --ds-type-numeric-letter-spacing: var(--ds-letter-spacing-normal);
   --ds-type-numeric-text-transform: none;
-  --ds-type-numeric-font-variant-numeric: tabular-nums;
+  --ds-type-numeric-font-variant-numeric: tabular-nums lining-nums;
 
   /* The eyebrow role, which had no base declaration at all: the three vertical
      artifacts each declared the SAME 0.08em / uppercase, which makes it a DS

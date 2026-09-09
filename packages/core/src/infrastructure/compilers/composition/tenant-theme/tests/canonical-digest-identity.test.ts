@@ -587,7 +587,20 @@ describe("digest identity across the canonicalization extraction", () => {
     // census below is asserted unchanged beside it.
     const POST_V1_FONT_AUTHORSHIP_DIGEST =
       "sha256-e112fb0ca6a954623224a13c9302386251fd92ab68ceaba75ebb3b6f73c9b8fb";
-    expect(artifact.digest).toBe(POST_V1_FONT_AUTHORSHIP_DIGEST);
+    expect(artifact.digest).not.toBe(POST_V1_FONT_AUTHORSHIP_DIGEST);
+    // Eighth declared move (WO-DER-04): five axes gained a deriver and emit
+    // what they used to withhold -- the z-index bands, the weight ladder
+    // `headingWeightBias` reaches, the breakpoint steps, the posture channels
+    // `responsive.posture` used to keep as data, and the motion roles that had
+    // no resting value -- and the named type ramp is now expressed on its own
+    // facets over `var(--ds-type-scale, 1)`. The digest covers the BASELINE
+    // this delta subtracts as well as the delta itself, so it moves even where
+    // the emitted delta does not: the channel census below is asserted
+    // unchanged at 65 beside it, which is what makes this a move in the
+    // compiled surface rather than in what this customer paints.
+    const POST_DERIVED_FAMILIES_DIGEST =
+      "sha256-59901191314f38fd7fffcf2223bed215049bc2af9ff6276c3d4f83f01ae51828";
+    expect(artifact.digest).toBe(POST_DERIVED_FAMILIES_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -600,7 +613,13 @@ describe("digest identity across the canonicalization extraction", () => {
     // subtraction removes it while the tenant seed still reaches it through the
     // root. Pinned two-sided so a channel that stopped tracking the seed and a
     // channel that merely stopped being restated cannot be confused.
-    expect(Object.keys(artifact.variables)).toHaveLength(65);
+    // WO-DER-04 (measured): 65 -> 70, added 5, removed 0. This document
+    // authors a density posture, so `--ds-density-mode-factor` reaches the
+    // delta for the first time -- the posture table used to withhold the
+    // identity factor and the posture was therefore unstateable. Its `flat`
+    // elevation now states the whole 0..6 ladder and the border weight it
+    // implies instead of levels 1..3, which adds four.
+    expect(Object.keys(artifact.variables)).toHaveLength(70);
     expect(artifact.variables["--ds-button-primary-bg"]).toBeUndefined();
 
     const baseline = lowerTheme(FIRST_PARTY_THEMES.bithire, IDENTITY.slug).cssVariables;
@@ -695,6 +714,10 @@ describe("digest identity across the canonicalization extraction", () => {
     // transport, so the ledger names the row that wrote them.
     const POST_V1_FONT_AUTHORSHIP_W4_DIGEST =
       "sha256-16eaef281dd7ea6898bc81f3079a311a92b79f347f5d13486ddb2fb4fc8fe2e6";
+    // WO-DER-04 does NOT move this one, and the silence is the evidence: this
+    // document authors neither a density posture nor an elevation posture, so
+    // the two families that started emitting have nothing to say about it and
+    // the artifact stays byte-identical.
     expect(artifact.digest).toBe(POST_V1_FONT_AUTHORSHIP_W4_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)

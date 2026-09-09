@@ -9,8 +9,19 @@
 
 import { setTypeRampVariables } from "../../../../foundation/type-ramp";
 
-const DIALED_FACET = /-(size|line-height)$/;
-const COMPOSITE = /^--ds-text-([a-z0-9-]+)$/;
+/** The addressable facets of a ramp entry; anything else IS the entry. */
+const FACETS = [
+  "-size",
+  "-weight",
+  "-line-height",
+  "-letter-spacing",
+  "-transform",
+] as const;
+const DIALED = new Set<string>(["-size", "-line-height"]);
+
+function facetOf(channel: string): (typeof FACETS)[number] | undefined {
+  return FACETS.find((facet) => channel.endsWith(facet));
+}
 
 /**
  * The ramp, derived rather than fixed.
@@ -27,18 +38,18 @@ export function deriveTypeScaleChannels(): Record<string, string> {
   setTypeRampVariables(table);
 
   const vars: Record<string, string> = {};
-  const composites: string[] = [];
+  const entries: string[] = [];
   for (const [channel, value] of Object.entries(table)) {
-    const composite = COMPOSITE.exec(channel);
-    if (composite) {
-      composites.push(composite[1]);
+    const facet = facetOf(channel);
+    if (facet === undefined) {
+      entries.push(channel.slice("--ds-text-".length));
       continue;
     }
-    vars[channel] = DIALED_FACET.test(channel)
+    vars[channel] = DIALED.has(facet)
       ? `calc(${value} * var(--ds-type-scale, 1))`
       : value;
   }
-  for (const name of composites) {
+  for (const name of entries) {
     vars[`--ds-text-${name}`] =
       `var(--ds-text-${name}-weight) var(--ds-text-${name}-size)` +
       `/var(--ds-text-${name}-line-height) var(--ds-font-family-base)`;
