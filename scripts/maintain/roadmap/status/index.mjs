@@ -3640,17 +3640,7 @@ export function reassignInProgressWorkOrder(workOrder, {
   return previous;
 }
 
-/**
- * Reopen a work order and keep the completion record it is withdrawing.
- *
- * A reopen clears `evidence`, `claimedBy`, `claimedAt` and `doneAt`, so without
- * this the closure that is being withdrawn leaves no trace anywhere: the prior
- * evidence — which carries the landing commit and the audit receipts — is the
- * only durable record of what was once claimed, and an unrecorded withdrawal is
- * indistinguishable from work that never happened. The prior record is appended
- * to `progressLog` in its existing closed `{at, by, note}` schema before the
- * fields are cleared, verbatim and never digested.
- */
+/** Appends the withdrawn completion record to `progressLog` before clearing `evidence`, `claimedBy`, `claimedAt` and `doneAt`. */
 export function reopenWorkOrder(workOrder, {
   note,
   reason,
