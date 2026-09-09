@@ -50,7 +50,7 @@ describe('CollectionWorkspaceSurface carries no product vocabulary', () => {
         data={DATA}
         columns={COLUMNS}
         rowKey="id"
-        header={{ title: 'Records' }}
+        header={{ eyebrow: 'Workspace', title: 'Records', subtitle: 'Every record in scope' }}
         controls={{
           scopes: {
             enabled: true,
@@ -89,7 +89,7 @@ describe('CollectionWorkspaceSurface carries no product vocabulary', () => {
         data={DATA}
         columns={COLUMNS}
         rowKey="id"
-        header={{ title: 'Records' }}
+        header={{ eyebrow: 'Workspace', title: 'Records', subtitle: 'Every record in scope' }}
       />,
     );
 

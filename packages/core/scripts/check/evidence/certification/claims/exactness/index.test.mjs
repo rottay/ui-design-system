@@ -15,6 +15,7 @@ import { countArc09PaintInFile } from '../../../../../libraries/paint/inline/ind
 import { analyzeEmbeddedCssPaint } from '../../../../../libraries/paint/embedded/index.mjs';
 import {
   analyzeClaimSourceRecords,
+  packageRootMatchesAnalyzer,
   analyzeTenantFloorCssRecords,
   buildClaimDocumentationInventory,
   collectDataPartStampsFromText,
@@ -30,6 +31,8 @@ import {
   discoverStaleTypescriptFiles,
   evaluateDataPartUnresolved,
   evaluateClaimAuthority,
+  evaluateDocumentationCheckoutPin,
+  workspaceAbsolute,
   evaluateClaimFloor,
   projectGat07RegistryDefinition,
   readSealedArchive,
@@ -1133,6 +1136,107 @@ test('G7/B-1 forwarder terminals: drop, override order, imperative stamps and mo
   ]);
   assert.deepEqual([...new Set(helpers.stamps.map(({ provenance }) => provenance.ownerModule))], [OWNER]);
   assert.deepEqual(helpers.unresolved, []);
+});
+
+test('G7/B-1 the forwarder proof reads the CODE, never the folder the clone sits in', () => {
+  // DEL-05 (2026-09-08). Evidence paths name a LOGICAL repository -- every path
+  // this gate publishes starts `ui-design-system/`, whatever the checkout is
+  // called -- but the module reader compared that whole label against the
+  // analyzer's absolute location. In any checkout not literally named
+  // `ui-design-system` the reader was null, every forwarder went unproven, and
+  // the gate reported 48 documented rows with "no source stamp" plus 116
+  // unresolved sinks. Same bytes, two labels, opposite verdicts.
+  const file = join(CORE_ROOT, 'src/components/structures/workspace/field-filters-panel/index.tsx');
+  const text = readFileSync(file, 'utf8');
+  const measure = (prefix) => collectDataPartStampsFromText(
+    text,
+    `${prefix}packages/core/src/components/structures/workspace/field-filters-panel/index.tsx`,
+  );
+  const canonical = measure('ui-design-system/');
+  assert.ok(canonical.stamps.length > 0, 'the calibration owner stamps a proven anatomy');
+  assert.equal(canonical.unresolved.length, 0);
+  for (const prefix of ['', 'r3-opus/', 'some/deep/nested/checkout/']) {
+    const other = measure(prefix);
+    assert.equal(other.stamps.length, canonical.stamps.length, `label ${JSON.stringify(prefix)} changed the verdict`);
+    assert.equal(other.unresolved.length, canonical.unresolved.length);
+  }
+});
+
+test('G7/B-1 CONTROL: package identity is still enforced, and an unproven tag is still unresolved', () => {
+  // Without this the fix above would be indistinguishable from switching the
+  // reader off. `packages/showroom` must never resolve through the core
+  // analyzer, a bare `core` must never match, and a tag whose module cannot be
+  // read must still fall to the unresolved channel.
+  assert.equal(packageRootMatchesAnalyzer('ui-design-system/packages/core'), true);
+  assert.equal(packageRootMatchesAnalyzer('r3-opus/packages/core'), true);
+  assert.equal(packageRootMatchesAnalyzer('ui-design-system/packages/showroom'), false);
+  assert.equal(packageRootMatchesAnalyzer('core'), false);
+  assert.equal(packageRootMatchesAnalyzer(''), false);
+
+  const unproven = collectDataPartStampsFromText(
+    "import { Mystery } from './nowhere';\n"
+    + 'export const Probe = () => <Mystery data-part="root" />;\n',
+    'ui-design-system/packages/core/src/components/primitives/layout/probe/index.tsx',
+  );
+  assert.equal(unproven.stamps.length, 0, 'a tag whose module does not exist proves nothing');
+  assert.equal(unproven.unresolved.length, 1);
+  assert.equal(unproven.unresolved[0].syntax, 'jsx-custom-unproven-forwarder');
+});
+
+test('an evidence path resolves back through the roots this run uses, not through a sibling clone', () => {
+  // The same defect one layer up: `join(WORKSPACE_ROOT, 'ui-design-system/…')`
+  // reads whatever directory happens to carry that name. In a worktree it read
+  // ANOTHER checkout, and died on an input the tree in front of it carries.
+  assert.equal(
+    workspaceAbsolute('ui-design-system/packages/core/package.json'),
+    join(findRepoRoot(HERE), 'packages/core/package.json'),
+  );
+  assert.equal(
+    workspaceAbsolute('docs-engineering/engineering/design-system/README.md'),
+    join(DOCS_ROOT, 'engineering/design-system/README.md'),
+  );
+});
+
+test('DRILL: CI pinning a documentation revision other than the seal is refused', () => {
+  // DEL-01 (2026-09-08): the workflow checked out `9865c253…` and the committed
+  // seal required `e048d2f9…`, so the gate could only ever be red in CI and
+  // nothing in the repository said so.
+  const seal = JSON.parse(readFileSync(join(HERE, 'documentation-seal/index.json'), 'utf8'));
+  const workflow = (ref) => [
+    '      - name: Checkout documentation evidence',
+    '        uses: actions/checkout@v4',
+    '        with:',
+    '          repository: rottay/docs-engineering',
+    `          ref: ${ref}`,
+    '',
+  ].join('\n');
+
+  assert.deepEqual(
+    evaluateDocumentationCheckoutPin(workflow(seal.documentationRevision), seal.documentationRevision).errors,
+    [],
+  );
+  const mismatched = evaluateDocumentationCheckoutPin(
+    workflow('9865c253eca40093515f6662630280aef2818f13'),
+    seal.documentationRevision,
+  );
+  assert.equal(mismatched.ok, false);
+  assert.match(mismatched.errors[0], /the workflow must follow the seal/);
+  assert.equal(
+    evaluateDocumentationCheckoutPin('name: ci\non: push\n', seal.documentationRevision).ok,
+    false,
+    'a workflow that pins nothing at all cannot supply the sealed corpus either',
+  );
+  assert.equal(evaluateDocumentationCheckoutPin('', seal.documentationRevision).ok, false);
+});
+
+test('the live CI workflow pins exactly the reviewed documentation seal', () => {
+  const seal = JSON.parse(readFileSync(join(HERE, 'documentation-seal/index.json'), 'utf8'));
+  const workflow = join(findRepoRoot(HERE), '.github/workflows/ci.yml');
+  assert.ok(existsSync(workflow), 'the workflow this gate reads must exist');
+  assert.deepEqual(
+    evaluateDocumentationCheckoutPin(readFileSync(workflow, 'utf8'), seal.documentationRevision).errors,
+    [],
+  );
 });
 
 test('G5 stale high-risk vocabulary is always red, including negations and double negatives', () => {

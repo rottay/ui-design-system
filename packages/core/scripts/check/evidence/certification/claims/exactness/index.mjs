@@ -55,6 +55,7 @@ const CLAIM_FLOOR_PATH = join(HERE, 'public-claim-floor/index.json');
 const CLAIM_DOC_ALLOWLIST_PATH = join(HERE, 'documentation-allowlist/index.json');
 const DOCUMENTATION_SEAL_PATH = join(HERE, 'documentation-seal/index.json');
 const STALE_CORPUS_PATH = join(HERE, 'stale-corpus/index.json');
+const CI_WORKFLOW_PATH = join(UI_ROOT, '.github/workflows/ci.yml');
 const BASELINE_PATH = join(CORE_ROOT, 'scripts/check/engine/tokens/audit/baseline/index.json');
 const AUDIT_PATH = join(CORE_ROOT, 'scripts/check/engine/tokens/audit/index.mjs');
 const DATA_PART_DOC = join(
@@ -330,6 +331,26 @@ function workspacePath(path) {
   return normalizePath(relative(WORKSPACE_ROOT, absolute));
 }
 
+/**
+ * The inverse of `workspacePath`. An evidence path names a LOGICAL repository,
+ * so reconstructing a real file from it must go back through the roots this run
+ * actually uses -- never through `<workspace>/<logical name>`, which resolves
+ * into a DIFFERENT checkout whenever this repository is not the sibling
+ * directory that happens to share the logical name. That is how a run inside a
+ * worktree read another clone's files, or died on an input the tree in front of
+ * it carries.
+ */
+export function workspaceAbsolute(path) {
+  const normalized = normalizePath(path);
+  if (normalized === 'docs-engineering' || normalized.startsWith('docs-engineering/')) {
+    return join(DOCS_ROOT, normalized.slice('docs-engineering'.length));
+  }
+  if (normalized === 'ui-design-system' || normalized.startsWith('ui-design-system/')) {
+    return join(UI_ROOT, normalized.slice('ui-design-system'.length));
+  }
+  return join(WORKSPACE_ROOT, normalized);
+}
+
 function read(path) {
   if (!existsSync(path)) throw new Error(`required GAT-07 input is missing: ${workspacePath(path)}`);
   return readFileSync(path, 'utf8');
@@ -582,8 +603,8 @@ function measureClaims() {
     inputFiles: [
       CLAIM_FLOOR_PATH,
       CLAIM_DOC_ALLOWLIST_PATH,
-      ...coreRecords.map((record) => join(WORKSPACE_ROOT, record.path)),
-      ...showroomRecords.map((record) => join(WORKSPACE_ROOT, record.path)),
+      ...coreRecords.map((record) => workspaceAbsolute(record.path)),
+      ...showroomRecords.map((record) => workspaceAbsolute(record.path)),
       ...documentationRecords.map((record) => record.absolutePath),
     ],
   };
@@ -1092,6 +1113,39 @@ export function sealedDocumentationContentMatches(revisionContent, worktreeConte
     && sha256(revisionContent) === sha256(worktreeContent);
 }
 
+/**
+ * The revision CI hands this gate must BE the reviewed seal.
+ *
+ * The workflow checks docs-engineering out at a pinned ref and exports it as
+ * `DOCS_ENGINEERING_ROOT`; this gate then refuses any checkout whose HEAD is
+ * not `documentationRevision`. Those two numbers were different -- the workflow
+ * pinned an ancestor of the sealed commit -- so the gate could only ever have
+ * been red in CI, and nothing in the repository said so. The seal is the
+ * reviewed authority, so the workflow follows it, and this check keeps them
+ * equal by construction rather than by memory.
+ */
+export function evaluateDocumentationCheckoutPin(workflowText, sealedRevision) {
+  if (typeof workflowText !== 'string' || workflowText.length === 0) {
+    return { ok: false, pinned: null, errors: ['the CI workflow is unreadable; the documentation pin cannot be verified'] };
+  }
+  const pins = [...workflowText.matchAll(
+    /repository:\s*rottay\/docs-engineering[\s\S]{0,400}?\n\s*ref:\s*([0-9a-fA-F]{7,40})/g,
+  )].map((match) => match[1].toLowerCase());
+  if (pins.length === 0) {
+    return { ok: false, pinned: null, errors: ['the CI workflow declares no pinned docs-engineering checkout'] };
+  }
+  const mismatched = [...new Set(pins)].filter((pin) => pin !== sealedRevision);
+  if (mismatched.length > 0) {
+    return {
+      ok: false,
+      pinned: pins,
+      errors: mismatched.map((pin) =>
+        `CI checks out docs-engineering ${pin} but the reviewed seal is ${sealedRevision}; the workflow must follow the seal`),
+    };
+  }
+  return { ok: true, pinned: pins, errors: [] };
+}
+
 function validateDocumentationSeal(documentPaths) {
   const seal = JSON.parse(read(DOCUMENTATION_SEAL_PATH));
   const errors = [];
@@ -1112,6 +1166,10 @@ function validateDocumentationSeal(documentPaths) {
   } else if (!/^[0-9a-f]{40}$/.test(seal.documentationRevision ?? '')) {
     errors.push('documentationRevision must be a full 40-character Git commit');
   } else {
+    errors.push(...evaluateDocumentationCheckoutPin(
+      existsSync(CI_WORKFLOW_PATH) ? read(CI_WORKFLOW_PATH) : '',
+      seal.documentationRevision,
+    ).errors);
     const head = spawnSync('git', ['rev-parse', 'HEAD'], {
       cwd: DOCS_ROOT,
       encoding: 'utf8',

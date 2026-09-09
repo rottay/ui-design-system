@@ -25,10 +25,23 @@ const gate = resolve(HERE, 'index.mjs');
 const realWorkspace = resolve(packageRoot, '../../..');
 const APP_CSS = 'app-bithire/src/styles/foundation.css';
 
-function runGate(args) {
+/**
+ * The gate, run against the fixture the drill built and NOTHING else.
+ *
+ * `APP_BITHIRE_ROOT` has the highest precedence after `--app-root`, so a run
+ * that inherited it read the real, clean application instead of the perturbed
+ * copy: the mutant went missing, the drill went green for the wrong reason, and
+ * the same suite passed 8/8 the moment the variable was unset. A negative
+ * control has to be insensitive to the environment that surrounds it, so the
+ * variable is removed here and set back explicitly by the one drill about it.
+ */
+function runGate(args, environment = {}) {
+  const env = { ...process.env, ...environment };
+  if (!Object.hasOwn(environment, 'APP_BITHIRE_ROOT')) delete env.APP_BITHIRE_ROOT;
   return spawnSync(process.execPath, [gate, ...args], {
     cwd: packageRoot,
     encoding: 'utf8',
+    env,
   });
 }
 
@@ -145,11 +158,7 @@ test('DRILL 5: the GitHub Actions path layout resolves via APP_BITHIRE_ROOT', ()
     assert.equal(withoutEnv.status, 1, 'the GHA layout has no sibling; the gate must fail');
 
     // With the variable the workflow exports, it finds the real corpus.
-    const withEnv = spawnSync(process.execPath, [gate, '--check', '--workspace-root', workspace], {
-      cwd: packageRoot,
-      encoding: 'utf8',
-      env: { ...process.env, APP_BITHIRE_ROOT: corpus },
-    });
+    const withEnv = runGate(['--check', '--workspace-root', workspace], { APP_BITHIRE_ROOT: corpus });
     assert.equal(
       withEnv.status,
       0,
@@ -167,6 +176,28 @@ test('DRILL 6: --app-root beats the environment and the sibling default', () => 
     const result = runGate(['--check', '--app-root', join(ws.dir, 'app-bithire')]);
     assert.equal(result.status, 0);
     assert.match(result.stdout, /corpus SHA unavailable/);
+  } finally {
+    rmSync(ws.dir, { recursive: true, force: true });
+  }
+});
+
+test('DRILL 7: an ambient APP_BITHIRE_ROOT cannot replace a drill fixture', () => {
+  // The control for every drill above. With the variable inherited, the gate
+  // read the real application instead of the perturbed copy and the planted
+  // defect vanished; the drill helper now removes it, and this asserts the
+  // removal rather than trusting it.
+  const ws = withWorkspace((file) => {
+    const css = readFileSync(file, 'utf8');
+    writeFileSync(file, css.replace(':root {', ':root {\n  --ds-color-primary: #ff0000;'), 'utf8');
+  });
+  try {
+    const inherited = spawnSync(process.execPath, [gate, '--check', '--workspace-root', ws.dir], {
+      cwd: packageRoot,
+      encoding: 'utf8',
+      env: { ...process.env, APP_BITHIRE_ROOT: join(realWorkspace, 'app-bithire') },
+    });
+    assert.equal(inherited.status, 0, 'the inherited variable makes the gate read the CLEAN application');
+    assert.equal(ws.run(['--check']).status, 1, 'the fixture the drill built still carries the defect');
   } finally {
     rmSync(ws.dir, { recursive: true, force: true });
   }

@@ -39,9 +39,10 @@
  *   node scripts/check/family-cut/index.mjs --json            the measurement
  *
  * Its teeth are proven in `index.test.mjs`, which plants real defects into a
- * sandbox copy of the family -- an inline `style={{ color }}`, a `--ds-button-x`
- * read nobody writes, a second class vocabulary, an `--ant-*` read -- and
- * asserts each one turns this command red. There is no `--drill` flag: a switch
+ * sandbox copy of the family -- an inline `style={{ color }}` however it is
+ * wrapped, a `--ds-button-x` read nobody writes, a second class vocabulary, an
+ * `--ant-*` read, a mechanically suppressed test suite -- and asserts each one
+ * turns this command red. There is no `--drill` flag: a switch
  * that mutates the measurement is a second way to be told the tree is broken,
  * and the first one is the tree.
  *
@@ -118,7 +119,7 @@ export const OWED_ARMS = Object.freeze([
     id: 'axe-per-family',
     owner: 'WO-GAT-04',
     reason:
-      'axe needs a rendered DOM. WO-GAT-04 owns the axe run and its decrease-only baseline over the per-state galleries; a static gate cannot run it. What this gate CAN prove, and does, is the blocking arm `a11yProbes`: the family owns at least one executable accessibility assertion of its own',
+      'axe needs a rendered DOM. WO-GAT-04 owns the axe run and its decrease-only baseline over the per-state galleries; a static gate cannot run it. What this gate CAN prove, and does, is the blocking arm `a11yAssertions`: the family EXECUTES at least one accessibility assertion of its own -- an assertion inside a suppressed suite is text, not evidence',
   },
 ]);
 
@@ -200,6 +201,176 @@ function isFamilySource(file) {
   return /\.tsx?$/u.test(posix);
 }
 
+// ---------------------------------------------------------------------------
+// Accessibility evidence: assertions that RUN, never text in a file
+// ---------------------------------------------------------------------------
+
+/**
+ * The assertion vocabulary that constitutes accessibility evidence: a query by
+ * accessible role or label, a name/description/focus matcher, or an axe run.
+ * `aria-*` string arguments count too -- asserting on an ARIA attribute is an
+ * accessibility assertion however it is spelled.
+ */
+const A11Y_CALLEE =
+  /(?:^|\.)(?:axe|toHaveNoViolations|toHaveAccessibleName|toHaveAccessibleDescription|toHaveFocus|toHaveRole|(?:get|find|query|getAll|findAll|queryAll)By(?:Role|LabelText|Title))$/u;
+const A11Y_ARGUMENT = /^aria-[a-z-]+$/u;
+
+/** `describe`/`it`/`test` and the prefixed spellings of a suppressed one. */
+const SUITE_ROOTS = new Set(['describe', 'suite', 'context']);
+const CASE_ROOTS = new Set(['it', 'test']);
+const SUPPRESSED_ROOTS = new Set(['xdescribe', 'xit', 'xtest', 'fdescribe.skip']);
+/** Modifiers that stop a suite or case from executing. `skipIf` is conditional, so it cannot be evidence either. */
+const SUPPRESSING_MODIFIERS = new Set(['skip', 'todo', 'skipIf', 'runIf']);
+
+/** `describe.skip.each` -> { root: 'describe', modifiers: ['skip', 'each'] }. */
+function callerChain(expression) {
+  const modifiers = [];
+  let current = expression;
+  for (;;) {
+    if (ts.isCallExpression(current)) { current = current.expression; continue; }
+    if (ts.isPropertyAccessExpression(current)) {
+      modifiers.unshift(current.name.text);
+      current = current.expression;
+      continue;
+    }
+    if (ts.isTaggedTemplateExpression(current)) { current = current.tag; continue; }
+    break;
+  }
+  if (!ts.isIdentifier(current)) return undefined;
+  return { root: current.text, modifiers };
+}
+
+function classifyRunner(node) {
+  if (!ts.isCallExpression(node)) return undefined;
+  const chain = callerChain(node.expression);
+  if (!chain) return undefined;
+  const { root, modifiers } = chain;
+  const kind = SUITE_ROOTS.has(root) ? 'suite' : CASE_ROOTS.has(root) ? 'case' : undefined;
+  if (!kind) {
+    if (!SUPPRESSED_ROOTS.has(root)) return undefined;
+    return { kind: root.startsWith('xdescribe') ? 'suite' : 'case', suppressed: true };
+  }
+  return { kind, suppressed: modifiers.some((name) => SUPPRESSING_MODIFIERS.has(name)) };
+}
+
+/** A body that runs only when something calls it. */
+function isFunctionLike(node) {
+  return ts.isArrowFunction(node) || ts.isFunctionExpression(node)
+    || ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node);
+}
+
+/** `((() => {}))()` -- a callee or a callback reached through parentheses is still invoked. */
+function unwrapParentheses(node) {
+  let current = node;
+  while (current && ts.isParenthesizedExpression(current)) current = current.expression;
+  return current;
+}
+
+/**
+ * The a11y assertions and the helper names reachable inside one node.
+ *
+ * A function body is entered only where reaching it MEANS running it: the
+ * callback of a call, an immediately invoked expression, the case body itself.
+ * A function that is only written down -- a `const` nobody calls, an event
+ * handler nobody fires -- executes nothing, so the assertions inside it are
+ * text of the kind this gate exists to refuse. They still count when an
+ * executing case reaches the function BY NAME, which is the `helpers`
+ * resolution in `countExecutableA11yAssertions`.
+ */
+function scanForA11y(node, source) {
+  let assertions = 0;
+  const calls = new Set();
+  const enter = (fn) => {
+    if (fn.body) visit(fn.body);
+  };
+  const visit = (current) => {
+    if (isFunctionLike(current)) return;
+    if (ts.isCallExpression(current)) {
+      const callee = current.expression.getText(source);
+      if (A11Y_CALLEE.test(callee)) assertions += 1;
+      for (const argument of current.arguments) {
+        if ((ts.isStringLiteral(argument) || ts.isNoSubstitutionTemplateLiteral(argument))
+          && A11Y_ARGUMENT.test(argument.text)) assertions += 1;
+      }
+      const chain = callerChain(current.expression);
+      if (chain && chain.modifiers.length === 0) calls.add(chain.root);
+      const invoked = unwrapParentheses(current.expression);
+      if (isFunctionLike(invoked)) enter(invoked);
+      else visit(current.expression);
+      for (const argument of current.arguments) {
+        const value = unwrapParentheses(argument);
+        if (isFunctionLike(value)) enter(value);
+        else visit(argument);
+      }
+      return;
+    }
+    ts.forEachChild(current, visit);
+  };
+  visit(node);
+  return { assertions, calls };
+}
+
+/**
+ * How many accessibility assertions this test file actually EXECUTES.
+ *
+ * A gate that counted matching text would accept a file whose every suite is
+ * `describe.skip`: the text is still there and nothing runs. So an assertion
+ * counts only when it sits inside a case that executes -- directly, or inside a
+ * module-scope helper that an executing case reaches.
+ */
+export function countExecutableA11yAssertions(file, text = readFileSync(file, 'utf8')) {
+  const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const helpers = new Map();
+  const executingCases = [];
+
+  const declareHelper = (name, body) => {
+    if (!name || !body) return;
+    helpers.set(name, scanForA11y(body, source));
+  };
+
+  const walk = (node, suppressed) => {
+    const runner = classifyRunner(node);
+    if (runner) {
+      const blocked = suppressed || runner.suppressed;
+      if (runner.kind === 'case') {
+        if (!blocked) executingCases.push(node);
+        // A case body holds assertions, never nested cases.
+        if (blocked) return;
+      }
+      for (const argument of node.arguments) ts.forEachChild(argument, (child) => walk(child, blocked));
+      return;
+    }
+    if (ts.isFunctionDeclaration(node) && node.name && node.body) {
+      declareHelper(node.name.text, node.body);
+    } else if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer
+      && (ts.isArrowFunction(node.initializer) || ts.isFunctionExpression(node.initializer))
+      && node.initializer.body) {
+      declareHelper(node.name.text, node.initializer.body);
+    }
+    ts.forEachChild(node, (child) => walk(child, suppressed));
+  };
+  walk(source, false);
+
+  let total = 0;
+  const reached = new Set();
+  const queue = [];
+  for (const testCase of executingCases) {
+    const scan = scanForA11y(testCase, source);
+    total += scan.assertions;
+    for (const name of scan.calls) queue.push(name);
+  }
+  while (queue.length > 0) {
+    const name = queue.pop();
+    if (reached.has(name)) continue;
+    reached.add(name);
+    const helper = helpers.get(name);
+    if (!helper) continue;
+    total += helper.assertions;
+    for (const next of helper.calls) queue.push(next);
+  }
+  return total;
+}
+
 export function resolveFamily(family, root = DEFAULT_ROOT) {
   const skins = collectSkinFiles(root)
     .filter((file) => file.includes(MODERN_SKIN_SEGMENT) || toPosix(file).includes('/presentation/components/skin/'))
@@ -215,14 +386,11 @@ export function resolveFamily(family, root = DEFAULT_ROOT) {
     family,
     'index.ts',
   );
-  const a11yProbes = componentDirs
+  const a11yEvidence = componentDirs
     .flatMap((dir) => walkFiles(dir, (file) => /\.test\.tsx?$/u.test(file)))
-    .filter((file) => {
-      const text = readFileSync(file, 'utf8');
-      return /\baxe\b/u.test(text)
-        || /toHaveAccessibleName|toHaveAccessibleDescription|getByRole|toHaveFocus|aria-/u.test(text);
-    })
-    .sort();
+    .sort()
+    .map((file) => ({ file, assertions: countExecutableA11yAssertions(file) }))
+    .filter((entry) => entry.assertions > 0);
   return {
     family,
     root,
@@ -230,7 +398,8 @@ export function resolveFamily(family, root = DEFAULT_ROOT) {
     componentDirs,
     sources,
     recipe: existsSync(recipe) ? recipe : undefined,
-    a11yProbes,
+    a11yProbes: a11yEvidence.map((entry) => entry.file),
+    a11yAssertions: a11yEvidence.reduce((total, entry) => total + entry.assertions, 0),
   };
 }
 
@@ -264,6 +433,66 @@ function attributeLiterals(attribute) {
     return literalsIn(attribute.initializer.expression);
   }
   return [];
+}
+
+/**
+ * Strips the wrappers that change a type and never a value. `x as CSSProperties`,
+ * `(x)`, `x satisfies CSSProperties`, `<CSSProperties>x` and `x!` all paint
+ * exactly what `x` paints, so a reader that stopped at any of them would let an
+ * authored colour through under a cast.
+ */
+function unwrapTransparent(node) {
+  let current = node;
+  while (current) {
+    if (ts.isParenthesizedExpression(current)
+      || ts.isAsExpression(current)
+      || ts.isNonNullExpression(current)
+      || current.kind === ts.SyntaxKind.SatisfiesExpression
+      || current.kind === ts.SyntaxKind.TypeAssertionExpression) {
+      current = current.expression;
+      continue;
+    }
+    return current;
+  }
+  return current;
+}
+
+/**
+ * Every object literal a `style` expression can evaluate to: through casts and
+ * parentheses, through a named local, through both arms of a conditional or a
+ * logical guard, and through an object spread of any of those.
+ */
+function collectStyleObjects(expression, namedObjects, out = new Set(), seen = new Set()) {
+  const node = unwrapTransparent(expression);
+  if (!node || seen.has(node)) return out;
+  seen.add(node);
+  if (ts.isObjectLiteralExpression(node)) {
+    out.add(node);
+    for (const property of node.properties) {
+      if (ts.isSpreadAssignment(property)) {
+        collectStyleObjects(property.expression, namedObjects, out, seen);
+      }
+    }
+    return out;
+  }
+  if (ts.isIdentifier(node)) {
+    const resolved = namedObjects.get(node.text);
+    if (resolved) collectStyleObjects(resolved, namedObjects, out, seen);
+    return out;
+  }
+  if (ts.isConditionalExpression(node)) {
+    collectStyleObjects(node.whenTrue, namedObjects, out, seen);
+    collectStyleObjects(node.whenFalse, namedObjects, out, seen);
+    return out;
+  }
+  if (ts.isBinaryExpression(node)
+    && [ts.SyntaxKind.AmpersandAmpersandToken, ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken]
+      .includes(node.operatorToken.kind)) {
+    collectStyleObjects(node.left, namedObjects, out, seen);
+    collectStyleObjects(node.right, namedObjects, out, seen);
+    return out;
+  }
+  return out;
 }
 
 /**
@@ -314,15 +543,22 @@ export function analyzeSource(file, source = ts.createSourceFile(
   let stampsStateAttribute = false;
   let stampsVariantAttribute = false;
 
-  const styleObjects = [];
+  const styleObjects = new Set();
   const namedObjects = new Map();
 
   const visit = (node) => {
-    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer
-      && ts.isObjectLiteralExpression(node.initializer)) {
-      namedObjects.set(node.name.text, node.initializer);
-      const annotation = node.type ? node.type.getText(source) : '';
-      if (/CSSProperties/u.test(annotation)) styleObjects.push(node.initializer);
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+      const initializer = unwrapTransparent(node.initializer);
+      if (ts.isObjectLiteralExpression(initializer)) namedObjects.set(node.name.text, initializer);
+      const annotation = [
+        node.type ? node.type.getText(source) : '',
+        ts.isAsExpression(node.initializer) ? node.initializer.type.getText(source) : '',
+      ].join(' ');
+      if (/CSSProperties/u.test(annotation)) {
+        for (const objectLiteral of collectStyleObjects(node.initializer, namedObjects)) {
+          styleObjects.add(objectLiteral);
+        }
+      }
     }
     if (ts.isCallExpression(node)) {
       const callee = node.expression.getText(source);
@@ -374,10 +610,10 @@ export function analyzeSource(file, source = ts.createSourceFile(
         for (const value of attributeLiterals(node)) variants.add(value);
       } else if (name === 'style' && node.initializer && ts.isJsxExpression(node.initializer)) {
         const expression = node.initializer.expression;
-        if (expression && ts.isObjectLiteralExpression(expression)) styleObjects.push(expression);
-        else if (expression && ts.isIdentifier(expression)) {
-          const resolved = namedObjects.get(expression.text);
-          if (resolved) styleObjects.push(resolved);
+        if (expression) {
+          for (const objectLiteral of collectStyleObjects(expression, namedObjects)) {
+            styleObjects.add(objectLiteral);
+          }
         }
       }
     }
@@ -593,6 +829,7 @@ export function measureFamily(resolved, { producers } = {}) {
       stateContract: stampsStateAttribute === skinUsesStateAttribute,
       stateGoverned: skinUsesStateAttribute ? usesPartAttributes : true,
       a11yProbes: resolved.a11yProbes.length,
+      a11yAssertions: resolved.a11yAssertions ?? 0,
     },
     ratchets: {
       readWithoutProducer: readWithoutProducer.debt.length,
@@ -697,7 +934,7 @@ export function judgeFamily(measured, pinned) {
         + 'one place decides when a part is pressed, or none does (F-37)',
     );
   }
-  if (blocking.a11yProbes === 0) {
+  if (blocking.a11yAssertions === 0) {
     findings.push(
       `${family}: BLOCKING the family owns no executable accessibility assertion; a cut without an a11y probe is not verified`,
     );

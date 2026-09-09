@@ -12,7 +12,7 @@
  */
 
 import assert from 'node:assert/strict';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
@@ -310,6 +310,297 @@ test('PLANT: losing the family a11y probe is BLOCKING', () => {
   withPlantedFamily(
     (sandbox) => rmSync(join(sandbox, 'src/components/primitives/inputs/button/tests'), { recursive: true, force: true }),
     (findings) => expectFinding(findings, 'owns no executable accessibility assertion', 'a cut without an a11y probe is not verified'),
+  );
+});
+
+// ---------------------------------------------------------------------------
+// R4 (2026-09-08): the two arms the re-audit proved could report a false PASS
+//
+// Both mutants below are the ones `audit/95-reaudit-2026-09-08/verification/
+// adversarial.md` ran against the delivered gate, which returned exit 0 for
+// each. Realistic, not text-shaped: neither changes a single painted pixel or
+// a single assertion's meaning -- only the syntax the reader walked through.
+// ---------------------------------------------------------------------------
+
+const TEST_DIR = 'src/components/primitives/inputs/button/tests';
+
+/** Rewrites every file of the family's test directory. */
+const patchTests = (sandbox, replace) => {
+  const dir = join(sandbox, TEST_DIR);
+  for (const name of readdirSync(dir)) {
+    if (!/\.test\.tsx?$/u.test(name)) continue;
+    const file = join(dir, name);
+    writeFileSync(file, replace(readFileSync(file, 'utf8')));
+  }
+};
+
+/** The two real `style={interactiveStyle}` sites of the Modern button. */
+const wrapBothStyleSites = (wrap) => (text) => {
+  const wrapped = text.replaceAll('style={interactiveStyle}', `style={${wrap}}`);
+  assert.equal(
+    (wrapped.match(new RegExp(`style=\\{${wrap.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}\\}`, 'gu')) ?? []).length,
+    2,
+    'the drill must rewrite both real style sites, or it proves nothing',
+  );
+  return wrapped;
+};
+
+for (const [label, wrap] of [
+  ['an `as` cast', "{ ...interactiveStyle, color: 'red' } as React.CSSProperties"],
+  ['a parenthesis', "({ ...interactiveStyle, color: 'red' })"],
+  ['a `satisfies`', "{ ...interactiveStyle, color: 'red' } satisfies React.CSSProperties"],
+  ['a parenthesised cast', "(({ ...interactiveStyle, color: 'red' }) as React.CSSProperties)"],
+  ['a spread of a literal', "{ ...interactiveStyle, ...{ color: 'red' } }"],
+]) {
+  test(`PLANT: authored paint behind ${label} is still BLOCKING`, () => {
+    withPlantedFamily(
+      (sandbox) => patch(sandbox, MODERN_TSX, wrapBothStyleSites(wrap)),
+      (findings, measured) => {
+        expectFinding(
+          findings,
+          'style` sets `color`',
+          `a transparent expression wrapper changes no runtime paint; ${label} must not hide it`,
+        );
+        assert.equal(
+          measured.blocking.inlineStyleViolations.length,
+          2,
+          'both rewritten style sites must be reported, not one',
+        );
+      },
+    );
+  });
+}
+
+test('CONTROL: the same wrapper WITHOUT authored paint is not a violation', () => {
+  // Without this the drills above would pass for the wrong reason: the gate
+  // could be refusing casts rather than refusing paint.
+  withPlantedFamily(
+    (sandbox) => patch(
+      sandbox,
+      MODERN_TSX,
+      wrapBothStyleSites('{ ...interactiveStyle } as React.CSSProperties'),
+    ),
+    (findings) => expectNoFinding(findings, 'BLOCKING inline paint', 'a cast is not itself a paint decision'),
+  );
+});
+
+test('CONTROL: a runtime `--ds-*` channel behind a cast is still allowed inline', () => {
+  withPlantedFamily(
+    (sandbox) => patch(
+      sandbox,
+      MODERN_TSX,
+      wrapBothStyleSites("{ ...interactiveStyle, '--ds-button-planted': pressMotion.duration } as React.CSSProperties"),
+    ),
+    (findings) => expectNoFinding(findings, 'BLOCKING inline paint', 'a runtime-computed channel may travel inline'),
+  );
+});
+
+test('the calibration family has executable a11y evidence, not matching text', () => {
+  const resolved = resolveFamily(FAMILY);
+  assert.ok(resolved.a11yAssertions > 0, 'the calibration family must execute a11y assertions');
+  assert.equal(
+    resolved.a11yProbes.length > 0,
+    true,
+    'the probe list is the files that execute at least one of them',
+  );
+});
+
+for (const [label, replace] of [
+  ['every suite is `describe.skip`', (text) => text.replaceAll(/^describe(?=[(.])/gmu, 'describe.skip')],
+  ['every case is `it.skip`', (text) => text.replaceAll(/(^|[^.\w])(it|test)(?=[(.])/gmu, '$1$2.skip')],
+  ['every suite is `describe.todo`', (text) => text.replaceAll(/^describe(?=[(.])/gmu, 'describe.todo')],
+]) {
+  test(`PLANT: a11y evidence where ${label} is BLOCKING`, () => {
+    withPlantedFamily(
+      (sandbox) => patchTests(sandbox, replace),
+      (findings, measured) => {
+        assert.equal(measured.blocking.a11yAssertions, 0, 'a suite that never runs asserts nothing');
+        assert.equal(measured.blocking.a11yProbes, 0, 'a file whose assertions never run is not a probe');
+        expectFinding(
+          findings,
+          'owns no executable accessibility assertion',
+          'a mechanically skipped mirror is not accessibility evidence',
+        );
+      },
+    );
+  });
+}
+
+test('CONTROL: the unskipped mirror keeps every executable a11y assertion', () => {
+  // The negative control for the three drills above: the same rewrite machinery
+  // applied as a no-op must leave the evidence exactly where it was.
+  withPlantedFamily(
+    (sandbox) => patchTests(sandbox, (text) => text),
+    (findings, measured) => {
+      assert.equal(measured.blocking.a11yAssertions, resolveFamily(FAMILY).a11yAssertions);
+      expectNoFinding(findings, 'owns no executable accessibility assertion', 'the untouched mirror is evidence');
+    },
+  );
+});
+
+test('CONTROL: an a11y assertion reached only through a helper still counts', () => {
+  withPlantedFamily(
+    (sandbox) => {
+      const dir = join(sandbox, TEST_DIR);
+      for (const name of readdirSync(dir)) rmSync(join(dir, name), { force: true });
+      writeFileSync(
+        join(dir, 'Button.helper-reached.test.tsx'),
+        [
+          "import { describe, it, expect } from 'vitest';",
+          "import { render, screen } from '@testing-library/react';",
+          "import Button from '../index';",
+          '',
+          'function assertNamed(name: string) {',
+          "  expect(screen.getByRole('button', { name })).toBeInTheDocument();",
+          '}',
+          '',
+          "describe('button', () => {",
+          "  it('has an accessible name', () => {",
+          '    render(<Button>Save</Button>);',
+          "    assertNamed('Save');",
+          '  });',
+          '});',
+          '',
+        ].join('\n'),
+      );
+    },
+    (findings, measured) => {
+      assert.equal(measured.blocking.a11yAssertions, 1, 'the helper an executing case calls is executed too');
+      expectNoFinding(findings, 'owns no executable accessibility assertion', 'a helper-reached assertion is evidence');
+    },
+  );
+});
+
+/**
+ * The 2026-09-08 review's mutant, planted as a drill: thirteen ORDINARY passing
+ * files whose accessibility assertions all sit in callbacks nothing invokes.
+ * The counter walked into those bodies and reported 26 executed assertions with
+ * no finding, which is the same false green the `describe.skip` mirror proves
+ * against -- reached through a shape a reader would call a normal test file.
+ */
+const UNCALLED_CALLBACK_TEST = [
+  "import { describe, it, expect } from 'vitest';",
+  "import { render, screen } from '@testing-library/react';",
+  "import Button from '../index';",
+  '',
+  '// Declared, never invoked: the assertions below run in no case.',
+  'function assertNamed(name: string) {',
+  "  expect(screen.getByRole('button', { name })).toHaveAccessibleName(name);",
+  '}',
+  '',
+  "describe('button', () => {",
+  "  it('renders its label', () => {",
+  '    const check = () => {',
+  "      expect(screen.getByRole('button')).toHaveAccessibleName('Save');",
+  '    };',
+  '    void check;',
+  '    void assertNamed;',
+  '    render(<Button onFocus={() => screen.getByLabelText(\'Save\')}>Save</Button>);',
+  "    expect(document.body.textContent).toContain('Save');",
+  '  });',
+  '});',
+  '',
+].join('\n');
+
+/** The green twin: the SAME two callbacks, now called by the executing case. */
+const CALLED_CALLBACK_TEST = UNCALLED_CALLBACK_TEST
+  .replace('    void check;', '    check();')
+  .replace('    void assertNamed;', "    assertNamed('Save');");
+
+function withOnlyTestFile(contents, run) {
+  withPlantedFamily(
+    (sandbox) => {
+      const dir = join(sandbox, TEST_DIR);
+      for (const name of readdirSync(dir)) rmSync(join(dir, name), { force: true });
+      writeFileSync(join(dir, 'Button.callback-shape.test.tsx'), contents);
+    },
+    run,
+  );
+}
+
+test('PLANT: an accessibility assertion in a callback NOTHING invokes is not evidence', () => {
+  withOnlyTestFile(UNCALLED_CALLBACK_TEST, (findings, measured) => {
+    assert.equal(measured.blocking.a11yAssertions, 0, 'an uninvoked body executes no assertion');
+    assert.equal(measured.blocking.a11yProbes, 0, 'a file that executes none of them is not a probe');
+    expectFinding(
+      findings,
+      'owns no executable accessibility assertion',
+      'a passing file whose a11y calls sit in uncalled callbacks is text, not evidence',
+    );
+  });
+});
+
+test('CONTROL: the SAME callbacks counted once the executing case calls them', () => {
+  // Without this the drill above would pass for the wrong reason: a counter
+  // that had simply stopped reading callbacks would also report zero.
+  withOnlyTestFile(CALLED_CALLBACK_TEST, (findings, measured) => {
+    // Two per callback: the role query and the name matcher.
+    assert.equal(measured.blocking.a11yAssertions, 4, 'both invoked callbacks execute their assertions');
+    assert.equal(measured.blocking.a11yProbes, 1);
+    expectNoFinding(
+      findings,
+      'owns no executable accessibility assertion',
+      'an invoked callback is executed accessibility evidence',
+    );
+  });
+});
+
+test('CONTROL: a callback the case passes to a caller still executes', () => {
+  // `await waitFor(() => expect(...).toHaveFocus())` is the ordinary shape of a
+  // real assertion, and it must keep counting: the rule is "reaching it runs
+  // it", not "callbacks do not count".
+  withOnlyTestFile([
+    "import { describe, it, expect } from 'vitest';",
+    "import { render, screen, waitFor } from '@testing-library/react';",
+    "import Button from '../index';",
+    '',
+    "describe('button', () => {",
+    "  it('takes focus', async () => {",
+    '    render(<Button>Save</Button>);',
+    "    await waitFor(() => expect(screen.getByRole('button')).toHaveFocus());",
+    '  });',
+    '});',
+    '',
+  ].join('\n'), (findings, measured) => {
+    assert.equal(measured.blocking.a11yAssertions, 2, 'the query and the focus matcher both execute');
+    expectNoFinding(findings, 'owns no executable accessibility assertion', 'a passed callback runs');
+  });
+});
+
+test('PLANT: the SAME helper assertion is worthless when the only case is skipped', () => {
+  withPlantedFamily(
+    (sandbox) => {
+      const dir = join(sandbox, TEST_DIR);
+      for (const name of readdirSync(dir)) rmSync(join(dir, name), { force: true });
+      writeFileSync(
+        join(dir, 'Button.helper-reached.test.tsx'),
+        [
+          "import { describe, it, expect } from 'vitest';",
+          "import { render, screen } from '@testing-library/react';",
+          "import Button from '../index';",
+          '',
+          'function assertNamed(name: string) {',
+          "  expect(screen.getByRole('button', { name })).toBeInTheDocument();",
+          '}',
+          '',
+          "describe('button', () => {",
+          "  it.skip('has an accessible name', () => {",
+          '    render(<Button>Save</Button>);',
+          "    assertNamed('Save');",
+          '  });',
+          '});',
+          '',
+        ].join('\n'),
+      );
+    },
+    (findings, measured) => {
+      assert.equal(measured.blocking.a11yAssertions, 0, 'nothing reaches the helper when the case is skipped');
+      expectFinding(
+        findings,
+        'owns no executable accessibility assertion',
+        'an unreachable helper is not accessibility evidence',
+      );
+    },
   );
 });
 

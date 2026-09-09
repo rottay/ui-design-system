@@ -2925,6 +2925,45 @@ export function validateRegistryMutationIntegrity(reg, options = {}) {
   }
 }
 
+/**
+ * Is the STATUS on disk still what its PRODUCERS say?
+ *
+ * STATUS.md is generated and committed, so a producer that moves after the
+ * last `roadmap:status` leaves a published indicator describing a run that no
+ * longer exists. That happened: STATUS carried a September 6 decisions-lit run
+ * while the artifact recorded a newer one, and nothing in the repository could
+ * report it -- the reader was already honest, the PUBLICATION was stale.
+ *
+ * So the check regenerates the producer-backed blocks and requires the file to
+ * carry them verbatim. It compares, it never rewrites: the fix is to run
+ * `pnpm roadmap:status`, which is the only thing allowed to publish.
+ */
+export function publishedIndicatorFreshnessErrors({
+  statusPath = STATUS_PATH,
+  blocks = null,
+} = {}) {
+  if (!fs.existsSync(statusPath)) return ["roadmap/STATUS.md is missing; run `pnpm roadmap:status`"];
+  const published = fs.readFileSync(statusPath, "utf8");
+  const producers = blocks ?? [
+    { producer: "packages/core/scripts/check/decisions-lit", lines: decisionsLitLines(readDecisionsLitIndicator()) },
+    { producer: CONTRACT_DIFF_PRODUCER, lines: contractDiffLines(readContractDiff()) },
+  ];
+  const errors = [];
+  for (const { producer, lines } of producers) {
+    for (const line of lines) {
+      if (line.trim().length === 0) continue;
+      if (published.includes(line)) continue;
+      errors.push(
+        `STATUS.md no longer matches its producer ${producer}: it does not carry ` +
+          `${JSON.stringify(line.length > 120 ? `${line.slice(0, 117)}...` : line)}. ` +
+          "Run `pnpm roadmap:status`; never edit the published block by hand",
+      );
+      break;
+    }
+  }
+  return errors;
+}
+
 function check() {
   const reg = loadRegistry();
   const map = byId(reg);
@@ -2947,6 +2986,7 @@ function check() {
   }
   errors.push(...validateRegistryMutationIntegrity(reg));
   errors.push(...programIndicatorBindingErrors(reg));
+  errors.push(...publishedIndicatorFreshnessErrors());
   if (errors.length) {
     console.error(`roadmap:check FAILED (${errors.length}):`);
     for (const e of errors) console.error("  - " + e);

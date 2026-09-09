@@ -50,7 +50,7 @@ export const CI_GATES = Object.freeze([
   // belongs here is the proof that it has teeth, which needs no range at all.
   { id: 'contract-changeset-drill', run: ['node', '--test', 'scripts/check/contract-changeset/tests/index.test.mjs'], blocking: true, phase: 'pre-build',
     noDrillReason:
-      'This entry IS the drill for `contract-changeset`: it plants eight ranges in throwaway git repositories — a guaranteed-surface change with no changeset, one covered only by the changeset the base branch already carries, one with an unparseable declaration, one with a bump that declares nothing, a shipped change with no changeset, and the three that must stay green — and asserts each lands in the direction it declares. The graded check itself is range-scoped and lives in the `changeset` job of .github/workflows/ci.yml; registering it here would compare main to itself on every checkout and pass vacuously.', },
+      'This entry IS the drill for `contract-changeset`: it plants one range per class in `DRILLS` — twenty today, each pinned by name in the roster assertion of that suite — in throwaway git repositories, and asserts each lands in the direction it declares. Eleven must go red (a guaranteed-surface change with no changeset, one covered only by the changeset the base branch already carries, an unparseable declaration, a bump that declares nothing, a shipped change with no changeset, a signature that moves where it is defined, a published root symbol, a declaration naming another package, a changed public overload, an unresolvable published export and a star export the resolver cannot follow) and the rest must stay green. The graded check itself is range-scoped and lives in the `changeset` job of .github/workflows/ci.yml; registering it here would compare main to itself on every checkout and pass vacuously.', },
   // A named import of a binding the target module never publishes is `undefined`
   // at runtime and renders an invalid element. A deep-path import rewrite landed
   // 22 of them at once because the short alias for a compound primitive lives in
@@ -350,14 +350,20 @@ export const CI_GATES = Object.freeze([
   // Drill first, and here with a reason of its own: the guard's whole verdict
   // is a digest comparison, and a digest that stopped covering a file reports
   // agreement and looks exactly like a fresh artifact.
-  { id: 'decisions-lit-drill', run: ['node', '--test', 'scripts/check/decisions-lit/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['decisions-lit-freshness'], },
-  { id: 'decisions-lit-freshness', run: ['pnpm', 'run', 'decisions-lit:check'], blocking: true, phase: 'pre-build', drillId: 'decisions-lit-drill', },
+  { id: 'decisions-lit-drill', run: ['node', '--test', 'scripts/check/decisions-lit/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['decisions-lit-freshness'],
+    distExemption:
+      'MEASURED, not assumed: the door import of `dist/server.js` is lazy and only fires when a decision is actually compiled, and this suite never compiles one. Run with `dist/` moved away it exits 0 (2026-09-08).',
+  },
+  { id: 'decisions-lit-freshness', run: ['pnpm', 'run', 'decisions-lit:check'], blocking: true, phase: 'pre-build', drillId: 'decisions-lit-drill',
+    distExemption:
+      'MEASURED, not assumed: the freshness read compares the committed artifact against its inputs and never reaches the lazy `dist/server.js` door. Run with `dist/` moved away it exits 0 (2026-09-08).',
+  },
   { id: 'variant-parity-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/variant-parity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['variant-parity'], },
   // El cuarto mide la FUENTE, no el artefacto: variant-parity es el canon
   // estructural de los 3 themes y corre sin build. Su `--check` es frescura Y
   // trinquete (divergentSlots / untaggedAuthoredLeaves, decrease-only).
   { id: 'variant-parity', run: ['node', 'scripts/generate/tokens/manifest/variant-parity/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'variant-parity-drill', ratchet: 'scripts/generate/tokens/manifest/variant-parity/baseline/index.json', },
-  { id: 'claim-exactness-drill', run: ['node', '--test', 'scripts/check/evidence/certification/claims/exactness/index.test.mjs', 'scripts/check/evidence/certification/claims/exactness/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['claim-exactness'], },
+  { id: 'claim-exactness-drill', run: ['node', '--test', 'scripts/check/evidence/certification/claims/exactness/index.test.mjs', 'scripts/check/evidence/certification/claims/exactness/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['claim-exactness'], prerequisites: ['docs-engineering-corpus'], },
   // The exact proof runs the audit above a second time inside two deterministic
   // passes and adds the planes no other gate covers: the claim/contract census in
   // the documentation, the code-derived vertical rows, the data-part corpus, and
@@ -365,7 +371,7 @@ export const CI_GATES = Object.freeze([
   // `pnpm run claim-exactness:check`, so a doc could contradict source with the whole
   // dashboard green. It sits AFTER the audit deliberately: when the audit is red
   // this gate is red for the same reason but far more slowly.
-  { id: 'claim-exactness', run: ['node', 'scripts/check/evidence/certification/claims/exactness/index.mjs', '--check-artifact'], blocking: true, phase: 'pre-build', drillId: 'claim-exactness-drill', },
+  { id: 'claim-exactness', run: ['node', 'scripts/check/evidence/certification/claims/exactness/index.mjs', '--check-artifact'], blocking: true, phase: 'pre-build', drillId: 'claim-exactness-drill', prerequisites: ['docs-engineering-corpus'], },
   { id: 'anatomy-variant-drill', run: ['node', '--test', 'scripts/check/engine/runtime/anatomy-variants/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['anatomy-variant-gate'], },
   { id: 'anatomy-variant-gate', run: ['node', 'scripts/check/engine/runtime/anatomy-variants/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'anatomy-variant-drill', },
   { id: 'size-axis-law-drill', run: ['node', '--test', 'scripts/check/boundaries/components/sizing/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['size-axis-law-gate'], },
@@ -420,7 +426,10 @@ export const CI_GATES = Object.freeze([
     noDrillReason:
       'The posture suite plants a wrong posture per adapter and asserts the classifier refuses it; the mutants live inside the suite.',
   },
-  { id: 'engine-freeze-drill', run: ['node', '--test', 'scripts/check/engine/lifecycle/freeze/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['engine-freeze-gate'], },
+  { id: 'engine-freeze-drill', run: ['node', '--test', 'scripts/check/engine/lifecycle/freeze/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['engine-freeze-gate'],
+    distExemption:
+      'MEASURED, not assumed: it imports the consumers module for its roster helpers and never calls `importDist`. Run with `dist/` moved away it exits 0 (2026-09-08).',
+  },
   { id: 'engine-freeze-gate', run: ['node', 'scripts/check/engine/lifecycle/freeze/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'engine-freeze-drill', ratchet: 'scripts/check/engine/lifecycle/freeze/baseline/index.json', },
   // The integration fence had NO manifest entry and NO test owner, so its three
   // silent-green defects could not be caught by anything. Drill first, for the
@@ -469,8 +478,6 @@ export const CI_GATES = Object.freeze([
   // Build: the five committed `styles/*.css` mirrors are required and the
   // `dist/*` copies are audited only when present, so a clean clone certifies
   // the same law without a build step.
-  { id: 'modern-bundle-framework-drill', run: ['node', '--test', 'scripts/check/engine/lifecycle/framework-bundle/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['modern-bundle-framework'], },
-  { id: 'modern-bundle-framework', run: ['node', 'scripts/check/engine/lifecycle/framework-bundle/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'modern-bundle-framework-drill', },
   // The palette seam: `--ds-chart-series-1..10` may be DEFINED only by a
   // tenant-scope compiler, never by anything closer to the marks. It was
   // orphaned and red on 2026-08-19 -- not because a component had defined the
@@ -553,9 +560,6 @@ export const CI_GATES = Object.freeze([
   // ceiling -- had no executable guard at all until now.
   { id: 'theme-channel-parity-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/theme-parity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-channel-parity'], },
   { id: 'theme-channel-parity', run: ['node', 'scripts/check/tokens/cascade/channels/theme-parity/index.mjs', '--check', '--quiet'], blocking: true, phase: 'pre-build', drillId: 'theme-channel-parity-drill', ratchet: 'scripts/check/tokens/cascade/channels/theme-parity/baseline/index.json', },
-  { id: 'tenant-channel-consumer-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/consumers/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['tenant-channel-consumer', 'tenant-channel-consumer-modern'], },
-  { id: 'tenant-channel-consumer', run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'tenant-channel-consumer-drill', ratchet: 'scripts/check/tokens/cascade/channels/consumers/baselines/all-engines/index.json', },
-  { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--modern-check'], blocking: true, phase: 'pre-build', drillId: 'tenant-channel-consumer-drill', ratchet: 'scripts/check/tokens/cascade/channels/consumers/baselines/modern/index.json', },
   // Drill first: the reachability census is baseline-backed, so a measurer that
   // quietly stopped resolving names would report zero violations and read as clean.
   { id: 'tenant-reachability-drill', run: ['node', 'scripts/check/orchestration/tests/drills/tenant-reachability/index.mjs'], blocking: true, phase: 'pre-build', drillFor: ['tenant-reachability'], },
@@ -565,8 +569,6 @@ export const CI_GATES = Object.freeze([
   // CI checks app-bithire out explicitly and local workspace runs discover the
   // sibling repository. NOT `--optional`: a missing corpus is a hard failure,
   // and the manifest validator forbids downgrading a blocking gate.
-  { id: 'app-ds-boundary', run: ['node', 'scripts/check/boundaries/applications/styles/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'app-ds-boundary-drill', prerequisites: ['app-bithire-corpus'], ratchet: 'scripts/check/boundaries/applications/styles/baseline/index.json', },
-  { id: 'app-ds-boundary-drill', run: ['node', '--test', 'scripts/check/boundaries/applications/styles/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['app-ds-boundary'], prerequisites: ['app-bithire-corpus'], },
   // Answers the question the boundary gate above does not: WHICH `--ds-*`
   // properties an app may assign, and under what scope (audit 2026-07-26,
   // independent code audit C3). Its allowlist is derived from DS source, so the drill runs
@@ -894,14 +896,6 @@ export const CI_GATES = Object.freeze([
   },
   // Drills for the three F0 honesty gates: a gate that cannot fail is not a
   // gate.
-  {
-    id: 'gate-honesty-drill',
-    run: ['node', '--test', 'scripts/check/automation/gates/honesty/index.test.mjs'],
-    blocking: true,
-    phase: 'pre-build',
-    noDrillReason:
-      'This entry IS the drill for the three F0 honesty gates; a drill of a drill has no separate subject.',
-  },
   // PACKAGE GATES — drills here, gates post-build, and the reason stated.
   //
   // `distfresh`, `packinv`, `public-declarations`, `public-barrel` and
@@ -980,6 +974,57 @@ export const CI_GATES = Object.freeze([
   { id: 'customization-controls-drill', run: ['node', '--test', 'scripts/generate/theme/controls-doc/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['customization-controls-freshness'], },
   { id: 'customization-controls-freshness', run: ['node', 'scripts/generate/theme/controls-doc/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'customization-controls-drill', },
 
+  // MOVED OUT OF PRE-BUILD (2026-09-08, WO-CAN-02 amendment J.23; corrected
+  // 2026-09-08 after the lot review measured the claim below).
+  //
+  // These EIGHT entries were declared `pre-build`. Measured by moving
+  // `packages/core/dist` away and running each one:
+  //
+  //   SIX exit 1. `tenant-channel-consumer` and its `--modern-check` twin on a
+  //   missing compiled contract; `app-ds-boundary` on a missing
+  //   `dist/bithire.css`; `app-ds-boundary-drill` on seven of nine cases, whose
+  //   fixture IS that stylesheet and the app corpus; `gate-honesty-drill` on
+  //   the gate that walks every exported build target; and
+  //   `modern-bundle-framework-drill` on ONE assertion of its own.
+  //
+  //   TWO exit 0, and neither one is the measurement its entry exists to make.
+  //   `modern-bundle-framework` audits the five COMMITTED mirrors and skips the
+  //   five `dist/` publish targets in silence -- the bytes a consumer installs
+  //   are exactly what it is positioned to certify -- so what a dist-less run
+  //   of that pair reports is its drill's count assertion (`audited >= 6`,
+  //   which gets 5), not a missing output. `tenant-channel-consumer-drill`
+  //   reports 21 green assertions with the only case that RUNS the gate
+  //   self-skipped for the reason it prints: "dist is not built".
+  //
+  // Of the eight, `validateManifest()` reports FOUR: the three tenant-channel
+  // entries and `app-ds-boundary`, whose dependency is a filesystem read or a
+  // dynamic import through a path variable rather than an import specifier --
+  // the shapes `dist-reachability` now follows, and the ones the old walk saw
+  // none of. The other four need a build for reasons no static walk sees: a
+  // count assertion, a self-skipping case, a fixture that is the built
+  // stylesheet, and a spawned command named through a variable. Running them
+  // without `dist/` is what found those, and it is the evidence recorded here.
+  //
+  // They are not deleted and not baselined: they run in the phase whose input
+  // they need, after the build step of `.github/workflows/ci.yml`, with the
+  // prerequisite declared so a run without one says PREREQ-MISSING and names it.
+  { id: 'modern-bundle-framework-drill', run: ['node', '--test', 'scripts/check/engine/lifecycle/framework-bundle/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['modern-bundle-framework'], prerequisites: ['fresh-dist'], },
+  { id: 'modern-bundle-framework', run: ['node', 'scripts/check/engine/lifecycle/framework-bundle/index.mjs'], blocking: true, phase: 'post-build', drillId: 'modern-bundle-framework-drill', prerequisites: ['fresh-dist'], },
+  { id: 'tenant-channel-consumer-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/consumers/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['tenant-channel-consumer', 'tenant-channel-consumer-modern'], prerequisites: ['fresh-dist'], },
+  { id: 'tenant-channel-consumer', run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--check'], blocking: true, phase: 'post-build', drillId: 'tenant-channel-consumer-drill', prerequisites: ['fresh-dist'], ratchet: 'scripts/check/tokens/cascade/channels/consumers/baselines/all-engines/index.json', },
+  { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--modern-check'], blocking: true, phase: 'post-build', drillId: 'tenant-channel-consumer-drill', prerequisites: ['fresh-dist'], ratchet: 'scripts/check/tokens/cascade/channels/consumers/baselines/modern/index.json', },
+  { id: 'app-ds-boundary-drill', run: ['node', '--test', 'scripts/check/boundaries/applications/styles/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['app-ds-boundary'], prerequisites: ['fresh-dist', 'app-bithire-corpus'], },
+  { id: 'app-ds-boundary', run: ['node', 'scripts/check/boundaries/applications/styles/index.mjs', '--check'], blocking: true, phase: 'post-build', drillId: 'app-ds-boundary-drill', prerequisites: ['fresh-dist', 'app-bithire-corpus'], ratchet: 'scripts/check/boundaries/applications/styles/baseline/index.json', },
+  {
+    id: 'gate-honesty-drill',
+    run: ['node', '--test', 'scripts/check/automation/gates/honesty/index.test.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    prerequisites: ['fresh-dist'],
+    noDrillReason:
+      'This entry IS the drill for the three F0 honesty gates; a drill of a drill has no separate subject. It runs post-build because one of the three gates it drills walks every exported build target, which a clean checkout does not have.',
+  },
+
   // The prepack chain, which `npm pack` fires and CI never did.
   { id: 'dist-freshness', run: ['pnpm', 'run', 'distfresh:check'], blocking: true, phase: 'post-build', drillId: 'dist-freshness-drill', prerequisites: ['fresh-dist'], },
   { id: 'pack-inventory', run: ['pnpm', 'run', 'packinv:check'], blocking: true, phase: 'post-build', drillId: 'pack-inventory-drill', prerequisites: ['fresh-dist'], ratchet: 'scripts/package/artifacts/inventory/baseline/index.json', },
@@ -1042,6 +1087,15 @@ export const PREREQUISITES = Object.freeze({
   'showroom-workspace': {
     describe: 'the @rottay/showroom workspace package',
     satisfied: () => existsSync(join(MANIFEST_PACKAGE_ROOT, '../showroom/package.json')),
+  },
+  'docs-engineering-corpus': {
+    describe:
+      'the sealed docs-engineering checkout the claim-exactness proof reads '
+      + '(DOCS_ENGINEERING_ROOT, or a sibling repository) at the revision in '
+      + 'scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json',
+    satisfied: () => existsSync(
+      process.env.DOCS_ENGINEERING_ROOT ?? join(MANIFEST_PACKAGE_ROOT, '../../../docs-engineering'),
+    ),
   },
 });
 
@@ -1108,6 +1162,15 @@ export function missingPrerequisites(gate) {
  * Structural validation of the manifest itself. Called by the runner and by the
  * drill, so a malformed entry cannot reach CI.
  */
+/**
+ * What a clean `validateManifest()` does and does NOT prove, in one sentence
+ * the runner prints, so a green structural check is never read as a green run.
+ */
+export const MANIFEST_VALIDATION_SCOPE =
+  'structural only: ids, phases, drills, prerequisites, script existence, and the three ways a pre-build entry '
+  + 'can reach dist/ (import, filesystem read of a dist path, command it spawns). It does not execute a gate, so a '
+  + 'pre-build entry that needs a built input through a path this walk cannot follow is caught by the run, not here.';
+
 export function validateManifest(gates = CI_GATES, { packageRoot = MANIFEST_PACKAGE_ROOT } = {}) {
   const problems = [];
   const seen = new Set();
@@ -1174,10 +1237,31 @@ export function validateManifest(gates = CI_GATES, { packageRoot = MANIFEST_PACK
       if ((gate.prerequisites ?? []).includes('fresh-dist')) {
         problems.push(`${gate.id}: a pre-build gate must not require a built dist/ (declare phase: 'post-build')`);
       }
+      // Three shapes, not one: an import specifier, a filesystem read of a
+      // `dist/` path however the path was built, and a child command followed
+      // into its own graph. `validateManifest()` reported no problem for four
+      // pre-build entries that reached `dist/` through the second shape --
+      // three read a compiled contract through a path variable, one reads
+      // `dist/bithire.css` -- because it only ever read the first (2026-09-08,
+      // rubric J.23). A walk is not the whole answer either: four more entries
+      // of that move need a build for reasons only running them reports.
       const reached = distReachableFrom(packageRoot, manifestEntryModules(gate.run, packageRoot));
-      for (const hit of reached.slice(0, 3)) {
-        problems.push(`${gate.id}: pre-build gate reaches dist/ through ${hit.file} -> ${hit.specifier}`);
+      if (reached.length === 0 && gate.distExemption !== undefined) {
+        problems.push(`${gate.id}: carries a distExemption and reaches no dist/ output; remove the exemption`);
+      } else if (reached.length > 0 && gate.distExemption === undefined) {
+        for (const hit of reached.slice(0, 3)) {
+          problems.push(
+            `${gate.id}: pre-build gate reaches dist/ through ${hit.file} -> ${hit.specifier} (${hit.kind}); `
+            + "move it to phase: 'post-build' with prerequisites: ['fresh-dist'], or state a measured distExemption",
+          );
+        }
       }
+    } else if (gate.distExemption !== undefined) {
+      problems.push(`${gate.id}: distExemption belongs to a pre-build entry; this one is ${gate.phase}`);
+    }
+    if (gate.distExemption !== undefined
+      && (typeof gate.distExemption !== 'string' || gate.distExemption.trim().length < 40)) {
+      problems.push(`${gate.id}: distExemption must be a written, measured sentence, not a placeholder`);
     }
 
     // EXISTENCE. Eight gates spent a whole refactor pointing at scripts the

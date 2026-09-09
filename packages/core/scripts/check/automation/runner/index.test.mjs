@@ -378,6 +378,7 @@ function plantRunnerFixture(gates) {
       `export const CI_GATES = Object.freeze(${JSON.stringify(gates)});`,
       'export function validateManifest() { return []; }',
       "export const PHASES = Object.freeze(['pre-build', 'post-build']);",
+      "export const MANIFEST_VALIDATION_SCOPE = 'structural only, in the fixture as in the real manifest';",
       'export const PREREQUISITES = Object.freeze({',
       "  'planted-input': { describe: 'an input the fixture never provides', satisfied: () => false },",
       "  'always-there': { describe: 'an input that is always present', satisfied: () => true },",

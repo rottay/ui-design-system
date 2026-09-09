@@ -22,6 +22,36 @@
  * The walk follows RELATIVE specifiers only. A bare specifier is either a
  * third-party package (not this tree) or the package's own name, which
  * resolves through `exports` into `dist/` and is therefore itself a hit.
+ *
+ * WHY IMPORTS ARE NOT ENOUGH (2026-09-08). `validateManifest()` reported no
+ * problem while seven pre-build entries reached `dist/` through a shape it
+ * never read. None of them IMPORTED it: three read a compiled contract off the
+ * filesystem through a path variable, one reads `dist/bithire.css` the same
+ * way, and three more reach it and measurably do not need it. An import is one
+ * of three ways to need a build, and the other two were invisible. So the walk
+ * now also reports:
+ *
+ *   path-literal   a `dist/` path a module builds or reads, including
+ *                  `join(root, 'dist', …)` where no single literal spells it;
+ * and it FOLLOWS a child command -- a script the gate spawns, including through
+ * a `pnpm run` alias -- into that script's own graph, so what the child reads is
+ * part of what the parent needs. Following is not accusing: the spawn itself is
+ * never a hit, only what the spawned module turns out to read.
+ *
+ * A module that MENTIONS `dist/` without depending on one -- a drill that
+ * fabricates a fake `dist/` in a tmpdir is the honest case -- is not silently
+ * forgiven: the manifest entry carries a written `distExemption`, which is
+ * reviewed like every other exemption in that file. Three entries carry one:
+ * `decisions-lit-drill`, `decisions-lit-freshness` and `engine-freeze-drill`,
+ * each measured at 0 with `dist/` moved away.
+ *
+ * AND A WALK IS STILL NOT THE WHOLE ANSWER. Four entries of the same 2026-09-08
+ * move need a build for reasons no static reader can see -- a count assertion
+ * over the audited bundles, a case that self-skips when `dist/` is absent, a
+ * fixture that IS the built stylesheet, and a command named through a variable.
+ * They were found by running them with `dist/` moved away, which is the only
+ * instrument that answers this question completely. This walk closes the shapes
+ * it can prove; it does not license the phase field it cannot.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -70,6 +100,144 @@ function reachesDist(specifier) {
   return /\bdist\//.test(specifier)
     || specifier === SELF_PACKAGE
     || specifier.startsWith(`${SELF_PACKAGE}/`);
+}
+
+/**
+ * A path expression that names a `dist/` segment, however it is spelled --
+ * excluding a dependency's own build output. `node_modules/vite/dist/node` is
+ * present on a clean checkout after `pnpm install`; this package's `dist/` is
+ * not, and only the second is what a phase declaration is about.
+ */
+const DIST_SEGMENT = /(?:^|[/'"`])dist(?:\/|['"`]|$)/;
+const VENDOR_PATH = /(?:^|\/)node_modules(?:\/|$)/;
+
+/** The child-process entry points a gate can hand another program to. */
+const SPAWN_CALLEES = new Set([
+  'spawn', 'spawnSync', 'exec', 'execSync', 'execFile', 'execFileSync', 'fork',
+]);
+
+/**
+ * The filesystem reads that turn a path into a DEPENDENCY.
+ *
+ * The distinction matters: a module that filters `dist` out of a corpus walk,
+ * or names it in a comment, does not need a build. A module that asks the
+ * filesystem for something under `dist/` does, and a run without one dies
+ * there. Only the second is a hit.
+ */
+const FS_READ_CALLEES = new Set([
+  'readFileSync', 'readdirSync', 'realpathSync', 'opendirSync', 'cpSync', 'globSync',
+  'readFile', 'readdir', 'cp', 'glob',
+]);
+
+/**
+ * Path reads and child commands a module carries.
+ *
+ * `join(coreRoot, 'dist', 'bithire.css')` names no `dist/` substring, and the
+ * result is usually held in a const and read several statements later, so the
+ * walk carries the dist-ness of a path through its variable: an initializer
+ * that names a `dist` segment marks the name, and a read of that name is a hit.
+ */
+export function distPathsAndCommands(source, fileName) {
+  const parsed = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true, scriptKindFor(fileName));
+  const paths = [];
+  const commands = [];
+  const distNames = new Set();
+  const literal = (node) => (node && (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node))
+    ? node.text
+    : null);
+
+  /** Does this expression evaluate to a path under `dist/`? */
+  const namesDist = (node) => {
+    if (!node) return false;
+    if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
+      return !VENDOR_PATH.test(node.text) && DIST_SEGMENT.test(node.text);
+    }
+    if (ts.isIdentifier(node)) return distNames.has(node.text);
+    if (ts.isTemplateExpression(node)) {
+      return DIST_SEGMENT.test(node.getText(parsed))
+        || node.templateSpans.some((span) => namesDist(span.expression));
+    }
+    if (ts.isCallExpression(node)) {
+      const callee = node.expression.getText(parsed);
+      const name = callee.slice(callee.lastIndexOf('.') + 1);
+      if (!['join', 'resolve', 'pathToFileURL', 'normalize', 'fileURLToPath'].includes(name)) return false;
+      if (node.arguments.some((argument) => VENDOR_PATH.test(literal(argument) ?? ''))) return false;
+      return node.arguments.some((argument) => literal(argument) === 'dist' || namesDist(argument));
+    }
+    if (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.PlusToken) {
+      return namesDist(node.left) || namesDist(node.right);
+    }
+    if (ts.isPropertyAccessExpression(node)) return distNames.has(node.getText(parsed)) || namesDist(node.expression);
+    if (ts.isArrayLiteralExpression(node)) return node.elements.some((element) => namesDist(element));
+    return false;
+  };
+
+  // Which names hold a `dist/` path. `const distDir = join(root, 'dist')` marks
+  // `distDir`, and `const full = join(distDir, relative)` inherits the mark, so
+  // the read three statements later is still seen. Two passes let a name built
+  // from an earlier one carry it.
+  const collect = (node) => {
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && namesDist(node.initializer)) {
+      distNames.add(node.name.text);
+    }
+    ts.forEachChild(node, collect);
+  };
+  collect(parsed);
+  collect(parsed);
+
+  /** A module-scope `const X = 'scripts/…'` a spawn call names by variable. */
+  const constantStrings = new Map();
+  for (const statement of parsed.statements) {
+    if (!ts.isVariableStatement(statement)) continue;
+    for (const declaration of statement.declarationList.declarations) {
+      const value = literal(declaration.initializer);
+      if (ts.isIdentifier(declaration.name) && value !== null) constantStrings.set(declaration.name.text, value);
+    }
+  }
+  const spawnArgument = (node) => literal(node)
+    ?? (node && ts.isIdentifier(node) ? constantStrings.get(node.text) ?? null : null);
+
+  const visit = (node) => {
+    // A dynamic import of a dist path is the shape the compiled-contract gates
+    // use, and it never spells `dist/` at the import site.
+    if (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword) {
+      const [argument] = node.arguments;
+      if (argument && (namesDist(argument) || DIST_SEGMENT.test(argument.getText(parsed)))) {
+        paths.push(`import(${argument.getText(parsed).slice(0, 120)})`);
+      }
+    }
+    if (ts.isCallExpression(node)) {
+      const callee = node.expression.getText(parsed);
+      const name = callee.slice(callee.lastIndexOf('.') + 1);
+      if (FS_READ_CALLEES.has(name)) {
+        const hit = node.arguments.find((argument) => namesDist(argument));
+        if (hit) paths.push(`${name}(${hit.getText(parsed).slice(0, 120)})`);
+      }
+      if (SPAWN_CALLEES.has(name)) {
+        const first = spawnArgument(node.arguments[0]);
+        const rest = node.arguments[1] && ts.isArrayLiteralExpression(node.arguments[1])
+          ? node.arguments[1].elements.map(spawnArgument)
+          : [];
+        if (first) commands.push({ command: first, args: rest.filter((value) => value !== null) });
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(parsed);
+  return { paths, commands };
+}
+
+/** The modules a `pnpm run <script>` alias makes node execute. */
+function scriptTargetsOf(packageRoot, script) {
+  let scripts;
+  try {
+    scripts = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8')).scripts ?? {};
+  } catch {
+    return [];
+  }
+  const command = scripts[script];
+  if (!command) return [];
+  return [...command.matchAll(/(?:\.\.\/\.\.\/)?scripts\/[\w./-]+\.mjs/g)].map((match) => match[0]);
 }
 
 function resolveRelative(packageRoot, fromRelative, specifier) {
@@ -124,9 +292,28 @@ export function distReachableFrom(packageRoot, entries) {
       continue;
     }
     for (const { text } of specifiers) {
-      if (reachesDist(text)) hits.push({ file, specifier: text });
+      if (reachesDist(text)) hits.push({ file, specifier: text, kind: 'import' });
       const resolved = resolveRelative(packageRoot, file, text);
       if (resolved) queue.push(resolved);
+    }
+    let carried;
+    try {
+      carried = distPathsAndCommands(source, file);
+    } catch {
+      continue;
+    }
+    for (const path of carried.paths) hits.push({ file, specifier: path, kind: 'path-literal' });
+    for (const { command, args } of carried.commands) {
+      const targets = command === 'pnpm' && args[0] === 'run' && args[1]
+        ? scriptTargetsOf(packageRoot, args[1])
+        : [command, ...args].filter((argument) => /\.(mjs|cjs|js|mts|cts)$/.test(argument));
+      for (const target of targets) {
+        const normalized = target.startsWith(packageRoot) ? relative(packageRoot, target) : target;
+        // Following, not accusing: a spawned script joins the graph and is
+        // judged by what IT reads. Reporting the spawn itself would condemn
+        // every gate that runs another one.
+        for (const expanded of expandEntry(packageRoot, normalized)) queue.push(expanded);
+      }
     }
   }
   return hits;
