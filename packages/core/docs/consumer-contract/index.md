@@ -367,11 +367,11 @@ type TenantThemeDocument = {
 | Efecto hoy | Decisiones |
 | --- | --- |
 | Pleno y coherente en static y DB | `palette.seeds` (salvo rampa `accent` y el bloque base vacío de rottay en DB, F-05), `palette.status-seeds`, `typography.pairing`, `typography.families`, `navigation.sidebar-tone`, `experience.profile`, `profiles.expressive` |
-| Parcial | `typography.scale` (1 canal), `density.mode` (escala efectiva; 9/123 skins), `motion.dial` (11/25 familias), `surfaces.elevation-posture` (17/25), `surfaces.effect-intensity` (8/25), `shape.button-style` (solo DB) |
+| Parcial | `typography.scale` (1 canal), `density.mode` (escala efectiva; 9/123 skins), `motion.dial` (11/25 familias), `surfaces.elevation-posture` (17/25), `surfaces.effect-intensity` (8/25), `shape.button-style` (solo DB), `states.emphasis` (efecto en artefactos vía canales derivados de estado/material; 0/8 familias de la muestra movidas), `states.focus-style` (ídem) |
 | Sin efecto útil | `shape.radius-scale` (se auto-cancela, F-07), `spacing.rhythm` (2/25), `recipe-profile` (sin lector), `chrome.anatomy` (4/123), `profiles.icon`, `responsive.posture`, `palette.dark-mode` por tenant (F-05) |
-| No existen aún | las 10 decisiones nuevas del kit (`neutral-temperature`, `contrast-posture`, `role-weights`, `numeric`, `nesting`, `control-height`, `border-style`, `states.emphasis`, `states.focus-style`, `motion.character`) |
+| No existen aún | las 8 decisiones nuevas del kit (`neutral-temperature`, `contrast-posture`, `role-weights`, `numeric`, `nesting`, `control-height`, `border-style`, `motion.character`) |
 
-Indicador "decisiones encendidas" (STATUS, WO-CON-03): hoy **7 plenas / 22** y 0 / 10 nuevas; objetivo 29 / 29 con sonda por eje. Dos tenants se ven distintos hoy por color, tipografía y perfil expresivo; forma, ritmo, estados y modo llegan con los cortes (olas 3–4).
+Indicador "decisiones encendidas" (STATUS, WO-CON-03): hoy **7 plenas / 22** y 0 / 8 nuevas — titular de la evidencia sellada en `scripts/check/decisions-lit/evidence/index.json`: "decisions lit = 7/22 (+0/8 new)"; objetivo 29 / 29 con sonda por eje. Registrado no es medido (DEL-07): las dos decisiones de estados constan como parciales porque los artefactos cambian (canales derivados de estado/material), pero la sonda sobre la muestra de 8 familias aún no mide ninguna familia movida. Dos tenants se ven distintos hoy por color, tipografía y perfil expresivo; forma, ritmo, estados y modo llegan con los cortes (olas 3–4).
 
 ## 5. Regla evolutiva
 

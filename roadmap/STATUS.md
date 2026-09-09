@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/10 new)** — decisions-lit probe, run of 2026-09-06T00:01:07.111Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/8 new)** — decisions-lit probe, run of 2026-09-08T21:40:19.262Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,13 +28,13 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/10 new)** — RECORDED; run of 2026-09-06T00:01:07.111Z.
+**decisions lit = 7/22 (+0/8 new)** — RECORDED; run of 2026-09-08T21:40:19.262Z.
 
 **measured on the 8-family sample: 10/22 move at least one sampled family** — MEASURED by that run.
 
 > Two halves, two statuses. The `n/22` figure is the audit's recorded effect class for today's control catalog, carried in the probe's catalog with its provenance; the `+m/10 new` figure and the measured line are derived by the run itself. Family movement is a sample of 8 of the 25 cascade families (`button`, `card`, `flex`, `grid`, `input`, `skeleton`, `space`, `stack`), so a decision can move a real family the sample does not carry; the whole-artifact comparison beside it is not a sample.
 
-Whole artifact: 17/29 kit decisions change the compiled tenant artifact today.
+Whole artifact: 19/29 kit decisions change the compiled tenant artifact today.
 
 Recorded vs measured — 5 row(s) disagree; neither side is authority, and the disagreement is published rather than resolved:
 - `palette.status-seeds` — recorded-full-moved-nothing: 0 channels moved, 0 sampled families
@@ -47,11 +47,17 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 
 > What an application pinned to that version must read before it upgrades. Rows are the `contract-diff` declarations of the changesets pending since it, republished from `packages/core/scripts/check/contract-changeset/index.mjs`; STATUS never parses a changeset itself. A changeset without a block declares no public surface movement — only a signature change is required to carry one.
 
-EMPTY — no pending changeset declares a subpath, signature or export change since `2.19.36`; 3 pending changeset(s) scanned and none carries a block: `major-canonical-tree.md` (major), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major).
+| Kind | Target | Change | Bump | Changeset |
+| --- | --- | --- | --- | --- |
+| signature | `./server#TenantThemeDocumentV2` | decisions `states.emphasis` and `states.focus-style` (catalog rows 20/21) now lower to 28 emitted `--ds-state-*`/`--ds-focus-ring*`/`--ds-material-*` channels; closed enum domains, additive | minor | `der-02-states-materials.md` |
+| signature | `./server#TenantThemeSimpleConfig` | `general.states` optional input accepted (`emphasis`, `focusStyle`); the v1 lowering maps it to `surfaces.{stateEmphasis,focusStyle}` and the v2→v1 projection writes it back by name; the v1→v2 migration (`migrateDocumentV1ToV2`) does not carry it yet (dropped; gap registered for implementation) | minor | `der-02-states-materials.md` |
+| signature | `./server#Theme` | normalized surfaces gain optional `stateEmphasis` and `focusStyle`; absent means `medium`/`ring`, byte-identical to the pre-decision foundation defaults | minor | `der-02-states-materials.md` |
+
+Also pending, declaring no public surface movement: `major-canonical-tree.md` (major), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major).
 
 ## Family acceptance — the sealed Modern Rescue adjudication
 
-**0/255 families accepted** — 0 assessed and not elevated, 255 unreviewed, 0 blocked on an owner decision. Read live from `packages/core/governance/manifest/index.json` (5355 control x family cells).
+**0/254 families accepted** — 0 assessed and not elevated, 254 unreviewed, 0 blocked on an owner decision. Read live from `packages/core/governance/manifest/index.json` (5334 control x family cells).
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
