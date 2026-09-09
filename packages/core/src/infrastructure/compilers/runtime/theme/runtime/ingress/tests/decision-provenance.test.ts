@@ -266,9 +266,92 @@ describe("member attribution holds for every braced row of the catalog", () => {
         measured.push(`${row.id}.${key}=${entries[0].effectiveLeaves.length}`);
       }
     }
-    expect(measured).toContain("typography.families.mono=1");
+    // `mono` and `display` are Theme leaves the DOCUMENT column cannot write,
+    // so naming them selects nothing to own; `base` and `heading` are written
+    // by both columns and own their leaf.
+    expect(measured).toContain("typography.families.base=1");
+    expect(measured).toContain("typography.families.heading=1");
+    expect(measured).toContain("typography.families.mono=0");
+    expect(measured).toContain("typography.families.display=0");
     expect(measured).toContain("profiles.expressive.icon=0");
     expect(measured.length).toBeGreaterThan(20);
+  });
+
+  it("an unlit selection keeps its tier and owns nothing it cannot write", () => {
+    // The document column of row 6 carries `fontFamilyBase|Heading` only, so a
+    // `mono` selection is admitted, reported unlit, and owns no leaf -- while
+    // the pairing that actually writes `--ds-font-family-mono` keeps it.
+    const document = {
+      version: 2,
+      plan: "pro",
+      decisions: {
+        "typography.pairing": "technical",
+        "typography.families": { mono: "editorial-text" },
+      },
+    } as unknown as TenantThemeDocumentV2;
+    const { ledger, unlit } = admitDocument({ vertical: "rottay", document });
+    expect(unlit.map((projection) => projection.id)).toEqual([
+      "typography.families",
+    ]);
+    const families = ledger.entries.find(
+      (entry) => entry.ref.kind === "decision" && entry.ref.id === "typography.families"
+    );
+    expect(families?.tier).toBe("pro");
+    expect(families?.provenance).toBe("direct-override");
+    expect(families?.effectiveLeaves).toEqual([]);
+    expect(ledgerOwnerOfLeaf(ledger, "typography.fontFamilyMono")?.ref).toEqual({
+      kind: "decision",
+      id: "typography.pairing",
+    });
+  });
+});
+
+describe("one authorship, one class, on both transports", () => {
+  const PROFILE = "rottay/management-editorial@1";
+  const STACK = "var(--ds-font-pack-grotesk-display)";
+
+  /** What owns `typography.fontFamilyBase`, and under which class. */
+  const baseOwnership = (
+    document: Parameters<typeof admitDocument>[0]["document"]
+  ) => {
+    const { ledger } = admitDocument({ vertical: "rottay", document });
+    const entry = ledgerOwnerOfLeaf(ledger, "typography.fontFamilyBase");
+    return { ref: entry?.ref, provenance: entry?.provenance };
+  };
+
+  it("a v1 row that writes a font owns it directly, exactly as v2 does", () => {
+    // The migration refuses to CARRY a free stack (row 6 closes the domain to a
+    // pack id), which is not a statement that the tenant did not write it: the
+    // leaf is emitted, so the ledger names its real author.
+    const v1 = baseOwnership({
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        experienceProfile: PROFILE,
+        typography: { fontFamilyBase: STACK },
+      },
+    } as never);
+    const v2 = baseOwnership({
+      version: 2,
+      plan: "pro",
+      decisions: {
+        "experience.profile": PROFILE,
+        "typography.families": { base: "grotesk-display" },
+      },
+    } as never);
+    expect(v1.ref).toEqual({ kind: "decision", id: "typography.families" });
+    expect(v1.provenance).toBe("direct-override");
+    expect(v1).toEqual(v2);
+  });
+
+  it("a row that writes no font leaves the leaf to the profile's pairing", () => {
+    const pure = baseOwnership({
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { experienceProfile: PROFILE },
+    } as never);
+    expect(pure.ref).toEqual({ kind: "decision", id: "typography.pairing" });
+    expect(pure.provenance).toBe("profile-derived");
   });
 });
 

@@ -214,11 +214,12 @@ migrated. Both facts are executable in
 document through the real path, keeping one row" and "keeps the v1 door refusing
 a v2 document by name").
 
-One gap remains named rather than hidden: `migrateDocumentV1ToV2` does not yet
-carry `general.states.emphasis` / `general.states.focusStyle` into the
-`states.emphasis` / `states.focus-style` decisions. A v1 row that sets either
-must not be migrated by that function until the carry lands (WO-CON-06 step 2,
-sequenced after the R1 provenance lot, which owns that file).
+That gap is closed too (WO-CON-06 step 2): `migrateDocumentV1ToV2` now carries
+`general.states.emphasis` / `general.states.focusStyle` into the
+`states.emphasis` / `states.focus-style` decisions, and refuses a value outside
+either closed domain at its own v1 keypath rather than dropping it. Both rows
+are Standard, so a row that authored only these still derives the `standard`
+plan.
 
 ### Step 7 — `oauth-transition` leaves the design system
 

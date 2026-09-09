@@ -13,6 +13,7 @@ import {
   type TenantThemeDocumentAny,
 } from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
+import type { TenantThemeVerticalEnvelope } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { admitDocument, type DocumentAdmission } from "../../runtime/document-v2";
 import { authoredThemePatch } from "../../foundation/draft-patch";
 import { draftProvenanceLedger } from "../../foundation/provenance";
@@ -22,6 +23,8 @@ export interface PreviewThemeIntentInput {
   vertical: FirstPartyVerticalId;
   slug: string;
   document: TenantThemeDocumentAny;
+  /** As on the persisted producer: preview clamps where publication clamps. */
+  ranges?: TenantThemeVerticalEnvelope["ranges"];
 }
 
 /** What an unsaved BrandTheme draft needs to name a compile. */
@@ -68,6 +71,7 @@ export function previewThemeAdmission(
   const admission = admitDocument({
     vertical: input.vertical,
     document: input.document,
+    ranges: input.ranges,
   });
   return {
     intent: {

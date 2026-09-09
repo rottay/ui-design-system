@@ -345,11 +345,23 @@ describe("migrate v1 -> v2", () => {
     expect(() => migrateDocumentV1ToV2(document)).toThrow(
       /general\.typography\.fontFamilyBase/u
     );
+    // The stack it cannot carry is still a leaf the row WRITES, so it is
+    // recorded as the direct authorship it is rather than left to the pairing.
     const { ledger } = admitDocument({ vertical: "bithire", document });
     expect(ledger.entries.map((entry) => entry.ref)).toEqual([
+      { kind: "decision", id: "typography.families" },
       { kind: "decision", id: "typography.pairing" },
     ]);
-    expect(ledger.entries[0].tier).toBe("standard");
+    expect(ledger.entries.map((entry) => entry.effectiveLeaves)).toEqual([
+      ["typography.fontFamilyBase"],
+      [
+        "typography.typePairing",
+        "typography.fontFamilyHeading",
+        "typography.letterSpacing.heading",
+        "typography.lineHeight.display",
+      ],
+    ]);
+    expect(ledger.entries[1].tier).toBe("standard");
   });
 
   it("keeps the decisions that flank an unmigratable per-mode seed", () => {
@@ -413,6 +425,46 @@ describe("migrate v1 -> v2", () => {
     expect(() => migrateDocumentV1ToV2(document)).toThrow(
       /general\.palette\.dark has no v2 counterpart/
     );
+  });
+
+  it("CARRIES both interaction-state dials, and admits them at the same door", () => {
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { states: { emphasis: "strong", focusStyle: "glow" } },
+    } as unknown as TenantThemeDocument;
+    const migrated = migrateDocumentV1ToV2(document);
+    expect(migrated.decisions["states.emphasis"]).toBe("strong");
+    expect(migrated.decisions["states.focus-style"]).toBe("glow");
+    // Both rows are Standard, so a row that authored only these keeps the
+    // minimum plan the migration derives for it.
+    expect(migrated.plan).toBe("standard");
+    // The carried decisions are the TENANT's, so the door records them as
+    // direct authorship rather than as something the migration invented.
+    const ledger = admitDocument({ vertical: "bithire", document }).ledger;
+    expect(
+      ledger.entries
+        .filter((entry) => entry.provenance === "direct-override")
+        .map((entry) => entry.ref)
+    ).toEqual([
+      { kind: "decision", id: "states.emphasis" },
+      { kind: "decision", id: "states.focus-style" },
+    ]);
+  });
+
+  it("REFUSES a state value outside the row's domain, at its own keypath", () => {
+    for (const [states, path] of [
+      [{ emphasis: "loud" }, /general\.states\.emphasis "loud"/],
+      [{ focusStyle: "halo" }, /general\.states\.focusStyle "halo"/],
+    ] as const) {
+      expect(() =>
+        migrateDocumentV1ToV2({
+          schemaVersion: 1,
+          mode: "simple",
+          appearance: { states },
+        } as unknown as TenantThemeDocument)
+      ).toThrow(path);
+    }
   });
 
   it("REFUSES a free font stack: row 6 closes the domain to a pack id", () => {

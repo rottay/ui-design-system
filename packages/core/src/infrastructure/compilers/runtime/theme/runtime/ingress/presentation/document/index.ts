@@ -12,6 +12,7 @@ import {
   type TenantThemeDocumentAny,
 } from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
+import type { TenantThemeVerticalEnvelope } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { admitDocument, type DocumentAdmission } from "../../runtime/document-v2";
 
 /** What a stored document needs to name a compile. */
@@ -28,6 +29,12 @@ export interface DocumentThemeIntentInput {
    * before its migration lands.
    */
   document: TenantThemeDocumentAny;
+  /**
+   * The envelope ranges a profile default is clamped into, when the caller
+   * publishes under a narrowed envelope rather than the registered one. The
+   * door applies the vertical's own ranges when it is absent.
+   */
+  ranges?: TenantThemeVerticalEnvelope["ranges"];
 }
 
 /**
@@ -71,6 +78,7 @@ export function documentThemeAdmission(
   const admission = admitDocument({
     vertical: input.vertical,
     document: input.document,
+    ranges: input.ranges,
   });
   return {
     intent: {

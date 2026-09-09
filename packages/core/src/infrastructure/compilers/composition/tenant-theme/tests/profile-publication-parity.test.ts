@@ -1,5 +1,5 @@
 /**
- * RT05 — the PUBLICATION side of "one document, one effective compile".
+ * RT05 — one document, one effective compile, on every door that admits it.
  *
  * The re-audit's receipt (`profile-publication-cases.json`) compared the door's
  * admitted delta for a document against the artifact that same document
@@ -10,28 +10,34 @@
  * replacement document it built for itself; the door was sent the selection
  * alone.
  *
- * This file proves the half R2 owns: the publish terminals expand ONCE, and the
- * artifact's runtime metadata and its CSS are two projections of that one
- * effective document rather than of two different ones. The door arm — teaching
- * `admitDocument` to expand, so previewing a profile shows what publishing it
- * compiles — is R1's file and is a routed integration item; the twelve
- * door-versus-published cases that asserted it are named in the R2 report and
- * come back with that integration, not as skips here.
+ * Both arms are asserted here. The PUBLICATION arm proves the terminals expand
+ * once and project the artifact's runtime metadata and its CSS from that one
+ * effective document. The PREVIEW arm — the twelve door-versus-published and
+ * door-versus-door cases R2 routed to the R1 integration — proves the door
+ * itself expands, so previewing a profile shows what publishing it compiles.
+ * Every document here is a v1 row, which carries no plan: the parity holds
+ * without an entitlement to judge, and the v2 cases below add the plan leg.
  *
  * The repair is not "emit neither": a profile default IS part of the effective
- * configuration the tenant chose when it selected the profile, so a publish must
- * emit it. These cases therefore assert EFFECTIVE VALUES, not only agreement — a
- * green run with the defaults deleted would fail this file.
+ * configuration the tenant chose when it selected the profile, so both doors
+ * must emit it. These cases therefore assert EFFECTIVE VALUES first and parity
+ * second — a green run with the defaults deleted from both paths would satisfy
+ * parity and fail this file.
  */
 import { describe, expect, it } from "vitest";
 
-import { ThemeAdmissionError } from "@/infrastructure/compilers/runtime/theme";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import type {
   TenantThemeArtifact,
   TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import {
+  admitDocument,
+  compileThemeIntent,
+  documentThemeIntent,
+  previewThemeIntent,
+} from "@/infrastructure/compilers/runtime/theme";
 import { compileTenantThemeConfig, getTenantThemeVerticalEnvelope } from "..";
 import { compileTenantThemeDocumentV2 } from "../document-v2";
 
@@ -40,6 +46,7 @@ const PROFILES = [
   "rottay/bithire-technical@1",
   "rottay/management-editorial@1",
 ] as const;
+const PLANS = ["standard", "pro", "internal"] as const;
 
 const identity = (vertical: FirstPartyVerticalId): TenantThemeConfigIdentity => ({
   tenantId: "11111111-1111-4111-8111-111111111111",
@@ -53,6 +60,21 @@ const profileDocument = (profile: string): TenantThemeDocument => ({
   mode: "simple",
   appearance: { experienceProfile: profile },
 });
+
+/** What the door admits for a document, as the audit compared it. */
+function doorVariables(
+  vertical: FirstPartyVerticalId,
+  document: TenantThemeDocument,
+  origin: "preview" | "tenant-document" = "preview"
+): Readonly<Record<string, string>> {
+  const intent =
+    origin === "preview"
+      ? previewThemeIntent({ vertical, slug: "acme", document })
+      : documentThemeIntent({ vertical, slug: "acme", document });
+  const { delta } = compileThemeIntent(intent);
+  if (!delta) throw new Error("the door measured no delta");
+  return delta.variables;
+}
 
 function publish(
   vertical: FirstPartyVerticalId,
@@ -71,8 +93,32 @@ function publishedVariables(
   return publish(vertical, document).variables;
 }
 
+function differences(
+  door: Readonly<Record<string, string>>,
+  published: Readonly<Record<string, string>>
+): readonly string[] {
+  const keys = new Set([...Object.keys(door), ...Object.keys(published)]);
+  return [...keys].filter((key) => door[key] !== published[key]).sort();
+}
+
+/** The v2 transport previewing the same selection, under a stated plan. */
+function previewV2Variables(
+  plan: (typeof PLANS)[number],
+  profile: string
+): Readonly<Record<string, string>> {
+  const { delta } = compileThemeIntent(
+    previewThemeIntent({
+      vertical: "bithire",
+      slug: "acme",
+      document: { version: 2, plan, decisions: { "experience.profile": profile } },
+    })
+  );
+  if (!delta) throw new Error("the door measured no delta");
+  return delta.variables;
+}
+
 /** The v2 transport publishing the same selection, under a stated plan. */
-function publishV2(plan: "standard" | "pro" | "internal", profile: string) {
+function publishV2(plan: (typeof PLANS)[number], profile: string) {
   return compileTenantThemeDocumentV2({
     ...identity("bithire"),
     verticalKey: "bithire",
@@ -80,9 +126,26 @@ function publishV2(plan: "standard" | "pro" | "internal", profile: string) {
   });
 }
 
-describe("RT05 · one publish, one effective document", () => {
+describe("RT05 · one document, one effective compile", () => {
   for (const vertical of VERTICALS) {
     for (const profile of PROFILES) {
+      it(`${vertical} · ${profile} previews exactly what it publishes`, () => {
+        const document = profileDocument(profile);
+        expect(
+          differences(
+            doorVariables(vertical, document),
+            publishedVariables(vertical, document)
+          )
+        ).toEqual([]);
+      });
+
+      it(`${vertical} · ${profile} admits the same delta through both producers`, () => {
+        const document = profileDocument(profile);
+        expect(doorVariables(vertical, document, "preview")).toEqual(
+          doorVariables(vertical, document, "tenant-document")
+        );
+      });
+
       it(`${vertical} · ${profile} states the same effective values in its metadata and its CSS`, () => {
         const artifact = publish(vertical, profileDocument(profile));
         const general = artifact.normalizedAppearance.general;
@@ -106,14 +169,16 @@ describe("RT05 · one publish, one effective document", () => {
     }
   }
 
-  it("emits the editorial profile's declared defaults into the published artifact", () => {
-    const published = publishedVariables(
-      "bithire",
-      profileDocument("rottay/management-editorial@1")
-    );
-    expect(published["--ds-motion-intensity"]).toBe("0.7");
-    expect(published["--ds-radius-scale"]).toBe("1.15");
-    expect(published["--ds-font-family-base"]).toContain("var(--ds-font-");
+  it("emits the editorial profile's declared defaults on BOTH paths", () => {
+    const document = profileDocument("rottay/management-editorial@1");
+    for (const source of [
+      doorVariables("bithire", document),
+      publishedVariables("bithire", document),
+    ]) {
+      expect(source["--ds-motion-intensity"]).toBe("0.7");
+      expect(source["--ds-radius-scale"]).toBe("1.15");
+      expect(source["--ds-font-family-base"]).toContain("var(--ds-font-");
+    }
   });
 
   it("keeps the profile out of the normalized appearance nowhere: the runtime metadata carries the effective values", () => {
@@ -140,7 +205,9 @@ describe("RT05 · precedence, removal and plan", () => {
   };
 
   it("an explicit dial outranks the profile, and the empty ones still receive it", () => {
+    const door = doorVariables("bithire", partialMotion);
     const published = publishedVariables("bithire", partialMotion);
+    expect(differences(door, published)).toEqual([]);
     expect(published["--ds-motion-intensity"]).toBe("0.2");
     expect(published["--ds-motion-duration-scale"]).toBe("1.1");
   });
@@ -159,6 +226,12 @@ describe("RT05 · precedence, removal and plan", () => {
         experienceProfile: "rottay/management-editorial@1",
       },
     };
+    expect(
+      differences(
+        doorVariables("bithire", withoutProfile),
+        publishedVariables("bithire", withoutProfile)
+      )
+    ).toEqual([]);
     expect(publishedVariables("bithire", withoutProfile)["--ds-radius-scale"]).not.toBe(
       "1.15"
     );
@@ -168,34 +241,161 @@ describe("RT05 · precedence, removal and plan", () => {
     expect(publish("bithire", withoutProfile).digest).toBe(
       publish("bithire", withoutProfile).digest
     );
+    // No `profile-derived` entry survives the removal, and the row keeps its
+    // own direct authorship on both sides.
+    const classesOf = (document: TenantThemeDocument) =>
+      (publish("bithire", document).provenance?.entries ?? []).map(
+        (entry) => entry.provenance
+      );
+    expect(classesOf(withoutProfile)).toEqual(["direct-override"]);
+    expect(classesOf(withProfile)).toContain("profile-derived");
+    expect(classesOf(withProfile)).toContain("direct-override");
+  });
+
+  /**
+   * Anti-regression 1 of the contract: the expansion may never manufacture
+   * authorship. A Standard row that selects a profile carries no directly
+   * authored typographic decision, however many typographic leaves the
+   * profile's defaults reach.
+   */
+  it("publishes a Standard profile selection without inventing typographic authorship", () => {
+    const { ledger } = publishV2("standard", "rottay/management-editorial@1");
+    expect(
+      ledger.entries
+        .filter((entry) => entry.provenance === "direct-override")
+        .map((entry) => entry.ref)
+    ).toEqual([{ kind: "decision", id: "experience.profile" }]);
+    expect(
+      ledger.entries.some((entry) => entry.provenance === "profile-derived")
+    ).toBe(true);
+  });
+
+  /**
+   * The cross-plan leg, `standard` included.
+   *
+   * The `standard` case used to be pinned as a known refusal: the tier station
+   * inferred decisions from merged patch leaves, so the font families the
+   * profile's pairing expands into read as an authored Pro `typography.families`
+   * and a Standard tenant could not select a profile at all. The station now
+   * judges the gate's ledger, where a profile default is `profile-derived` and
+   * authorship is never invented by an expansion (I-P0/I-T4), so the three plans
+   * compile one effective configuration to one result.
+   */
+  it("the same effective configuration compiles the same under every entitled plan", () => {
+    const base = previewV2Variables("standard", "rottay/management-editorial@1");
+    for (const plan of PLANS) {
+      expect(previewV2Variables(plan, "rottay/management-editorial@1")).toEqual(
+        base
+      );
+    }
+    expect(base["--ds-radius-scale"]).toBe("1.15");
   });
 
   it("the same effective configuration publishes the same under every entitled plan", () => {
-    const base = publishV2("pro", "rottay/management-editorial@1").artifact;
-    const other = publishV2("internal", "rottay/management-editorial@1").artifact;
-    expect(other.variables).toEqual(base.variables);
+    const base = publishV2("standard", "rottay/management-editorial@1").artifact;
+    for (const plan of PLANS) {
+      expect(
+        publishV2(plan, "rottay/management-editorial@1").artifact.variables
+      ).toEqual(base.variables);
+    }
     expect(base.variables["--ds-radius-scale"]).toBe("1.15");
   });
 
   /**
-   * The ONE case this lot cannot close, pinned rather than hidden.
-   *
-   * The tier station still infers decisions from merged patch leaves, so the
-   * font families a pairing expands into read as an authored
-   * `typography.families` (RA01). A Standard v2 document that selects a profile
-   * therefore reaches that inference at PUBLISH, where the expansion runs — the
-   * identical defect the re-audit reported for an authored pairing, over one
-   * more input. It closes with the ledger-judged tier station of R1 (contract
-   * I-T1/I-T4, Control 1), not here: exempting font-family leaves by name is
-   * forbidden. When that lands, this expectation goes red and is replaced by the
-   * cross-plan assertion above extended to `standard`.
+   * The clamp leg. A profile default is NARROWED by the envelope the caller
+   * publishes under -- never refused, because the tenant did not author it --
+   * and the door that previews must be handed the same envelope, or an editor
+   * would show a value the publish would clamp away.
    */
-  it("records the Standard leg still refused by the leaf-inferred tier station", () => {
-    expect(() => publishV2("standard", "rottay/management-editorial@1")).toThrow(
-      ThemeAdmissionError
+  it("clamps a profile default into the caller's envelope on both doors", () => {
+    const registered = getTenantThemeVerticalEnvelope("bithire")!;
+    const narrowed = {
+      ...registered,
+      ranges: { ...registered.ranges, radiusScale: { min: 0.9, max: 1 } },
+    };
+    const document = profileDocument("rottay/management-editorial@1");
+    const published = compileTenantThemeConfig(
+      { ...document, ...identity("bithire") },
+      { verticalEnvelope: narrowed }
     );
-    expect(() => publishV2("standard", "rottay/management-editorial@1")).toThrow(
-      /typography\.families/
+    const { delta } = compileThemeIntent(
+      previewThemeIntent({
+        vertical: "bithire",
+        slug: "acme",
+        document,
+        ranges: narrowed.ranges,
+      })
     );
+    expect(published.variables["--ds-radius-scale"]).toBe("1");
+    expect(delta?.variables["--ds-radius-scale"]).toBe("1");
+    expect(differences(delta!.variables, published.variables)).toEqual([]);
+    // Without the envelope the preview would show the registered vertical's
+    // clamp, which is the whole reason the door takes one.
+    expect(
+      doorVariables("bithire", document)["--ds-radius-scale"]
+    ).toBe("1.15");
+  });
+
+  it("previews a v2 profile document exactly as it publishes it", () => {
+    for (const plan of PLANS) {
+      expect(
+        differences(
+          previewV2Variables(plan, "rottay/management-editorial@1"),
+          publishV2(plan, "rottay/management-editorial@1").artifact.variables
+        )
+      ).toEqual([]);
+    }
+  });
+
+  /**
+   * The defaulting leg. A profile fills what the tenant left ABSENT; a supplied
+   * value is authorship whatever it is worth. Reading `""`, `null`, `false` or
+   * `0` as "unset" made the station overwrite four supplied values with the
+   * profile's pairing, so preview painted what publication refused.
+   */
+  it("defaults only an ABSENT field, and refuses a supplied one on both doors", () => {
+    const supplied = (typePairing: unknown): TenantThemeDocument =>
+      ({
+        schemaVersion: 1,
+        mode: "simple",
+        appearance: {
+          experienceProfile: "rottay/management-editorial@1",
+          typography: { typePairing },
+        },
+      }) as unknown as TenantThemeDocument;
+    const refusalOf = (run: () => unknown): string => {
+      try {
+        run();
+        return "no-refusal";
+      } catch (error) {
+        return (error as Error).message;
+      }
+    };
+    for (const value of ["", null, false, 0]) {
+      const document = supplied(value);
+      const preview = refusalOf(() =>
+        compileThemeIntent(
+          previewThemeIntent({ vertical: "rottay", slug: "acme", document })
+        )
+      );
+      const publication = refusalOf(() => publish("rottay", document));
+      expect(preview).not.toBe("no-refusal");
+      expect(publication).not.toBe("no-refusal");
+      // Both doors name the SAME supplied field at its own document path.
+      for (const message of [preview, publication]) {
+        expect(message).toContain("$.appearance.typography.typePairing");
+      }
+    }
+    // A supplied value the domain admits is kept; an absent one is filled.
+    expect(
+      admitDocument({ vertical: "rottay", document: supplied("technical") })
+        .effective
+    ).toMatchObject({ appearance: { typography: { typePairing: "technical" } } });
+    expect(
+      admitDocument({
+        vertical: "rottay",
+        document: profileDocument("rottay/management-editorial@1"),
+      }).effective
+    ).toMatchObject({ appearance: { typography: { typePairing: "editorial" } } });
   });
 });

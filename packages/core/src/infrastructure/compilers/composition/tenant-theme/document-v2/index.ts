@@ -9,7 +9,7 @@
  * judged against together with the raw identity of every selection. This
  * adapter keeps both. It runs the SAME door, the SAME lowering and the SAME
  * artifact assembly as `compileTenantTheme`; what it adds is a v2 entry and the
- * provenance the v1 transport has no field to carry.
+ * plan the v1 transport has no field to carry.
  *
  * @module Compilers/TenantTheme/DocumentV2
  * @category Compilers
@@ -38,11 +38,8 @@ import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/bran
 import {
   ThemeAdmissionError,
   documentThemeAdmission,
-  documentThemePatch,
   type DocumentAdmission,
 } from "@/infrastructure/compilers/runtime/theme";
-import { projectDecisionsToV1 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
-import { expandProfileDefaults } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/profile-expansion";
 import {
   TenantThemeValidationError,
   assembleTenantThemeArtifact,
@@ -53,7 +50,6 @@ import {
   envelopeShapeIssues,
   type EnvelopeRangedDial,
 } from "../foundation/envelope";
-import { documentV2Ledger } from "./foundation/ledger";
 
 export interface CompileTenantThemeDocumentV2Input {
   /** The persisted v2 document; v1 belongs to `compileTenantTheme`. */
@@ -211,52 +207,27 @@ export function compileTenantThemeDocumentV2(
   }
 
   try {
-    // ONE admission. The intent it returns carries the document's plan, so the
-    // tier station judges the publish exactly as it judges the preview; the
-    // report it returns is the same one the editor was shown.
+    // ONE admission, and ONE expansion inside it. The intent it returns carries
+    // the document's plan, so the tier station judges the publish exactly as it
+    // judges the preview; the report it returns is the same one the editor was
+    // shown, over the same effective document. The envelope this terminal was
+    // handed is the one the door clamps profile defaults into.
     const { intent, admission } = documentThemeAdmission({
       vertical: input.verticalKey,
       slug: input.slug,
       document: input.document,
-    });
-    // ONE expansion per publish, run by the terminal that publishes -- the same
-    // ingress station and the same envelope ranges `compileTenantTheme` runs,
-    // over the door's own projection rather than a shape rebuilt here. The door
-    // itself does not expand: it belongs to the R1 lot in flight, so the
-    // effective document it will one day report is derived here meanwhile.
-    const expansion = expandProfileDefaults({
-      vertical: input.verticalKey,
-      document: projectDecisionsToV1(input.document).v1,
       ranges: verticalEnvelope.ranges,
-    });
-    const ledger = documentV2Ledger({
-      document: input.document,
-      admission,
-      profileClaims: expansion.claims,
     });
     // The ledger travels ON the intent and nowhere else: `resolveTheme` is the
     // owner that holds the catalog, so it is the only place a stated tier can
-    // be checked against the one the catalog declares. The patch is re-lowered
-    // from the effective document only when the expansion actually filled
-    // something; otherwise the door's own patch is already that document's.
+    // be checked against the one the catalog declares.
     const { artifact } = assembleTenantThemeArtifact({
-      intent: {
-        ...intent,
-        ...(expansion.claims.length > 0
-          ? {
-              patch: documentThemePatch({
-                vertical: input.verticalKey,
-                document: expansion.document,
-              }),
-            }
-          : {}),
-        ledger,
-      },
+      intent,
       identity,
       verticalEnvelope,
-      document: expansion.document,
+      document: admission.effective,
     });
-    return { artifact, admission, ledger };
+    return { artifact, admission, ledger: admission.ledger };
   } catch (error) {
     // A named refusal from the door carries its own issue path already, and a
     // route that catches it for a preview must catch the identical error for

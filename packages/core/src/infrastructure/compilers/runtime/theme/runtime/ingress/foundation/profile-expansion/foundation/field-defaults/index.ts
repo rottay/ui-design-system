@@ -82,7 +82,10 @@ export function applyExpressiveFieldDefaults(
     return target();
   };
 
-  if (fieldDefaults.typePairing && !source.typography?.typePairing) {
+  if (
+    fieldDefaults.typePairing !== undefined &&
+    source.typography?.typePairing === undefined
+  ) {
     fill("typePairing").typography = {
       ...source.typography,
       typePairing: fieldDefaults.typePairing,

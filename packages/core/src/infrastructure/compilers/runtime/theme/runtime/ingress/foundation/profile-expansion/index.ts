@@ -32,7 +32,9 @@ import {
   sanitizeExpressiveOverrides,
 } from "@/foundation/tokens/ts/presentation/expressive-profiles";
 import { expandExpressiveProfiles } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import { THEME_DECISION_DOMAIN_SCHEMA } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
 import {
+  EXPRESSIVE_FIELD_DEFAULT_KEYS,
   applyExpressiveFieldDefaults,
   type ExpressiveClampRanges,
   type ExpressiveFieldDefaultKey,
@@ -85,6 +87,54 @@ function brandThemeLeaves(id: ThemeDecisionId): readonly string[] {
         .split(",")
         .map((member) => `${brace[1]}${member.trim()}${brace[3]}`)
     : [keypath];
+}
+
+/** The v1 transport path of a defaultable field, from the catalog column. */
+function documentPathOf(
+  document: TenantThemeDocument,
+  field: ExpressiveFieldDefaultKey
+): string {
+  const keypath = themeControl(DECISION_BY_FIELD[field]).keypath.document;
+  const root =
+    document.mode === "simple" ? "$.appearance" : "$.visualFoundation.general";
+  if (keypath === null) return `${root}.${field}`;
+  const tail = keypath.replace(/^appearance\.general\./u, "");
+  const brace = tail.match(/^(.*)\{[^}]*\}(.*)$/);
+  return brace
+    ? `${root}.${brace[1]}${field.slice(field.indexOf(".") + 1)}${brace[2]}`
+    : `${root}.${tail}`;
+}
+
+/**
+ * Why a SUPPLIED value the row's closed vocabulary does not admit may not be
+ * defaulted over, or `undefined` when every supplied field is admissible.
+ *
+ * Present is not truthy: a station that read `""`, `null`, `false` or `0` as
+ * "unset" replaced the tenant's own value with the profile's, so a preview
+ * painted what publication refused at the identical keypath. Ranged dials are
+ * deliberately absent -- their bounds are the vertical envelope's to refuse by
+ * name, and this station must not pre-empt that owner. The door refuses; this
+ * owner only measures, because a station below the door does not throw its
+ * refusals.
+ */
+export function authoredFieldRefusal(
+  document: TenantThemeDocument
+): string | undefined {
+  const general = generalOf(document);
+  for (const field of EXPRESSIVE_FIELD_DEFAULT_KEYS) {
+    const value = valueOf(general, field);
+    if (value === undefined) continue;
+    const id = DECISION_BY_FIELD[field];
+    const domain = THEME_DECISION_DOMAIN_SCHEMA[id];
+    if (domain?.kind !== "enum") continue;
+    if (domain.values.includes(value as string)) continue;
+    return (
+      `${documentPathOf(document, field)} ${JSON.stringify(value)} is outside ` +
+      `the "${id}" domain ${domain.values.join(" | ")}; a profile default ` +
+      "fills an ABSENT field, never a supplied one"
+    );
+  }
+  return undefined;
 }
 
 function leafOf(field: ExpressiveFieldDefaultKey): string {

@@ -119,14 +119,18 @@ describe("compileTenantThemeDocumentV2 · the real published path", () => {
         entry.effectiveLeaves.includes("typography.typePairing")
       )
     ).toBe(false);
-    // The authored pairing owns its own leaf AND the font families it expands
-    // into: nothing more specific named them, so the causal owner is the
-    // selection that caused them (I-P0/I-P3a).
+    // The authored pairing owns its own leaf AND every leaf it expands into:
+    // nothing more specific named them, so the causal owner is the selection
+    // that caused them (I-P0/I-P3a). The expansion set is read from the
+    // lowering that performs it, so it is the pairing's real reach -- fonts,
+    // the heading tracking and the display leading -- not a shorter table.
     expect(entryFor(compilation, "typography.pairing")?.effectiveLeaves).toEqual(
       [
         "typography.typePairing",
         "typography.fontFamilyBase",
         "typography.fontFamilyHeading",
+        "typography.letterSpacing.heading",
+        "typography.lineHeight.display",
       ]
     );
   });
@@ -220,11 +224,12 @@ describe("compileTenantThemeDocumentV2 · the real published path", () => {
     expect(reloaded.digest).toBe(artifact.digest);
   });
 
-  it("mounts an artifact that carries no provenance at all", () => {
-    // The v1 transport resolves no ledger, so it emits no provenance and puts
-    // none in its digest: a row compiled before this field existed verifies
-    // exactly as it did, which is the compatibility half of the extension.
-    const legacy = compileTenantThemeConfig(
+  it("records a v1 row's own authorship, and still mounts an artifact carrying none", () => {
+    // The v1 transport reaches the SAME door, so it resolves the same ledger:
+    // `density: compact` is a decision this row authored and the artifact says
+    // so. A v1 row carries no plan, so nothing is tier-judged -- the ledger is
+    // an authorship record here, not an entitlement one.
+    const authored = compileTenantThemeConfig(
       {
         schemaVersion: 1,
         mode: "simple",
@@ -233,13 +238,26 @@ describe("compileTenantThemeDocumentV2 · the real published path", () => {
       },
       { verticalEnvelope: getTenantThemeVerticalEnvelope(IDENTITY.verticalKey) }
     );
-    expect(legacy.provenance).toBeUndefined();
     expect(
-      verifyTenantThemeArtifactV1(legacy, {
-        slug: IDENTITY.slug,
-        verticalKey: IDENTITY.verticalKey,
-      })
-    ).toEqual({ ok: true, artifact: legacy });
+      authored.provenance?.entries.map((entry) => [entry.ref, entry.provenance])
+    ).toEqual([[{ kind: "decision", id: "density.mode" }, "direct-override"]]);
+    // A row that authored nothing the ledger models emits no provenance and
+    // puts none in its digest: it verifies exactly as a row compiled before
+    // this field existed does, which is the compatibility half of the
+    // extension.
+    const legacy = compileTenantThemeConfig(
+      { schemaVersion: 1, mode: "simple", appearance: {}, ...IDENTITY },
+      { verticalEnvelope: getTenantThemeVerticalEnvelope(IDENTITY.verticalKey) }
+    );
+    expect(legacy.provenance).toBeUndefined();
+    for (const artifact of [legacy, authored]) {
+      expect(
+        verifyTenantThemeArtifactV1(artifact, {
+          slug: IDENTITY.slug,
+          verticalKey: IDENTITY.verticalKey,
+        })
+      ).toEqual({ ok: true, artifact });
+    }
   });
 });
 
