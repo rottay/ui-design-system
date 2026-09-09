@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/8 new)** — decisions-lit probe, run of 2026-09-08T21:40:19.262Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/8 new)** — decisions-lit probe, run of 2026-09-09T22:23:47.383Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,20 +28,19 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/8 new)** — RECORDED; run of 2026-09-08T21:40:19.262Z.
+**decisions lit = 7/22 (+0/8 new)** — RECORDED; run of 2026-09-09T22:23:47.383Z.
 
-**measured on the 8-family sample: 10/22 move at least one sampled family** — MEASURED by that run.
+**measured on the 8-family sample: 11/22 move at least one sampled family** — MEASURED by that run.
 
 > Two halves, two statuses. The `n/22` figure is the audit's recorded effect class for today's control catalog, carried in the probe's catalog with its provenance; the `+m/10 new` figure and the measured line are derived by the run itself. Family movement is a sample of 8 of the 25 cascade families (`button`, `card`, `flex`, `grid`, `input`, `skeleton`, `space`, `stack`), so a decision can move a real family the sample does not carry; the whole-artifact comparison beside it is not a sample.
 
-Whole artifact: 19/29 kit decisions change the compiled tenant artifact today.
+Whole artifact: 20/29 kit decisions change the compiled tenant artifact today.
 
-Recorded vs measured — 5 row(s) disagree; neither side is authority, and the disagreement is published rather than resolved:
+Recorded vs measured — 4 row(s) disagree; neither side is authority, and the disagreement is published rather than resolved:
 - `palette.status-seeds` — recorded-full-moved-nothing: 0 channels moved, 0 sampled families
-- `shape.radius-scale` — recorded-none-moved: skeleton-card-line, skeleton-form-action
+- `shape.radius-scale` — recorded-none-moved: button-modern-md, card-modern-md, input-modern-md, skeleton-card-line, skeleton-form-action
 - `spacing.rhythm` — recorded-none-moved: flex-modern-preset-gap, grid-modern-preset-gap, space-modern-preset-gap, stack-modern-preset-gap
 - `navigation.sidebar-tone` — recorded-full-moved-nothing: 6 channels moved, 0 sampled families
-- `profiles.expressive` — recorded-full-moved-nothing: 3 channels moved, 0 sampled families
 
 ## Contract diff since `2.19.36` (WO-CON-05)
 
@@ -138,8 +137,8 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
 | WO-DER-02 | States and materials as derived roots | kimi-k3 | 2026-09-08 | 2026-09-08 20:33 — PARTIAL, registered by the R4 reconciliation lot (2026-09-08). The source of this WO landed at committed 34790cf43 ("materials and states as derived roots, one interaction vocabulary") WITHOUT a state transition; this entry registers that fact truthfully. It is NOT a close and this WO must never be marked done on it. F-10 stays PARTIAL: skins.stateGoverned is 16/123 = 13 % and has not moved — it sits in the family-cut lane and this WO's declared Files exclude the skins. Also outstanding: the per-artifact 71/71 --ds-material-* acceptance is unproven (baseline 0 / 65 / 2); the emphasis probe measures a synthetic element best-of-vertical and bithire moved 0/25 families (printed, not hidden), so real propagation to families is not demonstrated; catalog rows 20/21 correctly returned to minimumFamilies owner-pending rather than converting a measured declared fan-out into an approved product minimum, and material-arm's ratioFloor 0.85 is labelled PROVISIONAL and self-pinned, not F-10's threshold. Both belong to the owner's consolidated absolute-fan-out-floors decision (roadmap/kit-2026-09.md section 5b), which has not landed. The public contract diff for this range landed separately at 22d74f062 (DEL-02); the migrateDocumentV1ToV2 states gap it disclosed is owned by WO-CON-06. |
-| WO-DER-03 | Shape and palette derived once | opus | 2026-09-09 | (no entries — log via `progress`) |
-| WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | opus | 2026-09-09 | 2026-09-09 15:34 — 2026-09-09 PASS-PARTIAL landed (merge deb9b1324; Fable audit /private/tmp/fable-der04-fix-audit.md tras HOLD /private/tmp/fable-der04-audit.md). Residuales que mantienen la WO abierta: consumidores --ds-transition-* en engines congelados + family cuts; LegacySizeAlias (26 sitios, territorio family-cut); 16 literales de breakpoint en skins Modern/bridge + query 30rem no pineada en workspace-switcher (gap de regex del gate); migracion de skins F-30; 3 divergencias de shadows en base/shadows enrutadas a WO-DER-03; pin de direccion de alias calm/normal pendiente. |
+| WO-DER-03 | Shape and palette derived once | opus | 2026-09-09 | 2026-09-09 19:21 — 2026-09-09 PASS-PARTIAL landed (merge c08da7d23; Fable /private/tmp/fable-der03-audit.md + integracion /private/tmp/fable-der03-integration-audit.md). Residuales: (1) mitad palette sin entregar — derivers de tints/inks/semantica, decisiones neutral-temperature/contrast-posture inertes, accent ramp emitida con 0 lectores, mono desde dos constantes; (2) precedencia pill + override de radio sancionado — el valor pintado y su procedencia deben coincidir (resolver antes de aceptar la combinacion); (3) liveness census blind spot — productores anidados/emisiones de shape invisibles (lote gatefix en vuelo cubre productores anidados); (4) tenant-reach corpus gap — los 10 derivers nuevos de DER-04 no enumerados; (5) normalization-contract 10->11 duplicado rottay:CHROME.table.cellFontSize; (6) customization-preservation manifest stale vs censo regenerado. |
+| WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | opus | 2026-09-09 | 2026-09-09 19:21 — 2026-09-09 ampliacion de residuales por reauditoria 96-checkpoint (CC-01): cuatro decisiones del catalogo admitidas pero sin efecto siguen sin ruta tipada ni consumidor real y NO estaban nombradas: typography.role-weights (weights/index.ts lee el legacy headingWeightBias, no la decision), typography.numeric (export fijo, no entra al merge de roles), surfaces.border-style (elevation consume elevation/elevations solamente), motion.character. Mas CC-02: metadata del catalogo responsive stale (posture ya emite 4 canales; sigue sin lector productivo — la adopcion real es INV-07/FAM, sin lectores sinteticos). |
 | WO-EMI-02 | mountTenantTheme: one mount law, complete SSR projection, runtime that never recompiles | opus | 2026-09-09 | (no entries — log via `progress`) |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | (no entries — log via `progress`) |
 

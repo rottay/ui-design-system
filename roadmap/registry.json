@@ -4226,7 +4226,13 @@
    "notes": "wave 3; closes F-07, F-08, F-32; supersedes: WO-TOK-11",
    "claimedBy": "opus",
    "claimedAt": "2026-09-09",
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-09-09 19:21",
+     "by": "kimi-k3",
+     "note": "2026-09-09 PASS-PARTIAL landed (merge c08da7d23; Fable /private/tmp/fable-der03-audit.md + integracion /private/tmp/fable-der03-integration-audit.md). Residuales: (1) mitad palette sin entregar — derivers de tints/inks/semantica, decisiones neutral-temperature/contrast-posture inertes, accent ramp emitida con 0 lectores, mono desde dos constantes; (2) precedencia pill + override de radio sancionado — el valor pintado y su procedencia deben coincidir (resolver antes de aceptar la combinacion); (3) liveness census blind spot — productores anidados/emisiones de shape invisibles (lote gatefix en vuelo cubre productores anidados); (4) tenant-reach corpus gap — los 10 derivers nuevos de DER-04 no enumerados; (5) normalization-contract 10->11 duplicado rottay:CHROME.table.cellFontSize; (6) customization-preservation manifest stale vs censo regenerado."
+    }
+   ]
   },
   {
    "id": "WO-DER-04",
@@ -4250,6 +4256,11 @@
      "at": "2026-09-09 15:34",
      "by": "kimi-k3",
      "note": "2026-09-09 PASS-PARTIAL landed (merge deb9b1324; Fable audit /private/tmp/fable-der04-fix-audit.md tras HOLD /private/tmp/fable-der04-audit.md). Residuales que mantienen la WO abierta: consumidores --ds-transition-* en engines congelados + family cuts; LegacySizeAlias (26 sitios, territorio family-cut); 16 literales de breakpoint en skins Modern/bridge + query 30rem no pineada en workspace-switcher (gap de regex del gate); migracion de skins F-30; 3 divergencias de shadows en base/shadows enrutadas a WO-DER-03; pin de direccion de alias calm/normal pendiente."
+    },
+    {
+     "at": "2026-09-09 19:21",
+     "by": "kimi-k3",
+     "note": "2026-09-09 ampliacion de residuales por reauditoria 96-checkpoint (CC-01): cuatro decisiones del catalogo admitidas pero sin efecto siguen sin ruta tipada ni consumidor real y NO estaban nombradas: typography.role-weights (weights/index.ts lee el legacy headingWeightBias, no la decision), typography.numeric (export fijo, no entra al merge de roles), surfaces.border-style (elevation consume elevation/elevations solamente), motion.character. Mas CC-02: metadata del catalogo responsive stale (posture ya emite 4 canales; sigue sin lector productivo — la adopcion real es INV-07/FAM, sin lectores sinteticos)."
     }
    ]
   },
