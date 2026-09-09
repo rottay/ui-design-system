@@ -870,6 +870,98 @@ test('a write through any receiver chain that reaches the container withdraws sl
   }
 });
 
+test('a global root-property name is a container root for the slot witness', () => {
+  const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+  const typescript = requireFromCore('typescript');
+  const slot = "globalThis[Symbol.for('rottay.slot')]('node:fs');";
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-container-root-'));
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    for (const [name, body] of [
+  ['root-self', "self.Symbol.for = () => 'require';"],
+  ['root-top', "top.Symbol.for = () => 'require';"],
+  ['root-parent', "parent.Symbol.for = () => 'require';"],
+  ['root-frames', "frames.Symbol.for = () => 'require';"],
+  ['root-self-alias', "const s = self; s.Symbol.for = () => 'require';"],
+  ['root-self-alias-chain', "const s = self; const t = s; t.Symbol.for = () => 'require';"],
+  ['root-self-symbol-replacement', 'self.Symbol = FakeSymbol;'],
+  ['root-self-element-access', "self['Symbol'].for = () => 'require';"],
+  ['root-self-captured-intrinsic', "const S = self.Symbol; S.for = () => 'require';"],
+  ['root-self-property-chain', "self.parent.Symbol.for = () => 'require';"],
+  ['root-self-nested-expando', 'self.marker.Symbol = FakeSymbol;'],
+  ['root-self-define-property', "Object.defineProperty(self, 'Symbol', { value: FakeSymbol });"],
+  ['root-self-object-assign', 'Object.assign(self, { Symbol: FakeSymbol });'],
+  ['root-self-define-getter', "self.__defineGetter__('Symbol', () => FakeSymbol);"],
+  ['root-self-reflect-set', "Reflect.set(self, 'Symbol', FakeSymbol);"],
+  ['root-self-default-parameter', "function poison(c = self) { c.Symbol.for = () => 'require'; } poison();"],
+  ['root-parent-argument-hop', "function inner(x) { x.Symbol.for = () => 'require'; } inner(parent);"],
+  ['root-frames-assignment', "let c; c = frames; c.Symbol.for = () => 'require';"],
+  ['root-top-collection', "const bag = [top]; bag[0].Symbol.for = () => 'require';"],
+  ['root-top-wrapped', "const t = flag ? top : {}; t.Symbol.for = () => 'require';"],
+  ['root-self-destructured', "const { Symbol: S } = self; S.for = () => 'require';"],
+  ['root-self-iteration', "for (const c of [self]) { c.Symbol.for = () => 'require'; }"],
+    ]) {
+      const source = `${body} ${slot}`;
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.throws(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            /unresolved runtime module edge/,
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.throws(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          /unresolved runtime module edge/,
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+
+    for (const [name, source] of [
+  ['root-self-expando', "self.marker = 1; void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-self-method-call', "self.addEventListener('resize', handler); void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-self-well-known-read', "const iterate = self.Symbol.iterator; void iterate; void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-self-intrinsic-call', "void self.Symbol.for('rottay.slot'); void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-self-slot-store', "const host = self; host[Symbol.for('rottay.slot')] = { sequence: 0 }; void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-shadowed-self', "function draw(self) { self.Symbol.for = () => 'require'; } void draw({}); void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-shadowed-parent', "const parent = node.parent; parent.Symbol = FakeSymbol; void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-ordinary-top', "const box = { top: 0 }; box.top = 4; void box; void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-ordinary-frames', "const frames = list.slice(); frames.Symbol = 1; void frames; void globalThis[Symbol.for('rottay.slot')];"],
+  ['root-landed-allocator', "const KEY = Symbol.for('rottay.design-system.upload.uids'); function allocate() { const host = globalThis; const existing = host[KEY]; if (existing) return existing; const created = { sequence: 0 }; host[KEY] = created; return created; } const { sequence } = allocate(); void sequence;"],
+    ]) {
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.doesNotThrow(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.doesNotThrow(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('a JavaScript global expando no longer dissolves the container fence', () => {
   for (const source of [
     "globalThis.marker = 1; globalThis.require('d3');",

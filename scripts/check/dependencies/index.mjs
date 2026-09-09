@@ -696,8 +696,13 @@ export function analyzeRuntimeModuleEdges(
   // the admission as well. Two members survive that walk: a member of a
   // registered slot key, and a member the scan can name -- a readable key other
   // than `Symbol` taken directly off the container -- which is how a file keeps
-  // its own expandos and the container's own methods. A withdrawn file returns
-  // its computed keys to the refused default.
+  // its own expandos and the container's own methods. The container the witness
+  // judges is not only `globalThis`/`global`/`window`: in a browser the global
+  // object is itself reachable as `self`, `top`, `parent` and `frames`, so those
+  // unshadowed names -- and their aliases, through the same fixpoint -- are
+  // container roots here too. That widening is the witness's alone; the admitted
+  // shape stays a static registered key read off the named global container. A
+  // withdrawn file returns its computed keys to the refused default.
   const wellKnownSymbolMembers = new Set([
     'asyncDispose', 'asyncIterator', 'dispose', 'hasInstance', 'isConcatSpreadable',
     'iterator', 'match', 'matchAll', 'metadata', 'replace', 'search',
@@ -713,6 +718,10 @@ export function analyzeRuntimeModuleEdges(
       member.name.text === 'for' && ts.isIdentifier(member.expression) &&
       unshadowed(member.expression, 'Symbol'),
     );
+  }
+
+  function witnessContainerRoot(expression) {
+    return globalContainerExpression(expression, globalContainerRootProperties);
   }
 
   let globalContainerBindings = null;
@@ -952,7 +961,7 @@ export function analyzeRuntimeModuleEdges(
       );
     }
     function boundToContainer(value, scope = identityScope()) {
-      if (globalContainerExpression(value)) return true;
+      if (witnessContainerRoot(value)) return true;
       const current = unwrapRuntimeExpression(value);
       if (scope.bound.has(current)) return false;
       scope.bound.add(current);
@@ -994,7 +1003,7 @@ export function analyzeRuntimeModuleEdges(
 
   function symbolIntrinsicContainer(expression) {
     if (!expression) return false;
-    if (globalContainerExpression(expression)) return true;
+    if (witnessContainerRoot(expression)) return true;
     const current = unwrapRuntimeExpression(expression);
     return Boolean(
       ts.isIdentifier(current) && globalContainerBindingSymbols().has(symbolAt(current)),
@@ -1355,7 +1364,7 @@ export function analyzeRuntimeModuleEdges(
 
   rememberAuthorityBindings(sourceFile);
 
-  function globalContainerExpression(expression) {
+  function globalContainerExpression(expression, roots = globalContainerNames) {
     let current = expression;
     while (
       ts.isParenthesizedExpression(current) || ts.isAsExpression(current) ||
@@ -1364,12 +1373,12 @@ export function analyzeRuntimeModuleEdges(
     ) current = current.expression;
     if (ts.isIdentifier(current)) {
       return globalAliasSymbols.has(symbolAt(current)) ||
-        [...globalContainerNames].some((name) => unshadowed(current, name));
+        [...roots].some((name) => unshadowed(current, name));
     }
     if (
       (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
       globalContainerRootProperties.has(propertyText(current))
-    ) return globalContainerExpression(current.expression);
+    ) return globalContainerExpression(current.expression, roots);
     if (
       ts.isCallExpression(current) && ts.isIdentifier(current.expression) &&
       globalFactorySymbols.has(symbolAt(current.expression))
@@ -1377,9 +1386,10 @@ export function analyzeRuntimeModuleEdges(
     if (
       ts.isBinaryExpression(current) &&
       [ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken].includes(current.operatorToken.kind)
-    ) return globalContainerExpression(current.left) || globalContainerExpression(current.right);
+    ) return globalContainerExpression(current.left, roots) || globalContainerExpression(current.right, roots);
     if (ts.isConditionalExpression(current)) {
-      return globalContainerExpression(current.whenTrue) || globalContainerExpression(current.whenFalse);
+      return globalContainerExpression(current.whenTrue, roots) ||
+        globalContainerExpression(current.whenFalse, roots);
     }
     return false;
   }
