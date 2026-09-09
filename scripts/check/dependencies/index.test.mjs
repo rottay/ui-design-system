@@ -181,6 +181,9 @@ test('runtime edge policy is fail-closed for loader transport and scope-aware fo
     const existing = host[ALLOCATOR_KEY] as { sequence: number } | undefined;
     host[ALLOCATOR_KEY] = existing ?? { sequence: 0 };
     void (globalThis as Record<symbol, unknown>)[Symbol.for('rottay.design-system.filter-builder.ids')];
+    delete (globalThis as Record<symbol, unknown>)[ALLOCATOR_KEY];
+    const iterate = Symbol.iterator;
+    void iterate;
   `));
 
   for (const source of [
@@ -203,6 +206,21 @@ test('runtime edge policy is fail-closed for loader transport and scope-aware fo
     "let slot = Symbol.for('rottay.slot'); slot = other; globalThis[slot](source);",
     "const Symbol = LocalSymbol; const slot = Symbol.for('rottay.slot'); globalThis[slot](source);",
     "const slot = Symbol.for('rottay.slot'); const G = globalThis; G[slot] = require;",
+    "globalThis[Symbol.for('rottay.slot', extra)](source);",
+    "import { SLOT } from './keys'; globalThis[SLOT](source);",
+    "globalThis[Symbol.iterator](source);",
+    "Symbol.for = () => 'require'; globalThis[Symbol.for('node:fs')]('node:fs');",
+    "Object.defineProperty(Symbol, 'for', { value: () => 'require' }); globalThis[Symbol.for('node:fs')]('node:fs');",
+    "Object.defineProperty(Symbol.for, 'name', { value: 'x' }); globalThis[Symbol.for('node:fs')]('node:fs');",
+    "globalThis.Symbol = FakeSymbol; globalThis[Symbol.for('node:fs')]('node:fs');",
+    "const G = globalThis; G.Symbol = FakeSymbol; globalThis[Symbol.for('node:fs')]('node:fs');",
+    "const S = Symbol; S.for = () => 'require'; globalThis[Symbol.for('node:fs')]('node:fs');",
+    "function mutate(s) { s.for = () => 'require'; } mutate(Symbol); globalThis[Symbol.for('node:fs')]('node:fs');",
+    "[Symbol.for] = [() => 'require']; globalThis[Symbol.for('node:fs')]('node:fs');",
+    "delete Symbol.for; globalThis[Symbol.for('node:fs')]('node:fs');",
+    "globalThis[Symbol['for']('node:fs')]('node:fs');",
+    "globalThis[Symbol?.for('node:fs')]('node:fs');",
+    "globalThis[globalThis.Symbol.for('node:fs')]('node:fs');",
     "const getGlobal = () => globalThis; getGlobal()[name](source);",
     "function opaque(container) { return container[name]; } opaque(globalThis);",
     "function opaqueDefault(container = globalThis) { return container[name]; } opaqueDefault();",

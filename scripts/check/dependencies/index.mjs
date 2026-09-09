@@ -663,6 +663,103 @@ export function analyzeRuntimeModuleEdges(
   // fences; `Symbol.for('require')` is a different key from `require`, and the
   // registry never returns a well-known symbol. Every key that is not statically
   // one of these calls stays refused, so computed transport remains fail-closed.
+  //
+  // Those registry semantics hold only while the call reaches the genuine
+  // intrinsic, so the admission also demands evidence of that. The key shape is
+  // narrowed to a direct unshadowed `Symbol.for` member call -- no element
+  // access, no optional chain, no global-container path -- and the whole file
+  // must leave the intrinsic intact: writing or deleting `Symbol`, `Symbol.for`
+  // or `<global>.Symbol`, and letting `Symbol` escape as a value (a call
+  // argument such as `Object.defineProperty(Symbol, 'for', ...)`, an alias
+  // binding, a return) all withdraw the admission for the file and return its
+  // computed keys to the refused default.
+  function genuineSymbolForCall(expression) {
+    const call = unwrapRuntimeExpression(expression);
+    if (!ts.isCallExpression(call) || call.questionDotToken) return false;
+    const member = call.expression;
+    return Boolean(
+      ts.isPropertyAccessExpression(member) && !member.questionDotToken &&
+      member.name.text === 'for' && ts.isIdentifier(member.expression) &&
+      unshadowed(member.expression, 'Symbol'),
+    );
+  }
+
+  function symbolIntrinsicRoot(expression) {
+    if (!expression) return false;
+    const current = unwrapRuntimeExpression(expression);
+    if (ts.isIdentifier(current)) {
+      const parent = current.parent;
+      if (
+        (ts.isPropertyAccessExpression(parent) || ts.isQualifiedName(parent)) &&
+        parent.name === current
+      ) return false;
+      return unshadowed(current, 'Symbol');
+    }
+    return Boolean(
+      (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
+      propertyText(current) === 'Symbol' && globalContainerExpression(current.expression),
+    );
+  }
+
+  function symbolIntrinsicTouch(node) {
+    if (symbolIntrinsicRoot(node)) return true;
+    if (
+      (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) &&
+      symbolIntrinsicRoot(node.expression)
+    ) return true;
+    let touched = false;
+    ts.forEachChild(node, (child) => {
+      touched = touched || symbolIntrinsicTouch(child);
+    });
+    return touched;
+  }
+
+  function symbolIntrinsicOnlyRead(reference) {
+    const parent = reference.parent;
+    if (
+      (ts.isPropertyAccessExpression(parent) || ts.isElementAccessExpression(parent)) &&
+      parent.expression === reference
+    ) return true;
+    if (ts.isCallExpression(parent) && parent.expression === reference) return true;
+    return ts.isTypeOfExpression(parent);
+  }
+
+  let symbolIntrinsicIntegrity = null;
+
+  function symbolIntrinsicIntact() {
+    if (symbolIntrinsicIntegrity !== null) return symbolIntrinsicIntegrity;
+    symbolIntrinsicIntegrity = true;
+    function inspect(node) {
+      if (!symbolIntrinsicIntegrity) return;
+      if (runtimeNode(node)) {
+        if (
+          ts.isBinaryExpression(node) &&
+          node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+          node.operatorToken.kind <= ts.SyntaxKind.LastAssignment &&
+          symbolIntrinsicTouch(node.left)
+        ) symbolIntrinsicIntegrity = false;
+        if (ts.isDeleteExpression(node) && symbolIntrinsicTouch(node.expression)) {
+          symbolIntrinsicIntegrity = false;
+        }
+        if (
+          (ts.isPrefixUnaryExpression(node) || ts.isPostfixUnaryExpression(node)) &&
+          [ts.SyntaxKind.PlusPlusToken, ts.SyntaxKind.MinusMinusToken].includes(node.operator) &&
+          symbolIntrinsicTouch(node.operand)
+        ) symbolIntrinsicIntegrity = false;
+        if (
+          (ts.isCallExpression(node) || ts.isNewExpression(node)) &&
+          (node.arguments ?? []).some((argument) => symbolIntrinsicTouch(argument))
+        ) symbolIntrinsicIntegrity = false;
+        if (symbolIntrinsicRoot(node) && !symbolIntrinsicOnlyRead(node)) {
+          symbolIntrinsicIntegrity = false;
+        }
+      }
+      ts.forEachChild(node, inspect);
+    }
+    inspect(sourceFile);
+    return symbolIntrinsicIntegrity;
+  }
+
   function staticRegisteredSymbolKey(expression, resolvingSymbols = new Set()) {
     if (!expression) return false;
     const current = unwrapRuntimeExpression(expression);
@@ -685,7 +782,7 @@ export function analyzeRuntimeModuleEdges(
     }
     return Boolean(
       ts.isCallExpression(current) && current.arguments.length === 1 &&
-      directBuiltinMethodCall(current, 'Symbol', 'for') &&
+      genuineSymbolForCall(current) && symbolIntrinsicIntact() &&
       staticStringText(current.arguments[0]) !== null,
     );
   }
