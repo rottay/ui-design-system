@@ -82,7 +82,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 92/159 work orders done (58%)
+## Work-order burn-down — 94/159 work orders done (59%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -95,7 +95,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
-| [consumer-contract](./consumer-contract.md) | 3 | 0 | 3 | 6 |
+| [consumer-contract](./consumer-contract.md) | 5 | 0 | 1 | 6 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
 | [derivation](./derivation.md) | 1 | 1 | 5 | 7 |
 | [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
@@ -108,10 +108,10 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 | Milestone | State | Gate work orders | Outstanding | What it enables |
 | --- | --- | --- | --- | --- |
-| A · The apps can build | not reached | WO-CON-04, WO-CON-05 | WO-CON-04, WO-CON-05 | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
+| A · The apps can build | reached | WO-CON-04, WO-CON-05 | none | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | WO-FAM-01, WO-EVI-05 | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 42 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 40 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -151,7 +151,6 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-INV-02 | One i18n catalog with an English floor, locale-aware formatting and IME-safe submit | M | platform-invariants | audit-2026-09-05 |
 | WO-EVI-01 | theme-graph: derived cascade graph with a byte-exact check | M | evidence-graph | audit-2026-09-05 |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | L | evidence-graph | audit-2026-09-05 |
-| WO-CON-04 | Milestone A exit gate: a consumer proof and the app migration packets | S | consumer-contract | audit-2026-09-05 |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | M | derivation | audit-2026-09-05 |
 
 ## Blocked (dependencies or phase claim lock)
@@ -165,7 +164,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-ARC-13 | dependencies: WO-EVI-01; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
 | WO-ARC-14 | dependencies: WO-EMI-02; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
 | WO-ARC-15 | dependencies: WO-INV-03; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
-| WO-ARC-21 | dependencies: WO-CON-04; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
+| WO-ARC-21 | phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
 | WO-ARC-17 | dependencies: WO-ARC-14; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-ARC-16 | dependencies: WO-RET-01; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-ARC-20 | dependencies: WO-FAM-11; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
@@ -206,8 +205,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-RET-05 | dependencies: WO-EMI-02 |
 | WO-EVI-03 | dependencies: WO-DER-07 |
 | WO-EVI-05 | dependencies: WO-FAM-01 |
-| WO-CON-05 | dependencies: WO-CON-04 |
-| WO-CON-06 | dependencies: WO-CON-05, WO-EMI-02 |
+| WO-CON-06 | dependencies: WO-EMI-02 |
 | WO-INV-06 | dependencies: WO-INV-04, WO-FAM-10, WO-FAM-11 |
 | WO-FAM-12 | dependencies: WO-FAM-06, WO-FAM-07, WO-DER-04, WO-INV-04, WO-INV-07 |
 | WO-INV-07 | dependencies: WO-DER-04 |
@@ -315,3 +313,5 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-CON-01 | 2026-09-07 | sanctioned import surface complete: consumer-contract doc + lint rule landed (3a9873f4; rule 20/20 incl fail-closed cases; roster now 120/120 after WO-CAN-04's carried count change with death proof); pnpm --filter @rottay/design-system lint exit 0 measured on landed tree d0f54693 with REAL sibling app dirs (lint:vertical included, only non-blocking warnings); claim-exactness seal/artifacts regenerated green in audited lot d0f54693 (candidate d7d00aaa, independent K3 audit PASS: proof chain repaired, corpus drained 19 missing paths to 0, deterministic double-run); docs reconciled in docs-engineering 893bce77 (safety ref 19e0ec03). Adjudication: app-platform wiring out of scope per standing contract (only app-bithire is the productive consumer; app-evnto/app-platform are do-not-modify; evnto was already wired) — the rule runs in showroom+bithire+evnto, baselined per app, decrease-only |
 | WO-CON-02 | 2026-09-07 | mountTenantTheme facade complete: DS lot 072f71cb landed after independent PASS; facade bytes-equal to compileTenantTheme path for the three verticals (15/15 tests); showroom SSR mounts through one call; codemod applied to app-bithire trio compiles (16s green); docs reconciled in docs-engineering 893bce77 (safety ref bc2803e9). Closure conditions now met: (1) engine-token-audit GREEN and BLOCKING — 18 dead Daisy rules + tour inlinePaint drained in dbe18dea (audited candidate 34b7b738, K3 PASS; ceiling untouched, exact invariant satisfied; runner 140 blocking/1 excluded); (2) WO-GAT-07 documentationRevision/exactness-live resealed in the verified DS lot d0f54693 (documentationRevision 674474cb to 8944a4f = live docs main; inspectedDocsMatchRevision true; sealingErrors none; deterministic double-run 1e172e4f) — same lot, as required |
 | WO-CON-03 | 2026-09-07 | tenant document v2 door + decisions-lit complete: v2 door/migrate/adapter landed 722fd05b; public naming surface 2141922a (independent PASS); docs chapters in docs-engineering e421aa5; probe prints decisions lit = 7/22 (+0/10 new) (independently reproduced by the auditor with Chromium); registration lot 94117928 landed: 3 package scripts + decisions-lit-freshness gate with two-way drill pair (pre-build blocking, 142/1 runner, validateManifest 0 problems) + content-digest freshness guard (door 693 files + instrument 16 files, all refusal paths drilled incl. borrowed-fixture) + 13 new drills (32/32) + adjudicated consumer-contract §2 visualAuthority typed-declaration correction. Adjudications: gate registers the freshness guard (CI gates job installs no browser; run stays hand-run measurement) and mtime guard excludes generated facade/artifacts (content digest still covers them). Audits: PASS + rebase delta PASS |
+| WO-CON-04 | 2026-09-09 | merge f05c4e275; consumer-proof reparado (packed leg sin alias, auditPublished via TS checker, drills con gemelos verdes); Codex PASS + K3 confirm LANDING PASS /private/tmp/rottay-con04-k3-audit.md; DEL-03 repros atrapadas nombrando Button/DesignSystemProvider |
+| WO-CON-05 | 2026-09-09 | DEL-04 reparado en el lote R3 (merge c295af9bb, auditado); CON-04 cierra la cadena de verificacion honesta de consumidores; evidencia en /private/tmp/rottay-con04-k3-audit.md |

@@ -5058,7 +5058,7 @@
    "lane": "consumer-contract",
    "order": 4,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CON-01",
     "WO-CON-02",
@@ -5069,8 +5069,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1 (milestone A); closes n/a",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-09",
    "progressLog": [
     {
      "at": "2026-09-08 20:34",
@@ -5078,8 +5078,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): DEL-03 - the shipping consumer proof is blind to the surface it exists to protect. consumer-proof skips a missing export whose name begins with an uppercase letter while its signature leg maps sanctioned specifiers to SOURCE, not to built declarations; a scratch package exporting only 'unrelated = 1' returned [] while the fixture app imported Button and DesignSystemProvider. A declaration-only mutant (intent: ThemeIntent -> number) likewise returned exit 0 while a real external Bundler consumer flipped to TS2345. Evidence: audit/95-reaudit-2026-09-08/coverage/provenance.md and verification/adversarial.md. This is milestone A's exit gate: A may not be re-reached while the shipping proof is blind. No named export is asserted missing today.. Prior claimedBy=kimi-k3-dt claimedAt=2026-09-07 doneAt=2026-09-07. Prior evidence (verbatim): milestone A exit gate complete: consumer fixture (tests/integration/consumer — a real application: mounts via mountTenantTheme, writes a v2 document through the door, sanctioned surface only, passes the lint rule) landed 87d19b9e; bithire migration packet (X-01..X-06 restricted to bithire, codemods named and verified, root-specifier truth per auditor correction, PNG visual evidence pinned to ref dbe18dea) + evnto/platform deferral stubs; post-build consumer-proof gate (6 legs, 4 drilled classes) registered blocking in b607cef60 (post-build 21->23, both entries PASS in the runner inventory); planted mountTenantTheme signature change turns fixture and gate red (independently reproduced by the auditor); orphaned Playwright baselines removed per auditor condition. docs-engineering e048d2f9 retires OAuthTransitionScreen/OnboardingSurface from current docs (delta audit PASS). Audits: main PASS, docs v2 PASS, rebase delta PASS, registration delta PASS"
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-09",
+   "evidence": "merge f05c4e275; consumer-proof reparado (packed leg sin alias, auditPublished via TS checker, drills con gemelos verdes); Codex PASS + K3 confirm LANDING PASS /private/tmp/rottay-con04-k3-audit.md; DEL-03 repros atrapadas nombrando Button/DesignSystemProvider"
   },
   {
    "id": "WO-CON-05",
@@ -5087,7 +5087,7 @@
    "lane": "consumer-contract",
    "order": 5,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CON-04"
    ],
@@ -5096,8 +5096,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1 (milestone A); closes n/a",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-09",
    "progressLog": [
     {
      "at": "2026-09-08 20:34",
@@ -5105,8 +5105,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): DEL-02 and DEL-04. The contract-change protocol failed on its own subsequent range - the major typed-theme-catalog changeset announced a changed ThemePatch meaning and new public exports with no contract-diff block, and contract-changeset --base=4561be414 (the CON-05 close itself) exits 1. Signature detection classifies only entrypoint directories and package entry maps, so the published root index.ts reads as library and a type changing where it is defined is invisible; auditRange accepts any non-empty contract-diff without checking package identity or symbol coverage. Evidence: audit/95-reaudit-2026-09-08/coverage/provenance.md. The DEL-02 documentary repair for the 34790cf43 range landed at 22d74f062; it closes the instance, not the protocol hole.. Prior claimedBy=kimi-k3-dt claimedAt=2026-09-07 doneAt=2026-09-07. Prior evidence (verbatim): Two-track operating protocol + contract-diff block landed at 17a9babb (fresh K3 audit PASS); follow-up d9d826f5b registers contract-changeset-drill in the gates manifest (142->143 blocking, drill PASSes, FAIL set unchanged) and derives the test-94 family-rollup expectation from the governance manifest (delta K3 audit PASS); contract-changeset graded check carries 8 planted throwaway-range drills; STATUS contract-diff EMPTY on first run."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-09",
+   "evidence": "DEL-04 reparado en el lote R3 (merge c295af9bb, auditado); CON-04 cierra la cadena de verificacion honesta de consumidores; evidencia en /private/tmp/rottay-con04-k3-audit.md"
   },
   {
    "id": "WO-CON-06",
