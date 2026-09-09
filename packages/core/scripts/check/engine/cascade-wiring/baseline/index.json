@@ -11,9 +11,9 @@
   "denominator": 4365,
   "wired": 2204,
   "debt": 2161,
-  "transitivelyUnwired": 2205,
+  "transitivelyUnwired": 2204,
   "rootsExcluded": 774,
   "skinFiles": 391,
   "rootsExcludedNote": "rootsExcluded is measured from the exact fallback-target set. --ds-input-md-icon-size remains a positional fallback target without a root-reaching fallback of its own, so it is excluded from the denominator. The executable shape drill keeps that distinction fail-closed.",
-  "transitivelyUnwiredNote": "2205 >= debt 2161 por construccion: un nombre sin fallback a raiz tampoco alcanza terminal. La diferencia (44) son los nombres cuyo fallback nombra otra cosa que nadie escribe. El invariante de forma lo comprueba en cada corrida."
+  "transitivelyUnwiredNote": "2205 -> 2204 al integrar WO-DER-04, bajado en el commit que movio el numero. El unico nombre que salio, medido por diferencia de conjuntos contra el arbol previo a la integracion (1 salida, 0 entradas): --ds-skeleton-animation-easing, cuya cadena de fallbacks moria en --ds-motion-ease-standard, un nombre que nadie escribia. Ahora `foundation/animations/transitions` lo declara, asi que la cadena alcanza terminal. `debt` (2161) no se mueve: la cota inferior mira el fallback directo, que ya alcanzaba raiz. 2204 >= debt 2161 por construccion: un nombre sin fallback a raiz tampoco alcanza terminal. La diferencia (43) son los nombres cuyo fallback nombra otra cosa que nadie escribe. El invariante de forma lo comprueba en cada corrida."
 }
