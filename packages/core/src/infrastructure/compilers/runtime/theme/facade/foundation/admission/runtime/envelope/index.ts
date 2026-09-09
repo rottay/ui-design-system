@@ -81,15 +81,19 @@ function authoredSpellings(path: string): readonly string[] {
  *
  * So the comparison is against the vertical's own value, which is the same rule
  * the contrast station already uses on the emission side: a tenant answers for
- * what it changed. A document is unaffected — every dial it carries is one the
- * tenant set — and a draft that really does move a dial out of range is refused
- * exactly as a publish refuses it.
+ * what it changed.
+ *
+ * `directlyAuthored` is what that inference cannot see: a document carries only
+ * what its tenant chose, so a dial it states explicitly is a decision even when
+ * the value equals the one it would have inherited (I-P4). Those paths skip the
+ * equality exemption; an inherited baseline value never enters either set.
  */
 export function envelopeRangeIssues(
   theme: Theme,
   authoredPaths: ReadonlySet<string>,
   envelope: TenantThemeVerticalEnvelope | undefined,
-  baseline?: Theme
+  baseline?: Theme,
+  directlyAuthored?: ReadonlySet<string>
 ): ThemeAdmissionIssue[] {
   const ranges = envelope?.ranges;
   if (!ranges) return [];
@@ -98,7 +102,11 @@ export function envelopeRangeIssues(
     for (const spelling of authoredSpellings(row.themePath)) {
       if (!authoredPaths.has(spelling)) continue;
       const value = readThemePath(theme, spelling);
-      if (baseline !== undefined && readThemePath(baseline, spelling) === value) {
+      if (
+        baseline !== undefined &&
+        !directlyAuthored?.has(spelling) &&
+        readThemePath(baseline, spelling) === value
+      ) {
         continue;
       }
       if (isInsideEnvelopeRange(value, ranges[row.range])) continue;
@@ -218,10 +226,17 @@ export function envelopeIssues(
   theme: Theme,
   authoredPaths: ReadonlySet<string>,
   envelope: TenantThemeVerticalEnvelope | undefined,
-  baseline?: Theme
+  baseline?: Theme,
+  directlyAuthored?: ReadonlySet<string>
 ): ThemeAdmissionIssue[] {
   return [
-    ...envelopeRangeIssues(theme, authoredPaths, envelope, baseline),
+    ...envelopeRangeIssues(
+      theme,
+      authoredPaths,
+      envelope,
+      baseline,
+      directlyAuthored
+    ),
     ...closedDomainIssues(theme, authoredPaths),
     ...authoredColorIssues(theme, authoredPaths),
   ];

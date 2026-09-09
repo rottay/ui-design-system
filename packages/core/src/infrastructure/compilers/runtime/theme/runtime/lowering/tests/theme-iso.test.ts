@@ -581,7 +581,7 @@ describe("T0 DB mode projection through the common compiler", () => {
     rowVersion: 1,
   } as const;
 
-  it("makes explicit light byte-identical to an omitted background mode", () => {
+  it("makes explicit light byte-identical in PAINT to an omitted background mode", () => {
     const omitted = simplePaletteDocument({ primary: "#2F6B9A" });
     const explicit = simplePaletteDocument({
       primary: "#2F6B9A",
@@ -597,8 +597,22 @@ describe("T0 DB mode projection through the common compiler", () => {
     expect(explicitArtifact.normalizedAppearance).toEqual(
       omittedArtifact.normalizedAppearance
     );
-    expect(explicitArtifact.digest).toBe(omittedArtifact.digest);
-    expect(explicitArtifact.css).toBe(omittedArtifact.css);
+    // The CSS banner states the artifact's digest, so the PAINT is compared
+    // without it.
+    const paint = (css: string): string => css.slice(css.indexOf("\n") + 1);
+    expect(paint(explicitArtifact.css)).toBe(paint(omittedArtifact.css));
+    // The digest is NOT equal, and must not be: it covers the provenance
+    // ledger, and stating `backgroundMode: "light"` is a decision this tenant
+    // authored while omitting it is not. The two documents paint the same and
+    // report different authorship, which is exactly the distinction the ledger
+    // exists to keep (I-P4: a decision that moves no leaf is still authored).
+    expect(
+      explicitArtifact.provenance?.entries.map((entry) => entry.ref)
+    ).toContainEqual({ kind: "decision", id: "palette.dark-mode" });
+    expect(
+      omittedArtifact.provenance?.entries.map((entry) => entry.ref) ?? []
+    ).not.toContainEqual({ kind: "decision", id: "palette.dark-mode" });
+    expect(explicitArtifact.digest).not.toBe(omittedArtifact.digest);
   });
 
   it("routes dark seeds only to the dark overlay without rebasing the Theme", () => {

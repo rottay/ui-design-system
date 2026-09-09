@@ -37,6 +37,8 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   CHROME_ANATOMY_FAMILIES,
+  STATE_EMPHASIS_POSTURES,
+  STATE_FOCUS_STYLES,
   THEME_DECISION_TIER_BY_ID,
   type ThemeDecisionId,
   type ThemeDecisions,
@@ -90,13 +92,14 @@ function foundationOf(
 
 function migrateGeneralDecisions(
   general: TenantAppearanceGeneral | undefined,
-  decisions: Partial<ThemeDecisions>
+  decisions: Partial<ThemeDecisions>,
+  refuse: (reason: string) => void
 ): void {
   if (!general) return;
   const palette = general.palette;
   if (palette) {
     if (palette.dark !== undefined) {
-      throw new ThemePatchMigrationError(
+      refuse(
         "v1 general.palette.dark has no v2 counterpart; per-mode seeds enter as " +
           "per-mode SanctionedOverrides, which the kit has not opened yet"
       );
@@ -116,7 +119,7 @@ function migrateGeneralDecisions(
     }
     for (const key of ["foreground", "border"] as const) {
       if (palette[key] !== undefined) {
-        throw new ThemePatchMigrationError(
+        refuse(
           `v1 general.palette.${key} has no v2 counterpart; inks and borders are ` +
             "derived from the seeds, never authored (kit rows 1 and 4)"
         );
@@ -133,7 +136,7 @@ function migrateGeneralDecisions(
     }
     for (const key of ["fontFamilyBase", "fontFamilyHeading"] as const) {
       if (typography[key] !== undefined) {
-        throw new ThemePatchMigrationError(
+        refuse(
           `v1 general.typography.${key} has no v2 counterpart; row 6 closes the ` +
             "domain to a registered fontPackId, never a free stack"
         );
@@ -155,6 +158,29 @@ function migrateGeneralDecisions(
   if (general.surfaces?.effectIntensity !== undefined) {
     decisions["surfaces.effect-intensity"] = general.surfaces.effectIntensity;
   }
+  // Rows 20 and 21. v1 types both fields as an open string at the DB edge, so
+  // the closed catalog vocabulary is what admits them: a value outside it is
+  // refused at its own keypath rather than dropped, which is the difference
+  // between a migration and a repaint nobody was told about.
+  const states = general.states;
+  if (states) {
+    carryState(
+      states.emphasis,
+      STATE_EMPHASIS_POSTURES,
+      "states.emphasis",
+      "general.states.emphasis",
+      decisions,
+      refuse
+    );
+    carryState(
+      states.focusStyle,
+      STATE_FOCUS_STYLES,
+      "states.focus-style",
+      "general.states.focusStyle",
+      decisions,
+      refuse
+    );
+  }
   if (general.navigation?.sidebarTone) {
     decisions["navigation.sidebar-tone"] = general.navigation.sidebarTone;
   }
@@ -163,9 +189,34 @@ function migrateGeneralDecisions(
   }
 }
 
+/**
+ * Carry one closed-vocabulary v1 state field to the decision that owns it, or
+ * refuse it by name. Silence is the one answer a total migration may not give.
+ */
+function carryState<Id extends "states.emphasis" | "states.focus-style">(
+  value: string | undefined,
+  vocabulary: readonly ThemeDecisions[Id][],
+  id: Id,
+  keypath: string,
+  decisions: Partial<ThemeDecisions>,
+  refuse: (reason: string) => void
+): void {
+  if (value === undefined) return;
+  if (!(vocabulary as readonly string[]).includes(value)) {
+    refuse(
+      `v1 ${keypath} ${JSON.stringify(value)} is outside the "${id}" domain; ` +
+        `row ${id === "states.emphasis" ? "20" : "21"} closes it at ` +
+        `${vocabulary.join(", ")}`
+    );
+    return;
+  }
+  decisions[id] = value as ThemeDecisions[Id];
+}
+
 function migrateTokenOverrides(
   overrides: TenantThemeAdvancedAppearance["tokenOverrides"],
-  decisions: Partial<ThemeDecisions>
+  decisions: Partial<ThemeDecisions>,
+  refuse: (reason: string) => void
 ): void {
   for (const [token, value] of Object.entries(overrides ?? {})) {
     if (value === undefined) continue;
@@ -175,11 +226,12 @@ function migrateTokenOverrides(
     }
     const seed = TOKEN_TO_SEED[token];
     if (!seed) {
-      throw new ThemePatchMigrationError(
+      refuse(
         `v1 tokenOverride "${token}" has no v2 decision; raw --ds-* authorship is ` +
           "retired by D-03. Express it as a decision, or as a sanctioned " +
           "chrome.<family>.<channel> override"
       );
+      continue;
     }
     const [group, role] = seed;
     const id: ThemeDecisionId =
@@ -190,7 +242,8 @@ function migrateTokenOverrides(
 
 function migrateChrome(
   chrome: TenantThemeChrome | undefined,
-  decisions: Partial<ThemeDecisions>
+  decisions: Partial<ThemeDecisions>,
+  refuse: (reason: string) => void
 ): SanctionedOverrides | undefined {
   if (!chrome) return undefined;
   const anatomy: Record<string, string> = {};
@@ -199,13 +252,14 @@ function migrateChrome(
     if (fields === undefined) continue;
     const { anatomy: variant, ...rest } = fields as Record<string, unknown>;
     if (variant !== undefined) {
-      if (!ANATOMY_FAMILIES.includes(family as (typeof ANATOMY_FAMILIES)[number])) {
-        throw new ThemePatchMigrationError(
+      if (ANATOMY_FAMILIES.includes(family as (typeof ANATOMY_FAMILIES)[number])) {
+        anatomy[family] = variant as string;
+      } else {
+        refuse(
           `v1 chrome.${family}.anatomy has no v2 counterpart; row 28 closes the ` +
             `anatomy decision at ${ANATOMY_FAMILIES.join(", ")}`
         );
       }
-      anatomy[family] = variant as string;
     }
     if (Object.keys(rest).length > 0) remaining[family] = rest;
   }
@@ -236,33 +290,55 @@ function minimumPlan(
 }
 
 /**
- * Migrates one v1 document to v2, or refuses it by name.
+ * What a v1 document expresses in v2 terms, and what it cannot express.
  *
- * The result is re-validated STRUCTURALLY through
- * {@link assertTenantThemeDocumentV2}: version, plan, ids, tiers, decision key
- * sets, override entitlement and the D-03 walk. That is not a compile: a
- * migration is only proven against the lowering by admitting it, which
- * `migrateAndAdmitDocument` in the admission owner does and its tests assert
- * byte-for-byte against the v1 original.
+ * Capture and refusal are separated because they answer to different owners:
+ * the migration refuses a document it cannot carry whole, while the ingress
+ * gate still admits that document and has to record the authorship it DOES
+ * carry. Folding them together made one inexpressible field erase every
+ * decision the same document authored.
  */
-export function migrateDocumentV1ToV2(
+export interface V1DecisionCapture {
+  readonly decisions: Partial<ThemeDecisions>;
+  readonly overrides: SanctionedOverrides | undefined;
+  /** The fields with no v2 counterpart, in traversal order. Never partial. */
+  readonly unmigratable: readonly string[];
+}
+
+/**
+ * Reads every decision a v1 document expresses, and names what it does not.
+ *
+ * It derives no plan: a plan is an entitlement, and inventing one for a row
+ * that never carried it is exactly what D-02 forbids.
+ */
+export function captureV1Decisions(
   document: TenantThemeDocument
-): TenantThemeDocumentV2 {
+): V1DecisionCapture {
+  const unmigratable: string[] = [];
+  const refuse = (reason: string): void => {
+    unmigratable.push(reason);
+  };
   if (document.schemaVersion !== 1) {
-    throw new ThemePatchMigrationError(
-      `unsupported schemaVersion ${String(document.schemaVersion)}`
-    );
+    return {
+      decisions: {},
+      overrides: undefined,
+      unmigratable: [`unsupported schemaVersion ${String(document.schemaVersion)}`],
+    };
   }
   if (document.mode !== "simple" && document.mode !== "advanced") {
-    throw new ThemePatchMigrationError("unsupported document mode");
+    return {
+      decisions: {},
+      overrides: undefined,
+      unmigratable: ["unsupported document mode"],
+    };
   }
   const decisions: Partial<ThemeDecisions> = {};
-  migrateGeneralDecisions(generalOf(document), decisions);
+  migrateGeneralDecisions(generalOf(document), decisions, refuse);
 
   const foundation = foundationOf(document);
   const advanced = foundation?.advanced;
-  migrateTokenOverrides(advanced?.tokenOverrides, decisions);
-  const overrides = migrateChrome(advanced?.chrome, decisions);
+  migrateTokenOverrides(advanced?.tokenOverrides, decisions, refuse);
+  const overrides = migrateChrome(advanced?.chrome, decisions, refuse);
   if (advanced?.profiles) {
     // v1 types every expressive axis as an open `string`. The closed axis
     // vocabularies are re-resolved fail-closed by the expressive-profile
@@ -278,7 +354,26 @@ export function migrateDocumentV1ToV2(
   if (foundation?.recipeProfile) {
     decisions["recipe-profile"] = foundation.recipeProfile;
   }
+  return { decisions, overrides, unmigratable };
+}
 
+/**
+ * Migrates one v1 document to v2, or refuses it by name.
+ *
+ * The result is re-validated STRUCTURALLY through
+ * {@link assertTenantThemeDocumentV2}: version, plan, ids, tiers, decision key
+ * sets, override entitlement and the D-03 walk. That is not a compile: a
+ * migration is only proven against the lowering by admitting it, which
+ * `migrateAndAdmitDocument` in the admission owner does and its tests assert
+ * byte-for-byte against the v1 original.
+ */
+export function migrateDocumentV1ToV2(
+  document: TenantThemeDocument
+): TenantThemeDocumentV2 {
+  const { decisions, overrides, unmigratable } = captureV1Decisions(document);
+  if (unmigratable.length > 0) {
+    throw new ThemePatchMigrationError(unmigratable[0]);
+  }
   return assertTenantThemeDocumentV2({
     version: TENANT_THEME_DOCUMENT_VERSION_V2,
     plan: minimumPlan(decisions, overrides),

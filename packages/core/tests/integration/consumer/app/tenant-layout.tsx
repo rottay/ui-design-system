@@ -10,26 +10,24 @@
  * The artifact is an INPUT because a `ThemeIntent` names a baseline and carries
  * a patch; it does not carry the `tenantId`/`rowVersion` the digest is computed
  * over. WO-EMI-02 keeps accepting it and verifies it against its own compile.
+ *
+ * ONE ROW. The artifact is compiled from the v2 decision document the door
+ * admits, not from a v1 copy of it kept alongside: a second row is a second
+ * statement of the same tenant's identity, and the two drift the first time
+ * only one of them is edited.
  */
 import type { ReactNode } from 'react';
 import {
   buildThemePrepaintScript,
-  compileTenantThemeConfig,
+  compileTenantThemeDocumentV2,
   documentThemeAdmission,
-  getTenantThemeVerticalEnvelope,
-  hydrateTenantThemeConfig,
   mountTenantTheme,
   type DocumentAdmission,
   type MountedTenantTheme,
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
 
-import {
-  TENANT_DOCUMENT_V2,
-  TENANT_IDENTITY,
-  TENANT_SLUG,
-  TENANT_TRANSPORT_V1,
-} from './tenant-document';
+import { TENANT_DOCUMENT_V2, TENANT_IDENTITY, TENANT_SLUG } from './tenant-document';
 
 export interface TenantMount {
   mounted: MountedTenantTheme;
@@ -39,10 +37,11 @@ export interface TenantMount {
 
 /** The bytes this tenant's compiled identity ships as. */
 export function compileTenantArtifact(): TenantThemeArtifact {
-  return compileTenantThemeConfig(
-    hydrateTenantThemeConfig(TENANT_TRANSPORT_V1, TENANT_IDENTITY),
-    { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
-  );
+  return compileTenantThemeDocumentV2({
+    ...TENANT_IDENTITY,
+    verticalKey: 'bithire',
+    document: TENANT_DOCUMENT_V2,
+  }).artifact;
 }
 
 export async function mountTenant(): Promise<TenantMount> {

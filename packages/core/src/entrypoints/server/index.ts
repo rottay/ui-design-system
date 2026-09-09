@@ -68,6 +68,32 @@ export type {
 } from '../../infrastructure/compilers/composition/tenant-theme';
 
 /**
+ * The v2 publication seam.
+ *
+ * `compileTenantTheme` publishes the v1 transport. A stored v2 row reaches an
+ * artifact HERE, without being flattened to v1 first: flattening drops the
+ * document's `plan`, and a publish that cannot state its plan cannot be judged
+ * by the tier station the preview of the same document was judged by. The
+ * result carries the door's admission report and the decision-provenance
+ * ledger the artifact was compiled under, so a surface reads both from the
+ * compile rather than deriving weaker answers beside it.
+ */
+export { compileTenantThemeDocumentV2 } from '../../infrastructure/compilers/composition/tenant-theme/document-v2';
+export type {
+  CompileTenantThemeDocumentV2Input,
+  TenantThemeDocumentV2Compilation,
+} from '../../infrastructure/compilers/composition/tenant-theme/document-v2';
+export type {
+  DecisionProvenance,
+  DecisionProvenanceEntry,
+  DecisionProvenanceLedger,
+} from '../../foundation/contracts/composition/tenants/themes/provenance';
+export type {
+  TenantThemeArtifactProvenance,
+  TenantThemeArtifactProvenanceEntry,
+} from '../../foundation/contracts/composition/tenants/themes/tenant-theme';
+
+/**
  * The MOUNT half of the compiled-artifact contract.
  *
  * `resolveVisualAuthority` admits a compiled artifact only against proof: on

@@ -22,6 +22,7 @@ import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 
 import {
+  compileTenantThemeDocumentV2,
   documentThemeAdmission,
   migrateAndAdmitDocument,
   migrateDocumentV1ToV2,
@@ -299,14 +300,29 @@ describe('the application writes a tenant document v2 through the door', () => {
   });
 
   /**
-   * The one seam this fixture pins as a NEGATIVE, so the migration packet can
-   * name it instead of an app discovering it. `mountTenantTheme` requires a
-   * compiled `TenantThemeArtifact` for a tenant-document origin, and the
-   * artifact compiler still speaks v1 only. An app on a v2-only row therefore
-   * cannot compile its own artifact today. WO-CAT-02 closes it; when it does,
-   * this test fails and the app keeps exactly one row.
+   * The seam this fixture pinned as a NEGATIVE until WO-CON-06 closed it: the
+   * artifact compiler spoke v1 only, so an app on a v2 row could not compile
+   * the `TenantThemeArtifact` `mountTenantTheme` requires and had to keep a
+   * second, v1 copy of the same identity. The publication adapter removes the
+   * second row; what stays pinned is that the V1 door still refuses a v2
+   * document by name, because that refusal is the reason the adapter exists
+   * and not an accident to be discovered by an app.
    */
-  it('records that the artifact compiler does not yet accept a v2 document', () => {
+  it('publishes the v2 document through the real path, keeping one row', () => {
+    const { artifact, admission, ledger } = compileTenantThemeDocumentV2({
+      ...TENANT_IDENTITY,
+      verticalKey: 'bithire',
+      document: TENANT_DOCUMENT_V2,
+    });
+    expect(artifact.digest).toMatch(/^sha256-[a-f0-9]{64}$/);
+    expect(admission.version).toBe(2);
+    expect(
+      ledger.entries.filter((entry) => entry.provenance === 'direct-override').length,
+    ).toBeGreaterThan(0);
+    expect(artifact.provenance?.entries.length).toBe(ledger.entries.length);
+  });
+
+  it('keeps the v1 door refusing a v2 document by name', () => {
     expect(() => hydrateTenantThemeConfig(TENANT_DOCUMENT_V2, TENANT_IDENTITY)).toThrow(
       TenantThemeValidationError,
     );

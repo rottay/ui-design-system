@@ -197,14 +197,29 @@ fail-closed function `migrateDocumentV1ToV2(document)`, which either returns a
 v2 document or refuses BY THE NAME of the field it could not carry
 (`ThemePatchMigrationError`).
 
-One seam is open and app-bithire must not design around it: the ARTIFACT
-compiler (`hydrateTenantThemeConfig`) still accepts v1 only, so a tenant row
-that has already moved to v2 cannot compile the artifact `mountTenantTheme`
-requires for a `tenant-document` origin. Keep the v1 transport until WO-CAT-02
-closes it. The design system pins that refusal as an executable fact in
-`packages/core/tests/integration/consumer/index.test.ts` ("records that the
-artifact compiler does not yet accept a v2 document"), so the day it changes,
-the design system's own gate says so.
+That seam is now closed (WO-CON-06). A tenant row that has moved to v2 compiles
+its artifact through `compileTenantThemeDocumentV2({ document, tenantId, slug,
+verticalKey, rowVersion })`, which returns the artifact `mountTenantTheme`
+requires for a `tenant-document` origin, the door's admission report, and the
+decision-provenance ledger the artifact was compiled under. It does NOT flatten
+the document to v1 first: flattening drops the `plan`, and a publish that cannot
+state its plan cannot be judged by the tier station that judged the preview of
+the same document.
+
+app-bithire therefore keeps ONE row. `hydrateTenantThemeConfig` still refuses a
+v2 document by name -- that is the v1 door, and it stays the v1 door -- so a
+call site that still hands it a v2 document is a call site that has not
+migrated. Both facts are executable in
+`packages/core/tests/integration/consumer/index.test.ts` ("publishes the v2
+document through the real path, keeping one row" and "keeps the v1 door refusing
+a v2 document by name").
+
+That gap is closed too (WO-CON-06 step 2): `migrateDocumentV1ToV2` now carries
+`general.states.emphasis` / `general.states.focusStyle` into the
+`states.emphasis` / `states.focus-style` decisions, and refuses a value outside
+either closed domain at its own v1 keypath rather than dropping it. Both rows
+are Standard, so a row that authored only these still derives the `standard`
+plan.
 
 ### Step 7 — `oauth-transition` leaves the design system
 

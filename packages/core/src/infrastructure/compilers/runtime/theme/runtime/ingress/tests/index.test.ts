@@ -146,6 +146,9 @@ describe("authoredThemePatch", () => {
       slug: "acme",
       origin: "preview",
       patch: { palette: { primaryColor: "#123456" } },
+      // A draft that authored no chrome captured no claim; the ledger is empty
+      // rather than absent, which is what tells the caps this door records one.
+      ledger: { entries: [] },
     });
   });
 });

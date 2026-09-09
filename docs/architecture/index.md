@@ -286,6 +286,17 @@ and enter **one lowering** under
 `emitThemeCss`. There is deliberately no second compiler, and the structural gate
 `tests/architecture/theme-lowering-single-door/` fails if one reappears.
 
+The theme contracts under `src/foundation/contracts/composition/tenants/themes/` are a
+directed ladder rather than a bag of peers: `iso`, `provenance`, `tenant-theme`, `intent`,
+`resolved`, `compiled`, `emission`, `engine-adapter`, ranked in `SCOPED_OWNER_RANKS` in
+`scripts/check/architecture/audits/structure/index.mjs`. `provenance` owns the
+decision-provenance ledger vocabulary and precedes every owner that carries a ledger, so it
+reads no decision catalog of its own: the admitted decision domain is injected as a required
+argument at the trusted resolution boundary. That injection is what keeps the ladder
+directional instead of needing an upward exception, and it is also the fence — a caller who
+could supply the catalog could supply the tier it is checked against, so the catalog is never
+an intent field, a request option or a producer-supplied entitlement.
+
 The canonical custom-property prefix is `--ds-`. Component-local private variables use
 `--_ds-*` and are internal wiring, never a customization surface. The `--ds_` prefix is
 free experimentation space and must never reach a published artifact.

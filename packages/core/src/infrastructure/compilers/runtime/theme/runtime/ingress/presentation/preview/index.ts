@@ -13,18 +13,18 @@ import {
   type TenantThemeDocumentAny,
 } from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import {
-  admitDocument,
-  documentAnyThemePatch,
-  type DocumentAdmission,
-} from "../../runtime/document-v2";
+import type { TenantThemeVerticalEnvelope } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import { admitDocument, type DocumentAdmission } from "../../runtime/document-v2";
 import { authoredThemePatch } from "../../foundation/draft-patch";
+import { draftProvenanceLedger } from "../../foundation/provenance";
 
 /** What an unsaved document preview needs to name a compile. */
 export interface PreviewThemeIntentInput {
   vertical: FirstPartyVerticalId;
   slug: string;
   document: TenantThemeDocumentAny;
+  /** As on the persisted producer: preview clamps where publication clamps. */
+  ranges?: TenantThemeVerticalEnvelope["ranges"];
 }
 
 /** What an unsaved BrandTheme draft needs to name a compile. */
@@ -55,16 +55,7 @@ function entitlementOf(
  * thing a preview must never be is a cheaper path with fewer laws on it.
  */
 export function previewThemeIntent(input: PreviewThemeIntentInput): ThemeIntent {
-  return {
-    vertical: input.vertical,
-    slug: input.slug,
-    origin: "preview",
-    patch: documentAnyThemePatch({
-      vertical: input.vertical,
-      document: input.document,
-    }),
-    ...entitlementOf(input.document),
-  };
+  return previewThemeAdmission(input).intent;
 }
 
 /**
@@ -80,6 +71,7 @@ export function previewThemeAdmission(
   const admission = admitDocument({
     vertical: input.vertical,
     document: input.document,
+    ranges: input.ranges,
   });
   return {
     intent: {
@@ -88,6 +80,7 @@ export function previewThemeAdmission(
       origin: "preview",
       patch: admission.patch,
       ...entitlementOf(input.document),
+      ledger: admission.ledger,
     },
     admission,
   };
@@ -99,6 +92,11 @@ export function previewThemeAdmission(
  * The authoring surfaces edit a `BrandTheme`, not a document, so their draft
  * reaches the same door through the draft projection rather than the v1
  * migration. Same origin, same authorship, same admission.
+ *
+ * It carries the ledger its own door captured, for the same reason the document
+ * doors do: a draft states a decision and the leaf that decision expands into at
+ * the same level, so without the record the expansion reads as raw authorship
+ * and is measured against a ceiling its selection was already cleared past.
  */
 export function draftPreviewThemeIntent(
   input: DraftPreviewThemeIntentInput
@@ -108,5 +106,6 @@ export function draftPreviewThemeIntent(
     slug: input.slug,
     origin: "preview",
     patch: authoredThemePatch(input.draft),
+    ledger: draftProvenanceLedger(input.draft),
   };
 }

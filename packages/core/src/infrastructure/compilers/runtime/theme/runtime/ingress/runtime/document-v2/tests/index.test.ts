@@ -309,6 +309,79 @@ describe("migrate v1 -> v2", () => {
     expect(migrated.overrides).toEqual({ chrome: { tag: { defaultBg: "#101010" } } });
   });
 
+  it("derives `standard` for a pairing-only v1, and says so in the ledger", () => {
+    // D-02: the plan is DERIVED, never guessed, and a pairing is tier
+    // `standard`. The tier station reads this selection off the ledger rather
+    // than off the font leaves the pairing expands into, which is what refused
+    // every legal Standard pairing as Pro font authorship (RA01).
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { typography: { typePairing: "editorial" } },
+    } as unknown as TenantThemeDocument;
+    expect(migrateDocumentV1ToV2(document).plan).toBe("standard");
+    const { ledger } = admitDocument({ vertical: "bithire", document });
+    expect(ledger.entries.map((entry) => entry.ref)).toEqual([
+      { kind: "decision", id: "typography.pairing" },
+    ]);
+    expect(ledger.entries[0].tier).toBe("standard");
+  });
+
+  it("keeps the provenance of a v1 row it cannot migrate whole", () => {
+    // The migration refuses this document by name -- a free font stack has no
+    // v2 counterpart. The ingress door still admits it, so the decisions it
+    // DOES express must survive: one inexpressible field is not a licence to
+    // report that the tenant authored nothing.
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        typography: {
+          typePairing: "geometric",
+          fontFamilyBase: "Arial, sans-serif",
+        },
+      },
+    } as unknown as TenantThemeDocument;
+    expect(() => migrateDocumentV1ToV2(document)).toThrow(
+      /general\.typography\.fontFamilyBase/u
+    );
+    // The stack it cannot carry is still a leaf the row WRITES, so it is
+    // recorded as the direct authorship it is rather than left to the pairing.
+    const { ledger } = admitDocument({ vertical: "bithire", document });
+    expect(ledger.entries.map((entry) => entry.ref)).toEqual([
+      { kind: "decision", id: "typography.families" },
+      { kind: "decision", id: "typography.pairing" },
+    ]);
+    expect(ledger.entries.map((entry) => entry.effectiveLeaves)).toEqual([
+      ["typography.fontFamilyBase"],
+      [
+        "typography.typePairing",
+        "typography.fontFamilyHeading",
+        "typography.letterSpacing.heading",
+        "typography.lineHeight.display",
+      ],
+    ]);
+    expect(ledger.entries[1].tier).toBe("standard");
+  });
+
+  it("keeps the decisions that flank an unmigratable per-mode seed", () => {
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        palette: { backgroundMode: "auto", dark: { primary: "#17415F" } },
+      },
+    } as unknown as TenantThemeDocument;
+    expect(() => migrateDocumentV1ToV2(document)).toThrow(
+      /general\.palette\.dark/u
+    );
+    const { ledger } = admitDocument({ vertical: "bithire", document });
+    expect(ledger.entries.map((entry) => entry.ref)).toEqual([
+      { kind: "decision", id: "palette.dark-mode" },
+    ]);
+    expect(ledger.entries[0].tier).toBe("pro");
+  });
+
   it("carries the raw tokens that ARE a decision", () => {
     const document = {
       schemaVersion: 1,
@@ -352,6 +425,46 @@ describe("migrate v1 -> v2", () => {
     expect(() => migrateDocumentV1ToV2(document)).toThrow(
       /general\.palette\.dark has no v2 counterpart/
     );
+  });
+
+  it("CARRIES both interaction-state dials, and admits them at the same door", () => {
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { states: { emphasis: "strong", focusStyle: "glow" } },
+    } as unknown as TenantThemeDocument;
+    const migrated = migrateDocumentV1ToV2(document);
+    expect(migrated.decisions["states.emphasis"]).toBe("strong");
+    expect(migrated.decisions["states.focus-style"]).toBe("glow");
+    // Both rows are Standard, so a row that authored only these keeps the
+    // minimum plan the migration derives for it.
+    expect(migrated.plan).toBe("standard");
+    // The carried decisions are the TENANT's, so the door records them as
+    // direct authorship rather than as something the migration invented.
+    const ledger = admitDocument({ vertical: "bithire", document }).ledger;
+    expect(
+      ledger.entries
+        .filter((entry) => entry.provenance === "direct-override")
+        .map((entry) => entry.ref)
+    ).toEqual([
+      { kind: "decision", id: "states.emphasis" },
+      { kind: "decision", id: "states.focus-style" },
+    ]);
+  });
+
+  it("REFUSES a state value outside the row's domain, at its own keypath", () => {
+    for (const [states, path] of [
+      [{ emphasis: "loud" }, /general\.states\.emphasis "loud"/],
+      [{ focusStyle: "halo" }, /general\.states\.focusStyle "halo"/],
+    ] as const) {
+      expect(() =>
+        migrateDocumentV1ToV2({
+          schemaVersion: 1,
+          mode: "simple",
+          appearance: { states },
+        } as unknown as TenantThemeDocument)
+      ).toThrow(path);
+    }
   });
 
   it("REFUSES a free font stack: row 6 closes the domain to a pack id", () => {

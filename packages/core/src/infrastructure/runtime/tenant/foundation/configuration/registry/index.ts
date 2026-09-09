@@ -18,10 +18,12 @@
  */
 
 import type { TenantConfig } from '../../../../../../foundation/contracts';
+import type { PersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 import type {
   BrandExpressiveSelection,
 } from '@/foundation/contracts/composition/tenants/themes';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
 
 function deepFreeze<T>(value: T): T {
   if (value === null || typeof value !== 'object') {
@@ -60,13 +62,84 @@ export interface CodeOwnedGovernedBehavior {
   };
   /** Governed expressive selection: density posture, icon posture, motion defaults. */
   readonly expressive?: BrandExpressiveSelection;
+  /**
+   * The personality channels this tenant DECIDED -- names only, no values.
+   *
+   * The runtime projection strips `personality`, `brandTheme` and `appearance`
+   * to keep static CSS the sole visual emitter, and the instance-override
+   * policy read exactly those three fields to learn what the tenant had
+   * decided. Behind the real provider it therefore adjudicated against an empty
+   * set and admitted every selection it exists to refuse. The names travel here
+   * for the same reason the motion dial does: it is a governed fact no
+   * stylesheet can express, and a list of channel names is not a visual
+   * payload -- nothing here can paint.
+   */
+  readonly decidedChannels?: readonly string[];
 }
 
 const CODE_OWNED_GOVERNED_BEHAVIOR = new WeakMap<object, CodeOwnedGovernedBehavior>();
 
+const PERSONALITY_DIMENSIONS = ['animation', 'typography', 'accent', 'card'] as const;
+
+function collectDeclaredChannels(
+  personality: {
+    [K in (typeof PERSONALITY_DIMENSIONS)[number]]?: Partial<PersonalityTokens[K]>;
+  } | undefined,
+  into: Set<string>,
+): void {
+  if (!personality) return;
+  for (const dimension of PERSONALITY_DIMENSIONS) {
+    const values = personality[dimension];
+    if (!values) continue;
+    for (const [field, value] of Object.entries(values as Record<string, unknown>)) {
+      // A BrandTheme lowering emits a whole dimension the moment one field of
+      // it is authored, with the rest left `undefined`. Only a declared value
+      // is a decision.
+      if (value !== undefined) into.add(`${dimension}.${field}`);
+    }
+  }
+}
+
+/**
+ * The personality channels a tenant decided, by any of its authoring routes:
+ * the personality delta on the config, the BrandTheme lowered through the same
+ * function `useTokens` uses, and the two semantic density postures (the
+ * BrandTheme's `surfaces.density` and the DB document's
+ * `appearance.general.density`), which decide the same padding channel the
+ * personality card dimension carries.
+ *
+ * The ONE definition. A code-owned config is stripped of all three fields
+ * before it reaches a component, so its answer is captured here, while the
+ * fields still exist, and travels beside the projection; a caller-provided
+ * config still carries them and is read directly.
+ */
+export function tenantDecidedChannels(
+  config: TenantConfig | undefined,
+): ReadonlySet<string> {
+  if (!config) return new Set<string>();
+  const decided = declaredChannels(config);
+  for (const channel of getCodeOwnedGovernedBehavior(config)?.decidedChannels ?? []) {
+    decided.add(channel);
+  }
+  return decided;
+}
+
+/** The channels a config STILL carries the authoring fields for. */
+function declaredChannels(config: TenantConfig): Set<string> {
+  const decided = new Set<string>();
+  collectDeclaredChannels(config.personality, decided);
+  if (config.brandTheme) {
+    collectDeclaredChannels(brandThemeToPersonality(config.brandTheme), decided);
+    if (config.brandTheme.surfaces?.density !== undefined) decided.add('card.paddingDensity');
+  }
+  if (config.appearance?.general?.density !== undefined) decided.add('card.paddingDensity');
+  return decided;
+}
+
 function projectGovernedBehavior(
-  theme: TenantConfig['brandTheme'],
+  config: TenantConfig,
 ): CodeOwnedGovernedBehavior | undefined {
+  const theme = config.brandTheme;
   const intensity = theme?.motion?.intensity;
   const entranceDuration = theme?.motion?.entranceDuration;
   const expressive = theme?.expressive;
@@ -77,10 +150,14 @@ function projectGovernedBehavior(
           ...(intensity === undefined ? {} : { intensity }),
           ...(entranceDuration === undefined ? {} : { entranceDuration }),
         };
-  if (motion === undefined && expressive === undefined) return undefined;
+  const decidedChannels = [...declaredChannels(config)];
+  if (motion === undefined && expressive === undefined && decidedChannels.length === 0) {
+    return undefined;
+  }
   return deepFreeze({
     ...(motion === undefined ? {} : { motion }),
     ...(expressive === undefined ? {} : { expressive }),
+    ...(decidedChannels.length === 0 ? {} : { decidedChannels }),
   }) as CodeOwnedGovernedBehavior;
 }
 
@@ -110,7 +187,7 @@ function createKnownTenant(
     branding: { companyName: entry.name },
     brandTheme: entry.theme,
   }) as TenantConfig;
-  const behavior = projectGovernedBehavior(config.brandTheme);
+  const behavior = projectGovernedBehavior(config);
   if (behavior) CODE_OWNED_GOVERNED_BEHAVIOR.set(config, behavior);
   return config;
 }
@@ -173,7 +250,7 @@ export function getCodeOwnedRuntimeConfig(config: TenantConfig): TenantConfig {
   CODE_OWNED_RUNTIME_CONFIGS.set(config, projected);
   // Governed behavior travels with the projection's identity, not inside it.
   const behavior = CODE_OWNED_GOVERNED_BEHAVIOR.get(config)
-    ?? projectGovernedBehavior(config.brandTheme);
+    ?? projectGovernedBehavior(config);
   if (behavior) CODE_OWNED_GOVERNED_BEHAVIOR.set(projected, behavior);
   return projected;
 }
