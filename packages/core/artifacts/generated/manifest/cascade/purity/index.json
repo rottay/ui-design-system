@@ -17,8 +17,8 @@
   "stats": {
     "rows": 1989,
     "byClass": {
-      "value-shift": 1483,
-      "head-not-emitted": 339,
+      "value-shift": 1532,
+      "head-not-emitted": 290,
       "pure": 167
     },
     "byVertical": {
@@ -68,16 +68,13 @@
     },
     "headlessByChannel": {
       "--ds-radius-md": 10,
-      "--ds-material-raised-foreground": 6,
       "--ds-spacing-2": 9,
       "--ds-font-weight-medium": 13,
       "--ds-density-effective-scale": 14,
-      "--ds-focus-ring": 5,
       "--ds-surface-card": 36,
       "--ds-surface-control": 186,
       "--ds-glass-blur": 2,
       "--ds-gradient-primary": 2,
-      "--ds-material-overlay-background": 38,
       "--ds-material-overlay-foreground": 18
     },
     "collapsibleReplacementBytes": 2040,
@@ -332,8 +329,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 29
     },
     {
@@ -376,8 +373,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 29
     },
     {
@@ -585,8 +582,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 29
     },
     {
@@ -1619,8 +1616,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-focus-ring",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": -14
     },
     {
@@ -4699,8 +4696,8 @@
       "rule": "R1",
       "scope": "dark",
       "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 4
     },
     {
@@ -4743,8 +4740,8 @@
       "rule": "R1",
       "scope": "dark",
       "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 4
     },
     {
@@ -4897,8 +4894,8 @@
       "rule": "R1",
       "scope": "dark",
       "headChannel": "--ds-material-raised-foreground",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 7
     },
     {
@@ -13389,8 +13386,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-focus-ring",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": -15
     },
     {
@@ -13697,8 +13694,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-focus-ring",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": -15
     },
     {
@@ -14236,8 +14233,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14291,8 +14288,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14302,8 +14299,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14313,8 +14310,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 12
     },
     {
@@ -14775,8 +14772,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14786,8 +14783,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14841,8 +14838,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14907,8 +14904,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 12
     },
     {
@@ -14918,8 +14915,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14940,8 +14937,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14951,8 +14948,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -14984,8 +14981,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -15006,8 +15003,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 12
     },
     {
@@ -15050,8 +15047,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -15072,8 +15069,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -15127,8 +15124,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -15435,8 +15432,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -15479,8 +15476,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 12
     },
     {
@@ -16557,8 +16554,8 @@
       "rule": "R2",
       "scope": "base",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -18526,8 +18523,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-focus-ring",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": -12
     },
     {
@@ -18779,8 +18776,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-focus-ring",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": -12
     },
     {
@@ -19252,8 +19249,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19296,8 +19293,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19307,8 +19304,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19318,8 +19315,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19703,8 +19700,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19714,8 +19711,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19758,8 +19755,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -19813,8 +19810,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -19824,8 +19821,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -19846,8 +19843,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19857,8 +19854,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19890,8 +19887,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19901,8 +19898,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 18
     },
     {
@@ -19945,8 +19942,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -19967,8 +19964,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -20022,8 +20019,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -20165,8 +20162,8 @@
       "rule": "R1",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 10
     },
     {
@@ -20209,8 +20206,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -20847,8 +20844,8 @@
       "rule": "R2",
       "scope": "light",
       "headChannel": "--ds-material-overlay-background",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 30
     },
     {
@@ -21974,5 +21971,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "4ab216b9b5beb89137bb30375db4e3b7ba7c9625cc356b5bde71bc842c8b75dd"
+  "digest": "91740b728ed275888a961c85017e408ddc7a022a13ed8f199342925c27bb74d1"
 }
