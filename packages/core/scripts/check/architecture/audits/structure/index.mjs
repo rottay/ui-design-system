@@ -248,7 +248,7 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
   // The lowering's own floor is a ladder, not a bag of peers. `contract` is the
   // vocabulary every family is written against, `ground` is the canvas fact a
   // ramp measures against, and `shape` is the absent-leaf hygiene every writer
-  // applies before emitting. `expressive` and `dial` are the two facts the
+  // applies before emitting. `expressive` and `geometry` are the two facts the
   // pipeline resolves once and hands to everyone; the owners that read them sit
   // above, and nothing on a rank reads a peer.
   'infrastructure/compilers/runtime/theme/runtime/lowering/foundation': Object.freeze({
@@ -264,7 +264,7 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     sidebar: 0,
     seeds: 0,
     expressive: 1,
-    dial: 1,
+    geometry: 1,
     ramps: 1,
     typography: 1,
     chrome: 2,
