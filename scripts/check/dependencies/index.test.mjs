@@ -176,6 +176,11 @@ test('runtime edge policy is fail-closed for loader transport and scope-aware fo
     Reflect['deleteProperty'](row, 'score');
     Reflect.ownKeys(row);
     new MouseEvent('click', { bubbles: true, view: window });
+    const ALLOCATOR_KEY = Symbol.for('rottay.design-system.upload.uids');
+    const host = globalThis as Record<symbol, unknown>;
+    const existing = host[ALLOCATOR_KEY] as { sequence: number } | undefined;
+    host[ALLOCATOR_KEY] = existing ?? { sequence: 0 };
+    void (globalThis as Record<symbol, unknown>)[Symbol.for('rottay.design-system.filter-builder.ids')];
   `));
 
   for (const source of [
@@ -193,6 +198,11 @@ test('runtime edge policy is fail-closed for loader transport and scope-aware fo
     "const eventInit = { view: window }; new MouseEvent('click', eventInit);",
     "const MouseEvent = LocalEvent; new MouseEvent('click', { view: window });",
     "globalThis[name](source);",
+    "const slot = Symbol.for(name); globalThis[slot](source);",
+    "const slot = Symbol('rottay.slot'); globalThis[slot](source);",
+    "let slot = Symbol.for('rottay.slot'); slot = other; globalThis[slot](source);",
+    "const Symbol = LocalSymbol; const slot = Symbol.for('rottay.slot'); globalThis[slot](source);",
+    "const slot = Symbol.for('rottay.slot'); const G = globalThis; G[slot] = require;",
     "const getGlobal = () => globalThis; getGlobal()[name](source);",
     "function opaque(container) { return container[name]; } opaque(globalThis);",
     "function opaqueDefault(container = globalThis) { return container[name]; } opaqueDefault();",

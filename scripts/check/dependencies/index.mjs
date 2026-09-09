@@ -657,6 +657,46 @@ export function analyzeRuntimeModuleEdges(
     return null;
   }
 
+  // Cause 2026-09-09 (WO-CRA-24): a runtime-owned slot keyed by
+  // `Symbol.for(<static string>)` is admitted on the global container because a
+  // registry symbol is never any of the string-keyed loader properties this scan
+  // fences; `Symbol.for('require')` is a different key from `require`, and the
+  // registry never returns a well-known symbol. Every key that is not statically
+  // one of these calls stays refused, so computed transport remains fail-closed.
+  function staticRegisteredSymbolKey(expression, resolvingSymbols = new Set()) {
+    if (!expression) return false;
+    const current = unwrapRuntimeExpression(expression);
+    if (ts.isIdentifier(current)) {
+      const symbol = symbolAt(current);
+      if (!symbol || resolvingSymbols.has(symbol)) return false;
+      const declarations = symbol.declarations ?? [];
+      if (declarations.length !== 1) return false;
+      const declaration = declarations[0];
+      if (
+        declaration.getSourceFile() !== sourceFile ||
+        !ts.isVariableDeclaration(declaration) || !ts.isIdentifier(declaration.name) ||
+        !declaration.initializer || !ts.isVariableDeclarationList(declaration.parent) ||
+        !(declaration.parent.flags & ts.NodeFlags.Const)
+      ) return false;
+      resolvingSymbols.add(symbol);
+      const registered = staticRegisteredSymbolKey(declaration.initializer, resolvingSymbols);
+      resolvingSymbols.delete(symbol);
+      return registered;
+    }
+    return Boolean(
+      ts.isCallExpression(current) && current.arguments.length === 1 &&
+      directBuiltinMethodCall(current, 'Symbol', 'for') &&
+      staticStringText(current.arguments[0]) !== null,
+    );
+  }
+
+  function registeredSymbolContainerProperty(access) {
+    return Boolean(
+      ts.isElementAccessExpression(access) &&
+      staticRegisteredSymbolKey(access.argumentExpression),
+    );
+  }
+
   function runtimeIdentifier(identifier) {
     for (let current = identifier.parent; current && current !== sourceFile; current = current.parent) {
       if (ts.isTypeNode(current)) return false;
@@ -1363,7 +1403,8 @@ export function analyzeRuntimeModuleEdges(
       parent.expression === value
     ) {
       const property = propertyText(parent);
-      return property !== null && !loaderNames.has(property) && property !== 'Reflect';
+      if (property === null) return registeredSymbolContainerProperty(parent);
+      return !loaderNames.has(property) && property !== 'Reflect';
     }
     if (
       ts.isBinaryExpression(parent) &&
