@@ -24,12 +24,12 @@
  * resolves through `exports` into `dist/` and is therefore itself a hit.
  *
  * WHY IMPORTS ARE NOT ENOUGH (2026-09-08). `validateManifest()` reported no
- * problem while five real pre-build entries could not run on a clean checkout.
- * None of them IMPORTED `dist/`: two read a compiled contract off the
- * filesystem through a path variable, two read `dist/bithire.css` the same way,
- * and one spawned a command that walked every exported build target. An import
- * is one of three ways to need a build, and the other two were invisible. So
- * the walk now also reports:
+ * problem while seven pre-build entries reached `dist/` through a shape it
+ * never read. None of them IMPORTED it: three read a compiled contract off the
+ * filesystem through a path variable, one reads `dist/bithire.css` the same
+ * way, and three more reach it and measurably do not need it. An import is one
+ * of three ways to need a build, and the other two were invisible. So the walk
+ * now also reports:
  *
  *   path-literal   a `dist/` path a module builds or reads, including
  *                  `join(root, 'dist', …)` where no single literal spells it;
@@ -41,7 +41,17 @@
  * A module that MENTIONS `dist/` without depending on one -- a drill that
  * fabricates a fake `dist/` in a tmpdir is the honest case -- is not silently
  * forgiven: the manifest entry carries a written `distExemption`, which is
- * reviewed like every other exemption in that file.
+ * reviewed like every other exemption in that file. Three entries carry one:
+ * `decisions-lit-drill`, `decisions-lit-freshness` and `engine-freeze-drill`,
+ * each measured at 0 with `dist/` moved away.
+ *
+ * AND A WALK IS STILL NOT THE WHOLE ANSWER. Four entries of the same 2026-09-08
+ * move need a build for reasons no static reader can see -- a count assertion
+ * over the audited bundles, a case that self-skips when `dist/` is absent, a
+ * fixture that IS the built stylesheet, and a command named through a variable.
+ * They were found by running them with `dist/` moved away, which is the only
+ * instrument that answers this question completely. This walk closes the shapes
+ * it can prove; it does not license the phase field it cannot.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';

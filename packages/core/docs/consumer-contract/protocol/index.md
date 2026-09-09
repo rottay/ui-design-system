@@ -54,6 +54,18 @@ across the range.
 | a `contract-diff` row naming the symbol | a published declaration is ADDED, REMOVED, or changes shape, wherever it is defined |
 | the changeset bumps `@rottay/design-system` | always — a block inside a changeset that bumps another package travels with that package's release notes and reaches nobody pinned to this one |
 
+When a name is declared more than once, the shape is every declaration that a
+caller can see. A function's OVERLOAD signatures are its contract and its
+implementation signature is not — TypeScript hides that one from every caller —
+so changing an overload's return type is a contract event and widening the
+implementation behind unchanged overloads is not.
+
+The derivation fails closed. A published subpath whose source module cannot be
+located, and a name inside one that the resolver cannot follow, are reported as
+findings rather than skipped: the symbols behind an unresolvable input are
+missing from both ends of the comparison, so every one of them would read as
+unchanged and be asked for nothing.
+
 An implementation change behind an unchanged signature owes nothing beyond its
 changeset: rewriting a function body is not a contract event. Adding a field to
 `MountTenantThemeOptions` is, even though that interface is declared several

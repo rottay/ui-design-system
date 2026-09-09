@@ -25,7 +25,9 @@ import {
   parseContractDiffRow,
   readPendingChangesets,
   runDrill,
+  unresolvedSurfaceInputs,
 } from '../index.mjs';
+import { moduleExports } from '../surface/index.mjs';
 
 const changeset = (body) => parseChangeset('planted.md', body);
 
@@ -201,9 +203,16 @@ test('every declared drill class is planted and lands in its declared direction'
     'foreign-package-declaration',
     'library-without-changeset',
     'malformed-changeset',
+    'overload-implementation-changed',
+    'public-overload-change-declared',
+    'public-overload-changed',
+    'published-export-resolvable',
+    'published-export-unresolvable',
     'published-root-symbol-changed',
     'signature-defined-outside-entrypoints',
     'stale-changeset-only',
+    'star-export-inside-source-tree',
+    'star-export-outside-source-tree',
     'surface-body-only-change',
     'surface-change-declared',
   ]);
@@ -250,6 +259,101 @@ test('CONTROL: an implementation change behind an unchanged signature is not a c
 test('CONTROL: the same signature change WITH its row is green', { timeout: 300000 }, () => {
   const result = runDrill('surface-change-declared');
   assert.equal(result.landed, 'green');
+});
+
+// ---------------------------------------------------------------------------
+// The two defects the 2026-09-08 lot review reproduced against this check
+// ---------------------------------------------------------------------------
+
+test('the OVERLOADS are the published contract, not the implementation signature', () => {
+  // The unit the drill below rests on: three declarations of one name, and the
+  // shape a caller type-checks against is the two overloads.
+  const table = moduleExports('mount.ts', [
+    'export function resolveMount(input: string): string;',
+    'export function resolveMount(input: number): number;',
+    'export function resolveMount(input: string | number): string | number { return input; }',
+    '',
+  ].join('\n'));
+  const { fingerprint } = table.local.get('resolveMount');
+  assert.match(fingerprint, /\(input: string\): string;/);
+  assert.match(fingerprint, /\(input: number\): number;/);
+  assert.ok(
+    !fingerprint.includes('string | number'),
+    `the hidden implementation signature is not the contract: ${fingerprint}`,
+  );
+  // And the mutation the review ran changes it.
+  const changed = moduleExports('mount.ts', [
+    'export function resolveMount(input: string): string;',
+    'export function resolveMount(input: number): string;',
+    'export function resolveMount(input: string | number): string | number { return input; }',
+    '',
+  ].join('\n')).local.get('resolveMount').fingerprint;
+  assert.notEqual(changed, fingerprint);
+});
+
+test('a changed public overload is a contract event', { timeout: 300000 }, () => {
+  // The review's reproduction: the phone overload's return type moved, a real
+  // consumer went from clean to TS2322, and this check answered exit 0 with
+  // zero surface changes because the implementation overwrote the overloads.
+  const result = runDrill('public-overload-changed');
+  assert.equal(result.landed, 'red');
+  assert.match(result.findings.map((finding) => finding.detail).join(' '), /resolveMount/);
+});
+
+test('CONTROL: the same overload change WITH its row is green', { timeout: 300000 }, () => {
+  assert.equal(runDrill('public-overload-change-declared').landed, 'green');
+});
+
+test('CONTROL: widening the hidden implementation signature is not a contract event', {
+  timeout: 300000,
+}, () => {
+  // Without this the drill above could be passing because ANY edit to an
+  // overloaded function is red, which would be a different gate.
+  assert.equal(runDrill('overload-implementation-changed').landed, 'green');
+});
+
+test('an unresolvable published subpath is a finding, never a quiet hole', { timeout: 300000 }, () => {
+  // A subpath the derivation cannot resolve publishes symbols that are absent
+  // from BOTH ends of the diff, so every one of them reads as unchanged.
+  const result = runDrill('published-export-unresolvable');
+  assert.equal(result.landed, 'red');
+  assert.equal(result.findings[0].leg, 'surface-unresolved');
+  assert.match(result.findings[0].detail, /\.\/audit-missing/);
+});
+
+test('a star export the resolver cannot follow is the same finding', { timeout: 300000 }, () => {
+  // The second discarded class: `collectPublicSurface` reported it and
+  // `auditRange` dropped it on the floor.
+  const result = runDrill('star-export-outside-source-tree');
+  assert.equal(result.landed, 'red');
+  assert.equal(result.findings[0].leg, 'surface-unresolved');
+  assert.match(result.findings[0].detail, /star export leaves the source tree/);
+});
+
+test('CONTROL: a subpath and a star that DO resolve are not accused', { timeout: 300000 }, () => {
+  assert.equal(runDrill('published-export-resolvable').landed, 'green');
+  assert.equal(runDrill('star-export-inside-source-tree').landed, 'green');
+});
+
+test('the unresolved leg reads every class by name and counts each defect once', () => {
+  const rows = [
+    { subpath: './audit-missing', target: './dist/audit-missing.js', reason: 'no source module for the published target' },
+    { subpath: './audit-missing', target: './dist/audit-missing.js', reason: 'no source module for the published target' },
+    { file: 'packages/core/src/entrypoints/server/index.ts', specifier: 'elsewhere', reason: 'star export leaves the source tree' },
+    { subpath: './server', name: 'lost', reason: '`lost` is not exported by packages/core/src/x/index.ts' },
+  ];
+  // Base and head both carry the same broken subpath: one defect, not two.
+  assert.deepEqual(unresolvedSurfaceInputs(rows).length, 3);
+  const findings = auditRange({ changed: [], surfaceUnresolved: rows });
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].leg, 'surface-unresolved');
+  for (const fragment of ['./audit-missing', 'star export leaves the source tree', './server#lost']) {
+    assert.match(findings[0].detail, new RegExp(fragment.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')));
+  }
+});
+
+test('a range with no unresolved input carries no unresolved finding', () => {
+  assert.deepEqual(auditRange({ changed: [], surfaceUnresolved: [] }), []);
 });
 
 test('the stale-changeset drill is red because of the range, not a missing file', {

@@ -22,6 +22,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { CI_GATES, PHASES, manifestScriptTargets, validateManifest } from '../index.mjs';
+import { DRILLS } from '../../../../contract-changeset/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -407,6 +408,67 @@ test('DRILL: a distExemption is a written, measured sentence and never a spare o
         'MEASURED: run with dist/ moved away this entry exits 0, because the door import is lazy and never fires here.',
     })]).some((problem) => problem.includes('reaches no dist/ output')),
     'an exemption nobody needs is an exemption nobody reviews',
+  );
+});
+
+/**
+ * The 2026-09-08 phase move, pinned as a count.
+ *
+ * The lot review found the block comment describing it claiming nine moved
+ * entries and every one of them failing on a missing build output, when the
+ * tree holds eight and two of the eight exit 0 without `dist/`. Prose drifts
+ * from an inventory silently; this assertion does not.
+ */
+const PHASE_MOVED_2026_09_08 = [
+  'app-ds-boundary',
+  'app-ds-boundary-drill',
+  'gate-honesty-drill',
+  'modern-bundle-framework',
+  'modern-bundle-framework-drill',
+  'tenant-channel-consumer',
+  'tenant-channel-consumer-drill',
+  'tenant-channel-consumer-modern',
+];
+
+/** Enough of the table to name a roster; a count that leaves it fails here. */
+const NUMBER_WORDS = {
+  eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14,
+  fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20,
+  'twenty-one': 21, 'twenty-two': 22, 'twenty-three': 23, 'twenty-four': 24, 'twenty-five': 25,
+};
+
+test('the contract-changeset entry states the roster it actually plants', () => {
+  // Its written reason carried "eight ranges" while the suite planted thirteen.
+  // A count in prose drifts in silence unless something reads it.
+  const reason = CI_GATES.find((gate) => gate.id === 'contract-changeset-drill').noDrillReason;
+  const classes = Object.entries(DRILLS);
+  const stated = (pattern, label) => {
+    const match = reason.match(pattern);
+    assert.ok(match, `the reason must state ${label}`);
+    const value = NUMBER_WORDS[match[1].toLowerCase()];
+    assert.ok(value !== undefined, `unknown number word for ${label}: ${match[1]}`);
+    return value;
+  };
+  assert.equal(stated(/`DRILLS` — ([\w-]+) today/u, 'its roster size'), classes.length);
+  assert.equal(
+    stated(/([\w-]+) must go red/u, 'how many classes must go red'),
+    classes.filter(([, direction]) => direction === 'red').length,
+  );
+});
+
+test('the 2026-09-08 move is eight entries and three written dist exemptions', () => {
+  for (const id of PHASE_MOVED_2026_09_08) {
+    const gate = CI_GATES.find((entry) => entry.id === id);
+    assert.ok(gate, `${id} is named by the move and absent from the manifest`);
+    assert.equal(gate.phase, 'post-build', `${id} moved out of pre-build`);
+    assert.ok(
+      (gate.prerequisites ?? []).includes('fresh-dist'),
+      `${id} must declare the input it moved for, or a run without one says nothing`,
+    );
+  }
+  assert.deepEqual(
+    CI_GATES.filter((gate) => gate.distExemption !== undefined).map((gate) => gate.id).sort(),
+    ['decisions-lit-drill', 'decisions-lit-freshness', 'engine-freeze-drill'],
   );
 });
 

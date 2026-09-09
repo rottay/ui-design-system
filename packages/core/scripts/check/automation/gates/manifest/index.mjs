@@ -50,7 +50,7 @@ export const CI_GATES = Object.freeze([
   // belongs here is the proof that it has teeth, which needs no range at all.
   { id: 'contract-changeset-drill', run: ['node', '--test', 'scripts/check/contract-changeset/tests/index.test.mjs'], blocking: true, phase: 'pre-build',
     noDrillReason:
-      'This entry IS the drill for `contract-changeset`: it plants eight ranges in throwaway git repositories — a guaranteed-surface change with no changeset, one covered only by the changeset the base branch already carries, one with an unparseable declaration, one with a bump that declares nothing, a shipped change with no changeset, and the three that must stay green — and asserts each lands in the direction it declares. The graded check itself is range-scoped and lives in the `changeset` job of .github/workflows/ci.yml; registering it here would compare main to itself on every checkout and pass vacuously.', },
+      'This entry IS the drill for `contract-changeset`: it plants one range per class in `DRILLS` — twenty today, each pinned by name in the roster assertion of that suite — in throwaway git repositories, and asserts each lands in the direction it declares. Eleven must go red (a guaranteed-surface change with no changeset, one covered only by the changeset the base branch already carries, an unparseable declaration, a bump that declares nothing, a shipped change with no changeset, a signature that moves where it is defined, a published root symbol, a declaration naming another package, a changed public overload, an unresolvable published export and a star export the resolver cannot follow) and the rest must stay green. The graded check itself is range-scoped and lives in the `changeset` job of .github/workflows/ci.yml; registering it here would compare main to itself on every checkout and pass vacuously.', },
   // A named import of a binding the target module never publishes is `undefined`
   // at runtime and renders an invalid element. A deep-path import rewrite landed
   // 22 of them at once because the short alias for a compound primitive lives in
@@ -974,17 +974,40 @@ export const CI_GATES = Object.freeze([
   { id: 'customization-controls-drill', run: ['node', '--test', 'scripts/generate/theme/controls-doc/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['customization-controls-freshness'], },
   { id: 'customization-controls-freshness', run: ['node', 'scripts/generate/theme/controls-doc/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'customization-controls-drill', },
 
-  // MOVED OUT OF PRE-BUILD (2026-09-08, WO-CAN-02 amendment J.23).
+  // MOVED OUT OF PRE-BUILD (2026-09-08, WO-CAN-02 amendment J.23; corrected
+  // 2026-09-08 after the lot review measured the claim below).
   //
-  // Each of these nine entries was declared `pre-build` and MEASURABLY could not
-  // run there: on a checkout with no `dist/` they exit 1 on a missing build
-  // output, and with one they are green. `validateManifest()` reported no
-  // problem for any of them, because the dependency is a filesystem read or a
+  // These EIGHT entries were declared `pre-build`. Measured by moving
+  // `packages/core/dist` away and running each one:
+  //
+  //   SIX exit 1. `tenant-channel-consumer` and its `--modern-check` twin on a
+  //   missing compiled contract; `app-ds-boundary` on a missing
+  //   `dist/bithire.css`; `app-ds-boundary-drill` on seven of nine cases, whose
+  //   fixture IS that stylesheet and the app corpus; `gate-honesty-drill` on
+  //   the gate that walks every exported build target; and
+  //   `modern-bundle-framework-drill` on ONE assertion of its own.
+  //
+  //   TWO exit 0, and neither one is the measurement its entry exists to make.
+  //   `modern-bundle-framework` audits the five COMMITTED mirrors and skips the
+  //   five `dist/` publish targets in silence -- the bytes a consumer installs
+  //   are exactly what it is positioned to certify -- so what a dist-less run
+  //   of that pair reports is its drill's count assertion (`audited >= 6`,
+  //   which gets 5), not a missing output. `tenant-channel-consumer-drill`
+  //   reports 21 green assertions with the only case that RUNS the gate
+  //   self-skipped for the reason it prints: "dist is not built".
+  //
+  // Of the eight, `validateManifest()` reports FOUR: the three tenant-channel
+  // entries and `app-ds-boundary`, whose dependency is a filesystem read or a
   // dynamic import through a path variable rather than an import specifier --
-  // the three shapes `dist-reachability` now follows. They are not deleted and
-  // not baselined: they run in the phase whose input they need, after the build
-  // step of `.github/workflows/ci.yml`, with the prerequisite declared so a run
-  // without one says PREREQ-MISSING and names it.
+  // the shapes `dist-reachability` now follows, and the ones the old walk saw
+  // none of. The other four need a build for reasons no static walk sees: a
+  // count assertion, a self-skipping case, a fixture that is the built
+  // stylesheet, and a spawned command named through a variable. Running them
+  // without `dist/` is what found those, and it is the evidence recorded here.
+  //
+  // They are not deleted and not baselined: they run in the phase whose input
+  // they need, after the build step of `.github/workflows/ci.yml`, with the
+  // prerequisite declared so a run without one says PREREQ-MISSING and names it.
   { id: 'modern-bundle-framework-drill', run: ['node', '--test', 'scripts/check/engine/lifecycle/framework-bundle/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['modern-bundle-framework'], prerequisites: ['fresh-dist'], },
   { id: 'modern-bundle-framework', run: ['node', 'scripts/check/engine/lifecycle/framework-bundle/index.mjs'], blocking: true, phase: 'post-build', drillId: 'modern-bundle-framework-drill', prerequisites: ['fresh-dist'], },
   { id: 'tenant-channel-consumer-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/consumers/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['tenant-channel-consumer', 'tenant-channel-consumer-modern'], prerequisites: ['fresh-dist'], },
@@ -1216,9 +1239,12 @@ export function validateManifest(gates = CI_GATES, { packageRoot = MANIFEST_PACK
       }
       // Three shapes, not one: an import specifier, a filesystem read of a
       // `dist/` path however the path was built, and a child command followed
-      // into its own graph. `validateManifest()` reported no problem for five
-      // entries that could not run before a build because it only ever read the
-      // first (2026-09-08, rubric J.23).
+      // into its own graph. `validateManifest()` reported no problem for four
+      // pre-build entries that reached `dist/` through the second shape --
+      // three read a compiled contract through a path variable, one reads
+      // `dist/bithire.css` -- because it only ever read the first (2026-09-08,
+      // rubric J.23). A walk is not the whole answer either: four more entries
+      // of that move need a build for reasons only running them reports.
       const reached = distReachableFrom(packageRoot, manifestEntryModules(gate.run, packageRoot));
       if (reached.length === 0 && gate.distExemption !== undefined) {
         problems.push(`${gate.id}: carries a distExemption and reaches no dist/ output; remove the exemption`);

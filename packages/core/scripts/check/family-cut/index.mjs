@@ -253,11 +253,38 @@ function classifyRunner(node) {
   return { kind, suppressed: modifiers.some((name) => SUPPRESSING_MODIFIERS.has(name)) };
 }
 
-/** The a11y assertions and the helper names reachable inside one node. */
+/** A body that runs only when something calls it. */
+function isFunctionLike(node) {
+  return ts.isArrowFunction(node) || ts.isFunctionExpression(node)
+    || ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node);
+}
+
+/** `((() => {}))()` -- a callee or a callback reached through parentheses is still invoked. */
+function unwrapParentheses(node) {
+  let current = node;
+  while (current && ts.isParenthesizedExpression(current)) current = current.expression;
+  return current;
+}
+
+/**
+ * The a11y assertions and the helper names reachable inside one node.
+ *
+ * A function body is entered only where reaching it MEANS running it: the
+ * callback of a call, an immediately invoked expression, the case body itself.
+ * A function that is only written down -- a `const` nobody calls, an event
+ * handler nobody fires -- executes nothing, so the assertions inside it are
+ * text of the kind this gate exists to refuse. They still count when an
+ * executing case reaches the function BY NAME, which is the `helpers`
+ * resolution in `countExecutableA11yAssertions`.
+ */
 function scanForA11y(node, source) {
   let assertions = 0;
   const calls = new Set();
+  const enter = (fn) => {
+    if (fn.body) visit(fn.body);
+  };
   const visit = (current) => {
+    if (isFunctionLike(current)) return;
     if (ts.isCallExpression(current)) {
       const callee = current.expression.getText(source);
       if (A11Y_CALLEE.test(callee)) assertions += 1;
@@ -267,10 +294,19 @@ function scanForA11y(node, source) {
       }
       const chain = callerChain(current.expression);
       if (chain && chain.modifiers.length === 0) calls.add(chain.root);
+      const invoked = unwrapParentheses(current.expression);
+      if (isFunctionLike(invoked)) enter(invoked);
+      else visit(current.expression);
+      for (const argument of current.arguments) {
+        const value = unwrapParentheses(argument);
+        if (isFunctionLike(value)) enter(value);
+        else visit(argument);
+      }
+      return;
     }
     ts.forEachChild(current, visit);
   };
-  ts.forEachChild(node, visit);
+  visit(node);
   return { assertions, calls };
 }
 

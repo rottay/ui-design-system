@@ -164,6 +164,22 @@ function declarationKind(node) {
 }
 
 /**
+ * The published shape of ONE name from every declaration that carries it.
+ *
+ * A name can be declared more than once: a function's overload signatures with
+ * its implementation, a merged interface, a merged namespace. When overload
+ * signatures are present they ARE the contract -- TypeScript hides the
+ * implementation signature from every caller -- so the shape is the ordered
+ * list of overloads and the implementation is not part of it. Keeping only the
+ * last declaration, as this collector first did, made changing an overload's
+ * return type invisible while a consumer went from clean to TS2322.
+ */
+export function combineDeclarations(parts) {
+  const overloads = parts.filter((part) => part.overload);
+  return (overloads.length > 0 ? overloads : parts).map((part) => part.fingerprint).join(' ');
+}
+
+/**
  * One module's export table: what it declares itself, what it forwards, and
  * from where. Import bindings are included so `import { A } from './x'; export
  * { A }` resolves to the module that actually declares `A`.
@@ -175,6 +191,19 @@ export function moduleExports(file, text) {
   const forwards = new Map();
   const stars = [];
   const imports = new Map();
+
+  /** Records one declaration of `name`, keeping every earlier one. */
+  const record = (table, name, part) => {
+    const entry = table.get(name) ?? { kind: part.kind, parts: [] };
+    entry.parts.push(part);
+    table.set(name, entry);
+    return entry;
+  };
+  const settle = (table) => {
+    for (const [name, entry] of table) {
+      table.set(name, { kind: entry.kind, fingerprint: combineDeclarations(entry.parts) });
+    }
+  };
 
   for (const statement of source.statements) {
     if (ts.isImportDeclaration(statement) && ts.isStringLiteral(statement.moduleSpecifier)) {
@@ -206,7 +235,7 @@ export function moduleExports(file, text) {
       continue;
     }
     if (ts.isExportAssignment(statement) && !statement.isExportEquals) {
-      local.set('default', { kind: 'value', fingerprint: signatureFingerprint(statement.expression, source) });
+      record(local, 'default', { kind: 'value', fingerprint: signatureFingerprint(statement.expression, source) });
       continue;
     }
     const modifiers = ts.canHaveModifiers(statement) ? ts.getModifiers(statement) : undefined;
@@ -217,7 +246,7 @@ export function moduleExports(file, text) {
         if (!ts.isIdentifier(declaration.name)) continue;
         // A declaration WITHOUT `export` is still the definition an
         // `export { … }` clause below it names, so it is recorded either way.
-        (exported ? local : declarations).set(declaration.name.text, {
+        record(exported ? local : declarations, declaration.name.text, {
           kind: 'value',
           fingerprint: signatureFingerprint(declaration, source),
         });
@@ -225,15 +254,26 @@ export function moduleExports(file, text) {
       continue;
     }
     if (statement.name && ts.isIdentifier(statement.name)) {
-      const record = { kind: declarationKind(statement), fingerprint: signatureFingerprint(statement, source) };
-      (exported ? local : declarations).set(statement.name.text, record);
-      if (exported && isDefault) local.set('default', record);
+      const part = {
+        kind: declarationKind(statement),
+        fingerprint: signatureFingerprint(statement, source),
+        // A function declaration with no body is an overload SIGNATURE, which
+        // is what a caller type-checks against.
+        overload: ts.isFunctionDeclaration(statement) && statement.body === undefined,
+      };
+      const entry = record(exported ? local : declarations, statement.name.text, part);
+      if (exported && isDefault) local.set('default', entry);
       continue;
     }
     if (exported && isDefault) {
-      local.set('default', { kind: declarationKind(statement), fingerprint: signatureFingerprint(statement, source) });
+      record(local, 'default', {
+        kind: declarationKind(statement),
+        fingerprint: signatureFingerprint(statement, source),
+      });
     }
   }
+  settle(local);
+  settle(declarations);
   return { local, forwards, stars, imports, declarations };
 }
 

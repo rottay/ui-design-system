@@ -471,6 +471,102 @@ test('CONTROL: an a11y assertion reached only through a helper still counts', ()
   );
 });
 
+/**
+ * The 2026-09-08 review's mutant, planted as a drill: thirteen ORDINARY passing
+ * files whose accessibility assertions all sit in callbacks nothing invokes.
+ * The counter walked into those bodies and reported 26 executed assertions with
+ * no finding, which is the same false green the `describe.skip` mirror proves
+ * against -- reached through a shape a reader would call a normal test file.
+ */
+const UNCALLED_CALLBACK_TEST = [
+  "import { describe, it, expect } from 'vitest';",
+  "import { render, screen } from '@testing-library/react';",
+  "import Button from '../index';",
+  '',
+  '// Declared, never invoked: the assertions below run in no case.',
+  'function assertNamed(name: string) {',
+  "  expect(screen.getByRole('button', { name })).toHaveAccessibleName(name);",
+  '}',
+  '',
+  "describe('button', () => {",
+  "  it('renders its label', () => {",
+  '    const check = () => {',
+  "      expect(screen.getByRole('button')).toHaveAccessibleName('Save');",
+  '    };',
+  '    void check;',
+  '    void assertNamed;',
+  '    render(<Button onFocus={() => screen.getByLabelText(\'Save\')}>Save</Button>);',
+  "    expect(document.body.textContent).toContain('Save');",
+  '  });',
+  '});',
+  '',
+].join('\n');
+
+/** The green twin: the SAME two callbacks, now called by the executing case. */
+const CALLED_CALLBACK_TEST = UNCALLED_CALLBACK_TEST
+  .replace('    void check;', '    check();')
+  .replace('    void assertNamed;', "    assertNamed('Save');");
+
+function withOnlyTestFile(contents, run) {
+  withPlantedFamily(
+    (sandbox) => {
+      const dir = join(sandbox, TEST_DIR);
+      for (const name of readdirSync(dir)) rmSync(join(dir, name), { force: true });
+      writeFileSync(join(dir, 'Button.callback-shape.test.tsx'), contents);
+    },
+    run,
+  );
+}
+
+test('PLANT: an accessibility assertion in a callback NOTHING invokes is not evidence', () => {
+  withOnlyTestFile(UNCALLED_CALLBACK_TEST, (findings, measured) => {
+    assert.equal(measured.blocking.a11yAssertions, 0, 'an uninvoked body executes no assertion');
+    assert.equal(measured.blocking.a11yProbes, 0, 'a file that executes none of them is not a probe');
+    expectFinding(
+      findings,
+      'owns no executable accessibility assertion',
+      'a passing file whose a11y calls sit in uncalled callbacks is text, not evidence',
+    );
+  });
+});
+
+test('CONTROL: the SAME callbacks counted once the executing case calls them', () => {
+  // Without this the drill above would pass for the wrong reason: a counter
+  // that had simply stopped reading callbacks would also report zero.
+  withOnlyTestFile(CALLED_CALLBACK_TEST, (findings, measured) => {
+    // Two per callback: the role query and the name matcher.
+    assert.equal(measured.blocking.a11yAssertions, 4, 'both invoked callbacks execute their assertions');
+    assert.equal(measured.blocking.a11yProbes, 1);
+    expectNoFinding(
+      findings,
+      'owns no executable accessibility assertion',
+      'an invoked callback is executed accessibility evidence',
+    );
+  });
+});
+
+test('CONTROL: a callback the case passes to a caller still executes', () => {
+  // `await waitFor(() => expect(...).toHaveFocus())` is the ordinary shape of a
+  // real assertion, and it must keep counting: the rule is "reaching it runs
+  // it", not "callbacks do not count".
+  withOnlyTestFile([
+    "import { describe, it, expect } from 'vitest';",
+    "import { render, screen, waitFor } from '@testing-library/react';",
+    "import Button from '../index';",
+    '',
+    "describe('button', () => {",
+    "  it('takes focus', async () => {",
+    '    render(<Button>Save</Button>);',
+    "    await waitFor(() => expect(screen.getByRole('button')).toHaveFocus());",
+    '  });',
+    '});',
+    '',
+  ].join('\n'), (findings, measured) => {
+    assert.equal(measured.blocking.a11yAssertions, 2, 'the query and the focus matcher both execute');
+    expectNoFinding(findings, 'owns no executable accessibility assertion', 'a passed callback runs');
+  });
+});
+
 test('PLANT: the SAME helper assertion is worthless when the only case is skipped', () => {
   withPlantedFamily(
     (sandbox) => {

@@ -323,6 +323,28 @@ export function coverSurfaceChanges(surfaceChanges, rows) {
   return uncovered.sort((left, right) => left.symbol.localeCompare(right.symbol));
 }
 
+/**
+ * One unresolvable surface input, named the way its class reads.
+ *
+ * The three shapes the derivation can refuse: a published subpath with no
+ * source module, a star export that leaves the tree, and a name inside a
+ * resolved subpath that the chain cannot follow.
+ */
+export function describeUnresolved(row) {
+  if (row.subpath && row.name) return `${row.subpath}#${row.name} (${row.reason})`;
+  if (row.subpath) return `${row.subpath} -> ${row.target} (${row.reason})`;
+  if (row.file) return `${row.file}: \`export * from '${row.specifier}'\` (${row.reason})`;
+  return `${JSON.stringify(row)}`;
+}
+
+/**
+ * The unresolvable inputs, deduplicated across the two ends of the range.
+ * A subpath that is broken at base AND head is one defect, not two.
+ */
+export function unresolvedSurfaceInputs(rows) {
+  return [...new Set(rows.map((row) => describeUnresolved(row)))].sort();
+}
+
 export function auditRange({
   changed,
   declared = [],
@@ -330,8 +352,24 @@ export function auditRange({
   versionBumped = false,
   surfaceChanges = [],
   surfaceFiles = null,
+  surfaceUnresolved = [],
 }) {
   const findings = [];
+
+  // FAIL-CLOSED, AND NOT ONLY IN THE COLLECTOR. An input the derivation cannot
+  // resolve is a hole in the surface this gate certifies: the symbols behind it
+  // are absent from BOTH ends, so every one of them diffs to "unchanged" and is
+  // asked for nothing. It is a finding whatever else the range did -- a release
+  // does not excuse it, because the release is what ships the hole.
+  const unresolved = unresolvedSurfaceInputs(surfaceUnresolved);
+  if (unresolved.length > 0) {
+    findings.push({
+      leg: 'surface-unresolved',
+      detail:
+        `${unresolved.length} published surface input(s) could not be resolved, so the shape behind them is `
+        + `uncertified: ${unresolved.slice(0, 5).join('; ')}${unresolved.length > 5 ? '; …' : ''}`,
+    });
+  }
   const buckets = classifyPaths(changed, { surfaceFiles });
   const released = consumed.length > 0 && versionBumped;
   const governedDeclared = declared.filter((entry) => declaresGovernedPackage(entry));
@@ -495,13 +533,18 @@ function surfaceIn(repoRoot) {
   const manifest = readFile(`${LIBRARY_ROOT}package.json`);
   if (manifest === null) return { symbols: new Map(), files: new Map(), unresolved: [], entries: [] };
   const contract = readFile(`${LIBRARY_ROOT}contracts/package/entrypoints/index.json`);
-  const { entries } = publishedEntries({
+  // BOTH classes of unresolved input travel: a published subpath whose source
+  // module cannot be located, and a name inside one that cannot be followed.
+  // Dropping the first was how an export pointing at nothing produced no
+  // finding at all -- the surface simply stopped covering that subpath.
+  const { entries, unresolved: entryUnresolved } = publishedEntries({
     packageManifest: JSON.parse(manifest),
     entrypointContract: contract === null ? null : JSON.parse(contract),
     viteEntries: viteEntryMap(readFile(`${LIBRARY_ROOT}vite.config.ts`)),
     exists,
   });
-  return { ...collectPublicSurface({ entries, readModule: readFile, exists }), entries };
+  const collected = collectPublicSurface({ entries, readModule: readFile, exists });
+  return { ...collected, entries, unresolved: [...entryUnresolved, ...collected.unresolved] };
 }
 
 /**
@@ -606,6 +649,20 @@ export const DRILLS = Object.freeze({
   // published shape moved, and when the change IS declared.
   'surface-body-only-change': 'green',
   'surface-change-declared': 'green',
+  // The two defects the 2026-09-08 lot review reproduced against THIS check,
+  // each of which it answered with exit 0 and zero surface changes -- plus the
+  // second class of the unresolved one, which its finding named separately.
+  'public-overload-changed': 'red',
+  'published-export-unresolvable': 'red',
+  'star-export-outside-source-tree': 'red',
+  // And their controls. The overload pair proves the rule is "the overloads
+  // ARE the contract" and not "any edit to an overloaded function is red"; the
+  // resolvable pair proves an input that DOES resolve is never accused of
+  // being a hole.
+  'overload-implementation-changed': 'green',
+  'public-overload-change-declared': 'green',
+  'published-export-resolvable': 'green',
+  'star-export-inside-source-tree': 'green',
 });
 
 const RETAINED_CHANGESET = [
@@ -631,6 +688,19 @@ const VALID_CHANGESET = [
   '',
 ].join('\n');
 
+/** The sandbox package manifest, with any extra published subpaths. */
+function manifestWith(extraExports = {}) {
+  return `${JSON.stringify({
+    name: '@rottay/design-system',
+    version: '2.19.36',
+    exports: {
+      '.': { types: './dist/index.d.ts', import: './dist/index.js' },
+      './server': { types: './dist/server.d.ts', import: './dist/server.js' },
+      ...extraExports,
+    },
+  }, null, 2)}\n`;
+}
+
 function plant(workspace, path, contents) {
   mkdirSync(join(workspace, dirname(path)), { recursive: true });
   writeFileSync(join(workspace, path), contents);
@@ -650,19 +720,21 @@ const MOUNT_MODULE = [
   '  return { ...options };',
   '}',
   '',
+  // The lot review's probe: a published function whose contract is its
+  // OVERLOADS. A caller type-checks against these two lines and never against
+  // the implementation signature below them.
+  'export function resolveMount(input: string): string;',
+  'export function resolveMount(input: number): number;',
+  'export function resolveMount(input: string | number): string | number {',
+  '  return input;',
+  '}',
+  '',
 ].join('\n');
 
 /** A base commit with one file of every class this gate distinguishes. */
 function sandbox() {
   const workspace = mkdtempSync(join(tmpdir(), 'contract-changeset-drill-'));
-  plant(workspace, `${LIBRARY_ROOT}package.json`, `${JSON.stringify({
-    name: '@rottay/design-system',
-    version: '2.19.36',
-    exports: {
-      '.': { types: './dist/index.d.ts', import: './dist/index.js' },
-      './server': { types: './dist/server.d.ts', import: './dist/server.js' },
-    },
-  }, null, 2)}\n`);
+  plant(workspace, `${LIBRARY_ROOT}package.json`, manifestWith());
   plant(workspace, `${LIBRARY_ROOT}vite.config.ts`, [
     'export default {',
     '  build: { lib: { entry: {',
@@ -676,7 +748,7 @@ function sandbox() {
   plant(
     workspace,
     `${LIBRARY_ROOT}src/entrypoints/server/index.ts`,
-    "export { mountTenantTheme } from '../../infrastructure/mount';\n"
+    "export { mountTenantTheme, resolveMount } from '../../infrastructure/mount';\n"
     + "export type { MountTenantThemeOptions } from '../../infrastructure/mount';\n",
   );
   plant(workspace, `${LIBRARY_ROOT}src/index.ts`, "export { root } from './runtime/root';\n");
@@ -704,7 +776,8 @@ export function runDrill(drill) {
     const rewriteEntrypoint = () => plant(
       workspace,
       `${LIBRARY_ROOT}src/entrypoints/server/index.ts`,
-      "export { mountTenantTheme, type MountTenantThemeOptions } from '../../infrastructure/mount';\n"
+      "export { mountTenantTheme, resolveMount, type MountTenantThemeOptions } "
+      + "from '../../infrastructure/mount';\n"
       + 'export const serverMarker = 2;\n',
     );
     const changeset = (level, ...rows) => [
@@ -822,6 +895,100 @@ export function runDrill(drill) {
       plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset(
         'minor',
         'signature ./server#MountTenantThemeOptions — requires the compiled `artifact`',
+      ));
+    }
+
+    // THE OVERLOAD PROBE. The collector kept only the LAST declaration of a
+    // name, so the implementation signature overwrote both overloads and this
+    // mutation produced zero surface changes while a real consumer went from
+    // clean to TS2322.
+    const changeOverload = () => plant(
+      workspace,
+      `${LIBRARY_ROOT}src/infrastructure/mount/index.ts`,
+      MOUNT_MODULE.replace(
+        'export function resolveMount(input: number): number;',
+        'export function resolveMount(input: number): string;',
+      ),
+    );
+    if (drill === 'public-overload-changed') {
+      changeOverload();
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset('patch'));
+    }
+    if (drill === 'public-overload-change-declared') {
+      changeOverload();
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset(
+        'minor',
+        'signature ./server#resolveMount — the number overload now returns `string`',
+      ));
+    }
+    if (drill === 'overload-implementation-changed') {
+      // The control: the implementation signature is NOT the contract, so
+      // widening it behind unchanged overloads must stay green.
+      plant(
+        workspace,
+        `${LIBRARY_ROOT}src/infrastructure/mount/index.ts`,
+        MOUNT_MODULE.replace(
+          'export function resolveMount(input: string | number): string | number {',
+          'export function resolveMount(input: unknown): unknown {',
+        ),
+      );
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset('patch'));
+    }
+
+    // THE UNRESOLVED PROBE. A published subpath whose source module does not
+    // exist was dropped on the floor: the surface simply stopped covering it,
+    // and every symbol behind it diffed to "unchanged".
+    if (drill === 'published-export-unresolvable') {
+      plant(workspace, `${LIBRARY_ROOT}package.json`, manifestWith({
+        './audit-missing': { types: './dist/audit-missing.d.ts', import: './dist/audit-missing.js' },
+      }));
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset('patch'));
+    }
+    if (drill === 'published-export-resolvable') {
+      // The control: the same new subpath WITH its source module and its rows.
+      plant(workspace, `${LIBRARY_ROOT}package.json`, manifestWith({
+        './audit-present': { types: './dist/audit-present.d.ts', import: './dist/audit-present.js' },
+      }));
+      plant(
+        workspace,
+        `${LIBRARY_ROOT}src/audit-present/index.ts`,
+        'export const auditPresent = 1;\n',
+      );
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset(
+        'minor',
+        'subpath ./audit-present — added',
+      ));
+    }
+
+    // The SECOND unresolved class, which `auditRange` discarded separately: a
+    // star export the resolver cannot follow. Every name behind it is missing
+    // from both ends of the diff, so nothing about it is ever asked for.
+    if (drill === 'star-export-outside-source-tree') {
+      plant(
+        workspace,
+        `${LIBRARY_ROOT}src/entrypoints/server/index.ts`,
+        "export { mountTenantTheme, resolveMount } from '../../infrastructure/mount';\n"
+        + "export type { MountTenantThemeOptions } from '../../infrastructure/mount';\n"
+        + "export * from 'a-package-this-resolver-cannot-follow';\n",
+      );
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset(
+        'minor',
+        'subpath ./server — re-exports a third-party module',
+      ));
+    }
+    if (drill === 'star-export-inside-source-tree') {
+      // The control: the same shape of edit, through a star the resolver DOES
+      // follow, is not a hole and is not accused of being one.
+      plant(
+        workspace,
+        `${LIBRARY_ROOT}src/entrypoints/server/index.ts`,
+        "export { mountTenantTheme, resolveMount } from '../../infrastructure/mount';\n"
+        + "export type { MountTenantThemeOptions } from '../../infrastructure/mount';\n"
+        + "export * from '../../infrastructure/mount';\n",
+      );
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset(
+        'minor',
+        'subpath ./server — re-exports the mount module directly',
       ));
     }
 
