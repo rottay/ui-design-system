@@ -3954,7 +3954,7 @@
    "lane": "canon-close",
    "order": 2,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -3963,8 +3963,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-23, F-49, F-57, F-97, F-103, F-104, F-107",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-08",
    "progressLog": [
     {
      "at": "2026-09-08 20:34",
@@ -3972,8 +3972,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): rubric J.23 FAIL - 'One manifest is wired to both phases, but five real pre-build entries require dist and validation reports no problems'. validateManifest() returns no problems while entries 110/111, 116/117 and 141 fail without dist/; the reachability validator reads import-expression source text and cannot follow path-variable dataflow, filesystem reads or child commands. Entry 117 additionally reads the clean app through an inherited APP_BITHIRE_ROOT instead of its mutant fixture (8/8 when cleared). Two test-fixture typecheck errors from this WO's own delivery join its acceptance. The honest counters, the removed retry masking and the runner's PREREQ-MISSING semantics are NOT withdrawn.. Prior claimedBy=claude-opus-5-can-02 claimedAt=2026-09-05 doneAt=2026-09-06. Prior evidence (verbatim): Landed cbe58225 on main (45 paths, tree 6e0584d4, sole parent bacb6a4e). Reconstructed from prior audited candidate f10d0b90 onto post-CAN-06 stack; audit round 1 FAIL on conflict-resolution law violation (probe entry + manual-tools double registration), Opus consolidated fix (phase/noDrillReason/prerequisites + register removal), delta audit round 2 PASS on exact candidate refs/kimi-k3/candidates/can-02-poststack-v2 (86e49844): validateManifest 0 problems, runner exit 0, suites 13/13+18/18+10/10, freshness trio green, debt exactly 18 no widening."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-08",
+   "evidence": "R3 lot landed c295af9bb (54bfe274c+03e11a6c0); Codex audit LAND: phase model repaired — nine-entry inventory corrected to 8 moved + 3 exemptions, dist-reachability sees var-held/dynamic-import/spawned dist reads with negative controls, APP_BITHIRE_ROOT scrubbed in fixture tests, fixture TS2739 fixed at source (typecheck-tests OK 0/0); clean-checkout ordered path fails clearly by name; 11 inherited failures untouched, retries stay removed"
   },
   {
    "id": "WO-CAN-03",
@@ -4899,7 +4899,7 @@
    "lane": "evidence-graph",
    "order": 4,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4908,8 +4908,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-50, F-51, F-106; supersedes: WO-GAT-09",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-08",
    "progressLog": [
     {
      "at": "2026-09-06 01:36",
@@ -4922,8 +4922,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): DEL-01, DEL-05, DEL-07. CI checks out docs-engineering 9865c253 while the committed seal requires e048d2f9, and the exactness gate rejects unequal revisions. F-106 remains red with the correct docs: claim-exactness exits 1 with 49 error entries - 48 documented rows without a statically established source stamp plus 116 unresolved governed data-part sinks - and the recorded done evidence does not establish that closure. STATUS republished a stale decisions-lit run instead of reading its producer. Evidence: audit/95-reaudit-2026-09-08/coverage/provenance.md. This WO's declared Files also carry the reopen-provenance machinery added by this lot.. Prior claimedBy=claude-opus-5-evi-04 claimedAt=2026-09-06 doneAt=2026-09-06. Prior evidence (verbatim): Scout-measured closure (K2.7 report /private/tmp/rottay-closures-scout.md, HEAD fc841757): STATUS publishes the 11 indicator rows bound 1:1 to registry.metrics (row1 measured 7/22, rows 2-11 honestly NOT MEASURED with owing WO); fingerprint seal verifies green on pinned 712c7352 after CAN-02 landing; phase model kept with written reason; WO-CRA-23 sealed; F-50 clean (0 retired-path citations). Two adjudications by kimi-k3-dt: (1) outcome fingerprint re-seal satisfied by verification+documented deliberate non-reseal (mapping unmoved, 82 source IDs preserved, empty re-seal would be ceremony); (2) README DaisyUI lines are negations/residual-layer statements, not Modern-as-DaisyUI — acceptance intent satisfied. roadmap:check green, 95/95 roadmap tests."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-08",
+   "evidence": "R3 lot landed c295af9bb; Codex audit LAND: DEL-01 CI pin follows the unchanged seal (one declared ci.yml hunk); DEL-05 was a scanner not a missing contract (claims/exactness machinery, bounded write-set extension); DEL-07 republication carries production dates; exactness --check-artifact green vs sealed docs e048d2f9 (3318 counters, 3219 exact zeros); reopen-provenance machinery owned from R4 stands"
   },
   {
    "id": "WO-EVI-05",

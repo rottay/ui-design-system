@@ -61,7 +61,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 84/159 work orders done (53%)
+## Work-order burn-down — 86/159 work orders done (54%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -73,7 +73,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | [tokens](./tokens.md) | 10 | 0 | 1 | 11 |
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
-| [canon-close](./canon-close.md) | 4 | 0 | 2 | 6 |
+| [canon-close](./canon-close.md) | 5 | 0 | 1 | 6 |
 | [consumer-contract](./consumer-contract.md) | 3 | 0 | 3 | 6 |
 | [catalog-door](./catalog-door.md) | 1 | 0 | 2 | 3 |
 | [derivation](./derivation.md) | 0 | 1 | 6 | 7 |
@@ -81,7 +81,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | [emission-mount](./emission-mount.md) | 0 | 0 | 3 | 3 |
 | [platform-invariants](./platform-invariants.md) | 0 | 0 | 8 | 8 |
 | [retire](./retire.md) | 0 | 0 | 5 | 5 |
-| [evidence-graph](./evidence-graph.md) | 0 | 0 | 5 | 5 |
+| [evidence-graph](./evidence-graph.md) | 1 | 0 | 4 | 5 |
 
 ## Programme milestones (derived from their gate work orders)
 
@@ -90,7 +90,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | A · The apps can build | not reached | WO-CON-04, WO-CON-05 | WO-CON-04, WO-CON-05 | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 50 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 48 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -122,16 +122,15 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-CAN-02 | Honest verification: pre/post-build gate manifest, mandatory drills, fail-open counters, tautological tests removed | M | canon-close | audit-2026-09-05 |
 | WO-CAN-04 | Remove the parallel customization paths | M | canon-close | audit-2026-09-05 |
-| WO-EVI-04 | Roadmap and documentation truth: STATUS indicators, fingerprint re-seal, Modern Rescue sealed, docs regenerated | S | evidence-graph | audit-2026-09-05 |
+| WO-CAT-02 | Typed catalog, ThemeDecisions, document v2 and the end of the five catalogs | L | catalog-door | audit-2026-09-05 |
 | WO-CON-04 | Milestone A exit gate: a consumer proof and the app migration packets | S | consumer-contract | audit-2026-09-05 |
 
 ## Blocked (dependencies or phase claim lock)
 
 | WO | Waiting on |
 | --- | --- |
-| WO-GAT-09 | dependencies: WO-CRA-15, WO-EVI-02, WO-EVI-04; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
+| WO-GAT-09 | dependencies: WO-CRA-15, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-CRA-15 | dependencies: WO-RET-01; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-CRA-17 | dependencies: WO-RET-01; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
 | WO-ARC-12 | dependencies: WO-FAM-00; phase 1 is locked: Awaiting the complete Wave-0 checkpoint and explicit owner GO. |
@@ -156,7 +155,6 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-GAT-11 | dependencies: WO-INV-01, WO-INV-03, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-GAT-12 | dependencies: WO-EVI-01, WO-RET-03; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-SKIN-08 | dependencies: WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
-| WO-CAT-02 | dependencies: WO-CAN-02 |
 | WO-CAT-03 | dependencies: WO-CAT-02 |
 | WO-DER-01 | dependencies: WO-CAT-03 |
 | WO-DER-03 | dependencies: WO-DER-01 |
@@ -184,7 +182,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-INV-04 | dependencies: WO-DER-04, WO-EMI-02 |
 | WO-INV-05 | dependencies: WO-DER-04 |
 | WO-RET-01 | dependencies: WO-EMI-02, WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11 |
-| WO-RET-02 | dependencies: WO-CAN-02, WO-FAM-06 |
+| WO-RET-02 | dependencies: WO-FAM-06 |
 | WO-RET-03 | dependencies: WO-EVI-01 |
 | WO-RET-04 | dependencies: WO-DER-06, WO-EMI-02, WO-RET-01 |
 | WO-RET-05 | dependencies: WO-EMI-02 |
@@ -287,10 +285,12 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-CRA-23 | 2026-09-05 | SEALED: R0 instrumentación retenida; R1+ sustituidas por derivation/family-cuts; métrica 0/255 reemplazada por indicadores |
 | WO-CRA-24 | 2026-09-08 | landed 8f4d6e9ce; independent K3 audit LANDING PASS (/private/tmp/rottay-cra24-kimi-k3-audit.md): CD-01 probe measured both sides — base {filterCollision:true,remaining:0} → tip {filterCollision:false,remaining:1}; 9/9 acceptance tests; reserve-step mutation turns the 4 restored-identity tests red; no new reds; frozen engines + public surface untouched |
 | WO-CAN-01 | 2026-09-05 | C4 certified on committed baseline through 58-path governance residual closure: 820 stale references across 53 governance files reduced to 0; independent Claude Fable 5.1 audit PASS, matrix 115/115 blocking gates with 1 declared SKIP, Modern Rescue 48/48, roadmap 79/79; report /private/tmp/rottay-wo-can-01-fable.md SHA256 13219027e817fa46da57e43f4ee9f74f66ab0362a7598cdd34571ea071294842. |
+| WO-CAN-02 | 2026-09-08 | R3 lot landed c295af9bb (54bfe274c+03e11a6c0); Codex audit LAND: phase model repaired — nine-entry inventory corrected to 8 moved + 3 exemptions, dist-reachability sees var-held/dynamic-import/spawned dist reads with negative controls, APP_BITHIRE_ROOT scrubbed in fixture tests, fixture TS2739 fixed at source (typecheck-tests OK 0/0); clean-checkout ordered path fails clearly by name; 11 inherited failures untouched, retries stay removed |
 | WO-CAN-03 | 2026-09-06 | Closed by 79ffd71711c78f04a028f6f73cdeb44b89b6d8f0; exact 123-path source+derived lot; independent Kimi K3 PASS at /private/tmp/rottay-can03-exact-kimi-k3.md; 94/116 candidate versus 93/115 base, identical 22-red historical set, motion drill 6/6, zero new real reds; owner keeps radius=none as the recommended flush-header treatment. |
 | WO-CAN-05 | 2026-09-05 | CAN-05 complete: ui commits b1134dded071946f336271d1c962a1413ea98446, 5d189f9fedf506d2821203ce72ae394b34bec255, 188b38e75166a164c0adbd430eaba6b5282bb30d; docs commit aa0f24e3913925d9cb47828628543b7e043b9845; independent Fable 5.1 PASS reports /private/tmp/rottay-wo-can-05-final-fable.md, /private/tmp/rottay-can-05-source-close-fable.md, /private/tmp/rottay-can-05-docs-fable.md, /private/tmp/rottay-can-05-derived-fable.md |
 | WO-CAN-06 | 2026-09-06 | Landed f7cb572e on main (99 paths, tree 7e288b0a, sole parent 706d4c644). Independent K3 audit: round 1 HOLD on 3 stale derived cascade artifacts, fixed by coordinator regeneration in mandated order (extraction-fanout-producers); round 2 delta audit PASS on exact candidate refs/kimi-k3/candidates/can-06-poststack-v2 (5898570d) with all freshness and artifact-consuming gates green, zero collateral gate movement. |
 | WO-CAT-01 | 2026-09-05 | Published roadmap/kit-2026-09.md (SHA256 3a18b42a0101c44cf35857e2bdaca15eb1a5320c2d5ca3c53256674257b2b3d7; body digest 0f25b32c6d0842b20736a514d9794e6294a8b13f718aa4de9d368ca9bbd8e09c); independent Claude Fable 5.1 re-audit PASS in /private/tmp/rottay-wo-cat-01-fable-reaudit.md (SHA256 67637f13132e8fc1fae1cbf932f4220d134d1f5b8135d3c6e8a5fcfca246de7e). |
+| WO-EVI-04 | 2026-09-08 | R3 lot landed c295af9bb; Codex audit LAND: DEL-01 CI pin follows the unchanged seal (one declared ci.yml hunk); DEL-05 was a scanner not a missing contract (claims/exactness machinery, bounded write-set extension); DEL-07 republication carries production dates; exactness --check-artifact green vs sealed docs e048d2f9 (3318 counters, 3219 exact zeros); reopen-provenance machinery owned from R4 stands |
 | WO-CON-01 | 2026-09-07 | sanctioned import surface complete: consumer-contract doc + lint rule landed (3a9873f4; rule 20/20 incl fail-closed cases; roster now 120/120 after WO-CAN-04's carried count change with death proof); pnpm --filter @rottay/design-system lint exit 0 measured on landed tree d0f54693 with REAL sibling app dirs (lint:vertical included, only non-blocking warnings); claim-exactness seal/artifacts regenerated green in audited lot d0f54693 (candidate d7d00aaa, independent K3 audit PASS: proof chain repaired, corpus drained 19 missing paths to 0, deterministic double-run); docs reconciled in docs-engineering 893bce77 (safety ref 19e0ec03). Adjudication: app-platform wiring out of scope per standing contract (only app-bithire is the productive consumer; app-evnto/app-platform are do-not-modify; evnto was already wired) — the rule runs in showroom+bithire+evnto, baselined per app, decrease-only |
 | WO-CON-02 | 2026-09-07 | mountTenantTheme facade complete: DS lot 072f71cb landed after independent PASS; facade bytes-equal to compileTenantTheme path for the three verticals (15/15 tests); showroom SSR mounts through one call; codemod applied to app-bithire trio compiles (16s green); docs reconciled in docs-engineering 893bce77 (safety ref bc2803e9). Closure conditions now met: (1) engine-token-audit GREEN and BLOCKING — 18 dead Daisy rules + tour inlinePaint drained in dbe18dea (audited candidate 34b7b738, K3 PASS; ceiling untouched, exact invariant satisfied; runner 140 blocking/1 excluded); (2) WO-GAT-07 documentationRevision/exactness-live resealed in the verified DS lot d0f54693 (documentationRevision 674474cb to 8944a4f = live docs main; inspectedDocsMatchRevision true; sealingErrors none; deterministic double-run 1e172e4f) — same lot, as required |
 | WO-CON-03 | 2026-09-07 | tenant document v2 door + decisions-lit complete: v2 door/migrate/adapter landed 722fd05b; public naming surface 2141922a (independent PASS); docs chapters in docs-engineering e421aa5; probe prints decisions lit = 7/22 (+0/10 new) (independently reproduced by the auditor with Chromium); registration lot 94117928 landed: 3 package scripts + decisions-lit-freshness gate with two-way drill pair (pre-build blocking, 142/1 runner, validateManifest 0 problems) + content-digest freshness guard (door 693 files + instrument 16 files, all refusal paths drilled incl. borrowed-fixture) + 13 new drills (32/32) + adjudicated consumer-contract §2 visualAuthority typed-declaration correction. Adjudications: gate registers the freshness guard (CI gates job installs no browser; run stays hand-run measurement) and mtime guard excludes generated facade/artifacts (content digest still covers them). Audits: PASS + rebase delta PASS |
