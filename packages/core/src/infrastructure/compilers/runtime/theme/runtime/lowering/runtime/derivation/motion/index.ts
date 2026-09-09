@@ -1,27 +1,109 @@
 /**
- * @fileoverview The motion family: the closed duration/easing vocabulary.
+ * @fileoverview The motion family: ONE duration/easing vocabulary, every role
+ * of it stated at rest, plus the two bounded dials.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/motion
  * @category Compilers
  * @package @rottay/design-system
  */
 
+import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
+import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { setMotionVariables } from "../../../foundation/motion";
 
+/** The two bounded dials the shared posture table computes for this family. */
+const MOTION_DIAL_CHANNELS: ReadonlySet<string> = new Set([
+  "--ds-motion-intensity",
+  "--ds-motion-duration-scale",
+]);
+
+function motionDialVariables(
+  motion: AppearancePostureFields["motion"]
+): Record<string, string> {
+  if (!motion) return {};
+  const vars: Record<string, string> = {};
+  for (const [channel, value] of Object.entries(
+    appearancePostureToVariables({ motion })
+  )) {
+    if (MOTION_DIAL_CHANNELS.has(channel)) vars[channel] = value;
+  }
+  return vars;
+}
+
 /**
- * Three durations and two easing families, expressed as tokens; `calm` tracks
- * the theme's own entrance duration so tabs and tooltips animate at the speed
- * the theme authored for its entrances.
+ * The duration aliases the vocabulary also answers to.
+ *
+ * `instant/calm/deliberate` are the product-law cadence; `fast/normal/slow/
+ * glacial` are the same three steps under the names the token sheet and the
+ * skins already read. They are ALIASES of the cadence, not a second ladder:
+ * expressing them as `var()` onto the cadence is what keeps the second
+ * vocabulary from becoming a second authority the way `--ds-transition-*` did.
+ */
+const DURATION_ALIASES: Readonly<Record<string, string>> = {
+  "--ds-motion-fast": "var(--ds-motion-instant)",
+  "--ds-motion-normal": "var(--ds-motion-calm)",
+  "--ds-motion-slow": "var(--ds-motion-deliberate)",
+  "--ds-motion-glacial": "calc(var(--ds-motion-deliberate) * 1.5625)",
+};
+
+/**
+ * Roles a skin animates on that carried no resting value.
+ *
+ * A component that writes `animation: … var(--ds-motion-calm)` produces an
+ * INVALID animation wherever the channel is unset -- and `calm` and
+ * `deliberate` existed only inside the reduced-motion block, so thirteen
+ * modern animations were invalid in every context that ships the engine
+ * without a compiled tenant artifact. A role a component may bind has a
+ * resting value or it is not a role.
+ */
+const REST_ROLES: Readonly<Record<string, string>> = {
+  "--ds-motion-ease-standard": "var(--ds-ease-standard)",
+  "--ds-motion-ease-out": "var(--ds-motion-ease-enter)",
+  "--ds-motion-ease-in-out": "cubic-bezier(0.4, 0, 0.6, 1)",
+  "--ds-motion-scale-in": "0.98",
+  "--ds-motion-offset-in": "-2px",
+  "--ds-motion-panel-offset": "12px",
+};
+
+/**
+ * Three durations, two easing families, and the dials that bend them.
+ *
+ * The bounded `intensity` and `durationScale` dials used to be emitted by the
+ * scale-axis family while the vocabulary they bend was emitted here, so one
+ * axis had two owners separated by the whole registry. They are motion
+ * statements and settle in the motion family.
  */
 export const motionDeriver: FamilyDeriver = {
   family: "motion",
   rank: "derived",
   consumes: ["motion.*"],
   produces: ["--ds-motion-*", "--ds-ease-*"],
-  derive: (context) => {
-    const vars: Record<string, string> = {};
-    setMotionVariables(vars, context.theme);
-    return vars;
-  },
+  derive: (context) =>
+    deriveMotionChannels(context.theme, context.expressive.expansion),
 };
+
+export function deriveMotionChannels(
+  bt: BrandTheme,
+  expansion: ExpressiveExpansion
+): Record<string, string> {
+  const vars: Record<string, string> = {};
+  setMotionVariables(vars, bt);
+  Object.assign(vars, DURATION_ALIASES, REST_ROLES);
+  Object.assign(vars, motionDialVariables(expansion.fieldDefaults.motion));
+  Object.assign(
+    vars,
+    motionDialVariables(
+      bt.motion
+        ? {
+            intensity: bt.motion.intensity,
+            durationScale: bt.motion.durationScale,
+            ambient: bt.motion.ambient,
+          }
+        : undefined
+    )
+  );
+  return vars;
+}

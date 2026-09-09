@@ -1,114 +1,80 @@
 /**
- * @fileoverview The type-family family: font families and the two metrics a
- * governed pairing shares with an authored typography block.
+ * @fileoverview The typography family: ONE typographic authority -- pairing,
+ * ramp, roles, weights, figure posture and pack binding.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/typography
  * @category Compilers
  * @package @rottay/design-system
  */
 
-import { withArabicSafeFallback } from "@/foundation/kernel/typography";
-import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
-import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
-import { TYPE_PAIRING_CHANNELS } from "../../../foundation/contract";
+import { deriveTypePairingChannels } from "./pairing";
+import { deriveTypePackChannels } from "./packs";
+import { deriveTypeRoleChannels } from "./roles";
+import { deriveTypeScaleChannels } from "./scale";
+import { deriveTypeWeightChannels } from "./weights";
 
-const PAIRING_CHANNELS: ReadonlySet<string> = new Set<string>(
-  TYPE_PAIRING_CHANNELS
-);
-
-/** The pairing's five channels, and nothing else the posture table computes. */
-function pairingVariables(
-  typePairing: AppearancePostureFields["typePairing"]
-): Record<string, string> {
-  if (!typePairing) return {};
-  const vars: Record<string, string> = {};
-  for (const [channel, value] of Object.entries(
-    appearancePostureToVariables({ typePairing })
-  )) {
-    if (PAIRING_CHANNELS.has(channel)) vars[channel] = value;
-  }
-  return vars;
-}
+export { deriveTypePairingChannels } from "./pairing";
+export { deriveTypeRoleChannels } from "./roles";
+export { deriveTypeScaleChannels } from "./scale";
+export { deriveTypeWeightChannels } from "./weights";
+export { NUMERIC_POSTURE } from "./numeric";
 
 /**
- * The single producer of the type families and their tracking/leading.
+ * One family, one deriver.
  *
- * These five channels -- base, heading and mono family, heading tracking and
- * display leading -- used to be written twice inside one function, once from
- * the vertical's own block and once from the tenant floor, which is why write
- * order rather than authority decided them. The three vertical-level
- * statements (profile pairing, authored pairing, authored literal) resolve
- * HERE, in that order; the tenant's own pairing and literals are a separate
- * family one rank up, so the contest between authorities is the ranked merge
- * and not a trailing assignment.
+ * Type used to be split across two derivers and four parallel vocabularies:
+ * the families and metrics here, the ramp and roles in a second family, a
+ * weight ladder no decision could move, and a hardcoded scale exported from
+ * the token facade. A component therefore had to know WHICH vocabulary a
+ * given surface spoke before it could bind to it. The sub-owners below are
+ * layers of one authority, not competing ones: pairing states the families,
+ * scale states the ramp on the type dial, weights states the ladder the roles
+ * bind, numeric states the figure posture the roles wear, roles states what a
+ * surface actually binds, and packs states which registered pack a role
+ * resolved to. They are composed in that order, so a later layer refines an
+ * earlier one instead of contradicting it.
  */
 export const typographyDeriver: FamilyDeriver = {
   family: "typography",
   rank: "derived",
-  consumes: ["typography.*", "expressive.*"],
+  consumes: [
+    "typography.*",
+    "typography.roles",
+    "typography.labelStyle",
+    "typography.headingWeightBias",
+    "expressive.*",
+  ],
   produces: [
-    "--ds-font-family-base",
-    "--ds-font-family-heading",
-    "--ds-font-family-mono",
-    "--ds-font-family-display",
-    "--ds-letter-spacing-display",
-    "--ds-letter-spacing-heading",
-    "--ds-letter-spacing-body",
-    "--ds-letter-spacing-mono",
-    "--ds-line-height-display",
-    "--ds-line-height-heading",
-    "--ds-line-height-body",
-    "--ds-line-height-tight",
-    "--ds-line-height-relaxed",
+    "--ds-font-family-*",
+    "--ds-font-weight-*",
+    "--ds-font-pack-role-*",
+    "--ds-letter-spacing-*",
+    "--ds-line-height-*",
+    "--ds-text-*",
+    "--ds-type-*",
   ],
   derive: (context) =>
-    deriveTypeFamilyChannels(context.theme, context.expressive.expansion),
+    deriveTypographyChannels(
+      context.theme,
+      context.expressive.expansion,
+      context.expressive.typeRoleOverlay
+    ),
 };
 
-export function deriveTypeFamilyChannels(
+export function deriveTypographyChannels(
   bt: BrandTheme,
-  expansion: ExpressiveExpansion
+  expansion: ExpressiveExpansion,
+  typeRoleOverlay: ExpressiveTypeRoleOverlay | undefined
 ): Record<string, string> {
-  const vars: Record<string, string> = {};
-  Object.assign(vars, pairingVariables(expansion.fieldDefaults.typePairing));
-  const ty = bt.typography;
-  if (!ty) return vars;
-  Object.assign(vars, pairingVariables(ty.typePairing));
-  if (ty.fontFamilyBase)
-    vars["--ds-font-family-base"] = withArabicSafeFallback(ty.fontFamilyBase);
-  if (ty.fontFamilyHeading)
-    vars["--ds-font-family-heading"] = withArabicSafeFallback(
-      ty.fontFamilyHeading
-    );
-  if (ty.fontFamilyMono) vars["--ds-font-family-mono"] = ty.fontFamilyMono;
-  if (ty.fontFamilyDisplay)
-    vars["--ds-font-family-display"] = withArabicSafeFallback(
-      ty.fontFamilyDisplay
-    );
-  if (ty.letterSpacing) {
-    if (ty.letterSpacing.display)
-      vars["--ds-letter-spacing-display"] = ty.letterSpacing.display;
-    if (ty.letterSpacing.heading)
-      vars["--ds-letter-spacing-heading"] = ty.letterSpacing.heading;
-    if (ty.letterSpacing.body)
-      vars["--ds-letter-spacing-body"] = ty.letterSpacing.body;
-    if (ty.letterSpacing.mono)
-      vars["--ds-letter-spacing-mono"] = ty.letterSpacing.mono;
-  }
-  if (ty.lineHeight) {
-    if (ty.lineHeight.display != null)
-      vars["--ds-line-height-display"] = String(ty.lineHeight.display);
-    if (ty.lineHeight.heading != null)
-      vars["--ds-line-height-heading"] = String(ty.lineHeight.heading);
-    if (ty.lineHeight.body != null)
-      vars["--ds-line-height-body"] = String(ty.lineHeight.body);
-    if (ty.lineHeight.tight != null)
-      vars["--ds-line-height-tight"] = String(ty.lineHeight.tight);
-    if (ty.lineHeight.relaxed != null)
-      vars["--ds-line-height-relaxed"] = String(ty.lineHeight.relaxed);
-  }
-  return vars;
+  return {
+    ...deriveTypePairingChannels(bt, expansion),
+    ...deriveTypeScaleChannels(),
+    ...deriveTypeWeightChannels(bt),
+    ...deriveTypeRoleChannels(bt, typeRoleOverlay),
+    ...deriveTypePackChannels(bt),
+  };
 }

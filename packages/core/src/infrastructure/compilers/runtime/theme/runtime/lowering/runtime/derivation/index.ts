@@ -10,10 +10,14 @@ import type { FamilyDeriver } from "../../foundation/contract";
 import { axesDeriver } from "./axes";
 import { chartsDeriver } from "./charts";
 import { chromeDeriver } from "./chrome";
+import { densityDeriver } from "./density";
+import { elevationDeriver } from "./elevation";
 import { expressiveDeriver } from "./expressive";
 import { materialsDeriver } from "./materials";
 import { motionDeriver } from "./motion";
 import { paletteDeriver } from "./palette";
+import { responsiveDeriver } from "./responsive";
+import { rhythmDeriver } from "./rhythm";
 import { rampsDeriver } from "./ramps";
 import { recipesDeriver } from "./recipes";
 import { seedsDeriver } from "./seeds";
@@ -21,7 +25,6 @@ import { statesDeriver } from "./states";
 import { surfacesDeriver } from "./surfaces";
 import { tenantDeriver } from "./tenant";
 import { tintDeriver } from "./tint";
-import { typeRolesDeriver } from "./type-roles";
 import { typographyDeriver } from "./typography";
 
 /**
@@ -40,11 +43,14 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   paletteDeriver,
   statesDeriver,
   surfacesDeriver,
+  elevationDeriver,
   materialsDeriver,
   rampsDeriver,
   chartsDeriver,
   tintDeriver,
-  typeRolesDeriver,
+  densityDeriver,
+  rhythmDeriver,
+  responsiveDeriver,
   motionDeriver,
   tenantDeriver,
   chromeDeriver,

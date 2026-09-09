@@ -11,44 +11,22 @@
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
-import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FamilyDeriver } from "../../../foundation/contract";
-import { ELEVATION_PRESET_CHANNELS } from "../../../foundation/contract";
 import { semanticSurfaceRolesToSurfaceVariables } from "../../../foundation/materials";
-
-const ELEVATION_CHANNELS: ReadonlySet<string> = new Set<string>(
-  ELEVATION_PRESET_CHANNELS
-);
-
-/** The ladder a bounded elevation posture presets, and nothing else. */
-function elevationPresetVariables(
-  elevation: Parameters<typeof appearancePostureToVariables>[0]["elevation"]
-): Record<string, string> {
-  if (!elevation) return {};
-  const vars: Record<string, string> = {};
-  for (const [channel, value] of Object.entries(
-    appearancePostureToVariables({ elevation })
-  )) {
-    if (ELEVATION_CHANNELS.has(channel)) vars[channel] = value;
-  }
-  return vars;
-}
 
 /**
  * Everything a surface states: its grounds, its geometry operands, its shadow
- * and elevation ladders and its decorative layer.
+ * ladder and its decorative layer.
  *
- * The elevation preset a posture implies is emitted here rather than with the
- * scale axes, because the authored ladder that outranks it is a surfaces
- * statement -- one family, one channel, resolved in one place instead of two
- * writers separated by three hundred lines.
+ * Depth is NOT here. The elevation ladder and the stacking bands are one axis
+ * with one owner (`../elevation`); a surface states what it is made of, not
+ * how far off the page it sits.
  */
 export const surfacesDeriver: FamilyDeriver = {
   family: "surfaces",
   rank: "derived",
   consumes: ["surfaces.*", "expressive.*"],
   produces: [
-    "--ds-elevation-*",
     "--ds-surface-*",
     "--ds-radius-*",
     "--ds-shadow-*",
@@ -73,10 +51,6 @@ export function deriveSurfaceChannels(
   const su = bt.surfaces;
   const vars: Record<string, string> = {};
   if (!su) return vars;
-  Object.assign(
-    vars,
-    elevationPresetVariables(su.elevation ?? expansion.fieldDefaults.elevation)
-  );
   Object.assign(
     vars,
     semanticSurfaceRolesToSurfaceVariables(su.surfaceRoles ?? su.materials)
@@ -123,14 +97,6 @@ export function deriveSurfaceChannels(
       vars["--ds-shadow-focus-ring"] = su.shadows.focusRing;
     if (su.shadows.focusRingError)
       vars["--ds-shadow-focus-ring-error"] = su.shadows.focusRingError;
-  }
-  if (su.elevations) {
-    if (su.elevations.level0) vars["--ds-elevation-0"] = su.elevations.level0;
-    if (su.elevations.level1) vars["--ds-elevation-1"] = su.elevations.level1;
-    if (su.elevations.level2) vars["--ds-elevation-2"] = su.elevations.level2;
-    if (su.elevations.level3) vars["--ds-elevation-3"] = su.elevations.level3;
-    if (su.elevations.level4) vars["--ds-elevation-4"] = su.elevations.level4;
-    if (su.elevations.level5) vars["--ds-elevation-5"] = su.elevations.level5;
   }
   if (su.glass) {
     // 'none' is legacy zero-decoration suppression. The premium.css defaults

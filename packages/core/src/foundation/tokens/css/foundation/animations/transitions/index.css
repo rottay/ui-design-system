@@ -97,6 +97,19 @@
   --ds-motion-glacial: 500ms;
   --ds-motion-duration-scale: 1;
 
+  /* `calm` and `deliberate` are the cadence's own names for `normal` and
+     `slow`. They existed ONLY inside the reduced-motion block below, so every
+     `animation: … var(--ds-motion-calm)` resolved to nothing at rest and the
+     whole declaration was invalid wherever no compiled tenant artifact ships.
+     A role a component may bind carries a resting value. */
+  --ds-motion-calm: var(--ds-motion-normal);
+  --ds-motion-deliberate: var(--ds-motion-slow);
+  /* The travel dial skins multiply their entrance offsets by, and the ease
+     name the compiler emits as `--ds-ease-standard`. Both were read with a
+     literal fallback in place of a declaration. */
+  --ds-motion-intensity: 1;
+  --ds-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
   /* Intent-based cadence. Components bind to WHY motion exists instead of
      choosing arbitrary speeds, which keeps dense tools calm and AI feedback
      expressive without becoming decorative noise. */

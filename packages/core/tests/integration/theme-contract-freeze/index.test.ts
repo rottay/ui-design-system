@@ -355,16 +355,19 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/foundation/motion/index.ts`,
       `${LOWERING_ROOT}/foundation/palette/index.ts`,
       `${LOWERING_ROOT}/foundation/type-ramp/index.ts`,
-      `${LOWERING_ROOT}/runtime/derivation/axes/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/charts/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/density/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/elevation/ladder/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/materials/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/palette/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/recipes/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/responsive/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/states/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/surfaces/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/tenant/index.ts`,
-      `${LOWERING_ROOT}/runtime/derivation/typography/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/typography/pairing/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/typography/weights/index.ts`,
     ]);
   });
 
