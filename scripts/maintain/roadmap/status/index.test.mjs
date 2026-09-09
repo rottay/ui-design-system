@@ -2213,7 +2213,11 @@ test("the reopen record stays inside the closed progress schema", () => {
 test("decisions-lit indicator publishes the probe's own headline, never its own", () => {
   const indicator = readDecisionsLitIndicator();
   assert.equal(indicator.measured, true, "the committed probe artifact must be readable");
-  assert.match(indicator.headline, /^decisions lit = \d+\/22 \(\+\d+\/10 new\)$/);
+  // Denominator re-anchored 10 → 8 on 2026-09-08 (DT ruling): the WO-DER-02 v3
+  // repair moved states.emphasis/focus-style from `new` to `partial` — audited
+  // TRUTHFUL by the independent K3 v3 audit — so the probe's own headline now
+  // reports +n/8 new. The pin tracks the producer's number, never invents one.
+  assert.match(indicator.headline, /^decisions lit = \d+\/22 \(\+\d+\/8 new\)$/);
   assert.match(
     indicator.measuredHeadline,
     /^measured on the \d+-family sample: \d+\/22 move at least one sampled family$/,
