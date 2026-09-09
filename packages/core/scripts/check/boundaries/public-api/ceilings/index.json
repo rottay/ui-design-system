@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 9,
-      "maxSourceBytes": 62115
+      "maxSourceBytes": 63931
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-CAN-04: the mount door shrank. The provider stopped importing and mounting SystemCssVariablesBridge (the runtime personality painter this lot deleted) and now names the fail-closed adapter door directly, and the artifact-protocol channel docblock lost two lines; net -5 source bytes on the ./runtime/visual-authority graph, reachable modules unchanged at 9. Lowered in the same lot that produced it, per the anchor law. ./surfaces/oauth-transition is gone from the roster with the surface it published, so the seat is 76 subpaths.",
-  "lastMoveKind": "decrece-solo — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 0 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-CON-06 extends TenantThemeArtifact with the serialized decision-provenance metadatum, so the visual-authority verifier validates its shape and includes it in the digest it recomputes: +1816 source bytes on ./runtime/visual-authority, reachable modules unchanged at 9 (the ledger's own owner is deliberately NOT imported there).",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

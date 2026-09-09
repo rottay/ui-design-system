@@ -292,6 +292,9 @@ export function verifyTenantThemeArtifactV1(
   if (!sameOrderedStrings(artifact.coverage, TENANT_THEME_V1_COVERAGE)) {
     return { ok: false, error: "coverage is not the exact ordered v1 coverage" };
   }
+  if (artifact.provenance !== undefined && !isAdmittedProvenance(artifact.provenance)) {
+    return { ok: false, error: "provenance is not a serialized decision ledger" };
+  }
   if (
     Object.entries(artifact.variables).some(
       ([name, value]) => !name.startsWith("--ds-") || typeof value !== "string",
@@ -341,6 +344,10 @@ export function verifyTenantThemeArtifactV1(
       ...(artifact.modeDeltas && artifact.modeDeltas.length > 0
         ? { modeDeltas: artifact.modeDeltas }
         : {}),
+      // A decision metadatum that changes runtime policy cannot live outside
+      // the digest the mount proves: an artifact whose provenance was edited in
+      // transit would otherwise verify and then govern.
+      ...(artifact.provenance ? { provenance: artifact.provenance } : {}),
       scopes,
       ...(artifact.adjustments && artifact.adjustments.length > 0
         ? { adjustments: artifact.adjustments }
@@ -799,4 +806,38 @@ export function resolveVisualAuthority(
     artifact: verified.artifact,
     mountedArtifact,
   };
+}
+
+/**
+ * The serialized ledger, judged by SHAPE alone.
+ *
+ * The mount verifies an artifact, not a compile: it cannot re-derive who caused
+ * a leaf, and a tier or a provenance class it recomputed here would be one a
+ * transport could have forged. The vocabulary is judged where the ledger is
+ * built, against the injected catalog, and the digest below binds the result to
+ * this artifact. What is left for this side is refusing a metadatum that is not
+ * a ledger at all before a policy reader walks it.
+ */
+function isAdmittedProvenance(value: unknown): boolean {
+  if (!isRecord(value) || !Array.isArray(value.entries)) return false;
+  return value.entries.every((entry) => {
+    if (!isRecord(entry)) return false;
+    const { ref } = entry;
+    const refOk =
+      isRecord(ref) &&
+      ((ref.kind === "decision" && typeof ref.id === "string" && ref.id.length > 0) ||
+        (ref.kind === "sanctioned-override" &&
+          typeof ref.path === "string" &&
+          ref.path.length > 0));
+    return (
+      refOk &&
+      typeof entry.provenance === "string" &&
+      entry.provenance.length > 0 &&
+      (entry.tier === null || typeof entry.tier === "string") &&
+      Array.isArray(entry.effectiveLeaves) &&
+      entry.effectiveLeaves.every(
+        (leaf: unknown) => typeof leaf === "string" && leaf.length > 0
+      )
+    );
+  });
 }

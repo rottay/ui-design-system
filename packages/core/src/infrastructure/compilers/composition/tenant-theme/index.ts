@@ -21,14 +21,10 @@ import { sha256Utf8 } from "@/foundation/kernel/cryptography/sha-256";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import { validateResponsivePostureSelection } from "@/foundation/tokens/ts/presentation/responsive-postures";
 import { assertTenantIdentityAllowed } from "@/foundation/tokens/ts/presentation/brand-themes";
-import {
-  resolveExpressiveAxes,
-  sanitizeExpressiveOverrides,
-} from "@/foundation/tokens/ts/presentation/expressive-profiles";
-import { expandExpressiveProfiles } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type {
   NormalizedTenantThemeAppearance,
   TenantThemeArtifact,
+  TenantThemeArtifactProvenance,
   TenantThemeConfigIdentity,
   TenantThemeConfig,
   TenantThemeContrastAdjustment,
@@ -42,13 +38,9 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   TENANT_THEME_ANATOMY_VARIANTS,
-  TENANT_THEME_CHROME_FAMILIES,
-  TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
   TENANT_THEME_FONT_PACK_IDS,
-  TENANT_THEME_RADIUS_SCALE_BOUNDS,
   TENANT_THEME_REFERENCE_TOKENS,
   TENANT_THEME_SCHEMA_VERSION,
-  TENANT_THEME_TYPE_SCALE_BOUNDS,
   TENANT_THEME_V1_COVERAGE,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
@@ -63,7 +55,11 @@ import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
-import { withExpressiveFieldDefaults } from "../../runtime/theme/runtime/lowering/runtime/derivation/expressive";
+import { expandProfileDefaults } from "../../runtime/theme/runtime/ingress/foundation/profile-expansion";
+import {
+  envelopeDialIssues,
+  envelopeShapeIssues,
+} from "./foundation/envelope";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
 import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type { EngineVisualDeclaration } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
@@ -76,6 +72,8 @@ import {
   isTenantAuthoredField,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { type TenantStatusSeedAuthorship } from "@/foundation/contracts/composition/tenants/themes/resolved";
+import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
+import type { DecisionProvenanceLedger } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import { tenantArtifactScope } from "@/infrastructure/compilers/runtime/theme";
 // The artifact composer is deliberately NOT on the theme barrel: it is the
 // format two internal owners share, not an API a consuming app has any use for.
@@ -530,226 +528,25 @@ export function validateTenantThemeAgainstVerticalEnvelope(
   config: TenantThemeConfig,
   envelope: TenantThemeVerticalEnvelope | undefined
 ): TenantThemeValidationIssue[] {
-  if (!envelope) {
-    return [
-      {
-        code: "invalid_value",
-        path: "$.verticalKey",
-        message: "Tenant theme compilation requires a vertical policy envelope",
-      },
-    ];
-  }
-  const issues: TenantThemeValidationIssue[] = [];
-  if (!isPlainObject(envelope)) {
-    return [
-      {
-        code: "invalid_type",
-        path: "$.verticalEnvelope",
-        message: "Expected a code-owned vertical envelope object",
-      },
-    ];
-  }
-  const allowedEnvelopeKeys = new Set([
-    "schemaVersion",
-    "verticalKey",
-    "allowedModes",
-    "advanced",
-    "ranges",
-  ]);
-  for (const key of Object.keys(envelope)) {
-    if (!allowedEnvelopeKeys.has(key)) {
-      issues.push({
-        code: "unknown_key",
-        path: `$.verticalEnvelope.${key}`,
-        message: "Unknown vertical envelope field",
-      });
-    }
-  }
-  if (envelope.schemaVersion !== TENANT_THEME_SCHEMA_VERSION) {
-    issues.push({
-      code: "unsupported_schema_version",
-      path: "$.verticalEnvelope.schemaVersion",
-      message: "Unsupported vertical envelope version",
-    });
-  }
-  if (
-    typeof envelope.verticalKey !== "string" ||
-    !/^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/.test(envelope.verticalKey)
-  ) {
-    issues.push({
-      code: "invalid_value",
-      path: "$.verticalEnvelope.verticalKey",
-      message: "Invalid vertical envelope key",
-    });
-  } else if (envelope.verticalKey !== config.verticalKey) {
-    issues.push({
-      code: "invalid_value",
-      path: "$.verticalKey",
-      message: "Theme vertical does not match its policy envelope",
-    });
-  }
-  if (
-    !Array.isArray(envelope.allowedModes) ||
-    envelope.allowedModes.length === 0 ||
-    envelope.allowedModes.some(
-      (mode) => mode !== "simple" && mode !== "advanced"
-    ) ||
-    new Set(envelope.allowedModes).size !== envelope.allowedModes.length
-  ) {
-    issues.push({
-      code: "invalid_value",
-      path: "$.verticalEnvelope.allowedModes",
-      message: "Expected a unique non-empty simple/advanced mode list",
-    });
-  } else if (!envelope.allowedModes.includes(config.mode)) {
-    issues.push({
-      code: "invalid_value",
-      path: "$.mode",
-      message: `Mode ${config.mode} is not enabled by this vertical`,
-    });
-  }
-
-  const knownChromeFamilies = new Set<string>(TENANT_THEME_CHROME_FAMILIES);
-  if (envelope.advanced !== undefined) {
-    if (!isPlainObject(envelope.advanced)) {
-      issues.push({
-        code: "invalid_type",
-        path: "$.verticalEnvelope.advanced",
-        message: "Expected an Advanced policy object",
-      });
-    } else {
-      for (const key of Object.keys(envelope.advanced)) {
-        if (
-          key !== "chromeFamilies" &&
-          key !== "allowTokenOverrides" &&
-          key !== "allowAnatomyVariants"
-        ) {
-          issues.push({
-            code: "unknown_key",
-            path: `$.verticalEnvelope.advanced.${key}`,
-            message: "Unknown Advanced policy field",
-          });
-        }
-      }
-      if (
-        !Array.isArray(envelope.advanced.chromeFamilies) ||
-        envelope.advanced.chromeFamilies.some(
-          (family) =>
-            typeof family !== "string" || !knownChromeFamilies.has(family)
-        ) ||
-        new Set(envelope.advanced.chromeFamilies).size !==
-          envelope.advanced.chromeFamilies.length
-      ) {
-        issues.push({
-          code: "invalid_value",
-          path: "$.verticalEnvelope.advanced.chromeFamilies",
-          message: "Unknown or duplicate chrome family",
-        });
-      }
-      if (typeof envelope.advanced.allowTokenOverrides !== "boolean") {
-        issues.push({
-          code: "invalid_type",
-          path: "$.verticalEnvelope.advanced.allowTokenOverrides",
-          message: "Expected a boolean",
-        });
-      }
-      if (
-        envelope.advanced.allowAnatomyVariants !== undefined &&
-        typeof envelope.advanced.allowAnatomyVariants !== "boolean"
-      ) {
-        issues.push({
-          code: "invalid_type",
-          path: "$.verticalEnvelope.advanced.allowAnatomyVariants",
-          message: "Expected a boolean",
-        });
-      }
-    }
-  }
-
-  const rangeBounds = {
-    densityScale: { min: 0.75, max: 1.25 },
-    effectIntensity: TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
-    motionIntensity: { min: 0, max: 1 },
-    motionDurationScale: { min: 0.5, max: 1.5 },
-    typeScale: TENANT_THEME_TYPE_SCALE_BOUNDS,
-    radiusScale: TENANT_THEME_RADIUS_SCALE_BOUNDS,
-  } as const;
-  if (envelope.ranges !== undefined) {
-    if (!isPlainObject(envelope.ranges)) {
-      issues.push({
-        code: "invalid_type",
-        path: "$.verticalEnvelope.ranges",
-        message: "Expected a ranges object",
-      });
-    } else {
-      for (const [key, value] of Object.entries(envelope.ranges)) {
-        const global = rangeBounds[key as keyof typeof rangeBounds];
-        if (!global) {
-          issues.push({
-            code: "unknown_key",
-            path: `$.verticalEnvelope.ranges.${key}`,
-            message: "Unknown range",
-          });
-          continue;
-        }
-        if (
-          !isPlainObject(value) ||
-          Object.keys(value).some(
-            (field) => field !== "min" && field !== "max"
-          ) ||
-          typeof value.min !== "number" ||
-          typeof value.max !== "number" ||
-          !Number.isFinite(value.min) ||
-          !Number.isFinite(value.max) ||
-          value.min > value.max ||
-          value.min < global.min ||
-          value.max > global.max
-        ) {
-          issues.push({
-            code: "invalid_value",
-            path: `$.verticalEnvelope.ranges.${key}`,
-            message: "Range must be finite, ordered and inside global v1 caps",
-          });
-        }
-      }
-    }
-  }
-
-  if (issues.length > 0) return issues;
+  const issues = envelopeShapeIssues(envelope, {
+    verticalKey: config.verticalKey,
+    mode: config.mode,
+  });
+  if (issues.length > 0 || !envelope) return issues;
 
   const general =
     config.mode === "simple"
       ? config.appearance
       : config.visualFoundation.general;
   const ranges = envelope.ranges;
-  const rangedValues = [
-    ["motion.intensity", general?.motion?.intensity, ranges?.motionIntensity],
-    [
-      "motion.durationScale",
-      general?.motion?.durationScale,
-      ranges?.motionDurationScale,
-    ],
-    ["typography.scale", general?.typography?.scale, ranges?.typeScale],
-    ["shape.radiusScale", general?.shape?.radiusScale, ranges?.radiusScale],
-    [
-      "surfaces.effectIntensity",
-      general?.surfaces?.effectIntensity,
-      ranges?.effectIntensity,
-    ],
-  ] as const;
-  for (const [field, value, range] of rangedValues) {
-    // The VERDICT is `contracts/theme/runtime/envelopes`'; only the document
-    // spelling of the path is this transport's. The compile door asks the same
-    // question of the resolved Theme, so a preview and a publish of one
-    // document now agree on the answer (F-13).
-    if (value !== undefined && !isInsideEnvelopeRange(value, range)) {
-      issues.push({
-        code: "invalid_value",
-        path: `$.appearance.${field}`,
-        message: `Value exceeds the ${config.verticalKey} envelope`,
-      });
-    }
-  }
+  issues.push(
+    ...envelopeDialIssues({
+      general,
+      ranges,
+      verticalKey: config.verticalKey,
+      pathOf: (dial) => `$.appearance.${dial}`,
+    })
+  );
 
   if (config.mode === "advanced") {
     const advanced = config.visualFoundation.advanced;
@@ -858,7 +655,9 @@ function normalizeAppearance(
   });
 }
 
-function buildScopes(config: TenantThemeConfig): TenantThemeArtifact["scopes"] {
+function buildScopes(
+  config: Pick<TenantThemeConfigIdentity, "slug" | "verticalKey">
+): TenantThemeArtifact["scopes"] {
   const rootSelector = ":where([data-ds-root])";
   const verticalSelector = `:where([data-ds-root][data-vertical="${config.verticalKey}"])`;
   const tenantSelector = `:where([data-ds-root][data-tenant="${config.slug}"])`;
@@ -1023,6 +822,29 @@ export interface TenantThemeCompilation {
   readonly engineVisual: EngineVisualDeclaration;
 }
 
+/**
+ * The artifact's serialized provenance: the ledger the compile resolved, minus
+ * every authored value.
+ *
+ * Absent when the compile resolved no ledger, which is not the same statement
+ * as "nothing was authored": a transport that reports no provenance leaves the
+ * field off, and a mount reads the absence as "no decided-channel policy to
+ * apply here" rather than as an empty set of decisions.
+ */
+export function artifactProvenanceOf(
+  ledger: DecisionProvenanceLedger | undefined
+): TenantThemeArtifactProvenance | undefined {
+  if (!ledger || ledger.entries.length === 0) return undefined;
+  return {
+    entries: ledger.entries.map((entry) => ({
+      ref: entry.ref,
+      provenance: entry.provenance,
+      tier: entry.tier,
+      effectiveLeaves: entry.effectiveLeaves,
+    })),
+  };
+}
+
 export function compileTenantThemeConfig(
   input: unknown,
   options: CompileTenantThemeConfigOptions = {}
@@ -1063,49 +885,6 @@ export function compileTenantTheme(
     ]);
   }
 
-  const rawNormalizedAppearance = normalizeAppearance(config);
-
-  // C1b: governed expressive selection. The experience id is revalidated
-  // fail-closed (the schema already closes the enum; a row written before a
-  // profile retirement must still never paint), and the profile's FIELD
-  // defaults are applied to the normalized appearance BEFORE compilation,
-  // clamped into the vertical envelope — so the artifact's own
-  // normalizedAppearance (the shape MotionProvider and useTokens consume)
-  // carries the same effective values the CSS was compiled from.
-  // The experience-profile refusal is the door's: `admission/envelope` refuses
-  // an unknown id by name for EVERY origin, where this terminal refused it for
-  // one and the lowering silently expanded it to nothing everywhere else --
-  // deleting twelve of the vertical's channels without a word (F-61). What is
-  // left here is the EXPANSION, which is an artifact concern: the normalized
-  // appearance the runtime reads must carry the same effective values the CSS
-  // was compiled from.
-  const requestedExperienceProfile =
-    rawNormalizedAppearance.general?.experienceProfile;
-  const expressiveAxes = resolveExpressiveAxes(
-    requestedExperienceProfile,
-    sanitizeExpressiveOverrides(rawNormalizedAppearance.advanced?.profiles)
-  );
-  const expressiveExpansion = expandExpressiveProfiles(expressiveAxes);
-  const effectiveGeneral = withExpressiveFieldDefaults(
-    rawNormalizedAppearance.general,
-    expressiveExpansion.fieldDefaults,
-    verticalEnvelope.ranges
-  );
-  const normalizedAppearance =
-    effectiveGeneral === rawNormalizedAppearance.general
-      ? rawNormalizedAppearance
-      : normalizedClone({
-          ...rawNormalizedAppearance,
-          general: effectiveGeneral,
-        });
-
-  // The shared runtime/static Appearance compiler owns APCA autocorrection so
-  // artifact, provider and generated-CSS paths cannot drift.
-  // ISO T0: the DB path must resolve through the same total Theme and single
-  // compileTheme lowering as the static path. The v1 document migrates to a
-  // typed ThemeLayerPatch, is resolved over the code-owned vertical Theme, and the
-  // resulting variables are flattened (base + authored mode overrides) into the
-  // single SSR/hydration artifact map the runtime expects.
   // The typed refusal for an unknown vertical, stated ONCE and before the door.
   // The ingress door refuses the same value with a plain `Error`, which
   // `isoLowering` would retype -- but a caller of this compiler contracts on a
@@ -1121,45 +900,32 @@ export function compileTenantTheme(
     ]);
   }
   const vertical: FirstPartyVerticalId = config.verticalKey;
-  // The expansion above reached `normalizedAppearance` -- the shape
-  // MotionProvider and useTokens read -- but the CSS is lowered from the
-  // DOCUMENT below, and the document never learned the profile's field
-  // defaults. The result was a split-brain the acid test caught: a document
-  // selecting `management-editorial` normalized to radiusScale 1.15 and
-  // typePairing editorial in JS while its CSS kept bithire's 1.25 and grotesk,
-  // because a field the vertical baseline already authors is only overridden by
-  // a field the PATCH carries. Expanding the document general the same way
-  // makes one selection produce one result on both planes.
-  //
-  // Computed from the document general rather than reusing `effectiveGeneral`:
-  // `normalizeAppearance` drops the authored `dark` palette for any non-`auto`
-  // background mode, and feeding that back into the patch would silently
-  // retire a tenant's dark authorship. `withExpressiveFieldDefaults` returns
-  // its input by identity when there is nothing to add, so a document without
-  // a profile compiles to exactly the same bytes as before.
-  const documentGeneral =
+
+  // The profile expansion is the INGRESS station's, run here ONCE on the
+  // document this terminal is about to publish, so the artifact's runtime
+  // metadata and the CSS beside it are projections of the same effective
+  // document. It used to be a preprocess private to this terminal, over a
+  // replacement document it built for itself, which is why publishing a profile
+  // compiled fonts, motion and radius that previewing the same row never showed
+  // (RT05). The door does not expand: it is the R1 lot's file, so this terminal
+  // hands the producer the effective document instead of the selection alone.
+  const documentSource: TenantThemeDocument =
     config.mode === "simple"
-      ? config.appearance
-      : config.visualFoundation.general;
-  const effectiveDocumentGeneral = withExpressiveFieldDefaults(
-    documentGeneral,
-    expressiveExpansion.fieldDefaults,
-    verticalEnvelope.ranges
-  );
-  const documentPatchSource = {
-    schemaVersion: config.schemaVersion,
-    mode: config.mode,
-    ...(config.mode === "simple"
-      ? { appearance: effectiveDocumentGeneral }
+      ? {
+          schemaVersion: config.schemaVersion,
+          mode: "simple",
+          appearance: config.appearance,
+        }
       : {
-          visualFoundation: {
-            ...config.visualFoundation,
-            ...(effectiveDocumentGeneral
-              ? { general: effectiveDocumentGeneral }
-              : {}),
-          },
-        }),
-  } as unknown as TenantThemeDocument;
+          schemaVersion: config.schemaVersion,
+          mode: "advanced",
+          visualFoundation: config.visualFoundation,
+        };
+  const documentPatchSource = expandProfileDefaults({
+    vertical,
+    document: documentSource,
+    ranges: verticalEnvelope.ranges,
+  }).document;
   // The ISO leg is the only place a persisted row meets the fail-closed
   // ThemeLayerPatch/mergeDeep/compileTheme lowering, and those throw plain Errors
   // (`ThemePatchMigrationError`, `resolveTheme: unknown key ...`). A caller of
@@ -1168,52 +934,85 @@ export function compileTenantTheme(
   // The engine is the VERTICAL's, never the tenant's: the door reads the same
   // roster row the envelopes are keyed on, so a document cannot contradict what
   // product it is being rendered as.
-  const { compiledTheme, variables, modeDeltas } = isoLowering(
-    () => {
-      // The intent IS this tenant's authorship record: a path can only appear
-      // in its patch because the document put it there. `resolveTheme` collects
-      // the authored paths, projects the tenant's posture floors and reads the
-      // status-seed authorship off the SAME raw patch, in one place, so the
-      // lowering receives one envelope instead of four hand-assembled fields.
-      //
-      // The floors matter because the merge destroys the one fact the resolved
-      // Theme can no longer state: WHOSE a value is. The compiler lowers a
-      // vertical's own authoring and a tenant's selection at different
-      // positions -- the posture preset early, the tenant posture last -- and
-      // after a merge it cannot tell them apart.
-      //
-      // THE ADMISSION IS THE DOOR'S, all five stations of it. This terminal
-      // used to be the only place tier, envelope, contrast, chart and limit
-      // policy existed, which is exactly why the `preview` and draft origins
-      // reached the same channel writers with none of it applied (F-13). What
-      // is left here is the ARTIFACT: the delta the door already computed, the
-      // digest, the CSS and the scopes.
-      const { resolution, compiled, delta } = compileThemeIntent(
-        documentThemeIntent({
+  return isoLowering(
+    () =>
+      assembleTenantThemeArtifact({
+        intent: documentThemeIntent({
           vertical,
           slug: config.slug,
           document: documentPatchSource,
-        })
-      );
-      // A tenant-document intent is tenant-authored by the intent contract's
-      // own definition, so the door always produced a delta for it. Naming the
-      // absence rather than defaulting keeps the terminal from inventing an
-      // empty artifact out of a compile that did not measure one.
-      if (!delta) {
-        throw new Error(
-          `compileTenantTheme: the door returned no delta for ${JSON.stringify(
-            resolution.intent?.origin ?? "tenant-document"
-          )}; an artifact cannot be projected from an unmeasured compile`
-        );
-      }
-      return {
-        compiledTheme: compiled,
-        variables: delta.variables,
-        modeDeltas: delta.modeDeltas,
-      };
-    },
+        }),
+        identity: config,
+        verticalEnvelope,
+        document: documentPatchSource,
+      }),
     config.mode === "advanced" ? "$.visualFoundation" : "$.appearance"
   );
+}
+
+/**
+ * The ONE artifact builder, for every transport that publishes one.
+ *
+ * Digest, scopes, chart floor, CSS and the engine projection are stated here
+ * exactly once. The v1 terminal and the v2 adapter differ in how a document
+ * becomes an intent and in how they name a refusal -- never in what an artifact
+ * is -- so a second assembly would be a second answer to "what did this tenant
+ * publish", drifting from the first the day either changed.
+ */
+export interface TenantThemeArtifactAssembly {
+  readonly intent: ThemeIntent;
+  readonly identity: TenantThemeConfigIdentity;
+  readonly verticalEnvelope: TenantThemeVerticalEnvelope;
+  /**
+   * The EFFECTIVE v1-shape document the intent was produced from. The
+   * artifact's runtime metadata is normalized from it, so the shape
+   * `MotionProvider` and `useTokens` read can never state a different
+   * effective value from the CSS compiled beside it.
+   */
+  readonly document: TenantThemeDocument;
+}
+
+export function assembleTenantThemeArtifact(
+  input: TenantThemeArtifactAssembly
+): TenantThemeCompilation {
+  const { identity, verticalEnvelope } = input;
+  const normalizedAppearance = normalizeAppearance({
+    ...input.document,
+    tenantId: identity.tenantId,
+    slug: identity.slug,
+    verticalKey: identity.verticalKey,
+    rowVersion: identity.rowVersion,
+  } as TenantThemeConfig);
+  // The intent IS this tenant's authorship record: a path can only appear in
+  // its patch because the document put it there. `resolveTheme` collects the
+  // authored paths, projects the tenant's posture floors and reads the
+  // status-seed authorship off the SAME raw patch, in one place, so the
+  // lowering receives one envelope instead of four hand-assembled fields.
+  //
+  // THE ADMISSION IS THE DOOR'S, all five stations of it. This terminal used
+  // to be the only place tier, envelope, contrast, chart and limit policy
+  // existed, which is exactly why the `preview` and draft origins reached the
+  // same channel writers with none of it applied (F-13). What is left here is
+  // the ARTIFACT: the delta the door already computed, the digest, the CSS
+  // and the scopes.
+  const { resolution, compiled, delta } = compileThemeIntent(input.intent);
+  // A tenant-document intent is tenant-authored by the intent contract's own
+  // definition, so the door always produced a delta for it. Naming the absence
+  // rather than defaulting keeps the terminal from inventing an empty artifact
+  // out of a compile that did not measure one.
+  if (!delta) {
+    throw new Error(
+      `assembleTenantThemeArtifact: the door returned no delta for ${JSON.stringify(
+        resolution.intent?.origin ?? "tenant-document"
+      )}; an artifact cannot be projected from an unmeasured compile`
+    );
+  }
+  const { variables, modeDeltas } = delta;
+  // The ledger is the RESOLUTION's and can be nothing else. It reaches here
+  // only by travelling on the intent, where `resolveTheme` checked every tier
+  // against the catalog; a second parameter beside the intent would be a door
+  // a caller could hand a forged tier through.
+  const provenance = artifactProvenanceOf(resolution.provenance.ledger);
   // The one input the intent cannot carry. `backgroundMode` is v1 transport
   // metadata that deliberately never reaches the `Theme` ("runtime selection
   // metadata, not Theme authority"), so the canvas this document declares is
@@ -1237,7 +1036,7 @@ export function compileTenantTheme(
     throw new TenantThemeValidationError(declaredChartIssues);
   const adjustments: readonly TenantThemeContrastAdjustment[] = [];
 
-  const scopes = buildScopes(config);
+  const scopes = buildScopes(identity);
   const verticalEnvelopeDigest = `sha256-${sha256Utf8(
     canonicalizeTenantThemeValue(verticalEnvelope)
   )}`;
@@ -1247,13 +1046,14 @@ export function compileTenantTheme(
     // Coverage is provenance, not decoration: the runtime resolver suppresses
     // exactly these channels, so a coverage change must move the digest.
     coverage: TENANT_THEME_V1_COVERAGE,
-    tenantId: config.tenantId,
-    slug: config.slug,
-    verticalKey: config.verticalKey,
-    rowVersion: config.rowVersion,
+    tenantId: identity.tenantId,
+    slug: identity.slug,
+    verticalKey: identity.verticalKey,
+    rowVersion: identity.rowVersion,
     normalizedAppearance,
     variables,
     ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
+    ...(provenance ? { provenance } : {}),
     scopes,
     // Empty adjustment lists stay out of the digest source so pre-autocorrect
     // artifacts keep their digests; a non-empty list is a real output change.
@@ -1267,10 +1067,10 @@ export function compileTenantTheme(
   return {
     artifact: {
       schemaVersion: TENANT_THEME_SCHEMA_VERSION,
-      tenantId: config.tenantId,
-      slug: config.slug,
-      verticalKey: config.verticalKey,
-      rowVersion: config.rowVersion,
+      tenantId: identity.tenantId,
+      slug: identity.slug,
+      verticalKey: identity.verticalKey,
+      rowVersion: identity.rowVersion,
       compilerVersion: TENANT_THEME_COMPILER_VERSION,
       verticalEnvelopeDigest,
       digest,
@@ -1279,13 +1079,14 @@ export function compileTenantTheme(
       variables,
       ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
       ...(adjustments.length > 0 ? { adjustments } : {}),
-      css: renderArtifactCss(config.verticalKey, config.slug, variables, digest, {
+      ...(provenance ? { provenance } : {}),
+      css: renderArtifactCss(identity.verticalKey, identity.slug, variables, digest, {
         modeDeltas,
         backgroundMode:
           normalizedAppearance.general?.palette?.backgroundMode ?? "light",
       }),
       scopes,
     },
-    engineVisual: engineVisualOf(compiledTheme),
+    engineVisual: engineVisualOf(compiled),
   };
 }

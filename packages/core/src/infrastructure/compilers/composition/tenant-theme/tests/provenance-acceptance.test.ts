@@ -56,7 +56,7 @@ import {
   STATUS_SEED_FIELDS,
   STATUS_SEED_SHADOWING_FIELDS,
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds";
-import { withExpressiveFieldDefaults } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/expressive";
+import { withExpressiveFieldDefaults } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/profile-expansion/foundation/field-defaults";
 
 import {
   SIDEBAR_CONTRAST_ATTRIBUTION,

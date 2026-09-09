@@ -420,16 +420,22 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
   /* El lote C2 movio este subpath en las DOS dimensiones y el informe dijo que
    * los modulos no se habian movido. Aqui queda clavado lo que de verdad mide el
    * gate, para que la proxima diferencia se vea contra un numero y no contra una
-   * frase. */
+   * frase.
+   *
+   * 62115 -> 63931 (WO-CON-06): `TenantThemeArtifact` gana el metadato de
+   * procedencia serializado, y el verificador de mount valida su forma y lo
+   * mete en el digest que recomputa. Los modulos NO se mueven: el duenio del
+   * ledger no se importa aqui a proposito, porque un vocabulario que este lado
+   * recomputara seria un vocabulario que un transporte podria falsificar. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 62115 },
+    { reachableModules: 9, sourceBytes: 63931 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 62115), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 63931), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */
