@@ -1,17 +1,16 @@
 /**
- * What the tenant's two rows hold, and which one each door accepts today.
+ * What the tenant's rows hold, and what each one is for.
  *
  * `TENANT_DOCUMENT_V2` is the shape a customer writes from day one (consumer
  * contract §3): a plan, closed-domain decision ids, and nothing else. It is the
- * document the theme door admits and reports against.
+ * document the theme door admits and reports against, AND the document this
+ * application publishes its artifact from -- `compileTenantThemeDocumentV2`
+ * compiles it without flattening it to v1 first, so the app keeps one row.
  *
- * `TENANT_TRANSPORT_V1` is the row the tenant still carries. It exists here
- * because the ARTIFACT compiler -- the producer of the `TenantThemeArtifact`
- * that `mountTenantTheme` requires for a `tenant-document` origin -- refuses a
- * v2 document by name today (`Only TenantThemeConfig schema version 1 is
- * supported`). The fixture pins that refusal as an executable fact rather than
- * routing around it; WO-CAT-02 is the work order that closes the seam, and when
- * it lands this file loses its second row and the pin fails loudly.
+ * `TENANT_TRANSPORT_V1` is no longer a workaround for a door that refused v2.
+ * It stays as the migration example: a tenant that still holds a v1 row proves
+ * here that `migrateDocumentV1ToV2` reaches the same patch through the same
+ * door, which is what makes the migration a fact rather than a promise.
  */
 import type {
   TenantThemeConfigIdentity,

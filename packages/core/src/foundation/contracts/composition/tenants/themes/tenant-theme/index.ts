@@ -7,6 +7,7 @@
  * semantic mappings, React/code, selectors and raw CSS are not representable.
  */
 
+import type { DecisionProvenanceEntry } from "../provenance";
 import type {
   BrandAlertChrome,
   BrandAnchorChrome,
@@ -694,6 +695,34 @@ export interface TenantThemeArtifactModeDelta {
   variables: Readonly<Record<string, string>>;
 }
 
+/**
+ * One raw selection an artifact was compiled from, and the effective leaves it
+ * owns — the ledger entry MINUS its authored value.
+ *
+ * The value is dropped on purpose. What a runtime needs from provenance is
+ * which channels the tenant decided, so that a code-owned default cannot
+ * silently contradict a tenant decision; the visual value itself already
+ * reached the runtime as compiled CSS, and shipping it a second time as
+ * structured payload is the competing visual writer D-03 retired.
+ */
+export type TenantThemeArtifactProvenanceEntry = Omit<
+  DecisionProvenanceEntry,
+  "authoredValue"
+>;
+
+/**
+ * The serialized decision provenance of one compiled artifact.
+ *
+ * A WeakMap does not survive a database row or a new process, so the DB
+ * transport carries provenance here, inside the digest the mount proves. An
+ * artifact compiled before this field existed simply has none, and mounts
+ * exactly as it did: the decided-channel policy applies where the metadata is
+ * present, and every new compilation that resolves a ledger emits it.
+ */
+export interface TenantThemeArtifactProvenance {
+  readonly entries: readonly TenantThemeArtifactProvenanceEntry[];
+}
+
 /** Immutable, cacheable compiler output consumed by SSR and hydration. */
 export interface TenantThemeArtifact {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
@@ -718,6 +747,8 @@ export interface TenantThemeArtifact {
   modeDeltas?: readonly TenantThemeArtifactModeDelta[];
   /** Present only when at least one contrast autocorrect was applied. */
   adjustments?: readonly TenantThemeContrastAdjustment[];
+  /** Present when the compile resolved a decision-provenance ledger. */
+  provenance?: TenantThemeArtifactProvenance;
   css: string;
   scopes: TenantThemeArtifactScopes;
 }
