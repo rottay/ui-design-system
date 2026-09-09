@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-09T20:09:36.085Z",
+  "producedAt": "2026-09-09T21:21:25.377Z",
   "headline": "decisions lit = 7/22 (+0/8 new)",
   "measuredHeadline": "measured on the 8-family sample: 11/22 move at least one sampled family",
   "denominators": {
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-09T19:50:57.840Z"
+      "builtAt": "2026-09-09T21:18:12.671Z"
     },
     "sources": {
       "door": {
@@ -30,8 +30,8 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 728,
-        "digest": "565e8af5a6e42f267892e110fc6bf2a970cad0d1405aabe1796c072c3ee3e5ec"
+        "fileCount": 738,
+        "digest": "d3ce7fee449c4157d72215fb1b3a5ab8af142df5d70d0401d3a6866afac541b4"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
@@ -64,7 +64,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "5ef28a1b3326d6db60ca82b87d4114920e57176234d993a63f4ae23213ad581a",
+        "bundleSha": "29e59d752ce96e7661a6e113d31ff7c70c943fb14709c0c937eea47338ca8858",
         "bundleMode": "fresh"
       },
       "bithire": {
@@ -85,7 +85,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "ce24a8ef66a1b1c40ef821ed9bb9bd4d1a419b96163166c9079c3f20e3bb3cd0",
+        "bundleSha": "dc33e893bc5c84197d0a40988ae734bc5bf8bb23c6ff20b8a942acd8bbca94d7",
         "bundleMode": "fresh"
       },
       "evnto": {
@@ -106,7 +106,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "25681d1937f9ec8f0f74d24042998619ba1c6e6d6b8c283189a0822fb7ec21f8",
+        "bundleSha": "2ef78f50a15451ad6b2ad52bd260ac579b96b745ad0496ad5461cc70a3c35303",
         "bundleMode": "fresh"
       }
     },
@@ -240,7 +240,7 @@
           "space-modern-preset-gap",
           "stack-modern-preset-gap"
         ],
-        "movedChannelCount": 2,
+        "movedChannelCount": 3,
         "excludedIn": []
       },
       {
@@ -462,7 +462,7 @@
         "id": "responsive.posture",
         "tier": "pro",
         "recordedClass": "none",
-        "artifactBytesDiffer": false,
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -638,6 +638,7 @@
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
+          "--ds-text-eyebrow-size",
           "--ds-type-scale"
         ],
         "flex-modern-preset-gap/root": [
@@ -663,6 +664,7 @@
       },
       "movedChannels": [
         "--ds-font-size-xs",
+        "--ds-text-eyebrow-size",
         "--ds-type-scale"
       ]
     },
@@ -1182,7 +1184,7 @@
     {
       "id": "responsive.posture",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1364,6 +1366,7 @@
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
+          "--ds-text-eyebrow-size",
           "--ds-type-scale"
         ],
         "flex-modern-preset-gap/root": [
@@ -1389,6 +1392,7 @@
       },
       "movedChannels": [
         "--ds-font-size-xs",
+        "--ds-text-eyebrow-size",
         "--ds-type-scale"
       ]
     },
@@ -1882,7 +1886,7 @@
     {
       "id": "responsive.posture",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -2059,6 +2063,7 @@
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
+          "--ds-text-eyebrow-size",
           "--ds-type-scale"
         ],
         "flex-modern-preset-gap/root": [
@@ -2084,6 +2089,7 @@
       },
       "movedChannels": [
         "--ds-font-size-xs",
+        "--ds-text-eyebrow-size",
         "--ds-type-scale"
       ]
     },
@@ -2605,7 +2611,7 @@
     {
       "id": "responsive.posture",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []

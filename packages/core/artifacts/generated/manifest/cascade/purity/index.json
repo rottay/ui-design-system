@@ -17,9 +17,9 @@
   "stats": {
     "rows": 1989,
     "byClass": {
-      "value-shift": 1532,
-      "head-not-emitted": 290,
-      "pure": 167
+      "value-shift": 1544,
+      "head-not-emitted": 277,
+      "pure": 168
     },
     "byVertical": {
       "bithire": 838,
@@ -34,6 +34,7 @@
       "control.height": 2,
       "control.ratio.iconSize": 2,
       "control.ratio.lineHeight": 2,
+      "type.weight": 1,
       "tier.base.border": 7,
       "tier.page.bg": 6,
       "tier.raised.border": 2,
@@ -69,7 +70,6 @@
     "headlessByChannel": {
       "--ds-radius-md": 10,
       "--ds-spacing-2": 9,
-      "--ds-font-weight-medium": 13,
       "--ds-density-effective-scale": 14,
       "--ds-surface-card": 36,
       "--ds-surface-control": 186,
@@ -77,15 +77,15 @@
       "--ds-gradient-primary": 2,
       "--ds-material-overlay-foreground": 18
     },
-    "collapsibleReplacementBytes": 2040,
+    "collapsibleReplacementBytes": 2065,
     "collapsibleBytesByVertical": {
-      "bithire": 1017,
+      "bithire": 1042,
       "evnto": 529,
       "rottay": 494
     },
     "pureByRule": {
       "R2": 77,
-      "R5": 35,
+      "R5": 36,
       "R1": 13,
       "R4": 42
     }
@@ -1220,8 +1220,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -1352,8 +1352,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -1792,8 +1792,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -2045,8 +2045,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "pure",
       "replacementDeltaBytes": 25
     },
     {
@@ -3519,8 +3519,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -4102,8 +4102,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -10031,8 +10031,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -12363,8 +12363,8 @@
       "rule": "R1",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 0
     },
     {
@@ -12462,8 +12462,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -12715,8 +12715,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 0
     },
     {
@@ -15652,8 +15652,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -16356,8 +16356,8 @@
       "rule": "R5",
       "scope": "base",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -20360,8 +20360,8 @@
       "rule": "R5",
       "scope": "light",
       "headChannel": "--ds-font-weight-medium",
-      "headEmitted": false,
-      "class": "head-not-emitted",
+      "headEmitted": true,
+      "class": "value-shift",
       "replacementDeltaBytes": 25
     },
     {
@@ -21971,5 +21971,5 @@
       "replacementDeltaBytes": 28
     }
   ],
-  "digest": "91740b728ed275888a961c85017e408ddc7a022a13ed8f199342925c27bb74d1"
+  "digest": "08a2d3b61622d507d0e963cf9209f94542a6f7844552efad5ef7ac99061f2de7"
 }

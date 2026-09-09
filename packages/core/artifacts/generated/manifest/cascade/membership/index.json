@@ -28,15 +28,15 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 1607,
+    "rows": 1609,
     "byVia": {
-      "unattributed": 727,
+      "unattributed": 729,
       "governed-owner-table": 496,
       "declared-fallback": 342,
       "head-exact": 42
     },
     "byTier": {
-      "sin-tier": 908,
+      "sin-tier": 910,
       "control": 272,
       "base": 178,
       "raised": 96,
@@ -48,7 +48,7 @@
       "bg": 321,
       "border": 211,
       "fg": 474,
-      "sin-propiedad": 166,
+      "sin-propiedad": 168,
       "shadow": 121,
       "radius": 40,
       "family": 6,
@@ -75,7 +75,7 @@
       "seed.success": 1
     },
     "withRoot": 880,
-    "withoutRoot": 727,
+    "withoutRoot": 729,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
     "ownersCensused": 256,
@@ -85,7 +85,7 @@
     "rowsRefinedByStep": 65,
     "rowsParentByDesign": 39,
     "byStep": {
-      "sin-paso": 1503,
+      "sin-paso": 1505,
       "@parent": 39,
       "primary": 25,
       "muted": 9,
@@ -256,11 +256,11 @@
       }
     },
     "THEME.expressive": {
-      "channels": 53,
-      "unattributed": 46,
+      "channels": 58,
+      "unattributed": 50,
       "properties": {
         "radius": 27,
-        "sin-propiedad": 19
+        "sin-propiedad": 23
       }
     },
     "THEME.expressive.profiles": {
@@ -20920,16 +20920,19 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: SURFACES.elevations",
+        "whyNotV3": "owners sin adjudicar: SURFACES.elevations, THEME.expressive",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
       "property": null,
       "state": null,
       "owners": [
-        "SURFACES.elevations"
+        "SURFACES.elevations",
+        "THEME.expressive"
       ],
       "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion",
         "rottay:SURFACES.elevations.level0"
       ],
       "rootExposure": null,
@@ -21040,16 +21043,19 @@
       "state": null,
       "owners": [
         "OVERLAY.surfaces.elevations",
-        "SURFACES.elevations"
+        "SURFACES.elevations",
+        "THEME.expressive"
       ],
       "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion",
         "rottay:OVERLAY.surfaces.elevations.level4",
         "rottay:SURFACES.elevations.level4"
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
       "step": null,
-      "stepNote": "sin adjudicar: OVERLAY.surfaces.elevations|fg|level4, SURFACES.elevations|fg|level4"
+      "stepNote": "sin adjudicar: THEME.expressive|fg|experienceProfile, THEME.expressive|fg|schemaVersion, OVERLAY.surfaces.elevations|fg|level4"
     },
     {
       "channel": "--ds-elevation-5",
@@ -21058,7 +21064,7 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: OVERLAY.surfaces.elevations, SURFACES.elevations",
+        "whyNotV3": "owners sin adjudicar: OVERLAY.surfaces.elevations, SURFACES.elevations, THEME.expressive",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -21066,11 +21072,64 @@
       "state": null,
       "owners": [
         "OVERLAY.surfaces.elevations",
-        "SURFACES.elevations"
+        "SURFACES.elevations",
+        "THEME.expressive"
       ],
       "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion",
         "rottay:OVERLAY.surfaces.elevations.level5",
         "rottay:SURFACES.elevations.level5"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-elevation-6",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.expressive",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.expressive"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-elevation-border-style",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.expressive",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.expressive"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion"
       ],
       "rootExposure": null,
       "rootHasDerivationLaw": false,
@@ -48510,5 +48569,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "c1f1eec37ed7620d78e0f5979f4b605ea04a631c78a78f009bf1d81ba429990e"
+  "digest": "2244a15ee55d142c4b75394a29dd7454e30be8c624e72356da8c076f7a9e89d7"
 }
