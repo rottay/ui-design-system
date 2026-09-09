@@ -22,7 +22,10 @@ import {
   type TenantThemeDocumentV2,
 } from "@/contracts/theme/presentation/document";
 import { ThemeDecisionDomainError } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
+import { themeControl } from "@/contracts/theme/runtime/catalog";
+import { THEME_DECISION_IDS } from "@/contracts/theme/foundation/decisions";
 import { getTenantThemeVerticalEnvelope } from "@/contracts/theme/runtime/envelopes";
+import type { TenantAppearanceGeneral } from "@/foundation/contracts/composition/tenants/themes";
 import type { DecisionProvenanceLedger } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import type {
   TenantThemeArtifact,
@@ -35,12 +38,21 @@ import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/bran
 import {
   ThemeAdmissionError,
   documentThemeAdmission,
+  documentThemePatch,
   type DocumentAdmission,
 } from "@/infrastructure/compilers/runtime/theme";
+import { projectDecisionsToV1 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
+import { expandProfileDefaults } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/profile-expansion";
 import {
   TenantThemeValidationError,
   assembleTenantThemeArtifact,
 } from "..";
+import {
+  ENVELOPE_RANGED_DIALS,
+  envelopeDialIssues,
+  envelopeRangeShapeIssues,
+  type EnvelopeRangedDial,
+} from "../foundation/envelope";
 import { documentV2Ledger } from "./foundation/ledger";
 
 export interface CompileTenantThemeDocumentV2Input {
@@ -66,6 +78,60 @@ export interface TenantThemeDocumentV2Compilation {
 
 function refuse(code: "invalid_value" | "unsupported_schema_version", path: string, message: string): never {
   throw new TenantThemeValidationError([{ code, path, message }]);
+}
+
+/**
+ * Which decision authors each ranged dial, read off the catalog's own document
+ * keypath so a refusal names what the tenant wrote rather than the v1 field the
+ * projection happened to write it to.
+ */
+const DECISION_BY_DIAL: ReadonlyMap<EnvelopeRangedDial, string> = new Map(
+  THEME_DECISION_IDS.flatMap((id) => {
+    const keypath = themeControl(id).keypath.document;
+    if (keypath === null || !keypath.startsWith("appearance.general.")) return [];
+    const tail = keypath.slice("appearance.general.".length);
+    const brace = tail.match(/^(.*)\{([^}]*)\}(.*)$/);
+    const fields = brace
+      ? brace[2].split(",").map((member) => `${brace[1]}${member.trim()}${brace[3]}`)
+      : [tail];
+    return fields
+      .filter((field): field is EnvelopeRangedDial =>
+        (ENVELOPE_RANGED_DIALS as readonly string[]).includes(field)
+      )
+      .map((field): [EnvelopeRangedDial, string] => [field, id]);
+  })
+);
+
+function dialPath(dial: EnvelopeRangedDial): string {
+  const id = DECISION_BY_DIAL.get(dial);
+  return id ? `$.decisions[${JSON.stringify(id)}]` : `$.document.${dial}`;
+}
+
+/**
+ * The ranged dials this document AUTHORS, in the v1 general shape the envelope
+ * law reads. A record decision states its dials as members, so the dial's own
+ * keypath is what locates the value in both spaces.
+ */
+function authoredDials(
+  document: TenantThemeDocumentV2
+): TenantAppearanceGeneral {
+  const decisions = document.decisions as Record<string, unknown>;
+  const general: Record<string, unknown> = {};
+  for (const dial of ENVELOPE_RANGED_DIALS) {
+    const id = DECISION_BY_DIAL.get(dial);
+    if (id === undefined) continue;
+    const authored = decisions[id];
+    if (authored === undefined) continue;
+    const [group, field] = dial.split(".");
+    const value =
+      typeof authored === "object" && authored !== null
+        ? (authored as Record<string, unknown>)[field]
+        : authored;
+    if (value === undefined) continue;
+    const host = (general[group] ??= {}) as Record<string, unknown>;
+    host[field] = value;
+  }
+  return general as TenantAppearanceGeneral;
 }
 
 /**
@@ -121,22 +187,69 @@ export function compileTenantThemeDocumentV2(
     verticalKey: input.verticalKey,
     rowVersion: input.rowVersion,
   };
-  // ONE admission. The intent it returns carries the document's plan, so the
-  // tier station judges the publish exactly as it judges the preview; the
-  // report it returns is the same one the editor was shown.
-  const { intent, admission } = documentThemeAdmission({
-    vertical: input.verticalKey,
-    slug: input.slug,
-    document: input.document,
+  // The envelope option is the v1 terminal's, so its law has to be the v1
+  // terminal's too: a malformed envelope cannot say what it permits, and a
+  // DIRECTLY authored dial outside it is refused by name rather than narrowed.
+  // Only a profile's default is narrowed, which the expansion station does.
+  const envelopeIssues = envelopeRangeShapeIssues(verticalEnvelope.ranges);
+  if (envelopeIssues.length > 0) {
+    throw new TenantThemeValidationError(envelopeIssues);
+  }
+  const authoredIssues = envelopeDialIssues({
+    general: authoredDials(input.document),
+    ranges: verticalEnvelope.ranges,
+    verticalKey: input.verticalKey,
+    pathOf: dialPath,
   });
-  const ledger = documentV2Ledger({ document: input.document, admission });
+  if (authoredIssues.length > 0) {
+    throw new TenantThemeValidationError(authoredIssues);
+  }
+
   try {
+    // ONE admission. The intent it returns carries the document's plan, so the
+    // tier station judges the publish exactly as it judges the preview; the
+    // report it returns is the same one the editor was shown.
+    const { intent, admission } = documentThemeAdmission({
+      vertical: input.verticalKey,
+      slug: input.slug,
+      document: input.document,
+    });
+    // ONE expansion per publish, run by the terminal that publishes -- the same
+    // ingress station and the same envelope ranges `compileTenantTheme` runs,
+    // over the door's own projection rather than a shape rebuilt here. The door
+    // itself does not expand: it belongs to the R1 lot in flight, so the
+    // effective document it will one day report is derived here meanwhile.
+    const expansion = expandProfileDefaults({
+      vertical: input.verticalKey,
+      document: projectDecisionsToV1(input.document).v1,
+      ranges: verticalEnvelope.ranges,
+    });
+    const ledger = documentV2Ledger({
+      document: input.document,
+      admission,
+      profileClaims: expansion.claims,
+    });
+    // The ledger travels ON the intent and nowhere else: `resolveTheme` is the
+    // owner that holds the catalog, so it is the only place a stated tier can
+    // be checked against the one the catalog declares. The patch is re-lowered
+    // from the effective document only when the expansion actually filled
+    // something; otherwise the door's own patch is already that document's.
     const { artifact } = assembleTenantThemeArtifact({
-      intent,
+      intent: {
+        ...intent,
+        ...(expansion.claims.length > 0
+          ? {
+              patch: documentThemePatch({
+                vertical: input.verticalKey,
+                document: expansion.document,
+              }),
+            }
+          : {}),
+        ledger,
+      },
       identity,
       verticalEnvelope,
-      document: admission.effective,
-      ledger,
+      document: expansion.document,
     });
     return { artifact, admission, ledger };
   } catch (error) {

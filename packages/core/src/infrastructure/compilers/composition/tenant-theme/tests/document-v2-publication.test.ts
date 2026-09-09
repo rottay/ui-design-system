@@ -108,8 +108,15 @@ describe("compileTenantThemeDocumentV2 · the real published path", () => {
         entry.effectiveLeaves.includes("typography.typePairing")
       )
     ).toBe(false);
+    // The authored pairing owns its own leaf AND the font families it expands
+    // into: nothing more specific named them, so the causal owner is the
+    // selection that caused them (I-P0/I-P3a).
     expect(entryFor(compilation, "typography.pairing")?.effectiveLeaves).toEqual(
-      ["typography.typePairing"]
+      [
+        "typography.typePairing",
+        "typography.fontFamilyBase",
+        "typography.fontFamilyHeading",
+      ]
     );
   });
 
@@ -206,6 +213,64 @@ describe("compileTenantThemeDocumentV2 · refusals, by name", () => {
       expect(error).toBeInstanceOf(TenantThemeValidationError);
       expect((error as TenantThemeValidationError).issues[0].path).toBe(
         "$.verticalKey"
+      );
+    }
+  });
+
+  it("refuses a dial outside the vertical envelope, at the decision that authored it", () => {
+    // The envelope option is the v1 terminal's law, so the v2 transport owes the
+    // same answer: `shape.radius-scale` 1.24 is inside the catalog's own domain
+    // and outside bithire's registered envelope, and before this it published.
+    // The path names the DECISION, not the v1 field the projection wrote it to.
+    try {
+      compileTenantThemeDocumentV2({
+        ...IDENTITY,
+        document: {
+          version: 2,
+          plan: "pro",
+          decisions: { "shape.radius-scale": 1.24 },
+        },
+      });
+      throw new Error("expected a refusal");
+    } catch (error) {
+      expect(error).toBeInstanceOf(TenantThemeValidationError);
+      expect((error as TenantThemeValidationError).issues).toEqual([
+        {
+          code: "invalid_value",
+          path: '$.decisions["shape.radius-scale"]',
+          message: "Value exceeds the bithire envelope",
+        },
+      ]);
+    }
+    expect(() =>
+      compileTenantThemeConfig(
+        {
+          schemaVersion: 1,
+          mode: "simple",
+          appearance: { shape: { radiusScale: 1.24 } },
+          ...IDENTITY,
+        },
+        { verticalEnvelope: getTenantThemeVerticalEnvelope(IDENTITY.verticalKey) }
+      )
+    ).toThrow(TenantThemeValidationError);
+  });
+
+  it("refuses a malformed envelope before measuring any document against it", () => {
+    const registered = getTenantThemeVerticalEnvelope(IDENTITY.verticalKey);
+    try {
+      compileTenantThemeDocumentV2({
+        ...IDENTITY,
+        document: DOCUMENT,
+        verticalEnvelope: {
+          ...registered!,
+          ranges: { ...registered!.ranges, radiusScale: { min: 2, max: 3 } },
+        },
+      });
+      throw new Error("expected a refusal");
+    } catch (error) {
+      expect(error).toBeInstanceOf(TenantThemeValidationError);
+      expect((error as TenantThemeValidationError).issues[0].path).toBe(
+        "$.verticalEnvelope.ranges.radiusScale"
       );
     }
   });

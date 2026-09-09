@@ -39,12 +39,9 @@ import type {
 import {
   TENANT_THEME_ANATOMY_VARIANTS,
   TENANT_THEME_CHROME_FAMILIES,
-  TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
   TENANT_THEME_FONT_PACK_IDS,
-  TENANT_THEME_RADIUS_SCALE_BOUNDS,
   TENANT_THEME_REFERENCE_TOKENS,
   TENANT_THEME_SCHEMA_VERSION,
-  TENANT_THEME_TYPE_SCALE_BOUNDS,
   TENANT_THEME_V1_COVERAGE,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
@@ -60,6 +57,10 @@ import {
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
 import { expandProfileDefaults } from "../../runtime/theme/runtime/ingress/foundation/profile-expansion";
+import {
+  envelopeDialIssues,
+  envelopeRangeShapeIssues,
+} from "./foundation/envelope";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
 import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type { EngineVisualDeclaration } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
@@ -664,54 +665,7 @@ export function validateTenantThemeAgainstVerticalEnvelope(
     }
   }
 
-  const rangeBounds = {
-    densityScale: { min: 0.75, max: 1.25 },
-    effectIntensity: TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
-    motionIntensity: { min: 0, max: 1 },
-    motionDurationScale: { min: 0.5, max: 1.5 },
-    typeScale: TENANT_THEME_TYPE_SCALE_BOUNDS,
-    radiusScale: TENANT_THEME_RADIUS_SCALE_BOUNDS,
-  } as const;
-  if (envelope.ranges !== undefined) {
-    if (!isPlainObject(envelope.ranges)) {
-      issues.push({
-        code: "invalid_type",
-        path: "$.verticalEnvelope.ranges",
-        message: "Expected a ranges object",
-      });
-    } else {
-      for (const [key, value] of Object.entries(envelope.ranges)) {
-        const global = rangeBounds[key as keyof typeof rangeBounds];
-        if (!global) {
-          issues.push({
-            code: "unknown_key",
-            path: `$.verticalEnvelope.ranges.${key}`,
-            message: "Unknown range",
-          });
-          continue;
-        }
-        if (
-          !isPlainObject(value) ||
-          Object.keys(value).some(
-            (field) => field !== "min" && field !== "max"
-          ) ||
-          typeof value.min !== "number" ||
-          typeof value.max !== "number" ||
-          !Number.isFinite(value.min) ||
-          !Number.isFinite(value.max) ||
-          value.min > value.max ||
-          value.min < global.min ||
-          value.max > global.max
-        ) {
-          issues.push({
-            code: "invalid_value",
-            path: `$.verticalEnvelope.ranges.${key}`,
-            message: "Range must be finite, ordered and inside global v1 caps",
-          });
-        }
-      }
-    }
-  }
+  issues.push(...envelopeRangeShapeIssues(envelope.ranges));
 
   if (issues.length > 0) return issues;
 
@@ -720,34 +674,14 @@ export function validateTenantThemeAgainstVerticalEnvelope(
       ? config.appearance
       : config.visualFoundation.general;
   const ranges = envelope.ranges;
-  const rangedValues = [
-    ["motion.intensity", general?.motion?.intensity, ranges?.motionIntensity],
-    [
-      "motion.durationScale",
-      general?.motion?.durationScale,
-      ranges?.motionDurationScale,
-    ],
-    ["typography.scale", general?.typography?.scale, ranges?.typeScale],
-    ["shape.radiusScale", general?.shape?.radiusScale, ranges?.radiusScale],
-    [
-      "surfaces.effectIntensity",
-      general?.surfaces?.effectIntensity,
-      ranges?.effectIntensity,
-    ],
-  ] as const;
-  for (const [field, value, range] of rangedValues) {
-    // The VERDICT is `contracts/theme/runtime/envelopes`'; only the document
-    // spelling of the path is this transport's. The compile door asks the same
-    // question of the resolved Theme, so a preview and a publish of one
-    // document now agree on the answer (F-13).
-    if (value !== undefined && !isInsideEnvelopeRange(value, range)) {
-      issues.push({
-        code: "invalid_value",
-        path: `$.appearance.${field}`,
-        message: `Value exceeds the ${config.verticalKey} envelope`,
-      });
-    }
-  }
+  issues.push(
+    ...envelopeDialIssues({
+      general,
+      ranges,
+      verticalKey: config.verticalKey,
+      pathOf: (dial) => `$.appearance.${dial}`,
+    })
+  );
 
   if (config.mode === "advanced") {
     const advanced = config.visualFoundation.advanced;
@@ -1102,14 +1036,14 @@ export function compileTenantTheme(
   }
   const vertical: FirstPartyVerticalId = config.verticalKey;
 
-  // The profile expansion is the INGRESS station's, run here on the document
-  // this terminal is about to publish so the artifact's runtime metadata is a
-  // projection of the same effective document the door lowers. It used to be a
-  // preprocess only this terminal ran, over a replacement document it built
-  // for itself, which is why publishing a profile compiled fonts, motion and
-  // radius that previewing the same row never showed (RT05). Expanding here
-  // and again at the door is not two answers: the station only fills a field
-  // the tenant left empty, so the second pass returns its input by identity.
+  // The profile expansion is the INGRESS station's, run here ONCE on the
+  // document this terminal is about to publish, so the artifact's runtime
+  // metadata and the CSS beside it are projections of the same effective
+  // document. It used to be a preprocess private to this terminal, over a
+  // replacement document it built for itself, which is why publishing a profile
+  // compiled fonts, motion and radius that previewing the same row never showed
+  // (RT05). The door does not expand: it is the R1 lot's file, so this terminal
+  // hands the producer the effective document instead of the selection alone.
   const documentSource: TenantThemeDocument =
     config.mode === "simple"
       ? {
@@ -1171,13 +1105,6 @@ export interface TenantThemeArtifactAssembly {
    * effective value from the CSS compiled beside it.
    */
   readonly document: TenantThemeDocument;
-  /**
-   * The ledger the transport resolved at its own door, used when the compile
-   * did not carry one. What the compile carried always wins: a ledger that
-   * travelled with the intent was validated against the catalog by the
-   * resolver, and a transport may not overrule it.
-   */
-  readonly ledger?: DecisionProvenanceLedger;
 }
 
 export function assembleTenantThemeArtifact(
@@ -1216,9 +1143,11 @@ export function assembleTenantThemeArtifact(
     );
   }
   const { variables, modeDeltas } = delta;
-  const provenance = artifactProvenanceOf(
-    resolution.provenance.ledger ?? input.ledger
-  );
+  // The ledger is the RESOLUTION's and can be nothing else. It reaches here
+  // only by travelling on the intent, where `resolveTheme` checked every tier
+  // against the catalog; a second parameter beside the intent would be a door
+  // a caller could hand a forged tier through.
+  const provenance = artifactProvenanceOf(resolution.provenance.ledger);
   // The one input the intent cannot carry. `backgroundMode` is v1 transport
   // metadata that deliberately never reaches the `Theme` ("runtime selection
   // metadata, not Theme authority"), so the canvas this document declares is

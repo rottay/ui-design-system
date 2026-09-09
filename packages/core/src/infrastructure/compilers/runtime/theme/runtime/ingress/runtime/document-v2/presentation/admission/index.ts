@@ -15,8 +15,6 @@
  */
 
 import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
-import type { DecisionProvenanceClaim } from "@/foundation/contracts/composition/tenants/themes/provenance";
-import type { ThemeDecisionId } from "@/contracts/theme/foundation/decisions";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
   assertTenantThemeDocumentV2,
@@ -24,10 +22,8 @@ import {
   type TenantThemeDocumentAny,
   type TenantThemeDocumentV2,
 } from "@/contracts/theme/presentation/document";
-import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { assertThemeDecisionDomains } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
 import { documentThemePatch } from "../../../../foundation/document-patch";
-import { expandProfileDefaults } from "../../../../foundation/profile-expansion";
 import { projectDecisionsToV1, type DecisionProjection } from "../../foundation/projection";
 import { migrateDocumentV1ToV2 } from "../../foundation/migrate";
 
@@ -35,21 +31,6 @@ export interface DocumentAdmission {
   /** `1` for the persisted v1 transport, `2` for the decision document. */
   version: 1 | 2;
   patch: ThemeLayerPatch;
-  /**
-   * What the profile-expansion station filled, as `profile-derived` claims.
-   *
-   * Reported beside the patch rather than folded into `decisions`: a profile
-   * default is not a decision the tenant made, and a door that listed it as
-   * one would be the terminal's old authorship invention under a new name.
-   */
-  profileClaims: readonly DecisionProvenanceClaim<ThemeDecisionId>[];
-  /**
-   * The v1-shape document the patch was lowered from, profile defaults
-   * included. A publisher needs it to project the artifact's runtime metadata
-   * from the same effective document the patch came from, rather than running
-   * the expansion a second time and hoping the two agree.
-   */
-  effective: TenantThemeDocument;
   /** Empty for v1: a v1 document has no decision ids to report against. */
   decisions: readonly DecisionProjection[];
   /** Activated decisions that moved no keypath today, in kit row order. */
@@ -68,20 +49,14 @@ export function admitDocument(input: {
   document: TenantThemeDocumentAny;
 }): DocumentAdmission {
   if (!isTenantThemeDocumentV2(input.document)) {
-    const expanded = expandProfileDefaults({
-      vertical: input.vertical,
-      document: input.document,
-    });
     return {
       version: 1,
       patch: documentThemePatch({
         vertical: input.vertical,
-        document: expanded.document,
+        document: input.document,
       }),
       decisions: [],
       unlit: [],
-      profileClaims: expanded.claims,
-      effective: expanded.document,
     };
   }
   const document = assertTenantThemeDocumentV2(input.document);
@@ -89,23 +64,11 @@ export function admitDocument(input: {
   // every domain the catalog states in full. Two owners, one table.
   assertThemeDecisionDomains(document.decisions);
   const { v1, projections } = projectDecisionsToV1(document);
-  // The expansion runs on the PROJECTED v1 shape, after the report of what the
-  // tenant decided is already fixed, so a default can never enter the door's
-  // own answer about authorship.
-  const expanded = expandProfileDefaults({
-    vertical: input.vertical,
-    document: v1,
-  });
   return {
     version: 2,
-    patch: documentThemePatch({
-      vertical: input.vertical,
-      document: expanded.document,
-    }),
+    patch: documentThemePatch({ vertical: input.vertical, document: v1 }),
     decisions: projections,
     unlit: projections.filter((projection) => !projection.lit),
-    profileClaims: expanded.claims,
-    effective: expanded.document,
   };
 }
 

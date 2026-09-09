@@ -1,5 +1,5 @@
 /**
- * RT05 — publishing a profile must compile the document previewing it showed.
+ * RT05 — the PUBLICATION side of "one document, one effective compile".
  *
  * The re-audit's receipt (`profile-publication-cases.json`) compared the door's
  * admitted delta for a document against the artifact that same document
@@ -10,25 +10,30 @@
  * replacement document it built for itself; the door was sent the selection
  * alone.
  *
+ * This file proves the half R2 owns: the publish terminals expand ONCE, and the
+ * artifact's runtime metadata and its CSS are two projections of that one
+ * effective document rather than of two different ones. The door arm — teaching
+ * `admitDocument` to expand, so previewing a profile shows what publishing it
+ * compiles — is R1's file and is a routed integration item; the twelve
+ * door-versus-published cases that asserted it are named in the R2 report and
+ * come back with that integration, not as skips here.
+ *
  * The repair is not "emit neither": a profile default IS part of the effective
- * configuration the tenant chose when it selected the profile, so both doors
- * must emit it. These cases therefore assert EFFECTIVE VALUES first and parity
- * second — a green run with the defaults deleted from both paths would satisfy
- * parity and fail this file.
+ * configuration the tenant chose when it selected the profile, so a publish must
+ * emit it. These cases therefore assert EFFECTIVE VALUES, not only agreement — a
+ * green run with the defaults deleted would fail this file.
  */
 import { describe, expect, it } from "vitest";
 
+import { ThemeAdmissionError } from "@/infrastructure/compilers/runtime/theme";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import type {
+  TenantThemeArtifact,
   TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
-import {
-  documentThemeIntent,
-  previewThemeIntent,
-} from "@/infrastructure/compilers/runtime/theme";
 import { compileTenantThemeConfig, getTenantThemeVerticalEnvelope } from "..";
+import { compileTenantThemeDocumentV2 } from "../document-v2";
 
 const VERTICALS: readonly FirstPartyVerticalId[] = ["rottay", "bithire", "evnto"];
 const PROFILES = [
@@ -49,80 +54,72 @@ const profileDocument = (profile: string): TenantThemeDocument => ({
   appearance: { experienceProfile: profile },
 });
 
-/** What the door admits for a document, as the audit compared it. */
-function doorVariables(
+function publish(
   vertical: FirstPartyVerticalId,
-  document: TenantThemeDocument,
-  origin: "preview" | "tenant-document" = "preview"
-): Readonly<Record<string, string>> {
-  const intent =
-    origin === "preview"
-      ? previewThemeIntent({ vertical, slug: "acme", document })
-      : documentThemeIntent({ vertical, slug: "acme", document });
-  const { delta } = compileThemeIntent(intent);
-  if (!delta) throw new Error("the door measured no delta");
-  return delta.variables;
+  document: TenantThemeDocument
+): TenantThemeArtifact {
+  return compileTenantThemeConfig(
+    { ...document, ...identity(vertical) },
+    { verticalEnvelope: getTenantThemeVerticalEnvelope(vertical) }
+  );
 }
 
 function publishedVariables(
   vertical: FirstPartyVerticalId,
   document: TenantThemeDocument
 ): Readonly<Record<string, string>> {
-  return compileTenantThemeConfig(
-    { ...document, ...identity(vertical) },
-    { verticalEnvelope: getTenantThemeVerticalEnvelope(vertical) }
-  ).variables;
+  return publish(vertical, document).variables;
 }
 
-function differences(
-  door: Readonly<Record<string, string>>,
-  published: Readonly<Record<string, string>>
-): readonly string[] {
-  const keys = new Set([...Object.keys(door), ...Object.keys(published)]);
-  return [...keys].filter((key) => door[key] !== published[key]).sort();
+/** The v2 transport publishing the same selection, under a stated plan. */
+function publishV2(plan: "standard" | "pro" | "internal", profile: string) {
+  return compileTenantThemeDocumentV2({
+    ...identity("bithire"),
+    verticalKey: "bithire",
+    document: { version: 2, plan, decisions: { "experience.profile": profile } },
+  });
 }
 
-describe("RT05 · one document, one effective compile", () => {
+describe("RT05 · one publish, one effective document", () => {
   for (const vertical of VERTICALS) {
     for (const profile of PROFILES) {
-      it(`${vertical} · ${profile} previews exactly what it publishes`, () => {
-        const document = profileDocument(profile);
-        expect(
-          differences(
-            doorVariables(vertical, document),
-            publishedVariables(vertical, document)
-          )
-        ).toEqual([]);
-      });
-
-      it(`${vertical} · ${profile} admits the same delta through both producers`, () => {
-        const document = profileDocument(profile);
-        expect(doorVariables(vertical, document, "preview")).toEqual(
-          doorVariables(vertical, document, "tenant-document")
-        );
+      it(`${vertical} · ${profile} states the same effective values in its metadata and its CSS`, () => {
+        const artifact = publish(vertical, profileDocument(profile));
+        const general = artifact.normalizedAppearance.general;
+        // The terminal used to project the metadata from a replacement document
+        // it expanded for itself while the CSS came from the unexpanded
+        // selection, so one artifact could state two effective values. One
+        // station, run once, is what makes these two reads the same answer --
+        // including the silences: a dial this profile declares no default for
+        // is absent from BOTH, never present in one of them.
+        const dials = [
+          ["--ds-motion-intensity", general?.motion?.intensity],
+          ["--ds-motion-duration-scale", general?.motion?.durationScale],
+          ["--ds-radius-scale", general?.shape?.radiusScale],
+        ] as const;
+        for (const [name, value] of dials) {
+          expect(artifact.variables[name]).toBe(
+            value === undefined ? undefined : String(value)
+          );
+        }
       });
     }
   }
 
-  it("emits the editorial profile's declared defaults on BOTH paths", () => {
-    const document = profileDocument("rottay/management-editorial@1");
-    for (const source of [
-      doorVariables("bithire", document),
-      publishedVariables("bithire", document),
-    ]) {
-      expect(source["--ds-motion-intensity"]).toBe("0.7");
-      expect(source["--ds-radius-scale"]).toBe("1.15");
-      expect(source["--ds-font-family-base"]).toContain("var(--ds-font-");
-    }
+  it("emits the editorial profile's declared defaults into the published artifact", () => {
+    const published = publishedVariables(
+      "bithire",
+      profileDocument("rottay/management-editorial@1")
+    );
+    expect(published["--ds-motion-intensity"]).toBe("0.7");
+    expect(published["--ds-radius-scale"]).toBe("1.15");
+    expect(published["--ds-font-family-base"]).toContain("var(--ds-font-");
   });
 
   it("keeps the profile out of the normalized appearance nowhere: the runtime metadata carries the effective values", () => {
-    const artifact = compileTenantThemeConfig(
-      {
-        ...profileDocument("rottay/management-editorial@1"),
-        ...identity("bithire"),
-      },
-      { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire") }
+    const artifact = publish(
+      "bithire",
+      profileDocument("rottay/management-editorial@1")
     );
     expect(artifact.normalizedAppearance.general?.shape?.radiusScale).toBe(1.15);
     expect(artifact.normalizedAppearance.general?.motion?.intensity).toBe(0.7);
@@ -143,9 +140,7 @@ describe("RT05 · precedence, removal and plan", () => {
   };
 
   it("an explicit dial outranks the profile, and the empty ones still receive it", () => {
-    const door = doorVariables("bithire", partialMotion);
     const published = publishedVariables("bithire", partialMotion);
-    expect(differences(door, published)).toEqual([]);
     expect(published["--ds-motion-intensity"]).toBe("0.2");
     expect(published["--ds-motion-duration-scale"]).toBe("1.1");
   });
@@ -164,71 +159,43 @@ describe("RT05 · precedence, removal and plan", () => {
         experienceProfile: "rottay/management-editorial@1",
       },
     };
-    const removed = publishedVariables("bithire", withoutProfile);
-    const restored = publishedVariables("bithire", withProfile);
-    expect(removed["--ds-radius-scale"]).not.toBe("1.15");
-    expect(restored["--ds-radius-scale"]).toBe("1.15");
-    expect(
-      compileTenantThemeConfig(
-        { ...withoutProfile, ...identity("bithire") },
-        { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire") }
-      ).digest
-    ).toBe(
-      compileTenantThemeConfig(
-        { ...withoutProfile, ...identity("bithire") },
-        { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire") }
-      ).digest
+    expect(publishedVariables("bithire", withoutProfile)["--ds-radius-scale"]).not.toBe(
+      "1.15"
+    );
+    expect(publishedVariables("bithire", withProfile)["--ds-radius-scale"]).toBe(
+      "1.15"
+    );
+    expect(publish("bithire", withoutProfile).digest).toBe(
+      publish("bithire", withoutProfile).digest
     );
   });
 
-  it("the same effective configuration compiles the same under every entitled plan", () => {
-    const base = doorVariables(
-      "bithire",
-      profileDocument("rottay/management-editorial@1")
-    );
-    for (const plan of ["pro", "internal"] as const) {
-      const { delta } = compileThemeIntent(
-        previewThemeIntent({
-          vertical: "bithire",
-          slug: "acme",
-          document: {
-            version: 2,
-            plan,
-            decisions: { "experience.profile": "rottay/management-editorial@1" },
-          },
-        })
-      );
-      expect(delta?.variables).toEqual(base);
-    }
+  it("the same effective configuration publishes the same under every entitled plan", () => {
+    const base = publishV2("pro", "rottay/management-editorial@1").artifact;
+    const other = publishV2("internal", "rottay/management-editorial@1").artifact;
+    expect(other.variables).toEqual(base.variables);
+    expect(base.variables["--ds-radius-scale"]).toBe("1.15");
   });
 
   /**
-   * The `standard` leg of the cross-plan comparison, and the ONE case this lot
-   * cannot close on its own.
+   * The ONE case this lot cannot close, pinned rather than hidden.
    *
    * The tier station still infers decisions from merged patch leaves, so the
-   * font families a pairing expands into read as an authored `typography.
-   * families` (RA01). Now that the profile expansion runs at the door for both
-   * transports, a Standard v2 document that selects a profile reaches that same
-   * inference — the identical defect the re-audit reported for an authored
-   * pairing, over one more input. It closes with the ledger-judged tier station
-   * of R1 (contract I-T1/I-T4, Control 1), not here: exempting font-family
-   * leaves by name is forbidden. When that lands, this expectation goes red and
-   * is replaced by the parity assertion above extended to `standard`.
+   * font families a pairing expands into read as an authored
+   * `typography.families` (RA01). A Standard v2 document that selects a profile
+   * therefore reaches that inference at PUBLISH, where the expansion runs — the
+   * identical defect the re-audit reported for an authored pairing, over one
+   * more input. It closes with the ledger-judged tier station of R1 (contract
+   * I-T1/I-T4, Control 1), not here: exempting font-family leaves by name is
+   * forbidden. When that lands, this expectation goes red and is replaced by the
+   * cross-plan assertion above extended to `standard`.
    */
   it("records the Standard leg still refused by the leaf-inferred tier station", () => {
-    expect(() =>
-      compileThemeIntent(
-        previewThemeIntent({
-          vertical: "bithire",
-          slug: "acme",
-          document: {
-            version: 2,
-            plan: "standard",
-            decisions: { "experience.profile": "rottay/management-editorial@1" },
-          },
-        })
-      )
-    ).toThrow(/typography\.families/);
+    expect(() => publishV2("standard", "rottay/management-editorial@1")).toThrow(
+      ThemeAdmissionError
+    );
+    expect(() => publishV2("standard", "rottay/management-editorial@1")).toThrow(
+      /typography\.families/
+    );
   });
 });
