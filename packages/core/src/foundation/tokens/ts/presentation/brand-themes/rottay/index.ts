@@ -7346,9 +7346,9 @@ const CHROME: BrandChrome = {
     cellPadding: SEED.rhythm.tableCellPadding,
     /**
      * @domicile derived
-     * @governor deriva de: --ds-text-body-size (A2-4); 0.875rem plano-invariante medido; la mueve typography.scale
+     * @governor deriva de: --ds-text-body-size (A2-4); 0.875rem plano-invariante medido; typography.scale ya viene en --ds-text-body-size
      */
-    cellFontSize: 'calc(var(--ds-text-body-size) * var(--ds-type-scale, 1))',
+    cellFontSize: 'var(--ds-text-body-size)',
     /**
      * @domicile derived
      * @governor deriva de: --ds-color-text (A2-5); medido dark #ECECEC / light #1A1A1A, identicos a lo shippeado; el pin del overlay se retira
