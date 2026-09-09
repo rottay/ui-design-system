@@ -37,6 +37,8 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   CHROME_ANATOMY_FAMILIES,
+  STATE_EMPHASIS_POSTURES,
+  STATE_FOCUS_STYLES,
   THEME_DECISION_TIER_BY_ID,
   type ThemeDecisionId,
   type ThemeDecisions,
@@ -156,12 +158,59 @@ function migrateGeneralDecisions(
   if (general.surfaces?.effectIntensity !== undefined) {
     decisions["surfaces.effect-intensity"] = general.surfaces.effectIntensity;
   }
+  // Rows 20 and 21. v1 types both fields as an open string at the DB edge, so
+  // the closed catalog vocabulary is what admits them: a value outside it is
+  // refused at its own keypath rather than dropped, which is the difference
+  // between a migration and a repaint nobody was told about.
+  const states = general.states;
+  if (states) {
+    carryState(
+      states.emphasis,
+      STATE_EMPHASIS_POSTURES,
+      "states.emphasis",
+      "general.states.emphasis",
+      decisions,
+      refuse
+    );
+    carryState(
+      states.focusStyle,
+      STATE_FOCUS_STYLES,
+      "states.focus-style",
+      "general.states.focusStyle",
+      decisions,
+      refuse
+    );
+  }
   if (general.navigation?.sidebarTone) {
     decisions["navigation.sidebar-tone"] = general.navigation.sidebarTone;
   }
   if (general.experienceProfile) {
     decisions["experience.profile"] = general.experienceProfile;
   }
+}
+
+/**
+ * Carry one closed-vocabulary v1 state field to the decision that owns it, or
+ * refuse it by name. Silence is the one answer a total migration may not give.
+ */
+function carryState<Id extends "states.emphasis" | "states.focus-style">(
+  value: string | undefined,
+  vocabulary: readonly ThemeDecisions[Id][],
+  id: Id,
+  keypath: string,
+  decisions: Partial<ThemeDecisions>,
+  refuse: (reason: string) => void
+): void {
+  if (value === undefined) return;
+  if (!(vocabulary as readonly string[]).includes(value)) {
+    refuse(
+      `v1 ${keypath} ${JSON.stringify(value)} is outside the "${id}" domain; ` +
+        `row ${id === "states.emphasis" ? "20" : "21"} closes it at ` +
+        `${vocabulary.join(", ")}`
+    );
+    return;
+  }
+  decisions[id] = value as ThemeDecisions[Id];
 }
 
 function migrateTokenOverrides(
