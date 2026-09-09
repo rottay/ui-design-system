@@ -23,7 +23,7 @@
 
 import type { PersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 import type { TenantConfig } from '@/foundation/contracts';
-import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
+import { tenantDecidedChannels } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 
 import type { SurfaceVisualOverrides } from '../../../../contracts';
 
@@ -112,47 +112,20 @@ export function isAdmittedOverrideValue(
   );
 }
 
-const PERSONALITY_DIMENSIONS = ['animation', 'typography', 'accent', 'card'] as const;
-
-function collectDeclaredChannels(
-  personality: {
-    [K in (typeof PERSONALITY_DIMENSIONS)[number]]?: Partial<PersonalityTokens[K]>;
-  } | undefined,
-  into: Set<string>,
-): void {
-  if (!personality) return;
-  for (const dimension of PERSONALITY_DIMENSIONS) {
-    const values = personality[dimension];
-    if (!values) continue;
-    for (const [field, value] of Object.entries(values as Record<string, unknown>)) {
-      // A BrandTheme lowering emits a whole dimension the moment one field of
-      // it is authored, with the rest left `undefined`. Only a declared value
-      // is a decision.
-      if (value !== undefined) into.add(`${dimension}.${field}`);
-    }
-  }
-}
-
 /**
- * The personality channels the TENANT decided, by any of its authoring routes:
- * the personality delta on the config, the BrandTheme lowered through the same
- * function `useTokens` uses, and the two semantic density postures (the
- * BrandTheme's `surfaces.density` and the DB document's
- * `appearance.general.density`), which decide the same padding channel the
- * personality card dimension carries.
+ * The personality channels the TENANT decided, by any of its authoring routes.
+ *
+ * Delegated to the tenant configuration registry, which owns the ONE
+ * definition, because the answer has to survive a projection this layer never
+ * sees: `getCodeOwnedRuntimeConfig` strips `personality`, `brandTheme` and
+ * `appearance` before a component is ever handed the config, so re-reading
+ * those three fields here adjudicated every selection against an empty set
+ * behind the real provider and admitted what it exists to refuse.
  */
-export function resolveTenantDecidedChannels(config: TenantConfig | undefined): ReadonlySet<string> {
-  const decided = new Set<string>();
-  if (!config) return decided;
-
-  collectDeclaredChannels(config.personality, decided);
-  if (config.brandTheme) {
-    collectDeclaredChannels(brandThemeToPersonality(config.brandTheme), decided);
-    if (config.brandTheme.surfaces?.density !== undefined) decided.add('card.paddingDensity');
-  }
-  if (config.appearance?.general?.density !== undefined) decided.add('card.paddingDensity');
-
-  return decided;
+export function resolveTenantDecidedChannels(
+  config: TenantConfig | undefined,
+): ReadonlySet<string> {
+  return tenantDecidedChannels(config);
 }
 
 /** One admitted or refused instance selection, with the reason it was refused. */
