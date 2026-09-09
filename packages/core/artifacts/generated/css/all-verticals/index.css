@@ -185,13 +185,23 @@
      effective ramp and aliases on that boundary for true subtree locality.
      --ds-spacing-0 stays literal 0 (scaling zero is a no-op).
 
-     NOTE: themes/default.css redefines the common steps (0-64) and wins the
-     rottay-tokens cascade (imported later); it must carry the same calc wrap
-     over its own literals for density to reach those steps — the steps only
-     defined here (7, 9, 11, 14, 28, 36, 44, 52, 56, 60, 72, 80, 96) already
-     scale from this file. The fluid ramp below is a separate opt-in axis and is
-     intentionally NOT density-wrapped.
+     THIS FILE IS THE ONLY :root OWNER OF THE RAMP. The common steps (0-64)
+     and the semantic aliases used to be redeclared in themes/default.css,
+     which won the rottay-tokens cascade by import order — so the ramp had two
+     authorities and adding a step meant remembering the second one. The fluid
+     ramp below is a separate opt-in axis and is intentionally NOT
+     density-wrapped. foundation/base/density.css redeclares the effective ramp
+     on a data-density boundary; that is a LOCAL projection, not a second
+     authority, and it exists because a custom property cannot be recomputed
+     from an inherited declaration by changing one of its inputs.
      ======================================================================== */
+  --ds-spacing-0: 0;
+  --ds-spacing-1: calc(0.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-2: calc(0.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-3: calc(0.75rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-4: calc(1rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-5: calc(1.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-6: calc(1.5rem * var(--ds-density-effective-scale, 1));
   --ds-spacing-7: calc(1.75rem * var(--ds-density-effective-scale, 1));   /* 28px */
   --ds-spacing-9: calc(2.25rem * var(--ds-density-effective-scale, 1));   /* 36px */
   --ds-spacing-11: calc(2.75rem * var(--ds-density-effective-scale, 1));  /* 44px */
@@ -205,6 +215,27 @@
   --ds-spacing-72: calc(18rem * var(--ds-density-effective-scale, 1));    /* 288px */
   --ds-spacing-80: calc(20rem * var(--ds-density-effective-scale, 1));    /* 320px */
   --ds-spacing-96: calc(24rem * var(--ds-density-effective-scale, 1));    /* 384px */
+  --ds-spacing-8: calc(2rem * var(--ds-density-effective-scale, 1));      /* 32px */
+  --ds-spacing-10: calc(2.5rem * var(--ds-density-effective-scale, 1));   /* 40px */
+  --ds-spacing-12: calc(3rem * var(--ds-density-effective-scale, 1));     /* 48px */
+  --ds-spacing-16: calc(4rem * var(--ds-density-effective-scale, 1));     /* 64px */
+  --ds-spacing-20: calc(5rem * var(--ds-density-effective-scale, 1));     /* 80px */
+  --ds-spacing-24: calc(6rem * var(--ds-density-effective-scale, 1));     /* 96px */
+  --ds-spacing-32: calc(8rem * var(--ds-density-effective-scale, 1));     /* 128px */
+  --ds-spacing-40: calc(10rem * var(--ds-density-effective-scale, 1));    /* 160px */
+  --ds-spacing-48: calc(12rem * var(--ds-density-effective-scale, 1));    /* 192px */
+  --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));    /* 256px */
+
+  /* ========================================================================
+     SEMANTIC SPACING - the named steps components bind
+     ======================================================================== */
+  --ds-spacing-xs: var(--ds-density-spacing-xs, var(--ds-spacing-1)); /* 4px */
+  --ds-spacing-sm: var(--ds-density-spacing-sm, var(--ds-spacing-2)); /* 8px */
+  --ds-spacing-md: var(--ds-density-spacing-md, var(--ds-spacing-4)); /* 16px */
+  --ds-spacing-lg: var(--ds-density-spacing-lg, var(--ds-spacing-6)); /* 24px */
+  --ds-spacing-xl: var(--ds-density-spacing-xl, var(--ds-spacing-8)); /* 32px */
+  --ds-spacing-2xl: var(--ds-density-spacing-2xl, var(--ds-spacing-12)); /* 48px */
+  --ds-spacing-3xl: var(--ds-density-spacing-3xl, var(--ds-spacing-16)); /* 64px */
 
   /* ========================================================================
      NAMED SPACING - Semantic Aliases
@@ -588,17 +619,11 @@
      SEMANTIC TYPOGRAPHY ROLES
      Product components consume these roles; BrandTheme can override every
      facet without changing component anatomy or application markup.
+
+     The facets themselves are declared once, by themes/default.css, and
+     derived per tenant by the typography family of the theme compiler. This
+     file owns only the shorthand aliases below.
      ======================================================================== */
-
-
-
-
-
-
-
-  --ds-type-code-font-variant-numeric: tabular-nums;
-
-  --ds-type-numeric-font-weight: 600;
 
   /* Dynamic shorthand aliases. They reference the facets instead of copying
      values so a DB tenant can retune one role property without leaving a
@@ -1772,14 +1797,14 @@
   --ds-type-code-line-height: var(--ds-line-height-normal);
   --ds-type-code-letter-spacing: var(--ds-letter-spacing-normal);
   --ds-type-code-text-transform: none;
-  --ds-type-code-font-variant-numeric: normal;
+  --ds-type-code-font-variant-numeric: tabular-nums;
   --ds-type-numeric-font-family: var(--ds-font-family-base);
   --ds-type-numeric-font-size: var(--ds-font-size-base);
-  --ds-type-numeric-font-weight: 500;
+  --ds-type-numeric-font-weight: 600;
   --ds-type-numeric-line-height: var(--ds-line-height-snug);
   --ds-type-numeric-letter-spacing: var(--ds-letter-spacing-normal);
   --ds-type-numeric-text-transform: none;
-  --ds-type-numeric-font-variant-numeric: tabular-nums;
+  --ds-type-numeric-font-variant-numeric: tabular-nums lining-nums;
 
   /* The eyebrow role, which had no base declaration at all: the three vertical
      artifacts each declared the SAME 0.08em / uppercase, which makes it a DS
@@ -1887,33 +1912,6 @@
      byte-identical to the pre-rhythm cascade. */
   --ds-rhythm-scale: 1;
   --ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25);
-  --ds-spacing-0: 0;
-  --ds-spacing-1: calc(0.25rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-2: calc(0.5rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-3: calc(0.75rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-4: calc(1rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-5: calc(1.25rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-6: calc(1.5rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-8: calc(2rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-10: calc(2.5rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-12: calc(3rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-16: calc(4rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-20: calc(5rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-24: calc(6rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-32: calc(8rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-40: calc(10rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-48: calc(12rem * var(--ds-density-effective-scale, 1));
-  --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));
-
-  /* Semantic Spacing */
-  --ds-spacing-xs: var(--ds-density-spacing-xs, var(--ds-spacing-1));
-  --ds-spacing-sm: var(--ds-density-spacing-sm, var(--ds-spacing-2));
-  --ds-spacing-md: var(--ds-density-spacing-md, var(--ds-spacing-4));
-  --ds-spacing-lg: var(--ds-density-spacing-lg, var(--ds-spacing-6));
-  --ds-spacing-xl: var(--ds-density-spacing-xl, var(--ds-spacing-8));
-  --ds-spacing-2xl: var(--ds-density-spacing-2xl, var(--ds-spacing-12));
-  --ds-spacing-3xl: var(--ds-density-spacing-3xl, var(--ds-spacing-16));
-
   /* ─────────────────────────────────────────────────────────────────────────────
      4. BORDERS - Vercel Minimal Style
      ───────────────────────────────────────────────────────────────────────────── */
@@ -2149,12 +2147,16 @@
 
   /* ─────────────────────────────────────────────────────────────────────────────
      7. TRANSITIONS
+     The five named steps are aliases over the --ds-motion-* cadence declared in
+     foundation/animations/transitions, not a second timing vocabulary: a tenant
+     that moves its motion dials moves these with it. Off-cadence literals
+     (150ms, 300ms) resolve to the closed 120/200/320/500ms set.
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --ds-transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --ds-transition-slow: 300ms cubic-bezier(0.16, 1, 0.3, 1);
-  --ds-transition-slower: 500ms cubic-bezier(0.16, 1, 0.3, 1);
-  --ds-transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ds-transition-fast: var(--ds-motion-fast) var(--ds-motion-ease-standard);
+  --ds-transition-normal: var(--ds-motion-normal) var(--ds-motion-ease-standard);
+  --ds-transition-slow: var(--ds-motion-slow) var(--ds-motion-ease-out);
+  --ds-transition-slower: var(--ds-motion-glacial) var(--ds-motion-ease-out);
+  --ds-transition-spring: var(--ds-motion-slow) var(--ds-motion-spring);
 
   /* ═══════════════════════════════════════════════════════════════════════════
      2. SEMANTIC TOKENS
@@ -3599,6 +3601,19 @@ html.dark {
   --ds-motion-slow: 320ms;
   --ds-motion-glacial: 500ms;
   --ds-motion-duration-scale: 1;
+
+  /* `calm` and `deliberate` are the cadence's own names for `normal` and
+     `slow`. They existed ONLY inside the reduced-motion block below, so every
+     `animation: … var(--ds-motion-calm)` resolved to nothing at rest and the
+     whole declaration was invalid wherever no compiled tenant artifact ships.
+     A role a component may bind carries a resting value. */
+  --ds-motion-calm: var(--ds-motion-normal);
+  --ds-motion-deliberate: var(--ds-motion-slow);
+  /* The travel dial skins multiply their entrance offsets by, and the ease
+     name the compiler emits as `--ds-ease-standard`. Both were read with a
+     literal fallback in place of a declaration. */
+  --ds-motion-intensity: 1;
+  --ds-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
   /* Intent-based cadence. Components bind to WHY motion exists instead of
      choosing arbitrary speeds, which keeps dense tools calm and AI feedback
@@ -121383,6 +121398,35 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
  */
 
 /**
+ * Breakpoint Contract - Rottay Design System
+ *
+ * THE single declaration site of the viewport ladder. The steps mirror
+ * `foundation/contracts/kernel/responsive/breakpoints` (RESPONSIVE_BREAKPOINTS),
+ * which hooks, layout primitives and the theme compiler's `responsive` family
+ * all read; `tests/breakpoint-contract.test.ts` pins the two together so a
+ * sixth breakpoint vocabulary cannot appear beside this one.
+ *
+ * A `@media` prelude cannot read a custom property -- that is a language
+ * constraint, not an omission -- so a threshold that must appear inside a
+ * prelude is written as the literal this file names, and the test is what
+ * makes the literal a projection of the contract rather than a second scale.
+ * Everything that CAN read a token (container padding ladders, JS, the
+ * compiled tenant block) reads `--ds-breakpoint-*`.
+ *
+ * The container ladder a tenant selects (`responsive.posture`) is a separate,
+ * bounded axis and is emitted per tenant on `--ds-posture-*` by the compiler.
+ */
+
+:root {
+  --ds-breakpoint-xs: 0px;
+  --ds-breakpoint-sm: 640px;
+  --ds-breakpoint-md: 768px;
+  --ds-breakpoint-lg: 1024px;
+  --ds-breakpoint-xl: 1280px;
+  --ds-breakpoint-2xl: 1536px;
+}
+
+/**
  * Avatar Responsive Tokens - Rottay Design System
  *
  * Responsive overrides for Avatar component tokens.
@@ -122086,6 +122130,17 @@ html[lang]:lang(ar) {
     border-width: 0;
   }
 }
+:root {
+  --ds-motion-instant: 120ms;
+  --ds-motion-calm: 200ms;
+  --ds-motion-deliberate: 320ms;
+  --ds-motion-fast: var(--ds-motion-instant);
+  --ds-motion-normal: var(--ds-motion-calm);
+  --ds-motion-slow: var(--ds-motion-deliberate);
+  --ds-motion-glacial: 500ms;
+  --ds-motion-duration-scale: 1;
+  --ds-motion-intensity: 1;
+}
 }
 
 /* === All tenant overrides (unlayered, wins by specificity + source order) === */
@@ -122182,6 +122237,12 @@ html[lang]:lang(ar) {
   --ds-breadcrumb-color-active: #ECECEC;
   --ds-breadcrumb-color-hover: #ECECEC;
   --ds-breadcrumb-separator-color: #4A4A4F;
+  --ds-breakpoint-2xl: 1536px;
+  --ds-breakpoint-lg: 1024px;
+  --ds-breakpoint-md: 768px;
+  --ds-breakpoint-sm: 640px;
+  --ds-breakpoint-xl: 1280px;
+  --ds-breakpoint-xs: 0px;
   --ds-button-ai-shadow: var(--ds-shadow-button-rest);
   --ds-button-ai-shadow-active: var(--ds-shadow-button-rest);
   --ds-button-ai-shadow-hover: var(--ds-shadow-button-hover);
@@ -122626,6 +122687,14 @@ html[lang]:lang(ar) {
   --ds-font-family-display: var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
   --ds-font-family-heading: var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
   --ds-font-family-mono: var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace);
+  --ds-font-weight-body: var(--ds-font-weight-normal);
+  --ds-font-weight-bold: 700;
+  --ds-font-weight-display: 700;
+  --ds-font-weight-heading: 600;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-normal: 400;
+  --ds-font-weight-regular: var(--ds-font-weight-normal);
+  --ds-font-weight-semibold: 600;
   --ds-form-extra-color: #6B6B72;
   --ds-form-help-color: #6B6B72;
   --ds-form-label-color: var(--ds-color-text-page);
@@ -122867,13 +122936,23 @@ html[lang]:lang(ar) {
   --ds-motion-disclosure: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --ds-motion-ease-exit: var(--ds-ease-exit);
+  --ds-motion-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
   --ds-motion-ease-move: var(--ds-ease-standard);
+  --ds-motion-ease-out: var(--ds-motion-ease-enter);
+  --ds-motion-ease-standard: var(--ds-ease-standard);
+  --ds-motion-fast: var(--ds-motion-instant);
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
+  --ds-motion-glacial: calc(var(--ds-motion-deliberate) * 1.5625);
   --ds-motion-instant: 120ms;
   --ds-motion-intensity: 1;
+  --ds-motion-normal: var(--ds-motion-calm);
+  --ds-motion-offset-in: -2px;
+  --ds-motion-panel-offset: 12px;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
+  --ds-motion-scale-in: 0.98;
+  --ds-motion-slow: var(--ds-motion-deliberate);
   --ds-motion-spring-gentle: linear(0, 0.2131, 0.445, 0.6115, 0.7282, 0.809, 0.8664, 0.9065, 0.9346, 0.9542, 0.968, 0.9776, 0.9843, 0.989, 0.9923, 0.9946, 0.9962, 0.9974, 0.9982, 0.9987, 0.9991, 0.9994, 0.9996, 0.9997, 1);
   --ds-notification-bg: #1A1A1E;
   --ds-notification-shadow: 0 4px 24px rgba(0, 0, 0, 0.50), 0 0 0 1px #2A2A2F;
@@ -122898,6 +122977,10 @@ html[lang]:lang(ar) {
   --ds-popover-shadow: 0 4px 16px rgba(0, 0, 0, 0.40), 0 0 0 1px #2A2A2F;
   --ds-popover-title-border: #2A2A2F;
   --ds-popover-title-color: #ECECEC;
+  --ds-posture-container-compact-max: 639px;
+  --ds-posture-container-standard-max: 839px;
+  --ds-posture-id: balanced;
+  --ds-posture-span-bias: preferred;
   --ds-premium-card-bg: var(--ds-material-card-background, var(--ds-card-bg));
   --ds-premium-card-border: var(--ds-material-card-border, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-border-color)));
   --ds-premium-card-border-hover: var(--ds-material-card-border-hover, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-material-card-border-strong, var(--ds-card-border-color))));
@@ -123099,7 +123182,7 @@ html[lang]:lang(ar) {
   --ds-table-bg: #0C0C0E;
   --ds-table-border: #2A2A2F;
   --ds-table-cell-color: var(--ds-color-text);
-  --ds-table-cell-font-size: calc(var(--ds-text-body-size) * var(--ds-type-scale, 1));
+  --ds-table-cell-font-size: var(--ds-text-body-size);
   --ds-table-cell-padding: 0.875rem 1rem;
   --ds-table-header-bg: #131316;
   --ds-table-header-block-size: calc(var(--ds-input-md-height) - 0.25rem);
@@ -123166,41 +123249,41 @@ html[lang]:lang(ar) {
   --ds-tag-warning-bg: rgba(245, 158, 11, 0.12);
   --ds-tag-warning-border: rgba(245, 158, 11, 0.22);
   --ds-tag-warning-color: #FBBF24;
-  --ds-text-body: 400 0.875rem/1.25rem var(--ds-font-family-base);
+  --ds-text-body: var(--ds-text-body-weight) var(--ds-text-body-size)/var(--ds-text-body-line-height) var(--ds-font-family-base);
   --ds-text-body-letter-spacing: 0;
-  --ds-text-body-line-height: 1.25rem;
-  --ds-text-body-size: 0.875rem;
+  --ds-text-body-line-height: calc(1.25rem * var(--ds-type-scale, 1));
+  --ds-text-body-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-text-body-weight: 400;
-  --ds-text-detail: 400 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-detail: var(--ds-text-detail-weight) var(--ds-text-detail-size)/var(--ds-text-detail-line-height) var(--ds-font-family-base);
   --ds-text-detail-letter-spacing: 0;
-  --ds-text-detail-line-height: 1rem;
-  --ds-text-detail-size: 0.75rem;
+  --ds-text-detail-line-height: calc(1rem * var(--ds-type-scale, 1));
+  --ds-text-detail-size: calc(0.75rem * var(--ds-type-scale, 1));
   --ds-text-detail-weight: 400;
   --ds-text-disabled: #4A4A4F;
-  --ds-text-display: 700 2rem/2.25rem var(--ds-font-family-base);
+  --ds-text-display: var(--ds-text-display-weight) var(--ds-text-display-size)/var(--ds-text-display-line-height) var(--ds-font-family-base);
   --ds-text-display-letter-spacing: -0.02em;
-  --ds-text-display-line-height: 2.25rem;
-  --ds-text-display-size: 2rem;
+  --ds-text-display-line-height: calc(2.25rem * var(--ds-type-scale, 1));
+  --ds-text-display-size: calc(2rem * var(--ds-type-scale, 1));
   --ds-text-display-weight: 700;
-  --ds-text-emphasis: 600 1rem/1.5rem var(--ds-font-family-base);
+  --ds-text-emphasis: var(--ds-text-emphasis-weight) var(--ds-text-emphasis-size)/var(--ds-text-emphasis-line-height) var(--ds-font-family-base);
   --ds-text-emphasis-letter-spacing: 0;
-  --ds-text-emphasis-line-height: 1.5rem;
-  --ds-text-emphasis-size: 1rem;
+  --ds-text-emphasis-line-height: calc(1.5rem * var(--ds-type-scale, 1));
+  --ds-text-emphasis-size: calc(1rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-weight: 600;
-  --ds-text-eyebrow: 600 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-eyebrow: var(--ds-text-eyebrow-weight) var(--ds-text-eyebrow-size)/var(--ds-text-eyebrow-line-height) var(--ds-font-family-base);
   --ds-text-eyebrow-letter-spacing: 0.08em;
-  --ds-text-eyebrow-line-height: 1rem;
-  --ds-text-eyebrow-size: 0.75rem;
+  --ds-text-eyebrow-line-height: calc(1rem * var(--ds-type-scale, 1));
+  --ds-text-eyebrow-size: calc(0.75rem * var(--ds-type-scale, 1));
   --ds-text-eyebrow-transform: uppercase;
   --ds-text-eyebrow-weight: 600;
   --ds-text-inverse: #0C0C0E;
   --ds-text-primary: #ECECEC;
   --ds-text-secondary: #A0A0A5;
   --ds-text-tertiary: #808085;
-  --ds-text-title: 600 1.25rem/1.75rem var(--ds-font-family-base);
+  --ds-text-title: var(--ds-text-title-weight) var(--ds-text-title-size)/var(--ds-text-title-line-height) var(--ds-font-family-base);
   --ds-text-title-letter-spacing: -0.01em;
-  --ds-text-title-line-height: 1.75rem;
-  --ds-text-title-size: 1.25rem;
+  --ds-text-title-line-height: calc(1.75rem * var(--ds-type-scale, 1));
+  --ds-text-title-size: calc(1.25rem * var(--ds-type-scale, 1));
   --ds-text-title-weight: 600;
   --ds-textarea-bg: #131316;
   --ds-textarea-bg-disabled: #101012;
@@ -123380,6 +123463,17 @@ html[lang]:lang(ar) {
   --ds-upload-progress-bar: var(--ds-color-primary);
   --ds-upload-progress-track: #222226;
   --ds-watermark-color: #222226;
+  --ds-z-index-base: 0;
+  --ds-z-index-drawer: 1400;
+  --ds-z-index-dropdown: 1000;
+  --ds-z-index-fixed: 1200;
+  --ds-z-index-max: 9999;
+  --ds-z-index-modal: 1500;
+  --ds-z-index-notification: 1800;
+  --ds-z-index-overlay: 1300;
+  --ds-z-index-popover: 1600;
+  --ds-z-index-sticky: 1100;
+  --ds-z-index-tooltip: 1700;
 }
 
 /* === Compiled from Theme.modes.light — do not edit === */
@@ -124152,6 +124246,12 @@ html[lang]:lang(ar) {
   --ds-breadcrumb-link-color: var(--ds-color-text-secondary);
   --ds-breadcrumb-padding: 0.625rem 1rem;
   --ds-breadcrumb-separator-color: #8A9AAA;
+  --ds-breakpoint-2xl: 1536px;
+  --ds-breakpoint-lg: 1024px;
+  --ds-breakpoint-md: 768px;
+  --ds-breakpoint-sm: 640px;
+  --ds-breakpoint-xl: 1280px;
+  --ds-breakpoint-xs: 0px;
   --ds-button-danger-bg: var(--ds-color-error);
   --ds-button-danger-border: var(--ds-color-error);
   --ds-button-danger-color: var(--ds-color-text-on-error, var(--ds-control-on-brand));
@@ -124531,9 +124631,14 @@ html[lang]:lang(ar) {
   --ds-edge-hairline-width: 1px;
   --ds-edge-standard-width: 1px;
   --ds-effect-intensity: 0.58;
+  --ds-elevation-0: none;
   --ds-elevation-1: none;
   --ds-elevation-2: none;
   --ds-elevation-3: 0 1px 2px rgba(0,0,0,0.05);
+  --ds-elevation-4: 0 1px 3px rgba(0,0,0,0.06);
+  --ds-elevation-5: 0 2px 4px rgba(0,0,0,0.07);
+  --ds-elevation-6: 0 2px 6px rgba(0,0,0,0.08);
+  --ds-elevation-border-style: solid;
   --ds-elevation-lift-strength: 0;
   --ds-experience-profile: "rottay/bithire-technical@1";
   --ds-filter-pill-active-bg: var(--ds-tint-8);
@@ -124563,6 +124668,14 @@ html[lang]:lang(ar) {
   --ds-font-family-display: var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
   --ds-font-family-heading: var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
   --ds-font-family-mono: var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace);
+  --ds-font-weight-body: var(--ds-font-weight-normal);
+  --ds-font-weight-bold: 700;
+  --ds-font-weight-display: 800;
+  --ds-font-weight-heading: 700;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-normal: 400;
+  --ds-font-weight-regular: var(--ds-font-weight-normal);
+  --ds-font-weight-semibold: 600;
   --ds-form-field-disabled-opacity: 0.52;
   --ds-form-field-gap: 6px;
   --ds-form-field-horizontal-gap: 16px;
@@ -124867,17 +124980,31 @@ html[lang]:lang(ar) {
   --ds-motion-disclosure: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --ds-motion-ease-exit: var(--ds-ease-exit);
+  --ds-motion-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
   --ds-motion-ease-move: var(--ds-ease-standard);
+  --ds-motion-ease-out: var(--ds-motion-ease-enter);
+  --ds-motion-ease-standard: var(--ds-ease-standard);
+  --ds-motion-fast: var(--ds-motion-instant);
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
+  --ds-motion-glacial: calc(var(--ds-motion-deliberate) * 1.5625);
   --ds-motion-instant: 120ms;
   --ds-motion-intensity: 0.55;
+  --ds-motion-normal: var(--ds-motion-calm);
+  --ds-motion-offset-in: -2px;
+  --ds-motion-panel-offset: 12px;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
+  --ds-motion-scale-in: 0.98;
+  --ds-motion-slow: var(--ds-motion-deliberate);
   --ds-overlay-heavy: rgba(20, 40, 59, 0.08);
   --ds-overlay-light: rgba(20, 40, 59, 0.02);
   --ds-overlay-medium: rgba(20, 40, 59, 0.04);
   --ds-page-header-eyebrow-text-transform: none;
+  --ds-posture-container-compact-max: 639px;
+  --ds-posture-container-standard-max: 839px;
+  --ds-posture-id: balanced;
+  --ds-posture-span-bias: preferred;
   --ds-premium-card-bg: var(--ds-surface-card);
   --ds-premium-card-border: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-border));
   --ds-premium-card-border-hover: color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
@@ -125157,36 +125284,36 @@ html[lang]:lang(ar) {
   --ds-tall-card-shadow: 0 14px 34px -26px rgba(20, 40, 59, 0.32), 0 1px 2px rgba(20, 40, 59, 0.05);
   --ds-tall-card-title-color: #14283B;
   --ds-tall-card-value-color: #14283B;
-  --ds-text-body: 400 0.875rem/1.25rem var(--ds-font-family-base);
+  --ds-text-body: var(--ds-text-body-weight) var(--ds-text-body-size)/var(--ds-text-body-line-height) var(--ds-font-family-base);
   --ds-text-body-letter-spacing: 0;
-  --ds-text-body-line-height: 1.25rem;
-  --ds-text-body-size: 0.875rem;
+  --ds-text-body-line-height: calc(1.25rem * var(--ds-type-scale, 1));
+  --ds-text-body-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-text-body-weight: 400;
-  --ds-text-detail: 400 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-detail: var(--ds-text-detail-weight) var(--ds-text-detail-size)/var(--ds-text-detail-line-height) var(--ds-font-family-base);
   --ds-text-detail-letter-spacing: 0;
-  --ds-text-detail-line-height: 1rem;
-  --ds-text-detail-size: 0.75rem;
+  --ds-text-detail-line-height: calc(1rem * var(--ds-type-scale, 1));
+  --ds-text-detail-size: calc(0.75rem * var(--ds-type-scale, 1));
   --ds-text-detail-weight: 400;
-  --ds-text-display: 700 2rem/2.25rem var(--ds-font-family-base);
+  --ds-text-display: var(--ds-text-display-weight) var(--ds-text-display-size)/var(--ds-text-display-line-height) var(--ds-font-family-base);
   --ds-text-display-letter-spacing: -0.02em;
-  --ds-text-display-line-height: 2.25rem;
-  --ds-text-display-size: 2rem;
+  --ds-text-display-line-height: calc(2.25rem * var(--ds-type-scale, 1));
+  --ds-text-display-size: calc(2rem * var(--ds-type-scale, 1));
   --ds-text-display-weight: 700;
-  --ds-text-emphasis: 600 1rem/1.5rem var(--ds-font-family-base);
+  --ds-text-emphasis: var(--ds-text-emphasis-weight) var(--ds-text-emphasis-size)/var(--ds-text-emphasis-line-height) var(--ds-font-family-base);
   --ds-text-emphasis-letter-spacing: 0;
-  --ds-text-emphasis-line-height: 1.5rem;
-  --ds-text-emphasis-size: 1rem;
+  --ds-text-emphasis-line-height: calc(1.5rem * var(--ds-type-scale, 1));
+  --ds-text-emphasis-size: calc(1rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-weight: 600;
-  --ds-text-eyebrow: 600 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-eyebrow: var(--ds-text-eyebrow-weight) var(--ds-text-eyebrow-size)/var(--ds-text-eyebrow-line-height) var(--ds-font-family-base);
   --ds-text-eyebrow-letter-spacing: 0.08em;
-  --ds-text-eyebrow-line-height: 1rem;
-  --ds-text-eyebrow-size: 0.75rem;
+  --ds-text-eyebrow-line-height: calc(1rem * var(--ds-type-scale, 1));
+  --ds-text-eyebrow-size: calc(0.75rem * var(--ds-type-scale, 1));
   --ds-text-eyebrow-transform: uppercase;
   --ds-text-eyebrow-weight: 600;
-  --ds-text-title: 600 1.25rem/1.75rem var(--ds-font-family-base);
+  --ds-text-title: var(--ds-text-title-weight) var(--ds-text-title-size)/var(--ds-text-title-line-height) var(--ds-font-family-base);
   --ds-text-title-letter-spacing: -0.01em;
-  --ds-text-title-line-height: 1.75rem;
-  --ds-text-title-size: 1.25rem;
+  --ds-text-title-line-height: calc(1.75rem * var(--ds-type-scale, 1));
+  --ds-text-title-size: calc(1.25rem * var(--ds-type-scale, 1));
   --ds-text-title-weight: 600;
   --ds-textarea-max-height: 420px;
   --ds-textarea-min-height: 104px;
@@ -125329,6 +125456,16 @@ html[lang]:lang(ar) {
   --ds-workspace-shell-border: #D4E0EA;
   --ds-workspace-shell-overlay: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 3.5%, transparent) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%);
   --ds-workspace-shell-shadow: 0 12px 34px -26px rgba(20, 40, 59, 0.36), 0 1px 3px rgba(20, 40, 59, 0.08);
+  --ds-z-index-base: 0;
+  --ds-z-index-drawer: 1400;
+  --ds-z-index-dropdown: 1000;
+  --ds-z-index-fixed: 1200;
+  --ds-z-index-max: 9999;
+  --ds-z-index-modal: 1500;
+  --ds-z-index-notification: 1800;
+  --ds-z-index-overlay: 1300;
+  --ds-z-index-popover: 1600;
+  --ds-z-index-sticky: 1100;
   --ds-z-index-tooltip: 2700;
 }
 
@@ -125795,6 +125932,12 @@ html[lang]:lang(ar) {
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
   color-scheme: light;
   color: var(--ds-color-text-primary);
+  --ds-breakpoint-2xl: 1536px;
+  --ds-breakpoint-lg: 1024px;
+  --ds-breakpoint-md: 768px;
+  --ds-breakpoint-sm: 640px;
+  --ds-breakpoint-xl: 1280px;
+  --ds-breakpoint-xs: 0px;
   --ds-button-ai-shadow: var(--ds-shadow-button-rest);
   --ds-button-ai-shadow-active: var(--ds-shadow-button-rest);
   --ds-button-ai-shadow-hover: var(--ds-shadow-button-hover);
@@ -126028,6 +126171,14 @@ html[lang]:lang(ar) {
   --ds-font-family-display: var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
   --ds-font-family-heading: var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
   --ds-font-family-mono: var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace);
+  --ds-font-weight-body: var(--ds-font-weight-normal);
+  --ds-font-weight-bold: 700;
+  --ds-font-weight-display: 800;
+  --ds-font-weight-heading: 700;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-normal: 400;
+  --ds-font-weight-regular: var(--ds-font-weight-normal);
+  --ds-font-weight-semibold: 600;
   --ds-icon-tile-border: var(--ds-surface-icon-border);
   --ds-input-bg: #ffffff;
   --ds-input-bg-disabled: #FAFAFA;
@@ -126130,17 +126281,31 @@ html[lang]:lang(ar) {
   --ds-motion-disclosure: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --ds-motion-ease-exit: var(--ds-ease-exit);
+  --ds-motion-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
   --ds-motion-ease-move: var(--ds-ease-standard);
+  --ds-motion-ease-out: var(--ds-motion-ease-enter);
+  --ds-motion-ease-standard: var(--ds-ease-standard);
+  --ds-motion-fast: var(--ds-motion-instant);
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
+  --ds-motion-glacial: calc(var(--ds-motion-deliberate) * 1.5625);
   --ds-motion-instant: 120ms;
   --ds-motion-intensity: 1;
+  --ds-motion-normal: var(--ds-motion-calm);
+  --ds-motion-offset-in: -2px;
+  --ds-motion-panel-offset: 12px;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
+  --ds-motion-scale-in: 0.98;
+  --ds-motion-slow: var(--ds-motion-deliberate);
   --ds-motion-spring-gentle: linear(0, 0.1044, 0.2935, 0.4779, 0.6288, 0.7427, 0.8246, 0.8819, 0.9212, 0.9478, 0.9655, 0.9773, 0.9851, 0.9902, 0.9936, 0.9958, 0.9973, 0.9982, 0.9988, 0.9992, 0.9995, 0.9997, 0.9998, 0.9999, 1);
   --ds-overlay-heavy: rgba(0, 0, 0, 0.06);
   --ds-overlay-light: rgba(0, 0, 0, 0.01);
   --ds-overlay-medium: rgba(0, 0, 0, 0.03);
+  --ds-posture-container-compact-max: 639px;
+  --ds-posture-container-standard-max: 839px;
+  --ds-posture-id: balanced;
+  --ds-posture-span-bias: preferred;
   --ds-premium-card-bg: var(--ds-material-card-background, var(--ds-card-bg));
   --ds-premium-card-border: var(--ds-material-card-border, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-border-color)));
   --ds-premium-card-border-hover: var(--ds-material-card-border-hover, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-material-card-border-strong, var(--ds-card-border-color))));
@@ -126219,36 +126384,36 @@ html[lang]:lang(ar) {
   --ds-table-header-color: var(--ds-color-text-muted);
   --ds-table-header-font-size: 0.75rem;
   --ds-table-header-font-weight: 500;
-  --ds-text-body: 400 0.875rem/1.25rem var(--ds-font-family-base);
+  --ds-text-body: var(--ds-text-body-weight) var(--ds-text-body-size)/var(--ds-text-body-line-height) var(--ds-font-family-base);
   --ds-text-body-letter-spacing: 0;
-  --ds-text-body-line-height: 1.25rem;
-  --ds-text-body-size: 0.875rem;
+  --ds-text-body-line-height: calc(1.25rem * var(--ds-type-scale, 1));
+  --ds-text-body-size: calc(0.875rem * var(--ds-type-scale, 1));
   --ds-text-body-weight: 400;
-  --ds-text-detail: 400 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-detail: var(--ds-text-detail-weight) var(--ds-text-detail-size)/var(--ds-text-detail-line-height) var(--ds-font-family-base);
   --ds-text-detail-letter-spacing: 0;
-  --ds-text-detail-line-height: 1rem;
-  --ds-text-detail-size: 0.75rem;
+  --ds-text-detail-line-height: calc(1rem * var(--ds-type-scale, 1));
+  --ds-text-detail-size: calc(0.75rem * var(--ds-type-scale, 1));
   --ds-text-detail-weight: 400;
-  --ds-text-display: 700 2rem/2.25rem var(--ds-font-family-base);
+  --ds-text-display: var(--ds-text-display-weight) var(--ds-text-display-size)/var(--ds-text-display-line-height) var(--ds-font-family-base);
   --ds-text-display-letter-spacing: -0.02em;
-  --ds-text-display-line-height: 2.25rem;
-  --ds-text-display-size: 2rem;
+  --ds-text-display-line-height: calc(2.25rem * var(--ds-type-scale, 1));
+  --ds-text-display-size: calc(2rem * var(--ds-type-scale, 1));
   --ds-text-display-weight: 700;
-  --ds-text-emphasis: 600 1rem/1.5rem var(--ds-font-family-base);
+  --ds-text-emphasis: var(--ds-text-emphasis-weight) var(--ds-text-emphasis-size)/var(--ds-text-emphasis-line-height) var(--ds-font-family-base);
   --ds-text-emphasis-letter-spacing: 0;
-  --ds-text-emphasis-line-height: 1.5rem;
-  --ds-text-emphasis-size: 1rem;
+  --ds-text-emphasis-line-height: calc(1.5rem * var(--ds-type-scale, 1));
+  --ds-text-emphasis-size: calc(1rem * var(--ds-type-scale, 1));
   --ds-text-emphasis-weight: 600;
-  --ds-text-eyebrow: 600 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-eyebrow: var(--ds-text-eyebrow-weight) var(--ds-text-eyebrow-size)/var(--ds-text-eyebrow-line-height) var(--ds-font-family-base);
   --ds-text-eyebrow-letter-spacing: 0.08em;
-  --ds-text-eyebrow-line-height: 1rem;
-  --ds-text-eyebrow-size: 0.75rem;
+  --ds-text-eyebrow-line-height: calc(1rem * var(--ds-type-scale, 1));
+  --ds-text-eyebrow-size: calc(0.75rem * var(--ds-type-scale, 1));
   --ds-text-eyebrow-transform: uppercase;
   --ds-text-eyebrow-weight: 600;
-  --ds-text-title: 600 1.25rem/1.75rem var(--ds-font-family-base);
+  --ds-text-title: var(--ds-text-title-weight) var(--ds-text-title-size)/var(--ds-text-title-line-height) var(--ds-font-family-base);
   --ds-text-title-letter-spacing: -0.01em;
-  --ds-text-title-line-height: 1.75rem;
-  --ds-text-title-size: 1.25rem;
+  --ds-text-title-line-height: calc(1.75rem * var(--ds-type-scale, 1));
+  --ds-text-title-size: calc(1.25rem * var(--ds-type-scale, 1));
   --ds-text-title-weight: 600;
   --ds-timepicker-panel-shadow: var(--ds-shadow-md);
   --ds-tint-12: color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
@@ -126348,6 +126513,17 @@ html[lang]:lang(ar) {
   --ds-type-supporting-letter-spacing: var(--ds-letter-spacing-body, 0);
   --ds-type-supporting-line-height: 1.5;
   --ds-type-supporting-text-transform: none;
+  --ds-z-index-base: 0;
+  --ds-z-index-drawer: 1400;
+  --ds-z-index-dropdown: 1000;
+  --ds-z-index-fixed: 1200;
+  --ds-z-index-max: 9999;
+  --ds-z-index-modal: 1500;
+  --ds-z-index-notification: 1800;
+  --ds-z-index-overlay: 1300;
+  --ds-z-index-popover: 1600;
+  --ds-z-index-sticky: 1100;
+  --ds-z-index-tooltip: 1700;
 }
 
 /* === Compiled from Theme.modes.dark — do not edit === */

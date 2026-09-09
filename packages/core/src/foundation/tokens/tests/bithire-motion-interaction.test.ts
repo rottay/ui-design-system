@@ -71,7 +71,12 @@ describe('bithire artifact carries the ledger interaction defaults (§8.2)', () 
     // them (modern/skin/{tag,badge,tooltip}.css). Asserting the channels here is
     // what keeps a stale release from shipping a mixed interaction identity —
     // asserting the paint would only re-pin one engine's selector vocabulary.
-    expect(artifact).toContain('--ds-text-detail-size: 0.75rem');
+    // WO-DER-04: the ramp's size and leading now ride `var(--ds-type-scale, 1)`,
+    // so the literal is the OPERAND of a calc rather than the whole value. At
+    // the default scale of 1 it computes to the same 0.75rem.
+    expect(artifact).toContain(
+      '--ds-text-detail-size: calc(0.75rem * var(--ds-type-scale, 1))',
+    );
     // CI-1 re-pin: 6a4a78b29a (2026-08-10) fixed the tint ramp's colour space to
     // `oklab` (this test predates it, last touched 2026-07-28); `oklab` is the
     // authoritative, currently-enforced convention, not a drift -- see

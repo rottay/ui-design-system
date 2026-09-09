@@ -97,7 +97,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
 | [consumer-contract](./consumer-contract.md) | 5 | 0 | 1 | 6 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
-| [derivation](./derivation.md) | 1 | 1 | 5 | 7 |
+| [derivation](./derivation.md) | 1 | 3 | 3 | 7 |
 | [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
 | [emission-mount](./emission-mount.md) | 1 | 0 | 2 | 3 |
 | [platform-invariants](./platform-invariants.md) | 0 | 0 | 8 | 8 |
@@ -138,13 +138,13 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
 | WO-DER-02 | States and materials as derived roots | kimi-k3 | 2026-09-08 | 2026-09-08 20:33 — PARTIAL, registered by the R4 reconciliation lot (2026-09-08). The source of this WO landed at committed 34790cf43 ("materials and states as derived roots, one interaction vocabulary") WITHOUT a state transition; this entry registers that fact truthfully. It is NOT a close and this WO must never be marked done on it. F-10 stays PARTIAL: skins.stateGoverned is 16/123 = 13 % and has not moved — it sits in the family-cut lane and this WO's declared Files exclude the skins. Also outstanding: the per-artifact 71/71 --ds-material-* acceptance is unproven (baseline 0 / 65 / 2); the emphasis probe measures a synthetic element best-of-vertical and bithire moved 0/25 families (printed, not hidden), so real propagation to families is not demonstrated; catalog rows 20/21 correctly returned to minimumFamilies owner-pending rather than converting a measured declared fan-out into an approved product minimum, and material-arm's ratioFloor 0.85 is labelled PROVISIONAL and self-pinned, not F-10's threshold. Both belong to the owner's consolidated absolute-fan-out-floors decision (roadmap/kit-2026-09.md section 5b), which has not landed. The public contract diff for this range landed separately at 22d74f062 (DEL-02); the migrateDocumentV1ToV2 states gap it disclosed is owned by WO-CON-06. |
+| WO-DER-03 | Shape and palette derived once | opus | 2026-09-09 | (no entries — log via `progress`) |
+| WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | opus | 2026-09-09 | 2026-09-09 15:34 — 2026-09-09 PASS-PARTIAL landed (merge deb9b1324; Fable audit /private/tmp/fable-der04-fix-audit.md tras HOLD /private/tmp/fable-der04-audit.md). Residuales que mantienen la WO abierta: consumidores --ds-transition-* en engines congelados + family cuts; LegacySizeAlias (26 sitios, territorio family-cut); 16 literales de breakpoint en skins Modern/bridge + query 30rem no pineada en workspace-switcher (gap de regex del gate); migracion de skins F-30; 3 divergencias de shadows en base/shadows enrutadas a WO-DER-03; pin de direccion de alias calm/normal pendiente. |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-DER-03 | Shape and palette derived once | L | derivation | audit-2026-09-05 |
-| WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | L | derivation | audit-2026-09-05 |
 | WO-EMI-02 | mountTenantTheme: one mount law, complete SSR projection, runtime that never recompiles | L | emission-mount | audit-2026-09-05 |
 | WO-EMI-03 | Non-CSS token emitter for mobile readiness | M | emission-mount | audit-2026-09-05 |
 | WO-INV-01 | One direction authority and logical geometry everywhere | M | platform-invariants | audit-2026-09-05 |

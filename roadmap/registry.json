@@ -4215,7 +4215,7 @@
    "lane": "derivation",
    "order": 3,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4224,8 +4224,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-07, F-08, F-32; supersedes: WO-TOK-11",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "opus",
+   "claimedAt": "2026-09-09",
    "progressLog": []
   },
   {
@@ -4234,7 +4234,7 @@
    "lane": "derivation",
    "order": 4,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4243,9 +4243,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-30, F-31, F-36, F-26, F-35, F-21, F-84; supersedes: WO-ENG-25",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "opus",
+   "claimedAt": "2026-09-09",
+   "progressLog": [
+    {
+     "at": "2026-09-09 15:34",
+     "by": "kimi-k3",
+     "note": "2026-09-09 PASS-PARTIAL landed (merge deb9b1324; Fable audit /private/tmp/fable-der04-fix-audit.md tras HOLD /private/tmp/fable-der04-audit.md). Residuales que mantienen la WO abierta: consumidores --ds-transition-* en engines congelados + family cuts; LegacySizeAlias (26 sitios, territorio family-cut); 16 literales de breakpoint en skins Modern/bridge + query 30rem no pineada en workspace-switcher (gap de regex del gate); migracion de skins F-30; 3 divergencias de shadows en base/shadows enrutadas a WO-DER-03; pin de direccion de alias calm/normal pendiente."
+    }
+   ]
   },
   {
    "id": "WO-DER-05",

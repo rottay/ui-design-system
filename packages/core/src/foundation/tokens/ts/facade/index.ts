@@ -25,9 +25,6 @@ export * from '../runtime/components';
 export * from '../presentation/brand-themes';
 export * from '../runtime/mirrors';
 
-/** @deprecated Geist-based typography scale retained at the token facade. */
-export { typographyScale } from './compat/typography-scale';
-
 // Named imports for combined export
 import { baseTokens } from '../foundation/base';
 import { componentTokens } from '../runtime/components';

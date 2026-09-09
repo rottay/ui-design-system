@@ -24,13 +24,23 @@
      effective ramp and aliases on that boundary for true subtree locality.
      --ds-spacing-0 stays literal 0 (scaling zero is a no-op).
 
-     NOTE: themes/default.css redefines the common steps (0-64) and wins the
-     rottay-tokens cascade (imported later); it must carry the same calc wrap
-     over its own literals for density to reach those steps — the steps only
-     defined here (7, 9, 11, 14, 28, 36, 44, 52, 56, 60, 72, 80, 96) already
-     scale from this file. The fluid ramp below is a separate opt-in axis and is
-     intentionally NOT density-wrapped.
+     THIS FILE IS THE ONLY :root OWNER OF THE RAMP. The common steps (0-64)
+     and the semantic aliases used to be redeclared in themes/default.css,
+     which won the rottay-tokens cascade by import order — so the ramp had two
+     authorities and adding a step meant remembering the second one. The fluid
+     ramp below is a separate opt-in axis and is intentionally NOT
+     density-wrapped. foundation/base/density.css redeclares the effective ramp
+     on a data-density boundary; that is a LOCAL projection, not a second
+     authority, and it exists because a custom property cannot be recomputed
+     from an inherited declaration by changing one of its inputs.
      ======================================================================== */
+  --ds-spacing-0: 0;
+  --ds-spacing-1: calc(0.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-2: calc(0.5rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-3: calc(0.75rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-4: calc(1rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-5: calc(1.25rem * var(--ds-density-effective-scale, 1));
+  --ds-spacing-6: calc(1.5rem * var(--ds-density-effective-scale, 1));
   --ds-spacing-7: calc(1.75rem * var(--ds-density-effective-scale, 1));   /* 28px */
   --ds-spacing-9: calc(2.25rem * var(--ds-density-effective-scale, 1));   /* 36px */
   --ds-spacing-11: calc(2.75rem * var(--ds-density-effective-scale, 1));  /* 44px */
@@ -44,6 +54,27 @@
   --ds-spacing-72: calc(18rem * var(--ds-density-effective-scale, 1));    /* 288px */
   --ds-spacing-80: calc(20rem * var(--ds-density-effective-scale, 1));    /* 320px */
   --ds-spacing-96: calc(24rem * var(--ds-density-effective-scale, 1));    /* 384px */
+  --ds-spacing-8: calc(2rem * var(--ds-density-effective-scale, 1));      /* 32px */
+  --ds-spacing-10: calc(2.5rem * var(--ds-density-effective-scale, 1));   /* 40px */
+  --ds-spacing-12: calc(3rem * var(--ds-density-effective-scale, 1));     /* 48px */
+  --ds-spacing-16: calc(4rem * var(--ds-density-effective-scale, 1));     /* 64px */
+  --ds-spacing-20: calc(5rem * var(--ds-density-effective-scale, 1));     /* 80px */
+  --ds-spacing-24: calc(6rem * var(--ds-density-effective-scale, 1));     /* 96px */
+  --ds-spacing-32: calc(8rem * var(--ds-density-effective-scale, 1));     /* 128px */
+  --ds-spacing-40: calc(10rem * var(--ds-density-effective-scale, 1));    /* 160px */
+  --ds-spacing-48: calc(12rem * var(--ds-density-effective-scale, 1));    /* 192px */
+  --ds-spacing-64: calc(16rem * var(--ds-density-effective-scale, 1));    /* 256px */
+
+  /* ========================================================================
+     SEMANTIC SPACING - the named steps components bind
+     ======================================================================== */
+  --ds-spacing-xs: var(--ds-density-spacing-xs, var(--ds-spacing-1)); /* 4px */
+  --ds-spacing-sm: var(--ds-density-spacing-sm, var(--ds-spacing-2)); /* 8px */
+  --ds-spacing-md: var(--ds-density-spacing-md, var(--ds-spacing-4)); /* 16px */
+  --ds-spacing-lg: var(--ds-density-spacing-lg, var(--ds-spacing-6)); /* 24px */
+  --ds-spacing-xl: var(--ds-density-spacing-xl, var(--ds-spacing-8)); /* 32px */
+  --ds-spacing-2xl: var(--ds-density-spacing-2xl, var(--ds-spacing-12)); /* 48px */
+  --ds-spacing-3xl: var(--ds-density-spacing-3xl, var(--ds-spacing-16)); /* 64px */
 
   /* ========================================================================
      NAMED SPACING - Semantic Aliases

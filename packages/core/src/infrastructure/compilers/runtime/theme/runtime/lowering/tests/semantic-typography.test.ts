@@ -156,10 +156,44 @@ const FIRST_PARTY = [
 // both sides) and byte-identical `modeBlocks`, and the three committed
 // artifacts stay byte-identical (`first-party-artifacts-generated`). Zero
 // pixel, one order.
+// WO-DER-04 re-anchor, ADDITIVE plus one intentional value move, measured
+// rather than asserted. Five axes gained an owner and emit what they used to
+// withhold: rottay 1276 -> 1315 keys (+39), bithire 1248 -> 1291 (+43), evnto
+// 553 -> 592 (+39), removed 0 on all three. Every added key is a
+// `--ds-z-index-*` band, a `--ds-font-weight-*` step, a `--ds-breakpoint-*`
+// step, a `--ds-posture-*` channel or a `--ds-motion-*` role that had no
+// resting value; bithire adds four more because a `flat` posture now states
+// the whole 0..6 elevation ladder and the border weight it implies instead of
+// levels 1..3. 18 existing values moved on all three, all of them the named
+// ramp: `--ds-text-*` size and leading now carry `var(--ds-type-scale, 1)` and
+// each entry is expressed on its own facets instead of repeating the same
+// literals. At the default scale of 1 the ramp computes byte-identically --
+// the change is that a tenant's `typography.scale` finally reaches it.
+// ONE-AUTHORITY re-anchor, ROTTAY ONLY: the baseline authored
+// `chrome.table.cellFontSize` as `calc(var(--ds-text-body-size) *
+// var(--ds-type-scale, 1))`, which applied the type dial twice once
+// `--ds-text-body-size` started carrying it. It now reads the channel plain.
+// Measured rather than asserted: the keyset is byte-identical across the edit
+// (227961786ff66844..., 1315 base keys plus the same 3-key mode block on both
+// sides, none added, none removed) and exactly ONE value moved, the
+// `--ds-table-cell-font-size` above; the committed rottay facade artifact
+// diff is that single line. bithire authors the same field over a literal
+// seed, so it applies the dial once and did not move; evnto does not author
+// it. Neither is re-anchored.
+// SHAPE-OVER-DERIVED re-anchor, all three: the two blocks above are
+// independent, so the tree that carries both lands on neither of their values.
+// The SHAPE half stays ORDER-ONLY on top of the derived families, measured on
+// the tree that carries both: the emitted keyset is exactly the derived-family
+// keyset (rottay 1315, bithire 1291, evnto 592, none added, none removed), and
+// the three committed first-party facade artifacts -- which ARE this leg's
+// projection -- are byte-identical to the derived-family tree's. Only
+// `cssString` moves, and only in the order its lines appear, because the
+// `shape` family sits earlier in the deriver registry than the `surfaces` and
+// `axes` families it took the radius operands from.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "96fe4c054934ead4d1fcffe49fa13075fe7a50a6a96d76b20cfc44a6845dde26",
-  bithire: "fde58efc74691dbb372a564d682f0d24a89af8b1190ee6cdde654790ae3a39a5",
-  evnto: "6414ecda032c85ee3bfff225e23c2d934e0843f86f055fc694c8102418f7efb4",
+  rottay: "11fef5bd41005fc31bf80317a62f563d15104968af495f24690bd468fdc0c944",
+  bithire: "17fc41d275663689a132900c294b150a2b72ae89340c7bd6b273ef33042f5115",
+  evnto: "60878ab4f5fac622b50f92507c52586b345ea432fad274948b6e502dbd5dbd77",
 };
 
 /**

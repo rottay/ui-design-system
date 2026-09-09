@@ -197,6 +197,7 @@ const dbChannels = new Set(Object.keys(dbCompiled.variables));
 const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
   const seeds = compiled.normalizedAppearance.general?.palette ?? {};
   const chrome = compiled.normalizedAppearance.advanced?.chrome ?? {};
+  const general = compiled.normalizedAppearance.general ?? {};
   const variable = (name: string) => compiled.variables[name];
   // The DB palette's seeds are optional on the normalized shape but present in
   // every fixture this mirror is built from; a missing one would silently emit
@@ -231,12 +232,18 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
       errorColor: seed(seeds.status?.error, "status.error"),
       infoColor: seed(seeds.status?.info, "status.info"),
     },
-    // The bounded posture the document states as a decision. It is a static
-    // FIELD, which is the whole claim this mirror grades: the silhouette is
-    // reachable from the static contract without a chrome leaf standing in for
-    // a derivation the lowering now owns.
     surfaces: {
-      buttonStyle: compiled.normalizedAppearance.general?.shape?.buttonStyle,
+      // The three bounded postures the customer document states in `general`.
+      // A BrandTheme spells them on `surfaces`, so naming them here is the
+      // proof the static contract HAS the field -- the same law the palette
+      // seeds above satisfy. For the silhouette that is the whole claim: it is
+      // reachable from the static contract without a chrome leaf standing in
+      // for a derivation the lowering now owns.
+      buttonStyle: general.shape?.buttonStyle,
+      ...(general.surfaces?.elevation
+        ? { elevation: general.surfaces.elevation }
+        : {}),
+      ...(general.density ? { density: general.density } : {}),
     },
     chrome: {
       ...chrome,

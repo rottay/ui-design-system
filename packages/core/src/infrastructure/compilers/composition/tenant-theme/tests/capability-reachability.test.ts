@@ -459,11 +459,13 @@ describe("tenant capability registry reachability", () => {
     expect(artifact.variables["--ds-color-on-error"]).toBeUndefined();
   });
 
-  it("responsive.posture emits NO css channel: the same variable set with and without it", () => {
-    // The data-only claim, proven exhaustively rather than by naming a channel
-    // that was never going to exist. Two compilations of the SAME document,
-    // differing only by the authored ladder, must produce an identical
-    // variable map — identical keys AND identical values.
+  it("responsive.posture moves the posture channels and nothing else", () => {
+    // The axis used to be DATA-ONLY: the selected id travelled to the artifact
+    // in `normalizedAppearance` and emitted nothing, so a tenant could not
+    // see, probe or style the ladder it had chosen. WO-DER-04 projects it.
+    // Two compilations of the SAME document, differing only by the authored
+    // ladder, must now differ in EXACTLY the posture channels — the ladder is
+    // observable, and it still reaches nothing else.
     const withoutLadder = structuredClone(FULL_SURFACE_DOCUMENT);
     if (withoutLadder.mode !== "advanced") throw new Error("advanced fixture");
     delete (withoutLadder.visualFoundation.advanced as Record<string, unknown>)
@@ -483,15 +485,21 @@ describe("tenant capability registry reachability", () => {
     expect(
       bare.normalizedAppearance.advanced?.responsivePosture
     ).toBeUndefined();
-    expect(laddered.variables).toEqual(bare.variables);
 
-    // The emitted stylesheet differs in exactly ONE place — the provenance
-    // comment, which embeds the artifact digest, and the digest legitimately
-    // moves because the DOCUMENT gained a field. Every declaration is
-    // identical, which is what "no channel" means.
-    const declarations = (css: string) =>
-      css.split("\n").filter((line) => !line.trimStart().startsWith("/*"));
-    expect(declarations(laddered.css)).toEqual(declarations(bare.css));
+    const moved = Object.keys({ ...bare.variables, ...laddered.variables })
+      .filter((channel) => bare.variables[channel] !== laddered.variables[channel])
+      .sort();
+    expect(moved).toEqual([
+      "--ds-posture-container-compact-max",
+      "--ds-posture-container-standard-max",
+      "--ds-posture-id",
+      "--ds-posture-span-bias",
+    ]);
+    expect(laddered.variables["--ds-posture-id"]).toBe("expansive");
+    // A tenant artifact carries only what DIFFERS from its vertical baseline,
+    // and the baseline ladder IS `balanced` — so the bare compile correctly
+    // states nothing rather than restating the default.
+    expect(bare.variables["--ds-posture-id"]).toBeUndefined();
   });
 
   it("drill: declared-but-closed paths stay rejected and every opened vocabulary stays closed", () => {

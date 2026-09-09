@@ -18,3 +18,21 @@
  * `sr-only` utility (base.css ships only `.ds-sr-only`), and consumer apps
  * reach `.sr-only` through the shipped vertical bundles. */
 @source inline("sr-only");
+
+/* The motion canon at rest. The standalone engine bundle ships this file plus
+ * the reduced-motion guard, so without these declarations `--ds-motion-calm`
+ * and `--ds-motion-deliberate` appeared in the bundle ONLY inside that guard,
+ * at 0s -- and every modern animation bound to them was invalid at rest. The
+ * values mirror foundation/animations/transitions/index.css, which is the same
+ * cadence a tenant bundle inherits from base.css. */
+:root {
+  --ds-motion-instant: 120ms;
+  --ds-motion-calm: 200ms;
+  --ds-motion-deliberate: 320ms;
+  --ds-motion-fast: var(--ds-motion-instant);
+  --ds-motion-normal: var(--ds-motion-calm);
+  --ds-motion-slow: var(--ds-motion-deliberate);
+  --ds-motion-glacial: 500ms;
+  --ds-motion-duration-scale: 1;
+  --ds-motion-intensity: 1;
+}
