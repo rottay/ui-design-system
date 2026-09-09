@@ -38,7 +38,6 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   TENANT_THEME_ANATOMY_VARIANTS,
-  TENANT_THEME_CHROME_FAMILIES,
   TENANT_THEME_FONT_PACK_IDS,
   TENANT_THEME_REFERENCE_TOKENS,
   TENANT_THEME_SCHEMA_VERSION,
@@ -59,7 +58,7 @@ import {
 import { expandProfileDefaults } from "../../runtime/theme/runtime/ingress/foundation/profile-expansion";
 import {
   envelopeDialIssues,
-  envelopeRangeShapeIssues,
+  envelopeShapeIssues,
 } from "./foundation/envelope";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
 import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
@@ -529,145 +528,11 @@ export function validateTenantThemeAgainstVerticalEnvelope(
   config: TenantThemeConfig,
   envelope: TenantThemeVerticalEnvelope | undefined
 ): TenantThemeValidationIssue[] {
-  if (!envelope) {
-    return [
-      {
-        code: "invalid_value",
-        path: "$.verticalKey",
-        message: "Tenant theme compilation requires a vertical policy envelope",
-      },
-    ];
-  }
-  const issues: TenantThemeValidationIssue[] = [];
-  if (!isPlainObject(envelope)) {
-    return [
-      {
-        code: "invalid_type",
-        path: "$.verticalEnvelope",
-        message: "Expected a code-owned vertical envelope object",
-      },
-    ];
-  }
-  const allowedEnvelopeKeys = new Set([
-    "schemaVersion",
-    "verticalKey",
-    "allowedModes",
-    "advanced",
-    "ranges",
-  ]);
-  for (const key of Object.keys(envelope)) {
-    if (!allowedEnvelopeKeys.has(key)) {
-      issues.push({
-        code: "unknown_key",
-        path: `$.verticalEnvelope.${key}`,
-        message: "Unknown vertical envelope field",
-      });
-    }
-  }
-  if (envelope.schemaVersion !== TENANT_THEME_SCHEMA_VERSION) {
-    issues.push({
-      code: "unsupported_schema_version",
-      path: "$.verticalEnvelope.schemaVersion",
-      message: "Unsupported vertical envelope version",
-    });
-  }
-  if (
-    typeof envelope.verticalKey !== "string" ||
-    !/^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/.test(envelope.verticalKey)
-  ) {
-    issues.push({
-      code: "invalid_value",
-      path: "$.verticalEnvelope.verticalKey",
-      message: "Invalid vertical envelope key",
-    });
-  } else if (envelope.verticalKey !== config.verticalKey) {
-    issues.push({
-      code: "invalid_value",
-      path: "$.verticalKey",
-      message: "Theme vertical does not match its policy envelope",
-    });
-  }
-  if (
-    !Array.isArray(envelope.allowedModes) ||
-    envelope.allowedModes.length === 0 ||
-    envelope.allowedModes.some(
-      (mode) => mode !== "simple" && mode !== "advanced"
-    ) ||
-    new Set(envelope.allowedModes).size !== envelope.allowedModes.length
-  ) {
-    issues.push({
-      code: "invalid_value",
-      path: "$.verticalEnvelope.allowedModes",
-      message: "Expected a unique non-empty simple/advanced mode list",
-    });
-  } else if (!envelope.allowedModes.includes(config.mode)) {
-    issues.push({
-      code: "invalid_value",
-      path: "$.mode",
-      message: `Mode ${config.mode} is not enabled by this vertical`,
-    });
-  }
-
-  const knownChromeFamilies = new Set<string>(TENANT_THEME_CHROME_FAMILIES);
-  if (envelope.advanced !== undefined) {
-    if (!isPlainObject(envelope.advanced)) {
-      issues.push({
-        code: "invalid_type",
-        path: "$.verticalEnvelope.advanced",
-        message: "Expected an Advanced policy object",
-      });
-    } else {
-      for (const key of Object.keys(envelope.advanced)) {
-        if (
-          key !== "chromeFamilies" &&
-          key !== "allowTokenOverrides" &&
-          key !== "allowAnatomyVariants"
-        ) {
-          issues.push({
-            code: "unknown_key",
-            path: `$.verticalEnvelope.advanced.${key}`,
-            message: "Unknown Advanced policy field",
-          });
-        }
-      }
-      if (
-        !Array.isArray(envelope.advanced.chromeFamilies) ||
-        envelope.advanced.chromeFamilies.some(
-          (family) =>
-            typeof family !== "string" || !knownChromeFamilies.has(family)
-        ) ||
-        new Set(envelope.advanced.chromeFamilies).size !==
-          envelope.advanced.chromeFamilies.length
-      ) {
-        issues.push({
-          code: "invalid_value",
-          path: "$.verticalEnvelope.advanced.chromeFamilies",
-          message: "Unknown or duplicate chrome family",
-        });
-      }
-      if (typeof envelope.advanced.allowTokenOverrides !== "boolean") {
-        issues.push({
-          code: "invalid_type",
-          path: "$.verticalEnvelope.advanced.allowTokenOverrides",
-          message: "Expected a boolean",
-        });
-      }
-      if (
-        envelope.advanced.allowAnatomyVariants !== undefined &&
-        typeof envelope.advanced.allowAnatomyVariants !== "boolean"
-      ) {
-        issues.push({
-          code: "invalid_type",
-          path: "$.verticalEnvelope.advanced.allowAnatomyVariants",
-          message: "Expected a boolean",
-        });
-      }
-    }
-  }
-
-  issues.push(...envelopeRangeShapeIssues(envelope.ranges));
-
-  if (issues.length > 0) return issues;
+  const issues = envelopeShapeIssues(envelope, {
+    verticalKey: config.verticalKey,
+    mode: config.mode,
+  });
+  if (issues.length > 0 || !envelope) return issues;
 
   const general =
     config.mode === "simple"

@@ -19,8 +19,10 @@ import type {
   TenantThemeVerticalEnvelope,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
+  TENANT_THEME_CHROME_FAMILIES,
   TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
   TENANT_THEME_RADIUS_SCALE_BOUNDS,
+  TENANT_THEME_SCHEMA_VERSION,
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { isInsideEnvelopeRange } from "@/contracts/theme/runtime/envelopes";
@@ -34,6 +36,9 @@ const RANGE_BOUNDS = Object.freeze({
   typeScale: TENANT_THEME_TYPE_SCALE_BOUNDS,
   radiusScale: TENANT_THEME_RADIUS_SCALE_BOUNDS,
 } as const);
+
+/** The authoring modes an envelope may enable. */
+type EnvelopeMode = TenantThemeVerticalEnvelope["allowedModes"][number];
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -85,6 +90,165 @@ export function envelopeRangeShapeIssues(
       });
     }
   }
+  return issues;
+}
+
+/**
+ * Whether the envelope ITSELF is a well-formed policy for this vertical: its
+ * shape, its version, the identity it claims, the modes it enables, its
+ * Advanced policy and its ranges.
+ *
+ * Every transport that takes a `verticalEnvelope` owes these answers. An
+ * envelope that cannot say what it permits — an empty object, a version this
+ * build does not know, a policy written for another vertical — is refused
+ * before any document is measured against it, on whichever transport carried
+ * it. `mode` is the v1 authoring mode when the caller has one; a transport with
+ * no authoring mode simply omits it and is judged on everything else.
+ */
+export function envelopeShapeIssues(
+  envelope: TenantThemeVerticalEnvelope | undefined,
+  context: { verticalKey: string; mode?: EnvelopeMode }
+): TenantThemeValidationIssue[] {
+  if (!envelope) {
+    return [
+      {
+        code: "invalid_value",
+        path: "$.verticalKey",
+        message: "Tenant theme compilation requires a vertical policy envelope",
+      },
+    ];
+  }
+  if (!isPlainObject(envelope)) {
+    return [
+      {
+        code: "invalid_type",
+        path: "$.verticalEnvelope",
+        message: "Expected a code-owned vertical envelope object",
+      },
+    ];
+  }
+  const issues: TenantThemeValidationIssue[] = [];
+  const allowedEnvelopeKeys = new Set([
+    "schemaVersion",
+    "verticalKey",
+    "allowedModes",
+    "advanced",
+    "ranges",
+  ]);
+  for (const key of Object.keys(envelope)) {
+    if (!allowedEnvelopeKeys.has(key)) {
+      issues.push({
+        code: "unknown_key",
+        path: `$.verticalEnvelope.${key}`,
+        message: "Unknown vertical envelope field",
+      });
+    }
+  }
+  if (envelope.schemaVersion !== TENANT_THEME_SCHEMA_VERSION) {
+    issues.push({
+      code: "unsupported_schema_version",
+      path: "$.verticalEnvelope.schemaVersion",
+      message: "Unsupported vertical envelope version",
+    });
+  }
+  if (
+    typeof envelope.verticalKey !== "string" ||
+    !/^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/.test(envelope.verticalKey)
+  ) {
+    issues.push({
+      code: "invalid_value",
+      path: "$.verticalEnvelope.verticalKey",
+      message: "Invalid vertical envelope key",
+    });
+  } else if (envelope.verticalKey !== context.verticalKey) {
+    issues.push({
+      code: "invalid_value",
+      path: "$.verticalKey",
+      message: "Theme vertical does not match its policy envelope",
+    });
+  }
+  if (
+    !Array.isArray(envelope.allowedModes) ||
+    envelope.allowedModes.length === 0 ||
+    envelope.allowedModes.some(
+      (mode) => mode !== "simple" && mode !== "advanced"
+    ) ||
+    new Set(envelope.allowedModes).size !== envelope.allowedModes.length
+  ) {
+    issues.push({
+      code: "invalid_value",
+      path: "$.verticalEnvelope.allowedModes",
+      message: "Expected a unique non-empty simple/advanced mode list",
+    });
+  } else if (
+    context.mode !== undefined &&
+    !envelope.allowedModes.includes(context.mode)
+  ) {
+    issues.push({
+      code: "invalid_value",
+      path: "$.mode",
+      message: `Mode ${context.mode} is not enabled by this vertical`,
+    });
+  }
+
+  if (envelope.advanced !== undefined) {
+    if (!isPlainObject(envelope.advanced)) {
+      issues.push({
+        code: "invalid_type",
+        path: "$.verticalEnvelope.advanced",
+        message: "Expected an Advanced policy object",
+      });
+    } else {
+      const knownChromeFamilies = new Set<string>(TENANT_THEME_CHROME_FAMILIES);
+      for (const key of Object.keys(envelope.advanced)) {
+        if (
+          key !== "chromeFamilies" &&
+          key !== "allowTokenOverrides" &&
+          key !== "allowAnatomyVariants"
+        ) {
+          issues.push({
+            code: "unknown_key",
+            path: `$.verticalEnvelope.advanced.${key}`,
+            message: "Unknown Advanced policy field",
+          });
+        }
+      }
+      if (
+        !Array.isArray(envelope.advanced.chromeFamilies) ||
+        envelope.advanced.chromeFamilies.some(
+          (family) =>
+            typeof family !== "string" || !knownChromeFamilies.has(family)
+        ) ||
+        new Set(envelope.advanced.chromeFamilies).size !==
+          envelope.advanced.chromeFamilies.length
+      ) {
+        issues.push({
+          code: "invalid_value",
+          path: "$.verticalEnvelope.advanced.chromeFamilies",
+          message: "Unknown or duplicate chrome family",
+        });
+      }
+      if (typeof envelope.advanced.allowTokenOverrides !== "boolean") {
+        issues.push({
+          code: "invalid_type",
+          path: "$.verticalEnvelope.advanced.allowTokenOverrides",
+          message: "Expected a boolean",
+        });
+      }
+      if (
+        envelope.advanced.allowAnatomyVariants !== undefined &&
+        typeof envelope.advanced.allowAnatomyVariants !== "boolean"
+      ) {
+        issues.push({
+          code: "invalid_type",
+          path: "$.verticalEnvelope.advanced.allowAnatomyVariants",
+          message: "Expected a boolean",
+        });
+      }
+    }
+  }
+
+  issues.push(...envelopeRangeShapeIssues(envelope.ranges));
   return issues;
 }
 

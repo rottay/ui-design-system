@@ -50,7 +50,7 @@ import {
 import {
   ENVELOPE_RANGED_DIALS,
   envelopeDialIssues,
-  envelopeRangeShapeIssues,
+  envelopeShapeIssues,
   type EnvelopeRangedDial,
 } from "../foundation/envelope";
 import { documentV2Ledger } from "./foundation/ledger";
@@ -188,10 +188,15 @@ export function compileTenantThemeDocumentV2(
     rowVersion: input.rowVersion,
   };
   // The envelope option is the v1 terminal's, so its law has to be the v1
-  // terminal's too: a malformed envelope cannot say what it permits, and a
-  // DIRECTLY authored dial outside it is refused by name rather than narrowed.
-  // Only a profile's default is narrowed, which the expansion station does.
-  const envelopeIssues = envelopeRangeShapeIssues(verticalEnvelope.ranges);
+  // terminal's too: an envelope that cannot say what it permits -- wrong shape,
+  // unknown version, another vertical's policy, malformed ranges -- is refused
+  // here exactly as `compileTenantTheme` refuses it, and a DIRECTLY authored
+  // dial outside it is refused by name rather than narrowed. Only a profile's
+  // default is narrowed, which the expansion station does. The v1 authoring
+  // mode is not among these answers: a decision document does not carry one.
+  const envelopeIssues = envelopeShapeIssues(verticalEnvelope, {
+    verticalKey: input.verticalKey,
+  });
   if (envelopeIssues.length > 0) {
     throw new TenantThemeValidationError(envelopeIssues);
   }

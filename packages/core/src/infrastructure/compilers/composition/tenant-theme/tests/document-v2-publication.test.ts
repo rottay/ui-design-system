@@ -55,6 +55,17 @@ const entryFor = (
     (entry) => entry.ref.kind === "decision" && entry.ref.id === id
   );
 
+/** The issue list a refusal carried, or `[]` when the call did not refuse. */
+const issuesOf = (call: () => unknown) => {
+  try {
+    call();
+    return [];
+  } catch (error) {
+    expect(error).toBeInstanceOf(TenantThemeValidationError);
+    return (error as TenantThemeValidationError).issues;
+  }
+};
+
 describe("compileTenantThemeDocumentV2 · the real published path", () => {
   it("compiles a v2 document into a verifiable artifact", () => {
     const { artifact } = publish();
@@ -118,6 +129,61 @@ describe("compileTenantThemeDocumentV2 · the real published path", () => {
         "typography.fontFamilyHeading",
       ]
     );
+  });
+
+  it("keeps a partly authored dial split between its two owners", () => {
+    // The tenant authored ONE member of `motion.dial`; the profile filled the
+    // other two. Reporting all three as the tenant's would make a profile
+    // default read as authorship (I-P0, I-T4), so the row's decision identity
+    // stays with what the tenant wrote and each filled member keeps its own
+    // `profile-derived` claim.
+    const compilation = publish({
+      version: 2,
+      plan: "pro",
+      decisions: {
+        "experience.profile": "rottay/management-editorial@1",
+        "motion.dial": { intensity: 0.2 },
+      },
+    });
+    const authored = entryFor(compilation, "motion.dial");
+    expect(authored).toMatchObject({
+      provenance: "direct-override",
+      tier: "standard",
+      authoredValue: { intensity: 0.2 },
+      effectiveLeaves: ["motion.intensity"],
+    });
+    const filled = compilation.ledger.entries.filter((entry) =>
+      entry.effectiveLeaves.some(
+        (leaf) => leaf === "motion.durationScale" || leaf === "motion.ambient"
+      )
+    );
+    expect(
+      filled.map((entry) => [entry.provenance, entry.tier, entry.effectiveLeaves])
+    ).toEqual([
+      ["profile-derived", null, ["motion.durationScale"]],
+      ["profile-derived", null, ["motion.ambient"]],
+    ]);
+    expect(filled.map((entry) => entry.authoredValue)).toEqual([1.1, "subtle"]);
+    // The two classes survive the artifact and the mount: a reader of the
+    // serialized ledger sees the same split the compile resolved.
+    const reloaded = JSON.parse(
+      JSON.stringify(compilation.artifact)
+    ) as TenantThemeArtifact;
+    expect(
+      verifyTenantThemeArtifactV1(reloaded, {
+        slug: IDENTITY.slug,
+        verticalKey: IDENTITY.verticalKey,
+      })
+    ).toEqual({ ok: true, artifact: reloaded });
+    expect(
+      reloaded.provenance?.entries
+        .filter((entry) => entry.effectiveLeaves[0]?.startsWith("motion."))
+        .map((entry) => [entry.provenance, ...entry.effectiveLeaves])
+    ).toEqual([
+      ["direct-override", "motion.intensity"],
+      ["profile-derived", "motion.durationScale"],
+      ["profile-derived", "motion.ambient"],
+    ]);
   });
 
   it("serializes the provenance into the artifact and into its digest", () => {
@@ -273,6 +339,91 @@ describe("compileTenantThemeDocumentV2 · refusals, by name", () => {
         "$.verticalEnvelope.ranges.radiusScale"
       );
     }
+  });
+
+  it("refuses an envelope that cannot say what it permits, as v1 does", () => {
+    // A malformed RANGE was already refused; the envelope's own shape was not,
+    // so an empty policy, a version this build does not know and another
+    // vertical's policy all published. Each is now refused at the same path and
+    // with the same message the v1 terminal answers.
+    const registered = getTenantThemeVerticalEnvelope(IDENTITY.verticalKey)!;
+    const malformed = [
+      ["an empty policy", {}],
+      ["an unknown version", { ...registered, schemaVersion: 99 }],
+      ["another vertical's policy", { ...registered, verticalKey: "evnto" }],
+    ] as const;
+    for (const [what, verticalEnvelope] of malformed) {
+      const onV2 = issuesOf(() =>
+        compileTenantThemeDocumentV2({
+          ...IDENTITY,
+          document: DOCUMENT,
+          verticalEnvelope: verticalEnvelope as never,
+        })
+      );
+      const onV1 = issuesOf(() =>
+        compileTenantThemeConfig(
+          {
+            schemaVersion: 1,
+            mode: "simple",
+            appearance: {},
+            ...IDENTITY,
+          },
+          { verticalEnvelope: verticalEnvelope as never }
+        )
+      );
+      expect(onV2, what).not.toEqual([]);
+      expect(onV2, what).toEqual(onV1);
+    }
+  });
+
+  it("refuses an authored dial the narrowed envelope forbids, on both transports", () => {
+    const registered = getTenantThemeVerticalEnvelope(IDENTITY.verticalKey)!;
+    const narrowed = {
+      ...registered,
+      ranges: { ...registered.ranges, radiusScale: { min: 0.8, max: 1 } },
+    };
+    expect(
+      issuesOf(() =>
+        compileTenantThemeDocumentV2({
+          ...IDENTITY,
+          document: { version: 2, plan: "pro", decisions: { "shape.radius-scale": 1.15 } },
+          verticalEnvelope: narrowed,
+        })
+      )
+    ).toEqual([
+      {
+        code: "invalid_value",
+        path: '$.decisions["shape.radius-scale"]',
+        message: "Value exceeds the bithire envelope",
+      },
+    ]);
+    expect(
+      issuesOf(() =>
+        compileTenantThemeConfig(
+          {
+            schemaVersion: 1,
+            mode: "simple",
+            appearance: { shape: { radiusScale: 1.15 } },
+            ...IDENTITY,
+          },
+          { verticalEnvelope: narrowed }
+        )
+      )
+    ).toEqual([
+      {
+        code: "invalid_value",
+        path: "$.appearance.shape.radiusScale",
+        message: "Value exceeds the bithire envelope",
+      },
+    ]);
+    // The same narrowed envelope still publishes a document that respects it.
+    expect(
+      compileTenantThemeDocumentV2({
+        ...IDENTITY,
+        document: DOCUMENT,
+        verticalEnvelope: narrowed,
+      }).artifact.slug
+    ).toBe(IDENTITY.slug);
   });
 
   it("propagates the door's tier refusal without re-dressing it", () => {

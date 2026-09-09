@@ -25,7 +25,6 @@ import { themeControl } from "@/contracts/theme/runtime/catalog";
 import {
   authoredSelectionKey,
   resolveDecisionProvenanceLedger,
-  type AuthoredLeafClaim,
   type DecisionProvenanceCatalog,
   type DecisionProvenanceClaim,
   type DecisionProvenanceLedger,
@@ -211,36 +210,65 @@ function overrideClaims(
 }
 
 /**
- * Fold the profile's defaults into the selections the tenant already authored.
+ * The v2 transport path of one member of a decision row.
  *
- * A raw selection is captured ONCE, so a dial the tenant authored in part and
- * the profile filled the rest of is one entry: the members it names, plus the
- * members the profile expanded into it. Its class stays the tenant's, because
- * the tenant did author this selection and its tier was already judged on that
- * fact; what the profile supplied stays `expansion-derived` so a named claim
- * still beats it.
+ * A raw selection is captured ONCE, so the row's decision identity belongs to
+ * the tenant's own selection; a member the tenant left empty is located by
+ * where it sits in the document instead.
+ */
+function memberPath(id: ThemeDecisionId, leaf: string): string {
+  return `decisions[${JSON.stringify(id)}].${leaf.slice(
+    leaf.lastIndexOf(".") + 1
+  )}`;
+}
+
+/**
+ * Split a profile default off the decision identity the tenant already holds.
+ *
+ * One entry carries ONE provenance, so a row authored in part and filled for
+ * the rest cannot be merged: the merged entry would report the profile's
+ * members as the tenant's own (I-P0, I-T4). Each filled member becomes its own
+ * path-keyed, tier-less claim, which is what a value nobody decided is.
+ */
+function splitDerivedClaim(
+  claim: DecisionProvenanceClaim<ThemeDecisionId>
+): readonly DecisionProvenanceClaim<ThemeDecisionId>[] {
+  if (claim.ref.kind !== "decision") return [claim];
+  const { id } = claim.ref;
+  const authored = claim.authoredValue;
+  return claim.leaves.map((leaf) => {
+    const member = leaf.leaf.slice(leaf.leaf.lastIndexOf(".") + 1);
+    return {
+      ref: { kind: "sanctioned-override" as const, path: memberPath(id, leaf.leaf) },
+      provenance: claim.provenance,
+      authoredValue:
+        typeof authored === "object" && authored !== null && !Array.isArray(authored)
+          ? (authored as Record<string, unknown>)[member]
+          : authored,
+      leaves: [leaf],
+    };
+  });
+}
+
+/**
+ * Add the profile's defaults to the selections the tenant already authored.
+ *
+ * A default whose row the tenant never touched keeps that row's identity, so
+ * the ledger still reports WHICH decision the profile filled. A default that
+ * lands on a row the tenant authored in part is split instead: the tenant keeps
+ * the decision, and each member the profile supplied keeps `profile-derived`.
  */
 function foldClaims(
   authored: readonly DecisionProvenanceClaim<ThemeDecisionId>[],
   derived: readonly DecisionProvenanceClaim<ThemeDecisionId>[]
 ): readonly DecisionProvenanceClaim<ThemeDecisionId>[] {
-  const order: string[] = [];
-  const byKey = new Map<string, DecisionProvenanceClaim<ThemeDecisionId>>();
-  for (const claim of [...authored, ...derived]) {
-    const key = authoredSelectionKey(claim.ref);
-    const held = byKey.get(key);
-    if (!held) {
-      order.push(key);
-      byKey.set(key, claim);
-      continue;
-    }
-    const leaves: AuthoredLeafClaim[] = [...held.leaves];
-    for (const leaf of claim.leaves) {
-      if (!leaves.some((entry) => entry.leaf === leaf.leaf)) leaves.push(leaf);
-    }
-    byKey.set(key, { ...held, leaves });
-  }
-  return order.map((key) => byKey.get(key)!);
+  const held = new Set(authored.map((claim) => authoredSelectionKey(claim.ref)));
+  return [
+    ...authored,
+    ...derived.flatMap((claim) =>
+      held.has(authoredSelectionKey(claim.ref)) ? splitDerivedClaim(claim) : [claim]
+    ),
+  ];
 }
 
 /**
