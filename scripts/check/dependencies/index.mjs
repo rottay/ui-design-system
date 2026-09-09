@@ -688,8 +688,16 @@ export function analyzeRuntimeModuleEdges(
   // alias, return, assignment/update/delete/loop target, receiver of any other
   // member call or access, operand of a descriptor, prototype or proxy
   // operation -- withdraws the admission, as does any call that names `Symbol`
-  // as a property of the container. A withdrawn file returns its computed keys
-  // to the refused default.
+  // as a property of the container. A mutation is judged by the receiver chain
+  // it reaches through rather than by the name it happens to use: an assignment,
+  // a compound assignment, an update, a delete, a destructuring or loop target
+  // and any member call walk their receiver to its root, and a root that is the
+  // container, a resolved alias or an expression a collection poisons withdraws
+  // the admission as well. Two members survive that walk: a member of a
+  // registered slot key, and a member the scan can name -- a readable key other
+  // than `Symbol` taken directly off the container -- which is how a file keeps
+  // its own expandos and the container's own methods. A withdrawn file returns
+  // its computed keys to the refused default.
   const wellKnownSymbolMembers = new Set([
     'asyncDispose', 'asyncIterator', 'dispose', 'hasInstance', 'isConcatSpreadable',
     'iterator', 'match', 'matchAll', 'metadata', 'replace', 'search',
@@ -708,6 +716,7 @@ export function analyzeRuntimeModuleEdges(
   }
 
   let globalContainerBindings = null;
+  let containerMembership = null;
 
   function globalContainerBindingSymbols() {
     if (globalContainerBindings) return globalContainerBindings;
@@ -977,6 +986,9 @@ export function analyzeRuntimeModuleEdges(
         if (bindCollection(extraction.symbol)) boundAnother = true;
       }
     }
+    containerMembership = (expression) => (
+      boundToContainer(expression) || containsContainer(expression)
+    );
     return resolved;
   }
 
@@ -987,6 +999,11 @@ export function analyzeRuntimeModuleEdges(
     return Boolean(
       ts.isIdentifier(current) && globalContainerBindingSymbols().has(symbolAt(current)),
     );
+  }
+
+  function containerCarrier(expression) {
+    globalContainerBindingSymbols();
+    return Boolean(expression && containerMembership && containerMembership(expression));
   }
 
   function symbolIntrinsicRoot(expression) {
@@ -1046,6 +1063,81 @@ export function analyzeRuntimeModuleEdges(
     );
   }
 
+  function assignmentTargets(target) {
+    const current = target ? unwrapRuntimeExpression(target) : null;
+    if (!current || ts.isOmittedExpression(current)) return [];
+    if (ts.isArrayLiteralExpression(current)) {
+      return current.elements.flatMap((element) => assignmentTargets(
+        ts.isSpreadElement(element) ? element.expression : element,
+      ));
+    }
+    if (ts.isObjectLiteralExpression(current)) {
+      return current.properties.flatMap((declared) => {
+        if (ts.isPropertyAssignment(declared)) return assignmentTargets(declared.initializer);
+        return ts.isSpreadAssignment(declared) ? assignmentTargets(declared.expression) : [];
+      });
+    }
+    if (
+      ts.isBinaryExpression(current) && current.operatorToken.kind === ts.SyntaxKind.EqualsToken
+    ) return assignmentTargets(current.left);
+    return [current];
+  }
+
+  function mutationTargets(node) {
+    if (
+      ts.isBinaryExpression(node) &&
+      node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+      node.operatorToken.kind <= ts.SyntaxKind.LastAssignment
+    ) return assignmentTargets(node.left);
+    if (ts.isDeleteExpression(node)) return assignmentTargets(node.expression);
+    if (
+      (ts.isPrefixUnaryExpression(node) || ts.isPostfixUnaryExpression(node)) &&
+      [ts.SyntaxKind.PlusPlusToken, ts.SyntaxKind.MinusMinusToken].includes(node.operator)
+    ) return assignmentTargets(node.operand);
+    if (
+      (ts.isForOfStatement(node) || ts.isForInStatement(node)) && node.initializer &&
+      !ts.isVariableDeclarationList(node.initializer)
+    ) return assignmentTargets(node.initializer);
+    return [];
+  }
+
+  function containerReceiverChain(expression) {
+    const current = expression ? unwrapRuntimeExpression(expression) : null;
+    if (!current) return false;
+    if (symbolIntrinsicContainer(current) || containerCarrier(current)) return true;
+    return Boolean(
+      (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current) ||
+       ts.isCallExpression(current) || ts.isNewExpression(current)) &&
+      containerReceiverChain(current.expression),
+    );
+  }
+
+  function readableContainerMember(member) {
+    if (
+      ts.isElementAccessExpression(member) &&
+      registeredSymbolKeyShape(member.argumentExpression)
+    ) return true;
+    const property = propertyText(member);
+    return Boolean(
+      property !== null && property !== 'Symbol' &&
+      symbolIntrinsicContainer(member.expression),
+    );
+  }
+
+  function containerReach(member) {
+    return Boolean(
+      member && (ts.isPropertyAccessExpression(member) || ts.isElementAccessExpression(member)) &&
+      !symbolIntrinsicRoot(member.expression) && !readableContainerMember(member) &&
+      containerReceiverChain(member.expression),
+    );
+  }
+
+  function containerReachedMutation(node) {
+    const written = mutationTargets(node);
+    if (ts.isCallExpression(node) || ts.isNewExpression(node)) written.push(node.expression);
+    return written.some((target) => containerReach(unwrapRuntimeExpression(target)));
+  }
+
   function symbolPropertyName(name) {
     if (!name) return false;
     if (ts.isIdentifier(name) || ts.isStringLiteralLike(name)) return name.text === 'Symbol';
@@ -1085,6 +1177,7 @@ export function analyzeRuntimeModuleEdges(
           symbolIntrinsicIntegrity = false;
         }
         if (containerSymbolPropertyOperation(node)) symbolIntrinsicIntegrity = false;
+        if (containerReachedMutation(node)) symbolIntrinsicIntegrity = false;
       }
       ts.forEachChild(node, inspect);
     }
@@ -1092,7 +1185,7 @@ export function analyzeRuntimeModuleEdges(
     return symbolIntrinsicIntegrity;
   }
 
-  function staticRegisteredSymbolKey(expression, resolvingSymbols = new Set()) {
+  function registeredSymbolKeyShape(expression, resolvingSymbols = new Set()) {
     if (!expression) return false;
     const current = unwrapRuntimeExpression(expression);
     if (ts.isIdentifier(current)) {
@@ -1108,15 +1201,18 @@ export function analyzeRuntimeModuleEdges(
         !(declaration.parent.flags & ts.NodeFlags.Const)
       ) return false;
       resolvingSymbols.add(symbol);
-      const registered = staticRegisteredSymbolKey(declaration.initializer, resolvingSymbols);
+      const registered = registeredSymbolKeyShape(declaration.initializer, resolvingSymbols);
       resolvingSymbols.delete(symbol);
       return registered;
     }
     return Boolean(
       ts.isCallExpression(current) && current.arguments.length === 1 &&
-      genuineSymbolForCall(current) && symbolIntrinsicIntact() &&
-      staticStringText(current.arguments[0]) !== null,
+      genuineSymbolForCall(current) && staticStringText(current.arguments[0]) !== null,
     );
+  }
+
+  function staticRegisteredSymbolKey(expression) {
+    return registeredSymbolKeyShape(expression) && symbolIntrinsicIntact();
   }
 
   function registeredSymbolContainerProperty(access) {

@@ -768,6 +768,108 @@ test('a collection carries the container identity of every member it holds', () 
   }
 });
 
+test('a write through any receiver chain that reaches the container withdraws slot admission', () => {
+  const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+  const typescript = requireFromCore('typescript');
+  const slot = "globalThis[Symbol.for('rottay.slot')]('node:fs');";
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-receiver-chain-'));
+  const carrier = 'function poison(a = globalThis, b = a)';
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    for (const [name, body] of [
+  ['receiver-collection-member', `${carrier} { const bag = [b]; bag[0].Symbol.for = () => 'require'; } poison();`],
+  ['receiver-property-member', `${carrier} { const bag = { x: b }; bag.x.Symbol.for = () => 'require'; } poison();`],
+  ['receiver-member-property', `${carrier} { const bag = { x: b }; bag.x.y = FakeSymbol; } poison();`],
+  ['receiver-nested-index', `${carrier} { const bag = [[b, b]]; bag[0][1].Symbol.for = () => 'require'; } poison();`],
+  ['receiver-deep-chain', `${carrier} { const bag = [[b]]; bag[0][0].x = FakeSymbol; } poison();`],
+  ['receiver-compound-assign', `${carrier} { const bag = [b]; bag[0].Symbol += 1; } poison();`],
+  ['receiver-logical-assign', `${carrier} { const bag = [b]; bag[0].Symbol ??= FakeSymbol; } poison();`],
+  ['receiver-delete', `${carrier} { const bag = [b]; delete bag[0].Symbol; } poison();`],
+  ['receiver-postfix-update', `${carrier} { const bag = [b]; bag[0].Symbol++; } poison();`],
+  ['receiver-prefix-update', `${carrier} { const bag = [b]; --bag[0].Symbol; } poison();`],
+  ['receiver-computed-key', `${carrier} { const bag = [b]; bag[0][key] = FakeSymbol; } poison();`],
+  ['receiver-array-pattern', `${carrier} { const bag = [b]; [bag[0].Symbol] = [FakeSymbol]; } poison();`],
+  ['receiver-object-pattern', `${carrier} { const bag = [b]; ({ host: bag[0].Symbol } = source); } poison();`],
+  ['receiver-defaulted-pattern', `${carrier} { const bag = [b]; [bag[0].Symbol = FakeSymbol] = []; } poison();`],
+  ['receiver-spread-pattern', `${carrier} { const bag = [b]; [...bag[0].Symbol] = list; } poison();`],
+  ['receiver-for-of-target', `${carrier} { const bag = [b]; for (bag[0].Symbol of [FakeSymbol]) { void 0; } } poison();`],
+  ['receiver-for-in-target', `${carrier} { const bag = [b]; for (bag[0].Symbol in source) { void 0; } } poison();`],
+  ['receiver-member-call', `${carrier} { const bag = [b]; bag[0].__defineGetter__('Symbol', () => FakeSymbol); } poison();`],
+  ['receiver-new-member', `${carrier} { const bag = [b]; void new bag[0].Symbol(); } poison();`],
+  ['receiver-call-chain', `${carrier} { const bag = [b]; bag.find(Boolean).Symbol.for = () => 'require'; } poison();`],
+  ['receiver-conditional', `${carrier} { const bag = [b]; (flag ? bag[0] : {}).Symbol = FakeSymbol; } poison();`],
+  ['receiver-indirect-container', `function poison(c = globalThis) { c[key].for = () => 'require'; } poison();`],
+  ['receiver-alias-root-property', `const G = globalThis; const H = G; H.self.Symbol = FakeSymbol;`],
+  ['receiver-nested-closure', `${carrier} { const bag = [b]; const use = () => { bag[0].Symbol = FakeSymbol; }; use(); } poison();`],
+  ['receiver-argument-hop', `function inner(x) { x[0].Symbol.for = () => 'require'; } ${carrier} { inner([b]); } poison();`],
+    ]) {
+      const source = `${body} ${slot}`;
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.throws(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            /unresolved runtime module edge/,
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.throws(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          /unresolved runtime module edge/,
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+
+    for (const [name, source] of [
+  ['receiver-member-well-known-read', "function read(a = globalThis, b = a) { const bag = [b]; return bag[0].Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-container-method-call', "const scrollTarget = element ?? window; scrollTarget.addEventListener('scroll', handler); if (scrollTarget === window) window.scrollTo({ top: 0 }); void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-collection-method-call', "function read(a = globalThis, b = a) { const bag = [b]; bag.forEach((c) => { void c; }); return bag[0].Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-member-slot-read', "function read(a = globalThis, b = a) { const bag = [b]; return bag[0][Symbol.for('rottay.slot')]; } void read();"],
+  ['receiver-member-slot-call', "function read(a = globalThis, b = a) { const bag = [b]; return bag[0][Symbol.for('rottay.slot')]('node:fs'); } void read();"],
+  ['receiver-intrinsic-call', "function read(c = globalThis) { return c.Symbol.for('rottay.slot'); } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-container-expando', "globalThis.marker = 1; void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-slot-store', "const host = globalThis; host[Symbol.for('rottay.slot')] = { sequence: 0 };"],
+  ['receiver-slot-delete', "const KEY = Symbol.for('rottay.slot'); const host = globalThis; delete host[KEY]; void host[KEY];"],
+  ['receiver-collection-store', "function read(a = globalThis, b = a) { const bag = {}; bag.host = b; return bag.host.Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-allocator-shape', "const KEY = Symbol.for('rottay.slot'); function allocate() { const host = globalThis; const existing = host[KEY]; if (existing) return existing; const created = { sequence: 0 }; host[KEY] = created; return created; } const { sequence } = allocate(); void sequence;"],
+  ['receiver-ordinary-chain', "const bag = { x: {} }; bag.x.y = 1; void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-ordinary-member-call', "const bag = [1]; bag.forEach((c) => { void c; }); void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-ordinary-update', "const bag = { n: 0 }; bag.n++; void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-ordinary-delete', "const bag = { n: 0 }; delete bag.n; void globalThis[Symbol.for('rottay.slot')];"],
+  ['receiver-ordinary-loop-target', "const bag = { n: 0 }; for (bag.n of [1]) { void bag.n; } void globalThis[Symbol.for('rottay.slot')];"],
+    ]) {
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.doesNotThrow(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.doesNotThrow(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('a JavaScript global expando no longer dissolves the container fence', () => {
   for (const source of [
     "globalThis.marker = 1; globalThis.require('d3');",
