@@ -41,18 +41,18 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2549,
+    "filesScanned": 2558,
     "channels": 7502,
     "channelsDs": 7117,
     "channelsBridge": 385,
     "channelsWithoutReaders": 191,
     "channelsPaintsFalse": 927,
     "channelsPaintsInModernFalse": 1985,
-    "readers": 37028,
+    "readers": 37090,
     "readersByPlane": {
       "modern-skin-css": 14688,
       "presentation-css": 10411,
-      "foundation-css": 1156,
+      "foundation-css": 1218,
       "runtime-css": 262,
       "facade-entrypoints-css": 2,
       "classic-css": 857,
@@ -67,7 +67,7 @@
     "channelsByPlane": {
       "modern-skin-css": 3832,
       "presentation-css": 2026,
-      "foundation-css": 374,
+      "foundation-css": 375,
       "runtime-css": 138,
       "facade-entrypoints-css": 1,
       "classic-css": 723,
@@ -31540,7 +31540,8 @@
       "channel": "--ds-button-lg-radius",
       "kind": "ds",
       "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/button/index.css"
+        "src/foundation/tokens/css/presentation/components/button/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -32822,7 +32823,8 @@
       "channel": "--ds-button-md-radius",
       "kind": "ds",
       "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/button/index.css"
+        "src/foundation/tokens/css/presentation/components/button/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -35156,7 +35158,8 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/presentation/components/button/index.css",
-        "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css"
+        "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.ts"
       ],
       "planes": [
         "classic-css",
@@ -37673,7 +37676,8 @@
       "channel": "--ds-button-xl-radius",
       "kind": "ds",
       "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/button/index.css"
+        "src/foundation/tokens/css/presentation/components/button/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -38053,7 +38057,8 @@
       "channel": "--ds-button-xs-radius",
       "kind": "ds",
       "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/button/index.css"
+        "src/foundation/tokens/css/presentation/components/button/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -62764,7 +62769,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 115,
+          "line": 124,
           "prop": "--ds-shadow-input-error",
           "scalars": []
         },
@@ -62800,7 +62805,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 122,
+          "line": 133,
           "prop": "--ds-shadow-focus-ring-error",
           "scalars": []
         }
@@ -62855,7 +62860,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 114,
+          "line": 122,
           "prop": "--ds-shadow-input-focus",
           "scalars": []
         },
@@ -62942,7 +62947,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 121,
+          "line": 131,
           "prop": "--ds-shadow-focus-ring",
           "scalars": []
         },
@@ -63107,7 +63112,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 123,
+          "line": 135,
           "prop": "--ds-shadow-focus-ring-success",
           "scalars": []
         }
@@ -63159,7 +63164,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 124,
+          "line": 137,
           "prop": "--ds-shadow-focus-ring-warning",
           "scalars": []
         }
@@ -66507,7 +66512,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 135,
+          "line": 136,
           "prop": "itemBgHover",
           "scalars": []
         }
@@ -70355,7 +70360,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 132,
+          "line": 133,
           "prop": "bg",
           "scalars": []
         },
@@ -71194,6 +71199,7 @@
         "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/contrast/index.ts"
       ],
       "planes": [
+        "foundation-css",
         "modern-skin-css",
         "ts-other",
         "tsx-inline-stamp"
@@ -71201,6 +71207,13 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 25,
+          "prop": "--ds-color-mono-0",
+          "scalars": []
+        },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/drawer/index.css",
@@ -81448,6 +81461,48 @@
       "readers": [
         {
           "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 64,
+          "prop": "--ds-shadow-error-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 65,
+          "prop": "--ds-shadow-error-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 67,
+          "prop": "--ds-shadow-error-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 68,
+          "prop": "--ds-shadow-error-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 124,
+          "prop": "--ds-shadow-input-error",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 133,
+          "prop": "--ds-shadow-focus-ring-error",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
           "line": 185,
           "prop": "--ds-color-danger",
@@ -86193,35 +86248,35 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 62,
+          "line": 69,
           "prop": "--ds-color-border",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 63,
+          "line": 70,
           "prop": "--ds-color-border-primary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 64,
+          "line": 71,
           "prop": "--ds-color-border-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 65,
+          "line": 72,
           "prop": "--ds-color-border-subtle",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 66,
+          "line": 73,
           "prop": "--ds-color-border-tertiary",
           "scalars": []
         },
@@ -88142,14 +88197,84 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 42,
+          "line": 29,
+          "prop": "--ds-color-mono-100",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 30,
+          "prop": "--ds-color-mono-200",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 31,
+          "prop": "--ds-color-mono-300",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 32,
+          "prop": "--ds-color-mono-400",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 33,
+          "prop": "--ds-color-mono-500",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 34,
+          "prop": "--ds-color-mono-600",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 35,
+          "prop": "--ds-color-mono-700",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 36,
+          "prop": "--ds-color-mono-800",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 37,
+          "prop": "--ds-color-mono-900",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 41,
+          "prop": "--ds-color-surface-ink",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 49,
           "prop": "--ds-texture-backdrop-paper",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 78,
+          "line": 85,
           "prop": "--ds-surface-fg",
           "scalars": []
         },
@@ -88189,14 +88314,91 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 29,
+          "prop": "--ds-color-mono-100",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 30,
+          "prop": "--ds-color-mono-200",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 31,
+          "prop": "--ds-color-mono-300",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 32,
+          "prop": "--ds-color-mono-400",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 33,
+          "prop": "--ds-color-mono-500",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 34,
+          "prop": "--ds-color-mono-600",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 35,
+          "prop": "--ds-color-mono-700",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 36,
+          "prop": "--ds-color-mono-800",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 37,
+          "prop": "--ds-color-mono-900",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
           "line": 41,
+          "prop": "--ds-color-surface-ink",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 42,
+          "prop": "--ds-color-surface-paper",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 48,
           "prop": "--ds-texture-backdrop-ink",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 53,
+          "line": 60,
           "prop": "--ds-surface-fg",
           "scalars": []
         },
@@ -88242,7 +88444,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 36,
+          "line": 43,
           "prop": "--ds-color-hairline",
           "scalars": []
         }
@@ -88264,21 +88466,21 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 81,
+          "line": 88,
           "prop": "--ds-color-text-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 82,
+          "line": 89,
           "prop": "--ds-color-text-tertiary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 83,
+          "line": 90,
           "prop": "--ds-color-text-muted",
           "scalars": []
         },
@@ -88321,14 +88523,14 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 37,
+          "line": 44,
           "prop": "--ds-color-hairline-strong",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 61,
+          "line": 68,
           "prop": "--ds-color-text-disabled",
           "scalars": []
         },
@@ -88385,21 +88587,21 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 57,
+          "line": 64,
           "prop": "--ds-color-text-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 58,
+          "line": 65,
           "prop": "--ds-color-text-tertiary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 59,
+          "line": 66,
           "prop": "--ds-color-text-muted",
           "scalars": []
         },
@@ -89083,14 +89285,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 163,
+          "line": 164,
           "prop": "text",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 169,
+          "line": 170,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -90724,7 +90926,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 154,
+          "line": 155,
           "prop": "textMuted",
           "scalars": []
         },
@@ -91439,7 +91641,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 164,
+          "line": 165,
           "prop": "textMuted",
           "scalars": []
         },
@@ -92057,7 +92259,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 166,
+          "line": 167,
           "prop": "itemBgActive",
           "scalars": []
         }
@@ -92116,7 +92318,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 165,
+          "line": 166,
           "prop": "itemBgHover",
           "scalars": []
         }
@@ -92828,7 +93030,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 162,
+          "line": 163,
           "prop": "bg",
           "scalars": []
         },
@@ -93048,6 +93250,62 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 33,
+          "prop": "--ds-shadow-primary-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 34,
+          "prop": "--ds-shadow-primary-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 36,
+          "prop": "--ds-shadow-primary-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 37,
+          "prop": "--ds-shadow-primary-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 39,
+          "prop": "--ds-shadow-primary-lg",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 40,
+          "prop": "--ds-shadow-primary-lg",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 122,
+          "prop": "--ds-shadow-input-focus",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 131,
+          "prop": "--ds-shadow-focus-ring",
+          "scalars": []
+        },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
@@ -104193,7 +104451,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 136,
+          "line": 137,
           "prop": "itemBgActive",
           "scalars": []
         }
@@ -104612,7 +104870,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 143,
+          "line": 144,
           "prop": "bg",
           "scalars": []
         },
@@ -105140,7 +105398,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 146,
+          "line": 147,
           "prop": "itemBgHover",
           "scalars": []
         },
@@ -105227,7 +105485,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 147,
+          "line": 148,
           "prop": "itemBgActive",
           "scalars": []
         }
@@ -107321,14 +107579,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 145,
+          "line": 146,
           "prop": "textMuted",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 156,
+          "line": 157,
           "prop": "itemBgActive",
           "scalars": []
         }
@@ -107408,7 +107666,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 155,
+          "line": 156,
           "prop": "itemBgHover",
           "scalars": []
         }
@@ -107482,28 +107740,28 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 137,
+          "line": 138,
           "prop": "itemColorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 144,
+          "line": 145,
           "prop": "text",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 148,
+          "line": 149,
           "prop": "itemColorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 152,
+          "line": 153,
           "prop": "bg",
           "scalars": []
         }
@@ -107953,6 +108211,34 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 43,
+          "prop": "--ds-shadow-secondary-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 44,
+          "prop": "--ds-shadow-secondary-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 46,
+          "prop": "--ds-shadow-secondary-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 47,
+          "prop": "--ds-shadow-secondary-md",
+          "scalars": []
+        },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
@@ -108937,6 +109223,41 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 50,
+          "prop": "--ds-shadow-success-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 51,
+          "prop": "--ds-shadow-success-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 53,
+          "prop": "--ds-shadow-success-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 54,
+          "prop": "--ds-shadow-success-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 135,
+          "prop": "--ds-shadow-focus-ring-success",
+          "scalars": []
+        },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
@@ -112423,7 +112744,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 54,
+          "line": 61,
           "prop": "--ds-surface-bg",
           "scalars": []
         },
@@ -112502,7 +112823,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 79,
+          "line": 86,
           "prop": "--ds-surface-bg",
           "scalars": []
         },
@@ -117060,7 +117381,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 134,
+          "line": 135,
           "prop": "textMuted",
           "scalars": []
         },
@@ -125144,7 +125465,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 133,
+          "line": 134,
           "prop": "text",
           "scalars": []
         },
@@ -130335,6 +130656,41 @@
       "readers": [
         {
           "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 57,
+          "prop": "--ds-shadow-warning-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 58,
+          "prop": "--ds-shadow-warning-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 60,
+          "prop": "--ds-shadow-warning-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 61,
+          "prop": "--ds-shadow-warning-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 137,
+          "prop": "--ds-shadow-focus-ring-warning",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
           "line": 421,
           "prop": "--ds-color-warning-ink",
@@ -133139,6 +133495,13 @@
         },
         {
           "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 26,
+          "prop": "--ds-color-mono-1000",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
           "line": 187,
           "prop": "--ds-color-neutral-0",
@@ -133679,21 +134042,21 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 153,
+          "line": 154,
           "prop": "text",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 157,
+          "line": 158,
           "prop": "itemColorActive",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-          "line": 170,
+          "line": 171,
           "prop": "var(--ds-color-neutral-100)",
           "scalars": []
         },
@@ -157078,7 +157441,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 15,
+          "line": 20,
           "prop": "--ds-shadow-3xl",
           "scalars": []
         },
@@ -256139,7 +256502,8 @@
       "channel": "--ds-radius-button",
       "kind": "ds",
       "declaredIn": [
-        "src/foundation/tokens/css/foundation/base/borders/index.css"
+        "src/foundation/tokens/css/foundation/base/borders/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -261943,7 +262307,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
-          "line": 51,
+          "line": 47,
           "prop": "soft",
           "scalars": []
         },
@@ -262393,7 +262757,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/kernel/geometry/radius-dial/index.ts",
-          "line": 61,
+          "line": 68,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -276573,7 +276937,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 94,
+          "line": 101,
           "prop": "--ds-shadow-modal",
           "scalars": []
         },
@@ -278043,14 +278407,14 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 98,
+          "line": 105,
           "prop": "--ds-shadow-dropdown",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 99,
+          "line": 106,
           "prop": "--ds-shadow-menu",
           "scalars": []
         },
@@ -278328,21 +278692,21 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 85,
+          "line": 92,
           "prop": "--ds-shadow-card-hover",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 102,
+          "line": 109,
           "prop": "--ds-shadow-popover",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 110,
+          "line": 117,
           "prop": "--ds-shadow-sidebar",
           "scalars": []
         },
@@ -278640,14 +279004,14 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 91,
+          "line": 98,
           "prop": "--ds-shadow-button-active",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 113,
+          "line": 120,
           "prop": "--ds-shadow-input-rest",
           "scalars": []
         },
@@ -278868,28 +279232,28 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 84,
+          "line": 91,
           "prop": "--ds-shadow-card-rest",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 90,
+          "line": 97,
           "prop": "--ds-shadow-button-hover",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 103,
+          "line": 110,
           "prop": "--ds-shadow-tooltip",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 109,
+          "line": 116,
           "prop": "--ds-shadow-navbar",
           "scalars": []
         },
@@ -279248,6 +279612,83 @@
       "readers": [
         {
           "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 21,
+          "prop": "--ds-shadow-3xl",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 25,
+          "prop": "--ds-shadow-inner",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 75,
+          "prop": "--ds-drop-shadow-xs",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 76,
+          "prop": "--ds-drop-shadow-sm",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 77,
+          "prop": "--ds-drop-shadow-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 78,
+          "prop": "--ds-drop-shadow-md",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 79,
+          "prop": "--ds-drop-shadow-lg",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 80,
+          "prop": "--ds-drop-shadow-lg",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 81,
+          "prop": "--ds-drop-shadow-xl",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 82,
+          "prop": "--ds-drop-shadow-xl",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
+          "line": 83,
+          "prop": "--ds-drop-shadow-2xl",
+          "scalars": []
+        },
+        {
+          "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
           "line": 747,
           "prop": "--ds-elevation-1",
@@ -279432,14 +279873,14 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 95,
+          "line": 102,
           "prop": "--ds-shadow-dialog",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 106,
+          "line": 113,
           "prop": "--ds-shadow-drawer",
           "scalars": []
         },
@@ -279540,14 +279981,14 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 86,
+          "line": 93,
           "prop": "--ds-shadow-card-active",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/base/shadows/index.css",
-          "line": 89,
+          "line": 96,
           "prop": "--ds-shadow-button-rest",
           "scalars": []
         },
@@ -310153,7 +310594,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 60,
+          "line": 67,
           "prop": "--ds-color-text-inverse",
           "scalars": []
         },
@@ -316568,7 +317009,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 56,
+          "line": 63,
           "prop": "--ds-color-text-primary",
           "scalars": []
         },
