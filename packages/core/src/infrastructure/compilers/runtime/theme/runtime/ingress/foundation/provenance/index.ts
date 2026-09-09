@@ -303,9 +303,9 @@ function chromeOverrideClaims(
  */
 function withExpansionLeaves(claim: ThemeProvenanceClaim): ThemeProvenanceClaim {
   if (claim.ref.kind !== "decision") return claim;
-  const extra = expansionLeaves(claim.ref.id, claim.authoredValue).filter(
-    (leaf) => !claim.leaves.some((entry) => entry.leaf === leaf)
-  );
+  const extra = expansionEntries(claim.ref.id, claim.authoredValue)
+    .map((entry) => entry.leaf)
+    .filter((leaf) => !claim.leaves.some((entry) => entry.leaf === leaf));
   if (extra.length === 0) return claim;
   return {
     ...claim,
@@ -333,7 +333,11 @@ function splitDerivedClaim(
 ): readonly ThemeProvenanceClaim[] {
   if (claim.ref.kind !== "decision") return [claim];
   const { id } = claim.ref;
-  const authored = claim.authoredValue;
+  const authored: Record<string, unknown> | null = isRecordValue(
+    claim.authoredValue
+  )
+    ? claim.authoredValue
+    : null;
   return claim.leaves.map((leaf) => {
     const member = leaf.leaf.slice(leaf.leaf.lastIndexOf(".") + 1);
     return {
@@ -342,7 +346,7 @@ function splitDerivedClaim(
         path: `decisions[${JSON.stringify(id)}].${member}`,
       },
       provenance: claim.provenance,
-      authoredValue: isRecordValue(authored) ? authored[member] : authored,
+      authoredValue: authored === null ? claim.authoredValue : authored[member],
       leaves: [leaf],
     };
   });
