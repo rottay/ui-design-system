@@ -16,6 +16,8 @@
 import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
+import { TYPOGRAPHY_FAMILY_ROLES } from "@/contracts/theme/foundation/decisions";
+import { THEME_CONTROL_CATALOG } from "@/contracts/theme/runtime/catalog";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import {
   directOverrideEntries,
@@ -28,6 +30,7 @@ import {
   tierIssues,
 } from "../../../facade/foundation/admission";
 import { baselineFor } from "../../../runtime/resolution";
+import { documentProvenanceLedger } from "../foundation/provenance";
 import { admitDocument, documentThemeIntent, previewThemeIntent } from "..";
 
 const SLUG = "provenance-acceptance";
@@ -140,7 +143,54 @@ describe("Control 2 -- explicit Pro families stay refused, by name", () => {
     const pairing = ledger.entries.find(
       (entry) => entry.ref.kind === "decision" && entry.ref.id === "typography.pairing"
     );
-    expect(pairing?.effectiveLeaves).toEqual(["typography.typePairing"]);
+    // 2026-09-09: this pinned `["typography.typePairing"]`, which was the
+    // ledger agreeing with itself rather than with the lowering. A families
+    // record naming only `base` displaces only `fontFamilyBase`; the heading,
+    // the heading letter-spacing and the display line-height are still the
+    // pairing's own expansion (I-P0/I-P3a), and `geometric` tunes no mono.
+    expect(pairing?.effectiveLeaves).toEqual([
+      "typography.typePairing",
+      "typography.fontFamilyHeading",
+      "typography.letterSpacing.heading",
+      "typography.lineHeight.display",
+    ]);
+    expect(ledgerOwnerOfLeaf(ledger, "typography.fontFamilyMono")).toBeUndefined();
+  });
+
+  it("a families record owns the members it NAMES, and no others", () => {
+    const { ledger } = admitDocument({
+      vertical: "bithire",
+      document: {
+        version: 2,
+        plan: "pro",
+        decisions: { "typography.families": { base: "editorial-text" } },
+      } as unknown as TenantThemeDocumentV2,
+    });
+    expect(ledger.entries[0].effectiveLeaves).toEqual([
+      "typography.fontFamilyBase",
+    ]);
+    for (const leaf of [
+      "typography.fontFamilyHeading",
+      "typography.fontFamilyMono",
+      "typography.fontFamilyDisplay",
+    ]) {
+      expect(ledgerOwnerOfLeaf(ledger, leaf)).toBeUndefined();
+    }
+  });
+
+  it("a technical pairing keeps the mono leaf it alone expands into", () => {
+    const { ledger } = admitDocument({
+      vertical: "bithire",
+      document: pairingDocument("technical"),
+    });
+    expect(ledger.entries[0].effectiveLeaves).toEqual([
+      "typography.typePairing",
+      "typography.fontFamilyBase",
+      "typography.fontFamilyHeading",
+      "typography.fontFamilyMono",
+      "typography.letterSpacing.heading",
+      "typography.lineHeight.display",
+    ]);
   });
 
   it("a profile selection creates no typographic authorship (anti-RA01)", () => {
@@ -180,5 +230,39 @@ describe("Control 2 -- explicit Pro families stay refused, by name", () => {
       { kind: "decision", id: "palette.dark-mode" },
     ]);
     expect(tierIssues(ledger, { plan: "standard" })).toHaveLength(1);
+  });
+});
+
+describe("member attribution holds for every braced row of the catalog", () => {
+  /** The record keys a row closes; the registered typography row names roles. */
+  const memberKeysOf = (id: string, domain: (typeof THEME_CONTROL_CATALOG)[number]["domain"]) => {
+    if (domain.kind === "record") return domain.keys;
+    if (domain.kind === "color-set") return domain.roles;
+    return id === "typography.families" ? TYPOGRAPHY_FAMILY_ROLES : null;
+  };
+
+  it("gives each named member exactly its own leaf, and no sibling's", () => {
+    const measured: string[] = [];
+    for (const row of THEME_CONTROL_CATALOG) {
+      if (row.keypath.brandTheme === null || !row.keypath.brandTheme.includes("{")) {
+        continue;
+      }
+      const keys = memberKeysOf(row.id, row.domain);
+      if (keys === null) continue;
+      for (const key of keys) {
+        const { entries } = documentProvenanceLedger({
+          decisions: { [row.id]: { [key]: "x" } },
+          chrome: undefined,
+          chromeTransportPrefix: "overrides.chrome",
+        });
+        // A member the catalog has no keypath for is unlit, not unowned: it
+        // claims nothing rather than claiming the whole brace list.
+        expect(entries[0].effectiveLeaves.length).toBeLessThanOrEqual(1);
+        measured.push(`${row.id}.${key}=${entries[0].effectiveLeaves.length}`);
+      }
+    }
+    expect(measured).toContain("typography.families.mono=1");
+    expect(measured).toContain("profiles.expressive.icon=0");
+    expect(measured.length).toBeGreaterThan(20);
   });
 });

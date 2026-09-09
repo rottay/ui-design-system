@@ -204,4 +204,42 @@ describe("the caps measure AUTHORSHIP, not what the compiler derived from it", (
       ).not.toThrow();
     }
   });
+
+  it("measures a DRAFT's own control radius, which no ledger derived", () => {
+    // The exemption follows the derivation, not the keypath. A draft records no
+    // ledger, so `chrome.controls.buttonGeometry.radius` is what its author
+    // typed -- and typing it is not selecting `shape.button-style`.
+    const draft = draftOf({
+      controls: { buttonGeometry: { radius: "99999px" } },
+    });
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      const error = refusal(() =>
+        compileThemeIntent(draftPreviewThemeIntent({ vertical, slug: SLUG, draft }))
+      );
+      expect(error.issues[0]).toMatchObject({
+        code: "unsafe_value",
+        path: "$.chrome.controls.buttonGeometry.radius",
+      });
+    }
+  });
+
+  it("refuses a document that authors the same radius, at its own path", () => {
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      const error = refusal(() =>
+        compileThemeIntent(
+          documentThemeIntent({
+            vertical,
+            slug: SLUG,
+            document: v2Document({
+              controls: { buttonGeometry: { radius: "99999px" } },
+            }),
+          })
+        )
+      );
+      expect(error.issues[0]).toMatchObject({
+        code: "unsafe_value",
+        path: "$.overrides.chrome.controls.buttonGeometry.radius",
+      });
+    }
+  });
 });

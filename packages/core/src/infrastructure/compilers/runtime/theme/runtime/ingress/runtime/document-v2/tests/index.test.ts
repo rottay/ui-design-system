@@ -327,6 +327,49 @@ describe("migrate v1 -> v2", () => {
     expect(ledger.entries[0].tier).toBe("standard");
   });
 
+  it("keeps the provenance of a v1 row it cannot migrate whole", () => {
+    // The migration refuses this document by name -- a free font stack has no
+    // v2 counterpart. The ingress door still admits it, so the decisions it
+    // DOES express must survive: one inexpressible field is not a licence to
+    // report that the tenant authored nothing.
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        typography: {
+          typePairing: "geometric",
+          fontFamilyBase: "Arial, sans-serif",
+        },
+      },
+    } as unknown as TenantThemeDocument;
+    expect(() => migrateDocumentV1ToV2(document)).toThrow(
+      /general\.typography\.fontFamilyBase/u
+    );
+    const { ledger } = admitDocument({ vertical: "bithire", document });
+    expect(ledger.entries.map((entry) => entry.ref)).toEqual([
+      { kind: "decision", id: "typography.pairing" },
+    ]);
+    expect(ledger.entries[0].tier).toBe("standard");
+  });
+
+  it("keeps the decisions that flank an unmigratable per-mode seed", () => {
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        palette: { backgroundMode: "auto", dark: { primary: "#17415F" } },
+      },
+    } as unknown as TenantThemeDocument;
+    expect(() => migrateDocumentV1ToV2(document)).toThrow(
+      /general\.palette\.dark/u
+    );
+    const { ledger } = admitDocument({ vertical: "bithire", document });
+    expect(ledger.entries.map((entry) => entry.ref)).toEqual([
+      { kind: "decision", id: "palette.dark-mode" },
+    ]);
+    expect(ledger.entries[0].tier).toBe("pro");
+  });
+
   it("carries the raw tokens that ARE a decision", () => {
     const document = {
       schemaVersion: 1,

@@ -138,3 +138,46 @@ describe("the refusal is not achieved by refusing everything", () => {
     );
   });
 });
+
+describe("a PRESENT record is validated, whatever its truthiness", () => {
+  it("refuses null, \"\", false and 0 through both v1 producers", () => {
+    const outcomes: string[] = [];
+    for (const value of [null, "", false, 0]) {
+      for (const [name, produce] of Object.entries(PRODUCERS)) {
+        expect(() =>
+          compileThemeIntent(
+            produce({ vertical: "bithire", slug: SLUG, document: v1(value) })
+          )
+        ).toThrow(ExpressiveAxisDomainError);
+        outcomes.push(`${JSON.stringify(value)}/${name}`);
+      }
+    }
+    expect(outcomes).toHaveLength(8);
+  });
+
+  it("names the authored transport path, not the projected one", () => {
+    try {
+      compileThemeIntent(
+        documentThemeIntent({ vertical: "bithire", slug: SLUG, document: v1(null) })
+      );
+      throw new Error("the door admitted a malformed expressive record");
+    } catch (error) {
+      expect(error).toBeInstanceOf(ExpressiveAxisDomainError);
+      expect((error as ExpressiveAxisDomainError).path).toBe(
+        "$.visualFoundation.advanced.profiles"
+      );
+    }
+  });
+
+  it("still admits an absent record", () => {
+    expect(() =>
+      compileThemeIntent(
+        documentThemeIntent({
+          vertical: "bithire",
+          slug: SLUG,
+          document: v1(undefined),
+        })
+      )
+    ).not.toThrow();
+  });
+});

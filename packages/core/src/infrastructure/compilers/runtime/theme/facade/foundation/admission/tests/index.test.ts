@@ -21,6 +21,7 @@ import {
 import {
   compileThemeIntent,
   documentThemeIntent,
+  draftPreviewThemeIntent,
   previewThemeIntent,
 } from "@/infrastructure/compilers/runtime/theme";
 
@@ -194,7 +195,9 @@ describe("the plan decides what a tenant may activate", () => {
     const intent = documentThemeIntent({
       vertical: VERTICAL,
       slug: SLUG,
-      document: document({ palette: { backgroundMode: "auto" } }),
+      document: document({
+        palette: { backgroundMode: "auto", dark: { primary: "#17415F" } },
+      }),
     });
     expect(intent.entitlement).toBeUndefined();
     expect(() => compileThemeIntent(intent)).not.toThrow();
@@ -279,5 +282,44 @@ describe("the door refuses, and the refusal names what it refused", () => {
         })
       ).not.toThrow();
     }
+  });
+});
+
+describe("the envelope measures AUTHORSHIP, which value equality cannot erase", () => {
+  const ROTTAY = "rottay" as const;
+
+  it("refuses an explicit motion.intensity equal to rottay's own baseline", () => {
+    // Rottay renders at 1.0 and the tenant ceiling is 0.8, so this selection
+    // moves no leaf. It is still a dial the tenant set, and v1 publication has
+    // always refused it (I-P4).
+    for (const doc of [
+      document({ motion: { intensity: 1 } }),
+      {
+        version: 2,
+        plan: "pro",
+        decisions: { "motion.dial": { intensity: 1 } },
+      } as unknown as TenantThemeDocumentV2,
+    ]) {
+      for (const produce of [documentThemeIntent, previewThemeIntent]) {
+        const error = refusal(() =>
+          compileThemeIntent(produce({ vertical: ROTTAY, slug: SLUG, document: doc }))
+        );
+        expect(error.message).toMatch(/motionIntensity/u);
+      }
+    }
+  });
+
+  it("still exempts the inherited value nobody chose", () => {
+    // The same 1.0, carried by rottay's own baseline rather than decided: a
+    // `preset-inherited` leaf answers to no tenant cap (contract 2.1).
+    expect(() =>
+      compileThemeIntent(
+        draftPreviewThemeIntent({
+          vertical: ROTTAY,
+          slug: SLUG,
+          draft: { id: SLUG, name: "Studio draft" } as never,
+        })
+      )
+    ).not.toThrow();
   });
 });

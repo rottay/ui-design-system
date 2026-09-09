@@ -631,9 +631,11 @@ function migrateAdvanced(
   if (advanced.chrome) {
     patches.push({ chrome: advanced.chrome as ThemeLayerPatch["chrome"] });
   }
-  if (advanced.profiles) {
+  if (advanced.profiles !== undefined) {
     // v1 types every axis as an open `string`. Refused by name here, on the
     // authored path, rather than dropped by the paint-path sanitizer later.
+    // PRESENT, not truthy: `null`, `""`, `false` and `0` are malformed records
+    // publication rejects, and a truthiness test dropped all four in silence.
     assertExpressiveOverrides(
       advanced.profiles,
       "$.visualFoundation.advanced.profiles"

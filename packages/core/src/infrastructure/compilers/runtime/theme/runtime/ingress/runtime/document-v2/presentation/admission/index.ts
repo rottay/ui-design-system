@@ -24,17 +24,17 @@ import {
 } from "@/contracts/theme/presentation/document";
 import { assertThemeDecisionDomains } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
 import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/expressive-profiles";
-import {
-  ThemePatchMigrationError,
-  documentThemePatch,
-} from "../../../../foundation/document-patch";
+import { documentThemePatch } from "../../../../foundation/document-patch";
 import {
   documentProvenanceLedger,
   type ThemeProvenanceLedger,
 } from "../../../../foundation/provenance";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { projectDecisionsToV1, type DecisionProjection } from "../../foundation/projection";
-import { migrateDocumentV1ToV2 } from "../../foundation/migrate";
+import {
+  captureV1Decisions,
+  migrateDocumentV1ToV2,
+} from "../../foundation/migrate";
 
 export interface DocumentAdmission {
   /** `1` for the persisted v1 transport, `2` for the decision document. */
@@ -67,9 +67,10 @@ export interface DocumentAdmission {
  * decisions are ITS answer rather than a second v1 -> decision table. Where it
  * cannot express the document -- a v1 that authors a font stack, a raw token
  * override or per-mode seeds is legal v1 and inexpressible v2 -- the document
- * is still admissible here, and the ledger reports the sanctioned chrome
- * authorship it can still name rather than refusing a door that admits it.
- * Only the migration's own named refusal is caught; anything else propagates.
+ * is still admissible here, so the capture is read rather than the migration:
+ * every decision the row DOES express is recorded, and the field that has no
+ * v2 counterpart is named by the migration door, which is the door that
+ * refuses. A v1 row carries no plan and none is invented for it.
  *
  * Chrome is claimed at the V1 transport path, not the migrated `overrides.`
  * one, so a refusal points at what the author actually wrote.
@@ -80,13 +81,12 @@ function v1Ledger(document: TenantThemeDocument): ThemeProvenanceLedger {
       ? document.visualFoundation?.advanced?.chrome
       : undefined;
   const chromeTransportPrefix = "visualFoundation.advanced.chrome";
-  let decisions: Readonly<Record<string, unknown>> = {};
-  try {
-    decisions = migrateDocumentV1ToV2(document).decisions as Record<string, unknown>;
-  } catch (error) {
-    if (!(error instanceof ThemePatchMigrationError)) throw error;
-  }
-  return documentProvenanceLedger({ decisions, chrome, chromeTransportPrefix });
+  const { decisions } = captureV1Decisions(document);
+  return documentProvenanceLedger({
+    decisions: decisions as Record<string, unknown>,
+    chrome,
+    chromeTransportPrefix,
+  });
 }
 
 export function admitDocument(input: {

@@ -43,7 +43,6 @@ import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
-import { DECISION_EXPANSION_LEAVES } from "../../../../../runtime/ingress/foundation/provenance";
 import type { ThemeAdmissionIssue } from "../../foundation/issues";
 
 const ALLOWED_VALUE_FUNCTIONS = new Set([
@@ -401,15 +400,17 @@ function chromeRoots(
  * destinations whose direct editing is restricted" the plan law states. The
  * decision itself was already judged, by domain, envelope and tier.
  *
- * A draft carries no ledger: its chrome IS what its author typed, so every
- * leaf it moved is measured at its own keypath -- except the expansion targets,
- * which a draft states beside the decision that derives them.
+ * The exemption follows the DERIVATION, never the keypath. A transport with no
+ * ledger recorded no derivation, so every leaf it moved is authorship measured
+ * at its own keypath: exempting a keypath merely because some decision COULD
+ * have derived it let a draft author a `99999px` control radius without ever
+ * selecting a button style.
  */
 function authoredAt(
   leaf: string,
   ledger: DecisionProvenanceLedger | undefined
 ): string | null {
-  if (!ledger) return DECISION_EXPANSION_LEAVES.has(leaf) ? null : `$.${leaf}`;
+  if (!ledger) return `$.${leaf}`;
   const owner = ledgerOwnerOfLeaf(ledger, leaf);
   if (!owner) return null;
   return owner.ref.kind === "sanctioned-override" ? `$.${owner.ref.path}` : null;

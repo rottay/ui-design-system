@@ -30,6 +30,10 @@ import type {
   ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { ThemeResolution } from "@/foundation/contracts/composition/tenants/themes/resolved";
+import {
+  directOverrideEntries,
+  type DecisionProvenanceLedger,
+} from "@/foundation/contracts/composition/tenants/themes/provenance";
 import { getTenantThemeVerticalEnvelope } from "@/contracts/theme/runtime/envelopes";
 import { baselineFor } from "../../../runtime/resolution";
 import { movedLeaves } from "./foundation/authorship";
@@ -118,8 +122,15 @@ export function admitThemeIntent(input: {
   // The baseline is RESOLVED, never compiled: these stations run before a
   // single channel is written.
   const baseline = baselineFor(intent.vertical, intent.slug);
-  const leaves = movedLeaves(intent.patch, baseline);
   const ledger = resolution.provenance.ledger;
+  // And what it AUTHORED, which value equality cannot erase (I-P4). A document
+  // carries only what its tenant chose, so a selection whose value happens to
+  // equal the inherited one is still a decision the tenant made: `movedLeaves`
+  // alone let an explicit `motion.intensity: 1` clear a 0.8 ceiling on rottay
+  // because rottay's own baseline is 1. Inherited values stay exempt -- they
+  // are in neither set.
+  const authored = directAuthorshipLeaves(ledger);
+  const leaves = new Set([...movedLeaves(intent.patch, baseline), ...authored]);
   refuse([
     ...tierIssues(ledger, intent.entitlement),
     ...authoredValueIssues(intent.patch, leaves, ledger),
@@ -127,9 +138,23 @@ export function admitThemeIntent(input: {
       resolution.theme,
       leaves,
       getTenantThemeVerticalEnvelope(intent.vertical),
-      baseline
+      baseline,
+      authored
     ),
   ]);
+}
+
+/**
+ * The leaves the tenant's own `direct-override` selections own, every mode
+ * spelling included, read from the ledger rather than re-inferred.
+ */
+function directAuthorshipLeaves(
+  ledger: DecisionProvenanceLedger | undefined
+): ReadonlySet<string> {
+  if (!ledger) return new Set();
+  return new Set(
+    directOverrideEntries(ledger).flatMap((entry) => entry.effectiveLeaves)
+  );
 }
 
 /**
