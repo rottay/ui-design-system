@@ -94,10 +94,6 @@ const POPULATED_WITHDRAWN: readonly RetiredChannel[] = [
     because: "benign: #ffffff under both the tenant seed and the baseline",
   },
   {
-    token: DENSITY_MODE_FACTOR_TOKEN,
-    because: "benign: a `normal` mode rests at the baseline's own factor of 1",
-  },
-  {
     token: "--ds-button-primary-bg",
     because: "benign: a `var(--ds-color-primary)` indirection, not a color",
   },
@@ -131,6 +127,13 @@ const POPULATED_WITHDRAWN: readonly RetiredChannel[] = [
  * literals where an indirection belongs moves a token across the boundary.
  */
 const POPULATED_SEED_DERIVED: Readonly<Record<string, string>> = {
+  // WO-DER-04. `--ds-density-mode-factor` used to sit in POPULATED_WITHDRAWN
+  // as "benign: a `normal` mode rests at the baseline's own factor of 1" --
+  // but the rest WAS the defect: the posture table withheld the identity
+  // factor, so a vertical whose baseline is not normal could not be asked for
+  // normal by any decision. An AUTHORED posture is a statement even at the
+  // identity, so this document's `normal` now reaches the delta.
+  [DENSITY_MODE_FACTOR_TOKEN]: "1",
   "--ds-button-primary-bg-hover": "#00635C",
   "--ds-color-border-focus": "#0F766E",
   "--ds-color-link": "#0F766E",
@@ -568,6 +571,16 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       // ignored".
       "--ds-color-primary-rgb",
       "--ds-color-secondary-rgb",
+      // WO-DER-04. The density posture this document AUTHORS (`normal`) now
+      // reaches the delta at its identity factor, and its `flat` elevation
+      // states the whole 0..6 ladder plus the border weight it implies instead
+      // of levels 1..3 -- so roles 4..6 join `--ds-elevation-1..3`, which the
+      // baseline already matched and `W4_RETIRED` already records.
+      "--ds-density-mode-factor",
+      "--ds-elevation-4",
+      "--ds-elevation-5",
+      "--ds-elevation-6",
+      "--ds-elevation-border-style",
       "--ds-input-border-focus",
       "--ds-input-shadow-focus",
     ]);

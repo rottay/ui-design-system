@@ -38,6 +38,7 @@ import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-the
 import { evntoBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/evnto";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
+import { Z_INDEX_BANDS } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/elevation";
 
 /**
  * Which block of the pre-drain stylesheet a declaration lived in.
@@ -833,7 +834,10 @@ const RESURRECTION: readonly (readonly [string, readonly string[]])[] = [
     ],
   ],
   ["chrome.controls.focusRingColor", ["--ds-focus-ring-color"]],
-  ["chrome.tooltip.zIndex", ["--ds-tooltip-z-index", "--ds-z-index-tooltip"]],
+  // `--ds-z-index-tooltip` is deliberately NOT here: WO-DER-04 made the
+  // stacking scale a derived family, so the band always compiles and this
+  // chrome field only RAISES it. Its fallback is asserted on its own below.
+  ["chrome.tooltip.zIndex", ["--ds-tooltip-z-index"]],
   ["chrome.table.rowFocusShadow", ["--ds-table-row-focus-shadow"]],
   ["chrome.sidebar.width", ["--ds-shell-sidebar-width", "--ds-sidebar-width"]],
   ["chrome.sidebar.collapsedWidth", ["--ds-shell-sidebar-collapsed-width"]],
@@ -858,6 +862,17 @@ describe("BITHIRE EXTENSION DRAIN · the typed owner is the author", () => {
       expect(survivors).toEqual([]);
     }
   );
+
+  it("leaves the tooltip BAND standing when the chrome field that raised it goes", () => {
+    // Two-sided: bithire raises the band to 2700, and removing the field drops
+    // it back to the DS scale rather than to nothing. A band that vanished
+    // would put the tooltip back on a fallback literal, which is the defect
+    // the derived scale exists to close.
+    const { base: raised } = compileWithout("chrome.table.rowFocusShadow");
+    expect(raised["--ds-z-index-tooltip"]).toBe("2700");
+    const { base } = compileWithout("chrome.tooltip.zIndex");
+    expect(base["--ds-z-index-tooltip"]).toBe(String(Z_INDEX_BANDS.tooltip));
+  });
 
   it("deleting the dark info ink removes it from the dark block only", () => {
     const { base, dark } = compileWithout("modes.dark.palette.infoInkColor");

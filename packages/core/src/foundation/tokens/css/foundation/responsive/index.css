@@ -11,6 +11,7 @@
  * has to be imported unlayered rather than from here.
  */
 
+@import "./breakpoints/index.css";
 @import "./avatar/index.css";
 @import "./button/index.css";
 @import "./grid/index.css";

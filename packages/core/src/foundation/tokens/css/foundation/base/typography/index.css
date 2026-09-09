@@ -137,17 +137,11 @@
      SEMANTIC TYPOGRAPHY ROLES
      Product components consume these roles; BrandTheme can override every
      facet without changing component anatomy or application markup.
+
+     The facets themselves are declared once, by themes/default.css, and
+     derived per tenant by the typography family of the theme compiler. This
+     file owns only the shorthand aliases below.
      ======================================================================== */
-
-
-
-
-
-
-
-  --ds-type-code-font-variant-numeric: tabular-nums;
-
-  --ds-type-numeric-font-weight: 600;
 
   /* Dynamic shorthand aliases. They reference the facets instead of copying
      values so a DB tenant can retune one role property without leaving a

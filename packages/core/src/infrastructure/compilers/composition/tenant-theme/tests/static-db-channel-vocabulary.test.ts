@@ -198,6 +198,7 @@ const dbChannels = new Set(Object.keys(dbCompiled.variables));
 const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
   const seeds = compiled.normalizedAppearance.general?.palette ?? {};
   const chrome = compiled.normalizedAppearance.advanced?.chrome ?? {};
+  const general = compiled.normalizedAppearance.general ?? {};
   const variable = (name: string) => compiled.variables[name];
   // The DB palette's seeds are optional on the normalized shape but present in
   // every fixture this mirror is built from; a missing one would silently emit
@@ -231,6 +232,16 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
       warningColor: seed(seeds.status?.warning, "status.warning"),
       errorColor: seed(seeds.status?.error, "status.error"),
       infoColor: seed(seeds.status?.info, "status.info"),
+    },
+    surfaces: {
+      // The two bounded postures the customer document states in `general`.
+      // A BrandTheme spells them on `surfaces`, so naming them here is the
+      // proof the static contract HAS the field -- the same law the palette
+      // seeds above satisfy.
+      ...(general.surfaces?.elevation
+        ? { elevation: general.surfaces.elevation }
+        : {}),
+      ...(general.density ? { density: general.density } : {}),
     },
     chrome: {
       ...chrome,

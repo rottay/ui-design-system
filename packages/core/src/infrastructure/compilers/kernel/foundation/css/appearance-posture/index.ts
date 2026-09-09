@@ -77,6 +77,16 @@ export function buttonStyleRadius(
   return buttonStyle ? BUTTON_STYLE_RADIUS[buttonStyle] : undefined;
 }
 
+/**
+ * The ladder each governed posture states, over all SEVEN roles plus the
+ * border weight it implies.
+ *
+ * It used to state roles 1..3 only, so a theme that asked for a flat product
+ * still got the full derived depth on roles 4..6: three steps of one posture
+ * on top of four of another. A posture is a statement about the whole ladder
+ * or it is not a posture. `soft` is the identity and states nothing, which is
+ * what leaves the derived foundation ramp standing.
+ */
 const ELEVATION_PRESET: Readonly<
   Record<
     NonNullable<AppearancePostureFields["elevation"]>,
@@ -84,15 +94,25 @@ const ELEVATION_PRESET: Readonly<
   >
 > = {
   flat: {
+    "--ds-elevation-0": "none",
     "--ds-elevation-1": "none",
     "--ds-elevation-2": "none",
     "--ds-elevation-3": "0 1px 2px rgba(0,0,0,0.05)",
+    "--ds-elevation-4": "0 1px 3px rgba(0,0,0,0.06)",
+    "--ds-elevation-5": "0 2px 4px rgba(0,0,0,0.07)",
+    "--ds-elevation-6": "0 2px 6px rgba(0,0,0,0.08)",
+    "--ds-elevation-border-style": "solid",
   },
   soft: {},
   elevated: {
+    "--ds-elevation-0": "none",
     "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
     "--ds-elevation-2": "0 4px 8px rgba(0,0,0,0.1)",
     "--ds-elevation-3": "0 8px 16px rgba(0,0,0,0.12)",
+    "--ds-elevation-4": "0 16px 32px rgba(0,0,0,0.14)",
+    "--ds-elevation-5": "0 24px 48px rgba(0,0,0,0.16)",
+    "--ds-elevation-6": "0 32px 64px rgba(0,0,0,0.18)",
+    "--ds-elevation-border-style": "none",
   },
 };
 

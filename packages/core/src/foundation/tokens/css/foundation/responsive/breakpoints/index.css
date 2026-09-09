@@ -1,0 +1,28 @@
+/**
+ * Breakpoint Contract - Rottay Design System
+ *
+ * THE single declaration site of the viewport ladder. The steps mirror
+ * `foundation/contracts/kernel/responsive/breakpoints` (RESPONSIVE_BREAKPOINTS),
+ * which hooks, layout primitives and the theme compiler's `responsive` family
+ * all read; `tests/breakpoint-contract.test.ts` pins the two together so a
+ * sixth breakpoint vocabulary cannot appear beside this one.
+ *
+ * A `@media` prelude cannot read a custom property -- that is a language
+ * constraint, not an omission -- so a threshold that must appear inside a
+ * prelude is written as the literal this file names, and the test is what
+ * makes the literal a projection of the contract rather than a second scale.
+ * Everything that CAN read a token (container padding ladders, JS, the
+ * compiled tenant block) reads `--ds-breakpoint-*`.
+ *
+ * The container ladder a tenant selects (`responsive.posture`) is a separate,
+ * bounded axis and is emitted per tenant on `--ds-posture-*` by the compiler.
+ */
+
+:root {
+  --ds-breakpoint-xs: 0px;
+  --ds-breakpoint-sm: 640px;
+  --ds-breakpoint-md: 768px;
+  --ds-breakpoint-lg: 1024px;
+  --ds-breakpoint-xl: 1280px;
+  --ds-breakpoint-2xl: 1536px;
+}

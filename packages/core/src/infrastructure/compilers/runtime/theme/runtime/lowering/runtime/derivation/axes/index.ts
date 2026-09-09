@@ -7,10 +7,6 @@
  */
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
-import {
-  TENANT_THEME_RHYTHM_FACTORS,
-  TENANT_THEME_RHYTHM_SCALE_BOUNDS,
-} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
@@ -23,6 +19,9 @@ import {
 const FOREIGN_POSTURE_CHANNELS: ReadonlySet<string> = new Set<string>([
   ...TYPE_PAIRING_CHANNELS,
   ...ELEVATION_PRESET_CHANNELS,
+  "--ds-density-mode-factor",
+  "--ds-motion-intensity",
+  "--ds-motion-duration-scale",
 ]);
 
 /** The posture channels this family owns: the table's output minus the two above. */
@@ -58,49 +57,30 @@ export function authoredPosture(bt: BrandTheme): AppearancePostureFields {
 }
 
 /**
- * The three ramp axes plus the rhythm axis, and the bounded posture dials.
+ * The two ramp dials every other family reads, and the button silhouette.
  *
  * A compiled theme keeps the axes explicit in its artifact instead of relying
  * on the consumer-side `var(--ds-*-scale, 1)` fallbacks: a DB tenant artifact
  * emits the same canonical properties, so both sides of the cascade stay
  * observable and comparable without a second app-side theme channel.
  *
- * FAILING CLOSED IS PART OF THE RHYTHM PARITY, not an extra. A `BrandTheme` is
- * typed, but it is plain data by the time it reaches this compiler: it crosses
- * the RSC/JSON boundary and arrives through the compatibility
- * `TenantConfig.brandTheme` field, where no type survives. A bare bracket read
- * of the factor table therefore resolves INHERITED members, and any of them
- * makes `clamp(0.8, var(--ds-rhythm-scale, 1), 1.25)` invalid at
- * computed-value time for every consumer. The DB path rejects all of them at
- * document validation, so an own-property plus numeric guard is what makes the
- * two ingress paths fail closed the same way.
+ * Density, rhythm, elevation and the motion dials are NOT axes of this family
+ * even though the shared posture table computes them here: each is the whole
+ * subject of its own deriver, and a dial emitted beside the family that bends
+ * it is a second owner of that family. They are filtered out above and settle
+ * in `../density`, `../rhythm`, `../elevation` and `../motion`.
  */
 export const axesDeriver: FamilyDeriver = {
   family: "axes",
   rank: "derived",
   consumes: [
-    "surfaces.densityScale",
-    "surfaces.rhythm",
     "surfaces.buttonStyle",
     "surfaces.radiusScale",
-    "surfaces.density",
     "typography.scale",
     "typography.typePairing",
-    "motion.intensity",
-    "motion.durationScale",
-    "motion.ambient",
     "expressive.*",
   ],
-  produces: [
-    "--ds-type-scale",
-    "--ds-radius-scale",
-    "--ds-density-scale",
-    "--ds-rhythm-scale",
-    "--ds-radius-button",
-    "--ds-density-mode-factor",
-    "--ds-motion-intensity",
-    "--ds-motion-duration-scale",
-  ],
+  produces: ["--ds-type-scale", "--ds-radius-scale", "--ds-radius-button"],
   derive: (context) => deriveAxisChannels(context.theme, context.expressive.expansion),
 };
 
@@ -111,29 +91,7 @@ export function deriveAxisChannels(
   const vars: Record<string, string> = {
     "--ds-type-scale": "1",
     "--ds-radius-scale": "1",
-    "--ds-density-scale": String(bt.surfaces?.densityScale ?? 1),
   };
-  const authoredRhythm = bt.surfaces?.rhythm;
-  if (
-    typeof authoredRhythm === "string" &&
-    Object.prototype.hasOwnProperty.call(
-      TENANT_THEME_RHYTHM_FACTORS,
-      authoredRhythm
-    )
-  ) {
-    const rhythmFactor =
-      TENANT_THEME_RHYTHM_FACTORS[
-        authoredRhythm as keyof typeof TENANT_THEME_RHYTHM_FACTORS
-      ];
-    if (typeof rhythmFactor === "number" && Number.isFinite(rhythmFactor)) {
-      vars["--ds-rhythm-scale"] = String(
-        Math.min(
-          TENANT_THEME_RHYTHM_SCALE_BOUNDS.max,
-          Math.max(TENANT_THEME_RHYTHM_SCALE_BOUNDS.min, rhythmFactor)
-        )
-      );
-    }
-  }
   Object.assign(vars, axisPostureVariables(expansion.fieldDefaults));
   Object.assign(vars, axisPostureVariables(authoredPosture(bt)));
   return vars;

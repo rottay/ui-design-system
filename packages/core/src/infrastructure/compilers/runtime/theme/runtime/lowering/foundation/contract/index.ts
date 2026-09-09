@@ -118,11 +118,16 @@ export const TYPE_PAIRING_CHANNELS = [
   "--ds-line-height-display",
 ] as const;
 
-/** The three posture channels the SURFACES family owns (the elevation ladder). */
+/** The posture channels the ELEVATION family owns: seven roles and the edge. */
 export const ELEVATION_PRESET_CHANNELS = [
+  "--ds-elevation-0",
   "--ds-elevation-1",
   "--ds-elevation-2",
   "--ds-elevation-3",
+  "--ds-elevation-4",
+  "--ds-elevation-5",
+  "--ds-elevation-6",
+  "--ds-elevation-border-style",
 ] as const;
 
 /** A read-only view of everything merged at strictly lower ranks. */
