@@ -37,6 +37,9 @@ import type {
 import {
   isFilterGroup,
   generateFilterId,
+  updateFilterGroup,
+  updateFilterRule,
+  removeFilterNode,
 } from '../../runtime/tree';
 import {
   getOperatorsForFieldWithCustom,
@@ -188,65 +191,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     }
   };
 
-  // Immutable recursive tree update: walks from root to find the target group,
-  // spreading at every level so React's reconciler detects the change.
-  const updateGroup = useCallback(
-    (
-      root: FilterGroup,
-      targetId: string,
-      updater: (group: FilterGroup) => FilterGroup
-    ): FilterGroup => {
-      if (root.id === targetId) return updater(root);
-      return {
-        ...root,
-        rules: root.rules.map((rule) => {
-          if (isFilterGroup(rule)) {
-            return updateGroup(rule, targetId, updater);
-          }
-          return rule;
-        }),
-      };
-    },
-    []
-  );
-
-  const updateRule = useCallback(
-    (
-      root: FilterGroup,
-      ruleId: string,
-      updater: (rule: FilterRule) => FilterRule
-    ): FilterGroup => {
-      return {
-        ...root,
-        rules: root.rules.map((rule) => {
-          if (isFilterGroup(rule)) {
-            return updateRule(rule, ruleId, updater);
-          }
-          if (rule.id === ruleId) return updater(rule);
-          return rule;
-        }),
-      };
-    },
-    []
-  );
-
-  const removeNode = useCallback(
-    (root: FilterGroup, nodeId: string): FilterGroup => {
-      return {
-        ...root,
-        rules: root.rules
-          .filter((rule) => rule.id !== nodeId)
-          .map((rule) => {
-            if (isFilterGroup(rule)) {
-              return removeNode(rule, nodeId);
-            }
-            return rule;
-          }),
-      };
-    },
-    []
-  );
-
   // New rules default to the first field and its first valid operator so the
   // row renders with sensible dropdowns pre-selected. Value starts undefined
   // to show the placeholder text in the input.
@@ -258,43 +202,43 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       if (!defaultField) return;
       const ops = getOperatorsForFieldWithCustom(defaultField, customOperators);
       const newRule: FilterRule = {
-        id: generateFilterId(),
+        id: generateFilterId(value),
         field: defaultField.key,
         operator: ops[0]?.key ?? 'equals',
         value: undefined,
       };
       onChange(
-        updateGroup(value, groupId, (group) => ({
+        updateFilterGroup(value, groupId, (group) => ({
           ...group,
           rules: [...group.rules, newRule],
         }))
       );
     },
-    [fields, value, onChange, updateGroup, customOperators]
+    [fields, value, onChange, customOperators]
   );
 
   const handleAddGroup = useCallback(
     (parentGroupId: string) => {
       const newGroup: FilterGroup = {
-        id: generateFilterId(),
+        id: generateFilterId(value),
         logic: 'and',
         rules: [],
       };
       onChange(
-        updateGroup(value, parentGroupId, (group) => ({
+        updateFilterGroup(value, parentGroupId, (group) => ({
           ...group,
           rules: [...group.rules, newGroup],
         }))
       );
     },
-    [value, onChange, updateGroup]
+    [value, onChange]
   );
 
   const handleRemoveNode = useCallback(
     (nodeId: string) => {
-      onChange(removeNode(value, nodeId));
+      onChange(removeFilterNode(value, nodeId));
     },
-    [value, onChange, removeNode]
+    [value, onChange]
   );
 
   // Binary toggle between AND / OR. Nested groups allow users to build
@@ -302,13 +246,13 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
   const handleToggleLogic = useCallback(
     (groupId: string) => {
       onChange(
-        updateGroup(value, groupId, (group) => ({
+        updateFilterGroup(value, groupId, (group) => ({
           ...group,
           logic: group.logic === 'and' ? 'or' : 'and',
         }))
       );
     },
-    [value, onChange, updateGroup]
+    [value, onChange]
   );
 
   // Reset operator and value when the field type changes because the valid
@@ -320,7 +264,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       if (!fieldDef) return;
       const ops = getOperatorsForFieldWithCustom(fieldDef, customOperators);
       onChange(
-        updateRule(value, ruleId, (rule) => ({
+        updateFilterRule(value, ruleId, (rule) => ({
           ...rule,
           field: fieldKey,
           operator: ops[0]?.key ?? 'equals',
@@ -328,7 +272,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         }))
       );
     },
-    [fields, value, onChange, updateRule, customOperators]
+    [fields, value, onChange, customOperators]
   );
 
   // Clear the value when switching to a unary operator (e.g. "is empty")
@@ -337,26 +281,26 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     (ruleId: string, operator: FilterOperator) => {
       const opDef = allOperatorDefs.find((o) => o.key === operator);
       onChange(
-        updateRule(value, ruleId, (rule) => ({
+        updateFilterRule(value, ruleId, (rule) => ({
           ...rule,
           operator,
           value: opDef?.requiresValue ? rule.value : undefined,
         }))
       );
     },
-    [value, onChange, updateRule, allOperatorDefs]
+    [value, onChange, allOperatorDefs]
   );
 
   const handleValueChange = useCallback(
     (ruleId: string, newValue: any) => {
       onChange(
-        updateRule(value, ruleId, (rule) => ({
+        updateFilterRule(value, ruleId, (rule) => ({
           ...rule,
           value: newValue,
         }))
       );
     },
-    [value, onChange, updateRule]
+    [value, onChange]
   );
 
   // One size step for every composed control: compact toolbars read 'sm',

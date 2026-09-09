@@ -8,19 +8,66 @@
 import type { UploadFile, UploadProps } from '../../contracts';
 
 /**
- * A module counter, not a die roll: an upload descriptor is a React list key,
- * and a key that differs between two renders of the same list remounts the row
- * it identifies.
+ * The allocator state, owned by the runtime rather than by one module
+ * instance: `fileList` / `defaultFileList` restore descriptors created in an
+ * earlier session, and a bundle that loads two copies of this module must not
+ * hand the same uid to two different rows.
+ *
+ * It is a counter plus a reservation set, not a die roll: an upload descriptor
+ * is a React list key, and a key that differs between two renders of the same
+ * list remounts the row it identifies.
  */
-let uploadUidSequence = 0;
+interface UploadUidAllocator {
+  sequence: number;
+  reserved: Set<string>;
+}
 
-export function createUploadFile(
+const UPLOAD_UID_ALLOCATOR_KEY = Symbol.for('rottay.design-system.upload.uids');
+
+function getAllocator(): UploadUidAllocator {
+  const host = globalThis as Record<symbol, unknown>;
+  const existing = host[UPLOAD_UID_ALLOCATOR_KEY] as UploadUidAllocator | undefined;
+  if (existing) return existing;
+  const created: UploadUidAllocator = { sequence: 0, reserved: new Set<string>() };
+  host[UPLOAD_UID_ALLOCATOR_KEY] = created;
+  return created;
+}
+
+/**
+ * Reserves the uids of a supplied or restored file list, so a later
+ * {@link createUploadFile} can never reissue one of them.
+ */
+export function reserveUploadUids<T = unknown>(
+  fileList: ReadonlyArray<UploadFile<T>> | null | undefined
+): void {
+  if (!fileList) return;
+  const { reserved } = getAllocator();
+  for (const file of fileList) {
+    if (file && typeof file.uid === 'string' && file.uid) reserved.add(file.uid);
+  }
+}
+
+/**
+ * Creates the internal descriptor for a newly accepted file.
+ *
+ * @param existingFileList - The list the descriptor joins, whose uids are
+ * reserved first so a restored row keeps its own identity.
+ */
+export function createUploadFile<T = unknown>(
   file: File,
-  originalFile: File = file
+  originalFile: File = file,
+  existingFileList?: ReadonlyArray<UploadFile<T>> | null
 ): UploadFile {
-  uploadUidSequence += 1;
+  reserveUploadUids(existingFileList);
+  const allocator = getAllocator();
+  let uid: string;
+  do {
+    allocator.sequence += 1;
+    uid = `upload-${allocator.sequence}`;
+  } while (allocator.reserved.has(uid));
+  allocator.reserved.add(uid);
   return {
-    uid: `upload-${uploadUidSequence}`,
+    uid,
     name: file.name,
     status: 'done',
     size: file.size,
@@ -82,6 +129,8 @@ export async function resolveAcceptedUploadFiles<T = unknown>(
   nextFileList: UploadFile<T>[];
   acceptedFiles: UploadFile<T>[];
 }> {
+  reserveUploadUids(existingFileList);
+
   let nextFileList = [...existingFileList];
   const acceptedFiles: UploadFile<T>[] = [];
 
@@ -104,7 +153,7 @@ export async function resolveAcceptedUploadFiles<T = unknown>(
       }
     }
 
-    const uploadFile = createUploadFile(normalizedFile, file) as UploadFile<T>;
+    const uploadFile = createUploadFile(normalizedFile, file, nextFileList) as UploadFile<T>;
     nextFileList = [...nextFileList, uploadFile];
     acceptedFiles.push(uploadFile);
   }
@@ -118,10 +167,20 @@ export async function resolveAcceptedUploadFiles<T = unknown>(
 /**
  * Mantiene la eliminación de archivos consistente entre engines y centraliza
  * la comparación por `uid`, que es la identidad real del Upload interno.
+ *
+ * Elimina EXACTAMENTE UN descriptor: el mismo objeto si está en la lista, y si
+ * no, el primero que comparta `uid`. Borrar todas las coincidencias hacía que
+ * un archivo restaurado desapareciera junto con el nuevo.
  */
 export function removeUploadFile<T = unknown>(
   fileList: UploadFile<T>[],
   fileToRemove: UploadFile<T>
 ): UploadFile<T>[] {
-  return fileList.filter((file) => file.uid !== fileToRemove.uid);
+  const identityIndex = fileList.indexOf(fileToRemove);
+  const index =
+    identityIndex === -1
+      ? fileList.findIndex((file) => file.uid === fileToRemove.uid)
+      : identityIndex;
+  if (index === -1) return [...fileList];
+  return [...fileList.slice(0, index), ...fileList.slice(index + 1)];
 }
