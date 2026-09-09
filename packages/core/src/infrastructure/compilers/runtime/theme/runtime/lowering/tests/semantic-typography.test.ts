@@ -159,8 +159,19 @@ const FIRST_PARTY = [
 // each entry is expressed on its own facets instead of repeating the same
 // literals. At the default scale of 1 the ramp computes byte-identically --
 // the change is that a tenant's `typography.scale` finally reaches it.
+// ONE-AUTHORITY re-anchor, ROTTAY ONLY: the baseline authored
+// `chrome.table.cellFontSize` as `calc(var(--ds-text-body-size) *
+// var(--ds-type-scale, 1))`, which applied the type dial twice once
+// `--ds-text-body-size` started carrying it. It now reads the channel plain.
+// Measured rather than asserted: the keyset is byte-identical across the edit
+// (227961786ff66844..., 1315 base keys plus the same 3-key mode block on both
+// sides, none added, none removed) and exactly ONE value moved, the
+// `--ds-table-cell-font-size` above; the committed rottay facade artifact
+// diff is that single line. bithire authors the same field over a literal
+// seed, so it applies the dial once and did not move; evnto does not author
+// it. Neither is re-anchored.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "75338511e450d38723c2125c406a76a9c6db6fe000cb4721530b3974eaebbf5b",
+  rottay: "5b7b48792429c1268bf151b2b3a03e5f48353b6e099451f85c4f1a895ddbf323",
   bithire: "67f8a9a2ca7d30aca416179ab806d345d37f3d5e41d4a5df571525ca5870f517",
   evnto: "e706e29bfb0a685cb838addd4227af3aaf30834afe7efe828bcd8afcb421e944",
 };
