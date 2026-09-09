@@ -13,7 +13,7 @@
   <a href="#explore-the-project">Explore</a>
 </p>
 
-![Concept illustration: the same application expressed as editorial and technical tenant identities, using the same neutral palette and shared capabilities.](docs/readme/tenant-identities/index.png)
+![Concept illustration: the same application expressed as editorial and technical tenant identities, using the same neutral palette and shared capabilities.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/tenant-identities/index.png)
 
 > **The destination, not a release announcement.** This README presents the completed
 > product vision. The [roadmap](roadmap/README.md) and [live status](roadmap/STATUS.md)
@@ -125,34 +125,12 @@ similar names. Choosing a softer shape should affect relevant buttons, fields, c
 and overlays in ways that fit each family's anatomy. It should not paste the same
 border radius everywhere or erase the distinction between a radio and a checkbox.
 
-```mermaid
-flowchart TD
-  D["Tenant decision<br/>Softer shape"] --> R["Shared shape rules"]
-  R --> B["Buttons<br/>Control geometry"]
-  R --> I["Fields<br/>Input geometry"]
-  R --> C["Cards<br/>Surface geometry"]
-  R --> O["Overlays<br/>Container geometry"]
-  classDef decision fill:#17212b,color:#f7f4ed,stroke:#64748b
-  classDef family fill:#f7f4ed,color:#24272b,stroke:#a8a29e
-  class D,R decision
-  class B,I,C,O family
-```
+![A softer-shape decision flows through shared rules into appropriate button, field, card and overlay geometry.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/cascade-fanout/index.png)
 
 **One decision, multiple appropriate consequences.** Each family owns how it interprets
 the shared rule. The full path keeps inputs, permissions and output aligned:
 
-```mermaid
-flowchart LR
-  S["Static configuration"] --> A["Validate and resolve<br/>Choices · Permissions · Origin"]
-  T["Stored document or draft"] --> A
-  A --> C["Compile once<br/>Roots · Family derivations"]
-  C --> P["Project and emit<br/>Theme artifact"]
-  P --> M["Mount consistently<br/>Preview · Publish · Hydrate"]
-  classDef shared fill:#17212b,color:#f7f4ed,stroke:#64748b
-  classDef input fill:#f7f4ed,color:#24272b,stroke:#a8a29e
-  class A,C,P,M shared
-  class S,T input
-```
+![Static configuration and tenant documents share validation, resolution, compilation, artifact emission and the preview, publish and hydration mount contract.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/theme-pipeline/index.png)
 
 The responsibilities are explicit:
 
@@ -194,14 +172,7 @@ domain, data access, routes and product-specific content.
 
 ### Four UI tiers, one direction of composition
 
-```mermaid
-flowchart LR
-  P["Primitives<br/>Focused elements"] --> T["Patterns<br/>Reusable tasks"]
-  T --> S["Structures<br/>Page framing"]
-  S --> U["Surfaces<br/>Complete screens"]
-  classDef tier fill:#17212b,color:#f7f4ed,stroke:#64748b
-  class P,T,S,U tier
-```
+![Primitives compose into patterns, structures and surfaces: from focused elements to reusable tasks, page framing and complete screens.](https://raw.githubusercontent.com/rottay/ui-design-system/main/docs/readme/component-tiers/index.png)
 
 | Tier | Responsibility | Examples |
 |---|---|---|

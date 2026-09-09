@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="540" viewBox="0 0 1040 540" role="img" aria-labelledby="title description">
+  <title id="title">Different inputs, one interpretation</title>
+  <desc id="description">Static configuration and a stored tenant document or draft converge on validation and resolution. One compiler derives roots and family channels, then a presentation adapter projects and emits a theme artifact. Preview, publication and hydration share the same mount contract.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10" fill="#b7ad94"/></marker>
+    <style>text { font-family: Arial, Helvetica, sans-serif; text-anchor: middle; }</style>
+  </defs>
+  <rect x="0.5" y="0.5" width="1039" height="539" rx="20" fill="#121a23" stroke="#33404d"/>
+  <text x="520" y="44" fill="#c4b99e" font-size="15" letter-spacing="2">DIFFERENT INPUTS. ONE INTERPRETATION.</text>
+  <g fill="#f7f4ed">
+    <rect x="80" y="72" width="390" height="64" rx="10"/>
+    <rect x="570" y="72" width="390" height="64" rx="10"/>
+  </g>
+  <g font-size="23" fill="#24272b">
+    <text x="275" y="111">Static configuration</text>
+    <text x="765" y="111">Stored document or draft</text>
+  </g>
+  <path d="M275 136 V166 H765 V136 M275 166 H185 V194" fill="none" stroke="#b7ad94" stroke-width="2" marker-end="url(#arrow)"/>
+  <g fill="#222d38" stroke="#64748b">
+    <rect x="30" y="202" width="310" height="108" rx="12"/>
+    <rect x="365" y="202" width="310" height="108" rx="12"/>
+    <rect x="700" y="202" width="310" height="108" rx="12"/>
+  </g>
+  <g fill="none" stroke="#b7ad94" stroke-width="2" marker-end="url(#arrow)">
+    <path d="M340 256 H359"/><path d="M675 256 H694"/>
+  </g>
+  <g fill="#f7f4ed" font-size="24" font-weight="600">
+    <text x="185" y="243">Validate and resolve</text>
+    <text x="520" y="243">Compile once</text>
+    <text x="855" y="243">Project and emit</text>
+  </g>
+  <g fill="#c4cdd6" font-size="17">
+    <text x="185" y="271">Choices · Permissions · Origin</text>
+    <text x="520" y="271">Roots · Family derivations</text>
+    <text x="855" y="271">Theme artifact</text>
+  </g>
+  <path d="M855 310 V347 H520 V379" fill="none" stroke="#b7ad94" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="265" y="387" width="510" height="90" rx="12" fill="#f7f4ed"/>
+  <text x="520" y="423" font-size="25" font-weight="600" fill="#24272b">Mount consistently</text>
+  <text x="520" y="453" font-size="19" fill="#62666d">Preview · Publish · Hydrate</text>
+  <text x="520" y="511" font-size="17" fill="#b4bec8">The transport changes. The meaning of the theme does not.</text>
+</svg>
