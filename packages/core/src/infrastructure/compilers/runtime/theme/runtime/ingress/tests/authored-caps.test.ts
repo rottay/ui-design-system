@@ -15,6 +15,7 @@ import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/docum
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
+import { buttonStyleRadius } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import { getTenantThemeVerticalEnvelope } from "@/contracts/theme/runtime/envelopes";
 import {
   compileTenantThemeConfig,
@@ -206,9 +207,9 @@ describe("the caps measure AUTHORSHIP, not what the compiler derived from it", (
   });
 
   it("measures a DRAFT's own control radius, which no ledger derived", () => {
-    // The exemption follows the derivation, not the keypath. A draft records no
-    // ledger, so `chrome.controls.buttonGeometry.radius` is what its author
-    // typed -- and typing it is not selecting `shape.button-style`.
+    // The exemption follows the derivation, not the keypath. This draft selects
+    // no button style, so its ledger attributes the radius to the override that
+    // wrote it -- and typing a radius is not selecting `shape.button-style`.
     const draft = draftOf({
       controls: { buttonGeometry: { radius: "99999px" } },
     });
@@ -220,6 +221,37 @@ describe("the caps measure AUTHORSHIP, not what the compiler derived from it", (
         code: "unsafe_value",
         path: "$.chrome.controls.buttonGeometry.radius",
       });
+    }
+  });
+
+  it("measures a DRAFT's radius that is not the style word's derivation", () => {
+    // `pill` derives `9999px`. A draft that states `pill` AND a radius the
+    // lowering never writes authored that radius, so the ledger leaves it with
+    // the override and the cap refuses it.
+    const draft = draftOf({
+      controls: { buttonGeometry: { radius: "99999px" } },
+    }) as BrandTheme & { surfaces?: unknown };
+    draft.surfaces = { buttonStyle: "pill" };
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      const error = refusal(() =>
+        compileThemeIntent(draftPreviewThemeIntent({ vertical, slug: SLUG, draft }))
+      );
+      expect(error.issues[0]).toMatchObject({
+        code: "unsafe_value",
+        path: "$.chrome.controls.buttonGeometry.radius",
+      });
+    }
+  });
+
+  it("admits a DRAFT's radius that IS the style word's derivation", () => {
+    const draft = draftOf({
+      controls: { buttonGeometry: { radius: buttonStyleRadius("pill") } },
+    }) as BrandTheme & { surfaces?: unknown };
+    draft.surfaces = { buttonStyle: "pill" };
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      expect(() =>
+        compileThemeIntent(draftPreviewThemeIntent({ vertical, slug: SLUG, draft }))
+      ).not.toThrow();
     }
   });
 

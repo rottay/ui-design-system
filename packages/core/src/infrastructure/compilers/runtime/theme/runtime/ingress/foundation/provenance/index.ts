@@ -1,6 +1,6 @@
 /**
- * @fileoverview Capture what a document AUTHORED, at the gate, before anything
- * projects or expands it.
+ * @fileoverview Capture what a tenant transport AUTHORED, at the gate, before
+ * anything projects or expands it.
  *
  * A decision and the leaves its expansion writes are indistinguishable once the
  * patch exists: `typography.fontFamilyBase` looks the same whether a Pro
@@ -16,10 +16,12 @@
 
 import {
   resolveDecisionProvenanceLedger,
+  type DecisionProvenance,
   type DecisionProvenanceCatalog,
   type DecisionProvenanceClaim,
   type DecisionProvenanceLedger,
 } from "@/foundation/contracts/composition/tenants/themes/provenance";
+import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import {
   THEME_DECISION_IDS,
   THEME_DECISION_TIER_BY_ID,
@@ -127,7 +129,7 @@ function namedLeaves(
     );
     if (matches.length > 1) {
       throw new Error(
-        `documentProvenanceLedger: member "${member}" of "${id}" matches ` +
+        `provenance: member "${member}" of "${id}" matches ` +
           `${matches.map((match) => JSON.stringify(match.leaf)).join(", ")}; ` +
           "a record member owns exactly one keypath"
       );
@@ -149,12 +151,12 @@ function namedLeaves(
  * within the same provenance class (I-P5) while both tiers are still judged
  * separately.
  */
-function expansionLeaves(
+function expansionEntries(
   id: ThemeDecisionId,
   authoredValue: unknown
-): readonly string[] {
+): readonly ExpansionEntry[] {
   if (id === "typography.pairing") {
-    return flattenLeaves(
+    return flattenEntries(
       typePairingToTypography(
         authoredValue as Parameters<typeof typePairingToTypography>[0]
       ),
@@ -162,20 +164,27 @@ function expansionLeaves(
     );
   }
   if (id === "shape.button-style") {
-    return buttonStyleRadius(
+    const radius = buttonStyleRadius(
       authoredValue as Parameters<typeof buttonStyleRadius>[0]
-    ) === undefined
+    );
+    return radius === undefined
       ? []
-      : ["chrome.controls.buttonGeometry.radius"];
+      : [{ leaf: "chrome.controls.buttonGeometry.radius", value: radius }];
   }
   return [];
 }
 
-function flattenLeaves(value: unknown, trail: string): readonly string[] {
+/** One leaf an expansion writes, and the value the lowering writes into it. */
+interface ExpansionEntry {
+  readonly leaf: string;
+  readonly value: unknown;
+}
+
+function flattenEntries(value: unknown, trail: string): readonly ExpansionEntry[] {
   if (value === undefined) return [];
-  if (!isRecordValue(value)) return [trail];
+  if (!isRecordValue(value)) return [{ leaf: trail, value }];
   return Object.entries(value).flatMap(([key, child]) =>
-    flattenLeaves(child, `${trail}.${key}`)
+    flattenEntries(child, `${trail}.${key}`)
   );
 }
 
@@ -184,7 +193,7 @@ function decisionClaim(
   authoredValue: unknown
 ): ThemeProvenanceClaim {
   const named = namedLeaves(id, authoredValue);
-  const derived = expansionLeaves(id, authoredValue);
+  const derived = expansionEntries(id, authoredValue).map((entry) => entry.leaf);
   return {
     ref: { kind: "decision", id },
     provenance: "direct-override",
@@ -208,8 +217,18 @@ function decisionClaim(
  */
 function chromeOverrideClaims(
   chrome: unknown,
-  transportPrefix: string
+  transportPrefix: string,
+  options: {
+    /** The leaf space this subtree occupies, when it is not the base block. */
+    readonly leafPrefix?: string;
+    /** Leaves a decision already owns, which an override may not claim twice. */
+    readonly claimed?: ReadonlySet<string>;
+    /** The class the transport can assert; a document asserts authorship. */
+    readonly provenance?: DecisionProvenance;
+  } = {}
 ): ThemeProvenanceClaim[] {
+  const leafPrefix = options.leafPrefix ?? "chrome";
+  const provenance = options.provenance ?? "direct-override";
   const claims: ThemeProvenanceClaim[] = [];
   const walk = (value: unknown, trail: readonly string[]): void => {
     if (value === undefined) return;
@@ -219,16 +238,16 @@ function chromeOverrideClaims(
     if (trail[trail.length - 1] === "anatomy") return;
     if (value === null || typeof value !== "object" || Array.isArray(value)) {
       if (trail.length === 0) return;
+      const leaf = [leafPrefix, ...trail].join(".");
+      if (options.claimed?.has(leaf)) return;
       claims.push({
         ref: {
           kind: "sanctioned-override",
           path: [transportPrefix, ...trail].join("."),
         },
-        provenance: "direct-override",
+        provenance,
         authoredValue: value,
-        leaves: [
-          { leaf: ["chrome", ...trail].join("."), specificity: "named" },
-        ],
+        leaves: [{ leaf, specificity: "named" }],
       });
       return;
     }
@@ -265,5 +284,139 @@ export function documentProvenanceLedger(input: {
     claims,
     THEME_DECISION_PROVENANCE_CATALOG,
     "documentProvenanceLedger"
+  );
+}
+
+/** Read a BrandTheme leaf addressed by a catalog keypath. */
+function readDraftLeaf(draft: BrandTheme, leaf: string): unknown {
+  let cursor: unknown = draft;
+  for (const key of leaf.split(".")) {
+    if (!isRecordValue(cursor)) return undefined;
+    cursor = cursor[key];
+  }
+  return cursor;
+}
+
+/**
+ * What a draft selected for one decision, read at the keypaths the catalog's
+ * BrandTheme column names. A record decision is reassembled under the catalog's
+ * own member spellings, which is the vocabulary `namedLeaves` matches against.
+ */
+function draftDecisionValue(draft: BrandTheme, id: ThemeDecisionId): unknown {
+  const spellings = NAMED_SPELLINGS.get(id) ?? [];
+  if (spellings.length === 0) return undefined;
+  const braced = spellings.filter((spelling) => spelling.member !== null);
+  if (braced.length === 0) return readDraftLeaf(draft, spellings[0].leaf);
+  const authored: Record<string, unknown> = {};
+  for (const spelling of braced) {
+    const value = readDraftLeaf(draft, spelling.leaf);
+    if (value !== undefined) authored[spelling.member as string] = value;
+  }
+  return Object.keys(authored).length === 0 ? undefined : authored;
+}
+
+function isChromeLeaf(leaf: string): boolean {
+  return leaf.startsWith("chrome.");
+}
+
+/**
+ * What a draft's decision owns IN CHROME, and nothing it merely could own.
+ *
+ * A draft states the decision and its expansion at the same level, so the
+ * expansion is claimed only where the draft's own value IS what the lowering
+ * derives: a `pill` button style beside a `99999px` control radius is two
+ * different things, and reading the second as the first's output would exempt
+ * an authored ceiling breach from the cap that exists to refuse it.
+ */
+function draftChromeClaim(
+  draft: BrandTheme,
+  id: ThemeDecisionId,
+  authoredValue: unknown
+): ThemeProvenanceClaim | null {
+  const named = namedLeaves(id, authoredValue).filter(isChromeLeaf);
+  const derived = expansionEntries(id, authoredValue)
+    .filter(
+      (entry) =>
+        isChromeLeaf(entry.leaf) &&
+        !named.includes(entry.leaf) &&
+        readDraftLeaf(draft, entry.leaf) === entry.value
+    )
+    .map((entry) => entry.leaf);
+  if (named.length === 0 && derived.length === 0) return null;
+  return {
+    ref: { kind: "decision", id },
+    provenance: "direct-override",
+    authoredValue,
+    leaves: [
+      ...named.map((leaf) => ({ leaf, specificity: "named" as const })),
+      ...derived.map((leaf) => ({
+        leaf,
+        specificity: "expansion-derived" as const,
+      })),
+    ],
+  };
+}
+
+/**
+ * What a draft can assert about a chrome value it merely CARRIES: nothing.
+ *
+ * A document states only what its tenant chose, so every leaf in it is
+ * authorship. A draft is the whole theme the studio opened, so a chrome leaf it
+ * carries is the vertical's own until the author moves it -- and `movedLeaves`
+ * is the station that can say which. The claim exists so the leaf has an owner
+ * and a transport path; the class is the one that asserts no authorship.
+ *
+ * A decision is not in the same position: its value answers to a closed domain
+ * and the chrome leaf it reaches is the lowering's own output, never a value the
+ * tenant typed, so it is claimed as the selection it is.
+ */
+const CARRIED = "preset-inherited" as const;
+
+/**
+ * The ledger a BrandTheme draft contributes, over the chrome surface.
+ *
+ * The authoring surfaces edit a whole theme rather than a document, so the one
+ * question this ledger answers is the one the merged patch destroys and the
+ * authored-value caps ask: which selection caused each CHROME leaf. A leaf a
+ * decision caused is that decision's; every other chrome leaf is claimed at its
+ * own path under `CARRIED`, so the caps still measure what the author moved and
+ * still name it, while the vertical's own chrome answers to no customer
+ * ceiling. Nothing outside chrome is claimed: there, moved-ness is the whole
+ * answer.
+ */
+export function draftProvenanceLedger(draft: BrandTheme): ThemeProvenanceLedger {
+  const decisions: ThemeProvenanceClaim[] = [];
+  const claimed = new Set<string>();
+  for (const id of THEME_DECISION_IDS) {
+    const authoredValue = draftDecisionValue(draft, id);
+    if (authoredValue === undefined) continue;
+    const claim = draftChromeClaim(draft, id, authoredValue);
+    if (claim === null) continue;
+    decisions.push(claim);
+    for (const { leaf } of claim.leaves) claimed.add(leaf);
+  }
+  const modes = draft.modes ?? {};
+  const claims: ThemeProvenanceClaim[] = [
+    ...decisions,
+    ...chromeOverrideClaims(draft.chrome, "chrome", {
+      claimed,
+      provenance: CARRIED,
+    }),
+    ...Object.keys(modes).flatMap((mode) =>
+      chromeOverrideClaims(
+        modes[mode as keyof typeof modes]?.chrome,
+        `modes.${mode}.chrome`,
+        {
+          leafPrefix: `modes.${mode}.chrome`,
+          claimed,
+          provenance: CARRIED,
+        }
+      )
+    ),
+  ];
+  return resolveDecisionProvenanceLedger(
+    claims,
+    THEME_DECISION_PROVENANCE_CATALOG,
+    "draftProvenanceLedger"
   );
 }

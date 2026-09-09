@@ -16,6 +16,8 @@
 import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
+import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { buttonStyleRadius } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import { TYPOGRAPHY_FAMILY_ROLES } from "@/contracts/theme/foundation/decisions";
 import { THEME_CONTROL_CATALOG } from "@/contracts/theme/runtime/catalog";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
@@ -30,7 +32,10 @@ import {
   tierIssues,
 } from "../../../facade/foundation/admission";
 import { baselineFor } from "../../../runtime/resolution";
-import { documentProvenanceLedger } from "../foundation/provenance";
+import {
+  documentProvenanceLedger,
+  draftProvenanceLedger,
+} from "../foundation/provenance";
 import { admitDocument, documentThemeIntent, previewThemeIntent } from "..";
 
 const SLUG = "provenance-acceptance";
@@ -264,5 +269,72 @@ describe("member attribution holds for every braced row of the catalog", () => {
     expect(measured).toContain("typography.families.mono=1");
     expect(measured).toContain("profiles.expressive.icon=0");
     expect(measured.length).toBeGreaterThan(20);
+  });
+});
+
+describe("the draft door records the derivation its own transport states twice", () => {
+  const RADIUS_LEAF = "chrome.controls.buttonGeometry.radius";
+
+  const draftOf = (draft: object): BrandTheme =>
+    ({ id: SLUG, name: "Draft provenance", ...draft }) as unknown as BrandTheme;
+
+  const radiusOwner = (draft: BrandTheme) =>
+    ledgerOwnerOfLeaf(draftProvenanceLedger(draft), RADIUS_LEAF)?.ref;
+
+  it("attributes the radius to the style word when the value IS the derivation", () => {
+    expect(
+      radiusOwner(
+        draftOf({
+          surfaces: { buttonStyle: "pill" },
+          chrome: {
+            controls: { buttonGeometry: { radius: buttonStyleRadius("pill") } },
+          },
+        })
+      )
+    ).toEqual({ kind: "decision", id: "shape.button-style" });
+  });
+
+  it("attributes a radius no style word derived to the override that wrote it", () => {
+    expect(
+      radiusOwner(
+        draftOf({ chrome: { controls: { buttonGeometry: { radius: "99999px" } } } })
+      )
+    ).toEqual({ kind: "sanctioned-override", path: RADIUS_LEAF });
+  });
+
+  it("attributes a radius that is not the selected style's derivation to the override", () => {
+    // The guard is the whole mechanism: `pill` beside a radius `pill` does not
+    // produce is authored chrome, and reading it as the decision's own output
+    // would exempt it from the ceiling it breaches.
+    expect(
+      radiusOwner(
+        draftOf({
+          surfaces: { buttonStyle: "pill" },
+          chrome: { controls: { buttonGeometry: { radius: "99999px" } } },
+        })
+      )
+    ).toEqual({ kind: "sanctioned-override", path: RADIUS_LEAF });
+  });
+
+  it("gives a chrome leaf a decision NAMES exactly one owner", () => {
+    const ledger = draftProvenanceLedger(
+      draftOf({ chrome: { sidebar: { tone: "strong" } } })
+    );
+    expect(ledgerOwnerOfLeaf(ledger, "chrome.sidebar.tone")?.ref).toEqual({
+      kind: "decision",
+      id: "navigation.sidebar-tone",
+    });
+  });
+
+  it("claims a mode overlay's chrome at its own transport path", () => {
+    const ledger = draftProvenanceLedger(
+      draftOf({ modes: { dark: { chrome: { cardComponent: { radius: "8px" } } } } })
+    );
+    expect(
+      ledgerOwnerOfLeaf(ledger, "modes.dark.chrome.cardComponent.radius")?.ref
+    ).toEqual({
+      kind: "sanctioned-override",
+      path: "modes.dark.chrome.cardComponent.radius",
+    });
   });
 });
