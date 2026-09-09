@@ -3559,7 +3559,7 @@
   },
   "cascadePresence": {
     "notSeverity": "Presencia, NO severidad. Un canal declarado puede re-derivar y dejar pasar el dial. La severidad esta en `cascadeSeverance`.",
-    "distinctChannelsDeclared": 346,
+    "distinctChannelsDeclared": 352,
     "roots": [
       {
         "root": "--ds-alert-dialog-motion-scale",
@@ -3639,11 +3639,11 @@
       },
       {
         "root": "--ds-color-error",
-        "channelsInCascade": 56,
-        "declaredByAny": 13,
+        "channelsInCascade": 63,
+        "declaredByAny": 15,
         "declaredByAll": 3,
         "byTenant": {
-          "rottay": 12,
+          "rottay": 14,
           "bithire": 5,
           "evnto": 3
         },
@@ -3698,6 +3698,12 @@
             ]
           },
           {
+            "channel": "--ds-input-error-shadow-focus",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
             "channel": "--ds-menu-item-danger-color",
             "tenants": [
               "rottay"
@@ -3711,6 +3717,12 @@
           },
           {
             "channel": "--ds-radio-error-border",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-shadow-focus-ring-error",
             "tenants": [
               "rottay"
             ]
@@ -3737,13 +3749,13 @@
       },
       {
         "root": "--ds-color-primary",
-        "channelsInCascade": 414,
-        "declaredByAny": 228,
-        "declaredByAll": 65,
+        "channelsInCascade": 427,
+        "declaredByAny": 231,
+        "declaredByAll": 67,
         "byTenant": {
-          "rottay": 138,
-          "bithire": 172,
-          "evnto": 67
+          "rottay": 141,
+          "bithire": 174,
+          "evnto": 69
         },
         "channels": [
           {
@@ -4374,6 +4386,14 @@
             ]
           },
           {
+            "channel": "--ds-input-shadow-focus",
+            "tenants": [
+              "rottay",
+              "bithire",
+              "evnto"
+            ]
+          },
+          {
             "channel": "--ds-list-item-bg-hover",
             "tenants": [
               "rottay"
@@ -4571,6 +4591,14 @@
           },
           {
             "channel": "--ds-material-control-shadow-selected",
+            "tenants": [
+              "rottay",
+              "bithire",
+              "evnto"
+            ]
+          },
+          {
+            "channel": "--ds-material-inset-shadow",
             "tenants": [
               "rottay",
               "bithire",
@@ -4894,6 +4922,12 @@
           },
           {
             "channel": "--ds-shadow-focus-ring",
+            "tenants": [
+              "rottay"
+            ]
+          },
+          {
+            "channel": "--ds-shadow-inner",
             "tenants": [
               "rottay"
             ]
@@ -5267,11 +5301,11 @@
       },
       {
         "root": "--ds-color-success",
-        "channelsInCascade": 49,
-        "declaredByAny": 4,
+        "channelsInCascade": 54,
+        "declaredByAny": 5,
         "declaredByAll": 1,
         "byTenant": {
-          "rottay": 2,
+          "rottay": 3,
           "bithire": 3,
           "evnto": 1
         },
@@ -5288,6 +5322,12 @@
             "channel": "--ds-command-home-meter-fill",
             "tenants": [
               "bithire"
+            ]
+          },
+          {
+            "channel": "--ds-input-success-shadow-focus",
+            "tenants": [
+              "rottay"
             ]
           },
           {
@@ -7410,7 +7450,7 @@
     ]
   },
   "cascadeSeverance": {
-    "universe": 1065,
+    "universe": 1090,
     "roots": 38,
     "partition": "declaredInCascade = rootPinned + rootFrozen + severs + reDerives, por tenant",
     "exclusionRule": "Una raiz declarada por el tema queda fuera del reparto severs/reDerives, pero NO fuera de la medicion. Una semilla continua Standard autorada por tenant es rootPinned por autoridad del manifest. Fuera de esa autoridad, piso DERIVADO + al menos un modo sin var() = rootFrozen; piso LITERAL, piso AUSENTE o todos los modos parametricos = rootPinned.",
@@ -7423,14 +7463,14 @@
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 461,
       "channels": 3584,
-      "sha256": "4240e5467d8bf22cda763ffd5f7459e76da4f755e542d87df2b1c87d89a7653f",
+      "sha256": "6b5a79adbe4f2bf4f8565d0f25d660ef997eb94f5f7aad400df736f8fd405d7f",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },
     "perTenant": {
       "rottay": {
-        "declaredInCascade": 215,
-        "severedTotal": 91,
+        "declaredInCascade": 221,
+        "severedTotal": 96,
         "rootPinned": {
           "count": 10,
           "byReason": {
@@ -7717,7 +7757,7 @@
           ]
         },
         "severs": {
-          "count": 73,
+          "count": 78,
           "channels": [
             {
               "channel": "--ds-autocomplete-dropdown-shadow",
@@ -8090,6 +8130,39 @@
               ]
             },
             {
+              "channel": "--ds-input-error-shadow-focus",
+              "values": [
+                "base=0 0 0 2px rgba(239, 68, 68, 0.18)",
+                "overlay-mode=0 0 0 2px rgba(220, 38, 38, 0.14)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-input-shadow-focus",
+              "values": [
+                "base=0 0 0 3px rgba(255, 255, 255, 0.10)",
+                "overlay-mode=0 0 0 3px rgba(10, 10, 10, 0.08)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-input-success-shadow-focus",
+              "values": [
+                "base=0 0 0 2px rgba(34, 197, 94, 0.18)",
+                "overlay-mode=0 0 0 2px rgba(22, 163, 74, 0.14)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-list-item-bg-hover",
               "values": [
                 "base=#222226",
@@ -8314,6 +8387,28 @@
               "values": [
                 "base=0 0 0 3px rgba(255, 255, 255, 0.12)",
                 "overlay-mode=0 0 0 3px rgba(10, 10, 10, 0.10)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-shadow-focus-ring-error",
+              "values": [
+                "base=0 0 0 3px rgba(239, 68, 68, 0.16)",
+                "overlay-mode=0 0 0 3px rgba(220, 38, 38, 0.14)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
+              "channel": "--ds-shadow-inner",
+              "values": [
+                "base=inset 0 2px 4px 0 rgba(0, 0, 0, 0.30)",
+                "overlay-mode=inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)"
               ],
               "severedRoles": [
                 "default-mode",
@@ -8617,12 +8712,12 @@
           ]
         },
         "reDerives": {
-          "count": 129,
+          "count": 130,
           "reachingRoot": 65,
           "reachingLiveRoot": 62,
           "mixedRoleValues": 15,
-          "blockedUpstream": 14,
-          "blockedUpstreamRoles": 14,
+          "blockedUpstream": 15,
+          "blockedUpstreamRoles": 16,
           "channels": [
             {
               "channel": "--ds-button-default-shadow",
@@ -10433,6 +10528,36 @@
               "blockedRoles": [],
               "reachesLiveRoot": false,
               "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-inset-shadow",
+              "reads": [
+                "--ds-shadow-inner"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-inner"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-inner"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
             },
             {
               "channel": "--ds-material-inset-shadow-selected",
@@ -12514,8 +12639,8 @@
         }
       },
       "bithire": {
-        "declaredInCascade": 279,
-        "severedTotal": 150,
+        "declaredInCascade": 281,
+        "severedTotal": 151,
         "rootPinned": {
           "count": 12,
           "byReason": {
@@ -13698,8 +13823,8 @@
           ]
         },
         "partiallySevered": {
-          "count": 70,
-          "roleEdges": 70,
+          "count": 71,
+          "roleEdges": 71,
           "channels": [
             {
               "channel": "--ds-card-bg-hover",
@@ -13831,6 +13956,12 @@
               "channel": "--ds-input-loading-color",
               "severedRoles": [
                 "default-mode"
+              ]
+            },
+            {
+              "channel": "--ds-input-shadow-focus",
+              "severedRoles": [
+                "overlay-mode"
               ]
             },
             {
@@ -14124,12 +14255,12 @@
           ]
         },
         "reDerives": {
-          "count": 187,
+          "count": 189,
           "reachingRoot": 111,
           "reachingLiveRoot": 111,
-          "mixedRoleValues": 70,
-          "blockedUpstream": 6,
-          "blockedUpstreamRoles": 7,
+          "mixedRoleValues": 71,
+          "blockedUpstream": 7,
+          "blockedUpstreamRoles": 8,
           "channels": [
             {
               "channel": "--ds-badge-font-family",
@@ -16237,6 +16368,31 @@
               "blockedUpstream": false
             },
             {
+              "channel": "--ds-input-shadow-focus",
+              "reads": [
+                "--ds-material-control-focus-ring"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-material-control-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [
+                "overlay-mode"
+              ],
+              "reachesRoot": false,
+              "mixed": true,
+              "liveRootRoles": [],
+              "blockedRoles": [
+                "default-mode"
+              ],
+              "reachesLiveRoot": false,
+              "blockedUpstream": true
+            },
+            {
               "channel": "--ds-listing-grid-card-border",
               "reads": [
                 "--ds-color-border"
@@ -16871,6 +17027,33 @@
               ],
               "blockedRoles": [],
               "reachesLiveRoot": true,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-inset-shadow",
+              "reads": [
+                "--ds-shadow-inner"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-inner"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-inner"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
               "blockedUpstream": false
             },
             {
@@ -19442,8 +19625,8 @@
         }
       },
       "evnto": {
-        "declaredInCascade": 109,
-        "severedTotal": 18,
+        "declaredInCascade": 111,
+        "severedTotal": 19,
         "rootPinned": {
           "count": 10,
           "byReason": {
@@ -19686,7 +19869,7 @@
           ]
         },
         "severs": {
-          "count": 15,
+          "count": 16,
           "channels": [
             {
               "channel": "--ds-button-default-bg-hover",
@@ -19804,6 +19987,16 @@
               ]
             },
             {
+              "channel": "--ds-input-shadow-focus",
+              "values": [
+                "base=0 0 0 1px rgba(23, 23, 23, 0.2)"
+              ],
+              "severedRoles": [
+                "default-mode",
+                "overlay-mode"
+              ]
+            },
+            {
               "channel": "--ds-shadow-lg",
               "values": [
                 "base=0 8px 24px rgba(0, 0, 0, 0.08)"
@@ -19858,7 +20051,7 @@
           ]
         },
         "reDerives": {
-          "count": 82,
+          "count": 83,
           "reachingRoot": 49,
           "reachingLiveRoot": 49,
           "mixedRoleValues": 1,
@@ -20677,6 +20870,33 @@
                   "role": "overlay-mode",
                   "reads": [
                     "--ds-material-control-focus-ring"
+                  ]
+                }
+              ],
+              "severedRoles": [],
+              "reachesRoot": false,
+              "mixed": false,
+              "liveRootRoles": [],
+              "blockedRoles": [],
+              "reachesLiveRoot": false,
+              "blockedUpstream": false
+            },
+            {
+              "channel": "--ds-material-inset-shadow",
+              "reads": [
+                "--ds-shadow-inner"
+              ],
+              "readsByRole": [
+                {
+                  "role": "default-mode",
+                  "reads": [
+                    "--ds-shadow-inner"
+                  ]
+                },
+                {
+                  "role": "overlay-mode",
+                  "reads": [
+                    "--ds-shadow-inner"
                   ]
                 }
               ],
