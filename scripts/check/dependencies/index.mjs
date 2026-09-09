@@ -494,11 +494,14 @@ function createRuntimeAnalysisProgram(
 export const SLOT_WITNESS_SCOPE =
   'syntactic bindings plus enumerated invocation channels: the container is followed through every binding this '
   + 'walk can see (declaration, default, assignment, destructuring, iteration head, collection member, extraction) '
-  + 'and through four invocations that bind without one (`call`/`apply`/`bind` parameters and `this`, a generator '
-  + '`next(value)` resume, a `then`/`catch` callback parameter, and `arguments` at any call site it resolves). It is '
-  + 'not interprocedural dataflow: a container handed to a callee this file cannot resolve -- an import, a method '
-  + 'read off a value, a callback stored where the walk cannot follow -- reaches that body unseen. So the admission '
-  + 'proves the intrinsic is untouched along those channels, not that nothing reachable can touch it.';
+  + 'and through six invocations that bind without one, which are the whole enumeration -- `call`/`apply`/`bind` '
+  + 'parameters and `this`, a generator `next(value)` resume, a `then`/`catch` callback parameter, the parameters '
+  + 'and `arguments` of any call site it resolves, a tagged template substitution handed to the tag, and '
+  + 'construction through `new` or `super` handed to the constructor a class or its base declares. It is not '
+  + 'interprocedural dataflow: every one of those channels resolves its callee inside this file, so the escape is '
+  + 'the unresolvable callee -- a container handed to an import, to a method read off a value, or to a callback '
+  + 'stored where the walk cannot follow reaches that body unseen. So the admission proves the intrinsic is '
+  + 'untouched along those channels, not that nothing reachable can touch it.';
 
 /**
  * Classify runtime module edges with TypeScript binding identities. Alias
@@ -549,6 +552,7 @@ export function analyzeRuntimeModuleEdges(
   const globalFactoryNodes = new Set();
   const globalFactoryAssignments = [];
   const localFunctionBindings = new Map();
+  const localClassBindings = new Map();
   const parameterSafetyCache = new WeakMap();
   const loaderNames = new Set(['require', 'module', 'createRequire', 'eval', 'Function', 'process']);
   const toolingModuleSpecifiers = new Set(['module', 'node:module']);
@@ -744,20 +748,25 @@ export function analyzeRuntimeModuleEdges(
   }
 
   // A container also arrives without a binding this walk can see, delivered by
-  // the invocation itself: `fn.call/apply/bind` hand it to a parameter and to
-  // `this`, `generator.next(value)` hands it to whatever a `yield` resumes into,
-  // `promise.then/catch` hand it to a callback parameter, and every resolved
-  // call site hands its arguments to `arguments`. Those receivers have no
-  // symbol, so each is given a token the same fixpoint resolves, and a poison
-  // written through one withdraws the admission exactly as a named alias does.
+  // the invocation itself, and these six forms are the whole enumeration:
+  // `fn.call/apply/bind` hand it to a parameter and to `this`,
+  // `generator.next(value)` hands it to whatever a `yield` resumes into,
+  // `promise.then/catch` hand it to a callback parameter, every resolved call
+  // site hands its arguments to the callee's parameters and to `arguments`, a
+  // tagged template hands each substitution to the tag after the strings array,
+  // and `new C()` or `super()` hands its arguments to the constructor the class
+  // or its base declares. Those receivers have no symbol, so each is given a
+  // token the same fixpoint resolves, and a poison written through one
+  // withdraws the admission exactly as a named alias does.
   //
-  // Those channels are also the boundary of the whole witness, and therefore of
+  // Those six channels are the boundary of the whole witness, and therefore of
   // what an admitted file may be read to prove. The container is followed
   // through the bindings this walk sees and through the invocations above; this
-  // is not interprocedural dataflow. A container handed to a callee the file
-  // cannot resolve -- an import, a method read off a value, a callback stored
-  // where the walk cannot follow -- reaches that body unseen. So the admission
-  // proves the intrinsic is untouched along those channels, not that nothing
+  // is not interprocedural dataflow. Every channel resolves its callee inside
+  // this file, so the escape is the unresolvable callee: a container handed to
+  // an import, to a method read off a value, or to a callback stored where the
+  // walk cannot follow reaches that body unseen. So the admission proves the
+  // intrinsic is untouched along those channels, not that nothing
   // reachable can touch it.
   const thisReceivers = new Map();
   const argumentReceivers = new Map();
@@ -823,6 +832,7 @@ export function analyzeRuntimeModuleEdges(
     const extractions = [];
     const memberStores = [];
     const invocations = [];
+    const constructions = [];
     const generators = [];
     const deliveries = [];
     const callables = new Map();
@@ -963,19 +973,54 @@ export function analyzeRuntimeModuleEdges(
         )));
         invocations.push(node);
       }
+      if (ts.isNewExpression(node) || ts.isTaggedTemplateExpression(node)) {
+        constructions.push(node);
+      }
       if (localFunction(node) && node.asteriskToken) generators.push(node);
       ts.forEachChild(node, collect);
     }
     collect(sourceFile);
+    function baseClassExpression(declaration) {
+      for (const clause of declaration.heritageClauses ?? []) {
+        if (clause.token === ts.SyntaxKind.ExtendsKeyword && clause.types.length > 0) {
+          return clause.types[0].expression;
+        }
+      }
+      return null;
+    }
+    function inheritedConstruction(node) {
+      for (let current = node.parent; current; current = current.parent) {
+        if (ts.isClassLike(current)) return baseClassExpression(current);
+      }
+      return null;
+    }
+    function constructorOf(declaration, reached) {
+      for (const member of declaration.members) {
+        if (ts.isConstructorDeclaration(member) && member.body) return { fn: member, offset: 0 };
+      }
+      return callableOf(baseClassExpression(declaration), reached);
+    }
+    function templateSubstitutions(template) {
+      return ts.isTemplateExpression(template)
+        ? template.templateSpans.map((span) => span.expression)
+        : [];
+    }
     function callableOf(expression, reached = new Set()) {
       const current = expression ? unwrapRuntimeExpression(expression) : null;
       if (!current || reached.has(current)) return null;
       reached.add(current);
       if (localFunction(current)) return { fn: current, offset: 0 };
+      if (ts.isClassLike(current)) return constructorOf(current, reached);
+      if (current.kind === ts.SyntaxKind.SuperKeyword) {
+        return callableOf(inheritedConstruction(current), reached);
+      }
       if (ts.isIdentifier(current)) {
         const symbol = symbolAt(current);
         const declared = localFunctionBindings.get(symbol);
-        return declared ? { fn: declared, offset: 0 } : callables.get(symbol) ?? null;
+        if (declared) return { fn: declared, offset: 0 };
+        const constructed = localClassBindings.get(symbol);
+        if (constructed) return constructorOf(constructed, reached);
+        return callables.get(symbol) ?? null;
       }
       if (!ts.isCallExpression(current)) return null;
       const callee = unwrapRuntimeExpression(current.expression);
@@ -1092,6 +1137,16 @@ export function analyzeRuntimeModuleEdges(
       }
       const target = callableOf(invocation.expression);
       if (!target) continue;
+      deliverPositional(target, passed);
+      deliverArguments(target, passed);
+    }
+    for (const construction of constructions) {
+      const tagged = ts.isTaggedTemplateExpression(construction);
+      const target = callableOf(tagged ? construction.tag : construction.expression);
+      if (!target) continue;
+      const passed = tagged
+        ? [null, ...templateSubstitutions(construction.template)]
+        : [...(construction.arguments ?? [])];
       deliverPositional(target, passed);
       deliverArguments(target, passed);
     }
@@ -1558,6 +1613,10 @@ export function analyzeRuntimeModuleEdges(
       const symbol = symbolAt(node.name);
       globalFactoryAssignments.push({ node, symbol });
       if (symbol) localFunctionBindings.set(symbol, node);
+    }
+    if (ts.isClassDeclaration(node) && node.name) {
+      const symbol = symbolAt(node.name);
+      if (symbol) localClassBindings.set(symbol, node);
     }
     if (
       ts.isImportDeclaration(node) && ts.isStringLiteralLike(node.moduleSpecifier) &&

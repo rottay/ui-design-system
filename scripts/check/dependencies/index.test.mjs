@@ -968,6 +968,7 @@ test('an invocation-delivered container is a container root for the slot witness
   const typescript = requireFromCore('typescript');
   const slot = "globalThis[Symbol.for('rottay.slot')]('node:fs');";
   const poison = "function p(x) { x.Symbol.for = () => 'require'; }";
+  const tagPoison = "function t(s, x) { x.Symbol.for = () => 'require'; }";
   const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-invocation-root-'));
   try {
     mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
@@ -1009,6 +1010,26 @@ test('an invocation-delivered container is a container root for the slot witness
   ['compose-this-into-resume', "function* g() { const c = yield 0; c.Symbol.for = () => 'require'; } function feed() { const it = g(); it.next(); it.next(this); } feed.call(self);"],
   ['compose-settled-into-call', `${poison} Promise.resolve(self).then((x) => { p.call(null, x); });`],
   ['compose-arguments-into-apply', `${poison} function relay() { p.apply(null, [arguments[0]]); } relay(self);`],
+  ['tagged-substitution', `${tagPoison} t\`\${self}\`;`],
+  ['tagged-substitution-alias', `${tagPoison} const q = t; q\`\${self}\`;`],
+  ['tagged-substitution-bound', `${tagPoison} const q = t.bind(null); q\`\${self}\`;`],
+  ['tagged-substitution-arrow', "const t = (s, x) => { x.Symbol.for = () => 'require'; }; t`${self}`;"],
+  ['tagged-substitution-later', "function t(s, a, b) { b.Symbol.for = () => 'require'; } t`${0}${self}`;"],
+  ['tagged-substitution-arguments', "function t() { const x = arguments[1]; x.Symbol.for = () => 'require'; } t`${self}`;"],
+  ['tagged-chain', `${tagPoison} function relay(s, x) { t\`\${x}\`; } relay\`\${self}\`;`],
+  ['compose-tagged-into-call', `${poison} function t(s, x) { p.call(null, x); } t\`\${self}\`;`],
+  ['construct-function', `${poison} new p(self);`],
+  ['construct-class', "class C { constructor(x) { x.Symbol.for = () => 'require'; } } new C(self);"],
+  ['construct-class-expression', "const C = class { constructor(x) { x.Symbol.for = () => 'require'; } }; new C(self);"],
+  ['construct-second-argument', "class C { constructor(a, b) { b.Symbol.for = () => 'require'; } } new C(0, self);"],
+  ['construct-destructured', "class C { constructor([x]) { x.Symbol.for = () => 'require'; } } new C([self]);"],
+  ['construct-arguments', "class C { constructor() { const x = arguments[0]; x.Symbol.for = () => 'require'; } } new C(self);"],
+  ['construct-bound', `${poison} const Q = p.bind(null, self); new Q();`],
+  ['construct-super', "class B { constructor(x) { x.Symbol.for = () => 'require'; } } class D extends B { constructor(x) { super(x); } } new D(self);"],
+  ['construct-super-implicit', "class B { constructor(x) { x.Symbol.for = () => 'require'; } } class D extends B {} new D(self);"],
+  ['construct-subclass-own-body', "class B { constructor(x) { void x; } } class D extends B { constructor(x) { super(x); x.Symbol.for = () => 'require'; } } new D(self);"],
+  ['compose-construct-into-call', `${poison} class C { constructor(x) { p.call(null, x); } } new C(self);`],
+  ['compose-construct-into-tagged', `${tagPoison} class C { constructor(x) { t\`\${x}\`; } } new C(self);`],
     ]) {
       const source = `${body} ${slot}`;
       for (const extension of ['ts', 'mjs']) {
@@ -1045,6 +1066,15 @@ test('an invocation-delivered container is a container root for the slot witness
   ['call-expando', "function p(c) { c.marker = 1; } p.call(null, self); void globalThis[Symbol.for('rottay.slot')];"],
   ['then-slot-store', "Promise.resolve(seed).then((x) => { self[Symbol.for('rottay.slot')] = x; }); void globalThis[Symbol.for('rottay.slot')];"],
   ['call-well-known-read', "function p(c) { const iterate = c.Symbol.iterator; void iterate; } p.call(null, self); void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-tagged', "function t(s, x) { void x.length; } t`${label}`; void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-tagged-static', "function t(s) { void s.length; } t`static`; void globalThis[Symbol.for('rottay.slot')];"],
+  ['tagged-strings-arm', "function t(s) { s.Symbol.for = () => 'require'; } t`${self}`; void globalThis[Symbol.for('rottay.slot')];"],
+  ['tagged-unresolved-tag', "gql`${self}`; void globalThis[Symbol.for('rottay.slot')];"],
+  ['tagged-expando', "function t(s, c) { c.marker = 1; } t`${self}`; void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-construct', "class C { constructor(x) { void x.length; } } new C(label); void globalThis[Symbol.for('rottay.slot')];"],
+  ['construct-unrelated', "class C { constructor(x) { x.Symbol.for = () => 'require'; } } new C(label); void globalThis[Symbol.for('rottay.slot')];"],
+  ['construct-unresolved', "new Foreign(self); void globalThis[Symbol.for('rottay.slot')];"],
+  ['construct-expando', "class C { constructor(c) { c.marker = 1; } } new C(self); void globalThis[Symbol.for('rottay.slot')];"],
     ]) {
       for (const extension of ['ts', 'mjs']) {
         for (const enforceComputedCapabilities of [true, false]) {
@@ -1073,17 +1103,35 @@ test('an invocation-delivered container is a container root for the slot witness
 
 test('the slot witness states the boundary of what it proves', () => {
   assert.match(SLOT_WITNESS_SCOPE, /syntactic bindings plus enumerated invocation channels/);
-  for (const channel of ['`call`/`apply`/`bind`', '`next(value)` resume', '`then`/`catch`', '`arguments`']) {
+  assert.match(SLOT_WITNESS_SCOPE, /six invocations that bind without one, which are the whole enumeration/);
+  for (const channel of [
+    '`call`/`apply`/`bind`',
+    '`next(value)` resume',
+    '`then`/`catch`',
+    '`arguments`',
+    'a tagged template substitution handed to the tag',
+    'construction through `new` or `super`',
+  ]) {
     assert.ok(SLOT_WITNESS_SCOPE.includes(channel), channel);
   }
   assert.match(SLOT_WITNESS_SCOPE, /not interprocedural dataflow/);
+  assert.match(SLOT_WITNESS_SCOPE, /the escape is the unresolvable callee/);
   assert.match(SLOT_WITNESS_SCOPE, /not that nothing reachable can touch it/);
-  const stated = 'not that nothing\n  // reachable can touch it.';
+  const doctrineText = [
+    'the invocation itself, and these six forms are the whole enumeration:',
+    "site hands its arguments to the callee's parameters and to `arguments`, a",
+    'tagged template hands each substitution to the tag after the strings array,',
+    'and `new C()` or `super()` hands its arguments to the constructor the class',
+    'Those six channels are the boundary of the whole witness',
+    'this file, so the escape is the unresolvable callee: a container handed to',
+    'not that nothing\n  // reachable can touch it.',
+  ];
   for (const witness of [
     resolve(repositoryRoot, 'scripts/check/dependencies/index.mjs'),
     resolve(coreRoot, 'src/entrypoints/suppliers/cli/index.mjs'),
   ]) {
-    assert.ok(readFileSync(witness, 'utf8').includes(stated), witness);
+    const doctrine = readFileSync(witness, 'utf8');
+    for (const stated of doctrineText) assert.ok(doctrine.includes(stated), `${witness}: ${stated}`);
   }
 });
 
