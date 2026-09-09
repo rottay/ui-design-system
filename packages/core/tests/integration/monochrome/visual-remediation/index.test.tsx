@@ -56,19 +56,97 @@ const SECTION_FRAME_CSS = skinCss("section-frame.css");
 const TERMINAL_BLOCK_CSS = skinCss("terminal-block.css");
 const TREE_VIEW_CSS = skinCss("tree-view-connector.css");
 
-/** Resolves through the ramp stylesheet, following aliases, so the contrast math below cannot
- *  drift from the source of truth the way a hand-copied hex table would. Takes a FULL channel
- *  name because the ramp's steps and its semantic anchors no longer share one prefix. */
+/** The two anchors the ramp derives FROM live with the rest of the palette, not in the ramp
+ *  file, so the resolver follows them there instead of restating their values. */
+const THEME_CSS = readFileSync(
+  join(SOURCE_ROOT, "foundation/tokens/css/foundation/themes/default/index.css"),
+  "utf8",
+);
+
+/** sRGB hex to CIE L*a*b* (D65) and back. The ramp mixes `in lab`, so the resolver interpolates
+ *  where the browser does; mixing the sRGB bytes instead would report a ramp nothing paints. */
+function hexToLab(hex: string): [number, number, number] {
+  const linear = hexToRgbTuple(hex).map((c) => {
+    const srgb = c / 255;
+    return srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
+  }) as [number, number, number];
+  const [r, g, b] = linear;
+  const xyz = [
+    (0.4124564 * r + 0.3575761 * g + 0.1804375 * b) / 0.95047,
+    0.2126729 * r + 0.7151522 * g + 0.072175 * b,
+    (0.0193339 * r + 0.119192 * g + 0.9503041 * b) / 1.08883,
+  ];
+  const [fx, fy, fz] = xyz.map((t) =>
+    t > 216 / 24389 ? Math.cbrt(t) : ((24389 / 27) * t + 16) / 116,
+  ) as [number, number, number];
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+}
+
+function labToHex(lab: [number, number, number]): string {
+  const [lightness, aStar, bStar] = lab;
+  const fy = (lightness + 16) / 116;
+  const fx = fy + aStar / 500;
+  const fz = fy - bStar / 200;
+  const inverse = (t: number) => (t ** 3 > 216 / 24389 ? t ** 3 : (116 * t - 16) * (27 / 24389));
+  const [x, y, z] = [inverse(fx) * 0.95047, inverse(fy), inverse(fz) * 1.08883];
+  const bytes = [
+    3.2404542 * x - 1.5371385 * y - 0.4985314 * z,
+    -0.969266 * x + 1.8760108 * y + 0.041556 * z,
+    0.0556434 * x - 0.2040259 * y + 1.0572252 * z,
+  ].map((channel) => {
+    const clamped = Math.min(1, Math.max(0, channel));
+    const encoded = clamped <= 0.0031308 ? clamped * 12.92 : 1.055 * clamped ** (1 / 2.4) - 0.055;
+    return Math.round(encoded * 255);
+  });
+  return `#${bytes.map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+}
+
+const LAB_MIX = /color-mix\(in lab,\s*var\((--ds-[a-z0-9-]+)\)\s*([\d.]+)%,\s*var\((--ds-[a-z0-9-]+)\)\)/;
+
+/** Resolves through the ramp stylesheet, following aliases AND the `color-mix(in lab, …)`
+ *  derivation, so the contrast math below cannot drift from the source of truth the way a
+ *  hand-copied hex table would. Takes a FULL channel name because the ramp's steps and its
+ *  semantic anchors no longer share one prefix. */
 function rampHex(channel: string): string {
-  const literal = RAMP_CSS.match(new RegExp(`${channel}:\\s*(#[0-9a-fA-F]{6})`));
-  if (literal) return literal[1]!;
-  const alias = RAMP_CSS.match(new RegExp(`${channel}:\\s*var\\((--ds-[a-z0-9-]+)\\)`));
-  if (alias) return rampHex(alias[1]!);
+  for (const source of [RAMP_CSS, THEME_CSS]) {
+    const literal = source.match(new RegExp(`${channel}:\\s*(#[0-9a-fA-F]{6})`));
+    if (literal) return literal[1]!;
+    const alias = source.match(new RegExp(`${channel}:\\s*var\\((--ds-[a-z0-9-]+)\\)`));
+    if (alias) return rampHex(alias[1]!);
+    const mix = source.match(new RegExp(`${channel}:\\s*${LAB_MIX.source}`));
+    if (mix) return mixLabHex(mix[1]!, Number(mix[2]), mix[3]!);
+  }
   throw new Error(`ramp token ${channel} not found (or not resolvable) in foundation/monochrome/index.css`);
+}
+
+function mixLabHex(fromChannel: string, percent: number, toChannel: string): string {
+  const weight = percent / 100;
+  const from = hexToLab(rampHex(fromChannel));
+  const to = hexToLab(rampHex(toChannel));
+  return labToHex(
+    [0, 1, 2].map((i) => from[i]! * weight + to[i]! * (1 - weight)) as [number, number, number],
+  );
 }
 
 const INK = rampHex("--ds-color-surface-ink");
 const PAPER = rampHex("--ds-color-surface-paper");
+
+/**
+ * The ramp sheet with its `color-mix(in lab, …)` steps EVALUATED, for the live-cascade proofs.
+ *
+ * The steps derive from two anchors the palette owns, and this CSSOM implements neither
+ * `color-mix()` nor the cross-sheet anchor lookup: the whole chain resolves to the empty string,
+ * which would turn a cascade proof into a proof that happy-dom lacks a colour engine. The
+ * substitution is per DECLARATION and the values come from `rampHex`, i.e. from the same source
+ * of truth the contrast math reads, so nothing is hand-copied and every OTHER rule in the sheet
+ * -- the `.ds-mono-surface` re-keys these tests actually exercise -- is injected verbatim.
+ */
+const RESOLVED_RAMP_CSS = `:root {\n${["--ds-color-black", "--ds-color-white"]
+  .map((channel) => `  ${channel}: ${rampHex(channel)};`)
+  .join("\n")}\n}\n${RAMP_CSS.replace(
+  new RegExp(`(--ds-color-[a-z0-9-]+):\\s*${LAB_MIX.source}`, "g"),
+  (_match, channel: string) => `${channel}: ${rampHex(channel)}`,
+)}`;
 
 /** Any reference that resolves INTO the ramp: a numeric step, a semantic anchor, or the
  *  surface pair the same rule seats from one. Written as a source fragment because several
@@ -103,6 +181,11 @@ function parseRgb(value: string): [number, number, number] | null {
   if (hexMatch) return hexToRgbTuple(`#${hexMatch[1]}`);
   const rgbMatch = value.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
   if (rgbMatch) return [Number(rgbMatch[1]), Number(rgbMatch[2]), Number(rgbMatch[3])];
+  // The ramp's interior steps are authored as a lab mix over the two anchors, and this CSSOM
+  // hands the resolved chain back verbatim; evaluating it here keeps the assertion a colour
+  // comparison instead of a string comparison.
+  const mixMatch = value.match(LAB_MIX);
+  if (mixMatch) return hexToRgbTuple(mixLabHex(mixMatch[1]!, Number(mixMatch[2]), mixMatch[3]!));
   return null;
 }
 
@@ -508,7 +591,7 @@ describe("Defect 2/3 -- InvertSection re-keys generic DS text/border roles for c
       const ref = inkBody.match(/--ds-color-text-secondary:\s*var\((--ds-color-[a-z0-9-]+)\)/)?.[1];
       expect(ref).toBeTruthy();
 
-      injectRealCss(RAMP_CSS, injected);
+      injectRealCss(RESOLVED_RAMP_CSS, injected);
       injectRealCss(INVERT_SECTION_CSS, injected);
       injectRealCss(".probe-consumer { color: var(--ds-color-text-secondary); }", injected);
 
@@ -576,7 +659,7 @@ describe("Defect 2 -- cohort color declarations resolve without a .ds-mono-surfa
     });
 
     it("AsciiFrame degrades its foreground to the inherited page color when mounted standalone -- never to the ramp's absolute white, which would vanish on a light page", () => {
-      injectRealCss(RAMP_CSS, injected);
+      injectRealCss(RESOLVED_RAMP_CSS, injected);
       injectRealCss(ASCII_FRAME_CSS, injected);
 
       const { container } = render(<AsciiFrame label="STANDALONE">standalone body</AsciiFrame>);
@@ -1077,7 +1160,7 @@ describe("InvertSection -- text-disabled role (canon-permitted addition)", () =>
 describe("InvertSection -- paper-branch primary/inverse aliasing (the part canon flagged as most likely to be missed)", () => {
   it("does NOT need its own --ds-color-text-primary/-inverse override on the paper branch, because both alias --ds-surface-fg/-bg, which the paper branch already overrides -- proven via live cascade, not just source inspection", () => {
     const injected: HTMLStyleElement[] = [];
-    injectRealCss(RAMP_CSS, injected);
+    injectRealCss(RESOLVED_RAMP_CSS, injected);
     injectRealCss(INVERT_SECTION_CSS, injected);
     injectRealCss(".probe-primary { color: var(--ds-color-text-primary); }", injected);
 

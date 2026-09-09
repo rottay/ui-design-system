@@ -361,6 +361,12 @@ const CONSUMER_REACHED = new Set([
   'typography.pairing',
   'typography.families',
   'typography.scale',
+  // WO-DER-03: the silhouette CLOSES the loop now. Its expansion used to live
+  // in the DB ingress at the vertical's own rank, where bithire's authored
+  // button chrome outranked it, so the word moved a channel no consumer read.
+  // The `shape` family derives it at the tenant rank on both transports and it
+  // lands on the five per-size radii the button skin actually paints through.
+  'shape.button-style',
   'surfaces.elevation-posture',
   'surfaces.effect-intensity',
   'navigation.sidebar-tone',

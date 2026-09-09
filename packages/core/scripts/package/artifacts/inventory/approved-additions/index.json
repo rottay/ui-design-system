@@ -126,18 +126,6 @@
       "reason": "WO-DER-01: the FamilyDeriver contract -- the merge-rank lattice, the LoweringContext every family reads and the channel-ownership tables -- consumed by every deriver and by the pipeline."
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.cjs",
-      "reason": "WO-DER-01: the radius dial a block resolves once, so the chrome emitter and the surfaces family divide radius operands by the same number instead of each re-deriving it."
-    },
-    {
-      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.d.ts",
-      "reason": "WO-DER-01: the radius dial a block resolves once, so the chrome emitter and the surfaces family divide radius operands by the same number instead of each re-deriving it."
-    },
-    {
-      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.js",
-      "reason": "WO-DER-01: the radius dial a block resolves once, so the chrome emitter and the surfaces family divide radius operands by the same number instead of each re-deriving it."
-    },
-    {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/expressive/index.cjs",
       "reason": "WO-DER-01: the ONE expressive expansion of the lowering; it used to run four times inside the compile with three different version policies."
     },
@@ -340,6 +328,54 @@
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.js",
       "reason": "WO-DER-01: the type-family family (font families and the two metrics a governed pairing shares with an authored typography block)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.cjs",
+      "reason": "WO-DER-03: the radius baseline and the button-silhouette expansion, in one geometry owner. It replaces `foundation/dial`, whose divisor tracked the block's own dial and therefore cancelled the control it published (F-07)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.d.ts",
+      "reason": "WO-DER-03: the radius baseline and the button-silhouette expansion, in one geometry owner. It replaces `foundation/dial`, whose divisor tracked the block's own dial and therefore cancelled the control it published (F-07)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/geometry/index.js",
+      "reason": "WO-DER-03: the radius baseline and the button-silhouette expansion, in one geometry owner. It replaces `foundation/dial`, whose divisor tracked the block's own dial and therefore cancelled the control it published (F-07)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/index.cjs",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/index.d.ts",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/index.js",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/radius/index.cjs",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/radius/index.d.ts",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/radius/index.js",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/button/index.cjs",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/button/index.d.ts",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/shape/button/index.js",
+      "reason": "WO-DER-03: the shape family derives the radius ramp operands and the button silhouette once, for both transports (F-07, F-08)."
     }
   ]
 }

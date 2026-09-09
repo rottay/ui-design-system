@@ -362,6 +362,10 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/palette/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/recipes/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/responsive/index.ts`,
+      // WO-DER-03: the shape family mints the radius ramp operands. Its
+      // `button` sibling mints through `foundation/geometry`, which is a
+      // shared writer rather than a minting owner, so only `radius` appears.
+      `${LOWERING_ROOT}/runtime/derivation/shape/radius/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/states/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/surfaces/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/tenant/index.ts`,

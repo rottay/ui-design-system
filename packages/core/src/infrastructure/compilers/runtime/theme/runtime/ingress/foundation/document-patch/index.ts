@@ -37,10 +37,7 @@ import {
   TENANT_THEME_OVERRIDE_TOKENS,
   type TenantThemeOverrideToken,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import {
-  buttonStyleRadius,
-  typePairingToTypography,
-} from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
+import { typePairingToTypography } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
   FIRST_PARTY_THEMES,
@@ -554,20 +551,15 @@ function migrateGeneral(
       ["buttonStyle", "radiusScale"],
       "general.shape"
     );
+    // The silhouette is a DECISION, not a chrome leaf. Expanding it here gave
+    // the same word six channels through a document and one through a static
+    // theme; the expansion belongs to the `shape` family, where both transports
+    // pass through it.
     patches.push({
       surfaces: {
         buttonStyle: general.shape.buttonStyle,
         radiusScale: general.shape.radiusScale,
       },
-      chrome: general.shape.buttonStyle
-        ? {
-            controls: {
-              buttonGeometry: {
-                radius: buttonStyleRadius(general.shape.buttonStyle),
-              },
-            },
-          }
-        : undefined,
     });
   }
   if (general.surfaces) {

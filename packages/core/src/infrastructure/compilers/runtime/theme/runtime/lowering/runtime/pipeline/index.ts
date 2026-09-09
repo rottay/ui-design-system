@@ -22,7 +22,7 @@ import { MERGE_RANK } from "../../foundation/contract";
 import { resolveExpressiveFacts } from "../../foundation/expressive";
 import { brandThemeRampSurface } from "../../foundation/ground";
 import { FAMILY_DERIVERS } from "../derivation";
-import { resolveRadiusScaleChannel } from "../../foundation/dial";
+import { resolveRadiusBaseline } from "../../foundation/geometry";
 
 /** What the caller states about the block being compiled. */
 export interface LoweringRequest {
@@ -51,7 +51,7 @@ export interface LoweringResult {
 /**
  * Build the context every family reads.
  *
- * The expressive expansion and the radius dial are resolved HERE, once, and
+ * The expressive expansion and the radius baseline are resolved HERE, once, and
  * carried as facts. Before this they were re-resolved by each consumer that
  * needed them, with a different schema-version policy on the tenant arm, so
  * one theme could expand five ways inside one compile.
@@ -67,7 +67,11 @@ export function buildLoweringContext(
     mode: request.mode ?? theme.appearance?.defaultMode ?? "light",
     modePrefix: request.modePrefix ?? "",
     expressive,
-    radiusScale: resolveRadiusScaleChannel(theme, expressive.expansion),
+    radiusBaseline: resolveRadiusBaseline(
+      theme,
+      expressive.expansion,
+      request.tenant?.posture?.radiusScale
+    ),
     tenant: request.tenant,
   };
 }

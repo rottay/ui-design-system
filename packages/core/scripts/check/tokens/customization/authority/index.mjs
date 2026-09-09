@@ -150,6 +150,46 @@ function reaches(map, channel, dial, seen = new Set()) {
  * @param {Record<string, Record<string, string[]>>} artifacts per-vertical declarations
  * @param {Set<string>} dials the factor dials to judge against
  */
+/**
+ * A declaration that DIVIDES and MULTIPLIES by the same dial.
+ *
+ * `calc(9px / var(--ds-radius-scale) * var(--ds-radius-scale, 1))` satisfies
+ * the reachability rule above -- the dial is textually present inside a
+ * `calc()` -- and paints 9px at every dial position. F-07 measured that shape
+ * shipping as the Standard geometry control across all three verticals, so
+ * presence is not enough: a self-cancelling product is refused by name.
+ *
+ * The DIVISOR IS THE TEST, not the shape of the expression. A literal divisor
+ * (`calc(9px / 1.25 * var(--ds-radius-scale, 1))`) is a NORMALIZATION against a
+ * compile-time baseline -- the value still moves with the dial -- and is
+ * deliberately not a finding. What cancels is dividing by the dial ITSELF.
+ *
+ * @param {Record<string, Record<string, string[]>|string[]>} maps declaration maps by scope
+ * @param {Set<string>} dials the factor dials to judge against
+ */
+export function selfCancelling(maps, dials) {
+  const findings = [];
+  for (const [scope, map] of Object.entries(maps)) {
+    for (const [channel, values] of Object.entries(map)) {
+      for (const value of values) {
+        for (const calc of value.matchAll(CALC_EXPRESSION)) {
+          for (const dial of dials) {
+            const divides = new RegExp(
+              `/\\s*var\\(\\s*${dial.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`
+            ).test(calc[1]);
+            const multiplies = new RegExp(
+              `\\*\\s*var\\(\\s*${dial.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`
+            ).test(calc[1]);
+            if (divides && multiplies) findings.push({ scope, channel, dial, value });
+          }
+        }
+      }
+    }
+  }
+  findings.sort((a, b) => a.channel.localeCompare(b.channel) || a.scope.localeCompare(b.scope));
+  return findings;
+}
+
 export function analyse(base, artifacts, dials) {
   const verticals = Object.keys(artifacts);
   const effective = {};
@@ -191,18 +231,22 @@ export function measure() {
     collectInto(join(ARTIFACTS, vertical, 'index.css'), artifacts[vertical]);
   }
   const dials = factorDials(base);
-  return { dials: [...dials].sort(), findings: analyse(base, artifacts, dials) };
+  return {
+    dials: [...dials].sort(),
+    findings: analyse(base, artifacts, dials),
+    cancellations: selfCancelling({ base, ...artifacts }, dials),
+  };
 }
 
 const key = (f) => `${f.vertical}|${f.channel}|${f.dial}`;
 
 function main() {
   const args = process.argv.slice(2);
-  const { dials, findings } = measure();
+  const { dials, findings, cancellations } = measure();
   const inventory = JSON.parse(readFileSync(INVENTORY, 'utf8'));
 
   if (args.includes('--json')) {
-    console.log(JSON.stringify({ dials, findings }, null, 2));
+    console.log(JSON.stringify({ dials, findings, cancellations }, null, 2));
     return;
   }
   if (args.includes('--write')) {
@@ -218,6 +262,13 @@ function main() {
   }
 
   const failures = [];
+  for (const hit of cancellations) {
+    failures.push(
+      `DIAL AUTOCANCELADO: ${hit.scope} declara ${hit.channel} como ${JSON.stringify(hit.value)}, ` +
+        `que divide y multiplica por ${hit.dial} en el mismo calc(). El producto es constante para ` +
+        `toda escala, asi que el dial esta presente y no mueve nada (F-07).`
+    );
+  }
   const listed = new Set([...inventory.pending, ...inventory.exceptions].map(key));
   for (const finding of findings) {
     if (listed.has(key(finding))) continue;
@@ -241,7 +292,7 @@ function main() {
     process.exit(1);
   }
   console.log(
-    `dial-authority-gate OK — ${dials.length} diales de factor; ${findings.length} congelamientos, ` +
+    `dial-authority-gate OK — ${dials.length} diales de factor; 0 autocancelaciones; ${findings.length} congelamientos, ` +
       `todos inventariados (${inventory.pending.length} pendientes sin adjudicar, ${inventory.exceptions.length} excepciones del owner)`
   );
 }

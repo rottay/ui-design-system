@@ -1,8 +1,8 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-08T21:40:19.262Z",
+  "producedAt": "2026-09-09T22:23:47.383Z",
   "headline": "decisions lit = 7/22 (+0/8 new)",
-  "measuredHeadline": "measured on the 8-family sample: 10/22 move at least one sampled family",
+  "measuredHeadline": "measured on the 8-family sample: 11/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
     "newDecisions": 8,
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-08T21:25:42.802Z"
+      "builtAt": "2026-09-09T22:23:24.698Z"
     },
     "sources": {
       "door": {
@@ -30,8 +30,8 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 719,
-        "digest": "48771b5d8a4680db18081e26d9a4a108bc8760adbe2bf8b026c245bd55a33240"
+        "fileCount": 738,
+        "digest": "baa55a90aa375a4fcf304723665bdfef74abbf4be26f229928011986c96ac641"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
@@ -42,7 +42,7 @@
     "browser": {
       "specifier": "@playwright/test",
       "root": "packages/showroom/package.json",
-      "resolved": "../../../Users/daniel/Developer/Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+      "resolved": "../ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
       "browserVersion": "149.0.7827.55"
     },
     "roster": {
@@ -64,7 +64,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "eab0e78302640069a5ae58cc78c450a75eac320c12e040a3312b9a502964b9c4",
+        "bundleSha": "29e59d752ce96e7661a6e113d31ff7c70c943fb14709c0c937eea47338ca8858",
         "bundleMode": "fresh"
       },
       "bithire": {
@@ -85,7 +85,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "bd12833e402bdc30836882b3289561718d0f4890ae20fe8f41411ed63a4918c7",
+        "bundleSha": "dc33e893bc5c84197d0a40988ae734bc5bf8bb23c6ff20b8a942acd8bbca94d7",
         "bundleMode": "fresh"
       },
       "evnto": {
@@ -106,7 +106,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "81cdbc85bd3ac74c637971eef65d826cbb825e4a7d8107a77d2f4fc628ad2b3a",
+        "bundleSha": "2ef78f50a15451ad6b2ad52bd260ac579b96b745ad0496ad5461cc70a3c35303",
         "bundleMode": "fresh"
       }
     },
@@ -124,7 +124,7 @@
     "lit": 7,
     "partial": 8,
     "inert": 6,
-    "measuredLit": 10,
+    "measuredLit": 11,
     "discrepancies": [
       {
         "id": "palette.status-seeds",
@@ -134,7 +134,7 @@
       {
         "id": "shape.radius-scale",
         "kind": "recorded-none-moved",
-        "detail": "skeleton-card-line, skeleton-form-action"
+        "detail": "button-modern-md, card-modern-md, input-modern-md, skeleton-card-line, skeleton-form-action"
       },
       {
         "id": "spacing.rhythm",
@@ -145,11 +145,6 @@
         "id": "navigation.sidebar-tone",
         "kind": "recorded-full-moved-nothing",
         "detail": "6 channels moved, 0 sampled families"
-      },
-      {
-        "id": "profiles.expressive",
-        "kind": "recorded-full-moved-nothing",
-        "detail": "3 channels moved, 0 sampled families"
       }
     ],
     "newLit": 0,
@@ -245,7 +240,7 @@
           "space-modern-preset-gap",
           "stack-modern-preset-gap"
         ],
-        "movedChannelCount": 2,
+        "movedChannelCount": 3,
         "excludedIn": []
       },
       {
@@ -272,10 +267,13 @@
         "recordedClass": "none",
         "artifactBytesDiffer": true,
         "movedFamilies": [
+          "button-modern-md",
+          "card-modern-md",
+          "input-modern-md",
           "skeleton-card-line",
           "skeleton-form-action"
         ],
-        "movedChannelCount": 15,
+        "movedChannelCount": 11,
         "excludedIn": []
       },
       {
@@ -420,12 +418,13 @@
           "card-modern-md",
           "flex-modern-preset-gap",
           "grid-modern-preset-gap",
+          "input-modern-md",
           "skeleton-card-line",
           "skeleton-form-action",
           "space-modern-preset-gap",
           "stack-modern-preset-gap"
         ],
-        "movedChannelCount": 30,
+        "movedChannelCount": 34,
         "excludedIn": []
       },
       {
@@ -433,8 +432,12 @@
         "tier": "pro",
         "recordedClass": "full",
         "artifactBytesDiffer": true,
-        "movedFamilies": [],
-        "movedChannelCount": 3,
+        "movedFamilies": [
+          "button-modern-md",
+          "card-modern-md",
+          "input-modern-md"
+        ],
+        "movedChannelCount": 6,
         "excludedIn": []
       },
       {
@@ -459,7 +462,7 @@
         "id": "responsive.posture",
         "tier": "pro",
         "recordedClass": "none",
-        "artifactBytesDiffer": false,
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -635,6 +638,7 @@
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
+          "--ds-text-eyebrow-size",
           "--ds-type-scale"
         ],
         "flex-modern-preset-gap/root": [
@@ -660,6 +664,7 @@
       },
       "movedChannels": [
         "--ds-font-size-xs",
+        "--ds-text-eyebrow-size",
         "--ds-type-scale"
       ]
     },
@@ -684,10 +689,23 @@
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "button-modern-md/root": [
+          "border-top-left-radius"
+        ],
+        "input-modern-md/root": [
+          "border-top-left-radius"
+        ],
         "skeleton-card-line/line": [
           "border-top-left-radius"
         ],
@@ -702,14 +720,10 @@
           "--ds-input-md-border-radius",
           "--ds-radius-button",
           "--ds-radius-lg",
-          "--ds-radius-lg-base",
           "--ds-radius-md",
-          "--ds-radius-md-base",
           "--ds-radius-scale",
           "--ds-radius-sm",
-          "--ds-radius-sm-base",
-          "--ds-radius-xl",
-          "--ds-radius-xl-base"
+          "--ds-radius-xl"
         ]
       },
       "movedChannels": [
@@ -720,14 +734,10 @@
         "--ds-input-md-border-radius",
         "--ds-radius-button",
         "--ds-radius-lg",
-        "--ds-radius-lg-base",
         "--ds-radius-md",
-        "--ds-radius-md-base",
         "--ds-radius-scale",
         "--ds-radius-sm",
-        "--ds-radius-sm-base",
-        "--ds-radius-xl",
-        "--ds-radius-xl-base"
+        "--ds-radius-xl"
       ]
     },
     {
@@ -978,6 +988,7 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
+        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action",
         "space-modern-preset-gap",
@@ -985,7 +996,16 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
-          "background-image"
+          "background-image",
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "border-top-left-radius",
+          "font-family"
         ],
         "button-modern-md/hitbox": [
           "block-size",
@@ -994,6 +1014,9 @@
           "min-height",
           "inline-size",
           "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
         ],
         "skeleton-card-line/line": [
           "border-top-left-radius"
@@ -1015,10 +1038,14 @@
           "--ds-elevation-3",
           "--ds-elevation-lift-strength",
           "--ds-experience-profile",
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
           "--ds-input-md-border-radius",
+          "--ds-letter-spacing-heading",
           "--ds-material-canvas-texture",
           "--ds-material-card-highlight",
           "--ds-motion-duration-scale",
+          "--ds-motion-intensity",
           "--ds-radius-button",
           "--ds-radius-lg",
           "--ds-radius-lg-base",
@@ -1067,10 +1094,14 @@
         "--ds-elevation-3",
         "--ds-elevation-lift-strength",
         "--ds-experience-profile",
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
         "--ds-input-md-border-radius",
+        "--ds-letter-spacing-heading",
         "--ds-material-canvas-texture",
         "--ds-material-card-highlight",
         "--ds-motion-duration-scale",
+        "--ds-motion-intensity",
         "--ds-radius-button",
         "--ds-radius-lg",
         "--ds-radius-lg-base",
@@ -1089,14 +1120,41 @@
       "id": "profiles.expressive",
       "vertical": "rottay",
       "artifactBytesDiffer": true,
-      "movedFamilies": [],
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
         "token-readout/tokens": [
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
+          "--ds-letter-spacing-heading",
           "--ds-select-group-text-transform",
           "--ds-table-header-text-transform"
         ]
       },
       "movedChannels": [
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
+        "--ds-letter-spacing-heading",
         "--ds-select-group-text-transform",
         "--ds-table-header-text-transform"
       ]
@@ -1126,7 +1184,7 @@
     {
       "id": "responsive.posture",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1308,6 +1366,7 @@
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
+          "--ds-text-eyebrow-size",
           "--ds-type-scale"
         ],
         "flex-modern-preset-gap/root": [
@@ -1333,6 +1392,7 @@
       },
       "movedChannels": [
         "--ds-font-size-xs",
+        "--ds-text-eyebrow-size",
         "--ds-type-scale"
       ]
     },
@@ -1357,10 +1417,23 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "button-modern-md/root": [
+          "border-top-left-radius"
+        ],
+        "input-modern-md/root": [
+          "border-top-left-radius"
+        ],
         "skeleton-card-line/line": [
           "border-top-left-radius"
         ],
@@ -1375,14 +1448,10 @@
           "--ds-input-md-border-radius",
           "--ds-radius-button",
           "--ds-radius-lg",
-          "--ds-radius-lg-base",
           "--ds-radius-md",
-          "--ds-radius-md-base",
           "--ds-radius-scale",
           "--ds-radius-sm",
-          "--ds-radius-sm-base",
-          "--ds-radius-xl",
-          "--ds-radius-xl-base"
+          "--ds-radius-xl"
         ]
       },
       "movedChannels": [
@@ -1393,14 +1462,10 @@
         "--ds-input-md-border-radius",
         "--ds-radius-button",
         "--ds-radius-lg",
-        "--ds-radius-lg-base",
         "--ds-radius-md",
-        "--ds-radius-md-base",
         "--ds-radius-scale",
         "--ds-radius-sm",
-        "--ds-radius-sm-base",
-        "--ds-radius-xl",
-        "--ds-radius-xl-base"
+        "--ds-radius-xl"
       ]
     },
     {
@@ -1415,13 +1480,20 @@
       "id": "shape.button-style",
       "vertical": "bithire",
       "artifactBytesDiffer": true,
-      "movedFamilies": [],
+      "movedFamilies": [
+        "button-modern-md"
+      ],
       "movedTargets": {
+        "button-modern-md/root": [
+          "border-top-left-radius"
+        ],
         "token-readout/tokens": [
+          "--ds-button-md-radius",
           "--ds-radius-button"
         ]
       },
       "movedChannels": [
+        "--ds-button-md-radius",
         "--ds-radius-button"
       ]
     },
@@ -1639,12 +1711,26 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
+        "input-modern-md",
+        "skeleton-card-line",
+        "skeleton-form-action",
         "space-modern-preset-gap",
         "stack-modern-preset-gap"
       ],
       "movedTargets": {
         "card-modern-md/root": [
-          "background-image"
+          "border-top-left-radius",
+          "border-bottom-right-radius",
+          "background-image",
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "border-top-left-radius",
+          "font-family"
         ],
         "button-modern-md/hitbox": [
           "block-size",
@@ -1654,14 +1740,39 @@
           "inline-size",
           "width"
         ],
+        "input-modern-md/root": [
+          "border-top-left-radius",
+          "font-family"
+        ],
+        "skeleton-card-line/line": [
+          "border-top-left-radius"
+        ],
+        "skeleton-form-action/action": [
+          "border-top-left-radius"
+        ],
         "token-readout/tokens": [
+          "--ds-button-md-border-radius",
+          "--ds-button-md-radius",
+          "--ds-card-border-radius",
+          "--ds-card-radius",
           "--ds-density-effective-scale",
           "--ds-density-global-effective-scale",
           "--ds-density-mode-factor",
           "--ds-edge-emphasis-width",
           "--ds-elevation-lift-strength",
           "--ds-experience-profile",
-          "--ds-motion-duration-scale"
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
+          "--ds-input-md-border-radius",
+          "--ds-letter-spacing-heading",
+          "--ds-motion-duration-scale",
+          "--ds-motion-intensity",
+          "--ds-radius-button",
+          "--ds-radius-lg",
+          "--ds-radius-md",
+          "--ds-radius-scale",
+          "--ds-radius-sm",
+          "--ds-radius-xl"
         ],
         "flex-modern-preset-gap/root": [
           "gap",
@@ -1685,26 +1796,68 @@
         ]
       },
       "movedChannels": [
+        "--ds-button-md-border-radius",
+        "--ds-button-md-radius",
+        "--ds-card-border-radius",
+        "--ds-card-radius",
         "--ds-density-effective-scale",
         "--ds-density-global-effective-scale",
         "--ds-density-mode-factor",
         "--ds-edge-emphasis-width",
         "--ds-elevation-lift-strength",
         "--ds-experience-profile",
-        "--ds-motion-duration-scale"
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
+        "--ds-input-md-border-radius",
+        "--ds-letter-spacing-heading",
+        "--ds-motion-duration-scale",
+        "--ds-motion-intensity",
+        "--ds-radius-button",
+        "--ds-radius-lg",
+        "--ds-radius-md",
+        "--ds-radius-scale",
+        "--ds-radius-sm",
+        "--ds-radius-xl"
       ]
     },
     {
       "id": "profiles.expressive",
       "vertical": "bithire",
       "artifactBytesDiffer": true,
-      "movedFamilies": [],
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
         "token-readout/tokens": [
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
+          "--ds-letter-spacing-heading",
           "--ds-select-group-text-transform"
         ]
       },
       "movedChannels": [
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
+        "--ds-letter-spacing-heading",
         "--ds-select-group-text-transform"
       ]
     },
@@ -1733,7 +1886,7 @@
     {
       "id": "responsive.posture",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1910,6 +2063,7 @@
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
+          "--ds-text-eyebrow-size",
           "--ds-type-scale"
         ],
         "flex-modern-preset-gap/root": [
@@ -1935,6 +2089,7 @@
       },
       "movedChannels": [
         "--ds-font-size-xs",
+        "--ds-text-eyebrow-size",
         "--ds-type-scale"
       ]
     },
@@ -1959,10 +2114,23 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "button-modern-md/root": [
+          "border-top-left-radius"
+        ],
+        "input-modern-md/root": [
+          "border-top-left-radius"
+        ],
         "skeleton-card-line/line": [
           "border-top-left-radius"
         ],
@@ -1977,14 +2145,10 @@
           "--ds-input-md-border-radius",
           "--ds-radius-button",
           "--ds-radius-lg",
-          "--ds-radius-lg-base",
           "--ds-radius-md",
-          "--ds-radius-md-base",
           "--ds-radius-scale",
           "--ds-radius-sm",
-          "--ds-radius-sm-base",
-          "--ds-radius-xl",
-          "--ds-radius-xl-base"
+          "--ds-radius-xl"
         ]
       },
       "movedChannels": [
@@ -1995,14 +2159,10 @@
         "--ds-input-md-border-radius",
         "--ds-radius-button",
         "--ds-radius-lg",
-        "--ds-radius-lg-base",
         "--ds-radius-md",
-        "--ds-radius-md-base",
         "--ds-radius-scale",
         "--ds-radius-sm",
-        "--ds-radius-sm-base",
-        "--ds-radius-xl",
-        "--ds-radius-xl-base"
+        "--ds-radius-xl"
       ]
     },
     {
@@ -2251,6 +2411,7 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
+        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action",
         "space-modern-preset-gap",
@@ -2258,7 +2419,16 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
-          "background-image"
+          "background-image",
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "border-top-left-radius",
+          "font-family"
         ],
         "button-modern-md/hitbox": [
           "block-size",
@@ -2267,6 +2437,9 @@
           "min-height",
           "inline-size",
           "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
         ],
         "skeleton-card-line/line": [
           "border-top-left-radius"
@@ -2288,10 +2461,14 @@
           "--ds-elevation-3",
           "--ds-elevation-lift-strength",
           "--ds-experience-profile",
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
           "--ds-input-md-border-radius",
+          "--ds-letter-spacing-heading",
           "--ds-material-canvas-texture",
           "--ds-material-card-highlight",
           "--ds-motion-duration-scale",
+          "--ds-motion-intensity",
           "--ds-radius-button",
           "--ds-radius-lg",
           "--ds-radius-lg-base",
@@ -2341,10 +2518,14 @@
         "--ds-elevation-3",
         "--ds-elevation-lift-strength",
         "--ds-experience-profile",
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
         "--ds-input-md-border-radius",
+        "--ds-letter-spacing-heading",
         "--ds-material-canvas-texture",
         "--ds-material-card-highlight",
         "--ds-motion-duration-scale",
+        "--ds-motion-intensity",
         "--ds-radius-button",
         "--ds-radius-lg",
         "--ds-radius-lg-base",
@@ -2364,15 +2545,42 @@
       "id": "profiles.expressive",
       "vertical": "evnto",
       "artifactBytesDiffer": true,
-      "movedFamilies": [],
+      "movedFamilies": [
+        "button-modern-md",
+        "card-modern-md",
+        "input-modern-md"
+      ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "font-family"
+        ],
+        "card-modern-md/title": [
+          "letter-spacing",
+          "font-family"
+        ],
+        "button-modern-md/root": [
+          "font-family"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "input-modern-md/root": [
+          "font-family"
+        ],
         "token-readout/tokens": [
+          "--ds-font-family-base",
+          "--ds-font-family-heading",
+          "--ds-letter-spacing-heading",
           "--ds-select-group-text-transform",
           "--ds-table-header-letter-spacing",
           "--ds-table-header-text-transform"
         ]
       },
       "movedChannels": [
+        "--ds-font-family-base",
+        "--ds-font-family-heading",
+        "--ds-letter-spacing-heading",
         "--ds-select-group-text-transform",
         "--ds-table-header-letter-spacing",
         "--ds-table-header-text-transform"
@@ -2403,7 +2611,7 @@
     {
       "id": "responsive.posture",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []

@@ -57,7 +57,7 @@ export function authoredPosture(bt: BrandTheme): AppearancePostureFields {
 }
 
 /**
- * The two ramp dials every other family reads, and the button silhouette.
+ * The two ramp dials every other family reads.
  *
  * A compiled theme keeps the axes explicit in its artifact instead of relying
  * on the consumer-side `var(--ds-*-scale, 1)` fallbacks: a DB tenant artifact
@@ -80,7 +80,7 @@ export const axesDeriver: FamilyDeriver = {
     "typography.typePairing",
     "expressive.*",
   ],
-  produces: ["--ds-type-scale", "--ds-radius-scale", "--ds-radius-button"],
+  produces: ["--ds-type-scale", "--ds-radius-scale"],
   derive: (context) => deriveAxisChannels(context.theme, context.expressive.expansion),
 };
 

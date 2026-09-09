@@ -20463,18 +20463,6 @@
       "size": 401
     },
     {
-      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.cjs",
-      "size": 394
-    },
-    {
-      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.d.ts",
-      "size": 946
-    },
-    {
-      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/dial/index.js",
-      "size": 312
-    },
-    {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/expressive/index.cjs",
       "size": 562
     },

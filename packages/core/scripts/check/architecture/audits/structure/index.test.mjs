@@ -183,7 +183,7 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       sidebar: 0,
       seeds: 0,
       expressive: 1,
-      dial: 1,
+      geometry: 1,
       ramps: 1,
       typography: 1,
       chrome: 2,

@@ -28,15 +28,15 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 1607,
+    "rows": 1611,
     "byVia": {
-      "unattributed": 727,
+      "unattributed": 731,
       "governed-owner-table": 496,
       "declared-fallback": 342,
       "head-exact": 42
     },
     "byTier": {
-      "sin-tier": 908,
+      "sin-tier": 912,
       "control": 272,
       "base": 178,
       "raised": 96,
@@ -48,12 +48,12 @@
       "bg": 321,
       "border": 211,
       "fg": 474,
-      "sin-propiedad": 166,
+      "sin-propiedad": 168,
       "shadow": 121,
       "radius": 40,
       "family": 6,
       "ring": 21,
-      "weight": 17,
+      "weight": 19,
       "gap": 32,
       "height": 45,
       "duration": 9,
@@ -75,7 +75,7 @@
       "seed.success": 1
     },
     "withRoot": 880,
-    "withoutRoot": 727,
+    "withoutRoot": 731,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
     "ownersCensused": 256,
@@ -85,7 +85,7 @@
     "rowsRefinedByStep": 65,
     "rowsParentByDesign": 39,
     "byStep": {
-      "sin-paso": 1503,
+      "sin-paso": 1507,
       "@parent": 39,
       "primary": 25,
       "muted": 9,
@@ -256,11 +256,11 @@
       }
     },
     "THEME.expressive": {
-      "channels": 53,
-      "unattributed": 46,
+      "channels": 58,
+      "unattributed": 50,
       "properties": {
         "radius": 27,
-        "sin-propiedad": 19
+        "sin-propiedad": 23
       }
     },
     "THEME.expressive.profiles": {
@@ -1159,6 +1159,14 @@
         "sin-propiedad": 2
       }
     },
+    "TYPOGRAPHY": {
+      "channels": 7,
+      "unattributed": 3,
+      "properties": {
+        "weight": 2,
+        "sin-propiedad": 1
+      }
+    },
     "TYPOGRAPHY.letterSpacing": {
       "channels": 4,
       "unattributed": 3,
@@ -1702,13 +1710,6 @@
     },
     "THEME.recipes": {
       "channels": 1,
-      "unattributed": 1,
-      "properties": {
-        "sin-propiedad": 1
-      }
-    },
-    "TYPOGRAPHY": {
-      "channels": 5,
       "unattributed": 1,
       "properties": {
         "sin-propiedad": 1
@@ -5814,7 +5815,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:852",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:848",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-button-default-bg-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -5844,7 +5845,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-border-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:848",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:844",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-button-default-border",
         "coincidenceGuard": "no-value-match-used"
@@ -11105,7 +11106,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-text-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:883",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:879",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-card-shadow-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -13713,7 +13714,7 @@
       "via": null,
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "guardado por 4 raices distintas: ambiguo",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
         "whyNotV3": "owners sin adjudicar: OVERLAY.palette",
         "coincidenceGuard": "no-value-match-used"
       },
@@ -20920,16 +20921,19 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: SURFACES.elevations",
+        "whyNotV3": "owners sin adjudicar: SURFACES.elevations, THEME.expressive",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
       "property": null,
       "state": null,
       "owners": [
-        "SURFACES.elevations"
+        "SURFACES.elevations",
+        "THEME.expressive"
       ],
       "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion",
         "rottay:SURFACES.elevations.level0"
       ],
       "rootExposure": null,
@@ -21040,16 +21044,19 @@
       "state": null,
       "owners": [
         "OVERLAY.surfaces.elevations",
-        "SURFACES.elevations"
+        "SURFACES.elevations",
+        "THEME.expressive"
       ],
       "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion",
         "rottay:OVERLAY.surfaces.elevations.level4",
         "rottay:SURFACES.elevations.level4"
       ],
       "rootExposure": "internal-head",
       "rootHasDerivationLaw": true,
       "step": null,
-      "stepNote": "sin adjudicar: OVERLAY.surfaces.elevations|fg|level4, SURFACES.elevations|fg|level4"
+      "stepNote": "sin adjudicar: THEME.expressive|fg|experienceProfile, THEME.expressive|fg|schemaVersion, OVERLAY.surfaces.elevations|fg|level4"
     },
     {
       "channel": "--ds-elevation-5",
@@ -21058,7 +21065,7 @@
       "evidence": {
         "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
         "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: OVERLAY.surfaces.elevations, SURFACES.elevations",
+        "whyNotV3": "owners sin adjudicar: OVERLAY.surfaces.elevations, SURFACES.elevations, THEME.expressive",
         "coincidenceGuard": "no-value-match-used"
       },
       "tier": null,
@@ -21066,11 +21073,64 @@
       "state": null,
       "owners": [
         "OVERLAY.surfaces.elevations",
-        "SURFACES.elevations"
+        "SURFACES.elevations",
+        "THEME.expressive"
       ],
       "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion",
         "rottay:OVERLAY.surfaces.elevations.level5",
         "rottay:SURFACES.elevations.level5"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-elevation-6",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.expressive",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.expressive"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-elevation-border-style",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.expressive",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.expressive"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.expressive.experienceProfile",
+        "bithire:THEME.expressive.schemaVersion"
       ],
       "rootExposure": null,
       "rootHasDerivationLaw": false,
@@ -22036,6 +22096,56 @@
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
+      "channel": "--ds-font-weight-display",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: TYPOGRAPHY",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "weight",
+      "state": null,
+      "owners": [
+        "TYPOGRAPHY"
+      ],
+      "contributingSlots": [
+        "bithire:TYPOGRAPHY.headingWeightBias",
+        "evnto:TYPOGRAPHY.headingWeightBias"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-font-weight-heading",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: TYPOGRAPHY",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "weight",
+      "state": null,
+      "owners": [
+        "TYPOGRAPHY"
+      ],
+      "contributingSlots": [
+        "bithire:TYPOGRAPHY.headingWeightBias",
+        "evnto:TYPOGRAPHY.headingWeightBias"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
       "channel": "--ds-form-error-color",
       "rootId": "tier.control.fg",
       "via": "governed-owner-table",
@@ -22682,7 +22792,7 @@
       "contributingSlots": [
         "bithire:CHROME.controls.input.clear.focusRing"
       ],
-      "rootExposure": "internal-head",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": true,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -28653,7 +28763,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:307",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:295",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-material-card-background-active",
         "coincidenceGuard": "no-value-match-used"
@@ -28714,7 +28824,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:299",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:287",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-material-card-background-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -28742,7 +28852,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:315",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:303",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-material-card-background-selected",
         "coincidenceGuard": "no-value-match-used"
@@ -28871,7 +28981,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:345",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:333",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-material-card-border-hover",
         "coincidenceGuard": "no-value-match-used"
@@ -28898,7 +29008,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:357",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:345",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-material-card-border-selected",
         "coincidenceGuard": "no-value-match-used"
@@ -35792,7 +35902,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-surface-control",
-        "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:933",
+        "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:879",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-select-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -36705,7 +36815,7 @@
         "rottay:CHROME.controls.select.shadowFocus",
         "rottay:OVERLAY.chrome.controls.select.shadowFocus"
       ],
-      "rootExposure": "internal-head",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": true,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -40343,7 +40453,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:110",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:98",
         "edgeClass": "decl-fallback",
         "guardPrimary": "--ds-surface-icon-bg",
         "coincidenceGuard": "no-value-match-used"
@@ -44959,7 +45069,7 @@
         "rottay:CHROME.controls.textarea.shadowFocus",
         "rottay:OVERLAY.chrome.controls.textarea.shadowFocus"
       ],
-      "rootExposure": "internal-head",
+      "rootExposure": "tenant-dial",
       "rootHasDerivationLaw": true,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
@@ -48510,5 +48620,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "ac89cbbe4250ca6dfa9a7a8450eeab27ef5d6c551baae65a09808431d4006165"
+  "digest": "8f79ea836aab319e6032440b4bc6a1d2cd49c618e11bda4aa8669be48c9254ac"
 }

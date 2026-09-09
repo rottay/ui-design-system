@@ -146,6 +146,16 @@ const FIRST_PARTY = [
 // artifacts the previous compiler wrote. Every added key is `--ds-material-*`,
 // `--ds-state-*` or `--ds-focus-ring*`; bithire adds only 15 because it had
 // already authored 65 of the 71 roots by hand.
+// SHAPE re-anchor, all three, ORDER-ONLY and measured rather than asserted.
+// The radius operands and the button-silhouette alias moved out of the
+// `surfaces` and `axes` families into the new `shape` family, which sits
+// earlier in the deriver registry. The digest covers `cssString`, and
+// `cssString` preserves declaration order, so it moves. NOTHING ELSE DOES:
+// compiling all three themes on both sides of the edit gives 0 value
+// differences, identical key sets (rottay 1276, bithire 1248, evnto 553 on
+// both sides) and byte-identical `modeBlocks`, and the three committed
+// artifacts stay byte-identical (`first-party-artifacts-generated`). Zero
+// pixel, one order.
 // WO-DER-04 re-anchor, ADDITIVE plus one intentional value move, measured
 // rather than asserted. Five axes gained an owner and emit what they used to
 // withhold: rottay 1276 -> 1315 keys (+39), bithire 1248 -> 1291 (+43), evnto
@@ -170,10 +180,20 @@ const FIRST_PARTY = [
 // diff is that single line. bithire authors the same field over a literal
 // seed, so it applies the dial once and did not move; evnto does not author
 // it. Neither is re-anchored.
+// SHAPE-OVER-DERIVED re-anchor, all three: the two blocks above are
+// independent, so the tree that carries both lands on neither of their values.
+// The SHAPE half stays ORDER-ONLY on top of the derived families, measured on
+// the tree that carries both: the emitted keyset is exactly the derived-family
+// keyset (rottay 1315, bithire 1291, evnto 592, none added, none removed), and
+// the three committed first-party facade artifacts -- which ARE this leg's
+// projection -- are byte-identical to the derived-family tree's. Only
+// `cssString` moves, and only in the order its lines appear, because the
+// `shape` family sits earlier in the deriver registry than the `surfaces` and
+// `axes` families it took the radius operands from.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "5b7b48792429c1268bf151b2b3a03e5f48353b6e099451f85c4f1a895ddbf323",
-  bithire: "67f8a9a2ca7d30aca416179ab806d345d37f3d5e41d4a5df571525ca5870f517",
-  evnto: "e706e29bfb0a685cb838addd4227af3aaf30834afe7efe828bcd8afcb421e944",
+  rottay: "11fef5bd41005fc31bf80317a62f563d15104968af495f24690bd468fdc0c944",
+  bithire: "17fc41d275663689a132900c294b150a2b72ae89340c7bd6b273ef33042f5115",
+  evnto: "60878ab4f5fac622b50f92507c52586b345ea432fad274948b6e502dbd5dbd77",
 };
 
 /**

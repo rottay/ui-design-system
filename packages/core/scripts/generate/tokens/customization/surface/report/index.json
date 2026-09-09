@@ -3,37 +3,37 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "6ea8221e5aef0cf0c4d5793ad87c589b7ad2677aa04d77a0ffd635585277f6d8",
+    "inputsDigest": "d36421bd68486b62e388681548390c4057d8d692b9ec6b61c3b5ee23a8c9f8da",
     "manifestSchemaVersion": 4,
     "corpus": {
-      "authoredCssFiles": 461,
-      "productionTsFiles": 2088,
-      "testFiles": 1362,
+      "authoredCssFiles": 462,
+      "productionTsFiles": 2106,
+      "testFiles": 1378,
       "artifactFiles": 3
     }
   },
   "counts": {
-    "universe": 7298,
-    "writers": 4688,
-    "foundationTokens": 3363,
+    "universe": 7310,
+    "writers": 4701,
+    "foundationTokens": 3371,
     "componentTokens": 563,
-    "tenantChannels": 2288,
+    "tenantChannels": 2294,
     "publicHooks": 91,
-    "unadjudicatedReads": 2577,
-    "deadWriters": 273,
+    "unadjudicatedReads": 2576,
+    "deadWriters": 283,
     "frontierReserved": 0,
     "modernConsumedUnique": 3664,
-    "tsReadNames": 2703,
-    "tsWriteNames": 1321,
-    "tsMetadataNames": 815,
+    "tsReadNames": 2705,
+    "tsWriteNames": 1350,
+    "tsMetadataNames": 837,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
   "frontierFamilies": [],
   "deadByClass": {
-    "foundation": 130,
+    "foundation": 136,
     "component": 0,
-    "tenantChannel": 201,
+    "tenantChannel": 205,
     "authoredCssLocal": 6
   },
   "controls": {
@@ -193,6 +193,12 @@
     "--ds-action-dock-reserved-block-end",
     "--ds-action-dock-reserved-block-start",
     "--ds-bottom-tab-bar-reserved-block-end",
+    "--ds-breakpoint-2xl",
+    "--ds-breakpoint-lg",
+    "--ds-breakpoint-md",
+    "--ds-breakpoint-sm",
+    "--ds-breakpoint-xl",
+    "--ds-breakpoint-xs",
     "--ds-button-primary-border-color",
     "--ds-card-padding",
     "--ds-card-padding-xl",
@@ -322,6 +328,10 @@
     "--ds-metric-card-selected-ring",
     "--ds-metric-card-title-color",
     "--ds-popover-title-gap-current",
+    "--ds-posture-container-compact-max",
+    "--ds-posture-container-standard-max",
+    "--ds-posture-id",
+    "--ds-posture-span-bias",
     "--ds-premium-card-footer-color",
     "--ds-premium-card-glass-bg",
     "--ds-premium-card-rim",
@@ -9427,6 +9437,96 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-breakpoint-2xl": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-breakpoint-lg": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-breakpoint-md": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-breakpoint-sm": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-breakpoint-xl": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-breakpoint-xs": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
     "--ds-button-": {
       "category": "consumed-external-origin",
       "tier": "internal",
@@ -11449,8 +11549,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-button-link-bg": {
       "category": "compiler-derived-channel",
@@ -11899,8 +11999,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-button-outline-bg": {
       "category": "unadjudicated-read",
@@ -12705,12 +12805,12 @@
       "reads": {
         "css": 7,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-button-spinner-color": {
       "category": "canonical-authority",
@@ -13680,12 +13780,12 @@
       "reads": {
         "css": 2,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-button-xs-border-radius": {
       "category": "canonical-authority",
@@ -13830,12 +13930,12 @@
       "reads": {
         "css": 2,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-calendar-active-ink": {
       "category": "unadjudicated-read",
@@ -26368,7 +26468,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -26518,7 +26618,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 366,
+        "css": 372,
         "ts": 55,
         "tests": true,
         "modern": true,
@@ -27118,7 +27218,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 13,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -27148,7 +27248,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 15,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -27553,7 +27653,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1331,
+        "css": 1339,
         "ts": 268,
         "tests": true,
         "modern": true,
@@ -27823,7 +27923,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 36,
+        "css": 40,
         "ts": 12,
         "tests": true,
         "modern": true,
@@ -28033,7 +28133,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 240,
+        "css": 245,
         "ts": 43,
         "tests": true,
         "modern": true,
@@ -28528,7 +28628,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 185,
+        "css": 190,
         "ts": 39,
         "tests": true,
         "modern": true,
@@ -28738,7 +28838,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 65,
+        "css": 66,
         "ts": 19,
         "tests": true,
         "modern": true,
@@ -34445,7 +34545,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 7
+      "tsMetadataMentions": 8
     },
     "--ds-density-scale": {
       "category": "tenant-raw-override",
@@ -38373,7 +38473,7 @@
       "writer": true,
       "reads": {
         "css": 77,
-        "ts": 1,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -38678,8 +38778,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 3,
+      "tsMetadataMentions": 1
     },
     "--ds-elevation-1": {
       "category": "compiler-derived-channel",
@@ -38738,8 +38838,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 3,
+      "tsMetadataMentions": 1
     },
     "--ds-elevation-5": {
       "category": "compiler-derived-channel",
@@ -38753,8 +38853,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 3,
+      "tsMetadataMentions": 1
     },
     "--ds-elevation-6": {
       "category": "canonical-authority",
@@ -38764,12 +38864,27 @@
       "reads": {
         "css": 1,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
+    },
+    "--ds-elevation-border-style": {
+      "category": "generated-artifact-only",
+      "tier": "generated",
+      "status": "generated",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-elevation-lift": {
       "category": "component-channel",
@@ -41628,13 +41743,13 @@
       "writer": true,
       "reads": {
         "css": 107,
-        "ts": 53,
+        "ts": 54,
         "tests": true,
         "modern": true,
         "artifact": true
       },
       "tsWriteSites": 4,
-      "tsMetadataMentions": 14
+      "tsMetadataMentions": 13
     },
     "--ds-font-family-body": {
       "category": "unadjudicated-read",
@@ -41664,7 +41779,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 7
+      "tsMetadataMentions": 6
     },
     "--ds-font-family-heading": {
       "category": "tenant-raw-override",
@@ -41679,7 +41794,7 @@
         "artifact": true
       },
       "tsWriteSites": 4,
-      "tsMetadataMentions": 14
+      "tsMetadataMentions": 13
     },
     "--ds-font-family-mono": {
       "category": "tenant-raw-override",
@@ -41688,13 +41803,13 @@
       "writer": true,
       "reads": {
         "css": 87,
-        "ts": 23,
+        "ts": 22,
         "tests": true,
         "modern": true,
         "artifact": true
       },
       "tsWriteSites": 4,
-      "tsMetadataMentions": 9
+      "tsMetadataMentions": 8
     },
     "--ds-font-feature-tabular": {
       "category": "canonical-authority",
@@ -42516,9 +42631,9 @@
         "ts": 1,
         "tests": false,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-bold": {
@@ -42531,24 +42646,24 @@
         "ts": 2,
         "tests": false,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-display": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
         "css": 1,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-extrabold": {
@@ -42582,18 +42697,18 @@
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-heading": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
         "css": 8,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-light": {
@@ -42623,7 +42738,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-normal": {
@@ -42633,27 +42748,27 @@
       "writer": true,
       "reads": {
         "css": 20,
-        "ts": 2,
+        "ts": 4,
         "tests": false,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-regular": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "generated-artifact-only",
+      "tier": "generated",
+      "status": "generated",
+      "writer": true,
       "reads": {
         "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-semibold": {
@@ -42666,9 +42781,9 @@
         "ts": 2,
         "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-font-weight-thin": {
@@ -49914,7 +50029,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 1
     },
     "--ds-letter-spacing-display": {
       "category": "tenant-raw-override",
@@ -49929,7 +50044,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 1
     },
     "--ds-letter-spacing-h1": {
       "category": "canonical-authority",
@@ -50034,7 +50149,7 @@
         "artifact": true
       },
       "tsWriteSites": 4,
-      "tsMetadataMentions": 7
+      "tsMetadataMentions": 6
     },
     "--ds-letter-spacing-mono": {
       "category": "tenant-raw-override",
@@ -50049,7 +50164,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 1
     },
     "--ds-letter-spacing-normal": {
       "category": "canonical-authority",
@@ -50214,7 +50329,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 1
     },
     "--ds-line-height-display": {
       "category": "tenant-raw-override",
@@ -50229,7 +50344,7 @@
         "artifact": true
       },
       "tsWriteSites": 4,
-      "tsMetadataMentions": 4
+      "tsMetadataMentions": 3
     },
     "--ds-line-height-heading": {
       "category": "tenant-raw-override",
@@ -50244,7 +50359,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 1
     },
     "--ds-line-height-loose": {
       "category": "canonical-authority",
@@ -50304,7 +50419,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 1
     },
     "--ds-line-height-sm": {
       "category": "unadjudicated-read",
@@ -50349,7 +50464,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 1
     },
     "--ds-link-active-color": {
       "category": "unadjudicated-read",
@@ -61127,8 +61242,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 29,
-        "ts": 3,
+        "css": 30,
+        "ts": 4,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -61142,8 +61257,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
-        "ts": 2,
+        "css": 13,
+        "ts": 4,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -61179,7 +61294,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 5
+      "tsMetadataMentions": 6
     },
     "--ds-motion-ease-enter": {
       "category": "compiler-derived-channel",
@@ -61188,7 +61303,7 @@
       "writer": true,
       "reads": {
         "css": 108,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -61221,9 +61336,9 @@
         "ts": 1,
         "tests": false,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-ease-move": {
@@ -61247,28 +61362,28 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 787,
+        "css": 789,
         "ts": 32,
         "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
     "--ds-motion-ease-standard": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
-        "css": 4,
+        "css": 6,
         "ts": 0,
         "tests": false,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-fast": {
@@ -61277,13 +61392,13 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 739,
+        "css": 740,
         "ts": 14,
         "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-feedback": {
@@ -61307,13 +61422,13 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 72,
+        "css": 73,
         "ts": 4,
         "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-instant": {
@@ -61322,8 +61437,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 23,
-        "ts": 1,
+        "css": 24,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -61344,7 +61459,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 5
+      "tsMetadataMentions": 6
     },
     "--ds-motion-normal": {
       "category": "canonical-authority",
@@ -61352,13 +61467,13 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 175,
+        "css": 177,
         "ts": 13,
         "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
     "--ds-motion-offset-in": {
@@ -61371,9 +61486,9 @@
         "ts": 0,
         "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-panel-offset": {
@@ -61386,9 +61501,9 @@
         "ts": 0,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-rearrange": {
@@ -61446,9 +61561,9 @@
         "ts": 0,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-slow": {
@@ -61457,13 +61572,13 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 50,
+        "css": 53,
         "ts": 1,
         "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-spring": {
@@ -61472,7 +61587,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "tests": true,
         "modern": false,
@@ -66026,6 +66141,66 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-posture-container-compact-max": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-posture-container-standard-max": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-posture-id": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-posture-span-bias": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "dead-writer",
+      "writer": true,
+      "reads": {
+        "css": 0,
+        "ts": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
     "--ds-premium-card-accent": {
       "category": "canonical-authority",
       "tier": "internal",
@@ -69318,7 +69493,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 2,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -69354,7 +69529,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-input": {
       "category": "compiler-derived-channel",
@@ -69399,7 +69574,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-md": {
       "category": "tenant-raw-override",
@@ -69429,7 +69604,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 3
     },
     "--ds-radius-modal": {
       "category": "canonical-authority",
@@ -69534,7 +69709,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-xl": {
       "category": "tenant-raw-override",
@@ -69564,7 +69739,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-xs": {
       "category": "canonical-authority",
@@ -76622,7 +76797,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 20,
+        "css": 31,
         "ts": 17,
         "tests": true,
         "modern": false,
@@ -87379,7 +87554,7 @@
       "reads": {
         "css": 6,
         "ts": 2,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -93491,6 +93666,25 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-text-": {
+      "category": "consumed-external-origin",
+      "tier": "internal",
+      "status": "active",
+      "alias": {
+        "replacement": "--ds-type-*",
+        "batch": "D1a"
+      },
+      "writer": false,
+      "reads": {
+        "css": 0,
+        "ts": 3,
+        "tests": true,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 9
+    },
     "--ds-text-body": {
       "category": "generated-artifact-only",
       "tier": "generated",
@@ -93503,7 +93697,7 @@
       "reads": {
         "css": 0,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": true
       },
@@ -93598,7 +93792,7 @@
       "reads": {
         "css": 0,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": true
       },
@@ -93674,7 +93868,7 @@
       "reads": {
         "css": 0,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": true
       },
@@ -93750,7 +93944,7 @@
       "reads": {
         "css": 0,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": true
       },
@@ -105993,7 +106187,7 @@
       "reads": {
         "css": 2,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -106668,7 +106862,7 @@
       "reads": {
         "css": 2,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": true
       },
@@ -109940,7 +110134,7 @@
         "ts": 1,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
@@ -109985,7 +110179,7 @@
         "ts": 1,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 2
@@ -110030,7 +110224,7 @@
         "ts": 1,
         "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 1
@@ -110045,7 +110239,7 @@
         "ts": 1,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
@@ -110075,7 +110269,7 @@
         "ts": 1,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
@@ -110120,7 +110314,7 @@
         "ts": 2,
         "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 1
@@ -110195,7 +110389,7 @@
         "ts": 1,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 1
@@ -110210,7 +110404,7 @@
         "ts": 1,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
@@ -110225,7 +110419,7 @@
         "ts": 1,
         "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 2
@@ -110345,7 +110539,7 @@
         "ts": 1,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 0

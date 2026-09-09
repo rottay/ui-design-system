@@ -588,19 +588,39 @@ describe("digest identity across the canonicalization extraction", () => {
     const POST_V1_FONT_AUTHORSHIP_DIGEST =
       "sha256-e112fb0ca6a954623224a13c9302386251fd92ab68ceaba75ebb3b6f73c9b8fb";
     expect(artifact.digest).not.toBe(POST_V1_FONT_AUTHORSHIP_DIGEST);
-    // Eighth declared move (WO-DER-04): five axes gained a deriver and emit
+    // Eighth declared move, and the first that PAINTS: `shape.button-style`
+    // stopped expanding into a `chrome.controls` geometry leaf inside the DB
+    // ingress and is derived by the `shape` family at the tenant rank, for both
+    // transports (F-08). The tenant's chosen silhouette therefore reaches the
+    // five per-size button radii instead of losing to bithire's own authored
+    // chrome, so five channels join the delta and the digest moves with them.
+    // The channel census is owned by `tenant-theme-artifact-stability.test.ts`,
+    // which pins the five by name.
+    const POST_SILHOUETTE_DERIVATION_DIGEST =
+      "sha256-e107362bf70032643043d85c6c2d0d85d56a4edd8e580d13edafa16da2918404";
+    expect(artifact.digest).not.toBe(POST_SILHOUETTE_DERIVATION_DIGEST);
+    // Ninth declared move (WO-DER-04): five axes gained a deriver and emit
     // what they used to withhold -- the z-index bands, the weight ladder
     // `headingWeightBias` reaches, the breakpoint steps, the posture channels
     // `responsive.posture` used to keep as data, and the motion roles that had
     // no resting value -- and the named type ramp is now expressed on its own
     // facets over `var(--ds-type-scale, 1)`. The digest covers the BASELINE
     // this delta subtracts as well as the delta itself, so it moves even where
-    // the emitted delta does not: the channel census below is asserted
-    // unchanged at 65 beside it, which is what makes this a move in the
-    // compiled surface rather than in what this customer paints.
+    // the emitted delta does not.
     const POST_DERIVED_FAMILIES_DIGEST =
       "sha256-59901191314f38fd7fffcf2223bed215049bc2af9ff6276c3d4f83f01ae51828";
-    expect(artifact.digest).toBe(POST_DERIVED_FAMILIES_DIGEST);
+    expect(artifact.digest).not.toBe(POST_DERIVED_FAMILIES_DIGEST);
+    // Tenth, and the reason neither of the two above is the resting value: the
+    // eighth and the ninth are independent and both reach this document, so
+    // the tree that carries both carries their SUM. Measured, not asserted:
+    // the delta grows 65 -> 70 -> 75 with the two waves' channel sets disjoint
+    // (five per-size button radii; `--ds-density-mode-factor` plus elevation
+    // roles 4..6 and the border weight), which is what makes the sum exact.
+    // The two single-wave values stay pinned above, so a regression onto
+    // either one is a red rather than a silent revert.
+    const POST_SHAPE_AND_DERIVED_FAMILIES_DIGEST =
+      "sha256-ccfa0091618363953f1e520822956cd37474000980548aa956a2e88fec65d3d3";
+    expect(artifact.digest).toBe(POST_SHAPE_AND_DERIVED_FAMILIES_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -613,13 +633,17 @@ describe("digest identity across the canonicalization extraction", () => {
     // subtraction removes it while the tenant seed still reaches it through the
     // root. Pinned two-sided so a channel that stopped tracking the seed and a
     // channel that merely stopped being restated cannot be confused.
-    // WO-DER-04 (measured): 65 -> 70, added 5, removed 0. This document
+    // 65 -> 70 (WO-DER-03): the five per-size button radii the chosen
+    // silhouette now reaches at the tenant rank (the eighth declared move
+    // above).
+    // 70 -> 75 (WO-DER-04, measured): added 5, removed 0. This document
     // authors a density posture, so `--ds-density-mode-factor` reaches the
     // delta for the first time -- the posture table used to withhold the
     // identity factor and the posture was therefore unstateable. Its `flat`
     // elevation now states the whole 0..6 ladder and the border weight it
-    // implies instead of levels 1..3, which adds four.
-    expect(Object.keys(artifact.variables)).toHaveLength(70);
+    // implies instead of levels 1..3, which adds four. The two waves add
+    // disjoint channels, so the merged census is their sum.
+    expect(Object.keys(artifact.variables)).toHaveLength(75);
     expect(artifact.variables["--ds-button-primary-bg"]).toBeUndefined();
 
     const baseline = lowerTheme(FIRST_PARTY_THEMES.bithire, IDENTITY.slug).cssVariables;
@@ -714,11 +738,22 @@ describe("digest identity across the canonicalization extraction", () => {
     // transport, so the ledger names the row that wrote them.
     const POST_V1_FONT_AUTHORSHIP_W4_DIGEST =
       "sha256-16eaef281dd7ea6898bc81f3079a311a92b79f347f5d13486ddb2fb4fc8fe2e6";
-    // WO-DER-04 does NOT move this one, and the silence is the evidence: this
-    // document authors neither a density posture nor an elevation posture, so
-    // the two families that started emitting have nothing to say about it and
-    // the artifact stays byte-identical.
-    expect(artifact.digest).toBe(POST_V1_FONT_AUTHORSHIP_W4_DIGEST);
+    expect(artifact.digest).not.toBe(POST_V1_FONT_AUTHORSHIP_W4_DIGEST);
+    // Eighth declared move, and the first that PAINTS: `shape.button-style`
+    // stopped expanding into a `chrome.controls` geometry leaf inside the DB
+    // ingress and is derived by the `shape` family at the tenant rank, for both
+    // transports (F-08). The tenant's chosen silhouette therefore reaches the
+    // five per-size button radii instead of losing to bithire's own authored
+    // chrome, so five channels join the delta and the digest moves with them.
+    // The channel census is owned by `tenant-theme-artifact-stability.test.ts`,
+    // which pins the five by name.
+    // WO-DER-04 does NOT move this one further, and the silence is the
+    // evidence: this document authors neither a density posture nor an
+    // elevation posture, so the two families that started emitting have
+    // nothing to say about it and only the silhouette move survives.
+    const POST_SILHOUETTE_DERIVATION_W4_DIGEST =
+      "sha256-3e9b4c5cb940842c70c7a3620437756fe34cf5f80cf82ad4ae276b434875e776";
+    expect(artifact.digest).toBe(POST_SILHOUETTE_DERIVATION_W4_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -765,7 +800,8 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(artifact.variables["--ds-card-radius"]).toBe(
       "calc(10px / 1.25 * var(--ds-radius-scale, 1))"
     );
-    expect(Object.keys(artifact.variables)).toHaveLength(20);
+    // 20 -> 25: the same five per-size button radii.
+    expect(Object.keys(artifact.variables)).toHaveLength(25);
   });
 
   it("produces one digest for a document authored in any key order", () => {

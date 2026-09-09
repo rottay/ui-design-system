@@ -270,10 +270,13 @@ const ACTIVE_CAPABILITY_PROBES = {
     // inside the code-owned vertical envelope.
     expect(artifact.variables["--ds-radius-scale"]).toBe("0.9"),
   "shape.button-style": (artifact) =>
-    // The preset is normalized by the authored dial before the common radius
-    // multiplier, preserving its 2px effective value at the authored 0.9.
+    // The preset is normalized by the VERTICAL's own dial position, never by
+    // the dial this document states: a divisor that tracked the tenant's 0.9
+    // reproduced the 2px preset at every dial position, which is the
+    // self-cancellation the shape family ends. bithire rests at 1.25, so the
+    // authored 0.9 moves the corner to 2px * 0.9 / 1.25.
     expect(artifact.variables["--ds-radius-button"]).toBe(
-      "calc(2px / 0.9 * var(--ds-radius-scale, 1))"
+      "calc(2px / 1.25 * var(--ds-radius-scale, 1))"
     ),
   "density.mode": (artifact) =>
     expect(artifact.variables["--ds-density-mode-factor"]).toBeDefined(),

@@ -36,6 +36,7 @@ export const FIXTURE_TENANT_FACTS: TenantFacts = {
     motion: { intensity: 0.5, durationScale: 1.2 },
     elevation: "elevated",
   },
+  chosenButtonStyle: "pill",
   typography: {
     fontFamilyBase: "Tenant Sans",
     fontFamilyHeading: "Tenant Display",

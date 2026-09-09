@@ -6,9 +6,9 @@
     "sources": [
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts",
-        "bytes": 344374,
+        "bytes": 344365,
         "lines": 9333,
-        "sha256": "ca6e9517a61bba599eb1195f9668b2da59a6774f24026e905e7bba2cb7c36bdb"
+        "sha256": "01db44f43d6967decea1b338ab503be97cf9d5046ea50c879ba711d9024dcd3f"
       },
       {
         "file": "src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
@@ -11483,7 +11483,7 @@
         "scope": "CHROME.table.cellFontSize",
         "kind": "scope",
         "domicile": "derived",
-        "governor": "deriva de: --ds-text-body-size (A2-4); 0.875rem plano-invariante medido; la mueve typography.scale",
+        "governor": "deriva de: --ds-text-body-size (A2-4); 0.875rem plano-invariante medido; typography.scale ya viene en --ds-text-body-size",
         "governorClass": "funcion-o-raiz",
         "line": 7347
       },

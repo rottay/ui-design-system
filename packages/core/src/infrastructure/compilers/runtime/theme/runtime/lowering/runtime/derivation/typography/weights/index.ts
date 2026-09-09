@@ -31,6 +31,27 @@ const HEADING_BIAS: Readonly<
   heavier: { heading: "700", display: "800" },
 };
 
+type HeadingBias = keyof typeof HEADING_BIAS;
+
+/**
+ * FAILING CLOSED IS THE LADDER, not an extra, and it is the same law the
+ * `axes` and `states` families already state. A `BrandTheme` is typed, but it
+ * is plain data by the time it reaches this compiler: it crosses the RSC/JSON
+ * boundary and arrives through the compatibility `TenantConfig.brandTheme`
+ * field, where no type survives. A bare bracket read of a closed table
+ * therefore resolves INHERITED members and unknown words alike -- the first
+ * paints the literal string `undefined` on both role weights, the second
+ * throws and takes the whole compile down. An own-property guard is what makes
+ * the two ingress paths land on the same resting ladder.
+ */
+function readHeadingBias(bt: BrandTheme): HeadingBias {
+  const authored = bt.typography?.headingWeightBias;
+  return typeof authored === "string" &&
+    Object.prototype.hasOwnProperty.call(HEADING_BIAS, authored)
+    ? (authored as HeadingBias)
+    : "normal";
+}
+
 /**
  * The weight ladder, and the one decision that moves it.
  *
@@ -44,7 +65,7 @@ export function deriveTypeWeightChannels(
   bt: BrandTheme
 ): Record<string, string> {
   const vars: Record<string, string> = { ...WEIGHT_STEPS };
-  const bias = HEADING_BIAS[bt.typography?.headingWeightBias ?? "normal"];
+  const bias = HEADING_BIAS[readHeadingBias(bt)];
   vars["--ds-font-weight-heading"] = bias.heading;
   vars["--ds-font-weight-display"] = bias.display;
   return vars;
