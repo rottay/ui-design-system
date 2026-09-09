@@ -294,7 +294,7 @@
     },
     "./runtime/tenant": {
       "maxReachableModules": 48,
-      "maxSourceBytes": 1132000
+      "maxSourceBytes": 1167191
     },
     "./runtime/tenant-theme": {
       "maxReachableModules": 2,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-CON-06 extends TenantThemeArtifact with the serialized decision-provenance metadatum, so the visual-authority verifier validates its shape and includes it in the digest it recomputes: +1816 source bytes on ./runtime/visual-authority, reachable modules unchanged at 9 (the ledger's own owner is deliberately NOT imported there).",
+  "lastMove": "WO-CRA-24 follow-up: la landing R1 (14c0499cb, DecisionProvenanceLedger en la cadena de resolution) agrando el closure vivo de ./runtime/tenant en 35191 bytes medidos; el techo 1132000 se pino en dfd844914 sobre un arbol sin R1 (rama R2), y el merge cruzo la puerta sin re-anclar. Crecimiento auditado (K3 PASS fd3fb4601); se ancla el valor medido exacto, decrece-solo desde aqui.",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
