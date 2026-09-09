@@ -21,8 +21,8 @@
       "reason": "1437 -> 1433: tres hojas de estado sin membresia se retiraron al pasar a derivacion; el radio de Segmented se reclasifico desde sin membresia a su fallback declarado."
     },
     "expressionsCarryingLiteral": {
-      "value": 71,
-      "reason": "calc()/clamp() que leen la cascada y ADEMAS llevan un literal adentro: colapso a medias. El caso testigo es calc(13px * var(--ds-type-scale)). Decrece-solo."
+      "value": 70,
+      "reason": "calc()/clamp() que leen la cascada y ADEMAS llevan un literal adentro: colapso a medias. El caso testigo es calc(13px * var(--ds-type-scale)). Decrece-solo. 71 -> 70 (WO-DER-04, bajada en el commit que movio el numero): la unica fila que salio es rottay:CHROME.table.cellFontSize, autorada como calc(var(--ds-text-body-size) * var(--ds-type-scale, 1)). Aplicaba el dial de tipo DOS veces desde que --ds-text-body-size lo lleva, asi que la correccion de una-sola-autoridad la dejo leyendo el canal plano; sin calc() ya no es valueKind expression y el digito que la contaba era el 1 del fallback var(..., 1). Medido contra el inventario fila a fila: 1 salida, 0 entradas."
     },
     "literalPinsOnDeclaredHead": {
       "value": 20,

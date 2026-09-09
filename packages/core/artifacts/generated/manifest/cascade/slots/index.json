@@ -45,12 +45,12 @@
       "dimension": 246,
       "hex": 1454,
       "color-fn": 289,
-      "var-reference": 1008,
+      "var-reference": 1009,
       "boolean": 21,
-      "expression": 71
+      "expression": 70
     },
     "rowsReadingVar": 1076,
-    "expressionsCarryingLiteral": 71,
+    "expressionsCarryingLiteral": 70,
     "byRule": {
       "R4": 183,
       "R5": 1472,
@@ -64,17 +64,17 @@
       "collapse": 1157
     },
     "byRootAttribution": {
-      "emits-no-channel": 140,
-      "no-persisted-membership": 1433,
+      "emits-no-channel": 138,
+      "no-persisted-membership": 1435,
       "declared-fallback": 784,
       "governed-owner-table": 1057,
       "slot-spans-several-roots": 32,
       "head-exact": 148
     },
     "rowsWithRoot": 1989,
-    "rowsEmittingNoChannel": 140,
-    "channelEmissions": 4049,
-    "distinctChannelsReached": 1607,
+    "rowsEmittingNoChannel": 138,
+    "channelEmissions": 4063,
+    "distinctChannelsReached": 1611,
     "metadataRows": 33,
     "paintDenominator": 3561,
     "metadataRosterSize": 33,
@@ -40929,9 +40929,14 @@
         "--ds-edge-emphasis-width",
         "--ds-edge-hairline-width",
         "--ds-edge-standard-width",
+        "--ds-elevation-0",
         "--ds-elevation-1",
         "--ds-elevation-2",
         "--ds-elevation-3",
+        "--ds-elevation-4",
+        "--ds-elevation-5",
+        "--ds-elevation-6",
+        "--ds-elevation-border-style",
         "--ds-elevation-lift-strength",
         "--ds-experience-profile",
         "--ds-material-card-texture",
@@ -40943,9 +40948,14 @@
         "base|--ds-edge-emphasis-width",
         "base|--ds-edge-hairline-width",
         "base|--ds-edge-standard-width",
+        "base|--ds-elevation-0",
         "base|--ds-elevation-1",
         "base|--ds-elevation-2",
         "base|--ds-elevation-3",
+        "base|--ds-elevation-4",
+        "base|--ds-elevation-5",
+        "base|--ds-elevation-6",
+        "base|--ds-elevation-border-style",
         "base|--ds-elevation-lift-strength",
         "base|--ds-experience-profile",
         "base|--ds-material-card-texture",
@@ -40956,7 +40966,8 @@
       "rootId": null,
       "headRootIds": [
         "elevation.ladder",
-        "experience.profile"
+        "experience.profile",
+        "tier.base.fg"
       ],
       "rootAttribution": "slot-spans-several-roots",
       "rule": "R4",
@@ -41137,9 +41148,14 @@
         "--ds-edge-emphasis-width",
         "--ds-edge-hairline-width",
         "--ds-edge-standard-width",
+        "--ds-elevation-0",
         "--ds-elevation-1",
         "--ds-elevation-2",
         "--ds-elevation-3",
+        "--ds-elevation-4",
+        "--ds-elevation-5",
+        "--ds-elevation-6",
+        "--ds-elevation-border-style",
         "--ds-elevation-lift-strength",
         "--ds-experience-profile",
         "--ds-input-action-radius",
@@ -41192,9 +41208,14 @@
         "base|--ds-edge-emphasis-width",
         "base|--ds-edge-hairline-width",
         "base|--ds-edge-standard-width",
+        "base|--ds-elevation-0",
         "base|--ds-elevation-1",
         "base|--ds-elevation-2",
         "base|--ds-elevation-3",
+        "base|--ds-elevation-4",
+        "base|--ds-elevation-5",
+        "base|--ds-elevation-6",
+        "base|--ds-elevation-border-style",
         "base|--ds-elevation-lift-strength",
         "base|--ds-experience-profile",
         "base|--ds-input-action-radius",
@@ -41236,7 +41257,8 @@
         "control.ratio.radius",
         "elevation.ladder",
         "experience.profile",
-        "radius.base"
+        "radius.base",
+        "tier.base.fg"
       ],
       "rootAttribution": "slot-spans-several-roots",
       "rule": "R4",
@@ -43340,11 +43362,17 @@
       "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)",
       "taggedAtLine": 3500,
       "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
+      "emitsChannels": [
+        "--ds-font-weight-display",
+        "--ds-font-weight-heading"
+      ],
+      "emitsScoped": [
+        "base|--ds-font-weight-display",
+        "base|--ds-font-weight-heading"
+      ],
       "rootId": null,
       "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
+      "rootAttribution": "no-persisted-membership",
       "rule": "R5",
       "verdict": "adjudicate",
       "evidence": {
@@ -55515,11 +55543,17 @@
       "governor": "dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)",
       "taggedAtLine": 1931,
       "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
+      "emitsChannels": [
+        "--ds-font-weight-display",
+        "--ds-font-weight-heading"
+      ],
+      "emitsScoped": [
+        "base|--ds-font-weight-display",
+        "base|--ds-font-weight-heading"
+      ],
       "rootId": null,
       "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
+      "rootAttribution": "no-persisted-membership",
       "rule": "R5",
       "verdict": "adjudicate",
       "evidence": {
@@ -77796,11 +77830,11 @@
       "vertical": "rottay",
       "slotPath": "CHROME.table.cellFontSize",
       "evaluatedPath": "chrome.table.cellFontSize",
-      "authoredValue": "calc(var(--ds-text-body-size) * var(--ds-type-scale, 1))",
-      "valueKind": "expression",
+      "authoredValue": "var(--ds-text-body-size)",
+      "valueKind": "var-reference",
       "readsVar": true,
       "currentDomicile": "derived",
-      "governor": "deriva de: --ds-text-body-size (A2-4); 0.875rem plano-invariante medido; la mueve typography.scale",
+      "governor": "deriva de: --ds-text-body-size (A2-4); 0.875rem plano-invariante medido; typography.scale ya viene en --ds-text-body-size",
       "taggedAtLine": 7347,
       "isMetadata": false,
       "emitsChannels": [
@@ -77815,7 +77849,7 @@
       "rule": "R1",
       "verdict": "already-collapsed",
       "evidence": {
-        "collapsedAs": "expression"
+        "collapsedAs": "var-reference"
       }
     },
     {
@@ -106412,5 +106446,5 @@
       }
     }
   ],
-  "digest": "8bd1b6df9251fe983a14ef7b1643325c12cdcbd2fd6c0c9f592e3b1e66ee8f9d"
+  "digest": "c57bba18c54c00eb899ed735330fd396bc93cd164f6e86420f6158bcd604b3bd"
 }
