@@ -85,8 +85,8 @@ export const LOWERING_RUNTIME_DERIVATION = Object.freeze([
   `${DERIVATION}/surfaces/index.ts`,
   `${DERIVATION}/tenant/index.ts`,
   `${DERIVATION}/tint/index.ts`,
-  `${DERIVATION}/type-roles/index.ts`,
   `${DERIVATION}/typography/index.ts`,
+  `${DERIVATION}/typography/roles/index.ts`,
 ]);
 export const LOWERING_RUNTIME_PIPELINE = `${LOWERING}/runtime/pipeline/index.ts`;
 export const LOWERING_ORCHESTRATION = `${LOWERING}/index.ts`;
