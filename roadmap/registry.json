@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-08",
+ "updated": "2026-09-09",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -4002,7 +4002,7 @@
    "lane": "canon-close",
    "order": 4,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAN-01"
    ],
@@ -4011,8 +4011,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 1; closes F-18, F-56, F-17",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-09",
    "progressLog": [
     {
      "at": "2026-09-08 20:34",
@@ -4020,8 +4020,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): RA02 - false closure of F-18. The instance-override guard is blind at the real provider boundary: getCodeOwnedRuntimeConfig strips the very authoring fields the override policy reads, so the hook admits selections against an empty set (27 raw decided channels -> 0 projected; 12 representative selections flip from refused to admitted in all three first-party verticals). The passing test constructs the raw TenantProvider directly and never crosses the failing bridge. Evidence: findings.md:54 with a durable real-DesignSystemProvider repro. The removal of the competing personality writer is not being reopened.. Prior claimedBy=claude-opus-5-can-04 claimedAt=2026-09-05 doneAt=2026-09-07. Prior evidence (verbatim): landed 64ff990b from audited candidate can-04-v2 a509f324 (tree 92661e9b, 118 paths, sole parent); independent K3 audit PASS after F1-F5 delta (rottay-can04-v2-kimi-k3-audit.md); acceptance 4/4, 3 new gates+drills non-vacuous, battery 119/18/2 vs HEAD 112/19/2 reproduced, all ratchets decrease-only, producers suite 185/33 set-exact, derived artifacts byte-identical; parallel customization paths removed: oauth-transition skin+bridge+probe deleted with death proofs"
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-09",
+   "evidence": "R1 landed 14c0499cb (e1f3201f9); Codex audit LAND: RA02 reversed — decided-channel metadata survives to the REAL DesignSystemProvider route in 3/3 verticals, channel membership 27→27, all 12 representative selections refused, raw visual fields stripped (no raw payload)"
   },
   {
    "id": "WO-CAN-05",
@@ -4106,7 +4106,7 @@
    "lane": "catalog-door",
    "order": 2,
    "size": "L",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-01",
     "WO-CAN-02",
@@ -4117,8 +4117,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 2; closes F-03, F-04, F-06, F-25, F-70, F-35; supersedes: WO-ARC-14, WO-ARC-17",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-09",
    "progressLog": [
     {
      "at": "2026-09-08 20:34",
@@ -4126,8 +4126,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): RA03 - seven invalid expressive-axis values compile through both public producers in all 21 axis/vertical cells. Closed record KEYS are enforced; their VALUES are not: generated domain admission skips the record, the facade closed-domain check covers only three registry selections, and sanitizeExpressiveOverrides silently drops what it cannot read. findings.md:105 - 'the specific F61 ID repair is real, but blanket all domains closed / fail by name completion is overstated'. P2. The typed catalog itself, and its role as the single control listing, are not withdrawn.. Prior claimedBy=kimi-k3-dt claimedAt=2026-09-07 doneAt=2026-09-07. Prior evidence (verbatim): Typed catalog at contracts/theme (29 rows from the approved kit) + decision-typed ThemePatch with runtime refusals + TenantThemeDocument v2 with total fail-closed migrate v1->v2 over 7 verbatim app-platform fixtures (76/76); the 7 controls-reading gates repointed to the catalog, customization-model deleted, D-21(b) first-level roots admitted with the identity baseline untouched; new gates theme-single-listing + theme-decision-schema (--check green) and theme-keypath-coverage (honest red, excluded with written reason, blocking drill with teeth). Landed 3eaefc9cb (tree adfbc9b9) after fresh independent K3 audit PASS: 117 paths, gate matrix 150 blocking with FAIL set unchanged, focused suites 1508 pass, all 7 deviations adjudicated justified."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-09",
+   "evidence": "R1 landed 14c0499cb (7cf6e7675+14c0499cb); Codex audit LAND: RA03 reversed — 42/42 invalid expressive outcomes refused by name at the door before projection (7 axes), 204/204 valid outcomes pass, falsy present profiles refused 8/8; contract §2.1 validation law implemented (raw authored values; isSafeVisualValue only for visual strings)"
   },
   {
    "id": "WO-CAT-03",
@@ -4135,7 +4135,7 @@
    "lane": "catalog-door",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-02",
     "WO-CAN-06"
@@ -4145,8 +4145,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 2; closes F-13, F-24, F-61, F-27, F-60, F-02",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-09",
    "progressLog": [
     {
      "at": "2026-09-08 20:33",
@@ -4154,8 +4154,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): three findings against the single-admission claim. RA01 - legal Standard typography.pairing is rejected as Pro font-family authorship because tier admission infers decision IDs from expanded font leaves (4 pairings x 3 verticals x 2 public producers). RT04 - authored chrome caps are enforced only at V1 publication; V1/V2 document ingress and draft ingress skip enforceAuthoredCaps, so a 9999px radius passes the facade and is refused at publication (15 cap cases). RT05 - publication expands profile defaults into a replacement document while preview compiles the original (12/141 representable V1 cases, up to 41 base-delta entries); routed to WO-EMI-01. Evidence: audit/95-reaudit-2026-09-08/implementation/findings.md:35, :79, :93.. Prior claimedBy=claude-opus-5-cat-03 claimedAt=2026-09-07 doneAt=2026-09-07. Prior evidence (verbatim): One admission for all four origins (tier/engine/envelope/contrast/limits, intent+emission two-phase) under facade/foundation/admission; door closed on server AND root entrypoints (grep=0, supplier contract regenerated); refusal-by-name (F-61); baselines frozen+cloned (F-60); F-13 preview/publish parity, F-24, F-02 (9 test files); single-door 54 incl .measured census with mutants. F-27 closed in DT-adjudicated strengthened form: fiche slug-form stale post-CAN-06 (customer tenants rosterless by construction); adapterFor(vertical,slug) fails closed on vertical, PRIMARY_ENGINE fallback branch deleted, wiring allowlist entry removed. Landed 555cbb074 (56 paths, tree 35e65218, sole parent 9101adfb0). Independent K3 audits: v1 HOLD (4 defects) -> fixed -> v2 PASS, v3 delta PASS (pack-inventory adjudication of the lot's 27 dist entries, baseline untouched). Coordinator gates: full vitest 16694 pass / 12 fail = 11 inherited base-red + 1 flaky (SpatialExperience green isolated both trees); gates:ci red set identical to base. Owner-decision queued: playful preset (intensity 1.2) vs tenant motion cap 0.8. Standing debt queued: scripts-tree baseline drift, pack-inventory baseline regen (needs the 10 missing .d.ts restored first), typecheck:tests TS2739x2 CollectionWorkspace."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-09",
+   "evidence": "R1 landed 14c0499cb; Codex audit LAND: RA01 reversed — 24/24 Standard pairings compile (tier judges only direct-override ledger entries; entitled intent without ledger refused at $.ledger); RT04 reversed — 15/15 cap fixtures refused at the door at the original transport path on v2/v1/draft, decision expansions exempt per owner law (pill accepted), equal-valued direct authorship validated (I-P4)"
   },
   {
    "id": "WO-DER-01",
@@ -4163,7 +4163,7 @@
    "lane": "derivation",
    "order": 1,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-03"
    ],
@@ -4172,8 +4172,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-71, F-34, F-90, F-43, F-09",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-09",
    "progressLog": [
     {
      "at": "2026-09-08 20:33",
@@ -4181,8 +4181,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): CASCADE reopen only. This WO's own acceptance was not disproved; its certification is withdrawn because WO-CAT-03, on which its closure was certified, is reopened. The implementation stands and is not to be discarded or rewritten: re-closure is a certification RE-AFFIRMATION citing the same landed commit 59439fa13, once CAT-03 re-closes.. Prior claimedBy=claude-opus-5-der01 claimedAt=2026-09-08 doneAt=2026-09-08. Prior evidence (verbatim): Landed 59439fa13ba78f47f1a076963f2dddad65265bea (170 paths, parent 1f8de11e6): FamilyDeriver contract + single pipeline orchestrator + ranked merge (tenant>verticalOverride>derived>profile); lowering/runtime/variables and kernel/runtime/appearance retired; one color owner (contrastRatio/parseHex single definitions); read-without-producer ratchet (baseline 2096) + cascade-wiring transitive arm (2161/2205) registered blocking pre-build; byte-equivalence 3 verticals (1196/1233/475 keys, 0 diffs); governance/manifest 510 rows repointed to owning families via executable registry probe. Independent K3 audits PASS: v1 /private/tmp/rottay-der01-kimi-k3-audit.md + v2 delta /private/tmp/rottay-der01-v2-kimi-k3-audit.md; writer report /private/tmp/rottay-der01-opus.md SHA256 a555ee766a338207d399b334467c380d4c5cc6281e8a00f4b31839214bdc31fc. F-71+F-43 closed; F-34 duplicate-producer clause closed; F-09 structural clause only (drain routed to DER-02/03/04+family cuts); F-90 absence-encoding closed, dead-branch residual ruled by DT: landed B-1 drills are authority, tenant expressive.experienceProfile stays live, dead-read removal queued."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-09",
+   "evidence": "Re-affirmation per its reopen reason (cascade-only; acceptance NOT disproved, implementation stands): the 59439fa13 derivation pipeline (FamilyDeriver contract, ranked merge, single color owner) is unchanged and still green post-R1; re-closure cites 59439fa13 + the R1 landed tree 14c0499cb whose audits (Codex LAND) exercised the derivation registry"
   },
   {
    "id": "WO-DER-02",
@@ -4354,7 +4354,7 @@
    "lane": "family-cuts",
    "order": 1,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4363,8 +4363,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-67, F-66, F-37, F-09; supersedes: WO-ARC-12, WO-ARC-17",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-09",
    "progressLog": [
     {
      "at": "2026-09-08 20:33",
@@ -4372,8 +4372,8 @@
      "note": "REOPENED from done. Reason: R4 (2026-09-08 re-audit): two BLOCKING arms of the delivered family-cut gate report a false PASS. inlineStyleViolations misses a transparent expression wrapper (both Modern Button style sites cast to React.CSSProperties -> exit 0, findings []; removing only the cast -> exit 1), and a11yProbes counts skipped suites as executable evidence (every Button describe replaced by describe.skip -> exit 0, a11yProbes 13 unchanged). Evidence: audit/95-reaudit-2026-09-08/verification/adversarial.md; rubric J.8 and J.20. The instrument, its ratchets and its OWED-arm disclosure are NOT withdrawn and FAM-01..11 are not reclassified as false closure.. Prior claimedBy=claude-opus-5-fam00 claimedAt=2026-09-08 doneAt=2026-09-08. Prior evidence (verbatim): Landed 3a6fb8edd8b62ec6ee8f85917c3c3972777bc4dc (5 paths: family-cut gate + 30-drill suite + baseline + template, plus the coordinator's gates-manifest registration as blocking pre-build at indices 45/46). Gate green on button (10 blocking arms, 9 pinned ratchets, 4 OWED arms printed with owners); both acceptance drills proven red live by writer and re-planted independently by the auditor; one producer set shared with the global read-without-producer ratchet proven in vivo. Independent K3 audits: v1 PASS (/private/tmp/rottay-fam00-kimi-k3-audit.md), v2 delta HOLD for a retired-identity comment residue (fixed by writer round 1), v3 delta PASS (/private/tmp/rottay-fam00-v3-kimi-k3-audit.md — runner reaches family-cut PASS, stops only at the EVI-04-owned claim-exactness standing red, byte-identical with/without the lot). Writer report /private/tmp/rottay-fam00-opus.md SHA256 3b13199c7a8c9f5a27d02b9712f1d0057b87185d4bcc71a83781a03957a8c655. F-37(a) + F-09(a)(d) closed; F-66/F-67(a)/F-09(c) instruments delivered, drains routed to WO-FAM-01..11; skeleton-renderer arm OWED/UNASSIGNED recorded for owner adjudication."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-09",
+   "evidence": "R3 lot landed c295af9bb; Codex audit LAND: both false PASSes repaired — cast inline-style mutant caught, uncalled a11y callbacks no longer count as executed assertions (calibration 75/13 preserved), skipped suites fail the gate; realistic-mutant drill law honored with negative controls and green twins; family-cut ratchet pins untouched (button fanOutUnreached back to 1 via the owner-pending rows, declared in the addendum)"
   },
   {
    "id": "WO-FAM-01",
