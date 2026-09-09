@@ -4215,7 +4215,7 @@
    "lane": "derivation",
    "order": 3,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4224,8 +4224,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-07, F-08, F-32; supersedes: WO-TOK-11",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "opus",
+   "claimedAt": "2026-09-09",
    "progressLog": []
   },
   {
@@ -4234,7 +4234,7 @@
    "lane": "derivation",
    "order": 4,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4243,8 +4243,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-30, F-31, F-36, F-26, F-35, F-21, F-84; supersedes: WO-ENG-25",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "opus",
+   "claimedAt": "2026-09-09",
    "progressLog": []
   },
   {
