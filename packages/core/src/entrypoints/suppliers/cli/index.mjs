@@ -558,14 +558,15 @@ function analyzeRuntimeModuleEdges(
   // element access, no optional chain, no global-container path -- and across
   // the whole file the resolved intrinsic (`Symbol`, the container's `Symbol`
   // member, and the container carried by any local binding -- stored by a
-  // declaration, a default, an assignment or a call argument, directly or
-  // through a chain of them) may appear only as the receiver of that admitted
-  // call and as a read of a well-known symbol member in one of the listed
-  // value positions. Every other appearance -- value, argument, alias, return,
-  // assignment/update/delete/loop target, receiver of any other member call or
-  // access, operand of a descriptor, prototype or proxy operation -- withdraws
-  // the admission, as does any call that names `Symbol` as a property of the
-  // container. A withdrawn file returns its computed keys to the refused default.
+  // declaration, a default, an assignment, a call argument or an iteration
+  // head, directly or through a chain of them) may appear only as the receiver
+  // of that admitted call and as a read of a well-known symbol member in one of
+  // the listed value positions. Every other appearance -- value, argument,
+  // alias, return, assignment/update/delete/loop target, receiver of any other
+  // member call or access, operand of a descriptor, prototype or proxy
+  // operation -- withdraws the admission, as does any call that names `Symbol`
+  // as a property of the container. A withdrawn file returns its computed keys
+  // to the refused default.
   const wellKnownSymbolMembers = new Set([
     'asyncDispose', 'asyncIterator', 'dispose', 'hasInstance', 'isConcatSpreadable',
     'iterator', 'match', 'matchAll', 'metadata', 'replace', 'search',
@@ -590,6 +591,7 @@ function analyzeRuntimeModuleEdges(
     const resolved = new Set();
     globalContainerBindings = resolved;
     const bindings = [];
+    const iterations = [];
     const shortCircuitOperators = new Map([
       [ts.SyntaxKind.AmpersandAmpersandToken, ts.SyntaxKind.AmpersandAmpersandEqualsToken],
       [ts.SyntaxKind.BarBarToken, ts.SyntaxKind.BarBarEqualsToken],
@@ -690,6 +692,7 @@ function analyzeRuntimeModuleEdges(
       if (ts.isBinaryExpression(node) && storageOperators.has(node.operatorToken.kind)) {
         remember(node.left, node.right);
       }
+      if (ts.isForOfStatement(node) || ts.isForInStatement(node)) iterations.push(node);
       if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
         const fn = localFunctionBindings.get(symbolAt(node.expression));
         if (fn) {
@@ -702,6 +705,35 @@ function analyzeRuntimeModuleEdges(
       ts.forEachChild(node, collect);
     }
     collect(sourceFile);
+    const storedValues = new Map();
+    for (const { symbol, value } of bindings) {
+      storedValues.set(symbol, [...(storedValues.get(symbol) ?? []), value]);
+    }
+    function iteratedValues(iterable, reached = new Set()) {
+      const current = iterable ? unwrapRuntimeExpression(iterable) : null;
+      if (!current || ts.isOmittedExpression(current) || reached.has(current)) return [];
+      reached.add(current);
+      const members = ts.isArrayLiteralExpression(current)
+        ? current.elements.map((element) => (
+          ts.isSpreadElement(element) ? element.expression : element
+        ))
+        : [];
+      if (ts.isIdentifier(current)) members.push(...(storedValues.get(symbolAt(current)) ?? []));
+      const values = [current];
+      for (const reachable of [...evaluationPaths(current), ...members]) {
+        values.push(...iteratedValues(reachable, reached));
+      }
+      return values;
+    }
+    for (const iteration of iterations) {
+      const declared = iteration.initializer;
+      const targets = ts.isVariableDeclarationList(declared)
+        ? declared.declarations.map((declaration) => declaration.name)
+        : [declared];
+      for (const value of iteratedValues(iteration.expression)) {
+        for (const target of targets) remember(target, value);
+      }
+    }
     function evaluationPaths(current) {
       if (ts.isBinaryExpression(current)) {
         const operator = current.operatorToken.kind;

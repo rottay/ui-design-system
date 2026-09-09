@@ -568,6 +568,99 @@ test('a container stored by any binding form preserves the container identity it
   }
 });
 
+test('an iteration head carries the container identity of what it iterates', () => {
+  const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+  const typescript = requireFromCore('typescript');
+  const slot = "globalThis[Symbol.for('rottay.slot')]('node:fs');";
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-iterated-container-'));
+  const carrier = 'function poison(a = globalThis, b = a)';
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    for (const [name, body] of [
+      ['iterated-of', `${carrier} { for (const c of [b]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-of-var', `${carrier} { for (var c of [b]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-of-container', `${carrier} { for (const c of b) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-in-container', `${carrier} { for (const k in b) { k.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-in-stored', `${carrier} { const host = b; for (const k in host) { k.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-in-array', `${carrier} { for (const c in [b]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-await', `async function poison(a = globalThis, b = a) { for await (const c of [b]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-array-tail', `${carrier} { for (const c of [{}, b]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-stored-array', `${carrier} { const bag = [b]; for (const c of bag) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-spread', `${carrier} { for (const c of [...[b]]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-conditional', `${carrier} { for (const c of flag ? [b] : []) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-nullish', `${carrier} { for (const c of list ?? [b]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-root-property', `${carrier} { for (const c of [b.self]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-object-pattern', `${carrier} { for (const { self: c } of [b]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-array-pattern', `${carrier} { for (const [c] of [[b]]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-entry-pattern', `${carrier} { for (const [, c] of [['host', b]]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-assignment-target', `${carrier} { let c; for (c of [b]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-pattern-assignment', `${carrier} { let c; for ([c] of [[b]]) { c.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-nested-local', `${carrier} { for (const c of [b]) { const d = c; d.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-nested-loop', `${carrier} { for (const c of [b]) for (const d of [c]) { d.Symbol.for = () => 'require'; } } poison();`],
+      ['iterated-argument-hop', `function inner(x) { x.Symbol.for = () => 'require'; } ${carrier} { for (const c of [b]) { inner(c); } } poison();`],
+      ['iterated-define-property', `${carrier} { for (const c of [b]) { Object.defineProperty(c, 'Symbol', { value: FakeSymbol }); } } poison();`],
+      ['iterated-captured-intrinsic', `${carrier} { for (const c of [b]) { const S = c.Symbol; S.for = () => 'require'; } } poison();`],
+    ]) {
+      const source = `${body} ${slot}`;
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.throws(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            /unresolved runtime module edge/,
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.throws(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          /unresolved runtime module edge/,
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+
+    for (const [name, source] of [
+      ['iterated-ordinary', "function span(items) { for (const x of items) { void x; } } void span([]); void globalThis[Symbol.for('rottay.slot')];"],
+      ['iterated-ordinary-array', "for (const x of [1, 2]) { void x; } void globalThis[Symbol.for('rottay.slot')];"],
+      ['iterated-ordinary-in', "for (const k in { a: 1 }) { void k; } void globalThis[Symbol.for('rottay.slot')];"],
+      ['iterated-ordinary-stored', "const bag = [1]; for (const x of bag) { void x; } void globalThis[Symbol.for('rottay.slot')];"],
+      ['iterated-ordinary-entries', "for (const [k, v] of Object.entries({})) { void k; void v; } void globalThis[Symbol.for('rottay.slot')];"],
+      ['iterated-ordinary-await', "async function span(items) { for await (const x of items) { void x; } } void span([]); void globalThis[Symbol.for('rottay.slot')];"],
+      ['iterated-read-only-slot', "function read(a = globalThis, b = a) { for (const x of [1]) { void x; } return b[Symbol.for('rottay.slot')]; } void read();"],
+      ['iterated-well-known-member', "function read(a = globalThis, b = a) { for (const x of [1]) { void x; } return b.Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['iterated-container-element', "function read(a = globalThis, b = a) { for (const c of [b]) { return c[Symbol.for('rottay.slot')]; } } void read();"],
+    ]) {
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.doesNotThrow(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.doesNotThrow(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('a JavaScript global expando no longer dissolves the container fence', () => {
   for (const source of [
     "globalThis.marker = 1; globalThis.require('d3');",
