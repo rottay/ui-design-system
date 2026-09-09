@@ -82,7 +82,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 91/159 work orders done (57%)
+## Work-order burn-down — 92/159 work orders done (58%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -99,7 +99,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
 | [derivation](./derivation.md) | 1 | 1 | 5 | 7 |
 | [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
-| [emission-mount](./emission-mount.md) | 0 | 0 | 3 | 3 |
+| [emission-mount](./emission-mount.md) | 1 | 0 | 2 | 3 |
 | [platform-invariants](./platform-invariants.md) | 0 | 0 | 8 | 8 |
 | [retire](./retire.md) | 0 | 0 | 5 | 5 |
 | [evidence-graph](./evidence-graph.md) | 1 | 0 | 4 | 5 |
@@ -111,7 +111,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | A · The apps can build | not reached | WO-CON-04, WO-CON-05 | WO-CON-04, WO-CON-05 | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | WO-FAM-01, WO-EVI-05 | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 43 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 42 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -145,7 +145,8 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | --- | --- | --- | --- | --- |
 | WO-DER-03 | Shape and palette derived once | L | derivation | audit-2026-09-05 |
 | WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | L | derivation | audit-2026-09-05 |
-| WO-EMI-01 | One emitter family, one artifact for every origin, one preview | L | emission-mount | audit-2026-09-05 |
+| WO-EMI-02 | mountTenantTheme: one mount law, complete SSR projection, runtime that never recompiles | L | emission-mount | audit-2026-09-05 |
+| WO-EMI-03 | Non-CSS token emitter for mobile readiness | M | emission-mount | audit-2026-09-05 |
 | WO-INV-01 | One direction authority and logical geometry everywhere | M | platform-invariants | audit-2026-09-05 |
 | WO-INV-02 | One i18n catalog with an English floor, locale-aware formatting and IME-safe submit | M | platform-invariants | audit-2026-09-05 |
 | WO-EVI-01 | theme-graph: derived cascade graph with a byte-exact check | M | evidence-graph | audit-2026-09-05 |
@@ -184,8 +185,6 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-SKIN-08 | dependencies: WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-DER-05 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04 |
 | WO-DER-06 | dependencies: WO-DER-05, WO-DER-07 |
-| WO-EMI-02 | dependencies: WO-EMI-01 |
-| WO-EMI-03 | dependencies: WO-EMI-01 |
 | WO-FAM-01 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
 | WO-FAM-02 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
 | WO-FAM-03 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
@@ -310,6 +309,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-CAT-02 | 2026-09-09 | R1 landed 14c0499cb (7cf6e7675+14c0499cb); Codex audit LAND: RA03 reversed — 42/42 invalid expressive outcomes refused by name at the door before projection (7 axes), 204/204 valid outcomes pass, falsy present profiles refused 8/8; contract §2.1 validation law implemented (raw authored values; isSafeVisualValue only for visual strings) |
 | WO-CAT-03 | 2026-09-09 | R1 landed 14c0499cb; Codex audit LAND: RA01 reversed — 24/24 Standard pairings compile (tier judges only direct-override ledger entries; entitled intent without ledger refused at $.ledger); RT04 reversed — 15/15 cap fixtures refused at the door at the original transport path on v2/v1/draft, decision expansions exempt per owner law (pill accepted), equal-valued direct authorship validated (I-P4) |
 | WO-DER-01 | 2026-09-09 | Re-affirmation per its reopen reason (cascade-only; acceptance NOT disproved, implementation stands): the 59439fa13 derivation pipeline (FamilyDeriver contract, ranked merge, single color owner) is unchanged and still green post-R1; re-closure cites 59439fa13 + the R1 landed tree 14c0499cb whose audits (Codex LAND) exercised the derivation registry |
+| WO-EMI-01 | 2026-09-09 | R2 landed 38c192e8a + integration landed fd3fb4601; Codex + K3 audits LAND: RT05 reversed — same original document yields identical admitted results through preview, publish, reload, nested mount (27/27 parity incl. the 12 restored preview-arm cases; 0 differences on all profile×vertical cases; expected effective values asserted: 0.7/1.15/editorial fonts identical on both doors; partial override precedence; removal/restore digest identity; cross-plan + v1-without-plan parity, no invented entitlement); one expansion per document at the door; envelope clamps preview identically to publication |
 | WO-FAM-00 | 2026-09-09 | R3 lot landed c295af9bb; Codex audit LAND: both false PASSes repaired — cast inline-style mutant caught, uncalled a11y callbacks no longer count as executed assertions (calibration 75/13 preserved), skipped suites fail the gate; realistic-mutant drill law honored with negative controls and green twins; family-cut ratchet pins untouched (button fanOutUnreached back to 1 via the owner-pending rows, declared in the addendum) |
 | WO-EVI-04 | 2026-09-08 | R3 lot landed c295af9bb; Codex audit LAND: DEL-01 CI pin follows the unchanged seal (one declared ci.yml hunk); DEL-05 was a scanner not a missing contract (claims/exactness machinery, bounded write-set extension); DEL-07 republication carries production dates; exactness --check-artifact green vs sealed docs e048d2f9 (3318 counters, 3219 exact zeros); reopen-provenance machinery owned from R4 stands |
 | WO-CON-01 | 2026-09-07 | sanctioned import surface complete: consumer-contract doc + lint rule landed (3a9873f4; rule 20/20 incl fail-closed cases; roster now 120/120 after WO-CAN-04's carried count change with death proof); pnpm --filter @rottay/design-system lint exit 0 measured on landed tree d0f54693 with REAL sibling app dirs (lint:vertical included, only non-blocking warnings); claim-exactness seal/artifacts regenerated green in audited lot d0f54693 (candidate d7d00aaa, independent K3 audit PASS: proof chain repaired, corpus drained 19 missing paths to 0, deterministic double-run); docs reconciled in docs-engineering 893bce77 (safety ref 19e0ec03). Adjudication: app-platform wiring out of scope per standing contract (only app-bithire is the productive consumer; app-evnto/app-platform are do-not-modify; evnto was already wired) — the rule runs in showroom+bithire+evnto, baselined per app, decrease-only |

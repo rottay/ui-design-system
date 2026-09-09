@@ -4296,7 +4296,7 @@
    "lane": "emission-mount",
    "order": 1,
    "size": "L",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-03"
    ],
@@ -4305,9 +4305,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-17, F-59, F-05",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-k3",
+   "claimedAt": "2026-09-09",
+   "progressLog": [],
+   "doneAt": "2026-09-09",
+   "evidence": "R2 landed 38c192e8a + integration landed fd3fb4601; Codex + K3 audits LAND: RT05 reversed — same original document yields identical admitted results through preview, publish, reload, nested mount (27/27 parity incl. the 12 restored preview-arm cases; 0 differences on all profile×vertical cases; expected effective values asserted: 0.7/1.15/editorial fonts identical on both doors; partial override precedence; removal/restore digest identity; cross-plan + v1-without-plan parity, no invented entitlement); one expansion per document at the door; envelope clamps preview identically to publication"
   },
   {
    "id": "WO-EMI-02",
