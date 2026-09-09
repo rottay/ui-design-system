@@ -155,9 +155,20 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     },
   );
 
-  it('is bounded to the dial and the selection, never to visual personality', () => {
+  it('is bounded to the dial and the selections, never to visual personality', () => {
     const behavior = getCodeOwnedGovernedBehavior(getKnownTenantConfig('bithire')!)!;
-    expect(Object.keys(behavior).sort()).toEqual(['expressive', 'motion']);
+    // The whole slot, exactly: the authored dial, the expressive selection, the
+    // names of the decided personality channels, and the recipe-profile id.
+    // Every one is a governed fact no stylesheet can express; none of them can
+    // paint. A key appearing here that is not on this list is a visual channel
+    // taking a second route into the runtime.
+    expect(Object.keys(behavior).sort()).toEqual([
+      'decidedChannels',
+      'expressive',
+      'motion',
+      'recipeProfile',
+    ]);
+    expect(behavior.recipeProfile).toBe('rottay/network-professional@1');
     expect(Object.keys(behavior.motion!).sort()).toEqual(['entranceDuration', 'intensity']);
     expect(Object.isFrozen(behavior)).toBe(true);
     expect(Object.isFrozen(behavior.motion)).toBe(true);

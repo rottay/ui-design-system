@@ -120,6 +120,49 @@ describe('mountTenantTheme — static first-party verticals', () => {
       mountTenantTheme(staticThemeIntent('bithire'), { artifact: ARTIFACT }),
     ).rejects.toThrow(/has no compiled tenant artifact/);
   });
+
+  it('proves the projection satisfies the selector the mounted bytes are under', async () => {
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      const { rootAttributes, hydrationProof } = await mountTenantTheme(
+        staticThemeIntent(vertical),
+      );
+
+      expect(hydrationProof.scope.selector).toBe(specFor(vertical).selector);
+      for (const [name, value] of Object.entries(hydrationProof.scope.attributes)) {
+        expect(rootAttributes[name as keyof typeof rootAttributes]).toBe(value);
+      }
+    }
+  });
+
+  it('projects the recipe profile the artifact compiled (D-26)', async () => {
+    const rottay = await mountTenantTheme(staticThemeIntent('rottay'));
+    const bithire = await mountTenantTheme(staticThemeIntent('bithire'));
+
+    // Two verticals with deliberately different profiles; the attribute is what
+    // makes that difference reach the first paint.
+    expect(rottay.rootAttributes['data-recipe-profile']).toBe('rottay/technical-sharp@1');
+    expect(bithire.rootAttributes['data-recipe-profile']).toBe('rottay/network-professional@1');
+  });
+
+  it('projects the request viewport and motion posture the app declared', async () => {
+    const mounted = await mountTenantTheme(staticThemeIntent('bithire'), {
+      viewport: 'desktop',
+      motion: 'reduced',
+      density: 'spacious',
+    });
+
+    expect(mounted.rootAttributes['data-ds-viewport']).toBe('desktop');
+    expect(mounted.rootAttributes['data-ds-motion']).toBe('reduced');
+    expect(mounted.rootAttributes['data-density']).toBe('spacious');
+  });
+
+  it('stamps nothing for a posture the request never declared', async () => {
+    const mounted = await mountTenantTheme(staticThemeIntent('bithire'));
+
+    expect(mounted.rootAttributes['data-ds-viewport']).toBeUndefined();
+    expect(mounted.rootAttributes['data-ds-motion']).toBeUndefined();
+    expect(mounted.rootAttributes['data-density']).toBeUndefined();
+  });
 });
 
 describe('mountTenantTheme — tenant documents', () => {
@@ -162,6 +205,30 @@ describe('mountTenantTheme — tenant documents', () => {
       'data-vertical': 'bithire',
       'data-tenant': IDENTITY.slug,
     });
+  });
+
+  it('projects the density posture the document compiled, before the first paint', async () => {
+    const mounted = await mountTenantTheme(intent, { artifact: ARTIFACT });
+
+    // The document declares `density: 'compact'`. It used to reach the document
+    // only through `RootDensityProvider`'s effect, i.e. after the first paint.
+    expect(mounted.rootAttributes['data-density']).toBe('compact');
+  });
+
+  it('proves the projection satisfies the artifact selector', async () => {
+    const { rootAttributes, hydrationProof } = await mountTenantTheme(intent, {
+      artifact: ARTIFACT,
+    });
+
+    expect(hydrationProof.scope.selector).toBe(ARTIFACT.scopes.combinedSelector);
+    expect(hydrationProof.scope.attributes).toEqual({
+      'data-ds-root': '',
+      'data-vertical': 'bithire',
+      'data-tenant': IDENTITY.slug,
+    });
+    for (const [name, value] of Object.entries(hydrationProof.scope.attributes)) {
+      expect(rootAttributes[name as keyof typeof rootAttributes]).toBe(value);
+    }
   });
 
   it('refuses a tenant-authored intent with no artifact by name', async () => {

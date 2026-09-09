@@ -15,8 +15,10 @@
  * - **Reduced motion**: respects OS accessibility setting
  * - **Virtual keyboard**: bottom viewport occlusion while editing at scale 1
  *
- * SSR-safe: returns mobile-first defaults (phone, coarse, portrait) when
- * window is undefined so server-rendered markup matches the smallest layout.
+ * SSR: the snapshot is published through `useSyncExternalStore`, whose server
+ * answer is the request's viewport hint (`ssrViewport`, or the
+ * `data-ds-viewport` attribute `mountTenantTheme` projected). Only a request
+ * that declared nothing falls back to the mobile-first baseline.
  *
  * @example
  * ```tsx
@@ -40,10 +42,25 @@
  * @category System
  * @package @rottay/design-system
  */
-import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+  type ReactNode,
+} from 'react';
 
-import { buildMinWidthQuery } from '../../../../../../foundation/contracts/kernel/responsive/breakpoints';
 import { useMotionPreference } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
+import type { DocumentViewportHint, ResponsiveMediaSnapshot } from '../../../runtime/media-snapshot';
+import {
+  documentViewportHint,
+  getResponsiveMediaSnapshot,
+  mediaSnapshotForViewport,
+  subscribeResponsiveMedia,
+} from '../../../runtime/media-snapshot';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -129,17 +146,6 @@ const SSR_DEFAULTS: ResolvedResponsiveContextValue = {
   isVirtualKeyboardOpen: false,
 };
 
-// ---------------------------------------------------------------------------
-// Media query strings (computed once, reused for every provider instance)
-// ---------------------------------------------------------------------------
-
-const SM_QUERY = buildMinWidthQuery('sm');
-const MD_QUERY = buildMinWidthQuery('md');
-const LG_QUERY = buildMinWidthQuery('lg');
-const XL_QUERY = buildMinWidthQuery('xl');
-const XXL_QUERY = buildMinWidthQuery('2xl');
-const TOUCH_QUERY = '(hover: none) and (pointer: coarse)';
-const LANDSCAPE_QUERY = '(orientation: landscape)';
 const NON_EDITING_INPUT_TYPES = new Set([
   'button',
   'checkbox',
@@ -167,61 +173,15 @@ export const ResponsiveContext = createContext<ResponsiveContextValue | null>(nu
 // Atomic media snapshot
 // ---------------------------------------------------------------------------
 
-interface ResponsiveMediaSnapshot {
-  isSm: boolean;
-  isMd: boolean;
-  isLg: boolean;
-  isXl: boolean;
-  is2xl: boolean;
-  isTouchDevice: boolean;
-  isLandscape: boolean;
-}
-
 interface VirtualKeyboardSnapshot {
   inset: number;
   isOpen: boolean;
 }
 
-type ResponsiveMediaQueries = Record<keyof ResponsiveMediaSnapshot, MediaQueryList>;
-
-const SSR_MEDIA_SNAPSHOT: ResponsiveMediaSnapshot = {
-  isSm: false,
-  isMd: false,
-  isLg: false,
-  isXl: false,
-  is2xl: false,
-  isTouchDevice: true,
-  isLandscape: false,
-};
-
 const SSR_VIRTUAL_KEYBOARD_SNAPSHOT: VirtualKeyboardSnapshot = {
   inset: 0,
   isOpen: false,
 };
-
-function readResponsiveSnapshot(queries: ResponsiveMediaQueries): ResponsiveMediaSnapshot {
-  return {
-    isSm: queries.isSm.matches,
-    isMd: queries.isMd.matches,
-    isLg: queries.isLg.matches,
-    isXl: queries.isXl.matches,
-    is2xl: queries.is2xl.matches,
-    isTouchDevice: queries.isTouchDevice.matches,
-    isLandscape: queries.isLandscape.matches,
-  };
-}
-
-function responsiveSnapshotsEqual(left: ResponsiveMediaSnapshot, right: ResponsiveMediaSnapshot): boolean {
-  return (
-    left.isSm === right.isSm &&
-    left.isMd === right.isMd &&
-    left.isLg === right.isLg &&
-    left.isXl === right.isXl &&
-    left.is2xl === right.is2xl &&
-    left.isTouchDevice === right.isTouchDevice &&
-    left.isLandscape === right.isLandscape
-  );
-}
 
 function virtualKeyboardSnapshotsEqual(left: VirtualKeyboardSnapshot, right: VirtualKeyboardSnapshot): boolean {
   return left.inset === right.inset && left.isOpen === right.isOpen;
@@ -267,21 +227,6 @@ function readVirtualKeyboardSnapshot(
     inset,
     isOpen: inset > 0,
   };
-}
-
-/** Subscribe one shared callback to a query, including legacy Safari. */
-function subscribeToMediaQuery(query: MediaQueryList, listener: (event: MediaQueryListEvent) => void): () => void {
-  if (typeof query.addEventListener === 'function') {
-    query.addEventListener('change', listener);
-    return () => query.removeEventListener('change', listener);
-  }
-
-  if (typeof query.addListener === 'function') {
-    query.addListener(listener);
-    return () => query.removeListener(listener);
-  }
-
-  return () => {};
 }
 
 // ---------------------------------------------------------------------------
@@ -340,6 +285,12 @@ function buildContextValue(
 
 export interface ResponsiveProviderProps {
   children: ReactNode;
+  /**
+   * The viewport tier this REQUEST is for. Overrides the `data-ds-viewport`
+   * attribute; supply it when the application resolves the hint itself instead
+   * of letting `mountTenantTheme` project it.
+   */
+  ssrViewport?: DocumentViewportHint;
 }
 
 /**
@@ -350,48 +301,31 @@ export interface ResponsiveProviderProps {
  * preference with every `useResponsive()` consumer, eliminating per-component
  * reduced-motion listeners.
  *
- * SSR-safe: on the server, all consumers receive mobile-first defaults
- * (phone, coarse pointer, portrait orientation).
+ * The server answer is the request's viewport hint, so a desktop request
+ * renders a desktop layout on the first paint instead of correcting to one a
+ * frame later.
  */
-export function ResponsiveProvider({ children }: ResponsiveProviderProps): React.ReactElement {
-  const [mediaSnapshot, setMediaSnapshot] = useState<ResponsiveMediaSnapshot>(SSR_MEDIA_SNAPSHOT);
+export function ResponsiveProvider({
+  children,
+  ssrViewport,
+}: ResponsiveProviderProps): React.ReactElement {
   const [virtualKeyboardSnapshot, setVirtualKeyboardSnapshot] =
     useState<VirtualKeyboardSnapshot>(SSR_VIRTUAL_KEYBOARD_SNAPSHOT);
-  const [hasResolvedViewport, setHasResolvedViewport] = useState(false);
   const prefersReducedMotion = useMotionPreference();
 
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return undefined;
-    }
+  // The server render and the hydration render must answer from the SAME fact,
+  // so both read the hint: the prop when the application resolved it, otherwise
+  // the attribute the mount projected onto the document root.
+  const getServerSnapshot = useCallback(
+    (): ResponsiveMediaSnapshot => mediaSnapshotForViewport(ssrViewport ?? documentViewportHint()),
+    [ssrViewport],
+  );
 
-    const queries: ResponsiveMediaQueries = {
-      isSm: window.matchMedia(SM_QUERY),
-      isMd: window.matchMedia(MD_QUERY),
-      isLg: window.matchMedia(LG_QUERY),
-      isXl: window.matchMedia(XL_QUERY),
-      is2xl: window.matchMedia(XXL_QUERY),
-      isTouchDevice: window.matchMedia(TOUCH_QUERY),
-      isLandscape: window.matchMedia(LANDSCAPE_QUERY),
-    };
-
-    // Every media-query event reads the entire live set before committing one
-    // object. Boundary changes therefore cannot expose desktop+md or a
-    // transient phone tier while sibling events are still being delivered.
-    const publishSnapshot = (): void => {
-      const next = readResponsiveSnapshot(queries);
-      setMediaSnapshot((current) => (responsiveSnapshotsEqual(current, next) ? current : next));
-      setHasResolvedViewport(true);
-    };
-    const listener = (): void => publishSnapshot();
-
-    publishSnapshot();
-    const cleanups = Object.values(queries).map((query) => subscribeToMediaQuery(query, listener));
-
-    return () => {
-      cleanups.forEach((cleanup) => cleanup());
-    };
-  }, []);
+  const mediaSnapshot = useSyncExternalStore(
+    subscribeResponsiveMedia,
+    getResponsiveMediaSnapshot,
+    getServerSnapshot,
+  );
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
@@ -431,8 +365,14 @@ export function ResponsiveProvider({ children }: ResponsiveProviderProps): React
   }, []);
 
   const value = useMemo(
-    () => buildContextValue(mediaSnapshot, prefersReducedMotion, virtualKeyboardSnapshot, hasResolvedViewport),
-    [mediaSnapshot, prefersReducedMotion, virtualKeyboardSnapshot, hasResolvedViewport]
+    () =>
+      buildContextValue(
+        mediaSnapshot,
+        prefersReducedMotion,
+        virtualKeyboardSnapshot,
+        mediaSnapshot.resolved,
+      ),
+    [mediaSnapshot, prefersReducedMotion, virtualKeyboardSnapshot]
   );
 
   return <ResponsiveContext.Provider value={value}>{children}</ResponsiveContext.Provider>;

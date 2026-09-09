@@ -16,7 +16,13 @@ import {
   resetVisualAuthorityDiagnostics,
 } from '@/infrastructure/runtime/theming';
 import ModernButton from '@/components/primitives/inputs/button/engines/modern';
+import {
+  getCodeOwnedGovernedBehavior,
+  getCodeOwnedRuntimeConfig,
+  getKnownTenantConfig,
+} from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { DesignSystemProvider } from '..';
+import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(
   hydrateTenantThemeConfig({
@@ -57,6 +63,7 @@ function mountArtifact(artifact: TenantThemeArtifact): void {
   style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
   style.textContent = artifact.css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
 }
 
 function ProfileProbe() {
@@ -98,6 +105,42 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     expect(screen.getByTestId('active-recipe-profile'))
       .toHaveTextContent('rottay/editorial-round@1');
     expect(screen.getByRole('button')).toHaveAttribute('data-shape', 'round');
+  });
+
+  it('reaches a CODE-OWNED vertical, whose profile had no runtime channel at all', () => {
+    // F-112. The runtime projection strips `appearance` to keep static CSS the
+    // sole visual emitter, and the provider read the profile only from there —
+    // so `rottay` (technical-sharp) and `bithire` (network-professional) were
+    // indistinguishable in the product. The selection now travels on the
+    // identity-keyed governed-behavior slot, which is not paint and cannot be
+    // forged by a caller-built config.
+    const rottay = getKnownTenantConfig('rottay')!;
+    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(rottay)).recipeProfile)
+      .toBe('rottay/technical-sharp@1');
+
+    render(
+      <DesignSystemProvider tenantConfig={rottay} vertical="rottay" forceEngine="modern">
+        <ProfileProbe />
+      </DesignSystemProvider>,
+    );
+
+    expect(screen.getByTestId('active-recipe-profile'))
+      .toHaveTextContent('rottay/technical-sharp@1');
+    // The profile is only real if it MOVES a component. `technical-sharp`
+    // declares `button: { size: 'sm', variant: 'outline' }`; the engine default
+    // is a medium primary, so both attributes are evidence rather than a
+    // coincidence of defaults.
+    const button = screen.getByRole('button');
+    expect(button).toHaveAttribute('data-size', 'sm');
+    expect(button).toHaveAttribute('data-variant', 'outline');
+  });
+
+  it('gives two code-owned verticals the two different profiles they authored', () => {
+    const bithire = getKnownTenantConfig('bithire')!;
+    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(bithire)).recipeProfile)
+      .toBe('rottay/network-professional@1');
+    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(getKnownTenantConfig('rottay')!)).recipeProfile)
+      .not.toBe('rottay/network-professional@1');
   });
 
   it('blocks an uncompiled runtime brandTheme before the recipe consumer mounts', () => {

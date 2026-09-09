@@ -69,6 +69,7 @@ export type {
   VisualAuthorityDeclaration,
   VisualAuthorityInput,
   VisualAuthorityOrigin,
+  VisualAuthorityConflictKind,
   VisualAuthorityResolution,
   TenantThemeArtifactExpectation,
   TenantThemeArtifactVerification,

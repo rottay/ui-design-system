@@ -24,12 +24,27 @@
 
 import type { SupportedLocale, TextDirection } from '@/foundation/i18n/kernel/contracts';
 import { resolveDocumentLocaleAttributes } from '@/foundation/i18n/runtime/resolution';
+import type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
 
 /** The tenant's declared theme intent, before any viewer preference. */
 export type TenantThemeMode = 'light' | 'dark' | 'auto';
 
 /** The theme actually painted. `auto` is never one of these. */
 export type ResolvedTheme = 'light' | 'dark';
+
+/**
+ * The document-wide motion posture. `system` is the absence of a document
+ * policy: the OS media query stays the only authority and no attribute is
+ * stamped, which is what `html[data-ds-motion='reduced']` selects against.
+ */
+export type DocumentMotionPosture = 'system' | 'reduced';
+
+/**
+ * The request's viewport tier, as the server knows it (cookie, client hint,
+ * or user-agent). It is a HINT, never a measurement: the client republishes
+ * the real snapshot from `matchMedia` on its first commit.
+ */
+export type DocumentViewportHint = 'phone' | 'tablet' | 'desktop';
 
 export interface DocumentRootAttributesInput {
   /** The tenant's declared mode. `auto` defers to the pre-paint script. */
@@ -46,6 +61,18 @@ export interface DocumentRootAttributesInput {
   locale: SupportedLocale;
   /** Tenant scope attributes, when a tenant artifact is mounted. */
   tenant?: { slug: string; verticalKey: string };
+  /**
+   * Compiled density posture. Stamped here so the cascade resolves
+   * `--ds-density-mode-factor` on the FIRST paint instead of after a client
+   * effect; `RootDensityProvider` claims the same channel on hydration.
+   */
+  density?: DensityPosture;
+  /** Document motion policy. `system` stamps nothing and defers to the OS. */
+  motion?: DocumentMotionPosture;
+  /** Viewport tier the responsive runtime renders its server snapshot for. */
+  viewport?: DocumentViewportHint;
+  /** Validated recipe-profile id carried by the mounted artifact (D-26). */
+  recipeProfile?: string;
 }
 
 export interface DocumentRootAttributes {
@@ -58,6 +85,10 @@ export interface DocumentRootAttributes {
   'data-ds-root'?: '';
   'data-vertical'?: string;
   'data-tenant'?: string;
+  'data-density'?: DensityPosture;
+  'data-ds-motion'?: 'reduced';
+  'data-ds-viewport'?: DocumentViewportHint;
+  'data-recipe-profile'?: string;
 }
 
 /**
@@ -72,7 +103,17 @@ export interface DocumentRootAttributes {
 export function resolveDocumentRootAttributes(
   input: DocumentRootAttributesInput,
 ): DocumentRootAttributes {
-  const { themeMode, autoFallback = 'light', engine, locale, tenant } = input;
+  const {
+    themeMode,
+    autoFallback = 'light',
+    engine,
+    locale,
+    tenant,
+    density,
+    motion,
+    viewport,
+    recipeProfile,
+  } = input;
 
   const { lang, dir } = resolveDocumentLocaleAttributes(locale);
 
@@ -89,6 +130,11 @@ export function resolveDocumentRootAttributes(
     attributes['data-vertical'] = tenant.verticalKey;
     attributes['data-tenant'] = tenant.slug;
   }
+
+  if (density) attributes['data-density'] = density;
+  if (motion === 'reduced') attributes['data-ds-motion'] = 'reduced';
+  if (viewport) attributes['data-ds-viewport'] = viewport;
+  if (recipeProfile) attributes['data-recipe-profile'] = recipeProfile;
 
   return attributes;
 }

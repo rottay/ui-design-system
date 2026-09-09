@@ -15,6 +15,7 @@ import {
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
 } from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '..';
+import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(
   hydrateTenantThemeConfig({
@@ -50,6 +51,7 @@ function mountArtifact(artifact: TenantThemeArtifact): void {
   style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
   style.textContent = artifact.css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
 }
 
 function DensityProbe() {

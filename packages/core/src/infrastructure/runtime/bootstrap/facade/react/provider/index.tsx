@@ -1130,10 +1130,24 @@ export function DesignSystemProvider({
     verifiedArtifact?.normalizedAppearance as TenantConfig['appearance'] | undefined,
   );
 
+  // Governed, non-visual behavior of a code-owned vertical. The runtime
+  // projection above strips `brandTheme` so static CSS stays the sole visual
+  // emitter; motion, density, icon posture and the recipe-profile SELECTION are
+  // behavior no stylesheet can express, so they arrive here instead of riding
+  // on the published config.
+  const governedBehavior = getCodeOwnedGovernedBehavior(resolvedRuntimeConfig);
+
+  // ONE transport for the profile (D-26): the artifact decides it, and both the
+  // DB path (`normalizedAppearance.recipeProfile`, carried on the resolved
+  // config) and the code-owned path (the identity-keyed behavior slot) read
+  // that one decision. The code-owned branch used to be unreachable, which is
+  // why two verticals with deliberately different profiles were
+  // indistinguishable in the product.
   const recipeProfileSelection = (() => {
-    const dbProfile = resolvedRuntimeConfig.appearance?.recipeProfile;
-    return dbProfile
-      ? { profileId: dbProfile, schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION }
+    const profileId =
+      resolvedRuntimeConfig.appearance?.recipeProfile ?? governedBehavior?.recipeProfile;
+    return profileId
+      ? { profileId, schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION }
       : undefined;
   })();
   // C2b: governed icon posture — dual-source precedence (explicit DB Pro
@@ -1143,12 +1157,6 @@ export function DesignSystemProvider({
   // same value through the per-request box the application fills via
   // `provideServerIconExpressiveProfile` — both integration points share
   // this one pure resolver.
-  // Governed, non-visual behavior of a code-owned vertical. The runtime
-  // projection above strips `brandTheme` so static CSS stays the sole visual
-  // emitter; motion, density and icon posture are BEHAVIOR no stylesheet can
-  // express, so they arrive here instead of riding on the published config.
-  const governedBehavior = getCodeOwnedGovernedBehavior(resolvedRuntimeConfig);
-
   const iconExpressiveProfile = resolveActiveIconExpressiveProfile(
     governedBehavior
       // A local read-model, never published: `resolveActiveIconExpressiveProfile`

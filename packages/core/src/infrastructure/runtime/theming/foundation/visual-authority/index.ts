@@ -19,6 +19,7 @@ export {
   censusRuntimeVisualPayload,
   verifyTenantThemeArtifactV1,
   verifyMountedTenantThemeArtifact,
+  verifyTenantThemeArtifactScope,
   auditRetainedTenantThemeArtifact,
   tenantThemeArtifactCssIntegrity,
   tenantThemeArtifactElementId,
@@ -30,6 +31,7 @@ export {
 export type {
   VisualAuthority,
   VisualAuthorityOrigin,
+  VisualAuthorityConflictKind,
   ProviderDeclaration,
   CompiledArtifactDeclaration,
   VisualAuthorityDeclaration,
@@ -37,6 +39,7 @@ export type {
   TenantThemeArtifactExpectation,
   TenantThemeArtifactVerification,
   MountedTenantThemeArtifactVerification,
+  TenantThemeArtifactScopeVerification,
   TenantThemeArtifactSsrEmissionReceipt,
   TenantThemeArtifactSsrEmission,
   VisualAuthorityInput,

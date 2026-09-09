@@ -47,7 +47,23 @@ export type VisualAuthorityOrigin =
   | "invalid-declaration"
   /** Refused because no DOM exists AND no honest emission receipt was given. */
   | "unprovable-ssr-mount"
+  /** Refused because the document root does not carry the artifact's scope. */
+  | "unscoped-mount"
   | "uncompiled-visual-payload";
+
+/**
+ * What kind of question the refusal answers, as a closed value.
+ *
+ * The message says what happened to a human; this says which invariant broke,
+ * so a caller can branch without parsing prose. `scope` is the one admission
+ * used to be unable to state at all: the bytes were proven and the document
+ * root still did not match the selector they are attached to.
+ */
+export type VisualAuthorityConflictKind =
+  | "declaration"
+  | "payload"
+  | "mount"
+  | "scope";
 
 /** Explicitly context-only. This never grants a runtime painter. */
 export interface ProviderDeclaration {
@@ -452,6 +468,63 @@ export function verifyMountedTenantThemeArtifact(
   };
 }
 
+export type TenantThemeArtifactScopeVerification =
+  | { ok: true; element: Element }
+  | { ok: false; error: string };
+
+/**
+ * The element an artifact's scope selector is evaluated against.
+ *
+ * Every artifact scope -- the first-party `html[data-tenant]` arm and the
+ * compiled `[data-ds-root][data-vertical][data-tenant]` arm alike -- names the
+ * DOCUMENT ROOT, so a container passed as the search root still resolves to
+ * its own `documentElement` rather than to itself.
+ */
+function documentScopeElement(root: ParentNode): Element | null {
+  const asDocument = root as Partial<Document>;
+  if (asDocument.documentElement) return asDocument.documentElement;
+  const owner = (root as Partial<Element>).ownerDocument;
+  return owner?.documentElement ?? null;
+}
+
+/**
+ * Prove that the document root carries the scope the artifact's CSS is
+ * attached to.
+ *
+ * Byte proof and scope proof answer different questions. An artifact whose
+ * exact bytes are mounted in `<head>` paints NOTHING when `<html>` carries no
+ * `data-ds-root`/`data-vertical`/`data-tenant`, because every rule in it is
+ * nested under that selector. Admission used to prove only the first half and
+ * report `conflict: null` for a document that renders unstyled.
+ */
+export function verifyTenantThemeArtifactScope(
+  artifact: TenantThemeArtifact,
+  root: ParentNode | undefined =
+    typeof document === "undefined" ? undefined : document,
+): TenantThemeArtifactScopeVerification {
+  if (!root) return { ok: false, error: "no document root is available" };
+  const element = documentScopeElement(root);
+  if (!element) {
+    return { ok: false, error: "no document root element is available" };
+  }
+  if (!element.hasAttribute(artifact.scopes.root.attribute)) {
+    return {
+      ok: false,
+      error: `the document root does not carry ${artifact.scopes.root.attribute}`,
+    };
+  }
+  for (const descriptor of [artifact.scopes.vertical, artifact.scopes.tenant]) {
+    const live = element.getAttribute(descriptor.attribute);
+    if (live !== descriptor.value) {
+      return {
+        ok: false,
+        error: `the document root carries ${descriptor.attribute}=${JSON.stringify(live)}, not ${JSON.stringify(descriptor.value)}`,
+      };
+    }
+  }
+  return { ok: true, element };
+}
+
 export const MOUNTED_ARTIFACT_SELECTOR =
   `style[${TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE}],link[${TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE}]`;
 
@@ -635,6 +708,8 @@ export interface VisualAuthorityResolution {
   origin: VisualAuthorityOrigin;
   suppressedChannels: readonly TenantVisualChannel[];
   conflict: string | null;
+  /** Which invariant the conflict broke; `null` whenever `conflict` is null. */
+  conflictKind: VisualAuthorityConflictKind | null;
   artifact: TenantThemeArtifact | null;
   mountedArtifact: HTMLStyleElement | HTMLLinkElement | null;
 }
@@ -668,12 +743,14 @@ export function appearanceMatchesArtifact(
 function blocked(
   origin: VisualAuthorityOrigin,
   message: string,
+  kind: VisualAuthorityConflictKind,
 ): VisualAuthorityResolution {
   return {
     authority: "compiled-artifact",
     origin,
     suppressedChannels: TENANT_THEME_V1_COVERAGE,
     conflict: message,
+    conflictKind: kind,
     artifact: null,
     mountedArtifact: null,
   };
@@ -689,6 +766,7 @@ export function resolveVisualAuthority(
       return blocked(
         "uncompiled-visual-payload",
         `Tenant "${slug}" carries runtime visual payload but no verified mounted artifact.`,
+        "payload",
       );
     }
     return {
@@ -696,6 +774,7 @@ export function resolveVisualAuthority(
       origin: "no-visual-payload",
       suppressedChannels: NO_SUPPRESSION,
       conflict: null,
+      conflictKind: null,
       artifact: null,
       mountedArtifact: null,
     };
@@ -709,6 +788,7 @@ export function resolveVisualAuthority(
     return blocked(
       "invalid-declaration",
       `Tenant "${slug}" supplied an invalid visual authority declaration.`,
+      "declaration",
     );
   }
   if (declaration.authority === "provider") {
@@ -716,6 +796,7 @@ export function resolveVisualAuthority(
       return blocked(
         "uncompiled-visual-payload",
         `Tenant "${slug}" cannot use context-only provider authority with runtime visual payload.`,
+        "payload",
       );
     }
     return {
@@ -723,6 +804,7 @@ export function resolveVisualAuthority(
       origin: "explicit-context",
       suppressedChannels: NO_SUPPRESSION,
       conflict: null,
+      conflictKind: null,
       artifact: null,
       mountedArtifact: null,
     };
@@ -736,6 +818,7 @@ export function resolveVisualAuthority(
     return blocked(
       "invalid-declaration",
       `Tenant "${slug}" artifact rejected: ${verified.error}.`,
+      "declaration",
     );
   }
   const documentRoot =
@@ -760,6 +843,7 @@ export function resolveVisualAuthority(
       return blocked(
         "unprovable-ssr-mount",
         `Tenant "${slug}" cannot admit a compiled artifact with no mounted DOM: ${receiptFailure}.`,
+        "mount",
       );
     }
     origin = "ssr-emission-receipt";
@@ -772,6 +856,17 @@ export function resolveVisualAuthority(
       return blocked(
         "invalid-declaration",
         `Tenant "${slug}" artifact is not mounted: ${mounted.error}.`,
+        "declaration",
+      );
+    }
+    // The bytes are proven; the SELECTOR they are attached to is a second,
+    // independent question, and it is the one that decides whether they paint.
+    const scoped = verifyTenantThemeArtifactScope(verified.artifact, documentRoot);
+    if (!scoped.ok) {
+      return blocked(
+        "unscoped-mount",
+        `Tenant "${slug}" artifact is mounted but out of scope: ${scoped.error}.`,
+        "scope",
       );
     }
     mountedArtifact = mounted.element;
@@ -795,6 +890,7 @@ export function resolveVisualAuthority(
     return blocked(
       "invalid-declaration",
       `Tenant "${slug}" mixes a compiled artifact with ${conflicts.join(", ")}.`,
+      "declaration",
     );
   }
 
@@ -803,6 +899,7 @@ export function resolveVisualAuthority(
     origin,
     suppressedChannels: verified.artifact.coverage,
     conflict: null,
+    conflictKind: null,
     artifact: verified.artifact,
     mountedArtifact,
   };

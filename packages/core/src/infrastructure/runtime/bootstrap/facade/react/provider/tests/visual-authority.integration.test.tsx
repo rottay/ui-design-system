@@ -16,6 +16,20 @@ import {
   resetVisualAuthorityDiagnostics,
 } from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '..';
+import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+import { outstandingRootClaims } from '@/infrastructure/runtime/foundation/root-attributes';
+/**
+ * Whether the provider CLAIMED the root scope.
+ *
+ * `data-tenant` is no longer a proxy for that: `mountTenantTheme` projects the
+ * scope on the server, so the attribute is present in every correctly mounted
+ * document whether or not the barrier let a provider through. The claim
+ * registry answers the question the assertion actually asks.
+ */
+function providerClaimedRoot(): boolean {
+  return outstandingRootClaims(document.documentElement) > 0;
+}
+
 
 const ARTIFACT = compileTenantThemeConfig(
   hydrateTenantThemeConfig({
@@ -43,6 +57,7 @@ function mountArtifact(artifact: TenantThemeArtifact = ARTIFACT): HTMLStyleEleme
   style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
   style.textContent = artifact.css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
   return style;
 }
 
@@ -165,7 +180,7 @@ describe('DesignSystemProvider visual authority barrier', () => {
   it('blocks children before downstream providers when the artifact is not mounted', () => {
     renderProvider(tenantConfig());
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 
   it('blocks a tampered artifact even when its claimed element is mounted', () => {
@@ -173,7 +188,7 @@ describe('DesignSystemProvider visual authority barrier', () => {
     mountArtifact(tampered);
     renderProvider(tenantConfig(), tampered);
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 
   it('blocks uncompiled visual payload instead of rendering children under a baseline', () => {
@@ -190,7 +205,7 @@ describe('DesignSystemProvider visual authority barrier', () => {
       </DesignSystemProvider>,
     );
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 
   it('blocks a raw appearance that differs from the compiled artifact', () => {
@@ -295,7 +310,7 @@ describe('DesignSystemProvider retained mount proof', () => {
     tamper(style);
 
     await waitFor(() => expect(screen.queryByTestId('resolved-config')).toBeNull());
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 
   it('reports the revocation as a visual authority conflict', async () => {
@@ -346,6 +361,6 @@ describe('DesignSystemProvider retained mount proof', () => {
     await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
 
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 });

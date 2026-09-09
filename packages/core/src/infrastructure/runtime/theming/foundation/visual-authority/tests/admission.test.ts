@@ -15,6 +15,7 @@ import {
 import { resolveVisualAuthority as resolveFromPublic } from '@/entrypoints/public/runtime/visual-authority';
 import * as retention from '../runtime/retention';
 import type { RuntimeVisualPayloadCensus } from '../foundation/admission';
+import { stampTenantThemeScope } from './mount-fixture';
 
 /**
  * A hand-authored artifact fixture, NOT produced by `compileTenantThemeConfig`.
@@ -66,6 +67,7 @@ function mountArtifact(artifact: TenantThemeArtifact = FIXTURE): HTMLStyleElemen
   style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
   style.textContent = artifact.css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
   return style;
 }
 
