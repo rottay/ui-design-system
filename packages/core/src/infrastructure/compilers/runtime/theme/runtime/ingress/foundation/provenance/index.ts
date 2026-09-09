@@ -76,6 +76,34 @@ const NAMED_SPELLINGS: ReadonlyMap<ThemeDecisionId, readonly KeypathSpelling[]> 
     ])
   );
 
+/**
+ * The members a document can actually WRITE, from the same catalog column the
+ * transport is authored in. `null` where the row states a single keypath.
+ *
+ * `typography.families` registers four font roles and the document shape
+ * carries two: a selection naming `mono` moves nothing, so it must own nothing
+ * -- the pairing is what writes that leaf.
+ */
+const WRITABLE_MEMBERS: ReadonlyMap<
+  ThemeDecisionId,
+  readonly string[] | null
+> = new Map(
+  THEME_CONTROL_CATALOG.map((row) => {
+    const members =
+      row.keypath.document === null
+        ? []
+        : expandKeypath(row.keypath.document).filter(
+            (spelling) => spelling.member !== null
+          );
+    return [
+      row.id,
+      members.length > 0
+        ? members.map((spelling) => spelling.member as string)
+        : null,
+    ];
+  })
+);
+
 function expandKeypath(keypath: string): readonly KeypathSpelling[] {
   const brace = /^(.*)\{([^}]*)\}(.*)$/.exec(keypath);
   if (!brace) return [{ leaf: trimWildcard(keypath), member: null }];
@@ -120,6 +148,7 @@ function namedLeaves(
   if (braced.length === 0 || !isRecordValue(authoredValue)) {
     return spellings.map((spelling) => spelling.leaf);
   }
+  const writable = WRITABLE_MEMBERS.get(id) ?? null;
   const claimed: string[] = [];
   for (const [member, value] of Object.entries(authoredValue)) {
     if (value === undefined) continue;
@@ -133,7 +162,13 @@ function namedLeaves(
           "a record member owns exactly one keypath"
       );
     }
-    if (matches.length === 1) claimed.push(matches[0].leaf);
+    if (matches.length === 0) continue;
+    const writes =
+      writable === null ||
+      writable.some((candidate) =>
+        normalizeMember(candidate).includes(normalizeMember(member))
+      );
+    if (writes) claimed.push(matches[0].leaf);
   }
   return [...new Set(claimed)];
 }

@@ -33,6 +33,7 @@ import type {
   TenantThemeDocument,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
+  admitDocument,
   compileThemeIntent,
   documentThemeIntent,
   previewThemeIntent,
@@ -344,5 +345,57 @@ describe("RT05 · precedence, removal and plan", () => {
         )
       ).toEqual([]);
     }
+  });
+
+  /**
+   * The defaulting leg. A profile fills what the tenant left ABSENT; a supplied
+   * value is authorship whatever it is worth. Reading `""`, `null`, `false` or
+   * `0` as "unset" made the station overwrite four supplied values with the
+   * profile's pairing, so preview painted what publication refused.
+   */
+  it("defaults only an ABSENT field, and refuses a supplied one on both doors", () => {
+    const supplied = (typePairing: unknown): TenantThemeDocument =>
+      ({
+        schemaVersion: 1,
+        mode: "simple",
+        appearance: {
+          experienceProfile: "rottay/management-editorial@1",
+          typography: { typePairing },
+        },
+      }) as unknown as TenantThemeDocument;
+    const refusalOf = (run: () => unknown): string => {
+      try {
+        run();
+        return "no-refusal";
+      } catch (error) {
+        return (error as Error).message;
+      }
+    };
+    for (const value of ["", null, false, 0]) {
+      const document = supplied(value);
+      const preview = refusalOf(() =>
+        compileThemeIntent(
+          previewThemeIntent({ vertical: "rottay", slug: "acme", document })
+        )
+      );
+      const publication = refusalOf(() => publish("rottay", document));
+      expect(preview).not.toBe("no-refusal");
+      expect(publication).not.toBe("no-refusal");
+      // Both doors name the SAME supplied field at its own document path.
+      for (const message of [preview, publication]) {
+        expect(message).toContain("$.appearance.typography.typePairing");
+      }
+    }
+    // A supplied value the domain admits is kept; an absent one is filled.
+    expect(
+      admitDocument({ vertical: "rottay", document: supplied("technical") })
+        .effective
+    ).toMatchObject({ appearance: { typography: { typePairing: "technical" } } });
+    expect(
+      admitDocument({
+        vertical: "rottay",
+        document: profileDocument("rottay/management-editorial@1"),
+      }).effective
+    ).toMatchObject({ appearance: { typography: { typePairing: "editorial" } } });
   });
 });

@@ -345,11 +345,23 @@ describe("migrate v1 -> v2", () => {
     expect(() => migrateDocumentV1ToV2(document)).toThrow(
       /general\.typography\.fontFamilyBase/u
     );
+    // The stack it cannot carry is still a leaf the row WRITES, so it is
+    // recorded as the direct authorship it is rather than left to the pairing.
     const { ledger } = admitDocument({ vertical: "bithire", document });
     expect(ledger.entries.map((entry) => entry.ref)).toEqual([
+      { kind: "decision", id: "typography.families" },
       { kind: "decision", id: "typography.pairing" },
     ]);
-    expect(ledger.entries[0].tier).toBe("standard");
+    expect(ledger.entries.map((entry) => entry.effectiveLeaves)).toEqual([
+      ["typography.fontFamilyBase"],
+      [
+        "typography.typePairing",
+        "typography.fontFamilyHeading",
+        "typography.letterSpacing.heading",
+        "typography.lineHeight.display",
+      ],
+    ]);
+    expect(ledger.entries[1].tier).toBe("standard");
   });
 
   it("keeps the decisions that flank an unmigratable per-mode seed", () => {

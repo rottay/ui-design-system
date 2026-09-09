@@ -578,8 +578,19 @@ describe("digest identity across the canonicalization extraction", () => {
     // so this is a move in what the artifact REPORTS, not in what it paints.
     const POST_V1_PROVENANCE_DIGEST =
       "sha256-bb1278be04f7192c34f0afd98ba4683e72b75d2691a26f9e19592d74bc9e940e";
-    expect(artifact.digest).toBe(POST_V1_PROVENANCE_DIGEST);
-    expect(artifact.provenance?.entries.length).toBeGreaterThan(0);
+    expect(artifact.digest).not.toBe(POST_V1_PROVENANCE_DIGEST);
+    // Seventh declared move, and the same field: this document WRITES
+    // `fontFamilyBase` and `fontFamilyHeading`, and the ledger used to leave
+    // those leaves to whatever expanded into them. It now names the row that
+    // wrote them, so the serialized provenance gains one entry and the digest
+    // moves with it. Still a move in what the artifact REPORTS -- the channel
+    // census below is asserted unchanged beside it.
+    const POST_V1_FONT_AUTHORSHIP_DIGEST =
+      "sha256-e112fb0ca6a954623224a13c9302386251fd92ab68ceaba75ebb3b6f73c9b8fb";
+    expect(artifact.digest).toBe(POST_V1_FONT_AUTHORSHIP_DIGEST);
+    expect(
+      artifact.provenance?.entries.map((entry) => entry.ref)
+    ).toContainEqual({ kind: "decision", id: "typography.families" });
 
     // Cause 2, two-sided. What the tenant authored survives the subtraction...
     expect(artifact.variables["--ds-color-primary"]).toBe("#0F766E");
@@ -678,8 +689,16 @@ describe("digest identity across the canonicalization extraction", () => {
     // stays asserted, so this reads as a fifth declared move.
     const POST_V1_PROVENANCE_W4_DIGEST =
       "sha256-35ead1ed4d0a0562331c128eccd5bcde34b6f34b3ec50c8876e35dd6798c50e0";
-    expect(artifact.digest).toBe(POST_V1_PROVENANCE_W4_DIGEST);
-    expect(artifact.provenance?.entries.length).toBeGreaterThan(0);
+    expect(artifact.digest).not.toBe(POST_V1_PROVENANCE_W4_DIGEST);
+    // CAUSE 6 -- the same font-authorship move the populated-simple block
+    // pins: this document writes both font families through the advanced
+    // transport, so the ledger names the row that wrote them.
+    const POST_V1_FONT_AUTHORSHIP_W4_DIGEST =
+      "sha256-16eaef281dd7ea6898bc81f3079a311a92b79f347f5d13486ddb2fb4fc8fe2e6";
+    expect(artifact.digest).toBe(POST_V1_FONT_AUTHORSHIP_W4_DIGEST);
+    expect(
+      artifact.provenance?.entries.map((entry) => entry.ref)
+    ).toContainEqual({ kind: "decision", id: "typography.families" });
 
     // Cause 3, two-sided. The two authored leaves win over the tenant's own
     // `inverse` tone...

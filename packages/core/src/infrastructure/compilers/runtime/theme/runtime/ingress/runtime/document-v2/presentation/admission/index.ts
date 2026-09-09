@@ -24,8 +24,14 @@ import {
 } from "@/contracts/theme/presentation/document";
 import { assertThemeDecisionDomains } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
 import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/expressive-profiles";
-import { documentThemePatch } from "../../../../foundation/document-patch";
-import { expandProfileDefaults } from "../../../../foundation/profile-expansion";
+import {
+  ThemePatchMigrationError,
+  documentThemePatch,
+} from "../../../../foundation/document-patch";
+import {
+  authoredFieldRefusal,
+  expandProfileDefaults,
+} from "../../../../foundation/profile-expansion";
 import {
   documentProvenanceLedger,
   type ThemeProvenanceLedger,
@@ -108,11 +114,42 @@ function v1Ledger(
   const chromeTransportPrefix = "visualFoundation.advanced.chrome";
   const { decisions } = captureV1Decisions(document);
   return documentProvenanceLedger({
-    decisions: decisions as Record<string, unknown>,
+    decisions: {
+      ...(decisions as Record<string, unknown>),
+      ...v1FontAuthorship(document),
+    },
     chrome,
     chromeTransportPrefix,
     profileClaims,
   });
+}
+
+/**
+ * The font roles a v1 row wrote ITSELF, captured before any profile default is
+ * folded in.
+ *
+ * The migration refuses a free font stack because row 6 closes the decision
+ * domain to a registered pack id -- but refusing to CARRY a field is not the
+ * same as denying the tenant wrote it. Left uncaptured, the leaf it emits was
+ * attributed to the profile-derived pairing that merely expanded into the same
+ * name, so one authorship read as `direct-override` in v2 and `profile-derived`
+ * in v1.
+ */
+function v1FontAuthorship(
+  document: TenantThemeDocument
+): Record<string, unknown> {
+  const typography =
+    document.mode === "simple"
+      ? document.appearance?.typography
+      : document.visualFoundation?.general?.typography;
+  const families = Object.fromEntries(
+    (["fontFamilyBase", "fontFamilyHeading"] as const)
+      .filter((role) => typography?.[role] !== undefined)
+      .map((role) => [role, typography?.[role]])
+  );
+  return Object.keys(families).length > 0
+    ? { "typography.families": families }
+    : {};
 }
 
 export function admitDocument(input: {
@@ -127,6 +164,10 @@ export function admitDocument(input: {
   ranges?: TenantThemeVerticalEnvelope["ranges"];
 }): DocumentAdmission {
   if (!isTenantThemeDocumentV2(input.document)) {
+    // Authorship is judged on the ORIGINAL row, before a default fills
+    // anything: only an ABSENT field may receive one.
+    const refusal = authoredFieldRefusal(input.document);
+    if (refusal) throw new ThemePatchMigrationError(refusal);
     const expanded = expandProfileDefaults({
       vertical: input.vertical,
       document: input.document,
