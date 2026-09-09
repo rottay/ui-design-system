@@ -4323,7 +4323,7 @@
    "lane": "emission-mount",
    "order": 2,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-EMI-01",
     "WO-CON-02"
@@ -4333,8 +4333,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-19, F-20, F-46, F-112, F-89, F-12; supersedes: WO-ARC-14",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "opus",
+   "claimedAt": "2026-09-09",
    "progressLog": []
   },
   {
@@ -5142,7 +5142,7 @@
    "lane": "derivation",
    "order": 7,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-01",
     "WO-CON-03"
@@ -5152,8 +5152,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes n/a (enables WO-DER-06 F-11; D-30)",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "opus",
+   "claimedAt": "2026-09-09",
    "progressLog": []
   },
   {
