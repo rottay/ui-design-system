@@ -25,11 +25,17 @@ import {
 import { assertThemeDecisionDomains } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/decisions";
 import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/expressive-profiles";
 import { documentThemePatch } from "../../../../foundation/document-patch";
+import { expandProfileDefaults } from "../../../../foundation/profile-expansion";
 import {
   documentProvenanceLedger,
   type ThemeProvenanceLedger,
 } from "../../../../foundation/provenance";
-import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import type { DecisionProvenanceClaim } from "@/foundation/contracts/composition/tenants/themes/provenance";
+import type { ThemeDecisionId } from "@/contracts/theme/foundation/decisions";
+import type {
+  TenantThemeDocument,
+  TenantThemeVerticalEnvelope,
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { projectDecisionsToV1, type DecisionProjection } from "../../foundation/projection";
 import {
   captureV1Decisions,
@@ -44,6 +50,22 @@ export interface DocumentAdmission {
   decisions: readonly DecisionProjection[];
   /** Activated decisions that moved no keypath today, in kit row order. */
   unlit: readonly DecisionProjection[];
+  /**
+   * What the profile-expansion station filled, as `profile-derived` claims.
+   *
+   * Reported beside the decisions rather than inside them: a profile default is
+   * not a decision the tenant made, and a door that listed it as one would be
+   * the terminal's old authorship invention under a new name. The `ledger`
+   * below resolves both classes together, which is where they belong.
+   */
+  profileClaims: readonly DecisionProvenanceClaim<ThemeDecisionId>[];
+  /**
+   * The v1-shape document the patch was lowered from, profile defaults
+   * included. A publisher needs it to project the artifact's runtime metadata
+   * from the same effective document the patch came from, rather than running
+   * the expansion a second time and hoping the two agree.
+   */
+  effective: TenantThemeDocument;
   /**
    * Which raw selection caused each effective leaf, captured HERE and never
    * re-derived. Empty is a real answer ("this document authored nothing the
@@ -75,7 +97,10 @@ export interface DocumentAdmission {
  * Chrome is claimed at the V1 transport path, not the migrated `overrides.`
  * one, so a refusal points at what the author actually wrote.
  */
-function v1Ledger(document: TenantThemeDocument): ThemeProvenanceLedger {
+function v1Ledger(
+  document: TenantThemeDocument,
+  profileClaims: readonly DecisionProvenanceClaim<ThemeDecisionId>[]
+): ThemeProvenanceLedger {
   const chrome =
     document.mode === "advanced"
       ? document.visualFoundation?.advanced?.chrome
@@ -86,23 +111,38 @@ function v1Ledger(document: TenantThemeDocument): ThemeProvenanceLedger {
     decisions: decisions as Record<string, unknown>,
     chrome,
     chromeTransportPrefix,
+    profileClaims,
   });
 }
 
 export function admitDocument(input: {
   vertical: FirstPartyVerticalId;
   document: TenantThemeDocumentAny;
+  /**
+   * The clamp bounds a profile default may not cross. Omitted, the station
+   * reads the vertical's registered envelope; a caller that hands a publish
+   * terminal a NARROWED envelope hands the same one here, so previewing a
+   * document clamps exactly as publishing it does.
+   */
+  ranges?: TenantThemeVerticalEnvelope["ranges"];
 }): DocumentAdmission {
   if (!isTenantThemeDocumentV2(input.document)) {
+    const expanded = expandProfileDefaults({
+      vertical: input.vertical,
+      document: input.document,
+      ranges: input.ranges,
+    });
     return {
       version: 1,
       patch: documentThemePatch({
         vertical: input.vertical,
-        document: input.document,
+        document: expanded.document,
       }),
       decisions: [],
       unlit: [],
-      ledger: v1Ledger(input.document),
+      profileClaims: expanded.claims,
+      effective: expanded.document,
+      ledger: v1Ledger(input.document, expanded.claims),
     };
   }
   const document = assertTenantThemeDocumentV2(input.document);
@@ -117,15 +157,29 @@ export function admitDocument(input: {
     '$.decisions["profiles.expressive"]'
   );
   const { v1, projections } = projectDecisionsToV1(document);
+  // The expansion runs on the PROJECTED v1 shape, after the report of what the
+  // tenant decided is already fixed, so a default can never enter the door's
+  // own answer about authorship.
+  const expanded = expandProfileDefaults({
+    vertical: input.vertical,
+    document: v1,
+    ranges: input.ranges,
+  });
   return {
     version: 2,
-    patch: documentThemePatch({ vertical: input.vertical, document: v1 }),
+    patch: documentThemePatch({
+      vertical: input.vertical,
+      document: expanded.document,
+    }),
     decisions: projections,
     unlit: projections.filter((projection) => !projection.lit),
+    profileClaims: expanded.claims,
+    effective: expanded.document,
     ledger: documentProvenanceLedger({
       decisions: document.decisions as Record<string, unknown>,
       chrome: document.overrides?.chrome,
       chromeTransportPrefix: "overrides.chrome",
+      profileClaims: expanded.claims,
     }),
   };
 }

@@ -15,6 +15,7 @@
  */
 
 import {
+  authoredSelectionKey,
   resolveDecisionProvenanceLedger,
   type DecisionProvenanceCatalog,
   type DecisionProvenanceClaim,
@@ -241,6 +242,78 @@ function chromeOverrideClaims(
 }
 
 /**
+ * The expansion leaves a claim the STATION built reaches, added here so both
+ * classes answer to one expansion table. A profile that fills the pairing owns
+ * the font families that pairing writes, exactly as an authored pairing does,
+ * and keeps them `profile-derived` (I-P0).
+ */
+function withExpansionLeaves(claim: ThemeProvenanceClaim): ThemeProvenanceClaim {
+  if (claim.ref.kind !== "decision") return claim;
+  const extra = expansionLeaves(claim.ref.id, claim.authoredValue).filter(
+    (leaf) => !claim.leaves.some((entry) => entry.leaf === leaf)
+  );
+  if (extra.length === 0) return claim;
+  return {
+    ...claim,
+    leaves: [
+      ...claim.leaves,
+      ...extra.map((leaf) => ({
+        leaf,
+        specificity: "expansion-derived" as const,
+      })),
+    ],
+  };
+}
+
+/**
+ * Split a profile default off a decision identity the tenant already holds.
+ *
+ * One entry carries ONE provenance and a raw selection is captured once, so a
+ * row the tenant authored in part and the profile filled for the rest cannot
+ * be one entry: it would report the profile's members as the tenant's own
+ * (I-P0, I-T4). Each filled member becomes its own claim, keyed by the member
+ * it fills, and a value nobody decided carries no tier.
+ */
+function splitDerivedClaim(
+  claim: ThemeProvenanceClaim
+): readonly ThemeProvenanceClaim[] {
+  if (claim.ref.kind !== "decision") return [claim];
+  const { id } = claim.ref;
+  const authored = claim.authoredValue;
+  return claim.leaves.map((leaf) => {
+    const member = leaf.leaf.slice(leaf.leaf.lastIndexOf(".") + 1);
+    return {
+      ref: {
+        kind: "sanctioned-override" as const,
+        path: `decisions[${JSON.stringify(id)}].${member}`,
+      },
+      provenance: claim.provenance,
+      authoredValue: isRecordValue(authored) ? authored[member] : authored,
+      leaves: [leaf],
+    };
+  });
+}
+
+/**
+ * Add what the profile-expansion station filled to what the tenant authored.
+ *
+ * A default whose row the tenant never touched keeps that row's decision
+ * identity, so the ledger still reports WHICH decision the profile filled; a
+ * default landing on a row the tenant authored in part is split instead.
+ */
+function foldProfileClaims(
+  authored: readonly ThemeProvenanceClaim[],
+  derived: readonly ThemeProvenanceClaim[]
+): readonly ThemeProvenanceClaim[] {
+  const held = new Set(authored.map((claim) => authoredSelectionKey(claim.ref)));
+  return derived.flatMap((claim) =>
+    held.has(authoredSelectionKey(claim.ref))
+      ? splitDerivedClaim(claim)
+      : [withExpansionLeaves(claim)]
+  );
+}
+
+/**
  * The ledger a document contributes, from what its OWN transport declared.
  *
  * The two documents are not read here: the caller hands in the decision map
@@ -253,16 +326,23 @@ export function documentProvenanceLedger(input: {
   readonly decisions: Readonly<Record<string, unknown>>;
   readonly chrome: unknown;
   readonly chromeTransportPrefix: string;
+  /**
+   * What the profile-expansion station filled for this document, as
+   * `profile-derived` claims. The door runs that station, so both classes are
+   * resolved here in one pass instead of a second builder re-stating the first
+   * one's answer downstream.
+   */
+  readonly profileClaims?: readonly ThemeProvenanceClaim[];
 }): ThemeProvenanceLedger {
   const decisions = input.decisions;
-  const claims: ThemeProvenanceClaim[] = [
+  const authored: ThemeProvenanceClaim[] = [
     ...THEME_DECISION_IDS.filter((id) => decisions[id] !== undefined).map((id) =>
       decisionClaim(id, decisions[id])
     ),
     ...chromeOverrideClaims(input.chrome, input.chromeTransportPrefix),
   ];
   return resolveDecisionProvenanceLedger(
-    claims,
+    [...authored, ...foldProfileClaims(authored, input.profileClaims ?? [])],
     THEME_DECISION_PROVENANCE_CATALOG,
     "documentProvenanceLedger"
   );

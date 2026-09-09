@@ -55,7 +55,6 @@ import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
-import { expandProfileDefaults } from "../../runtime/theme/runtime/ingress/foundation/profile-expansion";
 import {
   envelopeDialIssues,
   envelopeShapeIssues,
@@ -80,7 +79,7 @@ import { tenantArtifactScope } from "@/infrastructure/compilers/runtime/theme";
 import { emitTenantArtifactCss } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
 import {
   compileThemeIntent,
-  documentThemeIntent,
+  documentThemeAdmission,
 } from "@/infrastructure/compilers/runtime/theme";
 // The single admission. This terminal supplies the one transport fact the
 // intent cannot carry (the document's declared canvas) and re-dresses the
@@ -901,14 +900,12 @@ export function compileTenantTheme(
   }
   const vertical: FirstPartyVerticalId = config.verticalKey;
 
-  // The profile expansion is the INGRESS station's, run here ONCE on the
-  // document this terminal is about to publish, so the artifact's runtime
-  // metadata and the CSS beside it are projections of the same effective
-  // document. It used to be a preprocess private to this terminal, over a
-  // replacement document it built for itself, which is why publishing a profile
-  // compiled fonts, motion and radius that previewing the same row never showed
-  // (RT05). The door does not expand: it is the R1 lot's file, so this terminal
-  // hands the producer the effective document instead of the selection alone.
+  // The profile expansion is the DOOR's, run ONCE for every transport that
+  // admits this document, so the artifact's runtime metadata and the CSS beside
+  // it are projections of the same effective document -- and so previewing the
+  // row shows what publishing it compiles (RT05). This terminal states the
+  // envelope the defaults are clamped into and reads the effective document
+  // back; it runs no station of its own.
   const documentSource: TenantThemeDocument =
     config.mode === "simple"
       ? {
@@ -921,11 +918,6 @@ export function compileTenantTheme(
           mode: "advanced",
           visualFoundation: config.visualFoundation,
         };
-  const documentPatchSource = expandProfileDefaults({
-    vertical,
-    document: documentSource,
-    ranges: verticalEnvelope.ranges,
-  }).document;
   // The ISO leg is the only place a persisted row meets the fail-closed
   // ThemeLayerPatch/mergeDeep/compileTheme lowering, and those throw plain Errors
   // (`ThemePatchMigrationError`, `resolveTheme: unknown key ...`). A caller of
@@ -934,20 +926,20 @@ export function compileTenantTheme(
   // The engine is the VERTICAL's, never the tenant's: the door reads the same
   // roster row the envelopes are keyed on, so a document cannot contradict what
   // product it is being rendered as.
-  return isoLowering(
-    () =>
-      assembleTenantThemeArtifact({
-        intent: documentThemeIntent({
-          vertical,
-          slug: config.slug,
-          document: documentPatchSource,
-        }),
-        identity: config,
-        verticalEnvelope,
-        document: documentPatchSource,
-      }),
-    config.mode === "advanced" ? "$.visualFoundation" : "$.appearance"
-  );
+  return isoLowering(() => {
+    const { intent, admission } = documentThemeAdmission({
+      vertical,
+      slug: config.slug,
+      document: documentSource,
+      ranges: verticalEnvelope.ranges,
+    });
+    return assembleTenantThemeArtifact({
+      intent,
+      identity: config,
+      verticalEnvelope,
+      document: admission.effective,
+    });
+  }, config.mode === "advanced" ? "$.visualFoundation" : "$.appearance");
 }
 
 /**
