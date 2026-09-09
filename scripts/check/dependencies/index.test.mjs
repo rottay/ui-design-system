@@ -382,6 +382,24 @@ test('an expression-wrapped default preserves the container identity it carries'
       ['wrapped-window-ternary', "function poison(b = flag ? window : {}) { b.Symbol = FakeSymbol; } poison();"],
       ['wrapped-define-property', "function poison(a = globalThis, b = a || {}) { Object.defineProperty(b, 'Symbol', { value: FakeSymbol }); } poison();"],
       ['wrapped-captured-intrinsic', "function poison(a = globalThis, b = a ?? {}) { const S = b.Symbol; S.for = () => 'require'; } poison();"],
+      ['wrapped-and', "function poison(a = globalThis, b = true && a) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-left', "function poison(a = globalThis, b = a && {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-container-direct', "function poison(b = flag && globalThis) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-alias', "const G = globalThis; function poison(b = flag && G) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-factory', "const getGlobal = () => globalThis; function poison(b = flag && getGlobal()) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-window', "function poison(b = flag && window) { b.Symbol = FakeSymbol; } poison();"],
+      ['wrapped-and-chain', "function poison(a = globalThis, b = flag && a, c = b && b) { c.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-comma', "function poison(a = globalThis, b = (0, flag && a)) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-composition', "function poison(a = globalThis, b = (flag && (a as any)) ?? {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-root-property', "function poison(a = globalThis, b = (flag && a).self) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-await', "async function poison(a = globalThis, b = await (flag && a)) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-argument-hop', "function inner(x) { x.Symbol.for = () => 'require'; } function outer(a = globalThis, b = flag && a) { inner(b); } outer();"],
+      ['wrapped-and-define-property', "function poison(a = globalThis, b = flag && a) { Object.defineProperty(b, 'Symbol', { value: FakeSymbol }); } poison();"],
+      ['wrapped-and-captured-intrinsic', "function poison(a = globalThis, b = true && a) { const S = b.Symbol; S.for = () => 'require'; } poison();"],
+      ['wrapped-and-binding-element', "function poison({ a = globalThis, b = flag && a } = {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-or-assign', "function poison(a = globalThis, b = (c ||= a)) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-and-assign', "function poison(a = globalThis, b = (c &&= a)) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-nullish-assign', "function poison(a = globalThis, b = (c ??= a)) { b.Symbol.for = () => 'require'; } poison();"],
     ]) {
       const source = `${body} ${slot}`;
       for (const extension of ['ts', 'mjs']) {
@@ -414,6 +432,15 @@ test('an expression-wrapped default preserves the container identity it carries'
       ['wrapped-destructured-default', "function draw({ width = 10, height = width || 4 } = {}) { return width * height; } void draw(); void globalThis[Symbol.for('rottay.slot')];"],
       ['wrapped-read-only-slot', "function read(a = globalThis, b = a || {}) { return b[Symbol.for('rottay.slot')]; } void read();"],
       ['wrapped-well-known-member', "function read(a = globalThis, b = a ?? {}) { return b.Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-and-plain-default', "function span(a = {}, b = a && {}) { return b; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-and-numeric-default', "function span(a = 1, b = a && 2) { return a + b; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-and-destructured-default', "function draw({ width = 10, height = width && 4 } = {}) { return width * height; } void draw(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-unary-plus-default', "function span(a = globalThis, b = +a) { b.Symbol = FakeSymbol; } span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-void-default', "function span(a = globalThis, b = void a) { b.Symbol = FakeSymbol; } span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-typeof-default', "function span(a = globalThis, b = typeof a) { b.Symbol = FakeSymbol; } span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-negation-default', "function span(a = globalThis, b = !a) { b.Symbol = FakeSymbol; } span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-and-read-only-slot', "function read(a = globalThis, b = true && a) { return b[Symbol.for('rottay.slot')]; } void read();"],
+      ['wrapped-and-well-known-member', "function read(a = globalThis, b = flag && a) { return b.Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
     ]) {
       for (const extension of ['ts', 'mjs']) {
         for (const enforceComputedCapabilities of [true, false]) {

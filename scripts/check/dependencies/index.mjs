@@ -733,26 +733,33 @@ export function analyzeRuntimeModuleEdges(
       ts.forEachChild(node, collect);
     }
     collect(sourceFile);
-    function boundToContainer(value) {
-      if (globalContainerExpression(value)) return true;
-      const current = unwrapRuntimeExpression(value);
+    const shortCircuitOperators = new Map([
+      [ts.SyntaxKind.AmpersandAmpersandToken, ts.SyntaxKind.AmpersandAmpersandEqualsToken],
+      [ts.SyntaxKind.BarBarToken, ts.SyntaxKind.BarBarEqualsToken],
+      [ts.SyntaxKind.QuestionQuestionToken, ts.SyntaxKind.QuestionQuestionEqualsToken],
+    ]);
+    const branchingOperators = new Set([
+      ...shortCircuitOperators.keys(), ...shortCircuitOperators.values(),
+    ]);
+    const carriedValueOperators = new Set([ts.SyntaxKind.CommaToken, ts.SyntaxKind.EqualsToken]);
+    function evaluationPaths(current) {
       if (ts.isBinaryExpression(current)) {
         const operator = current.operatorToken.kind;
-        if ([ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken].includes(operator)) {
-          return boundToContainer(current.left) || boundToContainer(current.right);
-        }
-        if ([ts.SyntaxKind.CommaToken, ts.SyntaxKind.EqualsToken].includes(operator)) {
-          return boundToContainer(current.right);
-        }
+        if (branchingOperators.has(operator)) return [current.left, current.right];
+        return carriedValueOperators.has(operator) ? [current.right] : [];
       }
-      if (ts.isConditionalExpression(current)) {
-        return boundToContainer(current.whenTrue) || boundToContainer(current.whenFalse);
-      }
-      if (ts.isAwaitExpression(current)) return boundToContainer(current.expression);
+      if (ts.isConditionalExpression(current)) return [current.whenTrue, current.whenFalse];
+      if (ts.isAwaitExpression(current)) return [current.expression];
       if (
         (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
         globalContainerRootProperties.has(propertyText(current))
-      ) return boundToContainer(current.expression);
+      ) return [current.expression];
+      return [];
+    }
+    function boundToContainer(value) {
+      if (globalContainerExpression(value)) return true;
+      const current = unwrapRuntimeExpression(value);
+      if (evaluationPaths(current).some((path) => boundToContainer(path))) return true;
       return Boolean(ts.isIdentifier(current) && resolved.has(symbolAt(current)));
     }
     let boundAnother = true;
