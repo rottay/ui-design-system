@@ -235,6 +235,58 @@ test('runtime edge policy is fail-closed for loader transport and scope-aware fo
   }
 });
 
+test('registered-symbol slot admission survives only the whitelisted intrinsic uses', () => {
+  for (const source of [
+    "Symbol.__defineGetter__('for', () => () => 'require'); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "Symbol['__defineGetter__']('for', () => () => 'require'); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "Symbol.__defineSetter__('for', (value) => value); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "globalThis.__defineGetter__('Symbol', () => FakeSymbol); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "const G = globalThis; G.__defineGetter__('Symbol', () => FakeSymbol); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "globalThis['__defineGetter__']('Symbol', () => FakeSymbol); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "Object.defineProperty(globalThis, 'Symbol', { value: FakeSymbol }); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "Object.assign(globalThis, { Symbol: FakeSymbol }); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "Reflect.set(Symbol, 'for', () => 'require'); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "Reflect.defineProperty(Symbol, 'for', { value: () => 'require' }); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "Object.setPrototypeOf(Symbol, { for: () => 'require' }); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "globalThis.proxied = new Proxy(Symbol, {}); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "const S = Symbol; S.for = () => 'require'; globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "function poison(container) { container.Symbol = FakeSymbol; } poison(globalThis); globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "globalThis.Symbol = FakeSymbol; globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "Symbol.iterator = FakeIterator; globalThis[Symbol.for('rottay.slot')]('node:fs');",
+    "const { for: forge } = Symbol; globalThis[Symbol.for('rottay.slot')]('node:fs');",
+  ]) {
+    for (const fixture of ['mutation.ts', 'mutation.mjs']) {
+      assert.throws(() => parseModuleSpecifiers(source, fixture), /unresolved runtime module edge/);
+    }
+  }
+
+  for (const source of [
+    "void globalThis[Symbol.for('rottay.design-system.upload.uids')];",
+    "const iterate = Symbol.iterator; void iterate; void globalThis[Symbol.for('rottay.slot')];",
+    "const host = globalThis; host[Symbol.for('rottay.slot')] = { sequence: 0 };",
+    "for (const value of [1]) { void value; } void globalThis[Symbol.for('rottay.slot')];",
+    "class Bag { [Symbol.iterator]() { return null; } } void Bag; void globalThis[Symbol.for('rottay.slot')];",
+  ]) {
+    for (const fixture of ['admitted.ts', 'admitted.mjs']) {
+      assert.doesNotThrow(() => parseModuleSpecifiers(source, fixture));
+    }
+  }
+});
+
+test('a JavaScript global expando no longer dissolves the container fence', () => {
+  for (const source of [
+    "globalThis.marker = 1; globalThis.require('d3');",
+    "globalThis.marker = 1; globalThis[name](source);",
+    "window.marker = 1; window[name](source);",
+  ]) {
+    assert.throws(() => parseModuleSpecifiers(source, 'expando.mjs'), /unresolved runtime module edge/);
+  }
+  assert.doesNotThrow(() => parseModuleSpecifiers(
+    "globalThis.marker = 1; void globalThis[Symbol.for('rottay.slot')];",
+    'expando.mjs',
+  ));
+});
+
 test('runtime edge policy closes the exact recursive-global and builtin-loader bypasses', () => {
   const hostile = [
     "window.window.require('d3');",
