@@ -7,10 +7,9 @@
  * @package @rottay/design-system
  */
 
-import type { DecisionProvenanceLedger } from "@/contracts/theme/foundation/provenance";
-
 import type { FirstPartyVerticalId } from "../../../../kernel/verticals";
 import type { ThemeLayerPatch } from "../iso";
+import type { DecisionProvenanceLedger } from "../provenance";
 
 /**
  * Which transport authored this intent. Transport only; never a visual input.

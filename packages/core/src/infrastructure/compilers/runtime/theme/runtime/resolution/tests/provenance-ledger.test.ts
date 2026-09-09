@@ -7,12 +7,17 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  THEME_DECISION_IDS,
+  THEME_DECISION_TIER_BY_ID,
+  type ThemeDecisionId,
+} from "@/contracts/theme/foundation/decisions";
+import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
+import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
+import {
   resolveDecisionProvenanceLedger,
   type DecisionProvenanceClaim,
   type DecisionProvenanceLedger,
-} from "@/contracts/theme/foundation/provenance";
-import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
-import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
+} from "@/foundation/contracts/composition/tenants/themes/provenance";
 import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/themes/resolved";
 
 import { resolveTheme } from "..";
@@ -21,7 +26,7 @@ const patch = {
   typography: { typePairing: "geometric" },
 } as unknown as ThemeLayerPatch;
 
-const pairingClaim: DecisionProvenanceClaim = {
+const pairingClaim: DecisionProvenanceClaim<ThemeDecisionId> = {
   ref: { kind: "decision", id: "typography.pairing" },
   provenance: "direct-override",
   authoredValue: "geometric",
@@ -31,7 +36,10 @@ const pairingClaim: DecisionProvenanceClaim = {
   ],
 };
 
-const ledger = resolveDecisionProvenanceLedger([pairingClaim]);
+const ledger = resolveDecisionProvenanceLedger([pairingClaim], {
+  ids: THEME_DECISION_IDS,
+  tierById: THEME_DECISION_TIER_BY_ID,
+});
 
 const tenantIntent = (
   overrides: Partial<ThemeIntent> = {}

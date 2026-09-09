@@ -10,6 +10,8 @@ import { describe, expect, it } from "vitest";
 import {
   THEME_DECISION_IDS,
   THEME_DECISION_TIER_BY_ID,
+  type ThemeDecisionId,
+  type ThemeDecisionTier,
 } from "@/contracts/theme/foundation/decisions";
 
 import {
@@ -24,9 +26,21 @@ import {
   LEAF_CLAIM_SPECIFICITIES,
   resolveDecisionProvenanceLedger,
   snapshotDecisionProvenanceLedger,
+  type DecisionProvenanceCatalog,
   type DecisionProvenanceClaim,
   type DecisionProvenanceLedger,
 } from "..";
+
+/**
+ * The catalog is INJECTED exactly as the resolution boundary injects it: the
+ * ledger owner sits below the catalog in the theme ladder and never reads it,
+ * so every assertion below has to state the canonical domain itself.
+ */
+const catalog: DecisionProvenanceCatalog<ThemeDecisionId, ThemeDecisionTier> =
+  Object.freeze({
+    ids: THEME_DECISION_IDS,
+    tierById: THEME_DECISION_TIER_BY_ID,
+  });
 
 const FONT_BASE = "typography.fontFamilyBase";
 const FONT_HEADING = "typography.fontFamilyHeading";
@@ -34,7 +48,7 @@ const FONT_HEADING = "typography.fontFamilyHeading";
 /** A Standard pairing: it NAMES its own dial and EXPANDS into the families. */
 const pairingClaim = (
   value: unknown = "geometric"
-): DecisionProvenanceClaim => ({
+): DecisionProvenanceClaim<ThemeDecisionId> => ({
   ref: { kind: "decision", id: "typography.pairing" },
   provenance: "direct-override",
   authoredValue: value,
@@ -46,7 +60,9 @@ const pairingClaim = (
 });
 
 /** A Pro families selection: it names the same two font leaves directly. */
-const familiesClaim = (value: unknown = { base: "inter" }): DecisionProvenanceClaim => ({
+const familiesClaim = (
+  value: unknown = { base: "inter" }
+): DecisionProvenanceClaim<ThemeDecisionId> => ({
   ref: { kind: "decision", id: "typography.families" },
   provenance: "direct-override",
   authoredValue: value,
@@ -90,7 +106,7 @@ describe("the closed vocabularies", () => {
 describe("I-P3b: the tier is the catalog's, never the producer's", () => {
   it("reads every decision tier from the catalog", () => {
     for (const id of THEME_DECISION_IDS) {
-      expect(catalogTierOf({ kind: "decision", id })).toBe(
+      expect(catalogTierOf({ kind: "decision", id }, catalog)).toBe(
         THEME_DECISION_TIER_BY_ID[id]
       );
     }
@@ -98,7 +114,10 @@ describe("I-P3b: the tier is the catalog's, never the producer's", () => {
 
   it("gives a sanctioned override no tier at all", () => {
     expect(
-      catalogTierOf({ kind: "sanctioned-override", path: "chrome.modal.bg" })
+      catalogTierOf(
+        { kind: "sanctioned-override", path: "chrome.modal.bg" },
+        catalog
+      )
     ).toBeNull();
   });
 
@@ -106,7 +125,7 @@ describe("I-P3b: the tier is the catalog's, never the producer's", () => {
     const ledger = resolveDecisionProvenanceLedger([
       pairingClaim(),
       familiesClaim(),
-    ]);
+    ], catalog);
     expect(ledger.entries.map((entry) => entry.tier)).toEqual([
       "standard",
       "pro",
@@ -125,7 +144,7 @@ describe("I-P3b: the tier is the catalog's, never the producer's", () => {
         },
       ],
     };
-    expect(() => assertDecisionProvenanceLedger(forged)).toThrow(
+    expect(() => assertDecisionProvenanceLedger(forged, catalog)).toThrow(
       /is not the catalog tier "pro" of decision:typography\.families/u
     );
   });
@@ -136,7 +155,7 @@ describe("I-P3a: the owner of a leaf is the causal winner", () => {
     const ledger = resolveDecisionProvenanceLedger([
       pairingClaim(),
       familiesClaim(),
-    ]);
+    ], catalog);
     expect(ledgerOwnerOfLeaf(ledger, FONT_BASE)?.ref).toEqual({
       kind: "decision",
       id: "typography.families",
@@ -156,11 +175,11 @@ describe("I-P3a: the owner of a leaf is the causal winner", () => {
     const forward = resolveDecisionProvenanceLedger([
       pairingClaim(),
       familiesClaim(),
-    ]);
+    ], catalog);
     const reversed = resolveDecisionProvenanceLedger([
       familiesClaim(),
       pairingClaim(),
-    ]);
+    ], catalog);
     expect(ledgerOwnerOfLeaf(reversed, FONT_BASE)?.ref).toEqual(
       ledgerOwnerOfLeaf(forward, FONT_BASE)?.ref
     );
@@ -180,7 +199,7 @@ describe("I-P3a: the owner of a leaf is the causal winner", () => {
         authoredValue: "rottay/management-editorial@1",
         leaves: [{ leaf: "motion.intensity", specificity: "expansion-derived" }],
       },
-    ]);
+    ], catalog);
     expect(ledgerOwnerOfLeaf(ledger, "motion.intensity")?.provenance).toBe(
       "profile-derived"
     );
@@ -200,7 +219,7 @@ describe("I-P3a: the owner of a leaf is the causal winner", () => {
         authoredValue: 0.4,
         leaves: [{ leaf: "motion.intensity", specificity: "named" }],
       },
-    ]);
+    ], catalog);
     const owner = ledgerOwnerOfLeaf(ledger, "motion.intensity");
     expect(owner?.ref).toEqual({
       kind: "sanctioned-override",
@@ -219,7 +238,7 @@ describe("I-P3a: the owner of a leaf is the causal winner", () => {
           authoredValue: "inter",
           leaves: [{ leaf: FONT_BASE, specificity: "named" }],
         },
-      ])
+      ], catalog)
     ).toThrow(/precedence cannot name a winner/u);
   });
 
@@ -227,10 +246,10 @@ describe("I-P3a: the owner of a leaf is the causal winner", () => {
     const ledger = resolveDecisionProvenanceLedger([
       pairingClaim(),
       familiesClaim(),
-    ]);
+    ], catalog);
     const owned = ledger.entries.flatMap((entry) => [...entry.effectiveLeaves]);
     expect(new Set(owned).size).toBe(owned.length);
-    expect(() => assertDecisionProvenanceLedger(ledger)).not.toThrow();
+    expect(() => assertDecisionProvenanceLedger(ledger, catalog)).not.toThrow();
   });
 });
 
@@ -241,14 +260,14 @@ describe("I-P0: a class travels with its cause and can never be raised", () => {
         ...pairingClaim(),
         provenance: "profile-derived",
       },
-    ]);
+    ], catalog);
     const entry = ledgerOwnerOfLeaf(ledger, FONT_BASE);
     expect(entry?.provenance).toBe("profile-derived");
     expect(directOverrideEntries(ledger)).toEqual([]);
   });
 
   it("keeps them direct when the tenant authored the pairing", () => {
-    const ledger = resolveDecisionProvenanceLedger([pairingClaim()]);
+    const ledger = resolveDecisionProvenanceLedger([pairingClaim()], catalog);
     expect(ledgerOwnerOfLeaf(ledger, FONT_BASE)?.provenance).toBe(
       "direct-override"
     );
@@ -269,7 +288,7 @@ describe("I-P3c / I-P4: nothing is lost, and equality is not a reason to lose it
         ],
       },
       familiesClaim(),
-    ]);
+    ], catalog);
     expect(ledger.entries).toHaveLength(2);
     const pairing = ledger.entries[0];
     expect(pairing.effectiveLeaves).toEqual([]);
@@ -282,7 +301,7 @@ describe("I-P3c / I-P4: nothing is lost, and equality is not a reason to lose it
     const ledger = resolveDecisionProvenanceLedger([
       pairingClaim(sameValue),
       familiesClaim(sameValue),
-    ]);
+    ], catalog);
     expect(ledger.entries).toHaveLength(2);
     expect(ledger.entries.map((entry) => entry.authoredValue)).toEqual([
       sameValue,
@@ -299,7 +318,7 @@ describe("I-P3c / I-P4: nothing is lost, and equality is not a reason to lose it
         authoredValue: "rottay/management-editorial@1",
         leaves: [],
       },
-    ]);
+    ], catalog);
     expect(ledger.entries).toHaveLength(1);
     expect(ledger.entries[0].effectiveLeaves).toEqual([]);
   });
@@ -446,12 +465,12 @@ describe("malformed input is refused by name", () => {
   ];
 
   it.each(cases)("refuses %s", (_label, value, message) => {
-    expect(() => assertDecisionProvenanceLedger(value)).toThrow(message);
+    expect(() => assertDecisionProvenanceLedger(value, catalog)).toThrow(message);
   });
 
   it("names the context it was refused at", () => {
     expect(() =>
-      assertDecisionProvenanceLedger(null, "resolveTheme: intent.ledger")
+      assertDecisionProvenanceLedger(null, catalog, "resolveTheme: intent.ledger")
     ).toThrow(/^resolveTheme: intent\.ledger: must be an object$/u);
   });
 
@@ -467,7 +486,7 @@ describe("malformed input is refused by name", () => {
             { leaf: FONT_BASE, specificity: "expansion-derived" },
           ],
         },
-      ])
+      ], catalog)
     ).toThrow(/is claimed twice by decision:typography\.pairing/u);
   });
 
@@ -480,7 +499,7 @@ describe("malformed input is refused by name", () => {
           authoredValue: "geometric",
           leaves: [{ leaf: FONT_BASE, specificity: "mostly" as never }],
         },
-      ])
+      ], catalog)
     ).toThrow(/unknown specificity "mostly"/u);
   });
 });
@@ -491,7 +510,7 @@ describe("the empty ledger and the snapshot", () => {
     expect(Object.isFrozen(EMPTY_DECISION_PROVENANCE_LEDGER)).toBe(true);
     expect(directOverrideEntries(EMPTY_DECISION_PROVENANCE_LEDGER)).toEqual([]);
     expect(() =>
-      assertDecisionProvenanceLedger(EMPTY_DECISION_PROVENANCE_LEDGER)
+      assertDecisionProvenanceLedger(EMPTY_DECISION_PROVENANCE_LEDGER, catalog)
     ).not.toThrow();
   });
 
@@ -507,7 +526,7 @@ describe("the empty ledger and the snapshot", () => {
         },
       ],
     };
-    const snapshot = snapshotDecisionProvenanceLedger(mutable);
+    const snapshot = snapshotDecisionProvenanceLedger(mutable, catalog);
     mutable.entries[0].effectiveLeaves.push(FONT_HEADING);
     mutable.entries.length = 0;
     expect(snapshot.entries).toHaveLength(1);
@@ -518,7 +537,8 @@ describe("the empty ledger and the snapshot", () => {
     const broken = { entries: [{ ref: { kind: "decision" } }] };
     expect(() =>
       snapshotDecisionProvenanceLedger(
-        broken as unknown as DecisionProvenanceLedger
+        broken as unknown as DecisionProvenanceLedger,
+        catalog
       )
     ).toThrow(/entries\[0\]: provenance must be an own property/u);
   });

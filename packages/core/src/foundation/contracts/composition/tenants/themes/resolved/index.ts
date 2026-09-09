@@ -7,8 +7,6 @@
  * @package @rottay/design-system
  */
 
-import type { DecisionProvenanceLedger } from "@/contracts/theme/foundation/provenance";
-
 import type {
   BrandMotion,
   BrandSurfaces,
@@ -19,6 +17,7 @@ import type {
 import type { ThemeIntent } from "../intent";
 import type { TenantAuthoredPaths, Theme, ThemeLayerPatch } from "../iso";
 import { collectPatchAuthoredPaths } from "../iso";
+import type { DecisionProvenanceLedger } from "../provenance";
 
 /**
  * The tone vocabulary the status-seed producers key on. Restated as literals

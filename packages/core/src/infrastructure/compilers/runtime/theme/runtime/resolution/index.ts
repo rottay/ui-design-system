@@ -7,9 +7,11 @@
  */
 
 import {
-  assertDecisionProvenanceLedger,
-  snapshotDecisionProvenanceLedger,
-} from "@/contracts/theme/foundation/provenance";
+  THEME_DECISION_IDS,
+  THEME_DECISION_TIER_BY_ID,
+  type ThemeDecisionId,
+  type ThemeDecisionTier,
+} from "@/contracts/theme/foundation/decisions";
 import {
   TENANT_AUTHORED_ORIGINS,
   THEME_PLANS,
@@ -22,6 +24,11 @@ import {
   mergeThemePatches,
   type Theme,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
+import {
+  assertDecisionProvenanceLedger,
+  snapshotDecisionProvenanceLedger,
+  type DecisionProvenanceCatalog,
+} from "@/foundation/contracts/composition/tenants/themes/provenance";
 import {
   EMPTY_PROVENANCE,
   tenantProvenance,
@@ -47,6 +54,20 @@ const ORIGINS: readonly ThemeIntentOrigin[] = Object.freeze([
   "static-vertical",
   ...TENANT_AUTHORED_ORIGINS,
 ]);
+
+/**
+ * The decision domain the ledger is judged against, bound HERE rather than
+ * imported by the contract that declares the ledger: that contract sits below
+ * the catalog in the theme ladder, and a producer that could supply the catalog
+ * could supply the tier it is checked against.
+ */
+const PROVENANCE_CATALOG: DecisionProvenanceCatalog<
+  ThemeDecisionId,
+  ThemeDecisionTier
+> = Object.freeze({
+  ids: THEME_DECISION_IDS,
+  tierById: THEME_DECISION_TIER_BY_ID,
+});
 
 /** The envelope is EXACTLY these keys: not fewer, not more, not inherited. */
 const INTENT_KEYS: readonly string[] = [
@@ -173,7 +194,11 @@ function assertThemeIntent(intent: ThemeIntent): void {
   // that captured it and the station that judges it.
   const { ledger } = intent;
   if (ledger !== undefined) {
-    assertDecisionProvenanceLedger(ledger, "resolveTheme: intent.ledger");
+    assertDecisionProvenanceLedger(
+      ledger,
+      PROVENANCE_CATALOG,
+      "resolveTheme: intent.ledger"
+    );
     // A static-vertical intent IS the vertical's baseline, so it has no tenant
     // authorship to record. Carrying entries there would be the one shape in
     // which vertical identity could enter as tenant authorship.
@@ -238,7 +263,11 @@ function snapshotLedger(
 ): ThemeIntent["ledger"] {
   return ledger === undefined
     ? undefined
-    : snapshotDecisionProvenanceLedger(ledger, "resolveTheme: intent.ledger");
+    : snapshotDecisionProvenanceLedger(
+        ledger,
+        PROVENANCE_CATALOG,
+        "resolveTheme: intent.ledger"
+      );
 }
 
 export function resolveTheme(intent: ThemeIntent): ThemeResolution {

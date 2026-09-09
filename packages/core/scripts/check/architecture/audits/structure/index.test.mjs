@@ -133,12 +133,13 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
     },
     'foundation/contracts/composition/tenants/themes': {
       iso: 0,
-      'tenant-theme': 1,
-      intent: 2,
-      resolved: 3,
-      compiled: 4,
-      emission: 5,
-      'engine-adapter': 6,
+      provenance: 1,
+      'tenant-theme': 2,
+      intent: 3,
+      resolved: 4,
+      compiled: 5,
+      emission: 6,
+      'engine-adapter': 7,
     },
     foundation: { contracts: 0, presets: 1 },
     'foundation/i18n/runtime': { catalog: 0, resolution: 1 },
@@ -250,7 +251,7 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
   assert.equal(owners.length, 23);
-  assert.equal(rankedChildren.length, 87);
+  assert.equal(rankedChildren.length, 88);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(
@@ -1250,22 +1251,33 @@ test('the theme contract chain is a directed ladder, and the reversed edge still
     // every later owner may read downward, but nothing may read back up.
     assert.deepEqual(SCOPED_OWNER_RANKS[owner], {
       iso: 0,
-      'tenant-theme': 1,
-      intent: 2,
-      resolved: 3,
-      compiled: 4,
-      emission: 5,
-      'engine-adapter': 6,
+      provenance: 1,
+      'tenant-theme': 2,
+      intent: 3,
+      resolved: 4,
+      compiled: 5,
+      emission: 6,
+      'engine-adapter': 7,
     });
 
     write(resolve(sourceRoot, `${owner}/iso/index.ts`), 'export const theme = true;\n');
+    // The ledger vocabulary imports nothing: its decision domain is injected by
+    // the resolution boundary, which is what keeps it below every carrier.
+    write(
+      resolve(sourceRoot, `${owner}/provenance/index.ts`),
+      'export type Ledger = { readonly entries: readonly string[] };\n',
+    );
+    write(
+      resolve(sourceRoot, `${owner}/tenant-theme/index.ts`),
+      "import type { Ledger } from '../provenance';\nexport type Document = { readonly ledger?: Ledger };\n",
+    );
     write(
       resolve(sourceRoot, `${owner}/intent/index.ts`),
-      "import { theme } from '../iso';\nexport const intent = theme;\n",
+      "import { theme } from '../iso';\nimport type { Ledger } from '../provenance';\nexport const intent = theme;\nexport type Intent = { readonly ledger?: Ledger };\n",
     );
     write(
       resolve(sourceRoot, `${owner}/resolved/index.ts`),
-      "import { intent } from '../intent';\nimport { theme } from '../iso';\nexport const resolved = intent && theme;\n",
+      "import { intent } from '../intent';\nimport { theme } from '../iso';\nimport type { Ledger } from '../provenance';\nexport const resolved = intent && theme;\nexport type Resolved = { readonly ledger?: Ledger };\n",
     );
     write(
       resolve(sourceRoot, `${owner}/compiled/index.ts`),
@@ -1277,19 +1289,64 @@ test('the theme contract chain is a directed ladder, and the reversed edge still
     );
 
     const downward = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(downward);
     const downwardIds = new Set(downward.findings.map(({ id }) => id));
     for (const edge of [
       `${owner}/intent/index.ts->${owner}/iso/index.ts`,
       `${owner}/resolved/index.ts->${owner}/intent/index.ts`,
       `${owner}/resolved/index.ts->${owner}/iso/index.ts`,
       `${owner}/engine-adapter/index.ts->${owner}/compiled/index.ts`,
+      // A carrier reading the ledger it transports is downward, and a type-only
+      // edge is still an edge: these three are exactly what rank 1 admits.
+      `${owner}/tenant-theme/index.ts->${owner}/provenance/index.ts`,
+      `${owner}/intent/index.ts->${owner}/provenance/index.ts`,
+      `${owner}/resolved/index.ts->${owner}/provenance/index.ts`,
     ]) {
       assert(!downwardIds.has(`sibling-owner-dependency:${edge}`), `downward edge must be legal: ${edge}`);
       assert(!downwardIds.has(`local-layer-inversion:${edge}`), `downward edge must be legal: ${edge}`);
     }
 
+    // The ledger reading a carrier is the inversion rank 1 exists to refuse,
+    // including as `import type`: the reason the catalog is injected instead.
+    for (const carrier of ['tenant-theme', 'intent', 'resolved']) {
+      write(
+        resolve(sourceRoot, `${owner}/provenance/index.ts`),
+        `import type { Ledger } from '../${carrier}';\nexport type Echo = Ledger;\n`,
+      );
+      const upwardIds = new Set(auditCoreStructure({ packageRoot, sourceRoot }).findings.map(({ id }) => id));
+      assert(
+        upwardIds.has(
+          `local-layer-inversion:${owner}/provenance/index.ts->${owner}/${carrier}/index.ts`,
+        ),
+        `provenance -> ${carrier} must stay an inversion`,
+      );
+    }
+
+    // And the ledger reading the decision catalog is the tier inversion the
+    // injected catalog replaces: `contracts` is a higher tier than `foundation`.
+    write(
+      resolve(sourceRoot, 'contracts/theme/foundation/decisions/index.ts'),
+      "export type DecisionId = 'typography.pairing';\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/provenance/index.ts`),
+      "import type { DecisionId } from '@/contracts/theme/foundation/decisions';\nexport type Ledger = { readonly id: DecisionId };\n",
+    );
+    const catalogEdge = auditCoreStructure({ packageRoot, sourceRoot });
+    assert(
+      new Set(catalogEdge.findings.map(({ id }) => id)).has(
+        `architecture-layer-inversion:${owner}/provenance/index.ts`
+        + '->contracts/theme/foundation/decisions/index.ts',
+      ),
+      'provenance -> the decision catalog must stay a tier inversion',
+    );
+
     // Reverse one edge: iso reading its own consumer is an inversion, so the
     // entry can never be read as a blanket exemption for the whole group.
+    write(
+      resolve(sourceRoot, `${owner}/provenance/index.ts`),
+      'export type Ledger = { readonly entries: readonly string[] };\n',
+    );
     write(
       resolve(sourceRoot, `${owner}/iso/index.ts`),
       "import { resolved } from '../resolved';\nexport const theme = resolved;\n",
