@@ -799,7 +799,7 @@ export const CI_GATES = Object.freeze([
   // solo computed-style distingue "presente" de "causal".
   {
     id: 'shape-radius-probe-drill',
-    run: ['node', '--test', 'scripts/check/tokens/shape/radius-probe/index.test.mjs'],
+    run: ['node', '--test', 'scripts/check/tokens/shape/index.test.mjs'],
     blocking: true,
     phase: 'post-build',
     drillFor: ['shape-radius-probe'],
@@ -807,7 +807,7 @@ export const CI_GATES = Object.freeze([
   },
   {
     id: 'shape-radius-probe',
-    run: ['node', 'scripts/check/tokens/shape/radius-probe/index.mjs'],
+    run: ['node', 'scripts/check/tokens/shape/index.mjs'],
     blocking: true,
     phase: 'post-build',
     drillId: 'shape-radius-probe-drill',

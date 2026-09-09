@@ -31,7 +31,7 @@
  * family whose own markup restates its corner would still count as moved.
  *
  * Usage:
- *   node scripts/check/tokens/shape/radius-probe/index.mjs [--json]
+ *   node scripts/check/tokens/shape/index.mjs [--json]
  *
  * Exit codes: 0 = floor met and both controls behaved everywhere · 1 = not.
  */
@@ -41,7 +41,7 @@ import { createRequire } from 'node:module';
 import { dirname, join, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
