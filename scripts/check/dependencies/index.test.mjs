@@ -467,6 +467,107 @@ test('an expression-wrapped default preserves the container identity it carries'
   }
 });
 
+test('a container stored by any binding form preserves the container identity it carries', () => {
+  const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+  const typescript = requireFromCore('typescript');
+  const slot = "globalThis[Symbol.for('rottay.slot')]('node:fs');";
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-stored-container-'));
+  const carrier = 'function poison(a = globalThis, b = a)';
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    for (const [name, body] of [
+      ['stored-const', `${carrier} { const c = b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-let', `${carrier} { let c = b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-var', `${carrier} { var c = b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-chain', `${carrier} { const c = b; const d = c; d.Symbol.for = () => 'require'; } poison();`],
+      ['stored-assignment', `${carrier} { let c; c = b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-assignment-chain', `${carrier} { let c, d; c = b; d = c; d.Symbol.for = () => 'require'; } poison();`],
+      ['stored-reassignment', `${carrier} { let c = {}; c = b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-or-assign', `${carrier} { let c = null; c ||= b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-and-assign', `${carrier} { let c = null; c &&= b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-nullish-assign', `${carrier} { let c = null; c ??= b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-comma-assignment', `${carrier} { let c; c = (0, b); c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-conditional', `${carrier} { const c = flag ? b : {}; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-await', `async function poison(a = globalThis, b = a) { const c = await b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-root-property', `${carrier} { const c = b.self; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-object-pattern', `${carrier} { const { self: c } = b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-object-pattern-shorthand', `${carrier} { const { self } = b; self.Symbol.for = () => 'require'; } poison();`],
+      ['stored-object-pattern-nested', `${carrier} { const { self: { parent: c } } = b; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-assignment-pattern', `${carrier} { let c; ({ self: c } = b); c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-shorthand-default', `${carrier} { let c; ({ c = b } = {}); c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-object-literal', `${carrier} { const { host: c } = { host: b }; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-array-pattern', `${carrier} { const [c] = [b]; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-array-index', `${carrier} { const [, c] = [{}, b]; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-array-assignment-pattern', `${carrier} { let c; [c] = [b]; c.Symbol.for = () => 'require'; } poison();`],
+      ['stored-hoisted-var', `${carrier} { c.Symbol.for = () => 'require'; var c = b; } poison();`],
+      ['stored-nested-closure', `${carrier} { const use = () => { const c = b; c.Symbol.for = () => 'require'; }; use(); } poison();`],
+      ['stored-argument-hop', `function inner(x) { x.Symbol.for = () => 'require'; } ${carrier} { const c = b; inner(c); } poison();`],
+      ['stored-pattern-parameter-hop', `function inner({ self: c }) { c.Symbol.for = () => 'require'; } function outer(a = globalThis, b = a) { inner(b); } outer();`],
+      ['stored-define-property', `${carrier} { const c = b; Object.defineProperty(c, 'Symbol', { value: FakeSymbol }); } poison();`],
+      ['stored-captured-intrinsic', `${carrier} { const c = b; const S = c.Symbol; S.for = () => 'require'; } poison();`],
+      ['stored-alias-assignment-chain', "let a, b; b = a = globalThis; const c = b; c.Symbol.for = () => 'require';"],
+    ]) {
+      const source = `${body} ${slot}`;
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.throws(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            /unresolved runtime module edge/,
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.throws(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          /unresolved runtime module edge/,
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+
+    for (const [name, source] of [
+      ['stored-ordinary', "function span(a = 1, b = a) { const c = b; return c; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['stored-ordinary-assignment', "function span(a = 1) { let c; c = a; return c; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['stored-ordinary-logical-assign', "function span(a = 1) { let c = null; c ||= a; return c; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['stored-ordinary-compound', "function span(a = 1, b = a) { let c = 0; c = b; c += 1; return c; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['stored-ordinary-object-literal', "const { size: s } = { size: 4 }; void s; void globalThis[Symbol.for('rottay.slot')];"],
+      ['stored-ordinary-array-destructure', "function span(list) { const [first] = list; return first; } void span([]); void globalThis[Symbol.for('rottay.slot')];"],
+      ['stored-ordinary-rest', "function span(bag) { const { ...rest } = bag; return rest; } void span({}); void globalThis[Symbol.for('rottay.slot')];"],
+      ['stored-ordinary-object', "const bag = {}; const c = bag; void c; void globalThis[Symbol.for('rottay.slot')];"],
+      ['stored-read-only-slot', "function read(a = globalThis, b = a) { const c = b; return c[Symbol.for('rottay.slot')]; } void read();"],
+      ['stored-well-known-member', "function read(a = globalThis, b = a) { const c = b; return c.Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+    ]) {
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.doesNotThrow(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.doesNotThrow(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('a JavaScript global expando no longer dissolves the container fence', () => {
   for (const source of [
     "globalThis.marker = 1; globalThis.require('d3');",
