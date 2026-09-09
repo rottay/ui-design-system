@@ -487,6 +487,30 @@ function createRuntimeAnalysisProgram(
   };
 }
 
+// TypeScript models a heritage entry as a type node, but `class D extends
+// <expr>` evaluates <expr>: only interface `extends` and `implements` erase.
+function heritageRuntimeExpression(ts, parent, child) {
+  if (!ts.isExpressionWithTypeArguments(parent) || parent.expression !== child) return false;
+  const clause = parent.parent;
+  const owner = clause?.parent;
+  return Boolean(
+    clause && ts.isHeritageClause(clause) && clause.token === ts.SyntaxKind.ExtendsKeyword &&
+    owner && (ts.isClassDeclaration(owner) || ts.isClassExpression(owner)),
+  );
+}
+
+function runtimePosition(ts, node, sourceFile) {
+  let child = node;
+  for (
+    let current = node.parent;
+    current && current !== sourceFile;
+    child = current, current = current.parent
+  ) {
+    if (ts.isTypeNode(current) && !heritageRuntimeExpression(ts, current, child)) return false;
+  }
+  return true;
+}
+
 /**
  * What the slot witness proves and what it does NOT, in the sentence a reader
  * needs before treating an admitted computed key as an untouched intrinsic.
@@ -497,11 +521,14 @@ export const SLOT_WITNESS_SCOPE =
   + 'and through six invocations that bind without one, which are the whole enumeration -- `call`/`apply`/`bind` '
   + 'parameters and `this`, a generator `next(value)` resume, a `then`/`catch` callback parameter, the parameters '
   + 'and `arguments` of any call site it resolves, a tagged template substitution handed to the tag, and '
-  + 'construction through `new` or `super` handed to the constructor a class or its base declares. It is not '
-  + 'interprocedural dataflow: every one of those channels resolves its callee inside this file, so the escape is '
-  + 'the unresolvable callee -- a container handed to an import, to a method read off a value, or to a callback '
-  + 'stored where the walk cannot follow reaches that body unseen. So the admission proves the intrinsic is '
-  + 'untouched along those channels, not that nothing reachable can touch it.';
+  + 'construction through `new` or `super` handed to the constructor a class or its base declares. Those channels '
+  + 'are judged in every runtime position, including a `class D extends <expr>` heritage expression TypeScript '
+  + 'models as a type node: pruning skips only genuinely erased type children, so no syntactic position hides a '
+  + 'write. It is not interprocedural dataflow: every one of those channels resolves its callee inside this '
+  + 'file, so the escape is the unresolvable callee -- a container handed to an import, to a method read off a '
+  + 'value, or to a callback stored where the walk cannot follow reaches that body unseen. What escapes is a '
+  + 'callee, never a position. So the admission proves the intrinsic is untouched along those channels, not '
+  + 'that nothing reachable can touch it.';
 
 /**
  * Classify runtime module edges with TypeScript binding identities. Alias
@@ -761,12 +788,16 @@ export function analyzeRuntimeModuleEdges(
   //
   // Those six channels are the boundary of the whole witness, and therefore of
   // what an admitted file may be read to prove. The container is followed
-  // through the bindings this walk sees and through the invocations above; this
-  // is not interprocedural dataflow. Every channel resolves its callee inside
+  // through the bindings this walk sees and through the invocations above, and
+  // it is judged in every runtime position: a `class D extends <expr>` heritage
+  // expression is runtime code TypeScript models as a type node, so pruning
+  // skips only genuinely erased type children and no syntactic position hides a
+  // write. This is not interprocedural dataflow. Every channel resolves inside
   // this file, so the escape is the unresolvable callee: a container handed to
   // an import, to a method read off a value, or to a callback stored where the
-  // walk cannot follow reaches that body unseen. So the admission proves the
-  // intrinsic is untouched along those channels, not that nothing
+  // walk cannot follow reaches that body unseen. What escapes is a callee, never
+  // a position. So the admission proves the intrinsic is untouched along those
+  // channels, not that nothing
   // reachable can touch it.
   const thisReceivers = new Map();
   const argumentReceivers = new Map();
@@ -1539,9 +1570,7 @@ export function analyzeRuntimeModuleEdges(
   }
 
   function runtimeIdentifier(identifier) {
-    for (let current = identifier.parent; current && current !== sourceFile; current = current.parent) {
-      if (ts.isTypeNode(current)) return false;
-    }
+    if (!runtimePosition(ts, identifier, sourceFile)) return false;
     const parent = identifier.parent;
     if (ts.isPropertyAccessExpression(parent) && parent.name === identifier) return false;
     if (ts.isQualifiedName(parent) && parent.right === identifier) return false;
@@ -1759,10 +1788,7 @@ export function analyzeRuntimeModuleEdges(
   }
 
   function runtimeNode(node) {
-    for (let current = node.parent; current && current !== sourceFile; current = current.parent) {
-      if (ts.isTypeNode(current)) return false;
-    }
-    return true;
+    return runtimePosition(ts, node, sourceFile);
   }
 
   function bindingPropertyText(node) {
@@ -3618,9 +3644,7 @@ function inspectJavaScriptExecutable(source, fileName) {
   }
 
   function runtimeIdentifier(identifier) {
-    for (let current = identifier.parent; current && current !== sourceFile; current = current.parent) {
-      if (ts.isTypeNode(current)) return false;
-    }
+    if (!runtimePosition(ts, identifier, sourceFile)) return false;
     const parent = identifier.parent;
     if (
       (ts.isImportSpecifier(parent) || ts.isExportSpecifier(parent)) &&

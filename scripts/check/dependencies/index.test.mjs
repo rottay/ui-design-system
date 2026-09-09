@@ -1030,6 +1030,18 @@ test('an invocation-delivered container is a container root for the slot witness
   ['construct-subclass-own-body', "class B { constructor(x) { void x; } } class D extends B { constructor(x) { super(x); x.Symbol.for = () => 'require'; } } new D(self);"],
   ['compose-construct-into-call', `${poison} class C { constructor(x) { p.call(null, x); } } new C(self);`],
   ['compose-construct-into-tagged', `${tagPoison} class C { constructor(x) { t\`\${x}\`; } } new C(self);`],
+  ['heritage-comma', "class B {} class D extends (self.Symbol.for = () => 'require', B) {}"],
+  ['heritage-comma-global', "class B {} class D extends (globalThis.Symbol.for = () => 'require', B) {}"],
+  ['heritage-comma-window', "class B {} class D extends (window.Symbol.for = () => 'require', B) {}"],
+  ['heritage-element-access', "class B {} class D extends (self['Symbol'].for = () => 'require', B) {}"],
+  ['heritage-container-alias', "const c = globalThis; class B {} class D extends (c.Symbol.for = () => 'require', B) {}"],
+  ['heritage-define-property', "class B {} class D extends (Object.defineProperty(self, 'Symbol', {}), B) {}"],
+  ['heritage-class-expression', "const E = class extends (self.Symbol.for = () => 'require', class {}) {}; void E;"],
+  ['heritage-static-block', "class D extends (class { static { self.Symbol.for = () => 'require'; } }) {}"],
+  ['heritage-field-initializer', "class D extends (class { f = (self.Symbol.for = () => 'require'); }) {}"],
+  ['heritage-inline-base-constructor', "class D extends (class { constructor(x) { x.Symbol.for = () => 'require'; } }) {} new D(self);"],
+  ['heritage-inline-base-alias', "const c = self; class D extends (class { constructor(x) { c.Symbol.for = () => 'require'; } }) {} new D(0);"],
+  ['heritage-mixin-application', "function Mixin(x, B) { x.Symbol.for = () => 'require'; return B; } class B {} class D extends Mixin(self, B) {}"],
     ]) {
       const source = `${body} ${slot}`;
       for (const extension of ['ts', 'mjs']) {
@@ -1075,6 +1087,10 @@ test('an invocation-delivered container is a container root for the slot witness
   ['construct-unrelated', "class C { constructor(x) { x.Symbol.for = () => 'require'; } } new C(label); void globalThis[Symbol.for('rottay.slot')];"],
   ['construct-unresolved', "new Foreign(self); void globalThis[Symbol.for('rottay.slot')];"],
   ['construct-expando', "class C { constructor(c) { c.marker = 1; } } new C(self); void globalThis[Symbol.for('rottay.slot')];"],
+  ['plain-heritage', "class B {} class D extends B {} void D; void globalThis[Symbol.for('rottay.slot')];"],
+  ['heritage-expando', "class B {} class D extends (self.marker = 1, B) {} void D; void globalThis[Symbol.for('rottay.slot')];"],
+  ['heritage-well-known-read', "class B {} class D extends (self.Symbol.iterator, B) {} void D; void globalThis[Symbol.for('rottay.slot')];"],
+  ['heritage-benign-mixin', "function Mixin(B) { return class extends B {}; } class B {} class D extends Mixin(B) {} void D; void globalThis[Symbol.for('rottay.slot')];"],
     ]) {
       for (const extension of ['ts', 'mjs']) {
         for (const enforceComputedCapabilities of [true, false]) {
@@ -1101,6 +1117,34 @@ test('an invocation-delivered container is a container root for the slot witness
   }
 });
 
+test('type-only heritage stays erased while a class extends expression is judged', () => {
+  const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+  const typescript = requireFromCore('typescript');
+  const slot = "void globalThis[Symbol.for('rottay.slot')];";
+  for (const [name, body] of [
+    ['implements-clause', 'interface I { a: number } class D implements I { a = 1; }'],
+    ['implements-qualified', 'namespace N { export interface I { a: number } } class D implements N.I { a = 1; }'],
+    ['interface-extends', 'interface A { a: number } interface B extends A { b: number } declare const v: B;'],
+    ['generic-constraint', 'function f<T extends { a: number }>(x: T) { return x; } void f;'],
+    ['conditional-type', 'type C<T> = T extends string ? number : boolean; declare const v: C<string>;'],
+    ['class-extends-type-arguments', 'class B<T> { declare v: T; } class D extends B<number> {} void D;'],
+  ]) {
+    assert.doesNotThrow(
+      () => analyzeRuntimeModuleEdges(`${body} ${slot}`, `${name}.ts`, typescript, {}),
+      name,
+    );
+  }
+  // The same write is refused in a class `extends` expression and admitted in
+  // an erased type child, which is the whole narrowing this gate defends.
+  assert.throws(
+    () => analyzeRuntimeModuleEdges(
+      `class B {} class D extends (self.Symbol.for = () => 'require', B) {} ${slot}`,
+      'heritage-runtime.ts', typescript, {},
+    ),
+    /unresolved runtime module edge/,
+  );
+});
+
 test('the slot witness states the boundary of what it proves', () => {
   assert.match(SLOT_WITNESS_SCOPE, /syntactic bindings plus enumerated invocation channels/);
   assert.match(SLOT_WITNESS_SCOPE, /six invocations that bind without one, which are the whole enumeration/);
@@ -1114,8 +1158,12 @@ test('the slot witness states the boundary of what it proves', () => {
   ]) {
     assert.ok(SLOT_WITNESS_SCOPE.includes(channel), channel);
   }
+  assert.match(SLOT_WITNESS_SCOPE, /judged in every runtime position/);
+  assert.match(SLOT_WITNESS_SCOPE, /heritage expression TypeScript/);
+  assert.match(SLOT_WITNESS_SCOPE, /no syntactic position hides a write/);
   assert.match(SLOT_WITNESS_SCOPE, /not interprocedural dataflow/);
   assert.match(SLOT_WITNESS_SCOPE, /the escape is the unresolvable callee/);
+  assert.match(SLOT_WITNESS_SCOPE, /What escapes is a callee, never a position/);
   assert.match(SLOT_WITNESS_SCOPE, /not that nothing reachable can touch it/);
   const doctrineText = [
     'the invocation itself, and these six forms are the whole enumeration:',
@@ -1123,7 +1171,10 @@ test('the slot witness states the boundary of what it proves', () => {
     'tagged template hands each substitution to the tag after the strings array,',
     'and `new C()` or `super()` hands its arguments to the constructor the class',
     'Those six channels are the boundary of the whole witness',
+    'it is judged in every runtime position: a `class D extends <expr>` heritage',
+    'skips only genuinely erased type children and no syntactic position hides a',
     'this file, so the escape is the unresolvable callee: a container handed to',
+    'walk cannot follow reaches that body unseen. What escapes is a callee, never',
     'not that nothing\n  // reachable can touch it.',
   ];
   for (const witness of [
