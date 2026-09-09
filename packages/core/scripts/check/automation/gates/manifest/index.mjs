@@ -1053,9 +1053,11 @@ export const CI_GATES = Object.freeze([
       'This entry IS a suite set: eleven-plus node-only diagnostics over the showroom registries and the skin-rule corpus, each with its own assertions. The glob is what makes the set complete; `wiring-coverage` is what proves the glob names real files.',
     prerequisites: ['showroom-workspace'], },
 
-  // The milestone A exit gate: an application that builds. The five static legs
-  // prove the fixture is admissible; the sixth runs it. `published` reads the
-  // export map and the BUILT modules, which is why this pair is post-build.
+  // The milestone A exit gate: an application that builds. The static legs prove
+  // the fixture is admissible, `packed` compiles it against the `npm pack`
+  // tarball with no source alias, and the last one runs it. `published` and
+  // `packed` read the export map, the BUILT modules and the emitted
+  // declarations, which is why this pair is post-build.
   { id: 'consumer-proof-drill', run: ['node', '--test', 'scripts/check/consumer-proof/tests/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['consumer-proof'], prerequisites: ['fresh-dist'], },
   { id: 'consumer-proof', run: ['node', 'scripts/check/consumer-proof/index.mjs'], blocking: true, phase: 'post-build', drillId: 'consumer-proof-drill', prerequisites: ['fresh-dist'], },
 ]);
