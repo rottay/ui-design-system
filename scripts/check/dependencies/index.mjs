@@ -736,6 +736,23 @@ export function analyzeRuntimeModuleEdges(
     function boundToContainer(value) {
       if (globalContainerExpression(value)) return true;
       const current = unwrapRuntimeExpression(value);
+      if (ts.isBinaryExpression(current)) {
+        const operator = current.operatorToken.kind;
+        if ([ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken].includes(operator)) {
+          return boundToContainer(current.left) || boundToContainer(current.right);
+        }
+        if ([ts.SyntaxKind.CommaToken, ts.SyntaxKind.EqualsToken].includes(operator)) {
+          return boundToContainer(current.right);
+        }
+      }
+      if (ts.isConditionalExpression(current)) {
+        return boundToContainer(current.whenTrue) || boundToContainer(current.whenFalse);
+      }
+      if (ts.isAwaitExpression(current)) return boundToContainer(current.expression);
+      if (
+        (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
+        globalContainerRootProperties.has(propertyText(current))
+      ) return boundToContainer(current.expression);
       return Boolean(ts.isIdentifier(current) && resolved.has(symbolAt(current)));
     }
     let boundAnother = true;

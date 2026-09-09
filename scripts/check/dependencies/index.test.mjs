@@ -349,6 +349,97 @@ test('a container reaching a parameter by default initializer withdraws slot adm
   }
 });
 
+test('an expression-wrapped default preserves the container identity it carries', () => {
+  const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+  const typescript = requireFromCore('typescript');
+  const slot = "globalThis[Symbol.for('rottay.slot')]('node:fs');";
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-wrapped-container-'));
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    for (const [name, body] of [
+      ['wrapped-or', "function poison(a = globalThis, b = a || {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-or-right', "function poison(a = globalThis, b = {} || a) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-nullish', "function poison(a = globalThis, b = a ?? {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-ternary-true', "function poison(a = globalThis, b = flag ? a : {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-ternary-false', "function poison(a = globalThis, b = flag ? {} : a) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-parenthesized', "function poison(a = globalThis, b = ((a) || {})) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-as-cast', "function poison(a = globalThis, b = (a as any) || {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-satisfies', "function poison(a = globalThis, b = a satisfies object) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-non-null', "function poison(a = globalThis, b = (a || {})!) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-comma', "function poison(a = globalThis, b = (0, a)) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-assignment', "function poison(a = globalThis, b = (c = a)) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-await', "async function poison(a = globalThis, b = await a) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-root-property', "function poison(a = globalThis, b = a.self) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-composition', "function poison(a = globalThis, b = (flag ? (a as any) : null) ?? {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-chain', "function poison(a = globalThis, b = a || {}, c = flag ? b : {}) { c.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-container-direct', "function poison(b = globalThis || {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-alias', "const G = globalThis; function poison(b = G ?? {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-factory', "const getGlobal = () => globalThis; function poison(b = getGlobal() || {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-argument-hop', "function inner(x) { x.Symbol.for = () => 'require'; } function outer(a = globalThis, b = a || {}) { inner(b); } outer();"],
+      ['wrapped-arrow', "const poison = (a = globalThis, b = a || {}) => { b.Symbol.for = () => 'require'; }; poison();"],
+      ['wrapped-method', "class Bag { poison(a = globalThis, b = a ?? {}) { b.Symbol.for = () => 'require'; } } new Bag().poison();"],
+      ['wrapped-binding-element', "function poison({ a = globalThis, b = a || {} } = {}) { b.Symbol.for = () => 'require'; } poison();"],
+      ['wrapped-window-ternary', "function poison(b = flag ? window : {}) { b.Symbol = FakeSymbol; } poison();"],
+      ['wrapped-define-property', "function poison(a = globalThis, b = a || {}) { Object.defineProperty(b, 'Symbol', { value: FakeSymbol }); } poison();"],
+      ['wrapped-captured-intrinsic', "function poison(a = globalThis, b = a ?? {}) { const S = b.Symbol; S.for = () => 'require'; } poison();"],
+    ]) {
+      const source = `${body} ${slot}`;
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.throws(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            /unresolved runtime module edge/,
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.throws(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          /unresolved runtime module edge/,
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+
+    for (const [name, source] of [
+      ['wrapped-plain-default', "function span(a = {}, b = a || {}) { return b; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-local-default', "const bag = makeBag(); function span(a = bag || {}) { return a; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-numeric-default', "function span(a = 1, b = a || 2) { return a + b; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-destructured-default', "function draw({ width = 10, height = width || 4 } = {}) { return width * height; } void draw(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['wrapped-read-only-slot', "function read(a = globalThis, b = a || {}) { return b[Symbol.for('rottay.slot')]; } void read();"],
+      ['wrapped-well-known-member', "function read(a = globalThis, b = a ?? {}) { return b.Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+    ]) {
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.doesNotThrow(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.doesNotThrow(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('a JavaScript global expando no longer dissolves the container fence', () => {
   for (const source of [
     "globalThis.marker = 1; globalThis.require('d3');",
