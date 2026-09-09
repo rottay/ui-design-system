@@ -681,7 +681,8 @@ export function analyzeRuntimeModuleEdges(
   // the whole file the resolved intrinsic (`Symbol`, the container's `Symbol`
   // member, and the container carried by any local binding -- stored by a
   // declaration, a default, an assignment, a call argument or an iteration
-  // head, directly or through a chain of them) may appear only as the receiver
+  // head, held as a member of a collection, or extracted back out of one,
+  // directly or through a chain of them) may appear only as the receiver
   // of that admitted call and as a read of a well-known symbol member in one of
   // the listed value positions. Every other appearance -- value, argument,
   // alias, return, assignment/update/delete/loop target, receiver of any other
@@ -714,6 +715,9 @@ export function analyzeRuntimeModuleEdges(
     globalContainerBindings = resolved;
     const bindings = [];
     const iterations = [];
+    const extractions = [];
+    const memberStores = [];
+    const collections = new Set();
     const shortCircuitOperators = new Map([
       [ts.SyntaxKind.AmpersandAmpersandToken, ts.SyntaxKind.AmpersandAmpersandEqualsToken],
       [ts.SyntaxKind.BarBarToken, ts.SyntaxKind.BarBarEqualsToken],
@@ -767,6 +771,25 @@ export function analyzeRuntimeModuleEdges(
       }
       return [];
     }
+    function patternTargets(pattern) {
+      if (ts.isObjectBindingPattern(pattern) || ts.isArrayBindingPattern(pattern)) {
+        return pattern.elements.map((element) => (
+          ts.isOmittedExpression(element) ? null : element.name
+        ));
+      }
+      if (ts.isObjectLiteralExpression(pattern)) {
+        return pattern.properties.map((declared) => {
+          if (ts.isPropertyAssignment(declared)) return declared.initializer;
+          if (ts.isShorthandPropertyAssignment(declared)) return declared.name;
+          return ts.isSpreadAssignment(declared) ? declared.expression : null;
+        });
+      }
+      if (!ts.isArrayLiteralExpression(pattern)) return [];
+      return pattern.elements.map((element) => {
+        if (ts.isOmittedExpression(element)) return null;
+        return ts.isSpreadElement(element) ? element.expression : element;
+      });
+    }
     function selectedMember(value, property, index) {
       const current = unwrapRuntimeExpression(value);
       if (property !== null && ts.isObjectLiteralExpression(current)) {
@@ -785,18 +808,18 @@ export function analyzeRuntimeModuleEdges(
       const element = arrayValueAt(reached, index);
       return !element || ts.isOmittedExpression(element) ? null : element;
     }
-    function remember(target, value) {
+    function remember(target, value, membership = false) {
       if (!target || !value) return;
       const current = unwrapRuntimeExpression(target);
       if (ts.isIdentifier(current)) {
         const symbol = symbolAt(current);
-        if (symbol) bindings.push({ symbol, value });
+        if (symbol) (membership ? extractions : bindings).push({ symbol, value });
         return;
       }
       if (
         ts.isBinaryExpression(current) && current.operatorToken.kind === ts.SyntaxKind.EqualsToken
       ) {
-        remember(current.left, value);
+        remember(current.left, value, membership);
         return;
       }
       for (const element of destructuredElements(current)) {
@@ -805,6 +828,15 @@ export function analyzeRuntimeModuleEdges(
         remember(element.target, selectedMember(value, element.property, element.index));
         if (globalContainerRootProperties.has(element.property)) remember(element.target, value);
       }
+      for (const member of patternTargets(current)) remember(member, value, true);
+    }
+    function rememberMemberStore(access, values) {
+      const current = unwrapRuntimeExpression(access);
+      if (!ts.isPropertyAccessExpression(current) && !ts.isElementAccessExpression(current)) return;
+      const host = unwrapRuntimeExpression(current.expression);
+      if (!ts.isIdentifier(host) || !sourceDeclared(host)) return;
+      const symbol = symbolAt(host);
+      if (symbol) memberStores.push({ host, symbol, values });
     }
     function collect(node) {
       if (
@@ -813,8 +845,14 @@ export function analyzeRuntimeModuleEdges(
       ) remember(node.name, node.initializer);
       if (ts.isBinaryExpression(node) && storageOperators.has(node.operatorToken.kind)) {
         remember(node.left, node.right);
+        rememberMemberStore(node.left, [node.right]);
       }
       if (ts.isForOfStatement(node) || ts.isForInStatement(node)) iterations.push(node);
+      if (ts.isCallExpression(node)) {
+        rememberMemberStore(node.expression, node.arguments.map((argument) => (
+          ts.isSpreadElement(argument) ? argument.expression : argument
+        )));
+      }
       if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
         const fn = localFunctionBindings.get(symbolAt(node.expression));
         if (fn) {
@@ -870,19 +908,73 @@ export function analyzeRuntimeModuleEdges(
       ) return [current.expression];
       return [];
     }
-    function boundToContainer(value) {
+    function collectionMembers(current) {
+      if (ts.isArrayLiteralExpression(current)) {
+        return current.elements.map((element) => (
+          ts.isSpreadElement(element) ? element.expression : element
+        ));
+      }
+      if (!ts.isObjectLiteralExpression(current)) return [];
+      return current.properties.map((declared) => {
+        if (ts.isPropertyAssignment(declared)) return declared.initializer;
+        if (ts.isShorthandPropertyAssignment(declared)) return declared.name;
+        return ts.isSpreadAssignment(declared) ? declared.expression : null;
+      });
+    }
+    function identityScope() {
+      return { bound: new Set(), holds: new Set() };
+    }
+    function containsContainer(value, scope = identityScope()) {
+      const current = value ? unwrapRuntimeExpression(value) : null;
+      if (!current || ts.isOmittedExpression(current) || scope.holds.has(current)) return false;
+      scope.holds.add(current);
+      if (collectionMembers(current).some((member) => (
+        member && (boundToContainer(member, scope) || containsContainer(member, scope))
+      ))) return true;
+      if (evaluationPaths(current).some((path) => containsContainer(path, scope))) return true;
+      if (ts.isIdentifier(current)) return collections.has(symbolAt(current));
+      if (ts.isCallExpression(current)) {
+        return containsContainer(current.expression, scope) ||
+          current.arguments.some((argument) => containsContainer(argument, scope));
+      }
+      return Boolean(
+        (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) &&
+        containsContainer(current.expression, scope),
+      );
+    }
+    function boundToContainer(value, scope = identityScope()) {
       if (globalContainerExpression(value)) return true;
       const current = unwrapRuntimeExpression(value);
-      if (evaluationPaths(current).some((path) => boundToContainer(path))) return true;
-      return Boolean(ts.isIdentifier(current) && resolved.has(symbolAt(current)));
+      if (scope.bound.has(current)) return false;
+      scope.bound.add(current);
+      if (evaluationPaths(current).some((path) => boundToContainer(path, scope))) return true;
+      if (ts.isIdentifier(current) && resolved.has(symbolAt(current))) return true;
+      return containsContainer(current, scope);
+    }
+    function bindCollection(symbol) {
+      if (collections.has(symbol)) return false;
+      collections.add(symbol);
+      resolved.add(symbol);
+      return true;
     }
     let boundAnother = true;
     while (boundAnother) {
       boundAnother = false;
       for (const binding of bindings) {
+        if (containsContainer(binding.value) && bindCollection(binding.symbol)) boundAnother = true;
         if (resolved.has(binding.symbol) || !boundToContainer(binding.value)) continue;
         resolved.add(binding.symbol);
         boundAnother = true;
+      }
+      for (const store of memberStores) {
+        if (collections.has(store.symbol) || boundToContainer(store.host)) continue;
+        if (!store.values.some((value) => boundToContainer(value))) continue;
+        bindCollection(store.symbol);
+        boundAnother = true;
+      }
+      for (const extraction of extractions) {
+        if (!containsContainer(extraction.value)) continue;
+        if (bindCollection(extraction.symbol)) boundAnother = true;
       }
     }
     return resolved;
