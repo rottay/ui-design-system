@@ -63,7 +63,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -72,6 +72,7 @@ import { repoRoot as findRepoRoot } from '../../libraries/repo-root/index.mjs';
 import {
   collectPublicSurface,
   diffSurfaces,
+  inferredReturnCertifier,
   publishedEntries,
   viteEntryMap,
 } from './surface/index.mjs';
@@ -478,6 +479,10 @@ const SURFACE_TREES = Object.freeze([
   `${LIBRARY_ROOT}src`,
   `${LIBRARY_ROOT}package.json`,
   `${LIBRARY_ROOT}vite.config.ts`,
+  // The certifying program compiles this revision with the package's own path
+  // aliases and lib set. Reading them from the LIVE tree instead would let a
+  // tsconfig edit inside the range certify both ends with the wrong options.
+  `${LIBRARY_ROOT}tsconfig.json`,
   `${LIBRARY_ROOT}contracts/package/entrypoints`,
 ]);
 
@@ -505,7 +510,27 @@ function checkoutSurfaceTree(repoRoot, ref) {
     encoding: 'buffer',
   });
   execFileSync('tar', ['-x', '-C', directory], { input: archive, maxBuffer: 512 * 1024 * 1024 });
+  linkInstalledDependencies(repoRoot, directory);
   return directory;
+}
+
+/**
+ * The installed dependencies, borrowed by an extracted revision.
+ *
+ * A revision extracted from git has no `node_modules`, so a certifying program
+ * over it would resolve `react` to nothing and infer `any` for every component
+ * -- while the working-tree end resolved it properly and inferred the real
+ * type. Every symbol would then diff. The two ends must see the same installed
+ * packages, and the only ones on the machine are the ones already installed.
+ */
+function linkInstalledDependencies(repoRoot, directory) {
+  for (const relative of ['node_modules', `${LIBRARY_ROOT}node_modules`]) {
+    const target = join(repoRoot, relative);
+    const link = join(directory, relative);
+    if (!existsSync(target) || existsSync(link)) continue;
+    mkdirSync(dirname(link), { recursive: true });
+    symlinkSync(target, link, 'dir');
+  }
 }
 
 /**
@@ -543,7 +568,16 @@ function surfaceIn(repoRoot) {
     viteEntries: viteEntryMap(readFile(`${LIBRARY_ROOT}vite.config.ts`)),
     exists,
   });
-  const collected = collectPublicSurface({ entries, readModule: readFile, exists });
+  const collected = collectPublicSurface({
+    entries,
+    readModule: readFile,
+    exists,
+    certify: inferredReturnCertifier({
+      rootDirectory: repoRoot,
+      packageDirectory: join(repoRoot, LIBRARY_ROOT),
+      entrySources: entries.map((entry) => entry.source),
+    }),
+  });
   return { ...collected, entries, unresolved: [...entryUnresolved, ...collected.unresolved] };
 }
 
@@ -663,6 +697,14 @@ export const DRILLS = Object.freeze({
   'public-overload-change-declared': 'green',
   'published-export-resolvable': 'green',
   'star-export-inside-source-tree': 'green',
+  // The 2026-09-09 checkpoint's counterexample: a published function whose
+  // return type is only stated by its body. Eliding the body made the two ends
+  // identical while a consumer went from clean to TS2322.
+  'inferred-return-changed': 'red',
+  // Its control, and the reason the repair resolves the signature instead of
+  // simply refusing to elide: an implementation edit that leaves the inferred
+  // type where it was is still not a contract event.
+  'inferred-return-body-only': 'green',
 });
 
 const RETAINED_CHANGESET = [
@@ -731,6 +773,13 @@ const MOUNT_MODULE = [
   '',
 ].join('\n');
 
+/**
+ * The checkpoint's probe, verbatim: a public function that writes down no
+ * return type, so the only statement of what it returns is the body a
+ * fingerprint elides.
+ */
+const INFERRED_RETURN_MODULE = 'export function value() { return 1; }\n';
+
 /** A base commit with one file of every class this gate distinguishes. */
 function sandbox() {
   const workspace = mkdtempSync(join(tmpdir(), 'contract-changeset-drill-'));
@@ -751,8 +800,13 @@ function sandbox() {
     "export { mountTenantTheme, resolveMount } from '../../infrastructure/mount';\n"
     + "export type { MountTenantThemeOptions } from '../../infrastructure/mount';\n",
   );
-  plant(workspace, `${LIBRARY_ROOT}src/index.ts`, "export { root } from './runtime/root';\n");
+  plant(
+    workspace,
+    `${LIBRARY_ROOT}src/index.ts`,
+    "export { root } from './runtime/root';\nexport { value } from './runtime/value';\n",
+  );
   plant(workspace, `${LIBRARY_ROOT}src/runtime/root/index.ts`, 'export const root: number = 1;\n');
+  plant(workspace, `${LIBRARY_ROOT}src/runtime/value/index.ts`, INFERRED_RETURN_MODULE);
   plant(workspace, `${LIBRARY_ROOT}docs/consumer-contract/index.md`, '# Consumer contract\n');
   plant(workspace, `${LIBRARY_ROOT}docs/guides/getting-started/index.md`, '# Getting started\n');
   plant(workspace, `${CHANGESET_DIR}/README.md`, '# Changesets\n');
@@ -892,9 +946,14 @@ export function runDrill(drill) {
         '  themeMode?: string;',
         '  themeMode?: string;\n  artifact: unknown;',
       ));
+      // TWO rows, because the edit moves two published symbols. `mountTenantTheme`
+      // returns `{ ...options }` with no return annotation, so a new required
+      // property on the option type is also a change to what it returns. The
+      // declaration is complete or the control is not a control.
       plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset(
         'minor',
         'signature ./server#MountTenantThemeOptions — requires the compiled `artifact`',
+        'signature ./server#mountTenantTheme — its inferred return carries the new `artifact`',
       ));
     }
 
@@ -990,6 +1049,28 @@ export function runDrill(drill) {
         'minor',
         'subpath ./server — re-exports the mount module directly',
       ));
+    }
+
+    // THE INFERRED-RETURN PROBE. `{ return 1; }` and `{ return String(1); }`
+    // elide to the same text, so the collector reported zero surface changes
+    // while the consumer's `const n: number = value()` became TS2322.
+    if (drill === 'inferred-return-changed') {
+      plant(
+        workspace,
+        `${LIBRARY_ROOT}src/runtime/value/index.ts`,
+        'export function value() { return String(1); }\n',
+      );
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset('patch'));
+    }
+    if (drill === 'inferred-return-body-only') {
+      // The control: a different body, the same inferred `number`. A repair
+      // that simply stopped eliding inferred bodies would fail here.
+      plant(
+        workspace,
+        `${LIBRARY_ROOT}src/runtime/value/index.ts`,
+        'export function value() { const one = 1; return one; }\n',
+      );
+      plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset('patch'));
     }
 
     let findings;

@@ -23,6 +23,22 @@
  * implementation is not a contract event and adding a parameter is. A value
  * declaration keeps its initializer: a public constant IS its value.
  *
+ * EXCEPT WHERE THE BODY IS THE SIGNATURE. Eliding the body is only sound when
+ * the return type is WRITTEN DOWN. Where it is inferred, the body is the
+ * declaration: `export function value() { return 1; }` and `{ return String(1); }`
+ * elide to the same text while a consumer holding `const n: number = value()`
+ * goes from clean to TS2322. So a function-like with a block body and no return
+ * annotation is elided to `{ }: <resolved return type>` -- the type TypeScript
+ * would emit into the `.d.ts`, obtained from a real checker over the same
+ * revision. A body edit that does not move that type still elides identically,
+ * which is why an implementation change stays green.
+ *
+ * AND WHERE IT CANNOT BE CERTIFIED, IT IS REFUSED. With no certifier the
+ * elision carries `UNCERTIFIED_INFERRED_RETURN`, and every published symbol
+ * carrying it is reported as `unresolved` -- the same fail-closed channel as an
+ * unreadable module. A pair of uncertified fingerprints comparing equal is not
+ * evidence that the signature held still.
+ *
  * FAIL-CLOSED. An export this resolver cannot follow -- an unreadable module, a
  * star through a package it cannot resolve, a depth or cycle bound -- is
  * recorded as `unresolved` and never silently dropped. A caller that treats
@@ -127,27 +143,68 @@ function resolveRelative(fromFile, specifier, exists) {
   return MODULE_SUFFIXES.map((suffix) => `${base}${suffix}`).find((candidate) => exists(candidate)) ?? null;
 }
 
-/** A declaration's shape: its text with every function body removed. */
-export function signatureFingerprint(node, source) {
+/**
+ * The elision of an inferred return that nothing certified.
+ *
+ * It is a visible token and not an empty string on purpose: a caller that
+ * compares two fingerprints must be able to see that the comparison was made
+ * over an uncertified shape, and `collectPublicSurface` turns it into an
+ * `unresolved` row rather than a silent pass.
+ */
+export const UNCERTIFIED_INFERRED_RETURN = '/* uncertified inferred return */';
+
+function isFunctionLike(node) {
+  return ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node)
+    || ts.isConstructorDeclaration(node) || ts.isGetAccessorDeclaration(node)
+    || ts.isSetAccessorDeclaration(node) || ts.isFunctionExpression(node)
+    || ts.isArrowFunction(node);
+}
+
+/**
+ * Does this declaration publish a return type that only its BODY states?
+ *
+ * A constructor returns its class and a setter returns nothing, so neither has
+ * an inferable return to certify. Everything else function-like without a
+ * `: Type` annotation does, and eliding its body drops the only place the
+ * published type is written.
+ */
+export function returnTypeIsInferred(node) {
+  if (ts.isConstructorDeclaration(node) || ts.isSetAccessorDeclaration(node)) return false;
+  return isFunctionLike(node) && node.type === undefined;
+}
+
+/**
+ * A declaration's shape: its text with every function body removed, and the
+ * resolved return type kept wherever removing the body would have removed the
+ * only statement of it.
+ *
+ * `certify(node)` returns the emitted return type of one function-like as a
+ * string, or null when this run cannot resolve it. Passing no certifier is the
+ * pure, source-only mode: it still elides, and it still MARKS what it could not
+ * certify.
+ */
+export function signatureFingerprint(node, source, certify = null) {
   const text = node.getText(source);
   const bodies = [];
   const visit = (current) => {
-    if ((ts.isFunctionDeclaration(current) || ts.isMethodDeclaration(current)
-      || ts.isConstructorDeclaration(current) || ts.isGetAccessorDeclaration(current)
-      || ts.isSetAccessorDeclaration(current) || ts.isFunctionExpression(current)
-      || ts.isArrowFunction(current)) && current.body && ts.isBlock(current.body)) {
-      bodies.push([current.body.getStart(source), current.body.getEnd()]);
+    if (isFunctionLike(current) && current.body && ts.isBlock(current.body)) {
+      bodies.push([current.body.getStart(source), current.body.getEnd(), current]);
       return;
     }
     ts.forEachChild(current, visit);
   };
   visit(node);
   if (bodies.length === 0) return text.replace(/\s+/gu, ' ').trim();
+  const elide = (fn) => {
+    if (!returnTypeIsInferred(fn)) return '{ }';
+    const resolved = certify === null ? null : certify(fn);
+    return resolved === null ? `{ }${UNCERTIFIED_INFERRED_RETURN}` : `{ }: ${resolved}`;
+  };
   const start = node.getStart(source);
   let out = '';
   let cursor = start;
-  for (const [from, to] of bodies.sort((a, b) => a[0] - b[0])) {
-    out += text.slice(cursor - start, from - start) + '{ }';
+  for (const [from, to, fn] of bodies.sort((a, b) => a[0] - b[0])) {
+    out += text.slice(cursor - start, from - start) + elide(fn);
     cursor = to;
   }
   out += text.slice(cursor - start);
@@ -184,8 +241,11 @@ export function combineDeclarations(parts) {
  * from where. Import bindings are included so `import { A } from './x'; export
  * { A }` resolves to the module that actually declares `A`.
  */
-export function moduleExports(file, text) {
+export function moduleExports(file, text, certify = null) {
   const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  // The certifier is asked about a node, and only ever about a node in THIS
+  // module, so the file it needs to look the node up in travels with the call.
+  const certifyHere = certify === null ? null : (node) => certify(file, node);
   const local = new Map();
   const declarations = new Map();
   const forwards = new Map();
@@ -235,7 +295,7 @@ export function moduleExports(file, text) {
       continue;
     }
     if (ts.isExportAssignment(statement) && !statement.isExportEquals) {
-      record(local, 'default', { kind: 'value', fingerprint: signatureFingerprint(statement.expression, source) });
+      record(local, 'default', { kind: 'value', fingerprint: signatureFingerprint(statement.expression, source, certifyHere) });
       continue;
     }
     const modifiers = ts.canHaveModifiers(statement) ? ts.getModifiers(statement) : undefined;
@@ -248,7 +308,7 @@ export function moduleExports(file, text) {
         // `export { … }` clause below it names, so it is recorded either way.
         record(exported ? local : declarations, declaration.name.text, {
           kind: 'value',
-          fingerprint: signatureFingerprint(declaration, source),
+          fingerprint: signatureFingerprint(declaration, source, certifyHere),
         });
       }
       continue;
@@ -256,7 +316,7 @@ export function moduleExports(file, text) {
     if (statement.name && ts.isIdentifier(statement.name)) {
       const part = {
         kind: declarationKind(statement),
-        fingerprint: signatureFingerprint(statement, source),
+        fingerprint: signatureFingerprint(statement, source, certifyHere),
         // A function declaration with no body is an overload SIGNATURE, which
         // is what a caller type-checks against.
         overload: ts.isFunctionDeclaration(statement) && statement.body === undefined,
@@ -268,7 +328,7 @@ export function moduleExports(file, text) {
     if (exported && isDefault) {
       record(local, 'default', {
         kind: declarationKind(statement),
-        fingerprint: signatureFingerprint(statement, source),
+        fingerprint: signatureFingerprint(statement, source, certifyHere),
       });
     }
   }
@@ -284,14 +344,14 @@ export function moduleExports(file, text) {
  * `exists(file)` answers whether one is present. Both are injected so a caller
  * can run this over a git revision without checking it out.
  */
-export function collectPublicSurface({ entries, readModule, exists }) {
+export function collectPublicSurface({ entries, readModule, exists, certify = null }) {
   const tables = new Map();
   const unresolved = [];
 
   const tableFor = (file) => {
     if (tables.has(file)) return tables.get(file);
     const text = readModule(file);
-    const table = text === null ? null : moduleExports(file, text);
+    const table = text === null ? null : moduleExports(file, text, certify);
     tables.set(file, table);
     return table;
   };
@@ -360,6 +420,16 @@ export function collectPublicSurface({ entries, readModule, exists }) {
         continue;
       }
       symbols.set(target, { ...resolved, subpath: entry.subpath });
+      // A published symbol whose inferred return nothing certified is a hole of
+      // exactly the kind this collector refuses elsewhere: its two ends compare
+      // equal because neither was read, not because neither moved.
+      if (resolved.fingerprint.includes(UNCERTIFIED_INFERRED_RETURN)) {
+        unresolved.push({
+          subpath: entry.subpath,
+          name,
+          reason: 'its published return type is inferred and this run certified no resolved signature for it',
+        });
+      }
       if (!files.has(resolved.file)) files.set(resolved.file, new Set());
       files.get(resolved.file).add(target);
     }
@@ -385,6 +455,124 @@ export function diffSurfaces(base, head) {
     if (!head.symbols.has(target)) rows.push({ target, change: 'removed', kind: symbol.kind, file: symbol.file });
   }
   return rows.sort((left, right) => left.target.localeCompare(right.target));
+}
+
+/**
+ * The compiler options a certifying program uses over ONE revision's tree.
+ *
+ * `tsconfig.json` is read from that revision when it is present so the path
+ * aliases and lib set match what the package is actually compiled with; a tree
+ * without one (the drill sandboxes) falls back to the same bundler-mode
+ * defaults. Emit is off in every case: only the checker is wanted.
+ */
+function certifyingOptions(packageDirectory) {
+  const configPath = `${packageDirectory}/tsconfig.json`;
+  const declared = ts.sys.fileExists(configPath)
+    ? ts.parseJsonConfigFileContent(
+      ts.readConfigFile(configPath, (file) => ts.sys.readFile(file)).config ?? {},
+      ts.sys,
+      packageDirectory,
+    ).options
+    : {
+      target: ts.ScriptTarget.ES2020,
+      lib: ['lib.es2020.d.ts', 'lib.dom.d.ts'],
+      module: ts.ModuleKind.ESNext,
+      moduleResolution: ts.ModuleResolutionKind.Bundler,
+      jsx: ts.JsxEmit.ReactJSX,
+      strict: true,
+    };
+  return {
+    ...declared,
+    // `.mjs` entrypoints are published source too, and without this they are
+    // simply absent from the program -- which reads as "cannot certify".
+    allowJs: true,
+    checkJs: false,
+    noEmit: true,
+    declaration: false,
+    declarationMap: false,
+    composite: false,
+    incremental: false,
+    tsBuildInfoFile: undefined,
+    outDir: undefined,
+    rootDir: undefined,
+  };
+}
+
+/**
+ * A resolved type printed so that two revisions of the same source print the
+ * same string.
+ *
+ * `typeToString` names a type it cannot reach through an `import("<absolute
+ * path>")`, and the two ends of a range are read from two different extracted
+ * directories. Left alone, every React-returning component would have diffed on
+ * its own tmpdir name. Package paths keep only what follows the last
+ * `node_modules/`, so a pnpm store version directory does not move a signature
+ * either; in-tree paths become repository-relative.
+ */
+export function normalizeResolvedType(text, rootDirectory) {
+  return text
+    .replace(/import\("([^"]*)"\)/gu, (_match, target) => {
+      const marker = target.lastIndexOf('/node_modules/');
+      if (marker >= 0) return `import("${target.slice(marker + '/node_modules/'.length)}")`;
+      if (target.startsWith(`${rootDirectory}/`)) return `import("${target.slice(rootDirectory.length + 1)}")`;
+      return `import("${target}")`;
+    })
+    .replace(/\s+/gu, ' ')
+    .trim();
+}
+
+/**
+ * The certifier `collectPublicSurface` asks for an inferred return type.
+ *
+ * It builds ONE program per revision, rooted at the published entry modules, and
+ * only on the first question -- a revision whose whole surface annotates its
+ * returns never pays for a checker. Nodes are matched by exact source span, so
+ * the answer belongs to the same declaration the fingerprint was cut from; a
+ * span the program does not carry returns null and is refused upstream rather
+ * than guessed at.
+ */
+export function inferredReturnCertifier({ rootDirectory, packageDirectory, entrySources }) {
+  let checker = null;
+  let program = null;
+  const spans = new Map();
+
+  const load = () => {
+    if (program !== null) return;
+    program = ts.createProgram(
+      entrySources.map((source) => `${rootDirectory}/${source}`),
+      certifyingOptions(packageDirectory),
+    );
+    checker = program.getTypeChecker();
+  };
+
+  const spansOf = (file) => {
+    if (spans.has(file)) return spans.get(file);
+    const sourceFile = program.getSourceFile(`${rootDirectory}/${file}`);
+    const index = sourceFile === undefined ? null : new Map();
+    if (index !== null) {
+      const walk = (node) => {
+        if (isFunctionLike(node)) index.set(`${node.getStart(sourceFile)}:${node.end}`, node);
+        ts.forEachChild(node, walk);
+      };
+      walk(sourceFile);
+    }
+    spans.set(file, index);
+    return index;
+  };
+
+  return (file, node) => {
+    load();
+    const index = spansOf(file);
+    if (index === null) return null;
+    const resolved = index.get(`${node.getStart()}:${node.end}`);
+    if (resolved === undefined) return null;
+    const signature = checker.getSignatureFromDeclaration(resolved);
+    if (signature === undefined) return null;
+    return normalizeResolvedType(
+      checker.typeToString(checker.getReturnTypeOfSignature(signature), resolved, ts.TypeFormatFlags.NoTruncation),
+      rootDirectory,
+    );
+  };
 }
 
 export { SOURCE_ROOT };
