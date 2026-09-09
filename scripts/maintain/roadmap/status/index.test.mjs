@@ -20,6 +20,8 @@ import {
   readFamilyAcceptance,
   readProgramIndicatorMeasurement,
   reassignInProgressWorkOrder,
+  reopenWorkOrder,
+  PROGRAM_MILESTONES,
   summarizeDsImprovements,
   summarizeDsSupportMilestones,
   summarizeProgramMilestones,
@@ -2029,7 +2031,7 @@ test("the closed registry schema rejects shadow state outside the DS program sub
 test("programme milestones are derived from their gate work orders, never stored", () => {
   const registry = liveRegistry();
   const milestones = summarizeProgramMilestones(registry);
-  assert.deepEqual(milestones.map((milestone) => milestone.id), ["A", "A2", "B", "C"]);
+  assert.deepEqual(milestones.map((milestone) => milestone.id), ["A", "A2-pilot", "B", "C"]);
 
   // No milestone may be an authored registry field.
   for (const workOrder of registry.workOrders) {
@@ -2037,40 +2039,174 @@ test("programme milestones are derived from their gate work orders, never stored
   }
   assert.ok(!Object.hasOwn(registry, "milestones"));
 
-  const milestoneA = milestones.find((milestone) => milestone.id === "A");
-  assert.deepEqual(milestoneA.gates, ["WO-CON-04", "WO-CON-05"]);
-  assert.equal(milestoneA.reached, true);
-  assert.deepEqual(milestoneA.outstanding, []);
-
-  // Milestone C is programme-scoped: its gate set is every audit-2026-09-05 work order.
+  // Milestone C is programme-scoped: its gate set is every audit-2026-09-05 work
+  // order, so an untagged successor is invisible to completion.
   const milestoneC = milestones.find((milestone) => milestone.id === "C");
   const programWorkOrders = registry.workOrders
     .filter((workOrder) => (workOrder.programs || []).includes("audit-2026-09-05"))
-    .map((workOrder) => workOrder.id);
-  assert.equal(milestoneC.gates.length, programWorkOrders.length);
+    .map((workOrder) => workOrder.id)
+    .sort();
+  assert.deepEqual(milestoneC.gates, programWorkOrders);
   assert.ok(milestoneC.gates.length > 0);
-  assert.equal(milestoneC.reached, false);
+
+  // Every named gate of every milestone resolves to a real registry entry: a
+  // gate that no work order carries would make its milestone unreachable in
+  // silence.
+  const ids = new Set(registry.workOrders.map((workOrder) => workOrder.id));
+  for (const milestone of milestones) {
+    for (const gate of milestone.gates) assert.ok(ids.has(gate), `${milestone.id} gate ${gate} is not registered`);
+  }
 });
 
-test("a milestone is reached only when every gate work order is done", () => {
-  const registry = liveRegistry();
-  for (const id of ["WO-CON-04", "WO-CON-05"]) {
-    const workOrder = registry.workOrders.find((candidate) => candidate.id === id);
-    workOrder.status = "done";
-    workOrder.claimedBy = "test";
-    workOrder.claimedAt = "2026-09-05";
-    workOrder.doneAt = "2026-09-05";
-    workOrder.evidence = "fixture";
-  }
-  const milestoneA = summarizeProgramMilestones(registry).find((milestone) => milestone.id === "A");
-  assert.equal(milestoneA.reached, true);
-  assert.deepEqual(milestoneA.outstanding, []);
+test("the pilot milestone carries the pilot instrument and the fleet threshold gates B", () => {
+  // The by-axis fleet threshold (WO-EVI-02) may never stand behind the pilot:
+  // a smaller population cannot discharge the fleet obligation.
+  const a2 = PROGRAM_MILESTONES.find((milestone) => milestone.id === "A2-pilot");
+  const b = PROGRAM_MILESTONES.find((milestone) => milestone.id === "B");
+  assert.ok(a2.gates.includes("WO-EVI-05"));
+  assert.ok(!a2.gates.includes("WO-EVI-02"));
+  assert.ok(b.gates.includes("WO-EVI-02"));
+  assert.ok(!PROGRAM_MILESTONES.some((milestone) => milestone.id === "A2"));
+});
 
-  // One gate regressing is enough to lose the milestone.
-  registry.workOrders.find((candidate) => candidate.id === "WO-CON-05").status = "in-progress";
-  const regressed = summarizeProgramMilestones(registry).find((milestone) => milestone.id === "A");
-  assert.equal(regressed.reached, false);
-  assert.deepEqual(regressed.outstanding, ["WO-CON-05"]);
+// Milestone reachability is asserted against controlled fixtures, never against
+// the live registry: a live assertion turns every legitimate reopen into a red
+// test and pressures the roadmap to stay green rather than stay true.
+const milestoneFixture = (states) => ({
+  workOrders: Object.entries(states).map(([id, status]) => ({
+    id,
+    status,
+    programs: ["audit-2026-09-05"],
+  })),
+});
+
+const gatesOf = (id) => {
+  const milestone = PROGRAM_MILESTONES.find((candidate) => candidate.id === id);
+  return milestone.programGate
+    ? ["WO-FIXTURE-01", "WO-FIXTURE-02"]
+    : milestone.gates;
+};
+
+test("a milestone is reached only when every gate work order is done", () => {
+  for (const milestone of PROGRAM_MILESTONES) {
+    const gates = gatesOf(milestone.id);
+    const allDone = milestoneFixture(Object.fromEntries(gates.map((gate) => [gate, "done"])));
+    const reached = summarizeProgramMilestones(allDone).find((candidate) => candidate.id === milestone.id);
+    assert.deepEqual(reached.gates, milestone.programGate ? [...gates].sort() : gates);
+    assert.equal(reached.reached, true, `${milestone.id} with every gate done must be reached`);
+    assert.deepEqual(reached.outstanding, []);
+  }
+});
+
+test("one open gate is enough to lose any milestone", () => {
+  for (const milestone of PROGRAM_MILESTONES) {
+    const gates = gatesOf(milestone.id);
+    for (const open of gates) {
+      for (const openStatus of ["todo", "in-progress"]) {
+        const registry = milestoneFixture(Object.fromEntries(
+          gates.map((gate) => [gate, gate === open ? openStatus : "done"]),
+        ));
+        const summary = summarizeProgramMilestones(registry).find((candidate) => candidate.id === milestone.id);
+        assert.equal(summary.reached, false, `${milestone.id} must not be reached while ${open} is ${openStatus}`);
+        assert.deepEqual(summary.outstanding, [open]);
+      }
+    }
+  }
+});
+
+test("a milestone with no gates is never reached", () => {
+  // Milestone C selects by programme membership; an empty programme must not
+  // read as "everything is done".
+  const summary = summarizeProgramMilestones({ workOrders: [] });
+  for (const milestone of summary) assert.equal(milestone.reached, false);
+});
+
+test("reopen preserves the completion record it withdraws", () => {
+  const workOrder = {
+    id: "WO-FIXTURE-01",
+    status: "done",
+    claimedBy: "writer",
+    claimedAt: "2026-09-01",
+    doneAt: "2026-09-02",
+    evidence: "Landed 0123456789abcdef0123456789abcdef01234567; gate green; auditor PASS.",
+    notes: "wave 1; closes F-99",
+    progressLog: [],
+  };
+
+  const previous = reopenWorkOrder(workOrder, { reason: "R4: the acceptance was disproved" });
+
+  assert.equal(previous.priorStatus, "done");
+  assert.equal(workOrder.status, "todo");
+  assert.equal(workOrder.evidence, null);
+  assert.equal(workOrder.claimedBy, null);
+  assert.equal(workOrder.claimedAt, null);
+  assert.equal(workOrder.doneAt, null);
+  // Without --note the routing notes survive untouched.
+  assert.equal(workOrder.notes, "wave 1; closes F-99");
+
+  assert.equal(workOrder.progressLog.length, 1);
+  const [entry] = workOrder.progressLog;
+  assert.deepEqual(Object.keys(entry).sort(), ["at", "by", "note"]);
+  assert.equal(entry.by, "reopen");
+  assert.match(entry.note, /REOPENED from done/);
+  assert.match(entry.note, /R4: the acceptance was disproved/);
+  // The evidence is carried verbatim, never as a digest.
+  assert.ok(entry.note.includes("Landed 0123456789abcdef0123456789abcdef01234567; gate green; auditor PASS."));
+  assert.ok(entry.note.includes("claimedBy=writer"));
+  assert.ok(entry.note.includes("claimedAt=2026-09-01"));
+  assert.ok(entry.note.includes("doneAt=2026-09-02"));
+});
+
+test("reopen with --note keeps the notes it replaces inside the record", () => {
+  const workOrder = {
+    id: "WO-FIXTURE-02",
+    status: "done",
+    claimedBy: "writer",
+    claimedAt: "2026-09-01",
+    doneAt: "2026-09-02",
+    evidence: "closed by WO-XXX-01 0123456789abcdef0123456789abcdef01234567",
+    notes: "ABSORBED by WO-XXX-01; wave 2",
+    progressLog: [{ at: "2026-09-01 10:00", by: "writer", note: "step 1 landed" }],
+  };
+
+  reopenWorkOrder(workOrder, { note: "REOPENED by R4", reason: "R4: superseding evidence" });
+
+  assert.equal(workOrder.notes, "REOPENED by R4");
+  assert.equal(workOrder.progressLog.length, 2);
+  // The pre-existing progress history is not disturbed.
+  assert.equal(workOrder.progressLog[0].note, "step 1 landed");
+  const entry = workOrder.progressLog[1];
+  assert.ok(entry.note.includes("Prior notes (verbatim): ABSORBED by WO-XXX-01; wave 2"));
+  assert.ok(entry.note.includes("closed by WO-XXX-01 0123456789abcdef0123456789abcdef01234567"));
+});
+
+test("reopen records that no reason was given rather than inventing one", () => {
+  const workOrder = {
+    id: "WO-FIXTURE-03",
+    status: "done",
+    claimedBy: null,
+    claimedAt: null,
+    doneAt: "2026-09-02",
+    evidence: null,
+    notes: "n/a",
+    progressLog: [],
+  };
+  reopenWorkOrder(workOrder);
+  const [entry] = workOrder.progressLog;
+  assert.match(entry.note, /Reason: not recorded\./);
+  assert.match(entry.note, /Prior evidence \(verbatim\): none recorded/);
+  assert.ok(!entry.note.includes("Prior notes (verbatim)"));
+});
+
+test("the reopen record stays inside the closed progress schema", () => {
+  const registry = liveRegistry();
+  const workOrder = registry.workOrders.find((candidate) => candidate.status === "done");
+  reopenWorkOrder(workOrder, { reason: "schema probe" });
+  assert.deepEqual(
+    validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY })
+      .filter((error) => error.includes("progressLog")),
+    [],
+  );
 });
 
 

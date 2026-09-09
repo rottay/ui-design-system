@@ -460,9 +460,41 @@ in the registry, so a milestone cannot be claimed without the work that proves i
 | Milestone | Gate | What it enables |
 | --- | --- | --- |
 | A · the apps can build | `WO-CON-04` + `WO-CON-05` | BitHire builds against `packages/core/docs/consumer-contract/index.md` while the DS continues behind the contract |
-| A2 · architecture validated in one vertical cut | `WO-CAT-02`, `WO-CAT-03`, `WO-DER-01`, `WO-FAM-00`, `WO-FAM-01`, `WO-EVI-02` | the cascade is proven end to end on one family; the autonomous APP and DS lanes start (D-29) |
-| B · real cascade in Modern | `WO-DER-05`, `WO-DER-07`, `WO-FAM-01`, `WO-FAM-02`, `WO-FAM-06` | two tenants of the same vertical differ in shape, rhythm, states and mode, not only colour |
+| A2-pilot · architecture validated in one vertical cut (pilot population) | `WO-CAT-02`, `WO-CAT-03`, `WO-DER-01`, `WO-FAM-00`, `WO-FAM-01`, `WO-EVI-05` | the cascade is proven end to end on one family, on the pilot population only; the autonomous APP and DS lanes start (D-29) |
+| B · real cascade in Modern | `WO-DER-05`, `WO-DER-07`, `WO-EVI-02`, `WO-FAM-01`, `WO-FAM-02`, `WO-FAM-06` | two tenants of the same vertical differ in shape, rhythm, states and mode, not only colour; the fleet six-axis threshold is reached |
 | C · 116/116 | every `audit-2026-09-05` work order done | re-audit with `audit/20-rubric`; the off-registry conditions (every `audit/30-findings` closure criterion green, every indicator at target) are stated in the STATUS row and are not derivable from WO status alone |
+
+**AMENDMENT (R4, 2026-09-08) — the pilot/fleet split, and what it may not certify.**
+The 2026-09-08 re-audit found that A2 required `WO-EVI-02`, whose acceptance
+(`evidence-graph.md`, read with `kit-2026-09.md` §5 rule 4) is a **fleet** obligation:
+each of six non-chromatic axes must move at least 80 % of the families that declare
+they consume it, with both negative controls. A one-family pilot cannot discharge a
+fleet threshold. The split is therefore executable, not prose: `PROGRAM_MILESTONES`
+in `scripts/maintain/roadmap/status/index.mjs` now carries `A2-pilot` gated on the new
+`WO-EVI-05` (the pilot instrument), and `WO-EVI-02` moved onto milestone B, which is
+where the fleet threshold now gates. This table restates that code; the code is the
+authority.
+
+**Milestone A is WITHDRAWN, not merely open (R4, 2026-09-08).** It was reported
+reached; both of its gates — `WO-CON-04` and `WO-CON-05` — were reopened by this lot
+against DEL-03 and DEL-02/DEL-04, so the reached claim is retracted. Downstream waiters
+on the two-track protocol are notified through this line and the handoff protocol above:
+track APP's frozen-contract guarantee rests on a shipping consumer proof that is
+demonstrably blind to missing capitalized runtime exports, and A may not be re-reached
+until `WO-CON-04`'s amended acceptance repairs it. The work-order burn-down moved 92 -> 83
+for the same reason; no obligation was deleted, and every reopened work order carries its
+prior evidence verbatim in its `progressLog` reopen record.
+
+**OWNER-PENDING — absolute fan-out floors (blocking, not annotating).** The kit's
+`broad-scope` rows carry an absolute minimum of families "fixed in the catalog"; that
+consolidated floor decision is reserved to the owner and has not landed (marker:
+`roadmap/kit-2026-09.md` §5 rule 1). Until it does, the certification claims that
+depend on unfixed minima are **BLOCKED, not merely annotated**: `WO-EVI-02`'s fleet
+by-axis acceptance, **milestone B**, and the fleet side of the former A2. A gate may
+not be reported green, and those claims may not be certified, by choosing a floor
+inside the programme. Existing explicit minima (the D-27 kit rows, the catalog-fixed
+broad-scope minima and `WO-DER-02`'s `states.emphasis ≥ 10 families` lane gate) stand
+verbatim and are not reopened by this marker.
 
 ### Dispositions of the 26 pre-existing open work orders (2026-09-05)
 

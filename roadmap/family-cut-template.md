@@ -183,7 +183,7 @@ named container queries, with a `ResizeObserver` only where structure changes.
 A family does not invent its own posture names, its own thresholds, or a second
 component for the small posture. `adapt` is not a tenant decision.
 
-### 4.2 Loading skeletons derived from the anatomy — owner UNASSIGNED
+### 4.2 Loading skeletons derived from the anatomy — owner WO-FAM-14 (NEEDS-OWNER-APPROVAL)
 
 A family does not hand-write a skeleton. One shared skeleton renderer reads the
 family's `data-part` anatomy and builds the loading state from it, so the
@@ -206,14 +206,23 @@ rather than through `transition: height`. Every animation respects
 A family that adds its own animation library, or its own FLIP, has not adopted
 the kernel — it has forked it.
 
-> **§4.2 has no owning work order.** WO-INV-07 and WO-INV-08 create the kernels
-> §4.1 and §4.3 measure against. Nothing in the roadmap creates the shared
-> anatomy-derived skeleton renderer: WO-CRA-02 owns the async-state timing law
-> and `BrandMotion.skeletonStyle`, and `components/primitives/feedback/skeleton`
-> ships nine hand-made compounds (`avatar`, `button`, `card`, `form-skeleton`,
-> `list-item`, `paragraph`, `table`, `text`, `transition`) that are exactly the
-> per-component skeletons this clause forbids. WO-FAM-00 states the requirement because its own step 2 requires it;
-> assigning the owner is a coordinator decision.
+> **AMENDMENT (R4, 2026-09-08) — §4.2 now has an owning work order: `WO-FAM-14`**
+> (`roadmap/family-cuts.md`), registered NEEDS-OWNER-APPROVAL. It owns the shared
+> renderer, the retirement of the nine hand-made compounds, this section's owner
+> line, and the flip of the gate's `anatomy-derived-skeleton` arm from OWED to
+> BLOCKING — which is that work order's own close act, not a coordinator edit.
+> It must close before `WO-FAM-01` closes, and therefore before `A2-pilot`.
+>
+> The history this replaces, preserved: "**§4.2 has no owning work order.**
+> WO-INV-07 and WO-INV-08 create the kernels §4.1 and §4.3 measure against.
+> Nothing in the roadmap creates the shared anatomy-derived skeleton renderer:
+> WO-CRA-02 owns the async-state timing law and `BrandMotion.skeletonStyle`, and
+> `components/primitives/feedback/skeleton` ships nine hand-made compounds
+> (`avatar`, `button`, `card`, `form-skeleton`, `list-item`, `paragraph`,
+> `table`, `text`, `transition`) that are exactly the per-component skeletons
+> this clause forbids. WO-FAM-00 states the requirement because its own step 2
+> requires it; assigning the owner is a coordinator decision." WO-CRA-02's scope
+> is unchanged by this assignment: it still does not own a renderer.
 
 ---
 

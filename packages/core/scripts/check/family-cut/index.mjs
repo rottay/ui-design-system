@@ -104,9 +104,9 @@ export const OWED_ARMS = Object.freeze([
   },
   {
     id: 'anatomy-derived-skeleton',
-    owner: 'UNASSIGNED (nearest: WO-CRA-02, which owns the async-state law and `BrandMotion.skeletonStyle` but not a renderer)',
+    owner: 'WO-FAM-14',
     reason:
-      'the shared skeleton renderer that builds a loading skeleton FROM the family `data-part` anatomy does not exist and no work order creates it; the template states the requirement (WO-FAM-00 step 2) and this arm stays owed until the coordinator assigns an owner. Measuring it now would fail every family for a kernel nobody has been asked to write',
+      'the shared skeleton renderer that builds a loading skeleton FROM the family `data-part` anatomy does not exist yet; WO-FAM-14 creates it, retires the nine hand-made compounds and flips this arm to blocking as its own close act. Measuring it now would fail every family for a kernel nobody has written',
   },
   {
     id: 'layout-animation-kernel',

@@ -2734,7 +2734,7 @@ const byId = (reg) => Object.fromEntries(reg.workOrders.map((w) => [w.id, w]));
 // from the state of its gate work orders; it is never a registry field, so it
 // cannot be asserted independently of the work that proves it.
 const PROGRAM_MILESTONE_PROGRAM = "audit-2026-09-05";
-const PROGRAM_MILESTONES = [
+export const PROGRAM_MILESTONES = [
   {
     id: "A",
     title: "The apps can build",
@@ -2742,16 +2742,16 @@ const PROGRAM_MILESTONES = [
     enables: "BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract.",
   },
   {
-    id: "A2",
-    title: "Architecture validated in one vertical cut",
-    gates: ["WO-CAT-02", "WO-CAT-03", "WO-DER-01", "WO-FAM-00", "WO-FAM-01", "WO-EVI-02"],
-    enables: "Decisions -> derivation -> channels -> skin proven end to end on one family; the autonomous APP and DS lanes start.",
+    id: "A2-pilot",
+    title: "Architecture validated in one vertical cut (pilot population)",
+    gates: ["WO-CAT-02", "WO-CAT-03", "WO-DER-01", "WO-FAM-00", "WO-FAM-01", "WO-EVI-05"],
+    enables: "Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one.",
   },
   {
     id: "B",
     title: "Real cascade in Modern",
-    gates: ["WO-DER-05", "WO-DER-07", "WO-FAM-01", "WO-FAM-02", "WO-FAM-06"],
-    enables: "Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography.",
+    gates: ["WO-DER-05", "WO-DER-07", "WO-EVI-02", "WO-FAM-01", "WO-FAM-02", "WO-FAM-06"],
+    enables: "Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached.",
   },
   {
     id: "C",
@@ -3640,6 +3640,46 @@ export function reassignInProgressWorkOrder(workOrder, {
   return previous;
 }
 
+/**
+ * Reopen a work order and keep the completion record it is withdrawing.
+ *
+ * A reopen clears `evidence`, `claimedBy`, `claimedAt` and `doneAt`, so without
+ * this the closure that is being withdrawn leaves no trace anywhere: the prior
+ * evidence — which carries the landing commit and the audit receipts — is the
+ * only durable record of what was once claimed, and an unrecorded withdrawal is
+ * indistinguishable from work that never happened. The prior record is appended
+ * to `progressLog` in its existing closed `{at, by, note}` schema before the
+ * fields are cleared, verbatim and never digested.
+ */
+export function reopenWorkOrder(workOrder, {
+  note,
+  reason,
+  at = localDateTime(),
+} = {}) {
+  const priorStatus = workOrder.status;
+  const priorEvidence = workOrder.evidence;
+  const priorNotes = workOrder.notes;
+  const replacesNotes = isNonEmptyString(note);
+  const parts = [
+    `REOPENED from ${priorStatus}. Reason: ${isNonEmptyString(reason) ? reason : "not recorded"}.`,
+    `Prior claimedBy=${workOrder.claimedBy ?? "null"} claimedAt=${workOrder.claimedAt ?? "null"} doneAt=${workOrder.doneAt ?? "null"}.`,
+    `Prior evidence (verbatim): ${isNonEmptyString(priorEvidence) ? priorEvidence : "none recorded"}`,
+  ];
+  if (replacesNotes) {
+    parts.push(`Prior notes (verbatim): ${isNonEmptyString(priorNotes) ? priorNotes : "none recorded"}`);
+  }
+  workOrder.progressLog = workOrder.progressLog || [];
+  workOrder.progressLog.push({ at, by: "reopen", note: parts.join(" ") });
+
+  workOrder.status = "todo";
+  workOrder.claimedBy = null;
+  workOrder.claimedAt = null;
+  workOrder.doneAt = null;
+  workOrder.evidence = null;
+  workOrder.notes = replacesNotes ? note : workOrder.notes;
+  return { priorStatus, priorEvidence, priorNotes };
+}
+
 export function main(argv = process.argv.slice(2)) {
 const [cmd, arg, ...rest] = argv;
 const args = [arg, ...rest].filter(Boolean);
@@ -3793,14 +3833,16 @@ switch (cmd) {
   case "reopen": {
     const reg = loadRegistry();
     const w = requireWo(reg, arg);
-    w.status = "todo"; w.claimedBy = null; w.claimedAt = null; w.doneAt = null; w.evidence = null;
-    w.notes = flag(args, "--note") || w.notes;
+    const { priorStatus } = reopenWorkOrder(w, {
+      note: flag(args, "--note"),
+      reason: flag(args, "--reason"),
+    });
     saveRegistry(reg); generateStatus();
-    console.log(`${w.id} reopened.`);
+    console.log(`${w.id} reopened from ${priorStatus}; the prior completion record is preserved as progress entry ${w.progressLog.length}.`);
     break;
   }
   default:
-    console.log("Usage: node scripts/maintain/roadmap/status/index.mjs <status|check|next|show WO-ID|delegate WO-ID|trace DS-IMP-ID|claim WO-ID [--by name]|reassign WO-ID --by name --notes \"...\"|progress WO-ID --note \"...\" [--by name]|done WO-ID --evidence \"...\"|reopen WO-ID [--note ...]>");
+    console.log("Usage: node scripts/maintain/roadmap/status/index.mjs <status|check|next|show WO-ID|delegate WO-ID|trace DS-IMP-ID|claim WO-ID [--by name]|reassign WO-ID --by name --notes \"...\"|progress WO-ID --note \"...\" [--by name]|done WO-ID --evidence \"...\"|reopen WO-ID [--note ...] [--reason \"...\"]>");
     process.exit(cmd ? 1 : 0);
 }
 }
