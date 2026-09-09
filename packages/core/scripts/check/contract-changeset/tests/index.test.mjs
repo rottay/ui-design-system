@@ -198,14 +198,58 @@ test('every declared drill class is planted and lands in its declared direction'
     'contract-without-changeset',
     'contract-without-diff-block',
     'docs-outside-contract',
+    'foreign-package-declaration',
     'library-without-changeset',
     'malformed-changeset',
+    'published-root-symbol-changed',
+    'signature-defined-outside-entrypoints',
     'stale-changeset-only',
+    'surface-body-only-change',
+    'surface-change-declared',
   ]);
   for (const [drill, expected] of Object.entries(DRILLS)) {
     const result = runDrill(drill);
     assert.equal(result.landed, expected, `${drill} landed ${result.landed}, declared ${expected}`);
   }
+});
+
+test('the derived surface sees a signature that changes where it is DEFINED', { timeout: 300000 }, () => {
+  // The reproduction the 2026-09-08 re-audit ran: a public type moves in the
+  // module that declares it, far from any entrypoint directory, and arrives
+  // with a version bump. The previous check called that `library` and asked for
+  // nothing more.
+  const result = runDrill('signature-defined-outside-entrypoints');
+  assert.equal(result.landed, 'red');
+  assert.equal(result.findings[0].leg, 'surface-coverage');
+  assert.match(result.findings[0].detail, /MountTenantThemeOptions/);
+});
+
+test('the published root barrel is a signature surface, not library bytes', { timeout: 300000 }, () => {
+  const result = runDrill('published-root-symbol-changed');
+  assert.equal(result.landed, 'red');
+  assert.match(result.findings.map((finding) => finding.detail).join(' '), /\.#root/);
+});
+
+test('a declaration that names another package is not coverage for this one', { timeout: 300000 }, () => {
+  const result = runDrill('foreign-package-declaration');
+  assert.equal(result.landed, 'red');
+  const legs = result.findings.map((finding) => finding.leg);
+  assert.ok(legs.includes('package-identity'), JSON.stringify(result.findings));
+  assert.ok(legs.includes('contract'), JSON.stringify(result.findings));
+});
+
+test('CONTROL: an implementation change behind an unchanged signature is not a contract event', {
+  timeout: 300000,
+}, () => {
+  // Without this the three drills above would pass for the wrong reason: the
+  // derived leg could be demanding a row for every edit to a surface file.
+  const result = runDrill('surface-body-only-change');
+  assert.equal(result.landed, 'green');
+});
+
+test('CONTROL: the same signature change WITH its row is green', { timeout: 300000 }, () => {
+  const result = runDrill('surface-change-declared');
+  assert.equal(result.landed, 'green');
 });
 
 test('the stale-changeset drill is red because of the range, not a missing file', {

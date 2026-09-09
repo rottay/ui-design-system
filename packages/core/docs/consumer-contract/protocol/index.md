@@ -42,6 +42,25 @@ a changeset. Three path classes, three answers:
 | exempt | `packages/core/docs/**` outside the consumer contract | none — those documents are not in the package's `files` and never reach a pinned consumer |
 | library | the rest of `packages/core/**` | a changeset |
 
+A path class is not the whole answer, because an entrypoint is a barrel and the
+declarations it publishes live where they are DEFINED. So the check also derives
+the **signature surface** from the exported declarations themselves: it resolves
+every published subpath of `exports` to the module that declares each name, and
+compares that declaration's shape — its text with function bodies elided —
+across the range.
+
+| Also required | When |
+|---|---|
+| a `contract-diff` row naming the symbol | a published declaration is ADDED, REMOVED, or changes shape, wherever it is defined |
+| the changeset bumps `@rottay/design-system` | always — a block inside a changeset that bumps another package travels with that package's release notes and reaches nobody pinned to this one |
+
+An implementation change behind an unchanged signature owes nothing beyond its
+changeset: rewriting a function body is not a contract event. Adding a field to
+`MountTenantThemeOptions` is, even though that interface is declared several
+directories away from `src/entrypoints/`. The range that changed 74
+public-contract paths and was asked for nothing is the reason this paragraph
+exists.
+
 The check counts only the changesets the pull request ADDS. A changeset already
 committed on the base branch — the retained 3.0 changeset of WO-RET-01 is one,
 and stays one until it is published — describes its own release, not the range

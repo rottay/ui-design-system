@@ -1777,12 +1777,38 @@ function moduleFileCandidates(base) {
 }
 
 /**
+ * Does the analyzer's own package IS the package a caller's path names?
+ *
+ * A caller labels its files with a workspace-relative path
+ * (`ui-design-system/packages/core/src/...`), whose FIRST segment is the name
+ * of the directory the repository happens to be checked out into. Matching that
+ * whole label against the analyzer's absolute location made the answer depend
+ * on the checkout's folder name: the identical bytes proved twenty canonical
+ * forwarders under one label and zero under another, and "zero" is the shape of
+ * a component that stamps nothing. A verdict that moves when a clone is renamed
+ * is not a measurement of the code.
+ *
+ * The package identity is the tail that names the package
+ * (`packages/core`), so leading segments are dropped one at a time until a
+ * suffix matches. At least two segments must survive, which is what keeps
+ * `packages/core` from matching `packages/showroom` through a bare `core`.
+ */
+export function packageRootMatchesAnalyzer(workspacePackageRoot, analyzerRoot = ANALYSIS_PACKAGE_ROOT) {
+  if (!workspacePackageRoot) return false;
+  const segments = workspacePackageRoot.split('/').filter(Boolean);
+  for (let start = 0; start <= segments.length - 2; start += 1) {
+    if (analyzerRoot.endsWith(`/${segments.slice(start).join('/')}`)) return true;
+  }
+  return false;
+}
+
+/**
  * Default module reader. Maps a workspace-relative module base onto disk using
  * the package root this analyzer itself lives in, and refuses to read anything
  * outside that package.
  */
 function createSourceModuleReader(workspacePackageRoot) {
-  if (!workspacePackageRoot || !ANALYSIS_PACKAGE_ROOT.endsWith(workspacePackageRoot)) return null;
+  if (!packageRootMatchesAnalyzer(workspacePackageRoot)) return null;
   const cache = new Map();
   return (base) => {
     if (cache.has(base)) return cache.get(base);

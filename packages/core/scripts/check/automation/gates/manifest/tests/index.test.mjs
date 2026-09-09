@@ -16,7 +16,8 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -288,6 +289,131 @@ test('DRILL: a pre-build gate whose module graph reaches dist/ is refused', () =
     ]),
     [],
   );
+});
+
+/**
+ * The three shapes the previous reachability walk could not see. Each is a
+ * REAL entry of this repository that the 2026-09-08 re-audit ran on a checkout
+ * without `dist/` and watched fail, while `validateManifest()` reported no
+ * problem at all.
+ */
+test('DRILL: a pre-build gate that READS a dist path through a variable is refused', () => {
+  // `const distDir = join(root, 'dist')` … `import(pathToFileURL(join(distDir,
+  // relative)).href)`. No import specifier anywhere spells `dist/`.
+  const planted = validateManifest([
+    wellFormedEntry({ run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--check'] }),
+  ]);
+  assert.ok(
+    planted.some((problem) => problem.includes('pre-build gate reaches dist/') && problem.includes('path-literal')),
+    `expected a path-dataflow problem, got: ${JSON.stringify(planted)}`,
+  );
+});
+
+test('DRILL: a pre-build gate that READS a dist file off the filesystem is refused', () => {
+  // `readFileSync(BUNDLE)` where `BUNDLE` is `dist/bithire.css`.
+  const planted = validateManifest([
+    wellFormedEntry({ run: ['node', 'scripts/check/boundaries/applications/styles/index.mjs', '--check'] }),
+  ]);
+  assert.ok(
+    planted.some((problem) => problem.includes('pre-build gate reaches dist/')),
+    `expected a filesystem-read problem, got: ${JSON.stringify(planted)}`,
+  );
+});
+
+test('DRILL: a pre-build gate that SPAWNS a dist-reading command is refused', () => {
+  const workspace = mkdtempSync(join(tmpdir(), 'gate-manifest-dist-drill-'));
+  try {
+    const spawner = 'scripts/check/planted-spawner/index.mjs';
+    const spawned = 'scripts/check/planted-spawned/index.mjs';
+    mkdirSync(join(workspace, dirname(spawner)), { recursive: true });
+    mkdirSync(join(workspace, dirname(spawned)), { recursive: true });
+    writeFileSync(join(workspace, spawner), [
+      "import { spawnSync } from 'node:child_process';",
+      `const GATE = '${spawned}';`,
+      "spawnSync('node', [GATE]);",
+      '',
+    ].join('\n'));
+    writeFileSync(join(workspace, spawned), [
+      "import { readFileSync } from 'node:fs';",
+      "readFileSync('dist/server.js');",
+      '',
+    ].join('\n'));
+    writeFileSync(join(workspace, 'package.json'), JSON.stringify({ name: 'planted', scripts: {} }));
+
+    const planted = validateManifest(
+      [wellFormedEntry({ run: ['node', spawner] })],
+      { packageRoot: workspace },
+    );
+    assert.ok(
+      planted.some((problem) => problem.includes('pre-build gate reaches dist/')),
+      `a command a gate spawns is part of what that gate needs: ${JSON.stringify(planted)}`,
+    );
+
+    // CONTROL: the same spawner, with the spawned script reading nothing built.
+    writeFileSync(join(workspace, spawned), "export const nothing = 1;\n");
+    assert.deepEqual(
+      validateManifest([wellFormedEntry({ run: ['node', spawner] })], { packageRoot: workspace }),
+      [],
+      'following a child command must not condemn every gate that spawns one',
+    );
+  } finally {
+    rmSync(workspace, { recursive: true, force: true });
+  }
+});
+
+test('CONTROL: a dependency\'s own dist/ is not this package\'s build output', () => {
+  // `node_modules/vite/dist/node/index.js` is present after `pnpm install` and
+  // says nothing about the phase. Reading it as a build dependency reported two
+  // gates that run green on a clean checkout.
+  const workspace = mkdtempSync(join(tmpdir(), 'gate-manifest-vendor-drill-'));
+  try {
+    const script = 'scripts/check/planted-vendor/index.mjs';
+    mkdirSync(join(workspace, dirname(script)), { recursive: true });
+    writeFileSync(join(workspace, script), [
+      "import { resolve } from 'node:path';",
+      "import { pathToFileURL } from 'node:url';",
+      "const vitePath = resolve('.', 'node_modules/vite/dist/node/index.js');",
+      'await import(pathToFileURL(vitePath).href);',
+      '',
+    ].join('\n'));
+    writeFileSync(join(workspace, 'package.json'), JSON.stringify({ name: 'planted', scripts: {} }));
+    assert.deepEqual(
+      validateManifest([wellFormedEntry({ run: ['node', script] })], { packageRoot: workspace }),
+      [],
+    );
+  } finally {
+    rmSync(workspace, { recursive: true, force: true });
+  }
+});
+
+test('DRILL: a distExemption is a written, measured sentence and never a spare one', () => {
+  const reaching = ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--check'];
+  assert.ok(
+    validateManifest([wellFormedEntry({ run: reaching, distExemption: 'it is fine' })])
+      .some((problem) => problem.includes('must be a written, measured sentence')),
+    'an exemption without a measurement is how a phase declaration goes back to being a guess',
+  );
+  assert.deepEqual(
+    validateManifest([wellFormedEntry({
+      run: reaching,
+      distExemption:
+        'MEASURED: run with dist/ moved away this entry exits 0, because the door import is lazy and never fires here.',
+    })]),
+    [],
+  );
+  assert.ok(
+    validateManifest([wellFormedEntry({
+      distExemption:
+        'MEASURED: run with dist/ moved away this entry exits 0, because the door import is lazy and never fires here.',
+    })]).some((problem) => problem.includes('reaches no dist/ output')),
+    'an exemption nobody needs is an exemption nobody reviews',
+  );
+});
+
+test('every pre-build entry either reaches no dist/ output or says why it may', () => {
+  // The live inventory, not a plant: this is the state the amendment demands of
+  // a clean checkout, and it is the assertion that keeps it true.
+  assert.deepEqual(validateManifest(), []);
 });
 
 test('DRILL: a declared dist prerequisite cannot hide in the pre-build phase', () => {

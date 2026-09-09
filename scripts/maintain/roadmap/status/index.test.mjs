@@ -17,6 +17,7 @@ import {
   phaseClaimBlocker,
   programIndicatorBindingErrors,
   programIndicatorLines,
+  publishedIndicatorFreshnessErrors,
   readFamilyAcceptance,
   readProgramIndicatorMeasurement,
   reassignInProgressWorkOrder,
@@ -2226,6 +2227,37 @@ test("decisions-lit indicator publishes the probe's own headline, never its own"
     lines.includes("cascade families"),
     "the block must state the family sample denominator, not just the count",
   );
+});
+
+test("the published STATUS carries what its producers say right now", () => {
+  assert.deepEqual(publishedIndicatorFreshnessErrors(), []);
+});
+
+test("DRILL: a STATUS that republishes an older run than its producer is refused", () => {
+  // DEL-07 (2026-09-08): STATUS carried a September 6 decisions-lit run while
+  // the artifact recorded a newer one. The reader was already honest; nothing
+  // checked that the PUBLICATION had been regenerated since.
+  const statusPath = `${os.tmpdir()}/roadmap-status-stale-${process.pid}.md`;
+  const fresh = decisionsLitLines(readDecisionsLitIndicator()).filter((line) => line.trim().length > 0);
+  try {
+    fs.writeFileSync(statusPath, `${fresh.join("\n")}\n`);
+    assert.deepEqual(publishedIndicatorFreshnessErrors({
+      statusPath,
+      blocks: [{ producer: "decisions-lit", lines: fresh }],
+    }), [], "the control: a STATUS that carries the producer's own lines is fresh");
+
+    const stale = fresh.map((line) => line.replace(/run of \S+/, "run of 2026-09-06T00:00:00.000Z"));
+    fs.writeFileSync(statusPath, `${stale.join("\n")}\n`);
+    const errors = publishedIndicatorFreshnessErrors({
+      statusPath,
+      blocks: [{ producer: "decisions-lit", lines: fresh }],
+    });
+    assert.equal(errors.length, 1, JSON.stringify(errors));
+    assert.match(errors[0], /no longer matches its producer/);
+    assert.match(errors[0], /roadmap:status/);
+  } finally {
+    fs.rmSync(statusPath, { force: true });
+  }
 });
 
 test("decisions-lit indicator labels which half is recorded and which is measured", () => {

@@ -45,6 +45,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   CI_GATES,
+  MANIFEST_VALIDATION_SCOPE,
   PHASES,
   PREREQUISITES,
   missingPrerequisites,
@@ -137,8 +138,9 @@ function describeDebt(gate) {
 }
 
 console.log(
-  `ci-gates [${selectedPhases.join(' + ')}]: ${blocking.length} blocking, ${excluded.length} excluded\n`,
+  `ci-gates [${selectedPhases.join(' + ')}]: ${blocking.length} blocking, ${excluded.length} excluded`,
 );
+console.log(`ci-gates: manifest validation is ${MANIFEST_VALIDATION_SCOPE}\n`);
 
 if (listOnly) {
   for (const gate of blocking) {

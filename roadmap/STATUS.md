@@ -53,7 +53,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | signature | `./server#TenantThemeSimpleConfig` | `general.states` optional input accepted (`emphasis`, `focusStyle`); the v1 lowering maps it to `surfaces.{stateEmphasis,focusStyle}` and the v2→v1 projection writes it back by name; the v1→v2 migration (`migrateDocumentV1ToV2`) does not carry it yet (dropped; gap registered for implementation) | minor | `der-02-states-materials.md` |
 | signature | `./server#Theme` | normalized surfaces gain optional `stateEmphasis` and `focusStyle`; absent means `medium`/`ring`, byte-identical to the pre-decision foundation defaults | minor | `der-02-states-materials.md` |
 
-Also pending, declaring no public surface movement: `major-canonical-tree.md` (major), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major).
+Also pending, declaring no public surface movement: `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major).
 
 ## Family acceptance — the sealed Modern Rescue adjudication
 

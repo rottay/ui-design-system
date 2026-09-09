@@ -98,6 +98,11 @@ that two families need is one kernel, not two implementations that drift.
   run itself is WO-GAT-04's — it needs a rendered DOM and a decrease-only
   finding baseline over the per-state galleries — and a static gate cannot do
   it.
+- **Executable means it runs.** The gate counts assertions inside cases that
+  execute, reached directly or through a helper an executing case calls. A
+  `describe.skip`, an `it.skip`, a `.todo` or a conditional `.skipIf` contains
+  the same text and asserts nothing, so it is worth nothing here. A family
+  whose whole suite is suppressed owns no a11y evidence.
 - RTL and i18n cases where the family has direction- or locale-dependent
   behaviour.
 - `EngineParity` is not needed. Modern is the only productive engine.
@@ -137,6 +142,12 @@ that thesis false for 88 % of families.
 runtime-computed `--ds-*` custom property; a caller's own `style` prop and a
 spread of the recipe's variable block are opaque and allowed. `style={{ color:
 … }}` is a paint decision in the wrong layer, and it is blocking.
+
+A wrapper that changes a type and never a value does not change that verdict.
+`{ … } as React.CSSProperties`, `({ … })`, `{ … } satisfies React.CSSProperties`,
+`<React.CSSProperties>{ … }`, `x!`, either arm of a conditional, and a spread of
+any of those all paint exactly what they wrap. The gate follows every one of
+them to the object literal underneath before it judges.
 
 ---
 
@@ -244,7 +255,7 @@ the moment a family breaks it.
 | `variantContract` | `data-variant` is stamped without a rule, or painted without a stamp |
 | `stateContract` | `data-state` is on exactly one side of the contract |
 | `stateGoverned` | the skin decides state through `[data-state]` and the source never calls `partAttributes` |
-| `a11yProbes` | the family owns no executable accessibility assertion |
+| `a11yAssertions` | the family executes no accessibility assertion (a suppressed suite is not evidence) |
 
 **RATCHET** — today's measured debt, pinned per family in
 `baseline/index.json`. Growth is red. Shrinkage is *also* red, with the
@@ -293,6 +304,21 @@ removed `partAttributes`, a deleted a11y suite. Each destructive drill has a
 control that proves the red came from the defect and not from the plant: the
 same `--ds-button-x` *with* a producer stays green, and the same `:hover`
 *paired* with `[data-state~='hovered']` stays green.
+
+A drill has to be **realistic**: it must be the shape a real regression takes,
+not a shape chosen because the reader already recognises it. The 2026-09-08
+re-audit proved that distinction the hard way — two arms that looked blocking
+returned a false PASS against mutants that changed no runtime behaviour at all.
+Both are now drilled with the mutants that beat them:
+
+- authored paint behind a transparent expression wrapper (`as` cast,
+  parenthesis, `satisfies`, parenthesised cast, spread of a literal) on **both**
+  real `style` sites, each with a control proving the red came from the paint
+  and not from the wrapper; and
+- the family's whole test suite mechanically suppressed (`describe.skip`,
+  `it.skip`, `describe.todo`), plus the helper-reached pair: the same assertion
+  counts when an executing case reaches it and counts for nothing when the only
+  case that reached it is skipped.
 
 ---
 
