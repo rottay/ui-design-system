@@ -3,12 +3,12 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "6ea8221e5aef0cf0c4d5793ad87c589b7ad2677aa04d77a0ffd635585277f6d8",
+    "inputsDigest": "9400bf37d3054ef4d328e775a3bd13cad3795b00251b0b6c352fcee6cd28d644",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 461,
-      "productionTsFiles": 2088,
-      "testFiles": 1362,
+      "productionTsFiles": 2097,
+      "testFiles": 1374,
       "artifactFiles": 3
     }
   },
@@ -24,8 +24,8 @@
     "frontierReserved": 0,
     "modernConsumedUnique": 3664,
     "tsReadNames": 2703,
-    "tsWriteNames": 1321,
-    "tsMetadataNames": 815,
+    "tsWriteNames": 1326,
+    "tsMetadataNames": 824,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
@@ -11449,8 +11449,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-button-link-bg": {
       "category": "compiler-derived-channel",
@@ -11899,8 +11899,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-button-outline-bg": {
       "category": "unadjudicated-read",
@@ -12705,12 +12705,12 @@
       "reads": {
         "css": 7,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-button-spinner-color": {
       "category": "canonical-authority",
@@ -13680,12 +13680,12 @@
       "reads": {
         "css": 2,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-button-xs-border-radius": {
       "category": "canonical-authority",
@@ -13830,12 +13830,12 @@
       "reads": {
         "css": 2,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-calendar-active-ink": {
       "category": "unadjudicated-read",
@@ -26368,7 +26368,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -26518,7 +26518,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 366,
+        "css": 372,
         "ts": 55,
         "tests": true,
         "modern": true,
@@ -27118,7 +27118,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 13,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -27148,7 +27148,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 15,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -27553,7 +27553,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1331,
+        "css": 1339,
         "ts": 268,
         "tests": true,
         "modern": true,
@@ -27823,7 +27823,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 36,
+        "css": 40,
         "ts": 12,
         "tests": true,
         "modern": true,
@@ -28033,7 +28033,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 240,
+        "css": 245,
         "ts": 43,
         "tests": true,
         "modern": true,
@@ -28528,7 +28528,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 185,
+        "css": 190,
         "ts": 39,
         "tests": true,
         "modern": true,
@@ -28738,7 +28738,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 65,
+        "css": 66,
         "ts": 19,
         "tests": true,
         "modern": true,
@@ -69318,7 +69318,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 2,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -69354,7 +69354,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-input": {
       "category": "compiler-derived-channel",
@@ -69399,7 +69399,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-md": {
       "category": "tenant-raw-override",
@@ -69429,7 +69429,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 3
     },
     "--ds-radius-modal": {
       "category": "canonical-authority",
@@ -69534,7 +69534,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-xl": {
       "category": "tenant-raw-override",
@@ -69564,7 +69564,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-xs": {
       "category": "canonical-authority",
@@ -76622,7 +76622,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 20,
+        "css": 31,
         "ts": 17,
         "tests": true,
         "modern": false,
