@@ -77,6 +77,28 @@ describe("typography/weights", () => {
       deriveTypeWeightChannels(theme({ headingWeightBias: "normal" }))
     );
   });
+
+  // The compatibility transport erases the type: a BrandTheme arrives as plain
+  // JSON through `TenantConfig.brandTheme`, so the two failure shapes below are
+  // reachable input, not hypotheticals.
+  it("rests at `normal` for a word outside the vocabulary, instead of throwing", () => {
+    const rogue = theme({
+      headingWeightBias: "ultra" as never,
+    });
+    expect(() => deriveTypeWeightChannels(rogue)).not.toThrow();
+    expect(deriveTypeWeightChannels(rogue)).toEqual(
+      deriveTypeWeightChannels(theme({ headingWeightBias: "normal" }))
+    );
+  });
+
+  it("rests at `normal` for an INHERITED member, instead of painting undefined", () => {
+    for (const inherited of ["constructor", "toString", "hasOwnProperty"]) {
+      const rogue = theme({ headingWeightBias: inherited as never });
+      expect(deriveTypeWeightChannels(rogue), inherited).toEqual(
+        deriveTypeWeightChannels(theme({ headingWeightBias: "normal" }))
+      );
+    }
+  });
 });
 
 describe("typography/numeric", () => {
