@@ -273,6 +273,82 @@ test('registered-symbol slot admission survives only the whitelisted intrinsic u
   }
 });
 
+test('a container reaching a parameter by default initializer withdraws slot admission', () => {
+  const requireFromCore = createRequire(resolve(coreRoot, 'package.json'));
+  const typescript = requireFromCore('typescript');
+  const slot = "globalThis[Symbol.for('rottay.slot')]('node:fs');";
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-defaulted-container-'));
+  try {
+    mkdirSync(resolve(fixtureRoot, 'src'), { recursive: true });
+    for (const [name, body] of [
+      ['default-container', "function poison(container = globalThis) { container.Symbol.for = () => 'require'; } poison();"],
+      ['default-alias', "const G = globalThis; function poison(container = G) { container.Symbol.for = () => 'require'; } poison();"],
+      ['default-factory', "const getGlobal = () => globalThis; function poison(c = getGlobal()) { c.Symbol.for = () => 'require'; } poison();"],
+      ['default-chain', "function poison(a = globalThis, b = a, c = b) { c.Symbol.for = () => 'require'; } poison();"],
+      ['default-destructured', "function poison({ Symbol: S } = globalThis) { S.for = () => 'require'; } poison();"],
+      ['default-binding-element', "function poison({ c = globalThis } = {}) { c.Symbol.for = () => 'require'; } poison();"],
+      ['default-arrow', "const poison = (c = globalThis) => { c.Symbol.for = () => 'require'; }; poison();"],
+      ['default-arrow-window', "const poison = (c = window) => { c.Symbol = FakeSymbol; }; poison();"],
+      ['default-method', "class Bag { poison(c = globalThis) { c.Symbol.for = () => 'require'; } } new Bag().poison();"],
+      ['default-argument-hop', "function inner(x) { x.Symbol.for = () => 'require'; } function outer(c = globalThis) { inner(c); } outer();"],
+      ['default-define-property', "function poison(c = globalThis) { Object.defineProperty(c, 'Symbol', { value: FakeSymbol }); } poison();"],
+      ['default-captured-intrinsic', "function poison(c = globalThis) { const S = c.Symbol; S.for = () => 'require'; } poison();"],
+    ]) {
+      const source = `${body} ${slot}`;
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.throws(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            /unresolved runtime module edge/,
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.throws(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          /unresolved runtime module edge/,
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+
+    for (const [name, source] of [
+      ['read-only-container', "function read(c = globalThis) { return c[Symbol.for('rottay.slot')]; } void read();"],
+      ['well-known-member', "function read(c = globalThis) { return c.Symbol.iterator; } void read(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['ordinary-defaults', "function span(a = 1, b = a) { return a + b; } void span(); void globalThis[Symbol.for('rottay.slot')];"],
+      ['ordinary-destructured-defaults', "function draw({ width = 10, height = width } = {}) { return width * height; } void draw(); void globalThis[Symbol.for('rottay.slot')];"],
+    ]) {
+      for (const extension of ['ts', 'mjs']) {
+        for (const enforceComputedCapabilities of [true, false]) {
+          assert.doesNotThrow(
+            () => analyzeRuntimeModuleEdges(source, `${name}.${extension}`, typescript, { enforceComputedCapabilities }),
+            `${name}.${extension}`,
+          );
+        }
+        const fixture = resolve(fixtureRoot, `src/fixture.${extension}`);
+        writeFileSync(fixture, source);
+        assert.doesNotThrow(
+          () => scanPackagedAppSuppliers({
+            appRoot: fixtureRoot,
+            contract: loadSupplierContract(),
+            typescript,
+          }),
+          `packaged ${name}.${extension}`,
+        );
+        rmSync(fixture, { force: true });
+      }
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('a JavaScript global expando no longer dissolves the container fence', () => {
   for (const source of [
     "globalThis.marker = 1; globalThis.require('d3');",

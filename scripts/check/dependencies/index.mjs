@@ -679,7 +679,8 @@ export function analyzeRuntimeModuleEdges(
   // key shape is narrowed to a direct unshadowed `Symbol.for` member call -- no
   // element access, no optional chain, no global-container path -- and across
   // the whole file the resolved intrinsic (`Symbol`, the container's `Symbol`
-  // member, and the container reached through a local parameter) may appear only
+  // member, and the container reached through a local parameter -- bound by a
+  // call argument, a default initializer, or a chain of either) may appear only
   // as the receiver of that admitted call and as a read of a well-known symbol
   // member in one of the listed value positions. Every other appearance --
   // value, argument, alias, return, assignment/update/delete/loop target,
@@ -708,24 +709,45 @@ export function analyzeRuntimeModuleEdges(
 
   function globalContainerParameterSymbols() {
     if (globalContainerParameters) return globalContainerParameters;
-    globalContainerParameters = new Set();
+    const resolved = new Set();
+    globalContainerParameters = resolved;
+    const bindings = [];
+    function remember(name, value) {
+      if (!name || !value || !ts.isIdentifier(name)) return;
+      const symbol = symbolAt(name);
+      if (symbol) bindings.push({ symbol, value });
+    }
     function collect(node) {
+      if ((ts.isParameter(node) || ts.isBindingElement(node)) && node.initializer) {
+        remember(node.name, node.initializer);
+      }
       if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
         const fn = localFunctionBindings.get(symbolAt(node.expression));
         if (fn) {
           node.arguments.forEach((argument, index) => {
-            if (!globalContainerExpression(argument)) return;
             const parameter = arrayValueAt(fn.parameters, index);
-            if (!parameter || !ts.isIdentifier(parameter.name)) return;
-            const symbol = symbolAt(parameter.name);
-            if (symbol) globalContainerParameters.add(symbol);
+            if (parameter) remember(parameter.name, argument);
           });
         }
       }
       ts.forEachChild(node, collect);
     }
     collect(sourceFile);
-    return globalContainerParameters;
+    function boundToContainer(value) {
+      if (globalContainerExpression(value)) return true;
+      const current = unwrapRuntimeExpression(value);
+      return Boolean(ts.isIdentifier(current) && resolved.has(symbolAt(current)));
+    }
+    let boundAnother = true;
+    while (boundAnother) {
+      boundAnother = false;
+      for (const binding of bindings) {
+        if (resolved.has(binding.symbol) || !boundToContainer(binding.value)) continue;
+        resolved.add(binding.symbol);
+        boundAnother = true;
+      }
+    }
+    return resolved;
   }
 
   function symbolIntrinsicContainer(expression) {
