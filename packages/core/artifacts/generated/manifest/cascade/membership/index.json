@@ -28,15 +28,15 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 1609,
+    "rows": 1611,
     "byVia": {
-      "unattributed": 729,
+      "unattributed": 731,
       "governed-owner-table": 496,
       "declared-fallback": 342,
       "head-exact": 42
     },
     "byTier": {
-      "sin-tier": 910,
+      "sin-tier": 912,
       "control": 272,
       "base": 178,
       "raised": 96,
@@ -53,7 +53,7 @@
       "radius": 40,
       "family": 6,
       "ring": 21,
-      "weight": 17,
+      "weight": 19,
       "gap": 32,
       "height": 45,
       "duration": 9,
@@ -75,7 +75,7 @@
       "seed.success": 1
     },
     "withRoot": 880,
-    "withoutRoot": 729,
+    "withoutRoot": 731,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
     "ownersCensused": 256,
@@ -85,7 +85,7 @@
     "rowsRefinedByStep": 65,
     "rowsParentByDesign": 39,
     "byStep": {
-      "sin-paso": 1505,
+      "sin-paso": 1507,
       "@parent": 39,
       "primary": 25,
       "muted": 9,
@@ -1159,6 +1159,14 @@
         "sin-propiedad": 2
       }
     },
+    "TYPOGRAPHY": {
+      "channels": 7,
+      "unattributed": 3,
+      "properties": {
+        "weight": 2,
+        "sin-propiedad": 1
+      }
+    },
     "TYPOGRAPHY.letterSpacing": {
       "channels": 4,
       "unattributed": 3,
@@ -1702,13 +1710,6 @@
     },
     "THEME.recipes": {
       "channels": 1,
-      "unattributed": 1,
-      "properties": {
-        "sin-propiedad": 1
-      }
-    },
-    "TYPOGRAPHY": {
-      "channels": 5,
       "unattributed": 1,
       "properties": {
         "sin-propiedad": 1
@@ -22093,6 +22094,56 @@
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+    },
+    {
+      "channel": "--ds-font-weight-display",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: TYPOGRAPHY",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "weight",
+      "state": null,
+      "owners": [
+        "TYPOGRAPHY"
+      ],
+      "contributingSlots": [
+        "bithire:TYPOGRAPHY.headingWeightBias",
+        "evnto:TYPOGRAPHY.headingWeightBias"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-font-weight-heading",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: TYPOGRAPHY",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "weight",
+      "state": null,
+      "owners": [
+        "TYPOGRAPHY"
+      ],
+      "contributingSlots": [
+        "bithire:TYPOGRAPHY.headingWeightBias",
+        "evnto:TYPOGRAPHY.headingWeightBias"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
     },
     {
       "channel": "--ds-form-error-color",
@@ -48569,5 +48620,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "2244a15ee55d142c4b75394a29dd7454e30be8c624e72356da8c076f7a9e89d7"
+  "digest": "8f79ea836aab319e6032440b4bc6a1d2cd49c618e11bda4aa8669be48c9254ac"
 }
