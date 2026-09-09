@@ -17,9 +17,6 @@ export type ElevationPosture = NonNullable<
   AppearancePostureFields["elevation"]
 >;
 
-/** The seven canonical roles, from the resting ground to the deepest overlay. */
-export const ELEVATION_ROLES = [0, 1, 2, 3, 4, 5, 6] as const;
-
 const ELEVATION_CHANNELS: ReadonlySet<string> = new Set<string>(
   ELEVATION_PRESET_CHANNELS
 );

@@ -13,18 +13,18 @@ import type { FamilyDeriver } from "../../../foundation/contract";
 import { deriveElevationLadder } from "./ladder";
 import { deriveZIndexBands } from "./z-index";
 
-export { ELEVATION_ROLES, deriveElevationLadder } from "./ladder";
+export { deriveElevationLadder } from "./ladder";
 export { Z_INDEX_BANDS, deriveZIndexBands } from "./z-index";
 
 /**
  * Depth, in one family.
  *
  * The ladder used to be emitted from the surfaces family and the stacking
- * bands from nowhere at all: no compiled block carried a z-index, so five
- * vocabularies and four undefined aliases painted from their own fallback
- * literals and the stacking order could not be reasoned about from the theme.
- * Both are statements about the same axis -- how far a surface sits from the
- * page -- so they answer to one deriver.
+ * bands from nowhere at all: no compiled block carried a z-index, so a tenant
+ * that raised one band could not see the bands it now sat above, and the
+ * single chrome field that could move one was the whole customer vocabulary
+ * for stacking order. Both are statements about the same axis -- how far a
+ * surface sits from the page -- so they answer to one deriver.
  */
 export const elevationDeriver: FamilyDeriver = {
   family: "elevation",

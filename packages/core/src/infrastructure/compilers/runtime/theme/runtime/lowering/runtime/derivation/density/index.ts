@@ -17,7 +17,7 @@ import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/ex
 import type { FamilyDeriver } from "../../../foundation/contract";
 
 /**
- * The two independent density inputs, and the one effective scale they compose.
+ * The two independent density inputs, and nothing else.
  *
  * `normal` USED TO BE INEXPRESSIBLE. The posture table emitted the mode factor
  * only when it differed from 1, so a vertical whose baseline is compact could
