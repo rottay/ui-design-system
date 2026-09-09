@@ -6,6 +6,7 @@ import {
   DesignSystemProvider,
   Divider,
   Flex,
+  getKnownTenantConfig,
   Heading,
   Link,
   Stack,
@@ -34,7 +35,7 @@ export interface IdentityStageProps {
   screen: string;
   digest: string;
   decisionCount: number;
-  tenantConfig: TenantConfig;
+  tenantConfig: TenantConfig | null;
   columns: IdentityStageOption[];
   modes: IdentityStageOption[];
   screens: IdentityStageOption[];
@@ -42,13 +43,13 @@ export interface IdentityStageProps {
 
 function OptionRow({ label, options }: { label: string; options: IdentityStageOption[] }) {
   return (
-    <Flex align="center" gap={10} wrap>
-      <Text size="xs" weight="semibold" variant="muted">
+    <Flex align="center" gap={10} wrap="wrap">
+      <Text size="xs" weight="semibold" color="muted">
         {label}
       </Text>
       {options.map((option) => (
         <Link key={option.id} href={option.href}>
-          <Text size="sm" weight={option.active ? 'semibold' : 'regular'}>
+          <Text size="sm" weight={option.active ? 'semibold' : 'normal'}>
             {option.active ? `· ${option.label}` : option.label}
           </Text>
         </Link>
@@ -60,26 +61,38 @@ function OptionRow({ label, options }: { label: string; options: IdentityStageOp
 export function IdentityStage(props: IdentityStageProps) {
   const { screen } = props;
   const shows = (name: string) => screen === 'all' || screen === name;
+  const tenantConfig = props.tenantConfig ?? getKnownTenantConfig('bithire');
 
   return (
     <DesignSystemProvider
       forceEngine="modern"
       forceTheme={props.mode}
-      tenantConfig={props.tenantConfig}
+      tenantConfig={tenantConfig}
       locale="en"
     >
-      <Box style={{ padding: 24 }}>
+      {/* The showroom body pins its own ground and font; the stage re-anchors
+          both to the DS channels so the candidate's own ones are what shows. */}
+      <Box
+        data-testid="identity-probe-stage"
+        style={{
+          padding: 24,
+          minHeight: '100vh',
+          background: 'var(--ds-color-bg)',
+          color: 'var(--ds-color-text-primary)',
+          fontFamily: 'var(--ds-font-family-base)',
+        }}
+      >
         <Stack spacing="lg" fullWidth>
           <Stack spacing="sm">
-            <Flex align="center" gap={10} wrap>
-              <Heading level={1}>{props.title}</Heading>
+            <Flex align="center" gap={10} wrap="wrap">
+              <Heading level="h1">{props.title}</Heading>
               <Badge variant="secondary">{props.mode}</Badge>
               <Badge variant="secondary">{props.decisionCount} decisions</Badge>
             </Flex>
-            <Text size="sm" variant="muted">
+            <Text size="sm" color="muted">
               {props.intent}
             </Text>
-            <Text size="xs" variant="muted">
+            <Text size="xs" color="muted">
               {props.digest}
             </Text>
             <OptionRow label="Candidate" options={props.columns} />

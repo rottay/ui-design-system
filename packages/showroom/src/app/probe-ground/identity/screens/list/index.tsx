@@ -54,7 +54,7 @@ const COLUMNS = [
           <Text size="sm" weight="semibold">
             {record.name}
           </Text>
-          <Text size="xs" variant="muted">
+          <Text size="xs" color="muted">
             {record.role}
           </Text>
         </Stack>
@@ -76,10 +76,10 @@ const COLUMNS = [
 export function ListScreen() {
   return (
     <Stack spacing="md" fullWidth>
-      <Flex align="center" justify="between" gap={12} wrap>
+      <Flex align="center" justify="between" gap={12} wrap="wrap">
         <Stack spacing="none">
-          <Heading level={2}>Candidates</Heading>
-          <Text size="sm" variant="muted">
+          <Heading level="h2">Candidates</Heading>
+          <Text size="sm" color="muted">
             48 active across 7 open roles
           </Text>
         </Stack>
@@ -89,7 +89,7 @@ export function ListScreen() {
         </Flex>
       </Flex>
 
-      <Flex align="center" gap={8} wrap>
+      <Flex align="center" gap={8} wrap="wrap">
         <Input placeholder="Search candidates" style={{ minWidth: 240 }} />
         <Select options={STAGE_OPTIONS} defaultValue="all" style={{ minWidth: 180 }} />
         <Button variant="secondary">Filters</Button>

@@ -10,6 +10,15 @@ import {
 
 import { buildRootStampScript } from '@/components/torture-tenant';
 
+// Every pack a candidate may select for a text role. The root layout loads only
+// `editorial-display`, so without these an unloaded pack variable would silently
+// drop the candidate's base family back to the showroom body font.
+import '@rottay/design-system/fonts/editorial-text.css';
+import '@rottay/design-system/fonts/grotesk-display.css';
+import '@rottay/design-system/fonts/humanist-text.css';
+import '@rottay/design-system/fonts/geometric-display.css';
+import '@rottay/design-system/fonts/plex-mono.css';
+
 import {
   BASELINE_ID,
   IDENTITY_CANDIDATES,
@@ -87,16 +96,21 @@ export default async function IdentityProbeGroundPage({
         .digest('hex')}`
     : `bithire vertical baseline · artifact ${mounted.artifactDigest}`;
 
-  const tenantConfig: TenantConfig = {
-    slug: mounted.hydrationProof.slug,
-    name: candidate ? candidate.title : 'BitHire baseline',
-    vertical: 'bithire',
-    engine: 'modern',
-    theme: mode,
-    plan: 'enterprise',
-    features: ['*'],
-    branding: { companyName: candidate ? candidate.title : 'BitHire' },
-  };
+  // Null for the baseline column: `bithire` is a reserved code-owned identity,
+  // so its config is resolved from the DS registry inside the stage rather than
+  // hand-authored here, which the provider refuses.
+  const tenantConfig: TenantConfig | null = candidate
+    ? {
+        slug: candidate.slug,
+        name: candidate.title,
+        vertical: 'bithire',
+        engine: 'modern',
+        theme: mode,
+        plan: 'enterprise',
+        features: ['*'],
+        branding: { companyName: candidate.title },
+      }
+    : null;
 
   const columns: IdentityStageOption[] = [
     { id: BASELINE_ID, label: 'Baseline (today)', href: href(BASELINE_ID, mode, screen), active: column === BASELINE_ID },

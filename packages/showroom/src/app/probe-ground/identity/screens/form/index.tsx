@@ -32,20 +32,20 @@ export function FormScreen() {
   return (
     <Stack spacing="md" fullWidth>
       <Stack spacing="none">
-        <Heading level={2}>New role</Heading>
-        <Text size="sm" variant="muted">
+        <Heading level="h2">New role</Heading>
+        <Text size="sm" color="muted">
           Three sections, one surface. Fields are numbered so the reviewer can cite them.
         </Text>
       </Stack>
 
       <Stack spacing="sm">
-        <Text size="xs" weight="semibold" variant="muted">
+        <Text size="xs" weight="semibold" color="muted">
           1 · Definition
         </Text>
         <FormField label="Role title" name="role-title" required>
           <Input defaultValue="Senior Backend Engineer" />
         </FormField>
-        <Flex gap={12} wrap>
+        <Flex gap={12} wrap="wrap">
           <Box style={{ flex: '1 1 220px' }}>
             <FormField label="Seniority" name="role-seniority" required>
               <Select options={SENIORITY} defaultValue="senior" />
@@ -68,10 +68,10 @@ export function FormScreen() {
       <Divider />
 
       <Stack spacing="sm">
-        <Text size="xs" weight="semibold" variant="muted">
+        <Text size="xs" weight="semibold" color="muted">
           2 · Compensation
         </Text>
-        <Flex gap={12} wrap>
+        <Flex gap={12} wrap="wrap">
           <Box style={{ flex: '1 1 200px' }}>
             <FormField label="Band minimum" name="comp-min" required>
               <Input defaultValue="92000" />
@@ -93,13 +93,13 @@ export function FormScreen() {
       <Divider />
 
       <Stack spacing="sm">
-        <Text size="xs" weight="semibold" variant="muted">
+        <Text size="xs" weight="semibold" color="muted">
           3 · Process
         </Text>
         <Flex align="center" justify="between" gap={12}>
           <Stack spacing="none">
             <Text size="sm">Remote-first loop</Text>
-            <Text size="xs" variant="muted">
+            <Text size="xs" color="muted">
               Panels are scheduled in the candidate&apos;s timezone.
             </Text>
           </Stack>

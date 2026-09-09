@@ -25,8 +25,8 @@ export function ModalScreen({ initialOpen = false }: { initialOpen?: boolean }) 
   return (
     <Stack spacing="md" fullWidth>
       <Stack spacing="none">
-        <Heading level={2}>Decision overlay</Heading>
-        <Text size="sm" variant="muted">
+        <Heading level="h2">Decision overlay</Heading>
+        <Text size="sm" color="muted">
           The dialog carries the candidate&apos;s surface: ground, radius, focus and motion.
         </Text>
       </Stack>

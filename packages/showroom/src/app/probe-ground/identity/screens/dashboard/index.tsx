@@ -42,22 +42,22 @@ const UPCOMING = [
 export function DashboardScreen() {
   return (
     <Stack spacing="md" fullWidth>
-      <Flex align="center" justify="between" gap={12} wrap>
+      <Flex align="center" justify="between" gap={12} wrap="wrap">
         <Stack spacing="none">
-          <Heading level={2}>Hiring overview</Heading>
-          <Text size="sm" variant="muted">
+          <Heading level="h2">Hiring overview</Heading>
+          <Text size="sm" color="muted">
             Q2 slate · platform and design pods
           </Text>
         </Stack>
         <Button variant="secondary">Export</Button>
       </Flex>
 
-      <Flex gap={12} wrap>
+      <Flex gap={12} wrap="wrap">
         {METRICS.map((metric) => (
           <Box key={metric.label} style={{ flex: '1 1 180px' }}>
             <Card>
               <Stack spacing="none">
-                <Text size="xs" variant="muted">
+                <Text size="xs" color="muted">
                   {metric.label}
                 </Text>
                 <Text size="2xl" weight="bold">
@@ -74,7 +74,14 @@ export function DashboardScreen() {
 
       <Card title="Candidate momentum">
         <Box style={{ height: 220 }}>
-          <LineChart data={MOMENTUM} height={200} />
+          <LineChart
+            series={[{ name: 'Moved forward', data: MOMENTUM }]}
+            height={200}
+            curved
+            showDots
+            xAxisLabel="Week"
+            yAxisLabel="Candidates advanced"
+          />
         </Box>
       </Card>
 
@@ -88,7 +95,7 @@ export function DashboardScreen() {
                   <Text size="sm" weight="semibold">
                     {row.name}
                   </Text>
-                  <Text size="xs" variant="muted">
+                  <Text size="xs" color="muted">
                     {row.slot}
                   </Text>
                 </Stack>

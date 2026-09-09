@@ -34,8 +34,8 @@ export function PhoneScreen() {
   return (
     <Stack spacing="md" fullWidth>
       <Stack spacing="none">
-        <Heading level={2}>Phone posture</Heading>
-        <Text size="sm" variant="muted">
+        <Heading level="h2">Phone posture</Heading>
+        <Text size="sm" color="muted">
           The same surface at {PHONE_WIDTH}px, where the responsive posture decides the ladder.
         </Text>
       </Stack>
@@ -43,7 +43,7 @@ export function PhoneScreen() {
       <Box style={{ width: PHONE_WIDTH, maxWidth: '100%' }}>
         <Stack spacing="sm" fullWidth>
           <Flex align="center" justify="between" gap={8}>
-            <Heading level={3}>Loops</Heading>
+            <Heading level="h3">Loops</Heading>
             <Badge variant="primary" size="sm">
               3 today
             </Badge>
@@ -59,7 +59,7 @@ export function PhoneScreen() {
                     <Text size="sm" weight="semibold">
                       {row.name}
                     </Text>
-                    <Text size="xs" variant="muted">
+                    <Text size="xs" color="muted">
                       {row.slot}
                     </Text>
                   </Stack>

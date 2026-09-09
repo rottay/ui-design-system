@@ -1,7 +1,7 @@
 /**
- * @fileoverview The WO-DER-07 BitHire identity candidates and the by-axis probe
- * that measures how far apart they are. Deleted once the owner records a pick
- * (D-30) and the chosen set becomes the bithire preset in WO-DER-06.
+ * @fileoverview The WO-DER-07 BitHire identity candidates. Deleted once the
+ * owner records a pick (D-30) and the chosen set becomes the bithire preset in
+ * WO-DER-06; the by-axis probe that measures them lives in `tests/`.
  *
  * @module Foundation/Presets/Candidates/Bithire
  * @category Types
@@ -9,4 +9,3 @@
  */
 
 export * from "./documents";
-export * from "./probe";

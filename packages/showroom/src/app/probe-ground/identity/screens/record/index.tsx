@@ -33,13 +33,13 @@ const TAB_ITEMS = [
 export function RecordScreen() {
   return (
     <Stack spacing="md" fullWidth>
-      <Flex align="center" justify="between" gap={12} wrap>
+      <Flex align="center" justify="between" gap={12} wrap="wrap">
         <Flex align="center" gap={12}>
           <Avatar size="lg" name="Ana Ruiz" />
           <Stack spacing="none">
-            <Heading level={2}>Ana Ruiz</Heading>
+            <Heading level="h2">Ana Ruiz</Heading>
             <Flex align="center" gap={8}>
-              <Text size="sm" variant="muted">
+              <Text size="sm" color="muted">
                 Senior Backend Engineer · Madrid
               </Text>
               <Tag variant="primary">Onsite</Tag>
@@ -78,7 +78,7 @@ export function RecordScreen() {
             </Box>
           ))}
           <Divider />
-          <Text size="sm" variant="muted">
+          <Text size="sm" color="muted">
             Panel is aligned on the hiring bar; the written debrief is still owed by the
             second interviewer.
           </Text>
