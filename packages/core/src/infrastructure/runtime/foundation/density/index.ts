@@ -22,8 +22,6 @@ import {
   type ReactNode,
 } from 'react';
 
-import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes';
-
 export const DENSITY_POSTURES = ['compact', 'comfortable', 'spacious'] as const;
 
 export type DensityPosture = (typeof DENSITY_POSTURES)[number];
@@ -121,15 +119,20 @@ export function RootDensityProvider({
   posture,
   children,
 }: RootDensityProviderProps) {
-  // The root is one shared surface with three writers in sequence -- the SSR
-  // projection, the pre-paint script, and this effect. A bare
-  // setAttribute/restore pair owns the value it happens to find, so a StrictMode
-  // remount or a sibling claim releases someone else's posture; the claim
-  // registry resolves the same overlap by identity.
-  useEffect(
-    () => claimRootAttribute(document.documentElement, 'data-density', posture),
-    [posture],
-  );
+  // NOT the root-attribute claim registry, deliberately: that owner is this
+  // one's architectural peer, and `structure:check` refuses the edge in either
+  // direction. WO-RET-04 normalizes the two owners; until then this save/restore
+  // is the sanctioned exception, and the SSR projection stamps the same channel
+  // before the first paint so the effect only ever confirms it.
+  useEffect(() => {
+    const element = document.documentElement;
+    const previous = element.getAttribute('data-density');
+    element.setAttribute('data-density', posture);
+    return () => {
+      if (previous === null) element.removeAttribute('data-density');
+      else element.setAttribute('data-density', previous);
+    };
+  }, [posture]);
 
   const value: DensityScopeValue =
     posture === 'comfortable' ? DEFAULT_SCOPE : { posture };

@@ -55,8 +55,8 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
-import type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
 import type {
+  DocumentDensityPosture,
   DocumentMotionPosture,
   DocumentRootAttributes,
   DocumentViewportHint,
@@ -120,7 +120,7 @@ export interface MountTenantThemeOptions {
    * artifact itself compiled, so the cascade resolves it on the FIRST paint
    * instead of after `RootDensityProvider`'s effect.
    */
-  density?: DensityPosture;
+  density?: DocumentDensityPosture;
 }
 
 /** One `<style>` element the server response must carry, and nothing else. */
@@ -238,7 +238,7 @@ interface MountedBytes {
   /** Validated recipe-profile id the artifact compiled (D-26). */
   readonly recipeProfile?: string;
   /** Density posture the artifact compiled, when it declared one. */
-  readonly density?: DensityPosture;
+  readonly density?: DocumentDensityPosture;
   readonly receipt?: TenantThemeArtifactSsrEmissionReceipt;
 }
 
@@ -251,7 +251,7 @@ interface MountedBytes {
  */
 function compiledDensityPosture(
   preference: string | undefined,
-): DensityPosture | undefined {
+): DocumentDensityPosture | undefined {
   if (preference === 'compact') return 'compact';
   if (preference === 'spacious') return 'spacious';
   if (preference === 'comfortable' || preference === 'normal') return 'comfortable';
