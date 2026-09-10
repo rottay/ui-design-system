@@ -23,6 +23,9 @@ import {
   findTintDirectOverlap,
   DEFAULT_BRAND_THEME_COMPILER_ROOT,
   collectBrandThemeCompilerSources,
+  extractIdentifierVarsAssignments,
+  extractKeyedVarsEmissions,
+  findCrossFileProducerCollisions,
   // corpus
   isScannableCorpusFile,
   collectSourceFiles,
@@ -243,6 +246,166 @@ test('LIVE: every family deriver declares a rank, and none is unranked', () => {
   assert.ok(sources.length > 0, 'the derivation registry resolved to zero families');
   const unranked = sources.filter((source) => source.rank === 'unranked').map((s) => s.relativePath);
   assert.deepEqual(unranked, [], `every family deriver must declare a merge rank, unranked: ${unranked.join(', ')}`);
+});
+
+/* ---------------------------------------------------------------------- */
+/* 3b. Producer discovery: nested owners and non-literal emission keys    */
+/* ---------------------------------------------------------------------- */
+
+/** A registry whose family holds its emissions in a SUB-owner, as the real one does. */
+function plantNestedRegistry() {
+  const root = mkdtempSync(join(tmpdir(), 'liveness-registry-'));
+  mkdirSync(join(root, 'typography', 'weights'), { recursive: true });
+  writeFileSync(
+    join(root, 'typography', 'index.ts'),
+    'export const typographyDeriver = { family: "typography", rank: "derived" };\n'
+    + 'export const derive = () => ({ ...deriveWeights() });\n',
+  );
+  writeFileSync(
+    join(root, 'typography', 'weights', 'index.ts'),
+    'export function deriveWeights(vars) {\n  vars["--ds-font-weight-heading"] = "700";\n}\n',
+  );
+  return root;
+}
+
+test('NEGATIVE CONTROL: a family that emits from a SUB-owner is not an empty family', () => {
+  // The 2026-09-09 cascade checkpoint's blind spot: the walk read
+  // `<root>/<family>/index.ts` only, so a parent that merely composes its
+  // sub-owners looked like a family that emits nothing and every channel behind
+  // it left the census.
+  const root = plantNestedRegistry();
+  try {
+    const sources = collectBrandThemeCompilerSources(root);
+    const nested = sources.find((source) => source.relativePath.endsWith('typography/weights/index.ts'));
+    assert.ok(nested, `the sub-owner must be discovered, got: ${sources.map((s) => s.relativePath).join(', ')}`);
+    // A layer of one authority carries that authority's rank; it does not
+    // become a second, unranked producer.
+    assert.equal(nested.rank, 'derived');
+    assert.equal(nested.family, 'typography');
+    assert.equal(nested.declaresRank, false);
+    const emitted = new Set(sources.flatMap((source) => [...extractDirectVarsAssignments(source.text).keys()]));
+    assert.ok(emitted.has('--ds-font-weight-heading'));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('LIVE: the real registry reaches its sub-owners, and every one inherits a real rank', () => {
+  const sources = collectBrandThemeCompilerSources();
+  const nested = sources.filter((source) => !source.declaresRank).map((source) => source.relativePath);
+  assert.ok(
+    nested.some((path) => path.endsWith('derivation/typography/weights/index.ts')),
+    `the recursive walk must reach typography/weights, reached: ${nested.join(', ')}`,
+  );
+  assert.ok(
+    nested.some((path) => path.endsWith('derivation/elevation/z-index/index.ts')),
+    'the recursive walk must reach elevation/z-index',
+  );
+  assert.deepEqual(sources.filter((source) => source.rank === 'unranked'), []);
+});
+
+test('a roster membership guard resolves to the roster it names', () => {
+  const source = [
+    'const PAIRING = new Set<string>(["--ds-font-family-base", "--ds-line-height-display"]);',
+    'export function derive(vars, table) {',
+    '  for (const [channel, value] of Object.entries(table)) {',
+    '    if (PAIRING.has(channel)) vars[channel] = value;',
+    '  }',
+    '}',
+  ].join('\n');
+  const { resolved, unresolved } = extractKeyedVarsEmissions(source);
+  assert.deepEqual([...resolved.keys()].sort(), ['--ds-font-family-base', '--ds-line-height-display']);
+  assert.deepEqual(unresolved, []);
+});
+
+test('CONTROL: a NEGATED membership guard is reported, never guessed at', () => {
+  // The complement of a roster over a table computed elsewhere is not
+  // enumerable from source. `axes/index.ts` is the real instance.
+  const source = [
+    'const FOREIGN = new Set<string>(["--ds-font-family-base"]);',
+    'export function derive(vars, table) {',
+    '  for (const [channel, value] of Object.entries(table)) {',
+    '    if (!FOREIGN.has(channel)) vars[channel] = value;',
+    '  }',
+    '}',
+  ].join('\n');
+  const { resolved, unresolved } = extractKeyedVarsEmissions(source);
+  assert.equal(resolved.size, 0);
+  assert.equal(unresolved.length, 1);
+  assert.match(unresolved[0].reason, /COMPLEMENT/);
+});
+
+test('a template over a literal table resolves to one name per key', () => {
+  const source = [
+    'const BANDS = Object.freeze({ base: 0, modal: 1500, max: 9999 });',
+    'export function derive(vars) {',
+    '  for (const [band, value] of Object.entries(BANDS)) {',
+    '    vars[`--ds-z-index-${band}`] = String(value);',
+    '  }',
+    '}',
+  ].join('\n');
+  const { resolved, unresolved } = extractKeyedVarsEmissions(source);
+  assert.deepEqual([...resolved.keys()].sort(), ['--ds-z-index-base', '--ds-z-index-max', '--ds-z-index-modal']);
+  assert.deepEqual(unresolved, []);
+});
+
+test('CONTROL: a template over a table filled at RUNTIME stays an unresolved pattern', () => {
+  // `typography/scale` declares `const entries: string[] = []` and fills it in a
+  // loop. Reading that initializer literally would certify "emits nothing" for a
+  // template that emits the whole type ramp, so an empty domain is refused.
+  const source = [
+    'export function derive(vars, table) {',
+    '  const entries: string[] = [];',
+    '  for (const [channel] of Object.entries(table)) entries.push(channel);',
+    '  for (const name of entries) vars[`--ds-text-${name}`] = "x";',
+    '}',
+  ].join('\n');
+  const { resolved, unresolved } = extractKeyedVarsEmissions(source);
+  assert.equal(resolved.size, 0);
+  assert.equal(unresolved.length, 1);
+  assert.match(unresolved[0].reason, /NON-EMPTY/);
+});
+
+test('extractIdentifierVarsAssignments reads a named constant key and its guard', () => {
+  const source = [
+    'const DENSITY = "--ds-density-mode-factor";',
+    'export function derive(vars) { vars[DENSITY] = "1"; }',
+  ].join('\n');
+  assert.deepEqual(
+    extractIdentifierVarsAssignments(source).map((site) => ({ key: site.key, guard: site.guard })),
+    [{ key: 'DENSITY', guard: null }],
+  );
+  assert.deepEqual([...extractKeyedVarsEmissions(source).resolved.keys()], ['--ds-density-mode-factor']);
+});
+
+test('findCrossFileProducerCollisions fires across FILES at one rank, not within one', () => {
+  // Two writes to one channel inside a single owner are sequential refinement
+  // (`typography/pairing` sets a posture floor, then an authored ceiling).
+  // Two different family files at one rank have no such order.
+  const one = new Map([['--ds-x', [{ file: 'a/index.ts', rank: 'derived' }, { file: 'a/index.ts', rank: 'derived' }]]]);
+  assert.deepEqual(findCrossFileProducerCollisions(one, new Map()), []);
+  const two = new Map([['--ds-x', [{ file: 'b/index.ts', rank: 'derived' }]]]);
+  assert.deepEqual(findCrossFileProducerCollisions(one, two), [
+    { name: '--ds-x', rank: 'derived', files: ['a/index.ts', 'b/index.ts'] },
+  ]);
+});
+
+test('LIVE: the shapes the old walk could not see are in the emitted universe, with owners', () => {
+  const sources = collectBrandThemeCompilerSources();
+  const emitted = new Set(sources.flatMap((source) => [
+    ...extractDirectVarsAssignments(source.text).keys(),
+    ...extractKeyedVarsEmissions(source.text, { file: source.path }).resolved.keys(),
+  ]));
+  for (const name of [
+    '--ds-font-weight-heading',      // a sub-owner literal assignment
+    '--ds-elevation-border-style',   // a sub-owner roster membership guard
+    '--ds-z-index-modal',            // a sub-owner template over a literal table
+    '--ds-breakpoint-sm',            // a top-level template over an IMPORTED table
+    '--ds-density-mode-factor',      // a top-level named-constant key
+  ]) {
+    assert.ok(emitted.has(name), `${name} must be visible to the producer census`);
+    assert.notEqual(classifySemanticOwner(name), null, `${name} must resolve to a semantic owner`);
+  }
 });
 
 test('LIVE: no channel is produced twice at one rank across the derivation registry', () => {

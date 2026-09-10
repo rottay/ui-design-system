@@ -186,29 +186,49 @@ export const DEFAULT_BRAND_THEME_COMPILER_ROOT = resolve(
  * legible: two families naming one channel at DIFFERENT ranks is precedence
  * (a tenant statement over a derivation), while two families naming it at the
  * SAME rank is a duplicate producer with no answer.
+ *
+ * THE REGISTRY IS A TREE, NOT A LIST. Reading only `<root>/<family>/index.ts`
+ * was true when every family was one file. It stopped being true when families
+ * grew sub-owners: `typography/{pairing,scale,weights,roles,numeric}` and
+ * `elevation/{ladder,z-index}` hold the actual `vars[...]` assignments while
+ * their parent only composes them, so a non-recursive read saw a parent that
+ * emits nothing and called the family covered. The walk is recursive, and a
+ * sub-owner INHERITS its family's rank: it is a layer of one authority, not a
+ * competing one, which is exactly why the parent is the only file that states
+ * a rank.
  */
 export function collectBrandThemeCompilerSources(
   root = DEFAULT_BRAND_THEME_COMPILER_ROOT,
 ) {
   const sources = [];
-  let entries;
-  try {
-    entries = readdirSync(root, { withFileTypes: true });
-  } catch {
-    return sources;
-  }
-  for (const entry of entries.filter((item) => item.isDirectory())) {
-    const file = join(root, entry.name, 'index.ts');
-    if (!existsSync(file)) continue;
-    const text = readFileSync(file, 'utf8');
-    const rank = /\brank:\s*["']([a-zA-Z-]+)["']/.exec(text)?.[1] ?? 'unranked';
-    sources.push({
-      path: file,
-      relativePath: `packages/core/${relative(CORE_ROOT, file).split(sep).join('/')}`,
-      text,
-      rank,
-    });
-  }
+  const walk = (directory, family, inheritedRank) => {
+    let entries;
+    try {
+      entries = readdirSync(directory, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries.filter((item) => item.isDirectory())) {
+      const child = join(directory, entry.name);
+      const file = join(child, 'index.ts');
+      let rank = inheritedRank;
+      if (existsSync(file)) {
+        const text = readFileSync(file, 'utf8');
+        const declaredRank = /\brank:\s*["']([a-zA-Z-]+)["']/.exec(text)?.[1] ?? null;
+        rank = declaredRank ?? inheritedRank ?? 'unranked';
+        sources.push({
+          path: file,
+          relativePath: `packages/core/${relative(CORE_ROOT, file).split(sep).join('/')}`,
+          text,
+          rank,
+          family: family ?? entry.name,
+          declaresRank: declaredRank !== null,
+        });
+      }
+      walk(child, family ?? entry.name, rank);
+    }
+  };
+  walk(root, null, null);
   return sources.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
 }
 
@@ -623,6 +643,263 @@ export function findUnresolvedInterpolatedAssignments(sourceText) {
   );
 }
 
+/* ---------------------------------------------------------------------- */
+/* 3b. Emission keys that are NOT string literals                         */
+/* ---------------------------------------------------------------------- */
+
+/*
+ * A `vars[...]` key is a string literal in most families, and the literal
+ * scanner above owns those. It is not always one:
+ *
+ *   vars[DENSITY_MODE_FACTOR_VARIABLE] = ...            a named constant
+ *   if (PAIRING_CHANNELS.has(channel)) vars[channel] =  a named roster
+ *   vars[`--ds-z-index-${band}`] = ...                  a template over a table
+ *
+ * The first two were invisible to BOTH scanners -- not reported, not counted,
+ * silently absent from the emitted universe. The third was reported as an
+ * unresolved pattern, which is honest but leaves the channels uncounted. The
+ * resolver below turns each shape into concrete names when its domain is a
+ * literal this file (or one import hop away) states, and reports it as an
+ * unresolved emission pattern when it is not. A negated membership guard is
+ * deliberately in the second class: the complement of a roster over a table
+ * computed elsewhere is not enumerable from source.
+ */
+
+const TS_MODULE_SUFFIXES = ['.ts', '.tsx', '/index.ts', '/index.tsx'];
+const MAX_ROSTER_HOPS = 4;
+
+/** The in-package module a derivation import names, or null for anything else. */
+export function resolveDerivationImport(fromFile, specifier, coreRoot = CORE_ROOT) {
+  const base = specifier.startsWith('@/')
+    ? join(coreRoot, 'src', specifier.slice(2))
+    : specifier.startsWith('.') ? resolve(dirname(fromFile), specifier) : null;
+  if (base === null) return null;
+  return TS_MODULE_SUFFIXES.map((suffix) => `${base}${suffix}`).find((candidate) => existsSync(candidate)) ?? null;
+}
+
+/** Every `const NAME = <expr>` initializer in a module, by name. */
+export function topLevelConstExpressions(sourceText) {
+  const found = new Map();
+  const re = /(?:^|[\n;])\s*(?:export\s+)?(?:const|let)\s+([A-Za-z_$][\w$]*)\s*(?::[^=;]*)?=\s*/gu;
+  let match;
+  while ((match = re.exec(sourceText)) !== null) {
+    const start = match.index + match[0].length;
+    let depth = 0;
+    let quote = null;
+    let index = start;
+    for (; index < sourceText.length; index += 1) {
+      const ch = sourceText[index];
+      if (quote) {
+        if (ch === '\\') index += 1;
+        else if (ch === quote) quote = null;
+        continue;
+      }
+      if (ch === '"' || ch === "'" || ch === '`') { quote = ch; continue; }
+      if (ch === '(' || ch === '[' || ch === '{') { depth += 1; continue; }
+      if (ch === ')' || ch === ']' || ch === '}') { depth -= 1; continue; }
+      if (ch === ';' && depth === 0) break;
+    }
+    found.set(match[1], sourceText.slice(start, index).trim());
+  }
+  return found;
+}
+
+/** Every named import binding in a module, as `local -> { specifier, imported }`. */
+export function namedImportBindings(sourceText) {
+  const bindings = new Map();
+  const re = /import\s+(?:type\s+)?\{([^}]*)\}\s*from\s*["']([^"']+)["']/gu;
+  let match;
+  while ((match = re.exec(sourceText)) !== null) {
+    for (const raw of match[1].split(',')) {
+      const parts = raw.trim().replace(/^type\s+/u, '').split(/\s+as\s+/u);
+      if (parts[0].length === 0) continue;
+      bindings.set((parts[1] ?? parts[0]).trim(), { specifier: match[2], imported: parts[0].trim() });
+    }
+  }
+  return bindings;
+}
+
+function moduleFacts(file, text, cache) {
+  const known = cache.get(file);
+  if (known) return known;
+  const facts = { file, text, consts: topLevelConstExpressions(text), imports: namedImportBindings(text) };
+  cache.set(file, facts);
+  return facts;
+}
+
+const OBJECT_KEY_RE = /^(?:(['"])([^'"]+)\1|([A-Za-z_$][\w$]*))\s*:/u;
+
+/**
+ * The literal names an expression enumerates, or null when it does not
+ * enumerate literally. Null is the fail-closed answer: the caller turns it
+ * into a reported unresolved pattern and never into "emits nothing".
+ */
+function enumerateLiterals(expression, facts, cache, coreRoot, depth) {
+  if (depth > MAX_ROSTER_HOPS) return null;
+  const text = expression.replace(/\s+as\s+const\s*$/u, '').trim();
+  const single = /^(['"])([^'"]*)\1$/u.exec(text);
+  if (single) return [single[2]];
+  const call = /^(?:new\s+Set(?:<[^>]*>)?|Object\.freeze|Object\.keys|Object\.entries|Object\.values)\s*\(/u.exec(text);
+  if (call) {
+    const inner = extractBracketBlock(text, text.slice(0, call[0].length), '(', ')');
+    return inner === null ? null : enumerateLiterals(inner, facts, cache, coreRoot, depth + 1);
+  }
+  if (text.startsWith('[')) {
+    const body = extractBracketBlock(text, '[', '[', ']');
+    if (body === null) return null;
+    const names = [];
+    for (const item of splitTopLevelListItems(body)) {
+      const literal = /^(['"])([^'"]*)\1$/u.exec(item);
+      if (literal) { names.push(literal[2]); continue; }
+      const spread = /^\.\.\.\s*([A-Za-z_$][\w$]*)$/u.exec(item);
+      const identifier = spread ?? /^([A-Za-z_$][\w$]*)$/u.exec(item);
+      if (!identifier) return null;
+      const nested = resolveRoster(identifier[1], facts, cache, coreRoot, depth + 1);
+      if (nested === null) return null;
+      names.push(...nested);
+    }
+    return names;
+  }
+  if (text.startsWith('{')) {
+    const body = extractBracketBlock(text, '{', '{', '}');
+    if (body === null) return null;
+    const keys = [];
+    for (const item of splitTopLevelListItems(body)) {
+      const key = OBJECT_KEY_RE.exec(item);
+      if (!key) return null;
+      keys.push(key[2] ?? key[3]);
+    }
+    return keys;
+  }
+  if (/^[A-Za-z_$][\w$]*$/u.test(text)) return resolveRoster(text, facts, cache, coreRoot, depth + 1);
+  return null;
+}
+
+/**
+ * An enumeration that came back EMPTY is not an answer.
+ *
+ * `typography/scale` declares `const entries: string[] = []` and fills it in a
+ * loop; reading its initializer literally yields zero names, which would have
+ * certified "this template emits nothing" for a template that emits the whole
+ * type ramp. An empty literal domain is therefore refused like any other shape
+ * this resolver cannot read.
+ */
+function nonEmpty(names) {
+  return names === null || names.length === 0 ? null : names;
+}
+
+/** The literal names one identifier stands for, following at most one import chain. */
+function resolveRoster(name, facts, cache, coreRoot, depth) {
+  if (depth > MAX_ROSTER_HOPS) return null;
+  const own = facts.consts.get(name);
+  if (own !== undefined) return enumerateLiterals(own, facts, cache, coreRoot, depth);
+  const imported = facts.imports.get(name);
+  if (!imported || facts.file === null) return null;
+  const target = resolveDerivationImport(facts.file, imported.specifier, coreRoot);
+  if (target === null) return null;
+  let text;
+  try {
+    text = readFileSync(target, 'utf8');
+  } catch {
+    return null;
+  }
+  return resolveRoster(imported.imported, moduleFacts(target, text, cache), cache, coreRoot, depth + 1);
+}
+
+/** Every `vars[<identifier>] = ...` assignment, with the guard that precedes it. */
+export function extractIdentifierVarsAssignments(sourceText) {
+  const offsets = buildLineIndex(sourceText);
+  const sites = [];
+  const re = /vars\[\s*([A-Za-z_$][\w$]*)\s*\]\s*=/gu;
+  let match;
+  while ((match = re.exec(sourceText)) !== null) {
+    const window = sourceText.slice(Math.max(0, match.index - 240), match.index);
+    const guard = /(!?)\s*([A-Za-z_$][\w$]*)\.has\(\s*([A-Za-z_$][\w$]*)\s*\)[^;{}]*$/u.exec(window);
+    sites.push({
+      key: match[1],
+      guard: guard && guard[3] === match[1] ? { roster: guard[2], negated: guard[1] === '!' } : null,
+      line: lineForOffset(offsets, match.index),
+    });
+  }
+  return sites;
+}
+
+/** The iterable a `for (const <key> ...  of <iterable>)` binds `key` over, or null. */
+function binderIterable(sourceText, key) {
+  const re = new RegExp(
+    `for\\s*\\(\\s*const\\s+(?:\\[\\s*${key}\\s*(?:,[^\\]]*)?\\]|${key})\\s+of\\s+`,
+    'u',
+  );
+  const match = re.exec(sourceText);
+  if (!match) return null;
+  const rest = sourceText.slice(match.index + match[0].length);
+  let depth = 0;
+  for (let index = 0; index < rest.length; index += 1) {
+    const ch = rest[index];
+    if (ch === '(' || ch === '[' || ch === '{') depth += 1;
+    else if (ch === ']' || ch === '}') depth -= 1;
+    else if (ch === ')') {
+      if (depth === 0) return rest.slice(0, index).trim();
+      depth -= 1;
+    }
+  }
+  return null;
+}
+
+/**
+ * The concrete channel names a module emits through a non-literal key, and the
+ * shapes it emits through a key this resolver refuses to guess at.
+ */
+export function extractKeyedVarsEmissions(sourceText, { file = null, coreRoot = CORE_ROOT } = {}) {
+  const cache = new Map();
+  const facts = moduleFacts(file ?? '<inline>', sourceText, cache);
+  const resolved = new Map();
+  const unresolved = [];
+  const add = (name, line) => resolved.set(name, [...(resolved.get(name) ?? []), { line }]);
+
+  for (const site of findUnresolvedInterpolatedAssignments(sourceText)) {
+    const parts = /^([^$]*)\$\{\s*([A-Za-z_$][\w$]*)\s*\}([^$]*)$/u.exec(site.raw);
+    const iterable = parts === null ? null : binderIterable(sourceText, parts[2]);
+    const keys = iterable === null ? null : nonEmpty(enumerateLiterals(iterable, facts, cache, coreRoot, 0));
+    if (keys === null) {
+      unresolved.push({
+        raw: `\`${site.raw}\``,
+        line: site.line,
+        reason: parts === null
+          ? 'the template is not a single interpolation over an enumerable domain'
+          : `\`${parts[2]}\` is not bound by a \`for ... of\` over a NON-EMPTY literal table this resolver can read`,
+      });
+      continue;
+    }
+    for (const key of keys) add(`${parts[1]}${key}${parts[3]}`, site.line);
+  }
+
+  for (const site of extractIdentifierVarsAssignments(sourceText)) {
+    if (site.guard !== null && site.guard.negated) {
+      unresolved.push({
+        raw: `${site.key}`,
+        line: site.line,
+        reason: `the key is filtered by \`!${site.guard.roster}.has(...)\`, and the COMPLEMENT of a roster over a table computed elsewhere is not enumerable from source`,
+      });
+      continue;
+    }
+    const source = site.guard === null ? site.key : site.guard.roster;
+    const names = nonEmpty(resolveRoster(source, facts, cache, coreRoot, 0));
+    if (names === null) {
+      unresolved.push({
+        raw: `${site.key}`,
+        line: site.line,
+        reason: site.guard === null
+          ? `\`${site.key}\` is not a constant this resolver can read as a channel name`
+          : `\`${site.guard.roster}\` is not a roster this resolver can enumerate`,
+      });
+      continue;
+    }
+    for (const name of names) add(name, site.line);
+  }
+  return { resolved, unresolved };
+}
+
 /** Any scale registered by more than one `setTintRampVariables` call site, matching or not. */
 export function findDuplicateTintScales(callSites) {
   const byScale = new Map();
@@ -662,6 +939,36 @@ export function findDuplicateDirectAssignments(directEmission) {
     }
   }
   return duplicates;
+}
+
+/**
+ * Any channel emitted at ONE rank from two different family files.
+ *
+ * The site-level rule above is the right one for literal assignments inside a
+ * single owner, where a second write is sequential refinement -- a posture
+ * floor then an authored ceiling, which `typography/pairing` does on purpose.
+ * Two FILES at one rank have no such reading: nothing orders them, so this is
+ * the shape that stays a defect once roster-resolved emissions join the census.
+ */
+export function findCrossFileProducerCollisions(directEmission, rosterEmission) {
+  const byName = new Map();
+  for (const emission of [directEmission, rosterEmission]) {
+    for (const [name, sites] of emission) {
+      const ranks = byName.get(name) ?? new Map();
+      for (const site of sites) {
+        const rank = site.rank ?? 'unranked';
+        ranks.set(rank, new Set([...(ranks.get(rank) ?? []), site.file ?? 'brand-theme/index.ts']));
+      }
+      byName.set(name, ranks);
+    }
+  }
+  const collisions = [];
+  for (const [name, ranks] of byName) {
+    for (const [rank, files] of ranks) {
+      if (files.size > 1) collisions.push({ name, rank, files: [...files].sort() });
+    }
+  }
+  return collisions.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 /** Any channel name emitted by BOTH the tint ramp AND a direct literal assignment. */
@@ -952,6 +1259,13 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-material-/, () => 'surfaces.material'],
   [/^--ds-surface-/, () => 'surfaces'],
   [/^--ds-font-family-/, () => 'typography'],
+  // The three families the recursive producer walk made visible. A census that
+  // newly SEES a channel must be able to name its owner, or it has traded one
+  // hole for another. (The four `--ds-posture-*` rows are a standing unowned
+  // finding from before that walk and are deliberately left where they were.)
+  [/^--ds-font-weight-/, () => 'typography'],
+  [/^--ds-z-index-/, () => 'surfaces.elevation.stacking'],
+  [/^--ds-breakpoint-/, () => 'responsive'],
   [/^--ds-letter-spacing-/, () => 'typography'],
   [/^--ds-line-height-/, () => 'typography'],
   [/^--ds-type-/, () => 'typography'],
@@ -1306,6 +1620,7 @@ export function analyzeChannelLiveness({
   let tintSuffixes = [];
   let tintDefinitionSite = null;
   const directEmission = new Map();
+  const rosterEmission = new Map();
   const unresolvedInterpolated = [];
   for (const source of compilerSources) {
     const tint = extractTintRampEmissions(source.text);
@@ -1324,7 +1639,18 @@ export function analyzeChannelLiveness({
       }
       directEmission.set(name, merged);
     }
-    for (const site of findUnresolvedInterpolatedAssignments(source.text)) {
+    // The non-literal keys: a named constant, a roster membership guard, or a
+    // template over a literal table. Each resolves to concrete names or is
+    // reported; neither shape is dropped.
+    const keyed = extractKeyedVarsEmissions(source.text, { file: source.path ?? null });
+    for (const [name, sites] of keyed.resolved) {
+      const merged = rosterEmission.get(name) ?? [];
+      for (const site of sites) {
+        merged.push({ ...site, file: source.relativePath, rank: source.rank });
+      }
+      rosterEmission.set(name, merged);
+    }
+    for (const site of keyed.unresolved) {
       unresolvedInterpolated.push({ ...site, file: source.relativePath });
     }
   }
@@ -1355,11 +1681,16 @@ export function analyzeChannelLiveness({
   }
   for (const site of unresolvedInterpolated) {
     failures.push(
-      `unresolved emission pattern: vars[\`${site.raw}\`] at ${site.file ?? 'brand-theme/index.ts'}:${site.line} is an interpolated template assignment this producer cannot resolve to concrete channel names -- the corpus is never shrunk to avoid this finding`,
+      `unresolved emission pattern: vars[${site.raw}] at ${site.file ?? 'brand-theme/index.ts'}:${site.line} is an emission this producer cannot resolve to concrete channel names -- ${site.reason ?? 'the key is not a literal'}; the corpus is never shrunk to avoid this finding`,
+    );
+  }
+  for (const collision of findCrossFileProducerCollisions(directEmission, rosterEmission)) {
+    failures.push(
+      `duplicate producer: ${collision.name} is emitted at rank "${collision.rank}" by ${collision.files.length} different family files (${collision.files.join(', ')}) -- a channel has exactly one producing family per rank`,
     );
   }
 
-  const emittedNames = new Set([...tintEmission.names, ...directEmission.keys()]);
+  const emittedNames = new Set([...tintEmission.names, ...directEmission.keys(), ...rosterEmission.keys()]);
   const universe = new Set([...declaredOverride, ...declaredReference, ...emittedNames]);
 
   // --- consumerRoots (defect 7) ----------------------------------------

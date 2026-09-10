@@ -488,21 +488,34 @@ jobs:
   changeset:
     name: Changeset Validation
     runs-on: self-hosted
-    timeout-minutes: 3
+    timeout-minutes: 15
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # The gate is dependency-free (node builtins and one repo-local import),
-      # so it needs a runtime but no install. Without this step the job would
-      # have kept running shell only and the check would never execute.
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@rottay'
+
+      # THE GATE IS NOT DEPENDENCY-FREE, AND SAYING SO KEPT IT FROM RUNNING.
+      # `contract-changeset` statically imports its surface derivation, which
+      # statically imports `typescript`. Without an install the first `node`
+      # call died with ERR_MODULE_NOT_FOUND before a single assertion ran, so
+      # the only machine that enforces this check never reached it.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # The inline shell this replaces asked whether ANY `.changeset/*.md`
       # existed. One is committed on main by design (the retained 3.0 changeset

@@ -27,7 +27,12 @@ import {
   runDrill,
   unresolvedSurfaceInputs,
 } from '../index.mjs';
-import { moduleExports } from '../surface/index.mjs';
+import {
+  UNCERTIFIED_INFERRED_RETURN,
+  collectPublicSurface,
+  moduleExports,
+  normalizeResolvedType,
+} from '../surface/index.mjs';
 
 const changeset = (body) => parseChangeset('planted.md', body);
 
@@ -201,6 +206,8 @@ test('every declared drill class is planted and lands in its declared direction'
     'contract-without-diff-block',
     'docs-outside-contract',
     'foreign-package-declaration',
+    'inferred-return-body-only',
+    'inferred-return-changed',
     'library-without-changeset',
     'malformed-changeset',
     'overload-implementation-changed',
@@ -264,6 +271,80 @@ test('CONTROL: the same signature change WITH its row is green', { timeout: 3000
 // ---------------------------------------------------------------------------
 // The two defects the 2026-09-08 lot review reproduced against this check
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// The blind spot the 2026-09-09 verification checkpoint reproduced (V96-02)
+// ---------------------------------------------------------------------------
+
+test('an inferred public return type is a signature, not an implementation detail', {
+  timeout: 300000,
+}, () => {
+  // The checkpoint's probe, verbatim: `export function value() { return 1; }`
+  // becomes `{ return String(1); }`, published through the package root, with a
+  // normal patch changeset and no contract-diff block. The collector reported
+  // zero surface changes -- both fingerprints elided to `export function value()
+  // { }` -- while the unchanged consumer `const result: number = value()` went
+  // from clean to TS2322.
+  const result = runDrill('inferred-return-changed');
+  assert.equal(result.landed, 'red');
+  assert.equal(result.findings[0].leg, 'surface-coverage');
+  assert.match(result.findings[0].detail, /\.#value/);
+});
+
+test('CONTROL: a body edit that leaves the inferred return where it was is green', {
+  timeout: 300000,
+}, () => {
+  // The twin that decides HOW the blind spot is repaired. Refusing to elide an
+  // inferred body at all would also make this red, and then every implementation
+  // change to an unannotated public function would demand a contract-diff row.
+  // Only resolving the signature answers both.
+  assert.equal(runDrill('inferred-return-body-only').landed, 'green');
+});
+
+test('an uncertified inferred return is refused, never compared blind', () => {
+  // The fail-closed half. Without a certifier the elision carries a marker, so
+  // two ends cannot agree by both being unread; `collectPublicSurface` reports
+  // the symbol as unresolved and `auditRange` raises it whatever else the range
+  // did.
+  const files = new Map([['packages/core/src/index.ts', 'export function value() { return 1; }\n']]);
+  const surface = collectPublicSurface({
+    entries: [{ subpath: '.', source: 'packages/core/src/index.ts' }],
+    readModule: (file) => files.get(file) ?? null,
+    exists: (file) => files.has(file),
+  });
+  assert.ok(surface.symbols.get('.#value').fingerprint.includes(UNCERTIFIED_INFERRED_RETURN));
+  assert.deepEqual(surface.unresolved.map((row) => row.name), ['value']);
+  const findings = auditRange({
+    changed: ['packages/core/src/index.ts'],
+    declared: [changeset('---\n"@rottay/design-system": patch\n---\n\nDeclared.\n')],
+    surfaceUnresolved: surface.unresolved,
+  });
+  assert.deepEqual(findings.map((finding) => finding.leg), ['surface-unresolved']);
+  assert.match(findings[0].detail, /inferred/);
+});
+
+test('a resolved inferred return prints the same string from two revisions', () => {
+  // The stability rule the certifier depends on: `typeToString` names a type it
+  // cannot reach through an absolute `import(...)`, and the two ends of a range
+  // are read from two different extracted directories.
+  assert.equal(
+    normalizeResolvedType('import("/tmp/tree-a/packages/core/src/x/index").T', '/tmp/tree-a'),
+    'import("packages/core/src/x/index").T',
+  );
+  assert.equal(
+    normalizeResolvedType('import("/tmp/tree-b/packages/core/src/x/index").T', '/tmp/tree-b'),
+    'import("packages/core/src/x/index").T',
+  );
+  // And a package path keeps only what follows the last `node_modules/`, so a
+  // pnpm store version directory is not a signature either.
+  assert.equal(
+    normalizeResolvedType(
+      'import("/r/node_modules/.pnpm/@types+react@19.2.14/node_modules/@types/react/index").FunctionComponent',
+      '/r',
+    ),
+    'import("@types/react/index").FunctionComponent',
+  );
+});
 
 test('the OVERLOADS are the published contract, not the implementation signature', () => {
   // The unit the drill below rests on: three declarations of one name, and the
