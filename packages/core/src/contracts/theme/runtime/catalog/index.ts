@@ -592,17 +592,17 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     },
     consumes: ["palette.seeds"],
     // The three border-width ROLES the declared families read, authored
-    // DIRECTLY. `surfaces.elevation-posture` reaches
-    // `--ds-elevation-border-style` as an implication of a shadow ladder; this
-    // row states the keyline itself and outranks that implication inside the
-    // one elevation family. The structural `--ds-border-width-{0,1,2,4,8}`
-    // scale is never touched: a posture modulates roles, never the scale.
+    // DIRECTLY, and nothing else. `--ds-elevation-border-style` belongs to
+    // `surfaces.elevation-posture`: a tenant posture writes it from the
+    // `tenant` rank, above the family this row derives in, so this row does not
+    // contest it -- a `0px` role width already draws no keyline. The structural
+    // `--ds-border-width-{0,1,2,4,8}` scale is never touched: a posture
+    // modulates roles, never the scale.
     produces: {
       channels: [
         "--ds-edge-hairline-width",
         "--ds-edge-standard-width",
         "--ds-edge-emphasis-width",
-        "--ds-elevation-border-style",
       ],
       rootAttributes: [],
     },

@@ -739,11 +739,11 @@ export interface BrandSurfaces {
    * Kit row 18: the weight of the keyline every bounded surface wears.
    *
    * DIRECT authorship of the three border-width ROLES
-   * (`--ds-edge-{hairline,standard,emphasis}-width`), not the border style an
-   * elevation preset happens to imply: `surfaces.elevation` states the shadow
-   * ladder and only incidentally reaches `--ds-elevation-border-style`, so a
-   * tenant that wanted borderless chrome had to buy a shadow posture it did
-   * not want. The two settle in the same family, decision over implication.
+   * (`--ds-edge-{hairline,standard,emphasis}-width`), which is what a tenant
+   * who wanted borderless chrome used to have to buy a shadow posture for.
+   * The border style that posture implies (`--ds-elevation-border-style`)
+   * stays the posture's, at the posture's rank: this field never contests it,
+   * because a `0px` role width already draws nothing.
    *
    * Structural `--ds-border-width-{0,1,2,4,8}` scale tokens stay untouched --
    * this posture modulates roles, never the scale -- and selection, error and

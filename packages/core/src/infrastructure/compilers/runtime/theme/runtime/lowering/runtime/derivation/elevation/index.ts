@@ -31,9 +31,9 @@ export { Z_INDEX_BANDS, deriveZIndexBands } from "./z-index";
  * The keyline is the third: `surfaces.borderStyle` (kit row 18) states the
  * border-width roles a bounded surface wears, and it is a DEPTH statement for
  * the same reason a shadow is -- a card reads as raised through its edge or its
- * shadow, and choosing one is choosing against the other. It had no keypath at
- * all before this, so `--ds-elevation-border-style` was only ever reachable as
- * a side effect of buying an elevation posture.
+ * shadow, and choosing one is choosing against the other. It reaches the three
+ * width roles and stops there: the border style a posture implies belongs to
+ * the posture, at the posture's rank.
  */
 export const elevationDeriver: FamilyDeriver = {
   family: "elevation",
@@ -55,13 +55,13 @@ export const elevationDeriver: FamilyDeriver = {
 };
 
 /**
- * Bands, then the posture's ladder, then the AUTHORED keyline.
+ * Bands, then the posture's ladder, then the authored keyline widths.
  *
- * The order is the precedence: `--ds-elevation-border-style` is an implication
- * of the elevation preset and a direct statement of the border posture, and a
- * decision that names a channel outranks a preset that merely reaches it. The
- * two answer to one family, so this composition is the whole contest -- there
- * is no second writer for a later rank to adjudicate.
+ * The three write disjoint channels, so this order is assembly and not
+ * precedence. The keyline stops at the width roles deliberately: the ladder
+ * also carries `--ds-elevation-border-style`, and a TENANT that authors the
+ * posture has that channel re-stated by the `tenant` family two ranks above
+ * this one -- so a contest declared here would be settled somewhere else.
  */
 export function deriveElevationChannels(
   bt: BrandTheme,

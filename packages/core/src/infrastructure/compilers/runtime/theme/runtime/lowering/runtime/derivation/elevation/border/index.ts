@@ -17,11 +17,13 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
  * would be two edge ladders, and the profile is the floor this decision is
  * expected to outrank, not a different scale.
  *
- * `--ds-elevation-border-style` follows the same statement so that `none`
- * actually REMOVES the keyline rather than drawing a zero-width solid one.
- * That channel is also written by the elevation posture preset, where it is an
- * IMPLICATION of a shadow ladder; this row states it outright, and
- * `../index.ts` composes the two so direct authorship wins.
+ * The three widths are the WHOLE row. `--ds-elevation-border-style` stays the
+ * elevation posture's: a tenant that authors the posture has it written from
+ * the `tenant` rank, above every family that derives from the Theme, so a
+ * keyline stated here could not outrank it -- and does not need to. A `0px`
+ * role width already draws nothing, and the style token the skins compose
+ * beside these widths is `--ds-edge-standard-style`, which the expressive
+ * `edge` axis owns.
  *
  * Structural `--ds-border-width-{0,1,2,4,8}` scale tokens are untouched: this
  * posture modulates roles, never the scale. Selection, error and focus borders
@@ -38,19 +40,16 @@ const BORDER_POSTURE: Readonly<
     "--ds-edge-hairline-width": "0px",
     "--ds-edge-standard-width": "0px",
     "--ds-edge-emphasis-width": "1px",
-    "--ds-elevation-border-style": "none",
   },
   hairline: {
     "--ds-edge-hairline-width": "1px",
     "--ds-edge-standard-width": "1px",
     "--ds-edge-emphasis-width": "1px",
-    "--ds-elevation-border-style": "solid",
   },
   strong: {
     "--ds-edge-hairline-width": "1px",
     "--ds-edge-standard-width": "1.5px",
     "--ds-edge-emphasis-width": "2px",
-    "--ds-elevation-border-style": "solid",
   },
 };
 

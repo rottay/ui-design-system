@@ -159,3 +159,88 @@ describe("the four connected decisions reach a channel on every vertical", () =>
     });
   });
 });
+
+/**
+ * The keyline beside the shadow posture it once claimed to outrank.
+ *
+ * The probe above drives one decision at a time, which is the exact shape that
+ * cannot see this: `surfaces.border-style` alone has no posture to contest. The
+ * CC-01 re-audit drove both together and found the stated order inverted -- the
+ * catalog row and two doc comments said the keyline outranked the
+ * `--ds-elevation-border-style` an elevation posture merely implies, while the
+ * merge did the opposite, because a TENANT posture is re-stated by the `tenant`
+ * family and the keyline derives two ranks below it. Settled by withdrawing the
+ * claim and the channel: the row owns the three WIDTHS, the posture owns the
+ * style. Both halves are asserted here, against the catalog, so the row's
+ * declaration and the merge can only move together.
+ */
+describe("surfaces.border-style beside surfaces.elevation-posture", () => {
+  const ROW = themeControl("surfaces.border-style");
+
+  /** The audit's own two cases, at the values it drove them with. */
+  const CASES = [
+    {
+      elevation: "elevated",
+      borderStyle: "strong",
+      widths: {
+        "--ds-edge-hairline-width": "1px",
+        "--ds-edge-standard-width": "1.5px",
+        "--ds-edge-emphasis-width": "2px",
+      },
+      impliedStyle: "none",
+    },
+    {
+      elevation: "flat",
+      borderStyle: "none",
+      widths: {
+        "--ds-edge-hairline-width": "0px",
+        "--ds-edge-standard-width": "0px",
+        "--ds-edge-emphasis-width": "1px",
+      },
+      impliedStyle: "solid",
+    },
+  ] as const;
+
+  it("declares the three width roles, and no border style", () => {
+    expect([...ROW.produces.channels]).toEqual([
+      "--ds-edge-hairline-width",
+      "--ds-edge-standard-width",
+      "--ds-edge-emphasis-width",
+    ]);
+  });
+
+  for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+    for (const { elevation, borderStyle, widths, impliedStyle } of CASES) {
+      it(`${vertical}/${elevation}+${borderStyle}: the row keeps the widths, the posture keeps the style`, () => {
+        const both = compiled(
+          vertical,
+          v2({
+            "surfaces.elevation-posture": elevation,
+            "surfaces.border-style": borderStyle,
+          })
+        );
+        for (const [channel, value] of Object.entries(widths)) {
+          expect(both[channel], `${vertical} ${channel}`).toBe(value);
+        }
+        expect(
+          both["--ds-elevation-border-style"],
+          `${vertical} keyline style`
+        ).toBe(impliedStyle);
+      });
+
+      it(`${vertical}/${borderStyle}: alone, the row states no border style at all`, () => {
+        // The withdrawal itself: without a posture beside it the row must leave
+        // the channel exactly where the vertical rests, rather than winning a
+        // contest it loses the moment a posture is authored.
+        const alone = compiled(vertical, v2({ "surfaces.border-style": borderStyle }));
+        const rest = compiled(vertical, v2({}));
+        expect(alone["--ds-elevation-border-style"]).toBe(
+          rest["--ds-elevation-border-style"]
+        );
+        expect(alone["--ds-edge-standard-width"]).toBe(
+          widths["--ds-edge-standard-width"]
+        );
+      });
+    }
+  }
+});
