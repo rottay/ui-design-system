@@ -258,7 +258,12 @@ export function collectFiles(dir, predicate, out = []) {
  * declared-but-unemitted finding disappear -- the same false negative the
  * consumer side already closes by excluding `/__generated__/` in `isSource`.
  * The productivity test is a fixpoint so a generated owner reached only
- * through another admitted generated owner still counts.
+ * through another admitted generated owner still counts, and it reads
+ * IMPORTS BY RUNTIME SEMANTICS: only a reference that survives type erasure
+ * admits the owner. A comment, a string mention and an `import type` /
+ * `export type` bind nothing at runtime, so none of them may certify an
+ * emission -- otherwise a commented-out import would suppress a real
+ * declared-but-unemitted finding.
  */
 const EMITTER_SKIP_DIRS = new Set([...SKIP_DIRS, 'test', 'tests']);
 const GENERATED_DIR = '__generated__';
@@ -277,12 +282,99 @@ function walkOwners(dir, out = []) {
   return out;
 }
 
-/** Relative module specifiers a source names, as the owner files they could resolve to. */
+/**
+ * Comments and string context removed, so a module specifier that only appears
+ * in prose cannot be read as a dependency. This is a string-aware scan rather
+ * than a regex because `//` occurs legitimately inside literals (URLs), and a
+ * naive strip truncates a file mid-literal. A missed strip errs toward losing a
+ * real import, which can only ADD a declared-but-unemitted finding; it can
+ * never certify a channel that nothing productive emits.
+ */
+function stripComments(source) {
+  let out = '';
+  let quote = null;
+  for (let index = 0; index < source.length; index += 1) {
+    const character = source[index];
+    const next = source[index + 1];
+    if (quote) {
+      out += character;
+      if (character === '\\') {
+        out += next ?? '';
+        index += 1;
+      } else if (character === quote) quote = null;
+      continue;
+    }
+    if (character === "'" || character === '"' || character === '`') {
+      quote = character;
+      out += character;
+      continue;
+    }
+    if (character === '/' && next === '/') {
+      while (index < source.length && source[index] !== '\n') index += 1;
+      out += '\n';
+      continue;
+    }
+    if (character === '/' && next === '*') {
+      index += 2;
+      while (index < source.length && !(source[index] === '*' && source[index + 1] === '/')) index += 1;
+      index += 1;
+      out += ' ';
+      continue;
+    }
+    out += character;
+  }
+  return out;
+}
+
+/**
+ * True when an import/export clause still binds something at runtime. A
+ * statement-level `type` modifier erases the whole statement, and a named
+ * clause whose every specifier is inline-`type` is erased with it; `{ type }`
+ * and `{ type as T }` bind a value called `type` and are not erased.
+ */
+function bindsAtRuntime(clause) {
+  const outside = clause.replace(/\{[\s\S]*\}/, '').trim();
+  if (outside.replace(/,/g, '').trim()) return true;
+  const braces = clause.match(/\{([\s\S]*)\}/);
+  if (!braces) return true;
+  const specifiers = braces[1]
+    .split(',')
+    .map((specifier) => specifier.trim())
+    .filter(Boolean);
+  if (!specifiers.length) return false;
+  return specifiers.some((specifier) => !/^type\s+(?!as\s)\S/.test(specifier));
+}
+
+/**
+ * Relative module specifiers a source names AS A VALUE, as the owner files they
+ * could resolve to.
+ *
+ * Productivity is a runtime question, so it is answered with runtime semantics:
+ * only an import that survives type erasure makes a generated emitter
+ * productive. A mention inside a comment, and an `import type` / `export type`
+ * that is erased before anything runs, leave the generated owner exactly as
+ * unimported as if the line were absent -- and admitting either would let a
+ * comment suppress a real declared-but-unemitted finding. Value imports,
+ * side-effect imports, value re-exports, `require` and dynamic `import()` all
+ * bind at runtime and all count.
+ */
 function importedOwners(file) {
   const targets = new Set();
-  const text = readFileSync(file, 'utf8');
-  for (const match of text.matchAll(/(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"]+)['"]/g)) {
-    const specifier = match[1];
+  const text = stripComments(readFileSync(file, 'utf8'));
+  const specifiers = [];
+  for (const match of text.matchAll(
+    /\b(?:import|export)\s+(type\s+)?([^'"]*?)\bfrom\s*['"]([^'"]+)['"]/g,
+  )) {
+    if (match[1] || !bindsAtRuntime(match[2])) continue;
+    specifiers.push(match[3]);
+  }
+  for (const match of text.matchAll(/\b(?:import|require)\s*\(\s*['"]([^'"]+)['"]/g)) {
+    specifiers.push(match[1]);
+  }
+  for (const match of text.matchAll(/\bimport\s*['"]([^'"]+)['"]/g)) {
+    specifiers.push(match[1]);
+  }
+  for (const specifier of specifiers) {
     if (!specifier.startsWith('.')) continue;
     const resolved = resolve(dirname(file), specifier.replace(/\.(?:js|ts)$/, ''));
     targets.add(`${resolved}.ts`);
