@@ -893,15 +893,32 @@ export function generatedVars(vars: Record<string, string>, card: Partial<Card> 
   rmSync(planted, { recursive: true, force: true });
 });
 
-test("the shipped lowering has no generated emitter, so the productivity test moves no number", () => {
+test("the productivity test moves no number on the shipped lowering", () => {
+  // Asserted relationally, not as a snapshot: the shipped inventory and an
+  // inventory that admits every generated owner unconditionally produce the
+  // SAME census, because the lowering has no generated owner at all. When one
+  // appears, this comparison is what says whether it is productive.
+  const lowering = join(CORE_ROOT, "src/infrastructure/compilers/runtime/theme/runtime/lowering");
+  const naive = [join(CORE_ROOT, "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts")];
+  const walk = (dir) => {
+    if (existsSync(join(dir, "index.ts"))) naive.push(join(dir, "index.ts"));
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory() || ["tests", "test", "fixtures", "__fixtures__", "stories"].includes(entry.name)) continue;
+      walk(join(dir, entry.name));
+    }
+  };
+  walk(lowering);
+
   const shipped = runThemeChannelParityGate();
   assert.deepEqual(
     shipped.analysis.emitterFiles.filter((file) => file.includes("__generated__")),
     [],
   );
-  assert.equal(shipped.analysis.emitterFiles.length, 55);
-  assert.equal(shipped.counters["declared-but-unemitted.total"], 23);
-  assert.equal(shipped.counters["emitted-but-unconsumed.total"], 208);
+  assert.deepEqual(shipped.analysis.emitterFiles.length, naive.length);
+  assert.deepEqual(
+    runThemeChannelParityGate({ emitterFiles: naive.sort() }).counters,
+    shipped.counters,
+  );
 });
 
 test("an obligated bucket is netted out of its category roll-up, exactly", () => {
