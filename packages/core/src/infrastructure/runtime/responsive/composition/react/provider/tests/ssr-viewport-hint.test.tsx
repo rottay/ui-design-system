@@ -84,6 +84,33 @@ const NATIVE_DOCUMENT_WRITE: unknown = document.write;
 const NATIVE_APPEND_CHILD: unknown = Node.prototype.appendChild;
 
 /**
+ * A SECOND REALM'S PROTOTYPE CHAIN, cloned before anything can intercept it.
+ *
+ * A node re-homed onto it is exactly what an element adopted from an iframe is
+ * on a runner that keeps the source realm's prototypes: fully usable in this
+ * document, found by its queries, and reached through interfaces that are NOT
+ * the ones a recorder patches. A genuinely separate DOM realm cannot stand in
+ * for it here -- neither runner accepts another realm's node into its document
+ * at all -- and both runners' own iframes share these prototypes, so the chain
+ * is the only way to put the condition in front of the instrument.
+ */
+const FOREIGN_REALM_PROTOTYPE = ((): object => {
+  const chain: object[] = [];
+  for (
+    let proto: object | null = Object.getPrototypeOf(document.createElement('div'));
+    proto;
+    proto = Object.getPrototypeOf(proto)
+  ) {
+    chain.push(proto);
+  }
+  let clone: object | null = null;
+  for (const proto of chain.reverse()) {
+    clone = Object.create(clone, Object.getOwnPropertyDescriptors(proto));
+  }
+  return clone as object;
+})();
+
+/**
  * Every call on this runner that can move a node INTO the document or OUT of
  * it, named where the slot is reached for.
  *
@@ -390,10 +417,6 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
    * carrier that crossed the edge one this recorder saw written -- and refuse the
    * drill by name when it was not.
    */
-  for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
-    commit(carrier);
-  }
-
   /**
    * WHICH DOCUMENT, asked as membership rather than as connectivity.
    *
@@ -417,6 +440,106 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   };
   const inWatchedDocument = (node: Node | null | undefined): boolean =>
     Boolean(node) && rootOf(node as Node) === watched;
+
+  /**
+   * THE TWO CONTEXTS THIS RECORDER DOES NOT OBSERVE, REFUSED BY NAME.
+   *
+   * EMI-02's contract is mount, hydration, retention and first paint for the
+   * product's own operations and the admitted harness: one document, one realm,
+   * no shadow trees. Two contexts fall outside it, and in both the recorder
+   * would otherwise report a falsely complete history rather than fail --
+   * which is the one outcome this instrument exists to make impossible.
+   *
+   *   A SHADOW TREE. Membership is parent ancestry, and a shadow tree's root is
+   *   its shadow root, not the document. A carrier inside one is therefore
+   *   neither an arrival nor a departure, `document.querySelectorAll` does not
+   *   reach it at `stop()`, and a `MutationObserver` on the document is never
+   *   told about it. Every channel declines it, and the history omits what it
+   *   painted.
+   *
+   *   A FOREIGN REALM. The interceptions are installed on THIS realm's
+   *   prototypes, so a node that keeps another realm's chain reaches an
+   *   unpatched `setAttribute` through the ordinary API. Unlike every other
+   *   unseen path, it can then go on writing AFTER the last observed write and
+   *   land back on the value this recorder recorded, which satisfies the
+   *   witness, the per-element check and the departure ledger at once.
+   *
+   * Neither is observed and neither is reconstructed: the DS mounts no carrier
+   * in a shadow tree and the harness is a single realm, so a carrier found in
+   * either context refuses the drill by name -- at admission, and at every
+   * crossing the membership rule already judges.
+   */
+  const patchedRealm: object = Element.prototype;
+  /** Reached through the prototypes this recorder actually patched. */
+  const inWatchedRealm = (node: Node): boolean =>
+    Object.prototype.isPrototypeOf.call(patchedRealm, node);
+  const asShadowRoot = (root: Node): ShadowRoot | null =>
+    root.nodeType === 11 && (root as ShadowRoot).host ? (root as ShadowRoot) : null;
+  /** Whether `node` hangs off the watched document through any number of hosts. */
+  const reachesWatchedDocument = (node: Node): boolean => {
+    let current: Node | null = node;
+    while (current) {
+      const root = rootOf(current);
+      if (root === watched) return true;
+      current = asShadowRoot(root)?.host ?? null;
+    }
+    return false;
+  };
+  const unsupported = (context: string, carrier: Element, where: string): void => {
+    const value = readBack.call(carrier, FULLSCREEN_ATTRIBUTE);
+    breach ??=
+      `UNSUPPORTED-CONTEXT: ${context} -- a surface carrying ${JSON.stringify(value)} ${where}, which this recorder does not observe; it will not report a commit history it did not see`;
+  };
+  const fromForeignRealm = (carrier: Element): void =>
+    unsupported('foreign realm', carrier, 'belongs to a realm whose writers were never patched');
+
+  /**
+   * A shadow root is not reachable from the document by query, so they are
+   * collected at the door that creates them and from every subtree that brings
+   * one in already attached. A CLOSED root created on a detached host before
+   * the drill opened is visible to nothing at all, in any instrument; the
+   * admitted harness attaches none.
+   */
+  const shadowRoots = new Set<ShadowRoot>();
+  patchMethod(element, 'attachShadow', (original) =>
+    function attachShadow(this: Element, ...args: unknown[]) {
+      const root = original.apply(this, args) as ShadowRoot;
+      if (root) shadowRoots.add(root);
+      return root;
+    },
+  );
+  const collectShadowRoots = (node: unknown): void => {
+    const candidate = node as Node | null;
+    if (!candidate || (candidate.nodeType !== 1 && candidate.nodeType !== 11)) return;
+    const hosts: Element[] = [
+      ...(candidate.nodeType === 1 ? [candidate as Element] : []),
+      ...Array.from((candidate as Element).querySelectorAll('*')),
+    ];
+    for (let index = 0; index < hosts.length; index += 1) {
+      const root = hosts[index].shadowRoot;
+      if (!root || shadowRoots.has(root)) continue;
+      shadowRoots.add(root);
+      hosts.push(...Array.from(root.querySelectorAll('*')));
+    }
+  };
+  /** Any carrier that can paint from inside a shadow tree refuses the drill. */
+  const sweepShadowTrees = (): void => {
+    for (const root of shadowRoots) {
+      for (const carrier of Array.from(root.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
+        if (!reachesWatchedDocument(carrier)) continue;
+        unsupported('shadow tree', carrier, 'lives inside a shadow tree attached to this document');
+      }
+    }
+  };
+
+  // Admission: what the document already carries is the first observed value,
+  // unless it is carried somewhere this recorder cannot follow.
+  collectShadowRoots(document.documentElement);
+  for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
+    if (inWatchedRealm(carrier)) commit(carrier);
+    else fromForeignRealm(carrier);
+  }
+  sweepShadowTrees();
 
   /** Everything under `node` that carries the attribute, `node` included. */
   const carriersIn = (node: unknown): Element[] => {
@@ -477,13 +600,22 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
    */
   const structural = (args: unknown[], call: () => unknown): unknown => {
     settleNow();
+    sweepShadowTrees();
     const arriving = args
       .flatMap(carriersIn)
       .map((carrier) => ({ carrier, wasInside: inWatchedDocument(carrier) }));
     const result = call();
     for (const { carrier, wasInside } of arriving) {
-      if (!wasInside && inWatchedDocument(carrier)) arrived(carrier);
+      if (wasInside || !inWatchedDocument(carrier)) continue;
+      if (inWatchedRealm(carrier)) arrived(carrier);
+      else fromForeignRealm(carrier);
     }
+    // A subtree can also arrive with a shadow tree already hanging off it, and
+    // that root was never handed to the door above.
+    for (const node of args) {
+      if (node && reachesWatchedDocument(node as Node)) collectShadowRoots(node);
+    }
+    sweepShadowTrees();
     return result;
   };
   for (const [, start, key] of STRUCTURAL_SLOTS) {
@@ -498,6 +630,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   patchSetter(element, 'textContent', (original) =>
     function textContent(this: Element, value: unknown) {
       settleNow();
+      sweepShadowTrees();
       original.call(this, value);
     },
   );
@@ -650,6 +783,10 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   return {
     stop: () => {
       settleNow();
+      sweepShadowTrees();
+      for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
+        if (!inWatchedRealm(carrier)) fromForeignRealm(carrier);
+      }
       restore();
       if (breach) throw new Error(breach);
       for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
@@ -1605,6 +1742,180 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
   });
 
   /**
+   * THE CONTEXTS IT REFUSES INSTEAD OF OBSERVING.
+   *
+   * Everything above is a question about WHO WROTE a value. These are questions
+   * about WHERE THE CARRIER LIVES: a shadow tree, whose mutations no observer on
+   * this document is told about and whose contents no query of it returns, and
+   * another realm, whose `setAttribute` is not the one this recorder patched. In
+   * both, every channel above declines the carrier in turn and the drill reads a
+   * complete, clean, wrong history. The DS mounts no carrier in a shadow tree and
+   * the harness is one realm, so both are refused by name rather than observed.
+   */
+  it('refuses a carrier that paints from inside a shadow tree', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const shadow = host.attachShadow({ mode: 'open' });
+    // Planted where nothing was watching, in the one place the ledger, the
+    // per-element check and both edges of the membership rule all miss it.
+    const painted = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(painted, FULLSCREEN_ATTRIBUTE, 'true');
+    shadow.appendChild(painted);
+    expect(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`).length).toBe(0);
+
+    const corrected = document.createElement('div');
+    corrected.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    document.body.appendChild(corrected);
+
+    try {
+      expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: shadow tree/);
+    } finally {
+      host.remove();
+      corrected.remove();
+    }
+  });
+
+  it('refuses it the same way when the shadow tree is closed', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    // A closed root answers no query; the door that made it is what names it.
+    const shadow = host.attachShadow({ mode: 'closed' });
+    const painted = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(painted, FULLSCREEN_ATTRIBUTE, 'true');
+    shadow.appendChild(painted);
+
+    try {
+      expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: shadow tree/);
+    } finally {
+      host.remove();
+    }
+  });
+
+  it('refuses a shadow carrier the document was already painting when it opened', () => {
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const shadow = host.attachShadow({ mode: 'open' });
+    const painted = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(painted, FULLSCREEN_ATTRIBUTE, 'true');
+    shadow.appendChild(painted);
+
+    const recorder = recordAdaptiveFullscreen();
+    try {
+      expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: shadow tree/);
+    } finally {
+      host.remove();
+    }
+  });
+
+  /**
+   * AND AT THE CROSSING, not merely wherever the tree happens to be.
+   *
+   * A detached shadow tree paints nothing, so a carrier inside one is no more a
+   * case than a carrier in a detached subtree. The refusal is owed by the
+   * insertion that makes its host a member of this document, which is the same
+   * edge the membership rule judges for every other carrier.
+   */
+  it('lets a detached shadow tree pass and refuses the crossing that attaches it', () => {
+    const host = document.createElement('div');
+    const shadow = host.attachShadow({ mode: 'open' });
+
+    const beforeAttaching = recordAdaptiveFullscreen();
+    const painted = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(painted, FULLSCREEN_ATTRIBUTE, 'true');
+    shadow.appendChild(painted);
+    expect(beforeAttaching.stop()).toEqual([]);
+
+    const recorder = recordAdaptiveFullscreen();
+    document.body.appendChild(host);
+    try {
+      expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: shadow tree/);
+    } finally {
+      host.remove();
+    }
+  });
+
+  it('leaves a shadow tree that carries nothing alone', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    host.attachShadow({ mode: 'open' }).appendChild(document.createElement('span'));
+
+    const surface = document.createElement('div');
+    surface.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    document.body.appendChild(surface);
+
+    try {
+      expect(recorder.stop()).toEqual(['false']);
+    } finally {
+      host.remove();
+      surface.remove();
+    }
+  });
+
+  /**
+   * THE OTHER REALM, which is the one unseen path that can also SETTLE where
+   * the recorder expects it to.
+   *
+   * The carrier's first value is written through the patched slot, so it is
+   * observed and the arrival is unremarkable. Every write after it goes through
+   * the ordinary API on the OTHER realm's prototype, which nothing here wrapped:
+   * it paints fullscreen and comes back to `false`. The witness never runs
+   * again, the carrier survives holding exactly what the recorder last recorded
+   * for it, and no removal record names it -- so the drill reports `['false']`
+   * for a frame that painted fullscreen, byte for byte the desktop pass.
+   */
+  it('refuses a carrier whose realm this recorder never patched', () => {
+    const carrier = document.createElement('div');
+    Object.setPrototypeOf(carrier, FOREIGN_REALM_PROTOTYPE);
+    const recorder = recordAdaptiveFullscreen();
+    Element.prototype.setAttribute.call(carrier, FULLSCREEN_ATTRIBUTE, 'false');
+    document.body.appendChild(carrier);
+    // The ordinary API, reaching the slot the recorder does not hold.
+    carrier.setAttribute(FULLSCREEN_ATTRIBUTE, 'true');
+    carrier.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+
+    try {
+      expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: foreign realm/);
+    } finally {
+      carrier.remove();
+    }
+  });
+
+  it('refuses a foreign-realm carrier the drill opened on, before any write', () => {
+    const carrier = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(carrier, FULLSCREEN_ATTRIBUTE, 'true');
+    Object.setPrototypeOf(carrier, FOREIGN_REALM_PROTOTYPE);
+    document.body.appendChild(carrier);
+
+    const recorder = recordAdaptiveFullscreen();
+    try {
+      expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: foreign realm/);
+    } finally {
+      carrier.remove();
+    }
+  });
+
+  it('leaves a foreign-realm node that carries nothing alone', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const bystander = document.createElement('div');
+    Object.setPrototypeOf(bystander, FOREIGN_REALM_PROTOTYPE);
+    document.body.appendChild(bystander);
+
+    const surface = document.createElement('div');
+    surface.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    document.body.appendChild(surface);
+
+    try {
+      expect(recorder.stop()).toEqual(['false']);
+    } finally {
+      bystander.remove();
+      surface.remove();
+    }
+  });
+
+  /**
    * A patched prototype that survived a drill would follow the worker into
    * every later file in the run. `stop()` restores before it can throw, so even
    * a red drill leaves the DOM as it found it.
@@ -1629,6 +1940,7 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
       ['Element.prototype', Element.prototype, 'removeAttributeNode'],
       ['Element.prototype', Element.prototype, 'toggleAttribute'],
       ['Element.prototype', Element.prototype, 'insertAdjacentHTML'],
+      ['Element.prototype', Element.prototype, 'attachShadow'],
       ['Element.prototype', Element.prototype, 'innerHTML'],
       ['Element.prototype', Element.prototype, 'outerHTML'],
       ['Attr.prototype', Attr.prototype, 'value'],
@@ -1684,6 +1996,9 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
 
     const before = slots.map(shapeOf);
     const beforeNames = surfaces.map(ownNames);
+    /** The recorded shape of a slot, by name: an added slot shifts no index. */
+    const shapeBefore = (start: object, key: string) =>
+      before[slots.findIndex((slot) => slot[1] === start && slot[2] === key)];
 
     const recorder = recordAdaptiveFullscreen();
     expect(Element.prototype.setAttribute).not.toBe(NATIVE_SET_ATTRIBUTE);
@@ -1701,14 +2016,22 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
         where: `${where}.${key}`,
         wrapped:
           (owner as Record<string, unknown>)[key] !==
-          before[slots.findIndex((slot) => slot[1] === start && slot[2] === key)].value,
+          shapeBefore(start, key).value,
       }).toEqual({ where: `${where}.${key}`, wrapped: true });
     }
     expect(shapeOf(['Element.prototype', Element.prototype, 'innerHTML']).set).not.toBe(
-      before[9].set,
+      shapeBefore(Element.prototype, 'innerHTML').set,
     );
-    expect(shapeOf(['Attr.prototype', Attr.prototype, 'value']).set).not.toBe(before[11].set);
-    expect(NamedNodeMap.prototype.setNamedItem).not.toBe(before[13].value);
+    expect(shapeOf(['Attr.prototype', Attr.prototype, 'value']).set).not.toBe(
+      shapeBefore(Attr.prototype, 'value').set,
+    );
+    expect(NamedNodeMap.prototype.setNamedItem).not.toBe(
+      shapeBefore(NamedNodeMap.prototype, 'setNamedItem').value,
+    );
+    // The door that creates a shadow tree is a slot like any other.
+    expect(Element.prototype.attachShadow).not.toBe(
+      shapeBefore(Element.prototype, 'attachShadow').value,
+    );
 
     recorder.stop();
 
