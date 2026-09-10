@@ -938,12 +938,34 @@ export type GeneratedVars = typeof generatedVars;
     "a quoted dynamic import": `const DOC = "await import('./__generated__')";\n`,
     "a template literal naming the import": "const DOC = `import { generatedVars } from './__generated__';`;\n",
     "a quoted import after a regex literal holding quotes": `const RE = /['"]\\/;/;\nconst DOC = "import { generatedVars } from './__generated__';";\n`,
+    // A REGEX LITERAL AFTER CONTROL FLOW is still a literal. `/` opens a regex
+    // whenever the previous token cannot end an expression, and the closing
+    // bracket of a control-flow head or of a block cannot: reading either as
+    // division walked into the literal and read the specifier inside it as an
+    // import that nothing runs.
+    "a regex after an if condition": `if (true) /[import("./__generated__")]/.test("sample");\n`,
+    "a regex after a closing block": `if (true) {} /[require("./__generated__")]/.test("sample");\n`,
+    "a regex after a while condition": `while (false) /[import("./__generated__")]/.test("sample");\n`,
+    "a regex after an empty for head": `for (;;) /[import("./__generated__")]/.test("sample");\n`,
+    "a regex after a switch block": `switch (1) {} /[import("./__generated__")]/.test("sample");\n`,
+    "a regex returned from a function": `function pattern() { return /[import("./__generated__")]/; }\n`,
     // An import TYPE QUERY is erased with the type that holds it: `typeof
     // import(...)`, an alias right-hand side and an annotation all describe the
     // module's shape and none of them loads it.
     "a typeof import type query": `type GeneratedModule = typeof import("./__generated__");\nexport type { GeneratedModule };\n`,
     "an import type query in a type alias": `type Vars = import("./__generated__").GeneratedVars;\nexport type { Vars };\n`,
     "an import type query in an annotation": `export function take(mod: import("./__generated__").GeneratedVars) { return mod; }\n`,
+    // PARENTHESES DO NOT MOVE A REFERENCE INTO VALUE POSITION: a redundant
+    // grouping around an import type is the same annotation and erases with it.
+    "a parenthesized import type in an annotation": `export let x: (import("./__generated__").GeneratedVars);\nexport type X = typeof x;\n`,
+    "a doubly parenthesized import type": `export let x: ((import("./__generated__").GeneratedVars));\nexport type X = typeof x;\n`,
+    "a parenthesized import type in a parameter": `export function take(mod: (import("./__generated__").GeneratedVars)) { return mod; }\n`,
+    "a parenthesized typeof import query": `type GeneratedModule = (typeof import("./__generated__"));\nexport type { GeneratedModule };\n`,
+    // And an object type separates MEMBERS with `;`, so the alias erasure has
+    // to end at the `;` outside every bracket rather than at the first one.
+    "an import type in an object type alias": `type Shape = {\n  first: string;\n  generated: import("./__generated__").GeneratedVars;\n};\nexport type { Shape };\n`,
+    "a parenthesized import type in an object type alias": `type Shape = {\n  first: string;\n  generated: (import("./__generated__").GeneratedVars);\n};\nexport type { Shape };\n`,
+    "an import type as a generic argument": `export type Wrapped = Array<import("./__generated__").GeneratedVars>;\n`,
   };
   for (const [shape, reference] of Object.entries(erased)) {
     const outcome = underReference(reference);
@@ -969,6 +991,25 @@ export type GeneratedVars = typeof generatedVars;
     "a real import beside a quoted decoy": `const DOC = "import { x } from './nowhere';";\nimport { generatedVars } from "./__generated__";\n`,
     "a real import after a regex literal holding quotes": `const RE = /['"]\\/;/;\nimport { generatedVars } from "./__generated__";\n`,
     "a real import after a URL in a line comment": `// see https://example.com/generated\nimport { generatedVars } from "./__generated__";\n`,
+    // The positive controls for the regex rule. Skipping a real regex must not
+    // eat the import beside it, and DIVISION must still be read as code: every
+    // operand that can precede a `/` leaves the rest of the file scannable.
+    "a real import after a regex following an if condition": `if (true) /['"]x/.test("sample");\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a regex following a block": `if (true) {} /['"]x/.test("sample");\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a division by a call result": `const ratio = fn() / 2;\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a division by an indexed operand": `const ratio = sizes[0] / 2;\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a division by a member": `const ratio = box.width / box.height;\nimport { generatedVars } from "./__generated__";\n`,
+    // The positive controls for the alias erasure: an alias must be erased to
+    // its own end and no further, whatever shape its body has.
+    "a real import after a function type alias": `type Fn = (arg: string) => void;\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after an object type alias": `type Shape = {\n  first: string;\n  second: number;\n};\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a multi-line union alias": `type Choice =\n  | "first"\n  | "second";\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after an alias with no semicolon": `type Bare = string\nimport { generatedVars } from "./__generated__";\n`,
+    // The positive control for the parenthesis rule: a grouping around a VALUE
+    // import still loads the module.
+    "a parenthesized dynamic import": `export const load = () => (import("./__generated__"));\n`,
+    "an awaited parenthesized dynamic import": `export async function load() { return await (import("./__generated__")); }\n`,
+    "a dynamic import inside a block": `export function load() { if (true) { import("./__generated__"); } }\n`,
   };
   for (const [shape, reference] of Object.entries(binding)) {
     const outcome = underReference(reference);

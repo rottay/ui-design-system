@@ -300,8 +300,54 @@ function walkOwners(dir, out = []) {
  * a channel that nothing productive emits.
  */
 const TEMPLATE_TEXT = '\u0000T\u0000';
-const REGEX_MAY_START_AFTER =
-  /(?:^|[({[,;:=!&|?+\-*/%~^<>]|\b(?:return|typeof|case|in|of|do|else|yield|await|new|void|delete))\s*$/;
+
+/**
+ * Whether a `/` at this point opens a REGEX LITERAL or divides. The lexical
+ * rule is that the previous significant token decides: an operand -- an
+ * identifier, a number, a literal, a `]`, a call or grouping `)` -- makes the
+ * `/` division, and a token that cannot end an expression makes it a regex.
+ * Listing only the punctuation that may precede an operand missed the shapes
+ * that close with a bracket, so `if (cond) /re/` and `if (cond) {} /re/` were
+ * read as division: the scan then walked INTO the literal and read the quoted
+ * text inside it as code, which is how a regex holding an import specifier
+ * certified a generated emitter.
+ *
+ * Two closers are genuinely ambiguous without a parser, and both resolve
+ * toward the regex: a `)` divides unless it closes a control-flow head, and a
+ * `}` ends a block far more often than it ends an object or function
+ * expression that something divides. Guessing regex SKIPS text rather than
+ * scanning it, so a wrong guess can only lose a real import and ADD a
+ * declared-but-unemitted finding.
+ */
+const REGEX_AFTER_WORD =
+  /^(?:return|typeof|case|in|of|do|else|yield|await|new|void|delete|instanceof|throw|default)$/;
+const CONTROL_FLOW_HEAD = /(?:^|[^\w$.])(?:if|while|for|switch|catch|with)\s*$/;
+
+function closesControlFlowHead(code) {
+  let depth = 0;
+  for (let index = code.length - 1; index >= 0; index -= 1) {
+    if (code[index] === ')') depth += 1;
+    else if (code[index] === '(') {
+      depth -= 1;
+      if (depth === 0) return CONTROL_FLOW_HEAD.test(code.slice(0, index));
+    }
+  }
+  return true;
+}
+
+function regexMayStart(code) {
+  const significant = code.replace(/\s+$/, '');
+  if (!significant) return true;
+  const last = significant[significant.length - 1];
+  if (last === ']' || last === '\u0000') return false;
+  if (last === ')') return closesControlFlowHead(significant);
+  if (/[\w$]/.test(last)) {
+    const word = significant.match(/[\w$]+$/)[0];
+    if (significant[significant.length - word.length - 1] === '.') return false;
+    return REGEX_AFTER_WORD.test(word);
+  }
+  return true;
+}
 
 function skipRegexLiteral(source, start) {
   let inClass = false;
@@ -350,7 +396,7 @@ function tokenize(source) {
       out += ' ';
       continue;
     }
-    if (character === '/' && REGEX_MAY_START_AFTER.test(out)) {
+    if (character === '/' && regexMayStart(out)) {
       index = skipRegexLiteral(source, index);
       out += ' ';
       continue;
@@ -422,7 +468,53 @@ function bindsAtRuntime(clause) {
  * the module and still counts -- the distinction is what runs, not the keyword.
  */
 const TYPE_QUERY_BEFORE = /(?:\btypeof|\bkeyof|\bextends|\bsatisfies|[:<|&])\s*$/;
-const TYPE_ALIAS = /\btype\s+[A-Za-z_$][\w$]*\s*(?:<[^>]*>)?\s*=[^;]*;/g;
+
+/**
+ * PARENTHESES DO NOT MOVE A REFERENCE INTO VALUE POSITION. `x: (import('./m').T)`
+ * is the same annotation as `x: import('./m').T` and erases with it, so the
+ * position is judged on the token before the redundant grouping rather than on
+ * the `(` itself. Seeing through the parens cannot promote a value reference to
+ * a type: what precedes a call's `(` is its callee, and a callee is not one of
+ * the type operators below.
+ */
+const REDUNDANT_PARENS = /(?:\s*\()+\s*$/;
+
+/**
+ * A type alias is erased whole, so nothing on its right-hand side runs. Ending
+ * the erasure at the first `;` held only for a one-line alias: an object type
+ * separates its MEMBERS with `;`, so the body's tail survived the removal and
+ * an `import()` inside it was read as a load. The body ends at the first `;`
+ * outside every bracket, so the scan tracks depth, and a body left unterminated
+ * ends at the newline that completes it rather than running to the next `;`
+ * somewhere below.
+ */
+const TYPE_ALIAS_HEAD = /\btype\s+[A-Za-z_$][\w$]*\s*(?:<[^<>;=]*>)?\s*=/g;
+const TYPE_CONTINUES = /(?:[=|&,<([{]|\bextends|\bkeyof|\btypeof|\bin|\bis)\s*$/;
+
+function eraseTypeAliases(text) {
+  let out = '';
+  let cursor = 0;
+  for (const head of text.matchAll(TYPE_ALIAS_HEAD)) {
+    if (head.index < cursor) continue;
+    let depth = 0;
+    let index = head.index + head[0].length;
+    for (; index < text.length; index += 1) {
+      const character = text[index];
+      if ('([{'.includes(character)) depth += 1;
+      else if (')]}'.includes(character)) {
+        if (depth === 0) break;
+        depth -= 1;
+      } else if (depth) continue;
+      else if (character === ';') {
+        index += 1;
+        break;
+      } else if (character === '\n' && !TYPE_CONTINUES.test(text.slice(head.index, index))) break;
+    }
+    out += `${text.slice(cursor, head.index)} `;
+    cursor = index;
+  }
+  return out + text.slice(cursor);
+}
 
 /**
  * Relative module specifiers a source names AS A VALUE, as the owner files they
@@ -440,7 +532,7 @@ const TYPE_ALIAS = /\btype\s+[A-Za-z_$][\w$]*\s*(?:<[^>]*>)?\s*=[^;]*;/g;
 function importedOwners(file) {
   const targets = new Set();
   const tokenized = tokenize(readFileSync(file, 'utf8'));
-  const text = tokenized.text.replace(TYPE_ALIAS, ' ');
+  const text = eraseTypeAliases(tokenized.text);
   const quotedAt = (index) => tokenized.quoted[Number(index)];
   const specifiers = [];
   for (const match of text.matchAll(
@@ -450,7 +542,7 @@ function importedOwners(file) {
     specifiers.push(quotedAt(match[3]));
   }
   for (const match of text.matchAll(/\b(?:import|require)\s*\(\s*\u0000Q(\d+)\u0000/g)) {
-    if (TYPE_QUERY_BEFORE.test(text.slice(0, match.index))) continue;
+    if (TYPE_QUERY_BEFORE.test(text.slice(0, match.index).replace(REDUNDANT_PARENS, ''))) continue;
     specifiers.push(quotedAt(match[1]));
   }
   for (const match of text.matchAll(/\bimport\s*\u0000Q(\d+)\u0000/g)) {
