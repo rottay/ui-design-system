@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-10T19:21:20.530Z",
+  "producedAt": "2026-09-10T23:10:23.389Z",
   "headline": "decisions lit = 7/22 (+0/6 new)",
   "measuredHeadline": "measured on the 8-family sample: 12/22 move at least one sampled family",
   "denominators": {
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-10T19:15:08.861Z"
+      "builtAt": "2026-09-10T23:08:05.677Z"
     },
     "sources": {
       "door": {
@@ -31,7 +31,7 @@
           "src/infrastructure/compilers"
         ],
         "fileCount": 749,
-        "digest": "a65f99086cbc801fb31cc07e12debb1d471cd944e316d7904c3d8067d71ddab4"
+        "digest": "ad57ecfe2660c8aa726089ef414a996460633a57456a6fab5719f676c8065c41"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
