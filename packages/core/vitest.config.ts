@@ -5,6 +5,19 @@ import { resolve } from 'path';
 const isCoverage = !!process.env.COVERAGE;
 
 /**
+ * Files whose law has to hold on BOTH DOM runners, listed by name.
+ *
+ * `--environment jsdom` on the command line does NOT reach a project: a project
+ * resolves its own environment, so the flag is accepted and ignored and every
+ * "both runners" run is the default runner twice. These files are therefore
+ * included by the `unit` project (happy-dom) AND by the `unit-jsdom` project
+ * below, so a single `vitest run` executes each of them once per runner.
+ */
+const dualRunnerFiles = [
+  'src/infrastructure/runtime/responsive/composition/react/provider/tests/ssr-viewport-hint.test.tsx',
+];
+
+/**
  * Integration/engine test patterns:
  *   *.integration.test.*
  *   *.real-engines.test.*
@@ -79,6 +92,10 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'unit',
+          // What this project CLAIMS to run on. A dual-runner file asserts the
+          // runner it measures against this, so a project that silently
+          // resolved a different environment is red rather than duplicated.
+          env: { DS_DOM_RUNNER: 'happy-dom' },
           include: [
             'src/**/*.test.{ts,tsx}',
             'tests/architecture/**/*.test.{ts,tsx}',
@@ -90,6 +107,16 @@ export default defineConfig({
             ...integrationPatterns,
             'node_modules/**',
           ],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'unit-jsdom',
+          environment: 'jsdom',
+          env: { DS_DOM_RUNNER: 'jsdom' },
+          include: dualRunnerFiles,
+          exclude: ['node_modules/**'],
         },
       },
       {

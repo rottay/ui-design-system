@@ -26,12 +26,26 @@
  *     recorded from before the surface exists: a first paint that had to be
  *     corrected shows up as a second entry in that sequence.
  *
+ * WHERE IT RUNS. On BOTH DOM runners, once each: the `unit` project resolves
+ * happy-dom and the `unit-jsdom` project resolves jsdom, and this file is named
+ * in both. A `--environment` flag on the command line does not reach a project,
+ * so it was accepted and ignored, and every "both runners" claim made before
+ * this file was listed twice was the default runner run twice. The identity
+ * drill below prints the runner it measured and asserts it against the one its
+ * project declares, so that cannot go quiet again.
+ *
+ * The two runners do not observe the same DOM. Where they differ, the
+ * difference is MEASURED at load and the drill asserts what the runner can
+ * actually deliver -- a recording where the write crosses a slot this file can
+ * hold, and the named refusal where it does not, because failing closed is the
+ * product behaviour there and not a runner excuse.
+ *
  * WHAT IT DOES NOT ASSERT. Browser layout. No relayout/paint measurement is
  * available to this runner, and none is claimed here; that leg belongs to a
  * Playwright run and is an open obligation, not something this file covers.
  */
 
-import { describe, expect, it, vi, afterEach } from 'vitest';
+import { describe, expect, it, vi, afterAll, afterEach } from 'vitest';
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
@@ -78,6 +92,11 @@ function withViewport(width: number, run: () => void): void {
 
 const FULLSCREEN_ATTRIBUTE = 'data-adaptive-fullscreen';
 
+/** Markup that names the attribute, for the writers this recorder refuses. */
+const PLANTED_MARKUP = `<span ${FULLSCREEN_ATTRIBUTE}="true"></span>`;
+/** The same carrier, spelled the way the parser still lowercases into it. */
+const SHOUTED_MARKUP = `<span ${FULLSCREEN_ATTRIBUTE.toUpperCase()}="true"></span>`;
+
 /** The unpatched writers, captured before any drill can intercept them. */
 const NATIVE_SET_ATTRIBUTE = Element.prototype.setAttribute;
 const NATIVE_DOCUMENT_WRITE: unknown = document.write;
@@ -86,13 +105,16 @@ const NATIVE_APPEND_CHILD: unknown = Node.prototype.appendChild;
 /**
  * A SECOND REALM'S PROTOTYPE CHAIN, cloned before anything can intercept it.
  *
- * A node re-homed onto it is exactly what an element adopted from an iframe is
- * on a runner that keeps the source realm's prototypes: fully usable in this
- * document, found by its queries, and reached through interfaces that are NOT
- * the ones a recorder patches. A genuinely separate DOM realm cannot stand in
- * for it here -- neither runner accepts another realm's node into its document
- * at all -- and both runners' own iframes share these prototypes, so the chain
- * is the only way to put the condition in front of the instrument.
+ * A node re-homed onto it is exactly what an element built in another realm is
+ * once it is in this document: fully usable, found by this document's queries,
+ * and reached through interfaces that are NOT the ones a recorder patches.
+ *
+ * jsdom gives every frame its own realm and accepts its nodes into this
+ * document, so the condition is real there and is drilled through a real
+ * `<iframe>` below. happy-dom shares one set of prototypes across its frames,
+ * so the condition cannot be produced there at all and this chain is the only
+ * way to put it in front of the instrument. Both are the same case for the
+ * recorder: a carrier whose writers it never held.
  */
 const FOREIGN_REALM_PROTOTYPE = ((): object => {
   const chain: object[] = [];
@@ -171,6 +193,156 @@ function declaringOwner(start: object | null, key: string): object | null {
 }
 
 /**
+ * WHICH DOM RUNNER THIS FILE IS EXECUTING ON, asked of the runner itself.
+ *
+ * Both runners are real here: the `unit` project resolves happy-dom and the
+ * `unit-jsdom` project resolves jsdom, and this file is named in both. Each
+ * project also DECLARES which one it is, so the identity drill below can catch
+ * a config that quietly resolved something else -- which is exactly what
+ * `--environment jsdom` did for as long as it was the mechanism.
+ */
+const DOM_RUNNER: 'happy-dom' | 'jsdom' | 'unknown' =
+  'happyDOM' in window
+    ? 'happy-dom'
+    : navigator.userAgent.includes('jsdom')
+      ? 'jsdom'
+      : 'unknown';
+const DECLARED_DOM_RUNNER = process.env.DS_DOM_RUNNER;
+
+/**
+ * WHAT THIS RUNNER LETS THE RECORDER SEE, measured rather than assumed.
+ *
+ * `dataset`, `cloneNode` and `importNode` put this attribute on an element with
+ * no element-level call of their own, so whether they are observable AT ALL is
+ * a property of the runner and not of the recorder. happy-dom lowers all three
+ * onto the public prototypes below; jsdom writes them straight into its
+ * internal attribute list, which nothing on this side can be told about.
+ *
+ * Where the write is unobservable, the recorder failing closed IS the product
+ * behaviour, so the drills assert the named refusal there and the recording
+ * where the write does cross a slot this file holds. Each probe installs those
+ * slots, plants the attribute exactly the way its drill does, and reports
+ * whether the write went through one of them.
+ */
+const OBSERVABLE_WRITER_SLOTS: readonly (readonly [object, string])[] = [
+  [Element.prototype, 'setAttribute'],
+  [Element.prototype, 'setAttributeNS'],
+  [Element.prototype, 'setAttributeNode'],
+  [Element.prototype, 'setAttributeNodeNS'],
+  [Element.prototype, 'toggleAttribute'],
+  [NamedNodeMap.prototype, 'setNamedItem'],
+  [NamedNodeMap.prototype, 'setNamedItemNS'],
+];
+function crossesAnObservableWriter(plant: () => void): boolean {
+  let crossed = false;
+  const restore: Restore[] = [];
+  for (const [owner, key] of OBSERVABLE_WRITER_SLOTS) {
+    const descriptor = Object.getOwnPropertyDescriptor(owner, key);
+    if (!descriptor || typeof descriptor.value !== 'function') continue;
+    const original = descriptor.value as AnyFunction;
+    Object.defineProperty(owner, key, {
+      ...descriptor,
+      value: function probe(this: unknown, ...args: unknown[]) {
+        crossed = true;
+        return original.apply(this, args);
+      },
+    });
+    restore.push(() => Object.defineProperty(owner, key, descriptor));
+  }
+  try {
+    plant();
+  } finally {
+    while (restore.length > 0) restore.pop()?.();
+  }
+  return crossed;
+}
+const DATASET_IS_OBSERVABLE = crossesAnObservableWriter(() => {
+  document.createElement('div').dataset.adaptiveFullscreen = 'probe';
+});
+const CLONE_IS_OBSERVABLE = ((): boolean => {
+  // Built with the captured writer, outside the probe, so only the COPY counts.
+  const source = document.createElement('div');
+  NATIVE_SET_ATTRIBUTE.call(source, FULLSCREEN_ATTRIBUTE, 'probe');
+  return crossesAnObservableWriter(() => {
+    source.cloneNode(true);
+  });
+})();
+const IMPORT_IS_OBSERVABLE = ((): boolean => {
+  const elsewhere = new DOMParser().parseFromString(PLANTED_MARKUP, 'text/html');
+  const foreign = elsewhere.body.firstElementChild as Element;
+  return crossesAnObservableWriter(() => {
+    document.importNode(foreign, true);
+  });
+})();
+
+/**
+ * WHETHER AN IFRAME IS REALLY ANOTHER REALM HERE, and whether its nodes can
+ * reach this document at all.
+ *
+ * Under jsdom both are true, so the foreign-realm case can be drilled with a
+ * real frame rather than with a cloned prototype chain. happy-dom shares one
+ * set of prototypes across its frames, so a frame node is an ordinary node of
+ * this realm there and the drill has nothing to reproduce.
+ */
+const IFRAME_IS_A_FOREIGN_REALM = ((): boolean => {
+  const frame = document.createElement('iframe');
+  document.body.appendChild(frame);
+  const elsewhere = frame.contentDocument;
+  const foreign = elsewhere ? elsewhere.createElement('div') : null;
+  const separate =
+    foreign !== null && !Object.prototype.isPrototypeOf.call(Element.prototype, foreign);
+  frame.remove();
+  return separate;
+})();
+
+/**
+ * `<dialog>` is a PRODUCT surface, not a recorder concern: the modern Modal
+ * renders one and calls `showModal()` on it. jsdom ships the interface and none
+ * of the behaviour, so the two first-paint drills that open a Modal run where
+ * dialogs exist and are skipped by name everywhere else. The law they assert is
+ * not runner-specific; only the surface it is asserted on is.
+ */
+const RUNNER_IMPLEMENTS_DIALOGS =
+  typeof (document.createElement('dialog') as HTMLDialogElement).showModal === 'function';
+const NO_DIALOGS_HERE =
+  'this runner implements no <dialog>: the modern Modal calls showModal(), which does not exist here';
+
+/**
+ * THE DOOR TO EVERY SHADOW TREE, held from module load rather than per drill.
+ *
+ * A closed root answers no query and is named by no element -- `host.shadowRoot`
+ * stays null for it forever -- so the call that creates it is the only moment
+ * anything can learn that it exists. A recorder that holds that door only while
+ * it runs is blind to every root opened before it, including one on a host that
+ * is already in the document: the sweep finds nothing, every other channel
+ * declines a carrier inside it in turn, and the drill reads a clean history for
+ * a tree it never looked at.
+ *
+ * The door is therefore held for this file's whole life and released in
+ * `afterAll`. The wrapper records and calls through, so it changes nothing. A
+ * root opened before this module loaded belongs to the runner's own document,
+ * which the admitted harness gives none.
+ */
+const SHADOW_ROOTS = new Set<ShadowRoot>();
+const NATIVE_ATTACH_SHADOW_SLOT = Object.getOwnPropertyDescriptor(
+  Element.prototype,
+  'attachShadow',
+) as PropertyDescriptor;
+const NATIVE_ATTACH_SHADOW = NATIVE_ATTACH_SHADOW_SLOT.value as AnyFunction;
+Object.defineProperty(Element.prototype, 'attachShadow', {
+  ...NATIVE_ATTACH_SHADOW_SLOT,
+  value: function attachShadow(this: Element, ...args: unknown[]) {
+    const root = NATIVE_ATTACH_SHADOW.apply(this, args) as ShadowRoot | null;
+    if (root) SHADOW_ROOTS.add(root);
+    return root;
+  },
+});
+afterAll(() => {
+  Object.defineProperty(Element.prototype, 'attachShadow', NATIVE_ATTACH_SHADOW_SLOT);
+  SHADOW_ROOTS.clear();
+});
+
+/**
  * Every value `data-adaptive-fullscreen` is COMMITTED with, in order, from
  * before the Modal renders until `stop()`.
  *
@@ -207,9 +379,12 @@ function declaringOwner(start: object | null, key: string): object | null {
  *    because they lower to `setAttribute` / `removeAttribute` here; the dataset
  *    drill below is what keeps that true rather than assumed.
  *
- *  REFUSED, loudly, at the write: `innerHTML`, `outerHTML`,
- *  `insertAdjacentHTML`, `document.write(ln)`. These plant attributes through
- *  the HTML parser, which no interception on this side can see. The refusal
+ *  REFUSED, loudly, at the write: `Element.innerHTML`, `ShadowRoot.innerHTML`,
+ *  `outerHTML`, `insertAdjacentHTML`, `document.write(ln)`. These plant
+ *  attributes through the HTML parser, which no interception on this side can
+ *  see. A shadow root declares its OWN `innerHTML` slot, and it is the worse of
+ *  the two: it plants where the sweep cannot follow, and can erase the carrier
+ *  again before the next sweep runs. The refusal
  *  fires only when the markup NAMES this attribute, so unrelated markup is
  *  untouched, and it throws instead of returning -- a drill that reaches for one
  *  of them goes red with `UNSUPPORTED-WRITER` rather than reporting a history
@@ -455,7 +630,9 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
    *   neither an arrival nor a departure, `document.querySelectorAll` does not
    *   reach it at `stop()`, and a `MutationObserver` on the document is never
    *   told about it. Every channel declines it, and the history omits what it
-   *   painted.
+   *   painted. Roots are found at the door that opens them -- held for this
+   *   file's whole life, because a closed root is named by nothing afterwards --
+   *   and from every subtree that arrives with one already attached.
    *
    *   A FOREIGN REALM. The interceptions are installed on THIS realm's
    *   prototypes, so a node that keeps another realm's chain reaches an
@@ -468,6 +645,12 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
    * in a shadow tree and the harness is a single realm, so a carrier found in
    * either context refuses the drill by name -- at admission, and at every
    * crossing the membership rule already judges.
+   *
+   * OUT OF CONTRACT, named rather than instrumented: a foreign-realm host
+   * carrying a CLOSED shadow root, which is both unobserved contexts at once
+   * and is reached by neither door -- the realm check never runs on a carrier
+   * no sweep can enumerate, and the closed root is named by nothing this realm
+   * holds.
    */
   const patchedRealm: object = Element.prototype;
   /** Reached through the prototypes this recorder actually patched. */
@@ -496,18 +679,11 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   /**
    * A shadow root is not reachable from the document by query, so they are
    * collected at the door that creates them and from every subtree that brings
-   * one in already attached. A CLOSED root created on a detached host before
-   * the drill opened is visible to nothing at all, in any instrument; the
-   * admitted harness attaches none.
+   * one in already attached. The door is the module-scoped one: a CLOSED root
+   * is named by nothing afterwards, so a root opened between two drills, or
+   * before the first one, is a root a per-drill door would sweep straight past.
    */
-  const shadowRoots = new Set<ShadowRoot>();
-  patchMethod(element, 'attachShadow', (original) =>
-    function attachShadow(this: Element, ...args: unknown[]) {
-      const root = original.apply(this, args) as ShadowRoot;
-      if (root) shadowRoots.add(root);
-      return root;
-    },
-  );
+  const shadowRoots = SHADOW_ROOTS;
   const collectShadowRoots = (node: unknown): void => {
     const candidate = node as Node | null;
     if (!candidate || (candidate.nodeType !== 1 && candidate.nodeType !== 11)) return;
@@ -703,6 +879,17 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
       settleNow();
       if (markupNamesAttribute(markup)) refuse('Element.insertAdjacentHTML');
       return original.call(this, position, markup);
+    },
+  );
+  // A shadow root declares its OWN `innerHTML`, which is a different slot from
+  // the element one and reaches the same parser. Left unpatched it plants a
+  // carrier in the one place the sweep cannot follow, and can erase it again
+  // before the next sweep runs.
+  patchSetter(ShadowRoot.prototype, 'innerHTML', (original) =>
+    function shadowInnerHTML(this: ShadowRoot, markup: unknown) {
+      settleNow();
+      if (markupNamesAttribute(markup)) refuse('ShadowRoot.innerHTML');
+      original.call(this, markup);
     },
   );
   // On the slot the LIVE document declares: this runner's document does not
@@ -1008,7 +1195,54 @@ describe('server and hydration publish the same snapshot', () => {
 });
 
 describe('adaptiveFullscreen on the first committed render', () => {
-  it('renders a desktop request non-fullscreen, with no correcting frame', () => {
+  /**
+   * The runner this file measured, named out loud, and checked against the one
+   * its project DECLARES. A project that resolved a different environment than
+   * it claims is the exact failure `--environment jsdom` used to hide: the flag
+   * never reached a project, so both "runners" were the default one.
+   *
+   * The capability row is the same evidence for the drills below: each of them
+   * asserts a recording or a named refusal according to these values, so they
+   * are pinned here per runner rather than read back from whatever the runner
+   * happens to do today.
+   */
+  it('names the DOM runner it measured, and what that runner lets this file observe', () => {
+    const measured = {
+      runner: DOM_RUNNER,
+      dialogs: RUNNER_IMPLEMENTS_DIALOGS,
+      dataset: DATASET_IS_OBSERVABLE,
+      clone: CLONE_IS_OBSERVABLE,
+      imported: IMPORT_IS_OBSERVABLE,
+      iframeIsAnotherRealm: IFRAME_IS_A_FOREIGN_REALM,
+    };
+    // The runner-identity proof for this run, printed where a reader of the
+    // output can see which runner produced the rows below it.
+    console.log(`[first-paint recorder] ${JSON.stringify(measured)}`);
+
+    expect(DOM_RUNNER).toBe(DECLARED_DOM_RUNNER);
+    expect(measured).toEqual(
+      DOM_RUNNER === 'jsdom'
+        ? {
+            runner: 'jsdom',
+            dialogs: false,
+            dataset: false,
+            clone: false,
+            imported: false,
+            iframeIsAnotherRealm: true,
+          }
+        : {
+            runner: 'happy-dom',
+            dialogs: true,
+            dataset: true,
+            clone: true,
+            imported: true,
+            iframeIsAnotherRealm: false,
+          },
+    );
+  });
+
+  it('renders a desktop request non-fullscreen, with no correcting frame', (ctx) => {
+    ctx.skip(!RUNNER_IMPLEMENTS_DIALOGS, NO_DIALOGS_HERE);
     withViewport(1440, () => {
       const recorder = recordAdaptiveFullscreen();
       render(
@@ -1023,7 +1257,8 @@ describe('adaptiveFullscreen on the first committed render', () => {
     });
   });
 
-  it('still renders a phone request fullscreen', () => {
+  it('still renders a phone request fullscreen', (ctx) => {
+    ctx.skip(!RUNNER_IMPLEMENTS_DIALOGS, NO_DIALOGS_HERE);
     withViewport(390, () => {
       const recorder = recordAdaptiveFullscreen();
       render(
@@ -1117,11 +1352,6 @@ function CorrectedThrough({
   return <div ref={surface} data-adaptive-fullscreen="true" />;
 }
 
-/** Markup that names the attribute, for the writers this recorder refuses. */
-const PLANTED_MARKUP = `<span ${FULLSCREEN_ATTRIBUTE}="true"></span>`;
-/** The same carrier, spelled the way the parser still lowercases into it. */
-const SHOUTED_MARKUP = `<span ${FULLSCREEN_ATTRIBUTE.toUpperCase()}="true"></span>`;
-
 describe('the recorder observes every writer, or refuses the drill by name', () => {
   it('records a correction written with setAttributeNS', () => {
     const recorder = recordAdaptiveFullscreen();
@@ -1169,11 +1399,15 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
   });
 
   /**
-   * `dataset` is the property-assignment path onto this attribute. It lowers to
-   * `setAttribute` on this runner rather than being patched itself -- and this
-   * drill is what keeps that a measured fact instead of an assumption.
+   * `dataset` is the property-assignment path onto this attribute, and it has
+   * no element-level call of its own: whether it can be observed at all is the
+   * runner's choice. happy-dom lowers it onto `setAttribute`, which this
+   * recorder holds, and the correction is recorded. jsdom writes it into its
+   * internal attribute list, where nothing on this side is told -- and there
+   * failing closed is the answer, not a history nobody watched. Which of the
+   * two applies is MEASURED at load, so neither branch is an assumption.
    */
-  it('records a correction assigned through dataset', () => {
+  it('records a correction assigned through dataset, or refuses it where the runner keeps the write to itself', () => {
     const recorder = recordAdaptiveFullscreen();
     render(
       <CorrectedThrough
@@ -1183,7 +1417,8 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
       />,
     );
 
-    expect(recorder.stop()).toEqual(['true', 'false']);
+    if (DATASET_IS_OBSERVABLE) expect(recorder.stop()).toEqual(['true', 'false']);
+    else expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER/);
   });
 
   /**
@@ -1230,10 +1465,13 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
   /**
    * A clone carries the attribute without anything writing it: no element-level
    * writer runs, and the source it was copied from need never be in the
-   * document. The copy goes through the attribute map, which is where this is
-   * recorded.
+   * document. happy-dom copies it through the attribute map this recorder
+   * watches, so the carrier is recorded; jsdom copies its internal attribute
+   * list directly, so the clone arrives holding a value nothing here saw
+   * written and the ARRIVAL check refuses the drill. Both are the instrument
+   * behaving: one observed the write, the other refused to speak for it.
    */
-  it('records a carrier planted by cloning a node, not by writing one', () => {
+  it('records a carrier planted by cloning a node, or refuses one whose copy crossed no watched writer', () => {
     const source = document.createElement('div');
     NATIVE_SET_ATTRIBUTE.call(source, FULLSCREEN_ATTRIBUTE, 'true');
 
@@ -1241,7 +1479,11 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
     const clone = source.cloneNode(true) as Element;
     document.body.appendChild(clone);
     try {
-      expect(recorder.stop()).toEqual(['true']);
+      if (CLONE_IS_OBSERVABLE) expect(recorder.stop()).toEqual(['true']);
+      else
+        expect(() => recorder.stop()).toThrow(
+          /UNOBSERVED-CARRIER: a surface entered the document/,
+        );
     } finally {
       clone.remove();
     }
@@ -1679,18 +1921,19 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
   });
 
   /**
-   * AND THE IMPORTING DOOR, which is the same crossing without a refusal.
+   * AND THE IMPORTING DOOR, which is the same crossing and NOT automatically a
+   * refusal.
    *
    * `importNode` does not move the foreign carrier; it copies it into this
-   * document, and this runner copies the attributes through the map the
-   * recorder already watches. So the imported carrier's value IS observed, its
-   * arrival is unremarkable, and the honest fullscreen-then-corrected sequence
-   * is reported rather than refused. A channel that refused every carrier
-   * coming from another document would report a breach here and be wrong: the
-   * question is never where a carrier came from, it is whether this recorder
-   * saw the value it carries written.
+   * document. Where the runner routes that copy through the attribute map this
+   * recorder watches, the imported value IS observed, the arrival is
+   * unremarkable, and the honest fullscreen-then-corrected sequence is reported
+   * rather than refused -- which is the point: the question is never where a
+   * carrier came from, it is whether this recorder saw the value it carries
+   * written. Where the runner copies its internal attribute list instead,
+   * nothing saw it, and the arrival check refuses.
    */
-  it('records an imported carrier, whose value crossed through a writer it does see', () => {
+  it('records an imported carrier whose value crossed a writer it does see, and refuses one that crossed none', () => {
     const elsewhere = new DOMParser().parseFromString(PLANTED_MARKUP, 'text/html');
     const recorder = recordAdaptiveFullscreen();
     const host = document.createElement('section');
@@ -1703,7 +1946,11 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
     host.replaceChild(corrected, imported);
 
     try {
-      expect(recorder.stop()).toEqual(['true', 'false']);
+      if (IMPORT_IS_OBSERVABLE) expect(recorder.stop()).toEqual(['true', 'false']);
+      else
+        expect(() => recorder.stop()).toThrow(
+          /UNOBSERVED-CARRIER: a surface entered the document/,
+        );
     } finally {
       host.remove();
     }
@@ -1793,6 +2040,43 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
     }
   });
 
+  /**
+   * AND THE CLOSED ROOT THAT WAS ALREADY OPEN WHEN THE DRILL WAS NOT.
+   *
+   * The host is in the document and the root is closed, so `host.shadowRoot` is
+   * null and stays null: after the fact, NOTHING in this DOM names that root.
+   * The admission walk does not reach the carrier, the sweep has no root to
+   * sweep, the membership rule never sees a crossing, and the ledger is never
+   * told. A sibling then corrects the surface and the drill reports a clean
+   * `['false']` for a tree that painted fullscreen -- the same wrong,
+   * complete-looking history the two contexts above exist to prevent.
+   *
+   * The only moment the root is nameable is the call that created it, so that
+   * door is held from module load rather than from the drill.
+   */
+  it('refuses a closed shadow tree that was opened before the drill was', () => {
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const shadow = host.attachShadow({ mode: 'closed' });
+    // The premise: nothing in the document will ever name this root again.
+    expect(host.shadowRoot).toBeNull();
+    const painted = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(painted, FULLSCREEN_ATTRIBUTE, 'true');
+    shadow.appendChild(painted);
+
+    const recorder = recordAdaptiveFullscreen();
+    const corrected = document.createElement('div');
+    corrected.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    document.body.appendChild(corrected);
+
+    try {
+      expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: shadow tree/);
+    } finally {
+      host.remove();
+      corrected.remove();
+    }
+  });
+
   it('refuses a shadow carrier the document was already painting when it opened', () => {
     const host = document.createElement('div');
     document.body.appendChild(host);
@@ -1806,6 +2090,60 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
       expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: shadow tree/);
     } finally {
       host.remove();
+    }
+  });
+
+  /**
+   * AND THE SHADOW ROOT'S OWN PARSER DOOR.
+   *
+   * `ShadowRoot.prototype.innerHTML` is a DIFFERENT slot from the element one,
+   * declared on the shadow root itself, and it reaches the same parser. Left
+   * unpatched it is the worst writer in this file: it plants the carrier inside
+   * the one tree no sweep can follow AND can erase it again in the next
+   * statement, so even a sweep that ran at every structural call would find an
+   * empty root. The two assignments below are exactly that -- paint, then erase
+   * before anything looks -- and a sibling then reports the clean `['false']`.
+   *
+   * The refusal fires at the first of them, and only because the markup names
+   * this attribute: unrelated shadow markup is left alone.
+   */
+  it('refuses shadow markup that plants the carrier and erases it before any sweep', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const shadow = host.attachShadow({ mode: 'open' });
+    try {
+      expect(() => {
+        shadow.innerHTML = PLANTED_MARKUP;
+        shadow.innerHTML = '';
+      }).toThrow(/UNSUPPORTED-WRITER: ShadowRoot.innerHTML/);
+      expect(shadow.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`).length).toBe(0);
+
+      shadow.innerHTML = '<span>body</span>';
+      expect(shadow.querySelectorAll('span').length).toBe(1);
+    } finally {
+      // Detached first: a refusal that did not fire leaves a carrier behind, and
+      // the drill that reports it must not also poison every drill after it.
+      host.remove();
+      recorder.stop();
+    }
+  });
+
+  it('refuses shadow markup that names the attribute in upper case too', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const shadow = host.attachShadow({ mode: 'open' });
+    try {
+      expect(() => {
+        shadow.innerHTML = SHOUTED_MARKUP;
+      }).toThrow(/UNSUPPORTED-WRITER: ShadowRoot.innerHTML/);
+      expect(shadow.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`).length).toBe(0);
+    } finally {
+      // Detached first: a refusal that did not fire leaves a carrier behind, and
+      // the drill that reports it must not also poison every drill after it.
+      host.remove();
+      recorder.stop();
     }
   });
 
@@ -1855,6 +2193,39 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
   });
 
   /**
+   * AND THE NARROWNESS THE DOOR MAKES NECESSARY.
+   *
+   * Every root this file opens is collected now, whenever it was opened, so the
+   * sweep sees roots that have nothing to do with the document. A tree hanging
+   * off a host that NEVER attaches paints nothing here: it is no more a case
+   * than a detached subtree, and refusing it would turn a correct desktop drill
+   * red for a surface no user could ever see. Only the reachability guard
+   * keeps that apart -- remove it and this drill goes red while every refusal
+   * above stays green.
+   */
+  it('leaves a shadow tree on a host that never attaches alone', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    // Opened INSIDE the drill, so the door certainly collected it, and never
+    // attached to anything, so it reaches no document.
+    const shadow = host.attachShadow({ mode: 'open' });
+    const painted = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(painted, FULLSCREEN_ATTRIBUTE, 'true');
+    shadow.appendChild(painted);
+
+    const surface = document.createElement('div');
+    surface.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    document.body.appendChild(surface);
+
+    try {
+      expect(host.isConnected).toBe(false);
+      expect(recorder.stop()).toEqual(['false']);
+    } finally {
+      surface.remove();
+    }
+  });
+
+  /**
    * THE OTHER REALM, which is the one unseen path that can also SETTLE where
    * the recorder expects it to.
    *
@@ -1894,6 +2265,42 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
       expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: foreign realm/);
     } finally {
       carrier.remove();
+    }
+  });
+
+  /**
+   * THE SAME CASE WITH A REAL SECOND REALM, where the runner has one.
+   *
+   * jsdom gives each frame its own `Element.prototype` and accepts its nodes
+   * into this document through the ordinary insertion, so the condition above
+   * is not a construction there -- it is what an `<iframe>` hands you. The
+   * carrier is painted with its OWN realm's writer, which is not the slot this
+   * recorder holds, and the arrival refuses it by name. happy-dom shares one
+   * set of prototypes across its frames and cannot produce the condition at
+   * all, which is why the cloned chain exists.
+   */
+  it('refuses a carrier this runner really did build in another realm', (ctx) => {
+    ctx.skip(
+      !IFRAME_IS_A_FOREIGN_REALM,
+      'this runner shares one realm across its frames: there is no second realm to build a carrier in',
+    );
+
+    const frame = document.createElement('iframe');
+    document.body.appendChild(frame);
+    const elsewhere = frame.contentDocument as Document;
+    const carrier = elsewhere.createElement('div');
+    const theirWriter = (elsewhere.defaultView as Window & typeof globalThis).Element.prototype
+      .setAttribute;
+    theirWriter.call(carrier, FULLSCREEN_ATTRIBUTE, 'true');
+
+    const recorder = recordAdaptiveFullscreen();
+    document.body.appendChild(carrier);
+    try {
+      expect(document.contains(carrier)).toBe(true);
+      expect(() => recorder.stop()).toThrow(/UNSUPPORTED-CONTEXT: foreign realm/);
+    } finally {
+      carrier.remove();
+      frame.remove();
     }
   });
 
@@ -1943,6 +2350,7 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
       ['Element.prototype', Element.prototype, 'attachShadow'],
       ['Element.prototype', Element.prototype, 'innerHTML'],
       ['Element.prototype', Element.prototype, 'outerHTML'],
+      ['ShadowRoot.prototype', ShadowRoot.prototype, 'innerHTML'],
       ['Attr.prototype', Attr.prototype, 'value'],
       ['Attr.prototype', Attr.prototype, 'nodeValue'],
       ['NamedNodeMap.prototype', NamedNodeMap.prototype, 'setNamedItem'],
@@ -1967,6 +2375,7 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
       ['NamedNodeMap.prototype', NamedNodeMap.prototype],
       ['Document.prototype', Document.prototype],
       ['DocumentFragment.prototype', DocumentFragment.prototype],
+      ['ShadowRoot.prototype', ShadowRoot.prototype],
       ['Range.prototype', Range.prototype],
       ['document', document],
     ];
@@ -2022,16 +2431,24 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
     expect(shapeOf(['Element.prototype', Element.prototype, 'innerHTML']).set).not.toBe(
       shapeBefore(Element.prototype, 'innerHTML').set,
     );
+    // A shadow root's own parser door, which is a different slot from the one
+    // above and would otherwise go unheld.
+    expect(shapeOf(['ShadowRoot.prototype', ShadowRoot.prototype, 'innerHTML']).set).not.toBe(
+      shapeBefore(ShadowRoot.prototype, 'innerHTML').set,
+    );
     expect(shapeOf(['Attr.prototype', Attr.prototype, 'value']).set).not.toBe(
       shapeBefore(Attr.prototype, 'value').set,
     );
     expect(NamedNodeMap.prototype.setNamedItem).not.toBe(
       shapeBefore(NamedNodeMap.prototype, 'setNamedItem').value,
     );
-    // The door that creates a shadow tree is a slot like any other.
-    expect(Element.prototype.attachShadow).not.toBe(
+    // The door that creates a shadow tree is held by the MODULE, not by the
+    // recorder -- a closed root is named by nothing after the call that makes
+    // it -- so the recorder must leave that slot exactly where it found it.
+    expect(Element.prototype.attachShadow).toBe(
       shapeBefore(Element.prototype, 'attachShadow').value,
     );
+    expect(Element.prototype.attachShadow).not.toBe(NATIVE_ATTACH_SHADOW);
 
     recorder.stop();
 
