@@ -69,14 +69,24 @@ const WRITERS: Partial<
   "palette.dark-mode": (t, v) => wrote((nest(t.general, "palette").backgroundMode = v)),
   "typography.pairing": (t, v) => wrote((nest(t.general, "typography").typePairing = v)),
   "typography.scale": (t, v) => wrote((nest(t.general, "typography").scale = v)),
+  "typography.role-weights": (t, v) =>
+    wrote((nest(t.general, "typography").roleWeights = v)),
+  "typography.numeric": (t, v) =>
+    wrote((nest(t.general, "typography").numeric = v)),
   "typography.families": writeFamilies,
   "shape.radius-scale": (t, v) => wrote((nest(t.general, "shape").radiusScale = v)),
   "shape.button-style": (t, v) => wrote((nest(t.general, "shape").buttonStyle = v)),
   "density.mode": (t, v) => wrote((t.general.density = v)),
   "spacing.rhythm": (t, v) => wrote((t.general.rhythm = v)),
-  "motion.dial": (t, v) => wrote((t.general.motion = v)),
+  // MERGED, not assigned: `motion.character` writes into the same v1 group, and
+  // an assignment here would erase whichever of the two the loop wrote first.
+  // The order of `THEME_DECISION_IDS` must not decide what a document carries.
+  "motion.dial": (t, v) => wrote(Object.assign(nest(t.general, "motion"), v)),
+  "motion.character": (t, v) => wrote((nest(t.general, "motion").character = v)),
   "surfaces.elevation-posture": (t, v) => wrote((nest(t.general, "surfaces").elevation = v)),
   "surfaces.effect-intensity": (t, v) => wrote((nest(t.general, "surfaces").effectIntensity = v)),
+  "surfaces.border-style": (t, v) =>
+    wrote((nest(t.general, "surfaces").borderStyle = v)),
   "states.emphasis": (t, v) => wrote((nest(t.general, "states").emphasis = v)),
   "states.focus-style": (t, v) => wrote((nest(t.general, "states").focusStyle = v)),
   "navigation.sidebar-tone": (t, v) => wrote((nest(t.general, "navigation").sidebarTone = v)),

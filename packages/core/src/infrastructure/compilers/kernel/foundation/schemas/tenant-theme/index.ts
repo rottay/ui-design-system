@@ -175,6 +175,8 @@ const general = object({
       min: TENANT_THEME_TYPE_SCALE_BOUNDS.min,
       max: TENANT_THEME_TYPE_SCALE_BOUNDS.max,
     }),
+    roleWeights: enumeration("light", "regular", "strong"),
+    numeric: enumeration("proportional", "tabular"),
   }),
   shape: object({
     buttonStyle: enumeration("sharp", "soft", "pill"),
@@ -198,6 +200,9 @@ const general = object({
       max: MOTION_DIAL_BOUNDS.durationScale.max,
     }),
     ambient: enumeration("off", "subtle"),
+    // The SHAPE of motion, not a fourth speed input: `MOTION_DIAL_KEYS` stays
+    // the three bounded dials the `motion.dial` decision is judged against.
+    character: enumeration("mechanical", "organic", "playful"),
   }),
   surfaces: object({
     elevation: enumeration("flat", "soft", "elevated"),
@@ -205,6 +210,7 @@ const general = object({
       min: TENANT_THEME_EFFECT_INTENSITY_BOUNDS.min,
       max: TENANT_THEME_EFFECT_INTENSITY_BOUNDS.max,
     }),
+    borderStyle: enumeration("none", "hairline", "strong"),
   }),
   navigation: object({
     sidebarTone: enumeration("subtle", "strong", "inverse"),

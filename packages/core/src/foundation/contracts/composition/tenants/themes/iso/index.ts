@@ -402,6 +402,8 @@ const DEFAULT_TYPOGRAPHY_KEYS: readonly (keyof BrandTypography)[] = [
   "fontFamilyMono",
   "fontFamilyDisplay",
   "headingWeightBias",
+  "roleWeights",
+  "numeric",
   "headingLetterSpacing",
   "labelStyle",
   "roles",
@@ -427,6 +429,7 @@ const DEFAULT_SURFACES_KEYS: readonly (keyof BrandSurfaces)[] = [
   "rhythm",
   "stateEmphasis",
   "focusStyle",
+  "borderStyle",
 ];
 
 const DEFAULT_SURFACE_TOKENS_SHAPE: Partial<SurfaceTokens> = {
@@ -572,6 +575,7 @@ function normalizeSurfaces(surfaces: BrandSurfaces | undefined): BrandSurfaces {
     rhythm: undefined,
     stateEmphasis: undefined,
     focusStyle: undefined,
+    borderStyle: undefined,
   };
   if (!surfaces) return base;
   return {
@@ -608,6 +612,7 @@ const DEFAULT_MOTION_SHAPE: BrandMotion = {
   intensity: undefined,
   durationScale: undefined,
   ambient: undefined,
+  character: undefined,
   entrance: undefined,
   entranceDuration: undefined,
   hoverLift: undefined,

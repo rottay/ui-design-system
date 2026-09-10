@@ -13,6 +13,9 @@ import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/
 import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { setMotionVariables } from "../../../foundation/motion";
+import { deriveMotionCharacter } from "./character";
+
+export { deriveMotionCharacter } from "./character";
 
 /** The two bounded dials the shared posture table computes for this family. */
 const MOTION_DIAL_CHANNELS: ReadonlySet<string> = new Set([
@@ -76,11 +79,16 @@ const REST_ROLES: Readonly<Record<string, string>> = {
  * scale-axis family while the vocabulary they bend was emitted here, so one
  * axis had two owners separated by the whole registry. They are motion
  * statements and settle in the motion family.
+ *
+ * `motion.character` (kit row 23) is the third statement and the second axis:
+ * the dial bends the cadence, the character reshapes the curve. It settles here
+ * for the same reason -- one axis, one owner -- and it deliberately reaches no
+ * duration, so the two rows cannot double-count each other.
  */
 export const motionDeriver: FamilyDeriver = {
   family: "motion",
   rank: "derived",
-  consumes: ["motion.*"],
+  consumes: ["motion.*", "motion.character"],
   produces: ["--ds-motion-*", "--ds-ease-*"],
   derive: (context) =>
     deriveMotionChannels(context.theme, context.expressive.expansion),
@@ -93,6 +101,10 @@ export function deriveMotionChannels(
   const vars: Record<string, string> = {};
   setMotionVariables(vars, bt);
   Object.assign(vars, DURATION_ALIASES, REST_ROLES);
+  // The AUTHORED character refines the resting roles above: `REST_ROLES` is the
+  // value a role has when nobody chose, and a chosen character is a choice. The
+  // two live in one family, so this composition is the whole contest.
+  Object.assign(vars, deriveMotionCharacter(bt));
   Object.assign(vars, motionDialVariables(expansion.fieldDefaults.motion));
   Object.assign(
     vars,

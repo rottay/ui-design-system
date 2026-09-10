@@ -335,7 +335,14 @@ function migrateTypography(
   if (!typography) return {};
   assertExactKeys(
     typography,
-    ["fontFamilyBase", "fontFamilyHeading", "typePairing", "scale"],
+    [
+      "fontFamilyBase",
+      "fontFamilyHeading",
+      "typePairing",
+      "scale",
+      "roleWeights",
+      "numeric",
+    ],
     "general.typography"
   );
   const paired = typePairingToTypography(typography.typePairing);
@@ -344,6 +351,8 @@ function migrateTypography(
       ...paired,
       typePairing: typography.typePairing,
       scale: typography.scale,
+      roleWeights: typography.roleWeights,
+      numeric: typography.numeric,
       fontFamilyBase: typography.fontFamilyBase ?? paired.fontFamilyBase,
       fontFamilyHeading:
         typography.fontFamilyHeading ?? paired.fontFamilyHeading,
@@ -530,7 +539,7 @@ function migrateGeneral(
   if (general.motion) {
     assertExactKeys(
       general.motion,
-      ["intensity", "durationScale", "ambient"],
+      ["intensity", "durationScale", "ambient", "character"],
       "general.motion"
     );
     const motion = general.motion;
@@ -540,6 +549,7 @@ function migrateGeneral(
           intensity: motion.intensity,
           durationScale: motion.durationScale,
           ambient: motion.ambient,
+          character: motion.character,
         },
       },
     });
@@ -565,13 +575,14 @@ function migrateGeneral(
   if (general.surfaces) {
     assertExactKeys(
       general.surfaces,
-      ["elevation", "effectIntensity"],
+      ["elevation", "effectIntensity", "borderStyle"],
       "general.surfaces"
     );
     patches.push({
       surfaces: {
         elevation: general.surfaces.elevation,
         effectIntensity: general.surfaces.effectIntensity,
+        borderStyle: general.surfaces.borderStyle,
       },
     });
   }
