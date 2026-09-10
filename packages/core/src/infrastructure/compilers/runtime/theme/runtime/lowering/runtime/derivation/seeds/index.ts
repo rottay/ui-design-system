@@ -38,6 +38,11 @@ function movedChannels(
  * seed and is left alone, and a tenant leaf that names the channel directly
  * outranks the tenant's own seed. Both guards live in the shared owners it
  * calls; there is no second derivation and no arithmetic here.
+ *
+ * The status half therefore states the block's OWN status tints -- the same
+ * `context.statusTints` the palette family states one rank down, derived once
+ * at the block's contrast posture -- rather than restating the mix strengths
+ * a second time.
  */
 export const seedsDeriver: FamilyDeriver = {
   family: "seeds",
@@ -58,7 +63,7 @@ export const seedsDeriver: FamilyDeriver = {
       modePrefix: context.modePrefix,
       seedIsTenantAuthored: tenant.seedIsTenantAuthored,
     });
-    applyTenantStatusSeedDerivations(next, context.theme.palette, {
+    applyTenantStatusSeedDerivations(next, context.statusTints, {
       authoredPaths: tenant.authoredPaths,
       modePrefix: context.modePrefix,
       toneSeedIsTenantAuthored: tenant.toneSeedIsTenantAuthored,

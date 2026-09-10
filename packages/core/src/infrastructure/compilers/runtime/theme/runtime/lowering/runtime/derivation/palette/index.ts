@@ -21,7 +21,9 @@ import {
   derivePaletteSemanticChannels,
   derivePaletteSemanticFloor,
 } from "./semantic";
-import { derivePaletteTints } from "./tints";
+
+export { resolveContrastPosture } from "./contrast-posture";
+export { derivePaletteTints } from "./tints";
 
 /**
  * Every channel a palette states or implies, in one producer.
@@ -37,6 +39,11 @@ import { derivePaletteTints } from "./tints";
  * other mode resolves its own seed here rather than being smuggled through a
  * second field on this one. The neutral axis is emitted here, not beside the
  * seeded ramps: `palette.neutral-temperature` is what decides it.
+ *
+ * The status tints arrive as a context fact rather than being derived here:
+ * the seeds family restates the same channels at tenant rank, and one
+ * derivation per block is what keeps the two from disagreeing about the
+ * posture's mix strengths.
  */
 export const paletteDeriver: FamilyDeriver = {
   family: "palette",
@@ -57,10 +64,13 @@ export const paletteDeriver: FamilyDeriver = {
     "--ds-text-inverse",
     "--ds-border-color*",
   ],
-  derive: (context) => derivePaletteChannels(context.theme),
+  derive: (context) => derivePaletteChannels(context.theme, context.statusTints),
 };
 
-export function derivePaletteChannels(bt: BrandTheme): Record<string, string> {
+export function derivePaletteChannels(
+  bt: BrandTheme,
+  statusTints: Record<string, string>
+): Record<string, string> {
   const vars: Record<string, string> = {};
   const palette = bt.palette;
   if (!palette) return vars;
@@ -78,7 +88,7 @@ export function derivePaletteChannels(bt: BrandTheme): Record<string, string> {
     vars,
     deriveExtendedPaletteFloor(palette.primaryColor, inkPair)
   );
-  Object.assign(vars, derivePaletteTints(palette, posture));
+  Object.assign(vars, statusTints);
   setExtendedPaletteVariables(vars, palette);
   Object.assign(vars, derivePaletteGround(palette));
   Object.assign(vars, deriveNeutralAxis(bt));
