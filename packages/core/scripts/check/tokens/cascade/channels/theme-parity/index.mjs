@@ -29,6 +29,8 @@
  *   node scripts/check/tokens/cascade/channels/theme-parity/index.mjs --current-json
  *   node scripts/check/tokens/cascade/channels/theme-parity/index.mjs --update-baseline
  */
+import ts from 'typescript';
+
 import {
   existsSync,
   readFileSync,
@@ -283,272 +285,119 @@ function walkOwners(dir, out = []) {
 }
 
 /**
- * Source reduced to CODE: every comment removed and every literal replaced by an
- * opaque placeholder, so text that merely LOOKS like an import cannot be read as
- * one. `const doc = "import { emit } from './__generated__'"` is a string, and a
- * string binds nothing when the file runs, so it must not certify an emission --
- * otherwise the productivity test is defeated by quoting the import it refuses.
+ * Module specifiers a source names AS A VALUE, read from the TypeScript
+ * PARSER's tree rather than from a hand-written scan of the text.
  *
- * The scan is character-aware rather than a regex because `//` occurs
- * legitimately inside literals (URLs) and a naive strip truncates a file
- * mid-literal. A quoted literal cannot span a line, so a stray quote resyncs at
- * the newline instead of swallowing the file; a regex literal is skipped whole,
- * so the quotes inside a character class never open one; a template keeps its
- * `${}` expressions as code while its text becomes a placeholder that no
- * specifier read accepts. Every failure mode of the scan loses a real import,
- * which can only ADD a declared-but-unemitted finding; none of them can certify
- * a channel that nothing productive emits.
- */
-const TEMPLATE_TEXT = '\u0000T\u0000';
-
-/**
- * Whether a `/` at this point opens a REGEX LITERAL or divides. The lexical
- * rule is that the previous significant token decides: an operand -- an
- * identifier, a number, a literal, a `]`, a call or grouping `)` -- makes the
- * `/` division, and a token that cannot end an expression makes it a regex.
- * Listing only the punctuation that may precede an operand missed the shapes
- * that close with a bracket, so `if (cond) /re/` and `if (cond) {} /re/` were
- * read as division: the scan then walked INTO the literal and read the quoted
- * text inside it as code, which is how a regex holding an import specifier
- * certified a generated emitter.
+ * Productivity is a claim about what RUNS, so the reference has to survive type
+ * erasure: a mention in a comment or a literal, an `import type` / `export
+ * type`, and an import type query leave the generated owner exactly as
+ * unimported as if the line were absent, and admitting any of them would let
+ * prose retire a real declared-but-unemitted finding. Value imports (default,
+ * named, namespace, side-effect), value re-exports, `import x = require(...)`,
+ * `require()` and a value-position dynamic `import()` all bind and all count.
  *
- * Two closers are genuinely ambiguous without a parser, and both resolve
- * toward the regex: a `)` divides unless it closes a control-flow head, and a
- * `}` ends a block far more often than it ends an object or function
- * expression that something divides. Guessing regex SKIPS text rather than
- * scanning it, so a wrong guess can only lose a real import and ADD a
- * declared-but-unemitted finding.
+ * WHY THE PARSER. Every one of those distinctions is a GRAMMATICAL one, and a
+ * tokenizer that approximates the grammar has to re-derive it: four rounds of
+ * review found four more shapes it got wrong -- a regex literal after a
+ * control-flow head, a redundant parenthesis around an import type, a regex
+ * after `for await (...)` or after an ASI-terminated `debugger`, and a type
+ * alias whose generic parameter carries a default. Each was a different way of
+ * asking the same question, "is this position code, text, or type?", and the
+ * answer is only definitive in a parse. `ts.createSourceFile` is that parse:
+ *
+ *   - comments and literals are not nodes, so nothing quoted is ever read;
+ *   - `/` is resolved by the grammar, so a regex literal is a literal wherever
+ *     it stands, and a division is an operator wherever it stands;
+ *   - a type-position `import(...)` parses as an `ImportTypeNode`, never as a
+ *     `CallExpression`, so `typeof import()`, annotations, unions, generic
+ *     arguments (defaulted or not), `keyof` / `satisfies` operands and
+ *     type-alias right-hand sides are excluded STRUCTURALLY, with no erasure
+ *     pass and no look-behind; and
+ *   - `type` as a modifier and `type` as a binding name are different tree
+ *     shapes, so `{ type }` and `{ type as T }` bind values by construction.
+ *
+ * One position is type-space yet parsed as an EXPRESSION, and the tree is how
+ * that became visible rather than a fifth counterexample: a heritage clause.
+ * `interface I extends import('./m').T` and `class C implements import('./m').T`
+ * hold a real `CallExpression`, and both erase. `class C extends <expr>` is the
+ * one heritage clause that runs, so the exclusion is by clause, not by keyword,
+ * and a dynamic import in a class `extends` still counts.
+ *
+ * The parser is syntax-only -- no program, no checker, no `tsconfig` -- so it
+ * stays as cheap and as hermetic as the scan it replaces. It is also total: a
+ * file that does not parse yields a best-effort tree rather than an exception,
+ * and a lost reference can only ADD a declared-but-unemitted finding, never
+ * certify a channel nothing emits.
  */
-const REGEX_AFTER_WORD =
-  /^(?:return|typeof|case|in|of|do|else|yield|await|new|void|delete|instanceof|throw|default)$/;
-const CONTROL_FLOW_HEAD = /(?:^|[^\w$.])(?:if|while|for|switch|catch|with)\s*$/;
-
-function closesControlFlowHead(code) {
-  let depth = 0;
-  for (let index = code.length - 1; index >= 0; index -= 1) {
-    if (code[index] === ')') depth += 1;
-    else if (code[index] === '(') {
-      depth -= 1;
-      if (depth === 0) return CONTROL_FLOW_HEAD.test(code.slice(0, index));
-    }
+function bindsAtRuntime(node) {
+  if (ts.isImportDeclaration(node)) {
+    const clause = node.importClause;
+    // No clause at all is a side-effect import: the module still executes.
+    if (!clause) return true;
+    if (clause.isTypeOnly) return false;
+    if (clause.name) return true;
+    const bindings = clause.namedBindings;
+    if (!bindings) return false;
+    if (ts.isNamespaceImport(bindings)) return true;
+    return bindings.elements.some((element) => !element.isTypeOnly);
   }
-  return true;
+  if (node.isTypeOnly) return false;
+  const clause = node.exportClause;
+  if (!clause) return true;
+  if (ts.isNamespaceExport(clause)) return true;
+  return clause.elements.some((element) => !element.isTypeOnly);
 }
 
-function regexMayStart(code) {
-  const significant = code.replace(/\s+$/, '');
-  if (!significant) return true;
-  const last = significant[significant.length - 1];
-  if (last === ']' || last === '\u0000') return false;
-  if (last === ')') return closesControlFlowHead(significant);
-  if (/[\w$]/.test(last)) {
-    const word = significant.match(/[\w$]+$/)[0];
-    if (significant[significant.length - word.length - 1] === '.') return false;
-    return REGEX_AFTER_WORD.test(word);
-  }
-  return true;
+function literalText(node) {
+  return node && ts.isStringLiteralLike(node) ? node.text : undefined;
 }
 
-function skipRegexLiteral(source, start) {
-  let inClass = false;
-  for (let index = start + 1; index < source.length; index += 1) {
-    const character = source[index];
-    if (character === '\\') index += 1;
-    else if (character === '\n') break;
-    else if (character === '[') inClass = true;
-    else if (character === ']') inClass = false;
-    else if (character === '/' && !inClass) return index + 1;
-  }
-  return start + 1;
-}
-
-function tokenize(source) {
-  const quoted = [];
-  const templates = [];
-  let inTemplateText = false;
-  let out = '';
-  let index = 0;
-  while (index < source.length) {
-    const character = source[index];
-    const next = source[index + 1];
-    if (inTemplateText) {
-      if (character === '\\') index += 2;
-      else if (character === '`') {
-        templates.pop();
-        inTemplateText = false;
-        index += 1;
-      } else if (character === '$' && next === '{') {
-        templates[templates.length - 1] = 0;
-        inTemplateText = false;
-        index += 2;
-      } else index += 1;
-      continue;
-    }
-    if (character === '/' && next === '/') {
-      while (index < source.length && source[index] !== '\n') index += 1;
-      out += '\n';
-      continue;
-    }
-    if (character === '/' && next === '*') {
-      index += 2;
-      while (index < source.length && !(source[index] === '*' && source[index + 1] === '/')) index += 1;
-      index += 2;
-      out += ' ';
-      continue;
-    }
-    if (character === '/' && regexMayStart(out)) {
-      index = skipRegexLiteral(source, index);
-      out += ' ';
-      continue;
-    }
-    if (character === "'" || character === '"') {
-      let value = '';
-      let scan = index + 1;
-      for (; scan < source.length && source[scan] !== '\n' && source[scan] !== character; scan += 1) {
-        if (source[scan] === '\\') {
-          value += source[scan] + (source[scan + 1] ?? '');
-          scan += 1;
-          continue;
-        }
-        value += source[scan];
+function valueSpecifiers(file, text) {
+  const source = ts.createSourceFile(
+    file,
+    text,
+    ts.ScriptTarget.Latest,
+    false,
+    /\.tsx$/i.test(file) ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+  );
+  const specifiers = [];
+  const take = (node) => {
+    const specifier = literalText(node);
+    if (specifier) specifiers.push(specifier);
+  };
+  const visit = (node) => {
+    // Type-space declarations are skipped WHOLE so the expression-shaped
+    // heritage clause inside an interface cannot be read as a load.
+    if (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) return;
+    if (ts.isHeritageClause(node) && node.token === ts.SyntaxKind.ImplementsKeyword) return;
+    if (ts.isImportDeclaration(node) || (ts.isExportDeclaration(node) && node.moduleSpecifier)) {
+      if (bindsAtRuntime(node)) take(node.moduleSpecifier);
+    } else if (
+      ts.isImportEqualsDeclaration(node) &&
+      !node.isTypeOnly &&
+      ts.isExternalModuleReference(node.moduleReference)
+    ) {
+      take(node.moduleReference.expression);
+    } else if (ts.isCallExpression(node)) {
+      // A type-position `import(...)` is an ImportTypeNode, so reaching a
+      // CallExpression already proves the reference is in value position.
+      const callee = node.expression;
+      if (
+        callee.kind === ts.SyntaxKind.ImportKeyword ||
+        (ts.isIdentifier(callee) && callee.text === 'require')
+      ) {
+        take(node.arguments[0]);
       }
-      quoted.push(value);
-      out += `\u0000Q${quoted.length - 1}\u0000`;
-      index = source[scan] === character ? scan + 1 : scan;
-      continue;
     }
-    if (character === '`') {
-      templates.push(0);
-      inTemplateText = true;
-      out += TEMPLATE_TEXT;
-      index += 1;
-      continue;
-    }
-    if (templates.length && character === '{') templates[templates.length - 1] += 1;
-    else if (templates.length && character === '}') {
-      if (templates[templates.length - 1] === 0) {
-        inTemplateText = true;
-        out += TEMPLATE_TEXT;
-        index += 1;
-        continue;
-      }
-      templates[templates.length - 1] -= 1;
-    }
-    out += character;
-    index += 1;
-  }
-  return { text: out, quoted };
+    ts.forEachChild(node, visit);
+  };
+  ts.forEachChild(source, visit);
+  return specifiers;
 }
 
-/**
- * True when an import/export clause still binds something at runtime. A
- * statement-level `type` modifier erases the whole statement, and a named
- * clause whose every specifier is inline-`type` is erased with it; `{ type }`
- * and `{ type as T }` bind a value called `type` and are not erased.
- */
-function bindsAtRuntime(clause) {
-  const outside = clause.replace(/\{[\s\S]*\}/, '').trim();
-  if (outside.replace(/,/g, '').trim()) return true;
-  const braces = clause.match(/\{([\s\S]*)\}/);
-  if (!braces) return true;
-  const specifiers = braces[1]
-    .split(',')
-    .map((specifier) => specifier.trim())
-    .filter(Boolean);
-  if (!specifiers.length) return false;
-  return specifiers.some((specifier) => !/^type\s+(?!as\s)\S/.test(specifier));
-}
-
-/**
- * `import(...)` in a TYPE position is an import type query, not a load.
- * TypeScript erases `typeof import('./x')`, an annotation, a union member, a
- * generic argument and an `extends` / `keyof` / `satisfies` operand before
- * anything runs, and it erases a type alias whole, so the alias right-hand side
- * is removed before the read. A bare `import('./x')` in VALUE position does load
- * the module and still counts -- the distinction is what runs, not the keyword.
- */
-const TYPE_QUERY_BEFORE = /(?:\btypeof|\bkeyof|\bextends|\bsatisfies|[:<|&])\s*$/;
-
-/**
- * PARENTHESES DO NOT MOVE A REFERENCE INTO VALUE POSITION. `x: (import('./m').T)`
- * is the same annotation as `x: import('./m').T` and erases with it, so the
- * position is judged on the token before the redundant grouping rather than on
- * the `(` itself. Seeing through the parens cannot promote a value reference to
- * a type: what precedes a call's `(` is its callee, and a callee is not one of
- * the type operators below.
- */
-const REDUNDANT_PARENS = /(?:\s*\()+\s*$/;
-
-/**
- * A type alias is erased whole, so nothing on its right-hand side runs. Ending
- * the erasure at the first `;` held only for a one-line alias: an object type
- * separates its MEMBERS with `;`, so the body's tail survived the removal and
- * an `import()` inside it was read as a load. The body ends at the first `;`
- * outside every bracket, so the scan tracks depth, and a body left unterminated
- * ends at the newline that completes it rather than running to the next `;`
- * somewhere below.
- */
-const TYPE_ALIAS_HEAD = /\btype\s+[A-Za-z_$][\w$]*\s*(?:<[^<>;=]*>)?\s*=/g;
-const TYPE_CONTINUES = /(?:[=|&,<([{]|\bextends|\bkeyof|\btypeof|\bin|\bis)\s*$/;
-
-function eraseTypeAliases(text) {
-  let out = '';
-  let cursor = 0;
-  for (const head of text.matchAll(TYPE_ALIAS_HEAD)) {
-    if (head.index < cursor) continue;
-    let depth = 0;
-    let index = head.index + head[0].length;
-    for (; index < text.length; index += 1) {
-      const character = text[index];
-      if ('([{'.includes(character)) depth += 1;
-      else if (')]}'.includes(character)) {
-        if (depth === 0) break;
-        depth -= 1;
-      } else if (depth) continue;
-      else if (character === ';') {
-        index += 1;
-        break;
-      } else if (character === '\n' && !TYPE_CONTINUES.test(text.slice(head.index, index))) break;
-    }
-    out += `${text.slice(cursor, head.index)} `;
-    cursor = index;
-  }
-  return out + text.slice(cursor);
-}
-
-/**
- * Relative module specifiers a source names AS A VALUE, as the owner files they
- * could resolve to.
- *
- * Productivity is a runtime question, so it is answered with runtime semantics:
- * only a reference that survives type erasure makes a generated emitter
- * productive. A mention inside a comment or a literal, an `import type` /
- * `export type`, and an import type query leave the generated owner exactly as
- * unimported as if the line were absent -- and admitting any of them would let
- * prose suppress a real declared-but-unemitted finding. Value imports,
- * side-effect imports, value re-exports, `require` and a value-position dynamic
- * `import()` all bind at runtime and all count.
- */
 function importedOwners(file) {
   const targets = new Set();
-  const tokenized = tokenize(readFileSync(file, 'utf8'));
-  const text = eraseTypeAliases(tokenized.text);
-  const quotedAt = (index) => tokenized.quoted[Number(index)];
-  const specifiers = [];
-  for (const match of text.matchAll(
-    /\b(?:import|export)\s+(type\s+)?([^\u0000]*?)\bfrom\s*\u0000Q(\d+)\u0000/g,
-  )) {
-    if (match[1] || !bindsAtRuntime(match[2])) continue;
-    specifiers.push(quotedAt(match[3]));
-  }
-  for (const match of text.matchAll(/\b(?:import|require)\s*\(\s*\u0000Q(\d+)\u0000/g)) {
-    if (TYPE_QUERY_BEFORE.test(text.slice(0, match.index).replace(REDUNDANT_PARENS, ''))) continue;
-    specifiers.push(quotedAt(match[1]));
-  }
-  for (const match of text.matchAll(/\bimport\s*\u0000Q(\d+)\u0000/g)) {
-    specifiers.push(quotedAt(match[1]));
-  }
-  for (const specifier of specifiers) {
+  for (const specifier of valueSpecifiers(file, readFileSync(file, 'utf8'))) {
     if (!specifier.startsWith('.')) continue;
     const resolved = resolve(dirname(file), specifier.replace(/\.(?:js|ts)$/, ''));
     targets.add(`${resolved}.ts`);

@@ -966,6 +966,28 @@ export type GeneratedVars = typeof generatedVars;
     "an import type in an object type alias": `type Shape = {\n  first: string;\n  generated: import("./__generated__").GeneratedVars;\n};\nexport type { Shape };\n`,
     "a parenthesized import type in an object type alias": `type Shape = {\n  first: string;\n  generated: (import("./__generated__").GeneratedVars);\n};\nexport type { Shape };\n`,
     "an import type as a generic argument": `export type Wrapped = Array<import("./__generated__").GeneratedVars>;\n`,
+    // A regex literal is a literal wherever the GRAMMAR puts one, and the
+    // grammar knows shapes an approximation of it kept missing: `for await`
+    // is a for-head like any other, and a statement terminated by automatic
+    // semicolon insertion ends before the `/` on the next line.
+    "a regex after a for-await head": `async function scan() { for await (const item of []) /[import("./__generated__")]/.test("sample"); }\n`,
+    "a regex after an ASI-terminated debugger": `debugger\n/[import("./__generated__")]/.test("sample");\n`,
+    "a regex after an ASI-terminated block": `{\n}\n/[require("./__generated__")]/.test("sample");\n`,
+    "a regex after a do-while body": `do {} while (false)\n/[import("./__generated__")]/.test("sample");\n`,
+    // A type position is a type position however the type is PARAMETERIZED: a
+    // generic parameter carrying a default holds an `=` that has nothing to do
+    // with the alias's own `=`, and only a parse can tell the two apart.
+    "an import type in a defaulted generic alias": `type Shape<T = string> = import("./__generated__").GeneratedVars;\nexport type { Shape };\n`,
+    "an import type in a multiply defaulted generic alias": `type Pair<A = string, B = Array<number>> = [A, B, import("./__generated__").GeneratedVars];\nexport type { Pair };\n`,
+    "an import type in a defaulted generic interface": `export interface Holder<T = string> {\n  held: T;\n  generated: import("./__generated__").GeneratedVars;\n}\n`,
+    "an import type in a conditional type": `type Pick<T> = T extends string ? import("./__generated__").GeneratedVars : never;\nexport type { Pick };\n`,
+    "an import type as a satisfies operand": `export const shape = {} satisfies Partial<import("./__generated__").GeneratedVars>;\n`,
+    // A heritage clause is type-space that PARSES as an expression, so these
+    // hold a real call node and still erase. `class extends` is the one
+    // heritage clause that runs, and it is a positive control below.
+    "an import type in an interface extends clause": `interface Local extends import("./__generated__").GeneratedVars {}\nexport type { Local };\n`,
+    "an import type in a class implements clause": `export class Local implements import("./__generated__").GeneratedVars {}\n`,
+    "an import type in a generic interface extends clause": `interface Local<T = string> extends Partial<import("./__generated__").GeneratedVars> { held: T }\nexport type { Local };\n`,
   };
   for (const [shape, reference] of Object.entries(erased)) {
     const outcome = underReference(reference);
@@ -1010,6 +1032,17 @@ export type GeneratedVars = typeof generatedVars;
     "a parenthesized dynamic import": `export const load = () => (import("./__generated__"));\n`,
     "an awaited parenthesized dynamic import": `export async function load() { return await (import("./__generated__")); }\n`,
     "a dynamic import inside a block": `export function load() { if (true) { import("./__generated__"); } }\n`,
+    // The positive controls for the parser's statement recognition: skipping a
+    // real regex, a for-await head, an ASI boundary or a defaulted generic
+    // alias must not eat the import that follows it.
+    "a real import after a for-await loop": `export async function scan() { for await (const item of []) console.log(item); }\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a debugger statement": `export function stop() { debugger }\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a defaulted generic alias": `type Shape<T = string> = { held: T };\nimport { generatedVars } from "./__generated__";\nexport type { Shape };\n`,
+    "a real import after a defaulted generic interface": `export interface Holder<T = string> { held: T }\nimport { generatedVars } from "./__generated__";\n`,
+    "a dynamic import in a for-await head": `export async function load() { for await (const mod of [import("./__generated__")]) void mod; }\n`,
+    "a dynamic import interpolated into a template": "export const note = `${import(\"./__generated__\")}`;\n",
+    "an import-equals require": `import generated = require("./__generated__");\nexport const held = generated;\n`,
+    "a dynamic import in a class extends clause": `export class Local extends (import("./__generated__") as never) {}\n`,
   };
   for (const [shape, reference] of Object.entries(binding)) {
     const outcome = underReference(reference);
