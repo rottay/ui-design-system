@@ -46,12 +46,12 @@ export function FormScreen() {
           <Input defaultValue="Senior Backend Engineer" />
         </FormField>
         <Flex gap={12} wrap="wrap">
-          <Box style={{ flex: '1 1 220px' }}>
+          <Box flex="1 1 220px">
             <FormField label="Seniority" name="role-seniority" required>
               <Select options={SENIORITY} defaultValue="senior" />
             </FormField>
           </Box>
-          <Box style={{ flex: '1 1 220px' }}>
+          <Box flex="1 1 220px">
             <FormField label="Location" name="role-location">
               <Select options={LOCATIONS} defaultValue="madrid" />
             </FormField>
@@ -72,17 +72,17 @@ export function FormScreen() {
           2 · Compensation
         </Text>
         <Flex gap={12} wrap="wrap">
-          <Box style={{ flex: '1 1 200px' }}>
+          <Box flex="1 1 200px">
             <FormField label="Band minimum" name="comp-min" required>
               <Input defaultValue="92000" />
             </FormField>
           </Box>
-          <Box style={{ flex: '1 1 200px' }}>
+          <Box flex="1 1 200px">
             <FormField label="Band maximum" name="comp-max" required>
               <Input defaultValue="108000" />
             </FormField>
           </Box>
-          <Box style={{ flex: '1 1 200px' }}>
+          <Box flex="1 1 200px">
             <FormField label="Equity" name="comp-equity" error="Enter a percentage between 0 and 1.">
               <Input defaultValue="2.4%" />
             </FormField>

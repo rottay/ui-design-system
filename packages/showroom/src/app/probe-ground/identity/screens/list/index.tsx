@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   Avatar,
   Badge,
@@ -8,15 +9,17 @@ import {
   Flex,
   Heading,
   Input,
+  PatternDataTable,
   Select,
   Stack,
-  Table,
   Tag,
   Text,
 } from '@rottay/design-system';
 
+import type { ColumnDef } from '@rottay/design-system';
+
 interface CandidateRow {
-  key: string;
+  id: string;
   name: string;
   role: string;
   stage: string;
@@ -26,12 +29,12 @@ interface CandidateRow {
 }
 
 const ROWS: CandidateRow[] = [
-  { key: 'c1', name: 'Ana Ruiz', role: 'Senior Backend Engineer', stage: 'Onsite', tone: 'primary', score: '8.4', updated: '2h ago' },
-  { key: 'c2', name: 'Marcus Bell', role: 'Staff Product Designer', stage: 'Offer prep', tone: 'success', score: '9.1', updated: '5h ago' },
-  { key: 'c3', name: 'Lena Fischer', role: 'People Analytics Lead', stage: 'Screen', tone: 'secondary', score: '7.2', updated: 'Yesterday' },
-  { key: 'c4', name: 'Tomas Silva', role: 'Senior Backend Engineer', stage: 'Debrief', tone: 'warning', score: '6.8', updated: 'Yesterday' },
-  { key: 'c5', name: 'Priya Nair', role: 'Engineering Manager', stage: 'Onsite', tone: 'primary', score: '8.9', updated: '2 days ago' },
-  { key: 'c6', name: 'Owen Clarke', role: 'Data Platform Engineer', stage: 'Sourced', tone: 'secondary', score: '—', updated: '3 days ago' },
+  { id: 'c1', name: 'Ana Ruiz', role: 'Senior Backend Engineer', stage: 'Onsite', tone: 'primary', score: '8.4', updated: '2h ago' },
+  { id: 'c2', name: 'Marcus Bell', role: 'Staff Product Designer', stage: 'Offer prep', tone: 'success', score: '9.1', updated: '5h ago' },
+  { id: 'c3', name: 'Lena Fischer', role: 'People Analytics Lead', stage: 'Screen', tone: 'secondary', score: '7.2', updated: 'Yesterday' },
+  { id: 'c4', name: 'Tomas Silva', role: 'Senior Backend Engineer', stage: 'Debrief', tone: 'warning', score: '6.8', updated: 'Yesterday' },
+  { id: 'c5', name: 'Priya Nair', role: 'Engineering Manager', stage: 'Onsite', tone: 'primary', score: '8.9', updated: '2 days ago' },
+  { id: 'c6', name: 'Owen Clarke', role: 'Data Platform Engineer', stage: 'Sourced', tone: 'secondary', score: '—', updated: '3 days ago' },
 ];
 
 const STAGE_OPTIONS = [
@@ -41,21 +44,21 @@ const STAGE_OPTIONS = [
   { label: 'Offer prep', value: 'offer' },
 ];
 
-const COLUMNS = [
+const COLUMNS: ColumnDef<CandidateRow>[] = [
   {
     key: 'name',
-    title: 'Candidate',
-    dataIndex: 'name',
-    sorter: true,
-    render: (_value: unknown, record: CandidateRow) => (
+    header: 'Candidate',
+    accessorKey: 'name',
+    sortable: true,
+    render: (_value, row) => (
       <Flex align="center" gap={10}>
-        <Avatar size="sm" name={record.name} />
+        <Avatar size="sm" name={row.name} />
         <Stack spacing="none">
           <Text size="sm" weight="semibold">
-            {record.name}
+            {row.name}
           </Text>
           <Text size="xs" color="muted">
-            {record.role}
+            {row.role}
           </Text>
         </Stack>
       </Flex>
@@ -63,17 +66,17 @@ const COLUMNS = [
   },
   {
     key: 'stage',
-    title: 'Stage',
-    dataIndex: 'stage',
-    render: (_value: unknown, record: CandidateRow) => (
-      <Tag variant={record.tone}>{record.stage}</Tag>
-    ),
+    header: 'Stage',
+    accessorKey: 'stage',
+    render: (_value, row) => <Tag variant={row.tone}>{row.stage}</Tag>,
   },
-  { key: 'score', title: 'Scorecard', dataIndex: 'score', sorter: true },
-  { key: 'updated', title: 'Last activity', dataIndex: 'updated' },
+  { key: 'score', header: 'Scorecard', accessorKey: 'score', sortable: true, align: 'right' },
+  { key: 'updated', header: 'Last activity', accessorKey: 'updated' },
 ];
 
 export function ListScreen() {
+  const [selectedKeys, setSelectedKeys] = useState<string[]>(['c2']);
+
   return (
     <Stack spacing="md" fullWidth>
       <Flex align="center" justify="between" gap={12} wrap="wrap">
@@ -90,22 +93,29 @@ export function ListScreen() {
       </Flex>
 
       <Flex align="center" gap={8} wrap="wrap">
-        <Input placeholder="Search candidates" style={{ minWidth: 240 }} />
-        <Select options={STAGE_OPTIONS} defaultValue="all" style={{ minWidth: 180 }} />
+        <Box minWidth={240}>
+          <Input placeholder="Search candidates" />
+        </Box>
+        <Box minWidth={180}>
+          <Select options={STAGE_OPTIONS} defaultValue="all" />
+        </Box>
         <Button variant="secondary">Filters</Button>
         <Badge variant="secondary">3 saved views</Badge>
       </Flex>
 
-      <Box>
-        <Table
-          rowKey="key"
-          bordered
-          pagination={false}
-          dataSource={ROWS}
-          columns={COLUMNS}
-          rowSelection={{ type: 'checkbox', defaultSelectedRowKeys: ['c2'] }}
-        />
-      </Box>
+      {/* The pattern table, not the primitive: `data-anatomy-table`
+          (ruled | zebra | open) is only read on `.ds-pattern-data-table`. */}
+      <PatternDataTable<CandidateRow>
+        data={ROWS}
+        columns={COLUMNS}
+        rowKey="id"
+        selectable
+        selectedKeys={selectedKeys}
+        onSelectionChange={setSelectedKeys}
+        hoverable
+        pagination={false}
+        messages={{ tableLabel: 'Candidates' }}
+      />
     </Stack>
   );
 }

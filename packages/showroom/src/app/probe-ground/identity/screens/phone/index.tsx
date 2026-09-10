@@ -40,7 +40,7 @@ export function PhoneScreen() {
         </Text>
       </Stack>
 
-      <Box style={{ width: PHONE_WIDTH, maxWidth: '100%' }}>
+      <Box width={PHONE_WIDTH} maxWidth="100%">
         <Stack spacing="sm" fullWidth>
           <Flex align="center" justify="between" gap={8}>
             <Heading level="h3">Loops</Heading>

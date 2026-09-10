@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import type { TenantConfig } from '@rottay/design-system';
 import {
   compileTenantThemeDocumentV2,
-  documentThemeIntent,
+  documentThemeAdmission,
   mountTenantTheme,
   staticThemeIntent,
 } from '@rottay/design-system/server';
@@ -29,7 +29,11 @@ import {
   sanitizeMode,
   sanitizeScreen,
 } from './candidates';
-import { IdentityStage, type IdentityStageOption } from './stage';
+import {
+  IdentityStage,
+  type IdentityStageOption,
+  type IdentityUnlitRow,
+} from './stage';
 
 // ---------------------------------------------------------------------------
 // WO-DER-07 identity probe-ground.
@@ -43,7 +47,10 @@ import { IdentityStage, type IdentityStageOption } from './stage';
 //
 // Nothing here paints: the page compiles the candidate's decision document
 // through the one door, mounts it with `mountTenantTheme`, and stamps exactly
-// what the mount returns.
+// what the mount returns. `dashboard` is the app-shell screen -- sider, header
+// and content -- so sidebar tone and the sidebar/layout anatomies have a
+// consumer; the list screen is the pattern table, which is the only surface
+// the table anatomy CSS reaches.
 // ---------------------------------------------------------------------------
 
 type Query = Record<string, string | string[] | undefined>;
@@ -79,16 +86,30 @@ export default async function IdentityProbeGroundPage({
       })
     : null;
 
-  const mounted = await (candidate && compilation
-    ? mountTenantTheme(
-        documentThemeIntent({
-          vertical: 'bithire',
-          slug: candidate.slug,
-          document: candidate.document,
-        }),
-        { artifact: compilation.artifact, themeMode: mode, locale: 'en' },
-      )
+  // One call, two answers: the intent the compiler mounts and the report that
+  // names which activated decisions moved no keypath. The unlit list below is
+  // the door's, never a list this page keeps.
+  const admitted = candidate
+    ? documentThemeAdmission({
+        vertical: 'bithire',
+        slug: candidate.slug,
+        document: candidate.document,
+      })
+    : null;
+
+  const mounted = await (admitted && compilation
+    ? mountTenantTheme(admitted.intent, {
+        artifact: compilation.artifact,
+        themeMode: mode,
+        locale: 'en',
+      })
     : mountTenantTheme(staticThemeIntent('bithire'), { themeMode: mode, locale: 'en' }));
+
+  const unlit: IdentityUnlitRow[] = (admitted?.admission.unlit ?? []).map((row) => ({
+    id: row.id,
+    tier: row.tier,
+    reason: row.reason ?? 'unlit',
+  }));
 
   const digest = candidate
     ? `decision digest sha256-${createHash('sha256')
@@ -161,6 +182,7 @@ export default async function IdentityProbeGroundPage({
         screen={screen}
         digest={digest}
         decisionCount={candidate ? Object.keys(candidate.document.decisions).length : 0}
+        unlit={unlit}
         tenantConfig={tenantConfig}
         columns={columns}
         modes={modes}

@@ -7,7 +7,7 @@
       "id": "editorial-quiet",
       "slug": "bithire-editorial-quiet",
       "title": "Editorial quiet",
-      "intent": "A hiring record that reads like a well-set document: warm paper ground, serif voice, airy rhythm, flat surfaces, states that whisper."
+      "intent": "A hiring record that reads like a well-set document: warm paper ground, serif voice, airy rhythm, effects turned almost off, states that whisper."
     },
     {
       "id": "product-dense",
@@ -19,7 +19,7 @@
       "id": "warm-humanist",
       "slug": "bithire-warm-humanist",
       "title": "Warm humanist",
-      "intent": "An approachable product: warm violet brand, geometric headings, pill controls, lifted surfaces, glow focus and unhurried playful motion."
+      "intent": "An approachable product: warm violet brand, geometric headings, lifted surfaces, glow focus and unhurried playful motion."
     }
   ]
 }
