@@ -286,7 +286,7 @@
     },
     "./runtime/responsive": {
       "maxReachableModules": 12,
-      "maxSourceBytes": 58115
+      "maxSourceBytes": 58600
     },
     "./runtime/root-attributes": {
       "maxReachableModules": 2,
@@ -294,7 +294,7 @@
     },
     "./runtime/tenant": {
       "maxReachableModules": 48,
-      "maxSourceBytes": 1167572
+      "maxSourceBytes": 1175505
     },
     "./runtime/tenant-theme": {
       "maxReachableModules": 2,
@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 9,
-      "maxSourceBytes": 63931
+      "maxSourceBytes": 70112
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "CC-01 connection lot: ./runtime/tenant reaches the tenant theme contract, which gained the four authoring routes the kit's still-unlit rows needed -- typography.roleWeights, typography.numeric, surfaces.borderStyle and motion.character, declared on both the BrandTheme and the v1 appearance shapes. Measured +390 source bytes over d2595306c (1167182 -> 1167572) against 9 bytes of headroom, and the reachable-module count is unchanged at 25: the graph did not widen, the contract did. Anchored at the exact measured value, decrease-only from here.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "merge wo-emi-02 (7cfe5abd4): techos vivos al valor medido del arbol combinado — visual-authority 63931->70112 y responsive 58115->58600 (widens auditados de EMI-02, Fable r11 PASS), tenant 1167572->1175505 = widen connfix +390 (CC-01, Codex r12 PASS) + 1175115 de EMI-02, suma exacta.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 3 subido(s), 0 sin ancla valida"
 }
