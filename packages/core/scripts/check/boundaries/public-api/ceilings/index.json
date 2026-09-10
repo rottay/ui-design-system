@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 9,
-      "maxSourceBytes": 69393
+      "maxSourceBytes": 70112
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-EMI-02 second repair round: the retained scope watch replays every intermediate root state through the one scope law admission now exposes over a reader, so a rewrite to another valid root-marker value stays silent while a loss inside the batch still revokes; and the observer additionally watches the resolved scope element when a supplied container root does not contain it (+660). No reachable-module move: no new import, one shared predicate and a second observe target.",
+  "lastMove": "./runtime/visual-authority 69393 -> 70112: la admision se niega ante una raiz de montaje que no esta en el documento, y retention observa el subarbol del elemento de scope para oir el desprendimiento del contenedor. Modulos sin mover.",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

@@ -79,76 +79,78 @@ function withViewport(width: number, run: () => void): void {
 const FULLSCREEN_ATTRIBUTE = 'data-adaptive-fullscreen';
 
 /**
- * Every value `data-adaptive-fullscreen` holds, in order, from before the Modal
- * renders until `stop()`.
+ * Every value `data-adaptive-fullscreen` is COMMITTED with, in order, from
+ * before the Modal renders until `stop()`.
  *
  * The first entry is the value the surface carried on the render that created
  * it -- the first committed render. A second entry is a correcting frame.
  *
- * IT REPLAYS THE BATCH; IT DOES NOT READ THE DOM. Records arrive together,
- * after every write in them has landed, so asking each target what it carries
- * NOW answers with the settled value for all of them and reports a one-entry
- * sequence for a surface that committed fullscreen and corrected itself a
- * layout effect later -- exactly the history this file exists to forbid, read
- * back as a pass. `attributeOldValue` is what makes the intermediate states
- * recoverable: a record's own `oldValue` is the value before it, and the value
- * AFTER it is the `oldValue` of the next record naming the same attribute on
- * the same element, or -- for the last one -- what the element carries now. The
- * same reconstruction the retained scope watch performs, for the same reason.
+ * IT INTERCEPTS THE WRITES; IT DOES NOT RECONSTRUCT THEM. A `MutationObserver`
+ * hands over a batch after every write in it has landed, so the history has to
+ * be rebuilt from `oldValue` chains and surviving nodes -- and a reconstruction
+ * can only speak about nodes that are still there to be asked. A surface
+ * committed fullscreen inside a node that the correcting frame REPLACES leaves
+ * no attribute record naming its outgoing value, and the added-node scan reads
+ * the replacement's subtree, which by delivery time already holds the corrected
+ * value: the batch reports `['false']` for a frame that painted `true` first,
+ * indistinguishable from a clean desktop render. Intercepting `setAttribute` on
+ * the caller's stack has no such blind spot -- it records the write when React
+ * performs it, before the node it targets can be replaced, removed or read
+ * back -- and needs no node to survive.
+ *
+ * It fails closed. Whatever every surface finally carries must be a value the
+ * interception actually saw, or the instrument itself is broken and says so
+ * instead of reporting a clean history it never observed.
  */
+let restoreAttributeInterception: (() => void) | null = null;
+
 function recordAdaptiveFullscreen(): { stop: () => string[] } {
-  const seen: string[] = [];
+  const seen: (string | null)[] = [];
   const push = (value: string | null): void => {
-    if (value !== null && seen[seen.length - 1] !== value) seen.push(value);
+    if (seen[seen.length - 1] !== value) seen.push(value);
   };
-  const judge = (records: MutationRecord[]): void => {
-    /** What `target` carried once every write at or before `index` had landed. */
-    const settledAfter = (target: Element, index: number): string | null => {
-      for (let later = index + 1; later < records.length; later += 1) {
-        const record = records[later];
-        if (record.type === 'attributes' && record.target === target) {
-          return record.oldValue;
+  interface AttributeWriter {
+    setAttribute: (this: Element, name: string, value: string) => void;
+    removeAttribute: (this: Element, name: string) => void;
+  }
+  const proto = Element.prototype as unknown as AttributeWriter;
+  const write = proto.setAttribute;
+  const erase = proto.removeAttribute;
+  proto.setAttribute = function intercepted(name, value) {
+    write.call(this, name, value);
+    if (name === FULLSCREEN_ATTRIBUTE) push(String(value));
+  };
+  proto.removeAttribute = function intercepted(name) {
+    erase.call(this, name);
+    if (name === FULLSCREEN_ATTRIBUTE) push(null);
+  };
+  // A patched prototype that outlives a failing assertion would follow the
+  // worker into every later file, so the restore is also owned by `afterEach`.
+  const restore = (): void => {
+    proto.setAttribute = write;
+    proto.removeAttribute = erase;
+    restoreAttributeInterception = null;
+  };
+  restoreAttributeInterception = restore;
+  return {
+    stop: () => {
+      restore();
+      for (const carrier of Array.from(
+        document.body.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`),
+      )) {
+        const settled = carrier.getAttribute(FULLSCREEN_ATTRIBUTE);
+        if (!seen.includes(settled)) {
+          throw new Error(
+            `the recorder never saw the value a surface settled on (${String(settled)}); it is not observing commits`,
+          );
         }
       }
-      return target.getAttribute(FULLSCREEN_ATTRIBUTE);
-    };
-    records.forEach((record, index) => {
-      if (record.type === 'attributes') {
-        const target = record.target as Element;
-        push(record.oldValue);
-        push(settledAfter(target, index));
-        return;
+      if (seen.includes(null)) {
+        throw new Error(
+          `${FULLSCREEN_ATTRIBUTE} was removed mid-history, which this instrument does not model`,
+        );
       }
-      for (const node of Array.from(record.addedNodes)) {
-        if (node.nodeType !== 1) continue;
-        const element = node as Element;
-        const carriers = [
-          ...(element.hasAttribute(FULLSCREEN_ATTRIBUTE) ? [element] : []),
-          ...Array.from(element.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`)),
-        ];
-        // The value it was CREATED with, not the value it ended up with: a
-        // node inserted fullscreen and corrected in the same batch has to show
-        // both, in that order.
-        for (const carrier of carriers) push(settledAfter(carrier, index));
-      }
-    });
-  };
-  const observer = new MutationObserver(judge);
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeOldValue: true,
-    attributeFilter: [FULLSCREEN_ATTRIBUTE],
-  });
-  return {
-    // Records are delivered in a microtask and `render()` returns on the same
-    // task, so the pending batch is taken on the caller's stack rather than
-    // waited for -- the same reason the retention watch drains its own.
-    stop: () => {
-      judge(observer.takeRecords());
-      observer.disconnect();
-      return [...seen];
+      return seen as string[];
     },
   };
 }
@@ -269,6 +271,7 @@ async function hydrateServerMarkup(
 }
 
 afterEach(() => {
+  restoreAttributeInterception?.();
   cleanup();
   resetResponsiveMediaStore();
   document.documentElement.removeAttribute('data-ds-viewport');
@@ -405,6 +408,41 @@ describe('adaptiveFullscreen on the first committed render', () => {
 
     const recorder = recordAdaptiveFullscreen();
     render(<CorrectedSurface />);
+
+    expect(recorder.stop()).toEqual(['true', 'false']);
+  });
+
+  /**
+   * THE SAME CONTROL, WITH THE COMMIT HIDDEN BY REPLACEMENT.
+   *
+   * The correction above rewrites the attribute on the node that carries it, so
+   * the write leaves a record naming the outgoing value. This one changes the
+   * surface's ELEMENT TYPE, which makes React drop the fullscreen node and
+   * insert a different one in its place. Nothing then names `true`: the removed
+   * node carries no attribute record, and the surviving subtree only ever held
+   * `false`. A recorder that rebuilds the history from delivered records
+   * therefore reports `['false']` -- byte-identical to the desktop drill's
+   * pass, for a frame that painted fullscreen first.
+   */
+  it('reports a first commit hidden by replacing the surface node, not rewriting it', () => {
+    const ReplacedSurface = (): React.ReactElement => {
+      const [fullscreen, setFullscreen] = React.useState(true);
+      React.useLayoutEffect(() => {
+        setFullscreen(false);
+      }, []);
+      return (
+        <section>
+          {fullscreen ? (
+            <span data-adaptive-fullscreen="true" />
+          ) : (
+            <div data-adaptive-fullscreen="false" />
+          )}
+        </section>
+      );
+    };
+
+    const recorder = recordAdaptiveFullscreen();
+    render(<ReplacedSurface />);
 
     expect(recorder.stop()).toEqual(['true', 'false']);
   });

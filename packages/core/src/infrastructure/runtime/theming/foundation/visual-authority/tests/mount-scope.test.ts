@@ -115,6 +115,27 @@ describe('admission proves scope, not only bytes', () => {
     expect(resolve().conflict).toBeNull();
   });
 
+  it('blocks a fresh admission whose search root is not in the document', () => {
+    const container = document.createElement('div');
+    container.appendChild(mountTenantThemeArtifactFixture(ARTIFACT));
+
+    const resolution = resolveVisualAuthority({
+      declaration: { authority: 'compiled-artifact', artifact: ARTIFACT },
+      slug: ARTIFACT.slug,
+      verticalKey: ARTIFACT.verticalKey,
+      payload: PAYLOAD,
+      documentRoot: container,
+    });
+
+    // The scope half would pass -- `<html>` is stamped -- which is exactly why
+    // the byte half has to ask where the bytes are. They are nowhere the
+    // document consults.
+    expect(verifyTenantThemeArtifactScope(ARTIFACT, container).ok).toBe(true);
+    expect(resolution.conflictKind).toBe('declaration');
+    expect(resolution.conflict).toMatch(/not attached to the document/);
+    expect(resolution.artifact).toBeNull();
+  });
+
   it('resolves a container search root against its own document root', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);

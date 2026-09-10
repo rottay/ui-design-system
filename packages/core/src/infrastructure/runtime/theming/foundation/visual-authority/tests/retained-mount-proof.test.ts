@@ -16,6 +16,7 @@ import {
   prepareMountedTenantThemeArtifactClaim,
   resetVisualAuthorityDiagnostics,
   retainMountedTenantThemeArtifact,
+  verifyMountedTenantThemeArtifact,
 } from '..';
 import type { PreparedTenantThemeArtifactClaim } from '..';
 import { clearTenantThemeScope, stampTenantThemeScope } from './mount-fixture';
@@ -468,6 +469,13 @@ describe('retained mount proof', () => {
  * which nodes the observer was attached to. So retention now watches the
  * resolved scope element in its own right whenever the supplied root does not
  * already contain it, and the verdict is continuous rather than deferred.
+ *
+ * A container that is not IN the document is the one form that is refused, and
+ * for the opposite reason: there the resolver's answer would be wrong. The
+ * bytes are not in any stylesheet the document consults, so nothing they
+ * declare paints -- while the scope half of the proof would be answered by the
+ * real `documentElement`, which they are not attached to. That pair certifies
+ * a paint that does not exist.
  */
 describe('retained proof armed on a container', () => {
   let stop: (() => void) | null = null;
@@ -535,6 +543,38 @@ describe('retained proof armed on a container', () => {
     await settle();
 
     expect(revocations).toHaveLength(1);
+  });
+
+  it('refuses a byte-perfect mount whose container is not in the document', () => {
+    const { container, style } = mountInContainer();
+    container.remove();
+
+    const mounted = verifyMountedTenantThemeArtifact(ARTIFACT, container);
+
+    expect(mounted.ok).toBe(false);
+    expect(mounted.ok === false && mounted.error).toMatch(
+      /not attached to the document/,
+    );
+    // The retained audit and a fresh arming answer the same way: a detached
+    // mount is not a weaker proof, it is no proof.
+    expect(auditRetainedTenantThemeArtifact(ARTIFACT, style, container)).toMatch(
+      /not attached to the document/,
+    );
+    expect(retainIn(container, style)).toHaveLength(1);
+  });
+
+  it('revokes when the container leaves the document after admission', async () => {
+    const { container, style } = mountInContainer();
+    const revocations = retainIn(container, style);
+
+    // Nothing inside the container moved, and `<html>` still carries the scope.
+    // The container cannot hear its own removal -- that record belongs to its
+    // parent -- so this is the case that stayed silently admitted.
+    container.remove();
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(/removed from the document/);
   });
 
   it('stays silent for container churn and for a valid root re-stamp', async () => {

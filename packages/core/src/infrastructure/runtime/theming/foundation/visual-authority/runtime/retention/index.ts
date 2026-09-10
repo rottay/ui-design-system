@@ -288,6 +288,14 @@ function watchMountedTenantThemeArtifact(
   // painting entirely with no record this watch can hear, invisible until some
   // later seal re-audits the end state. So the scope element is observed in its
   // own right whenever the supplied root does not already cover it.
+  //
+  // IT WATCHES THE TREE THERE, NOT ONLY THE ATTRIBUTES. A container cannot
+  // observe its own removal from its parent -- that record belongs to the
+  // parent -- so a watch confined to the container hears nothing when the whole
+  // container leaves the document, and the artifact stops painting with no
+  // verdict. Observing the scope element's subtree puts every ancestor of the
+  // container inside the watch, which is the only place that detachment is
+  // audible.
   const rootNode = root as Node;
   if (
     scopeElement &&
@@ -295,6 +303,8 @@ function watchMountedTenantThemeArtifact(
     !(rootNode.contains?.(scopeElement) ?? false)
   ) {
     observer.observe(scopeElement, {
+      childList: true,
+      subtree: true,
       attributes: true,
       attributeOldValue: true,
       attributeFilter: [...TENANT_THEME_ARTIFACT_SCOPE_ATTRIBUTES],

@@ -443,6 +443,20 @@ export function verifyMountedTenantThemeArtifact(
     };
   }
   const element = candidates[0];
+  // The mount law is about what the DOCUMENT paints. A style inside a container
+  // that is not in the document has no `sheet`, contributes nothing to
+  // `document.styleSheets`, and paints nothing -- while the scope half of this
+  // proof would still be answered by the real `documentElement`, which those
+  // bytes are not attached to. Admitting that pair certifies a paint that does
+  // not exist, so a detached mount root is refused by name rather than
+  // re-scoped: there is no honest scope for it to be proven against.
+  if (element.isConnected !== true) {
+    return {
+      ok: false,
+      error:
+        "the mounted artifact element is not attached to the document, so it paints nothing",
+    };
+  }
   if (
     element.getAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE) !==
     artifact.digest
