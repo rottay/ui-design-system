@@ -77,13 +77,43 @@ export function DashboardScreen() {
           rail) and the layout anatomy (flat / floating) also land on this shell.
         </Text>
         <Text size="sm" color="muted">
-          What the tone does NOT move here is the Menu. The default theme declares
-          --ds-menu-bg and the --ds-menu-item-* names, and a declared name makes the
-          fallback behind it inert, so the three --ds-sidebar-item-* channels never win
-          and every candidate paints the same white nav panel with the same row ink over
-          its own ground. The group eyebrow is pre-empted the same way, by a declared
-          --ds-sidebar-group-color. Pre-emption is a DS finding routed to the family
+          The footer line moves its ink but not its ground. The shell paints the footer
+          with var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg)), and the bithire artifact
+          pins --ds-sidebar-footer-bg: #F8FBFF in its light block, so in light every
+          column — including the two dark tones — paints its muted ink on the
+          vertical&apos;s pale strip instead of on the tone&apos;s ground. On that ground
+          the muted ink is under the DS&apos;s own 60 Lc body floor for all three
+          candidates: APCA Lc 52.5 (editorial-quiet), 57.9 (product-dense), 45.3
+          (warm-humanist); the baseline reads 63.6. In dark the artifact sets the footer
+          ground to var(--ds-sidebar-bg) and the footer follows the nav. The pinned ground
+          and the ungoverned muted ink are a vertical/DS defect routed to the family cuts,
+          so this line is evidence about the ink channel only, not about the tone&apos;s
+          ground and not about its contrast.
+        </Text>
+        <Text size="sm" color="muted">
+          What the tone does NOT move here is the Menu, and not for one reason. The modern
+          Menu panel never reads --ds-menu-bg at all: it paints a color-mix over
+          --ds-card-bg in light and over --ds-surface-panel in dark, and no --ds-sidebar-*
+          name is in that chain, so the panel ignores the tone because it never consults
+          it, not because a declared name shadows it. The rows are pre-empted the other
+          way: the default theme declares the --ds-menu-item-* names, and a declared name
+          makes the --ds-sidebar-item-* fallback behind it inert, so those three tone
+          channels never win. The group eyebrow is pre-empted the same way, by a declared
+          --ds-sidebar-group-color. In light that leaves every candidate with the same
+          white nav panel and the same row ink over its own ground; in dark the panel is
+          the dark mix instead of white. Pre-emption is a DS finding routed to the family
           cuts, not a difference between these candidates.
+        </Text>
+        <Text size="sm" color="muted">
+          Dark mode note: on this screen the selected navigation row is unreadable on the
+          baseline and on all three candidates alike — #171717 ink on the #152336
+          panel, APCA Lc 0.0. The default theme declares --ds-menu-item-color-active once,
+          in :root; its html.dark block re-declares --ds-menu-item-color,
+          --ds-menu-item-bg-hover and --ds-menu-item-bg-active but never
+          --ds-menu-item-color-active, so the light value survives into dark and no
+          artifact on this page overrides it. That is a DS default-theme defect routed to
+          the family cuts, and it is identical on every column, so the dark render of this
+          screen is not evidence about any candidate&apos;s navigation.
         </Text>
       </Stack>
 
