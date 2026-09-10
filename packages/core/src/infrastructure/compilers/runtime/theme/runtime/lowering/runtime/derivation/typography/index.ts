@@ -11,10 +11,11 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
+import { numericOverlay } from "./numeric";
 import { deriveTypePairingChannels } from "./pairing";
 import { deriveTypeRoleChannels } from "./roles";
 import { deriveTypeScaleChannels } from "./scale";
-import { deriveTypeWeightChannels } from "./weights";
+import { deriveTypeWeightChannels, roleWeightOverlay } from "./weights";
 
 export { deriveTypePairingChannels } from "./pairing";
 export { deriveTypeRoleChannels } from "./roles";
@@ -39,7 +40,9 @@ export { NUMERIC_POSTURE, numericOverlay } from "./numeric";
  * The two COARSE postures of the kit -- `typography.roleWeights` (row 9) and
  * `typography.numeric` (row 10) -- reach the semantic roles through `roles`
  * rather than beside it, so the vocabulary a component binds has exactly one
- * writer no matter how many decisions state a facet of it.
+ * writer no matter how many decisions state a facet of it. Each posture is
+ * stated by its own sub-owner and handed to the emitter HERE: the family
+ * composes its layers, so no sub-owner depends on a peer to state its own.
  */
 export const typographyDeriver: FamilyDeriver = {
   family: "typography",
@@ -78,6 +81,9 @@ export function deriveTypographyChannels(
     ...deriveTypePairingChannels(bt, expansion),
     ...deriveTypeScaleChannels(),
     ...deriveTypeWeightChannels(bt),
-    ...deriveTypeRoleChannels(bt, typeRoleOverlay),
+    ...deriveTypeRoleChannels(bt, typeRoleOverlay, {
+      numeric: numericOverlay(bt),
+      weights: roleWeightOverlay(bt),
+    }),
   };
 }

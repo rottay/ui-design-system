@@ -11,8 +11,16 @@ import type { SemanticTypographyTokens } from "@/foundation/contracts/kernel/tok
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import { omitUndefined } from "../../../../foundation/shape";
 import { setSemanticTypographyVariables } from "../../../../foundation/typography";
-import { numericOverlay } from "../numeric";
-import { roleWeightOverlay } from "../weights";
+
+/**
+ * The coarse postures the family hands down, in the order they are folded.
+ * They are produced by their own sub-owners and composed by the family, so the
+ * emitter ranks them without depending on the owners that state them.
+ */
+export interface TypeRolePostures {
+  readonly numeric: SemanticTypographyTokens;
+  readonly weights: SemanticTypographyTokens;
+}
 
 /**
  * The three COARSE decisions of the type vocabulary, folded into the authored
@@ -57,7 +65,8 @@ function foldPosture(
  */
 export function deriveTypeRoleChannels(
   bt: BrandTheme,
-  typeRoleOverlay: ExpressiveTypeRoleOverlay | undefined
+  typeRoleOverlay: ExpressiveTypeRoleOverlay | undefined,
+  postures: TypeRolePostures
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   const authoredLabelCase: "uppercase" | "capitalize" | "none" | undefined =
@@ -79,8 +88,8 @@ export function deriveTypeRoleChannels(
           },
         };
   const authoredRoles = foldPosture(
-    foldPosture(withLabelCase, numericOverlay(bt)),
-    roleWeightOverlay(bt)
+    foldPosture(withLabelCase, postures.numeric),
+    postures.weights
   );
   setSemanticTypographyVariables(vars, authoredRoles, typeRoleOverlay);
   return vars;

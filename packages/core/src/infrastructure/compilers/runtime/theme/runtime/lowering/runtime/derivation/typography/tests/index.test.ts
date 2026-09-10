@@ -31,6 +31,12 @@ const theme = (typography: BrandTheme["typography"]): BrandTheme => ({
   typography,
 });
 
+/** What the family hands the role emitter, composed the way the family does. */
+const postures = (typography: BrandTheme["typography"]) => ({
+  numeric: numericOverlay(theme(typography)),
+  weights: roleWeightOverlay(theme(typography)),
+});
+
 describe("typography/scale", () => {
   const channels = deriveTypeScaleChannels();
 
@@ -121,7 +127,7 @@ describe("typography/numeric", () => {
 
 describe("typography.role-weights (kit row 9)", () => {
   const roles = (typography: BrandTheme["typography"]) =>
-    deriveTypeRoleChannels(theme(typography), undefined);
+    deriveTypeRoleChannels(theme(typography), undefined, postures(typography));
 
   it("moves the SEMANTIC role weight, not only the ladder channel", () => {
     // The defect CC-01 measured: the legacy bias moved heading 500->700 and
@@ -198,7 +204,7 @@ describe("typography.role-weights (kit row 9)", () => {
 
 describe("typography.numeric (kit row 10)", () => {
   const roles = (typography: BrandTheme["typography"]) =>
-    deriveTypeRoleChannels(theme(typography), undefined);
+    deriveTypeRoleChannels(theme(typography), undefined, postures(typography));
 
   it("states ONE figure grammar across every role", () => {
     const tabular = roles({ numeric: "tabular" });
@@ -240,7 +246,8 @@ describe("typography.numeric (kit row 10)", () => {
   it("outranks an expressive overlay and loses to the finer authored role", () => {
     const overlaid = deriveTypeRoleChannels(
       theme({ numeric: "tabular" }),
-      { body: { fontVariantNumeric: "oldstyle-nums" } } as never
+      { body: { fontVariantNumeric: "oldstyle-nums" } } as never,
+      postures({ numeric: "tabular" })
     );
     expect(overlaid["--ds-type-body-font-variant-numeric"]).toBe("tabular-nums");
     expect(
