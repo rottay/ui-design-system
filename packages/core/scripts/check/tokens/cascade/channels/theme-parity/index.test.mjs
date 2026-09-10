@@ -15,7 +15,9 @@ import test from "node:test";
 
 import { packageRoot as findPackageRoot } from "../../../../../libraries/repo-root/index.mjs";
 import {
+  categoryOf,
   collectEmitterOwners,
+  deductObligations,
   evaluateObligations,
   runThemeChannelParityGate,
 } from "./index.mjs";
@@ -489,9 +491,10 @@ const shippedLedger = JSON.parse(readFileSync(join(HERE, "obligations/index.json
  * The obligation the mechanism was written for is DISCHARGED: its `ownerLot`
  * was C2, its resolution was DELETE_DECLARATION, and its expiry fired the
  * moment C2 relocated the lowering out of `kernel/runtime/brand-theme`. The
- * shipped ledger is therefore empty — asserted below — and the machinery keeps
- * its full coverage against this synthetic ledger, which is what stops an
- * emptied file from quietly retiring the drills with it.
+ * ledger now carries ONE live entry instead, `emitted-but-unconsumed.posture`
+ * (owner INV-07) — asserted below — and the machinery keeps its full coverage
+ * against this synthetic ledger, which is what stops a change of contents
+ * from quietly retiring the drills with it.
  */
 const ledger = {
   version: 1,
@@ -523,10 +526,17 @@ const LIVE_FIELDS = new Set([
 const options = { resolveOwner: () => LIVE_FIELDS };
 const COUNTERS = { "declared-but-unemitted.BrandSegmentedChrome": 2 };
 
-test("Q1: the shipped ledger is empty because C2 discharged its only obligation", () => {
-  // The expiry was written to fire on exactly this lot, and it did: the two
+test("Q1: C2's obligation is discharged and the ledger carries only INV-07's", () => {
+  // The expiry was written to fire on exactly that lot, and it did: the two
   // declarations are gone from `BrandSegmentedChrome` and the entry with them.
-  assert.deepEqual(shippedLedger.obligations, []);
+  assert.equal(
+    shippedLedger.obligations.some((entry) => entry.id.includes("BrandSegmentedChrome")),
+    false,
+  );
+  assert.deepEqual(
+    shippedLedger.obligations.map((entry) => entry.id),
+    ["emitted-but-unconsumed.posture"],
+  );
   // Scoped to the ONE interface: `focusRing` is a live field on several other
   // chrome families, so a whole-file search would pass for the wrong reason.
   const contracts = readFileSync(
@@ -781,4 +791,198 @@ test("DRILL: the four kit decisions their nested owners derive are emitted", () 
     blind.size > unemitted.size,
     "the one-level read reports strictly more, and every extra is an instrument defect",
   );
+});
+
+/* -------------------------------------------------------------------------- */
+/* generated emitters, and the roll-up an obligation is netted out of          */
+/* -------------------------------------------------------------------------- */
+
+/** Declared fields with no emitter edge, for an arbitrary emitter inventory. */
+function unemittedUnder(files) {
+  const { registry } = parseTypeRegistry([{ file: "theme.ts", text: contract }]);
+  const { fields } = collectDeclaredThemeFields(registry);
+  const emitted = parseEmitterMappings(
+    files.map((file) => ({ file, text: readFileSync(file, "utf8") })),
+    registry,
+  );
+  const graph = buildThemeChannelParityGraph({
+    declarations: fields,
+    emissions: emitted.emissions,
+    routedOwners: emitted.routedOwners,
+    consumers: new Map(),
+    overrideTokens: new Set(),
+    dataProjectedOwners: new Set(),
+  });
+  return new Set(graph.issues.declaredButUnemitted.map((issue) => issue.id));
+}
+
+test("DRILL: an unimported __generated__ emitter cannot certify a channel; an imported one can", () => {
+  const planted = mkdtempSync(join(tmpdir(), "theme-parity-generated-"));
+  const family = join(planted, "family");
+  mkdirSync(join(family, "__generated__"), { recursive: true });
+
+  const composing = `export function familyVars(vars: Record<string, string>, card: Partial<Card> | undefined) {
+  if (card?.bg) vars["--ds-card-bg"] = card.bg;
+}
+`;
+  writeFileSync(join(family, "index.ts"), composing);
+  // Nonproductive generated code: it writes the channel, nothing imports it.
+  writeFileSync(
+    join(family, "__generated__", "index.ts"),
+    `export function generatedVars(vars: Record<string, string>, card: Partial<Card> | undefined) {
+  if (card?.border) vars["--ds-card-border"] = card.border;
+}
+`,
+  );
+
+  const walked = collectEmitterOwners(planted);
+  assert.deepEqual(
+    walked.map((file) => relative(planted, file)),
+    ["family/index.ts"],
+    "an unimported generated owner is not in the inventory",
+  );
+  assert.ok(
+    unemittedUnder(walked).has("Card.border"),
+    "the real finding survives the plant — this is the false negative the productivity test closes",
+  );
+
+  // THE MUTANT: admit the generated file anyway, exactly as the inventory did
+  // before the productivity test, and the finding disappears with nothing
+  // productive emitting the channel.
+  const naive = [join(family, "index.ts"), join(family, "__generated__", "index.ts")];
+  assert.ok(
+    !unemittedUnder(naive).has("Card.border"),
+    "without the productivity test a nonproductive file certifies the emission",
+  );
+
+  // THE OTHER DIRECTION: a generated owner a productive owner imports is a
+  // real emitter and must be admitted, or the fix would invent findings.
+  writeFileSync(
+    join(family, "index.ts"),
+    `import { generatedVars } from "./__generated__";\n${composing}`,
+  );
+  const imported = collectEmitterOwners(planted);
+  assert.deepEqual(
+    imported.map((file) => relative(planted, file)),
+    ["family/__generated__/index.ts", "family/index.ts"],
+  );
+  assert.ok(!unemittedUnder(imported).has("Card.border"));
+
+  // And transitively: generated -> generated is still productive.
+  mkdirSync(join(family, "__generated__", "deep"), { recursive: true });
+  writeFileSync(
+    join(family, "__generated__", "deep", "index.ts"),
+    `export function deepVars(vars: Record<string, string>, card: Partial<Card> | undefined) {
+  if (card?.border) vars["--ds-deep-border"] = card.border;
+}
+`,
+  );
+  writeFileSync(
+    join(family, "__generated__", "index.ts"),
+    `export * from "./deep";
+export function generatedVars(vars: Record<string, string>, card: Partial<Card> | undefined) {
+  if (card?.border) vars["--ds-card-border"] = card.border;
+}
+`,
+  );
+  assert.ok(
+    collectEmitterOwners(planted).some((file) => file.endsWith("__generated__/deep/index.ts")),
+    "the fixpoint reaches a generated owner imported only by another generated owner",
+  );
+
+  rmSync(planted, { recursive: true, force: true });
+});
+
+test("the shipped lowering has no generated emitter, so the productivity test moves no number", () => {
+  const shipped = runThemeChannelParityGate();
+  assert.deepEqual(
+    shipped.analysis.emitterFiles.filter((file) => file.includes("__generated__")),
+    [],
+  );
+  assert.equal(shipped.analysis.emitterFiles.length, 55);
+  assert.equal(shipped.counters["declared-but-unemitted.total"], 23);
+  assert.equal(shipped.counters["emitted-but-unconsumed.total"], 208);
+});
+
+test("an obligated bucket is netted out of its category roll-up, exactly", () => {
+  const counters = {
+    "emitted-but-unconsumed.total": 208,
+    "emitted-but-unconsumed.posture": 4,
+    "emitted-but-unconsumed.card": 3,
+  };
+  const consumed = new Map([["emitted-but-unconsumed.posture", { count: 4 }]]);
+  assert.deepEqual(deductObligations(counters, consumed), {
+    "emitted-but-unconsumed.total": 204,
+    "emitted-but-unconsumed.posture": 4,
+    "emitted-but-unconsumed.card": 3,
+  });
+  assert.equal(counters["emitted-but-unconsumed.total"], 208, "the measured census is not mutated");
+
+  // The deduction buys no slack anywhere else: a fifth dead channel in ANOTHER
+  // bucket still consumes the roll-up and still breaks its own ceiling.
+  const regressed = deductObligations(
+    { ...counters, "emitted-but-unconsumed.total": 209, "emitted-but-unconsumed.card": 4 },
+    consumed,
+  );
+  const evaluation = evaluateParityBaseline(regressed, baseline);
+  assert.match(evaluation.errors.join("\n"), /emitted-but-unconsumed\.card=4; baseline=3/);
+});
+
+test("a category roll-up can never itself be obligated", () => {
+  const rollUp = {
+    obligations: [{ ...ledger.obligations[0], id: "declared-but-unemitted.total" }],
+  };
+  assert.match(
+    evaluateObligations(rollUp, { "declared-but-unemitted.total": 23 }, options).failures.join(""),
+    /is a category roll-up; obligate the bucket that holds the debt/,
+  );
+  const foreign = { obligations: [{ ...ledger.obligations[0], id: "not-a-census.bucket" }] };
+  assert.match(
+    evaluateObligations(foreign, { "not-a-census.bucket": 1 }, options).failures.join(""),
+    /is not a census bucket id/,
+  );
+  assert.equal(categoryOf("emitted-but-unconsumed.posture"), "emitted-but-unconsumed");
+  assert.equal(categoryOf("posture"), null);
+});
+
+test("INV-07: the shipped posture obligation holds against the live census, in both directions", () => {
+  const shipped = runThemeChannelParityGate();
+  const issuesByCategory = {
+    "declared-but-unemitted": shipped.graph.issues.declaredButUnemitted,
+    "emitted-but-unconsumed": shipped.graph.issues.emittedButUnconsumed,
+    "consumed-but-unowned": shipped.graph.issues.consumedButUnowned,
+  };
+  const live = { resolveOwner: (category) => new Set(issuesByCategory[category].map((issue) => issue.id)) };
+
+  const { failures, consumed } = evaluateObligations(shippedLedger, shipped.counters, live);
+  assert.deepEqual(failures, []);
+  assert.equal(consumed.size, 1);
+
+  const [obligation] = shippedLedger.obligations;
+  assert.equal(obligation.ownerLot, "INV-07");
+  assert.equal(obligation.count, obligation.fields.length);
+  for (const owner of [...obligation.legacyEmitterOwners, obligation.declaringOwner]) {
+    assert.ok(existsSync(join(CORE_ROOT, owner)), `${owner} must exist while the obligation is open`);
+  }
+
+  // Q3: the bucket is NOT also a ceiling, and its roll-up is back at the value
+  // it held before the tree walk — the ratchet reads it net of the obligation.
+  assert.equal(Object.hasOwn(baseline.ceilings, "emitted-but-unconsumed.posture"), false);
+  assert.equal(baseline.ceilings["emitted-but-unconsumed.total"], 206);
+  const ratcheted = deductObligations(shipped.counters, consumed);
+  assert.equal(ratcheted["emitted-but-unconsumed.total"], 204);
+  assert.deepEqual(evaluateParityBaseline(ratcheted, baseline).errors, [
+    "new unbaselined bucket: emitted-but-unconsumed.posture=4",
+  ]);
+
+  // The reason is checkable, not prose: the four channels are emitted by the
+  // named deriver and read by nothing under src.
+  const deriver = readFileSync(join(CORE_ROOT, obligation.legacyEmitterOwners[0]), "utf8");
+  const consumers = new Map(
+    shipped.graph.issues.emittedButUnconsumed.map((issue) => [issue.id, issue]),
+  );
+  for (const channel of obligation.fields) {
+    assert.ok(deriver.includes(`"${channel}"`), `${channel} is emitted by the responsive deriver`);
+    assert.ok(consumers.has(channel), `${channel} has no reader`);
+  }
 });

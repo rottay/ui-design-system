@@ -98,6 +98,18 @@ export function loadObligations(path = obligationsPath) {
   return JSON.parse(readFileSync(path, 'utf8'));
 }
 
+export const CENSUS_CATEGORIES = [
+  'declared-but-unemitted',
+  'emitted-but-unconsumed',
+  'consumed-but-unowned',
+];
+
+/** The census category a bucket id belongs to, or null when the id is not a bucket. */
+export function categoryOf(id) {
+  if (typeof id !== 'string') return null;
+  return CENSUS_CATEGORIES.find((category) => id.startsWith(`${category}.`)) ?? null;
+}
+
 export function evaluateObligations(ledger, counters, { resolveOwner }) {
   const failures = [];
   const consumed = new Map();
@@ -113,6 +125,17 @@ export function evaluateObligations(ledger, counters, { resolveOwner }) {
     }
     if (typeof obligation.count !== 'number') {
       failures.push(`obligation ${label} is missing an exact count`);
+      continue;
+    }
+    const category = categoryOf(obligation.id);
+    if (!category) {
+      failures.push(`obligation ${label} is not a census bucket id`);
+      continue;
+    }
+    // A roll-up is the sum of its buckets; obligating it would hide which
+    // bucket the debt is in, which is the opacity this instrument closes.
+    if (obligation.id === `${category}.total`) {
+      failures.push(`obligation ${label} is a category roll-up; obligate the bucket that holds the debt`);
       continue;
     }
 
@@ -140,8 +163,8 @@ export function evaluateObligations(ledger, counters, { resolveOwner }) {
       failures.push(`obligation ${label} count mismatch: expected ${obligation.count}, measured ${live}`);
       continue;
     }
-    // O4 — every named field is still in the live issue list.
-    const owners = resolveOwner();
+    // O4 — every named field is still in the live issue list of its own category.
+    const owners = resolveOwner(category);
     for (const field of obligation.fields ?? []) {
       if (!owners.has(field)) {
         failures.push(`obligation ${label} names a field that is no longer unemitted: ${field}`);
@@ -150,6 +173,24 @@ export function evaluateObligations(ledger, counters, { resolveOwner }) {
     if (failures.length === 0) consumed.set(obligation.id, obligation);
   }
   return { failures, consumed };
+}
+
+/**
+ * An obligated bucket is already accounted for -- exactly, by an owner lot,
+ * with an expiry. Leaving it inside its category roll-up as well would force
+ * the roll-up ceiling up by the same amount, and a raised roll-up ceiling is
+ * permanent anonymous slack: precisely the ceiling-shaped opacity the
+ * obligation replaces. So the ratchet reads the roll-up net of the exact
+ * obligated counts, and every other bucket keeps its own ceiling untouched.
+ * O3 has already proved each deducted count equals the live measurement.
+ */
+export function deductObligations(counters, consumed) {
+  const adjusted = { ...counters };
+  for (const [id, obligation] of consumed) {
+    const total = `${categoryOf(id)}.total`;
+    if (Object.hasOwn(adjusted, total)) adjusted[total] -= obligation.count;
+  }
+  return adjusted;
 }
 
 
@@ -208,17 +249,63 @@ export function collectFiles(dir, predicate, out = []) {
  *
  * Tests and fixtures stay out, the same law the consumer side applies: a
  * proof fixture must never be able to make a declared field look emitted.
+ *
+ * GENERATED OUTPUT IS NOT AUTHORED, so it is not production by position. An
+ * authored `index.ts` under the lowering is an emitter because someone put it
+ * in the ownership tree; a `__generated__/index.ts` is only an emitter when a
+ * productive owner imports it. Admitting it unconditionally lets an
+ * unimported generated file certify a channel as emitted and make a real
+ * declared-but-unemitted finding disappear -- the same false negative the
+ * consumer side already closes by excluding `/__generated__/` in `isSource`.
+ * The productivity test is a fixpoint so a generated owner reached only
+ * through another admitted generated owner still counts.
  */
 const EMITTER_SKIP_DIRS = new Set([...SKIP_DIRS, 'test', 'tests']);
+const GENERATED_DIR = '__generated__';
 
-export function collectEmitterOwners(dir, out = []) {
+function isGeneratedOwner(file) {
+  return file.replace(/\\/g, '/').includes(`/${GENERATED_DIR}/`);
+}
+
+function walkOwners(dir, out = []) {
   const own = join(dir, 'index.ts');
   if (existsSync(own)) out.push(own);
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     if (!entry.isDirectory() || EMITTER_SKIP_DIRS.has(entry.name)) continue;
-    collectEmitterOwners(join(dir, entry.name), out);
+    walkOwners(join(dir, entry.name), out);
   }
-  return out.sort();
+  return out;
+}
+
+/** Relative module specifiers a source names, as the owner files they could resolve to. */
+function importedOwners(file) {
+  const targets = new Set();
+  const text = readFileSync(file, 'utf8');
+  for (const match of text.matchAll(/(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"]+)['"]/g)) {
+    const specifier = match[1];
+    if (!specifier.startsWith('.')) continue;
+    const resolved = resolve(dirname(file), specifier.replace(/\.(?:js|ts)$/, ''));
+    targets.add(`${resolved}.ts`);
+    targets.add(join(resolved, 'index.ts'));
+  }
+  return targets;
+}
+
+export function collectEmitterOwners(dir) {
+  const owners = walkOwners(dir);
+  const admitted = new Set(owners.filter((file) => !isGeneratedOwner(file)));
+  const candidates = owners.filter(isGeneratedOwner);
+  for (let grew = true; grew; ) {
+    grew = false;
+    const imported = new Set();
+    for (const file of admitted) for (const target of importedOwners(file)) imported.add(target);
+    for (const candidate of candidates) {
+      if (admitted.has(candidate) || !imported.has(candidate)) continue;
+      admitted.add(candidate);
+      grew = true;
+    }
+  }
+  return [...admitted].sort();
 }
 
 const emitterFiles = [
@@ -319,22 +406,29 @@ function main() {
   const update = process.argv.includes('--update-baseline');
   const result = runThemeChannelParityGate();
   const baseline = loadBaseline();
-  const evaluation = evaluateParityBaseline(result.counters, baseline);
   const dataOnlyViolations = result.dataOnly.violations;
 
-  // Obligations are consulted AFTER the ratchet, never inside it. Each one
-  // suppresses exactly one `new unbaselined bucket` error and nothing else; an
-  // id that also appears in `ceilings` is an error, because that is the opaque
-  // route this instrument exists to close.
+  // An obligation is validated against the RAW census and only then removed
+  // from the ratchet's view: it suppresses exactly one `new unbaselined
+  // bucket` error and the same exact count inside that bucket's category
+  // roll-up, and nothing else. An id that also appears in `ceilings` is an
+  // error, because that is the opaque route this instrument exists to close.
   const ledger = loadObligations();
+  const issuesByCategory = {
+    'declared-but-unemitted': result.graph.issues.declaredButUnemitted,
+    'emitted-but-unconsumed': result.graph.issues.emittedButUnconsumed,
+    'consumed-but-unowned': result.graph.issues.consumedButUnowned,
+  };
   const { failures: obligationFailures, consumed } = evaluateObligations(ledger, result.counters, {
-    resolveOwner: () => new Set(result.graph.issues.declaredButUnemitted.map((issue) => issue.id)),
+    resolveOwner: (category) => new Set(issuesByCategory[category].map((issue) => issue.id)),
   });
   for (const id of consumed.keys()) {
     if (Object.hasOwn(baseline.ceilings ?? {}, id)) {
       obligationFailures.push(`obligation is not a ceiling: ${id} also appears in baseline.ceilings`);
     }
   }
+  const ratchetCounters = deductObligations(result.counters, consumed);
+  const evaluation = evaluateParityBaseline(ratchetCounters, baseline);
   const suppressed = new Set([...consumed.keys()].map((id) => `new unbaselined bucket: ${id}=${consumed.get(id).count}`));
   const ratchetErrors = evaluation.errors.filter((error) => !suppressed.has(error));
   const ratchetOk = ratchetErrors.length === 0;
@@ -417,8 +511,10 @@ function main() {
     for (const violation of dataOnlyViolations) process.stderr.write(`  - ${violation}\n`);
   }
   for (const [id, obligation] of consumed) {
+    const total = `${categoryOf(id)}.total`;
     process.stdout.write(
-      `  obligation (owner ${obligation.ownerLot}, expires on ${obligation.expiry.kind}): ${id}=${obligation.count}\n`,
+      `  obligation (owner ${obligation.ownerLot}, expires on ${obligation.expiry.kind}): ${id}=${obligation.count}`
+      + ` [${total} measured ${result.counters[total]}, ratcheted ${ratchetCounters[total]}]\n`,
     );
   }
   if (!ratchetOk) {
