@@ -6,7 +6,7 @@
 > Rollback: every control is an INPUT — removing the authored value restores the vertical's baseline.
 > `effect today` is MEASURED, not intended: `not-yet-derived` means the row has no producer anywhere yet.
 
-digest: 9d87d46663134bab57851f7874b533dad93442c64c9ebd1dee2a1cce708f44a1
+digest: c72e0f9832a7b9bd4c48e5cd481249719298f5c3a9c3e0aaaac2eb2c1acdc0cc
 
 ## STANDARD — 19 controls
 
@@ -14,7 +14,7 @@ digest: 9d87d46663134bab57851f7874b533dad93442c64c9ebd1dee2a1cce708f44a1
 |---|---|---|---|---|---|---|---|---|
 | `palette.seeds` | 1 | Brand palette seeds | 4 colours (primary, secondary, accent, background) | `appearance.general.palette.{primary,secondary,accent,background}` | 5 channels | 25/25 (declared fan-out) | never-lockable | css-channels |
 | `palette.status-seeds` | 2 | Status tone seeds (success/warning/error/info) | 4 colours (success, warning, error, info) | `appearance.general.palette.status.{success,warning,error,info}` | 83 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
-| `palette.neutral-temperature` | 3 | Neutral temperature | `cool` \| `neutral` \| `warm` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
+| `palette.neutral-temperature` | 3 | Neutral temperature | `cool` \| `neutral` \| `warm` | `appearance.general.palette.neutralTemperature` | 12 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `typography.pairing` | 7 | Type pairing personality | `sober` \| `editorial` \| `geometric` \| `technical` | `appearance.general.typography.typePairing` | 2 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `typography.scale` | 8 | Type scale dial | [0.9 – 1.1] | `appearance.general.typography.scale` | 1 channel | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `typography.role-weights` | 9 | Role weights | `light` \| `regular` \| `strong` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
@@ -36,7 +36,7 @@ digest: 9d87d46663134bab57851f7874b533dad93442c64c9ebd1dee2a1cce708f44a1
 
 | id | kit row | control | closed domain | document keypath | declared fan-out | minimum families | envelope (D-28 b) | effect today |
 |---|---|---|---|---|---|---|---|---|
-| `palette.contrast-posture` | 4 | Contrast posture | `soft` \| `standard` \| `high` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
+| `palette.contrast-posture` | 4 | Contrast posture | `soft` \| `standard` \| `high` | `appearance.general.palette.contrastPosture` | 16 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `palette.dark-mode` | 5 | Mode selection | `light` \| `dark` \| `auto` | `appearance.general.palette.{backgroundMode,dark.*}` | 1 channel | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
 | `typography.families` | 6 | Registered font pack per role | registered ids (`TENANT_THEME_FONT_PACK_IDS`) | `appearance.general.typography.{fontFamilyBase,fontFamilyHeading}` | 4 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
 | `typography.numeric` | 10 | Numeric posture | `proportional` \| `tabular` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |

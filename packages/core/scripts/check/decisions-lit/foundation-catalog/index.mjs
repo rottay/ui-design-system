@@ -40,9 +40,11 @@ export const TODAY_CONTROL_DENOMINATOR = 22;
 /**
  * The kit rows that do not exist in today's catalog at all. 10 -> 8 on
  * 2026-09-08 (K3 audit HOLD adjudication of WO-DER-02): `states.emphasis` and
- * `states.focus-style` gained a real producer and moved to `partial`.
+ * `states.focus-style` gained a real producer and moved to `partial`. 8 -> 6 on
+ * 2026-09-10 (WO-DER-03 palette half), for the same reason: the two palette
+ * postures gained `derivation/palette/{neutral-temperature,contrast-posture}`.
  */
-export const NEW_DECISION_DENOMINATOR = 8;
+export const NEW_DECISION_DENOMINATOR = 6;
 
 /**
  * `full`    the audit measured full, coherent effect in static and DB
@@ -70,8 +72,14 @@ export const RECORDED_CLASSES = Object.freeze(['full', 'partial', 'none', 'new']
 export const DECISIONS = Object.freeze([
   ['palette.seeds', 'full', [{ primary: '#4F46E5' }, { primary: '#DC2626' }]],
   ['palette.status-seeds', 'full', [{ success: '#10B981' }, { success: '#0EA5E9' }]],
-  ['palette.neutral-temperature', 'new', ['cool', 'warm']],
-  ['palette.contrast-posture', 'new', ['soft', 'high']],
+  // WO-DER-03 palette half (2026-09-10): both palette postures now have a real
+  // producer and the probe MEASURES them moving, so `new` is a lie the run
+  // refuses to publish. The class is `partial`: measured effect, bounded by the
+  // verticals' own hand-authored palettes -- temperature reaches the neutral
+  // ramp and the monochrome anchors, posture the derived inks and separators,
+  // neither the whole fan-out the rows declare.
+  ['palette.neutral-temperature', 'partial', ['cool', 'warm']],
+  ['palette.contrast-posture', 'partial', ['soft', 'high']],
   ['palette.dark-mode', 'none', ['light', 'dark']],
   ['typography.families', 'full', [{ base: 'humanist-text' }, { base: 'editorial-text' }]],
   ['typography.pairing', 'full', ['sober', 'editorial']],

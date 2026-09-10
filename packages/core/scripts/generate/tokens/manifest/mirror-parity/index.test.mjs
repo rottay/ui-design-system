@@ -1069,12 +1069,17 @@ test('todo canal que corta viene con su valor, y todo el que re-deriva con lo qu
 test('declaracion multiple es variante de modo, NO duplicacion', () => {
   const m = doc.multiDeclaration;
   assert.match(m.notDuplication, /NO duplicacion|no duplicacion/i);
-  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 664);
-  assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 438);
+  // WO-DER-03 mitad palette: rottay 664 -> 654 y bithire 438 -> 437. Los 11
+  // canales que salen son pasos de `--ds-color-accent-*` declarados en el
+  // bloque base Y en el de modo: rottay declara los diez en sus dos bloques,
+  // bithire solo el 900. La rampa accent se retiro por falta de lector; evnto
+  // no la declaraba dos veces y no se mueve.
+  assert.equal(m.perTenant.rottay.channelsDeclaredMoreThanOnce, 654);
+  assert.equal(m.perTenant.bithire.channelsDeclaredMoreThanOnce, 437);
   assert.equal(m.perTenant.evnto.channelsDeclaredMoreThanOnce, 87);
   // Casi todas caen en roles distintos: es el bloque claro y el oscuro.
-  assert.equal(m.perTenant.rottay.allInDistinctRoles, 664);
-  assert.equal(m.perTenant.bithire.allInDistinctRoles, 438);
+  assert.equal(m.perTenant.rottay.allInDistinctRoles, 654);
+  assert.equal(m.perTenant.bithire.allInDistinctRoles, 437);
   assert.equal(m.perTenant.evnto.allInDistinctRoles, 87);
   assert.equal(m.perTenant.evnto.sameRoleTwice, 0);
   // Ya NO hay ningun caso de mismo-rol-dos-veces en ningun tema: los tres

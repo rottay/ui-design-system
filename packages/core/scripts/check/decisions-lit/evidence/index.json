@@ -1,11 +1,11 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-09T22:23:47.383Z",
-  "headline": "decisions lit = 7/22 (+0/8 new)",
-  "measuredHeadline": "measured on the 8-family sample: 11/22 move at least one sampled family",
+  "producedAt": "2026-09-10T19:21:20.530Z",
+  "headline": "decisions lit = 7/22 (+0/6 new)",
+  "measuredHeadline": "measured on the 8-family sample: 12/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
-    "newDecisions": 8,
+    "newDecisions": 6,
     "kitRows": 29,
     "measuredFamilySample": [
       "button",
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-09T22:23:24.698Z"
+      "builtAt": "2026-09-10T19:15:08.861Z"
     },
     "sources": {
       "door": {
@@ -30,13 +30,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 738,
-        "digest": "baa55a90aa375a4fcf304723665bdfef74abbf4be26f229928011986c96ac641"
+        "fileCount": 749,
+        "digest": "a65f99086cbc801fb31cc07e12debb1d471cd944e316d7904c3d8067d71ddab4"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "794eacc3d358724b3099b47154431a9a57dc3f7a5565b23d16395b1a5e50220a"
+        "digest": "7d6db7f841807284366bb92d6087a7d690b0b418261683377e6e8c69006115c5"
       }
     },
     "browser": {
@@ -64,7 +64,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "29e59d752ce96e7661a6e113d31ff7c70c943fb14709c0c937eea47338ca8858",
+        "bundleSha": "9dbb03440f59eb0f57200e00b1d47517a5a19f9fc95bcbd01fa8824a1803134a",
         "bundleMode": "fresh"
       },
       "bithire": {
@@ -85,7 +85,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "dc33e893bc5c84197d0a40988ae734bc5bf8bb23c6ff20b8a942acd8bbca94d7",
+        "bundleSha": "1d56ade05cfdfa2a667f7bc75785f95408fa89b8db99c883be5157dce0e9e3c6",
         "bundleMode": "fresh"
       },
       "evnto": {
@@ -106,7 +106,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "2ef78f50a15451ad6b2ad52bd260ac579b96b745ad0496ad5461cc70a3c35303",
+        "bundleSha": "208e091b4a843862fcaa17210747000dd2529535ab705dfc052b8ace14c1bc03",
         "bundleMode": "fresh"
       }
     },
@@ -122,9 +122,9 @@
   },
   "summary": {
     "lit": 7,
-    "partial": 8,
+    "partial": 10,
     "inert": 6,
-    "measuredLit": 11,
+    "measuredLit": 12,
     "discrepancies": [
       {
         "id": "palette.status-seeds",
@@ -174,17 +174,20 @@
       {
         "id": "palette.neutral-temperature",
         "tier": "standard",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
-        "movedFamilies": [],
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "card-modern-md",
+          "input-modern-md"
+        ],
         "movedChannelCount": 0,
         "excludedIn": []
       },
       {
         "id": "palette.contrast-posture",
         "tier": "pro",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -506,7 +509,7 @@
     {
       "id": "palette.neutral-temperature",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -514,7 +517,7 @@
     {
       "id": "palette.contrast-posture",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1234,7 +1237,7 @@
     {
       "id": "palette.neutral-temperature",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1242,7 +1245,7 @@
     {
       "id": "palette.contrast-posture",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1927,15 +1930,28 @@
     {
       "id": "palette.neutral-temperature",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "card-modern-md",
+        "input-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "color"
+        ],
+        "card-modern-md/title": [
+          "color"
+        ],
+        "input-modern-md/root": [
+          "color"
+        ]
+      },
       "movedChannels": []
     },
     {
       "id": "palette.contrast-posture",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
