@@ -1296,6 +1296,11 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // consumed as data. They still get an owner, because an unclassified row is
   // a hole in the census rather than a decision.
   [/^--ds-(?:recipe|experience)-profile$/, () => 'provenance.selection'],
+  // The responsive family's value projection: the container thresholds, the
+  // span bias and the id of the posture that was admitted. No productive
+  // reader exists yet, which is a liveness verdict about them -- not a reason
+  // to leave the emitting control unnamed.
+  [/^--ds-posture-/, () => 'responsive.posture'],
 ]);
 
 export function classifySemanticOwner(name) {

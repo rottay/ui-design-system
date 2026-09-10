@@ -1,5 +1,27 @@
 {
   "version": 1,
-  "_comment": "Bounded transitional obligations for the DS-A003 parity census. NOT a ceiling: an obligation has one owner lot, an exact count, and a structural expiry, and it expires by being resolved rather than by being tolerated. It is a SIBLING of baseline/ and never a key inside it, because --update-baseline rewrites the baseline payload as {version,_comment,ceilings} and would erase anything else it carried. --update-baseline must never write this file, and must refuse to run while any obligation is open.",
-  "obligations": []
+  "_comment": "Bounded transitional obligations for the DS-A003 parity census. NOT a ceiling: an obligation has one owner lot, an exact count, and a structural expiry, and it expires by being resolved rather than by being tolerated. It is a SIBLING of baseline/ and never a key inside it, because --update-baseline rewrites the baseline payload as {version,_comment,ceilings} and would erase anything else it carried. --update-baseline must never write this file, and must refuse to run while any obligation is open. An obligated bucket is also deducted from its category roll-up by its exact count, so recording one here never forces the roll-up ceiling up.",
+  "obligations": [
+    {
+      "id": "emitted-but-unconsumed.posture",
+      "count": 4,
+      "fields": [
+        "--ds-posture-container-compact-max",
+        "--ds-posture-container-standard-max",
+        "--ds-posture-id",
+        "--ds-posture-span-bias"
+      ],
+      "ownerLot": "INV-07",
+      "resolution": "WIRE_OR_RETIRE",
+      "reason": "The four `--ds-posture-*` channels are emitted by the responsive deriver and have no productive var() reader under src. This is neither new emission nor new dead surface: all three shipped artifacts (rottay, bithire, evnto) carry the four names, and the responsive.posture row of src/contracts/theme/runtime/catalog/index.ts already states, as a typed authority, that no productive reader exists and that the adoption is INV-07's obligation. What changed on 2026-09-09 is instrument reach -- the emitter inventory now walks the lowering as the tree it is, so `derivation/responsive` is inside the census for the first time. A ceiling would have recorded the number and nothing else; this records the owner, the resolution and the expiry, and holds the count exact in both directions so neither a fifth dead channel nor a silent partial drain can pass.",
+      "declaringOwner": "src/contracts/theme/runtime/catalog/index.ts",
+      "legacyEmitterOwners": [
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/responsive/index.ts"
+      ],
+      "expiry": {
+        "kind": "emitter-relocation-or-reader-adoption",
+        "note": "Fires the moment the responsive deriver moves or is retired -- at which point the four channels are gone and this entry must be deleted -- and O4 fires the moment any of the four gains a reader and leaves the emitted-but-unconsumed list. Either way INV-07 must rule: wire the channels to a family or retire them from the catalog row."
+      }
+    }
+  ]
 }

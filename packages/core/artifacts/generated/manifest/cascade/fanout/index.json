@@ -41,7 +41,7 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2568,
+    "filesScanned": 2570,
     "channels": 7510,
     "channelsDs": 7125,
     "channelsBridge": 385,
@@ -153768,7 +153768,9 @@
     {
       "channel": "--ds-ease-exit",
       "kind": "ds",
-      "declaredIn": [],
+      "declaredIn": [
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts"
+      ],
       "planes": [
         "ts-other"
       ],
@@ -153911,7 +153913,9 @@
     {
       "channel": "--ds-ease-standard",
       "kind": "ds",
-      "declaredIn": [],
+      "declaredIn": [
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts"
+      ],
       "planes": [
         "modern-skin-css",
         "presentation-css",
@@ -154469,7 +154473,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts",
-          "line": 64,
+          "line": 67,
           "prop": "--ds-motion-ease-standard",
           "scalars": []
         }
@@ -154480,7 +154484,8 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts"
+        "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/elevation/border/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -154525,7 +154530,8 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts"
+        "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/elevation/border/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -154993,7 +154999,8 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/themes/default/index.css",
-        "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts"
+        "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/elevation/border/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -176995,14 +177002,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/weights/index.ts",
-          "line": 15,
+          "line": 19,
           "prop": "--ds-font-weight-regular",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/weights/index.ts",
-          "line": 19,
+          "line": 23,
           "prop": "--ds-font-weight-body",
           "scalars": []
         }
@@ -223101,7 +223108,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts",
-          "line": 48,
+          "line": 51,
           "prop": "--ds-motion-normal",
           "scalars": []
         }
@@ -223238,14 +223245,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts",
-          "line": 49,
+          "line": 52,
           "prop": "--ds-motion-slow",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts",
-          "line": 50,
+          "line": 53,
           "prop": "--ds-motion-glacial",
           "decl": "calc(var(--ds-motion-deliberate) * 1.5625)",
           "scalars": []
@@ -223498,7 +223505,8 @@
       "channel": "--ds-motion-ease-enter",
       "kind": "ds",
       "declaredIn": [
-        "src/foundation/tokens/css/foundation/animations/transitions/index.css"
+        "src/foundation/tokens/css/foundation/animations/transitions/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts"
       ],
       "planes": [
         "foundation-css",
@@ -224268,7 +224276,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts",
-          "line": 65,
+          "line": 68,
           "prop": "--ds-motion-ease-out",
           "scalars": []
         }
@@ -224342,6 +224350,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/animations/transitions/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts",
         "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts"
       ],
       "planes": [
@@ -238542,7 +238551,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts",
-          "line": 47,
+          "line": 50,
           "prop": "--ds-motion-fast",
           "scalars": []
         }
@@ -240140,6 +240149,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/animations/transitions/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts",
         "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts"
       ],
       "planes": [
@@ -240186,6 +240196,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/animations/transitions/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts",
         "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts"
       ],
       "planes": [
@@ -240611,6 +240622,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/foundation/animations/transitions/index.css",
+        "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts",
         "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts"
       ],
       "planes": [

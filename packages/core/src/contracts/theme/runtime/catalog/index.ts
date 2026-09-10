@@ -103,8 +103,9 @@ export type ThemeControlEnvelope =
  *
  * `data-only` is F-35's disposition for an axis that reaches the lowering and
  * emits nothing: it is declared here rather than published as if it painted.
- * `not-yet-derived` is the ten kit rows marked `(new)`, which have no producer
- * anywhere yet; it is not a synonym of `data-only`.
+ * `not-yet-derived` is a row with no producer anywhere yet; it is not a synonym
+ * of `data-only`, and it is not a synonym of partial reach either -- a row that
+ * derives fewer families than it declares still carries `css-channels`.
  */
 export type ThemeControlEffect =
   | "css-channels"
@@ -393,13 +394,34 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "standard",
     title: "Role weights",
     domain: { kind: "enum", values: ["light", "regular", "strong"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.typography.roleWeights",
+      brandTheme: "typography.roleWeights",
+    },
     consumes: ["typography.families"],
-    produces: { channels: [], rootAttributes: [] },
+    // The two ladder channels the heading and display surfaces bind, plus the
+    // five SEMANTIC role weights a component actually reads. The legacy
+    // `typography.headingWeightBias` reaches the first two only, which is why
+    // it is a fallback and not this decision: a bias that cannot move
+    // `--ds-type-display-font-weight` cannot state a weight posture. The four
+    // text roles (body, supporting, caption, code) are a legibility floor and
+    // no posture moves them.
+    produces: {
+      channels: [
+        "--ds-font-weight-heading",
+        "--ds-font-weight-display",
+        "--ds-type-display-font-weight",
+        "--ds-type-page-title-font-weight",
+        "--ds-type-section-title-font-weight",
+        "--ds-type-label-font-weight",
+        "--ds-type-numeric-font-weight",
+      ],
+      rootAttributes: [],
+    },
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "open",
-    effect: "not-yet-derived",
-    defaultBehavior: "the vertical's authored role weights",
+    effect: "css-channels",
+    defaultBehavior: "the legacy heading bias, then `regular`: the resting ladder",
   },
   {
     id: "typography.numeric",
@@ -408,13 +430,32 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "pro",
     title: "Numeric posture",
     domain: { kind: "enum", values: ["proportional", "tabular"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.typography.numeric",
+      brandTheme: "typography.numeric",
+    },
     consumes: ["typography.families"],
-    produces: { channels: [], rootAttributes: [] },
+    // ONE figure posture, stated across the whole role vocabulary rather than
+    // per surface: a table that aligns its figures and a heading that does not
+    // is not a decision, it is a per-role accident.
+    produces: {
+      channels: [
+        "--ds-type-display-font-variant-numeric",
+        "--ds-type-page-title-font-variant-numeric",
+        "--ds-type-section-title-font-variant-numeric",
+        "--ds-type-body-font-variant-numeric",
+        "--ds-type-supporting-font-variant-numeric",
+        "--ds-type-label-font-variant-numeric",
+        "--ds-type-caption-font-variant-numeric",
+        "--ds-type-code-font-variant-numeric",
+        "--ds-type-numeric-font-variant-numeric",
+      ],
+      rootAttributes: [],
+    },
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "open",
-    effect: "not-yet-derived",
-    defaultBehavior: "the numeric role of the base family",
+    effect: "css-channels",
+    defaultBehavior: "the DS resting posture: prose proportional, code and numeric tabular",
   },
   {
     id: "shape.radius-scale",
@@ -546,16 +587,33 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "standard",
     title: "Border style",
     domain: { kind: "enum", values: ["none", "hairline", "strong"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.surfaces.borderStyle",
+      brandTheme: "surfaces.borderStyle",
+    },
     consumes: ["palette.seeds"],
-    produces: { channels: [], rootAttributes: [] },
+    // The three border-width ROLES the declared families read, authored
+    // DIRECTLY, and nothing else. `--ds-elevation-border-style` belongs to
+    // `surfaces.elevation-posture`: a tenant posture writes it from the
+    // `tenant` rank, above the family this row derives in, so this row does not
+    // contest it -- a `0px` role width already draws no keyline. The structural
+    // `--ds-border-width-{0,1,2,4,8}` scale is never touched: a posture
+    // modulates roles, never the scale.
+    produces: {
+      channels: [
+        "--ds-edge-hairline-width",
+        "--ds-edge-standard-width",
+        "--ds-edge-emphasis-width",
+      ],
+      rootAttributes: [],
+    },
     minimumFamilies: {
       kind: "declared-fan-out",
       families: ["card", "input", "table", "panel"],
     },
     envelope: "open",
-    effect: "not-yet-derived",
-    defaultBehavior: "the vertical's authored border weights",
+    effect: "css-channels",
+    defaultBehavior: "the expressive `edge` axis default of the vertical",
   },
   {
     id: "surfaces.effect-intensity",
@@ -696,13 +754,30 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "pro",
     title: "Motion character",
     domain: { kind: "enum", values: ["mechanical", "organic", "playful"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.motion.character",
+      brandTheme: "motion.character",
+    },
     consumes: ["motion.dial"],
-    produces: { channels: [], rootAttributes: [] },
+    // The SHAPE of motion: the easing families and the distance a surface
+    // travels entering. Never a duration -- `motion.dial` owns how long, and a
+    // character that also moved the cadence would apply one axis twice.
+    produces: {
+      channels: [
+        "--ds-ease-standard",
+        "--ds-ease-exit",
+        "--ds-motion-ease-enter",
+        "--ds-motion-ease-in-out",
+        "--ds-motion-scale-in",
+        "--ds-motion-offset-in",
+        "--ds-motion-panel-offset",
+      ],
+      rootAttributes: [],
+    },
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "locked-by-default",
-    effect: "not-yet-derived",
-    defaultBehavior: "the engine's authored eases and springs",
+    effect: "css-channels",
+    defaultBehavior: "`organic`: the engine's own authored eases",
   },
   {
     id: "navigation.sidebar-tone",
@@ -896,10 +971,28 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
       brandTheme: "responsive.posture",
     },
     consumes: [],
-    produces: { channels: [], rootAttributes: [] },
+    // CC-02: this row said `data-only` with no channels after the deriver
+    // began projecting the selected posture. The EMISSION is these four; the
+    // CONSUMER status is a separate fact and stays honest below. A media query
+    // cannot read a custom property, so these are the contract's value
+    // projection, never a replacement for the thresholds a `@media` prelude
+    // spells out.
+    produces: {
+      channels: [
+        "--ds-posture-id",
+        "--ds-posture-container-compact-max",
+        "--ds-posture-container-standard-max",
+        "--ds-posture-span-bias",
+      ],
+      rootAttributes: [],
+    },
+    // Deliberately empty, and NOT an oversight: no productive `--ds-posture-*`
+    // reader exists under `src`. The adaptive solver reads the posture as data
+    // on its own route. Claiming a family here would count a serialized custom
+    // property as component behaviour; the adoption is INV-07's obligation.
     minimumFamilies: { kind: "declared-fan-out", families: [] },
     envelope: "open",
-    effect: "data-only",
+    effect: "css-channels",
     defaultBehavior: "the vertical's responsive contract, unchanged",
   },
 ] as const satisfies readonly ThemeControlRow[]);

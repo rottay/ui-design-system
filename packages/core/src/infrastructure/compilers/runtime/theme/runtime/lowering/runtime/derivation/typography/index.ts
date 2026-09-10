@@ -11,16 +11,17 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
+import { numericOverlay } from "./numeric";
 import { deriveTypePairingChannels } from "./pairing";
 import { deriveTypeRoleChannels } from "./roles";
 import { deriveTypeScaleChannels } from "./scale";
-import { deriveTypeWeightChannels } from "./weights";
+import { deriveTypeWeightChannels, roleWeightOverlay } from "./weights";
 
 export { deriveTypePairingChannels } from "./pairing";
 export { deriveTypeRoleChannels } from "./roles";
 export { deriveTypeScaleChannels } from "./scale";
-export { deriveTypeWeightChannels } from "./weights";
-export { NUMERIC_POSTURE } from "./numeric";
+export { deriveTypeWeightChannels, roleWeightOverlay } from "./weights";
+export { NUMERIC_POSTURE, numericOverlay } from "./numeric";
 
 /**
  * One family, one deriver.
@@ -35,6 +36,13 @@ export { NUMERIC_POSTURE } from "./numeric";
  * bind, numeric states the figure posture the roles wear, and roles states
  * what a surface actually binds. They are composed in that order, so a later
  * layer refines an earlier one instead of contradicting it.
+ *
+ * The two COARSE postures of the kit -- `typography.roleWeights` (row 9) and
+ * `typography.numeric` (row 10) -- reach the semantic roles through `roles`
+ * rather than beside it, so the vocabulary a component binds has exactly one
+ * writer no matter how many decisions state a facet of it. Each posture is
+ * stated by its own sub-owner and handed to the emitter HERE: the family
+ * composes its layers, so no sub-owner depends on a peer to state its own.
  */
 export const typographyDeriver: FamilyDeriver = {
   family: "typography",
@@ -43,6 +51,8 @@ export const typographyDeriver: FamilyDeriver = {
     "typography.*",
     "typography.roles",
     "typography.labelStyle",
+    "typography.roleWeights",
+    "typography.numeric",
     "typography.headingWeightBias",
     "expressive.*",
   ],
@@ -71,6 +81,9 @@ export function deriveTypographyChannels(
     ...deriveTypePairingChannels(bt, expansion),
     ...deriveTypeScaleChannels(),
     ...deriveTypeWeightChannels(bt),
-    ...deriveTypeRoleChannels(bt, typeRoleOverlay),
+    ...deriveTypeRoleChannels(bt, typeRoleOverlay, {
+      numeric: numericOverlay(bt),
+      weights: roleWeightOverlay(bt),
+    }),
   };
 }

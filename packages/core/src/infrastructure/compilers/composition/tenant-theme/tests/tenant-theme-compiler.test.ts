@@ -438,11 +438,21 @@ describe("TenantThemeConfig v1 server contract", () => {
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-e893268074cc59e4acdeaf27a0986d71104c98df67c12bf643031ed615caa952"
     );
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    // CC-01: the envelope gained the four authoring routes the kit's unlit rows
+    // needed (`general.typography.{roleWeights,numeric}`,
+    // `general.surfaces.borderStyle`, `general.motion.character`). A WIDENING,
+    // so the superseded pins stay asserted and the ratchet keeps its history.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-c35633aea90299acc841fc8e62221622e44083941761dfd4e71d80ef642f5c45"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-576975600674f58a3e3f2a1a8d12e51f6ff0294df84da40c7e379e7c72ef9188"
+    );
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-c6864c2ca65dfce8ca948905de4834c0afffd0b30942aa8190ef49602f1a0856"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-9654077d42fe6b5732527b73e28a9e47f85e156d8454d632ac91692f0de38c63"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

@@ -3,12 +3,12 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "d36421bd68486b62e388681548390c4057d8d692b9ec6b61c3b5ee23a8c9f8da",
+    "inputsDigest": "3a0124c79939261aa5a2c7fc97e2485e14041a4addc1763066cca0f8b5b85257",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 462,
-      "productionTsFiles": 2106,
-      "testFiles": 1378,
+      "productionTsFiles": 2108,
+      "testFiles": 1381,
       "artifactFiles": 3
     }
   },
@@ -25,7 +25,7 @@
     "modernConsumedUnique": 3664,
     "tsReadNames": 2705,
     "tsWriteNames": 1350,
-    "tsMetadataNames": 837,
+    "tsMetadataNames": 860,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
@@ -11549,7 +11549,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 2
     },
     "--ds-button-link-bg": {
@@ -11999,7 +11999,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 2
     },
     "--ds-button-outline-bg": {
@@ -12809,7 +12809,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 2
     },
     "--ds-button-spinner-color": {
@@ -13784,7 +13784,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 2
     },
     "--ds-button-xs-border-radius": {
@@ -13934,7 +13934,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 2
     },
     "--ds-calendar-active-ink": {
@@ -38403,8 +38403,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 4,
+      "tsMetadataMentions": 1
     },
     "--ds-ease-in-out": {
       "category": "canonical-authority",
@@ -38478,8 +38478,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 4,
+      "tsMetadataMentions": 1
     },
     "--ds-edge-emphasis-width": {
       "category": "canonical-authority",
@@ -38493,8 +38493,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 5,
-      "tsMetadataMentions": 5
+      "tsWriteSites": 8,
+      "tsMetadataMentions": 7
     },
     "--ds-edge-hairline-width": {
       "category": "canonical-authority",
@@ -38508,8 +38508,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 5,
-      "tsMetadataMentions": 2
+      "tsWriteSites": 8,
+      "tsMetadataMentions": 4
     },
     "--ds-edge-standard-style": {
       "category": "canonical-authority",
@@ -38538,8 +38538,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 5,
-      "tsMetadataMentions": 5
+      "tsWriteSites": 8,
+      "tsMetadataMentions": 7
     },
     "--ds-edit-fields-grid-columns": {
       "category": "component-channel",
@@ -42664,7 +42664,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-font-weight-extrabold": {
       "category": "canonical-authority",
@@ -42709,7 +42709,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-font-weight-light": {
       "category": "canonical-authority",
@@ -61308,8 +61308,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 4,
+      "tsMetadataMentions": 1
     },
     "--ds-motion-ease-exit": {
       "category": "compiler-derived-channel",
@@ -61334,12 +61334,12 @@
       "reads": {
         "css": 61,
         "ts": 1,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 4,
+      "tsMetadataMentions": 1
     },
     "--ds-motion-ease-move": {
       "category": "compiler-derived-channel",
@@ -61488,8 +61488,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 4,
+      "tsMetadataMentions": 1
     },
     "--ds-motion-panel-offset": {
       "category": "canonical-authority",
@@ -61503,8 +61503,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 4,
+      "tsMetadataMentions": 1
     },
     "--ds-motion-rearrange": {
       "category": "compiler-derived-channel",
@@ -61563,8 +61563,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 4,
+      "tsMetadataMentions": 1
     },
     "--ds-motion-slow": {
       "category": "canonical-authority",
@@ -66154,7 +66154,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 1
+      "tsMetadataMentions": 2
     },
     "--ds-posture-container-standard-max": {
       "category": "compiler-derived-channel",
@@ -66169,7 +66169,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 1
+      "tsMetadataMentions": 2
     },
     "--ds-posture-id": {
       "category": "compiler-derived-channel",
@@ -66184,7 +66184,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 1
+      "tsMetadataMentions": 2
     },
     "--ds-posture-span-bias": {
       "category": "compiler-derived-channel",
@@ -66199,7 +66199,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 1
+      "tsMetadataMentions": 2
     },
     "--ds-premium-card-accent": {
       "category": "canonical-authority",
@@ -69498,7 +69498,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 3,
+      "tsWriteSites": 4,
       "tsMetadataMentions": 8
     },
     "--ds-radius-card": {
@@ -105932,12 +105932,12 @@
       "reads": {
         "css": 1,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-body-font-weight": {
       "category": "tenant-raw-override",
@@ -106072,7 +106072,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-caption-font-weight": {
       "category": "tenant-raw-override",
@@ -106192,7 +106192,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-code-font-weight": {
       "category": "tenant-raw-override",
@@ -106477,7 +106477,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-display-font-weight": {
       "category": "tenant-raw-override",
@@ -106492,7 +106492,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-display-letter-spacing": {
       "category": "tenant-raw-override",
@@ -106627,7 +106627,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-label-font-weight": {
       "category": "tenant-raw-override",
@@ -106642,7 +106642,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-label-letter-spacing": {
       "category": "tenant-raw-override",
@@ -106852,7 +106852,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-numeric-font-weight": {
       "category": "tenant-raw-override",
@@ -106867,7 +106867,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-numeric-letter-spacing": {
       "category": "tenant-raw-override",
@@ -106987,7 +106987,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-page-title-font-weight": {
       "category": "tenant-raw-override",
@@ -107002,7 +107002,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-page-title-letter-spacing": {
       "category": "tenant-raw-override",
@@ -107152,7 +107152,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-section-title-font-weight": {
       "category": "tenant-raw-override",
@@ -107167,7 +107167,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-section-title-letter-spacing": {
       "category": "tenant-raw-override",
@@ -107302,7 +107302,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-type-supporting-font-weight": {
       "category": "tenant-raw-override",

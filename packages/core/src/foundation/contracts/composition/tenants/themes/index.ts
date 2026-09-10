@@ -576,6 +576,31 @@ export interface BrandTypography {
   fontFamilyMono?: string;
   fontFamilyDisplay?: string;
   headingWeightBias?: "lighter" | "normal" | "heavier";
+  /**
+   * Kit row 9: the weight posture the whole role vocabulary wears.
+   *
+   * A DECISION, and the reason `headingWeightBias` is not one: the bias only
+   * ever reached `--ds-font-weight-heading` and `--ds-font-weight-display`, so
+   * a theme that asked for heavier headings still drew every `--ds-type-<role>`
+   * at the builder's own weight. This posture states the ladder AND the role
+   * weights the surfaces actually bind, and it outranks the bias wherever both
+   * are authored; the bias keeps its own two channels as the fallback.
+   *
+   * Absent -> the bias, then `regular`, which is the resting ladder.
+   */
+  roleWeights?: "light" | "regular" | "strong";
+  /**
+   * Kit row 10: the figure posture every role wears.
+   *
+   * Tabular figures align in a column and proportional ones read as prose;
+   * which of the two a product wants is one statement about the whole type
+   * vocabulary, not a per-role accident. Reaches
+   * `--ds-type-<role>-font-variant-numeric` for all nine roles.
+   *
+   * Absent -> the DS resting posture (prose roles normal, code and numeric
+   * tabular), which is byte-identical to today.
+   */
+  numeric?: "proportional" | "tabular";
   headingLetterSpacing?: string;
   labelStyle?: "uppercase" | "sentence" | "capitalize";
   /** Per-role type system consumed by components instead of ad-hoc triples. */
@@ -710,6 +735,24 @@ export interface BrandSurfaces {
    * the double ring the interaction contract already specifies.
    */
   focusStyle?: "ring" | "underline" | "glow";
+  /**
+   * Kit row 18: the weight of the keyline every bounded surface wears.
+   *
+   * DIRECT authorship of the three border-width ROLES
+   * (`--ds-edge-{hairline,standard,emphasis}-width`), which is what a tenant
+   * who wanted borderless chrome used to have to buy a shadow posture for.
+   * The border style that posture implies (`--ds-elevation-border-style`)
+   * stays the posture's, at the posture's rank: this field never contests it,
+   * because a `0px` role width already draws nothing.
+   *
+   * Structural `--ds-border-width-{0,1,2,4,8}` scale tokens stay untouched --
+   * this posture modulates roles, never the scale -- and selection, error and
+   * focus borders ride their own state channels, so no value here can make a
+   * state border-only invisible.
+   *
+   * Absent -> the expressive `edge` axis default, byte-identical to today.
+   */
+  borderStyle?: "none" | "hairline" | "strong";
 }
 
 /**
@@ -724,6 +767,19 @@ export interface BrandMotion {
   durationScale?: number;
   /** Behavioral motion policy; intentionally emits no CSS custom property. */
   ambient?: TenantMotionDial["ambient"];
+  /**
+   * Kit row 23: the SHAPE of motion, orthogonal to the speed dial above.
+   *
+   * `motion.dial` decides how long a transition takes; this decides what curve
+   * it travels and how far a surface moves getting there. Reaches the easing
+   * and entrance-offset roles, never a duration -- so a tenant can ask for
+   * mechanical motion without also asking for fast motion.
+   *
+   * One of the three GOVERNED fields on this otherwise deprecated interface
+   * (see `intensity` and `durationScale`): bounded, closed, and admissible on
+   * both transports. Absent -> `organic`, the engine's own eases.
+   */
+  character?: "mechanical" | "organic" | "playful";
   entrance?: "none" | "fade" | "slideUp" | "spring" | "bounce";
   entranceDuration?: number;
   hoverLift?: number;
@@ -3218,6 +3274,18 @@ export interface TenantAppearanceGeneral {
     typePairing?: "sober" | "editorial" | "geometric" | "technical";
     /** Multiplies the font-size ramp through `--ds-type-scale`. */
     scale?: number;
+    /**
+     * Kit row 9: the weight posture the role vocabulary wears. Lowers through
+     * `derivation/typography/weights` onto the two ladder channels AND the nine
+     * `--ds-type-<role>-font-weight` channels.
+     */
+    roleWeights?: "light" | "regular" | "strong";
+    /**
+     * Kit row 10: the figure posture the role vocabulary wears. Lowers through
+     * `derivation/typography/numeric` onto the nine
+     * `--ds-type-<role>-font-variant-numeric` channels.
+     */
+    numeric?: "proportional" | "tabular";
   };
   shape?: {
     buttonStyle?: "sharp" | "soft" | "pill";
@@ -3241,8 +3309,16 @@ export interface TenantAppearanceGeneral {
   /**
    * Tenant-owned motion preference. Values are clamped by the runtime policy;
    * tenants cannot inject choreography, loops, keyframes or spring physics.
+   *
+   * `character` (kit row 23) rides the same group without entering
+   * `TenantMotionDial`: the dial is the three bounded SPEED inputs and its key
+   * set is closed by `MOTION_DIAL_KEYS`, which the `motion.dial` decision is
+   * judged against. Widening that type would let one decision's domain answer
+   * for another's.
    */
-  motion?: TenantMotionDial;
+  motion?: TenantMotionDial & {
+    character?: "mechanical" | "organic" | "playful";
+  };
   /**
    * The two interaction-state decisions (kit rows 20 and 21). Emphasis is the
    * delta every state expresses; focus is the signature every focusable
@@ -3261,6 +3337,12 @@ export interface TenantAppearanceGeneral {
      * to both the global safety bounds and the owning vertical envelope.
      */
     effectIntensity?: number;
+    /**
+     * Kit row 18: the keyline weight every bounded surface wears. Lowers
+     * through `derivation/elevation/border` onto the three
+     * `--ds-edge-*-width` roles, independently of the elevation posture above.
+     */
+    borderStyle?: "none" | "hairline" | "strong";
   };
   navigation?: {
     sidebarTone?: "subtle" | "strong" | "inverse";

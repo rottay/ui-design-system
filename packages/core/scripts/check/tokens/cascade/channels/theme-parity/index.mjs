@@ -29,6 +29,8 @@
  *   node scripts/check/tokens/cascade/channels/theme-parity/index.mjs --current-json
  *   node scripts/check/tokens/cascade/channels/theme-parity/index.mjs --update-baseline
  */
+import ts from 'typescript';
+
 import {
   existsSync,
   readFileSync,
@@ -73,23 +75,6 @@ const loweringDir = join(
   'runtime',
   'lowering',
 );
-/**
- * Every emitter that can declare a chrome channel. The lowering's writers are
- * one owner per concern since C2, so the list enumerates them rather than
- * naming a single compiler file: a channel emitted by any one of them is
- * emitted, and a list that saw only one owner would report the others' fields
- * as declared-but-unemitted.
- */
-const emitterFiles = [
-  join(srcDir, 'infrastructure', 'compilers', 'kernel', 'foundation', 'css', 'chrome-variables', 'index.ts'),
-  ...readdirSync(join(loweringDir, 'foundation'))
-    .sort()
-    .map((owner) => join(loweringDir, 'foundation', owner, 'index.ts')),
-  ...readdirSync(join(loweringDir, 'runtime'))
-    .sort()
-    .map((owner) => join(loweringDir, 'runtime', owner, 'index.ts')),
-  join(loweringDir, 'index.ts'),
-];
 const compilersDir = join(srcDir, 'infrastructure', 'compilers');
 const baselinePath = join(here, 'baseline/index.json');
 const obligationsPath = join(here, 'obligations/index.json');
@@ -115,6 +100,18 @@ export function loadObligations(path = obligationsPath) {
   return JSON.parse(readFileSync(path, 'utf8'));
 }
 
+export const CENSUS_CATEGORIES = [
+  'declared-but-unemitted',
+  'emitted-but-unconsumed',
+  'consumed-but-unowned',
+];
+
+/** The census category a bucket id belongs to, or null when the id is not a bucket. */
+export function categoryOf(id) {
+  if (typeof id !== 'string') return null;
+  return CENSUS_CATEGORIES.find((category) => id.startsWith(`${category}.`)) ?? null;
+}
+
 export function evaluateObligations(ledger, counters, { resolveOwner }) {
   const failures = [];
   const consumed = new Map();
@@ -130,6 +127,17 @@ export function evaluateObligations(ledger, counters, { resolveOwner }) {
     }
     if (typeof obligation.count !== 'number') {
       failures.push(`obligation ${label} is missing an exact count`);
+      continue;
+    }
+    const category = categoryOf(obligation.id);
+    if (!category) {
+      failures.push(`obligation ${label} is not a census bucket id`);
+      continue;
+    }
+    // A roll-up is the sum of its buckets; obligating it would hide which
+    // bucket the debt is in, which is the opacity this instrument closes.
+    if (obligation.id === `${category}.total`) {
+      failures.push(`obligation ${label} is a category roll-up; obligate the bucket that holds the debt`);
       continue;
     }
 
@@ -157,8 +165,8 @@ export function evaluateObligations(ledger, counters, { resolveOwner }) {
       failures.push(`obligation ${label} count mismatch: expected ${obligation.count}, measured ${live}`);
       continue;
     }
-    // O4 — every named field is still in the live issue list.
-    const owners = resolveOwner();
+    // O4 — every named field is still in the live issue list of its own category.
+    const owners = resolveOwner(category);
     for (const field of obligation.fields ?? []) {
       if (!owners.has(field)) {
         failures.push(`obligation ${label} names a field that is no longer unemitted: ${field}`);
@@ -167,6 +175,24 @@ export function evaluateObligations(ledger, counters, { resolveOwner }) {
     if (failures.length === 0) consumed.set(obligation.id, obligation);
   }
   return { failures, consumed };
+}
+
+/**
+ * An obligated bucket is already accounted for -- exactly, by an owner lot,
+ * with an expiry. Leaving it inside its category roll-up as well would force
+ * the roll-up ceiling up by the same amount, and a raised roll-up ceiling is
+ * permanent anonymous slack: precisely the ceiling-shaped opacity the
+ * obligation replaces. So the ratchet reads the roll-up net of the exact
+ * obligated counts, and every other bucket keeps its own ceiling untouched.
+ * O3 has already proved each deducted count equals the live measurement.
+ */
+export function deductObligations(counters, consumed) {
+  const adjusted = { ...counters };
+  for (const [id, obligation] of consumed) {
+    const total = `${categoryOf(id)}.total`;
+    if (Object.hasOwn(adjusted, total)) adjusted[total] -= obligation.count;
+  }
+  return adjusted;
 }
 
 
@@ -203,6 +229,227 @@ export function collectFiles(dir, predicate, out = []) {
   }
   return out.sort();
 }
+
+/**
+ * Every emitter that can declare a chrome channel. The lowering's writers are
+ * one owner per concern since C2, so the inventory walks them rather than
+ * naming a single compiler file: a channel emitted by any one of them is
+ * emitted, and an inventory that saw only one owner would report the others'
+ * fields as declared-but-unemitted.
+ *
+ * THE LOWERING IS A TREE. Reading `<branch>/<owner>/index.ts` and nothing
+ * below it was true while every owner was a single file. It stopped being
+ * true when the families grew nested owners: `derivation/motion/character`,
+ * `derivation/typography/{numeric,roles,weights}` and
+ * `derivation/elevation/border` hold the `vars[...]` assignments for
+ * `BrandMotion.character`, `BrandTypography.{numeric,roleWeights}` and
+ * `BrandSurfaces.borderStyle` while their parent only composes them -- and
+ * the whole `derivation/` branch already sat one level deeper than the read
+ * reached, so its owners were invisible as a block. A parent that never
+ * names a field is not evidence that nothing emits it, so the walk is
+ * recursive and every `index.ts` under the lowering is an emitter.
+ *
+ * Tests and fixtures stay out, the same law the consumer side applies: a
+ * proof fixture must never be able to make a declared field look emitted.
+ *
+ * GENERATED OUTPUT IS NOT AUTHORED, so it is not production by position. An
+ * authored `index.ts` under the lowering is an emitter because someone put it
+ * in the ownership tree; a `__generated__/index.ts` is only an emitter when a
+ * productive owner imports it. Admitting it unconditionally lets an
+ * unimported generated file certify a channel as emitted and make a real
+ * declared-but-unemitted finding disappear -- the same false negative the
+ * consumer side already closes by excluding `/__generated__/` in `isSource`.
+ * The productivity test is a fixpoint so a generated owner reached only
+ * through another admitted generated owner still counts, and it reads
+ * IMPORTS BY RUNTIME SEMANTICS: only a reference that survives type erasure
+ * admits the owner. A comment, a string mention and an `import type` /
+ * `export type` bind nothing at runtime, so none of them may certify an
+ * emission -- otherwise a commented-out import would suppress a real
+ * declared-but-unemitted finding.
+ */
+const EMITTER_SKIP_DIRS = new Set([...SKIP_DIRS, 'test', 'tests']);
+const GENERATED_DIR = '__generated__';
+
+function isGeneratedOwner(file) {
+  return file.replace(/\\/g, '/').includes(`/${GENERATED_DIR}/`);
+}
+
+function walkOwners(dir, out = []) {
+  const own = join(dir, 'index.ts');
+  if (existsSync(own)) out.push(own);
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || EMITTER_SKIP_DIRS.has(entry.name)) continue;
+    walkOwners(join(dir, entry.name), out);
+  }
+  return out;
+}
+
+/**
+ * Module specifiers a source names AS A VALUE, read from the TypeScript
+ * PARSER's tree rather than from a hand-written scan of the text.
+ *
+ * Productivity is a claim about what RUNS, so the reference has to survive type
+ * erasure: a mention in a comment or a literal, an `import type` / `export
+ * type`, and an import type query leave the generated owner exactly as
+ * unimported as if the line were absent, and admitting any of them would let
+ * prose retire a real declared-but-unemitted finding. Value imports (default,
+ * named, namespace, side-effect), value re-exports, `import x = require(...)`,
+ * `require()` and a value-position dynamic `import()` all bind and all count.
+ *
+ * WHY THE PARSER. Every one of those distinctions is a GRAMMATICAL one, and a
+ * tokenizer that approximates the grammar has to re-derive it: four rounds of
+ * review found four more shapes it got wrong -- a regex literal after a
+ * control-flow head, a redundant parenthesis around an import type, a regex
+ * after `for await (...)` or after an ASI-terminated `debugger`, and a type
+ * alias whose generic parameter carries a default. Each was a different way of
+ * asking the same question, "is this position code, text, or type?", and the
+ * answer is only definitive in a parse. `ts.createSourceFile` is that parse:
+ *
+ *   - comments and literals are not nodes, so nothing quoted is ever read;
+ *   - `/` is resolved by the grammar, so a regex literal is a literal wherever
+ *     it stands, and a division is an operator wherever it stands;
+ *   - a type-position `import(...)` parses as an `ImportTypeNode`, never as a
+ *     `CallExpression`, so `typeof import()`, annotations, unions, generic
+ *     arguments (defaulted or not), `keyof` / `satisfies` operands and
+ *     type-alias right-hand sides are excluded STRUCTURALLY, with no erasure
+ *     pass and no look-behind; and
+ *   - `type` as a modifier and `type` as a binding name are different tree
+ *     shapes, so `{ type }` and `{ type as T }` bind values by construction.
+ *
+ * One position is type-space yet parsed as an EXPRESSION, and the tree is how
+ * that became visible rather than a fifth counterexample: a heritage clause.
+ * `interface I extends import('./m').T` and `class C implements import('./m').T`
+ * hold a real `CallExpression`, and both erase. `class C extends <expr>` is the
+ * one heritage clause that runs, so the exclusion is by clause, not by keyword,
+ * and a dynamic import in a class `extends` still counts.
+ *
+ * A CLAUSE THAT RUNS STILL DOES NOT RUN INSIDE AN AMBIENT DECLARATION.
+ * `declare class C extends import('./m').Base` holds exactly the expression the
+ * previous paragraph admits, and `declare namespace N { import G = require(...) }`
+ * holds a real import-equals, yet a `declare` subtree -- class, function, enum,
+ * variable, namespace, module augmentation or `declare global` -- describes a
+ * shape the emitter deletes, so nothing under it loads anything. Reading its
+ * heritage as a load let a purely type-space file certify an emission, which is
+ * the same false negative in a new dress. The `declare` node is therefore
+ * skipped WHOLE, and ambience is a different question from clause: a namespace
+ * WITHOUT `declare` may hold statements that really execute and still counts.
+ *
+ * The parser is syntax-only -- no program, no checker, no `tsconfig` -- so it
+ * stays as cheap and as hermetic as the scan it replaces. It is also total: a
+ * file that does not parse yields a best-effort tree rather than an exception,
+ * and a lost reference can only ADD a declared-but-unemitted finding, never
+ * certify a channel nothing emits.
+ */
+function bindsAtRuntime(node) {
+  if (ts.isImportDeclaration(node)) {
+    const clause = node.importClause;
+    // No clause at all is a side-effect import: the module still executes.
+    if (!clause) return true;
+    if (clause.isTypeOnly) return false;
+    if (clause.name) return true;
+    const bindings = clause.namedBindings;
+    if (!bindings) return false;
+    if (ts.isNamespaceImport(bindings)) return true;
+    return bindings.elements.some((element) => !element.isTypeOnly);
+  }
+  if (node.isTypeOnly) return false;
+  const clause = node.exportClause;
+  if (!clause) return true;
+  if (ts.isNamespaceExport(clause)) return true;
+  return clause.elements.some((element) => !element.isTypeOnly);
+}
+
+function literalText(node) {
+  return node && ts.isStringLiteralLike(node) ? node.text : undefined;
+}
+
+function isAmbientDeclaration(node) {
+  return (
+    ts.canHaveModifiers(node) &&
+    (ts.getModifiers(node) ?? []).some(
+      (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword,
+    )
+  );
+}
+
+function valueSpecifiers(file, text) {
+  const source = ts.createSourceFile(
+    file,
+    text,
+    ts.ScriptTarget.Latest,
+    false,
+    /\.tsx$/i.test(file) ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+  );
+  const specifiers = [];
+  const take = (node) => {
+    const specifier = literalText(node);
+    if (specifier) specifiers.push(specifier);
+  };
+  const visit = (node) => {
+    // Type-space declarations are skipped WHOLE so the expression-shaped
+    // heritage clause inside an interface cannot be read as a load.
+    if (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) return;
+    if (ts.isHeritageClause(node) && node.token === ts.SyntaxKind.ImplementsKeyword) return;
+    // An ambient declaration is erased WHOLE, so even the heritage clause and
+    // the import-equals that would run outside one bind nothing here.
+    if (isAmbientDeclaration(node)) return;
+    if (ts.isImportDeclaration(node) || (ts.isExportDeclaration(node) && node.moduleSpecifier)) {
+      if (bindsAtRuntime(node)) take(node.moduleSpecifier);
+    } else if (
+      ts.isImportEqualsDeclaration(node) &&
+      !node.isTypeOnly &&
+      ts.isExternalModuleReference(node.moduleReference)
+    ) {
+      take(node.moduleReference.expression);
+    } else if (ts.isCallExpression(node)) {
+      // A type-position `import(...)` is an ImportTypeNode, so reaching a
+      // CallExpression already proves the reference is in value position.
+      const callee = node.expression;
+      if (
+        callee.kind === ts.SyntaxKind.ImportKeyword ||
+        (ts.isIdentifier(callee) && callee.text === 'require')
+      ) {
+        take(node.arguments[0]);
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  ts.forEachChild(source, visit);
+  return specifiers;
+}
+
+function importedOwners(file) {
+  const targets = new Set();
+  for (const specifier of valueSpecifiers(file, readFileSync(file, 'utf8'))) {
+    if (!specifier.startsWith('.')) continue;
+    const resolved = resolve(dirname(file), specifier.replace(/\.(?:js|ts)$/, ''));
+    targets.add(`${resolved}.ts`);
+    targets.add(join(resolved, 'index.ts'));
+  }
+  return targets;
+}
+
+export function collectEmitterOwners(dir) {
+  const owners = walkOwners(dir);
+  const admitted = new Set(owners.filter((file) => !isGeneratedOwner(file)));
+  const candidates = owners.filter(isGeneratedOwner);
+  for (let grew = true; grew; ) {
+    grew = false;
+    const imported = new Set();
+    for (const file of admitted) for (const target of importedOwners(file)) imported.add(target);
+    for (const candidate of candidates) {
+      if (admitted.has(candidate) || !imported.has(candidate)) continue;
+      admitted.add(candidate);
+      grew = true;
+    }
+  }
+  return [...admitted].sort();
+}
+
+const emitterFiles = [
+  join(srcDir, 'infrastructure', 'compilers', 'kernel', 'foundation', 'css', 'chrome-variables', 'index.ts'),
+  ...collectEmitterOwners(loweringDir),
+];
 
 function readSources(files) {
   return files.map((file) => ({ file, text: readFileSync(file, 'utf8') }));
@@ -297,22 +544,29 @@ function main() {
   const update = process.argv.includes('--update-baseline');
   const result = runThemeChannelParityGate();
   const baseline = loadBaseline();
-  const evaluation = evaluateParityBaseline(result.counters, baseline);
   const dataOnlyViolations = result.dataOnly.violations;
 
-  // Obligations are consulted AFTER the ratchet, never inside it. Each one
-  // suppresses exactly one `new unbaselined bucket` error and nothing else; an
-  // id that also appears in `ceilings` is an error, because that is the opaque
-  // route this instrument exists to close.
+  // An obligation is validated against the RAW census and only then removed
+  // from the ratchet's view: it suppresses exactly one `new unbaselined
+  // bucket` error and the same exact count inside that bucket's category
+  // roll-up, and nothing else. An id that also appears in `ceilings` is an
+  // error, because that is the opaque route this instrument exists to close.
   const ledger = loadObligations();
+  const issuesByCategory = {
+    'declared-but-unemitted': result.graph.issues.declaredButUnemitted,
+    'emitted-but-unconsumed': result.graph.issues.emittedButUnconsumed,
+    'consumed-but-unowned': result.graph.issues.consumedButUnowned,
+  };
   const { failures: obligationFailures, consumed } = evaluateObligations(ledger, result.counters, {
-    resolveOwner: () => new Set(result.graph.issues.declaredButUnemitted.map((issue) => issue.id)),
+    resolveOwner: (category) => new Set(issuesByCategory[category].map((issue) => issue.id)),
   });
   for (const id of consumed.keys()) {
     if (Object.hasOwn(baseline.ceilings ?? {}, id)) {
       obligationFailures.push(`obligation is not a ceiling: ${id} also appears in baseline.ceilings`);
     }
   }
+  const ratchetCounters = deductObligations(result.counters, consumed);
+  const evaluation = evaluateParityBaseline(ratchetCounters, baseline);
   const suppressed = new Set([...consumed.keys()].map((id) => `new unbaselined bucket: ${id}=${consumed.get(id).count}`));
   const ratchetErrors = evaluation.errors.filter((error) => !suppressed.has(error));
   const ratchetOk = ratchetErrors.length === 0;
@@ -395,8 +649,10 @@ function main() {
     for (const violation of dataOnlyViolations) process.stderr.write(`  - ${violation}\n`);
   }
   for (const [id, obligation] of consumed) {
+    const total = `${categoryOf(id)}.total`;
     process.stdout.write(
-      `  obligation (owner ${obligation.ownerLot}, expires on ${obligation.expiry.kind}): ${id}=${obligation.count}\n`,
+      `  obligation (owner ${obligation.ownerLot}, expires on ${obligation.expiry.kind}): ${id}=${obligation.count}`
+      + ` [${total} measured ${result.counters[total]}, ratcheted ${ratchetCounters[total]}]\n`,
     );
   }
   if (!ratchetOk) {

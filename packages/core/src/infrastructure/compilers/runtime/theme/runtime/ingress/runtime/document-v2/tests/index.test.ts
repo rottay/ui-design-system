@@ -96,13 +96,17 @@ describe("v2 accepted at the door", () => {
 });
 
 describe("accepted but not lit", () => {
-  it("accepts surfaces.border-style, records it, and reports it unlit", () => {
-    const document = v2({ "surfaces.border-style": "hairline" });
+  // `surfaces.border-style` used to be this suite's unlit exemplar; the CC-01
+  // connection lot gave it a keypath, so the exemplar moves to a row that still
+  // has none. It is deliberately still a STANDARD row: an unlit report is a
+  // statement about the keypath, never about the plan.
+  it("accepts palette.neutral-temperature, records it, and reports it unlit", () => {
+    const document = v2({ "palette.neutral-temperature": "warm" });
     const admission = admitDocument({ vertical: "bithire", document });
     expect(admission.version).toBe(2);
     expect(admission.decisions).toEqual([
       {
-        id: "surfaces.border-style",
+        id: "palette.neutral-temperature",
         tier: "standard",
         lit: false,
         reason: "no-keypath-today",
@@ -110,17 +114,36 @@ describe("accepted but not lit", () => {
       },
     ]);
     expect(admission.unlit.map((row) => row.id)).toEqual([
-      "surfaces.border-style",
+      "palette.neutral-temperature",
     ]);
     // The catalog DECLARES the absence with `null`, so the projection reports
     // it instead of discovering it from a missing table row.
-    expect(v1KeypathOf("surfaces.border-style")).toBeNull();
+    expect(v1KeypathOf("palette.neutral-temperature")).toBeNull();
   });
 
   it("moves nothing in the compiled CSS when only unlit decisions are activated", () => {
-    expect(css("bithire", v2({ "surfaces.border-style": "hairline" }))).toEqual(
-      css("bithire", v2({}))
-    );
+    expect(
+      css("bithire", v2({ "palette.neutral-temperature": "warm" }))
+    ).toEqual(css("bithire", v2({})));
+  });
+
+  it("lights surfaces.border-style and moves the edge roles with it (CC-01)", () => {
+    const admission = admitDocument({
+      vertical: "bithire",
+      document: v2({ "surfaces.border-style": "strong" }),
+    });
+    expect(admission.decisions).toEqual([
+      {
+        id: "surfaces.border-style",
+        tier: "standard",
+        lit: true,
+        keypaths: ["appearance.general.surfaces.borderStyle"],
+      },
+    ]);
+    expect(admission.unlit).toEqual([]);
+    expect(
+      css("bithire", v2({ "surfaces.border-style": "strong" }))
+    ).not.toEqual(css("bithire", v2({})));
   });
 
   it("lights states.emphasis and moves the material stack with it", () => {

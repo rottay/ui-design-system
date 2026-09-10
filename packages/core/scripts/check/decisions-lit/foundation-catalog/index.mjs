@@ -40,9 +40,13 @@ export const TODAY_CONTROL_DENOMINATOR = 22;
 /**
  * The kit rows that do not exist in today's catalog at all. 10 -> 8 on
  * 2026-09-08 (K3 audit HOLD adjudication of WO-DER-02): `states.emphasis` and
- * `states.focus-style` gained a real producer and moved to `partial`.
+ * `states.focus-style` gained a real producer and moved to `partial`. 8 -> 4 on
+ * 2026-09-09 (CC-01 of the 96-checkpoint cascade review): `typography.role-weights`,
+ * `typography.numeric`, `surfaces.border-style` and `motion.character` gained
+ * theirs, and this run REFUSED to publish them as `new` while measuring them
+ * move -- which is the re-record being deliberate rather than absorbed.
  */
-export const NEW_DECISION_DENOMINATOR = 8;
+export const NEW_DECISION_DENOMINATOR = 4;
 
 /**
  * `full`    the audit measured full, coherent effect in static and DB
@@ -76,8 +80,14 @@ export const DECISIONS = Object.freeze([
   ['typography.families', 'full', [{ base: 'humanist-text' }, { base: 'editorial-text' }]],
   ['typography.pairing', 'full', ['sober', 'editorial']],
   ['typography.scale', 'partial', [0.95, 1.05]],
-  ['typography.role-weights', 'new', ['light', 'strong']],
-  ['typography.numeric', 'new', ['proportional', 'tabular']],
+  // CC-01 (2026-09-09): both gained a keypath and a producer
+  // (`derivation/typography/{weights,numeric}`, reaching the roles through the
+  // single role emitter), and the probe MEASURES them moving, so `new` is a lie
+  // this run refuses to publish. `partial`, not `full`: the rows' own
+  // `minimumFamilies` is `owner-pending`, so no fan-out floor exists to measure
+  // them against, and CC-01's own warning is that emission is not adoption.
+  ['typography.role-weights', 'partial', ['light', 'strong']],
+  ['typography.numeric', 'partial', ['proportional', 'tabular']],
   ['shape.radius-scale', 'none', [0.85, 1.15]],
   ['shape.nesting', 'new', ['concentric', 'uniform']],
   ['shape.button-style', 'partial', ['sharp', 'pill']],
@@ -85,7 +95,11 @@ export const DECISIONS = Object.freeze([
   ['density.mode', 'partial', ['compact', 'spacious']],
   ['spacing.rhythm', 'none', ['tight', 'airy']],
   ['surfaces.elevation-posture', 'partial', ['flat', 'elevated']],
-  ['surfaces.border-style', 'new', ['none', 'strong']],
+  // CC-01 (2026-09-09): `derivation/elevation/border` authors the three
+  // `--ds-edge-*-width` roles directly. `partial` rather than `full`: the row
+  // declares a four-family fan-out (card, input, table, panel) and this probe
+  // measures a sample, not that fan-out.
+  ['surfaces.border-style', 'partial', ['none', 'strong']],
   ['surfaces.effect-intensity', 'partial', [0, 0.6]],
   // WO-DER-02 (2026-09-08, K3 audit HOLD adjudication): both state decisions
   // now have a real producer (`derivation/states`) and the probe MEASURES them
@@ -99,7 +113,10 @@ export const DECISIONS = Object.freeze([
     { intensity: 0, durationScale: 0.8 },
     { intensity: 0.8, durationScale: 1.3 },
   ]],
-  ['motion.character', 'new', ['mechanical', 'playful']],
+  // CC-01 (2026-09-09): `derivation/motion/character` reshapes the easing and
+  // entrance roles. `partial` for the same reason as the two typography rows:
+  // `owner-pending` names no floor to certify the reach against.
+  ['motion.character', 'partial', ['mechanical', 'playful']],
   ['navigation.sidebar-tone', 'full', ['subtle', 'inverse']],
   ['experience.profile', 'full', [
     'rottay/bithire-technical@1',

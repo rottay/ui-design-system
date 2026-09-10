@@ -364,11 +364,12 @@ export const THEME_DECISION_IDS: readonly ThemeDecisionId[] = Object.freeze(
 );
 
 /**
- * The ten rows the kit marks `(new)`: they have no producer anywhere yet.
+ * The ten rows the kit marks `(new)`: membership is a KIT fact and never moves.
  *
  * They are carried here so a document may activate them from day one and the
- * indicator can publish `n/22 (+m/10 new)` against the same two denominators
- * the consumer contract states, without a second list.
+ * indicator can publish `n/22 (+m new)` against the still-underived subset of
+ * them, whose measured `effect` the control catalog owns, without a second
+ * list.
  */
 export const NEW_THEME_DECISION_IDS: readonly ThemeDecisionId[] = Object.freeze(
   [

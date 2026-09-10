@@ -11,6 +11,7 @@ import { withArabicSafeFallback } from "@/foundation/kernel/typography";
 import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import {
+  buttonRadiusChannels,
   buttonSilhouetteAlias,
   buttonSilhouetteChannels,
 } from "../../../foundation/geometry";
@@ -33,7 +34,13 @@ import {
 export const tenantDeriver: FamilyDeriver = {
   family: "tenant",
   rank: "tenant",
-  consumes: ["typography.*", "surfaces.*", "motion.*", "expressive.*"],
+  consumes: [
+    "typography.*",
+    "surfaces.*",
+    "motion.*",
+    "expressive.*",
+    "chrome.controls.buttonGeometry.radius",
+  ],
   produces: [
     "--ds-type-scale",
     "--ds-radius-scale",
@@ -65,10 +72,34 @@ export const tenantDeriver: FamilyDeriver = {
       // the DB transport used to buy by expanding the word into a chrome leaf
       // of its own. It reaches the same six channels here, on both transports.
       // A word the tenant's PROFILE filled reaches the ramp alias only.
+      const silhouette = buttonSilhouetteChannels(
+        tenant.chosenButtonStyle,
+        context.radiusBaseline
+      );
       Object.assign(
         vars,
         buttonSilhouetteAlias(posture.buttonStyle, context.radiusBaseline),
-        buttonSilhouetteChannels(tenant.chosenButtonStyle, context.radiusBaseline)
+        silhouette,
+        // NAMED over EXPANSION-DERIVED, within one provenance class: the same
+        // rule the ledger applied to these two claims, now applied to the
+        // paint. A tenant that authored `shape.button-style` AND the sanctioned
+        // `chrome.controls.buttonGeometry.radius` override had the silhouette
+        // drawn over the override while the ledger reported the override as
+        // effective -- one leaf, two answers. The escape hatch is the more
+        // specific statement, so it settles LAST, here, at the same rank as the
+        // word it overrides rather than one rank below it.
+        //
+        // Scoped to the channels the silhouette actually wrote, because those
+        // are the ones it contests. A named radius with no silhouette beside it
+        // has nothing to outrank here, and reaching further would flatten the
+        // per-size button geometry a VERTICAL authored in leaves the tenant
+        // never named -- which is the opposite defect.
+        Object.keys(silhouette).length === 0
+          ? {}
+          : buttonRadiusChannels(
+              tenant.chosenButtonRadius,
+              context.radiusBaseline
+            )
       );
     }
     const tl = tenant.typography;

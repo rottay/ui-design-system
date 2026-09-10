@@ -14,6 +14,8 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import type { ThemeResolution } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { assertMandatoryFontFallback } from "@/foundation/kernel/typography";
+import type { DecisionProvenanceLedger } from "@/foundation/contracts/composition/tenants/themes/provenance";
+import { ledgerOwnerOfLeaf } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type { TenantFacts } from "./foundation/contract";
@@ -29,6 +31,47 @@ import { PRIMARY_SEED_FIELD } from "./foundation/seeds";
 import { resolveGovernedSelections } from "./runtime/derivation/recipes";
 import { compileModeBlocks } from "./runtime/mode-blocks";
 import { lowerBlock } from "./runtime/pipeline";
+
+/** The one chrome leaf a governed silhouette also expands into. */
+const BUTTON_RADIUS_LEAF = "chrome.controls.buttonGeometry.radius";
+
+/**
+ * The button radius the tenant NAMED, asked of the ledger rather than mirrored.
+ *
+ * `shape.button-style` expands into this leaf and a sanctioned override names
+ * it outright, so the two contest one leaf inside one provenance class, and
+ * I-P5 settles it for the override. The paint could not honour that: the
+ * silhouette lands at the `tenant` rank and the chrome family one rank below
+ * it, so a `pill` + override document reported the override as effective and
+ * drew the pill -- one leaf with two answers.
+ *
+ * The fix READS the verdict instead of restating the rule. A second
+ * implementation of "named beats expansion-derived" here would be a second
+ * authority to keep in step, and the first thing it would drift on is the next
+ * decision that learns an expansion. `ledgerOwnerOfLeaf` is the ledger's own
+ * reader and the entry it returns is the causal winner, so the compiled block
+ * and the provenance report cannot disagree by construction.
+ *
+ * `undefined` on every other shape of answer: no ledger (a transport that
+ * carries none authored nothing this station models), a decision owning the
+ * leaf (the silhouette IS the answer), a profile-derived owner (a default is
+ * not the tenant naming a radius), or a non-string value.
+ */
+function tenantNamedButtonRadius(
+  ledger: DecisionProvenanceLedger | undefined
+): string | undefined {
+  if (!ledger) return undefined;
+  const owner = ledgerOwnerOfLeaf(ledger, BUTTON_RADIUS_LEAF);
+  if (
+    owner === undefined ||
+    owner.ref.kind !== "sanctioned-override" ||
+    owner.provenance !== "direct-override" ||
+    typeof owner.authoredValue !== "string"
+  ) {
+    return undefined;
+  }
+  return owner.authoredValue;
+}
 
 /**
  * Lower one resolved theme, then project it onto an engine.
@@ -87,6 +130,9 @@ export function compileTheme(
     ? {
         posture: resolveTenantPosture(tenantPatch),
         chosenButtonStyle: tenantPatch.surfaces?.buttonStyle,
+        chosenButtonRadius: tenantNamedButtonRadius(
+          resolution.provenance.ledger
+        ),
         typography: tenantPatch.typography,
         authoredPaths: tenantAuthoredPaths,
         statusSeedAuthorship: tenantStatusSeedAuthorship,
