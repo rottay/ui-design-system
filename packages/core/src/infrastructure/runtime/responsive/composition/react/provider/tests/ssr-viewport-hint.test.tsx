@@ -112,7 +112,9 @@ const STRUCTURAL_SLOTS: readonly (readonly [string, object, string])[] = [
   ['Document.prototype', Document.prototype, 'append'],
   ['Document.prototype', Document.prototype, 'prepend'],
   ['Document.prototype', Document.prototype, 'replaceChildren'],
+  // The two doors a node comes through from ANOTHER document.
   ['Document.prototype', Document.prototype, 'adoptNode'],
+  ['Document.prototype', Document.prototype, 'importNode'],
   ['DocumentFragment.prototype', DocumentFragment.prototype, 'append'],
   ['DocumentFragment.prototype', DocumentFragment.prototype, 'prepend'],
   ['DocumentFragment.prototype', DocumentFragment.prototype, 'replaceChildren'],
@@ -208,12 +210,13 @@ function declaringOwner(start: object | null, key: string): object | null {
  *      though assigning to it does not currently reach the owner element, so a
  *      runner that made it live would be recorded rather than missed.
  *    - `DOMParser.parseFromString`, `Range.createContextualFragment`,
- *      `HTMLTemplateElement.innerHTML` and `importNode`/`adoptNode` build nodes
- *      in another document or fragment. Nothing they build is in this document
- *      until it is inserted, and the BIRTH CHANNEL below covers every carrier
- *      that gets inserted whichever of them built it: read as it lands -> the
- *      arrival check, corrected in place -> the witness, still carried at
- *      `stop()` -> the per-element check, gone from the document -> the
+ *      `HTMLTemplateElement.innerHTML`, `importNode` and `adoptNode` build or
+ *      re-home nodes in another document or fragment. Nothing they touch is a
+ *      member of THIS document until something makes it one, and the BIRTH
+ *      CHANNEL below covers every carrier that becomes one, whichever of them
+ *      built it and whether it was connected elsewhere first: read as it lands
+ *      -> the arrival check, corrected in place -> the witness, still carried
+ *      at `stop()` -> the per-element check, gone from this document -> the
  *      departure ledger. React DOM parses no markup it was not handed through
  *      `dangerouslySetInnerHTML`, which `innerHTML` refuses.
  *
@@ -344,7 +347,16 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
    * So a carrier is read AT THE TWO MOMENTS IT CROSSES THE DOCUMENT'S EDGE, on
    * the stack of the call that carries it across -- never by inspecting a
    * subtree afterwards, which is a question about what is still there rather
-   * than about what happened:
+   * than about what happened.
+   *
+   * BOTH EDGES ARE JUDGED BY THE SAME THING: membership of the watched
+   * document. Not connectivity, and not which structural slot happened to fire
+   * -- a move between two documents keeps the carrier connected throughout, and
+   * an edge judged by connectivity misses it coming and going. Everything that
+   * is not this document is equally foreign, so adoption, importing and a plain
+   * `appendChild` of a node that belongs to another document are the same
+   * crossing as an insertion from a detached tree, and answer to the same
+   * first-value/last-value law:
    *
    *   ARRIVAL. Every call that can put a node into the document reads what the
    *   carriers it brought in are holding, immediately after they land. A value
@@ -365,11 +377,13 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
    *   - already in the document when the drill began -> snapshotted here, and
    *     what it carries IS the first observed value;
    *   - written by any writer below -> recorded there;
-   *   - planted unseen and inserted -> the arrival check;
+   *   - planted unseen and brought in from anywhere -> the arrival check;
    *   - planted unseen and overwritten in place -> the witness;
    *   - planted unseen and still carried at `stop()` -> the per-element check;
-   *   - planted unseen and gone from the document -> the departure ledger.
-   * A carrier that never enters the document painted nothing, and is not a case.
+   *   - planted unseen and gone from this document, to a detached tree or to
+   *     another document -> the departure ledger.
+   * A carrier that never enters this document painted nothing here, and is not
+   * a case.
    *
    * Neither channel is the reconstruction this recorder exists to avoid: neither
    * ever contributes a value to the history. They ask one question -- was every
@@ -379,6 +393,30 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
     commit(carrier);
   }
+
+  /**
+   * WHICH DOCUMENT, asked as membership rather than as connectivity.
+   *
+   * "In the document" means THIS document -- the one whose carriers `stop()`
+   * can enumerate. Connectivity is a different question with a different
+   * answer: a carrier handed from one document to another is connected on both
+   * sides of the move, so an edge judged by `isConnected` sees no crossing at
+   * either end. A parser-built carrier could then enter this document holding a
+   * value nothing here wrote, and leave again, with the arrival check declining
+   * it as "already connected" and the departure ledger declining it as "still
+   * connected" -- the exact hole both channels exist to close.
+   *
+   * The root a node hangs from answers it directly, in every runner and for a
+   * detached tree as well as a foreign document.
+   */
+  const watched: Node = document;
+  const rootOf = (node: Node): Node => {
+    let current: Node = node;
+    while (current.parentNode) current = current.parentNode;
+    return current;
+  };
+  const inWatchedDocument = (node: Node | null | undefined): boolean =>
+    Boolean(node) && rootOf(node as Node) === watched;
 
   /** Everything under `node` that carries the attribute, `node` included. */
   const carriersIn = (node: unknown): Element[] => {
@@ -409,8 +447,10 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     for (const record of records) {
       for (const node of Array.from(record.removedNodes)) {
         for (const carrier of carriersIn(node)) {
-          // Still in the document: the per-element check at `stop()` owns it.
-          if (carrier.isConnected) continue;
+          // Still in THIS document -- moved rather than gone: the per-element
+          // check at `stop()` owns it. Anywhere else is a departure, whether it
+          // went to a detached tree or straight into another document.
+          if (inWatchedDocument(carrier)) continue;
           departed(carrier, readBack.call(carrier, FULLSCREEN_ATTRIBUTE));
         }
       }
@@ -427,20 +467,22 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
    * empties an already-detached subtree -- and read the arriving carriers after
    * it, which is when they are in the document to be read.
    *
-   * An arrival is a CROSSING, so a carrier that was already in the document
-   * before the call is not one: this runner lowers `replaceChild` into
-   * `insertBefore` plus `removeChild`, and the outgoing subtree is still
-   * connected for the first of those. Its account is the departure ledger's,
-   * and reporting it here would name the wrong edge for the same carrier.
+   * An arrival is a CROSSING INTO THIS DOCUMENT, so a carrier that was already
+   * a member of it before the call is not one: this runner lowers
+   * `replaceChild` into `insertBefore` plus `removeChild`, and the outgoing
+   * subtree is still a member for the first of those. Its account is the
+   * departure ledger's, and reporting it here would name the wrong edge for the
+   * same carrier. Everywhere else is foreign -- a detached tree, a fragment,
+   * another document -- and a carrier coming from any of them is arriving.
    */
   const structural = (args: unknown[], call: () => unknown): unknown => {
     settleNow();
     const arriving = args
       .flatMap(carriersIn)
-      .map((carrier) => ({ carrier, wasConnected: carrier.isConnected }));
+      .map((carrier) => ({ carrier, wasInside: inWatchedDocument(carrier) }));
     const result = call();
-    for (const { carrier, wasConnected } of arriving) {
-      if (!wasConnected && carrier.isConnected) arrived(carrier);
+    for (const { carrier, wasInside } of arriving) {
+      if (!wasInside && inWatchedDocument(carrier)) arrived(carrier);
     }
     return result;
   };
@@ -1377,6 +1419,154 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
 
     try {
       expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface left the document/);
+    } finally {
+      host.remove();
+    }
+  });
+
+  /**
+   * THE CARRIER THAT IS NEVER DISCONNECTED AT EITHER EDGE, which is what forces
+   * both judgments to ask about MEMBERSHIP of this document rather than about
+   * connectivity.
+   *
+   * The parser builds this carrier inside another document, where it is already
+   * connected. The first commit's layout effect hands it to this one -- it
+   * paints here, holding a value nothing here wrote -- and the second commit's
+   * effect hands it back, where it stays connected. It is connected at every
+   * instant of its life, so an arrival check that asks `!wasConnected` declines
+   * it on the way in, and a departure ledger that skips `isConnected` carriers
+   * declines the removal record naming it on the way out. Between them the
+   * `true` frame vanishes and the drill reports `['false']` -- a fullscreen
+   * first paint read as a clean desktop pass, with both channels installed and
+   * neither one speaking.
+   *
+   * Membership answers both: the crossing IN is an arrival because the carrier
+   * was not a member before the call and is one after it, whatever it was
+   * connected to in between.
+   */
+  it('refuses a carrier that crosses in from another document without ever disconnecting', () => {
+    const elsewhere = new DOMParser().parseFromString(PLANTED_MARKUP, 'text/html');
+    const carrier = elsewhere.body.firstElementChild as Element;
+    // The premise: it is connected where it was built, before it comes here.
+    expect(carrier.isConnected).toBe(true);
+
+    const CrossesTwoDocuments = (): React.ReactElement => {
+      const [handedBack, setHandedBack] = React.useState(false);
+      const host = React.useRef<HTMLElement>(null);
+      React.useLayoutEffect(() => {
+        if (handedBack || !host.current) return;
+        host.current.appendChild(carrier);
+        setHandedBack(true);
+      }, [handedBack]);
+      React.useLayoutEffect(() => {
+        if (!handedBack) return;
+        elsewhere.body.appendChild(carrier);
+      }, [handedBack]);
+      return (
+        <section>
+          <article ref={host} />
+          {handedBack ? <div data-adaptive-fullscreen="false" /> : null}
+        </section>
+      );
+    };
+
+    const recorder = recordAdaptiveFullscreen();
+    render(<CrossesTwoDocuments />);
+    // It left this document without ever losing a connection.
+    expect(carrier.isConnected).toBe(true);
+    expect(document.contains(carrier)).toBe(false);
+
+    expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface entered the document/);
+  });
+
+  /**
+   * AND THE SAME CROSSING AT THE OTHER EDGE, which the arrival check cannot
+   * speak for.
+   *
+   * This surface arrives empty, so its arrival is unremarkable and nothing is
+   * latched. An unenumerated writer plants the value while it is a member of
+   * this document -- it paints fullscreen -- and then it is handed to another
+   * document, still connected, and a corrected surface takes its place. The
+   * per-element check at `stop()` cannot ask it anything: it is no longer in
+   * the tree `stop()` can enumerate. Only the removal record, read as a
+   * departure because the carrier is no longer a MEMBER here, still holds the
+   * value it left with.
+   */
+  it('refuses a carrier that leaves for another document without ever disconnecting', () => {
+    const elsewhere = new DOMParser().parseFromString('<span></span>', 'text/html');
+    const recorder = recordAdaptiveFullscreen();
+    const surface = document.createElement('div');
+    document.body.appendChild(surface);
+    NATIVE_SET_ATTRIBUTE.call(surface, FULLSCREEN_ATTRIBUTE, 'true');
+    elsewhere.body.appendChild(surface);
+    expect(surface.isConnected).toBe(true);
+
+    const replacement = document.createElement('div');
+    replacement.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    document.body.appendChild(replacement);
+
+    try {
+      expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface left the document/);
+    } finally {
+      replacement.remove();
+    }
+  });
+
+  /**
+   * AND THE ADOPTION DOOR, which changes which document owns a node without
+   * putting it anywhere.
+   *
+   * `adoptNode` is the one call that re-homes a carrier outright, and it is
+   * intercepted like every other door a foreign node comes through. But it
+   * places nothing: an adopted node is parentless, paints nothing, and is not a
+   * member of anything. A membership judged by OWNERSHIP would refuse the drill
+   * right here, at a call that changed no document's contents. The crossing is
+   * the insertion that follows, and that is where the refusal belongs.
+   */
+  it('lets an adoption pass and refuses the insertion that makes the carrier a member', () => {
+    const elsewhere = new DOMParser().parseFromString(PLANTED_MARKUP, 'text/html');
+
+    const throughTheDoor = recordAdaptiveFullscreen();
+    const adopted = document.adoptNode(elsewhere.body.firstElementChild as Element);
+    expect(adopted.ownerDocument).toBe(document);
+    expect(adopted.isConnected).toBe(false);
+    expect(throughTheDoor.stop()).toEqual([]);
+
+    const recorder = recordAdaptiveFullscreen();
+    document.body.appendChild(adopted);
+    try {
+      expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface entered the document/);
+    } finally {
+      adopted.remove();
+    }
+  });
+
+  /**
+   * AND THE IMPORTING DOOR, which is the same crossing without a refusal.
+   *
+   * `importNode` does not move the foreign carrier; it copies it into this
+   * document, and this runner copies the attributes through the map the
+   * recorder already watches. So the imported carrier's value IS observed, its
+   * arrival is unremarkable, and the honest fullscreen-then-corrected sequence
+   * is reported rather than refused. A channel that refused every carrier
+   * coming from another document would report a breach here and be wrong: the
+   * question is never where a carrier came from, it is whether this recorder
+   * saw the value it carries written.
+   */
+  it('records an imported carrier, whose value crossed through a writer it does see', () => {
+    const elsewhere = new DOMParser().parseFromString(PLANTED_MARKUP, 'text/html');
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('section');
+    document.body.appendChild(host);
+    const imported = document.importNode(elsewhere.body.firstElementChild as Element, true);
+    host.appendChild(imported);
+
+    const corrected = document.createElement('div');
+    corrected.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    host.replaceChild(corrected, imported);
+
+    try {
+      expect(recorder.stop()).toEqual(['true', 'false']);
     } finally {
       host.remove();
     }
