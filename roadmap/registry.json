@@ -4236,6 +4236,11 @@
      "at": "2026-09-09 19:53",
      "by": "kimi-k3",
      "note": "2026-09-09 hallazgos sistemicos de la auditoria Fable de DER-07 (/private/tmp/fable-der07-audit.md): (a) el dial radius-scale NO mueve los canales en el camino de los candidatos — calc(N/s * var(--ds-radius-scale)) con scale=s computa identico a 0.85/0.8/1.2 (la sonda de DER-03 movia --ds-radius-md entre dials; verificar si el documento de candidato no baja el dial al CSS var o si el calc se auto-cancela en ese path); (b) el canal de button-style no tiene lector en el Button moderno. Ambos van al lote de conexion/paleta, previo a FAM-01."
+    },
+    {
+     "at": "2026-09-09 20:35",
+     "by": "kimi-k3",
+     "note": "2026-09-09 residual main-side del lote gatefix (Fable /private/tmp/fable-gatefix2-audit.md): --ds-radius-button y los cinco --ds-button-*-radius se emiten via spread-of-call y son INVISIBLES a ambos extractores de liveness sin finding de unresolved; --ds-radius-button sale silenciosamente del set compilado en el merge (declarado en CSS, ningun ratchet se mueve). Extender los extractores a spread-of-call o adjudicar esos canales a mano."
     }
    ]
   },
