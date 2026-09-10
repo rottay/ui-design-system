@@ -78,12 +78,28 @@ function withViewport(width: number, run: () => void): void {
 
 const FULLSCREEN_ATTRIBUTE = 'data-adaptive-fullscreen';
 
-/** The unpatched writer, captured before any drill can intercept it. */
+/** The unpatched writers, captured before any drill can intercept them. */
 const NATIVE_SET_ATTRIBUTE = Element.prototype.setAttribute;
+const NATIVE_DOCUMENT_WRITE: unknown = document.write;
 
 type Restore = () => void;
 /** A prototype slot, which is untyped by nature: the patch only calls through it. */
 type AnyFunction = (this: any, ...args: any[]) => any;
+
+/**
+ * The object that actually DECLARES `key` for `start`, which is not always the
+ * global constructor's prototype: this runner's live `document` does not
+ * inherit from `globalThis.Document.prototype` at all. Patching that prototype
+ * therefore misses `document.write` AND leaves a shadowing own property behind
+ * where the slot was inherited. Patching the declaring owner does neither.
+ */
+function declaringOwner(start: object | null, key: string): object | null {
+  let owner: object | null = start;
+  while (owner && !Object.getOwnPropertyDescriptor(owner, key)) {
+    owner = Object.getPrototypeOf(owner) as object | null;
+  }
+  return owner;
+}
 
 /**
  * Every value `data-adaptive-fullscreen` is COMMITTED with, in order, from
@@ -128,7 +144,21 @@ type AnyFunction = (this: any, ...args: any[]) => any;
  *  fires only when the markup NAMES this attribute, so unrelated markup is
  *  untouched, and it throws instead of returning -- a drill that reaches for one
  *  of them goes red with `UNSUPPORTED-WRITER` rather than reporting a history
- *  the recorder never observed.
+ *  the recorder never observed. The markup is matched CASE-INSENSITIVELY,
+ *  because the parser lowercases ASCII attribute names: `DATA-ADAPTIVE-
+ *  FULLSCREEN="true"` plants exactly the carrier a case-sensitive reader would
+ *  wave through as unrelated markup. And `document.write` is patched on the
+ *  slot the LIVE document declares, not on `globalThis.Document.prototype`,
+ *  which this runner's document does not inherit from.
+ *
+ *  AND EVERY OBSERVED WRITE IS ALSO A WITNESS. Before calling through, each
+ *  interception reads what the element ALREADY carried. A value there that this
+ *  recorder never recorded for that element was planted by a path it cannot
+ *  see, and a later correction would otherwise bury it: the element ends up
+ *  written, carrying exactly what that write left, so the end-of-drill check
+ *  below has nothing to object to. The witness latches `UNOBSERVED-CARRIER`
+ *  instead -- which is what closes parse-then-insert, `DOMParser`, adopted
+ *  fragments and any writer not enumerated here, present or future.
  *
  *  ADJUDICATED OUT OF SCOPE, with the reason:
  *    - Reflected IDL properties (`className`, `id`, `title`, `style`, ...) each
@@ -140,10 +170,11 @@ type AnyFunction = (this: any, ...args: any[]) => any;
  *      runner that made it live would be recorded rather than missed.
  *    - `DOMParser.parseFromString`, `Range.createContextualFragment` and
  *      `importNode`/`adoptNode` build nodes in another document or fragment.
- *      Nothing they build is in this document until it is inserted, and any
- *      carrier that survives insertion is caught by the per-element check in
- *      `stop()` below. React DOM parses no markup it was not handed through
- *      `dangerouslySetInnerHTML`, which the `innerHTML` refusal covers.
+ *      Nothing they build is in this document until it is inserted; a carrier
+ *      that survives insertion is caught by the per-element check in `stop()`,
+ *      and one that is CORRECTED after insertion -- which that check cannot see
+ *      -- is caught by the witness read above. React DOM parses no markup it was
+ *      not handed through `dangerouslySetInnerHTML`, which `innerHTML` refuses.
  *
  * AND IT FAILS CLOSED PER ELEMENT. Every element in the body that carries the
  * attribute when `stop()` runs must be an element this recorder saw written,
@@ -158,6 +189,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   const seen: (string | null)[] = [];
   const observed = new Map<Element, string | null>();
   const readBack = Element.prototype.getAttribute;
+  let breach: string | null = null;
 
   const push = (value: string | null): void => {
     if (seen.length === 0 || seen[seen.length - 1] !== value) seen.push(value);
@@ -169,12 +201,27 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     observed.set(element, value);
     push(value);
   };
+  /** What `element` carries BEFORE the write about to run. */
+  const carried = (element: Element | null | undefined): string | null =>
+    element ? readBack.call(element, FULLSCREEN_ATTRIBUTE) : null;
+  /**
+   * The value an observed write is about to overwrite must be the value this
+   * recorder last recorded for that element. Anything else went by unseen, and
+   * the correction would bury it.
+   */
+  const witness = (element: Element | null | undefined, previous: string | null): void => {
+    if (!element || previous === null) return;
+    if (observed.get(element) === previous) return;
+    breach ??=
+      `UNOBSERVED-CARRIER: a surface already carried ${JSON.stringify(previous)} when a writer this recorder does see corrected it; that value was planted by a path it cannot observe`;
+  };
   const namesAttribute = (name: unknown): boolean => {
     const lowered = String(name).toLowerCase();
     return lowered === FULLSCREEN_ATTRIBUTE || lowered.endsWith(`:${FULLSCREEN_ATTRIBUTE}`);
   };
+  // The parser lowercases ASCII attribute names, so any case plants the carrier.
   const markupNamesAttribute = (markup: unknown): boolean =>
-    String(markup).includes(FULLSCREEN_ATTRIBUTE);
+    String(markup).toLowerCase().includes(FULLSCREEN_ATTRIBUTE);
   const refuse = (writer: string): never => {
     throw new Error(
       `UNSUPPORTED-WRITER: ${writer} plants ${FULLSCREEN_ATTRIBUTE} through parsed markup, which this recorder cannot observe; it will not report a commit history it did not see`,
@@ -182,24 +229,31 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   };
 
   const undo: Restore[] = [];
-  const declaringOwner = (start: object | null, key: string): object | null => {
-    let owner: object | null = start;
-    while (owner && !Object.getOwnPropertyDescriptor(owner, key)) {
-      owner = Object.getPrototypeOf(owner) as object | null;
-    }
-    return owner;
-  };
+  /**
+   * Patch where the slot is DECLARED, and restore the shape it was found in:
+   * an inherited slot is re-exposed by deleting the own property, never left
+   * shadowed by a re-assigned copy of the inherited value.
+   */
   const patchMethod = (
-    owner: object | null | undefined,
+    start: object | null | undefined,
     key: string,
     wrap: (original: AnyFunction) => AnyFunction,
   ): void => {
-    const target = owner as Record<string, AnyFunction> | null | undefined;
+    const owner = declaringOwner((start ?? null) as object | null, key);
+    const target = owner as Record<string, AnyFunction> | null;
     if (!target || typeof target[key] !== 'function') return;
+    const wasOwn = Object.prototype.hasOwnProperty.call(target, key);
+    const descriptor = Object.getOwnPropertyDescriptor(target, key);
     const original = target[key];
-    target[key] = wrap(original);
+    Object.defineProperty(target, key, {
+      value: wrap(original),
+      writable: descriptor?.writable ?? true,
+      enumerable: descriptor?.enumerable ?? false,
+      configurable: true,
+    });
     undo.push(() => {
-      target[key] = original;
+      if (wasOwn && descriptor) Object.defineProperty(target, key, descriptor);
+      else delete target[key];
     });
   };
   const patchSetter = (
@@ -218,47 +272,52 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   };
 
   const element = Element.prototype;
+  /**
+   * Witness what was already there, call through, record what is there now.
+   *
+   * The witness runs BEFORE the call because these APIs nest: this runner
+   * lowers `setAttributeNS` and `setAttributeNode` into `setNamedItem`, whose
+   * own interception commits the new value first. A witness that read `observed`
+   * after the call would compare the outgoing value against the incoming one and
+   * report every nested write as a breach.
+   */
+  const around = (named: boolean, target: Element, call: () => unknown): unknown => {
+    if (named) witness(target, carried(target));
+    const result = call();
+    if (named) commit(target);
+    return result;
+  };
   patchMethod(element, 'setAttribute', (original) =>
     function setAttribute(this: Element, name: unknown, value: unknown) {
-      const result = original.call(this, name, value);
-      if (namesAttribute(name)) commit(this);
-      return result;
+      return around(namesAttribute(name), this, () => original.call(this, name, value));
     },
   );
   patchMethod(element, 'removeAttribute', (original) =>
     function removeAttribute(this: Element, name: unknown) {
-      const result = original.call(this, name);
-      if (namesAttribute(name)) commit(this);
-      return result;
+      return around(namesAttribute(name), this, () => original.call(this, name));
     },
   );
   patchMethod(element, 'setAttributeNS', (original) =>
     function setAttributeNS(this: Element, namespace: unknown, name: unknown, value: unknown) {
-      const result = original.call(this, namespace, name, value);
-      if (namesAttribute(name)) commit(this);
-      return result;
+      return around(namesAttribute(name), this, () => original.call(this, namespace, name, value));
     },
   );
   patchMethod(element, 'removeAttributeNS', (original) =>
     function removeAttributeNS(this: Element, namespace: unknown, name: unknown) {
-      const result = original.call(this, namespace, name);
-      if (namesAttribute(name)) commit(this);
-      return result;
+      return around(namesAttribute(name), this, () => original.call(this, namespace, name));
     },
   );
   patchMethod(element, 'toggleAttribute', (original) =>
     function toggleAttribute(this: Element, name: unknown, force: unknown) {
-      const result = original.call(this, name, force);
-      if (namesAttribute(name)) commit(this);
-      return result;
+      return around(namesAttribute(name), this, () => original.call(this, name, force));
     },
   );
   for (const key of ['setAttributeNode', 'setAttributeNodeNS', 'removeAttributeNode']) {
     patchMethod(element, key, (original) =>
       function withAttributeNode(this: Element, node: Attr) {
-        const result = original.call(this, node);
-        if (node && namesAttribute(node.name)) commit(this);
-        return result;
+        return around(Boolean(node) && namesAttribute(node.name), this, () =>
+          original.call(this, node),
+        );
       },
     );
   }
@@ -280,8 +339,11 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
       return original.call(this, position, markup);
     },
   );
+  // On the slot the LIVE document declares: this runner's document does not
+  // inherit from `globalThis.Document.prototype`, so patching that class would
+  // leave `document.write` unpatched and shadow an inherited slot for nothing.
   for (const key of ['write', 'writeln']) {
-    patchMethod(Document.prototype, key, (original) =>
+    patchMethod(document, key, (original) =>
       function documentWrite(this: Document, ...markup: unknown[]) {
         if (markup.some(markupNamesAttribute)) refuse(`Document.${key}`);
         return original.apply(this, markup);
@@ -294,8 +356,10 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   for (const key of ['value', 'nodeValue']) {
     patchSetter(Attr.prototype, key, (original) =>
       function attributeValue(this: Attr, value: unknown) {
+        const owner = namesAttribute(this.name) ? this.ownerElement : null;
+        witness(owner, carried(owner));
         original.call(this, value);
-        if (namesAttribute(this.name)) commit(this.ownerElement);
+        if (owner) commit(owner);
       },
     );
   }
@@ -306,17 +370,24 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   for (const key of ['setNamedItem', 'setNamedItemNS']) {
     patchMethod(attributes, key, (original) =>
       function setNamedItem(this: NamedNodeMap, node: Attr) {
+        // The map cannot name its element, but the attribute it is about to
+        // replace can -- and it also carries the value being overwritten.
+        const replaced = node && namesAttribute(node.name)
+          ? this.getNamedItem(FULLSCREEN_ATTRIBUTE)
+          : null;
+        const replacedOwner = replaced?.ownerElement ?? null;
+        witness(replacedOwner, replaced ? replaced.value : null);
         const result = original.call(this, node);
-        if (node && namesAttribute(node.name)) commit(node.ownerElement);
+        if (node && namesAttribute(node.name)) commit(node.ownerElement ?? replacedOwner);
         return result;
       },
     );
   }
   patchMethod(attributes, 'removeNamedItem', (original) =>
     function removeNamedItem(this: NamedNodeMap, name: unknown) {
-      const owner = namesAttribute(name)
-        ? (this.getNamedItem(String(name))?.ownerElement ?? null)
-        : null;
+      const removed = namesAttribute(name) ? this.getNamedItem(String(name)) : null;
+      const owner = removed?.ownerElement ?? null;
+      witness(owner, removed ? removed.value : null);
       const result = original.call(this, name);
       if (owner) commit(owner);
       return result;
@@ -324,9 +395,11 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   );
   patchMethod(attributes, 'removeNamedItemNS', (original) =>
     function removeNamedItemNS(this: NamedNodeMap, namespace: unknown, name: unknown) {
-      const owner = namesAttribute(name)
-        ? (this.getNamedItemNS(namespace as string | null, String(name))?.ownerElement ?? null)
+      const removed = namesAttribute(name)
+        ? this.getNamedItemNS(namespace as string | null, String(name))
         : null;
+      const owner = removed?.ownerElement ?? null;
+      witness(owner, removed ? removed.value : null);
       const result = original.call(this, namespace, name);
       if (owner) commit(owner);
       return result;
@@ -344,6 +417,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   return {
     stop: () => {
       restore();
+      if (breach) throw new Error(breach);
       for (const carrier of Array.from(
         document.body.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`),
       )) {
@@ -676,6 +750,8 @@ function CorrectedThrough({
 
 /** Markup that names the attribute, for the writers this recorder refuses. */
 const PLANTED_MARKUP = `<span ${FULLSCREEN_ATTRIBUTE}="true"></span>`;
+/** The same carrier, spelled the way the parser still lowercases into it. */
+const SHOUTED_MARKUP = `<span ${FULLSCREEN_ATTRIBUTE.toUpperCase()}="true"></span>`;
 
 describe('the recorder observes every writer, or refuses the drill by name', () => {
   it('records a correction written with setAttributeNS', () => {
@@ -885,51 +961,197 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
   });
 
   /**
+   * THE UPPERCASE PARSER PATH. HTML attribute names are ASCII case-insensitive:
+   * the parser lowercases `DATA-ADAPTIVE-FULLSCREEN` into exactly this carrier.
+   * A refusal that matched the markup case-sensitively read that as unrelated
+   * markup, let the parser plant `true` where nothing could see it, and reported
+   * the correcting `false` as the clean single-commit history of a desktop pass.
+   */
+  it('refuses parsed markup that names the attribute in upper case', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    try {
+      expect(() => {
+        host.innerHTML = SHOUTED_MARKUP;
+      }).toThrow(/UNSUPPORTED-WRITER/);
+      expect(() => host.insertAdjacentHTML('beforeend', SHOUTED_MARKUP)).toThrow(
+        /UNSUPPORTED-WRITER/,
+      );
+      expect(host.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`).length).toBe(0);
+    } finally {
+      // Detached first: a refusal that did not fire leaves a carrier behind, and
+      // the drill that reports it must not also poison every drill after it.
+      host.remove();
+      recorder.stop();
+    }
+  });
+
+  /**
+   * THE `document.write` PATH. This runner's live `document` does not inherit
+   * from `globalThis.Document.prototype`, so a refusal installed there is not
+   * the function `document.write` resolves to: the markup reaches the parser and
+   * plants the carrier with nothing watching.
+   *
+   * The identity check is what reports that BEFORE the markup is handed over.
+   * An unrefused `document.write` reopens the document and takes the rest of the
+   * suite's DOM with it, so this drill must not be the thing that discovers the
+   * patch missed.
+   */
+  it('refuses document.write on the slot the live document actually resolves to', () => {
+    const parserWriters = (['write', 'writeln'] as const).filter(
+      (key) => typeof (document as unknown as Record<string, unknown>)[key] === 'function',
+    );
+    // `writeln` is absent on this runner; if a runner update adds it, it is
+    // patched and drilled here without this file changing.
+    expect(parserWriters).toContain('write');
+
+    const recorder = recordAdaptiveFullscreen();
+    try {
+      expect(document.write).not.toBe(NATIVE_DOCUMENT_WRITE);
+      for (const key of parserWriters) {
+        expect(() => (document as unknown as Record<string, (markup: string) => void>)[key](
+          PLANTED_MARKUP,
+        )).toThrow(/UNSUPPORTED-WRITER/);
+      }
+      expect(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`).length).toBe(0);
+    } finally {
+      recorder.stop();
+    }
+  });
+
+  /**
+   * THE PARSE-THEN-INSERT RESIDUE, and the reason both refusals above are not
+   * the whole answer. A carrier planted where this recorder cannot see it --
+   * a fragment built in another document, an adopted node, any writer not
+   * enumerated -- and then CORRECTED by a writer it does see. The end-of-drill
+   * per-element check has nothing to object to: the element WAS written, and it
+   * carries exactly what that write left. Only reading what the element carried
+   * BEFORE the observed write can tell that a value went by unseen.
+   *
+   * The native writer captured before the patch is what any such path looks like
+   * from the recorder's side.
+   */
+  it('refuses an intermediate it never saw, even when an observed write corrects it', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const planted = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(planted, FULLSCREEN_ATTRIBUTE, 'true');
+    document.body.appendChild(planted);
+    planted.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    try {
+      expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER/);
+    } finally {
+      planted.remove();
+    }
+  });
+
+  /**
    * A patched prototype that survived a drill would follow the worker into
    * every later file in the run. `stop()` restores before it can throw, so even
    * a red drill leaves the DOM as it found it.
+   *
+   * AND IT RESTORES THE SHAPE, not just the value. A slot the recorder found
+   * INHERITED must be inherited again afterwards: re-assigning the original
+   * value onto the object the patch was aimed at leaves a new own property
+   * shadowing the prototype that declares it, which no identity check on the
+   * value would ever notice. `Attr.prototype.nodeValue` (declared on
+   * `Node.prototype`) and `document.write` (declared on a prototype
+   * `globalThis.Document` is not on) are the two live inherited slots here.
    */
-  it('leaves every writer it patched exactly as it found it', () => {
-    const descriptorSetter = (owner: object, key: string): unknown =>
-      Object.getOwnPropertyDescriptor(owner, key)?.set;
-    const before = {
-      setAttribute: Element.prototype.setAttribute,
-      removeAttribute: Element.prototype.removeAttribute,
-      setAttributeNS: Element.prototype.setAttributeNS,
-      setAttributeNode: Element.prototype.setAttributeNode,
-      removeAttributeNode: Element.prototype.removeAttributeNode,
-      toggleAttribute: Element.prototype.toggleAttribute,
-      insertAdjacentHTML: Element.prototype.insertAdjacentHTML,
-      write: Document.prototype.write,
-      setNamedItem: NamedNodeMap.prototype.setNamedItem,
-      removeNamedItem: NamedNodeMap.prototype.removeNamedItem,
-      innerHTML: descriptorSetter(Element.prototype, 'innerHTML'),
-      outerHTML: descriptorSetter(Element.prototype, 'outerHTML'),
-      attributeValue: descriptorSetter(Attr.prototype, 'value'),
-      nodeValue: descriptorSetter(Node.prototype, 'nodeValue'),
+  it('leaves every slot it patched exactly as it found it, own or inherited', () => {
+    /** Every slot the recorder reaches for, named where it reaches for it. */
+    const slots: readonly (readonly [string, object, string])[] = [
+      ['Element.prototype', Element.prototype, 'setAttribute'],
+      ['Element.prototype', Element.prototype, 'removeAttribute'],
+      ['Element.prototype', Element.prototype, 'setAttributeNS'],
+      ['Element.prototype', Element.prototype, 'removeAttributeNS'],
+      ['Element.prototype', Element.prototype, 'setAttributeNode'],
+      ['Element.prototype', Element.prototype, 'setAttributeNodeNS'],
+      ['Element.prototype', Element.prototype, 'removeAttributeNode'],
+      ['Element.prototype', Element.prototype, 'toggleAttribute'],
+      ['Element.prototype', Element.prototype, 'insertAdjacentHTML'],
+      ['Element.prototype', Element.prototype, 'innerHTML'],
+      ['Element.prototype', Element.prototype, 'outerHTML'],
+      ['Attr.prototype', Attr.prototype, 'value'],
+      ['Attr.prototype', Attr.prototype, 'nodeValue'],
+      ['NamedNodeMap.prototype', NamedNodeMap.prototype, 'setNamedItem'],
+      ['NamedNodeMap.prototype', NamedNodeMap.prototype, 'setNamedItemNS'],
+      ['NamedNodeMap.prototype', NamedNodeMap.prototype, 'removeNamedItem'],
+      ['NamedNodeMap.prototype', NamedNodeMap.prototype, 'removeNamedItemNS'],
+      ['document', document, 'write'],
+      ['document', document, 'writeln'],
+      ['Document.prototype', Document.prototype, 'write'],
+      ['Document.prototype', Document.prototype, 'writeln'],
+    ];
+    /** The objects a patch could leave a shadow on. */
+    const surfaces: readonly (readonly [string, object])[] = [
+      ['Element.prototype', Element.prototype],
+      ['Attr.prototype', Attr.prototype],
+      ['Node.prototype', Node.prototype],
+      ['NamedNodeMap.prototype', NamedNodeMap.prototype],
+      ['Document.prototype', Document.prototype],
+      ['document', document],
+    ];
+
+    /** Own-ness where the recorder reaches, plus the declaring slot itself. */
+    const shapeOf = ([, start, key]: readonly [string, object, string]) => {
+      const owner = declaringOwner(start, key);
+      const descriptor = owner ? Object.getOwnPropertyDescriptor(owner, key) : undefined;
+      return {
+        own: Object.prototype.hasOwnProperty.call(start, key),
+        owner,
+        get: descriptor?.get,
+        set: descriptor?.set,
+        value: descriptor?.value,
+        writable: descriptor?.writable,
+        enumerable: descriptor?.enumerable,
+        configurable: descriptor?.configurable,
+      };
     };
+    const ownNames = ([, owner]: readonly [string, object]): string[] =>
+      Object.getOwnPropertyNames(owner).sort();
+
+    // The two inherited slots this runner actually has: restoring by
+    // re-assignment would turn either of these into an own property.
+    expect(shapeOf(['Attr.prototype', Attr.prototype, 'nodeValue']).own).toBe(false);
+    expect(shapeOf(['document', document, 'write']).own).toBe(false);
+
+    const before = slots.map(shapeOf);
+    const beforeNames = surfaces.map(ownNames);
 
     const recorder = recordAdaptiveFullscreen();
-    expect(Element.prototype.setAttribute).not.toBe(before.setAttribute);
-    expect(descriptorSetter(Element.prototype, 'innerHTML')).not.toBe(before.innerHTML);
-    expect(descriptorSetter(Attr.prototype, 'value')).not.toBe(before.attributeValue);
-    expect(NamedNodeMap.prototype.setNamedItem).not.toBe(before.setNamedItem);
+    expect(Element.prototype.setAttribute).not.toBe(NATIVE_SET_ATTRIBUTE);
+    expect(document.write).not.toBe(NATIVE_DOCUMENT_WRITE);
+    expect(shapeOf(['Element.prototype', Element.prototype, 'innerHTML']).set).not.toBe(
+      before[9].set,
+    );
+    expect(shapeOf(['Attr.prototype', Attr.prototype, 'value']).set).not.toBe(before[11].set);
+    expect(NamedNodeMap.prototype.setNamedItem).not.toBe(before[13].value);
 
     recorder.stop();
 
-    expect(Element.prototype.setAttribute).toBe(before.setAttribute);
-    expect(Element.prototype.removeAttribute).toBe(before.removeAttribute);
-    expect(Element.prototype.setAttributeNS).toBe(before.setAttributeNS);
-    expect(Element.prototype.setAttributeNode).toBe(before.setAttributeNode);
-    expect(Element.prototype.removeAttributeNode).toBe(before.removeAttributeNode);
-    expect(Element.prototype.toggleAttribute).toBe(before.toggleAttribute);
-    expect(Element.prototype.insertAdjacentHTML).toBe(before.insertAdjacentHTML);
-    expect(Document.prototype.write).toBe(before.write);
-    expect(NamedNodeMap.prototype.setNamedItem).toBe(before.setNamedItem);
-    expect(NamedNodeMap.prototype.removeNamedItem).toBe(before.removeNamedItem);
-    expect(descriptorSetter(Element.prototype, 'innerHTML')).toBe(before.innerHTML);
-    expect(descriptorSetter(Element.prototype, 'outerHTML')).toBe(before.outerHTML);
-    expect(descriptorSetter(Attr.prototype, 'value')).toBe(before.attributeValue);
-    expect(descriptorSetter(Node.prototype, 'nodeValue')).toBe(before.nodeValue);
+    slots.forEach((slot, index) => {
+      const where = `${slot[0]}.${slot[2]}`;
+      const was = before[index];
+      const now = shapeOf(slot);
+      expect({ where, own: now.own }).toEqual({ where, own: was.own });
+      expect({ where, declared: now.owner === was.owner }).toEqual({ where, declared: true });
+      expect({ where, same: now.get === was.get }).toEqual({ where, same: true });
+      expect({ where, same: now.set === was.set }).toEqual({ where, same: true });
+      expect({ where, same: now.value === was.value }).toEqual({ where, same: true });
+      expect({ where, writable: now.writable }).toEqual({ where, writable: was.writable });
+      expect({ where, enumerable: now.enumerable }).toEqual({ where, enumerable: was.enumerable });
+      expect({ where, configurable: now.configurable }).toEqual({
+        where,
+        configurable: was.configurable,
+      });
+    });
+
+    surfaces.forEach((surface, index) => {
+      expect({ where: surface[0], names: ownNames(surface) }).toEqual({
+        where: surface[0],
+        names: beforeNames[index],
+      });
+    });
   });
 });
