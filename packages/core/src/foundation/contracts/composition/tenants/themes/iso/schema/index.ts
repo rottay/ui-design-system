@@ -154,6 +154,8 @@ export const THEME_LEAF_OPTIONS: Readonly<Record<string, readonly string[]>> =
   "chrome.sidebar.tone": Object.freeze(["inverse", "strong", "subtle"]),
   "chrome.table.anatomy": Object.freeze(["default", "open", "ruled", "zebra"]),
   "motion.ambient": Object.freeze(["off", "subtle"]),
+  "palette.contrastPosture": Object.freeze(["high", "soft", "standard"]),
+  "palette.neutralTemperature": Object.freeze(["cool", "neutral", "warm"]),
   "motion.entrance": Object.freeze(["bounce", "fade", "none", "slideUp", "spring"]),
   "motion.pulseSpeed": Object.freeze(["fast", "none", "normal", "slow"]),
   "motion.skeletonStyle": Object.freeze(["pulse", "shimmer", "wave"]),

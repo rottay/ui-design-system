@@ -79,15 +79,30 @@ const loweringDir = join(
  * naming a single compiler file: a channel emitted by any one of them is
  * emitted, and a list that saw only one owner would report the others' fields
  * as declared-but-unemitted.
+ *
+ * The walk is RECURSIVE, and that is load-bearing rather than tidy. A family
+ * whose derivation grew sub-owners -- `derivation/shape/{radius,button}`,
+ * `derivation/typography/roles`, `derivation/palette/*` -- keeps its emissions
+ * one level below the family index, and a one-level roster reported every
+ * field those sub-owners write as declared-but-unemitted. The census then
+ * measured the roster's depth instead of the compiler's coverage.
  */
+function loweringOwnerIndexes(dir) {
+  const found = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+    if (!entry.isDirectory()) continue;
+    const owner = join(dir, entry.name);
+    const index = join(owner, 'index.ts');
+    if (existsSync(index)) found.push(index);
+    found.push(...loweringOwnerIndexes(owner));
+  }
+  return found;
+}
+
 const emitterFiles = [
   join(srcDir, 'infrastructure', 'compilers', 'kernel', 'foundation', 'css', 'chrome-variables', 'index.ts'),
-  ...readdirSync(join(loweringDir, 'foundation'))
-    .sort()
-    .map((owner) => join(loweringDir, 'foundation', owner, 'index.ts')),
-  ...readdirSync(join(loweringDir, 'runtime'))
-    .sort()
-    .map((owner) => join(loweringDir, 'runtime', owner, 'index.ts')),
+  ...loweringOwnerIndexes(join(loweringDir, 'foundation')),
+  ...loweringOwnerIndexes(join(loweringDir, 'runtime')),
   join(loweringDir, 'index.ts'),
 ];
 const compilersDir = join(srcDir, 'infrastructure', 'compilers');

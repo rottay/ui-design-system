@@ -66,6 +66,10 @@ const WRITERS: Partial<
 > = Object.freeze({
   "palette.seeds": (t, v) => writeSeeds(t, v),
   "palette.status-seeds": (t, v) => wrote((nest(t.general, "palette").status = v)),
+  "palette.neutral-temperature": (t, v) =>
+    wrote((nest(t.general, "palette").neutralTemperature = v)),
+  "palette.contrast-posture": (t, v) =>
+    wrote((nest(t.general, "palette").contrastPosture = v)),
   "palette.dark-mode": (t, v) => wrote((nest(t.general, "palette").backgroundMode = v)),
   "typography.pairing": (t, v) => wrote((nest(t.general, "typography").typePairing = v)),
   "typography.scale": (t, v) => wrote((nest(t.general, "typography").scale = v)),

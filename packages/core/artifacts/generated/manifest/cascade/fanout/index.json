@@ -41,18 +41,18 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2568,
-    "channels": 7510,
-    "channelsDs": 7125,
+    "filesScanned": 2575,
+    "channels": 7512,
+    "channelsDs": 7127,
     "channelsBridge": 385,
     "channelsWithoutReaders": 198,
     "channelsPaintsFalse": 935,
     "channelsPaintsInModernFalse": 1993,
-    "readers": 37116,
+    "readers": 37124,
     "readersByPlane": {
       "modern-skin-css": 14691,
       "presentation-css": 10411,
-      "foundation-css": 1230,
+      "foundation-css": 1232,
       "runtime-css": 262,
       "facade-entrypoints-css": 2,
       "classic-css": 857,
@@ -62,12 +62,12 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 3056
+      "ts-other": 3062
     },
     "channelsByPlane": {
       "modern-skin-css": 3832,
       "presentation-css": 2026,
-      "foundation-css": 377,
+      "foundation-css": 379,
       "runtime-css": 138,
       "facade-entrypoints-css": 1,
       "classic-css": 723,
@@ -62108,6 +62108,20 @@
         },
         {
           "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints/index.ts",
+          "line": 72,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints/index.ts",
+          "line": 74,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/composition/react/tokens/index.ts",
           "line": 69,
           "prop": "50",
@@ -71276,7 +71290,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 25,
+          "line": 28,
           "prop": "--ds-color-mono-0",
           "scalars": []
         },
@@ -85004,6 +85018,13 @@
           "scalars": []
         },
         {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints/index.ts",
+          "line": 92,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/overlay/alert-dialog/engines/classic/index.tsx",
           "line": 84,
@@ -86314,35 +86335,35 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 69,
+          "line": 72,
           "prop": "--ds-color-border",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 70,
+          "line": 73,
           "prop": "--ds-color-border-primary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 71,
+          "line": 74,
           "prop": "--ds-color-border-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 72,
+          "line": 75,
           "prop": "--ds-color-border-subtle",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 73,
+          "line": 76,
           "prop": "--ds-color-border-tertiary",
           "scalars": []
         },
@@ -87412,6 +87433,13 @@
           "line": 552,
           "prop": "bgInfoColor",
           "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints/index.ts",
+          "line": 98,
+          "prop": "inline-expr",
+          "scalars": []
         }
       ]
     },
@@ -88263,84 +88291,84 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 29,
+          "line": 32,
           "prop": "--ds-color-mono-100",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 30,
+          "line": 33,
           "prop": "--ds-color-mono-200",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 31,
+          "line": 34,
           "prop": "--ds-color-mono-300",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 32,
+          "line": 35,
           "prop": "--ds-color-mono-400",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 33,
+          "line": 36,
           "prop": "--ds-color-mono-500",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 34,
+          "line": 37,
           "prop": "--ds-color-mono-600",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 35,
+          "line": 38,
           "prop": "--ds-color-mono-700",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 36,
+          "line": 39,
           "prop": "--ds-color-mono-800",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 37,
+          "line": 40,
           "prop": "--ds-color-mono-900",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 41,
+          "line": 44,
           "prop": "--ds-color-surface-ink",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 49,
+          "line": 52,
           "prop": "--ds-texture-backdrop-paper",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 85,
+          "line": 88,
           "prop": "--ds-surface-fg",
           "scalars": []
         },
@@ -88380,91 +88408,91 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 29,
+          "line": 32,
           "prop": "--ds-color-mono-100",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 30,
+          "line": 33,
           "prop": "--ds-color-mono-200",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 31,
+          "line": 34,
           "prop": "--ds-color-mono-300",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 32,
+          "line": 35,
           "prop": "--ds-color-mono-400",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 33,
+          "line": 36,
           "prop": "--ds-color-mono-500",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 34,
+          "line": 37,
           "prop": "--ds-color-mono-600",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 35,
+          "line": 38,
           "prop": "--ds-color-mono-700",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 36,
+          "line": 39,
           "prop": "--ds-color-mono-800",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 37,
+          "line": 40,
           "prop": "--ds-color-mono-900",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 41,
+          "line": 44,
           "prop": "--ds-color-surface-ink",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 42,
+          "line": 45,
           "prop": "--ds-color-surface-paper",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 48,
+          "line": 51,
           "prop": "--ds-texture-backdrop-ink",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 60,
+          "line": 63,
           "prop": "--ds-surface-fg",
           "scalars": []
         },
@@ -88510,7 +88538,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 43,
+          "line": 46,
           "prop": "--ds-color-hairline",
           "scalars": []
         }
@@ -88532,21 +88560,21 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 88,
+          "line": 91,
           "prop": "--ds-color-text-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 89,
+          "line": 92,
           "prop": "--ds-color-text-tertiary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 90,
+          "line": 93,
           "prop": "--ds-color-text-muted",
           "scalars": []
         },
@@ -88589,14 +88617,14 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 44,
+          "line": 47,
           "prop": "--ds-color-hairline-strong",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 68,
+          "line": 71,
           "prop": "--ds-color-text-disabled",
           "scalars": []
         },
@@ -88653,21 +88681,21 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 64,
+          "line": 67,
           "prop": "--ds-color-text-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 65,
+          "line": 68,
           "prop": "--ds-color-text-tertiary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 66,
+          "line": 69,
           "prop": "--ds-color-text-muted",
           "scalars": []
         },
@@ -93126,6 +93154,44 @@
           "file": "src/components/primitives/layout/divider/engines/classic/index.tsx",
           "line": 153,
           "prop": "inherit",
+          "scalars": []
+        }
+      ]
+    },
+    {
+      "channel": "--ds-color-neutral-ink",
+      "kind": "ds",
+      "declaredIn": [],
+      "planes": [
+        "foundation-css"
+      ],
+      "paints": true,
+      "paintsInModern": true,
+      "readers": [
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 28,
+          "prop": "--ds-color-mono-0",
+          "scalars": []
+        }
+      ]
+    },
+    {
+      "channel": "--ds-color-neutral-paper",
+      "kind": "ds",
+      "declaredIn": [],
+      "planes": [
+        "foundation-css"
+      ],
+      "paints": true,
+      "paintsInModern": true,
+      "readers": [
+        {
+          "plane": "foundation-css",
+          "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
+          "line": 29,
+          "prop": "--ds-color-mono-1000",
           "scalars": []
         }
       ]
@@ -111662,6 +111728,13 @@
           "line": 217,
           "prop": "successBgColor",
           "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints/index.ts",
+          "line": 80,
+          "prop": "inline-expr",
+          "scalars": []
         }
       ]
     },
@@ -112810,7 +112883,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 61,
+          "line": 64,
           "prop": "--ds-surface-bg",
           "scalars": []
         },
@@ -112889,7 +112962,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 86,
+          "line": 89,
           "prop": "--ds-surface-bg",
           "scalars": []
         },
@@ -132668,6 +132741,13 @@
           "line": 222,
           "prop": "warningBgColor",
           "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints/index.ts",
+          "line": 86,
+          "prop": "inline-expr",
+          "scalars": []
         }
       ]
     },
@@ -133562,7 +133642,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 26,
+          "line": 29,
           "prop": "--ds-color-mono-1000",
           "scalars": []
         },
@@ -310871,7 +310951,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 67,
+          "line": 70,
           "prop": "--ds-color-text-inverse",
           "scalars": []
         },
@@ -317286,7 +317366,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 63,
+          "line": 66,
           "prop": "--ds-color-text-primary",
           "scalars": []
         },

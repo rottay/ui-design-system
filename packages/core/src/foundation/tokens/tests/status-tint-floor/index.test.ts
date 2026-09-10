@@ -35,7 +35,8 @@ import { describe, expect, it } from "vitest";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { contrastRatio, parseHex } from "@/foundation/kernel/color/contrast";
 
-import { deriveStatusTintFloor } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
+import { CONTRAST_POSTURES } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
+import { derivePaletteTints } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints";
 import { STATUS_SEED_SHADOWING_FIELDS } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds";
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
@@ -188,7 +189,7 @@ describe("an absent status seed emits nothing", () => {
  * `provenance-acceptance.test.ts`'s `SEED_FAMILY` closure over the PRIMARY
  * table stays untouched.
  *
- * The closure below is assembled from `deriveStatusTintFloor`'s own output
+ * The closure below is assembled from `derivePaletteTints`'s own output
  * rather than hand-listed, so a channel added to the floor cannot be
  * silently omitted from the shadowing table's coverage.
  */
@@ -200,8 +201,9 @@ describe("STATUS_SEED_SHADOWING_FIELDS exactly matches the floor output", () => 
       errorColor: "#333333",
       infoColor: "#444444",
     };
-    const emitted = deriveStatusTintFloor(
-      allSeeded as unknown as Parameters<typeof deriveStatusTintFloor>[0]
+    const emitted = derivePaletteTints(
+      allSeeded as unknown as Parameters<typeof derivePaletteTints>[0],
+      CONTRAST_POSTURES.standard
     );
     expect(Object.keys(STATUS_SEED_SHADOWING_FIELDS).sort()).toEqual(
       Object.keys(emitted).sort()
@@ -322,7 +324,7 @@ describe("ink and well contrast holds after the hue correction", () => {
 /**
  * evnto's light palette RETIRED all four `*BorderColor` literals in this lot
  * (see `evnto/index.ts`, the comment above `linkHoverColor`), but each one
- * authored EXACTLY the string `deriveStatusTintFloor` derives from the seed
+ * authored EXACTLY the string `derivePaletteTints` derives from the seed
  * — a cero-delta byte retirement, not a correction (unlike the four
  * `*BgColor` literals, which genuinely moved). The four values below are
  * `evnto/index.ts` `successBorderColor`/`warningBorderColor`/

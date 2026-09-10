@@ -25,7 +25,10 @@ import { isDarkSurfaceTheme } from "@/infrastructure/compilers/runtime/theme/run
 import { deriveTenantColorRamps } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps";
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
-const ROLES = ['primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info'] as const;
+// `accent` is not here: its ten ramp steps had no reader anywhere in the
+// package, so the ramp family stopped deriving them (WO-DER-03 palette half).
+// The `--ds-color-accent` seed itself is unaffected and still painted.
+const ROLES = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
 
 // `isDarkSurfacePalette(palette)` -- the old shape-based inference ("declares
 // darkBackgroundColor and no backgroundColor") -- is gone along with the

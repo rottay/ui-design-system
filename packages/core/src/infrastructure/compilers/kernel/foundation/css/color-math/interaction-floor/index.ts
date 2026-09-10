@@ -29,7 +29,11 @@
 
 import { isValidCssColor } from '..';
 import { HOVER_LIGHTNESS_STEP, shadeSeed } from '../palette-derivations';
-import { measureReadableInk, type ReadableInkMeasurement } from '../readable-ink';
+import {
+  measureReadableInk,
+  type ReadableInkMeasurement,
+  type ReadableInkPair,
+} from '../readable-ink';
 
 /** The four channels this floor can reach, in their canonical names. */
 export const INTERACTION_FLOOR_CHANNELS = {
@@ -72,6 +76,7 @@ export interface InteractionFloor {
  */
 export function deriveInteractionFloor(
   effectivePrimary: string | undefined,
+  pair?: ReadableInkPair,
 ): InteractionFloor {
   if (!effectivePrimary || !isValidCssColor(effectivePrimary)) {
     return { variables: {}, ink: undefined };
@@ -84,9 +89,9 @@ export function deriveInteractionFloor(
     [INTERACTION_FLOOR_CHANNELS.link]: effectivePrimary,
   };
 
-  const ink = measureReadableInk(effectivePrimary);
+  const ink = measureReadableInk(effectivePrimary, pair);
   if (ink.status === 'measured') {
-    if (ink.meetsAA) {
+    if (ink.meetsFloor) {
       variables[INTERACTION_FLOOR_CHANNELS.primaryForeground] = ink.ink;
     }
     variables[INTERACTION_FLOOR_CHANNELS.linkHover] = shadeSeed(

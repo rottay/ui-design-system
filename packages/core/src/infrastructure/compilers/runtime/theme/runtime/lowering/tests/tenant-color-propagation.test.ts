@@ -218,7 +218,7 @@ describe('TENANT-COLOR PROPAGATION · the reach a seed has today', () => {
     // The ground is an input to every ramp derivation, so moving it must move
     // more than the three `--ds-color-bg-*` channels it literally names.
     const ramps = BACKGROUND_MOVED.filter((channel) =>
-      /^--ds-color-(secondary|accent|success|warning|error|info)-\d+$/.test(channel)
+      /^--ds-color-(secondary|success|warning|error|info)-\d+$/.test(channel)
     );
     expect(ramps.length).toBeGreaterThanOrEqual(20);
   });
@@ -227,8 +227,15 @@ describe('TENANT-COLOR PROPAGATION · the reach a seed has today', () => {
     // bithire's background floor rose 39 → 42 when the ground ladder started
     // deriving; its primary floor stays 11 because bithire authors the chrome
     // those channels would otherwise reach, which is the merge order working.
+    //
+    // 39 → 33 (WO-DER-03 palette half): the six channels that left are the
+    // accent ramp steps bithire does not author itself. They were derived
+    // against the ground, so they moved with it -- onto a channel no
+    // `var(--ds-color-accent-<step>)` anywhere resolves. A reach onto an unread
+    // channel is not reach, so the ramp family stopped deriving the role and
+    // the floor is restated at what a reader can actually see.
     expect(PRIMARY_MOVED.length).toBeGreaterThanOrEqual(11);
-    expect(BACKGROUND_MOVED.length).toBeGreaterThanOrEqual(39);
+    expect(BACKGROUND_MOVED.length).toBeGreaterThanOrEqual(33);
     // Eleven primary channels + ten categorical chart slots.
     expect(DB_PRIMARY_MOVED.length).toBeGreaterThanOrEqual(21);
     expect(DB_BACKGROUND_MOVED.length).toBeGreaterThanOrEqual(25);

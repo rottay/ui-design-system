@@ -58,6 +58,9 @@ export const LOWERING_FOUNDATION_GEOMETRY = `${LOWERING}/foundation/geometry/ind
 export const LOWERING_FOUNDATION_EXPRESSIVE = `${LOWERING}/foundation/expressive/index.ts`;
 const DERIVATION = `${LOWERING}/runtime/derivation`;
 export const LOWERING_DERIVATION_CHARTS = `${DERIVATION}/charts/index.ts`;
+export const DERIVATION_PALETTE_INKS = `${DERIVATION}/palette/inks/index.ts`;
+export const DERIVATION_PALETTE_NEUTRAL = `${DERIVATION}/palette/neutral-temperature/index.ts`;
+export const DERIVATION_PALETTE_TINTS = `${DERIVATION}/palette/tints/index.ts`;
 export const LOWERING_RUNTIME_DERIVATION = Object.freeze([
   `${DERIVATION}/axes/index.ts`,
   LOWERING_DERIVATION_CHARTS,
@@ -72,6 +75,14 @@ export const LOWERING_RUNTIME_DERIVATION = Object.freeze([
   `${DERIVATION}/materials/index.ts`,
   `${DERIVATION}/motion/index.ts`,
   `${DERIVATION}/palette/index.ts`,
+  // WO-DER-03 (palette half): the palette family's own sub-owners. The tint
+  // floor moved here from `foundation/palette` with its enumerated emitter
+  // intact, and the neutral axis is the first producer of the neutral ramp
+  // that a decision -- `palette.neutral-temperature` -- actually reaches.
+  DERIVATION_PALETTE_INKS,
+  DERIVATION_PALETTE_NEUTRAL,
+  `${DERIVATION}/palette/semantic/index.ts`,
+  DERIVATION_PALETTE_TINTS,
   `${DERIVATION}/ramps/index.ts`,
   `${DERIVATION}/recipes/index.ts`,
   `${DERIVATION}/seeds/index.ts`,
@@ -342,7 +353,7 @@ const CONSTANT_SOURCES = Object.freeze([
   ...LOWERING_SOURCES,
   TENANT_THEME,
   'packages/core/src/foundation/kernel/color/oklch/ramp/index.ts',
-  // ON_TONE_ROLES: deriveStatusTintFloor (the palette writer) iterates it but does not
+  // ON_TONE_ROLES: derivePaletteTints (the tint writer) iterates it but does not
   // declare it -- the vocabulary lives beside the readable-ink contract it was
   // authored for, not beside this second, later emitter.
   'packages/core/src/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink/index.ts',
@@ -479,7 +490,7 @@ export function buildEnumerators(root) {
     [LOWERING_FOUNDATION_MATERIALS, 'semanticSurfaceRolesToCssVariables', 'semantic material roles'],
     [LOWERING_FOUNDATION_TYPE_RAMP, 'setTypeRampVariables', 'the type ramp'],
     [LOWERING_FOUNDATION_TYPOGRAPHY, 'setSemanticTypographyVariables', 'semantic typography roles'],
-    [LOWERING_FOUNDATION_PALETTE, 'deriveStatusTintFloor', 'status tint floor bg/border/alpha'],
+    [DERIVATION_PALETTE_TINTS, 'derivePaletteTints', 'status tint floor bg/border/alpha'],
     [CHROME_VARIABLES, 'chromeToVariables', 'button geometry sizes'],
   ];
 

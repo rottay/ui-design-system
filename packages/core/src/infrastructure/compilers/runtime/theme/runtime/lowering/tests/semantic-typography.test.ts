@@ -190,10 +190,18 @@ const FIRST_PARTY = [
 // `cssString` moves, and only in the order its lines appear, because the
 // `shape` family sits earlier in the deriver registry than the `surfaces` and
 // `axes` families it took the radius operands from.
+// PALETTE re-anchor, all three (WO-DER-03 palette half): the base keyset moves
+// by exactly -8 in every vertical -- rottay 1315 -> 1307, bithire 1291 -> 1283,
+// evnto 592 -> 584 -- and the -8 is the same -10/+2 everywhere. The ten that
+// leave are `--ds-color-accent-{50..900}`, a ramp with no `var()` reader
+// anywhere in the package; the two that arrive are `--ds-color-neutral-ink` and
+// `--ds-color-neutral-paper`, the monochrome ramp's own anchors, read by
+// `foundation/monochrome`. No surviving channel changes value: this is a
+// keyset move, not a paint move.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "11fef5bd41005fc31bf80317a62f563d15104968af495f24690bd468fdc0c944",
-  bithire: "17fc41d275663689a132900c294b150a2b72ae89340c7bd6b273ef33042f5115",
-  evnto: "60878ab4f5fac622b50f92507c52586b345ea432fad274948b6e502dbd5dbd77",
+  rottay: "22e0372a3524d105fccb4e9025eeb0318458084d20b5ad97242997b19d8ea86e",
+  bithire: "75558dac4e5183760fe05f14e7b9b102811bb72f0fbdc6a2f87e995f66bb7375",
+  evnto: "3a791c53c8ef7648bd00746a25e01c66167dbd490c881311c5a9625e383ba1c5",
 };
 
 /**

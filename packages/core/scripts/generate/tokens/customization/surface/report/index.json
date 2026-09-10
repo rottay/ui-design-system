@@ -3,29 +3,29 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "d36421bd68486b62e388681548390c4057d8d692b9ec6b61c3b5ee23a8c9f8da",
+    "inputsDigest": "8ec2d8f7e9893468a501917d96e66713127d3449d53a2f6fa3f14d49b8076519",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 462,
-      "productionTsFiles": 2106,
-      "testFiles": 1378,
+      "productionTsFiles": 2113,
+      "testFiles": 1379,
       "artifactFiles": 3
     }
   },
   "counts": {
-    "universe": 7310,
-    "writers": 4701,
+    "universe": 7302,
+    "writers": 4693,
     "foundationTokens": 3371,
     "componentTokens": 563,
-    "tenantChannels": 2294,
+    "tenantChannels": 2306,
     "publicHooks": 91,
     "unadjudicatedReads": 2576,
     "deadWriters": 283,
     "frontierReserved": 0,
     "modernConsumedUnique": 3664,
     "tsReadNames": 2705,
-    "tsWriteNames": 1350,
-    "tsMetadataNames": 837,
+    "tsWriteNames": 1362,
+    "tsMetadataNames": 848,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
@@ -25494,13 +25494,13 @@
       "writer": false,
       "reads": {
         "css": 0,
-        "ts": 18,
+        "ts": 20,
         "tests": true,
         "modern": false,
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 10
+      "tsMetadataMentions": 9
     },
     "--ds-color-accent": {
       "category": "tenant-raw-override",
@@ -25516,156 +25516,6 @@
       },
       "tsWriteSites": 3,
       "tsMetadataMentions": 2
-    },
-    "--ds-color-accent-100": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-200": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-300": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-400": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-50": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-500": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-600": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-700": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-800": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-color-accent-900": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": true
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
     },
     "--ds-color-accent-hover": {
       "category": "compiler-derived-channel",
@@ -25889,8 +25739,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-alpha-error-20": {
       "category": "compiler-derived-channel",
@@ -25904,8 +25754,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-alpha-info-10": {
       "category": "compiler-derived-channel",
@@ -25919,8 +25769,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-alpha-primary-10": {
       "category": "compiler-derived-channel",
@@ -26009,8 +25859,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-alpha-success-20": {
       "category": "compiler-derived-channel",
@@ -26024,8 +25874,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-alpha-warning-10": {
       "category": "compiler-derived-channel",
@@ -26039,8 +25889,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-alpha-warning-20": {
       "category": "compiler-derived-channel",
@@ -26054,8 +25904,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-alpha-white-10": {
       "category": "canonical-authority",
@@ -26694,7 +26544,7 @@
       "writer": true,
       "reads": {
         "css": 14,
-        "ts": 6,
+        "ts": 7,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -26789,7 +26639,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 3
     },
     "--ds-color-error-border": {
@@ -26804,8 +26654,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-error-hover": {
       "category": "generated-artifact-only",
@@ -26964,7 +26814,7 @@
       "writer": true,
       "reads": {
         "css": 5,
-        "ts": 5,
+        "ts": 6,
         "tests": true,
         "modern": false,
         "artifact": true
@@ -27059,7 +26909,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 3
     },
     "--ds-color-info-border": {
@@ -27074,8 +26924,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-info-ink": {
       "category": "compiler-derived-channel",
@@ -27408,8 +27258,8 @@
       "tsMetadataMentions": 1
     },
     "--ds-color-neutral-100": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27419,12 +27269,12 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-200": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27434,12 +27284,12 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-300": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27449,12 +27299,12 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-400": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27464,12 +27314,12 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-50": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27479,12 +27329,12 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-500": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27494,12 +27344,12 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-600": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27509,12 +27359,12 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-700": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27524,12 +27374,12 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-800": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27539,12 +27389,12 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-color-neutral-900": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -27554,7 +27404,37 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 0,
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
+    },
+    "--ds-color-neutral-ink": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-color-neutral-paper": {
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": true
+      },
+      "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
     "--ds-color-on-error": {
@@ -27570,7 +27450,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 3
+      "tsMetadataMentions": 4
     },
     "--ds-color-on-info": {
       "category": "canonical-authority",
@@ -27585,7 +27465,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 3
+      "tsMetadataMentions": 4
     },
     "--ds-color-on-primary": {
       "category": "canonical-authority",
@@ -27615,7 +27495,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 3
+      "tsMetadataMentions": 4
     },
     "--ds-color-on-warning": {
       "category": "canonical-authority",
@@ -27630,7 +27510,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 3
+      "tsMetadataMentions": 4
     },
     "--ds-color-picker-height": {
       "category": "unadjudicated-read",
@@ -27870,7 +27750,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 3
     },
     "--ds-color-primary-hover": {
       "category": "compiler-derived-channel",
@@ -28209,7 +28089,7 @@
       "writer": true,
       "reads": {
         "css": 6,
-        "ts": 4,
+        "ts": 5,
         "tests": true,
         "modern": false,
         "artifact": true
@@ -28304,7 +28184,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 3
     },
     "--ds-color-success-border": {
@@ -28319,8 +28199,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-success-ink": {
       "category": "canonical-authority",
@@ -28704,7 +28584,7 @@
       "writer": true,
       "reads": {
         "css": 6,
-        "ts": 5,
+        "ts": 6,
         "tests": true,
         "modern": false,
         "artifact": true
@@ -28799,7 +28679,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
+      "tsWriteSites": 2,
       "tsMetadataMentions": 3
     },
     "--ds-color-warning-border": {
@@ -28814,8 +28694,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 4
     },
     "--ds-color-warning-ink": {
       "category": "canonical-authority",

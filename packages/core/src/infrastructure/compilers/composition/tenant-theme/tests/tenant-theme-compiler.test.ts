@@ -1170,7 +1170,9 @@ describe("closed schema and hostile input rejection", () => {
     expect(artifact.variables).toMatchObject(expectedVariables);
   });
 
-  it("keeps ramp tokens reference-only while deriving all seven roles from legal base seeds", () => {
+  // Six roles, not seven: `accent`'s ramp steps have no `var()` reader in the
+  // package, so the ramp family stopped deriving them (WO-DER-03 palette half).
+  it("keeps ramp tokens reference-only while deriving all six seeded roles from legal base seeds", () => {
     const authoredRamp = validateTenantThemeDocument({
       schemaVersion: 1,
       mode: "advanced",
@@ -1186,7 +1188,6 @@ describe("closed schema and hostile input rejection", () => {
     for (const role of [
       "primary",
       "secondary",
-      "accent",
       "success",
       "warning",
       "error",
@@ -1200,6 +1201,9 @@ describe("closed schema and hostile input rejection", () => {
         );
       }
     }
+    // And the retirement is the reason, not an accident of this document.
+    expect(artifact.variables["--ds-color-accent-500"]).toBeUndefined();
+    expect(artifact.variables["--ds-color-accent"]).toBeDefined();
   });
 
   it.each(["rgb(15 118 110)", "hsl(176 77% 26%)", "oklch(0.52 0.09 190)"])(

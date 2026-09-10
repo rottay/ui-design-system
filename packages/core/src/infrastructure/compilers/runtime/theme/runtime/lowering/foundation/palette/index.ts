@@ -1,5 +1,6 @@
 /**
- * @fileoverview Extended palette, alias and seed-RGB channel writers plus their floors.
+ * @fileoverview Extended palette, alias and seed-RGB channel writers plus the
+ * primary-seeded interaction floor.
  *
  * @module Compilers/Theme/Lowering/Foundation/palette
  * @category Compilers
@@ -12,7 +13,7 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes";
 import { parseHex } from "@/foundation/kernel/color/contrast";
 import { deriveInteractionFloor } from "@/infrastructure/compilers/kernel/foundation/css/color-math/interaction-floor";
-import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
+import type { ReadableInkPair } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 
 /**
  * The palette channels beyond the seeds: the second and third steps of every
@@ -175,72 +176,8 @@ export function setExtendedPaletteVariables(
  * color leaves the derived foreground, focus border and link hover in place.
  */
 export function deriveExtendedPaletteFloor(
-  effectivePrimary: string | undefined
+  effectivePrimary: string | undefined,
+  inkPair?: ReadableInkPair
 ): Record<string, string> {
-  return deriveInteractionFloor(effectivePrimary).variables;
-}
-
-/**
- * The floor for the status-tint family: `--ds-color-{tone}-bg`,
- * `--ds-color-{tone}-border` and `--ds-color-alpha-{tone}-{10,20}`, per tone.
- *
- * Each formula names the tone's OWN channel rather than resolving it, so the
- * floor never needs the seed's literal value -- only its presence in the
- * block being compiled. That is what lets one function serve the base block
- * and every mode overlay alike: `brandThemeToCssVariables` re-enters per
- * block with that block's own merged palette, so a dark overlay derives
- * against its own dark seed rather than inheriting light's.
- *
- * ANCHOR IS THE SEED, NOT THE `-500` STEP. `color-mix(in srgb,
- * var(--ds-color-{tone}) N%, transparent)` reads the channel the theme
- * itself sets (`--ds-color-{tone}` = `bt.palette.{tone}Color`, set a few
- * lines above in this same function), never a ramp step. The `-500` step is
- * residue of a documented APCA re-level (`default.css`) and no longer
- * coincides with the channel in three of four tones -- anchoring there would
- * paint a brown border under an amber well in bithire's warning tone.
- *
- * `--ds-color-alpha-info-20` is never emitted: it is a RETIRED channel
- * (`governance/tokens/decisions/writers/unused/system/index.json`, `"decision": "RETIRE_PROPOSED", "executed":
- * true`), and reviving it from this floor would resurrect a name the
- * programme already closed.
- *
- * GUARDED PER TONE, per the ramp-anchor law: a tone whose block carries no
- * seed emits nothing for it. Without this guard the floor would fire off a
- * mode overlay that authors an unrelated ramp blind to mode (e.g. evnto's
- * dark `ramps.success` copying light's 50..800 verbatim) and PROPAGATE that
- * defect instead of curing it.
- *
- * The guard does NOT exclude Evnto's dark overlay merely because
- * the overlay never declaring `successColor`. `applyModeOverlay` MERGES the
- * palette (`palette: mergeModeOverlay(bt.palette, overlay.palette)`), so a
- * dark block's palette always carries the base seed even when the overlay
- * itself is silent -- the floor DOES fire in dark, at the same seed, and
- * emits the identical string it emits in light. What actually excludes the
- * four `-bg` rows from dark's DELTA is downstream: `compileModeBlocks` only
- * keeps a key whose value differs from the base block's (`if (baseVars[key]
- * !== value)`), and dark's derived string is byte-identical to light's, so
- * the row is deduplicated, not suppressed at the source. The blind-ramp
- * defect this guard exists to stop is real and unchanged by
- * this correction -- only the EXPLANATION of why dark's delta stays empty
- * was wrong.
- *
- * Merged BEFORE `setExtendedPaletteVariables`, exactly like
- * `deriveExtendedPaletteFloor` above: derivation is the floor, an authored
- * `successBgColor`/`alphaSuccess10`/etc. is the ceiling, per channel.
- */
-export function deriveStatusTintFloor(
-  palette: BrandPalette
-): Record<string, string> {
-  const vars: Record<string, string> = {};
-  for (const role of ON_TONE_ROLES) {
-    if (!palette[`${role}Color`]) continue;
-    const channel = `--ds-color-${role}`;
-    vars[`${channel}-bg`] = `var(${channel}-50)`;
-    vars[`${channel}-border`] = `color-mix(in srgb, var(${channel}) 20%, transparent)`;
-    vars[`--ds-color-alpha-${role}-10`] = `color-mix(in srgb, var(${channel}) 10%, transparent)`;
-    if (role !== "info") {
-      vars[`--ds-color-alpha-${role}-20`] = `color-mix(in srgb, var(${channel}) 20%, transparent)`;
-    }
-  }
-  return vars;
+  return deriveInteractionFloor(effectivePrimary, inkPair).variables;
 }

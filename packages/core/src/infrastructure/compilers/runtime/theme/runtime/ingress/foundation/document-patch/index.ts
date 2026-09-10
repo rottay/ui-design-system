@@ -351,6 +351,24 @@ function migrateTypography(
   };
 }
 
+/** Closed domains of the two palette postures; the DB row is untrusted JSON. */
+const NEUTRAL_TEMPERATURES = ["cool", "neutral", "warm"] as const;
+const CONTRAST_POSTURES = ["soft", "standard", "high"] as const;
+
+function closedPosture<T extends string>(
+  value: unknown,
+  domain: readonly T[],
+  key: string
+): T | undefined {
+  if (value === undefined) return undefined;
+  if (!domain.includes(value as T)) {
+    throw new ThemePatchMigrationError(
+      `unsupported general.palette.${key} ${JSON.stringify(value)}`
+    );
+  }
+  return value as T;
+}
+
 function migratePalette(
   palette: TenantAppearanceGeneral["palette"] | undefined,
   defaultMode: BrandThemeMode
@@ -358,7 +376,10 @@ function migratePalette(
   if (!palette) return {};
 
   type Palette = NonNullable<TenantAppearanceGeneral["palette"]>;
-  type PaletteSeeds = Omit<Palette, "backgroundMode" | "dark">;
+  type PaletteSeeds = Omit<
+    Palette,
+    "backgroundMode" | "dark" | "neutralTemperature" | "contrastPosture"
+  >;
 
   const seedKeys = new Set([
     "primary",
@@ -411,7 +432,13 @@ function migratePalette(
     }
   };
 
-  const supported = new Set([...seedKeys, "backgroundMode", "dark"]);
+  const supported = new Set([
+    ...seedKeys,
+    "backgroundMode",
+    "dark",
+    "neutralTemperature",
+    "contrastPosture",
+  ]);
   for (const key of Object.keys(palette)) {
     if (!supported.has(key)) {
       throw new ThemePatchMigrationError(
@@ -480,10 +507,27 @@ function migratePalette(
   const lightPalette = mode === "dark" ? undefined : basePalette;
   const selectedDarkPalette =
     mode === "dark" ? basePalette : mode === "auto" ? darkPalette : undefined;
+  // The two postures ride the ROOT palette every mode block re-enters with;
+  // they state the whole neutral axis, so a mode overlay would be a second one.
+  const neutralTemperature = closedPosture(
+    palette.neutralTemperature,
+    NEUTRAL_TEMPERATURES,
+    "neutralTemperature"
+  );
+  const contrastPosture = closedPosture(
+    palette.contrastPosture,
+    CONTRAST_POSTURES,
+    "contrastPosture"
+  );
+  const postures =
+    neutralTemperature === undefined && contrastPosture === undefined
+      ? {}
+      : { palette: { neutralTemperature, contrastPosture } };
   return mergePatches([
     defaultMode === "light"
       ? { palette: lightPalette }
       : { palette: selectedDarkPalette },
+    postures,
     lightPalette && defaultMode !== "light"
       ? { modes: { light: { palette: lightPalette } } }
       : {},

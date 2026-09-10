@@ -6,21 +6,21 @@
     "artifacts": [
       {
         "file": "src/foundation/tokens/css/facade/artifacts/rottay/index.css",
-        "bytes": 101630,
-        "lines": 2017,
-        "sha256": "68e665a6be503161e3ece425af47c8635c8e20710e782e49413832b81bb530b9"
+        "bytes": 101024,
+        "lines": 1999,
+        "sha256": "23e16b3bf501361354736d3fcd2433b2945188f101ae8b64aa7cb3add4a53aac"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/bithire/index.css",
-        "bytes": 101752,
-        "lines": 1756,
-        "sha256": "ac1fcbe10c35cd6408075670ea8277b4f1c3b4becc6bfd13f5236c1db0f0efc2"
+        "bytes": 101451,
+        "lines": 1747,
+        "sha256": "a8d345d03048e9be84e22defa24fede54a4878ecc991555abcb8b6dcdfde52f6"
       },
       {
         "file": "src/foundation/tokens/css/facade/artifacts/evnto/index.css",
-        "bytes": 39110,
-        "lines": 703,
-        "sha256": "53a71de2e66c50e2ab3ed496e57a6f36a9dfbf65eb4d22917a46e855f531bccd"
+        "bytes": 38843,
+        "lines": 695,
+        "sha256": "22f7bd2e4f540e1f44481582cf26ba7d5d92234a8db1d4f654eead8004d3bf85"
       }
     ],
     "sources": [
@@ -47,45 +47,45 @@
   },
   "occurrenceTrap": {
     "rottay": {
-      "occurrences": 1995,
-      "distinctChannels": 1331
+      "occurrences": 1977,
+      "distinctChannels": 1323
     },
     "bithire": {
-      "occurrences": 1732,
-      "distinctChannels": 1294
+      "occurrences": 1723,
+      "distinctChannels": 1286
     },
     "evnto": {
-      "occurrences": 681,
-      "distinctChannels": 594
+      "occurrences": 673,
+      "distinctChannels": 586
     }
   },
   "surface": {
     "declares": {
-      "rottay": 1331,
-      "bithire": 1294,
-      "evnto": 594
+      "rottay": 1323,
+      "bithire": 1286,
+      "evnto": 586
     },
-    "union": 1812,
-    "intersection": 558,
-    "intersectionPct": 30.8,
+    "union": 1804,
+    "intersection": 550,
+    "intersectionPct": 30.5,
     "intersectionPctOfSmallest": 93.9,
     "pairwise": {
       "rottay+bithire": {
-        "shared": 813,
-        "union": 1812,
-        "pctOfUnion": 44.9,
-        "pctOfSmaller": 62.8
+        "shared": 805,
+        "union": 1804,
+        "pctOfUnion": 44.6,
+        "pctOfSmaller": 62.6
       },
       "rottay+evnto": {
-        "shared": 594,
-        "union": 1331,
-        "pctOfUnion": 44.6,
+        "shared": 586,
+        "union": 1323,
+        "pctOfUnion": 44.3,
         "pctOfSmaller": 100
       },
       "bithire+evnto": {
-        "shared": 558,
-        "union": 1330,
-        "pctOfUnion": 42,
+        "shared": 550,
+        "union": 1322,
+        "pctOfUnion": 41.6,
         "pctOfSmaller": 93.9
       }
     },
@@ -1403,16 +1403,6 @@
         "--ds-chart-series-8",
         "--ds-chart-series-9",
         "--ds-color-accent",
-        "--ds-color-accent-100",
-        "--ds-color-accent-200",
-        "--ds-color-accent-300",
-        "--ds-color-accent-400",
-        "--ds-color-accent-50",
-        "--ds-color-accent-500",
-        "--ds-color-accent-600",
-        "--ds-color-accent-700",
-        "--ds-color-accent-800",
-        "--ds-color-accent-900",
         "--ds-color-accent-hover",
         "--ds-color-alpha-error-10",
         "--ds-color-alpha-error-20",
@@ -1474,6 +1464,8 @@
         "--ds-color-neutral-700",
         "--ds-color-neutral-800",
         "--ds-color-neutral-900",
+        "--ds-color-neutral-ink",
+        "--ds-color-neutral-paper",
         "--ds-color-on-error",
         "--ds-color-on-info",
         "--ds-color-on-success",
@@ -1917,11 +1909,11 @@
     }
   },
   "valueParity": {
-    "commonChannels": 558,
-    "identicalValue": 220,
-    "divergentValue": 338,
-    "identicalRoleShape": 349,
-    "divergentRoleShape": 209,
+    "commonChannels": 550,
+    "identicalValue": 222,
+    "divergentValue": 328,
+    "identicalRoleShape": 351,
+    "divergentRoleShape": 199,
     "divergentRoleShapeChannels": [
       {
         "channel": "--ds-button-default-bg",
@@ -2057,86 +2049,6 @@
           "rottay": "base,overlay-mode",
           "bithire": "base",
           "evnto": "base,overlay-mode"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-100",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-200",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-300",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-400",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-50",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-500",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-600",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-700",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-800",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base",
-          "evnto": "base"
-        }
-      },
-      {
-        "channel": "--ds-color-accent-900",
-        "roles": {
-          "rottay": "base,overlay-mode",
-          "bithire": "base,overlay-mode",
-          "evnto": "base"
         }
       },
       {
@@ -7511,7 +7423,7 @@
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 462,
       "channels": 3592,
-      "sha256": "9a72832230187a6728d0cf7f83e3b86007b2c9243a2879a491a792a3de096181",
+      "sha256": "ca0e666f882fe78d850a03989dd0f957be50c0ceead97f10a8b947ff04f18983",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },
@@ -22762,14 +22674,14 @@
     "notDuplication": "Variante de modo (claro/oscuro), no duplicacion. Ver `valueParity`, que compara por rol de scope.",
     "perTenant": {
       "rottay": {
-        "channelsDeclaredMoreThanOnce": 664,
-        "allInDistinctRoles": 664,
+        "channelsDeclaredMoreThanOnce": 654,
+        "allInDistinctRoles": 654,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },
       "bithire": {
-        "channelsDeclaredMoreThanOnce": 438,
-        "allInDistinctRoles": 438,
+        "channelsDeclaredMoreThanOnce": 437,
+        "allInDistinctRoles": 437,
         "sameRoleTwice": 0,
         "sameRoleTwiceChannels": []
       },

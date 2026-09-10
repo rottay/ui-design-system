@@ -620,7 +620,19 @@ describe("digest identity across the canonicalization extraction", () => {
     // either one is a red rather than a silent revert.
     const POST_SHAPE_AND_DERIVED_FAMILIES_DIGEST =
       "sha256-ccfa0091618363953f1e520822956cd37474000980548aa956a2e88fec65d3d3";
-    expect(artifact.digest).toBe(POST_SHAPE_AND_DERIVED_FAMILIES_DIGEST);
+    expect(artifact.digest).not.toBe(POST_SHAPE_AND_DERIVED_FAMILIES_DIGEST);
+    // Eleventh declared move (WO-DER-03 palette half). The ten
+    // `--ds-color-accent-{50..900}` steps left the compiler: no `var()` reader
+    // anywhere in the package resolves them, so a tenant that re-seeded its
+    // accent was moving ten channels nothing painted. This document authors
+    // `palette.accent`, so all ten survived the ISO subtraction and the delta
+    // carried them; the census below drops 75 -> 65 for exactly that reason.
+    // The two monochrome anchors `--ds-color-neutral-{ink,paper}` arrived in
+    // the baseline in the same wave and are equal on both sides, so they do
+    // not enter the delta. Nothing this document PAINTS moved.
+    const POST_PALETTE_FAMILY_DIGEST =
+      "sha256-f049dedac64aaf3d083fab05a744eb2e467716c7b23ae0464055f20c9e1f8209";
+    expect(artifact.digest).toBe(POST_PALETTE_FAMILY_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -643,7 +655,14 @@ describe("digest identity across the canonicalization extraction", () => {
     // elevation now states the whole 0..6 ladder and the border weight it
     // implies instead of levels 1..3, which adds four. The two waves add
     // disjoint channels, so the merged census is their sum.
-    expect(Object.keys(artifact.variables)).toHaveLength(75);
+    // 75 -> 65 (WO-DER-03 palette half, measured): removed 10, added 0. The
+    // ten are `--ds-color-accent-{50..900}`, retired for want of a reader.
+    expect(Object.keys(artifact.variables)).toHaveLength(65);
+    expect(
+      Object.keys(artifact.variables).filter((name) =>
+        name.startsWith("--ds-color-accent-")
+      )
+    ).toEqual([]);
     expect(artifact.variables["--ds-button-primary-bg"]).toBeUndefined();
 
     const baseline = lowerTheme(FIRST_PARTY_THEMES.bithire, IDENTITY.slug).cssVariables;

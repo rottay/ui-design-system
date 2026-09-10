@@ -788,7 +788,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       status: 'active',
       evidence: {
         consumer:
-          'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts',
+          'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts',
         symbol: 'vars["--ds-color-success"]',
       },
       scope: 'tenant',
@@ -818,7 +818,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       //      is gated on the seed being authored.
       // COH-1 (2026-08-30): `--ds-color-{tone}-bg` / `-border` and seven
       // `--ds-color-alpha-{tone}-*` channels (5./6. below) are NO LONGER
-      // excluded. `deriveStatusTintFloor` (`lowering/foundation/palette`) merges a
+      // excluded. `derivePaletteTints` (`derivation/palette/tints`) merges a
       // FLOOR for these fifteen channels per tone, guarded by the same
       // `if (seed)` presence check every other emission in this family uses,
       // merged BEFORE `setExtendedPaletteVariables` so an authored
@@ -904,7 +904,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
         '--ds-tint-info-12',
         '--ds-tint-info-16',
         '--ds-tint-info-24',
-        // 5. bg/border floor per tone (`deriveStatusTintFloor`, guarded per
+        // 5. bg/border floor per tone (`derivePaletteTints`, guarded per
         //    tone by the same `if (seed)` presence check as 1.-4. above)
         '--ds-color-success-bg',
         '--ds-color-success-border',
@@ -926,7 +926,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
         '--ds-color-alpha-info-10',
       ],
       compat:
-        'opened in place (P0, 2026-08-28): schema + envelope + normalizer with a literal closed vocabulary. Additive and zero-delta — no authored override exists, and every emitter is guarded by `if (seed)`. No `dark` twin and no per-step root: the ramp steps derive from the seed. The sibling path `palette.{success,…}` stays REJECTED, so opening the axis widened nothing by accident. The declared radius was WIDENED (W-SOURCE) from 3 channels of one tone to 68, and again (COH-1, 2026-08-30) from 68 to 83: +8 bg/border and +7 alphas, once `deriveStatusTintFloor` made the four seeds reach them too. Each widening is a correction of the declaration, not a widening of the capability — no emitter, path or vocabulary moved, and an unauthored seed still emits none of the 83.',
+        'opened in place (P0, 2026-08-28): schema + envelope + normalizer with a literal closed vocabulary. Additive and zero-delta — no authored override exists, and every emitter is guarded by `if (seed)`. No `dark` twin and no per-step root: the ramp steps derive from the seed. The sibling path `palette.{success,…}` stays REJECTED, so opening the axis widened nothing by accident. The declared radius was WIDENED (W-SOURCE) from 3 channels of one tone to 68, and again (COH-1, 2026-08-30) from 68 to 83: +8 bg/border and +7 alphas, once `derivePaletteTints` made the four seeds reach them too. Each widening is a correction of the declaration, not a widening of the capability — no emitter, path or vocabulary moved, and an unauthored seed still emits none of the 83.',
     },
     {
       id: 'profiles.icon',
