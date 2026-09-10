@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-09",
+ "updated": "2026-09-10",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -4281,6 +4281,11 @@
      "at": "2026-09-09 21:03",
      "by": "kimi-k3",
      "note": "2026-09-09 hallazgo a11y REAL de la auditoria final de DER-07 (/private/tmp/fable-der07-final-audit.md): en dark mode la fila de navegacion seleccionada es #171717 sobre #152336 (APCA Lc 0.0, invisible) en baseline y los 3 candidatos — el bloque html.dark del tema default nunca re-declara --ds-menu-item-color-active. Va a los cortes de familia (menu/navigation); no es de los candidatos. Ademas: --ds-menu-bg no tiene lector en el Menu moderno (el panel pinta --ds-card-bg) y el autocorrect de contraste marca los seis canales var() del tone como unverifiable."
+    },
+    {
+     "at": "2026-09-10 13:27",
+     "by": "kimi-k3",
+     "note": "Connfix residual lot LANDED a5da15828 (Codex r12 PASS at 28037739f): producer discovery migrated to a TypeScript AST walk (regex-era false positives retired), ambient declarations excluded from runtime references, border-style precedence and motion.character derivation modules connected, committed cascade producer inventory regenerated via canonical --write (4,904 sites / 10,825 emissions, zero conflicts). Partially addresses the admitted-but-unlit residuals: surfaces.border-style and motion.character now have derivation owners; typography.role-weights, typography.numeric, nesting and control-height remain unlit. WO stays in-progress."
     }
    ]
   },

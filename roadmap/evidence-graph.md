@@ -60,6 +60,7 @@ Lane-wide rules (binding on every WO):
 
 ### WO-EVI-03 Tests through the door: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines
 - **Outcome** — A `door-parity` suite exercises one case per family through `compileThemeIntent`; `lowerBrandThemeFixture` consumers are counted and decrease to 0; `*.skin-channel.test` use the liveness graph (READ ≠ PAINT) instead of `toContain`; showroom visual baselines are marked pre-migration with an expiry and regenerated only after the owner approves the reference identity; `retry` stays 0.
+- **OPEN RESIDUAL routed 2026-09-10** (from WO-CON-06 per audit 97 P2; origin: V96 gate-repair lot): the blocking liveness drill is red 95/96 at both ends — a pre-existing base-red, uncured, not introduced by any 2026-09 lot. Bounded acceptance: the drill runs green end to end, or fails only with a named cause attributable to a named owner; a silent or unexplained red does not close this residual. It closes only here, alongside the liveness-graph adoption this WO already owns.
 - **Why** — F-48: 58 test files bypass the door, 452 assertions compare CSS text, tests are green over dead channels, byte-for-byte baselines freeze hardcodes.
 - **Closes** — F-48 (closure criteria in `audit/30-findings`).
 - **Wave** — 4; parallel with the other WOs of the same wave whose write sets are disjoint.
