@@ -149,22 +149,25 @@ describe("theme control catalog", () => {
   });
 
   it("marks the still-underived new rows as not-yet-derived and nothing else", () => {
-    // WO-DER-02 derives two of the ten `(new)` rows. The list they came from
-    // is a KIT fact -- which rows the kit added -- and stays as authored; what
-    // moves is the measured `effect`, which is what this row asserts.
-    const derivedByWoDer02: Parameters<typeof themeControl>[0][] = [
+    // WO-DER-02 derives two of the ten `(new)` rows and the CC-01 connection
+    // lot four more. The list they came from is a KIT fact -- which rows the
+    // kit added -- and stays as authored; what moves is the measured `effect`,
+    // which is what this row asserts.
+    const derived: Parameters<typeof themeControl>[0][] = [
       "states.emphasis",
       "states.focus-style",
+      "typography.role-weights",
+      "typography.numeric",
+      "surfaces.border-style",
+      "motion.character",
     ];
     const notDerived = THEME_CONTROL_CATALOG.filter(
       (row) => row.effect === "not-yet-derived"
     ).map((row) => row.id);
     expect([...notDerived].sort()).toEqual(
-      [...NEW_THEME_DECISION_IDS]
-        .filter((id) => !derivedByWoDer02.includes(id))
-        .sort()
+      [...NEW_THEME_DECISION_IDS].filter((id) => !derived.includes(id)).sort()
     );
-    for (const id of derivedByWoDer02) {
+    for (const id of derived) {
       const row = themeControl(id);
       expect(row.effect).toBe("css-channels");
       expect(row.produces.channels.length).toBeGreaterThan(0);
@@ -179,14 +182,53 @@ describe("theme control catalog", () => {
     }
   });
 
-  it("declares responsive.posture data-only (F-35) rather than publishing a paint it has no producer for", () => {
+  it("keeps the four connected rows at the tier the kit gave them", () => {
+    // The defect CC-01 named has exactly one wrong repair: moving a Standard
+    // row to Pro so a better cascade can be sold with the upgrade. The tier
+    // census above counts the catalog as a whole; this states the four rows the
+    // connection lot touched by name, so a silent promotion is red HERE rather
+    // than only in a total that another row could rebalance.
+    expect(
+      Object.fromEntries(
+        (
+          [
+            "typography.role-weights",
+            "typography.numeric",
+            "surfaces.border-style",
+            "motion.character",
+          ] as const
+        ).map((id) => [id, themeControl(id).tier])
+      )
+    ).toEqual({
+      "typography.role-weights": "standard",
+      "typography.numeric": "pro",
+      "surfaces.border-style": "standard",
+      "motion.character": "pro",
+    });
+  });
+
+  it("publishes responsive.posture's real emission while its consumer status stays honest (CC-02)", () => {
     const responsive = themeControl("responsive.posture");
-    expect(responsive.effect).toBe("data-only");
-    expect(responsive.produces.channels).toHaveLength(0);
+    // The row said `data-only` with no channels after its deriver had begun
+    // projecting the selected posture: catalog metadata describing a
+    // pre-DER-04 output. The EMISSION is these four.
+    expect(responsive.effect).toBe("css-channels");
+    expect([...responsive.produces.channels].sort()).toEqual([
+      "--ds-posture-container-compact-max",
+      "--ds-posture-container-standard-max",
+      "--ds-posture-id",
+      "--ds-posture-span-bias",
+    ]);
     expect(responsive.produces.rootAttributes).toHaveLength(0);
-    // A data-only row still has a real keypath: it is authored, it just paints
-    // nothing. That is the distinction F-35 asked the catalog to publish.
     expect(responsive.keypath.document).not.toBeNull();
+    // The CONSUMER status is a separate fact and does not move with the
+    // emission: no productive `--ds-posture-*` reader exists under `src`, so
+    // the declared fan-out stays empty. Serializing a value as a custom
+    // property is not a family adopting it, and that adoption is INV-07's.
+    expect(responsive.minimumFamilies).toEqual({
+      kind: "declared-fan-out",
+      families: [],
+    });
   });
 
   it("refuses an unknown control by name", () => {

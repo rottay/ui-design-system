@@ -396,11 +396,28 @@ describe("digest identity across the canonicalization extraction", () => {
       "sha256-c35633aea90299acc841fc8e62221622e44083941761dfd4e71d80ef642f5c45";
     const POST_SEGMENTED_RETIREMENT_CONFIG_DIGEST =
       "sha256-576975600674f58a3e3f2a1a8d12e51f6ff0294df84da40c7e379e7c72ef9188";
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    // CC-01 re-anchor: the envelope gained the four authoring routes the kit's
+    // still-unlit rows needed -- `general.typography.{roleWeights,numeric}`,
+    // `general.surfaces.borderStyle` and `general.motion.character`. An
+    // AMPLIATION of the closed field set, the same law as the P0 and F4A-6
+    // notes above: the previous positive pins drop to `not.toBe` so the ratchet
+    // keeps every superseded value asserted, and the two new values are
+    // re-derived from the tree rather than copied from another file's pins.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_SEGMENTED_RETIREMENT_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_SEGMENTED_RETIREMENT_CONFIG_DIGEST
+    );
+    const POST_CC01_DECISION_ROUTES_DOCUMENT_DIGEST =
+      "sha256-c6864c2ca65dfce8ca948905de4834c0afffd0b30942aa8190ef49602f1a0856";
+    const POST_CC01_DECISION_ROUTES_CONFIG_DIGEST =
+      "sha256-9654077d42fe6b5732527b73e28a9e47f85e156d8454d632ac91692f0de38c63";
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_CC01_DECISION_ROUTES_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_CC01_DECISION_ROUTES_CONFIG_DIGEST
     );
   });
 

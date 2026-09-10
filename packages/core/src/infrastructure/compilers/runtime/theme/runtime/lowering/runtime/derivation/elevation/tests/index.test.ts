@@ -13,6 +13,8 @@ import { describe, expect, it } from "vitest";
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { buildLoweringContext } from "../../../pipeline";
+import { deriveBorderPosture } from "../border";
+import { deriveElevationChannels } from "..";
 import { deriveElevationLadder } from "../ladder";
 import { Z_INDEX_BANDS, deriveZIndexBands } from "../z-index";
 
@@ -87,5 +89,77 @@ describe("elevation/ladder", () => {
     });
     expect(refined["--ds-elevation-2"]).toBe("0 0 0 1px hotpink");
     expect(refined["--ds-elevation-1"]).toBe(ladderOf("flat")["--ds-elevation-1"]);
+  });
+});
+
+describe("surfaces.border-style (kit row 18)", () => {
+  const posture = (borderStyle: "none" | "hairline" | "strong") =>
+    deriveBorderPosture({
+      id: "t",
+      name: "T",
+      surfaces: { borderStyle },
+    } as BrandTheme);
+
+  it("authors the three border-width ROLES the declared families read", () => {
+    expect(posture("none")).toEqual({
+      "--ds-edge-hairline-width": "0px",
+      "--ds-edge-standard-width": "0px",
+      "--ds-edge-emphasis-width": "1px",
+      "--ds-elevation-border-style": "none",
+    });
+    expect(posture("strong")["--ds-edge-standard-width"]).toBe("1.5px");
+    expect(posture("hairline")["--ds-edge-standard-width"]).toBe("1px");
+  });
+
+  it("never touches the structural border-width scale", () => {
+    // A posture modulates roles; the `--ds-border-width-{0,1,2,4,8}` scale is
+    // the ruler it is measured against and is not a dial.
+    for (const step of ["none", "hairline", "strong"] as const) {
+      expect(
+        Object.keys(posture(step)).filter((channel) =>
+          /^--ds-border-width-/u.test(channel)
+        )
+      ).toEqual([]);
+    }
+  });
+
+  it("states nothing when the theme decided nothing", () => {
+    expect(deriveBorderPosture({ id: "t", name: "T" } as BrandTheme)).toEqual({});
+    expect(
+      deriveBorderPosture({
+        id: "t",
+        name: "T",
+        surfaces: { borderStyle: "potato" as never },
+      } as BrandTheme)
+    ).toEqual({});
+    expect(
+      deriveBorderPosture({
+        id: "t",
+        name: "T",
+        surfaces: { borderStyle: "hasOwnProperty" as never },
+      } as BrandTheme)
+    ).toEqual({});
+  });
+
+  it("outranks the border style an elevation POSTURE merely implies", () => {
+    // `elevated` presets `--ds-elevation-border-style: none` as an implication
+    // of its shadow ladder. Direct authorship of the keyline is the more
+    // specific statement and settles after it, inside the one family.
+    const context = buildLoweringContext({
+      theme: {
+        id: "t",
+        name: "T",
+        surfaces: { elevation: "elevated", borderStyle: "strong" },
+      } as BrandTheme,
+    });
+    const channels = deriveElevationChannels(
+      context.theme,
+      context.expressive.expansion
+    );
+    expect(channels["--ds-elevation-border-style"]).toBe("solid");
+    // The shadow ladder the posture states is untouched by the keyline.
+    expect(channels["--ds-elevation-3"]).toBe(
+      ladderFor({ elevation: "elevated" })["--ds-elevation-3"]
+    );
   });
 });
