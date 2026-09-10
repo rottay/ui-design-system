@@ -359,7 +359,9 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/chrome/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/elevation/ladder/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/materials/index.ts`,
-      `${LOWERING_ROOT}/runtime/derivation/palette/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/palette/neutral-temperature/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/palette/semantic/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/palette/tints/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/recipes/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/responsive/index.ts`,
       // WO-DER-03: the shape family mints the radius ramp operands. Its
