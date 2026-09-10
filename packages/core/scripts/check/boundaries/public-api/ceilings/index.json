@@ -294,7 +294,7 @@
     },
     "./runtime/tenant": {
       "maxReachableModules": 48,
-      "maxSourceBytes": 1167191
+      "maxSourceBytes": 1167572
     },
     "./runtime/tenant-theme": {
       "maxReachableModules": 2,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-CRA-24 follow-up: la landing R1 (14c0499cb, DecisionProvenanceLedger en la cadena de resolution) agrando el closure vivo de ./runtime/tenant en 35191 bytes medidos; el techo 1132000 se pino en dfd844914 sobre un arbol sin R1 (rama R2), y el merge cruzo la puerta sin re-anclar. Crecimiento auditado (K3 PASS fd3fb4601); se ancla el valor medido exacto, decrece-solo desde aqui.",
+  "lastMove": "CC-01 connection lot: ./runtime/tenant reaches the tenant theme contract, which gained the four authoring routes the kit's still-unlit rows needed -- typography.roleWeights, typography.numeric, surfaces.borderStyle and motion.character, declared on both the BrandTheme and the v1 appearance shapes. Measured +390 source bytes over d2595306c (1167182 -> 1167572) against 9 bytes of headroom, and the reachable-module count is unchanged at 25: the graph did not widen, the contract did. Anchored at the exact measured value, decrease-only from here.",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
