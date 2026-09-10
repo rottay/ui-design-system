@@ -73,23 +73,6 @@ const loweringDir = join(
   'runtime',
   'lowering',
 );
-/**
- * Every emitter that can declare a chrome channel. The lowering's writers are
- * one owner per concern since C2, so the list enumerates them rather than
- * naming a single compiler file: a channel emitted by any one of them is
- * emitted, and a list that saw only one owner would report the others' fields
- * as declared-but-unemitted.
- */
-const emitterFiles = [
-  join(srcDir, 'infrastructure', 'compilers', 'kernel', 'foundation', 'css', 'chrome-variables', 'index.ts'),
-  ...readdirSync(join(loweringDir, 'foundation'))
-    .sort()
-    .map((owner) => join(loweringDir, 'foundation', owner, 'index.ts')),
-  ...readdirSync(join(loweringDir, 'runtime'))
-    .sort()
-    .map((owner) => join(loweringDir, 'runtime', owner, 'index.ts')),
-  join(loweringDir, 'index.ts'),
-];
 const compilersDir = join(srcDir, 'infrastructure', 'compilers');
 const baselinePath = join(here, 'baseline/index.json');
 const obligationsPath = join(here, 'obligations/index.json');
@@ -203,6 +186,45 @@ export function collectFiles(dir, predicate, out = []) {
   }
   return out.sort();
 }
+
+/**
+ * Every emitter that can declare a chrome channel. The lowering's writers are
+ * one owner per concern since C2, so the inventory walks them rather than
+ * naming a single compiler file: a channel emitted by any one of them is
+ * emitted, and an inventory that saw only one owner would report the others'
+ * fields as declared-but-unemitted.
+ *
+ * THE LOWERING IS A TREE. Reading `<branch>/<owner>/index.ts` and nothing
+ * below it was true while every owner was a single file. It stopped being
+ * true when the families grew nested owners: `derivation/motion/character`,
+ * `derivation/typography/{numeric,roles,weights}` and
+ * `derivation/elevation/border` hold the `vars[...]` assignments for
+ * `BrandMotion.character`, `BrandTypography.{numeric,roleWeights}` and
+ * `BrandSurfaces.borderStyle` while their parent only composes them -- and
+ * the whole `derivation/` branch already sat one level deeper than the read
+ * reached, so its owners were invisible as a block. A parent that never
+ * names a field is not evidence that nothing emits it, so the walk is
+ * recursive and every `index.ts` under the lowering is an emitter.
+ *
+ * Tests and fixtures stay out, the same law the consumer side applies: a
+ * proof fixture must never be able to make a declared field look emitted.
+ */
+const EMITTER_SKIP_DIRS = new Set([...SKIP_DIRS, 'test', 'tests']);
+
+export function collectEmitterOwners(dir, out = []) {
+  const own = join(dir, 'index.ts');
+  if (existsSync(own)) out.push(own);
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || EMITTER_SKIP_DIRS.has(entry.name)) continue;
+    collectEmitterOwners(join(dir, entry.name), out);
+  }
+  return out.sort();
+}
+
+const emitterFiles = [
+  join(srcDir, 'infrastructure', 'compilers', 'kernel', 'foundation', 'css', 'chrome-variables', 'index.ts'),
+  ...collectEmitterOwners(loweringDir),
+];
 
 function readSources(files) {
   return files.map((file) => ({ file, text: readFileSync(file, 'utf8') }));

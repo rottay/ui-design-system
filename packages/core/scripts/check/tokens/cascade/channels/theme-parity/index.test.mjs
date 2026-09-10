@@ -1,11 +1,24 @@
 import assert from "node:assert/strict";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import { packageRoot as findPackageRoot } from "../../../../../libraries/repo-root/index.mjs";
-import { evaluateObligations } from "./index.mjs";
+import {
+  collectEmitterOwners,
+  evaluateObligations,
+  runThemeChannelParityGate,
+} from "./index.mjs";
 
 import {
   auditDataOnlyProjections,
@@ -644,4 +657,128 @@ test("Q8: the canonical channel that supersedes focusRing is real and read", () 
   );
   assert.ok(existsSync(segmented));
   assert.match(readFileSync(segmented, "utf8"), /var\(--ds-focus-ring/);
+});
+
+/* ---------------------------------------------------------------------- */
+/* The emitter inventory is a TREE walk                                    */
+/* ---------------------------------------------------------------------- */
+
+/**
+ * A field is `declared-but-unemitted` when the compiler does not emit it. It
+ * is NOT unemitted when the inventory failed to open the file that emits it,
+ * and the two must never produce the same red: the first is a hole in the
+ * product, the second is a hole in the instrument. These drills hold the
+ * difference from both ends -- a planted emission that only a nested owner
+ * performs, and the shipped tree read once with each inventory.
+ */
+
+/** The pre-tree inventory, kept here as the mutant the walk has to beat. */
+function oneLevelInventory() {
+  const lowering = join(
+    CORE_ROOT,
+    "src/infrastructure/compilers/runtime/theme/runtime/lowering",
+  );
+  return [
+    join(CORE_ROOT, "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts"),
+    ...readdirSync(join(lowering, "foundation")).sort().map((owner) => join(lowering, "foundation", owner, "index.ts")),
+    ...readdirSync(join(lowering, "runtime")).sort().map((owner) => join(lowering, "runtime", owner, "index.ts")),
+    join(lowering, "index.ts"),
+  ];
+}
+
+test("DRILL: an emission only a nested owner performs is seen; a fixture's is not", () => {
+  const planted = mkdtempSync(join(tmpdir(), "theme-parity-nested-"));
+  const family = join(planted, "family");
+  mkdirSync(join(family, "nested"), { recursive: true });
+  mkdirSync(join(family, "tests"), { recursive: true });
+
+  // The parent composes and never names the field — exactly the shape that
+  // made BrandMotion.character look unemitted.
+  writeFileSync(
+    join(family, "index.ts"),
+    `import { nestedVars } from "./nested";
+export function familyVars(vars: Record<string, string>, card: Partial<Card> | undefined) {
+  nestedVars(vars, card);
+}
+`,
+  );
+  writeFileSync(
+    join(family, "nested", "index.ts"),
+    `export function nestedVars(vars: Record<string, string>, card: Partial<Card> | undefined) {
+  if (card?.bg) vars["--ds-drill-nested-bg"] = card.bg;
+}
+`,
+  );
+  // Same shape, inside tests/: it must stay out of the inventory, or a fixture
+  // could certify any field as emitted.
+  writeFileSync(
+    join(family, "tests", "index.ts"),
+    `export function fixtureVars(vars: Record<string, string>, card: Partial<Card> | undefined) {
+  if (card?.border) vars["--ds-drill-fixture-border"] = card.border;
+}
+`,
+  );
+
+  assert.deepEqual(
+    collectEmitterOwners(planted).map((file) => relative(planted, file)),
+    ["family/index.ts", "family/nested/index.ts"],
+  );
+
+  const { registry } = parseTypeRegistry([{ file: "theme.ts", text: contract }]);
+  const emitted = (files) =>
+    new Set(
+      parseEmitterMappings(
+        files.map((file) => ({ file, text: readFileSync(file, "utf8") })),
+        registry,
+      ).emissions.map((emission) => emission.name),
+    );
+
+  assert.ok(
+    !emitted([join(family, "index.ts")]).has("--ds-drill-nested-bg"),
+    "the parent alone is blind to it — this is the defect the walk repairs",
+  );
+  const walked = emitted(collectEmitterOwners(planted));
+  assert.ok(walked.has("--ds-drill-nested-bg"), "the nested owner's emission is seen");
+  assert.ok(!walked.has("--ds-drill-fixture-border"), "a fixture never emits");
+
+  rmSync(planted, { recursive: true, force: true });
+});
+
+test("DRILL: the four kit decisions their nested owners derive are emitted", () => {
+  // Each of the four is read by a sub-owner the parent only composes.
+  const nestedOwners = [
+    "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/elevation/border/index.ts",
+    "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/character/index.ts",
+    "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/numeric/index.ts",
+    "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/roles/index.ts",
+    "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/weights/index.ts",
+  ];
+  const fields = [
+    "BrandMotion.character",
+    "BrandSurfaces.borderStyle",
+    "BrandTypography.numeric",
+    "BrandTypography.roleWeights",
+  ];
+
+  const shipped = runThemeChannelParityGate();
+  const inventory = new Set(shipped.analysis.emitterFiles);
+  for (const owner of nestedOwners) {
+    assert.ok(inventory.has(owner), `the shipped inventory must reach ${owner}`);
+  }
+  const unemitted = new Set(shipped.graph.issues.declaredButUnemitted.map((issue) => issue.id));
+  for (const field of fields) {
+    assert.ok(!unemitted.has(field), `${field} is derived by a nested owner and is not unemitted`);
+  }
+
+  // The mutant: put the one-level inventory back and every one of the four
+  // returns. That is what makes this a drill and not a snapshot.
+  const regressed = runThemeChannelParityGate({ emitterFiles: oneLevelInventory() });
+  const blind = new Set(regressed.graph.issues.declaredButUnemitted.map((issue) => issue.id));
+  for (const field of fields) {
+    assert.ok(blind.has(field), `${field} must be reported unemitted under the one-level read`);
+  }
+  assert.ok(
+    blind.size > unemitted.size,
+    "the one-level read reports strictly more, and every extra is an instrument defect",
+  );
 });
