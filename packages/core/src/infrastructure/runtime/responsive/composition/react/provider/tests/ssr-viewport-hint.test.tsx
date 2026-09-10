@@ -78,6 +78,13 @@ function withViewport(width: number, run: () => void): void {
 
 const FULLSCREEN_ATTRIBUTE = 'data-adaptive-fullscreen';
 
+/** The unpatched writer, captured before any drill can intercept it. */
+const NATIVE_SET_ATTRIBUTE = Element.prototype.setAttribute;
+
+type Restore = () => void;
+/** A prototype slot, which is untyped by nature: the patch only calls through it. */
+type AnyFunction = (this: any, ...args: any[]) => any;
+
 /**
  * Every value `data-adaptive-fullscreen` is COMMITTED with, in order, from
  * before the Modal renders until `stop()`.
@@ -93,42 +100,244 @@ const FULLSCREEN_ATTRIBUTE = 'data-adaptive-fullscreen';
  * no attribute record naming its outgoing value, and the added-node scan reads
  * the replacement's subtree, which by delivery time already holds the corrected
  * value: the batch reports `['false']` for a frame that painted `true` first,
- * indistinguishable from a clean desktop render. Intercepting `setAttribute` on
- * the caller's stack has no such blind spot -- it records the write when React
+ * indistinguishable from a clean desktop render. Intercepting the write on the
+ * caller's stack has no such blind spot -- it records the write when React
  * performs it, before the node it targets can be replaced, removed or read
  * back -- and needs no node to survive.
  *
- * It fails closed. Whatever every surface finally carries must be a value the
- * interception actually saw, or the instrument itself is broken and says so
- * instead of reporting a clean history it never observed.
+ * ONE WRITER IS NOT THE DOM'S ONLY WRITER, so intercepting `setAttribute` alone
+ * would move the blind spot rather than close it. Every path that can put a
+ * value on this attribute is therefore either RECORDED or REFUSED BY NAME:
+ *
+ *  RECORDED, by calling through and then reading the attribute back off the
+ *  element the write landed on -- which is correct whether or not the runner
+ *  routes one API into another:
+ *    `setAttribute` / `removeAttribute`, `setAttributeNS` / `removeAttributeNS`,
+ *    `setAttributeNode(NS)` / `removeAttributeNode`, `toggleAttribute`,
+ *    `NamedNodeMap.setNamedItem(NS)` / `removeNamedItem(NS)` -- which is also
+ *    the path `cloneNode` plants a copied attribute through -- the `Attr.value`
+ *    setter (a live write to an already-attached attribute node, invisible to
+ *    every element-level API), and `Attr.nodeValue`.
+ *    `element.dataset.adaptiveFullscreen = ...` and `delete` on it are recorded
+ *    because they lower to `setAttribute` / `removeAttribute` here; the dataset
+ *    drill below is what keeps that true rather than assumed.
+ *
+ *  REFUSED, loudly, at the write: `innerHTML`, `outerHTML`,
+ *  `insertAdjacentHTML`, `document.write(ln)`. These plant attributes through
+ *  the HTML parser, which no interception on this side can see. The refusal
+ *  fires only when the markup NAMES this attribute, so unrelated markup is
+ *  untouched, and it throws instead of returning -- a drill that reaches for one
+ *  of them goes red with `UNSUPPORTED-WRITER` rather than reporting a history
+ *  the recorder never observed.
+ *
+ *  ADJUDICATED OUT OF SCOPE, with the reason:
+ *    - Reflected IDL properties (`className`, `id`, `title`, `style`, ...) each
+ *      write ONE fixed attribute name, none of which is this one. They cannot
+ *      plant the carrier.
+ *    - `Attr.textContent` has no setter on this runner's `Attr` (assigning to
+ *      it throws), so it is not a writer here; `Attr.nodeValue` is patched even
+ *      though assigning to it does not currently reach the owner element, so a
+ *      runner that made it live would be recorded rather than missed.
+ *    - `DOMParser.parseFromString`, `Range.createContextualFragment` and
+ *      `importNode`/`adoptNode` build nodes in another document or fragment.
+ *      Nothing they build is in this document until it is inserted, and any
+ *      carrier that survives insertion is caught by the per-element check in
+ *      `stop()` below. React DOM parses no markup it was not handed through
+ *      `dangerouslySetInnerHTML`, which the `innerHTML` refusal covers.
+ *
+ * AND IT FAILS CLOSED PER ELEMENT. Every element in the body that carries the
+ * attribute when `stop()` runs must be an element this recorder saw written,
+ * with the value it is carrying. A global "did we ever see this value" check is
+ * not enough: an unrelated element written `false` would mask a carrier that
+ * reached `false` through a path nothing observed. The per-element check is the
+ * backstop for every writer not enumerated above, present or future.
  */
-let restoreAttributeInterception: (() => void) | null = null;
+let restoreAttributeInterception: Restore | null = null;
 
 function recordAdaptiveFullscreen(): { stop: () => string[] } {
   const seen: (string | null)[] = [];
+  const observed = new Map<Element, string | null>();
+  const readBack = Element.prototype.getAttribute;
+
   const push = (value: string | null): void => {
-    if (seen[seen.length - 1] !== value) seen.push(value);
+    if (seen.length === 0 || seen[seen.length - 1] !== value) seen.push(value);
   };
-  interface AttributeWriter {
-    setAttribute: (this: Element, name: string, value: string) => void;
-    removeAttribute: (this: Element, name: string) => void;
+  /** What `element` carries now, recorded on the writer's own stack. */
+  const commit = (element: Element | null | undefined): void => {
+    if (!element) return;
+    const value = readBack.call(element, FULLSCREEN_ATTRIBUTE);
+    observed.set(element, value);
+    push(value);
+  };
+  const namesAttribute = (name: unknown): boolean => {
+    const lowered = String(name).toLowerCase();
+    return lowered === FULLSCREEN_ATTRIBUTE || lowered.endsWith(`:${FULLSCREEN_ATTRIBUTE}`);
+  };
+  const markupNamesAttribute = (markup: unknown): boolean =>
+    String(markup).includes(FULLSCREEN_ATTRIBUTE);
+  const refuse = (writer: string): never => {
+    throw new Error(
+      `UNSUPPORTED-WRITER: ${writer} plants ${FULLSCREEN_ATTRIBUTE} through parsed markup, which this recorder cannot observe; it will not report a commit history it did not see`,
+    );
+  };
+
+  const undo: Restore[] = [];
+  const declaringOwner = (start: object | null, key: string): object | null => {
+    let owner: object | null = start;
+    while (owner && !Object.getOwnPropertyDescriptor(owner, key)) {
+      owner = Object.getPrototypeOf(owner) as object | null;
+    }
+    return owner;
+  };
+  const patchMethod = (
+    owner: object | null | undefined,
+    key: string,
+    wrap: (original: AnyFunction) => AnyFunction,
+  ): void => {
+    const target = owner as Record<string, AnyFunction> | null | undefined;
+    if (!target || typeof target[key] !== 'function') return;
+    const original = target[key];
+    target[key] = wrap(original);
+    undo.push(() => {
+      target[key] = original;
+    });
+  };
+  const patchSetter = (
+    start: object | null | undefined,
+    key: string,
+    wrap: (original: (value: unknown) => void) => (value: unknown) => void,
+  ): void => {
+    const owner = declaringOwner(start ?? null, key);
+    const descriptor = owner ? Object.getOwnPropertyDescriptor(owner, key) : undefined;
+    if (!owner || !descriptor?.set || !descriptor.configurable) return;
+    const original = descriptor.set as (value: unknown) => void;
+    Object.defineProperty(owner, key, { ...descriptor, set: wrap(original) });
+    undo.push(() => {
+      Object.defineProperty(owner, key, descriptor);
+    });
+  };
+
+  const element = Element.prototype;
+  patchMethod(element, 'setAttribute', (original) =>
+    function setAttribute(this: Element, name: unknown, value: unknown) {
+      const result = original.call(this, name, value);
+      if (namesAttribute(name)) commit(this);
+      return result;
+    },
+  );
+  patchMethod(element, 'removeAttribute', (original) =>
+    function removeAttribute(this: Element, name: unknown) {
+      const result = original.call(this, name);
+      if (namesAttribute(name)) commit(this);
+      return result;
+    },
+  );
+  patchMethod(element, 'setAttributeNS', (original) =>
+    function setAttributeNS(this: Element, namespace: unknown, name: unknown, value: unknown) {
+      const result = original.call(this, namespace, name, value);
+      if (namesAttribute(name)) commit(this);
+      return result;
+    },
+  );
+  patchMethod(element, 'removeAttributeNS', (original) =>
+    function removeAttributeNS(this: Element, namespace: unknown, name: unknown) {
+      const result = original.call(this, namespace, name);
+      if (namesAttribute(name)) commit(this);
+      return result;
+    },
+  );
+  patchMethod(element, 'toggleAttribute', (original) =>
+    function toggleAttribute(this: Element, name: unknown, force: unknown) {
+      const result = original.call(this, name, force);
+      if (namesAttribute(name)) commit(this);
+      return result;
+    },
+  );
+  for (const key of ['setAttributeNode', 'setAttributeNodeNS', 'removeAttributeNode']) {
+    patchMethod(element, key, (original) =>
+      function withAttributeNode(this: Element, node: Attr) {
+        const result = original.call(this, node);
+        if (node && namesAttribute(node.name)) commit(this);
+        return result;
+      },
+    );
   }
-  const proto = Element.prototype as unknown as AttributeWriter;
-  const write = proto.setAttribute;
-  const erase = proto.removeAttribute;
-  proto.setAttribute = function intercepted(name, value) {
-    write.call(this, name, value);
-    if (name === FULLSCREEN_ATTRIBUTE) push(String(value));
-  };
-  proto.removeAttribute = function intercepted(name) {
-    erase.call(this, name);
-    if (name === FULLSCREEN_ATTRIBUTE) push(null);
-  };
+  patchSetter(element, 'innerHTML', (original) =>
+    function innerHTML(this: Element, markup: unknown) {
+      if (markupNamesAttribute(markup)) refuse('Element.innerHTML');
+      original.call(this, markup);
+    },
+  );
+  patchSetter(element, 'outerHTML', (original) =>
+    function outerHTML(this: Element, markup: unknown) {
+      if (markupNamesAttribute(markup)) refuse('Element.outerHTML');
+      original.call(this, markup);
+    },
+  );
+  patchMethod(element, 'insertAdjacentHTML', (original) =>
+    function insertAdjacentHTML(this: Element, position: unknown, markup: unknown) {
+      if (markupNamesAttribute(markup)) refuse('Element.insertAdjacentHTML');
+      return original.call(this, position, markup);
+    },
+  );
+  for (const key of ['write', 'writeln']) {
+    patchMethod(Document.prototype, key, (original) =>
+      function documentWrite(this: Document, ...markup: unknown[]) {
+        if (markup.some(markupNamesAttribute)) refuse(`Document.${key}`);
+        return original.apply(this, markup);
+      },
+    );
+  }
+
+  // An attribute node is a writer in its own right: once attached, writing its
+  // value changes what the element carries without touching the element.
+  for (const key of ['value', 'nodeValue']) {
+    patchSetter(Attr.prototype, key, (original) =>
+      function attributeValue(this: Attr, value: unknown) {
+        original.call(this, value);
+        if (namesAttribute(this.name)) commit(this.ownerElement);
+      },
+    );
+  }
+
+  // `cloneNode` copies attributes through this map, so a carrier planted by a
+  // clone is recorded here and nowhere else.
+  const attributes = NamedNodeMap.prototype as unknown as Record<string, AnyFunction>;
+  for (const key of ['setNamedItem', 'setNamedItemNS']) {
+    patchMethod(attributes, key, (original) =>
+      function setNamedItem(this: NamedNodeMap, node: Attr) {
+        const result = original.call(this, node);
+        if (node && namesAttribute(node.name)) commit(node.ownerElement);
+        return result;
+      },
+    );
+  }
+  patchMethod(attributes, 'removeNamedItem', (original) =>
+    function removeNamedItem(this: NamedNodeMap, name: unknown) {
+      const owner = namesAttribute(name)
+        ? (this.getNamedItem(String(name))?.ownerElement ?? null)
+        : null;
+      const result = original.call(this, name);
+      if (owner) commit(owner);
+      return result;
+    },
+  );
+  patchMethod(attributes, 'removeNamedItemNS', (original) =>
+    function removeNamedItemNS(this: NamedNodeMap, namespace: unknown, name: unknown) {
+      const owner = namesAttribute(name)
+        ? (this.getNamedItemNS(namespace as string | null, String(name))?.ownerElement ?? null)
+        : null;
+      const result = original.call(this, namespace, name);
+      if (owner) commit(owner);
+      return result;
+    },
+  );
+
   // A patched prototype that outlives a failing assertion would follow the
-  // worker into every later file, so the restore is also owned by `afterEach`.
+  // worker into every later file, so the restore is also owned by `afterEach`,
+  // and `stop()` restores BEFORE it can throw.
   const restore = (): void => {
-    proto.setAttribute = write;
-    proto.removeAttribute = erase;
+    while (undo.length > 0) undo.pop()?.();
     restoreAttributeInterception = null;
   };
   restoreAttributeInterception = restore;
@@ -139,9 +348,9 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
         document.body.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`),
       )) {
         const settled = carrier.getAttribute(FULLSCREEN_ATTRIBUTE);
-        if (!seen.includes(settled)) {
+        if (!observed.has(carrier) || observed.get(carrier) !== settled) {
           throw new Error(
-            `the recorder never saw the value a surface settled on (${String(settled)}); it is not observing commits`,
+            `UNOBSERVED-CARRIER: a surface carries ${String(settled)} that this recorder never saw written to it; it is not observing every commit`,
           );
         }
       }
@@ -445,5 +654,282 @@ describe('adaptiveFullscreen on the first committed render', () => {
     render(<ReplacedSurface />);
 
     expect(recorder.stop()).toEqual(['true', 'false']);
+  });
+});
+
+/**
+ * A surface that committed fullscreen and is corrected a layout effect later,
+ * through whichever DOM writer the drill hands it. The value the frame painted
+ * first has to appear in the history no matter which API removed it.
+ */
+function CorrectedThrough({
+  correct,
+}: {
+  correct: (surface: HTMLDivElement) => void;
+}): React.ReactElement {
+  const surface = React.useRef<HTMLDivElement>(null);
+  React.useLayoutEffect(() => {
+    if (surface.current) correct(surface.current);
+  }, [correct]);
+  return <div ref={surface} data-adaptive-fullscreen="true" />;
+}
+
+/** Markup that names the attribute, for the writers this recorder refuses. */
+const PLANTED_MARKUP = `<span ${FULLSCREEN_ATTRIBUTE}="true"></span>`;
+
+describe('the recorder observes every writer, or refuses the drill by name', () => {
+  it('records a correction written with setAttributeNS', () => {
+    const recorder = recordAdaptiveFullscreen();
+    render(
+      <CorrectedThrough
+        correct={(surface) => surface.setAttributeNS(null, FULLSCREEN_ATTRIBUTE, 'false')}
+      />,
+    );
+
+    expect(recorder.stop()).toEqual(['true', 'false']);
+  });
+
+  it('records a correction attached as an attribute node', () => {
+    const recorder = recordAdaptiveFullscreen();
+    render(
+      <CorrectedThrough
+        correct={(surface) => {
+          const node = document.createAttribute(FULLSCREEN_ATTRIBUTE);
+          node.value = 'false';
+          surface.setAttributeNode(node);
+        }}
+      />,
+    );
+
+    expect(recorder.stop()).toEqual(['true', 'false']);
+  });
+
+  /**
+   * The element is never touched here: the correction is written straight onto
+   * the attribute node the surface already carries. No element-level writer
+   * runs at all, which is exactly why this one needs its own interception.
+   */
+  it('records a correction written through the attribute node itself', () => {
+    const recorder = recordAdaptiveFullscreen();
+    render(
+      <CorrectedThrough
+        correct={(surface) => {
+          const node = surface.getAttributeNode(FULLSCREEN_ATTRIBUTE);
+          if (node) node.value = 'false';
+        }}
+      />,
+    );
+
+    expect(recorder.stop()).toEqual(['true', 'false']);
+  });
+
+  /**
+   * `dataset` is the property-assignment path onto this attribute. It lowers to
+   * `setAttribute` on this runner rather than being patched itself -- and this
+   * drill is what keeps that a measured fact instead of an assumption.
+   */
+  it('records a correction assigned through dataset', () => {
+    const recorder = recordAdaptiveFullscreen();
+    render(
+      <CorrectedThrough
+        correct={(surface) => {
+          surface.dataset.adaptiveFullscreen = 'false';
+        }}
+      />,
+    );
+
+    expect(recorder.stop()).toEqual(['true', 'false']);
+  });
+
+  /**
+   * `toggleAttribute` plants the EMPTY string, which is a value a surface can
+   * be seen carrying and therefore a value the history has to name. A recorder
+   * that only watched `setAttribute` with a value would report `['false']`.
+   */
+  it('records the empty value toggleAttribute plants, then the correction over it', () => {
+    const ToggledSurface = (): React.ReactElement => {
+      const surface = React.useRef<HTMLDivElement>(null);
+      React.useLayoutEffect(() => {
+        surface.current?.toggleAttribute(FULLSCREEN_ATTRIBUTE);
+        surface.current?.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+      }, []);
+      return <div ref={surface} />;
+    };
+
+    const recorder = recordAdaptiveFullscreen();
+    render(<ToggledSurface />);
+
+    expect(recorder.stop()).toEqual(['', 'false']);
+  });
+
+  /**
+   * A removal leaves NO carrier in the document, so the per-element backstop
+   * cannot catch it: an unobserved `removeAttributeNode` would report the clean
+   * `['true']` of a surface that ended up carrying nothing. Observing it is what
+   * turns the drill red.
+   */
+  it('sees a removal through removeAttributeNode rather than reporting a clean history', () => {
+    const recorder = recordAdaptiveFullscreen();
+    render(
+      <CorrectedThrough
+        correct={(surface) => {
+          const node = surface.getAttributeNode(FULLSCREEN_ATTRIBUTE);
+          if (node) surface.removeAttributeNode(node);
+        }}
+      />,
+    );
+
+    expect(() => recorder.stop()).toThrow(/removed mid-history/);
+  });
+
+  /**
+   * A clone carries the attribute without anything writing it: no element-level
+   * writer runs, and the source it was copied from need never be in the
+   * document. The copy goes through the attribute map, which is where this is
+   * recorded.
+   */
+  it('records a carrier planted by cloning a node, not by writing one', () => {
+    const source = document.createElement('div');
+    NATIVE_SET_ATTRIBUTE.call(source, FULLSCREEN_ATTRIBUTE, 'true');
+
+    const recorder = recordAdaptiveFullscreen();
+    const clone = source.cloneNode(true) as Element;
+    document.body.appendChild(clone);
+    try {
+      expect(recorder.stop()).toEqual(['true']);
+    } finally {
+      clone.remove();
+    }
+  });
+
+  /**
+   * THE MASKING CASE. The value the unobserved carrier settles on is a value
+   * the recorder DID see -- written by a different element. A global "have we
+   * ever seen this value" check passes here and certifies a history it never
+   * observed; only a per-element check can refuse it.
+   *
+   * The native writer captured before the patch is exactly what an
+   * unenumerated writer looks like from the recorder's side.
+   */
+  it('refuses a carrier it never saw written, even when another element wrote the same value', () => {
+    const recorder = recordAdaptiveFullscreen();
+    render(<div data-adaptive-fullscreen="false" />);
+
+    const unobserved = document.createElement('div');
+    document.body.appendChild(unobserved);
+    NATIVE_SET_ATTRIBUTE.call(unobserved, FULLSCREEN_ATTRIBUTE, 'false');
+    try {
+      expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER/);
+    } finally {
+      unobserved.remove();
+    }
+  });
+
+  it('refuses innerHTML that names the attribute, and leaves other markup alone', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    try {
+      expect(() => {
+        host.innerHTML = PLANTED_MARKUP;
+      }).toThrow(/UNSUPPORTED-WRITER/);
+      expect(host.children.length).toBe(0);
+
+      host.innerHTML = '<span>body</span>';
+      expect(host.children.length).toBe(1);
+    } finally {
+      // Detached first: a refusal that did not fire leaves a carrier behind, and
+      // the drill that reports it must not also poison every drill after it.
+      host.remove();
+      recorder.stop();
+    }
+  });
+
+  it('refuses outerHTML that names the attribute', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const parent = document.createElement('div');
+    const host = document.createElement('div');
+    parent.appendChild(host);
+    document.body.appendChild(parent);
+    try {
+      expect(() => {
+        host.outerHTML = PLANTED_MARKUP;
+      }).toThrow(/UNSUPPORTED-WRITER/);
+      expect(parent.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`).length).toBe(0);
+    } finally {
+      // Detached first: a refusal that did not fire leaves a carrier behind, and
+      // the drill that reports it must not also poison every drill after it.
+      parent.remove();
+      recorder.stop();
+    }
+  });
+
+  it('refuses insertAdjacentHTML that names the attribute', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    try {
+      expect(() => host.insertAdjacentHTML('beforeend', PLANTED_MARKUP)).toThrow(
+        /UNSUPPORTED-WRITER/,
+      );
+      expect(host.children.length).toBe(0);
+
+      host.insertAdjacentHTML('beforeend', '<span>body</span>');
+      expect(host.children.length).toBe(1);
+    } finally {
+      // Detached first: a refusal that did not fire leaves a carrier behind, and
+      // the drill that reports it must not also poison every drill after it.
+      host.remove();
+      recorder.stop();
+    }
+  });
+
+  /**
+   * A patched prototype that survived a drill would follow the worker into
+   * every later file in the run. `stop()` restores before it can throw, so even
+   * a red drill leaves the DOM as it found it.
+   */
+  it('leaves every writer it patched exactly as it found it', () => {
+    const descriptorSetter = (owner: object, key: string): unknown =>
+      Object.getOwnPropertyDescriptor(owner, key)?.set;
+    const before = {
+      setAttribute: Element.prototype.setAttribute,
+      removeAttribute: Element.prototype.removeAttribute,
+      setAttributeNS: Element.prototype.setAttributeNS,
+      setAttributeNode: Element.prototype.setAttributeNode,
+      removeAttributeNode: Element.prototype.removeAttributeNode,
+      toggleAttribute: Element.prototype.toggleAttribute,
+      insertAdjacentHTML: Element.prototype.insertAdjacentHTML,
+      write: Document.prototype.write,
+      setNamedItem: NamedNodeMap.prototype.setNamedItem,
+      removeNamedItem: NamedNodeMap.prototype.removeNamedItem,
+      innerHTML: descriptorSetter(Element.prototype, 'innerHTML'),
+      outerHTML: descriptorSetter(Element.prototype, 'outerHTML'),
+      attributeValue: descriptorSetter(Attr.prototype, 'value'),
+      nodeValue: descriptorSetter(Node.prototype, 'nodeValue'),
+    };
+
+    const recorder = recordAdaptiveFullscreen();
+    expect(Element.prototype.setAttribute).not.toBe(before.setAttribute);
+    expect(descriptorSetter(Element.prototype, 'innerHTML')).not.toBe(before.innerHTML);
+    expect(descriptorSetter(Attr.prototype, 'value')).not.toBe(before.attributeValue);
+    expect(NamedNodeMap.prototype.setNamedItem).not.toBe(before.setNamedItem);
+
+    recorder.stop();
+
+    expect(Element.prototype.setAttribute).toBe(before.setAttribute);
+    expect(Element.prototype.removeAttribute).toBe(before.removeAttribute);
+    expect(Element.prototype.setAttributeNS).toBe(before.setAttributeNS);
+    expect(Element.prototype.setAttributeNode).toBe(before.setAttributeNode);
+    expect(Element.prototype.removeAttributeNode).toBe(before.removeAttributeNode);
+    expect(Element.prototype.toggleAttribute).toBe(before.toggleAttribute);
+    expect(Element.prototype.insertAdjacentHTML).toBe(before.insertAdjacentHTML);
+    expect(Document.prototype.write).toBe(before.write);
+    expect(NamedNodeMap.prototype.setNamedItem).toBe(before.setNamedItem);
+    expect(NamedNodeMap.prototype.removeNamedItem).toBe(before.removeNamedItem);
+    expect(descriptorSetter(Element.prototype, 'innerHTML')).toBe(before.innerHTML);
+    expect(descriptorSetter(Element.prototype, 'outerHTML')).toBe(before.outerHTML);
+    expect(descriptorSetter(Attr.prototype, 'value')).toBe(before.attributeValue);
+    expect(descriptorSetter(Node.prototype, 'nodeValue')).toBe(before.nodeValue);
   });
 });
