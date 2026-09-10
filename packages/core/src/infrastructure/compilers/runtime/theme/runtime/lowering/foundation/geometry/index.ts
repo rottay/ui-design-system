@@ -71,6 +71,33 @@ export function buttonSilhouetteAlias(
 }
 
 /**
+ * Every channel a NAMED button radius states, folded onto the same dial.
+ *
+ * The same six channels `buttonSilhouetteChannels` writes, because they are the
+ * same leaf: an override that moved `--ds-radius-button` while five per-size
+ * radii kept the silhouette's value would replace one answer with two. Folded
+ * through `dialReachableRadius` for the same reason the chrome family folds its
+ * own radii through `applyRadiusDial` -- an authored radius is a value at the
+ * vertical's dial position, and the grammar it is emitted in must not depend on
+ * which rank happened to write it.
+ */
+export function buttonRadiusChannels(
+  radius: string | undefined,
+  radiusBaseline: string
+): Record<string, string> {
+  if (radius === undefined) return {};
+  const folded = dialReachableRadius(radius, resolveRadiusScale(radiusBaseline));
+  return {
+    "--ds-radius-button": folded,
+    "--ds-button-xs-radius": folded,
+    "--ds-button-sm-radius": folded,
+    "--ds-button-md-radius": folded,
+    "--ds-button-lg-radius": folded,
+    "--ds-button-xl-radius": folded,
+  };
+}
+
+/**
  * Every channel a CHOSEN `shape.button-style` states, for BOTH transports.
  *
  * The DB ingress used to expand the silhouette into a `chrome.controls`

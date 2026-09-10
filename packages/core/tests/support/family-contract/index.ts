@@ -37,6 +37,7 @@ export const FIXTURE_TENANT_FACTS: TenantFacts = {
     elevation: "elevated",
   },
   chosenButtonStyle: "pill",
+  chosenButtonRadius: undefined,
   typography: {
     fontFamilyBase: "Tenant Sans",
     fontFamilyHeading: "Tenant Display",
