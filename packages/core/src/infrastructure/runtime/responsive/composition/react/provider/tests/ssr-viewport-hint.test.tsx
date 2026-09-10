@@ -76,12 +76,25 @@ function withViewport(width: number, run: () => void): void {
   }
 }
 
+const FULLSCREEN_ATTRIBUTE = 'data-adaptive-fullscreen';
+
 /**
  * Every value `data-adaptive-fullscreen` holds, in order, from before the Modal
  * renders until `stop()`.
  *
  * The first entry is the value the surface carried on the render that created
  * it -- the first committed render. A second entry is a correcting frame.
+ *
+ * IT REPLAYS THE BATCH; IT DOES NOT READ THE DOM. Records arrive together,
+ * after every write in them has landed, so asking each target what it carries
+ * NOW answers with the settled value for all of them and reports a one-entry
+ * sequence for a surface that committed fullscreen and corrected itself a
+ * layout effect later -- exactly the history this file exists to forbid, read
+ * back as a pass. `attributeOldValue` is what makes the intermediate states
+ * recoverable: a record's own `oldValue` is the value before it, and the value
+ * AFTER it is the `oldValue` of the next record naming the same attribute on
+ * the same element, or -- for the last one -- what the element carries now. The
+ * same reconstruction the retained scope watch performs, for the same reason.
  */
 function recordAdaptiveFullscreen(): { stop: () => string[] } {
   const seen: string[] = [];
@@ -89,29 +102,44 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     if (value !== null && seen[seen.length - 1] !== value) seen.push(value);
   };
   const judge = (records: MutationRecord[]): void => {
-    for (const record of records) {
+    /** What `target` carried once every write at or before `index` had landed. */
+    const settledAfter = (target: Element, index: number): string | null => {
+      for (let later = index + 1; later < records.length; later += 1) {
+        const record = records[later];
+        if (record.type === 'attributes' && record.target === target) {
+          return record.oldValue;
+        }
+      }
+      return target.getAttribute(FULLSCREEN_ATTRIBUTE);
+    };
+    records.forEach((record, index) => {
       if (record.type === 'attributes') {
-        push((record.target as Element).getAttribute('data-adaptive-fullscreen'));
-        continue;
+        const target = record.target as Element;
+        push(record.oldValue);
+        push(settledAfter(target, index));
+        return;
       }
       for (const node of Array.from(record.addedNodes)) {
         if (node.nodeType !== 1) continue;
         const element = node as Element;
-        if (element.hasAttribute('data-adaptive-fullscreen')) {
-          push(element.getAttribute('data-adaptive-fullscreen'));
-        }
-        element
-          .querySelectorAll('[data-adaptive-fullscreen]')
-          .forEach((found) => push(found.getAttribute('data-adaptive-fullscreen')));
+        const carriers = [
+          ...(element.hasAttribute(FULLSCREEN_ATTRIBUTE) ? [element] : []),
+          ...Array.from(element.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`)),
+        ];
+        // The value it was CREATED with, not the value it ended up with: a
+        // node inserted fullscreen and corrected in the same batch has to show
+        // both, in that order.
+        for (const carrier of carriers) push(settledAfter(carrier, index));
       }
-    }
+    });
   };
   const observer = new MutationObserver(judge);
   observer.observe(document.body, {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['data-adaptive-fullscreen'],
+    attributeOldValue: true,
+    attributeFilter: [FULLSCREEN_ATTRIBUTE],
   });
   return {
     // Records are delivered in a microtask and `render()` returns on the same
@@ -353,5 +381,31 @@ describe('adaptiveFullscreen on the first committed render', () => {
 
       expect(recorder.stop()).toEqual(['true']);
     });
+  });
+
+  /**
+   * THE RECORDER'S OWN NEGATIVE CONTROL, and the reason the two drills above
+   * are evidence of anything.
+   *
+   * A green sequence proves nothing unless the instrument can go red. This
+   * plants exactly the history the criterion forbids -- a surface committed
+   * fullscreen and corrected out of it before the frame ends -- and requires
+   * the recorder to report both values. A recorder that reads each target's
+   * CURRENT attribute when the batch is delivered answers `['false']` here,
+   * indistinguishable from the desktop drill's pass.
+   */
+  it('reports a corrected first commit, which is what makes a clean one evidence', () => {
+    const CorrectedSurface = (): React.ReactElement => {
+      const surface = React.useRef<HTMLDivElement>(null);
+      React.useLayoutEffect(() => {
+        surface.current?.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+      }, []);
+      return <div ref={surface} data-adaptive-fullscreen="true" />;
+    };
+
+    const recorder = recordAdaptiveFullscreen();
+    render(<CorrectedSurface />);
+
+    expect(recorder.stop()).toEqual(['true', 'false']);
   });
 });

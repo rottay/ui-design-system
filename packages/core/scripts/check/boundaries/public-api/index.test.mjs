@@ -438,16 +438,23 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
    * a hacer la pregunta de scope, no solo la de bytes. Entra el vocabulario
    * cerrado de atributos de scope, la re-verificacion dentro del audit retenido
    * y el juicio por registro sobre la raiz del documento. Los modulos siguen sin
-   * moverse: retention ya importaba admission. */
+   * moverse: retention ya importaba admission.
+   *
+   * 68733 -> 69393 (WO-EMI-02, segunda ronda): el juicio por registro se
+   * reemplaza por el REPLAY del lote -- cada estado intermedio de la raiz pasa
+   * por la misma ley de scope, que admission ahora expone sobre un lector-- y
+   * el observer se engancha ademas al elemento de scope cuando la raiz provista
+   * no lo contiene. Los modulos siguen sin moverse: no entra ningun import
+   * nuevo, solo la ley compartida y el segundo observe. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 68733 },
+    { reachableModules: 9, sourceBytes: 69393 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 68733), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 69393), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */

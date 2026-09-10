@@ -384,6 +384,169 @@ describe('retained mount proof', () => {
     expect(revocations).toHaveLength(1);
     expect(revocations[0]).toMatch(/the document root does not carry data-ds-root/);
   });
+
+  /**
+   * A VALID REWRITE IS NOT A LOSS.
+   *
+   * The root marker is judged by presence -- `:where([data-ds-root])` -- so
+   * `""` and `"true"` are the same scope and the artifact never stopped
+   * painting. The watch used to compare the record's raw old value against the
+   * current one, which treats a presence-only marker like the two
+   * value-sensitive ones and revoked, permanently, a document that was in
+   * scope for the whole window. Nothing about a re-stamp is tampering.
+   */
+  it('stays silent when the root marker is rewritten to another valid value', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-ds-root', 'true');
+    await settle();
+
+    expect(revocations).toEqual([]);
+    expect(auditRetainedTenantThemeArtifact(ARTIFACT, style)).toBeNull();
+  });
+
+  it('stays silent when a churned root marker is restored to a valid value', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    // Two writes, both landing on a value the selector matches: the presence
+    // the artifact depends on was never absent between them.
+    document.documentElement.setAttribute('data-ds-root', 'true');
+    document.documentElement.setAttribute('data-ds-root', '');
+    await settle();
+
+    expect(revocations).toEqual([]);
+  });
+
+  /**
+   * The other direction of the same law, so the silence above is not silence
+   * about everything. Losing the marker between two valid values is a window
+   * in which the document painted unscoped, and the end state hides it.
+   */
+  it('still revokes a root marker removed between two valid values', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.removeAttribute('data-ds-root');
+    document.documentElement.setAttribute('data-ds-root', 'true');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(/does not carry data-ds-root/);
+  });
+
+  it('still revokes a tenant marker corrupted and restored in one batch', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-tenant', 'someone-else');
+    document.documentElement.setAttribute('data-tenant', ARTIFACT.slug);
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(/carries data-tenant="someone-else"/);
+  });
+});
+
+/**
+ * A SUPPLIED CONTAINER IS NOT THE SCOPE.
+ *
+ * `tenantThemeArtifactScopeElement` resolves any search root to its document's
+ * root element, because that is where every artifact selector is evaluated. A
+ * watch armed on a container therefore has its scope OUTSIDE the subtree it
+ * observes: stripping `data-ds-root` from `<html>` stops every rule in the
+ * artifact from matching and produced no record this watch could hear. The
+ * loss surfaced only if some later commit happened to seal and re-audit the
+ * end state -- which is a report, not a gate, and on a tree that never seals
+ * it is not even a report.
+ *
+ * Rejecting the container root at admission was the alternative and was not
+ * taken: admission accepts it today, the mount fixture and any host with its
+ * own render root rely on it, and the resolver's answer is CORRECT -- the
+ * scope really is the document root. The gap was never the root form, only
+ * which nodes the observer was attached to. So retention now watches the
+ * resolved scope element in its own right whenever the supplied root does not
+ * already contain it, and the verdict is continuous rather than deferred.
+ */
+describe('retained proof armed on a container', () => {
+  let stop: (() => void) | null = null;
+
+  afterEach(() => {
+    stop?.();
+    stop = null;
+    document.body.innerHTML = '';
+    document.head.innerHTML = '';
+    clearTenantThemeScope();
+  });
+
+  function mountInContainer(): { container: HTMLElement; style: HTMLStyleElement } {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const style = document.createElement('style');
+    style.setAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE, ARTIFACT.digest);
+    style.setAttribute(TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE, ARTIFACT.slug);
+    style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, ARTIFACT.verticalKey);
+    style.textContent = ARTIFACT.css;
+    container.appendChild(style);
+    stampTenantThemeScope(ARTIFACT);
+    return { container, style };
+  }
+
+  function retainIn(container: ParentNode, style: HTMLStyleElement): string[] {
+    const revocations: string[] = [];
+    stop = retainMountedTenantThemeArtifact(
+      ARTIFACT,
+      style,
+      (conflict) => revocations.push(conflict),
+      container,
+    );
+    return revocations;
+  }
+
+  it('admits a container root whose scope resolves to the document root', () => {
+    const { container, style } = mountInContainer();
+
+    expect(retainIn(container, style)).toEqual([]);
+    expect(auditRetainedTenantThemeArtifact(ARTIFACT, style, container)).toBeNull();
+  });
+
+  it('revokes an html scope loss it cannot see inside the container', async () => {
+    const { container, style } = mountInContainer();
+    const revocations = retainIn(container, style);
+
+    // Nothing inside the container moved. The only mutation is on `<html>`,
+    // outside the observed subtree -- which is exactly the case that used to
+    // pass unheard.
+    document.documentElement.removeAttribute('data-ds-root');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(
+      /the document root no longer carries the admitted artifact scope/,
+    );
+  });
+
+  it('revokes an html tenant relabel from the observer, not from a seal', async () => {
+    const { container, style } = mountInContainer();
+    const revocations = retainIn(container, style);
+
+    document.documentElement.setAttribute('data-tenant', 'someone-else');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+  });
+
+  it('stays silent for container churn and for a valid root re-stamp', async () => {
+    const { container, style } = mountInContainer();
+    const revocations = retainIn(container, style);
+
+    container.appendChild(document.createElement('div'));
+    document.documentElement.setAttribute('data-ds-root', 'true');
+    await settle();
+
+    expect(revocations).toEqual([]);
+  });
 });
 
 /**

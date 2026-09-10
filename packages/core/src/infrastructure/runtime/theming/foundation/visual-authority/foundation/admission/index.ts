@@ -507,22 +507,36 @@ export function verifyTenantThemeArtifactScope(
   if (!element) {
     return { ok: false, error: "no document root element is available" };
   }
-  if (!element.hasAttribute(artifact.scopes.root.attribute)) {
-    return {
-      ok: false,
-      error: `the document root does not carry ${artifact.scopes.root.attribute}`,
-    };
+  const failure = tenantThemeArtifactScopeFailure(artifact, (attribute) =>
+    element.getAttribute(attribute),
+  );
+  return failure ? { ok: false, error: failure } : { ok: true, element };
+}
+
+/**
+ * The scope law, over any reading of the root's attributes.
+ *
+ * The live document is one reading; a state the retained watch reconstructs
+ * from mutation records is another. Stating the conditions once keeps a replay
+ * from becoming a second, drifting definition of what a valid scope is.
+ *
+ * The root marker is judged by PRESENCE -- that is what the artifact's selector
+ * tests -- and the vertical and tenant markers by value.
+ */
+export function tenantThemeArtifactScopeFailure(
+  artifact: TenantThemeArtifact,
+  read: (attribute: string) => string | null,
+): string | null {
+  if (read(artifact.scopes.root.attribute) === null) {
+    return `the document root does not carry ${artifact.scopes.root.attribute}`;
   }
   for (const descriptor of [artifact.scopes.vertical, artifact.scopes.tenant]) {
-    const live = element.getAttribute(descriptor.attribute);
+    const live = read(descriptor.attribute);
     if (live !== descriptor.value) {
-      return {
-        ok: false,
-        error: `the document root carries ${descriptor.attribute}=${JSON.stringify(live)}, not ${JSON.stringify(descriptor.value)}`,
-      };
+      return `the document root carries ${descriptor.attribute}=${JSON.stringify(live)}, not ${JSON.stringify(descriptor.value)}`;
     }
   }
-  return { ok: true, element };
+  return null;
 }
 
 export const MOUNTED_ARTIFACT_SELECTOR =
