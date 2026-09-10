@@ -157,8 +157,7 @@ function declaringOwner(start: object | null, key: string): object | null {
  *  see, and a later correction would otherwise bury it: the element ends up
  *  written, carrying exactly what that write left, so the end-of-drill check
  *  below has nothing to object to. The witness latches `UNOBSERVED-CARRIER`
- *  instead -- which is what closes parse-then-insert, `DOMParser`, adopted
- *  fragments and any writer not enumerated here, present or future.
+ *  instead.
  *
  *  ADJUDICATED OUT OF SCOPE, with the reason:
  *    - Reflected IDL properties (`className`, `id`, `title`, `style`, ...) each
@@ -168,20 +167,23 @@ function declaringOwner(start: object | null, key: string): object | null {
  *      it throws), so it is not a writer here; `Attr.nodeValue` is patched even
  *      though assigning to it does not currently reach the owner element, so a
  *      runner that made it live would be recorded rather than missed.
- *    - `DOMParser.parseFromString`, `Range.createContextualFragment` and
- *      `importNode`/`adoptNode` build nodes in another document or fragment.
- *      Nothing they build is in this document until it is inserted; a carrier
- *      that survives insertion is caught by the per-element check in `stop()`,
- *      and one that is CORRECTED after insertion -- which that check cannot see
- *      -- is caught by the witness read above. React DOM parses no markup it was
+ *    - `DOMParser.parseFromString`, `Range.createContextualFragment`,
+ *      `HTMLTemplateElement.innerHTML` and `importNode`/`adoptNode` build nodes
+ *      in another document or fragment. Nothing they build is in this document
+ *      until it is inserted, and the BIRTH CHANNEL below covers every carrier
+ *      that gets inserted whichever of them built it: corrected in place -> the
+ *      witness, still carried at `stop()` -> the per-element check, gone from
+ *      the document -> the departure ledger. React DOM parses no markup it was
  *      not handed through `dangerouslySetInnerHTML`, which `innerHTML` refuses.
  *
- * AND IT FAILS CLOSED PER ELEMENT. Every element in the body that carries the
- * attribute when `stop()` runs must be an element this recorder saw written,
- * with the value it is carrying. A global "did we ever see this value" check is
- * not enough: an unrelated element written `false` would mask a carrier that
- * reached `false` through a path nothing observed. The per-element check is the
- * backstop for every writer not enumerated above, present or future.
+ * AND IT FAILS CLOSED PER ELEMENT. Every element in the document that carries
+ * the attribute when `stop()` runs must be an element this recorder saw
+ * written, with the value it is carrying. A global "did we ever see this value"
+ * check is not enough: an unrelated element written `false` would mask a
+ * carrier that reached `false` through a path nothing observed. The per-element
+ * check is the backstop for every writer not enumerated above, present or
+ * future -- for as long as the carrier survives to be asked. What happens when
+ * it does NOT survive is the birth channel's answer, stated where it is built.
  */
 let restoreAttributeInterception: Restore | null = null;
 
@@ -406,6 +408,64 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     },
   );
 
+  /**
+   * THE BIRTH CHANNEL, which is the other end of the same question.
+   *
+   * The witness sees a value an OBSERVED write buries; the per-element check
+   * below sees a carrier that SURVIVES. A carrier planted where this recorder
+   * cannot look and then DROPPED is neither -- a parser-built node inserted by
+   * one commit and replaced by the next is never written again, and is gone
+   * from the document before anything can be asked what it held. The history
+   * then simply starts mid-stream, and reads exactly like a clean
+   * single-commit pass.
+   *
+   * With the two owners below, a carrier's whole life is accounted for, and
+   * there is no sixth case:
+   *   - already in the document when the drill began -> snapshotted here, and
+   *     what it carries IS the first observed value;
+   *   - written by any writer above -> recorded there;
+   *   - planted unseen and overwritten in place -> the witness;
+   *   - planted unseen and still carried at `stop()` -> the per-element check;
+   *   - planted unseen and gone from the document -> this ledger.
+   * A carrier that never enters the document painted nothing, and is not a case.
+   *
+   * The ledger is NOT the reconstruction this recorder exists to avoid: it
+   * never contributes a value to the history. It asks one question -- was every
+   * carrier that left the document one this recorder saw written -- and refuses
+   * the drill by name when it was not. `stop()` drains it before disconnecting,
+   * so the answer never depends on a callback having been delivered.
+   */
+  for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
+    commit(carrier);
+  }
+  const passage: MutationRecord[] = [];
+  const ledger = new MutationObserver((records) => passage.push(...records));
+  ledger.observe(document, { childList: true, subtree: true });
+  undo.push(() => ledger.disconnect());
+
+  /** Everything under `node` that carries the attribute, `node` included. */
+  const carriersIn = (node: Node): Element[] => {
+    if (!node || node.nodeType !== 1) return [];
+    const element = node as Element;
+    const own = readBack.call(element, FULLSCREEN_ATTRIBUTE) === null ? [] : [element];
+    return [...own, ...Array.from(element.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))];
+  };
+  /** Every carrier that LEFT the document must be one this recorder saw. */
+  const auditDepartures = (): void => {
+    for (const record of passage) {
+      for (const node of Array.from(record.removedNodes)) {
+        for (const carrier of carriersIn(node)) {
+          // Still in the document: the per-element check below owns that one.
+          if (carrier.isConnected) continue;
+          const departed = readBack.call(carrier, FULLSCREEN_ATTRIBUTE);
+          if (observed.has(carrier) && observed.get(carrier) === departed) continue;
+          breach ??=
+            `UNOBSERVED-CARRIER: a surface left the document carrying ${JSON.stringify(departed)} that this recorder never saw written to it; it was planted by a path it cannot observe and dropped before anything could name it`;
+        }
+      }
+    }
+  };
+
   // A patched prototype that outlives a failing assertion would follow the
   // worker into every later file, so the restore is also owned by `afterEach`,
   // and `stop()` restores BEFORE it can throw.
@@ -416,11 +476,11 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   restoreAttributeInterception = restore;
   return {
     stop: () => {
+      passage.push(...ledger.takeRecords());
       restore();
+      auditDepartures();
       if (breach) throw new Error(breach);
-      for (const carrier of Array.from(
-        document.body.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`),
-      )) {
+      for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
         const settled = carrier.getAttribute(FULLSCREEN_ATTRIBUTE);
         if (!observed.has(carrier) || observed.get(carrier) !== settled) {
           throw new Error(
@@ -1021,27 +1081,103 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
   });
 
   /**
-   * THE PARSE-THEN-INSERT RESIDUE, and the reason both refusals above are not
-   * the whole answer. A carrier planted where this recorder cannot see it --
-   * a fragment built in another document, an adopted node, any writer not
-   * enumerated -- and then CORRECTED by a writer it does see. The end-of-drill
-   * per-element check has nothing to object to: the element WAS written, and it
-   * carries exactly what that write left. Only reading what the element carried
-   * BEFORE the observed write can tell that a value went by unseen.
+   * THE INTERMEDIATE NOBODY ELSE CAN SEE, and the witness's own drill.
    *
-   * The native writer captured before the patch is what any such path looks like
-   * from the recorder's side.
+   * The surface here is accounted for twice over: the recorder saw it written,
+   * saw it carry `false`, and finds it still carrying `false` at the end. Its
+   * arrival is unremarkable and it never leaves. Between those two observed
+   * writes a value goes by that nothing on this side wrote -- and the second
+   * write buries it. No end-of-drill reading of the document can object,
+   * because the document ends up exactly as an honest single-commit pass would
+   * leave it. Only reading what the element carried BEFORE the correcting write
+   * can tell that a value went past unseen.
+   *
+   * The native writer captured before the patch is what any unenumerated path
+   * looks like from the recorder's side.
    */
   it('refuses an intermediate it never saw, even when an observed write corrects it', () => {
     const recorder = recordAdaptiveFullscreen();
-    const planted = document.createElement('div');
-    NATIVE_SET_ATTRIBUTE.call(planted, FULLSCREEN_ATTRIBUTE, 'true');
-    document.body.appendChild(planted);
-    planted.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    const surface = document.createElement('div');
+    surface.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    document.body.appendChild(surface);
+    NATIVE_SET_ATTRIBUTE.call(surface, FULLSCREEN_ATTRIBUTE, 'true');
+    surface.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
     try {
       expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER/);
     } finally {
-      planted.remove();
+      surface.remove();
+    }
+  });
+
+  /**
+   * THE PARSER-BUILT CARRIER THAT IS REPLACED, NOT CORRECTED -- the case the
+   * witness and the per-element check both miss by construction.
+   *
+   * The first commit's layout effect inserts a carrier the HTML parser built:
+   * `createContextualFragment` does not go through `Element.innerHTML` on this
+   * runner, so the refusals never fire and no interception ever sees the value
+   * land. The second commit changes the surface's element type, so React drops
+   * that whole subtree and inserts its own `false` carrier instead. The planted
+   * `true` is therefore never overwritten -- nothing for the witness -- and is
+   * gone from the document by `stop()` -- nothing for the per-element check.
+   * The recorder's own history starts mid-stream and reports `['false']`, byte
+   * for byte the desktop drill's pass, for a frame that painted fullscreen.
+   *
+   * The departure ledger is what turns that into a refusal.
+   */
+  it('refuses a parser-built carrier that is replaced across two commits, not corrected', () => {
+    const ParsedThenReplaced = (): React.ReactElement => {
+      const [replaced, setReplaced] = React.useState(false);
+      const host = React.useRef<HTMLElement>(null);
+      React.useLayoutEffect(() => {
+        if (replaced || !host.current) return;
+        const range = document.createRange();
+        range.selectNodeContents(document.body);
+        host.current.appendChild(range.createContextualFragment(PLANTED_MARKUP));
+        setReplaced(true);
+      }, [replaced]);
+      return (
+        <section>
+          {replaced ? <div data-adaptive-fullscreen="false" /> : <article ref={host} />}
+        </section>
+      );
+    };
+
+    const recorder = recordAdaptiveFullscreen();
+    render(<ParsedThenReplaced />);
+
+    expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface left the document/);
+  });
+
+  /**
+   * AND WHAT THE DOCUMENT ALREADY CARRIED WHEN THE DRILL STARTED.
+   *
+   * A carrier that the server rendered, or that any parser planted before the
+   * recorder existed, never had a write for anything to observe: the recorder
+   * opens on a document that is already mid-history. If the correcting frame
+   * then REPLACES that node, the value it held leaves with it and the sequence
+   * begins at the correction -- a fullscreen first paint reported as a clean
+   * desktop one, with no writer to blame.
+   *
+   * So the drill snapshot IS the first observed value. `replaceChild` is the
+   * DOM operation a replacing commit performs, and the pre-existing carrier is
+   * planted with the native writer because nothing was watching yet.
+   */
+  it('records what the document already carried before anything replaced it', () => {
+    const host = document.createElement('section');
+    const served = document.createElement('span');
+    NATIVE_SET_ATTRIBUTE.call(served, FULLSCREEN_ATTRIBUTE, 'true');
+    host.appendChild(served);
+    document.body.appendChild(host);
+
+    const recorder = recordAdaptiveFullscreen();
+    const corrected = document.createElement('div');
+    corrected.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    host.replaceChild(corrected, served);
+    try {
+      expect(recorder.stop()).toEqual(['true', 'false']);
+    } finally {
+      host.remove();
     }
   });
 
