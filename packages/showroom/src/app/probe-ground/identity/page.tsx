@@ -47,10 +47,10 @@ import {
 //
 // Nothing here paints: the page compiles the candidate's decision document
 // through the one door, mounts it with `mountTenantTheme`, and stamps exactly
-// what the mount returns. `dashboard` is the app-shell screen -- sider, header
-// and content -- so sidebar tone and the sidebar/layout anatomies have a
-// consumer; the list screen is the pattern table, which is the only surface
-// the table anatomy CSS reaches.
+// what the mount returns. `dashboard` is the app-shell screen -- the DS
+// AppShell, whose navigation column is the only surface that reads sidebar
+// tone and which also honors both anatomy attributes; the list screen is the
+// pattern table, which is the only surface the table anatomy CSS reaches.
 // ---------------------------------------------------------------------------
 
 type Query = Record<string, string | string[] | undefined>;

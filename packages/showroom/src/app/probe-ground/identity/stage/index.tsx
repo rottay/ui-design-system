@@ -126,6 +126,15 @@ export function IdentityStage(props: IdentityStageProps) {
               {props.digest}
             </Text>
             <UnlitReport rows={props.unlit} decisionCount={props.decisionCount} />
+            {/* Stated by hand, unlike the door's list above: a lit decision whose
+                render is identical across candidates, already routed elsewhere. */}
+            <Text size="xs" color="muted">
+              Named residual — shape.radius-scale is lit and its scale channel differs per
+              candidate, but the ramp is emitted as calc(calc(Npx / scale) * scale), so it
+              cancels itself: every candidate computes the same 9px control radius (button,
+              input) and the same 0px table cell. That self-cancel is the DER-03 radius-dial
+              residual, so nothing on this page is evidence about radius.
+            </Text>
             <OptionRow label="Candidate" options={props.columns} />
             <OptionRow label="Mode" options={props.modes} />
             <OptionRow label="Screen" options={props.screens} />

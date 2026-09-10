@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  AppShell,
   Avatar,
   Badge,
   Box,
@@ -8,7 +9,6 @@ import {
   Card,
   Flex,
   Heading,
-  Layout,
   LineChart,
   Menu,
   Progress,
@@ -43,13 +43,26 @@ const UPCOMING = [
 ];
 
 const NAV_ITEMS = [
-  { key: 'overview', label: 'Overview', icon: <Icon name="navigation.home" decorative /> },
-  { key: 'candidates', label: 'Candidates', icon: <Icon name="entity.person" decorative /> },
-  { key: 'roles', label: 'Roles', icon: <Icon name="content.document" decorative /> },
-  { key: 'loops', label: 'Loops', icon: <Icon name="time.schedule" decorative /> },
-  { key: 'reports', label: 'Reports', icon: <Icon name="data.chart" decorative /> },
-  { key: 'divider', type: 'divider' as const },
-  { key: 'settings', label: 'Settings', icon: <Icon name="navigation.settings" decorative /> },
+  {
+    key: 'hiring',
+    type: 'group' as const,
+    label: 'Hiring',
+    children: [
+      { key: 'overview', label: 'Overview', icon: <Icon name="navigation.home" decorative /> },
+      { key: 'candidates', label: 'Candidates', icon: <Icon name="entity.person" decorative /> },
+      { key: 'roles', label: 'Roles', icon: <Icon name="content.document" decorative /> },
+      { key: 'loops', label: 'Loops', icon: <Icon name="time.schedule" decorative /> },
+    ],
+  },
+  {
+    key: 'workspace',
+    type: 'group' as const,
+    label: 'Workspace',
+    children: [
+      { key: 'reports', label: 'Reports', icon: <Icon name="data.chart" decorative /> },
+      { key: 'settings', label: 'Settings', icon: <Icon name="navigation.settings" decorative /> },
+    ],
+  },
 ];
 
 export function DashboardScreen() {
@@ -58,100 +71,129 @@ export function DashboardScreen() {
       <Stack spacing="none">
         <Heading level="h2">App shell</Heading>
         <Text size="sm" color="muted">
-          Sider plus header: the only screen where sidebar tone, the sidebar anatomy
-          (panel / rail) and the layout anatomy (flat / floating) have a consumer.
+          AppShell is the DS&apos;s only reader of sidebar tone: the navigation ground is
+          --ds-sidebar-bg, and the brand and footer lines take the tone&apos;s own ink,
+          --ds-sidebar-text and --ds-sidebar-text-muted. The sidebar anatomy (panel /
+          rail) and the layout anatomy (flat / floating) also land on this shell.
+        </Text>
+        <Text size="sm" color="muted">
+          What the tone does NOT move here is the Menu. The default theme declares
+          --ds-menu-bg and the --ds-menu-item-* names, and a declared name makes the
+          fallback behind it inert, so the three --ds-sidebar-item-* channels never win
+          and every candidate paints the same white nav panel with the same row ink over
+          its own ground. The group eyebrow is pre-empted the same way, by a declared
+          --ds-sidebar-group-color. Pre-emption is a DS finding routed to the family
+          cuts, not a difference between these candidates.
         </Text>
       </Stack>
 
-      <Layout hasSider>
-        <Layout.Sider width={232}>
-          <Stack spacing="sm" fullWidth>
-            <Flex align="center" gap={8}>
-              <Avatar size="sm" name="BitHire" />
-              <Text size="sm" weight="semibold">
-                BitHire
-              </Text>
-            </Flex>
-            <Menu mode="inline" items={NAV_ITEMS} defaultSelectedKeys={['overview']} />
-          </Stack>
-        </Layout.Sider>
-
-        <Layout>
-          <Layout.Header>
-            <Flex align="center" justify="between" gap={12} width="100%">
+      {/* A transform makes this Box the containing block for the shell's fixed
+          navigation column, so the shell stays inside the probe's page flow. */}
+      <Box transform="translate(0)" width="100%">
+        <AppShell
+          geometry={{
+            sidebarWidth: 244,
+            sidebarCollapsedWidth: 76,
+            headerHeight: 60,
+            sidebarHeaderHeight: 64,
+          }}
+          sidebar={{
+            // The shell paints no ink on its own slots, so slot content reads the
+            // tone's ink channels; without it a dark tone gets dark-on-dark text.
+            logo: (
+              <Box color="var(--ds-sidebar-text)">
+                <Flex align="center" gap={8}>
+                  <Avatar size="sm" name="BitHire" />
+                  <Text size="sm" weight="semibold" color="inherit">
+                    BitHire
+                  </Text>
+                </Flex>
+              </Box>
+            ),
+            nav: <Menu mode="inline" items={NAV_ITEMS} defaultSelectedKeys={['overview']} />,
+            footer: (
+              <Box color="var(--ds-sidebar-text-muted)">
+                <Text size="xs" color="inherit">
+                  Talent pod · Q2 slate
+                </Text>
+              </Box>
+            ),
+          }}
+          header={{
+            left: (
               <Stack spacing="none">
                 <Heading level="h3">Hiring overview</Heading>
                 <Text size="xs" color="muted">
                   Q2 slate · platform and design pods
                 </Text>
               </Stack>
+            ),
+            right: (
               <Flex align="center" gap={8}>
                 <Badge variant="secondary">Q2</Badge>
                 <Button variant="secondary">Export</Button>
               </Flex>
-            </Flex>
-          </Layout.Header>
-
-          <Layout.Content>
-            <Stack spacing="md" fullWidth>
-              <Flex gap={12} wrap="wrap">
-                {METRICS.map((metric) => (
-                  <Box key={metric.label} flex="1 1 180px">
-                    <Card>
-                      <Stack spacing="none">
-                        <Text size="xs" color="muted">
-                          {metric.label}
-                        </Text>
-                        <Text size="2xl" weight="bold">
-                          {metric.value}
-                        </Text>
-                        <Badge variant="success" size="sm">
-                          {metric.note}
-                        </Badge>
-                      </Stack>
-                    </Card>
-                  </Box>
-                ))}
-              </Flex>
-
-              <Card title="Candidate momentum">
-                <Box height={220}>
-                  <LineChart
-                    series={[{ name: 'Moved forward', data: MOMENTUM }]}
-                    height={200}
-                    curved
-                    showDots
-                    xAxisLabel="Week"
-                    yAxisLabel="Candidates advanced"
-                  />
+            ),
+          }}
+        >
+          <Stack spacing="md" fullWidth>
+            <Flex gap={12} wrap="wrap">
+              {METRICS.map((metric) => (
+                <Box key={metric.label} flex="1 1 180px">
+                  <Card>
+                    <Stack spacing="none">
+                      <Text size="xs" color="muted">
+                        {metric.label}
+                      </Text>
+                      <Text size="2xl" weight="bold">
+                        {metric.value}
+                      </Text>
+                      <Badge variant="success" size="sm">
+                        {metric.note}
+                      </Badge>
+                    </Stack>
+                  </Card>
                 </Box>
-              </Card>
+              ))}
+            </Flex>
 
-              <Card title="Next interviews">
-                <Stack spacing="sm">
-                  {UPCOMING.map((row) => (
-                    <Flex key={row.name} align="center" justify="between" gap={12}>
-                      <Flex align="center" gap={10}>
-                        <Avatar size="sm" name={row.name} />
-                        <Stack spacing="none">
-                          <Text size="sm" weight="semibold">
-                            {row.name}
-                          </Text>
-                          <Text size="xs" color="muted">
-                            {row.slot}
-                          </Text>
-                        </Stack>
-                      </Flex>
-                      <Tag variant={row.tone}>{row.stage}</Tag>
+            <Card title="Candidate momentum">
+              <Box height={220}>
+                <LineChart
+                  series={[{ name: 'Moved forward', data: MOMENTUM }]}
+                  height={200}
+                  curved
+                  showDots
+                  xAxisLabel="Week"
+                  yAxisLabel="Candidates advanced"
+                />
+              </Box>
+            </Card>
+
+            <Card title="Next interviews">
+              <Stack spacing="sm">
+                {UPCOMING.map((row) => (
+                  <Flex key={row.name} align="center" justify="between" gap={12}>
+                    <Flex align="center" gap={10}>
+                      <Avatar size="sm" name={row.name} />
+                      <Stack spacing="none">
+                        <Text size="sm" weight="semibold">
+                          {row.name}
+                        </Text>
+                        <Text size="xs" color="muted">
+                          {row.slot}
+                        </Text>
+                      </Stack>
                     </Flex>
-                  ))}
-                  <Progress type="line" percent={68} status="normal" />
-                </Stack>
-              </Card>
-            </Stack>
-          </Layout.Content>
-        </Layout>
-      </Layout>
+                    <Tag variant={row.tone}>{row.stage}</Tag>
+                  </Flex>
+                ))}
+                <Progress type="line" percent={68} status="normal" />
+              </Stack>
+            </Card>
+          </Stack>
+        </AppShell>
+      </Box>
     </Stack>
   );
 }
