@@ -103,8 +103,9 @@ export type ThemeControlEnvelope =
  *
  * `data-only` is F-35's disposition for an axis that reaches the lowering and
  * emits nothing: it is declared here rather than published as if it painted.
- * `not-yet-derived` is the ten kit rows marked `(new)`, which have no producer
- * anywhere yet; it is not a synonym of `data-only`.
+ * `not-yet-derived` is a row with no producer anywhere yet; it is not a synonym
+ * of `data-only`, and it is not a synonym of partial reach either -- a row that
+ * derives fewer families than it declares still carries `css-channels`.
  */
 export type ThemeControlEffect =
   | "css-channels"
