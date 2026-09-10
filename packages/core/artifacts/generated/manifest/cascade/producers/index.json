@@ -18,7 +18,7 @@
     "cssEdges": "a00eeca98576504b86170a77bb40256f2c0f37781f19acc875e676317bc8953c",
     "cascadeRoots": "ac735151ced59e7c7f7ffe98ffd585c32568ab15d148d389ea14469f57a6af8a",
     "rootCatalog": "807f76e5b80b352298d8487a42465d6e8aa5150d17295a3ef9375f6ba6f8c8d8",
-    "srcTsx": "d37c8f94b629247ba6489231a04680f6a7e6c85609b479ecd5fe7bf81f795ac4",
+    "srcTsx": "09058488538b6774ebde7b3f4d493c2983734d6c4dd965510b79d90830080649",
     "srcCompilers": "9986dcddca556657c16aeaae8c1755ac17fc22ad5e0b8b70d196f7cc99f29c9b",
     "artifacts": "012ad54de0fbe13173e3fac1f9083204922ce494c058a4c2efce2bd585aa5c12"
   },
@@ -95,8 +95,8 @@
       "stampSites": 513
     },
     "measuredCensus": {
-      "scannedFiles": 1814,
-      "excludedFiles": 1675,
+      "scannedFiles": 1820,
+      "excludedFiles": 1681,
       "styleSinks": 3290,
       "stampSites": 298,
       "distinctCustomProperties": 188,
@@ -108,13 +108,13 @@
     "censusDiff": {
       "scannedFiles": {
         "authored": 1740,
-        "measured": 1814,
-        "delta": 74
+        "measured": 1820,
+        "delta": 80
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 1675,
-        "delta": 11
+        "measured": 1681,
+        "delta": 17
       },
       "styleSinks": {
         "authored": 3283,
@@ -150,7 +150,7 @@
     "censusReconciliation": {
       "method": "identity, not tolerance. This module publishes the full member lists below; the authored census published COUNTS ONLY and no member list, so the two cannot be reconciled member by member from its side. The residual is therefore expressed as unknownProvenance rows with file and symbol, never as a numeric tolerance.",
       "authoredPublishesMemberLists": false,
-      "scannedFiles": 1814,
+      "scannedFiles": 1820,
       "governedChannels": 163,
       "unresolvedSites": 0
     },
@@ -1735,6 +1735,8 @@
       "packages/core/src/foundation/kernel/performance/index.ts",
       "packages/core/src/foundation/kernel/serialization/index.ts",
       "packages/core/src/foundation/kernel/typography/index.ts",
+      "packages/core/src/foundation/presets/candidates/bithire/documents/index.ts",
+      "packages/core/src/foundation/presets/candidates/bithire/index.ts",
       "packages/core/src/foundation/presets/policy/experience-baselines/evnto/index.ts",
       "packages/core/src/foundation/presets/product-profiles/index.ts",
       "packages/core/src/foundation/presets/verticals/index.ts",
@@ -2022,6 +2024,9 @@
       "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
       "packages/core/src/infrastructure/runtime/bootstrap/index.ts",
       "packages/core/src/infrastructure/runtime/bootstrap/presentation/boundaries/system-error/index.tsx",
+      "packages/core/src/infrastructure/runtime/density/composition/react/provider/index.tsx",
+      "packages/core/src/infrastructure/runtime/density/facade/index.ts",
+      "packages/core/src/infrastructure/runtime/density/index.ts",
       "packages/core/src/infrastructure/runtime/dom/foundation/data-part/index.ts",
       "packages/core/src/infrastructure/runtime/dom/runtime/css-color-resolution/index.ts",
       "packages/core/src/infrastructure/runtime/effects/composition/react/provider/index.tsx",
@@ -2114,6 +2119,7 @@
       "packages/core/src/infrastructure/runtime/responsive/facade/index.ts",
       "packages/core/src/infrastructure/runtime/responsive/index.ts",
       "packages/core/src/infrastructure/runtime/responsive/runtime/media-query/index.ts",
+      "packages/core/src/infrastructure/runtime/responsive/runtime/media-snapshot/index.ts",
       "packages/core/src/infrastructure/runtime/responsive/runtime/style-properties/index.ts",
       "packages/core/src/infrastructure/runtime/spatial/composition/react/contracts/types/index.ts",
       "packages/core/src/infrastructure/runtime/spatial/composition/react/hydrated/index.ts",

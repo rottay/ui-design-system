@@ -42,8 +42,9 @@ export const TENANT_DOCUMENT_V2: TenantThemeDocumentV2 = {
     'density.mode': 'compact',
     'states.emphasis': 'strong',
     // A decision the catalog still gives no keypath, so the fixture keeps an
-    // executable example of the "accepted but not lit" report.
-    'surfaces.border-style': 'hairline',
+    // executable example of the "accepted but not lit" report. It was
+    // `surfaces.border-style` until the connfix lot (a5da15828) derived it.
+    'shape.control-height': 'tall',
   },
 };
 

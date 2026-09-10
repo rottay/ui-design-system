@@ -258,8 +258,8 @@ describe('the application writes a tenant document v2 through the door', () => {
     expect(admission.decisions.map((decision) => decision.id).sort()).toEqual([
       'density.mode',
       'palette.seeds',
+      'shape.control-height',
       'states.emphasis',
-      'surfaces.border-style',
       'typography.pairing',
     ]);
   });
@@ -267,7 +267,7 @@ describe('the application writes a tenant document v2 through the door', () => {
   it('accepts a decision with no fan-out yet and names it unlit', async () => {
     const { admission } = await mountTenant();
     expect(admission.unlit.map((decision) => decision.id)).toEqual([
-      'surfaces.border-style',
+      'shape.control-height',
     ]);
     // `states.emphasis` was this example until WO-DER-02 derived it; it is
     // asserted LIT here so the two halves of the report stay honest together.
