@@ -157,11 +157,10 @@ async function renderOnRealServer(ssrViewport?: 'phone' | 'tablet' | 'desktop'):
     const Probe = (): React.ReactElement =>
       React_.createElement('output', { id: 'probe' }, String(useIsPhone()));
     return renderToStringFresh(
-      React_.createElement(
-        Provider,
-        ssrViewport ? { ssrViewport } : {},
-        React_.createElement(Probe),
-      ),
+      React_.createElement(Provider, {
+        ...(ssrViewport ? { ssrViewport } : {}),
+        children: React_.createElement(Probe),
+      }),
     );
   } finally {
     globalThis.window = savedWindow;
@@ -219,11 +218,10 @@ async function hydrateServerMarkup(
     act(() => {
       root = hydrateRoot(
         container,
-        React_.createElement(
-          Provider,
-          ssrViewport ? { ssrViewport } : {},
-          React_.createElement(Probe),
-        ),
+        React_.createElement(Provider, {
+          ...(ssrViewport ? { ssrViewport } : {}),
+          children: React_.createElement(Probe),
+        }),
         { onRecoverableError: (error: unknown) => recoverableErrors.push(String(error)) },
       );
     });

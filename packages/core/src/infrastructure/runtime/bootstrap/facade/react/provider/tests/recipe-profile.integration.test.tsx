@@ -118,7 +118,7 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     // identity-keyed governed-behavior slot, which is not paint and cannot be
     // forged by a caller-built config.
     const rottay = getKnownTenantConfig('rottay')!;
-    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(rottay)).recipeProfile)
+    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(rottay))?.recipeProfile)
       .toBe('rottay/technical-sharp@1');
 
     render(
@@ -181,9 +181,9 @@ describe('DesignSystemProvider recipe-profile authority', () => {
 
   it('gives two code-owned verticals the two different profiles they authored', () => {
     const bithire = getKnownTenantConfig('bithire')!;
-    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(bithire)).recipeProfile)
+    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(bithire))?.recipeProfile)
       .toBe('rottay/network-professional@1');
-    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(getKnownTenantConfig('rottay')!)).recipeProfile)
+    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(getKnownTenantConfig('rottay')!))?.recipeProfile)
       .not.toBe('rottay/network-professional@1');
   });
 
