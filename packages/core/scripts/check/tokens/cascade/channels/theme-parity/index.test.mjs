@@ -902,6 +902,7 @@ test("DRILL: only a runtime reference makes a generated emitter productive", () 
   if (card?.border) vars["--ds-card-border"] = card.border;
 }
 export type GeneratedVars = typeof generatedVars;
+export class GeneratedEmitter {}
 `;
   const composing = `export function familyVars(vars: Record<string, string>, card: Partial<Card> | undefined) {
   if (card?.bg) vars["--ds-card-bg"] = card.bg;
@@ -988,6 +989,21 @@ export type GeneratedVars = typeof generatedVars;
     "an import type in an interface extends clause": `interface Local extends import("./__generated__").GeneratedVars {}\nexport type { Local };\n`,
     "an import type in a class implements clause": `export class Local implements import("./__generated__").GeneratedVars {}\n`,
     "an import type in a generic interface extends clause": `interface Local<T = string> extends Partial<import("./__generated__").GeneratedVars> { held: T }\nexport type { Local };\n`,
+    // AN AMBIENT DECLARATION ERASES THE CLAUSES THAT OTHERWISE RUN. A
+    // `declare class` holds the one heritage clause that executes and a
+    // `declare namespace` may hold an import-equals, but a `declare` subtree
+    // is deleted whole, so neither loads the generated owner — reading the
+    // heritage as a value reference retired a real finding from pure
+    // type-space.
+    "an ambient class extends clause": `declare class Local extends import("./__generated__").GeneratedEmitter {}\n`,
+    "an exported ambient class extends clause": `export declare class Local extends import("./__generated__").GeneratedEmitter {}\n`,
+    "an ambient class extending a required base": `declare class Local extends require("./__generated__").GeneratedEmitter {}\n`,
+    "an ambient class extends clause with type arguments": `declare class Local extends import("./__generated__").GeneratedEmitter<string> {}\n`,
+    "an ambient namespace holding an import-equals": `declare namespace Ambient {\n  import Generated = require("./__generated__");\n}\n`,
+    "an ambient namespace holding a class extends clause": `declare namespace Ambient {\n  class Local extends import("./__generated__").GeneratedEmitter {}\n}\n`,
+    "an ambient module augmentation holding a value import": `declare module "./neighbour" {\n  import { generatedVars } from "./__generated__";\n  export const held: typeof generatedVars;\n}\n`,
+    "an ambient module augmentation holding a star re-export": `declare module "./neighbour" {\n  export * from "./__generated__";\n}\n`,
+    "a global augmentation holding a class extends clause": `declare global {\n  class Local extends import("./__generated__").GeneratedEmitter {}\n}\nexport {};\n`,
   };
   for (const [shape, reference] of Object.entries(erased)) {
     const outcome = underReference(reference);
@@ -1043,6 +1059,19 @@ export type GeneratedVars = typeof generatedVars;
     "a dynamic import interpolated into a template": "export const note = `${import(\"./__generated__\")}`;\n",
     "an import-equals require": `import generated = require("./__generated__");\nexport const held = generated;\n`,
     "a dynamic import in a class extends clause": `export class Local extends (import("./__generated__") as never) {}\n`,
+    // The positive controls for the ambience rule: the exclusion is about
+    // `declare`, not about `extends`, `namespace` or the word "emitter". The
+    // same clauses OUTSIDE an ambient declaration are real loads, and a
+    // namespace without `declare` holds statements that really execute.
+    "a class extending the generated emitter through a dynamic import": `export class Local extends (import("./__generated__").GeneratedEmitter as never) {}\n`,
+    "a class extending the generated emitter through a require": `const { GeneratedEmitter } = require("./__generated__");\nexport class Local extends GeneratedEmitter {}\n`,
+    "a class extending the generated emitter through a named import": `import { GeneratedEmitter } from "./__generated__";\nexport class Local extends GeneratedEmitter {}\n`,
+    "a namespace holding an import-equals": `namespace Local {\n  import Generated = require("./__generated__");\n  export const held = Generated;\n}\n`,
+    "a namespace holding a dynamic import": `namespace Local {\n  export const load = () => import("./__generated__");\n}\n`,
+    // And the ambient subtree is skipped, not the file around it: a real
+    // import beside a `declare` block must still admit the owner.
+    "a real import beside an ambient class extends clause": `declare class Ambient extends import("./nowhere").Base {}\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after an ambient module augmentation": `declare module "./neighbour" {\n  export const held: string;\n}\nimport { generatedVars } from "./__generated__";\n`,
   };
   for (const [shape, reference] of Object.entries(binding)) {
     const outcome = underReference(reference);

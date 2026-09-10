@@ -323,6 +323,17 @@ function walkOwners(dir, out = []) {
  * one heritage clause that runs, so the exclusion is by clause, not by keyword,
  * and a dynamic import in a class `extends` still counts.
  *
+ * A CLAUSE THAT RUNS STILL DOES NOT RUN INSIDE AN AMBIENT DECLARATION.
+ * `declare class C extends import('./m').Base` holds exactly the expression the
+ * previous paragraph admits, and `declare namespace N { import G = require(...) }`
+ * holds a real import-equals, yet a `declare` subtree -- class, function, enum,
+ * variable, namespace, module augmentation or `declare global` -- describes a
+ * shape the emitter deletes, so nothing under it loads anything. Reading its
+ * heritage as a load let a purely type-space file certify an emission, which is
+ * the same false negative in a new dress. The `declare` node is therefore
+ * skipped WHOLE, and ambience is a different question from clause: a namespace
+ * WITHOUT `declare` may hold statements that really execute and still counts.
+ *
  * The parser is syntax-only -- no program, no checker, no `tsconfig` -- so it
  * stays as cheap and as hermetic as the scan it replaces. It is also total: a
  * file that does not parse yields a best-effort tree rather than an exception,
@@ -352,6 +363,15 @@ function literalText(node) {
   return node && ts.isStringLiteralLike(node) ? node.text : undefined;
 }
 
+function isAmbientDeclaration(node) {
+  return (
+    ts.canHaveModifiers(node) &&
+    (ts.getModifiers(node) ?? []).some(
+      (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword,
+    )
+  );
+}
+
 function valueSpecifiers(file, text) {
   const source = ts.createSourceFile(
     file,
@@ -370,6 +390,9 @@ function valueSpecifiers(file, text) {
     // heritage clause inside an interface cannot be read as a load.
     if (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) return;
     if (ts.isHeritageClause(node) && node.token === ts.SyntaxKind.ImplementsKeyword) return;
+    // An ambient declaration is erased WHOLE, so even the heritage clause and
+    // the import-equals that would run outside one bind nothing here.
+    if (isAmbientDeclaration(node)) return;
     if (ts.isImportDeclaration(node) || (ts.isExportDeclaration(node) && node.moduleSpecifier)) {
       if (bindsAtRuntime(node)) take(node.moduleSpecifier);
     } else if (
