@@ -81,6 +81,46 @@ const FULLSCREEN_ATTRIBUTE = 'data-adaptive-fullscreen';
 /** The unpatched writers, captured before any drill can intercept them. */
 const NATIVE_SET_ATTRIBUTE = Element.prototype.setAttribute;
 const NATIVE_DOCUMENT_WRITE: unknown = document.write;
+const NATIVE_APPEND_CHILD: unknown = Node.prototype.appendChild;
+
+/**
+ * Every call on this runner that can move a node INTO the document or OUT of
+ * it, named where the slot is reached for.
+ *
+ * Insertion is where an arriving carrier is read. Removal is where the pending
+ * departure records are read, because a structural call is the only thing that
+ * can empty a subtree that has already been detached -- and reading one after
+ * that has happened is reading a subtree the evidence has left.
+ *
+ * The parser writers (`innerHTML`, `outerHTML`, `insertAdjacentHTML`,
+ * `document.write`) are structural too, and are patched with the refusals
+ * below; they read the pending records first for the same reason.
+ */
+const STRUCTURAL_SLOTS: readonly (readonly [string, object, string])[] = [
+  ['Node.prototype', Node.prototype, 'appendChild'],
+  ['Node.prototype', Node.prototype, 'insertBefore'],
+  ['Node.prototype', Node.prototype, 'replaceChild'],
+  ['Node.prototype', Node.prototype, 'removeChild'],
+  ['Element.prototype', Element.prototype, 'append'],
+  ['Element.prototype', Element.prototype, 'prepend'],
+  ['Element.prototype', Element.prototype, 'replaceChildren'],
+  ['Element.prototype', Element.prototype, 'before'],
+  ['Element.prototype', Element.prototype, 'after'],
+  ['Element.prototype', Element.prototype, 'replaceWith'],
+  ['Element.prototype', Element.prototype, 'remove'],
+  ['Element.prototype', Element.prototype, 'insertAdjacentElement'],
+  ['Document.prototype', Document.prototype, 'append'],
+  ['Document.prototype', Document.prototype, 'prepend'],
+  ['Document.prototype', Document.prototype, 'replaceChildren'],
+  ['Document.prototype', Document.prototype, 'adoptNode'],
+  ['DocumentFragment.prototype', DocumentFragment.prototype, 'append'],
+  ['DocumentFragment.prototype', DocumentFragment.prototype, 'prepend'],
+  ['DocumentFragment.prototype', DocumentFragment.prototype, 'replaceChildren'],
+  ['Range.prototype', Range.prototype, 'insertNode'],
+  ['Range.prototype', Range.prototype, 'surroundContents'],
+  ['Range.prototype', Range.prototype, 'deleteContents'],
+  ['Range.prototype', Range.prototype, 'extractContents'],
+];
 
 type Restore = () => void;
 /** A prototype slot, which is untyped by nature: the patch only calls through it. */
@@ -171,10 +211,11 @@ function declaringOwner(start: object | null, key: string): object | null {
  *      `HTMLTemplateElement.innerHTML` and `importNode`/`adoptNode` build nodes
  *      in another document or fragment. Nothing they build is in this document
  *      until it is inserted, and the BIRTH CHANNEL below covers every carrier
- *      that gets inserted whichever of them built it: corrected in place -> the
- *      witness, still carried at `stop()` -> the per-element check, gone from
- *      the document -> the departure ledger. React DOM parses no markup it was
- *      not handed through `dangerouslySetInnerHTML`, which `innerHTML` refuses.
+ *      that gets inserted whichever of them built it: read as it lands -> the
+ *      arrival check, corrected in place -> the witness, still carried at
+ *      `stop()` -> the per-element check, gone from the document -> the
+ *      departure ledger. React DOM parses no markup it was not handed through
+ *      `dangerouslySetInnerHTML`, which `innerHTML` refuses.
  *
  * AND IT FAILS CLOSED PER ELEMENT. Every element in the document that carries
  * the attribute when `stop()` runs must be an element this recorder saw
@@ -232,6 +273,19 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
 
   const undo: Restore[] = [];
   /**
+   * Slots already patched, by the owner that declares them: two starts can
+   * resolve to one declaration, and wrapping it twice would leave a wrapper
+   * behind when the first undo runs.
+   */
+  const patched = new Map<object, Set<string>>();
+  const claim = (owner: object, key: string): boolean => {
+    const keys = patched.get(owner) ?? new Set<string>();
+    patched.set(owner, keys);
+    if (keys.has(key)) return false;
+    keys.add(key);
+    return true;
+  };
+  /**
    * Patch where the slot is DECLARED, and restore the shape it was found in:
    * an inherited slot is re-exposed by deleting the own property, never left
    * shadowed by a re-assigned copy of the inherited value.
@@ -244,6 +298,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     const owner = declaringOwner((start ?? null) as object | null, key);
     const target = owner as Record<string, AnyFunction> | null;
     if (!target || typeof target[key] !== 'function') return;
+    if (!claim(target, key)) return;
     const wasOwn = Object.prototype.hasOwnProperty.call(target, key);
     const descriptor = Object.getOwnPropertyDescriptor(target, key);
     const original = target[key];
@@ -266,6 +321,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     const owner = declaringOwner(start ?? null, key);
     const descriptor = owner ? Object.getOwnPropertyDescriptor(owner, key) : undefined;
     if (!owner || !descriptor?.set || !descriptor.configurable) return;
+    if (!claim(owner, key)) return;
     const original = descriptor.set as (value: unknown) => void;
     Object.defineProperty(owner, key, { ...descriptor, set: wrap(original) });
     undo.push(() => {
@@ -274,6 +330,136 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   };
 
   const element = Element.prototype;
+
+  /**
+   * THE BIRTH CHANNEL, which is the other end of the same question.
+   *
+   * The witness sees a value an OBSERVED write buries; the per-element check at
+   * `stop()` sees a carrier that SURVIVES. A carrier planted where this recorder
+   * cannot look and then DROPPED is neither -- a parser-built node inserted by
+   * one commit and replaced by the next is never written again, and is gone from
+   * the document before anything can be asked what it held. The history then
+   * simply starts mid-stream, and reads exactly like a clean single-commit pass.
+   *
+   * So a carrier is read AT THE TWO MOMENTS IT CROSSES THE DOCUMENT'S EDGE, on
+   * the stack of the call that carries it across -- never by inspecting a
+   * subtree afterwards, which is a question about what is still there rather
+   * than about what happened:
+   *
+   *   ARRIVAL. Every call that can put a node into the document reads what the
+   *   carriers it brought in are holding, immediately after they land. A value
+   *   this recorder did not record for that element got there through a path it
+   *   cannot see, and the drill is refused by name -- before the correcting
+   *   frame, the removal, or any later cleanup can touch it.
+   *
+   *   DEPARTURE. Removal records are read WHEN THEY ARE HANDED OVER, and the
+   *   undelivered ones are read on the stack of the next structural call, which
+   *   is the only thing that can empty an already-detached subtree. The departed
+   *   carrier's value is therefore copied out while the subtree still holds it.
+   *   A ledger that waited for `stop()` to look would find a removed wrapper
+   *   that its own cleanup had already emptied, and report the correcting value
+   *   alone as a clean single-commit history.
+   *
+   * With those two, a carrier's whole life is accounted for, and there is no
+   * seventh case:
+   *   - already in the document when the drill began -> snapshotted here, and
+   *     what it carries IS the first observed value;
+   *   - written by any writer below -> recorded there;
+   *   - planted unseen and inserted -> the arrival check;
+   *   - planted unseen and overwritten in place -> the witness;
+   *   - planted unseen and still carried at `stop()` -> the per-element check;
+   *   - planted unseen and gone from the document -> the departure ledger.
+   * A carrier that never enters the document painted nothing, and is not a case.
+   *
+   * Neither channel is the reconstruction this recorder exists to avoid: neither
+   * ever contributes a value to the history. They ask one question -- was every
+   * carrier that crossed the edge one this recorder saw written -- and refuse the
+   * drill by name when it was not.
+   */
+  for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
+    commit(carrier);
+  }
+
+  /** Everything under `node` that carries the attribute, `node` included. */
+  const carriersIn = (node: unknown): Element[] => {
+    const candidate = node as Node | null;
+    // Elements and fragments only: a fragment is what an insertion is handed
+    // when the carriers it delivers were built somewhere else.
+    if (!candidate || (candidate.nodeType !== 1 && candidate.nodeType !== 11)) return [];
+    const root = candidate as Element;
+    const own =
+      candidate.nodeType === 1 && readBack.call(root, FULLSCREEN_ATTRIBUTE) !== null ? [root] : [];
+    return [...own, ...Array.from(root.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))];
+  };
+  /** A carrier that ENTERS the document must arrive carrying what we recorded. */
+  const arrived = (carrier: Element): void => {
+    const value = readBack.call(carrier, FULLSCREEN_ATTRIBUTE);
+    if (value === null || observed.get(carrier) === value) return;
+    breach ??=
+      `UNOBSERVED-CARRIER: a surface entered the document carrying ${JSON.stringify(value)} that this recorder never saw written to it; it was planted by a path it cannot observe`;
+  };
+  /** And a carrier that LEAVES it must leave carrying what we recorded. */
+  const departed = (carrier: Element, value: string | null): void => {
+    if (value === null || observed.get(carrier) === value) return;
+    breach ??=
+      `UNOBSERVED-CARRIER: a surface left the document carrying ${JSON.stringify(value)} that this recorder never saw written to it; it was planted by a path it cannot observe and dropped before anything could name it`;
+  };
+  /** Read every departure these records name, now, while their subtrees hold it. */
+  const settle = (records: readonly MutationRecord[]): void => {
+    for (const record of records) {
+      for (const node of Array.from(record.removedNodes)) {
+        for (const carrier of carriersIn(node)) {
+          // Still in the document: the per-element check at `stop()` owns it.
+          if (carrier.isConnected) continue;
+          departed(carrier, readBack.call(carrier, FULLSCREEN_ATTRIBUTE));
+        }
+      }
+    }
+  };
+  const ledger = new MutationObserver(settle);
+  ledger.observe(document, { childList: true, subtree: true });
+  undo.push(() => ledger.disconnect());
+  /** The records the callback has not been handed yet, read on this stack. */
+  const settleNow = (): void => settle(ledger.takeRecords());
+
+  /**
+   * Read the pending departures BEFORE the call -- this may be the cleanup that
+   * empties an already-detached subtree -- and read the arriving carriers after
+   * it, which is when they are in the document to be read.
+   *
+   * An arrival is a CROSSING, so a carrier that was already in the document
+   * before the call is not one: this runner lowers `replaceChild` into
+   * `insertBefore` plus `removeChild`, and the outgoing subtree is still
+   * connected for the first of those. Its account is the departure ledger's,
+   * and reporting it here would name the wrong edge for the same carrier.
+   */
+  const structural = (args: unknown[], call: () => unknown): unknown => {
+    settleNow();
+    const arriving = args
+      .flatMap(carriersIn)
+      .map((carrier) => ({ carrier, wasConnected: carrier.isConnected }));
+    const result = call();
+    for (const { carrier, wasConnected } of arriving) {
+      if (!wasConnected && carrier.isConnected) arrived(carrier);
+    }
+    return result;
+  };
+  for (const [, start, key] of STRUCTURAL_SLOTS) {
+    patchMethod(start, key, (original) =>
+      function acrossTheEdge(this: unknown, ...args: unknown[]) {
+        return structural(args, () => original.apply(this, args));
+      },
+    );
+  }
+  // Emptying a subtree names no node, so it leaves no record to read later:
+  // the pending ones have to be read before it runs.
+  patchSetter(element, 'textContent', (original) =>
+    function textContent(this: Element, value: unknown) {
+      settleNow();
+      original.call(this, value);
+    },
+  );
+
   /**
    * Witness what was already there, call through, record what is there now.
    *
@@ -325,18 +511,21 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   }
   patchSetter(element, 'innerHTML', (original) =>
     function innerHTML(this: Element, markup: unknown) {
+      settleNow();
       if (markupNamesAttribute(markup)) refuse('Element.innerHTML');
       original.call(this, markup);
     },
   );
   patchSetter(element, 'outerHTML', (original) =>
     function outerHTML(this: Element, markup: unknown) {
+      settleNow();
       if (markupNamesAttribute(markup)) refuse('Element.outerHTML');
       original.call(this, markup);
     },
   );
   patchMethod(element, 'insertAdjacentHTML', (original) =>
     function insertAdjacentHTML(this: Element, position: unknown, markup: unknown) {
+      settleNow();
       if (markupNamesAttribute(markup)) refuse('Element.insertAdjacentHTML');
       return original.call(this, position, markup);
     },
@@ -408,64 +597,6 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     },
   );
 
-  /**
-   * THE BIRTH CHANNEL, which is the other end of the same question.
-   *
-   * The witness sees a value an OBSERVED write buries; the per-element check
-   * below sees a carrier that SURVIVES. A carrier planted where this recorder
-   * cannot look and then DROPPED is neither -- a parser-built node inserted by
-   * one commit and replaced by the next is never written again, and is gone
-   * from the document before anything can be asked what it held. The history
-   * then simply starts mid-stream, and reads exactly like a clean
-   * single-commit pass.
-   *
-   * With the two owners below, a carrier's whole life is accounted for, and
-   * there is no sixth case:
-   *   - already in the document when the drill began -> snapshotted here, and
-   *     what it carries IS the first observed value;
-   *   - written by any writer above -> recorded there;
-   *   - planted unseen and overwritten in place -> the witness;
-   *   - planted unseen and still carried at `stop()` -> the per-element check;
-   *   - planted unseen and gone from the document -> this ledger.
-   * A carrier that never enters the document painted nothing, and is not a case.
-   *
-   * The ledger is NOT the reconstruction this recorder exists to avoid: it
-   * never contributes a value to the history. It asks one question -- was every
-   * carrier that left the document one this recorder saw written -- and refuses
-   * the drill by name when it was not. `stop()` drains it before disconnecting,
-   * so the answer never depends on a callback having been delivered.
-   */
-  for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
-    commit(carrier);
-  }
-  const passage: MutationRecord[] = [];
-  const ledger = new MutationObserver((records) => passage.push(...records));
-  ledger.observe(document, { childList: true, subtree: true });
-  undo.push(() => ledger.disconnect());
-
-  /** Everything under `node` that carries the attribute, `node` included. */
-  const carriersIn = (node: Node): Element[] => {
-    if (!node || node.nodeType !== 1) return [];
-    const element = node as Element;
-    const own = readBack.call(element, FULLSCREEN_ATTRIBUTE) === null ? [] : [element];
-    return [...own, ...Array.from(element.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))];
-  };
-  /** Every carrier that LEFT the document must be one this recorder saw. */
-  const auditDepartures = (): void => {
-    for (const record of passage) {
-      for (const node of Array.from(record.removedNodes)) {
-        for (const carrier of carriersIn(node)) {
-          // Still in the document: the per-element check below owns that one.
-          if (carrier.isConnected) continue;
-          const departed = readBack.call(carrier, FULLSCREEN_ATTRIBUTE);
-          if (observed.has(carrier) && observed.get(carrier) === departed) continue;
-          breach ??=
-            `UNOBSERVED-CARRIER: a surface left the document carrying ${JSON.stringify(departed)} that this recorder never saw written to it; it was planted by a path it cannot observe and dropped before anything could name it`;
-        }
-      }
-    }
-  };
-
   // A patched prototype that outlives a failing assertion would follow the
   // worker into every later file, so the restore is also owned by `afterEach`,
   // and `stop()` restores BEFORE it can throw.
@@ -476,9 +607,8 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   restoreAttributeInterception = restore;
   return {
     stop: () => {
-      passage.push(...ledger.takeRecords());
+      settleNow();
       restore();
-      auditDepartures();
       if (breach) throw new Error(breach);
       for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
         const settled = carrier.getAttribute(FULLSCREEN_ATTRIBUTE);
@@ -1123,7 +1253,9 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
    * The recorder's own history starts mid-stream and reports `['false']`, byte
    * for byte the desktop drill's pass, for a frame that painted fullscreen.
    *
-   * The departure ledger is what turns that into a refusal.
+   * The arrival check is what turns that into a refusal, and it fires at the
+   * `appendChild` that puts the parsed carrier in the document -- one commit
+   * before the replacement that would have buried it.
    */
   it('refuses a parser-built carrier that is replaced across two commits, not corrected', () => {
     const ParsedThenReplaced = (): React.ReactElement => {
@@ -1146,7 +1278,108 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
     const recorder = recordAdaptiveFullscreen();
     render(<ParsedThenReplaced />);
 
-    expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface left the document/);
+    expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface entered the document/);
+  });
+
+  /**
+   * THE SAME CARRIER, WITH THE EVIDENCE ERASED BEFORE `stop()` COULD READ IT.
+   *
+   * A ledger that inspects removed subtrees at the END of the drill can only
+   * speak about subtrees that are still intact then. Clearing the wrapper the
+   * correcting commit removed erases the carrier it was supposed to name -- the
+   * removal record still points at the wrapper, but the wrapper is empty by the
+   * time anything asks -- and the drill goes back to reporting `['false']` for a
+   * frame that painted fullscreen first.
+   *
+   * Reading each carrier as it CROSSES the edge has nothing to erase: the
+   * arrival check already refused this drill at the `appendChild`, before the
+   * replacement and long before the cleanup.
+   */
+  it('refuses a parser-built carrier whose subtree is cleared before stop() could read it', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('section');
+    document.body.appendChild(host);
+    const outgoing = document.createElement('article');
+    host.appendChild(outgoing);
+
+    const range = document.createRange();
+    range.selectNodeContents(document.body);
+    outgoing.appendChild(range.createContextualFragment(PLANTED_MARKUP));
+
+    const replacement = document.createElement('div');
+    replacement.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    host.replaceChild(replacement, outgoing);
+    // The cleanup that leaves the ledger nothing to inspect.
+    outgoing.replaceChildren();
+
+    try {
+      expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface entered the document/);
+    } finally {
+      host.remove();
+    }
+  });
+
+  /**
+   * THE CARRIER THAT ARRIVED CLEAN AND WAS PLANTED AFTERWARDS, which is the
+   * departure ledger's own case and nothing else's.
+   *
+   * The element enters the document carrying nothing, so its arrival is
+   * unremarkable. An unenumerated writer then plants the value while it is in
+   * the document -- there is no observed write for the witness to compare
+   * against -- and the correcting frame removes it, so there is no carrier left
+   * for the per-element check to ask. Only reading the removal itself refuses
+   * this.
+   *
+   * The native writer captured before the patch is what any unenumerated path
+   * looks like from the recorder's side.
+   */
+  it('refuses a carrier planted after it arrived and gone before stop() could ask', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('section');
+    document.body.appendChild(host);
+    const surface = document.createElement('div');
+    host.appendChild(surface);
+    NATIVE_SET_ATTRIBUTE.call(surface, FULLSCREEN_ATTRIBUTE, 'true');
+    surface.remove();
+
+    try {
+      expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface left the document/);
+    } finally {
+      host.remove();
+    }
+  });
+
+  /**
+   * AND THE SAME DEPARTURE, ERASED BEFORE `stop()`, which is what forces the
+   * ledger to read its records EAGERLY rather than at the end.
+   *
+   * Nothing here ever enters the document carrying a value, so the arrival
+   * check has nothing to say; the whole answer is in the removal record. The
+   * wrapper that leaves holds the carrier when it is removed and is empty a
+   * statement later. A ledger that reads its records on the next structural
+   * call copies the value out in between; one that waits for `stop()` finds an
+   * empty wrapper and reports the corrected value as a clean history.
+   */
+  it('reads a departure before the cleanup that would have erased it', () => {
+    const recorder = recordAdaptiveFullscreen();
+    const host = document.createElement('section');
+    document.body.appendChild(host);
+    const outgoing = document.createElement('article');
+    host.appendChild(outgoing);
+    const surface = document.createElement('div');
+    outgoing.appendChild(surface);
+    NATIVE_SET_ATTRIBUTE.call(surface, FULLSCREEN_ATTRIBUTE, 'true');
+
+    const replacement = document.createElement('div');
+    replacement.setAttribute(FULLSCREEN_ATTRIBUTE, 'false');
+    host.replaceChild(replacement, outgoing);
+    outgoing.replaceChildren();
+
+    try {
+      expect(() => recorder.stop()).toThrow(/UNOBSERVED-CARRIER: a surface left the document/);
+    } finally {
+      host.remove();
+    }
   });
 
   /**
@@ -1218,6 +1451,11 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
       ['document', document, 'writeln'],
       ['Document.prototype', Document.prototype, 'write'],
       ['Document.prototype', Document.prototype, 'writeln'],
+      ['Element.prototype', Element.prototype, 'textContent'],
+      // Every slot the birth channel reaches for, from the one table it
+      // installs them from: a slot added there is drilled here without this
+      // list being edited again.
+      ...STRUCTURAL_SLOTS,
     ];
     /** The objects a patch could leave a shadow on. */
     const surfaces: readonly (readonly [string, object])[] = [
@@ -1226,6 +1464,8 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
       ['Node.prototype', Node.prototype],
       ['NamedNodeMap.prototype', NamedNodeMap.prototype],
       ['Document.prototype', Document.prototype],
+      ['DocumentFragment.prototype', DocumentFragment.prototype],
+      ['Range.prototype', Range.prototype],
       ['document', document],
     ];
 
@@ -1258,6 +1498,22 @@ describe('the recorder observes every writer, or refuses the drill by name', () 
     const recorder = recordAdaptiveFullscreen();
     expect(Element.prototype.setAttribute).not.toBe(NATIVE_SET_ATTRIBUTE);
     expect(document.write).not.toBe(NATIVE_DOCUMENT_WRITE);
+    expect(Node.prototype.appendChild).not.toBe(NATIVE_APPEND_CHILD);
+    // Every structural slot is actually installed, not silently skipped for a
+    // name this runner spells differently.
+    for (const [where, start, key] of STRUCTURAL_SLOTS) {
+      const owner = declaringOwner(start, key);
+      expect({ where: `${where}.${key}`, patched: owner !== null }).toEqual({
+        where: `${where}.${key}`,
+        patched: true,
+      });
+      expect({
+        where: `${where}.${key}`,
+        wrapped:
+          (owner as Record<string, unknown>)[key] !==
+          before[slots.findIndex((slot) => slot[1] === start && slot[2] === key)].value,
+      }).toEqual({ where: `${where}.${key}`, wrapped: true });
+    }
     expect(shapeOf(['Element.prototype', Element.prototype, 'innerHTML']).set).not.toBe(
       before[9].set,
     );
