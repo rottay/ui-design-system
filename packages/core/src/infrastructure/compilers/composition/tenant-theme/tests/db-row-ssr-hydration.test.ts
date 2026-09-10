@@ -44,6 +44,7 @@ import {
   hydrateTenantThemeConfig,
   tenantThemeArtifactRootAttributes,
 } from '..';
+import { clearTenantThemeScope, stampTenantThemeScopeFor } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
 
 /**
  * The projection must agree with the compiler's own scope helper. Asserting the
@@ -218,6 +219,10 @@ describe('DB row -> SSR embed', () => {
  * what keeps the two legs honest: if the emitter ever stopped stamping a proof
  * attribute, hydration would stop recognising the mount here instead of the
  * harness quietly supplying what production forgot.
+ *
+ * The root scope is stamped alongside it because that is the other half of what
+ * the server response carries: `mountTenantTheme` returns the style element AND
+ * the root attributes its selector matches on, and admission proves both.
  */
 const mountedElements: HTMLStyleElement[] = [];
 
@@ -228,12 +233,17 @@ function mountServerEmission(emission: TenantThemeArtifactSsrEmission): HTMLStyl
   }
   style.textContent = emission.css;
   document.head.appendChild(style);
+  stampTenantThemeScopeFor({
+    slug: emission.receipt.slug,
+    verticalKey: emission.receipt.verticalKey,
+  });
   mountedElements.push(style);
   return style;
 }
 
 afterEach(() => {
   while (mountedElements.length > 0) mountedElements.pop()?.remove();
+  clearTenantThemeScope();
 });
 
 describe('SSR embed -> hydration reuse', () => {

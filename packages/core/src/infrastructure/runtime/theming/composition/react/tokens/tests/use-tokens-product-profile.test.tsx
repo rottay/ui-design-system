@@ -40,6 +40,7 @@ import {
   emitTenantThemeArtifactForSsr,
 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
+import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
 
 /** Classic seeds antd from a compiled projection and refuses to guess one. */
 const CLASSIC_VISUAL = firstPartyEngineVisual('bithire', 'classic');
@@ -101,6 +102,7 @@ function mountArtifact(artifact: TenantThemeArtifact): HTMLStyleElement {
   }
   style.textContent = css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
   mountedArtifacts.push(style);
   return style;
 }
@@ -212,50 +214,41 @@ describe('useTokens product profile resolution', () => {
   });
 
   it('composes the product-profile structural scale with the artifact density factor', () => {
-    // Two slugs, because two artifacts cannot share one tenant scope.
-    const normalArtifact = tokenTestArtifact('token-test-normal', 'normal');
-    const compactArtifact = tokenTestArtifact('token-test-compact', 'compact');
-    mountArtifact(normalArtifact);
-    mountArtifact(compactArtifact);
+    // ONE DOCUMENT, ONE TENANT SCOPE. Both trees used to render side by side,
+    // which no browser can reproduce: `<html>` carries a single `data-tenant`,
+    // so at most one of two artifacts is ever in scope. The two postures are
+    // therefore measured in two renders of the same document.
+    const measure = (slug: string, density: 'normal' | 'compact'): string => {
+      const artifact = tokenTestArtifact(slug, density);
+      mountArtifact(artifact);
+      render(
+        <DesignSystemProvider
+          tenantConfig={tokenTestTenant(slug)}
+          visualAuthority={{ authority: 'compiled-artifact', artifact }}
+          productProfile="events.organizer"
+          forceEngine="classic"
+          engineVisual={CLASSIC_VISUAL}
+          skipCssLoading
+        >
+          <DensitySpacing testId={`${density}-density-spacing`} />
+        </DesignSystemProvider>,
+      );
+      const text = screen.getByTestId(`${density}-density-spacing`).textContent ?? '';
+      cleanup();
+      return text;
+    };
 
-    render(
-      <>
-        <DesignSystemProvider
-          tenantConfig={tokenTestTenant('token-test-normal')}
-          visualAuthority={{ authority: 'compiled-artifact', artifact: normalArtifact }}
-          productProfile="events.organizer"
-          forceEngine="classic"
-          engineVisual={CLASSIC_VISUAL}
-          skipCssLoading
-        >
-          <DensitySpacing testId="normal-density-spacing" />
-        </DesignSystemProvider>
-        <DesignSystemProvider
-          tenantConfig={tokenTestTenant('token-test-compact')}
-          visualAuthority={{ authority: 'compiled-artifact', artifact: compactArtifact }}
-          productProfile="events.organizer"
-          forceEngine="classic"
-          engineVisual={CLASSIC_VISUAL}
-          skipCssLoading
-        >
-          <DensitySpacing testId="compact-density-spacing" />
-        </DesignSystemProvider>
-      </>,
-    );
+    const normal = measure('token-test-normal', 'normal');
+    const compact = measure('token-test-compact', 'compact');
 
     // spacing[4] = round(16 * effectiveScale). The structural factor comes from
     // the profile; only the mode factor differs between the two trees.
     const base = EVNTO_CANONICAL_SURFACES.densityScale;
-    expect(screen.getByTestId('normal-density-spacing')).toHaveTextContent(
-      String(Math.round(16 * resolveEffectiveDensityScale(base, 'normal'))),
-    );
-    expect(screen.getByTestId('compact-density-spacing')).toHaveTextContent(
-      String(Math.round(16 * resolveEffectiveDensityScale(base, 'compact'))),
-    );
+    expect(normal).toBe(String(Math.round(16 * resolveEffectiveDensityScale(base, 'normal'))));
+    expect(compact).toBe(String(Math.round(16 * resolveEffectiveDensityScale(base, 'compact'))));
     // The composition must actually move the value, or the assertions above
     // would both pass on a resolver that ignored the appearance entirely.
-    expect(screen.getByTestId('compact-density-spacing').textContent)
-      .not.toBe(screen.getByTestId('normal-density-spacing').textContent);
+    expect(compact).not.toBe(normal);
   });
 
   it('DRILL: the old raw-override shape is refused, not silently applied', () => {

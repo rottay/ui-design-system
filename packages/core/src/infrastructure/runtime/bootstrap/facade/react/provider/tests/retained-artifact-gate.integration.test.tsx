@@ -48,6 +48,20 @@ import {
 } from '@/infrastructure/runtime/theming';
 import type { TenantThemeArtifactSsrEmissionReceipt } from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '..';
+import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+import { outstandingRootClaims } from '@/infrastructure/runtime/foundation/root-attributes';
+/**
+ * Whether the provider CLAIMED the root scope.
+ *
+ * `data-tenant` is no longer a proxy for that: `mountTenantTheme` projects the
+ * scope on the server, so the attribute is present in every correctly mounted
+ * document whether or not the barrier let a provider through. The claim
+ * registry answers the question the assertion actually asks.
+ */
+function providerClaimedRoot(): boolean {
+  return outstandingRootClaims(document.documentElement) > 0;
+}
+
 
 /**
  * A server render with no DOM at all.
@@ -162,6 +176,7 @@ function mountArtifact(artifact: TenantThemeArtifact = ARTIFACT): HTMLStyleEleme
   style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
   style.textContent = artifact.css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
   return style;
 }
 
@@ -277,7 +292,7 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
     // the frame it painted. The seal drains inside the commit, so the block is
     // already on screen by the time control comes back.
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 
   it('sees an artifact rewritten and restored inside a child layout effect', () => {
@@ -366,7 +381,7 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
         queueMicrotask(() => {
           atCommitCheckpoint = {
             blocked: isBlocked(container),
-            tenantClaimed: document.documentElement.hasAttribute('data-tenant'),
+            tenantClaimed: providerClaimedRoot(),
           };
           commit.reach();
         });
@@ -456,7 +471,7 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
     await act(async () => { await Promise.resolve(); });
 
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 
   /**
@@ -714,7 +729,7 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
       await Promise.resolve();
     });
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
 
     const byteIdenticalClone = structuredClone(ARTIFACT) as TenantThemeArtifact;
     expect(byteIdenticalClone).not.toBe(ARTIFACT);
@@ -726,7 +741,7 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
     await act(async () => { await Promise.resolve(); });
 
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 
   it('stays blocked after a removal even once the same artifact is mounted again', async () => {
@@ -808,7 +823,7 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
     });
 
     expect(screen.queryByTestId('resolved-config')).toBeNull();
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(providerClaimedRoot()).toBe(false);
   });
 
   /**
@@ -892,7 +907,7 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
         queueMicrotask(() => {
           atCommitCheckpoint = {
             blocked: isBlocked(host),
-            tenantClaimed: document.documentElement.hasAttribute('data-tenant'),
+            tenantClaimed: providerClaimedRoot(),
           };
           commit.reach();
         });
@@ -979,6 +994,10 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
    * because the response genuinely lied.
    */
   it('blocks during hydration when the emitted artifact bytes never arrived', async () => {
+    // Earlier cases in this file hydrate their own roots, which RTL's cleanup
+    // does not unmount, so their claims are still outstanding. What this case
+    // asserts is that THIS render adds none.
+    const claimsBefore = outstandingRootClaims(document.documentElement);
     const mounted: string[] = [];
     function MountFlag(): React.ReactElement {
       useLayoutEffect(() => { mounted.push('live'); }, []);
@@ -1006,6 +1025,6 @@ describe('DesignSystemProvider two-phase retained artifact gate', () => {
     // shipped is dead bytes, not a live tree, and no document-level tenant
     // state was ever claimed for it.
     expect(mounted).toEqual([]);
-    expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
+    expect(outstandingRootClaims(document.documentElement)).toBe(claimsBefore);
   });
 });

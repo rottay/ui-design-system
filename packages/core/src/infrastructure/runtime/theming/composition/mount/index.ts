@@ -10,22 +10,31 @@
  * the mount proof does not read — while its CSS sits correctly in the document
  * and the provider refuses the surface anyway.
  *
- * WHAT THIS IS TODAY. A thin adapter over the pipeline that already exists:
- * the first-party artifact renderer for a code-owned vertical, the tenant-theme
- * compiler's artifact for a customer document, `resolveDocumentRootAttributes`
- * for the governed root scope, and `emitTenantThemeArtifactForSsr` for the
- * inline element and its receipt. It compiles nothing of its own and emits no
- * byte the current pipeline does not already emit.
+ * WHAT IT PROVES. Bytes AND scope. An artifact whose exact bytes are inlined in
+ * `<head>` paints nothing when the root element does not match the selector
+ * those bytes are nested under, and that is not a hypothetical: it was the
+ * state of app-platform. So this call projects the root attributes and then
+ * verifies them against the artifact's own scope descriptors before returning,
+ * refusing by name rather than handing back a mount that renders unstyled.
  *
- * WHAT IT IS FOR. The SIGNATURE is the deliverable. WO-EMI-02 replaces this
- * body with the real mount — scope verification, SSR responsive, one compile
- * per request — and deletes this file. What it KEEPS is the whole signature:
- * `(intent, options?)`, every field of `MountTenantThemeOptions` including
- * `artifact`, and the return shape. Applications that call it today are not
- * touched by that landing, which is the whole point of freezing the call now.
+ * WHAT IT PROJECTS. The COMPLETE governed root scope for one request: theme,
+ * engine, lang/dir, tenant scope, density, motion posture, the viewport hint
+ * the responsive runtime renders its server snapshot for, and the artifact's
+ * validated recipe profile (D-26). Density and motion used to be written by
+ * client effects after the first paint, and the viewport was not projected at
+ * all — which is why every first paint was a phone paint.
+ *
+ * WHAT IT DOES NOT DO. It does not compile a second time for a code-owned
+ * vertical (one compile per vertical per process, cached), it does not resolve
+ * `auto`, and it emits no `<style>` for a vertical whose artifact already ships
+ * inside `@rottay/design-system/styles.css`.
+ *
+ * SIGNATURE STABILITY. `(intent, options?)`, every field of
+ * `MountTenantThemeOptions` including `artifact`, and the four returned fields
+ * are frozen by the WO-CON-02 contract. New options are additive and optional.
  * An input this facade accepts is retired only through a versioned breaking
  * change with its own codemod — the 3.0 changeset of WO-RET-01 under the
- * WO-CON-05 protocol — never by swapping the implementation behind it.
+ * WO-CON-05 protocol.
  *
  * @module Runtime/Theming/Composition/Mount
  * @category Runtime
@@ -47,7 +56,10 @@ import {
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
 import type {
+  DocumentDensityPosture,
+  DocumentMotionPosture,
   DocumentRootAttributes,
+  DocumentViewportHint,
   ResolvedTheme,
   TenantThemeMode,
 } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
@@ -91,6 +103,29 @@ export interface MountTenantThemeOptions {
    * app-touching landing this WO exists to prevent.
    */
   artifact?: TenantThemeArtifact;
+  /**
+   * The viewport tier this REQUEST is for, as the server knows it (a cookie, a
+   * client hint, a user-agent parse). It is projected as `data-ds-viewport` and
+   * is the only thing that lets the responsive runtime render a desktop server
+   * snapshot; without it the first paint is a phone paint on every device.
+   *
+   * PASS THE SAME VALUE TO `DesignSystemProvider.ssrViewport`. The attribute is
+   * for CSS; the runtime takes the hint as a prop, because a value read back
+   * off `<html>` is `undefined` on a server and defined during hydration, which
+   * is a mismatch by construction.
+   */
+  viewport?: DocumentViewportHint;
+  /**
+   * Document motion policy for this request. `system` — the default — stamps
+   * nothing and leaves the OS media query as the sole authority.
+   */
+  motion?: DocumentMotionPosture;
+  /**
+   * Density posture override. Omitted, the mount reads the posture the
+   * artifact itself compiled, so the cascade resolves it on the FIRST paint
+   * instead of after `RootDensityProvider`'s effect.
+   */
+  density?: DocumentDensityPosture;
 }
 
 /** One `<style>` element the server response must carry, and nothing else. */
@@ -108,19 +143,29 @@ export interface MountedThemeStyleElement {
  * It carries the BYTES this mount is authoritative for, and — when those bytes
  * are inlined by this call — the receipt the client resolver admits them
  * against. It does NOT prove the browser received them; nothing available on a
- * server can. Scope verification arrives with the real mount (WO-EMI-02), which
- * keeps this shape.
+ * server can. What it DOES prove beyond the bytes is the SCOPE: `scope` names
+ * the three root attributes this mount projected and verified against the
+ * artifact's own scope descriptors, so a caller can assert the mount would
+ * paint without re-deriving the selector grammar.
  *
  * It is a SERVER value. Do not serialize it across the flight boundary: the
  * receipt is admitted by module-private identity and a structural copy of it is
  * refused by design.
  */
+export interface MountedThemeScopeProof {
+  /** The exact selector the mounted bytes are nested under. */
+  readonly selector: string;
+  /** The root attributes that make that selector match, as projected. */
+  readonly attributes: Readonly<Record<string, string>>;
+}
+
 export interface MountedThemeHydrationProof {
   readonly origin: ThemeIntentOrigin;
   readonly slug: string;
   readonly verticalKey: string;
   readonly digest: string;
   readonly css: string;
+  readonly scope: MountedThemeScopeProof;
   readonly receipt?: TenantThemeArtifactSsrEmissionReceipt;
 }
 
@@ -159,18 +204,31 @@ const REFUSAL = '[design-system] mountTenantTheme';
  * facade would lower a total ~9K-line authored theme on every SSR render for a
  * result that cannot differ.
  */
-const FIRST_PARTY_ARTIFACT_CSS = new Map<FirstPartyVerticalId, string>();
+interface FirstPartyArtifact {
+  readonly css: string;
+  readonly selector: string;
+  readonly recipeProfile?: string;
+}
 
-function firstPartyArtifactCss(vertical: FirstPartyVerticalId): string {
-  const cached = FIRST_PARTY_ARTIFACT_CSS.get(vertical);
+const FIRST_PARTY_ARTIFACTS = new Map<FirstPartyVerticalId, FirstPartyArtifact>();
+
+function firstPartyArtifact(vertical: FirstPartyVerticalId): FirstPartyArtifact {
+  const cached = FIRST_PARTY_ARTIFACTS.get(vertical);
   if (cached !== undefined) return cached;
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((row) => row.slug === vertical);
   if (!spec) {
     throw new Error(`${REFUSAL}: no first-party artifact is registered for ${JSON.stringify(vertical)}.`);
   }
-  const { css } = renderFirstPartyArtifact({ spec });
-  FIRST_PARTY_ARTIFACT_CSS.set(vertical, css);
-  return css;
+  const { css, compiled } = renderFirstPartyArtifact({ spec });
+  const artifact: FirstPartyArtifact = Object.freeze({
+    css,
+    selector: spec.selector,
+    ...(compiled.runtime.recipeProfile === undefined
+      ? {}
+      : { recipeProfile: compiled.runtime.recipeProfile }),
+  });
+  FIRST_PARTY_ARTIFACTS.set(vertical, artifact);
+  return artifact;
 }
 
 interface MountedBytes {
@@ -178,7 +236,31 @@ interface MountedBytes {
   readonly digest: string;
   readonly styleElements: readonly MountedThemeStyleElement[];
   readonly anatomyAttributes: Record<string, string>;
+  /** The selector the mounted bytes are nested under. */
+  readonly scopeSelector: string;
+  /** Root attributes that must be live for that selector to match. */
+  readonly scopeAttributes: Readonly<Record<string, string>>;
+  /** Validated recipe-profile id the artifact compiled (D-26). */
+  readonly recipeProfile?: string;
+  /** Density posture the artifact compiled, when it declared one. */
+  readonly density?: DocumentDensityPosture;
   readonly receipt?: TenantThemeArtifactSsrEmissionReceipt;
+}
+
+/**
+ * The compiled density preference as a runtime posture.
+ *
+ * `normal` is the document vocabulary's spelling of the runtime's
+ * `comfortable`; an absent preference stays absent so the mount does not stamp
+ * a posture the tenant never chose.
+ */
+function compiledDensityPosture(
+  preference: string | undefined,
+): DocumentDensityPosture | undefined {
+  if (preference === 'compact') return 'compact';
+  if (preference === 'spacious') return 'spacious';
+  if (preference === 'comfortable' || preference === 'normal') return 'comfortable';
+  return undefined;
 }
 
 function mountStaticVertical(intent: ThemeIntent, options: MountTenantThemeOptions): MountedBytes {
@@ -195,12 +277,17 @@ function mountStaticVertical(intent: ThemeIntent, options: MountTenantThemeOptio
       `${REFUSAL}: a static first-party mount is scoped to its own vertical; ${JSON.stringify(intent.slug)} is not ${JSON.stringify(intent.vertical)}.`,
     );
   }
-  const css = firstPartyArtifactCss(intent.vertical);
+  const artifact = firstPartyArtifact(intent.vertical);
   return {
-    css,
-    digest: `sha256-${sha256Utf8(css)}`,
+    css: artifact.css,
+    digest: `sha256-${sha256Utf8(artifact.css)}`,
     styleElements: [],
     anatomyAttributes: {},
+    scopeSelector: artifact.selector,
+    scopeAttributes: { 'data-tenant': intent.slug },
+    ...(artifact.recipeProfile === undefined
+      ? {}
+      : { recipeProfile: artifact.recipeProfile }),
   };
 }
 
@@ -223,6 +310,9 @@ function mountTenantAuthored(intent: ThemeIntent, options: MountTenantThemeOptio
     slug: artifact.slug,
     verticalKey: artifact.verticalKey,
   });
+  const density = compiledDensityPosture(
+    artifact.normalizedAppearance.general?.density,
+  );
   return {
     css: emission.css,
     digest: artifact.digest,
@@ -234,16 +324,47 @@ function mountTenantAuthored(intent: ThemeIntent, options: MountTenantThemeOptio
       }),
     ],
     anatomyAttributes: tenantThemeAnatomyAttributes(artifact),
+    scopeSelector: artifact.scopes.combinedSelector,
+    scopeAttributes: {
+      [artifact.scopes.root.attribute]: '',
+      [artifact.scopes.vertical.attribute]: artifact.scopes.vertical.value,
+      [artifact.scopes.tenant.attribute]: artifact.scopes.tenant.value,
+    },
+    ...(artifact.normalizedAppearance.recipeProfile === undefined
+      ? {}
+      : { recipeProfile: artifact.normalizedAppearance.recipeProfile }),
+    ...(density === undefined ? {} : { density }),
     receipt: emission.receipt,
   };
 }
 
 /**
+ * The mount's own scope proof: the projection it is about to return must
+ * satisfy the selector the bytes it is about to return are nested under.
+ *
+ * This is the server half of the invariant `resolveVisualAuthority` enforces on
+ * the client. Neither side trusts the other: the server refuses to hand back a
+ * mount that cannot paint, and the client refuses to admit a document that does
+ * not carry it.
+ */
+function assertMountScope(
+  projected: Readonly<Record<string, string | undefined>>,
+  mounted: MountedBytes,
+): void {
+  for (const [name, expected] of Object.entries(mounted.scopeAttributes)) {
+    if (projected[name] !== expected) {
+      throw new Error(
+        `${REFUSAL}: the projected root attributes do not satisfy ${mounted.scopeSelector}; ${name} is ${JSON.stringify(projected[name])}, not ${JSON.stringify(expected)}.`,
+      );
+    }
+  }
+}
+
+/**
  * Mount one tenant's compiled visual identity for one server render.
  *
- * Asynchronous because the real mount is: WO-EMI-02 resolves and compiles here,
- * and an application that awaited a synchronous facade would otherwise have to
- * change when it lands. Today nothing in the body suspends.
+ * Asynchronous because an application awaits it and the compile it caches may
+ * become asynchronous; nothing in the body suspends today.
  */
 export async function mountTenantTheme(
   intent: ThemeIntent,
@@ -254,6 +375,10 @@ export async function mountTenantTheme(
       ? mountStaticVertical(intent, options)
       : mountTenantAuthored(intent, options);
 
+  // The application's explicit posture outranks the compiled one: a request
+  // may know something the row does not (a viewer preference, a print render).
+  const density = options.density ?? mounted.density;
+
   const rootAttributes = resolveDocumentRootAttributes({
     themeMode: options.themeMode ?? 'light',
     ...(options.autoFallback ? { autoFallback: options.autoFallback } : {}),
@@ -263,10 +388,19 @@ export async function mountTenantTheme(
     engine: verticalEngine(intent.vertical),
     locale: options.locale ?? 'en',
     tenant: { slug: intent.slug, verticalKey: intent.vertical },
+    ...(density === undefined ? {} : { density }),
+    ...(options.motion === undefined ? {} : { motion: options.motion }),
+    ...(options.viewport === undefined ? {} : { viewport: options.viewport }),
+    ...(mounted.recipeProfile === undefined
+      ? {}
+      : { recipeProfile: mounted.recipeProfile }),
   });
 
+  const projected = Object.freeze({ ...rootAttributes, ...mounted.anatomyAttributes });
+  assertMountScope(projected, mounted);
+
   return Object.freeze({
-    rootAttributes: Object.freeze({ ...rootAttributes, ...mounted.anatomyAttributes }),
+    rootAttributes: projected,
     styleElements: Object.freeze(mounted.styleElements),
     artifactDigest: mounted.digest,
     hydrationProof: Object.freeze({
@@ -275,6 +409,10 @@ export async function mountTenantTheme(
       verticalKey: intent.vertical,
       digest: mounted.digest,
       css: mounted.css,
+      scope: Object.freeze({
+        selector: mounted.scopeSelector,
+        attributes: Object.freeze({ ...mounted.scopeAttributes }),
+      }),
       ...(mounted.receipt ? { receipt: mounted.receipt } : {}),
     }),
   });

@@ -47,7 +47,23 @@ export type VisualAuthorityOrigin =
   | "invalid-declaration"
   /** Refused because no DOM exists AND no honest emission receipt was given. */
   | "unprovable-ssr-mount"
+  /** Refused because the document root does not carry the artifact's scope. */
+  | "unscoped-mount"
   | "uncompiled-visual-payload";
+
+/**
+ * What kind of question the refusal answers, as a closed value.
+ *
+ * The message says what happened to a human; this says which invariant broke,
+ * so a caller can branch without parsing prose. `scope` is the one admission
+ * used to be unable to state at all: the bytes were proven and the document
+ * root still did not match the selector they are attached to.
+ */
+export type VisualAuthorityConflictKind =
+  | "declaration"
+  | "payload"
+  | "mount"
+  | "scope";
 
 /** Explicitly context-only. This never grants a runtime painter. */
 export interface ProviderDeclaration {
@@ -427,6 +443,20 @@ export function verifyMountedTenantThemeArtifact(
     };
   }
   const element = candidates[0];
+  // The mount law is about what the DOCUMENT paints. A style inside a container
+  // that is not in the document has no `sheet`, contributes nothing to
+  // `document.styleSheets`, and paints nothing -- while the scope half of this
+  // proof would still be answered by the real `documentElement`, which those
+  // bytes are not attached to. Admitting that pair certifies a paint that does
+  // not exist, so a detached mount root is refused by name rather than
+  // re-scoped: there is no honest scope for it to be proven against.
+  if (element.isConnected !== true) {
+    return {
+      ok: false,
+      error:
+        "the mounted artifact element is not attached to the document, so it paints nothing",
+    };
+  }
   if (
     element.getAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE) !==
     artifact.digest
@@ -452,8 +482,88 @@ export function verifyMountedTenantThemeArtifact(
   };
 }
 
+export type TenantThemeArtifactScopeVerification =
+  | { ok: true; element: Element }
+  | { ok: false; error: string };
+
+/**
+ * The element an artifact's scope selector is evaluated against.
+ *
+ * Every artifact scope -- the first-party `html[data-tenant]` arm and the
+ * compiled `[data-ds-root][data-vertical][data-tenant]` arm alike -- names the
+ * DOCUMENT ROOT, so a container passed as the search root still resolves to
+ * its own `documentElement` rather than to itself.
+ */
+export function tenantThemeArtifactScopeElement(root: ParentNode): Element | null {
+  const asDocument = root as Partial<Document>;
+  if (asDocument.documentElement) return asDocument.documentElement;
+  const owner = (root as Partial<Element>).ownerDocument;
+  return owner?.documentElement ?? null;
+}
+
+/**
+ * Prove that the document root carries the scope the artifact's CSS is
+ * attached to.
+ *
+ * Byte proof and scope proof answer different questions. An artifact whose
+ * exact bytes are mounted in `<head>` paints NOTHING when `<html>` carries no
+ * `data-ds-root`/`data-vertical`/`data-tenant`, because every rule in it is
+ * nested under that selector. Admission used to prove only the first half and
+ * report `conflict: null` for a document that renders unstyled.
+ */
+export function verifyTenantThemeArtifactScope(
+  artifact: TenantThemeArtifact,
+  root: ParentNode | undefined =
+    typeof document === "undefined" ? undefined : document,
+): TenantThemeArtifactScopeVerification {
+  if (!root) return { ok: false, error: "no document root is available" };
+  const element = tenantThemeArtifactScopeElement(root);
+  if (!element) {
+    return { ok: false, error: "no document root element is available" };
+  }
+  const failure = tenantThemeArtifactScopeFailure(artifact, (attribute) =>
+    element.getAttribute(attribute),
+  );
+  return failure ? { ok: false, error: failure } : { ok: true, element };
+}
+
+/**
+ * The scope law, over any reading of the root's attributes.
+ *
+ * The live document is one reading; a state the retained watch reconstructs
+ * from mutation records is another. Stating the conditions once keeps a replay
+ * from becoming a second, drifting definition of what a valid scope is.
+ *
+ * The root marker is judged by PRESENCE -- that is what the artifact's selector
+ * tests -- and the vertical and tenant markers by value.
+ */
+export function tenantThemeArtifactScopeFailure(
+  artifact: TenantThemeArtifact,
+  read: (attribute: string) => string | null,
+): string | null {
+  if (read(artifact.scopes.root.attribute) === null) {
+    return `the document root does not carry ${artifact.scopes.root.attribute}`;
+  }
+  for (const descriptor of [artifact.scopes.vertical, artifact.scopes.tenant]) {
+    const live = read(descriptor.attribute);
+    if (live !== descriptor.value) {
+      return `the document root carries ${descriptor.attribute}=${JSON.stringify(live)}, not ${JSON.stringify(descriptor.value)}`;
+    }
+  }
+  return null;
+}
+
 export const MOUNTED_ARTIFACT_SELECTOR =
   `style[${TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE}],link[${TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE}]`;
+
+/**
+ * Every root attribute an artifact's scope selector is evaluated against.
+ *
+ * The domain is closed by `TenantThemeScopeDescriptor`, so it can be stated
+ * once here and used as a MutationObserver filter without an artifact in hand.
+ */
+export const TENANT_THEME_ARTIFACT_SCOPE_ATTRIBUTES: readonly string[] =
+  Object.freeze(["data-ds-root", "data-vertical", "data-tenant"]);
 
 /**
  * Re-prove an already-admitted mount against the artifact it was admitted for.
@@ -463,6 +573,15 @@ export const MOUNTED_ARTIFACT_SELECTOR =
  * must still rest on the SAME node. Re-verifying alone would accept a takeover
  * by an identical-looking element, which hands a later mutation to a node the
  * application never mounted.
+ *
+ * IT RE-PROVES THE SCOPE TOO. Admission asks two questions -- are these the
+ * artifact's exact bytes, and does the document root carry the selector those
+ * bytes are nested under -- and a retained proof that re-asked only the first
+ * one was strictly weaker than the admission it claimed to hold open. Stripping
+ * `data-ds-root` from `<html>` after admission stops every rule in the artifact
+ * from matching while the bytes stay pristine, so the byte-only audit returned
+ * `null` for a document that had gone back to painting nothing. Both halves are
+ * re-proven here, in the order admission proves them.
  */
 export function auditRetainedTenantThemeArtifact(
   artifact: TenantThemeArtifact,
@@ -475,6 +594,8 @@ export function auditRetainedTenantThemeArtifact(
   if (current.element !== element) {
     return "the admitted artifact element was replaced after admission";
   }
+  const scope = verifyTenantThemeArtifactScope(artifact, root);
+  if (!scope.ok) return scope.error;
   return null;
 }
 
@@ -635,6 +756,8 @@ export interface VisualAuthorityResolution {
   origin: VisualAuthorityOrigin;
   suppressedChannels: readonly TenantVisualChannel[];
   conflict: string | null;
+  /** Which invariant the conflict broke; `null` whenever `conflict` is null. */
+  conflictKind: VisualAuthorityConflictKind | null;
   artifact: TenantThemeArtifact | null;
   mountedArtifact: HTMLStyleElement | HTMLLinkElement | null;
 }
@@ -668,12 +791,14 @@ export function appearanceMatchesArtifact(
 function blocked(
   origin: VisualAuthorityOrigin,
   message: string,
+  kind: VisualAuthorityConflictKind,
 ): VisualAuthorityResolution {
   return {
     authority: "compiled-artifact",
     origin,
     suppressedChannels: TENANT_THEME_V1_COVERAGE,
     conflict: message,
+    conflictKind: kind,
     artifact: null,
     mountedArtifact: null,
   };
@@ -689,6 +814,7 @@ export function resolveVisualAuthority(
       return blocked(
         "uncompiled-visual-payload",
         `Tenant "${slug}" carries runtime visual payload but no verified mounted artifact.`,
+        "payload",
       );
     }
     return {
@@ -696,6 +822,7 @@ export function resolveVisualAuthority(
       origin: "no-visual-payload",
       suppressedChannels: NO_SUPPRESSION,
       conflict: null,
+      conflictKind: null,
       artifact: null,
       mountedArtifact: null,
     };
@@ -709,6 +836,7 @@ export function resolveVisualAuthority(
     return blocked(
       "invalid-declaration",
       `Tenant "${slug}" supplied an invalid visual authority declaration.`,
+      "declaration",
     );
   }
   if (declaration.authority === "provider") {
@@ -716,6 +844,7 @@ export function resolveVisualAuthority(
       return blocked(
         "uncompiled-visual-payload",
         `Tenant "${slug}" cannot use context-only provider authority with runtime visual payload.`,
+        "payload",
       );
     }
     return {
@@ -723,6 +852,7 @@ export function resolveVisualAuthority(
       origin: "explicit-context",
       suppressedChannels: NO_SUPPRESSION,
       conflict: null,
+      conflictKind: null,
       artifact: null,
       mountedArtifact: null,
     };
@@ -736,6 +866,7 @@ export function resolveVisualAuthority(
     return blocked(
       "invalid-declaration",
       `Tenant "${slug}" artifact rejected: ${verified.error}.`,
+      "declaration",
     );
   }
   const documentRoot =
@@ -760,6 +891,7 @@ export function resolveVisualAuthority(
       return blocked(
         "unprovable-ssr-mount",
         `Tenant "${slug}" cannot admit a compiled artifact with no mounted DOM: ${receiptFailure}.`,
+        "mount",
       );
     }
     origin = "ssr-emission-receipt";
@@ -772,6 +904,17 @@ export function resolveVisualAuthority(
       return blocked(
         "invalid-declaration",
         `Tenant "${slug}" artifact is not mounted: ${mounted.error}.`,
+        "declaration",
+      );
+    }
+    // The bytes are proven; the SELECTOR they are attached to is a second,
+    // independent question, and it is the one that decides whether they paint.
+    const scoped = verifyTenantThemeArtifactScope(verified.artifact, documentRoot);
+    if (!scoped.ok) {
+      return blocked(
+        "unscoped-mount",
+        `Tenant "${slug}" artifact is mounted but out of scope: ${scoped.error}.`,
+        "scope",
       );
     }
     mountedArtifact = mounted.element;
@@ -795,6 +938,7 @@ export function resolveVisualAuthority(
     return blocked(
       "invalid-declaration",
       `Tenant "${slug}" mixes a compiled artifact with ${conflicts.join(", ")}.`,
+      "declaration",
     );
   }
 
@@ -803,6 +947,7 @@ export function resolveVisualAuthority(
     origin,
     suppressedChannels: verified.artifact.coverage,
     conflict: null,
+    conflictKind: null,
     artifact: verified.artifact,
     mountedArtifact,
   };

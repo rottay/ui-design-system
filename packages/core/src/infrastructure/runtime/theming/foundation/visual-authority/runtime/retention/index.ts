@@ -21,8 +21,11 @@ import {
   auditRetainedTenantThemeArtifact,
   MOUNTED_ARTIFACT_SELECTOR,
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_SCOPE_ATTRIBUTES,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
+  tenantThemeArtifactScopeElement,
+  tenantThemeArtifactScopeFailure,
   verifyMountedTenantThemeArtifact,
 } from "../../foundation/admission";
 
@@ -44,9 +47,25 @@ import {
  */
 const ARTIFACT_REMOVED = "the admitted artifact element was removed from the document";
 
+/**
+ * The scope attributes THIS artifact's selector is evaluated against.
+ *
+ * The observer filter is the closed vocabulary, because a filter is installed
+ * before any per-artifact reasoning; the judgement below narrows it to the
+ * three names this artifact actually depends on.
+ */
+function artifactScopeAttributeNames(artifact: TenantThemeArtifact): Set<string> {
+  return new Set([
+    artifact.scopes.root.attribute,
+    artifact.scopes.vertical.attribute,
+    artifact.scopes.tenant.attribute,
+  ]);
+}
+
 function disqualifyingArtifactMutation(
   record: MutationRecord,
   element: Element,
+  scopeElement: Element | null,
 ): string | null {
   if (record.type === "characterData") {
     return element.contains(record.target)
@@ -54,8 +73,12 @@ function disqualifyingArtifactMutation(
       : null;
   }
   if (record.type === "attributes") {
-    if (record.target !== element) return null;
     const attribute = record.attributeName;
+    // The document root is judged over the whole batch instead, by
+    // `disqualifyingScopeHistory`: one record names one attribute, and the
+    // scope is a condition over three.
+    if (scopeElement && record.target === scopeElement) return null;
+    if (record.target !== element) return null;
     // A same-value write still produces a record. Only a real change moves the
     // element's scope, and the filter already narrows this to the three proof
     // attributes.
@@ -74,13 +97,74 @@ function disqualifyingArtifactMutation(
     : null;
 }
 
+/**
+ * Ask the admission's scope question at every state the root passed THROUGH.
+ *
+ * One record names one attribute; the scope is a condition over three, so it
+ * can only be judged from a reconstructed state. The value after a write is
+ * the `oldValue` of the next write naming that attribute, or what the root
+ * carries now. That replay is what separates two histories with the same end
+ * state: a marker removed and restored inside one batch painted unscoped in
+ * between and revokes, while a rewrite to another value the selector still
+ * matches -- `data-ds-root=""` to `"true"` -- never stopped painting and stays
+ * silent. Comparing raw old against current values judged the presence-only
+ * root marker like the two value-sensitive ones and revoked, permanently, a
+ * document that was in scope throughout.
+ */
+function disqualifyingScopeHistory(
+  records: readonly MutationRecord[],
+  artifact: TenantThemeArtifact,
+  scopeElement: Element | null,
+): string | null {
+  if (!scopeElement) return null;
+  const names = artifactScopeAttributeNames(artifact);
+  const writes = records.filter(
+    (record) =>
+      record.type === "attributes" &&
+      record.target === scopeElement &&
+      record.attributeName !== null &&
+      names.has(record.attributeName),
+  );
+  if (writes.length === 0) return null;
+
+  const state = new Map<string, string | null>();
+  for (const name of names) state.set(name, scopeElement.getAttribute(name));
+  // Walking backwards leaves each attribute holding the value it had before
+  // the FIRST write that named it, which is where the replay starts.
+  for (let index = writes.length - 1; index >= 0; index -= 1) {
+    state.set(writes[index].attributeName as string, writes[index].oldValue);
+  }
+  const read = (attribute: string): string | null =>
+    state.has(attribute)
+      ? state.get(attribute) ?? null
+      : scopeElement.getAttribute(attribute);
+
+  for (let index = 0; index < writes.length; index += 1) {
+    const attribute = writes[index].attributeName as string;
+    let settled = scopeElement.getAttribute(attribute);
+    for (let later = index + 1; later < writes.length; later += 1) {
+      if (writes[later].attributeName === attribute) {
+        settled = writes[later].oldValue;
+        break;
+      }
+    }
+    state.set(attribute, settled);
+    const failure = tenantThemeArtifactScopeFailure(artifact, read);
+    if (failure) {
+      return `the document root no longer carries the admitted artifact scope: ${failure}`;
+    }
+  }
+  return null;
+}
+
 function touchesArtifactProof(
   record: MutationRecord,
   element: Element,
 ): boolean {
-  // `attributes` is filtered to the three artifact attributes, so any such
-  // record is by construction relevant: it either re-labels the admitted
-  // element or promotes some other node into the same tenant scope.
+  // `attributes` is filtered to the artifact proof attributes and the root
+  // scope attributes, so any such record is by construction relevant: it
+  // re-labels the admitted element, promotes some other node into the same
+  // tenant scope, or moves the scope the bytes are nested under.
   if (record.type === "attributes") return true;
   if (element === record.target || element.contains(record.target)) return true;
   const carriesArtifact = (node: Node): boolean => {
@@ -139,6 +223,8 @@ function watchMountedTenantThemeArtifact(
     return INERT_ARTIFACT_WATCHER;
   }
 
+  const scopeElement = tenantThemeArtifactScopeElement(root);
+
   let revoked = false;
   const revoke = (reason: string): void => {
     if (revoked) return;
@@ -149,8 +235,17 @@ function watchMountedTenantThemeArtifact(
 
   const judge = (records: readonly MutationRecord[]): void => {
     if (revoked) return;
+    const scopeLoss = disqualifyingScopeHistory(records, artifact, scopeElement);
+    if (scopeLoss) {
+      revoke(scopeLoss);
+      return;
+    }
     for (const record of records) {
-      const disqualified = disqualifyingArtifactMutation(record, element);
+      const disqualified = disqualifyingArtifactMutation(
+        record,
+        element,
+        scopeElement,
+      );
       if (!disqualified) continue;
       if (disqualified === ARTIFACT_REMOVED) {
         // A removal that leaves another element holding the scope is a
@@ -184,8 +279,37 @@ function watchMountedTenantThemeArtifact(
       TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
       TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
       TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
+      ...TENANT_THEME_ARTIFACT_SCOPE_ATTRIBUTES,
     ],
   });
+
+  // A container passed as the search root resolves its scope to its document's
+  // root element, outside the subtree observed above: the artifact could stop
+  // painting entirely with no record this watch can hear, invisible until some
+  // later seal re-audits the end state. So the scope element is observed in its
+  // own right whenever the supplied root does not already cover it.
+  //
+  // IT WATCHES THE TREE THERE, NOT ONLY THE ATTRIBUTES. A container cannot
+  // observe its own removal from its parent -- that record belongs to the
+  // parent -- so a watch confined to the container hears nothing when the whole
+  // container leaves the document, and the artifact stops painting with no
+  // verdict. Observing the scope element's subtree puts every ancestor of the
+  // container inside the watch, which is the only place that detachment is
+  // audible.
+  const rootNode = root as Node;
+  if (
+    scopeElement &&
+    scopeElement !== rootNode &&
+    !(rootNode.contains?.(scopeElement) ?? false)
+  ) {
+    observer.observe(scopeElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeOldValue: true,
+      attributeFilter: [...TENANT_THEME_ARTIFACT_SCOPE_ATTRIBUTES],
+    });
+  }
 
   // The DOM can have moved between admission and this call. Audit once now so
   // the watch never starts by certifying a mount that is already gone.
@@ -225,7 +349,10 @@ function watchMountedTenantThemeArtifact(
  * blocks on a failed admission.
  *
  * SCOPE, stated honestly. This proves that the ADMITTED NODE stays present,
- * unique in its tenant scope, and byte-exact. It does not, and cannot, prove
+ * unique in its tenant scope, and byte-exact, AND that the document root still
+ * carries the scope those bytes are nested under -- the same two questions
+ * admission asks, re-asked for as long as the declaration is live. It does not,
+ * and cannot, prove
  * that no other stylesheet in the document paints over it -- any script that
  * can reach the DOM can append `!important` rules the DS never sees, and no
  * runtime check can prevent that. One narrower residual is in the same class:

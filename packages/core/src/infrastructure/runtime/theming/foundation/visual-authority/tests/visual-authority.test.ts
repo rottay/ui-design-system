@@ -23,6 +23,7 @@ import {
   verifyTenantThemeArtifactV1,
   type RuntimeVisualPayloadCensus,
 } from '..';
+import { stampTenantThemeScope } from './mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(
   hydrateTenantThemeConfig({
@@ -57,6 +58,7 @@ function mountArtifact(artifact: TenantThemeArtifact = ARTIFACT): HTMLStyleEleme
   style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
   style.textContent = artifact.css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
   return style;
 }
 

@@ -35,6 +35,7 @@ import {
   hydrateTenantThemeConfig,
 } from '@/infrastructure/compilers/composition/tenant-theme';
 import { emitTenantThemeArtifactForSsr } from '@/infrastructure/runtime/theming/foundation/visual-authority';
+import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
 
 /**
  * A genuinely admitted tenant: one compiled artifact, carrying a real payload
@@ -103,6 +104,7 @@ function mountArtifact(artifact: TenantThemeArtifact): void {
   }
   style.textContent = css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
   mountedArtifacts.push(style);
 }
 

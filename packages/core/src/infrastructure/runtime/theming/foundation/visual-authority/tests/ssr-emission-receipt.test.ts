@@ -25,6 +25,7 @@ import {
   resolveVisualAuthority,
   tenantThemeArtifactElementId,
 } from '..';
+import { clearTenantThemeScope, stampTenantThemeScope } from './mount-fixture';
 
 function buildArtifact(slug: string, rowVersion: number): TenantThemeArtifact {
   return compileTenantThemeConfig(
@@ -172,6 +173,7 @@ describe('SSR emission receipt', () => {
     style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, ARTIFACT.verticalKey);
     style.textContent = ARTIFACT.css;
     document.head.appendChild(style);
+    stampTenantThemeScope(ARTIFACT);
 
     try {
       expect(resolveOnServer(ARTIFACT, undefined).origin).toBe('unprovable-ssr-mount');
@@ -187,6 +189,7 @@ describe('SSR emission receipt', () => {
       expect(observed.mountedArtifact).toBe(style);
     } finally {
       style.remove();
+      clearTenantThemeScope();
     }
   });
 

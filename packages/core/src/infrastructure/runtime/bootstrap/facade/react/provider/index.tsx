@@ -135,6 +135,7 @@ import {
 import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { getUnresolvedTenantConfig } from '../../../../tenant/foundation/configuration/defaults';
 import { ResponsiveProvider } from '../../../../responsive';
+import type { DocumentViewportHint } from '../../../../foundation/root-attributes/ssr';
 import { MotionProvider } from '../../../../motion';
 import { AntdConfigProvider } from '../../../../engines/presentation/adapters/antd';
 import {
@@ -149,10 +150,8 @@ import {
   RecipeProfileProvider,
   RECIPE_PROFILE_SCHEMA_VERSION,
 } from '../../../../foundation/recipes/profiles';
-import {
-  RootDensityProvider,
-  deriveDensityPosture,
-} from '../../../../foundation/density';
+import { deriveDensityPosture } from '../../../../foundation/density';
+import { RootDensityProvider } from '../../../../density';
 import {
   resolveExpressiveAxes,
   sanitizeExpressiveOverrides,
@@ -282,6 +281,20 @@ export interface DesignSystemProviderProps {
   skipCssLoading?: boolean;
   /** Base URL for tenant CSS files (only used when skipCssLoading=false) */
   cssBaseUrl?: string;
+  /**
+   * The viewport tier this REQUEST is for: exactly the value handed to
+   * `mountTenantTheme` as `options.viewport`, forwarded to the responsive
+   * runtime this provider mounts.
+   *
+   * WHY THE PROVIDER HAS TO CARRY IT. The mount projects the hint onto `<html>`
+   * so CSS can match it, and it is tempting to let the client read it back from
+   * there. It cannot: React asks the responsive store for its server answer on
+   * a machine with no document AND again while hydrating in the browser, so an
+   * attribute read makes those two answers disagree and React throws the whole
+   * first paint away. Omitted, the tree renders mobile-first on the server --
+   * the design system does not invent a viewport it was never told about.
+   */
+  ssrViewport?: DocumentViewportHint;
 }
 
 /**
@@ -816,6 +829,7 @@ export function DesignSystemProvider({
   onLocaleChange,
   onTenantResolved,
   onError,
+  ssrViewport,
 }: DesignSystemProviderProps): React.ReactElement {
   // ONE partition, shared by the sync path, the async render path, the async
   // resolution callback and every behavior read site below. Deriving it twice
@@ -1130,10 +1144,24 @@ export function DesignSystemProvider({
     verifiedArtifact?.normalizedAppearance as TenantConfig['appearance'] | undefined,
   );
 
+  // Governed, non-visual behavior of a code-owned vertical. The runtime
+  // projection above strips `brandTheme` so static CSS stays the sole visual
+  // emitter; motion, density, icon posture and the recipe-profile SELECTION are
+  // behavior no stylesheet can express, so they arrive here instead of riding
+  // on the published config.
+  const governedBehavior = getCodeOwnedGovernedBehavior(resolvedRuntimeConfig);
+
+  // ONE transport for the profile (D-26): the artifact decides it, and both the
+  // DB path (`normalizedAppearance.recipeProfile`, carried on the resolved
+  // config) and the code-owned path (the identity-keyed behavior slot) read
+  // that one decision. The code-owned branch used to be unreachable, which is
+  // why two verticals with deliberately different profiles were
+  // indistinguishable in the product.
   const recipeProfileSelection = (() => {
-    const dbProfile = resolvedRuntimeConfig.appearance?.recipeProfile;
-    return dbProfile
-      ? { profileId: dbProfile, schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION }
+    const profileId =
+      resolvedRuntimeConfig.appearance?.recipeProfile ?? governedBehavior?.recipeProfile;
+    return profileId
+      ? { profileId, schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION }
       : undefined;
   })();
   // C2b: governed icon posture — dual-source precedence (explicit DB Pro
@@ -1143,12 +1171,6 @@ export function DesignSystemProvider({
   // same value through the per-request box the application fills via
   // `provideServerIconExpressiveProfile` — both integration points share
   // this one pure resolver.
-  // Governed, non-visual behavior of a code-owned vertical. The runtime
-  // projection above strips `brandTheme` so static CSS stays the sole visual
-  // emitter; motion, density and icon posture are BEHAVIOR no stylesheet can
-  // express, so they arrive here instead of riding on the published config.
-  const governedBehavior = getCodeOwnedGovernedBehavior(resolvedRuntimeConfig);
-
   const iconExpressiveProfile = resolveActiveIconExpressiveProfile(
     governedBehavior
       // A local read-model, never published: `resolveActiveIconExpressiveProfile`
@@ -1307,7 +1329,7 @@ export function DesignSystemProvider({
               >
                 <FeatureProvider features={features}>
                   <MotionProvider profile={motionProfile} tenantDial={tenantMotionDial}>
-                    <ResponsiveProvider>
+                    <ResponsiveProvider ssrViewport={ssrViewport}>
                       <CommandRegistryProvider>
                         <AntdConfigProvider>
                           {/*

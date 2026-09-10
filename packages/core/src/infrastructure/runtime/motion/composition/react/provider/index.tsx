@@ -18,6 +18,7 @@ import {
   type MotionContextValue,
 } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
 import { useMotionEnvironment } from '@/infrastructure/runtime/foundation/motion/runtime/browser/environment';
+import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes';
 import { resolveMotionPolicy } from '@/infrastructure/runtime/foundation/motion/policy';
 import { useSystemReducedMotion } from '@/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion';
 
@@ -44,47 +45,21 @@ export interface MotionProviderProps {
   reducedMotion?: boolean;
 }
 
-const forcedReducedMotionProviders = new Set<symbol>();
-let attributeBeforeFirstForcedProvider: string | null | undefined;
 const useIsomorphicLayoutEffect =
   typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
-function syncForcedReducedMotionAttribute(): void {
-  if (typeof document === 'undefined') return;
-
-  if (forcedReducedMotionProviders.size > 0) {
-    document.documentElement.setAttribute('data-ds-motion', 'reduced');
-  } else if (attributeBeforeFirstForcedProvider === null) {
-    document.documentElement.removeAttribute('data-ds-motion');
-    attributeBeforeFirstForcedProvider = undefined;
-  } else if (attributeBeforeFirstForcedProvider !== undefined) {
-    document.documentElement.setAttribute(
-      'data-ds-motion',
-      attributeBeforeFirstForcedProvider,
-    );
-    attributeBeforeFirstForcedProvider = undefined;
-  }
-}
-
+/**
+ * Mark the whole document as reduced while an explicit policy is mounted.
+ *
+ * This used to keep its own registration Set plus a remembered "value before
+ * the first forced provider", which is a second ownership discipline over a
+ * root attribute the SSR projection and the pre-paint script also write. The
+ * claim registry is that discipline, once: overlapping claims resolve by
+ * identity, and the shell-owned value is the baseline a full release restores.
+ */
 function registerForcedReducedMotion(): () => void {
-  const registration = Symbol('forced-reduced-motion-provider');
-  if (
-    forcedReducedMotionProviders.size === 0 &&
-    typeof document !== 'undefined'
-  ) {
-    attributeBeforeFirstForcedProvider =
-      document.documentElement.getAttribute('data-ds-motion');
-  }
-  forcedReducedMotionProviders.add(registration);
-  syncForcedReducedMotionAttribute();
-
-  let registered = true;
-  return () => {
-    if (!registered) return;
-    registered = false;
-    forcedReducedMotionProviders.delete(registration);
-    syncForcedReducedMotionAttribute();
-  };
+  if (typeof document === 'undefined') return () => {};
+  return claimRootAttribute(document.documentElement, 'data-ds-motion', 'reduced');
 }
 
 /**

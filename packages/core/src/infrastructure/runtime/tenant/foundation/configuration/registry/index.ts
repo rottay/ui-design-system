@@ -24,6 +24,7 @@ import type {
 } from '@/foundation/contracts/composition/tenants/themes';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
+import { validateRecipeProfileSelection } from '@/foundation/tokens/ts/presentation/recipe-profiles';
 
 function deepFreeze<T>(value: T): T {
   if (value === null || typeof value !== 'object') {
@@ -75,6 +76,18 @@ export interface CodeOwnedGovernedBehavior {
    * payload -- nothing here can paint.
    */
   readonly decidedChannels?: readonly string[];
+  /**
+   * The validated recipe-profile id this tenant's artifact compiled (D-26).
+   *
+   * `rottay` selects `technical-sharp` and `bithire` `network-professional`;
+   * both were invisible in the product because the projection strips
+   * `appearance` and the provider read the profile only from there, so every
+   * first-party vertical resolved `NONE`. The id is a SELECTION, not paint --
+   * the same id the recipes deriver publishes as its provenance channel -- so
+   * it travels on the identity-keyed behavior slot beside the motion dial
+   * rather than re-entering the config as a visual field.
+   */
+  readonly recipeProfile?: string;
 }
 
 const CODE_OWNED_GOVERNED_BEHAVIOR = new WeakMap<object, CodeOwnedGovernedBehavior>();
@@ -151,12 +164,27 @@ function projectGovernedBehavior(
           ...(entranceDuration === undefined ? {} : { entranceDuration }),
         };
   const decidedChannels = [...declaredChannels(config)];
-  if (motion === undefined && expressive === undefined && decidedChannels.length === 0) {
+  // One validation, one answer: the same validator the recipes deriver calls for
+  // its provenance channel, so the JS selection and the compiled one cannot
+  // disagree about which profile this tenant chose. Fail-closed by the same
+  // rule -- an unknown id or a foreign schema version yields no selection.
+  const selection = validateRecipeProfileSelection(
+    theme?.recipes?.profile,
+    theme?.recipes?.schemaVersion,
+  );
+  const recipeProfile = selection.ok ? selection.profile?.id : undefined;
+  if (
+    motion === undefined &&
+    expressive === undefined &&
+    recipeProfile === undefined &&
+    decidedChannels.length === 0
+  ) {
     return undefined;
   }
   return deepFreeze({
     ...(motion === undefined ? {} : { motion }),
     ...(expressive === undefined ? {} : { expressive }),
+    ...(recipeProfile === undefined ? {} : { recipeProfile }),
     ...(decidedChannels.length === 0 ? {} : { decidedChannels }),
   }) as CodeOwnedGovernedBehavior;
 }

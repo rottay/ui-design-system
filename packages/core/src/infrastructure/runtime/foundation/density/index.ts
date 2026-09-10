@@ -5,6 +5,10 @@
  * (a) stamps a scoped `data-density` posture boundary and (b) exposes that
  * same posture to JS consumers.
  *
+ * The DOCUMENT-ROOT mount is not here. It writes `<html>`, which is the claim
+ * registry's surface, and that registry is this owner's architectural peer;
+ * `runtime/density` owns it one level up, where the edge runs downward.
+ *
  * Visual density is NOT a layout-view preference: table card/list view
  * vocabulary stays in application state; this contract governs coordinated
  * geometry (heights, padding, gap, type scale) only. The 44px coarse-pointer
@@ -18,7 +22,6 @@ import {
   createContext,
   createElement,
   useContext,
-  useEffect,
   type ReactNode,
 } from 'react';
 
@@ -30,11 +33,23 @@ export interface DensityScopeValue {
   readonly posture: DensityPosture;
 }
 
-const DEFAULT_SCOPE: DensityScopeValue = Object.freeze({
+/**
+ * The value every consumer outside any boundary reads.
+ *
+ * Exported because the ROOT mount is a separate owner: it publishes the same
+ * context and must publish this exact identity for `comfortable`, so a root
+ * mount at the default posture is indistinguishable from no mount at all.
+ */
+export const DENSITY_DEFAULT_SCOPE: DensityScopeValue = Object.freeze({
   posture: 'comfortable',
 });
 
-const DensityContext = createContext<DensityScopeValue>(DEFAULT_SCOPE);
+/**
+ * The one density carrier. Exported for `runtime/density`'s root provider,
+ * which owns the document-root claim and therefore cannot live here; every
+ * other consumer reads it through `useDensity`.
+ */
+export const DensityContext = createContext<DensityScopeValue>(DENSITY_DEFAULT_SCOPE);
 
 export interface DensityScopeProps {
   readonly posture: DensityPosture;
@@ -59,7 +74,7 @@ export function DensityScope({
   children,
 }: DensityScopeProps) {
   const value: DensityScopeValue =
-    posture === DEFAULT_SCOPE.posture ? DEFAULT_SCOPE : { posture };
+    posture === DENSITY_DEFAULT_SCOPE.posture ? DENSITY_DEFAULT_SCOPE : { posture };
   return createElement(
     DensityContext.Provider,
     { value },
@@ -96,40 +111,4 @@ export function densityScopeAttributes(
   posture: DensityPosture
 ): Readonly<Record<'data-density', DensityPosture>> {
   return { 'data-density': posture };
-}
-
-export interface RootDensityProviderProps {
-  readonly posture: DensityPosture;
-  readonly children?: ReactNode;
-}
-
-/**
- * Tenant-root density mount: publishes the semantic posture to JS consumers
- * and stamps it on the document element beside the tenant attributes.
- *
- * The root attribute is not a second multiplier. `foundation/base/density/index.css`
- * routes it to `--ds-density-mode-factor`, the same semantic channel the
- * Appearance and BrandTheme compilers write, and applies the separate local
- * factor only to non-root boundaries. Two writers of one channel resolve by
- * cascade to a single value, so a compiled tenant posture and this attribute
- * agree instead of composing; nested boundaries use `DensityScope`, whose
- * factor stays relative to whatever the global plane resolved to.
- */
-export function RootDensityProvider({
-  posture,
-  children,
-}: RootDensityProviderProps) {
-  useEffect(() => {
-    const element = document.documentElement;
-    const previous = element.getAttribute('data-density');
-    element.setAttribute('data-density', posture);
-    return () => {
-      if (previous === null) element.removeAttribute('data-density');
-      else element.setAttribute('data-density', previous);
-    };
-  }, [posture]);
-
-  const value: DensityScopeValue =
-    posture === 'comfortable' ? DEFAULT_SCOPE : { posture };
-  return createElement(DensityContext.Provider, { value }, children);
 }

@@ -46,6 +46,7 @@ import {
 } from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import { DensityScope, useDensity } from '../index';
+import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
 
 /**
  * The provider render carries only what it MEASURES.
@@ -132,6 +133,7 @@ function mountPostureArtifact(): void {
   style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, POSTURE_ARTIFACT.verticalKey);
   style.textContent = POSTURE_ARTIFACT.css;
   document.head.appendChild(style);
+  stampTenantThemeScope(POSTURE_ARTIFACT);
 }
 
 function PostureProbe() {

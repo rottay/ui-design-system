@@ -37,6 +37,7 @@ import {
   hydrateTenantThemeConfig,
   validateTenantThemeDocument,
 } from '..';
+import { clearTenantThemeScope, stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
 
 const MANAGEMENT_IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_the_management',
@@ -131,12 +132,14 @@ function mountArtifact(artifact: TenantThemeArtifact): void {
   }
   style.textContent = css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
   mountedArtifacts.push(style);
 }
 
 afterEach(() => {
   cleanup();
   while (mountedArtifacts.length > 0) mountedArtifacts.pop()?.remove();
+  clearTenantThemeScope();
 });
 
 describe('C1b expressive envelope — two-system acid test', () => {

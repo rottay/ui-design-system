@@ -16,8 +16,10 @@ import {
   prepareMountedTenantThemeArtifactClaim,
   resetVisualAuthorityDiagnostics,
   retainMountedTenantThemeArtifact,
+  verifyMountedTenantThemeArtifact,
 } from '..';
 import type { PreparedTenantThemeArtifactClaim } from '..';
+import { clearTenantThemeScope, stampTenantThemeScope } from './mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(
   hydrateTenantThemeConfig({
@@ -44,6 +46,7 @@ function mountArtifact(artifact: TenantThemeArtifact = ARTIFACT): HTMLStyleEleme
   style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, artifact.verticalKey);
   style.textContent = artifact.css;
   document.head.appendChild(style);
+  stampTenantThemeScope(artifact);
   return style;
 }
 
@@ -67,6 +70,13 @@ describe('retained mount proof', () => {
   afterEach(() => {
     stop?.();
     stop = null;
+    // The scope drills below move `<html>`, and every suite in this file shares
+    // one document: a leaked stamp or a leaked style is a second mount for the
+    // next describe.
+    document.head.innerHTML = '';
+    clearTenantThemeScope();
+    document.documentElement.removeAttribute('data-theme');
+    document.documentElement.removeAttribute('data-density');
     vi.restoreAllMocks();
   });
 
@@ -292,6 +302,291 @@ describe('retained mount proof', () => {
 
     expect(revocations).toEqual([]);
   });
+
+  /**
+   * The scope half of the admission, re-asked.
+   *
+   * Admission proves two things: these are the artifact's exact bytes, and the
+   * document root carries the selector those bytes are nested under. A retained
+   * proof that re-asked only the first was strictly weaker than the admission
+   * it held open -- stripping `data-ds-root` leaves every byte pristine and
+   * stops the whole artifact from painting, and the audit still answered
+   * `null`.
+   */
+  it('revokes when the document root loses the artifact scope', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.removeAttribute('data-ds-root');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(
+      /the document root no longer carries the admitted artifact scope/,
+    );
+    expect(auditRetainedTenantThemeArtifact(ARTIFACT, style)).toMatch(
+      /the document root does not carry data-ds-root/,
+    );
+  });
+
+  it('revokes when the root is relabelled into another tenant', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-tenant', 'someone-else');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(
+      /the document root no longer carries the admitted artifact scope/,
+    );
+  });
+
+  it('revokes a scope removal that is undone before the records are delivered', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    // The document painted unscoped for the whole window in between, which is
+    // the same reason a byte rewrite is judged from the record and not from
+    // the state it settles into.
+    document.documentElement.removeAttribute('data-vertical');
+    document.documentElement.setAttribute('data-vertical', ARTIFACT.verticalKey);
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+  });
+
+  it('does not revoke when a scope attribute is rewritten to the value it had', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-tenant', ARTIFACT.slug);
+    await settle();
+
+    expect(revocations).toEqual([]);
+  });
+
+  it('does not revoke when an unrelated root attribute changes', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-density', 'compact');
+    await settle();
+
+    expect(revocations).toEqual([]);
+  });
+
+  it('revokes immediately when the scope is already gone at watch time', () => {
+    const style = mountArtifact();
+    document.documentElement.removeAttribute('data-ds-root');
+    const revocations = retain(style);
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(/the document root does not carry data-ds-root/);
+  });
+
+  /**
+   * A VALID REWRITE IS NOT A LOSS.
+   *
+   * The root marker is judged by presence -- `:where([data-ds-root])` -- so
+   * `""` and `"true"` are the same scope and the artifact never stopped
+   * painting. The watch used to compare the record's raw old value against the
+   * current one, which treats a presence-only marker like the two
+   * value-sensitive ones and revoked, permanently, a document that was in
+   * scope for the whole window. Nothing about a re-stamp is tampering.
+   */
+  it('stays silent when the root marker is rewritten to another valid value', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-ds-root', 'true');
+    await settle();
+
+    expect(revocations).toEqual([]);
+    expect(auditRetainedTenantThemeArtifact(ARTIFACT, style)).toBeNull();
+  });
+
+  it('stays silent when a churned root marker is restored to a valid value', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    // Two writes, both landing on a value the selector matches: the presence
+    // the artifact depends on was never absent between them.
+    document.documentElement.setAttribute('data-ds-root', 'true');
+    document.documentElement.setAttribute('data-ds-root', '');
+    await settle();
+
+    expect(revocations).toEqual([]);
+  });
+
+  /**
+   * The other direction of the same law, so the silence above is not silence
+   * about everything. Losing the marker between two valid values is a window
+   * in which the document painted unscoped, and the end state hides it.
+   */
+  it('still revokes a root marker removed between two valid values', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.removeAttribute('data-ds-root');
+    document.documentElement.setAttribute('data-ds-root', 'true');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(/does not carry data-ds-root/);
+  });
+
+  it('still revokes a tenant marker corrupted and restored in one batch', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-tenant', 'someone-else');
+    document.documentElement.setAttribute('data-tenant', ARTIFACT.slug);
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(/carries data-tenant="someone-else"/);
+  });
+});
+
+/**
+ * A SUPPLIED CONTAINER IS NOT THE SCOPE.
+ *
+ * `tenantThemeArtifactScopeElement` resolves any search root to its document's
+ * root element, because that is where every artifact selector is evaluated. A
+ * watch armed on a container therefore has its scope OUTSIDE the subtree it
+ * observes: stripping `data-ds-root` from `<html>` stops every rule in the
+ * artifact from matching and produced no record this watch could hear. The
+ * loss surfaced only if some later commit happened to seal and re-audit the
+ * end state -- which is a report, not a gate, and on a tree that never seals
+ * it is not even a report.
+ *
+ * Rejecting the container root at admission was the alternative and was not
+ * taken: admission accepts it today, the mount fixture and any host with its
+ * own render root rely on it, and the resolver's answer is CORRECT -- the
+ * scope really is the document root. The gap was never the root form, only
+ * which nodes the observer was attached to. So retention now watches the
+ * resolved scope element in its own right whenever the supplied root does not
+ * already contain it, and the verdict is continuous rather than deferred.
+ *
+ * A container that is not IN the document is the one form that is refused, and
+ * for the opposite reason: there the resolver's answer would be wrong. The
+ * bytes are not in any stylesheet the document consults, so nothing they
+ * declare paints -- while the scope half of the proof would be answered by the
+ * real `documentElement`, which they are not attached to. That pair certifies
+ * a paint that does not exist.
+ */
+describe('retained proof armed on a container', () => {
+  let stop: (() => void) | null = null;
+
+  afterEach(() => {
+    stop?.();
+    stop = null;
+    document.body.innerHTML = '';
+    document.head.innerHTML = '';
+    clearTenantThemeScope();
+  });
+
+  function mountInContainer(): { container: HTMLElement; style: HTMLStyleElement } {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const style = document.createElement('style');
+    style.setAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE, ARTIFACT.digest);
+    style.setAttribute(TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE, ARTIFACT.slug);
+    style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, ARTIFACT.verticalKey);
+    style.textContent = ARTIFACT.css;
+    container.appendChild(style);
+    stampTenantThemeScope(ARTIFACT);
+    return { container, style };
+  }
+
+  function retainIn(container: ParentNode, style: HTMLStyleElement): string[] {
+    const revocations: string[] = [];
+    stop = retainMountedTenantThemeArtifact(
+      ARTIFACT,
+      style,
+      (conflict) => revocations.push(conflict),
+      container,
+    );
+    return revocations;
+  }
+
+  it('admits a container root whose scope resolves to the document root', () => {
+    const { container, style } = mountInContainer();
+
+    expect(retainIn(container, style)).toEqual([]);
+    expect(auditRetainedTenantThemeArtifact(ARTIFACT, style, container)).toBeNull();
+  });
+
+  it('revokes an html scope loss it cannot see inside the container', async () => {
+    const { container, style } = mountInContainer();
+    const revocations = retainIn(container, style);
+
+    // Nothing inside the container moved. The only mutation is on `<html>`,
+    // outside the observed subtree -- which is exactly the case that used to
+    // pass unheard.
+    document.documentElement.removeAttribute('data-ds-root');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(
+      /the document root no longer carries the admitted artifact scope/,
+    );
+  });
+
+  it('revokes an html tenant relabel from the observer, not from a seal', async () => {
+    const { container, style } = mountInContainer();
+    const revocations = retainIn(container, style);
+
+    document.documentElement.setAttribute('data-tenant', 'someone-else');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+  });
+
+  it('refuses a byte-perfect mount whose container is not in the document', () => {
+    const { container, style } = mountInContainer();
+    container.remove();
+
+    const mounted = verifyMountedTenantThemeArtifact(ARTIFACT, container);
+
+    expect(mounted.ok).toBe(false);
+    expect(mounted.ok === false && mounted.error).toMatch(
+      /not attached to the document/,
+    );
+    // The retained audit and a fresh arming answer the same way: a detached
+    // mount is not a weaker proof, it is no proof.
+    expect(auditRetainedTenantThemeArtifact(ARTIFACT, style, container)).toMatch(
+      /not attached to the document/,
+    );
+    expect(retainIn(container, style)).toHaveLength(1);
+  });
+
+  it('revokes when the container leaves the document after admission', async () => {
+    const { container, style } = mountInContainer();
+    const revocations = retainIn(container, style);
+
+    // Nothing inside the container moved, and `<html>` still carries the scope.
+    // The container cannot hear its own removal -- that record belongs to its
+    // parent -- so this is the case that stayed silently admitted.
+    container.remove();
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(/removed from the document/);
+  });
+
+  it('stays silent for container churn and for a valid root re-stamp', async () => {
+    const { container, style } = mountInContainer();
+    const revocations = retainIn(container, style);
+
+    container.appendChild(document.createElement('div'));
+    document.documentElement.setAttribute('data-ds-root', 'true');
+    await settle();
+
+    expect(revocations).toEqual([]);
+  });
 });
 
 /**
@@ -305,6 +600,7 @@ describe('armed artifact watch', () => {
     resetVisualAuthorityDiagnostics();
     document.head.innerHTML = '';
     document.body.innerHTML = '';
+    clearTenantThemeScope();
   });
 
   it('returns one stable handle for one identity in one document', () => {
@@ -528,6 +824,7 @@ describe('prepared artifact claim', () => {
   afterEach(() => {
     resetVisualAuthorityDiagnostics();
     document.head.innerHTML = '';
+    clearTenantThemeScope();
   });
 
   /**
@@ -644,6 +941,46 @@ describe('prepared artifact claim', () => {
 
     claim.seal();
     expect(claim.revocation()).toMatch(/removed from the document/);
+  });
+
+  /**
+   * The reproduced defect, on the path that matters most.
+   *
+   * The seal is what a React commit consults before the frame paints. A scope
+   * that disappears between admission and that seal used to survive it
+   * untouched: `revocation()` answered null, the retained audit answered null,
+   * and the provider therefore vouched for a live tree in which every rule of
+   * the artifact had stopped matching.
+   */
+  it('reports a scope removed before the seal, on the caller stack', () => {
+    const style = mountArtifact();
+    const claim = prepareMountedTenantThemeArtifactClaim(ARTIFACT, style);
+    claim.commit();
+
+    document.documentElement.removeAttribute('data-ds-root');
+
+    // The observer has not reported yet: this is the seal's verdict.
+    expect(claim.revocation()).toBeNull();
+
+    claim.seal();
+    expect(claim.revocation()).toMatch(
+      /the document root no longer carries the admitted artifact scope/,
+    );
+  });
+
+  /**
+   * The end-state leg of the same law. A scope stripped BEFORE the watch was
+   * armed produces no record this observer can attribute, so the seal's second
+   * question -- what IS -- is the only one that can catch it.
+   */
+  it('reports a scope that was already gone when the claim was armed', () => {
+    const style = mountArtifact();
+    document.documentElement.removeAttribute('data-vertical');
+    const claim = prepareMountedTenantThemeArtifactClaim(ARTIFACT, style);
+    claim.commit();
+
+    claim.seal();
+    expect(claim.revocation()).toMatch(/the document root carries data-vertical/);
   });
 
   it('answers a later claim with the standing verdict, without arming it', async () => {

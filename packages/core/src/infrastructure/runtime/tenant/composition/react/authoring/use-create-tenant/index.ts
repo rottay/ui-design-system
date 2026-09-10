@@ -14,6 +14,22 @@
  * verbatim. What an onboarding flow previews is therefore byte-identical to
  * what the tenant will be served.
  *
+ * THE SANCTIONED AUTHORING EXCEPTION. The mount law says the runtime consumes
+ * an artifact and does not recompile one. This hook does compile one, on the
+ * client, and that is deliberate rather than an oversight: it compiles a DRAFT
+ * a human is editing, so it answers "what would this tenant look like?" — a
+ * question no existing artifact can answer, because the artifact does not exist
+ * yet. That is a different question from the one hydration asks, and the law is
+ * about hydration: mounting `DesignSystemProvider`, resolving visual authority,
+ * and painting a tenant that already has a compiled artifact. No provider mount
+ * reaches this module, and an application that never authors a tenant never
+ * loads it.
+ *
+ * The boundary is not a promise made in prose. `tests/compile-door-census.test.ts`
+ * pins every runtime module that imports a compiler to exactly two entries —
+ * the server mount and this hook — and asserts this is the only CLIENT one, so
+ * a third door cannot appear without turning that census red.
+ *
  * @example
  * ```tsx
  * function TenantOnboarding() {

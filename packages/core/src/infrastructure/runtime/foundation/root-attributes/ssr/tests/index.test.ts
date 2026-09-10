@@ -9,7 +9,10 @@
 
 import { describe, it, expect } from 'vitest';
 
+import { DENSITY_POSTURES } from '@/infrastructure/runtime/foundation/density';
+
 import {
+  DOCUMENT_DENSITY_POSTURES,
   buildThemePrepaintScript,
   resolveDocumentRootAttributes,
 } from '..';
@@ -128,5 +131,38 @@ describe('buildThemePrepaintScript', () => {
     expect(() =>
       new Function('document', 'window', script)({ documentElement: root }, {}),
     ).not.toThrow();
+  });
+});
+
+/**
+ * The root density channel's vocabulary, kept identical to the runtime's.
+ *
+ * `runtime/foundation/density` owns the React runtime for this posture and is
+ * this owner's architectural PEER, so neither may import the other. The
+ * vocabulary is therefore declared twice and proven equal here — a test may
+ * cross the boundary that production code may not.
+ */
+describe('the root density channel and the density runtime declare one vocabulary', () => {
+  it('admits exactly the postures the runtime owner declares', () => {
+    expect([...DOCUMENT_DENSITY_POSTURES].sort()).toEqual([...DENSITY_POSTURES].sort());
+  });
+
+  it('projects every one of them onto the root', () => {
+    for (const posture of DOCUMENT_DENSITY_POSTURES) {
+      expect(
+        resolveDocumentRootAttributes({
+          themeMode: 'light',
+          engine: 'modern',
+          locale: 'en',
+          density: posture,
+        })['data-density'],
+      ).toBe(posture);
+    }
+  });
+
+  it('stamps nothing when the request declared no posture', () => {
+    expect(
+      resolveDocumentRootAttributes({ themeMode: 'light', engine: 'modern', locale: 'en' }),
+    ).not.toHaveProperty('data-density');
   });
 });

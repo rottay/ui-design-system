@@ -146,6 +146,7 @@ export type {
   RuntimeVisualPayloadCensus,
   VisualAuthorityResolution,
   VisualAuthorityOrigin,
+  VisualAuthorityConflictKind,
 } from '../../infrastructure/runtime/theming/foundation/visual-authority';
 export {
   isCodeOwnedTenantConfig,
@@ -445,8 +446,11 @@ export type {
 export {
   resolveDocumentRootAttributes,
   buildThemePrepaintScript,
+  type DocumentDensityPosture,
+  type DocumentMotionPosture,
   type DocumentRootAttributes,
   type DocumentRootAttributesInput,
+  type DocumentViewportHint,
   type ResolvedTheme,
   type TenantThemeMode,
 } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
@@ -475,22 +479,21 @@ export {
  * (`runtime-tenant-theme/{ssr,contracts,artifact-resolution}`); the codemod
  * `scripts/maintain/mount-tenant-theme` performs the replacement.
  *
- * DATED EXCEPTION, AND WHAT IT COVERS. The BODY is a thin adapter over the
- * pipeline exported above and emits no byte that pipeline does not already
- * emit; WO-EMI-02 replaces that body with the real mount and deletes the
- * adapter. The SIGNATURE is not part of the exception and does not change:
- * `(intent, options?)`, the whole of `MountTenantThemeOptions` — `themeMode`,
- * `autoFallback`, `locale` and `artifact` — and the return shape all survive
- * that landing, so an application that calls it today is not touched by it.
- * `artifact` in particular stays accepted, and the real mount verifies the
- * supplied artifact against its own compile rather than ignoring it. Any input
- * here is retired only by a versioned breaking change with a codemod (the 3.0
- * changeset of WO-RET-01 under the WO-CON-05 protocol).
+ * It proves BYTES AND SCOPE: the projection it returns is verified against the
+ * selector the returned bytes are nested under, so a mount that could not paint
+ * is refused here instead of reported by the browser as an unstyled page.
+ *
+ * THE SIGNATURE IS FROZEN: `(intent, options?)`, the whole of
+ * `MountTenantThemeOptions` — `themeMode`, `autoFallback`, `locale`, `artifact`,
+ * plus the additive `viewport`, `motion` and `density` — and the four returned
+ * fields. Any input here is retired only by a versioned breaking change with a
+ * codemod (the 3.0 changeset of WO-RET-01 under the WO-CON-05 protocol).
  */
 export { mountTenantTheme } from '../../infrastructure/runtime/theming/composition/mount';
 export type {
   MountTenantThemeOptions,
   MountedTenantTheme,
   MountedThemeHydrationProof,
+  MountedThemeScopeProof,
   MountedThemeStyleElement,
 } from '../../infrastructure/runtime/theming/composition/mount';

@@ -35,7 +35,7 @@ const GOVERNED_ROOT_ATTRIBUTES: Readonly<Record<string, string>> = {
   'data-tenant': 'infrastructure/runtime/tenant/composition/react/provider/index.tsx',
   'data-theme': 'infrastructure/runtime/theming/composition/react/provider/index.tsx',
   'data-engine': 'infrastructure/runtime/engines/composition/react/provider/index.tsx',
-  'data-density': 'infrastructure/runtime/foundation/density/index.ts',
+  'data-density': 'infrastructure/runtime/density/composition/react/provider/index.tsx',
   // `lang`/`dir` used to be exempt from this census on the grounds that they
   // were written through the reflected IDL properties and so could only be
   // proven behaviourally. That exemption is gone: they are ordinary claims on
