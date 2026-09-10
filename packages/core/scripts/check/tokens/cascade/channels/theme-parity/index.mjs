@@ -283,30 +283,59 @@ function walkOwners(dir, out = []) {
 }
 
 /**
- * Comments and string context removed, so a module specifier that only appears
- * in prose cannot be read as a dependency. This is a string-aware scan rather
- * than a regex because `//` occurs legitimately inside literals (URLs), and a
- * naive strip truncates a file mid-literal. A missed strip errs toward losing a
- * real import, which can only ADD a declared-but-unemitted finding; it can
- * never certify a channel that nothing productive emits.
+ * Source reduced to CODE: every comment removed and every literal replaced by an
+ * opaque placeholder, so text that merely LOOKS like an import cannot be read as
+ * one. `const doc = "import { emit } from './__generated__'"` is a string, and a
+ * string binds nothing when the file runs, so it must not certify an emission --
+ * otherwise the productivity test is defeated by quoting the import it refuses.
+ *
+ * The scan is character-aware rather than a regex because `//` occurs
+ * legitimately inside literals (URLs) and a naive strip truncates a file
+ * mid-literal. A quoted literal cannot span a line, so a stray quote resyncs at
+ * the newline instead of swallowing the file; a regex literal is skipped whole,
+ * so the quotes inside a character class never open one; a template keeps its
+ * `${}` expressions as code while its text becomes a placeholder that no
+ * specifier read accepts. Every failure mode of the scan loses a real import,
+ * which can only ADD a declared-but-unemitted finding; none of them can certify
+ * a channel that nothing productive emits.
  */
-function stripComments(source) {
+const TEMPLATE_TEXT = '\u0000T\u0000';
+const REGEX_MAY_START_AFTER =
+  /(?:^|[({[,;:=!&|?+\-*/%~^<>]|\b(?:return|typeof|case|in|of|do|else|yield|await|new|void|delete))\s*$/;
+
+function skipRegexLiteral(source, start) {
+  let inClass = false;
+  for (let index = start + 1; index < source.length; index += 1) {
+    const character = source[index];
+    if (character === '\\') index += 1;
+    else if (character === '\n') break;
+    else if (character === '[') inClass = true;
+    else if (character === ']') inClass = false;
+    else if (character === '/' && !inClass) return index + 1;
+  }
+  return start + 1;
+}
+
+function tokenize(source) {
+  const quoted = [];
+  const templates = [];
+  let inTemplateText = false;
   let out = '';
-  let quote = null;
-  for (let index = 0; index < source.length; index += 1) {
+  let index = 0;
+  while (index < source.length) {
     const character = source[index];
     const next = source[index + 1];
-    if (quote) {
-      out += character;
-      if (character === '\\') {
-        out += next ?? '';
+    if (inTemplateText) {
+      if (character === '\\') index += 2;
+      else if (character === '`') {
+        templates.pop();
+        inTemplateText = false;
         index += 1;
-      } else if (character === quote) quote = null;
-      continue;
-    }
-    if (character === "'" || character === '"' || character === '`') {
-      quote = character;
-      out += character;
+      } else if (character === '$' && next === '{') {
+        templates[templates.length - 1] = 0;
+        inTemplateText = false;
+        index += 2;
+      } else index += 1;
       continue;
     }
     if (character === '/' && next === '/') {
@@ -317,13 +346,52 @@ function stripComments(source) {
     if (character === '/' && next === '*') {
       index += 2;
       while (index < source.length && !(source[index] === '*' && source[index + 1] === '/')) index += 1;
-      index += 1;
+      index += 2;
       out += ' ';
       continue;
     }
+    if (character === '/' && REGEX_MAY_START_AFTER.test(out)) {
+      index = skipRegexLiteral(source, index);
+      out += ' ';
+      continue;
+    }
+    if (character === "'" || character === '"') {
+      let value = '';
+      let scan = index + 1;
+      for (; scan < source.length && source[scan] !== '\n' && source[scan] !== character; scan += 1) {
+        if (source[scan] === '\\') {
+          value += source[scan] + (source[scan + 1] ?? '');
+          scan += 1;
+          continue;
+        }
+        value += source[scan];
+      }
+      quoted.push(value);
+      out += `\u0000Q${quoted.length - 1}\u0000`;
+      index = source[scan] === character ? scan + 1 : scan;
+      continue;
+    }
+    if (character === '`') {
+      templates.push(0);
+      inTemplateText = true;
+      out += TEMPLATE_TEXT;
+      index += 1;
+      continue;
+    }
+    if (templates.length && character === '{') templates[templates.length - 1] += 1;
+    else if (templates.length && character === '}') {
+      if (templates[templates.length - 1] === 0) {
+        inTemplateText = true;
+        out += TEMPLATE_TEXT;
+        index += 1;
+        continue;
+      }
+      templates[templates.length - 1] -= 1;
+    }
     out += character;
+    index += 1;
   }
-  return out;
+  return { text: out, quoted };
 }
 
 /**
@@ -346,33 +414,47 @@ function bindsAtRuntime(clause) {
 }
 
 /**
+ * `import(...)` in a TYPE position is an import type query, not a load.
+ * TypeScript erases `typeof import('./x')`, an annotation, a union member, a
+ * generic argument and an `extends` / `keyof` / `satisfies` operand before
+ * anything runs, and it erases a type alias whole, so the alias right-hand side
+ * is removed before the read. A bare `import('./x')` in VALUE position does load
+ * the module and still counts -- the distinction is what runs, not the keyword.
+ */
+const TYPE_QUERY_BEFORE = /(?:\btypeof|\bkeyof|\bextends|\bsatisfies|[:<|&])\s*$/;
+const TYPE_ALIAS = /\btype\s+[A-Za-z_$][\w$]*\s*(?:<[^>]*>)?\s*=[^;]*;/g;
+
+/**
  * Relative module specifiers a source names AS A VALUE, as the owner files they
  * could resolve to.
  *
  * Productivity is a runtime question, so it is answered with runtime semantics:
- * only an import that survives type erasure makes a generated emitter
- * productive. A mention inside a comment, and an `import type` / `export type`
- * that is erased before anything runs, leave the generated owner exactly as
- * unimported as if the line were absent -- and admitting either would let a
- * comment suppress a real declared-but-unemitted finding. Value imports,
- * side-effect imports, value re-exports, `require` and dynamic `import()` all
- * bind at runtime and all count.
+ * only a reference that survives type erasure makes a generated emitter
+ * productive. A mention inside a comment or a literal, an `import type` /
+ * `export type`, and an import type query leave the generated owner exactly as
+ * unimported as if the line were absent -- and admitting any of them would let
+ * prose suppress a real declared-but-unemitted finding. Value imports,
+ * side-effect imports, value re-exports, `require` and a value-position dynamic
+ * `import()` all bind at runtime and all count.
  */
 function importedOwners(file) {
   const targets = new Set();
-  const text = stripComments(readFileSync(file, 'utf8'));
+  const tokenized = tokenize(readFileSync(file, 'utf8'));
+  const text = tokenized.text.replace(TYPE_ALIAS, ' ');
+  const quotedAt = (index) => tokenized.quoted[Number(index)];
   const specifiers = [];
   for (const match of text.matchAll(
-    /\b(?:import|export)\s+(type\s+)?([^'"]*?)\bfrom\s*['"]([^'"]+)['"]/g,
+    /\b(?:import|export)\s+(type\s+)?([^\u0000]*?)\bfrom\s*\u0000Q(\d+)\u0000/g,
   )) {
     if (match[1] || !bindsAtRuntime(match[2])) continue;
-    specifiers.push(match[3]);
+    specifiers.push(quotedAt(match[3]));
   }
-  for (const match of text.matchAll(/\b(?:import|require)\s*\(\s*['"]([^'"]+)['"]/g)) {
-    specifiers.push(match[1]);
+  for (const match of text.matchAll(/\b(?:import|require)\s*\(\s*\u0000Q(\d+)\u0000/g)) {
+    if (TYPE_QUERY_BEFORE.test(text.slice(0, match.index))) continue;
+    specifiers.push(quotedAt(match[1]));
   }
-  for (const match of text.matchAll(/\bimport\s*['"]([^'"]+)['"]/g)) {
-    specifiers.push(match[1]);
+  for (const match of text.matchAll(/\bimport\s*\u0000Q(\d+)\u0000/g)) {
+    specifiers.push(quotedAt(match[1]));
   }
   for (const specifier of specifiers) {
     if (!specifier.startsWith('.')) continue;

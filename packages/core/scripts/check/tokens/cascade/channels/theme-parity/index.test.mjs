@@ -930,6 +930,20 @@ export type GeneratedVars = typeof generatedVars;
     "an import type": `import type { GeneratedVars } from "./__generated__";\n`,
     "an inline type specifier": `import { type GeneratedVars } from "./__generated__";\n`,
     "an export type re-export": `export type { GeneratedVars } from "./__generated__";\n`,
+    // Text that PARSES like an import is still text. A literal is data the
+    // module never executes, so quoting the import — in either quote, or in a
+    // template — must leave the owner as unimported as leaving the line out.
+    "a quoted import statement": `const DOC = "import { generatedVars } from './__generated__';";\n`,
+    "a quoted import with the quotes swapped": `const DOC = 'import { generatedVars } from "./__generated__";';\n`,
+    "a quoted dynamic import": `const DOC = "await import('./__generated__')";\n`,
+    "a template literal naming the import": "const DOC = `import { generatedVars } from './__generated__';`;\n",
+    "a quoted import after a regex literal holding quotes": `const RE = /['"]\\/;/;\nconst DOC = "import { generatedVars } from './__generated__';";\n`,
+    // An import TYPE QUERY is erased with the type that holds it: `typeof
+    // import(...)`, an alias right-hand side and an annotation all describe the
+    // module's shape and none of them loads it.
+    "a typeof import type query": `type GeneratedModule = typeof import("./__generated__");\nexport type { GeneratedModule };\n`,
+    "an import type query in a type alias": `type Vars = import("./__generated__").GeneratedVars;\nexport type { Vars };\n`,
+    "an import type query in an annotation": `export function take(mod: import("./__generated__").GeneratedVars) { return mod; }\n`,
   };
   for (const [shape, reference] of Object.entries(erased)) {
     const outcome = underReference(reference);
@@ -947,6 +961,14 @@ export type GeneratedVars = typeof generatedVars;
     "a star re-export": `export * from "./__generated__";\n`,
     "a dynamic import": `const load = () => import("./__generated__");\n`,
     "a require": `const generated = require("./__generated__");\n`,
+    // The positive control for the type-query rule: a dynamic `import()` in
+    // VALUE position does load the module, wherever the expression sits.
+    "an awaited dynamic import": `export async function load() { return await import("./__generated__"); }\n`,
+    "a dynamic import in an object property": `export const registry = { load: () => import("./__generated__") };\n`,
+    // And the decoys must not SUPPRESS a real import that shares the file.
+    "a real import beside a quoted decoy": `const DOC = "import { x } from './nowhere';";\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a regex literal holding quotes": `const RE = /['"]\\/;/;\nimport { generatedVars } from "./__generated__";\n`,
+    "a real import after a URL in a line comment": `// see https://example.com/generated\nimport { generatedVars } from "./__generated__";\n`,
   };
   for (const [shape, reference] of Object.entries(binding)) {
     const outcome = underReference(reference);
