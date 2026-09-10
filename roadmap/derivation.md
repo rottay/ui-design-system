@@ -92,6 +92,28 @@ Lane-wide rules (binding on every WO):
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-DER-04 (Typography roles, density, rhythm, elevation and motion as derived families) exactly as specified in `roadmap/derivation.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-30, F-31, F-36, F-26, F-35, F-21, F-84 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
 
+### AMENDMENT 2026-09-10 — close-scope of the derivation roots (owner-approved; audit 96 PRD-01)
+
+The owner approved separating **root closure**, **family adoption** and **fleet certification**, preserving every requirement and threshold. The dependency cycle was textual: the roots demanded fleet evidence and the cuts demanded the roots `done`.
+
+**The rule.** WO-DER-02/03/04 each close when their *root scope* is satisfied: (1) the single admission door with closed domains and named refusals, tier by direct authorship only (R1 law); (2) real derivation — typed route to the canonical owner, one authority per value, correct precedence (including pill vs an allowed radius override), provenance preserved across preview AND publication (R2 law); (3) truthful producer/emission evidence, with any known blind spot named as a residual with an owner; (4) negative controls at the compiler level. A root does **not** close with its own promised decisions still inert, nor with wrong precedence. Family adoption is proven per family in its cut (WO-FAM-01..13, WO-FAM-14 by its own chain); fleet causality in WO-EVI-02/EVI-05, standing thresholds untouched (the >= 10-family probe requirement, the >= 80 % by-axis fleet bar, the owner-decided floors of `kit-2026-09.md` §5b).
+
+| Obligation | Was demanded of | Final owner |
+| --- | --- | --- |
+| F-10 `skins.stateGoverned` (16/123) + real emphasis probe | WO-DER-02 unbounded | WO-FAM-01..13 per family; WO-EVI-02 fleet. WO-DER-02 keeps per-artifact material coverage + the instrument |
+| F-30 Modern skins consume typography roles | WO-DER-04 | Family cuts. WO-DER-04 keeps the derived typography family and its gates (landed) |
+| F-31 `--ds-transition-*` = 0 | WO-DER-04 | Frozen engines: explicit exemption (below). Modern/family-cuts: the cuts. WO-DER-04 keeps the motion vocabulary with rest values (landed) |
+| F-36 `LegacySizeAlias` = 0 outside Classic | WO-DER-04 | Family cuts (26 sites in primitives/engine) |
+| F-35 breakpoint literals outside the contract | WO-DER-04 | Widened domain gate (gatefix lot, merged) + cuts for the 16 literals in Modern skins/bridge |
+| Admitted-but-unlit decisions: `typography.role-weights`, `typography.numeric`, `shape.nesting`, `shape.control-height` | unowned | Bounded connection lots before WO-FAM-01, under the root that promised each. (`surfaces.border-style` and `motion.character` connected: connfix lot `a5da15828`; `palette.neutral-temperature` and `palette.contrast-posture`: palette lot `4624e4555`) |
+| CC-02 responsive metadata stale | — | Gatefix lot (catalog, merged) + real adoption in WO-INV-07 |
+| pill precedence vs allowed radius override | WO-DER-03 | Bounded shape lot before WO-FAM-01: painted value and provenance agree, or the combination is refused by name |
+| Palette derivers (tints/inks/semantic, neutral-temperature, contrast-posture, accent ramp) | WO-DER-03 | Palette lot `4624e4555` (accent ramp removed by evidence; `ramps.accent` authorability routed to WO-DER-06) |
+
+**Frozen-engine exemption.** The `zero --ds-transition-*` criterion sweeps all source, but this lane forbids touching Classic/Rustic. The criterion applies to the **Modern + family-cuts perimeter**; the 21 Classic/Rustic sites are a named frozen excluded population — neither counted as open debt nor as green. No frozen file is touched.
+
+**EVI-05 (pilot) vs EVI-02 (fleet).** The pilot certifies one bounded cut end to end; the fleet certification keeps the six non-chromatic axes and its standing threshold (owner decision 2026-09-10, `kit-2026-09.md` §5b D3). The cuts do not share one dependency list: WO-FAM-14's chain runs through WO-INV-05, not through the DER-02/03/04 roots.
+
 ### WO-DER-05 Modes derived from decisions and one default-mode law
 - **Outcome** — `derivation/modes` derives the light/dark overlay from the same decisions (never from an authored overlay); `resolveDocumentMode(vertical, document)` reads the roster first (`?? "light"` = 0); a tenant's decisions cross modes; `auto` emits one `prefers-color-scheme` block; the vertical baseline is compiled once and cached by digest.
 - **Why** — F-05: the vertical overlay restores its values over the tenant patch (delta for the non-default mode = 0 in all verticals); a rottay tenant with `palette.primary` gets an empty base block and flips to light; previews drop mode blocks.
@@ -113,9 +135,9 @@ Lane-wide rules (binding on every WO):
 - **Why** — F-11: the neutral "Vercel black & white" theme ships in every bundle and evnto overrides 20.8 % of it; nine input families receive zero channels in bithire and evnto; F-25/F-54: three artifacts are three different surfaces (12 % intersection of authored leaves).
 - **Closes** — F-11, F-25, F-54, F-108 (closure criteria in `audit/30-findings`).
 - **Wave** — 4; parallel with the other WOs of the same wave whose write sets are disjoint.
-- **Depends on** — WO-DER-05, WO-CAT-02, WO-CON-03 (its decision→keypath adapter is deleted here or in WO-CAT-02, whichever lands last), WO-DER-07 (the chosen bithire identity).
+- **Depends on** — WO-DER-05, WO-CAT-02, WO-CON-03 (its decision→keypath adapter is deleted here or in WO-CAT-02, whichever lands last), WO-DER-07's candidate decision sets (which exist; the final pick is deferred — see the 2026-09-10 amendment on WO-DER-07).
 - **Steps** —
-  1. Author the bithire preset from the decision set chosen in WO-DER-07; rottay and evnto receive structural-neutral decision sets only (owner scope 2026-09-05: only app-bithire matters now; their identities are a later program).
+  1. Author the bithire preset from a decision set of WO-DER-07's candidates (provisional until the deferred D-30 pick; the preset's final look remains an explicit open obligation of the branding stage, not of this conversion). Rottay and evnto receive structural-neutral decision sets only (owner scope 2026-09-05: only app-bithire matters now; their identities are a later program).
   2. Delete `brand-themes/*`, `BrandTheme`, `TenantAppearance*`, `VERTICAL_REGISTRY` visuals; `roster` keeps identity + engine + envelope.
   3. Strip chromatic opinion from `themes/default`; keep structure.
   4. Gate `preset-without-derivable-values`; regenerate the first-party artifacts through the pipeline.
@@ -135,6 +157,8 @@ Lane-wide rules (binding on every WO):
   1. Three decision sets (e.g. "editorial quiet", "product dense", "warm humanist") written as v2 documents; every value inside the kit's closed domains.
   2. Probe-ground route rendering the six screens × 3 candidates × 2 modes through `mountTenantTheme` (no ad-hoc CSS).
   3. Owner review recorded in `roadmap/kit-2026-09.md` (a `D-30 — chosen BitHire identity` section) and in the `notes` of WO-DER-07 in `roadmap/registry.json`, with the chosen set's sha256 digest. Do not write to `audit/**`: the audit tree is evidence and rubric, never a target of this programme (same rule as WO-CAT-01).
+
+  **AMENDMENT 2026-09-10 — D-30 deferred (owner decision).** The owner deferred the final identity choice to a later branding stage: this stage builds and proves the customization *capability*, and the three candidates serve as provisional test variants (sufficiently contrasting, e.g. one circular/soft and one angular/compact), never as approved identities. Until the pick lands, this WO stays open with exactly one remaining obligation — the recorded owner pick with digest — and no fictitious choice is registered. The pilot (WO-EVI-05) and the preset conversion (WO-DER-06) use the candidates as provisional inputs and do not wait for D-30; the final look of the bithire preset remains an explicit open obligation of the branding stage.
 - **Files** — `packages/core/src/foundation/presets/candidates/bithire/**` (new; `foundation/presets/` exists, `candidates/` does not; deleted after the pick); `packages/showroom/src/app/probe-ground/identity/**` (new; `packages/showroom/src/app/probe/` exists, `probe-ground/` does not); `roadmap/kit-2026-09.md`.
 - **Acceptance gate** — The three candidates differ on ≥ 4 non-color axes of the by-axis probe; every candidate passes admission as a `pro` document; the owner's pick is recorded with its digest in `roadmap/kit-2026-09.md` and the WO-DER-07 `notes`, and `audit/**` is byte-unchanged; no candidate contains a raw `--ds-*` override.
 - **Do NOT** — Do not author CSS or channel values to make a candidate look right; if a decision is missing from the kit, file it as a kit amendment (D-27), never as an override.
