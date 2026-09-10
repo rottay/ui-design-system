@@ -426,16 +426,22 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
    * procedencia serializado, y el verificador de mount valida su forma y lo
    * mete en el digest que recomputa. Los modulos NO se mueven: el duenio del
    * ledger no se importa aqui a proposito, porque un vocabulario que este lado
-   * recomputara seria un vocabulario que un transporte podria falsificar. */
+   * recomputara seria un vocabulario que un transporte podria falsificar.
+   *
+   * 63931 -> 67603 (WO-EMI-02): la admision gana la PRUEBA DE SCOPE -- el
+   * verificador que compara la raiz del documento contra los descriptores de
+   * scope del artefacto, y la clase de conflicto cerrada que la nombra. Los
+   * modulos siguen sin moverse: la gramatica de selectores no se importa, se
+   * leen los descriptores que el propio artefacto ya trae. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 63931 },
+    { reachableModules: 9, sourceBytes: 67603 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 63931), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 67603), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */

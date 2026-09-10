@@ -286,7 +286,7 @@
     },
     "./runtime/responsive": {
       "maxReachableModules": 12,
-      "maxSourceBytes": 58115
+      "maxSourceBytes": 58355
     },
     "./runtime/root-attributes": {
       "maxReachableModules": 2,
@@ -294,7 +294,7 @@
     },
     "./runtime/tenant": {
       "maxReachableModules": 48,
-      "maxSourceBytes": 1167191
+      "maxSourceBytes": 1175115
     },
     "./runtime/tenant-theme": {
       "maxReachableModules": 2,
@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 9,
-      "maxSourceBytes": 63931
+      "maxSourceBytes": 67603
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-CRA-24 follow-up: la landing R1 (14c0499cb, DecisionProvenanceLedger en la cadena de resolution) agrando el closure vivo de ./runtime/tenant en 35191 bytes medidos; el techo 1132000 se pino en dfd844914 sobre un arbol sin R1 (rama R2), y el merge cruzo la puerta sin re-anclar. Crecimiento auditado (K3 PASS fd3fb4601); se ancla el valor medido exacto, decrece-solo desde aqui.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-EMI-02: admission gains the scope proof (visual-authority +3672), the responsive runtime gains the shared media-snapshot store with its SSR viewport projection (+240), and the tenant registry gains the governed recipe-profile validator so a code-owned vertical's selection reaches the runtime (+7924). Three measured source additions, no new reachable graph beyond the anchored module counts.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 3 subido(s), 0 sin ancla valida"
 }

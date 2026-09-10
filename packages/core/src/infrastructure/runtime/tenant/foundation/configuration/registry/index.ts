@@ -24,7 +24,7 @@ import type {
 } from '@/foundation/contracts/composition/tenants/themes';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
-import { resolveGovernedSelections } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes';
+import { validateRecipeProfileSelection } from '@/foundation/tokens/ts/presentation/recipe-profiles';
 
 function deepFreeze<T>(value: T): T {
   if (value === null || typeof value !== 'object') {
@@ -164,10 +164,15 @@ function projectGovernedBehavior(
           ...(entranceDuration === undefined ? {} : { entranceDuration }),
         };
   const decidedChannels = [...declaredChannels(config)];
-  // One validation, one answer: the same resolver the recipes deriver calls for
+  // One validation, one answer: the same validator the recipes deriver calls for
   // its provenance channel, so the JS selection and the compiled one cannot
-  // disagree about which profile this tenant chose.
-  const recipeProfile = theme ? resolveGovernedSelections(theme).recipeProfile : undefined;
+  // disagree about which profile this tenant chose. Fail-closed by the same
+  // rule -- an unknown id or a foreign schema version yields no selection.
+  const selection = validateRecipeProfileSelection(
+    theme?.recipes?.profile,
+    theme?.recipes?.schemaVersion,
+  );
+  const recipeProfile = selection.ok ? selection.profile?.id : undefined;
   if (
     motion === undefined &&
     expressive === undefined &&
