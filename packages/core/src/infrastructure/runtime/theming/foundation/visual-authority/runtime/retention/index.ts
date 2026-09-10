@@ -21,8 +21,10 @@ import {
   auditRetainedTenantThemeArtifact,
   MOUNTED_ARTIFACT_SELECTOR,
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_SCOPE_ATTRIBUTES,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
+  tenantThemeArtifactScopeElement,
   verifyMountedTenantThemeArtifact,
 } from "../../foundation/admission";
 
@@ -44,9 +46,26 @@ import {
  */
 const ARTIFACT_REMOVED = "the admitted artifact element was removed from the document";
 
+/**
+ * The scope attributes THIS artifact's selector is evaluated against.
+ *
+ * The observer filter is the closed vocabulary, because a filter is installed
+ * before any per-artifact reasoning; the judgement below narrows it to the
+ * three names this artifact actually depends on.
+ */
+function artifactScopeAttributeNames(artifact: TenantThemeArtifact): Set<string> {
+  return new Set([
+    artifact.scopes.root.attribute,
+    artifact.scopes.vertical.attribute,
+    artifact.scopes.tenant.attribute,
+  ]);
+}
+
 function disqualifyingArtifactMutation(
   record: MutationRecord,
   element: Element,
+  artifact: TenantThemeArtifact,
+  scopeElement: Element | null,
 ): string | null {
   if (record.type === "characterData") {
     return element.contains(record.target)
@@ -54,8 +73,21 @@ function disqualifyingArtifactMutation(
       : null;
   }
   if (record.type === "attributes") {
-    if (record.target !== element) return null;
     const attribute = record.attributeName;
+    // The DOCUMENT ROOT carries the selector the artifact's bytes are nested
+    // under. Losing it repaints the whole document unstyled without touching a
+    // byte of the artifact, so it is judged from the record for the same reason
+    // a byte rewrite is: a scope that is removed and restored still painted
+    // unscoped for the window in between.
+    if (scopeElement && record.target === scopeElement) {
+      if (!attribute || !artifactScopeAttributeNames(artifact).has(attribute)) {
+        return null;
+      }
+      return record.oldValue !== scopeElement.getAttribute(attribute)
+        ? "the document root no longer carries the admitted artifact scope"
+        : null;
+    }
+    if (record.target !== element) return null;
     // A same-value write still produces a record. Only a real change moves the
     // element's scope, and the filter already narrows this to the three proof
     // attributes.
@@ -78,9 +110,10 @@ function touchesArtifactProof(
   record: MutationRecord,
   element: Element,
 ): boolean {
-  // `attributes` is filtered to the three artifact attributes, so any such
-  // record is by construction relevant: it either re-labels the admitted
-  // element or promotes some other node into the same tenant scope.
+  // `attributes` is filtered to the artifact proof attributes and the root
+  // scope attributes, so any such record is by construction relevant: it
+  // re-labels the admitted element, promotes some other node into the same
+  // tenant scope, or moves the scope the bytes are nested under.
   if (record.type === "attributes") return true;
   if (element === record.target || element.contains(record.target)) return true;
   const carriesArtifact = (node: Node): boolean => {
@@ -139,6 +172,8 @@ function watchMountedTenantThemeArtifact(
     return INERT_ARTIFACT_WATCHER;
   }
 
+  const scopeElement = tenantThemeArtifactScopeElement(root);
+
   let revoked = false;
   const revoke = (reason: string): void => {
     if (revoked) return;
@@ -150,7 +185,12 @@ function watchMountedTenantThemeArtifact(
   const judge = (records: readonly MutationRecord[]): void => {
     if (revoked) return;
     for (const record of records) {
-      const disqualified = disqualifyingArtifactMutation(record, element);
+      const disqualified = disqualifyingArtifactMutation(
+        record,
+        element,
+        artifact,
+        scopeElement,
+      );
       if (!disqualified) continue;
       if (disqualified === ARTIFACT_REMOVED) {
         // A removal that leaves another element holding the scope is a
@@ -184,6 +224,7 @@ function watchMountedTenantThemeArtifact(
       TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
       TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
       TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
+      ...TENANT_THEME_ARTIFACT_SCOPE_ATTRIBUTES,
     ],
   });
 
@@ -225,7 +266,10 @@ function watchMountedTenantThemeArtifact(
  * blocks on a failed admission.
  *
  * SCOPE, stated honestly. This proves that the ADMITTED NODE stays present,
- * unique in its tenant scope, and byte-exact. It does not, and cannot, prove
+ * unique in its tenant scope, and byte-exact, AND that the document root still
+ * carries the scope those bytes are nested under -- the same two questions
+ * admission asks, re-asked for as long as the declaration is live. It does not,
+ * and cannot, prove
  * that no other stylesheet in the document paints over it -- any script that
  * can reach the DOM can append `!important` rules the DS never sees, and no
  * runtime check can prevent that. One narrower residual is in the same class:

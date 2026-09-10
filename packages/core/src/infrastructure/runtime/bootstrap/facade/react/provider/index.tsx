@@ -135,6 +135,7 @@ import {
 import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { getUnresolvedTenantConfig } from '../../../../tenant/foundation/configuration/defaults';
 import { ResponsiveProvider } from '../../../../responsive';
+import type { DocumentViewportHint } from '../../../../foundation/root-attributes/ssr';
 import { MotionProvider } from '../../../../motion';
 import { AntdConfigProvider } from '../../../../engines/presentation/adapters/antd';
 import {
@@ -149,10 +150,8 @@ import {
   RecipeProfileProvider,
   RECIPE_PROFILE_SCHEMA_VERSION,
 } from '../../../../foundation/recipes/profiles';
-import {
-  RootDensityProvider,
-  deriveDensityPosture,
-} from '../../../../foundation/density';
+import { deriveDensityPosture } from '../../../../foundation/density';
+import { RootDensityProvider } from '../../../../density';
 import {
   resolveExpressiveAxes,
   sanitizeExpressiveOverrides,
@@ -282,6 +281,20 @@ export interface DesignSystemProviderProps {
   skipCssLoading?: boolean;
   /** Base URL for tenant CSS files (only used when skipCssLoading=false) */
   cssBaseUrl?: string;
+  /**
+   * The viewport tier this REQUEST is for: exactly the value handed to
+   * `mountTenantTheme` as `options.viewport`, forwarded to the responsive
+   * runtime this provider mounts.
+   *
+   * WHY THE PROVIDER HAS TO CARRY IT. The mount projects the hint onto `<html>`
+   * so CSS can match it, and it is tempting to let the client read it back from
+   * there. It cannot: React asks the responsive store for its server answer on
+   * a machine with no document AND again while hydrating in the browser, so an
+   * attribute read makes those two answers disagree and React throws the whole
+   * first paint away. Omitted, the tree renders mobile-first on the server --
+   * the design system does not invent a viewport it was never told about.
+   */
+  ssrViewport?: DocumentViewportHint;
 }
 
 /**
@@ -816,6 +829,7 @@ export function DesignSystemProvider({
   onLocaleChange,
   onTenantResolved,
   onError,
+  ssrViewport,
 }: DesignSystemProviderProps): React.ReactElement {
   // ONE partition, shared by the sync path, the async render path, the async
   // resolution callback and every behavior read site below. Deriving it twice
@@ -1315,7 +1329,7 @@ export function DesignSystemProvider({
               >
                 <FeatureProvider features={features}>
                   <MotionProvider profile={motionProfile} tenantDial={tenantMotionDial}>
-                    <ResponsiveProvider>
+                    <ResponsiveProvider ssrViewport={ssrViewport}>
                       <CommandRegistryProvider>
                         <AntdConfigProvider>
                           {/*

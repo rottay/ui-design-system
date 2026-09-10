@@ -286,7 +286,7 @@
     },
     "./runtime/responsive": {
       "maxReachableModules": 12,
-      "maxSourceBytes": 58355
+      "maxSourceBytes": 58600
     },
     "./runtime/root-attributes": {
       "maxReachableModules": 2,
@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 9,
-      "maxSourceBytes": 67603
+      "maxSourceBytes": 68733
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-EMI-02: admission gains the scope proof (visual-authority +3672), the responsive runtime gains the shared media-snapshot store with its SSR viewport projection (+240), and the tenant registry gains the governed recipe-profile validator so a code-owned vertical's selection reaches the runtime (+7924). Three measured source additions, no new reachable graph beyond the anchored module counts.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 3 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-EMI-02 repair round: the retained mount proof re-asks the scope question admission already asks, so visual-authority carries the scope re-verification, the closed scope-attribute vocabulary and the observer filter over the document root (+1130); the responsive runtime states the props-only server-snapshot law in place of the document reader that made the server and the hydration answer disagree (+245). Two measured source additions, no new reachable graph beyond the anchored module counts.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
 }

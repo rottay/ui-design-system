@@ -5,7 +5,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 import {
   DENSITY_POSTURES,
   DensityScope,
-  RootDensityProvider,
   deriveDensityPosture,
   useDensity,
 } from '../index';
@@ -58,31 +57,5 @@ describe('DensityScope (DS-A006 single runtime contract)', () => {
     expect(deriveDensityPosture('comfortable')).toBe('comfortable');
     expect(deriveDensityPosture(0.85)).toBe('comfortable');
     expect(deriveDensityPosture(1.15)).toBe('comfortable');
-  });
-
-  it('keeps the root DOM label and JS posture in agreement, then restores prior state', () => {
-    document.documentElement.setAttribute('data-density', 'spacious');
-    const { getByTestId, rerender, unmount } = render(
-      <RootDensityProvider posture="compact">
-        <Probe />
-      </RootDensityProvider>
-    );
-    expect(document.documentElement).toHaveAttribute('data-density', 'compact');
-    expect(getByTestId('probe')).toHaveTextContent('compact');
-
-    rerender(
-      <RootDensityProvider posture="comfortable">
-        <Probe />
-      </RootDensityProvider>
-    );
-    expect(document.documentElement).toHaveAttribute(
-      'data-density',
-      'comfortable'
-    );
-    expect(getByTestId('probe')).toHaveTextContent('comfortable');
-
-    unmount();
-    expect(document.documentElement).toHaveAttribute('data-density', 'spacious');
-    document.documentElement.removeAttribute('data-density');
   });
 });

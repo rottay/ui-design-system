@@ -4,9 +4,12 @@
  * `foundation/base/density/index.css` gives the attribute real force: any non-root
  * `[data-density]` element re-projects `--ds-density-local-factor`, so every
  * element that stamps it creates a genuine geometry boundary. The runtime owner
- * (`DensityScope` / `RootDensityProvider` / `densityScopeAttributes`) stamps the
- * attribute AND publishes the matching `DensityContext`, which is what keeps the
- * CSS plane and the JS plane answering the same question.
+ * (`DensityScope` / `densityScopeAttributes`, plus `RootDensityProvider` for the
+ * document root) stamps the attribute AND publishes the matching
+ * `DensityContext`, which is what keeps the CSS plane and the JS plane answering
+ * the same question. The root provider takes its channel through the claim
+ * registry rather than writing the literal, so it is correctly absent from the
+ * census this file pins.
  *
  * A writer that stamps the attribute WITHOUT publishing the context is a second
  * authority: inside it, CSS geometry says one posture and `useDensity()` says

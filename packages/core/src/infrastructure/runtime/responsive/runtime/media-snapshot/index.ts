@@ -14,12 +14,20 @@
  * instead of a post-paint effect.
  *
  * WHY A HINT AND NOT A GUESS. A server has no viewport. It can, however, be
- * TOLD one: a cookie, a client hint, a user-agent parse. `mountTenantTheme`
- * projects whatever the application knows as `data-ds-viewport`, and this
- * module turns that one attribute into the complete server snapshot. When
- * nothing is known the answer stays the mobile-first baseline, because
- * inventing a desktop the request never claimed would be the same defect
- * pointing the other way.
+ * TOLD one: a cookie, a client hint, a user-agent parse. This module turns that
+ * one hint into the complete server snapshot. When nothing is known the answer
+ * stays the mobile-first baseline, because inventing a desktop the request
+ * never claimed would be the same defect pointing the other way.
+ *
+ * WHY THE HINT IS NEVER READ FROM THE DOCUMENT. `mountTenantTheme` also
+ * projects the hint as `data-ds-viewport`, and reading it back here looks like
+ * the tidiest possible way to reach the same fact. It is not: React calls the
+ * server snapshot once on a machine with no `document` and once in the browser
+ * while hydrating, so an attribute read answers `undefined` on the server and
+ * `desktop` on the client -- a guaranteed hydration mismatch, which is the
+ * defect this module exists to remove, re-entering through the back door. The
+ * hint therefore travels as a PROP, which both worlds see identically, and this
+ * module exposes no document reader at all.
  *
  * @module Infrastructure/Runtime/Responsive/MediaSnapshot
  * @category Runtime
@@ -30,9 +38,6 @@ import { buildMinWidthQuery } from '@/foundation/contracts/kernel/responsive/bre
 import type { DocumentViewportHint } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
 
 export type { DocumentViewportHint };
-
-/** The attribute `mountTenantTheme` projects the request's viewport tier as. */
-export const VIEWPORT_HINT_ATTRIBUTE = 'data-ds-viewport';
 
 export interface ResponsiveMediaSnapshot {
   readonly isSm: boolean;
@@ -111,28 +116,11 @@ const HINT_SNAPSHOTS: Readonly<Record<DocumentViewportHint, ResponsiveMediaSnaps
 /** The mobile-first baseline: what a request that declared nothing gets. */
 export const UNHINTED_MEDIA_SNAPSHOT = HINT_SNAPSHOTS.phone;
 
-export function isViewportHint(value: unknown): value is DocumentViewportHint {
-  return value === 'phone' || value === 'tablet' || value === 'desktop';
-}
-
 /** The complete server snapshot a viewport hint stands for. */
 export function mediaSnapshotForViewport(
   hint: DocumentViewportHint | undefined,
 ): ResponsiveMediaSnapshot {
   return hint === undefined ? UNHINTED_MEDIA_SNAPSHOT : HINT_SNAPSHOTS[hint];
-}
-
-/**
- * The hint the server stamped on this document, read back during hydration.
- *
- * Reading it here is what keeps the client's first render byte-identical to the
- * server's: both answer from the same attribute rather than from two
- * independent guesses.
- */
-export function documentViewportHint(): DocumentViewportHint | undefined {
-  if (typeof document === 'undefined') return undefined;
-  const declared = document.documentElement.getAttribute(VIEWPORT_HINT_ATTRIBUTE);
-  return isViewportHint(declared) ? declared : undefined;
 }
 
 function snapshotsEqual(a: ResponsiveMediaSnapshot, b: ResponsiveMediaSnapshot): boolean {

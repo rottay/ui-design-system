@@ -432,16 +432,22 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
    * verificador que compara la raiz del documento contra los descriptores de
    * scope del artefacto, y la clase de conflicto cerrada que la nombra. Los
    * modulos siguen sin moverse: la gramatica de selectores no se importa, se
-   * leen los descriptores que el propio artefacto ya trae. */
+   * leen los descriptores que el propio artefacto ya trae.
+   *
+   * 67603 -> 68733 (WO-EMI-02, ronda de reparacion): la prueba RETENIDA vuelve
+   * a hacer la pregunta de scope, no solo la de bytes. Entra el vocabulario
+   * cerrado de atributos de scope, la re-verificacion dentro del audit retenido
+   * y el juicio por registro sobre la raiz del documento. Los modulos siguen sin
+   * moverse: retention ya importaba admission. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 67603 },
+    { reachableModules: 9, sourceBytes: 68733 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 67603), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 68733), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */

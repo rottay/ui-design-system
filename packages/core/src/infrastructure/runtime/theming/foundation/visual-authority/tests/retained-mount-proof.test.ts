@@ -18,7 +18,7 @@ import {
   retainMountedTenantThemeArtifact,
 } from '..';
 import type { PreparedTenantThemeArtifactClaim } from '..';
-import { stampTenantThemeScope } from './mount-fixture';
+import { clearTenantThemeScope, stampTenantThemeScope } from './mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(
   hydrateTenantThemeConfig({
@@ -69,6 +69,13 @@ describe('retained mount proof', () => {
   afterEach(() => {
     stop?.();
     stop = null;
+    // The scope drills below move `<html>`, and every suite in this file shares
+    // one document: a leaked stamp or a leaked style is a second mount for the
+    // next describe.
+    document.head.innerHTML = '';
+    clearTenantThemeScope();
+    document.documentElement.removeAttribute('data-theme');
+    document.documentElement.removeAttribute('data-density');
     vi.restoreAllMocks();
   });
 
@@ -294,6 +301,89 @@ describe('retained mount proof', () => {
 
     expect(revocations).toEqual([]);
   });
+
+  /**
+   * The scope half of the admission, re-asked.
+   *
+   * Admission proves two things: these are the artifact's exact bytes, and the
+   * document root carries the selector those bytes are nested under. A retained
+   * proof that re-asked only the first was strictly weaker than the admission
+   * it held open -- stripping `data-ds-root` leaves every byte pristine and
+   * stops the whole artifact from painting, and the audit still answered
+   * `null`.
+   */
+  it('revokes when the document root loses the artifact scope', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.removeAttribute('data-ds-root');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(
+      /the document root no longer carries the admitted artifact scope/,
+    );
+    expect(auditRetainedTenantThemeArtifact(ARTIFACT, style)).toMatch(
+      /the document root does not carry data-ds-root/,
+    );
+  });
+
+  it('revokes when the root is relabelled into another tenant', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-tenant', 'someone-else');
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(
+      /the document root no longer carries the admitted artifact scope/,
+    );
+  });
+
+  it('revokes a scope removal that is undone before the records are delivered', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    // The document painted unscoped for the whole window in between, which is
+    // the same reason a byte rewrite is judged from the record and not from
+    // the state it settles into.
+    document.documentElement.removeAttribute('data-vertical');
+    document.documentElement.setAttribute('data-vertical', ARTIFACT.verticalKey);
+    await settle();
+
+    expect(revocations).toHaveLength(1);
+  });
+
+  it('does not revoke when a scope attribute is rewritten to the value it had', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-tenant', ARTIFACT.slug);
+    await settle();
+
+    expect(revocations).toEqual([]);
+  });
+
+  it('does not revoke when an unrelated root attribute changes', async () => {
+    const style = mountArtifact();
+    const revocations = retain(style);
+
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-density', 'compact');
+    await settle();
+
+    expect(revocations).toEqual([]);
+  });
+
+  it('revokes immediately when the scope is already gone at watch time', () => {
+    const style = mountArtifact();
+    document.documentElement.removeAttribute('data-ds-root');
+    const revocations = retain(style);
+
+    expect(revocations).toHaveLength(1);
+    expect(revocations[0]).toMatch(/the document root does not carry data-ds-root/);
+  });
 });
 
 /**
@@ -307,6 +397,7 @@ describe('armed artifact watch', () => {
     resetVisualAuthorityDiagnostics();
     document.head.innerHTML = '';
     document.body.innerHTML = '';
+    clearTenantThemeScope();
   });
 
   it('returns one stable handle for one identity in one document', () => {
@@ -530,6 +621,7 @@ describe('prepared artifact claim', () => {
   afterEach(() => {
     resetVisualAuthorityDiagnostics();
     document.head.innerHTML = '';
+    clearTenantThemeScope();
   });
 
   /**
@@ -646,6 +738,46 @@ describe('prepared artifact claim', () => {
 
     claim.seal();
     expect(claim.revocation()).toMatch(/removed from the document/);
+  });
+
+  /**
+   * The reproduced defect, on the path that matters most.
+   *
+   * The seal is what a React commit consults before the frame paints. A scope
+   * that disappears between admission and that seal used to survive it
+   * untouched: `revocation()` answered null, the retained audit answered null,
+   * and the provider therefore vouched for a live tree in which every rule of
+   * the artifact had stopped matching.
+   */
+  it('reports a scope removed before the seal, on the caller stack', () => {
+    const style = mountArtifact();
+    const claim = prepareMountedTenantThemeArtifactClaim(ARTIFACT, style);
+    claim.commit();
+
+    document.documentElement.removeAttribute('data-ds-root');
+
+    // The observer has not reported yet: this is the seal's verdict.
+    expect(claim.revocation()).toBeNull();
+
+    claim.seal();
+    expect(claim.revocation()).toMatch(
+      /the document root no longer carries the admitted artifact scope/,
+    );
+  });
+
+  /**
+   * The end-state leg of the same law. A scope stripped BEFORE the watch was
+   * armed produces no record this observer can attribute, so the seal's second
+   * question -- what IS -- is the only one that can catch it.
+   */
+  it('reports a scope that was already gone when the claim was armed', () => {
+    const style = mountArtifact();
+    document.documentElement.removeAttribute('data-vertical');
+    const claim = prepareMountedTenantThemeArtifactClaim(ARTIFACT, style);
+    claim.commit();
+
+    claim.seal();
+    expect(claim.revocation()).toMatch(/the document root carries data-vertical/);
   });
 
   it('answers a later claim with the standing verdict, without arming it', async () => {

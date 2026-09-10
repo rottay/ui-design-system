@@ -16,9 +16,9 @@
  * - **Virtual keyboard**: bottom viewport occlusion while editing at scale 1
  *
  * SSR: the snapshot is published through `useSyncExternalStore`, whose server
- * answer is the request's viewport hint (`ssrViewport`, or the
- * `data-ds-viewport` attribute `mountTenantTheme` projected). Only a request
- * that declared nothing falls back to the mobile-first baseline.
+ * answer is the request's viewport hint, taken from the `ssrViewport` PROP and
+ * from nothing else. Only a request that declared nothing falls back to the
+ * mobile-first baseline.
  *
  * @example
  * ```tsx
@@ -56,7 +56,6 @@ import React, {
 import { useMotionPreference } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
 import type { DocumentViewportHint, ResponsiveMediaSnapshot } from '../../../runtime/media-snapshot';
 import {
-  documentViewportHint,
   getResponsiveMediaSnapshot,
   mediaSnapshotForViewport,
   subscribeResponsiveMedia,
@@ -286,9 +285,15 @@ function buildContextValue(
 export interface ResponsiveProviderProps {
   children: ReactNode;
   /**
-   * The viewport tier this REQUEST is for. Overrides the `data-ds-viewport`
-   * attribute; supply it when the application resolves the hint itself instead
-   * of letting `mountTenantTheme` project it.
+   * The viewport tier this REQUEST is for -- the same value `mountTenantTheme`
+   * projected as `data-ds-viewport`, handed in as a prop.
+   *
+   * It must be a PROP and not a document read. `getServerSnapshot` runs twice
+   * for one request: once where there is no document at all, and once in the
+   * browser during hydration. A read of `<html>` answers `undefined` on the
+   * first and `desktop` on the second, which is a hydration mismatch by
+   * construction. A prop is the one input both runs see identically, because
+   * the server serializes it into the payload the client renders from.
    */
   ssrViewport?: DocumentViewportHint;
 }
@@ -303,7 +308,8 @@ export interface ResponsiveProviderProps {
  *
  * The server answer is the request's viewport hint, so a desktop request
  * renders a desktop layout on the first paint instead of correcting to one a
- * frame later.
+ * frame later. `DesignSystemProvider` forwards its own `ssrViewport` here; an
+ * application that mounts this provider directly passes the hint itself.
  */
 export function ResponsiveProvider({
   children,
@@ -313,11 +319,12 @@ export function ResponsiveProvider({
     useState<VirtualKeyboardSnapshot>(SSR_VIRTUAL_KEYBOARD_SNAPSHOT);
   const prefersReducedMotion = useMotionPreference();
 
-  // The server render and the hydration render must answer from the SAME fact,
-  // so both read the hint: the prop when the application resolved it, otherwise
-  // the attribute the mount projected onto the document root.
+  // Pure in `ssrViewport`, deliberately. This function is React's answer for
+  // BOTH the server render and the hydration render, so any input the two
+  // worlds see differently -- a `document` read above all -- makes them
+  // disagree about the very first paint.
   const getServerSnapshot = useCallback(
-    (): ResponsiveMediaSnapshot => mediaSnapshotForViewport(ssrViewport ?? documentViewportHint()),
+    (): ResponsiveMediaSnapshot => mediaSnapshotForViewport(ssrViewport),
     [ssrViewport],
   );
 

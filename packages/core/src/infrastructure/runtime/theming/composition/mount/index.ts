@@ -108,6 +108,11 @@ export interface MountTenantThemeOptions {
    * client hint, a user-agent parse). It is projected as `data-ds-viewport` and
    * is the only thing that lets the responsive runtime render a desktop server
    * snapshot; without it the first paint is a phone paint on every device.
+   *
+   * PASS THE SAME VALUE TO `DesignSystemProvider.ssrViewport`. The attribute is
+   * for CSS; the runtime takes the hint as a prop, because a value read back
+   * off `<html>` is `undefined` on a server and defined during hydration, which
+   * is a mismatch by construction.
    */
   viewport?: DocumentViewportHint;
   /**

@@ -480,7 +480,7 @@ export type TenantThemeArtifactScopeVerification =
  * DOCUMENT ROOT, so a container passed as the search root still resolves to
  * its own `documentElement` rather than to itself.
  */
-function documentScopeElement(root: ParentNode): Element | null {
+export function tenantThemeArtifactScopeElement(root: ParentNode): Element | null {
   const asDocument = root as Partial<Document>;
   if (asDocument.documentElement) return asDocument.documentElement;
   const owner = (root as Partial<Element>).ownerDocument;
@@ -503,7 +503,7 @@ export function verifyTenantThemeArtifactScope(
     typeof document === "undefined" ? undefined : document,
 ): TenantThemeArtifactScopeVerification {
   if (!root) return { ok: false, error: "no document root is available" };
-  const element = documentScopeElement(root);
+  const element = tenantThemeArtifactScopeElement(root);
   if (!element) {
     return { ok: false, error: "no document root element is available" };
   }
@@ -529,6 +529,15 @@ export const MOUNTED_ARTIFACT_SELECTOR =
   `style[${TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE}],link[${TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE}]`;
 
 /**
+ * Every root attribute an artifact's scope selector is evaluated against.
+ *
+ * The domain is closed by `TenantThemeScopeDescriptor`, so it can be stated
+ * once here and used as a MutationObserver filter without an artifact in hand.
+ */
+export const TENANT_THEME_ARTIFACT_SCOPE_ATTRIBUTES: readonly string[] =
+  Object.freeze(["data-ds-root", "data-vertical", "data-tenant"]);
+
+/**
  * Re-prove an already-admitted mount against the artifact it was admitted for.
  *
  * Admission is a point-in-time observation. This is the same observation, taken
@@ -536,6 +545,15 @@ export const MOUNTED_ARTIFACT_SELECTOR =
  * must still rest on the SAME node. Re-verifying alone would accept a takeover
  * by an identical-looking element, which hands a later mutation to a node the
  * application never mounted.
+ *
+ * IT RE-PROVES THE SCOPE TOO. Admission asks two questions -- are these the
+ * artifact's exact bytes, and does the document root carry the selector those
+ * bytes are nested under -- and a retained proof that re-asked only the first
+ * one was strictly weaker than the admission it claimed to hold open. Stripping
+ * `data-ds-root` from `<html>` after admission stops every rule in the artifact
+ * from matching while the bytes stay pristine, so the byte-only audit returned
+ * `null` for a document that had gone back to painting nothing. Both halves are
+ * re-proven here, in the order admission proves them.
  */
 export function auditRetainedTenantThemeArtifact(
   artifact: TenantThemeArtifact,
@@ -548,6 +566,8 @@ export function auditRetainedTenantThemeArtifact(
   if (current.element !== element) {
     return "the admitted artifact element was replaced after admission";
   }
+  const scope = verifyTenantThemeArtifactScope(artifact, root);
+  if (!scope.ok) return scope.error;
   return null;
 }
 
