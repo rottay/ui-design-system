@@ -20,7 +20,7 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
-import { buildPreviewCss } from '../../runtime/preview-css';
+import { buildPreviewCss, draftPreviewSource } from '../../runtime/preview-css';
 
 /** Default component samples shown when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
@@ -106,7 +106,10 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
   );
 
   /* Sanitized CSS re-anchored to the preview root; never html[data-tenant] */
-  const preview = useMemo(() => buildPreviewCss(tenantConfig), [tenantConfig]);
+  const preview = useMemo(
+    () => buildPreviewCss(draftPreviewSource(creationConfig) ?? tenantConfig),
+    [creationConfig, tenantConfig],
+  );
 
   const previewRef = useRef<HTMLDivElement>(null);
 
@@ -176,7 +179,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
               {creationConfig.name}
             </div>
             <div data-part="tenant-slug" style={{ fontSize: '12px' }}>
-              {creationConfig.slug} | {creationConfig.engine ?? 'classic'} | {creationConfig.personality ?? 'neutral'}
+              {creationConfig.slug} | {'rustic'} | {creationConfig.personality ?? 'neutral'}
             </div>
           </div>
         </div>

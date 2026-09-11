@@ -3,7 +3,10 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '../../../../../foundation/contracts';
+import type { EngineVisualDeclaration } from '../../../../../foundation/contracts/composition/tenants/themes/engine-adapter';
 import { bithireBrandTheme } from '../../../../../foundation/tokens/ts/presentation/brand-themes';
+import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
+import { EngineVisualDeclarationProvider } from '@/infrastructure/runtime/foundation/engine-visual';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { ProductProfileProvider, getProductProfile } from '../../../product-profiles';
 import { TenantProvider } from '../../../tenant';
@@ -19,10 +22,7 @@ if (!bithireVertical) {
   throw new Error('The chart-personality contract requires the bundled bithire vertical');
 }
 
-function createTenant(
-  slug: string,
-  options: Pick<TenantConfig, 'brandTheme' | 'personality'> = {},
-): TenantConfig {
+function createTenant(slug: string): TenantConfig {
   return {
     slug,
     name: slug,
@@ -30,7 +30,21 @@ function createTenant(
     plan: 'enterprise',
     features: [],
     branding: { companyName: slug },
-    ...options,
+  };
+}
+
+/**
+ * The compiled layer a mounted artifact publishes, for a theme.
+ *
+ * `brandThemeToPersonality` is the same function the lowering runs to fill
+ * `ThemeCompilation.runtime.personality`, so this is the compile's own answer
+ * rather than a fixture that restates it.
+ */
+function compiledFor(brandTheme: Parameters<typeof brandThemeToPersonality>[0]): EngineVisualDeclaration {
+  return {
+    engine: 'modern',
+    projection: { seeds: {}, modes: [] },
+    runtime: { personality: brandThemeToPersonality(brandTheme), tokenOverrides: {} },
   };
 }
 
@@ -48,14 +62,14 @@ describe('resolveChartPersonality', () => {
     });
   });
 
-  it('keeps BitHire and The Management Miami visibly distinct through BrandTheme charts', () => {
+  it('keeps BitHire and The Management Miami visibly distinct through their compiled charts', () => {
     const bithire = resolveChartPersonality({
-      tenantConfig: { brandTheme: bithireBrandTheme },
+      compiled: brandThemeToPersonality(bithireBrandTheme),
       vertical: bithireVertical,
       productProfile: recruitingProfile,
     });
     const management = resolveChartPersonality({
-      tenantConfig: { brandTheme: themanagementmiamiBrandTheme },
+      compiled: brandThemeToPersonality(themanagementmiamiBrandTheme),
       vertical: bithireVertical,
       productProfile: recruitingProfile,
     });
@@ -75,7 +89,7 @@ describe('resolveChartPersonality', () => {
     expect(management).not.toEqual(bithire);
   });
 
-  it('uses ProductProfile chart values only on the legacy path', () => {
+  it('lets the compiled layer override the profile field by field, and no further', () => {
     const legacyProfile = {
       personality: {
         chart: {
@@ -86,35 +100,43 @@ describe('resolveChartPersonality', () => {
       },
     } as const;
 
-    const legacy = resolveChartPersonality({
-      tenantConfig: {},
+    const noCompile = resolveChartPersonality({
       vertical: bithireVertical,
       productProfile: legacyProfile,
     });
-    const premiumWithoutChartOverrides = resolveChartPersonality({
-      tenantConfig: { brandTheme: { id: 'premium-empty', name: 'Premium Empty' } },
+    // A compile that states no `chart` decides nothing on this dimension, so
+    // the profile underneath it stands. Presence of a declaration is not a
+    // decision -- that distinction is what keeps a library-seeding projection
+    // from silently replacing the preset.
+    const compiledWithoutChart = resolveChartPersonality({
+      compiled: brandThemeToPersonality({ id: 'premium-empty', name: 'Premium Empty' }),
+      vertical: bithireVertical,
+      productProfile: legacyProfile,
+    });
+    const compiledWithChart = resolveChartPersonality({
+      compiled: brandThemeToPersonality(bithireBrandTheme),
       vertical: bithireVertical,
       productProfile: legacyProfile,
     });
 
-    expect(legacy).toMatchObject({
+    expect(noCompile).toMatchObject({
       mountDuration: 913,
       lineStyle: 'step',
       tooltipStyle: 'minimal',
     });
-    expect(premiumWithoutChartOverrides).toMatchObject(bithireVertical.personality.chart);
-    expect(premiumWithoutChartOverrides.mountDuration).not.toBe(913);
+    expect(compiledWithoutChart).toEqual(noCompile);
+    // And a compile that DOES state one wins on every field it states.
+    expect(compiledWithChart).toMatchObject(brandThemeToPersonality(bithireBrandTheme).chart!);
+    expect(compiledWithChart.mountDuration).not.toBe(913);
   });
 
-  it('applies a sparse tenant chart override last without erasing inherited fields', () => {
+  it('applies a sparse compiled chart override last without erasing inherited fields', () => {
     const result = resolveChartPersonality({
-      tenantConfig: {
-        brandTheme: bithireBrandTheme,
-        personality: {
-          chart: {
-            mountDuration: 120,
-            showDots: false,
-          },
+      compiled: {
+        chart: {
+          ...brandThemeToPersonality(bithireBrandTheme).chart,
+          mountDuration: 120,
+          showDots: false,
         },
       },
       vertical: bithireVertical,
@@ -135,7 +157,7 @@ describe('resolveChartPersonality', () => {
     const profileChart = Object.freeze({ ...DEFAULT_PERSONALITY.chart, lineStyle: 'step' as const });
     const tenantChart = Object.freeze({ mountDuration: 75 });
     const input = Object.freeze({
-      tenantConfig: Object.freeze({ personality: Object.freeze({ chart: tenantChart }) }),
+      compiled: Object.freeze({ chart: tenantChart }),
       vertical: Object.freeze({
         personality: Object.freeze({ ...DEFAULT_PERSONALITY, chart: verticalChart }),
       }),
@@ -151,6 +173,8 @@ describe('resolveChartPersonality', () => {
     expect(first).not.toBe(second);
     expect(first).not.toBe(verticalChart);
     expect(first).not.toBe(profileChart);
+    // The compiled layer goes last and states only `mountDuration`, so the
+    // profile's `lineStyle` underneath it stands.
     expect(first).toMatchObject({ mountDuration: 75, lineStyle: 'step' });
     expect(verticalChart.mountDuration).toBe(610);
     expect(profileChart.lineStyle).toBe('step');
@@ -171,21 +195,19 @@ describe('useResolvedChartPersonality', () => {
   it('isolates sibling provider scopes', () => {
     render(
       <>
-        <TenantProvider
-          config={createTenant('bithire-scope', { brandTheme: bithireBrandTheme })}
-          vertical={bithireVertical}
-        >
-          <ProductProfileProvider profile="recruiting.operator">
-            <ChartProbe testId="bithire-chart" />
-          </ProductProfileProvider>
+        <TenantProvider config={createTenant('bithire-scope')} vertical={bithireVertical}>
+          <EngineVisualDeclarationProvider declaration={compiledFor(bithireBrandTheme)}>
+            <ProductProfileProvider profile="recruiting.operator">
+              <ChartProbe testId="bithire-chart" />
+            </ProductProfileProvider>
+          </EngineVisualDeclarationProvider>
         </TenantProvider>
-        <TenantProvider
-          config={createTenant('management-scope', { brandTheme: themanagementmiamiBrandTheme })}
-          vertical={bithireVertical}
-        >
-          <ProductProfileProvider profile="recruiting.operator">
-            <ChartProbe testId="management-chart" />
-          </ProductProfileProvider>
+        <TenantProvider config={createTenant('management-scope')} vertical={bithireVertical}>
+          <EngineVisualDeclarationProvider declaration={compiledFor(themanagementmiamiBrandTheme)}>
+            <ProductProfileProvider profile="recruiting.operator">
+              <ChartProbe testId="management-chart" />
+            </ProductProfileProvider>
+          </EngineVisualDeclarationProvider>
         </TenantProvider>
       </>,
     );

@@ -31,7 +31,6 @@ const TENANT_CONFIG = {
 const TEST_TENANT: TenantConfig = {
   slug: 'ck-h1-studio',
   name: 'customization anatomy Studio',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],
@@ -122,7 +121,7 @@ describe.each([
   ['rustic', RusticTenantPreview],
 ] as const)('TenantPreview %s customization anatomy anatomy', (engine, Preview) => {
   it('exposes the complete palette, samples and finite states without disturbing tenant CSS lifecycle', () => {
-    const { container, unmount } = render(<Preview config={{ ...TENANT_CONFIG, engine }} />);
+    const { container, unmount } = render(<Preview config={TENANT_CONFIG} />);
     const root = container.querySelector(
       `.ds-pattern-tenant-preview.ds-engine-${engine}[data-part="root"]`
     ) as HTMLElement;

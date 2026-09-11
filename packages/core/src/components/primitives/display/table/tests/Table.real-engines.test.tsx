@@ -132,7 +132,6 @@ describe('Table skins — the interaction-state rules the flagship never photogr
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'test-tenant',
   name: 'Test Tenant',
-  engine: 'modern',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',

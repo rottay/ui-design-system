@@ -136,13 +136,18 @@ async function renderAdmitted(
 /**
  * Render a tenant whose visual payload has NO artifact behind it. Used only by
  * the fail-closed case, which wants exactly this outcome.
+ *
+ * The payload is raw BRANDING because that is the only visual channel a
+ * `TenantConfig` has: it carries no `appearance`, `brandTheme`,
+ * `tokenOverrides` or `personality`, so an unbacked appearance is not
+ * something an application can express.
  */
 async function renderUnbacked(
-  appearance: TenantAppearance,
+  branding: TenantConfig['branding'],
 ): Promise<CSSStyleDeclaration> {
   await act(async () => {
     render(
-      <DesignSystemProvider tenantConfig={makeConfig({ appearance })}>
+      <DesignSystemProvider tenantConfig={makeConfig({ branding })}>
         <div data-testid="child">hello</div>
       </DesignSystemProvider>,
     );
@@ -154,7 +159,6 @@ function makeConfig(overrides: Partial<TenantConfig>): TenantConfig {
   return {
     slug: 'test-appearance',
     name: 'Test Appearance',
-    engine: 'classic',
     theme: 'base', // default — backgroundMode should be able to win
     plan: 'enterprise',
     features: [],
@@ -235,14 +239,15 @@ describe('TenantAppearance via DesignSystemProvider', () => {
     expect(rootStyle.getPropertyValue('--ds-color-success')).toBe('');
   });
 
-  it('a tenant carrying appearance with no compiled artifact paints nothing at all', async () => {
+  it('a tenant carrying raw branding with no compiled artifact paints nothing at all', async () => {
     // The fail-closed half of the law, stated on the DOM. This tenant has a
     // real visual payload and no artifact, so there is no producer for it:
     // the honest outcome is an unpainted root, not the DS baseline wearing
     // the tenant's slug. Every channel the payload names stays empty.
     const rootStyle = await renderUnbacked({
-      general: { palette: { primary: '#FF5500' } },
-      advanced: { tokenOverrides: { '--ds-color-success': '#00FF00' } },
+      companyName: 'Test Appearance',
+      primaryColor: '#FF5500',
+      successColor: '#00FF00',
     });
 
     expect(rootStyle.getPropertyValue('--ds-color-primary')).toBe('');

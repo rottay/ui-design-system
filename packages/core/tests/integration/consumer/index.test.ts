@@ -35,6 +35,7 @@ import {
   type MountedTenantTheme,
   type ThemeIntent,
 } from '@rottay/design-system/server';
+import type { TenantConfig } from '@rottay/design-system';
 import {
   classifySubpath,
   subpathOfSpecifier,
@@ -434,5 +435,52 @@ describe('the application renders a page from the guaranteed surface', () => {
     render(Providers({ children: ConsumerPage({ title: 'Roles', rows: [] }) }));
     const page = await screen.findByTestId('consumer-page');
     expect(page.className).toContain('modern');
+  });
+});
+
+/**
+ * THE TYPE-LEVEL NEGATIVE.
+ *
+ * `TenantConfig` is identity, bounded branding and the artifact reference. None
+ * of the five fields below is nameable, and an application that names one must
+ * fail to COMPILE — a runtime assertion would pass just as happily against a
+ * type that still declared them and a provider that merely ignored them.
+ *
+ * Each `@ts-expect-error` is the assertion. If any field appears, its directive
+ * becomes an unused expect-error and `typecheck:tests` goes red on this file.
+ */
+describe('the removed visual fields are not nameable by a consumer', () => {
+  it('refuses each one at compile time', () => {
+    const identity: TenantConfig = {
+      slug: 'consumer-negative',
+      name: 'Consumer negative',
+      theme: 'base',
+      plan: 'enterprise',
+      features: [],
+      vertical: 'bithire',
+      branding: { companyName: 'Consumer negative' },
+    };
+
+    const written: Partial<Record<string, unknown>> = {
+      // @ts-expect-error no `brandTheme`: compile a Theme into an artifact.
+      brandTheme: identity.brandTheme,
+      // @ts-expect-error no `tokenOverrides`: they are `ThemeCompilation.runtime`.
+      tokenOverrides: identity.tokenOverrides,
+      // @ts-expect-error no `personality`: it is `ThemeCompilation.runtime`.
+      personality: identity.personality,
+      // @ts-expect-error no `appearance`: it is the artifact's read-model.
+      appearance: identity.appearance,
+      // @ts-expect-error no `engine`: the vertical roster decides it.
+      engine: identity.engine,
+    };
+
+    // The runtime half of the same statement: the object a consumer can build
+    // carries none of them either.
+    for (const field of Object.keys(written)) {
+      expect(identity).not.toHaveProperty(field);
+    }
+
+    // ...and the artifact reference the config DOES carry is its identity.
+    expect(compileTenantArtifact().verticalKey).toBe(identity.vertical);
   });
 });

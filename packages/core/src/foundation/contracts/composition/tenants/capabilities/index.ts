@@ -670,30 +670,16 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // A stop written to `patch.recipeProfile` landed on a key nothing
       // reads.
       //
-      // Witness fix (DT ruling, F4B-15): the prior witness
-      // (RecipeProfileProvider, symbol 'RecipeProfileProvider') implied the
-      // declared channel --ds-recipe-profile reaches production. Measured:
-      // it does not, on EITHER surface. (a) --ds-recipe-profile (CSS) has
-      // NO production reader -- grep-confirmed, no `var(--ds-recipe-profile)`
-      // exists in source; the lowering writes it once and nothing reads it
-      // back, so it is provenance of the selection, not paint
-      // (compilers/runtime/theme/runtime/lowering writes the channel from the
-      // validated selection and no CSS consumes it). (b) RecipeProfileProvider IS a
-      // real consumer, but of `resolvedRuntimeConfig.appearance?.recipeProfile`
-      // (the DB-normalized shape), never of the CSS channel -- and for the 3
-      // code-owned verticals (today's production, no tenant DB) it NEVER
-      // receives a value at all: `getCodeOwnedRuntimeConfig`
-      // (tenant/foundation/configuration/registry/index.ts:155-162)
-      // destructures `appearance` OUT and never restores it, and
-      // `governedBehavior` (the one alternate channel motion/expressive ride)
-      // does not carry `recipes` either. The two surfaces are architecturally
-      // decoupled, not a bug this control can fix. Kept RecipeProfileProvider
-      // as the witness (the only real functional consumer that exists) and
-      // corrected `symbol` to what it actually reads -- the calibration's own
-      // notes carry the full two-surface truth with citations.
+      // TWO SURFACES, one witness. `--ds-recipe-profile` (CSS) has no
+      // production reader: the lowering writes it once from the validated
+      // selection and nothing reads it back, so it is provenance, not paint.
+      // The functional reader is the provider, and it reads the SELECTION from
+      // both transports the artifact decides it on (D-26): the mounted
+      // artifact's normalized appearance, and the identity-keyed governed slot
+      // a code-owned vertical's theme fills.
       evidence: {
         consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
-        symbol: 'resolvedRuntimeConfig.appearance?.recipeProfile',
+        symbol: 'appearance?.recipeProfile ?? governedBehavior?.recipeProfile',
       },
       scope: 'tenant',
       owner: 'design-system',

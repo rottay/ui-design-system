@@ -17,7 +17,6 @@ const rows = [
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'pattern-test',
   name: 'Pattern Test Tenant',
-  engine: 'classic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -32,7 +31,7 @@ describe('PatternDataTable integration', () => {
   it.each(STABLE_ENGINES)('renders the live pattern with the %s engine', async (engine) => {
     render(
       <DesignSystemProvider
-        tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+        tenantConfig={TEST_TENANT_CONFIG}
         forceEngine={engine}
         engineVisual={firstPartyEngineVisual('rottay', engine)}
         skipCssLoading
@@ -69,7 +68,7 @@ describe('PatternDataTable integration', () => {
 
     render(
       <DesignSystemProvider
-        tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+        tenantConfig={TEST_TENANT_CONFIG}
         forceEngine={engine}
         engineVisual={firstPartyEngineVisual('rottay', engine)}
         skipCssLoading

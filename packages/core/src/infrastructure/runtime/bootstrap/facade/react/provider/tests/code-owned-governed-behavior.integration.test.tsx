@@ -15,6 +15,9 @@ import {
   resolveExpressiveAxes,
   sanitizeExpressiveOverrides,
 } from '@/foundation/tokens/ts/presentation/expressive-profiles';
+// The AUTHORED theme, read from where it is authored and deliberately not from
+// the tenant config: that is what this suite proves.
+import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { useMotionPolicy } from '../../../../../motion';
 import {
   resolveActiveIconExpressiveProfile,
@@ -85,6 +88,7 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     expect(keys).not.toContain('appearance');
     expect(keys).not.toContain('personality');
     expect(keys).not.toContain('tokenOverrides');
+    expect(keys).not.toContain('engine');
     expect(keys).toContain('slug');
     expect(keys).toContain('branding');
   });
@@ -106,7 +110,7 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     const source = getKnownTenantConfig('bithire')!;
     const behavior = getCodeOwnedGovernedBehavior(source)!;
     expect(behavior.expressive?.experienceProfile).toBe('rottay/bithire-technical@1');
-    expect(behavior.expressive).toBe(source.brandTheme!.expressive);
+    expect(behavior.expressive).toBe(bithireBrandTheme.expressive);
 
     const axesFromSlice = resolveExpressiveAxes(
       behavior.expressive!.experienceProfile,
@@ -114,32 +118,33 @@ describe('code-owned governed behavior survives the runtime projection', () => {
       behavior.expressive!.schemaVersion,
     );
     const axesFromSource = resolveExpressiveAxes(
-      source.brandTheme!.expressive!.experienceProfile,
-      sanitizeExpressiveOverrides(source.brandTheme!.expressive!.profiles),
-      source.brandTheme!.expressive!.schemaVersion,
+      bithireBrandTheme.expressive!.experienceProfile,
+      sanitizeExpressiveOverrides(bithireBrandTheme.expressive!.profiles),
+      bithireBrandTheme.expressive!.schemaVersion,
     );
     expect(axesFromSlice).toEqual(axesFromSource);
     // Not vacuous: the selection resolves real axes, including the two the
     // theme overrides on top of its experience profile.
     expect(axesFromSlice).toMatchObject({ type: 'humanist', geometry: 'rounded' });
 
-    expect(resolveActiveIconExpressiveProfile({ brandTheme: behavior }))
-      .toBe(resolveActiveIconExpressiveProfile(source));
+    expect(resolveActiveIconExpressiveProfile({ expressive: behavior.expressive }))
+      .toBe(resolveActiveIconExpressiveProfile({ expressive: bithireBrandTheme.expressive }));
     expect(deriveDensityPosture(axesFromSlice.density))
       .toBe(deriveDensityPosture(axesFromSource.density));
   });
 
-  it('keeps the rendered density and icon posture equal to the pre-strip resolution', () => {
-    const source = getKnownTenantConfig('bithire')!;
+  it('keeps the rendered density and icon posture equal to the authored resolution', () => {
     renderVertical('bithire');
     const result = probe();
     const axes = resolveExpressiveAxes(
-      source.brandTheme!.expressive!.experienceProfile,
-      sanitizeExpressiveOverrides(source.brandTheme!.expressive!.profiles),
-      source.brandTheme!.expressive!.schemaVersion,
+      bithireBrandTheme.expressive!.experienceProfile,
+      sanitizeExpressiveOverrides(bithireBrandTheme.expressive!.profiles),
+      bithireBrandTheme.expressive!.schemaVersion,
     );
     expect(result.density).toBe(deriveDensityPosture(axes.density));
-    expect(result.iconProfile).toBe(resolveActiveIconExpressiveProfile(source) ?? null);
+    expect(result.iconProfile).toBe(
+      resolveActiveIconExpressiveProfile({ expressive: bithireBrandTheme.expressive }) ?? null,
+    );
   });
 
   it.each(['bithire', 'evnto', 'rottay'] as const)(
@@ -150,7 +155,7 @@ describe('code-owned governed behavior survives the runtime projection', () => {
       const fromSource = getCodeOwnedGovernedBehavior(source);
       const fromProjection = getCodeOwnedGovernedBehavior(projection);
       expect(fromProjection).toBe(fromSource);
-      expect(projection.brandTheme).toBeUndefined();
+      expect(Object.keys(projection)).not.toContain('brandTheme');
       expect(fromSource).toBeDefined();
     },
   );

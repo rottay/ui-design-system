@@ -23,7 +23,6 @@ import type { TenantConfig } from '@/foundation/contracts';
 const IDENTITY_ONLY_TENANT: TenantConfig = {
   slug: 'personality-paint-probe',
   name: 'Personality Paint Probe',
-  engine: 'modern',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

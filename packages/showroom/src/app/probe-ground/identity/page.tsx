@@ -125,7 +125,6 @@ export default async function IdentityProbeGroundPage({
         slug: candidate.slug,
         name: candidate.title,
         vertical: 'bithire',
-        engine: 'modern',
         theme: mode,
         plan: 'enterprise',
         features: ['*'],

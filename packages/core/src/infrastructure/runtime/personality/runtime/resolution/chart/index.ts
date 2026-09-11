@@ -8,32 +8,24 @@
  */
 
 import type { ChartPersonalityTokens } from '../../../../../../foundation/contracts/kernel/tokens/personality';
-import type { BrandTheme } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import { DEFAULT_PERSONALITY } from '../../../foundation/defaults';
 
 type PartialChartPersonality = Partial<ChartPersonalityTokens>;
 
 /** The inputs that can contribute to the resolved chart posture. */
 export interface ChartPersonalityResolutionInput {
-  /** Active tenant configuration, including the premium or legacy visual path. */
-  tenantConfig?: Readonly<{
-    /**
-     * The active BrandTheme, of which only `charts` is read.
-     *
-     * `Partial`, not `Pick<BrandTheme, 'charts'>`: presence of a BrandTheme is
-     * itself the signal that selects the premium path, so a theme that carries
-     * no `charts` at all is a resolvable input this function is documented to
-     * handle. `Pick` made `charts` mandatory and rejected every other field of
-     * the real theme object callers already hold.
-     */
-    brandTheme?: Partial<BrandTheme> | null;
-    personality?: Readonly<{ chart?: PartialChartPersonality }> | null;
-  }> | null;
+  /**
+   * The compiled tenant layer: `ThemeCompilation.runtime.personality` of the
+   * mounted artifact. It goes LAST, and a compiled layer that states no `chart`
+   * leaves the layer underneath it standing -- the choice turns on what was
+   * decided, never on whether a declaration object exists.
+   */
+  compiled?: Readonly<{ chart?: PartialChartPersonality }> | null;
   /** Active vertical baseline, when a vertical has been resolved. */
   vertical?: Readonly<{
     personality: Readonly<{ chart?: PartialChartPersonality }>;
   }> | null;
-  /** Active legacy profile. Ignored whenever a BrandTheme is present. */
+  /** Active profile, layered under the compiled tenant decision. */
   productProfile?: Readonly<{
     personality?: Readonly<{ chart?: PartialChartPersonality }> | null;
   }> | null;
@@ -42,25 +34,19 @@ export interface ChartPersonalityResolutionInput {
 /**
  * Resolve chart personality with the canonical visual precedence:
  *
- * `DEFAULT -> vertical -> (BrandTheme.charts | ProductProfile.chart) -> tenant`
+ * `DEFAULT -> vertical -> ProductProfile.chart -> compiled.chart`
  *
- * BrandTheme presence selects the premium path even when `charts` is absent;
- * in that case product-profile chart values must not leak through. A fresh
- * result is returned on every call and no input object is mutated.
+ * A fresh result is returned on every call and no input object is mutated.
  */
 export function resolveChartPersonality({
-  tenantConfig,
+  compiled,
   vertical,
   productProfile,
 }: ChartPersonalityResolutionInput = {}): ChartPersonalityTokens {
-  const authoredChart = tenantConfig?.brandTheme
-    ? tenantConfig.brandTheme.charts
-    : productProfile?.personality?.chart;
-
   return {
     ...DEFAULT_PERSONALITY.chart,
     ...vertical?.personality.chart,
-    ...authoredChart,
-    ...tenantConfig?.personality?.chart,
+    ...productProfile?.personality?.chart,
+    ...compiled?.chart,
   };
 }

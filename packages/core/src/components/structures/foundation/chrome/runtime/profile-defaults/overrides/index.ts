@@ -59,10 +59,28 @@ export {
 export function useSurfaceVisualOverrideVerdicts(
   overrides?: SurfaceVisualOverrides,
 ): readonly SurfaceVisualOverrideVerdict[] {
-  const { config } = useTenantContext();
+  const decided = useTenantDecidedChannels();
   return useMemo(
-    () => adjudicateInstanceOverrides(overrides, resolveTenantDecidedChannels(config)),
-    [config, overrides],
+    () => adjudicateInstanceOverrides(overrides, decided),
+    [decided, overrides],
+  );
+}
+
+/**
+ * The active tenant's decided channels, from the two places a decision can
+ * come from: the identity-keyed slot of a code-owned vertical, and the
+ * semantic density posture the mounted artifact of a published one compiled.
+ */
+function useTenantDecidedChannels(): ReadonlySet<string> {
+  const { config, appearance } = useTenantContext();
+  const density = appearance?.general?.density;
+  return useMemo(
+    () =>
+      resolveTenantDecidedChannels(
+        config,
+        density === undefined ? undefined : { density },
+      ),
+    [config, density],
   );
 }
 
@@ -80,11 +98,11 @@ export function useSurfaceProfileDefaultsWithOverrides(
   overrides?: SurfaceVisualOverrides
 ): ResolvedSurfaceProfileDefaults {
   const base = useSurfaceProfileDefaults();
-  const { config } = useTenantContext();
+  const decided = useTenantDecidedChannels();
 
   const admitted = useMemo(
-    () => admitInstanceOverrides(overrides, resolveTenantDecidedChannels(config)),
-    [config, overrides],
+    () => admitInstanceOverrides(overrides, decided),
+    [decided, overrides],
   );
 
   return useMemo(() => {

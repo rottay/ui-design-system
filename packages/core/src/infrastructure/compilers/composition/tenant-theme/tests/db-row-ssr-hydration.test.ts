@@ -197,14 +197,10 @@ describe('DB row -> SSR embed', () => {
 
       expect(Object.prototype.hasOwnProperty.call(config, 'engine'), slug).toBe(false);
 
-      // The other half of the same fact: even when the tenant's own engine is
-      // handed to the resolver alongside the vertical's, the vertical decides.
+      // The other half of the same fact: the resolver has no tenant input left
+      // to rank, so the vertical decides by construction.
       expect(
-        resolveEngine({
-          verticalEngine: 'modern',
-          tenantEngine: config.engine,
-          tenantSlug: config.slug,
-        }),
+        resolveEngine({ verticalEngine: 'modern', tenantSlug: config.slug }),
         slug,
       ).toBe('modern');
     }
@@ -261,13 +257,7 @@ describe('SSR embed -> hydration reuse', () => {
       },
       slug: artifact.slug,
       verticalKey: artifact.verticalKey,
-      payload: {
-        visualBranding: false,
-        tokenOverrides: false,
-        appearance: artifact.normalizedAppearance,
-        personality: false,
-        brandTheme: false,
-      },
+      payload: { visualBranding: false },
       documentRoot: null,
     });
 
@@ -296,16 +286,10 @@ describe('SSR embed -> hydration reuse', () => {
       declaration: { authority: 'compiled-artifact', artifact: overWire },
       slug: overWire.slug,
       verticalKey: overWire.verticalKey,
-      payload: {
-        visualBranding: false,
-        tokenOverrides: false,
-        // The app retains the compiled appearance because the runtime still
-        // READS it (density, motion dial, anatomy). It is an echo, not a
-        // second authority, and the resolver must tell those apart.
-        appearance: overWire.normalizedAppearance,
-        personality: false,
-        brandTheme: false,
-      },
+      // The app carries no visual payload at all: the compiled appearance the
+      // runtime still READS (density, motion dial, anatomy) travels on the
+      // artifact, not on the config, so there is nothing here to echo.
+      payload: { visualBranding: false },
     });
 
     expect(resolution.authority).toBe('compiled-artifact');
@@ -333,13 +317,7 @@ describe('SSR embed -> hydration reuse', () => {
       declaration: { authority: 'compiled-artifact', artifact: overWire },
       slug: overWire.slug,
       verticalKey: overWire.verticalKey,
-      payload: {
-        visualBranding: false,
-        tokenOverrides: false,
-        appearance: undefined,
-        personality: false,
-        brandTheme: false,
-      },
+      payload: { visualBranding: false },
     });
 
     expect(resolution.origin).toBe('invalid-declaration');
@@ -360,37 +338,27 @@ describe('SSR embed -> hydration reuse', () => {
     ).toBe(true);
   });
 
-  it('DRILL: an authored override is NOT mistaken for the echo', () => {
-    // The other direction. A payload that genuinely differs must be reported as
-    // a conflict, or a second painter ships silently.
-    const { artifact, emission } = renderOnServer();
+  it('DRILL: raw branding beside a genuine mount is still a conflict', () => {
+    // The other direction. A payload that genuinely competes must be reported,
+    // or a second painter ships silently. `TenantConfig` carries no appearance,
+    // so the branding seeds are the only payload that can sit beside a mount.
+    const { emission } = renderOnServer();
 
-    // The mount is genuine, so the appearance mismatch is the ONLY thing wrong.
-    // Without this the drill passed for the wrong reason: the resolver blocked
-    // on "not mounted" and `conflict !== null` was satisfied, which means it
-    // would have stayed green with the echo comparison deleted outright.
+    // The mount is genuine, so the raw payload is the ONLY thing wrong. Without
+    // this the drill would pass for the wrong reason: the resolver would block
+    // on "not mounted" and `conflict !== null` would be satisfied even with the
+    // payload census deleted outright.
     mountServerEmission(emission);
-
-    const tampered = JSON.parse(JSON.stringify(artifact.normalizedAppearance));
-    tampered.general = { ...(tampered.general ?? {}), density: 'compact' };
-    // Guards the tamper itself: if the fixture ever compiles to `compact`, the
-    // line above becomes a no-op and this drill would assert nothing.
-    expect(appearanceMatchesArtifact(tampered, artifact.normalizedAppearance)).toBe(false);
+    const { artifact } = renderOnServer();
 
     const resolution = resolveVisualAuthority({
       declaration: { authority: 'compiled-artifact', artifact },
       slug: artifact.slug,
       verticalKey: artifact.verticalKey,
-      payload: {
-        visualBranding: false,
-        tokenOverrides: false,
-        appearance: tampered,
-        personality: false,
-        brandTheme: false,
-      },
+      payload: { visualBranding: true },
     });
 
-    expect(resolution.conflict).toMatch(/raw appearance differs from the artifact/);
+    expect(resolution.conflict).toMatch(/raw visual branding/);
     expect(resolution.conflict).not.toMatch(/is not mounted/);
     // Suppression stays total under conflict: a reported ambiguity must never
     // become a second painter.

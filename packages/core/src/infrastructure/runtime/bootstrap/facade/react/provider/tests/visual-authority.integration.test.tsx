@@ -76,14 +76,18 @@ function tenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
       logoMark: '/mark.svg',
       favicon: '/favicon.ico',
     },
-    appearance: ARTIFACT.normalizedAppearance as TenantAppearance,
     ...overrides,
   } as TenantConfig;
 }
 
 function ConfigProbe(): React.ReactElement {
-  const { config } = useTenantContext();
-  return <output data-testid="resolved-config">{JSON.stringify(config)}</output>;
+  const { config, appearance } = useTenantContext();
+  return (
+    <>
+      <output data-testid="resolved-config">{JSON.stringify(config)}</output>
+      <output data-testid="resolved-appearance">{JSON.stringify(appearance ?? null)}</output>
+    </>
+  );
 }
 
 function renderProvider(
@@ -169,10 +173,14 @@ describe('DesignSystemProvider visual authority barrier', () => {
       logoMark: '/mark.svg',
       favicon: '/favicon.ico',
     });
-    expect(resolved.appearance).toEqual(ARTIFACT.normalizedAppearance);
+    // The artifact's own read-model travels BESIDE the config, never inside it.
+    expect(resolved).not.toHaveProperty('appearance');
     expect(resolved).not.toHaveProperty('tokenOverrides');
     expect(resolved).not.toHaveProperty('personality');
     expect(resolved).not.toHaveProperty('brandTheme');
+    expect(resolved).not.toHaveProperty('engine');
+    expect(JSON.parse(screen.getByTestId('resolved-appearance').textContent ?? 'null'))
+      .toEqual(ARTIFACT.normalizedAppearance);
     expect(document.querySelector('link[id^="tenant-theme-"]')).toBeNull();
     expect(document.getElementById('rottay-emergency-tokens')).toBeNull();
   });
@@ -195,7 +203,6 @@ describe('DesignSystemProvider visual authority barrier', () => {
     render(
       <DesignSystemProvider
         tenantConfig={tenantConfig({
-          appearance: undefined,
           branding: { companyName: 'The Management', primaryColor: '#B3001B' },
         })}
         vertical="bithire"
@@ -208,19 +215,6 @@ describe('DesignSystemProvider visual authority barrier', () => {
     expect(providerClaimedRoot()).toBe(false);
   });
 
-  it('blocks a raw appearance that differs from the compiled artifact', () => {
-    mountArtifact();
-    renderProvider(tenantConfig({
-      appearance: {
-        ...(ARTIFACT.normalizedAppearance as TenantAppearance),
-        general: {
-          ...ARTIFACT.normalizedAppearance.general,
-          density: 'spacious',
-        },
-      },
-    }));
-    expect(screen.queryByTestId('resolved-config')).toBeNull();
-  });
 });
 
 /**

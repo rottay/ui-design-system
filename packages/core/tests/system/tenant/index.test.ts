@@ -53,7 +53,10 @@ describe('Tenant Schema', () => {
       expect(isValidTenantConfig(undefined)).toBe(false);
     });
 
-    it('should return false for invalid engine', () => {
+    it('does not judge an engine, because a tenant does not carry one', () => {
+      // `TenantConfig` has no `engine`: the vertical roster owns it, and
+      // `resolveEngine` has no tenant input to rank. A transport that names one
+      // is not refused for it -- the field has nowhere to land.
       const config = {
         slug: 'test',
         name: 'Test',
@@ -63,7 +66,7 @@ describe('Tenant Schema', () => {
         features: [],
         branding: { companyName: 'Test' },
       };
-      expect(isValidTenantConfig(config)).toBe(false);
+      expect(isValidTenantConfig(config)).toBe(true);
     });
 
     it('should return false for invalid plan', () => {
@@ -92,7 +95,7 @@ describe('Tenant Defaults', () => {
       expect(config.slug).toBe('demo');
       expect(config.name).toBe('Demo Tenant');
       // Same rule for the fallback tenant: no engine, so the vertical decides.
-      expect(config.engine).toBeUndefined();
+      expect(config).not.toHaveProperty('engine');
       expect(config.theme).toBeDefined();
       expect(config.plan).toBeDefined();
       expect(config.features).toBeDefined();

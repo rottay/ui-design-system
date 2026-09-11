@@ -50,13 +50,7 @@ function buildArtifact(slug: string, rowVersion: number): TenantThemeArtifact {
 const ARTIFACT = buildArtifact('themanagement', 7);
 const OTHER_ARTIFACT = buildArtifact('othertenant', 3);
 
-const NO_PAYLOAD = {
-  visualBranding: false,
-  tokenOverrides: false,
-  appearance: undefined,
-  personality: false,
-  brandTheme: false,
-} as const;
+const NO_PAYLOAD = { visualBranding: false } as const;
 
 function resolveOnServer(
   artifact: TenantThemeArtifact,
@@ -201,11 +195,11 @@ describe('SSR emission receipt', () => {
       declaration: { authority: 'compiled-artifact', artifact: ARTIFACT, ssrReceipt: receipt },
       slug: ARTIFACT.slug,
       verticalKey: ARTIFACT.verticalKey,
-      payload: { ...NO_PAYLOAD, tokenOverrides: true },
+      payload: { ...NO_PAYLOAD, visualBranding: true },
       documentRoot: null,
     });
 
     expect(resolution.origin).toBe('invalid-declaration');
-    expect(resolution.conflict).toMatch(/raw tokenOverrides/);
+    expect(resolution.conflict).toMatch(/raw visual branding/);
   });
 });

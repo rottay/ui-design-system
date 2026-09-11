@@ -72,24 +72,16 @@ if (!IconExpressiveProfileContext) {
 }
 const IconProfile = IconExpressiveProfileContext;
 
-// Kept for the PURE derivation calls only (last describe block) — never
-// rendered, so `resolveVisualAuthority` never inspects these.
-const DUOTONE_TENANT = tenantConfig({
-  slug: 'tenant-duotone',
-  brandTheme: {
-    ...bithireBrandTheme,
-    expressive: {
-      experienceProfile: 'rottay/management-editorial@1',
-      profiles: { icon: 'duotone' },
-    },
-  } as TenantConfig['brandTheme'],
-});
+// The GOVERNED expressive selections the pure derivation reads (last describe
+// block). They are selections, not configs: a `TenantConfig` carries neither a
+// theme nor an appearance, so the resolver takes the selection directly.
+const DUOTONE_SELECTION = {
+  experienceProfile: 'rottay/management-editorial@1',
+  profiles: { icon: 'duotone' },
+};
 
 // Plain bithire: technical posture, no icon axis — baseline weights.
-const BASELINE_TENANT = tenantConfig({
-  slug: 'tenant-baseline',
-  brandTheme: bithireBrandTheme as TenantConfig['brandTheme'],
-});
+const BASELINE_SELECTION = bithireBrandTheme.expressive;
 
 function NestedTree() {
   return (
@@ -246,18 +238,19 @@ describe('server seam — RSC contract and its harness limit', () => {
 });
 
 describe('shared derivation (provider client value === server seam value)', () => {
-  it('resolves the same posture the provider context carries, for both config shapes', () => {
-    expect(resolveActiveIconExpressiveProfile(DUOTONE_TENANT)).toBe('duotone');
-    expect(resolveActiveIconExpressiveProfile(BASELINE_TENANT)).toBeUndefined();
+  it('resolves the same posture the provider context carries, for both selection shapes', () => {
+    expect(resolveActiveIconExpressiveProfile({ expressive: DUOTONE_SELECTION })).toBe('duotone');
+    expect(resolveActiveIconExpressiveProfile({ expressive: BASELINE_SELECTION })).toBeUndefined();
     expect(resolveActiveIconExpressiveProfile(undefined)).toBeUndefined();
-    // DB appearance beats static brandTheme — the canon precedence.
+    // The artifact's appearance beats the governed static selection — the canon
+    // precedence.
     expect(
       resolveActiveIconExpressiveProfile({
         appearance: {
           general: { experienceProfile: 'rottay/management-editorial@1' },
           advanced: { profiles: { icon: 'solid-active' } },
         },
-        brandTheme: DUOTONE_TENANT.brandTheme,
+        expressive: DUOTONE_SELECTION,
       })
     ).toBe('solid-active');
   });

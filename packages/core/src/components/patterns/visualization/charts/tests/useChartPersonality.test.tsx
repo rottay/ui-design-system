@@ -10,7 +10,6 @@ import { mockMatchMedia } from '@tests/support/browser/match-media';
 const CHART_TEST_TENANT: TenantConfig = {
   slug: 'chart-test',
   name: 'Chart Test',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

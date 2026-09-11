@@ -39,11 +39,7 @@ import {
   censusRuntimeVisualPayload,
   emitTenantThemeArtifactForSsr,
 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
-import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
-
-/** Classic seeds antd from a compiled projection and refuses to guess one. */
-const CLASSIC_VISUAL = firstPartyEngineVisual('bithire', 'classic');
 
 /**
  * Identity only. Every visual field this fixture used to carry is now either
@@ -53,7 +49,6 @@ function tokenTestTenant(slug: string): TenantConfig {
   return {
     slug,
     name: 'Token Test',
-    engine: 'classic',
     theme: 'light',
     plan: 'enterprise',
     features: ['all'],
@@ -145,7 +140,11 @@ function DensitySpacing({ testId }: { testId: string }): React.ReactElement {
 }
 
 describe('useTokens product profile resolution', () => {
-  it('layers engine defaults, product profile, and the compiled artifact in that order', () => {
+  it('layers engine defaults, product profile, and the artifact density in that order', () => {
+    // NO `engineVisual`: this tenant mounted its compiled CSS and published no
+    // runtime half, so the product profile is the top JS layer. The tenant's
+    // own compile taking that slot is the subject of
+    // `artifact-runtime-authority.test.tsx`, not of this file.
     const artifact = tokenTestArtifact('token-test', 'compact');
     mountArtifact(artifact);
 
@@ -154,8 +153,7 @@ describe('useTokens product profile resolution', () => {
         tenantConfig={tokenTestTenant('token-test')}
         visualAuthority={{ authority: 'compiled-artifact', artifact }}
         productProfile="events.organizer"
-        forceEngine="classic"
-        engineVisual={CLASSIC_VISUAL}
+        forceEngine="modern"
         skipCssLoading
       >
         <TokenConsumer />
@@ -226,8 +224,7 @@ describe('useTokens product profile resolution', () => {
           tenantConfig={tokenTestTenant(slug)}
           visualAuthority={{ authority: 'compiled-artifact', artifact }}
           productProfile="events.organizer"
-          forceEngine="classic"
-          engineVisual={CLASSIC_VISUAL}
+          forceEngine="modern"
           skipCssLoading
         >
           <DensitySpacing testId={`${density}-density-spacing`} />
@@ -252,17 +249,16 @@ describe('useTokens product profile resolution', () => {
   });
 
   it('DRILL: the old raw-override shape is refused, not silently applied', () => {
-    // Verbatim the payload these tests used to assert on. It must not reach
-    // `useTokens` -- and the failure mode must be a blocked tree, not a tree
-    // that renders with the raw values quietly folded in.
+    // `TenantConfig` has no `tokenOverrides` or `personality` to write; the
+    // branding seeds are the one raw channel a transport can hand the runtime,
+    // and they must not reach `useTokens` -- the failure mode must be a blocked
+    // tree, not a tree that renders with the raw values quietly folded in.
     const rawOverrides = {
       branding: {
         companyName: 'Token Test Override',
         primaryColor: '#991b1b',
         darkPrimaryColor: '#fca5a5',
       },
-      tokenOverrides: { borderRadius: { md: '22px' }, densityScale: 1.2 },
-      personality: { card: { paddingDensity: 'compact' as const } },
     };
 
     render(
@@ -270,7 +266,7 @@ describe('useTokens product profile resolution', () => {
         tenantConfig={tokenTestTenant('token-test')}
         tenantOverrides={rawOverrides}
         productProfile="events.organizer"
-        forceEngine="classic"
+        forceEngine="modern"
         skipCssLoading
       >
         <TokenConsumer />
@@ -280,13 +276,11 @@ describe('useTokens product profile resolution', () => {
     expect(screen.queryByTestId('radius-md')).toBeNull();
 
     // Named, so a future change that blocks for some unrelated reason cannot
-    // keep this drill green: all three raw channels must be what is seen.
+    // keep this drill green: the raw channel must be what is seen.
     const census = censusRuntimeVisualPayload({
       ...tokenTestTenant('token-test'),
       ...rawOverrides,
     } as TenantConfig);
-    expect(census.visualBranding).toBe(true);
-    expect(census.tokenOverrides).toBe(true);
-    expect(census.personality).toBe(true);
+    expect(census).toEqual({ visualBranding: true });
   });
 });

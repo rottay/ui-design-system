@@ -66,7 +66,7 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
       vertical: 'bithire',
       branding: { companyName: TENANT_SLUG },
     });
-    expect(result.current.tenantConfig?.brandTheme).toBeUndefined();
+    expect(result.current.tenantConfig).not.toHaveProperty('brandTheme');
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -133,7 +133,7 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
         vertical: 'bithire',
       }),
     );
-    expect(result.current.tenantConfig?.brandTheme).toBeUndefined();
+    expect(result.current.tenantConfig).not.toHaveProperty('brandTheme');
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -145,21 +145,19 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
     expect(fetchSpy).toHaveBeenCalledWith(
       `/api/public/tenant-branding/${TENANT_SLUG}`,
     );
-    expect(result.current.tenantConfig?.brandTheme).toBeUndefined();
+    expect(result.current.tenantConfig).not.toHaveProperty('brandTheme');
     expect(result.current.tenantConfig?.branding).toMatchObject({
       companyName: 'The Management Miami DB',
       primaryColor: '#126B64',
       logo: '/tenant-assets/the-management-logo.svg',
     });
-    expect(result.current.tenantConfig?.personality).toMatchObject({
-      animation: { entrance: 'fade', entranceDuration: 180 },
-    });
-    expect(result.current.tenantConfig?.tokenOverrides).toEqual({
-      borderRadius: { md: '10px' },
-    });
-    expect(result.current.tenantConfig?.appearance).toEqual({
-      general: { density: 'comfortable' },
-    });
+    // The endpoint's `personality`, `tokenOverrides`, `appearance` and `engine`
+    // are NOT carried. A branding endpoint is a transport, not a visual
+    // authority: the artifact its document compiled to is what paints, so a
+    // second copy of those decisions here could only disagree with it.
+    for (const field of ['personality', 'tokenOverrides', 'appearance', 'engine']) {
+      expect(result.current.tenantConfig).not.toHaveProperty(field);
+    }
   });
 
   it('uses the resolved tenant slug even when a stale session names another tenant', async () => {
@@ -279,7 +277,6 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
   it.each([
     ['normalized slug', { slug: 'TENANT-A ', branding: { companyName: 'Tenant A' } }],
     ['reserved display identity', { slug: 'tenant-a', branding: { companyName: 'Bit Hire' } }],
-    ['invalid engine', { slug: 'tenant-a', engine: 'unknown', branding: { companyName: 'Tenant A' } }],
   ])('keeps the identity-only fallback for an invalid %s response', async (_label, data) => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
@@ -298,7 +295,30 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
       name: 'tenant-a',
       branding: { companyName: 'tenant-a' },
     });
-    expect(result.current.tenantConfig?.engine).toBeUndefined();
+    expect(result.current.tenantConfig).not.toHaveProperty('engine');
+  });
+
+  it('ignores an engine named by the branding response instead of honouring it', async () => {
+    // `TenantConfig` has no `engine`: the vertical roster owns it, so a
+    // transport that names one is not refused for it -- the field simply has
+    // nowhere to land, and the rest of the response is accepted normally.
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        data: { slug: 'tenant-a', engine: 'unknown', branding: { companyName: 'Tenant A' } },
+      }),
+    }));
+
+    const { result } = renderHook(() => useTenantBranding({
+      tenantSlug: 'tenant-a',
+      session: null,
+      vertical: 'bithire',
+    }));
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.tenantConfig?.branding.companyName).toBe('Tenant A');
+    expect(result.current.tenantConfig).not.toHaveProperty('engine');
   });
 
   it('rejects a reserved session display identity before branding I/O', () => {
@@ -631,8 +651,11 @@ describe('useTenantBranding at the visual-authority seam', () => {
       payload: censusRuntimeVisualPayload(result.current.tenantConfig),
       documentRoot: null,
     });
+    // ONE channel, because one is all a config can carry: the endpoint's
+    // `tokenOverrides`/`personality`/`appearance` reach the config nowhere, and
+    // its branding seeds are the one thing an artifact can be mixed with.
     expect(mixed.conflict).toMatch(
-      /mixes a compiled artifact with raw visual branding, raw tokenOverrides, raw tenant personality/,
+      /mixes a compiled artifact with raw visual branding/,
     );
     expect(mixed.artifact).toBeNull();
   });

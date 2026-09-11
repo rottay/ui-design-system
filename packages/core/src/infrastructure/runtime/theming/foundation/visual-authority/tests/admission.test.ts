@@ -54,10 +54,6 @@ const FIXTURE: TenantThemeArtifact = {
 
 const EMPTY_PAYLOAD: RuntimeVisualPayloadCensus = {
   visualBranding: false,
-  tokenOverrides: false,
-  appearance: undefined,
-  personality: false,
-  brandTheme: false,
 };
 
 function mountArtifact(artifact: TenantThemeArtifact = FIXTURE): HTMLStyleElement {

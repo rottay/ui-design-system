@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import type { TenantConfig } from "@/foundation/contracts";
+import type {
+  BrandTheme,
+  TenantAppearance,
+} from "@/foundation/contracts/composition/tenants/themes";
 import {
   LOCALE_CONFIGS,
   TRANSLATION_CATALOG,
@@ -34,9 +37,28 @@ const managementProjectedAppearance = brandThemeToTenantAppearance(
   themanagementmiamiBrandTheme
 );
 
-const managementAppearance: NonNullable<TenantConfig["appearance"]> = {
+const managementAppearance: TenantAppearance = {
   general: managementProjectedAppearance.general,
 };
+
+/**
+ * The two transport shapes, named locally.
+ *
+ * They are deliberately NOT `Pick<TenantConfig, ...>`: a tenant config carries
+ * neither a theme nor an appearance, so the fixtures below describe what each
+ * TRANSPORT hands the compiler, not what a runtime config holds.
+ */
+interface StaticTransportFixture {
+  slug: string;
+  vertical: string;
+  brandTheme: BrandTheme;
+}
+interface DbTransportFixture {
+  slug: string;
+  vertical: string;
+  appearance: TenantAppearance;
+  customTranslations: { components: { empty: { description: string } } };
+}
 
 /**
  * The DB transport, authored the way the document schema admits it: the
@@ -85,7 +107,7 @@ const bithireStaticConfig = {
   slug: "bithire",
   vertical: "bithire",
   brandTheme: bithireBrandTheme,
-} satisfies Pick<TenantConfig, "slug" | "vertical" | "brandTheme">;
+} satisfies StaticTransportFixture;
 
 function managementDbConfig(locale: Locale) {
   return {
@@ -95,15 +117,12 @@ function managementDbConfig(locale: Locale) {
     customTranslations: {
       components: { empty: { description: MANAGEMENT_COPY[locale] } },
     },
-  } satisfies Pick<
-    TenantConfig,
-    "slug" | "vertical" | "appearance" | "customTranslations"
-  >;
+  } satisfies DbTransportFixture;
 }
 
 function resolveEmptyCopy(
   locale: Locale,
-  customTranslations?: TenantConfig["customTranslations"]
+  customTranslations?: DbTransportFixture["customTranslations"]
 ): string | undefined {
   return resolveTranslation({
     key: "components.empty.description",

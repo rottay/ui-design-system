@@ -35,7 +35,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DesignSystemProvider } from '../../../src/infrastructure/runtime/bootstrap';
-import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
+import { librarySeedEngineVisual } from '@tests/support/engine';
 import type { EngineName, ProductProfileKey, TenantConfig } from '../../../src/foundation/contracts';
 import {
   PERSONALITY_CANONICAL_PROJECTION,
@@ -83,7 +83,6 @@ class IntersectionObserverMock {
 const EVNTO_TENANT: TenantConfig = {
   slug: 'evnto-test',
   name: 'Evnto Test',
-  engine: 'classic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -97,7 +96,6 @@ const EVNTO_TENANT: TenantConfig = {
 const BITHIRE_TENANT: TenantConfig = {
   slug: 'bithire-test',
   name: 'BitHire Test',
-  engine: 'classic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -123,15 +121,15 @@ const EVNTO_TENANT_WITH_UNCOMPILED_COLORS: TenantConfig = {
 
 function renderWithProfile(
   ui: React.ReactNode,
-  engine: EngineName,
+  engine: Exclude<EngineName, 'custom'>,
   tenantConfig: TenantConfig,
   productProfile: ProductProfileKey
 ) {
   return render(
     <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig, engine }}
+      tenantConfig={tenantConfig}
       forceEngine={engine}
-      engineVisual={firstPartyEngineVisual('rottay', engine)}
+      engineVisual={librarySeedEngineVisual(engine)}
       productProfile={productProfile}
       skipCssLoading
     >
@@ -376,7 +374,7 @@ describe('primitive personality integration', () => {
 
     rerender(
       <DesignSystemProvider
-        tenantConfig={{ ...BITHIRE_TENANT, engine: 'rustic' }}
+        tenantConfig={BITHIRE_TENANT}
         forceEngine="rustic"
         productProfile="recruiting.operator"
         skipCssLoading

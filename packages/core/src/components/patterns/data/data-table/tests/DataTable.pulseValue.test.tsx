@@ -25,7 +25,6 @@ import { PulseValue } from '../../../runtime/pulse/value-change';
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'pulse-value-test',
   name: 'Pulse Value Test Tenant',
-  engine: 'rustic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',

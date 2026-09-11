@@ -7,7 +7,7 @@ import React, { type ReactNode } from 'react';
 import type { Decorator } from '@storybook/react-vite';
 
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
-import type { ProductProfileKey, TenantConfig } from '../../../../../foundation/contracts';
+import type { EngineName, ProductProfileKey, TenantConfig } from '../../../../../foundation/contracts';
 import type {
   LocaleTranslations,
   SupportedLocale,
@@ -16,7 +16,6 @@ import type {
 const BASE_STORY_TENANT: TenantConfig = {
   slug: 'story',
   name: 'Story Tenant',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],
@@ -29,7 +28,7 @@ export interface SurfaceStoryProviderProps {
   children: ReactNode;
   locale?: SupportedLocale;
   productProfile?: ProductProfileKey;
-  engine?: TenantConfig['engine'];
+  engine?: EngineName;
   tenantOverrides?: Partial<TenantConfig>;
   customTranslations?: Partial<LocaleTranslations>;
 }
@@ -46,7 +45,6 @@ export function SurfaceStoryProvider({
     <DesignSystemProvider
       tenantConfig={{
         ...BASE_STORY_TENANT,
-        engine,
         locale,
       }}
       tenantOverrides={tenantOverrides}

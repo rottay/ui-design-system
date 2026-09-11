@@ -20,7 +20,7 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
-import { buildPreviewCss } from '../../runtime/preview-css';
+import { buildPreviewCss, draftPreviewSource } from '../../runtime/preview-css';
 
 /** Default set of component samples to display when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
@@ -118,7 +118,10 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
   );
 
   /* Sanitized CSS re-anchored to the preview root; never html[data-tenant] */
-  const preview = useMemo(() => buildPreviewCss(tenantConfig), [tenantConfig]);
+  const preview = useMemo(
+    () => buildPreviewCss(draftPreviewSource(creationConfig) ?? tenantConfig),
+    [creationConfig, tenantConfig],
+  );
 
   const previewRef = useRef<HTMLDivElement>(null);
 
@@ -192,7 +195,7 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
               {creationConfig.name}
             </div>
             <div style={{ fontSize: '13px', color: textTertiary }}>
-              {creationConfig.slug} | {creationConfig.engine ?? 'classic'} | {creationConfig.personality ?? 'neutral'}
+              {creationConfig.slug} | {'classic'} | {creationConfig.personality ?? 'neutral'}
             </div>
           </div>
         </div>
@@ -327,7 +330,7 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
                     padding: '16px',
                     borderRadius: '8px',
                     /* Personality token controls whether the card has a visible border */
-                    border: tenantConfig.personality?.card?.showBorder !== false
+                    border: personalityInfo.tokens.card?.showBorder !== false
                       ? `1px solid ${borderPrimary}`
                       : 'none',
                     boxShadow: 'var(--ds-shadow-sm)',
@@ -385,9 +388,9 @@ export default function ClassicTenantPreview(props: TenantPreviewProps) {
                       { bg: bgSecondary, fg: textPrimary },
                     ];
                     /* Badge border-radius driven by personality accent token */
-                    const badgeRadius = tenantConfig.personality?.accent?.badgeShape === 'pill'
+                    const badgeRadius = personalityInfo.tokens.accent?.badgeShape === 'pill'
                       ? '9999px'
-                      : tenantConfig.personality?.accent?.badgeShape === 'square'
+                      : personalityInfo.tokens.accent?.badgeShape === 'square'
                         ? '4px'
                         : '6px';
                     return (

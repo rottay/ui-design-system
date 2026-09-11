@@ -25,7 +25,6 @@ const rows: Row[] = [
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'responsive-test',
   name: 'Responsive Test',
-  engine: 'classic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',

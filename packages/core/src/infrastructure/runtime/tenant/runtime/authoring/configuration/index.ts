@@ -1,14 +1,21 @@
 /**
- * @fileoverview Tenant creation utilities.
- * @description Generates a complete TenantConfig from minimal input (slug, name,
- * primaryColor). Personality presets, density overrides, and structural token
- * adjustments are all derived automatically so onboarding flows never need to
- * hand-craft a full config object.
+ * @fileoverview Tenant authoring utilities.
+ * @description Projects one minimal draft (slug, name, primaryColor) into the
+ * two things an onboarding flow needs and which are deliberately NOT the same
+ * object: the tenant's IDENTITY (`createTenantConfig`) and its VISUAL SOURCE
+ * (`createTenantBrandTheme`). A `TenantConfig` carries no paint, so a draft's
+ * personality preset and density posture land on the BrandTheme the compiler
+ * lowers, never back on the config.
  */
 
-import type { TenantConfig, EngineName, TenantPlan } from '../../../../../../foundation/contracts';
+import type { TenantConfig, TenantPlan } from '../../../../../../foundation/contracts';
 import type { PersonalityTokens } from '../../../../../../foundation/contracts/kernel/tokens/personality';
-import type { TenantTokenOverrides } from '../../../../../../foundation/contracts/composition/tenants';
+import type {
+  BrandChrome,
+  BrandSurfaces,
+  BrandTheme,
+  BrandTypography,
+} from '../../../../../../foundation/contracts/composition/tenants/themes';
 import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
 import {
   resolvePersonalityPreset,
@@ -26,8 +33,6 @@ export interface TenantCreationConfig {
   secondaryColor?: string;
   /** Optional logo URL */
   logo?: string;
-  /** UI engine to use */
-  engine?: EngineName;
   /** Personality preset for quick visual identity */
   personality?: PersonalityPreset;
   /** Layout density */
@@ -65,10 +70,10 @@ function resolveDensity(
 }
 
 /**
- * Generates a complete TenantConfig from minimal input.
+ * Generates the tenant's IDENTITY from minimal input.
  *
- * Only `slug`, `name`, and `primaryColor` are required. Everything else
- * receives sensible defaults derived from the chosen personality preset.
+ * Only `slug`, `name`, and `primaryColor` are required. It carries no visual
+ * payload beyond the bounded branding seeds.
  *
  * @example
  * ```ts
@@ -87,9 +92,6 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
     primaryColor,
     secondaryColor,
     logo,
-    engine,
-    personality: personalityPreset = 'neutral',
-    density = 'comfortable',
     plan = 'starter',
     features = [],
     domain,
@@ -104,41 +106,10 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
     verticalKey: vertical,
   });
 
-  const personalityTokens = resolvePersonalityPreset(personalityPreset) as PersonalityTokens;
-  const { densityScale, paddingDensity } = resolveDensity(density);
-
-  // Density is the one high-level input that affects both structural tokens and
-  // perceived personality, so we project it into both layers here.
-  const mergedPersonality: Partial<PersonalityTokens> = {
-    ...personalityTokens,
-    card: {
-      ...personalityTokens.card!,
-      paddingDensity,
-    },
-  };
-
-  // Token overrides are only created when density differs from the 1.0 baseline.
-  // This keeps the generated config minimal -- the engine's own density scale
-  // applies when no override is present.
-  const tokenOverrides: TenantTokenOverrides | undefined =
-    densityScale !== 1.0 ? { densityScale } : undefined;
-
-  // Spacious layouts read better when radius scales with density. We encode
-  // that as a generated override instead of making callers wire it manually.
-  if (density === 'spacious' && tokenOverrides) {
-    tokenOverrides.borderRadius = {
-      sm: '10px',
-      md: '14px',
-      lg: '18px',
-      xl: '24px',
-    };
-  }
-
   return {
     slug,
     name,
     domain,
-    engine,
     theme: 'base',
     plan,
     features,
@@ -148,9 +119,56 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
       secondaryColor,
       logo,
     },
-    personality: mergedPersonality,
-    tokenOverrides,
     vertical,
     componentPack,
+  };
+}
+
+/**
+ * Generates the tenant's VISUAL SOURCE from the same input.
+ *
+ * The preset lands on the channels `brandThemeToPersonality` reads back, and
+ * density on `surfaces`, so one draft produces one theme.
+ */
+export function createTenantBrandTheme(config: TenantCreationConfig): BrandTheme {
+  const {
+    slug,
+    name,
+    primaryColor,
+    secondaryColor,
+    personality: personalityPreset = 'neutral',
+    density = 'comfortable',
+  } = config;
+
+  const personalityTokens = resolvePersonalityPreset(personalityPreset) as PersonalityTokens;
+  const { densityScale, paddingDensity } = resolveDensity(density);
+
+  const typography: BrandTypography = { ...personalityTokens.typography };
+  const chrome: BrandChrome = {
+    card: { ...personalityTokens.card, paddingDensity },
+    accent: { ...personalityTokens.accent },
+  };
+
+  // Stated only when it differs from the 1.0 baseline, so the engine's own
+  // scale applies otherwise. Spacious layouts read better when radius scales
+  // with density, so that pair travels together.
+  const surfaces: BrandSurfaces = {
+    ...(densityScale === 1.0 ? {} : { densityScale }),
+    ...(density === 'spacious'
+      ? { borderRadius: { sm: '10px', md: '14px', lg: '18px', xl: '24px' } }
+      : {}),
+  };
+
+  return {
+    id: slug,
+    name,
+    palette: {
+      primaryColor,
+      ...(secondaryColor ? { secondaryColor } : {}),
+    },
+    typography,
+    motion: { ...personalityTokens.animation },
+    chrome,
+    ...(Object.keys(surfaces).length > 0 ? { surfaces } : {}),
   };
 }

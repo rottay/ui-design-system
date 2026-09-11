@@ -15,6 +15,7 @@ import { EngineProvider } from '@/infrastructure/runtime/engines';
 import { ProductProfileProvider } from '@/infrastructure/runtime/product-profiles';
 import { TenantContext } from '@/infrastructure/runtime/tenant/foundation/context';
 import type { TenantConfig } from '@/foundation/contracts';
+import { getKnownTenantConfig } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 
 import type { SurfaceVisualOverrides } from '../../../../contracts';
 import {
@@ -31,12 +32,19 @@ import {
 const BASE_TENANT: TenantConfig = {
   slug: 'override-law',
   name: 'Override Law Tenant',
-  engine: 'modern',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],
   branding: { companyName: 'Override Law Tenant' },
 };
+
+/** What the two decision routes look like from a test's side. */
+interface MountedTenant {
+  /** A code-owned vertical whose authored theme decided its channels. */
+  codeOwned?: 'bithire';
+  /** The semantic density posture a published tenant's artifact compiled. */
+  density?: string;
+}
 
 /**
  * The contexts `useSurfaceProfileDefaults` actually reads, mounted directly.
@@ -47,13 +55,26 @@ const BASE_TENANT: TenantConfig = {
  * under test is the merge precedence, not the admission barrier, and the
  * admission barrier has its own suites.
  */
-function renderWithTenant(ui: ReactElement, tenantConfig: TenantConfig) {
+function renderWithTenant(ui: ReactElement, mounted: MountedTenant = {}) {
+  // The registry's OWN object for the code-owned arm: the decided channels are
+  // keyed off identity, so a literal that copies its fields decides nothing.
+  const config = mounted.codeOwned
+    ? getKnownTenantConfig(mounted.codeOwned) ?? BASE_TENANT
+    : BASE_TENANT;
+
   function Wrapper({ children }: { children: ReactNode }): ReactElement {
     return (
       <EngineProvider defaultEngine="modern">
         <ProductProfileProvider profile="generic.default">
           <TenantContext.Provider
-            value={{ config: tenantConfig, isLoading: false, vertical: undefined } as never}
+            value={{
+              config,
+              isLoading: false,
+              vertical: undefined,
+              ...(mounted.density === undefined
+                ? {}
+                : { appearance: { general: { density: mounted.density } } }),
+            } as never}
           >
             {children}
           </TenantContext.Provider>
@@ -84,7 +105,7 @@ function Probe({ overrides }: { overrides?: SurfaceVisualOverrides }) {
 
 describe('an instance selection cannot contradict a tenant decision', () => {
   it('applies a catalog value on a channel the tenant left open', () => {
-    renderWithTenant(<Probe overrides={{ badgeShape: 'pill' }} />, BASE_TENANT);
+    renderWithTenant(<Probe overrides={{ badgeShape: 'pill' }} />);
 
     expect(screen.getByTestId('badgeShape')).toHaveTextContent('pill');
     expect(screen.getByTestId('verdicts')).toHaveTextContent('badgeShape:admitted');
@@ -93,11 +114,12 @@ describe('an instance selection cannot contradict a tenant decision', () => {
   it('refuses the same selection once the tenant decides that channel', () => {
     renderWithTenant(
       <Probe overrides={{ badgeShape: 'pill' }} />,
-      { ...BASE_TENANT, personality: { accent: { badgeShape: 'square' } } },
+      { codeOwned: 'bithire' },
     );
 
-    // The tenant's value stands, and the refusal is named rather than silent.
-    expect(screen.getByTestId('badgeShape')).toHaveTextContent('square');
+    // The instance value does not land, and the refusal is named rather than
+    // silent. What DOES land is the resolution chain's own answer -- the
+    // tenant's paint rides its compiled artifact, not this policy.
     expect(screen.getByTestId('badgeShape')).not.toHaveTextContent('pill');
     expect(screen.getByTestId('verdicts')).toHaveTextContent('badgeShape:tenant-decided');
   });
@@ -105,7 +127,7 @@ describe('an instance selection cannot contradict a tenant decision', () => {
   it('refuses a density selection decided through the appearance document', () => {
     renderWithTenant(
       <Probe overrides={{ density: 'spacious' }} />,
-      { ...BASE_TENANT, appearance: { general: { density: 'compact' } } },
+      { density: 'compact' },
     );
 
     expect(screen.getByTestId('density')).not.toHaveTextContent('spacious');
@@ -115,17 +137,16 @@ describe('an instance selection cannot contradict a tenant decision', () => {
   it('closes the derived back door: a tenant-decided density also refuses sectionSpacing', () => {
     renderWithTenant(
       <Probe overrides={{ sectionSpacing: 'lg' }} />,
-      { ...BASE_TENANT, personality: { card: { paddingDensity: 'compact' } } },
+      { codeOwned: 'bithire' },
     );
 
-    expect(screen.getByTestId('sectionSpacing')).toHaveTextContent('sm');
+    expect(screen.getByTestId('sectionSpacing')).not.toHaveTextContent('lg');
     expect(screen.getByTestId('verdicts')).toHaveTextContent('sectionSpacing:tenant-decided');
   });
 
   it('refuses a value the catalog does not model even on an open channel', () => {
     renderWithTenant(
       <Probe overrides={{ density: 'ultra' as never, entranceDuration: 99_000 }} />,
-      BASE_TENANT,
     );
 
     expect(screen.getByTestId('density')).toHaveTextContent('comfortable');
@@ -153,14 +174,11 @@ describe('the catalog is complete and subordination has no gap', () => {
     expect(isAdmittedOverrideValue('animateEntrance', 'yes')).toBe(false);
   });
 
-  it('reads a BrandTheme decision through the same lowering useTokens uses', () => {
-    const decided = resolveTenantDecidedChannels({
-      ...BASE_TENANT,
-      brandTheme: {
-        chrome: { accent: { badgeShape: 'square' } },
-        surfaces: { density: 'compact' },
-      },
-    } as unknown as TenantConfig);
+  it('reads a code-owned vertical\'s authored decisions and the artifact density', () => {
+    const decided = resolveTenantDecidedChannels(
+      getKnownTenantConfig('bithire')!,
+      { density: 'compact' },
+    );
 
     expect(decided.has('accent.badgeShape')).toBe(true);
     expect(decided.has('card.paddingDensity')).toBe(true);
@@ -172,14 +190,11 @@ describe('the catalog is complete and subordination has no gap', () => {
       ]);
   });
 
-  it('treats an undeclared field of an authored dimension as an open channel', () => {
-    // A BrandTheme lowering emits a whole dimension with undefined members.
-    const decided = resolveTenantDecidedChannels({
-      ...BASE_TENANT,
-      personality: { accent: { badgeShape: undefined, barPosition: 'left' } },
-    } as unknown as TenantConfig);
-
-    expect(decided.has('accent.barPosition')).toBe(true);
-    expect(decided.has('accent.badgeShape')).toBe(false);
+  it('decides nothing for a tenant that authored nothing', () => {
+    // The EFFECTIVE personality of any tenant is fully populated, so authorship
+    // cannot be read from it. A config that is not code-owned and whose
+    // artifact compiled no density posture has decided no channel at all.
+    expect([...resolveTenantDecidedChannels(BASE_TENANT)]).toEqual([]);
+    expect([...resolveTenantDecidedChannels(undefined)]).toEqual([]);
   });
 });

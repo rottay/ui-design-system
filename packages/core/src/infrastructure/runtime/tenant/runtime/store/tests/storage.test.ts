@@ -208,7 +208,6 @@ describe('tenant storage facade', () => {
     mockedLoadStaticTenantConfig.mockResolvedValue({
       slug: 'acme',
       name: 'Acme',
-      engine: 'modern',
       theme: 'base',
       plan: 'pro',
       features: [],
@@ -226,7 +225,6 @@ describe('tenant storage facade', () => {
     mockedLoadStaticTenantConfig.mockResolvedValue({
       slug: 'static-tenant',
       name: 'Static Tenant',
-      engine: 'rustic',
       theme: 'light',
       locale: 'en',
       fallbackLocale: 'en',
@@ -292,7 +290,6 @@ describe('tenant storage facade', () => {
     mockedFetchRemoteTenantConfig.mockResolvedValue({
       slug: 'remote-tenant',
       name: 'Remote Tenant',
-      engine: 'classic',
       theme: 'base',
       locale: 'es',
       fallbackLocale: 'en',
@@ -358,7 +355,6 @@ describe('tenant storage facade', () => {
     mockedLoadStaticTenantConfig.mockResolvedValue({
       slug: 'preloaded',
       name: 'Preloaded Tenant',
-      engine: 'rustic',
       theme: 'light',
       locale: 'en',
       fallbackLocale: 'en',
@@ -378,7 +374,6 @@ describe('tenant storage facade', () => {
     mockedLoadStaticTenantConfig.mockResolvedValue({
       slug: 'clear-me',
       name: 'Clear Me',
-      engine: 'classic',
       theme: 'base',
       locale: 'en',
       fallbackLocale: 'en',

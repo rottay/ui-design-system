@@ -156,9 +156,7 @@ describe('density posture equivalence across every authority', () => {
     mountPostureArtifact();
     const view = render(
       <DesignSystemProvider
-        tenantConfig={tenantConfig({
-          appearance: POSTURE_ARTIFACT.normalizedAppearance as TenantConfig['appearance'],
-        })}
+        tenantConfig={tenantConfig()}
         vertical="rottay"
         visualAuthority={{ authority: 'compiled-artifact', artifact: POSTURE_ARTIFACT }}
         skipCssLoading
@@ -225,9 +223,7 @@ describe('density posture equivalence across every authority', () => {
     mountPostureArtifact();
     const view = render(
       <DesignSystemProvider
-        tenantConfig={tenantConfig({
-          appearance: POSTURE_ARTIFACT.normalizedAppearance as TenantConfig['appearance'],
-        })}
+        tenantConfig={tenantConfig()}
         vertical="rottay"
         visualAuthority={{ authority: 'compiled-artifact', artifact: POSTURE_ARTIFACT }}
         skipCssLoading

@@ -9,6 +9,7 @@ import { DesignSystemProvider } from '../../../src/infrastructure/runtime/bootst
 import { EngineProvider } from '../../../src/infrastructure/runtime/engines/composition/react/provider';
 import { firstPartyEngineVisual } from '../../../src/infrastructure/compilers/runtime/theme';
 import type { EngineName, TenantConfig } from '../../../src/foundation/contracts';
+import type { EngineVisualDeclaration } from '../../../src/foundation/contracts/composition/tenants/themes/engine-adapter';
 
 /**
  * Stable engines for testing (excludes experimental 'custom').
@@ -42,7 +43,6 @@ export type StableEngineName = (typeof STABLE_ENGINES)[number];
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'test-tenant',
   name: 'Test Tenant',
-  engine: 'modern',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -67,17 +67,33 @@ export interface RenderWithEngineOptions extends Omit<RenderOptions, 'wrapper'> 
 /**
  * Wrapper component for engine tests
  */
+/**
+ * The projection a library needs, WITHOUT a tenant decision attached.
+ *
+ * `classic` seeds antd from a compiled projection and refuses to guess one, so
+ * the reference vertical's compile stands in for a fixture tenant that authors
+ * no theme. That same declaration also carries `ThemeCompilation.runtime`,
+ * which `useTokens` reads as the TENANT layer -- and another vertical's
+ * compile is not this fixture's decision. The runtime half is therefore
+ * emptied: the seeds are borrowed, the decisions are not.
+ */
+export function librarySeedEngineVisual(
+  engine: Exclude<EngineName, 'custom'>,
+): EngineVisualDeclaration {
+  return {
+    ...firstPartyEngineVisual('rottay', engine),
+    runtime: { personality: {}, tokenOverrides: {} },
+  };
+}
+
 function createEngineWrapper(
   engine: EngineName,
   suspenseFallback: React.ReactNode
 ): React.FC<{ children: React.ReactNode }> {
-  // `classic` seeds antd from a compiled projection and refuses to guess one.
-  // The fixture tenant authors no theme, so the reference vertical's compile for
-  // the selected engine is the projection this stack renders with. `custom` has
-  // no first-party compile, and asking for one throws here — ahead of the
-  // refusal the suite is actually testing — so it publishes none.
+  // `custom` has no first-party compile, and asking for one throws here — ahead
+  // of the refusal the suite is actually testing — so it publishes none.
   const engineVisual =
-    engine === 'custom' ? undefined : firstPartyEngineVisual('rottay', engine);
+    engine === 'custom' ? undefined : librarySeedEngineVisual(engine);
 
   return function EngineWrapper({ children }) {
     // skipCssLoading avoids fetching tenant CSS files during tests, which would
@@ -86,7 +102,7 @@ function createEngineWrapper(
     // controls which engine renders regardless of the fixture tenant.
     return (
       <DesignSystemProvider
-        tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+        tenantConfig={TEST_TENANT_CONFIG}
         forceEngine={engine}
         {...(engineVisual ? { engineVisual } : {})}
         skipCssLoading

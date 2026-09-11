@@ -34,7 +34,7 @@ describe('static tenant loader', () => {
 
     expect(fetch).toHaveBeenCalledWith('/.designsystem/tenants/acme/config.json');
     expect(config.name).toBe('Acme');
-    expect(config.engine).toBeUndefined();
+    expect(config).not.toHaveProperty('engine');
   });
 
   it('rejects a reserved slug before fetching', async () => {

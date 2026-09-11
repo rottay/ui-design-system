@@ -52,11 +52,12 @@ function readTypeScale(): string {
 }
 
 /**
- * PURE derivation of the active responsive posture from a tenant
- * configuration — the single source every adaptive consumer shares, mirroring
- * `resolveActiveIconExpressiveProfile`. Precedence is the canon: the DB
- * appearance (`advanced.responsivePosture`, carried verbatim in the compiled
- * artifact's normalizedAppearance) beats the static BrandTheme selection.
+ * PURE derivation of the active responsive posture from the MOUNTED ARTIFACT's
+ * normalized appearance — the single source every adaptive consumer shares,
+ * mirroring `resolveActiveIconExpressiveProfile`. It reads
+ * `advanced.responsivePosture`, carried verbatim in the artifact the mount
+ * proves, and nothing else: a tenant config carries no visual payload, so there
+ * is no second selection to rank this one against.
  *
  * Resolution is fail-closed and TOTAL: an absent, unknown, malformed or
  * foreign-schema id yields `balanced`, whose thresholds are
@@ -65,19 +66,9 @@ function readTypeScale(): string {
  * makes "unset it" a true rollback.
  */
 export function resolveActiveResponsivePosture(
-  config: { appearance?: unknown; brandTheme?: unknown } | null | undefined
+  appearance: { advanced?: { responsivePosture?: string } } | null | undefined
 ): ResponsivePostureDefinition {
-  const appearance = config?.appearance as
-    | { advanced?: { responsivePosture?: string } }
-    | undefined;
-  const fromDocument = appearance?.advanced?.responsivePosture;
-  if (fromDocument !== undefined) return resolveResponsivePosture(fromDocument);
-  const selection = (
-    config?.brandTheme as
-      | { responsive?: { posture?: string; schemaVersion?: number } }
-      | undefined
-  )?.responsive;
-  return resolveResponsivePosture(selection?.posture, selection?.schemaVersion);
+  return resolveResponsivePosture(appearance?.advanced?.responsivePosture);
 }
 
 /**
@@ -86,8 +77,8 @@ export function resolveActiveResponsivePosture(
  */
 export function useActiveResponsivePosture(): ResponsivePostureDefinition {
   const tenant = useContext(TenantContext);
-  const config = tenant?.config;
-  return useMemo(() => resolveActiveResponsivePosture(config), [config]);
+  const appearance = tenant?.appearance;
+  return useMemo(() => resolveActiveResponsivePosture(appearance), [appearance]);
 }
 
 export interface AdaptiveEnvironment {

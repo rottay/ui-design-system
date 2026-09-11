@@ -151,7 +151,6 @@ function buildConfigFromSession(
   const config: TenantConfig = {
     slug: tenantSlug,
     name: tenant.name || tenantSlug,
-    engine: (branding.engine as TenantConfig['engine']) || undefined,
     theme: 'base',
     plan: (tenant.plan as TenantConfig['plan']) || 'starter',
     features: tenant.features || [],
@@ -208,15 +207,15 @@ function buildConfigFromResponse(
   const config: TenantConfig = {
     slug: tenantSlug,
     name: (data.branding as Record<string, unknown> | undefined)?.companyName as string || tenantSlug,
-    engine: (data.engine as TenantConfig['engine']) || undefined,
     theme: (data.theme as string) || 'base',
     plan: (tenant?.plan as TenantConfig['plan']) || 'starter',
     features: tenant?.features || [],
     vertical,
+    // The payload's `engine`, `personality`, `tokenOverrides` and `appearance`
+    // are NOT read. A branding endpoint is a transport, not a visual authority:
+    // what paints this tenant is the artifact its document compiled to, and a
+    // second copy of the same decisions here could only disagree with it.
     branding: (data.branding as TenantConfig['branding']) || {},
-    personality: (data.personality as TenantConfig['personality']) || undefined,
-    tokenOverrides: (data.tokenOverrides as TenantConfig['tokenOverrides']) || undefined,
-    appearance: (data.appearance as TenantConfig['appearance']) || undefined,
   };
   assertCustomerTenantConfig(config);
   return config;
@@ -226,10 +225,10 @@ function buildConfigFromResponse(
  * Layer a bounded session/API config over an authored vertical baseline.
  *
  * Registry entries are file-owned vertical baselines only. Customer tenants
- * never enter the registry; their API payload is the visual authority. Session
- * and public-branding payloads remain unable to replace a baseline BrandTheme.
- * Their allowed branding/config fields still win through the normal
- * TenantConfig merge path.
+ * never enter the registry. Neither payload is a visual authority -- the
+ * compiled artifact is -- so what survives here is identity and the bounded
+ * branding/config fields, which win through the normal TenantConfig merge
+ * path.
  */
 function overlayKnownTenantConfig(
   knownConfig: TenantConfig | undefined,
@@ -245,7 +244,6 @@ function overlayKnownTenantConfig(
       ...knownConfig.branding,
       ...overrideConfig.branding,
     },
-    brandTheme: knownConfig.brandTheme ?? overrideConfig.brandTheme,
   };
 }
 

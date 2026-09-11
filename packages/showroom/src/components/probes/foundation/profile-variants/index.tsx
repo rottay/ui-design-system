@@ -51,7 +51,10 @@ import {
   Tag,
   Text,
 } from "@rottay/design-system";
-import { getKnownTenantConfig } from "@rottay/design-system/server";
+import {
+  firstPartyEngineVisual,
+  getKnownTenantConfig,
+} from "@rottay/design-system/server";
 
 export type ProfileEvidenceVertical = "rottay" | "bithire" | "evnto";
 export type ProfileEvidenceLocale = "en" | "es" | "ar";
@@ -117,15 +120,17 @@ export function K0ProfileEvidence({
   // alternative produces an ordinary tenant carrying an uncompiled BrandTheme,
   // which blocks. `locale` travels on the provider prop below for the same
   // reason -- the code-owned projection keeps only
-  // `branding | engine | features | name | plan | slug | theme | vertical`.
+  // `branding | features | name | plan | slug | theme | vertical`.
   const tenantConfig = getKnownTenantConfig(vertical);
   if (!tenantConfig) {
     throw new Error(`The bundled ${vertical} tenant is missing from the registry`);
   }
 
-  // Read for the stamp only. The BrandTheme never reaches the provider from
-  // here -- the registry hands it to the compiler through the code-owned path.
-  const authoredProfile = tenantConfig.brandTheme?.recipes?.profile ?? "none";
+  // Read for the stamp only, and read from the COMPILE rather than from a
+  // field: `TenantConfig` carries no theme, and the vertical's own lowering
+  // publishes the validated selection on `ThemeCompilation.runtime`.
+  const authoredProfile =
+    firstPartyEngineVisual(vertical, "modern").runtime.recipeProfile ?? "none";
 
   return (
     <DesignSystemProvider

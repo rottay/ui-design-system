@@ -28,7 +28,7 @@ import React, { useMemo, useEffect, useId, useRef, useState } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
-import { buildPreviewCss } from '../../runtime/preview-css';
+import { buildPreviewCss, draftPreviewSource } from '../../runtime/preview-css';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernInput from '../../../../../primitives/inputs/input/engines/modern';
@@ -179,7 +179,10 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
   );
 
   /* Sanitized CSS re-anchored to the preview root; never html[data-tenant] */
-  const preview = useMemo(() => buildPreviewCss(tenantConfig), [tenantConfig]);
+  const preview = useMemo(
+    () => buildPreviewCss(draftPreviewSource(creationConfig) ?? tenantConfig),
+    [creationConfig, tenantConfig],
+  );
 
   const previewRef = useRef<HTMLDivElement>(null);
 
@@ -279,7 +282,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
             <p data-part="tenant-slug">
               <bdi>{creationConfig.slug}</bdi>
               {' | '}
-              <bdi>{creationConfig.engine ?? 'classic'}</bdi>
+              <bdi>{'modern'}</bdi>
               {' | '}
               <bdi>{creationConfig.personality ?? 'neutral'}</bdi>
             </p>

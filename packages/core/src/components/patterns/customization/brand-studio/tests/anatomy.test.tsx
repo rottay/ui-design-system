@@ -19,7 +19,6 @@ import { PatternBrandStudio } from '../index';
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-anatomy',
   name: 'Brand Studio Anatomy',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

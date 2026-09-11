@@ -86,12 +86,16 @@ export type VisualAuthorityDeclaration =
   | ProviderDeclaration
   | CompiledArtifactDeclaration;
 
+/**
+ * What visual payload a runtime `TenantConfig` still carries.
+ *
+ * ONE channel, because one is all a config can carry: a `TenantConfig` has no
+ * `brandTheme`, `tokenOverrides`, `personality` or `appearance`, so the seed
+ * colours and fonts of `branding` are the one place a transport can hand the
+ * runtime paint that no compile produced.
+ */
 export interface RuntimeVisualPayloadCensus {
   visualBranding: boolean;
-  tokenOverrides: boolean;
-  appearance: TenantAppearance | undefined;
-  personality: boolean;
-  brandTheme: boolean;
 }
 
 const VISUAL_BRANDING_FIELDS = [
@@ -113,20 +117,13 @@ const VISUAL_BRANDING_FIELDS = [
 ] as const;
 
 export function censusRuntimeVisualPayload(
-  config: Pick<
-    TenantConfig,
-    "branding" | "tokenOverrides" | "appearance" | "personality" | "brandTheme"
-  > | null | undefined,
+  config: Pick<TenantConfig, "branding"> | null | undefined,
 ): RuntimeVisualPayloadCensus {
   const branding = config?.branding;
   return {
     visualBranding:
       branding != null &&
       VISUAL_BRANDING_FIELDS.some((field) => branding[field] != null),
-    tokenOverrides: Object.keys(config?.tokenOverrides ?? {}).length > 0,
-    appearance: config?.appearance,
-    personality: config?.personality !== undefined,
-    brandTheme: config?.brandTheme !== undefined,
   };
 }
 
@@ -765,13 +762,7 @@ export interface VisualAuthorityResolution {
 const NO_SUPPRESSION: readonly TenantVisualChannel[] = Object.freeze([]);
 
 function hasVisualPayload(payload: RuntimeVisualPayloadCensus): boolean {
-  return (
-    payload.visualBranding ||
-    payload.tokenOverrides ||
-    payload.appearance !== undefined ||
-    payload.personality ||
-    payload.brandTheme
-  );
+  return payload.visualBranding;
 }
 
 export function appearanceMatchesArtifact(
@@ -920,24 +911,10 @@ export function resolveVisualAuthority(
     mountedArtifact = mounted.element;
   }
 
-  const conflicts: string[] = [];
-  if (payload.visualBranding) conflicts.push("raw visual branding");
-  if (payload.tokenOverrides) conflicts.push("raw tokenOverrides");
-  if (payload.personality) conflicts.push("raw tenant personality");
-  if (payload.brandTheme) conflicts.push("raw tenant brandTheme");
-  if (
-    payload.appearance !== undefined &&
-    !appearanceMatchesArtifact(
-      payload.appearance,
-      verified.artifact.normalizedAppearance,
-    )
-  ) {
-    conflicts.push("raw appearance differs from the artifact");
-  }
-  if (conflicts.length > 0) {
+  if (payload.visualBranding) {
     return blocked(
       "invalid-declaration",
-      `Tenant "${slug}" mixes a compiled artifact with ${conflicts.join(", ")}.`,
+      `Tenant "${slug}" mixes a compiled artifact with raw visual branding.`,
       "declaration",
     );
   }
