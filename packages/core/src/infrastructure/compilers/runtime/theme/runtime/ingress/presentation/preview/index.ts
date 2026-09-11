@@ -97,6 +97,10 @@ export function previewThemeAdmission(
  * doors do: a draft states a decision and the leaf that decision expands into at
  * the same level, so without the record the expansion reads as raw authorship
  * and is measured against a ceiling its selection was already cleared past.
+ *
+ * The vertical goes to the ledger too, because a draft restates values it never
+ * touched: only the baseline it was opened on separates a chrome leaf the
+ * editor moved from the product's own ink carried along with it.
  */
 export function draftPreviewThemeIntent(
   input: DraftPreviewThemeIntentInput
@@ -106,6 +110,6 @@ export function draftPreviewThemeIntent(
     slug: input.slug,
     origin: "preview",
     patch: authoredThemePatch(input.draft),
-    ledger: draftProvenanceLedger(input.draft),
+    ledger: draftProvenanceLedger(input.draft, input.vertical),
   };
 }

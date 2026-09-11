@@ -82,17 +82,25 @@ export interface TenantFacts {
    * The button radius the tenant NAMED through a sanctioned override, as the
    * LEDGER reports it -- not as the patch spells it.
    *
-   * `shape.button-style` expands into `chrome.controls.buttonGeometry.radius`
-   * and an override names it, so the two contest one leaf inside one provenance
-   * class and I-P5 settles it for the override. Carried here so that contest is
-   * resolved WITHIN the tenant family, where both statements sit at one rank
-   * and specificity is the whole answer; the silhouette used to win it merely
-   * by settling one rank above the chrome family.
+   * THE LAW, in one sentence: a radius the tenant authored through a route its
+   * plan entitles beats the silhouette `shape.button-style` expands into; an
+   * inherited or profile-filled one does not. `shape.button-style` expands into
+   * `chrome.controls.buttonGeometry.radius` and an override names it, so the
+   * two contest one leaf inside one provenance class and I-P5 settles it for
+   * the override. Carried here so that contest is resolved WITHIN the tenant
+   * family, where both statements sit at one rank and specificity is the whole
+   * answer; the silhouette used to win it merely by settling one rank above the
+   * chrome family.
    *
    * Present ONLY when the ledger names a `sanctioned-override` as the owner of
-   * that leaf, so a VERTICAL's own button geometry is not this fact: it stays
-   * at `verticalOverride` and still loses to a tenant silhouette, which is the
-   * inversion the ranked merge was built to fix.
+   * that leaf AND records it as `direct-override`, which is the catalog's own
+   * editability answer rather than a second one: the override route is Pro
+   * (`THEME_CATALOG_ANNEX` -> `sanctioned-overrides`) and a plan that does not
+   * entitle it is refused at the door, so nothing below that class can arrive
+   * here. A VERTICAL's own button geometry is therefore not this fact -- it
+   * stays at `verticalOverride` and still loses to a tenant silhouette, which
+   * is the inversion the ranked merge was built to fix -- and neither is a
+   * chrome radius a studio draft carried along untouched.
    */
   readonly chosenButtonRadius: string | undefined;
   readonly typography: BrandTheme["typography"] | undefined;

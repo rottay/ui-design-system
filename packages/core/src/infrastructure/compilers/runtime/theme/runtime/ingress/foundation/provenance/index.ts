@@ -23,6 +23,9 @@ import {
   type DecisionProvenanceLedger,
 } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { Theme } from "@/foundation/contracts/composition/tenants/themes/iso";
+import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
+import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
   THEME_DECISION_IDS,
   THEME_DECISION_TIER_BY_ID,
@@ -244,6 +247,22 @@ function decisionClaim(
 }
 
 /**
+ * What a draft can assert about a chrome value it merely CARRIES: nothing.
+ *
+ * A document states only what its tenant chose, so every leaf in it is
+ * authorship. A draft is the whole theme the studio opened, so a chrome leaf it
+ * carries is the vertical's own until the author MOVES it, and value against
+ * the baseline at the same keypath is what says which -- the same comparison
+ * `movedLeaves` makes for the caps. The claim exists either way so the leaf has
+ * an owner and a transport path; only the class changes.
+ *
+ * A decision is not in the same position: its value answers to a closed domain
+ * and the chrome leaf it reaches is the lowering's own output, never a value the
+ * tenant typed, so it is claimed as the selection it is.
+ */
+const CARRIED = "preset-inherited" as const;
+
+/**
  * One claim per authored chrome channel, recorded at its ORIGINAL transport
  * path so a refusal can point at what the author wrote.
  *
@@ -261,10 +280,17 @@ function chromeOverrideClaims(
     readonly claimed?: ReadonlySet<string>;
     /** The class the transport can assert; a document asserts authorship. */
     readonly provenance?: DecisionProvenance;
+    /**
+     * The theme this subtree is a PATCH of, on a transport that restates values
+     * it never touched. A leaf equal to its baseline twin is carried, not
+     * authored, so it drops to `CARRIED` however the transport asserted itself.
+     */
+    readonly carriedFrom?: Theme;
   } = {}
 ): ThemeProvenanceClaim[] {
   const leafPrefix = options.leafPrefix ?? "chrome";
   const provenance = options.provenance ?? "direct-override";
+  const { carriedFrom } = options;
   const claims: ThemeProvenanceClaim[] = [];
   const walk = (value: unknown, trail: readonly string[]): void => {
     if (value === undefined) return;
@@ -281,7 +307,10 @@ function chromeOverrideClaims(
           kind: "sanctioned-override",
           path: [transportPrefix, ...trail].join("."),
         },
-        provenance,
+        provenance:
+          carriedFrom !== undefined && readDraftLeaf(carriedFrom, leaf) === value
+            ? CARRIED
+            : provenance,
         authoredValue: value,
         leaves: [{ leaf, specificity: "named" }],
       });
@@ -406,8 +435,8 @@ export function documentProvenanceLedger(input: {
   );
 }
 
-/** Read a BrandTheme leaf addressed by a catalog keypath. */
-function readDraftLeaf(draft: BrandTheme, leaf: string): unknown {
+/** Read a theme leaf addressed by a catalog keypath, in either spelling. */
+function readDraftLeaf(draft: BrandTheme | Theme, leaf: string): unknown {
   let cursor: unknown = draft;
   for (const key of leaf.split(".")) {
     if (!isRecordValue(cursor)) return undefined;
@@ -477,33 +506,29 @@ function draftChromeClaim(
 }
 
 /**
- * What a draft can assert about a chrome value it merely CARRIES: nothing.
- *
- * A document states only what its tenant chose, so every leaf in it is
- * authorship. A draft is the whole theme the studio opened, so a chrome leaf it
- * carries is the vertical's own until the author moves it -- and `movedLeaves`
- * is the station that can say which. The claim exists so the leaf has an owner
- * and a transport path; the class is the one that asserts no authorship.
- *
- * A decision is not in the same position: its value answers to a closed domain
- * and the chrome leaf it reaches is the lowering's own output, never a value the
- * tenant typed, so it is claimed as the selection it is.
- */
-const CARRIED = "preset-inherited" as const;
-
-/**
  * The ledger a BrandTheme draft contributes, over the chrome surface.
  *
  * The authoring surfaces edit a whole theme rather than a document, so the one
  * question this ledger answers is the one the merged patch destroys and the
  * authored-value caps ask: which selection caused each CHROME leaf. A leaf a
  * decision caused is that decision's; every other chrome leaf is claimed at its
- * own path under `CARRIED`, so the caps still measure what the author moved and
- * still name it, while the vertical's own chrome answers to no customer
- * ceiling. Nothing outside chrome is claimed: there, moved-ness is the whole
- * answer.
+ * own path, `CARRIED` where it still equals the vertical's own value and
+ * authorship where the editor moved it. Nothing outside chrome is claimed:
+ * there, moved-ness is the whole answer.
+ *
+ * The vertical is a parameter rather than a default because the answer has no
+ * transport-independent form: bithire authors `chrome.controls.buttonGeometry
+ * .radius` and the other two verticals do not, so the same draft leaf is the
+ * product's own ink on one and the tenant's statement on another. Without the
+ * baseline every carried leaf had to be assumed inherited, which made a radius
+ * the editor really typed lose to the silhouette beside it while the ledger
+ * reported the radius as the leaf's owner.
  */
-export function draftProvenanceLedger(draft: BrandTheme): ThemeProvenanceLedger {
+export function draftProvenanceLedger(
+  draft: BrandTheme,
+  vertical: FirstPartyVerticalId
+): ThemeProvenanceLedger {
+  const carriedFrom = FIRST_PARTY_THEMES[vertical];
   const decisions: ThemeProvenanceClaim[] = [];
   const claimed = new Set<string>();
   for (const id of THEME_DECISION_IDS) {
@@ -519,7 +544,7 @@ export function draftProvenanceLedger(draft: BrandTheme): ThemeProvenanceLedger 
     ...decisions,
     ...chromeOverrideClaims(draft.chrome, "chrome", {
       claimed,
-      provenance: CARRIED,
+      carriedFrom,
     }),
     ...Object.keys(modes).flatMap((mode) =>
       chromeOverrideClaims(
@@ -528,7 +553,7 @@ export function draftProvenanceLedger(draft: BrandTheme): ThemeProvenanceLedger 
         {
           leafPrefix: `modes.${mode}.chrome`,
           claimed,
-          provenance: CARRIED,
+          carriedFrom,
         }
       )
     ),
