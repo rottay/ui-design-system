@@ -42,6 +42,26 @@ const ARTIFACT = compileTenantThemeConfig(
   { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
 );
 
+// Same engine and profile ids as ARTIFACT, one governed value changed: the
+// runtime half of a different compilation. Artifact A + runtime B.
+const FOREIGN_RUNTIME = compileTenantThemeConfig(
+  hydrateTenantThemeConfig({
+    schemaVersion: 1,
+    mode: 'simple',
+    appearance: {
+      palette: { primary: '#2F6B9A', backgroundMode: 'dark' },
+      density: 'compact',
+      motion: { intensity: 0.6, durationScale: 0.9, ambient: 'off' },
+    },
+  }, {
+    tenantId: 'tenant_themanagement',
+    slug: 'themanagement',
+    verticalKey: 'bithire',
+    rowVersion: 7,
+  }),
+  { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
+).runtime;
+
 const EMPTY_PAYLOAD: RuntimeVisualPayloadCensus = { visualBranding: false };
 
 function mountArtifact(artifact: TenantThemeArtifact = ARTIFACT): HTMLStyleElement {
@@ -90,6 +110,7 @@ describe('tenant visual authority', () => {
     ['slug', { slug: 'other' }],
     ['coverage', { coverage: ARTIFACT.coverage.slice(1) }],
     ['scopes', { scopes: { ...ARTIFACT.scopes, combinedSelector: ':root' } }],
+    ['runtime', { runtime: FOREIGN_RUNTIME }],
   ] as const)('rejects a tampered %s', (_label, patch) => {
     expect(verifyTenantThemeArtifactV1({ ...ARTIFACT, ...patch }, {
       slug: ARTIFACT.slug,
