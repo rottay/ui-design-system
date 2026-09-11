@@ -323,6 +323,20 @@ function entry(
   });
 }
 
+/**
+ * The mode a theme resolves to when neither it nor this roster declares one.
+ *
+ * THE PACKAGE'S ONLY LITERAL DEFAULT MODE. It lives with the roster because
+ * the roster is what answers the question for every theme that has an
+ * identity; this covers the remainder, and `compilers/kernel/foundation/modes`
+ * is its only reader. Thirteen copies of this literal used to be spread across
+ * the ingress, the lowering, the artifact terminal, the SSR projection and the
+ * studio, and on the one vertical whose baseline is dark every one of them was
+ * wrong in a different place.
+ */
+export const UNDECLARED_VERTICAL_DEFAULT_MODE: FirstPartyVerticalEntry["defaultMode"] =
+  "light";
+
 /** Full-theme roster in canonical slug order. */
 export const FIRST_PARTY_VERTICAL_ROSTER: readonly FirstPartyVerticalEntry[] =
   Object.freeze([

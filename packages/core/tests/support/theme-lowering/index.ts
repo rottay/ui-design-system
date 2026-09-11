@@ -46,6 +46,12 @@ export interface BrandThemeFixtureInput {
   brandTheme: BrandTheme;
   tenantSlug?: string;
   tenantAuthoredPaths?: TenantAuthoredPaths;
+  /**
+   * The honest subset the modes family carries across modes. A hand-authored
+   * fixture set is already honest, so it defaults to `tenantAuthoredPaths`;
+   * a suite mirroring a real document patch passes the collector's own answer.
+   */
+  tenantAuthoredLeaves?: TenantAuthoredPaths;
   tenantPatch?: Partial<BrandTheme>;
   tenantStatusSeedAuthorship?: TenantStatusSeedAuthorship;
 }
@@ -82,6 +88,7 @@ export function lowerBrandThemeFixture(
       : {
           tenantAuthored: true,
           authoredPaths: tenantAuthoredPaths,
+          authoredLeaves: input.tenantAuthoredLeaves ?? tenantAuthoredPaths,
           floors: (tenantPatch ?? {}) as ThemeFloors,
           statusSeedAuthorship:
             input.tenantStatusSeedAuthorship ??
@@ -116,6 +123,8 @@ export function lowerBrandThemeFixture(
 export interface LowerThemeProvenanceOptions {
   tenantSlug?: string;
   tenantAuthoredPaths?: TenantAuthoredPaths;
+  /** See `BrandThemeFixtureInput.tenantAuthoredLeaves`. */
+  tenantAuthoredLeaves?: TenantAuthoredPaths;
   tenantPatch?: Partial<BrandTheme>;
   tenantStatusSeedAuthorship?: TenantStatusSeedAuthorship;
 }
@@ -134,6 +143,8 @@ export function lowerTheme(
       : {
           tenantAuthored: true,
           authoredPaths: options.tenantAuthoredPaths,
+          authoredLeaves:
+            options.tenantAuthoredLeaves ?? options.tenantAuthoredPaths,
           floors: (options.tenantPatch ?? {}) as ThemeFloors,
           statusSeedAuthorship:
             options.tenantStatusSeedAuthorship ??

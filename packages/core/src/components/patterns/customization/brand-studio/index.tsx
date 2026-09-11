@@ -52,6 +52,7 @@ import {
   emitRule,
 } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
+import { themeDefaultMode as resolveThemeDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
 import { validateBrandingContrast, type BrandingColors } from '@/foundation/kernel/accessibility/branding-contrast';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type {
@@ -291,12 +292,12 @@ export function deriveBrandingColors(
 }
 
 /**
- * This theme's own declared default mode. Absent `appearance` means light —
- * the same fallback `isDarkSurfaceTheme` uses in the compiler
- * (`infrastructure/compilers/runtime/theme/runtime/lowering`).
+ * This theme's own declared default mode, asked of the compiler's one owner
+ * of that question (`compilers/kernel/foundation/modes`). A studio that
+ * answered it itself would repaint a canvas the publish never writes.
  */
 function themeDefaultMode(theme: BrandTheme): BrandThemeMode {
-  return theme.appearance?.defaultMode ?? 'light';
+  return resolveThemeDefaultMode(theme);
 }
 
 /**

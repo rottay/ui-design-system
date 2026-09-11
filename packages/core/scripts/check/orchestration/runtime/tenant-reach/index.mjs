@@ -41,7 +41,6 @@ export const LOWERING_FOUNDATION_FLOORS = `${LOWERING}/foundation/floors/index.t
 export const LOWERING_FOUNDATION_GROUND = `${LOWERING}/foundation/ground/index.ts`;
 export const LOWERING_FOUNDATION_INTAKE = `${LOWERING}/foundation/intake/index.ts`;
 export const LOWERING_FOUNDATION_MATERIALS = `${LOWERING}/foundation/materials/index.ts`;
-export const LOWERING_FOUNDATION_MODE_OVERLAY = `${LOWERING}/foundation/mode-overlay/index.ts`;
 export const LOWERING_FOUNDATION_MOTION = `${LOWERING}/foundation/motion/index.ts`;
 export const LOWERING_FOUNDATION_PALETTE = `${LOWERING}/foundation/palette/index.ts`;
 export const LOWERING_FOUNDATION_PERSONALITY = `${LOWERING}/foundation/personality/index.ts`;
@@ -52,7 +51,6 @@ export const LOWERING_FOUNDATION_SIDEBAR = `${LOWERING}/foundation/sidebar/index
 export const LOWERING_FOUNDATION_TINT = `${LOWERING}/foundation/tint/index.ts`;
 export const LOWERING_FOUNDATION_TYPE_RAMP = `${LOWERING}/foundation/type-ramp/index.ts`;
 export const LOWERING_FOUNDATION_TYPOGRAPHY = `${LOWERING}/foundation/typography/index.ts`;
-export const LOWERING_RUNTIME_MODE_BLOCKS = `${LOWERING}/runtime/mode-blocks/index.ts`;
 export const LOWERING_FOUNDATION_CONTRACT = `${LOWERING}/foundation/contract/index.ts`;
 export const LOWERING_FOUNDATION_GEOMETRY = `${LOWERING}/foundation/geometry/index.ts`;
 export const LOWERING_FOUNDATION_EXPRESSIVE = `${LOWERING}/foundation/expressive/index.ts`;
@@ -73,6 +71,11 @@ export const LOWERING_RUNTIME_DERIVATION = Object.freeze([
   // as `typed-literal` and no interpolated emitter is added, so the E0
   // totality law is untouched.
   `${DERIVATION}/materials/index.ts`,
+  // WO-DER-05: the modes family replaced `foundation/mode-overlay` and
+  // `runtime/mode-blocks`. It assembles the other mode's theme under the
+  // ranked merge and projects its delta; it emits no channel text of its own,
+  // and it joins the corpus so an emitter planted there is still attributed.
+  `${DERIVATION}/modes/index.ts`,
   `${DERIVATION}/motion/index.ts`,
   `${DERIVATION}/palette/index.ts`,
   // WO-DER-03 (palette half): the palette family's own sub-owners. The tint
@@ -119,7 +122,6 @@ export const LOWERING_SOURCES = Object.freeze([
   LOWERING_FOUNDATION_GROUND,
   LOWERING_FOUNDATION_INTAKE,
   LOWERING_FOUNDATION_MATERIALS,
-  LOWERING_FOUNDATION_MODE_OVERLAY,
   LOWERING_FOUNDATION_MOTION,
   LOWERING_FOUNDATION_PALETTE,
   LOWERING_FOUNDATION_PERSONALITY,
@@ -135,7 +137,6 @@ export const LOWERING_SOURCES = Object.freeze([
   LOWERING_FOUNDATION_EXPRESSIVE,
   ...LOWERING_RUNTIME_DERIVATION,
   LOWERING_RUNTIME_PIPELINE,
-  LOWERING_RUNTIME_MODE_BLOCKS,
   LOWERING_ORCHESTRATION,
 ]);
 

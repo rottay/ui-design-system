@@ -105,6 +105,13 @@ export interface TenantFacts {
   readonly chosenButtonRadius: string | undefined;
   readonly typography: BrandTheme["typography"] | undefined;
   readonly authoredPaths: TenantAuthoredPaths | undefined;
+  /**
+   * The paths the patch actually STATED a value for -- the honest subset of
+   * `authoredPaths`. The modes family carries a tenant's decisions across
+   * modes from this set; `authoredPaths` cannot answer that question, because
+   * it also names the keys the v1 patch builder emits as `undefined`.
+   */
+  readonly authoredLeaves: TenantAuthoredPaths | undefined;
   readonly statusSeedAuthorship: TenantStatusSeedAuthorship | undefined;
   /** Whether the seed THIS block compiles from is the tenant's own. */
   readonly seedIsTenantAuthored: boolean;

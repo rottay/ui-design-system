@@ -50,6 +50,11 @@ export const FIXTURE_TENANT_FACTS: TenantFacts = {
     "typography.fontFamilyBase",
     "surfaces.radiusScale",
   ]),
+  authoredLeaves: new Set([
+    "palette.primaryColor",
+    "typography.fontFamilyBase",
+    "surfaces.radiusScale",
+  ]),
   statusSeedAuthorship: undefined,
   seedIsTenantAuthored: true,
   toneSeedIsTenantAuthored: Object.fromEntries(

@@ -56,6 +56,7 @@ import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presen
 import {
   FIRST_PARTY_THEMES,
 } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { verticalDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
 import {
   compileThemeIntent,
   documentThemeIntent,
@@ -746,7 +747,7 @@ describe.each(FIRST_PARTY_VERTICAL_SLUGS)(
   "TRANSPORT EQUALITY · %s",
   (vertical) => {
     const slug = `transport-${vertical}`;
-    const defaultMode = FIRST_PARTY_THEMES[vertical].appearance?.defaultMode ?? "light";
+    const defaultMode = verticalDefaultMode(vertical);
 
     /** `__DEFAULT_MODE__` stands for "this vertical's own body mode". */
     const documentOf = (general: Record<string, unknown>): TenantThemeDocument =>

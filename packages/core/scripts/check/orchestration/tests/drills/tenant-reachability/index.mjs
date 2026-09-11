@@ -48,7 +48,6 @@ const REACH_CORPUS = Object.freeze([
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials/index.ts',
-  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/mode-overlay/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/motion/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality/index.ts',
@@ -66,6 +65,9 @@ const REACH_CORPUS = Object.freeze([
   // WO-DER-02 (2026-09-08, K3 audit HOLD adjudication): the reach corpus grew
   // the states/materials derivers, so this mirror grows the same two files.
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/materials/index.ts',
+  // WO-DER-05: the modes family replaced the retired mode-overlay/mode-blocks
+  // owners, so this mirror follows the reach corpus.
+  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/modes/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/ramps/index.ts',
@@ -81,7 +83,6 @@ const REACH_CORPUS = Object.freeze([
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tint/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/roles/index.ts',
-  'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/mode-blocks/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/pipeline/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts',
   'packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts',

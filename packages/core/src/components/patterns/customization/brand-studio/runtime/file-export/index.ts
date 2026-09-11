@@ -27,6 +27,7 @@ import type {
   TenantAppearanceAdvanced,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import { TENANT_THEME_EFFECT_INTENSITY_BOUNDS } from '../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
+import { themeDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
 
 /** Deep clone through JSON. BrandTheme is a plain data contract. */
 export function cloneBrandTheme(theme: BrandTheme): BrandTheme {
@@ -262,8 +263,9 @@ function palettePerMode(
   theme: BrandTheme,
   mode: BrandThemeMode
 ): Partial<BrandPalette> | undefined {
-  const defaultMode: BrandThemeMode = theme.appearance?.defaultMode ?? 'light';
-  return mode === defaultMode ? theme.palette : theme.modes?.[mode]?.palette;
+  return mode === themeDefaultMode(theme)
+    ? theme.palette
+    : theme.modes?.[mode]?.palette;
 }
 
 /**
@@ -325,7 +327,7 @@ export function brandThemeToTenantAppearance(theme: BrandTheme): TenantAppearanc
       //
       // The dark seeds below still travel, as the contract intends: inert
       // under `light`/`dark`, live under an `auto` the DOCUMENT chooses.
-      backgroundMode: theme.appearance?.defaultMode ?? 'light',
+      backgroundMode: themeDefaultMode(theme),
     };
     tenantPalette.background = lightPalette?.backgroundColor;
     if (darkPalette) {

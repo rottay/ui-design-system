@@ -60,6 +60,7 @@ import {
   envelopeShapeIssues,
 } from "./foundation/envelope";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
+import { declaredDocumentMode } from "../../kernel/foundation/modes";
 import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type { EngineVisualDeclaration } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import { engineVisualOf } from "../../runtime/theme/facade/presentation/engine-visual";
@@ -639,7 +640,11 @@ function normalizeAppearance(
         });
   const palette = normalized.general?.palette;
   if (!palette) return normalized;
-  const backgroundMode = palette.backgroundMode ?? "light";
+  // The canvas this document declares, resolved by the ONE reader. An absent
+  // selection is not "light": it is the vertical's own declared mode, and
+  // normalizing it to light is how a rottay document's seeds ended up in a
+  // block nobody renders.
+  const backgroundMode = declaredDocumentMode(config.verticalKey, normalized);
   const { dark, ...paletteWithoutDark } = palette;
   const canonicalPalette =
     backgroundMode === "auto"
@@ -739,7 +744,8 @@ function renderArtifactCss(
   digest: string,
   options: {
     modeDeltas?: readonly TenantThemeArtifactModeDelta[];
-    backgroundMode?: "light" | "dark" | "auto";
+    /** Whether the document defers its canvas to the viewer. */
+    followsSystem?: boolean;
   } = {}
 ): string {
   // The WHOLE artifact format is the emission owner's, not just its
@@ -753,7 +759,7 @@ function renderArtifactCss(
     digest,
     variables,
     modeDeltas: options.modeDeltas,
-    backgroundMode: options.backgroundMode,
+    followsSystem: options.followsSystem,
   });
 }
 
@@ -1011,8 +1017,10 @@ export function assembleTenantThemeArtifact(
   // knowable here and nowhere else. The RULE is the door's; this supplies the
   // grounds the door could not derive, and the door has already measured the
   // ones it could.
-  const declaredMode =
-    normalizedAppearance.general?.palette?.backgroundMode ?? "light";
+  const declaredMode = declaredDocumentMode(
+    identity.verticalKey,
+    normalizedAppearance
+  );
   const declaredGrounds: string[] = [];
   if (declaredMode === "auto") {
     declaredGrounds.push(DEFAULT_CHART_GROUNDS.light, DEFAULT_CHART_GROUNDS.dark);
@@ -1082,8 +1090,7 @@ export function assembleTenantThemeArtifact(
       runtime,
       css: renderArtifactCss(identity.verticalKey, identity.slug, variables, digest, {
         modeDeltas,
-        backgroundMode:
-          normalizedAppearance.general?.palette?.backgroundMode ?? "light",
+        followsSystem: declaredMode === "auto",
       }),
       scopes,
     },

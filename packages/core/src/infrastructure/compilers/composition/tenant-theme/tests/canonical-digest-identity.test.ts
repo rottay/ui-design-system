@@ -713,7 +713,34 @@ describe("digest identity across the canonicalization extraction", () => {
     // asserted unchanged beside it -- nothing this document PAINTS moved.
     const POST_ARTIFACT_RUNTIME_HALF_DIGEST =
       "sha256-3a00104353f2489f1bdc94f297b5840568340b2dba50b869e073203719ef7c06";
-    expect(artifact.digest).toBe(POST_ARTIFACT_RUNTIME_HALF_DIGEST);
+    expect(artifact.digest).not.toBe(POST_ARTIFACT_RUNTIME_HALF_DIGEST);
+    // Thirteenth declared move (WO-DER-05), and the first that changes what a
+    // customer SEES -- in the mode they were losing. This document authors a
+    // primary, a secondary and an accent on bithire, whose own `modes.dark`
+    // overlay restated all three; the overlay used to be merged ON TOP of the
+    // tenant patch, so the dark block repainted bithire's `#1e84e6` over the
+    // tenant's `#0F766E` (F-05). Measured, base block unchanged at 65 and the
+    // dark delta 41 -> 34:
+    //   - 10 withdrawn, because the dark selector now INHERITS the tenant's
+    //     own value from the base rule: `--ds-color-{primary,secondary}`,
+    //     their `-rgb` twins, `--ds-color-{border-focus,link,link-hover}`,
+    //     `--ds-input-{border-focus,shadow-focus}` and
+    //     `--ds-button-primary-bg-hover`;
+    //   - 10 re-derived, the chart series, which track the tenant's palette in
+    //     dark instead of bithire's;
+    //   - 3 added, `--ds-button-primary-{bg,color}` as the cascade aliases the
+    //     base block already carries, and `--ds-color-primary-foreground`.
+    // The light block is unmoved (bithire's default mode has none).
+    //
+    // OPERATIONAL NOTE: as with every move above, persisted rows recompile.
+    const POST_MODE_CROSSING_DIGEST =
+      "sha256-c0ca6e862d043d35dac9d112a5f8d06052fcf686154fe5ade28d2c85785d09f1";
+    expect(artifact.digest).toBe(POST_MODE_CROSSING_DIGEST);
+    const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
+    expect(dark?.variables["--ds-color-primary"]).toBeUndefined();
+    expect(
+      { ...artifact.variables, ...dark?.variables }["--ds-color-primary"]
+    ).toBe("#0F766E");
     // The two halves state different things about one compile and both are
     // right: `normalizedAppearance` reports what the DOCUMENT authored, and the
     // runtime half reports what the compile EFFECTIVELY resolved. This document

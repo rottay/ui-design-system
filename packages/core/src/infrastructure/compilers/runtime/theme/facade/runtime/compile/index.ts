@@ -13,10 +13,14 @@
  * @package @rottay/design-system
  */
 
-import type { EngineThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
+import type {
+  EngineAdapter,
+  EngineThemeCompilation,
+} from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
 import type { ThemeResolution } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import type { EngineName } from "@/foundation/contracts/kernel/engine-identity";
+import { sha256Utf8 } from "@/foundation/kernel/cryptography/sha-256";
 import { resolveAdapter } from "../../../presentation/adapters";
 import { staticThemeIntent, verticalEngine } from "../../../runtime/ingress";
 import { compileTheme } from "../../../runtime/lowering";
@@ -55,6 +59,57 @@ export interface ThemeIntentCompilation {
 }
 
 /**
+ * The vertical's own compile, once per (baseline, engine) in a process.
+ *
+ * Every tenant compile needs the baseline to measure its delta against, and
+ * lowering a ~9K-line authored theme a second time on every SSR request
+ * produces a result that CANNOT differ: the roster themes are frozen module
+ * singletons and the lowering is pure. The key is the digest of the resolved
+ * baseline and the adapter it is projected onto, so a theme edit, a slug
+ * change or a comparison engine each miss the cache on their own rather than
+ * on a hand-listed set of fields somebody has to remember to extend.
+ *
+ * The entry is FROZEN all the way down before it is shared (F-60). A cache
+ * that hands the same graph to every concurrent request turns one caller's
+ * mutation into every later caller's product, with no trace.
+ */
+const BASELINE_COMPILES = new Map<string, EngineThemeCompilation>();
+
+function deepFreeze<T>(value: T): T {
+  if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const child of Object.values(value as Record<string, unknown>)) {
+      deepFreeze(child);
+    }
+  }
+  return value;
+}
+
+function cachedBaselineCompile(
+  resolution: ThemeResolution,
+  adapter: EngineAdapter
+): EngineThemeCompilation {
+  // The digest is over the baseline's VISUAL content, with `id` and `name`
+  // dropped: `baselineFor` stamps the requesting tenant's slug onto the
+  // roster's Theme, and that slug reaches nothing the compile emits -- only
+  // the text of a refusal. Keyed WITH it, every tenant of a vertical would
+  // miss, which is the one case this cache exists for.
+  //
+  // `JSON.stringify`, not the canonical JSON serializer: a Theme legitimately
+  // carries `undefined` leaves (an unauthored capability note), which the
+  // canonical form refuses by design. Key ORDER is part of the identity here
+  // rather than noise -- two themes that differ only in it emit their channels
+  // in a different order -- so the insertion-ordered form is the right digest.
+  const { id: _id, name: _name, ...content } = resolution.theme;
+  const key = `${adapter.id}|sha256-${sha256Utf8(JSON.stringify(content))}`;
+  const cached = BASELINE_COMPILES.get(key);
+  if (cached !== undefined) return cached;
+  const compiled = deepFreeze(compileTheme(resolution, adapter));
+  BASELINE_COMPILES.set(key, compiled);
+  return compiled;
+}
+
+/**
  * Resolve, admit and lower one intent.
  *
  * Admission runs HERE, for every origin, exactly once. It used to be a single
@@ -83,7 +138,7 @@ export function compileThemeIntent(
   // an admission asked of a product about itself.
   const baselineIntent = staticThemeIntent(intent.vertical, intent.slug);
   const baselineResolution = resolveTheme(baselineIntent);
-  const baseline = compileTheme(baselineResolution, adapter);
+  const baseline = cachedBaselineCompile(baselineResolution, adapter);
   const delta = admitThemeCompilation({
     resolution,
     compiled,

@@ -11,6 +11,7 @@ import type {
   BrandTheme,
   BrandThemeMode,
 } from "@/foundation/contracts/composition/tenants/themes";
+import { themeDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
 import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
 import type {
   FamilyDeriver,
@@ -67,7 +68,7 @@ export function buildLoweringContext(
   return {
     theme,
     surface: request.surface ?? brandThemeRampSurface(theme),
-    mode: request.mode ?? theme.appearance?.defaultMode ?? "light",
+    mode: request.mode ?? themeDefaultMode(theme),
     modePrefix: request.modePrefix ?? "",
     expressive,
     radiusBaseline: resolveRadiusBaseline(

@@ -307,9 +307,14 @@ export function enforceTextContrast(
     }
     if (ground === undefined || groundToken === undefined) {
       if (!pairing.pageGroundFallback) continue;
-      const mode = normalizedAppearance.general?.palette?.backgroundMode ?? 'light';
+      // A GROUND PICK, not a default-mode decision: this kernel may not read
+      // the roster, so it never answers "which mode is this". The dark ground
+      // applies exactly when the caller's block says dark; `auto` stays
+      // light-first, as TEXT_CONTRAST_DEFAULT_PAGE_GROUNDS declares. Which
+      // mode a document renders is `compilers/kernel/foundation/modes`, and
+      // the compiler passes the answer in.
       ground =
-        mode === 'dark'
+        normalizedAppearance.general?.palette?.backgroundMode === 'dark'
           ? TEXT_CONTRAST_DEFAULT_PAGE_GROUNDS.dark
           : TEXT_CONTRAST_DEFAULT_PAGE_GROUNDS.light;
       groundToken = `default:${ground}`;

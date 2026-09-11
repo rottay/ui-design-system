@@ -16,6 +16,7 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
+import { FIRST_PARTY_VERTICALS } from '@/foundation/tokens/ts/presentation/brand-themes';
 import {
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
@@ -77,6 +78,10 @@ describe('mountTenantTheme — static first-party verticals', () => {
 
     it(`${vertical}: inlines nothing and stamps the governed root scope`, async () => {
       const mounted = await mountTenantTheme(staticThemeIntent(vertical));
+      // The mode the mounted BYTES declare, read off the artifact rather than
+      // restated: a mount that stamps `light` over a `color-scheme: dark`
+      // artifact is one document with two answers (audit 100, WO-EMI-02 #5).
+      const compiledMode = FIRST_PARTY_VERTICALS[vertical].defaultMode;
 
       // The bytes ship in the stylesheet the app already loads; a second inline
       // copy would be a competing visual layer.
@@ -85,12 +90,15 @@ describe('mountTenantTheme — static first-party verticals', () => {
         'data-ds-root': '',
         'data-vertical': vertical,
         'data-tenant': vertical,
-        'data-theme': 'light',
-        'data-tenant-theme-mode': 'light',
+        'data-theme': compiledMode,
+        'data-tenant-theme-mode': compiledMode,
         'data-engine': 'modern',
         lang: 'en',
         dir: 'ltr',
       });
+      expect(mounted.hydrationProof.css).toContain(
+        `color-scheme: ${compiledMode};`,
+      );
       expect(mounted.artifactDigest).toMatch(/^sha256-[a-f0-9]{64}$/);
       expect(mounted.hydrationProof.receipt).toBeUndefined();
     });

@@ -24,6 +24,19 @@ export function themeModeSelector(
 }
 
 /**
+ * Selector the `auto` media copy of a mode block is scoped to: the copy stands
+ * down for the OPPOSITE explicit `data-theme`, the one the pre-paint script
+ * writes once the viewer has been asked. The counterpart is spelled here
+ * rather than imported, because this file is the only owner of selector text.
+ */
+export function systemModeSelector(
+  baseSelector: string,
+  mode: BrandThemeMode
+): string {
+  return `${baseSelector}:not([data-theme='${mode === "dark" ? "light" : "dark"}'])`;
+}
+
+/**
  * Selector a compiled mode block is scoped to.
  *
  * Both arms are the root-state contract's two ways of naming an explicit mode:

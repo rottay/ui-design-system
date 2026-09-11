@@ -26,6 +26,7 @@ const bithire = staticThemeIntent("bithire");
 const authoredEmpty: ThemeProvenance = {
   tenantAuthored: true,
   authoredPaths: EMPTY_PROVENANCE.authoredPaths,
+  authoredLeaves: EMPTY_PROVENANCE.authoredLeaves,
   floors: {},
   statusSeedAuthorship: EMPTY_PROVENANCE.statusSeedAuthorship,
 };

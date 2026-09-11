@@ -25,6 +25,7 @@ import {
 import { FIRST_PARTY_VERTICAL_SLUGS } from '@/foundation/contracts/kernel/verticals';
 import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
+import { themeDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
 import {
   compileThemeIntent,
   draftPreviewThemeIntent,
@@ -729,7 +730,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
         typography: { ...authored.typography, scale: 1.05 },
         surfaces: { ...authored.surfaces, radiusScale: 1.15 },
       };
-      const baseTheme = authored.appearance?.defaultMode ?? 'light';
+      const baseTheme = themeDefaultMode(authored);
       const tenantSlug = `exactness-${vertical}`;
       const surface: BrandStudioSurfaceConfig = {
         key: baseTheme,

@@ -1340,6 +1340,40 @@ const GOVERNED_UNWRAPPED_ROOTS: readonly string[] = [
 ];
 
 /**
+ * Every keypath the patch STATES A VALUE FOR. A key carrying `undefined` is
+ * not a statement.
+ *
+ * The honest sibling of {@link collectPatchAuthoredPaths}, and deliberately a
+ * SECOND set rather than a correction of the first: the three provenance sites
+ * are written against the other one's semantics, and silently narrowing it
+ * would change three derivations for a reason none of them asked for.
+ *
+ * It exists because the v1 patch builder emits every palette key it knows,
+ * `undefined` included, so a document that authored one colour reports
+ * fourteen authored paths. A station that must carry a tenant's decision from
+ * one mode into the other cannot work from that: it would carry thirteen
+ * values the tenant never wrote. Leaves only -- a branch is not a decision,
+ * and its own leaves are enumerated beside it.
+ */
+export function collectPatchAuthoredLeaves(
+  patch: ThemeLayerPatch
+): TenantAuthoredPaths {
+  const authored = new Set<string>();
+  const walk = (value: unknown, prefix: string): void => {
+    if (value === null || value === undefined) return;
+    if (typeof value !== "object" || Array.isArray(value)) {
+      if (prefix !== "") authored.add(unwrapGovernedKeypath(prefix));
+      return;
+    }
+    for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+      walk(child, prefix ? `${prefix}.${key}` : key);
+    }
+  };
+  walk(patch, "");
+  return authored;
+}
+
+/**
  * Collect the tenant-authored paths of a patch, normalized to BrandTheme space.
  *
  * Deliberately an over-approximation in one direction only: it enumerates
@@ -1353,14 +1387,17 @@ export function collectPatchAuthoredPaths(
 ): TenantAuthoredPaths {
   const authored = new Set<string>();
   for (const path of collectThemeKeypaths(patch)) {
-    const [root, second] = path.split(".");
-    authored.add(
-      second === "value" && GOVERNED_UNWRAPPED_ROOTS.includes(root)
-        ? [root, ...path.split(".").slice(2)].join(".")
-        : path
-    );
+    authored.add(unwrapGovernedKeypath(path));
   }
   return authored;
+}
+
+/** `root.value.rest` is the governed wrapper's spelling of `root.rest`. */
+function unwrapGovernedKeypath(path: string): string {
+  const segments = path.split(".");
+  return segments[1] === "value" && GOVERNED_UNWRAPPED_ROOTS.includes(segments[0] as string)
+    ? [segments[0], ...segments.slice(2)].join(".")
+    : path;
 }
 
 /**
