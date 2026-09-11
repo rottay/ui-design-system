@@ -654,7 +654,7 @@
   display: flex;
   inline-size: 100%;
   min-block-size: calc(
-    var(--ds-select-option-height) * var(--ds-density-effective-scale)
+    var(--ds-select-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding: var(--ds-select-option-padding-y, 0.48rem) var(--ds-select-option-padding-x, 0.62rem);
   align-items: center;
@@ -871,7 +871,7 @@
 
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
     min-block-size: max(
-      calc(var(--ds-select-option-height) * var(--ds-density-effective-scale)),
+      calc(var(--ds-select-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)),
       var(--ds-select-touch-target-min, 44px)
     );
   }

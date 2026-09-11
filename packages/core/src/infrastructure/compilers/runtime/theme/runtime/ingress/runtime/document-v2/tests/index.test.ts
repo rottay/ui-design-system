@@ -96,35 +96,41 @@ describe("v2 accepted at the door", () => {
 });
 
 describe("accepted but not lit", () => {
-  // `surfaces.border-style` used to be this suite's unlit exemplar; the CC-01
-  // connection lot gave it a keypath, so the exemplar moves to a row that still
-  // has none. It is deliberately still a STANDARD row: an unlit report is a
-  // statement about the keypath, never about the plan.
-  it("accepts palette.neutral-temperature, records it, and reports it unlit", () => {
-    const document = v2({ "palette.neutral-temperature": "warm" });
+  // The exemplar has moved twice -- `surfaces.border-style` until the CC-01
+  // connection lot gave it a keypath, `palette.neutral-temperature` until
+  // WO-DER-03's palette half gave it one -- and there is no third whole-row
+  // candidate: every catalog row now declares a document keypath. So the
+  // exemplar becomes the case that OUTLIVES the census: a decision whose
+  // keypath exists but whose activated ROLE the v1 shape cannot carry. It is a
+  // PRO row, and the document says so -- an unlit report is a statement about
+  // the keypath, and the plan is the separate question the door answers first.
+  it("reports no whole row unlit, because every row now declares a keypath", () => {
+    for (const id of THEME_DECISION_IDS) expect(v1KeypathOf(id)).not.toBeNull();
+  });
+
+  it("accepts a typography role v1 cannot carry, records it, and reports it unlit", () => {
+    const document = v2({ "typography.families": { display: "editorial-display" } }, "pro");
     const admission = admitDocument({ vertical: "bithire", document });
     expect(admission.version).toBe(2);
     expect(admission.decisions).toEqual([
       {
-        id: "palette.neutral-temperature",
-        tier: "standard",
+        id: "typography.families",
+        tier: "pro",
         lit: false,
-        reason: "no-keypath-today",
+        reason: "role-has-no-keypath-today",
         keypaths: [],
       },
     ]);
-    expect(admission.unlit.map((row) => row.id)).toEqual([
-      "palette.neutral-temperature",
-    ]);
-    // The catalog DECLARES the absence with `null`, so the projection reports
-    // it instead of discovering it from a missing table row.
-    expect(v1KeypathOf("palette.neutral-temperature")).toBeNull();
+    expect(admission.unlit.map((row) => row.id)).toEqual(["typography.families"]);
+    // The row's own keypath is NOT null: what is missing is the v1 field for
+    // this role, which is why the reason names the role and not the row.
+    expect(v1KeypathOf("typography.families")).not.toBeNull();
   });
 
   it("moves nothing in the compiled CSS when only unlit decisions are activated", () => {
     expect(
-      css("bithire", v2({ "palette.neutral-temperature": "warm" }))
-    ).toEqual(css("bithire", v2({})));
+      css("bithire", v2({ "typography.families": { display: "editorial-display" } }, "pro"))
+    ).toEqual(css("bithire", v2({}, "pro")));
   });
 
   it("lights surfaces.border-style and moves the edge roles with it (CC-01)", () => {
@@ -291,7 +297,12 @@ describe("migrate v1 -> v2", () => {
         general: {
           palette: { primary: PRIMARY, status: { success: "#10B981" } },
           typography: { typePairing: "editorial", scale: 1.05 },
-          shape: { buttonStyle: "pill", radiusScale: 1.1 },
+          shape: {
+            buttonStyle: "pill",
+            radiusScale: 1.1,
+            nesting: "uniform",
+            controlHeight: "tall",
+          },
           density: "compact",
           rhythm: "airy",
           surfaces: { elevation: "elevated", effectIntensity: 0.4 },
@@ -321,6 +332,8 @@ describe("migrate v1 -> v2", () => {
         "recipe-profile",
         "responsive.posture",
         "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
         "shape.radius-scale",
         "spacing.rhythm",
         "surfaces.effect-intensity",
@@ -522,7 +535,12 @@ const ADVANCED_V1 = {
     general: {
       palette: { primary: PRIMARY, status: { success: "#10B981" } },
       typography: { typePairing: "editorial", scale: 1.05 },
-      shape: { buttonStyle: "pill", radiusScale: 1.1 },
+      shape: {
+        buttonStyle: "pill",
+        radiusScale: 1.1,
+        nesting: "uniform",
+        controlHeight: "tall",
+      },
       density: "compact",
       rhythm: "airy",
       surfaces: { elevation: "elevated", effectIntensity: 0.4 },

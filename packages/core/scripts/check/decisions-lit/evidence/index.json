@@ -1,11 +1,11 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-11T03:01:58.173Z",
-  "headline": "decisions lit = 7/22 (+0/2 new)",
-  "measuredHeadline": "measured on the 8-family sample: 13/22 move at least one sampled family",
+  "producedAt": "2026-09-11T04:15:17.086Z",
+  "headline": "decisions lit = 7/22 (+0/0 new)",
+  "measuredHeadline": "measured on the 8-family sample: 15/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
-    "newDecisions": 2,
+    "newDecisions": 0,
     "kitRows": 29,
     "measuredFamilySample": [
       "button",
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-11T02:57:55.912Z"
+      "builtAt": "2026-09-11T03:53:39.114Z"
     },
     "sources": {
       "door": {
@@ -30,13 +30,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 751,
-        "digest": "0054f28cde3c6dc00be6656bb3b4bf50a10099e7674e0a5a714a39d62cd43d50"
+        "fileCount": 753,
+        "digest": "cee51d749140bebfd11de294a2fa02f4eecb026e449741c116e3cd1d9bf2134d"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "189c83ec2d55a2e90150597e925dd8973f26c86e40b197a9380dc027d0bc1a9a"
+        "digest": "6b2b3dba45764b284825c92d2160503dfd9b8ec0e0ea8b27da714935e62a71f9"
       }
     },
     "browser": {
@@ -64,7 +64,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "9dbb03440f59eb0f57200e00b1d47517a5a19f9fc95bcbd01fa8824a1803134a",
+        "bundleSha": "d767253db2a5be326b80b1cde9e0a5f9f4e9b2f8492c3a200134d7e0e3164ec1",
         "bundleMode": "fresh"
       },
       "bithire": {
@@ -85,7 +85,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "1d56ade05cfdfa2a667f7bc75785f95408fa89b8db99c883be5157dce0e9e3c6",
+        "bundleSha": "1cce66c1b6fed9a865c1acacb92c7d056e8822f8f0f5eb20f01baae444a11bf3",
         "bundleMode": "fresh"
       },
       "evnto": {
@@ -106,7 +106,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "208e091b4a843862fcaa17210747000dd2529535ab705dfc052b8ace14c1bc03",
+        "bundleSha": "8d15b53c88d60cd88640552aae67f2ba426f98c1ceffa9314bad2df0941476ed",
         "bundleMode": "fresh"
       }
     },
@@ -122,9 +122,9 @@
   },
   "summary": {
     "lit": 7,
-    "partial": 14,
+    "partial": 16,
     "inert": 6,
-    "measuredLit": 13,
+    "measuredLit": 15,
     "discrepancies": [
       {
         "id": "palette.status-seeds",
@@ -252,7 +252,7 @@
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
         "movedFamilies": [],
-        "movedChannelCount": 0,
+        "movedChannelCount": 7,
         "excludedIn": []
       },
       {
@@ -261,7 +261,7 @@
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
         "movedFamilies": [],
-        "movedChannelCount": 0,
+        "movedChannelCount": 9,
         "excludedIn": []
       },
       {
@@ -282,10 +282,12 @@
       {
         "id": "shape.nesting",
         "tier": "pro",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
-        "movedFamilies": [],
-        "movedChannelCount": 0,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "card-modern-md"
+        ],
+        "movedChannelCount": 2,
         "excludedIn": []
       },
       {
@@ -302,10 +304,12 @@
       {
         "id": "shape.control-height",
         "tier": "standard",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
-        "movedFamilies": [],
-        "movedChannelCount": 0,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md"
+        ],
+        "movedChannelCount": 1,
         "excludedIn": []
       },
       {
@@ -401,7 +405,7 @@
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
         "movedFamilies": [],
-        "movedChannelCount": 0,
+        "movedChannelCount": 7,
         "excludedIn": []
       },
       {
@@ -429,7 +433,7 @@
           "space-modern-preset-gap",
           "stack-modern-preset-gap"
         ],
-        "movedChannelCount": 34,
+        "movedChannelCount": 35,
         "excludedIn": []
       },
       {
@@ -442,7 +446,7 @@
           "card-modern-md",
           "input-modern-md"
         ],
-        "movedChannelCount": 6,
+        "movedChannelCount": 7,
         "excludedIn": []
       },
       {
@@ -678,16 +682,56 @@
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-font-weight-display",
+          "--ds-font-weight-heading",
+          "--ds-type-display-font-weight",
+          "--ds-type-label-font-weight",
+          "--ds-type-numeric-font-weight",
+          "--ds-type-page-title-font-weight",
+          "--ds-type-section-title-font-weight"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-weight-display",
+        "--ds-font-weight-heading",
+        "--ds-type-display-font-weight",
+        "--ds-type-label-font-weight",
+        "--ds-type-numeric-font-weight",
+        "--ds-type-page-title-font-weight",
+        "--ds-type-section-title-font-weight"
+      ]
     },
     {
       "id": "typography.numeric",
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-type-body-font-variant-numeric",
+          "--ds-type-caption-font-variant-numeric",
+          "--ds-type-code-font-variant-numeric",
+          "--ds-type-display-font-variant-numeric",
+          "--ds-type-label-font-variant-numeric",
+          "--ds-type-numeric-font-variant-numeric",
+          "--ds-type-page-title-font-variant-numeric",
+          "--ds-type-section-title-font-variant-numeric",
+          "--ds-type-supporting-font-variant-numeric"
+        ]
+      },
+      "movedChannels": [
+        "--ds-type-body-font-variant-numeric",
+        "--ds-type-caption-font-variant-numeric",
+        "--ds-type-code-font-variant-numeric",
+        "--ds-type-display-font-variant-numeric",
+        "--ds-type-label-font-variant-numeric",
+        "--ds-type-numeric-font-variant-numeric",
+        "--ds-type-page-title-font-variant-numeric",
+        "--ds-type-section-title-font-variant-numeric",
+        "--ds-type-supporting-font-variant-numeric"
+      ]
     },
     {
       "id": "shape.radius-scale",
@@ -702,6 +746,10 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "card-modern-md/nested-region": [
           "border-top-left-radius",
           "border-bottom-right-radius"
         ],
@@ -748,10 +796,24 @@
     {
       "id": "shape.nesting",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "card-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/nested-region": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-radius-nest-inset",
+          "--ds-radius-nest-ratio"
+        ]
+      },
+      "movedChannels": [
+        "--ds-radius-nest-inset",
+        "--ds-radius-nest-ratio"
+      ]
     },
     {
       "id": "shape.button-style",
@@ -777,10 +839,24 @@
     {
       "id": "shape.control-height",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height"
+        ],
+        "token-readout/tokens": [
+          "--ds-control-height-scale"
+        ]
+      },
+      "movedChannels": [
+        "--ds-control-height-scale"
+      ]
     },
     {
       "id": "density.mode",
@@ -974,8 +1050,26 @@
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-ease-exit",
+          "--ds-ease-standard",
+          "--ds-motion-ease-enter",
+          "--ds-motion-ease-in-out",
+          "--ds-motion-offset-in",
+          "--ds-motion-panel-offset",
+          "--ds-motion-scale-in"
+        ]
+      },
+      "movedChannels": [
+        "--ds-ease-exit",
+        "--ds-ease-standard",
+        "--ds-motion-ease-enter",
+        "--ds-motion-ease-in-out",
+        "--ds-motion-offset-in",
+        "--ds-motion-panel-offset",
+        "--ds-motion-scale-in"
+      ]
     },
     {
       "id": "navigation.sidebar-tone",
@@ -1079,7 +1173,8 @@
           "--ds-radius-xl",
           "--ds-radius-xl-base",
           "--ds-select-group-text-transform",
-          "--ds-table-header-text-transform"
+          "--ds-table-header-text-transform",
+          "--ds-type-numeric-font-variant-numeric"
         ],
         "flex-modern-preset-gap/root": [
           "gap",
@@ -1135,7 +1230,8 @@
         "--ds-radius-xl",
         "--ds-radius-xl-base",
         "--ds-select-group-text-transform",
-        "--ds-table-header-text-transform"
+        "--ds-table-header-text-transform",
+        "--ds-type-numeric-font-variant-numeric"
       ]
     },
     {
@@ -1170,7 +1266,8 @@
           "--ds-font-family-heading",
           "--ds-letter-spacing-heading",
           "--ds-select-group-text-transform",
-          "--ds-table-header-text-transform"
+          "--ds-table-header-text-transform",
+          "--ds-type-numeric-font-variant-numeric"
         ]
       },
       "movedChannels": [
@@ -1178,7 +1275,8 @@
         "--ds-font-family-heading",
         "--ds-letter-spacing-heading",
         "--ds-select-group-text-transform",
-        "--ds-table-header-text-transform"
+        "--ds-table-header-text-transform",
+        "--ds-type-numeric-font-variant-numeric"
       ]
     },
     {
@@ -1423,16 +1521,56 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-font-weight-display",
+          "--ds-font-weight-heading",
+          "--ds-type-display-font-weight",
+          "--ds-type-label-font-weight",
+          "--ds-type-numeric-font-weight",
+          "--ds-type-page-title-font-weight",
+          "--ds-type-section-title-font-weight"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-weight-display",
+        "--ds-font-weight-heading",
+        "--ds-type-display-font-weight",
+        "--ds-type-label-font-weight",
+        "--ds-type-numeric-font-weight",
+        "--ds-type-page-title-font-weight",
+        "--ds-type-section-title-font-weight"
+      ]
     },
     {
       "id": "typography.numeric",
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-type-body-font-variant-numeric",
+          "--ds-type-caption-font-variant-numeric",
+          "--ds-type-code-font-variant-numeric",
+          "--ds-type-display-font-variant-numeric",
+          "--ds-type-label-font-variant-numeric",
+          "--ds-type-numeric-font-variant-numeric",
+          "--ds-type-page-title-font-variant-numeric",
+          "--ds-type-section-title-font-variant-numeric",
+          "--ds-type-supporting-font-variant-numeric"
+        ]
+      },
+      "movedChannels": [
+        "--ds-type-body-font-variant-numeric",
+        "--ds-type-caption-font-variant-numeric",
+        "--ds-type-code-font-variant-numeric",
+        "--ds-type-display-font-variant-numeric",
+        "--ds-type-label-font-variant-numeric",
+        "--ds-type-numeric-font-variant-numeric",
+        "--ds-type-page-title-font-variant-numeric",
+        "--ds-type-section-title-font-variant-numeric",
+        "--ds-type-supporting-font-variant-numeric"
+      ]
     },
     {
       "id": "shape.radius-scale",
@@ -1447,6 +1585,10 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "card-modern-md/nested-region": [
           "border-top-left-radius",
           "border-bottom-right-radius"
         ],
@@ -1493,10 +1635,24 @@
     {
       "id": "shape.nesting",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "card-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/nested-region": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-radius-nest-inset",
+          "--ds-radius-nest-ratio"
+        ]
+      },
+      "movedChannels": [
+        "--ds-radius-nest-inset",
+        "--ds-radius-nest-ratio"
+      ]
     },
     {
       "id": "shape.button-style",
@@ -1522,10 +1678,24 @@
     {
       "id": "shape.control-height",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height"
+        ],
+        "token-readout/tokens": [
+          "--ds-control-height-scale"
+        ]
+      },
+      "movedChannels": [
+        "--ds-control-height-scale"
+      ]
     },
     {
       "id": "density.mode",
@@ -1714,8 +1884,26 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-ease-exit",
+          "--ds-ease-standard",
+          "--ds-motion-ease-enter",
+          "--ds-motion-ease-in-out",
+          "--ds-motion-offset-in",
+          "--ds-motion-panel-offset",
+          "--ds-motion-scale-in"
+        ]
+      },
+      "movedChannels": [
+        "--ds-ease-exit",
+        "--ds-ease-standard",
+        "--ds-motion-ease-enter",
+        "--ds-motion-ease-in-out",
+        "--ds-motion-offset-in",
+        "--ds-motion-panel-offset",
+        "--ds-motion-scale-in"
+      ]
     },
     {
       "id": "navigation.sidebar-tone",
@@ -1766,6 +1954,10 @@
         "card-modern-md/title": [
           "letter-spacing",
           "font-family"
+        ],
+        "card-modern-md/nested-region": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
         ],
         "button-modern-md/root": [
           "border-top-left-radius",
@@ -1890,14 +2082,16 @@
           "--ds-font-family-base",
           "--ds-font-family-heading",
           "--ds-letter-spacing-heading",
-          "--ds-select-group-text-transform"
+          "--ds-select-group-text-transform",
+          "--ds-type-numeric-font-variant-numeric"
         ]
       },
       "movedChannels": [
         "--ds-font-family-base",
         "--ds-font-family-heading",
         "--ds-letter-spacing-heading",
-        "--ds-select-group-text-transform"
+        "--ds-select-group-text-transform",
+        "--ds-type-numeric-font-variant-numeric"
       ]
     },
     {
@@ -2150,16 +2344,56 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-font-weight-display",
+          "--ds-font-weight-heading",
+          "--ds-type-display-font-weight",
+          "--ds-type-label-font-weight",
+          "--ds-type-numeric-font-weight",
+          "--ds-type-page-title-font-weight",
+          "--ds-type-section-title-font-weight"
+        ]
+      },
+      "movedChannels": [
+        "--ds-font-weight-display",
+        "--ds-font-weight-heading",
+        "--ds-type-display-font-weight",
+        "--ds-type-label-font-weight",
+        "--ds-type-numeric-font-weight",
+        "--ds-type-page-title-font-weight",
+        "--ds-type-section-title-font-weight"
+      ]
     },
     {
       "id": "typography.numeric",
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-type-body-font-variant-numeric",
+          "--ds-type-caption-font-variant-numeric",
+          "--ds-type-code-font-variant-numeric",
+          "--ds-type-display-font-variant-numeric",
+          "--ds-type-label-font-variant-numeric",
+          "--ds-type-numeric-font-variant-numeric",
+          "--ds-type-page-title-font-variant-numeric",
+          "--ds-type-section-title-font-variant-numeric",
+          "--ds-type-supporting-font-variant-numeric"
+        ]
+      },
+      "movedChannels": [
+        "--ds-type-body-font-variant-numeric",
+        "--ds-type-caption-font-variant-numeric",
+        "--ds-type-code-font-variant-numeric",
+        "--ds-type-display-font-variant-numeric",
+        "--ds-type-label-font-variant-numeric",
+        "--ds-type-numeric-font-variant-numeric",
+        "--ds-type-page-title-font-variant-numeric",
+        "--ds-type-section-title-font-variant-numeric",
+        "--ds-type-supporting-font-variant-numeric"
+      ]
     },
     {
       "id": "shape.radius-scale",
@@ -2174,6 +2408,10 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "card-modern-md/nested-region": [
           "border-top-left-radius",
           "border-bottom-right-radius"
         ],
@@ -2220,10 +2458,24 @@
     {
       "id": "shape.nesting",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "card-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/nested-region": [
+          "border-top-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "token-readout/tokens": [
+          "--ds-radius-nest-inset",
+          "--ds-radius-nest-ratio"
+        ]
+      },
+      "movedChannels": [
+        "--ds-radius-nest-inset",
+        "--ds-radius-nest-ratio"
+      ]
     },
     {
       "id": "shape.button-style",
@@ -2249,10 +2501,24 @@
     {
       "id": "shape.control-height",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height"
+        ],
+        "token-readout/tokens": [
+          "--ds-control-height-scale"
+        ]
+      },
+      "movedChannels": [
+        "--ds-control-height-scale"
+      ]
     },
     {
       "id": "density.mode",
@@ -2446,8 +2712,26 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedTargets": {
+        "token-readout/tokens": [
+          "--ds-ease-exit",
+          "--ds-ease-standard",
+          "--ds-motion-ease-enter",
+          "--ds-motion-ease-in-out",
+          "--ds-motion-offset-in",
+          "--ds-motion-panel-offset",
+          "--ds-motion-scale-in"
+        ]
+      },
+      "movedChannels": [
+        "--ds-ease-exit",
+        "--ds-ease-standard",
+        "--ds-motion-ease-enter",
+        "--ds-motion-ease-in-out",
+        "--ds-motion-offset-in",
+        "--ds-motion-panel-offset",
+        "--ds-motion-scale-in"
+      ]
     },
     {
       "id": "navigation.sidebar-tone",
@@ -2550,7 +2834,8 @@
           "--ds-radius-xl-base",
           "--ds-select-group-text-transform",
           "--ds-table-header-letter-spacing",
-          "--ds-table-header-text-transform"
+          "--ds-table-header-text-transform",
+          "--ds-type-numeric-font-variant-numeric"
         ],
         "flex-modern-preset-gap/root": [
           "gap",
@@ -2607,7 +2892,8 @@
         "--ds-radius-xl-base",
         "--ds-select-group-text-transform",
         "--ds-table-header-letter-spacing",
-        "--ds-table-header-text-transform"
+        "--ds-table-header-text-transform",
+        "--ds-type-numeric-font-variant-numeric"
       ]
     },
     {
@@ -2643,7 +2929,8 @@
           "--ds-letter-spacing-heading",
           "--ds-select-group-text-transform",
           "--ds-table-header-letter-spacing",
-          "--ds-table-header-text-transform"
+          "--ds-table-header-text-transform",
+          "--ds-type-numeric-font-variant-numeric"
         ]
       },
       "movedChannels": [
@@ -2652,7 +2939,8 @@
         "--ds-letter-spacing-heading",
         "--ds-select-group-text-transform",
         "--ds-table-header-letter-spacing",
-        "--ds-table-header-text-transform"
+        "--ds-table-header-text-transform",
+        "--ds-type-numeric-font-variant-numeric"
       ]
     },
     {

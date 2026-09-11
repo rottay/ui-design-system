@@ -757,6 +757,39 @@ export interface BrandSurfaces {
    * Absent -> the expressive `edge` axis default, byte-identical to today.
    */
   borderStyle?: "none" | "hairline" | "strong";
+  /**
+   * Kit row 12: whether a surface nested inside another steps its corner down
+   * to stay concentric with the parent, or keeps the parent's own corner.
+   *
+   * The DS already derives a nested corner as `parent - inset`, where the inset
+   * is the smaller of the container's padding and the larger of a governed
+   * floor and half the parent radius. This decision states the two operands of
+   * that derivation, so one word moves every surface that nests instead of a
+   * per-family radius override: `concentric` restates today's law and
+   * `uniform` zeroes both operands, which makes the nested corner equal the
+   * parent's.
+   *
+   * Absent -> the derivation's own fallbacks, byte-identical to today.
+   */
+  nesting?: "concentric" | "uniform";
+  /**
+   * Kit row 14: how tall an interactive control stands, across every control
+   * family at once.
+   *
+   * ORTHOGONAL to `density`, and deliberately a second factor rather than a
+   * re-reading of the first: density scales control size AND the gaps around
+   * it, this scales the control height only. A compact product with tall
+   * controls is a coherent posture, and it is unreachable through `density`.
+   *
+   * Emitted as `--ds-control-height-scale` and multiplied in beside
+   * `--ds-density-effective-scale` at the point every control family already
+   * resolves its height, so the vertical's own size ramp is shifted rather
+   * than replaced. The mechanical pointer-target floors still clamp the
+   * result: a posture may not take a control below its minimum hit area.
+   *
+   * Absent -> factor 1, byte-identical to today.
+   */
+  controlHeight?: "compact" | "standard" | "tall";
 }
 
 /**
@@ -3301,6 +3334,18 @@ export interface TenantAppearanceGeneral {
     buttonStyle?: "sharp" | "soft" | "pill";
     /** Multiplies the radius ramp through `--ds-radius-scale`. */
     radiusScale?: number;
+    /**
+     * Kit row 12: the nested-radius law. Lowers through
+     * `derivation/shape/nesting` onto the two operands of the concentric
+     * derivation every nesting surface already reads.
+     */
+    nesting?: "concentric" | "uniform";
+    /**
+     * Kit row 14: the control-height posture. Lowers through
+     * `derivation/shape/control-height` onto `--ds-control-height-scale`,
+     * which every control family multiplies beside the density scale.
+     */
+    controlHeight?: "compact" | "standard" | "tall";
   };
   /** Semantic spacing mode shared by CSS and numeric useTokens consumers. */
   density?: "compact" | "normal" | "spacious";

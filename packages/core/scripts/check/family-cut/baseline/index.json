@@ -10,7 +10,7 @@
       "denominators": {
         "skinFiles": 3,
         "sourceFiles": 6,
-        "channelsRead": 252,
+        "channelsRead": 253,
         "classTokens": 14,
         "partsStamped": 13,
         "partsConsumed": 11
@@ -23,7 +23,8 @@
       "statesConsumedNotStamped": 1,
       "unpairedStatePseudoSelectors": 1,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 1
+      "fanOutUnreached": 1,
+      "channelsReadNote": "252 -> 253 in connection lot 2: the button skin folds --ds-control-height-scale into the height it already resolves from the density scale. `readWithoutProducer` (34) does not move -- the channel is declared in `foundation/themes/default` and emitted by `derivation/shape/control-height`, so it is read AND written."
     }
   }
 }

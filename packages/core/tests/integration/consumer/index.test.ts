@@ -265,16 +265,44 @@ describe('the application writes a tenant document v2 through the door', () => {
     ]);
   });
 
-  it('accepts a decision with no fan-out yet and names it unlit', async () => {
+  it('reports an EMPTY unlit list, because every row this app writes now lowers', async () => {
     const { admission } = await mountTenant();
-    expect(admission.unlit.map((decision) => decision.id)).toEqual([
-      'shape.control-height',
-    ]);
-    // `states.emphasis` was this example until WO-DER-02 derived it; it is
-    // asserted LIT here so the two halves of the report stay honest together.
+    // NOT deleted, and not weakened to "length is small": the list is asserted
+    // empty and the two rows that used to populate it are asserted lit beside
+    // it, so the day a catalog row outruns its fan-out again this goes red here
+    // rather than in a tenant's browser. `states.emphasis` was the example
+    // until WO-DER-02 derived it; `shape.control-height` until connection lot 2
+    // gave it a keypath, a deriver and painted consumers.
+    expect(admission.unlit.map((decision) => decision.id)).toEqual([]);
     expect(
       admission.decisions.find((decision) => decision.id === 'states.emphasis')?.keypaths
     ).toEqual(['appearance.general.states.emphasis']);
+    expect(
+      admission.decisions.find((decision) => decision.id === 'shape.control-height')
+        ?.keypaths
+    ).toEqual(['appearance.general.shape.controlHeight']);
+  });
+
+  it('still REPORTS unlit, by name and reason, for a role v1 cannot carry', () => {
+    // The mechanism outlives this app's own document. `typography.families`
+    // holds a keypath, but only two of its four roles have a v1 field, so a
+    // tenant that picks a display face activates a decision the projection
+    // cannot write -- accepted, reported, and distinguished from the whole-row
+    // gap by its own reason.
+    const { admission } = documentThemeAdmission({
+      vertical: 'bithire',
+      slug: TENANT_SLUG,
+      document: {
+        version: 2,
+        plan: 'pro',
+        decisions: { 'typography.families': { display: 'editorial-display' } },
+      },
+    });
+    expect(admission.unlit.map((decision) => decision.id)).toEqual([
+      'typography.families',
+    ]);
+    expect(admission.unlit[0]?.reason).toBe('role-has-no-keypath-today');
+    expect(admission.unlit[0]?.keypaths).toEqual([]);
   });
 
   it('refuses a decision id outside the published catalog, by name', () => {

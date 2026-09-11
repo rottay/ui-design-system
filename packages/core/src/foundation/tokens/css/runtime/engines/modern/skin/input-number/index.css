@@ -134,7 +134,7 @@
    relays are private implementation, NOT customization knobs. */
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='sm'] {
   --_ds-input-number-resolved-height: calc(
-    var(--ds-input-number-sm-height, var(--ds-input-sm-height, 32px)) * var(--ds-density-effective-scale)
+    var(--ds-input-number-sm-height, var(--ds-input-sm-height, 32px)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   --_ds-input-number-resolved-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
   padding-block: var(--ds-input-number-sm-padding-y, var(--ds-input-sm-padding-y, 4px));
@@ -143,7 +143,7 @@
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='md'] {
   --_ds-input-number-resolved-height: calc(
-    var(--ds-input-number-md-height, var(--ds-input-md-height, 36px)) * var(--ds-density-effective-scale)
+    var(--ds-input-number-md-height, var(--ds-input-md-height, 36px)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   --_ds-input-number-resolved-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
   padding-block: var(--ds-input-number-md-padding-y, var(--ds-input-md-padding-y, 6px));
@@ -152,7 +152,7 @@
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='lg'] {
   --_ds-input-number-resolved-height: calc(
-    var(--ds-input-number-lg-height, var(--ds-input-lg-height, 40px)) * var(--ds-density-effective-scale)
+    var(--ds-input-number-lg-height, var(--ds-input-lg-height, 40px)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   --_ds-input-number-resolved-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
   padding-block: var(--ds-input-number-lg-padding-y, var(--ds-input-lg-padding-y, 8px));

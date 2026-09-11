@@ -182,17 +182,17 @@
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='sm'],
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='sm'] {
   --_ds-datepicker-trigger-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
-  --_ds-datepicker-trigger-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='md'],
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='md'] {
   --_ds-datepicker-trigger-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
-  --_ds-datepicker-trigger-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='lg'],
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='lg'] {
   --_ds-datepicker-trigger-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
-  --_ds-datepicker-trigger-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input']::placeholder,

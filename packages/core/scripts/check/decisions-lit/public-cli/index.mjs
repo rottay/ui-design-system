@@ -123,8 +123,17 @@ export function headlineLines(summary, sampleSize) {
   return lines;
 }
 
-/** Folds the measured rows into the published summary. */
-export function summarize(rows) {
+/**
+ * Folds the measured rows into the published summary.
+ *
+ * `newIds` defaults to the catalog's own set and is a parameter for exactly one
+ * reason: that set is now EMPTY, and the refusal it feeds -- a row recorded
+ * `new` measured moving -- is the guard that made every earlier re-record
+ * deliberate. A guard whose trigger has become unreachable is a guard nobody
+ * can test, so the drill plants an id here instead of the suite being deleted
+ * along with the census it watched.
+ */
+export function summarize(rows, newIds = NEW_DECISION_IDS) {
   const byId = new Map();
   for (const row of rows) {
     const entry = byId.get(row.id) ?? { id: row.id, verticals: [] };
@@ -148,7 +157,7 @@ export function summarize(rows) {
     };
   });
   const newlyMoving = decisions.filter(
-    (row) => NEW_DECISION_IDS.includes(row.id) && row.artifactBytesDiffer,
+    (row) => newIds.includes(row.id) && row.artifactBytesDiffer,
   );
   const kept = decisions.filter((row) => row.recordedClass !== 'new');
   return {

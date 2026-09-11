@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "298f0db270ad4f66ef02ad24fce03f0fdc14fc48b69bcac64fb32f81e40f768d"
+    "registryDigest": "e09551300acd68518485c88997c6d294c4c4167c4dfeebb606b02d9896b3a1ba"
   },
   "title": "Status tone seeds (success/warning/error/info) in General",
   "valueType": "color-set",

@@ -1,5 +1,6 @@
 /**
- * The four decisions CC-01 found unlit, end to end, on all three verticals.
+ * Every decision a connection lot took from unlit to lit, end to end, on all
+ * three verticals.
  *
  * A unit test on a sub-owner proves a table is read. It cannot prove the value
  * a TENANT wrote reaches that table: the audit's 24 cases were all accepted by
@@ -36,17 +37,27 @@ const compiled = (
   compileThemeIntent(documentThemeIntent({ vertical, slug: SLUG, document }))
     .compiled.cssVariables;
 
-/** The audit's own fixtures: the two values it drove each row with. */
+/**
+ * The audit's own fixtures: the two values it drove each row with.
+ *
+ * The first four are CC-01's. `shape.nesting` and `shape.control-height` are
+ * connection lot 2's, and they are proved HERE rather than in a suite of their
+ * own precisely because the defect this file exists for was uniform: a row the
+ * door accepted, reported unlit, and compiled to zero channels, while every
+ * sub-owner it touched stayed green.
+ */
 const FIXTURES = {
   "typography.role-weights": ["light", "strong"],
   "typography.numeric": ["proportional", "tabular"],
   "surfaces.border-style": ["none", "strong"],
   "motion.character": ["mechanical", "playful"],
+  "shape.nesting": ["concentric", "uniform"],
+  "shape.control-height": ["compact", "tall"],
 } as const;
 
 type ConnectedId = keyof typeof FIXTURES;
 
-describe("the four connected decisions reach a channel on every vertical", () => {
+describe("every connected decision reaches a channel on every vertical", () => {
   for (const id of Object.keys(FIXTURES) as ConnectedId[]) {
     describe(id, () => {
       const row = themeControl(id);
@@ -79,11 +90,14 @@ describe("the four connected decisions reach a channel on every vertical", () =>
             );
             expect(changed.length).toBeGreaterThan(0);
             // Every channel it moved is one the catalog said it produces, so
-            // the row cannot buy its "lit" verdict with a side effect.
+            // the row cannot buy its "lit" verdict with a side effect. Read
+            // through the field's declared type: `themeControl` returns the
+            // union of all 29 `as const` rows, so a single row that still
+            // declares no channel narrows `includes` to `never` and the check
+            // stops compiling for reasons that have nothing to do with it.
+            const declared: readonly string[] = row.produces.channels;
             expect(
-              changed.filter(
-                (channel) => !row.produces.channels.includes(channel)
-              )
+              changed.filter((channel) => !declared.includes(channel))
             ).toEqual([]);
           });
 
@@ -117,7 +131,10 @@ describe("the four connected decisions reach a channel on every vertical", () =>
             expect(preview.compiled.cssVariables).toEqual(
               doc.compiled.cssVariables
             );
-            expect(published.artifact.variables).toEqual(doc.delta.variables);
+            // The delta is present only for a TENANT compile; asserting it
+            // exists is part of the claim, not a cast around the type.
+            expect(doc.delta).toBeDefined();
+            expect(published.artifact.variables).toEqual(doc.delta?.variables);
           });
         }
 
@@ -156,6 +173,8 @@ describe("the four connected decisions reach a channel on every vertical", () =>
       "typography.numeric": "pro",
       "surfaces.border-style": "standard",
       "motion.character": "pro",
+      "shape.nesting": "pro",
+      "shape.control-height": "standard",
     });
   });
 });

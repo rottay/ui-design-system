@@ -129,7 +129,11 @@ const v2 = (decisions: TenantThemeDocumentV2["decisions"]): TenantThemeDocumentV
 });
 
 /** The tenant document Fable's repro authors: a status seed, at a posture. */
-const rottayAt = (contrastPosture: string): ThemeCompilation =>
+const rottayAt = (
+  contrastPosture: NonNullable<
+    TenantThemeDocumentV2["decisions"]["palette.contrast-posture"]
+  >
+): ThemeCompilation =>
   compileThemeIntent(
     documentThemeIntent({
       vertical: "rottay",

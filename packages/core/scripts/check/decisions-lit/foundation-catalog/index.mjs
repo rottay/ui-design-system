@@ -45,10 +45,19 @@ export const TODAY_CONTROL_DENOMINATOR = 22;
  * `typography.numeric`, `surfaces.border-style` and `motion.character` gained
  * theirs, and this run REFUSED to publish them as `new` while measuring them
  * move -- which is the re-record being deliberate rather than absorbed. 4 -> 2 on
- * 2026-09-10 (WO-DER-03 palette half), for the same reason: the two palette
- * postures gained `derivation/palette/{neutral-temperature,contrast-posture}`.
+ * 2026-09-10, twice and independently: WO-DER-03's palette half gave
+ * `palette.neutral-temperature` and `palette.contrast-posture` their
+ * `derivation/palette/{neutral-temperature,contrast-posture}` owners, and
+ * connection lot 2 gave `shape.nesting` and `shape.control-height` a keypath, a
+ * canonical deriver under `derivation/shape/` and painted consumers. 2 -> 0 is
+ * the integration of the two: the kit admits no row that nothing lowers.
+ *
+ * ZERO IS A MEASUREMENT, NOT A FINISH LINE. All ten rows that left this census
+ * are recorded `partial`, not `full`: emission is not adoption, and the fan-out
+ * each row declares is proved in its family cut rather than here. What this
+ * denominator says is narrower and exact -- no kit row is INERT any more.
  */
-export const NEW_DECISION_DENOMINATOR = 2;
+export const NEW_DECISION_DENOMINATOR = 0;
 
 /**
  * `full`    the audit measured full, coherent effect in static and DB
@@ -97,9 +106,16 @@ export const DECISIONS = Object.freeze([
   ['typography.role-weights', 'partial', ['light', 'strong']],
   ['typography.numeric', 'partial', ['proportional', 'tabular']],
   ['shape.radius-scale', 'none', [0.85, 1.15]],
-  ['shape.nesting', 'new', ['concentric', 'uniform']],
+  // Connection lot 2 (2026-09-10): both gained a keypath and a canonical
+  // deriver (`derivation/shape/{nesting,control-height}`), and painted
+  // consumers -- the nested-corner derivation the card body publishes, and the
+  // control-height factor every control family folds in beside the density
+  // scale. `partial` for the same reason CC-01 gives its three rows: the
+  // `minimumFamilies` of both is `owner-pending`, so there is no declared
+  // fan-out floor to certify the reach against, and emission is not adoption.
+  ['shape.nesting', 'partial', ['concentric', 'uniform']],
   ['shape.button-style', 'partial', ['sharp', 'pill']],
-  ['shape.control-height', 'new', ['compact', 'tall']],
+  ['shape.control-height', 'partial', ['compact', 'tall']],
   ['density.mode', 'partial', ['compact', 'spacious']],
   ['spacing.rhythm', 'none', ['tight', 'airy']],
   ['surfaces.elevation-posture', 'partial', ['flat', 'elevated']],

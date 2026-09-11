@@ -438,8 +438,13 @@
 
   /* Nested-radius law: an inner surface's radius is
      max(0, outer radius - this inset), so nested corners read as one
-     geometry. Card and SemanticSurface consume the SAME inset. */
+     geometry. Card and SemanticSurface consume the SAME inset. The ratio is
+     the law's SECOND operand -- the inset is floored at this fraction of the
+     parent radius, so a contained-radius tenant keeps related curvature
+     instead of deriving a near-square child. `shape.nesting` states both:
+     `concentric` restates these two values, `uniform` zeroes them. */
   --ds-radius-nest-inset: 4px;
+  --ds-radius-nest-ratio: 0.5;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      2. TYPOGRAPHY - Geist/Inter Style
@@ -608,6 +613,12 @@
     ),
     3
   );
+  /* Control height — the `shape.controlHeight` factor, multiplied in beside
+     the density scale wherever a control family resolves its height. A SECOND
+     factor, not a re-reading of density: density scales the control AND the
+     room around it, this scales the control only. The mechanical pointer-target
+     floors still clamp the result. */
+  --ds-control-height-scale: 1;
   /* C-E1 · Layout rhythm — the DS-owned floor for the tenant `appearance.rhythm` /
      BrandTheme `surfaces.rhythm` axis. DELIBERATELY NOT part of the
      --ds-spacing-* ramp above: those steps also size controls, and rhythm

@@ -92,7 +92,7 @@
      mode's mechanical minimum (measured: 36px x 0.9 = 32.4px, F8). */
   min-block-size: max(
     var(--_ds-button-height-floor, 36px),
-    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale))
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
   );
   gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale));
   padding-block: 0;
@@ -323,7 +323,7 @@
   inline-size: 100%;
   min-block-size: max(
     var(--_ds-button-height-floor, 36px),
-    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale))
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
   );
   block-size: auto;
   padding-block: calc(
@@ -453,7 +453,7 @@
 
 .rottay-button.rottay-button--modern[data-shape='circle'] {
   inline-size: calc(
-    var(--ds-button-resolved-height) * var(--ds-density-effective-scale)
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   border-radius: var(--ds-radius-full);
 }

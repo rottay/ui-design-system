@@ -41,12 +41,24 @@ import {
 // measure: `states.emphasis` and `states.focus-style` first (WO-DER-02), then
 // `typography.role-weights`, `typography.numeric`, `surfaces.border-style` and
 // `motion.character` (CC-01 connection lot), then `palette.neutral-temperature`
-// and `palette.contrast-posture` (WO-DER-03 palette half). The headline's new
-// denominator follows NEW_DECISION_DENOMINATOR, so it decreases with them.
-test('the catalog states the kit census: 29 rows, 19 standard, 10 pro, 2 new', () => {
+// and `palette.contrast-posture` (WO-DER-03 palette half) and `shape.nesting`
+// and `shape.control-height` (connection lot 2). The headline's new denominator
+// follows NEW_DECISION_DENOMINATOR, so it decreases with them -- to zero here.
+// The list is DERIVED from the catalog rather than restated, so a row
+// re-recorded without moving the denominator fails this test rather than
+// shrinking the census quietly.
+test('the catalog states the kit census: 29 rows, 19 standard, 10 pro, 0 new', () => {
   assert.deepEqual(censusErrors(), []);
   assert.equal(DECISIONS.length, 29);
-  assert.equal(NEW_DECISION_IDS.length, 2);
+  assert.equal(NEW_DECISION_IDS.length, 0);
+  assert.deepEqual([...NEW_DECISION_IDS], []);
+  // The ten rows the kit marked `(new)` all left, and every one of them left as
+  // `partial`: the census is empty because nothing is inert, not because the
+  // fan-out was certified.
+  assert.deepEqual(
+    DECISIONS.filter((row) => row.recordedClass === 'new').map((row) => row.id),
+    [],
+  );
   assert.doesNotThrow(assertCatalogCensus);
 });
 
@@ -88,7 +100,7 @@ function fullRun(overrides = {}) {
 
 test('the headline is exactly the string the acceptance gate reads', () => {
   const summary = summarize(fullRun());
-  assert.equal(headline(summary), 'decisions lit = 7/22 (+0/2 new)');
+  assert.equal(headline(summary), 'decisions lit = 7/22 (+0/0 new)');
 });
 
 test('the measured half is DERIVED from the rows, not from the recorded class', () => {
@@ -110,7 +122,7 @@ test('the measured half is DERIVED from the rows, not from the recorded class', 
 test('both halves are published, and the gate substring survives', () => {
   const summary = summarize(fullRun());
   const lines = headlineLines(summary, 8);
-  assert.ok(lines[0].includes('decisions lit = 7/22 (+0/2 new)'));
+  assert.ok(lines[0].includes('decisions lit = 7/22 (+0/0 new)'));
   assert.ok(lines[0].includes('recorded'));
   assert.ok(lines[1].includes('measured on the 8-family sample'));
 });
@@ -164,15 +176,28 @@ test('REFUSES a run whose positive control moved no family', () => {
 });
 
 test('REFUSES a run in which a decision recorded `new` moved', () => {
-  const rows = fullRun({ [NEW_DECISION_IDS[0]]: { artifactBytesDiffer: true } });
-  const summary = summarize(rows);
+  // The catalog's own `new` set is empty, so the id is PLANTED. That is the
+  // whole point of keeping this drill: the guard that made the last four
+  // re-records deliberate must stay executable after the census it watched
+  // reached zero, or the next row admitted without a producer re-enters a
+  // census nothing checks.
+  const planted = 'spacing.rhythm';
+  assert.ok(!NEW_DECISION_IDS.includes(planted), 'the planted id must not be a real `new` row');
+  const rows = fullRun({ [planted]: { artifactBytesDiffer: true } });
+  const summary = summarize(rows, [planted]);
   assert.equal(summary.newLit, 1);
-  assert.equal(headline(summary), 'decisions lit = 7/22 (+1/2 new)');
+  assert.equal(headline(summary), 'decisions lit = 7/22 (+1/0 new)');
   assert.ok(
     violations({ summary, rows, verticals: ['bithire'] }).some((problem) =>
       problem.includes('MEASURED MOVING'),
     ),
   );
+});
+
+test('a real run has no `new` row left to refuse, and says so', () => {
+  const summary = summarize(fullRun());
+  assert.equal(summary.newLit, 0);
+  assert.deepEqual(summary.newlyMovingIds, []);
 });
 
 test('a compile exclusion is published, never folded into "moved nothing"', () => {
@@ -399,7 +424,7 @@ const FINGERPRINTS = {
 
 function publishedArtifact(overrides = {}) {
   return {
-    headline: 'decisions lit = 7/22 (+0/2 new)',
+    headline: 'decisions lit = 7/22 (+0/0 new)',
     producedAt: '2026-09-07T00:00:00.000Z',
     summary: { decisions: [], discrepancies: [] },
     violations: [],

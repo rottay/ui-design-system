@@ -152,49 +152,36 @@ describe("theme control catalog", () => {
     ).toEqual(["signature.accent-bar", "signature.texture"]);
   });
 
-  it("marks the still-underived new rows as not-yet-derived and nothing else", () => {
-    // WO-DER-02 derives two of the ten `(new)` rows, the CC-01 connection lot
-    // four more, and the WO-DER-03 palette half the two palette postures. The
-    // list they came from is a KIT fact -- which rows the kit added -- and
-    // stays as authored; what moves is the measured `effect`, which is what
-    // this row asserts.
-    const derived: Parameters<typeof themeControl>[0][] = [
-      "states.emphasis",
-      "states.focus-style",
-      "typography.role-weights",
-      "typography.numeric",
-      "surfaces.border-style",
-      "motion.character",
-      "palette.neutral-temperature",
-      "palette.contrast-posture",
-    ];
-    const notDerived = THEME_CONTROL_CATALOG.filter(
-      (row) => row.effect === "not-yet-derived"
-    ).map((row) => row.id);
-    expect([...notDerived].sort()).toEqual(
-      [...NEW_THEME_DECISION_IDS].filter((id) => !derived.includes(id)).sort()
-    );
-    for (const id of derived) {
+  it("has no not-yet-derived row left, and every kit row lowers", () => {
+    // WO-DER-02 derived two of the ten `(new)` rows, the CC-01 connection lot
+    // four more, the WO-DER-03 palette half the two palette postures, and
+    // connection lot 2 the last two shape rows. The list they came from is a
+    // KIT fact -- which rows the kit added -- and stays as authored; what moved
+    // is the measured `effect`, and it has now moved for all ten.
+    //
+    // The assertion is over `effect` READ FROM THE CATALOG, not over a list
+    // restated here: a row that regressed to `not-yet-derived` would name
+    // itself, and a new inert row admitted later fails on the same line.
+    expect(
+      THEME_CONTROL_CATALOG.filter(
+        (row) => (row.effect as string) === "not-yet-derived"
+      ).map((row) => row.id)
+    ).toEqual([]);
+    for (const id of NEW_THEME_DECISION_IDS) {
       const row = themeControl(id);
-      expect(row.effect).toBe("css-channels");
-      expect(row.produces.channels.length).toBeGreaterThan(0);
-      expect(row.keypath.document).not.toBeNull();
-      expect(row.keypath.brandTheme).not.toBeNull();
-    }
-    for (const row of THEME_CONTROL_CATALOG) {
-      if (row.effect !== "not-yet-derived") continue;
-      expect(row.produces.channels).toHaveLength(0);
-      expect(row.produces.rootAttributes).toHaveLength(0);
-      expect(row.keypath.document).toBeNull();
+      expect(row.effect, id).toBe("css-channels");
+      expect(row.produces.channels.length, id).toBeGreaterThan(0);
+      expect(row.keypath.document, id).not.toBeNull();
+      expect(row.keypath.brandTheme, id).not.toBeNull();
     }
   });
 
-  it("keeps the four connected rows at the tier the kit gave them", () => {
+  it("keeps every connected row at the tier the kit gave it", () => {
     // The defect CC-01 named has exactly one wrong repair: moving a Standard
     // row to Pro so a better cascade can be sold with the upgrade. The tier
-    // census above counts the catalog as a whole; this states the four rows the
-    // connection lot touched by name, so a silent promotion is red HERE rather
-    // than only in a total that another row could rebalance.
+    // census above counts the catalog as a whole; this states the connected
+    // rows by name, so a silent promotion is red HERE rather than only in a
+    // total that another row could rebalance.
     expect(
       Object.fromEntries(
         (
@@ -203,6 +190,8 @@ describe("theme control catalog", () => {
             "typography.numeric",
             "surfaces.border-style",
             "motion.character",
+            "shape.nesting",
+            "shape.control-height",
           ] as const
         ).map((id) => [id, themeControl(id).tier])
       )
@@ -211,6 +200,8 @@ describe("theme control catalog", () => {
       "typography.numeric": "pro",
       "surfaces.border-style": "standard",
       "motion.character": "pro",
+      "shape.nesting": "pro",
+      "shape.control-height": "standard",
     });
   });
 
