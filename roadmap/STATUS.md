@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T16:37:28.909Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T16:43:00.418Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,7 +28,7 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T16:37:28.909Z.
+**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T16:43:00.418Z.
 
 **measured on the 8-family sample: 17/22 move at least one sampled family** — MEASURED by that run.
 
@@ -97,7 +97,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 94/159 work orders done (59%)
+## Work-order burn-down — 97/159 work orders done (61%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -112,7 +112,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
 | [consumer-contract](./consumer-contract.md) | 5 | 0 | 1 | 6 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
-| [derivation](./derivation.md) | 1 | 4 | 2 | 7 |
+| [derivation](./derivation.md) | 4 | 1 | 2 | 7 |
 | [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
 | [emission-mount](./emission-mount.md) | 1 | 1 | 1 | 3 |
 | [platform-invariants](./platform-invariants.md) | 0 | 0 | 8 | 8 |
@@ -126,7 +126,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | A · The apps can build | reached | WO-CON-04, WO-CON-05 | none | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | WO-FAM-01, WO-EVI-05 | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 40 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 37 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -152,9 +152,6 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-DER-02 | States and materials as derived roots | kimi-k3 | 2026-09-08 | 2026-09-11 12:39 — SEEDS RENDER-MODE LAW LANDED (merge 861de4105 on r4-recon; writer Opus 514e2b6f1, audited by Kimi K3 under the temporary owner-authorized Fable substitution). palette.seeds now tunes the mode the tenant RENDERS - the vertical's own appearance.defaultMode when it selects none - instead of equating light with the body: rottay (the dark-default vertical) went 0 -> 23 moved channels in its rendered mode per compileTenantThemeDocumentV2 probes; bithire/evnto explicit destinations byte-identical. --ds-color-text-on-primary gained an APCA-chosen derived floor (apcaReadableInk; primary-foreground keeps the WCAG choice) so the standard-tier path no longer refuses at Lc 17.6/17.1 on dark-mode publishes. INERT_PAIRS discharged to []; axis-difference is 36/36 evidential cells, all negative controls at 0%. Gates re-run by the auditor: tsc 0, artifacts --check 0 (byte-identical), axis-difference 0, decisions-lit:check 0, contract-changeset 0, 215 lot tests green. |
-| WO-DER-03 | Shape and palette derived once | opus | 2026-09-09 | 2026-09-11 04:07 — SHAPE-PRECEDENCE LOT LANDED (debd08628; Fable LAND with 21-arm probe + Chromium computed-style + 3 mutations). Residual (e) DISCHARGED: pill vs allowed radius override — law stated on chosenButtonRadius (direct-override > profile-derived > preset-inherited; named beats expansion), painted value and provenance agree on all arms, standard-plan override refused by name. NEW residual (h), named blind spot, inherent to the draft transport: a bithire editor re-typing the baseline 9px is indistinguishable from a carried leaf and loses to pill in preview (matches movedLeaves rule, stated in the contract). decisions-lit neutral 7/22 (+0/0). |
-| WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | opus | 2026-09-09 | 2026-09-10 20:54 — CORRECTION (98-checkpoint item 6) to my entry of earlier today: it said role-weights, numeric, nesting and control-height 'remain unlit'. That was wrong in kind: the CC-01/connfix lot gave typography.role-weights, typography.numeric and motion.character real producers (decisions-lit records them partial — artifact bytes move, no sampled family moves; family adoption is the cuts' work per the close-scope amendment) and surfaces.border-style full sampled-family movement. Only shape.nesting and shape.control-height are fully inert (artifactBytesDiffer=false on all three verticals); the conn2 lot in flight owns them. Emission, instrumental read and family effect are separate facts and are now recorded as such. |
 | WO-EMI-02 | mountTenantTheme: one mount law, complete SSR projection, runtime that never recompiles | opus | 2026-09-09 | 2026-09-11 08:25 — CHECKPOINT 99 CORRECTION (scope, not status): Closes amendment in emission-mount.md - F-46's final closure routes to INV-04 (which lists it and depends on EMI-02); EMI-02's local close = F-19, F-20, F-112, F-89 + its own F-12 arm (recipeProfile in artifact, D-26). CORRECTION to my entry of earlier today: the pending real-browser first-paint leg is F-20, not F-12 (F-12 is the recipeProfile/personality reach finding; its remaining arms - adapters declaring invariant, accent-bar null, per-family reach - stay with the derivation/family lanes). |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | Kimi K3 | 2026-09-11 | 2026-09-11 12:39 — INERT_PAIRS discharged with the seeds render-mode law (merge 861de4105): the rottay/dark palette-only entry was the pair whose delta was empty because every seed landed in the mode rottay does not render; with routing fixed the 6 formerly non-evidential cells are evidential and the probe reports 0% on 36 of 36 evidential cells. Every positive-axis percentage byte-identical. Witness-per-cell binding (checkpoint 99 item 2) remains the next EVI-02 lot. |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | 2026-09-11 11:09 — CLIENT-PROVIDER CONNECTION LANDED (3 writer commits + integrator test + integration; audited by Kimi K3 under the temporary owner-authorized auditor substitution, Fable quota-exhausted ~20h). TenantThemeArtifact carries its runtime block (EngineVisualDeclaration from the SAME lowering; changeset der-07-artifact-runtime-half.md per CON-05, digest re-anchor measured - 0/65/25 delta channels unchanged, envelope digests unchanged); provider publishes the mounted artifact's own half; resolver no longer returns artifact:null. Runtime proof in real browser 3/3 candidates (posture/motion/density/recipe/tokens differ through the mount, not just CSS); negative control (seed is paint, never reaches useTokens); preview/publication byte parity per candidate; SSR receipt + flight-boundary byte comparison prove the client uses the server's artifact without recompiling. 99-item-1 identity negative ADDED BY DT and green: artifact A + runtime B (same engine/profile ids, foreign governed value) refused at mount; digest covers the runtime half. REGISTERED: (a) the showroom Playwright leg stays blocked by packages/core/dist/index.js carrying use-client into RSC consumers (pre-existing at base, reproduced byte-identical) - repairing it is a public-contract addition that needs its own WO (DT flags it to the owner as an identified need); (b) docs-engineering tenancy/contracts edits remain uncommitted in that repo's dirty tree; (c) past showroom typechecks via symlinked node_modules read MAIN's core dist, not the lot's - audits now require real installs/farms. The WO stays open with exactly one obligation: the recorded owner pick with digest (D-30 deferred to the branding stage). |
@@ -163,9 +160,12 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
+| WO-DER-05 | Modes derived from decisions and one default-mode law | M | derivation | audit-2026-09-05 |
 | WO-EMI-03 | Non-CSS token emitter for mobile readiness | M | emission-mount | audit-2026-09-05 |
 | WO-INV-01 | One direction authority and logical geometry everywhere | M | platform-invariants | audit-2026-09-05 |
 | WO-INV-02 | One i18n catalog with an English floor, locale-aware formatting and IME-safe submit | M | platform-invariants | audit-2026-09-05 |
+| WO-INV-03 | Global accessibility floor: forced-colors, contrast posture, axe per family, no critical baseline | M | platform-invariants | audit-2026-09-05 |
+| WO-INV-05 | Motion invariant: one vocabulary, zero inline literals, lint over every modern surface | S | platform-invariants | audit-2026-09-05 |
 | WO-EVI-01 | theme-graph: derived cascade graph with a byte-exact check | M | evidence-graph | audit-2026-09-05 |
 | WO-EVI-03 | Tests through the door: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines | M | evidence-graph | audit-2026-09-05 |
 
@@ -184,9 +184,9 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-ARC-17 | dependencies: WO-ARC-14; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-ARC-16 | dependencies: WO-RET-01; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-ARC-20 | dependencies: WO-FAM-11; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
-| WO-TOK-11 | dependencies: WO-DER-03, WO-EVI-02; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
+| WO-TOK-11 | dependencies: WO-EVI-02; phase 2A is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO. |
 | WO-ARC-18 | dependencies: WO-INV-04, WO-FAM-11; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
-| WO-ENG-25 | dependencies: WO-DER-04, WO-INV-05; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
+| WO-ENG-25 | dependencies: WO-INV-05; phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
 | WO-CRA-19 | phase 2B is locked: Awaiting the deferred-item adjudication for phases through 2B and explicit owner GO; CRA-17 material completion evidence recorded 2026-07-18 (matrix recaptured, sighted review approved) pending formal phase open. |
 | WO-CRA-18 | dependencies: WO-FAM-09; phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
 | WO-ENG-24 | phase 2C is locked: Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0. |
@@ -198,22 +198,19 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-GAT-11 | dependencies: WO-INV-01, WO-INV-03, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-GAT-12 | dependencies: WO-EVI-01, WO-RET-03; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-SKIN-08 | dependencies: WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
-| WO-DER-05 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04 |
 | WO-DER-06 | dependencies: WO-DER-05 |
-| WO-FAM-01 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-02 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-03 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-04 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-05 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-06 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-07 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-08 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-09 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-10 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-FAM-11 | dependencies: WO-DER-02, WO-DER-03, WO-DER-04, WO-INV-07 |
-| WO-INV-03 | dependencies: WO-DER-03 |
-| WO-INV-04 | dependencies: WO-DER-04, WO-EMI-02 |
-| WO-INV-05 | dependencies: WO-DER-04 |
+| WO-FAM-01 | dependencies: WO-INV-07 |
+| WO-FAM-02 | dependencies: WO-INV-07 |
+| WO-FAM-03 | dependencies: WO-INV-07 |
+| WO-FAM-04 | dependencies: WO-INV-07 |
+| WO-FAM-05 | dependencies: WO-INV-07 |
+| WO-FAM-06 | dependencies: WO-INV-07 |
+| WO-FAM-07 | dependencies: WO-INV-07 |
+| WO-FAM-08 | dependencies: WO-INV-07 |
+| WO-FAM-09 | dependencies: WO-INV-07 |
+| WO-FAM-10 | dependencies: WO-INV-07 |
+| WO-FAM-11 | dependencies: WO-INV-07 |
+| WO-INV-04 | dependencies: WO-EMI-02 |
 | WO-RET-01 | dependencies: WO-EMI-02, WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11 |
 | WO-RET-02 | dependencies: WO-FAM-06 |
 | WO-RET-03 | dependencies: WO-EVI-01 |
@@ -222,9 +219,9 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-EVI-05 | dependencies: WO-FAM-01 |
 | WO-CON-06 | dependencies: WO-EMI-02 |
 | WO-INV-06 | dependencies: WO-INV-04, WO-FAM-10, WO-FAM-11 |
-| WO-FAM-12 | dependencies: WO-FAM-06, WO-FAM-07, WO-DER-04, WO-INV-04, WO-INV-07 |
-| WO-INV-07 | dependencies: WO-DER-04, WO-INV-04 |
-| WO-INV-08 | dependencies: WO-DER-04, WO-INV-05 |
+| WO-FAM-12 | dependencies: WO-FAM-06, WO-FAM-07, WO-INV-04, WO-INV-07 |
+| WO-INV-07 | dependencies: WO-INV-04 |
+| WO-INV-08 | dependencies: WO-INV-05 |
 | WO-FAM-13 | dependencies: WO-FAM-08, WO-FAM-12, WO-INV-07, WO-INV-08 |
 | WO-FAM-14 | dependencies: WO-INV-05 |
 
@@ -322,6 +319,9 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-CAT-02 | 2026-09-09 | R1 landed 14c0499cb (7cf6e7675+14c0499cb); Codex audit LAND: RA03 reversed — 42/42 invalid expressive outcomes refused by name at the door before projection (7 axes), 204/204 valid outcomes pass, falsy present profiles refused 8/8; contract §2.1 validation law implemented (raw authored values; isSafeVisualValue only for visual strings) |
 | WO-CAT-03 | 2026-09-09 | R1 landed 14c0499cb; Codex audit LAND: RA01 reversed — 24/24 Standard pairings compile (tier judges only direct-override ledger entries; entitled intent without ledger refused at $.ledger); RT04 reversed — 15/15 cap fixtures refused at the door at the original transport path on v2/v1/draft, decision expansions exempt per owner law (pill accepted), equal-valued direct authorship validated (I-P4) |
 | WO-DER-01 | 2026-09-09 | Re-affirmation per its reopen reason (cascade-only; acceptance NOT disproved, implementation stands): the 59439fa13 derivation pipeline (FamilyDeriver contract, ranked merge, single color owner) is unchanged and still green post-R1; re-closure cites 59439fa13 + the R1 landed tree 14c0499cb whose audits (Codex LAND) exercised the derivation registry |
+| WO-DER-02 | 2026-09-11 | ROOT CLOSE per owner-approved close-scope (derivation.md AMENDMENT 2026-09-10, PRD-01/B): roots close on root scope; family adoption stays with WO-FAM-01..13 + fleet with WO-EVI-02/EVI-05, thresholds untouched. (1) ADMISSION DOOR: schema-widen e0dde87bc (29/29 catalog rows admitted with closed domains) + conn3 2c5956078 (carry complete); out-of-domain values refused BY NAME at the compiler (re-measured tonight: states.emphasis 'bold' refused - domain subtle|medium|strong; states.focus-style 'outline' refused). (2) REAL DERIVATION: states.emphasis strong/subtle moves 6 state channels compile-level (--ds-state-hover-shift 4->8% etc., compileThemeIntent probe, rottay); states.focus-style underline/glow move --ds-focus-ring* ('ring' default = correct 0-diff); material emission = 172 unique --ds-material-*/surface keys per artifact x3 verticals; provenance-acceptance + static-db-channel-vocabulary 127 tests green (preview AND publication). (3) TRUTHFUL EVIDENCE: state-material-arm gate green - 122/137 governed (89.1%, floor 0.85), the 15 ungoverned are measured debt named in baseline/index.json (filled/track variants, elevation-ladder depths, self-aliases), each closing with its family cut; axis-difference 36/36 evidential cells, states NC honestly NON-EVIDENTIAL (witness-per-cell binding in flight on wo-evi-02-witness - required before pilot/fleet negatives per checkpoint 99 item 2, not before root close). (4) NEGATIVES AT COMPILER LEVEL: refusal tests by name across ingress + lowering suites. ACCEPTANCE-GATE SUBCLAUSE MAPPING (no threshold reduced): 'per-artifact 71/71 --ds-material-* keys' - successor vocabulary is the semantic surface-role map (8 roles x facets, SEMANTIC_SURFACE_ROLES); per-artifact census = material-arm gate (green, decrease-only ratchet) + artifact-coverage gate (green: 8302/10793 reads declared). 'emphasis >=10 families probe' - reassigned by the same amendment to the cuts + fleet (owner D1: 20 real families final objective); root emission proven above. 'gate for state channels without material arm' - green. NOT CLOSED HERE: F-10 skins.stateGoverned 16/123 census and the emphasis family-movement probe (cuts + EVI-02, per the amendment). |
+| WO-DER-03 | 2026-09-11 | ROOT CLOSE per owner-approved close-scope (derivation.md AMENDMENT 2026-09-10). (1) ADMISSION DOOR: shared schema-widen/conn3 evidence (WO-DER-02 close, e0dde87bc + 2c5956078); closed domains + named refusals re-verified 2026-09-11. (2) REAL DERIVATION: shape.radius-scale moves 11 channels / 5 sampled families (decisions-lit evidence); shape.nesting 2ch/1fam, shape.control-height 1ch/1fam, shape.button-style 2ch/1fam all emit (conn2 28ab609b5 + decision-reach tests prove the tenant-written value reaches the table through preview AND V2 publication); palette.neutral-temperature + contrast-posture connected (4624e4555); palette.seeds brands the mode the tenant RENDERS (seeds law, merge 861de4105: rottay 0 to 23 channels in its rendered mode, APCA-safe on-primary floor via apcaReadableInk). PRECEDENCE: pill-vs-allowed-radius-override law landed (debd08628) - painted value and provenance agree or the combination is refused by name. Palette derivers tints/inks/semantic landed (4624e4555); accent ramp removed by evidence, ramps.accent authorability routed to WO-DER-06 per the amendment. (3) TRUTHFUL EVIDENCE: channel-liveness green with named residuals - 25 AUTHORABLE_UNPROVEN_EFFECT + 6 READ rows pinned under the INV-07 obligation (owner-tagged, expires on emitter-relocation-or-reader-adoption), --ds-color-accent-* routed to WO-DER-06. (4) NEGATIVES: compiler-level refusals by name across palette/shape suites (seed-mode-routing 12 tests: out-of-domain seed + backgroundMode refused). WRITTEN GATES measured 2026-09-11: grep rgba( on foundation/base/shadows = 0; grep hex on foundation/monochrome = 0; theme-parity green (transports equal, shape.button-style arm included); channel-liveness green; dial-authority 0 conflicts. SUBCLAUSE MAPPING (no threshold reduced): the radius >=20-families computed-style bar is fleet evidence - it certifies in WO-EVI-02 with the standing threshold per the amendment; root emission + precedence are proven here. NOT CLOSED HERE: family adoption of shape/palette decisions (WO-FAM cuts), fleet axis bars (WO-EVI-02). (A first done minutes earlier carried a placeholder note from a shell cwd mishap; reopened and re-closed with this evidence - the registry preserves both entries.) |
+| WO-DER-04 | 2026-09-11 | ROOT CLOSE per owner-approved close-scope (derivation.md AMENDMENT 2026-09-10). (1) ADMISSION DOOR: shared schema-widen/conn3 evidence (e0dde87bc + 2c5956078). (2) REAL DERIVATION: the four admitted-but-unlit decisions this root promised are all LIT and emitting - typography.role-weights moves 7 channels, typography.numeric 9 (decisions-lit evidence 2026-09-11; connection proven end-to-end by decision-reach tests through preview AND V2 publication), shape.nesting + shape.control-height connected by conn2 28ab609b5; surfaces.border-style + motion.character connected (connfix a5da15828). typography.scale moves 9 sampled families, density.mode 5, typography.families 3, typography.pairing 3. Motion vocabulary with rest values in the engine bundle: --ds-motion-calm: 200ms + --ds-motion-normal alias in artifacts/generated/css/engines/modern (measured tonight). Responsive contract projected: 29 --ds-breakpoint references in foundation tokens, zero literal min-width Npx breakpoints outside the contract (only min-width:0 layout resets). (3) TRUTHFUL EVIDENCE + NAMED RESIDUALS per the amendment: F-31 '--ds-transition-* = 0' - frozen-engine exemption: exactly the 21 Classic/Rustic sites (13 classic + 8 rustic, measured tonight) are the named excluded population; Modern/foundation sites belong to the family cuts. F-36 LegacySizeAlias - assigned to the cuts (26 sites). F-35 - widened-domain gatefix merged; real adoption in WO-INV-07. Root-authority/dial-authority gate: 0 conflicts, 1 owner-adjudicated exception, 0 pending unadjudicated (measured tonight). (4) NEGATIVES: compiler-level refusals by name across typography/motion suites. SUBCLAUSE MAPPING (no threshold reduced): F-30 skins consuming typography roles and the family-level movement bars certify in the cuts + WO-EVI-02 fleet with standing thresholds; this root closes the derived typography/density/rhythm/elevation/motion FAMILIES, their gates, and the emission of every decision it promised. NOT CLOSED HERE: skin adoption (cuts), --ds-transition retirement in Modern (cuts), INV-07 responsive adoption. |
 | WO-EMI-01 | 2026-09-09 | R2 landed 38c192e8a + integration landed fd3fb4601; Codex + K3 audits LAND: RT05 reversed — same original document yields identical admitted results through preview, publish, reload, nested mount (27/27 parity incl. the 12 restored preview-arm cases; 0 differences on all profile×vertical cases; expected effective values asserted: 0.7/1.15/editorial fonts identical on both doors; partial override precedence; removal/restore digest identity; cross-plan + v1-without-plan parity, no invented entitlement); one expansion per document at the door; envelope clamps preview identically to publication |
 | WO-FAM-00 | 2026-09-09 | R3 lot landed c295af9bb; Codex audit LAND: both false PASSes repaired — cast inline-style mutant caught, uncalled a11y callbacks no longer count as executed assertions (calibration 75/13 preserved), skipped suites fail the gate; realistic-mutant drill law honored with negative controls and green twins; family-cut ratchet pins untouched (button fanOutUnreached back to 1 via the owner-pending rows, declared in the addendum) |
 | WO-EVI-04 | 2026-09-08 | R3 lot landed c295af9bb; Codex audit LAND: DEL-01 CI pin follows the unchanged seal (one declared ci.yml hunk); DEL-05 was a scanner not a missing contract (claims/exactness machinery, bounded write-set extension); DEL-07 republication carries production dates; exactness --check-artifact green vs sealed docs e048d2f9 (3318 counters, 3219 exact zeros); reopen-provenance machinery owned from R4 stands |

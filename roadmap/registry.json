@@ -4190,7 +4190,7 @@
    "lane": "derivation",
    "order": 2,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4212,7 +4212,9 @@
      "by": "kimi-k3",
      "note": "SEEDS RENDER-MODE LAW LANDED (merge 861de4105 on r4-recon; writer Opus 514e2b6f1, audited by Kimi K3 under the temporary owner-authorized Fable substitution). palette.seeds now tunes the mode the tenant RENDERS - the vertical's own appearance.defaultMode when it selects none - instead of equating light with the body: rottay (the dark-default vertical) went 0 -> 23 moved channels in its rendered mode per compileTenantThemeDocumentV2 probes; bithire/evnto explicit destinations byte-identical. --ds-color-text-on-primary gained an APCA-chosen derived floor (apcaReadableInk; primary-foreground keeps the WCAG choice) so the standard-tier path no longer refuses at Lc 17.6/17.1 on dark-mode publishes. INERT_PAIRS discharged to []; axis-difference is 36/36 evidential cells, all negative controls at 0%. Gates re-run by the auditor: tsc 0, artifacts --check 0 (byte-identical), axis-difference 0, decisions-lit:check 0, contract-changeset 0, 215 lot tests green."
     }
-   ]
+   ],
+   "doneAt": "2026-09-11",
+   "evidence": "ROOT CLOSE per owner-approved close-scope (derivation.md AMENDMENT 2026-09-10, PRD-01/B): roots close on root scope; family adoption stays with WO-FAM-01..13 + fleet with WO-EVI-02/EVI-05, thresholds untouched. (1) ADMISSION DOOR: schema-widen e0dde87bc (29/29 catalog rows admitted with closed domains) + conn3 2c5956078 (carry complete); out-of-domain values refused BY NAME at the compiler (re-measured tonight: states.emphasis 'bold' refused - domain subtle|medium|strong; states.focus-style 'outline' refused). (2) REAL DERIVATION: states.emphasis strong/subtle moves 6 state channels compile-level (--ds-state-hover-shift 4->8% etc., compileThemeIntent probe, rottay); states.focus-style underline/glow move --ds-focus-ring* ('ring' default = correct 0-diff); material emission = 172 unique --ds-material-*/surface keys per artifact x3 verticals; provenance-acceptance + static-db-channel-vocabulary 127 tests green (preview AND publication). (3) TRUTHFUL EVIDENCE: state-material-arm gate green - 122/137 governed (89.1%, floor 0.85), the 15 ungoverned are measured debt named in baseline/index.json (filled/track variants, elevation-ladder depths, self-aliases), each closing with its family cut; axis-difference 36/36 evidential cells, states NC honestly NON-EVIDENTIAL (witness-per-cell binding in flight on wo-evi-02-witness - required before pilot/fleet negatives per checkpoint 99 item 2, not before root close). (4) NEGATIVES AT COMPILER LEVEL: refusal tests by name across ingress + lowering suites. ACCEPTANCE-GATE SUBCLAUSE MAPPING (no threshold reduced): 'per-artifact 71/71 --ds-material-* keys' - successor vocabulary is the semantic surface-role map (8 roles x facets, SEMANTIC_SURFACE_ROLES); per-artifact census = material-arm gate (green, decrease-only ratchet) + artifact-coverage gate (green: 8302/10793 reads declared). 'emphasis >=10 families probe' - reassigned by the same amendment to the cuts + fleet (owner D1: 20 real families final objective); root emission proven above. 'gate for state channels without material arm' - green. NOT CLOSED HERE: F-10 skins.stateGoverned 16/123 census and the emphasis family-movement probe (cuts + EVI-02, per the amendment)."
   },
   {
    "id": "WO-DER-03",
@@ -4220,7 +4222,7 @@
    "lane": "derivation",
    "order": 3,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4228,9 +4230,9 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 3; closes F-07, F-08, F-32; supersedes: WO-TOK-11 | 2026-09-10 close-scope amendment (owner-approved, derivation.md AMENDMENT 2026-09-10): root closes on root scope (door, real derivation with precedence+provenance, truthful evidence, negative controls); family adoption assigned to the cuts; fleet certification to EVI-02/05; frozen-engine perimeter explicit. Root may not close with own promised decisions inert or precedence wrong.",
-   "claimedBy": "opus",
-   "claimedAt": "2026-09-09",
+   "notes": "REOPENED BY DT minutes after close: the done carried a placeholder evidence string while I diagnosed a shell cwd issue; re-closing immediately with the complete evidence. The substantive close assessment is unchanged.",
+   "claimedBy": "daniel",
+   "claimedAt": "2026-09-11",
    "progressLog": [
     {
      "at": "2026-09-09 19:21",
@@ -4271,8 +4273,15 @@
      "at": "2026-09-11 04:07",
      "by": "Kimi K3",
      "note": "SHAPE-PRECEDENCE LOT LANDED (debd08628; Fable LAND with 21-arm probe + Chromium computed-style + 3 mutations). Residual (e) DISCHARGED: pill vs allowed radius override — law stated on chosenButtonRadius (direct-override > profile-derived > preset-inherited; named beats expansion), painted value and provenance agree on all arms, standard-plan override refused by name. NEW residual (h), named blind spot, inherent to the draft transport: a bithire editor re-typing the baseline 9px is indistinguishable from a carried leaf and loses to pill in preview (matches movedLeaves rule, stated in the contract). decisions-lit neutral 7/22 (+0/0)."
+    },
+    {
+     "at": "2026-09-11 12:49",
+     "by": "reopen",
+     "note": "REOPENED from done. Reason: not recorded. Prior claimedBy=opus claimedAt=2026-09-09 doneAt=2026-09-11. Prior evidence (verbatim): test Prior notes (verbatim): wave 3; closes F-07, F-08, F-32; supersedes: WO-TOK-11 | 2026-09-10 close-scope amendment (owner-approved, derivation.md AMENDMENT 2026-09-10): root closes on root scope (door, real derivation with precedence+provenance, truthful evidence, negative controls); family adoption assigned to the cuts; fleet certification to EVI-02/05; frozen-engine perimeter explicit. Root may not close with own promised decisions inert or precedence wrong."
     }
-   ]
+   ],
+   "doneAt": "2026-09-11",
+   "evidence": "ROOT CLOSE per owner-approved close-scope (derivation.md AMENDMENT 2026-09-10). (1) ADMISSION DOOR: shared schema-widen/conn3 evidence (WO-DER-02 close, e0dde87bc + 2c5956078); closed domains + named refusals re-verified 2026-09-11. (2) REAL DERIVATION: shape.radius-scale moves 11 channels / 5 sampled families (decisions-lit evidence); shape.nesting 2ch/1fam, shape.control-height 1ch/1fam, shape.button-style 2ch/1fam all emit (conn2 28ab609b5 + decision-reach tests prove the tenant-written value reaches the table through preview AND V2 publication); palette.neutral-temperature + contrast-posture connected (4624e4555); palette.seeds brands the mode the tenant RENDERS (seeds law, merge 861de4105: rottay 0 to 23 channels in its rendered mode, APCA-safe on-primary floor via apcaReadableInk). PRECEDENCE: pill-vs-allowed-radius-override law landed (debd08628) - painted value and provenance agree or the combination is refused by name. Palette derivers tints/inks/semantic landed (4624e4555); accent ramp removed by evidence, ramps.accent authorability routed to WO-DER-06 per the amendment. (3) TRUTHFUL EVIDENCE: channel-liveness green with named residuals - 25 AUTHORABLE_UNPROVEN_EFFECT + 6 READ rows pinned under the INV-07 obligation (owner-tagged, expires on emitter-relocation-or-reader-adoption), --ds-color-accent-* routed to WO-DER-06. (4) NEGATIVES: compiler-level refusals by name across palette/shape suites (seed-mode-routing 12 tests: out-of-domain seed + backgroundMode refused). WRITTEN GATES measured 2026-09-11: grep rgba( on foundation/base/shadows = 0; grep hex on foundation/monochrome = 0; theme-parity green (transports equal, shape.button-style arm included); channel-liveness green; dial-authority 0 conflicts. SUBCLAUSE MAPPING (no threshold reduced): the radius >=20-families computed-style bar is fleet evidence - it certifies in WO-EVI-02 with the standing threshold per the amendment; root emission + precedence are proven here. NOT CLOSED HERE: family adoption of shape/palette decisions (WO-FAM cuts), fleet axis bars (WO-EVI-02). (A first done minutes earlier carried a placeholder note from a shell cwd mishap; reopened and re-closed with this evidence - the registry preserves both entries.)"
   },
   {
    "id": "WO-DER-04",
@@ -4280,7 +4289,7 @@
    "lane": "derivation",
    "order": 4,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -4322,7 +4331,9 @@
      "by": "kimi-k3",
      "note": "CORRECTION (98-checkpoint item 6) to my entry of earlier today: it said role-weights, numeric, nesting and control-height 'remain unlit'. That was wrong in kind: the CC-01/connfix lot gave typography.role-weights, typography.numeric and motion.character real producers (decisions-lit records them partial — artifact bytes move, no sampled family moves; family adoption is the cuts' work per the close-scope amendment) and surfaces.border-style full sampled-family movement. Only shape.nesting and shape.control-height are fully inert (artifactBytesDiffer=false on all three verticals); the conn2 lot in flight owns them. Emission, instrumental read and family effect are separate facts and are now recorded as such."
     }
-   ]
+   ],
+   "doneAt": "2026-09-11",
+   "evidence": "ROOT CLOSE per owner-approved close-scope (derivation.md AMENDMENT 2026-09-10). (1) ADMISSION DOOR: shared schema-widen/conn3 evidence (e0dde87bc + 2c5956078). (2) REAL DERIVATION: the four admitted-but-unlit decisions this root promised are all LIT and emitting - typography.role-weights moves 7 channels, typography.numeric 9 (decisions-lit evidence 2026-09-11; connection proven end-to-end by decision-reach tests through preview AND V2 publication), shape.nesting + shape.control-height connected by conn2 28ab609b5; surfaces.border-style + motion.character connected (connfix a5da15828). typography.scale moves 9 sampled families, density.mode 5, typography.families 3, typography.pairing 3. Motion vocabulary with rest values in the engine bundle: --ds-motion-calm: 200ms + --ds-motion-normal alias in artifacts/generated/css/engines/modern (measured tonight). Responsive contract projected: 29 --ds-breakpoint references in foundation tokens, zero literal min-width Npx breakpoints outside the contract (only min-width:0 layout resets). (3) TRUTHFUL EVIDENCE + NAMED RESIDUALS per the amendment: F-31 '--ds-transition-* = 0' - frozen-engine exemption: exactly the 21 Classic/Rustic sites (13 classic + 8 rustic, measured tonight) are the named excluded population; Modern/foundation sites belong to the family cuts. F-36 LegacySizeAlias - assigned to the cuts (26 sites). F-35 - widened-domain gatefix merged; real adoption in WO-INV-07. Root-authority/dial-authority gate: 0 conflicts, 1 owner-adjudicated exception, 0 pending unadjudicated (measured tonight). (4) NEGATIVES: compiler-level refusals by name across typography/motion suites. SUBCLAUSE MAPPING (no threshold reduced): F-30 skins consuming typography roles and the family-level movement bars certify in the cuts + WO-EVI-02 fleet with standing thresholds; this root closes the derived typography/density/rhythm/elevation/motion FAMILIES, their gates, and the emission of every decision it promised. NOT CLOSED HERE: skin adoption (cuts), --ds-transition retirement in Modern (cuts), INV-07 responsive adoption."
   },
   {
    "id": "WO-DER-05",
