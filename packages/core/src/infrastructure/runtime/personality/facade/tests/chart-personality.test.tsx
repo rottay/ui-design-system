@@ -162,7 +162,11 @@ describe('resolveChartPersonality', () => {
     expect(first).not.toBe(second);
     expect(first).not.toBe(verticalChart);
     expect(first).not.toBe(profileChart);
-    expect(first).toMatchObject({ mountDuration: 75, lineStyle: 'step' });
+    // The compiled layer is present, so it -- not the profile -- sits over the
+    // vertical: `mountDuration` is the compile's and `lineStyle` falls back to
+    // the vertical's, never to the profile's `step`.
+    expect(first).toMatchObject({ mountDuration: 75, lineStyle: DEFAULT_PERSONALITY.chart.lineStyle });
+    expect(first.lineStyle).not.toBe('step');
     expect(verticalChart.mountDuration).toBe(610);
     expect(profileChart.lineStyle).toBe('step');
     expect(tenantChart.mountDuration).toBe(75);

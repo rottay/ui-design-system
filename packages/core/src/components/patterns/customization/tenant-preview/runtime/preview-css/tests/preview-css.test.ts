@@ -489,14 +489,15 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
       css.split('\n').find((line) => line.trim().startsWith('--ds-motion-calm:'));
 
     const lines = presets.map((personality) => {
-      const config = createTenantConfig({
-        slug: 'acme',
-        vertical: 'rottay',
-        name: 'Acme',
-        primaryColor: '#93BAFA',
-        personality,
-      });
-      const { css } = buildPreviewCss(config);
+      const { css } = buildPreviewCss(
+        draftPreviewSource({
+          slug: 'acme',
+          vertical: 'rottay',
+          name: 'Acme',
+          primaryColor: '#93BAFA',
+          personality,
+        })!,
+      );
       const line = calmLine(css);
       expect(line).toBeDefined();
       return line;
@@ -521,35 +522,27 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     // vertical's own theme at all.
     expect(() =>
       buildPreviewCss(
-        createTenantConfig({
+        draftPreviewSource({
           slug: 'acme',
           vertical: 'rottay',
           name: 'Acme',
           primaryColor: '#93BAFA',
           personality: 'playful',
-        }),
+        })!,
       ),
     ).toThrow(/motion\.intensity: Value 1\.2 exceeds the rottay envelope for motionIntensity/);
   });
 
   it('density: emitted --ds-density-scale differs between compact and spacious', () => {
-    const compact = createTenantConfig({
+    const draft = {
       slug: 'acme',
       vertical: 'rottay',
       name: 'Acme',
       primaryColor: '#93BAFA',
-      density: 'compact',
-    });
-    const spacious = createTenantConfig({
-      slug: 'acme',
-      vertical: 'rottay',
-      name: 'Acme',
-      primaryColor: '#93BAFA',
-      density: 'spacious',
-    });
+    } as const;
 
-    const cssCompact = buildPreviewCss(compact).css;
-    const cssSpacious = buildPreviewCss(spacious).css;
+    const cssCompact = buildPreviewCss(draftPreviewSource({ ...draft, density: 'compact' })!).css;
+    const cssSpacious = buildPreviewCss(draftPreviewSource({ ...draft, density: 'spacious' })!).css;
 
     expect(cssCompact).toContain('--ds-density-scale: 0.95;');
     expect(cssSpacious).toContain('--ds-density-scale: 1.1;');

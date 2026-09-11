@@ -170,13 +170,14 @@ export function useTokens(): DesignTokens {
   return useMemo(() => {
     // -- Token Resolution Pipeline --
     //
-    //   Structural:  engine -> vertical.tokenOverrides -> profile.tokenOverrides
-    //                -> compiled.tokenOverrides
-    //   Personality: DEFAULT -> vertical.personality -> profile.personality
-    //                -> compiled.personality
+    //   compiled present:  engine -> vertical -> compiled
+    //   compiled absent:   engine -> vertical -> product profile
     //
-    // Product profile contributes UX posture; the compiled layer is last
-    // because it is the tenant's own published decision.
+    // The product profile is a UX PRESET: it stands in for a tenant that has
+    // published nothing. A tenant that published a compile has decided these
+    // channels itself, and layering a preset underneath its decision would let
+    // the preset show through on every channel the compile happens to leave
+    // open -- two answers to one question, which is the shape this WO removes.
 
     // 1. Engine base tokens. `resolveAdapter` is the single door: an engine
     // with no adapter has no baseline and is refused rather than substituted.
@@ -198,59 +199,43 @@ export function useTokens(): DesignTokens {
       : engineOverrides.motion;
     const verticalDensityScale = verticalTokenOverrides?.densityScale ?? engineOverrides.densityScale;
 
-    // 3. Product-profile structural posture.
-    const productProfileTokenOverrides = profile.tokenOverrides;
-    const ppBorderRadius = productProfileTokenOverrides?.borderRadius
-      ? { ...verticalBorderRadius, ...productProfileTokenOverrides.borderRadius }
+    // 3. The top layer: the compiled tenant decision, or the product-profile
+    // preset when the tenant published none.
+    const top = compiled?.tokenOverrides ?? profile.tokenOverrides;
+    const borderRadius = top?.borderRadius
+      ? { ...verticalBorderRadius, ...top.borderRadius }
       : verticalBorderRadius;
-    const ppShadows = productProfileTokenOverrides?.shadows
-      ? { ...verticalShadows, ...productProfileTokenOverrides.shadows }
+    const shadows = top?.shadows
+      ? { ...verticalShadows, ...top.shadows }
       : verticalShadows;
-    const ppSurface = productProfileTokenOverrides?.surface
-      ? { ...verticalSurface, ...productProfileTokenOverrides.surface }
+    const surface = top?.surface
+      ? { ...verticalSurface, ...top.surface }
       : verticalSurface;
-    const ppMotion = productProfileTokenOverrides?.motion
-      ? { ...verticalMotion, ...productProfileTokenOverrides.motion }
+    const motion = top?.motion
+      ? { ...verticalMotion, ...top.motion }
       : verticalMotion;
-    const ppDensityScale = productProfileTokenOverrides?.densityScale ?? verticalDensityScale;
-
-    // 4. The compiled tenant layer, last.
-    const compiledTokenOverrides = compiled?.tokenOverrides;
-    const borderRadius = compiledTokenOverrides?.borderRadius
-      ? { ...ppBorderRadius, ...compiledTokenOverrides.borderRadius }
-      : ppBorderRadius;
-    const shadows = compiledTokenOverrides?.shadows
-      ? { ...ppShadows, ...compiledTokenOverrides.shadows }
-      : ppShadows;
-    const surface = compiledTokenOverrides?.surface
-      ? { ...ppSurface, ...compiledTokenOverrides.surface }
-      : ppSurface;
-    const motion = compiledTokenOverrides?.motion
-      ? { ...ppMotion, ...compiledTokenOverrides.motion }
-      : ppMotion;
     // Appearance density is a semantic factor composed AFTER the structural
     // resolution. The canonical resolver is also the source for the CSS
     // mode-factor channel, preventing JS/CSS drift.
     const densityScale = resolveEffectiveDensityScale(
-      compiledTokenOverrides?.densityScale ?? ppDensityScale,
+      top?.densityScale ?? verticalDensityScale,
       appearance?.general?.density,
     );
 
-    // 5. Personality. Each sub-object is spread independently so customizing
-    // one dimension does not wipe out another.
+    // 4. Personality, on the same two-layer rule. Each sub-object is spread
+    // independently so customizing one dimension does not wipe out another.
     const verticalPersonality = vertical?.personality;
-    const productPersonality = profile.personality;
-    const compiledPersonality = compiled?.personality;
+    const topPersonality = compiled ? compiled.personality : profile.personality;
     const personality: PersonalityTokens = {
-      animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...productPersonality?.animation, ...compiledPersonality?.animation },
+      animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...topPersonality?.animation },
       chart: resolveChartPersonality({
-        compiled: compiledPersonality,
+        compiled: compiled?.personality,
         vertical,
         productProfile: profile,
       }),
-      typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...productPersonality?.typography, ...compiledPersonality?.typography },
-      accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...productPersonality?.accent, ...compiledPersonality?.accent },
-      card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...productPersonality?.card, ...compiledPersonality?.card },
+      typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...topPersonality?.typography },
+      accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...topPersonality?.accent },
+      card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...topPersonality?.card },
     };
 
     return {

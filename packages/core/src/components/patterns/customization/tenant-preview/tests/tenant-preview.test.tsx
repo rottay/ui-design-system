@@ -14,7 +14,7 @@ import {
   createTenantConfig,
   type TenantCreationConfig,
 } from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
-import { buildPreviewCss, draftBrandTheme } from '../runtime/preview-css';
+import { buildPreviewCss, draftBrandTheme, draftPreviewSource } from '../runtime/preview-css';
 import { PREVIEW_SCOPE_ATTRIBUTE } from '../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
 import RusticTenantPreview from '../engines/rustic';
 import ClassicTenantPreview from '../engines/classic';
@@ -54,46 +54,34 @@ describe('TenantPreview', () => {
       expect(config).not.toHaveProperty('personality');
     });
 
-    it('should generate CSS from the config', () => {
-      // `buildPreviewCss` takes the `TenantConfig` directly -- this is
-      // exactly the call shape the Classic/Rustic engines use
-      // (`buildPreviewCss(tenantConfig)`), so this test exercises the real
-      // production resolution path instead of pre-building a `PreviewSource`.
-      const config = createTenantConfig(sampleConfig);
-      const { css } = buildPreviewCss(config);
+    it('should generate CSS from the draft', () => {
+      // `draftPreviewSource` is the call shape all three engines use, so this
+      // exercises the real production resolution path instead of pre-building
+      // a `PreviewSource` by hand.
+      const { css } = buildPreviewCss(draftPreviewSource(sampleConfig)!);
 
       expect(css).toContain('test-tenant');
       expect(css).toContain('--ds-color-primary');
     });
 
     it('should produce genuinely different CSS across personality presets', () => {
-      // Restores 'should handle all personality presets', which looped
-      // presets through the retired runtime tenant-CSS generator and asserted
-      // only `css.length > 0` -- true for any non-empty string, so it proved
-      // nothing about personality actually affecting anything. Now that
-      // `buildPreviewCss` resolves a `TenantConfig` itself (see
-      // `liftTenantConfigToBrandTheme`), `personality.animation.entranceDuration`
-      // is lifted onto `BrandMotion.entranceDuration`, which
-      // `compileTheme` feeds verbatim into `--ds-motion-calm`. Each of
-      // the four presets authors a different `entranceDuration`
-      // (formal 160, neutral 220, expressive 300, playful 400), so this
-      // checks the actual differing value per preset -- see
-      // `runtime/preview-css/tests/preview-css.test.ts` for why
-      // `--ds-motion-intensity` was rejected as the proof axis (two presets
-      // saturate to the same clamped value there).
-      // `playful` carries `animation.intensity` 1.2, which is ABOVE every
-      // vertical's tenant `motionIntensity` cap of 0.8, so the compile door
-      // refuses it on the preview path exactly as it would at publish
-      // (WO-CAT-03). `expressive` carries 1.0, which is the value rottay's own
-      // theme already declares -- a tenant that restates the vertical's value
-      // has decided nothing, so it is admitted. The presets below are the ones
-      // a tenant on this vertical can actually select; the collision between
-      // the shipped presets and the envelope is recorded in the
-      // preview-css suite, which asserts the refusal by name.
+      // Each preset authors a different `entranceDuration` (formal 160,
+      // neutral 220, expressive 300, playful 400), which `createTenantBrandTheme`
+      // places on `BrandMotion.entranceDuration` and `compileTheme` feeds
+      // verbatim into `--ds-motion-calm`. `--ds-motion-intensity` was rejected
+      // as the proof axis because two presets saturate to the same clamped
+      // value there -- see `runtime/preview-css/tests/preview-css.test.ts`.
+      //
+      // `playful` carries `animation.intensity` 1.2, above every vertical's
+      // tenant cap of 0.8, so the compile door refuses it on the preview path
+      // exactly as it would at publish (WO-CAT-03). `expressive` carries 1.0,
+      // the value rottay's own theme already declares -- a tenant that restates
+      // the vertical's value has decided nothing, so it is admitted.
       const presets = ['formal', 'neutral', 'expressive'] as const;
       const calmValues = presets.map((personality) => {
-        const config = createTenantConfig({ ...sampleConfig, personality });
-        const { css } = buildPreviewCss(config);
+        const { css } = buildPreviewCss(
+          draftPreviewSource({ ...sampleConfig, personality })!,
+        );
         const line = css.split('\n').find((l) => l.trim().startsWith('--ds-motion-calm:'));
         expect(line).toBeDefined();
         return line;
@@ -350,18 +338,16 @@ describe('TenantPreview', () => {
        builder's return value. `compileTheme` renders no chart, card or
        accent personality, and every preset carries all three, so a preset-built
        preview ALWAYS has something to declare. */
-    it('modern: names the axes it could not paint, on the rendered root', () => {
+    it('modern: reports no lost axis, because a draft compiles its whole theme', () => {
+      // The three `personality.*` axes this used to name are gone: a draft's
+      // preset is projected onto the BrandTheme the compiler lowers, not onto
+      // a config the lift has to represent. Absence is the assertion, and it
+      // must agree with the builder rather than be a constant that looks right.
       const { container } = render(<ModernTenantPreview config={sampleConfig} />);
       const root = container.querySelector(`[${PREVIEW_SCOPE_ATTRIBUTE}]`) as HTMLElement;
 
-      const declared = (root.getAttribute('data-ds-tenant-preview-unsupported') ?? '').split(' ');
-      expect(declared).toEqual(
-        expect.arrayContaining(['personality.chart', 'personality.card', 'personality.accent']),
-      );
-
-      // Named, and named ACCURATELY: the attribute must agree with the builder
-      // rather than being a constant string that happens to look right.
-      expect(declared).toEqual([...buildPreviewCss(createTenantConfig(sampleConfig)).unsupportedAxes]);
+      expect(root.hasAttribute('data-ds-tenant-preview-unsupported')).toBe(false);
+      expect(buildPreviewCss(draftPreviewSource(sampleConfig)!).unsupportedAxes).toEqual([]);
     });
 
     /* The attribute is absent rather than empty when there is no loss. That

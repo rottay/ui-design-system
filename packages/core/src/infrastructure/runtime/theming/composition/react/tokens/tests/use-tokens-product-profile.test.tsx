@@ -39,11 +39,7 @@ import {
   censusRuntimeVisualPayload,
   emitTenantThemeArtifactForSsr,
 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
-import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
-
-/** Classic seeds antd from a compiled projection and refuses to guess one. */
-const CLASSIC_VISUAL = firstPartyEngineVisual('bithire', 'classic');
 
 /**
  * Identity only. Every visual field this fixture used to carry is now either
@@ -144,7 +140,11 @@ function DensitySpacing({ testId }: { testId: string }): React.ReactElement {
 }
 
 describe('useTokens product profile resolution', () => {
-  it('layers engine defaults, product profile, and the compiled artifact in that order', () => {
+  it('layers engine defaults, product profile, and the artifact density in that order', () => {
+    // NO `engineVisual`: this tenant mounted its compiled CSS and published no
+    // runtime half, so the product profile is the top JS layer. The tenant's
+    // own compile taking that slot is the subject of
+    // `artifact-runtime-authority.test.tsx`, not of this file.
     const artifact = tokenTestArtifact('token-test', 'compact');
     mountArtifact(artifact);
 
@@ -153,8 +153,7 @@ describe('useTokens product profile resolution', () => {
         tenantConfig={tokenTestTenant('token-test')}
         visualAuthority={{ authority: 'compiled-artifact', artifact }}
         productProfile="events.organizer"
-        forceEngine="classic"
-        engineVisual={CLASSIC_VISUAL}
+        forceEngine="modern"
         skipCssLoading
       >
         <TokenConsumer />
@@ -225,8 +224,7 @@ describe('useTokens product profile resolution', () => {
           tenantConfig={tokenTestTenant(slug)}
           visualAuthority={{ authority: 'compiled-artifact', artifact }}
           productProfile="events.organizer"
-          forceEngine="classic"
-          engineVisual={CLASSIC_VISUAL}
+          forceEngine="modern"
           skipCssLoading
         >
           <DensitySpacing testId={`${density}-density-spacing`} />
@@ -270,7 +268,7 @@ describe('useTokens product profile resolution', () => {
         tenantConfig={tokenTestTenant('token-test')}
         tenantOverrides={rawOverrides}
         productProfile="events.organizer"
-        forceEngine="classic"
+        forceEngine="modern"
         skipCssLoading
       >
         <TokenConsumer />

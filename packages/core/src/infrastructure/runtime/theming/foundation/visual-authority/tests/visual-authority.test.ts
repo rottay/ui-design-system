@@ -220,9 +220,11 @@ describe('tenant visual authority', () => {
     expect(resolve(ARTIFACT, { ...EMPTY_PAYLOAD, visualBranding: true }).conflict)
       .toMatch(/raw visual branding/);
 
+    // No declaration and raw branding seeds: the one visual channel a config
+    // still has, with no compile behind it.
     expect(resolveVisualAuthority({
       slug: 'uncompiled',
-      payload: EMPTY_PAYLOAD,
+      payload: { visualBranding: true },
     }).origin).toBe('uncompiled-visual-payload');
   });
 

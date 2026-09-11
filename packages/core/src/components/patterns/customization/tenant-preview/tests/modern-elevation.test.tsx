@@ -106,7 +106,9 @@ describe('ModernTenantPreview elevation', () => {
     expect(name?.textContent).toBe('Test Tenant');
 
     const metaItems = Array.from(container.querySelectorAll('[data-part="tenant-slug"] bdi'));
-    expect(metaItems.map((n) => n.textContent)).toEqual(['test-tenant', 'classic', 'formal']);
+    // The middle item is the engine THIS preview renders in, not a field the
+    // draft carries: a tenant does not choose an engine.
+    expect(metaItems.map((n) => n.textContent)).toEqual(['test-tenant', 'modern', 'formal']);
   });
 
   it('drops the logo slot when the tenant logo fails to load', () => {

@@ -277,7 +277,6 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
   it.each([
     ['normalized slug', { slug: 'TENANT-A ', branding: { companyName: 'Tenant A' } }],
     ['reserved display identity', { slug: 'tenant-a', branding: { companyName: 'Bit Hire' } }],
-    ['invalid engine', { slug: 'tenant-a', engine: 'unknown', branding: { companyName: 'Tenant A' } }],
   ])('keeps the identity-only fallback for an invalid %s response', async (_label, data) => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
@@ -296,6 +295,29 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
       name: 'tenant-a',
       branding: { companyName: 'tenant-a' },
     });
+    expect(result.current.tenantConfig).not.toHaveProperty('engine');
+  });
+
+  it('ignores an engine named by the branding response instead of honouring it', async () => {
+    // `engine` was removed from `TenantConfig`: the vertical roster owns it, so
+    // a transport that names one is not refused for it -- the field simply has
+    // nowhere to land, and the rest of the response is accepted normally.
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        data: { slug: 'tenant-a', engine: 'unknown', branding: { companyName: 'Tenant A' } },
+      }),
+    }));
+
+    const { result } = renderHook(() => useTenantBranding({
+      tenantSlug: 'tenant-a',
+      session: null,
+      vertical: 'bithire',
+    }));
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.tenantConfig?.branding.companyName).toBe('Tenant A');
     expect(result.current.tenantConfig).not.toHaveProperty('engine');
   });
 
@@ -629,8 +651,12 @@ describe('useTenantBranding at the visual-authority seam', () => {
       payload: censusRuntimeVisualPayload(result.current.tenantConfig),
       documentRoot: null,
     });
+    // ONE channel, because one is all a config can carry: the endpoint's
+    // `tokenOverrides`/`personality`/`appearance` no longer reach the config at
+    // all, and its branding seeds are the last thing an artifact can be mixed
+    // with.
     expect(mixed.conflict).toMatch(
-      /mixes a compiled artifact with raw visual branding, raw tokenOverrides, raw tenant personality/,
+      /mixes a compiled artifact with raw visual branding/,
     );
     expect(mixed.artifact).toBeNull();
   });
