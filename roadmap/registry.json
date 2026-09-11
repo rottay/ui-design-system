@@ -4356,7 +4356,7 @@
    "lane": "derivation",
    "order": 5,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-02",
     "WO-DER-03",
@@ -4367,8 +4367,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-05, F-73",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "daniel",
+   "claimedAt": "2026-09-11",
    "progressLog": []
   },
   {
