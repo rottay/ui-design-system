@@ -7422,8 +7422,8 @@
       "excludes": "src/foundation/tokens/css/facade/artifacts/",
       "excludeReason": "Los artefactos de tenant son la SALIDA que se esta juzgando; incluirlos haria que el piso se explicara a si mismo.",
       "files": 462,
-      "channels": 3592,
-      "sha256": "ca0e666f882fe78d850a03989dd0f957be50c0ceead97f10a8b947ff04f18983",
+      "channels": 3596,
+      "sha256": "d8e87149d2e24595c9f56693610b72ab2db647e365695c9796242db826dd64fb",
       "derivedForms": "var( | calc( | color-mix(",
       "note": "Tamano y hash del piso medido. Si el piso cambia, esta cifra se mueve y la clasificacion de raices se vuelve a discutir con evidencia."
     },
@@ -7533,7 +7533,7 @@
               ],
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 795,
+                "line": 806,
                 "value": "0.98"
               }
             },
@@ -7672,7 +7672,7 @@
               "readerCount": 3,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 720,
+                "line": 731,
                 "value": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)"
               }
             },
@@ -7710,7 +7710,7 @@
               "readerCount": 2,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 902,
+                "line": 913,
                 "value": "var(--ds-color-primary-900)"
               }
             }
@@ -12656,7 +12656,7 @@
               ],
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 649,
+                "line": 660,
                 "value": "1px"
               }
             },
@@ -12721,7 +12721,7 @@
               ],
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 795,
+                "line": 806,
                 "value": "0.98"
               }
             },
@@ -12967,7 +12967,7 @@
               "readerCount": 0,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 720,
+                "line": 731,
                 "value": "0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent)"
               }
             },
@@ -12997,7 +12997,7 @@
               "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 902,
+                "line": 913,
                 "value": "var(--ds-color-primary-900)"
               }
             }
@@ -19712,7 +19712,7 @@
               ],
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 795,
+                "line": 806,
                 "value": "0.98"
               }
             },
@@ -19846,7 +19846,7 @@
               "readerCount": 1,
               "floor": {
                 "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
-                "line": 902,
+                "line": 913,
                 "value": "var(--ds-color-primary-900)"
               }
             }
