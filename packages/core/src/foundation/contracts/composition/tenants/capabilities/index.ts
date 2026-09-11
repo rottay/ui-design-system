@@ -1048,8 +1048,8 @@ export const FOUNDATION_AUTHORITIES: readonly FoundationAuthorityDeclaration[] =
       sinceWave: 'C1',
       channels: ['--ds-radius-nest-inset', '--ds-radius-nest-ratio'],
       derivation:
-        'inner radius = max(0, outer - inset), where the inset is bounded by the container padding and floored at max(--ds-radius-nest-inset, outer * --ds-radius-nest-ratio); the ratio used to be a literal /2 inside card.css, so the inset alone could only raise the step-down. `shape.nesting` states both operands: zeroing them collapses the inset and the nested corner IS the parent corner',
-      consumers: ['card.css', 'semantic-surface.css'],
+        'card.css: inner radius = max(0, outer - inset), where the inset is bounded by the container padding and floored at max(--ds-radius-nest-inset, outer * --ds-radius-nest-ratio); the ratio used to be a literal /2 there, so the inset alone could only raise the step-down. semantic-surface.css reads the inset only, as max(0, role radius - inset). `shape.nesting` states both operands: zeroing them collapses the inset and the nested corner IS the parent corner',
+      consumers: ['card.css both operands', 'semantic-surface.css inset only'],
     },
   ]);
 

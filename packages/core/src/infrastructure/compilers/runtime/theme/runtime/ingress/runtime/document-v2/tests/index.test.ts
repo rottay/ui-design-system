@@ -297,7 +297,12 @@ describe("migrate v1 -> v2", () => {
         general: {
           palette: { primary: PRIMARY, status: { success: "#10B981" } },
           typography: { typePairing: "editorial", scale: 1.05 },
-          shape: { buttonStyle: "pill", radiusScale: 1.1 },
+          shape: {
+            buttonStyle: "pill",
+            radiusScale: 1.1,
+            nesting: "uniform",
+            controlHeight: "tall",
+          },
           density: "compact",
           rhythm: "airy",
           surfaces: { elevation: "elevated", effectIntensity: 0.4 },
@@ -327,6 +332,8 @@ describe("migrate v1 -> v2", () => {
         "recipe-profile",
         "responsive.posture",
         "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
         "shape.radius-scale",
         "spacing.rhythm",
         "surfaces.effect-intensity",
@@ -528,7 +535,12 @@ const ADVANCED_V1 = {
     general: {
       palette: { primary: PRIMARY, status: { success: "#10B981" } },
       typography: { typePairing: "editorial", scale: 1.05 },
-      shape: { buttonStyle: "pill", radiusScale: 1.1 },
+      shape: {
+        buttonStyle: "pill",
+        radiusScale: 1.1,
+        nesting: "uniform",
+        controlHeight: "tall",
+      },
       density: "compact",
       rhythm: "airy",
       surfaces: { elevation: "elevated", effectIntensity: 0.4 },

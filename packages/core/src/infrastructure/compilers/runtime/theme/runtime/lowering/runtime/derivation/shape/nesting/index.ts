@@ -12,19 +12,20 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
 /**
  * Kit row 12, as two statements about ONE derivation.
  *
- * Card and SemanticSurface derive a nested corner the same way: the parent's
- * resolved radius minus an inset, where the inset is the smaller of the
- * container's own padding and the LARGER of a governed floor
- * (`--ds-radius-nest-inset`) and a fraction of the parent radius
- * (`--ds-radius-nest-ratio`). That fraction used to be a literal `/ 2` inside
- * both consumers, which is why a tenant could scale the radius ramp but never
- * decide whether nesting stepped the corner down at all.
+ * Card derives a nested corner as the parent's resolved radius minus an inset,
+ * where the inset is the smaller of the container's own padding and the LARGER
+ * of a governed floor (`--ds-radius-nest-inset`) and a fraction of the parent
+ * radius (`--ds-radius-nest-ratio`). That fraction used to be a literal `/ 2`
+ * inside card.css, which is why a tenant could scale the radius ramp but never
+ * decide whether nesting stepped the corner down at all. SemanticSurface reads
+ * the governed floor alone, subtracted from its role radius.
  *
- * The row states both operands because either one alone cannot express
- * `uniform`: the ratio term floors the inset at half the parent radius, so
- * zeroing only the governed floor leaves the step-down in place, and zeroing
- * only the ratio leaves the 4px floor. Together they collapse the inset to
- * zero, and `max(0, parent - 0)` IS the parent corner.
+ * The row states both operands because in Card's formula either one alone
+ * cannot express `uniform`: the ratio term floors the inset at half the parent
+ * radius, so zeroing only the governed floor leaves the step-down in place,
+ * and zeroing only the ratio leaves the 4px floor. Together they collapse the
+ * inset to zero, and `max(0, parent - 0)` IS the parent corner -- which is the
+ * same value the zeroed floor alone gives SemanticSurface.
  *
  * `concentric` restates the resting law rather than differing from it, for the
  * same reason `typography.roleWeights: regular` does: a posture that had to

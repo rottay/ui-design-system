@@ -149,6 +149,12 @@ function migrateGeneralDecisions(
   if (general.shape?.radiusScale !== undefined) {
     decisions["shape.radius-scale"] = general.shape.radiusScale;
   }
+  if (general.shape?.nesting) {
+    decisions["shape.nesting"] = general.shape.nesting;
+  }
+  if (general.shape?.controlHeight) {
+    decisions["shape.control-height"] = general.shape.controlHeight;
+  }
   if (general.density) decisions["density.mode"] = general.density;
   if (general.rhythm) decisions["spacing.rhythm"] = general.rhythm;
   if (general.motion) decisions["motion.dial"] = general.motion;
