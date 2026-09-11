@@ -9,7 +9,7 @@
 .rottay-button.rottay-button--modern.rottay-button-icon.ds-button-icon[data-icon-only='true'] {
   flex: 0 0 auto;
   min-inline-size: calc(
-    var(--ds-button-resolved-height) * var(--ds-density-effective-scale)
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding: 0;
 }

@@ -38,7 +38,8 @@
  * Phase C0 (material-grammar canary) additions:
  *
  *   - nest-radius law matured: the inset is now bounded by max(governed
- *     `--ds-radius-nest-inset`, parent radius / 2) instead of a raw 8px, so
+ *     `--ds-radius-nest-inset`, parent radius * `--ds-radius-nest-ratio`)
+ *     instead of a raw 8px, so
  *     nested corners stay concentric across the tenant radius scale
  *     (contained-radius tenants no longer derive near-square children) and
  *     `radius: none` still derives 0.
@@ -402,11 +403,14 @@
      wear. Concentric derivation — the parent's resolved radius minus a
      bounded inset. The inset is the SMALLER of the body padding (the true
      distance between the two strokes) and the LARGER of the governed
-     `--ds-radius-nest-inset` floor and half the parent radius, so the
-     nested corner keeps visibly related curvature across the whole
-     radius-scale instead of collapsing to a square on contained-radius
-     tenants (a 10px parent used to derive a 2px child; it now derives a
-     concentric 5px). `radius: none` still derives 0. Published on the body
+     `--ds-radius-nest-inset` floor and `--ds-radius-nest-ratio` of the
+     parent radius, so the nested corner keeps visibly related curvature
+     across the whole radius-scale instead of collapsing to a square on
+     contained-radius tenants (a 10px parent used to derive a 2px child; it
+     now derives a concentric 5px). Both operands are what `shape.nesting`
+     states: at their resting 4px/0.5 this is the law as written, and at
+     0px/0 the inset collapses and the nested corner IS the parent's.
+     `radius: none` still derives 0. Published on the body
      (not the root) so a nested card — and any SemanticSurface landing in
      this body — reads the PARENT's value through inheritance while its own
      body recomputes for the next level down. */
@@ -416,7 +420,7 @@
       var(--_ds-card-radius-current, var(--ds-card-radius)) -
         min(
           var(--ds-card-instance-padding, var(--ds-card-padding-current, 0px)),
-          max(var(--ds-radius-nest-inset, 4px), calc(var(--_ds-card-radius-current, var(--ds-card-radius)) / 2))
+          max(var(--ds-radius-nest-inset, 4px), calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-radius-nest-ratio, 0.5)))
         )
     )
   );

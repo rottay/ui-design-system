@@ -482,13 +482,26 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "pro",
     title: "Nested radius law",
     domain: { kind: "enum", values: ["concentric", "uniform"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.shape.nesting",
+      brandTheme: "surfaces.nesting",
+    },
     consumes: ["shape.radius-scale"],
-    produces: { channels: [], rootAttributes: [] },
+    // The two OPERANDS of the nested-corner derivation every nesting surface
+    // already reads, and nothing else. A nested corner is
+    // `max(0, parent - min(padding, max(inset, parent * ratio)))`: the ratio
+    // used to be a literal `/ 2` inside each consumer, so the governed inset
+    // alone could only RAISE the step-down and `uniform` was unreachable.
+    // Neither operand is a radius, so this row cannot contest the ramp
+    // `shape.radius-scale` owns -- it decides what nesting does to it.
+    produces: {
+      channels: ["--ds-radius-nest-inset", "--ds-radius-nest-ratio"],
+      rootAttributes: [],
+    },
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "locked-by-default",
-    effect: "not-yet-derived",
-    defaultBehavior: "the vertical's nesting law",
+    effect: "css-channels",
+    defaultBehavior: "the vertical's nesting law, then `concentric`",
   },
   {
     id: "shape.button-style",
@@ -515,13 +528,24 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "standard",
     title: "Control height",
     domain: { kind: "enum", values: ["compact", "standard", "tall"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.shape.controlHeight",
+      brandTheme: "surfaces.controlHeight",
+    },
     consumes: ["density.mode"],
-    produces: { channels: [], rootAttributes: [] },
+    // ONE factor, folded in where every control family already folds in
+    // `--ds-density-effective-scale`. A governed absolute ramp would be a
+    // fifth size vocabulary beside the four this row exists to unify, and it
+    // would flatten the height/radius pairing each vertical chose; shifting
+    // the authored ramp keeps the pairing and still reaches every family.
+    produces: {
+      channels: ["--ds-control-height-scale"],
+      rootAttributes: [],
+    },
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "open",
-    effect: "not-yet-derived",
-    defaultBehavior: "the density posture decides the control height",
+    effect: "css-channels",
+    defaultBehavior: "the density posture decides the control height; then factor 1",
   },
   {
     id: "density.mode",

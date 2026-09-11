@@ -102,17 +102,17 @@
    B6-02): the Input family's certified height/font/padding channels, scaled
    by the governed density channel (tag-input idiom). */
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="small"] {
-  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   font-size: var(--ds-input-sm-font-size);
   padding: 4px var(--ds-input-sm-padding-x);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="middle"] {
-  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   font-size: var(--ds-input-md-font-size);
   padding: 6px var(--ds-input-md-padding-x);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="large"] {
-  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   font-size: var(--ds-input-lg-font-size);
   padding: 8px var(--ds-input-lg-padding-x);
 }

@@ -103,19 +103,19 @@
 }
 
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='xs'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xs-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-xs-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='sm'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-sm-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-sm-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='md'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-md-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-md-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='lg'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-lg-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-lg-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='xl'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xl-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-xl-font-size);
 }
 
 /* State sync across the compact join: a focused, invalid, warning, success or

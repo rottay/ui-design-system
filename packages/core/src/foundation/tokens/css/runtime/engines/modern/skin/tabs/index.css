@@ -253,7 +253,7 @@
   min-inline-size: 0;
   max-inline-size: var(--ds-tabs-item-max-width, 18rem);
   block-size: calc(
-    var(--_ds-tabs-current-height) * var(--ds-density-effective-scale)
+    var(--_ds-tabs-current-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   flex: 0 0 auto;
   align-items: center;
@@ -842,7 +842,7 @@
   .rottay-tabs--modern[data-part='root'] [data-part='tab-button'] {
     min-block-size: max(
       44px,
-      calc(var(--_ds-tabs-current-height) * var(--ds-density-effective-scale))
+      calc(var(--_ds-tabs-current-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
     );
   }
 

@@ -28,10 +28,14 @@ export const TENANT_IDENTITY: TenantThemeConfigIdentity = {
 };
 
 /**
- * Four decisions on purpose: three the current fan-out lights, and
- * `states.emphasis`, which the catalog publishes and no family reads yet. The
- * door must ACCEPT it and REPORT it unlit -- refusing a published decision is
- * what would force the app to rewrite documents on every family cut.
+ * Five decisions on purpose, and NOT rewritten as each one is connected.
+ *
+ * Two of them were written here while the catalog gave them no keypath at all:
+ * `states.emphasis` until WO-DER-02 derived it, and `shape.control-height`
+ * until connection lot 2 did. Both are unchanged, and both now lower -- which
+ * is the promise the unlit report exists to make. Refusing a published decision
+ * is what would have forced this app to rewrite its rows on every family cut;
+ * accepting it and naming it unlit is what lets the row outlive the gap.
  */
 export const TENANT_DOCUMENT_V2: TenantThemeDocumentV2 = {
   version: 2,
@@ -41,9 +45,6 @@ export const TENANT_DOCUMENT_V2: TenantThemeDocumentV2 = {
     'typography.pairing': 'editorial',
     'density.mode': 'compact',
     'states.emphasis': 'strong',
-    // A decision the catalog still gives no keypath, so the fixture keeps an
-    // executable example of the "accepted but not lit" report. It was
-    // `surfaces.border-style` until the connfix lot (a5da15828) derived it.
     'shape.control-height': 'tall',
   },
 };

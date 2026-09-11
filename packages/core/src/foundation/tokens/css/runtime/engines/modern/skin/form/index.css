@@ -137,7 +137,7 @@
      multi-line labels grow past it without drifting the control. */
   min-block-size: calc(
     var(--_ds-form-control-height, var(--ds-input-md-height)) *
-    var(--ds-density-effective-scale)
+    var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   /* The vertical-layout bottom gap would skew the optical centering. */
   padding-block-end: 0;

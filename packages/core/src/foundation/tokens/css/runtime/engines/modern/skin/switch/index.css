@@ -63,17 +63,17 @@
 /* Size geometry + resolved thumb travel (density-scaled). */
 .ds-switch.ds-switch--modern[data-part='root'][data-size='sm'] [data-part='track'] {
   --ds-switch-resolved-track-w: calc(var(--ds-switch-sm-width) * var(--ds-density-effective-scale));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-sm-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-switch-resolved-thumb: calc(var(--ds-switch-sm-thumb, 0.75rem) * var(--ds-density-effective-scale));
 }
 .ds-switch.ds-switch--modern[data-part='root'][data-size='md'] [data-part='track'] {
   --ds-switch-resolved-track-w: calc(var(--ds-switch-md-width) * var(--ds-density-effective-scale));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-md-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-switch-resolved-thumb: calc(var(--ds-switch-md-thumb, 1rem) * var(--ds-density-effective-scale));
 }
 .ds-switch.ds-switch--modern[data-part='root'][data-size='lg'] [data-part='track'] {
   --ds-switch-resolved-track-w: calc(var(--ds-switch-lg-width) * var(--ds-density-effective-scale));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-lg-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-switch-resolved-thumb: calc(var(--ds-switch-lg-thumb, 1.25rem) * var(--ds-density-effective-scale));
 }
 

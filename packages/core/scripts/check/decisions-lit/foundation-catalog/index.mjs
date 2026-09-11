@@ -44,9 +44,19 @@ export const TODAY_CONTROL_DENOMINATOR = 22;
  * 2026-09-09 (CC-01 of the 96-checkpoint cascade review): `typography.role-weights`,
  * `typography.numeric`, `surfaces.border-style` and `motion.character` gained
  * theirs, and this run REFUSED to publish them as `new` while measuring them
- * move -- which is the re-record being deliberate rather than absorbed.
+ * move -- which is the re-record being deliberate rather than absorbed. 4 -> 2 on
+ * 2026-09-10 (connection lot 2): `shape.nesting` and `shape.control-height` were
+ * the last two rows the kit admitted while nothing lowered them, and the lot
+ * gave each a keypath, a canonical deriver under `derivation/shape/` and painted
+ * consumers.
+ *
+ * The two rows left are `palette.neutral-temperature` and
+ * `palette.contrast-posture`. They are connected on the palette lot's own
+ * branch, not here: this denominator states what THIS tree lowers, so it reads
+ * 2 until that lot merges and its own re-record takes it to 0. Reading 0 here
+ * before the merge would publish a connection this tree does not have.
  */
-export const NEW_DECISION_DENOMINATOR = 4;
+export const NEW_DECISION_DENOMINATOR = 2;
 
 /**
  * `full`    the audit measured full, coherent effect in static and DB
@@ -89,9 +99,16 @@ export const DECISIONS = Object.freeze([
   ['typography.role-weights', 'partial', ['light', 'strong']],
   ['typography.numeric', 'partial', ['proportional', 'tabular']],
   ['shape.radius-scale', 'none', [0.85, 1.15]],
-  ['shape.nesting', 'new', ['concentric', 'uniform']],
+  // Connection lot 2 (2026-09-10): both gained a keypath and a canonical
+  // deriver (`derivation/shape/{nesting,control-height}`), and painted
+  // consumers -- the nested-corner derivation the card body publishes, and the
+  // control-height factor every control family folds in beside the density
+  // scale. `partial` for the same reason CC-01 gives its three rows: the
+  // `minimumFamilies` of both is `owner-pending`, so there is no declared
+  // fan-out floor to certify the reach against, and emission is not adoption.
+  ['shape.nesting', 'partial', ['concentric', 'uniform']],
   ['shape.button-style', 'partial', ['sharp', 'pill']],
-  ['shape.control-height', 'new', ['compact', 'tall']],
+  ['shape.control-height', 'partial', ['compact', 'tall']],
   ['density.mode', 'partial', ['compact', 'spacious']],
   ['spacing.rhythm', 'none', ['tight', 'airy']],
   ['surfaces.elevation-posture', 'partial', ['flat', 'elevated']],

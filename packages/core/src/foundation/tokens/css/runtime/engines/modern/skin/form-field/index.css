@@ -67,7 +67,8 @@
       calc(
         (
           var(--_ds-form-field-control-height, var(--ds-input-md-height)) *
-            var(--ds-density-effective-scale) -
+            var(--ds-density-effective-scale) *
+            var(--ds-control-height-scale, 1) -
           1em * var(--ds-input-label-line-height, var(--ds-line-height-snug))
         ) / 2
       )

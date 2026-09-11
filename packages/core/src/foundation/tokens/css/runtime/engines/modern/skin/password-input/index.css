@@ -192,7 +192,7 @@
    relays (height floor + per-size edge) are private implementation, NOT
    customization knobs -- same idiom as `--_ds-input-resolved-height`. */
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='xs'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-xs-radius, var(--ds-input-xs-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-xs-padding-x);
   font-size: var(--ds-input-xs-font-size);
@@ -200,7 +200,7 @@
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='sm'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-sm-padding-x);
   font-size: var(--ds-input-sm-font-size);
@@ -208,7 +208,7 @@
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='md'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-md-padding-x);
   font-size: var(--ds-input-md-font-size);
@@ -216,7 +216,7 @@
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='lg'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-lg-padding-x);
   font-size: var(--ds-input-lg-font-size);
@@ -224,7 +224,7 @@
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='xl'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-xl-radius, var(--ds-input-xl-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-xl-padding-x);
   font-size: var(--ds-input-xl-font-size);

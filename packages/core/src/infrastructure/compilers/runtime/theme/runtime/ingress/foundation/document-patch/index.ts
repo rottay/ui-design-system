@@ -558,7 +558,7 @@ function migrateGeneral(
   if (general.shape) {
     assertExactKeys(
       general.shape,
-      ["buttonStyle", "radiusScale"],
+      ["buttonStyle", "radiusScale", "nesting", "controlHeight"],
       "general.shape"
     );
     // The silhouette is a DECISION, not a chrome leaf. Expanding it here gave
@@ -569,6 +569,8 @@ function migrateGeneral(
       surfaces: {
         buttonStyle: general.shape.buttonStyle,
         radiusScale: general.shape.radiusScale,
+        nesting: general.shape.nesting,
+        controlHeight: general.shape.controlHeight,
       },
     });
   }

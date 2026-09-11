@@ -76,6 +76,9 @@ const WRITERS: Partial<
   "typography.families": writeFamilies,
   "shape.radius-scale": (t, v) => wrote((nest(t.general, "shape").radiusScale = v)),
   "shape.button-style": (t, v) => wrote((nest(t.general, "shape").buttonStyle = v)),
+  "shape.nesting": (t, v) => wrote((nest(t.general, "shape").nesting = v)),
+  "shape.control-height": (t, v) =>
+    wrote((nest(t.general, "shape").controlHeight = v)),
   "density.mode": (t, v) => wrote((t.general.density = v)),
   "spacing.rhythm": (t, v) => wrote((t.general.rhythm = v)),
   // MERGED, not assigned: `motion.character` writes into the same v1 group, and

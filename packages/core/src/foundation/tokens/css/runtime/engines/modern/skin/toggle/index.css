@@ -86,27 +86,27 @@
    token-layer outage cannot shift the track geometry. */
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xs-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xs-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xs-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xs-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='sm'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-sm-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-sm-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-sm-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='md'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-md-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-md-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-md-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='lg'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-lg-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-lg-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-lg-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='xl'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xl-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xl-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xl-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xl-dot) * var(--ds-density-effective-scale));
 }
 
