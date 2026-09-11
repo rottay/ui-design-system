@@ -27,6 +27,13 @@ export const PRIMARY_SEED_FIELD = "palette.primaryColor";
  * author would use to overrule the derivation. `--ds-button-primary-color`
  * carries two because its emitter falls back from `.color` to `.text`, so both
  * spellings are the same statement about the same channel.
+ *
+ * `--ds-color-text-on-primary` is here because the ink a block paints on the
+ * primary must be measured against the primary THAT BLOCK renders. A vertical
+ * authors its own ink for its own seed, and a mode overlay inherits it, so a
+ * tenant that re-seeds the primary would otherwise keep an ink tuned for a
+ * colour it replaced -- which is how a dark-mode publish measured APCA Lc 17.6
+ * and was refused for a pair the tenant never chose.
  */
 export const SEED_SHADOWING_FIELDS: Readonly<
   Record<string, readonly string[]>
@@ -41,6 +48,7 @@ export const SEED_SHADOWING_FIELDS: Readonly<
   "--ds-input-border-focus": ["chrome.controls.input.borderFocus"],
   "--ds-input-shadow-focus": ["chrome.controls.input.shadowFocus"],
   "--ds-color-primary-foreground": ["palette.primaryForegroundColor"],
+  "--ds-color-text-on-primary": ["palette.onPrimaryColor"],
   "--ds-color-border-focus": ["palette.borderFocusColor"],
   "--ds-color-link": ["palette.linkColor"],
   "--ds-color-link-hover": ["palette.linkHoverColor"],

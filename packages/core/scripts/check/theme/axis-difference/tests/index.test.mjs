@@ -199,9 +199,9 @@ describe('axis-difference — the artifact is applied AS IT SHIPS', () => {
   });
 
   it('THE DEFECT: a mode-routed palette is not an empty artifact', () => {
-    // rottay's default mode is dark, so an authored LIGHT palette ships in
-    // modeDeltas[light] and the base block is empty by construction. Reading
-    // `variables` alone read that as a decision that moves no channel.
+    // A document that selects the vertical's non-default mode ships its palette
+    // in that mode's block, and the base block can be empty by construction.
+    // Reading `variables` alone read that as a decision that moves no channel.
     const routed = { variables: {}, modeDeltas: [{ mode: 'light', variables: { '--ds-color-primary': '#1F4FA8' } }] };
     assert.equal(Object.keys(routed.variables).length, 0);
     assert.equal(Object.keys(effectiveVariables(routed, 'light')).length, 1);

@@ -56,10 +56,10 @@ const ARTIFACT_STYLE_ID = 'ds-decisions-lit-artifact';
 const FREEZE_INTERPOLATION_CSS =
   '*, *::before, *::after { transition-property: none !important; animation-name: none !important; }';
 
-function sceneHtml({ vertical, bundleCss, fixtures }) {
-  const attributes = rootAttributes({ vertical, theme: 'light', engine: 'modern', arm: 'both' });
+function sceneHtml({ vertical, theme, bundleCss, fixtures }) {
+  const attributes = rootAttributes({ vertical, theme, engine: 'modern', arm: 'both' });
   return `<!doctype html>
-<html ${rootAttributesToHtml(attributes)} class="${rootClassNames({ theme: 'light' }).join(' ')}">
+<html ${rootAttributesToHtml(attributes)} class="${rootClassNames({ theme }).join(' ')}">
 <head><meta charset="utf-8"><style id="ds-bundle">${bundleCss}</style><style id="${ARTIFACT_STYLE_ID}"></style><style id="ds-freeze">${FREEZE_INTERPOLATION_CSS}</style></head>
 <body>${fixtures.map((fixture) => fixture.html).join('\n')}</body>
 </html>`;
@@ -163,9 +163,17 @@ async function setArtifact(page, css) {
  * Opens one scene per vertical and measures every decision on it.
  *
  * Fixtures whose selectors no longer occur in the measured CSS are excluded by
- * name and reported; their readings are never published as zeros.
+ * name and reported; their readings are never published as zeros. `themeOf`
+ * states the mode each vertical's scene is mounted in, and the roster note
+ * records it, so a reading is always attributable to a named mode.
  */
-export async function measure({ verticals, decisions, compileArms, bundleMode = 'fresh' }) {
+export async function measure({
+  verticals,
+  decisions,
+  compileArms,
+  themeOf,
+  bundleMode = 'fresh',
+}) {
   const { browser, close, provenance } = await launchBrowser();
   const context = await browser.newContext();
   const results = [];
@@ -190,10 +198,17 @@ export async function measure({ verticals, decisions, compileArms, bundleMode = 
         bundleSha: bundle.provenance.sha256,
         bundleMode: bundle.mode,
       };
+      // The mode the vertical RENDERS, never a literal: a decision that tunes
+      // the mode a tenant paints is invisible to a scene mounted in the other
+      // one, and publishing that as "moved nothing" is the instrument's error,
+      // not the decision's.
+      const theme = await themeOf(vertical);
+      rosterNotes[vertical].theme = theme;
       const page = await context.newPage();
-      await page.setContent(sceneHtml({ vertical, bundleCss: bundle.css, fixtures: matched }), {
-        waitUntil: 'load',
-      });
+      await page.setContent(
+        sceneHtml({ vertical, theme, bundleCss: bundle.css, fixtures: matched }),
+        { waitUntil: 'load' },
+      );
       results.push(
         ...(await measureVertical({
           vertical,

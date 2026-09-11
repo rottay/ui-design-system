@@ -156,6 +156,25 @@ export async function compileDecisionValue({ vertical, slug, tier, id, value }) 
   }
 }
 
+/**
+ * The mode a vertical RENDERS, read from the door's own compile of its baseline.
+ *
+ * The scene used to mount every vertical as `light`, which is the same
+ * "light is the body" assumption `ingress/foundation/document-patch` carried:
+ * on rottay, whose default mode is dark, it read the light overlay and never
+ * the block the tenant actually paints. A vertical states its own answer and
+ * this asks it rather than guessing.
+ */
+export async function verticalRenderedMode(vertical) {
+  const door = await loadDoor();
+  const compiled = door.compileThemeIntent(door.staticThemeIntent(vertical));
+  const mode = compiled.compiled.colorScheme;
+  if (mode !== 'light' && mode !== 'dark') {
+    throw new Error(`decisions-lit: ${vertical} declares no default mode to mount`);
+  }
+  return mode;
+}
+
 /** Both arms of one decision, in one vertical. */
 export async function compileDecisionArms({ vertical, slug, decision }) {
   const [a, b] = await Promise.all(

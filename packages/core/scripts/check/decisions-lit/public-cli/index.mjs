@@ -47,6 +47,7 @@ import {
   assertDoorBuildIsFresh,
   compileDecisionArms,
   repoRelative,
+  verticalRenderedMode,
 } from '../runtime/compile/index.mjs';
 import {
   RERUN_COMMAND,
@@ -246,6 +247,7 @@ async function commandRun(options) {
     decisions: DECISIONS,
     compileArms: ({ vertical, decision }) =>
       compileDecisionArms({ vertical, slug: vertical, decision }),
+    themeOf: verticalRenderedMode,
   });
   const summary = summarize(rows);
   const problems = violations({ summary, rows, verticals });

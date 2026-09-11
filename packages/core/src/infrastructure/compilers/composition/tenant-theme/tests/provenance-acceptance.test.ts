@@ -114,8 +114,8 @@ const POPULATED_SIMPLE_DOCUMENT = {
 } as const;
 
 /**
- * The ten channels a primary seed owns: the six `derivePrimarySemantics`
- * emits plus the four interaction-floor channels. Assembled from the compiler's
+ * The eleven channels a primary seed owns: the six `derivePrimarySemantics`
+ * emits plus the five interaction-floor channels. Assembled from the compiler's
  * own shadowing table rather than hand-listed, so a channel added to the family
  * cannot be silently omitted from this file's coverage.
  */
@@ -139,18 +139,19 @@ const BITHIRE_SEED_DERIVED: Readonly<Record<string, string>> = {
 };
 
 /**
- * The four the seed does NOT move, and the reason is a value predicate rather
- * than a rank: their derived value bakes no color of its own — two are `var()`
- * indirections that already point AT the channels the seed controls, and the
- * third resolves to the same ink under tenant and baseline alike. Re-deriving
- * them would replace an indirection with an identical indirection, so the delta
- * inherits them. They stay in `POPULATED_WITHDRAWN` as benign rows.
+ * The five the seed does NOT move, and the reason is a value predicate rather
+ * than a rank: three are `var()` indirections that already point AT the
+ * channels the seed controls, and the two inks resolve to the same `#ffffff`
+ * under tenant and baseline alike — `#0F766E` takes the light ink on both
+ * metrics. Re-deriving them would replace a value with an identical value, so
+ * the delta inherits them. They stay in `POPULATED_WITHDRAWN` as benign rows.
  */
 const BITHIRE_SEED_INHERITED = [
   "--ds-button-primary-bg",
   "--ds-button-primary-border",
   "--ds-button-primary-color",
   "--ds-color-primary-foreground",
+  "--ds-color-text-on-primary",
 ] as const;
 
 /** Every schema-admitted `advanced.chrome.sidebar` COLOR field. */

@@ -249,22 +249,23 @@ export function familyElements(root = CORE_ROOT, only = null) {
  * the 22-channel light block the palette actually ships in. That entry is gone;
  * rottay's LIGHT cells now measure the control like every other vertical.
  *
- * What survives the fix is narrower and real, and it is a PRODUCT fact about
- * rottay rather than about this probe. Measured 2026-09-11 through
- * `compileTenantThemeDocumentV2` on `dist/server.js`:
+ * The entry that survived it -- rottay / dark / `palette-only` -- is DISCHARGED.
+ * It recorded a product fact, and the derivation lane it named has since fixed
+ * that fact: `ingress/foundation/document-patch` read an absent `backgroundMode`
+ * as `"light"`, so on the one vertical whose default mode is dark every seed
+ * landed in `modes.light` and the mode the tenant renders was untouched. Seeds
+ * now tune the mode the vertical renders. Measured 2026-09-11 through
+ * `compileTenantThemeDocumentV2` on `dist/server.js`, before -> after:
  *
- *   rottay  palette.seeds                     -> base 0, modeDeltas light:22
- *   rottay  palette.seeds + dark-mode 'auto'  -> base 0, modeDeltas light:22
- *   bithire palette.seeds                     -> base 40, modeDeltas dark:39
- *   evnto   palette.seeds                     -> base 42, modeDeltas dark:42
+ *   rottay  palette.seeds                     base  0 -> 23, modeDeltas light 22 -> 23
+ *   rottay  palette.seeds + dark-mode 'auto'  base  0 -> 23, modeDeltas light 22 -> 23
+ *   rottay  palette.seeds + dark-mode 'dark'  APCA-refused -> base 23
+ *   bithire palette.seeds                     base 40 -> 40, modeDeltas dark 39 -> 39
+ *   evnto   palette.seeds                     base 42 -> 42, modeDeltas dark 42 -> 42
  *
- * The v1 transport semantics `ingress/foundation/document-patch` implements are
- * "top-level seeds customize the light/body mode", so on the one vertical whose
- * default mode is dark the seeds land in `modes.light` and the mode the tenant
- * actually renders in is untouched. `palette.dark-mode: 'dark'` is the only
- * route to it and is refused for these seeds by the APCA floor. That is owed by
- * the derivation lane; it is NOT this lot's to fix, and recording it here is
- * what keeps it visible instead of averaged away.
+ * This run therefore measures rottay's dark palette-only cells like every other
+ * vertical's: the six of them move from non-evidential to evidential, and the
+ * negative control goes from 30 of 36 evidential cells to 36 of 36.
  *
  * The MECHANISM is the point of the list, and it stays:
  *  - an arm that compiles nothing is a PRODUCT fact and fails this gate unless
@@ -273,18 +274,7 @@ export function familyElements(root = CORE_ROOT, only = null) {
  *  - a cell whose pair is inert proves NOTHING, so its 0 % is published with
  *    `evidential: false` and a negative control may not be credited from it.
  */
-export const INERT_PAIRS = Object.freeze([
-  {
-    vertical: 'rottay',
-    theme: 'dark',
-    scenario: 'palette-only',
-    note:
-      'rottay is the one first-party vertical whose default mode is dark, and palette.seeds compiles to '
-      + 'modeDeltas[light] only (base 0, light 22) — so the dark cell receives nothing. The same document moves '
-      + '40 channels on bithire and 42 on evnto, and rottay/light measures the control normally. Owner: the '
-      + 'derivation lane',
-  },
-]);
+export const INERT_PAIRS = Object.freeze([]);
 
 /**
  * An entry with no `theme` covers every mode of that pair; an entry WITH one
@@ -303,11 +293,9 @@ const isDeclaredInert = (inertPairs, vertical, theme, scenario) =>
  * BOTH halves are returned because both SHIP. The artifact is a base rule plus
  * one rule per mode the tenant changes, and a mode selector carries one
  * attribute more than the base, so wherever a mode speaks it wins. A probe that
- * applied `variables` alone would measure the base block in BOTH modes: on
- * bithire and evnto that reads the light palette in the dark cell, and on
- * rottay -- whose default mode is dark, so `ingress/foundation/document-patch`
- * routes the authored light palette to `modes.light` -- it reads an empty map
- * and reports a live decision inert.
+ * applied `variables` alone would measure the base block in BOTH modes, which
+ * reads every non-default mode's own block as if it did not exist and reports
+ * live decisions inert.
  */
 async function compileDocument({ compile, vertical, slug, decisions }) {
   const compilation = compile({
