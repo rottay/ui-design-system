@@ -31,14 +31,28 @@
  * Scoped (non-root) declarations are a local restatement, not the root
  * authority this gate is about, and are reported separately.
  *
- * DECREASE-ONLY, WITH A FLOOR. `baseline/index.json` pins today's ungoverned
- * count and the governed ratio may never fall below `ratioFloor`. The floor
- * is a PROVISIONAL, self-pinned value: F-10's own closure criterion is
- * `skins.stateGoverned >= 80 %`, measured on the Modern-skin population,
- * which is not this gate's population, so 0.85 here is this lane's choice
- * pending an owner decision -- not F-10's threshold. (Re-labelled per the K3
- * audit HOLD of WO-DER-02, 2026-09-08, WIP-02 adjudication.) Both clauses
- * bite; the drill proves it.
+ * EVERY UNGOVERNED ROW IS DISPOSED BY NAME. `ungovernedDispositions` in the
+ * baseline names each remaining channel and the work order that closes it, and
+ * the gate holds that list to the tree in both directions: a new ungoverned
+ * channel with no disposition fails, and a disposition whose channel is gone
+ * fails. A count with a prose category behind it is how the list went stale.
+ *
+ * DECREASE-ONLY, WITH TWO FLOORS. `baseline/index.json` pins today's
+ * ungoverned count and the governed ratio may never fall below `ratioFloor`.
+ * The ratio floor is a PROVISIONAL, self-pinned value: F-10's own closure
+ * criterion is `skins.stateGoverned >= 80 %`, measured on the Modern-skin
+ * population, which is not this gate's population, so 0.85 here is this
+ * lane's choice pending an owner decision -- not F-10's threshold.
+ * (Re-labelled per the K3 audit HOLD of WO-DER-02, 2026-09-08, WIP-02
+ * adjudication.) Both clauses bite; the drill proves it.
+ *
+ * NON-VACUITY. A ratio is only evidence if something was divided. Audit 100
+ * (F6) drove the gate green on a mutated tree that kept all 349 stylesheets
+ * and renamed every `--ds-` prefix away: population 0, ratio 1, no failures.
+ * `corpusFloor` cannot see that -- the files are all still there -- so
+ * `populationFloor` pins the measured channel population too and a population
+ * of zero is named as its own failure. The `population === 0 -> ratio 1`
+ * convenience below is safe only because this clause fires first.
  *
  * Usage:
  *   node scripts/check/tokens/states/material-arm/index.mjs [--quiet] [--json]
@@ -265,6 +279,13 @@ export const BASELINE_PATH = join(HERE, 'baseline/index.json');
 /** A corpus that shrank to nothing is a gate that stopped looking. */
 export const CORPUS_FLOOR = 300;
 
+/**
+ * A corpus of stylesheets none of which still declares a state channel is a
+ * gate that is looking and seeing nothing. The default is the non-vacuity
+ * minimum; `baseline/index.json` pins the real population above it.
+ */
+export const POPULATION_FLOOR = 1;
+
 export function runGate({ root = CORE_ROOT, baseline, quiet = false, json = false } = {}) {
   const pinned = baseline ?? JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
   const report = measure({ root });
@@ -274,10 +295,33 @@ export function runGate({ root = CORE_ROOT, baseline, quiet = false, json = fals
       `corpus collapsed to ${report.corpus} stylesheets (floor ${pinned.corpusFloor ?? CORPUS_FLOOR}): the gate is looking where the CSS is not`,
     );
   }
+  const populationFloor = pinned.populationFloor ?? POPULATION_FLOOR;
+  if (report.population < populationFloor) {
+    failures.push(
+      `population collapsed to ${report.population} root-scope state channels (floor ${populationFloor}) `
+      + `across ${report.corpus} stylesheets: the gate is certifying an empty set, not a governed one`,
+    );
+  }
   if (report.ungoverned > pinned.ungoverned) {
     failures.push(
       `${report.ungoverned} component state channels declare no material arm; the baseline is ${pinned.ungoverned} and this ratchet is decrease-only`,
     );
+  }
+  if (Array.isArray(pinned.ungovernedDispositions)) {
+    const disposed = new Set(pinned.ungovernedDispositions.map((entry) => entry.channel));
+    const measured = new Set(report.rows.map((row) => row.name));
+    const undisposed = [...measured].filter((name) => !disposed.has(name));
+    const stale = [...disposed].filter((name) => !measured.has(name));
+    if (undisposed.length > 0) {
+      failures.push(
+        `${undisposed.length} ungoverned channel(s) carry no disposition in the baseline: ${undisposed.join(', ')}`,
+      );
+    }
+    if (stale.length > 0) {
+      failures.push(
+        `${stale.length} baseline disposition(s) name a channel the tree no longer has: ${stale.join(', ')}`,
+      );
+    }
   }
   if (report.ratio < pinned.ratioFloor) {
     failures.push(

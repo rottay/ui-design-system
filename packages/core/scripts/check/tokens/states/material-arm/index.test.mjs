@@ -5,6 +5,10 @@
  * can fail on is driven red here against a fixture tree and then back to
  * green, and every exclusion is shown to exclude for its stated reason rather
  * than because the row happened to be missed.
+ *
+ * The population drills replay the mutation of audit 100 (F6): keep every
+ * stylesheet, rename every `--ds-` prefix away, and the three original clauses
+ * all stay green on nothing at all.
  */
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
@@ -14,7 +18,7 @@ import test from 'node:test';
 
 import { classify, measure, runGate } from './index.mjs';
 
-const BASELINE = { ungoverned: 0, ratioFloor: 0.8, corpusFloor: 1 };
+const BASELINE = { ungoverned: 0, ratioFloor: 0.8, corpusFloor: 1, populationFloor: 1 };
 
 function fixture(css, { path = 'src/foundation/tokens/css/probe/index.css' } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'state-material-arm-'));
@@ -65,6 +69,66 @@ test('an empty corpus fails instead of passing by looking at nothing', () => {
   try {
     const { failures } = runGate({ root, baseline: { ...BASELINE, corpusFloor: 5 }, quiet: true });
     assert.match(failures.join('\n'), /corpus collapsed/);
+  } finally { cleanup(); }
+});
+
+test('the audit-100 mutation is caught: a full corpus with an empty population', () => {
+  const { root, cleanup } = fixture(GOVERNED.replaceAll('--ds-', '--audit-'));
+  try {
+    for (let i = 0; i < 4; i += 1) {
+      const file = join(root, `src/components/probe-${i}/index.css`);
+      mkdirSync(join(file, '..'), { recursive: true });
+      writeFileSync(file, ':root {\n  --audit-widget-bg-hover: #ff0000;\n}\n');
+    }
+    const { report, failures } = runGate({
+      root,
+      baseline: { ...BASELINE, corpusFloor: 5 },
+      quiet: true,
+    });
+    assert.equal(report.corpus, 5);
+    assert.equal(report.population, 0);
+    assert.equal(report.ratio, 1);
+    assert.equal(failures.length, 1);
+    assert.match(failures[0], /population collapsed to 0 root-scope state channels/);
+  } finally { cleanup(); }
+});
+
+test('the pinned population floor bites before the population reaches zero', () => {
+  const { root, cleanup } = fixture(GOVERNED);
+  try {
+    const { report, failures } = runGate({
+      root,
+      baseline: { ...BASELINE, populationFloor: 2 },
+      quiet: true,
+    });
+    assert.equal(report.population, 1);
+    assert.match(failures.join('\n'), /floor 2/);
+  } finally { cleanup(); }
+});
+
+test('the disposition list is held to the tree in both directions', () => {
+  const { root, cleanup } = fixture(`${GOVERNED}:root {\n  --ds-widget-bg-active: #ff0000;\n}\n`);
+  try {
+    const undisposed = runGate({
+      root,
+      baseline: { ...BASELINE, ungoverned: 1, ungovernedDispositions: [] },
+      quiet: true,
+    });
+    assert.match(undisposed.failures.join('\n'), /carry no disposition .*--ds-widget-bg-active/);
+
+    const stale = runGate({
+      root,
+      baseline: {
+        ...BASELINE,
+        ungoverned: 1,
+        ungovernedDispositions: [
+          { channel: '--ds-widget-bg-active', owner: 'WO-FAM-01' },
+          { channel: '--ds-widget-bg-selected', owner: 'WO-FAM-01' },
+        ],
+      },
+      quiet: true,
+    });
+    assert.match(stale.failures.join('\n'), /no longer has: --ds-widget-bg-selected/);
   } finally { cleanup(); }
 });
 
