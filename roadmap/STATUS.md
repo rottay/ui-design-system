@@ -100,7 +100,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 97/159 work orders done (61%)
+## Work-order burn-down — 97/160 work orders done (61%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -113,7 +113,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [architecture](./architecture.md) | 11 | 0 | 10 | 21 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
-| [consumer-contract](./consumer-contract.md) | 5 | 0 | 1 | 6 |
+| [consumer-contract](./consumer-contract.md) | 5 | 0 | 2 | 7 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
 | [derivation](./derivation.md) | 4 | 2 | 1 | 7 |
 | [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
@@ -129,7 +129,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | A · The apps can build | reached | WO-CON-04, WO-CON-05 | none | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | WO-FAM-01, WO-EVI-05 | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 37 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 60 work orders of the audit-2026-09-05 programme | 38 of 60 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -171,6 +171,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-INV-05 | Motion invariant: one vocabulary, zero inline literals, lint over every modern surface | S | platform-invariants | audit-2026-09-05 |
 | WO-EVI-01 | theme-graph: derived cascade graph with a byte-exact check | M | evidence-graph | audit-2026-09-05 |
 | WO-EVI-03 | Tests through the door: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines | M | evidence-graph | audit-2026-09-05 |
+| WO-CON-07 | The public RSC boundary: pure owners reachable without the client barrel | S | consumer-contract | audit-2026-09-05 |
 
 ## Blocked (dependencies or phase claim lock)
 

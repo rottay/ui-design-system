@@ -5279,6 +5279,27 @@
    "evidence": null
   },
   {
+   "id": "WO-CON-07",
+   "title": "The public RSC boundary: pure owners reachable without the client barrel",
+   "lane": "consumer-contract",
+   "order": 7,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-CON-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "OWNER-AUTHORIZED 2026-09-11 (audit/101-autonomy-check-2026-09-11/reply-to-kimi.md item 1): bounded RSC-boundary repair - expose the pure engine-identity owner through a server-safe public boundary and correct the showroom's server-side consumers; NOT a barrel redo, NOT a global use-client removal. Blocks WO-EMI-02's F-20 browser evidence. Execute after WO-DER-05 lands (no owner overlap).",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null
+  },
+  {
    "id": "WO-DER-07",
    "title": "BitHire reference identity: three candidate decision sets rendered for the owner to pick",
    "lane": "derivation",
