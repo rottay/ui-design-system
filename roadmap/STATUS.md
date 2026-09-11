@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T15:08:56.259Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T16:37:28.909Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,16 +28,17 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T15:08:56.259Z.
+**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T16:37:28.909Z.
 
-**measured on the 8-family sample: 15/22 move at least one sampled family** — MEASURED by that run.
+**measured on the 8-family sample: 17/22 move at least one sampled family** — MEASURED by that run.
 
 > Two halves, two statuses. The `n/22` figure is the audit's recorded effect class for today's control catalog, carried in the probe's catalog with its provenance; the `+m/10 new` figure and the measured line are derived by the run itself. Family movement is a sample of 8 of the 25 cascade families (`button`, `card`, `flex`, `grid`, `input`, `skeleton`, `space`, `stack`), so a decision can move a real family the sample does not carry; the whole-artifact comparison beside it is not a sample.
 
 Whole artifact: 28/29 kit decisions change the compiled tenant artifact today.
 
-Recorded vs measured — 4 row(s) disagree; neither side is authority, and the disagreement is published rather than resolved:
+Recorded vs measured — 5 row(s) disagree; neither side is authority, and the disagreement is published rather than resolved:
 - `palette.status-seeds` — recorded-full-moved-nothing: 0 channels moved, 0 sampled families
+- `palette.dark-mode` — recorded-none-moved: button-modern-md
 - `shape.radius-scale` — recorded-none-moved: button-modern-md, card-modern-md, input-modern-md, skeleton-card-line, skeleton-form-action
 - `spacing.rhythm` — recorded-none-moved: flex-modern-preset-gap, grid-modern-preset-gap, space-modern-preset-gap, stack-modern-preset-gap
 - `navigation.sidebar-tone` — recorded-full-moved-nothing: 6 channels moved, 0 sampled families
@@ -88,7 +89,7 @@ Recorded vs measured — 4 row(s) disagree; neither side is authority, and the d
 | export | `.#assembleTenantThemeArtifact` | added: the ONE artifact builder both publication transports share — digest, scopes, chart floor, CSS and the engine projection stated once; it takes `{ intent, identity, verticalEnvelope, document }` and reads provenance only from the resolution, never from a parameter beside the intent | minor | `r2-publication-parity.md` |
 | export | `.#TenantThemeArtifactAssembly` | added: that builder's input type | minor | `r2-publication-parity.md` |
 
-Also pending, declaring no public surface movement: `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
+Also pending, declaring no public surface movement: `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `seeds-render-mode.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
 
 ## Family acceptance — the sealed Modern Rescue adjudication
 
