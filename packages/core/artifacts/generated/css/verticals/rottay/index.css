@@ -22812,7 +22812,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
      mode's mechanical minimum (measured: 36px x 0.9 = 32.4px, F8). */
   min-block-size: max(
     var(--_ds-button-height-floor, 36px),
-    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale))
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
   );
   gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale));
   padding-block: 0;
@@ -23043,7 +23043,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   inline-size: 100%;
   min-block-size: max(
     var(--_ds-button-height-floor, 36px),
-    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale))
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
   );
   block-size: auto;
   padding-block: calc(
@@ -23173,7 +23173,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 .rottay-button.rottay-button--modern[data-shape='circle'] {
   inline-size: calc(
-    var(--ds-button-resolved-height) * var(--ds-density-effective-scale)
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   border-radius: var(--ds-radius-full);
 }
@@ -24335,7 +24335,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * Phase C0 (material-grammar canary) additions:
  *
  *   - nest-radius law matured: the inset is now bounded by max(governed
- *     `--ds-radius-nest-inset`, parent radius / 2) instead of a raw 8px, so
+ *     `--ds-radius-nest-inset`, parent radius * `--ds-radius-nest-ratio`)
+ *     instead of a raw 8px, so
  *     nested corners stay concentric across the tenant radius scale
  *     (contained-radius tenants no longer derive near-square children) and
  *     `radius: none` still derives 0.
@@ -24699,11 +24700,14 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
      wear. Concentric derivation — the parent's resolved radius minus a
      bounded inset. The inset is the SMALLER of the body padding (the true
      distance between the two strokes) and the LARGER of the governed
-     `--ds-radius-nest-inset` floor and half the parent radius, so the
-     nested corner keeps visibly related curvature across the whole
-     radius-scale instead of collapsing to a square on contained-radius
-     tenants (a 10px parent used to derive a 2px child; it now derives a
-     concentric 5px). `radius: none` still derives 0. Published on the body
+     `--ds-radius-nest-inset` floor and `--ds-radius-nest-ratio` of the
+     parent radius, so the nested corner keeps visibly related curvature
+     across the whole radius-scale instead of collapsing to a square on
+     contained-radius tenants (a 10px parent used to derive a 2px child; it
+     now derives a concentric 5px). Both operands are what `shape.nesting`
+     states: at their resting 4px/0.5 this is the law as written, and at
+     0px/0 the inset collapses and the nested corner IS the parent's.
+     `radius: none` still derives 0. Published on the body
      (not the root) so a nested card — and any SemanticSurface landing in
      this body — reads the PARENT's value through inheritance while its own
      body recomputes for the next level down. */
@@ -24713,7 +24717,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
       var(--_ds-card-radius-current, var(--ds-card-radius)) -
         min(
           var(--ds-card-instance-padding, var(--ds-card-padding-current, 0px)),
-          max(var(--ds-radius-nest-inset, 4px), calc(var(--_ds-card-radius-current, var(--ds-card-radius)) / 2))
+          max(var(--ds-radius-nest-inset, 4px), calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-radius-nest-ratio, 0.5)))
         )
     )
   );
@@ -25558,7 +25562,7 @@ input.rottay-input.rottay-input--modern::selection {
   --ds-input-resolved-radius: var(--ds-input-xs-radius, var(--ds-input-xs-border-radius, var(--ds-radius-sm)));
   --_ds-input-resolved-gap: var(--ds-input-xs-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
-    var(--ds-input-xs-height) * var(--ds-density-effective-scale)
+    var(--ds-input-xs-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding-inline: var(--ds-input-xs-padding-x);
   font-size: var(--ds-input-xs-font-size);
@@ -25569,7 +25573,7 @@ input.rottay-input.rottay-input--modern::selection {
   --ds-input-resolved-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-sm)));
   --_ds-input-resolved-gap: var(--ds-input-sm-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
-    var(--ds-input-sm-height) * var(--ds-density-effective-scale)
+    var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding-inline: var(--ds-input-sm-padding-x);
   font-size: var(--ds-input-sm-font-size);
@@ -25580,7 +25584,7 @@ input.rottay-input.rottay-input--modern::selection {
   --ds-input-resolved-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-md)));
   --_ds-input-resolved-gap: var(--ds-input-md-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
-    var(--ds-input-md-height) * var(--ds-density-effective-scale)
+    var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding-inline: var(--ds-input-md-padding-x);
   font-size: var(--ds-input-md-font-size);
@@ -25591,7 +25595,7 @@ input.rottay-input.rottay-input--modern::selection {
   --ds-input-resolved-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-lg)));
   --_ds-input-resolved-gap: var(--ds-input-lg-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
-    var(--ds-input-lg-height) * var(--ds-density-effective-scale)
+    var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding-inline: var(--ds-input-lg-padding-x);
   font-size: var(--ds-input-lg-font-size);
@@ -25602,7 +25606,7 @@ input.rottay-input.rottay-input--modern::selection {
   --ds-input-resolved-radius: var(--ds-input-xl-radius, var(--ds-input-xl-border-radius, var(--ds-radius-xl)));
   --_ds-input-resolved-gap: var(--ds-input-xl-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
-    var(--ds-input-xl-height) * var(--ds-density-effective-scale)
+    var(--ds-input-xl-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding-inline: var(--ds-input-xl-padding-x);
   font-size: var(--ds-input-xl-font-size);
@@ -33578,7 +33582,8 @@ input.rottay-input.rottay-input--modern[type='number'] {
       calc(
         (
           var(--_ds-form-field-control-height, var(--ds-input-md-height)) *
-            var(--ds-density-effective-scale) -
+            var(--ds-density-effective-scale) *
+            var(--ds-control-height-scale, 1) -
           1em * var(--ds-input-label-line-height, var(--ds-line-height-snug))
         ) / 2
       )
@@ -34437,13 +34442,13 @@ input.rottay-input.rottay-input--modern[type='number'] {
 
 /* Public size geometry (density-scaled, physical px channels). */
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='sm'] {
-  min-block-size: calc(var(--ds-tag-input-sm-height, 32px) * var(--ds-density-effective-scale));
+  min-block-size: calc(var(--ds-tag-input-sm-height, 32px) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='md'] {
-  min-block-size: calc(var(--ds-tag-input-md-height, 40px) * var(--ds-density-effective-scale));
+  min-block-size: calc(var(--ds-tag-input-md-height, 40px) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='lg'] {
-  min-block-size: calc(var(--ds-tag-input-lg-height, 48px) * var(--ds-density-effective-scale));
+  min-block-size: calc(var(--ds-tag-input-lg-height, 48px) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size] {
@@ -34809,7 +34814,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
    relays are private implementation, NOT customization knobs. */
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='sm'] {
   --_ds-input-number-resolved-height: calc(
-    var(--ds-input-number-sm-height, var(--ds-input-sm-height, 32px)) * var(--ds-density-effective-scale)
+    var(--ds-input-number-sm-height, var(--ds-input-sm-height, 32px)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   --_ds-input-number-resolved-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
   padding-block: var(--ds-input-number-sm-padding-y, var(--ds-input-sm-padding-y, 4px));
@@ -34818,7 +34823,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='md'] {
   --_ds-input-number-resolved-height: calc(
-    var(--ds-input-number-md-height, var(--ds-input-md-height, 36px)) * var(--ds-density-effective-scale)
+    var(--ds-input-number-md-height, var(--ds-input-md-height, 36px)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   --_ds-input-number-resolved-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
   padding-block: var(--ds-input-number-md-padding-y, var(--ds-input-md-padding-y, 6px));
@@ -34827,7 +34832,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='lg'] {
   --_ds-input-number-resolved-height: calc(
-    var(--ds-input-number-lg-height, var(--ds-input-lg-height, 40px)) * var(--ds-density-effective-scale)
+    var(--ds-input-number-lg-height, var(--ds-input-lg-height, 40px)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   --_ds-input-number-resolved-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
   padding-block: var(--ds-input-number-lg-padding-y, var(--ds-input-lg-padding-y, 8px));
@@ -35531,7 +35536,7 @@ div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-pa
    relays (height floor + per-size edge) are private implementation, NOT
    customization knobs -- same idiom as `--_ds-input-resolved-height`. */
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='xs'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-xs-radius, var(--ds-input-xs-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-xs-padding-x);
   font-size: var(--ds-input-xs-font-size);
@@ -35539,7 +35544,7 @@ div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-pa
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='sm'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-sm-padding-x);
   font-size: var(--ds-input-sm-font-size);
@@ -35547,7 +35552,7 @@ div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-pa
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='md'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-md-padding-x);
   font-size: var(--ds-input-md-font-size);
@@ -35555,7 +35560,7 @@ div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-pa
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='lg'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-lg-padding-x);
   font-size: var(--ds-input-lg-font-size);
@@ -35563,7 +35568,7 @@ div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-pa
 }
 
 .ds-password-input.ds-password-input--modern[data-part='root'][data-size='xl'] {
-  --_ds-password-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale));
+  --_ds-password-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --_ds-password-resolved-radius: var(--ds-password-radius, var(--ds-input-xl-radius, var(--ds-input-xl-border-radius, var(--ds-radius-input, var(--ds-radius-md)))));
   padding-inline: var(--ds-input-xl-padding-x);
   font-size: var(--ds-input-xl-font-size);
@@ -36012,17 +36017,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Size geometry + resolved thumb travel (density-scaled). */
 .ds-switch.ds-switch--modern[data-part='root'][data-size='sm'] [data-part='track'] {
   --ds-switch-resolved-track-w: calc(var(--ds-switch-sm-width) * var(--ds-density-effective-scale));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-sm-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-switch-resolved-thumb: calc(var(--ds-switch-sm-thumb, 0.75rem) * var(--ds-density-effective-scale));
 }
 .ds-switch.ds-switch--modern[data-part='root'][data-size='md'] [data-part='track'] {
   --ds-switch-resolved-track-w: calc(var(--ds-switch-md-width) * var(--ds-density-effective-scale));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-md-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-switch-resolved-thumb: calc(var(--ds-switch-md-thumb, 1rem) * var(--ds-density-effective-scale));
 }
 .ds-switch.ds-switch--modern[data-part='root'][data-size='lg'] [data-part='track'] {
   --ds-switch-resolved-track-w: calc(var(--ds-switch-lg-width) * var(--ds-density-effective-scale));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-lg-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-switch-resolved-thumb: calc(var(--ds-switch-lg-thumb, 1.25rem) * var(--ds-density-effective-scale));
 }
 
@@ -36342,27 +36347,27 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    token-layer outage cannot shift the track geometry. */
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xs-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xs-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xs-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xs-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='sm'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-sm-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-sm-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-sm-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='md'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-md-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-md-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-md-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='lg'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-lg-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-lg-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-lg-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='xl'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xl-width) * var(--ds-density-effective-scale));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xl-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xl-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xl-dot) * var(--ds-density-effective-scale));
 }
 
@@ -38732,7 +38737,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      multi-line labels grow past it without drifting the control. */
   min-block-size: calc(
     var(--_ds-form-control-height, var(--ds-input-md-height)) *
-    var(--ds-density-effective-scale)
+    var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   /* The vertical-layout bottom gap would skew the optical centering. */
   padding-block-end: 0;
@@ -39499,7 +39504,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-button.rottay-button--modern.rottay-button-icon.ds-button-icon[data-icon-only='true'] {
   flex: 0 0 auto;
   min-inline-size: calc(
-    var(--ds-button-resolved-height) * var(--ds-density-effective-scale)
+    var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding: 0;
 }
@@ -40426,19 +40431,19 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='xs'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xs-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-xs-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='sm'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-sm-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-sm-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='md'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-md-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-md-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='lg'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-lg-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-lg-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='xl'] {
-  --_ds-input-addon-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xl-font-size);
+  --_ds-input-addon-resolved-height: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)); font-size: var(--ds-input-xl-font-size);
 }
 
 /* State sync across the compact join: a focused, invalid, warning, success or
@@ -43944,17 +43949,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='sm'],
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='sm'] {
   --_ds-datepicker-trigger-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
-  --_ds-datepicker-trigger-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='md'],
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='md'] {
   --_ds-datepicker-trigger-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
-  --_ds-datepicker-trigger-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-size='lg'],
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-size='lg'] {
   --_ds-datepicker-trigger-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-input, var(--ds-radius-md))));
-  --_ds-datepicker-trigger-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  --_ds-datepicker-trigger-height: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input']::placeholder,
@@ -45022,19 +45027,19 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Public size geometry on the canonical input scale + the density plane
    (drained from the engine's inline getSizeStyle; same fallbacks). */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-size='sm'] [data-part='input'] {
-  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   padding-block: var(--ds-spacing-1);
   padding-inline: var(--ds-input-sm-padding-x);
   font-size: var(--ds-input-sm-font-size);
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-size='md'] [data-part='input'] {
-  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   padding-block: calc(var(--ds-spacing-3) / 2);
   padding-inline: var(--ds-input-md-padding-x);
   font-size: var(--ds-input-md-font-size);
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-size='lg'] [data-part='input'] {
-  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-input-lg-padding-x);
   font-size: var(--ds-input-lg-font-size);
@@ -45189,7 +45194,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   align-items: center;
   box-sizing: border-box;
   inline-size: 100%;
-  min-block-size: calc(var(--ds-select-option-height, 2.25rem) * var(--ds-density-effective-scale));
+  min-block-size: calc(var(--ds-select-option-height, 2.25rem) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   padding-block: var(--ds-spacing-1);
   padding-inline: var(--ds-spacing-2);
   border-radius: var(--ds-radius-sm);
@@ -46490,7 +46495,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   display: flex;
   inline-size: 100%;
   min-block-size: calc(
-    var(--ds-select-option-height) * var(--ds-density-effective-scale)
+    var(--ds-select-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding: var(--ds-select-option-padding-y, 0.48rem) var(--ds-select-option-padding-x, 0.62rem);
   align-items: center;
@@ -46707,7 +46712,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
     min-block-size: max(
-      calc(var(--ds-select-option-height) * var(--ds-density-effective-scale)),
+      calc(var(--ds-select-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)),
       var(--ds-select-touch-target-min, 44px)
     );
   }
@@ -47169,17 +47174,17 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    B6-02): the Input family's certified height/font/padding channels, scaled
    by the governed density channel (tag-input idiom). */
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="small"] {
-  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   font-size: var(--ds-input-sm-font-size);
   padding: 4px var(--ds-input-sm-padding-x);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="middle"] {
-  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   font-size: var(--ds-input-md-font-size);
   padding: 6px var(--ds-input-md-padding-x);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="large"] {
-  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   font-size: var(--ds-input-lg-font-size);
   padding: 8px var(--ds-input-lg-padding-x);
 }
@@ -63875,7 +63880,7 @@ html[data-ds-motion="reduced"]
   min-inline-size: 0;
   max-inline-size: var(--ds-tabs-item-max-width, 18rem);
   block-size: calc(
-    var(--_ds-tabs-current-height) * var(--ds-density-effective-scale)
+    var(--_ds-tabs-current-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   flex: 0 0 auto;
   align-items: center;
@@ -64464,7 +64469,7 @@ html[data-ds-motion="reduced"]
   .rottay-tabs--modern[data-part='root'] [data-part='tab-button'] {
     min-block-size: max(
       44px,
-      calc(var(--_ds-tabs-current-height) * var(--ds-density-effective-scale))
+      calc(var(--_ds-tabs-current-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
     );
   }
 

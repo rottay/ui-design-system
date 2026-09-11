@@ -34,17 +34,11 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
 const NESTING_LAW: Readonly<
   Record<
     NonNullable<NonNullable<BrandTheme["surfaces"]>["nesting"]>,
-    Readonly<Record<string, string>>
+    { readonly inset: string; readonly ratio: string }
   >
 > = {
-  concentric: {
-    "--ds-radius-nest-inset": "4px",
-    "--ds-radius-nest-ratio": "0.5",
-  },
-  uniform: {
-    "--ds-radius-nest-inset": "0px",
-    "--ds-radius-nest-ratio": "0",
-  },
+  concentric: { inset: "4px", ratio: "0.5" },
+  uniform: { inset: "0px", ratio: "0" },
 };
 
 /**
@@ -64,5 +58,13 @@ export function deriveNestingLaw(bt: BrandTheme): Record<string, string> {
   ) {
     return {};
   }
-  return { ...NESTING_LAW[authored as keyof typeof NESTING_LAW] };
+  // Named channel by named channel, never a spread of the table: the emission
+  // graph the hook contract derives reads assignment KEYS, so a channel that
+  // only ever appears inside a lookup table is emitted by a compiler nobody can
+  // see owning it -- and it then reads as an app-tunable hook.
+  const law = NESTING_LAW[authored as keyof typeof NESTING_LAW];
+  return {
+    "--ds-radius-nest-inset": law.inset,
+    "--ds-radius-nest-ratio": law.ratio,
+  };
 }
