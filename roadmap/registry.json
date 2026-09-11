@@ -4948,7 +4948,7 @@
    "lane": "evidence-graph",
    "order": 2,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAT-03",
     "WO-DER-01"
@@ -4958,9 +4958,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-23, F-72, F-74, F-75, F-76, F-86, F-54; supersedes: WO-GAT-09, WO-ARC-19, WO-GAT-11, WO-SKIN-08",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "Kimi K3",
+   "claimedAt": "2026-09-11",
+   "progressLog": [
+    {
+     "at": "2026-09-11 07:18",
+     "by": "Kimi K3",
+     "note": "INSTRUMENT BUILD-OUT LANDED (8 lot commits + integration; Fable LAND after one bounded return: probe applies artifact as shipped with modeDeltas, false INERT_PAIRS entry deleted, NC2 NON-EVIDENTIAL while states positive is 0 with limits published, denominators pin population minus pinned unmountable/unsettled, artifact-coverage per-artifact with drill, tracked symlink removed, claims corrected). Causal instrument exists with drills proven red on planted mutants; variant-parity/mirror-parity/root-checklists retired with ledger (F-54). By-axis probe: palette-only 0% on 30/36 evidential cells (6 non-evidential = rottay/dark mode-scoped inert entry), positives typography 99.4/rhythm 17.1/shape 15.5/depth 6.0/motion 4.2/states 0.0 - NO threshold applied; fleet >=80% acceptance and milestone B stay OPEN. axis-difference excluded from CI pending browser in the core job (ci.yml). Honest limits: APCA baseline 16 pairings pinned shrink-only; STATIC_UNCOVERED 7 with measured causes. NEW PRODUCT FINDING routed to its own lot (next dispatch): palette.seeds routes to modes.light on dark-default rottay; correct law = mode-agnostic seeds to default-mode base + APCA-safe derived twin (Fable-confirmed repro). Remaining for full close: fleet population via family cuts + owner floors."
+    }
+   ]
   },
   {
    "id": "WO-EVI-03",
