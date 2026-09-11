@@ -127,12 +127,10 @@ export interface TenantTokenOverrides {
  *
  * WHAT IT NO LONGER CARRIES, and why. `brandTheme`, `tokenOverrides`,
  * `personality`, `appearance` and `engine` were removed: each was a second
- * authority over a question the compiled artifact already answers. A tenant's
- * visual identity is lowered ONCE -- `Theme -> compileTheme -> artifact` -- and
- * reaches the runtime as the mounted artifact's CSS plus its
- * `ThemeCompilation.runtime`; the engine is the vertical roster's. A config
- * that also carried those fields let the same question be answered twice, by
- * two inputs that drift the first time only one is edited.
+ * authority over a question the compiled artifact already answers. Visual
+ * identity is lowered ONCE -- `Theme -> compileTheme -> artifact` -- and
+ * reaches the runtime as that artifact's CSS plus its
+ * `ThemeCompilation.runtime`; the engine is the vertical roster's.
  *
  * HOW A TENANT REFERENCES ITS ARTIFACT. By identity: `slug` and `vertical` are
  * the keys the compiled artifact is published and admitted under

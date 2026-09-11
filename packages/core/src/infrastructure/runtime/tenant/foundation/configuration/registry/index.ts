@@ -38,23 +38,16 @@ function deepFreeze<T>(value: T): T {
 }
 
 /**
- * The bounded, NON-VISUAL behavior a code-owned theme governs.
+ * The bounded, NON-VISUAL behavior a code-owned theme governs: the motion dial,
+ * the density posture, the icon posture, the decided channels and the recipe
+ * selection -- facts no stylesheet can express.
  *
- * Stripping `brandTheme` off the runtime projection is what keeps static CSS
- * the sole visual emitter, but the same field also carried three governed
- * BEHAVIOR channels that no stylesheet can express: the motion dial, the
- * root density posture, and the icon expressive posture. Stripping it
- * wholesale silently demoted every first-party vertical to its motion-profile
- * envelope default -- bithire's authored 0.55 intensity fell to calm's 0.3.
- *
- * This is deliberately NOT a `TenantConfig` field. Adding one would widen the
- * public/DB-writable contract and give a customer tenant a second, uncensused
- * behavior channel. It is instead keyed off the projection's IDENTITY, so only
- * an object this module itself produced can ever carry it, and it is narrowed
- * to exactly the fields the runtime resolvers read: `intensity` and
- * `entranceDuration` from the authored dial, plus the governed expressive
- * selection. Visual personality (`entrance`, `hoverLift`, `skeletonStyle`,
- * palette, chrome, ...) does not ride along.
+ * Deliberately NOT a `TenantConfig` field: one would widen the public/DB
+ * contract with a second, uncensused behavior channel. It is keyed off the
+ * projection's IDENTITY, so only an object this module produced can carry it,
+ * and it is narrowed to exactly what the runtime resolvers read. Visual
+ * personality (`entrance`, `hoverLift`, palette, chrome, ...) does not ride
+ * along.
  */
 export interface CodeOwnedGovernedBehavior {
   /** Authored static motion inputs, narrowed to the dial the runtime resolves. */
@@ -67,24 +60,18 @@ export interface CodeOwnedGovernedBehavior {
   /**
    * The personality channels this tenant DECIDED -- names only, no values.
    *
-   * A code-owned vertical's authored theme is read once, at registration, and
-   * never reaches the config; the instance-override policy still has to know
-   * which channels the tenant decided in order to refuse an instance selection
-   * on one of them. The names travel here for the same reason the motion dial
-   * does: it is a governed fact no stylesheet can express, and a list of
+   * The authored theme is read once, at registration, and never reaches the
+   * config; the instance-override policy still has to know which channels the
+   * tenant decided in order to refuse a selection on one of them. A list of
    * channel names is not a visual payload -- nothing here can paint.
    */
   readonly decidedChannels?: readonly string[];
   /**
    * The validated recipe-profile id this tenant's artifact compiled (D-26).
    *
-   * `rottay` selects `technical-sharp` and `bithire` `network-professional`;
-   * both were invisible in the product because the provider read the profile
-   * only from a DB appearance, so every first-party vertical resolved `NONE`.
-   * The id is a SELECTION, not paint --
-   * the same id the recipes deriver publishes as its provenance channel -- so
-   * it travels on the identity-keyed behavior slot beside the motion dial
-   * rather than re-entering the config as a visual field.
+   * A SELECTION, not paint -- the same id the recipes deriver publishes as its
+   * provenance channel -- so it travels on the identity-keyed behavior slot
+   * beside the motion dial rather than re-entering the config.
    */
   readonly recipeProfile?: string;
 }
@@ -114,15 +101,14 @@ function collectDeclaredChannels(
 
 /**
  * The personality channels a tenant decided, from the ONE place a decision can
- * now come from: the compile that produced the tenant's artifact.
+ * come from: the compile that produced its artifact.
  *
- * A `TenantConfig` carries no visual payload at all, so it declares nothing.
- * A code-owned vertical's decisions are captured at registration -- while the
- * authored BrandTheme is still in hand -- and travel on the identity-keyed
- * behavior slot; a tenant that published an artifact declares them through the
- * compiled `ThemeCompilation.runtime.personality` the mount carries, plus the
- * semantic density posture of its normalized appearance, which decides the
- * same padding channel the personality card dimension carries.
+ * A `TenantConfig` declares nothing. A code-owned vertical's decisions are
+ * captured at registration, while the authored theme is still in hand, and
+ * travel on the identity-keyed slot; a published tenant declares them through
+ * the compiled `ThemeCompilation.runtime.personality` the mount carries, plus
+ * the semantic density posture of its normalized appearance, which decides the
+ * same padding channel the card dimension carries.
  */
 export function tenantDecidedChannels(
   config: TenantConfig | undefined,
@@ -251,14 +237,9 @@ export function isCodeOwnedTenantConfig(
 }
 
 /**
- * Returns the immutable, identity-only runtime projection of an exact
- * code-owned config.
- *
- * It DISCARDS NOTHING VISUAL, because there is nothing visual left to discard:
- * `TenantConfig` carries no `brandTheme`, `tokenOverrides`, `personality` or
- * `appearance`, so the only narrowing left is branding, reduced to identity.
- * The visual authority is the mounted artifact; static CSS remains the sole
- * emitter for a code-owned vertical.
+ * The immutable, identity-only runtime projection of an exact code-owned
+ * config. It discards nothing visual because `TenantConfig` carries nothing
+ * visual: the only narrowing left is branding, reduced to identity.
  */
 export function getCodeOwnedRuntimeConfig(config: TenantConfig): TenantConfig {
   if (!isCodeOwnedTenantConfig(config)) {

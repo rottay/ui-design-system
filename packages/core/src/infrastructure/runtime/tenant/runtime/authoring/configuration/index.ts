@@ -1,11 +1,11 @@
 /**
  * @fileoverview Tenant authoring utilities.
- * @description Projects one minimal authoring draft (slug, name, primaryColor)
- * into the two things an onboarding flow needs and which are deliberately NOT
- * the same object: the tenant's IDENTITY (`createTenantConfig`) and its VISUAL
- * SOURCE (`createTenantBrandTheme`). A `TenantConfig` carries no paint, so the
- * personality preset and density posture a draft chooses are projected onto the
- * BrandTheme the compiler lowers -- never back onto the config.
+ * @description Projects one minimal draft (slug, name, primaryColor) into the
+ * two things an onboarding flow needs and which are deliberately NOT the same
+ * object: the tenant's IDENTITY (`createTenantConfig`) and its VISUAL SOURCE
+ * (`createTenantBrandTheme`). A `TenantConfig` carries no paint, so a draft's
+ * personality preset and density posture land on the BrandTheme the compiler
+ * lowers, never back on the config.
  */
 
 import type { TenantConfig, TenantPlan } from '../../../../../../foundation/contracts';
@@ -72,10 +72,8 @@ function resolveDensity(
 /**
  * Generates the tenant's IDENTITY from minimal input.
  *
- * Only `slug`, `name`, and `primaryColor` are required. The result carries no
- * visual payload beyond the bounded branding seeds: the preset and density a
- * draft chooses become the BrandTheme `createTenantBrandTheme` builds from the
- * same input, which is what the compiler lowers.
+ * Only `slug`, `name`, and `primaryColor` are required. It carries no visual
+ * payload beyond the bounded branding seeds.
  *
  * @example
  * ```ts
@@ -127,13 +125,10 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
 }
 
 /**
- * Generates the tenant's VISUAL SOURCE from the same minimal input.
+ * Generates the tenant's VISUAL SOURCE from the same input.
  *
- * This is the half a compiler accepts. The personality preset lands on the
- * BrandTheme channels `brandThemeToPersonality` reads back -- `typography`,
- * `motion`, `chrome.card`, `chrome.accent` -- and density lands on `surfaces`,
- * so one draft produces one theme and the lowering stays the only place a
- * value becomes paint.
+ * The preset lands on the channels `brandThemeToPersonality` reads back, and
+ * density on `surfaces`, so one draft produces one theme.
  */
 export function createTenantBrandTheme(config: TenantCreationConfig): BrandTheme {
   const {
@@ -154,10 +149,9 @@ export function createTenantBrandTheme(config: TenantCreationConfig): BrandTheme
     accent: { ...personalityTokens.accent },
   };
 
-  // Density scale is only stated when it differs from the 1.0 baseline, so the
-  // generated theme stays minimal and the engine's own scale applies otherwise.
-  // Spacious layouts read better when radius scales with density, so that pair
-  // travels together rather than being wired by every caller.
+  // Stated only when it differs from the 1.0 baseline, so the engine's own
+  // scale applies otherwise. Spacious layouts read better when radius scales
+  // with density, so that pair travels together.
   const surfaces: BrandSurfaces = {
     ...(densityScale === 1.0 ? {} : { densityScale }),
     ...(density === 'spacious'

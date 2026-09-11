@@ -81,9 +81,8 @@ export interface TenantProviderProps {
   /** Resolved vertical preset passed from DesignSystemProvider */
   vertical?: ResolvedVerticalPreset;
   /**
-   * The mounted artifact's normalized appearance, published beside the config.
-   * It is a compiled read-model, never an authoring channel, so it is snapshot
-   * and frozen exactly like the config rather than trusted by reference.
+   * The mounted artifact's normalized appearance. A compiled read-model, never
+   * an authoring channel, snapshot and frozen exactly like the config.
    */
   appearance?: TenantAppearance;
 }
