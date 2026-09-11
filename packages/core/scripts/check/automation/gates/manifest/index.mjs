@@ -334,6 +334,29 @@ export const CI_GATES = Object.freeze([
   // without a commit that says so. Drill first: a walk that stopped finding
   // families would publish smaller denominators and every percentage above
   // them would go UP.
+  // THE SINGLE DOOR OF `ThemeIntent`, on the AST (rubric J.1). F-24 showed the
+  // bypass is reachable from outside the package: a caller that assembles the
+  // four fields itself has an intent the ingress never normalised and
+  // `assertThemeIntent` never saw. The walk covers `packages/showroom/src` as
+  // well as core, because that is where the bypass was demonstrated. Drill
+  // first: a walk that stopped finding literals would report a clean tree, so
+  // the gate fails on an EMPTY result as well as on a bad one.
+  { id: 'intent-literal-drill', run: ['node', '--test', 'scripts/check/theme/intent-literal/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['intent-literal'], },
+  { id: 'intent-literal', run: ['node', 'scripts/check/theme/intent-literal/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'intent-literal-drill', },
+  // TIER ENFORCEMENT AT BOTH TENANT DOORS (rubric J.7). F-03: the catalog
+  // carried a tier, the document carried a plan, and nothing compared them.
+  // Driven off the catalog in both directions, so a new pro control fails
+  // until its own rejection is proven.
+  { id: 'tier-rejection-drill', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/tier-rejection/drill/index.test.ts'], blocking: true, phase: 'pre-build', drillFor: ['tier-rejection'], },
+  { id: 'tier-rejection', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/tier-rejection/index.test.ts'], blocking: true, phase: 'pre-build', drillId: 'tier-rejection-drill', },
+  // ONE DECISION, FOUR TRANSPORTS, COMPARED AS BYTES (rubric J.4 and J.5). The
+  // vocabulary relation between static and DB is owned by
+  // `compilers/composition/tenant-theme/tests/static-db-channel-vocabulary.test.ts`;
+  // what this pair adds is the VALUE relation, plus the preview/publish half
+  // J.5 asks for and the non-vacuity law that keeps a parity of two unchanged
+  // maps from passing.
+  { id: 'transport-parity-drill', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/transport-parity/drill/index.test.ts'], blocking: true, phase: 'pre-build', drillFor: ['theme-transport-parity'], },
+  { id: 'theme-transport-parity', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/transport-parity/index.test.ts'], blocking: true, phase: 'pre-build', drillId: 'transport-parity-drill', },
   { id: 'theme-population-drill', run: ['node', '--test', 'scripts/check/theme/population/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-population'], },
   { id: 'theme-population', run: ['node', 'scripts/check/theme/population/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'theme-population-drill', },
   { id: 'fanout-facts-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/fanout/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['fanout-facts-freshness'], },
