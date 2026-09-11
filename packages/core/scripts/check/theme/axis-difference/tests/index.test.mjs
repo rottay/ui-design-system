@@ -11,12 +11,15 @@
  * and counting it would have put the rule's own first negative control at 1.6 %
  * on depth for a reason that has nothing to do with depth.
  *
- * Two of those verdicts exist because the probe got them WRONG. It applied
+ * Three of those verdicts exist because the probe got them WRONG. It applied
  * `artifact.variables` and nothing else, so a mode-routed palette read as an
- * empty delta and the run declared a live decision inert; and it marked both
+ * empty delta and the run declared a live decision inert; it marked both
  * negative controls green while the states positive read 0 %, which is a
- * control that costs nothing. Both now have cases that fail if the behaviour
- * comes back.
+ * control that costs nothing; and it then read that same witness run-globally
+ * and across two catalog rows at once, so one working cell would have
+ * certified the eleven vacuous ones and a move of `states.focus-style` would
+ * have certified the `states.emphasis` control. Each now has cases that fail
+ * if the behaviour comes back.
  *
  * The BROWSER half is the one no unit test can replace. It drives a NULL pair
  * -- two identical documents -- through the same Chromium, the same bundle and
@@ -40,6 +43,7 @@ import {
   STATES_DEPENDENT_CONTROL,
   UNMOUNTABLE_FAMILIES,
   UNSETTLED_FAMILIES,
+  WITNESSED_CONTROLS,
   differsOnAxis,
   effectiveVariables,
   evaluate,
@@ -50,6 +54,7 @@ import {
   run,
   selectorParts,
   stripColour,
+  witnessReading,
 } from '../index.mjs';
 import { AXIS_IDS } from '../../population/index.mjs';
 import { resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
@@ -92,6 +97,32 @@ const cell = (over = {}) => ({
   denominator: 100,
   moved: 90,
   percent: 90,
+  movedFamilies: [],
+  ...over,
+});
+
+/**
+ * One cell of the witnessed control, and one witness reading for it.
+ *
+ * They are separate because the cases below vary them separately: the standing
+ * of a cell now depends on the positive measured in ITS vertical and mode AND
+ * on what the control's own row moved THERE, and a helper that fused the two
+ * could not plant a case where only one of them holds.
+ */
+const control = (over = {}) => cell({
+  kind: 'negative',
+  scenario: STATES_DEPENDENT_CONTROL,
+  moved: 0,
+  percent: 0,
+  ...over,
+});
+
+const witness = (over = {}) => ({
+  axis: 'states',
+  control: 'states.emphasis',
+  positive: 'states',
+  moved: 0,
+  denominator: 148,
   movedFamilies: [],
   ...over,
 });
@@ -218,12 +249,12 @@ describe('axis-difference — a negative control is only evidence if its decisio
   it('the states positive at zero makes the states.emphasis control NON-EVIDENTIAL, with its reason', () => {
     const cells = markVacuousControls([
       cell({ kind: 'positive', scenario: 'states', axis: 'states', moved: 0, percent: 0 }),
-      cell({ kind: 'negative', scenario: STATES_DEPENDENT_CONTROL, axis: 'shape', moved: 0, percent: 0 }),
+      control({ axis: 'shape', witness: witness({ moved: 0 }) }),
       cell({ kind: 'negative', scenario: 'palette-only', axis: 'shape', moved: 0, percent: 0 }),
     ]);
     const nc2 = cells.find((entry) => entry.scenario === STATES_DEPENDENT_CONTROL);
     assert.equal(nc2.evidential, false);
-    assert.match(nc2.nonEvidentialReason, /states positive moved 0/);
+    assert.match(nc2.nonEvidentialReason, /states positive moved 0 famil\(ies\) in bithire\/light/);
     assert.equal(
       cells.find((entry) => entry.scenario === 'palette-only').evidential,
       true,
@@ -231,12 +262,104 @@ describe('axis-difference — a negative control is only evidence if its decisio
     );
   });
 
-  it('the same control REGAINS its standing the moment the states positive moves', () => {
+  it('the same control REGAINS its standing when the positive AND the row itself move in its cell', () => {
     const cells = markVacuousControls([
       cell({ kind: 'positive', scenario: 'states', axis: 'states', moved: 7, percent: 4.7 }),
-      cell({ kind: 'negative', scenario: STATES_DEPENDENT_CONTROL, axis: 'shape', moved: 0, percent: 0 }),
+      control({ axis: 'shape', witness: witness({ moved: 3 }) }),
     ]);
     assert.equal(cells.find((entry) => entry.scenario === STATES_DEPENDENT_CONTROL).evidential, true);
+  });
+
+  it('THE DEFECT, MIXED: one working cell certifies itself and nothing else', () => {
+    // Four cells of the same control, one per shape the rule has to separate.
+    // `bithire/dark` is the row that exists to keep the two halves apart: its
+    // own row moved but the positive did not move THERE, so a witness read
+    // run-globally would credit it off bithire/light. `evnto/light` is the
+    // mirror: the positive moved there, but not because of the row this
+    // control isolates.
+    const cells = markVacuousControls([
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', vertical: 'bithire', theme: 'light', moved: 7 }),
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', vertical: 'bithire', theme: 'dark', moved: 0 }),
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', vertical: 'evnto', theme: 'light', moved: 9 }),
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', vertical: 'evnto', theme: 'dark', moved: 0 }),
+      control({ vertical: 'bithire', theme: 'light', axis: 'shape', witness: witness({ moved: 3 }) }),
+      control({ vertical: 'bithire', theme: 'light', axis: 'typography', witness: witness({ moved: 3 }) }),
+      control({ vertical: 'bithire', theme: 'dark', axis: 'shape', witness: witness({ moved: 4 }) }),
+      control({ vertical: 'evnto', theme: 'light', axis: 'shape', witness: witness({ moved: 0 }) }),
+      control({ vertical: 'evnto', theme: 'dark', axis: 'shape', witness: witness({ moved: 0 }) }),
+    ]);
+    const standing = cells
+      .filter((entry) => entry.scenario === STATES_DEPENDENT_CONTROL)
+      .map((entry) => [`${entry.vertical}/${entry.theme} ${entry.axis}`, entry.evidential]);
+    assert.deepEqual(standing, [
+      ['bithire/light shape', true],
+      ['bithire/light typography', true],
+      ['bithire/dark shape', false],
+      ['evnto/light shape', false],
+      ['evnto/dark shape', false],
+    ]);
+
+    const byCell = (vertical, theme) => cells.find((entry) =>
+      entry.kind === 'negative' && entry.vertical === vertical && entry.theme === theme);
+    assert.match(
+      byCell('bithire', 'dark').nonEvidentialReason,
+      /states positive moved 0 famil\(ies\) in bithire\/dark/,
+      'a positive that moved in another cell is not this cell’s witness',
+    );
+    assert.match(
+      byCell('evnto', 'light').nonEvidentialReason,
+      /states\.emphasis on its own moved 0 of 148 famil\(ies\).*not to states\.emphasis/s,
+      'the states positive moves emphasis AND focus-style, so it cannot witness emphasis alone',
+    );
+  });
+
+  it('the binding is per CONTROL, so a focus-only control stands or falls on its own row', () => {
+    const cells = markVacuousControls([
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', moved: 9 }),
+      control({ axis: 'shape', witness: witness({ moved: 0 }) }),
+      control({
+        scenario: 'states-focus-only',
+        axis: 'shape',
+        witness: witness({ control: 'states.focus-style', moved: 5 }),
+      }),
+    ], { witnessedControls: [STATES_DEPENDENT_CONTROL, 'states-focus-only'] });
+    assert.equal(cells.find((entry) => entry.scenario === 'states-focus-only').evidential, true);
+    assert.equal(cells.find((entry) => entry.scenario === STATES_DEPENDENT_CONTROL).evidential, false);
+  });
+
+  it('a witnessed control with NO witness measured keeps the honest NON-EVIDENTIAL verdict', () => {
+    const cells = markVacuousControls([
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', moved: 9 }),
+      cell({ kind: 'negative', scenario: STATES_DEPENDENT_CONTROL, axis: 'shape', moved: 0, percent: 0 }),
+    ]);
+    const nc2 = cells.find((entry) => entry.scenario === STATES_DEPENDENT_CONTROL);
+    assert.equal(nc2.evidential, false);
+    assert.match(nc2.nonEvidentialReason, /no witness was measured/);
+  });
+
+  it('the shipped control DECLARES the witness the run has to measure for it', () => {
+    const emphasis = SCENARIOS.find((scenario) => scenario.id === STATES_DEPENDENT_CONTROL);
+    assert.deepEqual(emphasis.witness, { axis: 'states', control: 'states.emphasis', positive: 'states' });
+    assert.deepEqual([...WITNESSED_CONTROLS], [STATES_DEPENDENT_CONTROL]);
+    assert.deepEqual(
+      Object.keys(emphasis.a),
+      [emphasis.witness.control],
+      'the witness may only name the row the control actually isolates',
+    );
+  });
+
+  it('the witness reading is taken from the control OWN pair, on the axis its row owns', () => {
+    const before = { base: {}, states: { hovered: { probe: { 'box-shadow': 'none' }, quiet: { 'box-shadow': 'none' } } } };
+    const after = { base: {}, states: { hovered: { probe: { 'box-shadow': '0 1px 2px' }, quiet: { 'box-shadow': 'none' } } } };
+    const reading = witnessReading({
+      witness: { axis: 'states', control: 'states.emphasis', positive: 'states' },
+      before,
+      after,
+      denominator: ['probe', 'quiet'],
+    });
+    assert.equal(reading.moved, 1);
+    assert.equal(reading.denominator, 2);
+    assert.deepEqual(reading.movedFamilies, [{ family: 'probe', property: 'box-shadow' }]);
   });
 
   it('the limits that make it vacuous are measurements, not adjectives', () => {
