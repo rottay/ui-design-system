@@ -114,6 +114,12 @@ function migrateGeneralDecisions(
       decisions["palette.seeds"] = prune(seeds);
     }
     if (palette.status) decisions["palette.status-seeds"] = prune(palette.status);
+    if (palette.neutralTemperature) {
+      decisions["palette.neutral-temperature"] = palette.neutralTemperature;
+    }
+    if (palette.contrastPosture) {
+      decisions["palette.contrast-posture"] = palette.contrastPosture;
+    }
     if (palette.backgroundMode) {
       decisions["palette.dark-mode"] = palette.backgroundMode;
     }

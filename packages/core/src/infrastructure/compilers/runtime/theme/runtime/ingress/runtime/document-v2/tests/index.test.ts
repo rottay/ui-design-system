@@ -295,7 +295,12 @@ describe("migrate v1 -> v2", () => {
       mode: "advanced",
       visualFoundation: {
         general: {
-          palette: { primary: PRIMARY, status: { success: "#10B981" } },
+          palette: {
+            primary: PRIMARY,
+            status: { success: "#10B981" },
+            neutralTemperature: "warm",
+            contrastPosture: "high",
+          },
           typography: { typePairing: "editorial", scale: 1.05 },
           shape: {
             buttonStyle: "pill",
@@ -305,6 +310,7 @@ describe("migrate v1 -> v2", () => {
           },
           density: "compact",
           rhythm: "airy",
+          states: { emphasis: "strong", focusStyle: "glow" },
           surfaces: { elevation: "elevated", effectIntensity: 0.4 },
           navigation: { sidebarTone: "inverse" },
           experienceProfile: "rottay/bithire-technical@1",
@@ -327,6 +333,8 @@ describe("migrate v1 -> v2", () => {
         "density.mode",
         "experience.profile",
         "navigation.sidebar-tone",
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
         "palette.seeds",
         "palette.status-seeds",
         "recipe-profile",
@@ -336,6 +344,8 @@ describe("migrate v1 -> v2", () => {
         "shape.nesting",
         "shape.radius-scale",
         "spacing.rhythm",
+        "states.emphasis",
+        "states.focus-style",
         "surfaces.effect-intensity",
         "surfaces.elevation-posture",
         "typography.pairing",
@@ -533,7 +543,12 @@ const ADVANCED_V1 = {
   mode: "advanced",
   visualFoundation: {
     general: {
-      palette: { primary: PRIMARY, status: { success: "#10B981" } },
+      palette: {
+        primary: PRIMARY,
+        status: { success: "#10B981" },
+        neutralTemperature: "warm",
+        contrastPosture: "high",
+      },
       typography: { typePairing: "editorial", scale: 1.05 },
       shape: {
         buttonStyle: "pill",
@@ -543,6 +558,7 @@ const ADVANCED_V1 = {
       },
       density: "compact",
       rhythm: "airy",
+      states: { emphasis: "strong", focusStyle: "glow" },
       surfaces: { elevation: "elevated", effectIntensity: 0.4 },
       navigation: { sidebarTone: "inverse" },
       experienceProfile: "rottay/bithire-technical@1",

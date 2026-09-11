@@ -149,6 +149,8 @@ const general = object({
       error: COLOR,
       info: COLOR,
     }),
+    neutralTemperature: enumeration("cool", "neutral", "warm"),
+    contrastPosture: enumeration("soft", "standard", "high"),
     backgroundMode: enumeration("light", "dark", "auto"),
     dark: object({
       primary: COLOR,
@@ -184,6 +186,8 @@ const general = object({
       min: TENANT_THEME_RADIUS_SCALE_BOUNDS.min,
       max: TENANT_THEME_RADIUS_SCALE_BOUNDS.max,
     }),
+    nesting: enumeration("concentric", "uniform"),
+    controlHeight: enumeration("compact", "standard", "tall"),
   }),
   density: enumeration("compact", "normal", "spacious"),
   // Layout rhythm is a SEPARATE axis from density: density sizes controls,
@@ -203,6 +207,10 @@ const general = object({
     // The SHAPE of motion, not a fourth speed input: `MOTION_DIAL_KEYS` stays
     // the three bounded dials the `motion.dial` decision is judged against.
     character: enumeration("mechanical", "organic", "playful"),
+  }),
+  states: object({
+    emphasis: enumeration("subtle", "medium", "strong"),
+    focusStyle: enumeration("ring", "underline", "glow"),
   }),
   surfaces: object({
     elevation: enumeration("flat", "soft", "elevated"),
