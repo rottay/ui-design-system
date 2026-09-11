@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -324,6 +325,39 @@ export const CI_GATES = Object.freeze([
     noDrillReason:
       'This entry IS its own drill: `--self-check` re-runs the same three subjects against the same bundle with the tier order REVERSED and requires every one to flip, so the planted negative rides in the same process as the measurement.',
     prerequisites: ['showroom-workspace'],
+  },
+  // THE BY-AXIS TENANT-DIFFERENCE PROBE (kit-2026-09 section 5 rule 4). Two
+  // tenant documents of one vertical differing in exactly one group, measured
+  // per family as COMPUTED STYLE in Chromium across three verticals and two
+  // modes, with BOTH negative controls of the rule as first-class scenarios.
+  // The drill is blocking and runs everywhere: its offline half plants a defect
+  // in every verdict the gate can reach, and its browser half -- a NULL pair,
+  // two identical documents, which must read 0 % -- runs wherever a Chromium
+  // resolves and names the reason when none does.
+  { id: 'axis-difference-drill', run: ['node', '--test', 'scripts/check/theme/axis-difference/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['axis-difference'],
+    distExemption:
+      'MEASURED, not assumed: the probe imports dist/server.js lazily inside `run()`, and the only case that '
+      + 'calls it is the browser half, which declares `skip` when dist/server.js is absent. Run with dist/ moved '
+      + 'away the suite exits 0 with 21 passing assertions and the browser case skipped by written reason '
+      + '(2026-09-11).', },
+  {
+    id: 'axis-difference',
+    run: ['node', 'scripts/check/theme/axis-difference/index.mjs'],
+    blocking: false,
+    phase: 'post-build',
+    prerequisites: ['fresh-dist', 'showroom-workspace', 'playwright-chromium'],
+    drillId: 'axis-difference-drill',
+    excluded: {
+      reason:
+        'NOT a softened law and not a widened baseline: the gate is green on this tree today (both negative '
+        + 'controls at 0 % on every evidential cell, 3 verticals x 2 modes, run 2026-09-11) and its drill stays '
+        + 'BLOCKING. What is missing is CI wiring this lot may not do: the `quality-gates` job installs no '
+        + 'browser, and only the a11y and visual jobs run `playwright install chromium`, so a blocking entry '
+        + 'here would be PREREQ-MISSING on every CI run -- which is exactly how a gate gets downgraded (F-76). '
+        + 'Run it by hand with `node scripts/check/theme/axis-difference/index.mjs` after a build.',
+      owner: 'WO-EVI-02 fleet acceptance (browser install in the gates job of .github/workflows/ci.yml)',
+      trackedSince: '2026-09-11',
+    },
   },
   // WHAT EVERY RATCHET IN THIS REPOSITORY IS STANDING ON (F-86, F-75). A
   // decrease-only promise is about the DIRECTION of a number and says nothing
@@ -1196,6 +1230,19 @@ export const PREREQUISITES = Object.freeze({
   'app-bithire-corpus': {
     describe: 'the app-bithire checkout the app<->DS boundary gate audits (APP_BITHIRE_ROOT, or a sibling repository)',
     satisfied: () => existsSync(process.env.APP_BITHIRE_ROOT ?? join(MANIFEST_PACKAGE_ROOT, '../../../app-bithire')),
+  },
+  'playwright-chromium': {
+    describe:
+      'a Playwright Chromium the workspace can resolve (pnpm --filter @rottay/showroom exec playwright '
+      + 'install chromium). Computed-style evidence cannot be produced without one.',
+    satisfied: () => {
+      try {
+        const require = createRequire(join(MANIFEST_PACKAGE_ROOT, '../showroom/package.json'));
+        return Boolean(require('@playwright/test')?.chromium);
+      } catch {
+        return false;
+      }
+    },
   },
   'showroom-workspace': {
     describe: 'the @rottay/showroom workspace package',
