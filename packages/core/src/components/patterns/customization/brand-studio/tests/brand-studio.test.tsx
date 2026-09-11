@@ -36,7 +36,6 @@ import { ThemeAdmissionError } from '@/infrastructure/compilers/runtime/theme';
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-test',
   name: 'Brand Studio Test',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

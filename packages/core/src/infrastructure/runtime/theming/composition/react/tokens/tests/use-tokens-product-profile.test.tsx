@@ -53,7 +53,6 @@ function tokenTestTenant(slug: string): TenantConfig {
   return {
     slug,
     name: 'Token Test',
-    engine: 'classic',
     theme: 'light',
     plan: 'enterprise',
     features: ['all'],

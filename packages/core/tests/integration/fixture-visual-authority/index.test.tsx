@@ -52,7 +52,6 @@ function Probe(): React.ReactElement {
 const PAINTED_TENANT: TenantConfig = {
   slug: 'painted-without-artifact',
   name: 'Painted Without Artifact',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],
@@ -91,11 +90,7 @@ describe('the census law the helpers are admitted under', () => {
       branding: { companyName: 'Surface Test Tenant' },
     });
 
-    expect(census.visualBranding).toBe(false);
-    expect(census.tokenOverrides).toBe(false);
-    expect(census.personality).toBe(false);
-    expect(census.brandTheme).toBe(false);
-    expect(census.appearance).toBeUndefined();
+    expect(census).toEqual({ visualBranding: false });
   });
 
   it('counts a single brand colour as paint', () => {

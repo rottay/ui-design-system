@@ -25,7 +25,6 @@ const DATA: Row[] = [
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'test-tenant',
   name: 'Test Tenant',
-  engine: 'modern',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -39,7 +38,7 @@ const TEST_TENANT_CONFIG: TenantConfig = {
 function renderMarkup(engine: 'modern' | 'rustic', ui: React.ReactElement): string {
   return renderToStaticMarkup(
     <DesignSystemProvider
-      tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+      tenantConfig={TEST_TENANT_CONFIG}
       forceEngine={engine}
       skipCssLoading
     >

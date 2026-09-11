@@ -19,7 +19,6 @@ import { PatternBrandStudio } from '../index';
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-a11y',
   name: 'Brand Studio A11y',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

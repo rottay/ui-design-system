@@ -17,7 +17,6 @@ function testTenant(): TenantConfig {
   return {
     slug: 'nr1',
     name: 'nr1',
-    engine: 'rustic',
     theme: 'light',
     plan: 'enterprise',
     features: ['all'],

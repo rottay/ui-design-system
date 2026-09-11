@@ -12,7 +12,6 @@ import { mockMatchMedia } from '@tests/support/browser/match-media';
 const TEST_TENANT: TenantConfig = {
   slug: 'compact-test',
   name: 'Compact Test',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

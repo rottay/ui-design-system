@@ -22,7 +22,6 @@ import {
 const TEST_TENANT: TenantConfig = {
   slug: "preview-harness",
   name: "Preview Harness",
-  engine: "rustic",
   theme: "light",
   plan: "enterprise",
   features: ["all"],

@@ -17,7 +17,6 @@ import { PatternDataTable } from '..';
 const TENANT: TenantConfig = {
   slug: 'density-test',
   name: 'Density Test Tenant',
-  engine: 'modern',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',

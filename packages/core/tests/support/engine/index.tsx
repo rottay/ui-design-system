@@ -42,7 +42,6 @@ export type StableEngineName = (typeof STABLE_ENGINES)[number];
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'test-tenant',
   name: 'Test Tenant',
-  engine: 'modern',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -86,7 +85,7 @@ function createEngineWrapper(
     // controls which engine renders regardless of the fixture tenant.
     return (
       <DesignSystemProvider
-        tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+        tenantConfig={TEST_TENANT_CONFIG}
         forceEngine={engine}
         {...(engineVisual ? { engineVisual } : {})}
         skipCssLoading

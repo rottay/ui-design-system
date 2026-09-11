@@ -235,7 +235,6 @@ describe('animation hooks', () => {
         tenantConfig={{
           slug: 'motion-test',
           name: 'Motion Test',
-          engine: 'rustic',
           theme: 'light',
           locale: 'en',
           fallbackLocale: 'en',

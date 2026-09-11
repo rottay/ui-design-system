@@ -83,7 +83,6 @@ class IntersectionObserverMock {
 const EVNTO_TENANT: TenantConfig = {
   slug: 'evnto-test',
   name: 'Evnto Test',
-  engine: 'classic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -97,7 +96,6 @@ const EVNTO_TENANT: TenantConfig = {
 const BITHIRE_TENANT: TenantConfig = {
   slug: 'bithire-test',
   name: 'BitHire Test',
-  engine: 'classic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -129,7 +127,7 @@ function renderWithProfile(
 ) {
   return render(
     <DesignSystemProvider
-      tenantConfig={{ ...tenantConfig, engine }}
+      tenantConfig={tenantConfig}
       forceEngine={engine}
       engineVisual={firstPartyEngineVisual('rottay', engine)}
       productProfile={productProfile}
@@ -376,7 +374,7 @@ describe('primitive personality integration', () => {
 
     rerender(
       <DesignSystemProvider
-        tenantConfig={{ ...BITHIRE_TENANT, engine: 'rustic' }}
+        tenantConfig={BITHIRE_TENANT}
         forceEngine="rustic"
         productProfile="recruiting.operator"
         skipCssLoading

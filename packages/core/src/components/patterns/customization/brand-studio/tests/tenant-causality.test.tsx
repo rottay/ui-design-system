@@ -32,7 +32,6 @@ import {
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-causality',
   name: 'Brand Studio Causality',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

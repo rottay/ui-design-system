@@ -15,7 +15,6 @@ const OPTIONS = [
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'test-tenant',
   name: 'Test Tenant',
-  engine: 'classic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -32,7 +31,7 @@ describe('Select integration', () => {
     const { DesignSystemProvider } = await import('../../../../../infrastructure/runtime/bootstrap');
     render(
       <DesignSystemProvider
-        tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+        tenantConfig={TEST_TENANT_CONFIG}
         forceEngine={engine}
         engineVisual={firstPartyEngineVisual('rottay', engine)}
         skipCssLoading
@@ -53,7 +52,7 @@ describe('Select integration', () => {
 
     render(
       <DesignSystemProvider
-        tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+        tenantConfig={TEST_TENANT_CONFIG}
         forceEngine={engine}
         engineVisual={firstPartyEngineVisual('rottay', engine)}
         skipCssLoading

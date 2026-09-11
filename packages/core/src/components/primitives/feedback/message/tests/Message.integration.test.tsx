@@ -11,7 +11,6 @@ import { MessageProvider, useMessage } from '..';
 const TEST_TENANT_CONFIG: TenantConfig = {
   slug: 'coverage-tenant',
   name: 'Coverage Tenant',
-  engine: 'classic',
   theme: 'base',
   locale: 'en',
   fallbackLocale: 'en',
@@ -33,7 +32,7 @@ function renderMessageHarness(engine: Exclude<EngineName, 'custom'>) {
 
   render(
     <DesignSystemProvider
-      tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
+      tenantConfig={TEST_TENANT_CONFIG}
       forceEngine={engine}
       engineVisual={firstPartyEngineVisual('rottay', engine)}
       skipCssLoading

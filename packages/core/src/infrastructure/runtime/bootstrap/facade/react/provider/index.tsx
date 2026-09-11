@@ -1087,12 +1087,10 @@ export function DesignSystemProvider({
   // same value through the per-request box the application fills via
   // `provideServerIconExpressiveProfile` — both integration points share
   // this one pure resolver.
-  const iconExpressiveProfile = resolveActiveIconExpressiveProfile(
-    // A local read-model, never published: `resolveActiveIconExpressiveProfile`
-    // is structural and consumes exactly `{ expressive }` off the governed slot
-    // and the artifact's appearance.
-    { appearance, ...(governedBehavior ? { brandTheme: governedBehavior } : {}) },
-  );
+  const iconExpressiveProfile = resolveActiveIconExpressiveProfile({
+    appearance,
+    expressive: governedBehavior?.expressive,
+  });
 
   const motionProfile = resolvedVertical?.motionProfile ?? 'calm';
   const tenantMotionDial = resolveTenantMotionDial(

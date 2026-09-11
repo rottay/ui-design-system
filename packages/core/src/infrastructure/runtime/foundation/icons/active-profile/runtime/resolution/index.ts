@@ -4,10 +4,16 @@ import {
   sanitizeExpressiveOverrides,
 } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 
+/**
+ * The active icon posture, from the two places a selection can now come from:
+ * the mounted artifact's normalized appearance, and the governed expressive
+ * selection a code-owned vertical's theme authored. A tenant config carries
+ * neither, so neither is read from one.
+ */
 export function resolveActiveIconExpressiveProfile(
-  config: { appearance?: unknown; brandTheme?: unknown } | null | undefined,
+  source: { appearance?: unknown; expressive?: unknown } | null | undefined,
 ): ExpressiveIconProfile | undefined {
-  const appearance = config?.appearance as
+  const appearance = source?.appearance as
     | {
         general?: { experienceProfile?: string };
         advanced?: { profiles?: Record<string, unknown> };
@@ -19,17 +25,13 @@ export function resolveActiveIconExpressiveProfile(
   );
   if (dbAxes.icon) return dbAxes.icon;
 
-  const selection = (
-    config?.brandTheme as
-      | {
-          expressive?: {
-            experienceProfile?: string;
-            profiles?: Record<string, unknown>;
-            schemaVersion?: number;
-          };
-        }
-      | undefined
-  )?.expressive;
+  const selection = source?.expressive as
+    | {
+        experienceProfile?: string;
+        profiles?: Record<string, unknown>;
+        schemaVersion?: number;
+      }
+    | undefined;
   if (!selection) return undefined;
 
   return resolveExpressiveAxes(

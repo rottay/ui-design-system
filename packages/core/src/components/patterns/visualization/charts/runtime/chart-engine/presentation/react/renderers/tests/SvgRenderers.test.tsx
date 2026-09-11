@@ -54,7 +54,6 @@ function testTenant(slug: string): TenantConfig {
   return {
     slug,
     name: slug,
-    engine: 'rustic',
     theme: 'light',
     plan: 'enterprise',
     features: ['all'],

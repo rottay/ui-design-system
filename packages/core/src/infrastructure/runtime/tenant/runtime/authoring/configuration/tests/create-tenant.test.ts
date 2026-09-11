@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { createTenantConfig, type TenantCreationConfig } from '..';
+import { createTenantBrandTheme, createTenantConfig, type TenantCreationConfig } from '..';
 import {
   resolvePersonalityPreset,
   type PersonalityPreset,
@@ -66,9 +66,6 @@ describe('createTenantConfig', () => {
 
     expect(config.slug).toBe('acme');
     expect(config.name).toBe('ACME Corp');
-    // No engine is materialized. A tenant that silently claims `classic`
-    // outranks the vertical that declares `modern` (WO-ENG-17).
-    expect(config.engine).toBeUndefined();
     expect(config.theme).toBe('base');
     expect(config.plan).toBe('starter');
     expect(config.features).toEqual([]);
@@ -76,41 +73,43 @@ describe('createTenantConfig', () => {
     expect(config.branding.primaryColor).toBe('#3B82F6');
   });
 
-  it('should apply personality preset', () => {
+  it('carries no visual payload at all -- that is the BrandTheme half', () => {
     const config = createTenantConfig({
       ...minimalConfig,
       personality: 'formal',
-    });
-
-    expect(config.personality).toBeDefined();
-    expect(config.personality!.animation!.entrance).toBe('fade');
-    expect(config.personality!.animation!.intensity).toBeLessThan(0.5);
-    expect(config.personality!.card!.showBorder).toBe(true);
-  });
-
-  it('should apply density settings', () => {
-    const compact = createTenantConfig({
-      ...minimalConfig,
-      density: 'compact',
-    });
-    expect(compact.tokenOverrides?.densityScale).toBe(0.95);
-    expect(compact.personality!.card!.paddingDensity).toBe('compact');
-
-    const spacious = createTenantConfig({
-      ...minimalConfig,
       density: 'spacious',
     });
-    expect(spacious.tokenOverrides?.densityScale).toBe(1.1);
-    expect(spacious.personality!.card!.paddingDensity).toBe('spacious');
-    expect(spacious.tokenOverrides?.borderRadius).toBeDefined();
+
+    // The five removed fields. A draft's preset and density are BrandTheme
+    // channels; the identity config cannot restate them.
+    for (const field of ['brandTheme', 'personality', 'tokenOverrides', 'appearance', 'engine']) {
+      expect(Object.prototype.hasOwnProperty.call(config, field)).toBe(false);
+    }
   });
 
-  it('should not add tokenOverrides for comfortable density', () => {
-    const config = createTenantConfig({
-      ...minimalConfig,
-      density: 'comfortable',
-    });
-    expect(config.tokenOverrides).toBeUndefined();
+  it('projects the personality preset onto the BrandTheme channels', () => {
+    const theme = createTenantBrandTheme({ ...minimalConfig, personality: 'formal' });
+
+    expect(theme.motion!.entrance).toBe('fade');
+    expect(theme.motion!.intensity).toBeLessThan(0.5);
+    expect(theme.chrome!.card!.showBorder).toBe(true);
+    expect(theme.palette.primaryColor).toBe('#3B82F6');
+  });
+
+  it('projects density onto the BrandTheme surfaces', () => {
+    const compact = createTenantBrandTheme({ ...minimalConfig, density: 'compact' });
+    expect(compact.surfaces?.densityScale).toBe(0.95);
+    expect(compact.chrome!.card!.paddingDensity).toBe('compact');
+
+    const spacious = createTenantBrandTheme({ ...minimalConfig, density: 'spacious' });
+    expect(spacious.surfaces?.densityScale).toBe(1.1);
+    expect(spacious.chrome!.card!.paddingDensity).toBe('spacious');
+    expect(spacious.surfaces?.borderRadius).toBeDefined();
+  });
+
+  it('states no density scale for the comfortable baseline', () => {
+    const theme = createTenantBrandTheme({ ...minimalConfig, density: 'comfortable' });
+    expect(theme.surfaces?.densityScale).toBeUndefined();
   });
 
   it('should pass through optional fields', () => {
@@ -118,7 +117,6 @@ describe('createTenantConfig', () => {
       ...minimalConfig,
       secondaryColor: '#10B981',
       logo: 'https://example.com/logo.png',
-      engine: 'modern',
       plan: 'enterprise',
       features: ['analytics', 'export-pdf'],
       domain: 'acme.example.com',
@@ -126,18 +124,17 @@ describe('createTenantConfig', () => {
 
     expect(config.branding.secondaryColor).toBe('#10B981');
     expect(config.branding.logo).toBe('https://example.com/logo.png');
-    expect(config.engine).toBe('modern');
     expect(config.plan).toBe('enterprise');
     expect(config.features).toEqual(['analytics', 'export-pdf']);
     expect(config.domain).toBe('acme.example.com');
   });
 
   it('should default personality to neutral', () => {
-    const config = createTenantConfig(minimalConfig);
+    const theme = createTenantBrandTheme(minimalConfig);
     const neutralTokens = resolvePersonalityPreset('neutral');
 
-    expect(config.personality!.animation!.intensity).toBe(neutralTokens.animation!.intensity);
-    expect(config.personality!.animation!.entrance).toBe(neutralTokens.animation!.entrance);
+    expect(theme.motion!.intensity).toBe(neutralTokens.animation!.intensity);
+    expect(theme.motion!.entrance).toBe(neutralTokens.animation!.entrance);
   });
 
   it.each([

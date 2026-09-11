@@ -31,7 +31,6 @@ const TENANT_CONFIG = {
 const TEST_TENANT: TenantConfig = {
   slug: 'ck-h1-studio',
   name: 'customization anatomy Studio',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

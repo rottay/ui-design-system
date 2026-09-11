@@ -2,7 +2,6 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
-import type { TenantAppearance } from '@/foundation/contracts/composition/tenants/themes';
 import {
   type TenantThemeArtifact,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
@@ -43,13 +42,7 @@ const ARTIFACT = compileTenantThemeConfig(
   { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
 );
 
-const EMPTY_PAYLOAD: RuntimeVisualPayloadCensus = {
-  visualBranding: false,
-  tokenOverrides: false,
-  appearance: undefined,
-  personality: false,
-  brandTheme: false,
-};
+const EMPTY_PAYLOAD: RuntimeVisualPayloadCensus = { visualBranding: false };
 
 function mountArtifact(artifact: TenantThemeArtifact = ARTIFACT): HTMLStyleElement {
   const style = document.createElement('style');
@@ -64,10 +57,7 @@ function mountArtifact(artifact: TenantThemeArtifact = ARTIFACT): HTMLStyleEleme
 
 function resolve(
   artifact: TenantThemeArtifact = ARTIFACT,
-  payload: RuntimeVisualPayloadCensus = {
-    ...EMPTY_PAYLOAD,
-    appearance: ARTIFACT.normalizedAppearance as TenantAppearance,
-  },
+  payload: RuntimeVisualPayloadCensus = EMPTY_PAYLOAD,
 ) {
   return resolveVisualAuthority({
     declaration: { authority: 'compiled-artifact', artifact },
@@ -164,7 +154,7 @@ describe('tenant visual authority', () => {
       declaration: { authority: 'compiled-artifact', artifact: declared },
       slug: ARTIFACT.slug,
       verticalKey: ARTIFACT.verticalKey,
-      payload: { ...EMPTY_PAYLOAD, appearance: ARTIFACT.normalizedAppearance as TenantAppearance },
+      payload: EMPTY_PAYLOAD,
     });
     expect(resolution.conflict).toBeNull();
 
@@ -211,7 +201,7 @@ describe('tenant visual authority', () => {
       declaration: { authority: 'compiled-artifact', artifact: declared },
       slug: ARTIFACT.slug,
       verticalKey: ARTIFACT.verticalKey,
-      payload: { ...EMPTY_PAYLOAD, appearance: ARTIFACT.normalizedAppearance as TenantAppearance },
+      payload: EMPTY_PAYLOAD,
     });
     expect(reads).toBe(1);
     expect(resolution.conflict).toBeNull();
@@ -232,7 +222,7 @@ describe('tenant visual authority', () => {
 
     expect(resolveVisualAuthority({
       slug: 'uncompiled',
-      payload: { ...EMPTY_PAYLOAD, appearance: ARTIFACT.normalizedAppearance as TenantAppearance },
+      payload: EMPTY_PAYLOAD,
     }).origin).toBe('uncompiled-visual-payload');
   });
 
@@ -247,56 +237,20 @@ describe('tenant visual authority', () => {
   });
 
   it('separates identity branding from raw visual payload without slug inference', () => {
-    // The census only needs a valid BrandTheme presence witness; the previous
-    // fixture invented a `general` family that BrandTheme never declared and
-    // only compiled through a cast.
-    const codeOwned: NonNullable<TenantConfig['brandTheme']> = {
-      id: 'test-code-owned',
-      name: 'Test Code Owned',
-    };
+    // `branding` is the ONLY visual channel a `TenantConfig` still has, so the
+    // census is exactly the question "did a transport hand the runtime paint
+    // that no compile produced".
     const identityConfig = {
       branding: { companyName: 'Acme', logo: '/logo.svg' },
-      brandTheme: codeOwned,
     } as TenantConfig;
     expect(censusRuntimeVisualPayload(identityConfig))
-      .toMatchObject({ visualBranding: false, brandTheme: true });
+      .toEqual({ visualBranding: false });
 
     expect(censusRuntimeVisualPayload({
       ...identityConfig,
       branding: { ...identityConfig.branding, primaryColor: '#123456' },
-      brandTheme: { ...codeOwned },
     } as TenantConfig))
-      .toMatchObject({ visualBranding: true, brandTheme: true });
-  });
-
-  it('counts declared tokenOverrides keys, not their leaves', () => {
-    // The census reads `Object.keys(tokenOverrides).length > 0`, so a declared
-    // section is a declared channel even when it carries no value. This is the
-    // rule the provider's `tenantOverrides` merge used to violate from the other
-    // side: it spread all seven sections unconditionally, which turned a tenant
-    // with no visual payload into one carrying seven keys and got the mount
-    // refused as `uncompiled-visual-payload`.
-    const withConfig = (tokenOverrides: TenantConfig['tokenOverrides']) =>
-      censusRuntimeVisualPayload({
-        branding: { companyName: 'Acme' },
-        tokenOverrides,
-      } as TenantConfig).tokenOverrides;
-
-    // The exact fabrication the merge used to produce.
-    expect(withConfig({
-      surface: {},
-      motion: {},
-      borderRadius: {},
-      shadows: {},
-      glass: {},
-      gradients: {},
-      overlays: {},
-    })).toBe(true);
-    // One empty section is still one declared channel.
-    expect(withConfig({ surface: {} })).toBe(true);
-    // A bare object declares nothing, so there is nothing to compile and
-    // nothing to refuse.
-    expect(withConfig({})).toBe(false);
+      .toEqual({ visualBranding: true });
   });
 
   it('reports a production conflict once and throws in development', () => {

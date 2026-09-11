@@ -31,7 +31,6 @@ import {
 const BASE_TENANT: TenantConfig = {
   slug: 'override-law',
   name: 'Override Law Tenant',
-  engine: 'modern',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],
