@@ -4356,7 +4356,7 @@
    "lane": "derivation",
    "order": 5,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-02",
     "WO-DER-03",
@@ -4369,7 +4369,9 @@
    "notes": "wave 4; closes F-05, F-73",
    "claimedBy": "daniel",
    "claimedAt": "2026-09-11",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-11",
+   "evidence": "Landed 5f91ef595 (writer ff65f13c8, Opus/claude-daniel; audited ACCEPT by Kimi K3 under the temporary owner-authorized auditor substitution, Fable quota-exhausted). ONE EXECUTABLE DEFAULT-MODE LAW: compilers/kernel/foundation/modes is the single reader (roster first; UNDECLARED_VERTICAL_DEFAULT_MODE the only literal), CONSUMED — not paralleled — by seeds (document-patch renderedMode/verticalDefaultMode), static+DB compile (derivation/modes themeDefaultMode, tenant-theme declaredDocumentMode) and mount/SSR (mount declaredMode, root-attributes autoFallback); grep ?? 'light' = 0 in packages/core/src. Acceptance arms reproduced green by auditor (17 derivation/modes + 21 mount tests): rottay {palette.primary} compiles non-empty base block, declares colorScheme dark, [data-theme=light] carries the TENANT primary; only the tenant narrows its own decision (mode-agnostic seeds cross, per-mode seed ranks above base, mode-describing statements stay); auto emits exactly ONE media block keyed on the non-default mode (dark for light-default, LIGHT for dark-default), zero when the document names a mode; baseline compiled once, cached by digest. Audit-100 mount finding fixed: mountTenantTheme(staticThemeIntent rottay) stamps data-theme=dark matching the compile. Gates reproduced: ingress/lowering 40 tests, tsc 0, typecheck:tests 0 (baseline 0), tenant-theme fixtures, vertical-artifacts --check (first-party byte-identical), axis-difference OK (36/36 evidential NC at 0%), decisions-lit:check 7/22 on the merged tree, contract-changeset --base=e86495ff9 OK, structure:check 0 findings, diff --check clean. Pre-existing reds verified at base e86495ff9: tenant-document-v2 (registered base red, WO-DER-04 lit surfaces.border-style), SpatialExperience load-contention flake (passes isolated at tip). F-05 mode-block ranking: tenant above the sanctioned vertical mode overlay; measured bithire digest fixture base 65ch unchanged, dark delta 41->34 (10 inherit tenant's own value, 10 chart series re-derived, 3 cascade aliases); changeset der-05-modes-from-decisions.md with contract-diff (ThemeProvenance.authoredLeaves, DocumentRootAttributesInput autoFallback)."
   },
   {
    "id": "WO-DER-06",
