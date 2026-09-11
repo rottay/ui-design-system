@@ -4,10 +4,9 @@
  * registries, static assets, APIs, or app-provided config.
  */
 
-import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../../../../foundation/contracts';
+import type { TenantConfig, TenantBranding, TenantPlan } from '../../../../../foundation/contracts';
 import type { SupportedLocale } from '@/foundation/i18n/kernel/contracts';
 import { isTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
-import { isValidEngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 
 /**
  * Branding is intentionally permissive: only `companyName` is required.
@@ -60,12 +59,11 @@ export function isValidTenantConfig(config: unknown): config is TenantConfig {
 
   // Validation checks the structural contract (required fields, closed enums)
   // but intentionally skips deep validation of optional nested objects like
-  // personality, tokenOverrides, and customTranslations. Partial personality
-  // objects are valid because the merge chain fills gaps from lower layers.
+  // customTranslations. The engine is not among them: a tenant does not carry
+  // one, the vertical roster does.
   return (
       typeof c.slug === 'string' &&
       typeof c.name === 'string' &&
-      (c.engine === undefined || isValidEngineName(c.engine)) &&
       typeof c.theme === 'string' &&
       (c.locale === undefined || isValidLocale(c.locale)) &&
       (c.fallbackLocale === undefined || isValidLocale(c.fallbackLocale)) &&

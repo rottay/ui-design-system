@@ -59,6 +59,7 @@ import React, {
   useMemo,
 } from 'react';
 import type { TenantConfig, TenantContextValue } from '../../../../../../foundation/contracts';
+import type { TenantAppearance } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes/registry';
 import { isCanonicalJsonObject } from '@/foundation/kernel/serialization';
 import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
@@ -79,6 +80,12 @@ export interface TenantProviderProps {
   isLoading?: boolean;
   /** Resolved vertical preset passed from DesignSystemProvider */
   vertical?: ResolvedVerticalPreset;
+  /**
+   * The mounted artifact's normalized appearance, published beside the config.
+   * It is a compiled read-model, never an authoring channel, so it is snapshot
+   * and frozen exactly like the config rather than trusted by reference.
+   */
+  appearance?: TenantAppearance;
 }
 
 export function assertProviderTenantConfig(config: unknown): asserts config is TenantConfig {
@@ -148,6 +155,7 @@ export function TenantProvider({
   config,
   isLoading = false,
   vertical,
+  appearance,
 }: TenantProviderProps): React.ReactElement {
   // Never publish or later stamp from caller-owned mutable data. A child layout
   // effect runs before its parent layout effect, so validating `config` during
@@ -176,9 +184,19 @@ export function TenantProvider({
   // loading state, or vertical actually change. Without this, every parent
   // render would create a new object reference and cascade re-renders through
   // every useTenant() consumer in the tree.
+  const frozenAppearance = useMemo(
+    () => (appearance === undefined ? undefined : cloneAndFreezeTenantValue(appearance)),
+    [appearance],
+  );
+
   const value = useMemo<TenantContextValue>(
-    () => ({ config: validatedConfig, isLoading, vertical }),
-    [validatedConfig, isLoading, vertical],
+    () => ({
+      config: validatedConfig,
+      isLoading,
+      vertical,
+      ...(frozenAppearance === undefined ? {} : { appearance: frozenAppearance }),
+    }),
+    [validatedConfig, isLoading, vertical, frozenAppearance],
   );
 
   return (

@@ -12,6 +12,7 @@ import { ProductProfileContext } from '../../../../product-profiles';
 // root-attribute claiming and the first-party registry into every leaf that
 // only wanted `useContext`.
 import { TenantContext } from '../../../../tenant/foundation/context';
+import { EngineVisualDeclarationContext } from '../../../../foundation/engine-visual';
 import { resolveChartPersonality } from '../../../runtime/resolution/chart';
 
 /**
@@ -25,16 +26,11 @@ import { resolveChartPersonality } from '../../../runtime/resolution/chart';
 export function useResolvedChartPersonality(): ChartPersonalityTokens {
   const tenantContext = useContext(TenantContext);
   const { profile } = useContext(ProductProfileContext);
-  const config = tenantContext?.config;
+  const compiled = useContext(EngineVisualDeclarationContext)?.runtime.personality;
   const vertical = tenantContext?.vertical;
 
   return useMemo(
-    () => resolveChartPersonality({ tenantConfig: config, vertical, productProfile: profile }),
-    [
-      config?.brandTheme,
-      config?.personality?.chart,
-      vertical?.personality.chart,
-      profile.personality?.chart,
-    ],
+    () => resolveChartPersonality({ compiled, vertical, productProfile: profile }),
+    [compiled, vertical, profile],
   );
 }

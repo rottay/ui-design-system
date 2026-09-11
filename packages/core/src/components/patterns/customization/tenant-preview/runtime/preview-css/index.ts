@@ -29,10 +29,12 @@
  *
  * `buildPreviewCss` accepts either an already-resolved `PreviewSource` (a
  * caller that knows which of the two producers it wants) or a raw
- * `TenantConfig` (the common case: an engine holding a tenant config with no
- * opinion about which producer applies). The resolution from `TenantConfig`
- * to `PreviewSource` happens internally in `resolvePreviewInput`/
- * `liftTenantConfigToBrandTheme` below, so callers stay dumb call sites.
+ * `TenantConfig`, whose only remaining visual channel is its bounded branding.
+ * The resolution from `TenantConfig` to `PreviewSource` happens internally in
+ * `resolvePreviewInput`/`liftTenantConfigToBrandTheme` below, so callers stay
+ * dumb call sites. An authoring draft that wants its personality preset and
+ * density painted resolves through `draftPreviewSource` instead: those are
+ * BrandTheme channels, and a `TenantConfig` no longer carries them.
  */
 
 import type { TenantConfig } from '../../../../../../foundation/contracts/composition/tenants';
@@ -55,6 +57,10 @@ import {
   emitThemeCss,
 } from '@/infrastructure/compilers/runtime/theme';
 import { verifyTenantThemeArtifactV1 } from '../../../../../../infrastructure/runtime/theming/foundation/visual-authority';
+import {
+  createTenantBrandTheme,
+  type TenantCreationConfig,
+} from '@/infrastructure/runtime/tenant/runtime/authoring/configuration';
 import {
   buildPreviewScopeSelector,
   isSafePreviewCssValue,
@@ -175,18 +181,12 @@ export function draftBrandTheme(draft: {
 }
 
 /**
- * Lift a full `TenantConfig`'s legacy visual fields (`branding`, `personality`,
- * `tokenOverrides`) into the `BrandTheme` shape the lowering's intake accepts.
+ * Lift a `TenantConfig`'s bounded branding into the `BrandTheme` shape the
+ * lowering's intake accepts.
  *
  * This is NOT `draftBrandTheme` above. That function lifts a narrow 4-field
- * AUTHORING DRAFT (slug/name/primaryColor/secondaryColor) and is genuinely
- * lossless for that input because that input IS that small. A `TenantConfig`
- * carries far more: `branding`'s dark-mode/semantic/font fields,
- * `personality`'s five dimensions, and `tokenOverrides`' structural
- * surface/radius/shadow/glass/gradient/density knobs. Routing a full
- * `TenantConfig` through `draftBrandTheme` would silently drop every one of
- * those -- the exact defect this function exists to repair -- so each is
- * placed on its verified equivalent BrandTheme channel instead:
+ * AUTHORING DRAFT (slug/name/primaryColor/secondaryColor). This one lifts every
+ * visual field a `TenantConfig` still has, which is exactly `branding`:
  *   - `branding.{primary,secondary,accent,success,warning,error,info}Color`
  *     -> `palette` (same field names as `BrandPalette`)
  *   - `branding.dark{Primary,Secondary,Accent,Background}Color`
@@ -194,48 +194,29 @@ export function draftBrandTheme(draft: {
  *       by `compileTheme`; the generic rescoping loop below re-anchors
  *       it exactly like the base block, no special-casing needed)
  *   - `branding.fontFamily{Base,Heading,Mono,Display}` -> `typography`
- *   - `personality.typography.{headingWeightBias,headingLetterSpacing,labelStyle}`
- *     -> `typography` (verified against `brandThemeToPersonality`, the
- *       compiler's own reverse bridge: identical field names/types)
- *   - `personality.animation` -> `motion` (same verification; several fields
- *     reach emitted CSS text directly -- `intensity` feeds
- *     `--ds-motion-intensity`, `entranceDuration` feeds `--ds-motion-calm`
- *     and its `calc()` dependents, `springTension`/`springFriction` feed
- *     `--ds-motion-spring-gentle` when `useSpring` is set -- so a personality
- *     preset change is genuinely visible in the compiled preview)
- *   - `tokenOverrides.{surface,borderRadius,shadows,glass,gradients,overlays,
- *     densityScale}` -> `surfaces` (the exact inverse of
- *     `brandThemeToTokenOverrides`; `densityScale` feeds `--ds-density-scale`
- *     directly, which is how the density axis becomes observable)
- *   - `personality.{chart,card,accent}` -> `charts`/`chrome.{card,accent}`
- *     (stored losslessly on the BrandTheme -- nothing is dropped
- *     structurally) but reported in `unsupportedAxes` below: `chromeToVariables`
- *     only reads the VISUAL chrome sub-objects (`cardComponent`, `badge`,
- *     `controls`, ...), never `chrome.card`/`chrome.accent`, and `bt.charts`
- *     only ever reaches the compiler's separate `.personality` return value,
- *     which `buildPreviewCss` does not read. Their absence from the emitted
- *     CSS is therefore a named, observable fact instead of a silent one.
+ *
+ * It reports NO unsupported axis, and that is a statement about the input, not
+ * a silence: `personality`, `tokenOverrides`, `brandTheme` and `appearance`
+ * were removed from `TenantConfig`, so there is no longer an authored visual
+ * axis this lift can fail to represent.
  *
  * `logo`, `logoMark`, `favicon`, `companyName` (routed to `name` instead),
- * `plan`, `features`, `domain`, `engine`, `vertical`, and `componentPack` are
- * intentionally NOT lifted and NOT reported in `unsupportedAxes`: per
- * `BrandTheme`'s own doc comment it "does NOT include tenant identity" --
- * those fields have no CSS-variable channel to lose in the first place, so
- * naming them as an unsupported VISUAL axis would misrepresent what they are.
+ * `plan`, `features`, `domain`, `vertical`, and `componentPack` are
+ * intentionally NOT lifted and NOT reported: per `BrandTheme`'s own doc comment
+ * it "does NOT include tenant identity" -- those fields have no CSS-variable
+ * channel to lose in the first place, so naming them as an unsupported VISUAL
+ * axis would misrepresent what they are.
  *
  * Returns `null` when `branding.primaryColor` is absent: `BrandPalette.primaryColor`
  * is required, and there is no seed to build a palette from. Inventing one
  * would be exactly the DS-baseline-wearing-the-tenant's-name preview this
  * module refuses to produce (see `PreviewSource`'s doc comment above).
  */
-function liftTenantConfigToBrandTheme(
-  config: TenantConfig
-): { brandTheme: BrandTheme; unsupportedAxes: readonly string[] } | null {
+function liftTenantConfigToBrandTheme(config: TenantConfig): BrandTheme | null {
   const branding = config.branding;
   if (!branding.primaryColor) return null;
 
   const { accentColor } = branding;
-  const unsupportedAxes: string[] = [];
 
   const palette: BrandPalette = {
     primaryColor: branding.primaryColor,
@@ -252,39 +233,7 @@ function liftTenantConfigToBrandTheme(
     ...(branding.fontFamilyHeading ? { fontFamilyHeading: branding.fontFamilyHeading } : {}),
     ...(branding.fontFamilyMono ? { fontFamilyMono: branding.fontFamilyMono } : {}),
     ...(branding.fontFamilyDisplay ? { fontFamilyDisplay: branding.fontFamilyDisplay } : {}),
-    ...(config.personality?.typography ?? {}),
   };
-
-  const tokenOverrides = config.tokenOverrides;
-  const borderRadius = tokenOverrides?.borderRadius;
-  const surfaces: BrandSurfaces = {
-    ...(tokenOverrides?.surface ? { surface: tokenOverrides.surface } : {}),
-    ...(borderRadius ? { borderRadius } : {}),
-    ...(tokenOverrides?.shadows ? { shadows: tokenOverrides.shadows } : {}),
-    ...(tokenOverrides?.glass ? { glass: tokenOverrides.glass } : {}),
-    ...(tokenOverrides?.gradients ? { gradients: tokenOverrides.gradients } : {}),
-    ...(tokenOverrides?.overlays ? { overlays: tokenOverrides.overlays } : {}),
-    ...(tokenOverrides?.densityScale !== undefined
-      ? { densityScale: tokenOverrides.densityScale }
-      : {}),
-  };
-
-  const motion: BrandMotion | undefined = config.personality?.animation
-    ? { ...config.personality.animation }
-    : undefined;
-
-  const charts = config.personality?.chart;
-  if (charts) unsupportedAxes.push('personality.chart');
-
-  const chrome: BrandChrome = {};
-  if (config.personality?.card) {
-    chrome.card = config.personality.card;
-    unsupportedAxes.push('personality.card');
-  }
-  if (config.personality?.accent) {
-    chrome.accent = config.personality.accent;
-    unsupportedAxes.push('personality.accent');
-  }
 
   let darkPalette: Partial<BrandPalette>;
   {
@@ -303,15 +252,11 @@ function liftTenantConfigToBrandTheme(
   }
   const hasDarkPalette = Object.keys(darkPalette).length > 0;
 
-  const brandTheme: BrandTheme = {
+  return {
     id: config.slug,
     name: branding.companyName,
     palette,
     ...(Object.keys(typography).length > 0 ? { typography } : {}),
-    ...(Object.keys(surfaces).length > 0 ? { surfaces } : {}),
-    ...(motion ? { motion } : {}),
-    ...(charts ? { charts } : {}),
-    ...(Object.keys(chrome).length > 0 ? { chrome } : {}),
     // The overlay only. `appearance.defaultMode` used to be stamped `'light'`
     // here so that a standalone draft could legally carry a `modes.dark`
     // overlay. A draft is a patch over a vertical now, and the vertical
@@ -321,8 +266,28 @@ function liftTenantConfigToBrandTheme(
     // is the correct answer: there, a tenant's dark seeds ARE the base palette.
     ...(hasDarkPalette ? { modes: { dark: { palette: darkPalette } } } : {}),
   };
+}
 
-  return { brandTheme, unsupportedAxes };
+/**
+ * The preview source an AUTHORING DRAFT compiles to.
+ *
+ * A draft's personality preset and density posture are BrandTheme channels --
+ * `motion`, `typography`, `chrome`, `surfaces` -- so the honest preview of a
+ * draft is a compile of the theme it would publish, not of the identity config
+ * it would publish beside it.
+ *
+ * `null` when the draft names no first-party vertical: a draft is a patch over
+ * a vertical, so one that names no baseline names no compile either. Callers
+ * fall back to the config arm, which reports `vertical` as the lost axis.
+ */
+export function draftPreviewSource(draft: TenantCreationConfig): PreviewSource | null {
+  if (!isFirstPartyVerticalId(draft.vertical)) return null;
+  return {
+    kind: 'brand-theme',
+    vertical: draft.vertical,
+    slug: draft.slug,
+    brandTheme: createTenantBrandTheme(draft),
+  };
 }
 
 function isPreviewSource(input: TenantConfig | PreviewSource): input is PreviewSource {
@@ -344,24 +309,11 @@ function isPreviewSource(input: TenantConfig | PreviewSource): input is PreviewS
  * axis on its verified channel and NAME whatever it cannot represent. The arm
  * exists for a caller that genuinely already holds a compiled artifact.
  *
- * A `TenantConfig` is resolved in this order:
- *   1. A compiled `TenantThemeArtifact` the config already carries. There is
- *      currently no such field on `TenantConfig` (see
- *      `foundation/contracts/composition/tenants` -- `brandTheme` and
- *      `appearance` are its only visual channels), so this step is a no-op
- *      today; a caller already holding a compiled artifact passes it via the
- *      `PreviewSource` `tenant-theme` arm instead, handled above. This is
- *      where a future artifact-bearing field would be checked FIRST, ahead
- *      of `brandTheme`.
- *   2. `config.brandTheme` -- passed through in FULL, unmodified. Per
- *      `TenantConfig`'s own doc comment, when both are present `brandTheme`
- *      supersedes `branding`/`personality`/`tokenOverrides`, so ignoring
- *      those legacy fields here loses nothing that was actually authoritative.
- *   3. Otherwise, `config.branding`/`personality`/`tokenOverrides` are lifted
- *      into an equivalent BrandTheme (`liftTenantConfigToBrandTheme`).
- *   4. If there is not even a `branding.primaryColor` to seed a palette from,
- *      there is no producer for this config -- return a null source rather
- *      than inventing one.
+ * A `TenantConfig` carries exactly one visual channel -- its bounded
+ * `branding` -- so it resolves by lifting that onto an equivalent BrandTheme
+ * (`liftTenantConfigToBrandTheme`). If there is not even a
+ * `branding.primaryColor` to seed a palette from, there is no producer for this
+ * config, and a null source is returned rather than one invented.
  */
 function resolvePreviewInput(
   input: TenantConfig | PreviewSource
@@ -380,32 +332,15 @@ function resolvePreviewInput(
   }
   const vertical: FirstPartyVerticalId = input.vertical;
 
-  if (input.brandTheme) {
-    return {
-      source: {
-        kind: 'brand-theme',
-        vertical,
-        slug: input.slug,
-        brandTheme: input.brandTheme,
-      },
-      unsupportedAxes: [],
-    };
-  }
-
   const lifted = liftTenantConfigToBrandTheme(input);
   if (lifted === null) {
-    // No BrandTheme, no artifact, and not even a primary color to seed a
-    // palette from: nothing this module can honestly compile a preview from.
+    // Not even a primary color to seed a palette from: nothing this module can
+    // honestly compile a preview from.
     return { source: null, unsupportedAxes: ['palette'] };
   }
   return {
-    source: {
-      kind: 'brand-theme',
-      vertical,
-      slug: input.slug,
-      brandTheme: lifted.brandTheme,
-    },
-    unsupportedAxes: lifted.unsupportedAxes,
+    source: { kind: 'brand-theme', vertical, slug: input.slug, brandTheme: lifted },
+    unsupportedAxes: [],
   };
 }
 

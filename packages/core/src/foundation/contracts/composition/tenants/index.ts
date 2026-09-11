@@ -16,7 +16,7 @@
 
 import type { EngineName } from '../../runtime/engine';
 import type { ProductProfileKey } from '../../kernel/product-profile-identity';
-import type { PartialPersonalityTokens, PersonalityTokens } from '../../kernel/tokens/personality';
+import type { PersonalityTokens } from '../../kernel/tokens/personality';
 import type { SurfaceTokens, MotionTokens } from '../../kernel/tokens';
 import type { MotionProfile, VerticalKey } from '../../kernel/verticals';
 
@@ -121,34 +121,34 @@ export interface TenantTokenOverrides {
   overlays?: TenantOverlayTokens;
 }
 
-// TenantConfig is intentionally a flat JSON-serializable object so it can be
-// loaded from the remote storage API and static file loader without custom
-// transformations.
-//
-// Visual merge chain (implemented):
-//   DS base -> vertical baseline -> BrandTheme -> branding/tokenOverrides
-//   -> Appearance General -> Appearance Advanced -> runtime
-//
-// TenantAppearance is wired: DesignSystemProvider resolves config.appearance
-// into the Theme every transport lowers through `compileTheme`, ThemeProvider
-// injects vars inline, useTokens() reads density from appearance.general.
-//
-// The canonical premium source is `brandTheme` (embedded in TenantConfig).
-// Legacy fields `branding`, `personality`, and `tokenOverrides` remain
-// for backward compatibility.
+/**
+ * Tenant IDENTITY, bounded branding, and a reference to the artifact that
+ * paints it. Never a visual payload.
+ *
+ * WHAT IT NO LONGER CARRIES, and why. `brandTheme`, `tokenOverrides`,
+ * `personality`, `appearance` and `engine` were removed: each was a second
+ * authority over a question the compiled artifact already answers. A tenant's
+ * visual identity is lowered ONCE -- `Theme -> compileTheme -> artifact` -- and
+ * reaches the runtime as the mounted artifact's CSS plus its
+ * `ThemeCompilation.runtime`; the engine is the vertical roster's. A config
+ * that also carried those fields let the same question be answered twice, by
+ * two inputs that drift the first time only one is edited.
+ *
+ * HOW A TENANT REFERENCES ITS ARTIFACT. By identity: `slug` and `vertical` are
+ * the keys the compiled artifact is published and admitted under
+ * (`TenantThemeArtifact.slug` / `.verticalKey`), which is what
+ * `resolveVisualAuthority` matches a mount against. The artifact's own compiled
+ * read-model travels BESIDE this config, on `TenantContextValue.appearance`,
+ * rather than inside it.
+ *
+ * It stays a flat JSON-serializable object so it can be loaded from the remote
+ * storage API and the static file loader without custom transformations.
+ */
 export interface TenantConfig {
   slug: string;
   name: string;
   domain?: string;
 
-  /**
-   * A deliberate engine pin, honoured only for a bundled first-party tenant
-   * rendered with no vertical in play. The vertical owns the engine; a tenant
-   * arriving from the database may not set this and it will be ignored if it
-   * does. See `runtime/engines/resolution.ts`, which is the only place the
-   * engine is decided.
-   */
-  engine?: EngineName;
   theme: string;
   locale?: TenantSupportedLocale;
   fallbackLocale?: TenantSupportedLocale;
@@ -156,28 +156,14 @@ export interface TenantConfig {
   plan: TenantPlan;
   features: string[];
 
-  /** Tenant identity and visual branding (logos, colors, fonts).
-   *  New tenants should prefer `brandTheme` for rich visual identity.
-   *  `branding` remains required for backward compat; at minimum provide
-   *  `companyName` and optionally logos. Color/font fields here are
-   *  superseded by `brandTheme` when both are present. */
+  /**
+   * Bounded tenant branding: company name, logos, and the seed colours/fonts a
+   * transport may carry. The compiled artifact is what PAINTS them; a runtime
+   * projection reduces this to identity (`companyName` and the three logo
+   * fields) before any component sees it.
+   */
   branding: TenantBranding;
 
-  /** @deprecated Use `brandTheme.motion` / `brandTheme.chrome` instead.
-   *  Kept for backward compatibility with existing tenant configs.
-   *
-   *  DEEP-partial: a dimension is optional AND every field inside a present
-   *  dimension is independently optional. This mirrors the shape production
-   *  already consumes — `resolvePartialPersonalityCssVariables` takes
-   *  `PartialPersonalityInput`, which is exactly this, and the compiler
-   *  deep-merges through `mergePartialPersonality`. The former
-   *  `Partial<PersonalityTokens>` demanded a COMPLETE dimension the moment a
-   *  tenant declared one field of it, which no consumer requires and no tenant
-   *  config ever satisfied; the type was the broken part, not the data. */
-  personality?: PartialPersonalityTokens;
-  /** @deprecated Use `brandTheme.surfaces` / `brandTheme.chrome.controls` instead.
-   *  Kept for backward compatibility with existing tenant configs. */
-  tokenOverrides?: TenantTokenOverrides;
   /** Optional tenant-owned copy overrides merged on top of DS locale dictionaries */
   customTranslations?: Partial<TenantLocaleTranslations>;
 
@@ -185,16 +171,6 @@ export interface TenantConfig {
   vertical?: string;
   /** Pack key used by the custom engine to resolve tenant-specific implementations */
   componentPack?: string;
-
-  /** Embedded brand theme — the canonical premium visual source.
-   *  Used by bundled first-party verticals (file-first model).
-   *  DB tenants use appearance.general/advanced instead. */
-  brandTheme?: import('./themes').BrandTheme;
-
-  /** DB-owned tenant appearance (General + Advanced tiers).
-   *  Layered on top of the vertical theme in the merge chain.
-   *  See docs/premium-styling-track/02-customization-model.md. */
-  appearance?: import('./themes').TenantAppearance;
 }
 
 /**
@@ -230,4 +206,11 @@ export interface TenantContextValue {
   isLoading: boolean;
   /** Resolved vertical preset, if one was provided to DesignSystemProvider */
   vertical?: VerticalPreset;
+  /**
+   * The mounted artifact's own normalized appearance, published beside the
+   * config instead of folded into it. It is a COMPILED read-model -- density
+   * posture, background mode, responsive posture, recipe profile -- never an
+   * authoring channel, and it is absent when no artifact is mounted.
+   */
+  appearance?: import('./themes').TenantAppearance;
 }

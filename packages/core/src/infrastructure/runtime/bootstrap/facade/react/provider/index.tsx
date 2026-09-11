@@ -143,6 +143,7 @@ import {
   assertEngineVisualBelongs,
 } from '../../../../foundation/engine-visual';
 import type { EngineVisualDeclaration } from '@/foundation/contracts/composition/tenants/themes/engine-adapter';
+import type { TenantAppearance } from '@/foundation/contracts/composition/tenants/themes';
 import { resolveEngine } from '../../../../engines/runtime/resolution';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import { CommandRegistryProvider } from '../../../../application/commands';
@@ -385,19 +386,17 @@ const LEGACY_PROFILE_DURATION_MS: Readonly<Record<MotionProfile, number>> = {
 };
 
 /**
- * The static expressive selection for a config.
+ * The static expressive selection for a code-owned vertical.
  *
- * A code-owned config reaches the runtime as an identity-only projection with
- * `brandTheme` stripped, so its governed selection arrives through
+ * A `TenantConfig` carries no theme, so the selection arrives only through
  * `governed` -- the bounded, non-visual slice the registry keeps keyed to the
- * projection's identity. Nothing else changes: the selection is the same
- * object the theme authored, resolved by the same fail-closed registry.
+ * projection's identity. It is the same object the theme authored, resolved by
+ * the same fail-closed registry.
  */
 function resolveStaticExpressiveDefaults(
-  config: TenantConfig | null,
   governed?: CodeOwnedGovernedBehavior,
 ) {
-  const selection = governed?.expressive ?? config?.brandTheme?.expressive;
+  const selection = governed?.expressive;
   if (!selection) return undefined;
   return expandExpressiveProfiles(
     resolveExpressiveAxes(
@@ -413,24 +412,21 @@ function resolveStaticExpressiveDefaults(
  * the bounded tenant dial. New DB configs write appearance.general.motion.
  */
 function resolveTenantMotionDial(
-  config: TenantConfig | null,
+  appearance: TenantAppearance | undefined,
   profile: MotionProfile,
   governed?: CodeOwnedGovernedBehavior,
 ): TenantMotionDial | undefined {
-  if (!config) return undefined;
-
-  const explicit = config.appearance?.general?.motion;
-  const legacy = governed?.motion ?? config.brandTheme?.motion;
-  const legacyDurationScale = config.tokenOverrides?.motion?.durationScale;
-  const expressive = resolveStaticExpressiveDefaults(config, governed)?.motion;
-  if (!explicit && !legacy && legacyDurationScale === undefined && !expressive) {
+  const explicit = appearance?.general?.motion;
+  const legacy = governed?.motion;
+  const expressive = resolveStaticExpressiveDefaults(governed)?.motion;
+  if (!explicit && !legacy && !expressive) {
     return undefined;
   }
 
-  const derivedDurationScale = legacyDurationScale
-    ?? (typeof legacy?.entranceDuration === 'number'
+  const derivedDurationScale =
+    typeof legacy?.entranceDuration === 'number'
       ? legacy.entranceDuration / LEGACY_PROFILE_DURATION_MS[profile]
-      : undefined);
+      : undefined;
 
   return {
     intensity: explicit?.intensity ?? legacy?.intensity ?? expressive?.intensity,
@@ -472,9 +468,8 @@ const MemoizedChildren = memo(function MemoizedChildren({
  *                                 `forceTheme`. A mode is not a token, so this
  *                                 admits no raw paint.
  *
- * Everything else — branding, tokenOverrides, personality, brandTheme,
- * appearance, identity, `engine`, `componentPack` — is visual or identity
- * payload and MUST travel through the config so the census and the
+ * Everything else — branding, identity, `componentPack` — is visual or
+ * identity payload and MUST travel through the config so the census and the
  * reserved-identity assert can see it.
  *
  * Exported so the drill can assert against THIS declaration instead of a copy.
@@ -581,73 +576,13 @@ export function mergeDefinedOwnEntries<T extends object>(base: T, override: Part
   return merged as T;
 }
 
-const TOKEN_OVERRIDE_SECTIONS: ReadonlySet<string> = new Set([
-  'surface',
-  'motion',
-  'borderRadius',
-  'shadows',
-  'glass',
-  'gradients',
-  'overlays',
-]);
-
-/**
- * Section-wise merge that FABRICATES NOTHING and PRUNES NOTHING.
- *
- * An earlier implementation spread all seven sections unconditionally, so any
- * override at all produced `{ surface: {}, motion: {}, ... }` — seven keys the
- * caller never wrote. `censusRuntimeVisualPayload` counts `tokenOverrides` keys,
- * so that fabrication reported a runtime visual payload for a tenant that had
- * none, and the provider blocked on `uncompiled-visual-payload`.
- *
- * Replacing it with `{ ...base, ...override }` fixed the fabrication and opened
- * the mirror hole: `{ surface: undefined, motion: real }` is an own key, so the
- * spread overwrote a REAL base surface with `undefined` and left the key behind
- * — the tenant lost tokens it never asked to drop, and gained an artificial key
- * for the census to count. `undefined` means "I wrote nothing here" everywhere
- * else in this file (see `partitionTenantOverrides`); it means the same here.
- *
- * So: start from the base verbatim, copy only override entries whose value is
- * actually defined, merge a section only when BOTH sides declare an object, and
- * never invent a sibling neither side wrote.
- *
- * The SAME rule then applies one level further down. A section merged with a raw
- * `{ ...baseValue, ...overrideValue }` reopens the identical hole a field at a
- * time: `{ surface: { useGlass: undefined } }` would erase a real
- * `surface.useGlass` and leave an undefined field in its place. `mergeTokenOverrides`
- * would look correct at the top level and still lose tokens inside a section, so
- * both levels run through `mergeDefinedOwnEntries`.
- */
-export function mergeTokenOverrides(
-  base: TenantConfig['tokenOverrides'],
-  override: NonNullable<TenantConfig['tokenOverrides']>,
-): NonNullable<TenantConfig['tokenOverrides']> {
-  const merged: Record<string, unknown> = { ...base };
-
-  for (const key of Object.keys(override)) {
-    const overrideValue = (override as Record<string, unknown>)[key];
-    if (overrideValue === undefined) continue;
-
-    const baseValue = merged[key];
-    merged[key] =
-      TOKEN_OVERRIDE_SECTIONS.has(key) &&
-      isPlainObject(baseValue) &&
-      isPlainObject(overrideValue)
-        ? mergeDefinedOwnEntries(baseValue, overrideValue)
-        : overrideValue;
-  }
-
-  return merged as NonNullable<TenantConfig['tokenOverrides']>;
-}
-
 /**
  * Applies the visual/identity lane on top of a resolved tenant.
  *
  * Called ONLY when that lane is non-empty, which is what preserves the object
  * identity of a behavior-only mount. The merge is transparent: last write wins
- * for scalars, `branding` and `tokenOverrides` merge field-wise under the
- * undefined discipline when the override declares them, and no key the caller
- * omitted is invented.
+ * for scalars, `branding` merges field-wise under the undefined discipline when
+ * the override declares it, and no key the caller omitted is invented.
  *
  * The top-level spread below needs no such guard: `configOverrides` is the
  * partition's config lane, already built by skipping every own key whose value
@@ -655,13 +590,6 @@ export function mergeTokenOverrides(
  * caller's nested object arrives verbatim — `{ branding: { companyName, favicon:
  * '/f.ico', logo: undefined } }` is the shape that erased a tenant's real logo
  * while publishing a favicon, and the census would then have counted the key.
- *
- * `personality` is intentionally replaced rather than deep-merged. It is stored
- * as a partial shape and `useTokens()` is where it becomes fully resolved;
- * re-materializing the nested structure here would add type friction and no
- * behavior. Note the replacement is key-conditional now — `personality: {}`
- * publishes an empty object, which the census correctly reads as a declared
- * personality channel, instead of silently falling back to the base value.
  */
 function applyTenantConfigOverrides(
   baseTenantConfig: TenantConfig,
@@ -679,13 +607,6 @@ function applyTenantConfigOverrides(
     merged.branding = mergeDefinedOwnEntries(
       baseTenantConfig.branding,
       configOverrides.branding,
-    );
-  }
-
-  if (configOverrides.tokenOverrides !== undefined) {
-    merged.tokenOverrides = mergeTokenOverrides(
-      baseTenantConfig.tokenOverrides,
-      configOverrides.tokenOverrides,
     );
   }
 
@@ -711,19 +632,17 @@ function resolveTenantConfigWithOverrides(
     : applyTenantConfigOverrides(baseTenantConfig, partition.config);
 }
 
-/** Runtime context never carries a second copy of tenant visual source. */
-function buildResolvedRuntimeConfig(
-  config: TenantConfig,
-  compiledAppearance: TenantConfig['appearance'],
-): TenantConfig {
-  const {
-    branding,
-    tokenOverrides: _tokenOverrides,
-    appearance: _appearance,
-    personality: _personality,
-    brandTheme: _brandTheme,
-    ...identityAndBehavior
-  } = config;
+/**
+ * The config a component is handed: identity and identity-only branding.
+ *
+ * A transport may still carry seed colours and fonts on `branding` -- that is
+ * the last visual channel `TenantConfig` has -- and they are dropped here,
+ * because the mounted artifact already compiled them. The artifact's own
+ * normalized appearance travels beside this config on the tenant context, not
+ * inside it.
+ */
+function buildResolvedRuntimeConfig(config: TenantConfig): TenantConfig {
+  const { branding, ...identityAndBehavior } = config;
   const identityBranding = {
     companyName: branding.companyName,
     ...(branding.logo === undefined ? {} : { logo: branding.logo }),
@@ -733,7 +652,6 @@ function buildResolvedRuntimeConfig(
   return {
     ...identityAndBehavior,
     branding: identityBranding,
-    ...(compiledAppearance === undefined ? {} : { appearance: compiledAppearance }),
   } as TenantConfig;
 }
 
@@ -1039,10 +957,6 @@ export function DesignSystemProvider({
       explicitVisualAuthority,
       normalizedConfig?.slug,
       normalizedConfig?.branding,
-      normalizedConfig?.appearance,
-      normalizedConfig?.tokenOverrides,
-      normalizedConfig?.personality,
-      normalizedConfig?.brandTheme,
       codeOwnedConfig,
       resolvedVertical?.key,
       asyncRequestSlug,
@@ -1139,10 +1053,13 @@ export function DesignSystemProvider({
     return <LoadingScreen />;
   }
 
-  const resolvedRuntimeConfig = codeOwnedConfig ?? buildResolvedRuntimeConfig(
-    normalizedConfig,
-    verifiedArtifact?.normalizedAppearance as TenantConfig['appearance'] | undefined,
-  );
+  const resolvedRuntimeConfig = codeOwnedConfig ?? buildResolvedRuntimeConfig(normalizedConfig);
+
+  // THE ARTIFACT'S OWN read-model, read where it is proven and published beside
+  // the config rather than folded into it. It used to be assigned to
+  // `config.appearance`, which made a compiled output indistinguishable from a
+  // field a transport had authored -- the exact ambiguity the strip removes.
+  const appearance = verifiedArtifact?.normalizedAppearance as TenantAppearance | undefined;
 
   // Governed, non-visual behavior of a code-owned vertical. The runtime
   // projection above strips `brandTheme` so static CSS stays the sole visual
@@ -1158,8 +1075,7 @@ export function DesignSystemProvider({
   // why two verticals with deliberately different profiles were
   // indistinguishable in the product.
   const recipeProfileSelection = (() => {
-    const profileId =
-      resolvedRuntimeConfig.appearance?.recipeProfile ?? governedBehavior?.recipeProfile;
+    const profileId = appearance?.recipeProfile ?? governedBehavior?.recipeProfile;
     return profileId
       ? { profileId, schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION }
       : undefined;
@@ -1172,16 +1088,15 @@ export function DesignSystemProvider({
   // `provideServerIconExpressiveProfile` — both integration points share
   // this one pure resolver.
   const iconExpressiveProfile = resolveActiveIconExpressiveProfile(
-    governedBehavior
-      // A local read-model, never published: `resolveActiveIconExpressiveProfile`
-      // is structural and consumes exactly `{ expressive }` off this slot.
-      ? { appearance: resolvedRuntimeConfig.appearance, brandTheme: governedBehavior }
-      : resolvedRuntimeConfig,
+    // A local read-model, never published: `resolveActiveIconExpressiveProfile`
+    // is structural and consumes exactly `{ expressive }` off the governed slot
+    // and the artifact's appearance.
+    { appearance, ...(governedBehavior ? { brandTheme: governedBehavior } : {}) },
   );
 
   const motionProfile = resolvedVertical?.motionProfile ?? 'calm';
   const tenantMotionDial = resolveTenantMotionDial(
-    resolvedRuntimeConfig,
+    appearance,
     motionProfile,
     governedBehavior,
   );
@@ -1200,7 +1115,6 @@ export function DesignSystemProvider({
   const engine = resolveEngine({
     forceEngine,
     verticalEngine: resolvedVertical?.engine,
-    tenantEngine: resolvedRuntimeConfig.engine,
     tenantSlug: resolvedRuntimeConfig.slug,
   });
   // FAIL-CLOSED ENGINE BASELINE. An engine with no registered adapter has no
@@ -1211,11 +1125,11 @@ export function DesignSystemProvider({
   // A projection compiled for one engine cannot seed another, and the compile's
   // own governed profiles cannot contradict the tenant it is mounted against.
   if (engineVisual) {
-    assertEngineVisualBelongs(engineVisual, engine, resolvedRuntimeConfig.appearance);
+    assertEngineVisualBelongs(engineVisual, engine, appearance);
   }
   // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'.
   // tenant.theme only wins if it's explicitly set to a real mode (not the default 'base').
-  const appearanceBackgroundMode = resolvedRuntimeConfig.appearance?.general?.palette?.backgroundMode;
+  const appearanceBackgroundMode = appearance?.general?.palette?.backgroundMode;
   const VALID_THEME_MODES = new Set(['light', 'dark', 'auto']);
   const toExplicitThemeMode = (mode: string | undefined): string | undefined =>
     mode && VALID_THEME_MODES.has(mode) ? mode : undefined;
@@ -1283,8 +1197,8 @@ export function DesignSystemProvider({
   // authored static posture, then its expressive-profile default. Structural
   // `densityScale` remains a separate multiplier and is never reinterpreted.
   const rootDensityPosture = deriveDensityPosture(
-    resolvedRuntimeConfig.appearance?.general?.density ??
-      resolveStaticExpressiveDefaults(resolvedRuntimeConfig, governedBehavior)?.density,
+    appearance?.general?.density ??
+      resolveStaticExpressiveDefaults(governedBehavior)?.density,
   );
 
   // The provider is a client component, so the context object always exists
@@ -1308,7 +1222,11 @@ export function DesignSystemProvider({
     */}
     {claim ? <RetainedArtifactArm claim={claim} /> : null}
     <IconProfileCarrier.Provider value={iconExpressiveProfile}>
-    <TenantProvider config={resolvedRuntimeConfig} vertical={resolvedVertical}>
+    <TenantProvider
+      config={resolvedRuntimeConfig}
+      vertical={resolvedVertical}
+      {...(appearance ? { appearance } : {})}
+    >
       <RecipeProfileProvider
         profileId={recipeProfileSelection?.profileId}
         schemaVersion={recipeProfileSelection?.schemaVersion}

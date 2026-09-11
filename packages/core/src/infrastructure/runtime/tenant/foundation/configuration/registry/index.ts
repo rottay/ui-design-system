@@ -21,6 +21,7 @@ import type { TenantConfig } from '../../../../../../foundation/contracts';
 import type { PersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 import type {
   BrandExpressiveSelection,
+  BrandTheme,
 } from '@/foundation/contracts/composition/tenants/themes';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
@@ -66,23 +67,21 @@ export interface CodeOwnedGovernedBehavior {
   /**
    * The personality channels this tenant DECIDED -- names only, no values.
    *
-   * The runtime projection strips `personality`, `brandTheme` and `appearance`
-   * to keep static CSS the sole visual emitter, and the instance-override
-   * policy read exactly those three fields to learn what the tenant had
-   * decided. Behind the real provider it therefore adjudicated against an empty
-   * set and admitted every selection it exists to refuse. The names travel here
-   * for the same reason the motion dial does: it is a governed fact no
-   * stylesheet can express, and a list of channel names is not a visual
-   * payload -- nothing here can paint.
+   * A code-owned vertical's authored theme is read once, at registration, and
+   * never reaches the config; the instance-override policy still has to know
+   * which channels the tenant decided in order to refuse an instance selection
+   * on one of them. The names travel here for the same reason the motion dial
+   * does: it is a governed fact no stylesheet can express, and a list of
+   * channel names is not a visual payload -- nothing here can paint.
    */
   readonly decidedChannels?: readonly string[];
   /**
    * The validated recipe-profile id this tenant's artifact compiled (D-26).
    *
    * `rottay` selects `technical-sharp` and `bithire` `network-professional`;
-   * both were invisible in the product because the projection strips
-   * `appearance` and the provider read the profile only from there, so every
-   * first-party vertical resolved `NONE`. The id is a SELECTION, not paint --
+   * both were invisible in the product because the provider read the profile
+   * only from a DB appearance, so every first-party vertical resolved `NONE`.
+   * The id is a SELECTION, not paint --
    * the same id the recipes deriver publishes as its provenance channel -- so
    * it travels on the identity-keyed behavior slot beside the motion dial
    * rather than re-entering the config as a visual field.
@@ -114,45 +113,53 @@ function collectDeclaredChannels(
 }
 
 /**
- * The personality channels a tenant decided, by any of its authoring routes:
- * the personality delta on the config, the BrandTheme lowered through the same
- * function `useTokens` uses, and the two semantic density postures (the
- * BrandTheme's `surfaces.density` and the DB document's
- * `appearance.general.density`), which decide the same padding channel the
- * personality card dimension carries.
+ * The personality channels a tenant decided, from the ONE place a decision can
+ * now come from: the compile that produced the tenant's artifact.
  *
- * The ONE definition. A code-owned config is stripped of all three fields
- * before it reaches a component, so its answer is captured here, while the
- * fields still exist, and travels beside the projection; a caller-provided
- * config still carries them and is read directly.
+ * A `TenantConfig` carries no visual payload at all, so it declares nothing.
+ * A code-owned vertical's decisions are captured at registration -- while the
+ * authored BrandTheme is still in hand -- and travel on the identity-keyed
+ * behavior slot; a tenant that published an artifact declares them through the
+ * compiled `ThemeCompilation.runtime.personality` the mount carries, plus the
+ * semantic density posture of its normalized appearance, which decides the
+ * same padding channel the personality card dimension carries.
  */
 export function tenantDecidedChannels(
   config: TenantConfig | undefined,
+  compiled?: CompiledTenantDecisions,
 ): ReadonlySet<string> {
-  if (!config) return new Set<string>();
-  const decided = declaredChannels(config);
-  for (const channel of getCodeOwnedGovernedBehavior(config)?.decidedChannels ?? []) {
-    decided.add(channel);
+  const decided = new Set<string>();
+  if (config) {
+    for (const channel of getCodeOwnedGovernedBehavior(config)?.decidedChannels ?? []) {
+      decided.add(channel);
+    }
   }
+  collectDeclaredChannels(compiled?.personality, decided);
+  if (compiled?.density !== undefined) decided.add('card.paddingDensity');
   return decided;
 }
 
-/** The channels a config STILL carries the authoring fields for. */
-function declaredChannels(config: TenantConfig): Set<string> {
+/** What a mounted artifact's compile says this tenant decided. */
+export interface CompiledTenantDecisions {
+  /** `ThemeCompilation.runtime.personality` of the mounted artifact. */
+  readonly personality?: {
+    [K in (typeof PERSONALITY_DIMENSIONS)[number]]?: Partial<PersonalityTokens[K]>;
+  };
+  /** The artifact's normalized semantic density posture, when it compiled one. */
+  readonly density?: string;
+}
+
+/** The channels an authored BrandTheme declares, read once at registration. */
+function declaredChannels(theme: BrandTheme): Set<string> {
   const decided = new Set<string>();
-  collectDeclaredChannels(config.personality, decided);
-  if (config.brandTheme) {
-    collectDeclaredChannels(brandThemeToPersonality(config.brandTheme), decided);
-    if (config.brandTheme.surfaces?.density !== undefined) decided.add('card.paddingDensity');
-  }
-  if (config.appearance?.general?.density !== undefined) decided.add('card.paddingDensity');
+  collectDeclaredChannels(brandThemeToPersonality(theme), decided);
+  if (theme.surfaces?.density !== undefined) decided.add('card.paddingDensity');
   return decided;
 }
 
 function projectGovernedBehavior(
-  config: TenantConfig,
+  theme: BrandTheme,
 ): CodeOwnedGovernedBehavior | undefined {
-  const theme = config.brandTheme;
   const intensity = theme?.motion?.intensity;
   const entranceDuration = theme?.motion?.entranceDuration;
   const expressive = theme?.expressive;
@@ -163,7 +170,7 @@ function projectGovernedBehavior(
           ...(intensity === undefined ? {} : { intensity }),
           ...(entranceDuration === undefined ? {} : { entranceDuration }),
         };
-  const decidedChannels = [...declaredChannels(config)];
+  const decidedChannels = [...declaredChannels(theme)];
   // One validation, one answer: the same validator the recipes deriver calls for
   // its provenance channel, so the JS selection and the compiled one cannot
   // disagree about which profile this tenant chose. Fail-closed by the same
@@ -192,30 +199,27 @@ function projectGovernedBehavior(
 /**
  * First-party tenants that ship with the DS.
  *
- * Each entry is a complete `TenantConfig` including full `personality` tokens.
- * The personality section drives all visual differentiation -- animation timing,
- * chart rendering, typography casing, accent decorations, and card behavior --
- * without any per-tenant branching in component code.
+ * Each entry is an identity-only `TenantConfig`. Visual differentiation comes
+ * from the vertical's authored theme, compiled once into the artifact this
+ * package bundles; only the governed, non-visual half of that theme travels
+ * beside the config.
  */
 function createKnownTenant(
   entry: (typeof FIRST_PARTY_VERTICAL_ROSTER)[number],
 ): TenantConfig {
+  // The authored theme is READ here and never placed on the config: a
+  // `TenantConfig` carries no visual payload, and the governed, non-visual
+  // half of what the theme decides travels on the identity-keyed slot below.
   const config = deepFreeze({
     slug: entry.slug,
     name: entry.name,
-    // No `engine` key. A first-party tenant does not carry an engine of its
-    // own: `resolveEngine` returns `verticalEngine` before it ever reads
-    // `tenantEngine`, and every first-party vertical preset declares `modern`,
-    // so the tenant branch was unreachable. Stating it here made the vertical
-    // preset look like one of two authorities over the same decision.
     vertical: entry.verticalKey,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],
     branding: { companyName: entry.name },
-    brandTheme: entry.theme,
   }) as TenantConfig;
-  const behavior = projectGovernedBehavior(config);
+  const behavior = projectGovernedBehavior(entry.theme);
   if (behavior) CODE_OWNED_GOVERNED_BEHAVIOR.set(config, behavior);
   return config;
 }
@@ -248,7 +252,13 @@ export function isCodeOwnedTenantConfig(
 
 /**
  * Returns the immutable, identity-only runtime projection of an exact
- * code-owned config. Static CSS remains the sole visual emitter.
+ * code-owned config.
+ *
+ * It DISCARDS NOTHING VISUAL, because there is nothing visual left to discard:
+ * `TenantConfig` carries no `brandTheme`, `tokenOverrides`, `personality` or
+ * `appearance`, so the only narrowing left is branding, reduced to identity.
+ * The visual authority is the mounted artifact; static CSS remains the sole
+ * emitter for a code-owned vertical.
  */
 export function getCodeOwnedRuntimeConfig(config: TenantConfig): TenantConfig {
   if (!isCodeOwnedTenantConfig(config)) {
@@ -257,14 +267,7 @@ export function getCodeOwnedRuntimeConfig(config: TenantConfig): TenantConfig {
   const cached = CODE_OWNED_RUNTIME_CONFIGS.get(config);
   if (cached) return cached;
 
-  const {
-    branding,
-    tokenOverrides: _tokenOverrides,
-    appearance: _appearance,
-    personality: _personality,
-    brandTheme: _brandTheme,
-    ...identityAndBehavior
-  } = config;
+  const { branding, ...identityAndBehavior } = config;
   const projected = deepFreeze({
     ...identityAndBehavior,
     branding: {
@@ -277,8 +280,7 @@ export function getCodeOwnedRuntimeConfig(config: TenantConfig): TenantConfig {
   CODE_OWNED_TENANT_CONFIGS.add(projected);
   CODE_OWNED_RUNTIME_CONFIGS.set(config, projected);
   // Governed behavior travels with the projection's identity, not inside it.
-  const behavior = CODE_OWNED_GOVERNED_BEHAVIOR.get(config)
-    ?? projectGovernedBehavior(config);
+  const behavior = CODE_OWNED_GOVERNED_BEHAVIOR.get(config);
   if (behavior) CODE_OWNED_GOVERNED_BEHAVIOR.set(projected, behavior);
   return projected;
 }

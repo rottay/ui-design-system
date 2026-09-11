@@ -23,7 +23,10 @@
 
 import type { PersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 import type { TenantConfig } from '@/foundation/contracts';
-import { tenantDecidedChannels } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
+import {
+  tenantDecidedChannels,
+  type CompiledTenantDecisions,
+} from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 
 import type { SurfaceVisualOverrides } from '../../../../contracts';
 
@@ -117,15 +120,17 @@ export function isAdmittedOverrideValue(
  *
  * Delegated to the tenant configuration registry, which owns the ONE
  * definition, because the answer has to survive a projection this layer never
- * sees: `getCodeOwnedRuntimeConfig` strips `personality`, `brandTheme` and
- * `appearance` before a component is ever handed the config, so re-reading
- * those three fields here adjudicated every selection against an empty set
- * behind the real provider and admitted what it exists to refuse.
+ * sees: a `TenantConfig` carries no visual payload at all, so a code-owned
+ * vertical's decisions travel on the identity-keyed behavior slot and a
+ * published tenant's travel on the compile its mounted artifact came from.
+ * Reading the config's own fields here adjudicated every selection against an
+ * empty set behind the real provider and admitted what it exists to refuse.
  */
 export function resolveTenantDecidedChannels(
   config: TenantConfig | undefined,
+  compiled?: CompiledTenantDecisions,
 ): ReadonlySet<string> {
-  return tenantDecidedChannels(config);
+  return tenantDecidedChannels(config, compiled);
 }
 
 /** One admitted or refused instance selection, with the reason it was refused. */

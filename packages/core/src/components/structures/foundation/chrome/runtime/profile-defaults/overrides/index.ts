@@ -20,6 +20,7 @@
 
 import { useMemo } from 'react';
 import { useTenantContext } from '@/infrastructure/runtime/tenant/foundation/context';
+import { useEngineVisualDeclaration } from '@/infrastructure/runtime/foundation/engine-visual';
 import type { SurfaceVisualOverrides } from '../../../contracts';
 import {
   useSurfaceProfileDefaults,
@@ -59,10 +60,29 @@ export {
 export function useSurfaceVisualOverrideVerdicts(
   overrides?: SurfaceVisualOverrides,
 ): readonly SurfaceVisualOverrideVerdict[] {
-  const { config } = useTenantContext();
+  const decided = useTenantDecidedChannels();
   return useMemo(
-    () => adjudicateInstanceOverrides(overrides, resolveTenantDecidedChannels(config)),
-    [config, overrides],
+    () => adjudicateInstanceOverrides(overrides, decided),
+    [decided, overrides],
+  );
+}
+
+/**
+ * The active tenant's decided channels, from the two places a decision can
+ * come from: the identity-keyed slot of a code-owned vertical, and the compile
+ * that produced the mounted artifact of a published one.
+ */
+function useTenantDecidedChannels(): ReadonlySet<string> {
+  const { config, appearance } = useTenantContext();
+  const compiledPersonality = useEngineVisualDeclaration()?.runtime.personality;
+  const density = appearance?.general?.density;
+  return useMemo(
+    () =>
+      resolveTenantDecidedChannels(config, {
+        ...(compiledPersonality === undefined ? {} : { personality: compiledPersonality }),
+        ...(density === undefined ? {} : { density }),
+      }),
+    [config, compiledPersonality, density],
   );
 }
 
@@ -80,11 +100,11 @@ export function useSurfaceProfileDefaultsWithOverrides(
   overrides?: SurfaceVisualOverrides
 ): ResolvedSurfaceProfileDefaults {
   const base = useSurfaceProfileDefaults();
-  const { config } = useTenantContext();
+  const decided = useTenantDecidedChannels();
 
   const admitted = useMemo(
-    () => admitInstanceOverrides(overrides, resolveTenantDecidedChannels(config)),
-    [config, overrides],
+    () => admitInstanceOverrides(overrides, decided),
+    [decided, overrides],
   );
 
   return useMemo(() => {

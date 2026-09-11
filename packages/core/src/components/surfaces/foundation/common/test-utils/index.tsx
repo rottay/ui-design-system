@@ -35,7 +35,6 @@ import {
 const SURFACE_TEST_TENANT: TenantConfig = {
   slug: 'surface-test',
   name: 'Surface Test Tenant',
-  engine: 'rustic',
   theme: 'light',
   plan: 'enterprise',
   features: ['all'],

@@ -27,13 +27,10 @@ import { useMemo } from 'react';
 import { useTenantContext as useTenant } from '../../../../tenant/foundation/context';
 import { useProductProfileContext as useProductProfile } from '../../../../product-profiles';
 import { useEngineContext } from '../../../../engines';
+import { useEngineVisualDeclaration } from '../../../../foundation/engine-visual';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import { DEFAULT_PERSONALITY } from '../../../../personality/foundation/defaults';
 import { resolveChartPersonality } from '../../../../personality/runtime/resolution/chart';
-import {
-  brandThemeToPersonality,
-  brandThemeToTokenOverrides,
-} from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
 import { resolveEffectiveDensityScale } from '@/foundation/tokens/ts/foundation/base/density';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '@/foundation/contracts';
 
@@ -159,33 +156,33 @@ const OVERLAY_TOKENS: OverlayTokens = {
  * @returns {DesignTokens} Object containing all design tokens
  */
 export function useTokens(): DesignTokens {
-  const { config, vertical } = useTenant();
+  const { config, vertical, appearance } = useTenant();
   const { profile } = useProductProfile();
   const { engine } = useEngineContext();
+  // THE TENANT LAYER, from the compile that produced the mounted artifact.
+  // `ThemeCompilation.runtime` is the non-CSS half of that one lowering, so the
+  // numbers this hook returns and the variables the artifact paints are two
+  // projections of the same answer. There is no second merge here: a tenant
+  // that publishes no artifact contributes no tenant layer, which is the honest
+  // reading of "nothing was compiled for this tenant".
+  const compiled = useEngineVisualDeclaration()?.runtime;
 
   return useMemo(() => {
     // -- Token Resolution Pipeline --
     //
-    // Two paths depending on whether the tenant has a BrandTheme:
+    //   Structural:  engine -> vertical.tokenOverrides -> profile.tokenOverrides
+    //                -> compiled.tokenOverrides
+    //   Personality: DEFAULT -> vertical.personality -> profile.personality
+    //                -> compiled.personality
     //
-    // BrandTheme path (target model):
-    //   Structural: engine -> vertical.tokenOverrides -> brandTheme.surfaces
-    //   Personality: DEFAULT -> vertical.personality -> brandTheme (motion/charts/chrome)
-    //   Product profile contributes only surfaceDefaults (UX posture), not visual tokens.
-    //
-    // Legacy path (backward compatible):
-    //   Structural: engine -> vertical.tokenOverrides -> profile.tokenOverrides -> tenant.tokenOverrides
-    //   Personality: DEFAULT -> vertical.personality -> profile.personality -> tenant.personality
-
-    const brandTheme = config.brandTheme;
-    const hasBrandTheme = !!brandTheme;
+    // Product profile contributes UX posture; the compiled layer is last
+    // because it is the tenant's own published decision.
 
     // 1. Engine base tokens. `resolveAdapter` is the single door: an engine
     // with no adapter has no baseline and is refused rather than substituted.
     const engineOverrides = resolveAdapter(engine).tokenBaseline;
 
-    // 2. Vertical structural overrides (new — previously only personality participated).
-    // This closes the asymmetry where vertical influenced personality but not structural tokens.
+    // 2. Vertical structural overrides.
     const verticalTokenOverrides = vertical?.tokenOverrides;
     const verticalBorderRadius = verticalTokenOverrides?.borderRadius
       ? { ...engineOverrides.borderRadius, ...verticalTokenOverrides.borderRadius }
@@ -201,142 +198,69 @@ export function useTokens(): DesignTokens {
       : engineOverrides.motion;
     const verticalDensityScale = verticalTokenOverrides?.densityScale ?? engineOverrides.densityScale;
 
-    // 3. Final structural layer — BrandTheme -> Appearance -> tenant overrides
-    let borderRadius: typeof verticalBorderRadius;
-    let shadows: typeof verticalShadows;
-    let surface: typeof verticalSurface;
-    let motion: typeof verticalMotion;
-    let densityScale: number;
+    // 3. Product-profile structural posture.
+    const productProfileTokenOverrides = profile.tokenOverrides;
+    const ppBorderRadius = productProfileTokenOverrides?.borderRadius
+      ? { ...verticalBorderRadius, ...productProfileTokenOverrides.borderRadius }
+      : verticalBorderRadius;
+    const ppShadows = productProfileTokenOverrides?.shadows
+      ? { ...verticalShadows, ...productProfileTokenOverrides.shadows }
+      : verticalShadows;
+    const ppSurface = productProfileTokenOverrides?.surface
+      ? { ...verticalSurface, ...productProfileTokenOverrides.surface }
+      : verticalSurface;
+    const ppMotion = productProfileTokenOverrides?.motion
+      ? { ...verticalMotion, ...productProfileTokenOverrides.motion }
+      : verticalMotion;
+    const ppDensityScale = productProfileTokenOverrides?.densityScale ?? verticalDensityScale;
 
+    // 4. The compiled tenant layer, last.
+    const compiledTokenOverrides = compiled?.tokenOverrides;
+    const borderRadius = compiledTokenOverrides?.borderRadius
+      ? { ...ppBorderRadius, ...compiledTokenOverrides.borderRadius }
+      : ppBorderRadius;
+    const shadows = compiledTokenOverrides?.shadows
+      ? { ...ppShadows, ...compiledTokenOverrides.shadows }
+      : ppShadows;
+    const surface = compiledTokenOverrides?.surface
+      ? { ...ppSurface, ...compiledTokenOverrides.surface }
+      : ppSurface;
+    const motion = compiledTokenOverrides?.motion
+      ? { ...ppMotion, ...compiledTokenOverrides.motion }
+      : ppMotion;
     // Appearance density is a semantic factor composed AFTER the structural
-    // BrandTheme/legacy resolution. The canonical resolver is also the source
-    // for the CSS mode-factor channel, preventing JS/CSS drift.
-    const appearance = config.appearance;
+    // resolution. The canonical resolver is also the source for the CSS
+    // mode-factor channel, preventing JS/CSS drift.
+    const densityScale = resolveEffectiveDensityScale(
+      compiledTokenOverrides?.densityScale ?? ppDensityScale,
+      appearance?.general?.density,
+    );
 
-    if (hasBrandTheme) {
-      // BrandTheme path: engine -> vertical -> brandTheme -> appearance -> tenant overrides.
-      const btOverrides = brandThemeToTokenOverrides(brandTheme);
-      const tenantTokenOverrides = config.tokenOverrides;
-
-      const btBorderRadius = btOverrides.borderRadius
-        ? { ...verticalBorderRadius, ...btOverrides.borderRadius }
-        : verticalBorderRadius;
-      const btShadows = btOverrides.shadows
-        ? { ...verticalShadows, ...btOverrides.shadows }
-        : verticalShadows;
-      const btSurface = btOverrides.surface
-        ? { ...verticalSurface, ...btOverrides.surface }
-        : verticalSurface;
-      const btMotion = btOverrides.motion
-        ? { ...verticalMotion, ...btOverrides.motion }
-        : verticalMotion;
-      const btDensityScale = btOverrides.densityScale ?? verticalDensityScale;
-
-      // Tenant overrides are still last-write-wins on top of brandTheme
-      borderRadius = tenantTokenOverrides?.borderRadius
-        ? { ...btBorderRadius, ...tenantTokenOverrides.borderRadius }
-        : btBorderRadius;
-      shadows = tenantTokenOverrides?.shadows
-        ? { ...btShadows, ...tenantTokenOverrides.shadows }
-        : btShadows;
-      surface = tenantTokenOverrides?.surface
-        ? { ...btSurface, ...tenantTokenOverrides.surface }
-        : btSurface;
-      motion = tenantTokenOverrides?.motion
-        ? { ...btMotion, ...tenantTokenOverrides.motion }
-        : btMotion;
-      densityScale = resolveEffectiveDensityScale(
-        tenantTokenOverrides?.densityScale ?? btDensityScale,
-        appearance?.general?.density,
-      );
-    } else {
-      // Legacy path: profile -> tenant on top of vertical
-      const productProfileTokenOverrides = profile.tokenOverrides;
-      const ppBorderRadius = productProfileTokenOverrides?.borderRadius
-        ? { ...verticalBorderRadius, ...productProfileTokenOverrides.borderRadius }
-        : verticalBorderRadius;
-      const ppShadows = productProfileTokenOverrides?.shadows
-        ? { ...verticalShadows, ...productProfileTokenOverrides.shadows }
-        : verticalShadows;
-      const ppSurface = productProfileTokenOverrides?.surface
-        ? { ...verticalSurface, ...productProfileTokenOverrides.surface }
-        : verticalSurface;
-      const ppMotion = productProfileTokenOverrides?.motion
-        ? { ...verticalMotion, ...productProfileTokenOverrides.motion }
-        : verticalMotion;
-      const ppDensityScale = productProfileTokenOverrides?.densityScale ?? verticalDensityScale;
-
-      const tenantTokenOverrides = config.tokenOverrides;
-      borderRadius = tenantTokenOverrides?.borderRadius
-        ? { ...ppBorderRadius, ...tenantTokenOverrides.borderRadius }
-        : ppBorderRadius;
-      shadows = tenantTokenOverrides?.shadows
-        ? { ...ppShadows, ...tenantTokenOverrides.shadows }
-        : ppShadows;
-      surface = tenantTokenOverrides?.surface
-        ? { ...ppSurface, ...tenantTokenOverrides.surface }
-        : ppSurface;
-      motion = tenantTokenOverrides?.motion
-        ? { ...ppMotion, ...tenantTokenOverrides.motion }
-        : ppMotion;
-      densityScale = resolveEffectiveDensityScale(
-        tenantTokenOverrides?.densityScale ?? ppDensityScale,
-        appearance?.general?.density,
-      );
-    }
-
-    // 4. Personality tokens — BrandTheme or legacy merge.
-    // Each sub-object is spread independently so customizing one dimension
-    // does not wipe out another.
+    // 5. Personality. Each sub-object is spread independently so customizing
+    // one dimension does not wipe out another.
     const verticalPersonality = vertical?.personality;
-    const chartPersonality = resolveChartPersonality({
-      tenantConfig: config,
-      vertical,
-      productProfile: profile,
-    });
-    let personality: PersonalityTokens;
-
-    if (hasBrandTheme) {
-      // BrandTheme path: DEFAULT -> vertical -> brandTheme -> tenant.personality
-      // Product profile personality is skipped, but tenant personality remains
-      // the highest-priority layer for per-tenant overrides.
-      const btPersonality = brandThemeToPersonality(brandTheme);
-      const tenantPersonality = config.personality;
-      personality = {
-        animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...btPersonality.animation, ...tenantPersonality?.animation },
-        chart: chartPersonality,
-        typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...btPersonality.typography, ...tenantPersonality?.typography },
-        accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...btPersonality.accent, ...tenantPersonality?.accent },
-        card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...btPersonality.card, ...tenantPersonality?.card },
-      };
-    } else {
-      // Legacy path: DEFAULT -> vertical -> profile -> tenant
-      const productPersonality = profile.personality;
-      const tenantPersonality = config.personality;
-      personality = {
-        animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...productPersonality?.animation, ...tenantPersonality?.animation },
-        chart: chartPersonality,
-        typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...productPersonality?.typography, ...tenantPersonality?.typography },
-        accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...productPersonality?.accent, ...tenantPersonality?.accent },
-        card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...productPersonality?.card, ...tenantPersonality?.card },
-      };
-    }
-
-    // Effective branding: brandTheme.palette wins over config.branding for colors.
-    // This ensures useTokens reads the same colors that ThemeProvider renders.
-    const effectivePrimary = brandTheme?.palette?.primaryColor || config.branding.primaryColor;
-    const effectiveSecondary = brandTheme?.palette?.secondaryColor || config.branding.secondaryColor;
-    const effectiveAccent = brandTheme?.palette?.accentColor || config.branding.accentColor;
+    const productPersonality = profile.personality;
+    const compiledPersonality = compiled?.personality;
+    const personality: PersonalityTokens = {
+      animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...productPersonality?.animation, ...compiledPersonality?.animation },
+      chart: resolveChartPersonality({
+        compiled: compiledPersonality,
+        vertical,
+        productProfile: profile,
+      }),
+      typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...productPersonality?.typography, ...compiledPersonality?.typography },
+      accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...productPersonality?.accent, ...compiledPersonality?.accent },
+      card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...productPersonality?.card, ...compiledPersonality?.card },
+    };
 
     return {
       colors: {
         // Single-value color tokens remain for backward compatibility with older
         // consumers that read `tokens.colors.primary` directly. The canonical
-        // source of truth is now the CSS variable-backed scale objects below.
-        primary: effectivePrimary || 'var(--ds-color-primary)',
-        // Secondary falls back to accent then CSS var so tenants that only set
-        // an accent color still get a secondary-slot value in component code.
-        secondary: effectiveSecondary || effectiveAccent || 'var(--ds-color-secondary)',
+        // source of truth is the CSS variable-backed scale objects below, which
+        // the mounted artifact paints.
+        primary: 'var(--ds-color-primary)',
+        secondary: 'var(--ds-color-secondary)',
         success: 'var(--ds-color-success)',
         warning: 'var(--ds-color-warning)',
         error: 'var(--ds-color-error)',
@@ -362,7 +286,7 @@ export function useTokens(): DesignTokens {
       // CSS calc() because components consume them as numeric pixel values
       // for style objects and layout calculations.
       //
-      // IMPORTANT: this array is provider-global (structural scale × tenant
+      // IMPORTANT: this array is provider-global (structural scale x tenant
       // appearance). It cannot observe a descendant `data-density` boundary.
       // Components that promise subtree-local density must consume the CSS
       // `--ds-spacing-*` ramp instead. A future DensityScope context is required
@@ -393,7 +317,7 @@ export function useTokens(): DesignTokens {
           relaxed: 1.75,
         },
       },
-      // Engine-differentiated tokens (with tenant overrides)
+      // Engine-differentiated tokens (with the compiled tenant layer)
       borderRadius,
       shadows,
       surface,
@@ -406,25 +330,15 @@ export function useTokens(): DesignTokens {
       // Personality tokens
       personality,
     };
-  // Memo deps use config.slug as a proxy for "the whole tenant changed" plus
-  // the specific sub-objects that participate in the resolution pipeline. This
-  // avoids re-resolving on every render while still reacting to tenant switches,
-  // engine changes, and profile swaps.
-  //
-  // appearance dep: useTokens only reads appearance.general.density (for the
-  // multiplicative density factor), so we track that scalar instead of the
-  // whole appearance object to avoid stale memos when the object ref stays
-  // the same but the density field changes.
+  // `config.slug` stands in for "the whole tenant changed"; the compiled
+  // declaration and the appearance read-model are the only other inputs, and
+  // the density scalar is tracked rather than the whole appearance object so a
+  // stable object reference with a changed field cannot serve a stale memo.
   }, [
     engine,
     config.slug,
-    config.tokenOverrides,
-    config.personality,
-    config.brandTheme,
-    config.branding.primaryColor,
-    config.branding.secondaryColor,
-    config.branding.accentColor,
-    config.appearance?.general?.density,
+    compiled,
+    appearance?.general?.density,
     profile,
     vertical,
   ]);
