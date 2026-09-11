@@ -492,6 +492,16 @@ export const CI_GATES = Object.freeze([
   // ancla decrece-solo se puede desarmar sin que nada enrojezca: medido en este
   // mismo lote, `isValidCeiling` devolviendo `true` deja pasar diez formas
   // corruptas de techo con el gate en verde.
+  // THE HALF OF ENTRYPOINT PARITY NOBODY CHECKED. `public-entrypoint-boundary`
+  // compares the 76 governed subpaths exhaustively, but its reverse rule is
+  // scoped to six owners: 44 of the 120 published subpaths -- ./icons, ./marks,
+  // ./charts, ./styles/*, ./fonts/*, ./eslint, ./server, the CSS glob -- are
+  // outside it entirely, so a 121st could join them unreviewed. This pair
+  // classifies every subpath exactly once with a written reason per class, and
+  // asks the reverse question nothing asked: which entrypoint owners on disk
+  // does nobody publish.
+  { id: 'entrypoint-parity-drill', run: ['node', '--test', 'scripts/check/boundaries/entrypoint-parity/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['entrypoint-parity'], },
+  { id: 'entrypoint-parity', run: ['node', 'scripts/check/boundaries/entrypoint-parity/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'entrypoint-parity-drill', },
   { id: 'public-entrypoint-boundary-drill', run: ['node', '--test', 'scripts/check/boundaries/public-api/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['public-entrypoint-boundary'], },
   { id: 'public-entrypoint-boundary', run: ['node', 'scripts/check/boundaries/public-api/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'public-entrypoint-boundary-drill', ratchet: 'scripts/check/boundaries/public-api/ceilings/index.json', },
   // Drill first: the freeze gate's own self-test was 25/25 green while 43 of its
