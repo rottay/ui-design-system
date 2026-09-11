@@ -39,7 +39,6 @@
  */
 
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -84,57 +83,32 @@ const excluded = selected.filter((gate) => !gate.blocking);
  * green run says nothing about its size: ~9,000 findings sat frozen across
  * these files while every ratchet reported OK. The ratio is printed on every
  * run so the size is visible without reading a 3,000-key JSON.
+ *
+ * THE WALK LIVES IN `../gates/baselines`, not here. That module is also the
+ * `baseline-discipline` gate, which checks the same ledgers for a purpose, an
+ * undeclared widening and a new APCA pairing. Two walks over one set of files
+ * would be two answers to "how much debt is this", and the first time either
+ * changed they would disagree.
+ *
+ * Resolved lazily and from the package root, for the same reason the population
+ * is: the runner's own drill plants synthetic trees that carry three modules,
+ * and a static import of a fourth makes the runner unloadable there.
  */
-function debtOf(gate) {
-  if (!gate.ratchet) return null;
-  const path = join(packageRoot, gate.ratchet);
-  if (!existsSync(path)) return { error: `baseline missing: ${gate.ratchet}` };
-  let baseline;
-  try {
-    baseline = JSON.parse(readFileSync(path, 'utf8'));
-  } catch (error) {
-    return { error: `baseline unreadable: ${error instanceof Error ? error.message : String(error)}` };
-  }
-  // Baselines in this tree are not one shape: some are a flat counter map, some
-  // a ledger of named finding lists, some a nested policy document. The walk
-  // below counts what every one of them agrees on -- a numeric leaf is a
-  // ceiling, a list of findings is that many frozen findings -- and skips
-  // prose. It is a SIZE report, never a verdict; the gate itself owns the
-  // verdict.
-  const buckets = [];
-  const walk = (node) => {
-    if (Array.isArray(node)) {
-      buckets.push(node.length);
-      return;
-    }
-    if (node && typeof node === 'object') {
-      for (const value of Object.values(node)) walk(value);
-      return;
-    }
-    if (Number.isFinite(node)) buckets.push(node);
-  };
-  walk(baseline);
-  if (buckets.length === 0) return { error: `baseline carries no counter: ${gate.ratchet}` };
-  const frozen = buckets.reduce((total, value) => total + value, 0);
-  const atZero = buckets.filter((value) => value === 0).length;
-  return {
-    counters: buckets.length,
-    frozen,
-    atZero,
-    ratio: (buckets.length - atZero) / buckets.length,
-  };
+const BASELINES_MODULE = 'scripts/check/automation/gates/baselines/index.mjs';
+
+let describeLedgerDebt = null;
+try {
+  ({ describeDebt: describeLedgerDebt } = await import(
+    pathToFileURL(join(packageRoot, BASELINES_MODULE)).href
+  ));
+} catch {
+  describeLedgerDebt = null;
 }
 
 function describeDebt(gate) {
-  const debt = debtOf(gate);
-  if (!debt) return null;
-  if (debt.error) return `debt: UNREADABLE (${debt.error})`;
-  // Deliberately NOT called "findings": these baselines pin counts, byte
-  // ceilings and module ceilings side by side, so their sum has no single
-  // unit. `debtRatio` is the figure that means the same thing everywhere --
-  // how much of a gate's ledger is still standing on debt rather than on zero.
-  return `debtRatio ${(debt.ratio * 100).toFixed(1)}% — ${debt.counters - debt.atZero} of `
-    + `${debt.counters} pinned ceilings are above zero (ceiling sum ${debt.frozen}, mixed units)`;
+  if (!gate.ratchet) return null;
+  if (!describeLedgerDebt) return `debt: UNREADABLE (no ${BASELINES_MODULE})`;
+  return describeLedgerDebt(gate.ratchet, packageRoot);
 }
 
 /**

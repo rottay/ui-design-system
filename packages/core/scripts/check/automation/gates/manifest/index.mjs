@@ -325,6 +325,20 @@ export const CI_GATES = Object.freeze([
       'This entry IS its own drill: `--self-check` re-runs the same three subjects against the same bundle with the tier order REVERSED and requires every one to flip, so the planted negative rides in the same process as the measurement.',
     prerequisites: ['showroom-workspace'],
   },
+  // WHAT EVERY RATCHET IN THIS REPOSITORY IS STANDING ON (F-86, F-75). A
+  // decrease-only promise is about the DIRECTION of a number and says nothing
+  // about its size; ~9,000 findings sat frozen while every ratchet reported OK.
+  // This entry owns the discipline OF the ledgers -- a written subject, a
+  // declared widening, a closed APCA set -- and the debt walk the runner prints
+  // beside every gate is this module's, so there is one measurement.
+  { id: 'baseline-discipline-drill', run: ['node', '--test', 'scripts/check/automation/gates/baselines/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['baseline-discipline'], },
+  { id: 'baseline-discipline', run: ['node', 'scripts/check/automation/gates/baselines/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'baseline-discipline-drill', },
+  // PER-FAMILY REACH OF THE COMPILED ARTIFACTS. The causal successor to the two
+  // gates F-54 retired: a channel a family reads that no shipped artifact
+  // declares is a channel no tenant document can move, whatever the source
+  // producers say.
+  { id: 'artifact-coverage-drill', run: ['node', '--test', 'scripts/check/theme/artifact-coverage/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['artifact-coverage'], },
+  { id: 'artifact-coverage', run: ['node', 'scripts/check/theme/artifact-coverage/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'artifact-coverage-drill', ratchet: 'scripts/check/theme/artifact-coverage/baseline/index.json', },
   // THE DENOMINATOR OF EVERY CAUSAL PERCENTAGE THIS LANE PUBLISHES.
   // `WO-EVI-02` R4 amendment 3: each axis's denominator is the set of families
   // that declare they consume it, read from the typed catalog at a recorded

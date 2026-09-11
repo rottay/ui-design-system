@@ -366,7 +366,18 @@ function plantRunnerFixture(gates) {
   const manifestDir = join(root, 'scripts/check/automation/gates/manifest');
   const repoRootDir = join(root, 'scripts/libraries/repo-root');
   const populationDir = join(root, 'scripts/check/theme/population');
-  for (const dir of [runnerDir, manifestDir, repoRootDir, populationDir]) mkdirSync(dir, { recursive: true });
+  const baselinesDir = join(root, 'scripts/check/automation/gates/baselines');
+  for (const dir of [runnerDir, manifestDir, repoRootDir, populationDir, baselinesDir]) {
+    mkdirSync(dir, { recursive: true });
+  }
+
+  // The debt walk is the `baseline-discipline` gate's, borrowed rather than
+  // reimplemented. The fixture plants a stub so the runner's sequencing law can
+  // be exercised without a ledger, and the DEBT line is still asserted below.
+  writeFileSync(
+    join(baselinesDir, 'index.mjs'),
+    "export function describeDebt(path) { return path ? `debtRatio 42.0% — fixture ledger ${path}` : null; }\n",
+  );
 
   // The population owner is planted too, with a fixed sentence: the runner has
   // to PUBLISH a denominator on every run (WO-EVI-02 R4 amendment 3), and a

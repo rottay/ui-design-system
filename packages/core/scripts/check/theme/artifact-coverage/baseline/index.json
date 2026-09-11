@@ -1,0 +1,23 @@
+{
+  "purpose": "Per-family coverage of the compiled first-party artifacts: of the --ds-* channels a family Modern skin reads, how many does at least one shipped artifact declare. Successor to the variant-parity / mirror-parity pair F-54 retired.",
+  "direction": "Exact pins. uncovered may only fall, covered and families may only rise, and either way a move is red with the instruction to re-pin in the same commit. unreachableFamilies is a named list, not a count.",
+  "pinnedOn": "2026-09-11",
+  "catalogRevision": "2a25f7c6068407fb",
+  "verticals": {
+    "bithire": 4292,
+    "evnto": 4071,
+    "rottay": 4149
+  },
+  "families": 275,
+  "reads": 10793,
+  "covered": 8302,
+  "uncovered": 2491,
+  "unreachableFamilies": [
+    "carousel-compounds",
+    "watermark"
+  ],
+  "unreachableNotes": {
+    "carousel-compounds": "measured 2026-09-11: every --ds-* channel this skin reads is absent from all three compiled artifacts, so no tenant document can move it",
+    "watermark": "measured 2026-09-11: every --ds-* channel this skin reads is absent from all three compiled artifacts, so no tenant document can move it"
+  }
+}
