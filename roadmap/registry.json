@@ -5286,7 +5286,7 @@
    "lane": "consumer-contract",
    "order": 7,
    "size": "S",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CON-01"
    ],
@@ -5296,8 +5296,8 @@
    ],
    "notes": "OWNER-AUTHORIZED 2026-09-11 (audit/101-autonomy-check-2026-09-11/reply-to-kimi.md item 1): bounded RSC-boundary repair - expose the pure engine-identity owner through a server-safe public boundary and correct the showroom's server-side consumers; NOT a barrel redo, NOT a global use-client removal. Blocks WO-EMI-02's F-20 browser evidence. Execute after WO-DER-05 lands (no owner overlap).",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "daniel",
+   "claimedAt": "2026-09-11",
    "doneAt": null,
    "evidence": null
   },
