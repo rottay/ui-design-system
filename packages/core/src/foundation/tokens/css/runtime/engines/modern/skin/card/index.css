@@ -409,8 +409,10 @@
      contained-radius tenants (a 10px parent used to derive a 2px child; it
      now derives a concentric 5px). Both operands are what `shape.nesting`
      states: at their resting 4px/0.5 this is the law as written, and at
-     0px/0 the inset collapses and the nested corner IS the parent's.
-     `radius: none` still derives 0. Published on the body
+     0px/0 the inset collapses and the nested corner IS the parent's. Each is
+     read through a card channel that falls back to the governed root, which
+     is the §1.6 cascade shape: the card may bend the law for itself without
+     restating either value. `radius: none` still derives 0. Published on the body
      (not the root) so a nested card — and any SemanticSurface landing in
      this body — reads the PARENT's value through inheritance while its own
      body recomputes for the next level down. */
@@ -420,7 +422,10 @@
       var(--_ds-card-radius-current, var(--ds-card-radius)) -
         min(
           var(--ds-card-instance-padding, var(--ds-card-padding-current, 0px)),
-          max(var(--ds-radius-nest-inset, 4px), calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-radius-nest-ratio, 0.5)))
+          max(
+            var(--ds-card-nest-inset, var(--ds-radius-nest-inset)),
+            calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-card-nest-ratio, var(--ds-radius-nest-ratio)))
+          )
         )
     )
   );

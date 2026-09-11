@@ -53,6 +53,11 @@
   --ds-card-radius-sm: var(--ds-radius-sm);
   --ds-card-radius-lg: var(--ds-radius-xl);
   --ds-card-radius-xl: var(--ds-radius-2xl);
+  /* The two operands of the nested-corner law, taken from the governed roots
+     `shape.nesting` states. A card that must bend the law for itself rebinds
+     these; nothing else restates the values. */
+  --ds-card-nest-inset: var(--ds-radius-nest-inset);
+  --ds-card-nest-ratio: var(--ds-radius-nest-ratio);
 
   /* Borderless variant */
   --ds-card-borderless-border-width: var(--ds-border-width-0, 0);
