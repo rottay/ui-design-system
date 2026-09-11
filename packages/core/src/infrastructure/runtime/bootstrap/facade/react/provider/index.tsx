@@ -1119,10 +1119,25 @@ export function DesignSystemProvider({
   // The refusal used to be a side effect of the personality bridge calling
   // `useTokens()`; deleting that painter would have deleted the law with it.
   resolveAdapter(engine);
+  // THE RUNTIME HALF OF THE MOUNTED COMPILE. The artifact carries the non-CSS
+  // half of the same lowering its CSS came from, so the numbers `useTokens`
+  // returns and the variables the document paints are two projections of one
+  // answer. It outranks the prop because it is the half the mount proof
+  // covers; the prop remains for a compile that publishes no artifact, and for
+  // an artifact compiled before the block existed.
+  //
+  // A projection seeds ONE library, so the artifact's half is published only to
+  // the engine it was compiled for. An explicitly passed declaration compiled
+  // for another engine is still refused by name below: passing one is a claim.
+  const artifactEngineVisual =
+    verifiedArtifact?.runtime && verifiedArtifact.runtime.engine === engine
+      ? verifiedArtifact.runtime
+      : undefined;
+  const publishedEngineVisual = artifactEngineVisual ?? engineVisual;
   // A projection compiled for one engine cannot seed another, and the compile's
   // own governed profiles cannot contradict the tenant it is mounted against.
-  if (engineVisual) {
-    assertEngineVisualBelongs(engineVisual, engine, appearance);
+  if (publishedEngineVisual) {
+    assertEngineVisualBelongs(publishedEngineVisual, engine, appearance);
   }
   // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'.
   // tenant.theme only wins if it's explicitly set to a real mode (not the default 'base').
@@ -1237,7 +1252,7 @@ export function DesignSystemProvider({
             onLocaleChange={onLocaleChange}
           >
             <EngineProvider defaultEngine={engine}>
-              <EngineVisualDeclarationProvider declaration={engineVisual}>
+              <EngineVisualDeclarationProvider declaration={publishedEngineVisual}>
               <ThemeProvider
                 theme={theme}
                 tenant={resolvedRuntimeConfig.slug}

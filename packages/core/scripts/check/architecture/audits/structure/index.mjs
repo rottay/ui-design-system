@@ -168,24 +168,29 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
   }),
   // The theme contract chain is a dependency ladder, not a bag of peers:
   // iso owns Theme/ThemePatch, provenance owns the decision-provenance ledger
-  // vocabulary, tenant-theme owns the persisted transport, intent narrows one
-  // ingress onto a patch, resolved adds the envelope the merge destroys,
-  // compiled is the lowering product, emission is scope, and engine-adapter is
-  // the posture/projection contract over the product.
+  // vocabulary, compiled is the lowering product, emission is scope,
+  // engine-adapter is the posture/projection contract over that product, intent
+  // narrows one ingress onto a patch, resolved adds the envelope the merge
+  // destroys, and tenant-theme owns the persisted transport.
   // The ledger vocabulary is independent of the owners that CARRY it, so it
   // precedes all three of them: tenant-theme persists a ledger, intent
   // transports one and resolved snapshots one. It reads no catalog of its own —
   // the admitted decision domain is injected at the resolution boundary — which
   // is what lets it sit below owners the catalog itself sits above.
+  // `tenant-theme` is LAST because a compiled artifact is the terminal product
+  // of this chain, not an early stage of it: one row persists the ledger, the
+  // lowered variables, the scope it is nested under and the engine projection a
+  // runtime reads, so the transport is the widest consumer here rather than a
+  // peer of the stages it stores.
   'foundation/contracts/composition/tenants/themes': Object.freeze({
     iso: 0,
     provenance: 1,
-    'tenant-theme': 2,
-    intent: 3,
-    resolved: 4,
-    compiled: 5,
-    emission: 6,
-    'engine-adapter': 7,
+    compiled: 2,
+    emission: 3,
+    'engine-adapter': 4,
+    intent: 5,
+    resolved: 6,
+    'tenant-theme': 7,
   }),
   foundation: Object.freeze({
     contracts: 0,
