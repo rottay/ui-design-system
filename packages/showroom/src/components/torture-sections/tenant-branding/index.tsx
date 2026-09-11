@@ -78,7 +78,6 @@ export function TenantBrandingStates() {
               primaryColor,
               secondaryColor,
               logo: TENANT_BRANDING_LOGO,
-              engine,
               personality: 'formal',
             }}
             components={['button', 'card', 'input', 'badge', 'table']}

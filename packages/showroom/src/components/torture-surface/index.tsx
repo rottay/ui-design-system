@@ -84,48 +84,64 @@ export {
   type TortureFixture,
 } from '@/components/torture-tenant';
 
-function tortureTenantConfig(fixture: TortureFixture): TenantConfig | undefined {
+/**
+ * A fixture's IDENTITY and its VISUAL SOURCE, side by side.
+ *
+ * They are two values because `TenantConfig` carries no theme: a fixture theme
+ * is a draft this surface compiles and mounts itself, and the config is only
+ * what the provider is handed.
+ */
+interface TortureFixtureSource {
+  readonly config: TenantConfig;
+  readonly brandTheme?: BrandTheme;
+}
+
+function tortureTenantSource(fixture: TortureFixture): TortureFixtureSource | undefined {
   if (KNOWN_TENANT_FIXTURES.has(fixture)) {
-    return getKnownTenantConfig(fixture);
+    const config = getKnownTenantConfig(fixture);
+    return config ? { config } : undefined;
   }
 
   if (fixture === 'torture-dark') {
     return {
-      slug: 'torture-dark',
-      name: 'Torture Dark',
-      engine: 'modern',
-      theme: 'dark',
-      plan: 'enterprise',
-      features: ['*'],
-      vertical: 'rottay',
-      branding: { companyName: 'Torture Dark' },
+      config: {
+        slug: 'torture-dark',
+        name: 'Torture Dark',
+        theme: 'dark',
+        plan: 'enterprise',
+        features: ['*'],
+        vertical: 'rottay',
+        branding: { companyName: 'Torture Dark' },
+      },
       brandTheme: tortureDarkBrandTheme,
     };
   }
 
   if (fixture === 'themanagementmiami') {
     return {
-      slug: 'themanagementmiami',
-      name: 'The Management Miami fixture',
-      vertical: 'bithire',
-      engine: 'modern',
-      theme: 'light',
-      plan: 'enterprise',
-      features: ['*'],
-      branding: { companyName: 'The Management Miami' },
+      config: {
+        slug: 'themanagementmiami',
+        name: 'The Management Miami fixture',
+        vertical: 'bithire',
+        theme: 'light',
+        plan: 'enterprise',
+        features: ['*'],
+        branding: { companyName: 'The Management Miami' },
+      },
       brandTheme: themanagementmiamiBrandTheme,
     };
   }
 
   return {
-    slug: 'torture-light',
-    name: 'Torture Light',
-    engine: 'modern',
-    theme: 'light',
-    plan: 'enterprise',
-    features: ['*'],
-    vertical: 'rottay',
-    branding: { companyName: 'Torture Light' },
+    config: {
+      slug: 'torture-light',
+      name: 'Torture Light',
+      theme: 'light',
+      plan: 'enterprise',
+      features: ['*'],
+      vertical: 'rottay',
+      branding: { companyName: 'Torture Light' },
+    },
     brandTheme: tortureLightBrandTheme,
   };
 }
@@ -154,25 +170,21 @@ export const PROBE_BRAND_THEME_KEY = '__probeBrandTheme';
 type ProbeWindow = Window & { [PROBE_BRAND_THEME_KEY]?: BrandTheme };
 
 /**
- * The tenant the published DB specimen describes, projected from the artifact
- * the server already compiled and embedded.
+ * The tenant the published DB specimen describes: identity only.
  *
- * `appearance` is retained deliberately: the runtime still READS it for
- * density, the motion dial, `backgroundMode` and the recipe profile. It is the
- * artifact's own compiled source echoed back, not a second authority, and the
- * visual-authority resolver recognises that structurally.
+ * The artifact's own compiled appearance is NOT echoed back onto the config --
+ * the runtime reads it off the artifact the mount proves, which is the one
+ * place it can come from.
  */
 function canonicalManagementTenantConfig(artifact: TenantThemeArtifact): TenantConfig {
   return {
     slug: artifact.slug,
     name: 'The Management',
     vertical: artifact.verticalKey,
-    engine: 'modern',
     theme: 'light',
     plan: 'enterprise',
     features: ['*'],
     branding: { companyName: 'The Management' },
-    appearance: artifact.normalizedAppearance as TenantConfig['appearance'],
   };
 }
 
@@ -218,10 +230,11 @@ export function TortureSurface({
     fixture === 'themanagementmiami' && managementSource === 'canonical-db'
       ? (artifact ?? compileCanonicalManagementArtifact(publishedManagementSpecimen()))
       : undefined;
-  const tenantConfig = compiledArtifact
-    ? canonicalManagementTenantConfig(compiledArtifact)
-    : tortureTenantConfig(fixture);
-  const brandTheme = tenantConfig?.brandTheme;
+  const source = compiledArtifact
+    ? { config: canonicalManagementTenantConfig(compiledArtifact) }
+    : tortureTenantSource(fixture);
+  const tenantConfig = source?.config;
+  const brandTheme = source?.brandTheme;
 
   // The legacy-brand-fixture path: an unbundled, unregistered tenant carrying
   // a BrandTheme with no compiled artifact and no bundled CSS. The compiled
@@ -281,20 +294,11 @@ export function TortureSurface({
     return isShowroomTenant(slug) ? firstPartyEngineVisual(slug, engine) : undefined;
   }, [brandTheme, tenantConfig, engine]);
 
-  // Once this surface compiles and mounts the BrandTheme itself, the theme is
-  // no longer a payload the provider may act on -- it is CSS already in the
-  // document. Handing it to the provider anyway is a tenant carrying an
-  // uncompiled visual payload with nothing to verify against, which the
-  // resolver refuses outright. Stripping it here is the same projection the
-  // registry performs for a code-owned vertical, for the same reason: static
-  // CSS stays the sole visual emitter. The probe still reads the theme it
-  // ASKED for through `PROBE_BRAND_THEME_KEY` below, which is where that
-  // question belongs.
-  const providerConfig = useMemo(() => {
-    if (!tenantConfig || !legacyBrandCss) return tenantConfig;
-    const { brandTheme: _mountedSeparately, ...withoutTheme } = tenantConfig;
-    return withoutTheme as TenantConfig;
-  }, [tenantConfig, legacyBrandCss]);
+  // The config the provider is handed. The fixture theme never rode on it --
+  // this surface compiles and mounts it as CSS, and static CSS stays the sole
+  // visual emitter. The probe reads the theme it ASKED for through
+  // `PROBE_BRAND_THEME_KEY` below, which is where that question belongs.
+  const providerConfig = tenantConfig;
 
   // The receipt for the SERVER pass only. The artifact element itself is
   // mounted first-in-body by `TortureFirstPaint`, and the mount proof admits
