@@ -413,11 +413,29 @@ describe("digest identity across the canonicalization extraction", () => {
       "sha256-c6864c2ca65dfce8ca948905de4834c0afffd0b30942aa8190ef49602f1a0856";
     const POST_CC01_DECISION_ROUTES_CONFIG_DIGEST =
       "sha256-9654077d42fe6b5732527b73e28a9e47f85e156d8454d632ac91692f0de38c63";
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    // Write-validator widening re-anchor: the envelope gained the last six
+    // catalog routes it still refused as UNKNOWN_KEY --
+    // `general.palette.{neutralTemperature,contrastPosture}`,
+    // `general.shape.{nesting,controlHeight}` and the `general.states` node
+    // carrying `{emphasis,focusStyle}`. An AMPLIATION, the same law as the
+    // CC-01 note above: the previous positive pins drop to `not.toBe` so the
+    // ratchet keeps every superseded value asserted, and the two new values are
+    // re-derived from the tree rather than copied from another file's pins.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_CC01_DECISION_ROUTES_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_CC01_DECISION_ROUTES_CONFIG_DIGEST
+    );
+    const POST_CATALOG_CLOSURE_DOCUMENT_DIGEST =
+      "sha256-f1fd7588ea714b2ec559f762484849fb74ae630ec774e72fa244311f308a000e";
+    const POST_CATALOG_CLOSURE_CONFIG_DIGEST =
+      "sha256-902521c345aa1d798115d295249f62514b81327df3fa7ebf629182bf4bda2eed";
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_CATALOG_CLOSURE_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_CATALOG_CLOSURE_CONFIG_DIGEST
     );
   });
 

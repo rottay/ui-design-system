@@ -448,11 +448,23 @@ describe("TenantThemeConfig v1 server contract", () => {
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-576975600674f58a3e3f2a1a8d12e51f6ff0294df84da40c7e379e7c72ef9188"
     );
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    // The six catalog rows the v1 write validator still refused as UNKNOWN_KEY
+    // gained their authoring routes: `general.palette.{neutralTemperature,
+    // contrastPosture}`, `general.shape.{nesting,controlHeight}` and the new
+    // `general.states.{emphasis,focusStyle}` node. A WIDENING with the same law
+    // as CC-01 above -- nothing withdrawn, no field changed type or format -- so
+    // the superseded pins stay asserted and the ratchet keeps its history.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-c6864c2ca65dfce8ca948905de4834c0afffd0b30942aa8190ef49602f1a0856"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-9654077d42fe6b5732527b73e28a9e47f85e156d8454d632ac91692f0de38c63"
+    );
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-f1fd7588ea714b2ec559f762484849fb74ae630ec774e72fa244311f308a000e"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-902521c345aa1d798115d295249f62514b81327df3fa7ebf629182bf4bda2eed"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

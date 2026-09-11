@@ -114,6 +114,12 @@ function migrateGeneralDecisions(
       decisions["palette.seeds"] = prune(seeds);
     }
     if (palette.status) decisions["palette.status-seeds"] = prune(palette.status);
+    if (palette.neutralTemperature) {
+      decisions["palette.neutral-temperature"] = palette.neutralTemperature;
+    }
+    if (palette.contrastPosture) {
+      decisions["palette.contrast-posture"] = palette.contrastPosture;
+    }
     if (palette.backgroundMode) {
       decisions["palette.dark-mode"] = palette.backgroundMode;
     }
@@ -133,6 +139,12 @@ function migrateGeneralDecisions(
     }
     if (typography.scale !== undefined) {
       decisions["typography.scale"] = typography.scale;
+    }
+    if (typography.roleWeights) {
+      decisions["typography.role-weights"] = typography.roleWeights;
+    }
+    if (typography.numeric) {
+      decisions["typography.numeric"] = typography.numeric;
     }
     for (const key of ["fontFamilyBase", "fontFamilyHeading"] as const) {
       if (typography[key] !== undefined) {
@@ -157,12 +169,23 @@ function migrateGeneralDecisions(
   }
   if (general.density) decisions["density.mode"] = general.density;
   if (general.rhythm) decisions["spacing.rhythm"] = general.rhythm;
-  if (general.motion) decisions["motion.dial"] = general.motion;
+  if (general.motion) {
+    // Row 22's key set is closed at MOTION_DIAL_KEYS, so row 23's `character`
+    // cannot ride the group: assigning it whole made the v2 door refuse it.
+    const { character, ...dial } = general.motion;
+    if (Object.values(dial).some((value) => value !== undefined)) {
+      decisions["motion.dial"] = prune(dial);
+    }
+    if (character) decisions["motion.character"] = character;
+  }
   if (general.surfaces?.elevation) {
     decisions["surfaces.elevation-posture"] = general.surfaces.elevation;
   }
   if (general.surfaces?.effectIntensity !== undefined) {
     decisions["surfaces.effect-intensity"] = general.surfaces.effectIntensity;
+  }
+  if (general.surfaces?.borderStyle) {
+    decisions["surfaces.border-style"] = general.surfaces.borderStyle;
   }
   // Rows 20 and 21. v1 types both fields as an open string at the DB edge, so
   // the closed catalog vocabulary is what admits them: a value outside it is

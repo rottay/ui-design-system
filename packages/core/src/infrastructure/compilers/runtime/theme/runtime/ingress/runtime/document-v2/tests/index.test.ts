@@ -70,6 +70,38 @@ function css(vertical: (typeof FIRST_PARTY_VERTICAL_SLUGS)[number], document: un
   );
 }
 
+// The four rows a v1 row could author and v2 never saw: three dropped in silence,
+// and `motion.character`, which rode the dial record and made the v2 door refuse.
+const CARRIED = [
+  {
+    id: "typography.role-weights",
+    appearance: { typography: { roleWeights: "strong" } },
+    value: "strong",
+    invalid: { typography: { roleWeights: "bold" } },
+  },
+  {
+    id: "typography.numeric",
+    appearance: { typography: { numeric: "tabular" } },
+    value: "tabular",
+    invalid: { typography: { numeric: "lining" } },
+  },
+  {
+    id: "surfaces.border-style",
+    appearance: { surfaces: { borderStyle: "strong" } },
+    value: "strong",
+    invalid: { surfaces: { borderStyle: "heavy" } },
+  },
+  {
+    id: "motion.character",
+    appearance: { motion: { character: "playful" } },
+    value: "playful",
+    invalid: { motion: { character: "bouncy" } },
+  },
+] as const;
+
+const v1General = (appearance: unknown): TenantThemeDocument =>
+  ({ schemaVersion: 1, mode: "simple", appearance }) as unknown as TenantThemeDocument;
+
 describe("v2 accepted at the door", () => {
   it("compiles palette.seeds to the SAME BYTES as its v1 equivalent, per vertical", () => {
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
@@ -295,8 +327,18 @@ describe("migrate v1 -> v2", () => {
       mode: "advanced",
       visualFoundation: {
         general: {
-          palette: { primary: PRIMARY, status: { success: "#10B981" } },
-          typography: { typePairing: "editorial", scale: 1.05 },
+          palette: {
+            primary: PRIMARY,
+            status: { success: "#10B981" },
+            neutralTemperature: "warm",
+            contrastPosture: "high",
+          },
+          typography: {
+            typePairing: "editorial",
+            scale: 1.05,
+            roleWeights: "strong",
+            numeric: "tabular",
+          },
           shape: {
             buttonStyle: "pill",
             radiusScale: 1.1,
@@ -305,7 +347,13 @@ describe("migrate v1 -> v2", () => {
           },
           density: "compact",
           rhythm: "airy",
-          surfaces: { elevation: "elevated", effectIntensity: 0.4 },
+          states: { emphasis: "strong", focusStyle: "glow" },
+          motion: { intensity: 0.5, character: "playful" },
+          surfaces: {
+            elevation: "elevated",
+            effectIntensity: 0.4,
+            borderStyle: "strong",
+          },
           navigation: { sidebarTone: "inverse" },
           experienceProfile: "rottay/bithire-technical@1",
         },
@@ -326,7 +374,11 @@ describe("migrate v1 -> v2", () => {
         "chrome.anatomy",
         "density.mode",
         "experience.profile",
+        "motion.character",
+        "motion.dial",
         "navigation.sidebar-tone",
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
         "palette.seeds",
         "palette.status-seeds",
         "recipe-profile",
@@ -336,9 +388,14 @@ describe("migrate v1 -> v2", () => {
         "shape.nesting",
         "shape.radius-scale",
         "spacing.rhythm",
+        "states.emphasis",
+        "states.focus-style",
+        "surfaces.border-style",
         "surfaces.effect-intensity",
         "surfaces.elevation-posture",
+        "typography.numeric",
         "typography.pairing",
+        "typography.role-weights",
         "typography.scale",
       ].sort()
     );
@@ -514,6 +571,36 @@ describe("migrate v1 -> v2", () => {
     );
   });
 
+  for (const { id, appearance, value, invalid } of CARRIED) {
+    it(`carries general ${id} onto its own row`, () => {
+      expect(migrateDocumentV1ToV2(v1General(appearance)).decisions).toEqual({
+        [id]: value,
+      });
+    });
+
+    it(`REFUSES an out-of-domain ${id} BY NAME at the v2 door`, () => {
+      expect(() =>
+        migrateAndAdmitDocument({
+          vertical: "bithire",
+          document: v1General(invalid),
+        })
+      ).toThrow(new RegExp(`"${id.replace(".", "\\.")}"`));
+    });
+  }
+
+  it("splits the v1 motion group: speeds stay on the dial, character gets row 23", () => {
+    // Both halves together: dropping `character` to keep the dial admissible
+    // would be the same silent loss under a different name.
+    expect(
+      migrateDocumentV1ToV2(
+        v1General({ motion: { intensity: 0.5, durationScale: 1.2, character: "mechanical" } })
+      ).decisions
+    ).toEqual({
+      "motion.dial": { intensity: 0.5, durationScale: 1.2 },
+      "motion.character": "mechanical",
+    });
+  });
+
   it("is total: an unsupported schemaVersion is refused, never coerced", () => {
     expect(() =>
       migrateDocumentV1ToV2({ schemaVersion: 3, mode: "simple" } as never)
@@ -533,8 +620,18 @@ const ADVANCED_V1 = {
   mode: "advanced",
   visualFoundation: {
     general: {
-      palette: { primary: PRIMARY, status: { success: "#10B981" } },
-      typography: { typePairing: "editorial", scale: 1.05 },
+      palette: {
+        primary: PRIMARY,
+        status: { success: "#10B981" },
+        neutralTemperature: "warm",
+        contrastPosture: "high",
+      },
+      typography: {
+        typePairing: "editorial",
+        scale: 1.05,
+        roleWeights: "strong",
+        numeric: "tabular",
+      },
       shape: {
         buttonStyle: "pill",
         radiusScale: 1.1,
@@ -543,7 +640,13 @@ const ADVANCED_V1 = {
       },
       density: "compact",
       rhythm: "airy",
-      surfaces: { elevation: "elevated", effectIntensity: 0.4 },
+      states: { emphasis: "strong", focusStyle: "glow" },
+      motion: { intensity: 0.5, character: "playful" },
+      surfaces: {
+        elevation: "elevated",
+        effectIntensity: 0.4,
+        borderStyle: "strong",
+      },
       navigation: { sidebarTone: "inverse" },
       experienceProfile: "rottay/bithire-technical@1",
     },
@@ -820,6 +923,22 @@ describe("migration is proven at the COMPILE door, not only structurally", () =>
       );
     }
   });
+
+  for (const { id, appearance } of CARRIED) {
+    it(`a v1 row authoring only ${id} migrates to its own bytes, and is lit`, () => {
+      const document = {
+        schemaVersion: 1,
+        mode: "simple",
+        appearance,
+      } as unknown as TenantThemeDocument;
+      for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+        const result = migrateAndAdmitDocument({ vertical, document });
+        expect(result.unlit).toEqual([]);
+        expect(result.decisions.map((projection) => projection.id)).toEqual([id]);
+        expect(css(vertical, result.migrated)).toEqual(css(vertical, document));
+      }
+    });
+  }
 
   it("passes a v2 document straight through instead of migrating it twice", () => {
     const document = v2({ "palette.seeds": { primary: PRIMARY } });
