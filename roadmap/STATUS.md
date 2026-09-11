@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T11:15:07.323Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T15:08:56.259Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,7 +28,7 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T11:15:07.323Z.
+**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T15:08:56.259Z.
 
 **measured on the 8-family sample: 15/22 move at least one sampled family** — MEASURED by that run.
 
@@ -56,14 +56,17 @@ Recorded vs measured — 4 row(s) disagree; neither side is authority, and the d
 | signature | `./server#DocumentAdmission` | carries the `ledger` the gate captured | minor | `r1-decision-provenance.md` |
 | signature | `./server#DocumentAdmission` | REQUIRED output fields `profileClaims: readonly DecisionProvenanceClaim<ThemeDecisionId>[]` (what the profile-expansion station filled, as `profile-derived` claims) and `effective: TenantThemeDocument` (the v1-shape document the patch was lowered from, profile defaults included); both are always present, so a consumer that constructs a `DocumentAdmission` value itself must supply them | minor | `r1r2-integration-door.md` |
 | signature | `./server#DocumentThemeIntentInput` | optional `ranges?: TenantThemeVerticalEnvelope["ranges"]`, forwarded to the door so a persisted producer previews under the same envelope its publish clamps into; additive | minor | `r1r2-integration-door.md` |
+| signature | `./server#engineVisualOf` | the projected declaration now carries only properties that are present, so it round-trips through a database row unchanged. A channel the compile leaves unset no longer erases the preset under it in `useTokens` | major | `der-07-artifact-runtime-half.md` |
 | signature | `./server#PreviewThemeIntentInput` | optional `ranges?: TenantThemeVerticalEnvelope["ranges"]`, the preview counterpart of the same envelope; additive | minor | `r1r2-integration-door.md` |
 | signature | `./server#resolveActiveIconExpressiveProfile` | input is `{ appearance?, expressive? }`: the artifact's normalized appearance and the governed expressive SELECTION, replacing the `{ appearance?, brandTheme? }` shape a tenant config used to satisfy | major | `emi-02-tenant-config-strip.md` |
 | signature | `./server#RuntimeVisualPayloadCensus` | same reduction on the server barrel's re-export | major | `emi-02-tenant-config-strip.md` |
+| signature | `./server#TenantThemeArtifact` | gains optional `runtime: EngineVisualDeclaration`, the non-CSS half of the compile that produced `variables`/`css`. It is inside the artifact digest, so every stored artifact must be recompiled; absent on an artifact compiled before this release, which mounts unchanged | major | `der-07-artifact-runtime-half.md` |
 | signature | `./server#TenantThemeArtifact` | optional `provenance: { entries: [{ ref, provenance, tier, effectiveLeaves }] }`, included in the artifact digest when present; absent on every artifact compiled before it existed and on the v1 transport, which resolves no ledger, so stored artifacts stay verifiable and mountable without a schemaVersion bump | minor | `r2-publication-parity.md` |
 | signature | `./server#TenantThemeDocumentV2` | decisions `states.emphasis` and `states.focus-style` (catalog rows 20/21) now lower to 28 emitted `--ds-state-*`/`--ds-focus-ring*`/`--ds-material-*` channels; closed enum domains, additive | minor | `der-02-states-materials.md` |
 | signature | `./server#TenantThemeSimpleConfig` | `general.states` optional input accepted (`emphasis`, `focusStyle`); the v1 lowering maps it to `surfaces.{stateEmphasis,focusStyle}` and the v2→v1 projection writes it back by name; the v1→v2 migration (`migrateDocumentV1ToV2`) does not carry it yet (dropped; gap registered for implementation) | minor | `der-02-states-materials.md` |
 | signature | `./server#Theme` | normalized surfaces gain optional `stateEmphasis` and `focusStyle`; absent means `medium`/`ring`, byte-identical to the pre-decision foundation defaults | minor | `der-02-states-materials.md` |
 | signature | `.#admitDocument` | same optional `ranges` input field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
+| signature | `.#DesignSystemProviderProps` | `engineVisual` is no longer the only route for the compiled runtime half: the provider publishes `visualAuthority.artifact.runtime` when the artifact was compiled for the rendering engine, and falls back to the prop otherwise. The prop's own type and refusals are unchanged | major | `der-07-artifact-runtime-half.md` |
 | signature | `.#DocumentAdmission` | same two required output fields on the root barrel's re-export of the same declaration | minor | `r1r2-integration-door.md` |
 | signature | `.#DocumentThemeIntentInput` | same optional `ranges` field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
 | signature | `.#PreviewThemeIntentInput` | same optional `ranges` field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
