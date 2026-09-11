@@ -1396,6 +1396,7 @@ export const CONSULTED_PROVENANCE_FIELDS: ReadonlySet<string> = new Set([
   //    channel the seed would otherwise re-derive)
   "palette.primaryColor",
   "palette.primaryForegroundColor",
+  "palette.onPrimaryColor",
   "palette.borderFocusColor",
   "palette.linkColor",
   "palette.linkHoverColor",

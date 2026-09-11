@@ -1,7 +1,7 @@
 /**
- * The derived FLOOR for four opt-in `EXTENDED_PALETTE_CHANNELS` entries:
- * `--ds-color-primary-foreground`, `--ds-color-border-focus`,
- * `--ds-color-link`, `--ds-color-link-hover`.
+ * The derived FLOOR for five opt-in `EXTENDED_PALETTE_CHANNELS` entries:
+ * `--ds-color-primary-foreground`, `--ds-color-text-on-primary`,
+ * `--ds-color-border-focus`, `--ds-color-link`, `--ds-color-link-hover`.
  *
  * This file used to document a floor that was computed correctly but
  * DELIBERATELY NOT MERGED into `compileTheme`'s live output, because a
@@ -27,9 +27,9 @@
  * drill. And a seed that is a legal CSS color but not resolvable at compile
  * time (`var(--brand)`, `oklch(...)`) no longer gets a guessed default: the
  * two pass-through channels (border-focus, link) still restate the seed
- * verbatim, but the two channels that need real color math (foreground,
- * link-hover) are DEFERRED -- omitted from the floor entirely -- rather than
- * invented.
+ * verbatim, but the three channels that need real color math (the two inks
+ * and link-hover) are DEFERRED -- omitted from the floor entirely -- rather
+ * than invented.
  */
 import { describe, expect, it } from 'vitest';
 
@@ -39,11 +39,20 @@ import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-them
 import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
+import {
+  APCA_BODY_TEXT_MIN_LC,
+  apcaContrast,
+} from "@/foundation/kernel/accessibility/branding-contrast";
+import {
+  apcaReadableInk,
+  measureReadableInk,
+} from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { deriveExtendedPaletteFloor } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 const FLOOR_CHANNELS = [
   '--ds-color-primary-foreground',
+  '--ds-color-text-on-primary',
   '--ds-color-border-focus',
   '--ds-color-link',
   '--ds-color-link-hover',
@@ -52,7 +61,7 @@ const FLOOR_CHANNELS = [
 const WCAG_AA_NORMAL_TEXT_RATIO = 4.5;
 
 describe('deriveExtendedPaletteFloor · the derivation floor, for a bare hex seed', () => {
-  it('emits all four channels from a bare primary seed', () => {
+  it('emits every channel from a bare primary seed', () => {
     const floor = deriveExtendedPaletteFloor('#3A6FB0');
     for (const channel of FLOOR_CHANNELS) {
       expect(floor[channel], channel).toBeTruthy();
@@ -119,16 +128,17 @@ describe('deriveExtendedPaletteFloor · the derivation floor, for a bare hex see
     expect(floor['--ds-color-link-hover']).toMatch(/^#[0-9A-F]{6}$/i);
   });
 
-  it('FOCAL: a var()-authored primary -- the two pass-through channels still emit; foreground and link-hover are ABSENT, not invented', () => {
+  it('FOCAL: a var()-authored primary -- the two pass-through channels still emit; the inks and link-hover are ABSENT, not invented', () => {
     // The retired floor guessed '#ffffff' for the foreground and copied the
     // seed verbatim for link-hover when it could not do real math on a
     // var() chain -- a fabricated pairing dressed up as a checked one. The
-    // current floor DEFERS both instead: they are simply not present in the
-    // returned map, leaving the cascade's own default to stand.
+    // current floor DEFERS all three instead: they are simply not present in
+    // the returned map, leaving the cascade's own default to stand.
     const floor = deriveExtendedPaletteFloor('var(--brand-primary)');
     expect(floor['--ds-color-border-focus']).toBe('var(--brand-primary)');
     expect(floor['--ds-color-link']).toBe('var(--brand-primary)');
     expect(floor['--ds-color-primary-foreground']).toBeUndefined();
+    expect(floor['--ds-color-text-on-primary']).toBeUndefined();
     expect(floor['--ds-color-link-hover']).toBeUndefined();
     expect(Object.keys(floor).sort()).toEqual(['--ds-color-border-focus', '--ds-color-link']);
   });
@@ -138,7 +148,45 @@ describe('deriveExtendedPaletteFloor · the derivation floor, for a bare hex see
     expect(floor['--ds-color-border-focus']).toBe('oklch(0.6 0.12 250)');
     expect(floor['--ds-color-link']).toBe('oklch(0.6 0.12 250)');
     expect(floor['--ds-color-primary-foreground']).toBeUndefined();
+    expect(floor['--ds-color-text-on-primary']).toBeUndefined();
     expect(floor['--ds-color-link-hover']).toBeUndefined();
+  });
+
+  it('FOCAL: the ink ON the primary is emitted even when NEITHER canonical ink clears WCAG AA', () => {
+    // The withholding rule is the foreground's alone.
+    // `--ds-color-primary-foreground` is withheld for a mid-luminance seed
+    // because its cascade fallback is a neutral default;
+    // `--ds-color-text-on-primary` is emitted anyway because its fallback is
+    // the ink a DIFFERENT primary was tuned for, so withholding it can only
+    // ship a worse pair than the better of the two candidates.
+    // #7f7f7f measures 4.48:1 on the dark ink and 4.00:1 on the light one --
+    // the better of the two, and still under the 4.5:1 AA floor.
+    const seed = '#7f7f7f';
+    const measured = measureReadableInk(seed);
+    expect(measured.status).toBe('measured');
+    if (measured.status !== 'measured') return;
+    expect(measured.meetsFloor).toBe(false);
+    expect(deriveExtendedPaletteFloor(seed)['--ds-color-primary-foreground']).toBeUndefined();
+    expect(deriveExtendedPaletteFloor(seed)['--ds-color-text-on-primary']).toBe(
+      apcaReadableInk(seed),
+    );
+  });
+
+  it('FOCAL: the two inks part company on a mid-tone seed, and each follows the floor that grades it', () => {
+    // #1e84e6 is bithire's own dark-mode primary. WCAG prefers the dark ink
+    // (4.69:1 against 3.82:1); APCA measures that dark pair at Lc 35.4 and the
+    // light one at Lc 70.6, against a governed floor of 60. The channel the
+    // APCA pairing grades takes the APCA answer; the channel the axe gates
+    // grade takes the WCAG one.
+    const seed = '#1e84e6';
+    const floor = deriveExtendedPaletteFloor(seed);
+    expect(floor['--ds-color-text-on-primary']).toBe('#ffffff');
+    expect(floor['--ds-color-primary-foreground']).toBe('#171717');
+    expect(Math.abs(apcaContrast('#ffffff', seed))).toBeGreaterThanOrEqual(
+      APCA_BODY_TEXT_MIN_LC,
+    );
+    expect(Math.abs(apcaContrast('#171717', seed))).toBeLessThan(APCA_BODY_TEXT_MIN_LC);
+    expect(contrastRatio('#171717', seed)).toBeGreaterThan(contrastRatio('#ffffff', seed));
   });
 
   it('emits nothing at all for an absent seed or a string that is not a valid CSS color of any kind', () => {

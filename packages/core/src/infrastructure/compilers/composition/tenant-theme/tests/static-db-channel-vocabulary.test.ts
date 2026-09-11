@@ -889,7 +889,29 @@ describe("PREVIEW/PUBLISH · the preview door migrates with the baseline's own m
       document,
     });
     expect(preview.patch).toEqual(persisted.patch);
-    // and it is the DARK-default routing, not the retired `'light'` literal
+    // An unselected seed is mode-agnostic: it tunes the block the vertical
+    // renders on both defaults, so the mode argument cannot move it at all.
+    expect(preview.patch).toEqual(migrateV1(document, "dark").patch);
+    expect(preview.patch).toEqual(migrateV1(document, "light").patch);
+  });
+
+  it("a SELECTED mode still diverges between the roster and a caller's literal", () => {
+    // The fence above can no longer see the retired `'light'` literal, because
+    // the seed it carries lands in the base block either way. A document that
+    // SELECTS a mode still separates them: on rottay the selection is the
+    // non-default mode and routes to the overlay, and a caller that guessed
+    // `light` would write the same seed to the base block instead.
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { palette: { primary: "#123456", backgroundMode: "light" } },
+    } as unknown as TenantThemeDocument;
+
+    const preview = previewThemeIntent({
+      vertical: "rottay",
+      slug: "preview-publish",
+      document,
+    });
     expect(preview.patch).toEqual(migrateV1(document, "dark").patch);
     expect(preview.patch).not.toEqual(migrateV1(document, "light").patch);
   });

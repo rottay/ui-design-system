@@ -1,8 +1,8 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-11T15:08:56.259Z",
+  "producedAt": "2026-09-11T12:45:23.106Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
-  "measuredHeadline": "measured on the 8-family sample: 15/22 move at least one sampled family",
+  "measuredHeadline": "measured on the 8-family sample: 17/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
     "newDecisions": 0,
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-11T15:07:53.562Z"
+      "builtAt": "2026-09-11T12:42:19.980Z"
     },
     "sources": {
       "door": {
@@ -31,18 +31,18 @@
           "src/infrastructure/compilers"
         ],
         "fileCount": 753,
-        "digest": "5b759762f371051b59922377ed2c55a2165640cbb5a92523908c3e4cb5d7f460"
+        "digest": "086ca4b6d8980e2702a665a61f2876c227e6b786689746373dd912828c23cead"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "6b2b3dba45764b284825c92d2160503dfd9b8ec0e0ea8b27da714935e62a71f9"
+        "digest": "0454281a50eceacf350df5bc6a34d9dbaba6161f4b2a6eb003a5b8520039b384"
       }
     },
     "browser": {
       "specifier": "@playwright/test",
       "root": "packages/showroom/package.json",
-      "resolved": "../ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+      "resolved": "../../Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
       "browserVersion": "149.0.7827.55"
     },
     "roster": {
@@ -65,7 +65,8 @@
         ],
         "unmatched": [],
         "bundleSha": "d767253db2a5be326b80b1cde9e0a5f9f4e9b2f8492c3a200134d7e0e3164ec1",
-        "bundleMode": "fresh"
+        "bundleMode": "fresh",
+        "theme": "dark"
       },
       "bithire": {
         "matched": [
@@ -86,7 +87,8 @@
         ],
         "unmatched": [],
         "bundleSha": "1cce66c1b6fed9a865c1acacb92c7d056e8822f8f0f5eb20f01baae444a11bf3",
-        "bundleMode": "fresh"
+        "bundleMode": "fresh",
+        "theme": "light"
       },
       "evnto": {
         "matched": [
@@ -107,7 +109,8 @@
         ],
         "unmatched": [],
         "bundleSha": "8d15b53c88d60cd88640552aae67f2ba426f98c1ceffa9314bad2df0941476ed",
-        "bundleMode": "fresh"
+        "bundleMode": "fresh",
+        "theme": "light"
       }
     },
     "recordedClassSource": "audit/50-matrices/cascade section 1 crossed with audit/70-plan/roadmap-draft/consumer-contract.md section 4",
@@ -124,12 +127,17 @@
     "lit": 7,
     "partial": 16,
     "inert": 6,
-    "measuredLit": 15,
+    "measuredLit": 17,
     "discrepancies": [
       {
         "id": "palette.status-seeds",
         "kind": "recorded-full-moved-nothing",
         "detail": "0 channels moved, 0 sampled families"
+      },
+      {
+        "id": "palette.dark-mode",
+        "kind": "recorded-none-moved",
+        "detail": "button-modern-md"
       },
       {
         "id": "shape.radius-scale",
@@ -197,8 +205,10 @@
         "tier": "pro",
         "recordedClass": "none",
         "artifactBytesDiffer": true,
-        "movedFamilies": [],
-        "movedChannelCount": 0,
+        "movedFamilies": [
+          "button-modern-md"
+        ],
+        "movedChannelCount": 1,
         "excludedIn": []
       },
       {
@@ -346,7 +356,9 @@
         "tier": "standard",
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
-        "movedFamilies": [],
+        "movedFamilies": [
+          "card-modern-md"
+        ],
         "movedChannelCount": 3,
         "excludedIn": []
       },
@@ -532,9 +544,20 @@
       "id": "palette.dark-mode",
       "vertical": "rottay",
       "artifactBytesDiffer": true,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/root": [
+          "color"
+        ],
+        "token-readout/tokens": [
+          "--ds-color-text-on-primary"
+        ]
+      },
+      "movedChannels": [
+        "--ds-color-text-on-primary"
+      ]
     },
     {
       "id": "typography.families",
@@ -955,8 +978,13 @@
       "id": "surfaces.elevation-posture",
       "vertical": "rottay",
       "artifactBytesDiffer": true,
-      "movedFamilies": [],
+      "movedFamilies": [
+        "card-modern-md"
+      ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "box-shadow"
+        ],
         "token-readout/tokens": [
           "--ds-elevation-1",
           "--ds-elevation-2",
@@ -1112,6 +1140,7 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
+          "box-shadow",
           "background-image",
           "font-family"
         ],

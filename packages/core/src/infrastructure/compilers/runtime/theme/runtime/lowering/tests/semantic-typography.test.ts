@@ -198,10 +198,23 @@ const FIRST_PARTY = [
 // `--ds-color-neutral-paper`, the monochrome ramp's own anchors, read by
 // `foundation/monochrome`. No surviving channel changes value: this is a
 // keyset move, not a paint move.
+// ON-PRIMARY FLOOR re-anchor, all three: ORDER-ONLY, and
+// measured as such. `--ds-color-text-on-primary` gained a derived floor under
+// the authored value, so the channel is now first declared by the interaction
+// floor instead of by the extended-palette writer that overwrites it, and
+// `emitThemeCss` keeps a channel where it was first declared. An
+// order-insensitive digest over the same three surfaces -- base map, mode-block
+// maps and colorScheme, keys sorted -- is byte-identical across the edit:
+// rottay 165ebd18e98090078bbed6f32326691d03d3acc948c63a891f1bf47fb7ae21ec,
+// bithire 93abf144ed88c172354f4711888562a7afb586535ff1336f8e9eaec3d6f949c8,
+// evnto bdc4f4f6759108e79084f89afea86b92de7094bb00b22e23ad93f7b32a3a6fb2 on
+// both sides, with the base keysets unchanged at 1307 / 1283 / 584. The three
+// committed facade artifacts emit sorted, so all three stayed byte-identical
+// under `build:vertical-artifacts --check`.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "22e0372a3524d105fccb4e9025eeb0318458084d20b5ad97242997b19d8ea86e",
-  bithire: "75558dac4e5183760fe05f14e7b9b102811bb72f0fbdc6a2f87e995f66bb7375",
-  evnto: "3a791c53c8ef7648bd00746a25e01c66167dbd490c881311c5a9625e383ba1c5",
+  rottay: "fbab8014fb93f804b2e0a35f725813315a0723041fc4d097cab477eda935df93",
+  bithire: "c6a0caf349998a81f50a56c2260066f68b18a42a7cd090b163904e9415cbb2d3",
+  evnto: "44d5f4fc6b99ed465f59278adc9a035a0c9c300d2c9f8c23a0740248c87ce68d",
 };
 
 /**

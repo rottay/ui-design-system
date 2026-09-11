@@ -179,9 +179,10 @@ describe("one posture governs the status tints in every block that states them",
     );
     // The block the tenant's own seed reaches is the one the second producer
     // used to re-author at the identity strengths; naming it keeps the
-    // assertion above from passing on the base block alone.
-    const light = rottayAt("high").modeBlocks?.find((block) => block.mode === "light");
-    expect(light?.cssVariables["--ds-color-alpha-success-20"]).toBe(
+    // assertion above from passing on some other block's tint. On rottay that
+    // is the BASE block: an unselected seed tunes the mode the vertical
+    // renders, and rottay renders dark.
+    expect(rottayAt("high").cssVariables["--ds-color-alpha-success-20"]).toBe(
       `color-mix(in srgb, var(--ds-color-success) ${CONTRAST_POSTURES.high.separatorMix}%, transparent)`
     );
   });

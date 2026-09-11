@@ -502,20 +502,24 @@ function migratePalette(
     infoColor: source.status?.info,
   });
 
-  const mode = palette.backgroundMode ?? "light";
   const basePalette = paletteFields(palette);
   const darkPalette = palette.dark ? paletteFields(palette.dark) : undefined;
 
   // backgroundMode is runtime selection metadata, not Theme authority. It
   // therefore never reaches ThemeLayerPatch.appearance.defaultMode and never
-  // restructures the code-owned Theme. The v1 transport semantics are:
-  // - light: top-level seeds customize the light/body mode; dark seeds inert
-  // - dark: top-level seeds customize the selected dark mode; dark seeds inert
-  // - auto: top-level seeds customize light/body and authored dark seeds
-  //   customize the dark overlay
-  const lightPalette = mode === "dark" ? undefined : basePalette;
-  const selectedDarkPalette =
-    mode === "dark" ? basePalette : mode === "auto" ? darkPalette : undefined;
+  // restructures the code-owned Theme. What it selects is the mode the tenant
+  // RENDERS, and the top-level seeds tune that mode:
+  // - unset: the vertical's own default mode. Seeds are mode-agnostic brand
+  //   identity, so they belong to the mode the tenant actually paints
+  // - light / dark: the selected mode; the other keeps the vertical's design
+  // - auto: the default mode, and authored dark seeds tune the dark mode
+  // Reading an absent selection as "light" equated light with the body, so on
+  // the one vertical whose default mode is dark every seed landed in the mode
+  // nobody renders and a STANDARD-tier decision moved nothing on the canvas.
+  const selection = palette.backgroundMode;
+  const seededMode: BrandThemeMode =
+    selection === "light" || selection === "dark" ? selection : defaultMode;
+  const darkOverlayPalette = selection === "auto" ? darkPalette : undefined;
   // The two postures ride the ROOT palette every mode block re-enters with;
   // they state the whole neutral axis, so a mode overlay would be a second one.
   const neutralTemperature = closedPosture(
@@ -532,17 +536,22 @@ function migratePalette(
     neutralTemperature === undefined && contrastPosture === undefined
       ? {}
       : { palette: { neutralTemperature, contrastPosture } };
+  // One placement rule for both destinations: the mode a vertical declares as
+  // its default IS the base block, so seeds for it are the root palette and
+  // seeds for the other mode are that mode's overlay.
+  const seededBlock = (
+    mode: BrandThemeMode,
+    fields: NonNullable<ThemeLayerPatch["palette"]> | undefined
+  ): ThemeLayerPatch =>
+    fields === undefined
+      ? {}
+      : mode === defaultMode
+      ? { palette: fields }
+      : { modes: { [mode]: { palette: fields } } };
   return mergePatches([
-    defaultMode === "light"
-      ? { palette: lightPalette }
-      : { palette: selectedDarkPalette },
+    seededBlock(seededMode, basePalette),
     postures,
-    lightPalette && defaultMode !== "light"
-      ? { modes: { light: { palette: lightPalette } } }
-      : {},
-    selectedDarkPalette && defaultMode !== "dark"
-      ? { modes: { dark: { palette: selectedDarkPalette } } }
-      : {},
+    seededBlock("dark", darkOverlayPalette),
   ]);
 }
 

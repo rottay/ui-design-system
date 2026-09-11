@@ -61,18 +61,41 @@ describe("documentThemeIntent and previewThemeIntent", () => {
     expect({ ...preview, origin: persisted.origin }).toEqual(persisted);
   });
 
-  it("reads the default mode off the baseline, never off a caller's literal", () => {
-    // The mode argument decides WHICH BLOCK a customer's seed lands in: the
-    // base palette when the document's background mode is the baseline's own,
-    // and `modes.<mode>.palette` otherwise. The document below names no
-    // background mode, so the migration's own `light` default applies -- which
-    // is the base block on a light-default vertical and the LIGHT OVERLAY on a
-    // dark-default one. Two different blocks, from one document, decided
-    // entirely by the baseline this door now reads for itself.
+  it("routes an unselected seed to the mode the vertical RENDERS, on both defaults", () => {
+    // Seeds are mode-agnostic brand identity. A document that names no
+    // background mode therefore tunes the mode the tenant actually paints --
+    // the base block -- whichever mode that is. Reading the absent selection as
+    // `light` sent every rottay seed to the light overlay, so the one
+    // dark-default vertical branded a canvas nobody renders.
     expect(FIRST_PARTY_THEMES.rottay.appearance?.defaultMode).toBe("dark");
     expect(FIRST_PARTY_THEMES.bithire.appearance?.defaultMode).toBe("light");
 
     const document = simpleDocument("#123456");
+    const rottay = documentThemePatch({ vertical: "rottay", document }) as Record<
+      string,
+      Record<string, unknown>
+    >;
+    const bithire = documentThemePatch({ vertical: "bithire", document }) as Record<
+      string,
+      Record<string, unknown>
+    >;
+    expect(bithire.palette?.primaryColor).toBe("#123456");
+    expect(rottay.palette?.primaryColor).toBe("#123456");
+    expect(rottay.modes).toBeUndefined();
+  });
+
+  it("reads the default mode off the baseline, never off a caller's literal", () => {
+    // The mode argument decides WHICH BLOCK a customer's seed lands in: the
+    // base palette when the document's selected mode IS the baseline's own, and
+    // `modes.<mode>.palette` otherwise. The document below selects `light`, so
+    // it is the base block on a light-default vertical and the LIGHT OVERLAY on
+    // a dark-default one. Two different blocks, from one document, decided
+    // entirely by the baseline this door reads for itself.
+    const document = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: { palette: { primary: "#123456", backgroundMode: "light" } },
+    } as unknown as TenantThemeDocument;
     const rottay = documentThemePatch({ vertical: "rottay", document }) as Record<
       string,
       Record<string, Record<string, Record<string, unknown>>>
