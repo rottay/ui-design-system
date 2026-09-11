@@ -74,7 +74,7 @@ describe('TenantPreview', () => {
       //
       // `playful` carries `animation.intensity` 1.2, above every vertical's
       // tenant cap of 0.8, so the compile door refuses it on the preview path
-      // exactly as it would at publish (WO-CAT-03). `expressive` carries 1.0,
+      // exactly as it would at publish. `expressive` carries 1.0,
       // the value rottay's own theme already declares -- a tenant that restates
       // the vertical's value has decided nothing, so it is admitted.
       const presets = ['formal', 'neutral', 'expressive'] as const;
