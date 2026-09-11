@@ -37,6 +37,7 @@ signature .#censusRuntimeVisualPayload — input narrowed to `Pick<TenantConfig,
 signature ./server#censusRuntimeVisualPayload — same narrowed input on the server barrel's re-export
 signature .#resolveActiveIconExpressiveProfile — input is `{ appearance?, expressive? }`: the artifact's normalized appearance and the governed expressive SELECTION, replacing the `{ appearance?, brandTheme? }` shape a tenant config used to satisfy
 signature ./server#resolveActiveIconExpressiveProfile — same input change on the server barrel's re-export
+signature .#TENANT_CAPABILITY_REGISTRY — the `recipe-profile` row's evidence witness moves to `appearance?.recipeProfile ?? governedBehavior?.recipeProfile`, the expression the provider now reads: the artifact's normalized appearance for a published tenant and the identity-keyed governed slot for a code-owned vertical. Declarations, tiers and domains are unchanged
 signature .#TenantProvider — gains an optional `appearance` prop carrying the mounted artifact's normalized appearance; it is snapshot and frozen exactly like the config and published on `TenantContextValue.appearance`
 signature .#TenantProviderProps — same optional `appearance` field on the props declaration
 signature .#TenantCreationConfig — REMOVED `engine`; the vertical roster owns the engine. Its `personality` preset and `density` posture no longer reach `createTenantConfig`'s output: they are BrandTheme channels, projected by the new `createTenantBrandTheme` from the same draft
