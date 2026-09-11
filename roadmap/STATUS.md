@@ -89,7 +89,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `.#assembleTenantThemeArtifact` | added: the ONE artifact builder both publication transports share — digest, scopes, chart floor, CSS and the engine projection stated once; it takes `{ intent, identity, verticalEnvelope, document }` and reads provenance only from the resolution, never from a parameter beside the intent | minor | `r2-publication-parity.md` |
 | export | `.#TenantThemeArtifactAssembly` | added: that builder's input type | minor | `r2-publication-parity.md` |
 
-Also pending, declaring no public surface movement: `evi-02-witness-per-cell.md` (patch), `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `seeds-render-mode.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
+Also pending, declaring no public surface movement: `der-02-material-arm-non-vacuity.md` (patch), `evi-02-witness-per-cell.md` (patch), `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `seeds-render-mode.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
 
 ## Family acceptance — the sealed Modern Rescue adjudication
 
