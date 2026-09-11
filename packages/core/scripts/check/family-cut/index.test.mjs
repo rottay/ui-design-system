@@ -659,7 +659,14 @@ test('SHAPE: a moved denominator is reported before any ratchet is touched', () 
   const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
   const pinned = readBaseline().families[FAMILY];
   const moved = { ...pinned, denominators: { ...pinned.denominators, channelsRead: 1 } };
-  expectFinding(judgeFamily(measured, moved), 'denominator `channelsRead` moved from 1 to 252', 're-read the census first');
+  // Derived, not restated: the drill asserts that the MEASURED census reaches
+  // the finding, so a lot that legitimately moves the denominator re-anchors
+  // one number (the pin) instead of two.
+  expectFinding(
+    judgeFamily(measured, moved),
+    `denominator \`channelsRead\` moved from 1 to ${measured.denominators.channelsRead}`,
+    're-read the census first',
+  );
 });
 
 test('SHAPE: an empty roster is refused', () => {

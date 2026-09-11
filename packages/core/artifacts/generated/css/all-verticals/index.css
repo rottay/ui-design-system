@@ -1723,8 +1723,13 @@
 
   /* Nested-radius law: an inner surface's radius is
      max(0, outer radius - this inset), so nested corners read as one
-     geometry. Card and SemanticSurface consume the SAME inset. */
+     geometry. Card and SemanticSurface consume the SAME inset. The ratio is
+     the law's SECOND operand -- the inset is floored at this fraction of the
+     parent radius, so a contained-radius tenant keeps related curvature
+     instead of deriving a near-square child. `shape.nesting` states both:
+     `concentric` restates these two values, `uniform` zeroes them. */
   --ds-radius-nest-inset: 4px;
+  --ds-radius-nest-ratio: 0.5;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      2. TYPOGRAPHY - Geist/Inter Style
@@ -1893,6 +1898,12 @@
     ),
     3
   );
+  /* Control height — the `shape.controlHeight` factor, multiplied in beside
+     the density scale wherever a control family resolves its height. A SECOND
+     factor, not a re-reading of density: density scales the control AND the
+     room around it, this scales the control only. The mechanical pointer-target
+     floors still clamp the result. */
+  --ds-control-height-scale: 1;
   /* C-E1 · Layout rhythm — the DS-owned floor for the tenant `appearance.rhythm` /
      BrandTheme `surfaces.rhythm` axis. DELIBERATELY NOT part of the
      --ds-spacing-* ramp above: those steps also size controls, and rhythm
@@ -7341,6 +7352,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-card-radius-sm: var(--ds-radius-sm);
   --ds-card-radius-lg: var(--ds-radius-xl);
   --ds-card-radius-xl: var(--ds-radius-2xl);
+  /* The two operands of the nested-corner law, taken from the governed roots
+     `shape.nesting` states. A card that must bend the law for itself rebinds
+     these; nothing else restates the values. */
+  --ds-card-nest-inset: var(--ds-radius-nest-inset);
+  --ds-card-nest-ratio: var(--ds-radius-nest-ratio);
 
   /* Borderless variant */
   --ds-card-borderless-border-width: var(--ds-border-width-0, 0);
@@ -24756,8 +24772,10 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
      contained-radius tenants (a 10px parent used to derive a 2px child; it
      now derives a concentric 5px). Both operands are what `shape.nesting`
      states: at their resting 4px/0.5 this is the law as written, and at
-     0px/0 the inset collapses and the nested corner IS the parent's.
-     `radius: none` still derives 0. Published on the body
+     0px/0 the inset collapses and the nested corner IS the parent's. Each is
+     read through a card channel that falls back to the governed root, which
+     is the §1.6 cascade shape: the card may bend the law for itself without
+     restating either value. `radius: none` still derives 0. Published on the body
      (not the root) so a nested card — and any SemanticSurface landing in
      this body — reads the PARENT's value through inheritance while its own
      body recomputes for the next level down. */
@@ -24767,7 +24785,10 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
       var(--_ds-card-radius-current, var(--ds-card-radius)) -
         min(
           var(--ds-card-instance-padding, var(--ds-card-padding-current, 0px)),
-          max(var(--ds-radius-nest-inset, 4px), calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-radius-nest-ratio, 0.5)))
+          max(
+            var(--ds-card-nest-inset, var(--ds-radius-nest-inset)),
+            calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-card-nest-ratio, var(--ds-radius-nest-ratio)))
+          )
         )
     )
   );

@@ -294,7 +294,7 @@
     },
     "./runtime/tenant": {
       "maxReachableModules": 48,
-      "maxSourceBytes": 1175700
+      "maxSourceBytes": 1175926
     },
     "./runtime/tenant-theme": {
       "maxReachableModules": 2,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "merge wo-der-03-palette (17a32a3f7): tenant 1175505->1175700 = +195 medidos, las dos entradas ISO de roster y filas de enum cerrado de las posturas de paleta (misma atribucion que el widen auditado del lote, Fable r2 LAND).",
+  "lastMove": "conn2 lot (shape.nesting + shape.control-height), sobre main con WO-DER-03 ya integrado: tenant 1175700->1175926 = +226 bytes medidos, atribuidos exactamente a los dos unicos archivos del grafo de 25 modulos que este lote toca — iso/index.ts +86 (las dos claves nuevas de DEFAULT_SURFACES_KEYS y sus dos reset en normalizeSurfaces) e iso/schema/index.ts +140 (las dos filas de dominio cerrado surfaces.nesting y surfaces.controlHeight en THEME_LEAF_OPTIONS). maxReachableModules no se mueve: 25 de 48, sin modulo nuevo en el grafo; ningun otro subpath queda fuera de techo.",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

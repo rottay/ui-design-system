@@ -4,12 +4,13 @@
   "scope": "engines/modern unicamente. Classic y Rustic estan congelados (owner, 2026-09-05) y su pintura no es deuda que ninguna orden de trabajo vaya a bajar.",
   "producer": "declarado en el CSS autorado (src/foundation/tokens/css, src/components) o emitido por un derivador de familia -- libraries/tokens/producers, el mismo conjunto que usa el arma transitiva de cascade-wiring",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() filtrado a /engines/modern/ -- un solo walker, importado",
-  "denominator": 3649,
-  "produced": 1555,
+  "denominator": 3653,
+  "produced": 1559,
   "debt": 2094,
-  "producers": 3625,
+  "producers": 3631,
   "modernSkinFiles": 123,
   "debtNote": "2096 -> 2094 al integrar WO-DER-04, bajado en el commit que movio el numero. Los dos nombres que salieron, medidos por diferencia de conjuntos contra el arbol previo a la integracion (2 salidas, 0 entradas): --ds-motion-ease-standard y --ds-motion-intensity. Los skins Modern ya los leian; lo que no existia era el productor. `foundation/animations/transitions` los declara ahora en :root y `derivation/motion` los emite, asi que dejaron de resolver siempre a su literal inline. El denominador (3649) no se mueve: no hay lectura nueva. `produced` 1553 -> 1555 y `producers` 3613 -> 3625 son la misma medida vista del otro lado: los doce productores nuevos son las familias derivadas de WO-DER-04, y solo dos de ellas alcanzan un nombre que la pintura Modern ya leia.",
   "producersNote": "3610 -> 3613 en WO-DER-02: `derivation/states` da productor a --ds-state-{active,selected}-shift y a --ds-state-disabled-mix, que antes no los tenia nadie. `debt` (2096) y `denominator` (3649) no se mueven: los tres nombres nuevos no los lee ningun skin Modern todavia.",
-  "honesty": "El numero es la MEDIDA de hoy, no una meta. WO-DER-01 crea el instrumento; bajarlo es el trabajo de las WO-DER-02..04 y de los cortes por familia, que son las que dan productor a los nombres que hoy no lo tienen."
+  "honesty": "El numero es la MEDIDA de hoy, no una meta. WO-DER-01 crea el instrumento; bajarlo es el trabajo de las WO-DER-02..04 y de los cortes por familia, que son las que dan productor a los nombres que hoy no lo tienen.",
+  "denominatorNote": "3649 -> 3653 in connection lot 2, and `debt` (2094) does NOT move: the four names the Modern skin now reads all have a producer. Two are the roots `shape.nesting` and `shape.control-height` state -- --ds-radius-nest-ratio and --ds-control-height-scale, both declared in `foundation/themes/default` -- and two are the card channels read through them, --ds-card-nest-inset and --ds-card-nest-ratio, both declared in `presentation/components/card`. `produced` 1555 -> 1559 is the same four seen from the other side. `producers` 3625 -> 3631 is +6, not +4: the walker already measured 3627 on `main`, so two of the six predate this lot and are re-anchored here rather than left disagreeing with the tree."
 }

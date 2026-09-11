@@ -8,12 +8,15 @@
   },
   "producedOn": "cascade-wiring-census",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() -- un solo walker, importado",
-  "denominator": 4365,
-  "wired": 2204,
-  "debt": 2161,
-  "transitivelyUnwired": 2204,
-  "rootsExcluded": 774,
+  "denominator": 4366,
+  "wired": 2206,
+  "debt": 2160,
+  "transitivelyUnwired": 2203,
+  "rootsExcluded": 777,
   "skinFiles": 391,
   "rootsExcludedNote": "rootsExcluded is measured from the exact fallback-target set. --ds-input-md-icon-size remains a positional fallback target without a root-reaching fallback of its own, so it is excluded from the denominator. The executable shape drill keeps that distinction fail-closed.",
-  "transitivelyUnwiredNote": "2205 -> 2204 al integrar WO-DER-04, bajado en el commit que movio el numero. El unico nombre que salio, medido por diferencia de conjuntos contra el arbol previo a la integracion (1 salida, 0 entradas): --ds-skeleton-animation-easing, cuya cadena de fallbacks moria en --ds-motion-ease-standard, un nombre que nadie escribia. Ahora `foundation/animations/transitions` lo declara, asi que la cadena alcanza terminal. `debt` (2161) no se mueve: la cota inferior mira el fallback directo, que ya alcanzaba raiz. 2204 >= debt 2161 por construccion: un nombre sin fallback a raiz tampoco alcanza terminal. La diferencia (43) son los nombres cuyo fallback nombra otra cosa que nadie escribe. El invariante de forma lo comprueba en cada corrida."
+  "transitivelyUnwiredNote": "2205 -> 2204 al integrar WO-DER-04, bajado en el commit que movio el numero. El unico nombre que salio, medido por diferencia de conjuntos contra el arbol previo a la integracion (1 salida, 0 entradas): --ds-skeleton-animation-easing, cuya cadena de fallbacks moria en --ds-motion-ease-standard, un nombre que nadie escribia. Ahora `foundation/animations/transitions` lo declara, asi que la cadena alcanza terminal. 2204 -> 2203 en connection lot 2, por el mismo nombre que baja `debt`: --ds-radius-nest-inset sale del denominador al volverse destino de fallback. La cota superior sigue >= `debt` (2203 >= 2160) por construccion, y la diferencia (43) son los nombres cuyo fallback nombra otra cosa que nadie escribe. El invariante de forma lo comprueba en cada corrida.",
+  "debtNote": "2161 -> 2160 in connection lot 2, lowered in the commit that moved it. The single name that left, measured by set difference against `main` (1 exit, 0 entries): --ds-radius-nest-inset. It did not gain a fallback; it became a fallback DESTINATION, which rule (a) is exactly about -- `components/card` now declares --ds-card-nest-inset from it and the card skin reads `var(--ds-card-nest-inset, var(--ds-radius-nest-inset))`. Its sibling operand --ds-radius-nest-ratio, which `shape.nesting` introduced in the same lot, never entered the denominator for the same reason and therefore never entered the debt.",
+  "denominatorNote": "4365 -> 4366 in connection lot 2. Two entries (--ds-card-nest-inset, --ds-card-nest-ratio: the card channels the nesting law is now read through) and one exit (--ds-radius-nest-inset, reclassified as a root by rule (a)). `wired` 2204 -> 2206 is the same two entries seen from the other side: both carry a root fallback, so neither is debt. rootsExcluded 774 -> 777 counts the two nesting operands plus --ds-control-height-scale, which `shape.control-height` introduced and which the control skins already read inside another channel's fallback.",
+  "skinFilesNote": "391 is the pinned figure and the walker measures 390 on `main` itself; the drift predates this lot, which adds and removes no skin file. No gate reads this field, so it is left as the record of when it was last taken rather than quietly re-anchored here."
 }
