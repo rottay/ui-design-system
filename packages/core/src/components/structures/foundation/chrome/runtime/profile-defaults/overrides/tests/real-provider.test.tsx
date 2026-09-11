@@ -79,9 +79,9 @@ describe("the real DesignSystemProvider carries the tenant's decisions", () => {
       const config = getKnownTenantConfig(vertical);
       expect(config).toBeDefined();
       const projected = getCodeOwnedRuntimeConfig(config!);
-      // There is nothing left to strip: the five visual fields are gone from
-      // `TenantConfig` itself, so neither the source nor its projection can
-      // carry one and no competing JS writer can be reintroduced.
+      // There is nothing to strip: `TenantConfig` declares none of the five
+      // visual fields, so neither the source nor its projection can carry one
+      // and no competing JS writer can be reintroduced.
       for (const field of ['personality', 'brandTheme', 'appearance', 'tokenOverrides', 'engine']) {
         expect(config!).not.toHaveProperty(field);
         expect(projected).not.toHaveProperty(field);

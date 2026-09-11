@@ -439,14 +439,14 @@ describe('the application renders a page from the guaranteed surface', () => {
 });
 
 /**
- * THE TYPE-LEVEL NEGATIVE (WO-EMI-02).
+ * THE TYPE-LEVEL NEGATIVE.
  *
- * `TenantConfig` is identity, bounded branding and the artifact reference. The
- * five fields below were removed, and an application that still names one must
+ * `TenantConfig` is identity, bounded branding and the artifact reference. None
+ * of the five fields below is nameable, and an application that names one must
  * fail to COMPILE — a runtime assertion would pass just as happily against a
  * type that still declared them and a provider that merely ignored them.
  *
- * Each `@ts-expect-error` is the assertion. If any field returns, its directive
+ * Each `@ts-expect-error` is the assertion. If any field appears, its directive
  * becomes an unused expect-error and `typecheck:tests` goes red on this file.
  */
 describe('the removed visual fields are not nameable by a consumer', () => {
@@ -462,15 +462,15 @@ describe('the removed visual fields are not nameable by a consumer', () => {
     };
 
     const written: Partial<Record<string, unknown>> = {
-      // @ts-expect-error `brandTheme` was removed: compile a Theme into an artifact.
+      // @ts-expect-error no `brandTheme`: compile a Theme into an artifact.
       brandTheme: identity.brandTheme,
-      // @ts-expect-error `tokenOverrides` was removed: they are `ThemeCompilation.runtime`.
+      // @ts-expect-error no `tokenOverrides`: they are `ThemeCompilation.runtime`.
       tokenOverrides: identity.tokenOverrides,
-      // @ts-expect-error `personality` was removed: it is `ThemeCompilation.runtime`.
+      // @ts-expect-error no `personality`: it is `ThemeCompilation.runtime`.
       personality: identity.personality,
-      // @ts-expect-error `appearance` was removed: it is the artifact's read-model.
+      // @ts-expect-error no `appearance`: it is the artifact's read-model.
       appearance: identity.appearance,
-      // @ts-expect-error `engine` was removed: the vertical roster decides it.
+      // @ts-expect-error no `engine`: the vertical roster decides it.
       engine: identity.engine,
     };
 

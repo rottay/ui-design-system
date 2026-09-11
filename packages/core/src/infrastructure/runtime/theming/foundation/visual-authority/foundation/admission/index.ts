@@ -89,10 +89,10 @@ export type VisualAuthorityDeclaration =
 /**
  * What visual payload a runtime `TenantConfig` still carries.
  *
- * ONE channel, because one is all a config can carry: `brandTheme`,
- * `tokenOverrides`, `personality` and `appearance` were removed from
- * `TenantConfig`, so the seed colours and fonts of `branding` are the last
- * place a transport can hand the runtime paint that no compile produced.
+ * ONE channel, because one is all a config can carry: a `TenantConfig` has no
+ * `brandTheme`, `tokenOverrides`, `personality` or `appearance`, so the seed
+ * colours and fonts of `branding` are the one place a transport can hand the
+ * runtime paint that no compile produced.
  */
 export interface RuntimeVisualPayloadCensus {
   visualBranding: boolean;

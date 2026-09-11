@@ -226,9 +226,9 @@ describe('DesignSystemProvider recipe-profile authority', () => {
   });
 
   it('blocks an uncompiled runtime visual payload before the recipe consumer mounts', () => {
-    // A `TenantConfig` can no longer carry a theme, an appearance or a recipe
-    // selection at all; its bounded branding seeds are the last raw channel,
-    // and they are refused for want of an artifact exactly as a theme was.
+    // A `TenantConfig` carries no theme, appearance or recipe selection; its
+    // bounded branding seeds are its one raw channel, and they are refused for
+    // want of an artifact exactly as a theme is.
     render(
       <DesignSystemProvider tenantConfig={tenantConfig({
         branding: { companyName: 'Recipe profile proof', primaryColor: '#B3001B' },

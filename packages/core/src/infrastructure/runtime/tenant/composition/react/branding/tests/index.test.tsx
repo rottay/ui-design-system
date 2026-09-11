@@ -299,8 +299,8 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
   });
 
   it('ignores an engine named by the branding response instead of honouring it', async () => {
-    // `engine` was removed from `TenantConfig`: the vertical roster owns it, so
-    // a transport that names one is not refused for it -- the field simply has
+    // `TenantConfig` has no `engine`: the vertical roster owns it, so a
+    // transport that names one is not refused for it -- the field simply has
     // nowhere to land, and the rest of the response is accepted normally.
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
@@ -652,9 +652,8 @@ describe('useTenantBranding at the visual-authority seam', () => {
       documentRoot: null,
     });
     // ONE channel, because one is all a config can carry: the endpoint's
-    // `tokenOverrides`/`personality`/`appearance` no longer reach the config at
-    // all, and its branding seeds are the last thing an artifact can be mixed
-    // with.
+    // `tokenOverrides`/`personality`/`appearance` reach the config nowhere, and
+    // its branding seeds are the one thing an artifact can be mixed with.
     expect(mixed.conflict).toMatch(
       /mixes a compiled artifact with raw visual branding/,
     );

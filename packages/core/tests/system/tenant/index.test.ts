@@ -54,9 +54,9 @@ describe('Tenant Schema', () => {
     });
 
     it('does not judge an engine, because a tenant does not carry one', () => {
-      // `engine` was removed from `TenantConfig`: the vertical roster owns it,
-      // and `resolveEngine` has no tenant input left to rank. A transport that
-      // still names one is not refused for it -- the field has nowhere to land.
+      // `TenantConfig` has no `engine`: the vertical roster owns it, and
+      // `resolveEngine` has no tenant input to rank. A transport that names one
+      // is not refused for it -- the field has nowhere to land.
       const config = {
         slug: 'test',
         name: 'Test',

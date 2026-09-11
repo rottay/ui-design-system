@@ -138,9 +138,9 @@ async function renderAdmitted(
  * the fail-closed case, which wants exactly this outcome.
  *
  * The payload is raw BRANDING because that is the only visual channel a
- * `TenantConfig` still has: `appearance` was removed along with `brandTheme`,
- * `tokenOverrides` and `personality`, so an unbacked appearance is no longer
- * something an application can even express.
+ * `TenantConfig` has: it carries no `appearance`, `brandTheme`,
+ * `tokenOverrides` or `personality`, so an unbacked appearance is not
+ * something an application can express.
  */
 async function renderUnbacked(
   branding: TenantConfig['branding'],

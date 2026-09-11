@@ -545,9 +545,8 @@ describe('tenantOverrides: the visual lane is still refused', () => {
  * remain observable in the published config, and it must still trigger the
  * rebuild and its identity assert.
  *
- * `engine` used to stand beside it here. It is gone from `TenantConfig`
- * entirely: the vertical roster owns the engine, so there is no tenant pin left
- * to publish, honour or refuse.
+ * `engine` has no slot here at all: the vertical roster owns the engine, so
+ * there is no tenant pin to publish, honour or refuse.
  */
 describe('tenantOverrides: componentPack is config, not behavior', () => {
   /**

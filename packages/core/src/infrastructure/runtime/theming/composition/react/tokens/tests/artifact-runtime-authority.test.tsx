@@ -1,16 +1,16 @@
 /**
- * WO-EMI-02 step 4: `useTokens` reads the MOUNTED ARTIFACT's compile.
+ * `useTokens` reads the MOUNTED ARTIFACT's compile.
  *
  * The negative this file exists to prove is a precedence one. A tenant whose
- * compiled artifact says one thing and whose legacy config fields say another
- * must get the ARTIFACT's answer — and it must get it because the merge that
- * once read those fields is DELETED, not because it happens to lose a
- * comparison. Both halves are asserted: the rendered value, and the absence of
- * the read in the hook's own source.
+ * compiled artifact says one thing and whose forged config fields say another
+ * must get the ARTIFACT's answer — and it must get it because the hook reads
+ * those fields nowhere, not because they happen to lose a comparison. Both
+ * halves are asserted: the rendered value, and the absence of the read in the
+ * hook's own source.
  *
- * The legacy fields cannot be written through the type any more, so the fixture
- * smuggles them past it with one cast. That is the point: even a transport that
- * forges them at runtime moves nothing.
+ * Those fields cannot be written through the type, so the fixture smuggles
+ * them past it with one cast. That is the point: even a transport that forges
+ * them at runtime moves nothing.
  */
 
 import React from 'react';
@@ -58,9 +58,9 @@ const COMPILED = compileTenantTheme(
 );
 
 /**
- * What the config says instead. Every field here was removed from
- * `TenantConfig`; the cast is how a hostile or stale transport would still put
- * them on the object, and each one contradicts the compile above.
+ * What the config says instead. No field here exists on `TenantConfig`; the
+ * cast is how a hostile or stale transport would still put them on the object,
+ * and each one contradicts the compile above.
  */
 const SMUGGLED = {
   slug: SLUG,
@@ -188,8 +188,8 @@ describe('useTokens resolves the mounted artifact, not the config', () => {
   });
 
   it('deleted the config merge instead of letting it lose', () => {
-    // A precedence assertion alone would stay green if the old branch were
-    // still there and merely outranked. The reads are gone from the source.
+    // A precedence assertion alone would stay green against a losing branch
+    // that still existed. The source names none of these reads.
     const source = readFileSync(resolve(__dirname, '../index.ts'), 'utf8');
     for (const read of [
       'config.brandTheme',

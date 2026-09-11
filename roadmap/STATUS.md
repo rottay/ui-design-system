@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T06:56:28.612Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T10:41:05.270Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,7 +28,7 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T06:56:28.612Z.
+**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T10:41:05.270Z.
 
 **measured on the 8-family sample: 15/22 move at least one sampled family** — MEASURED by that run.
 
@@ -49,30 +49,24 @@ Recorded vs measured — 4 row(s) disagree; neither side is authority, and the d
 | Kind | Target | Change | Bump | Changeset |
 | --- | --- | --- | --- | --- |
 | signature | `./contracts/foundation#TenantConfig` | same five fields removed on the contracts barrel's re-export of the same declaration | major | `emi-02-tenant-config-strip.md` |
-| signature | `./contracts/foundation#TenantContextValue` | same optional field on the contracts barrel's re-export | major | `emi-02-tenant-config-strip.md` |
 | signature | `./server#admitDocument` | optional `ranges?: TenantThemeVerticalEnvelope["ranges"]` on its input object: the clamp bounds a profile default may not cross; omitted, the station reads the vertical's registered envelope, so existing calls compile and clamp as before | minor | `r1r2-integration-door.md` |
-| signature | `./server#censusRuntimeVisualPayload` | same narrowed input on the server barrel's re-export | major | `emi-02-tenant-config-strip.md` |
+| signature | `./server#censusRuntimeVisualPayload` | input narrowed to `Pick<TenantConfig, "branding"> / null / undefined`; it returns the one-field census above | major | `emi-02-tenant-config-strip.md` |
 | signature | `./server#compileTenantThemeDocumentV2` | new: publishes a `TenantThemeDocumentV2` to a `TenantThemeArtifact` with the door's admission report and the decision-provenance ledger; refuses a non-v2 document with `unsupported_schema_version` at `$.document.version` and an unrostered vertical with `invalid_value` at `$.verticalKey`; additive, no existing signature changes | minor | `r2-publication-parity.md` |
 | signature | `./server#DecisionProvenanceLedger` | published as a type with `DecisionProvenance` and `DecisionProvenanceEntry`; the shape a publication result and an artifact metadatum are read as, additive | minor | `r2-publication-parity.md` |
 | signature | `./server#DocumentAdmission` | carries the `ledger` the gate captured | minor | `r1-decision-provenance.md` |
 | signature | `./server#DocumentAdmission` | REQUIRED output fields `profileClaims: readonly DecisionProvenanceClaim<ThemeDecisionId>[]` (what the profile-expansion station filled, as `profile-derived` claims) and `effective: TenantThemeDocument` (the v1-shape document the patch was lowered from, profile defaults included); both are always present, so a consumer that constructs a `DocumentAdmission` value itself must supply them | minor | `r1r2-integration-door.md` |
 | signature | `./server#DocumentThemeIntentInput` | optional `ranges?: TenantThemeVerticalEnvelope["ranges"]`, forwarded to the door so a persisted producer previews under the same envelope its publish clamps into; additive | minor | `r1r2-integration-door.md` |
 | signature | `./server#PreviewThemeIntentInput` | optional `ranges?: TenantThemeVerticalEnvelope["ranges"]`, the preview counterpart of the same envelope; additive | minor | `r1r2-integration-door.md` |
-| signature | `./server#resolveActiveIconExpressiveProfile` | same input change on the server barrel's re-export | major | `emi-02-tenant-config-strip.md` |
-| signature | `./server#resolveActiveResponsivePosture` | same input change on the server barrel's re-export | major | `emi-02-tenant-config-strip.md` |
+| signature | `./server#resolveActiveIconExpressiveProfile` | input is `{ appearance?, expressive? }`: the artifact's normalized appearance and the governed expressive SELECTION, replacing the `{ appearance?, brandTheme? }` shape a tenant config used to satisfy | major | `emi-02-tenant-config-strip.md` |
 | signature | `./server#RuntimeVisualPayloadCensus` | same reduction on the server barrel's re-export | major | `emi-02-tenant-config-strip.md` |
-| signature | `./server#TenantConfig` | same five fields removed on the server barrel's re-export of the same declaration | major | `emi-02-tenant-config-strip.md` |
-| signature | `./server#TenantContextValue` | same optional field on the server barrel's re-export | major | `emi-02-tenant-config-strip.md` |
 | signature | `./server#TenantThemeArtifact` | optional `provenance: { entries: [{ ref, provenance, tier, effectiveLeaves }] }`, included in the artifact digest when present; absent on every artifact compiled before it existed and on the v1 transport, which resolves no ledger, so stored artifacts stay verifiable and mountable without a schemaVersion bump | minor | `r2-publication-parity.md` |
 | signature | `./server#TenantThemeDocumentV2` | decisions `states.emphasis` and `states.focus-style` (catalog rows 20/21) now lower to 28 emitted `--ds-state-*`/`--ds-focus-ring*`/`--ds-material-*` channels; closed enum domains, additive | minor | `der-02-states-materials.md` |
 | signature | `./server#TenantThemeSimpleConfig` | `general.states` optional input accepted (`emphasis`, `focusStyle`); the v1 lowering maps it to `surfaces.{stateEmphasis,focusStyle}` and the v2→v1 projection writes it back by name; the v1→v2 migration (`migrateDocumentV1ToV2`) does not carry it yet (dropped; gap registered for implementation) | minor | `der-02-states-materials.md` |
 | signature | `./server#Theme` | normalized surfaces gain optional `stateEmphasis` and `focusStyle`; absent means `medium`/`ring`, byte-identical to the pre-decision foundation defaults | minor | `der-02-states-materials.md` |
 | signature | `.#admitDocument` | same optional `ranges` input field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
-| signature | `.#censusRuntimeVisualPayload` | input narrowed to `Pick<TenantConfig, "branding"> / null / undefined`; it returns the one-field census above | major | `emi-02-tenant-config-strip.md` |
 | signature | `.#DocumentAdmission` | same two required output fields on the root barrel's re-export of the same declaration | minor | `r1r2-integration-door.md` |
 | signature | `.#DocumentThemeIntentInput` | same optional `ranges` field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
 | signature | `.#PreviewThemeIntentInput` | same optional `ranges` field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
-| signature | `.#resolveActiveIconExpressiveProfile` | input is `{ appearance?, expressive? }`: the artifact's normalized appearance and the governed expressive SELECTION, replacing the `{ appearance?, brandTheme? }` shape a tenant config used to satisfy | major | `emi-02-tenant-config-strip.md` |
 | signature | `.#resolveActiveResponsivePosture` | takes the artifact's normalized appearance (`{ advanced?: { responsivePosture? } }`) directly instead of a config; the `brandTheme.responsive` arm is gone because nothing could reach it once the config stopped carrying a theme | major | `emi-02-tenant-config-strip.md` |
 | signature | `.#RuntimeVisualPayloadCensus` | reduced to `{ visualBranding: boolean }`; `tokenOverrides`, `personality`, `brandTheme` and `appearance` are gone because a `TenantConfig` can no longer carry them, leaving the branding seeds as the only raw visual channel | major | `emi-02-tenant-config-strip.md` |
 | signature | `.#TENANT_CAPABILITY_REGISTRY` | the `recipe-profile` row's evidence witness moves to `appearance?.recipeProfile ?? governedBehavior?.recipeProfile`, the expression the provider now reads: the artifact's normalized appearance for a published tenant and the identity-keyed governed slot for a code-owned vertical. Declarations, tiers and domains are unchanged | major | `emi-02-tenant-config-strip.md` |

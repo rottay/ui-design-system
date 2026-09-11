@@ -72,10 +72,10 @@ export interface RenderWithEngineOptions extends Omit<RenderOptions, 'wrapper'> 
  *
  * `classic` seeds antd from a compiled projection and refuses to guess one, so
  * the reference vertical's compile stands in for a fixture tenant that authors
- * no theme. Since WO-EMI-02 the same declaration also carries
- * `ThemeCompilation.runtime`, which `useTokens` reads as the TENANT layer -- and
- * another vertical's compile is not this fixture's decision. The runtime half is
- * therefore emptied: the seeds are borrowed, the decisions are not.
+ * no theme. That same declaration also carries `ThemeCompilation.runtime`,
+ * which `useTokens` reads as the TENANT layer -- and another vertical's
+ * compile is not this fixture's decision. The runtime half is therefore
+ * emptied: the seeds are borrowed, the decisions are not.
  */
 export function librarySeedEngineVisual(
   engine: Exclude<EngineName, 'custom'>,

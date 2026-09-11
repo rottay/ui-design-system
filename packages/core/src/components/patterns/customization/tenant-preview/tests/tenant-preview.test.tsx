@@ -339,10 +339,10 @@ describe('TenantPreview', () => {
        accent personality, and every preset carries all three, so a preset-built
        preview ALWAYS has something to declare. */
     it('modern: reports no lost axis, because a draft compiles its whole theme', () => {
-      // The three `personality.*` axes this used to name are gone: a draft's
-      // preset is projected onto the BrandTheme the compiler lowers, not onto
-      // a config the lift has to represent. Absence is the assertion, and it
-      // must agree with the builder rather than be a constant that looks right.
+      // A draft's preset is projected onto the BrandTheme the compiler lowers,
+      // not onto a config the lift has to represent, so absence is the
+      // assertion -- and it must agree with the builder rather than be a
+      // constant that looks right.
       const { container } = render(<ModernTenantPreview config={sampleConfig} />);
       const root = container.querySelector(`[${PREVIEW_SCOPE_ATTRIBUTE}]`) as HTMLElement;
 

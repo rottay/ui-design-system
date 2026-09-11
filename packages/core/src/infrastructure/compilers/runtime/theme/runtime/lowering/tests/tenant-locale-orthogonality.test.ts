@@ -44,9 +44,9 @@ const managementAppearance: TenantAppearance = {
 /**
  * The two transport shapes, named locally.
  *
- * They are deliberately NOT `Pick<TenantConfig, ...>` any more: a tenant config
- * carries neither a theme nor an appearance, so the fixtures below describe
- * what each TRANSPORT hands the compiler, not what a runtime config holds.
+ * They are deliberately NOT `Pick<TenantConfig, ...>`: a tenant config carries
+ * neither a theme nor an appearance, so the fixtures below describe what each
+ * TRANSPORT hands the compiler, not what a runtime config holds.
  */
 interface StaticTransportFixture {
   slug: string;

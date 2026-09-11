@@ -125,12 +125,12 @@ export interface TenantTokenOverrides {
  * Tenant IDENTITY, bounded branding, and a reference to the artifact that
  * paints it. Never a visual payload.
  *
- * WHAT IT NO LONGER CARRIES, and why. `brandTheme`, `tokenOverrides`,
- * `personality`, `appearance` and `engine` were removed: each was a second
- * authority over a question the compiled artifact already answers. Visual
- * identity is lowered ONCE -- `Theme -> compileTheme -> artifact` -- and
- * reaches the runtime as that artifact's CSS plus its
- * `ThemeCompilation.runtime`; the engine is the vertical roster's.
+ * WHY IT CARRIES NO `brandTheme`, `tokenOverrides`, `personality`,
+ * `appearance` OR `engine`. Each would be a second authority over a question
+ * the compiled artifact already answers. Visual identity is lowered ONCE --
+ * `Theme -> compileTheme -> artifact` -- and reaches the runtime as that
+ * artifact's CSS plus its `ThemeCompilation.runtime`; the engine is the
+ * vertical roster's.
  *
  * HOW A TENANT REFERENCES ITS ARTIFACT. By identity: `slug` and `vertical` are
  * the keys the compiled artifact is published and admitted under

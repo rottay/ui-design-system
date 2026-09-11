@@ -249,12 +249,10 @@ describe('useTokens product profile resolution', () => {
   });
 
   it('DRILL: the old raw-override shape is refused, not silently applied', () => {
-    // What is left of the payload these tests used to assert on. The
-    // `tokenOverrides` and `personality` halves are gone from `TenantConfig`
-    // and cannot be written at all; the branding seeds are the one raw channel
-    // a transport can still hand the runtime, and they must not reach
-    // `useTokens` -- the failure mode must be a blocked tree, not a tree that
-    // renders with the raw values quietly folded in.
+    // `TenantConfig` has no `tokenOverrides` or `personality` to write; the
+    // branding seeds are the one raw channel a transport can hand the runtime,
+    // and they must not reach `useTokens` -- the failure mode must be a blocked
+    // tree, not a tree that renders with the raw values quietly folded in.
     const rawOverrides = {
       branding: {
         companyName: 'Token Test Override',

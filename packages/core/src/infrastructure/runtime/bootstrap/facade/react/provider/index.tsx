@@ -1056,9 +1056,8 @@ export function DesignSystemProvider({
   const resolvedRuntimeConfig = codeOwnedConfig ?? buildResolvedRuntimeConfig(normalizedConfig);
 
   // THE ARTIFACT'S OWN read-model, read where it is proven and published beside
-  // the config rather than folded into it. It used to be assigned to
-  // `config.appearance`, which made a compiled output indistinguishable from a
-  // field a transport had authored -- the exact ambiguity the strip removes.
+  // the config rather than inside it: a compiled output has to stay
+  // distinguishable from a field a transport authored.
   const appearance = verifiedArtifact?.normalizedAppearance as TenantAppearance | undefined;
 
   // Governed, non-visual behavior of a code-owned vertical. The runtime

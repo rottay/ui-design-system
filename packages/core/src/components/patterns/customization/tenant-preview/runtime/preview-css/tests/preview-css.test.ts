@@ -640,10 +640,8 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
   });
 
   it('reports no unsupported axis, because a config has no visual axis left to lose', () => {
-    // The lift used to name `personality.chart/card/accent` here: they were
-    // stored losslessly on the BrandTheme and never rendered. Those fields are
-    // gone from `TenantConfig`, so `branding` is the whole visual input and the
-    // lift is total over it -- the silence is now a fact about the type.
+    // `branding` is the whole visual input a `TenantConfig` carries and the
+    // lift is total over it, so the silence is a fact about the type.
     const config = baseTenantConfig({
       branding: {
         companyName: 'Acme Corp',

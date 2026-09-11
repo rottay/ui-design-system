@@ -34,7 +34,7 @@
  * `resolvePreviewInput`/`liftTenantConfigToBrandTheme` below, so callers stay
  * dumb call sites. An authoring draft that wants its personality preset and
  * density painted resolves through `draftPreviewSource` instead: those are
- * BrandTheme channels, and a `TenantConfig` no longer carries them.
+ * BrandTheme channels, not `TenantConfig` ones.
  */
 
 import type { TenantConfig } from '../../../../../../foundation/contracts/composition/tenants';
@@ -196,9 +196,8 @@ export function draftBrandTheme(draft: {
  *   - `branding.fontFamily{Base,Heading,Mono,Display}` -> `typography`
  *
  * It reports NO unsupported axis, and that is a statement about the input, not
- * a silence: `personality`, `tokenOverrides`, `brandTheme` and `appearance`
- * were removed from `TenantConfig`, so there is no longer an authored visual
- * axis this lift can fail to represent.
+ * a silence: `branding` is the whole visual surface a `TenantConfig` carries,
+ * so there is no authored visual axis this lift can fail to represent.
  *
  * `logo`, `logoMark`, `favicon`, `companyName` (routed to `name` instead),
  * `plan`, `features`, `domain`, `vertical`, and `componentPack` are

@@ -340,9 +340,8 @@ describe('SSR embed -> hydration reuse', () => {
 
   it('DRILL: raw branding beside a genuine mount is still a conflict', () => {
     // The other direction. A payload that genuinely competes must be reported,
-    // or a second painter ships silently. The appearance ECHO this drill used
-    // to tamper with is gone: `TenantConfig` carries no appearance at all, so
-    // the branding seeds are the only payload that can sit beside a mount.
+    // or a second painter ships silently. `TenantConfig` carries no appearance,
+    // so the branding seeds are the only payload that can sit beside a mount.
     const { emission } = renderOnServer();
 
     // The mount is genuine, so the raw payload is the ONLY thing wrong. Without
