@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T10:59:41.573Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T11:15:07.323Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,7 +28,7 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T10:59:41.573Z.
+**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T11:15:07.323Z.
 
 **measured on the 8-family sample: 15/22 move at least one sampled family** — MEASURED by that run.
 

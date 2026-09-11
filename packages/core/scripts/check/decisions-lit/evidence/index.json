@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-11T10:59:41.573Z",
+  "producedAt": "2026-09-11T11:15:07.323Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 8-family sample: 15/22 move at least one sampled family",
   "denominators": {
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-11T10:58:09.630Z"
+      "builtAt": "2026-09-11T11:14:09.756Z"
     },
     "sources": {
       "door": {
