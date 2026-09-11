@@ -4241,6 +4241,11 @@
      "at": "2026-09-09 20:35",
      "by": "kimi-k3",
      "note": "2026-09-09 residual main-side del lote gatefix (Fable /private/tmp/fable-gatefix2-audit.md): --ds-radius-button y los cinco --ds-button-*-radius se emiten via spread-of-call y son INVISIBLES a ambos extractores de liveness sin finding de unresolved; --ds-radius-button sale silenciosamente del set compilado en el merge (declarado en CSS, ningun ratchet se mueve). Extender los extractores a spread-of-call o adjudicar esos canales a mano."
+    },
+    {
+     "at": "2026-09-10 20:40",
+     "by": "kimi-k3",
+     "note": "PALETTE HALF LANDED (merge 17a32a3f7 + integration 77e76ff10; Fable re-audit LAND at 6e38573e8). Derivers derivation/palette/{semantic,inks,tints,neutral-temperature,contrast-posture} created; both postures LIVE (12/12/12 and 9-16 channels per vertical measured, zero diff at rest on the static arm); accent ramp REMOVED by evidence (0 readers vs 48 for secondary; every surface -10/+2, seed intact); mono ramp derives from the tenant neutral; the historical F-07 radius self-cancel warning verified STALE by fresh measurement (dial moves radii 1.6px vs 2.4px at 0.8/1.2). decisions-lit: 26/29 kit rows move the artifact, new-decision denominator 2 (nesting, control-height remain; conn2 lot in flight). RESIDUALS registered: (a) applyTenantSeedDerivations is posture-blind on the primary-seed path (a missing raise, not a lowering) — next connection lot; (b) F5 claim correction: '0 channels at rest' holds on the static arm only — the DB door moves 7/6/7 chrome channels for identity values, a pre-existing mechanism affecting every palette key; (c) freeze gate cannot see interpolated keys (palette/inks --ds-color-on-<role>) — pre-existing instrument blindness; (d) token-readout fixture reads none of the newly declared channels (F6) — conn2 lot extends it; (e) pill vs allowed-radius-override precedence — shape lot pending; (f) ramps.accent still authorable though unemitted — routed to WO-DER-06. WO stays in-progress until the close-scope amendment's root requirements are assessed."
     }
    ]
   },
