@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "law": "A component state channel declared at ROOT SCOPE must resolve through the material vocabulary. F-10: 488 hand-authored state channels, material coverage 0 % / 3 % / 92 % across the three artifacts, and one hover meaning ~370 edits. Decrease-only: the baseline follows the tree DOWN, never up.",
   "scope": "authored CSS under src/foundation/tokens/css and src/components. Generated artifacts are outputs, and Classic/Rustic are frozen (owner, 2026-09-05), so neither is debt this lane lowers.",
   "exclusions": "tone-scoped (name or value reaches a tone ramp), structural (transparent/none/currentColor/inherit/initial/unset), family-governed (--ds-sidebar-* <- navigation.sidebar-tone), governed-alias (a var() to a governed sibling of the same component). Each is a RULE, not an entry: a material root cannot express those values.",
@@ -7,9 +7,163 @@
   "governed": 122,
   "ungoverned": 15,
   "ratioFloor": 0.85,
+  "populationFloor": 137,
   "corpusFloor": 300,
-  "measuredCorpus": 348,
+  "measuredCorpus": 349,
   "families": 36,
   "governedFamilies": 33,
-  "honesty": "WO-DER-02 took this from 22/134 governed to 122/137. The 15 that remain are measured debt, not an allowlist: filled/track variants whose resting ground is not a surface role (input-filled, select-filled, switch track, slider handle, toggle track), depth channels that belong to the elevation ladder rather than to a material (avatar, float button, button elevated), and three self-aliases. Each closes with its family's cut."
+  "ratchets": {
+    "ungoverned": "DECREASE-ONLY. The tree may have fewer ungoverned channels than the pin, never more. Lowering it re-pins; raising it is the failure.",
+    "ratioFloor": "FLOOR, held by hand. governed/population may not fall below it. Provisional and self-pinned (see the gate docblock): it is this lane's number, not F-10's 80 %, which is measured on a different population.",
+    "populationFloor": "FLOOR, and therefore the OPPOSITE direction to `ungoverned`: the measured channel population may not fall below it. Added for audit 100 (F6), which drove the gate green on a tree where every stylesheet survived and every `--ds-` prefix had been renamed away -- population 0, ratio 1, zero failures. A legitimate shrink exists (a family cut that deletes channels instead of arming them), and it re-pins this number under owner review exactly like `corpusFloor`; it never silently passes. A population of zero is named as its own failure even when no baseline pins the floor.",
+    "corpusFloor": "FLOOR, held by hand and deliberately loose (300 against a measured 349). It answers 'is the gate still reading the CSS tree', not 'did one file move'.",
+    "measuredCorpus": "OBSERVATION, not a ratchet. It records what the tree measured when this baseline was written (349 stylesheets, re-measured 2026-09-11; the previous 348 was stale). Nothing fails on it; `corpusFloor` is the clause that bites.",
+    "population": "OBSERVATION of the same run. `populationFloor` is the clause that bites.",
+    "governed": "OBSERVATION. Nothing reads it; the ratio is derived from the tree, not from this number.",
+    "families": "OBSERVATION.",
+    "governedFamilies": "OBSERVATION."
+  },
+  "honesty": "WO-DER-02 took this from 22/134 governed to 122/137. The 15 that remain are measured debt, not an allowlist, and every one of them is enumerated below with the work order that closes it. Three shapes recur: a filled/track variant whose resting ground is not a surface role; a depth channel that belongs to the elevation ladder rather than to a material; and a restatement that aliases a resting sibling which is itself unarmed, so the governed-alias rule cannot rescue it one indirection deep.",
+  "dispositionLaw": "Each row closes with its family's cut (roadmap/family-cuts.md). `owner` is used when that lane names the family in a cut's own outcome list. Where it does not, the row carries `ownerCandidate` + `gap: true` instead: the nearest cut is named as a proposal and the missing assignment is the finding, because inventing an assignment here would put a channel in a work order that never agreed to own it. Four families are in that state today: slider, float-button, signal-card and command-home.",
+  "ungovernedDispositions": [
+    {
+      "channel": "--ds-input-filled-bg-hover",
+      "family": "input",
+      "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+      "value": "#e5e5e5",
+      "shape": "filled-variant ground",
+      "owner": "WO-FAM-02",
+      "why": "the cut names `input`; the filled variant's resting ground is a hand-picked neutral, so the hover has no surface role to take a material delta from until the cut derives one"
+    },
+    {
+      "channel": "--ds-switch-bg-hover",
+      "family": "switch",
+      "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+      "value": "var(--ds-color-neutral-400)",
+      "shape": "track ground",
+      "owner": "WO-FAM-01",
+      "why": "the cut names `switch/toggle` (unified by D-16); the off-state track reads the neutral ramp directly instead of a material background"
+    },
+    {
+      "channel": "--ds-slider-handle-bg-disabled",
+      "family": "slider",
+      "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+      "value": "var(--ds-color-neutral-400)",
+      "shape": "track/handle ground",
+      "ownerCandidate": "WO-FAM-01",
+      "gap": true,
+      "why": "`src/components/primitives/inputs/slider` is named by no cut: WO-FAM-01 lists button, checkbox, radio, switch/toggle and segmented, and WO-FAM-02 lists the text-entry family, neither of which is a slider. WO-FAM-01 is proposed because a slider is the same track-plus-handle control anatomy as the switch it already owns; the assignment is the owner's to make"
+    },
+    {
+      "channel": "--ds-floatbutton-hover-shadow",
+      "family": "floatbutton",
+      "file": "src/foundation/tokens/css/foundation/themes/default/index.css",
+      "value": "var(--ds-shadow-lg)",
+      "shape": "depth",
+      "ownerCandidate": "WO-FAM-01",
+      "gap": true,
+      "why": "`src/components/primitives/navigation/float-button` is named by no cut: WO-FAM-01 names `button` but not float-button, and WO-FAM-05 names menu, tabs, breadcrumb, pagination, steps and sidebar, not the component that physically sits beside them. WO-FAM-01 is proposed because the component is a button posture; separately, the hover is a step on the elevation ladder, which the material shadow arm and the derived shadows must agree on before it can be armed"
+    },
+    {
+      "channel": "--ds-avatar-hover-shadow",
+      "family": "avatar",
+      "file": "src/foundation/tokens/css/presentation/components/avatar/index.css",
+      "value": "0 4px 12px rgba(0, 0, 0, 0.1)",
+      "shape": "depth",
+      "owner": "WO-FAM-06",
+      "why": "the cut names `avatar`; the value is a literal shadow, so it owes the derived-shadow ladder first and the material shadow arm second"
+    },
+    {
+      "channel": "--ds-button-text-border-hover",
+      "family": "button",
+      "file": "src/foundation/tokens/css/presentation/components/button/index.css",
+      "value": "var(--ds-button-text-border)",
+      "shape": "restatement of an unarmed resting sibling",
+      "owner": "WO-FAM-01",
+      "why": "the cut names `button`; the alias lands on `--ds-button-text-border: transparent`, which is structural rather than governed, so the hover is a restatement of an absence. The cut either deletes the restatement or gives the text variant a real border material"
+    },
+    {
+      "channel": "--ds-button-text-border-active",
+      "family": "button",
+      "file": "src/foundation/tokens/css/presentation/components/button/index.css",
+      "value": "var(--ds-button-text-border)",
+      "shape": "restatement of an unarmed resting sibling",
+      "owner": "WO-FAM-01",
+      "why": "same channel and same resolution as the hover above, one state over"
+    },
+    {
+      "channel": "--ds-button-elevated-shadow-hover",
+      "family": "button",
+      "file": "src/foundation/tokens/css/presentation/components/button/index.css",
+      "value": "var(--ds-elevation-2)",
+      "shape": "depth",
+      "owner": "WO-FAM-01",
+      "why": "the cut names `button`; the elevated variant's hover is a rung of the elevation ladder, not a material delta, and the cut decides which of the two owns it"
+    },
+    {
+      "channel": "--ds-input-shadow-hover",
+      "family": "input",
+      "file": "src/foundation/tokens/css/presentation/components/input/index.css",
+      "value": "var(--ds-input-shadow-rest)",
+      "shape": "restatement of an unarmed resting sibling",
+      "owner": "WO-FAM-02",
+      "why": "the cut names `input`; the alias lands on `--ds-input-shadow-rest`, which resolves to a shadow root rather than a material arm, so the indirection does not reach the vocabulary"
+    },
+    {
+      "channel": "--ds-input-clear-border-hover",
+      "family": "input",
+      "file": "src/foundation/tokens/css/presentation/components/input/index.css",
+      "value": "var(--ds-input-border)",
+      "shape": "restatement of an unarmed resting sibling",
+      "owner": "WO-FAM-02",
+      "why": "the cut names `input`; the clear affordance's hover restates the field's resting border, which is itself unarmed"
+    },
+    {
+      "channel": "--ds-signal-card-border-hover",
+      "family": "signal",
+      "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+      "value": "color-mix(in srgb, var(--ds-signal-card-accent) 24%, var(--ds-surface-card-border))",
+      "shape": "tone one indirection deep",
+      "ownerCandidate": "WO-FAM-06",
+      "gap": true,
+      "why": "the consumer is `src/components/structures/dashboard/insights`, and no cut names the dashboard/insights structures: WO-FAM-12 names stats-grid and card collections for layout only, and WO-FAM-13 owns the widget board. WO-CRA-10 names the signal-card family, but as a promote-to-DS verdict, not as a paint owner. WO-FAM-06 is proposed because it owns `card` and this is a card border. Note for whoever takes it: `--ds-signal-card-accent` resolves to `var(--ds-color-primary)`, so this row may be a tone exclusion the rule cannot see one level deep rather than a missing arm -- decide that before arming it"
+    },
+    {
+      "channel": "--ds-command-home-control-hover-border",
+      "family": "command",
+      "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+      "value": "var(--ds-button-secondary-border, var(--ds-color-border-focus))",
+      "shape": "cross-family alias to an unarmed channel",
+      "ownerCandidate": "WO-FAM-11",
+      "gap": true,
+      "why": "the channel is a shell-section channel (`chrome.shell` in kernel/foundation/css/chrome-variables, painted by the page-shell skin and the `.ds-command-home-*` classes) with no DS component consumer of its own. WO-FAM-11 is proposed because it owns app-shell, page-shell, workspace-shell and the command palette, but its outcome list does not name `command-home`. The alias also reaches outside the family, into `--ds-button-secondary-border`, which carries no material arm either"
+    },
+    {
+      "channel": "--ds-select-filled-bg-hover",
+      "family": "select",
+      "file": "src/foundation/tokens/css/presentation/components/select/index.css",
+      "value": "var(--ds-color-neutral-200)",
+      "shape": "filled-variant ground",
+      "owner": "WO-FAM-03",
+      "why": "the cut names `select`; same shape as the input filled variant, a hand-picked neutral ground with no surface role behind it"
+    },
+    {
+      "channel": "--ds-toggle-disabled-bg",
+      "family": "toggle",
+      "file": "src/foundation/tokens/css/presentation/components/toggle/index.css",
+      "value": "var(--ds-color-neutral-200)",
+      "shape": "track ground",
+      "owner": "WO-FAM-01",
+      "why": "the cut names the unified switch/toggle (D-16); the disabled track reads the neutral ramp directly"
+    },
+    {
+      "channel": "--ds-toggle-disabled-dot-bg",
+      "family": "toggle",
+      "file": "src/foundation/tokens/css/presentation/components/toggle/index.css",
+      "value": "var(--ds-color-neutral-100)",
+      "shape": "track ground",
+      "owner": "WO-FAM-01",
+      "why": "the toggle's knob in the same disabled state, same cut, same resolution"
+    }
+  ]
 }
