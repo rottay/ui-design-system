@@ -22,6 +22,7 @@ import { MERGE_RANK } from "../../foundation/contract";
 import { resolveExpressiveFacts } from "../../foundation/expressive";
 import { brandThemeRampSurface } from "../../foundation/ground";
 import { FAMILY_DERIVERS } from "../derivation";
+import { derivePaletteTints, resolveContrastPosture } from "../derivation/palette";
 import { resolveRadiusBaseline } from "../../foundation/geometry";
 
 /** What the caller states about the block being compiled. */
@@ -54,7 +55,9 @@ export interface LoweringResult {
  * The expressive expansion and the radius baseline are resolved HERE, once, and
  * carried as facts. Before this they were re-resolved by each consumer that
  * needed them, with a different schema-version policy on the tenant arm, so
- * one theme could expand five ways inside one compile.
+ * one theme could expand five ways inside one compile. The status tints join
+ * them for the same reason: two families state those channels, at two ranks,
+ * and only one of them was reading the block's contrast posture.
  */
 export function buildLoweringContext(
   request: LoweringRequest
@@ -72,6 +75,9 @@ export function buildLoweringContext(
       expressive.expansion,
       request.tenant?.posture?.radiusScale
     ),
+    statusTints: theme.palette
+      ? derivePaletteTints(theme.palette, resolveContrastPosture(theme))
+      : {},
     tenant: request.tenant,
   };
 }

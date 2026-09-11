@@ -96,16 +96,6 @@
   --ds-chart-series-8: #828EC9;
   --ds-chart-series-9: #755B93;
   --ds-color-accent: #7A6A5A;
-  --ds-color-accent-100: #E6DBD0;
-  --ds-color-accent-200: #CBBDAF;
-  --ds-color-accent-300: #AF9F90;
-  --ds-color-accent-400: #948373;
-  --ds-color-accent-50: #FFFBF7;
-  --ds-color-accent-500: #786858;
-  --ds-color-accent-600: #5D4F41;
-  --ds-color-accent-700: #42372B;
-  --ds-color-accent-800: #292018;
-  --ds-color-accent-900: #110C08;
   --ds-color-accent-hover: #5A4A3A;
   --ds-color-alpha-error-10: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
   --ds-color-alpha-error-20: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
@@ -167,6 +157,8 @@
   --ds-color-neutral-700: #404040;
   --ds-color-neutral-800: #262626;
   --ds-color-neutral-900: #171717;
+  --ds-color-neutral-ink: #000000;
+  --ds-color-neutral-paper: #ffffff;
   --ds-color-on-error: #ffffff;
   --ds-color-on-info: #ffffff;
   --ds-color-on-success: #ffffff;

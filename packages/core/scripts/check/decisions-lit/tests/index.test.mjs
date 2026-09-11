@@ -38,14 +38,15 @@ import {
 } from '../runtime/freshness/index.mjs';
 
 // A row leaves the `new` census when it gains a real producer the probe can
-// measure: `states.emphasis` and `states.focus-style` first, then
+// measure: `states.emphasis` and `states.focus-style` first (WO-DER-02), then
 // `typography.role-weights`, `typography.numeric`, `surfaces.border-style` and
-// `motion.character`. The headline's new denominator follows
-// NEW_DECISION_DENOMINATOR, so it decreases with them.
-test('the catalog states the kit census: 29 rows, 19 standard, 10 pro, 4 new', () => {
+// `motion.character` (CC-01 connection lot), then `palette.neutral-temperature`
+// and `palette.contrast-posture` (WO-DER-03 palette half). The headline's new
+// denominator follows NEW_DECISION_DENOMINATOR, so it decreases with them.
+test('the catalog states the kit census: 29 rows, 19 standard, 10 pro, 2 new', () => {
   assert.deepEqual(censusErrors(), []);
   assert.equal(DECISIONS.length, 29);
-  assert.equal(NEW_DECISION_IDS.length, 4);
+  assert.equal(NEW_DECISION_IDS.length, 2);
   assert.doesNotThrow(assertCatalogCensus);
 });
 
@@ -87,7 +88,7 @@ function fullRun(overrides = {}) {
 
 test('the headline is exactly the string the acceptance gate reads', () => {
   const summary = summarize(fullRun());
-  assert.equal(headline(summary), 'decisions lit = 7/22 (+0/4 new)');
+  assert.equal(headline(summary), 'decisions lit = 7/22 (+0/2 new)');
 });
 
 test('the measured half is DERIVED from the rows, not from the recorded class', () => {
@@ -109,7 +110,7 @@ test('the measured half is DERIVED from the rows, not from the recorded class', 
 test('both halves are published, and the gate substring survives', () => {
   const summary = summarize(fullRun());
   const lines = headlineLines(summary, 8);
-  assert.ok(lines[0].includes('decisions lit = 7/22 (+0/4 new)'));
+  assert.ok(lines[0].includes('decisions lit = 7/22 (+0/2 new)'));
   assert.ok(lines[0].includes('recorded'));
   assert.ok(lines[1].includes('measured on the 8-family sample'));
 });
@@ -166,7 +167,7 @@ test('REFUSES a run in which a decision recorded `new` moved', () => {
   const rows = fullRun({ [NEW_DECISION_IDS[0]]: { artifactBytesDiffer: true } });
   const summary = summarize(rows);
   assert.equal(summary.newLit, 1);
-  assert.equal(headline(summary), 'decisions lit = 7/22 (+1/4 new)');
+  assert.equal(headline(summary), 'decisions lit = 7/22 (+1/2 new)');
   assert.ok(
     violations({ summary, rows, verticals: ['bithire'] }).some((problem) =>
       problem.includes('MEASURED MOVING'),
@@ -398,7 +399,7 @@ const FINGERPRINTS = {
 
 function publishedArtifact(overrides = {}) {
   return {
-    headline: 'decisions lit = 7/22 (+0/4 new)',
+    headline: 'decisions lit = 7/22 (+0/2 new)',
     producedAt: '2026-09-07T00:00:00.000Z',
     summary: { decisions: [], discrepancies: [] },
     violations: [],

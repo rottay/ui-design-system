@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/4 new)** — decisions-lit probe, run of 2026-09-10T23:42:04.768Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/6 new)** — decisions-lit probe, run of 2026-09-10T23:10:23.389Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,13 +28,13 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/4 new)** — RECORDED; run of 2026-09-10T23:42:04.768Z.
+**decisions lit = 7/22 (+0/6 new)** — RECORDED; run of 2026-09-10T23:10:23.389Z.
 
 **measured on the 8-family sample: 12/22 move at least one sampled family** — MEASURED by that run.
 
 > Two halves, two statuses. The `n/22` figure is the audit's recorded effect class for today's control catalog, carried in the probe's catalog with its provenance; the `+m/10 new` figure and the measured line are derived by the run itself. Family movement is a sample of 8 of the 25 cascade families (`button`, `card`, `flex`, `grid`, `input`, `skeleton`, `space`, `stack`), so a decision can move a real family the sample does not carry; the whole-artifact comparison beside it is not a sample.
 
-Whole artifact: 24/29 kit decisions change the compiled tenant artifact today.
+Whole artifact: 22/29 kit decisions change the compiled tenant artifact today.
 
 Recorded vs measured — 4 row(s) disagree; neither side is authority, and the disagreement is published rather than resolved:
 - `palette.status-seeds` — recorded-full-moved-nothing: 0 channels moved, 0 sampled families
@@ -138,8 +138,8 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | --- | --- | --- | --- | --- |
 | WO-DER-02 | States and materials as derived roots | kimi-k3 | 2026-09-08 | 2026-09-08 20:33 — PARTIAL, registered by the R4 reconciliation lot (2026-09-08). The source of this WO landed at committed 34790cf43 ("materials and states as derived roots, one interaction vocabulary") WITHOUT a state transition; this entry registers that fact truthfully. It is NOT a close and this WO must never be marked done on it. F-10 stays PARTIAL: skins.stateGoverned is 16/123 = 13 % and has not moved — it sits in the family-cut lane and this WO's declared Files exclude the skins. Also outstanding: the per-artifact 71/71 --ds-material-* acceptance is unproven (baseline 0 / 65 / 2); the emphasis probe measures a synthetic element best-of-vertical and bithire moved 0/25 families (printed, not hidden), so real propagation to families is not demonstrated; catalog rows 20/21 correctly returned to minimumFamilies owner-pending rather than converting a measured declared fan-out into an approved product minimum, and material-arm's ratioFloor 0.85 is labelled PROVISIONAL and self-pinned, not F-10's threshold. Both belong to the owner's consolidated absolute-fan-out-floors decision (roadmap/kit-2026-09.md section 5b), which has not landed. The public contract diff for this range landed separately at 22d74f062 (DEL-02); the migrateDocumentV1ToV2 states gap it disclosed is owned by WO-CON-06. |
 | WO-DER-03 | Shape and palette derived once | opus | 2026-09-09 | 2026-09-09 20:35 — 2026-09-09 residual main-side del lote gatefix (Fable /private/tmp/fable-gatefix2-audit.md): --ds-radius-button y los cinco --ds-button-*-radius se emiten via spread-of-call y son INVISIBLES a ambos extractores de liveness sin finding de unresolved; --ds-radius-button sale silenciosamente del set compilado en el merge (declarado en CSS, ningun ratchet se mueve). Extender los extractores a spread-of-call o adjudicar esos canales a mano. |
-| WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | opus | 2026-09-09 | 2026-09-10 13:27 — Connfix residual lot LANDED a5da15828 (Codex r12 PASS at 28037739f): producer discovery migrated to a TypeScript AST walk (regex-era false positives retired), ambient declarations excluded from runtime references, border-style precedence and motion.character derivation modules connected, committed cascade producer inventory regenerated via canonical --write (4,904 sites / 10,825 emissions, zero conflicts). Partially addresses the admitted-but-unlit residuals: surfaces.border-style and motion.character now have derivation owners; typography.role-weights, typography.numeric, nesting and control-height remain unlit. WO stays in-progress. |
-| WO-EMI-02 | mountTenantTheme: one mount law, complete SSR projection, runtime that never recompiles | opus | 2026-09-09 | 2026-09-10 19:45 — LANDED with named residuals (merge 7cfe5abd4 + re-anchor 0a5f639ba + republications 690d07113; Fable landing audit LAND-WITH-RESIDUALS on the combined tree). Demonstrated on the combined tree: mount law with scope proof (conflictKind 'scope' on out-of-scope mount), one root-attribute owner via the claim registry, complete SSR projection (density/motion/viewport/recipe-profile), responsive snapshot through useSyncExternalStore without mobile-first frame on both runners, artifact-fed RecipeProfile integration, consumer fixture frozen signature 25/25. F-19 and F-112 closed; F-20 closed for the two testable criteria. RESIDUALS (WO stays in-progress): (1) step 4 undelivered — TenantConfig still carries engine/personality/tokenOverrides/brandTheme/appearance and useTokens does not read the mounted artifact (F-89 open); (2) F-12 open — no classic/rustic recipe proof (frozen-engine perimeter; owner to assign); (3) F-46 owned by WO-INV-04; (4) the real-browser no-relayout paint leg is uncertified (no Playwright evidence; jsdom cannot observe the dialog drills); (5) getCodeOwnedRuntimeConfig still discards appearance — the D-26 slot was chosen instead, coherent with artifact-only but not the literal outcome sentence. Recorder limits written: shadow-tree and foreign-realm carriers refuse by name; the foreign-realm+closed-root compound is named out of contract. |
+| WO-DER-04 | Typography roles, density, rhythm, elevation and motion as derived families | opus | 2026-09-09 | 2026-09-09 21:03 — 2026-09-09 hallazgo a11y REAL de la auditoria final de DER-07 (/private/tmp/fable-der07-final-audit.md): en dark mode la fila de navegacion seleccionada es #171717 sobre #152336 (APCA Lc 0.0, invisible) en baseline y los 3 candidatos — el bloque html.dark del tema default nunca re-declara --ds-menu-item-color-active. Va a los cortes de familia (menu/navigation); no es de los candidatos. Ademas: --ds-menu-bg no tiene lector en el Menu moderno (el panel pinta --ds-card-bg) y el autocorrect de contraste marca los seis canales var() del tone como unverifiable. |
+| WO-EMI-02 | mountTenantTheme: one mount law, complete SSR projection, runtime that never recompiles | opus | 2026-09-09 | (no entries — log via `progress`) |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | (no entries — log via `progress`) |
 
 ## Next up (todo, dependencies satisfied)
@@ -207,7 +207,7 @@ Also pending, declaring no public surface movement: `major-canonical-tree.md` (m
 | WO-CON-06 | dependencies: WO-EMI-02 |
 | WO-INV-06 | dependencies: WO-INV-04, WO-FAM-10, WO-FAM-11 |
 | WO-FAM-12 | dependencies: WO-FAM-06, WO-FAM-07, WO-DER-04, WO-INV-04, WO-INV-07 |
-| WO-INV-07 | dependencies: WO-DER-04, WO-INV-04 |
+| WO-INV-07 | dependencies: WO-DER-04 |
 | WO-INV-08 | dependencies: WO-DER-04, WO-INV-05 |
 | WO-FAM-13 | dependencies: WO-FAM-08, WO-FAM-12, WO-INV-07, WO-INV-08 |
 | WO-FAM-14 | dependencies: WO-INV-05 |

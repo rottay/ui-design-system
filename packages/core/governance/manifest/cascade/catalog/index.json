@@ -252,12 +252,12 @@
           ]
         }
       },
-      "derivation": "NO HAY DERIVACION: el compilador dice literal que neutral es autorado-solamente y no tiene semilla de la que derivar -- packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps/index.ts:75-77 (\"A role that is authored-only (`neutral` has no seed to derive from) emits nothing until authored\"). Por eso es la raiz de color mas cara del catalogo: 132 canales escritos paso por paso en los tres temas.",
+      "derivation": "DERIVACION POR TEMPERATURA (WO-DER-03, mitad palette): neutral sigue sin semilla de color, pero ya no es autorado-solamente. `derivation/palette/neutral-temperature` es su unico productor: toma la rampa autorada del bloque y le aplica la temperatura que decide el tenant, y emite ademas los dos anclajes monocromos --ds-color-neutral-{ink,paper}. `foundation/ramps` dejo de reclamar el rol para que el canal tenga un solo productor. En `neutral` la transformacion es la identidad, de modo que los 132 canales escritos paso por paso en los tres temas siguen valiendo exactamente lo mismo.",
       "evidence": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:58",
-      "governedBy": null,
+      "governedBy": "palette.neutral-temperature",
       "governanceScope": "ninguna",
-      "exposure": "gap",
-      "exposureNote": "ES LA MAYOR PERILLA FALTANTE DEL GRUPO COLOR. Ningun control de los 20 nombra un canal neutral, y el propio compilador certifica que sin semilla no hay derivacion. Un tenant que quiere mover su gris no tiene puerta: tiene que escribir 10 pasos por la allowlist pro de token-overrides.",
+      "exposure": "tenant-dial",
+      "exposureNote": "ERA LA MAYOR PERILLA FALTANTE DEL GRUPO COLOR. WO-DER-03 (mitad palette) le dio puerta: el dial publico Standard `palette.neutral-temperature` entra por `BrandPalette.neutralTemperature` (estatico) o por `appearance.general.palette.neutralTemperature` (DB), las dos confluyen en BrandPalette ANTES del unico lowering y salen por `derivation/palette/neutral-temperature`, que declara --ds-color-neutral-{50..900} mas los dos anclajes --ds-color-neutral-{ink,paper} que lee foundation/monochrome. No se creo ninguna raiz por paso: los -{50..900} son la misma decision indexada mas fino. La perilla NO es una semilla de color -- neutral sigue sin tenerla -- sino la temperatura del eje, que es lo que un tenant realmente decide sobre su gris.",
       "derivationDebt": false,
       "collapsesLegacy": {
         "total": 132,
@@ -3331,15 +3331,15 @@
     "byExposure": {
       "counts": {
         "internal-head": 23,
-        "tenant-dial": 37,
-        "gap": 4
+        "tenant-dial": 38,
+        "gap": 3
       },
       "channels": {
         "internal-head": 1512,
-        "tenant-dial": 1497,
-        "gap": 301
+        "tenant-dial": 1629,
+        "gap": 169
       },
-      "reading": "De las 64 raices NO REFINADAS, 32 tienen control o dial declarado, 28 son cabezas internas correctas sin perilla y 4 son huecos de perilla. P0 (2026-08-28) abrio el dial publico Standard `palette.status-seeds` y las 4 raices ramp.seed.{error,info,success,warning} pasaron de gap a tenant-dial: gap BAJA 8->4, que es la direccion legal del trinquete. `ramp.seed.neutral` NO acompanio el movimiento y sigue gap: no tiene semilla en ninguna via, asi que un dial suyo seria una perilla que no mueve nada — su adjudicacion subio al owner. RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 36 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en artifacts/generated/manifest/cascade/membership/index.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
+      "reading": "De las 64 raices NO REFINADAS, 32 tienen control o dial declarado, 28 son cabezas internas correctas sin perilla y 4 son huecos de perilla. P0 (2026-08-28) abrio el dial publico Standard `palette.status-seeds` y las 4 raices ramp.seed.{error,info,success,warning} pasaron de gap a tenant-dial: gap BAJA 8->4, que es la direccion legal del trinquete. WO-DER-03 (mitad palette, 2026-09-10) cerro el que faltaba de ese grupo: `ramp.seed.neutral` pasa de gap a tenant-dial bajo `palette.neutral-temperature`, y gap BAJA 4->3 con sus 132 canales moviendose al lado tenant-dial (1497->1629, 301->169). La adjudicacion pendiente del owner era \"neutral no tiene semilla\", y sigue sin tenerla: lo que se abrio no es una semilla de color sino la TEMPERATURA del eje, que si mueve la rampa entera y los dos anclajes del monocromo. RECOMPUTADO de las filas en la cohorte 2A (2026-08-27). El catalogo tiene ademas 36 raices REFINADAS del eje paso, excluidas de este vocabulario por adjudicacion del DT: una hija hereda el exposure de su padre porque es la MISMA decision indexada mas fino, y contarlas por separado inflaria el backlog de perillas faltantes sin que la deuda crezca. Su cifra viva es su poblacion en artifacts/generated/manifest/cascade/membership/index.json; collapsesLegacy vale cero en ellas porque es censo fechado de 2026-08-18. El grueso de la pintura NO deberia ser perilla nunca: deberia ser cascada. Ese sigue siendo el hallazgo estructural.",
       "derivation": "1497 + 1512 + 301 = 3310 = Σ collapsesLegacy.total de las 64 raices, recomputado de las filas. El campo se llama collapsesLegacy desde la cohorte 1: es un censo FECHADO (2026-08-18) que NO se reconcilia con la membresia viva por canal (artifacts/generated/manifest/cascade/membership/index.json), medida sobre los canales que los temas emiten HOY y con criterios que sobreviven a la ley del owner. Ver corrections."
     },
     "byGroup": {
@@ -3374,14 +3374,8 @@
       ]
     },
     "gapBacklog": {
-      "statement": "EL BACKLOG REAL DE PERILLAS FALTANTES. 4 raices, 301 canales de tema.",
+      "statement": "EL BACKLOG REAL DE PERILLAS FALTANTES. 3 raices, 169 canales de tema. `ramp.seed.neutral` (132 canales) salio de esta lista en WO-DER-03: la gobierna `palette.neutral-temperature`.",
       "items": [
-        {
-          "rootId": "ramp.seed.neutral",
-          "channels": 132,
-          "channelStatus": "--ds-color-neutral-500",
-          "why": "ES LA MAYOR PERILLA FALTANTE DEL GRUPO COLOR. Ningun control de los 20 nombra un canal neutral, y el propio compilador certifica que sin semilla no hay derivacion. Un tenant que quiere mover su gris no tiene puerta: tiene que escribir 10 pasos por la allowlist pro de token-overrides."
-        },
         {
           "rootId": "tier.accent.bg",
           "channels": 63,

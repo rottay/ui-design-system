@@ -83,12 +83,12 @@ describe('measureReadableInk / deriveReadableInk', () => {
     const white = measureReadableInk('#ffffff');
     if (white.status !== 'measured') throw new Error('expected a measured result');
     expect(white.contrast).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT_RATIO);
-    expect(white.meetsAA).toBe(true);
+    expect(white.meetsFloor).toBe(true);
   });
 
   it('reports a measurable mid-gray pair as below AA instead of certifying it', () => {
     const gray = measureReadableInk('#777777');
-    expect(gray).toMatchObject({ status: 'measured', meetsAA: false });
+    expect(gray).toMatchObject({ status: 'measured', meetsFloor: false });
     if (gray.status !== 'measured') throw new Error('expected a measured result');
     expect(gray.contrast).toBeLessThan(WCAG_AA_NORMAL_TEXT_RATIO);
   });
@@ -123,7 +123,7 @@ describe('measureReadableInk / deriveReadableInk', () => {
     const measurement = measureReadableInk('#F59E0B');
     expect(measurement).toMatchObject({ status: 'measured', ink: '#171717' });
     if (measurement.status !== 'measured') throw new Error('expected a measured result');
-    expect(measurement.meetsAA).toBe(true);
+    expect(measurement.meetsFloor).toBe(true);
     expect(measurement.contrast).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT_RATIO);
   });
 });

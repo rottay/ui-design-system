@@ -108,15 +108,27 @@ const LAB_MIX = /color-mix\(in lab,\s*var\((--ds-[a-z0-9-]+)\)\s*([\d.]+)%,\s*va
  *  hand-copied hex table would. Takes a FULL channel name because the ramp's steps and its
  *  semantic anchors no longer share one prefix. */
 function rampHex(channel: string): string {
+  const hex = resolveRampHex(channel);
+  if (hex === null) {
+    throw new Error(`ramp token ${channel} not found (or not resolvable) in foundation/monochrome/index.css`);
+  }
+  return hex;
+}
+
+/** An alias may name a tenant-writable anchor with the package's own anchor as its `var()`
+ *  fallback; the cascade reads that fallback only when the primary is undeclared in these sheets. */
+function resolveRampHex(channel: string): string | null {
   for (const source of [RAMP_CSS, THEME_CSS]) {
     const literal = source.match(new RegExp(`${channel}:\\s*(#[0-9a-fA-F]{6})`));
     if (literal) return literal[1]!;
-    const alias = source.match(new RegExp(`${channel}:\\s*var\\((--ds-[a-z0-9-]+)\\)`));
-    if (alias) return rampHex(alias[1]!);
+    const alias = source.match(
+      new RegExp(`${channel}:\\s*var\\((--ds-[a-z0-9-]+)(?:,\\s*var\\((--ds-[a-z0-9-]+)\\))?\\)`),
+    );
+    if (alias) return resolveRampHex(alias[1]!) ?? (alias[2] ? resolveRampHex(alias[2]) : null);
     const mix = source.match(new RegExp(`${channel}:\\s*${LAB_MIX.source}`));
     if (mix) return mixLabHex(mix[1]!, Number(mix[2]), mix[3]!);
   }
-  throw new Error(`ramp token ${channel} not found (or not resolvable) in foundation/monochrome/index.css`);
+  return null;
 }
 
 function mixLabHex(fromChannel: string, percent: number, toChannel: string): string {

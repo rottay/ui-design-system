@@ -149,10 +149,11 @@ describe("theme control catalog", () => {
   });
 
   it("marks the still-underived new rows as not-yet-derived and nothing else", () => {
-    // WO-DER-02 derives two of the ten `(new)` rows and the CC-01 connection
-    // lot four more. The list they came from is a KIT fact -- which rows the
-    // kit added -- and stays as authored; what moves is the measured `effect`,
-    // which is what this row asserts.
+    // WO-DER-02 derives two of the ten `(new)` rows, the CC-01 connection lot
+    // four more, and the WO-DER-03 palette half the two palette postures. The
+    // list they came from is a KIT fact -- which rows the kit added -- and
+    // stays as authored; what moves is the measured `effect`, which is what
+    // this row asserts.
     const derived: Parameters<typeof themeControl>[0][] = [
       "states.emphasis",
       "states.focus-style",
@@ -160,6 +161,9 @@ describe("theme control catalog", () => {
       "typography.numeric",
       "surfaces.border-style",
       "motion.character",
+      "palette.neutral-temperature",
+      "palette.contrast-posture",
+    ];
     ];
     const notDerived = THEME_CONTROL_CATALOG.filter(
       (row) => row.effect === "not-yet-derived"

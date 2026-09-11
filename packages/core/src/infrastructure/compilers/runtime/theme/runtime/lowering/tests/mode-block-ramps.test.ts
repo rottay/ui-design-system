@@ -49,6 +49,13 @@ const effective = (
   channel: string,
 ): string | undefined => block[channel] ?? base[channel];
 
+/**
+ * The one authored role the ramp family stopped emitting (WO-DER-03 palette
+ * half): `--ds-color-accent-<step>` has no reader anywhere in the package, so
+ * an authored accent ramp reaches no paint in any mode and is not asserted to.
+ */
+const isEmittedRampRole = (role: string): boolean => role !== 'accent';
+
 describe('a light-surface tenant compiles a real color ramp for its non-default (dark) mode', () => {
   it('bithire (light-default): compileTheme carries exactly one modeBlocks entry, for dark', () => {
     const compiled = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
@@ -60,7 +67,9 @@ describe('a light-surface tenant compiles a real color ramp for its non-default 
     const compiled = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
     const darkVars = compiled.modeBlocks![0].cssVariables;
     const authoredDarkRamps = bithireBrandTheme.modes!.dark!.palette!.ramps!;
-    for (const role of Object.keys(authoredDarkRamps) as (keyof typeof authoredDarkRamps)[]) {
+    for (const role of Object.keys(authoredDarkRamps).filter(
+      isEmittedRampRole
+    ) as (keyof typeof authoredDarkRamps)[]) {
       for (const step of RAMP_STEPS) {
         const expected = authoredDarkRamps[role]?.[step];
         if (expected === undefined) continue;
@@ -75,7 +84,9 @@ describe('a light-surface tenant compiles a real color ramp for its non-default 
     expect(compiled.modeBlocks).toHaveLength(1);
     const darkVars = compiled.modeBlocks![0].cssVariables;
     const authoredDarkRamps = evntoBrandTheme.modes!.dark!.palette!.ramps!;
-    for (const role of Object.keys(authoredDarkRamps) as (keyof typeof authoredDarkRamps)[]) {
+    for (const role of Object.keys(authoredDarkRamps).filter(
+      isEmittedRampRole
+    ) as (keyof typeof authoredDarkRamps)[]) {
       for (const step of RAMP_STEPS) {
         const expected = authoredDarkRamps[role]?.[step];
         if (expected === undefined) continue;
@@ -114,7 +125,9 @@ describe('a light-surface tenant compiles a real color ramp for its non-default 
     // The second is the one that catches a broken filter, and it is checked
     // over every carried channel rather than a sampled one.
     let moved = 0;
-    for (const role of Object.keys(authoredDarkRamps) as (keyof typeof authoredDarkRamps)[]) {
+    for (const role of Object.keys(authoredDarkRamps).filter(
+      isEmittedRampRole
+    ) as (keyof typeof authoredDarkRamps)[]) {
       const authoredSteps = authoredDarkRamps[role];
       if (!authoredSteps) continue;
       for (const step of RAMP_STEPS) {
@@ -140,7 +153,9 @@ describe('a dark-surface tenant (rottay): its non-default (light) mode compiles 
     const darkVars = compiled.cssVariables; // rottay's base IS dark (its declared default)
     const lightVars = compiled.modeBlocks![0].cssVariables;
     const authoredLightRamps = rottayBrandTheme.modes!.light!.palette!.ramps!;
-    for (const role of Object.keys(authoredLightRamps) as (keyof typeof authoredLightRamps)[]) {
+    for (const role of Object.keys(authoredLightRamps).filter(
+      isEmittedRampRole
+    ) as (keyof typeof authoredLightRamps)[]) {
       const authoredSteps = authoredLightRamps[role];
       if (!authoredSteps) continue;
       let moved = 0;

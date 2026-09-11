@@ -25,11 +25,25 @@
  *   - the two DERIVED channels are omitted. An ink or a hover shade computed
  *     from an unresolvable seed would be a claim about a pairing that was
  *     never measured, and the cascade's own default is the honest answer.
+ *
+ * A RAISED FLOOR NEVER LOWERS CONTRAST. `palette.contrast-posture` may raise
+ * `pair.minimumRatio` above AA, and withholding the foreground on a seed that
+ * misses the raised ratio hands the channel to a cascade fallback nobody
+ * measured — on bithire's dark primary that fallback reads 3.82:1 where the
+ * withheld ink reads 4.69:1, so asking for MORE contrast produced less. The
+ * floor therefore withholds only when the best ink in the posture's own pair
+ * misses the canonical AA baseline too; a posture that asks for more can
+ * raise the emitted ink, never withdraw one the identity posture would emit.
  */
 
 import { isValidCssColor } from '..';
 import { HOVER_LIGHTNESS_STEP, shadeSeed } from '../palette-derivations';
-import { measureReadableInk, type ReadableInkMeasurement } from '../readable-ink';
+import {
+  CANONICAL_READABLE_INK,
+  measureReadableInk,
+  type ReadableInkMeasurement,
+  type ReadableInkPair,
+} from '../readable-ink';
 
 /** The four channels this floor can reach, in their canonical names. */
 export const INTERACTION_FLOOR_CHANNELS = {
@@ -72,6 +86,7 @@ export interface InteractionFloor {
  */
 export function deriveInteractionFloor(
   effectivePrimary: string | undefined,
+  pair?: ReadableInkPair,
 ): InteractionFloor {
   if (!effectivePrimary || !isValidCssColor(effectivePrimary)) {
     return { variables: {}, ink: undefined };
@@ -84,9 +99,9 @@ export function deriveInteractionFloor(
     [INTERACTION_FLOOR_CHANNELS.link]: effectivePrimary,
   };
 
-  const ink = measureReadableInk(effectivePrimary);
+  const ink = measureReadableInk(effectivePrimary, pair);
   if (ink.status === 'measured') {
-    if (ink.meetsAA) {
+    if (ink.meetsFloor || ink.contrast >= CANONICAL_READABLE_INK.minimumRatio) {
       variables[INTERACTION_FLOOR_CHANNELS.primaryForeground] = ink.ink;
     }
     variables[INTERACTION_FLOOR_CHANNELS.linkHover] = shadeSeed(

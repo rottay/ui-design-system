@@ -6,7 +6,6 @@
  * @package @rottay/design-system
  */
 
-import type { BrandPalette } from "@/foundation/contracts/composition/tenants/themes";
 import { isTenantAuthoredField } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { PRODUCER_RANK } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
@@ -118,6 +117,22 @@ function bakesItsOwnColor(value: string): boolean {
   return BAKED_COLOR.test(value.replace(CUSTOM_PROPERTY_NAME, ""));
 }
 
+/**
+ * Which status tone owns a derived channel, read from the channel's own name.
+ *
+ * The names are matched rather than listed so this reader can never state a
+ * channel the tint owner does not emit -- including the retired
+ * `--ds-color-alpha-info-20`, which stays unnamed here exactly as it stays
+ * unemitted there.
+ */
+function statusToneOf(channel: string): OnToneRole | undefined {
+  return ON_TONE_ROLES.find(
+    (role) =>
+      channel.startsWith(`--ds-color-${role}-`) ||
+      channel.startsWith(`--ds-color-alpha-${role}-`)
+  );
+}
+
 /** What one compiled block needs to know about its tenant's authorship. */
 interface TenantSeedProvenance {
   readonly authoredPaths: TenantAuthoredPaths;
@@ -205,10 +220,19 @@ export function applyTenantSeedDerivations(
  *     (`STATUS_SEED_SHADOWING_FIELDS`) is TENANT_LEAF and outranks the
  *     tenant's own seed.
  *  3. A value that bakes no colour of its own is left exactly as assembled.
+ *
+ * ONE OWNER OF THE FORMULA. `derivedTints` is what the status-tint owner
+ * (`derivation/palette/tints`) derived for THIS block, passed in by the
+ * caller; this function only ranks those values against what the block
+ * already assembled. It re-authored them once, at fixed 20 %/10 % mix
+ * strengths, and a tenant that had asked for a harder read got the posture's
+ * strengths in the block the floor reached and the fixed pair in the block
+ * this pass reached. Which channels exist, what they say, and which name the
+ * retired `--ds-color-alpha-info-20` is decided in one place, not two.
  */
 export function applyTenantStatusSeedDerivations(
   vars: Record<string, string>,
-  effectivePalette: BrandPalette | undefined,
+  derivedTints: Record<string, string>,
   provenance:
     | {
         authoredPaths: TenantAuthoredPaths;
@@ -232,31 +256,19 @@ export function applyTenantStatusSeedDerivations(
       }
     | undefined
 ): void {
-  if (!provenance || !effectivePalette) return;
+  if (!provenance) return;
   const { authoredPaths, modePrefix, toneSeedIsTenantAuthored } = provenance;
-  for (const role of ON_TONE_ROLES) {
-    if (!toneSeedIsTenantAuthored[role]) continue;
-    const channel = `--ds-color-${role}`;
-    const derived: Record<string, string> = {
-      [`${channel}-bg`]: `var(${channel}-50)`,
-      [`${channel}-border`]: `color-mix(in srgb, var(${channel}) 20%, transparent)`,
-      [`--ds-color-alpha-${role}-10`]: `color-mix(in srgb, var(${channel}) 10%, transparent)`,
-      ...(role === "info"
-        ? {}
-        : {
-            [`--ds-color-alpha-${role}-20`]: `color-mix(in srgb, var(${channel}) 20%, transparent)`,
-          }),
-    };
-    for (const [derivedChannel, derivedValue] of Object.entries(derived)) {
-      const currentRank = (
-        STATUS_SEED_SHADOWING_FIELDS[derivedChannel] ?? []
-      ).some((field) => isTenantAuthoredField(authoredPaths, field, modePrefix))
-        ? PRODUCER_RANK.tenantLeaf
-        : PRODUCER_RANK.baselineLeaf;
-      if (PRODUCER_RANK.tenantDerived <= currentRank) continue;
-      const current = vars[derivedChannel];
-      if (current !== undefined && !bakesItsOwnColor(current)) continue;
-      vars[derivedChannel] = derivedValue;
-    }
+  for (const [derivedChannel, derivedValue] of Object.entries(derivedTints)) {
+    const role = statusToneOf(derivedChannel);
+    if (!role || !toneSeedIsTenantAuthored[role]) continue;
+    const currentRank = (
+      STATUS_SEED_SHADOWING_FIELDS[derivedChannel] ?? []
+    ).some((field) => isTenantAuthoredField(authoredPaths, field, modePrefix))
+      ? PRODUCER_RANK.tenantLeaf
+      : PRODUCER_RANK.baselineLeaf;
+    if (PRODUCER_RANK.tenantDerived <= currentRank) continue;
+    const current = vars[derivedChannel];
+    if (current !== undefined && !bakesItsOwnColor(current)) continue;
+    vars[derivedChannel] = derivedValue;
   }
 }
