@@ -535,6 +535,10 @@ export interface BrandPalette {
   textColor?: string;
   /** Ink that stays legible on an inverted ground. */
   textInverseColor?: string;
+  /** Kit row 3. `neutral` is the achromatic resting position. */
+  neutralTemperature?: "cool" | "neutral" | "warm";
+  /** Kit row 4. `standard` is the resting posture. */
+  contrastPosture?: "soft" | "standard" | "high";
   /**
    * Component-facing alias channels. These are separate CSS names from the
    * semantic palette above (`--ds-text-primary` is not `--ds-color-text-primary`),
@@ -3273,6 +3277,12 @@ export interface TenantAppearanceGeneral {
       error?: string;
       info?: string;
     };
+    /**
+     * The two palette POSTURES (kit rows 3 and 4). No `dark` twin: they state
+     * the whole neutral axis, so a per-mode variant would be a second axis.
+     */
+    neutralTemperature?: "cool" | "neutral" | "warm";
+    contrastPosture?: "soft" | "standard" | "high";
     /** Feeds ThemeProvider theme resolution (not a CSS variable). */
     backgroundMode?: "light" | "dark" | "auto";
     /**

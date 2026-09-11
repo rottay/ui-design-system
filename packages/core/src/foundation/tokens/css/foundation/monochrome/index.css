@@ -7,6 +7,10 @@
  * and no literal of its own: it is DERIVED from the tenant's two neutral anchors, and a
  * tenant that re-points its ink or paper re-points every step with it.
  *
+ * The anchors are compiled, not authored: `palette.neutral-temperature` states them through
+ * `derivation/palette/neutral-temperature`. The two literals below are the no-tenant
+ * fallback for a page that renders without a compiled block at all, never the source.
+ *
  * The 11 numeric steps (mono-0 = ink .. mono-1000 = paper) stay PERCEPTUALLY EVEN:
  * `color-mix(in lab, …)` interpolates CIE L* linearly, so N% of the ink anchor is exactly
  * L* (100 − N) between two neutral anchors — the same +10 L* cadence the ramp shipped as
@@ -20,10 +24,9 @@
  */
 
 :root {
-  /* The two anchors. Both are tenant channels (themes/default.css), so the whole
-     ramp is white-labelable without a second authority. */
-  --ds-color-mono-0: var(--ds-color-black);
-  --ds-color-mono-1000: var(--ds-color-white);
+  /* The two anchors, stated by the neutral-temperature deriver. */
+  --ds-color-mono-0: var(--ds-color-neutral-ink, var(--ds-color-black));
+  --ds-color-mono-1000: var(--ds-color-neutral-paper, var(--ds-color-white));
 
   /* Perceptually-even grayscale ramp (CIE L* 0..100 in steps of 10). */
   --ds-color-mono-100: color-mix(in lab, var(--ds-color-mono-0) 90%, var(--ds-color-mono-1000));

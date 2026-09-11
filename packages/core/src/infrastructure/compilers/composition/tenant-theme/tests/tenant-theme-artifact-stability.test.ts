@@ -59,12 +59,29 @@ const BEHAVIOR_ONLY_AMBIENT_TOKEN = "--ds-motion-ambient";
 const PRE_ISO_ASSUMED_CANVAS = "#FFFFFF";
 /** The ground the single lowering reads off the merged Theme instead. */
 const BITHIRE_AUTHORED_CANVAS = "#F4F8FB";
-/** Exactly the three seeds `POPULATED_SIMPLE_DOCUMENT` authors. */
+/**
+ * The seeds `POPULATED_SIMPLE_DOCUMENT` authors AND the compiler still ramps.
+ * It authors a third, `accent: "#E2725B"`; its ten steps are pinned retired in
+ * `POPULATED_ACCENT_RAMP_RETIRED` instead, so the two lists together still
+ * account for every step the frozen fixture carries.
+ */
 const REGROUNDED_RAMP_SEEDS = {
   primary: "#0F766E",
   secondary: "#8C6D46",
-  accent: "#E2725B",
 } as const;
+
+/**
+ * The accent ramp, retired for want of a reader (WO-DER-03 palette half). No
+ * `var(--ds-color-accent-<step>)` exists anywhere in the package, so a tenant
+ * that re-seeded its accent moved ten channels nothing painted. The seed
+ * channel `--ds-color-accent` itself is unaffected.
+ */
+const POPULATED_ACCENT_RAMP_RETIRED: readonly RetiredChannel[] = RAMP_STEPS.map(
+  (step) => ({
+    token: `--ds-color-accent-${step}`,
+    because: "retired: the accent ramp has no var() reader in the package",
+  })
+);
 
 /** The compiled bithire baseline's own radius dial. */
 const BITHIRE_RADIUS_DIAL = "1.25";
@@ -531,9 +548,13 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     }
     // The darkest steps land on the same pixel under either ground, so a
     // silent collapse of the whole map into a no-op would be visible here.
-    expect(Object.keys(regrounded).length).toBe(26);
+    // 26 -> 18: the eight that left are the accent steps this ground used to
+    // move, now retired below. The darkest steps still land on the same pixel
+    // under either ground, so a silent collapse stays visible.
+    expect(Object.keys(regrounded).length).toBe(18);
 
     const additions = expectStableEmission(artifact, fixture, {
+      retired: POPULATED_ACCENT_RAMP_RETIRED,
       withdrawn: POPULATED_WITHDRAWN,
       seedDerived: POPULATED_SEED_DERIVED,
       moved: {

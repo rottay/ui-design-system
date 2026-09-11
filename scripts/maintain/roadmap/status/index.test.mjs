@@ -2214,8 +2214,12 @@ test("the reopen record stays inside the closed progress schema", () => {
 test("decisions-lit indicator publishes the probe's own headline, never its own", () => {
   const indicator = readDecisionsLitIndicator();
   assert.equal(indicator.measured, true, "the committed probe artifact must be readable");
-  // The pinned denominator tracks the producer's own headline; it is never invented here.
-  assert.match(indicator.headline, /^decisions lit = \d+\/22 \(\+\d+\/8 new\)$/);
+  // The pinned denominators track the producer's own headline; they are never
+  // invented here. `2` is what the probe measures since the CC-01 connection
+  // lot (role-weights, numeric, border-style, motion.character) and WO-DER-03's
+  // palette half (neutral-temperature, contrast-posture) took the
+  // still-underived new-decision denominator 8 -> 2.
+  assert.match(indicator.headline, /^decisions lit = \d+\/22 \(\+\d+\/2 new\)$/);
   assert.match(
     indicator.measuredHeadline,
     /^measured on the \d+-family sample: \d+\/22 move at least one sampled family$/,

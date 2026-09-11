@@ -45,18 +45,19 @@ export const TODAY_CONTROL_DENOMINATOR = 22;
  * `typography.numeric`, `surfaces.border-style` and `motion.character` gained
  * theirs, and this run REFUSED to publish them as `new` while measuring them
  * move -- which is the re-record being deliberate rather than absorbed. 4 -> 2 on
- * 2026-09-10 (connection lot 2): `shape.nesting` and `shape.control-height` were
- * the last two rows the kit admitted while nothing lowered them, and the lot
- * gave each a keypath, a canonical deriver under `derivation/shape/` and painted
- * consumers.
+ * 2026-09-10, twice and independently: WO-DER-03's palette half gave
+ * `palette.neutral-temperature` and `palette.contrast-posture` their
+ * `derivation/palette/{neutral-temperature,contrast-posture}` owners, and
+ * connection lot 2 gave `shape.nesting` and `shape.control-height` a keypath, a
+ * canonical deriver under `derivation/shape/` and painted consumers. 2 -> 0 is
+ * the integration of the two: the kit admits no row that nothing lowers.
  *
- * The two rows left are `palette.neutral-temperature` and
- * `palette.contrast-posture`. They are connected on the palette lot's own
- * branch, not here: this denominator states what THIS tree lowers, so it reads
- * 2 until that lot merges and its own re-record takes it to 0. Reading 0 here
- * before the merge would publish a connection this tree does not have.
+ * ZERO IS A MEASUREMENT, NOT A FINISH LINE. All ten rows that left this census
+ * are recorded `partial`, not `full`: emission is not adoption, and the fan-out
+ * each row declares is proved in its family cut rather than here. What this
+ * denominator says is narrower and exact -- no kit row is INERT any more.
  */
-export const NEW_DECISION_DENOMINATOR = 2;
+export const NEW_DECISION_DENOMINATOR = 0;
 
 /**
  * `full`    the audit measured full, coherent effect in static and DB
@@ -84,8 +85,14 @@ export const RECORDED_CLASSES = Object.freeze(['full', 'partial', 'none', 'new']
 export const DECISIONS = Object.freeze([
   ['palette.seeds', 'full', [{ primary: '#4F46E5' }, { primary: '#DC2626' }]],
   ['palette.status-seeds', 'full', [{ success: '#10B981' }, { success: '#0EA5E9' }]],
-  ['palette.neutral-temperature', 'new', ['cool', 'warm']],
-  ['palette.contrast-posture', 'new', ['soft', 'high']],
+  // WO-DER-03 palette half (2026-09-10): both palette postures now have a real
+  // producer and the probe MEASURES them moving, so `new` is a lie the run
+  // refuses to publish. The class is `partial`: measured effect, bounded by the
+  // verticals' own hand-authored palettes -- temperature reaches the neutral
+  // ramp and the monochrome anchors, posture the derived inks and separators,
+  // neither the whole fan-out the rows declare.
+  ['palette.neutral-temperature', 'partial', ['cool', 'warm']],
+  ['palette.contrast-posture', 'partial', ['soft', 'high']],
   ['palette.dark-mode', 'none', ['light', 'dark']],
   ['typography.families', 'full', [{ base: 'humanist-text' }, { base: 'editorial-text' }]],
   ['typography.pairing', 'full', ['sober', 'editorial']],

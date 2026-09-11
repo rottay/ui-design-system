@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "8e7257afae81b3a7d8c9d9e3868f5ad31897e1dfc7406d41b1ef854765994127"
+    "registryDigest": "298f0db270ad4f66ef02ad24fce03f0fdc14fc48b69bcac64fb32f81e40f768d"
   },
   "title": "Decoration intensity",
   "valueType": "scale",

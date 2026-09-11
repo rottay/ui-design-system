@@ -96,7 +96,12 @@ test('the live snapshot is the measured one, not a guess', () => {
   // WO-DER-02 (2026-09-08): el kit D-27/D-28 hace decisiones Standard a
   // states.emphasis y states.focus-style; las cinco raices state.delta.{hover,
   // active,selected,disabled,focus} pasan de internal-head a tenant-dial.
-  assert.deepEqual(counts, { 'tenant-dial': 37, 'internal-head': 23, gap: 4 });
+  // WO-DER-03 mitad palette (2026-09-10): `ramp.seed.neutral` pasa de gap a
+  // tenant-dial bajo `palette.neutral-temperature`. gap BAJA 4->3, la direccion
+  // legal. La adjudicacion que el owner tenia pendiente era "neutral no tiene
+  // semilla", y sigue sin tenerla: lo que se abrio es la TEMPERATURA del eje,
+  // que mueve la rampa entera y los dos anclajes del monocromo.
+  assert.deepEqual(counts, { 'tenant-dial': 38, 'internal-head': 23, gap: 3 });
 });
 
 /* ------- LAW 0b: the premise that makes the refined-root discount honest ------ */
@@ -283,7 +288,7 @@ test('LAW 3: gap is decrease-only -- growth fails', () => {
       doc.reconciliation.byExposure.counts['internal-head'] -= 1;
       doc.reconciliation.byExposure.counts.gap += 1;
     },
-    (findings) => expectFinding(findings, 'snapshot: gap moved from 4 to 5', 'gap may never grow'),
+    (findings) => expectFinding(findings, 'snapshot: gap moved from 3 to 4', 'gap may never grow'),
   );
 });
 
@@ -297,7 +302,7 @@ test('LAW 3: a gap that closes still fails until the snapshot is updated', () =>
       doc.reconciliation.byExposure.counts['tenant-dial'] += 1;
     },
     (findings) =>
-      expectFinding(findings, 'snapshot: gap shrank from 4 to 3', 'good news still has to be written down'),
+      expectFinding(findings, 'snapshot: gap shrank from 3 to 2', 'good news still has to be written down'),
   );
 });
 
@@ -308,7 +313,7 @@ test('the catalog must agree with its own reconciliation counts', () => {
     (doc) => {
       doc.reconciliation.byExposure.counts.gap = 99;
     },
-    (findings) => expectFinding(findings, 'but roots[] holds 4', 'a catalog that miscounts itself must fail'),
+    (findings) => expectFinding(findings, 'but roots[] holds 3', 'a catalog that miscounts itself must fail'),
   );
 });
 

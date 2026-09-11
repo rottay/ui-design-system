@@ -24,11 +24,13 @@ import {
  * the test's expectation rather than read back from the catalog: a rule that
  * derives its own expectation from the subject proves nothing.
  */
-const DECLARED_RATIO_ROWS = [1, 11, 15, 16, 17, 22, 24];
+const DECLARED_RATIO_ROWS = [1, 11, 15, 16, 17, 22, 24, 20, 21];
 // Rows 20 and 21 sat in this set under WO-DER-02, whose declared floors had
 // no recorded owner decision; the K3 audit HOLD of WO-DER-02 (2026-09-08,
-// WIP-02 adjudication) returned both rows to `owner-pending`, with their
-// family lists kept in the catalog as proposals only.
+// WIP-02 adjudication) returned both rows to `owner-pending`. The owner's
+// D1 decision (2026-09-10, kit-2026-09.md section 5b) fixes the floor at 20
+// real families per control with the applicable population fixed by rule per
+// control, so both rows re-enter this set as decided floors.
 const DECLARED_FAN_OUT_ROWS = [18, 19, 25, 26, 27, 28, 29];
 
 describe("theme control catalog", () => {
@@ -82,6 +84,8 @@ describe("theme control catalog", () => {
       "surfaces.elevation-posture": 25,
       "motion.dial": 25,
       "navigation.sidebar-tone": 2,
+      "states.emphasis": 20,
+      "states.focus-style": 20,
     });
   });
 
@@ -149,10 +153,11 @@ describe("theme control catalog", () => {
   });
 
   it("marks the still-underived new rows as not-yet-derived and nothing else", () => {
-    // WO-DER-02 derives two of the ten `(new)` rows and the CC-01 connection
-    // lot four more. The list they came from is a KIT fact -- which rows the
-    // kit added -- and stays as authored; what moves is the measured `effect`,
-    // which is what this row asserts.
+    // WO-DER-02 derives two of the ten `(new)` rows, the CC-01 connection lot
+    // four more, and the WO-DER-03 palette half the two palette postures. The
+    // list they came from is a KIT fact -- which rows the kit added -- and
+    // stays as authored; what moves is the measured `effect`, which is what
+    // this row asserts.
     const derived: Parameters<typeof themeControl>[0][] = [
       "states.emphasis",
       "states.focus-style",
@@ -160,6 +165,8 @@ describe("theme control catalog", () => {
       "typography.numeric",
       "surfaces.border-style",
       "motion.character",
+      "palette.neutral-temperature",
+      "palette.contrast-posture",
     ];
     const notDerived = THEME_CONTROL_CATALOG.filter(
       (row) => row.effect === "not-yet-derived"

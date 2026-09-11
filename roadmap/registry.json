@@ -4241,6 +4241,11 @@
      "at": "2026-09-09 20:35",
      "by": "kimi-k3",
      "note": "2026-09-09 residual main-side del lote gatefix (Fable /private/tmp/fable-gatefix2-audit.md): --ds-radius-button y los cinco --ds-button-*-radius se emiten via spread-of-call y son INVISIBLES a ambos extractores de liveness sin finding de unresolved; --ds-radius-button sale silenciosamente del set compilado en el merge (declarado en CSS, ningun ratchet se mueve). Extender los extractores a spread-of-call o adjudicar esos canales a mano."
+    },
+    {
+     "at": "2026-09-10 20:40",
+     "by": "kimi-k3",
+     "note": "PALETTE HALF LANDED (merge 17a32a3f7 + integration 77e76ff10; Fable re-audit LAND at 6e38573e8). Derivers derivation/palette/{semantic,inks,tints,neutral-temperature,contrast-posture} created; both postures LIVE (12/12/12 and 9-16 channels per vertical measured, zero diff at rest on the static arm); accent ramp REMOVED by evidence (0 readers vs 48 for secondary; every surface -10/+2, seed intact); mono ramp derives from the tenant neutral; the historical F-07 radius self-cancel warning verified STALE by fresh measurement (dial moves radii 1.6px vs 2.4px at 0.8/1.2). decisions-lit: 26/29 kit rows move the artifact, new-decision denominator 2 (nesting, control-height remain; conn2 lot in flight). RESIDUALS registered: (a) applyTenantSeedDerivations is posture-blind on the primary-seed path (a missing raise, not a lowering) — next connection lot; (b) F5 claim correction: '0 channels at rest' holds on the static arm only — the DB door moves 7/6/7 chrome channels for identity values, a pre-existing mechanism affecting every palette key; (c) freeze gate cannot see interpolated keys (palette/inks --ds-color-on-<role>) — pre-existing instrument blindness; (d) token-readout fixture reads none of the newly declared channels (F6) — conn2 lot extends it; (e) pill vs allowed-radius-override precedence — shape lot pending; (f) ramps.accent still authorable though unemitted — routed to WO-DER-06. WO stays in-progress until the close-scope amendment's root requirements are assessed."
     }
    ]
   },
@@ -4286,6 +4291,11 @@
      "at": "2026-09-10 13:27",
      "by": "kimi-k3",
      "note": "Connfix residual lot LANDED a5da15828 (Codex r12 PASS at 28037739f): producer discovery migrated to a TypeScript AST walk (regex-era false positives retired), ambient declarations excluded from runtime references, border-style precedence and motion.character derivation modules connected, committed cascade producer inventory regenerated via canonical --write (4,904 sites / 10,825 emissions, zero conflicts). Partially addresses the admitted-but-unlit residuals: surfaces.border-style and motion.character now have derivation owners; typography.role-weights, typography.numeric, nesting and control-height remain unlit. WO stays in-progress."
+    },
+    {
+     "at": "2026-09-10 20:54",
+     "by": "kimi-k3",
+     "note": "CORRECTION (98-checkpoint item 6) to my entry of earlier today: it said role-weights, numeric, nesting and control-height 'remain unlit'. That was wrong in kind: the CC-01/connfix lot gave typography.role-weights, typography.numeric and motion.character real producers (decisions-lit records them partial — artifact bytes move, no sampled family moves; family adoption is the cuts' work per the close-scope amendment) and surfaces.border-style full sampled-family movement. Only shape.nesting and shape.control-height are fully inert (artifactBytesDiffer=false on all three verticals); the conn2 lot in flight owns them. Emission, instrumental read and family effect are separate facts and are now recorded as such."
     }
    ]
   },
@@ -4320,14 +4330,13 @@
    "dependsOn": [
     "WO-DER-05",
     "WO-CAT-02",
-    "WO-CON-03",
-    "WO-DER-07"
+    "WO-CON-03"
    ],
    "mustLandWith": [],
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 4; closes F-11, F-25, F-54, F-108 | 2026-09-10: depends on DER-07 candidate sets (exist), not on the deferred D-30 pick; bithire preset authored from a provisional candidate; final look is a branding-stage obligation (kit-2026-09.md §5c).",
+   "notes": "wave 4; closes F-11, F-25, F-54, F-108 | 2026-09-10: depends on DER-07 candidate sets (exist), not on the deferred D-30 pick; bithire preset authored from a provisional candidate; final look is a branding-stage obligation (kit-2026-09.md §5c). | 2026-09-10 (98-checkpoint): DER-07 edge REMOVED from the graph — the technical preset conversion depends on the candidate sets, which exist and are landed (ec1d032cb), not on the deferred commercial pick. The final look of the bithire preset remains an explicit branding-stage obligation (kit-2026-09.md §5c).",
    "claimedBy": null,
    "claimedAt": null,
    "progressLog": []
@@ -4931,14 +4940,13 @@
    "size": "M",
    "status": "todo",
    "dependsOn": [
-    "WO-CAT-03",
-    "WO-DER-07"
+    "WO-CAT-03"
    ],
    "mustLandWith": [],
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "wave 4; closes F-48",
+   "notes": "wave 4; closes F-48 | 2026-09-10 (98-checkpoint): DER-07 edge REMOVED — the technical suite (door-parity, harness reduction, liveness-based channel tests) does not inherit the deferred pick. One obligation stays bound to the branding stage: regenerating the showroom visual baselines, which still waits for the owner-approved reference identity.",
    "claimedBy": null,
    "claimedAt": null,
    "progressLog": []

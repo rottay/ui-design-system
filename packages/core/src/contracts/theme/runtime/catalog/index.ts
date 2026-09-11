@@ -281,12 +281,31 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "standard",
     title: "Neutral temperature",
     domain: { kind: "enum", values: ["cool", "neutral", "warm"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.palette.neutralTemperature",
+      brandTheme: "palette.neutralTemperature",
+    },
     consumes: ["palette.seeds"],
-    produces: { channels: [], rootAttributes: [] },
+    produces: {
+      channels: [
+        "--ds-color-neutral-50",
+        "--ds-color-neutral-100",
+        "--ds-color-neutral-200",
+        "--ds-color-neutral-300",
+        "--ds-color-neutral-400",
+        "--ds-color-neutral-500",
+        "--ds-color-neutral-600",
+        "--ds-color-neutral-700",
+        "--ds-color-neutral-800",
+        "--ds-color-neutral-900",
+        "--ds-color-neutral-ink",
+        "--ds-color-neutral-paper",
+      ],
+      rootAttributes: [],
+    },
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "open",
-    effect: "not-yet-derived",
+    effect: "css-channels",
     defaultBehavior: "the vertical's neutral ramp, unchanged",
   },
   {
@@ -296,12 +315,35 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     tier: "pro",
     title: "Contrast posture",
     domain: { kind: "enum", values: ["soft", "standard", "high"] },
-    keypath: { document: null, brandTheme: null },
+    keypath: {
+      document: "appearance.general.palette.contrastPosture",
+      brandTheme: "palette.contrastPosture",
+    },
     consumes: ["palette.seeds", "palette.status-seeds"],
-    produces: { channels: [], rootAttributes: [] },
+    produces: {
+      channels: [
+        "--ds-color-on-success",
+        "--ds-color-on-warning",
+        "--ds-color-on-error",
+        "--ds-color-on-info",
+        "--ds-color-primary-foreground",
+        "--ds-color-success-border",
+        "--ds-color-warning-border",
+        "--ds-color-error-border",
+        "--ds-color-info-border",
+        "--ds-color-alpha-success-10",
+        "--ds-color-alpha-warning-10",
+        "--ds-color-alpha-error-10",
+        "--ds-color-alpha-info-10",
+        "--ds-color-alpha-success-20",
+        "--ds-color-alpha-warning-20",
+        "--ds-color-alpha-error-20",
+      ],
+      rootAttributes: [],
+    },
     minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
     envelope: "open",
-    effect: "not-yet-derived",
+    effect: "css-channels",
     defaultBehavior: "the DS APCA floors, unchanged",
   },
   {
@@ -704,9 +746,16 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     // segmented, select, shell, table, textarea, timepicker, tree, upload),
     // but the K3 audit HOLD of WO-DER-02 (2026-09-08, WIP-02 adjudication)
     // found no owner decision recorded for it: resolution by declaration is
-    // not a floor. The 25-family list stays as the proposal, and the row
-    // returns to `owner-pending` until the owner records the value.
-    minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
+    // not a floor. OWNER DECISION 2026-09-10 (kit-2026-09.md section 5b, D1):
+    // the floor is 20 REAL families. The applicable population is fixed by
+    // rule, not by proposal: the families whose root-scope state channels
+    // resolve through a material background root, materialized and measured
+    // by `scripts/check/tokens/states/material-arm` (36 applicable families
+    // at the 2026-09-10 run). A synthetic probe or a best-of-vertical reading
+    // is not evidence toward the floor. The full proof belongs to the family
+    // cuts and the fleet certification; it does not block root closure
+    // (close-scope amendment, roadmap/derivation.md).
+    minimumFamilies: { kind: "declared-ratio", families: 20, denominator: 25 },
     envelope: "open",
     effect: "css-channels",
     defaultBehavior: "the `medium` posture, which is the foundation's own deltas",
@@ -743,9 +792,15 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     // WO-DER-02 declared this floor `declared-fan-out` over the four material
     // focus roles (card, control, panel, inset), but the K3 audit HOLD of
     // WO-DER-02 (2026-09-08, WIP-02 adjudication) found no owner decision
-    // recorded for it: the list stays as the proposal and the row returns to
-    // `owner-pending` until the owner records the value.
-    minimumFamilies: { kind: "owner-pending", referenceExample: 20, denominator: 25 },
+    // recorded for it. OWNER DECISION 2026-09-10 (kit-2026-09.md section 5b,
+    // D1): the floor is 20 REAL families. The applicable population is fixed
+    // by rule: the families that paint a focus affordance, materialized as the
+    // readers of the three material focus rings or `--ds-focus-ring` itself
+    // (the focus-channel census over src/components + src/foundation/tokens/css,
+    // frozen engines excluded). Same evidence law as states.emphasis: real
+    // families only, decided by the family cuts and the fleet certification,
+    // never by a synthetic probe, and not a root-closure blocker.
+    minimumFamilies: { kind: "declared-ratio", families: 20, denominator: 25 },
     envelope: "never-lockable",
     effect: "css-channels",
     defaultBehavior: "the `ring` signature: the double ring of the interaction contract",

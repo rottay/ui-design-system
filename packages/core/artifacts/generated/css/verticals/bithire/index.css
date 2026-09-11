@@ -3387,6 +3387,10 @@ html.dark {
  * and no literal of its own: it is DERIVED from the tenant's two neutral anchors, and a
  * tenant that re-points its ink or paper re-points every step with it.
  *
+ * The anchors are compiled, not authored: `palette.neutral-temperature` states them through
+ * `derivation/palette/neutral-temperature`. The two literals below are the no-tenant
+ * fallback for a page that renders without a compiled block at all, never the source.
+ *
  * The 11 numeric steps (mono-0 = ink .. mono-1000 = paper) stay PERCEPTUALLY EVEN:
  * `color-mix(in lab, …)` interpolates CIE L* linearly, so N% of the ink anchor is exactly
  * L* (100 − N) between two neutral anchors — the same +10 L* cadence the ramp shipped as
@@ -3400,10 +3404,9 @@ html.dark {
  */
 
 :root {
-  /* The two anchors. Both are tenant channels (themes/default.css), so the whole
-     ramp is white-labelable without a second authority. */
-  --ds-color-mono-0: var(--ds-color-black);
-  --ds-color-mono-1000: var(--ds-color-white);
+  /* The two anchors, stated by the neutral-temperature deriver. */
+  --ds-color-mono-0: var(--ds-color-neutral-ink, var(--ds-color-black));
+  --ds-color-mono-1000: var(--ds-color-neutral-paper, var(--ds-color-white));
 
   /* Perceptually-even grayscale ramp (CIE L* 0..100 in steps of 10). */
   --ds-color-mono-100: color-mix(in lab, var(--ds-color-mono-0) 90%, var(--ds-color-mono-1000));
@@ -122381,16 +122384,6 @@ html[lang]:lang(ar) {
   --ds-collection-card-title-color: #14283B;
   --ds-collection-card-value-color: #14283B;
   --ds-color-accent: #86A6C2;
-  --ds-color-accent-100: #C8DCEE;
-  --ds-color-accent-200: #A6C0D7;
-  --ds-color-accent-300: #86A4BE;
-  --ds-color-accent-400: #6988A3;
-  --ds-color-accent-50: #F1F8FF;
-  --ds-color-accent-500: #4F6D87;
-  --ds-color-accent-600: #38536A;
-  --ds-color-accent-700: #253B4D;
-  --ds-color-accent-800: #142331;
-  --ds-color-accent-900: #070E15;
   --ds-color-accent-hover: #6f92b0;
   --ds-color-alpha-error-10: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
   --ds-color-alpha-error-20: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
@@ -122456,6 +122449,8 @@ html[lang]:lang(ar) {
   --ds-color-neutral-700: #474747;
   --ds-color-neutral-800: #2c2c2c;
   --ds-color-neutral-900: #191919;
+  --ds-color-neutral-ink: #000000;
+  --ds-color-neutral-paper: #ffffff;
   --ds-color-on-error: #ffffff;
   --ds-color-on-info: #ffffff;
   --ds-color-on-success: #ffffff;
@@ -123505,7 +123500,6 @@ html[lang]:lang(ar) {
   --ds-collection-card-status-color: var(--ds-color-primary-hover);
   --ds-collection-card-title-color: var(--ds-color-text-primary);
   --ds-collection-card-value-color: var(--ds-color-text-primary);
-  --ds-color-accent-900: #EDF6FF;
   --ds-color-accent-hover: #a6c6df;
   --ds-color-background: #0f1520;
   --ds-color-bg: #0f1520;

@@ -23,6 +23,24 @@ export const READABLE_INK_DARK = '#171717';
 export const WCAG_AA_NORMAL_TEXT_RATIO = 4.5;
 
 /**
+ * The pair an ink is chosen from, and the ratio it must clear to claim a
+ * channel. `palette.contrast-posture` states one of these; every caller that
+ * does not state one gets the canonical pair, so the algorithm stays single
+ * while the posture stays a parameter rather than a second derivation.
+ */
+export interface ReadableInkPair {
+  readonly light: string;
+  readonly dark: string;
+  readonly minimumRatio: number;
+}
+
+export const CANONICAL_READABLE_INK: ReadableInkPair = Object.freeze({
+  light: READABLE_INK_LIGHT,
+  dark: READABLE_INK_DARK,
+  minimumRatio: WCAG_AA_NORMAL_TEXT_RATIO,
+});
+
+/**
  * The outcome of choosing an ink for a seed.
  *
  * `unmeasurable` is a first-class result, not an error path with a default.
@@ -39,8 +57,8 @@ export type ReadableInkMeasurement =
       ink: string;
       /** That ink's WCAG contrast ratio over the seed. */
       contrast: number;
-      /** Whether `contrast` clears {@link WCAG_AA_NORMAL_TEXT_RATIO}. */
-      meetsAA: boolean;
+      /** Whether `contrast` clears the pair's own `minimumRatio`. */
+      meetsFloor: boolean;
     }
   | { status: 'unmeasurable'; reason: 'non-hex-seed' };
 
@@ -54,20 +72,23 @@ export type ReadableInkMeasurement =
  * cannot be wrong about a ratio it never computes, which is why the ratio is
  * now the thing computed.
  */
-export function measureReadableInk(seed: string): ReadableInkMeasurement {
+export function measureReadableInk(
+  seed: string,
+  pair: ReadableInkPair = CANONICAL_READABLE_INK,
+): ReadableInkMeasurement {
   if (!isHexColor(seed)) return { status: 'unmeasurable', reason: 'non-hex-seed' };
 
   const normalized = normalizeHexColor(seed);
-  const overLight = contrastRatio(READABLE_INK_LIGHT, normalized);
-  const overDark = contrastRatio(READABLE_INK_DARK, normalized);
+  const overLight = contrastRatio(pair.light, normalized);
+  const overDark = contrastRatio(pair.dark, normalized);
   const preferLight = overLight >= overDark;
 
   const contrast = preferLight ? overLight : overDark;
   return {
     status: 'measured',
-    ink: preferLight ? READABLE_INK_LIGHT : READABLE_INK_DARK,
+    ink: preferLight ? pair.light : pair.dark,
     contrast,
-    meetsAA: contrast >= WCAG_AA_NORMAL_TEXT_RATIO,
+    meetsFloor: contrast >= pair.minimumRatio,
   };
 }
 
@@ -90,8 +111,11 @@ export class UnmeasurableInkError extends Error {
  * handle the deferral must not receive a fabricated one. Callers that CAN
  * defer use {@link measureReadableInk} and skip the channel.
  */
-export function deriveReadableInk(seedHex: string): string {
-  const measurement = measureReadableInk(seedHex);
+export function deriveReadableInk(
+  seedHex: string,
+  pair: ReadableInkPair = CANONICAL_READABLE_INK,
+): string {
+  const measurement = measureReadableInk(seedHex, pair);
   if (measurement.status === 'unmeasurable') throw new UnmeasurableInkError(seedHex);
   return measurement.ink;
 }

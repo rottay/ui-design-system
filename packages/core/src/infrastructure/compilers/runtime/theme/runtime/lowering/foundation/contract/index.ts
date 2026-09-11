@@ -125,6 +125,17 @@ export interface LoweringContext {
    * constant of the vertical instead of the dial the block itself emits.
    */
   readonly radiusBaseline: string;
+  /**
+   * The status tints THIS block implies, derived once at the block's own
+   * contrast posture.
+   *
+   * Two families state these channels at two ranks -- the palette family as
+   * the derived floor, the seeds family as the tenant floor over an assembled
+   * block -- and a tenant that asked for a harder read must not get the
+   * posture's separator from one and the identity's from the other. Deriving
+   * them here is what makes that impossible rather than merely unintended.
+   */
+  readonly statusTints: Record<string, string>;
   readonly tenant: TenantFacts | undefined;
 }
 

@@ -23,19 +23,26 @@ interface RampRoleSpec {
 }
 
 /**
- * The 7 palette roles a ramp can be derived for.
+ * The 6 palette roles a ramp is derived for.
  *
  * One seed per role, whatever the surface. A mode overlay that wants a
  * different seed restates `primaryColor` in `modes.{mode}.palette`, which
  * re-enters this same derivation against that mode's own ground -- so the
  * other mode is a real compiled block rather than a parallel channel family
  * nothing consumes.
+ *
+ * `accent` is deliberately absent. Its ten ramp steps have no reader anywhere
+ * -- not one `var(--ds-color-accent-<step>)` in the package, against 48 for
+ * secondary -- so emitting them made the role look customizable while only the
+ * `--ds-color-accent` seed itself painted. They re-enter with the family cut
+ * that gives them a consumer, not before.
  */
+const UNREAD_RAMP_ROLES: ReadonlySet<string> = new Set(["accent"]);
+
 function rampRoleSpecs(palette: BrandPalette): readonly RampRoleSpec[] {
   return [
     { name: "primary", seed: palette.primaryColor },
     { name: "secondary", seed: palette.secondaryColor },
-    { name: "accent", seed: palette.accentColor },
     { name: "success", seed: palette.successColor },
     { name: "warning", seed: palette.warningColor },
     { name: "error", seed: palette.errorColor },
@@ -72,10 +79,12 @@ export function deriveTenantColorRamps(
       vars[`--ds-color-${role.name}-${step}`] = ramp[step];
     }
   }
-  // Authored steps win over derived ones. A role that is authored-only
-  // (`neutral` has no seed to derive from) emits nothing until authored, so an
-  // absent override never claims a channel.
+  // Authored steps win over derived ones. Two roles are excluded rather than
+  // overridden: `neutral`, whose ramp is a TEMPERATURE decision and belongs to
+  // the palette family that owns it, and `accent`, whose steps no reader
+  // resolves. One channel keeps one producing family.
   for (const [role, ramp] of Object.entries(palette.ramps ?? {})) {
+    if (role === "neutral" || UNREAD_RAMP_ROLES.has(role)) continue;
     for (const [step, value] of Object.entries(ramp ?? {})) {
       if (value) vars[`--ds-color-${role}-${step}`] = value;
     }

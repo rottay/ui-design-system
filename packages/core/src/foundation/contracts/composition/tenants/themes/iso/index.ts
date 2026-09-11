@@ -239,6 +239,8 @@ const DEFAULT_PALETTE_KEYS: readonly (keyof BrandPalette)[] = [
   "surfaceSecondaryColor",
   "textColor",
   "textInverseColor",
+  "neutralTemperature",
+  "contrastPosture",
   "aliases",
 ];
 

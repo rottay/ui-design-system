@@ -1,25 +1,29 @@
 /**
- * @fileoverview The palette family: seeds, semantics, inks and the two floors.
+ * @fileoverview The palette family: what the seeds state, what they imply, and
+ * the two postures that decide how the implications land.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/palette
  * @category Compilers
  * @package @rottay/design-system
  */
 
-import { isHexColor } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
-import { derivePaletteSemantics } from "@/infrastructure/compilers/kernel/foundation/css/color-math/palette-derivations";
-import {
-  ON_TONE_ROLES,
-  deriveReadableInk,
-  onToneChannel,
-} from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import {
   deriveExtendedPaletteFloor,
-  deriveStatusTintFloor,
   setExtendedPaletteVariables,
 } from "../../../foundation/palette";
+import { resolveContrastPosture } from "./contrast-posture";
+import { derivePaletteInks } from "./inks";
+import { deriveNeutralAxis } from "./neutral-temperature";
+import {
+  derivePaletteGround,
+  derivePaletteSemanticChannels,
+  derivePaletteSemanticFloor,
+} from "./semantic";
+
+export { resolveContrastPosture } from "./contrast-posture";
+export { derivePaletteTints } from "./tints";
 
 /**
  * Every channel a palette states or implies, in one producer.
@@ -33,7 +37,13 @@ import {
  *
  * A mode overlay re-enters this family with its own merged palette, so the
  * other mode resolves its own seed here rather than being smuggled through a
- * second field on this one.
+ * second field on this one. The neutral axis is emitted here, not beside the
+ * seeded ramps: `palette.neutral-temperature` is what decides it.
+ *
+ * The status tints arrive as a context fact rather than being derived here:
+ * the seeds family restates the same channels at tenant rank, and one
+ * derivation per block is what keeps the two from disagreeing about the
+ * posture's mix strengths.
  */
 export const paletteDeriver: FamilyDeriver = {
   family: "palette",
@@ -54,66 +64,33 @@ export const paletteDeriver: FamilyDeriver = {
     "--ds-text-inverse",
     "--ds-border-color*",
   ],
-  derive: (context) => derivePaletteChannels(context.theme),
+  derive: (context) => derivePaletteChannels(context.theme, context.statusTints),
 };
 
-export function derivePaletteChannels(bt: BrandTheme): Record<string, string> {
+export function derivePaletteChannels(
+  bt: BrandTheme,
+  statusTints: Record<string, string>
+): Record<string, string> {
   const vars: Record<string, string> = {};
-  if (!bt.palette) return vars;
-  const effectivePrimary = bt.palette.primaryColor;
+  const palette = bt.palette;
+  if (!palette) return vars;
+  const posture = resolveContrastPosture(bt);
+  const inkPair = {
+    light: posture.inkLight,
+    dark: posture.inkDark,
+    minimumRatio: posture.minimumRatio,
+  };
+
+  Object.assign(vars, derivePaletteSemanticFloor(palette));
+  Object.assign(vars, derivePaletteSemanticChannels(palette));
+  Object.assign(vars, derivePaletteInks(palette, inkPair));
   Object.assign(
     vars,
-    derivePaletteSemantics({
-      primary: effectivePrimary,
-      background: bt.palette.backgroundColor,
-    })
+    deriveExtendedPaletteFloor(palette.primaryColor, inkPair)
   );
-
-  if (bt.palette.primaryColor)
-    vars["--ds-color-primary"] = bt.palette.primaryColor;
-  if (bt.palette.secondaryColor)
-    vars["--ds-color-secondary"] = bt.palette.secondaryColor;
-  if (bt.palette.accentColor)
-    vars["--ds-color-accent"] = bt.palette.accentColor;
-  if (bt.palette.textPrimaryColor)
-    vars["--ds-color-text-primary"] = bt.palette.textPrimaryColor;
-  if (bt.palette.textSecondaryColor)
-    vars["--ds-color-text-secondary"] = bt.palette.textSecondaryColor;
-  if (bt.palette.textPageColor)
-    vars["--ds-color-text-page"] = bt.palette.textPageColor;
-  if (bt.palette.textMutedColor)
-    vars["--ds-color-text-muted"] = bt.palette.textMutedColor;
-  if (bt.palette.textDisabledColor)
-    vars["--ds-color-text-disabled"] = bt.palette.textDisabledColor;
-  if (bt.palette.borderPrimaryColor)
-    vars["--ds-color-border-primary"] = bt.palette.borderPrimaryColor;
-  if (bt.palette.borderSecondaryColor)
-    vars["--ds-color-border-secondary"] = bt.palette.borderSecondaryColor;
-  if (bt.palette.successColor)
-    vars["--ds-color-success"] = bt.palette.successColor;
-  if (bt.palette.warningColor)
-    vars["--ds-color-warning"] = bt.palette.warningColor;
-  if (bt.palette.errorColor) vars["--ds-color-error"] = bt.palette.errorColor;
-  if (bt.palette.infoColor) vars["--ds-color-info"] = bt.palette.infoColor;
-  // Readable ink over each hex status tone, from the shared derivation the
-  // DB path also uses; a dark-mode tone re-derives its own ink.
-  for (const role of ON_TONE_ROLES) {
-    const seed = bt.palette[`${role}Color`];
-    if (seed && isHexColor(seed)) {
-      vars[onToneChannel(role)] = deriveReadableInk(seed);
-    }
-  }
-  Object.assign(vars, deriveExtendedPaletteFloor(effectivePrimary));
-  Object.assign(vars, deriveStatusTintFloor(bt.palette));
-  setExtendedPaletteVariables(vars, bt.palette);
-
-  // This mode's ground. A theme declares one ground in the plain channel; its
-  // other mode declares that mode's ground in its own overlay, which compiles
-  // into a mode block.
-  if (bt.palette.backgroundColor) {
-    vars["--ds-color-bg-primary"] = bt.palette.backgroundColor;
-    vars["--ds-color-bg"] = bt.palette.backgroundColor;
-    vars["--ds-color-background"] = bt.palette.backgroundColor;
-  }
+  Object.assign(vars, statusTints);
+  setExtendedPaletteVariables(vars, palette);
+  Object.assign(vars, derivePaletteGround(palette));
+  Object.assign(vars, deriveNeutralAxis(bt));
   return vars;
 }

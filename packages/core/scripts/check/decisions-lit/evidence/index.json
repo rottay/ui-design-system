@@ -1,8 +1,8 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-11T00:55:49.946Z",
+  "producedAt": "2026-09-11T00:33:24.883Z",
   "headline": "decisions lit = 7/22 (+0/2 new)",
-  "measuredHeadline": "measured on the 8-family sample: 14/22 move at least one sampled family",
+  "measuredHeadline": "measured on the 8-family sample: 13/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
     "newDecisions": 2,
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-11T00:53:32.160Z"
+      "builtAt": "2026-09-11T00:30:04.622Z"
     },
     "sources": {
       "door": {
@@ -30,13 +30,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 748,
-        "digest": "41f4b8088141bb0ba6f05bd7dcf3ec00955efd7d93c519d2f4a85fbe75823fbb"
+        "fileCount": 751,
+        "digest": "4bbfe023b747c70821e48de554f79ecb19b9ea637d01aa7f146d8b3c587daedb"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "267bdc4bab2d87847c872433132f899c5b1e601e1df4dd0a182cad0efd607f56"
+        "digest": "189c83ec2d55a2e90150597e925dd8973f26c86e40b197a9380dc027d0bc1a9a"
       }
     },
     "browser": {
@@ -64,7 +64,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "715504d3f4643507afc85d18c5d2035d9440c5b8d3485c322f9e861370d9427b",
+        "bundleSha": "9dbb03440f59eb0f57200e00b1d47517a5a19f9fc95bcbd01fa8824a1803134a",
         "bundleMode": "fresh"
       },
       "bithire": {
@@ -85,7 +85,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "d665f7f339735f473683e48fe33914adafb2557a61705f97aa5a57f5d7c05cc0",
+        "bundleSha": "1d56ade05cfdfa2a667f7bc75785f95408fa89b8db99c883be5157dce0e9e3c6",
         "bundleMode": "fresh"
       },
       "evnto": {
@@ -106,7 +106,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "60f68bd4ec771d9511378745c25cb0a60f6c9fed28c06a02b9607cfcb0a9eea5",
+        "bundleSha": "208e091b4a843862fcaa17210747000dd2529535ab705dfc052b8ace14c1bc03",
         "bundleMode": "fresh"
       }
     },
@@ -124,7 +124,7 @@
     "lit": 7,
     "partial": 14,
     "inert": 6,
-    "measuredLit": 14,
+    "measuredLit": 13,
     "discrepancies": [
       {
         "id": "palette.status-seeds",
@@ -174,17 +174,20 @@
       {
         "id": "palette.neutral-temperature",
         "tier": "standard",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
-        "movedFamilies": [],
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "card-modern-md",
+          "input-modern-md"
+        ],
         "movedChannelCount": 0,
         "excludedIn": []
       },
       {
         "id": "palette.contrast-posture",
         "tier": "pro",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -249,7 +252,7 @@
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
         "movedFamilies": [],
-        "movedChannelCount": 7,
+        "movedChannelCount": 0,
         "excludedIn": []
       },
       {
@@ -258,7 +261,7 @@
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
         "movedFamilies": [],
-        "movedChannelCount": 9,
+        "movedChannelCount": 0,
         "excludedIn": []
       },
       {
@@ -279,12 +282,10 @@
       {
         "id": "shape.nesting",
         "tier": "pro",
-        "recordedClass": "partial",
-        "artifactBytesDiffer": true,
-        "movedFamilies": [
-          "card-modern-md"
-        ],
-        "movedChannelCount": 2,
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
         "excludedIn": []
       },
       {
@@ -301,12 +302,10 @@
       {
         "id": "shape.control-height",
         "tier": "standard",
-        "recordedClass": "partial",
-        "artifactBytesDiffer": true,
-        "movedFamilies": [
-          "button-modern-md"
-        ],
-        "movedChannelCount": 1,
+        "recordedClass": "new",
+        "artifactBytesDiffer": false,
+        "movedFamilies": [],
+        "movedChannelCount": 0,
         "excludedIn": []
       },
       {
@@ -402,7 +401,7 @@
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
         "movedFamilies": [],
-        "movedChannelCount": 7,
+        "movedChannelCount": 0,
         "excludedIn": []
       },
       {
@@ -430,7 +429,7 @@
           "space-modern-preset-gap",
           "stack-modern-preset-gap"
         ],
-        "movedChannelCount": 35,
+        "movedChannelCount": 34,
         "excludedIn": []
       },
       {
@@ -443,7 +442,7 @@
           "card-modern-md",
           "input-modern-md"
         ],
-        "movedChannelCount": 7,
+        "movedChannelCount": 6,
         "excludedIn": []
       },
       {
@@ -512,7 +511,7 @@
     {
       "id": "palette.neutral-temperature",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -520,7 +519,7 @@
     {
       "id": "palette.contrast-posture",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -679,56 +678,16 @@
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-font-weight-display",
-          "--ds-font-weight-heading",
-          "--ds-type-display-font-weight",
-          "--ds-type-label-font-weight",
-          "--ds-type-numeric-font-weight",
-          "--ds-type-page-title-font-weight",
-          "--ds-type-section-title-font-weight"
-        ]
-      },
-      "movedChannels": [
-        "--ds-font-weight-display",
-        "--ds-font-weight-heading",
-        "--ds-type-display-font-weight",
-        "--ds-type-label-font-weight",
-        "--ds-type-numeric-font-weight",
-        "--ds-type-page-title-font-weight",
-        "--ds-type-section-title-font-weight"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "typography.numeric",
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-type-body-font-variant-numeric",
-          "--ds-type-caption-font-variant-numeric",
-          "--ds-type-code-font-variant-numeric",
-          "--ds-type-display-font-variant-numeric",
-          "--ds-type-label-font-variant-numeric",
-          "--ds-type-numeric-font-variant-numeric",
-          "--ds-type-page-title-font-variant-numeric",
-          "--ds-type-section-title-font-variant-numeric",
-          "--ds-type-supporting-font-variant-numeric"
-        ]
-      },
-      "movedChannels": [
-        "--ds-type-body-font-variant-numeric",
-        "--ds-type-caption-font-variant-numeric",
-        "--ds-type-code-font-variant-numeric",
-        "--ds-type-display-font-variant-numeric",
-        "--ds-type-label-font-variant-numeric",
-        "--ds-type-numeric-font-variant-numeric",
-        "--ds-type-page-title-font-variant-numeric",
-        "--ds-type-section-title-font-variant-numeric",
-        "--ds-type-supporting-font-variant-numeric"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "shape.radius-scale",
@@ -743,10 +702,6 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "card-modern-md/nested-region": [
           "border-top-left-radius",
           "border-bottom-right-radius"
         ],
@@ -793,24 +748,10 @@
     {
       "id": "shape.nesting",
       "vertical": "rottay",
-      "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
-      "movedTargets": {
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "token-readout/tokens": [
-          "--ds-radius-nest-inset",
-          "--ds-radius-nest-ratio"
-        ]
-      },
-      "movedChannels": [
-        "--ds-radius-nest-inset",
-        "--ds-radius-nest-ratio"
-      ]
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "shape.button-style",
@@ -836,24 +777,10 @@
     {
       "id": "shape.control-height",
       "vertical": "rottay",
-      "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "button-modern-md"
-      ],
-      "movedTargets": {
-        "button-modern-md/hitbox": [
-          "block-size",
-          "height",
-          "min-block-size",
-          "min-height"
-        ],
-        "token-readout/tokens": [
-          "--ds-control-height-scale"
-        ]
-      },
-      "movedChannels": [
-        "--ds-control-height-scale"
-      ]
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "density.mode",
@@ -1047,26 +974,8 @@
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-ease-exit",
-          "--ds-ease-standard",
-          "--ds-motion-ease-enter",
-          "--ds-motion-ease-in-out",
-          "--ds-motion-offset-in",
-          "--ds-motion-panel-offset",
-          "--ds-motion-scale-in"
-        ]
-      },
-      "movedChannels": [
-        "--ds-ease-exit",
-        "--ds-ease-standard",
-        "--ds-motion-ease-enter",
-        "--ds-motion-ease-in-out",
-        "--ds-motion-offset-in",
-        "--ds-motion-panel-offset",
-        "--ds-motion-scale-in"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "navigation.sidebar-tone",
@@ -1170,8 +1079,7 @@
           "--ds-radius-xl",
           "--ds-radius-xl-base",
           "--ds-select-group-text-transform",
-          "--ds-table-header-text-transform",
-          "--ds-type-numeric-font-variant-numeric"
+          "--ds-table-header-text-transform"
         ],
         "flex-modern-preset-gap/root": [
           "gap",
@@ -1227,8 +1135,7 @@
         "--ds-radius-xl",
         "--ds-radius-xl-base",
         "--ds-select-group-text-transform",
-        "--ds-table-header-text-transform",
-        "--ds-type-numeric-font-variant-numeric"
+        "--ds-table-header-text-transform"
       ]
     },
     {
@@ -1263,8 +1170,7 @@
           "--ds-font-family-heading",
           "--ds-letter-spacing-heading",
           "--ds-select-group-text-transform",
-          "--ds-table-header-text-transform",
-          "--ds-type-numeric-font-variant-numeric"
+          "--ds-table-header-text-transform"
         ]
       },
       "movedChannels": [
@@ -1272,8 +1178,7 @@
         "--ds-font-family-heading",
         "--ds-letter-spacing-heading",
         "--ds-select-group-text-transform",
-        "--ds-table-header-text-transform",
-        "--ds-type-numeric-font-variant-numeric"
+        "--ds-table-header-text-transform"
       ]
     },
     {
@@ -1351,7 +1256,7 @@
     {
       "id": "palette.neutral-temperature",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1359,7 +1264,7 @@
     {
       "id": "palette.contrast-posture",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1518,56 +1423,16 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-font-weight-display",
-          "--ds-font-weight-heading",
-          "--ds-type-display-font-weight",
-          "--ds-type-label-font-weight",
-          "--ds-type-numeric-font-weight",
-          "--ds-type-page-title-font-weight",
-          "--ds-type-section-title-font-weight"
-        ]
-      },
-      "movedChannels": [
-        "--ds-font-weight-display",
-        "--ds-font-weight-heading",
-        "--ds-type-display-font-weight",
-        "--ds-type-label-font-weight",
-        "--ds-type-numeric-font-weight",
-        "--ds-type-page-title-font-weight",
-        "--ds-type-section-title-font-weight"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "typography.numeric",
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-type-body-font-variant-numeric",
-          "--ds-type-caption-font-variant-numeric",
-          "--ds-type-code-font-variant-numeric",
-          "--ds-type-display-font-variant-numeric",
-          "--ds-type-label-font-variant-numeric",
-          "--ds-type-numeric-font-variant-numeric",
-          "--ds-type-page-title-font-variant-numeric",
-          "--ds-type-section-title-font-variant-numeric",
-          "--ds-type-supporting-font-variant-numeric"
-        ]
-      },
-      "movedChannels": [
-        "--ds-type-body-font-variant-numeric",
-        "--ds-type-caption-font-variant-numeric",
-        "--ds-type-code-font-variant-numeric",
-        "--ds-type-display-font-variant-numeric",
-        "--ds-type-label-font-variant-numeric",
-        "--ds-type-numeric-font-variant-numeric",
-        "--ds-type-page-title-font-variant-numeric",
-        "--ds-type-section-title-font-variant-numeric",
-        "--ds-type-supporting-font-variant-numeric"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "shape.radius-scale",
@@ -1582,10 +1447,6 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "card-modern-md/nested-region": [
           "border-top-left-radius",
           "border-bottom-right-radius"
         ],
@@ -1632,24 +1493,10 @@
     {
       "id": "shape.nesting",
       "vertical": "bithire",
-      "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
-      "movedTargets": {
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "token-readout/tokens": [
-          "--ds-radius-nest-inset",
-          "--ds-radius-nest-ratio"
-        ]
-      },
-      "movedChannels": [
-        "--ds-radius-nest-inset",
-        "--ds-radius-nest-ratio"
-      ]
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "shape.button-style",
@@ -1675,24 +1522,10 @@
     {
       "id": "shape.control-height",
       "vertical": "bithire",
-      "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "button-modern-md"
-      ],
-      "movedTargets": {
-        "button-modern-md/hitbox": [
-          "block-size",
-          "height",
-          "min-block-size",
-          "min-height"
-        ],
-        "token-readout/tokens": [
-          "--ds-control-height-scale"
-        ]
-      },
-      "movedChannels": [
-        "--ds-control-height-scale"
-      ]
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "density.mode",
@@ -1881,26 +1714,8 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-ease-exit",
-          "--ds-ease-standard",
-          "--ds-motion-ease-enter",
-          "--ds-motion-ease-in-out",
-          "--ds-motion-offset-in",
-          "--ds-motion-panel-offset",
-          "--ds-motion-scale-in"
-        ]
-      },
-      "movedChannels": [
-        "--ds-ease-exit",
-        "--ds-ease-standard",
-        "--ds-motion-ease-enter",
-        "--ds-motion-ease-in-out",
-        "--ds-motion-offset-in",
-        "--ds-motion-panel-offset",
-        "--ds-motion-scale-in"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "navigation.sidebar-tone",
@@ -1951,10 +1766,6 @@
         "card-modern-md/title": [
           "letter-spacing",
           "font-family"
-        ],
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
         ],
         "button-modern-md/root": [
           "border-top-left-radius",
@@ -2079,16 +1890,14 @@
           "--ds-font-family-base",
           "--ds-font-family-heading",
           "--ds-letter-spacing-heading",
-          "--ds-select-group-text-transform",
-          "--ds-type-numeric-font-variant-numeric"
+          "--ds-select-group-text-transform"
         ]
       },
       "movedChannels": [
         "--ds-font-family-base",
         "--ds-font-family-heading",
         "--ds-letter-spacing-heading",
-        "--ds-select-group-text-transform",
-        "--ds-type-numeric-font-variant-numeric"
+        "--ds-select-group-text-transform"
       ]
     },
     {
@@ -2157,15 +1966,28 @@
     {
       "id": "palette.neutral-temperature",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "card-modern-md",
+        "input-modern-md"
+      ],
+      "movedTargets": {
+        "card-modern-md/root": [
+          "color"
+        ],
+        "card-modern-md/title": [
+          "color"
+        ],
+        "input-modern-md/root": [
+          "color"
+        ]
+      },
       "movedChannels": []
     },
     {
       "id": "palette.contrast-posture",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -2328,56 +2150,16 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-font-weight-display",
-          "--ds-font-weight-heading",
-          "--ds-type-display-font-weight",
-          "--ds-type-label-font-weight",
-          "--ds-type-numeric-font-weight",
-          "--ds-type-page-title-font-weight",
-          "--ds-type-section-title-font-weight"
-        ]
-      },
-      "movedChannels": [
-        "--ds-font-weight-display",
-        "--ds-font-weight-heading",
-        "--ds-type-display-font-weight",
-        "--ds-type-label-font-weight",
-        "--ds-type-numeric-font-weight",
-        "--ds-type-page-title-font-weight",
-        "--ds-type-section-title-font-weight"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "typography.numeric",
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-type-body-font-variant-numeric",
-          "--ds-type-caption-font-variant-numeric",
-          "--ds-type-code-font-variant-numeric",
-          "--ds-type-display-font-variant-numeric",
-          "--ds-type-label-font-variant-numeric",
-          "--ds-type-numeric-font-variant-numeric",
-          "--ds-type-page-title-font-variant-numeric",
-          "--ds-type-section-title-font-variant-numeric",
-          "--ds-type-supporting-font-variant-numeric"
-        ]
-      },
-      "movedChannels": [
-        "--ds-type-body-font-variant-numeric",
-        "--ds-type-caption-font-variant-numeric",
-        "--ds-type-code-font-variant-numeric",
-        "--ds-type-display-font-variant-numeric",
-        "--ds-type-label-font-variant-numeric",
-        "--ds-type-numeric-font-variant-numeric",
-        "--ds-type-page-title-font-variant-numeric",
-        "--ds-type-section-title-font-variant-numeric",
-        "--ds-type-supporting-font-variant-numeric"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "shape.radius-scale",
@@ -2392,10 +2174,6 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "card-modern-md/nested-region": [
           "border-top-left-radius",
           "border-bottom-right-radius"
         ],
@@ -2442,24 +2220,10 @@
     {
       "id": "shape.nesting",
       "vertical": "evnto",
-      "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
-      "movedTargets": {
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "token-readout/tokens": [
-          "--ds-radius-nest-inset",
-          "--ds-radius-nest-ratio"
-        ]
-      },
-      "movedChannels": [
-        "--ds-radius-nest-inset",
-        "--ds-radius-nest-ratio"
-      ]
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "shape.button-style",
@@ -2485,24 +2249,10 @@
     {
       "id": "shape.control-height",
       "vertical": "evnto",
-      "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "button-modern-md"
-      ],
-      "movedTargets": {
-        "button-modern-md/hitbox": [
-          "block-size",
-          "height",
-          "min-block-size",
-          "min-height"
-        ],
-        "token-readout/tokens": [
-          "--ds-control-height-scale"
-        ]
-      },
-      "movedChannels": [
-        "--ds-control-height-scale"
-      ]
+      "artifactBytesDiffer": false,
+      "movedFamilies": [],
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "density.mode",
@@ -2696,26 +2446,8 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-ease-exit",
-          "--ds-ease-standard",
-          "--ds-motion-ease-enter",
-          "--ds-motion-ease-in-out",
-          "--ds-motion-offset-in",
-          "--ds-motion-panel-offset",
-          "--ds-motion-scale-in"
-        ]
-      },
-      "movedChannels": [
-        "--ds-ease-exit",
-        "--ds-ease-standard",
-        "--ds-motion-ease-enter",
-        "--ds-motion-ease-in-out",
-        "--ds-motion-offset-in",
-        "--ds-motion-panel-offset",
-        "--ds-motion-scale-in"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "navigation.sidebar-tone",
@@ -2818,8 +2550,7 @@
           "--ds-radius-xl-base",
           "--ds-select-group-text-transform",
           "--ds-table-header-letter-spacing",
-          "--ds-table-header-text-transform",
-          "--ds-type-numeric-font-variant-numeric"
+          "--ds-table-header-text-transform"
         ],
         "flex-modern-preset-gap/root": [
           "gap",
@@ -2876,8 +2607,7 @@
         "--ds-radius-xl-base",
         "--ds-select-group-text-transform",
         "--ds-table-header-letter-spacing",
-        "--ds-table-header-text-transform",
-        "--ds-type-numeric-font-variant-numeric"
+        "--ds-table-header-text-transform"
       ]
     },
     {
@@ -2913,8 +2643,7 @@
           "--ds-letter-spacing-heading",
           "--ds-select-group-text-transform",
           "--ds-table-header-letter-spacing",
-          "--ds-table-header-text-transform",
-          "--ds-type-numeric-font-variant-numeric"
+          "--ds-table-header-text-transform"
         ]
       },
       "movedChannels": [
@@ -2923,8 +2652,7 @@
         "--ds-letter-spacing-heading",
         "--ds-select-group-text-transform",
         "--ds-table-header-letter-spacing",
-        "--ds-table-header-text-transform",
-        "--ds-type-numeric-font-variant-numeric"
+        "--ds-table-header-text-transform"
       ]
     },
     {

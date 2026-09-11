@@ -6,7 +6,7 @@
 > Rollback: every control is an INPUT — removing the authored value restores the vertical's baseline.
 > `effect today` is MEASURED, not intended: `not-yet-derived` means the row has no producer anywhere yet.
 
-digest: 715d2a74624397626e9bb458e8c02fc524b081ee5fb48af120309704cc74b794
+digest: c72e0f9832a7b9bd4c48e5cd481249719298f5c3a9c3e0aaaac2eb2c1acdc0cc
 
 ## STANDARD — 19 controls
 
@@ -14,17 +14,17 @@ digest: 715d2a74624397626e9bb458e8c02fc524b081ee5fb48af120309704cc74b794
 |---|---|---|---|---|---|---|---|---|
 | `palette.seeds` | 1 | Brand palette seeds | 4 colours (primary, secondary, accent, background) | `appearance.general.palette.{primary,secondary,accent,background}` | 5 channels | 25/25 (declared fan-out) | never-lockable | css-channels |
 | `palette.status-seeds` | 2 | Status tone seeds (success/warning/error/info) | 4 colours (success, warning, error, info) | `appearance.general.palette.status.{success,warning,error,info}` | 83 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
-| `palette.neutral-temperature` | 3 | Neutral temperature | `cool` \| `neutral` \| `warm` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
+| `palette.neutral-temperature` | 3 | Neutral temperature | `cool` \| `neutral` \| `warm` | `appearance.general.palette.neutralTemperature` | 12 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `typography.pairing` | 7 | Type pairing personality | `sober` \| `editorial` \| `geometric` \| `technical` | `appearance.general.typography.typePairing` | 2 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `typography.scale` | 8 | Type scale dial | [0.9 – 1.1] | `appearance.general.typography.scale` | 1 channel | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
-| `typography.role-weights` | 9 | Role weights | `light` \| `regular` \| `strong` | `appearance.general.typography.roleWeights` | 7 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
+| `typography.role-weights` | 9 | Role weights | `light` \| `regular` \| `strong` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
 | `shape.radius-scale` | 11 | Radius scale dial | [0.75 – 1.25] | `appearance.general.shape.radiusScale` | 2 channels | 24/25 (declared fan-out) | open | css-channels |
 | `shape.button-style` | 13 | Button silhouette | `sharp` \| `soft` \| `pill` | `appearance.general.shape.buttonStyle` | 1 channel | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `shape.control-height` | 14 | Control height | `compact` \| `standard` \| `tall` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
 | `density.mode` | 15 | Density posture | `compact` \| `normal` \| `spacious` | `appearance.general.density` | 2 channels | 24/25 (declared fan-out) | open | css-channels |
 | `spacing.rhythm` | 16 | Layout rhythm | `tight` \| `normal` \| `airy` | `appearance.general.rhythm` | 2 channels | 20/25 (declared fan-out) | open | css-channels |
 | `surfaces.elevation-posture` | 17 | Elevation posture | `flat` \| `soft` \| `elevated` | `appearance.general.surfaces.elevation` | 3 channels | 25/25 (declared fan-out) | open | css-channels |
-| `surfaces.border-style` | 18 | Border style | `none` \| `hairline` \| `strong` | `appearance.general.surfaces.borderStyle` | 3 channels | declared fan-out: card, input, table, panel | open | css-channels |
+| `surfaces.border-style` | 18 | Border style | `none` \| `hairline` \| `strong` | — | — | declared fan-out: card, input, table, panel | open | not-yet-derived |
 | `surfaces.effect-intensity` | 19 | Decoration intensity | [0 – 1] | `appearance.general.surfaces.effectIntensity` | 1 channel | declared fan-out: glass, blur, glow | open | css-channels |
 | `states.emphasis` | 20 | Interaction-state emphasis | `subtle` \| `medium` \| `strong` | `appearance.general.states.emphasis` | 18 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `states.focus-style` | 21 | Focus signature | `ring` \| `underline` \| `glow` | `appearance.general.states.focusStyle` | 10 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
@@ -36,16 +36,16 @@ digest: 715d2a74624397626e9bb458e8c02fc524b081ee5fb48af120309704cc74b794
 
 | id | kit row | control | closed domain | document keypath | declared fan-out | minimum families | envelope (D-28 b) | effect today |
 |---|---|---|---|---|---|---|---|---|
-| `palette.contrast-posture` | 4 | Contrast posture | `soft` \| `standard` \| `high` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
+| `palette.contrast-posture` | 4 | Contrast posture | `soft` \| `standard` \| `high` | `appearance.general.palette.contrastPosture` | 16 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
 | `palette.dark-mode` | 5 | Mode selection | `light` \| `dark` \| `auto` | `appearance.general.palette.{backgroundMode,dark.*}` | 1 channel | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
 | `typography.families` | 6 | Registered font pack per role | registered ids (`TENANT_THEME_FONT_PACK_IDS`) | `appearance.general.typography.{fontFamilyBase,fontFamilyHeading}` | 4 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | never-lockable | css-channels |
-| `typography.numeric` | 10 | Numeric posture | `proportional` \| `tabular` | `appearance.general.typography.numeric` | 9 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | css-channels |
+| `typography.numeric` | 10 | Numeric posture | `proportional` \| `tabular` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | open | not-yet-derived |
 | `shape.nesting` | 12 | Nested radius law | `concentric` \| `uniform` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | locked-by-default | not-yet-derived |
-| `motion.character` | 23 | Motion character | `mechanical` \| `organic` \| `playful` | `appearance.general.motion.character` | 7 channels | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | locked-by-default | css-channels |
+| `motion.character` | 23 | Motion character | `mechanical` \| `organic` \| `playful` | — | — | owner-pending — the kit's example is `>= 20/25` and is NOT a binding floor | locked-by-default | not-yet-derived |
 | `profiles.expressive` | 26 | Explicit expressive axes | 7 keys (type, geometry, edge, material, elevation, motif, icon), 28 values | `visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}` | 6 channels | declared fan-out (the row names no separate family list) | open | css-channels |
 | `recipe-profile` | 27 | Family recipe profile | registered ids (`RECIPE_PROFILE_REGISTRY`) | `visualFoundation.recipeProfile` | 1 channel | declared fan-out: button, card, section-card, tabs, tag, input, select, checkbox, radio, toggle | locked-by-default | css-channels |
 | `chrome.anatomy` | 28 | Anatomy variants | 4 keys (cardComponent, table, sidebar, layout) | `visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy` | 4 root attributes | declared fan-out: cardComponent, table, sidebar, layout | open | root-attributes |
-| `responsive.posture` | 29 | Responsive posture | `compact` \| `balanced` \| `expansive` | `visualFoundation.advanced.responsivePosture` | 4 channels | declared fan-out (the row names no separate family list) | open | css-channels |
+| `responsive.posture` | 29 | Responsive posture | `compact` \| `balanced` \| `expansive` | `visualFoundation.advanced.responsivePosture` | — | declared fan-out (the row names no separate family list) | open | data-only |
 
 ## Outside the 29 decisions
 

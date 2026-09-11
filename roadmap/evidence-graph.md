@@ -64,7 +64,7 @@ Lane-wide rules (binding on every WO):
 - **Why** — F-48: 58 test files bypass the door, 452 assertions compare CSS text, tests are green over dead channels, byte-for-byte baselines freeze hardcodes.
 - **Closes** — F-48 (closure criteria in `audit/30-findings`).
 - **Wave** — 4; parallel with the other WOs of the same wave whose write sets are disjoint.
-- **Depends on** — WO-CAT-03, WO-DER-07 (visual baselines are regenerated only after the owner picks the bithire reference identity).
+- **Depends on** — WO-CAT-03. (2026-09-10, 98-checkpoint: the WO-DER-07 edge was removed — the technical suite does not inherit the deferred D-30 pick. One obligation stays bound to the branding stage: the showroom visual baselines are regenerated only after the owner picks the bithire reference identity; the rest of this WO runs without it.)
 - **Steps** —
   1. Suite; `testConsumers` counter; rewrite channel tests; baseline policy.
 - **Files** — `packages/core/tests/**`; `packages/core/src/**/tests/**`; `packages/showroom/e2e/visual/**`.

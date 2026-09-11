@@ -505,7 +505,13 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // now carry `var(--ds-type-scale, 1)` and each entry is expressed on its
       // own facets. At the default scale of 1 they compute byte-identically;
       // what changed is that a tenant's type scale finally reaches the ramp.
-      rottay: 1315,
+      // WO-DER-03 palette half (measured): rottay 1315 -> 1307, removed 10,
+      // added 2. The ten removed are `--ds-color-accent-{50..900}`, a ramp with
+      // no `var()` reader anywhere in the package; the two added are
+      // `--ds-color-neutral-ink` and `--ds-color-neutral-paper`, the monochrome
+      // ramp's own anchors, read by `foundation/monochrome`. No surviving value
+      // moved: the -8 is a keyset move, not a paint move.
+      rottay: 1307,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -522,7 +528,13 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // now carry `var(--ds-type-scale, 1)` and each entry is expressed on its
       // own facets. At the default scale of 1 they compute byte-identically;
       // what changed is that a tenant's type scale finally reaches the ramp.
-      bithire: 1291,
+      // WO-DER-03 palette half (measured): bithire 1291 -> 1283, removed 10,
+      // added 2. The ten removed are `--ds-color-accent-{50..900}`, a ramp with
+      // no `var()` reader anywhere in the package; the two added are
+      // `--ds-color-neutral-ink` and `--ds-color-neutral-paper`, the monochrome
+      // ramp's own anchors, read by `foundation/monochrome`. No surviving value
+      // moved: the -8 is a keyset move, not a paint move.
+      bithire: 1283,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -542,7 +554,13 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // now carry `var(--ds-type-scale, 1)` and each entry is expressed on its
       // own facets. At the default scale of 1 they compute byte-identically;
       // what changed is that a tenant's type scale finally reaches the ramp.
-      evnto: 592,
+      // WO-DER-03 palette half (measured): evnto 592 -> 584, removed 10,
+      // added 2. The ten removed are `--ds-color-accent-{50..900}`, a ramp with
+      // no `var()` reader anywhere in the package; the two added are
+      // `--ds-color-neutral-ink` and `--ds-color-neutral-paper`, the monochrome
+      // ramp's own anchors, read by `foundation/monochrome`. No surviving value
+      // moved: the -8 is a keyset move, not a paint move.
+      evnto: 584,
     };
     for (const vertical of VERTICALS) {
       expect(
