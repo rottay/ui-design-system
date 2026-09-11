@@ -164,7 +164,6 @@ describe("theme control catalog", () => {
       "palette.neutral-temperature",
       "palette.contrast-posture",
     ];
-    ];
     const notDerived = THEME_CONTROL_CATALOG.filter(
       (row) => row.effect === "not-yet-derived"
     ).map((row) => row.id);

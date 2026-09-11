@@ -1,11 +1,11 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-10T23:10:23.389Z",
-  "headline": "decisions lit = 7/22 (+0/6 new)",
-  "measuredHeadline": "measured on the 8-family sample: 12/22 move at least one sampled family",
+  "producedAt": "2026-09-11T00:33:24.883Z",
+  "headline": "decisions lit = 7/22 (+0/2 new)",
+  "measuredHeadline": "measured on the 8-family sample: 13/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
-    "newDecisions": 6,
+    "newDecisions": 2,
     "kitRows": 29,
     "measuredFamilySample": [
       "button",
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-10T23:08:05.677Z"
+      "builtAt": "2026-09-11T00:30:04.622Z"
     },
     "sources": {
       "door": {
@@ -30,13 +30,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 749,
-        "digest": "ad57ecfe2660c8aa726089ef414a996460633a57456a6fab5719f676c8065c41"
+        "fileCount": 751,
+        "digest": "4bbfe023b747c70821e48de554f79ecb19b9ea637d01aa7f146d8b3c587daedb"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "7d6db7f841807284366bb92d6087a7d690b0b418261683377e6e8c69006115c5"
+        "digest": "189c83ec2d55a2e90150597e925dd8973f26c86e40b197a9380dc027d0bc1a9a"
       }
     },
     "browser": {
@@ -122,9 +122,9 @@
   },
   "summary": {
     "lit": 7,
-    "partial": 10,
+    "partial": 14,
     "inert": 6,
-    "measuredLit": 12,
+    "measuredLit": 13,
     "discrepancies": [
       {
         "id": "palette.status-seeds",
@@ -249,8 +249,8 @@
       {
         "id": "typography.role-weights",
         "tier": "standard",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -258,8 +258,8 @@
       {
         "id": "typography.numeric",
         "tier": "pro",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -349,10 +349,12 @@
       {
         "id": "surfaces.border-style",
         "tier": "standard",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
-        "movedFamilies": [],
-        "movedChannelCount": 0,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
+        "movedFamilies": [
+          "button-modern-md"
+        ],
+        "movedChannelCount": 2,
         "excludedIn": []
       },
       {
@@ -396,8 +398,8 @@
       {
         "id": "motion.character",
         "tier": "pro",
-        "recordedClass": "new",
-        "artifactBytesDiffer": false,
+        "recordedClass": "partial",
+        "artifactBytesDiffer": true,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -674,7 +676,7 @@
     {
       "id": "typography.role-weights",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -682,7 +684,7 @@
     {
       "id": "typography.numeric",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -894,10 +896,27 @@
     {
       "id": "surfaces.border-style",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/root": [
+          "border-top-width"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "token-readout/tokens": [
+          "--ds-edge-emphasis-width",
+          "--ds-edge-standard-width"
+        ]
+      },
+      "movedChannels": [
+        "--ds-edge-emphasis-width",
+        "--ds-edge-standard-width"
+      ]
     },
     {
       "id": "surfaces.effect-intensity",
@@ -953,7 +972,7 @@
     {
       "id": "motion.character",
       "vertical": "rottay",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1402,7 +1421,7 @@
     {
       "id": "typography.role-weights",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1410,7 +1429,7 @@
     {
       "id": "typography.numeric",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1622,10 +1641,27 @@
     {
       "id": "surfaces.border-style",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/root": [
+          "border-top-width"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "token-readout/tokens": [
+          "--ds-edge-emphasis-width",
+          "--ds-edge-standard-width"
+        ]
+      },
+      "movedChannels": [
+        "--ds-edge-emphasis-width",
+        "--ds-edge-standard-width"
+      ]
     },
     {
       "id": "surfaces.effect-intensity",
@@ -1676,7 +1712,7 @@
     {
       "id": "motion.character",
       "vertical": "bithire",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -2112,7 +2148,7 @@
     {
       "id": "typography.role-weights",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -2120,7 +2156,7 @@
     {
       "id": "typography.numeric",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -2332,10 +2368,27 @@
     {
       "id": "surfaces.border-style",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
-      "movedFamilies": [],
-      "movedTargets": {},
-      "movedChannels": []
+      "artifactBytesDiffer": true,
+      "movedFamilies": [
+        "button-modern-md"
+      ],
+      "movedTargets": {
+        "button-modern-md/root": [
+          "border-top-width"
+        ],
+        "button-modern-md/hitbox": [
+          "inline-size",
+          "width"
+        ],
+        "token-readout/tokens": [
+          "--ds-edge-emphasis-width",
+          "--ds-edge-standard-width"
+        ]
+      },
+      "movedChannels": [
+        "--ds-edge-emphasis-width",
+        "--ds-edge-standard-width"
+      ]
     },
     {
       "id": "surfaces.effect-intensity",
@@ -2391,7 +2444,7 @@
     {
       "id": "motion.character",
       "vertical": "evnto",
-      "artifactBytesDiffer": false,
+      "artifactBytesDiffer": true,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []

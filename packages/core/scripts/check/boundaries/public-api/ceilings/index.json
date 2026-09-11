@@ -294,7 +294,7 @@
     },
     "./runtime/tenant": {
       "maxReachableModules": 48,
-      "maxSourceBytes": 1175505
+      "maxSourceBytes": 1175700
     },
     "./runtime/tenant-theme": {
       "maxReachableModules": 2,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "merge wo-emi-02 (7cfe5abd4): techos vivos al valor medido del arbol combinado — visual-authority 63931->70112 y responsive 58115->58600 (widens auditados de EMI-02, Fable r11 PASS), tenant 1167572->1175505 = widen connfix +390 (CC-01, Codex r12 PASS) + 1175115 de EMI-02, suma exacta.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 3 subido(s), 0 sin ancla valida"
+  "lastMove": "merge wo-der-03-palette (17a32a3f7): tenant 1175505->1175700 = +195 medidos, las dos entradas ISO de roster y filas de enum cerrado de las posturas de paleta (misma atribucion que el widen auditado del lote, Fable r2 LAND).",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

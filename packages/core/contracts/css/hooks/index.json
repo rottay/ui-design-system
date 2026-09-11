@@ -53,7 +53,7 @@
   },
   "counts": {
     "tenantChannel": 2306,
-    "compilerConcreteEmissions": 2379,
+    "compilerConcreteEmissions": 2385,
     "compilerEmissionPatterns": 11,
     "themeContractFiles": 49,
     "ambiguousThemeContractTypes": 0,
