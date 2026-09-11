@@ -4261,6 +4261,11 @@
      "at": "2026-09-11 02:56",
      "by": "Kimi K3",
      "note": "CONN3 LANDED (2c5956078; Fable LAND). Residual (g) DISCHARGED: typography.role-weights, typography.numeric, surfaces.border-style carried; motion.character no longer crashes - v1 motion group splits correctly (speeds->dial, character->own row). Full 29-row sweep verified by Fable: no fifth gap; typography.families non-carry intentional (closed domain, refused by name). Every catalog row is now either carried or refused by name through parse->migrate->compile. decisions-lit republished in canonical checkout (7/22 +0/0 neutral; browser path normalized)."
+    },
+    {
+     "at": "2026-09-11 04:07",
+     "by": "Kimi K3",
+     "note": "SHAPE-PRECEDENCE LOT LANDED (debd08628; Fable LAND with 21-arm probe + Chromium computed-style + 3 mutations). Residual (e) DISCHARGED: pill vs allowed radius override — law stated on chosenButtonRadius (direct-override > profile-derived > preset-inherited; named beats expansion), painted value and provenance agree on all arms, standard-plan override refused by name. NEW residual (h), named blind spot, inherent to the draft transport: a bithire editor re-typing the baseline 9px is indistinguishable from a carried leaf and loses to pill in preview (matches movedLeaves rule, stated in the contract). decisions-lit neutral 7/22 (+0/0)."
     }
    ]
   },
