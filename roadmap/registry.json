@@ -4206,6 +4206,11 @@
      "at": "2026-09-08 20:33",
      "by": "kimi-k3",
      "note": "PARTIAL, registered by the R4 reconciliation lot (2026-09-08). The source of this WO landed at committed 34790cf43 (\"materials and states as derived roots, one interaction vocabulary\") WITHOUT a state transition; this entry registers that fact truthfully. It is NOT a close and this WO must never be marked done on it. F-10 stays PARTIAL: skins.stateGoverned is 16/123 = 13 % and has not moved — it sits in the family-cut lane and this WO's declared Files exclude the skins. Also outstanding: the per-artifact 71/71 --ds-material-* acceptance is unproven (baseline 0 / 65 / 2); the emphasis probe measures a synthetic element best-of-vertical and bithire moved 0/25 families (printed, not hidden), so real propagation to families is not demonstrated; catalog rows 20/21 correctly returned to minimumFamilies owner-pending rather than converting a measured declared fan-out into an approved product minimum, and material-arm's ratioFloor 0.85 is labelled PROVISIONAL and self-pinned, not F-10's threshold. Both belong to the owner's consolidated absolute-fan-out-floors decision (roadmap/kit-2026-09.md section 5b), which has not landed. The public contract diff for this range landed separately at 22d74f062 (DEL-02); the migrateDocumentV1ToV2 states gap it disclosed is owned by WO-CON-06."
+    },
+    {
+     "at": "2026-09-11 12:39",
+     "by": "kimi-k3",
+     "note": "SEEDS RENDER-MODE LAW LANDED (merge 861de4105 on r4-recon; writer Opus 514e2b6f1, audited by Kimi K3 under the temporary owner-authorized Fable substitution). palette.seeds now tunes the mode the tenant RENDERS - the vertical's own appearance.defaultMode when it selects none - instead of equating light with the body: rottay (the dark-default vertical) went 0 -> 23 moved channels in its rendered mode per compileTenantThemeDocumentV2 probes; bithire/evnto explicit destinations byte-identical. --ds-color-text-on-primary gained an APCA-chosen derived floor (apcaReadableInk; primary-foreground keeps the WCAG choice) so the standard-tier path no longer refuses at Lc 17.6/17.1 on dark-mode publishes. INERT_PAIRS discharged to []; axis-difference is 36/36 evidential cells, all negative controls at 0%. Gates re-run by the auditor: tsc 0, artifacts --check 0 (byte-identical), axis-difference 0, decisions-lit:check 0, contract-changeset 0, 215 lot tests green."
     }
    ]
   },
@@ -4970,6 +4975,11 @@
      "at": "2026-09-11 07:18",
      "by": "Kimi K3",
      "note": "INSTRUMENT BUILD-OUT LANDED (8 lot commits + integration; Fable LAND after one bounded return: probe applies artifact as shipped with modeDeltas, false INERT_PAIRS entry deleted, NC2 NON-EVIDENTIAL while states positive is 0 with limits published, denominators pin population minus pinned unmountable/unsettled, artifact-coverage per-artifact with drill, tracked symlink removed, claims corrected). Causal instrument exists with drills proven red on planted mutants; variant-parity/mirror-parity/root-checklists retired with ledger (F-54). By-axis probe: palette-only 0% on 30/36 evidential cells (6 non-evidential = rottay/dark mode-scoped inert entry), positives typography 99.4/rhythm 17.1/shape 15.5/depth 6.0/motion 4.2/states 0.0 - NO threshold applied; fleet >=80% acceptance and milestone B stay OPEN. axis-difference excluded from CI pending browser in the core job (ci.yml). Honest limits: APCA baseline 16 pairings pinned shrink-only; STATIC_UNCOVERED 7 with measured causes. NEW PRODUCT FINDING routed to its own lot (next dispatch): palette.seeds routes to modes.light on dark-default rottay; correct law = mode-agnostic seeds to default-mode base + APCA-safe derived twin (Fable-confirmed repro). Remaining for full close: fleet population via family cuts + owner floors."
+    },
+    {
+     "at": "2026-09-11 12:39",
+     "by": "Kimi K3",
+     "note": "INERT_PAIRS discharged with the seeds render-mode law (merge 861de4105): the rottay/dark palette-only entry was the pair whose delta was empty because every seed landed in the mode rottay does not render; with routing fixed the 6 formerly non-evidential cells are evidential and the probe reports 0% on 36 of 36 evidential cells. Every positive-axis percentage byte-identical. Witness-per-cell binding (checkpoint 99 item 2) remains the next EVI-02 lot."
     }
    ]
   },
