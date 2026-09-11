@@ -11,6 +11,12 @@
  * value", which is the question J.4 and J.5 ask and the one a customer
  * discovers the hard way.
  *
+ * SCOPE: ONE VERTICAL. Every arm runs on `bithire` (`VERTICAL` below). Parity
+ * is a relation between four transports of the SAME document, which one
+ * vertical demonstrates; a divergence that appears only under another
+ * vertical's envelope or default mode -- rottay's is dark, and the mode a
+ * decision lands in follows it -- is outside what this file measures.
+ *
  * THE FOUR TRANSPORTS, each the real productive door:
  *
  *   static    a code-owned `BrandTheme` with the decision's own

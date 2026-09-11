@@ -22,6 +22,12 @@
  * defaulting one -- "a defaulted plan is an entitlement nobody granted". The
  * assertion below is therefore that the static door carries NO entitlement,
  * not that it refuses something.
+ *
+ * SCOPE: ONE VERTICAL. Every case runs on `bithire` (`VERTICAL` below). A
+ * catalog tier is not per vertical, so one vertical exercises the rule for
+ * every row -- but this file measures bithire, and a refusal that only another
+ * vertical's envelope or default mode would produce is outside it. Read the
+ * result as "the station is reached", not as a fleet claim.
  */
 import { describe, expect, it } from "vitest";
 

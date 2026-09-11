@@ -31,6 +31,13 @@
  * measuring colour. They are implemented here as first-class scenarios and run
  * exactly like the positive ones.
  *
+ * A CONTROL IS ONLY EVIDENCE IF ITS OWN DECISION MOVED SOMETHING, which is the
+ * one thing a 0 % cannot tell you by itself. Each control therefore publishes
+ * `evidential` per cell and the verdict names the two SEPARATELY: today the
+ * palette control is evidential on every cell, and the `states.emphasis`
+ * control is not, because the states positive reads 0 % for the reasons
+ * enumerated and measured in `STATES_AXIS_LIMITS`.
+ *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
  * "a percentage whose denominator moved between runs is not comparable"
@@ -231,40 +238,77 @@ export function familyElements(root = CORE_ROOT, only = null) {
 }
 
 /**
- * Pairs whose compiled artifact carries ZERO variables on a vertical: the door
- * admits the document, the admission reports the decision `lit: true`, and the
- * published delta is empty.
+ * Pairs whose compiled artifact carries ZERO channels for the CELL being
+ * measured: the door admits the document, the admission reports the decision
+ * `lit: true`, and the published delta for that mode is empty.
  *
- * This is a PRODUCT fact, not an instrument fact, and the difference is the
- * whole reason it is a list rather than a failure. Measured 2026-09-11 through
- * `compileTenantThemeDocumentV2` on `dist/server.js`: a `palette.seeds`
- * document that produces 40 variables on bithire and 42 on evnto produces 0 on
- * rottay, while `shape.radius-scale` produces 1 on all three. The admission
- * reports `lit: true` and a patch at `modes.light.palette.*`; the artifact
- * carries nothing.
+ * AN ENTRY IS PER MODE, not per vertical. The list used to carry
+ * rottay / `palette-only` with no mode at all, which hid twelve cells behind
+ * one observation and was wrong on its own terms: the probe was reading
+ * `artifact.variables` alone, so on rottay -- default mode dark -- it never saw
+ * the 22-channel light block the palette actually ships in. That entry is gone;
+ * rottay's LIGHT cells now measure the control like every other vertical.
  *
- * Consequences, both stated rather than left implicit:
- *  - a NEW inert pair fails this gate, so the list may only shrink;
+ * What survives the fix is narrower and real, and it is a PRODUCT fact about
+ * rottay rather than about this probe. Measured 2026-09-11 through
+ * `compileTenantThemeDocumentV2` on `dist/server.js`:
+ *
+ *   rottay  palette.seeds                     -> base 0, modeDeltas light:22
+ *   rottay  palette.seeds + dark-mode 'auto'  -> base 0, modeDeltas light:22
+ *   bithire palette.seeds                     -> base 40, modeDeltas dark:39
+ *   evnto   palette.seeds                     -> base 42, modeDeltas dark:42
+ *
+ * The v1 transport semantics `ingress/foundation/document-patch` implements are
+ * "top-level seeds customize the light/body mode", so on the one vertical whose
+ * default mode is dark the seeds land in `modes.light` and the mode the tenant
+ * actually renders in is untouched. `palette.dark-mode: 'dark'` is the only
+ * route to it and is refused for these seeds by the APCA floor. That is owed by
+ * the derivation lane; it is NOT this lot's to fix, and recording it here is
+ * what keeps it visible instead of averaged away.
+ *
+ * The MECHANISM is the point of the list, and it stays:
+ *  - an arm that compiles nothing is a PRODUCT fact and fails this gate unless
+ *    the owner records it here WITH the measurement, so the first one is a
+ *    finding and the next cannot hide behind it;
  *  - a cell whose pair is inert proves NOTHING, so its 0 % is published with
  *    `evidential: false` and a negative control may not be credited from it.
- *
- * Owner: the derivation lane (rottay receives identity by decisions, D-14 /
- * kit section 5 rule 5). Not this lot's to fix, and not this lot's to hide.
  */
 export const INERT_PAIRS = Object.freeze([
   {
     vertical: 'rottay',
+    theme: 'dark',
     scenario: 'palette-only',
     note:
-      'palette.seeds compiles to an empty artifact delta on rottay while the door reports the decision lit; '
-      + 'the same document moves 40 channels on bithire and 42 on evnto',
+      'rottay is the one first-party vertical whose default mode is dark, and palette.seeds compiles to '
+      + 'modeDeltas[light] only (base 0, light 22) — so the dark cell receives nothing. The same document moves '
+      + '40 channels on bithire and 42 on evnto, and rottay/light measures the control normally. Owner: the '
+      + 'derivation lane',
   },
 ]);
 
-const isDeclaredInert = (vertical, scenario) =>
-  INERT_PAIRS.some((entry) => entry.vertical === vertical && entry.scenario === scenario);
+/**
+ * An entry with no `theme` covers every mode of that pair; an entry WITH one
+ * covers that mode alone, so declaring the mode that is genuinely empty cannot
+ * excuse the mode that is not.
+ */
+const isDeclaredInert = (inertPairs, vertical, theme, scenario) =>
+  inertPairs.some((entry) =>
+    entry.vertical === vertical
+    && entry.scenario === scenario
+    && (entry.theme === undefined || entry.theme === theme));
 
-/** The compiled tenant variable map for one document, through the published door. */
+/**
+ * The compiled tenant artifact for one document, through the published door.
+ *
+ * BOTH halves are returned because both SHIP. The artifact is a base rule plus
+ * one rule per mode the tenant changes, and a mode selector carries one
+ * attribute more than the base, so wherever a mode speaks it wins. A probe that
+ * applied `variables` alone would measure the base block in BOTH modes: on
+ * bithire and evnto that reads the light palette in the dark cell, and on
+ * rottay -- whose default mode is dark, so `ingress/foundation/document-patch`
+ * routes the authored light palette to `modes.light` -- it reads an empty map
+ * and reports a live decision inert.
+ */
 async function compileDocument({ compile, vertical, slug, decisions }) {
   const compilation = compile({
     document: { version: 2, plan: 'pro', decisions },
@@ -273,7 +317,21 @@ async function compileDocument({ compile, vertical, slug, decisions }) {
     verticalKey: vertical,
     rowVersion: 1,
   });
-  return compilation.artifact.variables;
+  const { variables, modeDeltas } = compilation.artifact;
+  return { variables, modeDeltas: modeDeltas ?? [] };
+}
+
+/**
+ * The channel map a scene must carry to reproduce ONE mode of that artifact:
+ * the base block, overlaid by that mode's own block.
+ *
+ * Applied inline in this order, the winner is the one the shipped stylesheet's
+ * specificity picks -- the mode block where it declares a channel, the base
+ * block everywhere else.
+ */
+export function effectiveVariables(artifact, theme) {
+  const delta = artifact.modeDeltas.find((block) => block.mode === theme);
+  return { ...artifact.variables, ...(delta?.variables ?? {}) };
 }
 
 /** The page HTML: the bundle, the scope attributes, and one node per family. */
@@ -305,6 +363,71 @@ export function sceneHtml({ css, vertical, theme, elements }) {
  * rather than implied.
  */
 export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected']);
+
+/**
+ * WHAT THIS PROBE CANNOT SEE ON THE STATES AXIS, measured rather than asserted.
+ *
+ * The states positive reads 0 % on every vertical and both modes, and a zero is
+ * the one reading that has two completely different causes: the decision moves
+ * nothing, or the instrument cannot see what it moved. This block is the second
+ * half, enumerated, so the zero is publishable without being read as either.
+ *
+ * It also settles what the run may claim about NEGATIVE CONTROL 2. That control
+ * is "two documents differing only in `states.emphasis` give 0 % on shape and
+ * typography" -- but a control is evidence only if the same decision MOVED
+ * something somewhere. While the states positive is zero, its 0 % on shape and
+ * typography is compatible with the decision reaching no family at all, so the
+ * run marks those cells non-evidential and says why. A run that claimed both
+ * controls green would be crediting a reading that cost nothing.
+ *
+ * Measured 2026-09-11 over the 275 Modern skin families and the 28 channels
+ * catalog rows `states.emphasis` and `states.focus-style` produce:
+ *
+ *  - 15 of the 28 have ZERO readers in any Modern skin, the four `*-shift`
+ *    channels and `--ds-state-disabled-mix` among them. Nothing at all paints
+ *    them, in any state.
+ *  - Of the 13 that are read, 9 paint a property OUTSIDE this probe's
+ *    vocabulary and are invisible to it by construction: `--ds-state-press-scale`
+ *    (18 readers) paints `transform`, `--ds-state-disabled-opacity` (4) paints
+ *    `opacity`, `--ds-focus-ring-offset` (57) paints `outline-offset`, and the
+ *    six live `--ds-material-*-background-*` channels paint `background`. The
+ *    six axes of kit rule 4 are non-chromatic and name none of these longhands.
+ *  - The remaining 4 -- `--ds-focus-ring` (24 readers), `--ds-focus-ring-width`
+ *    (74), `--ds-material-panel-focus-ring` (1), `--ds-material-control-focus-ring`
+ *    (1) -- do paint `box-shadow`, which IS read. Every one of those reads is
+ *    behind a focus condition: 33 of the 34 rules that carry one select on
+ *    `:focus-visible`, `[data-focused]` or `[data-state~='focused']`, and the
+ *    34th is a `@keyframes` stop. `focused` is not in `STATE_VARIANTS`, and a
+ *    stamped attribute cannot produce `:focus-visible` anyway -- that needs real
+ *    keyboard focus, one element at a time.
+ *  - The declaration side agrees: of the 157 families in the states population,
+ *    134 declare the axis through pseudo-classes ONLY, 19 through `[data-state=`
+ *    and 4 through a state channel alone. So the half of the rule this scene can
+ *    answer covers 19 families of 157 before a single value is compared.
+ *
+ * None of this is a reason to soften the axis. It is the reason the axis is
+ * published at 0 % WITH its limits instead of being quietly dropped, and it
+ * names exactly what would have to change for the number to mean something: a
+ * per-element hover/focus pass, and skins that read the state channels.
+ */
+export const STATES_AXIS_LIMITS = Object.freeze({
+  measuredOn: '2026-09-11',
+  channels: { total: 28, withoutReaders: 15, outsideProbeVocabulary: 9, paintingBoxShadow: 4 },
+  focusReads: { rules: 34, focusGuarded: 33, keyframeStop: 1 },
+  declarations: { population: 157, pseudoClassOnly: 134, byDataState: 19, byChannelOnly: 4 },
+  stampedStates: [...STATE_VARIANTS],
+  unreachable: [
+    'the four --ds-state-*-shift channels and --ds-state-disabled-mix have no reader in any Modern skin',
+    '--ds-state-press-scale paints transform and --ds-state-disabled-opacity paints opacity; neither longhand '
+    + 'belongs to any of the six non-chromatic axes',
+    'the four focus channels that do paint box-shadow apply only under :focus-visible / [data-focused] / '
+    + "[data-state~='focused']; this probe stamps hovered, pressed and selected, and never takes real focus",
+    ':hover is not simulated, so 134 of the 157 states families declare the axis in a way this scene never enters',
+  ],
+});
+
+/** The negative control the states-axis limits make vacuous while that axis reads zero. */
+export const STATES_DEPENDENT_CONTROL = 'states-emphasis-only';
 
 /** Every property read in one pass; each axis owns which of them it counts. */
 export function allProperties() {
@@ -389,6 +512,63 @@ export const UNSETTLED_FAMILIES = Object.freeze([
   'input',
   'layout-primitives',
   'mobile-header',
+]);
+
+/**
+ * The families whose Modern skin publishes NO selector this probe can
+ * materialise as one element, excluded from every denominator by NAME.
+ *
+ * WHY THIS IS PINNED and not merely reported. The published population is
+ * 221/183/216/197/157/202 families per axis; what a run measures is that set
+ * MINUS the families it could not mount and MINUS the unsettled ones, which is
+ * 206/175/199/182/148/191. That subtraction is legitimate -- a family with no
+ * mountable selector has nothing to read a computed style off -- but a
+ * subtraction nobody pinned is a denominator that shrinks silently: a skin
+ * refactor that turns a single-element rule into a descendant rule removes the
+ * family from the bottom of every fraction it was in, and every percentage
+ * above it goes UP for a reason that has nothing to do with tenant reach.
+ *
+ * So the set is declared here, checked for exact equality on a full run, and
+ * published beside the two denominators it separates. A family that STOPS
+ * mounting is a failure with an instruction to re-pin in the same commit, not a
+ * quieter fraction.
+ *
+ * Measured 2026-09-11: 27 of 275 skin families. They fall in three groups --
+ * keyframe-only and motion-only skins that declare no element rule at all
+ * (`primitive-motion`, `toast-animation-keyframes`, `stats-header-keyframes`,
+ * `data-terminal-card-keyframes`), surface and workspace skins whose every rule
+ * is a descendant selector (`record-workbench`, `wizard-surface`,
+ * `detail-form-surface`, `empty-state-surface`), and vertical screen skins of
+ * the same shape (`billing`, `audit`, `settings`, `team`).
+ */
+export const UNMOUNTABLE_FAMILIES = Object.freeze([
+  'adaptive-overlay',
+  'audit',
+  'billing',
+  'brand-studio',
+  'command-center',
+  'dashboard-activity-interactions',
+  'dashboard-metrics-interactions',
+  'data-table-interactions',
+  'data-terminal-card-keyframes',
+  'decision-inbox',
+  'detail-form-surface',
+  'empty-state-surface',
+  'file-browser',
+  'form-placeholders',
+  'import-export',
+  'input-residual',
+  'integration',
+  'navigation-static',
+  'primitive-motion',
+  'profile',
+  'record-workbench',
+  'settings',
+  'statistic-compounds',
+  'stats-header-keyframes',
+  'team',
+  'toast-animation-keyframes',
+  'wizard-surface',
 ]);
 
 /**
@@ -500,6 +680,35 @@ export function differsOnAxis(axis, before, after, family) {
   return null;
 }
 
+/**
+ * NEGATIVE CONTROL 2 IS ONLY EVIDENCE IF ITS OWN DECISION MOVED SOMETHING.
+ *
+ * `states-emphasis-only` reads 0 % on shape and typography, which is exactly
+ * what the rule demands -- but while the states POSITIVE also reads zero, that
+ * same 0 % is equally consistent with the decision reaching no family at all,
+ * and `STATES_AXIS_LIMITS` enumerates why it would. A run that counted it green
+ * would be crediting a reading that cost nothing.
+ *
+ * So the cells are marked in place, with their reason, and the verdict names
+ * the two controls separately. Mutating the cells rather than filtering them is
+ * deliberate: the percentage is still published, and a reader can see both the
+ * number and why it is not evidence.
+ */
+export function markVacuousControls(cells) {
+  const statesPositiveMoved = cells
+    .filter((cell) => cell.kind === 'positive' && cell.axis === 'states')
+    .reduce((total, cell) => total + cell.moved, 0);
+  if (statesPositiveMoved > 0) return cells;
+  for (const cell of cells) {
+    if (cell.scenario !== STATES_DEPENDENT_CONTROL) continue;
+    cell.evidential = false;
+    cell.nonEvidentialReason =
+      'the states positive moved 0 famil(ies) in this run, so a 0 % from the same decision shows only that '
+      + 'nothing this probe can read moved anywhere — see limits.states';
+  }
+  return cells;
+}
+
 export async function run({
   verticals = ['bithire', 'evnto', 'rottay'],
   themes = ['light', 'dark'],
@@ -543,13 +752,23 @@ export async function run({
           let after;
           let compiledA = 0;
           let compiledB = 0;
+          let baseA = 0;
+          let baseB = 0;
           try {
-            const variablesA = await compileDocument({
+            const artifactA = await compileDocument({
               compile, vertical, slug: `${scenario.id}-a`, decisions: scenario.a,
             });
-            const variablesB = await compileDocument({
+            const artifactB = await compileDocument({
               compile, vertical, slug: `${scenario.id}-b`, decisions: scenario.b,
             });
+            // The cell is ONE mode of the artifact, so it carries that mode's
+            // block over the base one -- the same winner the shipped selector
+            // order produces. Reading `variables` alone measured the base block
+            // twice and called a routed palette inert.
+            const variablesA = effectiveVariables(artifactA, theme);
+            const variablesB = effectiveVariables(artifactB, theme);
+            baseA = Object.keys(artifactA.variables).length;
+            baseB = Object.keys(artifactB.variables).length;
             compiledA = Object.keys(variablesA).length;
             compiledB = Object.keys(variablesB).length;
             before = await measureCell({ page, variables: variablesA, properties });
@@ -585,6 +804,10 @@ export async function run({
               axis,
               compiledA,
               compiledB,
+              // The base block alone, kept beside the effective count so a
+              // reader can see which half of the artifact carried the pair.
+              baseA,
+              baseB,
               appliedA: before.applied,
               appliedB: after.applied,
               // A pair that compiles to nothing cannot be evidence FOR anything,
@@ -606,43 +829,89 @@ export async function run({
     await close();
   }
 
+  markVacuousControls(cells);
+
+  const effective = (axis) => populations
+    .get(axis)
+    .filter((family) => mountable.includes(family) && !UNSETTLED_FAMILIES.includes(family));
+
   return {
     revision: catalogRevision(),
     browser: provenance,
     bundleMode: 'fresh',
     verticals,
     themes,
+    familiesFiltered: families !== null,
     families: {
       mountable: mountable.length,
       unmountable,
+      pinnedUnmountable: [...UNMOUNTABLE_FAMILIES],
       excludedUnsettled: [...UNSETTLED_FAMILIES],
       observedUnsettled: [...observedUnsettled].sort(),
       newlyUnsettled: [...newlyUnsettled].sort(),
     },
-    populations: Object.fromEntries(AXIS_IDS.map((axis) => [
-      axis,
-      populations
-        .get(axis)
-        .filter((family) => mountable.includes(family) && !UNSETTLED_FAMILIES.includes(family))
-        .length,
-    ])),
+    populations: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis).length])),
+    // THE DENOMINATOR, RECONCILED. `populations` above is the EFFECTIVE bottom
+    // of every fraction this run publishes; `declaredPopulations` is the pinned
+    // set `check/theme/population` owns. The two differ, and a reader who only
+    // saw the smaller one could not tell a legitimate exclusion from a silent
+    // shrinkage -- so both are published with the subtraction spelled out.
+    declaredPopulations: Object.fromEntries(
+      AXIS_IDS.map((axis) => [axis, populations.get(axis).length]),
+    ),
+    denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => {
+      const declared = populations.get(axis);
+      return [axis, {
+        declared: declared.length,
+        excludedUnmountable: declared.filter((family) => unmountable.includes(family)).length,
+        excludedUnsettled: declared.filter((family) => UNSETTLED_FAMILIES.includes(family)).length,
+        effective: effective(axis).length,
+      }];
+    })),
     refusals,
     cells,
+    limits: { states: STATES_AXIS_LIMITS },
     statesNote:
       'The states axis is measured under [data-state] only. The :hover half of the rule needs one real '
-      + 'pointer move per element and is NOT measured here; it is named rather than implied.',
+      + 'pointer move per element and is NOT measured here; it is named rather than implied. What else this '
+      + 'probe cannot see on that axis is enumerated with its measurements in limits.states.',
     unsettledNote:
       'A family whose computed values converge asymptotically under repeated style invalidation (a container '
       + 'query over its own box) is excluded from every denominator of the run it was unsettled in, and named '
       + 'here. Its drift is indistinguishable from a real difference at the sizes involved.',
+    unmountableNote:
+      'A family whose Modern skin publishes no single-element selector cannot be mounted and is excluded from '
+      + 'every denominator. The set is PINNED in UNMOUNTABLE_FAMILIES and checked for exact equality on a full '
+      + 'run, so a family that stops mounting is a failure rather than a smaller fraction.',
   };
 }
 
-export function evaluate(result, { threshold = null } = {}) {
+export function evaluate(result, { threshold = null, inertPairs = INERT_PAIRS } = {}) {
   const failures = [];
   if (result.cells.length === 0) failures.push('no cell measured — the probe ran nothing');
   if (result.families.mountable === 0) {
     failures.push('no family could be mounted — the selector reader is broken');
+  }
+  // THE EXCLUDED SET IS PART OF THE DENOMINATOR. Checked only on a full run: a
+  // `--families=` run measures a deliberate subset and its unmountable list is
+  // that subset's, not the corpus's.
+  if (result.familiesFiltered !== true) {
+    const pinned = [...(result.families.pinnedUnmountable ?? UNMOUNTABLE_FAMILIES)].sort();
+    const observed = [...result.families.unmountable].sort();
+    for (const family of observed) {
+      if (!pinned.includes(family)) {
+        failures.push(
+          `${family}: its Modern skin publishes no mountable selector and it is NOT in UNMOUNTABLE_FAMILIES, so `
+          + 'it silently left every denominator it was in. Restore the single-element rule, or pin it there with '
+          + 'the measurement in this commit',
+        );
+      }
+    }
+    for (const family of pinned) {
+      if (!observed.includes(family)) {
+        failures.push(`${family}: pinned as unmountable and now mounts; remove it from UNMOUNTABLE_FAMILIES in this commit`);
+      }
+    }
   }
   for (const family of result.families.newlyUnsettled ?? []) {
     failures.push(
@@ -676,21 +945,25 @@ export function evaluate(result, { threshold = null } = {}) {
       );
       continue;
     }
-    if ((cell.compiledA === 0 || cell.compiledB === 0) && !isDeclaredInert(cell.vertical, cell.scenario)) {
+    if ((cell.compiledA === 0 || cell.compiledB === 0)
+      && !isDeclaredInert(inertPairs, cell.vertical, cell.theme, cell.scenario)) {
       failures.push(
-        `${cell.vertical} ${cell.scenario}: the pair compiles to an EMPTY artifact delta `
+        `${cell.vertical}/${cell.theme} ${cell.scenario}: the pair compiles to an EMPTY artifact delta `
         + `(${cell.compiledA}/${cell.compiledB} variables) — the decision moves no channel on this vertical. `
         + 'Fix the derivation, or have the owner record it in INERT_PAIRS with the measurement',
       );
     }
   }
-  for (const entry of INERT_PAIRS) {
+  for (const entry of inertPairs) {
     const cells = result.cells.filter(
-      (cell) => cell.vertical === entry.vertical && cell.scenario === entry.scenario,
+      (cell) => cell.vertical === entry.vertical
+        && cell.scenario === entry.scenario
+        && (entry.theme === undefined || entry.theme === cell.theme),
     );
     if (cells.length > 0 && cells.every((cell) => cell.compiledA > 0 && cell.compiledB > 0)) {
       failures.push(
-        `${entry.vertical} ${entry.scenario}: declared inert and is no longer; remove it from INERT_PAIRS`,
+        `${entry.vertical}${entry.theme ? `/${entry.theme}` : ''} ${entry.scenario}: declared inert and is no `
+        + 'longer; remove it from INERT_PAIRS',
       );
     }
   }
@@ -756,7 +1029,21 @@ if (isMain) {
     + `chromium ${result.browser.browserVersion}`,
   );
   console.log(
-    `  denominators: ${Object.entries(result.populations).map(([axis, n]) => `${axis} ${n}`).join(', ')}`,
+    `  denominators (effective): ${Object.entries(result.populations).map(([axis, n]) => `${axis} ${n}`).join(', ')}`,
+  );
+  console.log(
+    `  denominators (declared by check/theme/population): `
+    + `${Object.entries(result.declaredPopulations).map(([axis, n]) => `${axis} ${n}`).join(', ')}`,
+  );
+  for (const [axis, row] of Object.entries(result.denominatorReconciliation)) {
+    console.log(
+      `    ${axis.padEnd(11)} ${row.declared} declared − ${row.excludedUnmountable} unmountable `
+      + `− ${row.excludedUnsettled} unsettled = ${row.effective}`,
+    );
+  }
+  console.log(
+    `  excluded as unmountable (pinned, named): ${result.families.unmountable.length} famil(ies)`
+    + ` — exactly the pin: ${result.familiesFiltered ? 'not checked (--families run)' : 'yes'}`,
   );
   console.log(
     `  excluded as unsettled (declared, named): ${result.families.excludedUnsettled.join(', ')}`
@@ -768,10 +1055,12 @@ if (isMain) {
         `  ${kind === 'negative' ? 'NEG ' : '    '}${cell.vertical}/${cell.theme} `
         + `${cell.scenario.padEnd(22)} ${cell.axis.padEnd(11)} `
         + `${cell.moved}/${cell.denominator} = ${cell.percent.toFixed(1)}%`
-        + (cell.evidential ? '' : '  [NON-EVIDENTIAL: the pair compiles to an empty delta]'),
+        + (cell.evidential ? '' : `  [NON-EVIDENTIAL: ${cell.nonEvidentialReason
+          ?? 'the pair compiles to an empty delta'}]`),
       );
     }
   }
+  for (const line of result.limits.states.unreachable) console.log(`  states axis limit: ${line}`);
   const failures = evaluate(result, {
     threshold: thresholdArgument === undefined ? null : Number(thresholdArgument),
   });
@@ -779,8 +1068,21 @@ if (isMain) {
     for (const failure of failures) console.error(`axis-difference FAIL — ${failure}`);
     process.exit(1);
   }
+  // The verdict names each control SEPARATELY. "Both negative controls green"
+  // was the line this run is not entitled to while one of them is vacuous.
+  const controls = [...new Set(result.cells.filter((cell) => cell.kind === 'negative').map((cell) => cell.scenario))];
+  for (const control of controls) {
+    const own = result.cells.filter((cell) => cell.scenario === control);
+    const evidential = own.filter((cell) => cell.evidential);
+    console.log(
+      evidential.length === 0
+        ? `  NEGATIVE CONTROL ${control}: NON-EVIDENTIAL in this run — ${own[0].nonEvidentialReason
+          ?? 'its pair compiles to an empty delta'}`
+        : `  NEGATIVE CONTROL ${control}: 0 % on ${evidential.length} evidential cell(s) of ${own.length}`,
+    );
+  }
   console.log(
-    'axis-difference OK — both negative controls at 0 %'
+    'axis-difference OK — every evidential negative-control cell at 0 %'
     + (thresholdArgument === undefined
       ? '; no threshold applied (the fleet bar is WO-EVI-02 acceptance, not this run)'
       : `, every axis at or above ${thresholdArgument} %`),

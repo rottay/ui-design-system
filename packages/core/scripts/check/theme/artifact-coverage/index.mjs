@@ -11,9 +11,13 @@
  * family will never see a tenant move, however many producers exist upstream.
  *
  * So the unit here is the family, and the measurement is a ratio per family:
- * of the `--ds-*` channels this family's Modern skin reads, how many does at
- * least one compiled first-party artifact declare. A family at ZERO is a family
- * the whole tenant transport cannot touch.
+ * of the `--ds-*` channels this family's Modern skin reads, how many does a
+ * compiled first-party artifact declare. That ratio is published TWICE -- once
+ * against the union of the three artifacts and once against each artifact
+ * separately -- because they answer different questions and only the first one
+ * used to be pinned. A family at ZERO on the union is a family the whole tenant
+ * transport cannot touch; a family at zero on ONE artifact is a family that
+ * tenant cannot touch.
  *
  * WHAT IT REPLACES. `variant-parity` and `mirror-parity` were retired by F-54
  * for measuring, respectively, docblock placeholders and the agreement of a
@@ -72,9 +76,31 @@ export function artifactChannels(root = DEFAULT_ROOT) {
   return byVertical;
 }
 
+/**
+ * UNION AND PER ARTIFACT ARE DIFFERENT QUESTIONS, and this gate answers both
+ * because two different readers ask it.
+ *
+ * `covered` is the UNION reach: of the channels a family reads, how many does
+ * AT LEAST ONE shipped artifact declare. That is the right bottom line for the
+ * unit `roadmap/evidence-graph.md` names -- "`artifact-coverage` per family" --
+ * because a family that no artifact can touch is unreachable whichever tenant
+ * you pick. On its own, though, it is a ratchet with a hole: 402 of the 8,302
+ * covered reads rest on a channel at least one vertical does not declare, so
+ * removing a channel from ONE artifact leaves every published number where it
+ * was. STATUS indicator 4 ("Material roots emitted per artifact", target
+ * 71/71/71) is asking the other question and would not have noticed.
+ *
+ * So `perVertical` is aggregated, pinned and evaluated alongside the union, and
+ * `coveredEveryVertical` publishes the intersection -- the reads every artifact
+ * declares, which is the only figure a per-artifact claim may quote.
+ */
 export function measure(root = DEFAULT_ROOT) {
   const byVertical = artifactChannels(root);
+  const verticals = [...byVertical.keys()];
   const union = new Set([...byVertical.values()].flatMap((set) => [...set]));
+  const everyVertical = new Set(
+    [...union].filter((channel) => verticals.every((vertical) => byVertical.get(vertical).has(channel))),
+  );
   const families = [];
   for (const [family, files] of skinFamilies(root)) {
     const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
@@ -87,6 +113,7 @@ export function measure(root = DEFAULT_ROOT) {
       reads: reads.length,
       covered: covered.length,
       uncovered: reads.length - covered.length,
+      coveredEveryVertical: reads.filter((channel) => everyVertical.has(channel)).length,
       perVertical: Object.fromEntries(
         [...byVertical].map(([vertical, set]) => [vertical, reads.filter((c) => set.has(c)).length]),
       ),
@@ -95,15 +122,26 @@ export function measure(root = DEFAULT_ROOT) {
   families.sort((a, b) => a.family.localeCompare(b.family));
   const reads = families.reduce((total, row) => total + row.reads, 0);
   const covered = families.reduce((total, row) => total + row.covered, 0);
+  const sum = (vertical) => families.reduce((total, row) => total + row.perVertical[vertical], 0);
   return {
     revision: catalogRevision().digest,
     verticals: Object.fromEntries([...byVertical].map(([vertical, set]) => [vertical, set.size])),
     unionChannels: union.size,
+    everyVerticalChannels: everyVertical.size,
     families: families.length,
     reads,
     covered,
     uncovered: reads - covered,
+    // The per-artifact half. `covered` above is the union, so it cannot move
+    // when one artifact stops declaring a channel the other two still do.
+    coveredPerVertical: Object.fromEntries(verticals.map((vertical) => [vertical, sum(vertical)])),
+    uncoveredPerVertical: Object.fromEntries(verticals.map((vertical) => [vertical, reads - sum(vertical)])),
+    coveredEveryVertical: families.reduce((total, row) => total + row.coveredEveryVertical, 0),
     unreachableFamilies: families.filter((row) => row.reads > 0 && row.covered === 0).map((row) => row.family),
+    unreachablePerVertical: Object.fromEntries(verticals.map((vertical) => [
+      vertical,
+      families.filter((row) => row.reads > 0 && row.perVertical[vertical] === 0).map((row) => row.family),
+    ])),
     rows: families,
   };
 }
@@ -147,9 +185,33 @@ export function evaluate(result, baseline) {
     }
   };
 
-  compare('uncovered reads', result.uncovered, baseline.uncovered, 'down');
-  compare('covered reads', result.covered, baseline.covered, 'up');
+  compare('uncovered reads (union)', result.uncovered, baseline.uncovered, 'down');
+  compare('covered reads (union)', result.covered, baseline.covered, 'up');
+  compare('covered reads (every artifact)', result.coveredEveryVertical, baseline.coveredEveryVertical, 'up');
   compare('families', result.families, baseline.families, 'up');
+
+  // PER ARTIFACT. Without these three, a channel can leave one artifact and no
+  // published counter moves, because the other two still carry it into the
+  // union. This is the half STATUS indicator 4 is asking about.
+  for (const [vertical, count] of Object.entries(result.coveredPerVertical)) {
+    compare(`covered reads (${vertical})`, count, baseline.coveredPerVertical?.[vertical], 'up');
+  }
+  for (const [vertical, families] of Object.entries(result.unreachablePerVertical)) {
+    const pinned = [...(baseline.unreachablePerVertical?.[vertical] ?? [])].sort();
+    for (const family of [...families].sort()) {
+      if (!pinned.includes(family)) {
+        failures.push(
+          `${family}: reads --ds-* channels and the ${vertical} artifact declares NONE of them — a family that `
+          + 'tenant cannot reach',
+        );
+      }
+    }
+    for (const family of pinned) {
+      if (!families.includes(family)) {
+        failures.push(`${family}: pinned as unreachable on ${vertical} and is no longer; remove it from the baseline`);
+      }
+    }
+  }
 
   const pinnedUnreachable = [...(baseline.unreachableFamilies ?? [])].sort();
   const actualUnreachable = [...result.unreachableFamilies].sort();
@@ -180,10 +242,17 @@ if (isMain) {
   const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
   const failures = evaluate(result, baseline);
   const percent = result.reads === 0 ? 0 : (result.covered / result.reads) * 100;
+  const everyPercent = result.reads === 0 ? 0 : (result.coveredEveryVertical / result.reads) * 100;
   console.log(
     `artifact-coverage — ${result.families} families, ${result.covered}/${result.reads} channel reads `
-    + `(${percent.toFixed(1)}%) declared by a compiled artifact; union ${result.unionChannels} channels across `
-    + `${Object.keys(result.verticals).length} verticals; catalog ${result.revision}`,
+    + `(${percent.toFixed(1)}%) declared by AT LEAST ONE compiled artifact, ${result.coveredEveryVertical} `
+    + `(${everyPercent.toFixed(1)}%) by EVERY one; union ${result.unionChannels} channels, common `
+    + `${result.everyVerticalChannels}, across ${Object.keys(result.verticals).length} verticals; `
+    + `catalog ${result.revision}`,
+  );
+  console.log(
+    `  per artifact: ${Object.entries(result.coveredPerVertical)
+      .map(([vertical, count]) => `${vertical} ${count}/${result.reads}`).join(', ')}`,
   );
   if (failures.length > 0) {
     for (const failure of failures) console.error(`artifact-coverage FAIL — ${failure}`);

@@ -104,13 +104,16 @@ test('every excluded gate names its reason and its owner', () => {
   //
   // `axis-difference` joined on 2026-09-11 (WO-EVI-02) and is a THIRD kind of
   // exclusion, adjudicated here so it is not read as either of the first two:
-  // the gate is GREEN on this tree -- both negative controls of kit rule 4 at
-  // 0 % across three verticals and two modes -- and its drill is blocking. What
-  // it lacks is an input CI does not provide: the `quality-gates` job installs
-  // no browser, and only the a11y and visual jobs run `playwright install
-  // chromium`, so a blocking entry would be PREREQ-MISSING on every run, which
-  // is precisely how F-76 says a gate gets downgraded. It returns to blocking
-  // when that job installs a browser, not when anything about the gate changes.
+  // the gate is GREEN on this tree -- the palette-only control of kit rule 4
+  // at 0 % across three verticals and two modes, with the emphasis-only
+  // control NON-EVIDENTIAL while the states positive reads 0 (its limits are
+  // published in the run artifact) -- and its drill is blocking. What
+  // it lacks is an input CI does not provide: the `core` job ("Core Library"),
+  // which runs this inventory, installs no browser, and only the `a11y` and
+  // `visual` jobs run `playwright install chromium`, so a blocking entry would
+  // be PREREQ-MISSING on every run, which is precisely how F-76 says a gate gets
+  // downgraded. It returns to blocking when that job installs a browser, not
+  // when anything about the gate changes.
   assert.deepEqual(
     excluded.map((g) => g.id).sort(),
     ['axis-difference', 'channel-liveness', 'theme-keypath-coverage'],

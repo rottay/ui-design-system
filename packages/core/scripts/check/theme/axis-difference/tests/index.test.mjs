@@ -5,11 +5,18 @@
  *
  * The OFFLINE half plants a defect in each verdict the gate can reach -- a
  * negative control that moved, a pair the instrument lost, a new inert pair, a
- * newly unsettled family, an axis under a threshold -- and asserts each is
- * named. It also asserts the attribution law directly: a colour change inside a
- * `box-shadow` is a difference on COLOUR, and counting it would have put the
- * rule's own first negative control at 1.6 % on depth for a reason that has
- * nothing to do with depth.
+ * newly unsettled family, a family that stopped mounting, an axis under a
+ * threshold -- and asserts each is named. It also asserts the attribution law
+ * directly: a colour change inside a `box-shadow` is a difference on COLOUR,
+ * and counting it would have put the rule's own first negative control at 1.6 %
+ * on depth for a reason that has nothing to do with depth.
+ *
+ * Two of those verdicts exist because the probe got them WRONG. It applied
+ * `artifact.variables` and nothing else, so a mode-routed palette read as an
+ * empty delta and the run declared a live decision inert; and it marked both
+ * negative controls green while the states positive read 0 %, which is a
+ * control that costs nothing. Both now have cases that fail if the behaviour
+ * comes back.
  *
  * The BROWSER half is the one no unit test can replace. It drives a NULL pair
  * -- two identical documents -- through the same Chromium, the same bundle and
@@ -29,12 +36,17 @@ import {
   COMPILER_MODULE,
   INERT_PAIRS,
   SCENARIOS,
+  STATES_AXIS_LIMITS,
+  STATES_DEPENDENT_CONTROL,
+  UNMOUNTABLE_FAMILIES,
   UNSETTLED_FAMILIES,
   differsOnAxis,
+  effectiveVariables,
   evaluate,
   familyElement,
   familyElements,
   isSingleElement,
+  markVacuousControls,
   run,
   selectorParts,
   stripColour,
@@ -87,9 +99,30 @@ const cell = (over = {}) => ({
 const result = (cells, over = {}) => ({
   cells,
   refusals: [],
-  families: { mountable: 10, unmountable: [], excludedUnsettled: [...UNSETTLED_FAMILIES], observedUnsettled: [], newlyUnsettled: [] },
+  familiesFiltered: false,
+  families: {
+    mountable: 10,
+    unmountable: [...UNMOUNTABLE_FAMILIES],
+    pinnedUnmountable: [...UNMOUNTABLE_FAMILIES],
+    excludedUnsettled: [...UNSETTLED_FAMILIES],
+    observedUnsettled: [],
+    newlyUnsettled: [],
+  },
   ...over,
 });
+
+/**
+ * A pair the OWNER would have declared inert, injected rather than read off the
+ * shipped list.
+ *
+ * `INERT_PAIRS` is empty on this tree and the gate is the reason it may stay
+ * that way, so a drill that plants its mutants by reading `INERT_PAIRS[0]`
+ * would evaporate the day the list is correct — which is exactly the day the
+ * verdict most needs to be reachable.
+ */
+const DECLARED_INERT = Object.freeze([
+  { vertical: 'evnto', scenario: 'palette-only', note: 'a planted declaration, so the verdict stays reachable' },
+]);
 
 const reading = (values) => ({ base: { probe: values }, states: {} });
 
@@ -152,6 +185,79 @@ describe('axis-difference — attribution, which is what makes a percentage mean
   });
 });
 
+describe('axis-difference — the artifact is applied AS IT SHIPS', () => {
+  it('a mode block overlays the base block, and only for the mode being measured', () => {
+    const artifact = {
+      variables: { '--ds-a': '1', '--ds-b': '2' },
+      modeDeltas: [
+        { mode: 'light', variables: { '--ds-b': 'light', '--ds-c': '3' } },
+        { mode: 'dark', variables: { '--ds-b': 'dark' } },
+      ],
+    };
+    assert.deepEqual(effectiveVariables(artifact, 'light'), { '--ds-a': '1', '--ds-b': 'light', '--ds-c': '3' });
+    assert.deepEqual(effectiveVariables(artifact, 'dark'), { '--ds-a': '1', '--ds-b': 'dark' });
+  });
+
+  it('THE DEFECT: a mode-routed palette is not an empty artifact', () => {
+    // rottay's default mode is dark, so an authored LIGHT palette ships in
+    // modeDeltas[light] and the base block is empty by construction. Reading
+    // `variables` alone read that as a decision that moves no channel.
+    const routed = { variables: {}, modeDeltas: [{ mode: 'light', variables: { '--ds-color-primary': '#1F4FA8' } }] };
+    assert.equal(Object.keys(routed.variables).length, 0);
+    assert.equal(Object.keys(effectiveVariables(routed, 'light')).length, 1);
+    assert.equal(Object.keys(effectiveVariables(routed, 'dark')).length, 0);
+  });
+
+  it('an artifact with no mode block is its base block, unchanged', () => {
+    const flat = { variables: { '--ds-a': '1' }, modeDeltas: [] };
+    assert.deepEqual(effectiveVariables(flat, 'light'), { '--ds-a': '1' });
+  });
+});
+
+describe('axis-difference — a negative control is only evidence if its decision moved', () => {
+  it('the states positive at zero makes the states.emphasis control NON-EVIDENTIAL, with its reason', () => {
+    const cells = markVacuousControls([
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', moved: 0, percent: 0 }),
+      cell({ kind: 'negative', scenario: STATES_DEPENDENT_CONTROL, axis: 'shape', moved: 0, percent: 0 }),
+      cell({ kind: 'negative', scenario: 'palette-only', axis: 'shape', moved: 0, percent: 0 }),
+    ]);
+    const nc2 = cells.find((entry) => entry.scenario === STATES_DEPENDENT_CONTROL);
+    assert.equal(nc2.evidential, false);
+    assert.match(nc2.nonEvidentialReason, /states positive moved 0/);
+    assert.equal(
+      cells.find((entry) => entry.scenario === 'palette-only').evidential,
+      true,
+      'the palette control is independent of the states axis and keeps its standing',
+    );
+  });
+
+  it('the same control REGAINS its standing the moment the states positive moves', () => {
+    const cells = markVacuousControls([
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', moved: 7, percent: 4.7 }),
+      cell({ kind: 'negative', scenario: STATES_DEPENDENT_CONTROL, axis: 'shape', moved: 0, percent: 0 }),
+    ]);
+    assert.equal(cells.find((entry) => entry.scenario === STATES_DEPENDENT_CONTROL).evidential, true);
+  });
+
+  it('the limits that make it vacuous are measurements, not adjectives', () => {
+    const limits = STATES_AXIS_LIMITS;
+    assert.equal(limits.channels.total, 28, 'the two states rows produce 28 channels');
+    assert.ok(limits.channels.withoutReaders > 0 && limits.channels.withoutReaders < limits.channels.total);
+    assert.equal(
+      limits.declarations.pseudoClassOnly + limits.declarations.byDataState + limits.declarations.byChannelOnly,
+      limits.declarations.population,
+      'the three declaration kinds must partition the states population',
+    );
+    assert.equal(
+      limits.focusReads.focusGuarded + limits.focusReads.keyframeStop,
+      limits.focusReads.rules,
+      'every box-shadow read of a focus channel is accounted for',
+    );
+    assert.ok(!limits.stampedStates.includes('focused'), 'the limit is that focused is never stamped');
+    assert.ok(limits.unreachable.length >= 4, 'each limit is written out, not summarised to a flag');
+  });
+});
+
 describe('axis-difference — the fixture is read off the skin, never invented', () => {
   it('prefers the data-part root and materialises its classes and attributes', () => {
     const element = familyElement(
@@ -202,31 +308,102 @@ describe('axis-difference drills — every verdict is reachable', () => {
     assert.ok(inert.some((line) => line.includes('compiles to an EMPTY artifact delta')), inert.join(' | '));
   });
 
-  it('the declared inert pair is NOT accused, and its cells carry no credit', () => {
-    const declared = INERT_PAIRS[0];
+  it('every shipped inert entry names a mode, a scenario and its measurement', () => {
+    for (const entry of INERT_PAIRS) {
+      assert.equal(typeof entry.vertical, 'string');
+      assert.equal(typeof entry.scenario, 'string');
+      assert.ok(['light', 'dark'].includes(entry.theme), `${entry.vertical}: a mode-less entry excuses every cell`);
+      assert.ok(
+        typeof entry.note === 'string' && /\d/u.test(entry.note),
+        `${entry.vertical}/${entry.theme}: an entry without a measurement is an excuse`,
+      );
+    }
+  });
+
+  it('a mode-scoped entry excuses ONLY that mode', () => {
+    const scoped = [{ vertical: 'rottay', theme: 'dark', scenario: 'palette-only', note: 'measured 0' }];
+    const empty = { scenario: 'palette-only', kind: 'negative', axis: 'depth', compiledA: 0, compiledB: 0, evidential: false, moved: 0, percent: 0 };
+    assert.deepEqual(
+      evaluate(result([cell({ vertical: 'rottay', theme: 'dark', ...empty })]), { inertPairs: scoped })
+        .filter((line) => line.includes('EMPTY artifact delta')),
+      [],
+      'the declared mode must be excused',
+    );
+    assert.ok(
+      evaluate(result([cell({ vertical: 'rottay', theme: 'light', ...empty })]), { inertPairs: scoped })
+        .some((line) => line.startsWith('rottay/light') && line.includes('EMPTY artifact delta')),
+      'the OTHER mode must still be accused — that is the whole point of scoping the entry',
+    );
+  });
+
+  it('a declared inert pair is NOT accused, and its cells carry no credit', () => {
+    const declared = DECLARED_INERT[0];
     const failures = evaluate(result([
       cell({ vertical: declared.vertical, scenario: declared.scenario, kind: 'negative', axis: 'depth',
         compiledA: 0, compiledB: 0, evidential: false, moved: 0, percent: 0 }),
       cell({ kind: 'negative', scenario: 'states-emphasis-only', axis: 'shape', moved: 0, percent: 0 }),
-    ]));
+    ]), { inertPairs: DECLARED_INERT });
     assert.deepEqual(failures, [], failures.join(' | '));
   });
 
   it('MUTANT: a run whose every negative cell is non-evidential carries no control at all', () => {
-    const declared = INERT_PAIRS[0];
+    const declared = DECLARED_INERT[0];
     const failures = evaluate(result([
       cell({ vertical: declared.vertical, scenario: declared.scenario, kind: 'negative', axis: 'depth',
         compiledA: 0, compiledB: 0, evidential: false, moved: 0, percent: 0 }),
-    ]));
+    ]), { inertPairs: DECLARED_INERT });
     assert.ok(failures.some((line) => line.includes('carries no negative control at all')), failures.join(' | '));
   });
 
   it('MUTANT: an inert pair that started moving must be unpinned', () => {
-    const declared = INERT_PAIRS[0];
+    const declared = DECLARED_INERT[0];
     const failures = evaluate(result([
       cell({ vertical: declared.vertical, scenario: declared.scenario, kind: 'negative', axis: 'depth', moved: 0, percent: 0 }),
-    ]));
+    ]), { inertPairs: DECLARED_INERT });
     assert.ok(failures.some((line) => line.includes('declared inert and is no longer')), failures.join(' | '));
+  });
+
+  it('MUTANT: a family that stops mounting cannot leave the denominator quietly', () => {
+    const failures = evaluate(result([cell()], {
+      families: {
+        mountable: 10,
+        unmountable: [...UNMOUNTABLE_FAMILIES, 'button'],
+        pinnedUnmountable: [...UNMOUNTABLE_FAMILIES],
+        excludedUnsettled: [...UNSETTLED_FAMILIES],
+        observedUnsettled: [],
+        newlyUnsettled: [],
+      },
+    }));
+    assert.ok(failures.some((line) => line.startsWith('button:') && line.includes('UNMOUNTABLE_FAMILIES')), failures.join(' | '));
+  });
+
+  it('MUTANT: a pinned family that starts mounting again must be unpinned', () => {
+    const failures = evaluate(result([cell()], {
+      families: {
+        mountable: 10,
+        unmountable: UNMOUNTABLE_FAMILIES.filter((family) => family !== 'billing'),
+        pinnedUnmountable: [...UNMOUNTABLE_FAMILIES],
+        excludedUnsettled: [...UNSETTLED_FAMILIES],
+        observedUnsettled: [],
+        newlyUnsettled: [],
+      },
+    }));
+    assert.ok(failures.some((line) => line.startsWith('billing:') && line.includes('now mounts')), failures.join(' | '));
+  });
+
+  it('a --families run does not check the corpus-wide unmountable pin', () => {
+    const failures = evaluate(result([cell()], {
+      familiesFiltered: true,
+      families: {
+        mountable: 3,
+        unmountable: ['button'],
+        pinnedUnmountable: [...UNMOUNTABLE_FAMILIES],
+        excludedUnsettled: [...UNSETTLED_FAMILIES],
+        observedUnsettled: [],
+        newlyUnsettled: [],
+      },
+    }));
+    assert.deepEqual(failures, [], failures.join(' | '));
   });
 
   it('MUTANT: a newly unsettled family is named rather than quietly excluded', () => {

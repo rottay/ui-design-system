@@ -349,11 +349,14 @@ export const CI_GATES = Object.freeze([
     drillId: 'axis-difference-drill',
     excluded: {
       reason:
-        'NOT a softened law and not a widened baseline: the gate is green on this tree today (both negative '
-        + 'controls at 0 % on every evidential cell, 3 verticals x 2 modes, run 2026-09-11) and its drill stays '
-        + 'BLOCKING. What is missing is CI wiring this lot may not do: the `quality-gates` job installs no '
-        + 'browser, and only the a11y and visual jobs run `playwright install chromium`, so a blocking entry '
-        + 'here would be PREREQ-MISSING on every CI run -- which is exactly how a gate gets downgraded (F-76). '
+        'NOT a softened law and not a widened baseline: the gate is green on this tree today (palette-only '
+        + 'control at 0 % on every evidential cell, 3 verticals x 2 modes, run 2026-09-11; the emphasis-only '
+        + 'control is NON-EVIDENTIAL while the states positive reads 0, with its limits published in the run '
+        + 'artifact) and its drill stays '
+        + 'BLOCKING. What is missing is CI wiring this lot may not do: the `core` job ("Core Library"), whose two '
+        + '"Quality gates (manifest-driven, ...)" steps run this inventory, installs no browser, and only the '
+        + '`a11y` and `visual` jobs run `playwright install chromium`, so a blocking entry here would be '
+        + 'PREREQ-MISSING on every CI run -- which is exactly how a gate gets downgraded (F-76). '
         + 'Run it by hand with `node scripts/check/theme/axis-difference/index.mjs` after a build.',
       owner: 'WO-EVI-02 fleet acceptance (browser install in the gates job of .github/workflows/ci.yml)',
       trackedSince: '2026-09-11',
@@ -395,6 +398,11 @@ export const CI_GATES = Object.freeze([
   // carried a tier, the document carried a plan, and nothing compared them.
   // Driven off the catalog in both directions, so a new pro control fails
   // until its own rejection is proven.
+  //
+  // SCOPE: `bithire` only (`const VERTICAL = "bithire"` in the suite). The
+  // catalog's tier is not per vertical, so one vertical exercises the rule --
+  // but a refusal that only bithire's envelope produces would not be caught
+  // here, and the entry says so rather than reading as a fleet claim.
   { id: 'tier-rejection-drill', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/tier-rejection/drill/index.test.ts'], blocking: true, phase: 'pre-build', drillFor: ['tier-rejection'], },
   { id: 'tier-rejection', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/tier-rejection/index.test.ts'], blocking: true, phase: 'pre-build', drillId: 'tier-rejection-drill', },
   // F-72: the propagation suite probed doors that are not the control's --
@@ -416,6 +424,11 @@ export const CI_GATES = Object.freeze([
   // what this pair adds is the VALUE relation, plus the preview/publish half
   // J.5 asks for and the non-vacuity law that keeps a parity of two unchanged
   // maps from passing.
+  //
+  // SCOPE: `bithire` only (`const VERTICAL = "bithire"` in the suite). Parity is
+  // a relation between four transports of the SAME document, which one vertical
+  // demonstrates; a divergence that appears only under another vertical's
+  // envelope or default mode is outside what this entry measures.
   { id: 'transport-parity-drill', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/transport-parity/drill/index.test.ts'], blocking: true, phase: 'pre-build', drillFor: ['theme-transport-parity'], },
   { id: 'theme-transport-parity', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/transport-parity/index.test.ts'], blocking: true, phase: 'pre-build', drillId: 'transport-parity-drill', },
   { id: 'theme-population-drill', run: ['node', '--test', 'scripts/check/theme/population/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-population'], },

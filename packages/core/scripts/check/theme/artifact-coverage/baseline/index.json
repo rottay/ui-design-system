@@ -1,6 +1,7 @@
 {
-  "purpose": "Per-family coverage of the compiled first-party artifacts: of the --ds-* channels a family Modern skin reads, how many does at least one shipped artifact declare. Successor to the variant-parity / mirror-parity pair F-54 retired.",
-  "direction": "Exact pins. uncovered may only fall, covered and families may only rise, and either way a move is red with the instruction to re-pin in the same commit. unreachableFamilies is a named list, not a count.",
+  "purpose": "Per-family coverage of the compiled first-party artifacts, measured twice: against the UNION of the three (is any tenant able to reach this family) and against each artifact separately (is THIS tenant able to). Successor to the variant-parity / mirror-parity pair F-54 retired.",
+  "direction": "Exact pins. uncovered may only fall, covered and families may only rise, and either way a move is red with the instruction to re-pin in the same commit. The unreachable lists are named sets, not counts. The per-artifact counters exist because the union cannot see a channel leaving ONE artifact while the other two still declare it.",
+  "perArtifactNote": "coveredPerVertical is the per-artifact half of the same measurement; covered above is the union and coveredEveryVertical the intersection. Measured 2026-09-11: 402 of the union-covered reads rest on a channel at least one vertical does not declare.",
   "pinnedOn": "2026-09-11",
   "catalogRevision": "2a25f7c6068407fb",
   "verticals": {
@@ -12,10 +13,30 @@
   "reads": 10793,
   "covered": 8302,
   "uncovered": 2491,
+  "coveredEveryVertical": 7900,
+  "coveredPerVertical": {
+    "bithire": 8251,
+    "evnto": 7932,
+    "rottay": 8013
+  },
   "unreachableFamilies": [
     "carousel-compounds",
     "watermark"
   ],
+  "unreachablePerVertical": {
+    "bithire": [
+      "carousel-compounds",
+      "watermark"
+    ],
+    "evnto": [
+      "carousel-compounds",
+      "watermark"
+    ],
+    "rottay": [
+      "carousel-compounds",
+      "watermark"
+    ]
+  },
   "unreachableNotes": {
     "carousel-compounds": "measured 2026-09-11: every --ds-* channel this skin reads is absent from all three compiled artifacts, so no tenant document can move it",
     "watermark": "measured 2026-09-11: every --ds-* channel this skin reads is absent from all three compiled artifacts, so no tenant document can move it"

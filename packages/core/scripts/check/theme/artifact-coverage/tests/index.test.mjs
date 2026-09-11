@@ -57,7 +57,10 @@ function pinnedFor(dir) {
     reads: result.reads,
     covered: result.covered,
     uncovered: result.uncovered,
+    coveredEveryVertical: result.coveredEveryVertical,
+    coveredPerVertical: result.coveredPerVertical,
     unreachableFamilies: result.unreachableFamilies,
+    unreachablePerVertical: result.unreachablePerVertical,
   };
 }
 
@@ -99,6 +102,57 @@ describe('artifact coverage drills — a worse tree is refused, and so is a lyin
     }
     const failures = evaluate(measure(dir), pinned);
     assert.ok(failures.some((line) => line.includes('coverage got WORSE')), failures.join(' | '));
+  });
+
+  it('MUTANT: a channel leaving ONE artifact is red — the hole the union alone had', () => {
+    // This is the case the union-only ratchet could not see: two artifacts still
+    // declare the channel, so `covered` does not move by a single read, and
+    // before the per-artifact counters existed the gate stayed green while one
+    // tenant lost its reach.
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    assert.deepEqual(evaluate(measure(dir), pinned), [], 'the sandbox must be green first');
+
+    const [victimVertical] = Object.keys(pinned.verticals);
+    const file = join(dir, ARTIFACT_ROOT, victimVertical, 'index.css');
+    const source = readFileSync(file, 'utf8');
+    const mutated = source.replaceAll('--ds-color-primary:', '--ds-drill-removed:');
+    assert.notEqual(mutated, source, 'the mutation must actually land');
+    writeFileSync(file, mutated);
+
+    const mutant = measure(dir);
+    assert.equal(mutant.covered, pinned.covered, 'the UNION is blind to this, which is why the halves differ');
+    const failures = evaluate(mutant, pinned);
+    assert.ok(
+      failures.some((line) => line.startsWith(`covered reads (${victimVertical}):`) && line.includes('WORSE')),
+      failures.join(' | '),
+    );
+    assert.ok(
+      failures.some((line) => line.startsWith('covered reads (every artifact):') && line.includes('WORSE')),
+      failures.join(' | '),
+    );
+  });
+
+  it('MUTANT: a family only ONE artifact cannot reach is named with that artifact', () => {
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    const [victimVertical] = Object.keys(pinned.verticals);
+    // A skin whose every read is a channel nobody declares: unreachable on the
+    // one artifact we drain it from, reachable nowhere else either — so it must
+    // be named per artifact rather than folded into the union list.
+    const family = join(dir, SKIN_ROOT, 'evi02-drill-family');
+    mkdirSync(family, { recursive: true });
+    writeFileSync(join(family, 'index.css'), '.ds-evi02-drill { color: var(--ds-color-primary); }\n');
+    const file = join(dir, ARTIFACT_ROOT, victimVertical, 'index.css');
+    writeFileSync(
+      file,
+      readFileSync(file, 'utf8').replaceAll('--ds-color-primary:', '--ds-drill-removed:'),
+    );
+    const failures = evaluate(measure(dir), pinned);
+    assert.ok(
+      failures.some((line) => line.startsWith('evi02-drill-family:') && line.includes(`the ${victimVertical} artifact`)),
+      failures.join(' | '),
+    );
   });
 
   it('MUTANT: an artifact emptied to nothing is a vacuity failure, not perfect coverage', () => {
