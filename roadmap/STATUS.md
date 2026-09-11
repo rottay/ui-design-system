@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T16:43:00.418Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-11T17:42:16.836Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,7 +28,7 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T16:43:00.418Z.
+**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-11T17:42:16.836Z.
 
 **measured on the 8-family sample: 17/22 move at least one sampled family** — MEASURED by that run.
 
@@ -52,7 +52,10 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | signature | `./contracts/foundation#TenantConfig` | same five fields removed on the contracts barrel's re-export of the same declaration | major | `emi-02-tenant-config-strip.md` |
 | signature | `./server#admitDocument` | optional `ranges?: TenantThemeVerticalEnvelope["ranges"]` on its input object: the clamp bounds a profile default may not cross; omitted, the station reads the vertical's registered envelope, so existing calls compile and clamp as before | minor | `r1r2-integration-door.md` |
 | signature | `./server#censusRuntimeVisualPayload` | input narrowed to `Pick<TenantConfig, "branding"> / null / undefined`; it returns the one-field census above | major | `emi-02-tenant-config-strip.md` |
+| signature | `./server#compileTenantThemeConfig` | a v1 `visualFoundation.advanced.tokenOverrides` entry whose value references its own token is now refused as `TenantThemeValidationError`; it previously compiled into a self-referencing channel | patch | `der-03-reference-cycle.md` |
+| signature | `./server#compileTenantThemeDocumentV2` | the same two refusals reach publication under the door's own `ThemeAdmissionError`, so preview and publish answer identically | patch | `der-03-reference-cycle.md` |
 | signature | `./server#compileTenantThemeDocumentV2` | new: publishes a `TenantThemeDocumentV2` to a `TenantThemeArtifact` with the door's admission report and the decision-provenance ledger; refuses a non-v2 document with `unsupported_schema_version` at `$.document.version` and an unrostered vertical with `invalid_value` at `$.verticalKey`; additive, no existing signature changes | minor | `r2-publication-parity.md` |
+| signature | `./server#compileThemeIntent` | refuses a tenant-authored reference cycle: `unsafe_value` at the override path for a chrome value that reads a channel its own leaf writes, and at `$.variables["--ds-*"]` for a cycle in the compiled delta. Previously admitted and painted verbatim | patch | `der-03-reference-cycle.md` |
 | signature | `./server#DecisionProvenanceLedger` | published as a type with `DecisionProvenance` and `DecisionProvenanceEntry`; the shape a publication result and an artifact metadatum are read as, additive | minor | `r2-publication-parity.md` |
 | signature | `./server#DocumentAdmission` | carries the `ledger` the gate captured | minor | `r1-decision-provenance.md` |
 | signature | `./server#DocumentAdmission` | REQUIRED output fields `profileClaims: readonly DecisionProvenanceClaim<ThemeDecisionId>[]` (what the profile-expansion station filled, as `profile-derived` claims) and `effective: TenantThemeDocument` (the v1-shape document the patch was lowered from, profile defaults included); both are always present, so a consumer that constructs a `DocumentAdmission` value itself must supply them | minor | `r1r2-integration-door.md` |
