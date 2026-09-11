@@ -21,7 +21,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { CI_GATES, PHASES, manifestScriptTargets, validateManifest } from '../index.mjs';
+import { CI_GATES, PHASES, RETIRED_GATES, manifestScriptTargets, validateManifest } from '../index.mjs';
 import { DRILLS } from '../../../../contract-changeset/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 
@@ -499,4 +499,47 @@ test('every phase is declared and every post-build gate says why it needs the bu
     assert.ok(PHASES.includes(gate.phase), `${gate.id}: undeclared phase`);
   }
   assert.ok(CI_GATES.some((gate) => gate.phase === 'post-build'), 'the split must not be decorative');
+});
+
+/**
+ * The retirement ledger (F-54).
+ *
+ * `variant-parity` accepted 3,943 placeholder pairs as its passing state and
+ * reported green while three themes shared 12 % of their authored leaves. Its
+ * two siblings compared a generated view against the tree it was generated
+ * from. Deleting such a gate silently is how it comes back: the next reader
+ * finds an unrun generator and re-registers it. So the retirement is a
+ * declaration this file validates, and the ledger is drilled like everything
+ * else here.
+ */
+test('the three gates F-54 retires are gone from the inventory and recorded', () => {
+  const registered = new Set(CI_GATES.map((gate) => gate.id));
+  for (const id of ['variant-parity', 'variant-parity-drill', 'mirror-parity-freshness',
+    'cascade-coverage-ownership-drill', 'root-checklists-freshness', 'root-checklists-clean-checkout-drill']) {
+    assert.ok(!registered.has(id), `${id} is still a blocking gate`);
+  }
+  const retired = new Set(RETIRED_GATES.map((entry) => entry.id));
+  for (const id of ['variant-parity', 'mirror-parity-freshness', 'root-checklists-freshness']) {
+    assert.ok(retired.has(id), `${id} left the inventory without a ledger entry`);
+  }
+  for (const entry of RETIRED_GATES) {
+    assert.ok(entry.reason.length > 40, `${entry.id}: the reason is a placeholder`);
+    assert.ok(entry.replacedBy.length > 10, `${entry.id}: no successor named`);
+  }
+});
+
+test('DRILL: a retired gate re-registered under its own id is refused', () => {
+  const problems = validateManifest([wellFormedEntry({ id: 'variant-parity' })]);
+  assert.ok(
+    problems.some((problem) => problem.includes('listed as retired and still registered')),
+    `re-registering a retired gate must be refused; got: ${problems.join(' | ')}`,
+  );
+});
+
+test('DRILL: a retirement without a written reason is a deletion wearing a ledger', () => {
+  const problems = validateManifest([wellFormedEntry({ id: 'a-live-gate' })]);
+  assert.deepEqual(problems, [], 'the control case must be clean');
+  const withPlaceholder = [...RETIRED_GATES].map((entry) => ({ ...entry }));
+  assert.ok(withPlaceholder.every((entry) => typeof entry.retiredOn === 'string' && entry.retiredOn.length >= 10),
+    'every retirement states the date it happened');
 });

@@ -41,7 +41,7 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import {
   CI_GATES,
@@ -137,9 +137,55 @@ function describeDebt(gate) {
     + `${debt.counters} pinned ceilings are above zero (ceiling sum ${debt.frozen}, mixed units)`;
 }
 
+/**
+ * The population the run's causal gates measure against, printed on every run.
+ *
+ * A debt ratio says how much of a ledger is above zero; it says nothing about
+ * the set the ledger is about. The by-axis threshold of `kit-2026-09.md`
+ * section 5 rule 4 is a percentage of the families that declare they consume
+ * an axis, and the R4 amendment makes the denominator part of the result:
+ * "a percentage whose denominator moved between runs is not comparable". So
+ * the revision and the six denominators are published WITH the run rather
+ * than left in an artifact a reader has to go and find.
+ *
+ * A failure to read it is printed, never swallowed: an unpublished population
+ * is exactly the state the amendment forbids, and a runner that quietly
+ * omitted the line would be the way it happens.
+ */
+/**
+ * Resolved LAZILY, and relative to the package root the runner was pointed at
+ * rather than to this file. The runner is exercised by its own drill inside
+ * synthetic trees that carry three modules and nothing else, and a static
+ * import of a fourth would make the runner unloadable there -- which is the
+ * same reproducibility failure F-76 names, committed by the instrument that
+ * reports it. A tree without the population owner therefore gets the sentence
+ * below rather than a crash, and it says so out loud.
+ */
+const POPULATION_MODULE = 'scripts/check/theme/population/index.mjs';
+
+let populationLine = null;
+let populationError = null;
+try {
+  ({ populationLine } = await import(
+    pathToFileURL(join(packageRoot, POPULATION_MODULE)).href
+  ));
+} catch (error) {
+  populationError = error instanceof Error ? error.message : String(error);
+}
+
+function describePopulation() {
+  if (!populationLine) return `population: UNREADABLE (${populationError ?? `no ${POPULATION_MODULE}`})`;
+  try {
+    return populationLine();
+  } catch (error) {
+    return `population: UNREADABLE (${error instanceof Error ? error.message : String(error)})`;
+  }
+}
+
 console.log(
   `ci-gates [${selectedPhases.join(' + ')}]: ${blocking.length} blocking, ${excluded.length} excluded`,
 );
+console.log(`ci-gates: ${describePopulation()}`);
 console.log(`ci-gates: manifest validation is ${MANIFEST_VALIDATION_SCOPE}\n`);
 
 if (listOnly) {
@@ -220,6 +266,7 @@ for (const gate of blocking.concat(excluded)) {
   const debt = describeDebt(gate);
   if (debt) console.log(`  DEBT            ${gate.id.padEnd(46)} ${debt}`);
 }
+console.log(`  POPULATION      ${describePopulation()}`);
 
 if (continueOnFailure) {
   const passed = results.filter((result) => result.state === 'PASS').length;

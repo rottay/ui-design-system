@@ -15,6 +15,7 @@ import {
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  rmSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -364,7 +365,16 @@ function plantRunnerFixture(gates) {
   const runnerDir = join(root, 'scripts/check/automation/runner');
   const manifestDir = join(root, 'scripts/check/automation/gates/manifest');
   const repoRootDir = join(root, 'scripts/libraries/repo-root');
-  for (const dir of [runnerDir, manifestDir, repoRootDir]) mkdirSync(dir, { recursive: true });
+  const populationDir = join(root, 'scripts/check/theme/population');
+  for (const dir of [runnerDir, manifestDir, repoRootDir, populationDir]) mkdirSync(dir, { recursive: true });
+
+  // The population owner is planted too, with a fixed sentence: the runner has
+  // to PUBLISH a denominator on every run (WO-EVI-02 R4 amendment 3), and a
+  // drill that omitted it would let the publication be dropped silently.
+  writeFileSync(
+    join(populationDir, 'index.mjs'),
+    "export function populationLine() { return 'population: fixture catalog deadbeef00000000 (1 decisions)'; }\n",
+  );
 
   writeFileSync(join(root, 'package.json'), '{"name":"runner-drill-fixture"}\n');
   copyFileSync(runner, join(runnerDir, 'index.mjs'));
@@ -409,6 +419,35 @@ const PREREQ_GATE = (id) => ({
   phase: 'pre-build',
   noDrillReason: FIXTURE_REASON,
   prerequisites: ['planted-input'],
+});
+
+test('DRILL: every run publishes the population its causal gates measure against', () => {
+  const fixture = plantRunnerFixture([PASSING_GATE('only-gate')]);
+
+  const listed = spawnSync(process.execPath, [fixture, '--list'], { encoding: 'utf8' });
+  assert.ok(
+    listed.stdout.includes('population: fixture catalog deadbeef00000000'),
+    '--list must state the population the plan is written against',
+  );
+
+  const ran = spawnSync(process.execPath, [fixture], { encoding: 'utf8' });
+  assert.equal(ran.status, 0);
+  assert.ok(
+    ran.stdout.includes('POPULATION      population: fixture catalog deadbeef00000000'),
+    'the summary must state the population, not only the debt',
+  );
+});
+
+test('DRILL: a tree with no population owner says UNREADABLE rather than omitting the line', () => {
+  const fixture = plantRunnerFixture([PASSING_GATE('only-gate')]);
+  rmSync(join(dirname(dirname(dirname(dirname(fixture)))), 'check/theme/population/index.mjs'), { force: true });
+
+  const ran = spawnSync(process.execPath, [fixture], { encoding: 'utf8' });
+  assert.equal(ran.status, 0, 'a missing population owner is reported, never fatal');
+  assert.ok(
+    ran.stdout.includes('population: UNREADABLE'),
+    'an unpublished population must be NAMED; a silent omission is the state the amendment forbids',
+  );
 });
 
 test('DRILL: --continue runs every blocking gate instead of stopping at the first red', () => {

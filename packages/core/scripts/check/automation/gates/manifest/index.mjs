@@ -325,11 +325,20 @@ export const CI_GATES = Object.freeze([
       'This entry IS its own drill: `--self-check` re-runs the same three subjects against the same bundle with the tier order REVERSED and requires every one to flip, so the planted negative rides in the same process as the measurement.',
     prerequisites: ['showroom-workspace'],
   },
+  // THE DENOMINATOR OF EVERY CAUSAL PERCENTAGE THIS LANE PUBLISHES.
+  // `WO-EVI-02` R4 amendment 3: each axis's denominator is the set of families
+  // that declare they consume it, read from the typed catalog at a recorded
+  // revision and published with the run; "a denominator may never be shrunk to
+  // reach a threshold". A ratio whose bottom half can move is not a
+  // measurement, so the population is pinned and moves in neither direction
+  // without a commit that says so. Drill first: a walk that stopped finding
+  // families would publish smaller denominators and every percentage above
+  // them would go UP.
+  { id: 'theme-population-drill', run: ['node', '--test', 'scripts/check/theme/population/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-population'], },
+  { id: 'theme-population', run: ['node', 'scripts/check/theme/population/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'theme-population-drill', },
   { id: 'fanout-facts-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/fanout/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['fanout-facts-freshness'], },
   // Generated manifest views must match their live sources.
   { id: 'fanout-facts-freshness', run: ['node', 'scripts/generate/tokens/manifest/fanout/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'fanout-facts-drill', },
-  { id: 'root-checklists-freshness', run: ['node', 'scripts/generate/tokens/manifest/root-checklists/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'root-checklists-clean-checkout-drill', },
-  { id: 'mirror-parity-freshness', run: ['node', 'scripts/generate/tokens/manifest/mirror-parity/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'cascade-coverage-ownership-drill', },
   // The `decisions lit` indicator, which STATUS republishes verbatim from
   // `scripts/check/decisions-lit/evidence/index.json`.
   //
@@ -358,11 +367,6 @@ export const CI_GATES = Object.freeze([
     distExemption:
       'MEASURED, not assumed: the freshness read compares the committed artifact against its inputs and never reaches the lazy `dist/server.js` door. Run with `dist/` moved away it exits 0 (2026-09-08).',
   },
-  { id: 'variant-parity-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/variant-parity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['variant-parity'], },
-  // El cuarto mide la FUENTE, no el artefacto: variant-parity es el canon
-  // estructural de los 3 themes y corre sin build. Su `--check` es frescura Y
-  // trinquete (divergentSlots / untaggedAuthoredLeaves, decrease-only).
-  { id: 'variant-parity', run: ['node', 'scripts/generate/tokens/manifest/variant-parity/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'variant-parity-drill', ratchet: 'scripts/generate/tokens/manifest/variant-parity/baseline/index.json', },
   { id: 'claim-exactness-drill', run: ['node', '--test', 'scripts/check/evidence/certification/claims/exactness/index.test.mjs', 'scripts/check/evidence/certification/claims/exactness/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['claim-exactness'], prerequisites: ['docs-engineering-corpus'], },
   // The exact proof runs the audit above a second time inside two deterministic
   // passes and adds the planes no other gate covers: the claim/contract census in
@@ -937,8 +941,6 @@ export const CI_GATES = Object.freeze([
   // Determinism of the generated cascade coverage document, whose artifact is
   // gitignored: the drills prove the document is a pure function of its inputs
   // and that the generator can create the directory it owns on a clean clone.
-  { id: 'cascade-coverage-ownership-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/mirror-parity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['mirror-parity-freshness'], },
-  { id: 'root-checklists-clean-checkout-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/root-checklists/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['root-checklists-freshness'], },
   { id: 'docs-public-set-drill', run: ['node', '--test', 'scripts/check/docs/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['docs-public-set:check'], },
   // The published documentation set has no other mechanical guard: a broken
   // link, a legacy path reference, non-English prose or a malformed diagram
@@ -1079,6 +1081,59 @@ export const CI_GATES = Object.freeze([
   // declarations, which is why this pair is post-build.
   { id: 'consumer-proof-drill', run: ['node', '--test', 'scripts/check/consumer-proof/tests/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['consumer-proof'], prerequisites: ['fresh-dist'], },
   { id: 'consumer-proof', run: ['node', 'scripts/check/consumer-proof/index.mjs'], blocking: true, phase: 'post-build', drillId: 'consumer-proof-drill', prerequisites: ['fresh-dist'], },
+]);
+
+/**
+ * Gates this inventory has RETIRED, with the reason and the instrument that
+ * answers the question instead.
+ *
+ * A gate that simply disappears from `CI_GATES` leaves no trace: the next
+ * reader finds a generator nobody runs and re-registers it. Worse, the three
+ * entries below were not merely unused -- they were measuring the wrong thing
+ * and reporting green, which is the failure class this whole file exists
+ * against. So a retirement is recorded, named and validated: an id may not be
+ * in both lists, and every entry must say what replaced it.
+ *
+ * The GENERATORS themselves live under `scripts/generate/tokens/manifest/**`
+ * and are not deleted here; deleting them is a separate write set. What is
+ * settled here is the only thing that made them law -- their place in the
+ * inventory CI runs.
+ */
+export const RETIRED_GATES = Object.freeze([
+  {
+    id: 'variant-parity',
+    drills: ['variant-parity-drill'],
+    retiredOn: '2026-09-11',
+    reason:
+      'F-54: it measured PLACEHOLDERS, not parity. Its baseline accepted 3,943 placeholder pairs -- 52 % of the '
+      + 'pair universe -- as the passing state, so three themes that share 12 % of their authored leaves read green. '
+      + 'Parity between the three artifacts is a property of the DERIVATION, not of a docblock tag census.',
+    replacedBy:
+      'scripts/check/theme/artifact-coverage (per-family coverage of the compiled artifacts, measured from the '
+      + 'typed catalog) and the per-family derivation cuts.',
+  },
+  {
+    id: 'mirror-parity-freshness',
+    drills: ['cascade-coverage-ownership-drill'],
+    retiredOn: '2026-09-11',
+    reason:
+      'F-54/F-04: the compiled mirror it froze is a generated view, and its agreement with the source was proof '
+      + 'that one generator had been run, never that a decision reaches a family.',
+    replacedBy:
+      'scripts/check/theme/artifact-coverage, which reads the same compiled artifacts and asks the causal question '
+      + 'instead: which families does each catalog decision actually cover.',
+  },
+  {
+    id: 'root-checklists-freshness',
+    drills: ['root-checklists-clean-checkout-drill'],
+    retiredOn: '2026-09-11',
+    reason:
+      'F-04/F-23: a checklist regenerated from the tree it describes agrees with itself by construction. It was '
+      + 'text presence, which this lane may not accept as ground truth.',
+    replacedBy:
+      'scripts/check/engine/read-without-producer (a read with no producer is the real defect the checklist '
+      + 'gestured at) and scripts/check/theme/artifact-coverage.',
+  },
 ]);
 
 const MANIFEST_PACKAGE_ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
@@ -1294,6 +1349,25 @@ export function validateManifest(gates = CI_GATES, { packageRoot = MANIFEST_PACK
       if (!existsSync(join(packageRoot, script))) {
         problems.push(`${gate.id}: names a script that does not exist: ${script}`);
       }
+    }
+  }
+
+  // A RETIRED gate may not come back by accident, and a retirement may not be
+  // a placeholder. Both halves are structural: an id in both lists is the
+  // contradiction, and an entry without a written reason and a named successor
+  // is a deletion wearing a ledger's clothes.
+  const retiredIds = new Set();
+  for (const entry of RETIRED_GATES) {
+    if (!entry.id) problems.push('a retired-gate entry has no id');
+    if (retiredIds.has(entry.id)) problems.push(`duplicate retired gate id: ${entry.id}`);
+    retiredIds.add(entry.id);
+    for (const key of ['reason', 'replacedBy', 'retiredOn']) {
+      if (typeof entry[key] !== 'string' || entry[key].trim().length < 10) {
+        problems.push(`retired ${entry.id}: ${key} must be a written value, not a placeholder`);
+      }
+    }
+    for (const id of [entry.id, ...(entry.drills ?? [])]) {
+      if (seen.has(id)) problems.push(`${id}: listed as retired and still registered in CI_GATES`);
     }
   }
 
