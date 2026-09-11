@@ -54,8 +54,12 @@ const BUTTON_RADIUS_LEAF = "chrome.controls.buttonGeometry.radius";
  *
  * `undefined` on every other shape of answer: no ledger (a transport that
  * carries none authored nothing this station models), a decision owning the
- * leaf (the silhouette IS the answer), a profile-derived owner (a default is
- * not the tenant naming a radius), or a non-string value.
+ * leaf (the silhouette IS the answer), an owner in any class below
+ * `direct-override` -- `profile-derived`, because a default is not the tenant
+ * naming a radius, and `preset-inherited`, because a draft that merely carried
+ * the vertical's own control radius did not name one either -- or a non-string
+ * value. A route the plan does not entitle never reaches here at all: the
+ * document door refuses it by name before a ledger exists.
  */
 function tenantNamedButtonRadius(
   ledger: DecisionProvenanceLedger | undefined
