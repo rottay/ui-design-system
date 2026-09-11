@@ -2,9 +2,11 @@ import { createHash } from 'node:crypto';
 
 import type { TenantConfig } from '@rottay/design-system';
 import {
+  canonicalizeTenantThemeValue,
   compileTenantThemeDocumentV2,
   documentThemeAdmission,
   mountTenantTheme,
+  previewThemeAdmission,
   staticThemeIntent,
 } from '@rottay/design-system/server';
 
@@ -31,12 +33,13 @@ import {
 } from './candidates';
 import {
   IdentityStage,
+  type IdentityDoorProof,
   type IdentityStageOption,
   type IdentityUnlitRow,
 } from './stage';
 
 // ---------------------------------------------------------------------------
-// WO-DER-07 identity probe-ground.
+// The identity probe-ground.
 //
 // One candidate per load: the tenant scope, the mode and the artifact are all
 // html-anchored, so three identities cannot share a document. The links below
@@ -46,11 +49,15 @@ import {
 //   ?screen=list|record|form|dashboard|modal|phone   (default: all six)
 //
 // Nothing here paints: the page compiles the candidate's decision document
-// through the one door, mounts it with `mountTenantTheme`, and stamps exactly
-// what the mount returns. `dashboard` is the app-shell screen -- the DS
-// AppShell, whose navigation column is the only surface that reads sidebar
-// tone and which also honors both anatomy attributes; the list screen is the
-// pattern table, which is the only surface the table anatomy CSS reaches.
+// through the one door, mounts it with `mountTenantTheme`, and hands the stage
+// exactly what the mount returned -- the artifact, its style elements and the
+// projected root attributes. The CLIENT runtime receives that same artifact as
+// its visual-authority declaration, so the screens below are evidence about the
+// mounted runtime and not only about a stylesheet that loaded. `dashboard` is
+// the app-shell screen -- the DS AppShell, whose navigation column is the only
+// surface that reads sidebar tone and which also honors both anatomy
+// attributes; the list screen is the pattern table, which is the only surface
+// the table anatomy CSS reaches.
 // ---------------------------------------------------------------------------
 
 type Query = Record<string, string | string[] | undefined>;
@@ -63,6 +70,19 @@ function readQuery(query: Query, key: string): string | null {
 
 function href(candidate: string, mode: string, screen: string): string {
   return `/probe-ground/identity?candidate=${candidate}&mode=${mode}&screen=${screen}`;
+}
+
+/**
+ * Canonical form of a value the two doors built independently.
+ *
+ * The round trip through JSON is what makes the comparison the right one: a
+ * patch is a deep partial, so one door may carry `borderPrimaryColor: undefined`
+ * where the other carries nothing at all, and in the JSON data model those are
+ * the same value. Canonical form alone refuses the first shape rather than
+ * equating it with the second.
+ */
+function canonicalPayload(value: unknown): string {
+  return canonicalizeTenantThemeValue(JSON.parse(JSON.stringify(value ?? null)));
 }
 
 export default async function IdentityProbeGroundPage({
@@ -97,6 +117,17 @@ export default async function IdentityProbeGroundPage({
       })
     : null;
 
+  // The SAME document through the UNSAVED door. R2's law is that previewing a
+  // row and publishing it resolve one payload, so the two are mounted side by
+  // side here and compared byte for byte rather than asserted in prose.
+  const previewed = candidate
+    ? previewThemeAdmission({
+        vertical: 'bithire',
+        slug: candidate.slug,
+        document: candidate.document,
+      })
+    : null;
+
   const mounted = await (admitted && compilation
     ? mountTenantTheme(admitted.intent, {
         artifact: compilation.artifact,
@@ -104,6 +135,43 @@ export default async function IdentityProbeGroundPage({
         locale: 'en',
       })
     : mountTenantTheme(staticThemeIntent('bithire'), { themeMode: mode, locale: 'en' }));
+
+  const previewMounted =
+    previewed && compilation
+      ? await mountTenantTheme(previewed.intent, {
+          artifact: compilation.artifact,
+          themeMode: mode,
+          locale: 'en',
+        })
+      : null;
+
+  const doorProof: IdentityDoorProof | null =
+    admitted && previewed && previewMounted
+      ? {
+          publishOrigin: mounted.hydrationProof.origin,
+          previewOrigin: previewMounted.hydrationProof.origin,
+          patchIdentical:
+            canonicalPayload(admitted.intent.patch) ===
+            canonicalPayload(previewed.intent.patch),
+          ledgerIdentical:
+            canonicalPayload(admitted.admission.ledger) ===
+            canonicalPayload(previewed.admission.ledger),
+          reportIdentical:
+            canonicalPayload([
+              admitted.admission.effective,
+              admitted.admission.unlit,
+            ]) ===
+            canonicalPayload([
+              previewed.admission.effective,
+              previewed.admission.unlit,
+            ]),
+          digestIdentical: mounted.artifactDigest === previewMounted.artifactDigest,
+          cssIdentical: mounted.hydrationProof.css === previewMounted.hydrationProof.css,
+          scopeIdentical:
+            mounted.hydrationProof.scope.selector ===
+            previewMounted.hydrationProof.scope.selector,
+        }
+      : null;
 
   const unlit: IdentityUnlitRow[] = (admitted?.admission.unlit ?? []).map((row) => ({
     id: row.id,
@@ -162,14 +230,6 @@ export default async function IdentityProbeGroundPage({
         data-testid="identity-probe-stamp"
         dangerouslySetInnerHTML={{ __html: buildRootStampScript(mounted.rootAttributes) }}
       />
-      {mounted.styleElements.map((element) => (
-        <style
-          key={element.id}
-          {...element.attributes}
-          data-testid="identity-probe-artifact-style"
-          dangerouslySetInnerHTML={{ __html: element.css }}
-        />
-      ))}
       <IdentityStage
         title={candidate ? candidate.title : 'BitHire baseline (today)'}
         intent={
@@ -183,6 +243,10 @@ export default async function IdentityProbeGroundPage({
         decisionCount={candidate ? Object.keys(candidate.document.decisions).length : 0}
         unlit={unlit}
         tenantConfig={tenantConfig}
+        artifact={compilation?.artifact ?? null}
+        styleElements={mounted.styleElements}
+        authoredSeed={candidate?.document.decisions['palette.seeds']?.primary ?? null}
+        doorProof={doorProof}
         columns={columns}
         modes={modes}
         screens={screens}

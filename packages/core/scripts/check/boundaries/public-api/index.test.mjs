@@ -453,16 +453,24 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
    * `documentElement` real al que no estan pegados-- y el observer del elemento
    * de scope pasa a mirar tambien su subarbol, que es el unico sitio donde el
    * desprendimiento del contenedor es audible. Los modulos siguen sin moverse:
-   * no entra ningun import nuevo. */
+   * no entra ningun import nuevo.
+   *
+   * 70112 -> 71610 (WO-DER-07): el artefacto persiste la mitad NO-CSS de su
+   * propio compile y esa mitad gobierna un render, asi que entra al digest y
+   * el verificador la rechaza POR FORMA antes de que gobierne: un declarante
+   * de engine visual con modos repetidos, con una semilla que no es escalar o
+   * con un nombre `--ds-*` como clave de semilla -- que seria un segundo
+   * escritor de CSS llegando por un campo JSON -- no se admite. Los modulos
+   * siguen sin moverse: no entra ningun import nuevo. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 70112 },
+    { reachableModules: 9, sourceBytes: 71610 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 70112), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 71610), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */

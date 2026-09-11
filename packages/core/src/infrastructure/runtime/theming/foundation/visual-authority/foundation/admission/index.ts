@@ -308,6 +308,12 @@ export function verifyTenantThemeArtifactV1(
   if (artifact.provenance !== undefined && !isAdmittedProvenance(artifact.provenance)) {
     return { ok: false, error: "provenance is not a serialized decision ledger" };
   }
+  if (artifact.runtime !== undefined && !isAdmittedArtifactRuntime(artifact.runtime)) {
+    return {
+      ok: false,
+      error: "runtime is not an engine-visual declaration the runtime can consume",
+    };
+  }
   if (
     Object.entries(artifact.variables).some(
       ([name, value]) => !name.startsWith("--ds-") || typeof value !== "string",
@@ -361,6 +367,7 @@ export function verifyTenantThemeArtifactV1(
       // the digest the mount proves: an artifact whose provenance was edited in
       // transit would otherwise verify and then govern.
       ...(artifact.provenance ? { provenance: artifact.provenance } : {}),
+      ...(artifact.runtime ? { runtime: artifact.runtime } : {}),
       scopes,
       ...(artifact.adjustments && artifact.adjustments.length > 0
         ? { adjustments: artifact.adjustments }
@@ -940,6 +947,54 @@ export function resolveVisualAuthority(
  * this artifact. What is left for this side is refusing a metadatum that is not
  * a ledger at all before a policy reader walks it.
  */
+/**
+ * The runtime half is DATA a React runtime reads, never paint.
+ *
+ * `--ds-*` is refused as a seed KEY on purpose: an adapter resolves a channel
+ * by that name and projects it onto the library's own vocabulary, so a seed
+ * still carrying the DS name is either a second CSS writer arriving through a
+ * JSON field or a payload edited in transit. Both are refused before the
+ * declaration reaches a provider.
+ */
+function isAdmittedEngineSeeds(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  return Object.entries(value).every(
+    ([name, seed]) =>
+      name.length > 0 &&
+      !name.startsWith("--ds-") &&
+      (typeof seed === "string" ||
+        (typeof seed === "number" && Number.isFinite(seed)))
+  );
+}
+
+function isAdmittedArtifactRuntime(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  if (typeof value.engine !== "string" || value.engine.length === 0) return false;
+  if (value.colorScheme !== undefined && value.colorScheme !== "light" && value.colorScheme !== "dark") {
+    return false;
+  }
+  const { projection, runtime } = value;
+  if (!isRecord(projection) || !isAdmittedEngineSeeds(projection.seeds)) return false;
+  if (!Array.isArray(projection.modes)) return false;
+  const seenModes = new Set<string>();
+  for (const block of projection.modes) {
+    if (!isRecord(block)) return false;
+    if (block.mode !== "light" && block.mode !== "dark") return false;
+    if (seenModes.has(block.mode)) return false;
+    if (!isAdmittedEngineSeeds(block.seeds)) return false;
+    seenModes.add(block.mode);
+  }
+  if (!isRecord(runtime)) return false;
+  if (!isRecord(runtime.personality) || !isRecord(runtime.tokenOverrides)) return false;
+  for (const selection of ["recipeProfile", "experienceProfile"] as const) {
+    const chosen = runtime[selection];
+    if (chosen !== undefined && (typeof chosen !== "string" || chosen.length === 0)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function isAdmittedProvenance(value: unknown): boolean {
   if (!isRecord(value) || !Array.isArray(value.entries)) return false;
   return value.entries.every((entry) => {

@@ -7,6 +7,7 @@
  * semantic mappings, React/code, selectors and raw CSS are not representable.
  */
 
+import type { EngineVisualDeclaration } from "../engine-adapter";
 import type { DecisionProvenanceEntry } from "../provenance";
 import type {
   BrandAlertChrome,
@@ -749,6 +750,24 @@ export interface TenantThemeArtifact {
   adjustments?: readonly TenantThemeContrastAdjustment[];
   /** Present when the compile resolved a decision-provenance ledger. */
   provenance?: TenantThemeArtifactProvenance;
+  /**
+   * The NON-CSS half of the same lowering: the personality, token overrides
+   * and governed selections a React runtime reads, plus the engine projection
+   * that seeds a third-party library.
+   *
+   * It travels here because the two halves answer one question. An application
+   * that mounted the CSS and forgot to hand the runtime the matching
+   * declaration left `useTokens` on the product-profile preset while the
+   * document painted something else, and a runtime that re-derived the half it
+   * was missing would be a second compiler. Inside the digest for the same
+   * reason `provenance` is: it governs at render, so an edit in transit must
+   * fail the mount proof rather than verify and then take effect.
+   *
+   * Absent on an artifact compiled before the block existed; such an artifact
+   * mounts exactly as it did, with the runtime half supplied by the
+   * application's own `engineVisual` or by nothing at all.
+   */
+  runtime?: EngineVisualDeclaration;
   css: string;
   scopes: TenantThemeArtifactScopes;
 }

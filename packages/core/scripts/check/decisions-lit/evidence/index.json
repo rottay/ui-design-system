@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-11T11:15:07.323Z",
+  "producedAt": "2026-09-11T13:07:11.869Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 8-family sample: 15/22 move at least one sampled family",
   "denominators": {
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-11T11:14:09.756Z"
+      "builtAt": "2026-09-11T12:28:28.442Z"
     },
     "sources": {
       "door": {
@@ -31,7 +31,7 @@
           "src/infrastructure/compilers"
         ],
         "fileCount": 753,
-        "digest": "0e9be99770c1eba92b60d76104315c99933d9a2e3fb464d17413603323da0f86"
+        "digest": "5b759762f371051b59922377ed2c55a2165640cbb5a92523908c3e4cb5d7f460"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
@@ -42,7 +42,7 @@
     "browser": {
       "specifier": "@playwright/test",
       "root": "packages/showroom/package.json",
-      "resolved": "../ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+      "resolved": "../../Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
       "browserVersion": "149.0.7827.55"
     },
     "roster": {

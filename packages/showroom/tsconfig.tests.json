@@ -2,7 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    // The e2e specs import design-system SOURCE fixtures, so this project
+    // compiles core files that resolve through the core's own `@/` alias. The
+    // showroom's own `src/` stays first, so a showroom path still wins.
+    "paths": {
+      "@/*": ["./src/*", "../core/src/*"]
+    }
   },
   "include": [
     "e2e/**/*.ts",

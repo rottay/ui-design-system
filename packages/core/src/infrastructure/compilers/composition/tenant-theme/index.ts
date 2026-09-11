@@ -1027,6 +1027,10 @@ export function assembleTenantThemeArtifact(
   if (declaredChartIssues.length > 0)
     throw new TenantThemeValidationError(declaredChartIssues);
   const adjustments: readonly TenantThemeContrastAdjustment[] = [];
+  // The non-CSS half of the SAME compile, taken from the same product the CSS
+  // was projected from. Deriving it a second time anywhere else would be a
+  // second lowering of one document.
+  const runtime = engineVisualOf(compiled);
 
   const scopes = buildScopes(identity);
   const verticalEnvelopeDigest = `sha256-${sha256Utf8(
@@ -1046,6 +1050,9 @@ export function assembleTenantThemeArtifact(
     variables,
     ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
     ...(provenance ? { provenance } : {}),
+    // Governs at render, so it is proven at mount: an edited runtime half must
+    // fail the digest rather than verify and then take effect.
+    runtime,
     scopes,
     // Empty adjustment lists stay out of the digest source so pre-autocorrect
     // artifacts keep their digests; a non-empty list is a real output change.
@@ -1072,6 +1079,7 @@ export function assembleTenantThemeArtifact(
       ...(modeDeltas.length > 0 ? { modeDeltas } : {}),
       ...(adjustments.length > 0 ? { adjustments } : {}),
       ...(provenance ? { provenance } : {}),
+      runtime,
       css: renderArtifactCss(identity.verticalKey, identity.slug, variables, digest, {
         modeDeltas,
         backgroundMode:
@@ -1079,6 +1087,6 @@ export function assembleTenantThemeArtifact(
       }),
       scopes,
     },
-    engineVisual: engineVisualOf(compiled),
+    engineVisual: runtime,
   };
 }
