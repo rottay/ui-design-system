@@ -34,7 +34,7 @@ describe('TenantProvider data-tenant ownership', () => {
     expect(view.getByTestId('rottay-child')).toBeTruthy();
     expect(document.documentElement.getAttribute('data-tenant')).toBe('rottay');
     expect(Object.isFrozen(rottay)).toBe(true);
-    expect(Object.isFrozen(rottay.brandTheme)).toBe(true);
+    expect(rottay).not.toHaveProperty('brandTheme');
   });
 
   it.each([

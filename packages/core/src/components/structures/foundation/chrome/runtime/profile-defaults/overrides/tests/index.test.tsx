@@ -14,7 +14,9 @@ import { describe, expect, it } from 'vitest';
 import { EngineProvider } from '@/infrastructure/runtime/engines';
 import { ProductProfileProvider } from '@/infrastructure/runtime/product-profiles';
 import { TenantContext } from '@/infrastructure/runtime/tenant/foundation/context';
+import { EngineVisualDeclarationProvider } from '@/infrastructure/runtime/foundation/engine-visual';
 import type { TenantConfig } from '@/foundation/contracts';
+import type { PartialPersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 
 import type { SurfaceVisualOverrides } from '../../../../contracts';
 import {
@@ -37,6 +39,12 @@ const BASE_TENANT: TenantConfig = {
   branding: { companyName: 'Override Law Tenant' },
 };
 
+/** What a mounted artifact publishes: the compiled layer and its appearance. */
+interface MountedTenant {
+  personality?: PartialPersonalityTokens;
+  density?: string;
+}
+
 /**
  * The contexts `useSurfaceProfileDefaults` actually reads, mounted directly.
  *
@@ -46,15 +54,30 @@ const BASE_TENANT: TenantConfig = {
  * under test is the merge precedence, not the admission barrier, and the
  * admission barrier has its own suites.
  */
-function renderWithTenant(ui: ReactElement, tenantConfig: TenantConfig) {
+function renderWithTenant(ui: ReactElement, mounted: MountedTenant = {}) {
   function Wrapper({ children }: { children: ReactNode }): ReactElement {
     return (
       <EngineProvider defaultEngine="modern">
         <ProductProfileProvider profile="generic.default">
           <TenantContext.Provider
-            value={{ config: tenantConfig, isLoading: false, vertical: undefined } as never}
+            value={{
+              config: BASE_TENANT,
+              isLoading: false,
+              vertical: undefined,
+              ...(mounted.density === undefined
+                ? {}
+                : { appearance: { general: { density: mounted.density } } }),
+            } as never}
           >
-            {children}
+            <EngineVisualDeclarationProvider
+              declaration={{
+                engine: 'modern',
+                projection: { seeds: {}, modes: [] },
+                runtime: { personality: mounted.personality ?? {}, tokenOverrides: {} },
+              }}
+            >
+              {children}
+            </EngineVisualDeclarationProvider>
           </TenantContext.Provider>
         </ProductProfileProvider>
       </EngineProvider>
@@ -83,7 +106,7 @@ function Probe({ overrides }: { overrides?: SurfaceVisualOverrides }) {
 
 describe('an instance selection cannot contradict a tenant decision', () => {
   it('applies a catalog value on a channel the tenant left open', () => {
-    renderWithTenant(<Probe overrides={{ badgeShape: 'pill' }} />, BASE_TENANT);
+    renderWithTenant(<Probe overrides={{ badgeShape: 'pill' }} />);
 
     expect(screen.getByTestId('badgeShape')).toHaveTextContent('pill');
     expect(screen.getByTestId('verdicts')).toHaveTextContent('badgeShape:admitted');
@@ -92,7 +115,7 @@ describe('an instance selection cannot contradict a tenant decision', () => {
   it('refuses the same selection once the tenant decides that channel', () => {
     renderWithTenant(
       <Probe overrides={{ badgeShape: 'pill' }} />,
-      { ...BASE_TENANT, personality: { accent: { badgeShape: 'square' } } },
+      { personality: { accent: { badgeShape: 'square' } } },
     );
 
     // The tenant's value stands, and the refusal is named rather than silent.
@@ -104,7 +127,7 @@ describe('an instance selection cannot contradict a tenant decision', () => {
   it('refuses a density selection decided through the appearance document', () => {
     renderWithTenant(
       <Probe overrides={{ density: 'spacious' }} />,
-      { ...BASE_TENANT, appearance: { general: { density: 'compact' } } },
+      { density: 'compact' },
     );
 
     expect(screen.getByTestId('density')).not.toHaveTextContent('spacious');
@@ -114,7 +137,7 @@ describe('an instance selection cannot contradict a tenant decision', () => {
   it('closes the derived back door: a tenant-decided density also refuses sectionSpacing', () => {
     renderWithTenant(
       <Probe overrides={{ sectionSpacing: 'lg' }} />,
-      { ...BASE_TENANT, personality: { card: { paddingDensity: 'compact' } } },
+      { personality: { card: { paddingDensity: 'compact' } } },
     );
 
     expect(screen.getByTestId('sectionSpacing')).toHaveTextContent('sm');
@@ -124,7 +147,6 @@ describe('an instance selection cannot contradict a tenant decision', () => {
   it('refuses a value the catalog does not model even on an open channel', () => {
     renderWithTenant(
       <Probe overrides={{ density: 'ultra' as never, entranceDuration: 99_000 }} />,
-      BASE_TENANT,
     );
 
     expect(screen.getByTestId('density')).toHaveTextContent('comfortable');
@@ -152,14 +174,11 @@ describe('the catalog is complete and subordination has no gap', () => {
     expect(isAdmittedOverrideValue('animateEntrance', 'yes')).toBe(false);
   });
 
-  it('reads a BrandTheme decision through the same lowering useTokens uses', () => {
-    const decided = resolveTenantDecidedChannels({
-      ...BASE_TENANT,
-      brandTheme: {
-        chrome: { accent: { badgeShape: 'square' } },
-        surfaces: { density: 'compact' },
-      },
-    } as unknown as TenantConfig);
+  it('reads a compiled decision through the same layer useTokens uses', () => {
+    const decided = resolveTenantDecidedChannels(BASE_TENANT, {
+      personality: { accent: { badgeShape: 'square' } },
+      density: 'compact',
+    });
 
     expect(decided.has('accent.badgeShape')).toBe(true);
     expect(decided.has('card.paddingDensity')).toBe(true);
@@ -173,10 +192,9 @@ describe('the catalog is complete and subordination has no gap', () => {
 
   it('treats an undeclared field of an authored dimension as an open channel', () => {
     // A BrandTheme lowering emits a whole dimension with undefined members.
-    const decided = resolveTenantDecidedChannels({
-      ...BASE_TENANT,
+    const decided = resolveTenantDecidedChannels(BASE_TENANT, {
       personality: { accent: { badgeShape: undefined, barPosition: 'left' } },
-    } as unknown as TenantConfig);
+    });
 
     expect(decided.has('accent.barPosition')).toBe(true);
     expect(decided.has('accent.badgeShape')).toBe(false);

@@ -89,16 +89,16 @@ function fire(entries: ObserverEntry[]): Promise<void> {
   });
 }
 
-/** A tenant config carrying only the document-side ladder selection. */
-function documentConfig(responsivePosture: string): object {
-  return { appearance: { advanced: { responsivePosture } } };
+/** The artifact appearance carrying only the ladder selection. */
+function documentConfig(responsivePosture: string): { advanced: { responsivePosture: string } } {
+  return { advanced: { responsivePosture } };
 }
 
-function withTenant(config: object | undefined, children: React.ReactNode) {
-  if (!config) return <>{children}</>;
+function withTenant(appearance: object | undefined, children: React.ReactNode) {
+  if (!appearance) return <>{children}</>;
   return (
     <TenantContext.Provider
-      value={{ config, isLoading: false, vertical: undefined } as never}
+      value={{ config: {}, isLoading: false, vertical: undefined, appearance } as never}
     >
       {children}
     </TenantContext.Provider>
@@ -110,8 +110,8 @@ describe('resolveActiveResponsivePosture — the pure derivation', () => {
     // 639/839 + `preferred` are not "sensible defaults" chosen here: they are
     // the literals the runtime and solver used before this axis existed. If
     // this drifts, every tenant that never opted in silently reflows.
-    for (const config of [undefined, null, {}, { appearance: {} }]) {
-      const resolved = resolveActiveResponsivePosture(config);
+    for (const appearance of [undefined, null, {}, { advanced: {} }]) {
+      const resolved = resolveActiveResponsivePosture(appearance);
       expect(resolved.id).toBe('balanced');
       expect(resolved.thresholds).toEqual({
         compactMaxPx: 639,
@@ -148,20 +148,11 @@ describe('resolveActiveResponsivePosture — the pure derivation', () => {
     }
   });
 
-  it('resolves from BrandTheme, and the document wins when both are present', () => {
-    expect(
-      resolveActiveResponsivePosture({
-        brandTheme: { responsive: { schemaVersion: 1, posture: 'expansive' } },
-      }).id
-    ).toBe('expansive');
-
-    // The DB document outranks static authoring, matching the icon-axis canon.
-    expect(
-      resolveActiveResponsivePosture({
-        appearance: { advanced: { responsivePosture: 'compact' } },
-        brandTheme: { responsive: { schemaVersion: 1, posture: 'expansive' } },
-      }).id
-    ).toBe('compact');
+  it('reads the mounted artifact and nothing beside it', () => {
+    // ONE selection, because there is only one source left: a `TenantConfig`
+    // carries no theme, so there is no second posture to outrank.
+    expect(resolveActiveResponsivePosture(documentConfig('expansive')).id).toBe('expansive');
+    expect(resolveActiveResponsivePosture(documentConfig('compact')).id).toBe('compact');
   });
 
   it('falls back to balanced for a retired, bogus or foreign-version id', () => {
@@ -173,11 +164,9 @@ describe('resolveActiveResponsivePosture — the pure derivation', () => {
     expect(resolveActiveResponsivePosture(documentConfig('')).id).toBe(
       'balanced'
     );
-    expect(
-      resolveActiveResponsivePosture({
-        brandTheme: { responsive: { schemaVersion: 99, posture: 'expansive' } },
-      }).id
-    ).toBe('balanced');
+    expect(resolveActiveResponsivePosture(documentConfig('expansive-v99')).id).toBe(
+      'balanced'
+    );
   });
 });
 

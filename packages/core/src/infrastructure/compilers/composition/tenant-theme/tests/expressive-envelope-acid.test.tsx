@@ -29,7 +29,10 @@ import type {
   TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { getKnownTenantConfig } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
+import {
+  getCodeOwnedGovernedBehavior,
+  getKnownTenantConfig,
+} from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { emitTenantThemeArtifactForSsr } from '@/infrastructure/runtime/theming/foundation/visual-authority';
 import {
   compileTenantThemeConfig,
@@ -179,14 +182,14 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // BitHire static: same tree, same component, only the tenant changes — the
     // icon must come back to the baseline navigation weight.
     //
-    // The registry object itself, not a copy carrying `brandTheme`. Code-owned
-    // trust is by IDENTITY, so a hand-built config with a reserved slug is
-    // deliberately untrusted and its `brandTheme` would be censused as raw
-    // payload. The governed icon posture reaches the seam through
+    // The registry object itself. Code-owned trust is by IDENTITY, so a
+    // hand-built config with a reserved slug is deliberately untrusted. The
+    // governed icon posture reaches the seam through
     // `getCodeOwnedGovernedBehavior`, which is exactly the production path.
     const bithireConfig = getKnownTenantConfig('bithire');
     if (!bithireConfig) throw new Error('Missing bundled BitHire tenant');
-    expect(bithireConfig.brandTheme).toBe(bithireBrandTheme);
+    expect(getCodeOwnedGovernedBehavior(bithireConfig)?.expressive)
+      .toBe(bithireBrandTheme.expressive);
 
     const bithire = render(
       <DesignSystemProvider tenantConfig={bithireConfig} skipCssLoading>

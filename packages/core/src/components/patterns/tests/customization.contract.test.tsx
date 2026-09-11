@@ -121,7 +121,7 @@ describe.each([
   ['rustic', RusticTenantPreview],
 ] as const)('TenantPreview %s customization anatomy anatomy', (engine, Preview) => {
   it('exposes the complete palette, samples and finite states without disturbing tenant CSS lifecycle', () => {
-    const { container, unmount } = render(<Preview config={{ ...TENANT_CONFIG, engine }} />);
+    const { container, unmount } = render(<Preview config={TENANT_CONFIG} />);
     const root = container.querySelector(
       `.ds-pattern-tenant-preview.ds-engine-${engine}[data-part="root"]`
     ) as HTMLElement;

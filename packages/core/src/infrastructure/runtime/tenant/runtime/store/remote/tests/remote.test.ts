@@ -42,7 +42,7 @@ describe('remote tenant storage', () => {
 
     expect(fetch).toHaveBeenCalledWith('https://tenants.example.com/acme');
     expect(config.slug).toBe('acme');
-    expect(config.engine).toBeUndefined();
+    expect(config).not.toHaveProperty('engine');
   });
 
   it('rejects a reserved request before the remote call', async () => {

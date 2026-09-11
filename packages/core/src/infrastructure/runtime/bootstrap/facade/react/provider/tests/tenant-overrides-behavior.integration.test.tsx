@@ -23,7 +23,6 @@ import {
   BEHAVIOR_OVERRIDE_KEYS,
   DesignSystemProvider,
   mergeDefinedOwnEntries,
-  mergeTokenOverrides,
 } from '..';
 
 /**
@@ -436,8 +435,7 @@ describe('tenantOverrides: pinned empty and undefined semantics', () => {
     const base = getKnownTenantConfig('bithire')!;
     renderCodeOwned('bithire', {
       locale: undefined,
-      tokenOverrides: undefined,
-      personality: undefined,
+      componentPack: undefined,
       branding: undefined,
     });
     // `{ key: undefined }` is what a caller writes when a conditional produced
@@ -447,50 +445,33 @@ describe('tenantOverrides: pinned empty and undefined semantics', () => {
     expect(observed!.config).toBe(getCodeOwnedRuntimeConfig(base));
   });
 
-  it('mounts a customer tenant under tokenOverrides:{} because the census counts zero keys', () => {
-    // The config IS rebuilt here -- tokenOverrides is the visual lane -- but the
-    // empty object stays empty instead of expanding into seven sections, so the
-    // census reads zero keys and there is no payload to refuse.
-    renderSync(customerConfig(), { tokenOverrides: {} });
+  it('mounts a customer tenant under an identity-only branding override', () => {
+    // The config IS rebuilt here -- branding is the visual/identity lane -- but
+    // `companyName` is identity, not paint, so the census reads no payload and
+    // there is nothing to refuse.
+    renderSync(customerConfig(), { branding: { companyName: 'The Management' } });
     expect(mounted()).toBe(true);
     expect(caught).toBeNull();
   });
 
-  it('refuses a code-owned tenant under tokenOverrides:{} with a reserved-identity error', () => {
+  it('refuses a code-owned tenant under the same identity-only branding override', () => {
     // Same empty payload, opposite verdict -- and correctly so. Touching the
     // visual lane at all rebuilds the object, and a rebuilt object carrying a
     // reserved slug is exactly what the identity assert exists to refuse.
-    renderCodeOwned('bithire', { tokenOverrides: {} });
+    renderCodeOwned('bithire', { branding: { companyName: 'BitHire' } });
     expect(caught).toBeInstanceOf(ReservedTenantIdentityError);
     expect(mounted()).toBe(false);
   });
 
-  it('refuses a customer tenant on tokenOverrides:{surface:{}} as uncompiled visual payload', () => {
-    // One declared section is one declared channel: the census counts keys, not
-    // leaves, so an empty `surface` is still a visual claim with no compiled
-    // artifact behind it.
-    renderSync(customerConfig(), { tokenOverrides: { surface: {} } });
+  it('refuses a customer tenant on one raw brand colour as uncompiled visual payload', () => {
+    // `branding` is the ONE visual channel a `TenantConfig` still has, so a
+    // single seed colour is a visual claim with no compiled artifact behind it.
+    renderSync(customerConfig(), {
+      branding: { companyName: 'The Management', primaryColor: '#B3001B' },
+    });
     expect(mounted()).toBe(false);
     expect(caught).toBeNull();
     expect(document.documentElement.hasAttribute('data-tenant')).toBe(false);
-  });
-
-  it('refuses a code-owned tenant on tokenOverrides:{surface:{}}', () => {
-    renderCodeOwned('bithire', { tokenOverrides: { surface: {} } });
-    expect(caught).toBeInstanceOf(ReservedTenantIdentityError);
-  });
-
-  it('refuses personality:{} on both a customer and a code-owned tenant', () => {
-    // `personality` is censused by presence, so an empty declaration is still a
-    // declaration -- and the key-conditional merge publishes that empty object
-    // rather than silently falling back to the base value.
-    renderSync(customerConfig(), { personality: {} });
-    expect(mounted()).toBe(false);
-    expect(caught).toBeNull();
-
-    cleanup();
-    renderCodeOwned('bithire', { personality: {} });
-    expect(caught).toBeInstanceOf(ReservedTenantIdentityError);
   });
 });
 
@@ -500,12 +481,13 @@ const RAW_VISUAL_OVERRIDES: Array<{ label: string; override: Partial<TenantConfi
     label: 'branding color',
     override: { branding: { companyName: 'The Management', primaryColor: '#B3001B' } },
   },
-  { label: 'token override', override: { tokenOverrides: { densityScale: 1.2 } } },
-  { label: 'personality', override: { personality: { animation: { entrance: 'fade' } } } },
-  { label: 'brandTheme', override: { brandTheme: getKnownTenantConfig('bithire')!.brandTheme } },
   {
-    label: 'appearance',
-    override: { appearance: { general: { palette: { primary: '#B3001B' } } } },
+    label: 'branding font',
+    override: { branding: { companyName: 'The Management', fontFamilyBase: 'Inter' } },
+  },
+  {
+    label: 'dark branding color',
+    override: { branding: { companyName: 'The Management', darkPrimaryColor: '#B3001B' } },
   },
 ];
 
@@ -548,25 +530,26 @@ describe('tenantOverrides: the visual lane is still refused', () => {
 });
 
 /**
- * `engine` and `componentPack` are the near misses of this partition. Both are
- * runtime SELECTIONS rather than paint, which is the argument that admitted
- * `theme` to the behavior lane -- and both must nevertheless stay OUT of it.
+ * `componentPack` is the near miss of this partition. It is a runtime SELECTION
+ * rather than paint, which is the argument that admitted `theme` to the
+ * behavior lane -- and it must nevertheless stay OUT of it.
  *
  * `theme` earned its place because it lands in a slot that accepts a mode and
- * nothing else, below `forceTheme` and behind the same validation. `engine` has
- * no such slot: it names which physical implementation renders every component,
- * and `resolveEngine` deliberately ignores a non-bundled tenant's pin so that a
- * DB-driven tenant cannot change what product it is. `componentPack` is worse
- * still -- it names a registered component pack, an arbitrary code surface.
+ * nothing else, below `forceTheme` and behind the same validation.
+ * `componentPack` has no such slot: it names a registered component pack, an
+ * arbitrary code surface.
  *
- * A behavior key is delivered at its read site and never censused. Moving
- * either of these there would hand a customer an unreviewed rendering swap and
- * an identity assert that never runs. So the drill is causal in both
- * directions: they must remain observable in the published config, they must
- * still trigger the rebuild and its identity assert, and the engine must not
- * become effective merely because the tenant asked.
+ * A behavior key is delivered at its read site and never censused. Moving it
+ * there would hand a customer an unreviewed rendering swap and an identity
+ * assert that never runs. So the drill is causal in both directions: it must
+ * remain observable in the published config, and it must still trigger the
+ * rebuild and its identity assert.
+ *
+ * `engine` used to stand beside it here. It is gone from `TenantConfig`
+ * entirely: the vertical roster owns the engine, so there is no tenant pin left
+ * to publish, honour or refuse.
  */
-describe('tenantOverrides: engine and componentPack are config, not behavior', () => {
+describe('tenantOverrides: componentPack is config, not behavior', () => {
   /**
    * Each near miss carries its own typed reader rather than a string index: a
    * `TenantConfig` is a declared shape, not a bag, and casting it to
@@ -579,12 +562,6 @@ describe('tenantOverrides: engine and componentPack are config, not behavior', (
     read: (config: TenantConfig) => unknown;
     published: unknown;
   }> = [
-    {
-      key: 'engine',
-      override: { engine: 'rustic' },
-      read: (config) => config.engine,
-      published: 'rustic',
-    },
     {
       key: 'componentPack',
       override: { componentPack: 'acme-pack' },
@@ -620,110 +597,6 @@ describe('tenantOverrides: engine and componentPack are config, not behavior', (
       expect(mounted()).toBe(false);
     });
   }
-
-  it('publishes the tenant engine pin without ever honouring it', () => {
-    renderSync(customerConfig(), { engine: 'rustic' }, { forceEngine: undefined });
-
-    // Published: the config lane carried it. Ignored: `resolveEngine` honours a
-    // tenant pin only for a BUNDLED tenant, and 'the-management' is a customer.
-    // The distinction is the whole reason this key cannot be behavior -- a
-    // behavior key is delivered to its consumer by construction, which is
-    // exactly the outcome the engine resolution order refuses.
-    expect(observed!.config.engine).toBe('rustic');
-    expect(observed!.engine).toBe(PRIMARY_ENGINE);
-    expect(observed!.engine).not.toBe('rustic');
-  });
-});
-
-/**
- * The token merge, tested directly, because its two failure modes are silent at
- * the provider level: both produce a config that mounts, and the damage shows
- * up later as tokens the tenant never dropped or a census counting keys nobody
- * wrote.
- *
- * FABRICATION was the first: spreading all seven sections unconditionally gave
- * every override `{ surface: {}, motion: {}, ... }`.
- *
- * PRUNING is its mirror, and the one this round closes. `{ surface: undefined }`
- * is an OWN key, so a plain `{ ...base, ...override }` overwrote a real base
- * surface with `undefined` and left the key standing -- the tenant lost tokens
- * it never asked to drop, and gained an artificial key for the census to count.
- * `undefined` means "I wrote nothing here" everywhere else in this partition;
- * it means the same here.
- */
-describe('mergeTokenOverrides: fail-closed, fabricating and pruning nothing', () => {
-  const BASE_SURFACE = { borderWidth: '1px', useGlass: true } as const;
-
-  function baseTokens(): NonNullable<TenantConfig['tokenOverrides']> {
-    return { surface: { ...BASE_SURFACE }, densityScale: 1.2 };
-  }
-
-  it('keeps a real base surface when the override declares it undefined', () => {
-    const base = baseTokens();
-    const merged = mergeTokenOverrides(base, {
-      surface: undefined,
-      motion: { durationScale: 2 },
-    });
-
-    // Deep-exact AND reference-exact: the base section is carried, not rebuilt.
-    expect(merged.surface).toEqual(BASE_SURFACE);
-    expect(merged.surface).toBe(base.surface);
-    // The declared half of the override still lands.
-    expect(merged.motion).toEqual({ durationScale: 2 });
-    // Untouched base scalars survive an unrelated override.
-    expect(merged.densityScale).toBe(1.2);
-  });
-
-  it('invents no sibling section that neither side wrote', () => {
-    const merged = mergeTokenOverrides(baseTokens(), {
-      surface: undefined,
-      motion: { durationScale: 2 },
-    });
-
-    // Own keys, exactly: `toEqual` would pass against `{ borderRadius:
-    // undefined }` and the census counts KEYS, so presence is what to assert.
-    expect(Object.keys(merged).sort()).toEqual(['densityScale', 'motion', 'surface']);
-    for (const section of ['borderRadius', 'shadows', 'glass', 'gradients', 'overlays']) {
-      expect(merged).not.toHaveProperty(section);
-    }
-  });
-
-  it('merges a section field-wise when BOTH sides declare it', () => {
-    const merged = mergeTokenOverrides(baseTokens(), {
-      surface: { useGlass: false },
-    });
-
-    // Last write wins per field; the field the override omitted survives.
-    expect(merged.surface).toEqual({ borderWidth: '1px', useGlass: false });
-    expect(Object.keys(merged).sort()).toEqual(['densityScale', 'surface']);
-  });
-
-  it('applies the same discipline INSIDE a section, field by field', () => {
-    // Drill C. The top-level rule alone is not enough: a section merged with a
-    // raw spread loses fields one at a time, and the loss is invisible from
-    // outside the section because `surface` itself is still there.
-    const merged = mergeTokenOverrides(baseTokens(), {
-      surface: { useGlass: undefined, borderWidth: '2px' },
-    });
-
-    expect(merged.surface).toEqual({ borderWidth: '2px', useGlass: true });
-    // Presence, not just value: a raw spread leaves `useGlass` sitting there
-    // holding `undefined`, which `toEqual` alone would happily accept.
-    expect(merged.surface).toHaveProperty('useGlass', true);
-    expect(Object.keys(merged.surface!).sort()).toEqual(['borderWidth', 'useGlass']);
-  });
-
-  it('drops undefined override keys even with no base to protect', () => {
-    const merged = mergeTokenOverrides(undefined, {
-      surface: undefined,
-      motion: { durationScale: 2 },
-    });
-
-    // Returning the override object by reference would have published its
-    // `surface` own key -- one census-visible channel out of thin air.
-    expect(Object.keys(merged)).toEqual(['motion']);
-    expect(merged).not.toHaveProperty('surface');
-  });
 });
 
 /**

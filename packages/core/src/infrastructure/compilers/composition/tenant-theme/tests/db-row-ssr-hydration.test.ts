@@ -197,14 +197,10 @@ describe('DB row -> SSR embed', () => {
 
       expect(Object.prototype.hasOwnProperty.call(config, 'engine'), slug).toBe(false);
 
-      // The other half of the same fact: even when the tenant's own engine is
-      // handed to the resolver alongside the vertical's, the vertical decides.
+      // The other half of the same fact: the resolver has no tenant input left
+      // to rank, so the vertical decides by construction.
       expect(
-        resolveEngine({
-          verticalEngine: 'modern',
-          tenantEngine: config.engine,
-          tenantSlug: config.slug,
-        }),
+        resolveEngine({ verticalEngine: 'modern', tenantSlug: config.slug }),
         slug,
       ).toBe('modern');
     }
@@ -261,13 +257,7 @@ describe('SSR embed -> hydration reuse', () => {
       },
       slug: artifact.slug,
       verticalKey: artifact.verticalKey,
-      payload: {
-        visualBranding: false,
-        tokenOverrides: false,
-        appearance: artifact.normalizedAppearance,
-        personality: false,
-        brandTheme: false,
-      },
+      payload: { visualBranding: false },
       documentRoot: null,
     });
 
@@ -296,16 +286,10 @@ describe('SSR embed -> hydration reuse', () => {
       declaration: { authority: 'compiled-artifact', artifact: overWire },
       slug: overWire.slug,
       verticalKey: overWire.verticalKey,
-      payload: {
-        visualBranding: false,
-        tokenOverrides: false,
-        // The app retains the compiled appearance because the runtime still
-        // READS it (density, motion dial, anatomy). It is an echo, not a
-        // second authority, and the resolver must tell those apart.
-        appearance: overWire.normalizedAppearance,
-        personality: false,
-        brandTheme: false,
-      },
+      // The app carries no visual payload at all: the compiled appearance the
+      // runtime still READS (density, motion dial, anatomy) travels on the
+      // artifact, not on the config, so there is nothing here to echo.
+      payload: { visualBranding: false },
     });
 
     expect(resolution.authority).toBe('compiled-artifact');
@@ -333,13 +317,7 @@ describe('SSR embed -> hydration reuse', () => {
       declaration: { authority: 'compiled-artifact', artifact: overWire },
       slug: overWire.slug,
       verticalKey: overWire.verticalKey,
-      payload: {
-        visualBranding: false,
-        tokenOverrides: false,
-        appearance: undefined,
-        personality: false,
-        brandTheme: false,
-      },
+      payload: { visualBranding: false },
     });
 
     expect(resolution.origin).toBe('invalid-declaration');
@@ -381,13 +359,7 @@ describe('SSR embed -> hydration reuse', () => {
       declaration: { authority: 'compiled-artifact', artifact },
       slug: artifact.slug,
       verticalKey: artifact.verticalKey,
-      payload: {
-        visualBranding: false,
-        tokenOverrides: false,
-        appearance: tampered,
-        personality: false,
-        brandTheme: false,
-      },
+      payload: { visualBranding: false },
     });
 
     expect(resolution.conflict).toMatch(/raw appearance differs from the artifact/);

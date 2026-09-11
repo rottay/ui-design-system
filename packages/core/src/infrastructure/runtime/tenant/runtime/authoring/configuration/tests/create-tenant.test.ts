@@ -93,7 +93,7 @@ describe('createTenantConfig', () => {
     expect(theme.motion!.entrance).toBe('fade');
     expect(theme.motion!.intensity).toBeLessThan(0.5);
     expect(theme.chrome!.card!.showBorder).toBe(true);
-    expect(theme.palette.primaryColor).toBe('#3B82F6');
+    expect(theme.palette!.primaryColor).toBe('#3B82F6');
   });
 
   it('projects density onto the BrandTheme surfaces', () => {

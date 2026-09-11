@@ -50,7 +50,8 @@ describe('TenantPreview', () => {
       expect(config.slug).toBe('test-tenant');
       expect(config.name).toBe('Test Tenant');
       expect(config.branding.primaryColor).toBe('#93BAFA');
-      expect(config.personality).toBeDefined();
+      // Identity only: the preset a draft chooses is a BrandTheme channel.
+      expect(config).not.toHaveProperty('personality');
     });
 
     it('should generate CSS from the config', () => {

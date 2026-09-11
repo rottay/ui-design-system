@@ -66,7 +66,7 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
       vertical: 'bithire',
       branding: { companyName: TENANT_SLUG },
     });
-    expect(result.current.tenantConfig?.brandTheme).toBeUndefined();
+    expect(result.current.tenantConfig).not.toHaveProperty('brandTheme');
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -133,7 +133,7 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
         vertical: 'bithire',
       }),
     );
-    expect(result.current.tenantConfig?.brandTheme).toBeUndefined();
+    expect(result.current.tenantConfig).not.toHaveProperty('brandTheme');
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -145,21 +145,19 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
     expect(fetchSpy).toHaveBeenCalledWith(
       `/api/public/tenant-branding/${TENANT_SLUG}`,
     );
-    expect(result.current.tenantConfig?.brandTheme).toBeUndefined();
+    expect(result.current.tenantConfig).not.toHaveProperty('brandTheme');
     expect(result.current.tenantConfig?.branding).toMatchObject({
       companyName: 'The Management Miami DB',
       primaryColor: '#126B64',
       logo: '/tenant-assets/the-management-logo.svg',
     });
-    expect(result.current.tenantConfig?.personality).toMatchObject({
-      animation: { entrance: 'fade', entranceDuration: 180 },
-    });
-    expect(result.current.tenantConfig?.tokenOverrides).toEqual({
-      borderRadius: { md: '10px' },
-    });
-    expect(result.current.tenantConfig?.appearance).toEqual({
-      general: { density: 'comfortable' },
-    });
+    // The endpoint's `personality`, `tokenOverrides`, `appearance` and `engine`
+    // are NOT carried. A branding endpoint is a transport, not a visual
+    // authority: the artifact its document compiled to is what paints, so a
+    // second copy of those decisions here could only disagree with it.
+    for (const field of ['personality', 'tokenOverrides', 'appearance', 'engine']) {
+      expect(result.current.tenantConfig).not.toHaveProperty(field);
+    }
   });
 
   it('uses the resolved tenant slug even when a stale session names another tenant', async () => {
@@ -298,7 +296,7 @@ describe('useTenantBranding DB-owned tenant boundary', () => {
       name: 'tenant-a',
       branding: { companyName: 'tenant-a' },
     });
-    expect(result.current.tenantConfig?.engine).toBeUndefined();
+    expect(result.current.tenantConfig).not.toHaveProperty('engine');
   });
 
   it('rejects a reserved session display identity before branding I/O', () => {

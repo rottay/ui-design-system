@@ -251,17 +251,18 @@ describe('useTokens product profile resolution', () => {
   });
 
   it('DRILL: the old raw-override shape is refused, not silently applied', () => {
-    // Verbatim the payload these tests used to assert on. It must not reach
-    // `useTokens` -- and the failure mode must be a blocked tree, not a tree
-    // that renders with the raw values quietly folded in.
+    // What is left of the payload these tests used to assert on. The
+    // `tokenOverrides` and `personality` halves are gone from `TenantConfig`
+    // and cannot be written at all; the branding seeds are the one raw channel
+    // a transport can still hand the runtime, and they must not reach
+    // `useTokens` -- the failure mode must be a blocked tree, not a tree that
+    // renders with the raw values quietly folded in.
     const rawOverrides = {
       branding: {
         companyName: 'Token Test Override',
         primaryColor: '#991b1b',
         darkPrimaryColor: '#fca5a5',
       },
-      tokenOverrides: { borderRadius: { md: '22px' }, densityScale: 1.2 },
-      personality: { card: { paddingDensity: 'compact' as const } },
     };
 
     render(
@@ -279,13 +280,11 @@ describe('useTokens product profile resolution', () => {
     expect(screen.queryByTestId('radius-md')).toBeNull();
 
     // Named, so a future change that blocks for some unrelated reason cannot
-    // keep this drill green: all three raw channels must be what is seen.
+    // keep this drill green: the raw channel must be what is seen.
     const census = censusRuntimeVisualPayload({
       ...tokenTestTenant('token-test'),
       ...rawOverrides,
     } as TenantConfig);
-    expect(census.visualBranding).toBe(true);
-    expect(census.tokenOverrides).toBe(true);
-    expect(census.personality).toBe(true);
+    expect(census).toEqual({ visualBranding: true });
   });
 });

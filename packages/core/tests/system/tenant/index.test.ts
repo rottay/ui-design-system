@@ -92,7 +92,7 @@ describe('Tenant Defaults', () => {
       expect(config.slug).toBe('demo');
       expect(config.name).toBe('Demo Tenant');
       // Same rule for the fallback tenant: no engine, so the vertical decides.
-      expect(config.engine).toBeUndefined();
+      expect(config).not.toHaveProperty('engine');
       expect(config.theme).toBeDefined();
       expect(config.plan).toBeDefined();
       expect(config.features).toBeDefined();

@@ -53,7 +53,6 @@ function tenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
     plan: 'enterprise',
     features: [],
     branding: { companyName: 'Recipe profile proof' },
-    appearance: ARTIFACT.normalizedAppearance,
     ...overrides,
   } as TenantConfig;
 }
@@ -111,12 +110,11 @@ describe('DesignSystemProvider recipe-profile authority', () => {
   });
 
   it('reaches a CODE-OWNED vertical, whose profile had no runtime channel at all', () => {
-    // F-112. The runtime projection strips `appearance` to keep static CSS the
-    // sole visual emitter, and the provider read the profile only from there —
-    // so `rottay` (technical-sharp) and `bithire` (network-professional) were
-    // indistinguishable in the product. The selection now travels on the
-    // identity-keyed governed-behavior slot, which is not paint and cannot be
-    // forged by a caller-built config.
+    // F-112. A `TenantConfig` carries no appearance, and the provider read the
+    // profile only from one — so `rottay` (technical-sharp) and `bithire`
+    // (network-professional) were indistinguishable in the product. The
+    // selection now travels on the identity-keyed governed-behavior slot, which
+    // is not paint and cannot be forged by a caller-built config.
     const rottay = getKnownTenantConfig('rottay')!;
     expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(rottay))?.recipeProfile)
       .toBe('rottay/technical-sharp@1');
@@ -227,15 +225,13 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     expect(bithire.shape).toBe('default');
   });
 
-  it('blocks an uncompiled runtime brandTheme before the recipe consumer mounts', () => {
+  it('blocks an uncompiled runtime visual payload before the recipe consumer mounts', () => {
+    // A `TenantConfig` can no longer carry a theme, an appearance or a recipe
+    // selection at all; its bounded branding seeds are the last raw channel,
+    // and they are refused for want of an artifact exactly as a theme was.
     render(
       <DesignSystemProvider tenantConfig={tenantConfig({
-        appearance: undefined,
-        brandTheme: {
-          id: 'runtime-technical',
-          name: 'Runtime technical',
-          recipes: { schemaVersion: 1, profile: 'rottay/technical-sharp@1' },
-        },
+        branding: { companyName: 'Recipe profile proof', primaryColor: '#B3001B' },
       })}>
         <ProfileProbe />
       </DesignSystemProvider>,

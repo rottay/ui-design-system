@@ -26,7 +26,7 @@ import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-the
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
-import type { TenantAppearance, TenantConfig } from '@/foundation/contracts';
+import type { TenantAppearance } from '@/foundation/contracts';
 import { brandThemeToTenantAppearance } from '@/components/patterns/customization/brand-studio/runtime/file-export';
 
 const bithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
@@ -38,7 +38,7 @@ const themanagementProjectedAppearance = brandThemeToTenantAppearance(
 /**
  * DB representation of The Management. The BrandTheme fixture above remains
  * the deterministic authoring/migration source, but a customer runtime never
- * receives it via TenantConfig.brandTheme: it receives a bounded tenant theme
+ * receives it via a static theme transport: it receives a bounded tenant theme
  * DOCUMENT layered on top of the BitHire vertical.
  *
  * Authored by hand rather than projected from the BrandTheme, and that is a
@@ -88,7 +88,7 @@ const themanagementDbTenant = {
   appearance: {
     general: themanagementProjectedAppearance.general,
   } satisfies TenantAppearance,
-} satisfies Pick<TenantConfig, 'slug' | 'vertical' | 'appearance'>;
+} satisfies { slug: string; vertical: string; appearance: TenantAppearance };
 
 /** The productive DB door: one document, one compile, one artifact. */
 const themanagementDbVariables = compileTenantThemeConfig(

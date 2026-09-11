@@ -22,7 +22,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildPreviewCss, draftBrandTheme } from '..';
+import { buildPreviewCss, draftBrandTheme, draftPreviewSource } from '..';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,
@@ -42,7 +42,10 @@ import {
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from '../../../../../../../infrastructure/compilers/composition/tenant-theme';
-import { createTenantConfig } from '../../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
+import {
+  createTenantBrandTheme,
+  createTenantConfig,
+} from '../../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import type { BrandTheme } from '../../../../../../../foundation/contracts/composition/tenants/themes';
 import type { TenantConfig } from '../../../../../../../foundation/contracts/composition/tenants';
 import type {
@@ -598,34 +601,41 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     expect(css).not.toContain('prefers-color-scheme');
   });
 
-  it('an explicit config.brandTheme is passed through in FULL, ignoring legacy branding/personality/tokenOverrides', () => {
-    const brandTheme: BrandTheme = {
-      id: 'acme',
+  it('a draft compiles the BrandTheme its preset and density project to', () => {
+    // `draftPreviewSource` is the arm the three preview engines use. It is the
+    // only one that can paint a preset, because the preset's channels --
+    // motion, chrome, surfaces -- are BrandTheme channels; a `TenantConfig`
+    // carries none of them.
+    const draft = {
+      slug: 'acme',
+      vertical: 'bithire',
       name: 'Acme Corp',
-      palette: { primaryColor: '#111827', secondaryColor: '#F59E0B' },
-    };
-    const config = baseTenantConfig({
-      brandTheme,
-      // Legacy fields present alongside brandTheme; per TenantConfig's own
-      // doc comment these are superseded and must not leak into the output.
-      // A canary hex: no first-party theme authors it, so its absence proves
-      // the legacy field was ignored rather than merely coinciding with a
-      // baseline value the vertical happens to declare.
-      branding: { companyName: 'Acme Corp', primaryColor: '#FE01DC' },
-      personality: { animation: { intensity: 1.5 } },
+      primaryColor: '#111827',
+      personality: 'formal',
+      density: 'spacious',
+    } as const;
+
+    const source = draftPreviewSource(draft);
+    expect(source).not.toBeNull();
+
+    const direct = buildPreviewCss(source!);
+    const fromTheme = buildPreviewCss({
+      kind: 'brand-theme',
+      vertical: 'bithire',
+      slug: 'acme',
+      brandTheme: createTenantBrandTheme(draft),
     });
 
-    const direct = buildPreviewCss({ kind: 'brand-theme',
-      vertical: 'bithire', slug: config.slug, brandTheme });
-    const viaConfig = buildPreviewCss(config);
-
-    expect(viaConfig.css).toBe(direct.css);
-    expect(viaConfig.unsupportedAxes).toEqual([]);
-    expect(viaConfig.css).toContain('#111827');
-    expect(viaConfig.css).not.toContain('#FE01DC');
+    expect(direct.css).toBe(fromTheme.css);
+    expect(direct.unsupportedAxes).toEqual([]);
+    expect(direct.css).toContain('#111827');
   });
 
-  it('neither a brandTheme nor a branding.primaryColor: returns the typed empty/unsupported result instead of inventing a preview', () => {
+  it('refuses to name a source for a draft that names no first-party vertical', () => {
+    expect(draftPreviewSource({ slug: 'acme', name: 'Acme', primaryColor: '#111827' })).toBeNull();
+  });
+
+  it('no branding.primaryColor: returns the typed empty/unsupported result instead of inventing a preview', () => {
     const config = baseTenantConfig({ branding: { companyName: 'Acme Corp' } });
 
     const result = buildPreviewCss(config);
@@ -636,41 +646,24 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     expect(result.scopeSelector).toBe(buildPreviewScopeSelector(result.safeSlug));
   });
 
-  it('personality.chart/card/accent are preserved on the lift but reported as unsupported, since the compiler never renders them', () => {
+  it('reports no unsupported axis, because a config has no visual axis left to lose', () => {
+    // The lift used to name `personality.chart/card/accent` here: they were
+    // stored losslessly on the BrandTheme and never rendered. Those fields are
+    // gone from `TenantConfig`, so `branding` is the whole visual input and the
+    // lift is total over it -- the silence is now a fact about the type.
     const config = baseTenantConfig({
-      branding: { companyName: 'Acme Corp', primaryColor: '#3B82F6' },
-      personality: {
-        chart: {
-          animateOnMount: true,
-          mountDuration: 300,
-          lineStyle: 'smooth',
-          showDots: true,
-          useGradientFill: false,
-          tooltipStyle: 'minimal',
-        },
-        card: {
-          defaultElevation: 'lg',
-          hoverElevation: 'lift-one',
-          showBorder: true,
-          hoverTint: false,
-          paddingDensity: 'compact',
-        },
-        accent: {
-          barPosition: 'top',
-          barThickness: 2,
-          barStyle: 'solid',
-          iconContainerShape: 'circle',
-          badgeShape: 'pill',
-          dividerStyle: 'dashed',
-        },
+      branding: {
+        companyName: 'Acme Corp',
+        primaryColor: '#3B82F6',
+        fontFamilyBase: 'Inter, sans-serif',
+        darkPrimaryColor: '#1E3A8A',
       },
     });
 
-    const { unsupportedAxes } = buildPreviewCss(config);
+    const { unsupportedAxes, css } = buildPreviewCss(config);
 
-    expect(unsupportedAxes).toEqual(
-      expect.arrayContaining(['personality.chart', 'personality.card', 'personality.accent'])
-    );
+    expect(unsupportedAxes).toEqual([]);
+    expect(css).toContain('#3B82F6');
   });
 
   it('never lets a hostile slug reach the selector, via the TenantConfig arm', () => {
