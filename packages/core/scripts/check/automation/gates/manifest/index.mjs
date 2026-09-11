@@ -397,6 +397,19 @@ export const CI_GATES = Object.freeze([
   // until its own rejection is proven.
   { id: 'tier-rejection-drill', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/tier-rejection/drill/index.test.ts'], blocking: true, phase: 'pre-build', drillFor: ['tier-rejection'], },
   { id: 'tier-rejection', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/tier-rejection/index.test.ts'], blocking: true, phase: 'pre-build', drillId: 'tier-rejection-drill', },
+  // F-72: the propagation suite probed doors that are not the control's --
+  // `surfaces.shadows.md` for `surfaces.elevation-posture`, `chrome.sidebar.bg`
+  // for `navigation.sidebar-tone`. Every mutator now has to write UNDER the
+  // catalog's own `keypath.brandTheme` / `keypath.document` for its row, and
+  // the comparison is mechanical, so the class cannot come back. Registering
+  // the suite here is what makes it run: it reached CI through no inventory.
+  { id: 'capability-propagation', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/capability-propagation/index.test.ts'], blocking: true, phase: 'pre-build',
+    noDrillReason:
+      'This entry IS a mutant-carrying suite. Its keypath guard was run against the tree as it stood and caught '
+      + 'two wrong doors nobody had named (typography.pairing writing a font family, shape.radius-scale writing a '
+      + 'raw radius) on top of the two F-72 reported; it also carries a near-miss matcher case asserting that '
+      + 'surfaces.shadows.md is NOT under surfaces.elevation and chrome.sidebar.bg is NOT under '
+      + 'chrome.sidebar.tone, plus a disjoint-territory control proving one dial cannot move another dial channel.', },
   // ONE DECISION, FOUR TRANSPORTS, COMPARED AS BYTES (rubric J.4 and J.5). The
   // vocabulary relation between static and DB is owned by
   // `compilers/composition/tenant-theme/tests/static-db-channel-vocabulary.test.ts`;
