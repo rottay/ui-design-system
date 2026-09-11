@@ -31,12 +31,17 @@
  * measuring colour. They are implemented here as first-class scenarios and run
  * exactly like the positive ones.
  *
- * A CONTROL IS ONLY EVIDENCE IF ITS OWN DECISION MOVED SOMETHING, which is the
- * one thing a 0 % cannot tell you by itself. Each control therefore publishes
- * `evidential` per cell and the verdict names the two SEPARATELY: today the
- * palette control is evidential on every cell, and the `states.emphasis`
- * control is not, because the states positive reads 0 % for the reasons
- * enumerated and measured in `STATES_AXIS_LIMITS`.
+ * A CONTROL IS ONLY EVIDENCE IF ITS OWN DECISION MOVED SOMETHING IN THE CELL IT
+ * CERTIFIES, which is the one thing a 0 % cannot tell you by itself. The
+ * witness is therefore bound to the cell it stands for -- same vertical, same
+ * mode, same kit control -- because neither of the looser readings is evidence:
+ * one (vertical, mode) where the decision reaches paint says nothing about the
+ * eleven where it does not, and a positive pair that moves two catalog rows at
+ * once says nothing about the one row the control isolates. Each control
+ * publishes `evidential` per cell and the verdict names the two SEPARATELY:
+ * today the palette control is evidential on every cell, and no cell of the
+ * `states.emphasis` control is, because the states positive reads 0 % in every
+ * one of them for the reasons enumerated and measured in `STATES_AXIS_LIMITS`.
  *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
@@ -159,6 +164,12 @@ export const SCENARIOS = Object.freeze([
     id: 'states-emphasis-only',
     kind: 'negative',
     expectZeroOn: ['shape', 'typography'],
+    // What has to have moved, in THIS cell, for this control's zero to be
+    // evidence: the `states` positive in the same vertical and mode, AND the
+    // `states.emphasis` row on its own -- the pair below -- on the `states`
+    // axis there. The positive moves two catalog rows at once, so it alone
+    // cannot tell emphasis from focus-style.
+    witness: { axis: 'states', control: 'states.emphasis', positive: 'states' },
     a: { 'states.emphasis': 'subtle' },
     b: { 'states.emphasis': 'strong' },
   },
@@ -363,10 +374,11 @@ export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected']);
  * It also settles what the run may claim about NEGATIVE CONTROL 2. That control
  * is "two documents differing only in `states.emphasis` give 0 % on shape and
  * typography" -- but a control is evidence only if the same decision MOVED
- * something somewhere. While the states positive is zero, its 0 % on shape and
- * typography is compatible with the decision reaching no family at all, so the
- * run marks those cells non-evidential and says why. A run that claimed both
- * controls green would be crediting a reading that cost nothing.
+ * something IN THE SAME CELL. Wherever the states positive is zero, that cell's
+ * 0 % on shape and typography is compatible with the decision reaching no
+ * family at all, so the run marks that cell non-evidential and says why. A run
+ * that claimed both controls green would be crediting a reading that cost
+ * nothing.
  *
  * Measured 2026-09-11 over the 275 Modern skin families and the 28 channels
  * catalog rows `states.emphasis` and `states.focus-style` produce:
@@ -414,8 +426,13 @@ export const STATES_AXIS_LIMITS = Object.freeze({
   ],
 });
 
-/** The negative control the states-axis limits make vacuous while that axis reads zero. */
+/** The negative control the states-axis limits make vacuous wherever that axis reads zero. */
 export const STATES_DEPENDENT_CONTROL = 'states-emphasis-only';
+
+/** The controls that may not be credited without a witness bound to the cell. */
+export const WITNESSED_CONTROLS = Object.freeze(
+  SCENARIOS.filter((scenario) => scenario.witness !== undefined).map((scenario) => scenario.id),
+);
 
 /** Every property read in one pass; each axis owns which of them it counts. */
 export function allProperties() {
@@ -669,32 +686,91 @@ export function differsOnAxis(axis, before, after, family) {
 }
 
 /**
- * NEGATIVE CONTROL 2 IS ONLY EVIDENCE IF ITS OWN DECISION MOVED SOMETHING.
+ * Did the control's OWN decision move anything, in the cell being measured, on
+ * the axis that decision owns.
+ *
+ * The reading is taken from the pair the control already ships -- two documents
+ * differing in exactly one catalog row -- so it attributes to that row and to
+ * nothing else. It is not published as a cell: the control's cells are the axes
+ * its `expectZeroOn` names, and an axis where the control is SUPPOSED to move
+ * would be accused by the 0 % rule if it were pushed through as one.
+ */
+export function witnessReading({ witness, before, after, denominator }) {
+  const moved = [];
+  for (const family of denominator) {
+    const property = differsOnAxis(witness.axis, before, after, family);
+    if (property) moved.push({ family, property });
+  }
+  return {
+    axis: witness.axis,
+    control: witness.control,
+    positive: witness.positive,
+    moved: moved.length,
+    denominator: denominator.length,
+    movedFamilies: moved.slice(0, 12),
+  };
+}
+
+/**
+ * THE WITNESS IS BOUND TO THE CELL, and this is the whole of the rule.
  *
  * `states-emphasis-only` reads 0 % on shape and typography, which is exactly
- * what the rule demands -- but while the states POSITIVE also reads zero, that
- * same 0 % is equally consistent with the decision reaching no family at all,
- * and `STATES_AXIS_LIMITS` enumerates why it would. A run that counted it green
- * would be crediting a reading that cost nothing.
+ * what the rule demands -- and a 0 % is worth nothing until something proves
+ * the decision behind it could have moved that cell at all. Two looser readings
+ * of "something moved" were both wrong, and each is refused here by name:
  *
- * So the cells are marked in place, with their reason, and the verdict names
- * the two controls separately. Mutating the cells rather than filtering them is
- * deliberate: the percentage is still published, and a reader can see both the
- * number and why it is not evidence.
+ *  - RUN-GLOBAL. Summing the states positive over the whole run credits twelve
+ *    (vertical, mode) cells because ONE of them moved. The day the first cell
+ *    starts working is precisely the day this matters, so the witness is looked
+ *    up in the same vertical and the same mode as the cell it certifies.
+ *  - CROSS-CONTROL. The states positive moves `states.emphasis` AND
+ *    `states.focus-style` in one pair, so its movement is equally explained by
+ *    the row this control does not isolate. The control's own pair -- which
+ *    differs in `states.emphasis` alone -- is measured on the same axis in the
+ *    same cell, and that reading is what attributes the movement to emphasis.
+ *
+ * Both must hold. Where either is absent the cell keeps its published
+ * percentage and loses its standing, with the half that failed named in the
+ * reason. Mutating the cells rather than filtering them is deliberate: a reader
+ * sees both the number and why it is not evidence.
  */
-export function markVacuousControls(cells) {
-  const statesPositiveMoved = cells
-    .filter((cell) => cell.kind === 'positive' && cell.axis === 'states')
-    .reduce((total, cell) => total + cell.moved, 0);
-  if (statesPositiveMoved > 0) return cells;
+export function markVacuousControls(cells, { witnessedControls = WITNESSED_CONTROLS } = {}) {
   for (const cell of cells) {
-    if (cell.scenario !== STATES_DEPENDENT_CONTROL) continue;
+    if (!witnessedControls.includes(cell.scenario)) continue;
+    const reason = vacuousReason(cell, cells);
+    if (reason === null) continue;
     cell.evidential = false;
-    cell.nonEvidentialReason =
-      'the states positive moved 0 famil(ies) in this run, so a 0 % from the same decision shows only that '
-      + 'nothing this probe can read moved anywhere — see limits.states';
+    cell.nonEvidentialReason = reason;
   }
   return cells;
+}
+
+/** Why this cell's control carries no witness, or `null` when it carries one. */
+function vacuousReason(cell, cells) {
+  const where = `${cell.vertical}/${cell.theme}`;
+  const witness = cell.witness ?? null;
+  if (witness === null) {
+    return `no witness was measured for ${where} ${cell.scenario}, and a 0 % standing on nothing is not evidence`;
+  }
+  const positive = cells.filter((entry) => entry.kind === 'positive'
+    && entry.scenario === witness.positive
+    && entry.vertical === cell.vertical
+    && entry.theme === cell.theme);
+  if (positive.length === 0) {
+    return `the ${witness.positive} positive was not measured in ${where}, so this cell has no witness — a `
+      + 'positive that moved in another cell says nothing about this one';
+  }
+  const positiveMoved = positive.reduce((total, entry) => total + entry.moved, 0);
+  if (positiveMoved === 0) {
+    return `the ${witness.positive} positive moved 0 famil(ies) in ${where} — the very cell this 0 % would `
+      + 'certify — so it shows only that nothing this probe can read moved there — see limits.states';
+  }
+  if (witness.moved === 0) {
+    return `the ${witness.positive} positive moved ${positiveMoved} famil(ies) in ${where}, but ${witness.control} `
+      + `on its own moved 0 of ${witness.denominator} famil(ies) on the ${witness.axis} axis there, so that `
+      + `movement is attributable to the other row of the positive pair and not to ${witness.control}`;
+  }
+  return null;
 }
 
 export async function run({
@@ -720,6 +796,9 @@ export async function run({
   const unmountable = [...elements].filter(([, element]) => element === null).map(([family]) => family);
   const populations = axisPopulations(root);
   const properties = allProperties();
+  const effective = (axis) => populations
+    .get(axis)
+    .filter((family) => mountable.includes(family) && !UNSETTLED_FAMILIES.includes(family));
 
   const { browser, close, provenance } = await launchBrowser();
   const cells = [];
@@ -774,11 +853,20 @@ export async function run({
             if (!UNSETTLED_FAMILIES.includes(family)) newlyUnsettled.add(family);
             observedUnsettled.add(family);
           }
+          // Measured once per (vertical, mode, control) and carried by every
+          // cell that control publishes there, because it is that cell's
+          // standing that depends on it.
+          const witness = scenario.witness === undefined
+            ? null
+            : witnessReading({
+              witness: scenario.witness,
+              before,
+              after,
+              denominator: effective(scenario.witness.axis),
+            });
           const axes = scenario.kind === 'positive' ? [scenario.axis] : scenario.expectZeroOn;
           for (const axis of axes) {
-            const denominator = populations
-              .get(axis)
-              .filter((family) => mountable.includes(family) && !UNSETTLED_FAMILIES.includes(family));
+            const denominator = effective(axis);
             const moved = [];
             for (const family of denominator) {
               const property = differsOnAxis(axis, before, after, family);
@@ -802,6 +890,9 @@ export async function run({
               // in either direction. Publishing the zero and refusing to credit
               // it is the only honest handling.
               evidential: compiledA > 0 && compiledB > 0,
+              // What this cell's control moved with its OWN decision, here.
+              // `null` for a control whose standing needs no witness.
+              witness,
               denominator: denominator.length,
               excludedUnsettled: UNSETTLED_FAMILIES.filter((family) => populations.get(axis).includes(family)),
               moved: moved.length,
@@ -818,10 +909,6 @@ export async function run({
   }
 
   markVacuousControls(cells);
-
-  const effective = (axis) => populations
-    .get(axis)
-    .filter((family) => mountable.includes(family) && !UNSETTLED_FAMILIES.includes(family));
 
   return {
     revision: catalogRevision(),
@@ -1062,10 +1149,14 @@ if (isMain) {
   for (const control of controls) {
     const own = result.cells.filter((cell) => cell.scenario === control);
     const evidential = own.filter((cell) => cell.evidential);
+    // Cell by cell, because the standing is now per cell: a control can be
+    // evidence in one (vertical, mode) and vacuous in the next, and a single
+    // run-wide adjective would hide exactly that.
     console.log(
       evidential.length === 0
-        ? `  NEGATIVE CONTROL ${control}: NON-EVIDENTIAL in this run — ${own[0].nonEvidentialReason
-          ?? 'its pair compiles to an empty delta'}`
+        ? `  NEGATIVE CONTROL ${control}: NON-EVIDENTIAL on all ${own.length} cell(s) — e.g. `
+          + `${own[0].vertical}/${own[0].theme}: ${own[0].nonEvidentialReason
+            ?? 'its pair compiles to an empty delta'}`
         : `  NEGATIVE CONTROL ${control}: 0 % on ${evidential.length} evidential cell(s) of ${own.length}`,
     );
   }
