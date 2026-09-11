@@ -25,6 +25,10 @@ const CARD_SKIN_CSS = readFileSync(
   join(CSS_ROOT, "runtime/engines/modern/skin/card/index.css"),
   "utf8"
 );
+const CARD_TOKEN_CSS = readFileSync(
+  join(CSS_ROOT, "presentation/components/card/index.css"),
+  "utf8"
+);
 
 const theme = (surfaces: BrandTheme["surfaces"]): BrandTheme => ({
   id: "t",
@@ -58,14 +62,15 @@ describe("shape/nesting (kit row 12)", () => {
 
   it("is the identity at `concentric`: exactly the resting law, restated", () => {
     const concentric = deriveNestingLaw(theme({ nesting: "concentric" }));
-    // The floor the foundation seeds, and the ratio the one consumer falls back
-    // to. A posture that had to DIFFER from the default to be expressible would
-    // make the default inexpressible, which is why `concentric` is a word at all.
+    // Both operands are seeded by the foundation at exactly these values, so a
+    // theme that names `concentric` paints what an unauthored theme paints. A
+    // posture that had to DIFFER from the default to be expressible would make
+    // the default inexpressible, which is why it is a word at all.
     expect(DEFAULT_THEME_CSS).toContain(
       `--ds-radius-nest-inset: ${concentric["--ds-radius-nest-inset"]};`
     );
-    expect(CARD_SKIN_CSS).toContain(
-      `var(--ds-radius-nest-ratio, ${concentric["--ds-radius-nest-ratio"]})`
+    expect(DEFAULT_THEME_CSS).toContain(
+      `--ds-radius-nest-ratio: ${concentric["--ds-radius-nest-ratio"]};`
     );
   });
 
@@ -93,11 +98,19 @@ describe("shape/nesting (kit row 12)", () => {
     }
   });
 
-  it("is consumed: the card derivation reads BOTH operands in one inset", () => {
-    expect(CARD_SKIN_CSS).toContain(
-      "max(var(--ds-radius-nest-inset, 4px), calc(var(--_ds-card-radius-current," +
-        " var(--ds-card-radius)) * var(--ds-radius-nest-ratio, 0.5)))"
-    );
+  it("is consumed: the card reads BOTH operands, each through its own channel", () => {
+    // The §1.6 cascade shape, twice: a card channel declared from the governed
+    // root, read with that root as its fallback. Both halves are asserted --
+    // the declaration alone would leave the read orphaned, and the read alone
+    // would leave the channel unproduced.
+    for (const operand of ["inset", "ratio"] as const) {
+      expect(CARD_TOKEN_CSS, operand).toContain(
+        `--ds-card-nest-${operand}: var(--ds-radius-nest-${operand});`
+      );
+      expect(CARD_SKIN_CSS, operand).toContain(
+        `var(--ds-card-nest-${operand}, var(--ds-radius-nest-${operand}))`
+      );
+    }
   });
 });
 
@@ -142,6 +155,9 @@ describe("shape/control-height (kit row 14)", () => {
       const source = readFileSync(file, "utf8");
       if (!source.includes("--ds-control-height-scale")) continue;
       for (const declaration of source.split(";")) {
+        // The foundation DECLARATION of the channel is the one site that names
+        // it without a density scale beside it; every other site is a read.
+        if (/--ds-control-height-scale\s*:/.test(declaration)) continue;
         if (!declaration.includes("--ds-control-height-scale")) continue;
         if (declaration.includes("--ds-density-effective-scale")) continue;
         offenders.push(`${relative(CSS_ROOT, file)}: ${declaration.trim()}`);
@@ -150,7 +166,8 @@ describe("shape/control-height (kit row 14)", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("is read with the resting factor as its own fallback, in every consumer", () => {
+  it("is declared once at rest, and read with that same factor as fallback", () => {
+    expect(DEFAULT_THEME_CSS).toContain("--ds-control-height-scale: 1;");
     const consumers: string[] = [];
     const bare: string[] = [];
     for (const file of styleFiles()) {
@@ -162,8 +179,9 @@ describe("shape/control-height (kit row 14)", () => {
         if (read !== "var(--ds-control-height-scale, 1)") bare.push(`${file}: ${read}`);
       }
     }
-    // An unauthored theme emits no channel at all, so a bare read would collapse
-    // every control to its content height rather than leaving it where it was.
+    // The declaration is what gives the channel a producer; the fallback is what
+    // survives a token-layer outage. A read without one would collapse every
+    // control to its content height instead of leaving it where it was.
     expect(bare).toEqual([]);
     expect(consumers.length).toBeGreaterThan(10);
   });
