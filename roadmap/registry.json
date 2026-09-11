@@ -4415,6 +4415,11 @@
      "at": "2026-09-11 07:00",
      "by": "Kimi K3",
      "note": "STEP 4 LANDED (merge 2895c9531 + integration; Fable LAND after delta audit: 13 trailers rewritten by DT pre-landing with tree byte-identical, changeset corrected 18->12 real published rows with 6 never-published symbols named). TenantConfig strip complete: brandTheme/tokenOverrides/personality/appearance/engine gone from the public contract (12-row major diff, changeset per CON-05); useTokens reads the mounted artifact. RESIDUALS NAMED: (a) TenantThemeArtifact carries no runtime block - useTokens gets the runtime half only when the app passes engineVisual; closing it = adding runtime to the artifact (moves stored digests) - core input of the DER-07 connection lot; (b) static brandTheme.responsive has no runtime reader on either path (D-26 class); (c) tenantDecidedChannels deliberately ignores runtime.personality (effective vs authored); DB-tenant authored personality channels unread (pre-existing); (d) test harnesses publish seed-only variant with emptied runtime; (e) F-12 real-browser first-paint leg still pending. Registry note corrected: consumer fixture 27/27 with 5 ts-expect-error directives."
+    },
+    {
+     "at": "2026-09-11 08:25",
+     "by": "Kimi K3",
+     "note": "CHECKPOINT 99 CORRECTION (scope, not status): Closes amendment in emission-mount.md - F-46's final closure routes to INV-04 (which lists it and depends on EMI-02); EMI-02's local close = F-19, F-20, F-112, F-89 + its own F-12 arm (recipeProfile in artifact, D-26). CORRECTION to my entry of earlier today: the pending real-browser first-paint leg is F-20, not F-12 (F-12 is the recipeProfile/personality reach finding; its remaining arms - adapters declaring invariant, accent-bar null, per-family reach - stay with the derivation/family lanes)."
     }
    ]
   },
@@ -5240,7 +5245,13 @@
    "notes": "wave 3; closes n/a (enables WO-DER-06 F-11; D-30) | 2026-09-10: D-30 DEFERRED to the branding stage (owner decision, kit-2026-09.md §5c). Candidates are provisional test variants, not approved identities. WO stays open with one obligation: the recorded owner pick with digest. No fictitious pick is registered.",
    "claimedBy": "opus",
    "claimedAt": "2026-09-09",
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-09-11 08:25",
+     "by": "Kimi K3",
+     "note": "TECHNICAL CONNECTION LOT DISPATCHED (checkpoint 99 item 3: register it so this WO does not read as branding-only). Branch wo-der-07-conn (der07-opus): the probe-ground comparison's client provider receives the mounted artifact instead of artifact:null; TenantThemeArtifact gains its runtime block (persistence-schema change per CON-05 with measured digest re-anchor); runtime-consumed proof beyond CSS (states/motion/posture) with negative control; preview/publication parity. Per checkpoint 99 item 1 the lot also owes: serialize+reload of the artifact with the client using that same result without recompiling, and the identity negative (artifact A + runtime B, same engine/profile IDs, different radius/personality - refused or only the admitted artifact's runtime prevails). The recorded owner pick with digest remains this WO's only branding obligation (D-30 deferred); the technical connection does not wait for it."
+    }
+   ]
   },
   {
    "id": "WO-INV-06",
