@@ -89,7 +89,7 @@ describe('resolveChartPersonality', () => {
     expect(management).not.toEqual(bithire);
   });
 
-  it('uses ProductProfile chart values only when no compiled layer is present', () => {
+  it('lets the compiled layer override the profile field by field, and no further', () => {
     const legacyProfile = {
       personality: {
         chart: {
@@ -100,23 +100,34 @@ describe('resolveChartPersonality', () => {
       },
     } as const;
 
-    const legacy = resolveChartPersonality({
+    const noCompile = resolveChartPersonality({
       vertical: bithireVertical,
       productProfile: legacyProfile,
     });
-    const premiumWithoutChartOverrides = resolveChartPersonality({
+    // A compile that states no `chart` decides nothing on this dimension, so
+    // the profile underneath it stands. Presence of a declaration is not a
+    // decision -- that distinction is what keeps a library-seeding projection
+    // from silently replacing the preset.
+    const compiledWithoutChart = resolveChartPersonality({
       compiled: brandThemeToPersonality({ id: 'premium-empty', name: 'Premium Empty' }),
       vertical: bithireVertical,
       productProfile: legacyProfile,
     });
+    const compiledWithChart = resolveChartPersonality({
+      compiled: brandThemeToPersonality(bithireBrandTheme),
+      vertical: bithireVertical,
+      productProfile: legacyProfile,
+    });
 
-    expect(legacy).toMatchObject({
+    expect(noCompile).toMatchObject({
       mountDuration: 913,
       lineStyle: 'step',
       tooltipStyle: 'minimal',
     });
-    expect(premiumWithoutChartOverrides).toMatchObject(bithireVertical.personality.chart);
-    expect(premiumWithoutChartOverrides.mountDuration).not.toBe(913);
+    expect(compiledWithoutChart).toEqual(noCompile);
+    // And a compile that DOES state one wins on every field it states.
+    expect(compiledWithChart).toMatchObject(brandThemeToPersonality(bithireBrandTheme).chart!);
+    expect(compiledWithChart.mountDuration).not.toBe(913);
   });
 
   it('applies a sparse compiled chart override last without erasing inherited fields', () => {
@@ -162,11 +173,9 @@ describe('resolveChartPersonality', () => {
     expect(first).not.toBe(second);
     expect(first).not.toBe(verticalChart);
     expect(first).not.toBe(profileChart);
-    // The compiled layer is present, so it -- not the profile -- sits over the
-    // vertical: `mountDuration` is the compile's and `lineStyle` falls back to
-    // the vertical's, never to the profile's `step`.
-    expect(first).toMatchObject({ mountDuration: 75, lineStyle: DEFAULT_PERSONALITY.chart.lineStyle });
-    expect(first.lineStyle).not.toBe('step');
+    // The compiled layer goes last and states only `mountDuration`, so the
+    // profile's `lineStyle` underneath it stands.
+    expect(first).toMatchObject({ mountDuration: 75, lineStyle: 'step' });
     expect(verticalChart.mountDuration).toBe(610);
     expect(profileChart.lineStyle).toBe('step');
     expect(tenantChart.mountDuration).toBe(75);
