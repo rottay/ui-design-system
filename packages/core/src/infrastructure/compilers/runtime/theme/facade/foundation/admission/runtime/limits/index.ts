@@ -44,6 +44,7 @@ import {
   type TenantThemeSchemaNode,
 } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
 import type { ThemeAdmissionIssue } from "../../foundation/issues";
+import { authoredSelfReference } from "../../foundation/references";
 
 const ALLOWED_VALUE_FUNCTIONS = new Set([
   "rgb",
@@ -417,7 +418,8 @@ function authoredAt(
 }
 
 /**
- * Refuse an authored chrome value that leaves the tenant grammar, by path.
+ * Refuse an authored chrome value that leaves the tenant grammar or closes a
+ * reference on its own channel, by path.
  *
  * `moved` is the same set the tier and envelope stations are handed, so an
  * inherited baseline value is never measured against a tenant cap: a
@@ -435,7 +437,20 @@ export function authoredValueIssues(
       if (typeof value !== "string" || !moved.has(leaf)) return;
       if (!VISUAL_VALUE_CHROME_LEAVES.has(field)) return;
       const path = authoredAt(leaf, ledger);
-      if (path === null || isSafeVisualValue(value, path, true)) return;
+      if (path === null) return;
+      // The reference cycle is asked first: `var(--ds-radius-button)` on the
+      // leaf that WRITES `--ds-radius-button` clears every grammar rule and
+      // every ceiling, so the general check would admit it and report nothing.
+      const cyclic = authoredSelfReference(field, value);
+      if (cyclic !== null) {
+        issues.push({
+          code: "unsafe_value",
+          path,
+          message: `Reference cycle: var(${cyclic}) resolves to a channel this override writes`,
+        });
+        return;
+      }
+      if (isSafeVisualValue(value, path, true)) return;
       issues.push({
         code: "unsafe_value",
         path,
