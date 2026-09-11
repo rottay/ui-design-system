@@ -1,8 +1,8 @@
 /**
  * @fileoverview The single admission: one policy, every origin.
  *
- * Five stations -- tier, engine, envelope, contrast, limits -- asked in one
- * place by `compileThemeIntent`. Before WO-CAT-03 four of the five existed only
+ * Six stations -- tier, engine, envelope, contrast, limits, cycles -- asked in
+ * one place by `compileThemeIntent`. Before WO-CAT-03 four of them existed only
  * inside `compileTenantTheme`, so `static-vertical`, `preview` and the
  * `BrandTheme` draft reached the channel writers with only the engine checked:
  * a preview accepted `typography.scale 100`, `radiusScale 9`, `notacolor` and a
@@ -15,7 +15,10 @@
  * the thing it refuses. Contrast and limits are questions about the EMISSION,
  * which does not exist until the lowering has run, and they are measured
  * against the vertical's own compile because a tenant is only answerable for
- * what it changed.
+ * what it changed. Cycles are asked on both sides: the authored reading runs
+ * inside the value station, where the override path still has a name, and the
+ * emitted reading runs over the delta, where every authoring route has already
+ * collapsed into channels.
  *
  * @module Compilers/Theme/Facade/Foundation/Admission
  * @category Compilers
@@ -39,6 +42,7 @@ import { baselineFor } from "../../../runtime/resolution";
 import { movedLeaves } from "./foundation/authorship";
 import { admitEngine } from "./runtime/engine";
 import { chartCategoryIssues, compiledChartGrounds, contrastIssues } from "./runtime/contrast";
+import { referenceCycleIssues } from "./runtime/cycles";
 import { envelopeIssues } from "./runtime/envelope";
 import { ThemeAdmissionError, refuse, type ThemeAdmissionIssue } from "./foundation/issues";
 import { authoredValueIssues, limitIssues, themeChannelDelta } from "./runtime/limits";
@@ -84,6 +88,13 @@ export {
   tierIssues,
   type ThemeAdmissionLedger,
 } from "./runtime/tier";
+export { referenceCycleIssues } from "./runtime/cycles";
+export {
+  authoredSelfReference,
+  channelReferences,
+  chromeLeafChannels,
+  cyclesIn,
+} from "./foundation/references";
 export { admitEngine } from "./runtime/engine";
 export {
   authoredLeaves,
@@ -181,6 +192,7 @@ export function admitThemeCompilation(input: {
     ...contrastIssues(compiled, baseline, patch, baselineTheme),
     ...chartCategoryIssues(delta.variables, compiledChartGrounds(compiled)),
     ...limitIssues(delta),
+    ...referenceCycleIssues(delta),
   ];
   // The refusal carries what it graded: an authoring surface has to tell its
   // author WHICH pair is illegible, and the pair only exists in the compile.
