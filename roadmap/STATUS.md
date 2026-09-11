@@ -97,7 +97,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 95/159 work orders done (60%)
+## Work-order burn-down — 96/159 work orders done (60%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -112,7 +112,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
 | [consumer-contract](./consumer-contract.md) | 5 | 0 | 1 | 6 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
-| [derivation](./derivation.md) | 2 | 1 | 4 | 7 |
+| [derivation](./derivation.md) | 3 | 1 | 3 | 7 |
 | [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
 | [emission-mount](./emission-mount.md) | 1 | 1 | 1 | 3 |
 | [platform-invariants](./platform-invariants.md) | 0 | 0 | 8 | 8 |
@@ -126,7 +126,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | A · The apps can build | reached | WO-CON-04, WO-CON-05 | none | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | WO-FAM-01, WO-EVI-05 | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 39 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 59 work orders of the audit-2026-09-05 programme | 38 of 59 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -160,7 +160,6 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-DER-02 | States and materials as derived roots | L | derivation | audit-2026-09-05 |
 | WO-DER-03 | Shape and palette derived once | L | derivation | audit-2026-09-05 |
 | WO-EMI-03 | Non-CSS token emitter for mobile readiness | M | emission-mount | audit-2026-09-05 |
 | WO-INV-01 | One direction authority and logical geometry everywhere | M | platform-invariants | audit-2026-09-05 |
@@ -198,19 +197,19 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-GAT-11 | dependencies: WO-INV-01, WO-INV-03, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-GAT-12 | dependencies: WO-EVI-01, WO-RET-03; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-SKIN-08 | dependencies: WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
-| WO-DER-05 | dependencies: WO-DER-02, WO-DER-03 |
+| WO-DER-05 | dependencies: WO-DER-03 |
 | WO-DER-06 | dependencies: WO-DER-05 |
-| WO-FAM-01 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-02 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-03 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-04 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-05 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-06 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-07 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-08 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-09 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-10 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
-| WO-FAM-11 | dependencies: WO-DER-02, WO-DER-03, WO-INV-07 |
+| WO-FAM-01 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-02 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-03 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-04 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-05 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-06 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-07 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-08 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-09 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-10 | dependencies: WO-DER-03, WO-INV-07 |
+| WO-FAM-11 | dependencies: WO-DER-03, WO-INV-07 |
 | WO-INV-03 | dependencies: WO-DER-03 |
 | WO-INV-04 | dependencies: WO-EMI-02 |
 | WO-RET-01 | dependencies: WO-EMI-02, WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11 |
@@ -321,6 +320,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-CAT-02 | 2026-09-09 | R1 landed 14c0499cb (7cf6e7675+14c0499cb); Codex audit LAND: RA03 reversed — 42/42 invalid expressive outcomes refused by name at the door before projection (7 axes), 204/204 valid outcomes pass, falsy present profiles refused 8/8; contract §2.1 validation law implemented (raw authored values; isSafeVisualValue only for visual strings) |
 | WO-CAT-03 | 2026-09-09 | R1 landed 14c0499cb; Codex audit LAND: RA01 reversed — 24/24 Standard pairings compile (tier judges only direct-override ledger entries; entitled intent without ledger refused at $.ledger); RT04 reversed — 15/15 cap fixtures refused at the door at the original transport path on v2/v1/draft, decision expansions exempt per owner law (pill accepted), equal-valued direct authorship validated (I-P4) |
 | WO-DER-01 | 2026-09-09 | Re-affirmation per its reopen reason (cascade-only; acceptance NOT disproved, implementation stands): the 59439fa13 derivation pipeline (FamilyDeriver contract, ranked merge, single color owner) is unchanged and still green post-R1; re-closure cites 59439fa13 + the R1 landed tree 14c0499cb whose audits (Codex LAND) exercised the derivation registry |
+| WO-DER-02 | 2026-09-11 | ROOT RE-CLOSE after milestone audit 100 F6 fix (merge bc6b7fab2's parent; instrument lot 2f24c27c2, K3-audited; reopen + first close preserved as progress entries). RETAINED INSTRUMENT, NOW NON-VACUOUS: state-material-arm gate carries a pinned populationFloor 137 + hard floor 1 (empty population = named failure, drill in the gate's own suite; pre-fix gate reddens exactly the 3 new drills), 15 EXACT channel-to-WO dispositions bound to the tree in both directions (11 mapped to concrete cuts WO-FAM-01/02/03/06; 4 registered GAPS with ownerCandidate - slider/floatbutton/signal-card/command-home have no cut in family-cuts.md, the assignment is flagged as the owner's, two entries carry findings: signal-card-border-hover may be a one-level-deep tone exclusion, command-home aliases outside its family), measuredCorpus honestly re-pinned 349 with every ratchet direction documented. Gate green on the real tree: 122/137 governed (89.1%, floor 0.85). MATERIAL COVERAGE, CORRECTED PER AUDIT F5: the facade artifacts declare 71/81/71 --ds-material-* roots (rottay/bithire/evnto, declarations not mentions) - the original per-artifact 71/71 acceptance is satisfied LITERALLY; artifact-coverage gate green (8302/10793 reads, 275 families). ROOT EMISSION (unchanged, audit-100-F8-reproduced): states.emphasis 6 channels, states.focus-style 2 on all three verticals; out-of-domain refused by name; provenance across preview + publication (127 tests). Named residuals with owners: emphasis/focus-style family movement -> cuts + EVI-02 fleet (owner D1=20 final); witness-per-cell extension for identical-map cells (audit F7) -> WO-EVI-02 next instrument lot before EVI-05/fleet NC certification. No threshold lowered; the reassigned arms keep their live owners. |
 | WO-DER-04 | 2026-09-11 | ROOT CLOSE per owner-approved close-scope (derivation.md AMENDMENT 2026-09-10), RECORD CORRECTED per milestone audit 100 (reclose 2026-09-11; prior close + correction note preserved as progress entries). (1) ADMISSION DOOR: shared schema-widen/conn3 evidence (e0dde87bc + 2c5956078). (2) REAL DERIVATION: typography.role-weights emits 7 channels, typography.numeric 9 (reproduced by audit 100 on all verticals); shape.nesting + control-height (conn2 28ab609b5); surfaces.border-style + motion.character (connfix a5da15828); typography.scale 9 sampled families, density.mode 5. Motion vocabulary with rest values: --ds-motion-calm: 200ms in the modern engine bundle + 0s !important reduced-motion override (audit-verified). Responsive contract: 29 --ds-breakpoint references in foundation tokens. (3) TRUTHFUL EVIDENCE, CORRECTED: the frozen excluded population for the --ds-transition criterion is 29 occurrences (13 Classic CSS + 8 Rustic CSS + 8 Rustic TSX - auto-complete, cascader, mentions, tree-select, upload x4), explicitly registered, not silently expanded. Three post-2026-09-05 commits touched 7 frozen-path files and are adjudicated as WO-sanctioned contract/guard work (f7cb572e3 CAN-06 admission guard; 64ff990bd CAN-04 parallel-path removal; 441477d3a EMI-02 TenantConfig strip) - no derivation or visual change to frozen engines. 23 literal min-width query thresholds exist, 16 outside foundation/responsive/ = exactly the population the amendment assigns to the cuts + INV-07; the widened gate checks ladder membership, not literal elimination. dial-authority: 0 conflicts, 1 owner-adjudicated exception. (4) NEGATIVES: compiler-level refusals by name across typography/motion suites. SUBCLAUSE MAPPING (no threshold reduced): F-30 skin adoption and family movement bars certify in the cuts + EVI-02 fleet with standing thresholds; this root closes the derived typography/density/rhythm/elevation/motion families, their gates, and the emission of every decision it promised. NOT CLOSED HERE: skin adoption (cuts), --ds-transition retirement in Modern (cuts), INV-07 responsive adoption, DER-06 preset conversion. |
 | WO-EMI-01 | 2026-09-09 | R2 landed 38c192e8a + integration landed fd3fb4601; Codex + K3 audits LAND: RT05 reversed — same original document yields identical admitted results through preview, publish, reload, nested mount (27/27 parity incl. the 12 restored preview-arm cases; 0 differences on all profile×vertical cases; expected effective values asserted: 0.7/1.15/editorial fonts identical on both doors; partial override precedence; removal/restore digest identity; cross-plan + v1-without-plan parity, no invented entitlement); one expansion per document at the door; envelope clamps preview identically to publication |
 | WO-FAM-00 | 2026-09-09 | R3 lot landed c295af9bb; Codex audit LAND: both false PASSes repaired — cast inline-style mutant caught, uncalled a11y callbacks no longer count as executed assertions (calibration 75/13 preserved), skipped suites fail the gate; realistic-mutant drill law honored with negative controls and green twins; family-cut ratchet pins untouched (button fanOutUnreached back to 1 via the owner-pending rows, declared in the addendum) |
