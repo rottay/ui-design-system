@@ -1,0 +1,15 @@
+{
+  "purpose": "The per-axis denominator of the by-axis tenant-difference probe (kit-2026-09 section 5 rule 4), pinned so it cannot be shrunk to reach a threshold (WO-EVI-02 R4 amendment 3).",
+  "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets.",
+  "catalogRevision": "2a25f7c6068407fb",
+  "pinnedOn": "2026-09-11",
+  "skinFamilies": 275,
+  "axes": {
+    "shape": 221,
+    "typography": 183,
+    "rhythm": 216,
+    "depth": 197,
+    "states": 157,
+    "motion": 202
+  }
+}

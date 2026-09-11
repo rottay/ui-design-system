@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -325,11 +326,116 @@ export const CI_GATES = Object.freeze([
       'This entry IS its own drill: `--self-check` re-runs the same three subjects against the same bundle with the tier order REVERSED and requires every one to flip, so the planted negative rides in the same process as the measurement.',
     prerequisites: ['showroom-workspace'],
   },
+  // THE BY-AXIS TENANT-DIFFERENCE PROBE (kit-2026-09 section 5 rule 4). Two
+  // tenant documents of one vertical differing in exactly one group, measured
+  // per family as COMPUTED STYLE in Chromium across three verticals and two
+  // modes, with BOTH negative controls of the rule as first-class scenarios.
+  // The drill is blocking and runs everywhere: its offline half plants a defect
+  // in every verdict the gate can reach, and its browser half -- a NULL pair,
+  // two identical documents, which must read 0 % -- runs wherever a Chromium
+  // resolves and names the reason when none does.
+  { id: 'axis-difference-drill', run: ['node', '--test', 'scripts/check/theme/axis-difference/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['axis-difference'],
+    distExemption:
+      'MEASURED, not assumed: the probe imports dist/server.js lazily inside `run()`, and the only case that '
+      + 'calls it is the browser half, which declares `skip` when dist/server.js is absent. Run with dist/ moved '
+      + 'away the suite exits 0 with 21 passing assertions and the browser case skipped by written reason '
+      + '(2026-09-11).', },
+  {
+    id: 'axis-difference',
+    run: ['node', 'scripts/check/theme/axis-difference/index.mjs'],
+    blocking: false,
+    phase: 'post-build',
+    prerequisites: ['fresh-dist', 'showroom-workspace', 'playwright-chromium'],
+    drillId: 'axis-difference-drill',
+    excluded: {
+      reason:
+        'NOT a softened law and not a widened baseline: the gate is green on this tree today (palette-only '
+        + 'control at 0 % on every evidential cell, 3 verticals x 2 modes, run 2026-09-11; the emphasis-only '
+        + 'control is NON-EVIDENTIAL while the states positive reads 0, with its limits published in the run '
+        + 'artifact) and its drill stays '
+        + 'BLOCKING. What is missing is CI wiring this lot may not do: the `core` job ("Core Library"), whose two '
+        + '"Quality gates (manifest-driven, ...)" steps run this inventory, installs no browser, and only the '
+        + '`a11y` and `visual` jobs run `playwright install chromium`, so a blocking entry here would be '
+        + 'PREREQ-MISSING on every CI run -- which is exactly how a gate gets downgraded (F-76). '
+        + 'Run it by hand with `node scripts/check/theme/axis-difference/index.mjs` after a build.',
+      owner: 'WO-EVI-02 fleet acceptance (browser install in the gates job of .github/workflows/ci.yml)',
+      trackedSince: '2026-09-11',
+    },
+  },
+  // WHAT EVERY RATCHET IN THIS REPOSITORY IS STANDING ON (F-86, F-75). A
+  // decrease-only promise is about the DIRECTION of a number and says nothing
+  // about its size; ~9,000 findings sat frozen while every ratchet reported OK.
+  // This entry owns the discipline OF the ledgers -- a written subject, a
+  // declared widening, a closed APCA set -- and the debt walk the runner prints
+  // beside every gate is this module's, so there is one measurement.
+  { id: 'baseline-discipline-drill', run: ['node', '--test', 'scripts/check/automation/gates/baselines/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['baseline-discipline'], },
+  { id: 'baseline-discipline', run: ['node', 'scripts/check/automation/gates/baselines/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'baseline-discipline-drill', },
+  // PER-FAMILY REACH OF THE COMPILED ARTIFACTS. The causal successor to the two
+  // gates F-54 retired: a channel a family reads that no shipped artifact
+  // declares is a channel no tenant document can move, whatever the source
+  // producers say.
+  { id: 'artifact-coverage-drill', run: ['node', '--test', 'scripts/check/theme/artifact-coverage/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['artifact-coverage'], },
+  { id: 'artifact-coverage', run: ['node', 'scripts/check/theme/artifact-coverage/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'artifact-coverage-drill', ratchet: 'scripts/check/theme/artifact-coverage/baseline/index.json', },
+  // THE DENOMINATOR OF EVERY CAUSAL PERCENTAGE THIS LANE PUBLISHES.
+  // `WO-EVI-02` R4 amendment 3: each axis's denominator is the set of families
+  // that declare they consume it, read from the typed catalog at a recorded
+  // revision and published with the run; "a denominator may never be shrunk to
+  // reach a threshold". A ratio whose bottom half can move is not a
+  // measurement, so the population is pinned and moves in neither direction
+  // without a commit that says so. Drill first: a walk that stopped finding
+  // families would publish smaller denominators and every percentage above
+  // them would go UP.
+  // THE SINGLE DOOR OF `ThemeIntent`, on the AST (rubric J.1). F-24 showed the
+  // bypass is reachable from outside the package: a caller that assembles the
+  // four fields itself has an intent the ingress never normalised and
+  // `assertThemeIntent` never saw. The walk covers `packages/showroom/src` as
+  // well as core, because that is where the bypass was demonstrated. Drill
+  // first: a walk that stopped finding literals would report a clean tree, so
+  // the gate fails on an EMPTY result as well as on a bad one.
+  { id: 'intent-literal-drill', run: ['node', '--test', 'scripts/check/theme/intent-literal/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['intent-literal'], },
+  { id: 'intent-literal', run: ['node', 'scripts/check/theme/intent-literal/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'intent-literal-drill', },
+  // TIER ENFORCEMENT AT BOTH TENANT DOORS (rubric J.7). F-03: the catalog
+  // carried a tier, the document carried a plan, and nothing compared them.
+  // Driven off the catalog in both directions, so a new pro control fails
+  // until its own rejection is proven.
+  //
+  // SCOPE: `bithire` only (`const VERTICAL = "bithire"` in the suite). The
+  // catalog's tier is not per vertical, so one vertical exercises the rule --
+  // but a refusal that only bithire's envelope produces would not be caught
+  // here, and the entry says so rather than reading as a fleet claim.
+  { id: 'tier-rejection-drill', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/tier-rejection/drill/index.test.ts'], blocking: true, phase: 'pre-build', drillFor: ['tier-rejection'], },
+  { id: 'tier-rejection', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/tier-rejection/index.test.ts'], blocking: true, phase: 'pre-build', drillId: 'tier-rejection-drill', },
+  // F-72: the propagation suite probed doors that are not the control's --
+  // `surfaces.shadows.md` for `surfaces.elevation-posture`, `chrome.sidebar.bg`
+  // for `navigation.sidebar-tone`. Every mutator now has to write UNDER the
+  // catalog's own `keypath.brandTheme` / `keypath.document` for its row, and
+  // the comparison is mechanical, so the class cannot come back. Registering
+  // the suite here is what makes it run: it reached CI through no inventory.
+  { id: 'capability-propagation', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/capability-propagation/index.test.ts'], blocking: true, phase: 'pre-build',
+    noDrillReason:
+      'This entry IS a mutant-carrying suite. Its keypath guard was run against the tree as it stood and caught '
+      + 'two wrong doors nobody had named (typography.pairing writing a font family, shape.radius-scale writing a '
+      + 'raw radius) on top of the two F-72 reported; it also carries a near-miss matcher case asserting that '
+      + 'surfaces.shadows.md is NOT under surfaces.elevation and chrome.sidebar.bg is NOT under '
+      + 'chrome.sidebar.tone, plus a disjoint-territory control proving one dial cannot move another dial channel.', },
+  // ONE DECISION, FOUR TRANSPORTS, COMPARED AS BYTES (rubric J.4 and J.5). The
+  // vocabulary relation between static and DB is owned by
+  // `compilers/composition/tenant-theme/tests/static-db-channel-vocabulary.test.ts`;
+  // what this pair adds is the VALUE relation, plus the preview/publish half
+  // J.5 asks for and the non-vacuity law that keeps a parity of two unchanged
+  // maps from passing.
+  //
+  // SCOPE: `bithire` only (`const VERTICAL = "bithire"` in the suite). Parity is
+  // a relation between four transports of the SAME document, which one vertical
+  // demonstrates; a divergence that appears only under another vertical's
+  // envelope or default mode is outside what this entry measures.
+  { id: 'transport-parity-drill', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/transport-parity/drill/index.test.ts'], blocking: true, phase: 'pre-build', drillFor: ['theme-transport-parity'], },
+  { id: 'theme-transport-parity', run: ['pnpm', 'exec', 'vitest', 'run', 'tests/integration/transport-parity/index.test.ts'], blocking: true, phase: 'pre-build', drillId: 'transport-parity-drill', },
+  { id: 'theme-population-drill', run: ['node', '--test', 'scripts/check/theme/population/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-population'], },
+  { id: 'theme-population', run: ['node', 'scripts/check/theme/population/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'theme-population-drill', },
   { id: 'fanout-facts-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/fanout/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['fanout-facts-freshness'], },
   // Generated manifest views must match their live sources.
   { id: 'fanout-facts-freshness', run: ['node', 'scripts/generate/tokens/manifest/fanout/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'fanout-facts-drill', },
-  { id: 'root-checklists-freshness', run: ['node', 'scripts/generate/tokens/manifest/root-checklists/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'root-checklists-clean-checkout-drill', },
-  { id: 'mirror-parity-freshness', run: ['node', 'scripts/generate/tokens/manifest/mirror-parity/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'cascade-coverage-ownership-drill', },
   // The `decisions lit` indicator, which STATUS republishes verbatim from
   // `scripts/check/decisions-lit/evidence/index.json`.
   //
@@ -358,11 +464,6 @@ export const CI_GATES = Object.freeze([
     distExemption:
       'MEASURED, not assumed: the freshness read compares the committed artifact against its inputs and never reaches the lazy `dist/server.js` door. Run with `dist/` moved away it exits 0 (2026-09-08).',
   },
-  { id: 'variant-parity-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/variant-parity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['variant-parity'], },
-  // El cuarto mide la FUENTE, no el artefacto: variant-parity es el canon
-  // estructural de los 3 themes y corre sin build. Su `--check` es frescura Y
-  // trinquete (divergentSlots / untaggedAuthoredLeaves, decrease-only).
-  { id: 'variant-parity', run: ['node', 'scripts/generate/tokens/manifest/variant-parity/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'variant-parity-drill', ratchet: 'scripts/generate/tokens/manifest/variant-parity/baseline/index.json', },
   { id: 'claim-exactness-drill', run: ['node', '--test', 'scripts/check/evidence/certification/claims/exactness/index.test.mjs', 'scripts/check/evidence/certification/claims/exactness/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['claim-exactness'], prerequisites: ['docs-engineering-corpus'], },
   // The exact proof runs the audit above a second time inside two deterministic
   // passes and adds the planes no other gate covers: the claim/contract census in
@@ -404,6 +505,16 @@ export const CI_GATES = Object.freeze([
   // ancla decrece-solo se puede desarmar sin que nada enrojezca: medido en este
   // mismo lote, `isValidCeiling` devolviendo `true` deja pasar diez formas
   // corruptas de techo con el gate en verde.
+  // THE HALF OF ENTRYPOINT PARITY NOBODY CHECKED. `public-entrypoint-boundary`
+  // compares the 76 governed subpaths exhaustively, but its reverse rule is
+  // scoped to six owners: 44 of the 120 published subpaths -- ./icons, ./marks,
+  // ./charts, ./styles/*, ./fonts/*, ./eslint, ./server, the CSS glob -- are
+  // outside it entirely, so a 121st could join them unreviewed. This pair
+  // classifies every subpath exactly once with a written reason per class, and
+  // asks the reverse question nothing asked: which entrypoint owners on disk
+  // does nobody publish.
+  { id: 'entrypoint-parity-drill', run: ['node', '--test', 'scripts/check/boundaries/entrypoint-parity/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['entrypoint-parity'], },
+  { id: 'entrypoint-parity', run: ['node', 'scripts/check/boundaries/entrypoint-parity/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'entrypoint-parity-drill', },
   { id: 'public-entrypoint-boundary-drill', run: ['node', '--test', 'scripts/check/boundaries/public-api/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['public-entrypoint-boundary'], },
   { id: 'public-entrypoint-boundary', run: ['node', 'scripts/check/boundaries/public-api/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'public-entrypoint-boundary-drill', ratchet: 'scripts/check/boundaries/public-api/ceilings/index.json', },
   // Drill first: the freeze gate's own self-test was 25/25 green while 43 of its
@@ -937,8 +1048,6 @@ export const CI_GATES = Object.freeze([
   // Determinism of the generated cascade coverage document, whose artifact is
   // gitignored: the drills prove the document is a pure function of its inputs
   // and that the generator can create the directory it owns on a clean clone.
-  { id: 'cascade-coverage-ownership-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/mirror-parity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['mirror-parity-freshness'], },
-  { id: 'root-checklists-clean-checkout-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/root-checklists/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['root-checklists-freshness'], },
   { id: 'docs-public-set-drill', run: ['node', '--test', 'scripts/check/docs/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['docs-public-set:check'], },
   // The published documentation set has no other mechanical guard: a broken
   // link, a legacy path reference, non-English prose or a malformed diagram
@@ -1081,6 +1190,59 @@ export const CI_GATES = Object.freeze([
   { id: 'consumer-proof', run: ['node', 'scripts/check/consumer-proof/index.mjs'], blocking: true, phase: 'post-build', drillId: 'consumer-proof-drill', prerequisites: ['fresh-dist'], },
 ]);
 
+/**
+ * Gates this inventory has RETIRED, with the reason and the instrument that
+ * answers the question instead.
+ *
+ * A gate that simply disappears from `CI_GATES` leaves no trace: the next
+ * reader finds a generator nobody runs and re-registers it. Worse, the three
+ * entries below were not merely unused -- they were measuring the wrong thing
+ * and reporting green, which is the failure class this whole file exists
+ * against. So a retirement is recorded, named and validated: an id may not be
+ * in both lists, and every entry must say what replaced it.
+ *
+ * The GENERATORS themselves live under `scripts/generate/tokens/manifest/**`
+ * and are not deleted here; deleting them is a separate write set. What is
+ * settled here is the only thing that made them law -- their place in the
+ * inventory CI runs.
+ */
+export const RETIRED_GATES = Object.freeze([
+  {
+    id: 'variant-parity',
+    drills: ['variant-parity-drill'],
+    retiredOn: '2026-09-11',
+    reason:
+      'F-54: it measured PLACEHOLDERS, not parity. Its baseline accepted 3,943 placeholder pairs -- 52 % of the '
+      + 'pair universe -- as the passing state, so three themes that share 12 % of their authored leaves read green. '
+      + 'Parity between the three artifacts is a property of the DERIVATION, not of a docblock tag census.',
+    replacedBy:
+      'scripts/check/theme/artifact-coverage (per-family coverage of the compiled artifacts, measured from the '
+      + 'typed catalog) and the per-family derivation cuts.',
+  },
+  {
+    id: 'mirror-parity-freshness',
+    drills: ['cascade-coverage-ownership-drill'],
+    retiredOn: '2026-09-11',
+    reason:
+      'F-54/F-04: the compiled mirror it froze is a generated view, and its agreement with the source was proof '
+      + 'that one generator had been run, never that a decision reaches a family.',
+    replacedBy:
+      'scripts/check/theme/artifact-coverage, which reads the same compiled artifacts and asks the causal question '
+      + 'instead: which families does each catalog decision actually cover.',
+  },
+  {
+    id: 'root-checklists-freshness',
+    drills: ['root-checklists-clean-checkout-drill'],
+    retiredOn: '2026-09-11',
+    reason:
+      'F-04/F-23: a checklist regenerated from the tree it describes agrees with itself by construction. It was '
+      + 'text presence, which this lane may not accept as ground truth.',
+    replacedBy:
+      'scripts/check/engine/read-without-producer (a read with no producer is the real defect the checklist '
+      + 'gestured at) and scripts/check/theme/artifact-coverage.',
+  },
+]);
+
 const MANIFEST_PACKAGE_ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 
 /** The two phases of the run, in order. */
@@ -1104,6 +1266,19 @@ export const PREREQUISITES = Object.freeze({
   'app-bithire-corpus': {
     describe: 'the app-bithire checkout the app<->DS boundary gate audits (APP_BITHIRE_ROOT, or a sibling repository)',
     satisfied: () => existsSync(process.env.APP_BITHIRE_ROOT ?? join(MANIFEST_PACKAGE_ROOT, '../../../app-bithire')),
+  },
+  'playwright-chromium': {
+    describe:
+      'a Playwright Chromium the workspace can resolve (pnpm --filter @rottay/showroom exec playwright '
+      + 'install chromium). Computed-style evidence cannot be produced without one.',
+    satisfied: () => {
+      try {
+        const require = createRequire(join(MANIFEST_PACKAGE_ROOT, '../showroom/package.json'));
+        return Boolean(require('@playwright/test')?.chromium);
+      } catch {
+        return false;
+      }
+    },
   },
   'showroom-workspace': {
     describe: 'the @rottay/showroom workspace package',
@@ -1294,6 +1469,25 @@ export function validateManifest(gates = CI_GATES, { packageRoot = MANIFEST_PACK
       if (!existsSync(join(packageRoot, script))) {
         problems.push(`${gate.id}: names a script that does not exist: ${script}`);
       }
+    }
+  }
+
+  // A RETIRED gate may not come back by accident, and a retirement may not be
+  // a placeholder. Both halves are structural: an id in both lists is the
+  // contradiction, and an entry without a written reason and a named successor
+  // is a deletion wearing a ledger's clothes.
+  const retiredIds = new Set();
+  for (const entry of RETIRED_GATES) {
+    if (!entry.id) problems.push('a retired-gate entry has no id');
+    if (retiredIds.has(entry.id)) problems.push(`duplicate retired gate id: ${entry.id}`);
+    retiredIds.add(entry.id);
+    for (const key of ['reason', 'replacedBy', 'retiredOn']) {
+      if (typeof entry[key] !== 'string' || entry[key].trim().length < 10) {
+        problems.push(`retired ${entry.id}: ${key} must be a written value, not a placeholder`);
+      }
+    }
+    for (const id of [entry.id, ...(entry.drills ?? [])]) {
+      if (seen.has(id)) problems.push(`${id}: listed as retired and still registered in CI_GATES`);
     }
   }
 

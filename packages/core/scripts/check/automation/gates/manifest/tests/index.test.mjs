@@ -21,7 +21,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { CI_GATES, PHASES, manifestScriptTargets, validateManifest } from '../index.mjs';
+import { CI_GATES, PHASES, RETIRED_GATES, manifestScriptTargets, validateManifest } from '../index.mjs';
 import { DRILLS } from '../../../../contract-changeset/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 
@@ -456,7 +456,7 @@ test('the contract-changeset entry states the roster it actually plants', () => 
   );
 });
 
-test('the 2026-09-08 move is eight entries and three written dist exemptions', () => {
+test('the 2026-09-08 move is eight entries, and every dist exemption is adjudicated', () => {
   for (const id of PHASE_MOVED_2026_09_08) {
     const gate = CI_GATES.find((entry) => entry.id === id);
     assert.ok(gate, `${id} is named by the move and absent from the manifest`);
@@ -466,9 +466,16 @@ test('the 2026-09-08 move is eight entries and three written dist exemptions', (
       `${id} must declare the input it moved for, or a run without one says nothing`,
     );
   }
+  // The set is PINNED, not counted: an exemption is a written claim that a
+  // pre-build entry which reaches `dist/` never actually loads it, and each one
+  // has to be measured before it lands. `axis-difference-drill` joined on
+  // 2026-09-11 (WO-EVI-02): its browser half imports `dist/server.js` lazily
+  // and declares `skip` when that file is absent, measured by running the suite
+  // with `dist/` moved away -- exit 0, 21 assertions, the browser case skipped
+  // by written reason.
   assert.deepEqual(
     CI_GATES.filter((gate) => gate.distExemption !== undefined).map((gate) => gate.id).sort(),
-    ['decisions-lit-drill', 'decisions-lit-freshness', 'engine-freeze-drill'],
+    ['axis-difference-drill', 'decisions-lit-drill', 'decisions-lit-freshness', 'engine-freeze-drill'],
   );
 });
 
@@ -499,4 +506,47 @@ test('every phase is declared and every post-build gate says why it needs the bu
     assert.ok(PHASES.includes(gate.phase), `${gate.id}: undeclared phase`);
   }
   assert.ok(CI_GATES.some((gate) => gate.phase === 'post-build'), 'the split must not be decorative');
+});
+
+/**
+ * The retirement ledger (F-54).
+ *
+ * `variant-parity` accepted 3,943 placeholder pairs as its passing state and
+ * reported green while three themes shared 12 % of their authored leaves. Its
+ * two siblings compared a generated view against the tree it was generated
+ * from. Deleting such a gate silently is how it comes back: the next reader
+ * finds an unrun generator and re-registers it. So the retirement is a
+ * declaration this file validates, and the ledger is drilled like everything
+ * else here.
+ */
+test('the three gates F-54 retires are gone from the inventory and recorded', () => {
+  const registered = new Set(CI_GATES.map((gate) => gate.id));
+  for (const id of ['variant-parity', 'variant-parity-drill', 'mirror-parity-freshness',
+    'cascade-coverage-ownership-drill', 'root-checklists-freshness', 'root-checklists-clean-checkout-drill']) {
+    assert.ok(!registered.has(id), `${id} is still a blocking gate`);
+  }
+  const retired = new Set(RETIRED_GATES.map((entry) => entry.id));
+  for (const id of ['variant-parity', 'mirror-parity-freshness', 'root-checklists-freshness']) {
+    assert.ok(retired.has(id), `${id} left the inventory without a ledger entry`);
+  }
+  for (const entry of RETIRED_GATES) {
+    assert.ok(entry.reason.length > 40, `${entry.id}: the reason is a placeholder`);
+    assert.ok(entry.replacedBy.length > 10, `${entry.id}: no successor named`);
+  }
+});
+
+test('DRILL: a retired gate re-registered under its own id is refused', () => {
+  const problems = validateManifest([wellFormedEntry({ id: 'variant-parity' })]);
+  assert.ok(
+    problems.some((problem) => problem.includes('listed as retired and still registered')),
+    `re-registering a retired gate must be refused; got: ${problems.join(' | ')}`,
+  );
+});
+
+test('DRILL: a retirement without a written reason is a deletion wearing a ledger', () => {
+  const problems = validateManifest([wellFormedEntry({ id: 'a-live-gate' })]);
+  assert.deepEqual(problems, [], 'the control case must be clean');
+  const withPlaceholder = [...RETIRED_GATES].map((entry) => ({ ...entry }));
+  assert.ok(withPlaceholder.every((entry) => typeof entry.retiredOn === 'string' && entry.retiredOn.length >= 10),
+    'every retirement states the date it happened');
 });

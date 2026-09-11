@@ -39,9 +39,8 @@
  */
 
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import {
   CI_GATES,
@@ -84,62 +83,83 @@ const excluded = selected.filter((gate) => !gate.blocking);
  * green run says nothing about its size: ~9,000 findings sat frozen across
  * these files while every ratchet reported OK. The ratio is printed on every
  * run so the size is visible without reading a 3,000-key JSON.
+ *
+ * THE WALK LIVES IN `../gates/baselines`, not here. That module is also the
+ * `baseline-discipline` gate, which checks the same ledgers for a purpose, an
+ * undeclared widening and a new APCA pairing. Two walks over one set of files
+ * would be two answers to "how much debt is this", and the first time either
+ * changed they would disagree.
+ *
+ * Resolved lazily and from the package root, for the same reason the population
+ * is: the runner's own drill plants synthetic trees that carry three modules,
+ * and a static import of a fourth makes the runner unloadable there.
  */
-function debtOf(gate) {
-  if (!gate.ratchet) return null;
-  const path = join(packageRoot, gate.ratchet);
-  if (!existsSync(path)) return { error: `baseline missing: ${gate.ratchet}` };
-  let baseline;
-  try {
-    baseline = JSON.parse(readFileSync(path, 'utf8'));
-  } catch (error) {
-    return { error: `baseline unreadable: ${error instanceof Error ? error.message : String(error)}` };
-  }
-  // Baselines in this tree are not one shape: some are a flat counter map, some
-  // a ledger of named finding lists, some a nested policy document. The walk
-  // below counts what every one of them agrees on -- a numeric leaf is a
-  // ceiling, a list of findings is that many frozen findings -- and skips
-  // prose. It is a SIZE report, never a verdict; the gate itself owns the
-  // verdict.
-  const buckets = [];
-  const walk = (node) => {
-    if (Array.isArray(node)) {
-      buckets.push(node.length);
-      return;
-    }
-    if (node && typeof node === 'object') {
-      for (const value of Object.values(node)) walk(value);
-      return;
-    }
-    if (Number.isFinite(node)) buckets.push(node);
-  };
-  walk(baseline);
-  if (buckets.length === 0) return { error: `baseline carries no counter: ${gate.ratchet}` };
-  const frozen = buckets.reduce((total, value) => total + value, 0);
-  const atZero = buckets.filter((value) => value === 0).length;
-  return {
-    counters: buckets.length,
-    frozen,
-    atZero,
-    ratio: (buckets.length - atZero) / buckets.length,
-  };
+const BASELINES_MODULE = 'scripts/check/automation/gates/baselines/index.mjs';
+
+let describeLedgerDebt = null;
+try {
+  ({ describeDebt: describeLedgerDebt } = await import(
+    pathToFileURL(join(packageRoot, BASELINES_MODULE)).href
+  ));
+} catch {
+  describeLedgerDebt = null;
 }
 
 function describeDebt(gate) {
-  const debt = debtOf(gate);
-  if (!debt) return null;
-  if (debt.error) return `debt: UNREADABLE (${debt.error})`;
-  // Deliberately NOT called "findings": these baselines pin counts, byte
-  // ceilings and module ceilings side by side, so their sum has no single
-  // unit. `debtRatio` is the figure that means the same thing everywhere --
-  // how much of a gate's ledger is still standing on debt rather than on zero.
-  return `debtRatio ${(debt.ratio * 100).toFixed(1)}% — ${debt.counters - debt.atZero} of `
-    + `${debt.counters} pinned ceilings are above zero (ceiling sum ${debt.frozen}, mixed units)`;
+  if (!gate.ratchet) return null;
+  if (!describeLedgerDebt) return `debt: UNREADABLE (no ${BASELINES_MODULE})`;
+  return describeLedgerDebt(gate.ratchet, packageRoot);
+}
+
+/**
+ * The population the run's causal gates measure against, printed on every run.
+ *
+ * A debt ratio says how much of a ledger is above zero; it says nothing about
+ * the set the ledger is about. The by-axis threshold of `kit-2026-09.md`
+ * section 5 rule 4 is a percentage of the families that declare they consume
+ * an axis, and the R4 amendment makes the denominator part of the result:
+ * "a percentage whose denominator moved between runs is not comparable". So
+ * the revision and the six denominators are published WITH the run rather
+ * than left in an artifact a reader has to go and find.
+ *
+ * A failure to read it is printed, never swallowed: an unpublished population
+ * is exactly the state the amendment forbids, and a runner that quietly
+ * omitted the line would be the way it happens.
+ */
+/**
+ * Resolved LAZILY, and relative to the package root the runner was pointed at
+ * rather than to this file. The runner is exercised by its own drill inside
+ * synthetic trees that carry three modules and nothing else, and a static
+ * import of a fourth would make the runner unloadable there -- which is the
+ * same reproducibility failure F-76 names, committed by the instrument that
+ * reports it. A tree without the population owner therefore gets the sentence
+ * below rather than a crash, and it says so out loud.
+ */
+const POPULATION_MODULE = 'scripts/check/theme/population/index.mjs';
+
+let populationLine = null;
+let populationError = null;
+try {
+  ({ populationLine } = await import(
+    pathToFileURL(join(packageRoot, POPULATION_MODULE)).href
+  ));
+} catch (error) {
+  populationError = error instanceof Error ? error.message : String(error);
+}
+
+function describePopulation() {
+  if (!populationLine) return `population: UNREADABLE (${populationError ?? `no ${POPULATION_MODULE}`})`;
+  try {
+    return populationLine();
+  } catch (error) {
+    return `population: UNREADABLE (${error instanceof Error ? error.message : String(error)})`;
+  }
 }
 
 console.log(
   `ci-gates [${selectedPhases.join(' + ')}]: ${blocking.length} blocking, ${excluded.length} excluded`,
 );
+console.log(`ci-gates: ${describePopulation()}`);
 console.log(`ci-gates: manifest validation is ${MANIFEST_VALIDATION_SCOPE}\n`);
 
 if (listOnly) {
@@ -220,6 +240,7 @@ for (const gate of blocking.concat(excluded)) {
   const debt = describeDebt(gate);
   if (debt) console.log(`  DEBT            ${gate.id.padEnd(46)} ${debt}`);
 }
+console.log(`  POPULATION      ${describePopulation()}`);
 
 if (continueOnFailure) {
   const passed = results.filter((result) => result.state === 'PASS').length;

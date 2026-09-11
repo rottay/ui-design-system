@@ -58,6 +58,7 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { THEME_CONTROL_CATALOG } from '@/contracts/theme/runtime/catalog';
 import { TENANT_CAPABILITY_REGISTRY } from '@/foundation/contracts/composition/tenants/capabilities';
 import type {
   TenantThemeAdvancedDocument,
@@ -210,7 +211,19 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'typography.pairing': {
     db: (d) => { d.visualFoundation!.general!.typography!.typePairing = 'geometric'; return d; },
-    static: (b) => { b.typography = { ...(b.typography ?? {}), fontFamilyBase: 'Futura, sans-serif' }; return b; },
+    // Found by the keypath guard below, not by hand: this wrote
+    // `typography.fontFamilyBase` -- a FAMILY, which is `typography.families`'
+    // door and the very leaf that outranks the pairing. The declared keypath is
+    // `typography.typePairing`, and the two families it expands into are
+    // cleared so the pairing is what the reading measures.
+    static: (b) => {
+      const typography = { ...(b.typography ?? {}) } as Record<string, unknown>;
+      delete typography.fontFamilyBase;
+      delete typography.fontFamilyHeading;
+      typography.typePairing = 'geometric';
+      b.typography = typography as BrandTheme['typography'];
+      return b;
+    },
   },
   'typography.families': {
     db: (d) => { d.visualFoundation!.general!.typography!.fontFamilyHeading = "'Playfair Display', serif"; return d; },
@@ -218,13 +231,17 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'typography.scale': {
     db: (d) => { d.visualFoundation!.general!.typography!.scale = 0.95; return d; },
+    static: (b) => { b.typography = { ...(b.typography ?? {}), scale: 1.08 } as BrandTheme['typography']; return b; },
   },
   'shape.radius-scale': {
     db: (d) => { d.visualFoundation!.general!.shape!.radiusScale = 0.8; return d; },
+    // Found by the keypath guard below: this wrote `surfaces.borderRadius.md`,
+    // a raw radius rather than the scale, which proves that authoring a radius
+    // paints a radius. The declared keypath is `surfaces.radiusScale`.
     static: (b) => {
       b.surfaces = {
         ...(b.surfaces ?? {}),
-        borderRadius: { ...(b.surfaces?.borderRadius ?? {}), md: '19px' },
+        radiusScale: 1.2,
       } as BrandTheme['surfaces'];
       return b;
     },
@@ -246,11 +263,22 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'surfaces.elevation-posture': {
     db: (d) => { d.visualFoundation!.general!.surfaces!.elevation = 'flat'; return d; },
+    // F-72: this used to write `surfaces.shadows.md` -- a raw shadow value, not
+    // the posture. It proved that authoring a shadow paints a shadow, which
+    // nobody doubted, and said nothing about the control. The catalog's
+    // `keypath.brandTheme` for this row is `surfaces.elevation`, and the
+    // keypath guard below now refuses a mutator that writes anywhere else.
+    // The explicit shadow map is CLEARED, not written: a BrandTheme states its
+    // own shadows, and an explicit leaf outranks the posture that would derive
+    // it. Measured -- setting `surfaces.elevation` alone moves 0 channels on
+    // bithire. Clearing the leaf it competes with is the same precedence fact
+    // `tests/integration/transport-parity` proves for four other rows, applied
+    // here so the posture is measured instead of the shadow.
     static: (b) => {
-      b.surfaces = {
-        ...(b.surfaces ?? {}),
-        shadows: { ...(b.surfaces?.shadows ?? {}), md: '0 0 0 1px #123456' },
-      } as BrandTheme['surfaces'];
+      const surfaces = { ...(b.surfaces ?? {}) } as Record<string, unknown>;
+      delete surfaces.shadows;
+      surfaces.elevation = 'flat';
+      b.surfaces = surfaces as BrandTheme['surfaces'];
       return b;
     },
   },
@@ -260,11 +288,13 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'navigation.sidebar-tone': {
     db: (d) => { d.visualFoundation!.general!.navigation!.sidebarTone = 'subtle'; return d; },
+    // F-72: this used to write `chrome.sidebar.bg` -- a colour, not the tone.
+    // The catalog's `keypath.brandTheme` for this row is `chrome.sidebar.tone`.
     static: (b) => {
       const chrome = b as unknown as { chrome?: Record<string, Record<string, unknown>> };
       chrome.chrome = {
         ...(chrome.chrome ?? {}),
-        sidebar: { ...(chrome.chrome?.sidebar ?? {}), bg: '#0b1a2b' },
+        sidebar: { ...(chrome.chrome?.sidebar ?? {}), tone: 'subtle' },
       };
       return b;
     },
@@ -306,6 +336,11 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'recipe-profile': {
     db: (d) => { d.visualFoundation!.recipeProfile = 'rottay/technical-sharp@1'; return d; },
+    static: (b) => {
+      const recipes = b as unknown as { recipes?: Record<string, unknown> };
+      recipes.recipes = { ...(recipes.recipes ?? {}), profile: 'rottay/editorial@1' };
+      return b;
+    },
   },
   'profiles.expressive': {
     db: (d) => { (d.visualFoundation!.advanced!.profiles as Record<string, string>).edge = 'hairline'; return d; },
@@ -315,6 +350,11 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'responsive.posture': {
     db: (d) => { d.visualFoundation!.advanced!.responsivePosture = 'compact'; return d; },
+    static: (b) => {
+      const responsive = b as unknown as { responsive?: Record<string, unknown> };
+      responsive.responsive = { ...(responsive.responsive ?? {}), posture: 'compact' };
+      return b;
+    },
   },
 };
 
@@ -334,18 +374,46 @@ const MUTATORS: Record<string, Mutators> = {
  *    `shape.button-style`, `token-overrides`, `palette.dark-mode`). Mutating
  *    those needs the selection catalogs, which leg 1 does not own.
  */
-const STATIC_UNCOVERED = new Set([
-  'palette.dark-mode',
-  'typography.scale',
-  'shape.button-style',
-  'experience.profile',
-  'chrome.anatomy',
-  'token-overrides',
-  'recipe-profile',
-  'profiles.expressive',
-  'profiles.icon',
-  'responsive.posture',
-]);
+/**
+ * Capabilities with NO static mutator, each with the measured reason.
+ *
+ * F-72 asks for this set to be empty. It is not, and every remaining entry is
+ * accounted for by a measurement rather than by a shrug -- three of them are
+ * not a static-path question at all, and the other four were driven through the
+ * catalog's own `keypath.brandTheme` and moved nothing, for reasons the
+ * transport-parity suite proves independently.
+ *
+ * It went from ten to four real gaps in this lot: `typography.scale`,
+ * `recipe-profile` and `responsive.posture` gained working static mutators, and
+ * the two entries F-72 named by hand (`surfaces.elevation-posture` writing
+ * `shadows.md`, `navigation.sidebar-tone` writing `sidebar.bg`) were moved onto
+ * their real keypaths, where the keypath guard below now holds them.
+ */
+const STATIC_UNCOVERED_REASONS: Readonly<Record<string, string>> = {
+  'palette.dark-mode':
+    'its brandTheme keypath is `modes.dark.palette.*`, and this leg reads the ROOT block of the static lowering '
+    + 'only; a mode delta is outside what `compileStatic` returns. Measured: 0 channels moved.',
+  'shape.button-style':
+    'bithire authors its button chrome explicitly and an explicit leaf outranks the silhouette that would '
+    + 'derive it. Measured: setting `surfaces.buttonStyle` moves 0 channels on this fixture.',
+  'experience.profile':
+    'locked-by-default (D-28 b): the vertical product posture, not a tenant taste axis, so there is no tenant '
+    + 'static authorship to mutate. Measured: 0 channels moved.',
+  'profiles.expressive':
+    'a six-key record composed into postures; one key is outranked by the explicit leaves the composition '
+    + 'writes. Measured: setting `expressive.profiles.edge` moves 0 channels.',
+  'chrome.anatomy':
+    'its catalog effect is `root-attributes`, not `css-channels`: it travels as a normalized root attribute and '
+    + 'never reaches a CSS channel, so a static channel assertion would assert something never promised.',
+  'token-overrides':
+    'not one of the 29 catalog decisions -- a retired row the registry still names. It has no brandTheme keypath '
+    + 'to mutate.',
+  'profiles.icon':
+    'not a catalog decision either, and it declares `derivedRootAttributes`: it travels as data, which the '
+    + 'data-only leg below asserts instead.',
+};
+
+const STATIC_UNCOVERED = new Set(Object.keys(STATIC_UNCOVERED_REASONS));
 
 /**
  * Capabilities where a channel that MOVED is read directly by the declared
@@ -448,6 +516,131 @@ function changedKeys(
   const keys = new Set([...Object.keys(before), ...Object.keys(after)]);
   return [...keys].filter((key) => before[key] !== after[key]).sort();
 }
+
+/**
+ * The leaf paths a mutator actually wrote, by diffing before against after.
+ *
+ * Deep rather than shallow, because a mutator that rewrites a container and a
+ * mutator that writes a leaf are the same edit from the outside and only one of
+ * them is at the keypath.
+ */
+function writtenLeaves(
+  before: unknown,
+  after: unknown,
+  prefix = ''
+): string[] {
+  if (before === after) return [];
+  const isRecord = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null && !Array.isArray(value);
+  // A branch that did not exist before is still DESCENDED into: a mutator that
+  // creates `responsive` wholesale wrote `responsive.posture`, and reporting
+  // the container instead would have accused it of missing its own door.
+  if (!isRecord(before) && !isRecord(after)) return prefix ? [prefix] : [];
+  const left = isRecord(before) ? before : {};
+  const right = isRecord(after) ? after : {};
+  const written: string[] = [];
+  for (const key of new Set([...Object.keys(left), ...Object.keys(right)])) {
+    written.push(...writtenLeaves(left[key], right[key], prefix ? `${prefix}.${key}` : key));
+  }
+  return written;
+}
+
+/**
+ * A catalog keypath expanded into the prefixes a write may legally land under.
+ *
+ * `chrome.{cardComponent,table,sidebar,layout}.anatomy` is four keypaths written
+ * once, and `modes.dark.palette.*` is a subtree. Both spellings are the
+ * catalog's, so both are read here rather than normalised away in the catalog.
+ */
+export function keypathPrefixes(keypath: string | null): string[] {
+  if (!keypath) return [];
+  const braced = keypath.match(/\{([^}]*)\}/u);
+  const expanded = braced
+    ? braced[1].split(',').map((option) => keypath.replace(/\{[^}]*\}/u, option.trim()))
+    : [keypath];
+  return expanded.map((path) => path.replace(/\.\*$/u, ''));
+}
+
+const under = (leaf: string, prefixes: readonly string[]): boolean =>
+  prefixes.some((prefix) => leaf === prefix || leaf.startsWith(`${prefix}.`));
+
+/**
+ * THE ANTI-F-72 LAW, and the durable half of this file.
+ *
+ * F-72 found two mutators probing a door that is not the control's: this suite
+ * wrote `surfaces.shadows.md` for `surfaces.elevation-posture` and
+ * `chrome.sidebar.bg` for `navigation.sidebar-tone`. Both moved channels, both
+ * passed every assertion, and neither said anything about the control -- the
+ * first proved that authoring a shadow paints a shadow.
+ *
+ * Fixing the two is worth little on its own; what closes the class is that a
+ * mutator must now write UNDER the catalog's own declared keypath for its row,
+ * and the comparison is mechanical. A future mutator aimed at the wrong door
+ * fails here before it can report a false green.
+ */
+describe('capability propagation — every mutator probes the control own door (F-72)', () => {
+  const catalogById = new Map(THEME_CONTROL_CATALOG.map((row) => [row.id as string, row]));
+
+  for (const capability of ACTIVE) {
+    const row = catalogById.get(capability.id);
+    const mutators = MUTATORS[capability.id];
+    if (!row || !mutators) continue;
+
+    if (mutators.static) {
+      it(`${capability.id}: the static mutator writes its own keypath.brandTheme`, () => {
+        const prefixes = keypathPrefixes(row.keypath.brandTheme);
+        expect(prefixes.length, `${capability.id} has a static mutator and no brandTheme keypath`)
+          .toBeGreaterThan(0);
+        const base = clone(bithireBrandTheme) as BrandTheme;
+        const written = writtenLeaves(base, mutators.static!(clone(base)));
+        expect(written.length, 'the mutator changed nothing at all').toBeGreaterThan(0);
+        expect(
+          written.filter((leaf) => under(leaf, prefixes)),
+          `${capability.id} wrote ${written.join(', ')}; its declared door is ${prefixes.join(' | ')}`,
+        ).not.toEqual([]);
+      });
+    }
+
+    if (mutators.db) {
+      it(`${capability.id}: the DB mutator writes its own keypath.document`, () => {
+        // The catalog states the document keypath in its v1 projection spelling
+        // (`appearance.general.…`); the v1 document object this suite authors
+        // spells the same place `visualFoundation.…`. The alias is applied here,
+        // once, rather than a second keypath being invented in the catalog.
+        const prefixes = keypathPrefixes(row.keypath.document)
+          .map((path) => path.replace(/^appearance\./u, 'visualFoundation.'));
+        expect(prefixes.length, `${capability.id} has a DB mutator and no document keypath`)
+          .toBeGreaterThan(0);
+        const base = clone(BASE_DOC);
+        const written = writtenLeaves(base, mutators.db!(clone(base)));
+        expect(written.length, 'the mutator changed nothing at all').toBeGreaterThan(0);
+        expect(
+          written.filter((leaf) => under(leaf, prefixes)),
+          `${capability.id} wrote ${written.join(', ')}; its declared door is ${prefixes.join(' | ')}`,
+        ).not.toEqual([]);
+      });
+    }
+  }
+
+  it('the keypath matcher refuses a near miss', () => {
+    expect(under('surfaces.shadows.md', keypathPrefixes('surfaces.elevation'))).toBe(false);
+    expect(under('surfaces.elevation', keypathPrefixes('surfaces.elevation'))).toBe(true);
+    expect(under('chrome.sidebar.bg', keypathPrefixes('chrome.sidebar.tone'))).toBe(false);
+    expect(under('chrome.sidebar.tone', keypathPrefixes('chrome.sidebar.tone'))).toBe(true);
+    expect(under('chrome.table.anatomy', keypathPrefixes('chrome.{cardComponent,table}.anatomy'))).toBe(true);
+    expect(under('modes.dark.palette.primaryColor', keypathPrefixes('modes.dark.palette.*'))).toBe(true);
+    expect(under('modes.light.palette.primaryColor', keypathPrefixes('modes.dark.palette.*'))).toBe(false);
+  });
+});
+
+describe('capability propagation — every remaining static gap has a measured reason', () => {
+  it('names a cause for each uncovered capability, and none for a covered one', () => {
+    for (const [id, reason] of Object.entries(STATIC_UNCOVERED_REASONS)) {
+      expect(reason.length, `${id}: the reason is a placeholder`).toBeGreaterThan(60);
+      expect(MUTATORS[id]?.static, `${id} is ledgered as uncovered and has a static mutator`).toBeUndefined();
+    }
+  });
+});
 
 describe('capability propagation — coverage is pinned to the registry', () => {
   it('owns a mutator for every ACTIVE capability', () => {
