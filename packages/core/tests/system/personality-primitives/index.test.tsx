@@ -35,7 +35,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DesignSystemProvider } from '../../../src/infrastructure/runtime/bootstrap';
-import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
+import { librarySeedEngineVisual } from '@tests/support/engine';
 import type { EngineName, ProductProfileKey, TenantConfig } from '../../../src/foundation/contracts';
 import {
   PERSONALITY_CANONICAL_PROJECTION,
@@ -121,7 +121,7 @@ const EVNTO_TENANT_WITH_UNCOMPILED_COLORS: TenantConfig = {
 
 function renderWithProfile(
   ui: React.ReactNode,
-  engine: EngineName,
+  engine: Exclude<EngineName, 'custom'>,
   tenantConfig: TenantConfig,
   productProfile: ProductProfileKey
 ) {
@@ -129,7 +129,7 @@ function renderWithProfile(
     <DesignSystemProvider
       tenantConfig={tenantConfig}
       forceEngine={engine}
-      engineVisual={firstPartyEngineVisual('rottay', engine)}
+      engineVisual={librarySeedEngineVisual(engine)}
       productProfile={productProfile}
       skipCssLoading
     >

@@ -338,31 +338,28 @@ describe('SSR embed -> hydration reuse', () => {
     ).toBe(true);
   });
 
-  it('DRILL: an authored override is NOT mistaken for the echo', () => {
-    // The other direction. A payload that genuinely differs must be reported as
-    // a conflict, or a second painter ships silently.
-    const { artifact, emission } = renderOnServer();
+  it('DRILL: raw branding beside a genuine mount is still a conflict', () => {
+    // The other direction. A payload that genuinely competes must be reported,
+    // or a second painter ships silently. The appearance ECHO this drill used
+    // to tamper with is gone: `TenantConfig` carries no appearance at all, so
+    // the branding seeds are the only payload that can sit beside a mount.
+    const { emission } = renderOnServer();
 
-    // The mount is genuine, so the appearance mismatch is the ONLY thing wrong.
-    // Without this the drill passed for the wrong reason: the resolver blocked
-    // on "not mounted" and `conflict !== null` was satisfied, which means it
-    // would have stayed green with the echo comparison deleted outright.
+    // The mount is genuine, so the raw payload is the ONLY thing wrong. Without
+    // this the drill would pass for the wrong reason: the resolver would block
+    // on "not mounted" and `conflict !== null` would be satisfied even with the
+    // payload census deleted outright.
     mountServerEmission(emission);
-
-    const tampered = JSON.parse(JSON.stringify(artifact.normalizedAppearance));
-    tampered.general = { ...(tampered.general ?? {}), density: 'compact' };
-    // Guards the tamper itself: if the fixture ever compiles to `compact`, the
-    // line above becomes a no-op and this drill would assert nothing.
-    expect(appearanceMatchesArtifact(tampered, artifact.normalizedAppearance)).toBe(false);
+    const { artifact } = renderOnServer();
 
     const resolution = resolveVisualAuthority({
       declaration: { authority: 'compiled-artifact', artifact },
       slug: artifact.slug,
       verticalKey: artifact.verticalKey,
-      payload: { visualBranding: false },
+      payload: { visualBranding: true },
     });
 
-    expect(resolution.conflict).toMatch(/raw appearance differs from the artifact/);
+    expect(resolution.conflict).toMatch(/raw visual branding/);
     expect(resolution.conflict).not.toMatch(/is not mounted/);
     // Suppression stays total under conflict: a reported ambiguity must never
     // become a second painter.

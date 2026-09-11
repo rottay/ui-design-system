@@ -100,15 +100,21 @@ function collectDeclaredChannels(
 }
 
 /**
- * The personality channels a tenant decided, from the ONE place a decision can
- * come from: the compile that produced its artifact.
+ * The personality channels a tenant DECIDED -- what it authored, never what a
+ * compile derived for it.
  *
  * A `TenantConfig` declares nothing. A code-owned vertical's decisions are
  * captured at registration, while the authored theme is still in hand, and
- * travel on the identity-keyed slot; a published tenant declares them through
- * the compiled `ThemeCompilation.runtime.personality` the mount carries, plus
- * the semantic density posture of its normalized appearance, which decides the
- * same padding channel the card dimension carries.
+ * travel on the identity-keyed slot. A published tenant's one remaining
+ * authored channel that this policy can read is the semantic density posture
+ * its artifact compiled, which decides the same padding channel the card
+ * dimension carries.
+ *
+ * `ThemeCompilation.runtime.personality` is deliberately NOT read here. It is
+ * the EFFECTIVE personality -- the vertical baseline with the tenant's patch
+ * already merged into it -- so every field is populated for every tenant, and
+ * treating it as authorship would mark every channel decided and refuse every
+ * instance selection this catalog exists to admit.
  */
 export function tenantDecidedChannels(
   config: TenantConfig | undefined,
@@ -120,17 +126,12 @@ export function tenantDecidedChannels(
       decided.add(channel);
     }
   }
-  collectDeclaredChannels(compiled?.personality, decided);
   if (compiled?.density !== undefined) decided.add('card.paddingDensity');
   return decided;
 }
 
-/** What a mounted artifact's compile says this tenant decided. */
+/** What a mounted artifact says this tenant decided. */
 export interface CompiledTenantDecisions {
-  /** `ThemeCompilation.runtime.personality` of the mounted artifact. */
-  readonly personality?: {
-    [K in (typeof PERSONALITY_DIMENSIONS)[number]]?: Partial<PersonalityTokens[K]>;
-  };
   /** The artifact's normalized semantic density posture, when it compiled one. */
   readonly density?: string;
 }

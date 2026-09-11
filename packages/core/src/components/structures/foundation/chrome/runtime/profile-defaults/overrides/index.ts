@@ -20,7 +20,6 @@
 
 import { useMemo } from 'react';
 import { useTenantContext } from '@/infrastructure/runtime/tenant/foundation/context';
-import { useEngineVisualDeclaration } from '@/infrastructure/runtime/foundation/engine-visual';
 import type { SurfaceVisualOverrides } from '../../../contracts';
 import {
   useSurfaceProfileDefaults,
@@ -69,20 +68,19 @@ export function useSurfaceVisualOverrideVerdicts(
 
 /**
  * The active tenant's decided channels, from the two places a decision can
- * come from: the identity-keyed slot of a code-owned vertical, and the compile
- * that produced the mounted artifact of a published one.
+ * come from: the identity-keyed slot of a code-owned vertical, and the
+ * semantic density posture the mounted artifact of a published one compiled.
  */
 function useTenantDecidedChannels(): ReadonlySet<string> {
   const { config, appearance } = useTenantContext();
-  const compiledPersonality = useEngineVisualDeclaration()?.runtime.personality;
   const density = appearance?.general?.density;
   return useMemo(
     () =>
-      resolveTenantDecidedChannels(config, {
-        ...(compiledPersonality === undefined ? {} : { personality: compiledPersonality }),
-        ...(density === undefined ? {} : { density }),
-      }),
-    [config, compiledPersonality, density],
+      resolveTenantDecidedChannels(
+        config,
+        density === undefined ? undefined : { density },
+      ),
+    [config, density],
   );
 }
 

@@ -170,14 +170,13 @@ export function useTokens(): DesignTokens {
   return useMemo(() => {
     // -- Token Resolution Pipeline --
     //
-    //   compiled present:  engine -> vertical -> compiled
-    //   compiled absent:   engine -> vertical -> product profile
+    //   engine -> vertical -> product profile -> compiled tenant layer
     //
-    // The product profile is a UX PRESET: it stands in for a tenant that has
-    // published nothing. A tenant that published a compile has decided these
-    // channels itself, and layering a preset underneath its decision would let
-    // the preset show through on every channel the compile happens to leave
-    // open -- two answers to one question, which is the shape this WO removes.
+    // The product profile is a UX PRESET; the compiled layer is the tenant's
+    // own published decision, so it goes last. Layering rather than switching
+    // is deliberate: the choice has to turn on whether a channel was DECIDED,
+    // not on whether a declaration object exists, and a compile that states
+    // nothing on a channel must leave the preset underneath it standing.
 
     // 1. Engine base tokens. `resolveAdapter` is the single door: an engine
     // with no adapter has no baseline and is refused rather than substituted.
@@ -199,43 +198,52 @@ export function useTokens(): DesignTokens {
       : engineOverrides.motion;
     const verticalDensityScale = verticalTokenOverrides?.densityScale ?? engineOverrides.densityScale;
 
-    // 3. The top layer: the compiled tenant decision, or the product-profile
-    // preset when the tenant published none.
-    const top = compiled?.tokenOverrides ?? profile.tokenOverrides;
-    const borderRadius = top?.borderRadius
-      ? { ...verticalBorderRadius, ...top.borderRadius }
-      : verticalBorderRadius;
-    const shadows = top?.shadows
-      ? { ...verticalShadows, ...top.shadows }
-      : verticalShadows;
-    const surface = top?.surface
-      ? { ...verticalSurface, ...top.surface }
-      : verticalSurface;
-    const motion = top?.motion
-      ? { ...verticalMotion, ...top.motion }
-      : verticalMotion;
+    // 3. Product-profile preset, then the compiled tenant layer over it.
+    const profileOverrides = profile.tokenOverrides;
+    const compiledOverrides = compiled?.tokenOverrides;
+    const borderRadius = {
+      ...verticalBorderRadius,
+      ...profileOverrides?.borderRadius,
+      ...compiledOverrides?.borderRadius,
+    };
+    const shadows = {
+      ...verticalShadows,
+      ...profileOverrides?.shadows,
+      ...compiledOverrides?.shadows,
+    };
+    const surface = {
+      ...verticalSurface,
+      ...profileOverrides?.surface,
+      ...compiledOverrides?.surface,
+    };
+    const motion = {
+      ...verticalMotion,
+      ...profileOverrides?.motion,
+      ...compiledOverrides?.motion,
+    };
     // Appearance density is a semantic factor composed AFTER the structural
     // resolution. The canonical resolver is also the source for the CSS
     // mode-factor channel, preventing JS/CSS drift.
     const densityScale = resolveEffectiveDensityScale(
-      top?.densityScale ?? verticalDensityScale,
+      compiledOverrides?.densityScale ?? profileOverrides?.densityScale ?? verticalDensityScale,
       appearance?.general?.density,
     );
 
-    // 4. Personality, on the same two-layer rule. Each sub-object is spread
+    // 4. Personality, on the same order. Each sub-object is spread
     // independently so customizing one dimension does not wipe out another.
     const verticalPersonality = vertical?.personality;
-    const topPersonality = compiled ? compiled.personality : profile.personality;
+    const profilePersonality = profile.personality;
+    const compiledPersonality = compiled?.personality;
     const personality: PersonalityTokens = {
-      animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...topPersonality?.animation },
+      animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...profilePersonality?.animation, ...compiledPersonality?.animation },
       chart: resolveChartPersonality({
-        compiled: compiled?.personality,
+        compiled: compiledPersonality,
         vertical,
         productProfile: profile,
       }),
-      typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...topPersonality?.typography },
-      accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...topPersonality?.accent },
-      card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...topPersonality?.card },
+      typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...profilePersonality?.typography, ...compiledPersonality?.typography },
+      accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...profilePersonality?.accent, ...compiledPersonality?.accent },
+      card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...profilePersonality?.card, ...compiledPersonality?.card },
     };
 
     return {

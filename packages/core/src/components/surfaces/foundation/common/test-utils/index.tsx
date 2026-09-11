@@ -89,11 +89,14 @@ export function renderSurface(
     ...renderOptions
   } = options;
 
-  // `classic` seeds antd from a compiled projection and refuses to guess one.
-  // The fixture tenant authors no theme, so the reference vertical's compile for
-  // the selected engine is the projection this stack renders with.
+  // `classic` seeds antd from a compiled projection and refuses to guess one,
+  // so the reference vertical's compile stands in for a fixture tenant that
+  // authors no theme of its own. It is published ONLY where a library needs
+  // seeding: since WO-EMI-02 the declaration also carries
+  // `ThemeCompilation.runtime`, which `useTokens` reads as the TENANT layer --
+  // and a stand-in from another vertical is not this fixture's decision.
   const engineVisual =
-    engine === 'custom' ? undefined : firstPartyEngineVisual('rottay', engine);
+    engine === 'classic' ? firstPartyEngineVisual('rottay', engine) : undefined;
 
   // A wrapper rather than a pre-composed tree: `rerender` re-renders the CHILD,
   // so a stack composed here by hand would leave the second render with no

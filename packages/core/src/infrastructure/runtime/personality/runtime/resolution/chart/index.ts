@@ -16,19 +16,16 @@ type PartialChartPersonality = Partial<ChartPersonalityTokens>;
 export interface ChartPersonalityResolutionInput {
   /**
    * The compiled tenant layer: `ThemeCompilation.runtime.personality` of the
-   * mounted artifact.
-   *
-   * Its PRESENCE is the signal that this tenant published a compile of its own,
-   * so a compiled layer that carries no `chart` at all is a resolvable input
-   * this function is documented to handle — and one that must still suppress
-   * the product profile's chart posture.
+   * mounted artifact. It goes LAST, and a compiled layer that states no `chart`
+   * leaves the layer underneath it standing -- the choice turns on what was
+   * decided, never on whether a declaration object exists.
    */
   compiled?: Readonly<{ chart?: PartialChartPersonality }> | null;
   /** Active vertical baseline, when a vertical has been resolved. */
   vertical?: Readonly<{
     personality: Readonly<{ chart?: PartialChartPersonality }>;
   }> | null;
-  /** Active profile. Ignored whenever a compiled tenant layer is present. */
+  /** Active profile, layered under the compiled tenant decision. */
   productProfile?: Readonly<{
     personality?: Readonly<{ chart?: PartialChartPersonality }> | null;
   }> | null;
@@ -37,11 +34,9 @@ export interface ChartPersonalityResolutionInput {
 /**
  * Resolve chart personality with the canonical visual precedence:
  *
- * `DEFAULT -> vertical -> (compiled.chart | ProductProfile.chart)`
+ * `DEFAULT -> vertical -> ProductProfile.chart -> compiled.chart`
  *
- * A compiled layer selects the tenant path even when `chart` is absent; in that
- * case product-profile chart values must not leak through. A fresh result is
- * returned on every call and no input object is mutated.
+ * A fresh result is returned on every call and no input object is mutated.
  */
 export function resolveChartPersonality({
   compiled,
@@ -51,6 +46,7 @@ export function resolveChartPersonality({
   return {
     ...DEFAULT_PERSONALITY.chart,
     ...vertical?.personality.chart,
-    ...(compiled ? compiled.chart : productProfile?.personality?.chart),
+    ...productProfile?.personality?.chart,
+    ...compiled?.chart,
   };
 }
