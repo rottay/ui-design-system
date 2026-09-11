@@ -29,7 +29,7 @@ import {
 } from "./foundation/personality";
 import { PRIMARY_SEED_FIELD } from "./foundation/seeds";
 import { resolveGovernedSelections } from "./runtime/derivation/recipes";
-import { compileModeBlocks } from "./runtime/mode-blocks";
+import { deriveModeThemes, projectModeDelta } from "./runtime/derivation/modes";
 import { lowerBlock } from "./runtime/pipeline";
 
 /** The one chrome leaf a governed silhouette also expands into. */
@@ -105,6 +105,9 @@ export function compileTheme(
   const tenantAuthoredPaths = tenant
     ? resolution.provenance.authoredPaths
     : undefined;
+  const tenantAuthoredLeaves = tenant
+    ? resolution.provenance.authoredLeaves
+    : undefined;
   const tenantPatch = tenant
     ? (resolution.provenance.floors as Partial<BrandTheme>)
     : undefined;
@@ -139,6 +142,7 @@ export function compileTheme(
         ),
         typography: tenantPatch.typography,
         authoredPaths: tenantAuthoredPaths,
+        authoredLeaves: tenantAuthoredLeaves,
         statusSeedAuthorship: tenantStatusSeedAuthorship,
         seedIsTenantAuthored:
           tenantAuthoredPaths !== undefined &&
@@ -161,14 +165,25 @@ export function compileTheme(
 
   assertMandatoryFontFallback(cssVariables, tenantSlug);
 
-  // The declared mode of the values above; the non-default modes are compiled
-  // from the typed `modes` overlays into their own blocks below.
+  // The declared mode of the values above; the other mode is derived from the
+  // SAME decisions by the modes family and lowered through the SAME pipeline.
   const colorScheme = effectiveTheme.appearance?.defaultMode;
-  const modeBlocks = compileModeBlocks(
-    effectiveTheme,
-    cssVariables,
+  const modeBlocks = deriveModeThemes({
+    theme: effectiveTheme,
     tenantFacts,
-    tenantPatch
+    tenantPatch,
+  }).map((request) =>
+    projectModeDelta(
+      request,
+      lowerBlock({
+        theme: request.theme,
+        mode: request.mode,
+        surface: request.mode,
+        modePrefix: request.modePrefix,
+        tenant: request.tenant,
+      }),
+      cssVariables
+    )
   );
   for (const block of modeBlocks) {
     // A mode may restyle type; it may not drop the mandatory fallback while

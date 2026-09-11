@@ -265,7 +265,6 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     palette: 0,
     tint: 0,
     'type-ramp': 0,
-    'mode-overlay': 0,
     sidebar: 0,
     seeds: 0,
     expressive: 1,
@@ -277,14 +276,13 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     personality: 2,
     motion: 3,
   }),
-  // A mode block is a delta over an already-compiled base block, so the
-  // per-mode owner consumes the base channel assembly and never the reverse.
-  // The families derive, the pipeline merges them by rank, and a mode block is
-  // a delta over an already-merged base block. Nothing reads back up the ladder.
+  // The families derive and the pipeline merges them by rank. The modes family
+  // assembles the OTHER mode's theme and projects its delta, but it never runs
+  // the pipeline itself -- the orchestrator does -- so it stays a family among
+  // families and nothing reads back up the ladder.
   'infrastructure/compilers/runtime/theme/runtime/lowering/runtime': Object.freeze({
     derivation: 0,
     pipeline: 1,
-    'mode-blocks': 2,
   }),
   // Shade seeds and readable-ink measurement are the colour floor. The
   // interaction floor is the policy on top of them: it asks what a hover or

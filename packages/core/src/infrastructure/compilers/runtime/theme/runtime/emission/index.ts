@@ -7,6 +7,7 @@ import type { EmissionScope } from "@/foundation/contracts/composition/tenants/t
 import {
   containerScope,
   firstPartyScope,
+  systemModeSelector,
   tenantArtifactScope,
 } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 import { admitCssVariables } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
@@ -108,7 +109,14 @@ export interface TenantArtifactComposition {
   readonly digest: string;
   readonly variables: Readonly<Record<string, string>>;
   readonly modeDeltas?: readonly TenantArtifactModeDelta[];
-  readonly backgroundMode?: "light" | "dark" | "auto";
+  /**
+   * Whether the document defers its canvas to the viewer (`backgroundMode:
+   * "auto"`), which is the only thing this format does with that field. A
+   * boolean, read off the artifact by both the producer and the verifier: it
+   * used to be the three-valued mode with a light-first default on each side,
+   * and a default here states a canvas this owner cannot know.
+   */
+  readonly followsSystem?: boolean;
 }
 
 /**
@@ -129,15 +137,21 @@ export interface TenantArtifactComposition {
 export function emitTenantArtifactCss(composition: TenantArtifactComposition): string {
   const scope = tenantArtifactScope(composition.verticalKey, composition.slug);
   const declarations = emitDeclarations(composition.variables);
+  // Under `auto` the viewer chooses, so exactly ONE media copy exists: the
+  // delta block itself. A compile states a block for the mode its base rule is
+  // NOT, so the block's own mode is the preference to key on -- read off the
+  // artifact's shape rather than told, which is why a dark-first vertical is
+  // no longer a light-first guess.
   const modeRules = (composition.modeDeltas ?? []).map((block) => {
     const modeDeclarations = emitDeclarations(block.variables);
     const explicitRule = emitRule(scope.modeSelector(block.mode), modeDeclarations);
-    if (composition.backgroundMode !== "auto" || block.mode !== "dark") {
-      return explicitRule;
-    }
+    if (composition.followsSystem !== true) return explicitRule;
     const automaticRule =
-      "@media (prefers-color-scheme: dark) {\n" +
-      `${emitRule(`${scope.baseSelector}:not([data-theme='light'])`, modeDeclarations)}\n}`;
+      `@media (prefers-color-scheme: ${block.mode}) {\n` +
+      `${emitRule(
+        systemModeSelector(scope.baseSelector, block.mode),
+        modeDeclarations
+      )}\n}`;
     return `${explicitRule}\n${automaticRule}`;
   });
   return [

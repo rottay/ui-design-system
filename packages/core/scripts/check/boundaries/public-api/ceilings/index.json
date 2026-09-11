@@ -294,7 +294,7 @@
     },
     "./runtime/tenant": {
       "maxReachableModules": 48,
-      "maxSourceBytes": 1175926
+      "maxSourceBytes": 1177500
     },
     "./runtime/tenant-theme": {
       "maxReachableModules": 2,
@@ -302,7 +302,7 @@
     },
     "./runtime/visual-authority": {
       "maxReachableModules": 9,
-      "maxSourceBytes": 71610
+      "maxSourceBytes": 73141
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-DER-07: la admision valida el bloque runtime que el artefacto ahora persiste — el declarante de engine visual queda dentro del digest, y el verificador lo rechaza por forma antes de que gobierne un render. Sin imports nuevos: 9 modulos alcanzables, sin mover.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-DER-05: the one default-mode law and the honest authored-leaf collector. +1574 on ./runtime/tenant is the collectPatchAuthoredLeaves owner, the ThemeProvenance.authoredLeaves field, the TenantFacts field and the roster's single UNDECLARED_VERTICAL_DEFAULT_MODE; +1531 on ./runtime/visual-authority is the auto media-copy selector moving into the selector owner and the emission field becoming followsSystem. No new reachable module in either graph.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
 }

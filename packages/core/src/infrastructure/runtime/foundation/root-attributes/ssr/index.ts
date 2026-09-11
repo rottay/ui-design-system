@@ -24,6 +24,7 @@
 
 import type { SupportedLocale, TextDirection } from '@/foundation/i18n/kernel/contracts';
 import { resolveDocumentLocaleAttributes } from '@/foundation/i18n/runtime/resolution';
+import { verticalDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
 
 /** The tenant's declared theme intent, before any viewer preference. */
 export type TenantThemeMode = 'light' | 'dark' | 'auto';
@@ -68,8 +69,10 @@ export interface DocumentRootAttributesInput {
   themeMode: TenantThemeMode;
   /**
    * What `auto` renders as on the server, before the viewer's preference is
-   * known. Light is the safe default: a light document that darkens is a
-   * one-frame correction, whereas a dark document that lightens flashes.
+   * known. Omitted, it is the mounted vertical's OWN declared mode -- the
+   * canvas the artifact's base rule already paints -- so the pre-JS frame and
+   * the stylesheet agree. A literal light default flashed on every dark-first
+   * vertical, which is the same wrong answer the compiler used to give.
    */
   autoFallback?: ResolvedTheme;
   /** Active engine. Stamped so engine-scoped CSS matches on the first paint. */
@@ -122,7 +125,6 @@ export function resolveDocumentRootAttributes(
 ): DocumentRootAttributes {
   const {
     themeMode,
-    autoFallback = 'light',
     engine,
     locale,
     tenant,
@@ -133,6 +135,7 @@ export function resolveDocumentRootAttributes(
   } = input;
 
   const { lang, dir } = resolveDocumentLocaleAttributes(locale);
+  const autoFallback = input.autoFallback ?? verticalDefaultMode(tenant?.verticalKey);
 
   const attributes: DocumentRootAttributes = {
     'data-theme': themeMode === 'auto' ? autoFallback : themeMode,

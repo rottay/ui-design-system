@@ -16,7 +16,7 @@ import type {
 } from "..";
 import type { ThemeIntent } from "../intent";
 import type { TenantAuthoredPaths, Theme, ThemeLayerPatch } from "../iso";
-import { collectPatchAuthoredPaths } from "../iso";
+import { collectPatchAuthoredLeaves, collectPatchAuthoredPaths } from "../iso";
 import type { DecisionProvenanceLedger } from "../provenance";
 
 /**
@@ -74,6 +74,17 @@ export interface ThemeProvenance {
    */
   readonly tenantAuthored: boolean;
   readonly authoredPaths: TenantAuthoredPaths;
+  /**
+   * The subset of `authoredPaths` the patch actually STATES a value for.
+   *
+   * `authoredPaths` over-reports by construction -- it enumerates container
+   * keys and keys the v1 patch builder emits as `undefined` -- which is
+   * harmless for the closed field vocabularies that consume it and fatal for
+   * a station that must carry a tenant's own decisions across modes. Kept
+   * beside it rather than replacing it: narrowing the older set would change
+   * three derivations that were written against its semantics.
+   */
+  readonly authoredLeaves: TenantAuthoredPaths;
   readonly floors: ThemeFloors;
   readonly statusSeedAuthorship: TenantStatusSeedAuthorship;
   /**
@@ -166,6 +177,7 @@ function freezeAuthorship(
 export const EMPTY_PROVENANCE: ThemeProvenance = Object.freeze({
   tenantAuthored: false,
   authoredPaths: immutableAuthoredPaths([]),
+  authoredLeaves: immutableAuthoredPaths([]),
   floors: Object.freeze({}),
   statusSeedAuthorship: Object.freeze({
     base: Object.freeze({ success: false, warning: false, error: false, info: false }),
@@ -189,6 +201,7 @@ export function tenantProvenance(
   return Object.freeze({
     tenantAuthored: true,
     authoredPaths: immutableAuthoredPaths(collectPatchAuthoredPaths(patch)),
+    authoredLeaves: immutableAuthoredPaths(collectPatchAuthoredLeaves(patch)),
     floors: freezeFloors(tenantPostureFloors(patch)),
     statusSeedAuthorship: freezeAuthorship(deriveTenantStatusSeedAuthorship(patch)),
     ledger,

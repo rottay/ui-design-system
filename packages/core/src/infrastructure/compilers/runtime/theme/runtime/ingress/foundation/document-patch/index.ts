@@ -39,10 +39,11 @@ import {
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { typePairingToTypography } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
+import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
-  FIRST_PARTY_THEMES,
-  isFirstPartyVerticalId,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
+  renderedMode,
+  verticalDefaultMode,
+} from "@/infrastructure/compilers/kernel/foundation/modes";
 import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/expressive-profiles";
 
 const V1_SCHEMA_VERSION = "1";
@@ -517,8 +518,7 @@ function migratePalette(
   // the one vertical whose default mode is dark every seed landed in the mode
   // nobody renders and a STANDARD-tier decision moved nothing on the canvas.
   const selection = palette.backgroundMode;
-  const seededMode: BrandThemeMode =
-    selection === "light" || selection === "dark" ? selection : defaultMode;
+  const seededMode = renderedMode(defaultMode, selection);
   const darkOverlayPalette = selection === "auto" ? darkPalette : undefined;
   // The two postures ride the ROOT palette every mode block re-enters with;
   // they state the whole neutral axis, so a mode overlay would be a second one.
@@ -808,14 +808,16 @@ export function migrateV1(
  * The patch a persisted or previewed document contributes, over the baseline
  * the vertical names.
  *
- * The default mode is READ FROM THE ROSTER, never passed in. `migrateV1` routes
- * a top-level palette seed to `palette` when the document's background mode
- * matches the baseline's own default and to `modes.<mode>.palette` otherwise,
- * so the mode argument decides WHICH block a customer's colour lands in. The DB
- * terminal passed the baseline's `appearance.defaultMode`; the preview sandbox
- * passed the literal `"light"`. On Rottay, whose default mode is `dark`, that
- * made the preview repaint the dark canvas for a change publish would write
- * into the light block -- the preview and the artifact disagreed about the same
+ * The default mode is READ FROM THE ROSTER, never passed in, and it is read
+ * through the ONE owner of that question --
+ * `compilers/kernel/foundation/modes`. `migrateV1` routes a top-level palette
+ * seed to `palette` when the document's background mode matches the
+ * baseline's own default and to `modes.<mode>.palette` otherwise, so the mode
+ * argument decides WHICH block a customer's colour lands in. The DB terminal
+ * passed the baseline's `appearance.defaultMode`; the preview sandbox passed
+ * the literal `"light"`. On Rottay, whose default mode is `dark`, that made
+ * the preview repaint the dark canvas for a change publish would write into
+ * the light block -- the preview and the artifact disagreed about the same
  * document. One reader, one answer.
  */
 export function documentThemePatch(input: {
@@ -829,11 +831,5 @@ export function documentThemePatch(input: {
       `${String(input.vertical)} is not a first-party vertical`
     );
   }
-  const defaultMode = FIRST_PARTY_THEMES[input.vertical].appearance?.defaultMode;
-  if (!defaultMode) {
-    throw new ThemePatchMigrationError(
-      `the ${input.vertical} baseline declares no default mode`
-    );
-  }
-  return migrateV1(input.document, defaultMode).patch;
+  return migrateV1(input.document, verticalDefaultMode(input.vertical)).patch;
 }

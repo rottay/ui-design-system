@@ -219,8 +219,12 @@ function expectedArtifactCss(artifact: TenantThemeArtifact): string {
     digest: artifact.digest,
     variables: artifact.variables,
     modeDeltas: artifact.modeDeltas,
-    backgroundMode:
-      artifact.normalizedAppearance.general?.palette?.backgroundMode ?? "light",
+    // Read off the artifact, exactly as the producer reads it. `auto` is the
+    // only value this format acts on, so the verifier needs no default-mode
+    // authority of its own -- and must not acquire one, or the two spellings
+    // of the same artifact could diverge without either being wrong.
+    followsSystem:
+      artifact.normalizedAppearance.general?.palette?.backgroundMode === "auto",
   });
 }
 

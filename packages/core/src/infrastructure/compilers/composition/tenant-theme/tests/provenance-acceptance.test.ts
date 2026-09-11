@@ -40,6 +40,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   CONSULTED_PROVENANCE_FIELDS,
+  collectPatchAuthoredLeaves,
   collectPatchAuthoredPaths,
   mergeThemePatches,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
@@ -596,6 +597,10 @@ describe("static and DB share one lowering", () => {
       baseTheme,
       resolved: mergeThemePatches(baseTheme, envelope.patch),
       authoredPaths: collectPatchAuthoredPaths(envelope.patch),
+      // The modes family carries a tenant's mode-agnostic decisions from one
+      // block into the other, and it reads the HONEST set to do it. A mirror
+      // that omits it is no longer the same lowering.
+      authoredLeaves: collectPatchAuthoredLeaves(envelope.patch),
       // E-1: the DB leg hands the compiler the tenant's posture FLOORS as well
       // as its authorship, so a reconstruction that omits them is no longer the
       // same lowering. Imported rather than re-derived: one definition, or this
@@ -616,13 +621,14 @@ describe("static and DB share one lowering", () => {
   it("case G1: the artifact is the direct lowering minus the vertical baseline", () => {
     for (const vertical of VERTICALS) {
       const artifact = compileFor(vertical, POPULATED_SIMPLE_DOCUMENT);
-      const { baseTheme, resolved, authoredPaths, floors } = lower(
+      const { baseTheme, resolved, authoredPaths, authoredLeaves, floors } = lower(
         vertical,
         POPULATED_SIMPLE_DOCUMENT as unknown as TenantThemeDocument
       );
       const direct = lowerTheme(resolved, {
         tenantSlug: IDENTITY.slug,
         tenantAuthoredPaths: authoredPaths,
+        tenantAuthoredLeaves: authoredLeaves,
         tenantPatch: floors,
       });
       const baseline = lowerTheme(baseTheme, { tenantSlug: IDENTITY.slug });
@@ -635,9 +641,19 @@ describe("static and DB share one lowering", () => {
           (block) => block.mode === delta.mode
         );
         expect(directBlock, `${vertical} ${delta.mode} block`).toBeDefined();
+        // EFFECTIVE, not the block alone. A compile's own mode block carries
+        // only what moves against its OWN base, while the artifact's delta
+        // carries what moves against the VERTICAL's mode -- so a channel the
+        // tenant pulled into both of its blocks is stated by the artifact and
+        // withdrawn by the compile. Both say the same thing about the
+        // selector; only the effective value is comparable.
+        const directEffective = {
+          ...direct.cssVariables,
+          ...directBlock!.cssVariables,
+        };
         for (const [channel, value] of Object.entries(delta.variables)) {
           expect(
-            directBlock!.cssVariables[channel],
+            directEffective[channel],
             `${vertical} ${delta.mode} ${channel}`
           ).toBe(value);
         }

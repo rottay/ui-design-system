@@ -12,6 +12,7 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { chromeToVariables } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
+import { themeDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
 
 /**
  * Map BrandTheme.chrome sub-interfaces to flat CSS variable declarations.
@@ -29,7 +30,7 @@ import { chromeToVariables } from "@/infrastructure/compilers/kernel/foundation/
  */
 export function brandThemeToChromeVariables(
   bt: BrandTheme,
-  mode: BrandThemeMode = bt.appearance?.defaultMode ?? "light",
+  mode: BrandThemeMode = themeDefaultMode(bt),
   /** Tenant authorship, when this compile has a tenant. See `ChromeVariableContext`. */
   tenantAuthoredPaths?: TenantAuthoredPaths,
   modePrefix = "",

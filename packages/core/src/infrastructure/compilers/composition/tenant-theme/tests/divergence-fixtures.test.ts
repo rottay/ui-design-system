@@ -141,7 +141,7 @@ describe("divergence fixtures (W4 section 9)", () => {
     }
   });
 
-  it("editorial carries its typed dark intent while sober keeps the code-owned mode", () => {
+  it("editorial carries its typed dark intent while sober carries its own into dark", () => {
     const sober = compileSober();
     const editorial = compileEditorial();
     const soberDark = sober.modeDeltas?.find((delta) => delta.mode === "dark");
@@ -152,8 +152,16 @@ describe("divergence fixtures (W4 section 9)", () => {
     expect(editorial.variables["--ds-color-primary"]).toBe("#A23B72");
     expect(editorialDark?.variables["--ds-color-primary"]).toBe("#D06A9F");
     expect(editorial.css).toContain("@media (prefers-color-scheme: dark)");
-    expect(soberDark?.variables["--ds-color-primary"]).toBe("#1e84e6");
-    expect(soberDark?.variables["--ds-color-primary"]).not.toBe(
+    // Sober states no dark intent, so its ONE brand colour is its colour in
+    // both modes. It used to read `#1e84e6` here -- bithire's own dark overlay
+    // primary, restored over the tenant's choice purely because the overlay
+    // was more specific (F-05). The delta withdraws the channel now, and the
+    // dark selector inherits the tenant's base value.
+    expect(soberDark?.variables["--ds-color-primary"]).toBeUndefined();
+    expect({ ...sober.variables, ...soberDark?.variables }["--ds-color-primary"]).toBe(
+      sober.variables["--ds-color-primary"]
+    );
+    expect(sober.variables["--ds-color-primary"]).not.toBe(
       editorialDark?.variables["--ds-color-primary"]
     );
     expect(

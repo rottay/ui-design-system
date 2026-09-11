@@ -50,6 +50,10 @@ import type {
 import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { tenantThemeAnatomyAttributes } from '@/infrastructure/compilers/composition/tenant-theme';
+import {
+  declaredDocumentMode,
+  verticalDefaultMode,
+} from '@/infrastructure/compilers/kernel/foundation/modes';
 import { verticalEngine } from '@/infrastructure/compilers/runtime/theme';
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
@@ -234,6 +238,15 @@ function firstPartyArtifact(vertical: FirstPartyVerticalId): FirstPartyArtifact 
 interface MountedBytes {
   readonly css: string;
   readonly digest: string;
+  /**
+   * The mode these bytes declare, `auto` preserved.
+   *
+   * Read from the SAME law the compile used, never guessed here. A literal
+   * `'light'` at the mount stamped `data-theme="light"` over a static rottay
+   * artifact whose own base rule says `color-scheme: dark` -- one document,
+   * two answers, and the wrong one on the root element.
+   */
+  readonly declaredMode: TenantThemeMode;
   readonly styleElements: readonly MountedThemeStyleElement[];
   readonly anatomyAttributes: Record<string, string>;
   /** The selector the mounted bytes are nested under. */
@@ -281,6 +294,7 @@ function mountStaticVertical(intent: ThemeIntent, options: MountTenantThemeOptio
   return {
     css: artifact.css,
     digest: `sha256-${sha256Utf8(artifact.css)}`,
+    declaredMode: verticalDefaultMode(intent.vertical),
     styleElements: [],
     anatomyAttributes: {},
     scopeSelector: artifact.selector,
@@ -316,6 +330,10 @@ function mountTenantAuthored(intent: ThemeIntent, options: MountTenantThemeOptio
   return {
     css: emission.css,
     digest: artifact.digest,
+    declaredMode: declaredDocumentMode(
+      artifact.verticalKey,
+      artifact.normalizedAppearance,
+    ),
     styleElements: [
       Object.freeze({
         id: emission.receipt.elementId,
@@ -380,7 +398,9 @@ export async function mountTenantTheme(
   const density = options.density ?? mounted.density;
 
   const rootAttributes = resolveDocumentRootAttributes({
-    themeMode: options.themeMode ?? 'light',
+    // The application may override the mode for this request; absent that, the
+    // mount stamps the mode the mounted bytes were COMPILED for.
+    themeMode: options.themeMode ?? mounted.declaredMode,
     ...(options.autoFallback ? { autoFallback: options.autoFallback } : {}),
     // The ENGINE is the roster's, never the application's. A hand-written
     // `engine="modern"` in a root layout is a second authority on a question
