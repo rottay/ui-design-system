@@ -159,6 +159,60 @@ describe('useTokens resolves the mounted artifact, not the config', () => {
     );
   });
 
+  it('publishes the compiled half from the ARTIFACT, with no engineVisual prop', () => {
+    // The connection this file's first case could not state: the artifact
+    // carries the non-CSS half of its own compile, so an application that
+    // mounts it and passes nothing else gets the same tenant layer. Measured by
+    // rendering the identical tree twice -- once with the prop, once without --
+    // and comparing the readings rather than re-pinning them.
+    mountArtifact(COMPILED.artifact);
+
+    render(
+      <DesignSystemProvider
+        tenantConfig={SMUGGLED}
+        visualAuthority={{ authority: 'compiled-artifact', artifact: COMPILED.artifact }}
+        engineVisual={COMPILED.engineVisual}
+        vertical="bithire"
+        forceEngine="modern"
+        skipCssLoading
+      >
+        <Probe />
+      </DesignSystemProvider>,
+    );
+    const withProp = readTokens();
+    cleanup();
+
+    render(
+      <DesignSystemProvider
+        tenantConfig={SMUGGLED}
+        visualAuthority={{ authority: 'compiled-artifact', artifact: COMPILED.artifact }}
+        vertical="bithire"
+        forceEngine="modern"
+        skipCssLoading
+      >
+        <Probe />
+      </DesignSystemProvider>,
+    );
+    const withoutProp = readTokens();
+
+    expect(withoutProp).toEqual(withProp);
+    // Not vacuous: these readings are the tenant's, not the baseline's, so the
+    // comparison above would also fail if BOTH trees had fallen back.
+    expect(withoutProp.paddingDensity).toBe('compact');
+    expect(withoutProp.radiusMd).toBe(
+      COMPILED.artifact.runtime?.runtime.tokenOverrides.borderRadius?.md,
+    );
+
+    // NEGATIVE CONTROL. `palette.primary` is a paint decision: it belongs to
+    // the artifact's CSS and must not arrive a second time as a JS value, or
+    // the runtime becomes the second painter the authority barrier exists to
+    // prevent. It is in the artifact's variables and nowhere in its runtime
+    // half, which is what makes the absence in the readings a law and not an
+    // accident of what `Probe` happens to print.
+    expect(COMPILED.artifact.variables['--ds-color-primary']).toBe('#991b1b');
+    expect(JSON.stringify(COMPILED.artifact.runtime?.runtime)).not.toContain('#991b1b');
+  });
+
   it('resolves the engine/vertical baseline when no artifact is mounted', () => {
     // The other side of the same law: absence is absence. A tenant that
     // published no compile contributes no tenant layer, rather than falling

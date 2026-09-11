@@ -132,6 +132,14 @@ function bithireEnvelopePair() {
 const POST_ROTTAY_T3_ENVELOPE_DIGEST =
   "sha256-38b931bbd463ba683a7c5b495c580865dd62e1753c4380ad21ca737f8d8250be";
 
+/**
+ * The null-override artifact digest once the artifact carries the non-CSS half
+ * of its own compile. Two blocks below assert it, so it is written once here
+ * rather than twice where they could drift apart.
+ */
+const POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST =
+  "sha256-a1de559005353e3b84f22bdabbdd6ed073b6c96ddc3aae222b6417f96774f825";
+
 const NULL_OVERRIDE_DOCUMENT = {
   schemaVersion: 1,
   mode: "simple",
@@ -482,45 +490,74 @@ describe("digest identity across the canonicalization extraction", () => {
       verticalEnvelope: envelope,
     });
 
-    // The pre-change fence is REPRODUCED, not abandoned. These two literals
-    // ARE the values the fixture pinned before this tranche; they stay
-    // written and asserted here, so the re-anchor recorded in the fixture's
-    // `reanchored` ledger is attributed rather than laundered -- the old pin
-    // is still reachable from today's compiler, which is what proves it was
-    // never stale.
-    expect(before.digest).toBe(
-      "sha256-f594475c5aba01a40f2fe9f4b3f08d6343a4e2df3640ecd4d2abd9acaece8a6c"
-    );
+    // The ENVELOPE fence is REPRODUCED, not abandoned. This literal IS the
+    // value the fixture pinned before this tranche; it stays written and
+    // asserted here, so the re-anchor recorded in the fixture's `reanchored`
+    // ledger is attributed rather than laundered -- the old envelope pin is
+    // still reachable from today's compiler, which is what proves it was never
+    // stale.
     expect(before.verticalEnvelopeDigest).toBe(
       "sha256-65da54f9b7e5bb192b79f73ae996855a43a9ce15ab8c6a419c69dca2a18d783f"
     );
-    // ...and today's output is the RE-ANCHORED pin, in both the envelope and
-    // the artifact. The inequality is carried by the two sets of values being
-    // different literals, so nothing is asserted only against itself.
     expect(after.verticalEnvelopeDigest).toBe(
       PINNED.nullOverrideEnvelopeDigest
     );
-    expect(after.digest).toBe(PINNED.nullOverrideDigest);
+
+    // THE ARTIFACT fence is a different kind of claim and moves differently.
+    // The two literals below superseded the T3-era pair when the digest SOURCE
+    // gained the runtime half: a source field is not an input, so no
+    // reconstruction of the inputs brings the old numbers back and both sides
+    // of this comparison move together. Both superseded values stay asserted,
+    // so the chain is proven link by link rather than replaced by its newest
+    // end, and the claim this block makes -- the only thing separating `before`
+    // from `after` is the envelope -- is unchanged and measured below.
+    const PRE_RUNTIME_HALF_NULL_OVERRIDE_PRE_T3_DIGEST =
+      "sha256-f594475c5aba01a40f2fe9f4b3f08d6343a4e2df3640ecd4d2abd9acaece8a6c";
+    expect(before.digest).not.toBe(PRE_RUNTIME_HALF_NULL_OVERRIDE_PRE_T3_DIGEST);
+    expect(before.digest).toBe(
+      "sha256-326bb71ca61a764f55e80cb953303c00ad4d32eb04c3c1eebfd0c33dc3efa244"
+    );
+    expect(after.digest).not.toBe(PINNED.nullOverrideDigest);
+    expect(after.digest).toBe(POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST);
 
     // Everything else in the digest source is byte-identical, so the move is
     // provenance, not paint. A tenant that renders through this artifact sees
-    // the same variables it saw before the tranche.
+    // the same variables it saw before the tranche. The runtime half joins that
+    // list: it is projected from the compile, not from the policy envelope, so
+    // widening the roster cannot move it.
     expect(after.variables).toEqual(before.variables);
     expect(after.variables).toEqual({});
     expect(after.normalizedAppearance).toEqual(before.normalizedAppearance);
+    expect(after.runtime).toEqual(before.runtime);
     expect(after.scopes).toEqual(before.scopes);
     expect(after.coverage).toEqual(before.coverage);
     expect(after.compilerVersion).toBe(before.compilerVersion);
   });
 
-  it("keeps the null-override artifact digest byte-identical", () => {
+  it("moves the null-override artifact digest for the runtime half alone", () => {
+    // The negative control finally moved, and what moved it is the reason it
+    // was a good control: this document authors NOTHING, so its `variables` are
+    // empty and stay empty, and the only thing that can shift its digest is a
+    // change to the digest SOURCE. The artifact now carries the non-CSS half of
+    // its own compile -- the personality, token overrides and governed
+    // selections a React runtime reads -- and that half governs at render, so
+    // it is inside the digest exactly as `provenance` is. Nothing this artifact
+    // paints moved: the assertions below pin the empty variable map and the
+    // unchanged envelope beside the new digest.
+    //
+    // OPERATIONAL CONSEQUENCE: a moved artifact digest invalidates every
+    // artifact already persisted against a tenant row, and every such row must
+    // be recompiled.
     const artifact = compileTenantThemeConfig(
       hydrateTenantThemeConfig(NULL_OVERRIDE_DOCUMENT, { ...IDENTITY })
     );
-    expect(artifact.digest).toBe(PINNED.nullOverrideDigest);
+    expect(artifact.digest).not.toBe(PINNED.nullOverrideDigest);
+    expect(artifact.digest).toBe(POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST);
     expect(artifact.verticalEnvelopeDigest).toBe(
       PINNED.nullOverrideEnvelopeDigest
     );
+    expect(artifact.variables).toEqual({});
+    expect(artifact.runtime?.runtime.personality).toBeDefined();
   });
 
   it("moves the populated simple artifact digest for two separated reasons", () => {
@@ -667,7 +704,24 @@ describe("digest identity across the canonicalization extraction", () => {
     // not enter the delta. Nothing this document PAINTS moved.
     const POST_PALETTE_FAMILY_DIGEST =
       "sha256-f049dedac64aaf3d083fab05a744eb2e467716c7b23ae0464055f20c9e1f8209";
-    expect(artifact.digest).toBe(POST_PALETTE_FAMILY_DIGEST);
+    expect(artifact.digest).not.toBe(POST_PALETTE_FAMILY_DIGEST);
+    // Twelfth declared move, and the first that is a change to the digest
+    // SOURCE rather than to what the compile emits: the artifact now carries
+    // the non-CSS half of its own compile beside the CSS, so the personality,
+    // token overrides and governed selections a React runtime reads are proven
+    // by the same mount proof as the bytes. The channel census below is
+    // asserted unchanged beside it -- nothing this document PAINTS moved.
+    const POST_ARTIFACT_RUNTIME_HALF_DIGEST =
+      "sha256-3a00104353f2489f1bdc94f297b5840568340b2dba50b869e073203719ef7c06";
+    expect(artifact.digest).toBe(POST_ARTIFACT_RUNTIME_HALF_DIGEST);
+    // The two halves state different things about one compile and both are
+    // right: `normalizedAppearance` reports what the DOCUMENT authored, and the
+    // runtime half reports what the compile EFFECTIVELY resolved. This document
+    // selects no recipe profile, so the vertical's own is what a runtime reads.
+    expect(artifact.normalizedAppearance.recipeProfile).toBeUndefined();
+    expect(artifact.runtime?.runtime.recipeProfile).toBe(
+      "rottay/network-professional@1"
+    );
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -807,7 +861,14 @@ describe("digest identity across the canonicalization extraction", () => {
     // nothing to say about it and only the silhouette move survives.
     const POST_SILHOUETTE_DERIVATION_W4_DIGEST =
       "sha256-3e9b4c5cb940842c70c7a3620437756fe34cf5f80cf82ad4ae276b434875e776";
-    expect(artifact.digest).toBe(POST_SILHOUETTE_DERIVATION_W4_DIGEST);
+    expect(artifact.digest).not.toBe(POST_SILHOUETTE_DERIVATION_W4_DIGEST);
+    // CAUSE 7 -- the same runtime-half move the populated-simple block pins:
+    // the artifact carries the non-CSS half of its own compile, the digest
+    // covers it, and the 25-channel census below is asserted unchanged beside
+    // it. A source field, not an emission.
+    const POST_ARTIFACT_RUNTIME_HALF_W4_DIGEST =
+      "sha256-55e71a9f5c98fe5d4e092496a99ef53ee51215b34e68879077314b627d423199";
+    expect(artifact.digest).toBe(POST_ARTIFACT_RUNTIME_HALF_W4_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });

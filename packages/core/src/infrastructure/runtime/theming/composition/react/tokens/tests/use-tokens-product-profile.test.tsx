@@ -30,6 +30,7 @@ import type { TenantThemeArtifact } from '@/foundation/contracts/composition/ten
 import { getKnownTenantConfig } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { EVNTO_CANONICAL_SURFACES } from '@/foundation/presets/policy/experience-baselines/evnto';
 import { resolveEffectiveDensityScale } from '@/foundation/tokens/ts/foundation/base/density';
+import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -134,18 +135,24 @@ function EvntoAxes({ testId }: { testId: string }): React.ReactElement {
   );
 }
 
+function SurfaceAxis({ testId }: { testId: string }): React.ReactElement {
+  return <pre data-testid={testId}>{JSON.stringify(useTokens().surface)}</pre>;
+}
+
 function DensitySpacing({ testId }: { testId: string }): React.ReactElement {
   const tokens = useTokens();
   return <span data-testid={testId}>{tokens.spacing[4]}</span>;
 }
 
 describe('useTokens product profile resolution', () => {
-  it('layers engine defaults, product profile, and the artifact density in that order', () => {
-    // NO `engineVisual`: this tenant mounted its compiled CSS and published no
-    // runtime half, so the product profile is the top JS layer. The tenant's
-    // own compile taking that slot is the subject of
-    // `artifact-runtime-authority.test.tsx`, not of this file.
+  it('layers engine defaults, product profile, and the artifact compile in that order', () => {
+    // The artifact publishes the non-CSS half of its own compile, so the
+    // tenant's published decision is the TOP JS layer and the preset stands
+    // only where that compile is silent. Every expectation below is read off
+    // the artifact rather than pinned, so it states the ORDER and not a value.
     const artifact = tokenTestArtifact('token-test', 'compact');
+    const compiled = artifact.runtime?.runtime;
+    if (!compiled) throw new Error('the compiled artifact published no runtime half');
     mountArtifact(artifact);
 
     render(
@@ -160,18 +167,19 @@ describe('useTokens product profile resolution', () => {
       </DesignSystemProvider>
     );
 
-    // Product-profile structural layer, intact and concrete.
+    // The compile states this channel, so it outranks the preset...
+    expect(compiled.tokenOverrides.borderRadius?.md)
+      .not.toBe(EVNTO_CANONICAL_SURFACES.borderRadius.md);
     expect(screen.getByTestId('radius-md'))
-      .toHaveTextContent(EVNTO_CANONICAL_SURFACES.borderRadius.md);
+      .toHaveTextContent(String(compiled.tokenOverrides.borderRadius?.md));
 
-    // Product-profile personality survives; the tenant's own `personality` no
-    // longer exists as a runtime layer at all.
-    expect(screen.getByTestId('card-density')).toHaveTextContent('spacious');
+    // ...and so does its personality, on the same order.
+    expect(screen.getByTestId('card-density'))
+      .toHaveTextContent(String(compiled.personality.card?.paddingDensity));
 
-    // The one tenant-authored value that legitimately reaches JS tokens: the
-    // artifact's density, composed over the profile's structural scale.
+    // Density composes the artifact's own structural scale with its posture.
     const expectedScale = resolveEffectiveDensityScale(
-      EVNTO_CANONICAL_SURFACES.densityScale,
+      compiled.tokenOverrides.densityScale,
       'compact',
     );
     expect(screen.getByTestId('spacing-1'))
@@ -181,6 +189,32 @@ describe('useTokens product profile resolution', () => {
     // compiled CSS artifact; a JS token echoing it would be the second painter
     // this whole seam exists to prevent.
     expect(screen.getByTestId('primary-color')).not.toHaveTextContent('#991b1b');
+  });
+
+  it('leaves the preset standing on a channel the compile states nothing about', () => {
+    // The other half of "layering rather than switching": a mounted artifact
+    // is not a switch that discards everything under it. `surface` is the
+    // channel this compile publishes empty, so the engine baseline below it
+    // survives intact.
+    const artifact = tokenTestArtifact('token-test-surface', 'normal');
+    expect(artifact.runtime?.runtime.tokenOverrides.surface).toEqual({});
+    mountArtifact(artifact);
+
+    render(
+      <DesignSystemProvider
+        tenantConfig={tokenTestTenant('token-test-surface')}
+        visualAuthority={{ authority: 'compiled-artifact', artifact }}
+        productProfile="events.organizer"
+        forceEngine="modern"
+        skipCssLoading
+      >
+        <SurfaceAxis testId="surface-under-artifact" />
+      </DesignSystemProvider>
+    );
+
+    expect(screen.getByTestId('surface-under-artifact').textContent).toBe(
+      JSON.stringify(resolveAdapter('modern').tokenBaseline.surface),
+    );
   });
 
   it('resolves identical structural and motion axes for bundled and custom Evnto', () => {
@@ -238,9 +272,11 @@ describe('useTokens product profile resolution', () => {
     const normal = measure('token-test-normal', 'normal');
     const compact = measure('token-test-compact', 'compact');
 
-    // spacing[4] = round(16 * effectiveScale). The structural factor comes from
-    // the profile; only the mode factor differs between the two trees.
-    const base = EVNTO_CANONICAL_SURFACES.densityScale;
+    // spacing[4] = round(16 * effectiveScale). The structural factor is the
+    // artifact's own compiled scale, which outranks the preset's; only the mode
+    // factor differs between the two trees.
+    const base = tokenTestArtifact('token-test-normal', 'normal').runtime?.runtime
+      .tokenOverrides.densityScale;
     expect(normal).toBe(String(Math.round(16 * resolveEffectiveDensityScale(base, 'normal'))));
     expect(compact).toBe(String(Math.round(16 * resolveEffectiveDensityScale(base, 'compact'))));
     // The composition must actually move the value, or the assertions above
