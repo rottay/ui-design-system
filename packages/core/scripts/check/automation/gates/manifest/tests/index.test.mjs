@@ -456,7 +456,7 @@ test('the contract-changeset entry states the roster it actually plants', () => 
   );
 });
 
-test('the 2026-09-08 move is eight entries and three written dist exemptions', () => {
+test('the 2026-09-08 move is eight entries, and every dist exemption is adjudicated', () => {
   for (const id of PHASE_MOVED_2026_09_08) {
     const gate = CI_GATES.find((entry) => entry.id === id);
     assert.ok(gate, `${id} is named by the move and absent from the manifest`);
@@ -466,9 +466,16 @@ test('the 2026-09-08 move is eight entries and three written dist exemptions', (
       `${id} must declare the input it moved for, or a run without one says nothing`,
     );
   }
+  // The set is PINNED, not counted: an exemption is a written claim that a
+  // pre-build entry which reaches `dist/` never actually loads it, and each one
+  // has to be measured before it lands. `axis-difference-drill` joined on
+  // 2026-09-11 (WO-EVI-02): its browser half imports `dist/server.js` lazily
+  // and declares `skip` when that file is absent, measured by running the suite
+  // with `dist/` moved away -- exit 0, 21 assertions, the browser case skipped
+  // by written reason.
   assert.deepEqual(
     CI_GATES.filter((gate) => gate.distExemption !== undefined).map((gate) => gate.id).sort(),
-    ['decisions-lit-drill', 'decisions-lit-freshness', 'engine-freeze-drill'],
+    ['axis-difference-drill', 'decisions-lit-drill', 'decisions-lit-freshness', 'engine-freeze-drill'],
   );
 });
 
