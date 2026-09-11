@@ -4991,6 +4991,11 @@
      "at": "2026-09-11 12:39",
      "by": "Kimi K3",
      "note": "INERT_PAIRS discharged with the seeds render-mode law (merge 861de4105): the rottay/dark palette-only entry was the pair whose delta was empty because every seed landed in the mode rottay does not render; with routing fixed the 6 formerly non-evidential cells are evidential and the probe reports 0% on 36 of 36 evidential cells. Every positive-axis percentage byte-identical. Witness-per-cell binding (checkpoint 99 item 2) remains the next EVI-02 lot."
+    },
+    {
+     "at": "2026-09-11 13:05",
+     "by": "Kimi K3",
+     "note": "WITNESS-PER-CELL BINDING LANDED (checkpoint 99 item 2 DISCHARGED; merge 94743d6f6; writer Opus 49ab6a3ce, audited by Kimi K3 under the temporary Fable substitution). A negative control now declares its witness (axis/control/positive) and a cell is evidential only when BOTH hold in that same (vertical, mode): the states positive moved there AND the control's own isolating pair moved on its own axis there (witnessReading reuses the same page reads; no extra browser work). Run-global and cross-control readings are refused by name in the verdict prose. Mixed drill: 5 control cells across 4 (V,M) - bithire/light evidential, bithire/dark non-evidential (positive silent there), evnto/light non-evidential (movement attributable to focus-style, not emphasis), evnto/dark non-evidential on both halves. Auditor-planted run-global mutant reddens exactly the mixed test. Real probe: no cell changed class - 36/36 evidential, palette NC 0% on 36/36, states NC honestly NON-EVIDENTIAL on all 12 cells. The instrument is now ready to accredit pilot/fleet negatives the day the states axis starts moving families."
     }
    ]
   },
