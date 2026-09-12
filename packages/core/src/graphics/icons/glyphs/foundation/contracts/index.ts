@@ -1,9 +1,8 @@
 /**
  * @fileoverview Shared type definitions for the icon subsystem.
  *
- * Defines `SvgIconProps` (the base props interface for all icons), the
- * `IconComponent` type alias, and the `ICON_SIZE_MAP` lookup table that
- * maps named size tokens to their CSS variable references.
+ * Defines `SvgIconProps` (the base props interface for all icons) and the
+ * `IconComponent` type alias.
  */
 
 import type React from 'react';
@@ -89,20 +88,6 @@ export type IconComponent = React.ComponentType<{
   'aria-hidden'?: boolean | 'true' | 'false';
 }>;
 
-
-/**
- * The one icon size scale every icon runtime resolves a named size through.
- * Values are defined in `foundation/tokens/css/presentation/components/icon/index.css`;
- * the fallback keeps an icon sized where that stylesheet is not loaded.
- */
-export const ICON_SIZE_MAP: Record<string, string> = {
-  xs: 'var(--ds-icon-xs-size, 0.75rem)',
-  sm: 'var(--ds-icon-sm-size, 1rem)',
-  md: 'var(--ds-icon-md-size, 1.25rem)',
-  lg: 'var(--ds-icon-lg-size, 1.5rem)',
-  xl: 'var(--ds-icon-xl-size, 2rem)',
-  '2xl': 'var(--ds-icon-2xl-size, 3rem)',
-};
 
 /** Product-level semantic role, independent of any icon supplier. */
 export type IconRole =

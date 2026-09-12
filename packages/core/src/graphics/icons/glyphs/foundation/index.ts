@@ -1,5 +1,5 @@
 /**
- * @fileoverview Canonical icon token references used by runtime icon helpers.
+ * @fileoverview Canonical icon size tokens and the one icon size scale used by runtime icon helpers.
  *
  * The package-internal `src/foundation/tokens/` module holds a much broader token catalog,
  * but runtime code inside the core package should depend on a tiny canonical
@@ -18,3 +18,12 @@ export const ICON_SIZE_TOKENS = {
 } as const;
 
 export type IconSizeToken = keyof typeof ICON_SIZE_TOKENS;
+
+export const ICON_SIZE_MAP: Record<string, string> = {
+  xs: 'var(--ds-icon-xs-size, 0.75rem)',
+  sm: 'var(--ds-icon-sm-size, 1rem)',
+  md: 'var(--ds-icon-md-size, 1.25rem)',
+  lg: 'var(--ds-icon-lg-size, 1.5rem)',
+  xl: 'var(--ds-icon-xl-size, 2rem)',
+  '2xl': 'var(--ds-icon-2xl-size, 3rem)',
+};
