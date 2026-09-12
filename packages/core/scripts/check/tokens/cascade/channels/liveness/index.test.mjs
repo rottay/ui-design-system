@@ -36,6 +36,7 @@ import {
   DEFAULT_CSS_ROOTS,
   CORE_ROOT,
   REPO_ROOT,
+  siblingReposRoot,
   // paint graph (defect 1)
   buildPaintGraph,
   computePaint,
@@ -53,6 +54,12 @@ import {
   LIVE_CLASSIFICATIONS,
   UNPROVEN_CLASSIFICATIONS,
   classifyLiveness,
+  // disposition registry -- ownership of every standing non-LIVE row
+  CHANNEL_DISPOSITIONS,
+  DISPOSITION_OWNER_PATTERN,
+  buildDispositionIndex,
+  adjudicateDispositions,
+  dispositionFailures,
   // digest + ratchet (defects 2, 6, 7)
   computeInputsDigest,
   compareAgainstPrevious,
@@ -873,7 +880,28 @@ test('DEFAULT_CONSUMER_ROOTS names app-bithire as a required consumerRoot resolv
   assert.equal(DEFAULT_CONSUMER_ROOTS[0].required, true);
   assert.ok(DEFAULT_CONSUMER_ROOTS[0].root.endsWith(`${sep}app-bithire${sep}src`));
   assert.ok(!DEFAULT_CONSUMER_ROOTS[0].root.includes(`${sep}ui-design-system${sep}app-bithire`), 'app-bithire is a SIBLING repo, not nested inside ui-design-system');
-  assert.ok(REPO_ROOT.length < CORE_ROOT.length, 'REPO_ROOT must be an ancestor of CORE_ROOT, not equal to it');
+  assert.ok(REPO_ROOT.length < CORE_ROOT.length, 'REPO_ROOT must be shorter than CORE_ROOT, not equal to it');
+});
+
+test('the sibling root is the MAIN checkout\'s parent, so a linked worktree still finds app-bithire', () => {
+  // A linked worktree's `.git` is a file pointing into the main checkout's
+  // `.git/worktrees/<name>`. Resolving the siblings from the worktree's own
+  // parent finds nothing there, which reads as a missing required consumerRoot
+  // and demotes every externally-painted channel to a non-LIVE class.
+  const workDir = mkdtempSync(join(tmpdir(), 'liveness-worktree-fixture-'));
+  const main = join(workDir, 'siblings', 'ui-design-system');
+  const linked = join(workDir, 'worktrees', 'some-lot');
+  for (const dir of [main, join(linked, 'packages', 'core', 'scripts')]) mkdirSync(dir, { recursive: true });
+  writeFileSync(join(main, 'pnpm-workspace.yaml'), 'packages:\n  - packages/*\n');
+  writeFileSync(join(linked, 'pnpm-workspace.yaml'), 'packages:\n  - packages/*\n');
+  writeFileSync(join(linked, '.git'), `gitdir: ${join(main, '.git', 'worktrees', 'some-lot')}\n`);
+
+  assert.equal(siblingReposRoot(join(linked, 'packages', 'core', 'scripts')), join(workDir, 'siblings'));
+
+  // A plain checkout keeps the original semantics exactly: parent of the root.
+  mkdirSync(join(main, '.git'), { recursive: true });
+  assert.equal(siblingReposRoot(main), join(workDir, 'siblings'));
+  rmSync(workDir, { recursive: true, force: true });
 });
 
 /* ---------------------------------------------------------------------- */
@@ -888,6 +916,9 @@ function baseAnalyzerArgs(overrides = {}) {
     cssStylesheets: [css('src/foundation/tokens/css/theme.css', ':root { color: var(--ds-color-primary); }')],
     tsStylesheets: [css('src/components/primitives/display/Button/index.tsx', 'const s = 1;')],
     consumerRoots: [],
+    // A fixture universe is not the real one, so the SHIPPED pins would all be
+    // stale against it. Each case below registers exactly the pins it is about.
+    dispositions: [],
     ...overrides,
   };
 }
@@ -1142,6 +1173,7 @@ test('GREEN: runGate accepts a present, valid, fresh artifact and uses it as the
     familyInventoryPath,
     cssRoots: [cssRoot],
     consumerRoots: [],
+    dispositions: [],
     evidenceRoot,
     round: 'R1',
   };
@@ -1157,6 +1189,195 @@ test('GREEN: runGate accepts a present, valid, fresh artifact and uses it as the
   assert.ok(gateRun.failures.every((f) => !f.startsWith('stale output')), `expected no staleness failure, got: ${JSON.stringify(gateRun.failures)}`);
   assert.ok(gateRun.failures.every((f) => !f.startsWith('missing artifact')));
   rmSync(workDir, { recursive: true, force: true });
+});
+
+/* ---------------------------------------------------------------------- */
+/* Disposition registry -- the ownership law, and its three reds          */
+/* ---------------------------------------------------------------------- */
+
+/**
+ * The drill for the pin table.
+ *
+ * A pin is only worth having if it cannot rot, so the three transitions it has
+ * to catch get a red each: a non-LIVE row nobody registered (the new dead
+ * channel the CI exclusion used to hide), a pin pointing at a channel that is
+ * no longer measured, and a pin whose channel has gone LIVE and must therefore
+ * be deleted. A table that only ever grew would be a baseline wearing a
+ * different word.
+ */
+const FABRICATED = '--ds-color-fabricated-new-channel-no-terminal';
+
+/** A fixture universe in which FABRICATED is authorable-but-unproven, and --ds-color-primary is LIVE. */
+function fabricatedArgs(overrides = {}) {
+  return baseAnalyzerArgs({
+    tenantThemeSource: `
+      export const TENANT_THEME_OVERRIDE_TOKENS = ["--ds-color-primary"] as const;
+      export const TENANT_THEME_REFERENCE_TOKENS = new Set([
+        ...TENANT_THEME_OVERRIDE_TOKENS,
+        "${FABRICATED}",
+      ]);
+    `,
+    cssStylesheets: [css('src/foundation/tokens/css/theme.css', ':root { color: var(--ds-color-primary); }')],
+    ...overrides,
+  });
+}
+
+const pinGroup = (over = {}) => ({
+  owner: 'WO-DER-06',
+  classification: LIVENESS.authorableUnprovenEffect,
+  registered: '2026-09-11',
+  reason: 'a planted registration, so the verdict stays reachable and the shipped table is never the fixture',
+  channels: [FABRICATED],
+  ...over,
+});
+
+test('GREEN: a registered row is OWNED, not accused -- and is still published with its owner', () => {
+  const result = analyzeChannelLiveness(fabricatedArgs({ dispositions: [pinGroup()] }));
+  const row = result.channels.find((entry) => entry.name === FABRICATED);
+  assert.equal(row.classification, LIVENESS.authorableUnprovenEffect, 'the row keeps its class; a pin never re-classifies');
+  assert.deepEqual(result.failures.filter((f) => f.includes(FABRICATED)), []);
+  assert.deepEqual(result.dispositions.byOwner['WO-DER-06'], [FABRICATED]);
+  assert.equal(result.dispositions.pinnedRows, 1);
+  const report = formatReport({
+    ok: true,
+    failures: [],
+    evidenceNote: null,
+    result,
+    corpus: { cssFileCount: 1, tsFileCount: 1 },
+    resolvedArtifactPath: null,
+  });
+  assert.ok(
+    report.includes(`WO-DER-06 (1): ${FABRICATED}`),
+    'a pinned finding is still a finding: the report prints the row and its owner',
+  );
+});
+
+test('RED (a): an UNREGISTERED non-LIVE row fails closed, named exactly', () => {
+  const result = analyzeChannelLiveness(fabricatedArgs({ dispositions: [] }));
+  assert.equal(result.ok, false);
+  assert.ok(
+    result.failures.some((f) => f.startsWith('STOP NO-GO')
+      && f.includes('with NO registered owner')
+      && f.includes(FABRICATED)),
+    result.failures.join(' | '),
+  );
+  assert.equal(result.dispositions.pinnedRows, 0);
+});
+
+test('RED (b): a STALE pin -- registered against a channel the measurement no longer has -- fails closed', () => {
+  const result = analyzeChannelLiveness(fabricatedArgs({
+    dispositions: [pinGroup(), pinGroup({ channels: ['--ds-channel-that-was-renamed-away'] })],
+  }));
+  assert.equal(result.ok, false);
+  assert.ok(
+    result.failures.some((f) => f.startsWith('stale pin: --ds-channel-that-was-renamed-away')
+      && f.includes('no longer exists in the measured universe')),
+    result.failures.join(' | '),
+  );
+});
+
+test('RED (c): a DISCHARGED pin -- the channel is LIVE now -- fails closed; the table only shrinks', () => {
+  const result = analyzeChannelLiveness(fabricatedArgs({
+    dispositions: [pinGroup(), pinGroup({ channels: ['--ds-color-primary'] })],
+  }));
+  const live = result.channels.find((entry) => entry.name === '--ds-color-primary');
+  assert.ok(LIVE_CLASSIFICATIONS.has(live.classification), 'fixture precondition: this channel paints');
+  assert.equal(result.ok, false);
+  assert.ok(
+    result.failures.some((f) => f.startsWith('discharged pin: --ds-color-primary')
+      && f.includes('the work landed, so delete the pin')),
+    result.failures.join(' | '),
+  );
+});
+
+test('RED (d): a DRIFTED pin is re-adjudicated by its owner, not silently re-covered', () => {
+  const result = analyzeChannelLiveness(fabricatedArgs({
+    dispositions: [pinGroup({ classification: LIVENESS.readUnproven })],
+  }));
+  assert.ok(
+    result.failures.some((f) => f.startsWith(`drifted pin: ${FABRICATED}`)
+      && f.includes('re-register it against the class it is actually in')),
+    result.failures.join(' | '),
+  );
+  assert.ok(
+    !result.failures.some((f) => f.startsWith('STOP NO-GO') && f.includes(FABRICATED)),
+    'a drifted pin is accused ONCE, against the pin -- not a second time as an unregistered row',
+  );
+});
+
+test('RED: a channel registered twice, or pinned to something that is not a work order, fails closed', () => {
+  const duplicated = adjudicateDispositions([], {
+    dispositions: [pinGroup(), pinGroup({ owner: 'WO-INV-07' })],
+  });
+  assert.ok(duplicated.failures.some((f) => f.startsWith(`duplicate pin: ${FABRICATED}`)), duplicated.failures.join(' | '));
+
+  const unowned = adjudicateDispositions([], { dispositions: [pinGroup({ owner: 'the derivation lane' })] });
+  assert.ok(
+    unowned.failures.some((f) => f.startsWith(`invalid pin: ${FABRICATED}`) && f.includes('owns nothing')),
+    unowned.failures.join(' | '),
+  );
+});
+
+test('dispositionFailures is the ownership law plus the preconditions that make it readable', () => {
+  const result = {
+    failures: [
+      'required consumerRoot missing: app-bithire',
+      'unknown family: 54 consumer site(s) ...',
+      'unresolved emission pattern: vars[channel] ...',
+      'missing artifact: ...',
+    ],
+    dispositions: { failures: ['stale pin: --ds-x ...'] },
+  };
+  assert.deepEqual(dispositionFailures(result), [
+    'required consumerRoot missing: app-bithire',
+    'stale pin: --ds-x ...',
+  ]);
+});
+
+test('META: the SHIPPED table is the registered set -- 44 channels, one owner each, no duplicates', () => {
+  const { index, duplicates } = buildDispositionIndex();
+  assert.deepEqual(duplicates, []);
+  assert.equal(index.size, 44, 'the pin count is the audit-100 registration: 25 + 13 + 5 + 1');
+  const byClass = {};
+  for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
+  assert.deepEqual(byClass, {
+    [LIVENESS.authorableUnprovenEffect]: 25,
+    [LIVENESS.unreadEmittedNoRoute]: 13,
+    [LIVENESS.readNoProductiveTerminal]: 5,
+    [LIVENESS.readUnproven]: 1,
+  });
+  for (const pin of index.values()) {
+    assert.ok(UNPROVEN_CLASSIFICATIONS.has(pin.classification), `${pin.channel}: a pin may only register a non-LIVE class`);
+    assert.ok(DISPOSITION_OWNER_PATTERN.test(pin.owner), `${pin.channel}: "${pin.owner}" is not a work-order id`);
+    assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(pin.registered), `${pin.channel}: a pin without a registration date is an excuse`);
+    assert.ok(pin.reason.length > 40, `${pin.channel}: a pin without a stated obligation is an allowlist entry`);
+  }
+  for (const group of CHANNEL_DISPOSITIONS) {
+    assert.ok(Object.isFrozen(group) && Object.isFrozen(group.channels));
+  }
+});
+
+test('META: every pinned owner is a work order that is still OPEN in the roadmap registry', () => {
+  // A pin addresses an obligation. An owner that is already DONE owns nothing,
+  // so the row would be orphaned while still looking registered.
+  const registryPath = join(CORE_ROOT, '..', '..', 'roadmap', 'registry.json');
+  const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
+  const statusOf = new Map(registry.workOrders.map((order) => [order.id, order.status]));
+  const expand = (owner) => {
+    const range = /^(WO-[A-Z]{3,4})-(\d{2})\.\.(\d{2})$/.exec(owner);
+    if (range === null) return [owner];
+    const ids = [];
+    for (let n = Number(range[2]); n <= Number(range[3]); n += 1) {
+      ids.push(`${range[1]}-${String(n).padStart(2, '0')}`);
+    }
+    return ids;
+  };
+  for (const group of CHANNEL_DISPOSITIONS) {
+    for (const id of expand(group.owner)) {
+      assert.ok(statusOf.has(id), `${group.owner}: ${id} is not a work order in roadmap/registry.json`);
+      assert.notEqual(statusOf.get(id), 'done', `${group.owner}: ${id} is already done and cannot own a standing finding`);
+    }
+  }
 });
 
 test('DEFAULT_EVIDENCE_ROOT points at the semantic Modern Rescue evidence tree', () => {
