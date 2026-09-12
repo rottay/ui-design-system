@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-11",
+ "updated": "2026-09-12",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -4458,6 +4458,11 @@
      "at": "2026-09-11 13:10",
      "by": "opus",
      "note": "AUDIT 100 DISPOSITION (2026-09-11): (1) STALE BLOCKER REMOVED - residual (a) from the step-4 entry (artifact carries no runtime block) was discharged by the DER-07 connection lot (da5c08c7b: runtime half in the artifact, mount identity + A/B negative proven); it is no longer a blocker. (2) NEW FINDING ACCEPTED - the static recipe-profile path reads an independently projected authored selection (projectGovernedBehavior -> validateRecipeProfileSelection -> appearance?.recipeProfile), NOT the artifact: this contradicts the retained artifact-only F-12/D-26 arm and joins this WO's close blockers beside F-20 (real-browser first paint, itself blocked by the root-barrel use-client RSC defect - WO need flagged to the owner). (3) FORWARDED TO DER-05 - mountTenantTheme(staticThemeIntent('rottay')) mounts data-theme=light while the static compile says colorScheme=dark (options.themeMode ?? 'light'); the default-mode law belongs to DER-05 and this observation is registered in its brief."
+    },
+    {
+     "at": "2026-09-12 04:41",
+     "by": "Kimi K3",
+     "note": "F-20 BROWSER LEG UNBLOCKED (2026-09-12): WO-CON-07 landed 497a7a1a8 — server-safe @rottay/design-system/server boundary for engine identity; the named F-20 failure (/design-cards/manifest 'IMPLEMENTED_ENGINE_NAMES is not iterable' in the production build) now renders 200 against the lot's own packed dist, reproduced by the auditor. EMI-02's remaining close blockers: (1) static recipeProfile must read the ARTIFACT (not projectGovernedBehavior's parallel projection), (2) the real-browser first-paint evidence itself, now executable. The DER-05 default-mode fix (mount stamps the roster's declared mode) already landed at 5f91ef595."
     }
    ]
   },
@@ -5286,7 +5291,7 @@
    "lane": "consumer-contract",
    "order": 7,
    "size": "S",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CON-01"
    ],
@@ -5298,8 +5303,8 @@
    "progressLog": [],
    "claimedBy": "daniel",
    "claimedAt": "2026-09-11",
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-12",
+   "evidence": "Landed 497a7a1a8 (writer f7d83b2bf, Opus/claude-opus-5 on .claude-daniel, session 8a9c0c40 resumed after the ENOTFOUND cut; audited ACCEPT by Kimi K3 under the temporary owner-authorized auditor substitution; audit/102 handoff + R102-01 applied). BOUNDARY: @rottay/design-system/server re-exports 8 values + 2 types from the pure engine-identity owner (contracts/* was machine-refused for runtime values: public-api gate 'contracts may export types only'; root barrel keeps use client; PRIMARY_ENGINE deliberately unpublished — engine-wiring PRIMARY_ENGINE_READERS closes that set). R102-01 FIXED + VERIFIED by auditor's reconciled probe on the exact detector hash: await-import and require destructuring now flag (were false negatives), import type excluded (was false positive), 0/4 mismatches; 13 twin arms + 7/7 drill tests; detector docblock states conservative classification, not graph knowledge. SWEEP: 10 boundary symbols policed, 0 server modules on the client root; red/green plant demonstrated. FARM OF THE LOT'S OWN PACKED DIST (/tmp/con07-farm, npm pack tarball, no source alias): dist/index.js carries use client, dist/server.js does not; farm tsc 0 over all 10 symbols. F-20 DIAGNOSIS BY NAME + BROWSER LEG reproduced by the auditor against the farm (next build EXIT=0, next start :7099): 200 /design-cards/manifest (was the production-build failure 'IMPLEMENTED_ENGINE_NAMES is not iterable'), 200 /foundations (engines in server-rendered HTML), 200 /, 200 /probe-ground/identity (already-green identity route), 200 /primitives/inputs/button — bounded evidence, the showroom as a whole is NOT declared green. Second same-class instance found and fixed (/foundations via SHOWROOM_ENGINES re-published by a use-client module — now reads the boundary). Gates: tsc 0, typecheck:tests 0 baseline 0, structure:check 0 findings, contract-changeset --base=72eabb9e5 OK, changeset with 10-row contract-diff, consumer-contract rows unmoved (120 subpaths, 17 guaranteed, showroom allowSubpaths baseline stays 9), decisions-lit:check green on the merged tree, diff --check clean, roadmap untouched by the writer. New registered BASE-RED (pre-existing at base 72eabb9e5, blocks prepack): runtime-hardening:structural 'WO-CRA-15 dependency authority drifted' + stale browser-evidence fingerprint — unrelated to this lot's write set. Contributes the browser leg WO-EMI-02's F-20 evidence needs; closes nothing beyond its own scope."
   },
   {
    "id": "WO-DER-07",
