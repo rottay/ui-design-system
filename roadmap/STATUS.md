@@ -141,7 +141,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `.#ViewportPosture` | added; phone / tablet / desktop | major | `inv-07-adaptation-slots.md` |
 | export | `.#WorkspaceResponsiveConfig` | changed; `mobileBreakpoint` is a ladder step, not a pixel count | major | `inv-04-one-responsive-mechanism.md` |
 
-Also pending, declaring no public surface movement: `der-02-material-arm-non-vacuity.md` (patch), `emi-02-artifact-recipe-profile.md` (patch), `evi-02-witness-per-cell.md` (patch), `icon-size-map-leaf-home.md` (patch), `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `seeds-render-mode.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
+Also pending, declaring no public surface movement: `der-02-material-arm-non-vacuity.md` (patch), `emi-02-artifact-recipe-profile.md` (patch), `evi-02-witness-per-cell.md` (patch), `fix-103-motion-retime-list-keyboard.md` (patch), `icon-size-map-leaf-home.md` (patch), `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `seeds-render-mode.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
 
 ## Family acceptance — the sealed Modern Rescue adjudication
 
