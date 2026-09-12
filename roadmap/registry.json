@@ -4392,7 +4392,13 @@
    "notes": "wave 4; closes F-11, F-25, F-54, F-108 | 2026-09-10: depends on DER-07 candidate sets (exist), not on the deferred D-30 pick; bithire preset authored from a provisional candidate; final look is a branding-stage obligation (kit-2026-09.md §5c). | 2026-09-10 (98-checkpoint): DER-07 edge REMOVED from the graph — the technical preset conversion depends on the candidate sets, which exist and are landed (ec1d032cb), not on the deferred commercial pick. The final look of the bithire preset remains an explicit branding-stage obligation (kit-2026-09.md §5c).",
    "claimedBy": null,
    "claimedAt": null,
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-09-12 18:50",
+     "by": "Kimi K3",
+     "note": "G103-02 HANDOFF (audit/103-day-direction-2026-09-12/gates.md): this WO receives 2 pinned channels from EMI-02: --ds-experience-profile, --ds-recipe-profile (reason at liveness registry: profiles travel as data/provenance, not CSS paint). EXIT CONDITION per channel: demonstrate the pertinent effect route OR retire it from contract/emission, removing the pin in the same lot; if a channel is provenance-only, adjudicate its classification explicitly - do not fabricate CSS readers to satisfy a counter. Change of owner is not resolution."
+    }
+   ]
   },
   {
    "id": "WO-EMI-01",
@@ -4463,6 +4469,11 @@
      "at": "2026-09-12 04:41",
      "by": "Kimi K3",
      "note": "F-20 BROWSER LEG UNBLOCKED (2026-09-12): WO-CON-07 landed 497a7a1a8 — server-safe @rottay/design-system/server boundary for engine identity; the named F-20 failure (/design-cards/manifest 'IMPLEMENTED_ENGINE_NAMES is not iterable' in the production build) now renders 200 against the lot's own packed dist, reproduced by the auditor. EMI-02's remaining close blockers: (1) static recipeProfile must read the ARTIFACT (not projectGovernedBehavior's parallel projection), (2) the real-browser first-paint evidence itself, now executable. The DER-05 default-mode fix (mount stamps the roster's declared mode) already landed at 5f91ef595."
+    },
+    {
+     "at": "2026-09-12 18:50",
+     "by": "Kimi K3",
+     "note": "POST-CLOSE DEFECT RUNTIME-01 (audit/103-day-direction-2026-09-12/runtime.md; strong build-order inference, focal reproduction still owed): package.json build runs tsc && vite build BEFORE build:vertical-css, whose generator consumes dist and writes the runtime metadata module under src only after Vite already bundled the previous module; the stamp records a nonce/hashes source but does not rebuild. Changing one valid recipe profile + one supported build can ship stale JS with new CSS; the mount check (composition/mount) then refuses the static mount and a second build masks it. OBLIGATION: generation must complete before the final distributable JS bundle and stamp; a bootstrap compiler build, if needed, must be a distinct stage from the final package build; no second authored-theme authority. FOCAL ACCEPTANCE: in the lot worktree change one valid profile selection, run the supported build workflow ONCE, verify the public package mounts the same profile/runtime/CSS, and that a second run produces no further changes. Resolve before widening DER-06 profiles. Status kept done (reopen would cascade over done dependents INV-04/07/05 per DAG validation); close evidence above preserved; correction lot routed here."
     }
    ],
    "doneAt": "2026-09-12",
@@ -4673,7 +4684,13 @@
    "notes": "wave 4; closes F-41, F-38, F-80",
    "claimedBy": null,
    "claimedAt": null,
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-09-12 18:50",
+     "by": "Kimi K3",
+     "note": "G103-02 HANDOFF (audit/103-day-direction-2026-09-12/gates.md): this WO receives 6 pinned channels from INV-07: --ds-breakpoint-2xl/-lg/-md/-sm/-xl/-xs (reason: CSS preludes do not read variables; breakpoints are consumed as data). EXIT CONDITION per channel: demonstrate the pertinent effect route OR retire from contract/emission, removing the pin in the same lot; provenance/data-only classification must be adjudicated explicitly, not masked with artificial readers."
+    }
+   ]
   },
   {
    "id": "WO-FAM-08",
@@ -4863,7 +4880,13 @@
    "notes": "wave 4; closes F-31, F-114; supersedes: WO-ENG-25",
    "claimedBy": "daniel",
    "claimedAt": "2026-09-12",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-09-12 18:50",
+     "by": "Kimi K3",
+     "note": "POST-CLOSE DEFECT RUNTIME-02 (audit/103-day-direction-2026-09-12/runtime.md; strong hook-dependency inference, focal test owed): token-eased-loop reads the computed easing once when starting WAAPI and re-runs only on ref/enabled/duration/token-name/direction/keyframes; GradientBackground/GlowEffect pass constant inputs, so switching motion.character (organic->playful) with duration constant leaves mounted ambient effects on the previous curve while CSS consumers update. OBLIGATION: use a CSS-owned animation consuming the variable directly, or update timing from the shared artifact/theme change signal after CSS commit; no second character map, no DOM polling. FOCAL ACCEPTANCE: extend use-token-eased-loop tests with a rerender changing ONLY the computed easing (duration/keyframes/token name constant), assert timing changes or old animation cancelled+replaced; keep the reduced-motion cancellation assertion. Status kept done (reopen would cascade per DAG validation); correction lot routed here."
+    }
+   ],
    "doneAt": "2026-09-12",
    "evidence": "Landed d7fd3814c (writer fe4eabadb Opus/claude-daniel; audited ACCEPT by Kimi K3) + manifest re-anchor 82d49a2ec. Closes F-114 (lint no-motion-literals green over graphics/motion incl. ease*/steps() extension; ONE ICON_SIZE_MAP declaration, factory/semantic duplicates deleted) and F-31 for this WO's slice (0 modern TSX transition literals across all 136 engines/modern dirs - the spec's grep glob was one level shallow, honest equivalents at 0, adjudication registered; artifact --ds-motion-calm x2 >= fiche's 2; reduced-motion kill switch universal - proven by test over all 5 shipped bundles + source census: every unguarded animated sheet is frozen-engine, frozen untouched per the fence). Premium arm: view-transition recipes on --ds-motion-ease-move/enter/exit driven by motion.character (character-gate 5/5 incl. the real bug it caught - view-transition pseudo-elements escaping the wildcard, now named), neutralized under reduced motion. Effects: aurora/grid-pattern token eases; glow/gradient WAAPI loops reading the token (token-eased-loop; CRA12 PASS). toast-compounds guarded. Write-set enlargement declared+justified. Integration debt discharged in 82d49a2ec (manifest re-anchored, decisions-lit re-run 7/22). KNOWN REGRESSION OWNED: the lot grew ./primitives/message source bytes 259094 > 256096 (public-entrypoints red on main since d7fd3814c, bisected by DT) - repair lot dispatched (graph measurement; reachability fix or measured lastMove); the DT's brief omitted the gate and the audit counted PASS lines without exit codes - procedure corrected. Remaining registered: --ds-transition-* retirement (outside WO steps); ~30 modern skins with CSS keyword eases the lint does not read; skeleton compounds inline shimmer -> WO-FAM-14; constitution #20 stale drill (WO-CAT-02 deleted the validator rule) needs owner; pack-hygiene lot (fixtures in pack + packinv re-seed with real install)."
   },
@@ -5044,6 +5067,11 @@
      "at": "2026-09-12 14:50",
      "by": "Kimi K3",
      "note": "PIN ADJUDICATION landed 38818c36e (2026-09-12): the 2 profile-channel pins orphaned by the EMI-02 close move to WO-DER-06 with evidence (both are selection ids consumed as data — 'provenance, not paint'; no CSS var() route exists, so no discharge was fabricated). 44 pins stand: DER-06 28, INV-07 10, FAM-01..13 6. META open-owner law green again (liveness 106/106). Also: responsive-single-authority + drill now blocking pre-build in the CI manifest (INV-04's deliberate gap closed)."
+    },
+    {
+     "at": "2026-09-12 18:47",
+     "by": "Kimi K3",
+     "note": "G103-01 (audit/103-day-direction-2026-09-12/gates.md, REPRODUCED in-memory fixture): a pin on a channel with no reads/terminal makes the FULL analyzer return ok=true (failures=[]), conflating ownership with effect. Obligation: keep the blocking ownership gate AND its independent projection, but non-LIVE rows must remain failures of the full check (or an explicit separate effect result); a pin yields ownership PASS + full-liveness still FAIL. Add the negative/positive pair. Note: the real-tree full check stays red with the 5 known failures; the 44 pins stay visible; no false discharge occurred. No re-audit of the 44."
     }
    ]
   },
@@ -5395,7 +5423,13 @@
    "notes": "wave 4; closes F-81 (partial)",
    "claimedBy": null,
    "claimedAt": null,
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-09-12 18:50",
+     "by": "Kimi K3",
+     "note": "G103-02 HANDOFF (audit/103-day-direction-2026-09-12/gates.md): this WO receives 4 pinned channels from INV-07: --ds-posture-container-compact-max, --ds-posture-container-standard-max, --ds-posture-id, --ds-posture-span-bias (reason: posture consumed as data by the solver; needs a productive route or retirement in the adaptive kit). EXIT CONDITION per channel: demonstrate the effect route OR retire from contract/emission, removing the pin in the same lot; explicit adjudication if data-only."
+    }
+   ]
   },
   {
    "id": "WO-INV-07",
@@ -5416,7 +5450,13 @@
    "notes": "wave 3; closes F-35 (partial) | 2026-09-10: owner approved the WO-INV-04 edge (full dependency; the container half waits for named containers, no early half-enabling). The R4 close-scope amendment stands.",
    "claimedBy": "daniel",
    "claimedAt": "2026-09-12",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-09-12 18:50",
+     "by": "Kimi K3",
+     "note": "POST-CLOSE DEFECT RUNTIME-03 (audit/103-day-direction-2026-09-12/runtime.md; strong code/semantics inference, focal test owed): data-table presentation='list' rows render as Box role=listitem with onClick but no focusable control/tabIndex/keyboard handler for onRowClick; plain-text columns + only onRowClick become pointer-only when an adapt slot chooses list. OBLIGATION: keep list semantics and provide a focusable, semantically appropriate row-opening control with Enter/Space and nested action/selection isolation, using the existing interaction contract; coordinate with the data-table family cut. FOCAL ACCEPTANCE: list presentation with plain text columns, onRowClick, no actions; tab to the row-opening control; keyboard activation fires exactly one row-open callback; nested selection/action controls do not open the row. Status kept done (reopen would cascade per DAG validation); correction lot routed here."
+    }
+   ],
    "doneAt": "2026-09-12",
    "evidence": "Landed 4864d32f0 (writer bc9886a6f Opus/claude-daniel; audited ACCEPT by Kimi K3, temporary owner-authorized substitution). R4 effective closure scope VERIFIED: (1) SSR phone hint renders cards with the 3 declared columns (data-presentation=cards, data-posture=phone, no <table>; desktop hint renders table) - PatternDataTable.adapt-ssr 2/2; (2) a 320px container flips data-posture to 'desktop compact' + cards WITHOUT viewport change, 1200px flips back (adapt suite 7/7; stubbed ResizeObserver - bounded, real-browser proof rides with EVI-05); (3) posture census = 1 vocabulary (11 sets, 0 foreign names; drill plants 'standard' and gets 2); (4) reference implementation complete (keep/priority/shrink, table|cards|list, inline|menu|swipe with aria-expanded) from the SAME column model - no second component; (5) adapt-slot gate green for data-table, 7 layout-sensitive families declared (data-table FAM-08, card FAM-06, grid FAM-07, form FAM-02, app-shell FAM-11, modal FAM-04, charts FAM-09), drills 16/16 incl. red-before; the per-cut green clause stays rerouted per the R4 amendment; (6) family-cut template sections 1.5 + 4.1; (7) consumer fixture 29/29 (app-side roles-table: 3 kept columns, cards at 390px). Closes F-35 partial (named containers + one posture vocabulary at component level). DT adjudications registered in the merge message: data-posture token list; kernel/adaptation path; family list in the adaptation contract (not catalog fan-out); 'regular' breaking rename with tenant ladder untouched; 640-767px standalone behaviour change in changeset. Pins: 10 stay pinned with honest verdicts (CSS preludes cannot read variables; posture channels consumed as data) - reroute to WO-FAM-07 (breakpoints x6) + WO-FAM-12 (posture x4) dispatched as a micro-lot per the META open-owner law. Gates: 86/86 data-table, liveness 106/106, dispositions OK, single-authority OK, tsc 0, typecheck:tests 0, structure 0, contract-changeset --base=f5686c288 OK (major + contract-diff), decisions-lit fresh, entrypoints 76 PASS (no ceiling edited), eslint 0 errors, axis-difference OK, family-cut drills 40/47 = base (7 registered inline-paint base-reds), diff --check clean. NOT done (registered): swipe reveal has no Modern skin animation; docs-engineering external repo untouched."
   },
