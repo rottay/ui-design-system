@@ -141,7 +141,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `.#ViewportPosture` | added; phone / tablet / desktop | major | `inv-07-adaptation-slots.md` |
 | export | `.#WorkspaceResponsiveConfig` | changed; `mobileBreakpoint` is a ladder step, not a pixel count | major | `inv-04-one-responsive-mechanism.md` |
 
-Also pending, declaring no public surface movement: `der-02-material-arm-non-vacuity.md` (patch), `emi-02-artifact-recipe-profile.md` (patch), `evi-02-witness-per-cell.md` (patch), `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `seeds-render-mode.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
+Also pending, declaring no public surface movement: `der-02-material-arm-non-vacuity.md` (patch), `emi-02-artifact-recipe-profile.md` (patch), `evi-02-witness-per-cell.md` (patch), `icon-size-map-leaf-home.md` (patch), `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `seeds-render-mode.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
 
 ## Family acceptance — the sealed Modern Rescue adjudication
 
@@ -165,7 +165,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [consumer-contract](./consumer-contract.md) | 6 | 0 | 1 | 7 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
 | [derivation](./derivation.md) | 5 | 1 | 1 | 7 |
-| [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
+| [family-cuts](./family-cuts.md) | 1 | 1 | 13 | 15 |
 | [emission-mount](./emission-mount.md) | 2 | 0 | 1 | 3 |
 | [platform-invariants](./platform-invariants.md) | 3 | 0 | 5 | 8 |
 | [retire](./retire.md) | 0 | 0 | 5 | 5 |
@@ -206,6 +206,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | --- | --- | --- | --- | --- |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | Kimi K3 | 2026-09-11 | 2026-09-12 14:50 — PIN ADJUDICATION landed 38818c36e (2026-09-12): the 2 profile-channel pins orphaned by the EMI-02 close move to WO-DER-06 with evidence (both are selection ids consumed as data — 'provenance, not paint'; no CSS var() route exists, so no discharge was fabricated). 44 pins stand: DER-06 28, INV-07 10, FAM-01..13 6. META open-owner law green again (liveness 106/106). Also: responsive-single-authority + drill now blocking pre-build in the CI manifest (INV-04's deliberate gap closed). |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | 2026-09-11 11:09 — CLIENT-PROVIDER CONNECTION LANDED (3 writer commits + integrator test + integration; audited by Kimi K3 under the temporary owner-authorized auditor substitution, Fable quota-exhausted ~20h). TenantThemeArtifact carries its runtime block (EngineVisualDeclaration from the SAME lowering; changeset der-07-artifact-runtime-half.md per CON-05, digest re-anchor measured - 0/65/25 delta channels unchanged, envelope digests unchanged); provider publishes the mounted artifact's own half; resolver no longer returns artifact:null. Runtime proof in real browser 3/3 candidates (posture/motion/density/recipe/tokens differ through the mount, not just CSS); negative control (seed is paint, never reaches useTokens); preview/publication byte parity per candidate; SSR receipt + flight-boundary byte comparison prove the client uses the server's artifact without recompiling. 99-item-1 identity negative ADDED BY DT and green: artifact A + runtime B (same engine/profile ids, foreign governed value) refused at mount; digest covers the runtime half. REGISTERED: (a) the showroom Playwright leg stays blocked by packages/core/dist/index.js carrying use-client into RSC consumers (pre-existing at base, reproduced byte-identical) - repairing it is a public-contract addition that needs its own WO (DT flags it to the owner as an identified need); (b) docs-engineering tenancy/contracts edits remain uncommitted in that repo's dirty tree; (c) past showroom typechecks via symlinked node_modules read MAIN's core dist, not the lot's - audits now require real installs/farms. The WO stays open with exactly one obligation: the recorded owner pick with digest (D-30 deferred to the branding stage). |
+| WO-FAM-14 | The shared anatomy-derived skeleton renderer | daniel | 2026-09-12 | (no entries — log via `progress`) |
 
 ## Next up (todo, dependencies satisfied)
 
@@ -232,7 +233,6 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-EVI-03 | Tests through the door: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines | M | evidence-graph | audit-2026-09-05 |
 | WO-CON-06 | The v2 publication seam: a live owner for the fixture rows, the migration packet and the v1→v2 carry | S | consumer-contract | audit-2026-09-05 |
 | WO-INV-08 | Layout animation kernel: FLIP reflow, animated size, shared-element transitions, a perfection budget | M | platform-invariants | audit-2026-09-05 |
-| WO-FAM-14 | The shared anatomy-derived skeleton renderer | M | family-cuts | audit-2026-09-05 |
 
 ## Blocked (dependencies or phase claim lock)
 

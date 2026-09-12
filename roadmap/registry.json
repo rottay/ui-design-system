@@ -5468,7 +5468,7 @@
    "lane": "family-cuts",
    "order": 15,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-01",
     "WO-INV-05"
@@ -5479,8 +5479,8 @@
    ],
    "notes": "OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (missing skeleton owner; family-cut-template.md 4.2 and family-cut/index.mjs:106-109 both reported UNASSIGNED). wave 3; must close BEFORE WO-FAM-01 closes and therefore before A2-pilot, and the same clause blocks every later cut. Stated as a per-cut close condition in WO-FAM-01..13 rather than as registry edges, so a cut may start in parallel and only its closure waits. Flipping the anatomy-derived-skeleton arm OWED->BLOCKING is this WO's own close act.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "daniel",
+   "claimedAt": "2026-09-12",
    "doneAt": null,
    "evidence": null
   }
