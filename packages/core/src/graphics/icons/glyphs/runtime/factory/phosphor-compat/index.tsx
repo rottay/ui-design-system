@@ -11,11 +11,11 @@
 import React, { forwardRef } from "react";
 import type { ComponentType, RefAttributes, SVGProps } from "react";
 
-import {
-  ICON_SIZE_MAP,
-  type DSIconComponent,
-  type DSIconProps,
-  type IconSize,
+import { ICON_SIZE_MAP } from "../../../foundation";
+import type {
+  DSIconComponent,
+  DSIconProps,
+  IconSize,
 } from "../../../foundation/contracts";
 
 type PhosphorWeight =

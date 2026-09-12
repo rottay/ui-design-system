@@ -9,7 +9,8 @@
  */
 
 import React, { forwardRef } from 'react';
-import { ICON_SIZE_MAP, type SvgIconProps as IconProps } from '..';
+import { ICON_SIZE_MAP } from '../..';
+import type { SvgIconProps as IconProps } from '..';
 
 /**
  * Foundation component for all DS icons. Renders children inside a configured

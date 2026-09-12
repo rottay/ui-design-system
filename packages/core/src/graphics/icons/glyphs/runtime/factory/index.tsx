@@ -12,12 +12,12 @@
  */
 
 import React, { forwardRef } from 'react';
-import {
-  ICON_SIZE_MAP,
-  type DSIconComponent,
-  type DSIconProps,
-  type DSIconSourceComponent,
-  type IconSize,
+import { ICON_SIZE_MAP } from '../../foundation';
+import type {
+  DSIconComponent,
+  DSIconProps,
+  DSIconSourceComponent,
+  IconSize,
 } from '../../foundation/contracts';
 
 /**

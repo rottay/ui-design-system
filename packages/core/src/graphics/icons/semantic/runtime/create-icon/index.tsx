@@ -13,12 +13,8 @@ import {
   isGraphicAssetAdapterEnabled,
   reportGraphicAssetTelemetry,
 } from '../../../../../infrastructure/runtime/graphics/asset-governance/runtime/control';
-import {
-  ICON_SIZE_MAP,
-  type IconRole,
-  type IconState,
-  type IconTone,
-} from '../../../glyphs/foundation/contracts';
+import { ICON_SIZE_MAP } from '../../../glyphs/foundation';
+import type { IconRole, IconState, IconTone } from '../../../glyphs/foundation/contracts';
 import { resolveIconWeight } from '../../foundation/policy';
 import { useActiveIconExpressiveProfile } from '../../../../../infrastructure/runtime/foundation/icons/active-profile/foundation/read';
 import type { IconProps } from '../../foundation/contracts';

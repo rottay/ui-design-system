@@ -15,9 +15,8 @@ export type {
 export * from './glyphs/presentation/catalog';
 
 export type { SvgIconProps, IconComponent } from './glyphs/foundation/contracts';
-export { ICON_SIZE_MAP } from './glyphs/foundation/contracts';
 
-export { ICON_SIZE_TOKENS } from './glyphs/foundation';
+export { ICON_SIZE_MAP, ICON_SIZE_TOKENS } from './glyphs/foundation';
 export type { IconSizeToken } from './glyphs/foundation';
 
 export { BaseIcon } from './glyphs/foundation/contracts/base';
