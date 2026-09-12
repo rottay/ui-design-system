@@ -125,26 +125,43 @@ export const CI_GATES = Object.freeze([
   // check stopped firing. Drill first: a classifier that returned a
   // live/protected verdict for everything would report zero findings and
   // look exactly like a clean tree.
-  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/liveness/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['channel-liveness'], },
-  // Excluded from blocking: the channel debt this gate measures is
-  // authorship/theme-value work, not zero-delta rewiring — proven empirically
-  // on 2026-08-20 when the 12 zero-delta recables of F2.4 drained ZERO
-  // findings (24 AUTHORABLE_UNPROVEN_EFFECT + 3 READ_NO_PRODUCTIVE_TERMINAL
-  // + 1 READ_UNPROVEN + 4 UNREAD_EMITTED_NO_KNOWN_ROUTE + 52 unknown-family
-  // consumer sites; census identical to 2026-08-19). Drain ownership per the
-  // sequence amendment (2026-08-20): accent/tints/overlays/glass ladders are
-  // theme-value decisions -> F4A/F4B; the remainder + unknown-family ->
-  // F2-asymmetric (post-F4B). The drill stays blocking so the classifier
-  // itself cannot rot. Return to blocking = findings drained, not
-  // re-baselined.
+  { id: 'channel-liveness-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/liveness/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['channel-liveness', 'channel-liveness-dispositions'], },
+  // The OWNERSHIP half of the liveness producer, and it BLOCKS.
+  //
+  // Audit 100 (2026-09-11, finding F2) established that the full `--check` was
+  // red with 9 findings while the gate below was excluded wholesale, which put
+  // a genuinely NEW dead channel in exactly the same silence as the 44 known
+  // ones. The DT registered an exact channel-to-work-order disposition for
+  // every one of those 44 rows; this entry enforces that registration and
+  // nothing else. It fails on an unregistered non-LIVE row, a pin whose
+  // channel left the universe, a pin whose channel has gone LIVE (the table
+  // only shrinks) and a pin whose class drifted -- plus the preconditions
+  // without which the classification could not be read at all. It does NOT
+  // require the R1 artifact and does NOT enforce the standing analysis
+  // findings the producer refuses to hide; those stay in the exclusion below.
+  { id: 'channel-liveness-dispositions', run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check-dispositions'], blocking: true, phase: 'pre-build', drillId: 'channel-liveness-drill', },
+  // Excluded from blocking, with a reason that is now exact rather than a
+  // census from 2026-08-20. With the 44 rows pinned and enforced by the entry
+  // above, `--check` still carries FIVE findings the disposition registry does
+  // not cover and must not pretend to:
+  //   * the missing R1 `channel-liveness.json` artifact, which `--write`
+  //     refuses to produce while the analysis is red -- it unblocks when the
+  //     four below do;
+  //   * three unresolved emitter patterns (`derivation/axes/index.ts:35`,
+  //     `derivation/typography/scale/index.ts:48` and `:53`), where the key is
+  //     the complement of a roster, or a table computed elsewhere, and is not
+  //     enumerable from source text;
+  //   * 54 consumer sites under `patterns/visualization` with no canonical
+  //     family-inventory row -- inventory drift.
+  // Return to blocking = those five drained, not re-baselined.
   {
     id: 'channel-liveness',
     run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check'],
     blocking: false,
     excluded: {
-      reason: 'Channel debt is authorship/theme-value work, not zero-delta rewiring (proven 2026-08-20: 12 recables drained 0 findings). Ladders accent/tints/overlays/glass drain in F4A/F4B; the rest + 52 unknown-family in F2-asymmetric. Drill remains blocking.',
-      owner: 'F4A/F4B + F2-asymmetric (sequence amendment 2026-08-20, roadmap §5/§12)',
-      trackedSince: '2026-08-20',  // re-adjudicada en el cierre de F2-seguro (antes: c8063fdb9, F2 monolítico)
+      reason: 'The 44 known non-LIVE rows are pinned to work orders and enforced BLOCKING by channel-liveness-dispositions. What keeps the full --check red is outside that law: the missing R1 artifact, three emitter patterns not enumerable from source text (derivation/axes:35, typography/scale:48 and :53), and 54 consumer sites under patterns/visualization with no family-inventory row.',
+      owner: 'WO-EVI-02 (emitter-pattern resolution + R1 artifact) and WO-RET-04 (family-inventory drift); the 44 channel rows are owned per CHANNEL_DISPOSITIONS',
+      trackedSince: '2026-08-20',  // re-adjudicada 2026-09-11 tras la auditoria 100 (antes: censo 2026-08-20)
     },
     phase: 'pre-build',
     drillId: 'channel-liveness-drill',

@@ -38,10 +38,13 @@
  * one (vertical, mode) where the decision reaches paint says nothing about the
  * eleven where it does not, and a positive pair that moves two catalog rows at
  * once says nothing about the one row the control isolates. Each control
- * publishes `evidential` per cell and the verdict names the two SEPARATELY:
- * today the palette control is evidential on every cell, and no cell of the
- * `states.emphasis` control is, because the states positive reads 0 % in every
- * one of them for the reasons enumerated and measured in `STATES_AXIS_LIMITS`.
+ * publishes `evidential` per cell and the verdict names the two SEPARATELY.
+ * WHAT the witness is differs, because what each control isolates differs: the
+ * `states.emphasis` pair needs the states positive to have moved in the same
+ * cell AND its own row to have moved there, while the `palette.seeds` pair --
+ * already a one-row pair -- needs only its two arms to reach the page as
+ * DIFFERENT effective maps. A non-empty map is not a witness; neither is a
+ * positive that moved in another cell.
  *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
@@ -155,6 +158,21 @@ export const SCENARIOS = Object.freeze([
     id: 'palette-only',
     kind: 'negative',
     expectZeroOn: AXIS_IDS,
+    // What has to have moved, in THIS cell, for this control's zero to be
+    // evidence: the two documents must reach the page as DIFFERENT effective
+    // maps. This control isolates one catalog row already -- its pair differs
+    // in `palette.seeds` alone -- so its own compiled pair is the witness, and
+    // the reading that matters is not "both maps are non-empty" but "the two
+    // maps differ at all".
+    //
+    // Measured 2026-09-12 through `compileTenantThemeDocumentV2` on a dist
+    // built from this tree, as differing/channels per cell: bithire 39/41
+    // light and 20/44 dark, evnto 39/42 and 17/44, rottay 18/23 and 18/23.
+    // Every cell carries a witness today, so the law downgrades nothing here.
+    // It is the law rather than an observation because the reading it replaces
+    // could not tell that apart from a mode whose seeds are routed elsewhere:
+    // a cell that stops differing now loses its standing by itself.
+    witness: { kind: 'effective-map', control: 'palette.seeds' },
     a: { 'palette.seeds': { primary: '#1F4FA8', secondary: '#3C6E71', accent: '#B26B2E' } },
     b: { 'palette.seeds': { primary: '#7A2E6B', secondary: '#2E6B5A', accent: '#A8471F' } },
   },
@@ -169,7 +187,7 @@ export const SCENARIOS = Object.freeze([
     // `states.emphasis` row on its own -- the pair below -- on the `states`
     // axis there. The positive moves two catalog rows at once, so it alone
     // cannot tell emphasis from focus-style.
-    witness: { axis: 'states', control: 'states.emphasis', positive: 'states' },
+    witness: { kind: 'axis-positive', axis: 'states', control: 'states.emphasis', positive: 'states' },
     a: { 'states.emphasis': 'subtle' },
     b: { 'states.emphasis': 'strong' },
   },
@@ -695,19 +713,50 @@ export function differsOnAxis(axis, before, after, family) {
  * its `expectZeroOn` names, and an axis where the control is SUPPOSED to move
  * would be accused by the 0 % rule if it were pushed through as one.
  */
-export function witnessReading({ witness, before, after, denominator }) {
+export function witnessReading({ witness, before, after, denominator, variablesA, variablesB }) {
+  if (witness.kind === 'effective-map') {
+    return {
+      kind: witness.kind,
+      control: witness.control,
+      ...effectiveMapDifference(variablesA ?? {}, variablesB ?? {}),
+    };
+  }
   const moved = [];
   for (const family of denominator) {
     const property = differsOnAxis(witness.axis, before, after, family);
     if (property) moved.push({ family, property });
   }
   return {
+    kind: witness.kind ?? 'axis-positive',
     axis: witness.axis,
     control: witness.control,
     positive: witness.positive,
     moved: moved.length,
     denominator: denominator.length,
     movedFamilies: moved.slice(0, 12),
+  };
+}
+
+/**
+ * How far apart the two arms of a pair actually land, as CHANNELS rather than
+ * as a count of channels.
+ *
+ * `compiledA > 0 && compiledB > 0` was the reading this replaces, and it
+ * answers a question nobody asked: whether the door emitted anything. On the
+ * cells where a decision is routed to the mode the tenant does NOT render, both
+ * arms emit a full map and the two maps are the SAME map, so the page receives
+ * one document twice and the 0 % that follows is arithmetic, not evidence.
+ * `differing` is the reading that separates them: it is the number of names on
+ * which the two documents disagree, and it is zero exactly when this probe has
+ * nothing to read.
+ */
+export function effectiveMapDifference(variablesA, variablesB) {
+  const names = [...new Set([...Object.keys(variablesA), ...Object.keys(variablesB)])].sort();
+  const differing = names.filter((name) => variablesA[name] !== variablesB[name]);
+  return {
+    channels: names.length,
+    differing: differing.length,
+    differingChannels: differing.slice(0, 12),
   };
 }
 
@@ -733,6 +782,17 @@ export function witnessReading({ witness, before, after, denominator }) {
  * percentage and loses its standing, with the half that failed named in the
  * reason. Mutating the cells rather than filtering them is deliberate: a reader
  * sees both the number and why it is not evidence.
+ *
+ * THE SAME LAW COVERS `palette-only`, and the third wrong reading it refuses is
+ * the one this control shipped with:
+ *
+ *  - NON-EMPTY. A pair whose two arms both compile a full map was read as
+ *    evidential because neither map was empty. On twelve of the thirty-six
+ *    cells those two maps are the SAME map -- rottay/light and evnto/dark emit
+ *    the seeds into the mode the vertical does not render, so both arms carry
+ *    0 differing channels -- and a 0 % measured by applying one document twice
+ *    is guaranteed by construction. The witness is the DIFFERENCE between the
+ *    two effective maps, not the size of either.
  */
 export function markVacuousControls(cells, { witnessedControls = WITNESSED_CONTROLS } = {}) {
   for (const cell of cells) {
@@ -751,6 +811,12 @@ function vacuousReason(cell, cells) {
   const witness = cell.witness ?? null;
   if (witness === null) {
     return `no witness was measured for ${where} ${cell.scenario}, and a 0 % standing on nothing is not evidence`;
+  }
+  if (witness.kind === 'effective-map') {
+    if (witness.differing > 0) return null;
+    return `the two documents of the ${witness.control} pair compile to an IDENTICAL effective map in ${where} `
+      + `(${witness.channels} channel(s), 0 differing) — identical map = no witness this probe can read, because `
+      + 'both arms apply the same document and a 0 % between a document and itself certifies nothing';
   }
   const positive = cells.filter((entry) => entry.kind === 'positive'
     && entry.scenario === witness.positive
@@ -771,6 +837,28 @@ function vacuousReason(cell, cells) {
       + `movement is attributable to the other row of the positive pair and not to ${witness.control}`;
   }
   return null;
+}
+
+/** `vertical/mode (axis, axis)` for each cell named, so a verdict names WHICH cells it lost. */
+export function namedCells(cells) {
+  const byCell = new Map();
+  for (const cell of cells) {
+    const where = `${cell.vertical}/${cell.theme}`;
+    byCell.set(where, [...(byCell.get(where) ?? []), cell.axis]);
+  }
+  return [...byCell].map(([where, axes]) => `${where} (${axes.join(', ')})`).join('; ');
+}
+
+/** One `[vertical/mode, reason]` per cell that lost its standing, deduplicated over the axes. */
+export function vacuousReasonsByCell(cells) {
+  const byCell = new Map();
+  for (const cell of cells) {
+    const where = `${cell.vertical}/${cell.theme}`;
+    if (!byCell.has(where)) {
+      byCell.set(where, cell.nonEvidentialReason ?? 'its pair compiles to an empty delta');
+    }
+  }
+  return [...byCell];
 }
 
 export async function run({
@@ -821,6 +909,8 @@ export async function run({
           let compiledB = 0;
           let baseA = 0;
           let baseB = 0;
+          let variablesA = {};
+          let variablesB = {};
           try {
             const artifactA = await compileDocument({
               compile, vertical, slug: `${scenario.id}-a`, decisions: scenario.a,
@@ -832,8 +922,8 @@ export async function run({
             // block over the base one -- the same winner the shipped selector
             // order produces. Reading `variables` alone measured the base block
             // twice and called a routed palette inert.
-            const variablesA = effectiveVariables(artifactA, theme);
-            const variablesB = effectiveVariables(artifactB, theme);
+            variablesA = effectiveVariables(artifactA, theme);
+            variablesB = effectiveVariables(artifactB, theme);
             baseA = Object.keys(artifactA.variables).length;
             baseB = Object.keys(artifactB.variables).length;
             compiledA = Object.keys(variablesA).length;
@@ -862,7 +952,9 @@ export async function run({
               witness: scenario.witness,
               before,
               after,
-              denominator: effective(scenario.witness.axis),
+              denominator: scenario.witness.axis === undefined ? [] : effective(scenario.witness.axis),
+              variablesA,
+              variablesB,
             });
           const axes = scenario.kind === 'positive' ? [scenario.axis] : scenario.expectZeroOn;
           for (const axis of axes) {
@@ -961,7 +1053,26 @@ export async function run({
   };
 }
 
-export function evaluate(result, { threshold = null, inertPairs = INERT_PAIRS } = {}) {
+/**
+ * The one negative control this run may carry with NO standing cell, and the
+ * only one.
+ *
+ * `states-emphasis-only` is vacuous for a reason that is measured rather than
+ * assumed -- every line of `STATES_AXIS_LIMITS` -- and dropping the control
+ * instead of publishing it vacuous would hide that measurement. Every OTHER
+ * negative control must keep at least one evidential cell, because a control
+ * that has gone wholly vacuous is indistinguishable from a control that was
+ * never run, and a run with no negative control has nothing holding its
+ * positives honest. The list is declared here so that becoming vacuous is a
+ * FAILURE for a control nobody adjudicated, not a quieter verdict.
+ */
+export const VACUITY_PERMITTED_CONTROLS = Object.freeze([STATES_DEPENDENT_CONTROL]);
+
+export function evaluate(result, {
+  threshold = null,
+  inertPairs = INERT_PAIRS,
+  vacuityPermitted = VACUITY_PERMITTED_CONTROLS,
+} = {}) {
   const failures = [];
   if (result.cells.length === 0) failures.push('no cell measured — the probe ran nothing');
   if (result.families.mountable === 0) {
@@ -1052,6 +1163,20 @@ export function evaluate(result, { threshold = null, inertPairs = INERT_PAIRS } 
       + 'carries no negative control at all',
     );
   }
+  // FAIL CLOSED, PER CONTROL. Marking cells non-evidential is what makes the
+  // verdict honest; it must not also be what makes it green. A control whose
+  // every cell lost its standing has stopped being a control, and only the one
+  // whose vacuity is measured and enumerated may say so without failing.
+  for (const control of [...new Set(negatives.map((cell) => cell.scenario))]) {
+    if (vacuityPermitted.includes(control)) continue;
+    const own = negatives.filter((cell) => cell.scenario === control);
+    if (own.some((cell) => cell.evidential)) continue;
+    failures.push(
+      `NEGATIVE CONTROL ${control}: all ${own.length} of its cell(s) are NON-EVIDENTIAL, so this run carries no `
+      + `${control} control at all — e.g. ${own[0].vertical}/${own[0].theme}: ${own[0].nonEvidentialReason
+        ?? 'its pair compiles to an empty delta'}`,
+    );
+  }
   for (const cell of negatives) {
     if (cell.moved > 0) {
       failures.push(
@@ -1135,6 +1260,22 @@ if (isMain) {
       );
     }
   }
+  // The witness READINGS, published beside the percentages they license. A run
+  // that printed only the verdict would leave a reader unable to tell an
+  // evidential 0 % from one nobody had checked.
+  for (const control of [...new Set(result.cells
+    .filter((cell) => cell.witness?.kind === 'effective-map')
+    .map((cell) => cell.scenario))]) {
+    const seen = new Set();
+    const readings = [];
+    for (const cell of result.cells.filter((entry) => entry.scenario === control && entry.witness !== null)) {
+      const where = `${cell.vertical}/${cell.theme}`;
+      if (seen.has(where)) continue;
+      seen.add(where);
+      readings.push(`${where} ${cell.witness.differing}/${cell.witness.channels}`);
+    }
+    console.log(`  witness ${control} (effective-map, differing/channels): ${readings.join(', ')}`);
+  }
   for (const line of result.limits.states.unreachable) console.log(`  states axis limit: ${line}`);
   const failures = evaluate(result, {
     threshold: thresholdArgument === undefined ? null : Number(thresholdArgument),
@@ -1149,6 +1290,7 @@ if (isMain) {
   for (const control of controls) {
     const own = result.cells.filter((cell) => cell.scenario === control);
     const evidential = own.filter((cell) => cell.evidential);
+    const vacuous = own.filter((cell) => !cell.evidential);
     // Cell by cell, because the standing is now per cell: a control can be
     // evidence in one (vertical, mode) and vacuous in the next, and a single
     // run-wide adjective would hide exactly that.
@@ -1157,8 +1299,17 @@ if (isMain) {
         ? `  NEGATIVE CONTROL ${control}: NON-EVIDENTIAL on all ${own.length} cell(s) — e.g. `
           + `${own[0].vertical}/${own[0].theme}: ${own[0].nonEvidentialReason
             ?? 'its pair compiles to an empty delta'}`
-        : `  NEGATIVE CONTROL ${control}: 0 % on ${evidential.length} evidential cell(s) of ${own.length}`,
+        : `  NEGATIVE CONTROL ${control}: 0 % on ${evidential.length} evidential cell(s) of ${own.length}`
+          + (vacuous.length === 0
+            ? ''
+            : ` — NON-EVIDENTIAL on ${vacuous.length}: ${namedCells(vacuous)}`),
     );
+    // The reason once per (vertical, mode), not once per axis: the six axes of
+    // one cell lose their standing for the same single reason, and printing it
+    // six times would read as six findings.
+    for (const [where, reason] of vacuousReasonsByCell(vacuous)) {
+      console.log(`    ${control} ${where}: ${reason}`);
+    }
   }
   console.log(
     'axis-difference OK — every evidential negative-control cell at 0 %'

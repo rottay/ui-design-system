@@ -137,6 +137,7 @@
  * ============================================================================
  *   node scripts/check/tokens/cascade/channels/liveness/index.mjs                  # human report
  *   node scripts/check/tokens/cascade/channels/liveness/index.mjs --check           # fail-closed CI gate (requires R1 artifact)
+ *   node scripts/check/tokens/cascade/channels/liveness/index.mjs --check-dispositions # fail-closed OWNERSHIP gate: every non-LIVE row pinned, every pin still owed
  *   node scripts/check/tokens/cascade/channels/liveness/index.mjs --json             # full JSON report to stdout
  *   node scripts/check/tokens/cascade/channels/liveness/index.mjs --write [--round R1] [--artifact-path <p>]
  */
@@ -147,6 +148,7 @@ import {
   mkdirSync,
   readdirSync,
   readFileSync,
+  statSync,
   writeFileSync,
 } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
@@ -162,9 +164,38 @@ const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPTS_DIR = dirname(SCRIPT_PATH);
 
 export const CORE_ROOT = findPackageRoot(SCRIPTS_DIR);
-// The monorepo root is the parent of this repo root: it is where sibling
-// repos such as `app-bithire` live, one level above `ui-design-system`.
-export const REPO_ROOT = resolve(findRepoRoot(SCRIPTS_DIR), '..');
+
+/**
+ * Where the SIBLING repos live -- `app-bithire` among them -- which is one
+ * level above `ui-design-system`.
+ *
+ * A linked git worktree is not beside its siblings: it sits under its own
+ * worktrees directory, so `parent-of-the-checkout` resolves to a directory that
+ * has no `app-bithire` in it and the required consumerRoot reads as missing.
+ * That demoted eleven externally-painted channels to a non-LIVE class, which
+ * this gate would then report as eleven unowned rows -- a wrong measurement
+ * dressed as a finding. A linked worktree's `.git` is a FILE pointing into the
+ * main checkout's `.git/worktrees/<name>`, so the main checkout is readable
+ * from it and the siblings are beside THAT.
+ */
+export function siblingReposRoot(fromDir = SCRIPTS_DIR) {
+  const checkout = findRepoRoot(fromDir);
+  const gitPath = join(checkout, '.git');
+  const marker = `${sep}.git${sep}worktrees${sep}`;
+  try {
+    if (statSync(gitPath).isFile()) {
+      const pointer = /^gitdir:\s*(.+)$/m.exec(readFileSync(gitPath, 'utf8'))?.[1]?.trim();
+      if (pointer && pointer.includes(marker)) {
+        return resolve(pointer.slice(0, pointer.indexOf(marker)), '..');
+      }
+    }
+  } catch {
+    // A checkout with no readable `.git` is the plain case: fall through.
+  }
+  return resolve(checkout, '..');
+}
+
+export const REPO_ROOT = siblingReposRoot();
 export const DEFAULT_TENANT_THEME_CONTRACT = resolve(
   CORE_ROOT,
   'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts',
@@ -1351,6 +1382,242 @@ export const UNPROVEN_CLASSIFICATIONS = new Set([
   LIVENESS.unreadEmittedNoRoute,
 ]);
 
+/* ---------------------------------------------------------------------- */
+/* 8b. Disposition registry -- WHO owns every standing non-LIVE row       */
+/* ---------------------------------------------------------------------- */
+
+/**
+ * WHAT A PIN IS, AND WHAT IT IS NOT.
+ *
+ * This is NOT the baseline/allowlist the section "WHY NO BASELINE FILE" above
+ * refuses, and the difference is the whole design. A baseline accepts a row
+ * into SILENCE: the row stops being printed, the count goes down, and nobody
+ * can tell a drained finding from an accepted one. A pin does the opposite. It
+ * leaves the row exactly where it is -- measured, classified, named in the
+ * report with its owner on every run -- and adds the one thing the row was
+ * missing, which is a work order that has agreed to resolve it. The debt is not
+ * declared resolved by being pinned; it is declared OWNED.
+ *
+ * That is what makes this gate blockable. Before the registry the gate had a
+ * standing red with no address, so it could only be excluded from CI wholesale
+ * (`blocking: false`), which meant a genuinely NEW dead channel landed in
+ * exactly the same silence as the 44 known ones. With the registry the gate
+ * fails on the three transitions that actually matter:
+ *
+ *   (a) UNREGISTERED -- a non-LIVE row nobody pinned. This is the new dead
+ *       channel the exclusion used to hide, and it is now a hard red.
+ *   (b) STALE -- a pin whose channel is no longer in the measured universe.
+ *       The name was renamed or removed and the pin is pointing at nothing, so
+ *       an owner is carrying an obligation that no longer exists.
+ *   (c) DISCHARGED -- a pin whose channel now classifies LIVE. The work landed;
+ *       the pin must be deleted in the same commit. THE TABLE ONLY SHRINKS.
+ *
+ * A fourth, (d) DRIFTED, falls out of the same reading: a pin declares the
+ * class it was registered against, so a row that moved from one non-LIVE class
+ * to another is re-adjudicated by its owner rather than silently re-covered.
+ *
+ * WHY IN THE SCRIPT AND NOT IN A JSON FILE. `computeInputsDigest` already
+ * covers this script's own source, so a pin edit invalidates the evidence
+ * artifact exactly like a classifier edit does -- no second digest input, no
+ * file that can drift out from under the artifact that quotes it.
+ *
+ * REGISTERED 2026-09-11 by the DT from audit 100 (`dt-adjudication.md` F2), one
+ * owner per class group, reproducing the run it was registered against:
+ * 25 AUTHORABLE_UNPROVEN_EFFECT + 13 UNREAD_EMITTED_NO_KNOWN_ROUTE +
+ * 5 READ_NO_PRODUCTIVE_TERMINAL + 1 READ_UNPROVEN = 44 channels.
+ */
+export const CHANNEL_DISPOSITIONS = Object.freeze([
+  Object.freeze({
+    owner: 'WO-DER-06',
+    classification: LIVENESS.authorableUnprovenEffect,
+    registered: '2026-09-11',
+    reason:
+      'the vertical-preset conversion decides reader-or-retire per channel; the 2026-09-10 amendment already routed ramps.accent there and the audit-100 disposition extended it to the full authorable set',
+    channels: Object.freeze([
+      '--ds-color-accent-50',
+      '--ds-color-accent-100',
+      '--ds-color-accent-200',
+      '--ds-color-accent-300',
+      '--ds-color-accent-400',
+      '--ds-color-accent-500',
+      '--ds-color-accent-600',
+      '--ds-color-accent-700',
+      '--ds-color-accent-800',
+      '--ds-color-accent-900',
+      '--ds-color-info-300',
+      '--ds-color-text-page',
+      '--ds-glass-bg',
+      '--ds-glass-border',
+      '--ds-overlay-heavy',
+      '--ds-overlay-light',
+      '--ds-overlay-medium',
+      '--ds-tint-error-16',
+      '--ds-tint-error-24',
+      '--ds-tint-info-16',
+      '--ds-tint-info-24',
+      '--ds-tint-success-16',
+      '--ds-tint-success-24',
+      '--ds-tint-warning-16',
+      '--ds-tint-warning-24',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-INV-07',
+    classification: LIVENESS.unreadEmittedNoRoute,
+    registered: '2026-09-11',
+    reason:
+      'real responsive adoption is already this work order\'s obligation: the breakpoint and posture channels are emitted for readers that the responsive lane has not written yet',
+    channels: Object.freeze([
+      '--ds-breakpoint-2xl',
+      '--ds-breakpoint-lg',
+      '--ds-breakpoint-md',
+      '--ds-breakpoint-sm',
+      '--ds-breakpoint-xl',
+      '--ds-breakpoint-xs',
+      '--ds-posture-container-compact-max',
+      '--ds-posture-container-standard-max',
+      '--ds-posture-id',
+      '--ds-posture-span-bias',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EMI-02',
+    classification: LIVENESS.unreadEmittedNoRoute,
+    registered: '2026-09-11',
+    reason: 'the runtime readers for the two profile channels are this work order\'s retained arms',
+    channels: Object.freeze(['--ds-experience-profile', '--ds-recipe-profile']),
+  }),
+  Object.freeze({
+    owner: 'WO-FAM-01..13',
+    classification: LIVENESS.unreadEmittedNoRoute,
+    registered: '2026-09-11',
+    reason:
+      'the surfaces cuts own the reader; connfix a5da15828 connected the decision, so what is missing is the consumer side of the cut',
+    channels: Object.freeze(['--ds-elevation-border-style']),
+  }),
+  Object.freeze({
+    owner: 'WO-FAM-01..13',
+    classification: LIVENESS.readNoProductiveTerminal,
+    registered: '2026-09-11',
+    reason:
+      'each of these is read inside a private custom property that no family declares a terminal for; the consumer adoption that closes the chain belongs to the family cuts',
+    channels: Object.freeze([
+      '--ds-color-error-900',
+      '--ds-color-success-900',
+      '--ds-radius-button',
+      '--ds-z-index-base',
+      '--ds-z-index-drawer',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-DER-06',
+    classification: LIVENESS.readUnproven,
+    registered: '2026-09-11',
+    reason: 'the only evidence is a raw TS/TSX var() occurrence; the preset conversion decides reader-or-retire',
+    channels: Object.freeze(['--ds-color-secondary-400']),
+  }),
+]);
+
+/** A pin addresses a work order, never a person, a lane or a date. */
+export const DISPOSITION_OWNER_PATTERN = /^WO-[A-Z]{3,4}-\d{2}(?:\.\.\d{2})?$/;
+
+/** channel -> its single registered disposition, plus any channel registered twice. */
+export function buildDispositionIndex(dispositions = CHANNEL_DISPOSITIONS) {
+  const index = new Map();
+  const duplicates = [];
+  for (const group of dispositions) {
+    for (const channel of group.channels) {
+      if (index.has(channel)) {
+        duplicates.push(channel);
+        continue;
+      }
+      index.set(channel, {
+        channel,
+        owner: group.owner,
+        classification: group.classification,
+        registered: group.registered,
+        reason: group.reason,
+      });
+    }
+  }
+  return { index, duplicates: [...new Set(duplicates)].sort() };
+}
+
+/**
+ * The measurement against the registry, in both directions.
+ *
+ * Both directions are the point. Reading only rows -> pins would let the table
+ * grow stale pins forever; reading only pins -> rows would let an unowned new
+ * dead channel through. Every pinned row is returned so the report can keep
+ * printing it WITH its owner: a pinned finding is still a finding.
+ */
+export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOSITIONS } = {}) {
+  const failures = [];
+  const { index, duplicates } = buildDispositionIndex(dispositions);
+  for (const channel of duplicates) {
+    failures.push(
+      `duplicate pin: ${channel} is registered more than once in CHANNEL_DISPOSITIONS -- a channel has exactly one owner`,
+    );
+  }
+  for (const pin of index.values()) {
+    if (!DISPOSITION_OWNER_PATTERN.test(pin.owner)) {
+      failures.push(
+        `invalid pin: ${pin.channel} is pinned to "${pin.owner}", which is not a work-order id -- a pin registers OWNERSHIP, and an owner that is not a work order owns nothing`,
+      );
+    }
+  }
+
+  const measured = new Map(channels.filter((row) => row.classification).map((row) => [row.name, row]));
+  const pinned = [];
+  const unregistered = new Map();
+  for (const row of channels) {
+    if (!row.classification || !UNPROVEN_CLASSIFICATIONS.has(row.classification)) continue;
+    const pin = index.get(row.name);
+    if (pin !== undefined && pin.classification === row.classification) {
+      pinned.push({ ...pin });
+      continue;
+    }
+    // A pin whose class drifted is accused once, below, against the PIN -- not
+    // a second time here as though the channel had never been registered.
+    if (pin !== undefined) continue;
+    const list = unregistered.get(row.classification) ?? [];
+    list.push(row.name);
+    unregistered.set(row.classification, list);
+  }
+  for (const [classification, names] of unregistered) {
+    failures.push(
+      `STOP NO-GO: ${names.length} channel(s) classified ${classification} with NO registered owner (no proven terminal, no proven external evidence, no retirement, no pin) -- exact rows: ${names.sort().join(', ')}`,
+    );
+  }
+
+  for (const pin of index.values()) {
+    const row = measured.get(pin.channel);
+    if (row === undefined) {
+      failures.push(
+        `stale pin: ${pin.channel} is pinned to ${pin.owner} as ${pin.classification} and no longer exists in the measured universe -- the pin points at nothing; remove it in the same commit that removed the channel`,
+      );
+      continue;
+    }
+    if (LIVE_CLASSIFICATIONS.has(row.classification)) {
+      failures.push(
+        `discharged pin: ${pin.channel} is pinned to ${pin.owner} as ${pin.classification} and now classifies ${row.classification} -- the work landed, so delete the pin; this table only shrinks`,
+      );
+      continue;
+    }
+    if (row.classification !== pin.classification) {
+      failures.push(
+        `drifted pin: ${pin.channel} is pinned to ${pin.owner} as ${pin.classification} and now measures ${row.classification} -- the debt changed shape; re-register it against the class it is actually in`,
+      );
+    }
+  }
+
+  const byOwner = {};
+  for (const entry of [...pinned].sort((a, b) => a.channel.localeCompare(b.channel))) {
+    (byOwner[entry.owner] ??= []).push(entry.channel);
+  }
+  return { failures, pinned, byOwner, registered: index.size };
+}
+
 /**
  * Exhaustive over the row shape this file ever constructs (universe =
  * declaredOverride ∪ declaredReference ∪ emitted, so at least one of
@@ -1585,6 +1852,7 @@ export function analyzeChannelLiveness({
   consumerRoots = [],
   previousArtifact = null,
   enforceArtifactFreshness = false,
+  dispositions = CHANNEL_DISPOSITIONS,
   drill = null,
 }) {
   const failures = [];
@@ -1890,21 +2158,12 @@ export function analyzeChannelLiveness({
     );
   }
 
-  // --- STOP NO-GO: every non-LIVE row is a standing finding (defects 3, 8) --
-  const unprovenRows = channels.filter((row) => row.classification && UNPROVEN_CLASSIFICATIONS.has(row.classification));
-  if (unprovenRows.length > 0) {
-    const byBucket = new Map();
-    for (const row of unprovenRows) {
-      const list = byBucket.get(row.classification) ?? [];
-      list.push(row.name);
-      byBucket.set(row.classification, list);
-    }
-    for (const [classification, names] of byBucket) {
-      failures.push(
-        `STOP NO-GO: ${names.length} channel(s) classified ${classification} (no proven terminal, no proven external evidence, no retirement) -- exact rows: ${names.join(', ')}`,
-      );
-    }
-  }
+  // --- STOP NO-GO, now addressed: every non-LIVE row is still a standing
+  // finding (defects 3, 8), and it must additionally carry a registered owner.
+  // The adjudication reds on an unregistered row, a stale pin, a discharged pin
+  // and a drifted pin; it never hides a pinned row, which is published below.
+  const adjudication = adjudicateDispositions(channels, { dispositions });
+  failures.push(...adjudication.failures);
 
   const sourceDigest = computeInputsDigest({
     gateScriptSource: readFileSync(SCRIPT_PATH, 'utf8'),
@@ -1950,6 +2209,17 @@ export function analyzeChannelLiveness({
     failures,
     analysisLimitations,
     sourceDigest,
+    // A pinned finding is still a finding: it is published, with its owner, on
+    // every run. Nothing here is a count that went down.
+    dispositions: {
+      registered: adjudication.registered,
+      pinnedRows: adjudication.pinned.length,
+      // The subset of `failures` the ownership law itself produced, so the
+      // blocking leg can be exactly that law and nothing else.
+      failures: adjudication.failures,
+      byOwner: adjudication.byOwner,
+      pinned: [...adjudication.pinned].sort((a, b) => a.channel.localeCompare(b.channel)),
+    },
     consumerRoots: consumerResults.map(({ consumerRoot, load }) => ({
       id: consumerRoot.id,
       root: relative(REPO_ROOT, consumerRoot.root).split(sep).join('/'),
@@ -2002,6 +2272,7 @@ export function runGate({
   round = DEFAULT_ROUND,
   artifactPath = undefined,
   requireArtifact = false,
+  dispositions = CHANNEL_DISPOSITIONS,
   drill = null,
 } = {}) {
   const tenantThemeSource = readFileSync(tenantThemeContractPath, 'utf8');
@@ -2050,6 +2321,7 @@ export function runGate({
     consumerRoots,
     previousArtifact,
     enforceArtifactFreshness: requireArtifact,
+    dispositions,
     drill,
   });
 
@@ -2095,6 +2367,9 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
     consumerRoots: result.consumerRoots,
     counts: result.counts,
     analysisLimitations: result.analysisLimitations,
+    // The ledger records WHO owns every standing non-LIVE row it publishes, so
+    // a reader of the artifact alone can tell an owned debt from an orphan one.
+    dispositions: result.dispositions,
     channels: result.channels,
   };
 }
@@ -2119,6 +2394,17 @@ export function formatReport(gateRun) {
   for (const [classification, count] of Object.entries(result.counts.byClassification)) {
     lines.push(`    ${classification}: ${count}`);
   }
+  // The pinned rows are PRINTED, every run, with their owners. A pin registers
+  // ownership; it does not declare the debt resolved, and a reader who cannot
+  // see the rows cannot tell the difference.
+  if (result.dispositions) {
+    lines.push(
+      `  pinned dispositions (ownership registered -- the debt is NOT resolved): ${result.dispositions.pinnedRows} row(s) of ${result.dispositions.registered} pin(s)`,
+    );
+    for (const [owner, names] of Object.entries(result.dispositions.byOwner)) {
+      lines.push(`    ${owner} (${names.length}): ${names.join(', ')}`);
+    }
+  }
   if (resolvedArtifactPath) {
     lines.push(`  artifact path (freshness/ratchet anchor): ${relative(CORE_ROOT, resolvedArtifactPath)}`);
   }
@@ -2140,9 +2426,33 @@ export function formatReport(gateRun) {
   return lines.join('\n');
 }
 
+/**
+ * The preconditions without which an adjudication would be measured against the
+ * WRONG classification, and therefore red for the wrong reason.
+ *
+ * A missing consumerRoot silently demotes every externally-painted channel to a
+ * non-LIVE class, which would read as eleven unregistered rows. That must fail
+ * as what it is -- a broken measurement -- and not as an ownership finding.
+ */
+const DISPOSITION_PRECONDITION_PREFIXES = Object.freeze([
+  'zero corpus',
+  'required consumerRoot missing',
+  'unclassified output',
+]);
+
+/** Exactly the ownership law, plus the preconditions that make it readable. */
+export function dispositionFailures(result) {
+  return [
+    ...result.failures.filter((failure) =>
+      DISPOSITION_PRECONDITION_PREFIXES.some((prefix) => failure.startsWith(prefix))),
+    ...(result.dispositions?.failures ?? []),
+  ];
+}
+
 function main() {
   const args = process.argv.slice(2);
   const check = args.includes('--check');
+  const checkDispositions = args.includes('--check-dispositions');
   const write = args.includes('--write');
   const json = args.includes('--json');
   const roundFlagIndex = args.indexOf('--round');
@@ -2174,6 +2484,22 @@ function main() {
   }
 
   const gateRun = runGate({ round, artifactPath, requireArtifact: check });
+
+  // THE OWNERSHIP LAW ON ITS OWN, which is the leg that blocks. The full
+  // `--check` additionally requires the R1 artifact and the two standing
+  // analysis findings this producer refuses to hide (three unresolved emitter
+  // patterns, the family-inventory drift); those have their own owners and are
+  // recorded as such in the gate manifest. This leg answers one question -- is
+  // every non-LIVE row owned, and does every pin still find its channel in the
+  // class it was registered against -- and it answers it fail-closed.
+  if (checkDispositions) {
+    const blocking = dispositionFailures(gateRun.result);
+    const report = formatReport({ ...gateRun, ok: blocking.length === 0, failures: blocking });
+    if (blocking.length === 0) console.log(report);
+    else console.error(report);
+    process.exitCode = blocking.length === 0 ? 0 : 1;
+    return;
+  }
 
   if (json) {
     process.stdout.write(`${JSON.stringify(buildArtifact(gateRun, { round }), null, 2)}\n`);

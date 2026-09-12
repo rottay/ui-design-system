@@ -11,15 +11,17 @@
  * and counting it would have put the rule's own first negative control at 1.6 %
  * on depth for a reason that has nothing to do with depth.
  *
- * Three of those verdicts exist because the probe got them WRONG. It applied
+ * FOUR of those verdicts exist because the probe got them WRONG. It applied
  * `artifact.variables` and nothing else, so a mode-routed palette read as an
  * empty delta and the run declared a live decision inert; it marked both
  * negative controls green while the states positive read 0 %, which is a
- * control that costs nothing; and it then read that same witness run-globally
- * and across two catalog rows at once, so one working cell would have
- * certified the eleven vacuous ones and a move of `states.focus-style` would
- * have certified the `states.emphasis` control. Each now has cases that fail
- * if the behaviour comes back.
+ * control that costs nothing; it then read that same witness run-globally and
+ * across two catalog rows at once, so one working cell would have certified the
+ * eleven vacuous ones and a move of `states.focus-style` would have certified
+ * the `states.emphasis` control; and it credited a palette cell for compiling
+ * NON-EMPTY maps rather than DIFFERENT ones, so a pair whose two arms are the
+ * same document read as evidence. Each now has cases that fail if the behaviour
+ * comes back.
  *
  * The BROWSER half is the one no unit test can replace. It drives a NULL pair
  * -- two identical documents -- through the same Chromium, the same bundle and
@@ -27,7 +29,9 @@
  * drives a real pair through the same path and requires more than 0 %. An
  * instrument that reports a difference between a document and itself is
  * reporting noise, and every percentage it publishes would be that noise plus
- * whatever else it found.
+ * whatever else it found. The same NULL pair is driven through the palette
+ * CONTROL, where the honest verdict is the opposite one: 0 % between a document
+ * and itself is not a control passing, it is a control with nothing to read.
  */
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
@@ -50,7 +54,10 @@ import {
   familyElement,
   familyElements,
   isSingleElement,
+  VACUITY_PERMITTED_CONTROLS,
+  effectiveMapDifference,
   markVacuousControls,
+  namedCells,
   run,
   selectorParts,
   stripColour,
@@ -118,12 +125,40 @@ const control = (over = {}) => cell({
 });
 
 const witness = (over = {}) => ({
+  kind: 'axis-positive',
   axis: 'states',
   control: 'states.emphasis',
   positive: 'states',
   moved: 0,
   denominator: 148,
   movedFamilies: [],
+  ...over,
+});
+
+/**
+ * The OTHER witness shape: what the palette control's own pair compiled to.
+ *
+ * Its standing does not depend on a positive at all -- the pair already differs
+ * in exactly one catalog row -- so the only question is whether the two arms
+ * reach the page as different documents.
+ */
+const mapWitness = (over = {}) => ({
+  kind: 'effective-map',
+  control: 'palette.seeds',
+  channels: 23,
+  differing: 23,
+  differingChannels: [],
+  ...over,
+});
+
+/** A palette-only cell that carries a real witness, so a case only changes what it is about. */
+const paletteControl = (over = {}) => cell({
+  kind: 'negative',
+  scenario: 'palette-only',
+  axis: 'shape',
+  moved: 0,
+  percent: 0,
+  witness: mapWitness(),
   ...over,
 });
 
@@ -250,7 +285,7 @@ describe('axis-difference — a negative control is only evidence if its decisio
     const cells = markVacuousControls([
       cell({ kind: 'positive', scenario: 'states', axis: 'states', moved: 0, percent: 0 }),
       control({ axis: 'shape', witness: witness({ moved: 0 }) }),
-      cell({ kind: 'negative', scenario: 'palette-only', axis: 'shape', moved: 0, percent: 0 }),
+      paletteControl(),
     ]);
     const nc2 = cells.find((entry) => entry.scenario === STATES_DEPENDENT_CONTROL);
     assert.equal(nc2.evidential, false);
@@ -337,13 +372,88 @@ describe('axis-difference — a negative control is only evidence if its decisio
     assert.match(nc2.nonEvidentialReason, /no witness was measured/);
   });
 
+  it('THE DEFECT: a palette cell whose two arms compile the SAME map is NOT evidence', () => {
+    // The reading this replaces: both arms compiled 23 channels, neither map
+    // was empty, so the cell was credited. They are the same 23 channels.
+    const cells = markVacuousControls([
+      paletteControl({ vertical: 'rottay', theme: 'light', compiledA: 23, compiledB: 23,
+        witness: mapWitness({ channels: 23, differing: 0 }) }),
+      paletteControl({ vertical: 'evnto', theme: 'dark', compiledA: 42, compiledB: 42,
+        witness: mapWitness({ channels: 42, differing: 0 }) }),
+      paletteControl({ vertical: 'bithire', theme: 'light', compiledA: 40, compiledB: 40,
+        witness: mapWitness({ channels: 40, differing: 17 }) }),
+    ]);
+    const standing = cells.map((entry) => [`${entry.vertical}/${entry.theme}`, entry.evidential]);
+    assert.deepEqual(standing, [
+      ['rottay/light', false],
+      ['evnto/dark', false],
+      ['bithire/light', true],
+    ]);
+    assert.match(
+      cells[0].nonEvidentialReason,
+      /IDENTICAL effective map in rottay\/light \(23 channel\(s\), 0 differing\)/,
+      'the reason names the cell and the reading it was taken from',
+    );
+    assert.match(cells[0].nonEvidentialReason, /identical map = no witness this probe can read/);
+  });
+
+  it('ONE differing channel is a witness; the map size is not the reading', () => {
+    const [cell1] = markVacuousControls([
+      paletteControl({ witness: mapWitness({ channels: 42, differing: 1 }) }),
+    ]);
+    assert.equal(cell1.evidential, true);
+    assert.equal(cell1.nonEvidentialReason, undefined);
+  });
+
+  it('the map witness is the DIFFERENCE between the two arms, not the size of either', () => {
+    const same = { '--ds-color-primary': '#111', '--ds-color-accent': '#222' };
+    assert.deepEqual(effectiveMapDifference(same, { ...same }), {
+      channels: 2, differing: 0, differingChannels: [],
+    });
+    assert.deepEqual(effectiveMapDifference(same, { ...same, '--ds-color-accent': '#333' }), {
+      channels: 2, differing: 1, differingChannels: ['--ds-color-accent'],
+    });
+    assert.deepEqual(
+      effectiveMapDifference(same, { ...same, '--ds-color-extra': '#444' }).differing,
+      1,
+      'a name present in only one arm is a difference, not a match',
+    );
+    assert.deepEqual(effectiveMapDifference({}, {}), { channels: 0, differing: 0, differingChannels: [] });
+  });
+
+  it('the run wires the map witness from the pair it actually applied', () => {
+    const reading = witnessReading({
+      witness: { kind: 'effective-map', control: 'palette.seeds' },
+      before: { base: {}, states: {} },
+      after: { base: {}, states: {} },
+      variablesA: { '--ds-color-primary': '#111' },
+      variablesB: { '--ds-color-primary': '#111' },
+    });
+    assert.deepEqual(reading, {
+      kind: 'effective-map', control: 'palette.seeds', channels: 1, differing: 0, differingChannels: [],
+    });
+  });
+
   it('the shipped control DECLARES the witness the run has to measure for it', () => {
     const emphasis = SCENARIOS.find((scenario) => scenario.id === STATES_DEPENDENT_CONTROL);
-    assert.deepEqual(emphasis.witness, { axis: 'states', control: 'states.emphasis', positive: 'states' });
-    assert.deepEqual([...WITNESSED_CONTROLS], [STATES_DEPENDENT_CONTROL]);
+    assert.deepEqual(emphasis.witness, {
+      kind: 'axis-positive', axis: 'states', control: 'states.emphasis', positive: 'states',
+    });
     assert.deepEqual(
       Object.keys(emphasis.a),
       [emphasis.witness.control],
+      'the witness may only name the row the control actually isolates',
+    );
+  });
+
+  it('EVERY negative control declares a witness — a control with none is credited for free', () => {
+    const negatives = SCENARIOS.filter((scenario) => scenario.kind === 'negative').map((scenario) => scenario.id);
+    assert.deepEqual([...WITNESSED_CONTROLS].sort(), [...negatives].sort());
+    const palette = SCENARIOS.find((scenario) => scenario.id === 'palette-only');
+    assert.deepEqual(palette.witness, { kind: 'effective-map', control: 'palette.seeds' });
+    assert.deepEqual(
+      Object.keys(palette.a),
+      [palette.witness.control],
       'the witness may only name the row the control actually isolates',
     );
   });
@@ -423,6 +533,54 @@ describe('axis-difference drills — every verdict is reachable', () => {
     assert.ok(failures.some((line) => line.includes('badge(box-shadow)')));
   });
 
+  it('MUTANT: a palette control that has gone WHOLLY vacuous fails closed', () => {
+    // Marking a cell non-evidential is what makes the verdict honest. It must
+    // not also be what makes it green: a control with no standing cell left has
+    // stopped being a control, and the run has nothing holding its positives up.
+    const vacuous = markVacuousControls([
+      paletteControl({ vertical: 'rottay', theme: 'light', witness: mapWitness({ differing: 0 }) }),
+      paletteControl({ vertical: 'evnto', theme: 'dark', witness: mapWitness({ differing: 0 }) }),
+    ]);
+    const failures = evaluate(result(vacuous));
+    assert.ok(
+      failures.some((line) => line.startsWith('NEGATIVE CONTROL palette-only')
+        && line.includes('all 2 of its cell(s) are NON-EVIDENTIAL')),
+      failures.join(' | '),
+    );
+    assert.ok(failures.some((line) => line.includes('identical map = no witness')), failures.join(' | '));
+
+    // One surviving evidential cell is enough for the control to stand.
+    const survives = markVacuousControls([
+      ...vacuous.map((entry) => ({ ...entry })),
+      paletteControl({ vertical: 'bithire', theme: 'light', witness: mapWitness({ differing: 17 }) }),
+    ]);
+    assert.deepEqual(
+      evaluate(result(survives)).filter((line) => line.startsWith('NEGATIVE CONTROL palette-only')),
+      [],
+    );
+  });
+
+  it('the ONE control allowed to be wholly vacuous is the one whose vacuity is measured', () => {
+    assert.deepEqual([...VACUITY_PERMITTED_CONTROLS], [STATES_DEPENDENT_CONTROL]);
+    const failures = evaluate(result([
+      cell({ kind: 'positive', scenario: 'states', axis: 'states', moved: 0 }),
+      control({ axis: 'shape', evidential: false, nonEvidentialReason: 'the states positive moved 0' }),
+      paletteControl(),
+    ]));
+    assert.deepEqual(failures.filter((line) => line.startsWith('NEGATIVE CONTROL')), []);
+  });
+
+  it('a verdict that loses cells NAMES them', () => {
+    assert.equal(
+      namedCells([
+        { vertical: 'rottay', theme: 'light', axis: 'shape' },
+        { vertical: 'rottay', theme: 'light', axis: 'depth' },
+        { vertical: 'evnto', theme: 'dark', axis: 'shape' },
+      ]),
+      'rottay/light (shape, depth); evnto/dark (shape)',
+    );
+  });
+
   it('MUTANT: a pair the instrument lost is a different verdict from an inert pair', () => {
     const lost = evaluate(result([cell({ compiledA: 40, compiledB: 41, appliedA: 0, appliedB: 41 })]));
     assert.ok(lost.some((line) => line.includes('the instrument lost them')), lost.join(' | '));
@@ -464,6 +622,9 @@ describe('axis-difference drills — every verdict is reachable', () => {
     const failures = evaluate(result([
       cell({ vertical: declared.vertical, scenario: declared.scenario, kind: 'negative', axis: 'depth',
         compiledA: 0, compiledB: 0, evidential: false, moved: 0, percent: 0 }),
+      // The control still has to STAND somewhere: a run whose only palette
+      // cells are inert carries no palette control, which is its own verdict.
+      paletteControl({ vertical: 'bithire', axis: 'depth' }),
       cell({ kind: 'negative', scenario: 'states-emphasis-only', axis: 'shape', moved: 0, percent: 0 }),
     ]), { inertPairs: DECLARED_INERT });
     assert.deepEqual(failures, [], failures.join(' | '));
@@ -590,5 +751,33 @@ describe('axis-difference BROWSER drill — a document does not differ from itse
       'the real shape pair moved nothing, so the null result above proves nothing either',
     );
     assert.deepEqual(measurement.refusals, [], JSON.stringify(measurement.refusals));
+  });
+
+  it('a palette control whose two documents are the SAME document is refused, end to end', async () => {
+    // The identical-map law driven through the real compiler, the real bundle
+    // and the real browser rather than asserted over a hand-built cell. A NULL
+    // palette pair is the shape the defect had: both arms compile a full map,
+    // the maps are the same map, and the 0 % that follows is arithmetic.
+    const palette = SCENARIOS.find((scenario) => scenario.id === 'palette-only');
+    const measurement = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families: FAMILIES,
+      scenarios: [{ ...palette, a: palette.a, b: palette.a }],
+    });
+
+    const cells = measurement.cells.filter((entry) => entry.scenario === 'palette-only');
+    assert.ok(cells.length > 0);
+    for (const entry of cells) {
+      assert.ok(entry.compiledA > 0 && entry.compiledB > 0, 'the defect needs BOTH arms to compile a full map');
+      assert.equal(entry.witness.differing, 0);
+      assert.equal(entry.evidential, false, `${entry.axis}: a document does not witness itself`);
+      assert.match(entry.nonEvidentialReason, /IDENTICAL effective map in bithire\/light/);
+    }
+    assert.ok(
+      evaluate(measurement).some((line) => line.startsWith('NEGATIVE CONTROL palette-only')
+        && line.includes('NON-EVIDENTIAL')),
+      'and the run fails closed rather than publishing a control it no longer has',
+    );
   });
 });
