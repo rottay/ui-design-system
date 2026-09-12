@@ -15,7 +15,7 @@
  * HOW OWNERSHIP IS DECIDED. By source containment, not by name. A component
  * is owned by the row whose `sourceOwner` directory contains its terminal
  * declaration file. Name matching was tried first and is wrong: it reports
- * `ModalHeader`, `SkeletonText` and `AvatarBadge` as unowned even though they
+ * `ModalHeader`, `ProgressLine` and `AvatarBadge` as unowned even though they
  * are compound members of a family that does have a row, and it reports
  * aliases like `WorkspaceHeader` as unowned even though they resolve to
  * `CollectionHeader`'s file. CLAUDE.md settles it -- "Aliases, compatibility

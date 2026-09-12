@@ -1,75 +1,49 @@
 /**
- * Modern Skeleton skin (TASK S canon-shimmer pass; supersedes the WO-SKIN-03
- * DaisyUI-owned split).
+ * Modern Skeleton skin: the Skeleton primitive's blocks. Imported
+ * `layer(rottay-engines)`. The anatomy renderer's bones paint from
+ * `presentation/components/skin/skeleton-anatomy` on the same motion law.
  *
- * LAYER: `layer(rottay-engines)`. The canonical order lives in
- * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
- * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
- * component base and is in turn overridden by the structure and surface tiers;
- * the unlayered compiled tenant artifact wins over all of them.
+ * MOTION: every moving block rides the motion vocabulary -- the foundation
+ * `ds-foundation-pulse` / `ds-foundation-shimmer` keyframes on
+ * `--ds-motion-attention` and `--ds-motion-ease-in-out` -- and no keyframe is
+ * declared for the skeleton itself. `data-animation` selects the style; a block
+ * without it holds a static flat fill. Under reduced motion every block is a
+ * static flat surface, not a slower shimmer.
  *
- * The modern Skeleton no longer rides DaisyUI's `.skeleton` class -- that class
- * is gone from the engine, so this file decrements daisy.classConsumers. Anatomy
- * now mirrors the rustic skin: the shape-variant root carries `.rottay-skeleton`
- * directly; the text/default avatar/title/line are blocks inside
- * `.rottay-skeleton-wrapper` (a flex container, not itself a block). The
- * animation is the shared canon set (foundation/animations/keyframes.css)
- * selected through --ds-skeleton-animation-name -- the engine sets it from the
- * personality-resolved skeletonStyle -- and ridden on the
- * --ds-skeleton-animation-duration token so pulseSpeed still drives cadence.
- *
- * BACKGROUND: base is the flat tenant fill (--ds-skeleton-bg). The moving
- * ('shimmer') style swaps in the sweeping gradient at higher specificity, keyed
- * on data-animation='shimmer' -- exactly the rustic model. pulse animates opacity
- * over the flat fill; shimmer sweeps background-position over the gradient. An
- * inactive skeleton carries no data-animation and --ds-skeleton-animation-name:
- * none, so it holds a static flat block.
- *
- * SPECIFICITY (P-48): background and border-radius are non-border paint, so
- * (0,3,0)+ unlayered clears preflight and DaisyUI regardless; none touches the
- * tenant `* { border-color }` floor. The gradient override buys (0,4,0) via the
- * extra data-animation attribute so it wins over the flat base.
+ * SPECIFICITY (P-48): fills and radii are non-border paint and clear preflight
+ * at (0,3,0).
  */
 
-/* ---- base flat fill + canon animation on every modern skeleton block ---- */
+/* ---- flat fill: every skeleton block ---- */
 .rottay-skeleton.rottay-skeleton--modern[data-part='root'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
-  /* The fallback chain ends in surfaces, not a bare neutral: if the token
-     layers ever fail to load, the block still reads as quiet panel material
-     under either theme instead of a hard grey flash. */
   background: var(
     --ds-skeleton-bg,
     var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
   );
-  /* Cadence/easing fall back to the motion scale, not literals: the canon
-     `--ds-skeleton-animation-duration` (1.5s) stays the primary channel and
-     `--ds-motion-attention` is the governed stand-in. */
-  animation: var(--ds-skeleton-animation-name, ds-skeleton-shimmer)
-    var(--ds-skeleton-animation-duration, var(--ds-motion-attention))
-    var(--ds-skeleton-animation-easing, var(--ds-motion-ease-standard))
-    infinite;
 }
 
-/* ---- shimmer style: sweeping gradient (higher specificity via data-animation) ---- */
+/* ---- pulse: opacity over the flat fill ---- */
+.rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='pulse'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='pulse'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='pulse'],
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='pulse'] {
+  animation: ds-foundation-pulse calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite;
+}
+
+/* ---- shimmer: the sweeping gradient ---- */
 .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='shimmer'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='shimmer'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='shimmer'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
-  /* The governed `--ds-skeleton-wave-gradient` (default.css) already rides
-     surface-panel/card with an 8% primary tint; this third-string fallback
-     mirrors the same surface chain so a token-layer outage cannot resurrect
-     a raw grey wave. */
   background: var(
     --ds-skeleton-wave-gradient,
     linear-gradient(
       90deg,
-      /* SEMANTIC GROUP: feedback. (R1 Cohort 1) The panel and card grounds now
-         come from the tenant-writable --ds-material-{panel,card}-background role
-         channels. Before this, a monochrome tenant's skeleton shimmered blue,
-         because --ds-surface-panel-bg/--ds-surface-card-bg are not tenant
-         reachable and leaked from the VERTICAL baseline. */
+      /* SEMANTIC GROUP: feedback. The panel and card grounds come from the
+         tenant-writable --ds-material-{panel,card}-background role channels. */
       var(--ds-material-panel-background, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))) 25%,
       color-mix(
         in srgb,
@@ -80,28 +54,22 @@
     )
   );
   background-size: 200% 100%;
+  animation: ds-foundation-shimmer calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite;
 }
 
 /* ---- shape-variant root radius (circular/rounded/rectangular) ---- */
 .rottay-skeleton.rottay-skeleton--modern[data-part='root'] {
   border-radius: var(--ds-skeleton-shape-radius);
-  /* Geometry reserve (B7-02): width/height are OPTIONAL contract props, so a
-     bare shape variant used to collapse to a 0-block-size invisible block and
-     the incoming content jumped. The floor keeps the placeholder perceivable
-     at one governed line height; an explicit height always wins over the
-     min. */
+  /* Width/height are optional: the floor keeps a bare shape variant perceivable
+     at one governed line height; an explicit height always wins. */
   min-block-size: var(--ds-skeleton-line-height, 1rem);
 }
 
-/* ---- avatar radius (circle/rounded) + squish guard (was inline flexShrink) ---- */
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'] {
   flex-shrink: 0;
   border-radius: var(--ds-skeleton-avatar-radius);
 }
 
-/* ---- text/default-variant layout (was `flex gap-4` / `flex-1 space-y-2`
-        utilities + inline geometry literals in the engine): density tokens
-        can now retune the whole anatomy from one place. ---- */
 .rottay-skeleton-wrapper.rottay-skeleton--modern[data-part='root'] {
   display: flex;
   gap: var(--ds-skeleton-gap, var(--ds-spacing-md));
@@ -115,7 +83,6 @@
   gap: var(--ds-skeleton-line-gap, var(--ds-spacing-xs));
 }
 
-/* Title line is 60% width to visually distinguish it from body text. */
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'] {
   inline-size: 60%;
   block-size: var(--ds-skeleton-title-height, 1.25rem);
@@ -125,22 +92,16 @@
   block-size: var(--ds-skeleton-line-height, 1rem);
 }
 
-/* Last paragraph line is 80% width to simulate a natural text ending,
-   preventing the skeleton from looking like a uniform block. */
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line']:last-child {
   inline-size: 80%;
 }
 
-/* ---- title/line corner radius (DaisyUI's `.skeleton` no longer supplies it) ---- */
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
   border-radius: var(--ds-skeleton-line-radius, var(--ds-radius-sm));
 }
 
-/* ---- RTL: the wave sweeps against the reading direction by default
-        (background-position runs on the physical x axis), so the canon
-        keyframes are played in reverse under rtl. Reversing the opacity
-        pulse is a no-op visually, so one rule serves both styles. ---- */
+/* ---- RTL: the sweep runs against the reading direction by default ---- */
 :dir(rtl) .rottay-skeleton.rottay-skeleton--modern[data-part='root'],
 :dir(rtl) .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'],
 :dir(rtl) .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
@@ -152,30 +113,53 @@
   animation-direction: reverse;
 }
 
-/* ---- forced colors: fills are stripped to Canvas, which would erase the
-        placeholder entirely. GrayText keeps a visible, calm silhouette
-        (the system placeholder color) and the background shorthand also
-        clears any gradient image. Motion keeps working: the pulse still
-        animates opacity, which forced colors does not adjust. ---- */
-@media (forced-colors: active) {
-  .rottay-skeleton.rottay-skeleton--modern[data-part='root'],
-  .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='shimmer'],
-  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'],
-  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='shimmer'],
-  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
-  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='shimmer'],
-  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'],
-  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
-    background: GrayText;
-  }
-}
-
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
-   relaid out, or left waiting on an event that never arrives. */
+   relaid out, or left waiting on an event that never arrives. The flat fill makes the
+   collapsed frame a static surface, not a paused sweep. */
 @media (prefers-reduced-motion: reduce) {
-  .rottay-skeleton.rottay-skeleton--modern[data-part='root'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'], .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
+  .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='pulse'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='pulse'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='pulse'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='pulse'],
+  .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='shimmer'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='shimmer'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='shimmer'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    background: var(
+      --ds-skeleton-bg,
+      var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+    );
+  }
+}
+
+html[data-ds-motion='reduced'] .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='pulse'],
+html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='pulse'],
+html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='pulse'],
+html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='pulse'],
+html[data-ds-motion='reduced'] .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='shimmer'],
+html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='shimmer'],
+html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='shimmer'],
+html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+  );
+}
+
+/* ---- forced colors: GrayText keeps a visible silhouette where fills are
+        stripped to Canvas ---- */
+@media (forced-colors: active) {
+  .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-part='root'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-part='avatar'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-part='title'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-part='line'],
+  html[data-ds-motion='reduced'] .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-part='root'],
+  html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-part='avatar'],
+  html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-part='title'],
+  html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-part='line'] {
+    background: GrayText;
   }
 }

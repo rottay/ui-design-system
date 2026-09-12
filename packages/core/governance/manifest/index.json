@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/scripts/generate/tokens/manifest/generation/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "ea54a61b1a4399439806683929ef4f77e7ec055eb6ed9ae0dd7e9ff91867c075",
+  "inputsDigest": "0585eae6b1fb399c9befc6109001d295f6e9548d5d68d2fc87f5873a06ab3118",
   "denominators": {
     "canonicalFamilies": 254,
     "activeStandardControls": 14,
@@ -2259,7 +2259,7 @@
     {
       "familyId": "pattern/data/pattern-grid-view",
       "path": "governance/manifest/families/pattern/data/pattern-grid-view/index.json",
-      "digest": "8edbaad1196bda6fa677caf016fc43b04de6ee9973ab67b951a6603f42805fbc",
+      "digest": "198b82e333b02f0558036118d51318714b8ab27adc097c58ef561e4f55b8c1d6",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },
@@ -2735,7 +2735,7 @@
     {
       "familyId": "primitive/feedback/skeleton",
       "path": "governance/manifest/families/primitive/feedback/skeleton/index.json",
-      "digest": "660b673140f5a06d7420ed89f1227ec8f6921b39175beabebd5713e2a0d98ed1",
+      "digest": "9a3ba39052920b3d3525d13760110a2115371be52904443032994e2a7c776700",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

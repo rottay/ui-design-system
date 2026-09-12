@@ -32,7 +32,7 @@ const IN_SCOPE = walk(CSS_ROOT)
 
 const rel = (f: string): string => f.slice(CSS_ROOT.length + 1);
 
-/** The 22 stylesheets that carry the sentinel and are the reduced-motion OWNER of the motion
+/** The 23 stylesheets that carry the sentinel and are the reduced-motion OWNER of the motion
  *  they declare. This is a current-state roster, not a record of what was once unguarded: a file
  *  belongs here because it both animates something and collapses it, so membership follows the
  *  motion. `record-facts` is the worked example — the collapse used to sit in the modern skin
@@ -52,6 +52,7 @@ const ROSTER = [
   "presentation/components/skin/record-facts/index.css",
   "presentation/components/skin/record-workbench/index.css",
   "presentation/components/skin/scroll-area/index.css",
+  "presentation/components/skin/skeleton-anatomy/index.css",
   "runtime/engines/modern/framework-bridge/index.css",
   "runtime/engines/modern/skin/collapse/index.css",
   "runtime/engines/modern/skin/command-palette/index.css",
@@ -148,7 +149,7 @@ const KILLS_MOTION = /(^|[\s;])(transition|animation)\s*:\s*none/m;
  *  blanked one: it is prose, and it is what makes roster membership self-declaring on disk. */
 const SENTINEL = /Reduced motion: durations collapse but the transition still fires/;
 
-describe("R5 motion batch -- the guarded roster is exactly the 22 motion-owning files", () => {
+describe("R5 motion batch -- the guarded roster is exactly the 23 motion-owning files", () => {
   it("matches the roster on disk, with no file added or dropped", () => {
     const onDisk = IN_SCOPE.filter((f) => SENTINEL.test(readFileSync(f, "utf8"))).map(rel);
     expect(onDisk).toEqual(ROSTER);

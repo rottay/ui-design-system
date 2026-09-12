@@ -43,6 +43,7 @@ const SANDBOX_SOURCES = [
   'src/foundation/tokens/css/presentation/components/skin/button-group',
   'src/foundation/tokens/css/presentation/components/skin/button-icon',
   'src/infrastructure/runtime/foundation/recipes/contracts/families/button',
+  'src/components/primitives/feedback/skeleton/runtime/anatomy-renderer',
 ];
 
 function expectFinding(findings, fragment, message) {
@@ -310,6 +311,120 @@ test('PLANT: losing the family a11y probe is BLOCKING', () => {
   withPlantedFamily(
     (sandbox) => rmSync(join(sandbox, 'src/components/primitives/inputs/button/tests'), { recursive: true, force: true }),
     (findings) => expectFinding(findings, 'owns no executable accessibility assertion', 'a cut without an a11y probe is not verified'),
+  );
+});
+
+// ---------------------------------------------------------------------------
+// The anatomy-derived skeleton arm: one renderer draws every loading state
+// ---------------------------------------------------------------------------
+
+const RENDERER = 'src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.tsx';
+const SKELETON_ARM = 'BLOCKING anatomy-derived-skeleton';
+
+for (const [label, plant] of [
+  ['a skeleton component under the family owner', (sandbox) => {
+    const dir = join(sandbox, 'src/components/primitives/inputs/button/compound/skeleton');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'index.tsx'), [
+      "import React from 'react';",
+      '',
+      'export function ButtonSkeleton() {',
+      '  return <span data-part="trigger" aria-hidden="true" />;',
+      '}',
+      '',
+    ].join('\n'));
+  }],
+  ['a skeleton shimmer keyframe in the family skin', (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
+    `${text}\n@keyframes ds-button-loading-shimmer { to { background-position: 200% 0; } }\n`)],
+]) {
+  test(`PLANT: a hand-made per-component skeleton -- ${label} -- is BLOCKING`, () => {
+    withPlantedFamily(plant, (findings, measured) => {
+      assert.ok(measured.blocking.skeleton.handMade.length > 0, 'the plant is measured as a hand-made skeleton');
+      expectFinding(findings, `${SKELETON_ARM} -- hand-made skeleton`, 'a family may not draw its own loading state');
+    });
+  });
+}
+
+test('CONTROL: a family that composes the shared renderer is not a hand-made skeleton', () => {
+  withPlantedFamily(
+    (sandbox) => patch(sandbox, MODERN_TSX, (text) =>
+      text.replace(
+        '  const anatomyProps = {',
+        '  const plantedLoading = <AnatomySkeleton><span data-part="trigger" /></AnatomySkeleton>;\n  void plantedLoading;\n  const anatomyProps = {',
+      )),
+    (findings, measured) => {
+      assert.deepEqual(measured.blocking.skeleton.handMade, []);
+      expectNoFinding(findings, SKELETON_ARM, 'the renderer is the one door, not a defect');
+    },
+  );
+});
+
+/**
+ * Renames a part the family really stamps AND the rule that paints it, so every
+ * other arm stays exactly at its pin: the only thing left to catch is that the
+ * skeleton renderer was never told about the new part.
+ */
+const renameAnatomy = (sandbox) => {
+  patch(sandbox, MODERN_TSX, (text) => {
+    const renamed = text.replace('<span data-part="prefix">', '<span data-part="leading-adornment">');
+    assert.notEqual(renamed, text, 'the drill must change a part the family really stamps');
+    return renamed;
+  });
+  patch(sandbox, MODERN_SKIN, (text) => {
+    const renamed = text.replace("[data-part='prefix']", "[data-part='leading-adornment']");
+    assert.notEqual(renamed, text, 'the drill must move the paint with the part');
+    return renamed;
+  });
+};
+
+test('PLANT: a `data-part` anatomy change with no renderer change is BLOCKING', () => {
+  withPlantedFamily(
+    renameAnatomy,
+    (findings, measured) => {
+      assert.deepEqual(measured.blocking.skeleton.partsWithoutRole, ['leading-adornment']);
+      assert.equal(findings.length, 1, `the rename moves no other arm; got ${JSON.stringify(findings)}`);
+      expectFinding(
+        findings,
+        `${SKELETON_ARM} -- \`data-part\` \`leading-adornment\` has no role in the shared skeleton renderer`,
+        'the renderer cannot derive a loading state from a part it has never been told how to draw',
+      );
+    },
+  );
+});
+
+test('CONTROL: the SAME anatomy change WITH its renderer change holds', () => {
+  withPlantedFamily(
+    (sandbox) => {
+      renameAnatomy(sandbox);
+      patch(sandbox, RENDERER, (text) => {
+        const taught = text.replace("  prefix: 'round',", "  prefix: 'round',\n  'leading-adornment': 'round',");
+        assert.notEqual(taught, text, 'the control must teach the renderer the new part');
+        return taught;
+      });
+    },
+    (findings, measured) => {
+      assert.deepEqual(measured.blocking.skeleton.partsWithoutRole, []);
+      assert.deepEqual(findings, [], 'a renamed part the renderer can draw is not drift');
+    },
+  );
+});
+
+test('the anatomy-derived skeleton arm is BLOCKING, not OWED, and holds on the live tree', () => {
+  assert.equal(OWED_ARMS.some((arm) => arm.id === 'anatomy-derived-skeleton'), false);
+  const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
+  assert.equal(measured.blocking.skeleton.renderer, true);
+  assert.deepEqual(measured.blocking.skeleton.handMade, []);
+  assert.deepEqual(measured.blocking.skeleton.partsWithoutRole, []);
+  expectNoFinding(judgeFamily(measured, readBaseline().families[FAMILY]), SKELETON_ARM, 'the calibration family is derived, not hand-made');
+});
+
+test('SHAPE: a missing shared renderer is BLOCKING, never a vacuous pass', () => {
+  withPlantedFamily(
+    (sandbox) => rmSync(join(sandbox, RENDERER), { force: true }),
+    (findings, measured) => {
+      assert.equal(measured.blocking.skeleton.renderer, false);
+      expectFinding(findings, `${SKELETON_ARM} -- the shared renderer`, 'an arm with nothing to measure against is red');
+    },
   );
 });
 
@@ -634,7 +749,7 @@ test('SHAPE: a family that resolves to two owners is refused, not guessed at', (
 
 test('the calibration family resolves to exactly one owner in the real tree', () => {
   // The control for the drill above, and the reason the nested-owner filter
-  // exists: `feedback/skeleton/compound/button` is named `button` too.
+  // exists: a family's own `compound/*` or `engines/*` folder may share a name.
   const resolved = resolveFamily(FAMILY);
   assert.equal(resolved.componentDirs.length, 1);
   assert.ok(resolved.componentDirs[0].endsWith(join('primitives', 'inputs', 'button')));

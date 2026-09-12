@@ -185,8 +185,9 @@ the family's namespace and is not counted.
 
 Three requirements a cut owes that are not about colour. Each names the work
 order that makes it enforceable; until that work order lands, the gate prints
-the arm as **OWED** on every run rather than reporting it green. §4.1 is no
-longer owed: WO-INV-07 landed its kernel and its gate.
+the arm as **OWED** on every run rather than reporting it green. §4.1 and §4.2
+are no longer owed: WO-INV-07 landed its kernel and its gate, and WO-FAM-14
+landed the shared skeleton renderer and flipped its arm to BLOCKING.
 
 ### 4.1 The `adapt` slot — WO-INV-07 (measured)
 
@@ -227,7 +228,7 @@ contract, and for each one requires `adapt: Adapt<...>` on the props, a computed
 the contract. For a rostered family it is the BLOCKING `adaptSlot` arm of the
 family-cut gate.
 
-### 4.2 Loading skeletons derived from the anatomy — owner WO-FAM-14 (OWNER-RATIFIED 2026-09-08)
+### 4.2 Loading skeletons derived from the anatomy — owner WO-FAM-14 (renderer landed; gate arm BLOCKING)
 
 A family does not hand-write a skeleton. One shared skeleton renderer reads the
 family's `data-part` anatomy and builds the loading state from it, so the
@@ -238,6 +239,11 @@ The shimmer comes from the motion vocabulary (`--ds-motion-*`), never from a
 per-component keyframe, and it is reduced-motion safe: under
 `prefers-reduced-motion: reduce` the skeleton is a static surface, not a slower
 shimmer.
+
+The renderer is `AnatomySkeleton`
+(`packages/core/src/components/primitives/feedback/skeleton/runtime/anatomy-renderer`).
+It draws only the parts its `SKELETON_PART_ROLES` vocabulary gives a role, so a
+family that adds or renames a part gives that part a role in the same change.
 
 ### 4.3 Presence and enter animation — WO-INV-08
 
@@ -289,6 +295,7 @@ the moment a family breaks it.
 | `stateContract` | `data-state` is on exactly one side of the contract |
 | `stateGoverned` | the skin decides state through `[data-state]` and the source never calls `partAttributes` |
 | `a11yAssertions` | the family executes no accessibility assertion (a suppressed suite is not evidence) |
+| `anatomy-derived-skeleton` | the shared skeleton renderer is missing; the family draws its own skeleton (a skeleton-named owner path, declaration or element, or a skeleton part, selector, keyframe or animation in its skin); or it stamps a `data-part` the renderer has no role for |
 | `adaptSlot` | a family declared layout-sensitive does not accept `adapt: Adapt<...>`, stamps no `data-posture` resolved through the shared runtime, or spells posture names of its own |
 
 **RATCHET** — today's measured debt, pinned per family in

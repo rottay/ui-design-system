@@ -313,9 +313,9 @@
         {
           "repo": "ui-design-system",
           "scope": "test",
-          "maxCount": 42,
-          "maxFiles": 15,
-          "digest": "5d3ed99663a8ff79b8d0d471b31cc13c7e23b2db6d4481f21c8d8631d153e6f5"
+          "maxCount": 41,
+          "maxFiles": 14,
+          "digest": "cbdccbc05250afb2e21fc2766ee186a5c49129d0a0f5e71d72b979748d851490"
         }
       ],
       "canonicalTreeRelocation": {

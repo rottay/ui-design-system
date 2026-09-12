@@ -38,26 +38,13 @@ export type {
   ToastContainerProps,
 } from './toast';
 
-export {
-  Skeleton,
-  SkeletonAvatar,
-  SkeletonText,
-  SkeletonButton,
-  SkeletonCard,
-  SkeletonListItem,
-  SkeletonTable,
-  SkeletonForm,
-  SkeletonParagraph,
-} from './skeleton';
+export { Skeleton, AnatomySkeleton } from './skeleton';
 export type {
   SkeletonProps,
   SkeletonVariant,
   SkeletonAnimation,
-  SkeletonCardProps,
-  SkeletonListItemProps,
-  SkeletonTableProps,
-  SkeletonFormProps,
-  SkeletonParagraphProps,
+  AnatomySkeletonProps,
+  SkeletonPartRole,
 } from './skeleton';
 
 export { Drawer } from './drawer';

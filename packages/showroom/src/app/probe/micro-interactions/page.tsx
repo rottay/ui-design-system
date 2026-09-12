@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
+  AnatomySkeleton,
   Box,
   Stack,
   Text,
@@ -12,7 +13,6 @@ import {
   CopyToCheck,
   HamburgerToX,
   PulseValue,
-  Skeleton,
   Toast,
   ToastProvider,
   useToast,
@@ -169,13 +169,13 @@ function CatalogContent() {
                   hint="Content fades in over the skeleton; it never pops."
                 >
                   <Box data-testid="item-crossfade">
-                    <Skeleton.Transition loading={!active} skeleton={<Skeleton.Card />}>
+                    <AnatomySkeleton loading={!active}>
                       <Card title="Ana Moreau" style={{ width: '100%' }}>
                         <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
                           Senior Platform Engineer
                         </Text>
                       </Card>
-                    </Skeleton.Transition>
+                    </AnatomySkeleton>
                   </Box>
                 </Item>
 

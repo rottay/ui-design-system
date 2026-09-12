@@ -239,7 +239,7 @@
 @import "../../../runtime/engines/rustic/skin/rate/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/skeleton/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/skeleton/index.css" layer(rottay-engines);
-@import "../../../presentation/components/skin/skeleton-compounds/index.css"
+@import "../../../presentation/components/skin/skeleton-anatomy/index.css"
   layer(rottay-components);
 /* Overlay family (WO-SKIN-03 checkpoint O). */
 @import "../../../runtime/engines/rustic/skin/modal/index.css" layer(rottay-engines);

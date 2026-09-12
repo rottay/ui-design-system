@@ -81,29 +81,4 @@ describe('Skeleton integration', () => {
       roots.forEach((root) => expect(root).toHaveAttribute('aria-hidden', 'true'));
     });
   });
-
-  it('renders compound skeleton pieces using shared skeleton tokens', () => {
-    const { container } = renderSurface(
-      <div>
-        <Skeleton.Avatar size="lg" />
-        <Skeleton.Text lines={2} />
-        <Skeleton.Button shape="round" />
-      </div>
-    );
-
-    // The shimmer gradient (--ds-skeleton-wave-gradient) paints from
-    // skeleton-compounds.css hooked on the class + data-part pair below; only
-    // the shared canon ds-skeleton-shimmer animation reference stays inline.
-    const avatar = container.querySelector('.rottay-skeleton-avatar[data-part="root"]');
-    const button = container.querySelector('.rottay-skeleton-button[data-part="root"]');
-
-    expect(avatar).toBeTruthy();
-    expect(button).toBeTruthy();
-    expect(avatar?.getAttribute('style') ?? '').toContain(
-      'ds-skeleton-shimmer var(--ds-skeleton-animation-duration'
-    );
-    expect(button?.getAttribute('style') ?? '').toContain(
-      'ds-skeleton-shimmer var(--ds-skeleton-animation-duration'
-    );
-  });
 });

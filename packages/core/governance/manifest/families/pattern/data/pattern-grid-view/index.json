@@ -1325,11 +1325,23 @@
               ]
             },
             {
-              "component": "SkeletonCard",
+              "component": "AnatomySkeleton",
               "tier": "primitive",
-              "importedFrom": "../../../../../primitives/feedback/Skeleton",
+              "importedFrom": "../../../../../primitives/feedback/skeleton",
               "importSites": [
                 "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:21"
+              ],
+              "renderSiteCount": 1,
+              "engines": [
+                "shared"
+              ]
+            },
+            {
+              "component": "Card",
+              "tier": "primitive",
+              "importedFrom": "../../../../../primitives/display/card",
+              "importSites": [
+                "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:22"
               ],
               "renderSiteCount": 1,
               "engines": [

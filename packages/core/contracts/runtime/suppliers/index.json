@@ -55,6 +55,7 @@
         "Affix",
         "Alert",
         "AlertDialog",
+        "AnatomySkeleton",
         "Anchor",
         "AntdConfigProvider",
         "AppShell",
@@ -493,14 +494,6 @@
         "Show",
         "SidebarSurface",
         "Skeleton",
-        "SkeletonAvatar",
-        "SkeletonButton",
-        "SkeletonCard",
-        "SkeletonForm",
-        "SkeletonListItem",
-        "SkeletonParagraph",
-        "SkeletonTable",
-        "SkeletonText",
         "SlideIn",
         "Slider",
         "Space",
@@ -1081,6 +1074,9 @@
           "@phosphor-icons/react",
           "antd",
           "motion"
+        ],
+        "AnatomySkeleton": [
+          "antd"
         ],
         "Anchor": [
           "antd"
@@ -2846,14 +2842,6 @@
         "ShortcutProvider",
         "ShortcutScope",
         "Show",
-        "SkeletonAvatar",
-        "SkeletonButton",
-        "SkeletonCard",
-        "SkeletonForm",
-        "SkeletonListItem",
-        "SkeletonParagraph",
-        "SkeletonTable",
-        "SkeletonText",
         "Stack",
         "StepperContent",
         "SurfaceErrorBoundary",

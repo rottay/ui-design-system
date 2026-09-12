@@ -23,6 +23,13 @@
  *             order and is PRINTED ON EVERY RUN. There is no silent third
  *             state: an arm nobody can measure is not an arm that passes.
  *
+ * ANATOMY-DERIVED SKELETON. A family's loading state is drawn by the one shared
+ * renderer (`SKELETON_RENDERER_PATH`) from the family's stamped `data-part`
+ * anatomy. The BLOCKING arm refuses a hand-made skeleton inside a family -- a
+ * skeleton-named owner path, declaration or element, a skeleton part, selector,
+ * keyframe or animation in its skin -- and refuses a stamped part the renderer's
+ * `SKELETON_PART_ROLES` vocabulary has no role for.
+ *
  * LAYOUT-SENSITIVE FAMILIES. A rostered family declared in the adaptation
  * contract's `LAYOUT_SENSITIVE_FAMILIES` also holds the BLOCKING `adaptSlot`
  * arm, measured by `./adapt-slot`: it accepts `adapt` and stamps
@@ -103,16 +110,22 @@ const PSEUDO_STATE_TWIN = Object.freeze({
 });
 
 /**
+ * The shared loading-state renderer. A family's skeleton is drawn by it from the
+ * family's stamped `data-part` anatomy, and it can only draw a part its
+ * `SKELETON_PART_ROLES` vocabulary gives a role.
+ */
+export const SKELETON_RENDERER_PATH =
+  'src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.tsx';
+const SKELETON_RENDERER_EXPORT = 'AnatomySkeleton';
+const SKELETON_ROLES = new Set(['frame', 'pass', 'block', 'line', 'round', 'omit']);
+const SKELETON_WORD = /skeleton/iu;
+const SKELETON_MOTION_WORD = /skeleton|shimmer/iu;
+
+/**
  * Arms the template requires and this gate cannot yet measure, each with the
  * work order that makes it measurable. Printed on every run.
  */
 export const OWED_ARMS = Object.freeze([
-  {
-    id: 'anatomy-derived-skeleton',
-    owner: 'WO-FAM-14',
-    reason:
-      'the shared skeleton renderer that builds a loading skeleton FROM the family `data-part` anatomy does not exist yet; WO-FAM-14 creates it, retires the nine hand-made compounds and flips this arm to blocking as its own close act. Measuring it now would fail every family for a kernel nobody has written',
-  },
   {
     id: 'layout-animation-kernel',
     owner: 'WO-INV-08',
@@ -549,8 +562,21 @@ export function analyzeSource(file, source = ts.createSourceFile(
 
   const styleObjects = new Set();
   const namedObjects = new Map();
+  const skeletonSigns = [];
+  const lineOf = (node) => source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
 
   const visit = (node) => {
+    if ((ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)
+      || (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name)))
+      && node.name && SKELETON_WORD.test(node.name.text)) {
+      skeletonSigns.push({ what: `declaration \`${node.name.text}\``, line: lineOf(node) });
+    }
+    if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node))) {
+      const tag = node.tagName.getText(source);
+      if (SKELETON_WORD.test(tag) && tag !== SKELETON_RENDERER_EXPORT) {
+        skeletonSigns.push({ what: `element \`<${tag}>\``, line: lineOf(node) });
+      }
+    }
     if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
       const initializer = unwrapTransparent(node.initializer);
       if (ts.isObjectLiteralExpression(initializer)) namedObjects.set(node.name.text, initializer);
@@ -655,6 +681,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
     classTokens,
     inlineStyleViolations,
     visualLiterals: visualLiterals.map((entry) => ({ ...entry, file })),
+    skeletonSigns: skeletonSigns.map((entry) => ({ ...entry, file })),
     usesPartAttributes,
     dynamicParts,
     stampsPartAttribute,
@@ -724,7 +751,23 @@ export function analyzeSkin(file) {
     file,
   }));
 
-  return { file, parts, states, classTokens, selectsVariant, colorLiterals, unpairedPseudo, antReads };
+  const lineAt = (index) => text.slice(0, index).split('\n').length;
+  const skeletonSigns = [];
+  for (const match of text.matchAll(/@keyframes\s+([\w-]+)/gu)) {
+    if (SKELETON_MOTION_WORD.test(match[1])) {
+      skeletonSigns.push({ what: `keyframes \`${match[1]}\``, line: lineAt(match.index), file });
+    }
+  }
+  for (const match of text.matchAll(/animation(?:-name)?\s*:\s*([^;}]+)/gu)) {
+    if (SKELETON_MOTION_WORD.test(match[1].replace(/--ds-[\w-]+/gu, ''))) {
+      skeletonSigns.push({ what: `animation \`${match[1].trim().slice(0, 80)}\``, line: lineAt(match.index), file });
+    }
+  }
+  for (const match of text.matchAll(/(?:\.[\w-]*skeleton[\w-]*|\[data-part\s*[~^*$|]?=\s*['"][^'"]*skeleton[^'"]*['"]\])/giu)) {
+    skeletonSigns.push({ what: `selector \`${match[0]}\``, line: lineAt(match.index), file });
+  }
+
+  return { file, parts, states, classTokens, selectsVariant, colorLiterals, unpairedPseudo, antReads, skeletonSigns };
 }
 
 // ---------------------------------------------------------------------------
@@ -747,6 +790,78 @@ export function fanOutFor(family, readNames, catalog = readThemeCatalog()) {
     rows.push({ control: row.id, channels, reached, unreached: reached.length === 0 });
   }
   return rows;
+}
+
+// ---------------------------------------------------------------------------
+// The anatomy-derived skeleton
+// ---------------------------------------------------------------------------
+
+/**
+ * The part vocabulary the shared skeleton renderer can draw, read from its
+ * source: the keys of `SKELETON_PART_ROLES`. `undefined` when the renderer or
+ * its vocabulary is missing -- which is a finding, never an empty pass.
+ */
+export function readSkeletonPartRoles(root = DEFAULT_ROOT) {
+  const file = join(root, SKELETON_RENDERER_PATH);
+  if (!existsSync(file)) return undefined;
+  const source = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  let roles;
+  const visit = (node) => {
+    if (roles) return;
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name)
+      && node.name.text === 'SKELETON_PART_ROLES' && node.initializer) {
+      let value = unwrapTransparent(node.initializer);
+      if (ts.isCallExpression(value) && value.arguments[0]) value = unwrapTransparent(value.arguments[0]);
+      if (!ts.isObjectLiteralExpression(value)) return;
+      roles = new Map();
+      for (const property of value.properties) {
+        if (!ts.isPropertyAssignment(property)) continue;
+        const name = property.name.getText(source).replace(/^['"]|['"]$/gu, '');
+        const role = unwrapTransparent(property.initializer);
+        roles.set(name, ts.isStringLiteral(role) ? role.text : undefined);
+      }
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  if (!roles) return undefined;
+  return roles;
+}
+
+/** Everything under a family owner whose path says it is a skeleton of its own. */
+function skeletonPathSigns(resolved) {
+  const signs = [];
+  for (const dir of resolved.componentDirs) {
+    for (const file of walkFiles(dir, isFamilySource)) {
+      const rel = toPosix(relative(dir, file));
+      if (SKELETON_WORD.test(rel)) signs.push({ what: `owner path \`${rel}\``, line: 1, file });
+    }
+  }
+  return signs;
+}
+
+export function measureSkeletonArm(resolved, sources, skins, stampedParts) {
+  const roles = readSkeletonPartRoles(resolved.root);
+  const handMade = [
+    ...skeletonPathSigns(resolved),
+    ...sources.flatMap((entry) => entry.skeletonSigns),
+    ...skins.flatMap((entry) => entry.skeletonSigns),
+    ...[...stampedParts].filter((part) => SKELETON_WORD.test(part))
+      .map((part) => ({ what: `\`data-part\` \`${part}\``, line: 0, file: '' })),
+  ];
+  const invalidRoles = roles
+    ? [...roles].filter(([, role]) => !SKELETON_ROLES.has(role)).map(([part]) => part).sort()
+    : [];
+  const partsWithoutRole = roles
+    ? [...stampedParts].filter((part) => !roles.has(part) && !SKELETON_WORD.test(part)).sort()
+    : [];
+  return {
+    renderer: roles !== undefined && roles.size > 0,
+    invalidRoles,
+    handMade,
+    partsWithoutRole,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -810,6 +925,7 @@ export function measureFamily(resolved, { producers } = {}) {
   const antReads = skins.flatMap((skin) => skin.antReads);
   const inlineStyleViolations = sources.flatMap((entry) => entry.inlineStyleViolations);
   const visualLiterals = sources.flatMap((entry) => entry.visualLiterals);
+  const skeleton = measureSkeletonArm(resolved, sources, skins, stampedParts);
   const fanOut = fanOutFor(family, readNames);
   const layoutSensitive = readLayoutSensitiveFamilies().find((entry) => entry.family === family);
   const adaptSlot = layoutSensitive
@@ -818,6 +934,7 @@ export function measureFamily(resolved, { producers } = {}) {
 
   return {
     family,
+    root,
     denominators: {
       skinFiles: resolved.skins.length,
       sourceFiles: resolved.sources.length,
@@ -839,6 +956,7 @@ export function measureFamily(resolved, { producers } = {}) {
       a11yProbes: resolved.a11yProbes.length,
       a11yAssertions: resolved.a11yAssertions ?? 0,
       adaptSlot,
+      skeleton,
     },
     ratchets: {
       readWithoutProducer: readWithoutProducer.debt.length,
@@ -945,6 +1063,30 @@ export function judgeFamily(measured, pinned) {
   }
   for (const finding of blocking.adaptSlot ?? []) {
     findings.push(`${family}: BLOCKING adapt-slot ${finding}`);
+  }
+  const skeleton = blocking.skeleton;
+  if (skeleton) {
+    if (!skeleton.renderer) {
+      findings.push(
+        `${family}: BLOCKING anatomy-derived-skeleton -- the shared renderer ${SKELETON_RENDERER_PATH} is missing or declares no \`SKELETON_PART_ROLES\``,
+      );
+    }
+    for (const part of skeleton.invalidRoles) {
+      findings.push(`${family}: BLOCKING anatomy-derived-skeleton -- the renderer gives \`${part}\` a role outside ${JSON.stringify([...SKELETON_ROLES])}`);
+    }
+    for (const sign of skeleton.handMade) {
+      const where = sign.file ? ` at ${toPosix(relative(measured.root ?? DEFAULT_ROOT, sign.file))}:${sign.line}` : '';
+      findings.push(
+        `${family}: BLOCKING anatomy-derived-skeleton -- hand-made skeleton: ${sign.what}${where}. `
+          + 'A family does not draw its own loading state; `AnatomySkeleton` derives it from the family anatomy',
+      );
+    }
+    for (const part of skeleton.partsWithoutRole) {
+      findings.push(
+        `${family}: BLOCKING anatomy-derived-skeleton -- \`data-part\` \`${part}\` has no role in the shared skeleton renderer; `
+          + `give it one in \`SKELETON_PART_ROLES\` (${SKELETON_RENDERER_PATH}) with the anatomy change, or the loading state drifts from the component`,
+      );
+    }
   }
   if (blocking.a11yAssertions === 0) {
     findings.push(

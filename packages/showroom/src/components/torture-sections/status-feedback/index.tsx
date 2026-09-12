@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Stack, Text, Alert, Progress, Skeleton, Spinner, Rate } from '@rottay/design-system';
+import { AnatomySkeleton, Box, Button, Card, Stack, Text, Alert, Progress, Skeleton, Spinner, Rate } from '@rottay/design-system';
 
 // Fixed fixtures for the WO-SKIN-03 checkpoint S status-family data-part
 // probe (Skeleton, Alert, Progress, Spinner, Rate). Every instance below is
@@ -61,14 +61,13 @@ export function StatusFbStates() {
           <Skeleton variant="rounded" width="100%" height={80} />
           {/* Text/default-variant branch (avatar + title + paragraph) */}
           <Skeleton avatar title paragraph={{ rows: 3 }} />
-          <Skeleton.Avatar size="lg" shape="circle" />
-          <Skeleton.Text lines={3} />
-          <Skeleton.Paragraph lines={3} lastLineWidth="45%" />
-          <Skeleton.Button size="md" shape="round" />
-          <Skeleton.Card hasImage lines={2} />
-          <Skeleton.ListItem hasAvatar lines={2} />
-          <Skeleton.Form fields={3} />
-          <Skeleton.Table rows={3} columns={4} />
+          {/* Loading states derived from the stand-in component's data-part anatomy */}
+          <AnatomySkeleton>
+            <Card title="Card title" description="Card description" />
+          </AnatomySkeleton>
+          <AnatomySkeleton>
+            <Button>Action</Button>
+          </AnatomySkeleton>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-statusfb-spinner">

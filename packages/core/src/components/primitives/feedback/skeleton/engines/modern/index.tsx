@@ -1,7 +1,7 @@
 /**
  * @fileoverview Skeleton Modern Engine - Rottay Design System
  * @description Token-driven skeleton: the unlayered modern skin
- * (`skin/skeleton.css`) owns the flat/shimmer fills, the canon animation
+ * (`skin/skeleton.css`) owns the flat/shimmer fills, the motion-vocabulary animation
  * wiring, all layout and the line/title geometry. No DaisyUI `skeleton`
  * class remains (drained in the TASK S canon-shimmer pass).
  *
@@ -13,17 +13,13 @@
  * other family.
  *
  * **Key Features:**
- * - Canon keyframe set (ds-skeleton-pulse/shimmer/wave) selected through
- *   `--ds-skeleton-animation-name`
- * - Cadence rides `--ds-skeleton-animation-duration`
+ * - `data-animation` selects the pulse or shimmer the skin runs on the
+ *   motion vocabulary; reduced motion holds a static flat surface
  * - Skin-owned anatomy: shape variants, avatar, title/line rhythm
- * - Global reduced-motion guard pins every canon animation to its final
- *   frame (personality.css wildcard, OS media query + data-ds-motion)
  *
  * **Multi-Tenant Theming:**
- * The tenant background, highlight and cadence arrive through
- * `--ds-skeleton-*` channels; the personality `skeletonStyle` chooses
- * pulse vs wave and the engine maps it onto the canon animation name.
+ * The tenant background and highlight arrive through `--ds-skeleton-*`
+ * channels; the personality `skeletonStyle` chooses pulse vs shimmer.
  *
  * **Size Handling:**
  * | Size | Implementation |
@@ -63,19 +59,15 @@ import { SKELETON_DEFAULTS } from '../../contracts';
  *
  * @description
  * Token-driven skeleton: the unlayered modern skin
- * (`skin/skeleton.css`) owns the flat/shimmer fills, the canon animation
+ * (`skin/skeleton.css`) owns the flat/shimmer fills, the motion-vocabulary animation
  * wiring, all layout and the line/title geometry. No DaisyUI `skeleton`
  * class remains (drained in the TASK S canon-shimmer pass, decrementing
  * `daisy.classConsumers`).
  *
  * @remarks
  * **Implementation Details:**
- * - Canon keyframe set (ds-skeleton-pulse/shimmer/wave) selected through
- *   `--ds-skeleton-animation-name`; cadence rides
- *   `--ds-skeleton-animation-duration`; the global reduced-motion guard
- *   (personality.css wildcard, OS media query + data-ds-motion='reduced')
- *   pins every canon animation to its final frame instantly.
- * - `data-animation` selects the flat-vs-gradient background in the skin.
+ * - `data-animation` selects the pulse or shimmer in the skin, which runs
+ *   both on the motion vocabulary and holds them static under reduced motion.
  * - `data-part='content'` marks the text column so the skin owns the
  *   title/line rhythm (60% title, 80% natural-ending last line).
  *
@@ -130,16 +122,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // Animation Resolution
   // ---------------------------------------------------------------------------
 
-  // The Skeleton wrapper injects `animation` from the tenant personality
-  // (resolveSkeletonPersonalityDefaults -> 'pulse' | 'wave'), so this honors
-  // skeletonStyle across engines. Modern renders the premium sweeping gradient
-  // (ds-skeleton-shimmer) for any moving style and the flat opacity pulse
-  // (ds-skeleton-pulse) for 'pulse'; an inactive/false skeleton holds static.
-  // `data-animation` selects the flat-vs-gradient background in the unlayered
-  // skin; --ds-skeleton-animation-name selects the shared canon keyframe.
   const resolvedStyle = active && animation ? (animation === 'pulse' ? 'pulse' : 'shimmer') : undefined;
-  const animationName =
-    resolvedStyle === 'pulse' ? 'ds-skeleton-pulse' : resolvedStyle === 'shimmer' ? 'ds-skeleton-shimmer' : 'none';
 
   // ---------------------------------------------------------------------------
   // Style Helpers
@@ -182,7 +165,6 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
             : variant === 'rounded'
               ? 'var(--ds-skeleton-radius)'
               : '0',
-          '--ds-skeleton-animation-name': animationName,
         } as React.CSSProperties}
       />
     );
@@ -193,10 +175,8 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // ---------------------------------------------------------------------------
 
   // Text/default variant: the wrapper is a flex container (NOT a painted block),
-  // so it carries `.rottay-skeleton-wrapper` and owns --ds-skeleton-animation-name
-  // plus the personality style (which carries --ds-skeleton-animation-duration);
-  // both inherit to the avatar/title/line blocks below, which the unlayered skin
-  // paints as descendants keyed on data-part + data-animation. All layout
+  // so it carries `.rottay-skeleton-wrapper`; the skin paints the avatar/title/
+  // line blocks below as descendants keyed on data-part + data-animation. All layout
   // (wrapper gap, content column, title/line geometry, the natural 80% last
   // line) lives in the skin so density tokens can retune it.
   return (
@@ -204,7 +184,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
       data-part={dataPart ?? 'root'}
       className={`rottay-skeleton-wrapper rottay-skeleton--modern ${className}`}
       aria-hidden="true"
-      style={{ ...style, '--ds-skeleton-animation-name': animationName } as React.CSSProperties}
+      style={style}
     >
       {/* Avatar placeholder */}
       {avatar && (
