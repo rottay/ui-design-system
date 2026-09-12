@@ -166,6 +166,10 @@ export const CI_GATES = Object.freeze([
     phase: 'pre-build',
     drillId: 'channel-liveness-drill',
   },
+  // One responsive authority: no per-instance stylesheet, 100vh/vw, width query
+  // outside `runtime/responsive` or unnamed @container; every surface adopts it.
+  { id: 'responsive-single-authority-drill', run: ['node', '--test', 'scripts/check/responsive/single-authority/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['responsive-single-authority'], },
+  { id: 'responsive-single-authority', run: ['node', 'scripts/check/responsive/single-authority/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'responsive-single-authority-drill', },
 
   // --- source-owned artifact freshness: this manifest runs before Build ---
   // These gates execute the authored TypeScript roster and compile CSS from
