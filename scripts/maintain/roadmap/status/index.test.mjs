@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import test from "node:test";
+import "./execution-policy.test.mjs";
 
 import {
   actionableWorkOrders,

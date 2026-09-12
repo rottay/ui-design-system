@@ -68,6 +68,18 @@ const ROOT = findRepoRoot(path.dirname(fileURLToPath(import.meta.url)));
 const ROADMAP = path.join(ROOT, "roadmap");
 const REGISTRY_PATH = path.join(ROADMAP, "registry.json");
 const STATUS_PATH = path.join(ROADMAP, "STATUS.md");
+export function executionPolicyText(readme) {
+  const start = "<!-- execution-policy:start -->";
+  const end = "<!-- execution-policy:end -->";
+  const parts = readme.split(start);
+  if (parts.length !== 2 || parts[1].split(end).length !== 2) {
+    throw new Error("Missing or ambiguous execution policy in roadmap/README.md");
+  }
+  const policy = parts[1].split(end)[0].trim();
+  if (!policy) throw new Error("Empty execution policy in roadmap/README.md");
+  return policy;
+}
+
 const LANES = [
   "engine-modern", "craft", "gates", "tokens", "architecture", "skin-adoption",
   "canon-close", "consumer-contract", "catalog-door", "derivation", "family-cuts",
@@ -3738,7 +3750,7 @@ switch (cmd) {
     else {
       const dm = block.match(/\*\*Delegation prompt\*\*\s*[—-]\s*([\s\S]*?)(?=\n- \*\*|\n### |\n---|$)/);
       console.log(dm ? dm[1].trim() : block);
-      console.log("\n--- Universal fences (roadmap/README.md): work on main; commit only when full cert is green; never git-restore directories; no emojis/AI attribution; update the matching docs-engineering product/ chapter CURRENT lines before `done`.");
+      console.log("\n---\n" + executionPolicyText(fs.readFileSync(path.join(ROADMAP, "README.md"), "utf8")));
     }
     console.log(`\n[state] status=${w.status}${w.claimedBy ? ` claimedBy=${w.claimedBy}` : ""}${open.length ? ` OPEN-DEPS=${open.join(",")}` : " deps-satisfied"}${(w.mustLandWith || []).length ? ` mustLandWith=${w.mustLandWith.join(",")}` : ""}`);
     for (const p of w.progressLog || []) console.log(`[progress] ${p.at} ${p.by}: ${p.note}`);

@@ -236,6 +236,59 @@ be fixed or deliberately respecified in its own work order.
   — are specifications and a consumed contract, not plan documents. Nothing else may be added
   outside a lane file.
 
+### Execution and review policy — owner amendment 2026-09-12
+
+<!-- execution-policy:start -->
+**Mandatory execution policy (roadmap/README.md, owner 2026-09-12).**
+This amendment supersedes older blanket instructions to run the full suite or
+full certification for every lot; it does not waive a WO's substantive acceptance
+criteria or final certification. State and dependencies remain in the existing
+registry; denominator definitions and authorities are unchanged.
+
+- **Writer and auditor:** Opus (Daniel profile when using Claude) or Kimi may
+  implement a bounded lot. Every lot needs an independent code auditor; nobody
+  approves their own implementation. Verify actual model/profile/session identity,
+  never a terminal label. Kimi remains DT/integrator.
+- **Before shared-core design is adopted:** Codex, Fable and Kimi review the SAME
+  debrief: WO, base, proposed contract, owners/write set, invariants, alternatives
+  and executable acceptance. Core means catalog/permissions, precedence, derivation
+  and channel ownership, compilation/emission, artifact identity/persistence,
+  SSR/hydration/public boundaries, shared family kernels and acceptance instruments.
+  Each records ACCEPT or HOLD with evidence and authorship conflicts. Resolve
+  disagreements before integrating the affected core change. A writer's agreement
+  is not an independent audit. Missing reviewers mean pending, not implicit consent.
+- **Current core checkpoints:** apply that review to the changed shared contracts
+  in WO-CON-07, WO-EMI-02, WO-DER-06, WO-INV-04/07 and WO-EVI-01/02/04, and to any
+  other WO changing the core defined above. Completed contracts are not reopened
+  just to collect retrospective signatures; reopen only for a concrete finding.
+  WO-FAM-01 consumes the agreed contract as the pilot. Later family cuts reuse it;
+  only a proposed contract delta returns to the three reviewers.
+- **Before each lot is integrated:** independently review the exact candidate diff
+  and run focal tests of new/changed behavior and directly affected consumers,
+  appropriate type checks and the applicable contract gates. Record commands,
+  scope and results. New regressions cannot be hidden by widening baselines.
+  Browser/first-paint claims require browser evidence from the lot's own package.
+  Design approval does not approve unseen code. Preserve active drafts/checkpoints;
+  never reset or overwrite another writer's work.
+- **At important milestones:** run the complete suite on a pinned integration
+  commit for the first end-to-end pilot, relevant family/shared-core wave closures,
+  and final certification/release. Reuse that result for the lots it covers, not
+  one full run per writer. Expand a focal regression scope when a concrete
+  cross-cutting failure warrants it. Never represent focal evidence as a full pass.
+- **Parallelism and cost:** one complete component per writer (deriver, skin,
+  runtime and tests) within the same block, only with disjoint files and stable
+  shared contracts. Shared compiler/catalog/registries have one owner. Serialize
+  integration/commits and heavy builds/suites/browser runs on this host; wait for
+  completion events instead of continuously polling.
+- **Evidence and landing:** record debrief version/hash, each review and the tested
+  candidate; link them from the existing WO progress/done evidence via the roadmap
+  script. No shadow backlog or new status. Kimi lands audited functional commits
+  locally on main; never push, never restore directories, never sweep foreign
+  staging. No emojis or AI attribution; keep applicable product documentation
+  current. The three-way agreement
+  is NOT yet obtained merely because this policy is documented.
+<!-- execution-policy:end -->
+
 ### DS-improvements authority, milestones and wave locks
 
 - The adjudicated modern program is pinned through `traceability.ds-improvements`. Its requirements
@@ -281,9 +334,10 @@ be fixed or deliberately respecified in its own work order.
 > HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/maintain/roadmap/status/index.mjs` (claim/progress/done/reopen;
 > deps, mustLandWith hazards, and evidence are enforced). `node scripts/maintain/roadmap/status/index.mjs delegate
 > WO-ENG-NN` prints the ready-to-paste executor prompt. (2) Gates are truth: a WO is done only when its
-> acceptance gate is green — the lane's mechanical gate is `node scripts/check/engine-token-audit.mjs --check`
-> (created by WO-ENG-01, extended by every later token WO) plus `pnpm --filter @rottay/design-system run
-> build` and `pnpm test`. (3) For EVERY visual WO the SIGHTED CHECK is mandatory: run the showroom
+> applicable acceptance evidence is green under the owner-approved Execution and review policy above:
+> focal tests and applicable gates per lot, full suite at important milestones, independent audit
+> before integration and three-way agreement for shared-core contract changes.
+> (3) For EVERY visual WO the SIGHTED CHECK is mandatory: run the showroom
 > (`pnpm --filter @rottay/design-system-showroom run dev`, http://localhost:7001), capture the affected
 > flagship components before/after under both tenant palettes (a dark-surface and a light-surface tenant) to `test-artifacts/engine-modern/<wo>/`, then
 > actually LOOK at the PNGs and score them against the spec (sections 1 + 11). The metrics ratchet is
