@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "generatedBy": "node packages/core/scripts/generate/tokens/manifest/generation/index.mjs --sync",
   "authorityLaw": "Controls own semantics, groups own recipe vocabularies, families own applicability edges, and this index owns generated rollups.",
-  "inputsDigest": "5f79f04e508939234592eb7a2b4ca0d159371487278e12dbebcb033e60f1503f",
+  "inputsDigest": "ea54a61b1a4399439806683929ef4f77e7ec055eb6ed9ae0dd7e9ff91867c075",
   "denominators": {
     "canonicalFamilies": 254,
     "activeStandardControls": 14,
@@ -1862,107 +1862,107 @@
     {
       "controlId": "palette.seeds",
       "path": "governance/manifest/controls/palette/seeds/index.json",
-      "digest": "285f7d42192de78ef02284e2ae2cca3eda13577c93a28745dc99d0a89221ac0e"
+      "digest": "1115c118fc922ce3ee56d6361de116a27b382ef1513b5064f43ff6d646523f7e"
     },
     {
       "controlId": "typography.pairing",
       "path": "governance/manifest/controls/typography/pairing/index.json",
-      "digest": "464b394f14788f467dba20344ada1dd9424ca0c07c0aea6d053a7dc2fc294646"
+      "digest": "d04c475ed0e4f7a8b47f058600167806aa5ccf6b62de266c205686f43e3e8947"
     },
     {
       "controlId": "typography.families",
       "path": "governance/manifest/controls/typography/families/index.json",
-      "digest": "ab8fc8bfbf56b831d3408a8c6d3a2ec1e0ef4cdfacedcc07f73646d8a0c841cb"
+      "digest": "f48ad544f2db458253fea696dad0990bb3bacff8ace9480145ec4cc99fe7d741"
     },
     {
       "controlId": "typography.scale",
       "path": "governance/manifest/controls/typography/scale/index.json",
-      "digest": "f5243669371600a5a66a8068a175b14bdd606db0672a0ae8c673be95948bd1a6"
+      "digest": "d2013d7cd47d6d4108b188604539d6fee4690c7154861cb1277a937b4e2e8ee3"
     },
     {
       "controlId": "shape.radius-scale",
       "path": "governance/manifest/controls/shape/radius-scale/index.json",
-      "digest": "603233c520b5051e623b14d774b978ac7eb9eb160ccc452c9b6c9ca22c360407"
+      "digest": "e4a9928b5ef4415226236afe15fa3591ef28272db73514d0ddf69b37d544bcf4"
     },
     {
       "controlId": "shape.button-style",
       "path": "governance/manifest/controls/shape/button-style/index.json",
-      "digest": "8eda004b28f97452357351b3f7061e4a3314a225a8713cb6bc5b053e9823e633"
+      "digest": "046ce7aa307e48f3806806dc8464941f055233c3ed603b54d806e0b6d15e0727"
     },
     {
       "controlId": "density.mode",
       "path": "governance/manifest/controls/density/mode/index.json",
-      "digest": "d1a190e6f532a20ea2904a6a9bccad9c2fe3a1df9ae5519f36d51093468a4036"
+      "digest": "e5df9fb161c0c8a82e8782f60932339dc0ee350c995a625552484235074ba83b"
     },
     {
       "controlId": "spacing.rhythm",
       "path": "governance/manifest/controls/spacing/rhythm/index.json",
-      "digest": "97fb91f3ffddb1933a9313f3ede9d442feb36dccae13ac3dd908e41c53e7ff93"
+      "digest": "fee7e1c7ecbdeac45187efae0b4f9fb141bab98b80329608235d7061dcc1ad8f"
     },
     {
       "controlId": "motion.dial",
       "path": "governance/manifest/controls/motion/dial/index.json",
-      "digest": "32324fe6e20a8718274338734bcfaf9dc9a98bb1f589ce9d24dbceaf57cd395c"
+      "digest": "ad2e047b124df4c68de4621ba0aa624a672ade8742c577fe9f8f0fec6393bbae"
     },
     {
       "controlId": "surfaces.elevation-posture",
       "path": "governance/manifest/controls/surfaces/elevation-posture/index.json",
-      "digest": "cb2c23edc487eae9cbc831d8f58ee45cb768893c41003727eeaa4343d93efdb5"
+      "digest": "bd66532f127124ad392e0afc1f9093443e8bedc0f4e71c5fc73daea1a166bfc8"
     },
     {
       "controlId": "surfaces.effect-intensity",
       "path": "governance/manifest/controls/surfaces/effect-intensity/index.json",
-      "digest": "ca554d41c9f0ac2273116703397aa2f58fafc9f2e4b588c87f203d05a94bec18"
+      "digest": "2274b4f85fc6c465a9180249bc429acac0bd70f329757574a7f6b764d969f06d"
     },
     {
       "controlId": "navigation.sidebar-tone",
       "path": "governance/manifest/controls/navigation/sidebar-tone/index.json",
-      "digest": "d6c6e7284074dae4e01874eb7b8906329d942ad275e6936ed5c02b00e2214acf"
+      "digest": "07444935211f4a67b366bffa4a5e5dee12439d32ba3ff96643b0ed62040b7ae2"
     },
     {
       "controlId": "experience.profile",
       "path": "governance/manifest/controls/experience/profile/index.json",
-      "digest": "4b151b28e23d4205bdd4964cd9a1da0ae518666a583f12d063f405f9fc664c1a"
+      "digest": "49b20b9cedf23ccf47678f98a62fc1a567c53dc5752c01062b95445029b307bb"
     },
     {
       "controlId": "chrome.families",
       "path": "governance/manifest/controls/chrome/families/index.json",
-      "digest": "bc215e7856156ea53ece834ada4d6a47d83099c1afa3de907a0a5073489859b8"
+      "digest": "a09320905211a20a22aa718b9952cdd199b4f0d743041f6a952deb168529948e"
     },
     {
       "controlId": "chrome.anatomy",
       "path": "governance/manifest/controls/chrome/anatomy/index.json",
-      "digest": "3aa9129da192a5f926567462938c800acc5f0b0b0dc47113f5b46d8ac066624a"
+      "digest": "51c3141e3c5e18899bbb20bd8aa03c2ee3ee4dbd748ee63ad012326d372782a3"
     },
     {
       "controlId": "token-overrides",
       "path": "governance/manifest/controls/tokens/overrides/index.json",
-      "digest": "4d976ed8f4a64c180a623f61d58d76615a732bd755750ef23b35e81255257e6e"
+      "digest": "426611d260e38cba512e9903636eb9c014bf6853b0edccf5685dd05f814443b1"
     },
     {
       "controlId": "recipe-profile",
       "path": "governance/manifest/controls/recipes/profile/index.json",
-      "digest": "102df32b3483d6cfecd92e3e6fc631a480329f3117b9255dd4859b2f3b0044a7"
+      "digest": "7cf360c26f637f8ecd38410a835d93ae853b4188258e7eec9fb51dd5c25a43e9"
     },
     {
       "controlId": "profiles.expressive",
       "path": "governance/manifest/controls/profiles/expressive/index.json",
-      "digest": "bd3146946818b14535a52b730deb5b8d9b961c8038867c76d1476ddfe7f3fd6b"
+      "digest": "6bb831cf1f4507932384349da64fd2c8d0774d3471a563516eef41befb1c7c68"
     },
     {
       "controlId": "palette.status-seeds",
       "path": "governance/manifest/controls/palette/status-seeds/index.json",
-      "digest": "46e406a4e03279ad53d69c56087eff68c186015c109b87652f8c99412c5763cc"
+      "digest": "88961f9984c0569458f11bf57005e82fd1faac728ba21fb2bc86c243b8f972fa"
     },
     {
       "controlId": "profiles.icon",
       "path": "governance/manifest/controls/profiles/icon/index.json",
-      "digest": "d2d6f28469c980acaecfe633473e6741d635bcfa462b5e6082d267b633612a26"
+      "digest": "757c12a53e9a2fdc453ecb59eb49a6d0ecf43cf8488fbb8c286d50ce034b3565"
     },
     {
       "controlId": "responsive.posture",
       "path": "governance/manifest/controls/responsive/posture/index.json",
-      "digest": "fe93104677f8404be4cfe678eab772867324cbd1d2e4a32238caf3567986382b"
+      "digest": "0b85c2001becceeec5667e4da29aaf29cd34410b91243962affc1cce8bbdd297"
     }
   ],
   "groups": [
@@ -3736,7 +3736,7 @@
     {
       "familyId": "surface/workspace/collection-workspace",
       "path": "governance/manifest/families/surface/workspace/collection-workspace/index.json",
-      "digest": "15a548508a921ad09dac6afd7ddc7e65c4f6af884a2dace9c4bc5a8b74aa86ba",
+      "digest": "d2cb211e62408a5e2cd734b1006b63fa83e0de2fc1fa40096c0a33596bee5cee",
       "maximumClaim": "SOURCE_BOUND",
       "reviewVerdict": null
     },

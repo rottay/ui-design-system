@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "e09551300acd68518485c88997c6d294c4c4167c4dfeebb606b02d9896b3a1ba"
+    "registryDigest": "e9c0a5cc48dcf3d1d3b65e0f235f26ef8b7fa686623a34bf301c3a7bbd6a24a6"
   },
   "title": "Density posture",
   "valueType": "enum",
