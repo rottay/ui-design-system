@@ -152,6 +152,29 @@ describe('mountTenantTheme — static first-party verticals', () => {
     expect(bithire.rootAttributes['data-recipe-profile']).toBe('rottay/network-professional@1');
   });
 
+  /**
+   * THE ATTRIBUTE IS THE ARTIFACT'S OWN CHANNEL, not a second projection.
+   *
+   * The literals above are readable but they are still literals; this reads the
+   * `--ds-recipe-profile` provenance channel out of the SHIPPED stylesheet and
+   * requires the projected attribute to be that exact string, for every
+   * vertical. The pair can only agree while one compile answers both.
+   */
+  it('stamps the profile the shipped artifact bytes themselves declare', async () => {
+    const declared: string[] = [];
+
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      const inBytes = committedArtifactCss(vertical).match(
+        /--ds-recipe-profile:\s*"([^"]+)"\s*;/,
+      )?.[1];
+      const { rootAttributes } = await mountTenantTheme(staticThemeIntent(vertical));
+      expect(rootAttributes['data-recipe-profile'], `${vertical} mount`).toBe(inBytes);
+      if (inBytes) declared.push(inBytes);
+    }
+
+    expect(new Set(declared).size).toBeGreaterThanOrEqual(2);
+  });
+
   it('projects the request viewport and motion posture the app declared', async () => {
     const mounted = await mountTenantTheme(staticThemeIntent('bithire'), {
       viewport: 'desktop',

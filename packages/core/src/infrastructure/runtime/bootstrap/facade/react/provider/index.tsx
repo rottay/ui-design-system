@@ -1067,18 +1067,6 @@ export function DesignSystemProvider({
   // on the published config.
   const governedBehavior = getCodeOwnedGovernedBehavior(resolvedRuntimeConfig);
 
-  // ONE transport for the profile (D-26): the artifact decides it, and both the
-  // DB path (`normalizedAppearance.recipeProfile`, carried on the resolved
-  // config) and the code-owned path (the identity-keyed behavior slot) read
-  // that one decision. The code-owned branch used to be unreachable, which is
-  // why two verticals with deliberately different profiles were
-  // indistinguishable in the product.
-  const recipeProfileSelection = (() => {
-    const profileId = appearance?.recipeProfile ?? governedBehavior?.recipeProfile;
-    return profileId
-      ? { profileId, schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION }
-      : undefined;
-  })();
   // C2b: governed icon posture — dual-source precedence (explicit DB Pro
   // axis or DB experience composition win over the static BrandTheme
   // selection). Delivered through the RSC-safe seam: assigned to the CLIENT
@@ -1139,6 +1127,24 @@ export function DesignSystemProvider({
   if (publishedEngineVisual) {
     assertEngineVisualBelongs(publishedEngineVisual, engine, appearance);
   }
+  // ONE TRANSPORT FOR THE PROFILE (D-26), and it is the ARTIFACT in all three
+  // arms. The compiled runtime block comes first because it is the half the
+  // mount proof covers and the half `assertEngineVisualBelongs` has just
+  // verified against this tenant; `normalizedAppearance` answers for an
+  // artifact compiled before that block existed; and a code-owned vertical
+  // reads its own artifact's generated runtime block off the identity-keyed
+  // slot, because its stylesheet ships inside the package and there is no row
+  // to admit. No arm re-derives the selection from an authored theme: doing so
+  // let the document and the product disagree about which recipes are active.
+  const recipeProfileSelection = (() => {
+    const profileId =
+      publishedEngineVisual?.runtime.recipeProfile
+      ?? appearance?.recipeProfile
+      ?? governedBehavior?.recipeProfile;
+    return profileId
+      ? { profileId, schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION }
+      : undefined;
+  })();
   // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'.
   // tenant.theme only wins if it's explicitly set to a real mode (not the default 'base').
   const appearanceBackgroundMode = appearance?.general?.palette?.backgroundMode;

@@ -35,7 +35,11 @@ export default defineConfig({
   // diagnostics/ holds the P-79 dead-selector audit (GAT-01): it probes every
   // skin selector against the rendered torture page, so it needs the same
   // production `next start` and belongs in this config, not the a11y one.
-  testMatch: ['visual/**/*.spec.ts', 'whitelabel/**/*.spec.ts', 'responsive/**/*.spec.ts', 'diagnostics/**/*.spec.ts'],
+  // first-paint/ holds the WO-EMI-02 F-20 probe: it holds the framework's
+  // chunks to measure the frame before hydration, which only means anything
+  // against a production server — the dev server ships its own extra scripts
+  // and recompiles on navigation.
+  testMatch: ['visual/**/*.spec.ts', 'whitelabel/**/*.spec.ts', 'responsive/**/*.spec.ts', 'diagnostics/**/*.spec.ts', 'first-paint/**/*.spec.ts'],
   // One flagship gallery page serves every cell in the matrix; parallel
   // workers would fight over the same production server's compile/response
   // cache for no benefit, so this mirrors the a11y harness's single-worker,

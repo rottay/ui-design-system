@@ -59,6 +59,7 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
+import { firstPartyArtifactRecipeProfile } from '@/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
 import type {
   DocumentDensityPosture,
   DocumentMotionPosture,
@@ -224,6 +225,18 @@ function firstPartyArtifact(vertical: FirstPartyVerticalId): FirstPartyArtifact 
     throw new Error(`${REFUSAL}: no first-party artifact is registered for ${JSON.stringify(vertical)}.`);
   }
   const { css, compiled } = renderFirstPartyArtifact({ spec });
+  // TWO INDEPENDENT ANSWERS TO ONE QUESTION. This compile is what the bundled
+  // CSS was produced from; the shipped runtime block is the SAME compile's
+  // non-CSS half, written at build time because a browser must not lower a
+  // theme to learn which recipes are active. They can only disagree when the
+  // block is stale or hand-edited, and a client reading a profile the document
+  // was not painted for is the divergence the mount exists to refuse.
+  const shipped = firstPartyArtifactRecipeProfile(vertical);
+  if (shipped !== compiled.runtime.recipeProfile) {
+    throw new Error(
+      `${REFUSAL}: the shipped runtime block for ${JSON.stringify(vertical)} declares recipe profile ${JSON.stringify(shipped)}, but its artifact compiled ${JSON.stringify(compiled.runtime.recipeProfile)}. Regenerate with \`pnpm -C packages/core build:vertical-css\`.`,
+    );
+  }
   const artifact: FirstPartyArtifact = Object.freeze({
     css,
     selector: spec.selector,

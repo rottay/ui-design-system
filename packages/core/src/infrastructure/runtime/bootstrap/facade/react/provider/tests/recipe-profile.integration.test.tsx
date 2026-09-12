@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -22,6 +24,7 @@ import {
   getKnownTenantConfig,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { FIRST_PARTY_VERTICAL_SLUGS } from '@/foundation/contracts/kernel/verticals';
+import { firstPartyArtifactRecipeProfile } from '@/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
 import { staticThemeIntent } from '@/infrastructure/compilers/runtime/theme';
 import { mountTenantTheme } from '@/infrastructure/runtime/theming/composition/mount';
 import { DesignSystemProvider } from '..';
@@ -68,6 +71,17 @@ function mountArtifact(artifact: TenantThemeArtifact): void {
   stampTenantThemeScope(artifact);
 }
 
+const SRC_ROOT = resolve(__dirname, '../../../../../../..');
+
+/** The provenance channel the recipes deriver emitted into the shipped bytes. */
+function recipeProfileInArtifactBytes(slug: string): string | undefined {
+  const css = readFileSync(
+    resolve(SRC_ROOT, `foundation/tokens/css/facade/artifacts/${slug}/index.css`),
+    'utf8',
+  );
+  return css.match(/--ds-recipe-profile:\s*"([^"]+)"\s*;/)?.[1];
+}
+
 function ProfileProbe() {
   const profile = useRecipeProfile();
   return (
@@ -79,9 +93,14 @@ function ProfileProbe() {
 }
 
 describe('DesignSystemProvider recipe-profile authority', () => {
+  let reported: string[];
+
   beforeEach(() => {
     resetVisualAuthorityDiagnostics();
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    reported = [];
+    vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+      reported.push(args.map(String).join(' '));
+    });
   });
 
   afterEach(() => {
@@ -114,10 +133,11 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     // profile only from one — so `rottay` (technical-sharp) and `bithire`
     // (network-professional) were indistinguishable in the product. The
     // selection now travels on the identity-keyed governed-behavior slot, which
-    // is not paint and cannot be forged by a caller-built config.
+    // is not paint and cannot be forged by a caller-built config; what it
+    // carries is the vertical's own ARTIFACT block, byte-bound below.
     const rottay = getKnownTenantConfig('rottay')!;
     expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(rottay))?.recipeProfile)
-      .toBe('rottay/technical-sharp@1');
+      .toBe(recipeProfileInArtifactBytes('rottay'));
 
     render(
       <DesignSystemProvider tenantConfig={rottay} vertical="rottay" forceEngine="modern">
@@ -137,22 +157,25 @@ describe('DesignSystemProvider recipe-profile authority', () => {
   });
 
   /**
-   * REGISTRY-FED AND ARTIFACT-FED ARE THE SAME DECISION, proven per vertical.
+   * ONE DECISION, FOUR READINGS, proven per vertical against the BYTES.
    *
    * A code-owned vertical has no `<style>` to admit -- its artifact ships
    * inside `styles.css` -- so the provider cannot read its profile off a
    * mounted element the way the DB path does. What it reads instead is the
-   * registry's projection of the same authored theme. That is only honest if
-   * the two are the same decision, and "the same decision" is a claim about
-   * two compilers, not a comment. So this asserts the identity directly, for
-   * every first-party vertical: the id the registry publishes to
-   * `RecipeProfileProvider`, the id the artifact compile produced, and the id
-   * `mountTenantTheme` stamps as `data-recipe-profile` are one string.
+   * artifact's own generated runtime block: the non-CSS half of the very
+   * compile that wrote the stylesheet. That is only honest if every reading is
+   * the same string, and "the same string" is a claim about two build outputs,
+   * not a comment.
+   *
+   * So this asserts the identity directly, for every first-party vertical:
+   * the `--ds-recipe-profile` channel inside the SHIPPED CSS file, the shipped
+   * runtime block, the id the registry hands `RecipeProfileProvider`, and the
+   * id `mountTenantTheme` stamps as `data-recipe-profile` are one value.
    *
    * If they ever diverge, the product and the stylesheet disagree about which
    * recipes are active, which is exactly F-112 pointing the other way.
    */
-  it('publishes the same profile the mounted artifact compiled, per vertical', async () => {
+  it('publishes the profile the artifact BYTES declare, per vertical', async () => {
     expect(FIRST_PARTY_VERTICAL_SLUGS.length).toBeGreaterThan(1);
     const declared: string[] = [];
 
@@ -163,12 +186,15 @@ describe('DesignSystemProvider recipe-profile authority', () => {
       )?.recipeProfile;
 
       const mounted = await mountTenantTheme(staticThemeIntent(slug, slug));
-      const fromArtifact = mounted.rootAttributes['data-recipe-profile'];
+      const fromMount = mounted.rootAttributes['data-recipe-profile'];
+      const fromBytes = recipeProfileInArtifactBytes(slug);
 
-      // Absent on BOTH sides is a legitimate answer -- a vertical need not
-      // select a profile, and `evnto` does not -- but it must be absent on both.
-      expect(fromRegistry, `${slug} registry profile`).toBe(fromArtifact);
-      if (fromRegistry) declared.push(`${slug}:${fromRegistry}`);
+      // Absent on ALL sides is a legitimate answer -- a vertical need not
+      // select a profile, and `evnto` does not -- but it must be absent on all.
+      expect(fromRegistry, `${slug} registry profile`).toBe(fromBytes);
+      expect(fromMount, `${slug} mounted profile`).toBe(fromBytes);
+      expect(firstPartyArtifactRecipeProfile(slug), `${slug} runtime block`).toBe(fromBytes);
+      if (fromBytes) declared.push(`${slug}:${fromBytes}`);
     }
 
     // Anti-cheat: an all-undefined roster would satisfy the identity above for
@@ -177,12 +203,36 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     expect(new Set(declared.map((row) => row.split(':')[1])).size).toBeGreaterThanOrEqual(2);
   });
 
-  it('gives two code-owned verticals the two different profiles they authored', () => {
+  it('gives two code-owned verticals the two different profiles their artifacts compiled', () => {
     const bithire = getKnownTenantConfig('bithire')!;
     expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(bithire))?.recipeProfile)
-      .toBe('rottay/network-professional@1');
+      .toBe(recipeProfileInArtifactBytes('bithire'));
     expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(getKnownTenantConfig('rottay')!))?.recipeProfile)
-      .not.toBe('rottay/network-professional@1');
+      .not.toBe(recipeProfileInArtifactBytes('bithire'));
+  });
+
+  /**
+   * THE AUTHORED-SELECTION READ PATH IS GONE FROM THE RUNTIME.
+   *
+   * The registry used to answer "which profile did this vertical choose?" by
+   * calling `validateRecipeProfileSelection(theme.recipes.profile, ...)` on the
+   * authored BrandTheme -- an independently projected AUTHORED selection beside
+   * the artifact's own compiled one. Two readers of one decision is exactly the
+   * D-26 violation, and it cannot be closed by a comment: a source assertion is
+   * what keeps the call from growing back.
+   *
+   * The validator itself stays exported and is still called where it belongs --
+   * the lowering's recipes deriver, and admission -- so this names the runtime
+   * registry, not the symbol.
+   */
+  it('has no authored-selection validator left in the tenant registry', () => {
+    const registry = readFileSync(
+      resolve(SRC_ROOT, 'infrastructure/runtime/tenant/foundation/configuration/registry/index.ts'),
+      'utf8',
+    );
+    expect(registry).not.toMatch(/validateRecipeProfileSelection/);
+    expect(registry).not.toMatch(/recipes\?\.profile/);
+    expect(registry).toMatch(/firstPartyArtifactRecipeProfile/);
   });
 
   /**
@@ -223,6 +273,100 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     expect(bithire).not.toEqual(rottay);
     expect(bithire.variant).toBe('primary');
     expect(bithire.shape).toBe('default');
+  });
+
+  /**
+   * A DB ARTIFACT WHOSE GOVERNED SELECTION WAS MOVED AFTER THE COMPILE.
+   *
+   * The profile appears twice inside one artifact: `normalizedAppearance`
+   * carries the read-model of what the tenant decided, and `runtime` carries
+   * what the compile that produced the CSS actually selected. Either can be
+   * rewritten in transit, or by a row whose appearance was edited without a
+   * recompile, and a runtime resolving recipes the document was never painted
+   * for is the exact failure D-26 forbids.
+   *
+   * Both halves are inside the digest source, so neither edit survives
+   * admission: the declaration is refused BY NAME and the recipe consumer never
+   * mounts at all. The authored-side projection that used to stand behind this
+   * path is gone, so there is nothing left to fall back to either.
+   */
+  it.each([
+    [
+      'the appearance read-model',
+      (artifact: TenantThemeArtifact): TenantThemeArtifact => ({
+        ...artifact,
+        normalizedAppearance: {
+          ...artifact.normalizedAppearance,
+          recipeProfile: 'rottay/technical-sharp@1',
+        },
+      }),
+    ],
+    [
+      'the compiled runtime half',
+      (artifact: TenantThemeArtifact): TenantThemeArtifact => ({
+        ...artifact,
+        runtime: {
+          ...artifact.runtime!,
+          runtime: { ...artifact.runtime!.runtime, recipeProfile: 'rottay/technical-sharp@1' },
+        },
+      }),
+    ],
+  ])('refuses an artifact whose selection was tampered in %s', (_label, tamper) => {
+    expect(ARTIFACT.normalizedAppearance.recipeProfile).toBe('rottay/editorial-round@1');
+    expect(ARTIFACT.runtime?.runtime.recipeProfile).toBe('rottay/editorial-round@1');
+
+    const tampered = tamper(ARTIFACT);
+    mountArtifact(tampered);
+    render(
+      <DesignSystemProvider
+        tenantConfig={tenantConfig()}
+        visualAuthority={{ authority: 'compiled-artifact', artifact: tampered }}
+        vertical="rottay"
+        forceEngine="modern"
+      >
+        <ProfileProbe />
+      </DesignSystemProvider>,
+    );
+
+    // Blocked, not silently re-resolved: no consumer mounted, so no recipe was
+    // published from either half of the tampered artifact.
+    expect(screen.queryByTestId('active-recipe-profile')).toBeNull();
+    expect(reported.join(' | '))
+      .toMatch(/artifact digest does not recompute from v1 source/);
+  });
+
+  /**
+   * THE VERIFIED HALF OUTRANKS A HAND-PASSED CLAIM.
+   *
+   * `engineVisual` is an application's claim; the artifact's own `runtime` is a
+   * record inside the digest the mount proof covers. When both are present and
+   * they disagree, the runtime reads the verified one -- so an app that
+   * published a projection compiled for a different theme cannot move which
+   * recipes are active on a tenant whose bytes say otherwise.
+   */
+  it('resolves from the artifact half, not a contradicting published projection', () => {
+    mountArtifact(ARTIFACT);
+    render(
+      <DesignSystemProvider
+        tenantConfig={tenantConfig()}
+        visualAuthority={{ authority: 'compiled-artifact', artifact: ARTIFACT }}
+        engineVisual={{
+          ...ARTIFACT.runtime!,
+          runtime: {
+            ...ARTIFACT.runtime!.runtime,
+            recipeProfile: 'rottay/technical-sharp@1',
+          },
+        }}
+        vertical="rottay"
+        forceEngine="modern"
+      >
+        <ProfileProbe />
+      </DesignSystemProvider>,
+    );
+
+    expect(screen.getByTestId('active-recipe-profile'))
+      .toHaveTextContent('rottay/editorial-round@1');
+    expect(screen.getByRole('button')).toHaveAttribute('data-shape', 'round');
   });
 
   it('blocks an uncompiled runtime visual payload before the recipe consumer mounts', () => {
