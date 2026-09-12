@@ -1481,10 +1481,11 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     ]),
   }),
   Object.freeze({
-    owner: 'WO-EMI-02',
+    owner: 'WO-DER-06',
     classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-11',
-    reason: 'the runtime readers for the two profile channels are this work order\'s retained arms',
+    registered: '2026-09-12',
+    reason:
+      'both are quoted selection ids echoed as provenance; every runtime reader takes the selection as data (artifact runtime block, provider, resolveExpressiveAxes), so no stylesheet reads them, and the preset conversion that deletes the BrandTheme paths the recipes deriver consumes decides reader-or-retire',
     channels: Object.freeze(['--ds-experience-profile', '--ds-recipe-profile']),
   }),
   Object.freeze({
