@@ -107,7 +107,7 @@ describe('Descriptions modern — responsive column tiers', () => {
       // given, not to the window. A `@media` here would size a Descriptions in
       // a narrow rail from the viewport and hand it the wide tier.
       expect(SKIN).not.toContain(`@media (min-width: ${query})`);
-      const block = SKIN.slice(SKIN.indexOf(`@container (min-width: ${query})`));
+      const block = SKIN.slice(SKIN.indexOf(`@container ds-descriptions (min-width: ${query})`));
       expect(block).toMatch(
         new RegExp(
           `\\[data-columns='responsive'\\][^{]*\\{\\s*--ds-descriptions-column-count:\\s*var\\(--_ds-descriptions-columns-${tier}`
@@ -120,11 +120,11 @@ describe('Descriptions modern — responsive column tiers', () => {
       /\[data-part='root'\]\[data-columns='responsive'\] > \[data-part='body'\] > \[data-part='rows'\]\s*\{\s*--ds-descriptions-column-count:\s*var\(--_ds-descriptions-columns-xs/
     );
     expect(floor).toBeGreaterThan(-1);
-    expect(floor).toBeLessThan(SKIN.indexOf('@container (min-width: 640px)'));
+    expect(floor).toBeLessThan(SKIN.indexOf('@container ds-descriptions (min-width: 640px)'));
     // The narrow-container collapse must still outrank the tiers: it sets the
     // track list outright and lives after them in the cascade.
-    expect(SKIN.indexOf('@container (max-width: 860px)')).toBeGreaterThan(
-      SKIN.indexOf('@container (min-width: 1536px)')
+    expect(SKIN.indexOf('@container ds-descriptions (max-width: 860px)')).toBeGreaterThan(
+      SKIN.indexOf('@container ds-descriptions (min-width: 1536px)')
     );
   });
 });

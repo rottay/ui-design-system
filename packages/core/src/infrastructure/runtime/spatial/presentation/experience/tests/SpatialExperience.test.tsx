@@ -11,6 +11,7 @@ import {
 } from '../../../runtime/browser/context-lease';
 import type { SpatialSceneRuntimeProps } from '../../../composition/react/contracts/types';
 import { resetWebGL2CapabilityForTests } from '../../../runtime/browser/capability/webgl2';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
 
 const motion = vi.hoisted(() => ({
   policy: {
@@ -27,6 +28,9 @@ const motion = vi.hoisted(() => ({
 
 vi.mock('@/infrastructure/runtime/foundation/motion/composition/react/preference', () => ({
   useMotionPolicy: () => motion.policy,
+  // `useSpatialViewport` reads the ONE responsive snapshot now, and that
+  // snapshot folds in the reduced-motion preference from this same owner.
+  useMotionPreference: () => motion.policy.reduce,
 }));
 
 interface ObserverRecord {
@@ -45,8 +49,18 @@ interface MediaQueryRecord {
 
 let mediaQueries: MediaQueryRecord[] = [];
 
+/**
+ * A viewport this harness declares by WIDTH.
+ *
+ * `useSpatialViewport` reads the one responsive snapshot now, so the harness has
+ * to describe a width rather than answer two hand-picked query strings: the
+ * store asks the governed ladder (`min-width` at every step), and a stub that
+ * answered `false` to all of them would describe a viewport no browser has.
+ */
 function installViewport(phone = false, tablet = false): void {
   mediaQueries = [];
+  const width = phone ? 390 : tablet ? 900 : 1440;
+  resetResponsiveMediaStore();
   window.matchMedia = vi.fn((query: string) => {
     const record: MediaQueryRecord = {
       addEventListener: vi.fn(),
@@ -55,8 +69,13 @@ function installViewport(phone = false, tablet = false): void {
       removeListener: vi.fn(),
     };
     mediaQueries.push(record);
+    const bounds = [...query.matchAll(/\((min|max)-width:\s*(\d+)px\)/g)];
     return {
-      matches: query.includes('767') ? phone : query.includes('1024') ? tablet : false,
+      matches:
+        bounds.length > 0 &&
+        bounds.every(([, feature, value]) =>
+          feature === 'min' ? width >= Number(value) : width <= Number(value)
+        ),
       media: query,
       onchange: null,
       ...record,
@@ -64,6 +83,9 @@ function installViewport(phone = false, tablet = false): void {
     };
   }) as typeof window.matchMedia;
 }
+
+/** The governed viewport queries the shared store subscribes to. */
+const STORE_QUERY_COUNT = 7;
 
 function setViewport(isIntersecting: boolean, index = 0): void {
   const observer = observers[index];
@@ -312,7 +334,9 @@ describe('SpatialExperience', () => {
 
     view.unmount();
     expect(observers[0]?.disconnect).toHaveBeenCalledTimes(1);
-    expect(mediaQueries).toHaveLength(2);
+    // The shared store owns the subscriptions: seven governed queries, attached
+    // once for the process and released when the last consumer leaves.
+    expect(mediaQueries).toHaveLength(STORE_QUERY_COUNT);
     expect(mediaQueries.every((query) => query.removeEventListener.mock.calls.length === 1))
       .toBe(true);
     expect(getSpatialContextLeaseCount()).toBe(0);
@@ -654,7 +678,10 @@ describe('SpatialExperience', () => {
   });
 
   it('rolls back partial modern media listeners and cleans the legacy fallback', async () => {
-    const records = Array.from({ length: 2 }, () => ({
+    // The guarantee moved WITH the subscription: this scene no longer owns its
+    // own `matchMedia` pair, so what is certified here is that the shared store
+    // it reads keeps the rollback for every responsive consumer at once.
+    const records = Array.from({ length: STORE_QUERY_COUNT }, () => ({
       addEventListener: vi.fn(() => {
         throw new Error('partial modern MediaQueryList');
       }),
@@ -663,6 +690,7 @@ describe('SpatialExperience', () => {
       removeListener: vi.fn(),
     }));
     let queryIndex = 0;
+    resetResponsiveMediaStore();
     window.matchMedia = vi.fn((query: string) => ({
       matches: false,
       media: query,

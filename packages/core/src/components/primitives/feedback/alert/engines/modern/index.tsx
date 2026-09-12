@@ -211,10 +211,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
   const labelId = `alert-label-${reactId.replace(/:/g, '')}`;
-  const elementId = needsResponsiveCSS ? `alert-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const isCompact = !compactIsResponsive && compactProp === true;
 
@@ -284,9 +281,6 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
 
   return (
     <>
-    {responsive && responsive.css && (
-      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-    )}
     <div
       ref={rootRef}
       data-part="root"
@@ -296,9 +290,9 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
       data-has-description={Boolean(description)}
       data-closable={closable}
       className={`rottay-alert-shell rottay-alert-shell--modern ${className}`}
-      style={style}
+      style={{ ...style, ...responsive.channels }}
       role="alert"
-      {...(responsive ? responsive.attrs : {})}
+      {...responsive.attrs}
     >
       {/* Icon Section */}
       {showIcon && <span className="rottay-alert-shell__icon" data-part="icon">{icon || TYPE_ICONS[alertType]}</span>}

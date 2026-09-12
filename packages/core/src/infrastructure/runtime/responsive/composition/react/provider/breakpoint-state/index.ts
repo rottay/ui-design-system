@@ -1,23 +1,19 @@
+'use client';
+
 /**
- * @fileoverview useBreakpoints Hook - Rottay Design System
- * @description Convenient React hook for detecting common breakpoints
- * and device capabilities using Tailwind CSS conventions.
+ * @fileoverview useBreakpoints — the device-tier projection of the one
+ * responsive snapshot.
  *
  * @remarks
- * Detects:
- * - **Breakpoints**: isMobile, isTablet, isDesktop
+ * Reports:
+ * - **Breakpoints**: isMobile (0-639), isTablet (640-1023), isDesktop (1024+)
  * - **Combinations**: isMobileOrTablet, isTabletOrDesktop
  * - **Capabilities**: isTouchDevice, prefersReducedMotion
  *
- * Breakpoint ranges (Tailwind-compatible):
- * - Mobile: 0-639px
- * - Tablet: 640-1023px
- * - Desktop: 1024px+
- *
- * When a `ResponsiveProvider` is present in the tree, this hook reads from
- * the shared context (zero additional matchMedia subscriptions). When no
- * provider exists, it falls back to per-component viewport listeners while
- * reduced motion still comes from the shared runtime authority.
+ * This hook derives nothing of its own. It projects `useResponsive()`, which is
+ * the single authority for viewport state; the per-component `matchMedia`
+ * fallback it used to call CONDITIONALLY (a Rules-of-Hooks violation, and five
+ * extra subscriptions per component) is gone.
  *
  * @example Responsive navigation
  * ```tsx
@@ -29,14 +25,7 @@
  * @category Runtime
  * @package @rottay/design-system
  */
-import { useContext } from 'react';
-import { useMediaQuery } from '@/infrastructure/runtime/responsive/runtime/media-query';
-import {
-  buildMinWidthQuery,
-  buildRangeQuery,
-} from '@/foundation/contracts/kernel/responsive/breakpoints';
-import { ResponsiveContext } from '..';
-import { useMotionPreference } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
+import { useResponsive } from '..';
 
 /**
  * Breakpoint detection results
@@ -59,99 +48,24 @@ export interface UseBreakpointsResult {
 }
 
 /**
- * Convenient hook for common breakpoint detection.
+ * Device-tier flags for the current viewport.
  *
- * Uses a mobile-first system based on Tailwind CSS breakpoints.
- * SSR-safe: returns false for all breakpoints on the server.
+ * Mobile-first tiers, mutually exclusive: mobile 0-639px, tablet 640-1023px,
+ * desktop 1024px and above. Touch is `(hover: none) and (pointer: coarse)`, so
+ * a small window on a mouse-driven machine is not a touch device.
  *
- * When wrapped in a `ResponsiveProvider`, reads from shared context (no
- * additional matchMedia subscriptions). Without a provider, creates its own
- * viewport subscriptions while retaining the shared motion preference.
- *
- * Breakpoints:
- * - Mobile: 0-639px (default, no media query needed)
- * - Tablet: 640-1023px (sm breakpoint)
- * - Desktop: 1024px+ (lg breakpoint)
- *
- * Also detects:
- * - Touch devices (via pointer and hover media features)
- * - Reduced motion preference
- *
- * @example
- * ```tsx
- * import { useBreakpoints } from '@rottay/design-system';
- *
- * function ResponsiveLayout() {
- *   const { isMobile, isDesktop, isTouchDevice, prefersReducedMotion } = useBreakpoints();
- *
- *   return (
- *     <div>
- *       {isMobile && <MobileNav />}
- *       {isDesktop && <DesktopNav />}
- *       {isTouchDevice && <TouchOptimizedButton />}
- *       {!prefersReducedMotion && <AnimatedElement />}
- *     </div>
- *   );
- * }
- * ```
- *
- * @returns {UseBreakpointsResult} Object with boolean flags for each breakpoint and device capability
+ * @returns {UseBreakpointsResult} Boolean flags for each tier and capability
  */
 export function useBreakpoints(): UseBreakpointsResult {
-  const responsiveContext = useContext(ResponsiveContext);
-
-  // Fast path: when a ResponsiveProvider is in the tree, derive everything
-  // from the shared context without creating any matchMedia subscriptions.
-  if (responsiveContext) {
-    return {
-      isMobile: responsiveContext.isPhone,
-      isTablet: responsiveContext.isTablet,
-      isDesktop: responsiveContext.isDesktop,
-      isTouchDevice: responsiveContext.isTouchDevice,
-      prefersReducedMotion: responsiveContext.prefersReducedMotion,
-      isMobileOrTablet: responsiveContext.isPhoneOrTablet,
-      isTabletOrDesktop: responsiveContext.isTabletOrDesktop,
-    };
-  }
-
-  // Fallback path: no provider -- create per-component viewport subscriptions.
-  // This preserves backward compatibility so existing code keeps working
-  // while the app gradually adopts ResponsiveProvider.
-  return useBreakpointsFallback();
-}
-
-/**
- * Internal fallback that creates its own viewport matchMedia subscriptions.
- * Only called when no ResponsiveProvider exists in the tree.
- */
-function useBreakpointsFallback(): UseBreakpointsResult {
-  // Range queries produce mutually exclusive breakpoint tiers. Using
-  // buildRangeQuery ensures exactly one of isMobile/isTablet/isDesktop is
-  // true at any viewport width, avoiding ambiguity from overlapping queries.
-  const isMobile = useMediaQuery(buildRangeQuery('xs', 'sm'));   // 0-639px
-  const isTablet = useMediaQuery(buildRangeQuery('sm', 'lg'));   // 640-1023px
-  const isDesktop = useMediaQuery(buildMinWidthQuery('lg'));      // 1024px+
-
-  // Device capability queries use CSS Level 4 interaction media features.
-  // `hover: none` + `pointer: coarse` together identify true touch devices
-  // (not just small screens), while `prefers-reduced-motion` respects the
-  // OS-level accessibility setting for motion-sensitive users. Reduced motion
-  // itself comes from the singleton runtime store below.
-  const isTouchDevice = useMediaQuery('(hover: none) and (pointer: coarse)');
-  const prefersReducedMotion = useMotionPreference();
-
-  // Derived combinations avoid forcing consumers to write `||` checks repeatedly.
-  // These are plain booleans (not hooks), so no additional subscriptions are created.
-  const isMobileOrTablet = isMobile || isTablet;
-  const isTabletOrDesktop = isTablet || isDesktop;
+  const responsive = useResponsive();
 
   return {
-    isMobile,
-    isTablet,
-    isDesktop,
-    isTouchDevice,
-    prefersReducedMotion,
-    isMobileOrTablet,
-    isTabletOrDesktop,
+    isMobile: responsive.isPhone,
+    isTablet: responsive.isTablet,
+    isDesktop: responsive.isDesktop,
+    isTouchDevice: responsive.isTouchDevice,
+    prefersReducedMotion: responsive.prefersReducedMotion,
+    isMobileOrTablet: responsive.isPhoneOrTablet,
+    isTabletOrDesktop: responsive.isTabletOrDesktop,
   };
 }

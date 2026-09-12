@@ -43,7 +43,8 @@
 import React, { useId } from 'react';
 import { Box, Card, Grid, Heading, Stack, Text } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import type { AuthSurfaceConfig } from '../../../../foundation/contracts';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
@@ -72,7 +73,8 @@ export function AuthSurface({
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
-  const { shouldStack, isMobile } = useSurfaceResponsiveLayout(config.visual);
+  const { isPhone: isMobile } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const titleId = useId();
   // Split layout requires all three conditions: a non-centered layout preference,

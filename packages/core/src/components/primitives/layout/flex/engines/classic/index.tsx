@@ -50,26 +50,18 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     const responsiveEntries = collectFlexResponsiveEntries(props);
     const needsResponsiveCSS = responsiveEntries.length > 0;
 
-    const elementId = needsResponsiveCSS
-      ? `flex-${reactId.replace(/:/g, "")}`
-      : "";
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
 
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         <AntFlex
           ref={ref}
           className={["rottay-flex", "rottay-flex--classic", className]
             .filter(Boolean)
             .join(" ")}
-          style={resolvedStyle}
+          style={{ ...resolvedStyle, ...responsive.channels }}
           {...presentationAttributes}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           {...rest}
         >
           {children}

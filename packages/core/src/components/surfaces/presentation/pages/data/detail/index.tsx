@@ -19,7 +19,7 @@
 import { Box, Stack } from "../../../../../primitives";
 import { PatternDetailPanel, resolveRowKey } from "../../../../../patterns";
 import { FadeIn, recordTransitionName } from "@/graphics/motion";
-import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
+import { useBreakpoints } from "@/infrastructure/runtime/responsive";
 import {
   filterDetailSurfaceTabs,
   filterSurfaceActions,

@@ -8,6 +8,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { chromeToVariables } from '@/infrastructure/compilers/kernel/foundation/css/chrome-variables';
 import { Card } from '..';
 import ModernCard from '../engines/modern';
+import { responsiveCss } from '@tests/support/responsive';
 
 const modernSkinPath = join(
   __dirname,
@@ -232,7 +233,7 @@ describe('Card Pass 2 craft contract', () => {
       <ModernCard padding={{ xs: 'sm', lg: 'lg' }}>Responsive evidence</ModernCard>,
     );
 
-    const style = container.querySelector('style')?.textContent ?? '';
+    const style = responsiveCss(container);
     const body = container.querySelector('[data-part="body"]') as HTMLElement;
     const skin = readFileSync(modernSkinPath, 'utf-8');
 
@@ -252,7 +253,7 @@ describe('Card Pass 2 craft contract', () => {
     expect(skin).toContain("[data-variant='ghost']");
     expect(skin).toContain("[data-cover-position='start']");
     expect(skin).toContain("[data-cover-position='end']");
-    expect(skin).toContain('@container (max-width: 28rem)');
+    expect(skin).toContain('@container ds-card (max-width: 28rem)');
     expect(skin).toContain('@media (prefers-reduced-motion: reduce)');
     expect(skin).toContain('@media (forced-colors: active)');
     expect(skin).toContain('--ds-card-state-overlay-hover-opacity');

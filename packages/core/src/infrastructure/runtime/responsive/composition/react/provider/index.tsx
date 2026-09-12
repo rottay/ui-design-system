@@ -56,6 +56,7 @@ import React, {
 import { useMotionPreference } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
 import type { DocumentViewportHint, ResponsiveMediaSnapshot } from '../../../runtime/media-snapshot';
 import {
+  UNHINTED_MEDIA_SNAPSHOT,
   getResponsiveMediaSnapshot,
   mediaSnapshotForViewport,
   subscribeResponsiveMedia,
@@ -127,23 +128,6 @@ export interface ResolvedResponsiveContextValue extends ResponsiveContextValue {
 // ---------------------------------------------------------------------------
 // SSR-safe defaults (mobile-first)
 // ---------------------------------------------------------------------------
-
-const SSR_DEFAULTS: ResolvedResponsiveContextValue = {
-  hasResolvedViewport: false,
-  deviceClass: 'phone',
-  activeBreakpoint: 'xs',
-  isPhone: true,
-  isTablet: false,
-  isDesktop: false,
-  pointer: 'coarse',
-  orientation: 'portrait',
-  prefersReducedMotion: true,
-  isPhoneOrTablet: true,
-  isTabletOrDesktop: false,
-  isTouchDevice: true,
-  virtualKeyboardInset: 0,
-  isVirtualKeyboardOpen: false,
-};
 
 const NON_EDITING_INPUT_TYPES = new Set([
   'button',
@@ -390,27 +374,59 @@ export function ResponsiveProvider({
 // ---------------------------------------------------------------------------
 
 /**
- * Returns the shared responsive state from the nearest `ResponsiveProvider`.
+ * THE responsive snapshot: the one place viewport state is read.
  *
- * If no provider exists in the tree, returns SSR-safe defaults (phone,
- * coarse, portrait) so components degrade gracefully during gradual adoption.
+ * Both inputs are read UNCONDITIONALLY. The two hooks this replaced called
+ * their fallback -- itself a hook -- only when no provider was present, which
+ * is a Rules-of-Hooks violation at the heart of the responsive runtime: a tree
+ * that mounts a provider around an already-rendered consumer changes that
+ * consumer's hook order mid-life.
  *
- * @example
- * ```tsx
- * const { deviceClass, isDesktop, isTouchDevice } = useResponsive();
- * ```
+ * With a provider the context wins, because it is the only value that carries
+ * the request's `ssrViewport` hint and the virtual-keyboard inset. Without one
+ * the answer is the shared external store, so a provider-less consumer now
+ * reports the REAL viewport instead of degrading to a phone forever. The store
+ * is a singleton with one listener set, so being provider-less costs one
+ * subscription, not a `matchMedia` per component.
  */
 export function useResponsive(): ResolvedResponsiveContextValue {
   const context = useContext(ResponsiveContext);
+  const media = useSyncExternalStore(
+    subscribeResponsiveMedia,
+    getResponsiveMediaSnapshot,
+    getUnhintedServerSnapshot,
+  );
+  const prefersReducedMotion = useMotionPreference();
 
-  // Graceful fallback: no provider means we return SSR defaults.
-  // This enables gradual adoption -- existing code that uses useBreakpoints
-  // without a provider will still work (the hook itself falls back to its
-  // own matchMedia subscriptions).
-  if (!context) {
-    return SSR_DEFAULTS;
-  }
+  return useMemo(
+    () =>
+      context
+        ? normalizeResponsiveContext(context)
+        : buildContextValue(
+            media,
+            prefersReducedMotion,
+            SSR_VIRTUAL_KEYBOARD_SNAPSHOT,
+            media.resolved,
+          ),
+    [context, media, prefersReducedMotion],
+  );
+}
 
+/** The server answer for a consumer with no provider above it. */
+function getUnhintedServerSnapshot(): ResponsiveMediaSnapshot {
+  return UNHINTED_MEDIA_SNAPSHOT;
+}
+
+/**
+ * Completes a caller-provided legacy context value.
+ *
+ * A context an application built by hand already represents an intentional
+ * viewport snapshot, so its resolution flag defaults to true; only the
+ * provider's own pre-hydration value is unresolved.
+ */
+function normalizeResponsiveContext(
+  context: ResponsiveContextValue,
+): ResolvedResponsiveContextValue {
   if (
     context.hasResolvedViewport !== undefined &&
     context.virtualKeyboardInset !== undefined &&
@@ -423,11 +439,8 @@ export function useResponsive(): ResolvedResponsiveContextValue {
 
   return {
     ...context,
-    // A caller-provided legacy context already represents an intentional
-    // viewport snapshot. Only the provider's SSR value is unresolved.
     hasResolvedViewport: context.hasResolvedViewport ?? true,
     virtualKeyboardInset,
-    isVirtualKeyboardOpen:
-      context.isVirtualKeyboardOpen ?? virtualKeyboardInset > 0,
+    isVirtualKeyboardOpen: context.isVirtualKeyboardOpen ?? virtualKeyboardInset > 0,
   };
 }

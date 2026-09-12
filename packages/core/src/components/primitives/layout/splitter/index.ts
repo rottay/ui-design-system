@@ -46,7 +46,7 @@
  * ```tsx
  * import { Splitter } from '@rottay/design-system';
  *
- * <Splitter layout="vertical" style={{ height: '100vh' }}>
+ * <Splitter layout="vertical" style={{ height: '100dvh' }}>
  *   <Splitter.Panel defaultSize={60}>
  *     <div>Code editor</div>
  *   </Splitter.Panel>

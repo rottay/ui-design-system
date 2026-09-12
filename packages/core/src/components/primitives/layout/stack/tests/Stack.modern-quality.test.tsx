@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 
 import ModernStack from "../engines/modern";
+import { responsiveCss } from "@tests/support/responsive";
 
 const layoutSkin = readFileSync(
   resolve(
@@ -79,7 +80,7 @@ describe("Modern Stack quality contract", () => {
     // The mechanism (one scoped rule set per instance) is unchanged; what is
     // retired is the expectation that a responsive rung reaches the browser
     // unscaled while the identical scalar rung is scaled by the skin.
-    const css = container.querySelector("style")?.textContent ?? "";
+    const css = responsiveCss(container);
     expect(css).toContain("flex-direction: column");
     expect(css).toContain("flex-direction: row");
     expect(css).toContain(

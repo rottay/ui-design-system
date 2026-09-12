@@ -133,7 +133,7 @@
   inset-inline-start: 0;
   z-index: var(--ds-z-index-dropdown, 1000);
   min-inline-size: 180px;
-  max-inline-size: min(16rem, calc(100vw - 2rem));
+  max-inline-size: min(16rem, calc(100dvw - 2rem));
   max-block-size: 280px;
   margin-block-start: var(--ds-spacing-1, 4px);
   padding: var(--ds-spacing-1, 4px);

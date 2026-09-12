@@ -1,4 +1,4 @@
-export type { AdaptiveConfig } from "../../../../components/surfaces/foundation/contracts/adaptive";
+export type { SurfaceAdaptivePosture } from "../../../../components/surfaces/foundation/contracts/adaptive";
 export type {
   EntityAdapter,
   SurfaceCapabilityRegistration,

@@ -47,9 +47,9 @@
 .ds-structure.ds-column-menu-panel[data-part="surface"] {
   inline-size: min(
     var(--ds-column-menu-panel-inline-size, 432px),
-    calc(100vw - var(--ds-column-menu-viewport-gutter, 24px))
+    calc(100dvw - var(--ds-column-menu-viewport-gutter, 24px))
   );
-  max-inline-size: calc(100vw - var(--ds-column-menu-viewport-gutter, 24px));
+  max-inline-size: calc(100dvw - var(--ds-column-menu-viewport-gutter, 24px));
   overflow: hidden;
   border-radius: var(--ds-column-menu-panel-radius, var(--ds-radius-xl, 20px));
   border: var(
@@ -403,7 +403,7 @@
 
 /* NARROW POSTURE — container, never viewport.
  *
- * The panel is capped at `calc(100vw - gutter)`, so on a phone it is ~336px
+ * The panel is capped at `calc(100dvw - gutter)`, so on a phone it is ~336px
  * wide while the row keeps a fixed trailing cluster of up to four icon
  * controls. The copy column (`flex: 1 1 auto; min-inline-size: 0`) absorbs the
  * whole deficit and collapses under 100px, so the caption reflows to three or
@@ -412,7 +412,7 @@
  * The threshold is px, not rem, deliberately: classic re-bases the root font
  * size (`--ds-font-size-base`), so a rem threshold would fire at a different
  * width per engine while the panel's own cap stays 432px. 420px sits below
- * that cap and above every phone's `100vw - 24px`, so the posture is
+ * that cap and above every phone's `100dvw - 24px`, so the posture is
  * phone-only by construction. */
 @container ds-column-menu-panel (max-width: 420px) {
   .ds-structure.ds-column-menu-panel[data-part="surface"]

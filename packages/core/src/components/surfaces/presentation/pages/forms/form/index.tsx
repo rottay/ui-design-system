@@ -26,7 +26,8 @@ import {
 import type { FormSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import {
   resolveStackSpacing,
@@ -45,7 +46,8 @@ export interface FormSurfaceProps {
 export function FormSurface({ config, loading = false, error, onRetry }: FormSurfaceProps): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
-  const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   // Stamped state attributes follow the resolved viewport so SSR/first-paint
   // markup never claims a mobile posture the media query has not confirmed.
   const resolvedMobile = hasResolvedViewport && isMobile;

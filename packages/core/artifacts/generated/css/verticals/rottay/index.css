@@ -7947,11 +7947,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-modal-3xl-max-height: 80vh;
   --ds-modal-4xl-max-height: 80vh;
   --ds-modal-5xl-max-height: 80vh;
-  --ds-modal-full-max-height: 100vh;
+  --ds-modal-full-max-height: 100dvh;
 
   /* Legacy height variants */
-  --ds-modal-max-height: calc(100vh - 4rem); /* Max height with margins */
-  --ds-modal-full-height: calc(100vh - 2rem);
+  --ds-modal-max-height: calc(100dvh - 4rem); /* Max height with margins */
+  --ds-modal-full-height: calc(100dvh - 2rem);
 
   /* ========================================================================
      OVERLAY/BACKDROP
@@ -8047,7 +8047,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-modal-body-color: var(--ds-color-neutral-700);
   --ds-modal-body-font-size: var(--ds-font-size-base);
   --ds-modal-body-line-height: var(--ds-line-height-normal);
-  --ds-modal-body-max-height: calc(100vh - 12rem); /* Scrollable body */
+  --ds-modal-body-max-height: calc(100dvh - 12rem); /* Scrollable body */
 
   /* ========================================================================
      FOOTER
@@ -8119,7 +8119,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   /* Drawer/Side modal */
   --ds-modal-drawer-width: 24rem;          /* 384px */
   --ds-modal-drawer-max-width: 90vw;
-  --ds-modal-drawer-height: 100vh;
+  --ds-modal-drawer-height: 100dvh;
   --ds-modal-drawer-border-radius: var(--ds-radius-none, 0);
 
   /* Bottom sheet (mobile) */
@@ -8197,8 +8197,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      RESPONSIVE
      Mobile-specific adjustments
      ======================================================================== */
-  --ds-modal-mobile-width: calc(100vw - 2rem);
-  --ds-modal-mobile-max-height: calc(100vh - 2rem);
+  --ds-modal-mobile-width: calc(100dvw - 2rem);
+  --ds-modal-mobile-max-height: calc(100dvh - 2rem);
   --ds-modal-mobile-padding: var(--ds-spacing-4, 1rem);
   --ds-modal-mobile-border-radius: var(--ds-radius-lg);
 
@@ -10520,7 +10520,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   );
   --ds-command-home-console-min-height: var(
     --ds-command-console-min-height,
-    calc(100vh - 108px)
+    calc(100dvh - 108px)
   );
   /* `--ds-command-console-padding` is a consumer hook: a caller that names the
      console padding has stated exact geometry, so only the DS fallback takes
@@ -10814,7 +10814,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 :where(.ds-workspace-frame--loading) {
-  min-height: min(720px, calc(100vh - 64px));
+  min-height: min(720px, calc(100dvh - 64px));
 }
 
 :where(.ds-workspace-grid) {
@@ -14351,7 +14351,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   width: 100%;
   min-width: 0;
   overflow: hidden;
-  container-type: inline-size;
+  container: ds-decision-panorama / inline-size;
   border: 1px solid var(--ds-surface-card-border-strong, var(--ds-color-border-secondary));
   border-radius: var(--ds-radius-2xl, 20px);
   background: linear-gradient(
@@ -14674,7 +14674,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   50% { transform: scale(1.025); opacity: 1; }
 }
 
-@container (max-width: 820px) {
+@container ds-decision-panorama (max-width: 820px) {
   .ds-pattern-decision-panorama .ds-decision-panorama__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -14699,7 +14699,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 }
 
-@container (max-width: 540px) {
+@container ds-decision-panorama (max-width: 540px) {
   .ds-pattern-decision-panorama[data-part='root'][data-loading] {
     border-radius: var(--ds-radius-xl, 16px);
   }
@@ -15065,7 +15065,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   width: 100%;
   min-width: 0;
   overflow: hidden;
-  container-type: inline-size;
+  container: ds-record-facts / inline-size;
   border: 1px solid var(--ds-record-facts-border);
   border-radius: var(--ds-record-facts-radius, var(--ds-radius-xl, 16px));
   background: var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
@@ -15393,7 +15393,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 }
 
-@container (max-width: 900px) {
+@container ds-record-facts (max-width: 900px) {
   .ds-pattern-record-facts .ds-record-facts__grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
@@ -15420,7 +15420,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 }
 
-@container (max-width: 560px) {
+@container ds-record-facts (max-width: 560px) {
   .ds-pattern-record-facts .ds-record-facts__header {
     align-items: flex-start;
     padding: 13px 14px;
@@ -18458,15 +18458,9 @@ html[data-tenant] .ant-drawer-mask {
   background: var(--ds-drawer-overlay-bg);
 }
 
-/* Sheet-specific mobile viewport contract. */
+/* Sheet-specific mobile viewport contract, on the dynamic viewport. */
 .rottay-sheet-classic {
-  --ds-sheet-viewport-max-height: 85vh;
-}
-
-@supports (height: 100dvh) {
-  .rottay-sheet-classic {
-    --ds-sheet-viewport-max-height: 85dvh;
-  }
+  --ds-sheet-viewport-max-height: 85dvh;
 }
 
 /* =============================================================================
@@ -19659,7 +19653,7 @@ html[data-tenant] .ant-steps.ds-stepper .ant-steps-item-finish .ant-steps-item-t
    ============================================================================= */
 
 html[data-tenant] .ant-layout {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--ds-layout-bg, var(--ds-color-bg-primary));
 }
 
@@ -24375,7 +24369,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* base */
 .ds-card.ds-card--modern[data-part='root'] {
   position: relative;
-  container-type: inline-size;
+  container: ds-card / inline-size;
   min-inline-size: 0;
   min-block-size: var(--ds-premium-card-min-height);
   overflow: hidden;
@@ -24893,7 +24887,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   margin-block-start: 0;
 }
 
-@container (max-width: 28rem) {
+@container ds-card (max-width: 28rem) {
   .ds-card.ds-card--modern[data-part='root'] {
     --ds-card-actions-justify: stretch;
   }
@@ -25348,7 +25342,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  */
 
 .rottay-input-field[data-part='field'] {
-  container-type: inline-size;
+  container: ds-input-field / inline-size;
   display: grid;
   inline-size: 100%;
   min-inline-size: 0;
@@ -25867,7 +25861,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
   min-inline-size: 0;
 }
 
-@container (inline-size < 18rem) {
+@container ds-input-field (inline-size < 18rem) {
   .rottay-input.rottay-input--modern {
     --_ds-input-resolved-gap: var(--ds-input-compact-gap, var(--ds-spacing-1));
   }
@@ -26707,6 +26701,9 @@ input.rottay-input.rottay-input--modern[type='number'] {
   100% { opacity: 0; transform: scale(var(--ds-badge-pulse-scale)); }
 }
 
+/* DELIBERATELY UNNAMED, and the only one left in the tree: a badge declares no
+   container of its own and belongs to no fixed owner, so "the nearest ancestor
+   container" is exactly what this query means. */
 @container (max-width: 12rem) {
   .rottay-badge.rottay-badge--modern[data-kind='chip'],
   .rottay-badge.rottay-badge--modern[data-kind='pill'] {
@@ -33557,7 +33554,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
  */
 
 .ds-form-field.ds-form-field--modern[data-part='root'] {
-  container-type: inline-size;
+  container: ds-form-field / inline-size;
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--ds-input-color);
@@ -33766,7 +33763,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
   --_ds-form-field-control-height: var(--ds-input-lg-height);
 }
 
-@container (inline-size < 34rem) {
+@container ds-form-field (inline-size < 34rem) {
   .ds-form-field.ds-form-field--modern[data-part='root'][data-layout='horizontal'] [data-part='layout'] {
     grid-template-columns: minmax(0, 1fr);
     row-gap: var(--ds-form-field-gap, calc(var(--ds-input-label-margin-bottom) * var(--ds-rhythm-effective-scale, 1)));
@@ -40562,7 +40559,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-textarea.ds-input-textarea[data-part='root'] {
   position: relative;
   display: grid;
-  container-type: inline-size;
+  container: ds-input-textarea / inline-size;
   inline-size: 100%;
   min-inline-size: 0;
   gap: var(--ds-input-message-gap, var(--ds-spacing-1));
@@ -40772,7 +40769,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   overflow-wrap: anywhere;
 }
 
-@container (inline-size < 18rem) {
+@container ds-input-textarea (inline-size < 18rem) {
   .rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='count'] {
     justify-self: start;
   }
@@ -44211,7 +44208,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      base channel, month/year the compact one. max-inline-size is the <400px
      guard so a fixed width never overflows a narrow viewport. */
   inline-size: var(--ds-datepicker-panel-width, 288px);
-  max-inline-size: calc(100vw - 2 * var(--ds-spacing-4));
+  max-inline-size: calc(100dvw - 2 * var(--ds-spacing-4));
   /* Panel frame drained from the inline panelStyle (P2): the portaled panel
      inherits the document font through the portal root, exactly as the
      inline `fontFamily: 'inherit'` did. */
@@ -44574,7 +44571,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   }
   .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] {
     inline-size: max-content;
-    max-inline-size: calc(100vw - var(--ds-spacing-4));
+    max-inline-size: calc(100dvw - var(--ds-spacing-4));
   }
   .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button'],
   .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'] {
@@ -45205,7 +45202,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    inline from the engine (no skin rule needed). */
 .ds-autocomplete.ds-autocomplete--modern.ds-autocomplete-panel[data-part='dropdown'][data-match-width='false'] {
   inline-size: max-content;
-  max-inline-size: min(var(--_ds-autocomplete-dropdown-max-width, 28rem), calc(100vw - 1rem));
+  max-inline-size: min(var(--_ds-autocomplete-dropdown-max-width, 28rem), calc(100dvw - 1rem));
 }
 
 /* Option rows: the states that used to ride the dead DaisyUI `active` /
@@ -46368,8 +46365,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-select-shell__dropdown.ds-select-shell__dropdown[data-part='dropdown'] {
   --ds-select-enter-y: -5px;
   isolation: isolate;
-  min-inline-size: min(var(--ds-select-dropdown-min-width, 15rem), calc(100vw - 1rem));
-  max-inline-size: min(var(--ds-select-dropdown-max-width, 28rem), calc(100vw - 1rem));
+  min-inline-size: min(var(--ds-select-dropdown-min-width, 15rem), calc(100dvw - 1rem));
+  max-inline-size: min(var(--ds-select-dropdown-max-width, 28rem), calc(100dvw - 1rem));
   padding: var(--ds-select-dropdown-padding);
   overflow: hidden;
   color: var(--ds-color-text-primary);
@@ -48081,7 +48078,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
         (lane overlay register). ---- */
 .ds-cascader.ds-cascader--modern.ds-cascader-panel[data-part="dropdown"] {
   z-index: var(--ds-cascader-dropdown-z, var(--ds-z-index-dropdown));
-  max-inline-size: calc(100vw - 2 * var(--ds-spacing-4));
+  max-inline-size: calc(100dvw - 2 * var(--ds-spacing-4));
   border-radius: var(--ds-radius-lg);
   background: linear-gradient(
       var(--ds-elevation-surface-3),
@@ -48103,7 +48100,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-cascader.ds-cascader--modern[data-part="dropdown"]
   [data-part="option-list"] {
   max-inline-size: calc(
-    100vw - 2 * var(--ds-spacing-4) - 2 * var(--ds-spacing-1)
+    100dvw - 2 * var(--ds-spacing-4) - 2 * var(--ds-spacing-1)
   );
   overflow-x: auto;
 }
@@ -50889,7 +50886,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    --ds-surface-overlay from --ds-surface-card (BitHire does, in dark) now has
    the drawer follow the overlay side, with popover, dropdown and modal. */
 .rottay-drawer--modern[data-part='surface'] {
-  max-width: 100vw;
+  max-width: 100dvw;
   background:
     var(--ds-material-overlay-texture, none),
     linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4)),
@@ -51616,7 +51613,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   --_ds-toast-wash-well: var(--ds-tint-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
   --_ds-toast-wash-action: var(--ds-tint-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
   position: relative;
-  width: min(28rem, calc(100vw - (var(--ds-toast-viewport-gutter, var(--ds-spacing-3)) * 2)));
+  width: min(28rem, calc(100dvw - (var(--ds-toast-viewport-gutter, var(--ds-spacing-3)) * 2)));
   /* In-flow hosts narrower than the viewport formula (e.g. a padded 390px
      probe frame) must never be protruded: clamp to the containing block. */
   max-inline-size: 100%;
@@ -52418,7 +52415,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   flex-direction: column;
   align-items: center;
   gap: var(--ds-spacing-2);
-  inline-size: min(34rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  inline-size: min(34rem, calc(100dvw - (var(--ds-spacing-4) * 2)));
   pointer-events: none;
 }
 /* Margin-auto centring is direction-neutral and avoids the former
@@ -52465,7 +52462,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--ds-spacing-3);
-  min-inline-size: min(20rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  min-inline-size: min(20rem, calc(100dvw - (var(--ds-spacing-4) * 2)));
   max-inline-size: 100%;
   padding: var(--ds-spacing-3) var(--ds-spacing-4);
   overflow: hidden;
@@ -52970,7 +52967,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-3);
-  inline-size: min(26rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  inline-size: min(26rem, calc(100dvw - (var(--ds-spacing-4) * 2)));
   pointer-events: none;
 }
 
@@ -54025,12 +54022,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   inline-size: var(--ds-alert-dialog-width, 91.6667%);
   max-inline-size: min(
     var(--ds-alert-dialog-max-width, 24rem),
-    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
   /* Cap against the DYNAMIC viewport with breathing room at both edges: a
-     100vh cap lets the panel kiss the viewport chrome on short/mobile
+     100dvh cap lets the panel kiss the viewport chrome on short/mobile
      screens and can push the actions out of reach. */
-  max-block-size: calc(100vh - var(--ds-spacing-8));
+  max-block-size: calc(100dvh - var(--ds-spacing-8));
   max-block-size: calc(100dvh - var(--ds-spacing-8));
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -54119,10 +54116,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* The surface is the container: on narrow panels the actions stack
    full-width instead of compressing into an unreadable end-aligned row. */
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-  container-type: inline-size;
+  container: ds-alert-dialog / inline-size;
 }
 
-@container (max-width: 20rem) {
+@container ds-alert-dialog (max-width: 20rem) {
   .rottay-alert-dialog--modern[data-part='root'] [data-part='footer'] {
     flex-direction: column;
     align-items: stretch;
@@ -55208,11 +55205,11 @@ html[data-ds-motion='reduced']
   inline-size: 100%;
   max-inline-size: min(
     var(--ds-confirm-dialog-max-width, 24rem),
-    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
   /* Cap against the DYNAMIC viewport with breathing room at both edges; the
      panel scrolls its own overflow instead of pushing actions off-screen. */
-  max-block-size: calc(100vh - var(--ds-spacing-8));
+  max-block-size: calc(100dvh - var(--ds-spacing-8));
   max-block-size: calc(100dvh - var(--ds-spacing-8));
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -55312,10 +55309,10 @@ html[data-ds-motion='reduced']
    (alert-dialog.css's grammar — long localized labels stay reachable at
    320px). */
 .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'] {
-  container-type: inline-size;
+  container: ds-confirm-dialog / inline-size;
 }
 
-@container (max-width: 20rem) {
+@container ds-confirm-dialog (max-width: 20rem) {
   .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='footer'] {
     flex-direction: column;
     align-items: stretch;
@@ -56056,8 +56053,8 @@ html[data-ds-motion='reduced']
   --_ds-dropdown-item-height-current: var(--ds-dropdown-item-height, 2.4rem);
   --_ds-dropdown-item-padding-block-current: var(--ds-dropdown-item-padding-y, 0.45rem);
   --_ds-dropdown-item-padding-inline-current: var(--ds-dropdown-item-padding-x, 0.55rem);
-  min-inline-size: min(var(--ds-dropdown-min-width, 14rem), calc(100vw - 1rem));
-  max-inline-size: min(var(--ds-dropdown-max-width, 22rem), calc(100vw - 1rem));
+  min-inline-size: min(var(--ds-dropdown-min-width, 14rem), calc(100dvw - 1rem));
+  max-inline-size: min(var(--ds-dropdown-max-width, 22rem), calc(100dvw - 1rem));
   padding: var(--ds-dropdown-padding);
   overflow: visible;
   color: var(--ds-dropdown-color, var(--ds-color-text-secondary));
@@ -56216,7 +56213,7 @@ html[data-ds-motion='reduced']
    a submenu are exempt: the submenu hangs outside the list's box and any
    overflow clip would amputate it (engine stamps `data-has-submenu`). */
 .rottay-dropdown__surface[data-part='surface']:not([data-has-submenu='true']) > [data-part='menu'] {
-  max-block-size: var(--_ds-dropdown-menu-max-block-size, min(21rem, calc(100vh - 2rem)));
+  max-block-size: var(--_ds-dropdown-menu-max-block-size, min(21rem, calc(100dvh - 2rem)));
   max-block-size: var(--_ds-dropdown-menu-max-block-size, min(21rem, calc(100dvh - 2rem)));
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -57201,7 +57198,7 @@ html[data-ds-motion='reduced']
     scale(var(--ds-hover-card-motion-scale, 0.975));
 
   inline-size: var(--ds-hover-card-width, 18rem);
-  max-inline-size: calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4));
+  max-inline-size: calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4));
   /* Rich content can run long: the card scrolls internally with a quiet thin
      scrollbar instead of growing past the viewport. The anchor-css branch
      keeps overflow: visible (UA [popover] reset below wins on specificity). */
@@ -58640,13 +58637,13 @@ html[data-ds-motion='reduced']
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-fullscreen='true'] {
-  inline-size: 100vw;
+  inline-size: 100dvw;
   max-inline-size: none;
   max-block-size: none;
 }
-/* Adaptive fullscreen (phone posture): the dynamic viewport when supported,
-   with a 100vh fallback for older engines — kept in CSS so the fallback
-   coexists without `!important` or a second viewport subscription. The
+/* Adaptive fullscreen (phone posture), on the dynamic viewport: the surface
+   tracks the visible area as mobile browser chrome collapses, with no second
+   viewport subscription and no `!important`. The
    full-viewport surface also absorbs the device safe areas (notch, home
    indicator) with PHYSICAL insets — the sheet.css/drawer.css sanctioned
    idiom — so the header's close control and the footer actions never slide
@@ -58654,19 +58651,12 @@ html[data-ds-motion='reduced']
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-adaptive-fullscreen='true'] {
   box-sizing: border-box;
-  block-size: 100vh;
-  max-block-size: 100vh;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
   padding-left: env(safe-area-inset-left, 0px);
   padding-right: env(safe-area-inset-right, 0px);
-}
-@supports (height: 100dvh) {
-  .rottay-overlay-modal-shell--modern[data-part='root']
-    > [data-part='surface'][data-adaptive-fullscreen='true'] {
-    block-size: 100dvh;
-    max-block-size: 100dvh;
-  }
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true']) {
@@ -59811,11 +59801,11 @@ html[data-ds-motion='reduced']
   padding: var(--ds-popconfirm-padding, var(--ds-spacing-4));
   min-inline-size: min(
     var(--ds-popconfirm-min-width, 12.5rem),
-    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
   max-inline-size: min(
     var(--ds-popconfirm-max-width, 21.875rem),
-    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-base);
@@ -60167,7 +60157,7 @@ html[data-ds-motion='reduced']
   min-inline-size: min(
     var(--ds-popover-min-width, 12rem),
     calc(
-      100vw - var(--ds-popover-viewport-gap, 0.75rem) -
+      100dvw - var(--ds-popover-viewport-gap, 0.75rem) -
         var(--ds-popover-viewport-gap, 0.75rem)
     )
   );
@@ -60181,7 +60171,7 @@ html[data-ds-motion='reduced']
   max-inline-size: min(
     var(--ds-popover-instance-max-width, var(--ds-popover-max-width-current)),
     calc(
-      100vw - var(--ds-popover-viewport-gap, 0.75rem) -
+      100dvw - var(--ds-popover-viewport-gap, 0.75rem) -
         var(--ds-popover-viewport-gap, 0.75rem)
     )
   );
@@ -61782,17 +61772,10 @@ html[data-ds-motion="reduced"]
 /* ---- viewport contract: the fixed full-viewport frame (drained from the
         engine's inline `position: fixed; inset: 0`). ---- */
 .rottay-sheet--modern[data-part='root'] {
-  --ds-sheet-viewport-max-height: 85vh;
+  --ds-sheet-viewport-max-height: 85dvh;
   position: fixed;
   inset: 0;
-  height: 100vh;
-}
-
-@supports (height: 100dvh) {
-  .rottay-sheet--modern[data-part='root'] {
-    --ds-sheet-viewport-max-height: 85dvh;
-    height: 100dvh;
-  }
+  height: 100dvh;
 }
 
 /* ---- backdrop: scrim + glass, intensity-governed like the rest of the
@@ -61870,7 +61853,7 @@ html[data-ds-motion="reduced"]
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'],
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right'] {
   inline-size: var(--ds-sheet-side-width, 380px);
-  max-inline-size: 100vw;
+  max-inline-size: 100dvw;
   padding-block-start: var(--ds-sheet-safe-area-top, env(safe-area-inset-top, 0px));
   padding-block-end: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
@@ -62140,18 +62123,11 @@ html[data-ds-motion="reduced"]
 
 /* ---- backdrop ---- */
 .rottay-sheet--rustic[data-part='root'] {
-  --ds-sheet-viewport-max-height: 85vh;
+  --ds-sheet-viewport-max-height: 85dvh;
   position: fixed;
   inset: 0;
-  height: 100vh;
+  height: 100dvh;
   z-index: var(--ds-z-overlay, 1300);
-}
-
-@supports (height: 100dvh) {
-  .rottay-sheet--rustic[data-part='root'] {
-    --ds-sheet-viewport-max-height: 85dvh;
-    height: 100dvh;
-  }
 }
 
 .rottay-sheet--rustic[data-part='root'] > [data-part='backdrop'] {
@@ -69904,7 +69880,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] {
   min-inline-size: 0;
-  container-type: inline-size;
+  container: ds-descriptions / inline-size;
   color: var(--ds-descriptions-color, var(--ds-color-text-primary));
   /* --ds-motion-calm has no base-token definition today (only the
      reduced-motion override), so the entrance binds to the reveal intent. */
@@ -70055,27 +70031,27 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
   --ds-descriptions-column-count: var(--_ds-descriptions-columns-xs, 1);
 }
-@container (min-width: 640px) {
+@container ds-descriptions (min-width: 640px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-sm, 1);
   }
 }
-@container (min-width: 768px) {
+@container ds-descriptions (min-width: 768px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-md, 1);
   }
 }
-@container (min-width: 1024px) {
+@container ds-descriptions (min-width: 1024px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-lg, 1);
   }
 }
-@container (min-width: 1280px) {
+@container ds-descriptions (min-width: 1280px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-xl, 1);
   }
 }
-@container (min-width: 1536px) {
+@container ds-descriptions (min-width: 1536px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-xxl, 1);
   }
@@ -70234,7 +70210,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   padding: var(--ds-descriptions-row-padding-md, 0.625rem 0.75rem);
 }
 
-@container (max-width: 860px) {
+@container ds-descriptions (max-width: 860px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal']:not([data-column-count='1']) > [data-part='body'] > [data-part='rows'] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -70249,7 +70225,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   }
 }
 
-@container (max-width: 560px) {
+@container ds-descriptions (max-width: 560px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows'] {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -70701,7 +70677,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   /* Container-driven compactness: the expansive posture (below) collapses to
      the bounded compact one by CONTAINER width, not viewport — an empty state
      inside a narrow panel must not keep desktop-scale padding and dead air. */
-  container-type: inline-size;
+  container: ds-empty / inline-size;
 }
 
 .rottay-empty.rottay-empty--modern[data-part='root'][data-image='simple'] {
@@ -70776,7 +70752,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
    the region de-escalates to the same bounded values the `simple` variant
    already declares — one compact grammar, two trigger axes. Tenant overrides
    of the `--ds-empty-simple-*` channels tune both. */
-@container (max-width: 26rem) {
+@container ds-empty (max-width: 26rem) {
   .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'] {
     min-block-size: var(--ds-empty-simple-min-height, 8rem);
     padding: var(--ds-empty-simple-padding, var(--ds-spacing-lg));
@@ -71361,7 +71337,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
  * engine's Tailwind utilities (`flex flex-col min-h-screen`, `md:flex-row`,
  * `px-4`, `p-4`, `shrink-0`, `overflow-y-auto`, `transition-all
  * duration-300`) so paint and structure share one owner. Values are
- * parity-transcribed: 100vh min block size, the 768px `md` breakpoint,
+ * parity-transcribed: 100dvh min block size, the 768px `md` breakpoint,
  * spacing via the density-scaled `--ds-spacing-*` channels, and the sider
  * collapse motion rides the canonical `--ds-motion-slow` (320ms, the canon
  * neighbor of the drained `duration-300`). `Content` now carries
@@ -71441,7 +71417,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
 
 /* ===========================================================================
  * K3-C: shell structure (was Tailwind utilities in the engine). Parity values:
- * `min-h-screen` -> 100vh block size; `md:flex-row` -> 768px breakpoint;
+ * `min-h-screen` -> 100dvh block size; `md:flex-row` -> 768px breakpoint;
  * `px-4`/`p-4` -> density-scaled --ds-spacing-4; `duration-300` -> the
  * canonical --ds-motion-slow (320ms). Logical properties are used wherever
  * the drained utility had a physical axis (`px-4` -> padding-inline).
@@ -71464,7 +71440,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   /* A nested root must shrink below its content's max-content instead of
      forcing the parent shell wider (B1.1 min-inline-size: 0 law). */
   min-inline-size: 0;
-  min-block-size: var(--ds-layout-root-min-block-size, 100vh);
+  min-block-size: var(--ds-layout-root-min-block-size, 100dvh);
   min-block-size: var(--ds-layout-root-min-block-size, 100dvh);
 }
 /* A layout inside a layout is a REGION, not the shell: the viewport lock
@@ -73936,7 +73912,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
   position: relative;
   /* The two-sided fold below measures the timeline's own box, not the
      viewport: a timeline in a 320px rail must fold even on a desktop. */
-  container-type: inline-size;
+  container: ds-timeline / inline-size;
   /* The skin is the single paint owner: it cannot lean on framework preflight
      for the list reset (stepper.css precedent). */
   margin: 0;
@@ -74025,7 +74001,7 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
         inline-start edge and giving every row the full measure -- the
         intentional simplified posture, not a squeeze. Alignment flips with it
         so the folded rows read away from the rail like the `end` side does. ---- */
-@container (max-width: 30rem) {
+@container ds-timeline (max-width: 30rem) {
   .rottay-timeline.rottay-timeline--modern[data-part='root'][data-sides='both'] > [data-part='item'] {
     grid-template-columns: 0 auto minmax(0, 1fr);
   }
@@ -74401,7 +74377,7 @@ html[data-ds-motion='reduced']
   max-inline-size: min(
     var(--ds-tooltip-instance-max-width, var(--ds-tooltip-max-width-current)),
     calc(
-      100vw - var(--ds-tooltip-viewport-gap, 0.5rem) -
+      100dvw - var(--ds-tooltip-viewport-gap, 0.5rem) -
         var(--ds-tooltip-viewport-gap, 0.5rem)
     )
   );
@@ -82457,7 +82433,7 @@ html[data-ds-motion="reduced"]
   min-inline-size: var(--ds-environment-toggle-panel-min-width, 11.25rem);
   /* The panel needs an inline ceiling and a measured placement flip, or a
    trigger past the viewport midpoint pushes it off the inline edge. */
-  max-inline-size: calc(100vw - var(--ds-spacing-4, 1rem));
+  max-inline-size: calc(100dvw - var(--ds-spacing-4, 1rem));
   max-block-size: 60vh;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -82914,7 +82890,7 @@ html[data-ds-motion="reduced"]
   z-index: 50;
   inline-size: min(
     var(--ds-workspace-switcher-panel-width, 18rem),
-    calc(100vw - 2 * var(--ds-spacing-4, 16px))
+    calc(100dvw - 2 * var(--ds-spacing-4, 16px))
   );
   overflow: hidden;
 }
@@ -83300,7 +83276,7 @@ html[data-ds-motion="reduced"]
   justify-content: center;
   padding-block-start: 10vh;
   padding-inline: var(--ds-spacing-3, 12px);
-  container-type: inline-size;
+  container: ds-shortcuts-overlay / inline-size;
 }
 
 /* backdrop: scrim + sanctioned glass layer, at parity with the command
@@ -83429,7 +83405,7 @@ html[data-ds-motion="reduced"]
 }
 
 /* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
-@container (inline-size < 40rem) {
+@container ds-shortcuts-overlay (inline-size < 40rem) {
   .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
     padding-block-start: var(--ds-spacing-8, 32px);
   }
@@ -83616,7 +83592,7 @@ html[data-ds-motion="reduced"]
   inset-inline-start: 0;
   z-index: var(--ds-z-index-dropdown, 1000);
   min-inline-size: 180px;
-  max-inline-size: min(16rem, calc(100vw - 2rem));
+  max-inline-size: min(16rem, calc(100dvw - 2rem));
   max-block-size: 280px;
   margin-block-start: var(--ds-spacing-1, 4px);
   padding: var(--ds-spacing-1, 4px);
@@ -84018,7 +83994,7 @@ html[data-ds-motion="reduced"]
   inset-inline-end: 0;
   z-index: var(--ds-z-dropdown);
   inline-size: var(--ds-notification-center-panel-width, 22.5rem);
-  max-inline-size: calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4));
+  max-inline-size: calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4));
   margin-block-start: var(--ds-spacing-2);
   padding: var(--ds-spacing-3);
   container: ds-notification-panel / inline-size;
@@ -86609,7 +86585,7 @@ html[data-ds-motion="reduced"]
   justify-content: center;
 }
 
-@container (max-width: 28rem) {
+@container ds-card (max-width: 28rem) {
   .rottay-card-header[data-part='header'][data-part='header'] {
     flex-direction: column;
   }
@@ -88011,7 +87987,7 @@ html[data-ds-motion="reduced"]
    It is also its own inline-size container: the ledger rows below stack
    label over value under the narrow cut (C-12 two-column-to-stack rule). */
 div.ds-structure.ds-form-sections[data-part='facts-card'] {
-  container-type: inline-size;
+  container: ds-form-facts-card / inline-size;
   --_ds-form-sections-density: var(--ds-density-global-effective-scale, 1);
   inline-size: 100%;
   border-radius: var(--ds-radius-lg, 16px);
@@ -88108,7 +88084,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    survives and long ES/AR labels never fight a squeezed value column. The
    Flex's own row direction is a (0,1,0) skin rule, so this chained rule
    outranks it; `row-gap` likewise outranks the gap channel's row axis. */
-@container (inline-size < 24rem) {
+@container ds-form-facts-card (inline-size < 24rem) {
   div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'] {
     flex-direction: column;
     row-gap: 2px;
@@ -98274,7 +98250,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Root shell -------------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root'] {
-  container-type: inline-size;
+  container: ds-list-toolbar / inline-size;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -98604,9 +98580,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Filter controls --------------------------------------------------------- */
 
 .ds-list-toolbar__filter-menu[data-part='filter-menu'] {
-  min-inline-size: min(13rem, calc(100vw - 2rem));
-  max-inline-size: min(20rem, calc(100vw - 2rem));
-  max-block-size: min(22rem, calc(100vh - 6rem));
+  min-inline-size: min(13rem, calc(100dvw - 2rem));
+  max-inline-size: min(20rem, calc(100dvw - 2rem));
+  max-block-size: min(22rem, calc(100dvh - 6rem));
   overflow: auto;
   padding: var(--ds-spacing-1, 0.25rem);
   border-radius: var(
@@ -98616,8 +98592,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-list-toolbar__settings-panel[data-part='settings-panel'] {
-  inline-size: min(20rem, calc(100vw - 2rem));
-  max-block-size: min(28rem, calc(100vh - 6rem));
+  inline-size: min(20rem, calc(100dvw - 2rem));
+  max-block-size: min(28rem, calc(100dvh - 6rem));
   overflow: auto;
 }
 
@@ -98858,8 +98834,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Mobile overflow --------------------------------------------------------- */
 
 .ds-list-toolbar__mobile-overflow-panel[data-part='mobile-overflow-panel'] {
-  min-inline-size: min(15rem, calc(100vw - 2rem));
-  max-inline-size: min(22rem, calc(100vw - 2rem));
+  min-inline-size: min(15rem, calc(100dvw - 2rem));
+  max-inline-size: min(22rem, calc(100dvw - 2rem));
   padding-block: var(--ds-spacing-2, 0.5rem);
 }
 
@@ -99112,7 +99088,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* On narrow phones the collection title and count remain the primary
    orientation signal. Preserve their readable width by collapsing the
    redundant route-level primary action to its labelled icon. */
-@container (max-width: 480px) {
+@container ds-list-toolbar (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__primary-action-mobile[data-part='primary-action-mobile'][data-part='primary-action-mobile'] {
     inline-size: var(--ds-control-size-sm, 32px);
@@ -99375,7 +99351,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-text-on-primary);
 }
 
-@container (max-width: 1080px) {
+@container ds-list-toolbar (max-width: 1080px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
     gap: var(--ds-spacing-3, 0.75rem);
@@ -99476,7 +99452,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
-@container (max-width: 480px) {
+@container ds-list-toolbar (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
     padding: var(
@@ -101089,9 +101065,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-column-menu-panel[data-part="surface"] {
   inline-size: min(
     var(--ds-column-menu-panel-inline-size, 432px),
-    calc(100vw - var(--ds-column-menu-viewport-gutter, 24px))
+    calc(100dvw - var(--ds-column-menu-viewport-gutter, 24px))
   );
-  max-inline-size: calc(100vw - var(--ds-column-menu-viewport-gutter, 24px));
+  max-inline-size: calc(100dvw - var(--ds-column-menu-viewport-gutter, 24px));
   overflow: hidden;
   border-radius: var(--ds-column-menu-panel-radius, var(--ds-radius-xl, 20px));
   border: var(
@@ -101445,7 +101421,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* NARROW POSTURE — container, never viewport.
  *
- * The panel is capped at `calc(100vw - gutter)`, so on a phone it is ~336px
+ * The panel is capped at `calc(100dvw - gutter)`, so on a phone it is ~336px
  * wide while the row keeps a fixed trailing cluster of up to four icon
  * controls. The copy column (`flex: 1 1 auto; min-inline-size: 0`) absorbs the
  * whole deficit and collapses under 100px, so the caption reflows to three or
@@ -101454,7 +101430,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * The threshold is px, not rem, deliberately: classic re-bases the root font
  * size (`--ds-font-size-base`), so a rem threshold would fire at a different
  * width per engine while the panel's own cap stays 432px. 420px sits below
- * that cap and above every phone's `100vw - 24px`, so the posture is
+ * that cap and above every phone's `100dvw - 24px`, so the posture is
  * phone-only by construction. */
 @container ds-column-menu-panel (max-width: 420px) {
   .ds-structure.ds-column-menu-panel[data-part="surface"]
@@ -101577,7 +101553,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-export-button-panel[data-part='panel'] {
   z-index: var(--ds-export-button-panel-z, var(--ds-z-index-popover, 1600));
   min-inline-size: var(--ds-export-button-panel-min-width, 200px);
-  max-inline-size: calc(100vw - 16px);
+  max-inline-size: calc(100dvw - 16px);
   padding: var(--ds-spacing-1, 4px);
   border-radius: var(--ds-radius-lg, 8px);
   background: var(--ds-color-bg-elevated);
@@ -102883,7 +102859,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   inset-block-start: calc(100% + 12px);
   inline-size: min(
     420px,
-    calc(100vw - 32px)
+    calc(100dvw - 32px)
   );
   z-index: 180;
   padding: 18px;
@@ -104881,7 +104857,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] {
   min-inline-size: 0;
   color: var(--ds-color-text-primary);
-  container-type: inline-size;
+  container: ds-pricing-table / inline-size;
 }
 
 /* ---- loading: shaped skeleton mirror that conserves the loaded footprint
@@ -105150,7 +105126,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ---- narrow containers: compact rhythm + sticky feature column while the
         plan columns scroll (comparison semantics stay intact). ---- */
-@container (max-width: 640px) {
+@container ds-pricing-table (max-width: 640px) {
   .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-card {
     padding: var(--ds-spacing-3, 12px);
   }
@@ -106383,7 +106359,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* The section description must survive the narrow breakpoint: it is the one
    line that says what the record section IS. */
-@container (max-width: 560px) {
+@container ds-record-facts (max-width: 560px) {
   .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__description {
     display: -webkit-box;
     overflow: hidden;
@@ -106449,7 +106425,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* The narrow query owns its own floor for both parts; mirrored here so the
    engine layer does not out-rank it, now density-aware like the rest. */
-@container (max-width: 560px) {
+@container ds-record-facts (max-width: 560px) {
   .ds-pattern-record-facts.ds-engine-modern
     .ds-record-facts__fact:not([data-emphasis="narrative"]),
   .ds-pattern-record-facts.ds-engine-modern[data-density="compact"]
@@ -108969,7 +108945,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   z-index: var(--ds-z-dropdown, var(--ds-z-index-dropdown, 1000));
   inline-size: min(
     var(--ds-collection-filter-dropdown-width, 22.5rem),
-    calc(100vw - (var(--ds-spacing-3, 0.75rem) * 2))
+    calc(100dvw - (var(--ds-spacing-3, 0.75rem) * 2))
   );
   min-inline-size: 0;
   overflow: auto;
@@ -111328,7 +111304,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    luminance step on hero surfaces); this public pre-auth page IS such a
    first-impression surface (marketing precedent). */
 .ds-surface.ds-auth[data-part='root'] {
-  min-block-size: 100vh;
+  min-block-size: 100dvh;
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-color-neutral-900) 1.2%, var(--ds-color-bg-primary)),
@@ -111336,15 +111312,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   );
 }
 
-/* Dynamic viewport floor where supported (modern sheet.css precedent):
-   the canvas tracks the visible area as mobile chrome collapses, so the
-   background never ends short of the fold; content is top-aligned, so
-   the floor change shifts no layout. */
-@supports (height: 100dvh) {
-  .ds-surface.ds-auth[data-part='root'] {
-    min-block-size: 100dvh;
-  }
-}
 
 /* ---- container geometry ----
    Default 1120px measure, centered, with fluid padding per viewport. A
@@ -112137,7 +112104,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    barely-there vertical luminance step on hero surfaces); the mesh channel
    is the showcase-only role, tenant-governed, with a `none` fallback. */
 .ds-surface.ds-marketing[data-part='root'] {
-  min-block-size: 100vh;
+  min-block-size: 100dvh;
   padding-block-end: var(--ds-spacing-20, 80px);
   background:
     var(--ds-gradient-mesh, none),
@@ -112152,15 +112119,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding-block-end: var(--ds-spacing-10, 40px);
 }
 
-/* Dynamic viewport floor where supported (modern sheet.css precedent):
-   the editorial canvas tracks the visible area as mobile chrome
-   collapses, so the background never ends short of the fold; content is
-   top-aligned, so the floor change shifts no layout. */
-@supports (height: 100dvh) {
-  .ds-surface.ds-marketing[data-part='root'] {
-    min-block-size: 100dvh;
-  }
-}
 
 /* ---- container geometry ----
    Default 1260px measure, centered, with fluid padding per viewport. A
@@ -113644,6 +113602,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * container query was retired); the cut uses logical container units.
  */
 
+/* The studio's own box is the container the preview cut reads: the cut was an
+   unnamed query with no declared container at all, so it attached to whatever
+   ancestor happened to be one. */
+.ds-pattern-brand-studio {
+  container: ds-brand-studio / inline-size;
+}
+
 /* ---- layout: editor field grid + preview track (was inline/injected) ---- */
 .ds-pattern-brand-studio .ds-pattern-brand-studio__editor-grid[data-part='editor-grid'] {
   display: grid;
@@ -113657,7 +113622,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   gap: var(--ds-spacing-6);
   align-items: start;
 }
-@container (inline-size < 56.25rem) {
+@container ds-brand-studio (inline-size < 56.25rem) {
   .ds-pattern-brand-studio .brand-studio-layout[data-part='preview-grid'] {
     grid-template-columns: 1fr;
   }
@@ -113958,7 +113923,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
     var(--ds-shadow-lg, 0 26px 70px color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent));
-  container-type: inline-size;
+  container: ds-visual-excellence / inline-size;
   animation: ds-visual-excellence-arrive var(--ds-motion-slow, 320ms)
     var(--ds-motion-ease-out, ease-out) both;
 }
@@ -114502,7 +114467,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-align: center;
 }
 
-@container (max-width: 860px) {
+@container ds-visual-excellence (max-width: 860px) {
   .ds-visual-excellence__command-bar {
     grid-template-columns: minmax(0, 1fr) auto;
   }
@@ -114531,7 +114496,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
-@container (max-width: 560px) {
+@container ds-visual-excellence (max-width: 560px) {
   .ds-visual-excellence {
     border-inline: 0;
     border-radius: 0;
@@ -121406,6 +121371,1912 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   --ds-breakpoint-lg: 1024px;
   --ds-breakpoint-xl: 1280px;
   --ds-breakpoint-2xl: 1536px;
+}
+
+/**
+ * The Dynamic Viewport - Rottay Design System
+ *
+ * TWO CHANNELS, ONE MEANING. The static `vh`/`vw` units are the LARGE viewport:
+ * on a phone they include browser chrome that is currently on screen, so a
+ * full-viewport surface sized with them is bigger than the space the user can
+ * actually see and its footer sits under the address bar. `dvh`/`dvw` track the
+ * visible area as that chrome collapses, which is what every full-viewport
+ * surface in this package means.
+ *
+ * WHY A CHANNEL AND NOT THE LITERAL. A full-viewport dimension an engine stamps
+ * INLINE is a visual value inside a TSX file, which the skin-first law forbids.
+ * Naming it once here keeps the literal in CSS and leaves the inline
+ * declaration doing only what it is there for: outranking a caller's own style
+ * on a surface whose geometry the engine owns.
+ */
+
+:root {
+  --ds-viewport-inline-size: 100dvw;
+  --ds-viewport-block-size: 100dvh;
+}
+
+/**
+ * Responsive Channels - Rottay Design System
+ *
+ * GENERATED SHAPE, AUTHORED FILE. Every rule below is
+ * `buildResponsiveChannelSheet()` in
+ * `foundation/tokens/css/foundation/responsive/tests/projection`, and
+ * `../channel-contract.test.ts` compares the two byte for byte.
+ *
+ * WHY IT EXISTS. A responsive prop used to render its own
+ * `<style dangerouslySetInnerHTML>` per instance: one stylesheet per rendered
+ * Box, Card, Button or Text, carrying its own `@media` preludes, blocked by a
+ * strict CSP, and outside every layer the cascade orders. Here the instance
+ * publishes only VALUES -- one `--_ds-rsp-*` custom property per declared
+ * breakpoint -- and names the steps it declared in `data-ds-responsive`. This
+ * sheet owns the preludes, so the whole mechanism is six media blocks in the
+ * last design-system layer instead of one element per component.
+ *
+ * WHY A TOKEN PER STEP. A step an instance did not declare must leave the skin
+ * alone. An attribute token armed only for declared steps does exactly that;
+ * a chained `var()` fallback would instead force a value at every width.
+ *
+ * WHY A SECOND ATTRIBUTE. `data-ds-responsive-hard` is the same assignment
+ * with `!important`, for instances that must outrank an unlayered
+ * third-party stylesheet (the frozen classic engines and antd).
+ */
+
+[data-ds-responsive~="align-items@xs"] {
+  align-items: var(--_ds-rsp-align-items-xs);
+}
+
+[data-ds-responsive~="display@xs"] {
+  display: var(--_ds-rsp-display-xs);
+}
+
+[data-ds-responsive~="flex-direction@xs"] {
+  flex-direction: var(--_ds-rsp-flex-direction-xs);
+}
+
+[data-ds-responsive~="flex-wrap@xs"] {
+  flex-wrap: var(--_ds-rsp-flex-wrap-xs);
+}
+
+[data-ds-responsive~="font-size@xs"] {
+  font-size: var(--_ds-rsp-font-size-xs);
+}
+
+[data-ds-responsive~="gap@xs"] {
+  gap: var(--_ds-rsp-gap-xs);
+}
+
+[data-ds-responsive~="height@xs"] {
+  height: var(--_ds-rsp-height-xs);
+}
+
+[data-ds-responsive~="justify-content@xs"] {
+  justify-content: var(--_ds-rsp-justify-content-xs);
+}
+
+[data-ds-responsive~="letter-spacing@xs"] {
+  letter-spacing: var(--_ds-rsp-letter-spacing-xs);
+}
+
+[data-ds-responsive~="line-height@xs"] {
+  line-height: var(--_ds-rsp-line-height-xs);
+}
+
+[data-ds-responsive~="margin@xs"] {
+  margin: var(--_ds-rsp-margin-xs);
+}
+
+[data-ds-responsive~="margin-block@xs"] {
+  margin-block: var(--_ds-rsp-margin-block-xs);
+}
+
+[data-ds-responsive~="margin-block-end@xs"] {
+  margin-block-end: var(--_ds-rsp-margin-block-end-xs);
+}
+
+[data-ds-responsive~="margin-block-start@xs"] {
+  margin-block-start: var(--_ds-rsp-margin-block-start-xs);
+}
+
+[data-ds-responsive~="margin-bottom@xs"] {
+  margin-bottom: var(--_ds-rsp-margin-bottom-xs);
+}
+
+[data-ds-responsive~="margin-inline@xs"] {
+  margin-inline: var(--_ds-rsp-margin-inline-xs);
+}
+
+[data-ds-responsive~="margin-inline-end@xs"] {
+  margin-inline-end: var(--_ds-rsp-margin-inline-end-xs);
+}
+
+[data-ds-responsive~="margin-inline-start@xs"] {
+  margin-inline-start: var(--_ds-rsp-margin-inline-start-xs);
+}
+
+[data-ds-responsive~="margin-left@xs"] {
+  margin-left: var(--_ds-rsp-margin-left-xs);
+}
+
+[data-ds-responsive~="margin-right@xs"] {
+  margin-right: var(--_ds-rsp-margin-right-xs);
+}
+
+[data-ds-responsive~="margin-top@xs"] {
+  margin-top: var(--_ds-rsp-margin-top-xs);
+}
+
+[data-ds-responsive~="max-height@xs"] {
+  max-height: var(--_ds-rsp-max-height-xs);
+}
+
+[data-ds-responsive~="max-width@xs"] {
+  max-width: var(--_ds-rsp-max-width-xs);
+}
+
+[data-ds-responsive~="min-height@xs"] {
+  min-height: var(--_ds-rsp-min-height-xs);
+}
+
+[data-ds-responsive~="min-width@xs"] {
+  min-width: var(--_ds-rsp-min-width-xs);
+}
+
+[data-ds-responsive~="overflow@xs"] {
+  overflow: var(--_ds-rsp-overflow-xs);
+}
+
+[data-ds-responsive~="overflow-x@xs"] {
+  overflow-x: var(--_ds-rsp-overflow-x-xs);
+}
+
+[data-ds-responsive~="overflow-y@xs"] {
+  overflow-y: var(--_ds-rsp-overflow-y-xs);
+}
+
+[data-ds-responsive~="padding@xs"] {
+  padding: var(--_ds-rsp-padding-xs);
+}
+
+[data-ds-responsive~="padding-block@xs"] {
+  padding-block: var(--_ds-rsp-padding-block-xs);
+}
+
+[data-ds-responsive~="padding-block-end@xs"] {
+  padding-block-end: var(--_ds-rsp-padding-block-end-xs);
+}
+
+[data-ds-responsive~="padding-block-start@xs"] {
+  padding-block-start: var(--_ds-rsp-padding-block-start-xs);
+}
+
+[data-ds-responsive~="padding-bottom@xs"] {
+  padding-bottom: var(--_ds-rsp-padding-bottom-xs);
+}
+
+[data-ds-responsive~="padding-inline@xs"] {
+  padding-inline: var(--_ds-rsp-padding-inline-xs);
+}
+
+[data-ds-responsive~="padding-inline-end@xs"] {
+  padding-inline-end: var(--_ds-rsp-padding-inline-end-xs);
+}
+
+[data-ds-responsive~="padding-inline-start@xs"] {
+  padding-inline-start: var(--_ds-rsp-padding-inline-start-xs);
+}
+
+[data-ds-responsive~="padding-left@xs"] {
+  padding-left: var(--_ds-rsp-padding-left-xs);
+}
+
+[data-ds-responsive~="padding-right@xs"] {
+  padding-right: var(--_ds-rsp-padding-right-xs);
+}
+
+[data-ds-responsive~="padding-top@xs"] {
+  padding-top: var(--_ds-rsp-padding-top-xs);
+}
+
+[data-ds-responsive~="width@xs"] {
+  width: var(--_ds-rsp-width-xs);
+}
+
+[data-ds-responsive~="_ds-button-resolved-radius@xs"] {
+  --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-xs);
+}
+
+[data-ds-responsive~="_ds-input-responsive-height@xs"] {
+  --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-xs);
+}
+
+[data-ds-responsive~="_ds-stack-divider-gap-block@xs"] {
+  --_ds-stack-divider-gap-block: var(--_ds-rsp-_ds-stack-divider-gap-block-xs);
+}
+
+[data-ds-responsive~="_ds-stack-divider-gap-inline@xs"] {
+  --_ds-stack-divider-gap-inline: var(--_ds-rsp-_ds-stack-divider-gap-inline-xs);
+}
+
+[data-ds-responsive~="_ds-stack-gap-current@xs"] {
+  --_ds-stack-gap-current: var(--_ds-rsp-_ds-stack-gap-current-xs);
+}
+
+[data-ds-responsive~="ds-alert-responsive-padding@xs"] {
+  --ds-alert-responsive-padding: var(--_ds-rsp-ds-alert-responsive-padding-xs);
+}
+
+[data-ds-responsive~="ds-badge-resolved-font-size@xs"] {
+  --ds-badge-resolved-font-size: var(--_ds-rsp-ds-badge-resolved-font-size-xs);
+}
+
+[data-ds-responsive~="ds-badge-resolved-height@xs"] {
+  --ds-badge-resolved-height: var(--_ds-rsp-ds-badge-resolved-height-xs);
+}
+
+[data-ds-responsive~="ds-badge-resolved-padding-inline@xs"] {
+  --ds-badge-resolved-padding-inline: var(--_ds-rsp-ds-badge-resolved-padding-inline-xs);
+}
+
+[data-ds-responsive~="ds-button-resolved-height@xs"] {
+  --ds-button-resolved-height: var(--_ds-rsp-ds-button-resolved-height-xs);
+}
+
+[data-ds-responsive~="ds-button-resolved-icon-size@xs"] {
+  --ds-button-resolved-icon-size: var(--_ds-rsp-ds-button-resolved-icon-size-xs);
+}
+
+[data-ds-responsive~="ds-button-resolved-padding-y@xs"] {
+  --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-xs);
+}
+
+[data-ds-responsive~="ds-card-instance-padding@xs"] {
+  --ds-card-instance-padding: var(--_ds-rsp-ds-card-instance-padding-xs);
+}
+
+[data-ds-responsive~="ds-input-responsive-gap@xs"] {
+  --ds-input-responsive-gap: var(--_ds-rsp-ds-input-responsive-gap-xs);
+}
+
+[data-ds-responsive~="ds-input-responsive-radius@xs"] {
+  --ds-input-responsive-radius: var(--_ds-rsp-ds-input-responsive-radius-xs);
+}
+
+[data-ds-responsive~="ds-select-trigger-responsive-font-size@xs"] {
+  --ds-select-trigger-responsive-font-size: var(--_ds-rsp-ds-select-trigger-responsive-font-size-xs);
+}
+
+[data-ds-responsive~="ds-select-trigger-responsive-height@xs"] {
+  --ds-select-trigger-responsive-height: var(--_ds-rsp-ds-select-trigger-responsive-height-xs);
+}
+
+[data-ds-responsive~="ds-select-trigger-responsive-line-height@xs"] {
+  --ds-select-trigger-responsive-line-height: var(--_ds-rsp-ds-select-trigger-responsive-line-height-xs);
+}
+
+[data-ds-responsive~="ds-select-trigger-responsive-padding-x@xs"] {
+  --ds-select-trigger-responsive-padding-x: var(--_ds-rsp-ds-select-trigger-responsive-padding-x-xs);
+}
+
+[data-ds-responsive~="ds-tabs-responsive-font-size@xs"] {
+  --ds-tabs-responsive-font-size: var(--_ds-rsp-ds-tabs-responsive-font-size-xs);
+}
+
+[data-ds-responsive~="ds-tabs-responsive-height@xs"] {
+  --ds-tabs-responsive-height: var(--_ds-rsp-ds-tabs-responsive-height-xs);
+}
+
+[data-ds-responsive~="ds-tabs-responsive-icon-size@xs"] {
+  --ds-tabs-responsive-icon-size: var(--_ds-rsp-ds-tabs-responsive-icon-size-xs);
+}
+
+[data-ds-responsive~="ds-tabs-responsive-padding@xs"] {
+  --ds-tabs-responsive-padding: var(--_ds-rsp-ds-tabs-responsive-padding-xs);
+}
+
+[data-ds-responsive~="ds-textarea-responsive-radius@xs"] {
+  --ds-textarea-responsive-radius: var(--_ds-rsp-ds-textarea-responsive-radius-xs);
+}
+
+[data-ds-responsive-hard~="font-size@xs"] {
+  font-size: var(--_ds-rsp-font-size-xs) !important;
+}
+
+[data-ds-responsive-hard~="height@xs"] {
+  height: var(--_ds-rsp-height-xs) !important;
+}
+
+[data-ds-responsive-hard~="line-height@xs"] {
+  line-height: var(--_ds-rsp-line-height-xs) !important;
+}
+
+[data-ds-responsive-hard~="min-width@xs"] {
+  min-width: var(--_ds-rsp-min-width-xs) !important;
+}
+
+[data-ds-responsive-hard~="padding@xs"] {
+  padding: var(--_ds-rsp-padding-xs) !important;
+}
+
+[data-ds-responsive-hard~="padding-inline-end@xs"] {
+  padding-inline-end: var(--_ds-rsp-padding-inline-end-xs) !important;
+}
+
+@media (min-width: 640px) {
+  [data-ds-responsive~="align-items@sm"] {
+    align-items: var(--_ds-rsp-align-items-sm);
+  }
+
+  [data-ds-responsive~="display@sm"] {
+    display: var(--_ds-rsp-display-sm);
+  }
+
+  [data-ds-responsive~="flex-direction@sm"] {
+    flex-direction: var(--_ds-rsp-flex-direction-sm);
+  }
+
+  [data-ds-responsive~="flex-wrap@sm"] {
+    flex-wrap: var(--_ds-rsp-flex-wrap-sm);
+  }
+
+  [data-ds-responsive~="font-size@sm"] {
+    font-size: var(--_ds-rsp-font-size-sm);
+  }
+
+  [data-ds-responsive~="gap@sm"] {
+    gap: var(--_ds-rsp-gap-sm);
+  }
+
+  [data-ds-responsive~="height@sm"] {
+    height: var(--_ds-rsp-height-sm);
+  }
+
+  [data-ds-responsive~="justify-content@sm"] {
+    justify-content: var(--_ds-rsp-justify-content-sm);
+  }
+
+  [data-ds-responsive~="letter-spacing@sm"] {
+    letter-spacing: var(--_ds-rsp-letter-spacing-sm);
+  }
+
+  [data-ds-responsive~="line-height@sm"] {
+    line-height: var(--_ds-rsp-line-height-sm);
+  }
+
+  [data-ds-responsive~="margin@sm"] {
+    margin: var(--_ds-rsp-margin-sm);
+  }
+
+  [data-ds-responsive~="margin-block@sm"] {
+    margin-block: var(--_ds-rsp-margin-block-sm);
+  }
+
+  [data-ds-responsive~="margin-block-end@sm"] {
+    margin-block-end: var(--_ds-rsp-margin-block-end-sm);
+  }
+
+  [data-ds-responsive~="margin-block-start@sm"] {
+    margin-block-start: var(--_ds-rsp-margin-block-start-sm);
+  }
+
+  [data-ds-responsive~="margin-bottom@sm"] {
+    margin-bottom: var(--_ds-rsp-margin-bottom-sm);
+  }
+
+  [data-ds-responsive~="margin-inline@sm"] {
+    margin-inline: var(--_ds-rsp-margin-inline-sm);
+  }
+
+  [data-ds-responsive~="margin-inline-end@sm"] {
+    margin-inline-end: var(--_ds-rsp-margin-inline-end-sm);
+  }
+
+  [data-ds-responsive~="margin-inline-start@sm"] {
+    margin-inline-start: var(--_ds-rsp-margin-inline-start-sm);
+  }
+
+  [data-ds-responsive~="margin-left@sm"] {
+    margin-left: var(--_ds-rsp-margin-left-sm);
+  }
+
+  [data-ds-responsive~="margin-right@sm"] {
+    margin-right: var(--_ds-rsp-margin-right-sm);
+  }
+
+  [data-ds-responsive~="margin-top@sm"] {
+    margin-top: var(--_ds-rsp-margin-top-sm);
+  }
+
+  [data-ds-responsive~="max-height@sm"] {
+    max-height: var(--_ds-rsp-max-height-sm);
+  }
+
+  [data-ds-responsive~="max-width@sm"] {
+    max-width: var(--_ds-rsp-max-width-sm);
+  }
+
+  [data-ds-responsive~="min-height@sm"] {
+    min-height: var(--_ds-rsp-min-height-sm);
+  }
+
+  [data-ds-responsive~="min-width@sm"] {
+    min-width: var(--_ds-rsp-min-width-sm);
+  }
+
+  [data-ds-responsive~="overflow@sm"] {
+    overflow: var(--_ds-rsp-overflow-sm);
+  }
+
+  [data-ds-responsive~="overflow-x@sm"] {
+    overflow-x: var(--_ds-rsp-overflow-x-sm);
+  }
+
+  [data-ds-responsive~="overflow-y@sm"] {
+    overflow-y: var(--_ds-rsp-overflow-y-sm);
+  }
+
+  [data-ds-responsive~="padding@sm"] {
+    padding: var(--_ds-rsp-padding-sm);
+  }
+
+  [data-ds-responsive~="padding-block@sm"] {
+    padding-block: var(--_ds-rsp-padding-block-sm);
+  }
+
+  [data-ds-responsive~="padding-block-end@sm"] {
+    padding-block-end: var(--_ds-rsp-padding-block-end-sm);
+  }
+
+  [data-ds-responsive~="padding-block-start@sm"] {
+    padding-block-start: var(--_ds-rsp-padding-block-start-sm);
+  }
+
+  [data-ds-responsive~="padding-bottom@sm"] {
+    padding-bottom: var(--_ds-rsp-padding-bottom-sm);
+  }
+
+  [data-ds-responsive~="padding-inline@sm"] {
+    padding-inline: var(--_ds-rsp-padding-inline-sm);
+  }
+
+  [data-ds-responsive~="padding-inline-end@sm"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-sm);
+  }
+
+  [data-ds-responsive~="padding-inline-start@sm"] {
+    padding-inline-start: var(--_ds-rsp-padding-inline-start-sm);
+  }
+
+  [data-ds-responsive~="padding-left@sm"] {
+    padding-left: var(--_ds-rsp-padding-left-sm);
+  }
+
+  [data-ds-responsive~="padding-right@sm"] {
+    padding-right: var(--_ds-rsp-padding-right-sm);
+  }
+
+  [data-ds-responsive~="padding-top@sm"] {
+    padding-top: var(--_ds-rsp-padding-top-sm);
+  }
+
+  [data-ds-responsive~="width@sm"] {
+    width: var(--_ds-rsp-width-sm);
+  }
+
+  [data-ds-responsive~="_ds-button-resolved-radius@sm"] {
+    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-sm);
+  }
+
+  [data-ds-responsive~="_ds-input-responsive-height@sm"] {
+    --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-sm);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-block@sm"] {
+    --_ds-stack-divider-gap-block: var(--_ds-rsp-_ds-stack-divider-gap-block-sm);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-inline@sm"] {
+    --_ds-stack-divider-gap-inline: var(--_ds-rsp-_ds-stack-divider-gap-inline-sm);
+  }
+
+  [data-ds-responsive~="_ds-stack-gap-current@sm"] {
+    --_ds-stack-gap-current: var(--_ds-rsp-_ds-stack-gap-current-sm);
+  }
+
+  [data-ds-responsive~="ds-alert-responsive-padding@sm"] {
+    --ds-alert-responsive-padding: var(--_ds-rsp-ds-alert-responsive-padding-sm);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-font-size@sm"] {
+    --ds-badge-resolved-font-size: var(--_ds-rsp-ds-badge-resolved-font-size-sm);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-height@sm"] {
+    --ds-badge-resolved-height: var(--_ds-rsp-ds-badge-resolved-height-sm);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-padding-inline@sm"] {
+    --ds-badge-resolved-padding-inline: var(--_ds-rsp-ds-badge-resolved-padding-inline-sm);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-height@sm"] {
+    --ds-button-resolved-height: var(--_ds-rsp-ds-button-resolved-height-sm);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-icon-size@sm"] {
+    --ds-button-resolved-icon-size: var(--_ds-rsp-ds-button-resolved-icon-size-sm);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-padding-y@sm"] {
+    --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-sm);
+  }
+
+  [data-ds-responsive~="ds-card-instance-padding@sm"] {
+    --ds-card-instance-padding: var(--_ds-rsp-ds-card-instance-padding-sm);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-gap@sm"] {
+    --ds-input-responsive-gap: var(--_ds-rsp-ds-input-responsive-gap-sm);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-radius@sm"] {
+    --ds-input-responsive-radius: var(--_ds-rsp-ds-input-responsive-radius-sm);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-font-size@sm"] {
+    --ds-select-trigger-responsive-font-size: var(--_ds-rsp-ds-select-trigger-responsive-font-size-sm);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-height@sm"] {
+    --ds-select-trigger-responsive-height: var(--_ds-rsp-ds-select-trigger-responsive-height-sm);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-line-height@sm"] {
+    --ds-select-trigger-responsive-line-height: var(--_ds-rsp-ds-select-trigger-responsive-line-height-sm);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-padding-x@sm"] {
+    --ds-select-trigger-responsive-padding-x: var(--_ds-rsp-ds-select-trigger-responsive-padding-x-sm);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-font-size@sm"] {
+    --ds-tabs-responsive-font-size: var(--_ds-rsp-ds-tabs-responsive-font-size-sm);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-height@sm"] {
+    --ds-tabs-responsive-height: var(--_ds-rsp-ds-tabs-responsive-height-sm);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-icon-size@sm"] {
+    --ds-tabs-responsive-icon-size: var(--_ds-rsp-ds-tabs-responsive-icon-size-sm);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-padding@sm"] {
+    --ds-tabs-responsive-padding: var(--_ds-rsp-ds-tabs-responsive-padding-sm);
+  }
+
+  [data-ds-responsive~="ds-textarea-responsive-radius@sm"] {
+    --ds-textarea-responsive-radius: var(--_ds-rsp-ds-textarea-responsive-radius-sm);
+  }
+
+  [data-ds-responsive-hard~="font-size@sm"] {
+    font-size: var(--_ds-rsp-font-size-sm) !important;
+  }
+
+  [data-ds-responsive-hard~="height@sm"] {
+    height: var(--_ds-rsp-height-sm) !important;
+  }
+
+  [data-ds-responsive-hard~="line-height@sm"] {
+    line-height: var(--_ds-rsp-line-height-sm) !important;
+  }
+
+  [data-ds-responsive-hard~="min-width@sm"] {
+    min-width: var(--_ds-rsp-min-width-sm) !important;
+  }
+
+  [data-ds-responsive-hard~="padding@sm"] {
+    padding: var(--_ds-rsp-padding-sm) !important;
+  }
+
+  [data-ds-responsive-hard~="padding-inline-end@sm"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-sm) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  [data-ds-responsive~="align-items@md"] {
+    align-items: var(--_ds-rsp-align-items-md);
+  }
+
+  [data-ds-responsive~="display@md"] {
+    display: var(--_ds-rsp-display-md);
+  }
+
+  [data-ds-responsive~="flex-direction@md"] {
+    flex-direction: var(--_ds-rsp-flex-direction-md);
+  }
+
+  [data-ds-responsive~="flex-wrap@md"] {
+    flex-wrap: var(--_ds-rsp-flex-wrap-md);
+  }
+
+  [data-ds-responsive~="font-size@md"] {
+    font-size: var(--_ds-rsp-font-size-md);
+  }
+
+  [data-ds-responsive~="gap@md"] {
+    gap: var(--_ds-rsp-gap-md);
+  }
+
+  [data-ds-responsive~="height@md"] {
+    height: var(--_ds-rsp-height-md);
+  }
+
+  [data-ds-responsive~="justify-content@md"] {
+    justify-content: var(--_ds-rsp-justify-content-md);
+  }
+
+  [data-ds-responsive~="letter-spacing@md"] {
+    letter-spacing: var(--_ds-rsp-letter-spacing-md);
+  }
+
+  [data-ds-responsive~="line-height@md"] {
+    line-height: var(--_ds-rsp-line-height-md);
+  }
+
+  [data-ds-responsive~="margin@md"] {
+    margin: var(--_ds-rsp-margin-md);
+  }
+
+  [data-ds-responsive~="margin-block@md"] {
+    margin-block: var(--_ds-rsp-margin-block-md);
+  }
+
+  [data-ds-responsive~="margin-block-end@md"] {
+    margin-block-end: var(--_ds-rsp-margin-block-end-md);
+  }
+
+  [data-ds-responsive~="margin-block-start@md"] {
+    margin-block-start: var(--_ds-rsp-margin-block-start-md);
+  }
+
+  [data-ds-responsive~="margin-bottom@md"] {
+    margin-bottom: var(--_ds-rsp-margin-bottom-md);
+  }
+
+  [data-ds-responsive~="margin-inline@md"] {
+    margin-inline: var(--_ds-rsp-margin-inline-md);
+  }
+
+  [data-ds-responsive~="margin-inline-end@md"] {
+    margin-inline-end: var(--_ds-rsp-margin-inline-end-md);
+  }
+
+  [data-ds-responsive~="margin-inline-start@md"] {
+    margin-inline-start: var(--_ds-rsp-margin-inline-start-md);
+  }
+
+  [data-ds-responsive~="margin-left@md"] {
+    margin-left: var(--_ds-rsp-margin-left-md);
+  }
+
+  [data-ds-responsive~="margin-right@md"] {
+    margin-right: var(--_ds-rsp-margin-right-md);
+  }
+
+  [data-ds-responsive~="margin-top@md"] {
+    margin-top: var(--_ds-rsp-margin-top-md);
+  }
+
+  [data-ds-responsive~="max-height@md"] {
+    max-height: var(--_ds-rsp-max-height-md);
+  }
+
+  [data-ds-responsive~="max-width@md"] {
+    max-width: var(--_ds-rsp-max-width-md);
+  }
+
+  [data-ds-responsive~="min-height@md"] {
+    min-height: var(--_ds-rsp-min-height-md);
+  }
+
+  [data-ds-responsive~="min-width@md"] {
+    min-width: var(--_ds-rsp-min-width-md);
+  }
+
+  [data-ds-responsive~="overflow@md"] {
+    overflow: var(--_ds-rsp-overflow-md);
+  }
+
+  [data-ds-responsive~="overflow-x@md"] {
+    overflow-x: var(--_ds-rsp-overflow-x-md);
+  }
+
+  [data-ds-responsive~="overflow-y@md"] {
+    overflow-y: var(--_ds-rsp-overflow-y-md);
+  }
+
+  [data-ds-responsive~="padding@md"] {
+    padding: var(--_ds-rsp-padding-md);
+  }
+
+  [data-ds-responsive~="padding-block@md"] {
+    padding-block: var(--_ds-rsp-padding-block-md);
+  }
+
+  [data-ds-responsive~="padding-block-end@md"] {
+    padding-block-end: var(--_ds-rsp-padding-block-end-md);
+  }
+
+  [data-ds-responsive~="padding-block-start@md"] {
+    padding-block-start: var(--_ds-rsp-padding-block-start-md);
+  }
+
+  [data-ds-responsive~="padding-bottom@md"] {
+    padding-bottom: var(--_ds-rsp-padding-bottom-md);
+  }
+
+  [data-ds-responsive~="padding-inline@md"] {
+    padding-inline: var(--_ds-rsp-padding-inline-md);
+  }
+
+  [data-ds-responsive~="padding-inline-end@md"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-md);
+  }
+
+  [data-ds-responsive~="padding-inline-start@md"] {
+    padding-inline-start: var(--_ds-rsp-padding-inline-start-md);
+  }
+
+  [data-ds-responsive~="padding-left@md"] {
+    padding-left: var(--_ds-rsp-padding-left-md);
+  }
+
+  [data-ds-responsive~="padding-right@md"] {
+    padding-right: var(--_ds-rsp-padding-right-md);
+  }
+
+  [data-ds-responsive~="padding-top@md"] {
+    padding-top: var(--_ds-rsp-padding-top-md);
+  }
+
+  [data-ds-responsive~="width@md"] {
+    width: var(--_ds-rsp-width-md);
+  }
+
+  [data-ds-responsive~="_ds-button-resolved-radius@md"] {
+    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-md);
+  }
+
+  [data-ds-responsive~="_ds-input-responsive-height@md"] {
+    --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-md);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-block@md"] {
+    --_ds-stack-divider-gap-block: var(--_ds-rsp-_ds-stack-divider-gap-block-md);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-inline@md"] {
+    --_ds-stack-divider-gap-inline: var(--_ds-rsp-_ds-stack-divider-gap-inline-md);
+  }
+
+  [data-ds-responsive~="_ds-stack-gap-current@md"] {
+    --_ds-stack-gap-current: var(--_ds-rsp-_ds-stack-gap-current-md);
+  }
+
+  [data-ds-responsive~="ds-alert-responsive-padding@md"] {
+    --ds-alert-responsive-padding: var(--_ds-rsp-ds-alert-responsive-padding-md);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-font-size@md"] {
+    --ds-badge-resolved-font-size: var(--_ds-rsp-ds-badge-resolved-font-size-md);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-height@md"] {
+    --ds-badge-resolved-height: var(--_ds-rsp-ds-badge-resolved-height-md);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-padding-inline@md"] {
+    --ds-badge-resolved-padding-inline: var(--_ds-rsp-ds-badge-resolved-padding-inline-md);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-height@md"] {
+    --ds-button-resolved-height: var(--_ds-rsp-ds-button-resolved-height-md);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-icon-size@md"] {
+    --ds-button-resolved-icon-size: var(--_ds-rsp-ds-button-resolved-icon-size-md);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-padding-y@md"] {
+    --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-md);
+  }
+
+  [data-ds-responsive~="ds-card-instance-padding@md"] {
+    --ds-card-instance-padding: var(--_ds-rsp-ds-card-instance-padding-md);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-gap@md"] {
+    --ds-input-responsive-gap: var(--_ds-rsp-ds-input-responsive-gap-md);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-radius@md"] {
+    --ds-input-responsive-radius: var(--_ds-rsp-ds-input-responsive-radius-md);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-font-size@md"] {
+    --ds-select-trigger-responsive-font-size: var(--_ds-rsp-ds-select-trigger-responsive-font-size-md);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-height@md"] {
+    --ds-select-trigger-responsive-height: var(--_ds-rsp-ds-select-trigger-responsive-height-md);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-line-height@md"] {
+    --ds-select-trigger-responsive-line-height: var(--_ds-rsp-ds-select-trigger-responsive-line-height-md);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-padding-x@md"] {
+    --ds-select-trigger-responsive-padding-x: var(--_ds-rsp-ds-select-trigger-responsive-padding-x-md);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-font-size@md"] {
+    --ds-tabs-responsive-font-size: var(--_ds-rsp-ds-tabs-responsive-font-size-md);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-height@md"] {
+    --ds-tabs-responsive-height: var(--_ds-rsp-ds-tabs-responsive-height-md);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-icon-size@md"] {
+    --ds-tabs-responsive-icon-size: var(--_ds-rsp-ds-tabs-responsive-icon-size-md);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-padding@md"] {
+    --ds-tabs-responsive-padding: var(--_ds-rsp-ds-tabs-responsive-padding-md);
+  }
+
+  [data-ds-responsive~="ds-textarea-responsive-radius@md"] {
+    --ds-textarea-responsive-radius: var(--_ds-rsp-ds-textarea-responsive-radius-md);
+  }
+
+  [data-ds-responsive-hard~="font-size@md"] {
+    font-size: var(--_ds-rsp-font-size-md) !important;
+  }
+
+  [data-ds-responsive-hard~="height@md"] {
+    height: var(--_ds-rsp-height-md) !important;
+  }
+
+  [data-ds-responsive-hard~="line-height@md"] {
+    line-height: var(--_ds-rsp-line-height-md) !important;
+  }
+
+  [data-ds-responsive-hard~="min-width@md"] {
+    min-width: var(--_ds-rsp-min-width-md) !important;
+  }
+
+  [data-ds-responsive-hard~="padding@md"] {
+    padding: var(--_ds-rsp-padding-md) !important;
+  }
+
+  [data-ds-responsive-hard~="padding-inline-end@md"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-md) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-ds-responsive~="align-items@lg"] {
+    align-items: var(--_ds-rsp-align-items-lg);
+  }
+
+  [data-ds-responsive~="display@lg"] {
+    display: var(--_ds-rsp-display-lg);
+  }
+
+  [data-ds-responsive~="flex-direction@lg"] {
+    flex-direction: var(--_ds-rsp-flex-direction-lg);
+  }
+
+  [data-ds-responsive~="flex-wrap@lg"] {
+    flex-wrap: var(--_ds-rsp-flex-wrap-lg);
+  }
+
+  [data-ds-responsive~="font-size@lg"] {
+    font-size: var(--_ds-rsp-font-size-lg);
+  }
+
+  [data-ds-responsive~="gap@lg"] {
+    gap: var(--_ds-rsp-gap-lg);
+  }
+
+  [data-ds-responsive~="height@lg"] {
+    height: var(--_ds-rsp-height-lg);
+  }
+
+  [data-ds-responsive~="justify-content@lg"] {
+    justify-content: var(--_ds-rsp-justify-content-lg);
+  }
+
+  [data-ds-responsive~="letter-spacing@lg"] {
+    letter-spacing: var(--_ds-rsp-letter-spacing-lg);
+  }
+
+  [data-ds-responsive~="line-height@lg"] {
+    line-height: var(--_ds-rsp-line-height-lg);
+  }
+
+  [data-ds-responsive~="margin@lg"] {
+    margin: var(--_ds-rsp-margin-lg);
+  }
+
+  [data-ds-responsive~="margin-block@lg"] {
+    margin-block: var(--_ds-rsp-margin-block-lg);
+  }
+
+  [data-ds-responsive~="margin-block-end@lg"] {
+    margin-block-end: var(--_ds-rsp-margin-block-end-lg);
+  }
+
+  [data-ds-responsive~="margin-block-start@lg"] {
+    margin-block-start: var(--_ds-rsp-margin-block-start-lg);
+  }
+
+  [data-ds-responsive~="margin-bottom@lg"] {
+    margin-bottom: var(--_ds-rsp-margin-bottom-lg);
+  }
+
+  [data-ds-responsive~="margin-inline@lg"] {
+    margin-inline: var(--_ds-rsp-margin-inline-lg);
+  }
+
+  [data-ds-responsive~="margin-inline-end@lg"] {
+    margin-inline-end: var(--_ds-rsp-margin-inline-end-lg);
+  }
+
+  [data-ds-responsive~="margin-inline-start@lg"] {
+    margin-inline-start: var(--_ds-rsp-margin-inline-start-lg);
+  }
+
+  [data-ds-responsive~="margin-left@lg"] {
+    margin-left: var(--_ds-rsp-margin-left-lg);
+  }
+
+  [data-ds-responsive~="margin-right@lg"] {
+    margin-right: var(--_ds-rsp-margin-right-lg);
+  }
+
+  [data-ds-responsive~="margin-top@lg"] {
+    margin-top: var(--_ds-rsp-margin-top-lg);
+  }
+
+  [data-ds-responsive~="max-height@lg"] {
+    max-height: var(--_ds-rsp-max-height-lg);
+  }
+
+  [data-ds-responsive~="max-width@lg"] {
+    max-width: var(--_ds-rsp-max-width-lg);
+  }
+
+  [data-ds-responsive~="min-height@lg"] {
+    min-height: var(--_ds-rsp-min-height-lg);
+  }
+
+  [data-ds-responsive~="min-width@lg"] {
+    min-width: var(--_ds-rsp-min-width-lg);
+  }
+
+  [data-ds-responsive~="overflow@lg"] {
+    overflow: var(--_ds-rsp-overflow-lg);
+  }
+
+  [data-ds-responsive~="overflow-x@lg"] {
+    overflow-x: var(--_ds-rsp-overflow-x-lg);
+  }
+
+  [data-ds-responsive~="overflow-y@lg"] {
+    overflow-y: var(--_ds-rsp-overflow-y-lg);
+  }
+
+  [data-ds-responsive~="padding@lg"] {
+    padding: var(--_ds-rsp-padding-lg);
+  }
+
+  [data-ds-responsive~="padding-block@lg"] {
+    padding-block: var(--_ds-rsp-padding-block-lg);
+  }
+
+  [data-ds-responsive~="padding-block-end@lg"] {
+    padding-block-end: var(--_ds-rsp-padding-block-end-lg);
+  }
+
+  [data-ds-responsive~="padding-block-start@lg"] {
+    padding-block-start: var(--_ds-rsp-padding-block-start-lg);
+  }
+
+  [data-ds-responsive~="padding-bottom@lg"] {
+    padding-bottom: var(--_ds-rsp-padding-bottom-lg);
+  }
+
+  [data-ds-responsive~="padding-inline@lg"] {
+    padding-inline: var(--_ds-rsp-padding-inline-lg);
+  }
+
+  [data-ds-responsive~="padding-inline-end@lg"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-lg);
+  }
+
+  [data-ds-responsive~="padding-inline-start@lg"] {
+    padding-inline-start: var(--_ds-rsp-padding-inline-start-lg);
+  }
+
+  [data-ds-responsive~="padding-left@lg"] {
+    padding-left: var(--_ds-rsp-padding-left-lg);
+  }
+
+  [data-ds-responsive~="padding-right@lg"] {
+    padding-right: var(--_ds-rsp-padding-right-lg);
+  }
+
+  [data-ds-responsive~="padding-top@lg"] {
+    padding-top: var(--_ds-rsp-padding-top-lg);
+  }
+
+  [data-ds-responsive~="width@lg"] {
+    width: var(--_ds-rsp-width-lg);
+  }
+
+  [data-ds-responsive~="_ds-button-resolved-radius@lg"] {
+    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-lg);
+  }
+
+  [data-ds-responsive~="_ds-input-responsive-height@lg"] {
+    --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-lg);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-block@lg"] {
+    --_ds-stack-divider-gap-block: var(--_ds-rsp-_ds-stack-divider-gap-block-lg);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-inline@lg"] {
+    --_ds-stack-divider-gap-inline: var(--_ds-rsp-_ds-stack-divider-gap-inline-lg);
+  }
+
+  [data-ds-responsive~="_ds-stack-gap-current@lg"] {
+    --_ds-stack-gap-current: var(--_ds-rsp-_ds-stack-gap-current-lg);
+  }
+
+  [data-ds-responsive~="ds-alert-responsive-padding@lg"] {
+    --ds-alert-responsive-padding: var(--_ds-rsp-ds-alert-responsive-padding-lg);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-font-size@lg"] {
+    --ds-badge-resolved-font-size: var(--_ds-rsp-ds-badge-resolved-font-size-lg);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-height@lg"] {
+    --ds-badge-resolved-height: var(--_ds-rsp-ds-badge-resolved-height-lg);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-padding-inline@lg"] {
+    --ds-badge-resolved-padding-inline: var(--_ds-rsp-ds-badge-resolved-padding-inline-lg);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-height@lg"] {
+    --ds-button-resolved-height: var(--_ds-rsp-ds-button-resolved-height-lg);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-icon-size@lg"] {
+    --ds-button-resolved-icon-size: var(--_ds-rsp-ds-button-resolved-icon-size-lg);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-padding-y@lg"] {
+    --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-lg);
+  }
+
+  [data-ds-responsive~="ds-card-instance-padding@lg"] {
+    --ds-card-instance-padding: var(--_ds-rsp-ds-card-instance-padding-lg);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-gap@lg"] {
+    --ds-input-responsive-gap: var(--_ds-rsp-ds-input-responsive-gap-lg);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-radius@lg"] {
+    --ds-input-responsive-radius: var(--_ds-rsp-ds-input-responsive-radius-lg);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-font-size@lg"] {
+    --ds-select-trigger-responsive-font-size: var(--_ds-rsp-ds-select-trigger-responsive-font-size-lg);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-height@lg"] {
+    --ds-select-trigger-responsive-height: var(--_ds-rsp-ds-select-trigger-responsive-height-lg);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-line-height@lg"] {
+    --ds-select-trigger-responsive-line-height: var(--_ds-rsp-ds-select-trigger-responsive-line-height-lg);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-padding-x@lg"] {
+    --ds-select-trigger-responsive-padding-x: var(--_ds-rsp-ds-select-trigger-responsive-padding-x-lg);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-font-size@lg"] {
+    --ds-tabs-responsive-font-size: var(--_ds-rsp-ds-tabs-responsive-font-size-lg);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-height@lg"] {
+    --ds-tabs-responsive-height: var(--_ds-rsp-ds-tabs-responsive-height-lg);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-icon-size@lg"] {
+    --ds-tabs-responsive-icon-size: var(--_ds-rsp-ds-tabs-responsive-icon-size-lg);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-padding@lg"] {
+    --ds-tabs-responsive-padding: var(--_ds-rsp-ds-tabs-responsive-padding-lg);
+  }
+
+  [data-ds-responsive~="ds-textarea-responsive-radius@lg"] {
+    --ds-textarea-responsive-radius: var(--_ds-rsp-ds-textarea-responsive-radius-lg);
+  }
+
+  [data-ds-responsive-hard~="font-size@lg"] {
+    font-size: var(--_ds-rsp-font-size-lg) !important;
+  }
+
+  [data-ds-responsive-hard~="height@lg"] {
+    height: var(--_ds-rsp-height-lg) !important;
+  }
+
+  [data-ds-responsive-hard~="line-height@lg"] {
+    line-height: var(--_ds-rsp-line-height-lg) !important;
+  }
+
+  [data-ds-responsive-hard~="min-width@lg"] {
+    min-width: var(--_ds-rsp-min-width-lg) !important;
+  }
+
+  [data-ds-responsive-hard~="padding@lg"] {
+    padding: var(--_ds-rsp-padding-lg) !important;
+  }
+
+  [data-ds-responsive-hard~="padding-inline-end@lg"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-lg) !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-ds-responsive~="align-items@xl"] {
+    align-items: var(--_ds-rsp-align-items-xl);
+  }
+
+  [data-ds-responsive~="display@xl"] {
+    display: var(--_ds-rsp-display-xl);
+  }
+
+  [data-ds-responsive~="flex-direction@xl"] {
+    flex-direction: var(--_ds-rsp-flex-direction-xl);
+  }
+
+  [data-ds-responsive~="flex-wrap@xl"] {
+    flex-wrap: var(--_ds-rsp-flex-wrap-xl);
+  }
+
+  [data-ds-responsive~="font-size@xl"] {
+    font-size: var(--_ds-rsp-font-size-xl);
+  }
+
+  [data-ds-responsive~="gap@xl"] {
+    gap: var(--_ds-rsp-gap-xl);
+  }
+
+  [data-ds-responsive~="height@xl"] {
+    height: var(--_ds-rsp-height-xl);
+  }
+
+  [data-ds-responsive~="justify-content@xl"] {
+    justify-content: var(--_ds-rsp-justify-content-xl);
+  }
+
+  [data-ds-responsive~="letter-spacing@xl"] {
+    letter-spacing: var(--_ds-rsp-letter-spacing-xl);
+  }
+
+  [data-ds-responsive~="line-height@xl"] {
+    line-height: var(--_ds-rsp-line-height-xl);
+  }
+
+  [data-ds-responsive~="margin@xl"] {
+    margin: var(--_ds-rsp-margin-xl);
+  }
+
+  [data-ds-responsive~="margin-block@xl"] {
+    margin-block: var(--_ds-rsp-margin-block-xl);
+  }
+
+  [data-ds-responsive~="margin-block-end@xl"] {
+    margin-block-end: var(--_ds-rsp-margin-block-end-xl);
+  }
+
+  [data-ds-responsive~="margin-block-start@xl"] {
+    margin-block-start: var(--_ds-rsp-margin-block-start-xl);
+  }
+
+  [data-ds-responsive~="margin-bottom@xl"] {
+    margin-bottom: var(--_ds-rsp-margin-bottom-xl);
+  }
+
+  [data-ds-responsive~="margin-inline@xl"] {
+    margin-inline: var(--_ds-rsp-margin-inline-xl);
+  }
+
+  [data-ds-responsive~="margin-inline-end@xl"] {
+    margin-inline-end: var(--_ds-rsp-margin-inline-end-xl);
+  }
+
+  [data-ds-responsive~="margin-inline-start@xl"] {
+    margin-inline-start: var(--_ds-rsp-margin-inline-start-xl);
+  }
+
+  [data-ds-responsive~="margin-left@xl"] {
+    margin-left: var(--_ds-rsp-margin-left-xl);
+  }
+
+  [data-ds-responsive~="margin-right@xl"] {
+    margin-right: var(--_ds-rsp-margin-right-xl);
+  }
+
+  [data-ds-responsive~="margin-top@xl"] {
+    margin-top: var(--_ds-rsp-margin-top-xl);
+  }
+
+  [data-ds-responsive~="max-height@xl"] {
+    max-height: var(--_ds-rsp-max-height-xl);
+  }
+
+  [data-ds-responsive~="max-width@xl"] {
+    max-width: var(--_ds-rsp-max-width-xl);
+  }
+
+  [data-ds-responsive~="min-height@xl"] {
+    min-height: var(--_ds-rsp-min-height-xl);
+  }
+
+  [data-ds-responsive~="min-width@xl"] {
+    min-width: var(--_ds-rsp-min-width-xl);
+  }
+
+  [data-ds-responsive~="overflow@xl"] {
+    overflow: var(--_ds-rsp-overflow-xl);
+  }
+
+  [data-ds-responsive~="overflow-x@xl"] {
+    overflow-x: var(--_ds-rsp-overflow-x-xl);
+  }
+
+  [data-ds-responsive~="overflow-y@xl"] {
+    overflow-y: var(--_ds-rsp-overflow-y-xl);
+  }
+
+  [data-ds-responsive~="padding@xl"] {
+    padding: var(--_ds-rsp-padding-xl);
+  }
+
+  [data-ds-responsive~="padding-block@xl"] {
+    padding-block: var(--_ds-rsp-padding-block-xl);
+  }
+
+  [data-ds-responsive~="padding-block-end@xl"] {
+    padding-block-end: var(--_ds-rsp-padding-block-end-xl);
+  }
+
+  [data-ds-responsive~="padding-block-start@xl"] {
+    padding-block-start: var(--_ds-rsp-padding-block-start-xl);
+  }
+
+  [data-ds-responsive~="padding-bottom@xl"] {
+    padding-bottom: var(--_ds-rsp-padding-bottom-xl);
+  }
+
+  [data-ds-responsive~="padding-inline@xl"] {
+    padding-inline: var(--_ds-rsp-padding-inline-xl);
+  }
+
+  [data-ds-responsive~="padding-inline-end@xl"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-xl);
+  }
+
+  [data-ds-responsive~="padding-inline-start@xl"] {
+    padding-inline-start: var(--_ds-rsp-padding-inline-start-xl);
+  }
+
+  [data-ds-responsive~="padding-left@xl"] {
+    padding-left: var(--_ds-rsp-padding-left-xl);
+  }
+
+  [data-ds-responsive~="padding-right@xl"] {
+    padding-right: var(--_ds-rsp-padding-right-xl);
+  }
+
+  [data-ds-responsive~="padding-top@xl"] {
+    padding-top: var(--_ds-rsp-padding-top-xl);
+  }
+
+  [data-ds-responsive~="width@xl"] {
+    width: var(--_ds-rsp-width-xl);
+  }
+
+  [data-ds-responsive~="_ds-button-resolved-radius@xl"] {
+    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-xl);
+  }
+
+  [data-ds-responsive~="_ds-input-responsive-height@xl"] {
+    --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-xl);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-block@xl"] {
+    --_ds-stack-divider-gap-block: var(--_ds-rsp-_ds-stack-divider-gap-block-xl);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-inline@xl"] {
+    --_ds-stack-divider-gap-inline: var(--_ds-rsp-_ds-stack-divider-gap-inline-xl);
+  }
+
+  [data-ds-responsive~="_ds-stack-gap-current@xl"] {
+    --_ds-stack-gap-current: var(--_ds-rsp-_ds-stack-gap-current-xl);
+  }
+
+  [data-ds-responsive~="ds-alert-responsive-padding@xl"] {
+    --ds-alert-responsive-padding: var(--_ds-rsp-ds-alert-responsive-padding-xl);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-font-size@xl"] {
+    --ds-badge-resolved-font-size: var(--_ds-rsp-ds-badge-resolved-font-size-xl);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-height@xl"] {
+    --ds-badge-resolved-height: var(--_ds-rsp-ds-badge-resolved-height-xl);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-padding-inline@xl"] {
+    --ds-badge-resolved-padding-inline: var(--_ds-rsp-ds-badge-resolved-padding-inline-xl);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-height@xl"] {
+    --ds-button-resolved-height: var(--_ds-rsp-ds-button-resolved-height-xl);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-icon-size@xl"] {
+    --ds-button-resolved-icon-size: var(--_ds-rsp-ds-button-resolved-icon-size-xl);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-padding-y@xl"] {
+    --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-xl);
+  }
+
+  [data-ds-responsive~="ds-card-instance-padding@xl"] {
+    --ds-card-instance-padding: var(--_ds-rsp-ds-card-instance-padding-xl);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-gap@xl"] {
+    --ds-input-responsive-gap: var(--_ds-rsp-ds-input-responsive-gap-xl);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-radius@xl"] {
+    --ds-input-responsive-radius: var(--_ds-rsp-ds-input-responsive-radius-xl);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-font-size@xl"] {
+    --ds-select-trigger-responsive-font-size: var(--_ds-rsp-ds-select-trigger-responsive-font-size-xl);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-height@xl"] {
+    --ds-select-trigger-responsive-height: var(--_ds-rsp-ds-select-trigger-responsive-height-xl);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-line-height@xl"] {
+    --ds-select-trigger-responsive-line-height: var(--_ds-rsp-ds-select-trigger-responsive-line-height-xl);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-padding-x@xl"] {
+    --ds-select-trigger-responsive-padding-x: var(--_ds-rsp-ds-select-trigger-responsive-padding-x-xl);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-font-size@xl"] {
+    --ds-tabs-responsive-font-size: var(--_ds-rsp-ds-tabs-responsive-font-size-xl);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-height@xl"] {
+    --ds-tabs-responsive-height: var(--_ds-rsp-ds-tabs-responsive-height-xl);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-icon-size@xl"] {
+    --ds-tabs-responsive-icon-size: var(--_ds-rsp-ds-tabs-responsive-icon-size-xl);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-padding@xl"] {
+    --ds-tabs-responsive-padding: var(--_ds-rsp-ds-tabs-responsive-padding-xl);
+  }
+
+  [data-ds-responsive~="ds-textarea-responsive-radius@xl"] {
+    --ds-textarea-responsive-radius: var(--_ds-rsp-ds-textarea-responsive-radius-xl);
+  }
+
+  [data-ds-responsive-hard~="font-size@xl"] {
+    font-size: var(--_ds-rsp-font-size-xl) !important;
+  }
+
+  [data-ds-responsive-hard~="height@xl"] {
+    height: var(--_ds-rsp-height-xl) !important;
+  }
+
+  [data-ds-responsive-hard~="line-height@xl"] {
+    line-height: var(--_ds-rsp-line-height-xl) !important;
+  }
+
+  [data-ds-responsive-hard~="min-width@xl"] {
+    min-width: var(--_ds-rsp-min-width-xl) !important;
+  }
+
+  [data-ds-responsive-hard~="padding@xl"] {
+    padding: var(--_ds-rsp-padding-xl) !important;
+  }
+
+  [data-ds-responsive-hard~="padding-inline-end@xl"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-xl) !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  [data-ds-responsive~="align-items@2xl"] {
+    align-items: var(--_ds-rsp-align-items-2xl);
+  }
+
+  [data-ds-responsive~="display@2xl"] {
+    display: var(--_ds-rsp-display-2xl);
+  }
+
+  [data-ds-responsive~="flex-direction@2xl"] {
+    flex-direction: var(--_ds-rsp-flex-direction-2xl);
+  }
+
+  [data-ds-responsive~="flex-wrap@2xl"] {
+    flex-wrap: var(--_ds-rsp-flex-wrap-2xl);
+  }
+
+  [data-ds-responsive~="font-size@2xl"] {
+    font-size: var(--_ds-rsp-font-size-2xl);
+  }
+
+  [data-ds-responsive~="gap@2xl"] {
+    gap: var(--_ds-rsp-gap-2xl);
+  }
+
+  [data-ds-responsive~="height@2xl"] {
+    height: var(--_ds-rsp-height-2xl);
+  }
+
+  [data-ds-responsive~="justify-content@2xl"] {
+    justify-content: var(--_ds-rsp-justify-content-2xl);
+  }
+
+  [data-ds-responsive~="letter-spacing@2xl"] {
+    letter-spacing: var(--_ds-rsp-letter-spacing-2xl);
+  }
+
+  [data-ds-responsive~="line-height@2xl"] {
+    line-height: var(--_ds-rsp-line-height-2xl);
+  }
+
+  [data-ds-responsive~="margin@2xl"] {
+    margin: var(--_ds-rsp-margin-2xl);
+  }
+
+  [data-ds-responsive~="margin-block@2xl"] {
+    margin-block: var(--_ds-rsp-margin-block-2xl);
+  }
+
+  [data-ds-responsive~="margin-block-end@2xl"] {
+    margin-block-end: var(--_ds-rsp-margin-block-end-2xl);
+  }
+
+  [data-ds-responsive~="margin-block-start@2xl"] {
+    margin-block-start: var(--_ds-rsp-margin-block-start-2xl);
+  }
+
+  [data-ds-responsive~="margin-bottom@2xl"] {
+    margin-bottom: var(--_ds-rsp-margin-bottom-2xl);
+  }
+
+  [data-ds-responsive~="margin-inline@2xl"] {
+    margin-inline: var(--_ds-rsp-margin-inline-2xl);
+  }
+
+  [data-ds-responsive~="margin-inline-end@2xl"] {
+    margin-inline-end: var(--_ds-rsp-margin-inline-end-2xl);
+  }
+
+  [data-ds-responsive~="margin-inline-start@2xl"] {
+    margin-inline-start: var(--_ds-rsp-margin-inline-start-2xl);
+  }
+
+  [data-ds-responsive~="margin-left@2xl"] {
+    margin-left: var(--_ds-rsp-margin-left-2xl);
+  }
+
+  [data-ds-responsive~="margin-right@2xl"] {
+    margin-right: var(--_ds-rsp-margin-right-2xl);
+  }
+
+  [data-ds-responsive~="margin-top@2xl"] {
+    margin-top: var(--_ds-rsp-margin-top-2xl);
+  }
+
+  [data-ds-responsive~="max-height@2xl"] {
+    max-height: var(--_ds-rsp-max-height-2xl);
+  }
+
+  [data-ds-responsive~="max-width@2xl"] {
+    max-width: var(--_ds-rsp-max-width-2xl);
+  }
+
+  [data-ds-responsive~="min-height@2xl"] {
+    min-height: var(--_ds-rsp-min-height-2xl);
+  }
+
+  [data-ds-responsive~="min-width@2xl"] {
+    min-width: var(--_ds-rsp-min-width-2xl);
+  }
+
+  [data-ds-responsive~="overflow@2xl"] {
+    overflow: var(--_ds-rsp-overflow-2xl);
+  }
+
+  [data-ds-responsive~="overflow-x@2xl"] {
+    overflow-x: var(--_ds-rsp-overflow-x-2xl);
+  }
+
+  [data-ds-responsive~="overflow-y@2xl"] {
+    overflow-y: var(--_ds-rsp-overflow-y-2xl);
+  }
+
+  [data-ds-responsive~="padding@2xl"] {
+    padding: var(--_ds-rsp-padding-2xl);
+  }
+
+  [data-ds-responsive~="padding-block@2xl"] {
+    padding-block: var(--_ds-rsp-padding-block-2xl);
+  }
+
+  [data-ds-responsive~="padding-block-end@2xl"] {
+    padding-block-end: var(--_ds-rsp-padding-block-end-2xl);
+  }
+
+  [data-ds-responsive~="padding-block-start@2xl"] {
+    padding-block-start: var(--_ds-rsp-padding-block-start-2xl);
+  }
+
+  [data-ds-responsive~="padding-bottom@2xl"] {
+    padding-bottom: var(--_ds-rsp-padding-bottom-2xl);
+  }
+
+  [data-ds-responsive~="padding-inline@2xl"] {
+    padding-inline: var(--_ds-rsp-padding-inline-2xl);
+  }
+
+  [data-ds-responsive~="padding-inline-end@2xl"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-2xl);
+  }
+
+  [data-ds-responsive~="padding-inline-start@2xl"] {
+    padding-inline-start: var(--_ds-rsp-padding-inline-start-2xl);
+  }
+
+  [data-ds-responsive~="padding-left@2xl"] {
+    padding-left: var(--_ds-rsp-padding-left-2xl);
+  }
+
+  [data-ds-responsive~="padding-right@2xl"] {
+    padding-right: var(--_ds-rsp-padding-right-2xl);
+  }
+
+  [data-ds-responsive~="padding-top@2xl"] {
+    padding-top: var(--_ds-rsp-padding-top-2xl);
+  }
+
+  [data-ds-responsive~="width@2xl"] {
+    width: var(--_ds-rsp-width-2xl);
+  }
+
+  [data-ds-responsive~="_ds-button-resolved-radius@2xl"] {
+    --_ds-button-resolved-radius: var(--_ds-rsp-_ds-button-resolved-radius-2xl);
+  }
+
+  [data-ds-responsive~="_ds-input-responsive-height@2xl"] {
+    --_ds-input-responsive-height: var(--_ds-rsp-_ds-input-responsive-height-2xl);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-block@2xl"] {
+    --_ds-stack-divider-gap-block: var(--_ds-rsp-_ds-stack-divider-gap-block-2xl);
+  }
+
+  [data-ds-responsive~="_ds-stack-divider-gap-inline@2xl"] {
+    --_ds-stack-divider-gap-inline: var(--_ds-rsp-_ds-stack-divider-gap-inline-2xl);
+  }
+
+  [data-ds-responsive~="_ds-stack-gap-current@2xl"] {
+    --_ds-stack-gap-current: var(--_ds-rsp-_ds-stack-gap-current-2xl);
+  }
+
+  [data-ds-responsive~="ds-alert-responsive-padding@2xl"] {
+    --ds-alert-responsive-padding: var(--_ds-rsp-ds-alert-responsive-padding-2xl);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-font-size@2xl"] {
+    --ds-badge-resolved-font-size: var(--_ds-rsp-ds-badge-resolved-font-size-2xl);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-height@2xl"] {
+    --ds-badge-resolved-height: var(--_ds-rsp-ds-badge-resolved-height-2xl);
+  }
+
+  [data-ds-responsive~="ds-badge-resolved-padding-inline@2xl"] {
+    --ds-badge-resolved-padding-inline: var(--_ds-rsp-ds-badge-resolved-padding-inline-2xl);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-height@2xl"] {
+    --ds-button-resolved-height: var(--_ds-rsp-ds-button-resolved-height-2xl);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-icon-size@2xl"] {
+    --ds-button-resolved-icon-size: var(--_ds-rsp-ds-button-resolved-icon-size-2xl);
+  }
+
+  [data-ds-responsive~="ds-button-resolved-padding-y@2xl"] {
+    --ds-button-resolved-padding-y: var(--_ds-rsp-ds-button-resolved-padding-y-2xl);
+  }
+
+  [data-ds-responsive~="ds-card-instance-padding@2xl"] {
+    --ds-card-instance-padding: var(--_ds-rsp-ds-card-instance-padding-2xl);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-gap@2xl"] {
+    --ds-input-responsive-gap: var(--_ds-rsp-ds-input-responsive-gap-2xl);
+  }
+
+  [data-ds-responsive~="ds-input-responsive-radius@2xl"] {
+    --ds-input-responsive-radius: var(--_ds-rsp-ds-input-responsive-radius-2xl);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-font-size@2xl"] {
+    --ds-select-trigger-responsive-font-size: var(--_ds-rsp-ds-select-trigger-responsive-font-size-2xl);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-height@2xl"] {
+    --ds-select-trigger-responsive-height: var(--_ds-rsp-ds-select-trigger-responsive-height-2xl);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-line-height@2xl"] {
+    --ds-select-trigger-responsive-line-height: var(--_ds-rsp-ds-select-trigger-responsive-line-height-2xl);
+  }
+
+  [data-ds-responsive~="ds-select-trigger-responsive-padding-x@2xl"] {
+    --ds-select-trigger-responsive-padding-x: var(--_ds-rsp-ds-select-trigger-responsive-padding-x-2xl);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-font-size@2xl"] {
+    --ds-tabs-responsive-font-size: var(--_ds-rsp-ds-tabs-responsive-font-size-2xl);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-height@2xl"] {
+    --ds-tabs-responsive-height: var(--_ds-rsp-ds-tabs-responsive-height-2xl);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-icon-size@2xl"] {
+    --ds-tabs-responsive-icon-size: var(--_ds-rsp-ds-tabs-responsive-icon-size-2xl);
+  }
+
+  [data-ds-responsive~="ds-tabs-responsive-padding@2xl"] {
+    --ds-tabs-responsive-padding: var(--_ds-rsp-ds-tabs-responsive-padding-2xl);
+  }
+
+  [data-ds-responsive~="ds-textarea-responsive-radius@2xl"] {
+    --ds-textarea-responsive-radius: var(--_ds-rsp-ds-textarea-responsive-radius-2xl);
+  }
+
+  [data-ds-responsive-hard~="font-size@2xl"] {
+    font-size: var(--_ds-rsp-font-size-2xl) !important;
+  }
+
+  [data-ds-responsive-hard~="height@2xl"] {
+    height: var(--_ds-rsp-height-2xl) !important;
+  }
+
+  [data-ds-responsive-hard~="line-height@2xl"] {
+    line-height: var(--_ds-rsp-line-height-2xl) !important;
+  }
+
+  [data-ds-responsive-hard~="min-width@2xl"] {
+    min-width: var(--_ds-rsp-min-width-2xl) !important;
+  }
+
+  [data-ds-responsive-hard~="padding@2xl"] {
+    padding: var(--_ds-rsp-padding-2xl) !important;
+  }
+
+  [data-ds-responsive-hard~="padding-inline-end@2xl"] {
+    padding-inline-end: var(--_ds-rsp-padding-inline-end-2xl) !important;
+  }
+}
+
+/**
+ * Responsive Visibility - Rottay Design System
+ *
+ * GENERATED SHAPE, AUTHORED FILE. Every rule below is
+ * `buildResponsiveVisibilitySheet()` in
+ * `foundation/tokens/css/foundation/responsive/tests/projection`, and
+ * `../visibility-contract.test.ts` compares the two byte for byte.
+ *
+ * WHY IT EXISTS. `Show`, `Hide` and `ResponsiveSlot` used to render a
+ * `<style dangerouslySetInnerHTML>` per instance, each with a `useId`-scoped
+ * class. The boundary set is CLOSED -- six lower bounds, six upper bounds and
+ * three device bands -- so it is one static sheet and one attribute per
+ * instance, which a strict CSP cannot drop and the layer order can rank.
+ *
+ * BOTH MODES ARE BOX-TRANSPARENT WHILE VISIBLE (`display: contents`): a
+ * boundary never inserts an anonymous block of its own into the parent's
+ * layout. The hide rule keeps its pinned `!important`: hiding must beat any
+ * display the children carry.
+ */
+
+[data-ds-show] {
+  display: none;
+}
+
+[data-ds-hide] {
+  display: contents;
+}
+
+@media (min-width: 0px) {
+  [data-ds-show="from:xs"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:xs"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  [data-ds-show="from:sm"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:sm"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  [data-ds-show="from:md"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:md"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-ds-show="from:lg"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:lg"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-ds-show="from:xl"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:xl"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  [data-ds-show="from:2xl"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:2xl"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  [data-ds-show="below:sm"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:sm"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-ds-show="below:md"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:md"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  [data-ds-show="below:lg"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:lg"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1279px) {
+  [data-ds-show="below:xl"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:xl"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1535px) {
+  [data-ds-show="below:2xl"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:2xl"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  [data-ds-show="on:phone"] {
+    display: contents;
+  }
+
+  [data-ds-hide="on:phone"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  [data-ds-show="on:tablet"] {
+    display: contents;
+  }
+
+  [data-ds-hide="on:tablet"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-ds-show="on:desktop"] {
+    display: contents;
+  }
+
+  [data-ds-hide="on:desktop"] {
+    display: none !important;
+  }
 }
 
 /**

@@ -32,7 +32,7 @@
   width: 100%;
   min-width: 0;
   overflow: hidden;
-  container-type: inline-size;
+  container: ds-record-facts / inline-size;
   border: 1px solid var(--ds-record-facts-border);
   border-radius: var(--ds-record-facts-radius, var(--ds-radius-xl, 16px));
   background: var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
@@ -360,7 +360,7 @@
   }
 }
 
-@container (max-width: 900px) {
+@container ds-record-facts (max-width: 900px) {
   .ds-pattern-record-facts .ds-record-facts__grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
@@ -387,7 +387,7 @@
   }
 }
 
-@container (max-width: 560px) {
+@container ds-record-facts (max-width: 560px) {
   .ds-pattern-record-facts .ds-record-facts__header {
     align-items: flex-start;
     padding: 13px 14px;

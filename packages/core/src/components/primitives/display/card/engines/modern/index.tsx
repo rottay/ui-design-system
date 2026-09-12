@@ -184,10 +184,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `card-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const padding = paddingIsResponsive ? CARD_DEFAULTS.padding : (paddingProp as string);
 
@@ -278,10 +275,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   // Shared sub-elements
   // ============================================================================
 
-  const responsiveStyleTag = responsive && responsive.css ? (
-    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-  ) : null;
-  const responsiveAttrs = responsive ? responsive.attrs : {};
+  const responsiveAttrs = responsive.attrs;
 
   const coverNode = cover ? (
     <div data-part="cover" data-error={coverFailed ? 'true' : undefined}>
@@ -305,10 +299,9 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   if (loading) {
     return (
       <>
-        {responsiveStyleTag}
         <div
           {...rest}
-          style={cardStyle}
+          style={{ ...cardStyle, ...responsive.channels }}
           className={cardClassName}
           aria-busy="true"
           aria-disabled="true"
@@ -362,7 +355,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
 
   return (
     <>
-      {responsiveStyleTag}
       <div
         {...rest}
         className={cardClassName}
@@ -387,7 +379,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         aria-pressed={isActionable && selectable ? selected : undefined}
         aria-disabled={unavailable || undefined}
         aria-busy={loading || undefined}
-        style={cardStyle}
+        style={{ ...cardStyle, ...responsive.channels }}
         {...skinAttributes}
         {...responsiveAttrs}
         {...partAttributes('root', interaction)}

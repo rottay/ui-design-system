@@ -359,7 +359,7 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
 
   /**
    * Whether a standalone table may switch itself to the mobile-card renderer.
-   * Collection workspaces disable this because their `AdaptiveConfig` is the
+   * Collection workspaces disable this because their declared posture is the
    * single authority for the active collection posture.
    * @default true
    */

@@ -12,6 +12,9 @@
  */
 
 @import "./breakpoints/index.css";
+@import "./viewport/index.css";
+@import "./channels/index.css";
+@import "./visibility/index.css";
 @import "./avatar/index.css";
 @import "./button/index.css";
 @import "./grid/index.css";

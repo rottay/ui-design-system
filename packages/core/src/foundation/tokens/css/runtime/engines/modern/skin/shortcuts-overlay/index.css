@@ -38,7 +38,7 @@
   justify-content: center;
   padding-block-start: 10vh;
   padding-inline: var(--ds-spacing-3, 12px);
-  container-type: inline-size;
+  container: ds-shortcuts-overlay / inline-size;
 }
 
 /* backdrop: scrim + sanctioned glass layer, at parity with the command
@@ -167,7 +167,7 @@
 }
 
 /* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
-@container (inline-size < 40rem) {
+@container ds-shortcuts-overlay (inline-size < 40rem) {
   .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
     padding-block-start: var(--ds-spacing-8, 32px);
   }

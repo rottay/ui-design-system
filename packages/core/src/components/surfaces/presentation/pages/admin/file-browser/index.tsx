@@ -24,7 +24,7 @@ import { Box, Flex, Skeleton, Stack } from '../../../../../primitives';
 import { PatternFileManager } from '../../../../../patterns';
 import type { FileItem, FolderItem } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import type { FileBrowserSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';

@@ -85,6 +85,13 @@ export default [
       // frozen classic engines, four in the boot error screen, and 438 in
       // stories and suites.
       '@rottay/no-hardcoded-colors': 'error',
+
+      // ON, with one file exemption declared below. This is the rule F-46 named:
+      // the responsive runtime called its provider-less fallback -- itself a
+      // hook -- only when no provider was present, so mounting a provider around
+      // a live consumer changed that consumer's hook order. Across production
+      // `src/**` it now measures ZERO.
+      'react-hooks/rules-of-hooks': 'error',
     },
   },
   {
@@ -113,6 +120,16 @@ export default [
     // background. Its colours are deliberately theme-independent.
     files: ['src/infrastructure/runtime/bootstrap/presentation/boundaries/system-error/**/*.{ts,tsx}'],
     rules: { '@rottay/no-hardcoded-colors': 'off' },
+  },
+  {
+    // EXEMPTION 5 — stories and suites, for the Rules of Hooks ONLY. A CSF
+    // `render` and a suite-local probe are components React mounts; the rule
+    // sees an anonymous arrow whose name does not start with a capital and
+    // reports every hook inside it. 68 findings, all of that shape, in 16
+    // files, none of them a rendered product path. The rule stays on for every
+    // production file, which is where the defect it exists to catch lives.
+    files: ['src/**/*.stories.{ts,tsx}', 'src/**/tests/**/*.{ts,tsx}', 'src/**/*.{test,spec}.{ts,tsx}'],
+    rules: { 'react-hooks/rules-of-hooks': 'off' },
   },
   {
     // EXEMPTION 4 — the motion suites, and ONLY the motion suites. Extending

@@ -566,12 +566,12 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
       role="dialog"
       aria-label={tOr("columnMenu.panelLabel", "Table columns")}
       recipe="bordered"
-      maxWidth="min(var(--ds-column-menu-panel-inline-size, 432px), calc(100vw - 24px))"
+      maxWidth="min(var(--ds-column-menu-panel-inline-size, 432px), calc(var(--ds-viewport-inline-size) - 24px))"
       className="ds-structure ds-column-menu"
       overlayClassName="ds-structure ds-column-menu-panel"
       overlayStyle={{
         inlineSize:
-          "min(var(--ds-column-menu-panel-inline-size, 432px), calc(100vw - 24px))",
+          "min(var(--ds-column-menu-panel-inline-size, 432px), calc(var(--ds-viewport-inline-size) - 24px))",
       }}
       content={
         <Box data-part="panel" data-open={isOpen} ref={panelRef} tabIndex={-1}>

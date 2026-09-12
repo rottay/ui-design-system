@@ -81,7 +81,7 @@
   inset-inline-end: 0;
   z-index: var(--ds-z-dropdown);
   inline-size: var(--ds-notification-center-panel-width, 22.5rem);
-  max-inline-size: calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4));
+  max-inline-size: calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4));
   margin-block-start: var(--ds-spacing-2);
   padding: var(--ds-spacing-3);
   container: ds-notification-panel / inline-size;

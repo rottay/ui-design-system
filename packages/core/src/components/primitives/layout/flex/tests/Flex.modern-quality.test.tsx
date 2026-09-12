@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 
 import ModernFlex from "../engines/modern";
+import { responsiveCss } from "@tests/support/responsive";
 
 describe("Modern Flex quality contract", () => {
   it("keeps semantic gaps tokenized and the formatting context shrink-safe", () => {
@@ -64,7 +65,7 @@ describe("Modern Flex quality contract", () => {
     // The mechanism (one scoped rule set per instance) is unchanged; what is
     // retired is the expectation that a responsive rung reaches the browser
     // unscaled while the identical scalar rung is scaled by the skin.
-    const css = container.querySelector("style")?.textContent ?? "";
+    const css = responsiveCss(container);
     expect(css).toContain(
       "gap: calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1))"
     );
@@ -101,7 +102,7 @@ describe("Modern Flex quality contract", () => {
         gap={{ xs: Number.NaN, md: [-4, Number.NEGATIVE_INFINITY] }}
       />
     );
-    const css = container.querySelector("style")?.textContent ?? "";
+    const css = responsiveCss(container);
     expect(css).toContain("gap: 0px");
     expect(css).not.toMatch(/NaN|Infinity|gap:\s*-/);
   });

@@ -91,14 +91,19 @@ describe("embedded CSS data producers", () => {
     ).toBe(true);
 
     const uniqueProperties = [...new Set(propertyMap)].sort();
-    const { css } = generateResponsiveCSS(
-      "embedded-css-contract",
+    const projection = generateResponsiveCSS(
       uniqueProperties.map((cssProperty) => ({
         cssProperty,
         value: { xs: "1px", md: "2px" },
       }))
     );
-    const emitted = declarationProperties(css);
+    // The projection arms `channel@step` tokens instead of emitting a
+    // stylesheet; the property half of each token is what this leg measures.
+    const emitted = (projection.attrs["data-ds-responsive"] ?? "")
+      .split(" ")
+      .filter(Boolean)
+      .map((token) => token.split("@")[0])
+      .map((slug) => (/^_?ds-/.test(slug) ? `--${slug}` : slug));
     expect([...new Set(emitted)].sort()).toEqual(uniqueProperties);
     expect(
       emitted.every((property) => !isEmbeddedCssPaintProperty(property))

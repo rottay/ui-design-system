@@ -29,7 +29,7 @@ import { PatternListToolbar } from "../../../../../patterns/data/list-toolbar";
 import type { ViewMode } from "../../../../../patterns/data/list-toolbar";
 import { FadeIn, recordTransitionName } from "@/graphics/motion";
 import { useCollectionStagger } from "../../../../../patterns/foundation/motion";
-import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
+import { useBreakpoints } from "@/infrastructure/runtime/responsive";
 import {
   countActiveFilters,
   resolveSurfaceAction,

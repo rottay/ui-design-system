@@ -7,6 +7,7 @@ import { RADIUS_MAP, SHADOW_MAP, SPACING_MAP } from "../contracts";
 import ClassicBox from "../engines/classic";
 import ModernBox from "../engines/modern";
 import RusticBox from "../engines/rustic";
+import { responsiveCss } from "@tests/support/responsive";
 
 const ENGINE_COMPONENTS = {
   classic: ClassicBox,
@@ -410,7 +411,7 @@ describe("Box runtime engines", () => {
       );
 
       const box = screen.getByTestId(`box-responsive-geometry-${engine}`);
-      const css = container.querySelector("style")?.textContent ?? "";
+      const css = responsiveCss(container);
       expect(box.getAttribute("style") ?? "").not.toContain("[object Object]");
       expect(css).toContain("height: 10rem");
       expect(css).toContain("height: 20rem");

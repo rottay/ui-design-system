@@ -67,7 +67,7 @@ import type { SurfaceAction } from '../../../foundation/chrome/contracts';
 import { resolveSurfaceButtonVariant } from '../../../foundation/chrome/runtime/access';
 import { normalizeSurfaceError } from '../../../foundation/chrome/runtime/errors';
 import { useSurfaceTranslations } from '../../../foundation/chrome/runtime/i18n';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 
 // ---------------------------------------------------------------------------

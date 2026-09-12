@@ -11,6 +11,7 @@ import { describe, expect, it } from 'vitest';
 import RusticButton from '../engines/rustic';
 import ModernButton from '../engines/modern';
 import ClassicButton from '../engines/classic';
+import { responsiveChannelElement, responsiveCss, responsiveTokens } from '@tests/support/responsive';
 
 // ---------------------------------------------------------------------------
 // Rustic Engine
@@ -25,9 +26,9 @@ describe('RusticButton responsive size', () => {
       const button = container.querySelector('.rottay-button--rustic');
       expect(button).toBeInTheDocument();
       // No style tag should be injected
-      expect(container.querySelector('style')).toBeNull();
-      // data-responsive-id should NOT be present
-      expect(button?.hasAttribute('data-responsive-id')).toBe(false);
+      expect(responsiveCss(container)).toBe('');
+      // no responsive channel is armed at all
+      expect(responsiveTokens(container)).toHaveLength(0);
     });
   });
 
@@ -36,17 +37,17 @@ describe('RusticButton responsive size', () => {
       const { container } = render(
         <RusticButton size={{ xs: 'sm', lg: 'xl' }}>Responsive</RusticButton>
       );
-      const styleTag = container.querySelector('style');
-      const button = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const button = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(button).toBeInTheDocument();
       // Should contain height, padding, and font-size declarations
-      expect(styleTag?.textContent).toContain('height:');
-      expect(styleTag?.textContent).toContain('padding:');
-      expect(styleTag?.textContent).toContain('font-size:');
+      expect(styleTag).toContain('height:');
+      expect(styleTag).toContain('padding:');
+      expect(styleTag).toContain('font-size:');
       // lg tier: media query for 1024px
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
     it('resolves semantic aliases (phone, tablet, desktop)', () => {
@@ -55,12 +56,12 @@ describe('RusticButton responsive size', () => {
           Aliased
         </RusticButton>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
+      expect(styleTag).toContain('@media (min-width: 640px)');
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
     it('does not set inline height/padding/fontSize when size is responsive', () => {
@@ -93,7 +94,7 @@ describe('ModernButton responsive size', () => {
       expect(button).toBeInTheDocument();
       expect(button?.className).not.toContain('btn-sm');
       expect(button?.className).toContain('rottay-button');
-      expect(container.querySelector('style')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -102,10 +103,10 @@ describe('ModernButton responsive size', () => {
       const { container } = render(
         <ModernButton size={{ xs: 'sm', lg: 'lg' }}>Responsive</ModernButton>
       );
-      const styleTag = container.querySelector('style');
-      const button = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const button = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(button).toBeInTheDocument();
       // Should NOT contain DaisyUI size classes when responsive
       expect(button?.className).not.toContain('btn-sm');
@@ -121,15 +122,15 @@ describe('ModernButton responsive size', () => {
           Multi-breakpoint
         </ModernButton>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
-      expect(styleTag?.textContent).toContain('height:');
-      expect(styleTag?.textContent).toContain('padding-inline:');
-      expect(styleTag?.textContent).toContain('line-height:');
-      expect(styleTag?.textContent).toContain('--ds-button-resolved-icon-size:');
-      expect(styleTag?.textContent).toContain('font-size:');
-      expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
-      expect(styleTag?.textContent).toContain('@media (min-width: 1280px)');
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
+      expect(styleTag).toContain('height:');
+      expect(styleTag).toContain('padding-inline:');
+      expect(styleTag).toContain('line-height:');
+      expect(styleTag).toContain('--ds-button-resolved-icon-size:');
+      expect(styleTag).toContain('font-size:');
+      expect(styleTag).toContain('@media (min-width: 768px)');
+      expect(styleTag).toContain('@media (min-width: 1280px)');
     });
   });
 });
@@ -147,9 +148,9 @@ describe('ClassicButton responsive size', () => {
       const button = container.querySelector('.rottay-button--classic');
       expect(button).toBeInTheDocument();
       // No style tag should be injected
-      expect(container.querySelector('style')).toBeNull();
-      // data-responsive-id should NOT be present
-      expect(button?.hasAttribute('data-responsive-id')).toBe(false);
+      expect(responsiveCss(container)).toBe('');
+      // no responsive channel is armed at all
+      expect(responsiveTokens(container)).toHaveLength(0);
     });
   });
 
@@ -158,17 +159,17 @@ describe('ClassicButton responsive size', () => {
       const { container } = render(
         <ClassicButton size={{ xs: 'sm', lg: 'xl' }}>Responsive</ClassicButton>
       );
-      const styleTag = container.querySelector('style');
-      const button = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const button = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(button).toBeInTheDocument();
       // Should contain height, padding, and font-size declarations
-      expect(styleTag?.textContent).toContain('height:');
-      expect(styleTag?.textContent).toContain('padding:');
-      expect(styleTag?.textContent).toContain('font-size:');
+      expect(styleTag).toContain('height:');
+      expect(styleTag).toContain('padding:');
+      expect(styleTag).toContain('font-size:');
       // lg tier: media query for 1024px
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
     it('resolves semantic aliases (phone, tablet, desktop)', () => {
@@ -177,12 +178,12 @@ describe('ClassicButton responsive size', () => {
           Aliased
         </ClassicButton>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
+      expect(styleTag).toContain('@media (min-width: 640px)');
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
     it('contains height, padding, and font-size in generated CSS', () => {
@@ -191,13 +192,13 @@ describe('ClassicButton responsive size', () => {
           Multi-breakpoint
         </ClassicButton>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
-      expect(styleTag?.textContent).toContain('height:');
-      expect(styleTag?.textContent).toContain('padding:');
-      expect(styleTag?.textContent).toContain('font-size:');
-      expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
-      expect(styleTag?.textContent).toContain('@media (min-width: 1280px)');
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
+      expect(styleTag).toContain('height:');
+      expect(styleTag).toContain('padding:');
+      expect(styleTag).toContain('font-size:');
+      expect(styleTag).toContain('@media (min-width: 768px)');
+      expect(styleTag).toContain('@media (min-width: 1280px)');
     });
   });
 });

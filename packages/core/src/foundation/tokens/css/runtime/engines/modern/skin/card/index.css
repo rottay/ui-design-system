@@ -59,7 +59,7 @@
 /* base */
 .ds-card.ds-card--modern[data-part='root'] {
   position: relative;
-  container-type: inline-size;
+  container: ds-card / inline-size;
   min-inline-size: 0;
   min-block-size: var(--ds-premium-card-min-height);
   overflow: hidden;
@@ -577,7 +577,7 @@
   margin-block-start: 0;
 }
 
-@container (max-width: 28rem) {
+@container ds-card (max-width: 28rem) {
   .ds-card.ds-card--modern[data-part='root'] {
     --ds-card-actions-justify: stretch;
   }

@@ -1,0 +1,167 @@
+/**
+ * Responsive Visibility - Rottay Design System
+ *
+ * GENERATED SHAPE, AUTHORED FILE. Every rule below is
+ * `buildResponsiveVisibilitySheet()` in
+ * `foundation/tokens/css/foundation/responsive/tests/projection`, and
+ * `../visibility-contract.test.ts` compares the two byte for byte.
+ *
+ * WHY IT EXISTS. `Show`, `Hide` and `ResponsiveSlot` used to render a
+ * `<style dangerouslySetInnerHTML>` per instance, each with a `useId`-scoped
+ * class. The boundary set is CLOSED -- six lower bounds, six upper bounds and
+ * three device bands -- so it is one static sheet and one attribute per
+ * instance, which a strict CSP cannot drop and the layer order can rank.
+ *
+ * BOTH MODES ARE BOX-TRANSPARENT WHILE VISIBLE (`display: contents`): a
+ * boundary never inserts an anonymous block of its own into the parent's
+ * layout. The hide rule keeps its pinned `!important`: hiding must beat any
+ * display the children carry.
+ */
+
+[data-ds-show] {
+  display: none;
+}
+
+[data-ds-hide] {
+  display: contents;
+}
+
+@media (min-width: 0px) {
+  [data-ds-show="from:xs"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:xs"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  [data-ds-show="from:sm"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:sm"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  [data-ds-show="from:md"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:md"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-ds-show="from:lg"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:lg"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-ds-show="from:xl"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:xl"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  [data-ds-show="from:2xl"] {
+    display: contents;
+  }
+
+  [data-ds-hide="from:2xl"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  [data-ds-show="below:sm"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:sm"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-ds-show="below:md"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:md"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  [data-ds-show="below:lg"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:lg"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1279px) {
+  [data-ds-show="below:xl"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:xl"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1535px) {
+  [data-ds-show="below:2xl"] {
+    display: contents;
+  }
+
+  [data-ds-hide="below:2xl"] {
+    display: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  [data-ds-show="on:phone"] {
+    display: contents;
+  }
+
+  [data-ds-hide="on:phone"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  [data-ds-show="on:tablet"] {
+    display: contents;
+  }
+
+  [data-ds-hide="on:tablet"] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-ds-show="on:desktop"] {
+    display: contents;
+  }
+
+  [data-ds-hide="on:desktop"] {
+    display: none !important;
+  }
+}

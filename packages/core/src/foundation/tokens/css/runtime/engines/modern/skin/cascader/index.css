@@ -231,7 +231,7 @@
         (lane overlay register). ---- */
 .ds-cascader.ds-cascader--modern.ds-cascader-panel[data-part="dropdown"] {
   z-index: var(--ds-cascader-dropdown-z, var(--ds-z-index-dropdown));
-  max-inline-size: calc(100vw - 2 * var(--ds-spacing-4));
+  max-inline-size: calc(100dvw - 2 * var(--ds-spacing-4));
   border-radius: var(--ds-radius-lg);
   background: linear-gradient(
       var(--ds-elevation-surface-3),
@@ -253,7 +253,7 @@
 .ds-cascader.ds-cascader--modern[data-part="dropdown"]
   [data-part="option-list"] {
   max-inline-size: calc(
-    100vw - 2 * var(--ds-spacing-4) - 2 * var(--ds-spacing-1)
+    100dvw - 2 * var(--ds-spacing-4) - 2 * var(--ds-spacing-1)
   );
   overflow-x: auto;
 }

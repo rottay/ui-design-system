@@ -420,7 +420,7 @@
      base channel, month/year the compact one. max-inline-size is the <400px
      guard so a fixed width never overflows a narrow viewport. */
   inline-size: var(--ds-datepicker-panel-width, 288px);
-  max-inline-size: calc(100vw - 2 * var(--ds-spacing-4));
+  max-inline-size: calc(100dvw - 2 * var(--ds-spacing-4));
   /* Panel frame drained from the inline panelStyle (P2): the portaled panel
      inherits the document font through the portal root, exactly as the
      inline `fontFamily: 'inherit'` did. */
@@ -783,7 +783,7 @@
   }
   .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] {
     inline-size: max-content;
-    max-inline-size: calc(100vw - var(--ds-spacing-4));
+    max-inline-size: calc(100dvw - var(--ds-spacing-4));
   }
   .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button'],
   .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'] {

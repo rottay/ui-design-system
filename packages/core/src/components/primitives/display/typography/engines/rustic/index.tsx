@@ -140,10 +140,7 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
-    const elementId = needsResponsiveCSS ? `heading-${reactId.replace(/:/g, '')}` : '';
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
 
     const scalarSize = scalarOrUndefined(size);
     const effectiveSize = scalarSize || defaultSizeMap[level];
@@ -187,9 +184,6 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const HeadingElement = Tag as React.ElementType;
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         <HeadingElement
           ref={ref}
           className={`rottay-heading ${SCOPE_CLASSES} rottay-heading--${level} ${className}`.trim()}
@@ -198,11 +192,11 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           translate={translate}
           title={title}
           {...restProps}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
-          style={headingStyle}
+          style={{ ...headingStyle, ...responsive.channels }}
         >
           {children}
         </HeadingElement>
@@ -276,10 +270,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
-    const elementId = needsResponsiveCSS ? `text-${reactId.replace(/:/g, '')}` : '';
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
 
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.text.size;
 
@@ -326,9 +317,6 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
     const TextElement = Tag as React.ElementType;
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         <TextElement
           ref={ref}
           className={`rottay-text ${SCOPE_CLASSES}${numeric === 'tabular' ? ' ds-nums-tabular' : ''} ${className}`.trim()}
@@ -337,11 +325,11 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
           translate={translate}
           title={title}
           {...restProps}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
-          style={resolvedTextStyle}
+          style={{ ...resolvedTextStyle, ...responsive.channels }}
         >
           {children}
         </TextElement>
@@ -405,9 +393,7 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
         } as ResponsivePropEntry<any>,
       );
     }
-    const responsive = responsiveEntries.length
-      ? generateResponsiveCSS(`paragraph-${reactId.replace(/:/g, '')}`, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.paragraph.size;
     const craftProps = {
       textStyle,
@@ -446,7 +432,6 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
 
     return (
       <>
-        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
         <p
           ref={ref}
           className={`rottay-paragraph ${SCOPE_CLASSES} ${className}`.trim()}
@@ -455,11 +440,11 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
           translate={translate}
           title={title}
           {...restProps}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
-          style={paragraphStyle}
+          style={{ ...paragraphStyle, ...responsive.channels }}
         >
           {children}
         </p>
@@ -532,9 +517,7 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
         } as ResponsivePropEntry<any>,
       );
     }
-    const responsive = responsiveEntries.length
-      ? generateResponsiveCSS(`link-${reactId.replace(/:/g, '')}`, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.link.size;
     const craftProps = {
       textStyle,
@@ -585,7 +568,6 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
 
     return (
       <>
-        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
         <a
           ref={ref}
           href={disabled ? undefined : href}
@@ -598,12 +580,12 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
           translate={translate}
           title={title}
           {...restProps}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}
-          style={linkStyle}
+          style={{ ...linkStyle, ...responsive.channels }}
           aria-disabled={disabled || undefined}
         >
           {children}

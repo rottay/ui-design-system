@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { ClassicGrid } from "../engines/classic";
+import { responsiveChannelElement, responsiveCss } from '@tests/support/responsive';
 
 describe("ClassicGrid responsive templates", () => {
   it("projects responsive templates into the shared layout stylesheet", () => {
@@ -22,6 +23,6 @@ describe("ClassicGrid responsive templates", () => {
     expect(grid).toHaveStyle(
       "--_ds-grid-rows-xs: repeat(1, 1fr); --_ds-grid-rows-xl: repeat(2, 1fr)"
     );
-    expect(container.querySelector("style")).toBeNull();
+    expect(responsiveCss(container)).toBe('');
   });
 });

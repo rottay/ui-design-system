@@ -248,8 +248,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? selectId : '';
-  const responsiveCSS = needsResponsiveCSS ? generateResponsiveCSS(elementId, responsiveEntries) : null;
+  const responsiveCSS = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
 
@@ -998,10 +997,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         data-disabled={disabled || undefined}
         style={style}
       >
-        {responsiveCSS && responsiveCSS.css && <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />}
         <select
           ref={nativeSelectRef}
-          {...(responsiveCSS ? responsiveCSS.attrs : {})}
+          {...responsiveCSS.attrs}
+          style={{ ...responsiveCSS.channels }}
           data-part="trigger"
           data-variant={variant}
           data-status={effectiveStatus !== 'default' ? effectiveStatus : undefined}
@@ -1163,11 +1162,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       style={style}
       onKeyDown={handleKeyDown}
     >
-      {responsiveCSS && responsiveCSS.css && <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />}
       {/* Trigger */}
       <div
         {...triggerHtmlProps}
-        {...(responsiveCSS ? responsiveCSS.attrs : {})}
+        {...responsiveCSS.attrs}
+        style={{ ...responsiveCSS.channels }}
         /* The caller's id must survive the custom path too: it only reached the
            native <select>, so adding searchable/multiple/virtual silently
            dangled every <label htmlFor> and aria-labelledby aimed at it --

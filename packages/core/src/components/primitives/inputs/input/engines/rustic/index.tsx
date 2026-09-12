@@ -124,10 +124,7 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `input-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;
 
@@ -341,15 +338,12 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   return (
     <div style={{ position: 'relative', width: '100%' }}>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       <div
         className={containerClasses}
-        style={style}
+        style={{ ...style, ...responsive.channels }}
         {...skinAttributes}
         {...partAttributes('root', interaction)}
-        {...(responsive ? responsive.attrs : {})}
+        {...responsive.attrs}
         onClick={() => inputRef.current?.focus()}
         onPointerEnter={interactionHandlers.onPointerEnter}
         onPointerLeave={interactionHandlers.onPointerLeave}

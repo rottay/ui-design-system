@@ -17,7 +17,8 @@ import { useOptionalDirection } from "@/infrastructure/runtime/i18n";
 import { useSurfaceTranslations } from "../../../../../structures/foundation/chrome/runtime/i18n";
 import { PageShellSurface } from "../../../../../structures/shell/page-shell-surface";
 import { useSurfaceProfileDefaultsWithOverrides } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides";
-import { useSurfaceResponsiveLayout } from "../../../../../structures/foundation/chrome/runtime/responsive";
+import { useResponsive, useResponsiveValue } from "@/infrastructure/runtime/responsive";
+import { surfaceStackingValue } from "../../../../../structures/foundation/chrome/contracts";
 import { SurfaceActionBar } from "../../../../../structures/shell/surface-chrome";
 import { hasSurfaceError } from "../../../../runtime/helpers";
 import { SurfaceEmptyState, SurfaceErrorState } from "../../../../../structures/feedback/surface-lifecycle";
@@ -62,7 +63,8 @@ export function CompareSurface({
     config.visual?.profileOverrides
   );
   const { tSurface } = useSurfaceTranslations();
-  const responsive = useSurfaceResponsiveLayout({ stackOnMobile: true });
+  const shouldStack =
+    useResponsiveValue(surfaceStackingValue({ stackOnMobile: true })) ?? false;
   // Direction-aware pinning: the criteria column is the FIRST column, which
   // sits at inline-start -- physical left in LTR, physical right in RTL. The
   // Table's `fixed` contract is explicitly physical, so the surface resolves
@@ -102,7 +104,7 @@ export function CompareSurface({
       // Fixed 24% width on desktop keeps the criteria column narrow enough
       // to leave room for multiple subjects; on mobile it auto-sizes.
       title: tSurface("compare.criteria"),
-      width: responsive.shouldStack ? undefined : "24%",
+      width: shouldStack ? undefined : "24%",
       // Pin the criteria column through horizontal scroll so wide subject
       // sets never scroll the row labels out of view. Composed through the
       // Table primitive's own (physical) fixed contract, keyed on direction.
@@ -160,7 +162,7 @@ export function CompareSurface({
         <Stack
           className="ds-surface ds-compare"
           data-part="root"
-          data-layout={responsive.shouldStack ? "stacked" : "table"}
+          data-layout={shouldStack ? "stacked" : "table"}
           data-loading={loading ? "true" : "false"}
           spacing="lg"
         >
@@ -202,7 +204,7 @@ export function CompareSurface({
               {/* On mobile, the table layout is unreadable with multiple columns,
                 so we switch to stacked cards where each row becomes a card
                 that lists values per subject vertically. */}
-              {responsive.shouldStack ? (
+              {shouldStack ? (
                 <Stack spacing="md">
                   {section.rows.map((row) => (
                     <Card key={row.key} variant="outlined">

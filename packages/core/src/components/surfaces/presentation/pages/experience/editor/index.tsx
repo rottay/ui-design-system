@@ -40,7 +40,8 @@ import {
   SurfaceAccentBarWrapper,
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
@@ -63,7 +64,8 @@ export function EditorSurface({
 }: EditorSurfaceProps): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
-  const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   const resolvedMobile = isMobile && hasResolvedViewport;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const previewTitleId = useId();

@@ -147,10 +147,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `card-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const padding = paddingIsResponsive ? CARD_DEFAULTS.padding : (paddingProp as string);
 
@@ -254,13 +251,10 @@ export default function RusticCard(props: CardProps): React.ReactElement {
 
   return (
     <>
-    {responsive && responsive.css && (
-      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-    )}
     <div
       {...rest}
       className={`rottay-card rottay-card--rustic ${className}`}
-      style={cardStyle}
+      style={{ ...cardStyle, ...responsive.channels }}
       {...skinAttributes}
       onClick={onClick}
       {...interactionHandlers}
@@ -272,7 +266,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       aria-busy={loading}
-      {...(responsive ? responsive.attrs : {})}
+      {...responsive.attrs}
       {...partAttributes('root', interaction)}
     >
       {loadingOverlay}

@@ -103,10 +103,7 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementIdVal = needsResponsiveCSS ? `badge-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementIdVal, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? BADGE_DEFAULTS.size;
 
@@ -214,9 +211,6 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
 
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         {/*
           No --ds-badge-hover-transform treatment on this span: unlike the
           modern/rustic skin files, there is no classic-engine skin location
@@ -228,9 +222,9 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
         */}
         <span
           className={className}
-          style={standaloneStyle}
+          style={{ ...standaloneStyle, ...responsive.channels }}
           onClick={isInteractive ? handleClick : undefined}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
         >
           {icon && <span style={{ marginRight: 4 }}>{icon}</span>}
           {props.children}
@@ -260,9 +254,6 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
   // from antd's own styling, not from this component.
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       <AntBadge
         count={typeof displayValue === 'string' ? displayValue : formatCount(displayValue as number, max!)}
         dot={dot}
@@ -273,9 +264,9 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
         offset={offset}
         status={status}
         className={className}
-        style={badgeStyle}
+        style={{ ...badgeStyle, ...responsive.channels }}
         onClick={isInteractive ? handleClick : undefined}
-        {...(responsive ? responsive.attrs : {})}
+        {...responsive.attrs}
       >
         {children}
       </AntBadge>

@@ -90,17 +90,10 @@
 /* ---- viewport contract: the fixed full-viewport frame (drained from the
         engine's inline `position: fixed; inset: 0`). ---- */
 .rottay-sheet--modern[data-part='root'] {
-  --ds-sheet-viewport-max-height: 85vh;
+  --ds-sheet-viewport-max-height: 85dvh;
   position: fixed;
   inset: 0;
-  height: 100vh;
-}
-
-@supports (height: 100dvh) {
-  .rottay-sheet--modern[data-part='root'] {
-    --ds-sheet-viewport-max-height: 85dvh;
-    height: 100dvh;
-  }
+  height: 100dvh;
 }
 
 /* ---- backdrop: scrim + glass, intensity-governed like the rest of the
@@ -178,7 +171,7 @@
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'],
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right'] {
   inline-size: var(--ds-sheet-side-width, 380px);
-  max-inline-size: 100vw;
+  max-inline-size: 100dvw;
   padding-block-start: var(--ds-sheet-safe-area-top, env(safe-area-inset-top, 0px));
   padding-block-end: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }

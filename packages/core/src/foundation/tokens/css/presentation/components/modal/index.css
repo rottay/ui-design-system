@@ -31,11 +31,11 @@
   --ds-modal-3xl-max-height: 80vh;
   --ds-modal-4xl-max-height: 80vh;
   --ds-modal-5xl-max-height: 80vh;
-  --ds-modal-full-max-height: 100vh;
+  --ds-modal-full-max-height: 100dvh;
 
   /* Legacy height variants */
-  --ds-modal-max-height: calc(100vh - 4rem); /* Max height with margins */
-  --ds-modal-full-height: calc(100vh - 2rem);
+  --ds-modal-max-height: calc(100dvh - 4rem); /* Max height with margins */
+  --ds-modal-full-height: calc(100dvh - 2rem);
 
   /* ========================================================================
      OVERLAY/BACKDROP
@@ -131,7 +131,7 @@
   --ds-modal-body-color: var(--ds-color-neutral-700);
   --ds-modal-body-font-size: var(--ds-font-size-base);
   --ds-modal-body-line-height: var(--ds-line-height-normal);
-  --ds-modal-body-max-height: calc(100vh - 12rem); /* Scrollable body */
+  --ds-modal-body-max-height: calc(100dvh - 12rem); /* Scrollable body */
 
   /* ========================================================================
      FOOTER
@@ -203,7 +203,7 @@
   /* Drawer/Side modal */
   --ds-modal-drawer-width: 24rem;          /* 384px */
   --ds-modal-drawer-max-width: 90vw;
-  --ds-modal-drawer-height: 100vh;
+  --ds-modal-drawer-height: 100dvh;
   --ds-modal-drawer-border-radius: var(--ds-radius-none, 0);
 
   /* Bottom sheet (mobile) */
@@ -281,8 +281,8 @@
      RESPONSIVE
      Mobile-specific adjustments
      ======================================================================== */
-  --ds-modal-mobile-width: calc(100vw - 2rem);
-  --ds-modal-mobile-max-height: calc(100vh - 2rem);
+  --ds-modal-mobile-width: calc(100dvw - 2rem);
+  --ds-modal-mobile-max-height: calc(100dvh - 2rem);
   --ds-modal-mobile-padding: var(--ds-spacing-4, 1rem);
   --ds-modal-mobile-border-radius: var(--ds-radius-lg);
 

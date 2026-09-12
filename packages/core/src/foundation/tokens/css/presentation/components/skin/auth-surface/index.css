@@ -50,7 +50,7 @@
    luminance step on hero surfaces); this public pre-auth page IS such a
    first-impression surface (marketing precedent). */
 .ds-surface.ds-auth[data-part='root'] {
-  min-block-size: 100vh;
+  min-block-size: 100dvh;
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-color-neutral-900) 1.2%, var(--ds-color-bg-primary)),
@@ -58,15 +58,6 @@
   );
 }
 
-/* Dynamic viewport floor where supported (modern sheet.css precedent):
-   the canvas tracks the visible area as mobile chrome collapses, so the
-   background never ends short of the fold; content is top-aligned, so
-   the floor change shifts no layout. */
-@supports (height: 100dvh) {
-  .ds-surface.ds-auth[data-part='root'] {
-    min-block-size: 100dvh;
-  }
-}
 
 /* ---- container geometry ----
    Default 1120px measure, centered, with fluid padding per viewport. A

@@ -27,7 +27,7 @@
  * engine's Tailwind utilities (`flex flex-col min-h-screen`, `md:flex-row`,
  * `px-4`, `p-4`, `shrink-0`, `overflow-y-auto`, `transition-all
  * duration-300`) so paint and structure share one owner. Values are
- * parity-transcribed: 100vh min block size, the 768px `md` breakpoint,
+ * parity-transcribed: 100dvh min block size, the 768px `md` breakpoint,
  * spacing via the density-scaled `--ds-spacing-*` channels, and the sider
  * collapse motion rides the canonical `--ds-motion-slow` (320ms, the canon
  * neighbor of the drained `duration-300`). `Content` now carries
@@ -107,7 +107,7 @@
 
 /* ===========================================================================
  * K3-C: shell structure (was Tailwind utilities in the engine). Parity values:
- * `min-h-screen` -> 100vh block size; `md:flex-row` -> 768px breakpoint;
+ * `min-h-screen` -> 100dvh block size; `md:flex-row` -> 768px breakpoint;
  * `px-4`/`p-4` -> density-scaled --ds-spacing-4; `duration-300` -> the
  * canonical --ds-motion-slow (320ms). Logical properties are used wherever
  * the drained utility had a physical axis (`px-4` -> padding-inline).
@@ -130,7 +130,7 @@
   /* A nested root must shrink below its content's max-content instead of
      forcing the parent shell wider (B1.1 min-inline-size: 0 law). */
   min-inline-size: 0;
-  min-block-size: var(--ds-layout-root-min-block-size, 100vh);
+  min-block-size: var(--ds-layout-root-min-block-size, 100dvh);
   min-block-size: var(--ds-layout-root-min-block-size, 100dvh);
 }
 /* A layout inside a layout is a REGION, not the shell: the viewport lock

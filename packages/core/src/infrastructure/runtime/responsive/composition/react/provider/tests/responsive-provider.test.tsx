@@ -26,6 +26,7 @@ import {
   type ResolvedResponsiveContextValue,
   type ResponsiveContextValue,
 } from '../../../..';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { useResponsiveValue } from '@/infrastructure/runtime/responsive/composition/react/provider/responsive-value';
 
@@ -269,11 +270,16 @@ let originalMatchMedia: typeof window.matchMedia;
 
 beforeEach(() => {
   originalMatchMedia = window.matchMedia;
+  // The store is a module singleton: without this, one case's viewport is the
+  // next case's cached answer whenever the next case has no `matchMedia` to
+  // rebuild from.
+  resetResponsiveMediaStore();
 });
 
 afterEach(() => {
   cleanup();
   window.matchMedia = originalMatchMedia;
+  resetResponsiveMediaStore();
   vi.restoreAllMocks();
 });
 
@@ -282,25 +288,48 @@ afterEach(() => {
 // ---------------------------------------------------------------------------
 
 describe('ResponsiveProvider', () => {
-  describe('SSR defaults (no provider)', () => {
-    it('useResponsive returns phone defaults when no provider exists', () => {
+  describe('no provider: the shared store answers', () => {
+    it('useResponsive reads the real viewport instead of degrading to phone', () => {
+      // The defect this replaces: without a provider the hook returned a frozen
+      // phone constant for the life of the tree, so a provider-less consumer on
+      // a desktop laid out as a phone and never corrected.
+      window.matchMedia = createMatchMediaMock(viewportResolver(1280)).matchMedia as never;
       const { result } = renderHook(() => useResponsive());
 
-      expect(result.current.deviceClass).toBe('phone');
-      expect(result.current.hasResolvedViewport).toBe(false);
-      expect(result.current.isPhone).toBe(true);
-      expect(result.current.isTablet).toBe(false);
-      expect(result.current.isDesktop).toBe(false);
-      expect(result.current.pointer).toBe('coarse');
-      expect(result.current.orientation).toBe('portrait');
-      // Static-first SSR: motion remains reduced until the browser preference
-      // is known, preventing pre-hydration animation.
-      expect(result.current.prefersReducedMotion).toBe(true);
-      expect(result.current.isPhoneOrTablet).toBe(true);
-      expect(result.current.isTabletOrDesktop).toBe(false);
-      expect(result.current.isTouchDevice).toBe(true);
+      expect(result.current.deviceClass).toBe('desktop');
+      expect(result.current.activeBreakpoint).toBe('xl');
+      expect(result.current.hasResolvedViewport).toBe(true);
+      expect(result.current.isDesktop).toBe(true);
+      expect(result.current.pointer).toBe('fine');
+      // No provider means no virtual-keyboard observer; the inset stays at its
+      // floor rather than being guessed.
       expect(result.current.virtualKeyboardInset).toBe(0);
       expect(result.current.isVirtualKeyboardOpen).toBe(false);
+    });
+
+    it('falls back to the mobile-first baseline where matchMedia does not exist', () => {
+      // The server answer, and the only place `phone` is still a default.
+      const withoutMatchMedia = window.matchMedia;
+      // @ts-expect-error -- deliberately removing the capability under test.
+      delete window.matchMedia;
+      try {
+        const { result } = renderHook(() => useResponsive());
+        expect(result.current.deviceClass).toBe('phone');
+        expect(result.current.hasResolvedViewport).toBe(false);
+        expect(result.current.isPhone).toBe(true);
+        expect(result.current.isTablet).toBe(false);
+        expect(result.current.isDesktop).toBe(false);
+        expect(result.current.pointer).toBe('coarse');
+        expect(result.current.orientation).toBe('portrait');
+        // Static-first SSR: motion remains reduced until the browser preference
+        // is known, preventing pre-hydration animation.
+        expect(result.current.prefersReducedMotion).toBe(true);
+        expect(result.current.isPhoneOrTablet).toBe(true);
+        expect(result.current.isTabletOrDesktop).toBe(false);
+        expect(result.current.isTouchDevice).toBe(true);
+      } finally {
+        window.matchMedia = withoutMatchMedia;
+      }
     });
 
     it('normalizes a legacy custom context to the strong hook return contract', () => {

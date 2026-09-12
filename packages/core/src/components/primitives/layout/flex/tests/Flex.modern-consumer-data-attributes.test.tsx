@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import React from "react";
 import { Flex } from "../engines/modern";
+import { responsiveCss, responsiveTokens } from '@tests/support/responsive';
 
 function root(container: HTMLElement): HTMLElement {
   return container.querySelector('[data-component="flex"]') as HTMLElement;
@@ -76,10 +77,11 @@ describe("Flex modern probe", () => {
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
-  it("responsive direction emits a scoped rule and the id attr", () => {
+  it("arms the governed channels instead of injecting a scoped stylesheet", () => {
     const { container } = render(<Flex direction={{ xs: "column", md: "row" }} />);
-    expect(root(container).getAttribute("data-responsive-id")).toBeTruthy();
-    expect(container.querySelector("style")?.innerHTML).toContain("flex-direction: row");
+    expect(responsiveTokens(container)).toEqual(["flex-direction@xs", "flex-direction@md"]);
+    expect(responsiveCss(container)).toContain("flex-direction: row");
+    expect(container.querySelectorAll("style")).toHaveLength(0);
   });
 
   it("inline reaches the DOM", () => {

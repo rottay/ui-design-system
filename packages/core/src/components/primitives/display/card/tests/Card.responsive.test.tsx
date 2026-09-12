@@ -11,6 +11,7 @@ import { describe, expect, it } from 'vitest';
 import ClassicCard from '../engines/classic';
 import RusticCard from '../engines/rustic';
 import ModernCard from '../engines/modern';
+import { responsiveChannelElement, responsiveCss, responsiveTokens } from '@tests/support/responsive';
 
 // ---------------------------------------------------------------------------
 // Classic Engine
@@ -25,7 +26,7 @@ describe('ClassicCard responsive padding', () => {
       const card = container.querySelector('.rottay-card--classic');
       expect(card).toBeInTheDocument();
       // No responsive style tag should be injected for scalar values
-      expect(container.querySelector('style[data-responsive-id]')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -34,24 +35,24 @@ describe('ClassicCard responsive padding', () => {
       const { container } = render(
         <ClassicCard padding={{ xs: 'sm', lg: 'lg' }}>Content</ClassicCard>
       );
-      const styleTag = container.querySelector('style');
-      const card = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const card = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(card).toBeInTheDocument();
       // sm padding value
-      expect(styleTag?.textContent).toContain('padding:');
+      expect(styleTag).toContain('padding:');
       // lg breakpoint
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
-    it('sets data-responsive-id attribute on the element', () => {
+    it('arms the governed responsive channels on the element', () => {
       const { container } = render(
         <ClassicCard padding={{ xs: 'sm', md: 'lg' }}>Content</ClassicCard>
       );
-      const card = container.querySelector('[data-responsive-id]');
+      const card = responsiveChannelElement(container);
       expect(card).toBeInTheDocument();
-      expect(card?.getAttribute('data-responsive-id')).toBeTruthy();
+      expect(responsiveTokens(container).length).toBeGreaterThan(0);
     });
   });
 
@@ -62,12 +63,12 @@ describe('ClassicCard responsive padding', () => {
           Content
         </ClassicCard>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
+      expect(styleTag).toContain('@media (min-width: 640px)');
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
   });
 });
@@ -86,7 +87,7 @@ describe('RusticCard responsive padding', () => {
       expect(card).toBeInTheDocument();
       // The rustic card has its own keyframes style tag, but should NOT
       // have a responsive style tag when padding is scalar
-      expect(card?.hasAttribute('data-responsive-id')).toBe(false);
+      expect(responsiveTokens(container)).toHaveLength(0);
     });
   });
 
@@ -95,20 +96,16 @@ describe('RusticCard responsive padding', () => {
       const { container } = render(
         <RusticCard padding={{ xs: 'sm', lg: 'lg' }}>Content</RusticCard>
       );
-      const styles = container.querySelectorAll('style');
-      // Should have at least one style with responsive CSS
-      const responsiveStyle = Array.from(styles).find(
-        (s) => s.textContent?.includes('@media')
-      );
-      expect(responsiveStyle).not.toBeUndefined();
-      expect(responsiveStyle?.textContent).toContain('@media (min-width: 1024px)');
+      const responsiveStyle = responsiveCss(container);
+      expect(responsiveStyle).toContain('@media');
+      expect(responsiveStyle).toContain('@media (min-width: 1024px)');
     });
 
-    it('sets data-responsive-id attribute', () => {
+    it('arms the governed responsive channels', () => {
       const { container } = render(
         <RusticCard padding={{ xs: 'sm', md: 'lg' }}>Content</RusticCard>
       );
-      const card = container.querySelector('[data-responsive-id]');
+      const card = responsiveChannelElement(container);
       expect(card).toBeInTheDocument();
     });
   });
@@ -118,13 +115,10 @@ describe('RusticCard responsive padding', () => {
       const { container } = render(
         <RusticCard padding={{ phone: 'sm', desktop: 'lg' }}>Content</RusticCard>
       );
-      const styles = container.querySelectorAll('style');
-      const responsiveStyle = Array.from(styles).find(
-        (s) => s.textContent?.includes('@media')
-      );
-      expect(responsiveStyle).not.toBeUndefined();
+      const responsiveStyle = responsiveCss(container);
+      expect(responsiveStyle).toContain('@media');
       // desktop -> lg (1024px)
-      expect(responsiveStyle?.textContent).toContain('@media (min-width: 1024px)');
+      expect(responsiveStyle).toContain('@media (min-width: 1024px)');
     });
   });
 });
@@ -139,8 +133,8 @@ describe('ModernCard responsive padding', () => {
       const { container } = render(
         <ModernCard padding="lg">Content</ModernCard>
       );
-      // No data-responsive-id when scalar
-      expect(container.querySelector('[data-responsive-id]')).toBeNull();
+      // no responsive channel is armed for a scalar
+      expect(responsiveChannelElement(container)).toBeNull();
     });
   });
 
@@ -149,22 +143,22 @@ describe('ModernCard responsive padding', () => {
       const { container } = render(
         <ModernCard padding={{ xs: 'sm', lg: 'lg' }}>Content</ModernCard>
       );
-      const styleTag = container.querySelector('style');
-      const card = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const card = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(card).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain('padding:');
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('padding:');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
-    it('sets data-responsive-id attribute', () => {
+    it('arms the governed responsive channels', () => {
       const { container } = render(
         <ModernCard padding={{ xs: 'sm', xl: 'lg' }}>Content</ModernCard>
       );
-      const card = container.querySelector('[data-responsive-id]');
+      const card = responsiveChannelElement(container);
       expect(card).toBeInTheDocument();
-      expect(card?.getAttribute('data-responsive-id')).toBeTruthy();
+      expect(responsiveTokens(container).length).toBeGreaterThan(0);
     });
   });
 
@@ -175,12 +169,12 @@ describe('ModernCard responsive padding', () => {
           Content
         </ModernCard>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
+      expect(styleTag).toContain('@media (min-width: 640px)');
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
   });
 });

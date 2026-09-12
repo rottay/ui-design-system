@@ -36,6 +36,7 @@
  */
 
 import type { ReactNode } from 'react';
+import type { ResponsiveValueObject } from '@/foundation/contracts/kernel/responsive/values';
 import type { TabsProps } from '../../../../primitives/navigation/tabs';
 
 /** A single breadcrumb segment. Provide `href` for link navigation or `onClick` for SPA routing. */
@@ -316,4 +317,49 @@ export interface SurfaceVisualOverrides {
   labelStyle?: 'uppercase' | 'sentence' | 'capitalize';
   countUpEnabled?: boolean;
   pulseSpeed?: 'none' | 'slow' | 'normal' | 'fast';
+}
+
+/**
+ * Responsive stacking overrides accepted by chrome with split layouts.
+ *
+ * By default a split layout stacks on mobile (opt-out) and does NOT stack on
+ * tablet (opt-in).
+ */
+export interface SurfaceResponsiveVisualConfig {
+  /** Stack content vertically on mobile viewports. Defaults to `true`. */
+  stackOnMobile?: boolean;
+  /** Stack content vertically on tablet viewports. Defaults to `false`. */
+  stackOnTablet?: boolean;
+}
+
+/**
+ * The stacking ladder a split layout declares, as a `ResponsiveValue`.
+ *
+ * PURE. It derives no breakpoint of its own and calls no hook: the caller
+ * resolves it with `useResponsiveValue` from the one responsive runtime. This
+ * is what replaced `useSurfaceResponsiveLayout`, which read the viewport itself
+ * and was therefore a second responsive authority living at the structure tier.
+ */
+export function surfaceStackingValue(
+  visual?: SurfaceResponsiveVisualConfig,
+): ResponsiveValueObject<boolean> {
+  return {
+    xs: visual?.stackOnMobile !== false,
+    sm: visual?.stackOnTablet === true,
+    lg: false,
+  };
+}
+
+/**
+ * The column ladder a grid layout declares, as a `ResponsiveValue`.
+ *
+ * Also pure, for the same reason. Tablet defaults to at most two columns and
+ * mobile to one, which is the fallback every grid surface used to restate.
+ */
+export function surfaceColumnsValue(
+  desktopColumns: number,
+  tabletColumns: number = Math.min(desktopColumns, 2),
+  mobileColumns = 1,
+): ResponsiveValueObject<number> {
+  return { xs: mobileColumns, sm: tabletColumns, lg: desktopColumns };
 }

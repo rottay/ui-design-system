@@ -96,9 +96,11 @@ export type {
 } from './foundation/contracts/adaptive/collection';
 export { useCollectionWorkspace } from './runtime/collection-workspace';
 
-// Adaptive posture contract + runtime hook
+// Adaptive posture contract. Declaration is a `ResponsiveValue` on the one
+// ladder and resolution is pure, so a container-measured surface and a
+// viewport one share both.
 export type {
-  AdaptiveConfig,
+  SurfaceAdaptivePosture,
   SurfacePosture,
   CollectionPosture,
   FormSectionLayout,
@@ -106,11 +108,8 @@ export type {
   ActionBarPosture,
   FilterPosture,
   NavPosture,
-  Breakpoint,
 } from './foundation/contracts/adaptive';
-export { resolvePosture, toBreakpoint } from './foundation/contracts/adaptive';
-export { useAdaptivePosture } from './runtime/adaptive-posture';
-export type { UseAdaptivePostureResult } from './runtime/adaptive-posture';
+export { resolveSurfacePosture } from './foundation/contracts/adaptive';
 
 // Runtime profile defaults + per-surface override hook
 export {

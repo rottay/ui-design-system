@@ -43,7 +43,8 @@ import {
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
@@ -53,7 +54,6 @@ import { PageShellSurface } from '../../../../../structures/shell/page-shell-sur
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
-import { useResponsive } from '@/infrastructure/runtime/responsive';
 
 /** Default transcript renderer used when consumers do not provide a custom message slot. */
 function DefaultMessage({
@@ -182,8 +182,13 @@ export function ChatSurface({
 }: ChatSurfaceProps): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
-  const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
-  const { virtualKeyboardInset, isVirtualKeyboardOpen } = useResponsive();
+  const {
+    isPhone: isMobile,
+    hasResolvedViewport,
+    virtualKeyboardInset,
+    isVirtualKeyboardOpen,
+  } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   const resolvedMobile = isMobile && hasResolvedViewport;
   const showSidebar =
     !!config.presentation.sidebar &&

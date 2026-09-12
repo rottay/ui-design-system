@@ -142,11 +142,11 @@
   inline-size: 100%;
   max-inline-size: min(
     var(--ds-confirm-dialog-max-width, 24rem),
-    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
   /* Cap against the DYNAMIC viewport with breathing room at both edges; the
      panel scrolls its own overflow instead of pushing actions off-screen. */
-  max-block-size: calc(100vh - var(--ds-spacing-8));
+  max-block-size: calc(100dvh - var(--ds-spacing-8));
   max-block-size: calc(100dvh - var(--ds-spacing-8));
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -246,10 +246,10 @@
    (alert-dialog.css's grammar — long localized labels stay reachable at
    320px). */
 .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'] {
-  container-type: inline-size;
+  container: ds-confirm-dialog / inline-size;
 }
 
-@container (max-width: 20rem) {
+@container ds-confirm-dialog (max-width: 20rem) {
   .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='footer'] {
     flex-direction: column;
     align-items: stretch;

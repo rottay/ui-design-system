@@ -19,6 +19,13 @@
  * container query was retired); the cut uses logical container units.
  */
 
+/* The studio's own box is the container the preview cut reads: the cut was an
+   unnamed query with no declared container at all, so it attached to whatever
+   ancestor happened to be one. */
+.ds-pattern-brand-studio {
+  container: ds-brand-studio / inline-size;
+}
+
 /* ---- layout: editor field grid + preview track (was inline/injected) ---- */
 .ds-pattern-brand-studio .ds-pattern-brand-studio__editor-grid[data-part='editor-grid'] {
   display: grid;
@@ -32,7 +39,7 @@
   gap: var(--ds-spacing-6);
   align-items: start;
 }
-@container (inline-size < 56.25rem) {
+@container ds-brand-studio (inline-size < 56.25rem) {
   .ds-pattern-brand-studio .brand-studio-layout[data-part='preview-grid'] {
     grid-template-columns: 1fr;
   }

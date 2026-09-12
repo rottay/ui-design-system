@@ -63,7 +63,7 @@ const styles = {
   layout: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
+    minHeight: 'var(--ds-viewport-block-size)',
   } as React.CSSProperties,
   /** Override when hasSider is true: switch to horizontal row direction */
   layoutWithSider: {

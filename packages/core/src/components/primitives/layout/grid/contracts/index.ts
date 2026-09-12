@@ -39,24 +39,17 @@ import type {
   WithChildrenProps,
   BaseComponentProps,
 } from "../../../../../foundation/contracts";
+import type { ResponsiveValueObject } from "@/foundation/contracts/kernel/responsive/values";
 
 /**
- * Responsive breakpoint object for grid properties
+ * Breakpoint object for grid properties.
+ *
+ * The ONE responsive contract, re-exported under the name Grid's public API
+ * has always used. Grid used to declare a second `ResponsiveValue` of its own
+ * -- six canonical keys, no `base`, no device aliases -- which every other
+ * responsive prop in the package disagreed with.
  */
-export interface ResponsiveValue<T> {
-  /** Extra small screens (mobile) */
-  xs?: T;
-  /** Small screens (small tablets) */
-  sm?: T;
-  /** Medium screens (tablets) */
-  md?: T;
-  /** Large screens (desktops) */
-  lg?: T;
-  /** Extra large screens (large desktops) */
-  xl?: T;
-  /** 2x Extra large screens */
-  "2xl"?: T;
-}
+export type ResponsiveValue<T> = ResponsiveValueObject<T>;
 
 /**
  * Number of columns or rows in the grid

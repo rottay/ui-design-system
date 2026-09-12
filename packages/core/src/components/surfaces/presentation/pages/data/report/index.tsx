@@ -24,7 +24,8 @@ import type {
   ReportTemplate,
 } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
@@ -460,10 +461,11 @@ export function ReportSurface({
   // sidebar-filters layout puts templates + filters in a persistent left
   // column. On tablet this gets too cramped, so it stacks.
   const isSidebarLayout = config.visual.layout === 'sidebar-filters';
-  const { isMobile, shouldStack } = useSurfaceResponsiveLayout({
-    stackOnMobile: true,
-    stackOnTablet: isSidebarLayout,
-  });
+  const { isPhone: isMobile } = useResponsive();
+  const shouldStack =
+    useResponsiveValue(
+      surfaceStackingValue({ stackOnMobile: true, stackOnTablet: isSidebarLayout })
+    ) ?? false;
   // Visual defaults cascade: explicit surface config -> product profile ->
   // DS defaults (spacing scale, card material, motion intensity).
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);

@@ -6,7 +6,7 @@
  * manager owns. The per-placement switch then spreads `...base` and adds the
  * viewport-edge rect, so the placement COORDINATES already outranked caller
  * style; only `position` and the owned `zIndex` were exposed. The rect is
- * 100vh/100vw spans against viewport edges, which only pin on a fixed element.
+ * 100dvh/100dvw spans against viewport edges, which only pin on a fixed element.
  *
  * Both halves are load-bearing: the block must win, AND it must stay narrow --
  * caller paint survives, and the engine claims only the edges the chosen
@@ -72,7 +72,7 @@ describe('FAB-17 / Drawer modern: engine positioning block wins over caller styl
 
     expect(surface.style.top).toBe('0px');
     expect(surface.style.left).toBe('0px');
-    expect(surface.style.height).toBe('100vh');
+    expect(surface.style.height).toBe('var(--ds-viewport-block-size)');
   });
 
   it('right placement: the engine rect claims the inline-end edge', () => {

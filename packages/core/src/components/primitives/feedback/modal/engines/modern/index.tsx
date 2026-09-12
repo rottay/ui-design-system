@@ -29,7 +29,7 @@ import { useModalInertSiblings } from '../../../../runtime/overlay/focus-managem
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
-import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive/composition/react/provider/phone-state';
+import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
@@ -399,10 +399,10 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           /* Reset native dialog styling */
           position: 'fixed',
           inset: 0,
-          width: '100vw',
-          height: '100vh',
-          maxWidth: '100vw',
-          maxHeight: '100vh',
+          width: 'var(--ds-viewport-inline-size)',
+          height: 'var(--ds-viewport-block-size)',
+          maxWidth: 'var(--ds-viewport-inline-size)',
+          maxHeight: 'var(--ds-viewport-block-size)',
           margin: 0,
           padding: 0,
           display: 'flex',

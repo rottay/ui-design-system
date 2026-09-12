@@ -40,7 +40,9 @@ import type {
   CollectionWorkspaceSurfaceMode,
   WorkspaceActiveFiltersConfig,
 } from '../../../../foundation/contracts/adaptive/collection';
-import type { AdaptiveConfig } from '../../../../foundation/contracts/adaptive';
+import { deviceAliasForBreakpoint } from '@/foundation/contracts/kernel/responsive/breakpoints';
+import { useResponsive } from '@/infrastructure/runtime/responsive';
+import { resolveSurfacePosture, type SurfaceAdaptivePosture } from '../../../../foundation/contracts/adaptive';
 import type { DensityKey, ViewMode } from '../../../../../patterns/data/list-toolbar/contracts';
 import type {
   CollectionHeaderMetaItem,
@@ -55,7 +57,6 @@ import {
   isCollectionFilterValueActive,
   useCollectionWorkspace,
 } from '../../../../runtime/collection-workspace';
-import { useAdaptivePosture } from '../../../../runtime/adaptive-posture';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import {
   resolveSurfacePermission,
@@ -186,7 +187,7 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
     ariaLabel?: string;
   };
   icon?: ReactNode;
-  adaptive?: AdaptiveConfig;
+  adaptive?: SurfaceAdaptivePosture;
 }
 
 // ---------------------------------------------------------------------------
@@ -797,7 +798,14 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   );
   const columnsResizable = presentation?.resizable ?? !!controls?.columnSettings?.onColumnResize;
 
-  const posture = useAdaptivePosture(adaptive, workspace.containerBreakpoint);
+  const { activeBreakpoint } = useResponsive();
+  // The posture follows the COLLECTION's own box when it has been measured and
+  // the viewport otherwise, so an embedded workspace in a narrow column reads
+  // its own width rather than the window's.
+  const postureBreakpoint = workspace.containerBreakpoint ?? activeBreakpoint;
+  const postureDevice = deviceAliasForBreakpoint(postureBreakpoint);
+  const postureIsPhone = postureDevice === 'phone';
+  const posture = resolveSurfacePosture(adaptive, postureBreakpoint);
   // Effective density: a runtime `controls.density` switcher value wins; else
   // the declarative `density` prop baseline (default 'comfortable'). The
   // resolved density CSS variables (design-language §3) are emitted on the
@@ -916,13 +924,13 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   );
 
   const effectiveViewMode = useMemo(() => {
-    if (posture.collection && posture.breakpoint !== 'desktop') {
+    if (posture.collection && postureDevice !== 'desktop') {
       return posture.collection;
     }
     return workspace.activeViewMode;
-  }, [posture.collection, posture.breakpoint, workspace.activeViewMode]);
+  }, [posture.collection, postureDevice, workspace.activeViewMode]);
 
-  const showOptionalChrome = !posture.compactHeader && !posture.isPhone;
+  const showOptionalChrome = !posture.compactHeader && !postureIsPhone;
   const showContextChrome = Boolean(
     resolvedContextSlot && (showOptionalChrome || chrome?.context === true),
   );
@@ -1870,7 +1878,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             scopes={controls.scopes.scopes}
             activeScope={controls.scopes.activeScope ?? controls.scopes.scopes[0]?.key ?? ''}
             onScopeChange={controls.scopes.onScopeChange ?? (() => {})}
-            variant={posture.isPhone ? 'inline' : 'section'}
+            variant={postureIsPhone ? 'inline' : 'section'}
           />
         )}
         {controls?.savedViews?.enabled && controls.savedViews.views && controls.savedViews.views.length > 0 && (
@@ -2142,7 +2150,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           data-part="controls-row"
           align="center"
           gap={10}
-          wrap={posture.isPhone ? 'wrap' : 'nowrap'}
+          wrap={postureIsPhone ? 'wrap' : 'nowrap'}
           data-ds-collection-controls-row="true"
         >
           <Box
@@ -2151,8 +2159,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             data-filters-expanded={inlineFiltersExpanded ? 'true' : 'false'}
             style={{
               // Test-pinned inline geometry (phone full-width rail).
-              flex: posture.isPhone ? '1 1 100%' : 1,
-              width: posture.isPhone ? '100%' : undefined,
+              flex: postureIsPhone ? '1 1 100%' : 1,
+              width: postureIsPhone ? '100%' : undefined,
             }}
           >
             <Box
@@ -2169,7 +2177,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 <Flex
                   align="center"
                   gap={8}
-                  wrap={posture.isPhone ? 'wrap' : 'nowrap'}
+                  wrap={postureIsPhone ? 'wrap' : 'nowrap'}
                   className="ds-collection-workspace__views-strip-row"
                 >
                   {hasScopes && (
@@ -2214,7 +2222,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                   className="ds-collection-workspace__filters-strip"
                   data-part="filters-strip"
                   data-active={inlineFiltersExpanded ? 'true' : 'false'}
-                  data-phone={posture.isPhone ? 'true' : 'false'}
+                  data-phone={postureIsPhone ? 'true' : 'false'}
                   data-ds-collection-filters-strip="true"
                 >
                   <Flex
@@ -2257,17 +2265,17 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                           position: 'relative',
                           zIndex: 4,
                           overflow: 'visible',
-                          minWidth: posture.isPhone ? undefined : 'max-content',
+                          minWidth: postureIsPhone ? undefined : 'max-content',
                           // Custom-property passthrough (sanctioned): the
                           // filter panel's inline layout channels.
-                          ['--ds-filter-panel-inline-wrap' as string]: posture.isPhone ? 'wrap' : 'nowrap',
-                          ['--ds-filter-panel-inline-flex' as string]: posture.isPhone
+                          ['--ds-filter-panel-inline-wrap' as string]: postureIsPhone ? 'wrap' : 'nowrap',
+                          ['--ds-filter-panel-inline-flex' as string]: postureIsPhone
                             ? '1 1 268px'
                             : '0 0 auto',
-                          ['--ds-filter-panel-inline-min-width' as string]: posture.isPhone
+                          ['--ds-filter-panel-inline-min-width' as string]: postureIsPhone
                             ? '196px'
                             : 'auto',
-                          ['--ds-filter-panel-inline-control-width' as string]: posture.isPhone
+                          ['--ds-filter-panel-inline-control-width' as string]: postureIsPhone
                             ? '100%'
                             : '156px',
                         }}
@@ -2298,7 +2306,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             gap={4}
             style={{
               flexShrink: 0,
-              ...(posture.isPhone
+              ...(postureIsPhone
                 ? {
                     width: '100%',
                     justifyContent: 'flex-end',
@@ -2394,7 +2402,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               <PageSizeControl
                 pagination={behavior?.pagination}
                 visibleCount={data.length}
-                compact={posture.isPhone}
+                compact={postureIsPhone}
               />
             )}
 
@@ -2468,7 +2476,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       <Box
         className="ds-collection-workspace__body"
         data-part="body"
-        data-phone={posture.isPhone ? 'true' : 'false'}
+        data-phone={postureIsPhone ? 'true' : 'false'}
         data-ds-collection-body="true"
       >
         <Flex className="ds-collection-workspace__body-content" data-part="body-content" gap={4}>

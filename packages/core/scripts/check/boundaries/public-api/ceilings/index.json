@@ -193,8 +193,8 @@
       "maxSourceBytes": 155628
     },
     "./primitives/responsive": {
-      "maxReachableModules": 6,
-      "maxSourceBytes": 12972
+      "maxReachableModules": 5,
+      "maxSourceBytes": 14072
     },
     "./primitives/segmented": {
       "maxReachableModules": 17,
@@ -285,8 +285,8 @@
       "maxSourceBytes": 2041590
     },
     "./runtime/responsive": {
-      "maxReachableModules": 12,
-      "maxSourceBytes": 58600
+      "maxReachableModules": 11,
+      "maxSourceBytes": 59317
     },
     "./runtime/root-attributes": {
       "maxReachableModules": 2,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-DER-05: the one default-mode law and the honest authored-leaf collector. +1574 on ./runtime/tenant is the collectPatchAuthoredLeaves owner, the ThemeProvenance.authoredLeaves field, the TenantFacts field and the roster's single UNDECLARED_VERTICAL_DEFAULT_MODE; +1531 on ./runtime/visual-authority is the auto media-copy selector moving into the selector owner and the emission field becoming followsSystem. No new reachable module in either graph.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-INV-04 (F-46), one responsive mechanism — two ceilings UP and two DOWN, all four measured. UP: ./runtime/responsive maxSourceBytes 58600 -> 59317 (+717), the facade publishing the single ResponsiveValue resolution beside the hooks; ./primitives/responsive maxSourceBytes 12972 -> 14072 (+1100), Show/Hide/ResponsiveSlot reading the closed visibility-boundary vocabulary from the contract instead of building media queries locally, with the useId-scoped stylesheet each instance used to inject now gone. DOWN: ./runtime/responsive maxReachableModules 12 -> 11 (the provider-less fallback stopped pulling the generic useMediaQuery into the breakpoint hook's graph); ./primitives/responsive maxReachableModules 6 -> 5 (one boundary contract instead of a per-family visibility runtime).",
+  "lastMoveKind": "decrece-solo — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 0 subido(s), 0 sin ancla valida"
 }

@@ -57,7 +57,8 @@ import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
@@ -366,7 +367,7 @@ export function NotificationSurface({
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
-  const { isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout();
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
   const resolvedMobile = isMobile && hasResolvedViewport;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const useTabs = config.visual.layout === 'tabs';

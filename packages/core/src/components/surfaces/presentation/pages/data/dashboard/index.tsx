@@ -41,10 +41,11 @@ import {
   useContainerPosture,
 } from "../../../../../patterns/runtime/adaptive-layout/presentation/react";
 import { useSurfaceProfileDefaultsWithOverrides } from "../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides";
+import { useResponsive, useResponsiveValue } from "@/infrastructure/runtime/responsive";
 import {
-  resolveResponsiveColumnCount,
-  useSurfaceResponsiveLayout,
-} from "../../../../../structures/foundation/chrome/runtime/responsive";
+  surfaceColumnsValue,
+  surfaceStackingValue,
+} from "../../../../../structures/foundation/chrome/contracts";
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
@@ -167,11 +168,8 @@ export function DashboardSurface({
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
-  const responsiveLayout = useSurfaceResponsiveLayout({
-    stackOnMobile: true,
-    stackOnTablet: false,
-  });
-  const isMobile = responsiveLayout.isMobile;
+  const { isPhone: isMobile } = useResponsive();
+  useResponsiveValue(surfaceStackingValue({ stackOnMobile: true, stackOnTablet: false }));
   // Section reveals opt into the scroll-driven entry fade-up only when the
   // ambient dial allows decorative motion. allowAmbientMotion already folds in
   // reduced-motion, coarse-pointer, constrained-power and hidden-tab state, so
@@ -206,12 +204,14 @@ export function DashboardSurface({
     isMobile && config.visual.mobileStatsLimit
       ? (config.behavior.stats ?? []).slice(0, config.visual.mobileStatsLimit)
       : config.behavior.stats;
-  const statsColumns = resolveResponsiveColumnCount(
-    responsiveLayout,
-    config.visual.statsColumns ?? 4,
-    Math.min(config.visual.statsColumns ?? 4, 2),
-    1
-  );
+  const statsColumns =
+    useResponsiveValue(
+      surfaceColumnsValue(
+        config.visual.statsColumns ?? 4,
+        Math.min(config.visual.statsColumns ?? 4, 2),
+        1
+      )
+    ) ?? 1;
   const sectionsColumns =
     isMobile && config.visual.stackSectionsOnMobile !== false
       ? 1
@@ -363,7 +363,7 @@ export function DashboardSurface({
            early-return is NOT used here because it would drop the board. */
         <DashboardSkeleton
           statsCount={stats?.length ?? 0}
-          /* resolveResponsiveColumnCount clamps to the 1–12 literal range by
+          /* surfaceColumnsValue clamps to the 1–12 literal range by
              contract, so the resolved count is always a valid GridColumns. */
           statsColumns={statsColumns as GridColumns}
           sections={visibleSections}

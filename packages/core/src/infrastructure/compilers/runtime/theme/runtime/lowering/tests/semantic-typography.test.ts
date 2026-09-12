@@ -211,9 +211,17 @@ const FIRST_PARTY = [
 // both sides, with the base keysets unchanged at 1307 / 1283 / 584. The three
 // committed facade artifacts emit sorted, so all three stayed byte-identical
 // under `build:vertical-artifacts --check`.
+/**
+ * WO-INV-04 re-anchored `bithire` ONLY: the one channel that moved is
+ * `--ds-command-home-console-min-height`, whose authored value moved off the
+ * static viewport unit onto `calc(100dvh - 108px)` with the rest of the
+ * dynamic-viewport migration. `rottay` and `evnto` declare no viewport-unit
+ * channel and keep the digests they had, which is what makes this a
+ * one-channel move rather than a re-baseline.
+ */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
   rottay: "fbab8014fb93f804b2e0a35f725813315a0723041fc4d097cab477eda935df93",
-  bithire: "c6a0caf349998a81f50a56c2260066f68b18a42a7cd090b163904e9415cbb2d3",
+  bithire: "cdb9f666b20d007e00b59bb3cd873cd7e86338deede53c6b2990ef82ed1651a2",
   evnto: "44d5f4fc6b99ed465f59278adc9a035a0c9c300d2c9f8c23a0740248c87ce68d",
 };
 

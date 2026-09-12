@@ -102,11 +102,11 @@
   padding: var(--ds-popconfirm-padding, var(--ds-spacing-4));
   min-inline-size: min(
     var(--ds-popconfirm-min-width, 12.5rem),
-    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
   max-inline-size: min(
     var(--ds-popconfirm-max-width, 21.875rem),
-    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-base);

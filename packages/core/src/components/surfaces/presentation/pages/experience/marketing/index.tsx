@@ -46,7 +46,8 @@ import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import type { MarketingSurfaceConfig } from '../../../../foundation/contracts';
 
 export interface MarketingSurfaceProps {
@@ -115,7 +116,8 @@ export function MarketingSurface({
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
-  const { shouldStack, isMobile } = useSurfaceResponsiveLayout(config.visual);
+  const { isPhone: isMobile } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const heroFirst = config.visual.heroPosition !== 'end';
   const heroContent =

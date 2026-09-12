@@ -64,7 +64,7 @@
 import React from 'react';
 import type { ReactNode, CSSProperties } from 'react';
 import type { ButtonSize, ButtonVariant, ButtonShape } from '../../contracts';
-import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive/composition/react/provider/phone-state';
+import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive';
 
 export interface ButtonGroupProps {
   /** Group children (Button components) */

@@ -24,7 +24,7 @@ import React, { useState, useCallback, useMemo, type ReactNode, type CSSProperti
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { FormBuilderProps } from '../../contracts';
 import type { FieldDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { resolveAdaptiveFormFieldColumnSpan, resolveAdaptiveFormLayout } from '../../runtime/responsive';
 
 // Personality-driven easing and duration: these reference CSS custom properties

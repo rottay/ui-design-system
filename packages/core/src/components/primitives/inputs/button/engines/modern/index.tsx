@@ -307,10 +307,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `btn-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(resolvedSizeProp) ?? BUTTON_DEFAULTS.size;
 
@@ -533,12 +530,8 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     'data-pulse': pulse ? 'true' : undefined,
     'data-bordered': bordered ? 'true' : undefined,
     ...partAttributes(dataPart ?? 'trigger', interaction),
-    ...(responsive ? responsive.attrs : {}),
+    ...responsive.attrs,
   };
-
-  const responsiveStyleTag = responsive?.css ? (
-    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-  ) : null;
 
   // A navigational action remains a native anchor so open-in-new-tab,
   // context-menu and assistive-technology semantics all work. Inert links use
@@ -547,7 +540,6 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     const safeRel = target === '_blank' ? rel ?? 'noopener noreferrer' : rel;
     return (
       <>
-        {responsiveStyleTag}
         <a
           {...(nativeButtonProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
           {...interactionProps}
@@ -558,7 +550,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
           rel={safeRel}
           className={classes}
           onClick={onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
-          style={interactiveStyle}
+          style={{ ...interactiveStyle, ...responsive.channels }}
         >
           {content}
         </a>
@@ -568,7 +560,6 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
 
   return (
     <>
-      {responsiveStyleTag}
       <button
         {...nativeButtonProps}
         {...interactionProps}
@@ -578,7 +569,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         className={classes}
         disabled={disabled || busy}
         onClick={onClick}
-        style={interactiveStyle}
+        style={{ ...interactiveStyle, ...responsive.channels }}
         aria-disabled={disabled || busy}
         aria-busy={busy}
       >

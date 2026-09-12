@@ -152,7 +152,7 @@ describe('Descriptions modern — span is clamped to the row track count', () =>
     // At <=860px the grid drops to two tracks; a span authored for the wide
     // grid is still wider than that, so the skin gives it the whole row.
     expect(SKIN).toMatch(
-      /@container \(max-width: 860px\)[\s\S]*?\[data-part='row'\]:not\(\[data-span='1'\]\)\s*\{\s*grid-column:\s*1 \/ -1;/
+      /@container ds-descriptions \(max-width: 860px\)[\s\S]*?\[data-part='row'\]:not\(\[data-span='1'\]\)\s*\{\s*grid-column:\s*1 \/ -1;/
     );
   });
 });

@@ -42,10 +42,10 @@ import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/sta
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
 import { WorkflowTemplateIcon } from '@/graphics/icons/semantic/generated/roles/workflow-template';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
-import { useAdaptivePosture } from '../../../../runtime/adaptive-posture';
+import { resolveSurfacePosture } from '../../../../foundation/contracts/adaptive';
 import { useSurfaceProfileDefaults } from '../../../../../structures/foundation/chrome/runtime/profile-defaults';
 import {
   resolveStackSpacing,
@@ -164,7 +164,7 @@ export interface GuidedDraftFormSurfaceProps {
    * }}
    * ```
    */
-  adaptive?: import('../../../../foundation/contracts/adaptive').AdaptiveConfig;
+  adaptive?: import('../../../../foundation/contracts/adaptive').SurfaceAdaptivePosture;
 }
 
 // ---------------------------------------------------------------------------
@@ -601,13 +601,13 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
   // not confirmed (the provider's pre-resolution default is phone; the
   // form-family surfaces gate the same way). Structure keeps reading the
   // breakpoint flags directly.
-  const { hasResolvedViewport } = useResponsive();
+  const { hasResolvedViewport, activeBreakpoint } = useResponsive();
   const resolvedMobile = hasResolvedViewport && isMobile;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
 
   // Adaptive posture resolution
-  const posture = useAdaptivePosture(adaptive);
+  const posture = resolveSurfacePosture(adaptive, activeBreakpoint);
 
   // Responsive layout: adaptive override -> breakpoint defaults
   const formLayoutMap: Record<string, SectionNavLayout> = {
@@ -762,12 +762,17 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       ) : (
         // Desktop: side-by-side layout with sidebar
         <Flex data-part="content" data-layout="sidebar" gap={5}>
+          {/* The declared posture reaches the nav on EVERY tier. This branch
+              used to hardcode `sidebar`, so an `adaptive` posture that named a
+              form layout was silently dropped above the stacking width. With no
+              posture declared the resolution below still answers `sidebar`
+              here, so the default is unchanged. */}
           <SectionNav
             sections={sections}
             activeSection={activeSection}
             onSectionClick={handleSectionClick}
             headingWeight={headingWeight}
-            layout="sidebar"
+            layout={sectionNavLayout}
             mode={mode}
           />
           <Box data-part="content-body">

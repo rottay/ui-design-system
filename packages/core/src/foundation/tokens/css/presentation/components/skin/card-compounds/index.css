@@ -385,7 +385,7 @@
   justify-content: center;
 }
 
-@container (max-width: 28rem) {
+@container ds-card (max-width: 28rem) {
   .rottay-card-header[data-part='header'][data-part='header'] {
     flex-direction: column;
   }

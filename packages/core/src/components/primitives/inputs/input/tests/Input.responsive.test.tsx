@@ -9,6 +9,7 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import ClassicInput from '../engines/classic';
+import { responsiveChannelElement, responsiveCss, responsiveTokens } from '@tests/support/responsive';
 
 // ---------------------------------------------------------------------------
 // Classic Engine
@@ -21,9 +22,9 @@ describe('ClassicInput responsive size', () => {
         <ClassicInput size="lg" placeholder="Test" />
       );
       // No responsive style tag should be injected for scalar values
-      expect(container.querySelector('style')).toBeNull();
-      // data-responsive-id should NOT be present on the input
-      expect(container.querySelector('[data-responsive-id]')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
+      // no responsive channel is armed at all on the input
+      expect(responsiveChannelElement(container)).toBeNull();
     });
   });
 
@@ -32,23 +33,23 @@ describe('ClassicInput responsive size', () => {
       const { container } = render(
         <ClassicInput size={{ xs: 'sm', lg: 'xl' }} placeholder="Responsive" />
       );
-      const styleTag = container.querySelector('style');
+      const styleTag = responsiveCss(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       // Should contain height and font-size declarations
-      expect(styleTag?.textContent).toContain('height:');
-      expect(styleTag?.textContent).toContain('font-size:');
+      expect(styleTag).toContain('height:');
+      expect(styleTag).toContain('font-size:');
       // lg breakpoint: 1024px
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
-    it('sets data-responsive-id attribute on the element', () => {
+    it('arms the governed responsive channels on the element', () => {
       const { container } = render(
         <ClassicInput size={{ xs: 'sm', md: 'lg' }} placeholder="Test" />
       );
-      const input = container.querySelector('[data-responsive-id]');
+      const input = responsiveChannelElement(container);
       expect(input).toBeInTheDocument();
-      expect(input?.getAttribute('data-responsive-id')).toBeTruthy();
+      expect(responsiveTokens(container).length).toBeGreaterThan(0);
     });
   });
 
@@ -57,12 +58,12 @@ describe('ClassicInput responsive size', () => {
       const { container } = render(
         <ClassicInput size={{ phone: 'xs', tablet: 'md', desktop: 'xl' }} placeholder="Aliased" />
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
+      expect(styleTag).toContain('@media (min-width: 640px)');
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
   });
 });

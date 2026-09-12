@@ -16,7 +16,24 @@
 
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { responsiveVisibilityQuery } from '@/foundation/contracts/kernel/responsive/visibility';
 import { ResponsiveSlot } from '..';
+
+/**
+ * The boundaries a rendered slot set stands for.
+ *
+ * The wrappers stamp one token each and inject no stylesheet, so the media
+ * queries this file has always measured are read back through the contract.
+ */
+function boundaries(container: HTMLElement): string[] {
+  return Array.from(container.querySelectorAll('[data-ds-show],[data-ds-hide]')).map((node) => {
+    const token = node.getAttribute('data-ds-show') ?? node.getAttribute('data-ds-hide') ?? '';
+    const [kind, value] = token.split(':') as [string, never];
+    const constraints =
+      kind === 'on' ? { on: value } : kind === 'from' ? { from: value } : { below: value };
+    return responsiveVisibilityQuery(constraints) ?? '';
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Device-alias mode
@@ -37,9 +54,9 @@ describe('ResponsiveSlot - device aliases', () => {
     expect(screen.getByTestId('tablet')).toBeInTheDocument();
     expect(screen.getByTestId('desktop')).toBeInTheDocument();
 
-    // Verify the Show wrappers emit style tags with media queries
-    const styles = container.querySelectorAll('style');
-    expect(styles.length).toBeGreaterThanOrEqual(3);
+    // Three boundaries, and not one injected stylesheet between them.
+    expect(boundaries(container)).toHaveLength(3);
+    expect(container.querySelectorAll('style')).toHaveLength(0);
   });
 
   it('renders tablet content on tablet', () => {
@@ -84,12 +101,10 @@ describe('ResponsiveSlot - device aliases', () => {
 
     // Without tablet, phone + tablet are merged into a single Show below="desktop"
     // so the phone content covers 0--1023px
-    const styles = container.querySelectorAll('style');
-    expect(styles.length).toBeGreaterThanOrEqual(2);
+    expect(boundaries(container).length).toBeGreaterThanOrEqual(2);
 
     // The phone content should be wrapped in a Show that covers below desktop
-    const styleTexts = Array.from(styles).map((s) => s.textContent);
-    const hasBelowDesktop = styleTexts.some((t) => t?.includes('max-width: 1023px'));
+    const hasBelowDesktop = boundaries(container).some((q) => q.includes('max-width: 1023px'));
     expect(hasBelowDesktop).toBe(true);
   });
 
@@ -106,9 +121,7 @@ describe('ResponsiveSlot - device aliases', () => {
     expect(screen.getByTestId('tablet')).toBeInTheDocument();
 
     // Tablet content covers tablet + desktop (from="tablet", no upper bound)
-    const styles = container.querySelectorAll('style');
-    const styleTexts = Array.from(styles).map((s) => s.textContent);
-    const hasFromTablet = styleTexts.some((t) => t?.includes('min-width: 640px'));
+    const hasFromTablet = boundaries(container).some((q) => q.includes('min-width: 640px'));
     expect(hasFromTablet).toBe(true);
   });
 
@@ -124,9 +137,8 @@ describe('ResponsiveSlot - device aliases', () => {
     );
 
     expect(screen.getByTestId('shared')).toBeInTheDocument();
-    // No style tags needed since content is identical at all sizes
-    const styles = container.querySelectorAll('style');
-    expect(styles.length).toBe(0);
+    // No boundary needed since content is identical at all sizes.
+    expect(boundaries(container)).toHaveLength(0);
   });
 });
 
@@ -142,8 +154,7 @@ describe('ResponsiveSlot - standard breakpoints', () => {
 
     expect(screen.getByTestId('xs')).toBeInTheDocument();
     // Single slot covering full range -- no Show wrappers needed
-    const styles = container.querySelectorAll('style');
-    expect(styles.length).toBe(0);
+    expect(boundaries(container)).toHaveLength(0);
   });
 
   it('cascades xs to sm when sm is not provided', () => {
@@ -159,10 +170,9 @@ describe('ResponsiveSlot - standard breakpoints', () => {
     expect(screen.getByTestId('lg')).toBeInTheDocument();
 
     // xs covers xs through md (below lg), lg covers lg+
-    const styles = container.querySelectorAll('style');
-    const styleTexts = Array.from(styles).map((s) => s.textContent);
-    const hasBelowLg = styleTexts.some((t) => t?.includes('max-width: 1023px'));
-    const hasFromLg = styleTexts.some((t) => t?.includes('min-width: 1024px'));
+    const queries = boundaries(container);
+    const hasBelowLg = queries.some((q) => q.includes('max-width: 1023px'));
+    const hasFromLg = queries.some((q) => q.includes('min-width: 1024px'));
     expect(hasBelowLg).toBe(true);
     expect(hasFromLg).toBe(true);
   });

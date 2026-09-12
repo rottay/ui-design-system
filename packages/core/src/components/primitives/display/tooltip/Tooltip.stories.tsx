@@ -282,12 +282,12 @@ export const LocaleAndLongCopy: Story = {
     <div
       dir="rtl"
       lang="ar"
-      style={{ width: "min(18rem, calc(100vw - 2rem))" }}
+      style={{ width: "min(18rem, calc(100dvw - 2rem))" }}
     >
       <Tooltip
         engine="modern"
         content="راجع الأدلة الموثقة قبل نقل المرشح إلى المرحلة التالية؛ يمكن تعديل التوصية قبل تنفيذها."
-        maxWidth="min(22rem, calc(100vw - 1rem))"
+        maxWidth="min(22rem, calc(100dvw - 1rem))"
         placement="bottom-start"
         recipe="rich"
         shortcut="ctrl+enter"

@@ -197,8 +197,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `input-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS ? generateResponsiveCSS(elementId, responsiveEntries) : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;
 
@@ -335,9 +334,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     );
   }
 
-  const responsiveStyleTag =
-    responsive && responsive.css ? <style dangerouslySetInnerHTML={{ __html: responsive.css }} /> : null;
-  const responsiveAttrs = responsive ? responsive.attrs : {};
+  const responsiveAttrs = responsive.attrs;
 
   /** The DOM contract the modern Input skin selects on. Spread onto the
    *  shell element -- the neutral `<div>` in the addon branch, the `<input>`
@@ -441,7 +438,6 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   if (prefix || suffix || showClearButton || loading) {
     return (
       <div className={`rottay-input-field ${className}`.trim()} data-part="field" style={style}>
-        {responsiveStyleTag}
         <div
           className={shellClassName}
           onClick={(event) => {
@@ -453,6 +449,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           {...partAttributes(dataPart ?? 'root', interaction)}
           {...skinAttributes}
           {...responsiveAttrs}
+          style={{ ...responsive.channels }}
         >
           {prefix && (
             <span data-part="affix-prefix">
@@ -484,10 +481,10 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // Simple input without prefix/suffix -- the shell IS the input element
   return (
     <div className={`rottay-input-field ${className}`.trim()} data-part="field" style={style}>
-      {responsiveStyleTag}
       <input
         {...inputProps}
         {...responsiveAttrs}
+        style={{ ...responsive.channels }}
         className={shellClassName}
         onPointerEnter={interactionHandlers.onPointerEnter}
         onPointerLeave={interactionHandlers.onPointerLeave}

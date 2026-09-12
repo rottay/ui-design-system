@@ -121,7 +121,7 @@ export const PageHeaderSystem: Story = {
   render: () => (
     <div
       style={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         padding: "clamp(16px, 3vw, 36px)",
         background: "var(--ds-shell-bg, var(--ds-color-bg-primary))",
       }}

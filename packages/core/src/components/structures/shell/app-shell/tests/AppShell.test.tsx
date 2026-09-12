@@ -222,7 +222,7 @@ describe('AppShell responsive contract', () => {
     expect(dialog).toHaveClass('rottay-app-shell__navigation-drawer');
     expect(dialog.style.boxSizing).toBe('');
     expect(dialog.style.getPropertyValue('--ds-shell-resolved-drawer-inline-size')).toBe(
-      'min(var(--ds-shell-sidebar-width, 312px), 100dvw)',
+      'min(var(--ds-shell-sidebar-width, 312px), var(--ds-viewport-inline-size))',
     );
     expect(dialog.style.width).toBe('var(--ds-shell-resolved-drawer-inline-size)');
     const drawerHeader = dialog.querySelector(

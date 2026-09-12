@@ -22,7 +22,8 @@ import type {
   SearchSurfaceResult,
 } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import {
   SurfaceActionBar,
   SurfaceSectionCard,
@@ -156,7 +157,8 @@ export function SearchSurface({
     config.visual?.profileOverrides
   );
   const { tSurfaceOr } = useSurfaceTranslations();
-  const { isMobile, shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  const { isPhone: isMobile } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   // Visual defaults cascade: explicit surface config -> product profile ->
   // DS defaults (spacing scale, card material, motion intensity).
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);

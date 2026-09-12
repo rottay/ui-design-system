@@ -12,7 +12,8 @@ import { filterSurfaceActions, filterSurfaceTabbedViews } from '../../foundation
 import type { HeaderSurfaceConfig } from '../../foundation/chrome/contracts';
 import { PageShellSurface } from '../../shell/page-shell-surface';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../foundation/chrome/runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../foundation/chrome/contracts';
 import { SurfaceActionBar, SurfaceTabbedLabel } from '../../shell/surface-chrome';
 
 export interface HeaderSurfaceProps {
@@ -25,7 +26,7 @@ export function HeaderSurface({
   loading = false,
 }: HeaderSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
-  const { isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout();
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
   const resolvedMobile = isMobile && hasResolvedViewport;
   // Tabs use app-resolved access so hidden tabs never appear in the
   // navigation, avoiding confusing "access denied" states.

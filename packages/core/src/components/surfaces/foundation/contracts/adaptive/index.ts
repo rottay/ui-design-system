@@ -1,16 +1,30 @@
 /**
  * @fileoverview Adaptive surface contracts.
  *
- * Typed posture declarations that surfaces use to describe their
- * breakpoint-aware behavior. Instead of scattering media queries and
- * isMobile checks, surfaces declare their posture transforms here
- * and the runtime resolves them.
+ * Typed posture declarations a surface uses to describe its breakpoint-aware
+ * behaviour. Instead of scattering media queries and `isMobile` checks, a
+ * surface declares its posture per step and the one responsive runtime
+ * resolves it.
  *
- * Three contract levels:
- * - AdaptivePosture: the resolved behavior for the current breakpoint
- * - AdaptiveConfig: the full declaration (phone + tablet + desktop)
- * - useAdaptivePosture(): hook that resolves config -> posture
+ * ONE MECHANISM. This owner used to declare `AdaptiveConfig` -- a
+ * `{ desktop, tablet, phone }` object with a desktop-first merging cascade of
+ * its own -- and `useAdaptivePosture`, a hook that read the viewport itself.
+ * That was a second responsive vocabulary and a second responsive authority
+ * beside `ResponsiveValue` and `useResponsiveValue`. The declaration is now a
+ * `ResponsiveValue` on the one ladder, and resolution is pure, so a surface
+ * measuring its own CONTAINER resolves the same declaration through the same
+ * function a viewport consumer uses.
  */
+
+import {
+  RESPONSIVE_BREAKPOINT_ORDER,
+  type ResponsiveBreakpointKey,
+} from '@/foundation/contracts/kernel/responsive/breakpoints';
+import {
+  isResponsiveValue,
+  normalizeResponsiveValue,
+  type ResponsiveValueObject,
+} from '@/foundation/contracts/kernel/responsive/values';
 
 // ---------------------------------------------------------------------------
 // Posture values
@@ -66,89 +80,70 @@ export interface SurfacePosture {
 }
 
 // ---------------------------------------------------------------------------
-// Adaptive config (declared by consumers)
+// Adaptive declaration
 // ---------------------------------------------------------------------------
 
 /**
- * Full adaptive configuration declared on a surface.
+ * A posture declared per breakpoint, mobile-first.
  *
- * Each breakpoint key is optional. Missing breakpoints inherit
- * from the next larger breakpoint (phone <- tablet <- desktop).
+ * Steps MERGE upward: a step inherits every field declared at or below it and
+ * overrides only what it restates. Device aliases (`phone`, `tablet`,
+ * `desktop`) and the canonical steps are the same ladder, so both spellings are
+ * accepted and mean the same thing.
  *
  * @example
  * ```ts
- * const adaptive: AdaptiveConfig = {
- *   desktop: { collection: 'table', pane: 'inline', filters: 'inline' },
- *   tablet: { collection: 'table', pane: 'sheet', filters: 'dropdown' },
+ * const adaptive: SurfaceAdaptivePosture = {
  *   // `route` opens the dedicated record destination. Use `hidden` when the
  *   // supporting pane should disappear without introducing navigation.
  *   phone: { collection: 'cards', pane: 'route', filters: 'sheet', compactHeader: true },
+ *   tablet: { collection: 'table', pane: 'sheet', filters: 'dropdown' },
+ *   desktop: { collection: 'table', pane: 'inline', filters: 'inline' },
  * };
  * ```
  */
-export interface AdaptiveConfig {
-  desktop?: SurfacePosture;
-  tablet?: SurfacePosture;
-  phone?: SurfacePosture;
-}
+export type SurfaceAdaptivePosture = ResponsiveValueObject<SurfacePosture>;
 
 // ---------------------------------------------------------------------------
 // Resolution
 // ---------------------------------------------------------------------------
 
-/** Breakpoint key as detected by useBreakpoints(). */
-export type Breakpoint = 'phone' | 'tablet' | 'desktop';
-
-/**
- * Resolves an AdaptiveConfig into a single SurfacePosture for the
- * current breakpoint. Cascades: phone <- tablet <- desktop.
- */
-export function resolvePosture(
-  config: AdaptiveConfig | undefined,
-  breakpoint: Breakpoint,
-): SurfacePosture {
-  if (!config) return {};
-
-  const desktop = config.desktop ?? {};
-  const tablet = { ...desktop, ...config.tablet };
-  const phone = { ...tablet, ...config.phone };
-
-  const resolved = (() => {
-    switch (breakpoint) {
-      case 'phone':
-        return phone;
-      case 'tablet':
-        return tablet;
-      case 'desktop':
-      default:
-        return desktop;
-    }
-  })();
-
-  if (resolved.gridColumns === undefined) return resolved;
+function withBoundedGridColumns(posture: SurfacePosture): SurfacePosture {
+  if (posture.gridColumns === undefined) return posture;
 
   if (
-    typeof resolved.gridColumns === 'number'
-    && Number.isInteger(resolved.gridColumns)
-    && resolved.gridColumns >= 1
-    && resolved.gridColumns <= 6
+    typeof posture.gridColumns === 'number'
+    && Number.isInteger(posture.gridColumns)
+    && posture.gridColumns >= 1
+    && posture.gridColumns <= 6
   ) {
-    return resolved;
+    return posture;
   }
 
-  const normalized = { ...resolved };
+  const normalized = { ...posture };
   delete normalized.gridColumns;
   return normalized;
 }
 
 /**
- * Maps useBreakpoints() booleans to a Breakpoint key.
+ * Resolves a declared posture at one breakpoint. Pure: the caller supplies the
+ * step, so a viewport consumer and a container-measured one share it.
  */
-export function toBreakpoint(flags: {
-  isMobile: boolean;
-  isTablet: boolean;
-}): Breakpoint {
-  if (flags.isMobile) return 'phone';
-  if (flags.isTablet) return 'tablet';
-  return 'desktop';
+export function resolveSurfacePosture(
+  declaration: SurfaceAdaptivePosture | undefined,
+  breakpoint: ResponsiveBreakpointKey,
+): SurfacePosture {
+  if (!declaration || !isResponsiveValue<SurfacePosture>(declaration)) return {};
+
+  const byStep = normalizeResponsiveValue(declaration);
+  const activeIndex = RESPONSIVE_BREAKPOINT_ORDER.indexOf(breakpoint);
+  const upTo = activeIndex < 0 ? RESPONSIVE_BREAKPOINT_ORDER.length - 1 : activeIndex;
+
+  let resolved: SurfacePosture = {};
+  for (let step = 0; step <= upTo; step += 1) {
+    const declared = byStep[RESPONSIVE_BREAKPOINT_ORDER[step]];
+    if (declared) resolved = { ...resolved, ...declared };
+  }
+
+  return withBoundedGridColumns(resolved);
 }

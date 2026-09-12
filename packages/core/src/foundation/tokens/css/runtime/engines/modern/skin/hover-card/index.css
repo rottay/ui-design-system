@@ -100,7 +100,7 @@
     scale(var(--ds-hover-card-motion-scale, 0.975));
 
   inline-size: var(--ds-hover-card-width, 18rem);
-  max-inline-size: calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4));
+  max-inline-size: calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4));
   /* Rich content can run long: the card scrolls internally with a quiet thin
      scrollbar instead of growing past the viewport. The anchor-css branch
      keeps overflow: visible (UA [popover] reset below wins on specificity). */

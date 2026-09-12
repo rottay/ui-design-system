@@ -5,7 +5,7 @@
  * @description Premium slide-in drawer panel with backdrop blur, directional
  * slide animation, and polished header/body/footer layout. Uses DS tokens for
  * surfaces, elevation, motion, and radii. Narrow viewports are served by the
- * inline `maxWidth: 100vw` / `maxHeight: 100vh` clamp: a size preset that does
+ * inline dynamic-viewport clamp (`--ds-viewport-inline-size` / `--ds-viewport-block-size`): a size preset that does
  * not fit the viewport degrades to full-bleed instead of overflowing (never a
  * squeezed panel with horizontal scroll).
  *
@@ -186,7 +186,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       // positioning is ANATOMY, not customization surface -- a drawer that is
       // not fixed is not a drawer. `style` is a public, unrestricted
       // CSSProperties hatch, and the switch below COMPUTES a viewport-edge
-      // rect against this position: top/left/right/bottom plus a 100vh/100vw
+      // rect against this position: top/left/right/bottom plus a dynamic-viewport
       // span, which only pin to the viewport on a fixed element. A caller
       // passing `position: static` strands that rect and the panel renders in
       // flow. That is true of the component as it stands today, and it is the
@@ -217,8 +217,8 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           top: 0,
           left: 0,
           width: resolvedWidth,
-          height: '100vh',
-          maxWidth: '100vw',
+          height: 'var(--ds-viewport-block-size)',
+          maxWidth: 'var(--ds-viewport-inline-size)',
         };
       case 'right':
         return {
@@ -226,26 +226,26 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           top: 0,
           right: 0,
           width: resolvedWidth,
-          height: '100vh',
-          maxWidth: '100vw',
+          height: 'var(--ds-viewport-block-size)',
+          maxWidth: 'var(--ds-viewport-inline-size)',
         };
       case 'top':
         return {
           ...base,
           top: 0,
           left: 0,
-          width: '100vw',
+          width: 'var(--ds-viewport-inline-size)',
           height: resolvedHeight,
-          maxHeight: '100vh',
+          maxHeight: 'var(--ds-viewport-block-size)',
         };
       case 'bottom':
         return {
           ...base,
           bottom: 0,
           left: 0,
-          width: '100vw',
+          width: 'var(--ds-viewport-inline-size)',
           height: resolvedHeight,
-          maxHeight: '100vh',
+          maxHeight: 'var(--ds-viewport-block-size)',
         };
       default:
         return base;

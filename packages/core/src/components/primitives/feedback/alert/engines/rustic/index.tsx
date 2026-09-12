@@ -212,10 +212,7 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `alert-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const isCompact = !compactIsResponsive && compactProp === true;
 
@@ -306,10 +303,7 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
 
   return (
     <>
-    {responsive && responsive.css && (
-      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-    )}
-    <div data-part="root" data-tone={alertType} className={`rottay-alert-shell rottay-alert-shell--rustic ${className ?? ''}`} style={baseStyle} role="alert" {...(responsive ? responsive.attrs : {})}>
+    <div data-part="root" data-tone={alertType} className={`rottay-alert-shell rottay-alert-shell--rustic ${className ?? ''}`} style={{ ...baseStyle, ...responsive.channels }} role="alert" {...responsive.attrs}>
       {/* Icon Section */}
       {showIcon && (
         <span data-part="icon" style={iconStyle}>

@@ -94,10 +94,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementIdVal = needsResponsiveCSS ? `badge-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementIdVal, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? BADGE_DEFAULTS.size;
 
@@ -235,10 +232,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     animation: 'ds-badge-pulse-rustic 1.5s ease-in-out infinite',
   } : {};
 
-  const responsiveStyleTag = responsive && responsive.css ? (
-    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-  ) : null;
-  const responsiveAttrs = responsive ? responsive.attrs : {};
+  const responsiveAttrs = responsive.attrs;
 
   // Standalone / labelled-children path: render as an inline tag without any
   // wrapper container -- children (if present, with no separate content/
@@ -246,7 +240,6 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   if (!children || isLabelledChildren) {
     return (
       <>
-        {responsiveStyleTag}
         <span
           className={`rottay-badge rottay-badge--rustic ${className}`}
           data-part="root"
@@ -255,7 +248,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
           data-bordered={bordered ? 'true' : undefined}
           data-dot={dot ? 'true' : undefined}
           data-size={size}
-          style={{ ...badgeIndicatorStyle, ...pulseAnimation, ...style }}
+          style={{ ...badgeIndicatorStyle, ...pulseAnimation, ...style, ...responsive.channels }}
           onClick={isInteractive ? handleClick : undefined}
           // The hover transform itself is CSS (foundation/tokens/css/runtime/engines/rustic/skin/badge/index.css),
           // keyed on this attribute plus :hover -- not a JS mouse handler.
@@ -299,7 +292,6 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
 
   return (
     <>
-      {responsiveStyleTag}
       <div className={className} data-part="anchor" style={containerStyle}>
         {children}
         {shouldShowBadge && (

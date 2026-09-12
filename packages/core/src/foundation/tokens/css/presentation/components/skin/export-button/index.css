@@ -70,7 +70,7 @@
 .ds-structure.ds-export-button-panel[data-part='panel'] {
   z-index: var(--ds-export-button-panel-z, var(--ds-z-index-popover, 1600));
   min-inline-size: var(--ds-export-button-panel-min-width, 200px);
-  max-inline-size: calc(100vw - 16px);
+  max-inline-size: calc(100dvw - 16px);
   padding: var(--ds-spacing-1, 4px);
   border-radius: var(--ds-radius-lg, 8px);
   background: var(--ds-color-bg-elevated);

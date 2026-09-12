@@ -503,8 +503,8 @@
 .ds-select-shell__dropdown.ds-select-shell__dropdown[data-part='dropdown'] {
   --ds-select-enter-y: -5px;
   isolation: isolate;
-  min-inline-size: min(var(--ds-select-dropdown-min-width, 15rem), calc(100vw - 1rem));
-  max-inline-size: min(var(--ds-select-dropdown-max-width, 28rem), calc(100vw - 1rem));
+  min-inline-size: min(var(--ds-select-dropdown-min-width, 15rem), calc(100dvw - 1rem));
+  max-inline-size: min(var(--ds-select-dropdown-max-width, 28rem), calc(100dvw - 1rem));
   padding: var(--ds-select-dropdown-padding);
   overflow: hidden;
   color: var(--ds-color-text-primary);

@@ -35,7 +35,7 @@ import { BOX_DEFAULTS, SPACING_MAP, isVoidElement } from "../../contracts";
 import {
   generateResponsiveCSS,
   scalarOrUndefined,
-} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+} from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
 // Deterministic style builder. Consumer-supplied paint stays available through
@@ -434,12 +434,7 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const responsiveEntries = collectBoxResponsiveEntries(props);
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
-  const elementId = needsResponsiveCSS
-    ? `box-${reactId.replace(/:/g, "")}`
-    : "";
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   // Stable engine hooks only; dynamic utility names are intentionally avoided.
   const classNames = ["rottay-box", "rottay-box--modern", className]
@@ -472,8 +467,8 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     "data-layout-motion":
       props.motion && props.motion !== "none" ? props.motion : undefined,
     "data-component": "box",
-    style: computedStyle,
-    ...(responsive ? responsive.attrs : {}),
+    style: { ...computedStyle, ...responsive.channels },
+    ...responsive.attrs,
   };
 
   // Void elements (input, img, br, hr, ...) have no content model: React-DOM
@@ -488,9 +483,6 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       {element}
     </>
   );

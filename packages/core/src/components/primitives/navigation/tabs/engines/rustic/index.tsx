@@ -137,10 +137,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const responsiveElementId = needsResponsiveCSS ? `tabs-${tabsId}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(responsiveElementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
   // Ref map for imperative focus management during keyboard navigation
@@ -273,11 +270,8 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
       {...stateMotion.attributes}
       data-variant={compatibleType}
     >
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       {/* Tab List */}
-      <div role="tablist" data-part="tab-list" style={tabListStyle} {...(responsive ? responsive.attrs : {})}>
+      <div role="tablist" data-part="tab-list" style={{ ...tabListStyle, ...responsive.channels }} {...responsive.attrs}>
         {items.map((item: TabItem) => (
           <button
             key={item.key}

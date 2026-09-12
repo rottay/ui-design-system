@@ -121,13 +121,47 @@ Object.defineProperty(HTMLCanvasElement.prototype, 'toDataURL', {
   value: vi.fn().mockReturnValue('data:image/png;base64,'),
 });
 
+/**
+ * Answers a width query against the window this environment really reports.
+ *
+ * The shim used to answer `false` to EVERY query, which describes a viewport
+ * that is neither at least 640px wide nor at most 639px wide -- a width no real
+ * browser has. Two owners asking the same question in complementary forms
+ * therefore got two different answers, and which one a component believed
+ * depended on which form it happened to use. jsdom reports `innerWidth`, so the
+ * shim answers from it and the forms agree.
+ *
+ * Everything that is not a width query keeps the old `false`: a preference
+ * (`prefers-reduced-motion`, `prefers-color-scheme`) and a capability
+ * (`hover`, `pointer`) have no default this environment can honestly invent,
+ * and `false` is the conservative one the suites are written against.
+ */
+function matchesWidthQuery(query: string): boolean {
+  const width = typeof window.innerWidth === 'number' ? window.innerWidth : 1024;
+  let sawWidthFeature = false;
+  let matches = true;
+
+  for (const [, feature, value] of query.matchAll(/\((min|max)-width:\s*(\d+(?:\.\d+)?)px\)/g)) {
+    sawWidthFeature = true;
+    const threshold = Number(value);
+    matches = matches && (feature === 'min' ? width >= threshold : width <= threshold);
+  }
+
+  return sawWidthFeature && matches;
+}
+
 function installMatchMediaMock(): void {
   const noop = () => undefined;
 
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: (query: string): MediaQueryList => ({
-      matches: false,
+      // A GETTER, like the real thing: a `MediaQueryList` a runtime memoized
+      // once must still answer for the width the page has NOW, or a suite that
+      // resizes mid-file reads the width it started with.
+      get matches() {
+        return matchesWidthQuery(query);
+      },
       media: query,
       onchange: null,
       addListener: noop,

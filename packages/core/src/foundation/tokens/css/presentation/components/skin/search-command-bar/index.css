@@ -405,7 +405,7 @@
   inset-block-start: calc(100% + 12px);
   inline-size: min(
     420px,
-    calc(100vw - 32px)
+    calc(100dvw - 32px)
   );
   z-index: 180;
   padding: 18px;

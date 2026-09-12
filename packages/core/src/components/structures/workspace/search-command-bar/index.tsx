@@ -47,6 +47,7 @@ import { StatusLoadingIcon } from '@/graphics/icons/semantic/generated/roles/sta
 import { useVoiceInput } from '@/infrastructure/runtime/application/automation/voice/composition/react/input';
 import { useRegisterCommands } from '@/infrastructure/runtime/application/commands';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { ConnectedCommandPalette } from '../connected-command-palette';
 import { Box } from '@ui/primitives/layout/box';
 import { Button } from '@ui/primitives/inputs/button';
@@ -156,6 +157,10 @@ export function SearchCommandBar({
 }: SearchCommandBarProps) {
   const embedded = surfaceVariant === 'embedded';
   const editorialTech = layoutVariant === 'editorial-tech';
+  // The compact band is the ladder's own `< lg`, not the 959px this component
+  // used to subscribe to with a `matchMedia` of its own -- a seventh threshold
+  // no other owner could read.
+  const { isPhoneOrTablet } = useResponsive();
   // Register commands in the global registry when provided
   useRegisterCommands(commandsProp ?? []);
   const i18n = useOptionalTranslation('components');
@@ -197,7 +202,6 @@ export function SearchCommandBar({
   const commandSuggestions = command.suggestions ?? [];
   const [showVoiceHelp, setShowVoiceHelp] = useState(false);
   const [isRequestingMicPermission, setIsRequestingMicPermission] = useState(false);
-  const [isCompactViewport, setIsCompactViewport] = useState(false);
 
   useEffect(() => {
     if (!isVoicePermissionBlocked && !needsVoicePermission) {
@@ -210,24 +214,6 @@ export function SearchCommandBar({
       setIsRequestingMicPermission(false);
     }
   }, [needsVoicePermission]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return;
-    }
-
-    const mediaQuery = window.matchMedia('(max-width: 959px)');
-    const syncViewport = () => setIsCompactViewport(mediaQuery.matches);
-    syncViewport();
-
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', syncViewport);
-      return () => mediaQuery.removeEventListener('change', syncViewport);
-    }
-
-    mediaQuery.addListener(syncViewport);
-    return () => mediaQuery.removeListener(syncViewport);
-  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -289,7 +275,7 @@ export function SearchCommandBar({
   // after the user invokes voice; the mic affordance remains available for that
   // explicit action. Persistent permission badges compete with collection tools.
   const showVoiceBadge = voiceSupported && (voiceStatus !== 'idle' || isVoicePermissionBlocked);
-  const hideInlinePermissionBadge = needsVoicePermission && isCompactViewport;
+  const hideInlinePermissionBadge = needsVoicePermission && isPhoneOrTablet;
   const showInlineVoiceBadge = showVoiceBadge && !hideInlinePermissionBadge;
   const hasClearButton = Boolean(command.value.trim()) && !isVoiceActive;
 

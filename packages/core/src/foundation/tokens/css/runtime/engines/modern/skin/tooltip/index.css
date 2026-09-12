@@ -106,7 +106,7 @@
   max-inline-size: min(
     var(--ds-tooltip-instance-max-width, var(--ds-tooltip-max-width-current)),
     calc(
-      100vw - var(--ds-tooltip-viewport-gap, 0.5rem) -
+      100dvw - var(--ds-tooltip-viewport-gap, 0.5rem) -
         var(--ds-tooltip-viewport-gap, 0.5rem)
     )
   );

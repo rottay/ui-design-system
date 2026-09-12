@@ -439,7 +439,14 @@ export interface CollectionBehaviorConfig<T> {
 
 /** Responsive behavior configuration. */
 export interface WorkspaceResponsiveConfig {
-  mobileBreakpoint?: number;
+  /**
+   * The ladder step below which mobile defaults apply. Defaults to `md`.
+   *
+   * A LADDER STEP, not a pixel count: the free number this used to accept was
+   * a breakpoint vocabulary only this one hook could read, so a workspace and
+   * the surface around it could disagree about where mobile begins.
+   */
+  mobileBreakpoint?: ResponsiveBreakpointKey;
   mobileView?: string;
 }
 
@@ -457,6 +464,7 @@ export type {
 } from '../../../../../structures/shell/workspace-shell';
 
 import type { WorkspaceShellPresentationConfig } from '../../../../../structures/shell/workspace-shell';
+import type { ResponsiveBreakpointKey } from '@/foundation/contracts/kernel/responsive/breakpoints';
 
 /** Visual presentation configuration. */
 export interface CollectionPresentationConfig {

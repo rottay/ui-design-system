@@ -138,10 +138,7 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `card-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const padding = paddingIsResponsive ? CARD_DEFAULTS.padding : (paddingProp as string);
 
@@ -199,9 +196,6 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       <AntCard
         {...rest}
         title={cardTitle}
@@ -230,8 +224,9 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
             backgroundColor: colorStyles.background,
           }),
           ...style,
+          ...responsive.channels,
         }}
-        {...(responsive ? responsive.attrs : {})}
+        {...responsive.attrs}
         data-part="root"
       >
         {/* When loading we render AntD Skeleton instead of children so the card

@@ -227,9 +227,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
       } as ResponsivePropEntry<any>,
     );
   }
-  const responsive = responsiveEntries.length > 0
-    ? generateResponsiveCSS(`badge-${reactId.replace(/:/g, '')}`, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
   const size = scalarOrUndefined(sizeProp) ?? BADGE_DEFAULTS.size;
   const sizeSpec = SIZE_SPECS[size] ?? SIZE_SPECS.xl;
   const baseResolvedStyle: BadgeCSSProperties = {
@@ -241,10 +239,6 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     ...baseResolvedStyle,
     ...(style as BadgeCSSProperties),
   };
-
-  const responsiveStyleTag = responsive?.css ? (
-    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-  ) : null;
 
   const activate = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -298,15 +292,14 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   );
 
   if (!hasOverlayAnchor) {
-    if (!visible) return <>{responsiveStyleTag}</>;
+    if (!visible) return <></>;
 
     return (
       <>
-        {responsiveStyleTag}
         <span
           {...rootProps}
           {...partAttributes(dataPart ?? 'root', interaction)}
-          {...responsive?.attrs}
+          {...responsive.attrs}
           className={`rottay-badge rottay-badge--modern ${className}`.trim()}
           data-kind={kind}
           data-variant={variant}
@@ -327,7 +320,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
           data-has-dot={dot ? 'true' : undefined}
           data-dot={dot ? 'true' : undefined}
           data-removable={isRemovable ? 'true' : undefined}
-          style={resolvedStyle}
+          style={{ ...resolvedStyle, ...responsive.channels }}
           aria-busy={loading || undefined}
           aria-describedby={ariaDescribedBy}
           aria-label={!isInteractive ? ariaLabel : undefined}
@@ -403,7 +396,6 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
 
   return (
     <>
-      {responsiveStyleTag}
       <span {...rootProps} className={`rottay-badge-anchor ${className}`.trim()} data-part={dataPart ?? "anchor"} style={style}>
         {isInteractive ? (
           <button

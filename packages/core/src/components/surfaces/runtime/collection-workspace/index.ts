@@ -10,21 +10,24 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { RefCallback } from 'react';
-import { RESPONSIVE_BREAKPOINTS } from '@/foundation/contracts/kernel/responsive/breakpoints';
+import {
+  RESPONSIVE_BREAKPOINTS,
+  breakpointForWidth,
+  type ResponsiveBreakpointKey,
+} from '@/foundation/contracts/kernel/responsive/breakpoints';
+import { useResponsive } from '@/infrastructure/runtime/responsive';
 import type {
   CollectionWorkspaceConfig,
   CollectionViewMode,
   WorkspaceControlsConfig,
   CollectionBehaviorConfig,
 } from '../../foundation/contracts/adaptive/collection';
-import type { Breakpoint } from '../../foundation/contracts/adaptive';
-
 interface UseCollectionWorkspaceOptions<T> {
   config: CollectionWorkspaceConfig<T>;
   /** Default view mode when none is specified. */
   defaultViewMode?: string;
-  /** Breakpoint below which mobile defaults apply (px). */
-  mobileBreakpoint?: number;
+  /** Ladder step below which mobile defaults apply. */
+  mobileBreakpoint?: ResponsiveBreakpointKey;
 }
 
 interface UseCollectionWorkspaceReturn<T> {
@@ -63,16 +66,10 @@ interface UseCollectionWorkspaceReturn<T> {
 
   /** Ref for the collection box that owns responsive posture. */
   collectionRef: RefCallback<HTMLElement>;
-  /** Measured container breakpoint; undefined keeps the viewport fallback. */
-  containerBreakpoint: Breakpoint | undefined;
+  /** Measured container step; undefined keeps the viewport fallback. */
+  containerBreakpoint: ResponsiveBreakpointKey | undefined;
   /** Whether the collection container is in mobile mode. */
   isMobile: boolean;
-}
-
-function breakpointForContainerWidth(width: number): Breakpoint {
-  if (width < RESPONSIVE_BREAKPOINTS.sm) return 'phone';
-  if (width < RESPONSIVE_BREAKPOINTS.lg) return 'tablet';
-  return 'desktop';
 }
 
 /** Whether a filter value carries a meaningful constraint. */
@@ -94,9 +91,10 @@ export function useCollectionWorkspace<T>(
   options: UseCollectionWorkspaceOptions<T>,
 ): UseCollectionWorkspaceReturn<T> {
   const { config, defaultViewMode = 'table' } = options;
-  const resolvedBreakpoint = options.mobileBreakpoint
+  const mobileStep: ResponsiveBreakpointKey = options.mobileBreakpoint
     ?? config.presentation?.responsive?.mobileBreakpoint
-    ?? 768;
+    ?? 'md';
+  const mobileMaxWidth = RESPONSIVE_BREAKPOINTS[mobileStep];
   const controls = config.controls;
   const behavior = config.behavior;
 
@@ -170,19 +168,12 @@ export function useCollectionWorkspace<T>(
     setCollectionNode(node);
   }, []);
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
-  const [viewportIsMobile, setViewportIsMobile] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia(`(max-width: ${resolvedBreakpoint}px)`).matches;
-  });
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mql = window.matchMedia(`(max-width: ${resolvedBreakpoint}px)`);
-    const handler = (e: MediaQueryListEvent) => setViewportIsMobile(e.matches);
-    mql.addEventListener('change', handler);
-    setViewportIsMobile(mql.matches);
-    return () => mql.removeEventListener('change', handler);
-  }, [resolvedBreakpoint]);
+  // The viewport half comes from the one responsive snapshot, not from a
+  // `matchMedia` of this hook's own: the px threshold it used to accept was a
+  // breakpoint vocabulary no other owner could read.
+  const { activeBreakpoint } = useResponsive();
+  const viewportIsMobile =
+    RESPONSIVE_BREAKPOINTS[activeBreakpoint] < mobileMaxWidth;
 
   useEffect(() => {
     const node = collectionNode;
@@ -203,14 +194,12 @@ export function useCollectionWorkspace<T>(
   }, [collectionNode]);
 
   const containerBreakpoint = useMemo(
-    () => containerWidth === null
-      ? undefined
-      : breakpointForContainerWidth(containerWidth),
+    () => (containerWidth === null ? undefined : breakpointForWidth(containerWidth)),
     [containerWidth],
   );
   const isMobile = containerWidth === null
     ? viewportIsMobile
-    : containerWidth <= resolvedBreakpoint;
+    : containerWidth < mobileMaxWidth;
 
   const activeViewMode = useMemo(() => {
     const configured = controls?.viewMode?.value ?? internalViewMode;

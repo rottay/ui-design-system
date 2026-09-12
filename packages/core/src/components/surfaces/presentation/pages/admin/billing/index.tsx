@@ -16,7 +16,7 @@
  */
 
 import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { FadeIn } from '@/graphics/motion';
 import { ActionDownloadIcon } from '@/graphics/icons/semantic/generated/roles/action-download';
 import { BillingCreditCardIcon } from '@/graphics/icons/semantic/generated/roles/billing-credit-card';

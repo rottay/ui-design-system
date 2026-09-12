@@ -169,10 +169,7 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
-    const elementId = needsResponsiveCSS ? `heading-${reactId.replace(/:/g, '')}` : '';
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
     const scalarSize = scalarOrUndefined(size);
     const craftProps = {
       textStyle,
@@ -211,7 +208,6 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     if (level === 'h6') {
       return (
         <>
-          {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
           <h6
             ref={ref}
             lang={lang}
@@ -219,11 +215,11 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
             translate={translate}
             title={title}
             {...props}
-            {...(responsive ? responsive.attrs : {})}
+            {...responsive.attrs}
             data-part={dataPart ?? "root"}
             data-color={color}
             {...typographyDataAttributes(craftProps)}
-            style={resolvedStyle}
+            style={{ ...resolvedStyle, ...responsive.channels }}
             className={resolvedClassName}
           >
             {children}
@@ -234,9 +230,6 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         <Title
           ref={ref as React.Ref<HTMLElement>}
           level={LEVEL_MAP[level]}
@@ -247,11 +240,11 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           translate={translate}
           title={title}
           {...props}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
-          style={resolvedStyle}
+          style={{ ...resolvedStyle, ...responsive.channels }}
           className={resolvedClassName}
         >
           {children}
@@ -337,10 +330,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
-    const elementId = needsResponsiveCSS ? `text-${reactId.replace(/:/g, '')}` : '';
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.text.size;
     const craftProps = {
       textStyle,
@@ -387,7 +377,6 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
       const TextElement = as as React.ElementType;
       return (
         <>
-          {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
           <TextElement
             ref={ref}
             lang={lang}
@@ -395,12 +384,12 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
             translate={translate}
             title={title}
             {...props}
-            {...(responsive ? responsive.attrs : {})}
+            {...responsive.attrs}
             data-part={dataPart ?? "root"}
             data-color={color}
             {...typographyDataAttributes(craftProps)}
             className={resolvedClassName}
-            style={resolvedStyle}
+            style={{ ...resolvedStyle, ...responsive.channels }}
           >
             {children}
           </TextElement>
@@ -410,9 +399,6 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
 
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         <AntText
           ref={ref as React.Ref<HTMLElement>}
           type={TYPE_MAP[color]}
@@ -428,11 +414,11 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
           translate={translate}
           title={title}
           {...props}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
-          style={resolvedStyle}
+          style={{ ...resolvedStyle, ...responsive.channels }}
           className={resolvedClassName}
         >
           {children}
@@ -509,9 +495,7 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
         } as ResponsivePropEntry<any>,
       );
     }
-    const responsive = responsiveEntries.length
-      ? generateResponsiveCSS(`paragraph-${reactId.replace(/:/g, '')}`, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.paragraph.size;
     const craftProps = {
       textStyle,
@@ -527,7 +511,6 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
 
     return (
       <>
-        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
         <AntParagraph
           ref={ref as React.Ref<HTMLElement>}
           type={TYPE_MAP[color]}
@@ -537,11 +520,12 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
           translate={translate}
           title={title}
           {...props}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={{
+            ...responsive.channels,
             ...(!sizeIsResponsive && !textStyle ? { fontSize: SIZE_MAP.text[size] } : {}),
             ...(weight ? { fontWeight: WEIGHT_MAP[weight] } : {}),
             ...resolveTypographyCraftStyle({
@@ -633,9 +617,7 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
         } as ResponsivePropEntry<any>,
       );
     }
-    const responsive = responsiveEntries.length
-      ? generateResponsiveCSS(`link-${reactId.replace(/:/g, '')}`, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.link.size;
     const craftProps = {
       textStyle,
@@ -651,7 +633,6 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
 
     return (
       <>
-        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
         <AntLink
           ref={ref as React.Ref<HTMLElement>}
           href={disabled ? undefined : href}
@@ -667,13 +648,14 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
           translate={translate}
           title={title}
           {...props}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}
           aria-disabled={disabled || undefined}
           style={{
+            ...responsive.channels,
             ...(!sizeIsResponsive && !textStyle ? { fontSize: SIZE_MAP.text[size] } : {}),
             ...(weight ? { fontWeight: WEIGHT_MAP[weight] } : {}),
             ...resolveTypographyCraftStyle({

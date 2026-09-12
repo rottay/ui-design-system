@@ -10,7 +10,8 @@
 import React, { useEffect, useId, useState } from 'react';
 import { Box, Button, Card, Flex } from '../../../../primitives';
 import { useSurfaceTranslations } from '../../../foundation/chrome/runtime/i18n';
-import { useSurfaceResponsiveLayout } from '../../../foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../foundation/chrome/contracts';
 import type { SidebarSurfaceConfig } from '../../../foundation/chrome/contracts';
 import { SurfaceActionBar } from '../../surface-chrome';
 
@@ -25,7 +26,7 @@ function toCssLength(value: number | string): string {
 
 export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
-  const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   const navigationId = useId();
   // Collapse state supports controlled (app owns state) and uncontrolled
   // (surface manages toggling) modes.

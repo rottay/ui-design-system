@@ -9,6 +9,7 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import ClassicBadge from '../engines/classic';
+import { responsiveChannelElement, responsiveCss, responsiveTokens } from '@tests/support/responsive';
 
 // ---------------------------------------------------------------------------
 // Classic Engine
@@ -23,9 +24,9 @@ describe('ClassicBadge responsive size', () => {
         </ClassicBadge>
       );
       // No responsive style tag should be injected for scalar values
-      expect(container.querySelector('style')).toBeNull();
-      // data-responsive-id should NOT be present
-      expect(container.querySelector('[data-responsive-id]')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
+      // no responsive channel is armed at all
+      expect(responsiveChannelElement(container)).toBeNull();
     });
   });
 
@@ -36,28 +37,28 @@ describe('ClassicBadge responsive size', () => {
           <span>Child</span>
         </ClassicBadge>
       );
-      const styleTag = container.querySelector('style');
-      const badge = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const badge = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(badge).toBeInTheDocument();
       // Should contain min-width, height, and font-size declarations
-      expect(styleTag?.textContent).toContain('min-width:');
-      expect(styleTag?.textContent).toContain('height:');
-      expect(styleTag?.textContent).toContain('font-size:');
+      expect(styleTag).toContain('min-width:');
+      expect(styleTag).toContain('height:');
+      expect(styleTag).toContain('font-size:');
       // lg breakpoint: 1024px
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
-    it('sets data-responsive-id attribute on the element', () => {
+    it('arms the governed responsive channels on the element', () => {
       const { container } = render(
         <ClassicBadge size={{ xs: 'sm', md: 'lg' }} count={3}>
           <span>Child</span>
         </ClassicBadge>
       );
-      const badge = container.querySelector('[data-responsive-id]');
+      const badge = responsiveChannelElement(container);
       expect(badge).toBeInTheDocument();
-      expect(badge?.getAttribute('data-responsive-id')).toBeTruthy();
+      expect(responsiveTokens(container).length).toBeGreaterThan(0);
     });
   });
 
@@ -68,12 +69,12 @@ describe('ClassicBadge responsive size', () => {
           <span>Child</span>
         </ClassicBadge>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
+      expect(styleTag).toContain('@media (min-width: 640px)');
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
   });
 
@@ -82,12 +83,12 @@ describe('ClassicBadge responsive size', () => {
       const { container } = render(
         <ClassicBadge size={{ xs: 'sm', lg: 'xl' }} />
       );
-      const styleTag = container.querySelector('style');
-      const badge = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const badge = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(badge).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
   });
 });

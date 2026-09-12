@@ -46,7 +46,8 @@ import {
 } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { MediaSurfaceConfig, MediaSurfaceItem } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
-import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue, surfaceColumnsValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
@@ -197,8 +198,9 @@ export function MediaSurface({
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
-  const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
-  const resolvedMobile = responsiveLayout.isMobile && responsiveLayout.hasResolvedViewport;
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
+  const resolvedMobile = isMobile && hasResolvedViewport;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   // Selection supports controlled (app owns selectedItemId) and uncontrolled
   // (surface auto-selects first item) modes. Auto-selection on mount ensures
@@ -226,7 +228,6 @@ export function MediaSurface({
   const itemActions = useMemo(() => {
     return filterSurfaceActions(config.behavior.itemActions, config.access, selectedItem);
   }, [config.behavior.itemActions, config.access, selectedItem]);
-  const shouldStack = responsiveLayout.shouldStack;
   // Explicit safe resolution: the rail skeleton needs a numeric block size;
   // the loaded preview keeps the contract value verbatim (Image `height`
   // accepts string | number). No casts.
@@ -252,15 +253,17 @@ export function MediaSurface({
   // Gallery column count scales down responsively: desktop uses the configured
   // count, tablet caps at 2 to prevent cramped thumbnails, mobile always
   // collapses to a single column.
-  const galleryColumns = resolveResponsiveColumnCount(
-    responsiveLayout,
-    config.visual.columns ?? 3,
-    Math.min(config.visual.columns ?? 3, 2),
-    Math.min(
-      config.visual.columns ?? 3,
-      Math.max(1, Math.floor(config.visual.mobileColumnsLimit ?? 1))
-    )
-  );
+  const galleryColumns =
+    useResponsiveValue(
+      surfaceColumnsValue(
+        config.visual.columns ?? 3,
+        Math.min(config.visual.columns ?? 3, 2),
+        Math.min(
+          config.visual.columns ?? 3,
+          Math.max(1, Math.floor(config.visual.mobileColumnsLimit ?? 1))
+        )
+      )
+    ) ?? 1;
 
   // Per-card entrance choreography (collection.insert recipe), gated by BOTH
   // the product profile's animateEntrance flag AND the active motion policy,

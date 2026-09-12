@@ -73,7 +73,7 @@ function BrandLocaleEvidence({ brandLabel, sourceLabel }: EvidenceProps) {
       data-evidence-locale={locale}
       data-evidence-direction={direction}
       dir={direction}
-      minHeight="100vh"
+      minHeight="100dvh"
       padding={{ xs: 'md', md: '2xl' }}
       background="var(--ds-color-bg-primary)"
     >

@@ -115,12 +115,7 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     });
     const needsResponsiveCSS = responsiveEntries.length > 0;
 
-    const elementId = needsResponsiveCSS
-      ? `flex-${reactId.replace(/:/g, "")}`
-      : "";
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
 
     const combinedClassName = ["rottay-flex", "rottay-flex--modern", className]
       .filter(Boolean)
@@ -132,16 +127,13 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
 
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         <div
           {...rest}
           ref={ref}
           className={combinedClassName}
-          style={modernStyle}
+          style={{ ...modernStyle, ...responsive.channels }}
           {...presentationAttributes}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-component="flex"
         >
           {children}

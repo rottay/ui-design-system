@@ -227,10 +227,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     addResponsiveSizeChannel('--ds-tabs-responsive-icon-size', 'iconSize');
   }
 
-  const responsiveElementId = sizeIsResponsive ? `tabs-${tabsId}` : '';
-  const responsive = sizeIsResponsive
-    ? generateResponsiveCSS(responsiveElementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const tabListRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<Map<string, HTMLButtonElement | null>>(new Map());
@@ -523,10 +520,10 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   return (
     <div
       className={modernTabsRecipe.resolve(undefined, { root: className }).root}
-      style={{ ...stateMotion.variables, ...style }}
+      style={{ ...stateMotion.variables, ...style, ...responsive.channels }}
       data-part="root"
       {...stateMotion.attributes}
-      {...(responsive?.attrs ?? {})}
+      {...responsive.attrs}
       data-variant={type ?? 'line'}
       data-recipe={recipe}
       data-size={sizeIsResponsive ? 'responsive' : scalarSize}
@@ -544,7 +541,6 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       data-direction={writingDirection}
       data-active-key={currentKey}
     >
-      {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
 
       <div data-part="tab-rail">
         {showScrollControls && renderOverflowControl('previous', !overflowState.before)}

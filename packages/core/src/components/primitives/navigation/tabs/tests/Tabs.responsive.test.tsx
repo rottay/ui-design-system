@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 
 import ClassicTabs from '../engines/classic';
 import ModernTabs from '../engines/modern';
+import { responsiveChannelElement, responsiveCss, responsiveTokens } from '@tests/support/responsive';
 
 const TAB_ITEMS = [
   { key: '1', label: 'Tab 1', children: <div>Content 1</div> },
@@ -27,9 +28,9 @@ describe('ClassicTabs responsive size', () => {
         <ClassicTabs size="lg" items={TAB_ITEMS} />
       );
       // No responsive style tag should be injected for scalar values
-      expect(container.querySelector('style')).toBeNull();
-      // data-responsive-id should NOT be present
-      expect(container.querySelector('[data-responsive-id]')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
+      // no responsive channel is armed at all
+      expect(responsiveChannelElement(container)).toBeNull();
     });
   });
 
@@ -38,25 +39,25 @@ describe('ClassicTabs responsive size', () => {
       const { container } = render(
         <ClassicTabs size={{ xs: 'sm', lg: 'lg' }} items={TAB_ITEMS} />
       );
-      const styleTag = container.querySelector('style');
-      const tabs = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const tabs = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(tabs).toBeInTheDocument();
       // Should contain padding and font-size declarations
-      expect(styleTag?.textContent).toContain('padding:');
-      expect(styleTag?.textContent).toContain('font-size:');
+      expect(styleTag).toContain('padding:');
+      expect(styleTag).toContain('font-size:');
       // lg breakpoint: 1024px
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
-    it('sets data-responsive-id attribute on the element', () => {
+    it('arms the governed responsive channels on the element', () => {
       const { container } = render(
         <ClassicTabs size={{ xs: 'sm', md: 'lg' }} items={TAB_ITEMS} />
       );
-      const tabs = container.querySelector('[data-responsive-id]');
+      const tabs = responsiveChannelElement(container);
       expect(tabs).toBeInTheDocument();
-      expect(tabs?.getAttribute('data-responsive-id')).toBeTruthy();
+      expect(responsiveTokens(container).length).toBeGreaterThan(0);
     });
   });
 
@@ -68,12 +69,12 @@ describe('ClassicTabs responsive size', () => {
           items={TAB_ITEMS}
         />
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 640px)');
+      expect(styleTag).toContain('@media (min-width: 640px)');
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
   });
 });
@@ -83,18 +84,18 @@ describe('ModernTabs responsive size', () => {
     const { container } = render(
       <ModernTabs size={{ base: 'sm', lg: 'lg' }} items={TAB_ITEMS} />
     );
-    const styleTag = container.querySelector('style');
+    const styleTag = responsiveCss(container);
     const root = container.querySelector('.rottay-tabs--modern');
 
     expect(root).toHaveAttribute('data-size', 'responsive');
-    expect(root).toHaveAttribute('data-responsive-id');
+    expect(responsiveTokens(container).length).toBeGreaterThan(0);
     // Responsive rules configure the public responsive inputs. The skin
     // resolves them into private `--_ds-tabs-current-*` intermediates so
     // callers cannot couple themselves to the internal cascade.
-    expect(styleTag?.textContent).toContain('--ds-tabs-responsive-height:');
-    expect(styleTag?.textContent).toContain('--ds-tabs-responsive-padding:');
-    expect(styleTag?.textContent).toContain('--ds-tabs-responsive-font-size:');
-    expect(styleTag?.textContent).toContain('--ds-tabs-responsive-icon-size:');
-    expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+    expect(styleTag).toContain('--ds-tabs-responsive-height:');
+    expect(styleTag).toContain('--ds-tabs-responsive-padding:');
+    expect(styleTag).toContain('--ds-tabs-responsive-font-size:');
+    expect(styleTag).toContain('--ds-tabs-responsive-icon-size:');
+    expect(styleTag).toContain('@media (min-width: 1024px)');
   });
 });

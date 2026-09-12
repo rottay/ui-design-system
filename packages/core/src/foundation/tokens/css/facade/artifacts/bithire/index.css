@@ -395,7 +395,7 @@
   --ds-command-grid-size: 22px;
   --ds-command-home-compact-action-height: 202px;
   --ds-command-home-console-bg: #F6FAFE;
-  --ds-command-home-console-min-height: calc(100vh - 108px);
+  --ds-command-home-console-min-height: calc(100dvh - 108px);
   --ds-command-home-console-padding: clamp(calc(20px * var(--ds-rhythm-effective-scale, 1)), calc(3vw * var(--ds-rhythm-effective-scale, 1)), calc(34px * var(--ds-rhythm-effective-scale, 1))) clamp(calc(16px * var(--ds-rhythm-effective-scale, 1)), calc(4vw * var(--ds-rhythm-effective-scale, 1)), calc(56px * var(--ds-rhythm-effective-scale, 1))) calc(24px * var(--ds-rhythm-effective-scale, 1));
   --ds-command-home-control-bg: #FFFFFF;
   --ds-command-home-control-border: #B7D3F2;

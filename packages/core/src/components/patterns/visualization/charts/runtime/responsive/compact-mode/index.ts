@@ -8,7 +8,7 @@
  */
 
 import { useMemo } from 'react';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import type { ChartCompactConfig } from '../../../contracts';
 import { DEFAULT_COMPACT_CONFIG } from '../../../contracts/compactness';
 

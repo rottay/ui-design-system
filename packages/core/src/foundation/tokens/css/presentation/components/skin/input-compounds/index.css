@@ -210,7 +210,7 @@
 .rottay-textarea.ds-input-textarea[data-part='root'] {
   position: relative;
   display: grid;
-  container-type: inline-size;
+  container: ds-input-textarea / inline-size;
   inline-size: 100%;
   min-inline-size: 0;
   gap: var(--ds-input-message-gap, var(--ds-spacing-1));
@@ -420,7 +420,7 @@
   overflow-wrap: anywhere;
 }
 
-@container (inline-size < 18rem) {
+@container ds-input-textarea (inline-size < 18rem) {
   .rottay-textarea.ds-input-textarea[data-part='root'] > [data-part='count'] {
     justify-self: start;
   }

@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import ModernGrid from "../engines/modern";
+import { responsiveChannelElement, responsiveCss } from '@tests/support/responsive';
 
 describe("ModernGrid responsive templates", () => {
   it("projects responsive templates into the shared layout stylesheet", () => {
@@ -22,6 +23,6 @@ describe("ModernGrid responsive templates", () => {
     expect(grid).toHaveStyle(
       "--_ds-grid-rows-xs: repeat(1, minmax(0, 1fr)); --_ds-grid-rows-lg: repeat(2, minmax(0, 1fr))"
     );
-    expect(container.querySelector("style")).toBeNull();
+    expect(responsiveCss(container)).toBe('');
   });
 });
