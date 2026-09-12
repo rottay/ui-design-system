@@ -1,18 +1,10 @@
 'use client';
 
 import {
-  IMPLEMENTED_ENGINE_NAMES,
   isImplementedEngineName,
   type ImplementedEngineName,
 } from '@rottay/design-system';
 
-/**
- * The engines the showroom can switch between: the design system's own
- * implemented roster, derived rather than restated. The showroom used to keep
- * its own three-name list and its own three-way comparison, so retiring or
- * adding an engine in the DS left this file silently stale.
- */
-export const SHOWROOM_ENGINES = IMPLEMENTED_ENGINE_NAMES;
 export const SHOWROOM_TENANTS = ['rottay', 'bithire', 'evnto'] as const;
 
 export type RuntimeQueryEngine = ImplementedEngineName;

@@ -738,6 +738,8 @@
     "tenant-theme-fixtures:check": "node scripts/package/contracts/tenant-theme-canaries/index.mjs --check",
     "public-entrypoints:check": "node scripts/check/boundaries/public-api/index.mjs",
     "public-entrypoints:test": "node --test scripts/check/boundaries/public-api/index.test.mjs scripts/maintain/public-entrypoint-imports/index.test.mjs",
+    "rsc-boundary:check": "node scripts/check/boundaries/rsc-client-root/index.mjs",
+    "rsc-boundary:test": "node --test scripts/check/boundaries/rsc-client-root/index.test.mjs",
     "public-entrypoints:codemod": "node scripts/maintain/public-entrypoint-imports/index.mjs"
   },
   "releaseSync": {

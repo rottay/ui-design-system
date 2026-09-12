@@ -26,6 +26,31 @@ export type {
 
 export { toSupportedLocale } from '../../foundation/i18n/runtime/resolution/locale';
 
+/**
+ * ENGINE IDENTITY, REACHABLE WITHOUT THE CLIENT GRAPH.
+ *
+ * The root barrel carries `'use client'`, so a server component that names the
+ * roster through it pulls the client graph into the RSC build. The owner below
+ * is React-free by its own docblock and travels here as ONE unit: a consumer
+ * handed the names but not the guards writes the second enumeration
+ * `engine-wiring` refuses. `PRIMARY_ENGINE` is deliberately not here -- it
+ * answers which engine a RUNTIME resolves to, and that reader set is closed.
+ */
+export {
+  ADMITTED_ENGINE_NAMES,
+  ENGINE_NAMES,
+  FROZEN_ENGINE_NAMES,
+  IMPLEMENTED_ENGINE_NAMES,
+  isAdmittedEngineName,
+  isFrozenEngineName,
+  isImplementedEngineName,
+  isValidEngineName,
+} from '../../foundation/contracts/kernel/engine-identity';
+export type {
+  EngineName,
+  ImplementedEngineName,
+} from '../../foundation/contracts/kernel/engine-identity';
+
 // Font-pack registry (W4-B1): manifest for SSR <link rel="preload"> emission of
 // the opt-in @rottay/design-system/fonts/<id>.css packs a tenant envelope enables.
 export {

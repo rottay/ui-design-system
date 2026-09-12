@@ -1,4 +1,4 @@
-import type { ImplementedEngineName } from '@rottay/design-system';
+import type { ImplementedEngineName } from '@rottay/design-system/server';
 
 export type EngineSignatureId = ImplementedEngineName;
 

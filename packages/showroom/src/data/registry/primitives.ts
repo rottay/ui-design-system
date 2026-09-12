@@ -19,7 +19,7 @@
 import {
   IMPLEMENTED_ENGINE_NAMES,
   type ImplementedEngineName,
-} from '@rottay/design-system';
+} from '@rottay/design-system/server';
 
 export type PrimitiveCategory =
   | 'display'

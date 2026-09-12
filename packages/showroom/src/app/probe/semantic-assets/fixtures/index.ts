@@ -1,5 +1,5 @@
 import type { IconName } from '@rottay/design-system/icons';
-import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system';
+import { IMPLEMENTED_ENGINE_NAMES } from '@rottay/design-system/server';
 
 export const CRA17_TENANTS = ['bithire', 'themanagementmiami'] as const;
 export type Cra17Tenant = (typeof CRA17_TENANTS)[number];
