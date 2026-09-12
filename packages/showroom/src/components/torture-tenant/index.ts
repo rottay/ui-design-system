@@ -16,15 +16,13 @@
  */
 
 import {
-  isImplementedEngineName,
-  type ImplementedEngineName,
-} from '@rottay/design-system';
-import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
+  isImplementedEngineName,
   resolveDocumentRootAttributes,
   type DocumentRootAttributes,
+  type ImplementedEngineName,
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
 

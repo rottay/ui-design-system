@@ -517,6 +517,13 @@ export const CI_GATES = Object.freeze([
   { id: 'entrypoint-parity', run: ['node', 'scripts/check/boundaries/entrypoint-parity/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'entrypoint-parity-drill', },
   { id: 'public-entrypoint-boundary-drill', run: ['node', '--test', 'scripts/check/boundaries/public-api/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['public-entrypoint-boundary'], },
   { id: 'public-entrypoint-boundary', run: ['node', 'scripts/check/boundaries/public-api/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'public-entrypoint-boundary-drill', ratchet: 'scripts/check/boundaries/public-api/ceilings/index.json', },
+  // The published root carries `use client`, so a server module that names a
+  // server-safe symbol through it pulls the client graph into the RSC build.
+  // Nothing above sees that: the parity gate reads the export map, not who
+  // imports what, and the subpath lint reads a disposition table that cannot
+  // tell a server module from a client one.
+  { id: 'rsc-client-root-drill', run: ['node', '--test', 'scripts/check/boundaries/rsc-client-root/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['rsc-client-root'], },
+  { id: 'rsc-client-root', run: ['node', 'scripts/check/boundaries/rsc-client-root/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'rsc-client-root-drill', },
   // Drill first: the freeze gate's own self-test was 25/25 green while 43 of its
   // 78 written exceptions were keyed at paths git has never contained, because
   // nothing asserted that a key resolves. A detector that cannot be seen
