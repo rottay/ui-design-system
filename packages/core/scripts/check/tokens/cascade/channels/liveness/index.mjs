@@ -1629,6 +1629,27 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
 }
 
 /**
+ * The effect verdict, apart from ownership: a pin names who owes a terminal but
+ * never supplies one, so every non-LIVE row stays an effect failure, pinned or not.
+ */
+export function assessChannelEffect(channels) {
+  const rows = [];
+  const byClassification = new Map();
+  for (const row of channels) {
+    if (!row.classification || !UNPROVEN_CLASSIFICATIONS.has(row.classification)) continue;
+    rows.push(row.name);
+    const list = byClassification.get(row.classification) ?? [];
+    list.push(row.name);
+    byClassification.set(row.classification, list);
+  }
+  const failures = [...byClassification].map(
+    ([classification, names]) =>
+      `unproven effect: ${names.length} channel(s) classified ${classification} (no proven terminal, no proven external evidence, no retirement; a pin registers who owes the effect, not the effect) -- exact rows: ${names.sort().join(', ')}`,
+  );
+  return { ok: failures.length === 0, failures, rows: rows.sort() };
+}
+
+/**
  * Exhaustive over the row shape this file ever constructs (universe =
  * declaredOverride ∪ declaredReference ∪ emitted, so at least one of
  * `declaredOverride`/`declaredReference`/emitted always holds) — every
@@ -2168,12 +2189,13 @@ export function analyzeChannelLiveness({
     );
   }
 
-  // --- STOP NO-GO, now addressed: every non-LIVE row is still a standing
-  // finding (defects 3, 8), and it must additionally carry a registered owner.
-  // The adjudication reds on an unregistered row, a stale pin, a discharged pin
-  // and a drifted pin; it never hides a pinned row, which is published below.
+  // --- STOP NO-GO: every non-LIVE row is still a standing finding (defects 3,
+  // 8), and it must additionally carry a registered owner. The adjudication
+  // reds on an unregistered row, a stale pin, a discharged pin and a drifted
+  // pin; the effect verdict keeps every non-LIVE row red, pinned or not.
   const adjudication = adjudicateDispositions(channels, { dispositions });
   failures.push(...adjudication.failures);
+  const effect = assessChannelEffect(channels);
 
   const sourceDigest = computeInputsDigest({
     gateScriptSource: readFileSync(SCRIPT_PATH, 'utf8'),
@@ -2215,8 +2237,10 @@ export function analyzeChannelLiveness({
   for (const row of channels) if (row.classification) byClassification[row.classification] += 1;
 
   return {
-    ok: failures.length === 0,
+    ok: failures.length === 0 && effect.ok,
     failures,
+    // Ownership PASS is not effect PASS: a fully pinned universe still fails here.
+    effect,
     analysisLimitations,
     sourceDigest,
     // A pinned finding is still a finding: it is published, with its owner, on
@@ -2337,7 +2361,7 @@ export function runGate({
 
   const failures = [...preFailures, ...result.failures];
   return {
-    ok: failures.length === 0,
+    ok: failures.length === 0 && result.effect.ok,
     failures,
     evidenceNote,
     result,
@@ -2384,7 +2408,7 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
   };
 }
 
-export function formatReport(gateRun) {
+export function formatReport(gateRun, { effectBlocks = true } = {}) {
   const { ok, failures, evidenceNote, result, corpus, resolvedArtifactPath } = gateRun;
   const lines = [];
   lines.push(
@@ -2427,13 +2451,25 @@ export function formatReport(gateRun) {
       `  ${row.name}: classification=${row.classification} declaredReference=${row.declaredReference} externalConsumerPainted=${row.externalConsumerPainted} reads.total=${row.reads.total}`,
     );
   }
+  if (result.effect && !result.effect.ok) {
+    lines.push(
+      `  effect verdict FAIL (ownership does not discharge it${effectBlocks ? '' : '; not part of this leg'}): ${result.effect.rows.length} non-LIVE row(s)`,
+    );
+    for (const failure of result.effect.failures) lines.push(`    - ${failure}`);
+  }
   if (ok) {
     lines.push('channel-liveness-gate OK');
   } else {
-    lines.push(`channel-liveness-gate FAIL -- ${failures.length} finding(s):`);
+    const effectRed = effectBlocks && result.effect && !result.effect.ok ? ' and the effect verdict above' : '';
+    lines.push(`channel-liveness-gate FAIL -- ${failures.length} finding(s)${effectRed}:`);
     for (const failure of failures) lines.push(`  - ${failure}`);
   }
   return lines.join('\n');
+}
+
+/** The artifact asserts liveness, so only a green, unlimited analysis may write it. */
+export function mayWriteArtifact(result) {
+  return result.ok && result.effect.ok && result.analysisLimitations.length === 0;
 }
 
 /**
@@ -2478,7 +2514,7 @@ function main() {
     // write yet).
     const gateRun = runGate({ round, artifactPath, requireArtifact: false });
     const { result } = gateRun;
-    if (!result.ok || result.analysisLimitations.length > 0) {
+    if (!mayWriteArtifact(result)) {
       console.error('[channel-liveness-gate] --write REFUSED: the analysis is red or limited; a generated-only artifact must never assert what the analysis could not prove.');
       console.error(formatReport(gateRun));
       process.exitCode = 1;
@@ -2504,7 +2540,10 @@ function main() {
   // class it was registered against -- and it answers it fail-closed.
   if (checkDispositions) {
     const blocking = dispositionFailures(gateRun.result);
-    const report = formatReport({ ...gateRun, ok: blocking.length === 0, failures: blocking });
+    const report = formatReport(
+      { ...gateRun, ok: blocking.length === 0, failures: blocking },
+      { effectBlocks: false },
+    );
     if (blocking.length === 0) console.log(report);
     else console.error(report);
     process.exitCode = blocking.length === 0 ? 0 : 1;
