@@ -252,28 +252,48 @@ export function DataTableMobileCards<T extends object>({
           ) : null;
 
         if (presentation === "list") {
+          const openRow = onRowClick ? () => onRowClick(row, index) : undefined;
           return withSwipe(
             <Box
               key={rowKey}
               role="listitem"
               data-part="record-list-item"
               data-selected={isSelected ? "true" : "false"}
-              onClick={onRowClick ? () => onRowClick(row, index) : undefined}
+              onClick={openRow}
             >
               <Flex justify="between" align="center" gap={12}>
                 <Flex align="center" gap={12} wrap="wrap">
                   {selection}
-                  {titleColumn && (
-                    <Box data-part="mobile-card-title">
-                      {renderDefaultField(titleColumn, row, index)}
-                    </Box>
-                  )}
-                  {renderMeta(row, index)}
-                  {summaryColumns.map((column) => (
-                    <Box key={column.key} data-part="mobile-card-summary-value">
-                      {renderDefaultField(column, row, index)}
-                    </Box>
-                  ))}
+                  <Flex
+                    align="center"
+                    gap={12}
+                    wrap="wrap"
+                    data-part="record-list-open"
+                    role={openRow ? "button" : undefined}
+                    tabIndex={openRow ? 0 : undefined}
+                    onKeyDown={
+                      openRow
+                        ? (event) => {
+                            if (event.target !== event.currentTarget) return;
+                            if (event.key !== "Enter" && event.key !== " ") return;
+                            event.preventDefault();
+                            openRow();
+                          }
+                        : undefined
+                    }
+                  >
+                    {titleColumn && (
+                      <Box data-part="mobile-card-title">
+                        {renderDefaultField(titleColumn, row, index)}
+                      </Box>
+                    )}
+                    {renderMeta(row, index)}
+                    {summaryColumns.map((column) => (
+                      <Box key={column.key} data-part="mobile-card-summary-value">
+                        {renderDefaultField(column, row, index)}
+                      </Box>
+                    ))}
+                  </Flex>
                 </Flex>
                 {inlineActions && (
                   <Box

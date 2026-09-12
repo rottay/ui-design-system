@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
-import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { mockMatchMedia } from "@tests/support/browser/match-media";
@@ -184,6 +185,79 @@ describe("PatternDataTable adapt — one column model, three presentations", () 
     expect(list).toHaveTextContent("Staff engineer");
     expect(list).toHaveTextContent("Grace");
     expect(list).not.toHaveTextContent("Offer");
+  });
+
+  it("opens a list record from the keyboard exactly once when the row has no actions", async () => {
+    mockMatchMedia(390);
+    const user = userEvent.setup();
+    const onRowClick = vi.fn();
+    render(
+      <Table
+        actions={undefined}
+        onRowClick={onRowClick}
+        adapt={{ phone: { presentation: "list", columns: { keep: ["name", "owner"] } } }}
+      />,
+    );
+    await screen.findByRole("list");
+    const items = screen.getAllByRole("listitem");
+    const opener = within(items[0] as HTMLElement).getByRole("button");
+    expect(opener).toHaveTextContent("Staff engineer");
+
+    await user.tab();
+    expect(opener).toHaveFocus();
+
+    await user.keyboard("{Enter}");
+    expect(onRowClick).toHaveBeenCalledTimes(1);
+    expect(onRowClick).toHaveBeenLastCalledWith(rows[0], 0);
+
+    await user.keyboard(" ");
+    expect(onRowClick).toHaveBeenCalledTimes(2);
+
+    await user.tab();
+    expect(within(items[1] as HTMLElement).getByRole("button")).toHaveFocus();
+  });
+
+  it("offers no row-opening control when the table has no row click", async () => {
+    mockMatchMedia(390);
+    render(<Table actions={undefined} adapt={{ phone: { presentation: "list" } }} />);
+    await screen.findByRole("list");
+    expect(screen.queryAllByRole("button")).toHaveLength(0);
+  });
+
+  it("keeps nested selection and action controls from opening a list record", async () => {
+    mockMatchMedia(390);
+    const user = userEvent.setup();
+    const onRowClick = vi.fn();
+    const onAction = vi.fn();
+    render(
+      <Table
+        selectable
+        onRowClick={onRowClick}
+        actions={(row) => (
+          <button type="button" onClick={onAction}>{`Archive ${row.name}`}</button>
+        )}
+        adapt={{ phone: { presentation: "list", columns: { keep: ["name", "owner"] } } }}
+      />,
+    );
+    await screen.findByRole("list");
+    const item = screen.getAllByRole("listitem")[0] as HTMLElement;
+    const checkbox = await within(item).findByRole("checkbox");
+    const action = within(item).getByRole("button", { name: "Archive Staff engineer" });
+
+    await user.click(checkbox);
+    expect(checkbox).toBeChecked();
+    checkbox.focus();
+    await user.keyboard(" ");
+    expect(checkbox).not.toBeChecked();
+    await user.click(action);
+    action.focus();
+    await user.keyboard("{Enter}");
+
+    expect(onAction).toHaveBeenCalledTimes(2);
+    expect(onRowClick).not.toHaveBeenCalled();
+
+    await user.click(within(item).getByText("Staff engineer"));
+    expect(onRowClick).toHaveBeenCalledTimes(1);
   });
 
   it("puts row actions behind a menu trigger", async () => {
