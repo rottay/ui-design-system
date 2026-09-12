@@ -48,6 +48,6 @@
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-icon-transition-duration: 0.2s;
-  --ds-icon-transition-timing: ease-in-out;
+  --ds-icon-transition-duration: var(--ds-motion-normal);
+  --ds-icon-transition-timing: var(--ds-motion-ease-in-out);
 }

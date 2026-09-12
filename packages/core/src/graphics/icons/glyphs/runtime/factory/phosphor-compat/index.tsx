@@ -11,10 +11,11 @@
 import React, { forwardRef } from "react";
 import type { ComponentType, RefAttributes, SVGProps } from "react";
 
-import type {
-  DSIconComponent,
-  DSIconProps,
-  IconSize,
+import {
+  ICON_SIZE_MAP,
+  type DSIconComponent,
+  type DSIconProps,
+  type IconSize,
 } from "../../../foundation/contracts";
 
 type PhosphorWeight =
@@ -36,15 +37,6 @@ interface PhosphorSsrGlyphProps extends SVGProps<SVGSVGElement> {
 
 /** Internal source contract; supplier declarations never cross public barrels. */
 type PhosphorSsrGlyph = ComponentType<PhosphorSsrGlyphProps>;
-
-const ICON_SIZE_MAP: Record<string, string> = {
-  xs: "var(--ds-icon-xs-size, 12px)",
-  sm: "var(--ds-icon-sm-size, 16px)",
-  md: "var(--ds-icon-md-size, 20px)",
-  lg: "var(--ds-icon-lg-size, 24px)",
-  xl: "var(--ds-icon-xl-size, 32px)",
-  "2xl": "var(--ds-icon-2xl-size, 48px)",
-};
 
 /**
  * Phosphor has discrete weights while the legacy named-icon API exposes a

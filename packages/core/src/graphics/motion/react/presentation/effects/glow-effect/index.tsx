@@ -5,9 +5,9 @@
  *
  * Wraps child content in a pulsing box-shadow glow whose color, blur radius,
  * and animation speed are derived from prop-based intensity tiers and the
- * tenant's motion personality. Uses Motion for React's `animate` prop to
- * smoothly interpolate between two shadow states ("breathe" effect) on the
- * GPU-accelerated compositor layer.
+ * tenant's motion personality. A Web Animations loop breathes between two
+ * shadow states on the `--ds-motion-ease-in-out` curve, so the pulse follows
+ * the tenant's motion character.
  *
  * @example
  * <GlowEffect color="var(--ds-color-accent)" intensity="lg">
@@ -15,10 +15,10 @@
  * </GlowEffect>
  */
 
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useRef } from 'react';
 import type { GlowEffectProps } from '@/graphics/motion/foundation/contracts';
 import { useMotionPersonality, useReducedMotion } from '@/graphics/motion/react/runtime';
+import { useTokenEasedLoop } from '@/graphics/motion/react/runtime/token-eased-loop';
 
 /**
  * Blur and spread pixel values for each intensity tier.
@@ -44,7 +44,7 @@ const PULSE_DURATION_MAP: Record<string, number> = { slow: 1.6, normal: 1, fast:
  * @param props.children - Content displayed inside the glowing wrapper.
  * @param props.className - Optional CSS class for the motion container.
  * @param props.style - Optional inline styles merged onto the motion container.
- * @returns A Motion div with an animated box-shadow glow.
+ * @returns A div with an animated box-shadow glow.
  */
 export const GlowEffect: React.FC<GlowEffectProps> = ({
   color = 'var(--ds-color-primary-500)',
@@ -71,16 +71,24 @@ export const GlowEffect: React.FC<GlowEffectProps> = ({
   // as a pulse without creating harsh flickering.
   const glowSm = `0 0 ${blur * 0.7}px ${spread}px ${color}`;
   const glowLg = `0 0 ${blur}px ${spread * 1.5}px ${color}`;
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  // One alternate iteration is half a breath (small -> large).
+  useTokenEasedLoop(glowRef, {
+    keyframes: [{ boxShadow: glowSm }, { boxShadow: glowLg }],
+    durationMs: (effectiveDuration * 1000) / 2,
+    easingToken: '--ds-motion-ease-in-out',
+    enabled: !shouldReduceMotion,
+  });
 
   return (
-    <motion.div
+    <div
+      ref={glowRef}
       className={className}
       style={{ position: 'relative', display: 'inline-block', ...style }}
-      animate={shouldReduceMotion ? undefined : { boxShadow: [glowSm, glowLg, glowSm] }}
-      transition={{ duration: effectiveDuration, repeat: Infinity, ease: 'easeInOut' }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
 

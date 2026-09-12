@@ -82,7 +82,7 @@ export const GridPattern: React.FC<GridPatternProps> = ({
               cy={size / 2}
               r={dotSize}
               fill={color}
-              style={shouldAnimate ? { animation: `ds-grid-fade ${fadeDuration}s ease-in-out infinite` } : undefined}
+              style={shouldAnimate ? { animation: `ds-grid-fade ${fadeDuration}s var(--ds-motion-ease-in-out) infinite` } : undefined}
             />
           </pattern>
         </defs>

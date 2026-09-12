@@ -77,3 +77,15 @@
     transform: scaleX(0);
   }
 }
+
+/* Reduced motion holds the countdown full instead of letting the global kill
+   switch collapse it to empty, which would read as an already-expired undo. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-undo-toast [data-part='fill'] {
+    animation: none !important;
+  }
+}
+
+html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
+  animation: none !important;
+}

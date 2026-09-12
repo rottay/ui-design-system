@@ -7,8 +7,8 @@
  * and right by shifting `background-position` between 0% and 100%.
  * The `backgroundSize: 200% 200%` trick doubles the painted gradient area
  * so the pan reveals different color blends over time. Animation duration
- * adapts to the tenant's motion personality, and the gradient string is
- * memoized to avoid unnecessary style object churn during animation frames.
+ * adapts to the tenant's motion personality, and the pan travels on the
+ * `--ds-motion-ease-in-out` curve so it follows the tenant's motion character.
  *
  * @example
  * <GradientBackground colors={['#6366f1', '#ec4899', '#f59e0b']} duration={12}>
@@ -16,10 +16,10 @@
  * </GradientBackground>
  */
 
-import React, { useMemo } from 'react';
-import { motion } from 'motion/react';
+import React, { useMemo, useRef } from 'react';
 import type { GradientBackgroundProps } from '@/graphics/motion/foundation/contracts';
 import { useMotionPersonality, useReducedMotion } from '@/graphics/motion/react/runtime';
+import { useTokenEasedLoop } from '@/graphics/motion/react/runtime/token-eased-loop';
 
 /** Maps personality pulse speed to a duration multiplier for the pan cycle. */
 const PULSE_DURATION_MAP: Record<string, number> = { slow: 1.6, normal: 1, fast: 0.6 };
@@ -57,8 +57,7 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
     4
   );
 
-  // Memoize the gradient string so Motion's animation loop doesn't
-  // force a new style object allocation on every frame.
+  // Memoize the gradient string so re-renders don't allocate a new style object.
   // backgroundSize: 200% 200% is essential - it creates a gradient surface
   // twice as wide/tall as the element so background-position can pan across
   // the extra area and reveal different color blends.
@@ -66,17 +65,19 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
     () => ({ background: `linear-gradient(45deg, ${colors.join(', ')})`, backgroundSize: '200% 200%' }),
     [colors]
   );
+  const gradientRef = useRef<HTMLDivElement>(null);
+
+  // One alternate iteration is half a cycle (left -> right).
+  useTokenEasedLoop(gradientRef, {
+    keyframes: [{ backgroundPosition: '0% 50%' }, { backgroundPosition: '100% 50%' }],
+    durationMs: (effectiveDuration * 1000) / 2,
+    easingToken: '--ds-motion-ease-in-out',
+    enabled: shouldAnimate,
+  });
 
   return (
     <div className={className} style={{ position: 'relative', width: '100%', height: '100%', ...style }}>
-      {/* The gradient div is absolutely positioned behind the content layer.
-          backgroundPosition keyframes pan left-to-right-to-left; 'linear' easing
-          prevents the pan from decelerating at edges, which would look like a stall. */}
-      <motion.div
-        style={{ position: 'absolute', inset: 0, ...gradientStyle }}
-        animate={shouldAnimate ? { backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] } : undefined}
-        transition={{ duration: effectiveDuration, repeat: Infinity, ease: 'linear' }}
-      />
+      <div ref={gradientRef} style={{ position: 'absolute', inset: 0, ...gradientStyle }} />
       <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%' }}>{children}</div>
     </div>
   );

@@ -48,7 +48,7 @@
      `--ds-motion-attention` is the governed stand-in. */
   animation: var(--ds-skeleton-animation-name, ds-skeleton-shimmer)
     var(--ds-skeleton-animation-duration, var(--ds-motion-attention))
-    var(--ds-skeleton-animation-easing, var(--ds-motion-ease-standard, ease-in-out))
+    var(--ds-skeleton-animation-easing, var(--ds-motion-ease-standard))
     infinite;
 }
 

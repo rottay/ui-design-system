@@ -559,7 +559,7 @@
     var(--ds-surface-panel) 75%
   );
   background-size: 200% 100%;
-  animation: ds-skeleton-shimmer var(--ds-motion-attention) ease-in-out infinite;
+  animation: ds-skeleton-shimmer var(--ds-motion-attention) var(--ds-motion-ease-in-out) infinite;
 }
 .ds-table.ds-table--modern [data-part='skeleton-row']:nth-child(2n) [data-part='skeleton-bar'] {
   inline-size: 58%;

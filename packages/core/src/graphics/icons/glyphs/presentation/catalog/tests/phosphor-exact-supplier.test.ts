@@ -434,7 +434,7 @@ describe("catalog Phosphor supplier migration", () => {
         createElement(Icon, { size: "sm", strokeWidth: 2, title: label })
       );
 
-      expect(markup, family).toContain('width="var(--ds-icon-sm-size, 16px)"');
+      expect(markup, family).toContain('width="var(--ds-icon-sm-size, 1rem)"');
       expect(markup, family).toContain('class="rottay-icon"');
       expect(markup, family).toContain('role="img"');
       expect(markup, family).toContain(`aria-label="${label}"`);

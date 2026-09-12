@@ -91,8 +91,8 @@ describe("createIcon accessibility and rendering contract", () => {
     );
     const icon = screen.getByTestId("icon");
 
-    expect(icon).toHaveAttribute("width", "var(--ds-icon-lg-size, 24px)");
-    expect(icon).toHaveAttribute("height", "var(--ds-icon-lg-size, 24px)");
+    expect(icon).toHaveAttribute("width", "var(--ds-icon-lg-size, 1.5rem)");
+    expect(icon).toHaveAttribute("height", "var(--ds-icon-lg-size, 1.5rem)");
     expect(icon).toHaveAttribute("stroke", "currentColor");
     expect(icon).toHaveAttribute(
       "stroke-width",
@@ -120,7 +120,7 @@ describe("createIcon accessibility and rendering contract", () => {
     container.innerHTML = markup;
     const icon = container.querySelector("svg");
 
-    expect(icon).toHaveAttribute("width", "var(--ds-icon-sm-size, 16px)");
+    expect(icon).toHaveAttribute("width", "var(--ds-icon-sm-size, 1rem)");
     expect(icon).toHaveAttribute("role", "img");
     expect(icon).toHaveAttribute("aria-label", "Server status");
     expect(icon).not.toHaveAttribute("aria-hidden");
@@ -140,8 +140,8 @@ describe("Phosphor compatibility factory contract", () => {
     );
     const icon = screen.getByTestId("icon");
 
-    expect(icon).toHaveAttribute("width", "var(--ds-icon-lg-size, 24px)");
-    expect(icon).toHaveAttribute("height", "var(--ds-icon-lg-size, 24px)");
+    expect(icon).toHaveAttribute("width", "var(--ds-icon-lg-size, 1.5rem)");
+    expect(icon).toHaveAttribute("height", "var(--ds-icon-lg-size, 1.5rem)");
     expect(icon).toHaveAttribute("fill", "currentColor");
     expect(icon).toHaveAttribute("data-supplier-weight", "thin");
     expect(icon).not.toHaveAttribute("stroke-width");

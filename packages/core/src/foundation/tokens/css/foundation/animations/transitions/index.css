@@ -453,13 +453,13 @@
 ::view-transition-old(root) {
   animation: ds-view-transition-fade-out
     var(--ds-page-transition-duration, var(--ds-motion-normal))
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-exit) both;
 }
 
 ::view-transition-new(root) {
   animation: ds-view-transition-fade-in
     var(--ds-page-transition-duration, var(--ds-motion-normal))
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-enter) both;
 }
 
 @keyframes ds-scroll-reveal-in {
@@ -502,10 +502,13 @@
      transform/size interpolation between old and new geometry (the morph
      itself); old/new animate the opacity crossfade of their content.
      Without an animation, the group renders directly at the new geometry:
-     an instant cut instead of motion. */
+     an instant cut instead of motion. A `*` argument carries no specificity,
+     so the root pair styled above is listed by name to win the cascade. */
   ::view-transition-group(*),
   ::view-transition-old(*),
-  ::view-transition-new(*) {
+  ::view-transition-new(*),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
     animation: none;
   }
 }
@@ -529,17 +532,17 @@
    riding the root crossfade. */
 ::view-transition-group(*.ds-vt-tab-panel) {
   animation-duration: var(--ds-motion-normal);
-  animation-timing-function: var(--ds-motion-ease-out);
+  animation-timing-function: var(--ds-motion-ease-move);
 }
 
 ::view-transition-old(*.ds-vt-tab-panel) {
   animation: ds-view-transition-fade-out var(--ds-motion-fast)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-exit) both;
 }
 
 ::view-transition-new(*.ds-vt-tab-panel) {
   animation: ds-view-transition-fade-in var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-enter) both;
 }
 
 /* Direction-aware slide: old exits toward, new enters from. Each keyframe set
@@ -595,22 +598,22 @@
    same way. Do not replace :where() with a bare attribute selector. */
 :where(html[data-ds-vt-direction='forward'])::view-transition-old(*.ds-vt-tab-panel) {
   animation: ds-vt-panel-exit-toward-start var(--ds-motion-fast)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-exit) both;
 }
 
 :where(html[data-ds-vt-direction='forward'])::view-transition-new(*.ds-vt-tab-panel) {
   animation: ds-vt-panel-enter-from-end var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-enter) both;
 }
 
 :where(html[data-ds-vt-direction='backward'])::view-transition-old(*.ds-vt-tab-panel) {
   animation: ds-vt-panel-exit-toward-end var(--ds-motion-fast)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-exit) both;
 }
 
 :where(html[data-ds-vt-direction='backward'])::view-transition-new(*.ds-vt-tab-panel) {
   animation: ds-vt-panel-enter-from-start var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-enter) both;
 }
 
 /* Record morphs (kanban card -> detail, row -> detail): the browser's default
@@ -618,7 +621,7 @@
    these rules only put its timing on the canon. */
 ::view-transition-group(*.ds-vt-record) {
   animation-duration: var(--ds-motion-slow);
-  animation-timing-function: var(--ds-motion-ease-out);
+  animation-timing-function: var(--ds-motion-ease-move);
 }
 
 /* Modal -> full-page promote morph (named pair ds-vt-modal-promote; see
@@ -628,7 +631,7 @@
 ::view-transition-old(ds-vt-modal-promote),
 ::view-transition-new(ds-vt-modal-promote) {
   animation-duration: var(--ds-motion-slow);
-  animation-timing-function: var(--ds-motion-ease-out);
+  animation-timing-function: var(--ds-motion-ease-move);
 }
 
 /* Reduced-motion neutralization for every group this section styles. The

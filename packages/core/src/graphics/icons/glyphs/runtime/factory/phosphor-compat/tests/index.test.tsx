@@ -80,8 +80,8 @@ describe('createPhosphorCompatibilityIcon', () => {
     const icon = screen.getByTestId('icon');
 
     expect(ref.current).toBe(icon);
-    expect(icon).toHaveAttribute('width', 'var(--ds-icon-lg-size, 24px)');
-    expect(icon).toHaveAttribute('height', 'var(--ds-icon-lg-size, 24px)');
+    expect(icon).toHaveAttribute('width', 'var(--ds-icon-lg-size, 1.5rem)');
+    expect(icon).toHaveAttribute('height', 'var(--ds-icon-lg-size, 1.5rem)');
     expect(icon).toHaveAttribute('fill', 'rebeccapurple');
     expect(icon).toHaveClass('rottay-icon', 'consumer-icon');
     expect(icon).toHaveStyle({ opacity: '0.4' });

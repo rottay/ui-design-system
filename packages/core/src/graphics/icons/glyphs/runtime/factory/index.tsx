@@ -12,21 +12,13 @@
  */
 
 import React, { forwardRef } from 'react';
-import type {
-  DSIconComponent,
-  DSIconProps,
-  DSIconSourceComponent,
-  IconSize,
+import {
+  ICON_SIZE_MAP,
+  type DSIconComponent,
+  type DSIconProps,
+  type DSIconSourceComponent,
+  type IconSize,
 } from '../../foundation/contracts';
-
-const ICON_SIZE_MAP: Record<string, string> = {
-  xs: 'var(--ds-icon-xs-size, 12px)',
-  sm: 'var(--ds-icon-sm-size, 16px)',
-  md: 'var(--ds-icon-md-size, 20px)',
-  lg: 'var(--ds-icon-lg-size, 24px)',
-  xl: 'var(--ds-icon-xl-size, 32px)',
-  '2xl': 'var(--ds-icon-2xl-size, 48px)',
-};
 
 /**
  * Factory that wraps a compatible SVG icon component with DS defaults.

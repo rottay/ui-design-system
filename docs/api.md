@@ -106,7 +106,7 @@ renderer implementations. See the Showroom for a live page per chart type.
 | `no-hardcoded-colors` | Disallow hardcoded color values; use DS CSS variables instead |
 | `no-db-in-components` | Disallow database/ORM imports in UI component files |
 | `no-direct-lucide` | Disallow direct `lucide-react` imports; use DS icons instead |
-| `no-motion-literals` | Disallow raw `cubic-bezier()`/duration literals in modern-engine styles; use `--ds-motion-*` tokens |
+| `no-motion-literals` | Disallow raw `cubic-bezier()`, keyword easing and duration literals in modern-engine and `graphics/motion` styles; use `--ds-motion-*` tokens |
 | `no-size-type-outside-classic` | Restrict the deprecated `SizeType` import to the classic-engine antd bridge |
 
 ## 9. Server entry
