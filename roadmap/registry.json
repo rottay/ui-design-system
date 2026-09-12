@@ -4885,6 +4885,11 @@
      "at": "2026-09-12 18:50",
      "by": "Kimi K3",
      "note": "POST-CLOSE DEFECT RUNTIME-02 (audit/103-day-direction-2026-09-12/runtime.md; strong hook-dependency inference, focal test owed): token-eased-loop reads the computed easing once when starting WAAPI and re-runs only on ref/enabled/duration/token-name/direction/keyframes; GradientBackground/GlowEffect pass constant inputs, so switching motion.character (organic->playful) with duration constant leaves mounted ambient effects on the previous curve while CSS consumers update. OBLIGATION: use a CSS-owned animation consuming the variable directly, or update timing from the shared artifact/theme change signal after CSS commit; no second character map, no DOM polling. FOCAL ACCEPTANCE: extend use-token-eased-loop tests with a rerender changing ONLY the computed easing (duration/keyframes/token name constant), assert timing changes or old animation cancelled+replaced; keep the reduced-motion cancellation assertion. Status kept done (reopen would cascade per DAG validation); correction lot routed here."
+    },
+    {
+     "at": "2026-09-12 19:20",
+     "by": "Kimi K3",
+     "note": "RUNTIME-02 CORRECTED (2026-09-12): commit 320ae825c, landed via merge d04cce4d7 + changeset 20cc0249a (main 20cc0249a). useTokenEasedLoop re-reads the easing token after every commit and on provider paint-attribute mutations of the ancestor chain (shared PROVIDER_PAINT_ATTRIBUTE_FILTER, no new map, MutationObserver not polling); running loops retime in place via effect.updateTiming, linear fallback. Writer: Opus (claude-opus-5, daniel profile). Independent auditor: Kimi K3 — focal reproduction on branch AND merged tree: token-eased-loop vitest 7/7 exit 0 (incl. rerender changing ONLY easing -> retimed once; attribute change without rerender -> retimed; invalid curve -> linear; enabled off -> cancelled, reduced-motion assertion kept); AnimationCatalog 2/2 (writer); tsc 0; contract-changeset --base OK with patch changeset. Declared limit: in-place stylesheet text swap without attribute change/rerender is not detected (matches charts); no browser run."
     }
    ],
    "doneAt": "2026-09-12",
@@ -5455,6 +5460,11 @@
      "at": "2026-09-12 18:50",
      "by": "Kimi K3",
      "note": "POST-CLOSE DEFECT RUNTIME-03 (audit/103-day-direction-2026-09-12/runtime.md; strong code/semantics inference, focal test owed): data-table presentation='list' rows render as Box role=listitem with onClick but no focusable control/tabIndex/keyboard handler for onRowClick; plain-text columns + only onRowClick become pointer-only when an adapt slot chooses list. OBLIGATION: keep list semantics and provide a focusable, semantically appropriate row-opening control with Enter/Space and nested action/selection isolation, using the existing interaction contract; coordinate with the data-table family cut. FOCAL ACCEPTANCE: list presentation with plain text columns, onRowClick, no actions; tab to the row-opening control; keyboard activation fires exactly one row-open callback; nested selection/action controls do not open the row. Status kept done (reopen would cascade per DAG validation); correction lot routed here."
+    },
+    {
+     "at": "2026-09-12 19:20",
+     "by": "Kimi K3",
+     "note": "RUNTIME-03 CORRECTED (2026-09-12): commit 1b356725a, landed via merge d04cce4d7 + changeset 20cc0249a (main 20cc0249a). data-table presentation='list' keeps role=listitem and gains a focusable role=button row-opening area (data-part=record-list-open) with Enter/Space activation guarded by event.target===currentTarget; selection/actions stay outside it and never open the row; pointer behavior unchanged. Writer: Opus (claude-opus-5, daniel profile). Independent auditor: Kimi K3 — data-table focal 119/119 exit 0 on branch AND merged tree; new tests: Tab reaches opener, Enter opens exactly once, Space once, next Tab reaches row 2; no onRowClick -> no button; checkbox/action interaction never opens; old code fails the keyboard test (writer red->green). Not done (declared): browser focus-ring check; no skin rule for the area yet (CSS was outside the write set) - noted for the data-table family cut."
     }
    ],
    "doneAt": "2026-09-12",
