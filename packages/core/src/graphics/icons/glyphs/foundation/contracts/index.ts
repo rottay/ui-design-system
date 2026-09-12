@@ -12,7 +12,7 @@ import type {
   RefAttributes,
   SVGProps,
 } from 'react';
-import { ICON_SIZE_TOKENS, type IconSizeToken } from '..';
+import type { IconSizeToken } from '..';
 
 /** Stable size contract retained by the one-minor named-icon compatibility API. */
 export type IconSize = IconSizeToken | number;
@@ -91,16 +91,17 @@ export type IconComponent = React.ComponentType<{
 
 
 /**
- * Maps named size tokens to their CSS variable strings.
- * Actual pixel values are defined in `foundation/tokens/css/presentation/components/icon/index.css`.
+ * The one icon size scale every icon runtime resolves a named size through.
+ * Values are defined in `foundation/tokens/css/presentation/components/icon/index.css`;
+ * the fallback keeps an icon sized where that stylesheet is not loaded.
  */
 export const ICON_SIZE_MAP: Record<string, string> = {
-  xs: ICON_SIZE_TOKENS.xs,
-  sm: ICON_SIZE_TOKENS.sm,
-  md: ICON_SIZE_TOKENS.md,
-  lg: ICON_SIZE_TOKENS.lg,
-  xl: ICON_SIZE_TOKENS.xl,
-  '2xl': ICON_SIZE_TOKENS['2xl'],
+  xs: 'var(--ds-icon-xs-size, 0.75rem)',
+  sm: 'var(--ds-icon-sm-size, 1rem)',
+  md: 'var(--ds-icon-md-size, 1.25rem)',
+  lg: 'var(--ds-icon-lg-size, 1.5rem)',
+  xl: 'var(--ds-icon-xl-size, 2rem)',
+  '2xl': 'var(--ds-icon-2xl-size, 3rem)',
 };
 
 /** Product-level semantic role, independent of any icon supplier. */

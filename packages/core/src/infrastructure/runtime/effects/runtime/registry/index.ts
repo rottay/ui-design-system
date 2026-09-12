@@ -139,7 +139,7 @@ const DEFINITIONS = [
     certificationPending: 'Replace the paint-property perpetual pulse with a state-bound governed treatment.',
     tier: 'expressive',
     purpose: 'feedback',
-    observed: { renderer: 'motion', loop: 'while-live', lazy: false },
+    observed: { renderer: 'waapi', loop: 'while-live', lazy: false },
     provenance: sourceProvenance('packages/core/src/graphics/motion/react/presentation/effects/glow-effect/index.tsx'),
     fallback: {
       static: 'Render one bounded tokenized glow at its settled intensity.',
@@ -159,7 +159,7 @@ const DEFINITIONS = [
     certificationPending: 'Remove default-on paint animation and prove lazy/static/offscreen behavior.',
     tier: 'expressive',
     purpose: 'ambient',
-    observed: { renderer: 'motion', loop: 'while-live', lazy: false },
+    observed: { renderer: 'waapi', loop: 'while-live', lazy: false },
     provenance: sourceProvenance('packages/core/src/graphics/motion/react/presentation/effects/gradient-background/index.tsx'),
     fallback: {
       static: 'Render the provider-scoped gradient at a deterministic settled position.',

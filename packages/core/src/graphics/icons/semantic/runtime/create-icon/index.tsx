@@ -13,8 +13,12 @@ import {
   isGraphicAssetAdapterEnabled,
   reportGraphicAssetTelemetry,
 } from '../../../../../infrastructure/runtime/graphics/asset-governance/runtime/control';
-import { ICON_SIZE_TOKENS } from '../../../glyphs/foundation';
-import type { IconRole, IconState, IconTone } from '../../../glyphs/foundation/contracts';
+import {
+  ICON_SIZE_MAP,
+  type IconRole,
+  type IconState,
+  type IconTone,
+} from '../../../glyphs/foundation/contracts';
 import { resolveIconWeight } from '../../foundation/policy';
 import { useActiveIconExpressiveProfile } from '../../../../../infrastructure/runtime/foundation/icons/active-profile/foundation/read';
 import type { IconProps } from '../../foundation/contracts';
@@ -73,14 +77,6 @@ const VALID_TONES: ReadonlySet<IconTone> = new Set([
   'error',
   'info',
 ]);
-const SIZE_FALLBACKS: Readonly<Record<keyof typeof ICON_SIZE_TOKENS, string>> = {
-  xs: 'var(--ds-icon-xs-size, 0.75rem)',
-  sm: 'var(--ds-icon-sm-size, 1rem)',
-  md: 'var(--ds-icon-md-size, 1.25rem)',
-  lg: 'var(--ds-icon-lg-size, 1.5rem)',
-  xl: 'var(--ds-icon-xl-size, 2rem)',
-  '2xl': 'var(--ds-icon-2xl-size, 3rem)',
-};
 const warnedInputs = new Set<string>();
 
 function warnOnce(key: string, message: string): void {
@@ -91,11 +87,11 @@ function warnOnce(key: string, message: string): void {
 
 function resolveSize(value: unknown): string | number {
   if (typeof value === 'number') {
-    return Number.isFinite(value) && value > 0 ? value : SIZE_FALLBACKS.md;
+    return Number.isFinite(value) && value > 0 ? value : ICON_SIZE_MAP.md;
   }
-  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(SIZE_FALLBACKS, value)
-    ? SIZE_FALLBACKS[value as keyof typeof SIZE_FALLBACKS]
-    : SIZE_FALLBACKS.md;
+  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(ICON_SIZE_MAP, value)
+    ? ICON_SIZE_MAP[value]
+    : ICON_SIZE_MAP.md;
 }
 
 function resolveTone(

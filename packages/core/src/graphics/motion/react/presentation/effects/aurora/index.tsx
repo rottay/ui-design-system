@@ -112,7 +112,7 @@ export const Aurora: React.FC<AuroraProps> = ({
               // Wave skeleton style gets slightly higher opacity for a bolder look;
               // pulse style stays subtler to avoid competing with loading indicators.
               opacity: motionPersonality.skeletonStyle === 'wave' ? 0.34 : 0.28,
-              animation: shouldReduceMotion ? 'none' : `ds-aurora-blob ${blob.duration}s ease-in-out ${blob.delay}s infinite`,
+              animation: shouldReduceMotion ? 'none' : `ds-aurora-blob ${blob.duration}s var(--ds-motion-ease-in-out) ${blob.delay}s infinite`,
               // willChange: 'transform' promotes the blob to its own compositor layer,
               // preventing repaint of the parent during animation. Disabled when static.
               willChange: shouldReduceMotion ? 'auto' : 'transform',

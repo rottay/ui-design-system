@@ -3948,13 +3948,13 @@ html.dark {
 ::view-transition-old(root) {
   animation: ds-view-transition-fade-out
     var(--ds-page-transition-duration, var(--ds-motion-normal))
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-exit) both;
 }
 
 ::view-transition-new(root) {
   animation: ds-view-transition-fade-in
     var(--ds-page-transition-duration, var(--ds-motion-normal))
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-enter) both;
 }
 
 @keyframes ds-scroll-reveal-in {
@@ -3997,10 +3997,13 @@ html.dark {
      transform/size interpolation between old and new geometry (the morph
      itself); old/new animate the opacity crossfade of their content.
      Without an animation, the group renders directly at the new geometry:
-     an instant cut instead of motion. */
+     an instant cut instead of motion. A `*` argument carries no specificity,
+     so the root pair styled above is listed by name to win the cascade. */
   ::view-transition-group(*),
   ::view-transition-old(*),
-  ::view-transition-new(*) {
+  ::view-transition-new(*),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
     animation: none;
   }
 }
@@ -4024,17 +4027,17 @@ html.dark {
    riding the root crossfade. */
 ::view-transition-group(*.ds-vt-tab-panel) {
   animation-duration: var(--ds-motion-normal);
-  animation-timing-function: var(--ds-motion-ease-out);
+  animation-timing-function: var(--ds-motion-ease-move);
 }
 
 ::view-transition-old(*.ds-vt-tab-panel) {
   animation: ds-view-transition-fade-out var(--ds-motion-fast)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-exit) both;
 }
 
 ::view-transition-new(*.ds-vt-tab-panel) {
   animation: ds-view-transition-fade-in var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-enter) both;
 }
 
 /* Direction-aware slide: old exits toward, new enters from. Each keyframe set
@@ -4090,22 +4093,22 @@ html.dark {
    same way. Do not replace :where() with a bare attribute selector. */
 :where(html[data-ds-vt-direction='forward'])::view-transition-old(*.ds-vt-tab-panel) {
   animation: ds-vt-panel-exit-toward-start var(--ds-motion-fast)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-exit) both;
 }
 
 :where(html[data-ds-vt-direction='forward'])::view-transition-new(*.ds-vt-tab-panel) {
   animation: ds-vt-panel-enter-from-end var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-enter) both;
 }
 
 :where(html[data-ds-vt-direction='backward'])::view-transition-old(*.ds-vt-tab-panel) {
   animation: ds-vt-panel-exit-toward-end var(--ds-motion-fast)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-exit) both;
 }
 
 :where(html[data-ds-vt-direction='backward'])::view-transition-new(*.ds-vt-tab-panel) {
   animation: ds-vt-panel-enter-from-start var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
+    var(--ds-motion-ease-enter) both;
 }
 
 /* Record morphs (kanban card -> detail, row -> detail): the browser's default
@@ -4113,7 +4116,7 @@ html.dark {
    these rules only put its timing on the canon. */
 ::view-transition-group(*.ds-vt-record) {
   animation-duration: var(--ds-motion-slow);
-  animation-timing-function: var(--ds-motion-ease-out);
+  animation-timing-function: var(--ds-motion-ease-move);
 }
 
 /* Modal -> full-page promote morph (named pair ds-vt-modal-promote; see
@@ -4123,7 +4126,7 @@ html.dark {
 ::view-transition-old(ds-vt-modal-promote),
 ::view-transition-new(ds-vt-modal-promote) {
   animation-duration: var(--ds-motion-slow);
-  animation-timing-function: var(--ds-motion-ease-out);
+  animation-timing-function: var(--ds-motion-ease-move);
 }
 
 /* Reduced-motion neutralization for every group this section styles. The
@@ -9028,8 +9031,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-icon-transition-duration: 0.2s;
-  --ds-icon-transition-timing: ease-in-out;
+  --ds-icon-transition-duration: var(--ds-motion-normal);
+  --ds-icon-transition-timing: var(--ds-motion-ease-in-out);
 }
 
 }
@@ -27459,7 +27462,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
     var(--ds-surface-panel) 75%
   );
   background-size: 200% 100%;
-  animation: ds-skeleton-shimmer var(--ds-motion-attention) ease-in-out infinite;
+  animation: ds-skeleton-shimmer var(--ds-motion-attention) var(--ds-motion-ease-in-out) infinite;
 }
 .ds-table.ds-table--modern [data-part='skeleton-row']:nth-child(2n) [data-part='skeleton-bar'] {
   inline-size: 58%;
@@ -50058,7 +50061,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
      `--ds-motion-attention` is the governed stand-in. */
   animation: var(--ds-skeleton-animation-name, ds-skeleton-shimmer)
     var(--ds-skeleton-animation-duration, var(--ds-motion-attention))
-    var(--ds-skeleton-animation-easing, var(--ds-motion-ease-standard, ease-in-out))
+    var(--ds-skeleton-animation-easing, var(--ds-motion-ease-standard))
     infinite;
 }
 
@@ -52258,6 +52261,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   to {
     transform: scaleX(0);
   }
+}
+
+/* Reduced motion holds the countdown full instead of letting the global kill
+   switch collapse it to empty, which would read as an already-expired undo. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-undo-toast [data-part='fill'] {
+    animation: none !important;
+  }
+}
+
+html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
+  animation: none !important;
 }
 
 }
@@ -106076,7 +106091,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     var(--ds-surface-panel) 75%
   );
   background-size: 200% 100%;
-  animation: ds-skeleton-shimmer var(--ds-motion-attention) ease-in-out infinite;
+  animation: ds-skeleton-shimmer var(--ds-motion-attention) var(--ds-motion-ease-in-out) infinite;
   border-radius: var(--ds-radius-sm);
 }
 
