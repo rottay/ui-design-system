@@ -55,7 +55,7 @@
     "tenantChannel": 2309,
     "compilerConcreteEmissions": 2388,
     "compilerEmissionPatterns": 11,
-    "themeContractFiles": 51,
+    "themeContractFiles": 57,
     "ambiguousThemeContractTypes": 0,
     "unresolvedCompilerEmissions": 0,
     "interpolatedFamilies": 71,
@@ -68,7 +68,7 @@
     "unadjudicatedReads": 2563,
     "promoted": 91,
     "styleFiles": 465,
-    "componentFiles": 1314
+    "componentFiles": 1316
   },
   "declaredSlots": {
     "--ds-command-grid-opacity": {

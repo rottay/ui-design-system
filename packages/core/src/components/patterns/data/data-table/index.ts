@@ -21,6 +21,12 @@ export type {
   DataTableMessages,
   DataTableRecipe,
 } from "./contracts";
+export type {
+  DataTableAdaptation,
+  DataTableColumnAdaptation,
+  DataTablePresentation,
+  DataTableRowActions,
+} from "../../../../foundation/contracts/kernel/adaptation";
 export { resolveAccessor, resolveRowKey } from "./runtime/row-resolution";
 export type {
   ColumnDef,

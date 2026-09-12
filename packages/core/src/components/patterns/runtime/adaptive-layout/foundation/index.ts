@@ -12,7 +12,7 @@
  * so this owner holds no component-inventory row and exports no component.
  *
  * This is the CONTRACT layer only: pure types plus the one declarative
- * vocabulary table. It imports nothing. Geometry lives one layer up in
+ * vocabulary table. It imports only the shared posture vocabulary. Geometry lives one layer up in
  * `../runtime` (pure, no DOM), and measurement/observers/epochs live in
  * `../presentation/react` — the house shape for a React binding layer under a
  * UI owner (`patterns/visualization/charts/runtime/chart-engine` declares the
@@ -40,7 +40,9 @@
  *     container posture bucket — the solver never reads a viewport.
  */
 
-export type ContainerPosture = 'compact' | 'standard' | 'expanded';
+import type { ContainerPosture } from '@/foundation/contracts/kernel/adaptation';
+
+export type { ContainerPosture };
 
 /** Tenant-reachable responsive posture axis (previously ABSENT — R1.B). */
 export interface ResponsivePostureProfile {

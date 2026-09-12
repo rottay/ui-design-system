@@ -11,9 +11,15 @@ import type {
   ColumnDef,
   ResponsiveColumnMode,
 } from "@/foundation/contracts/runtime/components/patterns/core";
+import type {
+  DataTableRowActions,
+  ViewportPosture,
+} from "@/foundation/contracts/kernel/adaptation";
 import type { DataTableMobileCardContext } from "../../../contracts";
 import type { DataTableMessages } from "../../../contracts";
+import type { RecordColumnProjection } from "../../../runtime/adaptation";
 import { resolveAccessor } from "../../../runtime/row-resolution";
+import { placeRowActions, SwipeActionsRecord } from "./row-actions";
 
 function stringifyMobileValue(value: unknown): string {
   if (value === null || value === undefined || value === "") {
@@ -45,7 +51,7 @@ export interface DataTableMobileCardsProps<T extends object> {
   data: T[];
   columns: ColumnDef<T>[];
   /** Current device class key, used to resolve responsive column roles. */
-  deviceKey?: "phone" | "tablet" | "desktop";
+  deviceKey?: ViewportPosture;
   getRowKey: (row: T, index: number) => string;
   selectedKeys?: string[];
   selectable?: boolean;
@@ -58,6 +64,15 @@ export interface DataTableMobileCardsProps<T extends object> {
     context: DataTableMobileCardContext<T>
   ) => React.ReactNode;
   messages?: DataTableMessages;
+  /**
+   * The column projection an adaptation declared. When present it replaces the
+   * per-column responsive roles and the positional heuristic, uncapped: the
+   * application said which columns stay.
+   */
+  projection?: RecordColumnProjection<T>;
+  /** `list` renders one compact line per record instead of a card. */
+  presentation?: "cards" | "list";
+  rowActions?: DataTableRowActions;
 }
 
 /**
@@ -66,7 +81,7 @@ export interface DataTableMobileCardsProps<T extends object> {
  */
 function getMode<T>(
   column: ColumnDef<T>,
-  deviceKey: "phone" | "tablet" | "desktop"
+  deviceKey: ViewportPosture
 ): ResponsiveColumnMode {
   return column.responsive?.[deviceKey] ?? "visible";
 }
@@ -97,8 +112,12 @@ export function DataTableMobileCards<T extends object>({
   actions,
   mobileCard,
   messages,
+  projection,
+  presentation = "cards",
+  rowActions = "inline",
 }: DataTableMobileCardsProps<T>): React.ReactElement {
   const visibleColumns = columns.filter((column) => column.visible !== false);
+  const rowActionsLabel = messages?.rowActions ?? "Row actions";
 
   // Check if ANY column has a responsive config at this device class.
   // If so, use the responsive roles to pick title/summary columns.
@@ -109,8 +128,12 @@ export function DataTableMobileCards<T extends object>({
 
   let titleColumn: ColumnDef<T> | undefined;
   let summaryColumns: ColumnDef<T>[];
+  const metaColumns: ColumnDef<T>[] = projection?.meta ?? [];
 
-  if (hasResponsiveConfig) {
+  if (projection) {
+    titleColumn = projection.title;
+    summaryColumns = projection.fields;
+  } else if (hasResponsiveConfig) {
     // Use explicit responsive roles
     const primaryCols = visibleColumns.filter(
       (col) => getMode(col, deviceKey) === "primary"
@@ -144,12 +167,32 @@ export function DataTableMobileCards<T extends object>({
     );
   }
 
+  const renderMeta = (row: T, index: number) =>
+    metaColumns.length > 0 ? (
+      <Flex gap={8} wrap="wrap" align="center" data-part="record-meta">
+        {metaColumns.map((column) => (
+          <Box key={column.key} data-part="record-meta-value">
+            {renderDefaultField(column, row, index)}
+          </Box>
+        ))}
+      </Flex>
+    ) : null;
+
   return (
-    <Stack spacing="md" className="ds-pattern-data-table ds-data-table--mobile">
+    <Stack
+      spacing={presentation === "list" ? "xs" : "md"}
+      className="ds-pattern-data-table ds-data-table--mobile"
+      data-part={presentation === "list" ? "record-list" : "record-cards"}
+      role={presentation === "list" ? "list" : undefined}
+    >
       {data.map((row, index) => {
         const rowKey = getRowKey(row, index);
         const isSelected = selectedKeys.includes(rowKey);
-        const resolvedActions = actions?.(row, index);
+        const authoredActions = actions?.(row, index);
+        const resolvedActions =
+          rowActions === "menu"
+            ? placeRowActions("menu", authoredActions, rowActionsLabel)
+            : authoredActions;
         const mobileCardContext: DataTableMobileCardContext<T> = {
           item: row,
           index,
@@ -166,6 +209,19 @@ export function DataTableMobileCards<T extends object>({
           },
           actions: resolvedActions,
         };
+        const inlineActions = rowActions === "swipe" ? null : resolvedActions;
+        const withSwipe = (record: React.ReactElement): React.ReactElement =>
+          rowActions === "swipe" && authoredActions ? (
+            <SwipeActionsRecord
+              key={rowKey}
+              label={rowActionsLabel}
+              actions={authoredActions}
+            >
+              {record}
+            </SwipeActionsRecord>
+          ) : (
+            record
+          );
 
         if (mobileCard) {
           return (
@@ -179,7 +235,60 @@ export function DataTableMobileCards<T extends object>({
           );
         }
 
-        return (
+        const selection =
+          selectable && onToggleSelection ? (
+            <Box
+              data-part="mobile-card-selection"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <Checkbox
+                checked={isSelected}
+                onChange={() => onToggleSelection(rowKey)}
+                aria-label={
+                  messages?.selectRow?.(rowKey) ?? `Select ${rowKey}`
+                }
+              />
+            </Box>
+          ) : null;
+
+        if (presentation === "list") {
+          return withSwipe(
+            <Box
+              key={rowKey}
+              role="listitem"
+              data-part="record-list-item"
+              data-selected={isSelected ? "true" : "false"}
+              onClick={onRowClick ? () => onRowClick(row, index) : undefined}
+            >
+              <Flex justify="between" align="center" gap={12}>
+                <Flex align="center" gap={12} wrap="wrap">
+                  {selection}
+                  {titleColumn && (
+                    <Box data-part="mobile-card-title">
+                      {renderDefaultField(titleColumn, row, index)}
+                    </Box>
+                  )}
+                  {renderMeta(row, index)}
+                  {summaryColumns.map((column) => (
+                    <Box key={column.key} data-part="mobile-card-summary-value">
+                      {renderDefaultField(column, row, index)}
+                    </Box>
+                  ))}
+                </Flex>
+                {inlineActions && (
+                  <Box
+                    data-part="mobile-card-actions"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    {inlineActions}
+                  </Box>
+                )}
+              </Flex>
+            </Box>
+          );
+        }
+
+        return withSwipe(
           <Card
             key={rowKey}
             variant="outlined"
@@ -199,22 +308,10 @@ export function DataTableMobileCards<T extends object>({
                         {renderDefaultField(titleColumn, row, index)}
                       </Box>
                     )}
+                    {renderMeta(row, index)}
                   </Stack>
 
-                  {selectable && onToggleSelection && (
-                    <Box
-                      data-part="mobile-card-selection"
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={() => onToggleSelection(rowKey)}
-                        aria-label={
-                          messages?.selectRow?.(rowKey) ?? `Select ${rowKey}`
-                        }
-                      />
-                    </Box>
-                  )}
+                  {selection}
                 </Flex>
 
                 {summaryColumns.length > 0 && (
@@ -243,13 +340,13 @@ export function DataTableMobileCards<T extends object>({
                   </Stack>
                 )}
 
-                {resolvedActions && (
+                {inlineActions && (
                   <Box
                     data-part="mobile-card-actions"
                     onClick={(event) => event.stopPropagation()}
                   >
                     <Flex gap={8} wrap="wrap">
-                      {resolvedActions}
+                      {inlineActions}
                     </Flex>
                   </Box>
                 )}

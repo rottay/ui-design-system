@@ -9,6 +9,10 @@
 import type { ReactNode } from "react";
 import type { DataTableMobileCardContext } from "@/foundation/contracts/runtime/components/patterns/data";
 import type {
+  Adapt,
+  DataTableAdaptation,
+} from "@/foundation/contracts/kernel/adaptation";
+import type {
   PatternBaseProps,
   ColumnDef,
   SortConfig,
@@ -89,6 +93,8 @@ export interface DataTableMessages {
   expandRow?: (rowKey: string, expanded: boolean) => string;
   selectedCount?: (count: number) => ReactNode;
   paginationRange?: (start: number, end: number, total: number) => ReactNode;
+  /** Accessible name of the row-actions menu trigger and swipe disclosure. */
+  rowActions?: string;
 }
 
 /**
@@ -335,10 +341,29 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   // ---------------------------------------------------------------------------
 
   /**
-   * Card renderer for the mobile breakpoint. When the table's own container
-   * width is below `mobileBreakpoint`, it switches from a traditional row
-   * layout to a card-based layout using this renderer. Viewport width is only
-   * used as a fallback where `ResizeObserver` is unavailable.
+   * Per-posture adaptation, declared by the application as deltas: which
+   * columns stay, shrink or lead, whether rows present as `table`, `cards` or
+   * `list`, and whether row actions are `inline`, in a `menu` or revealed by
+   * `swipe`. Every presentation is generated from `columns`.
+   *
+   * Postures are the ones every family shares. The viewport posture resolves
+   * on the server from the request's viewport hint; the container posture
+   * resolves from the table's own box on the tenant's container ladder. By
+   * default a phone request and a compact box present `cards`.
+   *
+   * @example
+   * ```tsx
+   * adapt={{
+   *   phone: { columns: { keep: ["name", "status", "owner"], shrink: ["status"] }, presentation: "cards" },
+   *   tablet: { columns: { keep: ["name", "status", "owner", "updatedAt"] } },
+   * }}
+   * ```
+   */
+  adapt?: Adapt<DataTableAdaptation>;
+
+  /**
+   * Card renderer for the cards presentation. It receives the canonical
+   * selection, open and row-action behavior of the row.
    *
    * @param row     - The data object for this card.
    * @param index   - Zero-based index in `data`.
@@ -351,16 +376,19 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   ) => ReactNode;
 
   /**
-   * Container width (in pixels) at which the table switches to mobile card
-   * layout. Only effective when `mobileCard` is provided.
-   * @default 768
+   * Container width (in pixels) below which the table presents cards.
+   *
+   * @deprecated A pixel threshold owned by one family. Declare
+   * `adapt={{ compact: { presentation: "cards" } }}` instead, which follows the
+   * shared container ladder. When set, it replaces the posture defaults.
    */
   mobileBreakpoint?: number;
 
   /**
-   * Whether a standalone table may switch itself to the mobile-card renderer.
-   * Collection workspaces disable this because their declared posture is the
-   * single authority for the active collection posture.
+   * Whether a standalone table applies its own posture defaults (cards on a
+   * phone request or a compact box). Collection workspaces disable this
+   * because their declared posture is the single authority for the active
+   * collection posture; an explicit `adapt` still applies.
    * @default true
    */
   autoMobileCards?: boolean;

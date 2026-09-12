@@ -409,3 +409,38 @@ visibility, against `foundation/tokens/css/foundation/responsive/visibility`.
 
 Neither injects a `<style>` element per instance, so a strict CSP cannot drop
 them and the cascade can rank them.
+
+---
+
+## Adaptation: postures and the `adapt` slot
+
+A layout-sensitive family does not read breakpoints. It accepts `adapt` —
+per-posture deltas the application declares — and resolves it with
+`useAdaptation` (`src/infrastructure/runtime/adaptation`).
+
+| Axis | Postures | Resolved from |
+|---|---|---|
+| viewport | `phone`, `tablet`, `desktop` | `useResponsive()`: the request's `ssrViewport` hint on the server, the shared store in the browser |
+| container | `compact`, `regular`, `expanded` | one `ResizeObserver` on the family's own box, on the tenant's container ladder (`responsive.posture`) |
+
+```tsx
+const { posture, adaptation, postureAttribute } = useAdaptation(adapt, {
+  base: FAMILY_BASE,
+  defaults: FAMILY_DEFAULTS,
+  containerRef: rootRef,
+});
+return <div ref={rootRef} data-posture={postureAttribute}>…</div>;
+```
+
+Layers apply in a fixed order: the family base, the family's own posture
+defaults, then the application's `adapt`; inside each source the container
+entry applies after the viewport entry. `data-posture` is a token list —
+`desktop compact` once the box is measured — so a skin selects
+`[data-posture~='compact']`. Attach `containerRef` only where the family's
+structure changes with its box; visual-only changes belong to the family's
+named `@container` queries.
+
+`PatternDataTable` is the reference implementation:
+`adapt={{ phone: { columns: { keep: ['name', 'status', 'owner'] }, presentation: 'cards' } }}`.
+The declared families and the gate that holds them to the slot are
+`LAYOUT_SENSITIVE_FAMILIES` and `scripts/check/family-cut/adapt-slot`.

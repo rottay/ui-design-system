@@ -11,7 +11,14 @@ import React, {
 import { createEngineComponent } from "../../../../../../infrastructure/runtime/engines/presentation/component-factory";
 import { stampDataPart } from "../../../../../../infrastructure/runtime/dom/foundation/data-part";
 import { RESPONSIVE_BREAKPOINTS } from "@/foundation/contracts/kernel/responsive/breakpoints";
-import { useBreakpoints, useResponsive } from "@/infrastructure/runtime/responsive";
+import {
+  DATA_TABLE_ADAPTATION_BASE,
+  DATA_TABLE_ADAPT_DEFAULTS,
+  type ResolvedDataTableAdaptation,
+  type ViewportPosture,
+} from "@/foundation/contracts/kernel/adaptation";
+import { useAdaptation } from "@/infrastructure/runtime/adaptation";
+import { useResponsive } from "@/infrastructure/runtime/responsive";
 import { Box } from "@/components/primitives/layout/box";
 import { Button } from "@/components/primitives/inputs/button";
 import { Flex } from "@/components/primitives/layout/flex";
@@ -31,8 +38,14 @@ import type {
 } from "../../../../../../foundation/contracts/runtime/components/patterns/core";
 import type { DataTablePatternProps, DataTableRecipe } from "../../contracts";
 import { useRecipeProfileDefaults } from "@/infrastructure/runtime/foundation/recipes/profiles";
+import {
+  adaptTableColumns,
+  declaresColumnAdaptation,
+  projectRecordColumns,
+} from "../../runtime/adaptation";
 import { resolveRowKey } from "../../runtime/row-resolution";
 import { DataTableMobileCards } from "./mobile-cards";
+import { placeRowActions } from "./mobile-cards/row-actions";
 
 /**
  * Resolves the effective responsive mode for a column at the current device class.
@@ -40,22 +53,9 @@ import { DataTableMobileCards } from "./mobile-cards";
  */
 function getColumnResponsiveMode<T>(
   column: ColumnDef<T>,
-  deviceKey: "phone" | "tablet" | "desktop"
+  deviceKey: ViewportPosture
 ): ResponsiveColumnMode {
   return column.responsive?.[deviceKey] ?? "visible";
-}
-
-/**
- * Maps the `useBreakpoints()` result to a device class key matching the
- * `ColumnResponsiveConfig` interface.
- */
-function resolveDeviceKey(bp: {
-  isMobile: boolean;
-  isTablet: boolean;
-}): "phone" | "tablet" | "desktop" {
-  if (bp.isMobile) return "phone";
-  if (bp.isTablet) return "tablet";
-  return "desktop";
 }
 
 const DataTableEngine = createEngineComponent<DataTablePatternProps<any>>(
@@ -209,7 +209,7 @@ export function PatternDataTable<T extends object>(
     messages,
     loading = false,
     mobileCard,
-    mobileBreakpoint = 768,
+    mobileBreakpoint,
     autoMobileCards = true,
     actions,
     onRowClick,
@@ -217,31 +217,62 @@ export function PatternDataTable<T extends object>(
     filterValues = {},
     onFilterChange,
     pagination,
+    adapt,
   } = props;
-  // The VIEWPORT fallback, read from the one responsive snapshot rather than
-  // from a `matchMedia` of this table's own. `mobileBreakpoint` stays a
-  // container width, which is what the contract documents it as.
-  const { activeBreakpoint } = useResponsive();
-  const isMobile = RESPONSIVE_BREAKPOINTS[activeBreakpoint] < mobileBreakpoint;
-  const breakpoints = useBreakpoints();
-  const deviceKey = resolveDeviceKey(breakpoints);
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(
     []
   );
   const responsiveRootRef = useRef<HTMLDivElement | null>(null);
-  const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
+  // The deprecated pixel threshold keeps its own measurement, and only while
+  // it is set; everything else adapts on the shared postures.
+  const legacyThreshold = mobileBreakpoint;
+  const { activeBreakpoint } = useResponsive();
+  const [legacyWidth, setLegacyWidth] = useState<number | null>(null);
   useEffect(() => {
     const node = responsiveRootRef.current;
+    if (legacyThreshold === undefined) return undefined;
     if (!node || typeof ResizeObserver === "undefined") return undefined;
-
     const observer = new ResizeObserver((entries) => {
       const width = entries[0]?.contentRect.width;
-      if (typeof width === "number") setContainerWidth(width);
+      if (typeof width === "number") setLegacyWidth(width);
     });
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [legacyThreshold]);
+  const legacyCompact =
+    legacyThreshold !== undefined &&
+    (legacyWidth === null
+      ? RESPONSIVE_BREAKPOINTS[activeBreakpoint] < legacyThreshold
+      : legacyWidth < legacyThreshold);
+
+  const adaptationBase = useMemo<ResolvedDataTableAdaptation>(
+    () =>
+      legacyThreshold !== undefined && autoMobileCards && legacyCompact
+        ? { ...DATA_TABLE_ADAPTATION_BASE, presentation: "cards" }
+        : DATA_TABLE_ADAPTATION_BASE,
+    [autoMobileCards, legacyCompact, legacyThreshold]
+  );
+  const {
+    posture,
+    adaptation,
+    postureAttribute,
+  } = useAdaptation<ResolvedDataTableAdaptation>(adapt, {
+    base: adaptationBase,
+    defaults:
+      autoMobileCards && legacyThreshold === undefined
+        ? DATA_TABLE_ADAPT_DEFAULTS
+        : undefined,
+    containerRef: responsiveRootRef,
+  });
+  const responsiveDeviceKey: ViewportPosture =
+    legacyThreshold !== undefined
+      ? legacyCompact
+        ? "phone"
+        : posture.viewport
+      : posture.container === "compact"
+      ? "phone"
+      : posture.viewport;
 
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
   const handleSelectionChange = useCallback(
@@ -272,10 +303,6 @@ export function PatternDataTable<T extends object>(
     [data, getRowKey, handleSelectionChange, selectedKeys]
   );
 
-  const responsiveDeviceKey =
-    containerWidth !== null && containerWidth < mobileBreakpoint
-      ? "phone"
-      : deviceKey;
   const visibleColumns = useMemo(
     () =>
       columns.filter((column) => {
@@ -287,10 +314,35 @@ export function PatternDataTable<T extends object>(
       }),
     [columns, responsiveDeviceKey]
   );
-  const shouldUseMobileCards =
-    autoMobileCards &&
-    (containerWidth === null ? isMobile : containerWidth < mobileBreakpoint) &&
-    visibleColumns.length > 0;
+  // Keyed by value: an inline `adapt` literal must not re-create the column
+  // model the engine receives on every render.
+  const columnAdaptationKey = JSON.stringify(adaptation.columns);
+  const columnAdaptation = useMemo(
+    () => adaptation.columns,
+    [columnAdaptationKey]
+  );
+  const presentation =
+    visibleColumns.length > 0 ? adaptation.presentation : "table";
+  const rowActionsLabel = messages?.rowActions ?? "Row actions";
+  const tableActions = useMemo(
+    () =>
+      actions && adaptation.rowActions !== "inline"
+        ? (row: T, index: number) =>
+            placeRowActions("menu", actions(row, index), rowActionsLabel)
+        : actions,
+    [actions, adaptation.rowActions, rowActionsLabel]
+  );
+  const tableColumns = useMemo(
+    () => adaptTableColumns(visibleColumns, columnAdaptation),
+    [visibleColumns, columnAdaptation]
+  );
+  const recordProjection = useMemo(
+    () =>
+      declaresColumnAdaptation(columnAdaptation)
+        ? projectRecordColumns(visibleColumns, columnAdaptation)
+        : undefined,
+    [visibleColumns, columnAdaptation]
+  );
 
   // Density is a declarative anatomy state. Skins resolve its spacing tokens;
   // presentation code must not recreate stable visual values inline.
@@ -346,11 +398,14 @@ export function PatternDataTable<T extends object>(
       </div>
     ) : null;
 
-  if (shouldUseMobileCards) {
+  if (presentation !== "table") {
     return (
       <div
         ref={responsiveRootRef}
         data-part="responsive-root"
+        data-posture={postureAttribute}
+        data-presentation={presentation}
+        data-row-actions={adaptation.rowActions}
         className="ds-data-table-responsive-root"
       >
         <Stack
@@ -471,6 +526,9 @@ export function PatternDataTable<T extends object>(
               actions={actions}
               mobileCard={mobileCard}
               messages={messages}
+              projection={recordProjection}
+              presentation={presentation}
+              rowActions={adaptation.rowActions}
             />
           )}
 
@@ -490,11 +548,15 @@ export function PatternDataTable<T extends object>(
     <div
       ref={responsiveRootRef}
       data-part="responsive-root"
+      data-posture={postureAttribute}
+      data-presentation="table"
+      data-row-actions={adaptation.rowActions === "inline" ? "inline" : "menu"}
       className="ds-data-table-responsive-root"
     >
       <DataTableEngine
         {...props}
-        columns={visibleColumns}
+        columns={tableColumns}
+        actions={tableActions}
         selectedKeys={selectedKeys}
         onSelectionChange={handleSelectionChange}
         density={resolvedDensity}

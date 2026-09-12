@@ -205,7 +205,7 @@ export function useAdaptiveBoardLayout({
     // invalidates measurements, which re-enter through `measuredRows`.
     return resolveAdaptiveLayout(contracts, intents, {
       cols: TIER_COLS[tier],
-      posture: tier === 'single' ? 'compact' : tier === 'mid' ? 'standard' : 'expanded',
+      posture: tier === 'single' ? 'compact' : tier === 'mid' ? 'regular' : 'expanded',
       measuredRows,
       // E2: the tenant posture reaches the board HERE rather than through the
       // tier, because a span bias is bounded by each item's own contract and

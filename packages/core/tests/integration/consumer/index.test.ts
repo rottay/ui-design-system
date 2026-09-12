@@ -17,9 +17,10 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { createElement } from 'react';
 import ts from 'typescript';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import {
   compileTenantThemeDocumentV2,
@@ -46,6 +47,9 @@ import RootLayout, { mountVertical } from './app/layout';
 import TenantRootLayout, { compileTenantArtifact, mountTenant } from './app/tenant-layout';
 import ConsumerPage from './app/page';
 import Providers from './app/providers';
+import RolesTable, { type OpenRole } from './app/roles-table';
+import { mockMatchMedia } from '@tests/support/browser/match-media';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
 import {
   TENANT_DOCUMENT_V2,
   TENANT_IDENTITY,
@@ -435,6 +439,51 @@ describe('the application renders a page from the guaranteed surface', () => {
     render(Providers({ children: ConsumerPage({ title: 'Roles', rows: [] }) }));
     const page = await screen.findByTestId('consumer-page');
     expect(page.className).toContain('modern');
+  });
+});
+
+describe('the application adapts a collection from its own side', () => {
+  const roles: OpenRole[] = [
+    { id: 'a', title: 'Staff engineer', stage: 'Screening', owner: 'Ada', openedAt: '2026-09-01', location: 'Remote' },
+    { id: 'b', title: 'Product designer', stage: 'Offer', owner: 'Grace', openedAt: '2026-09-02', location: 'Lisbon' },
+  ];
+
+  afterEach(() => {
+    cleanup();
+    resetResponsiveMediaStore();
+  });
+
+  async function renderAt(width: number) {
+    mockMatchMedia(width);
+    resetResponsiveMediaStore();
+    const view = render(Providers({ children: createElement(RolesTable, { roles }) }));
+    const box = await waitFor(() => {
+      const root = view.container.querySelector('[data-part="responsive-root"]');
+      expect(root).not.toBeNull();
+      return root as HTMLElement;
+    });
+    return { ...view, box };
+  }
+
+  it('keeps three columns and presents cards on a phone', async () => {
+    const { box } = await renderAt(390);
+    expect(box.getAttribute('data-posture')).toBe('phone');
+    expect(box.getAttribute('data-presentation')).toBe('cards');
+    expect(box.querySelector('table')).toBeNull();
+    for (const role of roles) {
+      expect(await screen.findByText(role.title)).toBeTruthy();
+      expect(screen.getByText(role.stage)).toBeTruthy();
+      expect(screen.getByText(role.owner)).toBeTruthy();
+      expect(screen.queryByText(role.openedAt)).toBeNull();
+      expect(screen.queryByText(role.location)).toBeNull();
+    }
+  });
+
+  it('keeps every column in a table on a desktop', async () => {
+    const { box } = await renderAt(1440);
+    expect(box.getAttribute('data-posture')).toBe('desktop');
+    expect(box.getAttribute('data-presentation')).toBe('table');
+    expect(await screen.findByText(roles[0].location)).toBeTruthy();
   });
 });
 

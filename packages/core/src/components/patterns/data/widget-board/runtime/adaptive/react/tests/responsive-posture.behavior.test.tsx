@@ -207,10 +207,10 @@ describe('useContainerPosture — the same width, three ladders', () => {
     // 700px is a width that can only disagree: below compact's 759 bound,
     // but above balanced's 639 and above expansive's 519.
     expect(await postureAt(700, documentConfig('compact'))).toBe('compact');
-    expect(await postureAt(700, undefined)).toBe('standard');
+    expect(await postureAt(700, undefined)).toBe('regular');
     // The second boundary separates the remaining pair: 800px is above
     // expansive's 719 standard bound but below balanced's 839.
-    expect(await postureAt(800, undefined)).toBe('standard');
+    expect(await postureAt(800, undefined)).toBe('regular');
     expect(await postureAt(800, documentConfig('expansive'))).toBe('expanded');
   });
 
@@ -230,7 +230,7 @@ describe('useContainerPosture — the same width, three ladders', () => {
         contentRect: { width: 700, height: 0 },
       },
     ]);
-    expect(latest.current).toBe('standard');
+    expect(latest.current).toBe('regular');
   });
 });
 

@@ -158,6 +158,13 @@ export type { ExpressiveEmphasisResult } from './infrastructure/runtime/foundati
 // The solver is shared support under `ui/patterns/runtime/adaptive-layout`;
 // only the legacy-vocabulary adapter stays with the board.
 export { LEGACY_SIZE_SPANS } from './components/patterns/runtime/adaptive-layout/foundation';
+// The adaptation slot every layout-sensitive family accepts.
+export type {
+  Adapt,
+  Posture,
+  ResolvedPosture,
+  ViewportPosture,
+} from './foundation/contracts/kernel/adaptation';
 export {
   placementsToGridStyles,
   resolveAdaptiveLayout,
