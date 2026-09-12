@@ -130,7 +130,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [derivation](./derivation.md) | 5 | 1 | 1 | 7 |
 | [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
 | [emission-mount](./emission-mount.md) | 2 | 0 | 1 | 3 |
-| [platform-invariants](./platform-invariants.md) | 0 | 0 | 8 | 8 |
+| [platform-invariants](./platform-invariants.md) | 0 | 1 | 7 | 8 |
 | [retire](./retire.md) | 0 | 0 | 5 | 5 |
 | [evidence-graph](./evidence-graph.md) | 1 | 1 | 3 | 5 |
 
@@ -167,6 +167,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
+| WO-INV-04 | One responsive mechanism: contract-driven CSS first, JS behind useSyncExternalStore | daniel | 2026-09-12 | (no entries — log via `progress`) |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | Kimi K3 | 2026-09-11 | 2026-09-12 05:32 — INSTRUMENT LOT LANDED 1b59d5205 (2026-09-12, writer Opus acde40c60, audited ACCEPT by Kimi K3). F7 DISCHARGED as a law: palette-only NC reads an effective-map witness per cell (identical map = NON-EVIDENTIAL, fail-closed per control, end-to-end NULL-pair drill through real compiler+Chromium). NOTE: the 12 identical-map cells from audit 100 no longer reproduce post-DER-05 (rottay/light 18/23) — the law stands to catch any return. LIVENESS OWNERSHIP NOW BLOCKING via channel-liveness-dispositions: 44 pins enforced exactly as registered (DER-06 26, INV-07 10, FAM-01..13 6, EMI-02 2); unregistered/stale/discharged/drifted all drill red. DEVIATION REGISTERED: full --check stays excluded (5 uncovered findings named: missing R1 artifact -> WO-EVI-02, 3 emitter patterns -> WO-EVI-02, 54 visualization consumer sites -> WO-RET-04 inventory drift); return to blocking = those five drained. Pins register ownership, NOT resolved debt. WO-EVI-02 stays OPEN (fleet acceptance, transport parity, tier rejection etc. remain). |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | 2026-09-11 11:09 — CLIENT-PROVIDER CONNECTION LANDED (3 writer commits + integrator test + integration; audited by Kimi K3 under the temporary owner-authorized auditor substitution, Fable quota-exhausted ~20h). TenantThemeArtifact carries its runtime block (EngineVisualDeclaration from the SAME lowering; changeset der-07-artifact-runtime-half.md per CON-05, digest re-anchor measured - 0/65/25 delta channels unchanged, envelope digests unchanged); provider publishes the mounted artifact's own half; resolver no longer returns artifact:null. Runtime proof in real browser 3/3 candidates (posture/motion/density/recipe/tokens differ through the mount, not just CSS); negative control (seed is paint, never reaches useTokens); preview/publication byte parity per candidate; SSR receipt + flight-boundary byte comparison prove the client uses the server's artifact without recompiling. 99-item-1 identity negative ADDED BY DT and green: artifact A + runtime B (same engine/profile ids, foreign governed value) refused at mount; digest covers the runtime half. REGISTERED: (a) the showroom Playwright leg stays blocked by packages/core/dist/index.js carrying use-client into RSC consumers (pre-existing at base, reproduced byte-identical) - repairing it is a public-contract addition that needs its own WO (DT flags it to the owner as an identified need); (b) docs-engineering tenancy/contracts edits remain uncommitted in that repo's dirty tree; (c) past showroom typechecks via symlinked node_modules read MAIN's core dist, not the lot's - audits now require real installs/farms. The WO stays open with exactly one obligation: the recorded owner pick with digest (D-30 deferred to the branding stage). |
 
@@ -179,7 +180,6 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-INV-01 | One direction authority and logical geometry everywhere | M | platform-invariants | audit-2026-09-05 |
 | WO-INV-02 | One i18n catalog with an English floor, locale-aware formatting and IME-safe submit | M | platform-invariants | audit-2026-09-05 |
 | WO-INV-03 | Global accessibility floor: forced-colors, contrast posture, axe per family, no critical baseline | M | platform-invariants | audit-2026-09-05 |
-| WO-INV-04 | One responsive mechanism: contract-driven CSS first, JS behind useSyncExternalStore | M | platform-invariants | audit-2026-09-05 |
 | WO-INV-05 | Motion invariant: one vocabulary, zero inline literals, lint over every modern surface | S | platform-invariants | audit-2026-09-05 |
 | WO-RET-05 | Showroom and Storybook through the mount law; probes as configurations | M | retire | audit-2026-09-05 |
 | WO-EVI-01 | theme-graph: derived cascade graph with a byte-exact check | M | evidence-graph | audit-2026-09-05 |
