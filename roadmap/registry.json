@@ -4421,7 +4421,7 @@
    "lane": "emission-mount",
    "order": 2,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-EMI-01",
     "WO-CON-02"
@@ -4464,7 +4464,9 @@
      "by": "Kimi K3",
      "note": "F-20 BROWSER LEG UNBLOCKED (2026-09-12): WO-CON-07 landed 497a7a1a8 — server-safe @rottay/design-system/server boundary for engine identity; the named F-20 failure (/design-cards/manifest 'IMPLEMENTED_ENGINE_NAMES is not iterable' in the production build) now renders 200 against the lot's own packed dist, reproduced by the auditor. EMI-02's remaining close blockers: (1) static recipeProfile must read the ARTIFACT (not projectGovernedBehavior's parallel projection), (2) the real-browser first-paint evidence itself, now executable. The DER-05 default-mode fix (mount stamps the roster's declared mode) already landed at 5f91ef595."
     }
-   ]
+   ],
+   "doneAt": "2026-09-12",
+   "evidence": "CLOSE LOT landed 63ab01cd0 (writer 705a9c09e Opus/claude-daniel; audited ACCEPT by Kimi K3, temporary owner-authorized substitution). Per the checkpoint-99 amendment the WO closes locally: F-19 (mount law + scope proof, landed earlier), F-20 (SSR snapshot earlier + REAL-BROWSER leg now), F-112 (recipe profile channel + runtime reader), F-89 (TenantConfig strip, step 4 earlier), and its own F-12 arm (recipeProfile travels in the artifact only, D-26). THIS LOT: (1) static recipeProfile reads the ARTIFACT - generated runtime block from the same compile as the CSS artifact; authored-side validator deleted from the tenant registry; provider reads the verified half after assertEngineVisualBelongs; mount refuses a stale shipped block by name; both tamper halves inside the digest source (admission refusal); 38 tests reproduced by auditor incl. direction test (artifact block editorial-round beats authored technical-sharp) and the no-authored-validator source assertion. (2) F-20 REAL BROWSER: /probe/first-paint(+modal) on the lot's own packed-dist farm; auditor reproduced served bytes (desktop, unresolved, digest sha256-c6460ce6, slug bithire-editorial-quiet) + chromium 4/4 (desktop pre-hydration, bounding box identical post-hydration, 375px anti-cheat DOES move to phone, modal data-adaptive-fullscreen history ['false']). BOUNDED: certified exactly those two routes; showroom NOT desktop-first wholesale (no other route passes ssrViewport). DER-05's default-mode fix had already landed (5f91ef595). RESIDUALS re-checked, VERIFIED-STILL-OPEN, routed: (b) static responsive no runtime reader (D-26 class); (c) DB-tenant authored personality channels unread (catalog law, derivation/family lanes); (d) harness seed-only variants (contract shape). F-46 final closure routes to WO-INV-04 verbatim per the amendment; remaining F-12 arms stay with their lanes. Gates: liveness 106/106, dispositions OK, axis-difference OK, tsc 0, typecheck:tests 0, structure 0, contract-changeset --base=c87dd7771 OK, vertical-artifacts 3/3, decisions-lit fresh, public-entrypoints PASS, consumer fixture 27/27, diff --check clean."
   },
   {
    "id": "WO-EMI-03",
