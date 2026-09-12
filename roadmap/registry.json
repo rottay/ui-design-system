@@ -4830,7 +4830,7 @@
    "lane": "platform-invariants",
    "order": 4,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-04",
     "WO-EMI-02"
@@ -4842,7 +4842,9 @@
    "notes": "wave 4; closes F-46, F-35; supersedes: WO-ARC-18",
    "claimedBy": "daniel",
    "claimedAt": "2026-09-12",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-12",
+   "evidence": "Landed 16777a249 (writer 1b4653f5d Opus/claude-daniel, 255 files; audited ACCEPT by Kimi K3, temporary owner-authorized substitution). Closes F-46 + F-35 per the checkpoint-99 routing (EMI-02's done evidence had already shown the mount-side inputs). SIX responsive authorities collapsed into infrastructure/runtime/responsive: chrome helpers deleted (pure builders in chrome/contracts), AdaptiveConfig/useAdaptivePosture REMOVED not kept beside (changeset major; SurfaceAdaptivePosture cascade inversion named breaking), surfaces builders demoted, collection-workspace + search-command-bar re-pointed (compact band 959->1023px named), runtime rewritten (one ResponsiveValue/resolveResponsiveValue, --_ds-rsp-* channels, one static sheet, 7 matchMedia listeners once per process, provider-less reads the real viewport). Registered acceptance gate reproduced verbatim by auditor: dangerouslySetInnerHTML inputs = 0; 100vh/vw = 0; one authority 33/33 surfaces via single-authority --check + 8/8 drills; eslint 0 errors with react-hooks/rules-of-hooks:error on production src (scoped stories/tests exemption declared). F-46: conditional hooks gone (2 real early-return useMemos hoisted), CSS-first family alive, provider-less no longer degrades to phone, 11 input style sinks -> 0. F-35: posture id remains transport but --ds-posture-* are emitted channels; one ladder; 31/32 @container named (badge exception documented). Declared exception: Ant-parity Sider ladder (public-API compatibility, named in the gate). Gates: tsc 0, typecheck:tests 0, structure 0, axis-difference OK (UNMOUNTABLE 27->26 brand-studio per the gate's re-pin rule), containerquery OK, contract-changeset --base=9fc70d4d1 OK (major + contract-diff), decisions-lit fresh on merged tree, public-entrypoints 76 PASS (2 ceilings widened/2 tightened, measured lastMove), engine-audit inlinePaint 190 = base (exit-1 = registered fallbackParity base-red, byte-identical at base), first-paint spec 4/4 against the lot's OWN dist+build, diff --check clean. Honest test-defect fixes verified (ListSurface.defaults vacuous claim; GuidedDraftFormSurface dropping adaptive.formLayout). Flakes verified in isolation: SpatialExperience 17/17, brand-studio 33/33. OWED (follow-up micro-lot, registered in the merge message): (1) META pin-owner red — WO-EMI-02 done owning 2 pins (experience/recipe-profile), red since the EMI-02 close 6e08fd1a9; (2) single-authority gate CI-manifest registration (deliberate gap left to DT); (3) the 10 INV-07 pins intact and undischarged."
   },
   {
    "id": "WO-INV-05",
