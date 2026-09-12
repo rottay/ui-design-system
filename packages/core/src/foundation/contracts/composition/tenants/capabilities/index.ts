@@ -679,7 +679,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // a code-owned vertical's theme fills.
       evidence: {
         consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
-        symbol: 'appearance?.recipeProfile ?? governedBehavior?.recipeProfile',
+        symbol: 'publishedEngineVisual?.runtime.recipeProfile',
       },
       scope: 'tenant',
       owner: 'design-system',
