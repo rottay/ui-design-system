@@ -5401,7 +5401,7 @@
    "lane": "platform-invariants",
    "order": 7,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-04",
     "WO-FAM-00",
@@ -5412,8 +5412,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 3; closes F-35 (partial) | 2026-09-10: owner approved the WO-INV-04 edge (full dependency; the container half waits for named containers, no early half-enabling). The R4 close-scope amendment stands.",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "daniel",
+   "claimedAt": "2026-09-12",
    "progressLog": []
   },
   {
