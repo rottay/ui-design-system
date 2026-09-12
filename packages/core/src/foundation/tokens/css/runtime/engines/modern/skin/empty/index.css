@@ -43,7 +43,7 @@
   /* Container-driven compactness: the expansive posture (below) collapses to
      the bounded compact one by CONTAINER width, not viewport — an empty state
      inside a narrow panel must not keep desktop-scale padding and dead air. */
-  container-type: inline-size;
+  container: ds-empty / inline-size;
 }
 
 .rottay-empty.rottay-empty--modern[data-part='root'][data-image='simple'] {
@@ -118,7 +118,7 @@
    the region de-escalates to the same bounded values the `simple` variant
    already declares — one compact grammar, two trigger axes. Tenant overrides
    of the `--ds-empty-simple-*` channels tune both. */
-@container (max-width: 26rem) {
+@container ds-empty (max-width: 26rem) {
   .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'] {
     min-block-size: var(--ds-empty-simple-min-height, 8rem);
     padding: var(--ds-empty-simple-padding, var(--ds-spacing-lg));

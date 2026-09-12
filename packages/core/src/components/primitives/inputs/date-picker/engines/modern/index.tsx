@@ -450,6 +450,61 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   // ---------------------------------------------------------------------------
 
   // Month picker mode
+  // HOISTED ABOVE THE PANEL-MODE RETURNS. The month and year panels return
+  // early, so computing the day grid below them called `useMemo`
+  // conditionally: switching `picker` changed this component's hook order
+  // mid-life. Both memos are pure in props the early returns do not touch.
+  // Default: full day-level calendar grid (42 cells = 6 rows x 7 columns).
+  // B5-03: the pinned Sunday-first helper stays the source of truth; for
+  // non-Sunday week starts the contiguous 42-day window shifts so the first
+  // column is the locale's first weekday. The shift is two-directional: when
+  // the locale's leading count is SMALLER than the helper's, the window
+  // starts later (drop head cells, extend the tail); when it is LARGER the
+  // window starts earlier (prepend days before the helper's first cell,
+  // trim the tail) -- slicing alone would drop in-month days whenever the
+  // month begins before the locale's week start.
+  const grid = useMemo(() => {
+    const baseGrid = generateCalendarGrid(viewYear, viewMonth, disabledDate);
+    if (weekStart === 0) return baseGrid;
+    const sundayLeading = new Date(viewYear, viewMonth, 1).getDay();
+    const leading = (sundayLeading - weekStart + 7) % 7;
+    const delta = leading - sundayLeading;
+    if (delta === 0) return baseGrid;
+    const makeOutside = (date: Date) => ({
+      date,
+      day: date.getDate(),
+      isCurrentMonth: false,
+      isToday: isSameDay(date, today),
+      isDisabled: disabledDate ? disabledDate(date) : false,
+    });
+    if (delta < 0) {
+      const drop = -delta;
+      const last = baseGrid[baseGrid.length - 1].date;
+      const tail = Array.from({ length: drop }, (_, i) =>
+        makeOutside(new Date(last.getFullYear(), last.getMonth(), last.getDate() + i + 1)),
+      );
+      return [...baseGrid.slice(drop), ...tail];
+    }
+    const first = baseGrid[0].date;
+    const head = Array.from({ length: delta }, (_, i) =>
+      makeOutside(new Date(first.getFullYear(), first.getMonth(), first.getDate() - delta + i)),
+    );
+    return [...head, ...baseGrid.slice(0, baseGrid.length - delta)];
+  }, [viewYear, viewMonth, disabledDate, weekStart, today]);
+
+  // The flat 42-cell grid is chunked into calendar weeks so every gridcell has
+  // an owning role="row" (a grid with direct gridcell children exposes no rows).
+  const weekRows = useMemo(
+    () =>
+      Array.from({ length: Math.ceil(grid.length / 7) }, (_, week) => ({
+        key: week,
+        cells: grid
+          .slice(week * 7, week * 7 + 7)
+          .map((cell, offset) => ({ cell, idx: week * 7 + offset })),
+      })),
+    [grid],
+  );
+
   if (picker === 'month') {
     return (
       <div data-part="panel" data-mode="month" className="rottay-datepicker-panel rottay-datepicker-panel--modern" role="dialog" aria-label={t('datepicker.date_picker')}>
@@ -545,43 +600,6 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     );
   }
 
-  // Default: full day-level calendar grid (42 cells = 6 rows x 7 columns).
-  // B5-03: the pinned Sunday-first helper stays the source of truth; for
-  // non-Sunday week starts the contiguous 42-day window shifts so the first
-  // column is the locale's first weekday. The shift is two-directional: when
-  // the locale's leading count is SMALLER than the helper's, the window
-  // starts later (drop head cells, extend the tail); when it is LARGER the
-  // window starts earlier (prepend days before the helper's first cell,
-  // trim the tail) -- slicing alone would drop in-month days whenever the
-  // month begins before the locale's week start.
-  const grid = useMemo(() => {
-    const baseGrid = generateCalendarGrid(viewYear, viewMonth, disabledDate);
-    if (weekStart === 0) return baseGrid;
-    const sundayLeading = new Date(viewYear, viewMonth, 1).getDay();
-    const leading = (sundayLeading - weekStart + 7) % 7;
-    const delta = leading - sundayLeading;
-    if (delta === 0) return baseGrid;
-    const makeOutside = (date: Date) => ({
-      date,
-      day: date.getDate(),
-      isCurrentMonth: false,
-      isToday: isSameDay(date, today),
-      isDisabled: disabledDate ? disabledDate(date) : false,
-    });
-    if (delta < 0) {
-      const drop = -delta;
-      const last = baseGrid[baseGrid.length - 1].date;
-      const tail = Array.from({ length: drop }, (_, i) =>
-        makeOutside(new Date(last.getFullYear(), last.getMonth(), last.getDate() + i + 1)),
-      );
-      return [...baseGrid.slice(drop), ...tail];
-    }
-    const first = baseGrid[0].date;
-    const head = Array.from({ length: delta }, (_, i) =>
-      makeOutside(new Date(first.getFullYear(), first.getMonth(), first.getDate() - delta + i)),
-    );
-    return [...head, ...baseGrid.slice(0, baseGrid.length - delta)];
-  }, [viewYear, viewMonth, disabledDate, weekStart, today]);
 
   // Range panel grammar: RangePicker always passes both range props (null
   // until picked), so their presence -- not the band's -- marks the panel.
@@ -605,18 +623,6 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     return firstInMonth >= 0 ? firstInMonth : 0;
   })();
 
-  // The flat 42-cell grid is chunked into calendar weeks so every gridcell has
-  // an owning role="row" (a grid with direct gridcell children exposes no rows).
-  const weekRows = useMemo(
-    () =>
-      Array.from({ length: Math.ceil(grid.length / 7) }, (_, week) => ({
-        key: week,
-        cells: grid
-          .slice(week * 7, week * 7 + 7)
-          .map((cell, offset) => ({ cell, idx: week * 7 + offset })),
-      })),
-    [grid],
-  );
 
   return (
     <div data-part="panel" data-mode="date" data-range={isRangePanel || undefined} className="rottay-datepicker-panel rottay-datepicker-panel--modern" role="dialog" aria-label={t('datepicker.date_picker')}>

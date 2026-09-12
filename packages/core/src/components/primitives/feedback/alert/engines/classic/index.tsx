@@ -158,10 +158,7 @@ export default function ClassicAlert(props: AlertProps): React.ReactElement {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `alert-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const isCompact = !compactIsResponsive && compactProp === true;
 
@@ -174,9 +171,6 @@ export default function ClassicAlert(props: AlertProps): React.ReactElement {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       <AntAlert
         // Type & Appearance
         type={alertType}
@@ -193,11 +187,9 @@ export default function ClassicAlert(props: AlertProps): React.ReactElement {
 
         // Styling
         className={className}
-        style={{
-          ...(isCompact ? { padding: '8px 12px', fontSize: '0.8125rem' } : {}),
-          ...style,
-        }}
-        {...(responsive ? responsive.attrs : {})}
+        style={{ ...(isCompact ? { padding: '8px 12px', fontSize: '0.8125rem' } : {}),
+            ...style, ...responsive.channels }}
+        {...responsive.attrs}
       />
     </>
   );

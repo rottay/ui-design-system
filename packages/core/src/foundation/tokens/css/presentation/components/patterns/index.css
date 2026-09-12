@@ -747,7 +747,7 @@
   );
   --ds-command-home-console-min-height: var(
     --ds-command-console-min-height,
-    calc(100vh - 108px)
+    calc(100dvh - 108px)
   );
   /* `--ds-command-console-padding` is a consumer hook: a caller that names the
      console padding has stated exact geometry, so only the DS fallback takes
@@ -1041,7 +1041,7 @@
 }
 
 :where(.ds-workspace-frame--loading) {
-  min-height: min(720px, calc(100vh - 64px));
+  min-height: min(720px, calc(100dvh - 64px));
 }
 
 :where(.ds-workspace-grid) {

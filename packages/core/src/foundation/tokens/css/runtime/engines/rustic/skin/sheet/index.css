@@ -25,18 +25,11 @@
 
 /* ---- backdrop ---- */
 .rottay-sheet--rustic[data-part='root'] {
-  --ds-sheet-viewport-max-height: 85vh;
+  --ds-sheet-viewport-max-height: 85dvh;
   position: fixed;
   inset: 0;
-  height: 100vh;
+  height: 100dvh;
   z-index: var(--ds-z-overlay, 1300);
-}
-
-@supports (height: 100dvh) {
-  .rottay-sheet--rustic[data-part='root'] {
-    --ds-sheet-viewport-max-height: 85dvh;
-    height: 100dvh;
-  }
 }
 
 .rottay-sheet--rustic[data-part='root'] > [data-part='backdrop'] {

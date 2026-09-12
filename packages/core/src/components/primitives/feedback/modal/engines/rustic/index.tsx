@@ -78,7 +78,7 @@ import { Portal } from '../../../../runtime/overlay/portal';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 
@@ -125,7 +125,7 @@ const MAX_HEIGHT_STYLES: Record<ModalSize, string> = {
   '3xl': 'var(--ds-modal-3xl-max-height, 90vh)',
   '4xl': 'var(--ds-modal-4xl-max-height, 90vh)',
   '5xl': 'var(--ds-modal-5xl-max-height, 90vh)',
-  full: 'var(--ds-modal-full-max-height, 100vh)',
+  full: 'var(--ds-modal-full-max-height, var(--ds-viewport-block-size))',
 };
 
 const PADDING_STYLES = {
@@ -403,8 +403,8 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     inset: adaptive ? 0 : undefined,
     display: 'flex',
     flexDirection: 'column',
-    width: effectiveFullscreen ? '100vw' : '100%',
-    height: adaptive ? '100dvh' : undefined,
+    width: effectiveFullscreen ? 'var(--ds-viewport-inline-size)' : '100%',
+    height: adaptive ? 'var(--ds-viewport-block-size)' : undefined,
     ...(effectiveFullscreen ? { maxWidth: 'none', maxHeight: 'none' } : SIZE_STYLES[modalSize]),
     maxHeight: effectiveFullscreen ? 'none' : MAX_HEIGHT_STYLES[modalSize],
     overflow: 'hidden',

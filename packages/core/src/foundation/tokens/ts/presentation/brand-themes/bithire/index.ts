@@ -4675,7 +4675,7 @@ const CHROME: BrandChrome = {
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
      */
-    commandHomeConsoleMinHeight: "calc(100vh - 108px)",
+    commandHomeConsoleMinHeight: "calc(100dvh - 108px)",
     /**
      * @domicile seed
      * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)

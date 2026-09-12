@@ -19,6 +19,7 @@ import { I18nProvider } from "@/infrastructure/runtime/i18n";
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
+import { responsiveChannelElement, responsiveCss } from "@tests/support/responsive";
 
 describe("Input real engine coverage", () => {
   // WO-CNF-01: `type="hidden"` renders a bare, form-participating input with no
@@ -587,10 +588,11 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     );
 
     const shell = container.querySelector('.rottay-input[data-part="root"]');
-    const generatedCss = container.querySelector("style")?.textContent ?? "";
+    const generatedCss = responsiveCss(container);
 
     expect(shell).toHaveAttribute("data-size-responsive", "true");
-    expect(shell).toHaveAttribute("data-responsive-id");
+    // The channels land on the SHELL, which is the node the skin paints.
+    expect(shell).toBe(responsiveChannelElement(container));
     expect(generatedCss).toContain(
       "padding-inline: var(--ds-input-sm-padding-x);"
     );

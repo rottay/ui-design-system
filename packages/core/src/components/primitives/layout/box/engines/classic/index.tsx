@@ -61,7 +61,7 @@ import {
   generateResponsiveCSS,
   isResponsiveValue,
   scalarOrUndefined,
-} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+} from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
 // Classic engine uses the same inline-style approach as rustic for layout props.
@@ -418,12 +418,7 @@ const ClassicBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const responsiveEntries = collectBoxResponsiveEntries(props);
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
-  const elementId = needsResponsiveCSS
-    ? `box-${reactId.replace(/:/g, "")}`
-    : "";
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   // Build class names with Classic-specific prefixes
   const classNames = ["rottay-box", "rottay-box--classic", className]
@@ -435,8 +430,8 @@ const ClassicBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     ...htmlAttributes,
     ref: ref as Ref<HTMLElement>,
     className: classNames,
-    style: computedStyle,
-    ...(responsive ? responsive.attrs : {}),
+    style: { ...computedStyle, ...responsive.channels },
+    ...responsive.attrs,
   };
 
   // Void elements (input, img, br, hr, ...) reject a children argument in
@@ -447,9 +442,6 @@ const ClassicBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       {element}
     </>
   );

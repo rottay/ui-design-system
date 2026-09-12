@@ -7,7 +7,7 @@ import {
   ResponsiveContext,
   type ResponsiveContextValue,
 } from '../../../../../../../infrastructure/runtime/responsive';
-import type { AdaptiveConfig } from '../../../../../foundation/contracts/adaptive';
+import type { SurfaceAdaptivePosture } from '../../../../../foundation/contracts/adaptive';
 import { renderSurface } from '../../../../../foundation/common/test-utils';
 import { CollectionWorkspaceSurface } from '../index';
 
@@ -63,7 +63,7 @@ const DESKTOP_CONTEXT: ResponsiveContextValue = {
 
 function renderAdaptiveWorkspace(
   context: ResponsiveContextValue,
-  adaptive: AdaptiveConfig,
+  adaptive: SurfaceAdaptivePosture,
   cardsColumns: number | 'auto' = 'auto',
 ) {
   return renderSurface(
@@ -97,10 +97,13 @@ async function cardDispatch(container: HTMLElement): Promise<HTMLElement> {
 }
 
 it('uses two tablet and one phone column from adaptive card posture', async () => {
+  // MOBILE-FIRST: each step inherits what is declared at or below it, so the
+  // card posture is stated once at `phone` and the wider steps only restate
+  // what actually changes.
   const adaptive = {
+    phone: { collection: 'cards' as const, gridColumns: 1 },
+    tablet: { gridColumns: 2 },
     desktop: { collection: 'table' as const },
-    tablet: { collection: 'cards' as const, gridColumns: 2 },
-    phone: { gridColumns: 1 },
   };
 
   const tablet = renderAdaptiveWorkspace(TABLET_CONTEXT, adaptive);

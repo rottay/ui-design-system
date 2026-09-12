@@ -170,10 +170,7 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `input-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;
 
@@ -263,10 +260,7 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     onKeyDown: handleKeyDown,
     onPressEnter: onPressEnter as () => void,
     className: `rottay-input rottay-input--classic ${className}`,
-    style: {
-      ...flushedStyles,
-      ...style,
-    },
+    style: { ...flushedStyles, ...style, ...responsive.channels },
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
     'aria-invalid': ariaInvalid ?? (hasError || undefined),
@@ -309,10 +303,7 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-required': required,
   };
 
-  const responsiveStyleTag = responsive && responsive.css ? (
-    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-  ) : null;
-  const responsiveAttrs = responsive ? responsive.attrs : {};
+  const responsiveAttrs = responsive.attrs;
 
   // Hidden inputs carry no visible chrome: render a bare, form-participating
   // `<input type="hidden">` so server-action forms receive the value via
@@ -357,7 +348,6 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   if (type === 'number') {
     return (
       <div style={{ width: '100%' }}>
-        {responsiveStyleTag}
         <InputNumber
           {...numberProps}
           ref={ref as any}
@@ -387,7 +377,6 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   if (type === 'password') {
     return (
       <div style={{ width: '100%' }}>
-        {responsiveStyleTag}
         <AntInput.Password
           {...commonProps}
           ref={ref as any}
@@ -416,7 +405,6 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   if (type === 'search') {
     return (
       <div style={{ width: '100%' }}>
-        {responsiveStyleTag}
         <AntInput.Search
           {...commonProps}
           ref={ref as any}
@@ -449,7 +437,6 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // Default text input (also handles email, tel, url)
   return (
     <div style={{ width: '100%' }}>
-      {responsiveStyleTag}
       <AntInput
         {...commonProps}
         ref={ref as any}

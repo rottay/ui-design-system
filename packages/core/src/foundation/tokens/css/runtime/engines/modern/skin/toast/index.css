@@ -55,7 +55,7 @@
   --_ds-toast-wash-well: var(--ds-tint-12, color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary)));
   --_ds-toast-wash-action: var(--ds-tint-8, color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary)));
   position: relative;
-  width: min(28rem, calc(100vw - (var(--ds-toast-viewport-gutter, var(--ds-spacing-3)) * 2)));
+  width: min(28rem, calc(100dvw - (var(--ds-toast-viewport-gutter, var(--ds-spacing-3)) * 2)));
   /* In-flow hosts narrower than the viewport formula (e.g. a padded 390px
      probe frame) must never be protruded: clamp to the containing block. */
   max-inline-size: 100%;

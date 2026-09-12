@@ -24,7 +24,8 @@ import type { OperationalSurfaceConfig } from '../../../../foundation/contracts'
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
-import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue, surfaceColumnsValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
@@ -205,13 +206,13 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
 }: OperationalSurfaceProps<TFeed>): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurfaceOr } = useSurfaceTranslations();
-  const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
-  const isMobile = responsiveLayout.isMobile;
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   // Stamped state attributes follow the resolved viewport so SSR/first-paint
   // markup never claims a mobile posture the media query has not confirmed
   // (the provider's pre-resolution default is phone; form/scheduler family
   // idiom). Structural decisions keep reading `isMobile` directly.
-  const resolvedMobile = responsiveLayout.hasResolvedViewport && isMobile;
+  const resolvedMobile = hasResolvedViewport && isMobile;
   // Visual defaults cascade: explicit surface config -> product profile ->
   // DS defaults (spacing scale, card material, motion intensity).
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
@@ -236,8 +237,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
     ...(config.behavior.actions ?? []),
     ...(config.behavior.refreshAction ? [config.behavior.refreshAction] : []),
   ];
-  const shouldStack = responsiveLayout.shouldStack;
-  const statsColumns = resolveResponsiveColumnCount(responsiveLayout, 4, 2, 1);
+  const statsColumns = useResponsiveValue(surfaceColumnsValue(4, 2, 1)) ?? 1;
   const stats = isMobile && config.visual.mobileStatsLimit
     ? (config.behavior.stats ?? []).slice(0, config.visual.mobileStatsLimit)
     : config.behavior.stats;
@@ -376,7 +376,7 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
            drop the surface's own shape (report/dashboard precedent). */
         <OperationalSkeleton
           statsCount={stats?.length ?? 0}
-          /* resolveResponsiveColumnCount clamps to the 1-12 literal range by
+          /* surfaceColumnsValue clamps to the 1-12 literal range by
              contract, so the resolved count is always a valid GridColumns. */
           statsColumns={statsColumns as GridColumns}
           cardVariant={cardVariant}

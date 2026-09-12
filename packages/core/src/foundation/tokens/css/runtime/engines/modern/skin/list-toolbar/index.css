@@ -36,7 +36,7 @@
 /* Root shell -------------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root'] {
-  container-type: inline-size;
+  container: ds-list-toolbar / inline-size;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -366,9 +366,9 @@
 /* Filter controls --------------------------------------------------------- */
 
 .ds-list-toolbar__filter-menu[data-part='filter-menu'] {
-  min-inline-size: min(13rem, calc(100vw - 2rem));
-  max-inline-size: min(20rem, calc(100vw - 2rem));
-  max-block-size: min(22rem, calc(100vh - 6rem));
+  min-inline-size: min(13rem, calc(100dvw - 2rem));
+  max-inline-size: min(20rem, calc(100dvw - 2rem));
+  max-block-size: min(22rem, calc(100dvh - 6rem));
   overflow: auto;
   padding: var(--ds-spacing-1, 0.25rem);
   border-radius: var(
@@ -378,8 +378,8 @@
 }
 
 .ds-list-toolbar__settings-panel[data-part='settings-panel'] {
-  inline-size: min(20rem, calc(100vw - 2rem));
-  max-block-size: min(28rem, calc(100vh - 6rem));
+  inline-size: min(20rem, calc(100dvw - 2rem));
+  max-block-size: min(28rem, calc(100dvh - 6rem));
   overflow: auto;
 }
 
@@ -620,8 +620,8 @@
 /* Mobile overflow --------------------------------------------------------- */
 
 .ds-list-toolbar__mobile-overflow-panel[data-part='mobile-overflow-panel'] {
-  min-inline-size: min(15rem, calc(100vw - 2rem));
-  max-inline-size: min(22rem, calc(100vw - 2rem));
+  min-inline-size: min(15rem, calc(100dvw - 2rem));
+  max-inline-size: min(22rem, calc(100dvw - 2rem));
   padding-block: var(--ds-spacing-2, 0.5rem);
 }
 
@@ -874,7 +874,7 @@
 /* On narrow phones the collection title and count remain the primary
    orientation signal. Preserve their readable width by collapsing the
    redundant route-level primary action to its labelled icon. */
-@container (max-width: 480px) {
+@container ds-list-toolbar (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__primary-action-mobile[data-part='primary-action-mobile'][data-part='primary-action-mobile'] {
     inline-size: var(--ds-control-size-sm, 32px);
@@ -1137,7 +1137,7 @@
   color: var(--ds-color-text-on-primary);
 }
 
-@container (max-width: 1080px) {
+@container ds-list-toolbar (max-width: 1080px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
     gap: var(--ds-spacing-3, 0.75rem);
@@ -1238,7 +1238,7 @@
   }
 }
 
-@container (max-width: 480px) {
+@container ds-list-toolbar (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
     padding: var(

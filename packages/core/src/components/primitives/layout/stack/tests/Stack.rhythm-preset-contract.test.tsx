@@ -44,6 +44,10 @@ import {
   resolveStackSpacingWithRhythm,
 } from "../runtime/responsive";
 import { TENANT_THEME_RHYTHM_FACTORS } from "../../../../../foundation/contracts/composition/tenants/themes/tenant-theme";
+import {
+  RESPONSIVE_BREAKPOINTS,
+  RESPONSIVE_BREAKPOINT_ORDER,
+} from "@/foundation/contracts/kernel/responsive/breakpoints";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const LAYOUT_PRIMITIVES = resolve(
@@ -60,16 +64,49 @@ const CSS = readFileSync(LAYOUT_PRIMITIVES, "utf8");
 
 const RHYTHM_CHANNEL = "--ds-rhythm-effective-scale";
 const RHYTHM_READ = `var(${RHYTHM_CHANNEL}, 1)`;
-const SELECTOR = '[data-responsive-id="stack-ID"]';
+const SELECTOR = '[data-ds-responsive]';
 
 type ResponsiveSpacing = Record<string, StackSpacing>;
 
-/** The emitted scoped CSS, with the per-render element id normalized away. */
+/**
+ * The declarations the rendered stack's channels stand for.
+ *
+ * A responsive prop no longer renders a `<style>` element: it publishes one
+ * `--_ds-rsp-*` custom property per declared breakpoint and names those steps
+ * in `data-ds-responsive`, and ONE static sheet owns the preludes. This
+ * function is the pair read back the way the cascade reads it, so every pin
+ * below still measures the exact declarations the engine projects.
+ */
 function emittedCSS(ui: React.ReactElement): string {
   const { container, unmount } = render(ui);
-  const css = container.querySelector("style")?.textContent ?? "";
+  const node = container.querySelector(`${SELECTOR}`) as HTMLElement | null;
+  const tokens = (node?.getAttribute("data-ds-responsive") ?? "")
+    .split(" ")
+    .filter(Boolean)
+    .map((token) => {
+      const [slug, step] = token.split("@");
+      return {
+        step,
+        property: slug.startsWith("_ds-") || slug.startsWith("ds-") ? `--${slug}` : slug,
+        value: node?.style.getPropertyValue(`--_ds-rsp-${slug}-${step}`) ?? "",
+      };
+    });
   unmount();
-  return css.replace(/"stack-[^"]*"/g, '"stack-ID"');
+  if (tokens.length === 0) return "";
+
+  let css = "";
+  for (const step of RESPONSIVE_BREAKPOINT_ORDER) {
+    const at = tokens.filter((token) => token.step === step);
+    if (at.length === 0) continue;
+    const indent = step === "xs" ? "  " : "    ";
+    const body = at.map((token) => `${indent}${token.property}: ${token.value};`).join("\n");
+    if (step === "xs") {
+      css += `${SELECTOR} {\n${body}\n}\n`;
+    } else {
+      css += `@media (min-width: ${RESPONSIVE_BREAKPOINTS[step]}px) {\n  ${SELECTOR} {\n${body}\n  }\n}\n`;
+    }
+  }
+  return css;
 }
 
 /**

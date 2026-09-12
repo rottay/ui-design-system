@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-const PHONE_QUERY = '(max-width: 767px)';
-const TABLET_QUERY = '(max-width: 1024px)';
+import {
+  RESPONSIVE_BREAKPOINTS,
+} from '@/foundation/contracts/kernel/responsive/breakpoints';
+import { useResponsive } from '@/infrastructure/runtime/responsive';
 
 export interface SpatialViewportSnapshot {
   readonly phone: boolean;
@@ -15,99 +15,41 @@ const CONSERVATIVE_SNAPSHOT: SpatialViewportSnapshot = Object.freeze({
   tablet: true,
 });
 
-function subscribeMediaQuery(query: MediaQueryList, listener: () => void): () => void {
-  try {
-    if (typeof query.addEventListener === 'function') {
-      query.addEventListener('change', listener);
-      return () => {
-        try {
-          query.removeEventListener('change', listener);
-        } catch {
-          // A detached/hostile MediaQueryList cannot block component teardown.
-        }
-      };
-    }
-  } catch {
-    // A partial implementation may attach before throwing. Roll it back before
-    // falling through to the legacy Safari listener contract.
-    try {
-      query.removeEventListener?.('change', listener);
-    } catch {
-      // Continue with the only remaining subscription contract.
-    }
-  }
+const PHONE_SNAPSHOT: SpatialViewportSnapshot = Object.freeze({
+  phone: true,
+  tablet: true,
+});
 
-  try {
-    if (typeof query.addListener === 'function') {
-      query.addListener(listener);
-      return () => {
-        try {
-          query.removeListener(listener);
-        } catch {
-          // A detached/hostile MediaQueryList cannot block component teardown.
-        }
-      };
-    }
-  } catch {
-    // As above, avoid retaining a listener from a partial implementation.
-    try {
-      query.removeListener?.(listener);
-    } catch {
-      // Missing viewport evidence remains conservative.
-    }
-  }
+const TABLET_SNAPSHOT: SpatialViewportSnapshot = Object.freeze({
+  phone: false,
+  tablet: true,
+});
 
-  return () => undefined;
-}
+const WIDE_SNAPSHOT: SpatialViewportSnapshot = Object.freeze({
+  phone: false,
+  tablet: false,
+});
 
 /**
- * Hydration-safe viewport evidence. The server and first client paint are
- * conservative; only an attached browser query may upgrade the scene.
+ * Hydration-safe viewport evidence, read from the ONE responsive snapshot.
+ *
+ * This hook used to own two `matchMedia` subscriptions and two thresholds of
+ * its own (`767px`, `1024px`) -- a second responsive derivation whose phone
+ * band did not agree with the ladder's. It now projects `useResponsive()`:
+ * phone is below the `md` step, and the wide scene starts at `lg`, which are
+ * the same two edges the old queries were reaching for.
+ *
+ * Until the browser has published a real snapshot the answer stays
+ * conservative, exactly as before: only attached viewport evidence may upgrade
+ * the scene.
  */
 export function useSpatialViewport(): SpatialViewportSnapshot {
-  const [snapshot, setSnapshot] = useState<SpatialViewportSnapshot>(CONSERVATIVE_SNAPSHOT);
+  const { activeBreakpoint, hasResolvedViewport } = useResponsive();
 
-  useEffect(() => {
-    if (typeof window.matchMedia !== 'function') return undefined;
+  if (!hasResolvedViewport) return CONSERVATIVE_SNAPSHOT;
 
-    let phoneQuery: MediaQueryList;
-    let tabletQuery: MediaQueryList;
-    try {
-      phoneQuery = window.matchMedia(PHONE_QUERY);
-      tabletQuery = window.matchMedia(TABLET_QUERY);
-    } catch {
-      return undefined;
-    }
-    let mounted = true;
-
-    const publish = (): void => {
-      if (!mounted) return;
-      let next: SpatialViewportSnapshot;
-      try {
-        next = Object.freeze({
-          phone: phoneQuery.matches,
-          tablet: tabletQuery.matches,
-        });
-      } catch {
-        return;
-      }
-      setSnapshot((current) => (
-        current.phone === next.phone && current.tablet === next.tablet
-          ? current
-          : next
-      ));
-    };
-
-    const unsubscribePhone = subscribeMediaQuery(phoneQuery, publish);
-    const unsubscribeTablet = subscribeMediaQuery(tabletQuery, publish);
-    publish();
-
-    return () => {
-      mounted = false;
-      unsubscribePhone();
-      unsubscribeTablet();
-    };
-  }, []);
-
-  return snapshot;
+  const width = RESPONSIVE_BREAKPOINTS[activeBreakpoint];
+  if (width < RESPONSIVE_BREAKPOINTS.md) return PHONE_SNAPSHOT;
+  if (width < RESPONSIVE_BREAKPOINTS.lg) return TABLET_SNAPSHOT;
+  return WIDE_SNAPSHOT;
 }

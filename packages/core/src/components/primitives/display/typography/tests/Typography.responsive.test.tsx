@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 
 import { ApolloHeading, ApolloText } from '../engines/rustic';
 import { ModernHeading, ModernText } from '../engines/modern';
+import { responsiveChannelElement, responsiveCss, responsiveTokens } from '@tests/support/responsive';
 
 // ---------------------------------------------------------------------------
 // Rustic (Apollo) Engine
@@ -24,9 +25,9 @@ describe('ApolloHeading responsive size', () => {
       const heading = container.querySelector('.rottay-heading');
       expect(heading).toBeInTheDocument();
       // No style tag should be injected
-      expect(container.querySelector('style')).toBeNull();
-      // data-responsive-id should NOT be present
-      expect(heading?.hasAttribute('data-responsive-id')).toBe(false);
+      expect(responsiveCss(container)).toBe('');
+      // no responsive channel is armed at all
+      expect(responsiveTokens(container)).toHaveLength(0);
     });
 
     it('renders without size using level-based default', () => {
@@ -35,7 +36,7 @@ describe('ApolloHeading responsive size', () => {
       );
       const heading = container.querySelector('.rottay-heading');
       expect(heading).toBeInTheDocument();
-      expect(container.querySelector('style')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -46,17 +47,17 @@ describe('ApolloHeading responsive size', () => {
           Responsive Heading
         </ApolloHeading>
       );
-      const styleTag = container.querySelector('style');
-      const heading = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const heading = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(heading).toBeInTheDocument();
       // xs tier: font-size for 'md' heading
-      expect(styleTag?.textContent).toContain('font-size:');
+      expect(styleTag).toContain('font-size:');
       // lg tier: media query for 1024px
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
       // line-height should also be set
-      expect(styleTag?.textContent).toContain('line-height:');
+      expect(styleTag).toContain('line-height:');
     });
 
     it('resolves semantic aliases (phone, tablet, desktop)', () => {
@@ -65,10 +66,10 @@ describe('ApolloHeading responsive size', () => {
           Aliased Heading
         </ApolloHeading>
       );
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
+      const styleTag = responsiveCss(container);
+      expect(styleTag).not.toBe('');
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
+      expect(styleTag).toContain('@media (min-width: 1024px)');
     });
 
     it('does not set inline font-size when size is responsive', () => {
@@ -79,7 +80,9 @@ describe('ApolloHeading responsive size', () => {
       );
       const heading = container.querySelector('.rottay-heading');
       // Inline style should NOT contain fontSize when responsive
-      expect(heading?.getAttribute('style')).not.toContain('font-size');
+      // The channel custom properties carry `font-size` in their NAME; what
+      // must be absent is the DECLARATION, which the static sheet now owns.
+      expect(heading?.getAttribute('style')).not.toMatch(/(?:^|;)\s*font-size:/);
     });
   });
 });
@@ -92,7 +95,7 @@ describe('ApolloText responsive size', () => {
       );
       const text = container.querySelector('.rottay-text');
       expect(text).toBeInTheDocument();
-      expect(container.querySelector('style')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -103,15 +106,15 @@ describe('ApolloText responsive size', () => {
           Responsive Text
         </ApolloText>
       );
-      const styleTag = container.querySelector('style');
-      const text = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const text = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(text).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain('font-size:');
-      expect(styleTag?.textContent).toContain('@media (min-width: 768px)');
-      expect(styleTag?.textContent).toContain('@media (min-width: 1280px)');
-      expect(styleTag?.textContent).toContain('line-height:');
+      expect(styleTag).toContain('font-size:');
+      expect(styleTag).toContain('@media (min-width: 768px)');
+      expect(styleTag).toContain('@media (min-width: 1280px)');
+      expect(styleTag).toContain('line-height:');
     });
 
     it('does not set inline font-size when size is responsive', () => {
@@ -119,7 +122,7 @@ describe('ApolloText responsive size', () => {
         <ApolloText size={{ xs: 'xs', lg: 'xl' }}>No Inline Size</ApolloText>
       );
       const text = container.querySelector('.rottay-text');
-      expect(text?.getAttribute('style')).not.toContain('font-size');
+      expect(text?.getAttribute('style')).not.toMatch(/(?:^|;)\s*font-size:/);
     });
   });
 });
@@ -138,7 +141,7 @@ describe('ModernHeading responsive size', () => {
       expect(heading).toBeInTheDocument();
       expect(heading?.className).not.toContain('text-5xl');
       expect(heading?.className).toContain('font-bold');
-      expect(container.querySelector('style')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -149,10 +152,10 @@ describe('ModernHeading responsive size', () => {
           Responsive Heading
         </ModernHeading>
       );
-      const styleTag = container.querySelector('style');
-      const heading = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const heading = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(heading).toBeInTheDocument();
       // Should NOT contain any Tailwind text size class
       expect(heading?.className).not.toContain('text-xl');
@@ -173,7 +176,7 @@ describe('ModernText responsive size', () => {
       expect(text).toBeInTheDocument();
       expect(text?.className).not.toContain('text-lg');
       expect(text?.className).toContain('font-normal');
-      expect(container.querySelector('style')).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -184,10 +187,10 @@ describe('ModernText responsive size', () => {
           Responsive Text
         </ModernText>
       );
-      const styleTag = container.querySelector('style');
-      const text = container.querySelector('[data-responsive-id]');
+      const styleTag = responsiveCss(container);
+      const text = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(text).toBeInTheDocument();
       // Should NOT contain Tailwind text size classes
       expect(text?.className).not.toContain('text-sm');

@@ -10,8 +10,8 @@ import React, {
 } from "react";
 import { createEngineComponent } from "../../../../../../infrastructure/runtime/engines/presentation/component-factory";
 import { stampDataPart } from "../../../../../../infrastructure/runtime/dom/foundation/data-part";
-import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
-import { useMediaQuery } from "@/infrastructure/runtime/responsive/runtime/media-query";
+import { RESPONSIVE_BREAKPOINTS } from "@/foundation/contracts/kernel/responsive/breakpoints";
+import { useBreakpoints, useResponsive } from "@/infrastructure/runtime/responsive";
 import { Box } from "@/components/primitives/layout/box";
 import { Button } from "@/components/primitives/inputs/button";
 import { Flex } from "@/components/primitives/layout/flex";
@@ -218,9 +218,11 @@ export function PatternDataTable<T extends object>(
     onFilterChange,
     pagination,
   } = props;
-  const isMobile = useMediaQuery(
-    `(max-width: ${Math.max(mobileBreakpoint - 1, 0)}px)`
-  );
+  // The VIEWPORT fallback, read from the one responsive snapshot rather than
+  // from a `matchMedia` of this table's own. `mobileBreakpoint` stays a
+  // container width, which is what the contract documents it as.
+  const { activeBreakpoint } = useResponsive();
+  const isMobile = RESPONSIVE_BREAKPOINTS[activeBreakpoint] < mobileBreakpoint;
   const breakpoints = useBreakpoints();
   const deviceKey = resolveDeviceKey(breakpoints);
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(

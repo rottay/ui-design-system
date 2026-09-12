@@ -22,7 +22,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Statistic } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import type { StatsGridProps } from '../../contracts';
 import type { StatDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';

@@ -23,7 +23,8 @@ import { countActiveFilters, hasSurfaceError } from '../../../../runtime/helpers
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
@@ -76,7 +77,7 @@ export function KanbanSurface({
 }: KanbanSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurfaceOr } = useSurfaceTranslations();
-  const { isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout();
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
   // Visual defaults cascade: explicit surface config -> product profile ->
   // DS defaults (spacing scale, card material, motion intensity).
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);

@@ -18,7 +18,7 @@
  */
 
 .ds-form-field.ds-form-field--modern[data-part='root'] {
-  container-type: inline-size;
+  container: ds-form-field / inline-size;
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--ds-input-color);
@@ -227,7 +227,7 @@
   --_ds-form-field-control-height: var(--ds-input-lg-height);
 }
 
-@container (inline-size < 34rem) {
+@container ds-form-field (inline-size < 34rem) {
   .ds-form-field.ds-form-field--modern[data-part='root'][data-layout='horizontal'] [data-part='layout'] {
     grid-template-columns: minmax(0, 1fr);
     row-gap: var(--ds-form-field-gap, calc(var(--ds-input-label-margin-bottom) * var(--ds-rhythm-effective-scale, 1)));

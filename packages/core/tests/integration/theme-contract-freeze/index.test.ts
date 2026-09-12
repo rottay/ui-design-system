@@ -521,10 +521,11 @@ describe("channel minting and CSS text have declared owners", () => {
       symbol: "isSafePreviewCssValue",
     },
     { file: EMISSION_ASSEMBLY_OWNER, symbol: "admitCssVariables" },
-    {
-      file: "infrastructure/runtime/responsive/runtime/style-properties/index.ts",
-      symbol: "isSafeCssValue",
-    },
+    // The responsive projection was the third entry here. WO-INV-04 stopped it
+    // assembling declaration TEXT -- it publishes one custom property per
+    // declared breakpoint and a static sheet owns the rules -- so it is no
+    // longer an assembler. It still routes every value through the same
+    // authority, which the leg below keeps pinned.
   ];
 
   /**
@@ -634,14 +635,17 @@ describe("channel minting and CSS text have declared owners", () => {
     }
   });
 
-  it("the responsive assembler routes its projected values through the authority", () => {
-    // Named on its own: its dimension props are typed as free strings and its
-    // output reaches a `<style dangerouslySetInnerHTML>` sink in every primitive.
+  it("the responsive projection routes its values through the authority and assembles nothing", () => {
+    // Named on its own: its dimension props are typed as free strings, so every
+    // value it publishes is judged by the same authority the emitter uses --
+    // and it assembles NO declaration text and feeds NO stylesheet, which is
+    // what stopped a strict CSP from dropping responsive sizing.
     const file = "infrastructure/runtime/responsive/runtime/style-properties/index.ts";
     const source = readFileSync(join(SRC_ROOT, file), "utf8");
     expect(source).toContain(`from '@/${VALUE_AUTHORITY}'`);
     expect(source).toMatch(/isSafeCssValue\(/);
-    expect(DECLARATION_ASSEMBLY.test(source)).toBe(true);
+    expect(DECLARATION_ASSEMBLY.test(source)).toBe(false);
+    expect(CSS_TEXT_SINK.test(withoutComments(source))).toBe(false);
   });
 
   it("the re-export is a forward, not a second grammar", () => {
@@ -703,6 +707,12 @@ describe("channel minting and CSS text have declared owners", () => {
    * Every productive `<style>` text sink, pinned as file -> the identifier that
    * feeds it. Lines move; a new sink file or a new feeder is a new way into a
    * stylesheet and has to arrive declared with its producer.
+   *
+   * This map used to hold 43 files and 57 occurrences. WO-INV-04 removed 35 of
+   * them at once: every responsive primitive rendered one `<style>` per
+   * instance, and they now publish governed channels against one static sheet.
+   * What remains are the three tenant-preview scopes, two reduced-motion
+   * keyframe blocks and the toast check animation.
    */
   const HTML_STYLE_SINKS: Readonly<Record<string, readonly string[]>> = {
     "components/patterns/customization/brand-studio/index.tsx": ["preview.css", "scopedCss"],
@@ -710,44 +720,9 @@ describe("channel minting and CSS text have declared owners", () => {
     "components/patterns/customization/tenant-preview/engines/classic/index.tsx": ["preview.css"],
     "components/patterns/customization/tenant-preview/engines/modern/index.tsx": ["preview.css"],
     "components/patterns/customization/tenant-preview/engines/rustic/index.tsx": ["preview.css"],
-    "components/primitives/display/badge/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/display/badge/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/display/badge/engines/rustic/index.tsx": ["responsive.css"],
-    "components/primitives/display/card/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/display/card/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/display/card/engines/rustic/index.tsx": ["responsive.css"],
-    "components/primitives/display/typography/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/display/typography/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/display/typography/engines/rustic/index.tsx": ["responsive.css"],
-    "components/primitives/feedback/alert/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/feedback/alert/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/feedback/alert/engines/rustic/index.tsx": ["responsive.css"],
     "components/primitives/feedback/toast/compound/animated-check/index.tsx": ["keyframes"],
-    "components/primitives/inputs/button/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/inputs/button/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/inputs/button/engines/rustic/index.tsx": ["responsive.css"],
-    "components/primitives/inputs/input/compound/text-area/index.tsx": ["responsive.css"],
-    "components/primitives/inputs/input/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/inputs/input/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/inputs/input/engines/rustic/index.tsx": ["responsive.css"],
-    "components/primitives/inputs/select/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/inputs/select/engines/modern/index.tsx": ["responsiveCSS.css"],
-    "components/primitives/inputs/select/engines/rustic/index.tsx": ["responsiveCSS.css"],
-    "components/primitives/layout/box/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/layout/box/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/layout/box/engines/rustic/index.tsx": ["responsive.css"],
     "components/primitives/layout/collapse/engines/modern/index.tsx": ["COLLAPSE_STYLES"],
     "components/primitives/layout/collapse/engines/rustic/index.tsx": ["RUSTIC_REDUCED_MOTION_STYLES"],
-    "components/primitives/layout/flex/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/layout/flex/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/layout/flex/engines/rustic/index.tsx": ["responsive.css"],
-    "components/primitives/layout/responsive/runtime/visibility/index.tsx": ["css"],
-    "components/primitives/layout/stack/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/layout/stack/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/layout/stack/engines/rustic/index.tsx": ["responsive.css"],
-    "components/primitives/navigation/tabs/engines/classic/index.tsx": ["responsive.css"],
-    "components/primitives/navigation/tabs/engines/modern/index.tsx": ["responsive.css"],
-    "components/primitives/navigation/tabs/engines/rustic/index.tsx": ["responsive.css"],
   };
 
   /** The productive files whose `<style>` carries its CSS as a child. */
@@ -775,7 +750,7 @@ describe("channel minting and CSS text have declared owners", () => {
     const declared: Record<string, string[]> = {};
     for (const [file, feeders] of census) declared[file] = [...feeders].sort();
     expect(declared).toEqual(HTML_STYLE_SINKS);
-    expect(occurrences).toBe(57);
+    expect(occurrences).toBe(9);
   });
 
   it("every productive <style> that carries its CSS as a child is declared", () => {

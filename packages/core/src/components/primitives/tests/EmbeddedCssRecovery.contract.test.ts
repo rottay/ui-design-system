@@ -721,23 +721,31 @@ describe('skin ownership migration embedded CSS recovery — producer and hook c
     expect(source).not.toContain('createElement("style")');
   });
 
-  it('keeps only certified responsive producers in Input, Select and Tabs', () => {
+  it('leaves NO stylesheet producer in Input, Select or Tabs', () => {
+    // The last certified producers were the responsive ones. WO-INV-04 replaced
+    // them with governed channels plus one static sheet, so the certified count
+    // is now zero and these three engines join the producer-free set above.
     const input = readSource('components/primitives/inputs/input/engines/modern/index.tsx');
     const select = readSource('components/primitives/inputs/select/engines/modern/index.tsx');
     const tabs = readSource('components/primitives/navigation/tabs/engines/modern/index.tsx');
 
     expect(input).not.toContain('ds-input-ph-');
     expect(input).not.toContain('::placeholder');
-    expect(input.match(/<style/g)).toHaveLength(1);
+    expect(input).not.toMatch(/<style(?:\s|>)/);
 
     expect(select).not.toContain('ds-sel-search-');
     expect(select).not.toContain('searchPlaceholderCSS');
-    expect(select.match(/<style/g)).toHaveLength(2);
+    expect(select).not.toMatch(/<style(?:\s|>)/);
     expect(select.match(/className="rottay-select__search-input"/g)).toHaveLength(1);
 
     expect(tabs).not.toContain('::webkit-scrollbar');
     expect(tabs).not.toContain('@keyframes ds-tabs-fade-in');
-    expect(tabs.match(/<style/g)).toHaveLength(1);
+    expect(tabs).not.toMatch(/<style(?:\s|>)/);
+
+    // And every responsive channel they publish rides the one projection.
+    for (const source of [input, select, tabs]) {
+      expect(source).toContain('generateResponsiveCSS');
+    }
   });
 
   it('stamps every ScrollArea engine with the closed state contract', () => {

@@ -143,10 +143,7 @@ export default function ClassicTabs(props: TabsProps): React.ReactElement {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `tabs-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
 
@@ -183,9 +180,6 @@ export default function ClassicTabs(props: TabsProps): React.ReactElement {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       <AntTabs
         items={antItems}
         activeKey={activeKey}
@@ -195,8 +189,8 @@ export default function ClassicTabs(props: TabsProps): React.ReactElement {
         centered={centered}
         onChange={onChange}
         className={className}
-        style={style}
-        {...(responsive ? responsive.attrs : {})}
+        style={{ ...style, ...responsive.channels }}
+        {...responsive.attrs}
       />
     </>
   );

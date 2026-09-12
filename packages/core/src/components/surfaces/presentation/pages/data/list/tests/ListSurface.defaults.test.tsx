@@ -54,6 +54,12 @@ function buildConfig(): ListSurfaceConfig<RawCandidate> {
 
 describe('ListSurface profile defaults', () => {
   it('uses the product profile list view when the surface does not force one', async () => {
+    // `events.organizer` declares `surfaceDefaults.listView: 'table'`, so the
+    // profile default IS the table. This leg used to assert the card renderer
+    // instead and passed only because the test DOM answered `false` to every
+    // media query at once -- a viewport neither at least 640px wide nor at most
+    // 639px wide -- which put the surface in its MOBILE branch, where the card
+    // view is the default regardless of profile.
     renderSurface(
       <ListSurface
         data={[
@@ -70,7 +76,39 @@ describe('ListSurface profile defaults', () => {
       }
     );
 
-    expect(await screen.findByText('Card view: Ana Gomez')).toBeInTheDocument();
+    expect(await screen.findByRole('table')).toBeInTheDocument();
+    expect(screen.getByText('Ana Gomez')).toBeInTheDocument();
+    expect(screen.queryByText('Card view: Ana Gomez')).toBeNull();
+  });
+
+  it('falls to the mobile card default below the stacking width', async () => {
+    // The counterfactual for the leg above: the SAME profile and the SAME
+    // config render the card view once the viewport really is a phone, which is
+    // what makes the assertion above about the profile and not about the
+    // environment.
+    const original = window.innerWidth;
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 390 });
+    try {
+      renderSurface(
+        <ListSurface
+          data={[
+            {
+              id: '1',
+              name: 'Ana Gomez',
+            },
+          ]}
+          adapter={candidateAdapter}
+          config={buildConfig()}
+        />,
+        {
+          productProfile: 'events.organizer',
+        }
+      );
+
+      expect(await screen.findByText('Card view: Ana Gomez')).toBeInTheDocument();
+    } finally {
+      Object.defineProperty(window, 'innerWidth', { configurable: true, value: original });
+    }
   });
 
   it('lets the surface instance override profile-driven card chrome', async () => {

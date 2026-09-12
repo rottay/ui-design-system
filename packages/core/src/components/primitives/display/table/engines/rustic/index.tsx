@@ -755,7 +755,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
   // ---- Scroll dimensions ----
   // scroll.y sets maxHeight on the scroll container, enabling vertical overflow.
-  // Accepts both pixel numbers and CSS strings (e.g., 'calc(100vh - 200px)').
+  // Accepts both pixel numbers and CSS strings (e.g., 'calc(100dvh - 200px)').
   const scrollYValue = typeof scroll?.y === 'number' ? scroll.y : typeof scroll?.y === 'string' ? scroll.y : undefined;
 
   const tableElement = (

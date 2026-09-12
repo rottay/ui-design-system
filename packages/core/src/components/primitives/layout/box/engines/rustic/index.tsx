@@ -23,7 +23,7 @@ import {
   generateResponsiveCSS,
   isResponsiveValue,
   scalarOrUndefined,
-} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+} from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
 // Rustic engine converts ALL layout props to inline CSSProperties.
@@ -367,12 +367,7 @@ const RusticBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const responsiveEntries = collectBoxResponsiveEntries(props);
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
-  const elementId = needsResponsiveCSS
-    ? `box-${reactId.replace(/:/g, "")}`
-    : "";
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   // Build class names with Rustic-specific prefixes
   const classNames = ["rottay-box", "rottay-box--rustic", className]
@@ -406,8 +401,8 @@ const RusticBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
       !callerOwnsShadow && props.shadow && props.shadow !== "none"
         ? props.shadow
         : undefined,
-    style: computedStyle,
-    ...(responsive ? responsive.attrs : {}),
+    style: { ...computedStyle, ...responsive.channels },
+    ...responsive.attrs,
   };
 
   // Void elements (input, img, br, hr, ...) reject a children argument in
@@ -418,9 +413,6 @@ const RusticBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       {element}
     </>
   );

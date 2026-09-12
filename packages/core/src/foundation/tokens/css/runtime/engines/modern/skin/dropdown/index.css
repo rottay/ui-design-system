@@ -127,8 +127,8 @@
   --_ds-dropdown-item-height-current: var(--ds-dropdown-item-height, 2.4rem);
   --_ds-dropdown-item-padding-block-current: var(--ds-dropdown-item-padding-y, 0.45rem);
   --_ds-dropdown-item-padding-inline-current: var(--ds-dropdown-item-padding-x, 0.55rem);
-  min-inline-size: min(var(--ds-dropdown-min-width, 14rem), calc(100vw - 1rem));
-  max-inline-size: min(var(--ds-dropdown-max-width, 22rem), calc(100vw - 1rem));
+  min-inline-size: min(var(--ds-dropdown-min-width, 14rem), calc(100dvw - 1rem));
+  max-inline-size: min(var(--ds-dropdown-max-width, 22rem), calc(100dvw - 1rem));
   padding: var(--ds-dropdown-padding);
   overflow: visible;
   color: var(--ds-dropdown-color, var(--ds-color-text-secondary));
@@ -287,7 +287,7 @@
    a submenu are exempt: the submenu hangs outside the list's box and any
    overflow clip would amputate it (engine stamps `data-has-submenu`). */
 .rottay-dropdown__surface[data-part='surface']:not([data-has-submenu='true']) > [data-part='menu'] {
-  max-block-size: var(--_ds-dropdown-menu-max-block-size, min(21rem, calc(100vh - 2rem)));
+  max-block-size: var(--_ds-dropdown-menu-max-block-size, min(21rem, calc(100dvh - 2rem)));
   max-block-size: var(--_ds-dropdown-menu-max-block-size, min(21rem, calc(100dvh - 2rem)));
   overflow-y: auto;
   overscroll-behavior: contain;

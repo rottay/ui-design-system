@@ -65,7 +65,7 @@
  *   templateRows="auto 1fr auto"
  *   templateAreas="'header header header' 'sidebar main aside' 'footer footer footer'"
  *   gap="md"
- *   minHeight="100vh"
+ *   minHeight="100dvh"
  * >
  *   <Grid.Item area="header">Header</Grid.Item>
  *   <Grid.Item area="sidebar">Sidebar</Grid.Item>

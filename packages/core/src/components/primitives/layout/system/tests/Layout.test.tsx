@@ -107,8 +107,8 @@ describe('Layout', () => {
   });
 
   it('applies custom style', () => {
-    render(<Layout style={{ minHeight: '100vh' }}>Content</Layout>);
-    expect(screen.getByTestId('layout')).toHaveStyle({ minHeight: '100vh' });
+    render(<Layout style={{ minHeight: 'var(--ds-viewport-block-size)' }}>Content</Layout>);
+    expect(screen.getByTestId('layout')).toHaveStyle({ minHeight: 'var(--ds-viewport-block-size)' });
   });
 });
 

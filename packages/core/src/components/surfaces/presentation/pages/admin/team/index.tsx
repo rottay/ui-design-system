@@ -30,7 +30,8 @@ import type { TeamMember, TeamSurfaceConfig } from '../../../../foundation/contr
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
@@ -282,7 +283,7 @@ export function TeamSurface({
   onRetry,
 }: TeamSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
-  const { isMobile } = useSurfaceResponsiveLayout();
+  const { isPhone: isMobile } = useResponsive();
   const { tSurfaceOr } = useSurfaceTranslations();
   const members = config.behavior.members;
   const hasMembers = members.length > 0;

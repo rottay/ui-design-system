@@ -42,7 +42,7 @@ import React from 'react';
 import { Box, Stack, Text } from '../../../../../primitives';
 import { PatternPricingTable } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import type { PricingSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome';

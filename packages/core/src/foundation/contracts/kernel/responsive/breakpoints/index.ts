@@ -105,3 +105,47 @@ export function buildRangeQuery(
 
   return `(min-width: ${minWidth}px) and (max-width: ${maxWidth}px)`;
 }
+
+/**
+ * Device bands, stated once: phone 0-639, tablet 640-1023, desktop 1024+.
+ *
+ * The same three tiers `useResponsive().deviceClass` reports, named here so a
+ * consumer that has a WIDTH rather than a viewport -- a measured container --
+ * lands on the same ladder instead of inventing thresholds of its own.
+ */
+export const RESPONSIVE_DEVICE_ALIASES = ['phone', 'tablet', 'desktop'] as const;
+
+export type ResponsiveDeviceAlias = (typeof RESPONSIVE_DEVICE_ALIASES)[number];
+
+/** The breakpoint each device band starts at. */
+export const RESPONSIVE_DEVICE_START: Readonly<
+  Record<ResponsiveDeviceAlias, ResponsiveBreakpointKey>
+> = { phone: 'xs', tablet: 'sm', desktop: 'lg' };
+
+/** The first breakpoint ABOVE each device band; `null` means unbounded. */
+export const RESPONSIVE_DEVICE_END: Readonly<
+  Record<ResponsiveDeviceAlias, ResponsiveBreakpointKey | null>
+> = { phone: 'sm', tablet: 'lg', desktop: null };
+
+/** The ladder step a width falls in. */
+export function breakpointForWidth(width: number): ResponsiveBreakpointKey {
+  let step: ResponsiveBreakpointKey = 'xs';
+  for (const candidate of RESPONSIVE_BREAKPOINT_ORDER) {
+    if (width >= RESPONSIVE_BREAKPOINTS[candidate]) step = candidate;
+  }
+  return step;
+}
+
+/** The device band a ladder step belongs to. */
+export function deviceAliasForBreakpoint(
+  breakpoint: ResponsiveBreakpointKey,
+): ResponsiveDeviceAlias {
+  return deviceAliasForWidth(RESPONSIVE_BREAKPOINTS[breakpoint]);
+}
+
+/** The device band a width falls in. */
+export function deviceAliasForWidth(width: number): ResponsiveDeviceAlias {
+  if (width >= RESPONSIVE_BREAKPOINTS.lg) return 'desktop';
+  if (width >= RESPONSIVE_BREAKPOINTS.sm) return 'tablet';
+  return 'phone';
+}

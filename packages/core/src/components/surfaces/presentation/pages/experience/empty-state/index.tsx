@@ -25,7 +25,8 @@ import { SurfaceActionBar } from '../../../../../structures/shell/surface-chrome
 import { SurfaceEmptyState } from '../../../../../structures/feedback/surface-lifecycle';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 
 export interface EmptyStateSurfaceProps {
   config: EmptyStateSurfaceConfig;
@@ -37,7 +38,7 @@ export function EmptyStateSurface({
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
     config.visual?.profileOverrides
   );
-  const { isMobile } = useSurfaceResponsiveLayout();
+  const { isPhone: isMobile } = useResponsive();
   // Primary and secondary actions use final app-resolved visibility so the
   // state gracefully degrades when the create action is unavailable.
   const primaryAction = resolveSurfaceAction(config.behavior.primaryAction, config.access);

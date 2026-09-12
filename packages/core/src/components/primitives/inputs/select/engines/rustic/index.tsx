@@ -127,10 +127,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `select-${reactId.replace(/:/g, '')}` : '';
-  const responsiveCSS = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsiveCSS = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
 
@@ -667,9 +664,6 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       style={containerStyle}
       onKeyDown={handleKeyDown}
     >
-      {responsiveCSS && responsiveCSS.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
-      )}
 
       {/* Hidden input for form submission */}
       {name && (

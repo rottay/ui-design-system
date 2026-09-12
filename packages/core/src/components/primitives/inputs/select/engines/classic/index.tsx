@@ -194,10 +194,7 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `select-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
 
@@ -284,9 +281,6 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
 
   return (
     <>
-    {responsive && responsive.css && (
-      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-    )}
     <AntSelect
       ref={ref}
       value={value}
@@ -310,11 +304,11 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
       onBlur={onBlur as any}
       onClear={onClear}
       className={selectClassName}
-      style={customStyle}
+      style={{ ...customStyle, ...responsive.channels }}
       id={id}
       autoFocus={autoFocus}
       {...antProps}
-      {...(responsive ? responsive.attrs : {})}
+      {...responsive.attrs}
     />
     </>
   );

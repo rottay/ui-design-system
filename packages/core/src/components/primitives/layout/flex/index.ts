@@ -52,7 +52,7 @@
  *   direction="column"
  *   align="center"
  *   justify="center"
- *   style={{ height: '100vh' }}
+ *   style={{ height: '100dvh' }}
  * >
  *   <Logo />
  *   <h1>Welcome</h1>

@@ -157,7 +157,7 @@ export function AdaptiveOverlay({
   };
   // The engine Drawer paints `width` inline on the panel, so no media query can
   // rescue a forced side drawer on a phone: the desktop measure would overflow.
-  const drawerWidth = isPhone ? '100vw' : width;
+  const drawerWidth = isPhone ? 'var(--ds-viewport-inline-size)' : width;
   // The Drawer contract's placement is a physical screen side, so the trailing
   // side panel has to be mirrored by hand for RTL reading order. The i18n
   // provider is OPTIONAL and reports 'ltr' when absent, so the document

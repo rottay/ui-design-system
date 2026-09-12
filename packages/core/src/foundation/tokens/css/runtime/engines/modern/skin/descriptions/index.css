@@ -33,7 +33,7 @@
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] {
   min-inline-size: 0;
-  container-type: inline-size;
+  container: ds-descriptions / inline-size;
   color: var(--ds-descriptions-color, var(--ds-color-text-primary));
   /* --ds-motion-calm has no base-token definition today (only the
      reduced-motion override), so the entrance binds to the reveal intent. */
@@ -184,27 +184,27 @@
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
   --ds-descriptions-column-count: var(--_ds-descriptions-columns-xs, 1);
 }
-@container (min-width: 640px) {
+@container ds-descriptions (min-width: 640px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-sm, 1);
   }
 }
-@container (min-width: 768px) {
+@container ds-descriptions (min-width: 768px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-md, 1);
   }
 }
-@container (min-width: 1024px) {
+@container ds-descriptions (min-width: 1024px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-lg, 1);
   }
 }
-@container (min-width: 1280px) {
+@container ds-descriptions (min-width: 1280px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-xl, 1);
   }
 }
-@container (min-width: 1536px) {
+@container ds-descriptions (min-width: 1536px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-columns='responsive'] > [data-part='body'] > [data-part='rows'] {
     --ds-descriptions-column-count: var(--_ds-descriptions-columns-xxl, 1);
   }
@@ -363,7 +363,7 @@
   padding: var(--ds-descriptions-row-padding-md, 0.625rem 0.75rem);
 }
 
-@container (max-width: 860px) {
+@container ds-descriptions (max-width: 860px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal']:not([data-column-count='1']) > [data-part='body'] > [data-part='rows'] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -378,7 +378,7 @@
   }
 }
 
-@container (max-width: 560px) {
+@container ds-descriptions (max-width: 560px) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows'] {
     grid-template-columns: minmax(0, 1fr);
   }

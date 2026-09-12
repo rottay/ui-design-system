@@ -270,15 +270,15 @@
       },
       "symbols": [
         {
-          "name": "AdaptiveConfig",
-          "kind": "type"
-        },
-        {
           "name": "CollectionWorkspaceProps",
           "kind": "type"
         },
         {
           "name": "EntityAdapter",
+          "kind": "type"
+        },
+        {
+          "name": "SurfaceAdaptivePosture",
           "kind": "type"
         },
         {
@@ -483,8 +483,8 @@
       "output": "entrypoints/public/runtime/responsive/index",
       "budget": {
         "maxDirectSources": 3,
-        "maxReachableModules": 12,
-        "maxSourceBytes": 58600
+        "maxReachableModules": 11,
+        "maxSourceBytes": 59317
       },
       "symbols": [
         {
@@ -954,8 +954,8 @@
       "output": "entrypoints/public/primitives/responsive/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 6,
-        "maxSourceBytes": 12972
+        "maxReachableModules": 5,
+        "maxSourceBytes": 14072
       },
       "symbols": [
         {

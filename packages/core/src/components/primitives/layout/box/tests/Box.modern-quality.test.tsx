@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 
 import ModernBox from "../engines/modern";
+import { responsiveCss } from "@tests/support/responsive";
 
 describe("Modern Box quality contract", () => {
   it("projects scalar structure without runtime Tailwind class dependencies", () => {
@@ -51,7 +52,7 @@ describe("Modern Box quality contract", () => {
       />
     );
 
-    const css = container.querySelector("style")?.textContent ?? "";
+    const css = responsiveCss(container);
     expect(css).toContain("padding-inline-start: var(--ds-spacing-2");
     expect(css).toContain("padding-block: var(--ds-spacing-1");
     expect(css).toContain("height: 240px");

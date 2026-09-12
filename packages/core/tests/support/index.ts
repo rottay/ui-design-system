@@ -24,3 +24,11 @@ export {
   isStableEngine,
   getEngineDisplayName,
 } from './engine';
+
+// What a rendered responsive prop declares: the channels an instance publishes
+// put back together with the static sheet that applies them.
+export {
+  responsiveChannelElement,
+  responsiveCss,
+  responsiveTokens,
+} from './responsive';

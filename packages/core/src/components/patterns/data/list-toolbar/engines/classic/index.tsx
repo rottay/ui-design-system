@@ -46,7 +46,7 @@ import type {
   FilterPillConfig,
   DensityKey,
 } from '../../contracts';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useEngineContext } from '@/infrastructure/runtime/engines/composition/react/provider';
 import { PATTERN_TRANSITION } from '@/components/patterns/foundation/motion';
 import {

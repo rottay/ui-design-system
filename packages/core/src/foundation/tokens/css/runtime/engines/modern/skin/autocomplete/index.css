@@ -274,7 +274,7 @@
    inline from the engine (no skin rule needed). */
 .ds-autocomplete.ds-autocomplete--modern.ds-autocomplete-panel[data-part='dropdown'][data-match-width='false'] {
   inline-size: max-content;
-  max-inline-size: min(var(--_ds-autocomplete-dropdown-max-width, 28rem), calc(100vw - 1rem));
+  max-inline-size: min(var(--_ds-autocomplete-dropdown-max-width, 28rem), calc(100dvw - 1rem));
 }
 
 /* Option rows: the states that used to ride the dead DaisyUI `active` /

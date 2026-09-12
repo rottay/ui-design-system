@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { ChartProjectionSpec, ChartProjectionView } from '../../../../../foundation/projection';
 import { ChartFrame } from '..';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
 
 const activityProjection: ChartProjectionSpec = {
   desktop: {
@@ -171,7 +172,10 @@ describe('ChartFrame', () => {
     expect(renderView).toHaveBeenLastCalledWith(activityProjection.phone);
   });
 
-  it('uses the responsive runtime and its mobile-first SSR fallback by default', () => {
+  it('reads the REAL viewport with no provider above it', () => {
+    // The defect this replaces: a provider-less consumer used to get a frozen
+    // phone constant for the life of the tree, so a chart mounted outside the
+    // provider rendered its phone summary on a desktop and never corrected.
     const renderView = vi.fn((view: ChartProjectionView) => (
       <div>{view.rendererId}</div>
     ));
@@ -185,10 +189,37 @@ describe('ChartFrame', () => {
     );
 
     const frame = screen.getByRole('region', { name: 'Activity' });
-    expect(frame).toHaveAttribute('data-device-class', 'phone');
-    expect(frame).toHaveAttribute('data-projection-mode', 'summary');
-    expect(screen.getByText('activity-summary')).toBeInTheDocument();
-    expect(renderView).toHaveBeenCalledWith(activityProjection.phone);
+    expect(frame).toHaveAttribute('data-device-class', 'desktop');
+    expect(renderView).toHaveBeenCalledWith(activityProjection.desktop);
+  });
+
+  it('falls back to the mobile-first baseline where the viewport cannot be read', () => {
+    // The server's answer, and the only place `phone` is still a default.
+    const original = window.matchMedia;
+    // @ts-expect-error -- removing the capability under test.
+    delete window.matchMedia;
+    resetResponsiveMediaStore();
+    const renderView = vi.fn((view: ChartProjectionView) => (
+      <div>{view.rendererId}</div>
+    ));
+    try {
+      render(
+        <ChartFrame
+          title="Activity"
+          projection={activityProjection}
+          renderView={renderView}
+        />,
+      );
+
+      const frame = screen.getByRole('region', { name: 'Activity' });
+      expect(frame).toHaveAttribute('data-device-class', 'phone');
+      expect(frame).toHaveAttribute('data-projection-mode', 'summary');
+      expect(screen.getByText('activity-summary')).toBeInTheDocument();
+      expect(renderView).toHaveBeenCalledWith(activityProjection.phone);
+    } finally {
+      window.matchMedia = original;
+      resetResponsiveMediaStore();
+    }
   });
 
   it('keeps heading and description ids unique across colocated provider roots', () => {

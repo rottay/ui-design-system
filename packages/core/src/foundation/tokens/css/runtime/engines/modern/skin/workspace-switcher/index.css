@@ -254,7 +254,7 @@
   z-index: 50;
   inline-size: min(
     var(--ds-workspace-switcher-panel-width, 18rem),
-    calc(100vw - 2 * var(--ds-spacing-4, 16px))
+    calc(100dvw - 2 * var(--ds-spacing-4, 16px))
   );
   overflow: hidden;
 }

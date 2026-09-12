@@ -30,7 +30,7 @@ import { Heading } from '../../../../../primitives/display/typography';
 import { Button } from '../../../../../primitives/inputs/button';
 import { Skeleton } from '../../../../../primitives/feedback/skeleton';
 import { ContentDocumentIcon } from '@/graphics/icons/semantic/generated/roles/content-document';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,

@@ -192,6 +192,19 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     resolved: 6,
     'tenant-theme': 7,
   }),
+  // The responsive contract is a dependency ladder, not a bag of peers: the
+  // BREAKPOINTS are the scale, `values` is the breakpoint-keyed value shape
+  // read against it, and `channels`/`visibility` are its two CSS projections
+  // (one governed property channel per step, one visibility band per boundary).
+  // Every owner here exists because exactly one scale exists; making them peers
+  // is what let two incompatible `ResponsiveValue` contracts coexist (audit
+  // F-35), so the order is declared rather than tolerated.
+  'foundation/contracts/kernel/responsive': Object.freeze({
+    breakpoints: 0,
+    values: 1,
+    channels: 2,
+    visibility: 2,
+  }),
   foundation: Object.freeze({
     contracts: 0,
     presets: 1,

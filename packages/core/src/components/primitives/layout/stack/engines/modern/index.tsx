@@ -32,7 +32,7 @@ import { STACK_DEFAULTS } from "../../contracts";
 import {
   generateResponsiveCSS,
   scalarOrDefault,
-} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+} from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import {
   collectStackResponsiveEntries,
   renderStackChildren,
@@ -106,12 +106,7 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   });
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
-  const elementId = needsResponsiveCSS
-    ? `stack-${reactId.replace(/:/g, "")}`
-    : "";
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const classNames = ["rottay-stack", "rottay-stack--modern", className]
     .filter(Boolean)
@@ -121,21 +116,15 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       {React.createElement(
         ElementType,
         {
           ...htmlAttributes,
           ref: ref as Ref<HTMLElement>,
           className: classNames,
-          style: {
-            minInlineSize: 0,
-            ...presentation.style,
-          },
+          style: { minInlineSize: 0, ...presentation.style, ...responsive.channels },
           ...presentation.attributes,
-          ...(responsive ? responsive.attrs : {}),
+          ...responsive.attrs,
           "data-component": "stack",
         },
         renderedChildren

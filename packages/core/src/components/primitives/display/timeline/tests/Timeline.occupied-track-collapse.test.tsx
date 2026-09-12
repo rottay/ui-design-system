@@ -122,9 +122,9 @@ describe('Timeline modern — occupied-track collapse', () => {
       /\[data-part='root'\]\[data-sides='end'\][^{]*\{\s*grid-template-columns:\s*0\s+auto\s+minmax\(0,\s*1fr\);/
     );
     // The fold measures the family's own box, so a narrow rail folds on desktop.
-    expect(SKIN).toMatch(/\[data-part='root'\]\s*\{[^}]*container-type:\s*inline-size/);
-    expect(SKIN).toMatch(/@container \(max-width: 30rem\)/);
-    const fold = SKIN.slice(SKIN.indexOf('@container (max-width: 30rem)'));
+    expect(SKIN).toMatch(/\[data-part='root'\]\s*\{[^}]*container:\s*ds-timeline \/ inline-size/);
+    expect(SKIN).toMatch(/@container ds-timeline \(max-width: 30rem\)/);
+    const fold = SKIN.slice(SKIN.indexOf('@container ds-timeline (max-width: 30rem)'));
     expect(fold).toMatch(
       /\[data-sides='both'\][^{]*\[data-part='item'\]\s*\{\s*grid-template-columns:\s*0\s+auto\s+minmax\(0,\s*1fr\);/
     );

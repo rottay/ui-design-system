@@ -96,7 +96,10 @@ describe("tenant-theme preview fixtures render without a product concept", () =>
       </Harness>
     );
     expect(await screen.findByText("Overview")).toBeInTheDocument();
-    expect(screen.getByText("Throughput")).toBeInTheDocument();
+    // Awaited, not synchronous: on a desktop viewport the sections region is
+    // measured and packed before it paints, so the board arrives one commit
+    // after the chrome.
+    expect(await screen.findByText("Throughput")).toBeInTheDocument();
     expect(container.textContent ?? "").not.toMatch(DOMAIN_VOCABULARY);
   });
 

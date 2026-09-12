@@ -556,6 +556,12 @@ export const UNSETTLED_FAMILIES = Object.freeze([
  * mounting is a failure with an instruction to re-pin in the same commit, not a
  * quieter fraction.
  *
+ * Measured 2026-09-12 (WO-INV-04): 26 of 275 skin families. `brand-studio`
+ * left the set: its preview cut was an `@container` query with no declared
+ * container at all, and naming that container put a single-element rule
+ * (`.ds-pattern-brand-studio { container: ds-brand-studio / inline-size }`) on
+ * the family root, which is exactly what "mountable" means here.
+ *
  * Measured 2026-09-11: 27 of 275 skin families. They fall in three groups --
  * keyframe-only and motion-only skins that declare no element rule at all
  * (`primitive-motion`, `toast-animation-keyframes`, `stats-header-keyframes`,
@@ -568,7 +574,6 @@ export const UNMOUNTABLE_FAMILIES = Object.freeze([
   'adaptive-overlay',
   'audit',
   'billing',
-  'brand-studio',
   'command-center',
   'dashboard-activity-interactions',
   'dashboard-metrics-interactions',

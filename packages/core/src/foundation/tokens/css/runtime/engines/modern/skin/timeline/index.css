@@ -54,7 +54,7 @@
   position: relative;
   /* The two-sided fold below measures the timeline's own box, not the
      viewport: a timeline in a 320px rail must fold even on a desktop. */
-  container-type: inline-size;
+  container: ds-timeline / inline-size;
   /* The skin is the single paint owner: it cannot lean on framework preflight
      for the list reset (stepper.css precedent). */
   margin: 0;
@@ -143,7 +143,7 @@
         inline-start edge and giving every row the full measure -- the
         intentional simplified posture, not a squeeze. Alignment flips with it
         so the folded rows read away from the rail like the `end` side does. ---- */
-@container (max-width: 30rem) {
+@container ds-timeline (max-width: 30rem) {
   .rottay-timeline.rottay-timeline--modern[data-part='root'][data-sides='both'] > [data-part='item'] {
     grid-template-columns: 0 auto minmax(0, 1fr);
   }

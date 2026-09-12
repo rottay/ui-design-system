@@ -31,7 +31,7 @@ describe('ResponsiveSlot xs/phone alias', () => {
     );
 
     // xs+tablet share one boundary, desktop takes the other: two wrappers, not three.
-    expect(document.querySelectorAll('[class^="ds-show-"]')).toHaveLength(2);
+    expect(document.querySelectorAll('[data-ds-show]')).toHaveLength(2);
   });
 
   it('lets an explicit phone slot win over xs', () => {

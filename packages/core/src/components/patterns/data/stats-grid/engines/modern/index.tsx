@@ -24,7 +24,7 @@
  */
 
 import React from "react";
-import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
+import { useBreakpoints } from "@/infrastructure/runtime/responsive";
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernStatistic from '../../../../../primitives/display/statistic/engines/modern';

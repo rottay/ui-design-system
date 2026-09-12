@@ -233,10 +233,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
-    const elementId = needsResponsiveCSS ? `btn-${reactId.replace(/:/g, '')}` : '';
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
 
     const size = scalarOrUndefined(sizeProp) ?? BUTTON_DEFAULTS.size;
 
@@ -311,10 +308,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     const renderPrefix = prefix && !loading ? prefix : null;
     const renderSuffix = suffix ? suffix : null;
 
-    const responsiveAttrs = responsive ? responsive.attrs : {};
-    const responsiveStyleTag = responsive && responsive.css ? (
-      <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-    ) : null;
+    const responsiveAttrs = responsive.attrs;
     const anchorProps = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
 
     // When href is set, render an <a> instead of <button> for correct
@@ -323,13 +317,12 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     if (href && !disabled && !loading) {
       return (
         <>
-          {responsiveStyleTag}
           <a
             {...anchorProps}
             href={href}
             target={target}
             className={classNames}
-            style={buttonStyle}
+            style={{ ...buttonStyle, ...responsive.channels }}
             {...interactionHandlers}
             {...skinAttributes}
             {...responsiveAttrs}
@@ -348,13 +341,12 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <>
-        {responsiveStyleTag}
         <button
           {...rest}
           ref={ref}
           type={htmlType}
           className={classNames}
-          style={buttonStyle}
+          style={{ ...buttonStyle, ...responsive.channels }}
           disabled={disabled || loading}
           onClick={handleClick}
           {...interactionHandlers}

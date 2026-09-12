@@ -16,7 +16,7 @@
  */
 
 import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { FadeIn } from '@/graphics/motion';
 import { ContentCodeIcon } from '@/graphics/icons/semantic/generated/roles/content-code';
 import { ContentDocumentIcon } from '@/graphics/icons/semantic/generated/roles/content-document';

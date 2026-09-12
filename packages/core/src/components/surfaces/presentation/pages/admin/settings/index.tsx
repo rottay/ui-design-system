@@ -24,7 +24,8 @@ import { filterSurfaceTabbedViews, hasSurfaceError } from '../../../../runtime/h
 import type { SettingsSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
@@ -62,7 +63,8 @@ export function SettingsSurface({
   onRetry,
 }: SettingsSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
-  const { shouldStack, isMobile } = useSurfaceResponsiveLayout(config.visual);
+  const { isPhone: isMobile } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   const { tSurfaceOr } = useSurfaceTranslations();
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const isCompact = profileDefaults.density === 'compact';

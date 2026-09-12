@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest";
 import { Flex as RusticFlex } from "../engines/rustic";
 import { Flex as ClassicFlex } from "../engines/classic";
 import { Flex as ModernFlex } from "../engines/modern";
+import { responsiveChannelElement, responsiveCss } from '@tests/support/responsive';
 
 describe("RusticFlex responsive props", () => {
   describe("backward compatibility", () => {
@@ -21,7 +22,7 @@ describe("RusticFlex responsive props", () => {
       const flex = container.firstChild as HTMLElement;
       expect(flex).toHaveAttribute("data-direction", "column");
       expect(flex.getAttribute("style") ?? "").not.toContain("flex-direction");
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
 
     it("renders plain scalar gap as a bounded CSS parameter", () => {
@@ -30,7 +31,7 @@ describe("RusticFlex responsive props", () => {
       expect(flex).toHaveAttribute("data-gap", "uniform");
       expect(flex.getAttribute("style")).toContain("--ds-flex-gap: 16px");
       expect(flex.getAttribute("style") ?? "").not.toMatch(/(?:^|;)\s*gap:/);
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
 
     it("keeps omitted defaults out of the inline style contract", () => {
@@ -46,14 +47,14 @@ describe("RusticFlex responsive props", () => {
       const { container } = render(
         <RusticFlex direction={{ xs: "column", lg: "row" }}>Content</RusticFlex>
       );
-      const styleTag = container.querySelector("style");
-      const flex = container.querySelector("[data-responsive-id]");
+      const styleTag = responsiveCss(container);
+      const flex = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(flex).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain("flex-direction: column;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain("flex-direction: row;");
+      expect(styleTag).toContain("flex-direction: column;");
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain("flex-direction: row;");
     });
   });
 
@@ -62,12 +63,12 @@ describe("RusticFlex responsive props", () => {
       const { container } = render(
         <RusticFlex gap={{ xs: 8, md: 16, xl: 32 }}>Content</RusticFlex>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("gap: 8px;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
-      expect(styleTag?.textContent).toContain("gap: 16px;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1280px)");
-      expect(styleTag?.textContent).toContain("gap: 32px;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("gap: 8px;");
+      expect(styleTag).toContain("@media (min-width: 768px)");
+      expect(styleTag).toContain("gap: 16px;");
+      expect(styleTag).toContain("@media (min-width: 1280px)");
+      expect(styleTag).toContain("gap: 32px;");
     });
   });
 
@@ -76,10 +77,10 @@ describe("RusticFlex responsive props", () => {
       const { container } = render(
         <RusticFlex wrap={{ xs: "nowrap", md: "wrap" }}>Content</RusticFlex>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("flex-wrap: nowrap;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
-      expect(styleTag?.textContent).toContain("flex-wrap: wrap;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("flex-wrap: nowrap;");
+      expect(styleTag).toContain("@media (min-width: 768px)");
+      expect(styleTag).toContain("flex-wrap: wrap;");
     });
   });
 
@@ -90,10 +91,10 @@ describe("RusticFlex responsive props", () => {
           Content
         </RusticFlex>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("justify-content: flex-start;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain(
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("justify-content: flex-start;");
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain(
         "justify-content: space-between;"
       );
     });
@@ -104,10 +105,10 @@ describe("RusticFlex responsive props", () => {
       const { container } = render(
         <RusticFlex align={{ xs: "stretch", md: "center" }}>Content</RusticFlex>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("align-items: stretch;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
-      expect(styleTag?.textContent).toContain("align-items: center;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("align-items: stretch;");
+      expect(styleTag).toContain("@media (min-width: 768px)");
+      expect(styleTag).toContain("align-items: center;");
     });
   });
 
@@ -118,12 +119,12 @@ describe("RusticFlex responsive props", () => {
           Content
         </RusticFlex>
       );
-      const styleTag = container.querySelector("style");
+      const styleTag = responsiveCss(container);
       // phone -> xs (no media query)
-      expect(styleTag?.textContent).toContain("flex-direction: column;");
+      expect(styleTag).toContain("flex-direction: column;");
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain("@media (min-width: 640px)");
-      expect(styleTag?.textContent).toContain("flex-direction: row;");
+      expect(styleTag).toContain("@media (min-width: 640px)");
+      expect(styleTag).toContain("flex-direction: row;");
     });
   });
 });
@@ -142,7 +143,7 @@ describe("ClassicFlex responsive props", () => {
         "data-direction",
         "column"
       );
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
 
     it("renders plain scalar gap without a style tag", () => {
@@ -150,7 +151,7 @@ describe("ClassicFlex responsive props", () => {
       const flex = container.querySelector(".rottay-flex--classic");
       expect(flex).toHaveAttribute("data-gap", "uniform");
       expect(flex?.getAttribute("style")).toContain("--ds-flex-gap: 16px");
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -161,14 +162,14 @@ describe("ClassicFlex responsive props", () => {
           Content
         </ClassicFlex>
       );
-      const styleTag = container.querySelector("style");
-      const flex = container.querySelector("[data-responsive-id]");
+      const styleTag = responsiveCss(container);
+      const flex = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(flex).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain("flex-direction: column;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain("flex-direction: row;");
+      expect(styleTag).toContain("flex-direction: column;");
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain("flex-direction: row;");
     });
   });
 
@@ -177,12 +178,12 @@ describe("ClassicFlex responsive props", () => {
       const { container } = render(
         <ClassicFlex gap={{ xs: 8, md: 16, xl: 32 }}>Content</ClassicFlex>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("gap: 8px;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
-      expect(styleTag?.textContent).toContain("gap: 16px;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1280px)");
-      expect(styleTag?.textContent).toContain("gap: 32px;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("gap: 8px;");
+      expect(styleTag).toContain("@media (min-width: 768px)");
+      expect(styleTag).toContain("gap: 16px;");
+      expect(styleTag).toContain("@media (min-width: 1280px)");
+      expect(styleTag).toContain("gap: 32px;");
     });
   });
 
@@ -193,11 +194,11 @@ describe("ClassicFlex responsive props", () => {
           Content
         </ClassicFlex>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("flex-direction: column;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("flex-direction: column;");
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain("flex-direction: row;");
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain("flex-direction: row;");
     });
   });
 });
@@ -215,7 +216,7 @@ describe("ModernFlex responsive props", () => {
       const flex = container.firstChild as HTMLElement;
       expect(flex).toHaveAttribute("data-direction", "column");
       expect(flex.getAttribute("style") ?? "").not.toContain("flex-direction");
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
 
     it("renders plain scalar gap as a bounded CSS parameter without a style tag", () => {
@@ -224,7 +225,7 @@ describe("ModernFlex responsive props", () => {
       expect(flex).toHaveAttribute("data-gap", "uniform");
       expect(flex.getAttribute("style")).toContain("--ds-flex-gap: 16px");
       expect(flex.getAttribute("style") ?? "").not.toMatch(/(?:^|;)\s*gap:/);
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -233,14 +234,14 @@ describe("ModernFlex responsive props", () => {
       const { container } = render(
         <ModernFlex direction={{ xs: "column", lg: "row" }}>Content</ModernFlex>
       );
-      const styleTag = container.querySelector("style");
-      const flex = container.querySelector("[data-responsive-id]");
+      const styleTag = responsiveCss(container);
+      const flex = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(flex).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain("flex-direction: column;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain("flex-direction: row;");
+      expect(styleTag).toContain("flex-direction: column;");
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain("flex-direction: row;");
     });
   });
 
@@ -249,12 +250,12 @@ describe("ModernFlex responsive props", () => {
       const { container } = render(
         <ModernFlex gap={{ xs: 8, md: 16, xl: 32 }}>Content</ModernFlex>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("gap: 8px;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
-      expect(styleTag?.textContent).toContain("gap: 16px;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1280px)");
-      expect(styleTag?.textContent).toContain("gap: 32px;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("gap: 8px;");
+      expect(styleTag).toContain("@media (min-width: 768px)");
+      expect(styleTag).toContain("gap: 16px;");
+      expect(styleTag).toContain("@media (min-width: 1280px)");
+      expect(styleTag).toContain("gap: 32px;");
     });
   });
 
@@ -265,11 +266,11 @@ describe("ModernFlex responsive props", () => {
           Content
         </ModernFlex>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("flex-direction: column;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("flex-direction: column;");
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain("@media (min-width: 640px)");
-      expect(styleTag?.textContent).toContain("flex-direction: row;");
+      expect(styleTag).toContain("@media (min-width: 640px)");
+      expect(styleTag).toContain("flex-direction: row;");
     });
   });
 });

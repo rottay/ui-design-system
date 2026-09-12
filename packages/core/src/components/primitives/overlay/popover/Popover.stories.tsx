@@ -348,7 +348,7 @@ export const LocaleViewportAndLongCopy: Story = {
       dir="rtl"
       lang="ar"
       spacing="md"
-      style={{ inlineSize: 'min(17rem, calc(100vw - 2rem))' }}
+      style={{ inlineSize: 'min(17rem, calc(100dvw - 2rem))' }}
     >
       <Popover
         open

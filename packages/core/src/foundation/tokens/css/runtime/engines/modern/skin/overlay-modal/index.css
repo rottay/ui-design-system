@@ -225,13 +225,13 @@
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-fullscreen='true'] {
-  inline-size: 100vw;
+  inline-size: 100dvw;
   max-inline-size: none;
   max-block-size: none;
 }
-/* Adaptive fullscreen (phone posture): the dynamic viewport when supported,
-   with a 100vh fallback for older engines — kept in CSS so the fallback
-   coexists without `!important` or a second viewport subscription. The
+/* Adaptive fullscreen (phone posture), on the dynamic viewport: the surface
+   tracks the visible area as mobile browser chrome collapses, with no second
+   viewport subscription and no `!important`. The
    full-viewport surface also absorbs the device safe areas (notch, home
    indicator) with PHYSICAL insets — the sheet.css/drawer.css sanctioned
    idiom — so the header's close control and the footer actions never slide
@@ -239,19 +239,12 @@
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-adaptive-fullscreen='true'] {
   box-sizing: border-box;
-  block-size: 100vh;
-  max-block-size: 100vh;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
   padding-left: env(safe-area-inset-left, 0px);
   padding-right: env(safe-area-inset-right, 0px);
-}
-@supports (height: 100dvh) {
-  .rottay-overlay-modal-shell--modern[data-part='root']
-    > [data-part='surface'][data-adaptive-fullscreen='true'] {
-    block-size: 100dvh;
-    max-block-size: 100dvh;
-  }
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true']) {

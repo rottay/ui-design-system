@@ -25,7 +25,8 @@ import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Button, Card, Flex, Grid, Heading, Input, Stack, Text, Textarea } from '../../../../../primitives';
 import type { ProfileSection, ProfileSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { hasSurfaceError } from '../../../../runtime/helpers';
 import {
   SurfaceEmptyState,
@@ -255,10 +256,11 @@ export function ProfileSurface({
   const isSidebarLayout = config.visual.layout === 'sidebar';
   // Sidebar layout stacks on tablet in addition to mobile because the
   // avatar + nav sidebar becomes too narrow on tablet viewports.
-  const { isMobile, shouldStack } = useSurfaceResponsiveLayout({
-    stackOnMobile: true,
-    stackOnTablet: isSidebarLayout,
-  });
+  const { isPhone: isMobile } = useResponsive();
+  const shouldStack =
+    useResponsiveValue(
+      surfaceStackingValue({ stackOnMobile: true, stackOnTablet: isSidebarLayout })
+    ) ?? false;
   const isCompact = profileDefaults.density === 'compact';
 
   const hasPageActions =

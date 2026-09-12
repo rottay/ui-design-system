@@ -925,15 +925,9 @@ html[data-tenant] .ant-drawer-mask {
   background: var(--ds-drawer-overlay-bg);
 }
 
-/* Sheet-specific mobile viewport contract. */
+/* Sheet-specific mobile viewport contract, on the dynamic viewport. */
 .rottay-sheet-classic {
-  --ds-sheet-viewport-max-height: 85vh;
-}
-
-@supports (height: 100dvh) {
-  .rottay-sheet-classic {
-    --ds-sheet-viewport-max-height: 85dvh;
-  }
+  --ds-sheet-viewport-max-height: 85dvh;
 }
 
 /* =============================================================================
@@ -2126,7 +2120,7 @@ html[data-tenant] .ant-steps.ds-stepper .ant-steps-item-finish .ant-steps-item-t
    ============================================================================= */
 
 html[data-tenant] .ant-layout {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--ds-layout-bg, var(--ds-color-bg-primary));
 }
 

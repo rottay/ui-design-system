@@ -549,6 +549,9 @@
   100% { opacity: 0; transform: scale(var(--ds-badge-pulse-scale)); }
 }
 
+/* DELIBERATELY UNNAMED, and the only one left in the tree: a badge declares no
+   container of its own and belongs to no fixed owner, so "the nearest ancestor
+   container" is exactly what this query means. */
 @container (max-width: 12rem) {
   .rottay-badge.rottay-badge--modern[data-kind='chip'],
   .rottay-badge.rottay-badge--modern[data-kind='pill'] {

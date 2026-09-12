@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
 
 import ClassicBox from "../engines/classic";
 import { SPACING_MAP } from "../contracts";
+import { responsiveChannelElement, responsiveCss } from '@tests/support/responsive';
 
 describe("ClassicBox responsive props", () => {
   describe("backward compatibility", () => {
@@ -19,7 +20,7 @@ describe("ClassicBox responsive props", () => {
       expect(box).toBeInTheDocument();
       expect(box).toHaveStyle({ padding: SPACING_MAP.md });
       // No style tag should be injected
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
 
     it("renders plain scalar display as inline style", () => {
@@ -28,7 +29,7 @@ describe("ClassicBox responsive props", () => {
       );
       const box = container.querySelector(".rottay-box--classic");
       expect(box).toHaveStyle({ display: "flex" });
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
 
     it("renders plain scalar width as inline style", () => {
@@ -37,7 +38,7 @@ describe("ClassicBox responsive props", () => {
       );
       const box = container.querySelector(".rottay-box--classic");
       expect(box).toHaveStyle({ width: "200px" });
-      expect(container.querySelector("style")).toBeNull();
+      expect(responsiveCss(container)).toBe('');
     });
   });
 
@@ -46,29 +47,29 @@ describe("ClassicBox responsive props", () => {
       const { container } = render(
         <ClassicBox p={{ xs: "sm", lg: "xl" }}>Content</ClassicBox>
       );
-      const styleTag = container.querySelector("style");
-      const box = container.querySelector("[data-responsive-id]");
+      const styleTag = responsiveCss(container);
+      const box = responsiveChannelElement(container);
 
-      expect(styleTag).not.toBeNull();
+      expect(styleTag).not.toBe('');
       expect(box).toBeInTheDocument();
-      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.sm};`);
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.xl};`);
+      expect(styleTag).toContain(`padding: ${SPACING_MAP.sm};`);
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain(`padding: ${SPACING_MAP.xl};`);
     });
 
     it("generates CSS for responsive px (horizontal padding)", () => {
       const { container } = render(
         <ClassicBox px={{ base: "xs", md: "lg" }}>Content</ClassicBox>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain(
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain(
         `padding-left: ${SPACING_MAP.xs};`
       );
-      expect(styleTag?.textContent).toContain(
+      expect(styleTag).toContain(
         `padding-right: ${SPACING_MAP.xs};`
       );
-      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
-      expect(styleTag?.textContent).toContain(
+      expect(styleTag).toContain("@media (min-width: 768px)");
+      expect(styleTag).toContain(
         `padding-left: ${SPACING_MAP.lg};`
       );
     });
@@ -79,24 +80,24 @@ describe("ClassicBox responsive props", () => {
       const { container } = render(
         <ClassicBox m={{ xs: "sm", xl: "2xl" }}>Content</ClassicBox>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain(`margin: ${SPACING_MAP.sm};`);
-      expect(styleTag?.textContent).toContain("@media (min-width: 1280px)");
-      expect(styleTag?.textContent).toContain(`margin: ${SPACING_MAP["2xl"]};`);
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain(`margin: ${SPACING_MAP.sm};`);
+      expect(styleTag).toContain("@media (min-width: 1280px)");
+      expect(styleTag).toContain(`margin: ${SPACING_MAP["2xl"]};`);
     });
 
     it("generates CSS for responsive mx (horizontal margin)", () => {
       const { container } = render(
         <ClassicBox mx={{ phone: "xs", desktop: "lg" }}>Content</ClassicBox>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain(
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain(
         `margin-left: ${SPACING_MAP.xs};`
       );
-      expect(styleTag?.textContent).toContain(
+      expect(styleTag).toContain(
         `margin-right: ${SPACING_MAP.xs};`
       );
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain("@media (min-width: 1024px)");
     });
   });
 
@@ -107,12 +108,12 @@ describe("ClassicBox responsive props", () => {
           Content
         </ClassicBox>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("display: none;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
-      expect(styleTag?.textContent).toContain("display: block;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain("display: flex;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("display: none;");
+      expect(styleTag).toContain("@media (min-width: 768px)");
+      expect(styleTag).toContain("display: block;");
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain("display: flex;");
     });
   });
 
@@ -123,11 +124,11 @@ describe("ClassicBox responsive props", () => {
           Content
         </ClassicBox>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("width: 100%;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 768px)");
-      expect(styleTag?.textContent).toContain("width: 50%;");
-      expect(styleTag?.textContent).toContain("width: 33%;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("width: 100%;");
+      expect(styleTag).toContain("@media (min-width: 768px)");
+      expect(styleTag).toContain("width: 50%;");
+      expect(styleTag).toContain("width: 33%;");
     });
   });
 
@@ -136,10 +137,10 @@ describe("ClassicBox responsive props", () => {
       const { container } = render(
         <ClassicBox maxWidth={{ xs: "100%", lg: "960px" }}>Content</ClassicBox>
       );
-      const styleTag = container.querySelector("style");
-      expect(styleTag?.textContent).toContain("max-width: 100%;");
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain("max-width: 960px;");
+      const styleTag = responsiveCss(container);
+      expect(styleTag).toContain("max-width: 100%;");
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain("max-width: 960px;");
     });
   });
 
@@ -150,15 +151,15 @@ describe("ClassicBox responsive props", () => {
           Content
         </ClassicBox>
       );
-      const styleTag = container.querySelector("style");
+      const styleTag = responsiveCss(container);
       // phone -> xs (no media query)
-      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.xs};`);
+      expect(styleTag).toContain(`padding: ${SPACING_MAP.xs};`);
       // tablet -> sm (640px)
-      expect(styleTag?.textContent).toContain("@media (min-width: 640px)");
-      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.md};`);
+      expect(styleTag).toContain("@media (min-width: 640px)");
+      expect(styleTag).toContain(`padding: ${SPACING_MAP.md};`);
       // desktop -> lg (1024px)
-      expect(styleTag?.textContent).toContain("@media (min-width: 1024px)");
-      expect(styleTag?.textContent).toContain(`padding: ${SPACING_MAP.xl};`);
+      expect(styleTag).toContain("@media (min-width: 1024px)");
+      expect(styleTag).toContain(`padding: ${SPACING_MAP.xl};`);
     });
   });
 });

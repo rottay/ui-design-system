@@ -134,12 +134,12 @@
   inline-size: var(--ds-alert-dialog-width, 91.6667%);
   max-inline-size: min(
     var(--ds-alert-dialog-max-width, 24rem),
-    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
   /* Cap against the DYNAMIC viewport with breathing room at both edges: a
-     100vh cap lets the panel kiss the viewport chrome on short/mobile
+     100dvh cap lets the panel kiss the viewport chrome on short/mobile
      screens and can push the actions out of reach. */
-  max-block-size: calc(100vh - var(--ds-spacing-8));
+  max-block-size: calc(100dvh - var(--ds-spacing-8));
   max-block-size: calc(100dvh - var(--ds-spacing-8));
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -228,10 +228,10 @@
 /* The surface is the container: on narrow panels the actions stack
    full-width instead of compressing into an unreadable end-aligned row. */
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-  container-type: inline-size;
+  container: ds-alert-dialog / inline-size;
 }
 
-@container (max-width: 20rem) {
+@container ds-alert-dialog (max-width: 20rem) {
   .rottay-alert-dialog--modern[data-part='root'] [data-part='footer'] {
     flex-direction: column;
     align-items: stretch;

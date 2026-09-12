@@ -264,8 +264,8 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
   // Horizontal drawers (left/right) use width for sizing; vertical drawers
   // (top/bottom) use height. The opposite dimension always fills the viewport.
   const isHorizontal = placement === 'left' || placement === 'right';
-  const drawerWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : '100vw');
-  const drawerHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : '100vh');
+  const drawerWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : 'var(--ds-viewport-inline-size)');
+  const drawerHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : 'var(--ds-viewport-block-size)');
 
   // ---------------------------------------------------------------------------
   // Style Definitions
@@ -317,7 +317,7 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
           top: 0,
           left: 0,
           width: drawerWidth,
-          height: '100vh',
+          height: 'var(--ds-viewport-block-size)',
         };
       case 'right':
         return {
@@ -325,14 +325,14 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
           top: 0,
           right: 0,
           width: drawerWidth,
-          height: '100vh',
+          height: 'var(--ds-viewport-block-size)',
         };
       case 'top':
         return {
           ...baseStyle,
           top: 0,
           left: 0,
-          width: '100vw',
+          width: 'var(--ds-viewport-inline-size)',
           height: drawerHeight,
         };
       case 'bottom':
@@ -340,7 +340,7 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
           ...baseStyle,
           bottom: 0,
           left: 0,
-          width: '100vw',
+          width: 'var(--ds-viewport-inline-size)',
           height: drawerHeight,
         };
       default:

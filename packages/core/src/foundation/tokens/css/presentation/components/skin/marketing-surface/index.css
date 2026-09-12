@@ -51,7 +51,7 @@
    barely-there vertical luminance step on hero surfaces); the mesh channel
    is the showcase-only role, tenant-governed, with a `none` fallback. */
 .ds-surface.ds-marketing[data-part='root'] {
-  min-block-size: 100vh;
+  min-block-size: 100dvh;
   padding-block-end: var(--ds-spacing-20, 80px);
   background:
     var(--ds-gradient-mesh, none),
@@ -66,15 +66,6 @@
   padding-block-end: var(--ds-spacing-10, 40px);
 }
 
-/* Dynamic viewport floor where supported (modern sheet.css precedent):
-   the editorial canvas tracks the visible area as mobile chrome
-   collapses, so the background never ends short of the fold; content is
-   top-aligned, so the floor change shifts no layout. */
-@supports (height: 100dvh) {
-  .ds-surface.ds-marketing[data-part='root'] {
-    min-block-size: 100dvh;
-  }
-}
 
 /* ---- container geometry ----
    Default 1260px measure, centered, with fluid padding per viewport. A

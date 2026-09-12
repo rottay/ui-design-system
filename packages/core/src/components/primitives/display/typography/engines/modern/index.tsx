@@ -278,10 +278,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
-    const elementId = needsResponsiveCSS ? `heading-${reactId.replace(/:/g, '')}` : '';
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
 
     const scalarSize = scalarOrUndefined(size);
     const effectiveSize = scalarSize ?? DEFAULT_HEADING_SIZE[level];
@@ -370,9 +367,6 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         <Component
           ref={ref as React.Ref<HTMLHeadingElement>}
           className={classes}
@@ -381,13 +375,13 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           translate={translate}
           title={resolvedTitle}
           {...props}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           data-size={effectiveSize}
           data-line-clamp={normalizedClamp}
           {...typographyDataAttributes(craftProps)}
-          style={{ ...typographyStyle, ...nonRoleStyle, ...style }}
+          style={{ ...typographyStyle, ...nonRoleStyle, ...style, ...responsive.channels }}
         >
           {children}
         </Component>
@@ -471,10 +465,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
-    const elementId = needsResponsiveCSS ? `text-${reactId.replace(/:/g, '')}` : '';
-    const responsive = needsResponsiveCSS
-      ? generateResponsiveCSS(elementId, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
 
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.text.size;
 
@@ -550,9 +541,6 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
 
     return (
       <>
-        {responsive && responsive.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-        )}
         <Component
           ref={ref as any}
           className={classes}
@@ -561,13 +549,13 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
           translate={translate}
           title={resolvedTitle}
           {...props}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           data-size={size}
           data-line-clamp={normalizedClamp}
           {...typographyDataAttributes(craftProps)}
-          style={{ ...textSizeStyle, ...nonRoleStyle, ...style }}
+          style={{ ...textSizeStyle, ...nonRoleStyle, ...style, ...responsive.channels }}
         >
           {children}
         </Component>
@@ -656,9 +644,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
         } as ResponsivePropEntry<any>,
       );
     }
-    const responsive = responsiveEntries.length
-      ? generateResponsiveCSS(`paragraph-${reactId.replace(/:/g, '')}`, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.paragraph.size;
     const paragraphSizeStyle: React.CSSProperties = !sizeIsResponsive
       ? {
@@ -706,7 +692,6 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
 
     return (
       <>
-        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
         <p
           ref={ref}
           className={classes}
@@ -715,13 +700,13 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
           translate={translate}
           title={resolvedTitle}
           {...props}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           data-size={size}
           data-line-clamp={normalizedClamp}
           {...typographyDataAttributes(craftProps)}
-          style={{ ...paragraphSizeStyle, ...nonRoleStyle, ...style }}
+          style={{ ...paragraphSizeStyle, ...nonRoleStyle, ...style, ...responsive.channels }}
         >
           {children}
         </p>
@@ -818,9 +803,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
         } as ResponsivePropEntry<any>,
       );
     }
-    const responsive = responsiveEntries.length
-      ? generateResponsiveCSS(`link-${reactId.replace(/:/g, '')}`, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.link.size;
     // A link declares no weight of its own unless the caller asks or `strong`
     // is set, so anywhere else it inherits one and the role must not seize it.
@@ -860,7 +843,6 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
 
     return (
       <>
-        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
         {/* Disabled links have href removed entirely so they are not
             navigable via keyboard or assistive technology. */}
         <a
@@ -875,13 +857,13 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
           translate={translate}
           title={title}
           {...props}
-          {...(responsive ? responsive.attrs : {})}
+          {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
           data-size={size}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}
-          style={{ ...linkSizeStyle, ...nonRoleStyle, ...style }}
+          style={{ ...linkSizeStyle, ...nonRoleStyle, ...style, ...responsive.channels }}
           aria-disabled={disabled || undefined}
         >
           {children}

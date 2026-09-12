@@ -122,7 +122,7 @@ describe('Modal', () => {
       const phoneSurface = screen.getByRole('dialog');
       expect(phoneSurface).toHaveAttribute('data-fullscreen', 'true');
       expect(phoneSurface).toHaveAttribute('data-adaptive-fullscreen', 'true');
-      expect(phoneSurface.style.width).toBe('100vw');
+      expect(phoneSurface.style.width).toBe('var(--ds-viewport-inline-size)');
       expect(phoneSurface.style.position).toBe('fixed');
       expect(phoneSurface.style.margin).toBe('0px');
       expect(phoneSurface.style.getPropertyValue('--ds-modal-surface-radius')).toBe('0');
@@ -138,7 +138,7 @@ describe('Modal', () => {
       const explicitSurface = screen.getByRole('dialog');
       expect(explicitSurface).toHaveAttribute('data-fullscreen', 'true');
       expect(explicitSurface).toHaveAttribute('data-adaptive-fullscreen', 'false');
-      expect(explicitSurface.style.height).toBe('100vh');
+      expect(explicitSurface.style.height).toBe('var(--ds-viewport-block-size)');
     });
   });
 

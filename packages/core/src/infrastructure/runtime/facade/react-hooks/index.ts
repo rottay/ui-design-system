@@ -173,20 +173,16 @@ export type {
 export { useFeatures, useHasFeature, useFeatureContext } from '../../features';
 
 // ============================================================================
-// Responsive hooks -- viewport detection and breakpoint-based values
-// When a ResponsiveProvider is in the tree, useBreakpoints and
-// useResponsiveValue read from shared context (zero extra subscriptions).
-// Without a provider they fall back to per-component matchMedia listeners.
+// Responsive hooks -- viewport detection and breakpoint-based values.
+// All three project the one responsive snapshot: with a ResponsiveProvider in
+// the tree the context answers, and without one the shared external store does.
 // ============================================================================
 export {
   useMediaQuery,
   useBreakpoints,
   useResponsiveValue,
 } from '../../responsive';
-export type {
-  UseBreakpointsResult,
-  ResponsiveValueConfig,
-} from '../../responsive';
+export type { UseBreakpointsResult } from '../../responsive';
 
 // ============================================================================
 // Accessibility hooks -- keyboard navigation and screen reader support

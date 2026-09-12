@@ -209,10 +209,7 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
   }
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
-  const elementId = needsResponsiveCSS ? `btn-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = generateResponsiveCSS(responsiveEntries);
 
   const size = scalarOrUndefined(sizeProp) ?? BUTTON_DEFAULTS.size;
 
@@ -237,9 +234,6 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
       <AntButton
         {...passthroughProps}
         ref={mergedRef}
@@ -257,13 +251,13 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
         target={target}
         onClick={onClick}
         className={classNames}
-        style={style}
+        style={{ ...style, ...responsive.channels }}
         id={id}
         aria-label={ariaLabel}
         data-testid={dataTestId}
         tabIndex={tabIndex}
         aria-busy={loading || undefined}
-        {...(responsive ? responsive.attrs : {})}
+        {...responsive.attrs}
       >
         {loading && resolvedBusyLabel != null ? resolvedBusyLabel : children}
         {/* End icon / suffix is rendered outside Ant's icon slot because Ant

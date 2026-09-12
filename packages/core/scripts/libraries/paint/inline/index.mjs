@@ -353,14 +353,25 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
       ],
     ]),
   ],
+  // WO-INV-04: the responsive channel projection now answers with BOTH halves
+  // of the mechanism, so it is a style producer and not only a prop bag. Its
+  // `channels` half is one `--_ds-rsp-*` custom property per declared
+  // breakpoint -- never a paint longhand, because the governed channel
+  // vocabulary is closed and the static sheet, not this object, assigns the
+  // property -- and its `attrs` half stays the `data-ds-responsive` token list.
+  // Every responsive primitive spreads `channels` now that none of them injects
+  // a `<style>` element, so leaving that path opaque would count the whole
+  // mechanism as inline paint it does not contain. `zeroPaint` is VERIFIED by
+  // this library against the producer's own body, never asserted here.
   [
     "infrastructure/runtime/responsive/runtime/style-properties/index",
     new Map([
       [
         "generateResponsiveCSS",
         {
-          kind: "nonStylePropBag",
+          kind: "style",
           ownership: "zeroPaint",
+          stylePaths: new Set(["channels"]),
           nonStylePaths: new Set(["attrs"]),
           transparentArgs: [],
         },

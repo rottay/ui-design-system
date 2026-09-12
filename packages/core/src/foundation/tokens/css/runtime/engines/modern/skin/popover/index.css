@@ -154,7 +154,7 @@
   min-inline-size: min(
     var(--ds-popover-min-width, 12rem),
     calc(
-      100vw - var(--ds-popover-viewport-gap, 0.75rem) -
+      100dvw - var(--ds-popover-viewport-gap, 0.75rem) -
         var(--ds-popover-viewport-gap, 0.75rem)
     )
   );
@@ -168,7 +168,7 @@
   max-inline-size: min(
     var(--ds-popover-instance-max-width, var(--ds-popover-max-width-current)),
     calc(
-      100vw - var(--ds-popover-viewport-gap, 0.75rem) -
+      100dvw - var(--ds-popover-viewport-gap, 0.75rem) -
         var(--ds-popover-viewport-gap, 0.75rem)
     )
   );

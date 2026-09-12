@@ -1,0 +1,21 @@
+/**
+ * The Dynamic Viewport - Rottay Design System
+ *
+ * TWO CHANNELS, ONE MEANING. The static `vh`/`vw` units are the LARGE viewport:
+ * on a phone they include browser chrome that is currently on screen, so a
+ * full-viewport surface sized with them is bigger than the space the user can
+ * actually see and its footer sits under the address bar. `dvh`/`dvw` track the
+ * visible area as that chrome collapses, which is what every full-viewport
+ * surface in this package means.
+ *
+ * WHY A CHANNEL AND NOT THE LITERAL. A full-viewport dimension an engine stamps
+ * INLINE is a visual value inside a TSX file, which the skin-first law forbids.
+ * Naming it once here keeps the literal in CSS and leaves the inline
+ * declaration doing only what it is there for: outranking a caller's own style
+ * on a surface whose geometry the engine owns.
+ */
+
+:root {
+  --ds-viewport-inline-size: 100dvw;
+  --ds-viewport-block-size: 100dvh;
+}

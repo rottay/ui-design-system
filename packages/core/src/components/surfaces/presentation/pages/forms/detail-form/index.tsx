@@ -29,7 +29,8 @@ import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structure
 import { resolveStackSpacing, SurfaceAccentBarWrapper } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
 import type { DetailFormSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
-import { useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../../structures/shell/surface-chrome';
 import { SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 
@@ -49,7 +50,8 @@ export function DetailFormSurface({
 }: DetailFormSurfaceProps): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
-  const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   // Stamped state attributes follow the resolved viewport so SSR/first-paint
   // markup never claims a mobile posture the media query has not confirmed.
   const resolvedMobile = hasResolvedViewport && isMobile;

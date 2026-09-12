@@ -21,7 +21,8 @@ import type { VisualizationSurfaceConfig } from '../../../../foundation/contract
 import { PageShellSurface } from '../../../../../structures/shell/page-shell-surface';
 import { useSurfaceProfileDefaultsWithOverrides } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/overrides';
 import { resolveStackSpacing } from '../../../../../structures/foundation/chrome/runtime/profile-defaults/personality';
-import { resolveResponsiveColumnCount, useSurfaceResponsiveLayout } from '../../../../../structures/foundation/chrome/runtime/responsive';
+import { useResponsive, useResponsiveValue } from '@/infrastructure/runtime/responsive';
+import { surfaceStackingValue, surfaceColumnsValue } from '../../../../../structures/foundation/chrome/contracts';
 import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../../structures/shell/surface-chrome';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/feedback/surface-lifecycle';
 import { FadeIn, StaggerChildren } from '@/graphics/motion';
@@ -108,15 +109,14 @@ export function VisualizationSurface({
 }: VisualizationSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { tSurfaceOr } = useSurfaceTranslations();
-  const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
+  const { isPhone: isMobile, hasResolvedViewport } = useResponsive();
+  const shouldStack = useResponsiveValue(surfaceStackingValue(config.visual)) ?? false;
   // Visual defaults cascade: explicit surface config -> product profile ->
   // DS defaults (spacing scale, card material, motion intensity).
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const cardVariant = profileDefaults.cardVariant;
   const compactMobileCharts =
-    responsiveLayout.isMobile &&
-    responsiveLayout.hasResolvedViewport &&
-    config.visual.compactChartsOnMobile === true;
+    isMobile && hasResolvedViewport && config.visual.compactChartsOnMobile === true;
   // Views use app-resolved access so hidden chart types never appear
   // in the tab bar (e.g. financial charts hidden from non-admin users).
   const visibleViews = filterSurfaceTabbedViews(config.behavior.views, config.access);
@@ -129,9 +129,9 @@ export function VisualizationSurface({
   const isControlledViewState = config.behavior.activeView !== undefined;
   // Stats grid adapts from 4 columns on desktop to 1 on mobile so KPI
   // numbers remain readable at every breakpoint.
-  const statsColumns = resolveResponsiveColumnCount(responsiveLayout, 4, 2, 1);
+  const statsColumns = useResponsiveValue(surfaceColumnsValue(4, 2, 1)) ?? 1;
   const hasAside = Boolean(config.presentation.aside);
-  const useAsideColumns = hasAside && !responsiveLayout.shouldStack;
+  const useAsideColumns = hasAside && !shouldStack;
 
   const chrome = {
     ...config.presentation.chrome,
@@ -158,7 +158,7 @@ export function VisualizationSurface({
        surface's own shape. */
     <VisualizationSkeleton
       statsCount={config.behavior.stats?.length ?? 0}
-      /* resolveResponsiveColumnCount clamps to the 1–12 literal range by
+      /* surfaceColumnsValue clamps to the 1–12 literal range by
          contract, so the resolved count is always a valid GridColumns. */
       statsColumns={statsColumns as GridColumns}
       cardVariant={cardVariant}
@@ -235,9 +235,9 @@ export function VisualizationSurface({
 
   const visualizationContent = (
     <Grid
-      className={`ds-surface ds-visualization ds-visualization--${responsiveLayout.shouldStack ? 'stacked' : 'wide'}`}
+      className={`ds-surface ds-visualization ds-visualization--${shouldStack ? 'stacked' : 'wide'}`}
       data-part="root"
-      data-mobile={responsiveLayout.isMobile ? 'true' : 'false'}
+      data-mobile={isMobile ? 'true' : 'false'}
       data-loading={loading ? 'true' : 'false'}
       columns={useAsideColumns ? 12 : 1}
       gap={sectionSpacing}

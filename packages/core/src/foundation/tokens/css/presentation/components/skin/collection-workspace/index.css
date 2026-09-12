@@ -997,7 +997,7 @@
   z-index: var(--ds-z-dropdown, var(--ds-z-index-dropdown, 1000));
   inline-size: min(
     var(--ds-collection-filter-dropdown-width, 22.5rem),
-    calc(100vw - (var(--ds-spacing-3, 0.75rem) * 2))
+    calc(100dvw - (var(--ds-spacing-3, 0.75rem) * 2))
   );
   min-inline-size: 0;
   overflow: auto;

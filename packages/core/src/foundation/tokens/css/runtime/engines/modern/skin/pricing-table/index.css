@@ -35,7 +35,7 @@
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] {
   min-inline-size: 0;
   color: var(--ds-color-text-primary);
-  container-type: inline-size;
+  container: ds-pricing-table / inline-size;
 }
 
 /* ---- loading: shaped skeleton mirror that conserves the loaded footprint
@@ -304,7 +304,7 @@
 
 /* ---- narrow containers: compact rhythm + sticky feature column while the
         plan columns scroll (comparison semantics stay intact). ---- */
-@container (max-width: 640px) {
+@container ds-pricing-table (max-width: 640px) {
   .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-card {
     padding: var(--ds-spacing-3, 12px);
   }

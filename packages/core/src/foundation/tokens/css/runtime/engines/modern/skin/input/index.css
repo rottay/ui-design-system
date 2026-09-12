@@ -20,7 +20,7 @@
  */
 
 .rottay-input-field[data-part='field'] {
-  container-type: inline-size;
+  container: ds-input-field / inline-size;
   display: grid;
   inline-size: 100%;
   min-inline-size: 0;
@@ -539,7 +539,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
   min-inline-size: 0;
 }
 
-@container (inline-size < 18rem) {
+@container ds-input-field (inline-size < 18rem) {
   .rottay-input.rottay-input--modern {
     --_ds-input-resolved-gap: var(--ds-input-compact-gap, var(--ds-spacing-1));
   }

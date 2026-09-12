@@ -168,9 +168,9 @@ describe('Modal advanced engine coverage', () => {
     // skin's, keyed on the state attribute the engine stamps.
     const modalBox = dialog.querySelector('[role="document"]') as HTMLDivElement;
     expect(dialog).toHaveStyle({
-      width: '100vw',
-      maxWidth: '100vw',
-      maxHeight: '100vh',
+      width: 'var(--ds-viewport-inline-size)',
+      maxWidth: 'var(--ds-viewport-inline-size)',
+      maxHeight: 'var(--ds-viewport-block-size)',
     });
     expect(modalBox.getAttribute('data-fullscreen')).toBe('true');
 

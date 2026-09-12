@@ -568,7 +568,7 @@ describe('AdaptiveOverlay', () => {
 
       // The engine Drawer paints `width` inline, so 640px would overflow a
       // 360px viewport; the phone measure must be viewport-bound instead.
-      expect(screen.getByTestId('adaptive-overlay')).toHaveAttribute('data-width', '100vw');
+      expect(screen.getByTestId('adaptive-overlay')).toHaveAttribute('data-width', 'var(--ds-viewport-inline-size)');
     });
 
     it('keeps the default width viewport-bound on a forced phone drawer', () => {
@@ -579,7 +579,7 @@ describe('AdaptiveOverlay', () => {
         </AdaptiveOverlay>
       );
 
-      expect(screen.getByTestId('adaptive-overlay')).toHaveAttribute('data-width', '100vw');
+      expect(screen.getByTestId('adaptive-overlay')).toHaveAttribute('data-width', 'var(--ds-viewport-inline-size)');
     });
 
     it('mirrors the trailing side panel to the inline-end edge in RTL', () => {

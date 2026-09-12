@@ -38,7 +38,7 @@ import React, {
 } from 'react';
 import type { AppShellProps, ShellInset, ShellInsetByPosture, ShellPosture } from '../contracts';
 import { SHELL_DEFAULTS } from '../contracts';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { NavigationMenuIcon } from '@/graphics/icons/semantic/generated/roles/navigation-menu';
@@ -364,7 +364,7 @@ export function AppShell({
             }}
             surfaceStyle={
               {
-                '--ds-shell-resolved-drawer-inline-size': `min(${sidebarInlineSize}, 100dvw)`,
+                '--ds-shell-resolved-drawer-inline-size': `min(${sidebarInlineSize}, var(--ds-viewport-inline-size))`,
                 // Sheet owns the portal position inline. The shell contributes only
                 // the runtime width that cannot be expressed from portal-inherited
                 // state; every static declaration lives in the colocated stylesheet.

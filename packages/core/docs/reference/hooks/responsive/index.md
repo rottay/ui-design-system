@@ -4,13 +4,25 @@ SSR-safe responsive behavior detection hooks for building adaptive user interfac
 
 ## Overview
 
-The responsive hooks system provides three powerful hooks for detecting and responding to viewport changes:
+ONE AUTHORITY. `useResponsive()` is the only place viewport state is derived:
+it reads a shared external store through `useSyncExternalStore`, so the seven
+`matchMedia` queries exist once per process no matter how many components ask.
+Everything below is a projection of it.
 
-1. **`useMediaQuery`** - Custom media query detection
-2. **`useBreakpoints`** - Common breakpoint detection (mobile/tablet/desktop)
-3. **`useResponsiveValue`** - Responsive values based on current breakpoint
+1. **`useResponsive`** - the snapshot: device tier, active breakpoint, pointer,
+   orientation, reduced motion, virtual-keyboard inset
+2. **`useBreakpoints`** - the device-tier flags (mobile/tablet/desktop)
+3. **`useResponsiveValue`** - a `ResponsiveValue` resolved at the current step
+4. **`usePhoneBreakpoint`** - the phone flag alone
+5. **`useMediaQuery`** - an arbitrary NON-viewport query (preference, pointer)
 
-All hooks are **SSR-safe** and return sensible defaults when rendered on the server.
+With a `ResponsiveProvider` in the tree the context answers, because it is the
+only value carrying the request's `ssrViewport` hint and the virtual-keyboard
+inset. Without one the shared store answers, so a provider-less consumer reports
+the real viewport instead of degrading to a phone.
+
+All hooks are **SSR-safe**: a request that declared no viewport hint gets the
+mobile-first baseline.
 
 ---
 
@@ -127,31 +139,33 @@ function Dashboard() {
 
 ### `useResponsiveValue`
 
-Get responsive values that change based on the current breakpoint.
+Resolve a `ResponsiveValue` at the current breakpoint.
 
 ```typescript
-interface ResponsiveValueConfig<T> {
-  base: T;   // Always applies (mobile-first)
-  sm?: T;    // 640px+
-  md?: T;    // 768px+
-  lg?: T;    // 1024px+
-  xl?: T;    // 1280px+
-  '2xl'?: T; // 1536px+
-}
+type ResponsiveValue<T> = T | {
+  base?: T; xs?: T;            // 0px (aliases of each other; `phone` too)
+  sm?: T;                       // 640px+  (alias: `tablet`)
+  md?: T;                       // 768px+
+  lg?: T;                       // 1024px+ (alias: `desktop`)
+  xl?: T;                       // 1280px+
+  '2xl'?: T;                    // 1536px+
+};
 
-function useResponsiveValue<T>(values: ResponsiveValueConfig<T>): T
+function useResponsiveValue<T>(values: ResponsiveValue<T> | undefined): T | undefined
 ```
+
+ONE CONTRACT. `ResponsiveValue` is the same type the layout primitives accept on
+`padding`, `gap`, `columns` and every other responsive prop, and the same one
+`generateResponsiveCSS` projects to CSS channels. The hook used to declare a
+`ResponsiveValueConfig` of its own — `base` required, no `xs`, no device
+aliases — which is the second vocabulary this replaced.
 
 **Breakpoint Cascade:**
 
-The hook follows a mobile-first approach and returns the most specific value that matches:
-
-1. Check `2xl` (1536px+)
-2. Check `xl` (1280px+)
-3. Check `lg` (1024px+)
-4. Check `md` (768px+)
-5. Check `sm` (640px+)
-6. Fall back to `base`
+Mobile-first: the answer is the value declared at the active breakpoint, or at
+the nearest declared step below it. `undefined` means the ladder declares
+nothing at or below that step — which is a real answer, not a failure: it is how
+`{ lg: 4 }` says "no columns below 1024px".
 
 **Examples:**
 
@@ -261,11 +275,13 @@ function App() {
 
 ```tsx
 function ResponsiveImage() {
+  // `base` is declared, so the ladder always answers; `?? 'small'` is the
+  // honest floor for a ladder that might not.
   const imageSize = useResponsiveValue({
     base: 'small',
     md: 'medium',
     lg: 'large',
-  });
+  }) ?? 'small';
 
   const imageSizes = {
     small: 'image-sm.jpg',
@@ -283,9 +299,11 @@ function ResponsiveImage() {
 
 All hooks are SSR-safe and handle server-side rendering correctly:
 
-- **`useMediaQuery`**: Returns `false` on server
-- **`useBreakpoints`**: Returns all `false` on server (except combinations)
-- **`useResponsiveValue`**: Returns `base` value on server
+- **`useResponsive`**: answers the request's `ssrViewport` hint, or the
+  mobile-first baseline when the request declared nothing
+- **`useBreakpoints`** / **`usePhoneBreakpoint`**: the same snapshot, projected
+- **`useResponsiveValue`**: the value declared at that step, or below it
+- **`useMediaQuery`**: returns `false` on server
 
 This ensures:
 1. No hydration mismatches
@@ -377,3 +395,17 @@ const { isMobile, isDesktop }: UseBreakpointsResult = useBreakpoints();
 - Public React hook facade: `packages/core/src/infrastructure/runtime/facade/react-hooks/`
 - Theming: `packages/core/src/infrastructure/runtime/theming/`
 - Design Tokens: `packages/core/src/foundation/tokens/`
+
+---
+
+## Where the CSS half lives
+
+A responsive PROP is not resolved in JavaScript at all. `generateResponsiveCSS`
+projects it onto governed channels — one `--_ds-rsp-*` custom property per
+declared breakpoint plus a `data-ds-responsive` token list — and one static
+sheet (`foundation/tokens/css/foundation/responsive/channels`) owns every
+`@media` prelude. `Show`, `Hide` and `ResponsiveSlot` do the same for
+visibility, against `foundation/tokens/css/foundation/responsive/visibility`.
+
+Neither injects a `<style>` element per instance, so a strict CSP cannot drop
+them and the cascade can rank them.

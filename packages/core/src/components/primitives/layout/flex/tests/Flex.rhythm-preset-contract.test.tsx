@@ -33,6 +33,7 @@ import {
   type FlexProps,
 } from "../contracts";
 import { TENANT_THEME_RHYTHM_FACTORS } from "../../../../../foundation/contracts/composition/tenants/themes/tenant-theme";
+import { responsiveCss } from "@tests/support/responsive";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const LAYOUT_PRIMITIVES = resolve(
@@ -205,12 +206,19 @@ describe("leg 3 -- direction, wrapping and logical properties are untouched", ()
  */
 const RHYTHM_READ = "var(--ds-rhythm-effective-scale, 1)";
 
-/** The emitted scoped CSS, with the per-render element id normalized away. */
+/**
+ * The declarations the rendered Flex's channels stand for.
+ *
+ * A responsive prop no longer renders a `<style>` element: it publishes one
+ * `--_ds-rsp-*` custom property per declared breakpoint and names those steps
+ * in `data-ds-responsive`, and ONE static sheet owns the preludes. Every pin
+ * below therefore measures the same declarations through the same cascade.
+ */
 function emittedCSS(ui: React.ReactElement): string {
   const { container, unmount } = render(ui);
-  const css = container.querySelector("style")?.textContent ?? "";
+  const css = responsiveCss(container, SELECTOR);
   unmount();
-  return css.replace(/"flex-[^"]*"/g, '"flex-ID"');
+  return css;
 }
 
 interface ResponsiveScenario {
@@ -222,7 +230,7 @@ interface ResponsiveScenario {
   readonly scaled: string;
 }
 
-const SELECTOR = '[data-responsive-id="flex-ID"]';
+const SELECTOR = "[data-ds-responsive]";
 
 /** Builds the generator's own output shape without re-deriving its values. */
 function block(base: string, media?: readonly [number, string]): string {

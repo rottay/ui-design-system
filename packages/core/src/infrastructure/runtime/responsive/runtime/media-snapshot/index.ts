@@ -196,33 +196,95 @@ function readLiveSnapshot(): ResponsiveMediaSnapshot {
   return cached;
 }
 
+/**
+ * Subscribe to one query, tolerating a partial `MediaQueryList`.
+ *
+ * A hostile or half-implemented list can ATTACH and then throw, so the modern
+ * contract is rolled back before the legacy one is tried: without that, a
+ * partial implementation leaves a listener nobody can remove and the teardown
+ * that follows throws instead of finishing. (Inherited from the spatial
+ * viewport hook this store replaced, where it was the certified behaviour.)
+ */
 function subscribeToMediaQuery(query: MediaQueryList, listener: () => void): () => void {
-  if (typeof query.addEventListener === 'function') {
-    query.addEventListener('change', listener);
-    return () => query.removeEventListener('change', listener);
+  try {
+    if (typeof query.addEventListener === 'function') {
+      query.addEventListener('change', listener);
+      return () => {
+        try {
+          query.removeEventListener('change', listener);
+        } catch {
+          // A detached list cannot block teardown.
+        }
+      };
+    }
+  } catch {
+    try {
+      query.removeEventListener?.('change', listener);
+    } catch {
+      // Continue to the only remaining subscription contract.
+    }
   }
-  if (typeof query.addListener === 'function') {
-    query.addListener(listener);
-    return () => query.removeListener(listener);
+
+  try {
+    if (typeof query.addListener === 'function') {
+      query.addListener(listener);
+      return () => {
+        try {
+          query.removeListener(listener);
+        } catch {
+          // As above.
+        }
+      };
+    }
+  } catch {
+    try {
+      query.removeListener?.(listener);
+    } catch {
+      // Missing viewport evidence stays conservative.
+    }
   }
+
   return () => {};
 }
 
-/** Subscribe to every governed viewport query through one shared listener set. */
-export function subscribeResponsiveMedia(onStoreChange: () => void): () => void {
-  listeners.add(onStoreChange);
+let mediaCleanups: Array<() => void> = [];
+let attachedTo: unknown = null;
+
+function detachFromMedia(): void {
+  for (const cleanup of mediaCleanups) cleanup();
+  mediaCleanups = [];
+  attachedTo = null;
+}
+
+function attachToMedia(): void {
   const live = ensureQueries();
-  const cleanups = live
-    ? Object.values(live).map((query) =>
-        subscribeToMediaQuery(query, () => {
-          readLiveSnapshot();
-          for (const listener of listeners) listener();
-        }),
-      )
-    : [];
+  if (!live) return;
+  const notify = (): void => {
+    readLiveSnapshot();
+    for (const listener of [...listeners]) listener();
+  };
+  mediaCleanups = Object.values(live).map((query) => subscribeToMediaQuery(query, notify));
+  attachedTo = queriesSource;
+}
+
+/**
+ * Subscribe to every governed viewport query through one shared listener set.
+ *
+ * The seven `matchMedia` listeners are attached ONCE, for the whole process,
+ * and dropped when the last subscriber leaves. Attaching them per subscriber
+ * instead -- which is what this did while the provider was the only consumer --
+ * makes one viewport change cost O(subscribers squared) notifications, and
+ * every responsive hook is a subscriber now.
+ */
+export function subscribeResponsiveMedia(onStoreChange: () => void): () => void {
+  if (listeners.size === 0 || attachedTo !== queriesSource) {
+    detachFromMedia();
+    attachToMedia();
+  }
+  listeners.add(onStoreChange);
   return () => {
     listeners.delete(onStoreChange);
-    for (const cleanup of cleanups) cleanup();
+    if (listeners.size === 0) detachFromMedia();
   };
 }
 
@@ -233,6 +295,7 @@ export function getResponsiveMediaSnapshot(): ResponsiveMediaSnapshot {
 
 /** Drop the memoized query set. The store rebuilds it on the next read. */
 export function resetResponsiveMediaStore(): void {
+  detachFromMedia();
   queries = null;
   queriesSource = null;
   cached = UNHINTED_MEDIA_SNAPSHOT;

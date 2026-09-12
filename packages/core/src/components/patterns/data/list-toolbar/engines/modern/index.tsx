@@ -64,7 +64,7 @@ import type {
   ActiveFilterState,
   DensityKey,
 } from '../../contracts';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================

@@ -190,9 +190,7 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
             : []),
         ]
       : [];
-    const responsive = sizeIsResponsive
-      ? generateResponsiveCSS(`textarea-${reactId.replace(/:/g, '')}`, responsiveEntries)
-      : null;
+    const responsive = generateResponsiveCSS(responsiveEntries);
 
     // Synchronize the forwarded ref with our internal textareaRef so the
     // parent can access the DOM node regardless of ref type (callback or object).
@@ -284,9 +282,9 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
         data-resize={resize === false ? 'none' : typeof resize === 'string' ? resize : 'theme'}
         style={style}
       >
-        {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
         <textarea
-          {...(responsive?.attrs ?? {})}
+          {...responsive.attrs}
+          style={{ ...responsive.channels }}
           ref={textareaRef}
           id={controlId}
           name={name}

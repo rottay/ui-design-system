@@ -295,7 +295,7 @@ describe('useCollectionWorkspace', () => {
     const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
       ...baseConfig,
       presentation: {
-        responsive: { mobileBreakpoint: 1024 },
+        responsive: { mobileBreakpoint: 'lg' },
       },
     };
 
@@ -1738,7 +1738,7 @@ describe('CollectionWorkspaceSurface', () => {
               },
               presentation: {
                 responsive: {
-                  mobileBreakpoint: 768,
+                  mobileBreakpoint: 'md',
                   mobileView: 'cards',
                 },
               },
