@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-12T18:26:23.718Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-12T19:24:13.176Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,7 +28,7 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-12T18:26:23.718Z.
+**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-12T19:24:13.176Z.
 
 **measured on the 8-family sample: 17/22 move at least one sampled family** — MEASURED by that run.
 
@@ -102,13 +102,25 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `./server#TenantThemeArtifactProvenance` | added: the artifact's serialized provenance metadatum, `{ entries }`; the shape `TenantThemeArtifact.provenance` publishes | minor | `r2-publication-parity.md` |
 | export | `./server#TenantThemeArtifactProvenanceEntry` | added: one serialized entry — `{ ref, provenance, tier, effectiveLeaves }`; deliberately NOT `authoredValue`, so an artifact carries no raw authored payload | minor | `r2-publication-parity.md` |
 | export | `./server#TenantThemeDocumentV2Compilation` | added: the adapter's result — `{ artifact, admission, ledger }`; the admission is the door's own report so a surface never re-derives which decisions went unlit, and the ledger is the same one serialized inside the artifact | minor | `r2-publication-parity.md` |
+| export | `.#Adapt` | added; per-posture deltas of a family's adaptation | major | `inv-07-adaptation-slots.md` |
 | export | `.#AdaptiveConfig` | removed; superseded by SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#artifactProvenanceOf` | added: projects a resolved ledger onto the artifact metadatum, dropping every authored value; `undefined` when the compile resolved no ledger, which is what keeps pre-existing artifacts unchanged | minor | `r2-publication-parity.md` |
 | export | `.#assembleTenantThemeArtifact` | added: the ONE artifact builder both publication transports share — digest, scopes, chart floor, CSS and the engine projection stated once; it takes `{ intent, identity, verticalEnvelope, document }` and reads provenance only from the resolution, never from a parameter beside the intent | minor | `r2-publication-parity.md` |
 | export | `.#Breakpoint` | removed; the three device bands are ResponsiveDeviceAlias | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#CollectionWorkspaceProps` | changed; `adaptive` takes SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
+| export | `.#ContainerPosture` | changed; the middle band is `regular`, not `standard` | major | `inv-07-adaptation-slots.md` |
+| export | `.#DataTableAdaptation` | added; columns, presentation and rowActions per posture | major | `inv-07-adaptation-slots.md` |
+| export | `.#DataTableColumnAdaptation` | added; keep, priority and shrink by column key | major | `inv-07-adaptation-slots.md` |
+| export | `.#DataTableMessages` | changed; `rowActions` names the row-actions menu and swipe disclosure | major | `inv-07-adaptation-slots.md` |
 | export | `.#DataTablePatternProps` | changed; `mobileBreakpoint` documents the CONTAINER width, and the viewport fallback reads the one snapshot | major | `inv-04-one-responsive-mechanism.md` |
+| export | `.#DataTablePatternProps` | changed; `adapt` added, `mobileBreakpoint` deprecated with no default | major | `inv-07-adaptation-slots.md` |
+| export | `.#DataTablePresentation` | added; table / cards / list | major | `inv-07-adaptation-slots.md` |
+| export | `.#DataTableRowActions` | added; inline / menu / swipe | major | `inv-07-adaptation-slots.md` |
 | export | `.#GuidedDraftFormSurfaceProps` | changed; `adaptive` takes SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
+| export | `.#Posture` | added; the viewport and container posture names in one union | major | `inv-07-adaptation-slots.md` |
+| export | `.#resolveActiveResponsivePosture` | changed; owned by the adaptation runtime, same input and result | major | `inv-07-adaptation-slots.md` |
+| export | `.#resolveContainerPosture` | changed; answers `regular` for the middle band | major | `inv-07-adaptation-slots.md` |
+| export | `.#ResolvedPosture` | added; the viewport posture and the measured container posture of one instance | major | `inv-07-adaptation-slots.md` |
 | export | `.#resolvePosture` | removed; superseded by resolveSurfacePosture | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#resolveSurfacePosture` | added; pure posture resolution at one breakpoint | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#ResponsiveValue` | changed; one contract: scalar or breakpoint object, `xs`/`base` and the device aliases on one ladder | major | `inv-04-one-responsive-mechanism.md` |
@@ -124,6 +136,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `.#UseAdaptivePostureResult` | removed; with the hook | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#usePhoneBreakpoint` | added; the phone projection of the one snapshot | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#useResponsiveValue` | changed; takes ResponsiveValue<T>, returns T / undefined | major | `inv-04-one-responsive-mechanism.md` |
+| export | `.#ViewportPosture` | added; phone / tablet / desktop | major | `inv-07-adaptation-slots.md` |
 | export | `.#WorkspaceResponsiveConfig` | changed; `mobileBreakpoint` is a ladder step, not a pixel count | major | `inv-04-one-responsive-mechanism.md` |
 
 Also pending, declaring no public surface movement: `der-02-material-arm-non-vacuity.md` (patch), `emi-02-artifact-recipe-profile.md` (patch), `evi-02-witness-per-cell.md` (patch), `major-canonical-tree.md` (major), `r3-honest-verification.md` (patch), `seeds-render-mode.md` (patch), `two-track-operating-protocol.md` (patch), `typed-theme-catalog.md` (major), `v96-gate-repairs.md` (patch).
@@ -134,7 +147,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 101/160 work orders done (63%)
+## Work-order burn-down — 102/160 work orders done (64%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -152,7 +165,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [derivation](./derivation.md) | 5 | 1 | 1 | 7 |
 | [family-cuts](./family-cuts.md) | 1 | 0 | 14 | 15 |
 | [emission-mount](./emission-mount.md) | 2 | 0 | 1 | 3 |
-| [platform-invariants](./platform-invariants.md) | 1 | 1 | 6 | 8 |
+| [platform-invariants](./platform-invariants.md) | 2 | 0 | 6 | 8 |
 | [retire](./retire.md) | 0 | 0 | 5 | 5 |
 | [evidence-graph](./evidence-graph.md) | 1 | 1 | 3 | 5 |
 
@@ -163,7 +176,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | A · The apps can build | reached | WO-CON-04, WO-CON-05 | none | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | not reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | WO-FAM-01, WO-EVI-05 | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 60 work orders of the audit-2026-09-05 programme | 34 of 60 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 60 work orders of the audit-2026-09-05 programme | 33 of 60 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -191,7 +204,6 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | --- | --- | --- | --- | --- |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | Kimi K3 | 2026-09-11 | 2026-09-12 14:50 — PIN ADJUDICATION landed 38818c36e (2026-09-12): the 2 profile-channel pins orphaned by the EMI-02 close move to WO-DER-06 with evidence (both are selection ids consumed as data — 'provenance, not paint'; no CSS var() route exists, so no discharge was fabricated). 44 pins stand: DER-06 28, INV-07 10, FAM-01..13 6. META open-owner law green again (liveness 106/106). Also: responsive-single-authority + drill now blocking pre-build in the CI manifest (INV-04's deliberate gap closed). |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | 2026-09-11 11:09 — CLIENT-PROVIDER CONNECTION LANDED (3 writer commits + integrator test + integration; audited by Kimi K3 under the temporary owner-authorized auditor substitution, Fable quota-exhausted ~20h). TenantThemeArtifact carries its runtime block (EngineVisualDeclaration from the SAME lowering; changeset der-07-artifact-runtime-half.md per CON-05, digest re-anchor measured - 0/65/25 delta channels unchanged, envelope digests unchanged); provider publishes the mounted artifact's own half; resolver no longer returns artifact:null. Runtime proof in real browser 3/3 candidates (posture/motion/density/recipe/tokens differ through the mount, not just CSS); negative control (seed is paint, never reaches useTokens); preview/publication byte parity per candidate; SSR receipt + flight-boundary byte comparison prove the client uses the server's artifact without recompiling. 99-item-1 identity negative ADDED BY DT and green: artifact A + runtime B (same engine/profile ids, foreign governed value) refused at mount; digest covers the runtime half. REGISTERED: (a) the showroom Playwright leg stays blocked by packages/core/dist/index.js carrying use-client into RSC consumers (pre-existing at base, reproduced byte-identical) - repairing it is a public-contract addition that needs its own WO (DT flags it to the owner as an identified need); (b) docs-engineering tenancy/contracts edits remain uncommitted in that repo's dirty tree; (c) past showroom typechecks via symlinked node_modules read MAIN's core dist, not the lot's - audits now require real installs/farms. The WO stays open with exactly one obligation: the recorded owner pick with digest (D-30 deferred to the branding stage). |
-| WO-INV-07 | Adaptation slots: one typed `adapt` contract per family for viewport and container postures | daniel | 2026-09-12 | (no entries — log via `progress`) |
 
 ## Next up (todo, dependencies satisfied)
 
@@ -199,6 +211,17 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | --- | --- | --- | --- | --- |
 | WO-DER-06 | Vertical presets as decisions; BrandTheme retired; neutral foundation without opinion | L | derivation | audit-2026-09-05 |
 | WO-EMI-03 | Non-CSS token emitter for mobile readiness | M | emission-mount | audit-2026-09-05 |
+| WO-FAM-01 | Family cut: button, checkbox, radio, switch/toggle, segmented | L | family-cuts | audit-2026-09-05 |
+| WO-FAM-02 | Family cut: input, textarea, password, otp, tag-input, input-number, form-field and the form runtime | L | family-cuts | audit-2026-09-05 |
+| WO-FAM-03 | Family cut: select, auto-complete, cascader, tree-select, mentions, transfer, pickers and color-picker with shared listbox and calendar kernels | XL | family-cuts | audit-2026-09-05 |
+| WO-FAM-04 | Family cut: modal, drawer, sheet, dialogs, popover, dropdown, hover-card, tooltip, tour and one Notifier | L | family-cuts | audit-2026-09-05 |
+| WO-FAM-05 | Family cut: menu, tabs, breadcrumb, pagination, steps and sidebar navigation | M | family-cuts | audit-2026-09-05 |
+| WO-FAM-06 | Family cut: card, table, badge, tag, avatar, tree, list, descriptions and typography compounds | L | family-cuts | audit-2026-09-05 |
+| WO-FAM-07 | Family cut: layout primitives with one implementation and a logical API | M | family-cuts | audit-2026-09-05 |
+| WO-FAM-08 | Family cut: data-table, toolbars, column settings, saved views, widget-board, kanban, calendar-view, file-manager and shared DnD/export kernels | XL | family-cuts | audit-2026-09-05 |
+| WO-FAM-09 | Family cut: charts with one series paint resolver and pure geometry | L | family-cuts | audit-2026-09-05 |
+| WO-FAM-10 | Family cut: forms and record surfaces on the ledger doctrine, headers with one contract | L | family-cuts | audit-2026-09-05 |
+| WO-FAM-11 | Family cut: shells and workspace (app-shell regions, page-shell, workspace-shell, search, command palette, keyboard owner) | L | family-cuts | audit-2026-09-05 |
 | WO-INV-01 | One direction authority and logical geometry everywhere | M | platform-invariants | audit-2026-09-05 |
 | WO-INV-02 | One i18n catalog with an English floor, locale-aware formatting and IME-safe submit | M | platform-invariants | audit-2026-09-05 |
 | WO-INV-03 | Global accessibility floor: forced-colors, contrast posture, axe per family, no critical baseline | M | platform-invariants | audit-2026-09-05 |
@@ -237,26 +260,15 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-GAT-11 | dependencies: WO-INV-01, WO-INV-03, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-GAT-12 | dependencies: WO-EVI-01, WO-RET-03; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
 | WO-SKIN-08 | dependencies: WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11, WO-EVI-02; phase 6 is locked: Awaiting all prior wave checkpoints and explicit owner GO for system certification. |
-| WO-FAM-01 | dependencies: WO-INV-07 |
-| WO-FAM-02 | dependencies: WO-INV-07 |
-| WO-FAM-03 | dependencies: WO-INV-07 |
-| WO-FAM-04 | dependencies: WO-INV-07 |
-| WO-FAM-05 | dependencies: WO-INV-07 |
-| WO-FAM-06 | dependencies: WO-INV-07 |
-| WO-FAM-07 | dependencies: WO-INV-07 |
-| WO-FAM-08 | dependencies: WO-INV-07 |
-| WO-FAM-09 | dependencies: WO-INV-07 |
-| WO-FAM-10 | dependencies: WO-INV-07 |
-| WO-FAM-11 | dependencies: WO-INV-07 |
 | WO-RET-01 | dependencies: WO-FAM-01, WO-FAM-02, WO-FAM-03, WO-FAM-04, WO-FAM-05, WO-FAM-06, WO-FAM-07, WO-FAM-08, WO-FAM-09, WO-FAM-10, WO-FAM-11 |
 | WO-RET-02 | dependencies: WO-FAM-06 |
 | WO-RET-03 | dependencies: WO-EVI-01 |
 | WO-RET-04 | dependencies: WO-DER-06, WO-RET-01 |
 | WO-EVI-05 | dependencies: WO-FAM-01 |
 | WO-INV-06 | dependencies: WO-FAM-10, WO-FAM-11 |
-| WO-FAM-12 | dependencies: WO-FAM-06, WO-FAM-07, WO-INV-07 |
+| WO-FAM-12 | dependencies: WO-FAM-06, WO-FAM-07 |
 | WO-INV-08 | dependencies: WO-INV-05 |
-| WO-FAM-13 | dependencies: WO-FAM-08, WO-FAM-12, WO-INV-07, WO-INV-08 |
+| WO-FAM-13 | dependencies: WO-FAM-08, WO-FAM-12, WO-INV-08 |
 | WO-FAM-14 | dependencies: WO-INV-05 |
 
 ## Sequencing hazards (mechanically enforced)
@@ -368,3 +380,4 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-CON-04 | 2026-09-09 | merge f05c4e275; consumer-proof reparado (packed leg sin alias, auditPublished via TS checker, drills con gemelos verdes); Codex PASS + K3 confirm LANDING PASS /private/tmp/rottay-con04-k3-audit.md; DEL-03 repros atrapadas nombrando Button/DesignSystemProvider |
 | WO-CON-05 | 2026-09-09 | DEL-04 reparado en el lote R3 (merge c295af9bb, auditado); CON-04 cierra la cadena de verificacion honesta de consumidores; evidencia en /private/tmp/rottay-con04-k3-audit.md |
 | WO-CON-07 | 2026-09-12 | Landed 497a7a1a8 (writer f7d83b2bf, Opus/claude-opus-5 on .claude-daniel, session 8a9c0c40 resumed after the ENOTFOUND cut; audited ACCEPT by Kimi K3 under the temporary owner-authorized auditor substitution; audit/102 handoff + R102-01 applied). BOUNDARY: @rottay/design-system/server re-exports 8 values + 2 types from the pure engine-identity owner (contracts/* was machine-refused for runtime values: public-api gate 'contracts may export types only'; root barrel keeps use client; PRIMARY_ENGINE deliberately unpublished — engine-wiring PRIMARY_ENGINE_READERS closes that set). R102-01 FIXED + VERIFIED by auditor's reconciled probe on the exact detector hash: await-import and require destructuring now flag (were false negatives), import type excluded (was false positive), 0/4 mismatches; 13 twin arms + 7/7 drill tests; detector docblock states conservative classification, not graph knowledge. SWEEP: 10 boundary symbols policed, 0 server modules on the client root; red/green plant demonstrated. FARM OF THE LOT'S OWN PACKED DIST (/tmp/con07-farm, npm pack tarball, no source alias): dist/index.js carries use client, dist/server.js does not; farm tsc 0 over all 10 symbols. F-20 DIAGNOSIS BY NAME + BROWSER LEG reproduced by the auditor against the farm (next build EXIT=0, next start :7099): 200 /design-cards/manifest (was the production-build failure 'IMPLEMENTED_ENGINE_NAMES is not iterable'), 200 /foundations (engines in server-rendered HTML), 200 /, 200 /probe-ground/identity (already-green identity route), 200 /primitives/inputs/button — bounded evidence, the showroom as a whole is NOT declared green. Second same-class instance found and fixed (/foundations via SHOWROOM_ENGINES re-published by a use-client module — now reads the boundary). Gates: tsc 0, typecheck:tests 0 baseline 0, structure:check 0 findings, contract-changeset --base=72eabb9e5 OK, changeset with 10-row contract-diff, consumer-contract rows unmoved (120 subpaths, 17 guaranteed, showroom allowSubpaths baseline stays 9), decisions-lit:check green on the merged tree, diff --check clean, roadmap untouched by the writer. New registered BASE-RED (pre-existing at base 72eabb9e5, blocks prepack): runtime-hardening:structural 'WO-CRA-15 dependency authority drifted' + stale browser-evidence fingerprint — unrelated to this lot's write set. Contributes the browser leg WO-EMI-02's F-20 evidence needs; closes nothing beyond its own scope. |
+| WO-INV-07 | 2026-09-12 | Landed 4864d32f0 (writer bc9886a6f Opus/claude-daniel; audited ACCEPT by Kimi K3, temporary owner-authorized substitution). R4 effective closure scope VERIFIED: (1) SSR phone hint renders cards with the 3 declared columns (data-presentation=cards, data-posture=phone, no <table>; desktop hint renders table) - PatternDataTable.adapt-ssr 2/2; (2) a 320px container flips data-posture to 'desktop compact' + cards WITHOUT viewport change, 1200px flips back (adapt suite 7/7; stubbed ResizeObserver - bounded, real-browser proof rides with EVI-05); (3) posture census = 1 vocabulary (11 sets, 0 foreign names; drill plants 'standard' and gets 2); (4) reference implementation complete (keep/priority/shrink, table|cards|list, inline|menu|swipe with aria-expanded) from the SAME column model - no second component; (5) adapt-slot gate green for data-table, 7 layout-sensitive families declared (data-table FAM-08, card FAM-06, grid FAM-07, form FAM-02, app-shell FAM-11, modal FAM-04, charts FAM-09), drills 16/16 incl. red-before; the per-cut green clause stays rerouted per the R4 amendment; (6) family-cut template sections 1.5 + 4.1; (7) consumer fixture 29/29 (app-side roles-table: 3 kept columns, cards at 390px). Closes F-35 partial (named containers + one posture vocabulary at component level). DT adjudications registered in the merge message: data-posture token list; kernel/adaptation path; family list in the adaptation contract (not catalog fan-out); 'regular' breaking rename with tenant ladder untouched; 640-767px standalone behaviour change in changeset. Pins: 10 stay pinned with honest verdicts (CSS preludes cannot read variables; posture channels consumed as data) - reroute to WO-FAM-07 (breakpoints x6) + WO-FAM-12 (posture x4) dispatched as a micro-lot per the META open-owner law. Gates: 86/86 data-table, liveness 106/106, dispositions OK, single-authority OK, tsc 0, typecheck:tests 0, structure 0, contract-changeset --base=f5686c288 OK (major + contract-diff), decisions-lit fresh, entrypoints 76 PASS (no ceiling edited), eslint 0 errors, axis-difference OK, family-cut drills 40/47 = base (7 registered inline-paint base-reds), diff --check clean. NOT done (registered): swipe reveal has no Modern skin animation; docs-engineering external repo untouched. |

@@ -5401,7 +5401,7 @@
    "lane": "platform-invariants",
    "order": 7,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-04",
     "WO-FAM-00",
@@ -5414,7 +5414,9 @@
    "notes": "wave 3; closes F-35 (partial) | 2026-09-10: owner approved the WO-INV-04 edge (full dependency; the container half waits for named containers, no early half-enabling). The R4 close-scope amendment stands.",
    "claimedBy": "daniel",
    "claimedAt": "2026-09-12",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-12",
+   "evidence": "Landed 4864d32f0 (writer bc9886a6f Opus/claude-daniel; audited ACCEPT by Kimi K3, temporary owner-authorized substitution). R4 effective closure scope VERIFIED: (1) SSR phone hint renders cards with the 3 declared columns (data-presentation=cards, data-posture=phone, no <table>; desktop hint renders table) - PatternDataTable.adapt-ssr 2/2; (2) a 320px container flips data-posture to 'desktop compact' + cards WITHOUT viewport change, 1200px flips back (adapt suite 7/7; stubbed ResizeObserver - bounded, real-browser proof rides with EVI-05); (3) posture census = 1 vocabulary (11 sets, 0 foreign names; drill plants 'standard' and gets 2); (4) reference implementation complete (keep/priority/shrink, table|cards|list, inline|menu|swipe with aria-expanded) from the SAME column model - no second component; (5) adapt-slot gate green for data-table, 7 layout-sensitive families declared (data-table FAM-08, card FAM-06, grid FAM-07, form FAM-02, app-shell FAM-11, modal FAM-04, charts FAM-09), drills 16/16 incl. red-before; the per-cut green clause stays rerouted per the R4 amendment; (6) family-cut template sections 1.5 + 4.1; (7) consumer fixture 29/29 (app-side roles-table: 3 kept columns, cards at 390px). Closes F-35 partial (named containers + one posture vocabulary at component level). DT adjudications registered in the merge message: data-posture token list; kernel/adaptation path; family list in the adaptation contract (not catalog fan-out); 'regular' breaking rename with tenant ladder untouched; 640-767px standalone behaviour change in changeset. Pins: 10 stay pinned with honest verdicts (CSS preludes cannot read variables; posture channels consumed as data) - reroute to WO-FAM-07 (breakpoints x6) + WO-FAM-12 (posture x4) dispatched as a micro-lot per the META open-owner law. Gates: 86/86 data-table, liveness 106/106, dispositions OK, single-authority OK, tsc 0, typecheck:tests 0, structure 0, contract-changeset --base=f5686c288 OK (major + contract-diff), decisions-lit fresh, entrypoints 76 PASS (no ceiling edited), eslint 0 errors, axis-difference OK, family-cut drills 40/47 = base (7 registered inline-paint base-reds), diff --check clean. NOT done (registered): swipe reveal has no Modern skin animation; docs-engineering external repo untouched."
   },
   {
    "id": "WO-INV-08",
