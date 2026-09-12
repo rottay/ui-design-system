@@ -1,8 +1,15 @@
 /**
- * Regenerate first-party vertical CSS artifacts from their authored source.
+ * Regenerate first-party vertical artifacts from their authored source.
  *
  * Each artifact (`src/foundation/tokens/css/facade/artifacts/<slug>/index.css`) is a BUILD OUTPUT:
  *   index.css = compileThemeIntent(staticThemeIntent(<slug>))
+ *
+ * The SAME compile has a non-CSS half, and it is written here too:
+ *   src/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.ts
+ *     = compileThemeIntent(staticThemeIntent(<slug>)).compiled.runtime
+ * A code-owned vertical has no artifact row for the runtime to read, so the
+ * governed recipe selection would otherwise have to be re-derived from the
+ * authored theme by a second reader. One compile, two outputs, one gate.
  *
  * The brand compiler owns every theme variable the artifact carries (palette,
  * typography, surfaces, chrome) and every mode block, so the artifact is a pure
@@ -58,6 +65,80 @@ const artifacts = FIRST_PARTY_VERTICAL_ROSTER.map((row, index) => {
 });
 if (artifacts.length !== FIRST_PARTY_ARTIFACT_SPECS.length) {
   throw new Error('First-party artifact projection length differs from the roster');
+}
+
+/** Every governed selection the runtime half of an artifact publishes. */
+const RUNTIME_FIELDS = ['recipeProfile'];
+
+function renderBlock(runtime) {
+  const fields = RUNTIME_FIELDS.filter((field) => runtime[field] !== undefined).map(
+    (field) => `${field}: ${JSON.stringify(runtime[field])}`,
+  );
+  return fields.length === 0 ? 'Object.freeze({})' : `Object.freeze({ ${fields.join(', ')} })`;
+}
+
+/**
+ * The FORMAT of the generated runtime module, stated ONCE so the writer and the
+ * `--check` comparison are the same function: a generator whose expected output
+ * is spelled twice can pass its own check against a file it would never write.
+ *
+ * @param {ReadonlyArray<{ slug: string, runtime: Record<string, unknown> }>} rows
+ *   One row per first-party vertical, in roster order.
+ * @param {string} regenerateCommand
+ * @returns {string} the exact bytes of the generated module.
+ */
+function renderFirstPartyArtifactRuntimeModule(rows, regenerateCommand) {
+  const entries = rows.map((row) => `  ${row.slug}: ${renderBlock(row.runtime)},`);
+  return [
+    '/* GENERATED — do not edit */',
+    '/**',
+    ' * @fileoverview The runtime half of every first-party vertical artifact.',
+    ' *',
+    ' * This file is a BUILD OUTPUT of the SAME compile that writes',
+    ' * `src/foundation/tokens/css/facade/artifacts/<slug>/index.css`:',
+    ' *   block = compileThemeIntent(staticThemeIntent(<slug>)).compiled.runtime',
+    ' *',
+    ' * WHY IT EXISTS. A code-owned vertical ships its CSS inside `styles.css`, so',
+    ' * the runtime has no artifact row to read the non-CSS half off — and a',
+    ' * governed SELECTION is not paint, so no stylesheet can hand it to React.',
+    ' * The runtime used to re-derive that selection from the authored BrandTheme,',
+    ' * which made the artifact and the product two independent readers of one',
+    ' * decision. This is the artifact\'s own block, materialized for import',
+    ' * exactly as its variables are materialized for loading.',
+    ' *',
+    ` * Regenerate: ${regenerateCommand}`,
+    ' *',
+    ' * @module Compilers/TenantCss/ArtifactRuntime',
+    ' * @category Compilers',
+    ' * @package @rottay/design-system',
+    ' */',
+    '',
+    "import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';",
+    '',
+    '/** The governed, non-CSS selections one vertical\'s artifact compiled. */',
+    'export interface FirstPartyArtifactRuntimeBlock {',
+    '  /** Validated recipe-profile id, absent when the vertical selects none. */',
+    '  readonly recipeProfile?: string;',
+    '}',
+    '',
+    'export const FIRST_PARTY_ARTIFACT_RUNTIME: Readonly<',
+    '  Record<FirstPartyVerticalId, FirstPartyArtifactRuntimeBlock>',
+    '> = Object.freeze({',
+    ...entries,
+    '});',
+    '',
+    '/**',
+    ' * The recipe profile a first-party vertical\'s artifact compiled, or',
+    ' * `undefined` when it selected none. Never a fallback to another vertical.',
+    ' */',
+    'export function firstPartyArtifactRecipeProfile(',
+    '  vertical: string,',
+    '): string | undefined {',
+    '  return FIRST_PARTY_ARTIFACT_RUNTIME[vertical as FirstPartyVerticalId]',
+    '    ?.recipeProfile;',
+    '}',
+    '',
+  ].join('\n');
 }
 
 function firstDiff(a, b) {
@@ -151,6 +232,8 @@ function checkGeneratedRampApca(slug, brandTheme, compiled) {
 
 let stale = 0;
 const apcaFailures = [];
+/** The non-CSS half of every compile, in roster order. */
+const runtimeRows = [];
 
 for (const spec of artifacts) {
   const { slug, brandTheme } = spec;
@@ -161,6 +244,7 @@ for (const spec of artifacts) {
     regenerateCommand: REGENERATE_COMMAND,
   });
   apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled));
+  runtimeRows.push({ slug, runtime: compiled.runtime });
 
   if (check) {
     const current = existsSync(artifactPath) ? readFileSync(artifactPath, 'utf-8') : '';
@@ -175,6 +259,36 @@ for (const spec of artifacts) {
     writeFileSync(artifactPath, output);
     console.log(`Generated artifacts/${slug}/index.css (${output.length} bytes, ${Object.keys(compiled.cssVariables).length} compiled vars).`);
   }
+}
+
+// The runtime half, written as ONE module rather than one per slug: a reader
+// needs the whole roster to answer "which profile did this vertical compile?",
+// and three files would be three imports of one fact.
+const runtimeModulePath = resolve(
+  root,
+  'src/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.ts',
+);
+const runtimeModule = renderFirstPartyArtifactRuntimeModule(runtimeRows, REGENERATE_COMMAND);
+if (check) {
+  const current = existsSync(runtimeModulePath) ? readFileSync(runtimeModulePath, 'utf-8') : '';
+  if (current !== runtimeModule) {
+    stale += 1;
+    console.error('✗ tenant-css/artifact-runtime/index.ts is out of sync with its authored source.');
+    console.error(firstDiff(current, runtimeModule));
+  } else {
+    console.log('✓ tenant-css/artifact-runtime/index.ts is up to date.');
+  }
+} else if (existsSync(runtimeModulePath) && readFileSync(runtimeModulePath, 'utf-8') === runtimeModule) {
+  // Identical bytes are NOT rewritten. This output lives under `src/`, and the
+  // generator runs after `vite build`, so touching it would make the door look
+  // newer than the bundle that was just compiled from it -- `decisions-lit`
+  // refuses that ordering, on every build, for no change at all.
+  console.log('tenant-css/artifact-runtime/index.ts is already current.');
+} else {
+  writeFileSync(runtimeModulePath, runtimeModule);
+  console.log(
+    `Generated tenant-css/artifact-runtime/index.ts (${runtimeModule.length} bytes, ${runtimeRows.length} verticals).`,
+  );
 }
 
 const newApcaFailures = apcaFailures.filter((failure) => !apcaBaseline.has(failure.key));

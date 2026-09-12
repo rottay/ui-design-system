@@ -25,7 +25,10 @@ import type {
 } from '@/foundation/contracts/composition/tenants/themes';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
-import { validateRecipeProfileSelection } from '@/foundation/tokens/ts/presentation/recipe-profiles';
+// The generated leaf, never the `tenant-css` barrel: that barrel reaches the
+// artifact renderer and therefore the whole lowering, which this runtime owner
+// must not pull into a client bundle. `public-entrypoints:check` is the guard.
+import { firstPartyArtifactRecipeProfile } from '@/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
 
 function deepFreeze<T>(value: T): T {
   if (value === null || typeof value !== 'object') {
@@ -67,10 +70,15 @@ export interface CodeOwnedGovernedBehavior {
    */
   readonly decidedChannels?: readonly string[];
   /**
-   * The validated recipe-profile id this tenant's artifact compiled (D-26).
+   * The validated recipe-profile id this vertical's ARTIFACT compiled (D-26).
    *
-   * A SELECTION, not paint -- the same id the recipes deriver publishes as its
-   * provenance channel -- so it travels on the identity-keyed behavior slot
+   * Read out of the artifact's own generated runtime block -- the non-CSS half
+   * of the compile that produced the bundled stylesheet -- and never re-derived
+   * from the authored theme here. Deriving it a second time made the document
+   * and the product two independent readers of one decision, which is only
+   * ever as true as the last person to edit one of them.
+   *
+   * A SELECTION, not paint, so it travels on the identity-keyed behavior slot
    * beside the motion dial rather than re-entering the config.
    */
   readonly recipeProfile?: string;
@@ -145,8 +153,9 @@ function declaredChannels(theme: BrandTheme): Set<string> {
 }
 
 function projectGovernedBehavior(
-  theme: BrandTheme,
+  entry: (typeof FIRST_PARTY_VERTICAL_ROSTER)[number],
 ): CodeOwnedGovernedBehavior | undefined {
+  const theme = entry.theme;
   const intensity = theme?.motion?.intensity;
   const entranceDuration = theme?.motion?.entranceDuration;
   const expressive = theme?.expressive;
@@ -158,15 +167,13 @@ function projectGovernedBehavior(
           ...(entranceDuration === undefined ? {} : { entranceDuration }),
         };
   const decidedChannels = [...declaredChannels(theme)];
-  // One validation, one answer: the same validator the recipes deriver calls for
-  // its provenance channel, so the JS selection and the compiled one cannot
-  // disagree about which profile this tenant chose. Fail-closed by the same
-  // rule -- an unknown id or a foreign schema version yields no selection.
-  const selection = validateRecipeProfileSelection(
-    theme?.recipes?.profile,
-    theme?.recipes?.schemaVersion,
-  );
-  const recipeProfile = selection.ok ? selection.profile?.id : undefined;
+  // THE ARTIFACT'S ANSWER, not this module's. The vertical's compile already
+  // validated the selection and published it as the provenance channel of the
+  // bundled stylesheet; the shipped runtime block is that same compile's
+  // non-CSS half. Re-validating `theme.recipes.profile` here would put a second
+  // reader on the decision, and the mount is what refuses a block that no
+  // longer matches its own compile.
+  const recipeProfile = firstPartyArtifactRecipeProfile(entry.slug);
   if (
     motion === undefined &&
     expressive === undefined &&
@@ -206,7 +213,7 @@ function createKnownTenant(
     features: ['*'],
     branding: { companyName: entry.name },
   }) as TenantConfig;
-  const behavior = projectGovernedBehavior(entry.theme);
+  const behavior = projectGovernedBehavior(entry);
   if (behavior) CODE_OWNED_GOVERNED_BEHAVIOR.set(config, behavior);
   return config;
 }
