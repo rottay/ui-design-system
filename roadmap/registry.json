@@ -4852,7 +4852,7 @@
    "lane": "platform-invariants",
    "order": 5,
    "size": "S",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-04"
    ],
@@ -4863,7 +4863,9 @@
    "notes": "wave 4; closes F-31, F-114; supersedes: WO-ENG-25",
    "claimedBy": "daniel",
    "claimedAt": "2026-09-12",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-12",
+   "evidence": "Landed d7fd3814c (writer fe4eabadb Opus/claude-daniel; audited ACCEPT by Kimi K3) + manifest re-anchor 82d49a2ec. Closes F-114 (lint no-motion-literals green over graphics/motion incl. ease*/steps() extension; ONE ICON_SIZE_MAP declaration, factory/semantic duplicates deleted) and F-31 for this WO's slice (0 modern TSX transition literals across all 136 engines/modern dirs - the spec's grep glob was one level shallow, honest equivalents at 0, adjudication registered; artifact --ds-motion-calm x2 >= fiche's 2; reduced-motion kill switch universal - proven by test over all 5 shipped bundles + source census: every unguarded animated sheet is frozen-engine, frozen untouched per the fence). Premium arm: view-transition recipes on --ds-motion-ease-move/enter/exit driven by motion.character (character-gate 5/5 incl. the real bug it caught - view-transition pseudo-elements escaping the wildcard, now named), neutralized under reduced motion. Effects: aurora/grid-pattern token eases; glow/gradient WAAPI loops reading the token (token-eased-loop; CRA12 PASS). toast-compounds guarded. Write-set enlargement declared+justified. Integration debt discharged in 82d49a2ec (manifest re-anchored, decisions-lit re-run 7/22). KNOWN REGRESSION OWNED: the lot grew ./primitives/message source bytes 259094 > 256096 (public-entrypoints red on main since d7fd3814c, bisected by DT) - repair lot dispatched (graph measurement; reachability fix or measured lastMove); the DT's brief omitted the gate and the audit counted PASS lines without exit codes - procedure corrected. Remaining registered: --ds-transition-* retirement (outside WO steps); ~30 modern skins with CSS keyword eases the lint does not read; skeleton compounds inline shimmer -> WO-FAM-14; constitution #20 stale drill (WO-CAT-02 deleted the validator rule) needs owner; pack-hygiene lot (fixtures in pack + packinv re-seed with real install)."
   },
   {
    "id": "WO-RET-01",
