@@ -210,6 +210,20 @@ export interface FamilyDeriver {
   derive(context: LoweringContext, below: AssembledChannels): DerivedChannels;
 }
 
+/**
+ * A family whose contest settles on the THEME, before any channel exists.
+ *
+ * `modes` is the one: it assembles the theme each mode block lowers from, so it
+ * has no `produces` and never runs in `runDerivation`. It states its rank in
+ * the same place and the same shape as a `FamilyDeriver` because the rank is
+ * what makes its contest legible, and the merge it ranks in is the same one.
+ */
+export interface ThemeLayerFamily {
+  /** The canonical family id; unique across the registry. */
+  readonly family: string;
+  readonly rank: MergeRankName;
+}
+
 /** Does `name` fall under `pattern` (exact, or prefix when it ends in `*`)? */
 export function channelMatches(name: string, pattern: ChannelPattern): boolean {
   return pattern.endsWith("*")

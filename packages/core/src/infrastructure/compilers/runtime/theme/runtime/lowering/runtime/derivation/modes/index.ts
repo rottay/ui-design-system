@@ -35,9 +35,25 @@ import { completeChromeShape } from "@/foundation/contracts/composition/tenants/
 import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { themeDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
-import type { TenantFacts } from "../../../foundation/contract";
+import type {
+  TenantFacts,
+  ThemeLayerFamily,
+} from "../../../foundation/contract";
 import { PRIMARY_SEED_FIELD } from "../../../foundation/seeds";
 import { keepTenantBaseSidebarLeaves } from "../../../foundation/sidebar";
+
+/**
+ * Where this family stands in the one ranked merge.
+ *
+ * A vertical's `modes.<mode>` overlay is a sanctioned override of its own
+ * baseline, so it outranks the derivation and loses to every tenant decision
+ * that crosses into the mode -- which is the inversion `applyModeOverlay` and
+ * `tenantDecisionsCrossingInto` implement, stated where every family states it.
+ */
+export const modesFamily: ThemeLayerFamily = {
+  family: "modes",
+  rank: "verticalOverride",
+};
 
 /** Every mode a Theme can carry a block for, in canonical order. */
 const MODES: readonly BrandThemeMode[] = Object.freeze(["light", "dark"]);
