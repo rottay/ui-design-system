@@ -1462,11 +1462,11 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     ]),
   }),
   Object.freeze({
-    owner: 'WO-INV-07',
+    owner: 'WO-FAM-07',
     classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-11',
+    registered: '2026-09-12',
     reason:
-      'real responsive adoption is already this work order\'s obligation: the breakpoint and posture channels are emitted for readers that the responsive lane has not written yet',
+      'CSS @media/@container preludes cannot read custom properties (WO-INV-07 evidence), so the only productive route is a family cut that paints or style-queries these values; the layout primitives this cut owns are where that adoption belongs, or where the channels are retired',
     channels: Object.freeze([
       '--ds-breakpoint-2xl',
       '--ds-breakpoint-lg',
@@ -1474,6 +1474,15 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-breakpoint-sm',
       '--ds-breakpoint-xl',
       '--ds-breakpoint-xs',
+    ]),
+  }),
+  Object.freeze({
+    owner: 'WO-FAM-12',
+    classification: LIVENESS.unreadEmittedNoRoute,
+    registered: '2026-09-12',
+    reason:
+      'the posture channels are consumed as data by the adaptation solver today and no stylesheet reads them; the auto-fit grids of the adaptive layout kit are their natural CSS reader, so this cut writes that paint route or retires the channels',
+    channels: Object.freeze([
       '--ds-posture-container-compact-max',
       '--ds-posture-container-standard-max',
       '--ds-posture-id',
