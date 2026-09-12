@@ -194,7 +194,7 @@ describe('resolveAdaptiveLayout', () => {
   it('resolves content modes by resolved span and posture, honoring valid hints', () => {
     const item = contract('modal', {
       contentModes: [
-        { id: 'full', minSpan: { cols: 6 }, minPosture: 'standard' },
+        { id: 'full', minSpan: { cols: 6 }, minPosture: 'regular' },
         { id: 'compact', minSpan: { cols: 3 } },
         { id: 'summary', minSpan: { cols: 1 } },
       ],
@@ -213,11 +213,11 @@ describe('resolveAdaptiveLayout', () => {
     );
     expect(hinted.placements[0].modeId).toBe('summary');
 
-    // Posture gate: full requires standard+, so compact posture demotes even
+    // Posture gate: full requires regular+, so compact posture demotes even
     // at a wide span.
     const wide = contract('wide', {
       contentModes: [
-        { id: 'full', minSpan: { cols: 2 }, minPosture: 'standard' },
+        { id: 'full', minSpan: { cols: 2 }, minPosture: 'regular' },
         { id: 'summary', minSpan: { cols: 1 } },
       ],
     });
@@ -278,7 +278,7 @@ describe('resolveAdaptiveLayout', () => {
     };
     for (let round = 0; round < 60; round += 1) {
       const cols = [1, 2, 4, 6, 12][Math.floor(next() * 5)];
-      const posture = (['compact', 'standard', 'expanded'] as const)[
+      const posture = (['compact', 'regular', 'expanded'] as const)[
         Math.floor(next() * 3)
       ];
       const count = 1 + Math.floor(next() * 9);
@@ -448,7 +448,7 @@ describe('resolveAdaptiveLayout', () => {
   it('buckets container posture by profile thresholds', () => {
     const profile = { thresholds: { compactMaxPx: 480, standardMaxPx: 960 } };
     expect(resolveContainerPosture(320, profile)).toBe('compact');
-    expect(resolveContainerPosture(700, profile)).toBe('standard');
+    expect(resolveContainerPosture(700, profile)).toBe('regular');
     expect(resolveContainerPosture(1400, profile)).toBe('expanded');
   });
 });

@@ -37,7 +37,7 @@ work to them, and the gate never reads them.
 
 ## 1. What a cut delivers
 
-Five deliverables. A cut that lands four of them is not done.
+Six deliverables. A cut that lands five of them is not done.
 
 ### 1.1 The deriver
 
@@ -107,7 +107,14 @@ that two families need is one kernel, not two implementations that drift.
   behaviour.
 - `EngineParity` is not needed. Modern is the only productive engine.
 
-### 1.5 The causality evidence
+### 1.5 The `adapt` slot
+
+If the family is declared in `LAYOUT_SENSITIVE_FAMILIES`
+(`packages/core/src/foundation/contracts/kernel/adaptation`), the cut exposes
+`adapt` per WO-INV-07 and stamps `data-posture` (§4.1). A layout-sensitive
+family that does not is not done.
+
+### 1.6 The causality evidence
 
 The cut states, in its report, which decisions of the typed control catalog
 (`src/contracts/theme/runtime/catalog`) declare this family in their fan-out,
@@ -178,9 +185,10 @@ the family's namespace and is not counted.
 
 Three requirements a cut owes that are not about colour. Each names the work
 order that makes it enforceable; until that work order lands, the gate prints
-the arm as **OWED** on every run rather than reporting it green.
+the arm as **OWED** on every run rather than reporting it green. §4.1 is no
+longer owed: WO-INV-07 landed its kernel and its gate.
 
-### 4.1 The `adapt` slot — WO-INV-07
+### 4.1 The `adapt` slot — WO-INV-07 (measured)
 
 A layout-sensitive family exposes
 `adapt?: Partial<Record<Posture, FamilyAdaptation>>` with the posture names
@@ -193,6 +201,31 @@ named container queries, with a `ResizeObserver` only where structure changes.
 
 A family does not invent its own posture names, its own thresholds, or a second
 component for the small posture. `adapt` is not a tenant decision.
+
+What exists to adopt:
+
+- the contract: `Posture`, `ViewportPosture`, `ContainerPosture`, `Adapt<A>`,
+  `resolveAdaptation`, `postureAttribute`, and the family's typed adaptation
+  beside `DataTableAdaptation` under
+  `packages/core/src/foundation/contracts/kernel/adaptation`;
+- the runtime: `useAdaptation(adapt, { base, defaults, containerRef })` in
+  `packages/core/src/infrastructure/runtime/adaptation`, which answers the
+  postures in force, the resolved adaptation and the `data-posture` value;
+- the reference implementation: `PatternDataTable`
+  (`columns: { keep, priority, shrink }`, `presentation: table | cards | list`,
+  `rowActions: inline | menu | swipe`), where `cards` and `list` are generated
+  from the same column model.
+
+`data-posture` is a token list: the viewport posture always, plus the container
+posture once the box is measured (`desktop compact`). A skin selects
+`[data-posture~='compact']`.
+
+The gate is `packages/core/scripts/check/family-cut/adapt-slot/index.mjs`
+(`--family=<family>`, `--census`). It reads the declared families from the
+contract, and for each one requires `adapt: Adapt<...>` on the props, a computed
+`data-posture` resolved through the shared runtime, and no posture names outside
+the contract. For a rostered family it is the BLOCKING `adaptSlot` arm of the
+family-cut gate.
 
 ### 4.2 Loading skeletons derived from the anatomy — owner WO-FAM-14 (OWNER-RATIFIED 2026-09-08)
 
@@ -256,6 +289,7 @@ the moment a family breaks it.
 | `stateContract` | `data-state` is on exactly one side of the contract |
 | `stateGoverned` | the skin decides state through `[data-state]` and the source never calls `partAttributes` |
 | `a11yAssertions` | the family executes no accessibility assertion (a suppressed suite is not evidence) |
+| `adaptSlot` | a family declared layout-sensitive does not accept `adapt: Adapt<...>`, stamps no `data-posture` resolved through the shared runtime, or spells posture names of its own |
 
 **RATCHET** — today's measured debt, pinned per family in
 `baseline/index.json`. Growth is red. Shrinkage is *also* red, with the

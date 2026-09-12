@@ -3310,5 +3310,11 @@
   "embeddedCssPaint.primitives/runtime/overlay/field-overlay/index.tsx": 0,
   "fleet.inlinePaint.structures/foundation/chrome/runtime/profile-defaults/overrides/catalog/index.ts": 0,
   "runtimeSvgPaint.structures/foundation/chrome/runtime/profile-defaults/overrides/catalog/index.ts": 0,
-  "embeddedCssPaint.structures/foundation/chrome/runtime/profile-defaults/overrides/catalog/index.ts": 0
+  "embeddedCssPaint.structures/foundation/chrome/runtime/profile-defaults/overrides/catalog/index.ts": 0,
+  "fleet.inlinePaint.patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx": 0,
+  "fleet.inlinePaint.patterns/data/data-table/runtime/adaptation/index.ts": 0,
+  "runtimeSvgPaint.patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx": 0,
+  "runtimeSvgPaint.patterns/data/data-table/runtime/adaptation/index.ts": 0,
+  "embeddedCssPaint.patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx": 0,
+  "embeddedCssPaint.patterns/data/data-table/runtime/adaptation/index.ts": 0
 }

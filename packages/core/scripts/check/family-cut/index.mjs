@@ -23,6 +23,11 @@
  *             order and is PRINTED ON EVERY RUN. There is no silent third
  *             state: an arm nobody can measure is not an arm that passes.
  *
+ * LAYOUT-SENSITIVE FAMILIES. A rostered family declared in the adaptation
+ * contract's `LAYOUT_SENSITIVE_FAMILIES` also holds the BLOCKING `adaptSlot`
+ * arm, measured by `./adapt-slot`: it accepts `adapt` and stamps
+ * `data-posture`, or its cut is not done.
+ *
  * ONE MEASUREMENT, NEVER TWO. The read-without-producer arm imports
  * `check/engine/read-without-producer` and `libraries/tokens/producers`; the
  * skin corpus comes from `libraries/engine/skins/files`; the fan-out comes
@@ -55,6 +60,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import ts from 'typescript';
 
+import {
+  measureAdaptSlot,
+  readLayoutSensitiveFamilies,
+  readPostureVocabulary,
+} from './adapt-slot/index.mjs';
 import { classifyReadWithoutProducer } from '../engine/read-without-producer/index.mjs';
 import { collectSkinFiles } from '../../libraries/engine/skins/files/index.mjs';
 import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.mjs';
@@ -97,12 +107,6 @@ const PSEUDO_STATE_TWIN = Object.freeze({
  * work order that makes it measurable. Printed on every run.
  */
 export const OWED_ARMS = Object.freeze([
-  {
-    id: 'adapt-slot',
-    owner: 'WO-INV-07',
-    reason:
-      'the typed `adapt` contract and the `data-posture` stamp do not exist yet; WO-INV-07 adds the contract, the reference implementation and this arm',
-  },
   {
     id: 'anatomy-derived-skeleton',
     owner: 'WO-FAM-14',
@@ -807,6 +811,10 @@ export function measureFamily(resolved, { producers } = {}) {
   const inlineStyleViolations = sources.flatMap((entry) => entry.inlineStyleViolations);
   const visualLiterals = sources.flatMap((entry) => entry.visualLiterals);
   const fanOut = fanOutFor(family, readNames);
+  const layoutSensitive = readLayoutSensitiveFamilies().find((entry) => entry.family === family);
+  const adaptSlot = layoutSensitive
+    ? measureAdaptSlot(layoutSensitive, root, readPostureVocabulary()).findings
+    : [];
 
   return {
     family,
@@ -830,6 +838,7 @@ export function measureFamily(resolved, { producers } = {}) {
       stateGoverned: skinUsesStateAttribute ? usesPartAttributes : true,
       a11yProbes: resolved.a11yProbes.length,
       a11yAssertions: resolved.a11yAssertions ?? 0,
+      adaptSlot,
     },
     ratchets: {
       readWithoutProducer: readWithoutProducer.debt.length,
@@ -933,6 +942,9 @@ export function judgeFamily(measured, pinned) {
       `${family}: BLOCKING the skin decides state through \`[data-state]\` but the source never calls \`partAttributes\` -- `
         + 'one place decides when a part is pressed, or none does (F-37)',
     );
+  }
+  for (const finding of blocking.adaptSlot ?? []) {
+    findings.push(`${family}: BLOCKING adapt-slot ${finding}`);
   }
   if (blocking.a11yAssertions === 0) {
     findings.push(

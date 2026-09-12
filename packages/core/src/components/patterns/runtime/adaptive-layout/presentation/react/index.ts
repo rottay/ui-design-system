@@ -9,8 +9,8 @@
  * is pure geometry, and THIS module owns everything environmental — a REAL
  * `layoutEpoch` slice derived from direction, locale, effective density
  * posture, the live `--ds-type-scale` value, font readiness and the tenant
- * artifact revision; container-first posture measurement through one
- * ResizeObserver per boundary; and the versioned persistence gate.
+ * artifact revision; and the versioned persistence gate. Container posture
+ * measurement is the shared adaptation runtime's, re-exported here.
  *
  * Consumers own only their OWN geometry adapter: WidgetBoard's board hook
  * (`patterns/data/widget-board/runtime/adaptive/react`) adds the board's
@@ -21,27 +21,26 @@
 import {
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
-import type { RefObject } from 'react';
 
 import { I18nContext } from '@/infrastructure/runtime/i18n/runtime/context/provider';
 import { useDensity } from '@/infrastructure/runtime/foundation/density';
 import { TenantContext } from '@/infrastructure/runtime/tenant/foundation/context';
-import {
-  resolveResponsivePosture,
-  type ResponsivePostureDefinition,
-} from '@/foundation/tokens/ts/presentation/responsive-postures';
+import { useActiveResponsivePosture } from '@/infrastructure/runtime/adaptation/runtime/container-posture';
+import type { ResponsivePostureDefinition } from '@/foundation/tokens/ts/presentation/responsive-postures';
 
 import type {
-  ContainerPosture,
   LayoutIntent,
   LayoutProfileRevision,
-  ResponsivePostureProfile,
 } from '../../foundation';
-import { resolveContainerPosture } from '../../runtime';
+
+export {
+  resolveActiveResponsivePosture,
+  useActiveResponsivePosture,
+  useContainerPosture,
+} from '@/infrastructure/runtime/adaptation/runtime/container-posture';
 
 function readTypeScale(): string {
   if (typeof document === 'undefined') return '1';
@@ -49,36 +48,6 @@ function readTypeScale(): string {
     .getPropertyValue('--ds-type-scale')
     .trim();
   return value.length > 0 ? value : '1';
-}
-
-/**
- * PURE derivation of the active responsive posture from the MOUNTED ARTIFACT's
- * normalized appearance — the single source every adaptive consumer shares,
- * mirroring `resolveActiveIconExpressiveProfile`. It reads
- * `advanced.responsivePosture`, carried verbatim in the artifact the mount
- * proves, and nothing else: a tenant config carries no visual payload, so there
- * is no second selection to rank this one against.
- *
- * Resolution is fail-closed and TOTAL: an absent, unknown, malformed or
- * foreign-schema id yields `balanced`, whose thresholds are
- * literally the 639/839 pair this runtime hardcoded before the axis opened.
- * Absent is therefore byte-for-byte the pre-capability ladder, which is what
- * makes "unset it" a true rollback.
- */
-export function resolveActiveResponsivePosture(
-  appearance: { advanced?: { responsivePosture?: string } } | null | undefined
-): ResponsivePostureDefinition {
-  return resolveResponsivePosture(appearance?.advanced?.responsivePosture);
-}
-
-/**
- * The ONE context read of the active ladder. Every adaptive consumer resolves
- * its thresholds through this hook; none reads a breakpoint constant.
- */
-export function useActiveResponsivePosture(): ResponsivePostureDefinition {
-  const tenant = useContext(TenantContext);
-  const appearance = tenant?.appearance;
-  return useMemo(() => resolveActiveResponsivePosture(appearance), [appearance]);
 }
 
 export interface AdaptiveEnvironment {
@@ -193,43 +162,4 @@ export function normalizeLayoutRevision(
       typeof (intent as LayoutIntent).order === 'number' &&
       typeof (intent as LayoutIntent).visible === 'boolean'
   );
-}
-
-/**
- * Container-first posture for any adaptive consumer that has no board grid
- * of its own (DashboardSurface's packed sections). One ResizeObserver per
- * container; when the environment cannot measure (SSR, jsdom), the caller's
- * fallback posture governs — measurement upgrades it, never downgrades to a
- * guess.
- *
- * E2: with no explicit `thresholds` the ladder comes from the tenant's active
- * responsive posture instead of a constant, so the axis reaches every consumer
- * that never asked for one. An explicit argument still wins — the caller-props
- * law applies to thresholds exactly as it does to recipe defaults.
- */
-export function useContainerPosture(
-  containerRef: RefObject<HTMLElement | null>,
-  fallback: ContainerPosture,
-  thresholds?: ResponsivePostureProfile['thresholds']
-): ContainerPosture {
-  const active = useActiveResponsivePosture();
-  const { compactMaxPx, standardMaxPx } = thresholds ?? active.thresholds;
-  const [measured, setMeasured] = useState<ContainerPosture | null>(null);
-  useEffect(() => {
-    const element = containerRef.current;
-    if (!element || typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const width = entry.contentRect.width;
-        if (width <= 0) continue;
-        const next = resolveContainerPosture(width, {
-          thresholds: { compactMaxPx, standardMaxPx },
-        });
-        setMeasured((current) => (current === next ? current : next));
-      }
-    });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [containerRef, compactMaxPx, standardMaxPx]);
-  return measured ?? fallback;
 }

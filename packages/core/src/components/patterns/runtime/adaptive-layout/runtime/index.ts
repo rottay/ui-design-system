@@ -26,12 +26,11 @@ import type {
   PlacementGridStyle,
   PlacementReason,
   ResolvedPlacement,
-  ResponsivePostureProfile,
 } from '../foundation';
 
 const POSTURE_RANK: Record<ContainerPosture, number> = {
   compact: 0,
-  standard: 1,
+  regular: 1,
   expanded: 2,
 };
 
@@ -337,14 +336,7 @@ export function resolveAdaptiveLayout(
  * recompute a layout: the runtime re-solves only when `cols` or the posture
  * bucket actually change.
  */
-export function resolveContainerPosture(
-  widthPx: number,
-  profile: Pick<ResponsivePostureProfile, 'thresholds'>
-): ContainerPosture {
-  if (widthPx <= profile.thresholds.compactMaxPx) return 'compact';
-  if (widthPx <= profile.thresholds.standardMaxPx) return 'standard';
-  return 'expanded';
-}
+export { resolveContainerPosture } from '@/foundation/contracts/kernel/adaptation';
 
 /** Solver output → the two inline grid lines a cell stamps. */
 export function placementsToGridStyles(
