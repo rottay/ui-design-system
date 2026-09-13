@@ -26,11 +26,11 @@ describe('ModernButton advanced engine coverage', () => {
     );
 
     const loadingButton = screen.getByRole('button', { name: /save/i });
-    expect(loadingButton.className).toContain('rottay-button--danger');
-    expect(loadingButton.className).toContain('rottay-button--xl');
-    expect(loadingButton.className).toContain('rottay-button--circle');
-    expect(loadingButton.className).toContain('rottay-button--block');
-    expect(loadingButton.className).toContain('rottay-button--shadow');
+    expect(loadingButton.className).toContain('ds-button--danger');
+    expect(loadingButton.className).toContain('ds-button--xl');
+    expect(loadingButton.className).toContain('ds-button--circle');
+    expect(loadingButton.className).toContain('ds-button--block');
+    expect(loadingButton.className).toContain('ds-button--shadow');
     expect(loadingButton).toBeDisabled();
     expect(loadingButton).toHaveAttribute('aria-busy', 'true');
     const spinner = container.querySelector('[data-part="spinner"]');
@@ -78,9 +78,9 @@ describe('ModernButton advanced engine coverage', () => {
     );
 
     const activeButton = screen.getByRole('button', { name: /go/i });
-    expect(activeButton.className).toContain('rottay-button--primary');
-    expect(activeButton.className).toContain('rottay-button--xs');
-    expect(activeButton.className).toContain('rottay-button--round');
+    expect(activeButton.className).toContain('ds-button--primary');
+    expect(activeButton.className).toContain('ds-button--xs');
+    expect(activeButton.className).toContain('ds-button--round');
     expect(screen.getByTestId('prefix')).toBeInTheDocument();
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
     expect(screen.queryByTestId('suffix')).not.toBeInTheDocument();
@@ -108,8 +108,8 @@ describe('ModernButton advanced engine coverage', () => {
 
     const button = screen.getByRole('button', { name: /continue/i });
     expect(button).toHaveAttribute('type', 'submit');
-    expect(button.className).toContain('rottay-button--link');
-    expect(button.className).toContain('rottay-button--sm');
+    expect(button.className).toContain('ds-button--link');
+    expect(button.className).toContain('ds-button--sm');
     expect(screen.getByTestId('suffix')).toBeInTheDocument();
 
     // The skin paints from a stylesheet, keyed on `data-state`. This runtime

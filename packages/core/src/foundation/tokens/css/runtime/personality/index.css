@@ -262,8 +262,7 @@ h6,
    ======================================================================== */
 
 .ant-btn,
-.btn,
-[data-engine] .ds-button {
+.btn {
   transition: transform var(--ds-personality-animation-entrance-duration, 300ms),
     box-shadow var(--ds-personality-animation-entrance-duration, 300ms),
     background-color var(--ds-personality-animation-entrance-duration, 300ms),
@@ -272,14 +271,12 @@ h6,
 }
 
 .ant-btn:hover,
-.btn:hover,
-[data-engine] .ds-button:hover {
+.btn:hover {
   transform: var(--ds-button-hover-transform, translateY(0) scale(1));
 }
 
 .ant-btn:active,
-.btn:active,
-[data-engine] .ds-button:active {
+.btn:active {
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
@@ -318,8 +315,7 @@ h6,
    ======================================================================== */
 
 .ant-btn-primary:hover:not(:disabled),
-.btn-primary:hover:not(:disabled),
-[data-engine] .ds-button-primary:hover:not(:disabled) {
+.btn-primary:hover:not(:disabled) {
   box-shadow: var(--ds-card-shadow-hover),
     0 0 20px rgba(var(--ds-color-primary-rgb, 99, 102, 241), 0.15);
 }
@@ -330,8 +326,7 @@ h6,
    ======================================================================== */
 
 .ant-btn:focus-visible,
-.btn:focus-visible,
-[data-engine] .ds-button:focus-visible {
+.btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
     0 0 0 4px var(--ds-color-primary-400, #818cf8);
@@ -466,8 +461,7 @@ input:focus-visible,
    ======================================================================== */
 
 .ant-checkbox .ant-checkbox-inner,
-.checkbox,
-[data-engine] .ds-checkbox {
+.checkbox {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-checkbox-transition-timing, ease-in-out),
@@ -477,8 +471,7 @@ input:focus-visible,
       var(--ds-checkbox-transition-timing, ease-in-out);
 }
 
-.ant-checkbox-checked .ant-checkbox-inner::after,
-[data-engine] .ds-checkbox-check {
+.ant-checkbox-checked .ant-checkbox-inner::after {
   transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
     cubic-bezier(0.12, 0.4, 0.29, 1.46);
 }
@@ -488,8 +481,7 @@ input:focus-visible,
    Applies personality-driven animation timing to radio dot transitions.
    ======================================================================== */
 
-.ant-radio .ant-radio-inner,
-[data-engine] .ds-radio {
+.ant-radio .ant-radio-inner {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-radio-transition-timing, ease-in-out),
@@ -499,8 +491,7 @@ input:focus-visible,
       var(--ds-radio-transition-timing, ease-in-out);
 }
 
-.ant-radio-checked .ant-radio-inner::after,
-[data-engine] .ds-radio-dot {
+.ant-radio-checked .ant-radio-inner::after {
   transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
       cubic-bezier(0.12, 0.4, 0.29, 1.46),
     opacity var(--ds-personality-animation-entrance-duration, 200ms)
@@ -512,9 +503,7 @@ input:focus-visible,
    Applies personality-driven slide timing to toggle components.
    ======================================================================== */
 
-.ant-switch,
-[data-engine] .ds-toggle,
-[data-engine] .ds-switch {
+.ant-switch {
   transition: background-color
       var(--ds-personality-animation-entrance-duration, 200ms)
       var(--ds-toggle-transition-timing, ease-in-out),
@@ -522,9 +511,7 @@ input:focus-visible,
       var(--ds-toggle-transition-timing, ease-in-out);
 }
 
-.ant-switch-handle,
-[data-engine] .ds-toggle-dot,
-[data-engine] .ds-switch-handle {
+.ant-switch-handle {
   transition: transform var(--ds-personality-animation-entrance-duration, 200ms)
     cubic-bezier(0.34, 1.56, 0.64, 1);
 }

@@ -10,6 +10,7 @@ import type { FamilyDeriver } from "../../foundation/contract";
 import { axesDeriver } from "./axes";
 import { chartsDeriver } from "./charts";
 import { chromeDeriver } from "./chrome";
+import { buttonChromeDeriver } from "./chrome/button";
 import { densityDeriver } from "./density";
 import { elevationDeriver } from "./elevation";
 import { expressiveDeriver } from "./expressive";
@@ -56,6 +57,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   motionDeriver,
   tenantDeriver,
   chromeDeriver,
+  buttonChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

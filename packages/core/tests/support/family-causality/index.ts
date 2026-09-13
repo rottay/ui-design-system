@@ -1,0 +1,270 @@
+/**
+ * @fileoverview Computed-style causality probes for a family cut.
+ *
+ * A probe compiles the same vertical twice through the productive door
+ * (`documentThemeIntent` -> `compileThemeIntent` -> `emitThemeCss`), loads the
+ * resolved source stylesheet plus one compiled arm into a real Chromium page,
+ * mounts the family's own server markup and reads computed style back. A
+ * decision is causal for a family when its arm moves the family's paint and a
+ * negative control does not move.
+ *
+ * @module Tests/Support/family-causality
+ */
+
+import { existsSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import { dirname, resolve } from 'node:path';
+
+import {
+  compileThemeIntent,
+  documentThemeIntent,
+  emitThemeCss,
+  firstPartyScope,
+  mountTenantTheme,
+  staticThemeIntent,
+} from '@/entrypoints/server';
+
+const CORE_ROOT = resolve(__dirname, '../../..');
+const BASE_ENTRY = resolve(CORE_ROOT, 'src/foundation/tokens/css/facade/entrypoints/base/index.css');
+
+export type ProbeVertical = 'rottay' | 'bithire' | 'evnto';
+
+/** A document v2 decision map, keyed by catalog id. */
+export type ProbeDecisions = Readonly<Record<string, unknown>>;
+
+export interface ProbeTarget {
+  /** Stable name of the reading. */
+  readonly id: string;
+  /** Selector inside the mounted markup. */
+  readonly selector: string;
+  /** Computed property to read, in CSS spelling; `@rect.<key>` reads the element box instead. */
+  readonly property: string;
+  /** Attributes stamped on the matched element before reading, e.g. `data-state`. */
+  readonly attributes?: Readonly<Record<string, string>>;
+  /** Direction of the probe host. */
+  readonly dir?: 'ltr' | 'rtl';
+}
+
+export interface ProbeEnvironment {
+  readonly reducedMotion?: 'reduce' | 'no-preference';
+  readonly forcedColors?: 'active' | 'none';
+  /** A touch device: `(pointer: coarse)` and `(hover: none)` match. */
+  readonly touch?: boolean;
+}
+
+export interface ProbeRequest {
+  readonly vertical: ProbeVertical;
+  readonly markup: string;
+  readonly arms: Readonly<Record<string, ProbeDecisions>>;
+  readonly targets: readonly ProbeTarget[];
+  readonly plan?: 'standard' | 'pro';
+  readonly environment?: ProbeEnvironment;
+}
+
+export type ProbeReadings = Record<string, Record<string, string>>;
+
+function resolveImports(css: string, baseDir: string): string {
+  return css.replace(
+    /@import\s+['"](\.[^'"]+)['"]\s*(layer\([^)]+\))?\s*;/g,
+    (match, importPath: string, layerDirective: string | undefined) => {
+      const fullPath = resolve(baseDir, importPath);
+      if (!existsSync(fullPath)) return `/* unresolved: ${match} */`;
+      const content = resolveImports(readFileSync(fullPath, 'utf8'), dirname(fullPath));
+      if (!layerDirective) return content;
+      return `@layer ${layerDirective.slice('layer('.length, -1)} {\n${content}\n}`;
+    },
+  );
+}
+
+let baseCss: string | undefined;
+
+/** The tenant-free stylesheet exactly as the bundle build resolves it, read from source. */
+export function resolvedBaseCss(): string {
+  baseCss ??= resolveImports(readFileSync(BASE_ENTRY, 'utf8'), dirname(BASE_ENTRY));
+  return baseCss;
+}
+
+export interface MountedArm {
+  readonly rootAttributes: Readonly<Record<string, string>>;
+  readonly css: string;
+}
+
+/**
+ * One arm: the root attributes the server mount projects for the vertical, and
+ * the CSS the productive door compiles for the vertical plus the arm's decisions.
+ */
+export async function mountArm(
+  vertical: ProbeVertical,
+  decisions: ProbeDecisions,
+  plan: 'standard' | 'pro' = 'pro',
+): Promise<MountedArm> {
+  const intent = documentThemeIntent({
+    vertical,
+    slug: vertical,
+    document: { version: 2, plan, decisions } as never,
+  });
+  const { compiled } = compileThemeIntent(intent);
+  const mounted = await mountTenantTheme(staticThemeIntent(vertical));
+  return {
+    rootAttributes: mounted.rootAttributes,
+    css: emitThemeCss(compiled, firstPartyScope(vertical)),
+  };
+}
+
+/** The surface a consumer mounts a family on: the canvas ground and its ink. */
+const SURFACE_STYLE = 'background: var(--ds-color-bg-primary); color: var(--ds-color-text-primary); padding: 16px;';
+
+interface ChromiumLike {
+  launch(): Promise<{
+    newContext(options?: { hasTouch?: boolean; isMobile?: boolean }): Promise<{
+      newPage(): Promise<ProbePage>;
+    }>;
+    close(): Promise<void>;
+  }>;
+}
+
+interface ProbePage {
+  setContent(html: string): Promise<void>;
+  addStyleTag(options: { content: string }): Promise<unknown>;
+  addScriptTag(options: { content: string }): Promise<unknown>;
+  emulateMedia(options: { reducedMotion?: string; forcedColors?: string }): Promise<void>;
+  evaluate<R, A>(fn: (arg: A) => R, arg: A): Promise<R>;
+  close(): Promise<void>;
+}
+
+function resolveChromium(): ChromiumLike {
+  const roots = [
+    resolve(CORE_ROOT, 'package.json'),
+    resolve(CORE_ROOT, '../../package.json'),
+    resolve(CORE_ROOT, '../showroom/package.json'),
+  ];
+  for (const root of roots) {
+    for (const specifier of ['playwright', '@playwright/test']) {
+      try {
+        const module = createRequire(root)(specifier) as { chromium?: ChromiumLike };
+        if (module.chromium) return module.chromium;
+      } catch {
+        // try the next resolution root
+      }
+    }
+  }
+  throw new Error('family-causality: no Playwright chromium is resolvable from core, the workspace or showroom');
+}
+
+/** Measure every target under every arm, one fresh page per arm. */
+export async function measureArms(request: ProbeRequest): Promise<ProbeReadings> {
+  const browser = await resolveChromium().launch();
+  const readings: ProbeReadings = {};
+  try {
+    const environment = request.environment ?? {};
+    const context = await browser.newContext(
+      environment.touch ? { hasTouch: true, isMobile: true } : {},
+    );
+    const base = resolvedBaseCss();
+    for (const [label, decisions] of Object.entries(request.arms)) {
+      const page = await context.newPage();
+      await page.emulateMedia({
+        reducedMotion: environment.reducedMotion ?? 'no-preference',
+        forcedColors: environment.forcedColors ?? 'none',
+      });
+      await page.setContent('<!doctype html><html><head></head><body></body></html>');
+      const arm = await mountArm(request.vertical, decisions, request.plan);
+      await page.addStyleTag({ content: base });
+      await page.addStyleTag({ content: arm.css });
+      readings[label] = await page.evaluate(
+        ({ markup, targets, rootAttributes, surface }) => {
+          for (const [name, value] of Object.entries(rootAttributes)) {
+            document.documentElement.setAttribute(name, value);
+          }
+          const values: Record<string, string> = {};
+          for (const target of targets) {
+            const host = document.createElement('div');
+            host.setAttribute('style', surface);
+            host.setAttribute('dir', target.dir ?? 'ltr');
+            host.innerHTML = markup;
+            document.body.append(host);
+            const element = host.querySelector(target.selector);
+            if (!element) {
+              values[target.id] = `<no match: ${target.selector}>`;
+            } else {
+              for (const [name, value] of Object.entries(target.attributes ?? {})) {
+                element.setAttribute(name, value);
+              }
+              values[target.id] = target.property.startsWith('@rect.')
+                ? String(Math.round(element.getBoundingClientRect()[target.property.slice(6) as 'left']))
+                : getComputedStyle(element).getPropertyValue(target.property);
+            }
+            host.remove();
+          }
+          return values;
+        },
+        { markup: request.markup, targets: request.targets, rootAttributes: arm.rootAttributes, surface: SURFACE_STYLE },
+      );
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+  return readings;
+}
+
+export interface AxeFinding {
+  readonly id: string;
+  readonly impact: string | null;
+  readonly nodes: number;
+  /** The first offending node's markup and axe's own summary of it. */
+  readonly sample?: string;
+}
+
+export interface AxeRequest {
+  readonly vertical: ProbeVertical;
+  readonly markup: string;
+  readonly decisions?: ProbeDecisions;
+  readonly dir?: 'ltr' | 'rtl';
+}
+
+/** axe-core over the family's markup, painted by the source stylesheet and one compiled arm. */
+export async function auditAxe(request: AxeRequest): Promise<AxeFinding[]> {
+  const axeSource = readFileSync(createRequire(resolve(CORE_ROOT, 'package.json')).resolve('axe-core'), 'utf8');
+  const browser = await resolveChromium().launch();
+  try {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    const arm = await mountArm(request.vertical, request.decisions ?? {});
+    await page.setContent('<!doctype html><html lang="en"><head><title>probe</title></head><body></body></html>');
+    await page.addStyleTag({ content: resolvedBaseCss() });
+    await page.addStyleTag({ content: arm.css });
+    await page.addScriptTag({ content: axeSource });
+    const findings = await page.evaluate(
+      async ({ markup, rootAttributes, surface, dir }) => {
+        for (const [name, value] of Object.entries(rootAttributes)) {
+          document.documentElement.setAttribute(name, value);
+        }
+        const main = document.createElement('main');
+        main.setAttribute('style', surface);
+        main.setAttribute('dir', dir);
+        main.innerHTML = markup;
+        document.body.append(main);
+        type Violation = { id: string; impact: string | null; nodes: Array<{ html: string; failureSummary?: string }> };
+        const runner = (window as unknown as { axe: { run(node: Element): Promise<{ violations: Violation[] }> } }).axe;
+        const result = await runner.run(main);
+        return result.violations.map((violation) => ({
+          id: violation.id,
+          impact: violation.impact,
+          nodes: violation.nodes.length,
+          sample: `${violation.nodes[0]?.html ?? ''} :: ${violation.nodes[0]?.failureSummary ?? ''}`,
+        }));
+      },
+      { markup: request.markup, rootAttributes: arm.rootAttributes, surface: SURFACE_STYLE, dir: request.dir ?? 'ltr' },
+    );
+    await page.close();
+    return findings;
+  } finally {
+    await browser.close();
+  }
+}
+
+/** The findings axe classifies as serious or critical. */
+export function seriousFindings(findings: readonly AxeFinding[]): AxeFinding[] {
+  return findings.filter((finding) => finding.impact === 'serious' || finding.impact === 'critical');
+}

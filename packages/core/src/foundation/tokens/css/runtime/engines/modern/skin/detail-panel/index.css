@@ -240,8 +240,8 @@
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='back-button'] {
   display: contents;
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'] > .rottay-button,
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='back-button'] > .rottay-button {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'] > .ds-button,
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='back-button'] > .ds-button {
   flex-shrink: 0;
 }
 
@@ -250,45 +250,45 @@
         secondary the Button contract does not offer) and where the quality
         contract PINS the pattern's primary hover. Every other variant is the
         primitive's own paint (see COMPOSITION in the header). ---- */
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .rottay-button {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
   border: 1px solid var(--ds-color-primary);
   box-shadow: var(--ds-elevation-1);
 }
 @media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .rottay-button:hover:not(:disabled) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:hover:not(:disabled) {
     background: var(--ds-color-primary-600);
     border-color: var(--ds-color-primary-600);
     box-shadow: var(--ds-elevation-2);
   }
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .rottay-button:focus:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:focus:not(:disabled) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
   box-shadow: var(--ds-elevation-2);
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .rottay-button:active:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:active:not(:disabled) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
 }
 
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .rottay-button {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button {
   background: transparent;
   color: var(--ds-color-error-600);
   border: 1px solid var(--ds-color-error-200);
 }
 @media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .rottay-button:hover:not(:disabled) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:hover:not(:disabled) {
     background: var(--ds-color-error-50);
     border-color: var(--ds-color-error-300);
   }
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .rottay-button:focus:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:focus:not(:disabled) {
   background: var(--ds-color-error-50);
   border-color: var(--ds-color-error-300);
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .rottay-button:active:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:active:not(:disabled) {
   background: var(--ds-color-error-50);
   border-color: var(--ds-color-error-300);
 }

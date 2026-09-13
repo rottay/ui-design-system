@@ -24,7 +24,7 @@
    ============================================================================= */
 /* Bridge removed (WO-RET-02 drain): no modern engine emits the Daisy
    `.btn`/`.btn-primary`/`.btn-ghost` classes. Button paints from
-   `skin/button.css` (`.rottay-button--modern`) and FloatButton from
+   `skin/button.css` (`.ds-button--modern`) and FloatButton from
    `skin/float-button.css`; both keep the `--ds-button-*` channels this bridge
    referenced (size, radius, transition, focus ring, hover/active transforms
    and the primary/ghost colour ramps) in their fallback chains. */

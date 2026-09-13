@@ -177,11 +177,11 @@
         `border: 1px solid transparent` is NOT a reset, so the rule reaches the
         (0,4,0) border floor through the root ancestor. Highlight = hover
         (guarded below) || focus || active. ---- */
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:focus,
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:active {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:focus,
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:active {
   border-color: var(--ds-color-border);
   background: var(--ds-color-neutral-50);
   color: var(--ds-color-text-primary);
@@ -359,7 +359,7 @@
   display: contents;
 }
 
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .rottay-button {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .ds-button {
   flex-shrink: 0;
 }
 
@@ -533,7 +533,7 @@
     color: var(--ds-color-text-secondary);
   }
 
-  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:hover {
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:hover {
     border-color: var(--ds-color-border);
     background: var(--ds-color-neutral-50);
     color: var(--ds-color-text-primary);
@@ -574,7 +574,7 @@
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .rottay-button {
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .ds-button {
     min-block-size: var(--ds-touch-target-min, 44px);
     min-inline-size: var(--ds-touch-target-min, 44px);
   }

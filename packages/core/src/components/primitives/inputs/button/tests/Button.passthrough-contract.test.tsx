@@ -28,7 +28,7 @@ describe('Button pass-through honesty law', () => {
   it('modern: forwards id/aria-label/data-* and the caller data-part wins', () => {
     const { container } = render(<ModernButton {...passthrough}>Go</ModernButton>);
 
-    const button = container.querySelector('button.rottay-button--modern') as HTMLButtonElement;
+    const button = container.querySelector('button.ds-button--modern') as HTMLButtonElement;
     expect(button).toBeTruthy();
     expect(button).toHaveAttribute('id', 'caller-button-id');
     expect(button).toHaveAttribute('aria-label', 'Caller label');
@@ -39,7 +39,7 @@ describe('Button pass-through honesty law', () => {
   it('modern: stamps the default data-part="trigger" when the caller passes none', () => {
     const { container } = render(<ModernButton>Go</ModernButton>);
 
-    const button = container.querySelector('button.rottay-button--modern') as HTMLButtonElement;
+    const button = container.querySelector('button.ds-button--modern') as HTMLButtonElement;
     expect(button).toBeTruthy();
     expect(button).toHaveAttribute('data-part', 'trigger');
   });

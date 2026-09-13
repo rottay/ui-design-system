@@ -375,8 +375,14 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
   // keeps the precedence it has always had.
   const interactiveStyle: React.CSSProperties = {
     ...pressMotion.variables,
+    ...(pressMotion.recipe.state === 'animated'
+      ? {
+          '--ds-button-transition-duration': pressMotion.variables['--ds-recipe-enter'],
+          '--ds-button-transition-timing': pressMotion.variables['--ds-recipe-curve'],
+        }
+      : {}),
     ...style,
-  };
+  } as React.CSSProperties;
 
   // -------------------------------------------------------------------------
   // Content
@@ -450,7 +456,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         {displayedBusyLabel != null && <span data-part="label">{displayedBusyLabel}</span>}
       </span>
       {accessibleBusyLabel != null && (
-        <VisuallyHidden data-part="accessible-label">{accessibleBusyLabel}</VisuallyHidden>
+        <VisuallyHidden>{accessibleBusyLabel}</VisuallyHidden>
       )}
     </span>
   ) : (
@@ -465,7 +471,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         {restingContentNode}
       </span>
       {busy && accessibleBusyLabel != null && (
-        <VisuallyHidden data-part="accessible-label">{accessibleBusyLabel}</VisuallyHidden>
+        <VisuallyHidden>{accessibleBusyLabel}</VisuallyHidden>
       )}
     </>
   );

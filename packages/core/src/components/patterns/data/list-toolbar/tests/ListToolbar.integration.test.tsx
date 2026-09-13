@@ -62,9 +62,9 @@ describe('PatternListToolbar integration', () => {
       if (engine === 'modern') {
         const filterTrigger = await screen.findByRole('button', { name: /status/i });
         expect(filterTrigger).toBeInTheDocument();
-        expect(filterTrigger).toHaveClass('rottay-button');
+        expect(filterTrigger).toHaveClass('ds-button');
         expect(await screen.findByRole('button', { name: /create event/i })).toHaveClass(
-          'rottay-button',
+          'ds-button',
         );
       } else {
         expect(await screen.findByText('All')).toBeInTheDocument();
@@ -233,7 +233,7 @@ describe('PatternListToolbar integration', () => {
     expect(screen.getByRole('button', { name: 'المزيد من الخيارات' })).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'إضافة مرشح جديد إلى القائمة' }),
-    ).toHaveClass('rottay-button');
+    ).toHaveClass('ds-button');
 
     fireEvent.click(
       screen.getByRole('button', {

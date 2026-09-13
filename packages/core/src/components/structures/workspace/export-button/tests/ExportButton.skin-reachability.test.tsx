@@ -49,6 +49,10 @@ async function openPanel(): Promise<HTMLElement> {
  */
 const EXEMPT = (selector: string): boolean => selector.includes('[data-part=\'toast\']');
 
+/** The Modern button answers to the `ds-` namespace; the frozen engines keep theirs. */
+const buttonEngineClass = (engine: string) =>
+  engine === "modern" ? "ds-button--modern" : `rottay-button--${engine}`;
+
 describe("ExportButton skin reachability", () => {
   it("every authored selector matches a node the family actually renders", async () => {
     const container = await openPanel();
@@ -81,12 +85,13 @@ describe("ExportButton skin reachability", () => {
       );
       const trigger = await waitFor(() => {
         const node = container.querySelector(
-          `.rottay-button--${engine}`
+          `.${buttonEngineClass(engine)}`
         ) as HTMLElement;
         expect(node).not.toBeNull();
         return node;
       });
-      expect(container.querySelectorAll('[class*="rottay-button--"]:not(.rottay-button--' + engine + ')')).toHaveLength(0);
+      const foreign = STABLE_ENGINES.filter((other) => other !== engine).map((other) => `.${buttonEngineClass(other)}`);
+      expect(container.querySelectorAll(foreign.join(', '))).toHaveLength(0);
 
       fireEvent.click(trigger);
       await waitForPortalContent(
@@ -96,7 +101,7 @@ describe("ExportButton skin reachability", () => {
         1
       );
       for (const item of document.querySelectorAll(".ds-export-button-item")) {
-        expect(item.className).toContain(`rottay-button--${engine}`);
+        expect(item.className).toContain(buttonEngineClass(engine));
       }
     }
   );

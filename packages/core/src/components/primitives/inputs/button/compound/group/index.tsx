@@ -148,7 +148,7 @@ export function ButtonGroup({
 
   return (
     <div
-      className={`rottay-button-group rottay-button-group--${orientation} ${connected ? 'rottay-button-group--connected' : ''} ${className}`}
+      className={`ds-button-group ds-button-group--${orientation} ${connected ? 'ds-button-group--connected' : ''} ${className}`}
       style={groupStyle}
       role="group"
       aria-label={ariaLabel}

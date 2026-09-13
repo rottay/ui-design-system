@@ -6,7 +6,7 @@
  * the selected Button engine; this seam never reaches into a variant color.
  */
 
-.rottay-button-group[data-part='group'] {
+.ds-button-group[data-part='group'] {
   display: inline-flex;
   max-inline-size: 100%;
   /* Children align on their shared baseline posture, never stretched: a mixed
@@ -30,10 +30,10 @@
    caller reordering anything. The breath scales with the same density axis —
    tighter in a compact command bar, ceremonial in a spacious header. A solid
    first child is already dominant and takes nothing. */
-.rottay-button-group[data-part='group'][data-orientation='horizontal']:not(
+.ds-button-group[data-part='group'][data-orientation='horizontal']:not(
     [data-connected='true']
   )
-  > .rottay-button:is(
+  > [data-variant]:is(
     [data-variant='primary'],
     [data-variant='danger'],
     [data-variant='success'],
@@ -46,15 +46,15 @@
   );
 }
 
-.rottay-button-group[data-orientation='horizontal'] {
+.ds-button-group[data-orientation='horizontal'] {
   flex-flow: row wrap;
 }
 
-.rottay-button-group[data-orientation='vertical'] {
+.ds-button-group[data-orientation='vertical'] {
   flex-direction: column;
 }
 
-.rottay-button-group[data-connected='true'] {
+.ds-button-group[data-connected='true'] {
   gap: 0;
   flex-wrap: nowrap;
   overflow-inline: auto;
@@ -74,7 +74,7 @@
   scroll-padding: var(--_ds-button-group-ring-room);
 }
 
-.rottay-button-group[data-connected='true'] > .rottay-button {
+.ds-button-group[data-connected='true'] > [data-variant] {
   position: relative;
 }
 
@@ -86,35 +86,39 @@
    `border-radius: 0` reset tied the engine's own (0,3,0) base rule and lost
    it by source order, so every joined cluster rendered as separately-rounded
    pills instead of one fused control (F7). Layout stays here. */
-.rottay-button-group[data-connected='true'][data-orientation='horizontal']
-  > .rottay-button:not(:first-child) {
+.ds-button-group[data-connected='true'][data-orientation='horizontal']
+  > [data-variant]:not(:first-child) {
   margin-inline-start: calc(var(--ds-button-border-width) * -1);
 }
 
-.rottay-button-group[data-connected='true'][data-orientation='vertical']
-  > .rottay-button:not(:first-child) {
+.ds-button-group[data-connected='true'][data-orientation='vertical']
+  > [data-variant]:not(:first-child) {
   margin-block-start: calc(var(--ds-button-border-width) * -1);
 }
 
-.rottay-button-group[data-connected='true'] > .rottay-button:is(:hover, :focus-visible),
-.rottay-button-group[data-connected='true']
-  > .rottay-button[data-state~='focus-visible'] {
-  z-index: 1;
+.ds-button-group[data-connected='true']
+  > [data-variant]:is(
+    [data-state~='hovered'],
+    :hover,
+    [data-state~='focus-visible'],
+    :focus-visible
+  ) {
+  z-index: var(--ds-z-index-relative-above);
 }
 
-.rottay-button-group[data-part='group'][data-mobile='true']:not([data-connected='true']) {
+.ds-button-group[data-part='group'][data-mobile='true']:not([data-connected='true']) {
   inline-size: var(--ds-button-group-mobile-width);
   flex-direction: var(--ds-button-group-mobile-direction);
   gap: var(--ds-button-group-mobile-gap);
 }
 
-.rottay-button-group[data-part='group'][data-mobile='true']:not([data-connected='true'])
-  > .rottay-button {
+.ds-button-group[data-part='group'][data-mobile='true']:not([data-connected='true'])
+  > [data-variant] {
   inline-size: 100%;
 }
 
 @media (forced-colors: active) {
-  .rottay-button-group[data-connected='true'] > .rottay-button {
+  .ds-button-group[data-connected='true'] > [data-variant] {
     forced-color-adjust: auto;
   }
 }

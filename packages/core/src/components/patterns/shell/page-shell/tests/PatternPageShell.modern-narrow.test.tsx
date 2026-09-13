@@ -55,7 +55,7 @@ describe('PatternPageShell modern — narrow posture and composed back control',
 
   it('lets the composed ghost Button own every back-control state', () => {
     const { container } = render(<ModernPageShell {...buildProps()} />);
-    const back = container.querySelector('[data-part="back"] > .rottay-button');
+    const back = container.querySelector('[data-part="back"] > .ds-button');
 
     expect(back).not.toBeNull();
     expect(back).toHaveAttribute('data-variant', 'ghost');
@@ -63,10 +63,10 @@ describe('PatternPageShell modern — narrow posture and composed back control',
     // Before: the shell repainted rest/hover/focus at (0,4,0)/(0,5,0) from the
     // raw neutral ramp, so `--ds-button-ghost-*` was inert on this one control
     // and the unqualified `:focus` left the treatment stuck after a click.
-    expect(skinStyles).not.toContain("[data-part='back'] > .rottay-button:hover");
-    expect(skinStyles).not.toContain("[data-part='back'] > .rottay-button:focus");
+    expect(skinStyles).not.toContain("[data-part='back'] > .ds-button:hover");
+    expect(skinStyles).not.toContain("[data-part='back'] > .ds-button:focus");
     expect(skinStyles).toContain(
-      "[data-part='back'] > .rottay-button {\n  flex-shrink: 0;\n}",
+      "[data-part='back'] > .ds-button {\n  flex-shrink: 0;\n}",
     );
   });
 });
