@@ -1,0 +1,31 @@
+/**
+ * TreeSelect Component Tokens - Rottay Design System
+ *
+ * Structural constants of the tree-select family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/tree-select`.
+ */
+
+:root {
+  --ds-tree-select-radius: var(--ds-radius-md);
+  --ds-tree-select-border-width: var(--ds-edge-standard-width);
+  --ds-tree-select-md-padding-y: calc(var(--ds-spacing-3) / 2);
+  --ds-tree-select-transition-duration: var(--ds-input-transition-duration);
+  --ds-tree-select-transition-timing: var(--ds-input-transition-timing);
+  --ds-tree-select-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-tree-select-clear-inset-inline-end: var(--ds-spacing-8);
+  --ds-tree-select-clear-size: 1.5rem;
+  --ds-tree-select-clear-gap: var(--ds-spacing-5);
+  --ds-tree-select-arrow-rotate-open: 180deg;
+  --ds-tree-select-chevron-rotate-open: 90deg;
+  --ds-tree-select-dropdown-radius: var(--ds-radius-lg);
+  --ds-tree-select-dropdown-max-height: 15rem;
+  --ds-tree-select-empty-min-height: 4.5rem;
+  --ds-tree-select-level: 0;
+  --ds-tree-select-indent: var(--ds-spacing-4);
+  --ds-tree-select-toggle-size: 1.5rem;
+  --ds-tree-select-check-size: 1rem;
+  --ds-tree-select-spinner-size: 0.75rem;
+  --ds-tree-select-spinner-stroke: var(--ds-border-width-2);
+  --ds-tree-select-spinner-duration: var(--ds-motion-glacial);
+  --ds-tree-select-touch-target-min: var(--ds-touch-target-min);
+}

@@ -5,8 +5,8 @@
  * Rottay Design System. Renders a fully custom tree dropdown with no
  * dependency on Ant Design's rc-tree. Paint and static geometry are owned by
  * the modern skin (`skin/tree-select.css`) keyed on `data-part`/`data-*`
- * hooks; the only inline geometry left is the sanctioned per-level indent
- * calc (runtime value over governed channels).
+ * hooks; the node's level travels as the `--ds-tree-select-level` runtime
+ * channel and the skin computes the indent from it.
  *
  * B6-02 (Phase B premium pass): the engine now consumes the contract's
  * `loading` (governed Spinner posture inside the panel), `status`
@@ -36,13 +36,15 @@ import type {
 } from '../../contracts';
 import { TREESELECT_DEFAULTS } from '../../contracts';
 import { FieldOverlayPanel, useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
-import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
+import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
+import { isTypeaheadKey, resolveListboxTarget, resolveTypeaheadTarget } from '../../../../runtime/collection/listbox';
+import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 
 /**
@@ -50,6 +52,29 @@ import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
  * subtree at the SAME specificity they had as descendants of the field root.
  */
 const PANEL_SCOPE = 'ds-tree-select ds-tree-select--modern ds-tree-select-panel';
+
+/** English floor for the `components.treeselect.*` catalog keys, so the field renders without a provider. */
+const EN_FALLBACK: Readonly<Record<string, string>> = {
+  'treeselect.placeholder': 'Please select',
+  'treeselect.search_placeholder': 'Search...',
+  'treeselect.not_found': 'No data',
+  'treeselect.clear': 'Clear',
+  'treeselect.expand': 'Expand',
+  'treeselect.collapse': 'Collapse',
+};
+
+function useTreeSelectCopy(): { t: (key: string) => string } {
+  const i18n = useOptionalTranslation('components');
+  return {
+    t: (key) => {
+      const resolved = i18n?.t(key);
+      if (!resolved || resolved === key || resolved === `components.${key}` || resolved.startsWith('i18n:missing:')) {
+        return EN_FALLBACK[key] ?? key;
+      }
+      return resolved;
+    },
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -274,7 +299,9 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   rovingKey,
   onRovingFocus,
 }) => {
-  const { t } = useTranslation('components');
+  const { t } = useTreeSelectCopy();
+  const row = useInteractionState({ disabled: node.disabled });
+  const toggle = useInteractionState();
   const key = node.key ?? node.value;
   const isExpanded = expandedKeys.has(key);
   const isSelected = selectedKeys.has(node.value);
@@ -328,15 +355,14 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   return (
     <li>
       <div
-        style={{
-          // Logical indent (RTL flips it free) riding the governed channels:
-          // per-level step + base offset, all skin-tunable. The step scales
-          // with the density channel (Tree B4-04 idiom) so deep trees in
-          // compact mode do not waste the panel's inline track.
-          paddingInlineStart: `calc(${level} * var(--ds-tree-select-indent, 16px) * var(--ds-density-effective-scale, 1) + var(--ds-spacing-2, 8px))`,
-        }}
+        style={{ '--ds-tree-select-level': level } as React.CSSProperties}
         onClick={() => !node.disabled && onSelect(node)}
-        data-part="option"
+        {...partAttributes('option', row.state)}
+        onPointerEnter={row.handlers.onPointerEnter}
+        onPointerLeave={row.handlers.onPointerLeave}
+        onPointerDown={row.handlers.onPointerDown}
+        onPointerUp={row.handlers.onPointerUp}
+        onBlur={row.handlers.onBlur}
         data-selected={isSelected || undefined}
         data-disabled={node.disabled || undefined}
         data-key={key}
@@ -350,7 +376,8 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         aria-disabled={node.disabled || undefined}
         aria-checked={checkable ? (isIndeterminate ? 'mixed' : isSelected) : undefined}
         tabIndex={!node.disabled && key === rovingKey ? 0 : -1}
-        onFocus={() => {
+        onFocus={(event) => {
+          row.handlers.onFocus(event);
           if (!node.disabled) onRovingFocus(key);
         }}
         onKeyDown={(e) => {
@@ -365,7 +392,13 @@ const TreeNode: React.FC<TreeNodeProps> = ({
           <button
             type="button"
             onClick={handleExpand}
-            data-part="tree-node-toggle"
+            {...partAttributes('tree-node-toggle', toggle.state)}
+            onPointerEnter={toggle.handlers.onPointerEnter}
+            onPointerLeave={toggle.handlers.onPointerLeave}
+            onPointerDown={toggle.handlers.onPointerDown}
+            onPointerUp={toggle.handlers.onPointerUp}
+            onFocus={toggle.handlers.onFocus}
+            onBlur={toggle.handlers.onBlur}
             aria-label={isExpanded ? t('treeselect.collapse') : t('treeselect.expand')}
             aria-expanded={isExpanded}
             tabIndex={-1}
@@ -388,7 +421,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         {checkable && (
           <input
             type="checkbox"
-            data-part="option-icon"
+            {...partAttributes('option-icon', { disabled: Boolean(node.disabled || node.disableCheckbox) })}
             checked={isSelected}
             ref={(el) => { if (el) el.indeterminate = isIndeterminate; }}
             disabled={node.disabled || node.disableCheckbox}
@@ -428,6 +461,29 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   );
 };
 
+function TreeSelectClearButton({ label, onClear }: { label: string; onClear: (event: React.MouseEvent) => void }) {
+  const action = useFieldAction();
+  return (
+    <button
+      type="button"
+      onClick={onClear}
+      aria-label={label}
+      {...partAttributes('clear-button', action.state)}
+      onPointerEnter={action.handlers.onPointerEnter}
+      onPointerLeave={action.handlers.onPointerLeave}
+      onPointerDown={action.handlers.onPointerDown}
+      onPointerUp={action.handlers.onPointerUp}
+      onPointerCancel={action.handlers.onPointerCancel}
+      onFocus={action.handlers.onFocus}
+      onBlur={action.handlers.onBlur}
+      onKeyDown={action.handlers.onKeyDown}
+      onKeyUp={action.handlers.onKeyUp}
+    >
+      <ActionCloseIcon decorative size={12} />
+    </button>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // TreeSelect component
 // ---------------------------------------------------------------------------
@@ -445,7 +501,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
  */
 export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
   (props, ref) => {
-    const { t } = useTranslation('components');
+    const { t } = useTreeSelectCopy();
 
     const {
       treeData: rawTreeData,
@@ -532,8 +588,9 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
     /** APG roving tabindex: the one row in the tab order (Tree B4-04 idiom). */
     const [rovingKey, setRovingKey] = useState<string | number | null>(null);
-    /** Typeahead rolling buffer (500ms window, Tree B4-04 cadence). */
     const typeaheadRef = useRef<TypeaheadState>({ buffer: '', lastKeyTime: 0 });
+    const trigger = useInteractionState({ disabled });
+    const searchField = useInteractionState();
     /** Trigger↔popup linkage (aria-controls lives on the dropdown shell: the
      *  tree unmounts under the empty/loading branches, the shell does not). */
     const dropdownId = useId();
@@ -581,12 +638,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       setPanelEl(node);
     }, []);
 
-    // Reading-direction probe (Tree/Segmented engine idiom).
-    const isRtl = (el: HTMLElement): boolean => {
-      const scoped = el.closest('[dir]');
-      if (scoped) return scoped.getAttribute('dir') === 'rtl';
-      return document.documentElement.dir === 'rtl';
-    };
 
     // Sync controlled expanded keys
     useEffect(() => {
@@ -779,86 +830,47 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       }
 
       const currentIndex = rows.indexOf(row);
-
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      const vertical = resolveListboxTarget(e.key, { activeIndex: currentIndex, itemCount: rows.length });
+      if (vertical !== null) {
         e.preventDefault();
-        if (rows.length === 0) return;
-        const nextIndex = currentIndex < 0
-          ? 0
-          : (currentIndex + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length;
-        rows[nextIndex]?.focus();
-        return;
-      }
-      if (e.key === 'Home') {
-        e.preventDefault();
-        rows[0]?.focus();
-        return;
-      }
-      if (e.key === 'End') {
-        e.preventDefault();
-        rows[rows.length - 1]?.focus();
+        if (vertical >= 0) rows[vertical]?.focus();
         return;
       }
 
-      // APG typeahead (Tree B4-04 idiom): printable characters — Space
-      // excluded, it toggles selection — move focus to the next visible row
-      // whose label starts with the rolling 500ms buffer. A buffer that is
-      // still growing matches from the CURRENT row (it may be the only
-      // match); a fresh character starts from the next one; a buffer that
-      // stopped matching restarts from the fresh character, which cycles
-      // repeated letters across same-initial rows.
-      if (e.key.length === 1 && e.key !== ' ' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        const advanced = advanceTypeahead(typeaheadRef.current, e.key.toLowerCase(), Date.now());
-        let buffer = advanced.prefix;
-        // A buffer longer than the keystroke that produced it is still
-        // growing, so the search includes the CURRENT row (it may be the only
-        // match); a buffer that restarted begins at the next row.
-        const extending = buffer.length > 1;
-        typeaheadRef.current.lastKeyTime = advanced.state.lastKeyTime;
-        const labels = rows.map((r) =>
-          (r.querySelector('[data-part="tree-node-label"]')?.textContent ?? '').trim().toLowerCase()
-        );
-        const findMatch = (needle: string, offset: number): number => {
-          for (let i = 0; i < rows.length; i += 1) {
-            const idx = (currentIndex + offset + i) % rows.length;
-            if (labels[idx]?.startsWith(needle)) return idx;
-          }
-          return -1;
-        };
-        let match = findMatch(buffer, extending ? 0 : 1);
-        if (match < 0 && buffer.length > 1) {
-          buffer = e.key.toLowerCase();
-          match = findMatch(buffer, 1);
-        }
-        typeaheadRef.current.buffer = buffer;
-        if (match >= 0) {
+      // Space is kept for selection, so it never feeds the type-ahead buffer.
+      if (isTypeaheadKey(e)) {
+        const result = resolveTypeaheadTarget(typeaheadRef.current, e.key, {
+          activeIndex: currentIndex,
+          itemCount: rows.length,
+          getItemText: (index) => rows[index]?.querySelector('[data-part="tree-node-label"]')?.textContent ?? undefined,
+          now: Date.now(),
+        });
+        typeaheadRef.current = result.state;
+        if (result.index >= 0) {
           e.preventDefault();
-          rows[match]?.focus();
+          rows[result.index]?.focus();
         }
         return;
       }
 
-      const rtl = isRtl(row);
-      const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
-      const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
+      const intent = resolveNavigationIntent(e.key, { orientation: 'horizontal', rtl: resolveReadingDirectionIsRtl(row) });
       const key = row.getAttribute('data-key');
       const hasChildren = row.getAttribute('data-has-children') === 'true';
       const expanded = row.getAttribute('data-expanded') === 'true';
 
-      if (e.key === forwardKey) {
+      if (intent === 'next') {
         if (!hasChildren || expanded || key === null) return;
         e.preventDefault();
         handleToggle(key);
         return;
       }
-      if (e.key === backwardKey) {
+      if (intent === 'previous') {
         e.preventDefault();
         if (expanded && key !== null) {
           handleToggle(key);
           return;
         }
-        // Collapsed or leaf: move DOM focus to the parent row (nearest
-        // previous row with a lower data-level).
+        // A collapsed row or a leaf moves focus to its parent, the nearest previous row one level up.
         const level = Number(row.getAttribute('data-level') ?? 0);
         if (level === 0) return;
         for (let i = currentIndex - 1; i >= 0; i -= 1) {
@@ -969,7 +981,13 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
             }
           }}
           id={id}
-          data-part="trigger"
+          {...partAttributes('trigger', trigger.state)}
+          onPointerEnter={trigger.handlers.onPointerEnter}
+          onPointerLeave={trigger.handlers.onPointerLeave}
+          onPointerDown={trigger.handlers.onPointerDown}
+          onPointerUp={trigger.handlers.onPointerUp}
+          onFocus={trigger.handlers.onFocus}
+          onBlur={trigger.handlers.onBlur}
           data-size={size}
           data-status={status || undefined}
           data-open={isOpen || undefined}
@@ -1002,14 +1020,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
             the second pass; the engine-advanced query that looked for it is
             queued for a independent code audit repin). */}
         {allowClear && selectedKeys.size > 0 && !disabled && (
-          <button
-            type="button"
-            onClick={handleClear}
-            data-part="clear-button"
-            aria-label={t('treeselect.clear')}
-          >
-            <ActionCloseIcon decorative size={12} />
-          </button>
+          <TreeSelectClearButton label={t('treeselect.clear')} onClear={handleClear} />
         )}
 
         {isOpen && (
@@ -1032,7 +1043,13 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                 <input
                   ref={searchInputRef}
                   type="text"
-                  data-part="search-input"
+                  {...partAttributes('search-input', searchField.state)}
+                  onPointerEnter={searchField.handlers.onPointerEnter}
+                  onPointerLeave={searchField.handlers.onPointerLeave}
+                  onPointerDown={searchField.handlers.onPointerDown}
+                  onPointerUp={searchField.handlers.onPointerUp}
+                  onFocus={searchField.handlers.onFocus}
+                  onBlur={searchField.handlers.onBlur}
                   placeholder={t('treeselect.search_placeholder')}
                   aria-label={t('treeselect.search_placeholder')}
                   value={searchValue}

@@ -1,161 +1,106 @@
 /**
- * Modern TreeSelect skin (WO-SKIN-02 checkpoint B, dropdown family;
- * lane-A Quiet Premium pass).
+ * Modern TreeSelect skin.
  *
- * LAYER: `layer(rottay-engines)`. The canonical order lives in
- * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
- * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
- * component base and is in turn overridden by the structure and surface tiers;
- * the unlayered compiled tenant artifact wins over all of them.
- *
- * TWO SCOPE ROOTS. The field root is the outer `<div>` carrying
- * `ds-tree-select ds-tree-select--modern` + `data-part='root'`; the trigger,
- * value/placeholder, clear button and arrow are its descendants. The panel is
- * PORTALED through the overlay kernel (WO-CAN-05) and is therefore NOT a
- * descendant of the field: it carries its own
- * `ds-tree-select ds-tree-select--modern ds-tree-select-panel` scope, and the
- * search box, tree list and every node row are addressed through that class.
- * Both prefixes are (0,3,0), so every rule below kept the specificity it had.
- *
- * SPECIFICITY (P-48): the Rottay artifact ships an unlayered `*` border floor at
- * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
- * classes (0,2,0) + `[data-part='root']` + any descendant `[data-part]`
- * already reach (0,4,0) with a single descendant hop, so no part here needs
- * the repeated-`[data-part]` trick.
- *
- * GEOMETRY DRAIN (lane-A pass): the dropdown's z-index/max-height/slide-in
- * animation, the option-row transitions, the arrow/chevron rotations
- * and the loading spinner's animation all lived inline; they are skin-owned
- * now so the reduced-motion block has full authority. The per-level indent
- * stays in the engine as a runtime calc over governed channels
- * (`--ds-tree-select-indent`, `--ds-spacing-2`) using logical
- * `paddingInlineStart` -- RTL flips the tree for free. The chevron mirror
- * under `[dir='rtl']` is skin-owned via `data-expanded`.
- *
- * A11Y (lane-A pass): the trigger is now a real combobox (role/tabIndex/
- * aria-expanded + Enter/Space/ArrowDown/Escape), options carry
- * role='option'/aria-selected/tabIndex + Enter/Space, and every suppressed
- * outline has a `:focus-visible` ring replacement below.
- *
- * KEYFRAMES: `ds-tree-select-slide-in` backs the dropdown's skin-owned
- * `animation`. The loading spinner resolves against the global foundation
- * `ds-foundation-spin` keyframe.
- *
- * PER-NODE LAZY SPINNER (deliberate eje-12 deviation, documented): the
- * toggle's loading indicator is a phrasing-content `<span data-part=
- * 'loading'>` painted here (border arc over `ds-foundation-spin`), NOT the
- * composed Spinner primitive -- the Spinner's root is a `<div>` with a
- * `role='status'` live region, which is invalid inside the `<button>`
- * toggle's content model, and swapping the whole toggle for a Spinner while
- * `loadData` runs would unmount the focused control (focus loss on
- * activation). The panel-level `loading` state DOES compose ModernSpinner.
- *
- * B6-02 (Phase B premium pass): (1) the trigger/search surfaces moved off
- * the generic `--ds-color-bg-input` (near-black under the TMM dark-text
- * projection — the K4-D Transfer adjudication) onto the certified
- * `--ds-input-bg` channel; (2) trigger geometry (box sizing, per-size
- * height/font/padding, density-scaled) drained from the engine's inline
- * `getSizeStyle` into `data-size` rules; (3) the contract `status` prop
- * paints the Input-family error/warning frame grammar (border + focus halo
- * via the certified `--ds-input-{error,warning}-*` channels); (4) search
- * input and option checkbox geometry drained from inline styles; (5) option
- * rows scale their block padding with `--ds-density-effective-scale`;
- * (6) the contract `loading` prop renders a governed Spinner posture
- * (`loading-state`, Select loading grammar).
+ * The field is `ds-tree-select ds-tree-select--modern[data-part='root']`; the
+ * tree panel is portaled with its own `ds-tree-select-panel` scope. The trigger,
+ * search input, clear action, rows and toggles carry the kernel's `data-state`;
+ * a row carries its depth as `--ds-tree-select-level`. Every channel is written
+ * by `derivation/chrome/tree-select` or `presentation/components/tree-select`.
  */
 
 @keyframes ds-tree-select-slide-in {
   from {
     opacity: 0;
-    transform: translateY(-4px) scale(0.98);
+    transform: translateY(calc(var(--ds-spacing-1) * -1)) scale(var(--ds-motion-scale-in));
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
   }
 }
 
-/* ---- root + trigger ---- */
-.ds-tree-select.ds-tree-select--modern[data-part="root"] {
+.ds-tree-select.ds-tree-select--modern[data-part='root'] {
   position: relative;
 }
 
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"] {
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'] {
   display: flex;
   align-items: center;
   box-sizing: border-box;
   inline-size: 100%;
   cursor: pointer;
-  border: 1px solid var(--ds-color-border);
-  border-radius: var(--ds-radius-md);
-  /* Certified Input-family channel (B6-02): the generic --ds-color-bg-input
-     resolves near-black under the TMM dark-text projection (K4-D Transfer
-     adjudication); --ds-input-bg is the Input family's own surface. */
-  background: var(--ds-input-bg, var(--ds-surface-control));
-  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-tree-select-radius, var(--ds-radius-md));
+  background: var(--ds-tree-select-bg, var(--ds-material-control-background));
+  color: var(--ds-tree-select-ink, var(--ds-color-text-primary));
+  font-family: var(--ds-tree-select-font-family, var(--ds-font-family-base));
   outline: none;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing),
+    box-shadow var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing);
 }
-/* Trigger geometry per size (drained from the engine's inline getSizeStyle,
-   B6-02): the Input family's certified height/font/padding channels, scaled
-   by the governed density channel (tag-input idiom). */
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="small"] {
-  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-part='trigger'] {
+  border: var(--ds-tree-select-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-tree-select-border, var(--ds-material-control-border));
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-size='small'] {
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
   font-size: var(--ds-input-sm-font-size);
-  padding: 4px var(--ds-input-sm-padding-x);
+  padding: var(--ds-spacing-1) var(--ds-input-sm-padding-x);
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="middle"] {
-  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-size='middle'] {
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
   font-size: var(--ds-input-md-font-size);
-  padding: 6px var(--ds-input-md-padding-x);
+  padding: var(--ds-tree-select-md-padding-y) var(--ds-input-md-padding-x);
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="large"] {
-  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-size='large'] {
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
   font-size: var(--ds-input-lg-font-size);
-  padding: 8px var(--ds-input-lg-padding-x);
+  padding: var(--ds-spacing-2) var(--ds-input-lg-padding-x);
 }
-/* Contract `status` (B6-02): the Input-family error/warning frame grammar —
-   border at rest AND under focus (source order keeps these after the
-   generic focus rule so equal specificity resolves to status). */
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-status="error"] {
-  border-color: var(--ds-input-error-border, var(--ds-color-error));
+
+@media (hover: hover) {
+  .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-part='trigger']:is([data-state~='hovered'], :hover):not([data-disabled='true']) {
+    border-color: var(--ds-tree-select-border-hover, var(--ds-material-control-border-hover));
+  }
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-status="warning"] {
-  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
-}
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:where(:hover):not([data-disabled='true']) {
-  border-color: var(--ds-tree-select-border-hover, var(--ds-material-control-border-hover));
-}
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:focus-visible {
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
   border-color: var(--ds-tree-select-border-focus, var(--ds-color-primary));
-  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
+  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-focus-ring));
 }
-/* Status under focus (B6-02): the frame keeps the status hue; the halo reads
-   the certified Input status channels. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-status="error"]:focus-visible {
-  border-color: var(--ds-input-error-border, var(--ds-color-error));
-  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring)));
+
+/* A status frame keeps its hue at rest, on hover and under focus, where it takes its status halo. */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-part='trigger'][data-status='error'] {
+  border-color: var(--ds-tree-select-error-border, var(--ds-color-error));
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-status="warning"]:focus-visible {
-  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
-  box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring)));
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-part='trigger'][data-status='warning'] {
+  border-color: var(--ds-tree-select-warning-border, var(--ds-color-warning));
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-disabled='true'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-status='error']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow: var(--ds-tree-select-error-shadow-focus, var(--ds-focus-ring));
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-status='warning']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow: var(--ds-tree-select-warning-shadow-focus, var(--ds-focus-ring));
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-disabled='true'] {
+  opacity: var(--ds-tree-select-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
 
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="placeholder"] {
-  color: var(--ds-color-text-secondary);
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-tree-select-placeholder, var(--ds-type-color-muted));
 }
 
-/* Trigger text takes the remaining track and truncates (drained from the
-   `flex-1 truncate` utility). */
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="value"],
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="placeholder"] {
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='value'],
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='placeholder'] {
   flex: 1;
   min-inline-size: 0;
   overflow: hidden;
@@ -163,193 +108,171 @@
   white-space: nowrap;
 }
 
-/* Clear lives outside the combobox (APG: no nested interactives); the skin
-   overlays it between the value and the arrow zone (drained 24px inline
-   geometry). */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="clear-button"] {
+/* The clear action lives outside the combobox and is overlaid between the value and the chevron. */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button'] {
   position: absolute;
-  inset-inline-end: var(--ds-tree-select-clear-inset-inline-end, 30px);
+  inset-inline-end: var(--ds-tree-select-clear-inset-inline-end);
   inset-block-start: 50%;
   transform: translateY(-50%);
-  inline-size: var(--ds-tree-select-clear-size, 24px);
-  block-size: var(--ds-tree-select-clear-size, 24px);
+  inline-size: var(--ds-tree-select-clear-size);
+  block-size: var(--ds-tree-select-clear-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   cursor: pointer;
   background: transparent;
-  color: var(--ds-color-text-primary);
-  border-radius: 50%;
+  color: var(--ds-tree-select-clear-color, var(--ds-color-text-primary));
+  border-radius: var(--ds-radius-full);
   border: none;
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: color var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing);
 }
-.ds-tree-select.ds-tree-select--modern[data-part="root"]:has([data-part="clear-button"]) [data-part="arrow-icon"] {
-  margin-inline-start: var(--ds-tree-select-clear-gap, 20px);
+
+.ds-tree-select.ds-tree-select--modern[data-part='root']:has([data-part='clear-button']) [data-part='arrow-icon'] {
+  margin-inline-start: var(--ds-tree-select-clear-gap);
 }
-@media (hover: hover) {
-  .ds-tree-select.ds-tree-select--modern[data-part="root"]
-    [data-part="clear-button"]:hover {
-    color: var(--ds-color-error);
-  }
+
+/* Clearing is a neutral reset: its hover steps the ink, never to the error hue. */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button']:is([data-state~='hovered'], :hover),
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button']:is([data-state~='pressed'], :active) {
+  color: var(--ds-tree-select-clear-color-hover, var(--ds-color-text-primary));
 }
-/* Touch/active equivalent of the hover treatment. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="clear-button"]:active {
-  color: var(--ds-color-error);
-}
-.ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="clear-button"]:focus-visible {
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
-  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
+  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-focus-ring));
 }
 
-/* Trigger chevron: open rotation drained from the `rotate-180` utility +
-   inline transition. The glyph is vertically symmetric -- no RTL mirror. */
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="arrow-icon"] {
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
-}
-.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-open='true'] [data-part="arrow-icon"] {
-  transform: rotate(180deg);
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='arrow-icon'] {
+  transition: transform var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing);
 }
 
-/* ---- dropdown panel: the PORTALED panel root, addressed by its own scope
-        class rather than as a descendant of the field. Placement, the band
-        and the measured trigger width are the overlay kernel's inline style;
-        the skin owns the surface, the cap and the entrance only. ---- */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel[data-part="dropdown"] {
-  z-index: var(--ds-tree-select-dropdown-z, var(--ds-z-index-dropdown));
-  max-block-size: var(--ds-tree-select-dropdown-max-height, 240px);
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(var(--ds-tree-select-arrow-rotate-open));
+}
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel[data-part='dropdown'] {
+  max-block-size: var(--ds-tree-select-dropdown-max-height);
   overflow-y: auto;
-  border-radius: var(--ds-radius-lg);
+  border-radius: var(--ds-tree-select-dropdown-radius, var(--ds-radius-lg));
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
-  border-color: var(--ds-color-border);
-  border-width: 1px;
-  border-style: solid;
-  animation: ds-tree-select-slide-in var(--ds-motion-fast) var(--ds-motion-ease-out);
+    var(--ds-tree-select-dropdown-bg, var(--ds-material-overlay-background));
+  box-shadow: var(--ds-tree-select-dropdown-shadow, var(--ds-elevation-2));
+  animation: ds-tree-select-slide-in var(--ds-tree-select-transition-duration) var(--ds-motion-ease-out);
 }
 
-/* Search wrapper: padding drained from `p-2`; the sticky top bar (was the
-   `sticky top-0 z-10` utilities) keeps the field visible over long trees,
-   stacked one step above the local base (token scale). */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="search-input-wrapper"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel[data-part='dropdown'][data-part='dropdown'] {
+  border: var(--ds-edge-hairline-width) solid var(--ds-tree-select-dropdown-border, var(--ds-color-border));
+}
+
+/* The search bar sticks over long trees one step above the panel's own content. */
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='search-input-wrapper'] {
   position: sticky;
   inset-block-start: 0;
   z-index: var(--ds-z-index-relative-above);
   padding: var(--ds-spacing-2);
-  border-bottom: 1px solid var(--ds-color-border);
-  background: var(--ds-surface-card);
+  background: var(--ds-tree-select-dropdown-bg, var(--ds-material-overlay-background));
 }
 
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="search-input"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
+  border-block-end: var(--ds-edge-hairline-width) solid var(--ds-tree-select-divider, var(--ds-color-border));
+}
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='search-input'] {
   inline-size: 100%;
   box-sizing: border-box;
-  /* Geometry drained from the engine's inline style (B6-02). */
   block-size: var(--ds-input-sm-height);
-  padding: 4px var(--ds-input-sm-padding-x);
+  padding: var(--ds-spacing-1) var(--ds-input-sm-padding-x);
   font-size: var(--ds-input-sm-font-size);
-  border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
-  /* Certified Input-family channel (B6-02), same adjudication as the
-     trigger above. */
-  background: var(--ds-input-bg, var(--ds-surface-control));
-  color: var(--ds-color-text-primary);
+  background: var(--ds-tree-select-bg, var(--ds-material-control-background));
+  color: var(--ds-tree-select-ink, var(--ds-color-text-primary));
   outline: none;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
-}
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="search-input"]:focus-visible {
-  border-color: var(--ds-tree-select-border-focus, var(--ds-color-primary));
-  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
+    border-color var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing),
+    box-shadow var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing);
 }
 
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="empty"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='search-input'][data-part='search-input'] {
+  border: var(--ds-edge-hairline-width) solid var(--ds-tree-select-border, var(--ds-material-control-border));
+}
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='search-input'][data-part='search-input']:is([data-state~='focus-visible'], :focus-visible) {
+  border-color: var(--ds-tree-select-border-focus, var(--ds-color-primary));
+  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-focus-ring));
+}
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='empty'] {
   padding: var(--ds-spacing-4);
   text-align: center;
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-tree-select-empty-ink, var(--ds-color-text-secondary));
 }
 
-/* Contract `loading` posture (B6-02): the governed Spinner centered in the
-   empty well's spatial contract (Select loading-state grammar); the Spinner
-   primitive owns ring/cadence/reduced-motion/forced-colors. */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="loading-state"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='loading-state'] {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--ds-spacing-2);
-  min-block-size: 4.5rem;
+  min-block-size: var(--ds-tree-select-empty-min-height);
   padding: var(--ds-spacing-4);
-  color: var(--ds-color-text-muted, var(--ds-color-text-secondary));
+  color: var(--ds-tree-select-empty-ink, var(--ds-color-text-secondary));
 }
 
-/* Tree list rhythm (drained from the `p-2` utility). */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="tree-list"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-list'] {
   padding: var(--ds-spacing-2);
 }
 
-/* ---- tree node row (layout drained from `flex items-center py-1
-        cursor-pointer` and the toggle's inline geometry) ---- */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="option"] {
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option'] {
   display: flex;
   align-items: center;
-  /* Density (B6-02): row rhythm scales with the governed channel; the
-     per-level indent scales in the engine's calc. */
-  padding-block: calc(var(--ds-spacing-1) * var(--ds-density-effective-scale));
-  cursor: pointer;
-  /* Base transparent frame so selection never shifts layout by 1px. */
-  border: 1px solid transparent;
-  border-radius: var(--ds-radius-sm);
+  padding-block: var(--ds-spacing-1);
+  padding-inline-start: calc(
+    var(--ds-tree-select-level) * var(--ds-tree-select-indent) * var(--ds-density-effective-scale) + var(--ds-spacing-2)
+  );
   padding-inline-end: var(--ds-spacing-2);
+  cursor: pointer;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-tree-select-option-ink, var(--ds-color-text-primary));
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background-color var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing),
+    color var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing),
+    border-color var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing);
 }
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option'][data-part='option'] {
+  border: var(--ds-edge-hairline-width) solid transparent;
+}
+
 @media (hover: hover) {
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-    [data-part="option"]:where(:hover):not([data-selected='true']):not([data-disabled='true']) {
-    background: var(--ds-color-bg-hover);
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled='true']) {
+    background: var(--ds-tree-select-option-bg-hover, var(--ds-material-overlay-background));
   }
 }
-/* Touch/active equivalent of the hover wash. */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="option"]:active:not([data-selected='true']):not([data-disabled='true']) {
-  background: var(--ds-color-bg-hover);
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option']:is([data-state~='pressed'], :active):not([data-selected='true']):not([data-disabled='true']) {
+  background: var(--ds-tree-select-option-bg-hover, var(--ds-material-overlay-background));
 }
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="option"]:focus-visible {
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
-  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
+  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-focus-ring));
 }
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="option"][data-disabled='true'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option'][data-disabled='true'] {
+  opacity: var(--ds-tree-select-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="option"][data-selected="true"] {
-  background: var(
-    --ds-color-bg-selected,
-    color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
-  );
-  color: var(--ds-color-primary);
-  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option'][data-part='option'][data-selected='true'] {
+  background: var(--ds-tree-select-option-bg-selected, var(--ds-material-overlay-background));
+  color: var(--ds-tree-select-option-ink-selected, var(--ds-color-primary));
+  border-color: var(--ds-tree-select-option-border-selected, var(--ds-color-primary));
   font-weight: var(--ds-font-weight-medium);
 }
 
-/* Long taxonomy labels truncate -- never wrap mid-word (content-integrity).
-   Layout drained from the `flex-1` utility. */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="tree-node-label"] {
+/* Long taxonomy labels truncate and never wrap mid-word. */
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-label'] {
   flex: 1;
   min-inline-size: 0;
   overflow: hidden;
@@ -357,170 +280,139 @@
   white-space: nowrap;
 }
 
-/* Match highlight: quiet semibold primary ink (the `font-semibold` utility
-   is drained here). */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="tree-node-highlight"] {
-  color: var(--ds-color-primary);
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-highlight'] {
+  color: var(--ds-tree-select-highlight-ink, var(--ds-color-primary));
   font-weight: var(--ds-font-weight-semibold);
 }
 
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="tree-node-toggle"] {
-  block-size: 24px;
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-toggle'] {
+  block-size: var(--ds-tree-select-toggle-size);
   padding-block: 0;
   padding-inline: var(--ds-spacing-2);
   margin-inline-end: var(--ds-spacing-1);
   cursor: pointer;
-  font-size: var(--ds-font-size-xs);
+  font-size: var(--ds-type-caption-font-size);
   background: transparent;
-  color: var(--ds-color-text-primary);
+  color: var(--ds-tree-select-ink, var(--ds-color-text-primary));
   border-radius: var(--ds-radius-md);
   border: none;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background-color var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing);
 }
-@media (hover: hover) {
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-    [data-part="tree-node-toggle"]:hover {
-    background: var(--ds-color-bg-hover);
-  }
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-toggle']:is([data-state~='hovered'], :hover),
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-toggle']:is([data-state~='pressed'], :active) {
+  background: var(--ds-tree-select-option-bg-hover, var(--ds-material-overlay-background));
 }
-/* Touch/active equivalent of the hover wash. */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="tree-node-toggle"]:active {
-  background: var(--ds-color-bg-hover);
-}
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="tree-node-toggle"]:focus-visible {
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-toggle']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
-  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
+  box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-focus-ring));
 }
 
-/* Expand chevron: governed icon — the facade's autoMirror flips it under
-   RTL, so the skin only owns the expansion rotation (collapsed = inline-end,
-   expanded = rotated down). The former manual `scaleX(-1)` rules are gone:
-   they would have double-mirrored the autoMirror. */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="chevron"] {
+/* The governed chevron mirrors under RTL through the icon facade; the skin only rotates it open. */
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='chevron'] {
   display: inline-flex;
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
-}
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="chevron"][data-expanded='true'] {
-  transform: rotate(90deg);
+  transition: transform var(--ds-tree-select-transition-duration) var(--ds-tree-select-transition-timing);
 }
 
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="leaf-spacer"] {
-  inline-size: 24px;
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='chevron'][data-expanded='true'] {
+  transform: rotate(var(--ds-tree-select-chevron-rotate-open));
+}
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='leaf-spacer'] {
+  inline-size: var(--ds-tree-select-toggle-size);
   flex-shrink: 0;
 }
 
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="loading"] {
-  inline-size: 12px;
-  block-size: 12px;
-  border: 2px solid var(--ds-color-border);
-  border-top-color: var(--ds-color-primary);
-  border-radius: 50%;
-  /* Drained from the inline animation (reduced-motion now governs it). */
-  animation: ds-foundation-spin var(--ds-tree-select-spinner-duration, var(--ds-motion-glacial)) linear infinite;
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='loading'] {
+  inline-size: var(--ds-tree-select-spinner-size);
+  block-size: var(--ds-tree-select-spinner-size);
+  border: var(--ds-tree-select-spinner-stroke) solid var(--ds-tree-select-spinner-track, var(--ds-color-border));
+  border-top-color: var(--ds-tree-select-spinner-ink, var(--ds-color-primary));
+  border-radius: var(--ds-radius-full);
+  animation: ds-foundation-spin var(--ds-tree-select-spinner-duration) linear infinite;
 }
 
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="option-icon"] {
-  accent-color: var(--ds-color-primary);
-  /* Box + cursor drained from the engine's inline style (B6-02); the
-     checkbox never stretches with the row. */
-  inline-size: 16px;
-  block-size: 16px;
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option-icon'] {
+  accent-color: var(--ds-tree-select-check-accent, var(--ds-color-primary));
+  inline-size: var(--ds-tree-select-check-size);
+  block-size: var(--ds-tree-select-check-size);
   flex: none;
   cursor: pointer;
-  /* Logical gap after the checkbox (was the physical `mr-2` utility). */
   margin-inline-end: var(--ds-spacing-2);
 }
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="option-icon"]:disabled {
+
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option-icon']:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
 }
 
-/* treeLine guide: physical border-left -> logical inline-start (RTL flips it
-   to the correct side); 1px hairline, the tree connector idiom (tree.css).
-   The indent (was the `ml-4` utility) is skin-owned. */
-.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-  [data-part="tree-list"][data-tree-line="true"] {
+/* The tree line sits on the inline start, so RTL draws it on the correct side. */
+.ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-list'][data-tree-line='true'] {
   margin-inline-start: var(--ds-spacing-4);
-  border-inline-start: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border-inline-start: var(--ds-edge-hairline-width) solid var(--ds-tree-select-line, var(--ds-color-border-subtle));
 }
 
-/* ---- coarse pointer: rows/toggles/trigger reach the 44px floor via
-        min-block-size (wins over inline heights, fine pointers untouched). ---- */
 @media (hover: none) and (pointer: coarse) {
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"],
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="option"],
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="tree-node-toggle"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"] {
-    min-block-size: var(--ds-tree-select-touch-target-min, var(--ds-touch-target-min, 44px));
+  .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option'],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-toggle'],
+  .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button'] {
+    min-block-size: var(--ds-tree-select-touch-target-min, var(--ds-touch-target-min));
   }
 }
 
-/* ---- reduced motion: dropdown entrance, spinner, chevron/arrow rotations
-        and every state transition go quiet. ---- */
 @media (prefers-reduced-motion: reduce) {
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel[data-part="dropdown"] {
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel[data-part='dropdown'],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='loading'] {
     animation: none;
   }
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="loading"] {
-    animation: none;
-  }
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"],
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="search-input"],
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="option"],
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="tree-node-toggle"],
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="chevron"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="arrow-icon"],
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"] {
+
+  .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='search-input'],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option'],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-toggle'],
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='chevron'],
+  .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='arrow-icon'],
+  .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button'] {
     transition: none;
   }
 }
 
-/* ---- forced colors (system colors only): the selected node reads as a
-        system selection; focus rings re-map to Highlight outlines (the
-        box-shadow rings drop); the tree connector and chevron inherit the
-        forced palette. ---- */
 @media (forced-colors: active) {
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-    [data-part="option"][data-selected="true"] {
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option'][data-selected='true'] {
     background: Highlight;
     border-color: Highlight;
     color: HighlightText;
   }
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:focus-visible,
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="search-input"]:focus-visible,
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="option"]:focus-visible,
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="tree-node-toggle"]:focus-visible,
-  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"]:focus-visible {
+
+  .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='search-input']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-toggle']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-    [data-part="option"][data-disabled='true'] {
+
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='option'][data-disabled='true'] {
     color: GrayText;
   }
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-    [data-part="tree-list"][data-tree-line="true"] {
+
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-list'][data-tree-line='true'] {
     border-inline-start-color: ButtonText;
   }
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="chevron"] {
+
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='chevron'] {
     color: ButtonText;
   }
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel
-    [data-part="tree-node-highlight"] {
+
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='tree-node-highlight'] {
     color: CanvasText;
   }
-  /* Per-node lazy spinner: authored border colors are forced away, which
-     would leave a uniform static ring -- the arc re-expresses in system
-     colors so the activity cue keeps its shape. */
-  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part="loading"] {
+
+  /* The lazy-load arc keeps its shape in system colours. */
+  .ds-tree-select.ds-tree-select--modern.ds-tree-select-panel [data-part='loading'] {
     border-color: ButtonText;
     border-top-color: Highlight;
   }
