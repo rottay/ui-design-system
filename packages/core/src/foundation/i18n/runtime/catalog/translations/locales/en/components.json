@@ -1735,5 +1735,8 @@
       "success": "Success",
       "warning": "Warning"
     }
+  },
+  "textarea": {
+    "count_limit": "{count}/{max}"
   }
 }
