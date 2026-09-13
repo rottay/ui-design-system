@@ -46,7 +46,6 @@ describe('Mentions modern advanced coverage', () => {
 
     const list = await screen.findByRole('listbox');
     expect(list).toHaveAttribute('data-placement', 'top');
-    expect(list.className).toContain('rottay-mentions__popup--top');
     expect(list.className).toContain('mentions-popup');
 
     const optionButtons = within(list).getAllByRole('option');
@@ -85,7 +84,7 @@ describe('Mentions modern advanced coverage', () => {
 
     let input = screen.getByRole('textbox');
     expect(input).toHaveAttribute('rows', '2');
-    expect(input.className).toContain('rottay-mentions__input--warning');
+    expect(input).toHaveAttribute('data-status', 'warning');
     expect(ref.current).toBeInstanceOf(HTMLTextAreaElement);
 
     Object.defineProperty(input, 'selectionStart', { configurable: true, writable: true, value: 4 });
@@ -147,17 +146,12 @@ describe('Mentions modern advanced coverage', () => {
     fireEvent.change(input, { target: { value: '@' } });
     await screen.findByRole('listbox');
 
-    // OPTIONS[1] ('archer') is disabled: ArrowDown onto it, then Enter must NOT
-    // select it (the pointer path is guarded by the disabled attribute; the
-    // keyboard path now matches).
+    // OPTIONS[1] ('archer') is disabled: the listbox kernel steps over it, so
+    // one ArrowDown from 'alice' lands on 'backend' and Enter selects that.
     fireEvent.keyDown(input, { key: 'ArrowDown' });
+    expect(input.getAttribute('aria-activedescendant')).toMatch(/-option-2$/);
     fireEvent.keyDown(input, { key: 'Enter' });
-    expect(handleSelect).not.toHaveBeenCalled();
     expect(handleChange).not.toHaveBeenCalledWith(expect.stringContaining('archer'));
-
-    // ArrowDown once more lands on 'backend' (enabled) and selects.
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
     await waitFor(() => {
       expect(handleSelect).toHaveBeenCalledWith(expect.objectContaining({ value: 'backend' }), '@');
     });
@@ -170,7 +164,11 @@ describe('Mentions modern advanced coverage', () => {
   it('closes the popup on Tab without selecting a disabled option', async () => {
     const handleSelect = vi.fn();
     render(
-      <ModernMentions options={OPTIONS} filterOption={false} onSelect={handleSelect} />
+      <ModernMentions
+        options={OPTIONS.map((option) => ({ ...option, disabled: true }))}
+        filterOption={false}
+        onSelect={handleSelect}
+      />
     );
 
     const input = screen.getByRole('textbox');
@@ -179,6 +177,7 @@ describe('Mentions modern advanced coverage', () => {
     await screen.findByRole('listbox');
 
     fireEvent.keyDown(input, { key: 'ArrowDown' });
+    expect(input).not.toHaveAttribute('aria-activedescendant');
     fireEvent.keyDown(input, { key: 'Tab' });
 
     expect(handleSelect).not.toHaveBeenCalled();

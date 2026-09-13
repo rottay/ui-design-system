@@ -1,0 +1,29 @@
+/**
+ * Mentions Component Tokens - Rottay Design System
+ *
+ * Structural constants of the mentions family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/mentions`.
+ */
+
+:root {
+  --ds-mentions-border-width: var(--ds-edge-standard-width);
+  --ds-mentions-radius: var(--ds-radius-md);
+  --ds-mentions-transition-duration: var(--ds-input-transition-duration);
+  --ds-mentions-transition-timing: var(--ds-input-transition-timing);
+  --ds-mentions-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-mentions-autosize-height: auto;
+  --ds-mentions-autosize-overflow: auto;
+  --ds-mentions-enter-offset: var(--ds-spacing-1);
+  --ds-mentions-dropdown-padding: var(--ds-spacing-1);
+  --ds-mentions-dropdown-max-height: 12rem;
+  --ds-mentions-dropdown-radius: var(--ds-radius-lg);
+  --ds-mentions-option-padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  --ds-mentions-option-radius: var(--ds-radius-md);
+  --ds-mentions-option-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-mentions-option-touch-target-min: var(--ds-touch-target-min);
+  --ds-mentions-spinner-size: 0.8125em;
+  --ds-mentions-spinner-gap: 0.5em;
+  --ds-mentions-spinner-offset: -0.125em;
+  --ds-mentions-spinner-stroke: var(--ds-border-width-2);
+  --ds-mentions-spinner-duration: calc(var(--ds-motion-slow) * 2);
+}

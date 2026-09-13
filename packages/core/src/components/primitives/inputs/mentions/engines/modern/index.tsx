@@ -6,8 +6,8 @@
  * keyboard navigation, and auto-size support -- no Ant Design dependency at
  * runtime and no DaisyUI classes. All static paint and geometry are owned by
  * the modern skin (`skin/mentions.css`) keyed on `data-part`/`data-*` hooks;
- * the engine keeps only truly dynamic writes (the auto-size height
- * measurements) and the public `style` escape hatch.
+ * the auto-size measurement travels as runtime channels and the public `style`
+ * escape hatch stays on the root.
  *
  * @example
  * ```tsx
@@ -21,6 +21,8 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect, useId } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import { isComposingKey, partAttributes, useInteractionState } from '@/foundation/behavior';
+import { useListbox } from '../../../../runtime/collection/listbox';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { MentionsProps, MentionsOption } from '../../contracts';
 import {
@@ -34,6 +36,15 @@ import { MENTIONS_DEFAULTS } from '../../contracts';
  * DOM measurements, falls back to useEffect on the server to avoid warnings.
  */
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+/**
+ * Scope class the portaled panel carries so the skin can address it and its
+ * subtree at the SAME specificity they had as descendants of the field root.
+ */
+const PANEL_SCOPE = 'ds-mentions ds-mentions--modern ds-mentions-panel';
+
+/** The line height in px the auto-size assumes when the computed one is unreadable. */
+const FALLBACK_LINE_HEIGHT = 20;
 
 /**
  * Modern engine Mentions: cursor-aware prefix detection, filtered suggestion
@@ -53,12 +64,6 @@ const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffec
  * @param ref - Forwarded ref attached to the underlying `<textarea>` element.
  * @returns A skin-painted textarea with a suggestion dropdown overlay.
  */
-/**
- * Scope class the portaled panel carries so the skin can address it and its
- * subtree at the SAME specificity they had as descendants of the field root.
- */
-const PANEL_SCOPE = 'ds-mentions ds-mentions--modern ds-mentions-panel';
-
 export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
   (props, ref) => {
     const {
@@ -112,7 +117,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const [searchText, setSearchText] = useState('');
     const [currentPrefix, setCurrentPrefix] = useState('');
     const [mentionStart, setMentionStart] = useState(-1);
-    const [focusedIndex, setFocusedIndex] = useState(0);
     // Listbox wiring: aria-controls points at the popup while open and
     // aria-activedescendant at the arrow-navigated option, so AT announces
     // the active suggestion (focus itself never leaves the textarea).
@@ -132,24 +136,23 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     // Normalize prefix to array so multi-prefix detection logic stays uniform
     const prefixes = (Array.isArray(prefix) ? prefix : [prefix]).filter((p): p is string => !!p);
 
-    // Auto-size: dynamically adjust textarea height based on content
+    // The measured height travels as runtime channels: the skin owns the property that applies it.
     const adjustTextareaHeight = useCallback(() => {
       const textarea = textareaRef.current;
       if (!textarea || !autoSize) return;
 
-      // Reset height to auto first to get the correct scrollHeight
-      textarea.style.height = 'auto';
+      textarea.style.setProperty('--ds-mentions-autosize-height', 'auto');
       const scrollHeight = textarea.scrollHeight;
 
       if (typeof autoSize === 'object') {
-        const lineHeight = parseInt(getComputedStyle(textarea).lineHeight) || 20;
+        const lineHeight = parseInt(getComputedStyle(textarea).lineHeight) || FALLBACK_LINE_HEIGHT;
         const minH = autoSize.minRows ? autoSize.minRows * lineHeight : 0;
         const maxH = autoSize.maxRows ? autoSize.maxRows * lineHeight : Infinity;
-        textarea.style.height = `${Math.min(Math.max(scrollHeight, minH), maxH)}px`;
-        textarea.style.overflowY = scrollHeight > maxH ? 'auto' : 'hidden';
+        textarea.style.setProperty('--ds-mentions-autosize-height', `${Math.min(Math.max(scrollHeight, minH), maxH)}px`);
+        textarea.style.setProperty('--ds-mentions-autosize-overflow', scrollHeight > maxH ? 'auto' : 'hidden');
       } else {
-        textarea.style.height = `${scrollHeight}px`;
-        textarea.style.overflowY = 'hidden';
+        textarea.style.setProperty('--ds-mentions-autosize-height', `${scrollHeight}px`);
+        textarea.style.setProperty('--ds-mentions-autosize-overflow', 'hidden');
       }
     }, [autoSize]);
 
@@ -168,32 +171,27 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       return options.filter((opt) => filterOption(searchText, opt));
     }, [options, searchText, filterOption]);
 
-    // aria-activedescendant must reference an element that EXISTS right now.
-    // `onSearch` refills `options` without a keystroke, so an arrowed index can
-    // outlive the list it pointed into; an unclamped id then named a removed
-    // row while no row painted active and Enter committed nothing.
-    const hasActiveOption =
-      isOpen && !loading && focusedIndex >= 0 && focusedIndex < filteredOptions.length;
-    const activeOptionId = hasActiveOption
-      ? `mentions-${mentionsId}-option-${focusedIndex}`
-      : undefined;
+    const isItemSelectable = useCallback(
+      (index: number) => !arrayValueAt(filteredOptions, index)?.disabled,
+      [filteredOptions]
+    );
+    // While loading the panel shows its posture, so no suggestion can hold the active option.
+    const listbox = useListbox({
+      open: isOpen && !loading,
+      itemCount: loading ? 0 : filteredOptions.length,
+      isItemSelectable,
+      listboxId,
+      optionIdPrefix: `mentions-${mentionsId}`,
+    });
+    const { activeIndex, setActiveIndex, nextSelectableFrom } = listbox;
+    const field = useInteractionState({ disabled });
 
-    // Restore the highlight (rather than merely hiding the dangling reference)
-    // when an async refill shrinks the list under the cursor.
+    // An open session always has an active suggestion, including after an async refill shrinks the list.
     useEffect(() => {
-      if (focusedIndex >= filteredOptions.length) setFocusedIndex(0);
-    }, [filteredOptions.length, focusedIndex]);
-
-    // Keyboard navigation keeps the active option in view: aria-activedescendant
-    // never moves DOM focus, so the row must be scrolled into the popup's
-    // viewport explicitly (nearest edge, no page scroll). Guarded for jsdom.
-    useEffect(() => {
-      if (!activeOptionId) return;
-      const el = document.getElementById(activeOptionId);
-      if (el && typeof el.scrollIntoView === 'function') {
-        el.scrollIntoView({ block: 'nearest' });
+      if (isOpen && !loading && activeIndex < 0 && filteredOptions.length > 0) {
+        setActiveIndex(nextSelectableFrom(-1, 1));
       }
-    }, [activeOptionId]);
+    }, [isOpen, loading, activeIndex, filteredOptions.length, setActiveIndex, nextSelectableFrom]);
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newValue = e.target.value;
@@ -231,7 +229,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         setCurrentPrefix(foundPrefix);
         setMentionStart(mentionStartPos);
         setIsOpen(true);
-        setFocusedIndex(0);
+        setActiveIndex(-1);
         onSearch?.(search, foundPrefix);
       } else {
         setIsOpen(false);
@@ -267,36 +265,19 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (!isOpen) return;
-      // While an IME composes, Enter confirms the candidate and the arrows walk the candidate
-      // window; intercepting them would insert a mention instead of the text being composed.
-      const native = e.nativeEvent as KeyboardEvent;
-      if (native.isComposing || native.keyCode === 229) return;
+      // While an IME composes, Enter confirms the candidate and the arrows walk the candidate window.
+      if (isComposingKey(e)) return;
 
       switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          setFocusedIndex((prev) =>
-            prev < filteredOptions.length - 1 ? prev + 1 : 0
-          );
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          setFocusedIndex((prev) =>
-            prev > 0 ? prev - 1 : filteredOptions.length - 1
-          );
-          break;
         case 'Enter':
         case 'Tab': {
-          const focusedOption = focusedIndex >= 0 ? arrayValueAt(filteredOptions, focusedIndex) : undefined;
-          // Keyboard selection must honor the same disabled gate as pointer
-          // click (K4-D Pass 2 review: only the pointer path was guarded).
+          const focusedOption = activeIndex >= 0 ? arrayValueAt(filteredOptions, activeIndex) : undefined;
           if (focusedOption && !focusedOption.disabled) {
             e.preventDefault();
             handleSelect(focusedOption);
             break;
           }
-          // Tab carries focus out of the component, so the popup must not outlive it. Native
-          // Tab is deliberately left alone: there is nothing navigable to consume it.
+          // Tab carries focus out of the component, so the popup must not outlive it.
           if (e.key === 'Tab') setIsOpen(false);
           break;
         }
@@ -306,13 +287,11 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           e.stopPropagation();
           setIsOpen(false);
           break;
+        case 'ArrowDown':
+        case 'ArrowUp':
         case 'Home':
-          e.preventDefault();
-          setFocusedIndex(0);
-          break;
         case 'End':
-          e.preventDefault();
-          setFocusedIndex(filteredOptions.length - 1);
+          listbox.navigate(e);
           break;
       }
     };
@@ -368,7 +347,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
-          className={['rottay-mentions__input', status ? `rottay-mentions__input--${status}` : undefined].filter(Boolean).join(' ')}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -380,11 +358,17 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           aria-multiline="true"
           aria-haspopup="listbox"
           aria-controls={isOpen ? listboxId : undefined}
-          aria-activedescendant={activeOptionId}
+          aria-activedescendant={listbox.activeId}
           id={providedId}
           aria-labelledby={ariaLabelledBy}
           aria-label={resolvedAriaLabel}
-          data-part="textarea"
+          {...partAttributes('textarea', field.state)}
+          onPointerEnter={field.handlers.onPointerEnter}
+          onPointerLeave={field.handlers.onPointerLeave}
+          onPointerDown={field.handlers.onPointerDown}
+          onPointerUp={field.handlers.onPointerUp}
+          onFocus={field.handlers.onFocus}
+          onBlur={field.handlers.onBlur}
           data-disabled={disabled || undefined}
           data-readonly={readOnly || undefined}
           data-status={status || undefined}
@@ -396,14 +380,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           <ul
             {...overlay.panelProps}
             id={listboxId}
-            className={[
-              PANEL_SCOPE,
-              'rottay-mentions__popup',
-              `rottay-mentions__popup--${placement}`,
-              popupClassName,
-            ]
-              .filter(Boolean)
-              .join(' ')}
+            className={[PANEL_SCOPE, popupClassName].filter(Boolean).join(' ')}
             data-placement={placement}
             data-part="dropdown"
             /* The mention-session accent used to be read off the field root;
@@ -419,22 +396,27 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                 {loadingContent}
               </li>
             ) : filteredOptions.length > 0 ? (
-              filteredOptions.map((option, index) => (
+              filteredOptions.map((option, index) => {
+                const optionProps = listbox.getOptionProps(index, {
+                  selected: index === activeIndex,
+                  disabled: option.disabled,
+                });
+                return (
                 /* The option role rides the BUTTON, not the wrapper: a
                    focusable control inside role="option" is a nested-interactive
                    violation and APG forbids focusable content in an option. */
                 <li key={option.value} role="none">
                   <button
                     type="button"
-                    role="option"
-                    id={`mentions-${mentionsId}-option-${index}`}
-                    aria-selected={focusedIndex === index}
-                    className={`${option.disabled ? 'disabled' : ''} ${focusedIndex === index ? 'active' : ''}`}
+                    role={optionProps.role}
+                    id={optionProps.id}
+                    aria-selected={optionProps['aria-selected']}
+                    aria-disabled={optionProps['aria-disabled']}
                     disabled={option.disabled}
                     onClick={() => handleSelect(option)}
-                    onMouseEnter={() => setFocusedIndex(index)}
+                    onMouseEnter={optionProps.onMouseEnter}
                     data-part="option"
-                    data-active={focusedIndex === index || undefined}
+                    data-active={optionProps['data-active']}
                     data-disabled={option.disabled || undefined}
                     /* Virtual focus stays on the textarea; options must never become
                        independent tab stops. */
@@ -447,7 +429,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                     <span data-part="option-label">{option.label ?? option.value}</span>
                   </button>
                 </li>
-              ))
+                );
+              })
             ) : (
               <li role="option" aria-disabled="true" data-part="empty">
                 {emptyContent}
