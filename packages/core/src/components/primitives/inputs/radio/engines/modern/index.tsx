@@ -26,6 +26,7 @@
 'use client';
 
 import React, { useState, useId, useCallback, useEffect, useRef } from 'react';
+import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import type { RadioProps } from '../../contracts';
 import { RADIO_DEFAULTS } from '../../contracts';
 import { useRadioGroup } from '../../runtime/group-context';
@@ -136,6 +137,13 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     onChange?.(e);
   }, [groupControlled, group, value, isControlled, onChange]);
 
+  const { state: interaction, handlers } = useInteractionState({ disabled });
+  const pressKey = (event: React.KeyboardEvent<HTMLInputElement>, down: boolean) => {
+    if (event.key !== ' ') return;
+    if (down) handlers.onPointerDown(event as unknown as React.PointerEvent);
+    else handlers.onPointerUp(event as unknown as React.PointerEvent);
+  };
+
   const displayLabel = label || children;
   // The description sits inside the <label>, so an explicit name source is
   // what keeps it out of the accessible name.
@@ -147,7 +155,12 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     <div className={className} style={style}>
       <label
         className="ds-radio ds-radio--modern"
-        data-part="root"
+        {...partAttributes('root', interaction)}
+        onPointerEnter={handlers.onPointerEnter}
+        onPointerLeave={handlers.onPointerLeave}
+        onPointerDown={handlers.onPointerDown}
+        onPointerUp={handlers.onPointerUp}
+        onPointerCancel={handlers.onPointerUp}
         data-size={size}
         data-color={color}
         data-checked={isChecked ? 'true' : 'false'}
@@ -171,6 +184,10 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
           required={required}
           autoFocus={autoFocus}
           onChange={handleChange}
+          onFocus={handlers.onFocus}
+          onBlur={handlers.onBlur}
+          onKeyDown={(event) => pressKey(event, true)}
+          onKeyUp={(event) => pressKey(event, false)}
           aria-invalid={error || undefined}
           aria-label={ariaLabel}
           aria-labelledby={labelledBy}

@@ -12,6 +12,7 @@ import { chartsDeriver } from "./charts";
 import { chromeDeriver } from "./chrome";
 import { buttonChromeDeriver } from "./chrome/button";
 import { checkboxChromeDeriver } from "./chrome/checkbox";
+import { radioChromeDeriver } from "./chrome/radio";
 import { densityDeriver } from "./density";
 import { elevationDeriver } from "./elevation";
 import { expressiveDeriver } from "./expressive";
@@ -60,6 +61,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   chromeDeriver,
   buttonChromeDeriver,
   checkboxChromeDeriver,
+  radioChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

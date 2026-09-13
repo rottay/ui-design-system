@@ -11,6 +11,7 @@ import { AnatomySkeleton } from '@/components/primitives/feedback/skeleton/runti
 import ModernCheckbox from '../engines/modern';
 import { CheckboxGroup } from '../compound/group';
 import {
+  AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
   describeCausality,
@@ -111,12 +112,12 @@ describe('checkbox geometry, direction and accessibility in a real browser', () 
     expect(loading).toContain('data-part="box"');
   });
 
-  it('has no serious or critical axe violation in any first-party vertical', async () => {
+  it('has no serious or critical axe violation in any gated vertical mode', async () => {
     const gallery = renderToStaticMarkup(
       <CheckboxGroup engine="modern" options={[{ label: 'One', value: 1 }, { label: 'Two', value: 2, disabled: true }]} defaultValue={[1]} />,
     ) + markup;
-    for (const vertical of VERTICALS) {
-      expect(seriousFindings(await auditAxe({ vertical, markup: gallery })), vertical).toEqual([]);
+    for (const scope of AXE_SCOPES) {
+      expect(seriousFindings(await auditAxe({ ...scope, markup: gallery })), `${scope.vertical} ${scope.theme}`).toEqual([]);
     }
   }, 120_000);
 });

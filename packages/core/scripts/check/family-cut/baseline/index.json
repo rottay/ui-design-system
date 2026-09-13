@@ -47,6 +47,27 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 1,
       "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/checkbox, structural constants by presentation/components/checkbox; state decided by the interaction kernel on the root; one ds- vocabulary. fanOutUnreached=1 is recipe-profile: RecipeProfileDefaultsByFamily declares no checkbox axis and its only channel is provenance owned by WO-DER-06."
+    },
+    "radio": {
+      "cut": "WO-FAM-01",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 6,
+        "channelsRead": 63,
+        "classTokens": 4,
+        "partsStamped": 8,
+        "partsConsumed": 8
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 1,
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/radio, structural constants by presentation/components/radio; state decided by the interaction kernel on the root and on each Radio.Group segment; the segment colour resolves from data-color, never from inline channels; one ds- vocabulary. fanOutUnreached=1 is recipe-profile: RecipeProfileDefaultsByFamily declares no radio axis and its only channel is provenance owned by WO-DER-06."
     }
   }
 }

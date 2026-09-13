@@ -107,6 +107,7 @@ import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
 import { deriveCheckboxChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/checkbox";
+import { deriveRadioChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/radio";
 
 const DEFAULT_CSS = join(
   process.cwd(),
@@ -1472,6 +1473,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the typed shape is closed and 
 /** Channels a family-cut deriver states as a decision relation when no vertical authors them. */
 const FAMILY_RELATIONS: Readonly<Record<string, string>> = {
   ...deriveCheckboxChannels(),
+  ...deriveRadioChannels(),
 };
 
 describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports", () => {

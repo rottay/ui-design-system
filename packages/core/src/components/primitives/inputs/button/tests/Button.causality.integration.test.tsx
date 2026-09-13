@@ -10,6 +10,7 @@ import { ButtonGroup } from '../compound';
 import ModernButton from '../engines/modern';
 import { RecipeProfileProvider } from '@/infrastructure/runtime/foundation/recipes/profiles';
 import {
+  AXE_SCOPES,
   auditAxe,
   measureArms,
   seriousFindings,
@@ -230,7 +231,7 @@ describe('button direction and accessibility in a real browser', () => {
     expect(Number(rtlIcon)).toBeGreaterThan(Number(rtlLabel));
   }, 60_000);
 
-  it('has no serious or critical axe violation in any first-party vertical', async () => {
+  it('has no serious or critical axe violation in any gated vertical mode', async () => {
     const gallery = renderToStaticMarkup(
       <div>
         {(['primary', 'secondary', 'default', 'ghost', 'text', 'link', 'danger'] as const).map((variant) => (
@@ -241,9 +242,9 @@ describe('button direction and accessibility in a real browser', () => {
         <ModernButton icon={<svg aria-hidden="true" />} aria-label="Delete" />
       </div>,
     );
-    for (const vertical of VERTICALS) {
-      const findings = await auditAxe({ vertical, markup: gallery });
-      expect(seriousFindings(findings), vertical).toEqual([]);
+    for (const scope of AXE_SCOPES) {
+      const findings = await auditAxe({ ...scope, markup: gallery });
+      expect(seriousFindings(findings), `${scope.vertical} ${scope.theme}`).toEqual([]);
     }
   }, 120_000);
 });

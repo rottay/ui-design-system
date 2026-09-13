@@ -225,6 +225,8 @@ export interface AxeRequest {
   readonly markup: string;
   readonly decisions?: ProbeDecisions;
   readonly dir?: 'ltr' | 'rtl';
+  /** Overrides the mount's declared mode, to audit the vertical's other mode. */
+  readonly theme?: 'light' | 'dark';
 }
 
 /** axe-core over the family's markup, painted by the source stylesheet and one compiled arm. */
@@ -259,7 +261,12 @@ export async function auditAxe(request: AxeRequest): Promise<AxeFinding[]> {
           sample: `${violation.nodes[0]?.html ?? ''} :: ${violation.nodes[0]?.failureSummary ?? ''}`,
         }));
       },
-      { markup: request.markup, rootAttributes: arm.rootAttributes, surface: SURFACE_STYLE, dir: request.dir ?? 'ltr' },
+      {
+        markup: request.markup,
+        rootAttributes: request.theme ? { ...arm.rootAttributes, 'data-theme': request.theme } : arm.rootAttributes,
+        surface: SURFACE_STYLE,
+        dir: request.dir ?? 'ltr',
+      },
     );
     await page.close();
     return findings;
@@ -267,6 +274,17 @@ export async function auditAxe(request: AxeRequest): Promise<AxeFinding[]> {
     await browser.close();
   }
 }
+
+/**
+ * The axe scopes a family cut must hold: each vertical in its declared mode,
+ * plus bithire in both modes (the owner's Modern x bithire scope).
+ */
+export const AXE_SCOPES: ReadonlyArray<{ vertical: ProbeVertical; theme: 'light' | 'dark' }> = [
+  { vertical: 'rottay', theme: 'dark' },
+  { vertical: 'bithire', theme: 'light' },
+  { vertical: 'bithire', theme: 'dark' },
+  { vertical: 'evnto', theme: 'light' },
+];
 
 /** The findings axe classifies as serious or critical. */
 export function seriousFindings(findings: readonly AxeFinding[]): AxeFinding[] {
