@@ -22,49 +22,64 @@
  * themanagementmiami and the torture fixtures are deliberately not registered
  * there and must not be added here.
  *
- * Usage:
- *   node scripts/build/verticals/bundle-build/index.mjs           # write artifacts
- *   node scripts/build/verticals/bundle-build/index.mjs --check    # fail if any artifact is stale
+ * ORDER. The runtime module is an input of the package bundle, so it must be
+ * written BEFORE `vite build`. Writing and `--check` therefore lower the themes
+ * with the bootstrap compiler stage (`../compiler-bootstrap`), compiled from
+ * `src/`, never with `dist/`. `--verify-dist` runs after the bundle and proves
+ * the block the package ships is the block its own compiler produces.
  *
- * Imports the compiled package from dist/, so run after `tsc && vite build`
- * (the `build` script sequences this for you via build:vertical-css).
+ * Usage:
+ *   node scripts/build/verticals/bundle-build/index.mjs                # write artifacts
+ *   node scripts/build/verticals/bundle-build/index.mjs --check        # fail if any artifact is stale
+ *   node scripts/build/verticals/bundle-build/index.mjs --verify-dist  # fail if dist ships a stale runtime block
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { isDarkSurfaceTheme } from '../../../../dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground/index.js';
-import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../../../../dist/foundation/kernel/accessibility/branding-contrast/index.js';
-import {
-  renderFirstPartyArtifact,
-  FIRST_PARTY_ARTIFACT_SPECS,
-  FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
-} from '../../../../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
-import {
-  FIRST_PARTY_VERTICAL_ROSTER,
-} from '../../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js';
+import { COMPILER_MODULES, withBootstrapCompiler } from '../compiler-bootstrap/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = findPackageRoot(__dirname);
 const check = process.argv.includes('--check');
+const verifyDist = process.argv.includes('--verify-dist');
 
-const REGENERATE_COMMAND = FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND;
+/** The compiler modules the generator reads, loaded from one compile root. */
+async function loadCompiler(compilerRoot) {
+  const load = (key) => import(pathToFileURL(resolve(compilerRoot, `${COMPILER_MODULES[key]}.js`)).href);
+  const [ground, contrast, renderer, brandThemes] = await Promise.all(
+    ['ground', 'brandingContrast', 'artifactRenderer', 'brandThemes'].map(load),
+  );
+  return {
+    isDarkSurfaceTheme: ground.isDarkSurfaceTheme,
+    apcaContrast: contrast.apcaContrast,
+    APCA_BODY_TEXT_MIN_LC: contrast.APCA_BODY_TEXT_MIN_LC,
+    renderFirstPartyArtifact: renderer.renderFirstPartyArtifact,
+    FIRST_PARTY_ARTIFACT_SPECS: renderer.FIRST_PARTY_ARTIFACT_SPECS,
+    REGENERATE_COMMAND: renderer.FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
+    FIRST_PARTY_VERTICAL_ROSTER: brandThemes.FIRST_PARTY_VERTICAL_ROSTER,
+  };
+}
 
 /** First-party artifacts this generator owns (spec is the shared source of truth). */
-const artifacts = FIRST_PARTY_VERTICAL_ROSTER.map((row, index) => {
-  const spec = FIRST_PARTY_ARTIFACT_SPECS[index];
-  if (!spec || spec.slug !== row.slug) {
-    throw new Error(`First-party artifact order drift at index ${index}: ${spec?.slug ?? '<missing>'} !== ${row.slug}`);
+function firstPartyArtifacts({ FIRST_PARTY_VERTICAL_ROSTER, FIRST_PARTY_ARTIFACT_SPECS }) {
+  const artifacts = FIRST_PARTY_VERTICAL_ROSTER.map((row, index) => {
+    const spec = FIRST_PARTY_ARTIFACT_SPECS[index];
+    if (!spec || spec.slug !== row.slug) {
+      throw new Error(`First-party artifact order drift at index ${index}: ${spec?.slug ?? '<missing>'} !== ${row.slug}`);
+    }
+    if (row.theme.id !== row.slug) {
+      throw new Error(`First-party roster mismatch: theme.id ${row.theme.id} !== slug ${row.slug}`);
+    }
+    return { ...spec, brandTheme: row.theme };
+  });
+  if (artifacts.length !== FIRST_PARTY_ARTIFACT_SPECS.length) {
+    throw new Error('First-party artifact projection length differs from the roster');
   }
-  if (row.theme.id !== row.slug) {
-    throw new Error(`First-party roster mismatch: theme.id ${row.theme.id} !== slug ${row.slug}`);
-  }
-  return { ...spec, brandTheme: row.theme };
-});
-if (artifacts.length !== FIRST_PARTY_ARTIFACT_SPECS.length) {
-  throw new Error('First-party artifact projection length differs from the roster');
+  return artifacts;
 }
 
 /** Every governed selection the runtime half of an artifact publishes. */
@@ -192,7 +207,7 @@ const apcaBaseline = new Set(
 );
 
 /** Check every -900 ramp step that ships in one state against that state's ground. */
-function checkRampApcaAgainstGround(scope, label, ground, cssVariables) {
+function checkRampApcaAgainstGround({ apcaContrast, APCA_BODY_TEXT_MIN_LC }, scope, label, ground, cssVariables) {
   if (!ground) return [];
   const failures = [];
   for (const [name, hex] of Object.entries(cssVariables)) {
@@ -207,7 +222,7 @@ function checkRampApcaAgainstGround(scope, label, ground, cssVariables) {
   return failures;
 }
 
-function checkGeneratedRampApca(slug, brandTheme, compiled) {
+function checkGeneratedRampApca(compiler, slug, brandTheme, compiled) {
   // A theme's ground for the mode it compiles is always its own
   // `palette.backgroundColor`. When a theme omits it, the fallback is keyed
   // to the theme's DECLARED default mode (`brandTheme.appearance.defaultMode
@@ -216,8 +231,8 @@ function checkGeneratedRampApca(slug, brandTheme, compiled) {
   // compiler's own DARK_DEFAULT_GROUND / LIGHT_DEFAULT_GROUND.
   const baseGround =
     brandTheme.palette?.backgroundColor ??
-    (isDarkSurfaceTheme(brandTheme) ? '#0A0A0A' : '#FFFFFF');
-  const failures = checkRampApcaAgainstGround(slug, slug, baseGround, compiled.cssVariables);
+    (compiler.isDarkSurfaceTheme(brandTheme) ? '#0A0A0A' : '#FFFFFF');
+  const failures = checkRampApcaAgainstGround(compiler, slug, slug, baseGround, compiled.cssVariables);
 
   // A mode block ships its own ramp on its own ground. Checking authored ramps
   // only against the base ground would clear a dark ramp for the light canvas
@@ -225,88 +240,141 @@ function checkGeneratedRampApca(slug, brandTheme, compiled) {
   for (const block of compiled.modeBlocks ?? []) {
     const modeGround = block.cssVariables['--ds-color-bg-primary'] ?? baseGround;
     const shipped = { ...compiled.cssVariables, ...block.cssVariables };
-    failures.push(...checkRampApcaAgainstGround(`${slug}|${block.mode}`, `${slug} (${block.mode} mode)`, modeGround, shipped));
+    failures.push(...checkRampApcaAgainstGround(compiler, `${slug}|${block.mode}`, `${slug} (${block.mode} mode)`, modeGround, shipped));
   }
   return failures;
 }
 
-let stale = 0;
-const apcaFailures = [];
-/** The non-CSS half of every compile, in roster order. */
-const runtimeRows = [];
+/** A gate verdict already printed; thrown so the bootstrap directory is still removed. */
+class GateFailure extends Error {}
 
-for (const spec of artifacts) {
-  const { slug, brandTheme } = spec;
-  const artifactPath = resolve(root, `src/foundation/tokens/css/facade/artifacts/${slug}/index.css`);
-
-  const { css: output, compiled } = renderFirstPartyArtifact({
-    spec,
-    regenerateCommand: REGENERATE_COMMAND,
-  });
-  apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled));
-  runtimeRows.push({ slug, runtime: compiled.runtime });
-
-  if (check) {
-    const current = existsSync(artifactPath) ? readFileSync(artifactPath, 'utf-8') : '';
-    if (current !== output) {
-      stale += 1;
-      console.error(`✗ artifacts/${slug}/index.css is out of sync with its authored source.`);
-      console.error(firstDiff(current, output));
-    } else {
-      console.log(`✓ artifacts/${slug}/index.css is up to date.`);
-    }
-  } else {
-    writeFileSync(artifactPath, output);
-    console.log(`Generated artifacts/${slug}/index.css (${output.length} bytes, ${Object.keys(compiled.cssVariables).length} compiled vars).`);
-  }
-}
-
-// The runtime half, written as ONE module rather than one per slug: a reader
-// needs the whole roster to answer "which profile did this vertical compile?",
-// and three files would be three imports of one fact.
-const runtimeModulePath = resolve(
+const RUNTIME_MODULE_PATH = resolve(
   root,
   'src/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.ts',
 );
-const runtimeModule = renderFirstPartyArtifactRuntimeModule(runtimeRows, REGENERATE_COMMAND);
-if (check) {
-  const current = existsSync(runtimeModulePath) ? readFileSync(runtimeModulePath, 'utf-8') : '';
-  if (current !== runtimeModule) {
-    stale += 1;
-    console.error('✗ tenant-css/artifact-runtime/index.ts is out of sync with its authored source.');
-    console.error(firstDiff(current, runtimeModule));
-  } else {
-    console.log('✓ tenant-css/artifact-runtime/index.ts is up to date.');
+
+/** Lower every first-party theme once, gate its ramp, and collect both halves. */
+function compileArtifacts(compiler) {
+  const apcaFailures = [];
+  const rows = firstPartyArtifacts(compiler).map((spec) => {
+    const { css, compiled } = compiler.renderFirstPartyArtifact({
+      spec,
+      regenerateCommand: compiler.REGENERATE_COMMAND,
+    });
+    apcaFailures.push(...checkGeneratedRampApca(compiler, spec.slug, spec.brandTheme, compiled));
+    return { slug: spec.slug, css, compiled, runtime: compiled.runtime };
+  });
+
+  const newApcaFailures = apcaFailures.filter((failure) => !apcaBaseline.has(failure.key));
+  const baselinedApcaFailures = apcaFailures.filter((failure) => apcaBaseline.has(failure.key));
+
+  if (!verifyDist && baselinedApcaFailures.length > 0) {
+    console.warn(`\n${baselinedApcaFailures.length} known ramp pairing(s) below the APCA body-text threshold (baselined, decrease-only):`);
+    for (const failure of baselinedApcaFailures) console.warn(`  ! ${failure.message}`);
   }
-} else if (existsSync(runtimeModulePath) && readFileSync(runtimeModulePath, 'utf-8') === runtimeModule) {
-  // Identical bytes are NOT rewritten. This output lives under `src/`, and the
-  // generator runs after `vite build`, so touching it would make the door look
-  // newer than the bundle that was just compiled from it -- `decisions-lit`
-  // refuses that ordering, on every build, for no change at all.
-  console.log('tenant-css/artifact-runtime/index.ts is already current.');
-} else {
-  writeFileSync(runtimeModulePath, runtimeModule);
-  console.log(
-    `Generated tenant-css/artifact-runtime/index.ts (${runtimeModule.length} bytes, ${runtimeRows.length} verticals).`,
-  );
+
+  if (newApcaFailures.length > 0) {
+    console.error(`\n${newApcaFailures.length} generated ramp pairing(s) failed the APCA body-text threshold:`);
+    for (const failure of newApcaFailures) console.error(`  ✗ ${failure.message}`);
+    console.error(`\nFix the pairing, or add it to ${APCA_BASELINE_PATH} with an owner and a retirement condition.`);
+    throw new GateFailure('apca');
+  }
+  return rows;
 }
 
-const newApcaFailures = apcaFailures.filter((failure) => !apcaBaseline.has(failure.key));
-const baselinedApcaFailures = apcaFailures.filter((failure) => apcaBaseline.has(failure.key));
+/** Write, or with `--check` compare, both outputs of the bootstrap compile. */
+function generate(compiler) {
+  let stale = 0;
+  const rows = compileArtifacts(compiler);
 
-if (baselinedApcaFailures.length > 0) {
-  console.warn(`\n${baselinedApcaFailures.length} known ramp pairing(s) below the APCA body-text threshold (baselined, decrease-only):`);
-  for (const failure of baselinedApcaFailures) console.warn(`  ! ${failure.message}`);
+  for (const { slug, css: output, compiled } of rows) {
+    const artifactPath = resolve(root, `src/foundation/tokens/css/facade/artifacts/${slug}/index.css`);
+    if (check) {
+      const current = existsSync(artifactPath) ? readFileSync(artifactPath, 'utf-8') : '';
+      if (current !== output) {
+        stale += 1;
+        console.error(`✗ artifacts/${slug}/index.css is out of sync with its authored source.`);
+        console.error(firstDiff(current, output));
+      } else {
+        console.log(`✓ artifacts/${slug}/index.css is up to date.`);
+      }
+    } else {
+      writeFileSync(artifactPath, output);
+      console.log(`Generated artifacts/${slug}/index.css (${output.length} bytes, ${Object.keys(compiled.cssVariables).length} compiled vars).`);
+    }
+  }
+
+  // The runtime half, written as ONE module rather than one per slug: a reader
+  // needs the whole roster to answer "which profile did this vertical compile?",
+  // and three files would be three imports of one fact.
+  const runtimeModule = renderFirstPartyArtifactRuntimeModule(rows, compiler.REGENERATE_COMMAND);
+  const current = existsSync(RUNTIME_MODULE_PATH) ? readFileSync(RUNTIME_MODULE_PATH, 'utf-8') : '';
+  if (check) {
+    if (current !== runtimeModule) {
+      stale += 1;
+      console.error('✗ tenant-css/artifact-runtime/index.ts is out of sync with its authored source.');
+      console.error(firstDiff(current, runtimeModule));
+    } else {
+      console.log('✓ tenant-css/artifact-runtime/index.ts is up to date.');
+    }
+  } else if (current === runtimeModule) {
+    // Identical bytes are NOT rewritten: a standalone regeneration after a build
+    // would otherwise date the module after its bundle, which `decisions-lit` refuses.
+    console.log('tenant-css/artifact-runtime/index.ts is already current.');
+  } else {
+    writeFileSync(RUNTIME_MODULE_PATH, runtimeModule);
+    console.log(
+      `Generated tenant-css/artifact-runtime/index.ts (${runtimeModule.length} bytes, ${rows.length} verticals).`,
+    );
+  }
+
+  if (check && stale > 0) {
+    console.error(`\n${stale} vertical artifact(s) are stale or hand-edited. Regenerate with:\n  ${compiler.REGENERATE_COMMAND}`);
+    throw new GateFailure('stale');
+  }
 }
 
-if (newApcaFailures.length > 0) {
-  console.error(`\n${newApcaFailures.length} generated ramp pairing(s) failed the APCA body-text threshold:`);
-  for (const failure of newApcaFailures) console.error(`  ✗ ${failure.message}`);
-  console.error(`\nFix the pairing, or add it to ${APCA_BASELINE_PATH} with an owner and a retirement condition.`);
-  process.exit(1);
+/**
+ * The block the package SHIPS, in both module formats, against the block its
+ * own bundled compiler produces. The source module can be current while the
+ * bundle still carries its predecessor; only the bundle is what a consumer
+ * mounts, so only the bundle can answer this.
+ */
+async function verifyShippedRuntime(compiler, distRoot) {
+  const modulePath = resolve(distRoot, COMPILER_MODULES.artifactRuntime);
+  const shipped = {
+    esm: (await import(pathToFileURL(`${modulePath}.js`).href)).FIRST_PARTY_ARTIFACT_RUNTIME,
+    cjs: createRequire(import.meta.url)(`${modulePath}.cjs`).FIRST_PARTY_ARTIFACT_RUNTIME,
+  };
+  let drift = 0;
+  for (const { slug, runtime } of compileArtifacts(compiler)) {
+    const expected = renderBlock(runtime);
+    for (const [format, table] of Object.entries(shipped)) {
+      const actual = table?.[slug] === undefined ? '<missing>' : renderBlock(table[slug]);
+      if (actual !== expected) {
+        drift += 1;
+        console.error(`✗ dist ${format} runtime block for ${slug} is ${actual}, but its compile produced ${expected}.`);
+      }
+    }
+  }
+  if (drift > 0) {
+    console.error(
+      '\nThe bundle was compiled from a runtime module older than its artifacts. The artifacts must be ' +
+        'generated before `vite build`; run the full build: pnpm --filter @rottay/design-system build',
+    );
+    throw new GateFailure('dist');
+  }
+  console.log(`✓ dist ships the runtime block its compiler produces (${Object.keys(shipped).join(', ')}).`);
 }
 
-if (check && stale > 0) {
-  console.error(`\n${stale} vertical artifact(s) are stale or hand-edited. Regenerate with:\n  ${REGENERATE_COMMAND}`);
-  process.exit(1);
+try {
+  if (verifyDist) {
+    const distRoot = resolve(root, 'dist');
+    await verifyShippedRuntime(await loadCompiler(distRoot), distRoot);
+  } else {
+    await withBootstrapCompiler(root, async (compilerRoot) => generate(await loadCompiler(compilerRoot)));
+  }
+} catch (error) {
+  if (!(error instanceof GateFailure)) console.error(error);
+  process.exitCode = 1;
 }
