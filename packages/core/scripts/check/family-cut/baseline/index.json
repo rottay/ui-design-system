@@ -109,6 +109,175 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- option geometry, frame, depth, hover and selected weight by derivation/chrome/segmented, structural constants by presentation/components/segmented; root hover decided by the interaction kernel; one ds-segmented vocabulary. partsStampedNotConsumed=1 is `root`, the default part a composite may rename (P-79), so the skin anchors on role=radiogroup and the part is read by the anatomy skeleton renderer instead; held for adjudication rather than fabricating a reader."
+    },
+    "input": {
+      "cut": "WO-FAM-02",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 10,
+        "channelsRead": 169,
+        "classTokens": 7,
+        "partsStamped": 14,
+        "partsConsumed": 15
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 1,
+      "cutNote": "WO-FAM-02: every channel the Modern skin reads is written -- field relations by derivation/chrome/input, structural constants by presentation/components/input; clear, search and reveal actions decide state through the field-action kernel; one ds-input vocabulary (the rottay-input classes and the comment-only input-residual skin are gone). Two pins stay above 0 for adjudication, never by a fabricated stamp: partsConsumedNotStamped=1 is `trigger`, the Select trigger part the input-compounds skin composes inside a compact Input.Group (select is WO-FAM-03's family); fanOutUnreached=1 is recipe-profile, whose only channel is provenance owned by WO-DER-06."
+    },
+    "textarea": {
+      "cut": "WO-FAM-02",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 104,
+        "classTokens": 3,
+        "partsStamped": 4,
+        "partsConsumed": 4
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-02: field relations by derivation/chrome/textarea on the input grammar, constants by presentation/components/textarea; root and clear action governed by the interaction and field-action kernels; Enter commits through resolveSubmitIntent (multiline)."
+    },
+    "password-input": {
+      "cut": "WO-FAM-02",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 127,
+        "classTokens": 3,
+        "partsStamped": 11,
+        "partsConsumed": 11
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-02: the --ds-password-* channels answer to --ds-password-input-*, the strength tones are theme relations (the contract carries no colour), the error ink is the readable error root; visibility toggle governed by the interaction kernel."
+    },
+    "otp-input": {
+      "cut": "WO-FAM-02",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 58,
+        "classTokens": 3,
+        "partsStamped": 4,
+        "partsConsumed": 4
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-02: the --ds-otp-* channels answer to --ds-otp-input-*; slots governed by the interaction kernel; composition commits only on compositionend."
+    },
+    "tag-input": {
+      "cut": "WO-FAM-02",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 66,
+        "classTokens": 4,
+        "partsStamped": 6,
+        "partsConsumed": 6
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-02: container relations by derivation/chrome/tag-input, constants by presentation/components/tag-input; root governed by the interaction kernel; the unpainted live region no longer stamps a part; separator and Enter never commit while composing."
+    },
+    "input-number": {
+      "cut": "WO-FAM-02",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 119,
+        "classTokens": 3,
+        "partsStamped": 10,
+        "partsConsumed": 10
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-02: one --ds-input-number-* namespace (the vertical chrome's --ds-inputnumber-* emission and the rustic floors were renamed), so tenant input-number chrome reaches the Modern engine; root and steppers governed by the interaction kernel; the legacy stepper glyph is gone."
+    },
+    "form-field": {
+      "cut": "WO-FAM-02",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 58,
+        "classTokens": 2,
+        "partsStamped": 12,
+        "partsConsumed": 12
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-02: label and message relations by derivation/chrome/form-field, constants by presentation/components/form-field (moved out of the input token file); the reserved message lines travel as the runtime --ds-form-field-message-lines channel."
+    },
+    "form": {
+      "cut": "WO-FAM-02",
+      "owner": "src/components/primitives/inputs/form",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 6,
+        "channelsRead": 68,
+        "classTokens": 6,
+        "partsStamped": 16,
+        "partsConsumed": 16
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-02: pinned owner src/components/primitives/inputs/form (the name is shared with the FormHeader structure, which keeps its own skin); both engines render from runtime/{state,validation}; FORM_DEFAULTS.layout is vertical (D-22); adapt/data-posture through useAdaptation; FormSurface answers to ds-form-surface so the form vocabulary is the primitive's alone."
     }
   }
 }

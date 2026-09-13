@@ -12,6 +12,14 @@ import { chartsDeriver } from "./charts";
 import { chromeDeriver } from "./chrome";
 import { buttonChromeDeriver } from "./chrome/button";
 import { checkboxChromeDeriver } from "./chrome/checkbox";
+import { inputChromeDeriver } from "./chrome/input";
+import { textareaChromeDeriver } from "./chrome/textarea";
+import { passwordInputChromeDeriver } from "./chrome/password-input";
+import { otpInputChromeDeriver } from "./chrome/otp-input";
+import { tagInputChromeDeriver } from "./chrome/tag-input";
+import { inputNumberChromeDeriver } from "./chrome/input-number";
+import { formFieldChromeDeriver } from "./chrome/form-field";
+import { formChromeDeriver } from "./chrome/form";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
 import { toggleChromeDeriver } from "./chrome/toggle";
@@ -66,6 +74,14 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   radioChromeDeriver,
   segmentedChromeDeriver,
   toggleChromeDeriver,
+  inputChromeDeriver,
+  textareaChromeDeriver,
+  passwordInputChromeDeriver,
+  otpInputChromeDeriver,
+  tagInputChromeDeriver,
+  inputNumberChromeDeriver,
+  formFieldChromeDeriver,
+  formChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

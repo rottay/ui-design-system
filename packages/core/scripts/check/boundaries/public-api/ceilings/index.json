@@ -190,7 +190,7 @@
     },
     "./primitives/radio": {
       "maxReachableModules": 47,
-      "maxSourceBytes": 155628
+      "maxSourceBytes": 157925
     },
     "./primitives/responsive": {
       "maxReachableModules": 5,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-FAM-01 (D-16), Switch merges into Toggle -- one ceiling UP, measured. ./primitives/switch maxSourceBytes 83908 -> 84662 (+754): the subpath now resolves the one binary switch family (the Toggle facade, its contract carrying the deprecated Switch types, and the Switch alias compound; 15 modules) instead of a second family of its own. The legacy size normalization lives in the dynamically loaded engine, so the common kernel (14214 bytes) stays out of the static graph; ./primitives/toggle measures the same 84662 under its unchanged 88375 anchor.",
+  "lastMove": "WO-FAM-02: the behavior kernel barrel radio imports now also carries resolveSubmitIntent and useFieldAction, the shared IME-safe submit and field-action kernels of the field family cut (155628 -> 157925, +2297 source bytes; reachable modules unchanged under the 47 anchor)",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

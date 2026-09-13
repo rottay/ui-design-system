@@ -227,10 +227,18 @@ const FIRST_PARTY = [
  * The only moved values are rottay's radio and toggle descriptions, now the
  * secondary ink in both modes, so the light block no longer restates them.
  */
+/**
+ * WO-FAM-02 re-anchored all three, ADDITIVE plus one rename, measured: the eight
+ * field family derivers add rottay 1357 -> 1469 base keys, bithire 1355 -> 1485,
+ * evnto 649 -> 786, moved 0; every added key is a `--ds-{input,textarea,
+ * password-input,otp-input,tag-input,input-number,form-field,form}-*` relation.
+ * rottay's twelve authored `--ds-inputnumber-*` keys (and their light-block
+ * twins) now emit as `--ds-input-number-*` with the same values.
+ */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "57702fc3dc7a38e9678859c5ac12020907a674ff182cfd64b03a4ded6d77b6c6",
-  bithire: "5119e16aaf9812cffdfeb50b9af04503a5cf7f0f29c03d14162ccc5d25661f06",
-  evnto: "178906bd4de3c0cc6785447f23eecbd07f38057ef9e99199ccb5c6f41a7eb569",
+  rottay: "907fc7f61edf951a8e678aaaf48ef8c1d1ae658525224a2b631da7278d551002",
+  bithire: "9d83f98ac773f39dc7fa5a8ce2b63d51ad40098a5a31162d52ed98cd9503a3ae",
+  evnto: "97c224884c30c1f9f5577715a8076f3612466aefdbdd37d18513adf489689f2e",
 };
 
 /**
