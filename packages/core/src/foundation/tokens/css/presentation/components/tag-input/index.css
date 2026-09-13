@@ -1,0 +1,24 @@
+/**
+ * TagInput Component Tokens - Rottay Design System
+ *
+ * Structural constants of the tag-input family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/tag-input`.
+ */
+
+:root {
+  --ds-tag-input-gap: var(--ds-spacing-1);
+  --ds-tag-input-padding-y: var(--ds-spacing-1);
+  --ds-tag-input-padding-x: var(--ds-spacing-2);
+  --ds-tag-input-sm-height: 32px;
+  --ds-tag-input-md-height: 40px;
+  --ds-tag-input-lg-height: 48px;
+  --ds-tag-input-border-width: var(--ds-edge-standard-width);
+  --ds-tag-input-input-min-width: 60px;
+  --ds-tag-input-line-height: var(--ds-line-height-normal);
+  --ds-tag-input-error-gap: var(--ds-spacing-1);
+  --ds-tag-input-error-font-size: var(--ds-font-size-xs);
+  --ds-tag-input-rejected-halo-width: 3px;
+  --ds-tag-input-touch-target-min: 44px;
+  --ds-tag-input-transition-duration: var(--ds-input-transition-duration);
+  --ds-tag-input-transition-timing: var(--ds-input-transition-timing);
+}
