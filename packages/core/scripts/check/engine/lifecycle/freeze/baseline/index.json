@@ -496,6 +496,18 @@
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/ui/primitives/inputs/Switch/engines/classic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "WO-FAM-01 (D-16, landed ad38a9327): Switch merged into Toggle; the frozen classic Switch engine is deleted with its family. DT authorization, owner may veto.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "WO-FAM-01 (D-16, landed ad38a9327): Switch merged into Toggle; the frozen rustic Switch engine is deleted with its family. DT authorization, owner may veto.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/ui/primitives/overlay/Modal/engines/classic/index.tsx": {
       "blob": null,
       "relocationDigest": null,
