@@ -13,48 +13,58 @@
 
   /* XS - Extra Small */
   --ds-input-xs-height: 1.5rem;            /* 24px */
-  --ds-input-xs-padding-x: var(--ds-spacing-2, 0.5rem);         /* 8px */
+  --ds-input-xs-padding-x: var(--ds-spacing-2);         /* 8px */
   --ds-input-xs-padding-y: 0.125rem;       /* 2px */
-  --ds-input-xs-font-size: 0.75rem;        /* 12px */
+  --ds-input-xs-font-size: var(--ds-font-size-xs);
   --ds-input-xs-line-height: 1.25rem;      /* 20px */
   --ds-input-xs-icon-size: 0.875rem;       /* 14px */
   --ds-input-xs-border-radius: var(--ds-radius-sm);
+  --ds-input-xs-radius: var(--ds-input-xs-border-radius);
+  --ds-input-xs-gap: var(--ds-input-affix-gap);
 
   /* SM - Small */
   --ds-input-sm-height: 2rem;              /* 32px */
   --ds-input-sm-padding-x: 0.625rem;       /* 10px */
-  --ds-input-sm-padding-y: var(--ds-spacing-1, 0.25rem);        /* 4px */
-  --ds-input-sm-font-size: 0.8125rem;      /* 13px */
+  --ds-input-sm-padding-y: var(--ds-spacing-1);        /* 4px */
+  --ds-input-sm-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
   --ds-input-sm-line-height: 1.5rem;       /* 24px */
   --ds-input-sm-icon-size: 1rem;           /* 16px */
   --ds-input-sm-border-radius: var(--ds-radius-md);
+  --ds-input-sm-radius: var(--ds-input-sm-border-radius);
+  --ds-input-sm-gap: var(--ds-input-affix-gap);
 
   /* MD - Medium (Default) */
   --ds-input-md-height: 2.5rem;            /* 40px */
   --ds-input-md-padding-x: 0.75rem;        /* 12px */
-  --ds-input-md-padding-y: var(--ds-spacing-2, 0.5rem);         /* 8px */
-  --ds-input-md-font-size: 0.875rem;       /* 14px */
+  --ds-input-md-padding-y: var(--ds-spacing-2);         /* 8px */
+  --ds-input-md-font-size: var(--ds-font-size-sm);
   --ds-input-md-line-height: 1.5rem;       /* 24px */
   --ds-input-md-icon-size: 1.25rem;        /* 20px */
   --ds-input-md-border-radius: var(--ds-radius-md);
+  --ds-input-md-radius: var(--ds-input-md-border-radius);
+  --ds-input-md-gap: var(--ds-input-affix-gap);
 
   /* LG - Large */
   --ds-input-lg-height: 3rem;              /* 48px */
   --ds-input-lg-padding-x: 0.875rem;       /* 14px */
-  --ds-input-lg-padding-y: var(--ds-spacing-3, 0.75rem);        /* 12px */
-  --ds-input-lg-font-size: 1rem;           /* 16px */
+  --ds-input-lg-padding-y: var(--ds-spacing-3);        /* 12px */
+  --ds-input-lg-font-size: var(--ds-font-size-base);
   --ds-input-lg-line-height: 1.75rem;      /* 28px */
   --ds-input-lg-icon-size: 1.5rem;         /* 24px */
   --ds-input-lg-border-radius: var(--ds-radius-lg);
+  --ds-input-lg-radius: var(--ds-input-lg-border-radius);
+  --ds-input-lg-gap: var(--ds-input-affix-gap);
 
   /* XL - Extra Large */
   --ds-input-xl-height: 3.5rem;            /* 56px */
-  --ds-input-xl-padding-x: var(--ds-spacing-4, 1rem);           /* 16px */
-  --ds-input-xl-padding-y: var(--ds-spacing-4, 1rem);           /* 16px */
-  --ds-input-xl-font-size: 1.125rem;       /* 18px */
+  --ds-input-xl-padding-x: var(--ds-spacing-4);           /* 16px */
+  --ds-input-xl-padding-y: var(--ds-spacing-4);           /* 16px */
+  --ds-input-xl-font-size: var(--ds-font-size-lg);
   --ds-input-xl-line-height: 2rem;         /* 32px */
   --ds-input-xl-icon-size: 1.75rem;        /* 28px */
   --ds-input-xl-border-radius: var(--ds-radius-lg);
+  --ds-input-xl-radius: var(--ds-input-xl-border-radius);
+  --ds-input-xl-gap: var(--ds-input-affix-gap);
 
   /* Textarea specific */
   --ds-textarea-min-height: 6rem;       /* 96px */
@@ -88,12 +98,13 @@
   --ds-input-border-focus: var(--ds-input-border-color-focus);
   --ds-input-border-disabled: var(--ds-input-border-color-disabled);
 
-  --ds-input-border-width: var(--ds-border-width-1, 1px);
+  --ds-input-border-width: var(--ds-edge-standard-width);
   --ds-input-border-width-focus: 2px;
   --ds-input-border-style: solid;
-  --ds-input-radius: var(--ds-radius-input, var(--ds-radius-md));
+  --ds-input-radius: var(--ds-radius-input);
   --ds-input-gap: var(--ds-input-affix-gap, var(--ds-spacing-2));
   --ds-input-message-gap: var(--ds-spacing-1);
+  --ds-input-compact-gap: var(--ds-spacing-1);
   --ds-input-caret-color: var(--ds-input-border-focus);
   --ds-input-selection-bg: color-mix(in srgb, var(--ds-input-border-focus) 20%, transparent);
   --ds-input-selection-color: var(--ds-input-color);
@@ -137,6 +148,8 @@
   --ds-input-shadow-hover: var(--ds-input-shadow-rest);
   --ds-input-shadow-focus: var(--ds-shadow-input-focus);
   --ds-input-shadow-error-focus: var(--ds-shadow-input-error);
+  --ds-input-shadow-disabled: none;
+  --ds-input-inset-shadow: none;
 
   /* ========================================================================
      ADDONS - Prefix/Suffix
@@ -146,13 +159,15 @@
   --ds-input-addon-color: var(--ds-color-neutral-600);
   --ds-input-addon-border-color: var(--ds-color-neutral-300);
   --ds-input-addon-border: var(--ds-input-addon-border-color);
-  --ds-input-addon-padding-x: var(--ds-spacing-3, 0.75rem);
+  --ds-input-addon-padding-x: var(--ds-spacing-3);
+  --ds-input-addon-radius: var(--ds-radius-input);
+  --ds-input-addon-font-weight: var(--ds-font-weight-medium);
 
   --ds-input-affix-gap: 0.5rem;            /* Gap between affix and input text */
   --ds-input-affix-color: var(--ds-color-neutral-500);
   --ds-input-affix-size: var(--ds-input-md-icon-size);
   --ds-input-affix-size-compact: var(--ds-input-sm-icon-size);
-  --ds-input-affix-padding-x: var(--ds-spacing-0, 0);
+  --ds-input-affix-padding-x: var(--ds-spacing-0);
   --ds-input-affix-bg: transparent;
   --ds-input-affix-border: 0 solid transparent;
   --ds-input-affix-radius: var(--ds-radius-sm);
@@ -163,7 +178,7 @@
      ======================================================================== */
   --ds-input-icon-color: var(--ds-color-neutral-500);
   --ds-input-icon-color-hover: var(--ds-color-neutral-600);
-  --ds-input-icon-gap: var(--ds-spacing-2, 0.5rem);
+  --ds-input-icon-gap: var(--ds-spacing-2);
 
   /* ========================================================================
      CLEAR BUTTON
@@ -174,14 +189,15 @@
   --ds-input-clear-color-hover: var(--ds-color-neutral-600);
   --ds-input-clear-bg-hover: var(--ds-material-control-background-hover);
   --ds-input-clear-bg: transparent;
-  --ds-input-clear-border: 1px solid transparent;
+  --ds-input-clear-border: var(--ds-input-border-width) solid transparent;
   --ds-input-clear-border-hover: var(--ds-input-border);
   --ds-input-action-shadow-hover: none;
   --ds-input-action-focus-ring: var(--ds-focus-ring);
   --ds-input-clear-radius: var(--ds-radius-full);
   --ds-input-action-size: var(--ds-input-md-icon-size);
   --ds-input-action-radius: var(--ds-input-clear-radius);
-  --ds-input-action-active-transform: scale(0.94);
+  --ds-input-action-active-transform: scale(var(--ds-state-press-scale));
+  --ds-input-action-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-input-touch-target-min: var(--ds-touch-target-min, 2.75rem);
 
   /* Loading */
@@ -206,6 +222,9 @@
   --ds-input-label-color-disabled: var(--ds-material-control-foreground-disabled);
   --ds-input-label-font-size: var(--ds-font-size-sm);
   --ds-input-label-font-weight: var(--ds-font-weight-medium);
+  --ds-input-label-font-family: var(--ds-input-font-family);
+  --ds-input-label-letter-spacing: normal;
+  --ds-input-label-line-height: var(--ds-line-height-snug);
   --ds-input-label-margin-bottom: 0.375rem;
   --ds-input-label-required-color: var(--ds-color-error-500);
 
@@ -215,7 +234,7 @@
      ======================================================================== */
   --ds-input-helper-color: var(--ds-color-neutral-600);
   --ds-input-helper-font-size: var(--ds-font-size-sm);
-  --ds-input-helper-margin-top: var(--ds-spacing-1, 0.25rem);
+  --ds-input-helper-margin-top: var(--ds-spacing-1);
   --ds-input-helper-line-height: var(--ds-line-height-snug);
 
   /* ========================================================================
@@ -224,7 +243,7 @@
      ======================================================================== */
   --ds-input-error-message-color: var(--ds-color-error-600);
   --ds-input-error-message-font-size: var(--ds-font-size-sm);
-  --ds-input-error-message-margin-top: var(--ds-spacing-1, 0.25rem);
+  --ds-input-error-message-margin-top: var(--ds-spacing-1);
   --ds-input-error-message-icon-size: 1rem;
   --ds-input-error-message-font-weight: var(--ds-font-weight-medium);
 
@@ -234,19 +253,19 @@
      ======================================================================== */
   --ds-input-success-message-color: var(--ds-color-success-600);
   --ds-input-success-message-font-size: var(--ds-font-size-sm);
-  --ds-input-success-message-margin-top: var(--ds-spacing-1, 0.25rem);
+  --ds-input-success-message-margin-top: var(--ds-spacing-1);
 
   /* ========================================================================
      GROUP/COMPACT
      Settings for input groups
      ======================================================================== */
-  --ds-input-group-gap: var(--ds-spacing-0, 0);
+  --ds-input-group-gap: var(--ds-spacing-0);
   --ds-input-group-gap-separated: var(--ds-spacing-2);
-  --ds-input-group-overlap: -1px;
+  --ds-input-group-overlap: calc(-1 * var(--ds-input-border-width));
   --ds-input-group-min-item-width: 12rem;
   --ds-input-group-border-radius-first: var(--ds-radius-md) 0 0 var(--ds-radius-md);
   --ds-input-group-border-radius-last: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
-  --ds-input-group-border-radius-middle: var(--ds-radius-none, 0);
+  --ds-input-group-border-radius-middle: var(--ds-radius-none);
 
   /* ========================================================================
      SEARCH INPUT
@@ -259,16 +278,9 @@
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-input-transition-duration: 0.2s;
-  --ds-input-transition-timing: ease-in-out;
+  --ds-input-transition-duration: var(--ds-motion-feedback);
+  --ds-input-transition-timing: var(--ds-motion-ease-out);
   --ds-input-transition: all var(--ds-input-transition-duration) var(--ds-input-transition-timing);
-
-  /* FormField composition */
-  --ds-form-field-gap: var(--ds-input-label-margin-bottom);
-  --ds-form-field-horizontal-gap: var(--ds-spacing-4);
-  --ds-form-field-label-offset-y: 0;
-  --ds-form-field-required-gap: 0.25em;
-  --ds-form-field-disabled-opacity: var(--ds-input-disabled-opacity);
 
   /* Textarea composition */
   --ds-textarea-padding-x: var(--ds-input-md-padding-x);
@@ -288,7 +300,7 @@
      DISABLED STATE
      Appearance when disabled
      ======================================================================== */
-  --ds-input-disabled-opacity: 0.6;
+  --ds-input-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-input-disabled-cursor: not-allowed;
 
   /* ========================================================================

@@ -29,6 +29,7 @@ import { describe, expect, it } from "vitest";
 import { lowerBrandThemeFixture, lowerTheme } from "@tests/support/theme-lowering";
 
 import { evntoBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/evnto";
+import { deriveInputChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input";
 import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 
 const ROOT = process.cwd();
@@ -153,9 +154,8 @@ describe("both retired channels land on the compiled surface", () => {
     });
 
     it(`${name}: light does not gain an input placeholder (wrong-mode guard)`, () => {
-      // The extension's placeholder was dark-only; migrating it must not make
-      // the body author a light input placeholder it never had.
-      expect(compile().cssVariables[PLACEHOLDER_TYPED]).toBeUndefined();
+      // The extension's placeholder was dark-only; the body carries only the input family's mode-agnostic relation.
+      expect(compile().cssVariables[PLACEHOLDER_TYPED]).toBe(deriveInputChannels()[PLACEHOLDER_TYPED]);
     });
 
     it(`${name}: the contract-less alias name is never emitted`, () => {

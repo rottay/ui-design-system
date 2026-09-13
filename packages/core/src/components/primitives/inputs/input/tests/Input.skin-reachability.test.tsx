@@ -35,7 +35,7 @@ const MODERN_SKIN_ROOT = "src/foundation/tokens/css/runtime/engines/modern/skin"
 const RULES = readSkinRules("input", MODERN_SKIN_ROOT);
 
 /** The shell is the paint owner; these are the rules keyed on it. */
-const SHELL_ANCHOR = /^(input)?\.rottay-input\.rottay-input--modern/;
+const SHELL_ANCHOR = /^(input)?\.ds-input-shell\.ds-input-shell--modern/;
 const shellRules = RULES.filter((rule) => SHELL_ANCHOR.test(rule.selector));
 
 /** `unreachableSelectors` never judges a state-dependent selector, so this is
@@ -72,7 +72,7 @@ describe("modern Input skin reachability", () => {
       "data-part": "search-input",
       className: "ds-consumer__field",
     });
-    const shell = labelled.querySelector(".rottay-input.rottay-input--modern");
+    const shell = labelled.querySelector(".ds-input-shell.ds-input-shell--modern");
     expect(shell?.getAttribute("data-part")).toBe("search-input");
     const labelledDead = unreachableSelectors({ rules: shellRules, scopes: [labelled] });
 
@@ -98,8 +98,8 @@ describe("modern Input skin reachability", () => {
     // the same reading, which is what licenses this lane's reachability numbers
     // as measurements rather than floors.
     const container = await renderField({ "data-part": "search-input" });
-    expect(container.querySelectorAll(".rottay-input.rottay-input--modern")).toHaveLength(
-      document.querySelectorAll(".rottay-input.rottay-input--modern").length
+    expect(container.querySelectorAll(".ds-input-shell.ds-input-shell--modern")).toHaveLength(
+      document.querySelectorAll(".ds-input-shell.ds-input-shell--modern").length
     );
     expect(unreachableSelectors({ rules: shellRules, scopes: [container] })).toEqual(
       unreachableSelectors({ rules: shellRules, scopes: [container, document] })

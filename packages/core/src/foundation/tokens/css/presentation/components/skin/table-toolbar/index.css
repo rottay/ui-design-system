@@ -18,7 +18,7 @@
  *    the sibling `active-filters-bar.css` already used throughout.
  *
  * 2. The modern search surface was keyed on
- *    `:has(> .rottay-input--modern[data-part='root'])`, but this family passes
+ *    `:has(> .ds-input-shell--modern[data-part='root'])`, but this family passes
  *    `data-part='search-input'` to the Input and the modern primitive writes
  *    `data-part={caller ?? 'root'}` — the caller's part REPLACES the default,
  *    so the predicate could never hold. Same root cause as (1) in a second

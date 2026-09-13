@@ -397,9 +397,9 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .rottay-input.rottay-input--modern,
+  .ds-saved-views__input[data-part='field'] .ds-input-shell.ds-input-shell--modern,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .rottay-input.rottay-input--modern {
+  .ds-saved-views__create-input[data-part='field'] .ds-input-shell.ds-input-shell--modern {
   border: 1px solid var(--ds-color-border);
 }
 

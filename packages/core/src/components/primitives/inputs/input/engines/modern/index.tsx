@@ -35,7 +35,7 @@
 'use client';
 
 import React, { forwardRef, useState, useCallback, useRef, useEffect, useId } from 'react';
-import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { partAttributes, resolveSubmitIntent, useFieldAction, useInteractionState } from '@/foundation/behavior';
 import type { InputProps, InputSize } from '../../contracts';
 import { INPUT_DEFAULTS, SIZE_MAP as INPUT_SIZE_MAP } from '../../contracts';
 import {
@@ -61,13 +61,14 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
 
 function ClearButton({ onClick }: { onClick: () => void }) {
   const translation = useOptionalTranslation('common');
+  const action = useFieldAction();
 
   return (
     <button
       type="button"
-      data-part="clear-button"
+      {...partAttributes('clear-button', action.state)}
+      {...action.handlers}
       onClick={onClick}
-      onPointerDown={(event) => event.preventDefault()}
       aria-label={translation?.t('clear') ?? 'Clear'}
     >
       <ActionCloseIcon decorative size="sm" />
@@ -258,9 +259,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      // An IME candidate is confirmed with Enter; that keydown carries
-      // `isComposing` and must not read as the user submitting the field.
-      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+      if (resolveSubmitIntent(e) === 'submit') {
         onPressEnter?.(e);
       }
       onKeyDown?.(e);
@@ -352,7 +351,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'data-size-responsive': sizeIsResponsive ? 'true' : undefined,
   } as const;
 
-  const shellClassName = 'rottay-input rottay-input--modern';
+  const shellClassName = 'ds-input-shell ds-input-shell--modern';
 
   // Shared input props
   const inputProps = {
@@ -437,7 +436,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // buttons valid while the actual input remains associated by FormField.
   if (prefix || suffix || showClearButton || loading) {
     return (
-      <div className={`rottay-input-field ${className}`.trim()} data-part="field" style={style}>
+      <div className={`ds-input-field ${className}`.trim()} data-part="field" style={style}>
         <div
           className={shellClassName}
           onClick={(event) => {
@@ -459,7 +458,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
           <input
             {...inputProps}
-            className="rottay-input__control"
+            className="ds-input-control"
             data-part="control"
           />
 
@@ -480,7 +479,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   // Simple input without prefix/suffix -- the shell IS the input element
   return (
-    <div className={`rottay-input-field ${className}`.trim()} data-part="field" style={style}>
+    <div className={`ds-input-field ${className}`.trim()} data-part="field" style={style}>
       <input
         {...inputProps}
         {...responsiveAttrs}

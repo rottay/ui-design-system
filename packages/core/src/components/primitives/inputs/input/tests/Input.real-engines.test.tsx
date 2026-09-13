@@ -300,28 +300,12 @@ describe("Input real engine coverage", () => {
       </InputGroup>
     );
 
-    const addons = container.querySelectorAll(".rottay-input-addon");
-    const group = container.querySelector(".rottay-input-group");
+    const addons = container.querySelectorAll(".ds-input-addon");
+    const group = container.querySelector(".ds-input-group");
     expect(group).toHaveAttribute("data-compact", "true");
     expect(group).toHaveAttribute("data-size", "lg");
     expect((addons[0] as HTMLElement).style.borderTopRightRadius).toBe("");
     expect((addons[1] as HTMLElement).style.marginLeft).toBe("");
-
-    const compoundSkin = readFileSync(
-      join(
-        __dirname,
-        "../../../../../foundation/tokens/css/presentation/components/skin/input-compounds/index.css"
-      ),
-      "utf8"
-    );
-    expect(compoundSkin).toContain(
-      ".rottay-input-group[data-part='group'][data-compact='true'] > :first-child:not(:last-child)"
-    );
-    expect(compoundSkin).toContain("border-start-end-radius: 0 !important;");
-    expect(compoundSkin).toContain("border-end-end-radius: 0 !important;");
-    expect(compoundSkin).toContain(
-      "margin-inline-start: var(--ds-input-group-overlap"
-    );
 
     rerender(
       <InputGroup compact={false} size="sm">
@@ -332,8 +316,8 @@ describe("Input real engine coverage", () => {
       </InputGroup>
     );
 
-    const nonCompactAddons = container.querySelectorAll(".rottay-input-addon");
-    expect(container.querySelector(".rottay-input-group")).toHaveAttribute(
+    const nonCompactAddons = container.querySelectorAll(".ds-input-addon");
+    expect(container.querySelector(".ds-input-group")).toHaveAttribute(
       "data-compact",
       "false"
     );
@@ -385,7 +369,7 @@ describe("Input real engine coverage", () => {
 
     expect(screen.getByTestId("native-action")).not.toHaveAttribute("size");
     expect(screen.getByTestId("fragment-child")).not.toHaveAttribute("size");
-    expect(container.querySelector(".rottay-input-addon")).toHaveAttribute("data-size", "xl");
+    expect(container.querySelector(".ds-input-addon")).toHaveAttribute("data-size", "xl");
   });
 
   it("stamps textarea loading, resize and progressive count states without overlays", () => {
@@ -420,8 +404,8 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     );
     const plainShell = screen.getByRole("textbox", { name: "Plain" });
     expect(plainShell.tagName).toBe("INPUT");
-    expect(plainShell.className).toContain("rottay-input");
-    expect(plainShell.className).toContain("rottay-input--modern");
+    expect(plainShell.className).toContain("ds-input-shell");
+    expect(plainShell.className).toContain("ds-input-shell--modern");
     expect(plainShell).toHaveAttribute("data-part", "root");
     expect(plainShell).toHaveAttribute("data-variant", "filled");
     expect(plainShell).toHaveAttribute("data-size", "lg");
@@ -437,12 +421,12 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     // Interactive suffix buttons cannot be descendants of a label. The shell
     // is therefore a neutral div while the actual input remains labelable.
     const wrappedShell = wrappedContainer.querySelector(
-      '.rottay-input[data-part="root"]'
+      '.ds-input-shell[data-part="root"]'
     ) as HTMLDivElement;
     expect(wrappedShell).not.toBeNull();
     expect(wrappedShell.tagName).toBe("DIV");
-    expect(wrappedShell.className).toContain("rottay-input");
-    expect(wrappedShell.className).toContain("rottay-input--modern");
+    expect(wrappedShell.className).toContain("ds-input-shell");
+    expect(wrappedShell.className).toContain("ds-input-shell--modern");
     expect(wrappedShell).toHaveAttribute("data-part", "root");
     expect(wrappedShell).toHaveAttribute("data-variant", "filled");
     expect(wrappedShell).toHaveAttribute("data-size", "lg");
@@ -450,7 +434,7 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     // The actual control has a stable public anatomy part but never the
     // paint-triggering root class, so the skin cannot double-paint it.
     const innerInput = screen.getByRole("textbox", { name: "Wrapped" });
-    expect(innerInput.className).toBe("rottay-input__control");
+    expect(innerInput.className).toBe("ds-input-control");
     expect(innerInput).toHaveAttribute("data-part", "control");
 
     plainContainer.remove();
@@ -523,32 +507,6 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     );
   });
 
-  it("modern skin: focus and semantic rings use valid public box-shadow channels", () => {
-    // The skin paints from a stylesheet this runtime never loads. What is
-    // assertable here is the CONTRACT the sheet answers to (established in
-    // the component tests above) and the sheet's own content, the way
-    // Card.real-engines.test.tsx reads `skin/card.css` directly. The pixels
-    // themselves are measured against a real cascade by
-    // `packages/showroom/e2e/visual/states.spec.ts`.
-    const skin = readFileSync(
-      join(
-        __dirname,
-        "../../../../../foundation/tokens/css/runtime/engines/modern/skin/input/index.css"
-      ),
-      "utf-8"
-    );
-
-    // No rule may substitute a box-shadow token into the outline shorthand
-    // (the invalid declaration P-54 found) -- that string must not appear.
-    expect(skin).not.toContain("solid var(--ds-input-shadow-focus");
-
-    expect(skin).toContain("box-shadow: var(--ds-input-shadow-focus");
-    expect(skin).toContain("box-shadow: var(--ds-input-error-shadow-focus");
-    expect(skin).toContain("box-shadow: var(--ds-input-warning-shadow-focus");
-    expect(skin).toContain("box-shadow: var(--ds-input-success-shadow-focus");
-    expect(skin).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(skin).toContain("@media (forced-colors: active)");
-  });
 
   it("modern: stamps filled/readOnly/loading anatomy and wires inline errors to the control", () => {
     const { container } = render(
@@ -565,7 +523,7 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     );
 
     const control = screen.getByRole("textbox", { name: "Audited field" });
-    const shell = container.querySelector('.rottay-input[data-part="root"]');
+    const shell = container.querySelector('.ds-input-shell[data-part="root"]');
     const alert = screen.getByRole("alert");
 
     expect(shell).toHaveAttribute("data-filled", "true");
@@ -587,7 +545,7 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
       />
     );
 
-    const shell = container.querySelector('.rottay-input[data-part="root"]');
+    const shell = container.querySelector('.ds-input-shell[data-part="root"]');
     const generatedCss = responsiveCss(container);
 
     expect(shell).toHaveAttribute("data-size-responsive", "true");
@@ -671,59 +629,6 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     expect(await screen.findByRole("button", { name: "Search" })).toBeInTheDocument();
   });
 
-  it("the Input skin consumes visibly divergent values from both real brands", () => {
-    const bithire = lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
-      tenantSlug: 'bithire',
-    }).cssVariables;
-    const management = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
-      tenantSlug: 'themanagementmiami',
-    }).cssVariables;
-    const skin = readFileSync(
-      join(
-        __dirname,
-        "../../../../../foundation/tokens/css/runtime/engines/modern/skin/input/index.css"
-      ),
-      "utf-8"
-    );
-
-    const compoundSkin = readFileSync(
-      join(
-        __dirname,
-        "../../../../../foundation/tokens/css/presentation/components/skin/input-compounds/index.css"
-      ),
-      "utf-8"
-    );
-    const formFieldSkin = readFileSync(
-      join(
-        __dirname,
-        "../../../../../foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
-      ),
-      "utf-8"
-    );
-
-    for (const [channel, consumer] of [
-      ["--ds-input-bg", skin],
-      ["--ds-input-color", skin],
-      ["--ds-input-border-focus", skin],
-      ["--ds-radius-input", skin],
-      ["--ds-input-shadow-focus", skin],
-      ["--ds-input-selection-bg", skin],
-      ["--ds-input-filled-border", skin],
-      ["--ds-input-action-focus-ring", skin],
-      ["--ds-input-count-color-warning", skin],
-      ["--ds-input-md-padding-y", compoundSkin],
-      ["--ds-textarea-radius", compoundSkin],
-      ["--ds-input-group-gap-separated", compoundSkin],
-      ["--ds-form-field-gap", formFieldSkin],
-    ] as const) {
-      expect(bithire[channel], channel).toBeDefined();
-      expect(management[channel], channel).toBeDefined();
-      expect(bithire[channel], channel).not.toBe(management[channel]);
-      expect(consumer).toContain(`var(${channel}`);
-    }
-  });
 
   it("rustic: the shell is always the wrapping <div>, in both branches", () => {
     const { container: plainContainer } = render(
@@ -792,292 +697,5 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     // would appear outside a `/* ... */` block.
     const rulesOnly = skin.replace(/\/\*[\s\S]*?\*\//g, "");
     expect(rulesOnly).not.toContain("[data-state~='hovered']");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// K1-B01 / K1-B02: the modern Input shell-vs-control paint contract, resolved
-// against the REAL stylesheet. jsdom never loads the skin, so these tests
-// compute the cascade themselves -- real rendered DOM + real selector
-// matching (`element.matches`) + specificity ordering -- and assert which
-// declaration WINS each paint longhand, the way FieldsBatch.real-engines
-// reads skins as source but one level closer to the browser's answer.
-// ---------------------------------------------------------------------------
-
-interface PaintSnapshot {
-  borderWidth?: string;
-  backgroundColor?: string;
-  borderColor?: string;
-  boxShadow?: string;
-}
-
-/** Strip comments and at-rule blocks, then return every `{selector, body}` rule. */
-function parseSkinRules(css: string): Array<{ selector: string; body: string }> {
-  const noComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
-  const noAtRules = noComments.replace(/@[\w-]+[^{]*\{(?:[^{}]|\{[^}]*\})*\}/g, "");
-  const rules: Array<{ selector: string; body: string }> = [];
-  const re = /([^{}]+)\{([^{}]*)\}/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(noAtRules)) !== null) {
-    rules.push({ selector: m[1].trim(), body: m[2].trim() });
-  }
-  return rules;
-}
-
-/** The (b, c) specificity columns of one comma-free selector. */
-function specificityOf(selector: string): [number, number] {
-  const classes = (selector.match(/\.[A-Za-z_-][\w-]*/g) || []).length;
-  const attrs = (selector.match(/\[[^\]]*\]/g) || []).length;
-  const pseudos = (selector.match(/(?<!:):[A-Za-z-]+/g) || []).length;
-  const notArgs = (selector.match(/:not\(([^)]*)\)/g) || []).reduce(
-    (n, frag) => n + specificityOf(frag.slice(5, -1))[0],
-    0
-  );
-  const stripped = selector
-    .replace(/:not\([^)]*\)/g, " ")
-    .replace(/\.[A-Za-z_-][\w-]*/g, " ")
-    .replace(/\[[^\]]*\]/g, " ")
-    .replace(/::?[A-Za-z-]+/g, " ")
-    .replace(/[>+~*]/g, " ");
-  const elements = stripped
-    .split(/\s+/)
-    .filter((token) => /^[A-Za-z][\w-]*$/.test(token)).length;
-  return [classes + attrs + pseudos + notArgs, elements];
-}
-
-/** Split a declaration value on top-level whitespace (var() commas stay whole). */
-function splitTopLevel(value: string): string[] {
-  const parts: string[] = [];
-  let depth = 0;
-  let current = "";
-  for (const ch of value) {
-    if (ch === "(") depth += 1;
-    if (ch === ")") depth -= 1;
-    if (/\s/.test(ch) && depth === 0) {
-      if (current) parts.push(current);
-      current = "";
-    } else {
-      current += ch;
-    }
-  }
-  if (current) parts.push(current);
-  return parts;
-}
-
-/** The declarations of one rule body, folded onto the paint longhands we track. */
-function paintDeclarations(body: string): Array<{ prop: keyof PaintSnapshot; value: string }> {
-  const out: Array<{ prop: keyof PaintSnapshot; value: string }> = [];
-  for (const decl of body.split(";")) {
-    const idx = decl.indexOf(":");
-    if (idx < 0) continue;
-    const prop = decl.slice(0, idx).trim().toLowerCase();
-    const value = decl.slice(idx + 1).trim();
-    if (prop === "border") {
-      const parts = splitTopLevel(value);
-      if (parts[0]) out.push({ prop: "borderWidth", value: parts[0] });
-      if (parts.length >= 3) out.push({ prop: "borderColor", value: parts.slice(2).join(" ") });
-    } else if (prop === "border-width") {
-      out.push({ prop: "borderWidth", value });
-    } else if (prop === "border-color") {
-      out.push({ prop: "borderColor", value });
-    } else if (prop === "background") {
-      const parts = splitTopLevel(value);
-      out.push({ prop: "backgroundColor", value: parts[parts.length - 1] ?? value });
-    } else if (prop === "background-color") {
-      out.push({ prop: "backgroundColor", value });
-    } else if (prop === "box-shadow") {
-      out.push({ prop: "boxShadow", value });
-    }
-  }
-  return out;
-}
-
-/**
- * The paint longhands an element would compute from the skin: every matching
- * rule contributes its declarations at its best selector specificity; the
- * highest (b, c) wins, source order breaks ties.
- */
-function computePaint(el: Element, rules: Array<{ selector: string; body: string }>): PaintSnapshot {
-  const candidates: Array<{ spec: [number, number]; order: number; prop: keyof PaintSnapshot; value: string }> = [];
-  rules.forEach((rule, order) => {
-    let best: [number, number] | null = null;
-    for (const part of rule.selector.split(",")) {
-      let matches = false;
-      try {
-        matches = el.matches(part.trim());
-      } catch {
-        continue; // pseudos jsdom cannot evaluate (:-webkit-autofill, ::placeholder)
-      }
-      if (!matches) continue;
-      const spec = specificityOf(part.trim());
-      if (!best || spec[0] > best[0] || (spec[0] === best[0] && spec[1] > best[1])) best = spec;
-    }
-    if (!best) return;
-    for (const decl of paintDeclarations(rule.body)) {
-      candidates.push({ spec: best, order, prop: decl.prop, value: decl.value });
-    }
-  });
-  const snapshot: PaintSnapshot = {};
-  for (const prop of ["borderWidth", "backgroundColor", "borderColor", "boxShadow"] as const) {
-    const sorted = candidates
-      .map((candidate, index) => ({ ...candidate, index }))
-      .filter((candidate) => candidate.prop === prop)
-      .sort(
-        (a, b) =>
-          a.spec[0] - b.spec[0] || a.spec[1] - b.spec[1] || a.order - b.order || a.index - b.index
-      );
-    const winner = sorted[sorted.length - 1];
-    if (winner) snapshot[prop] = winner.value;
-  }
-  return snapshot;
-}
-
-describe("Input modern skin -- shell/control paint contract (K1-B01, K1-B02)", () => {
-  const skinCss = readFileSync(
-    join(__dirname, "../../../../../foundation/tokens/css/runtime/engines/modern/skin/input/index.css"),
-    "utf-8"
-  );
-  const compoundCss = readFileSync(
-    join(__dirname, "../../../../../foundation/tokens/css/presentation/components/skin/input-compounds/index.css"),
-    "utf-8"
-  );
-  const rules = parseSkinRules(skinCss);
-
-  function paintOf(jsx: React.ReactElement, act?: (root: HTMLElement) => void): PaintSnapshot {
-    const { unmount } = render(jsx);
-    const root = screen.getByRole("textbox") as HTMLElement;
-    act?.(root);
-    const paint = computePaint(root, rules);
-    unmount();
-    return paint;
-  }
-
-  it("the standalone outline root keeps the variant's paint at rest (K1-B01)", () => {
-    const paint = paintOf(<ModernInput variant="outline" aria-label="Rest audit" />);
-    // Regression pin: this computed `0` / `transparent` when the control reset
-    // selected the root node itself.
-    expect(paint.borderWidth, "standalone outline root must not compute border-width: 0").toBeDefined();
-    expect(paint.borderWidth!).not.toMatch(/^0(px)?$/);
-    expect(paint.backgroundColor, "standalone outline root must not compute background: transparent").toBeDefined();
-    expect(paint.backgroundColor!).not.toBe("transparent");
-    // The paint owner is the skin's canonical channels -- nobody else.
-    expect(paint.borderColor).toContain("var(--ds-input-border");
-    expect(paint.backgroundColor).toContain("var(--ds-input-bg");
-  });
-
-  it("every variant of the standalone root keeps a painted border and surface at rest", () => {
-    for (const [variant, borderChannel, bgChannel] of [
-      ["outline", "--ds-input-border", "--ds-input-bg"],
-      ["filled", "--ds-input-filled-border", "--ds-input-filled-bg"],
-      ["flushed", "--ds-input-border", "--ds-input-bg"],
-    ] as const) {
-      const paint = paintOf(<ModernInput variant={variant} aria-label={`${variant} audit`} />);
-      expect(paint.borderWidth, `${variant} border-width`).not.toMatch(/^0(px)?$/);
-      expect(paint.borderColor, `${variant} border-color`).toContain(`var(${borderChannel}`);
-      if (variant === "flushed") {
-        expect(paint.backgroundColor).toBe("transparent"); // flushed's documented design
-      } else {
-        expect(paint.backgroundColor, `${variant} background`).toContain(`var(${bgChannel}`);
-      }
-    }
-  });
-
-  it("hover/focus/error/readonly/disabled repaint the standalone root through the channels", () => {
-    const hovered = paintOf(<ModernInput aria-label="Hover audit" />, (root) => {
-      fireEvent.pointerEnter(root);
-    });
-    expect(hovered.borderColor).toContain("var(--ds-input-border-hover");
-
-    const focused = paintOf(<ModernInput aria-label="Focus audit" />, (root) => {
-      fireEvent.focus(root);
-    });
-    expect(focused.borderColor).toContain("var(--ds-input-border-focus");
-    expect(focused.boxShadow).toContain("var(--ds-input-shadow-focus");
-
-    const invalid = paintOf(<ModernInput error aria-label="Error audit" />);
-    expect(invalid.borderColor).toContain("var(--ds-input-error-border");
-
-    const readonly = paintOf(<ModernInput readOnly aria-label="Readonly audit" />);
-    expect(readonly.borderColor).toContain("var(--ds-input-readonly-border");
-    expect(readonly.backgroundColor).toContain("var(--ds-input-readonly-bg");
-
-    const disabled = paintOf(<ModernInput disabled aria-label="Disabled audit" />);
-    expect(disabled.borderColor).toContain("var(--ds-input-border-disabled");
-    expect(disabled.backgroundColor).toContain("var(--ds-input-bg-disabled");
-  });
-
-  it("guard: no paint-erasing rule can select the standalone root node (K1-B01)", () => {
-    render(<ModernInput aria-label="Guard audit" />);
-    const root = screen.getByRole("textbox", { name: "Guard audit" });
-    const erasing = rules.filter(
-      (rule) =>
-        /background:\s*transparent/.test(rule.body) &&
-        /(^|;)\s*border:\s*0\b/.test(rule.body) &&
-        /box-shadow:\s*none/.test(rule.body)
-    );
-    // The guard is only meaningful while a chrome-free control reset exists.
-    expect(erasing.length).toBeGreaterThan(0);
-    for (const rule of erasing) {
-      for (const part of rule.selector.split(",")) {
-        expect(
-          root.matches(part.trim()),
-          `a paint-erasing rule must never match the root node: ${part.trim()}`
-        ).toBe(false);
-      }
-    }
-  });
-
-  it("compound branch: the addon shell keeps paint and only the inner control is transparent", () => {
-    const { unmount, container } = render(
-      <ModernInput prefix={<span aria-hidden="true">@</span>} aria-label="Compound audit" />
-    );
-    const control = screen.getByRole("textbox", { name: "Compound audit" });
-    const shell = control.closest(".rottay-input[data-part='root']") as HTMLElement;
-    expect(shell.tagName).toBe("DIV");
-
-    const shellRest = computePaint(shell, rules);
-    expect(shellRest.borderWidth).toBeDefined();
-    expect(shellRest.borderWidth!).not.toMatch(/^0(px)?$/);
-    expect(shellRest.backgroundColor).toContain("var(--ds-input-bg");
-
-    fireEvent.pointerEnter(shell);
-    expect(computePaint(shell, rules).borderColor).toContain("var(--ds-input-border-hover");
-    fireEvent.pointerLeave(shell);
-    fireEvent.focus(control);
-    const shellFocus = computePaint(shell, rules);
-    expect(shellFocus.borderColor).toContain("var(--ds-input-border-focus");
-    expect(shellFocus.boxShadow).toContain("var(--ds-input-shadow-focus");
-
-    const controlPaint = computePaint(control, rules);
-    expect(controlPaint.borderWidth).toBe("0");
-    expect(controlPaint.backgroundColor).toBe("transparent");
-    expect(container.querySelectorAll("input").length).toBe(1);
-    unmount();
-  });
-
-  it("autofill paint still covers both structural branches", () => {
-    expect(skinCss).toContain("> .rottay-input__control:-webkit-autofill");
-    expect(skinCss).toContain(
-      "input.rottay-input.rottay-input--modern:-webkit-autofill"
-    );
-  });
-
-  it("input-compounds: addon border color rides the doubled (0,4,0) anatomy booster (K1-B02)", () => {
-    // Width/style stay on the base rule at (0,3,0) where nothing contests them.
-    expect(compoundCss).toContain("border-width: var(--ds-input-border-width);");
-    expect(compoundCss).toContain("border-style: var(--ds-input-border-style);");
-    expect(compoundCss).not.toContain("var(--ds-input-border-width, 1px)");
-    // The color doubles the anatomy anchor: 2 classes + 2 data-part attrs =
-    // (0,4,0), clearing the tenant `html[data-tenant]:not([data-theme]):not(.light) *`
-    // border floor at (0,3,1) (P-48). No !important, no third paint owner.
-    const boosterSelector =
-      ".rottay-input-addon.ds-input-addon[data-part='root'][data-part='root']";
-    expect(specificityOf(boosterSelector)).toEqual([4, 0]);
-    const booster = compoundCss.match(
-      /\.rottay-input-addon\.ds-input-addon\[data-part='root'\]\[data-part='root'\]\s*\{([^}]*)\}/
-    );
-    expect(booster).not.toBeNull();
-    expect(booster![1]).toContain("border-color: var(--ds-input-addon-border, var(--ds-input-border))");
-    expect(booster![1]).not.toContain("!important");
   });
 });

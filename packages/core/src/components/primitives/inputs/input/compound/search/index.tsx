@@ -48,6 +48,7 @@
 "use client";
 
 import { useEffect, useRef, type KeyboardEvent } from "react";
+import { partAttributes, resolveSubmitIntent, useFieldAction } from "@/foundation/behavior";
 import type { InputSearchProps } from "../../contracts";
 import { BaseInput } from "../../engines";
 import { ActionSearchIcon } from "@/graphics/icons/semantic/generated/roles/action-search";
@@ -92,7 +93,7 @@ export const InputSearch = (props: InputSearchProps) => {
   }, [inputProps.value]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !loading) {
+    if (resolveSubmitIntent(e) === "submit" && !loading) {
       onSearch?.(e.currentTarget.value);
     }
     inputProps.onKeyDown?.(e);
@@ -103,14 +104,17 @@ export const InputSearch = (props: InputSearchProps) => {
     inputProps.onChange?.(value, event);
   };
 
+  const searchDisabled = Boolean(loading || inputProps.disabled);
+  const action = useFieldAction({ disabled: searchDisabled });
+
   const searchButton = showSearchButton ? (
     <button
       type="button"
-      data-part="search-button"
+      {...partAttributes("search-button", action.state)}
+      {...action.handlers}
       onClick={() => onSearch?.(queryRef.current)}
-      onPointerDown={(event) => event.preventDefault()}
       aria-label={translation?.t("search") ?? "Search"}
-      disabled={Boolean(loading || inputProps.disabled)}
+      disabled={searchDisabled}
     >
       {searchButtonText || <ActionSearchIcon decorative size="sm" />}
     </button>

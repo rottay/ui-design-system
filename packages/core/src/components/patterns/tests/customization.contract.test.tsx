@@ -198,8 +198,8 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     for (const variant of ['primary', 'secondary', 'default', 'ghost']) {
       expect(queryAll(root, `.ds-button--modern[data-variant="${variant}"]`)).toHaveLength(1);
     }
-    expect(queryAll(root, '.rottay-input--modern[data-part="input"]')).toHaveLength(2);
-    expect(queryAll(root, '.rottay-input--modern[data-part="input"][data-invalid="true"]')).toHaveLength(1);
+    expect(queryAll(root, '.ds-input-shell--modern[data-part="input"]')).toHaveLength(2);
+    expect(queryAll(root, '.ds-input-shell--modern[data-part="input"][data-invalid="true"]')).toHaveLength(1);
     for (const variant of ['outlined', 'elevated']) {
       expect(queryAll(root, `.ds-card--modern[data-variant="${variant}"]`)).toHaveLength(1);
     }

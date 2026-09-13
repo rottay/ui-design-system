@@ -210,7 +210,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -224,7 +224,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -235,7 +235,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -246,7 +246,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -258,7 +258,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -269,7 +269,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='input']),
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']),
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -612,7 +612,7 @@
  * refined here: it is primitive/inputs/input's --ds-input-letter-spacing. */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__input
-  .rottay-input,
+  .ds-input-shell,
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__input.rottay-input {
   font-size: var(--ds-font-size-sm);
