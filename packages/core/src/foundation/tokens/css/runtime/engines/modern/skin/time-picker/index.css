@@ -1,208 +1,141 @@
 /**
- * Modern TimePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ * Modern TimePicker skin.
  *
- * LAYER: `layer(rottay-engines)`. The canonical order lives in
- * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
- * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
- * component base and is in turn overridden by the structure and surface tiers;
- * the unlayered compiled tenant artifact wins over all of them.
- *
- * TWO SCOPE ROOTS:
- * - The trigger (`TimePickerBase`/`TimeRangePicker` root `<div data-part='root'>`)
- *   stays IN-TREE. Neither root carried a first-party class before this
- *   migration -- both were Tailwind-only passthrough -- so this migration adds
- *   `rottay-timepicker`/`rottay-timepicker--modern` (single) and
- *   `rottay-timepicker-range`/`rottay-timepicker-range--modern` (range),
- *   mirroring the BEM family the rustic engine already carries for this same
- *   component (not a `ds-` prefix).
- * - `TimePanel` (the hour/minute/second dropdown) is `createPortal(...,
- *   document.body)` -- it is NOT a DOM descendant of the trigger root, so it
- *   cannot be scoped under the trigger's class. It carried only
- *   `data-part='panel'` with no class; this migration adds the self-sufficient
- *   `rottay-timepicker__panel` class so panel rules can scope standalone,
- *   mirroring ColorPicker rustic's `rottay-colorpicker__dropdown`. `TimePanel`
- *   is shared verbatim by `TimePickerBase` and `TimeRangePicker`, so one panel
- *   ruleset serves both.
- *
- * STATUS: neither trigger root carried a status/disabled modifier class
- * pre-migration (unlike the rustic engine's BEM modifiers) -- the border-color
- * override was pure inline JS keyed on the `status` prop. This migration adds
- * `data-status` ('default'|'error'|'warning') to each trigger-input, the same
- * discriminator idiom InputNumber's modern skin uses.
- *
- * ACTIVE RANGE INPUT: `TimeRangePicker`'s start/end box-shadow ring was never
- * native focus -- it painted whichever input `activeInput` currently targets
- * while the panel is open. `data-active` (added here) reproduces the removed
- * inline ternary's condition exactly: `activeInput === 'start' && isOpen`
- * (and the `'end'` counterpart).
- *
- * KEYFRAME: `rottay-select-slide-in` was injected per-mount via a `<style>`
- * tag inside `TimePanel` itself. Renamed `ds-time-picker-slide-in` and moved
- * here (loads once, globally, instead of re-injecting on every panel mount).
- * The animation REFERENCE later left the inline `panelStyle` as well: the
- * panel rule below owns `animation` so the reduced-motion block has full
- * authority (an inline style would win).
- *
- * STATE-PAINT DRAIN (lane-A pass): header/option/now-button font-weight
- * ternaries and every inline `transition` moved here (new: trigger
- * hover/focus-visible/disabled, clear-button opacity hover, time-option
- * focus ring replacing the suppressed outline, now-button hover/focus,
- * coarse-pointer 44px floors, reduced-motion block). Panel i18n: the
- * Hr/Min/Sec labels, Now button, placeholders and range placeholders resolve
- * through the `components.timepicker` catalogue with an English floor.
- *
- * SPECIFICITY (P-48): the Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
- * (0,3,1). Under the trigger root, a border-color rule reaches (0,4,0) via the
- * two root classes + the target's own `data-part` repeated, same as every
- * other engine skin. Under the standalone panel there is no root PAIR to draw
- * on, so the single `rottay-timepicker__panel` class is repeated twice in its
- * place, plus the target's own `data-part` repeated twice -- matching
- * ColorPicker rustic's `.dropdown.dropdown [data-part='x'][data-part='x']`
- * idiom. Non-border paint (background, color, box-shadow, outline,
- * border-radius) and pure `border: none` resets win unlayered at (0,3,0) or a
- * single class.
- *
- * B5-03 (Phase B second pass): contract-driven option states + craft.
- * - Option cells can now be DISABLED (`data-disabled`, from the contract
- *   `disabledTime`): muted ink via the shared `--ds-disabled-opacity`
- *   channel + `cursor: not-allowed` (never opacity-only in forced-colors --
- *   the FC block remaps to GrayText).
- * - Scroll snap (`proximity`, never `mandatory`): wheel/keyboard scrolling
- *   settles on a cell instead of parking between two, without trapping the
- *   scroll port; reduced-motion keeps the instant placement.
- * - Range trigger gains the governed clear button (contract `allowClear`):
- *   same opacity-swap idiom as the single picker's.
- * - Variant frame grammar on the trigger: `filled` (inset well) and
- *   `borderless` (frame dropped, focus ring + status channels kept).
- * - `data-part='extra-footer'` carries the contract `renderExtraFooter`
- *   row with the same hairline grammar as the Now footer.
- *
- * P2 (2026-07 second pass): `min-inline-size: 0` on the range trigger pair
- * (320px flex overflow), the retired `font-size: 16px; line-height: 1`
- * glyph metrics dropped from the single clear-button (the icon role sizes
- * itself), the panel is a real `role="dialog"` (the trigger's
- * `aria-haspopup="dialog"` now resolves), Now-selection returns focus to
- * the invoking input, and the range separator defaults to the
- * direction-neutral '~' (the '→' glyph read wrong under RTL).
+ * The single trigger is `ds-time-picker ds-time-picker--modern[data-part='root']`
+ * and the range trigger `ds-time-picker-range ds-time-picker-range--modern`; the
+ * portaled `ds-time-picker-panel` holds the column listboxes. Triggers, cells,
+ * the Now action and the clear action carry the kernel's `data-state`. Every
+ * channel is written by `derivation/chrome/time-picker` or
+ * `presentation/components/time-picker`.
  */
 
-/* ---- trigger roots (in-tree): layout drained from live Tailwind utilities
-        (`relative w-full` / `flex items-center gap-2` / `shrink-0` /
-        `w-full cursor-pointer`), which are supplier paint. ---- */
+@keyframes ds-time-picker-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-time-picker-enter-y)) scale(var(--ds-motion-scale-in));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
 
-.rottay-timepicker.rottay-timepicker--modern[data-part='root'] {
+.ds-time-picker.ds-time-picker--modern[data-part='root'] {
   position: relative;
   inline-size: 100%;
 }
 
-.rottay-timepicker-range.rottay-timepicker-range--modern[data-part='root'] {
+.ds-time-picker-range.ds-time-picker-range--modern[data-part='root'] {
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-2);
   inline-size: 100%;
 }
 
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='separator'] {
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='separator'] {
   flex-shrink: 0;
+  color: var(--ds-time-picker-separator-color, var(--ds-color-text-secondary));
 }
 
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'] {
+/* An <input> keeps an intrinsic min-content width, so the range pair needs a shrink floor to narrow. */
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'] {
+  box-sizing: border-box;
   inline-size: 100%;
-  /* Flex shrink floor (P2): an <input> keeps an intrinsic min-content width,
-     so without this the start/end pair overflows a 320px container instead
-     of narrowing (responsive law, DatePicker range parity). */
   min-inline-size: 0;
   cursor: pointer;
-  /* Reserve room for the clear + clock suffix wells (geometry drained from
-     the engine's inline `paddingInlineEnd: 48`). */
-  padding-inline-end: 48px;
+  padding-inline-end: var(--ds-time-picker-suffix-reserve);
+  border-radius: var(--ds-time-picker-radius, var(--ds-radius-md));
+  background: var(--ds-time-picker-bg, var(--ds-material-control-background));
+  color: var(--ds-time-picker-color, var(--ds-color-text-primary));
+  font-family: var(--ds-time-picker-font-family, var(--ds-font-family-base));
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  transition:
+    border-color var(--ds-time-picker-transition-duration) var(--ds-time-picker-transition-timing),
+    box-shadow var(--ds-time-picker-transition-duration) var(--ds-time-picker-transition-timing);
 }
 
-/* Size steps keyed on the engine-stamped `data-size` (drained from the
-   engine's inline sizeStyleMap). */
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-size='sm'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-size='sm'] {
-  block-size: var(--ds-input-sm-height);
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-size='sm'],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-size='sm'] {
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
   font-size: var(--ds-input-sm-font-size);
-  padding-block: 4px;
+  padding-block: var(--ds-spacing-1);
   padding-inline-start: var(--ds-input-sm-padding-x);
 }
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-size='md'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-size='md'] {
-  block-size: var(--ds-input-md-height);
+
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-size='md'],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-size='md'] {
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
   font-size: var(--ds-input-md-font-size);
-  padding-block: 6px;
+  padding-block: var(--ds-time-picker-md-padding-y);
   padding-inline-start: var(--ds-input-md-padding-x);
 }
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-size='lg'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-size='lg'] {
-  block-size: var(--ds-input-lg-height);
+
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-size='lg'],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-size='lg'] {
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
   font-size: var(--ds-input-lg-font-size);
-  padding-block: 8px;
+  padding-block: var(--ds-spacing-2);
   padding-inline-start: var(--ds-input-lg-padding-x);
 }
 
-/* ---- trigger (in-tree): base + range share identical rest-state paint ---- */
-
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'] {
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
-  color: var(--ds-color-text-primary);
-  outline: none;
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-status],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-status] {
+  border: var(--ds-time-picker-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-time-picker-border, var(--ds-material-control-border));
 }
 
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-status],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-status] {
-  border: 1px solid var(--ds-color-border);
+@media (hover: hover) {
+  .ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status]:is([data-state~='hovered'], :hover):not([data-state~='disabled']):not([data-status='error']):not([data-status='warning']),
+  .ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status]:is([data-state~='hovered'], :hover):not([data-state~='disabled']):not([data-status='error']):not([data-status='warning']) {
+    border-color: var(--ds-time-picker-border-hover, var(--ds-material-control-border-hover));
+  }
 }
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='error'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='error'] {
-  border-color: var(--ds-color-error);
+
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status]:is([data-state~='focus-visible'], :focus-visible),
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status]:is([data-state~='focus-visible'], :focus-visible) {
+  border-color: var(--ds-time-picker-border-focus, var(--ds-color-primary));
+  box-shadow: var(--ds-time-picker-shadow-focus, var(--ds-focus-ring));
 }
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'] {
-  border-color: var(--ds-color-warning);
+
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='error'],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='error'] {
+  border-color: var(--ds-time-picker-error-border, var(--ds-color-error));
 }
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']),
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-status]:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-timepicker-border-hover, var(--ds-material-control-border-hover));
+
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'] {
+  border-color: var(--ds-time-picker-warning-border, var(--ds-color-warning));
 }
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-status]:focus-visible,
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-status]:focus-visible {
-  border-color: var(--ds-timepicker-border-focus, var(--ds-color-primary));
-}
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input']:focus-visible,
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input']:focus-visible {
-  box-shadow: var(--ds-timepicker-shadow-focus, var(--ds-shadow-focus-ring));
-}
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input']:disabled,
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input']:disabled {
-  opacity: var(--ds-disabled-opacity, 0.5);
+
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input']:is([data-state~='disabled'], :disabled),
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input']:is([data-state~='disabled'], :disabled) {
+  background: var(--ds-time-picker-bg-disabled, var(--ds-material-control-background-disabled));
+  opacity: var(--ds-time-picker-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
 
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-active='true'] {
-  box-shadow: 0 0 0 2px var(--ds-color-primary);
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-active='true'] {
+  box-shadow: var(--ds-time-picker-active-ring, var(--ds-focus-ring));
 }
 
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='separator'] {
-  color: var(--ds-color-text-secondary);
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-variant='filled'],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-variant='filled'] {
+  background: var(--ds-time-picker-filled-bg, var(--ds-material-inset-background));
 }
 
-/* ---- clear-button / clock-icon: `TimePickerBase` only -- `TimeRangePicker`
-        renders neither. ---- */
+/* Borderless drops the frame; the focus ring and the status frames keep their own rules. */
+.ds-time-picker.ds-time-picker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status][data-variant='borderless'],
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status][data-variant='borderless'] {
+  border-color: transparent;
+  background: transparent;
+}
 
-.rottay-timepicker.rottay-timepicker--modern [data-part='clear-button'] {
-  /* Chrome geometry drained from the engine's inline style (single picker:
-     absolutely positioned inside the trigger, before the clock well). No
-     font-size: the governed close icon sizes itself (the drained `16px/1`
-     pair only existed for the retired '×' text glyph). */
+.ds-time-picker.ds-time-picker--modern [data-part='clear-button'] {
   position: absolute;
-  inset-inline-end: 28px;
-  top: 50%;
+  inset-inline-end: var(--ds-time-picker-clear-inset);
+  inset-block-start: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -211,112 +144,79 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  border-radius: 50%;
-  color: var(--ds-color-text-primary);
-  opacity: var(--ds-timepicker-clear-opacity, 0.5);
-  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
-}
-.rottay-timepicker.rottay-timepicker--modern [data-part='clear-button']:hover {
-  opacity: 1;
+  border-radius: var(--ds-radius-full);
+  color: var(--ds-time-picker-clear-color, var(--ds-color-text-primary));
+  opacity: var(--ds-time-picker-clear-opacity);
+  transition: opacity var(--ds-time-picker-transition-duration) var(--ds-time-picker-transition-timing);
 }
 
-.rottay-timepicker.rottay-timepicker--modern [data-part='clock-icon'] {
-  /* Positioning drained from the engine's inline style. */
-  position: absolute;
-  inset-inline-end: 10px;
-  top: 50%;
-  display: flex;
-  pointer-events: none;
-  transform: translateY(-50%);
-  color: var(--ds-color-text-muted);
-}
-
-/* Range clear-button (B5-03): the contract `allowClear` now reaches the
-   range trigger -- same governed close role and opacity-swap idiom as the
-   single picker, sitting as the flex row's trailing item. */
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='clear-button'] {
-  /* Chrome geometry drained from the engine's inline style. */
-  inline-size: 24px;
-  block-size: 24px;
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='clear-button'] {
+  inline-size: var(--ds-time-picker-action-size);
+  block-size: var(--ds-time-picker-action-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  font-size: var(--ds-font-size-xs);
   cursor: pointer;
   flex-shrink: 0;
   background: transparent;
-  color: var(--ds-color-text-primary);
-  border-radius: 50%;
+  color: var(--ds-time-picker-clear-color, var(--ds-color-text-primary));
+  border-radius: var(--ds-radius-full);
   border: none;
-  opacity: var(--ds-timepicker-clear-opacity, 0.5);
-  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+  opacity: var(--ds-time-picker-clear-opacity);
+  transition: opacity var(--ds-time-picker-transition-duration) var(--ds-time-picker-transition-timing);
 }
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='clear-button']:hover {
+
+.ds-time-picker.ds-time-picker--modern [data-part='clear-button']:is([data-state~='hovered'], :hover),
+.ds-time-picker-range.ds-time-picker-range--modern [data-part='clear-button']:is([data-state~='hovered'], :hover) {
   opacity: 1;
 }
 
-/* Variant frame grammar (B5-03): `filled` reads as an inset well; `borderless`
-   drops the frame (the legacy `bordered={false}` alias lands here too) while
-   the focus ring and the error/warning border-color channels keep their own
-   rules. Doubled data-part keeps border-color above the Rottay (0,3,1)
-   floor. */
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-variant='filled'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-variant='filled'] {
-  background: var(--ds-surface-inset, var(--ds-color-bg-input, var(--ds-surface-control)));
-}
-.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status][data-variant='borderless'],
-.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status][data-variant='borderless'] {
-  border-color: transparent;
-  background: transparent;
+.ds-time-picker.ds-time-picker--modern [data-part='clock-icon'] {
+  position: absolute;
+  inset-inline-end: var(--ds-time-picker-icon-inset);
+  inset-block-start: 50%;
+  display: flex;
+  pointer-events: none;
+  transform: translateY(-50%);
+  color: var(--ds-time-picker-icon-color, var(--ds-color-text-muted));
 }
 
-/* ---------------------------------------------------------------------
-   Panel (portal, standalone) -- shared by TimePickerBase and TimeRangePicker
-   --------------------------------------------------------------------- */
+/* Portaled panel */
 
-.rottay-timepicker__panel {
-  /* Geometry drained from the engine's inline panelStyle (B-correction):
-     the portal mounts outside the field's font scope and the entrance
-     animation needs the clip. */
-  font-family: inherit;
+.ds-time-picker-panel[data-part='panel'] {
+  --ds-time-picker-enter-y: calc(var(--ds-spacing-1) * -1);
+  font-family: var(--ds-time-picker-font-family, var(--ds-font-family-base));
   overflow: hidden;
-  /* The dark-aware luminance step is its own layer directly above the fill
-     (lane overlay register, dropdown.css idiom): inert until a dark surface
-     raises --ds-elevation-lift-strength. */
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-color-bg-elevated);
-  border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-timepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));
-  /* Skin-owned entrance (drained from inline panelStyle.animation) so the
-     reduced-motion block below can govern it; inline styles would win. */
-  animation: ds-time-picker-slide-in var(--ds-motion-fast) var(--ds-motion-ease-out);
-}
-.rottay-timepicker__panel.rottay-timepicker__panel[data-part='panel'][data-part='panel'] {
-  border: 1px solid var(--ds-color-border);
+    var(--ds-time-picker-panel-bg, var(--ds-material-overlay-background));
+  border-radius: var(--ds-time-picker-panel-radius, var(--ds-radius-lg));
+  box-shadow: var(--ds-time-picker-panel-shadow, var(--ds-elevation-3));
+  animation: ds-time-picker-slide-in var(--ds-time-picker-transition-duration) var(--ds-motion-ease-out);
 }
 
-/* column divider: a bare `<div data-part='column-divider'>` between the
-   scroll columns (geometry + hairline drained from the engine's inline
-   dividerStyle). */
-.rottay-timepicker__panel [data-part='column-divider'] {
-  inline-size: 1px;
+.ds-time-picker-panel.ds-time-picker-panel[data-part='panel'][data-part='panel'] {
+  border: var(--ds-edge-hairline-width) solid var(--ds-time-picker-divider, var(--ds-color-border));
+}
+
+/* A top placement opens above the trigger, so the panel travels up from below. */
+[data-part='popup'][data-placement^='top'] > .ds-time-picker-panel[data-part='panel'] {
+  --ds-time-picker-enter-y: var(--ds-spacing-1);
+}
+
+.ds-time-picker-panel [data-part='column-divider'] {
+  inline-size: var(--ds-edge-hairline-width);
   flex-shrink: 0;
-  background: var(--ds-color-border);
+  background: var(--ds-time-picker-divider, var(--ds-color-border));
 }
 
-/* Scrollport craft: quiet thin scrollbar and a mask fade at both edges (a
-   luminance mask, never a color gradient) so long columns read as scrollable
-   without chrome weight. Scroll snap is PROXIMITY (B5-03): wheel/keyboard
-   scrolling settles on a cell instead of parking between two, without ever
-   trapping the port the way a mandatory snap would. Geometry drained from
-   the engine's inline colStyle. */
-.rottay-timepicker__panel [data-part='time-column'] {
+/* A quiet scrollport: proximity snap settles on a cell and a luminance mask fades both edges. */
+.ds-time-picker-panel [data-part='time-column'] {
   overflow-y: auto;
-  block-size: var(--ds-time-column-height, 200px);
-  padding: var(--ds-spacing-1) 2px;
-  scrollbar-width: var(--ds-timepicker-column-scrollbar-width, thin);
+  block-size: var(--ds-time-picker-column-height);
+  padding: var(--ds-spacing-1) var(--ds-time-picker-column-gutter);
+  scrollbar-width: thin;
   scroll-snap-type: y proximity;
   mask-image: linear-gradient(
     to bottom,
@@ -327,215 +227,156 @@
   );
 }
 
-.rottay-timepicker__panel.rottay-timepicker__panel [data-part='header'][data-part='header'] {
-  border-bottom: 1px solid var(--ds-color-border);
-}
-/* Header layout + labels (geometry drained from the engine's inline
-   headerStyle/labelStyle). */
-.rottay-timepicker__panel [data-part='header'] {
+.ds-time-picker-panel [data-part='header'] {
   display: flex;
   align-items: center;
   padding: var(--ds-spacing-2) var(--ds-spacing-3) var(--ds-spacing-1);
   gap: var(--ds-spacing-2);
 }
-.rottay-timepicker__panel [data-part='column-label'] {
-  font-size: var(--ds-font-size-2xs);
-  text-transform: uppercase;
+
+.ds-time-picker-panel.ds-time-picker-panel [data-part='header'][data-part='header'] {
+  border-block-end: var(--ds-edge-hairline-width) solid var(--ds-time-picker-divider, var(--ds-color-border));
+}
+
+.ds-time-picker-panel [data-part='column-label'] {
+  flex: 1;
+  color: var(--ds-time-picker-label-ink, var(--ds-color-text-muted));
+  font-size: var(--ds-type-caption-font-size);
+  font-weight: var(--ds-font-weight-semibold);
   letter-spacing: var(--ds-letter-spacing-wide);
   text-align: center;
-  flex: 1;
+  text-transform: var(--ds-time-picker-label-transform);
 }
-.rottay-timepicker__panel [data-part='label-separator'] {
+
+.ds-time-picker-panel [data-part='label-separator'] {
   flex: 0;
-  inline-size: 1px;
+  inline-size: var(--ds-edge-hairline-width);
 }
-.rottay-timepicker__panel [data-part='columns'] {
+
+.ds-time-picker-panel [data-part='columns'] {
   display: flex;
   padding: var(--ds-spacing-1);
 }
-/* column-label spans (Hr/Min/Sec + the two zero-width spacer spans) share one
-   color; the data-part hooks above carry the geometry. Font weight drained
-   from the inline labelStyle. */
-.rottay-timepicker__panel [data-part='header'] > span {
-  color: var(--ds-color-text-muted);
-  font-weight: var(--ds-font-weight-semibold);
-}
 
-.rottay-timepicker__panel [data-part='time-option'] {
-  /* Cell geometry drained from the engine's inline itemStyle. */
-  inline-size: 44px;
+.ds-time-picker-panel [data-part='time-option'] {
+  inline-size: var(--ds-time-picker-cell-width);
   block-size: var(--ds-input-sm-height);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: var(--ds-input-sm-font-size);
   cursor: pointer;
-  margin: 1px auto;
+  margin: var(--ds-edge-hairline-width) auto;
   border-radius: var(--ds-radius-md);
   border: none;
   outline: none;
   background: transparent;
-  color: var(--ds-color-text-primary);
-  /* Tabular figures keep every column of two-digit options optically aligned. */
+  color: var(--ds-time-picker-option-ink, var(--ds-color-text-primary));
   font-variant-numeric: tabular-nums;
-  /* Cells settle on the snap port's center (proximity snap -- see column). */
   scroll-snap-align: center;
-  /* Skin-owned so reduced-motion can silence it (inline would win). */
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background-color var(--ds-time-picker-transition-duration) var(--ds-time-picker-transition-timing);
 }
-/* Disabled option (contract `disabledTime`): muted ink + unmistakable
-   cursor, not just color; the FC block remaps the ink to GrayText. The
-   hover guard repeats the panel class to outrank the generic option hover
-   (a disabled cell never paints the hover wash). */
-.rottay-timepicker__panel [data-part='time-option'][data-disabled='true'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
-  cursor: not-allowed;
+
+.ds-time-picker-panel [data-part='time-option']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled='true']) {
+  background: var(--ds-time-picker-option-bg-hover, var(--ds-material-overlay-background));
 }
-.rottay-timepicker__panel.rottay-timepicker__panel [data-part='time-option'][data-disabled='true']:hover {
-  background: transparent;
+
+.ds-time-picker-panel [data-part='time-option']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow: var(--ds-time-picker-shadow-focus, var(--ds-focus-ring));
 }
-/* Keyboard focus replacement for the suppressed outline. */
-.rottay-timepicker__panel [data-part='time-option']:focus-visible {
-  box-shadow: var(--ds-timepicker-shadow-focus, var(--ds-shadow-focus-ring));
-}
-.rottay-timepicker__panel [data-part='time-option'][data-selected='true'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary, var(--ds-color-white));
-  /* Emphasis paint drained from the inline getItemStyle ternary. */
+
+.ds-time-picker-panel [data-part='time-option'][data-selected='true'] {
+  background: var(--ds-time-picker-option-bg-selected, var(--ds-color-primary));
+  color: var(--ds-time-picker-option-ink-selected, var(--ds-color-text-on-primary));
   font-weight: var(--ds-font-weight-semibold);
 }
-.rottay-timepicker__panel [data-part='time-option']:hover:not([data-selected='true']) {
-  background: var(--ds-color-bg-hover);
+
+/* A disabled cell mutes its ink and never takes the hover wash. */
+.ds-time-picker-panel [data-part='time-option'][data-disabled='true'] {
+  opacity: var(--ds-time-picker-disabled-opacity, var(--ds-state-disabled-opacity));
+  cursor: not-allowed;
 }
 
-.rottay-timepicker__panel.rottay-timepicker__panel [data-part='footer'][data-part='footer'] {
-  border-top: 1px solid var(--ds-color-border);
-}
-.rottay-timepicker__panel [data-part='footer'] {
-  padding: var(--ds-spacing-1-5, 6px) var(--ds-spacing-2);
-}
-/* Extra footer (contract renderExtraFooter): consumer content under the
-   picker chrome, same hairline grammar as the Now footer. */
-.rottay-timepicker__panel.rottay-timepicker__panel [data-part='extra-footer'][data-part='extra-footer'] {
-  border-top: 1px solid var(--ds-color-border);
-}
-.rottay-timepicker__panel [data-part='extra-footer'] {
-  padding: var(--ds-spacing-1-5, 6px) var(--ds-spacing-2);
+.ds-time-picker-panel [data-part='footer'],
+.ds-time-picker-panel [data-part='extra-footer'] {
+  padding: var(--ds-time-picker-footer-padding-y) var(--ds-spacing-2);
 }
 
-/* Popup shell (portal): positioning is skin-owned; only the measured
-   top/left coordinates stay inline (truly dynamic per open). Scoped via the
-   inner panel class — `data-part='popup'` is shared with map-view. */
-[data-part='popup']:has(> .rottay-timepicker__panel) {
-  position: fixed;
-  z-index: var(--ds-timepicker-z-index, 1050);
+.ds-time-picker-panel.ds-time-picker-panel [data-part='footer'][data-part='footer'],
+.ds-time-picker-panel.ds-time-picker-panel [data-part='extra-footer'][data-part='extra-footer'] {
+  border-block-start: var(--ds-edge-hairline-width) solid var(--ds-time-picker-divider, var(--ds-color-border));
 }
 
-/* now-button: primary CTA treatment with the standard hover/focus posture
-   (closes the old "static, no hover" gap, same fix as the DatePicker
-   today-button). */
-.rottay-timepicker__panel [data-part='now-button'] {
-  /* Geometry drained from the engine's inline style. */
+.ds-time-picker-panel [data-part='now-button'] {
   inline-size: 100%;
-  padding: 4px var(--ds-spacing-3);
-  font-size: var(--ds-font-size-xs);
+  padding: var(--ds-spacing-1) var(--ds-spacing-3);
+  font-size: var(--ds-type-caption-font-size);
   cursor: pointer;
   border-radius: var(--ds-radius-md);
   border: none;
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary, var(--ds-color-white));
+  background: var(--ds-time-picker-now-bg, var(--ds-color-primary));
+  color: var(--ds-time-picker-now-ink, var(--ds-color-text-on-primary));
   font-weight: var(--ds-font-weight-medium);
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background-color var(--ds-time-picker-transition-duration) var(--ds-time-picker-transition-timing);
 }
-.rottay-timepicker__panel [data-part='now-button']:hover {
-  background: var(--ds-color-primary-hover, var(--ds-color-primary));
+
+.ds-time-picker-panel [data-part='now-button']:is([data-state~='hovered'], :hover) {
+  background: var(--ds-time-picker-now-bg-hover, var(--ds-color-primary));
 }
-.rottay-timepicker__panel [data-part='now-button']:focus-visible {
+
+.ds-time-picker-panel [data-part='now-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
-  box-shadow: var(--ds-timepicker-shadow-focus, var(--ds-shadow-focus-ring));
+  box-shadow: var(--ds-time-picker-shadow-focus, var(--ds-focus-ring));
 }
 
-@keyframes ds-time-picker-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(-4px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Top placements open ABOVE the trigger, so the panel travels from below
-   (Dropdown direction-aware idiom). The wrapper stamps data-placement. */
-@keyframes ds-time-picker-slide-in-top {
-  from {
-    opacity: 0;
-    transform: translateY(4px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-[data-placement='topLeft'] .rottay-timepicker__panel,
-[data-placement='topRight'] .rottay-timepicker__panel {
-  animation-name: ds-time-picker-slide-in-top;
-}
-
-/* Coarse-pointer floor: interactive parts reach 44px via min-size channels --
-   min-* wins over the inline width/height geometry, so the density contract
-   on fine pointers is untouched. */
 @media (hover: none) and (pointer: coarse) {
-  .rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'],
-  .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'] {
-    min-block-size: var(--ds-timepicker-touch-target-min, var(--ds-touch-target-min, 44px));
-  }
-  .rottay-timepicker__panel [data-part='time-option'],
-  .rottay-timepicker__panel [data-part='now-button'] {
-    min-block-size: var(--ds-timepicker-touch-target-min, var(--ds-touch-target-min, 44px));
+  .ds-time-picker.ds-time-picker--modern [data-part='trigger-input'],
+  .ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'],
+  .ds-time-picker-panel [data-part='time-option'],
+  .ds-time-picker-panel [data-part='now-button'] {
+    min-block-size: var(--ds-time-picker-touch-target-min, var(--ds-touch-target-min));
   }
 }
 
-/* Reduced motion: kills the panel entrance and every skin-owned state
-   transition. (All transitions now live here -- the engine keeps none inline,
-   so this block has full authority.) */
 @media (prefers-reduced-motion: reduce) {
-  .rottay-timepicker__panel {
+  .ds-time-picker-panel[data-part='panel'] {
     animation: none;
   }
-  .rottay-timepicker.rottay-timepicker--modern [data-part='clear-button'],
-  .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='clear-button'],
-  .rottay-timepicker__panel [data-part='time-option'],
-  .rottay-timepicker__panel [data-part='now-button'] {
+
+  .ds-time-picker.ds-time-picker--modern [data-part='trigger-input'],
+  .ds-time-picker-range.ds-time-picker-range--modern [data-part='trigger-input'],
+  .ds-time-picker.ds-time-picker--modern [data-part='clear-button'],
+  .ds-time-picker-range.ds-time-picker-range--modern [data-part='clear-button'],
+  .ds-time-picker-panel [data-part='time-option'],
+  .ds-time-picker-panel [data-part='now-button'] {
     transition: none;
   }
 }
 
-/* Forced colors (system colors only): the selected option reads as a system
-   selection and hover/focus survive the stripped backgrounds. */
 @media (forced-colors: active) {
-  .rottay-timepicker__panel [data-part='time-option'][data-selected='true'] {
+  .ds-time-picker-panel [data-part='time-option'][data-selected='true'] {
     background: Highlight;
     color: HighlightText;
   }
-  /* Disabled cells: the forced palette's own GrayText (opacity alone is not
-     a state signal once the palette strips). */
-  .rottay-timepicker__panel [data-part='time-option'][data-disabled='true'] {
+
+  .ds-time-picker-panel [data-part='time-option'][data-disabled='true'] {
     color: GrayText;
     opacity: 1;
   }
-  .rottay-timepicker__panel [data-part='time-option']:hover:not([data-selected='true']) {
+
+  .ds-time-picker-panel [data-part='time-option']:is([data-state~='hovered'], :hover):not([data-selected='true']) {
     outline: 1px solid;
     outline-offset: -1px;
   }
-  .rottay-timepicker__panel [data-part='time-option']:focus-visible,
-  .rottay-timepicker__panel [data-part='now-button']:focus-visible {
+
+  .ds-time-picker-panel [data-part='time-option']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-time-picker-panel [data-part='now-button']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-  .rottay-timepicker__panel [data-part='now-button'] {
+
+  .ds-time-picker-panel [data-part='now-button'] {
     border: 1px solid ButtonText;
     background: ButtonFace;
     color: ButtonText;

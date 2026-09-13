@@ -5,11 +5,11 @@ import { describe, expect, it, vi } from 'vitest';
 import ModernTimePicker, { TimePicker as ModernTimePickerCompound } from '../engines/modern';
 
 // The modern engine renders a read-only text trigger (data-part="trigger-input")
-// that opens a portaled hour/minute/second panel (.rottay-timepicker__panel) on
+// that opens a portaled hour/minute/second panel (.ds-time-picker-panel) on
 // click; paint is owned by the modern skin, so tests drive the data-part anatomy.
 
 /** The portaled panel lives under document.body, outside the render container. */
-const panel = () => document.querySelector('.rottay-timepicker__panel');
+const panel = () => document.querySelector('.ds-time-picker-panel');
 const columns = () =>
   Array.from(document.querySelectorAll<HTMLElement>('[data-part="time-column"]'));
 const optionsOf = (column: HTMLElement) =>
@@ -32,7 +32,7 @@ describe('TimePicker modern advanced coverage', () => {
     expect(trigger).toHaveAttribute('readonly');
     expect(trigger).toHaveAttribute('data-status', 'error');
     expect(trigger).toHaveValue('09:30:00');
-    expect(trigger.style.boxSizing).toBe('border-box');
+    expect(trigger.getAttribute('style')).toBeNull();
 
     fireEvent.click(trigger);
     expect(panel()).not.toBeNull();

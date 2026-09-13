@@ -78,7 +78,7 @@ describe('TimePicker real engine coverage', () => {
     expect(onChange).toHaveBeenLastCalledWith(expect.any(Date), '10:30:00');
 
     fireEvent.keyDown(document, { key: 'Escape' });
-    expect(document.querySelector('.rottay-timepicker__panel')).toBeNull();
+    expect(document.querySelector('.ds-time-picker-panel')).toBeNull();
 
     fireEvent.click(rangeStart);
     fireEvent.click(optionsOf(columns()[1])[15]);

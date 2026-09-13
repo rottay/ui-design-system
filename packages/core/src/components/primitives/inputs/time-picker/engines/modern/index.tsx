@@ -5,9 +5,9 @@
  * read-only text trigger. Hour/minute/second columns resolve their option
  * domains from the contract (steps, disabledTime, hideDisabledOptions,
  * show* flags); 12-hour mode adds a catalog-driven AM/PM meridiem strip.
- * Keyboard: per-column roving tab stop, arrows/Home/End, ArrowLeft/Right hop
- * between columns (mirrored under RTL). Popup geometry remains inline while
- * the standalone modern skin owns paint/state across the portal boundary.
+ * Keyboard: per-column roving tab stop; arrows, edges and type-ahead come from
+ * the listbox kernel and the column hop from roving-focus's reading direction.
+ * The panel is placed by the field overlay kernel; the skin owns every paint.
  *
  * B5-03: the trigger clock glyph resolves through the semantic icon corpus
  * (`time.timestamp`); the local SVG is retired.
@@ -17,6 +17,11 @@
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
+import { isTypeaheadKey, resolveListboxTarget, resolveTypeaheadTarget } from '../../../../runtime/collection/listbox';
+import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
+import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 import type { TimePickerProps, TimeRangePickerProps, TimePickerPlacement } from '../../contracts';
 import {
   FieldOverlayPanel,
@@ -27,12 +32,13 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { TimeTimestampIcon } from '@/graphics/icons/semantic/generated/roles/time-timestamp';
 
-/** Reading-direction probe (Segmented/Tree/Calendar engine idiom). */
-function isRtlContext(el: HTMLElement): boolean {
-  const scoped = el.closest('[dir]');
-  if (scoped) return scoped.getAttribute('dir') === 'rtl';
-  return document.documentElement.dir === 'rtl';
-}
+/** The contract's corner placements in the overlay kernel's logical vocabulary. */
+const OVERLAY_PLACEMENT: Readonly<Record<TimePickerPlacement, OverlayPlacement>> = {
+  bottomLeft: 'bottom-start',
+  bottomRight: 'bottom-end',
+  topLeft: 'top-start',
+  topRight: 'top-end',
+};
 
 /**
  * Hook-local `tOr`: catalogue value with an English floor -- when the
@@ -114,27 +120,35 @@ interface TimePanelProps {
   renderExtraFooter?: () => React.ReactNode;
 }
 
+const columnTypeahead = new WeakMap<HTMLElement, TypeaheadState>();
+
 /**
- * APG column keyboard contract: each column is a strip with a roving tab
- * stop (the selected option). ArrowUp/ArrowDown move focus between options
- * (wrapping), Home/End jump to the edges, ArrowLeft/ArrowRight hop to the
- * sibling column (mirrored under RTL, where the column flow flips). Focus
- * moves only -- selection commits on activation (click / Enter / Space via
- * the native button), matching the DatePicker grid idiom.
+ * APG column keyboard contract: each column is a listbox strip with a roving tab
+ * stop (the selected option). The listbox kernel moves focus with the arrows,
+ * edges and type-ahead; the horizontal intent hops to the sibling column in the
+ * reading direction. Focus moves only; selection commits on activation.
  */
 function handleColumnKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
-  const { key } = event;
-  if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End' && key !== 'ArrowLeft' && key !== 'ArrowRight') return;
   const column = event.currentTarget;
   const target = event.target as HTMLElement | null;
-  if (!target || target.closest('[data-part="time-option"]') === null) return;
+  const current = target?.closest<HTMLButtonElement>('[data-part="time-option"]');
+  if (!current) return;
+  const options = Array.from(column.querySelectorAll<HTMLButtonElement>('[data-part="time-option"]'));
+  const activeIndex = options.indexOf(current);
+  const isItemSelectable = (index: number) => !options[index]?.disabled;
 
-  if (key === 'ArrowLeft' || key === 'ArrowRight') {
+  const vertical = resolveListboxTarget(event.key, { activeIndex, itemCount: options.length, isItemSelectable });
+  if (vertical !== null) {
+    event.preventDefault();
+    if (vertical >= 0) options[vertical]?.focus();
+    return;
+  }
+
+  const intent = resolveNavigationIntent(event.key, { orientation: 'horizontal', rtl: resolveReadingDirectionIsRtl(column) });
+  if (intent === 'next' || intent === 'previous') {
     const panel = column.closest('[data-part="panel"]');
     const columns = Array.from(panel?.querySelectorAll<HTMLElement>('[data-part="time-column"]') ?? []);
-    const index = columns.indexOf(column);
-    const direction = (key === 'ArrowRight' ? 1 : -1) * (isRtlContext(column) ? -1 : 1);
-    const sibling = columns[index + direction];
+    const sibling = columns[columns.indexOf(column) + (intent === 'next' ? 1 : -1)];
     if (!sibling) return;
     event.preventDefault();
     const stop = sibling.querySelector<HTMLElement>('[data-part="time-option"][data-selected="true"]')
@@ -143,17 +157,72 @@ function handleColumnKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
     return;
   }
 
-  const options = Array.from(column.querySelectorAll<HTMLElement>('[data-part="time-option"]'));
-  if (options.length === 0) return;
-  event.preventDefault();
-  const currentIndex = options.indexOf(target.closest('[data-part="time-option"]') as HTMLElement);
-  let nextIndex = 0;
-  if (key === 'Home') nextIndex = 0;
-  else if (key === 'End') nextIndex = options.length - 1;
-  else if (currentIndex >= 0) {
-    nextIndex = (currentIndex + (key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+  if (!isTypeaheadKey(event)) return;
+  const result = resolveTypeaheadTarget(columnTypeahead.get(column) ?? { buffer: '', lastKeyTime: 0 }, event.key, {
+    activeIndex,
+    itemCount: options.length,
+    isItemSelectable,
+    getItemText: (index) => options[index]?.textContent ?? undefined,
+    now: Date.now(),
+  });
+  columnTypeahead.set(column, result.state);
+  if (result.index >= 0) {
+    event.preventDefault();
+    options[result.index]?.focus();
   }
-  options[nextIndex]?.focus();
+}
+
+interface TimeOptionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  part: 'time-option' | 'now-button';
+}
+
+/** A column cell or the Now action whose hover, focus and disabled state the interaction kernel decides. */
+function TimeOptionButton({ part, disabled, onFocus, onBlur, children, ...rest }: TimeOptionButtonProps) {
+  const cell = useInteractionState({ disabled });
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      {...rest}
+      {...partAttributes(part, cell.state)}
+      onPointerEnter={cell.handlers.onPointerEnter}
+      onPointerLeave={cell.handlers.onPointerLeave}
+      onPointerDown={cell.handlers.onPointerDown}
+      onPointerUp={cell.handlers.onPointerUp}
+      onFocus={(event) => {
+        cell.handlers.onFocus(event);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        cell.handlers.onBlur(event);
+        onBlur?.(event);
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function TimeClearButton({ label, onClear, children }: { label: string; onClear: (event: React.MouseEvent) => void; children: React.ReactNode }) {
+  const action = useFieldAction();
+  return (
+    <button
+      type="button"
+      onClick={onClear}
+      tabIndex={-1}
+      aria-label={label}
+      {...partAttributes('clear-button', action.state)}
+      onPointerEnter={action.handlers.onPointerEnter}
+      onPointerLeave={action.handlers.onPointerLeave}
+      onPointerDown={action.handlers.onPointerDown}
+      onPointerUp={action.handlers.onPointerUp}
+      onPointerCancel={action.handlers.onPointerCancel}
+      onFocus={action.handlers.onFocus}
+      onBlur={action.handlers.onBlur}
+    >
+      {children}
+    </button>
+  );
 }
 
 const TimePanel: React.FC<TimePanelProps> = ({
@@ -228,7 +297,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
   return (
     <div
       data-part="panel"
-      className="rottay-timepicker__panel"
+      className="ds-time-picker-panel"
       // The trigger advertises `aria-haspopup="dialog"`, so the popup must
       // actually BE a dialog (APG relationship); the name resolves through
       // the catalog (timepicker.time_picker) with the English floor.
@@ -264,12 +333,11 @@ const TimePanel: React.FC<TimePanelProps> = ({
               onKeyDown={handleColumnKeyDown}
             >
               {col.options.map((opt) => (
-                <button
+                <TimeOptionButton
                   key={opt.value}
-                  type="button"
+                  part="time-option"
                   role="option"
                   aria-selected={opt.value === col.selected}
-                  data-part="time-option"
                   data-selected={opt.value === col.selected || undefined}
                   data-disabled={opt.disabled || undefined}
                   disabled={opt.disabled || undefined}
@@ -278,7 +346,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
                   onClick={() => commitOption(col.key, opt.value)}
                 >
                   {cellRender ? cellRender(opt.value, { type: col.key }) : pad2(opt.value)}
-                </button>
+                </TimeOptionButton>
               ))}
             </div>
           </React.Fragment>
@@ -297,18 +365,17 @@ const TimePanel: React.FC<TimePanelProps> = ({
               onKeyDown={handleColumnKeyDown}
             >
               {(['am', 'pm'] as const).map((mer) => (
-                <button
+                <TimeOptionButton
                   key={mer}
-                  type="button"
+                  part="time-option"
                   role="option"
                   aria-selected={meridiem === mer}
-                  data-part="time-option"
                   data-selected={meridiem === mer || undefined}
                   tabIndex={meridiem === mer ? 0 : -1}
                   onClick={() => onMeridiemChange(mer)}
                 >
                   {mer === 'am' ? amLabel : pmLabel}
-                </button>
+                </TimeOptionButton>
               ))}
             </div>
           </>
@@ -318,13 +385,9 @@ const TimePanel: React.FC<TimePanelProps> = ({
       {/* Now button */}
       {showNow && (
         <div data-part="footer">
-          <button
-            type="button"
-            data-part="now-button"
-            onClick={onNowClick}
-          >
+          <TimeOptionButton part="now-button" onClick={onNowClick}>
             {tOr('timepicker.now', 'Now')}
-          </button>
+          </TimeOptionButton>
         </div>
       )}
 
@@ -485,40 +548,6 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     [ref],
   );
 
-  // Fixed position for portal popup. Top placements subtract the PANEL's
-  // measured height and *Right placements align the panel's inline end with
-  // the trigger's (DatePicker precedent); the panel ref lands with the same
-  // commit that opens it, so it is readable inside the effect.
-  const [pos, setPos] = useState({ top: 0, left: 0 });
-  useEffect(() => {
-    if (!isOpen || !triggerRef.current) return;
-    const update = () => {
-      const rect = triggerRef.current!.getBoundingClientRect();
-      const panelRect = panelRef.current?.getBoundingClientRect();
-      const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
-      // Responsive law: never let the panel overflow the viewport's inline
-      // end. 208 is the worst-case panel footprint (three 44px option columns
-      // + dividers + padding, coarse floors included).
-      const PANEL_MAX_FOOTPRINT = 208;
-      let top = rect.bottom + gap;
-      let left = rect.left;
-      if (placement.includes('top')) {
-        top = rect.top - gap - (panelRect?.height ?? 0);
-      }
-      if (placement.includes('Right')) {
-        left = rect.right - (panelRect?.width ?? PANEL_MAX_FOOTPRINT);
-      }
-      left = Math.max(gap, Math.min(left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
-      setPos({ top, left });
-    };
-    update();
-    window.addEventListener('scroll', update, true);
-    window.addEventListener('resize', update);
-    return () => {
-      window.removeEventListener('scroll', update, true);
-      window.removeEventListener('resize', update);
-    };
-  }, [isOpen, placement]);
 
   // One overlay contract: the kernel's shared Escape router and shared
   // capture-phase outside-pointer watcher replace this engine's two private
@@ -536,7 +565,9 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     open: isOpen,
     anchor: anchorEl,
     panel: panelEl,
-    surface: 'viewport',
+    placement: OVERLAY_PLACEMENT[placement],
+    offset: 4,
+    flip: true,
     modal: true,
     lockScroll: false,
     restoreFocus: false,
@@ -596,22 +627,26 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     if (parsed) handleSelect(parsed.h, parsed.m, parsed.s);
   }, [isControlled, onChange, handleSelect]);
 
+  const trigger = useInteractionState({ disabled });
   const triggerSize = toCanonicalSize(size) ?? 'md';
 
   return (
     <>
-      <div ref={setTriggerRef} data-part="root" className={`rottay-timepicker rottay-timepicker--modern ${className}`} style={style}>
+      <div ref={setTriggerRef} data-part="root" className={`ds-time-picker ds-time-picker--modern ${className}`} style={style}>
         <input
           ref={setInputRef}
           type="text"
           readOnly
-          data-part="trigger-input"
+          {...partAttributes('trigger-input', trigger.state)}
+          onPointerEnter={trigger.handlers.onPointerEnter}
+          onPointerLeave={trigger.handlers.onPointerLeave}
+          onPointerDown={trigger.handlers.onPointerDown}
+          onPointerUp={trigger.handlers.onPointerUp}
+          onFocus={trigger.handlers.onFocus}
+          onBlur={trigger.handlers.onBlur}
           data-status={status ?? 'default'}
           data-variant={effectiveVariant}
           data-size={triggerSize}
-          // `boxSizing` stays inline: the modern-engine-advanced test reads
-          // `trigger.style.boxSizing` (pin). Everything else is skin-owned.
-          style={{ boxSizing: 'border-box' }}
           value={displayText}
           disabled={disabled}
           placeholder={placeholder}
@@ -634,15 +669,9 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           aria-label={id ? undefined : placeholder}
         />
         {allowClear && displayText && !disabled && (
-          <button
-            type="button"
-            data-part="clear-button"
-            onClick={handleClear}
-            tabIndex={-1}
-            aria-label={tOr('timepicker.clear', 'Clear')}
-          >
+          <TimeClearButton label={tOr('timepicker.clear', 'Clear')} onClear={handleClear}>
             {clearIcon ?? <ActionCloseIcon decorative size={14} />}
-          </button>
+          </TimeClearButton>
         )}
         <span
           data-part="clock-icon"
@@ -666,8 +695,6 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
               data-placement={placement}
               className={popupClassName}
               style={{
-                top: pos.top,
-                left: pos.left,
                 ...overlay.panelProps.style,
                 ...popupStyle,
               }}
@@ -856,35 +883,6 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
   }, [ref]);
 
-  const [pos, setPos] = useState({ top: 0, left: 0 });
-  useEffect(() => {
-    if (!isOpen || !triggerRef.current) return;
-    const update = () => {
-      const rect = triggerRef.current!.getBoundingClientRect();
-      const panelRect = panelRef.current?.getBoundingClientRect();
-      const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
-      // Responsive law: viewport clamp + measured top/Right placement -- see
-      // TimePickerBase.
-      const PANEL_MAX_FOOTPRINT = 208;
-      let top = rect.bottom + gap;
-      let left = rect.left;
-      if (placement.includes('top')) {
-        top = rect.top - gap - (panelRect?.height ?? 0);
-      }
-      if (placement.includes('Right')) {
-        left = rect.right - (panelRect?.width ?? PANEL_MAX_FOOTPRINT);
-      }
-      left = Math.max(gap, Math.min(left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
-      setPos({ top, left });
-    };
-    update();
-    window.addEventListener('scroll', update, true);
-    window.addEventListener('resize', update);
-    return () => {
-      window.removeEventListener('scroll', update, true);
-      window.removeEventListener('resize', update);
-    };
-  }, [isOpen, placement]);
 
   // One overlay contract (TimePickerBase rationale above). Dismissal returns
   // focus to the range input currently being filled.
@@ -900,7 +898,9 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     open: isOpen,
     anchor: anchorEl,
     panel: panelEl,
-    surface: 'viewport',
+    placement: OVERLAY_PLACEMENT[placement],
+    offset: 4,
+    flip: true,
     modal: true,
     lockScroll: false,
     restoreFocus: false,
@@ -971,6 +971,8 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     onChange?.(null, ['', '']);
   }, [isControlled, onChange]);
 
+  const startField = useInteractionState({ disabled });
+  const endField = useInteractionState({ disabled });
   const rangeSize = toCanonicalSize(size) ?? 'md';
 
   return (
@@ -978,22 +980,25 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
       <div
         ref={setTriggerRef}
         data-part="root"
-        className={`rottay-timepicker-range rottay-timepicker-range--modern ${className}`}
+        className={`ds-time-picker-range ds-time-picker-range--modern ${className}`}
         style={style}
         id={id}
       >
         <input
           type="text"
           readOnly
-          data-part="trigger-input"
+          {...partAttributes('trigger-input', startField.state)}
+          onPointerEnter={startField.handlers.onPointerEnter}
+          onPointerLeave={startField.handlers.onPointerLeave}
+          onPointerDown={startField.handlers.onPointerDown}
+          onPointerUp={startField.handlers.onPointerUp}
+          onFocus={startField.handlers.onFocus}
+          onBlur={startField.handlers.onBlur}
           data-range-input="start"
           data-status={status ?? 'default'}
           data-variant={effectiveVariant}
           data-active={(activeInput === 'start' && isOpen) || undefined}
           data-size={rangeSize}
-          // `boxSizing` stays inline (pinned pattern); sizing is skin-owned
-          // via `data-size`.
-          style={{ boxSizing: 'border-box' }}
           value={startText}
           disabled={disabled}
           placeholder={placeholder[0]}
@@ -1010,13 +1015,18 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
         <input
           type="text"
           readOnly
-          data-part="trigger-input"
+          {...partAttributes('trigger-input', endField.state)}
+          onPointerEnter={endField.handlers.onPointerEnter}
+          onPointerLeave={endField.handlers.onPointerLeave}
+          onPointerDown={endField.handlers.onPointerDown}
+          onPointerUp={endField.handlers.onPointerUp}
+          onFocus={endField.handlers.onFocus}
+          onBlur={endField.handlers.onBlur}
           data-range-input="end"
           data-status={status ?? 'default'}
           data-variant={effectiveVariant}
           data-active={(activeInput === 'end' && isOpen) || undefined}
           data-size={rangeSize}
-          style={{ boxSizing: 'border-box' }}
           value={endText}
           disabled={disabled}
           placeholder={placeholder[1]}
@@ -1030,15 +1040,9 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           aria-label={placeholder[1]}
         />
         {allowClear && (startText || endText) && !disabled && (
-          <button
-            type="button"
-            data-part="clear-button"
-            onClick={handleClear}
-            tabIndex={-1}
-            aria-label={tOr('timepicker.clear', 'Clear')}
-          >
+          <TimeClearButton label={tOr('timepicker.clear', 'Clear')} onClear={handleClear}>
             {clearIcon ?? <ActionCloseIcon decorative size={12} />}
-          </button>
+          </TimeClearButton>
         )}
       </div>
 
@@ -1052,8 +1056,6 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
               data-placement={placement}
               className={popupClassName}
               style={{
-                top: pos.top,
-                left: pos.left,
                 ...overlay.panelProps.style,
                 ...popupStyle,
               }}

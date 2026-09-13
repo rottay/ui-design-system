@@ -1,0 +1,28 @@
+/**
+ * TimePicker Component Tokens - Rottay Design System
+ *
+ * Structural constants of the time-picker family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/time-picker`.
+ */
+
+:root {
+  --ds-time-picker-radius: var(--ds-radius-md);
+  --ds-time-picker-border-width: var(--ds-edge-standard-width);
+  --ds-time-picker-md-padding-y: calc(var(--ds-spacing-3) / 2);
+  --ds-time-picker-suffix-reserve: 3rem;
+  --ds-time-picker-transition-duration: var(--ds-input-transition-duration);
+  --ds-time-picker-transition-timing: var(--ds-input-transition-timing);
+  --ds-time-picker-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-time-picker-clear-opacity: var(--ds-state-disabled-opacity);
+  --ds-time-picker-clear-inset: 1.75rem;
+  --ds-time-picker-icon-inset: 0.625rem;
+  --ds-time-picker-action-size: 1.5rem;
+  --ds-time-picker-enter-y: calc(var(--ds-spacing-1) * -1);
+  --ds-time-picker-panel-radius: var(--ds-radius-lg);
+  --ds-time-picker-column-height: 12.5rem;
+  --ds-time-picker-column-gutter: 0.125rem;
+  --ds-time-picker-cell-width: 2.75rem;
+  --ds-time-picker-label-transform: uppercase;
+  --ds-time-picker-footer-padding-y: calc(var(--ds-spacing-3) / 2);
+  --ds-time-picker-touch-target-min: var(--ds-touch-target-min);
+}
