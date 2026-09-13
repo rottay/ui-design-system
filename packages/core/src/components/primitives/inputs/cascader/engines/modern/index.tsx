@@ -20,6 +20,10 @@
  */
 import React, { useState, useRef, useEffect, useCallback, useId, useMemo } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
+import { resolveListboxTarget, resolveTypeaheadTarget, isTypeaheadKey } from '../../../../runtime/collection/listbox';
+import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../../contracts';
 import {
   FieldOverlayPanel,
@@ -141,8 +145,66 @@ function resolvePathAndColumns(
   return { path, columns };
 }
 
+interface CascaderOptionButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'role'> {
+  role: 'option';
+  children: React.ReactNode;
+}
+
+/** A column or search-result row: a real focused button whose state the interaction kernel decides. */
+function CascaderOptionButton({ disabled, children, onFocus, onBlur, ...rest }: CascaderOptionButtonProps) {
+  const row = useInteractionState({ disabled });
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      {...rest}
+      {...partAttributes('option', row.state)}
+      onPointerEnter={(event) => {
+        row.handlers.onPointerEnter(event);
+        rest.onPointerEnter?.(event);
+      }}
+      onPointerLeave={row.handlers.onPointerLeave}
+      onPointerDown={row.handlers.onPointerDown}
+      onPointerUp={row.handlers.onPointerUp}
+      onFocus={(event) => {
+        row.handlers.onFocus(event);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        row.handlers.onBlur(event);
+        onBlur?.(event);
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function CascaderClearButton({ label, onClear }: { label: string; onClear: (event: React.MouseEvent) => void }) {
+  const action = useFieldAction();
+  return (
+    <button
+      type="button"
+      onClick={onClear}
+      aria-label={label}
+      {...partAttributes('clear-button', action.state)}
+      onPointerEnter={action.handlers.onPointerEnter}
+      onPointerLeave={action.handlers.onPointerLeave}
+      onPointerDown={action.handlers.onPointerDown}
+      onPointerUp={action.handlers.onPointerUp}
+      onPointerCancel={action.handlers.onPointerCancel}
+      onFocus={action.handlers.onFocus}
+      onBlur={action.handlers.onBlur}
+      onKeyDown={action.handlers.onKeyDown}
+      onKeyUp={action.handlers.onKeyUp}
+    >
+      <ActionCloseIcon decorative size={12} />
+    </button>
+  );
+}
+
 /**
- * Modern Cascader component (DaisyUI/Tailwind CSS).
+ * Modern Cascader component.
  *
  * Renders a trigger input that opens a multi-column dropdown. Each column
  * represents one level of the option hierarchy. Selecting a leaf node
@@ -234,12 +296,9 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     // of the freshly appended column (see handleDropdownKeyDown).
     const pendingColumnFocusRef = useRef(false);
 
-    // Reading-direction probe (Tree/Segmented engine idiom).
-    const isRtl = (el: HTMLElement): boolean => {
-      const scoped = el.closest('[dir]');
-      if (scoped) return scoped.getAttribute('dir') === 'rtl';
-      return document.documentElement.dir === 'rtl';
-    };
+    const trigger = useInteractionState({ disabled });
+    const searchField = useInteractionState();
+    const typeaheadRef = useRef<TypeaheadState>({ buffer: '', lastKeyTime: 0 });
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (controlledOpen === undefined) {
@@ -412,12 +471,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       last?.querySelector<HTMLElement>('[data-part="option"]')?.focus();
     }, [activeColumns]);
 
-    // APG multi-column keyboard contract: ArrowUp/Down cycle the options of
-    // the CURRENT column; forward (ArrowRight in LTR) expands the focused
-    // option and moves focus into the new column; backward collapses to the
-    // selected option of the previous column; Escape closes and returns
-    // focus to the trigger. Forward/backward swap under RTL (the column flow
-    // mirrors). Options stay native buttons -- this only moves DOM focus.
+    // APG multi-column keyboard contract: the listbox kernel walks and type-aheads the current column; the
+    // horizontal intent (mirrored under RTL) expands forward into the next column or returns to the previous one.
     const handleDropdownKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -433,29 +488,31 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       const columnEl = optionEl.closest('ul');
       if (!columnEl) return;
 
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      const rows = Array.from(columnEl.querySelectorAll<HTMLButtonElement>('[data-part="option"]'));
+      const currentIndex = rows.indexOf(optionEl as HTMLButtonElement);
+      const vertical = resolveListboxTarget(e.key, {
+        activeIndex: currentIndex,
+        itemCount: rows.length,
+        isItemSelectable: (index) => !rows[index]?.disabled,
+      });
+      if (vertical !== null) {
         e.preventDefault();
-        const columnOptions = Array.from(
-          columnEl.querySelectorAll<HTMLElement>('[data-part="option"]:not(:disabled)'),
-        );
-        if (columnOptions.length === 0) return;
-        const currentIndex = columnOptions.indexOf(optionEl);
-        const nextIndex = currentIndex < 0
-          ? 0
-          : (currentIndex + (e.key === 'ArrowDown' ? 1 : -1) + columnOptions.length) % columnOptions.length;
-        columnOptions[nextIndex]?.focus();
+        if (vertical >= 0) rows[vertical]?.focus();
         return;
       }
-
-      // APG listbox completeness: Home/End jump to the first/last enabled
-      // option of the current column (or of the flat search results).
-      if (e.key === 'Home' || e.key === 'End') {
-        e.preventDefault();
-        const columnOptions = Array.from(
-          columnEl.querySelectorAll<HTMLElement>('[data-part="option"]:not(:disabled)'),
-        );
-        if (columnOptions.length === 0) return;
-        (e.key === 'Home' ? columnOptions[0] : columnOptions[columnOptions.length - 1])?.focus();
+      if (isTypeaheadKey(e)) {
+        const result = resolveTypeaheadTarget(typeaheadRef.current, e.key, {
+          activeIndex: currentIndex,
+          itemCount: rows.length,
+          isItemSelectable: (index) => !rows[index]?.disabled,
+          getItemText: (index) => rows[index]?.querySelector('[data-part="option-label"]')?.textContent ?? undefined,
+          now: Date.now(),
+        });
+        typeaheadRef.current = result.state;
+        if (result.index >= 0) {
+          e.preventDefault();
+          rows[result.index]?.focus();
+        }
         return;
       }
 
@@ -467,13 +524,13 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         columnsWrap.querySelectorAll(':scope > [data-part="menu-column"]'),
       ).indexOf(columnEl as Element);
       if (columnIndex < 0) return;
-      const rtl = isRtl(optionEl);
-      const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
-      const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
+      const intent = resolveNavigationIntent(e.key, {
+        orientation: 'horizontal',
+        rtl: resolveReadingDirectionIsRtl(optionEl),
+      });
 
-      if (e.key === forwardKey) {
-        const rawIndex = Array.from(columnEl.querySelectorAll('[data-part="option"]')).indexOf(optionEl);
-        const option = arrayValueAt(activeColumns[columnIndex] ?? [], rawIndex);
+      if (intent === 'next') {
+        const option = arrayValueAt(activeColumns[columnIndex] ?? [], currentIndex);
         if (!option) return;
         const expandable =
           (getChildren(option, fieldNames)?.length ?? 0) > 0 ||
@@ -484,7 +541,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         void expandOption(option, columnIndex);
         return;
       }
-      if (e.key === backwardKey) {
+      if (intent === 'previous') {
         if (columnIndex === 0) return;
         e.preventDefault();
         const prevColumn = columnsWrap.querySelectorAll(':scope > [data-part="menu-column"]')[columnIndex - 1];
@@ -593,7 +650,13 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
               closeWithoutCommit();
             }
           }}
-          data-part="trigger"
+          {...partAttributes('trigger', trigger.state)}
+          onPointerEnter={trigger.handlers.onPointerEnter}
+          onPointerLeave={trigger.handlers.onPointerLeave}
+          onPointerDown={trigger.handlers.onPointerDown}
+          onPointerUp={trigger.handlers.onPointerUp}
+          onFocus={trigger.handlers.onFocus}
+          onBlur={trigger.handlers.onBlur}
           data-open={isOpen || undefined}
           data-disabled={disabled || undefined}
           role="combobox"
@@ -626,14 +689,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             controls nested inside the interactive combobox element. The skin
             overlays it at the trigger's inline end. */}
         {allowClear && selectedPath.length > 0 && !disabled && (
-          <button
-            type="button"
-            onClick={handleClear}
-            data-part="clear-button"
-            aria-label={tOr('cascader.clear', 'Clear')}
-          >
-            <ActionCloseIcon decorative size={12} />
-          </button>
+          <CascaderClearButton label={tOr('cascader.clear', 'Clear')} onClear={handleClear} />
         )}
 
         {isOpen && (
@@ -666,7 +722,13 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                 <input
                   ref={searchInputRef}
                   type="text"
-                  data-part="search-input"
+                  {...partAttributes('search-input', searchField.state)}
+                  onPointerEnter={searchField.handlers.onPointerEnter}
+                  onPointerLeave={searchField.handlers.onPointerLeave}
+                  onPointerDown={searchField.handlers.onPointerDown}
+                  onPointerUp={searchField.handlers.onPointerUp}
+                  onFocus={searchField.handlers.onFocus}
+                  onBlur={searchField.handlers.onBlur}
                   placeholder={tOr('cascader.search_placeholder', 'Search...')}
                   /* Placeholder is the accessible-name floor (Mentions K4-D
                      idiom): without an aria-label the field fails axe `label`. */
@@ -687,16 +749,14 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                       const isResultSelected = isFlatPathSelected(fo);
                       return (
                       <li key={idx}>
-                        <button
-                          type="button"
+                        <CascaderOptionButton
                           onClick={() => handleSearchSelect(fo)}
-                          data-part="option"
                           data-selected={isResultSelected || undefined}
                           role="option"
                           aria-selected={isResultSelected}
                         >
                           <span data-part="option-label">{fo.labels.join(' / ')}</span>
-                        </button>
+                        </CascaderOptionButton>
                       </li>
                       );
                     })
@@ -733,12 +793,10 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                           const isLoading = loadingKeys.has(optValue);
                           return (
                             <li key={String(optValue)}>
-                              <button
-                                type="button"
+                              <CascaderOptionButton
                                 disabled={option.disabled}
                                 onClick={() => handleOptionClick(option, colIndex)}
                                 onMouseEnter={() => handleOptionHover(option, colIndex)}
-                                data-part="option"
                                 data-selected={isSelected || undefined}
                                 data-disabled={option.disabled || undefined}
                                 role="option"
@@ -759,7 +817,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                                     </span>
                                   )
                                 )}
-                              </button>
+                              </CascaderOptionButton>
                             </li>
                           );
                         })

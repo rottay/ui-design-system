@@ -1,0 +1,30 @@
+/**
+ * Cascader Component Tokens - Rottay Design System
+ *
+ * Structural constants of the cascader family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/cascader`.
+ */
+
+:root {
+  --ds-cascader-radius: var(--ds-radius-md);
+  --ds-cascader-border-width: var(--ds-edge-standard-width);
+  --ds-cascader-md-padding-y: calc(var(--ds-spacing-3) / 2);
+  --ds-cascader-transition-duration: var(--ds-input-transition-duration);
+  --ds-cascader-transition-timing: var(--ds-input-transition-timing);
+  --ds-cascader-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-cascader-clear-inset-inline-end: var(--ds-spacing-8);
+  --ds-cascader-clear-size: 1.5rem;
+  --ds-cascader-clear-gap: var(--ds-spacing-5);
+  --ds-cascader-arrow-rotate-open: 180deg;
+  --ds-cascader-dropdown-radius: var(--ds-radius-lg);
+  --ds-cascader-empty-min-height: 4.5rem;
+  --ds-cascader-column-width: 12rem;
+  --ds-cascader-column-max-height: 15rem;
+  --ds-cascader-column-enter-x: calc(var(--ds-spacing-2) * -1);
+  --ds-cascader-option-padding-y: calc(var(--ds-spacing-3) / 2);
+  --ds-cascader-spinner-stroke: var(--ds-border-width-2);
+  --ds-cascader-spinner-size-sm: 0.75rem;
+  --ds-cascader-spinner-size: 0.875rem;
+  --ds-cascader-spinner-duration: var(--ds-motion-glacial);
+  --ds-cascader-touch-target-min: var(--ds-touch-target-min);
+}

@@ -49,19 +49,17 @@ const here = dirname(fileURLToPath(import.meta.url));
 const CSS = join(here, '../../../../foundation/tokens/css');
 const read = (p: string) => readFileSync(join(CSS, p), 'utf8');
 
-/** Every new skin file this checkpoint added, keyed by a readable label. */
+/**
+ * The frozen Rustic dropdown skins. The Modern skins of these families are
+ * measured by the family-cut gate and proven by each family's browser
+ * causality suite (WO-FAM-03), not by their text.
+ */
 const SKINS: Record<string, string> = {
-  'modern/select': read('runtime/engines/modern/skin/select/index.css'),
   'rustic/select': read('runtime/engines/rustic/skin/select/index.css'),
-  'modern/tree-select': read('runtime/engines/modern/skin/tree-select/index.css'),
   'rustic/tree-select': read('runtime/engines/rustic/skin/tree-select/index.css'),
-  'modern/cascader': read('runtime/engines/modern/skin/cascader/index.css'),
   'rustic/cascader': read('runtime/engines/rustic/skin/cascader/index.css'),
-  'modern/autocomplete': read('runtime/engines/modern/skin/auto-complete/index.css'),
   'rustic/autocomplete': read('runtime/engines/rustic/skin/autocomplete/index.css'),
-  'modern/mentions': read('runtime/engines/modern/skin/mentions/index.css'),
   'rustic/mentions': read('runtime/engines/rustic/skin/mentions/index.css'),
-  'select-compounds': read('presentation/components/skin/select-compounds/index.css'),
 };
 
 /** Strip comments and `@keyframes` blocks, then return every `{selector, body}` rule. */
@@ -277,20 +275,7 @@ const NC: Record<string, string> = Object.fromEntries(
 const ROOT_DESCENDANT_DROPDOWN =
   /\[data-part=["']root["']\][^,{]*\[data-part=["']dropdown["']\]/;
 
-/** The standalone scope class each kernel-portaled Modern panel carries. */
-const MODERN_PANEL_SCOPE: Record<string, RegExp> = {
-  'modern/tree-select': /\.ds-tree-select\.ds-tree-select--modern\.ds-tree-select-panel/,
-  'modern/cascader': /\.ds-cascader\.ds-cascader--modern\.ds-cascader-panel/,
-  'modern/autocomplete': /\.ds-auto-complete\.ds-auto-complete--modern\.ds-auto-complete-panel/,
-  'modern/mentions': /\.ds-mentions\.ds-mentions--modern\.ds-mentions-panel/,
-};
-
-describe('dropdown skins -- portal posture selector pins', () => {
-  it('Select modern portals its custom dropdown: standalone `.ds-select-shell__dropdown`, never root-descendant', () => {
-    expect(/\.ds-select-shell__dropdown\[data-part='dropdown'\]/.test(NC['modern/select'])).toBe(true);
-    expect(/\[data-part='root'\][^,{]*\[data-part='dropdown'\]/.test(NC['modern/select'])).toBe(false);
-  });
-
+describe('dropdown skins -- rustic portal posture selector pins', () => {
   it('Select rustic dropdown is in-tree: reached as a root descendant, no standalone popup class', () => {
     expect(/\[data-part='root'\][^,{]*\[data-part='dropdown'\]/.test(NC['rustic/select'])).toBe(true);
     expect(/\.ds-select-shell__dropdown/.test(NC['rustic/select'])).toBe(false);
@@ -301,53 +286,14 @@ describe('dropdown skins -- portal posture selector pins', () => {
     expect(/\[data-part='root'\][^,{]*\[data-part='dropdown'\]/.test(NC['rustic/tree-select'])).toBe(false);
   });
 
-  it('TreeSelect modern kernel-portals (WO-CAN-05): standalone `.ds-tree-select-panel` scope, never root-descendant', () => {
-    expect(MODERN_PANEL_SCOPE['modern/tree-select'].test(NC['modern/tree-select'])).toBe(true);
-    expect(
-      /\.ds-tree-select\.ds-tree-select--modern\.ds-tree-select-panel\[data-part="dropdown"\]/.test(
-        NC['modern/tree-select'],
-      ),
-    ).toBe(true);
-    expect(ROOT_DESCENDANT_DROPDOWN.test(NC['modern/tree-select'])).toBe(false);
-    // Rustic's self-portal class stays out of the Modern skin: two doors, two
-    // anatomies.
-    expect(/\.rottay-treeselect__dropdown/.test(NC['modern/tree-select'])).toBe(false);
-  });
-
   it('Cascader rustic portals: standalone `.rottay-cascader__dropdown`, never root-descendant', () => {
     expect(/\.rottay-cascader__dropdown\[data-part='dropdown'\]/.test(NC['rustic/cascader'])).toBe(true);
     expect(/\[data-part='root'\][^,{]*\[data-part='dropdown'\]/.test(NC['rustic/cascader'])).toBe(false);
   });
 
-  it('Cascader modern kernel-portals: standalone `.ds-cascader-panel` scope, never root-descendant, trigger chrome addresses both doors', () => {
-    expect(MODERN_PANEL_SCOPE['modern/cascader'].test(NC['modern/cascader'])).toBe(true);
-    expect(
-      /\.ds-cascader\.ds-cascader--modern\.ds-cascader-panel\[data-part="dropdown"\]/.test(
-        NC['modern/cascader'],
-      ),
-    ).toBe(true);
-    expect(ROOT_DESCENDANT_DROPDOWN.test(NC['modern/cascader'])).toBe(false);
-    expect(/\.rottay-cascader__dropdown/.test(NC['modern/cascader'])).toBe(false);
-    // Cascader renders its trigger chrome BOTH in the field and inside the
-    // portaled panel, so the shared rules select both doors in one `:is()`
-    // rather than duplicating the block.
-    expect(
-      /:is\(\[data-part="root"\],\s*\[data-part="dropdown"\]\)/.test(NC['modern/cascader']),
-    ).toBe(true);
-  });
-
-  it('AutoComplete + Mentions modern kernel-portal, rustic stays in-tree', () => {
-    for (const label of ['modern/autocomplete', 'modern/mentions']) {
-      expect(MODERN_PANEL_SCOPE[label].test(NC[label]), `${label} panel scope`).toBe(true);
-      expect(ROOT_DESCENDANT_DROPDOWN.test(NC[label]), `${label} root-descendant`).toBe(false);
-    }
+  it('AutoComplete + Mentions rustic stay in-tree with no popup class', () => {
     for (const label of ['rustic/autocomplete', 'rustic/mentions']) {
       expect(ROOT_DESCENDANT_DROPDOWN.test(NC[label]), `${label} root-descendant`).toBe(true);
-    }
-    // Neither family adopted a rustic-style `__dropdown`/`__popup` popup class
-    // in either engine: the Modern door is the panel scope class, the Rustic
-    // popup is still the field's own descendant.
-    for (const label of ['modern/autocomplete', 'rustic/autocomplete', 'modern/mentions', 'rustic/mentions']) {
       expect(/__dropdown|__popup/.test(NC[label]), label).toBe(false);
     }
   });
@@ -359,7 +305,7 @@ describe('dropdown skins -- portal posture selector pins', () => {
 // parts, never the container: no rule may target the root element itself.
 // ---------------------------------------------------------------------------
 describe('dropdown skins -- Select container is left to the field-filters-panel', () => {
-  for (const label of ['modern/select', 'rustic/select']) {
+  for (const label of ['rustic/select']) {
     it(`${label}: no rule paints a bare container -- every selector's target is a non-root data-part`, () => {
       const offenders: string[] = [];
       for (const { selector, body } of cssRules(SKINS[label])) {
@@ -421,10 +367,7 @@ describe('dropdown skins -- interaction literal pins', () => {
   });
 
   it('keyframes were renamed into the skins (ds-*-*), never the old rottay-select-* / rottay-*select-*', () => {
-    expect(/@keyframes\s+ds-select-appear/.test(NC['modern/select'])).toBe(true);
     expect(/@keyframes\s+ds-select-(?:spin|dropdown-in|check-in)/.test(NC['rustic/select'])).toBe(true);
-    expect(/@keyframes\s+ds-tree-select-slide-in/.test(NC['modern/tree-select'])).toBe(true);
-    expect(/@keyframes\s+ds-cascader-(?:slide-in|panel-in)/.test(NC['modern/cascader'])).toBe(true);
     const all = Object.values(NC).join('\n');
     expect(/@keyframes\s+rottay-/.test(all)).toBe(false);
   });
