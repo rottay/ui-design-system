@@ -60,6 +60,8 @@ import {
   buildDispositionIndex,
   adjudicateDispositions,
   dispositionFailures,
+  assessChannelEffect,
+  mayWriteArtifact,
   // digest + ratchet (defects 2, 6, 7)
   computeInputsDigest,
   compareAgainstPrevious,
@@ -1231,25 +1233,75 @@ const pinGroup = (over = {}) => ({
   ...over,
 });
 
-test('GREEN: a registered row is OWNED, not accused -- and is still published with its owner', () => {
-  const result = analyzeChannelLiveness(fabricatedArgs({ dispositions: [pinGroup()] }));
+/** FABRICATED is the only non-LIVE row: the one emitted channel is read. */
+const isolatedArgs = (overrides = {}) =>
+  fabricatedArgs({ brandThemeSource: 'vars["--ds-color-primary"] = "#111111";', familyRows: [], ...overrides });
+
+test('a pin is ownership PASS and full-liveness FAIL: the owned row is published, not discharged', () => {
+  const result = analyzeChannelLiveness(isolatedArgs({ dispositions: [pinGroup()] }));
   const row = result.channels.find((entry) => entry.name === FABRICATED);
   assert.equal(row.classification, LIVENESS.authorableUnprovenEffect, 'the row keeps its class; a pin never re-classifies');
-  assert.deepEqual(result.failures.filter((f) => f.includes(FABRICATED)), []);
+  assert.equal(row.reads.total, 0, 'fixture precondition: nothing reads the pinned channel');
+
+  assert.deepEqual(dispositionFailures(result), [], 'ownership leg: the row is owned');
   assert.deepEqual(result.dispositions.byOwner['WO-DER-06'], [FABRICATED]);
   assert.equal(result.dispositions.pinnedRows, 1);
-  const report = formatReport({
-    ok: true,
-    failures: [],
+
+  assert.equal(result.ok, false, 'full result: an owner is not an effect');
+  assert.equal(result.effect.ok, false);
+  assert.deepEqual(result.effect.rows, [FABRICATED]);
+  assert.ok(
+    result.effect.failures.some((f) => f.startsWith('unproven effect: 1 channel(s)') && f.includes(FABRICATED)),
+    result.effect.failures.join(' | '),
+  );
+  assert.equal(mayWriteArtifact(result), false, '--write refuses an artifact while a pinned row has no terminal');
+
+  const gateRun = {
+    ok: result.ok,
+    failures: result.failures,
     evidenceNote: null,
     result,
     corpus: { cssFileCount: 1, tsFileCount: 1 },
     resolvedArtifactPath: null,
-  });
+  };
+  const full = formatReport(gateRun);
   assert.ok(
-    report.includes(`WO-DER-06 (1): ${FABRICATED}`),
+    full.includes(`WO-DER-06 (1): ${FABRICATED}`),
     'a pinned finding is still a finding: the report prints the row and its owner',
   );
+  assert.ok(full.includes('effect verdict FAIL (ownership does not discharge it)'), full);
+  assert.ok(full.includes('channel-liveness-gate FAIL'), full);
+
+  const ownership = formatReport({ ...gateRun, ok: true, failures: [] }, { effectBlocks: false });
+  assert.ok(ownership.includes('channel-liveness-gate OK'), ownership);
+  assert.ok(ownership.includes('not part of this leg'), ownership);
+});
+
+test('the same channel with a terminal read and no pin is ownership PASS and full-liveness PASS', () => {
+  const result = analyzeChannelLiveness(isolatedArgs({
+    dispositions: [],
+    cssStylesheets: [
+      css('src/foundation/tokens/css/theme.css', `:root { color: var(--ds-color-primary); background: var(${FABRICATED}); }`),
+    ],
+  }));
+  const row = result.channels.find((entry) => entry.name === FABRICATED);
+  assert.ok(LIVE_CLASSIFICATIONS.has(row.classification), `fixture precondition: the channel paints (${row.classification})`);
+  assert.deepEqual(dispositionFailures(result), []);
+  assert.deepEqual(result.effect, { ok: true, failures: [], rows: [] });
+  assert.equal(result.ok, true, result.failures.join(' | '));
+  assert.equal(mayWriteArtifact(result), true);
+});
+
+test('the effect verdict names every non-LIVE row, pinned or not, and nothing LIVE', () => {
+  const effect = assessChannelEffect([
+    { name: '--ds-a', classification: LIVENESS.authorableUnprovenEffect },
+    { name: '--ds-b', classification: LIVENESS.readUnproven },
+    { name: '--ds-c', classification: [...LIVE_CLASSIFICATIONS][0] },
+    { name: '--ds-d', classification: null },
+  ]);
+  assert.equal(effect.ok, false);
+  assert.deepEqual(effect.rows, ['--ds-a', '--ds-b']);
+  assert.equal(effect.failures.length, 2);
 });
 
 test('RED (a): an UNREGISTERED non-LIVE row fails closed, named exactly', () => {
