@@ -175,8 +175,11 @@ export interface ListboxOptionProps extends ComboboxItemProps {
 }
 
 export interface Listbox extends ComboboxFoundation {
-  /** Moves the active option for an arrow, edge, page or type-ahead key; true when consumed. */
-  navigate: (event: ListboxKeyEvent) => boolean;
+  /**
+   * Moves the active option for an arrow, edge, page or type-ahead key: the row it
+   * landed on, -1 when the key was consumed without a match, `null` when not consumed.
+   */
+  navigate: (event: ListboxKeyEvent) => number | null;
   /** Option ARIA plus pointer tracking that never scrolls the list. */
   getOptionProps: (index: number, options?: { selected?: boolean; disabled?: boolean }) => ListboxOptionProps;
 }
@@ -189,14 +192,14 @@ export function useListbox(options: ListboxOptions): Listbox {
   const { open, itemCount, isItemSelectable } = comboboxOptions;
 
   const navigate = useCallback(
-    (event: ListboxKeyEvent): boolean => {
+    (event: ListboxKeyEvent): number | null => {
       const target = resolveListboxTarget(event.key, { activeIndex, itemCount, isItemSelectable, pageSize });
       if (target !== null) {
         event.preventDefault();
         if (target >= 0) setActiveIndex(target, 'keyboard');
-        return true;
+        return target;
       }
-      if (!getItemText || !isTypeaheadKey(event)) return false;
+      if (!getItemText || !isTypeaheadKey(event)) return null;
       const result = resolveTypeaheadTarget(typeaheadRef.current, event.key, {
         activeIndex,
         itemCount,
@@ -207,7 +210,7 @@ export function useListbox(options: ListboxOptions): Listbox {
       typeaheadRef.current = result.state;
       event.preventDefault();
       if (result.index >= 0) setActiveIndex(result.index, 'keyboard');
-      return true;
+      return result.index;
     },
     [activeIndex, itemCount, isItemSelectable, pageSize, getItemText, setActiveIndex],
   );

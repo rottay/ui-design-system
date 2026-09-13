@@ -47,7 +47,7 @@ describe('Select real engine coverage', () => {
       />
     );
 
-    fireEvent.click(container.querySelector('.rottay-select__trigger') as HTMLDivElement);
+    fireEvent.click(container.querySelector('[data-part="trigger"]') as HTMLDivElement);
     fireEvent.change(screen.getByPlaceholderText('Search...'), { target: { value: 'a' } });
     fireEvent.click(screen.getByRole('option', { name: 'Alpha' }));
 

@@ -16,10 +16,10 @@
  * claiming a paint it cannot deliver.
  *
  * The Select rule below is NOT redundant: `input.css` never selects
- * `.rottay-select__search-input`, so this is the only paint that node has.
+ * `.ds-select-shell__search-input`, so this is the only paint that node has.
  */
 
-.rottay-select__search-input::placeholder {
+.ds-select-shell__search-input::placeholder {
   color: var(--ds-color-text-muted);
   opacity: 1;
 }

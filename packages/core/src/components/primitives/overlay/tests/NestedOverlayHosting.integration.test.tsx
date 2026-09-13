@@ -142,7 +142,7 @@ describe('Nested overlays inside an open modern Modal', () => {
 
     // The Select trigger lives inside the portaled dialog, not in the render
     // container, so it is resolved from the document.
-    const trigger = await waitForDocumentNode('.rottay-select__trigger');
+    const trigger = await waitForDocumentNode('.ds-select-shell [data-part="trigger"]');
     expect(dialog.contains(trigger)).toBe(true);
     fireEvent.click(trigger);
 

@@ -44,31 +44,20 @@ export function SelectOption({
   className = '',
   style,
 }: SelectOptionProps): React.ReactElement {
-  // This component is primarily used for declarative API
-  // The actual rendering is handled by the parent Select component
-  // This renders a placeholder that can be used if rendered directly
-  const optionStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '8px 12px',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.5 : 1,
-    ...style,
-  };
-
+  // Declarative API: the parent Select renders options; this is the standalone rendering.
   return (
     <div
-      className={`rottay-select-option ${disabled ? 'rottay-select-option--disabled' : ''} ${className}`}
-      style={optionStyle}
+      className={`ds-select-option ${className}`.trim()}
+      style={style}
       data-part="option"
       data-value={value}
-      data-disabled={disabled}
+      data-disabled={disabled || undefined}
       role="option"
-      aria-disabled={disabled}
+      aria-selected={false}
+      aria-disabled={disabled || undefined}
     >
-      {icon && <span className="rottay-select-option__icon" data-part="option-icon">{icon}</span>}
-      <span className="rottay-select-option__label">{children}</span>
+      {icon && <span data-part="option-icon">{icon}</span>}
+      <span data-part="option-label">{children}</span>
     </div>
   );
 }

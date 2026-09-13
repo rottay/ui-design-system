@@ -74,7 +74,7 @@
   --ds-select-border-color-focus: var(--ds-color-primary-500);
   --ds-select-border-color-disabled: var(--ds-material-control-border-disabled);
 
-  --ds-select-border-width: var(--ds-border-width-1, 1px);
+  --ds-select-border-width: var(--ds-edge-standard-width);
   --ds-select-border-style: solid;
 
   /* ========================================================================
@@ -216,14 +216,74 @@
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-select-transition-duration: 0.2s;
-  --ds-select-transition-timing: ease-in-out;
+  --ds-select-transition-duration: var(--ds-input-transition-duration);
+  --ds-select-transition-timing: var(--ds-input-transition-timing);
   --ds-select-transition: all var(--ds-select-transition-duration) var(--ds-select-transition-timing);
 
   /* ========================================================================
      DISABLED STATE
      Appearance when disabled
      ======================================================================== */
-  --ds-select-disabled-opacity: 0.6;
+  --ds-select-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-select-disabled-cursor: not-allowed;
+
+  /* ========================================================================
+     MODERN ANATOMY - trigger, actions and listbox geometry
+     ======================================================================== */
+  --ds-select-trigger-xs-height: var(--ds-input-xs-height);
+  --ds-select-trigger-xs-padding-x: var(--ds-input-xs-padding-x);
+  --ds-select-trigger-xs-font-size: var(--ds-input-xs-font-size);
+  --ds-select-trigger-xs-line-height: var(--ds-input-xs-line-height);
+  --ds-select-trigger-sm-height: var(--ds-input-sm-height);
+  --ds-select-trigger-sm-padding-x: var(--ds-input-sm-padding-x);
+  --ds-select-trigger-sm-font-size: var(--ds-input-sm-font-size);
+  --ds-select-trigger-sm-line-height: var(--ds-input-sm-line-height);
+  --ds-select-trigger-md-height: var(--ds-input-md-height);
+  --ds-select-trigger-md-padding-x: var(--ds-input-md-padding-x);
+  --ds-select-trigger-md-font-size: var(--ds-input-md-font-size);
+  --ds-select-trigger-md-line-height: var(--ds-input-md-line-height);
+  --ds-select-trigger-lg-height: var(--ds-input-lg-height);
+  --ds-select-trigger-lg-padding-x: var(--ds-input-lg-padding-x);
+  --ds-select-trigger-lg-font-size: var(--ds-input-lg-font-size);
+  --ds-select-trigger-lg-line-height: var(--ds-input-lg-line-height);
+  --ds-select-trigger-xl-height: var(--ds-input-xl-height);
+  --ds-select-trigger-xl-padding-x: var(--ds-input-xl-padding-x);
+  --ds-select-trigger-xl-font-size: var(--ds-input-xl-font-size);
+  --ds-select-trigger-xl-line-height: var(--ds-input-xl-line-height);
+  --ds-select-trigger-gap: var(--ds-input-gap);
+  --ds-select-trigger-actions-gap: var(--ds-spacing-1);
+  --ds-select-native-arrow-clearance: var(--ds-spacing-8);
+  --ds-select-loading-inset: var(--ds-spacing-8);
+  --ds-select-loading-stroke: calc(var(--ds-input-loading-stroke) * 1px);
+  --ds-select-value-font-weight: var(--ds-font-weight-medium);
+  --ds-select-tag-max-width: 10rem;
+  --ds-select-action-size: 1.35rem;
+  --ds-select-arrow-rotate: 0deg;
+  --ds-select-arrow-rotate-open: 180deg;
+  --ds-select-backdrop-filter: none;
+  --ds-select-enter-distance: var(--ds-spacing-1);
+  --ds-select-dropdown-min-width: 15rem;
+  --ds-select-dropdown-max-width: 28rem;
+  --ds-select-dropdown-inline-size: auto;
+  --ds-select-dropdown-border-width: var(--ds-edge-hairline-width);
+  --ds-select-max-height: 15rem;
+  --ds-select-search-height: 2.55rem;
+  --ds-select-search-radius: var(--ds-radius-md);
+  --ds-select-group-height: 1.8rem;
+  --ds-select-option-gap: var(--ds-spacing-1);
+  --ds-select-option-padding-y: var(--ds-spacing-2);
+  --ds-select-option-padding-x: var(--ds-spacing-3);
+  --ds-select-option-radius: var(--ds-radius-md);
+  --ds-select-option-icon-well-size: 1.8rem;
+  --ds-select-option-checkbox-size: 1.05rem;
+  --ds-select-option-check-size: 1.5rem;
+  --ds-select-option-content-gap: 0.12rem;
+  --ds-select-empty-min-height: 4.5rem;
+  --ds-select-scrollbar-size: 6px;
+  --ds-select-virtual-height: auto;
+  --ds-select-virtual-total: auto;
+  --ds-select-virtual-offset: 0;
+  --ds-select-virtual-row: auto;
+  --ds-select-touch-target-min: var(--ds-touch-target-min);
+  --ds-select-tag-remove-touch-min: 1.5rem;
 }

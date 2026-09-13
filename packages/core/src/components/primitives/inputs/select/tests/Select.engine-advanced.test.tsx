@@ -74,7 +74,7 @@ describe('Select advanced engine coverage', () => {
     // `data-status`; the native select carries the attribute, not inline paint.
     expect(select.getAttribute('data-status')).toBe('warning');
     expect(select?.querySelector('option[value=""]')).toHaveTextContent('Choose record');
-    expect(container.querySelector('.rottay-select__loading-indicator')).toBeTruthy();
+    expect(container.querySelector('[data-part="loading"][role="status"]')).toBeTruthy();
 
     fireEvent.focus(select!);
     fireEvent.blur(select!);

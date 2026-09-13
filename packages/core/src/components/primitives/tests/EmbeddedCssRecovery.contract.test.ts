@@ -38,7 +38,7 @@ const SKIN_HASHES = {
   // below (4afa74b353, 2026-08-11) -- the file's whole content changed when
   // the Input placeholder rule and its header comment moved out. Verified
   // with `shasum -a 256` against the tree today before writing.
-  'form-placeholders': 'a78148b905f491e1ad561ea34455a623a47a4375e1c0a2c648cfd8ed3961437b',
+  'form-placeholders': '84a168a4fd5f3a3cb42f7d5c149642c724774e3a66e458fefacd921a934248f0',
   'navigation-static': 'a35d19035d60d802a89771759fe3a584deea6e982ac4fba08bfd6a52f5884d12',
   'primitive-motion': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
   // CI-1 re-pin: 449ad4ba9 (2026-08-10) added a `@media
@@ -426,7 +426,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     expect(
       ruleContract(RELOCATED.inputModern, 'input.ds-input-shell.ds-input-shell--modern::placeholder')
     ).toEqual(inputPlaceholder);
-    expect(ruleContract(SKINS.formPlaceholders, '.rottay-select__search-input::placeholder')).toEqual({
+    expect(ruleContract(SKINS.formPlaceholders, '.ds-select-shell__search-input::placeholder')).toEqual({
       color: 'var(--ds-color-text-muted)',
       opacity: '1',
     });
@@ -736,7 +736,7 @@ describe('skin ownership migration embedded CSS recovery — producer and hook c
     expect(select).not.toContain('ds-sel-search-');
     expect(select).not.toContain('searchPlaceholderCSS');
     expect(select).not.toMatch(/<style(?:\s|>)/);
-    expect(select.match(/className="rottay-select__search-input"/g)).toHaveLength(1);
+    expect(select.match(/className="ds-select-shell__search-input"/g)).toHaveLength(1);
 
     expect(tabs).not.toContain('::webkit-scrollbar');
     expect(tabs).not.toContain('@keyframes ds-tabs-fade-in');

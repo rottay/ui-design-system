@@ -46,24 +46,6 @@ export function SelectOptGroup({
   className = '',
   style,
 }: SelectOptGroupProps): React.ReactElement {
-  const groupStyle: CSSProperties = {
-    opacity: disabled ? 0.5 : 1,
-    ...style,
-  };
-
-  const labelStyle: CSSProperties = {
-    padding: '8px 12px 4px',
-    fontSize: '12px',
-    fontWeight: 600,
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    userSelect: 'none',
-  };
-
-  const optionsStyle: CSSProperties = {
-    marginBottom: '4px',
-  };
-
   // Clone children to pass disabled prop if group is disabled
   const clonedChildren = React.Children.map(children, (child) => {
     if (React.isValidElement(child) && disabled) {
@@ -76,20 +58,18 @@ export function SelectOptGroup({
 
   return (
     <div
-      className={`rottay-select-optgroup ${disabled ? 'rottay-select-optgroup--disabled' : ''} ${className}`}
-      style={groupStyle}
+      className={`ds-select-optgroup ${className}`.trim()}
+      style={style}
       data-part="option-group"
       role="group"
       aria-label={label}
-      aria-disabled={disabled}
-      data-disabled={disabled}
+      aria-disabled={disabled || undefined}
+      data-disabled={disabled || undefined}
     >
-      <div className="rottay-select-optgroup__label" data-part="group-label" style={labelStyle}>
+      <div data-part="group-label" aria-hidden="true">
         {label}
       </div>
-      <div className="rottay-select-optgroup__options" style={optionsStyle}>
-        {clonedChildren}
-      </div>
+      <div data-part="group-options">{clonedChildren}</div>
     </div>
   );
 }

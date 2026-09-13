@@ -67,26 +67,27 @@ describe('Select modern type-ahead', () => {
     expect(activeLabel()).toBe('Apple');
   });
 
-  it('cycles same-initial options on a repeated character', () => {
+  it('searches a fresh character from the next option and cycles same-initial options on a repeat', () => {
     const trigger = openCustomPanel();
-
-    fireEvent.keyDown(trigger, { key: 'a' });
     expect(activeLabel()).toBe('Apple');
 
-    vi.advanceTimersByTime(KEEP);
     fireEvent.keyDown(trigger, { key: 'a' });
     expect(activeLabel()).toBe('Apricot');
 
     vi.advanceTimersByTime(KEEP);
     fireEvent.keyDown(trigger, { key: 'a' });
     expect(activeLabel()).toBe('Apple');
+
+    vi.advanceTimersByTime(KEEP);
+    fireEvent.keyDown(trigger, { key: 'a' });
+    expect(activeLabel()).toBe('Apricot');
   });
 
   it('retries a dead accumulated prefix as a fresh single-character search', () => {
     const trigger = openCustomPanel();
 
     fireEvent.keyDown(trigger, { key: 'a' });
-    expect(activeLabel()).toBe('Apple');
+    expect(activeLabel()).toBe('Apricot');
 
     // "ab" matches nothing, so the fallback re-searches "b" from the next row.
     vi.advanceTimersByTime(KEEP);
