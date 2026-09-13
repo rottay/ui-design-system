@@ -189,7 +189,7 @@ describe('Nested overlays inside an open modern Modal', () => {
     );
 
     const dialog = await waitForModalDialog();
-    const panel = await waitForDocumentNode(".rottay-datepicker-panel--modern[data-part='panel']");
+    const panel = await waitForDocumentNode(".ds-date-picker-panel--modern[data-part='panel']");
 
     expectHostedInsideDialog(dialog, panel);
     // Stronger than mere containment: the panel resolved the MODAL'S host, the

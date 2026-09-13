@@ -1,0 +1,36 @@
+/**
+ * DatePicker Component Tokens - Rottay Design System
+ *
+ * Structural constants of the date-picker family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/date-picker`.
+ */
+
+:root {
+  --ds-date-picker-radius: var(--ds-radius-md);
+  --ds-date-picker-border-width: var(--ds-edge-standard-width);
+  --ds-date-picker-suffix-reserve: 3rem;
+  --ds-date-picker-transition-duration: var(--ds-input-transition-duration);
+  --ds-date-picker-transition-timing: var(--ds-input-transition-timing);
+  --ds-date-picker-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-date-picker-clear-opacity: var(--ds-state-disabled-opacity);
+  --ds-date-picker-clear-inset: var(--ds-spacing-4);
+  --ds-date-picker-icon-inset: var(--ds-spacing-2);
+  --ds-date-picker-action-size: 1.5rem;
+  --ds-date-picker-enter-y: calc(var(--ds-spacing-1) * -1);
+  --ds-date-picker-panel-radius: var(--ds-radius-lg);
+  --ds-date-picker-panel-width: 18rem;
+  --ds-date-picker-panel-width-compact: 16rem;
+  --ds-date-picker-panel-padding: var(--ds-spacing-3);
+  --ds-date-picker-nav-size: 1.75rem;
+  --ds-date-picker-nav-gap: 0.125rem;
+  --ds-date-picker-double-nav-overlap: -0.4rem;
+  --ds-date-picker-grid-gap: 0.125rem;
+  --ds-date-picker-cell-size: calc(2.25rem * var(--ds-density-effective-scale));
+  --ds-date-picker-cell-radius: var(--ds-radius-md);
+  --ds-date-picker-cell-disabled-opacity: calc(var(--ds-state-disabled-opacity) / 2);
+  --ds-date-picker-cell-outside-opacity: calc(var(--ds-state-disabled-opacity) * 0.6);
+  --ds-date-picker-cell-decade-edge-opacity: calc(var(--ds-state-disabled-opacity) * 0.8);
+  --ds-date-picker-today-marker-size: 0.25rem;
+  --ds-date-picker-today-marker-offset: 0.1875rem;
+  --ds-date-picker-touch-target-min: var(--ds-touch-target-min);
+}

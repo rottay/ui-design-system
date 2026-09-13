@@ -1,20 +1,11 @@
 'use client';
 
 /**
- * @fileoverview DatePicker Modern Engine - Rottay Design System.
- * Full token- and skin-driven calendar UI built from native DOM -- no Ant
- * Design, DaisyUI, or dayjs dependency. Renders date/month/year grids with
- * keyboard navigation, range highlighting, optional time selection, and ARIA
- * dialog semantics.
- * Positioning uses a lightweight hook instead of floating-ui.
- *
- * B5-03 (Phase B second pass): locale-safe geometry (week grid follows the
- * catalog locale's first weekday via a bounded CLDR table; weekday/month
- * names resolve through `calendar.*` catalog channels with the pinned
- * English tables as floors), RTL-mirrored arrow navigation, range band
- * grammar (`data-range-start/end`, hover `data-range-preview`), governed
- * icon slots for every contract override, and variant/bordered frame
- * discriminators for the skin.
+ * @fileoverview DatePicker Modern engine: a read-only trigger that opens a
+ * calendar dialog with date, month and year grids, range selection and optional
+ * time. The grid geometry, week start, day labels and grid keyboard come from
+ * the calendar kernel, the panel from the field overlay kernel, and state from
+ * the interaction kernel; the Modern skin paints every part.
  *
  * @example
  * ```tsx
@@ -26,19 +17,21 @@
  * @package @rottay/design-system
  */
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react';
-import type { DatePickerMode, DatePickerProps, RangePickerProps } from '../../contracts';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import type {
+  DatePickerMode,
+  DatePickerPlacement,
+  DatePickerProps,
+  RangePickerProps,
+} from '../../contracts';
 import {
   FieldOverlayPanel,
   useFieldOverlay,
 } from '../../../../runtime/overlay/field-overlay';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
+import { resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { TimeDateIcon } from '@/graphics/icons/semantic/generated/roles/time-date';
@@ -52,10 +45,12 @@ import {
   isSameDay,
   isDateInRange,
   parseDateValue,
-  formatDateStr,
   formatDisplay,
+  formatCalendarDate,
   generateCalendarGrid,
-  getKeyboardNavDate,
+  resolveEnabledCalendarKeyDate,
+  resolveWeekStartsOn,
+  weekdayOrder,
 } from '../../runtime/calendar';
 
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
@@ -67,8 +62,7 @@ const parseLocalDateValue = (value: Date | string | null | undefined): Date | nu
     if (m) {
       const [year, month, day] = [Number(m[1]), Number(m[2]), Number(m[3])];
       const d = new Date(0);
-      // setFullYear keeps years 0000-0099 out of the 1900 window; the
-      // round-trip rejects what the constructor would silently roll over.
+      // setFullYear keeps years 0000-0099 out of the 1900 window; the round-trip rejects rollovers.
       d.setFullYear(year, month - 1, day);
       d.setHours(0, 0, 0, 0);
       const roundTrips =
@@ -79,30 +73,55 @@ const parseLocalDateValue = (value: Date | string | null | undefined): Date | nu
   return parseDateValue(value);
 };
 
-// ---------------------------------------------------------------------------
-// Size config
-// ---------------------------------------------------------------------------
-
-// DS size tokens mapped to inline style dimensions, keyed by the canonical
-// `sm | md | lg` step -- `toCanonicalSize` resolves any accepted spelling.
-// Bare channels (fallback parity): every `--ds-input-*` axis is a declared
-// channel, so `var(--ds-x)` resolves to the channel default on its own.
-// C-02 height-as-floor: the BLOCK AXIS no longer lives here -- the skin owns
-// it per data-size through the `--_ds-datepicker-trigger-height` relay
-// (min-block-size x the density plane, recomputed max(relay, 44px) on coarse
-// pointers), so the trigger grows with type scale and the touch floor can
-// actually win (an inline min-block-size would beat the skin's coarse rule).
-// Inline keeps only font-size + the padding pair the spread-order note below
-// depends on; padding now reads the per-size channel pair (Input grammar).
-const sizeStyleMap: Record<'sm' | 'md' | 'lg', React.CSSProperties> = {
-  sm: { fontSize: 'var(--ds-input-sm-font-size)', padding: 'var(--ds-input-sm-padding-y) var(--ds-input-sm-padding-x)' },
-  md: { fontSize: 'var(--ds-input-md-font-size)', padding: 'var(--ds-input-md-padding-y) var(--ds-input-md-padding-x)' },
-  lg: { fontSize: 'var(--ds-input-lg-font-size)', padding: 'var(--ds-input-lg-padding-y) var(--ds-input-lg-padding-x)' },
+/** The contract's corner placements in the overlay kernel's logical vocabulary. */
+const OVERLAY_PLACEMENT: Readonly<Record<DatePickerPlacement, OverlayPlacement>> = {
+  bottomLeft: 'bottom-start',
+  bottomRight: 'bottom-end',
+  topLeft: 'top-start',
+  topRight: 'top-end',
 };
 
-// All functional glyphs resolve through the semantic icon corpus. The double
-// year affordance composes two logical navigation roles so tenant icon packs
-// and RTL behavior remain authoritative.
+/** English floor for the `components.datepicker.*` catalog keys, so the field renders without a provider. */
+const EN_FALLBACK: Readonly<Record<string, string>> = {
+  'datepicker.placeholder': 'Select date',
+  'datepicker.today': 'Today',
+  'datepicker.now': 'Now',
+  'datepicker.clear_date': 'Clear date',
+  'datepicker.clear_dates': 'Clear dates',
+  'datepicker.start_date': 'Start date',
+  'datepicker.end_date': 'End date',
+  'datepicker.previous_month': 'Previous month',
+  'datepicker.next_month': 'Next month',
+  'datepicker.previous_year': 'Previous year',
+  'datepicker.next_year': 'Next year',
+  'datepicker.previous_decade': 'Previous decade',
+  'datepicker.next_decade': 'Next decade',
+  'datepicker.date_picker': 'Date picker',
+  'datepicker.calendar_dates': 'Calendar dates',
+  'datepicker.hour': 'Hour',
+  'datepicker.minute': 'Minute',
+};
+
+const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
+const MONTH_KEYS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const;
+
+interface DatePickerCopy {
+  t: (key: string) => string;
+  /** A catalog label with its own floor; a missing key never reaches the screen. */
+  label: (key: string, fallback: string) => string;
+  locale: string | undefined;
+}
+
+function useDatePickerCopy(): DatePickerCopy {
+  const i18n = useOptionalTranslation('components');
+  const label = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved.endsWith(key) || resolved.startsWith('i18n:missing:')) return fallback;
+    return resolved;
+  };
+  return { t: (key) => label(key, EN_FALLBACK[key] ?? key), label, locale: i18n?.locale };
+}
+
 const PreviousIcon = () => <NavigationBackIcon decorative size={16} />;
 const NextIcon = () => <NavigationForwardIcon decorative size={16} />;
 const PreviousYearIcon = () => (
@@ -118,106 +137,66 @@ const NextYearIcon = () => (
   </span>
 );
 
-// ---------------------------------------------------------------------------
-// Locale-safe calendar geometry (B5-03; Calendar B4-04 idiom)
-// ---------------------------------------------------------------------------
+type GovernedButtonPart = 'nav-button' | 'cell' | 'today-button';
 
-// Weekday/month names resolve through the `components` catalog (`calendar.*`
-// -- the channel the Calendar primitive already owns, plus the sibling
-// `calendar.months_short.*` block), so locales and tenant overrides stay in
-// the same dictionary. On a catalog miss the provider echoes the full key;
-// the endsWith guard detects the echo and the English fallback tables render,
-// keeping no-catalog behavior byte-identical to the pinned literals
-// (`DAYS_SHORT`/`MONTHS_FULL`/`MONTHS_SHORT` stay the floors AND the pinned
-// runtime constants -- they are not redefined here).
-const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
-const MONTH_KEYS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const;
-
-// First column of the week per catalog locale (bounded CLDR table over the
-// five supported locales): ISO Monday for es/fr/pt, Saturday for ar, Sunday
-// for en. A fixed table (not Intl weekInfo) keeps the geometry deterministic
-// across ICU builds and jsdom. The floor is Sunday (0) -- byte-identical to
-// the historical Sunday-first grid.
-const WEEK_START_BY_LOCALE: Record<string, number> = { en: 0, es: 1, fr: 1, pt: 1, ar: 6 };
-
-type CatalogTranslate = (key: string) => string;
-
-function catalogLabel(t: CatalogTranslate, key: string, fallback: string): string {
-  const resolved = t(key);
-  return resolved && !resolved.endsWith(key) ? resolved : fallback;
+interface GovernedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  part: GovernedButtonPart;
+  stateDisabled?: boolean;
 }
 
-/** Reading-direction probe (Segmented/Tree/Calendar engine idiom). */
-function isRtlContext(el: HTMLElement): boolean {
-  const scoped = el.closest('[dir]');
-  if (scoped) return scoped.getAttribute('dir') === 'rtl';
-  return document.documentElement.dir === 'rtl';
+/** A panel button whose hover, press, focus and disabled state the interaction kernel decides. */
+function GovernedButton({ part, stateDisabled, onFocus, onBlur, children, ...rest }: GovernedButtonProps) {
+  const button = useInteractionState({ disabled: stateDisabled });
+  return (
+    <button
+      type="button"
+      {...rest}
+      {...partAttributes(part, button.state)}
+      onPointerEnter={(event) => {
+        button.handlers.onPointerEnter(event);
+        rest.onPointerEnter?.(event);
+      }}
+      onPointerLeave={button.handlers.onPointerLeave}
+      onPointerDown={button.handlers.onPointerDown}
+      onPointerUp={button.handlers.onPointerUp}
+      onFocus={(event) => {
+        button.handlers.onFocus(event);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        button.handlers.onBlur(event);
+        onBlur?.(event);
+      }}
+    >
+      {children}
+    </button>
+  );
 }
 
-// ---------------------------------------------------------------------------
-// usePopoverPosition hook
-// ---------------------------------------------------------------------------
-
-// Custom positioning hook replaces a floating-ui dependency. It calculates
-// absolute coordinates from the trigger's bounding rect and recomputes on
-// scroll (captured phase to catch nested scrollable containers) and resize.
-// Top placements subtract the PANEL's measured height: without it the panel's
-// top edge parked at the trigger's top edge and the panel painted DOWN over
-// the field (the measured panel ref arrives with the same commit that opens
-// it, so it is readable inside the effect).
-function usePopoverPosition(
-  triggerRef: React.RefObject<HTMLElement | null>,
-  isOpen: boolean,
-  placement: string = 'bottomLeft',
-  panelRef?: React.RefObject<HTMLElement | null>,
-) {
-  const [pos, setPos] = useState({ top: 0, left: 0 });
-
-  useEffect(() => {
-    if (!isOpen || !triggerRef.current) return;
-
-    const update = () => {
-      const rect = triggerRef.current!.getBoundingClientRect();
-      // Fixed positioning uses viewport-relative coordinates (no scrollY/scrollX)
-      // Gap between trigger and dropdown for visual separation
-      const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
-      let top = rect.bottom + gap;
-      let left = rect.left;
-
-      if (placement.includes('top')) {
-        const panelHeight = panelRef?.current?.getBoundingClientRect().height ?? 0;
-        top = rect.top - gap - panelHeight;
-      }
-      if (placement.includes('Right')) {
-        left = rect.right;
-      }
-
-      // Responsive law: never let the panel overflow the viewport's inline
-      // end. 344 is the worst-case panel footprint (coarse-pointer day grid:
-      // 7x44 cells + gaps + padding); clamping with the maximum keeps every
-      // mode inside the viewport, at the cost of a slightly earlier clamp
-      // for the narrower month/year panels.
-      const PANEL_MAX_FOOTPRINT = 344;
-      left = Math.max(gap, Math.min(left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
-
-      setPos({ top, left });
-    };
-
-    update();
-    // Capture phase on scroll ensures we catch scrolls inside overflow containers
-    window.addEventListener('scroll', update, true);
-    window.addEventListener('resize', update);
-    return () => {
-      window.removeEventListener('scroll', update, true);
-      window.removeEventListener('resize', update);
-    };
-  }, [isOpen, placement, triggerRef, panelRef]);
-
-  return pos;
+function ClearAction({ label, onClear, children }: { label: string; onClear: (event: React.MouseEvent) => void; children: React.ReactNode }) {
+  const action = useFieldAction();
+  return (
+    <button
+      type="button"
+      onClick={onClear}
+      tabIndex={-1}
+      aria-label={label}
+      {...partAttributes('clear-button', action.state)}
+      onPointerEnter={action.handlers.onPointerEnter}
+      onPointerLeave={action.handlers.onPointerLeave}
+      onPointerDown={action.handlers.onPointerDown}
+      onPointerUp={action.handlers.onPointerUp}
+      onPointerCancel={action.handlers.onPointerCancel}
+      onFocus={action.handlers.onFocus}
+      onBlur={action.handlers.onBlur}
+    >
+      {children}
+    </button>
+  );
 }
 
 // ---------------------------------------------------------------------------
-// TimePicker sub-component
+// TimePickerPanel sub-component
 // ---------------------------------------------------------------------------
 
 interface TimePickerPanelProps {
@@ -227,95 +206,79 @@ interface TimePickerPanelProps {
   onMinutesChange: (m: number) => void;
 }
 
-// Time selection uses native <select> elements for reliable mobile behavior.
-// The engine stamps parts only; geometry AND paint live in the standalone
-// portal skin (date-picker.css `[data-part='time-column']`).
+// Native selects keep time selection reliable on mobile; the skin paints the column.
 const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
   hours,
   minutes,
   onHoursChange,
   onMinutesChange,
 }) => {
-  const { t } = useTranslation('components');
+  const { t } = useDatePickerCopy();
   return (
-  <div data-part="time-column">
-    <TimeTimestampIcon decorative size={14} />
-    <select
-      value={hours}
-      onChange={(e) => onHoursChange(Number(e.target.value))}
-      aria-label={t('datepicker.hour')}
-    >
-      {Array.from({ length: 24 }, (_, i) => (
-        <option key={i} value={i}>{pad2(i)}</option>
-      ))}
-    </select>
-    <span>:</span>
-    <select
-      value={minutes}
-      onChange={(e) => onMinutesChange(Number(e.target.value))}
-      aria-label={t('datepicker.minute')}
-    >
-      {Array.from({ length: 60 }, (_, i) => (
-        <option key={i} value={i}>{pad2(i)}</option>
-      ))}
-    </select>
-  </div>
+    <div data-part="time-column">
+      <TimeTimestampIcon decorative size={14} />
+      <select
+        data-part="time-select"
+        value={hours}
+        onChange={(e) => onHoursChange(Number(e.target.value))}
+        aria-label={t('datepicker.hour')}
+      >
+        {Array.from({ length: 24 }, (_, i) => (
+          <option key={i} value={i}>{pad2(i)}</option>
+        ))}
+      </select>
+      <span data-part="time-separator">:</span>
+      <select
+        data-part="time-select"
+        value={minutes}
+        onChange={(e) => onMinutesChange(Number(e.target.value))}
+        aria-label={t('datepicker.minute')}
+      >
+        {Array.from({ length: 60 }, (_, i) => (
+          <option key={i} value={i}>{pad2(i)}</option>
+        ))}
+      </select>
+    </div>
   );
 };
 
 // ---------------------------------------------------------------------------
-// CalendarPanel sub-component (the dropdown calendar grid)
+// CalendarPanel sub-component
 // ---------------------------------------------------------------------------
 
 interface CalendarPanelProps {
-  /** The currently selected date (for highlighting). */
   selectedDate: Date | null;
-  /** View year/month state. */
   viewYear: number;
   viewMonth: number;
   onViewChange: (year: number, month: number) => void;
-  /** Called when a date cell is clicked. */
   onDateSelect: (date: Date) => void;
-  /** Disabled date predicate. */
   disabledDate?: (d: Date) => boolean;
-  /** Picker mode. */
   picker: string;
-  /** Show time picker. */
   showTime: boolean;
-  /** Time state. */
   hours: number;
   minutes: number;
   onHoursChange: (h: number) => void;
   onMinutesChange: (m: number) => void;
-  /** Show Today button. */
   showToday: boolean;
-  /** Show Now button (for time mode). */
   showNow: boolean;
-  /** Called when Today/Now is clicked. */
   onTodayClick: () => void;
-  /** Extra footer renderer. */
   renderExtraFooter?: () => React.ReactNode;
-  /** Cell render customization. */
   cellRender?: (current: Date, info: { originNode: React.ReactNode; today: Date; range?: 'start' | 'end' }) => React.ReactNode;
-  /** Range mode: highlight dates between start and end. */
   rangeStart?: Date | null;
   rangeEnd?: Date | null;
-  /** Uncommitted end under the pointer while the second endpoint is being
-      picked (range hover preview; never painted as a committed band). */
+  /** The uncommitted end under the pointer while the second endpoint is picked; never painted as committed. */
   rangePreviewEnd?: Date | null;
-  /** Pointer hover over a day cell (feeds the range preview). */
   onCellHover?: (date: Date) => void;
-  /** Focused date for keyboard navigation. */
   focusedDate: Date | null;
   onFocusedDateChange: (d: Date) => void;
-  /** Panel change callback. */
   onPanelChange?: (date: Date, mode: DatePickerMode) => void;
-  /** Contract icon-slot overrides (the governed corpus stays the default). */
   prevIcon?: React.ReactNode;
   nextIcon?: React.ReactNode;
   superPrevIcon?: React.ReactNode;
   superNextIcon?: React.ReactNode;
 }
+
+const PANEL_CLASS = 'ds-date-picker-panel ds-date-picker-panel--modern';
 
 const CalendarPanel: React.FC<CalendarPanelProps> = ({
   selectedDate,
@@ -347,46 +310,24 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   superPrevIcon,
   superNextIcon,
 }) => {
-  const { t, locale } = useTranslation('components');
+  const { t, label, locale } = useDatePickerCopy();
   const today = useMemo(() => new Date(), []);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // Roving focus (APG date grid): arrow navigation updates `focusedDate`;
-  // this effect lands DOM focus on the newly tabbable cell, so the focus
-  // ring and the SR announcement travel with the logical focus. It only
-  // moves focus that is already INSIDE the grid -- a pointer user pressing
-  // the header nav buttons keeps their focus where they put it. Re-runs
-  // after a view change because the active cell re-renders in the new month.
+  // Keyboard travel moves the tab stop; focus follows it only while focus is already inside the grid.
   useEffect(() => {
     if (!focusedDate) return;
     const gridEl = gridRef.current;
     if (!gridEl || !gridEl.contains(document.activeElement)) return;
-    const active = gridEl.querySelector<HTMLElement>(
-      "[data-part='cell'][tabindex='0']",
-    );
-    active?.focus();
+    gridEl.querySelector<HTMLElement>("[data-part='cell'][tabindex='0']")?.focus();
   }, [focusedDate, viewYear, viewMonth]);
 
-  // B5-03 locale-safe geometry: week grid starts on the locale's first
-  // weekday (bounded CLDR table above; Sunday stays the floor) and weekday/
-  // month names resolve through the catalog with pinned English floors. The
-  // header weekday order rotates with the same offset, so columns and headers
-  // always agree; RTL mirroring stays visual (grid auto-flow under dir=rtl).
-  const weekStart = WEEK_START_BY_LOCALE[locale] ?? 0;
-  const weekdayNames = WEEKDAY_KEYS.map((key, index) =>
-    catalogLabel(t, `calendar.weekdays.${key}`, DAYS_SHORT[index]),
-  );
-  const orderedWeekdays = weekStart === 0
-    ? weekdayNames
-    : [...weekdayNames.slice(weekStart), ...weekdayNames.slice(0, weekStart)];
-  const monthNamesFull = MONTH_KEYS.map((key, index) =>
-    catalogLabel(t, `calendar.months.${key}`, MONTHS_FULL[index]),
-  );
-  const monthNamesShort = MONTH_KEYS.map((key, index) =>
-    catalogLabel(t, `calendar.months_short.${key}`, MONTHS_SHORT[index]),
-  );
+  const weekStart = resolveWeekStartsOn(locale);
+  const weekdayNames = WEEKDAY_KEYS.map((key, index) => label(`calendar.weekdays.${key}`, DAYS_SHORT[index]));
+  const orderedWeekdays = weekdayOrder(weekStart).map((weekday) => weekdayNames[weekday]);
+  const monthNamesFull = MONTH_KEYS.map((key, index) => label(`calendar.months.${key}`, MONTHS_FULL[index]));
+  const monthNamesShort = MONTH_KEYS.map((key, index) => label(`calendar.months_short.${key}`, MONTHS_SHORT[index]));
 
-  // Month navigation
   const handlePrevMonth = () => {
     const newMonth = viewMonth === 0 ? 11 : viewMonth - 1;
     const newYear = viewMonth === 0 ? viewYear - 1 : viewYear;
@@ -402,120 +343,58 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   const handlePrevYear = () => onViewChange(viewYear - 1, viewMonth);
   const handleNextYear = () => onViewChange(viewYear + 1, viewMonth);
 
-  // Keyboard navigation on the grid (APG): arrows ±1/±7 days, PageUp/PageDown
-  // ±1 month, Home/End to the month edges. In RTL the column flow mirrors
-  // visually, so Left/Right swap (Calendar/Segmented idiom).
+  const isDisabled = useCallback((date: Date) => Boolean(disabledDate?.(date)), [disabledDate]);
+
+  // The APG date grid comes from the calendar kernel: the week edges follow the locale and the arrows the direction.
   const handleGridKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       const base = focusedDate || selectedDate || today;
-      const rtl = isRtlContext(e.currentTarget as HTMLElement);
-      const key = rtl && e.key === 'ArrowRight'
-        ? 'ArrowLeft'
-        : rtl && e.key === 'ArrowLeft'
-          ? 'ArrowRight'
-          : e.key;
-      const newDate = getKeyboardNavDate(base, key);
+      const rtl = resolveReadingDirectionIsRtl(e.currentTarget as HTMLElement);
+      const newDate = resolveEnabledCalendarKeyDate(base, e, isDisabled, { rtl, weekStartsOn: weekStart });
 
       if (newDate) {
         e.preventDefault();
         onFocusedDateChange(newDate);
-        // Update view if navigated out of current month
         if (newDate.getMonth() !== viewMonth || newDate.getFullYear() !== viewYear) {
           onViewChange(newDate.getFullYear(), newDate.getMonth());
         }
+        return;
       }
 
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        const dateToSelect = focusedDate || base;
-        if (!disabledDate || !disabledDate(dateToSelect)) {
-          onDateSelect(dateToSelect);
-        }
-      }
-
-      if (e.key === 'Escape') {
-        // Let parent handle close
+        if (!isDisabled(base)) onDateSelect(base);
       }
     },
-    [focusedDate, selectedDate, today, viewMonth, viewYear, onFocusedDateChange, onViewChange, onDateSelect, disabledDate],
+    [focusedDate, selectedDate, today, viewMonth, viewYear, onFocusedDateChange, onViewChange, onDateSelect, isDisabled, weekStart],
   );
 
-  // ---------------------------------------------------------------------------
-  // The engine stamps parts and state ONLY: panel/header/nav/cell/footer
-  // geometry AND paint live in the standalone panel skin (date-picker.css),
-  // because portal content sits outside the trigger root. Tenant semantic
-  // channels are set on the DS root and still cascade into the governed
-  // portal scope. Cell SIZE, grid gutters, band grammar, motion and the
-  // coarse-pointer floors are skin-owned (see the skin docblock).
-  // ---------------------------------------------------------------------------
+  const grid = useMemo(
+    () => generateCalendarGrid(viewYear, viewMonth, disabledDate, { weekStartsOn: weekStart }),
+    [viewYear, viewMonth, disabledDate, weekStart],
+  );
 
-  // Month picker mode
-  // HOISTED ABOVE THE PANEL-MODE RETURNS. The month and year panels return
-  // early, so computing the day grid below them called `useMemo`
-  // conditionally: switching `picker` changed this component's hook order
-  // mid-life. Both memos are pure in props the early returns do not touch.
-  // Default: full day-level calendar grid (42 cells = 6 rows x 7 columns).
-  // B5-03: the pinned Sunday-first helper stays the source of truth; for
-  // non-Sunday week starts the contiguous 42-day window shifts so the first
-  // column is the locale's first weekday. The shift is two-directional: when
-  // the locale's leading count is SMALLER than the helper's, the window
-  // starts later (drop head cells, extend the tail); when it is LARGER the
-  // window starts earlier (prepend days before the helper's first cell,
-  // trim the tail) -- slicing alone would drop in-month days whenever the
-  // month begins before the locale's week start.
-  const grid = useMemo(() => {
-    const baseGrid = generateCalendarGrid(viewYear, viewMonth, disabledDate);
-    if (weekStart === 0) return baseGrid;
-    const sundayLeading = new Date(viewYear, viewMonth, 1).getDay();
-    const leading = (sundayLeading - weekStart + 7) % 7;
-    const delta = leading - sundayLeading;
-    if (delta === 0) return baseGrid;
-    const makeOutside = (date: Date) => ({
-      date,
-      day: date.getDate(),
-      isCurrentMonth: false,
-      isToday: isSameDay(date, today),
-      isDisabled: disabledDate ? disabledDate(date) : false,
-    });
-    if (delta < 0) {
-      const drop = -delta;
-      const last = baseGrid[baseGrid.length - 1].date;
-      const tail = Array.from({ length: drop }, (_, i) =>
-        makeOutside(new Date(last.getFullYear(), last.getMonth(), last.getDate() + i + 1)),
-      );
-      return [...baseGrid.slice(drop), ...tail];
-    }
-    const first = baseGrid[0].date;
-    const head = Array.from({ length: delta }, (_, i) =>
-      makeOutside(new Date(first.getFullYear(), first.getMonth(), first.getDate() - delta + i)),
-    );
-    return [...head, ...baseGrid.slice(0, baseGrid.length - delta)];
-  }, [viewYear, viewMonth, disabledDate, weekStart, today]);
-
-  // The flat 42-cell grid is chunked into calendar weeks so every gridcell has
-  // an owning role="row" (a grid with direct gridcell children exposes no rows).
+  // Every gridcell has an owning row: the 42 cells chunk into calendar weeks.
   const weekRows = useMemo(
     () =>
       Array.from({ length: Math.ceil(grid.length / 7) }, (_, week) => ({
         key: week,
-        cells: grid
-          .slice(week * 7, week * 7 + 7)
-          .map((cell, offset) => ({ cell, idx: week * 7 + offset })),
+        cells: grid.slice(week * 7, week * 7 + 7).map((cell, offset) => ({ cell, idx: week * 7 + offset })),
       })),
     [grid],
   );
 
   if (picker === 'month') {
     return (
-      <div data-part="panel" data-mode="month" className="rottay-datepicker-panel rottay-datepicker-panel--modern" role="dialog" aria-label={t('datepicker.date_picker')}>
+      <div data-part="panel" data-mode="month" className={PANEL_CLASS} role="dialog" aria-label={t('datepicker.date_picker')}>
         <div data-part="header">
-          <button type="button" data-part="nav-button" onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+          <GovernedButton part="nav-button" onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             {superPrevIcon ?? <PreviousIcon />}
-          </button>
+          </GovernedButton>
           <span data-part="panel-title">{viewYear}</span>
-          <button type="button" data-part="nav-button" onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          <GovernedButton part="nav-button" onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             {superNextIcon ?? <NextIcon />}
-          </button>
+          </GovernedButton>
         </div>
         <div data-part="grid">
           {monthNamesShort.map((m, i) => {
@@ -524,10 +403,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               : false;
             const isCurrent = today.getMonth() === i && today.getFullYear() === viewYear;
             return (
-              <button
+              <GovernedButton
                 key={m}
-                type="button"
-                data-part="cell"
+                part="cell"
                 data-selected={isSelected || undefined}
                 data-today={isCurrent || undefined}
                 onClick={() => {
@@ -537,34 +415,29 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 }}
               >
                 {m}
-              </button>
+              </GovernedButton>
             );
           })}
         </div>
-        {renderExtraFooter && (
-          <div data-part="footer">
-            {renderExtraFooter()}
-          </div>
-        )}
+        {renderExtraFooter && <div data-part="footer">{renderExtraFooter()}</div>}
       </div>
     );
   }
 
-  // Year picker mode
   if (picker === 'year') {
     const startYear = Math.floor(viewYear / 10) * 10;
     return (
-      <div data-part="panel" data-mode="year" className="rottay-datepicker-panel rottay-datepicker-panel--modern" role="dialog" aria-label={t('datepicker.date_picker')}>
+      <div data-part="panel" data-mode="year" className={PANEL_CLASS} role="dialog" aria-label={t('datepicker.date_picker')}>
         <div data-part="header">
-          <button type="button" data-part="nav-button" onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
+          <GovernedButton part="nav-button" onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
             {superPrevIcon ?? <PreviousIcon />}
-          </button>
+          </GovernedButton>
           <span data-part="panel-title">
             {startYear} - {startYear + 9}
           </span>
-          <button type="button" data-part="nav-button" onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
+          <GovernedButton part="nav-button" onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
             {superNextIcon ?? <NextIcon />}
-          </button>
+          </GovernedButton>
         </div>
         <div data-part="grid">
           {Array.from({ length: 12 }, (_, i) => {
@@ -573,10 +446,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
             const isCurrent = today.getFullYear() === yr;
             const isOutOfRange = i === 0 || i === 11;
             return (
-              <button
+              <GovernedButton
                 key={yr}
-                type="button"
-                data-part="cell"
+                part="cell"
                 data-selected={isSelected || undefined}
                 data-today={isCurrent || undefined}
                 data-decade-edge={isOutOfRange || undefined}
@@ -587,34 +459,20 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 }}
               >
                 {yr}
-              </button>
+              </GovernedButton>
             );
           })}
         </div>
-        {renderExtraFooter && (
-          <div data-part="footer">
-            {renderExtraFooter()}
-          </div>
-        )}
+        {renderExtraFooter && <div data-part="footer">{renderExtraFooter()}</div>}
       </div>
     );
   }
 
-
-  // Range panel grammar: RangePicker always passes both range props (null
-  // until picked), so their presence -- not the band's -- marks the panel.
-  // The skin then keeps column-gap:0 CONSTANT for range panels (no geometry
-  // jump when the hover preview starts) and lets cells fill their tracks so
-  // the in-range band reads as one continuous surface.
+  // RangePicker always passes both range props, so their presence marks a range panel.
   const isRangePanel = rangeStart !== undefined || rangeEnd !== undefined;
-  // Uncommitted band end: while the second endpoint is being picked, the
-  // hovered date previews the band (never painted as committed).
   const previewEnd = !rangeEnd && rangeStart ? rangePreviewEnd ?? null : null;
 
-  // Roving tabindex (APG): exactly ONE cell is tabbable at a time. The
-  // tabbable cell follows the logical focus (arrows), then the selection,
-  // then today; when none of those is inside the current view, the first
-  // in-month cell takes the stop so the grid always has an entry point.
+  // Exactly one tabbable cell: the logical focus, else the selection, else today, else the first in-month day.
   const activeDate = focusedDate ?? selectedDate ?? today;
   const activeCellIndex = (() => {
     const match = grid.findIndex((c) => isSameDay(c.date, activeDate));
@@ -623,112 +481,83 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     return firstInMonth >= 0 ? firstInMonth : 0;
   })();
 
-
   return (
-    <div data-part="panel" data-mode="date" data-range={isRangePanel || undefined} className="rottay-datepicker-panel rottay-datepicker-panel--modern" role="dialog" aria-label={t('datepicker.date_picker')}>
-      {/* Header navigation */}
+    <div data-part="panel" data-mode="date" data-range={isRangePanel || undefined} className={PANEL_CLASS} role="dialog" aria-label={t('datepicker.date_picker')}>
       <div data-part="header">
         <div data-part="nav-group">
-          <button type="button" data-part="nav-button" onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+          <GovernedButton part="nav-button" onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             {superPrevIcon ?? <PreviousYearIcon />}
-          </button>
-          <button type="button" data-part="nav-button" onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
+          </GovernedButton>
+          <GovernedButton part="nav-button" onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
             {prevIcon ?? <PreviousIcon />}
-          </button>
+          </GovernedButton>
         </div>
         <span data-part="panel-title">
           {monthNamesFull[viewMonth]} {viewYear}
         </span>
         <div data-part="nav-group">
-          <button type="button" data-part="nav-button" onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
+          <GovernedButton part="nav-button" onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
             {nextIcon ?? <NextIcon />}
-          </button>
-          <button type="button" data-part="nav-button" onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          </GovernedButton>
+          <GovernedButton part="nav-button" onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             {superNextIcon ?? <NextYearIcon />}
-          </button>
+          </GovernedButton>
         </div>
       </div>
 
-      {/* Calendar grid */}
-      <div
-        ref={gridRef}
-        data-part="grid"
-        role="grid"
-        onKeyDown={handleGridKeyDown}
-        aria-label={t('datepicker.calendar_dates')}
-      >
-        {/* Day-of-week headers (locale-rotated with the week start). The
-            header row is a row OF the grid (APG owns columnheaders inside
-            role="grid"); it spans every day track so its 7 sub-tracks stay
-            aligned with the day columns. Column gap is skin-owned so range
-            panels can keep headers and day tracks aligned when the band
-            drops the gutter. */}
-        <div data-part="weekday-row" role="row" style={{ gridColumn: '1 / -1' }}>
+      <div ref={gridRef} data-part="grid" role="grid" onKeyDown={handleGridKeyDown} aria-label={t('datepicker.calendar_dates')}>
+        <div data-part="weekday-row" role="row">
           {orderedWeekdays.map((d) => (
-            <div
-              key={d}
-              data-part="weekday-header"
-              role="columnheader"
-              aria-label={d}
-            >
+            <div key={d} data-part="weekday-header" role="columnheader" aria-label={d}>
               {d}
             </div>
           ))}
         </div>
 
         {weekRows.map((week) => (
-          // `display: contents` keeps the week semantic (role="row") without
-          // adding a box, so the 7 cells stay direct items of the day grid.
-          <div key={week.key} data-part="week-row" role="row" style={{ display: 'contents' }}>
-        {week.cells.map(({ cell, idx }) => {
-          const isSelected = selectedDate ? isSameDay(cell.date, selectedDate) : false;
-          const inCommittedRange = isDateInRange(cell.date, rangeStart ?? null, rangeEnd ?? null);
-          const inPreviewRange = !inCommittedRange && isDateInRange(cell.date, rangeStart ?? null, previewEnd);
-          const isRangeStart = !!(rangeStart && isSameDay(cell.date, rangeStart));
-          const isRangeEnd = !!(rangeEnd && isSameDay(cell.date, rangeEnd));
-          const isEndpoint = isRangeStart || isRangeEnd;
-          const endpointRange = isRangeStart
-            ? 'start' as const
-            : isRangeEnd
-              ? 'end' as const
-              : undefined;
-          const originNode = cell.day;
+          <div key={week.key} data-part="week-row" role="row">
+            {week.cells.map(({ cell, idx }) => {
+              const isSelected = selectedDate ? isSameDay(cell.date, selectedDate) : false;
+              const inCommittedRange = isDateInRange(cell.date, rangeStart ?? null, rangeEnd ?? null);
+              const inPreviewRange = !inCommittedRange && isDateInRange(cell.date, rangeStart ?? null, previewEnd);
+              const isRangeStart = !!(rangeStart && isSameDay(cell.date, rangeStart));
+              const isRangeEnd = !!(rangeEnd && isSameDay(cell.date, rangeEnd));
+              const isEndpoint = isRangeStart || isRangeEnd;
+              const endpointRange = isRangeStart ? ('start' as const) : isRangeEnd ? ('end' as const) : undefined;
+              const originNode = cell.day;
 
-          return (
-            <button
-              key={idx}
-              type="button"
-              role="gridcell"
-              aria-selected={isSelected}
-              aria-disabled={cell.isDisabled}
-              aria-current={cell.isToday ? 'date' : undefined}
-              aria-label={formatDateStr(cell.date)}
-              tabIndex={idx === activeCellIndex ? 0 : -1}
-              data-part="cell"
-              data-today={cell.isToday || undefined}
-              data-selected={(isSelected || isEndpoint) || undefined}
-              data-in-range={inCommittedRange || undefined}
-              data-range-preview={inPreviewRange || undefined}
-              data-range-start={isRangeStart || undefined}
-              data-range-end={isRangeEnd || undefined}
-              data-disabled={cell.isDisabled || undefined}
-              data-outside-month={!cell.isCurrentMonth || undefined}
-              onMouseEnter={() => onCellHover?.(cell.date)}
-              onClick={() => {
-                if (!cell.isDisabled) onDateSelect(cell.date);
-              }}
-            >
-              {cellRender
-                ? cellRender(cell.date, { originNode, today, range: endpointRange })
-                : originNode}
-            </button>
-          );
-        })}
+              return (
+                <GovernedButton
+                  key={idx}
+                  part="cell"
+                  stateDisabled={cell.isDisabled}
+                  role="gridcell"
+                  aria-selected={isSelected}
+                  aria-disabled={cell.isDisabled}
+                  aria-current={cell.isToday ? 'date' : undefined}
+                  aria-label={formatCalendarDate(cell.date, locale)}
+                  tabIndex={idx === activeCellIndex ? 0 : -1}
+                  data-today={cell.isToday || undefined}
+                  data-selected={(isSelected || isEndpoint) || undefined}
+                  data-in-range={inCommittedRange || undefined}
+                  data-range-preview={inPreviewRange || undefined}
+                  data-range-start={isRangeStart || undefined}
+                  data-range-end={isRangeEnd || undefined}
+                  data-disabled={cell.isDisabled || undefined}
+                  data-outside-month={!cell.isCurrentMonth || undefined}
+                  onPointerEnter={() => onCellHover?.(cell.date)}
+                  onClick={() => {
+                    if (!cell.isDisabled) onDateSelect(cell.date);
+                  }}
+                >
+                  {cellRender ? cellRender(cell.date, { originNode, today, range: endpointRange }) : originNode}
+                </GovernedButton>
+              );
+            })}
           </div>
         ))}
       </div>
 
-      {/* Time picker */}
       {showTime && (
         <TimePickerPanel
           hours={hours}
@@ -738,20 +567,13 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
         />
       )}
 
-      {/* Footer */}
       <div data-part="footer">
         {showToday && (
-          <button
-            type="button"
-            data-part="today-button"
-            onClick={onTodayClick}
-          >
+          <GovernedButton part="today-button" onClick={onTodayClick}>
             {showTime && showNow ? t('datepicker.now') : t('datepicker.today')}
-          </button>
+          </GovernedButton>
         )}
-        {renderExtraFooter && (
-          <div data-part="extra-footer">{renderExtraFooter()}</div>
-        )}
+        {renderExtraFooter && <div data-part="extra-footer">{renderExtraFooter()}</div>}
       </div>
     </div>
   );
@@ -762,20 +584,12 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
 // ---------------------------------------------------------------------------
 
 /**
- * Modern token- and skin-driven DatePicker engine.
- *
- * Renders a read-only input that opens a `CalendarPanel` popover on click.
- * Supports controlled and uncontrolled usage, date/month/year picker modes,
- * optional time selection, disabled dates, cell customization, and Today/Now
- * quick-select. The popover is absolutely positioned via `usePopoverPosition`.
- *
- * @param props - Rottay DatePickerProps (engine-agnostic interface).
- * @param ref   - Forwarded to the text input element.
- * @returns The rendered DatePicker with its governed calendar popover.
+ * Modern DatePicker engine: a read-only input that opens the calendar dialog
+ * through the field overlay kernel.
  */
 const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
   (props, ref) => {
-    const { t } = useTranslation('components');
+    const { t } = useDatePickerCopy();
 
     const {
       value,
@@ -813,21 +627,15 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       superNextIcon,
     } = props;
 
-    // Frame-grammar discriminator for the skin: `bordered={false}` is the
-    // legacy alias of `variant='borderless'` (the explicit variant wins).
+    // `bordered={false}` is the legacy alias of `variant='borderless'`; an explicit variant wins.
     const effectiveVariant = !bordered ? 'borderless' : variant ?? 'outlined';
 
     const displayPlaceholder = placeholder ?? t('datepicker.placeholder');
     const showTime = !!showTimeProp;
-    // Controlled vs uncontrolled pattern: if value/open are explicitly passed
-    // (even as null), the consumer owns that state. undefined means uncontrolled.
     const isControlled = value !== undefined;
     const isOpenControlled = controlledOpen !== undefined;
 
-    // State
-    const [internalDate, setInternalDate] = useState<Date | null>(() =>
-      parseLocalDateValue(defaultValue),
-    );
+    const [internalDate, setInternalDate] = useState<Date | null>(() => parseLocalDateValue(defaultValue));
     const [internalOpen, setInternalOpen] = useState(false);
     const [focusedDate, setFocusedDate] = useState<Date | null>(null);
     const [hours, setHours] = useState(0);
@@ -836,12 +644,10 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
     const selectedDate = isControlled ? parseLocalDateValue(value) : internalDate;
     const isOpen = isOpenControlled ? controlledOpen! : internalOpen;
 
-    // Initialize view to selected date or today
     const initialView = selectedDate || new Date();
     const [viewYear, setViewYear] = useState(initialView.getFullYear());
     const [viewMonth, setViewMonth] = useState(initialView.getMonth());
 
-    // Sync view with selectedDate when it changes externally
     useEffect(() => {
       if (selectedDate) {
         setViewYear(selectedDate.getFullYear());
@@ -851,28 +657,12 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       }
     }, [selectedDate]);
 
-    // Refs
-    const triggerRef = useRef<HTMLDivElement>(null);
-    const panelRef = useRef<HTMLDivElement>(null);
     const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
-    // The panel carries both this engine's measuring ref and the kernel's
-    // containment element.
-    const setPanelNode = useCallback((node: HTMLDivElement | null) => {
-      panelRef.current = node;
-      setPanelEl(node);
-    }, []);
     const inputRef = useRef<HTMLInputElement>(null);
-    // The calendar leaves the trigger's DOM ancestry when it portals, so the
-    // tenant/locale scope has to be re-stamped around it. The kernel
-    // needs the anchor as state (a ref would not re-render when it lands), so
-    // the trigger publishes to both.
+    // The overlay kernel needs the anchor as state: a ref would not re-render when it lands.
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-    const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
-      (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-      setAnchorEl(node);
-    }, []);
+    const trigger = useInteractionState({ disabled });
 
-    // Merge refs
     const setInputRef = useCallback(
       (node: HTMLInputElement | null) => {
         (inputRef as React.MutableRefObject<HTMLInputElement | null>).current = node;
@@ -882,10 +672,6 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       [ref],
     );
 
-    // Popover position (measured: top placements subtract the panel height)
-    const popPos = usePopoverPosition(triggerRef, isOpen, placement, panelRef);
-
-    // Open/close
     const setOpen = useCallback(
       (next: boolean) => {
         if (!isOpenControlled) setInternalOpen(next);
@@ -894,16 +680,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       [isOpenControlled, onOpenChange],
     );
 
-    // Click-outside dismissal. Uses mousedown (not click) so the popover
-    // closes before the external element's click handler fires -- this avoids
-    // One overlay contract. The kernel owns the shared Escape router (top-most
-    // layer only) and the shared capture-phase outside-pointer watcher, which
-    // replaces this engine's two private document listeners; Escape and an
-    // outside press both RETURN FOCUS to the trigger input, because the panel
-    // unmounts on close and focus would otherwise drop to <body>. The measured
-    // placement below stays this engine's own (its viewport clamp and
-    // placement vocabulary are product behaviour), so the surface is declared
-    // `viewport` and the kernel contributes the canonical dropdown band.
+    // Escape and an outside press return focus to the input: the panel unmounts on close.
     const dismissPanel = useCallback(() => {
       setOpen(false);
       inputRef.current?.focus();
@@ -914,7 +691,9 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       open: isOpen,
       anchor: anchorEl,
       panel: panelEl,
-      surface: 'viewport',
+      placement: OVERLAY_PLACEMENT[placement],
+      offset: 4,
+      flip: true,
       modal: true,
       lockScroll: false,
       restoreFocus: false,
@@ -922,9 +701,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       dismissOnOutsidePointer: true,
     });
 
-    // When showTime is active, we merge the time portion from the time picker
-    // state into the selected calendar date. Without this, selecting a new day
-    // would reset the previously chosen time to midnight.
+    // With showTime the chosen time survives a new day instead of resetting to midnight.
     const handleDateSelect = useCallback(
       (date: Date) => {
         const finalDate = showTime
@@ -936,20 +713,15 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
         onChange?.(finalDate, dateStr);
         setFocusedDate(null);
 
-        // Keep the popover open when showTime is active so the user can
-        // adjust hours/minutes after selecting the date, then dismiss manually.
+        // With showTime the panel stays open for the time; otherwise it closes and focus returns to the input.
         if (!showTime) {
           setOpen(false);
-          // Focus return (APG): the panel unmounts on close, so the clicked
-          // cell's focus would drop to <body>. The trigger input owns the
-          // dialog's return focus (the Escape path already does the same).
           inputRef.current?.focus();
         }
       },
       [showTime, hours, minutes, format, picker, isControlled, onChange, setOpen],
     );
 
-    // Today/Now
     const handleTodayClick = useCallback(() => {
       const now = new Date();
       handleDateSelect(now);
@@ -957,7 +729,6 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       setViewMonth(now.getMonth());
     }, [handleDateSelect]);
 
-    // Clear
     const handleClear = useCallback(
       (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -967,7 +738,6 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       [isControlled, onChange],
     );
 
-    // Time changes
     const handleHoursChange = useCallback(
       (h: number) => {
         setHours(h);
@@ -996,39 +766,32 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       [selectedDate, format, picker, isControlled, onChange],
     );
 
-    // Display text
     const displayText = formatDisplay(selectedDate, format, picker, showTime);
-
-    // Size styles
     const canonicalSize = toCanonicalSize(size) ?? 'md';
-    const dateSizeStyle = sizeStyleMap[canonicalSize];
+
     return (
       <>
         <div
-          ref={setTriggerRef}
+          ref={setAnchorEl}
           data-part="root"
-          className={`rottay-datepicker rottay-datepicker--modern ${className}`}
+          className={`ds-date-picker ds-date-picker--modern ${className}`}
           style={style}
         >
           <input
             ref={setInputRef}
             type="text"
-            // readOnly prevents keyboard input -- dates must be selected via the
-            // calendar panel. paddingInlineEnd reserves space for the clear +
-            // calendar icons (logical property: the icon pair flips under RTL).
-            // It MUST follow the size-enum spread: the enum's `padding`
-            // shorthand resets every longhand, so a paddingInlineEnd declared
-            // before it was dead code and the icon pair overlapped long text.
+            // Dates are chosen in the calendar, so the input never takes keystrokes.
             readOnly
-            data-part="trigger-input"
+            {...partAttributes('trigger-input', trigger.state)}
+            onPointerEnter={trigger.handlers.onPointerEnter}
+            onPointerLeave={trigger.handlers.onPointerLeave}
+            onPointerDown={trigger.handlers.onPointerDown}
+            onPointerUp={trigger.handlers.onPointerUp}
+            onFocus={trigger.handlers.onFocus}
+            onBlur={trigger.handlers.onBlur}
             data-status={status ?? 'default'}
             data-size={canonicalSize}
             data-variant={effectiveVariant}
-            style={{
-              boxSizing: 'border-box',
-              ...dateSizeStyle,
-              paddingInlineEnd: 48,
-            }}
             value={displayText}
             disabled={disabled}
             placeholder={displayPlaceholder}
@@ -1042,85 +805,61 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
                 setOpen(!isOpen);
               }
             }}
-            // ARIA combobox pattern: the input acts as the trigger, the calendar
-            // panel is the dialog popup. Screen readers announce the expanded state.
             role="combobox"
             aria-expanded={isOpen}
             aria-haspopup="dialog"
-            // The placeholder is only a LAST-RESORT name: with an `id` an
-            // external <label for> owns the name, and aria-label would outrank it.
+            // With an id an external <label for> owns the name, so the placeholder is only the last resort.
             aria-label={id ? undefined : displayPlaceholder}
           />
           {allowClear && displayText && !disabled && (
-            <button
-              type="button"
-              data-part="clear-button"
-              onClick={handleClear}
-              tabIndex={-1}
-              aria-label={t('datepicker.clear_date')}
-            >
+            <ClearAction label={t('datepicker.clear_date')} onClear={handleClear}>
               <ActionCloseIcon decorative size={14} />
-            </button>
+            </ClearAction>
           )}
-          <span
-            data-part="calendar-icon"
-            aria-hidden="true"
-          >
+          <span data-part="calendar-icon" aria-hidden="true">
             {suffixIcon ?? <TimeDateIcon decorative size={16} />}
           </span>
         </div>
 
-        {/* Calendar popover -- rendered through the shared overlay substrate
-            to avoid ancestor overflow:hidden clipping. The target resolves as
-            explicit container > active top-layer host > shared
-            `#rottay-portal-root`, so the calendar stays visible when the field
-            sits inside a `showModal()` dialog. The kernel carries the
-            tenant/theme/direction lineage across the boundary. Positioning
-            stays fixed off the trigger rect; zIndex 1050 matches the DS
-            overlay stacking layer (above modals at 1040). */}
         {isOpen && (
           <FieldOverlayPanel overlay={overlay}>
-          <div
-            {...overlay.panelProps}
-            ref={setPanelNode}
-            data-placement={placement}
-            style={{
-              position: 'fixed',
-              top: popPos.top,
-              left: popPos.left,
-              ...overlay.panelProps.style,
-            }}
-          >
-            <CalendarPanel
-              selectedDate={selectedDate}
-              viewYear={viewYear}
-              viewMonth={viewMonth}
-              onViewChange={(y, m) => {
-                setViewYear(y);
-                setViewMonth(m);
-              }}
-              onDateSelect={handleDateSelect}
-              disabledDate={disabledDate}
-              picker={picker}
-              showTime={showTime}
-              hours={hours}
-              minutes={minutes}
-              onHoursChange={handleHoursChange}
-              onMinutesChange={handleMinutesChange}
-              showToday={showToday}
-              showNow={showNow}
-              onTodayClick={handleTodayClick}
-              renderExtraFooter={renderExtraFooter}
-              cellRender={cellRender}
-              focusedDate={focusedDate}
-              onFocusedDateChange={setFocusedDate}
-              onPanelChange={onPanelChange}
-              prevIcon={prevIcon}
-              nextIcon={nextIcon}
-              superPrevIcon={superPrevIcon}
-              superNextIcon={superNextIcon}
-            />
-          </div>
+            <div
+              {...overlay.panelProps}
+              ref={setPanelEl}
+              data-part="popup"
+              data-placement={placement}
+              style={overlay.panelProps.style}
+            >
+              <CalendarPanel
+                selectedDate={selectedDate}
+                viewYear={viewYear}
+                viewMonth={viewMonth}
+                onViewChange={(y, m) => {
+                  setViewYear(y);
+                  setViewMonth(m);
+                }}
+                onDateSelect={handleDateSelect}
+                disabledDate={disabledDate}
+                picker={picker}
+                showTime={showTime}
+                hours={hours}
+                minutes={minutes}
+                onHoursChange={handleHoursChange}
+                onMinutesChange={handleMinutesChange}
+                showToday={showToday}
+                showNow={showNow}
+                onTodayClick={handleTodayClick}
+                renderExtraFooter={renderExtraFooter}
+                cellRender={cellRender}
+                focusedDate={focusedDate}
+                onFocusedDateChange={setFocusedDate}
+                onPanelChange={onPanelChange}
+                prevIcon={prevIcon}
+                nextIcon={nextIcon}
+                superPrevIcon={superPrevIcon}
+                superNextIcon={superNextIcon}
+              />
+            </div>
           </FieldOverlayPanel>
         )}
       </>
@@ -1135,21 +874,12 @@ DatePickerBase.displayName = 'DatePicker.Modern';
 // ---------------------------------------------------------------------------
 
 /**
- * Modern token- and skin-driven RangePicker engine.
- *
- * Renders two read-only inputs (start/end) with a shared `CalendarPanel`.
- * Selection follows a ping-pong pattern: the first click sets the start
- * date and auto-advances focus to end; the second click sets the end date
- * and closes the popover. Range highlighting is applied between the two
- * endpoints in the calendar grid.
- *
- * @param props - Rottay RangePickerProps (engine-agnostic interface).
- * @param ref   - Forwarded to the wrapper div element.
- * @returns The rendered RangePicker with its governed calendar popover.
+ * Modern RangePicker engine: two read-only inputs and one calendar. The first
+ * pick sets the start and moves to the end; the second sets the end and closes.
  */
 const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
   (props, ref) => {
-    const { t } = useTranslation('components');
+    const { t } = useDatePickerCopy();
 
     const {
       value,
@@ -1163,9 +893,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       size = 'default',
       status,
       placeholder,
-      // Contract-honest default (`@default '~'`): the modern engine drifted
-      // to '-->' — an ASCII arrow that also reads as a directional glyph and
-      // points the wrong way under RTL. '~' is direction-neutral.
+      // '~' is direction-neutral: an arrow would point the wrong way under RTL.
       separator = '~',
       placement = 'bottomLeft',
       allowClear = true,
@@ -1187,7 +915,6 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       superNextIcon,
     } = props;
 
-    // See DatePickerBase: legacy `bordered={false}` aliases variant borderless.
     const effectiveVariant = !bordered ? 'borderless' : variant ?? 'outlined';
 
     const displayPlaceholder = placeholder ?? [t('datepicker.start_date'), t('datepicker.end_date')];
@@ -1195,7 +922,6 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
     const isControlled = value !== undefined;
     const isOpenControlled = controlledOpen !== undefined;
 
-    // State
     const [internalStart, setInternalStart] = useState<Date | null>(() =>
       defaultValue ? parseLocalDateValue(defaultValue[0]) : null,
     );
@@ -1203,14 +929,11 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       defaultValue ? parseLocalDateValue(defaultValue[1]) : null,
     );
     const [internalOpen, setInternalOpen] = useState(false);
-    // Tracks which side of the range the calendar is filling. After selecting
-    // a start date, we auto-advance to 'end' so the next click sets the end.
     const [activeInput, setActiveInput] = useState<'start' | 'end'>('start');
     const [focusedDate, setFocusedDate] = useState<Date | null>(null);
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
-    // Date under the pointer while the second endpoint is being picked: the
-    // panel previews the would-be band from it (never committed paint).
+    // The date under the pointer while the end is picked previews the band; it is never committed paint.
     const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
     const startDate = isControlled ? parseLocalDateValue(value?.[0]) : internalStart;
@@ -1221,30 +944,18 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
     const [viewYear, setViewYear] = useState(initialView.getFullYear());
     const [viewMonth, setViewMonth] = useState(initialView.getMonth());
 
-    // Refs
     const triggerRef = useRef<HTMLDivElement>(null);
-    const panelRef = useRef<HTMLDivElement>(null);
     const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
-    // The panel carries both this engine's measuring ref and the kernel's
-    // containment element.
-    const setPanelNode = useCallback((node: HTMLDivElement | null) => {
-      panelRef.current = node;
-      setPanelEl(node);
-    }, []);
-    // See DatePickerBase: the portaled calendar needs the anchor as state so
-    // the scope snapshot re-resolves once the trigger lands. The callback must
-    // be stable -- an inline ref arrow is re-created every render, so React
-    // would detach (null) and re-attach it each commit and the setState would
-    // loop.
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const startField = useInteractionState({ disabled });
+    const endField = useInteractionState({ disabled });
+    // A stable callback: an inline ref arrow would detach and re-attach every commit and loop the setState.
     const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
       (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       setAnchorEl(node);
       if (typeof ref === 'function') ref(node);
       else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
     }, [ref]);
-
-    const popPos = usePopoverPosition(triggerRef, isOpen, placement, panelRef);
 
     const setOpen = useCallback(
       (next: boolean) => {
@@ -1254,8 +965,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       [isOpenControlled, onOpenChange],
     );
 
-    // One overlay contract (single-picker rationale above). Dismissal returns
-    // focus to the range input currently being filled.
+    // Dismissal returns focus to the range input currently being filled.
     const dismissPanel = useCallback(() => {
       setOpen(false);
       triggerRef.current
@@ -1268,7 +978,9 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       open: isOpen,
       anchor: anchorEl,
       panel: panelEl,
-      surface: 'viewport',
+      placement: OVERLAY_PLACEMENT[placement],
+      offset: 4,
+      flip: true,
       modal: true,
       lockScroll: false,
       restoreFocus: false,
@@ -1276,7 +988,6 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       dismissOnOutsidePointer: true,
     });
 
-    // Emit change
     const emitChange = useCallback(
       (s: Date | null, e: Date | null) => {
         const sStr = formatDisplay(s, format, picker, showTime);
@@ -1286,8 +997,6 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       [format, picker, showTime, onChange],
     );
 
-    // Range selection follows a ping-pong pattern: start -> end -> close.
-    // The calendar stays open between selections so users see the range highlight.
     const handleDateSelect = useCallback(
       (date: Date) => {
         if (activeInput === 'start') {
@@ -1298,26 +1007,20 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           if (!isControlled) setInternalEnd(date);
           setActiveInput('start');
           emitChange(startDate, date);
-          // Close after both ends are selected (unless time picker keeps it open)
           if (!showTime) {
             setOpen(false);
-            // Focus return (APG): the panel unmounts with the clicked cell's
-            // focus inside; the range input just filled owns the return
-            // focus (the Escape path does the same for the active input).
+            // The panel unmounts with the clicked cell's focus inside; the filled end input takes it.
             triggerRef.current
               ?.querySelector<HTMLElement>("[data-range-input='end']")
               ?.focus();
           }
         }
         setFocusedDate(null);
-        // A committed click ends the hover preview cycle (the next preview
-        // starts from the pointer's next cell entry).
         setHoveredDate(null);
       },
       [activeInput, isControlled, endDate, startDate, showTime, emitChange, setOpen],
     );
 
-    // Today
     const handleTodayClick = useCallback(() => {
       const now = new Date();
       handleDateSelect(now);
@@ -1325,7 +1028,6 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       setViewMonth(now.getMonth());
     }, [handleDateSelect]);
 
-    // Clear
     const handleClear = useCallback(
       (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -1340,37 +1042,32 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
 
     const startText = formatDisplay(startDate, format, picker, showTime);
     const endText = formatDisplay(endDate, format, picker, showTime);
-
     const canonicalSize = toCanonicalSize(size) ?? 'md';
-    const rangeSizeStyle = sizeStyleMap[canonicalSize];
-    // box-sizing stays pinned inline (React does not inherit it into the
-    // input from the skin's border-box reset in every artifact); width and
-    // cursor are skin-owned (`inline-size: 100%` / `cursor: pointer` on
-    // `[data-part='trigger-input']`).
-    const rangeInputBaseStyle: React.CSSProperties = {
-      boxSizing: 'border-box' as const,
-      ...rangeSizeStyle,
-    };
 
     return (
       <>
         <div
           ref={setTriggerRef}
           data-part="root"
-          className={`rottay-datepicker-range rottay-datepicker-range--modern ${className}`}
+          className={`ds-date-picker-range ds-date-picker-range--modern ${className}`}
           style={style}
           id={id}
         >
           <input
             type="text"
             readOnly
-            data-part="trigger-input"
+            {...partAttributes('trigger-input', startField.state)}
+            onPointerEnter={startField.handlers.onPointerEnter}
+            onPointerLeave={startField.handlers.onPointerLeave}
+            onPointerDown={startField.handlers.onPointerDown}
+            onPointerUp={startField.handlers.onPointerUp}
+            onFocus={startField.handlers.onFocus}
+            onBlur={startField.handlers.onBlur}
             data-range-input="start"
             data-status={status ?? 'default'}
             data-size={canonicalSize}
             data-variant={effectiveVariant}
             data-active={(activeInput === 'start' && isOpen) || undefined}
-            style={rangeInputBaseStyle}
             value={startText}
             disabled={disabled}
             placeholder={displayPlaceholder[0]}
@@ -1389,13 +1086,18 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           <input
             type="text"
             readOnly
-            data-part="trigger-input"
+            {...partAttributes('trigger-input', endField.state)}
+            onPointerEnter={endField.handlers.onPointerEnter}
+            onPointerLeave={endField.handlers.onPointerLeave}
+            onPointerDown={endField.handlers.onPointerDown}
+            onPointerUp={endField.handlers.onPointerUp}
+            onFocus={endField.handlers.onFocus}
+            onBlur={endField.handlers.onBlur}
             data-range-input="end"
             data-status={status ?? 'default'}
             data-size={canonicalSize}
             data-variant={effectiveVariant}
             data-active={(activeInput === 'end' && isOpen) || undefined}
-            style={rangeInputBaseStyle}
             value={endText}
             disabled={disabled}
             placeholder={displayPlaceholder[1]}
@@ -1411,68 +1113,55 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             aria-label={displayPlaceholder[1]}
           />
           {allowClear && (startText || endText) && !disabled && (
-            <button
-              type="button"
-              data-part="clear-button"
-              onClick={handleClear}
-              tabIndex={-1}
-              aria-label={t('datepicker.clear_dates')}
-            >
-              {/* Same governed close role as the single picker's clear (the
-                  former '×' text glyph bypassed the icon corpus). */}
+            <ClearAction label={t('datepicker.clear_dates')} onClear={handleClear}>
               <ActionCloseIcon decorative size={12} />
-            </button>
+            </ClearAction>
           )}
         </div>
 
-        {/* Shared overlay substrate -- see DatePickerBase. */}
         {isOpen && (
           <FieldOverlayPanel overlay={overlay}>
-          <div
-            {...overlay.panelProps}
-            ref={setPanelNode}
-            data-placement={placement}
-            style={{
-              position: 'fixed',
-              top: popPos.top,
-              left: popPos.left,
-              ...overlay.panelProps.style,
-            }}
-          >
-            <CalendarPanel
-              selectedDate={activeInput === 'start' ? startDate : endDate}
-              viewYear={viewYear}
-              viewMonth={viewMonth}
-              onViewChange={(y, m) => {
-                setViewYear(y);
-                setViewMonth(m);
-              }}
-              onDateSelect={handleDateSelect}
-              disabledDate={disabledDate}
-              picker={picker}
-              showTime={showTime}
-              hours={hours}
-              minutes={minutes}
-              onHoursChange={setHours}
-              onMinutesChange={setMinutes}
-              showToday={showToday}
-              showNow={showNow}
-              onTodayClick={handleTodayClick}
-              renderExtraFooter={renderExtraFooter}
-              cellRender={cellRender}
-              rangeStart={startDate}
-              rangeEnd={endDate}
-              rangePreviewEnd={activeInput === 'end' ? hoveredDate : null}
-              onCellHover={setHoveredDate}
-              focusedDate={focusedDate}
-              onFocusedDateChange={setFocusedDate}
-              onPanelChange={onPanelChange}
-              prevIcon={prevIcon}
-              nextIcon={nextIcon}
-              superPrevIcon={superPrevIcon}
-              superNextIcon={superNextIcon}
-            />
-          </div>
+            <div
+              {...overlay.panelProps}
+              ref={setPanelEl}
+              data-part="popup"
+              data-placement={placement}
+              style={overlay.panelProps.style}
+            >
+              <CalendarPanel
+                selectedDate={activeInput === 'start' ? startDate : endDate}
+                viewYear={viewYear}
+                viewMonth={viewMonth}
+                onViewChange={(y, m) => {
+                  setViewYear(y);
+                  setViewMonth(m);
+                }}
+                onDateSelect={handleDateSelect}
+                disabledDate={disabledDate}
+                picker={picker}
+                showTime={showTime}
+                hours={hours}
+                minutes={minutes}
+                onHoursChange={setHours}
+                onMinutesChange={setMinutes}
+                showToday={showToday}
+                showNow={showNow}
+                onTodayClick={handleTodayClick}
+                renderExtraFooter={renderExtraFooter}
+                cellRender={cellRender}
+                rangeStart={startDate}
+                rangeEnd={endDate}
+                rangePreviewEnd={activeInput === 'end' ? hoveredDate : null}
+                onCellHover={setHoveredDate}
+                focusedDate={focusedDate}
+                onFocusedDateChange={setFocusedDate}
+                onPanelChange={onPanelChange}
+                prevIcon={prevIcon}
+                nextIcon={nextIcon}
+                superPrevIcon={superPrevIcon}
+                superNextIcon={superNextIcon}
+              />
+            </div>
           </FieldOverlayPanel>
         )}
       </>
@@ -1481,10 +1170,6 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
 );
 
 RangePicker.displayName = 'DatePicker.RangePicker.Modern';
-
-// ---------------------------------------------------------------------------
-// Compound export
-// ---------------------------------------------------------------------------
 
 export const DatePicker = Object.assign(DatePickerBase, {
   RangePicker,

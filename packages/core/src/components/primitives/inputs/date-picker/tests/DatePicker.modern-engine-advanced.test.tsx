@@ -137,7 +137,7 @@ describe('DatePicker modern advanced coverage', () => {
       target: { value: '30' },
     });
 
-    const disabledCell = screen.getByRole('gridcell', { name: '2026-03-15' });
+    const disabledCell = screen.getByRole('gridcell', { name: 'Sunday, March 15, 2026' });
     expect(disabledCell).toHaveAttribute('aria-disabled', 'true');
     fireEvent.click(disabledCell);
 
