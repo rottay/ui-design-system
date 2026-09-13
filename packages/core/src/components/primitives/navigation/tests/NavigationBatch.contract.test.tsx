@@ -244,7 +244,7 @@ describe('Navigation-family data-part contract (WO-SKIN-04 checkpoint N)', () =>
     // `Stepper.Step`'s own `data-part="item"` stamp is therefore only
     // reachable when it is rendered standalone, as here -- matching the
     // "compound tested directly" idiom StatusBatch.contract.test.tsx uses
-    // for `Skeleton.Card`/`Progress.Line`.
+    // for `Progress.Line`.
     it('compound form (standalone): Stepper.Step stamps item(data-status/data-active)/icon/label/connector', async () => {
       const { container } = renderWithEngine(
         <>

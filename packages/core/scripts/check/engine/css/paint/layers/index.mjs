@@ -1126,7 +1126,6 @@ const UNLAYERED_HEADER_DEBT = [
   "presentation/components/skin/progress-compounds/index.css",
   "presentation/components/skin/radio-group/index.css",
   "presentation/components/skin/select-compounds/index.css",
-  "presentation/components/skin/skeleton-compounds/index.css",
   "presentation/components/skin/statistic-compounds/index.css",
   "presentation/components/skin/stats-header/index.css",
   "presentation/components/skin/status-filter-pills/index.css",

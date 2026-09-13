@@ -1,0 +1,159 @@
+/**
+ * Anatomy skeleton skin -- engine-agnostic, like the renderer it paints
+ * (`AnatomySkeleton`, no engine switch). Imported `layer(rottay-components)`.
+ *
+ * The source keeps the component's exact geometry, hidden, while one bone per
+ * measured `data-part` paints over it. Bone geometry arrives as the runtime
+ * `--ds-skeleton-bone-*` channels; the role (`frame`, `block`, `line`, `round`)
+ * decides the shape.
+ *
+ * MOTION: bones pulse or shimmer on the foundation `ds-foundation-pulse` /
+ * `ds-foundation-shimmer` keyframes with `--ds-motion-attention` and
+ * `--ds-motion-ease-in-out`; no keyframe is declared for the skeleton. Under
+ * reduced motion the bones hold a static flat surface, not a slower shimmer.
+ *
+ * SPECIFICITY (P-48): fills and radii clear preflight at (0,3,0)+; the frame
+ * paints a border colour, so it reaches (0,4,0) to clear the tenant
+ * `* { border-color }` floor.
+ */
+
+.ds-skeleton-anatomy[data-part='root'] {
+  position: relative;
+}
+
+.ds-skeleton-anatomy[data-part='root'] > [data-part='source'],
+.ds-skeleton-anatomy[data-part='root'] > [data-part='bones'] {
+  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out, var(--ds-motion-ease-standard));
+}
+
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'] > [data-part='source'],
+.ds-skeleton-anatomy[data-part='root'][data-loading='false'] > [data-part='bones'] {
+  opacity: 0;
+}
+
+.ds-skeleton-anatomy[data-part='root'] > [data-part='bones'],
+.ds-skeleton-anatomy[data-part='root'][data-measured='false']::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-measured='false']::after {
+  content: '';
+  border-radius: var(--ds-skeleton-radius, var(--ds-radius-sm));
+}
+
+.ds-skeleton-anatomy[data-part='root'] [data-part='bone'] {
+  position: absolute;
+  inset-block-start: var(--ds-skeleton-bone-y, var(--ds-spacing-0));
+  left: var(--ds-skeleton-bone-x, var(--ds-spacing-0));
+  inline-size: var(--ds-skeleton-bone-width, var(--ds-spacing-0));
+  block-size: var(--ds-skeleton-bone-height, var(--ds-spacing-0));
+  /* The part's own measured corner, else the tenant edge dial. */
+  border-radius: var(--ds-skeleton-bone-radius, calc(6px * var(--ds-radius-scale, 1)));
+}
+
+.ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-bone='line'] {
+  inset-block-start: calc(var(--ds-skeleton-bone-y, 0px) + var(--ds-skeleton-bone-height, 0px) * 0.2);
+  block-size: calc(var(--ds-skeleton-bone-height, 0px) * 0.6);
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
+}
+
+.ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-bone='round'] {
+  inline-size: min(var(--ds-skeleton-bone-width, 0px), var(--ds-skeleton-bone-height, 0px));
+  block-size: min(var(--ds-skeleton-bone-width, 0px), var(--ds-skeleton-bone-height, 0px));
+  border-radius: 50%;
+}
+
+.ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-part='bone'][data-bone='frame'] {
+  border: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+
+/* ---- flat fill ---- */
+.ds-skeleton-anatomy[data-part='root'] [data-part='bone']:not([data-bone='frame']),
+.ds-skeleton-anatomy[data-part='root'][data-measured='false']::after {
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+  );
+}
+
+/* ---- pulse: opacity over the flat fill ---- */
+.ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+.ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after {
+  animation: ds-foundation-pulse calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite;
+}
+
+/* ---- shimmer: the sweeping gradient ---- */
+.ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+.ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+  background: var(
+    --ds-skeleton-wave-gradient,
+    linear-gradient(
+      90deg,
+      var(--ds-material-panel-background, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))) 25%,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) 8%,
+        var(--ds-material-card-background, var(--ds-surface-card-bg, var(--ds-surface-card)))
+      ) 50%,
+      var(--ds-material-panel-background, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))) 75%
+    )
+  );
+  background-size: 200% 100%;
+  animation: ds-foundation-shimmer calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite;
+}
+
+/* ---- RTL: the sweep runs against the reading direction by default ---- */
+:dir(rtl) .ds-skeleton-anatomy[data-part='root'] [data-part='bone'],
+.ds-skeleton-anatomy[data-part='root'] [data-part='bone']:dir(rtl) {
+  animation-direction: reverse;
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. The flat fill makes the
+   collapsed frame a static surface, not a paused sweep. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-skeleton-anatomy[data-part='root'] > [data-part='source'],
+  .ds-skeleton-anatomy[data-part='root'] > [data-part='bones'],
+  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
+  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
+  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+    background: var(
+      --ds-skeleton-bg,
+      var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+    );
+  }
+}
+
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+  );
+}
+
+/* ---- forced colors: GrayText keeps a visible silhouette ---- */
+@media (forced-colors: active) {
+  .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-part='root'][data-measured='false']::after,
+  html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-part='bone']:not([data-bone='frame']),
+  html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-part='root'][data-measured='false']::after {
+    background: GrayText;
+  }
+  .ds-skeleton-anatomy[data-part='root'] [data-part='bone'][data-part='bone'][data-bone='frame'] {
+    border-color: GrayText;
+  }
+}

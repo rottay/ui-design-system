@@ -67,7 +67,7 @@ describe('modern locale switcher -- virtual focus is announced from the trigger'
 });
 
 describe('modern locale switcher -- loading is non-operable and announced', () => {
-  it('replaces the trigger with a skeleton, announces busy, and exposes no control', () => {
+  it('replaces the trigger with its anatomy skeleton, announces busy, and exposes no control', () => {
     const onChange = vi.fn();
     const { container } = renderWithEngine(
       <ModernLocaleSwitcher locale="en" onChange={onChange} locales={DEFAULT_LOCALES} loading />,
@@ -77,8 +77,13 @@ describe('modern locale switcher -- loading is non-operable and announced', () =
     const root = container.querySelector("[data-part='root']");
     expect(root?.getAttribute('aria-busy')).toBe('true');
 
-    expect(screen.queryByTestId('locale-switcher-trigger')).toBeNull();
-    expect(root?.querySelector('.rottay-skeleton-button')).toBeTruthy();
+    const skeleton = root?.querySelector('.ds-skeleton-anatomy');
+    expect(skeleton).toBeTruthy();
+    const source = skeleton?.querySelector("[data-part='source']");
+    expect(source?.getAttribute('aria-hidden')).toBe('true');
+    expect(source?.hasAttribute('inert')).toBe(true);
+    expect(source?.contains(screen.getByTestId('locale-switcher-trigger'))).toBe(true);
+    expect(skeleton?.querySelector("[data-part='bone'][data-source-part='trigger']")).toBeTruthy();
     expect(screen.queryByRole('combobox')).toBeNull();
     expect(screen.queryByRole('button')).toBeNull();
     expect(screen.queryByRole('listbox')).toBeNull();
@@ -103,7 +108,8 @@ describe('modern locale switcher -- loading is non-operable and announced', () =
     );
 
     expect(screen.queryByTestId('locale-switcher-menu')).toBeNull();
-    expect(screen.queryByTestId('locale-switcher-trigger')).toBeNull();
+    expect(screen.getByTestId('locale-switcher-trigger').closest("[data-part='source'][inert]")).toBeTruthy();
+    expect(screen.queryByRole('combobox')).toBeNull();
   });
 });
 

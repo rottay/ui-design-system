@@ -2,15 +2,14 @@
 
 /**
  * @fileoverview Skeleton - placeholder loading indicators that mimic content shape.
- * Compound sub-components: Avatar, Text, Button, Card, ListItem, Table, Form, Paragraph.
+ * `AnatomySkeleton` builds a component's loading state from its `data-part` anatomy.
  * Animation defaults resolve from the tenant personality tokens when available.
  * Multi-engine: Classic (Ant Design), Modern (token skin), Rustic (Vanilla).
  *
  * @example
  * ```tsx
  * <Skeleton active avatar paragraph={{ rows: 3 }} title />
- * <Skeleton.Card />
- * <Skeleton.Table rows={5} columns={4} />
+ * <AnatomySkeleton loading={isLoading}><Card title={title} /></AnatomySkeleton>
  * ```
  *
  * @module Skeleton
@@ -26,17 +25,6 @@ import {
   resolveSkeletonPersonalityDefaults,
 } from '@/foundation/tokens/ts/runtime/personality';
 import type { SkeletonProps } from './contracts';
-import {
-  SkeletonAvatar,
-  SkeletonText,
-  SkeletonButton,
-  SkeletonCard,
-  SkeletonListItem,
-  SkeletonTable,
-  SkeletonForm,
-  SkeletonParagraph,
-  SkeletonTransition,
-} from './compound';
 
 export {
   type SkeletonProps,
@@ -45,9 +33,11 @@ export {
   SKELETON_DEFAULTS,
 } from './contracts';
 
-export { SkeletonAvatar, SkeletonText, SkeletonButton, SkeletonCard, SkeletonListItem, SkeletonTable, SkeletonForm, SkeletonParagraph, SkeletonTransition };
-export type { SkeletonAvatarProps, SkeletonTextProps, SkeletonButtonProps } from './compound';
-export type { SkeletonCardProps, SkeletonListItemProps, SkeletonTableProps, SkeletonFormProps, SkeletonParagraphProps, SkeletonTransitionProps } from './compound';
+export {
+  AnatomySkeleton,
+  type AnatomySkeletonProps,
+  type SkeletonPartRole,
+} from './runtime/anatomy-renderer';
 
 // Engine-switchable base -- not exported directly because SkeletonComponent
 // wraps it to inject personality-aware animation defaults.
@@ -83,30 +73,7 @@ const SkeletonComponent = forwardRef<any, SkeletonProps>((props, ref) => {
 SkeletonComponent.displayName = 'Skeleton';
 
 /**
- * Skeleton component with personality-aware defaults and compound sub-components.
+ * Skeleton component with personality-aware defaults.
  * Variants: text, circular, rectangular, rounded. Animations: pulse, wave.
  */
-export const Skeleton = Object.assign(
-  SkeletonComponent,
-  // Attach compound sub-components for shape-specific placeholders
-  {
-    /** Circular/square placeholder for avatar images. */
-    Avatar: SkeletonAvatar,
-    /** Multi-line text placeholder. */
-    Text: SkeletonText,
-    /** Button-shaped placeholder. */
-    Button: SkeletonButton,
-    /** Card with optional image area and text lines. */
-    Card: SkeletonCard,
-    /** List row with optional avatar and text lines. */
-    ListItem: SkeletonListItem,
-    /** Table grid with configurable rows and columns. */
-    Table: SkeletonTable,
-    /** Form layout with label + input pairs. */
-    Form: SkeletonForm,
-    /** Dense body-copy placeholder with variable last-line width. */
-    Paragraph: SkeletonParagraph,
-    /** Opacity-only crossfade between a skeleton and its real content. */
-    Transition: SkeletonTransition,
-  }
-);
+export const Skeleton = SkeletonComponent;

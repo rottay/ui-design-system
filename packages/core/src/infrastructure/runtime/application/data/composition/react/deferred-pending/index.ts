@@ -16,7 +16,7 @@
  * @example
  * ```tsx
  * const { showSpinner, showSkeleton } = useDeferredPending(isPending);
- * if (showSkeleton) return <Skeleton.Table rows={5} />;
+ * if (showSkeleton) return <AnatomySkeleton><Table columns={columns} dataSource={[]} /></AnatomySkeleton>;
  * return <Button pending={showSpinner}>Save</Button>;
  * ```
  *

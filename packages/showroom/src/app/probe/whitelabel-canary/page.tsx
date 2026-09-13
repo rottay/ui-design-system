@@ -4,6 +4,7 @@ import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import {
+  AnatomySkeleton,
   Badge,
   Box,
   Button,
@@ -20,7 +21,6 @@ import {
   Progress,
   Select,
   Sheet,
-  Skeleton,
   Spinner,
   Stack,
   Tabs,
@@ -790,7 +790,7 @@ function WidgetsSection({ copy }: { copy: CanaryCopy }) {
 }
 
 // ---------------------------------------------------------------------------
-// wc-states — Spinner (2 sizes) + Skeleton table
+// wc-states — Spinner (2 sizes) + anatomy-derived Card skeleton
 // ---------------------------------------------------------------------------
 
 function StatesSection({ copy }: { copy: CanaryCopy }) {
@@ -804,7 +804,9 @@ function StatesSection({ copy }: { copy: CanaryCopy }) {
           <Spinner size="md" label={copy.spinnerSync} />
           <Spinner size="xl" label={copy.spinnerLoading} />
         </Stack>
-        <Skeleton.Table rows={4} columns={5} />
+        <AnatomySkeleton>
+          <Card title={copy.statesCaption} description={copy.spinnerLoading} />
+        </AnatomySkeleton>
       </Stack>
     </Box>
   );

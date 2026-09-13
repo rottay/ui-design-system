@@ -52,51 +52,52 @@ describe('canon skeleton keyframes', () => {
   });
 });
 
-describe('modern skeleton canon animation (DaisyUI dropped)', () => {
-  it('drives animation through --ds-skeleton-animation-name with a canon fallback', () => {
-    expect(modernSkin).toContain('var(--ds-skeleton-animation-name, ds-skeleton-shimmer)');
+describe('modern skeleton animation rides the motion vocabulary (DaisyUI dropped)', () => {
+  it('runs the foundation keyframes on --ds-motion-* and names no skeleton keyframe', () => {
+    const src = stripBlockComments(modernSkin);
+    expect(src).toContain('ds-foundation-pulse calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite');
+    expect(src).toContain('ds-foundation-shimmer calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite');
+    for (const name of CANON) expect(src).not.toMatch(new RegExp(`${name}(?![\\w-])`));
+    expect(src).not.toContain('--ds-skeleton-animation-');
   });
 
   it('no bare DaisyUI `.skeleton` selector remains in the modern skin', () => {
-    // The scope classes are `.rottay-skeleton` / `.rottay-skeleton-wrapper`; a
-    // bare `.skeleton` selector would mean the engine still leans on DaisyUI.
     expect(stripBlockComments(modernSkin)).not.toMatch(/\.skeleton[\s.,{[]/);
   });
 });
 
 describe('modern skeleton honors skeletonStyle across the resolved animation', () => {
-  it('pulse -> flat opacity pulse (ds-skeleton-pulse)', () => {
+  it('pulse -> flat opacity pulse', () => {
     const { container } = render(<ModernSkeleton variant="rectangular" animation="pulse" active />);
     const root = container.querySelector('.rottay-skeleton[data-part="root"]') as HTMLElement;
     expect(root).toBeTruthy();
     expect(root.getAttribute('data-animation')).toBe('pulse');
-    expect(root.style.getPropertyValue('--ds-skeleton-animation-name')).toBe('ds-skeleton-pulse');
   });
 
-  it('wave -> premium sweeping gradient (ds-skeleton-shimmer)', () => {
+  it('wave -> sweeping gradient shimmer', () => {
     const { container } = render(<ModernSkeleton variant="rectangular" animation="wave" active />);
     const root = container.querySelector('.rottay-skeleton[data-part="root"]') as HTMLElement;
     expect(root.getAttribute('data-animation')).toBe('shimmer');
-    expect(root.style.getPropertyValue('--ds-skeleton-animation-name')).toBe('ds-skeleton-shimmer');
   });
 
-  it('inactive -> static (animation-name none, no data-animation)', () => {
+  it('inactive -> static (no data-animation)', () => {
     const { container } = render(<ModernSkeleton variant="rectangular" animation="wave" active={false} />);
     const root = container.querySelector('.rottay-skeleton[data-part="root"]') as HTMLElement;
     expect(root.getAttribute('data-animation')).toBeNull();
-    expect(root.style.getPropertyValue('--ds-skeleton-animation-name')).toBe('none');
+    expect(root.getAttribute('style') ?? '').not.toContain('animation');
   });
 });
 
 describe('skeleton is static under reduced motion', () => {
-  it('relies on the global wildcard guard (0.01ms, single iteration) — no per-skeleton rule needed', () => {
-    // The canon keyframes carry no reduced-motion branch of their own; the
-    // global guard in personality.css zeroes animation-duration and pins the
-    // iteration-count to 1 for every element, so each canon skeleton animation
-    // lands on its final frame instantly instead of looping.
+  it('the modern skin collapses every animated block onto a flat fill', () => {
+    const src = stripBlockComments(modernSkin);
+    const media = /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/.exec(src);
+    expect(media).not.toBeNull();
+    expect(media![1]).toContain(".rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='shimmer']");
+    expect(media![1]).toContain('animation-iteration-count: 1 !important;');
+    expect(media![1]).toMatch(/background: var\(\s*--ds-skeleton-bg/);
+    expect(media![1]).not.toContain('gradient');
+    expect(src).toMatch(/html\[data-ds-motion='reduced'\] \.rottay-skeleton\.rottay-skeleton--modern\[data-part='root'\]\[data-animation='shimmer'\]/);
     expect(personality).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
-    expect(personality).toContain('animation-duration: 0.01ms !important');
-    expect(personality).toContain('animation-iteration-count: 1 !important');
-    expect(keyframes).not.toMatch(/prefers-reduced-motion/);
   });
 });

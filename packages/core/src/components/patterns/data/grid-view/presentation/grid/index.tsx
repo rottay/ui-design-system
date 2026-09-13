@@ -18,7 +18,8 @@ import { Box } from '../../../../../primitives/layout/box';
 import { Checkbox } from '../../../../../primitives/inputs/checkbox';
 import { Flex } from '../../../../../primitives/layout/flex';
 import { Pagination } from '../../../../../primitives/navigation/pagination';
-import { SkeletonCard } from '../../../../../primitives/feedback/skeleton';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
+import { Card } from '../../../../../primitives/display/card';
 import { Stack } from '../../../../../primitives/layout/stack';
 import { Text } from '../../../../../primitives/display/typography/compound/text';
 import type { GridViewProps } from '../../contracts';
@@ -159,7 +160,9 @@ function GridSkeleton({
       style={gridStyle}
     >
       {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
-        <SkeletonCard className="ds-grid-view__skeleton" key={index} lines={3} />
+        <AnatomySkeleton className="ds-grid-view__skeleton" key={index}>
+          <Card title={'\u00a0'} description={'\u00a0'} />
+        </AnatomySkeleton>
       ))}
     </Box>
   );

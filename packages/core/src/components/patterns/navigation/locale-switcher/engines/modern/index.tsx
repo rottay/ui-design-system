@@ -29,7 +29,7 @@ function isRtlContext(el: HTMLElement): boolean {
 }
 import { DEFAULT_LOCALES } from '../../runtime/default-locales';
 import { StatusVerifiedIcon } from '@/graphics/icons/semantic/generated/roles/status-verified';
-import { SkeletonButton } from '../../../../../primitives/feedback/skeleton';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
@@ -233,6 +233,49 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
   /*  Render — geometry and paint live in the modern skin, keyed on    */
   /*  data-part/data-size; nothing structural stays inline.            */
   /* ---------------------------------------------------------------- */
+  const trigger = (
+    <button
+      type="button"
+      data-part="trigger"
+      data-size={size}
+      onClick={() => {
+        setOpen(prev => !prev);
+        if (!open) setFocusIndex(-1);
+      }}
+      // APG select-only combobox: DOM focus never leaves this trigger, so the
+      // active option must be pointed at from here — on the panel it is inert.
+      role="combobox"
+      aria-haspopup="listbox"
+      aria-expanded={isOpen}
+      aria-controls={isOpen ? listboxId : undefined}
+      aria-activedescendant={isOpen ? activeDescendantId : undefined}
+      aria-label={tOr('locale_switcher.trigger_aria', 'Language: {locale}', {
+        locale: activeLocale?.label ?? locale,
+      })}
+      data-testid="locale-switcher-trigger"
+    >
+      {showFlag && activeLocale?.flag && (
+        <span aria-hidden="true" data-part="flag">
+          {activeLocale.flag}
+        </span>
+      )}
+      {showLabel ? (
+        /* Autoglottonym: never translated; dir=auto keeps a RTL locale name
+           (e.g. العربية) honest inside a LTR chrome, and lang lets screen
+           readers pronounce it in its own language. */
+        <span data-part="trigger-label" lang={activeLocale?.code ?? locale} dir="auto">
+          {activeLocale?.label ?? locale}
+        </span>
+      ) : (
+        /* The compact trigger still carries text: `flag` is optional on
+           LocaleDef and is aria-hidden, so the label-less variant would
+           otherwise render as a bare chevron. */
+        <span data-part="trigger-code">{activeLocale?.code ?? locale}</span>
+      )}
+      <NavigationDownIcon size={12} decorative />
+    </button>
+  );
+
   return (
     <div
       ref={containerRef}
@@ -243,50 +286,7 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
       style={style}
       onKeyDown={handleKeyDown}
     >
-      {isLoading ? (
-        <SkeletonButton size={size} />
-      ) : (
-      <button
-        type="button"
-        data-part="trigger"
-        data-size={size}
-        onClick={() => {
-          setOpen(prev => !prev);
-          if (!open) setFocusIndex(-1);
-        }}
-        // APG select-only combobox: DOM focus never leaves this trigger, so the
-        // active option must be pointed at from here — on the panel it is inert.
-        role="combobox"
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        aria-controls={isOpen ? listboxId : undefined}
-        aria-activedescendant={isOpen ? activeDescendantId : undefined}
-        aria-label={tOr('locale_switcher.trigger_aria', 'Language: {locale}', {
-          locale: activeLocale?.label ?? locale,
-        })}
-        data-testid="locale-switcher-trigger"
-      >
-        {showFlag && activeLocale?.flag && (
-          <span aria-hidden="true" data-part="flag">
-            {activeLocale.flag}
-          </span>
-        )}
-        {showLabel ? (
-          /* Autoglottonym: never translated; dir=auto keeps a RTL locale name
-             (e.g. العربية) honest inside a LTR chrome, and lang lets screen
-             readers pronounce it in its own language. */
-          <span data-part="trigger-label" lang={activeLocale?.code ?? locale} dir="auto">
-            {activeLocale?.label ?? locale}
-          </span>
-        ) : (
-          /* The compact trigger still carries text: `flag` is optional on
-             LocaleDef and is aria-hidden, so the label-less variant would
-             otherwise render as a bare chevron. */
-          <span data-part="trigger-code">{activeLocale?.code ?? locale}</span>
-        )}
-        <NavigationDownIcon size={12} decorative />
-      </button>
-      )}
+      {isLoading ? <AnatomySkeleton>{trigger}</AnatomySkeleton> : trigger}
 
       {/* Dropdown menu */}
       {isOpen && (

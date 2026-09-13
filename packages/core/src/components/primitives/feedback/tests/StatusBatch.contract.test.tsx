@@ -4,7 +4,7 @@ import { waitFor } from '@testing-library/react';
 
 import { Alert } from '../alert';
 import { Progress } from '../progress';
-import { Skeleton } from '../skeleton';
+import { AnatomySkeleton, Skeleton } from '../skeleton';
 import { Spinner } from '../spinner';
 import { Rate } from '../rate';
 import { renderWithEngine } from '@tests/support/engine';
@@ -187,73 +187,23 @@ describe('Status-family data-part contract (WO-SKIN-03 checkpoint S)', () => {
       },
     );
 
-    it('Avatar compound: stamps root', async () => {
-      const { container } = renderWithEngine(<Skeleton.Avatar />, 'modern');
-      await waitForPart(container, 'root');
-    });
-
-    it('Button compound: stamps root', async () => {
-      const { container } = renderWithEngine(<Skeleton.Button />, 'modern');
-      await waitForPart(container, 'root');
-    });
-
-    it('Text compound: stamps root + one line per configured line', async () => {
-      const { container } = renderWithEngine(<Skeleton.Text lines={4} />, 'modern');
-      await waitForPart(container, 'root');
-      expect(container.querySelectorAll('[data-part="line"]')).toHaveLength(4);
-    });
-
-    it('Paragraph compound: stamps root + one line per configured line', async () => {
-      const { container } = renderWithEngine(<Skeleton.Paragraph lines={4} />, 'modern');
-      await waitForPart(container, 'root');
-      expect(container.querySelectorAll('[data-part="line"]')).toHaveLength(4);
-    });
-
-    it('Card compound: stamps root/image/title/line', async () => {
-      const { container } = renderWithEngine(<Skeleton.Card hasImage lines={3} />, 'modern');
-      await waitForPart(container, 'root');
-      expect(container.querySelectorAll('[data-part="image"]')).toHaveLength(1);
-      expect(container.querySelectorAll('[data-part="title"]')).toHaveLength(1);
-      expect(container.querySelectorAll('[data-part="line"]')).toHaveLength(3);
-    });
-
-    it('Card compound: omits the image part when hasImage is false', async () => {
-      const { container } = renderWithEngine(<Skeleton.Card lines={2} />, 'modern');
-      await waitForPart(container, 'root');
-      expect(container.querySelectorAll('[data-part="image"]')).toHaveLength(0);
-    });
-
-    it('ListItem compound: stamps root/avatar/line', async () => {
-      const { container } = renderWithEngine(<Skeleton.ListItem hasAvatar lines={3} />, 'modern');
-      await waitForPart(container, 'root');
-      expect(container.querySelectorAll('[data-part="avatar"]')).toHaveLength(1);
-      expect(container.querySelectorAll('[data-part="line"]')).toHaveLength(3);
-    });
-
-    it('Form compound: stamps root/field/label/input/action', async () => {
-      const { container } = renderWithEngine(<Skeleton.Form fields={3} />, 'modern');
-      await waitForPart(container, 'root');
-      expect(container.querySelectorAll('[data-part="field"]')).toHaveLength(3);
-      expect(container.querySelectorAll('[data-part="label"]')).toHaveLength(3);
-      expect(container.querySelectorAll('[data-part="input"]')).toHaveLength(3);
-      expect(container.querySelectorAll('[data-part="action"]')).toHaveLength(1);
-    });
-
-    it('Table compound: stamps root/row(data-row=header|body)/cell', async () => {
-      const { container } = renderWithEngine(<Skeleton.Table rows={3} columns={4} />, 'modern');
-      await waitForPart(container, 'root');
-
-      const rows = container.querySelectorAll('[data-part="row"]');
-      expect(rows).toHaveLength(4); // 1 header row + 3 body rows
-
-      const headerRows = container.querySelectorAll('[data-part="row"][data-row="header"]');
-      expect(headerRows).toHaveLength(1);
-
-      const bodyRows = container.querySelectorAll('[data-part="row"][data-row="body"]');
-      expect(bodyRows).toHaveLength(3);
-
-      // (1 header row + 3 body rows) * 4 columns
-      expect(container.querySelectorAll('[data-part="cell"]')).toHaveLength(16);
+    it('AnatomySkeleton: stamps root/source/bones and one bone per stamped part', async () => {
+      const { container } = renderWithEngine(
+        <AnatomySkeleton>
+          <div data-part="root">
+            <span data-part="icon" />
+            <span data-part="title">Title</span>
+          </div>
+        </AnatomySkeleton>,
+        'modern',
+      );
+      await waitForPart(container, 'source');
+      const bones = Array.from(container.querySelectorAll<HTMLElement>('[data-part="bone"]'));
+      expect(bones.map((bone) => `${bone.dataset.sourcePart}:${bone.dataset.bone}`)).toEqual([
+        'root:frame',
+        'icon:round',
+        'title:line',
+      ]);
     });
   });
 });
