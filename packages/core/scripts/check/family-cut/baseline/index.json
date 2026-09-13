@@ -94,7 +94,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 101,
+        "channelsRead": 103,
         "classTokens": 2,
         "partsStamped": 4,
         "partsConsumed": 3
@@ -108,7 +108,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- option geometry, frame, depth, hover and selected weight by derivation/chrome/segmented, structural constants by presentation/components/segmented; root hover decided by the interaction kernel; one ds-segmented vocabulary. partsStampedNotConsumed=1 is `root`, the default part a composite may rename (P-79), so the skin anchors on role=radiogroup and the part is read by the anatomy skeleton renderer instead; held for adjudication rather than fabricating a reader."
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- option geometry, frame, depth, hover and selected weight by derivation/chrome/segmented, structural constants by presentation/components/segmented; root hover decided by the interaction kernel; one ds-segmented vocabulary. partsStampedNotConsumed=1 is `root`, the default part a composite may rename (P-79), so the skin anchors on role=radiogroup and the part is read by the anatomy skeleton renderer instead; held for adjudication rather than fabricating a reader. WO-EVI-05: channelsRead 101 -> 103 is the dial-scaled `--ds-motion-feedback` and `--ds-motion-reveal` the transitions now read, each with its raw rung as fallback; readWithoutProducer stays 0."
     }
   }
 }

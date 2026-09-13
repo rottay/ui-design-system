@@ -55,7 +55,13 @@ import {
   familyElements,
   isSingleElement,
   VACUITY_PERMITTED_CONTROLS,
+  NEGATIVE_CONTROLS,
+  STATE_VARIANTS,
   effectiveMapDifference,
+  evaluatePilot,
+  pairScenarios,
+  pilotReadings,
+  sceneHtml,
   markVacuousControls,
   namedCells,
   run,
@@ -63,7 +69,7 @@ import {
   stripColour,
   witnessReading,
 } from '../index.mjs';
-import { AXIS_IDS } from '../../population/index.mjs';
+import { AXIS_IDS, AXES, axisControls, groupControls } from '../../population/index.mjs';
 import { resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 
@@ -472,22 +478,21 @@ describe('axis-difference — a negative control is only evidence if its decisio
     assert.deepEqual(reading.movedFamilies, [{ family: 'probe', property: 'box-shadow' }]);
   });
 
-  it('the limits that make it vacuous are measurements, not adjectives', () => {
+  it('the limits that bound it are measurements, not adjectives', () => {
     const limits = STATES_AXIS_LIMITS;
     assert.equal(limits.channels.total, 28, 'the two states rows produce 28 channels');
-    assert.ok(limits.channels.withoutReaders > 0 && limits.channels.withoutReaders < limits.channels.total);
+    assert.equal(
+      limits.channels.withoutReaders + limits.channels.paintingColourOnly + limits.channels.paintingInsideVocabulary,
+      limits.channels.total,
+      'every states channel is accounted for',
+    );
     assert.equal(
       limits.declarations.pseudoClassOnly + limits.declarations.byDataState + limits.declarations.byChannelOnly,
       limits.declarations.population,
       'the three declaration kinds must partition the states population',
     );
-    assert.equal(
-      limits.focusReads.focusGuarded + limits.focusReads.keyframeStop,
-      limits.focusReads.rules,
-      'every box-shadow read of a focus channel is accounted for',
-    );
-    assert.ok(!limits.stampedStates.includes('focused'), 'the limit is that focused is never stamped');
-    assert.ok(limits.unreachable.length >= 4, 'each limit is written out, not summarised to a flag');
+    assert.deepEqual(limits.stampedStates, [...STATE_VARIANTS]);
+    assert.ok(limits.unreachable.length >= 3, 'each limit is written out, not summarised to a flag');
   });
 });
 
@@ -720,6 +725,175 @@ describe('axis-difference drills — every verdict is reachable', () => {
   });
 });
 
+
+/** Two complete documents that differ on every kit group, the shape the pilot pair has. */
+const PAIR_A = Object.freeze({
+  'palette.seeds': { primary: '#2F5BE8' },
+  'palette.contrast-posture': 'high',
+  'typography.scale': 0.94,
+  'shape.radius-scale': 0.8,
+  'density.mode': 'compact',
+  'surfaces.elevation-posture': 'soft',
+  'states.emphasis': 'strong',
+  'states.focus-style': 'ring',
+  'motion.character': 'mechanical',
+  'chrome.anatomy': { table: 'zebra' },
+});
+const PAIR_B = Object.freeze({
+  'palette.seeds': { primary: '#7A4BC4' },
+  'palette.contrast-posture': 'soft',
+  'typography.scale': 1,
+  'shape.radius-scale': 1.2,
+  'density.mode': 'normal',
+  'surfaces.elevation-posture': 'elevated',
+  'states.emphasis': 'medium',
+  'states.focus-style': 'glow',
+  'motion.character': 'playful',
+  'chrome.anatomy': { table: 'open' },
+});
+
+const PILOT = Object.freeze({
+  catalogRevision: 'rev',
+  families: { button: [...AXIS_IDS], checkbox: ['shape', 'states'] },
+  denominators: { shape: 2, typography: 1, rhythm: 1, depth: 1, states: 2, motion: 1 },
+});
+
+/** A pilot run in which every pilot family moved on every positive and both controls stand. */
+const pilotRun = (over = {}) => {
+  const cells = [
+    ...AXIS_IDS.map((axis) => cell({
+      scenario: axis, axis, denominator: 2, moved: 2, percent: 100, movedIds: ['button', 'checkbox'],
+    })),
+    ...AXIS_IDS.map((axis) => paletteControl({ axis, denominator: 2 })),
+    ...['shape', 'typography'].map((axis) => control({
+      axis, denominator: 2, witness: witness({ moved: 2, denominator: 2 }),
+    })),
+  ];
+  return result(cells, {
+    familiesFiltered: true,
+    revision: { digest: 'rev' },
+    effectiveFamilies: Object.fromEntries(AXIS_IDS.map((axis) => [axis, ['button', 'checkbox']])),
+    ...over,
+  });
+};
+
+describe('axis-difference — the pilot pair is cut one group at a time', () => {
+  const scenarios = pairScenarios({ base: PAIR_A, other: PAIR_B });
+
+  it('one positive per axis and both shipped negative controls, with their witnesses', () => {
+    assert.deepEqual(scenarios.filter((entry) => entry.kind === 'positive').map((entry) => entry.axis), [...AXIS_IDS]);
+    assert.deepEqual(scenarios.filter((entry) => entry.kind === 'negative').map((entry) => entry.id), [...NEGATIVE_CONTROLS]);
+    const emphasis = scenarios.find((entry) => entry.id === 'states-emphasis-only');
+    assert.deepEqual(emphasis.witness, SCENARIOS.find((entry) => entry.id === 'states-emphasis-only').witness);
+    assert.deepEqual(emphasis.expectZeroOn, ['shape', 'typography']);
+    const palette = scenarios.find((entry) => entry.id === 'palette-only');
+    assert.equal(palette.witness.kind, 'effective-map');
+    assert.deepEqual(palette.expectZeroOn, [...AXIS_IDS]);
+  });
+
+  it('every scenario keeps the base and differs from it in exactly the rows it names', () => {
+    const controls = axisControls();
+    const rowsOf = (entry) => (entry.kind === 'positive'
+      ? controls.get(entry.axis)
+      : entry.id === 'palette-only' ? groupControls('color') : ['states.emphasis']);
+    for (const entry of scenarios) {
+      assert.equal(entry.a, PAIR_A);
+      const differing = Object.keys({ ...entry.a, ...entry.b })
+        .filter((row) => JSON.stringify(entry.a[row]) !== JSON.stringify(entry.b[row]));
+      assert.ok(differing.length > 0, `${entry.id}: moves nothing`);
+      for (const row of differing) assert.ok(rowsOf(entry).includes(row), `${entry.id}: ${row} leaked into the cut`);
+    }
+    assert.deepEqual(scenarios.find((entry) => entry.id === 'states-emphasis-only').b['states.focus-style'], 'ring');
+  });
+
+  it('MUTANT: a pair that agrees on a whole group is refused, never published as a zero', () => {
+    assert.throws(
+      () => pairScenarios({ base: PAIR_A, other: { ...PAIR_B, 'motion.character': 'mechanical' } }),
+      /agrees on every row of motion/u,
+    );
+  });
+});
+
+describe('axis-difference — the pilot verdict', () => {
+  it('a run where every pilot family moved and both controls stand is green', () => {
+    assert.deepEqual(evaluatePilot(pilotRun(), PILOT), []);
+  });
+
+  it('publishes pilot readings over the pilot denominator, labelled as the pilot', () => {
+    const readings = pilotReadings(pilotRun(), PILOT);
+    assert.ok(readings.every((entry) => entry.scope === 'pilot'));
+    assert.deepEqual(readings.find((entry) => entry.axis === 'states'), {
+      scope: 'pilot', vertical: 'bithire', theme: 'light', axis: 'states', moved: 2, denominator: 2,
+    });
+  });
+
+  it('MUTANT: a pilot family that does not move on an axis it declares is named', () => {
+    const run = pilotRun();
+    run.cells.find((entry) => entry.axis === 'depth' && entry.kind === 'positive').movedIds = ['checkbox'];
+    assert.ok(evaluatePilot(run, PILOT).some((line) => line === 'button: declares depth and did not move on it in bithire/light'));
+  });
+
+  it('MUTANT: a pilot family outside the measured denominator cannot pass by absence', () => {
+    const run = pilotRun();
+    run.effectiveFamilies.states = ['button'];
+    assert.ok(evaluatePilot(run, PILOT).some((line) => line.startsWith('checkbox: declares states and is outside')));
+  });
+
+  it('MUTANT: a vacuous control is not credited in the pilot, emphasis included', () => {
+    const run = pilotRun();
+    for (const entry of run.cells.filter((item) => item.scenario === 'states-emphasis-only')) {
+      entry.witness = witness({ moved: 0 });
+    }
+    markVacuousControls(run.cells);
+    const failures = evaluatePilot(run, PILOT);
+    assert.ok(failures.some((line) => line.startsWith('NEGATIVE CONTROL states-emphasis-only: all 2')));
+    assert.ok(failures.some((line) => line.startsWith('NEGATIVE CONTROL states-emphasis-only bithire/light shape: NON-EVIDENTIAL')));
+  });
+
+  it('MUTANT: a control that was not run at all is named', () => {
+    const run = pilotRun();
+    run.cells = run.cells.filter((entry) => entry.scenario !== 'palette-only');
+    assert.ok(evaluatePilot(run, PILOT).includes('NEGATIVE CONTROL palette-only: not run'));
+  });
+
+  it('MUTANT: a control that moved fails the pilot like it fails the fleet', () => {
+    const run = pilotRun();
+    Object.assign(run.cells.find((entry) => entry.scenario === 'palette-only' && entry.axis === 'rhythm'), {
+      moved: 1, movedFamilies: [{ family: 'button', property: 'padding-top' }],
+    });
+    assert.ok(evaluatePilot(run, PILOT).some((line) => line.startsWith('NEGATIVE CONTROL palette-only moved 1/2 families on rhythm')));
+  });
+
+  it('MUTANT: a run at another catalog revision, or a shrunk pilot denominator, is refused', () => {
+    assert.ok(evaluatePilot(pilotRun({ revision: { digest: 'other' } }), PILOT)
+      .some((line) => line.startsWith('the run measured catalog other')));
+    const shrunk = { ...PILOT, denominators: { ...PILOT.denominators, shape: 1 } };
+    assert.ok(evaluatePilot(pilotRun(), shrunk).includes('shape: pilot denominator 1 != 2 declaring families'));
+  });
+});
+
+describe('axis-difference — a family can be measured on its own anatomy', () => {
+  it('a mount replaces the skin element in the scene, and an unmountable family with a mount is mounted', () => {
+    const elements = new Map([['alert', { classes: ['ds-alert'], attributes: {} }], ['team', null]]);
+    const html = sceneHtml({
+      css: '', vertical: 'bithire', theme: 'light', elements,
+      mounts: { team: { markup: '<section class="ds-team"><b data-part="row"></b></section>' } },
+    });
+    assert.match(html, /<div data-axis-family="alert" class="ds-alert"><\/div>/u);
+    assert.match(html, /<div data-axis-family="team" data-axis-mount="">(<section class="ds-team">)/u);
+  });
+
+  it('the states axis reads the non-chromatic longhands a state paints, under every stamped state', () => {
+    assert.deepEqual([...STATE_VARIANTS], ['hovered', 'pressed', 'selected', 'focus-visible']);
+    for (const property of ['transform', 'opacity', 'outline-width', 'outline-offset']) {
+      assert.ok(AXES.states.computed.includes(property), property);
+    }
+    const before = { base: {}, states: { pressed: { probe: { transform: 'matrix(0.98, 0, 0, 0.98, 0, 0)' } } } };
+    const after = { base: {}, states: { pressed: { probe: { transform: 'matrix(0.96, 0, 0, 0.96, 0, 0)' } } } };
+    assert.equal(differsOnAxis('states', before, after, 'probe'), 'transform');
+  });
+});
+
 describe('axis-difference BROWSER drill — a document does not differ from itself', { skip: browserReason }, () => {
   // Families the full run measured as MOVING on shape, so the positive half of
   // this drill is not silently asserting against a subset that moves nothing.
@@ -779,5 +953,52 @@ describe('axis-difference BROWSER drill — a document does not differ from itse
         && line.includes('NON-EVIDENTIAL')),
       'and the run fails closed rather than publishing a control it no longer has',
     );
+  });
+
+  it('MUTANT: controls that smuggle a shape row and a typography row are caught end to end', async () => {
+    // The shipped controls with one foreign row planted in each second document,
+    // driven through the real compiler, bundle and browser. Red here is the proof
+    // that the controls' green on the real pair is a measurement.
+    const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+    const palette = byId('palette-only');
+    const emphasis = byId('states-emphasis-only');
+    const measurement = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families: [...FAMILIES, 'heading'],
+      scenarios: [
+        byId('states'),
+        { ...palette, b: { ...palette.b, 'shape.radius-scale': 1.15 } },
+        { ...emphasis, b: { ...emphasis.b, 'typography.scale': 1.05 } },
+      ],
+    });
+    const failures = evaluate(measurement, { vacuityPermitted: VACUITY_PERMITTED_CONTROLS });
+    assert.ok(
+      failures.some((line) => line.startsWith('NEGATIVE CONTROL palette-only moved') && line.includes('on shape')),
+      failures.join(' | '),
+    );
+    assert.ok(
+      failures.some((line) => line.startsWith('NEGATIVE CONTROL states-emphasis-only moved') && line.includes('on typography')),
+      failures.join(' | '),
+    );
+  });
+
+  it('a mounted anatomy against itself reads 0 % on every axis, states included', async () => {
+    const shape = SCENARIOS.find((scenario) => scenario.id === 'shape');
+    const markup = '<button type="button" class="ds-button ds-button--modern" data-variant="primary" '
+      + 'data-part="trigger"><span data-part="content"><span data-part="label">Save</span></span></button>';
+    const measurement = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families: ['button'],
+      mounts: { button: { markup } },
+      scenarios: AXIS_IDS.map((axis) => ({ id: `null-${axis}`, kind: 'positive', axis, a: shape.b, b: shape.b })),
+    });
+    assert.deepEqual(measurement.families.mounted, ['button']);
+    assert.equal(measurement.cells.length, AXIS_IDS.length);
+    for (const entry of measurement.cells) {
+      assert.equal(entry.denominator, 1, `${entry.axis}: the mounted family is in the denominator`);
+      assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+    }
   });
 });
