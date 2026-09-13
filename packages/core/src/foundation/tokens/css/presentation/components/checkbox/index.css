@@ -13,26 +13,26 @@
 
   /* XS - Extra Small (14px) */
   --ds-checkbox-xs-size: 0.875rem;         /* 14px */
-  --ds-checkbox-xs-font-size: 0.75rem;     /* 12px */
+  --ds-checkbox-xs-font-size: var(--ds-font-size-xs);
   --ds-checkbox-xs-border-width: 1.5px;
 
   /* SM - Small (16px) */
   --ds-checkbox-sm-size: 1rem;             /* 16px */
-  --ds-checkbox-sm-font-size: 0.8125rem;   /* 13px */
+  --ds-checkbox-sm-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
   --ds-checkbox-sm-border-width: 1.5px;
 
   /* MD - Medium (18px - Default) */
   --ds-checkbox-md-size: 1.125rem;         /* 18px */
-  --ds-checkbox-md-font-size: 0.875rem;    /* 14px */
-  --ds-checkbox-md-border-width: var(--ds-border-width-2, 2px);
+  --ds-checkbox-md-font-size: var(--ds-font-size-sm);
+  --ds-checkbox-md-border-width: var(--ds-border-width-2);
 
   /* LG - Large (20px) */
-  --ds-checkbox-lg-font-size: 1rem;        /* 16px */
-  --ds-checkbox-lg-border-width: var(--ds-border-width-2, 2px);
+  --ds-checkbox-lg-font-size: var(--ds-font-size-base);
+  --ds-checkbox-lg-border-width: var(--ds-border-width-2);
 
   /* XL - Extra Large (24px) */
-  --ds-checkbox-xl-font-size: 1.125rem;    /* 18px */
-  --ds-checkbox-xl-border-width: var(--ds-border-width-2, 2px);
+  --ds-checkbox-xl-font-size: var(--ds-font-size-lg);
+  --ds-checkbox-xl-border-width: var(--ds-border-width-2);
 
   /* Size-agnostic default. The base component rule sizes an unqualified
      checkbox, so it needs a rung to read; this DERIVES from md rather than
@@ -43,11 +43,11 @@
      RADIUS - Checkbox Border Radius
      Multiple radius variants
      ======================================================================== */
-  --ds-checkbox-radius-none: var(--ds-radius-none, 0);
-  --ds-checkbox-radius-sm: 2px;
-  --ds-checkbox-radius-md: 4px;
-  --ds-checkbox-radius-lg: var(--ds-radius-sm, 6px);
-  --ds-checkbox-radius-full: var(--ds-radius-full, 9999px);
+  --ds-checkbox-radius-none: 0;
+  --ds-checkbox-radius-sm: calc(2px * var(--ds-radius-scale, 1));
+  --ds-checkbox-radius-md: calc(4px * var(--ds-radius-scale, 1));
+  --ds-checkbox-radius-lg: var(--ds-radius-sm);
+  --ds-checkbox-radius-full: var(--ds-radius-full);
 
   /* ========================================================================
      COLORS - Checkbox Color Variants
@@ -55,62 +55,69 @@
      ======================================================================== */
 
   /* Default variant (neutral) */
-  --ds-checkbox-default-bg: var(--ds-color-neutral-600, #4b5563);
-  --ds-checkbox-default-border: var(--ds-color-neutral-600, #4b5563);
-  --ds-checkbox-default-check: #ffffff;
+  --ds-checkbox-default-bg: var(--ds-color-neutral-600);
+  --ds-checkbox-default-border: var(--ds-color-neutral-600);
+  --ds-checkbox-default-check: var(--ds-color-text-on-primary);
 
   /* Primary variant */
-  --ds-checkbox-primary-bg: var(--ds-color-primary, #1890ff);
-  --ds-checkbox-primary-border: var(--ds-color-primary, #1890ff);
-  --ds-checkbox-primary-check: #ffffff;
+  --ds-checkbox-primary-bg: var(--ds-color-primary);
+  --ds-checkbox-primary-border: var(--ds-color-primary);
+  --ds-checkbox-primary-check: var(--ds-color-text-on-primary);
 
   /* Secondary variant */
-  --ds-checkbox-secondary-bg: var(--ds-color-secondary, #6b7280);
-  --ds-checkbox-secondary-border: var(--ds-color-secondary, #6b7280);
-  --ds-checkbox-secondary-check: #ffffff;
+  --ds-checkbox-secondary-bg: var(--ds-color-secondary);
+  --ds-checkbox-secondary-border: var(--ds-color-secondary);
+  --ds-checkbox-secondary-check: var(--ds-color-text-on-primary);
 
   /* Success variant */
-  --ds-checkbox-success-bg: var(--ds-color-success, #52c41a);
-  --ds-checkbox-success-border: var(--ds-color-success, #52c41a);
-  --ds-checkbox-success-check: #ffffff;
+  --ds-checkbox-success-bg: var(--ds-color-success);
+  --ds-checkbox-success-border: var(--ds-color-success);
+  --ds-checkbox-success-check: var(--ds-color-text-on-primary);
 
   /* Warning variant */
-  --ds-checkbox-warning-bg: var(--ds-color-warning, #faad14);
-  --ds-checkbox-warning-border: var(--ds-color-warning, #faad14);
-  --ds-checkbox-warning-check: #ffffff;
+  --ds-checkbox-warning-bg: var(--ds-color-warning);
+  --ds-checkbox-warning-border: var(--ds-color-warning);
+  --ds-checkbox-warning-check: var(--ds-color-text-on-primary);
 
   /* Error variant */
-  --ds-checkbox-error-bg: var(--ds-color-error, #ff4d4f);
-  --ds-checkbox-error-border: var(--ds-color-error, #ff4d4f);
-  --ds-checkbox-error-check: #ffffff;
+  --ds-checkbox-error-bg: var(--ds-color-error);
+  --ds-checkbox-error-border: var(--ds-color-error);
+  --ds-checkbox-error-check: var(--ds-color-text-on-primary);
 
   /* ========================================================================
      STATES
      Visual indicators for different states
      ======================================================================== */
   --ds-checkbox-unchecked-bg: transparent;
-  --ds-checkbox-unchecked-border: var(--ds-color-border, #d9d9d9);
-  --ds-checkbox-disabled-opacity: 0.5;
+  --ds-checkbox-unchecked-border: var(--ds-color-border);
+  --ds-checkbox-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-checkbox-disabled-cursor: not-allowed;
+  --ds-checkbox-border-width: var(--ds-border-width-2);
+  --ds-checkbox-label-line-height: var(--ds-line-height-snug);
+  --ds-checkbox-checkmark-size: max(0.625rem, 75%);
 
   /* ========================================================================
      SPACING
      Spacing between checkbox and label
      ======================================================================== */
-  --ds-checkbox-label-gap: 8px;
+  --ds-checkbox-label-gap: var(--ds-spacing-2);
+  --ds-checkbox-text-gap: calc(var(--ds-spacing-1) / 2);
+  --ds-checkbox-row-padding-block: var(--ds-spacing-1);
+  --ds-checkbox-touch-target-min: var(--ds-touch-target-min);
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-checkbox-transition-duration: 0.2s;
-  --ds-checkbox-transition-timing: ease-in-out;
+  --ds-checkbox-transition-duration: var(--ds-motion-feedback);
+  --ds-checkbox-transition-timing: var(--ds-motion-ease-out);
   --ds-checkbox-transition: all var(--ds-checkbox-transition-duration) var(--ds-checkbox-transition-timing);
 
   /* ========================================================================
      FOCUS
      Focus ring settings
      ======================================================================== */
-  --ds-checkbox-focus-ring-width: var(--ds-focus-ring-width, 2px);
-  --ds-checkbox-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
-  --ds-checkbox-focus-ring-color: var(--ds-color-primary, #1890ff);
+  --ds-checkbox-focus-ring-width: var(--ds-focus-ring-width);
+  --ds-checkbox-focus-ring-offset: var(--ds-focus-ring-offset);
+  --ds-checkbox-focus-ring-color: var(--ds-focus-ring-color);
 }

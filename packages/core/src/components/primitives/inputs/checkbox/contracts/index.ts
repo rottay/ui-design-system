@@ -43,7 +43,7 @@
  *
  * console.log(CHECKBOX_DEFAULTS.size);  // 'md'
  * console.log(CHECKBOX_DEFAULTS.color); // 'primary'
- * console.log(COLOR_MAP.success.bg);    // 'var(--ds-color-success, #52c41a)'
+ * console.log(COLOR_MAP.success.bg);    // 'var(--ds-color-success-500)'
  * ```
  *
  * @see {@link Checkbox} for the main component
@@ -321,43 +321,43 @@ export const SIZE_MAP_NUMERIC: Record<CheckboxSize, number> = {
 
 /**
  * Color configuration mapping for each checkbox variant.
- * References CSS custom properties with hardcoded fallback values.
+ * References CSS custom properties only.
  *
  * @constant
  * @property {string} bg - Background color when checked
  * @property {string} border - Border color when checked
- * @property {string} check - Checkmark stroke color (always white)
+ * @property {string} check - Checkmark stroke color (the on-primary ink)
  */
 export const COLOR_MAP: Record<CheckboxVariant, { bg: string; border: string; check: string }> = {
   default: {
-    bg: 'var(--ds-color-neutral-600, #4b5563)',
-    border: 'var(--ds-color-neutral-600, #4b5563)',
-    check: '#ffffff',
+    bg: 'var(--ds-color-neutral-600)',
+    border: 'var(--ds-color-neutral-600)',
+    check: 'var(--ds-color-text-on-primary)',
   },
   primary: {
-    bg: 'var(--ds-color-primary-500, #1890ff)',
-    border: 'var(--ds-color-primary-500, #1890ff)',
-    check: '#ffffff',
+    bg: 'var(--ds-color-primary-500)',
+    border: 'var(--ds-color-primary-500)',
+    check: 'var(--ds-color-text-on-primary)',
   },
   secondary: {
-    bg: 'var(--ds-color-secondary-500, #6b7280)',
-    border: 'var(--ds-color-secondary-500, #6b7280)',
-    check: '#ffffff',
+    bg: 'var(--ds-color-secondary-500)',
+    border: 'var(--ds-color-secondary-500)',
+    check: 'var(--ds-color-text-on-primary)',
   },
   success: {
-    bg: 'var(--ds-color-success-500, #52c41a)',
-    border: 'var(--ds-color-success-500, #52c41a)',
-    check: '#ffffff',
+    bg: 'var(--ds-color-success-500)',
+    border: 'var(--ds-color-success-500)',
+    check: 'var(--ds-color-text-on-primary)',
   },
   warning: {
-    bg: 'var(--ds-color-warning-500, #faad14)',
-    border: 'var(--ds-color-warning-500, #faad14)',
-    check: '#ffffff',
+    bg: 'var(--ds-color-warning-500)',
+    border: 'var(--ds-color-warning-500)',
+    check: 'var(--ds-color-text-on-primary)',
   },
   error: {
-    bg: 'var(--ds-color-error-500, #ff4d4f)',
-    border: 'var(--ds-color-error-500, #ff4d4f)',
-    check: '#ffffff',
+    bg: 'var(--ds-color-error-500)',
+    border: 'var(--ds-color-error-500)',
+    check: 'var(--ds-color-text-on-primary)',
   },
 };
 

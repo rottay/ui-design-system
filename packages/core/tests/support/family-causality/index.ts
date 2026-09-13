@@ -12,6 +12,7 @@
  */
 
 import { existsSync, readFileSync } from 'node:fs';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 
@@ -39,8 +40,10 @@ export interface ProbeTarget {
   readonly selector: string;
   /** Computed property to read, in CSS spelling; `@rect.<key>` reads the element box instead. */
   readonly property: string;
-  /** Attributes stamped on the matched element before reading, e.g. `data-state`. */
+  /** Attributes stamped before reading, e.g. `data-state`. */
   readonly attributes?: Readonly<Record<string, string>>;
+  /** Selector of the element that receives `attributes`; the target itself when absent. */
+  readonly attributesOn?: string;
   /** Direction of the probe host. */
   readonly dir?: 'ltr' | 'rtl';
 }
@@ -187,8 +190,9 @@ export async function measureArms(request: ProbeRequest): Promise<ProbeReadings>
             if (!element) {
               values[target.id] = `<no match: ${target.selector}>`;
             } else {
+              const stamped = target.attributesOn ? host.querySelector(target.attributesOn) ?? element : element;
               for (const [name, value] of Object.entries(target.attributes ?? {})) {
-                element.setAttribute(name, value);
+                stamped.setAttribute(name, value);
               }
               values[target.id] = target.property.startsWith('@rect.')
                 ? String(Math.round(element.getBoundingClientRect()[target.property.slice(6) as 'left']))
@@ -267,4 +271,55 @@ export async function auditAxe(request: AxeRequest): Promise<AxeFinding[]> {
 /** The findings axe classifies as serious or critical. */
 export function seriousFindings(findings: readonly AxeFinding[]): AxeFinding[] {
   return findings.filter((finding) => finding.impact === 'serious' || finding.impact === 'critical');
+}
+
+export interface DecisionArm {
+  /** The document v2 value the arm states for the decision. */
+  readonly value: unknown;
+  /** Reading ids the decision must move. */
+  readonly moves: readonly string[];
+  /** A reading id the decision must leave untouched. */
+  readonly holds: string;
+  /** Verticals in which the family reads the decision; a vertical's own chrome may outrank it elsewhere. */
+  readonly in: readonly ProbeVertical[];
+}
+
+export interface CausalitySpec {
+  readonly family: string;
+  readonly markup: string;
+  readonly targets: readonly ProbeTarget[];
+  readonly decisions: Readonly<Record<string, DecisionArm>>;
+}
+
+export const FIRST_PARTY_VERTICALS: readonly ProbeVertical[] = ['rottay', 'bithire', 'evnto'];
+
+/** One case per decision: its arm moves what it claims and holds its control, per vertical. */
+export function describeCausality(spec: CausalitySpec): void {
+  const readings: Partial<Record<ProbeVertical, ProbeReadings>> = {};
+  describe(`${spec.family} causality`, () => {
+    beforeAll(async () => {
+      const arms = Object.fromEntries([
+        ['base', {}],
+        ...Object.entries(spec.decisions).map(([id, arm]) => [id, { [id]: arm.value }]),
+      ]);
+      const verticals = new Set(Object.values(spec.decisions).flatMap((arm) => arm.in));
+      for (const vertical of verticals) {
+        readings[vertical] = await measureArms({ vertical, markup: spec.markup, arms, targets: spec.targets });
+      }
+    }, 240_000);
+
+    for (const [decision, arm] of Object.entries(spec.decisions)) {
+      it(`${decision} moves ${arm.moves.join(', ')} and holds ${arm.holds}`, () => {
+        for (const vertical of arm.in) {
+          const base = readings[vertical]!.base!;
+          const moved = readings[vertical]![decision]!;
+          for (const id of arm.moves) {
+            expect(base[id], `${vertical}: ${id} has a reading`).not.toMatch(/^<no match/);
+            expect(moved[id], `${vertical}: ${id}`).not.toBe(base[id]);
+          }
+          expect(moved[arm.holds], `${vertical}: control ${arm.holds}`).toBe(base[arm.holds]);
+        }
+      });
+    }
+  });
 }

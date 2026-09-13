@@ -106,6 +106,7 @@ import {
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
+import { deriveCheckboxChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/checkbox";
 
 const DEFAULT_CSS = join(
   process.cwd(),
@@ -1468,6 +1469,11 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the typed shape is closed and 
   });
 });
 
+/** Channels a family-cut deriver states as a decision relation when no vertical authors them. */
+const FAMILY_RELATIONS: Readonly<Record<string, string>> = {
+  ...deriveCheckboxChannels(),
+};
+
 describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports", () => {
   const PROBE = "#010203";
   const pairs = FAMILIES.flatMap((family) =>
@@ -1490,8 +1496,8 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports"
       expect(compileDocument(document)[channel]).toBe(PROBE);
 
       // Static transport: remove the field from both mode authorities and the
-      // channel must disappear. If it survives, something else emits it and
-      // the field was never the authority.
+      // channel must fall back to its family deriver's decision relation, or
+      // disappear. Anything else is a second author the field never outranked.
       const clone = structuredClone(rottayBrandTheme);
       const body = (clone.chrome.controls as unknown as Controls)[prop];
       const light = lightControlsOf(clone)[prop];
@@ -1508,7 +1514,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports"
         ...stripped.cssVariables,
         ...(strippedLight?.cssVariables ?? {}),
       };
-      expect(effective[channel]).toBeUndefined();
+      expect(effective[channel]).toBe(FAMILY_RELATIONS[channel]);
     }
   );
 

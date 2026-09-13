@@ -183,7 +183,7 @@ export function CheckboxGroup({
         data-direction={direction}
         data-spacing={spacing}
         data-disabled={disabled || undefined}
-        className={`rottay-checkbox-group rottay-checkbox-group--${direction} ${className}`}
+        className={`ds-checkbox-group ds-checkbox-group--${direction} ${className}`}
         style={style}
         role="group"
         aria-label={translation?.t('checkbox.group') ?? 'Checkbox group'}

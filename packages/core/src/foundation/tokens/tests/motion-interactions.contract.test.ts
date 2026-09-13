@@ -105,7 +105,7 @@ describe('modern skin micro-interactions honor reduced motion', () => {
   });
 
   it('press-scale extends the shared interaction-state token, not a literal', () => {
-    expect(checkbox).toContain(':active:not([data-disabled=\'true\'])');
+    expect(checkbox).toContain(":is([data-state~='pressed'], :active):not([data-disabled='true'])");
     expect(checkbox).toContain('scale(var(--ds-state-press-scale))');
     expect(switchCss).toContain('scale(var(--ds-state-press-scale))');
   });
