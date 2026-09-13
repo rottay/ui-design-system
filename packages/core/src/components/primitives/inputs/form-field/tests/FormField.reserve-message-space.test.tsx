@@ -20,7 +20,7 @@ describe('Modern FormField reserveMessageSpace', () => {
 
     const region = container.querySelector('[data-part="message-region"]') as HTMLElement;
     expect(region).toHaveAttribute('data-reserve-message', 'true');
-    expect(region.style.getPropertyValue('--_ds-form-field-message-lines')).toBe('1');
+    expect(region.style.getPropertyValue('--ds-form-field-message-lines')).toBe('1');
   });
 
   it('stamps the numeric line count when reserveMessageSpace is a number', () => {
@@ -31,7 +31,7 @@ describe('Modern FormField reserveMessageSpace', () => {
     );
 
     const region = container.querySelector('[data-part="message-region"]') as HTMLElement;
-    expect(region.style.getPropertyValue('--_ds-form-field-message-lines')).toBe('2');
+    expect(region.style.getPropertyValue('--ds-form-field-message-lines')).toBe('2');
   });
 
   it('keeps the reserved region mounted while toggling the error, and the help/error swap is unchanged', () => {

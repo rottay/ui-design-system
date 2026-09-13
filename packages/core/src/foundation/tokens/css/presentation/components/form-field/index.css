@@ -1,0 +1,26 @@
+/**
+ * FormField Component Tokens - Rottay Design System
+ *
+ * Structural constants of the form-field family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/form-field`.
+ */
+
+:root {
+  --ds-form-field-gap: var(--ds-input-label-margin-bottom);
+  --ds-form-field-horizontal-gap: var(--ds-spacing-4);
+  --ds-form-field-label-offset-y: 0;
+  --ds-form-field-label-width: 7.5rem;
+  --ds-form-field-required-gap: 0.25em;
+  --ds-form-field-required-font-weight: var(--ds-font-weight-bold);
+  --ds-form-field-message-lines: 1;
+  --ds-form-field-message-gap: var(--ds-input-message-gap);
+  --ds-form-field-label-letter-spacing: var(--ds-input-label-letter-spacing);
+  --ds-form-field-label-line-height: var(--ds-input-label-line-height);
+  --ds-form-field-sm-label-font-size: var(--ds-font-size-xs);
+  --ds-form-field-sm-helper-font-size: var(--ds-font-size-xs);
+  --ds-form-field-lg-label-font-size: var(--ds-font-size-md);
+  --ds-form-field-lg-helper-font-size: var(--ds-font-size-sm);
+  --ds-form-field-disabled-opacity: var(--ds-input-disabled-opacity);
+  --ds-form-field-transition-duration: var(--ds-input-transition-duration);
+  --ds-form-field-transition-timing: var(--ds-input-transition-timing);
+}

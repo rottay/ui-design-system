@@ -21,7 +21,7 @@
   container: ds-form-field / inline-size;
   inline-size: 100%;
   min-inline-size: 0;
-  color: var(--ds-input-color);
+  color: var(--ds-form-field-ink, var(--ds-color-text-primary));
   /* Mobile keyboard posture: the browser's focus scroll keeps one rhythm of
      clearance so the label never lands flush under sticky chrome. */
   scroll-margin-block: var(--ds-spacing-6, 1.5rem);
@@ -35,11 +35,11 @@
      its channel name, which silently defeats every reader that greps for
      `var(--ds-form-field-gap` -- the no-loss `hasConsumer` probe and the
      real-engines contract test among them. */
-  gap: var(--ds-form-field-gap, calc(var(--ds-input-label-margin-bottom) * var(--ds-rhythm-effective-scale, 1)));
+  gap: calc(var(--ds-form-field-gap, var(--ds-spacing-2)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-layout='horizontal'] [data-part='layout'] {
-  grid-template-columns: minmax(0, var(--ds-form-field-label-width, 7.5rem)) minmax(0, 1fr);
+  grid-template-columns: minmax(0, var(--ds-form-field-label-width, var(--ds-spacing-32))) minmax(0, 1fr);
   align-items: start;
   column-gap: var(--ds-form-field-horizontal-gap, var(--ds-spacing-4));
 }
@@ -69,7 +69,7 @@
           var(--_ds-form-field-control-height, var(--ds-input-md-height)) *
             var(--ds-density-effective-scale) *
             var(--ds-control-height-scale, 1) -
-          1em * var(--ds-input-label-line-height, var(--ds-line-height-snug))
+          1em * var(--ds-form-field-label-line-height, var(--ds-line-height-snug))
         ) / 2
       )
     )
@@ -78,31 +78,31 @@
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='label'] {
   display: inline;
-  color: var(--ds-input-label-color, var(--ds-color-text-primary));
-  font-family: var(--ds-input-label-font-family, var(--ds-input-font-family));
-  font-size: var(--ds-input-label-font-size, var(--ds-font-size-sm));
-  font-weight: var(--ds-input-label-font-weight, var(--ds-font-weight-medium));
-  letter-spacing: var(--ds-input-label-letter-spacing, normal);
-  line-height: var(--ds-input-label-line-height, var(--ds-line-height-snug));
+  color: var(--ds-form-field-label-color, var(--ds-color-text-primary));
+  font-family: var(--ds-form-field-label-font-family, var(--ds-font-family-base));
+  font-size: var(--ds-form-field-label-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-form-field-label-font-weight, var(--ds-font-weight-medium));
+  letter-spacing: var(--ds-form-field-label-letter-spacing, normal);
+  line-height: var(--ds-form-field-label-line-height, var(--ds-line-height-snug));
   /* The form label speaks the tenant's LABEL type role: technical/geometric
      profiles author uppercase capsule labels here while editorial stays in
      title case -- the governed `--ds-type-label-text-transform` channel
      (default `none`, so the unset render is byte-identical). */
-  text-transform: var(--ds-type-label-text-transform, none);
+  text-transform: var(--ds-form-field-label-text-transform, none);
   hyphens: auto;
   overflow-wrap: anywhere;
-  transition: color var(--ds-input-transition-duration) var(--ds-input-transition-timing);
+  transition: color var(--ds-form-field-transition-duration, var(--ds-motion-fast)) var(--ds-form-field-transition-timing, var(--ds-motion-ease-out));
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='required-mark'] {
   margin-inline-start: var(--ds-form-field-required-gap);
-  color: var(--ds-input-label-required-color, var(--ds-color-error));
+  color: var(--ds-form-field-required-color, var(--ds-color-error));
   font-weight: var(--ds-form-field-required-font-weight, var(--ds-font-weight-bold));
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='body'] {
   display: grid;
-  gap: var(--ds-input-message-gap, var(--ds-spacing-1));
+  gap: var(--ds-form-field-message-gap, var(--ds-spacing-1));
 }
 
 /* `reserveMessageSpace`: the message region always mounts, so its box floor
@@ -112,23 +112,23 @@
    per-instance line count the engine stamps inline. */
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='message-region'][data-reserve-message='true'] {
   min-block-size: calc(
-    var(--_ds-form-field-message-lines, 1) *
-      var(--ds-input-helper-font-size, var(--ds-font-size-xs)) *
-      var(--ds-input-helper-line-height, var(--ds-line-height-snug))
+    var(--ds-form-field-message-lines, 1) *
+      var(--ds-form-field-helper-font-size, var(--ds-font-size-xs)) *
+      var(--ds-form-field-helper-line-height, var(--ds-line-height-snug))
   );
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='help-text'],
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-message'] {
   margin: 0;
-  font-size: var(--ds-input-helper-font-size, var(--ds-font-size-xs));
-  line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
+  font-size: var(--ds-form-field-helper-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-form-field-helper-line-height, var(--ds-line-height-snug));
   hyphens: auto;
   overflow-wrap: anywhere;
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-invalid='true'] [data-part='label'] {
-  color: var(--ds-input-error-message-color, var(--ds-color-error));
+  color: var(--ds-form-field-error-color, var(--ds-color-error));
 }
 
 /* Focus-within label tint: the field answers keyboard/pointer focus with one
@@ -137,7 +137,7 @@
    muted) — the tint never hijacks a semantic state. */
 .ds-form-field.ds-form-field--modern[data-part='root']:focus-within:not([data-invalid='true']):not([data-disabled='true']) [data-part='label'] {
   color: var(
-    --_ds-form-field-label-color-focus,
+    --ds-form-field-label-color-focus,
     var(--ds-color-primary)
   );
 }
@@ -149,19 +149,19 @@
      hue-neutral, no tenant fork, and it converges to a pairing the source
      already passes (bithire 5.52:1; TMM's #5C4F3D only darkens, 7.19 -> 9.28:1).
      A tenant's explicit `--ds-form-field-helper-color` stays untouched. */
-  color: var(--ds-form-field-helper-color, color-mix(in srgb, var(--ds-input-helper-color, var(--ds-color-text-secondary)) 65%, var(--ds-color-text-primary) 35%));
+  color: var(--ds-form-field-helper-color, var(--ds-color-text-secondary));
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-message'] {
   display: flex;
   align-items: flex-start;
   gap: var(--_ds-form-field-error-icon-gap, var(--ds-spacing-1));
-  color: var(--ds-input-error-message-color, var(--ds-input-error-color, var(--ds-color-error)));
-  font-weight: var(--ds-input-error-message-font-weight, var(--ds-font-weight-medium));
+  color: var(--ds-form-field-error-color, var(--ds-color-error));
+  font-weight: var(--ds-form-field-error-font-weight, var(--ds-font-weight-medium));
   /* One compositor-safe beat on entry; the message text itself is already
      announced by role="alert", so motion never carries the information. */
-  animation: ds-form-field-message-in var(--ds-motion-fast)
-    var(--ds-motion-ease-out);
+  animation: ds-form-field-message-in var(--ds-form-field-transition-duration, var(--ds-motion-fast))
+    var(--ds-form-field-transition-timing, var(--ds-motion-ease-out));
 }
 
 @keyframes ds-form-field-message-in {
@@ -183,13 +183,13 @@
   block-size: var(--ds-icon-size-status, 14px);
   margin-block-start: calc(
     (
-      1em * var(--ds-input-helper-line-height, var(--ds-line-height-snug)) -
+      1em * var(--ds-form-field-helper-line-height, var(--ds-line-height-snug)) -
         var(--ds-icon-size-status, 14px)
     ) / 2
   );
   color: var(
     --_ds-form-field-error-icon-color,
-    var(--ds-input-error-message-color, var(--ds-color-error))
+    var(--ds-form-field-error-color, var(--ds-color-error))
   );
 }
 
@@ -198,16 +198,16 @@
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-disabled='true'] {
-  opacity: var(--ds-form-field-disabled-opacity, var(--ds-input-disabled-opacity));
+  opacity: var(--ds-form-field-disabled-opacity, var(--ds-state-disabled-opacity));
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-disabled='true'] [data-part='label'] {
-  color: var(--ds-input-label-color-disabled, var(--ds-input-color-disabled));
+  color: var(--ds-form-field-label-color-disabled, var(--ds-color-text-disabled));
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-size='sm'] {
-  --ds-input-label-font-size: var(--ds-form-field-sm-label-font-size, var(--ds-font-size-xs));
-  --ds-input-helper-font-size: var(--ds-form-field-sm-helper-font-size, var(--ds-font-size-xs));
+  --ds-form-field-label-font-size: var(--ds-form-field-sm-label-font-size, var(--ds-font-size-xs));
+  --ds-form-field-helper-font-size: var(--ds-form-field-sm-helper-font-size, var(--ds-font-size-xs));
   /* Control geometry the horizontal label aligns to (Input sm height). */
   /* DEC-05: twin of form.css's `--_ds-form-control-height`, deliberately kept
      separate so a FormField nested in a Form aligns to its OWN data-size
@@ -221,8 +221,8 @@
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-size='lg'] {
-  --ds-input-label-font-size: var(--ds-form-field-lg-label-font-size, var(--ds-font-size-md));
-  --ds-input-helper-font-size: var(--ds-form-field-lg-helper-font-size, var(--ds-font-size-sm));
+  --ds-form-field-label-font-size: var(--ds-form-field-lg-label-font-size, var(--ds-font-size-md));
+  --ds-form-field-helper-font-size: var(--ds-form-field-lg-helper-font-size, var(--ds-font-size-sm));
   /* Control geometry the horizontal label aligns to (Input lg height). */
   --_ds-form-field-control-height: var(--ds-input-lg-height);
 }
@@ -230,7 +230,7 @@
 @container ds-form-field (inline-size < 34rem) {
   .ds-form-field.ds-form-field--modern[data-part='root'][data-layout='horizontal'] [data-part='layout'] {
     grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--ds-form-field-gap, calc(var(--ds-input-label-margin-bottom) * var(--ds-rhythm-effective-scale, 1)));
+    row-gap: calc(var(--ds-form-field-gap, var(--ds-spacing-2)) * var(--ds-rhythm-effective-scale, 1));
   }
 }
 

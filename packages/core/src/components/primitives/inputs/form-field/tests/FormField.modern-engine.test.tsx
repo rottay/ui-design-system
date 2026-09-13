@@ -43,7 +43,7 @@ describe('Modern FormField public anatomy', () => {
     );
 
     const control = screen.getByLabelText('Work email');
-    const inputShell = container.querySelector('.rottay-input[data-part="root"]');
+    const inputShell = container.querySelector('.ds-input-shell[data-part="root"]');
 
     expect(control).toBeDisabled();
     expect(control).toHaveAttribute('aria-invalid', 'true');
