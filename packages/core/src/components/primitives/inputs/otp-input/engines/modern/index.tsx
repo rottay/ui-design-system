@@ -2,13 +2,11 @@
 
 /**
  * @fileoverview OTPInput Modern Engine - Rottay Design System.
- * Custom implementation rendering a row of individual digit inputs with
- * auto-advance, backspace navigation, and paste distribution -- no DaisyUI
- * classes. All static paint and geometry (row flex/gap, per-size slot boxes,
- * monospace slot typography, disabled posture, error gap/typography) are
- * owned by the modern skin (`skin/otp-input.css`) keyed on
- * `data-part`/`data-size`/`data-disabled`; no inline styles remain on any
- * part. The public `style` escape hatch stays on the outer wrapper.
+ * A row of single-character inputs with auto-advance, backspace navigation and
+ * paste distribution. Every visual decision lives in the modern skin
+ * (`skin/otp-input`) keyed on `data-part`, `data-size`, `data-disabled`,
+ * `data-error`, `data-filled` and the kernel's `data-state`; the public `style`
+ * escape hatch stays on the outer field.
  *
  * @example
  * ```tsx
@@ -22,6 +20,7 @@
 
 import React, { useState, useCallback, useRef, useId, useMemo } from 'react';
 import { arrayValueAt, setArrayValueAt } from '@/foundation/kernel/collections';
+import { isComposingKey, partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { OTPInputProps } from '../../contracts';
 import { OTPINPUT_DEFAULTS } from '../../contracts';
@@ -30,27 +29,51 @@ function focusInputAt(inputs: readonly (HTMLInputElement | null)[], index: numbe
   arrayValueAt(inputs, index)?.focus();
 }
 
+type SlotProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> & {
+  inputRef: (element: HTMLInputElement | null) => void;
+  error: boolean;
+  filled: boolean;
+};
+
+function OtpSlot({ inputRef, error, filled, disabled, onFocus, onBlur, ...input }: SlotProps): React.ReactElement {
+  const { state, handlers } = useInteractionState({ disabled });
+  return (
+    <input
+      {...input}
+      ref={inputRef}
+      {...partAttributes('slot', state)}
+      data-error={error ? 'true' : 'false'}
+      data-filled={filled ? 'true' : 'false'}
+      disabled={disabled}
+      onPointerEnter={handlers.onPointerEnter}
+      onPointerLeave={handlers.onPointerLeave}
+      onPointerDown={handlers.onPointerDown}
+      onPointerUp={handlers.onPointerUp}
+      onPointerCancel={handlers.onPointerUp}
+      onFocus={(event) => {
+        handlers.onFocus(event);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        handlers.onBlur(event);
+        onBlur?.(event);
+      }}
+    />
+  );
+}
+
 /**
- * Modern engine OTPInput: each digit occupies its own
- * `<input maxLength={1}>` box painted by the modern skin. Focus auto-advances
- * on entry and retreats on backspace.
+ * Modern engine OTPInput: each character occupies its own
+ * `<input maxLength={1}>` painted by the modern skin.
  *
  * @param props - Unified OTPInputProps from the design system contract.
- * @returns A skin-painted flex row of single-character inputs.
+ * @returns A skin-painted row of single-character inputs.
  */
 export default function ModernOTPInput(props: OTPInputProps): React.ReactElement {
-  // Optional provider + English floor (the floor must stay byte-identical to
-  // the historical label: the quality contract pins `Digit N of M`). The tOr
-  // guard keeps a missing catalogue entry from echoing the raw key into the
-  // accessible name (the AutoComplete engine's idiom).
-  const i18n = useOptionalTranslation('components');
-  const digitLabel = (index: number, total: number): string => {
-    const resolved = i18n?.t('otp.digit_label', { index: index + 1, length: total });
-    if (!resolved || resolved === 'otp.digit_label' || resolved === 'components.otp.digit_label') {
-      return `Digit ${index + 1} of ${total}`;
-    }
-    return resolved;
-  };
+  const i18n = useOptionalTranslation();
+  const digitLabel = (index: number, total: number): string =>
+    i18n?.tOr('components.otp.digit_label', 'Digit {index} of {length}', { index: index + 1, length: total })
+      ?? `Digit ${index + 1} of ${total}`;
   const {
     length = OTPINPUT_DEFAULTS.length,
     value: controlledValue,
@@ -73,8 +96,9 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
   const idPrefix = providedId || `otp-modern-${generatedId}`;
   const errorMessageId = `${idPrefix}-error`;
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const composingRef = useRef(false);
+  const composedDraftRef = useRef('');
 
-  // Initialize per-slot values by splitting the controlled value and padding with empty strings
   const [internalValues, setInternalValues] = useState<string[]>(
     () => (controlledValue || '').split('').concat(Array(length).fill('')).slice(0, length)
   );
@@ -88,25 +112,20 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     [controlledValue, internalValues, length]
   );
 
-  /** Validate a single character against the configured input type (numeric or alphanumeric). */
-  const isValidChar = useCallback((char: string) => {
-    if (type === 'numeric') return /^[0-9]$/.test(char);
-    return /^[a-zA-Z0-9]$/.test(char);
+  // Full-width digits and letters from an IME fold to their ASCII form.
+  const acceptedChars = useCallback((text: string): string[] => {
+    const pattern = type === 'numeric' ? /^[0-9]$/ : /^[a-zA-Z0-9]$/;
+    return text.normalize('NFKC').split('').filter((char) => pattern.test(char));
   }, [type]);
 
-  /**
-   * Persist slot values and fire onChange/onComplete callbacks.
-   * onComplete only fires when every slot is filled, enabling auto-submit flows.
-   */
   const wasCompleteRef = useRef(false);
   const updateValue = useCallback((newValues: string[]) => {
     setInternalValues(newValues);
     const joined = newValues.join('');
     onChange?.(joined);
     const complete = joined.length === length && newValues.every((v) => v !== '');
-    // onComplete is an auto-submit edge, not a level: retyping a slot in an
-    // already-full code used to re-fire it on every keystroke, so a verify
-    // flow submitted the code again for each correction.
+    // onComplete is an auto-submit edge, not a level: correcting a slot of an
+    // already-full code must not submit it again.
     if (complete && !wasCompleteRef.current) {
       onComplete?.(joined);
     }
@@ -125,25 +144,28 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     focusInputAt(inputRefs.current, Math.min(startIndex + chars.length, length - 1));
   }, [values, length, updateValue]);
 
-  /** Write a valid character to the current slot and auto-advance focus to the next. */
-  const handleChange = useCallback((index: number, char: string) => {
-    if (!isValidChar(char)) return;
+  const commitInput = useCallback((index: number, incoming: string) => {
+    const chars = acceptedChars(incoming).slice(0, length - index);
+    if (chars.length > 1) {
+      // One-time-code autofill delivers the whole code into one slot as an input event.
+      distribute(chars, index);
+      return;
+    }
+    const [char] = chars;
+    if (!char) return;
     const newValues = [...values];
     newValues[index] = char;
     updateValue(newValues);
-    if (index < length - 1) {
-      focusInputAt(inputRefs.current, index + 1);
-    }
-  }, [values, isValidChar, length, updateValue]);
+    if (index < length - 1) focusInputAt(inputRefs.current, index + 1);
+  }, [acceptedChars, distribute, length, values, updateValue]);
 
   /**
-   * Keyboard navigation: Backspace clears the current slot (or retreats to
-   * the previous one if already empty); Delete clears the current slot in
-   * place; ArrowLeft/Right moves focus laterally; Home/End jump to the
-   * first/last slot. The digit row is LTR by contract (an OTP never mirrors),
-   * so ArrowLeft is always the previous index regardless of locale direction.
+   * Backspace clears the slot (or retreats when already empty), Delete clears
+   * in place, Home/End jump to the ends. The row is a positional code rendered
+   * left to right in every locale, so ArrowLeft is always the previous slot.
    */
   const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isComposingKey(e)) return;
     if (e.key === 'Backspace') {
       e.preventDefault();
       const newValues = [...values];
@@ -163,8 +185,10 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
         updateValue(newValues);
       }
     } else if (e.key === 'ArrowLeft' && index > 0) {
+      e.preventDefault();
       focusInputAt(inputRefs.current, index - 1);
     } else if (e.key === 'ArrowRight' && index < length - 1) {
+      e.preventDefault();
       focusInputAt(inputRefs.current, index + 1);
     } else if (e.key === 'Home') {
       e.preventDefault();
@@ -175,51 +199,50 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     }
   }, [values, length, updateValue]);
 
-  /**
-   * Paste handler: distributes clipboard text across slots (filtered by type),
-   * then focuses the slot after the last pasted character.
-   */
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData('text').trim();
-    distribute(pasted.split('').filter(isValidChar).slice(0, length), 0);
-  }, [distribute, isValidChar, length]);
+    distribute(acceptedChars(e.clipboardData.getData('text').trim()).slice(0, length), 0);
+  }, [acceptedChars, distribute, length]);
 
   return (
-    <div className={className} style={style} data-part="field">
-      <div className="ds-otp-input ds-otp-input--modern" data-part="root" data-size={size} data-disabled={disabled ? 'true' : 'false'}>
+    <div className={`ds-otp-input-field ${className || ''}`.trim()} style={style} data-part="field">
+      <div
+        className="ds-otp-input ds-otp-input--modern"
+        data-part="root"
+        data-size={size}
+        data-disabled={disabled ? 'true' : 'false'}
+        dir="ltr"
+      >
         {Array.from({ length }, (_, index) => (
-          <input
+          <OtpSlot
             key={index}
-            ref={(el) => { setArrayValueAt(inputRefs.current, index, el); }}
+            inputRef={(el) => { setArrayValueAt(inputRefs.current, index, el); }}
             id={`${idPrefix}-${index}`}
             name={name ? `${name}-${index}` : undefined}
             type={mask ? 'password' : 'text'}
             inputMode={type === 'numeric' ? 'numeric' : 'text'}
             maxLength={1}
-            data-part="slot"
-            data-error={error ? 'true' : 'false'}
-            data-filled={arrayValueAt(values, index) ? 'true' : 'false'}
+            error={error}
+            filled={Boolean(arrayValueAt(values, index))}
             value={arrayValueAt(values, index) || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
             onFocus={(e) => { e.target.select(); }}
+            onCompositionStart={() => { composingRef.current = true; composedDraftRef.current = ''; }}
+            onCompositionEnd={(e) => {
+              composingRef.current = false;
+              commitInput(index, e.data || composedDraftRef.current || e.currentTarget.value);
+            }}
             onChange={(e) => {
-              // The platform's one-time-code autofill delivers the WHOLE code
-              // into this one slot as an input event -- never a paste -- so
-              // keeping only the last character threw the code away. Anything
-              // longer than one character is distributed like a paste.
-              const incoming = e.target.value;
-              if (incoming.length > 1) {
-                distribute(incoming.split('').filter(isValidChar).slice(0, length - index), index);
+              // A half-composed candidate is not a character yet; composition end commits it.
+              if (composingRef.current || (e.nativeEvent as InputEvent).isComposing) {
+                composedDraftRef.current = e.target.value;
                 return;
               }
-              if (incoming) handleChange(index, incoming);
+              commitInput(index, e.target.value);
             }}
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
-            // The first slot invites the platform's one-time-code autofill;
-            // the paste handler above distributes it across every slot.
             autoComplete={index === 0 ? 'one-time-code' : 'off'}
             aria-label={digitLabel(index, length)}
             aria-invalid={error || undefined}
@@ -228,9 +251,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
         ))}
       </div>
       {error && errorMessage && (
-        <div data-part="error-wrapper">
-          <span id={errorMessageId} data-part="error-message" role="alert">{errorMessage}</span>
-        </div>
+        <span id={errorMessageId} data-part="error-message" role="alert">{errorMessage}</span>
       )}
     </div>
   );

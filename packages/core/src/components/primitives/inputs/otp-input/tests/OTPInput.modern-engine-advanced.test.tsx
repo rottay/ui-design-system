@@ -80,7 +80,7 @@ describe('OTPInput modern advanced coverage', () => {
     expect((screen.getByLabelText('Digit 4 of 4') as HTMLInputElement).value).toBe('6');
   });
 
-  it('stamps error + size hooks and renders the error wrapper anatomy', () => {
+  it('stamps error + size hooks and renders the error message anatomy', () => {
     const { container } = render(
       <ModernOTPInput length={6} size="lg" error errorMessage="Invalid code" disabled onChange={() => {}} />
     );
@@ -93,7 +93,6 @@ describe('OTPInput modern advanced coverage', () => {
     expect(slot).toHaveAttribute('data-error', 'true');
     expect(slot).toBeDisabled();
 
-    expect(container.querySelector('[data-part="error-wrapper"]')).not.toBeNull();
     expect(container.querySelector('[data-part="error-message"]')).toHaveTextContent('Invalid code');
   });
 
