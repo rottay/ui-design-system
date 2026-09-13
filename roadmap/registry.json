@@ -4397,6 +4397,11 @@
      "at": "2026-09-12 18:50",
      "by": "Kimi K3",
      "note": "G103-02 HANDOFF (audit/103-day-direction-2026-09-12/gates.md): this WO receives 2 pinned channels from EMI-02: --ds-experience-profile, --ds-recipe-profile (reason at liveness registry: profiles travel as data/provenance, not CSS paint). EXIT CONDITION per channel: demonstrate the pertinent effect route OR retire it from contract/emission, removing the pin in the same lot; if a channel is provenance-only, adjudicate its classification explicitly - do not fabricate CSS readers to satisfy a counter. Change of owner is not resolution."
+    },
+    {
+     "at": "2026-09-13 00:05",
+     "by": "Kimi K3",
+     "note": "FLAGS ROUTED FROM WO-FAM-01 CLOSE (ad38a9327): (a) evnto dark palette defect — button text/link variants measure 2.27:1 (#515151 on #171615); pre-existing, outside the axe gating scope of the cut; fix belongs to the vertical preset decisions of this WO. (b) chrome.controls.switch still compiles --ds-switch-* with no Modern reader after the D-16 merge (Switch = deprecated Toggle alias); retire or reclassify explicitly in this WO's token lane — do not leave compiling unread channels without adjudication."
     }
    ]
   },
