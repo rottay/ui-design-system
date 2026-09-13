@@ -4531,7 +4531,7 @@
    "lane": "family-cuts",
    "order": 2,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4546,7 +4546,9 @@
    "notes": "wave 4; closes F-41, F-33, F-63, F-15",
    "claimedBy": "opus",
    "claimedAt": "2026-09-12",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-13",
+   "evidence": "LANDED ad38a9327 (writer 327c190d1..57dd38823, Opus claude-opus-5 daniel). First family cut: button, checkbox, radio, unified Toggle (D-16: Switch deprecated alias, richer contract kept + busy/focusable + ref + aria naming), segmented -- each written once across deriver + Modern skin + runtime + tests. Acceptance: family-cut gate 5/5 (readWithoutProducer=0, colorLiterals=0, legacyNamespace=0, census=0, one ds- vocabulary); 67/67 causality probes in REAL CHROMIUM through the productive door with negative controls (decision moves paint, control does not); axe no serious in gated vertical modes; focus ring 3:1; reduced-motion/forced-colors/RTL/touch floors proven; loading via AnatomySkeleton (FAM-14 law). F-41/F-33/F-63/F-15 arms per fiches. Independent audit Kimi K3 (temporary Fable substitution; design seat excepted by owner 2026-09-13): gate CLI 0, drill-suite reds (7 inline-paint) verified IDENTICAL to base, liveness 106/106 + dispositions 44/44, decisions-lit regenerated + :check 0, contract-changeset 0 (major changeset with migration + contract-diff), baseline moves measured with set-difference notes (one declared widening: ./primitives/switch +754, lastMove recorded), wider-run 2 reds verified pre-existing at base (theme-contract-freeze emission-composer; customization-fields illegible-payload -- NEW entry in the base-red inventory). DT adjudications: partsStampedNotConsumed=1 (button trigger, segmented root) legitimate -- consumed by the skeleton renderer, gate counts skins only; fanOutUnreached=1 = recipe-profile axis routed to DER-06 (G103-02); kernels named in the spec that do not exist (pointerType, resolveSubmitIntent) satisfied via the existing shared kernels; adapt-slot arm vacuously green (none of these families on the layout-sensitive roster, roster owned by the adaptation contract); Toggle survives as the family name (owner may veto). FLAGS ROUTED (not close blockers): (a) evnto dark palette defect 2.27:1 button text/link (#515151 on #171615) -> DER-06 vertical presets; (b) chrome.controls.switch still compiles --ds-switch-* with no Modern reader -> retirement decision routed to DER-06 token lane; (c) showroom typecheck 26 errors environmental (stale linked package build), to re-verify at EVI-05 against the lot's own dist."
   },
   {
    "id": "WO-FAM-02",
