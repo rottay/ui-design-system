@@ -461,16 +461,25 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
    * de engine visual con modos repetidos, con una semilla que no es escalar o
    * con un nombre `--ds-*` como clave de semilla -- que seria un segundo
    * escritor de CSS llegando por un campo JSON -- no se admite. Los modulos
-   * siguen sin moverse: no entra ningun import nuevo. */
+   * siguen sin moverse: no entra ningun import nuevo.
+   *
+   * 71610 -> 73141 (WO-DER-05): la copia `auto` de un bloque de modo se
+   * enclava en la preferencia del modo que el bloque declara, no en `dark`
+   * fijo. +502 en tenant-selectors (el selector de la copia pasa a su unico
+   * duenio), +727 en emission (`backgroundMode` con default claro se vuelve el
+   * booleano `followsSystem`) y +302 en admission (el verificador lo lee del
+   * artefacto igual que el productor). El techo lo amplio DER-05 con `--widen`
+   * y su `lastMove`; este ancla no se habia re-medido. Los modulos siguen sin
+   * moverse: no entra ningun import nuevo. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 71610 },
+    { reachableModules: 9, sourceBytes: 73141 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 71610), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 73141), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */
