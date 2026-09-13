@@ -15,7 +15,7 @@
  *
  * **Configuration Constants:**
  * - `PASSWORD_INPUT_DEFAULTS` - Default prop values
- * - `STRENGTH_COLORS` - Design-token-based colors for each strength level
+ * - `STRENGTH_COLORS` - The strength-meter channel for each strength level
  * - `STRENGTH_WIDTHS` - Progress bar widths for each strength level
  *
  * @example Type Usage
@@ -63,12 +63,12 @@ export type PasswordInputVariant = 'outline' | 'filled' | 'flushed' | 'unstyled'
 
 /**
  * Password strength levels for the strength indicator bar.
- * Each level maps to a specific color and progress width via
+ * Each level maps to a strength-meter channel and progress width via
  * `STRENGTH_COLORS` and `STRENGTH_WIDTHS`.
- * - `'weak'`: 25% progress, error color
- * - `'fair'`: 50% progress, warning color
- * - `'good'`: 75% progress, primary color
- * - `'strong'`: 100% progress, success color
+ * - `'weak'`: 25% progress, error tone
+ * - `'fair'`: 50% progress, warning tone
+ * - `'good'`: 75% progress, primary tone
+ * - `'strong'`: 100% progress, success tone
  */
 export type PasswordStrengthLevel = 'weak' | 'fair' | 'good' | 'strong';
 
@@ -171,18 +171,14 @@ export interface PasswordInputProps extends EngineAwareProps {
 }
 
 /**
- * Design-token-based colors mapped to each password strength level.
- * Uses CSS custom properties with fallback hex values.
+ * The strength-meter channel each level paints with. The colour itself is a
+ * decision of the theme (`derivation/chrome/password-input`), never of this contract.
  */
 export const STRENGTH_COLORS: Record<PasswordStrengthLevel, string> = {
-  /** Error color for weak passwords */
-  weak: 'var(--ds-color-error-500, #ff4d4f)',
-  /** Warning color for fair passwords */
-  fair: 'var(--ds-color-warning-500, #faad14)',
-  /** Primary color for good passwords */
-  good: 'var(--ds-color-primary-500, #1890ff)',
-  /** Success color for strong passwords */
-  strong: 'var(--ds-color-success-500, #52c41a)',
+  weak: 'var(--ds-password-input-strength-weak, var(--ds-color-error))',
+  fair: 'var(--ds-password-input-strength-fair, var(--ds-color-warning))',
+  good: 'var(--ds-password-input-strength-good, var(--ds-color-primary))',
+  strong: 'var(--ds-password-input-strength-strong, var(--ds-color-success))',
 };
 
 /**

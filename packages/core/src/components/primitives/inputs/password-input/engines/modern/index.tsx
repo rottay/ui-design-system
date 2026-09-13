@@ -25,7 +25,7 @@
  *
  * @example
  * ```tsx
- * <PasswordInput engine="modern" showToggle strengthIndicator strengthLevel="medium" />
+ * <PasswordInput engine="modern" showToggle strengthIndicator strengthLevel="good" />
  * ```
  *
  * @module ModernPasswordInput
@@ -36,7 +36,7 @@
 'use client';
 
 import React, { useState, useCallback, useId } from 'react';
-import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { partAttributes, resolveSubmitIntent, useInteractionState } from '../../../../../../foundation/behavior';
 import type { PasswordInputProps, PasswordStrengthLevel } from '../../contracts';
 import { PASSWORD_INPUT_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -62,24 +62,12 @@ const STRENGTH_LABEL_FALLBACK: Record<PasswordStrengthLevel, string> = {
   strong: 'Strong',
 };
 
-/**
- * Catalogued copy with an English floor: when the catalogue entry has not
- * landed yet the provider echoes the full key, which must never reach visible
- * copy or an aria-label (the AutoComplete/OTPInput engines' tOr idiom).
- */
+/** Catalogued copy with an English floor for a render outside the i18n provider. */
 function usePasswordInputTranslation() {
   const common = useOptionalTranslation('common');
   const components = useOptionalTranslation('components');
-  const tCommon = (key: string, fallback: string): string => {
-    const resolved = common?.t(key);
-    if (!resolved || resolved === key || resolved === `common.${key}`) return fallback;
-    return resolved;
-  };
-  const tComponents = (key: string, fallback: string): string => {
-    const resolved = components?.t(key);
-    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
-    return resolved;
-  };
+  const tCommon = (key: string, fallback: string): string => common?.tOr(key, fallback) ?? fallback;
+  const tComponents = (key: string, fallback: string): string => components?.tOr(key, fallback) ?? fallback;
   return { tCommon, tComponents };
 }
 
@@ -163,6 +151,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
   // keys off `focused` -- a text field's border is not a keyboard-only
   // affordance, so the ring follows any real focus, pointer or keyboard.
   const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
+  const { state: toggleInteraction, handlers: toggleHandlers } = useInteractionState({ disabled });
 
   // `data-filled` is a content state the skin paints from, so it must mirror
   // what is actually in the field, not `value ?? defaultValue`.
@@ -178,9 +167,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(e);
     if (capsLockHint) setCapsLockOn(e.getModifierState('CapsLock'));
-    if (e.key === 'Enter') {
-      onPressEnter?.(e);
-    }
+    if (resolveSubmitIntent(e) === 'submit') onPressEnter?.(e);
   }, [onKeyDown, onPressEnter, capsLockHint]);
 
   // keyup catches the Caps Lock key's OWN press (its down state precedes the
@@ -281,7 +268,8 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
         {showToggle && (
           <button
             type="button"
-            data-part="visibility-toggle"
+            {...toggleHandlers}
+            {...partAttributes('visibility-toggle', toggleInteraction)}
             data-visible={visible ? 'true' : 'false'}
             disabled={disabled}
             onClick={handleToggleVisibility}
