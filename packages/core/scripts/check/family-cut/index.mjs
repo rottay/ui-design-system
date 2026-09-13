@@ -158,6 +158,27 @@ function skinBelongsToFamily(file, family) {
   return owner === family || owner.startsWith(`${family}-`);
 }
 
+/**
+ * A prefixed skin is only a COMPOUND when nothing else claims its name. It is a
+ * sibling family when a component owner directory carries that name
+ * (`input-number` beside `input`, `form-field` beside `form`), and it is another
+ * owner's paint when it selects no class the family's own sources name
+ * (`form-header` is the FormHeader structure's). Both are reported, never
+ * silently dropped, and the pinned `skinFiles` denominator still moves if the
+ * split ever changes.
+ */
+function foreignCompoundReason(file, family, ownerNames, familyClassTokens) {
+  const owner = basename(dirname(file));
+  if (owner === family) return undefined;
+  if (ownerNames.has(owner)) return `sibling family \`${owner}\` has its own component owner`;
+  const selected = [...analyzeSkin(file).classTokens].filter((token) => {
+    const remainder = token.slice(token.indexOf('-') + 1);
+    return remainder === family || remainder.startsWith(`${family}-`);
+  });
+  if (selected.some((token) => familyClassTokens.has(token))) return undefined;
+  return `selects no class the family's sources name (${JSON.stringify(selected.slice(0, 4))})`;
+}
+
 function walkFiles(dir, predicate, found = []) {
   let entries;
   try {
@@ -182,7 +203,7 @@ function walkFiles(dir, predicate, found = []) {
  */
 const NESTED_OWNER_SEGMENT = /\/(?:compound|engines|contracts|tests|runtime|foundation|composition|presentation)\//u;
 
-function findComponentDirs(root, family) {
+function collectOwnerDirs(root) {
   const dirs = [];
   const componentRoot = join(root, COMPONENT_ROOT);
   const walk = (dir) => {
@@ -196,11 +217,22 @@ function findComponentDirs(root, family) {
       if (!entry.isDirectory()) continue;
       const full = join(dir, entry.name);
       const rel = `/${toPosix(relative(componentRoot, full))}/`;
-      if (entry.name === family && !NESTED_OWNER_SEGMENT.test(rel)) dirs.push(full);
-      else walk(full);
+      if (!NESTED_OWNER_SEGMENT.test(rel)) dirs.push(full);
+      walk(full);
     }
   };
   walk(componentRoot);
+  return dirs;
+}
+
+function findComponentDirs(root, family, ownerDirs = collectOwnerDirs(root)) {
+  const dirs = [];
+  for (const dir of ownerDirs) {
+    if (basename(dir) !== family) continue;
+    // An owner is the outermost directory of that name; its own subtree is its parts.
+    if (dirs.some((found) => dir.startsWith(`${found}${sep}`))) continue;
+    dirs.push(dir);
+  }
   return dirs;
 }
 
@@ -388,14 +420,34 @@ export function countExecutableA11yAssertions(file, text = readFileSync(file, 'u
   return total;
 }
 
-export function resolveFamily(family, root = DEFAULT_ROOT) {
+/**
+ * `pin.owner` names the family's one owner when its folder name is shared with
+ * another tier (`form` is both the primitive and the FormHeader structure).
+ * It selects among the candidates and never adds one: a pin that matches none
+ * leaves the family with zero owners, which is a BLOCKING refusal.
+ */
+export function resolveFamily(family, root = DEFAULT_ROOT, pin = {}) {
+  const ownerDirs = collectOwnerDirs(root);
+  const candidates = findComponentDirs(root, family, ownerDirs);
+  const componentDirs = pin.owner
+    ? candidates.filter((dir) => toPosix(relative(root, dir)) === pin.owner)
+    : candidates;
+  const sources = componentDirs
+    .flatMap((dir) => walkFiles(dir, isFamilySource))
+    .sort();
+  const ownerNames = new Set(ownerDirs.map((dir) => basename(dir)));
+  const familyClassTokens = new Set(sources.flatMap((file) => [...readFileSync(file, 'utf8')
+    .matchAll(new RegExp(`(?<![\\w-])(?:${CLASS_PREFIXES.join('|')})-[a-z0-9]+(?:-{1,2}[a-z0-9]+)*`, 'gu'))]
+    .map((match) => match[0])));
+  const foreignSkins = [];
   const skins = collectSkinFiles(root)
     .filter((file) => file.includes(MODERN_SKIN_SEGMENT) || toPosix(file).includes('/presentation/components/skin/'))
     .filter((file) => skinBelongsToFamily(file, family))
-    .sort();
-  const componentDirs = findComponentDirs(root, family);
-  const sources = componentDirs
-    .flatMap((dir) => walkFiles(dir, isFamilySource))
+    .filter((file) => {
+      const reason = foreignCompoundReason(file, family, ownerNames, familyClassTokens);
+      if (reason) foreignSkins.push({ skin: toPosix(relative(root, file)), reason });
+      return !reason;
+    })
     .sort();
   const recipe = join(
     root,
@@ -412,6 +464,9 @@ export function resolveFamily(family, root = DEFAULT_ROOT) {
     family,
     root,
     skins,
+    foreignSkins,
+    ownerCandidates: candidates.map((dir) => toPosix(relative(root, dir))),
+    pinnedOwner: pin.owner,
     componentDirs,
     sources,
     recipe: existsSync(recipe) ? recipe : undefined,
@@ -931,6 +986,12 @@ export function measureFamily(resolved, { producers } = {}) {
   const adaptSlot = layoutSensitive
     ? measureAdaptSlot(layoutSensitive, root, readPostureVocabulary()).findings
     : [];
+  const measuredOwners = resolved.componentDirs.map((dir) => toPosix(relative(root, dir)));
+  if (layoutSensitive && measuredOwners.length === 1 && measuredOwners[0] !== layoutSensitive.owner) {
+    adaptSlot.push(
+      `${family}: owner -- the cut measures ${measuredOwners[0]} but the adaptation contract declares ${layoutSensitive.owner}`,
+    );
+  }
 
   return {
     family,
@@ -979,6 +1040,9 @@ export function measureFamily(resolved, { producers } = {}) {
       readWithoutProducer: readWithoutProducer.debt,
       fanOut,
       owners: resolved.componentDirs.map((dir) => toPosix(relative(root, dir))),
+      ownerCandidates: resolved.ownerCandidates ?? [],
+      pinnedOwner: resolved.pinnedOwner,
+      foreignSkins: resolved.foreignSkins ?? [],
       skins: resolved.skins.map((file) => toPosix(relative(root, file))),
       sources: resolved.sources.map((file) => toPosix(relative(root, file))),
     },
@@ -1150,7 +1214,7 @@ export function collectFindings({ baselinePath = BASELINE_PATH, root = DEFAULT_R
   const findings = [];
   const measurements = [];
   for (const family of families) {
-    const measured = measureFamily(resolveFamily(family, root), { producers: producerSet });
+    const measured = measureFamily(resolveFamily(family, root, baseline.families?.[family] ?? {}), { producers: producerSet });
     measurements.push(measured);
     findings.push(...judgeFamily(measured, baseline.families?.[family]));
   }
