@@ -377,9 +377,9 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .rottay-input,
+  .ds-saved-views__input[data-part='field'] .ds-input-shell,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .rottay-input {
+  .ds-saved-views__create-input[data-part='field'] .ds-input-shell {
   box-sizing: border-box;
   inline-size: 100%;
   block-size: var(--ds-saved-views-input-height, 26px);
@@ -404,9 +404,9 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .rottay-input:focus,
+  .ds-saved-views__input[data-part='field'] .ds-input-shell:focus,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .rottay-input:focus {
+  .ds-saved-views__create-input[data-part='field'] .ds-input-shell:focus {
   border-color: var(--ds-focus-ring-color);
   box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
 }
@@ -509,9 +509,9 @@
   .ds-pattern-saved-views.ds-engine-modern
     .ds-saved-views__create-button[data-part='create-button'],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__input[data-part='field'] .rottay-input,
+    .ds-saved-views__input[data-part='field'] .ds-input-shell,
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-input[data-part='field'] .rottay-input {
+    .ds-saved-views__create-input[data-part='field'] .ds-input-shell {
     transition: none;
   }
 }
