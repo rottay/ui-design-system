@@ -76,6 +76,7 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { LegacySizeAlias, Size } from '../../../../../foundation/contracts/kernel/common';
+import type { Adapt, FormAdaptation } from '../../../../../foundation/contracts/kernel/adaptation';
 
 /**
  * Layout direction for the form and its fields.
@@ -231,6 +232,8 @@ export interface FormProps<T = unknown> {
   initialValues?: Partial<T>;
   /** Form layout */
   layout?: FormLayout;
+  /** Per-posture deltas over the form's own props, e.g. `{ phone: { layout: 'vertical' } }`. */
+  adapt?: Adapt<FormAdaptation>;
   /** Label column config for horizontal layout */
   labelCol?: { span?: number; offset?: number };
   /** Wrapper column config for horizontal layout */
@@ -388,7 +391,7 @@ export interface FormErrorListProps {
  * Applied when no explicit value is provided by the consumer.
  *
  * @constant
- * @property {string} layout - Default layout direction ('horizontal')
+ * @property {string} layout - Default layout direction ('vertical')
  * @property {string} labelAlign - Default label text alignment ('right')
  * @property {boolean} colon - Show colon after labels (true)
  * @property {string} size - Default control size ('default')
@@ -397,8 +400,8 @@ export interface FormErrorListProps {
  * @property {boolean} preserve - Preserve values on unmount (true)
  * @property {string} autoComplete - Browser autocomplete behavior ('on')
  */
-export const FORM_DEFAULTS: Partial<FormProps> = {
-  layout: 'horizontal',
+export const FORM_DEFAULTS: Partial<FormProps> & { layout: FormLayout } = {
+  layout: 'vertical',
   labelAlign: 'right',
   colon: true,
   size: 'default',

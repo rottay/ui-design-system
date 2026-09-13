@@ -77,7 +77,7 @@
 }
 
 .ds-form.ds-form--modern[data-part='root'][data-disabled='true'] {
-  opacity: var(--ds-disabled-opacity, 0.58);
+  opacity: var(--ds-form-disabled-opacity, var(--ds-state-disabled-opacity));
 }
 
 /* Control geometry the horizontal label aligns to (Input height channels,
@@ -165,7 +165,7 @@
   justify-content: space-between;
   gap: var(--ds-spacing-2);
   min-inline-size: 0;
-  padding-block-end: var(--ds-form-label-gap, 4px);
+  padding-block-end: var(--ds-form-label-gap, var(--ds-spacing-1));
 }
 
 .ds-form-item.ds-form-item--modern [data-part='label-text'] {
@@ -178,18 +178,18 @@
      sit between it and the historical literal. Measured drift this closes:
      bithire rendered Form.Item labels in Space Grotesk 16px next to
      FormField's Public Sans 12px labels -- two type treatments in one form. */
-  color: var(--ds-form-label-color, var(--ds-input-label-color, var(--ds-color-text-primary)));
-  font-family: var(--ds-form-label-font-family, var(--ds-input-label-font-family, var(--ds-input-font-family, var(--ds-font-family-heading, var(--ds-font-family-base)))));
+  color: var(--ds-form-label-color, var(--ds-color-text-primary));
+  font-family: var(--ds-form-label-font-family, var(--ds-font-family-base));
   font-weight: var(--ds-form-label-font-weight, var(--ds-font-weight-medium));
   /* Tracking and case join the field family's label grammar (the FormField
      label channels) so Form.Item and FormField labels can never drift into
      two type treatments inside one tenant. `--ds-form-label-letter-spacing`
      stays first: a tenant's explicit form-label decision keeps winning. */
-  letter-spacing: var(--ds-form-label-letter-spacing, var(--ds-input-label-letter-spacing, -0.01em));
-  text-transform: var(--ds-type-label-text-transform, none);
-  line-height: var(--ds-form-label-line-height, 1.35);
+  letter-spacing: var(--ds-form-label-letter-spacing, normal);
+  text-transform: var(--ds-form-label-text-transform, none);
+  line-height: var(--ds-form-label-line-height, var(--ds-line-height-snug));
   /* The focus-within tint arrives on the family's transition cadence. */
-  transition: color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
+  transition: color var(--ds-form-transition-duration, var(--ds-motion-fast)) var(--ds-form-transition-timing, var(--ds-motion-ease-out));
 }
 
 /* Focus-within label tint (FormField grammar, C-02): the item answers
@@ -199,7 +199,7 @@
    semantic state. The private relay is the one form-field.css owns:
    one label-focus decision, two anatomies. */
 .ds-form.ds-form--modern:not([data-disabled='true']) .ds-form-item.ds-form-item--modern[data-part='item']:focus-within:not(:has([data-part='help-text'][data-error='true'])) [data-part='label-text'] {
-  color: var(--_ds-form-field-label-color-focus, var(--ds-color-primary));
+  color: var(--ds-form-label-color-focus, var(--ds-color-primary));
 }
 
 /* Label size follows the form-level data-size channel, unified with the
@@ -209,13 +209,13 @@
    label voice per tenant -- hierarchy rides weight/tracking/case, not a
    second size ramp that shouted over FormField labels. */
 .ds-form.ds-form--modern[data-size='sm'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
-  font-size: var(--ds-form-label-font-size-sm, var(--ds-form-field-sm-label-font-size, var(--ds-input-label-font-size, 14px)));
+  font-size: var(--ds-form-label-font-size-sm, var(--ds-font-size-xs));
 }
 .ds-form.ds-form--modern[data-size='md'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
-  font-size: var(--ds-form-label-font-size-md, var(--ds-input-label-font-size, 16px));
+  font-size: var(--ds-form-label-font-size-md, var(--ds-font-size-sm));
 }
 .ds-form.ds-form--modern[data-size='lg'] .ds-form-item.ds-form-item--modern [data-part='label-text'] {
-  font-size: var(--ds-form-label-font-size-lg, var(--ds-form-field-lg-label-font-size, var(--ds-input-label-font-size, 18px)));
+  font-size: var(--ds-form-label-font-size-lg, var(--ds-font-size-md));
 }
 
 .ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='required'] {
@@ -230,13 +230,13 @@
   padding-block: 2px;
   padding-inline: var(--ds-spacing-2);
   border-radius: var(--ds-radius-full);
-  color: var(--ds-color-text-muted);
+  color: var(--ds-form-badge-ink, var(--ds-color-text-secondary));
   background: var(--ds-surface-inset, var(--ds-surface-panel));
   font-family: var(--ds-font-family-mono, var(--ds-font-family-base));
-  font-size: var(--ds-form-badge-font-size, 10px);
+  font-size: var(--ds-form-badge-font-size, var(--ds-font-size-xs));
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-form-badge-letter-spacing, 0.055em);
-  line-height: var(--ds-form-badge-line-height, 1.3);
+  letter-spacing: var(--ds-form-badge-letter-spacing, normal);
+  line-height: var(--ds-form-badge-line-height, var(--ds-line-height-tight));
   text-transform: uppercase;
 }
 
@@ -258,13 +258,13 @@
   border-radius: var(--ds-radius-full);
   color: var(--ds-color-text-muted);
   background: var(--ds-surface-inset, var(--ds-surface-panel));
-  font-size: var(--ds-form-tooltip-font-size, 11px);
+  font-size: var(--ds-form-tooltip-font-size, var(--ds-font-size-xs));
   font-weight: var(--ds-font-weight-semibold);
   cursor: help;
   transition:
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    color var(--ds-form-transition-duration, var(--ds-motion-fast)) var(--ds-form-transition-timing, var(--ds-motion-ease-out)),
+    background var(--ds-form-transition-duration, var(--ds-motion-fast)) var(--ds-form-transition-timing, var(--ds-motion-ease-out)),
+    transform var(--ds-form-transition-duration, var(--ds-motion-fast)) var(--ds-form-transition-timing, var(--ds-motion-ease-out));
 }
 
 .ds-form-item.ds-form-item--modern[data-part='item'] [data-part='tooltip-icon'] {
@@ -272,14 +272,14 @@
 }
 
 @media (hover: hover) {
-  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:hover {
+  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:is([data-state~='hovered'], :hover) {
     color: var(--ds-color-primary);
     background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
     transform: translateY(-1px);
   }
 }
 /* Touch/active equivalent of the hover treatment. */
-.ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:active {
+.ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-primary);
   background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
 }
@@ -335,15 +335,15 @@
     ds-form-modern-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out),
     /* Canonical spin (Table/Tree precedent) on the motion authority's slow
        cadence; the family-local duplicate keyframe is retired. */
-    ds-foundation-spin var(--ds-form-spinner-duration, var(--ds-motion-glacial)) linear infinite;
+    ds-foundation-spin var(--ds-form-spinner-duration, var(--ds-motion-slow)) linear infinite;
 }
 
 .ds-form-item.ds-form-item--modern [data-part='message'] {
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-1);
-  min-block-size: var(--ds-form-message-min-height, 20px);
-  padding-block-start: var(--ds-form-message-gap, 4px);
+  min-block-size: var(--ds-form-message-min-height, var(--ds-spacing-5));
+  padding-block-start: var(--ds-form-message-gap, var(--ds-spacing-1));
 }
 
 /* The governed status.error glyph: semantic signal as SHAPE (FormField
@@ -365,7 +365,7 @@
 .ds-form-item.ds-form-item--modern [data-part='extra-text'] {
   color: var(--ds-form-supporting-color, var(--ds-color-text-secondary));
   font-size: var(--ds-font-size-xs);
-  line-height: var(--ds-form-supporting-line-height, 1.45);
+  line-height: var(--ds-form-supporting-line-height, var(--ds-line-height-snug));
 }
 
 .ds-form-item.ds-form-item--modern [data-part='help-text'][data-error='true'] {
@@ -403,7 +403,7 @@
   align-items: flex-start;
   gap: var(--ds-spacing-2);
   font-size: var(--ds-font-size-sm);
-  line-height: var(--ds-form-supporting-line-height, 1.45);
+  line-height: var(--ds-form-supporting-line-height, var(--ds-line-height-snug));
 }
 
 /* Compositor-safe entrance (opacity + transform only): the former
@@ -430,7 +430,7 @@
     /* Collapsed to vertical rhythm: the control-height floor no longer
        applies (it would read as dead space above the control). */
     min-block-size: 0;
-    padding-block-end: var(--ds-form-label-gap, 4px);
+    padding-block-end: var(--ds-form-label-gap, var(--ds-spacing-1));
   }
 }
 
@@ -454,8 +454,8 @@
   .ds-form.ds-form--modern[data-part='root'] .ds-form-error-list.ds-form-error-list--modern[data-part='error-list'] {
     border-color: ButtonText;
   }
-  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:hover,
-  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:active {
+  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:is([data-state~='hovered'], :hover),
+  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:is([data-state~='pressed'], :active) {
     color: ButtonText;
     background: ButtonFace;
   }

@@ -500,8 +500,8 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
     // destructuring, and Card stamps its own data-part after caller rest in
     // every engine, so neither forwards a consumer-passed
     // data-part to the DOM (confirmed for both engines of each), so their
-    // anatomy is the className already on them (`ds-surface ds-form` /
-    // `ds-wizard` / `ds-detail-form`, `ds-form__error-card`, etc.), never a
+    // anatomy is the className already on them (`ds-surface ds-form-surface` /
+    // `ds-wizard` / `ds-detail-form`, `ds-form-surface__error-card`, etc.), never a
     // data-part attribute. Asserting `[data-part='root']` here would give a
     // FALSE PASS by matching Card's own unrelated internal `root` stamp
     // instead of proving this surface's own root landed -- verified by a
@@ -516,8 +516,8 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       };
       const { container } = renderWithEngine(<FormSurface config={config} />, 'modern');
 
-      await waitForClass(container, 'ds-form');
-      await waitForClass(container, 'ds-form__error-card');
+      await waitForClass(container, 'ds-form-surface');
+      await waitForClass(container, 'ds-form-surface__error-card');
     });
 
     it('WizardSurface: stamps root(className)/error-card(className)', async () => {
