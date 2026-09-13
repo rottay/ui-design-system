@@ -466,6 +466,12 @@
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "WO-FAM-01 (D-16, landed ad38a9327): Switch merged into Toggle; the frozen rustic switch skin is deleted with its family. DT authorization, owner may veto.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree-select/index.css": {
       "blob": "0de3061e02b93ac370b49214f19ea5db1bf91f5d6fc637b9432462b163ef0463",
       "relocationDigest": "f55cf3edb033b10904c400883838789fb6f6b9414a7c70d03277c46a79dd3957",
