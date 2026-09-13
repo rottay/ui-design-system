@@ -4586,7 +4586,7 @@
    "lane": "family-cuts",
    "order": 4,
    "size": "XL",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4599,8 +4599,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-77, F-21, F-39",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "opus",
+   "claimedAt": "2026-09-13",
    "progressLog": []
   },
   {
