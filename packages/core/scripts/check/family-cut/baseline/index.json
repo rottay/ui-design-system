@@ -10,7 +10,7 @@
       "denominators": {
         "skinFiles": 3,
         "sourceFiles": 6,
-        "channelsRead": 253,
+        "channelsRead": 252,
         "classTokens": 13,
         "partsStamped": 12,
         "partsConsumed": 11
@@ -24,7 +24,6 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 1,
-      "channelsReadNote": "252 -> 253 in connection lot 2: the button skin folds --ds-control-height-scale into the height it already resolves from the density scale. `readWithoutProducer` (34) does not move -- the channel is declared in `foundation/themes/default` and emitted by `derivation/shape/control-height`, so it is read AND written.",
       "cutNote": "WO-FAM-01: the 32 shadow channels and the label weight/family are emitted by derivation/chrome/button; the press recipe timing is stamped onto the button channels; one `ds-` vocabulary. Two pins stay above 0 for adjudication, never by a fabricated reader: partsStampedNotConsumed=1 is `trigger`, the default root part a composite may rename (P-79), so the skin anchors on `[data-variant]` and the part is read by the anatomy skeleton renderer instead; fanOutUnreached=1 is `recipe-profile`, whose only channel `--ds-recipe-profile` is provenance owned by WO-DER-06 while the profile reaches the button through the runtime."
     },
     "checkbox": {
@@ -32,7 +31,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 6,
-        "channelsRead": 74,
+        "channelsRead": 80,
         "classTokens": 3,
         "partsStamped": 7,
         "partsConsumed": 7
@@ -53,7 +52,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 6,
-        "channelsRead": 63,
+        "channelsRead": 68,
         "classTokens": 4,
         "partsStamped": 8,
         "partsConsumed": 8
@@ -74,7 +73,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 5,
-        "channelsRead": 89,
+        "channelsRead": 98,
         "classTokens": 3,
         "partsStamped": 12,
         "partsConsumed": 12
@@ -95,7 +94,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 76,
+        "channelsRead": 101,
         "classTokens": 2,
         "partsStamped": 4,
         "partsConsumed": 3

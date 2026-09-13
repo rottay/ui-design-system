@@ -609,6 +609,7 @@ test('classifySemanticOwner covers every declared rule and role-suffixes the tin
   assert.equal(classifySemanticOwner('--ds-tint-4'), 'palette.tint-ramp.primary');
   assert.equal(classifySemanticOwner('--ds-color-primary'), 'palette');
   assert.equal(classifySemanticOwner('--ds-radius-md'), 'surfaces.radius');
+  assert.equal(classifySemanticOwner('--ds-toggle-track-bg-checked'), 'chrome.toggle');
   assert.equal(classifySemanticOwner('--ds-rhythm-scale'), 'surfaces.rhythm');
   assert.equal(classifySemanticOwner('--ds-motion-calm'), 'motion');
   assert.equal(classifySemanticOwner('--ds-motion-ease-enter'), 'motion.easing');
