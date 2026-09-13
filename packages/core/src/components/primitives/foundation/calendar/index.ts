@@ -1,9 +1,7 @@
 /**
- * @fileoverview Shared calendar utilities - Rottay Design System
- * @description Engine-agnostic calendar functions, constants, and types used
- * by calendar-bearing primitives.
- *
- * Extracted to eliminate duplication between engine implementations.
+ * @fileoverview The calendar kernel: grid geometry, locale week start and names,
+ * formatting and the APG date-grid keyboard, shared by every calendar-bearing
+ * primitive.
  *
  * @module primitives/foundation/calendar
  * @category PrimitiveFoundation
@@ -15,6 +13,8 @@
 // ---------------------------------------------------------------------------
 
 export const DAYS_SHORT = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+
+export const DAYS_LONG = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export const MONTHS_FULL = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -147,56 +147,35 @@ export interface CalendarDay {
   isDisabled: boolean;
 }
 
+export interface CalendarGridOptions {
+  /** @default 0 (Sunday) */
+  readonly weekStartsOn?: WeekStartsOn;
+}
+
 /**
- * Generate a 6-week (42-cell) calendar grid for a given year/month.
- * Includes leading days from the previous month and trailing days
- * from the next month.
+ * Generate a 6-week (42-cell) grid for a month whose first column is
+ * `weekStartsOn`, padded with the adjacent months' days.
  */
 export function generateCalendarGrid(
   year: number,
   month: number,
   disabledDate?: (d: Date) => boolean,
+  options: CalendarGridOptions = {},
 ): CalendarDay[] {
+  const { weekStartsOn = 0 } = options;
   const today = new Date();
-  const totalDays = daysInMonthCount(year, month);
-  const startDay = firstDayOfMonth(year, month);
-  const grid: CalendarDay[] = [];
-
-  const prevMonth = month === 0 ? 11 : month - 1;
-  const prevYear = month === 0 ? year - 1 : year;
-  const prevMonthDays = daysInMonthCount(prevYear, prevMonth);
-  for (let i = startDay - 1; i >= 0; i--) {
-    const d = prevMonthDays - i;
-    const date = new Date(prevYear, prevMonth, d);
-    grid.push({
-      date, day: d, isCurrentMonth: false,
+  const leading = (firstDayOfMonth(year, month) - weekStartsOn + 7) % 7;
+  const viewedMonth = new Date(year, month, 1).getMonth();
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(year, month, 1 - leading + index);
+    return {
+      date,
+      day: date.getDate(),
+      isCurrentMonth: date.getMonth() === viewedMonth,
       isToday: isSameDay(date, today),
       isDisabled: disabledDate ? disabledDate(date) : false,
-    });
-  }
-
-  for (let d = 1; d <= totalDays; d++) {
-    const date = new Date(year, month, d);
-    grid.push({
-      date, day: d, isCurrentMonth: true,
-      isToday: isSameDay(date, today),
-      isDisabled: disabledDate ? disabledDate(date) : false,
-    });
-  }
-
-  const remaining = 42 - grid.length;
-  const nextMonth = month === 11 ? 0 : month + 1;
-  const nextYear = month === 11 ? year + 1 : year;
-  for (let d = 1; d <= remaining; d++) {
-    const date = new Date(nextYear, nextMonth, d);
-    grid.push({
-      date, day: d, isCurrentMonth: false,
-      isToday: isSameDay(date, today),
-      isDisabled: disabledDate ? disabledDate(date) : false,
-    });
-  }
-
-  return grid;
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -219,4 +198,162 @@ export function getKeyboardNavDate(current: Date, key: string): Date | null {
     case 'End':        return new Date(y, m + 1, 0);
     default:           return null;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Locale geometry
+// ---------------------------------------------------------------------------
+
+/** The weekday a grid's first column holds: 0 is Sunday, 6 is Saturday. */
+export type WeekStartsOn = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+/** CLDR regions whose week starts on Sunday or Saturday; every other region starts on Monday. */
+const SUNDAY_REGIONS = new Set([
+  'AG', 'AS', 'BD', 'BR', 'BS', 'BT', 'BW', 'BZ', 'CA', 'CN', 'CO', 'DM', 'DO', 'ET', 'GT', 'GU', 'HK',
+  'HN', 'ID', 'IL', 'IN', 'JM', 'JP', 'KE', 'KH', 'KR', 'LA', 'MH', 'MM', 'MO', 'MT', 'MX', 'MZ', 'NI',
+  'NP', 'PA', 'PE', 'PH', 'PK', 'PR', 'PY', 'SA', 'SG', 'SV', 'TH', 'TT', 'TW', 'UM', 'US', 'VE', 'VI',
+  'WS', 'YE', 'ZA', 'ZW',
+]);
+const SATURDAY_REGIONS = new Set(['AE', 'AF', 'BH', 'DJ', 'DZ', 'EG', 'IQ', 'IR', 'JO', 'KW', 'LY', 'OM', 'QA', 'SD', 'SY']);
+
+/** A bare language tag answers for the region the product ships it to. */
+const WEEK_START_BY_LANGUAGE: Readonly<Record<string, WeekStartsOn>> = { en: 0, es: 1, fr: 1, pt: 1, de: 1, it: 1, ar: 6, fa: 6, he: 0, ja: 0, ko: 0, zh: 0 };
+
+/**
+ * The first weekday of a locale, from a fixed CLDR table rather than
+ * `Intl.Locale#weekInfo`, so the grid is identical across ICU builds.
+ */
+export function resolveWeekStartsOn(locale?: string | null): WeekStartsOn {
+  if (!locale) return 0;
+  const [language = '', ...rest] = locale.replace(/_/g, '-').split('-');
+  const region = rest.find((part) => /^[A-Za-z]{2}$|^\d{3}$/.test(part))?.toUpperCase();
+  if (region) {
+    if (SUNDAY_REGIONS.has(region)) return 0;
+    if (SATURDAY_REGIONS.has(region)) return 6;
+    return 1;
+  }
+  return WEEK_START_BY_LANGUAGE[language.toLowerCase()] ?? 1;
+}
+
+/** Sunday-based weekday indices in column order. */
+export function weekdayOrder(weekStartsOn: WeekStartsOn = 0): number[] {
+  return Array.from({ length: 7 }, (_, column) => (weekStartsOn + column) % 7);
+}
+
+const REFERENCE_SUNDAY = new Date(2023, 0, 1);
+
+function formatterFor(locale: string | undefined, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat | null {
+  if (!locale) return null;
+  try {
+    return new Intl.DateTimeFormat(locale, options);
+  } catch {
+    return null;
+  }
+}
+
+/** Weekday names in column order; without a locale the English floor. */
+export function formatWeekdayNames(
+  locale: string | undefined,
+  options: { weekStartsOn?: WeekStartsOn; width?: 'narrow' | 'short' | 'long' } = {},
+): string[] {
+  const { weekStartsOn = 0, width = 'short' } = options;
+  const formatter = formatterFor(locale, { weekday: width });
+  return weekdayOrder(weekStartsOn).map((weekday) =>
+    formatter
+      ? formatter.format(new Date(REFERENCE_SUNDAY.getFullYear(), 0, 1 + weekday))
+      : width === 'long'
+        ? DAYS_LONG[weekday]
+        : DAYS_SHORT[weekday],
+  );
+}
+
+/** Month names January first; without a locale the English floor. */
+export function formatMonthNames(locale: string | undefined, width: 'short' | 'long' = 'long'): string[] {
+  const formatter = formatterFor(locale, { month: width });
+  return Array.from({ length: 12 }, (_, month) =>
+    formatter ? formatter.format(new Date(2023, month, 1)) : width === 'long' ? MONTHS_FULL[month] : MONTHS_SHORT[month],
+  );
+}
+
+/** The accessible name of a day cell in the active locale. */
+export function formatCalendarDate(date: Date, locale?: string): string {
+  const formatter = formatterFor(locale, { dateStyle: 'full' });
+  return formatter ? formatter.format(date) : formatDateStr(date);
+}
+
+// ---------------------------------------------------------------------------
+// Grid keyboard (APG date grid)
+// ---------------------------------------------------------------------------
+
+export interface CalendarKeyEvent {
+  readonly key: string;
+  readonly shiftKey?: boolean;
+}
+
+export interface CalendarKeyOptions {
+  /** Left and right swap in a right-to-left context. */
+  readonly rtl?: boolean;
+  readonly weekStartsOn?: WeekStartsOn;
+}
+
+/** Same day in another month, clamped to that month's length. */
+function shiftMonths(date: Date, months: number): Date {
+  const target = new Date(date.getFullYear(), date.getMonth() + months, 1);
+  const day = Math.min(date.getDate(), daysInMonthCount(target.getFullYear(), target.getMonth()));
+  return new Date(target.getFullYear(), target.getMonth(), day);
+}
+
+/**
+ * The date a grid key moves focus to, or `null` for a key the grid does not
+ * own: arrows a day or a week, Home and End the week edges, PageUp and
+ * PageDown a month, with Shift a year.
+ */
+export function resolveCalendarKeyDate(
+  current: Date,
+  event: CalendarKeyEvent,
+  options: CalendarKeyOptions = {},
+): Date | null {
+  const { rtl = false, weekStartsOn = 0 } = options;
+  const y = current.getFullYear();
+  const m = current.getMonth();
+  const d = current.getDate();
+  switch (event.key) {
+    case 'ArrowLeft':
+      return new Date(y, m, d + (rtl ? 1 : -1));
+    case 'ArrowRight':
+      return new Date(y, m, d + (rtl ? -1 : 1));
+    case 'ArrowUp':
+      return new Date(y, m, d - 7);
+    case 'ArrowDown':
+      return new Date(y, m, d + 7);
+    case 'Home':
+      return new Date(y, m, d - ((current.getDay() - weekStartsOn + 7) % 7));
+    case 'End':
+      return new Date(y, m, d + (6 - ((current.getDay() - weekStartsOn + 7) % 7)));
+    case 'PageUp':
+      return shiftMonths(current, event.shiftKey ? -12 : -1);
+    case 'PageDown':
+      return shiftMonths(current, event.shiftKey ? 12 : 1);
+    default:
+      return null;
+  }
+}
+
+/**
+ * The key's destination, stepping past disabled dates in the same direction;
+ * `null` when the key is not a grid key or every date that way is disabled.
+ */
+export function resolveEnabledCalendarKeyDate(
+  current: Date,
+  event: CalendarKeyEvent,
+  isDisabled: (date: Date) => boolean,
+  options: CalendarKeyOptions = {},
+): Date | null {
+  let target = resolveCalendarKeyDate(current, event, options);
+  const stepKey = event.key === 'Home' ? 'ArrowRight' : event.key === 'End' ? 'ArrowLeft' : event.key;
+  const stepOptions = event.key === 'Home' || event.key === 'End' ? { ...options, rtl: false } : options;
+  for (let guard = 0; target && isDisabled(target) && guard < 366; guard += 1) {
+    target = resolveCalendarKeyDate(target, { ...event, key: stepKey }, stepOptions);
+  }
+  return target && !isDisabled(target) ? target : null;
 }
