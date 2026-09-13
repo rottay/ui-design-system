@@ -5,7 +5,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { FormField } from './';
 import { Input } from '../input';
-import { Switch } from '../switch';
+import { Toggle } from '../toggle';
 import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
 import { EngineComparison as EngineComparisonHelper } from '../../../../../.storybook/components';
 
@@ -178,7 +178,7 @@ export const ModernStateMatrix: Story = {
         <Input engine="modern" defaultValue="Locked" />
       </FormField>
       <FormField engine="modern" label="Notifications" name="m-switch">
-        <Switch engine="modern" defaultChecked />
+        <Toggle engine="modern" defaultChecked aria-label="Notifications" />
       </FormField>
       <div dir="rtl" lang="ar">
         <FormField

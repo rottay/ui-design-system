@@ -16,7 +16,6 @@
 
 import React, { forwardRef } from 'react';
 
-import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import type { SwitchProps, ToggleSize } from '../../contracts';
 import { Toggle } from '../..';
 
@@ -25,7 +24,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     <Toggle
       {...rest}
       ref={ref as never}
-      size={(toCanonicalSize(size) ?? 'md') as ToggleSize}
+      size={size as ToggleSize}
       checkedLabel={checkedChildren}
       uncheckedLabel={unCheckedChildren}
       onChange={

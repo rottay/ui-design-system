@@ -24,6 +24,7 @@
 import React, { forwardRef, useCallback, useId, useState } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import type { ToggleProps } from '../../contracts';
 import { TOGGLE_DEFAULTS } from '../../contracts';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
@@ -122,7 +123,7 @@ const ModernToggle = forwardRef<HTMLInputElement, ToggleProps>((props, ref) => {
       <label
         className="ds-toggle ds-toggle--modern"
         {...partAttributes('root', interaction)}
-        data-size={size}
+        data-size={toCanonicalSize(size) ?? TOGGLE_DEFAULTS.size}
         data-color={color}
         data-checked={isChecked ? 'true' : 'false'}
         data-error={error ? 'true' : 'false'}

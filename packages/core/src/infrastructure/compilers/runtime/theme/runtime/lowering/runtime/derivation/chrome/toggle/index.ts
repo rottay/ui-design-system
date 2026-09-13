@@ -27,6 +27,7 @@ export const toggleChromeDeriver: FamilyDeriver = {
     "--ds-toggle-track-bg-checked",
     "--ds-toggle-track-bg-hover",
     "--ds-toggle-track-bg-active",
+    "--ds-toggle-hover-shift",
     "--ds-toggle-error-track-bg",
     "--ds-toggle-dot-shadow",
     "--ds-toggle-label-color",
@@ -49,6 +50,7 @@ export function deriveToggleChannels(): Record<string, string> {
   vars["--ds-toggle-track-bg-checked"] = "var(--ds-color-primary)";
   vars["--ds-toggle-track-bg-hover"] = `color-mix(in srgb, ${TRACK}, var(--ds-color-text-primary) var(--ds-state-hover-shift))`;
   vars["--ds-toggle-track-bg-active"] = `color-mix(in srgb, ${TRACK}, var(--ds-color-text-primary) var(--ds-state-active-shift))`;
+  vars["--ds-toggle-hover-shift"] = "var(--ds-state-hover-shift)";
   vars["--ds-toggle-error-track-bg"] = "var(--ds-color-error)";
   vars["--ds-toggle-dot-shadow"] = "var(--ds-elevation-1)";
   vars["--ds-toggle-label-color"] = "var(--ds-color-text-primary)";

@@ -218,33 +218,33 @@
    this fallback chain makes the same ladder the DEFAULT for any tenant that
    authors nothing here at all. */
 .ds-segmented.ds-segmented--modern[role='radiogroup'][data-size='small'] {
-  --ds-segmented-current-height: var(--ds-segmented-sm-height);
-  --ds-segmented-current-padding-x: var(--ds-segmented-sm-padding-x);
-  --ds-segmented-current-font-size: var(--ds-segmented-sm-font-size);
-  --ds-segmented-current-line-height: var(--ds-segmented-sm-line-height);
-  --ds-segmented-current-gap: var(--ds-segmented-sm-gap);
-  --ds-segmented-current-icon-size: var(--ds-segmented-sm-icon-size);
-  --ds-segmented-current-radius: var(--ds-segmented-sm-radius);
+  --ds-segmented-current-height: var(--ds-segmented-sm-height, var(--ds-button-sm-height));
+  --ds-segmented-current-padding-x: var(--ds-segmented-sm-padding-x, var(--ds-button-sm-padding-x));
+  --ds-segmented-current-font-size: var(--ds-segmented-sm-font-size, var(--ds-button-sm-font-size));
+  --ds-segmented-current-line-height: var(--ds-segmented-sm-line-height, var(--ds-button-sm-line-height));
+  --ds-segmented-current-gap: var(--ds-segmented-sm-gap, var(--ds-button-sm-gap));
+  --ds-segmented-current-icon-size: var(--ds-segmented-sm-icon-size, var(--ds-button-sm-icon-size));
+  --ds-segmented-current-radius: var(--ds-segmented-sm-radius, var(--ds-segmented-item-radius, var(--ds-button-sm-radius)));
 }
 
 .ds-segmented.ds-segmented--modern[role='radiogroup'][data-size='middle'] {
-  --ds-segmented-current-height: var(--ds-segmented-md-height);
-  --ds-segmented-current-padding-x: var(--ds-segmented-md-padding-x);
-  --ds-segmented-current-font-size: var(--ds-segmented-md-font-size);
-  --ds-segmented-current-line-height: var(--ds-segmented-md-line-height);
-  --ds-segmented-current-gap: var(--ds-segmented-md-gap);
-  --ds-segmented-current-icon-size: var(--ds-segmented-md-icon-size);
-  --ds-segmented-current-radius: var(--ds-segmented-md-radius);
+  --ds-segmented-current-height: var(--ds-segmented-md-height, var(--ds-button-md-height));
+  --ds-segmented-current-padding-x: var(--ds-segmented-md-padding-x, var(--ds-button-md-padding-x));
+  --ds-segmented-current-font-size: var(--ds-segmented-md-font-size, var(--ds-button-md-font-size));
+  --ds-segmented-current-line-height: var(--ds-segmented-md-line-height, var(--ds-button-md-line-height));
+  --ds-segmented-current-gap: var(--ds-segmented-md-gap, var(--ds-button-md-gap));
+  --ds-segmented-current-icon-size: var(--ds-segmented-md-icon-size, var(--ds-button-md-icon-size));
+  --ds-segmented-current-radius: var(--ds-segmented-md-radius, var(--ds-segmented-item-radius, var(--ds-button-md-radius)));
 }
 
 .ds-segmented.ds-segmented--modern[role='radiogroup'][data-size='large'] {
-  --ds-segmented-current-height: var(--ds-segmented-lg-height);
-  --ds-segmented-current-padding-x: var(--ds-segmented-lg-padding-x);
-  --ds-segmented-current-font-size: var(--ds-segmented-lg-font-size);
-  --ds-segmented-current-line-height: var(--ds-segmented-lg-line-height);
-  --ds-segmented-current-gap: var(--ds-segmented-lg-gap);
-  --ds-segmented-current-icon-size: var(--ds-segmented-lg-icon-size);
-  --ds-segmented-current-radius: var(--ds-segmented-lg-radius);
+  --ds-segmented-current-height: var(--ds-segmented-lg-height, var(--ds-button-lg-height));
+  --ds-segmented-current-padding-x: var(--ds-segmented-lg-padding-x, var(--ds-button-lg-padding-x));
+  --ds-segmented-current-font-size: var(--ds-segmented-lg-font-size, var(--ds-button-lg-font-size));
+  --ds-segmented-current-line-height: var(--ds-segmented-lg-line-height, var(--ds-button-lg-line-height));
+  --ds-segmented-current-gap: var(--ds-segmented-lg-gap, var(--ds-button-lg-gap));
+  --ds-segmented-current-icon-size: var(--ds-segmented-lg-icon-size, var(--ds-button-lg-icon-size));
+  --ds-segmented-current-radius: var(--ds-segmented-lg-radius, var(--ds-segmented-item-radius, var(--ds-button-lg-radius)));
 }
 
 .ds-segmented--modern[role='radiogroup'] [data-part='option'] {
@@ -257,7 +257,7 @@
   /* Long options truncate against a bound instead of stretching the whole
      track into scroll; block mode already constrains via flex. */
   max-inline-size: var(--ds-segmented-item-max-inline-size);
-  height: calc(var(--ds-segmented-current-height) * var(--ds-control-height-scale, 1));
+  height: calc(var(--ds-segmented-current-height) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   padding: 0 var(--ds-segmented-current-padding-x);
   border: none;
   border-radius: var(--ds-segmented-current-radius);
@@ -297,7 +297,7 @@
   justify-content: center;
   width: var(--ds-segmented-current-icon-size);
   height: var(--ds-segmented-current-icon-size);
-  border-radius: var(--ds-segmented-icon-radius);
+  border-radius: var(--ds-segmented-icon-radius, var(--ds-radius-xs));
   /* No transition here: the pass-2 verdict keeps the icon on the option's
      ink with no lift/tint of its own (single-axis reading), so no rule ever
      changes a transitionable property on this part — the former
@@ -372,14 +372,14 @@
 }
 
 .ds-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
-  opacity: var(--ds-segmented-disabled-opacity);
-  cursor: var(--ds-segmented-disabled-cursor);
+  opacity: var(--ds-segmented-disabled-opacity, var(--ds-state-disabled-opacity));
+  cursor: not-allowed;
 }
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
   .ds-segmented--modern[role='radiogroup'] [data-part='option'] {
-    min-block-size: var(--ds-segmented-touch-target-min);
+    min-block-size: var(--ds-segmented-touch-target-min, var(--ds-touch-target-min));
   }
 }
 

@@ -45,11 +45,11 @@
   align-items: center;
   gap: var(--ds-checkbox-label-gap, var(--ds-spacing-2));
   max-inline-size: 100%;
-  padding-block: var(--ds-checkbox-row-padding-block);
+  padding-block: var(--ds-checkbox-row-padding-block, var(--ds-spacing-1));
   /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-checkbox-touch-target-min);
+  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min));
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -242,8 +242,8 @@
 /* Checkmark ------------------------------------------------------------- */
 .ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {
   display: block;
-  inline-size: var(--ds-checkbox-checkmark-size);
-  block-size: var(--ds-checkbox-checkmark-size);
+  inline-size: var(--ds-checkbox-checkmark-size, var(--ds-icon-xs-size));
+  block-size: var(--ds-checkbox-checkmark-size, var(--ds-icon-xs-size));
   transform: scale(1);
   animation: ds-checkbox-settle var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
@@ -273,18 +273,18 @@
 .ds-checkbox.ds-checkbox--modern [data-part='label'] {
   color: var(--ds-checkbox-label-color, var(--ds-color-text-primary));
   font-size: var(--ds-checkbox-md-font-size, var(--ds-font-size-sm));
-  line-height: var(--ds-checkbox-label-line-height);
+  line-height: var(--ds-checkbox-label-line-height, var(--ds-line-height-snug));
   /* No `hyphens: auto` here: with hyphenation the column's min-content shrinks
      to a hyphenated segment and the label breaks mid-word under a squeeze. */
   overflow-wrap: break-word;
 }
 
 /* Label type scales with the indicator size, on the canonical channels. */
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-checkbox-xs-font-size); }
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-checkbox-sm-font-size); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-checkbox-xs-font-size, var(--ds-font-size-xs)); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-checkbox-sm-font-size, var(--ds-font-size-sm)); }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-checkbox-md-font-size); }
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-checkbox-lg-font-size); }
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-checkbox-xl-font-size); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-checkbox-lg-font-size, var(--ds-font-size-base)); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-checkbox-xl-font-size, var(--ds-font-size-lg)); }
 .ds-checkbox.ds-checkbox--modern[data-disabled='true'] [data-part='label'] {
   color: var(--ds-color-text-disabled);
 }
@@ -320,14 +320,14 @@
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-checkbox-touch-target-min);
+  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min));
   }
   .ds-checkbox.ds-checkbox--modern[data-part='root'][data-standalone='true'] {
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-checkbox-touch-target-min);
-    min-inline-size: var(--ds-checkbox-touch-target-min);
+  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min));
+    min-inline-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min));
     justify-content: center;
   }
 }

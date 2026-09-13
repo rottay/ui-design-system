@@ -46,6 +46,7 @@ export const segmentedChromeDeriver: FamilyDeriver = {
     "--ds-segmented-lg-gap",
     "--ds-segmented-lg-icon-size",
     "--ds-segmented-lg-radius",
+    "--ds-segmented-item-radius",
     "--ds-segmented-border",
     "--ds-segmented-border-hover",
     "--ds-segmented-shadow-hover",
@@ -81,6 +82,7 @@ export function deriveSegmentedChannels(): Record<string, string> {
   vars["--ds-segmented-lg-gap"] = "var(--ds-button-lg-gap)";
   vars["--ds-segmented-lg-icon-size"] = "var(--ds-button-lg-icon-size)";
   vars["--ds-segmented-lg-radius"] = "var(--ds-button-lg-radius)";
+  vars["--ds-segmented-item-radius"] = "var(--ds-button-md-radius)";
   vars["--ds-segmented-border"] = "var(--ds-material-control-border)";
   vars["--ds-segmented-border-hover"] = "var(--ds-material-control-border-hover)";
   vars["--ds-segmented-shadow-hover"] = "var(--ds-material-control-shadow-hover)";

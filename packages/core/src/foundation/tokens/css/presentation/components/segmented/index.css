@@ -12,6 +12,5 @@
   --ds-segmented-item-transform-selected: none;
   --ds-segmented-icon-radius: var(--ds-radius-xs);
   --ds-segmented-disabled-opacity: var(--ds-state-disabled-opacity);
-  --ds-segmented-disabled-cursor: not-allowed;
   --ds-segmented-touch-target-min: var(--ds-touch-target-min);
 }
