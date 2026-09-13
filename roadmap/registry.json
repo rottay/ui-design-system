@@ -4561,7 +4561,7 @@
    "lane": "family-cuts",
    "order": 3,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4576,7 +4576,9 @@
    "notes": "wave 4; closes F-78, F-26, F-39, F-33 R4 2026-09-08: this cut inherits the runtime that WO-CRA-24 repairs (CD-01, restored-record identity) — `filter-builder/runtime/tree`; do not re-derive its identity allocation inside the cut.",
    "claimedBy": "opus",
    "claimedAt": "2026-09-13",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-13",
+   "evidence": "LANDED fa778d480 (writer 833787068..7d1f461e5, 18 commits, Opus claude-opus-5 daniel). Eight families (input, textarea, password-input, otp-input, tag-input, input-number, form-field, form) each written once across deriver + Modern skin + runtime + tests; ONE shared form runtime for both engines (D-22 layout); inputnumber/input-number namespace unified; NEW shared kernels resolveSubmitIntent/isComposingKey (IME-safe submit) + useFieldAction (Codex ACCEPT); loading via AnatomySkeleton; form exposes adapt + stamps data-posture (adapt-slot exit 0). F-78 form similarity 65.4%->21.1% (<25% target met for form; otp rustic engine untouched); F-33 chrome reaches Modern InputNumber. Acceptance: family-cut gate 13/13 (readWithoutProducer=0, one ds- vocabulary each, census 0); 88/88 browser causality probes with negative controls; axe clean except the routed bithire dark invalid-input finding (pre-existing, -> DER-06); consumer fixture 29/29; tsc/typecheck/structure/entrypoints/decisions-lit fresh/contract-changeset all 0. Independent audit Kimi K3. CORE DELTAS reviewed by Codex (codex-response-fam02-deltas.md + addenda): kernels ACCEPT; HOLDs C1 (family-cut sibling exclusion could mask paint on the measured family), C2 (paint-lexer handler-bag certified path not value; second-round useMemo binding shadow) and C3 (rustic freeze exception) ALL RESOLVED after writer corrections 87cb8ef57/c3849283a/50812d913/7d1f461e5 with red-to-green drills. C3 freeze exception DT-authorized (enumerated Modern-parity bug fixes; owner may veto); dependency re-validation included as inseparable, recorded in the exception reason. FLAGS ROUTED: bithire dark invalid input 1.08:1 (authors --ds-input-error-color once) -> DER-06; states.focus-style/emphasis/elevation-posture not reaching fields (verticals author their own focus shadow/hover border; input rest shadow invalid when inset is none, same on base) -> DER-06/surfaces lane; Input.TextArea vs Textarea duplication stays for a later cut; freeze-gate 35 violations (3 FAM-01 switch deletions DT authorizes next; 32 pre-existing triage) registered in WO-EVI-02."
   },
   {
    "id": "WO-FAM-03",
