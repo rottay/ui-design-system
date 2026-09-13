@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-12",
+ "updated": "2026-09-13",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -5518,7 +5518,7 @@
    "lane": "family-cuts",
    "order": 15,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01",
     "WO-INV-05"
@@ -5531,8 +5531,8 @@
    "progressLog": [],
    "claimedBy": "daniel",
    "claimedAt": "2026-09-12",
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-13",
+   "evidence": "LANDED 23eec22fc (writer cea31faca, Opus claude-opus-5 daniel profile). One anatomy-derived renderer (AnatomySkeleton) reads the stamped data-part anatomy and paints bones by role; the nine hand-made compounds + compound skin deleted without compat; shimmer only --ds-motion-*; reduced-motion = static flat surface; family-cut arm anatomy-derived-skeleton flipped OWED->BLOCKING as the WO's own close act. Independent audit Kimi K3 (temporary Fable substitution; design seat excepted by owner 2026-09-13, debrief delta): skeleton suite 63/63, 4 gate drills green (planted hand-made skeleton BLOCKING, planted shimmer keyframe BLOCKING, composing family green, arm holds on live tree), 7 family-cut suite reds verified IDENTICAL set at base 2583f10da, liveness 106/106 + dispositions 44/44, reduced-motion guard 53/53, decisions-lit regenerated + :check exit 0, baseline lowerings with set-difference justifications, grep survivors = only frozen AntD comments, changeset major. Design review: Codex ACCEPT (debrief delta addendum), Kimi ACCEPT (conflict declared), Fable excepted by owner. Flags routed: BrandMotion.pulseSpeed no longer drives skeleton cadence (tenant dial still scales; declared in changeset); ds-skeleton-* keyframes remain for frozen Rustic + table/stats-grid skins (their cuts migrate them). Combined-candidate checks on main 3f1405c1c: liveness 0, dispositions 0, family-cut gate 0, decisions-lit:check 0, contract-changeset 0."
   }
  ],
  "traceability": {
