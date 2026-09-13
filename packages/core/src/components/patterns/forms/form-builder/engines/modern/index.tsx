@@ -49,7 +49,7 @@ import { Textarea } from '../../../../../primitives/inputs/textarea';
 import { Select } from '../../../../../primitives/inputs/select';
 import { Checkbox } from '../../../../../primitives/inputs/checkbox';
 import { Radio } from '../../../../../primitives/inputs/radio';
-import { Switch } from '../../../../../primitives/inputs/switch';
+import { Toggle } from '../../../../../primitives/inputs/toggle';
 import { FormField } from '../../../../../primitives/inputs/form-field';
 import { DatePicker } from '../../../../../primitives/inputs/date-picker';
 import { TimePicker } from '../../../../../primitives/inputs/time-picker';
@@ -98,7 +98,7 @@ function useFormBuilderTranslation() {
 
 /**
  * DS-primitive-driven form builder that renders DS components (Input, Select,
- * Checkbox, Radio, Switch, etc.) instead of raw HTML elements. Manages value
+ * Checkbox, Radio, Toggle, etc.) instead of raw HTML elements. Manages value
  * state, validation, conditional visibility, collapsible sections, read-only
  * mode, and multi-step wizard navigation internally -- no form library required.
  *
@@ -467,7 +467,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           );
         case 'switch':
           return (
-            <Switch checked={!!val} onChange={(checked) => updateValue(field.name, checked)} disabled={fieldDisabled} />
+            <Toggle checked={!!val} onChange={(checked) => updateValue(field.name, checked)} disabled={fieldDisabled} />
           );
         /* ------------------------------------------------------------------
          * DS Primitive inputs -- DatePicker, TimePicker, Upload, ColorPicker,

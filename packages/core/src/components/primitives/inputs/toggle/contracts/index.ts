@@ -36,7 +36,8 @@
  */
 
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
-import type { ReactNode, CSSProperties, ChangeEvent } from 'react';
+import type { LegacySizeAlias, Size } from '../../../../../foundation/contracts/kernel/common';
+import type { ReactNode, CSSProperties, ChangeEvent, MouseEvent } from 'react';
 
 // Size types
 export type ToggleSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -84,6 +85,14 @@ export interface ToggleProps extends EngineAwareProps {
   labelPlacement?: ToggleLabelPlacement;
   /** Change handler */
   onChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;
+  /** Tab index of the native switch */
+  tabIndex?: number;
+  /** Accessible name when no visible label names the switch */
+  'aria-label'?: string;
+  /** Id of the element that names the switch; outranks `aria-label` and `label` */
+  'aria-labelledby'?: string;
+  /** Ids of elements that describe the switch, merged with its own description */
+  'aria-describedby'?: string;
   /** Additional CSS class */
   className?: string;
   /** Inline styles */
@@ -120,12 +129,12 @@ export const SIZE_VALUES: Record<ToggleSize, { width: number; height: number; do
 
 // Color mappings
 export const COLOR_MAP: Record<ToggleVariant, { bg: string; bgChecked: string; border: string }> = {
-  default: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-primary-500, #1890ff)', border: 'var(--ds-color-neutral-300, #d9d9d9)' },
-  primary: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-primary-500, #1890ff)', border: 'var(--ds-color-primary-500, #1890ff)' },
-  secondary: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-secondary-500, #6c757d)', border: 'var(--ds-color-secondary-500, #6c757d)' },
-  success: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-success-500, #52c41a)', border: 'var(--ds-color-success-500, #52c41a)' },
-  warning: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-warning-500, #faad14)', border: 'var(--ds-color-warning-500, #faad14)' },
-  error: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-error-500, #ff4d4f)', border: 'var(--ds-color-error-500, #ff4d4f)' },
+  default: { bg: 'var(--ds-color-neutral-300)', bgChecked: 'var(--ds-color-primary-500)', border: 'var(--ds-color-neutral-300)' },
+  primary: { bg: 'var(--ds-color-neutral-300)', bgChecked: 'var(--ds-color-primary-500)', border: 'var(--ds-color-primary-500)' },
+  secondary: { bg: 'var(--ds-color-neutral-300)', bgChecked: 'var(--ds-color-secondary-500)', border: 'var(--ds-color-secondary-500)' },
+  success: { bg: 'var(--ds-color-neutral-300)', bgChecked: 'var(--ds-color-success-500)', border: 'var(--ds-color-success-500)' },
+  warning: { bg: 'var(--ds-color-neutral-300)', bgChecked: 'var(--ds-color-warning-500)', border: 'var(--ds-color-warning-500)' },
+  error: { bg: 'var(--ds-color-neutral-300)', bgChecked: 'var(--ds-color-error-500)', border: 'var(--ds-color-error-500)' },
 };
 
 export const TOGGLE_DEFAULTS = {
@@ -136,4 +145,42 @@ export const TOGGLE_DEFAULTS = {
   loading: false,
   error: false,
   labelPlacement: 'end' as ToggleLabelPlacement,
+};
+
+/**
+ * Size of the deprecated `Switch` alias.
+ * @deprecated since 2026-09-12 (D-16): use `ToggleSize`; `Switch` resolves to `Toggle`.
+ */
+export type SwitchSize = Extract<Size, 'sm' | 'md' | 'lg'> | LegacySizeAlias;
+
+/**
+ * Props of the deprecated `Switch` alias.
+ * @deprecated since 2026-09-12 (D-16): use `ToggleProps`; `checkedChildren` and
+ * `unCheckedChildren` are `checkedLabel` and `uncheckedLabel` there.
+ */
+export interface SwitchProps {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
+  size?: SwitchSize;
+  checkedChildren?: ReactNode;
+  unCheckedChildren?: ReactNode;
+  onChange?: (checked: boolean) => void;
+  onClick?: (checked: boolean, event: MouseEvent) => void;
+  className?: string;
+  style?: CSSProperties;
+  autoFocus?: boolean;
+  tabIndex?: number;
+  id?: string;
+  name?: string;
+  'aria-label'?: string;
+}
+
+/** @deprecated since 2026-09-12 (D-16): use `TOGGLE_DEFAULTS`. */
+export const SWITCH_DEFAULTS: Partial<SwitchProps> = {
+  size: 'default',
+  disabled: false,
+  loading: false,
+  defaultChecked: false,
 };

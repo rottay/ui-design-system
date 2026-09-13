@@ -1,7 +1,7 @@
 /**
  * Toggle Component Tokens - Rottay Design System
  *
- * Design tokens specific to Toggle/Switch components.
+ * Design tokens of the one binary switch family (Toggle; Switch is its deprecated name).
  * Includes sizes, colors, variants, and interactive properties.
  */
 
@@ -52,41 +52,41 @@
      ======================================================================== */
 
   /* Default variant */
-  --ds-toggle-default-bg: #d9d9d9;
-  --ds-toggle-default-bg-checked: #1890ff;
-  --ds-toggle-default-border: #d9d9d9;
+  --ds-toggle-default-bg: var(--ds-color-border-secondary);
+  --ds-toggle-default-bg-checked: var(--ds-color-primary);
+  --ds-toggle-default-border: var(--ds-color-border-secondary);
 
   /* Primary variant */
-  --ds-toggle-primary-bg: #d9d9d9;
-  --ds-toggle-primary-bg-checked: var(--ds-color-primary-500, #1890ff);
-  --ds-toggle-primary-border: var(--ds-color-primary-500, #1890ff);
+  --ds-toggle-primary-bg: var(--ds-color-border-secondary);
+  --ds-toggle-primary-bg-checked: var(--ds-color-primary-500);
+  --ds-toggle-primary-border: var(--ds-color-primary-500);
 
   /* Secondary variant */
-  --ds-toggle-secondary-bg: #d9d9d9;
-  --ds-toggle-secondary-bg-checked: var(--ds-color-neutral-600, #6c757d);
-  --ds-toggle-secondary-border: var(--ds-color-neutral-600, #6c757d);
+  --ds-toggle-secondary-bg: var(--ds-color-border-secondary);
+  --ds-toggle-secondary-bg-checked: var(--ds-color-neutral-600);
+  --ds-toggle-secondary-border: var(--ds-color-neutral-600);
 
   /* Success variant */
-  --ds-toggle-success-bg: #d9d9d9;
-  --ds-toggle-success-bg-checked: var(--ds-color-success-500, #52c41a);
-  --ds-toggle-success-border: var(--ds-color-success-500, #52c41a);
+  --ds-toggle-success-bg: var(--ds-color-border-secondary);
+  --ds-toggle-success-bg-checked: var(--ds-color-success-500);
+  --ds-toggle-success-border: var(--ds-color-success-500);
 
   /* Warning variant */
-  --ds-toggle-warning-bg: #d9d9d9;
-  --ds-toggle-warning-bg-checked: var(--ds-color-warning-500, #faad14);
-  --ds-toggle-warning-border: var(--ds-color-warning-500, #faad14);
+  --ds-toggle-warning-bg: var(--ds-color-border-secondary);
+  --ds-toggle-warning-bg-checked: var(--ds-color-warning-500);
+  --ds-toggle-warning-border: var(--ds-color-warning-500);
 
   /* Error variant */
-  --ds-toggle-error-bg: #d9d9d9;
-  --ds-toggle-error-bg-checked: var(--ds-color-error-500, #ff4d4f);
-  --ds-toggle-error-border: var(--ds-color-error-500, #ff4d4f);
+  --ds-toggle-error-bg: var(--ds-color-border-secondary);
+  --ds-toggle-error-bg-checked: var(--ds-color-error-500);
+  --ds-toggle-error-border: var(--ds-color-error-500);
 
   /* ========================================================================
      DOT/HANDLE - Toggle Handle Styling
      Settings for the toggle handle/dot
      ======================================================================== */
-  --ds-toggle-dot-bg: var(--ds-color-white, #ffffff);
-  --ds-toggle-dot-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --ds-toggle-dot-bg: var(--ds-color-white);
+  --ds-toggle-dot-shadow: var(--ds-elevation-1);
   --ds-toggle-dot-border-radius: var(--ds-radius-full);
 
   /* ========================================================================
@@ -94,28 +94,32 @@
      Settings for the toggle track/background
      ======================================================================== */
   --ds-toggle-track-border-radius: var(--ds-radius-full);
-  --ds-toggle-track-border-width: var(--ds-border-width-1, 1px);
+  --ds-toggle-track-border-width: var(--ds-border-width-1);
   --ds-toggle-track-border-style: solid;
 
   /* ========================================================================
      LABEL - Label Styling
      Settings for toggle labels
      ======================================================================== */
-  --ds-toggle-label-color: var(--ds-color-neutral-700);
+  --ds-toggle-label-color: var(--ds-color-text-primary);
   --ds-toggle-label-color-disabled: var(--ds-material-control-foreground-disabled);
   --ds-toggle-label-font-weight: var(--ds-font-weight-normal);
-  --ds-toggle-label-gap: var(--ds-spacing-2, 0.5rem);            /* 8px */
+  --ds-toggle-label-gap: var(--ds-spacing-2);
+  --ds-toggle-label-line-height: var(--ds-line-height-snug);
+  --ds-toggle-text-gap: calc(var(--ds-spacing-1) / 2);
+  --ds-toggle-message-gap: var(--ds-spacing-1);
+  --ds-toggle-touch-target-min: var(--ds-touch-target-min);
 
   /* Description text */
-  --ds-toggle-description-color: var(--ds-color-neutral-500);
-  --ds-toggle-description-font-size: 0.75rem;
-  --ds-toggle-description-margin-top: var(--ds-spacing-1, 0.25rem);
+  --ds-toggle-description-color: var(--ds-type-color-muted);
+  --ds-toggle-description-font-size: var(--ds-type-caption-font-size);
+  --ds-toggle-description-margin-top: var(--ds-spacing-1);
 
   /* ========================================================================
      INNER LABELS - On/Off Text Inside Toggle
      Settings for text inside the toggle track
      ======================================================================== */
-  --ds-toggle-inner-font-size: 0.625rem;    /* 10px */
+  --ds-toggle-inner-font-size: calc(0.625rem * var(--ds-type-scale, 1));
   --ds-toggle-inner-color: var(--ds-color-white);
   --ds-toggle-inner-padding: 0 0.375rem;
 
@@ -123,26 +127,26 @@
      HELPER TEXT
      Settings for helper/description text
      ======================================================================== */
-  --ds-toggle-helper-color: var(--ds-color-neutral-600);
-  --ds-toggle-helper-font-size: 0.75rem;
-  --ds-toggle-helper-margin-top: var(--ds-spacing-1, 0.25rem);
+  --ds-toggle-helper-color: var(--ds-type-color-muted);
+  --ds-toggle-helper-font-size: var(--ds-type-caption-font-size);
+  --ds-toggle-helper-margin-top: var(--ds-spacing-1);
 
   /* ========================================================================
      ERROR STATE
      Settings for error message and styling
      ======================================================================== */
   --ds-toggle-error-border-color: var(--ds-color-error-500);
-  --ds-toggle-error-message-color: var(--ds-color-error-600);
-  --ds-toggle-error-message-font-size: var(--ds-font-size-xs, 0.75rem);
-  --ds-toggle-error-message-margin-top: var(--ds-spacing-1, 0.25rem);
+  --ds-toggle-error-message-color: var(--ds-color-error-ink);
+  --ds-toggle-error-message-font-size: var(--ds-type-caption-font-size);
+  --ds-toggle-error-message-margin-top: var(--ds-spacing-1);
 
   /* ========================================================================
      FOCUS STATE
      Settings for focus ring/outline
      ======================================================================== */
-  --ds-toggle-focus-ring-color: var(--ds-color-primary-200);
-  --ds-toggle-focus-ring-width: 3px;
-  --ds-toggle-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
+  --ds-toggle-focus-ring-color: var(--ds-focus-ring-color);
+  --ds-toggle-focus-ring-width: var(--ds-focus-ring-width);
+  --ds-toggle-focus-ring-offset: var(--ds-focus-ring-offset);
   --ds-toggle-focus-shadow: 0 0 0 var(--ds-toggle-focus-ring-width) var(--ds-toggle-focus-ring-color);
 
   /* ========================================================================
@@ -151,13 +155,14 @@
      ======================================================================== */
   --ds-toggle-loading-color: var(--ds-color-white);
   --ds-toggle-loading-size: 0.75rem;
+  --ds-toggle-loading-duration: var(--ds-motion-glacial);
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-toggle-transition-duration: 0.2s;
-  --ds-toggle-transition-timing: ease-in-out;
+  --ds-toggle-transition-duration: var(--ds-motion-feedback);
+  --ds-toggle-transition-timing: var(--ds-motion-ease-out);
   --ds-toggle-transition: all var(--ds-toggle-transition-duration) var(--ds-toggle-transition-timing);
   --ds-toggle-dot-transition: transform var(--ds-toggle-transition-duration) var(--ds-toggle-transition-timing);
 
@@ -165,7 +170,7 @@
      DISABLED STATE
      Appearance when disabled
      ======================================================================== */
-  --ds-toggle-disabled-opacity: 0.5;
+  --ds-toggle-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-toggle-disabled-cursor: not-allowed;
   --ds-toggle-disabled-bg: var(--ds-color-neutral-200);
   --ds-toggle-disabled-dot-bg: var(--ds-color-neutral-100);

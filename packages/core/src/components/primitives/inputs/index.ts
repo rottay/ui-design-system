@@ -57,8 +57,8 @@ export type {
 export { Textarea } from './textarea';
 export type { TextareaProps, TextareaVariant, TextareaSize, TextareaStatus } from './textarea';
 
-export { Switch } from './switch';
-export type { SwitchProps, SwitchSize } from './switch';
+export { Switch } from './toggle';
+export type { SwitchProps, SwitchSize } from './toggle';
 
 export { InputNumber } from './input-number';
 export type { InputNumberProps, InputNumberSize, InputNumberStatus } from './input-number';

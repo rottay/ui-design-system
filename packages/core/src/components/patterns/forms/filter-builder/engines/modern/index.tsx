@@ -4,7 +4,7 @@
  * @fileoverview Modern engine for the FilterBuilder pattern (Lote 2 rebuild).
  * The pattern COMPOSES public primitives -- it never recreates controls:
  * Select (field / operator / select values), Input + InputNumber (text and
- * numeric values), DatePicker (date values), Switch (boolean values), Empty
+ * numeric values), DatePicker (date values), Toggle (boolean values), Empty
  * (initial empty hint) and Button (add / remove / logic-toggle / clear).
  * Each primitive is the single paint owner of its own chrome; this file owns
  * semantics, the recursive filter tree and the layout anatomy (`data-part`
@@ -52,7 +52,7 @@ import ModernButton from '../../../../../primitives/inputs/button/engines/modern
 import ModernInput from '../../../../../primitives/inputs/input/engines/modern';
 import ModernInputNumber from '../../../../../primitives/inputs/input-number/engines/modern';
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
-import ModernSwitch from '../../../../../primitives/inputs/switch/engines/modern';
+import ModernToggle from '../../../../../primitives/inputs/toggle/engines/modern';
 import ModernDatePicker from '../../../../../primitives/inputs/date-picker/engines/modern';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionAddIcon } from '@/graphics/icons/semantic/generated/roles/action-add';
@@ -408,15 +408,13 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           />
         );
       case 'boolean':
-        // SwitchProps does not extend BaseComponentProps (no aria-* index), so
-        // the accessible name rides a named group wrapper -- registered gap:
-        // the Switch contract should extend BaseComponentProps directly.
         return (
-          <span data-part="value-switch" role="group" aria-label={valueAriaLabel}>
-            <ModernSwitch
+          <span data-part="value-switch">
+            <ModernToggle
               size={controlSize}
               checked={rule.value === true}
               onChange={(checked) => handleValueChange(rule.id, checked)}
+              aria-label={valueAriaLabel}
             />
           </span>
         );

@@ -157,8 +157,6 @@
   layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/password-input/index.css"
   layer(rottay-engines);
-@import "../../../runtime/engines/modern/skin/switch/index.css" layer(rottay-engines);
-@import "../../../runtime/engines/rustic/skin/switch/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/toggle/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/toggle/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/radio/index.css" layer(rottay-engines);
