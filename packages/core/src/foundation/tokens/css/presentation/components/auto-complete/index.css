@@ -1,0 +1,25 @@
+/**
+ * AutoComplete Component Tokens - Rottay Design System
+ *
+ * Structural constants of the auto-complete family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/auto-complete`.
+ */
+
+:root {
+  --ds-auto-complete-border-width: var(--ds-edge-standard-width);
+  --ds-auto-complete-radius: var(--ds-radius-md);
+  --ds-auto-complete-md-padding-y: calc(var(--ds-spacing-3) / 2);
+  --ds-auto-complete-transition-duration: var(--ds-input-transition-duration);
+  --ds-auto-complete-transition-timing: var(--ds-input-transition-timing);
+  --ds-auto-complete-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-auto-complete-autofill-spread: 1000px;
+  --ds-auto-complete-clear-reserve: var(--ds-spacing-8);
+  --ds-auto-complete-clear-size: 1.5rem;
+  --ds-auto-complete-dropdown-radius: var(--ds-radius-md);
+  --ds-auto-complete-dropdown-max-height: 15rem;
+  --ds-auto-complete-dropdown-max-width: 28rem;
+  --ds-auto-complete-dropdown-inline-size: auto;
+  --ds-auto-complete-option-height: 2.25rem;
+  --ds-auto-complete-empty-min-height: 4.5rem;
+  --ds-auto-complete-touch-target-min: var(--ds-touch-target-min);
+}

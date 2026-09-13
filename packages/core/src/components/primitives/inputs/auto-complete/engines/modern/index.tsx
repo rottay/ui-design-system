@@ -15,8 +15,9 @@
  * @package @rottay/design-system
  */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo, useId } from 'react';
+import React, { useState, useRef, useCallback, useMemo, useId } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import { partAttributes, resolveSubmitIntent, useFieldAction, useInteractionState } from '@/foundation/behavior';
 import type { AutoCompleteProps, AutoCompleteOption } from '../../contracts';
 import {
   FieldOverlayPanel,
@@ -27,7 +28,7 @@ import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/c
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
-import { useComboboxFoundation } from '../../../../runtime/collection/combobox';
+import { useListbox } from '../../../../runtime/collection/listbox';
 
 /**
  * Hook-local `tOr`: catalogue value with an English floor -- when the
@@ -44,6 +45,35 @@ function useAutoCompleteTranslation() {
   return { tOr };
 }
 
+function ClearAction({ label, onClear }: { label: string; onClear: () => void }) {
+  const action = useFieldAction();
+  return (
+    <button
+      type="button"
+      onClick={onClear}
+      aria-label={label}
+      {...partAttributes('clear-button', action.state)}
+      onPointerEnter={action.handlers.onPointerEnter}
+      onPointerLeave={action.handlers.onPointerLeave}
+      onPointerDown={action.handlers.onPointerDown}
+      onPointerUp={action.handlers.onPointerUp}
+      onPointerCancel={action.handlers.onPointerCancel}
+      onFocus={action.handlers.onFocus}
+      onBlur={action.handlers.onBlur}
+      onKeyDown={action.handlers.onKeyDown}
+      onKeyUp={action.handlers.onKeyUp}
+    >
+      <ActionCloseIcon decorative size={12} />
+    </button>
+  );
+}
+
+/**
+ * Scope class the portaled panel carries so the skin can address it and its
+ * subtree at the SAME specificity they had as descendants of the field root.
+ */
+const PANEL_SCOPE = 'ds-auto-complete ds-auto-complete--modern ds-auto-complete-panel';
+
 /**
  * Modern Rottay implementation of the AutoComplete input.
  *
@@ -52,7 +82,7 @@ function useAutoCompleteTranslation() {
  * Keyboard navigation (Arrow/Home/End/PageUp/PageDown over enabled options,
  * Enter, Escape) and click-outside dismissal are handled internally, keeping
  * parity with the Classic engine's UX. All paint and per-size geometry live in
- * the modern skin (`skin/autocomplete.css`) keyed on `data-part`/`data-size`/
+ * the modern skin (`skin/auto-complete`) keyed on `data-part`/`data-size`/
  * `data-status`; no inline styles remain on any part (the public `style`
  * escape hatch stays on the root, and a numeric `popupMatchSelectWidth` is
  * sanctioned instance geometry on the dropdown).
@@ -61,12 +91,6 @@ function useAutoCompleteTranslation() {
  * @param ref   - Forwarded ref attached to the outer wrapper div.
  * @returns A Rottay-skinned autocomplete input with dropdown suggestion list.
  */
-/**
- * Scope class the portaled panel carries so the skin can address it and its
- * subtree at the SAME specificity they had as descendants of the field root.
- */
-const PANEL_SCOPE = 'ds-autocomplete ds-autocomplete--modern ds-autocomplete-panel';
-
 export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
   (props, ref) => {
     const { tOr } = useAutoCompleteTranslation();
@@ -164,9 +188,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       [filteredOptions]
     );
 
-    // The combobox kernel owns the active descendant, the panel posture and
-    // every ARIA attribute that has to agree with both.
-    const combobox = useComboboxFoundation({
+    // The listbox kernel owns the active descendant, keyboard travel, the panel posture and their ARIA.
+    const listbox = useListbox({
       open: isOpen,
       itemCount: filteredOptions.length,
       isItemSelectable,
@@ -174,7 +197,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       query: value,
       listboxId,
     });
-    const { activeIndex, listState, setActiveIndex, nextSelectableFrom } = combobox;
+    const { activeIndex, listState, setActiveIndex } = listbox;
+    const field = useInteractionState({ disabled });
 
     // Only update internal open state when the dropdown is uncontrolled;
     // always notify the parent so controlled consumers stay in sync.
@@ -271,30 +295,6 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       dismissOnOutsidePointer: true,
     });
 
-    // Keyboard-originated focus moves mark themselves so the scroll effect
-    // below can tell them apart from hover: hover must never drag the
-    // scrollport out from under the pointer.
-    const moveFocus = useCallback(
-      (index: number) => setActiveIndex(index, 'keyboard'),
-      [setActiveIndex]
-    );
-
-    // Keep the keyboard-focused option inside the dropdown scrollport.
-    // jsdom lacks scrollIntoView -- guard like the Select engine does.
-    // Consuming the keyboard marker LAST keeps a move that could not be acted
-    // upon (closed panel, no active row) alive for the next render.
-    const { consumeKeyboardMove, getOptionId } = combobox;
-    useEffect(() => {
-      if (!isOpen || activeIndex < 0 || !consumeKeyboardMove()) return;
-      const node = document.getElementById(getOptionId(activeIndex));
-      if (node && typeof node.scrollIntoView === 'function') {
-        node.scrollIntoView({ block: 'nearest' });
-      }
-    }, [isOpen, activeIndex, consumeKeyboardMove, getOptionId]);
-
-    // Keyboard navigation with circular wrapping over ENABLED options
-    // (ArrowDown at the end goes back to the first option, ArrowUp at the
-    // start goes to the last), Home/End/PageUp/PageDown parity with Select.
     const handleKeyDown = (e: React.KeyboardEvent) => {
       if (!isOpen) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -304,69 +304,33 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
         return;
       }
 
-      switch (e.key) {
-        case 'ArrowDown':
+      if (e.key === 'Enter') {
+        // An IME confirming a candidate never commits; with no active option Enter belongs to the form.
+        if (resolveSubmitIntent(e) !== 'submit') return;
+        const focusedOption = activeIndex >= 0 ? arrayValueAt(filteredOptions, activeIndex) : undefined;
+        if (focusedOption && !focusedOption.disabled) {
           e.preventDefault();
-          moveFocus(nextSelectableFrom(activeIndex, 1));
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          moveFocus(nextSelectableFrom(activeIndex, -1));
-          break;
-        case 'Home':
-          e.preventDefault();
-          moveFocus(nextSelectableFrom(-1, 1));
-          break;
-        case 'End':
-          e.preventDefault();
-          moveFocus(nextSelectableFrom(filteredOptions.length, -1));
-          break;
-        case 'PageDown': {
-          // Paged movement counts RENDERED rows, not selectable ones, then
-          // recovers to the nearest enabled row -- so it stays here rather
-          // than in the kernel, whose scan is selectable-only.
-          e.preventDefault();
-          const target = Math.min((activeIndex < 0 ? -1 : activeIndex) + 10, filteredOptions.length - 1);
-          moveFocus(arrayValueAt(filteredOptions, target)?.disabled ? nextSelectableFrom(target - 1, 1) : target);
-          break;
+          handleSelect(focusedOption);
         }
-        case 'PageUp': {
-          e.preventDefault();
-          const target = Math.max((activeIndex < 0 ? filteredOptions.length : activeIndex) - 10, 0);
-          moveFocus(arrayValueAt(filteredOptions, target)?.disabled ? nextSelectableFrom(target + 1, -1) : target);
-          break;
-        }
-        case 'Enter': {
-          // preventDefault only when Enter actually commits an option: with no
-          // active descendant the keystroke belongs to the surrounding form.
-          // Disabled options are unreachable (arrow nav skips them), but a
-          // stale index could still point at one -- guard the commit.
-          const focusedOption = activeIndex >= 0 ? arrayValueAt(filteredOptions, activeIndex) : undefined;
-          if (focusedOption && !focusedOption.disabled) {
-            e.preventDefault();
-            handleSelect(focusedOption);
-          }
-          break;
-        }
-        case 'Escape':
-          // Close and RETURN FOCUS to the input (Dropdown/DatePicker
-          // precedent): if the pointer/user landed DOM focus on an option,
-          // the dropdown unmount would drop focus to <body>.
-          // An open popup consumes its own dismissal; Escape must not also close an ancestor overlay.
-          e.preventDefault();
-          e.stopPropagation();
-          handleOpenChange(false);
-          inputRef.current?.focus();
-          break;
+        return;
       }
+      if (e.key === 'Escape') {
+        // An open popup consumes its own dismissal and returns focus to the input.
+        e.preventDefault();
+        e.stopPropagation();
+        handleOpenChange(false);
+        inputRef.current?.focus();
+        return;
+      }
+      listbox.navigate(e);
     };
 
     // The kernel bags are read into explicit attributes: the inline-paint
     // ratchet fails closed on a spread of an unresolvable call result, and
     // these getters are aria/id wiring the kernel's own zero-pinned counter
     // already polices.
-    const inputProps = combobox.getInputProps();
-    const listboxProps = combobox.getListboxProps();
+    const inputProps = listbox.getInputProps();
+    const listboxProps = listbox.getListboxProps();
 
     return (
       <div
@@ -378,7 +342,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`ds-autocomplete ds-autocomplete--modern ${className || ''}`}
+        className={`ds-auto-complete ds-auto-complete--modern ${className || ''}`}
         style={style}
         data-part="root"
         data-size={size}
@@ -391,12 +355,20 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             type="text"
             value={value}
             onChange={(e) => handleChange(e.target.value)}
-            onFocus={handleInputFocus}
+            onFocus={(event) => {
+              field.handlers.onFocus(event);
+              handleInputFocus();
+            }}
+            onBlur={field.handlers.onBlur}
+            onPointerEnter={field.handlers.onPointerEnter}
+            onPointerLeave={field.handlers.onPointerLeave}
+            onPointerDown={field.handlers.onPointerDown}
+            onPointerUp={field.handlers.onPointerUp}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             disabled={disabled}
             autoFocus={autoFocus}
-            data-part="input"
+            {...partAttributes('input', field.state)}
             data-open={isOpen || undefined}
             data-disabled={disabled || undefined}
             aria-label={inputLabel}
@@ -416,17 +388,13 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
               Clearing returns focus to the input: the button unmounts on the
               same click, and the default would strand focus on <body>. */}
           {allowClear && value && !disabled && (
-            <button
-              type="button"
-              onClick={() => {
+            <ClearAction
+              label={tOr('autocomplete.clear', 'Clear')}
+              onClear={() => {
                 handleChange('');
                 inputRef.current?.focus();
               }}
-              data-part="clear-button"
-              aria-label={tOr('autocomplete.clear', 'Clear')}
-            >
-              <ActionCloseIcon decorative size={12} />
-            </button>
+            />
           )}
         </div>
 
@@ -449,11 +417,11 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             aria-busy={listboxProps['aria-busy']}
             aria-multiselectable={listboxProps['aria-multiselectable']}
             className={`${PANEL_SCOPE} ${popupClassName || ''}`.trim()}
-            data-match-width={popupMatchSelectWidth === false ? 'false' : undefined}
+            data-match-width={popupMatchSelectWidth === false ? 'false' : typeof popupMatchSelectWidth === 'number' ? 'fixed' : undefined}
             style={{
               ...overlay.panelProps.style,
               ...(typeof popupMatchSelectWidth === 'number'
-                ? { inlineSize: popupMatchSelectWidth }
+                ? ({ '--ds-auto-complete-dropdown-inline-size': `${popupMatchSelectWidth}px` } as React.CSSProperties)
                 : null),
             }}
           >
@@ -477,33 +445,22 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
               </li>
             ) : (
               filteredOptions.map((option, index) => {
-                const itemProps = combobox.getItemProps(index, {
+                const itemProps = listbox.getOptionProps(index, {
                   selected: option.value === value,
-                  disabled: option.disabled,
+                  disabled: option.disabled || disabled,
                 });
                 return (
                 <li key={option.value} role="none">
                   <button
                     type="button"
-                    // A disabled combobox has inert options: with a controlled
-                    // `open` the panel still renders, and an ungated row let a
-                    // click fire onChange/onSelect on a disabled control.
+                    // A disabled combobox has inert options even under a controlled `open`.
                     disabled={option.disabled || disabled}
                     tabIndex={-1}
-                    // Selection dismisses the popup, which unmounts the button
-                    // the pointer just focused -- without the restore, focus
-                    // strands on <body> and the next Tab restarts the document.
+                    // Selection unmounts the button the pointer focused, so focus returns to the input.
                     onClick={() => selectAndRestoreFocus(option)}
-                    // Sync keyboard focus index on hover so mouse and keyboard
-                    // navigation stay coordinated -- without tripping the
-                    // keyboard-only scroll-into-view.
-                    onMouseEnter={() => setActiveIndex(index, 'pointer')}
+                    onMouseEnter={itemProps.onMouseEnter}
                     data-part="option"
-                    // Must track the same condition as `disabled` above: the
-                    // skin paints inertness off this attribute, so gating it on
-                    // the row alone left a disabled control's rows looking live.
                     data-disabled={option.disabled || disabled || undefined}
-                    // Truncated rows keep a full-value affordance (Select idiom).
                     title={typeof option.label === 'string' ? option.label : option.value}
                     role={itemProps.role}
                     id={itemProps.id}

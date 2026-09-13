@@ -1,0 +1,310 @@
+/**
+ * Modern AutoComplete skin.
+ *
+ * The field is `ds-auto-complete ds-auto-complete--modern[data-part='root']`
+ * with `data-size` and `data-status`; the suggestion listbox is portaled and
+ * carries its own `ds-auto-complete-panel` scope. State is the kernel's
+ * `data-state`; the active option is `data-active`. Border-colour rules reach
+ * (0,4,0) so the tenant's `html[data-tenant] *` border reset loses.
+ */
+
+@keyframes ds-auto-complete-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-auto-complete-enter-y)) scale(var(--ds-motion-scale-in));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] {
+  position: relative;
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input-wrapper'] {
+  position: relative;
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input'] {
+  inline-size: 100%;
+  box-sizing: border-box;
+  border: var(--ds-auto-complete-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-auto-complete-border, var(--ds-material-control-border));
+  border-radius: var(--ds-auto-complete-radius, var(--ds-radius-md));
+  background: var(--ds-auto-complete-bg, var(--ds-material-control-background));
+  color: var(--ds-auto-complete-ink, var(--ds-color-text-primary));
+  caret-color: var(--ds-auto-complete-caret, var(--ds-color-primary));
+  font-family: var(--ds-auto-complete-font-family, var(--ds-font-family-base));
+  outline: none;
+  transition:
+    border-color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing),
+    background-color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing),
+    box-shadow var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-size='sm'] [data-part='input'] {
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-size='md'] [data-part='input'] {
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
+  padding-block: var(--ds-auto-complete-md-padding-y);
+  padding-inline: var(--ds-input-md-padding-x);
+  font-size: var(--ds-input-md-font-size);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-size='lg'] [data-part='input'] {
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-input-lg-padding-x);
+  font-size: var(--ds-input-lg-font-size);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input']::placeholder {
+  color: var(--ds-auto-complete-placeholder, var(--ds-type-color-muted));
+  opacity: var(--ds-input-placeholder-opacity);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input']::selection {
+  color: var(--ds-input-selection-color, var(--ds-color-text-primary));
+  background: var(--ds-input-selection-bg);
+}
+
+@media (hover: hover) {
+  .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input'][data-part='input']:is([data-state~='hovered'], :hover):not([data-state~='disabled']):not([data-state~='focus-visible']) {
+    border-color: var(--ds-auto-complete-border-hover, var(--ds-material-control-border-hover));
+  }
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input'][data-part='input']:is([data-state~='pressed'], :active):not([data-state~='disabled']):not([data-state~='focus-visible']) {
+  border-color: var(--ds-auto-complete-border-hover, var(--ds-material-control-border-hover));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input'][data-part='input']:is([data-state~='focus-visible'], :focus-visible) {
+  border-color: var(--ds-auto-complete-border-focus, var(--ds-color-primary));
+  box-shadow: var(--ds-auto-complete-shadow-focus, var(--ds-focus-ring));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input']:is([data-state~='disabled'], :disabled) {
+  opacity: var(--ds-auto-complete-disabled-opacity, var(--ds-state-disabled-opacity));
+  cursor: not-allowed;
+}
+
+/* A semantic frame outranks hover and focus; focus adds its status ring. */
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-status='error'] [data-part='input'][data-part='input'] {
+  background: var(--ds-auto-complete-error-bg, var(--ds-material-control-background));
+  border-color: var(--ds-auto-complete-error-border, var(--ds-color-error));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-status='error'] [data-part='input'][data-part='input']:is([data-state~='focus-visible'], :focus-visible) {
+  border-color: var(--ds-auto-complete-error-border, var(--ds-color-error));
+  box-shadow: var(--ds-auto-complete-error-shadow-focus, var(--ds-focus-ring));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-status='warning'] [data-part='input'][data-part='input'] {
+  background: var(--ds-auto-complete-warning-bg, var(--ds-material-control-background));
+  border-color: var(--ds-auto-complete-warning-border, var(--ds-color-warning));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-status='warning'] [data-part='input'][data-part='input']:is([data-state~='focus-visible'], :focus-visible) {
+  border-color: var(--ds-auto-complete-warning-border, var(--ds-color-warning));
+  box-shadow: var(--ds-auto-complete-warning-shadow-focus, var(--ds-focus-ring));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input']:-webkit-autofill {
+  -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-color-text-primary));
+  caret-color: var(--ds-auto-complete-caret, var(--ds-color-primary));
+  box-shadow: inset 0 0 0 var(--ds-auto-complete-autofill-spread) var(--ds-input-autofill-bg, var(--ds-material-control-background));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input']:autofill {
+  box-shadow: inset 0 0 0 var(--ds-auto-complete-autofill-spread) var(--ds-input-autofill-bg, var(--ds-material-control-background));
+}
+
+/* A long value never runs under the clear action. */
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input-wrapper']:has([data-part='clear-button']) [data-part='input'] {
+  padding-inline-end: var(--ds-auto-complete-clear-reserve);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button'] {
+  position: absolute;
+  inset-inline-end: var(--ds-spacing-2);
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  inline-size: var(--ds-auto-complete-clear-size);
+  block-size: var(--ds-auto-complete-clear-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ds-auto-complete-clear-color, var(--ds-color-text-muted));
+  border: none;
+  border-radius: var(--ds-radius-full);
+  transition: color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button']:is([data-state~='hovered'], :hover),
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button']:is([data-state~='pressed'], :active) {
+  color: var(--ds-auto-complete-clear-color-hover, var(--ds-color-text-primary));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: none;
+  box-shadow: var(--ds-auto-complete-shadow-focus, var(--ds-focus-ring));
+}
+
+.ds-auto-complete.ds-auto-complete--modern.ds-auto-complete-panel[data-part='dropdown'] {
+  --ds-auto-complete-enter-y: calc(var(--ds-spacing-1) * -1);
+  margin: 0;
+  padding: var(--ds-spacing-1);
+  max-block-size: var(--ds-auto-complete-dropdown-max-height);
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: thin;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--ds-spacing-2),
+    black calc(100% - var(--ds-spacing-2)),
+    transparent
+  );
+  border-radius: var(--ds-auto-complete-dropdown-radius, var(--ds-radius-lg));
+  background:
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-auto-complete-dropdown-bg, var(--ds-material-overlay-background));
+  box-shadow: var(--ds-auto-complete-dropdown-shadow, var(--ds-elevation-2));
+  animation: ds-auto-complete-slide-in var(--ds-auto-complete-transition-duration) var(--ds-motion-ease-out);
+}
+
+.ds-auto-complete.ds-auto-complete--modern.ds-auto-complete-panel[data-part='dropdown'][data-part='dropdown'] {
+  border: var(--ds-edge-hairline-width) solid var(--ds-auto-complete-dropdown-border, var(--ds-color-border-subtle));
+}
+
+/* Content width bounded by the family dial; a numeric width arrives as a runtime channel. */
+.ds-auto-complete.ds-auto-complete--modern.ds-auto-complete-panel[data-part='dropdown'][data-match-width='false'] {
+  inline-size: max-content;
+  max-inline-size: min(var(--ds-auto-complete-dropdown-max-width), calc(100dvw - var(--ds-spacing-4)));
+}
+
+.ds-auto-complete.ds-auto-complete--modern.ds-auto-complete-panel[data-part='dropdown'][data-match-width='fixed'] {
+  inline-size: var(--ds-auto-complete-dropdown-inline-size);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'] {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: calc(var(--ds-auto-complete-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-spacing-2);
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  color: var(--ds-auto-complete-option-ink, var(--ds-color-text-secondary));
+  font-size: var(--ds-input-sm-font-size);
+  text-align: start;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing),
+    border-color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing),
+    background-color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing);
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'][data-part='option'] {
+  border: var(--ds-edge-hairline-width) solid transparent;
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'] > [data-part='option-label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The active descendant follows both the keyboard and the pointer: it is the one hover decision. */
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'][data-active='true']:not([data-disabled='true']) {
+  color: var(--ds-auto-complete-option-ink-active, var(--ds-color-text-primary));
+  border-color: var(--ds-auto-complete-option-border-active, var(--ds-color-border-subtle));
+  background: var(--ds-auto-complete-option-bg-hover, var(--ds-material-overlay-background));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
+  opacity: var(--ds-auto-complete-disabled-opacity, var(--ds-state-disabled-opacity));
+  cursor: not-allowed;
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='empty'],
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='loading-state'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2);
+  min-block-size: var(--ds-auto-complete-empty-min-height);
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-auto-complete-empty-color, var(--ds-color-text-muted));
+  font-size: var(--ds-type-body-font-size);
+  line-height: var(--ds-line-height-snug);
+  text-align: center;
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='empty'][data-part='empty'],
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='loading-state'][data-part='loading-state'] {
+  border: var(--ds-edge-hairline-width) dashed var(--ds-auto-complete-empty-border, var(--ds-color-border));
+}
+
+.ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='loading-state-label'] {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input'],
+  .ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'],
+  .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button'] {
+    min-block-size: var(--ds-auto-complete-touch-target-min, var(--ds-touch-target-min));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-auto-complete.ds-auto-complete--modern.ds-auto-complete-panel[data-part='dropdown'] {
+    animation: none;
+  }
+
+  .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input'],
+  .ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'],
+  .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button'] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'][data-active='true'] {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+
+  .ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
+    color: GrayText;
+  }
+
+  .ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='empty'],
+  .ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='loading-state'] {
+    border-color: ButtonText;
+  }
+}

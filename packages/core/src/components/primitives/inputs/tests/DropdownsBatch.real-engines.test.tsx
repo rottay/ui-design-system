@@ -57,7 +57,7 @@ const SKINS: Record<string, string> = {
   'rustic/tree-select': read('runtime/engines/rustic/skin/tree-select/index.css'),
   'modern/cascader': read('runtime/engines/modern/skin/cascader/index.css'),
   'rustic/cascader': read('runtime/engines/rustic/skin/cascader/index.css'),
-  'modern/autocomplete': read('runtime/engines/modern/skin/autocomplete/index.css'),
+  'modern/autocomplete': read('runtime/engines/modern/skin/auto-complete/index.css'),
   'rustic/autocomplete': read('runtime/engines/rustic/skin/autocomplete/index.css'),
   'modern/mentions': read('runtime/engines/modern/skin/mentions/index.css'),
   'rustic/mentions': read('runtime/engines/rustic/skin/mentions/index.css'),
@@ -281,7 +281,7 @@ const ROOT_DESCENDANT_DROPDOWN =
 const MODERN_PANEL_SCOPE: Record<string, RegExp> = {
   'modern/tree-select': /\.ds-tree-select\.ds-tree-select--modern\.ds-tree-select-panel/,
   'modern/cascader': /\.ds-cascader\.ds-cascader--modern\.ds-cascader-panel/,
-  'modern/autocomplete': /\.ds-autocomplete\.ds-autocomplete--modern\.ds-autocomplete-panel/,
+  'modern/autocomplete': /\.ds-auto-complete\.ds-auto-complete--modern\.ds-auto-complete-panel/,
   'modern/mentions': /\.ds-mentions\.ds-mentions--modern\.ds-mentions-panel/,
 };
 
