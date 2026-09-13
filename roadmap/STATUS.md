@@ -191,7 +191,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [consumer-contract](./consumer-contract.md) | 6 | 0 | 1 | 7 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
 | [derivation](./derivation.md) | 5 | 1 | 1 | 7 |
-| [family-cuts](./family-cuts.md) | 3 | 0 | 12 | 15 |
+| [family-cuts](./family-cuts.md) | 3 | 1 | 11 | 15 |
 | [emission-mount](./emission-mount.md) | 2 | 0 | 1 | 3 |
 | [platform-invariants](./platform-invariants.md) | 3 | 0 | 5 | 8 |
 | [retire](./retire.md) | 0 | 0 | 5 | 5 |
@@ -230,6 +230,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
+| WO-FAM-02 | Family cut: input, textarea, password, otp, tag-input, input-number, form-field and the form runtime | opus | 2026-09-13 | (no entries — log via `progress`) |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | Kimi K3 | 2026-09-11 | 2026-09-12 18:47 — G103-01 (audit/103-day-direction-2026-09-12/gates.md, REPRODUCED in-memory fixture): a pin on a channel with no reads/terminal makes the FULL analyzer return ok=true (failures=[]), conflating ownership with effect. Obligation: keep the blocking ownership gate AND its independent projection, but non-LIVE rows must remain failures of the full check (or an explicit separate effect result); a pin yields ownership PASS + full-liveness still FAIL. Add the negative/positive pair. Note: the real-tree full check stays red with the 5 known failures; the 44 pins stay visible; no false discharge occurred. No re-audit of the 44. |
 | WO-EVI-05 | Causal-gate pilot: the instrument, its drills, and one family green on the pilot population | opus | 2026-09-13 | (no entries — log via `progress`) |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | 2026-09-11 11:09 — CLIENT-PROVIDER CONNECTION LANDED (3 writer commits + integrator test + integration; audited by Kimi K3 under the temporary owner-authorized auditor substitution, Fable quota-exhausted ~20h). TenantThemeArtifact carries its runtime block (EngineVisualDeclaration from the SAME lowering; changeset der-07-artifact-runtime-half.md per CON-05, digest re-anchor measured - 0/65/25 delta channels unchanged, envelope digests unchanged); provider publishes the mounted artifact's own half; resolver no longer returns artifact:null. Runtime proof in real browser 3/3 candidates (posture/motion/density/recipe/tokens differ through the mount, not just CSS); negative control (seed is paint, never reaches useTokens); preview/publication byte parity per candidate; SSR receipt + flight-boundary byte comparison prove the client uses the server's artifact without recompiling. 99-item-1 identity negative ADDED BY DT and green: artifact A + runtime B (same engine/profile ids, foreign governed value) refused at mount; digest covers the runtime half. REGISTERED: (a) the showroom Playwright leg stays blocked by packages/core/dist/index.js carrying use-client into RSC consumers (pre-existing at base, reproduced byte-identical) - repairing it is a public-contract addition that needs its own WO (DT flags it to the owner as an identified need); (b) docs-engineering tenancy/contracts edits remain uncommitted in that repo's dirty tree; (c) past showroom typechecks via symlinked node_modules read MAIN's core dist, not the lot's - audits now require real installs/farms. The WO stays open with exactly one obligation: the recorded owner pick with digest (D-30 deferred to the branding stage). |
@@ -240,7 +241,6 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | --- | --- | --- | --- | --- |
 | WO-DER-06 | Vertical presets as decisions; BrandTheme retired; neutral foundation without opinion | L | derivation | audit-2026-09-05 |
 | WO-EMI-03 | Non-CSS token emitter for mobile readiness | M | emission-mount | audit-2026-09-05 |
-| WO-FAM-02 | Family cut: input, textarea, password, otp, tag-input, input-number, form-field and the form runtime | L | family-cuts | audit-2026-09-05 |
 | WO-FAM-03 | Family cut: select, auto-complete, cascader, tree-select, mentions, transfer, pickers and color-picker with shared listbox and calendar kernels | XL | family-cuts | audit-2026-09-05 |
 | WO-FAM-04 | Family cut: modal, drawer, sheet, dialogs, popover, dropdown, hover-card, tooltip, tour and one Notifier | L | family-cuts | audit-2026-09-05 |
 | WO-FAM-05 | Family cut: menu, tabs, breadcrumb, pagination, steps and sidebar navigation | M | family-cuts | audit-2026-09-05 |

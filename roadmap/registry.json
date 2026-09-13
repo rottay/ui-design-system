@@ -4561,7 +4561,7 @@
    "lane": "family-cuts",
    "order": 3,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4574,8 +4574,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-78, F-26, F-39, F-33 R4 2026-09-08: this cut inherits the runtime that WO-CRA-24 repairs (CD-01, restored-record identity) — `filter-builder/runtime/tree`; do not re-derive its identity allocation inside the cut.",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "opus",
+   "claimedAt": "2026-09-13",
    "progressLog": []
   },
   {
