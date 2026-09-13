@@ -159,6 +159,6 @@ describe.each(ENGINES)('pickers DOM carries the contract, not the paint -- %s en
     const swatch = await firstPart(container, 'swatch');
     expect(swatch.style.background, `${engine} swatch background inline`).toBe('');
     expect(swatch.style.backgroundColor, `${engine} swatch background-color inline`).toBe('');
-    expect(swatch.style.getPropertyValue('--ds-colorpicker-swatch-color')).toBe('#ff0000');
+    expect(swatch.style.getPropertyValue(engine === 'modern' ? '--ds-color-picker-swatch-color' : '--ds-colorpicker-swatch-color')).toBe('#ff0000');
   });
 });

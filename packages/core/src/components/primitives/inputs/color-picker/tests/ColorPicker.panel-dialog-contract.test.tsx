@@ -67,6 +67,6 @@ describe('ColorPicker modern panel dialog contract', () => {
 
     fireEvent.change(hex, { target: { value: '#zz' } });
     expect(hex).toHaveAttribute('aria-invalid', 'true');
-    expect(hex).toHaveAccessibleDescription('Enter a valid hex color (e.g. #1677ff)');
+    expect(hex).toHaveAccessibleDescription('Enter a valid hex color, such as #RRGGBB');
   });
 });

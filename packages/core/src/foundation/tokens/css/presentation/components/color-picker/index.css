@@ -1,0 +1,27 @@
+/**
+ * ColorPicker Component Tokens - Rottay Design System
+ *
+ * Structural constants of the color-picker family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/color-picker`.
+ */
+
+:root {
+  --ds-color-picker-swatch-color: transparent;
+  --ds-color-picker-preset-color: transparent;
+  --ds-color-picker-transition-duration: var(--ds-input-transition-duration);
+  --ds-color-picker-transition-timing: var(--ds-input-transition-timing);
+  --ds-color-picker-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-color-picker-enter-y: calc(var(--ds-spacing-1) * -1);
+  --ds-color-picker-swatch-size-sm: 1.5rem;
+  --ds-color-picker-swatch-size-md: 2rem;
+  --ds-color-picker-swatch-size-lg: 2.5rem;
+  --ds-color-picker-preset-swatch-size: 1.25rem;
+  --ds-color-picker-swatch-hover-scale: 1.1;
+  --ds-color-picker-height: 10rem;
+  --ds-color-picker-dropdown-min-width: 11rem;
+  --ds-color-picker-selected-ring-width: 2px;
+  --ds-color-picker-check-width: 0.625rem;
+  --ds-color-picker-check-height: 0.35rem;
+  --ds-color-picker-check-transform: translate(-50%, -65%) rotate(-45deg);
+  --ds-color-picker-touch-target-min: var(--ds-touch-target-min);
+}

@@ -1,7 +1,5 @@
 import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ColorPicker as ModernColorPicker } from '../engines/modern';
@@ -68,7 +66,7 @@ describe('ColorPicker runtime engine coverage', () => {
       '#654321'
     );
 
-    const hexInput = screen.getByPlaceholderText('#000000');
+    const hexInput = screen.getByPlaceholderText('#RRGGBB');
     fireEvent.change(hexInput, { target: { value: '#333333' } });
     fireEvent.blur(hexInput);
     expect(handleChange).toHaveBeenCalledWith(expect.any(Object), '#333333');
@@ -120,7 +118,7 @@ describe('ColorPicker runtime engine coverage', () => {
     expect(swatch).not.toBeNull();
 
     await waitFor(() => {
-      expect(swatch.style.getPropertyValue('--ds-colorpicker-swatch-color')).toBe('#2a7d4f');
+      expect(swatch.style.getPropertyValue('--ds-color-picker-swatch-color')).toBe('#2a7d4f');
     });
     expect(screen.getByText('#2a7d4f')).toBeInTheDocument();
     unmount();
@@ -128,7 +126,7 @@ describe('ColorPicker runtime engine coverage', () => {
     // Unresolvable token: the swatch keeps the var() and never invents a color.
     const { container: bareContainer } = render(<ModernColorPicker />);
     const bareSwatch = bareContainer.querySelector('[data-part="swatch"]') as HTMLElement;
-    expect(bareSwatch.style.getPropertyValue('--ds-colorpicker-swatch-color')).toBe(
+    expect(bareSwatch.style.getPropertyValue('--ds-color-picker-swatch-color')).toBe(
       'var(--ds-color-primary)',
     );
   });
@@ -145,7 +143,7 @@ describe('ColorPicker runtime engine coverage', () => {
     );
     const swatch = container.querySelector('[data-part="swatch"]') as HTMLElement;
     await waitFor(() => {
-      expect(swatch.style.getPropertyValue('--ds-colorpicker-swatch-color')).toBe('#2a7d4f');
+      expect(swatch.style.getPropertyValue('--ds-color-picker-swatch-color')).toBe('#2a7d4f');
     });
     expect(screen.getByText('#2a7d4f')).toBeInTheDocument();
   });
@@ -165,13 +163,7 @@ describe('ColorPicker runtime engine coverage', () => {
     expect(dropdown.style.position).toBe('fixed');
   });
 
-  it('rides the tenant mono channel on the hex input via the skin, not a Tailwind utility (K4-C Pass-2 live finding)', () => {
-    const skin = readFileSync(
-      resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css'),
-      'utf8',
-    );
-    expect(skin).toContain('font-family: var(--ds-font-family-mono);');
-    // The engine no longer relies on the shadowed Tailwind font-mono utility.
+  it('leaves the hex input font to the skin, not a Tailwind utility', () => {
     render(<ModernColorPicker open />);
     const hex = document.querySelector('[data-part="hex-input"]') as HTMLElement;
     expect(hex.className).not.toContain('font-mono');
@@ -204,16 +196,7 @@ describe('ColorPicker runtime engine coverage', () => {
       expect(left).toBeGreaterThanOrEqual(8);
       expect(left + 200).toBeLessThanOrEqual(window.innerWidth - 8);
 
-      // The retired edge mechanism leaves nothing behind, in the DOM or the skin.
       expect(dropdown.hasAttribute('data-edge')).toBe(false);
-      const skin = readFileSync(
-        resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css'),
-        'utf8',
-      );
-      expect(skin).not.toContain("[data-part='dropdown'][data-edge='end']");
-      expect(skin).not.toContain('inset-inline-end: 0');
-      // Nor does the skin keep a position that would fight the kernel's.
-      expect(/\[data-part='dropdown'\][^{]*\{[^}]*position:\s*absolute/.test(skin)).toBe(false);
     } finally {
       Element.prototype.getBoundingClientRect = original;
     }

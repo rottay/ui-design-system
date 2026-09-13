@@ -37,6 +37,7 @@
  */
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { ColorPickerProps, Color, ColorFormat } from '../../contracts';
+import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
 import {
   FieldOverlayPanel,
   useFieldOverlay,
@@ -45,6 +46,7 @@ import { COLORPICKER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { resolveCssColor } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 
 /**
  * Token-backed default (K4-C): the previous `defaultValue = '#1677ff'` hard
@@ -103,14 +105,55 @@ const createColor = (hex: string): Color => ({
  * @param props - {@link ColorPickerProps} unified color picker props shared across engines.
  * @returns A ref-forwarding color picker with Tailwind/token styling.
  */
-/**
- * Scope class the portaled panel carries: the family pair the skin already
- * scopes every panel-subtree rule through, so those rules keep matching at
- * identical specificity once the panel leaves the field, plus a panel marker
- * for the two rules that used to reach it through `[data-part='root']`.
- */
-const PANEL_SCOPE =
-  'rottay-colorpicker rottay-colorpicker--modern rottay-colorpicker-panel';
+/** The contract's placements in the overlay kernel's logical vocabulary. */
+const OVERLAY_PLACEMENT: Readonly<Record<NonNullable<ColorPickerProps['placement']>, OverlayPlacement>> = {
+  top: 'top',
+  topLeft: 'top-start',
+  topRight: 'top-end',
+  bottom: 'bottom',
+  bottomLeft: 'bottom-start',
+  bottomRight: 'bottom-end',
+};
+
+interface PresetSwatchProps {
+  color: string;
+  selected: boolean;
+  disabled?: boolean;
+  label: string;
+  onSelect: (color: string) => void;
+}
+
+function PresetSwatch({ color, selected, disabled, label, onSelect }: PresetSwatchProps) {
+  const swatch = useInteractionState({ disabled });
+  return (
+    <button
+      type="button"
+      {...partAttributes('preset-swatch', swatch.state)}
+      {...swatch.handlers}
+      data-selected={selected || undefined}
+      style={{ '--ds-color-picker-preset-color': color } as React.CSSProperties}
+      aria-label={label}
+      aria-pressed={selected}
+      onClick={() => onSelect(color)}
+      disabled={disabled}
+    />
+  );
+}
+
+function ClearButton({ label, disabled, onClear }: { label: string; disabled?: boolean; onClear: () => void }) {
+  const clear = useInteractionState({ disabled });
+  return (
+    <button
+      type="button"
+      {...partAttributes('clear-button', clear.state)}
+      {...clear.handlers}
+      onClick={onClear}
+      disabled={disabled}
+    >
+      {label}
+    </button>
+  );
+}
 
 export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
   (props, ref) => {
@@ -216,6 +259,10 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     // the raw key back, which the endsWith guard detects — K4-C wires the
     // channel ahead of the locale JSONs, so behavior is byte-identical until
     // they land).
+    const triggerState = useInteractionState({ disabled });
+    const hexState = useInteractionState({ disabled });
+    const formatState = useInteractionState({ disabled });
+
     const i18n = useOptionalTranslation('components');
     const colorPickerLabel = (
       key: string,
@@ -359,7 +406,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       open: isOpen,
       anchor: anchorEl,
       panel: panelEl,
-      placement: placement?.includes('top') ? 'top-start' : 'bottom-start',
+      placement: OVERLAY_PLACEMENT[placement ?? 'bottomLeft'],
       offset: 4,
       flip: true,
       modal: true,
@@ -414,7 +461,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       <div
         {...overlay.panelProps}
         ref={setPanelNode}
-        className={PANEL_SCOPE}
+        className="ds-color-picker-panel ds-color-picker-panel--modern"
         data-part="dropdown"
         /* The trigger has always advertised `aria-haspopup="dialog"`, but the
            surface it opened was an anonymous div: AT was promised a named
@@ -425,9 +472,6 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
         data-placement={placement}
         style={overlay.panelProps.style}
       >
-        {/* Color input: geometry drained to the skin (the
-            `--ds-color-picker-height` hook keeps its fallback there --
-            undeclared channel, its fallback IS its contract). */}
         <input
           type="color"
           data-part="native-color-input"
@@ -441,13 +485,21 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
         <div data-part="hex-field">
           <input
             type="text"
-            data-part="hex-input"
+            {...partAttributes('hex-input', hexState.state)}
+            onPointerEnter={hexState.handlers.onPointerEnter}
+            onPointerLeave={hexState.handlers.onPointerLeave}
+            onPointerDown={hexState.handlers.onPointerDown}
+            onPointerUp={hexState.handlers.onPointerUp}
+            onFocus={hexState.handlers.onFocus}
             data-invalid={hexIsInvalid ? 'true' : undefined}
             value={hexDraft ?? currentValue}
             onChange={(e) => setHexDraft(e.target.value)}
             onKeyDown={handleHexKeyDown}
-            onBlur={handleHexBlur}
-            placeholder="#000000"
+            onBlur={(event) => {
+              hexState.handlers.onBlur(event);
+              handleHexBlur(event);
+            }}
+            placeholder="#RRGGBB"
             disabled={disabled}
             aria-label={colorPickerLabel('colorpicker.hexLabel', 'Hex color')}
             aria-invalid={hexIsInvalid || undefined}
@@ -458,7 +510,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           />
           {hexIsInvalid && (
             <span id={hexErrorId} data-part="hex-error" role="alert">
-              {colorPickerLabel('colorpicker.invalidHex', 'Enter a valid hex color (e.g. #1677ff)')}
+              {colorPickerLabel('colorpicker.invalidHex', 'Enter a valid hex color, such as #RRGGBB')}
             </span>
           )}
         </div>
@@ -468,7 +520,8 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             accessible name is localized. */}
         <div data-part="format-field">
           <select
-            data-part="format-select"
+            {...partAttributes('format-select', formatState.state)}
+            {...formatState.handlers}
             value={currentFormat}
             onChange={handleFormatSelect}
             disabled={disabled}
@@ -493,16 +546,13 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                     const isPresetSelected =
                       currentValue.toLowerCase() === color.toLowerCase();
                     return (
-                      <button
+                      <PresetSwatch
                         key={color}
-                        type="button"
-                        data-part="preset-swatch"
-                        data-selected={isPresetSelected || undefined}
-                        style={{ '--ds-colorpicker-preset-color': color } as React.CSSProperties}
-                        aria-label={colorPickerLabel('colorpicker.selectColor', `Select color ${color}`, { color })}
-                        aria-pressed={isPresetSelected}
-                        onClick={() => handleChange(color)}
+                        color={color}
+                        selected={isPresetSelected}
                         disabled={disabled}
+                        label={colorPickerLabel('colorpicker.selectColor', `Select color ${color}`, { color })}
+                        onSelect={handleChange}
                       />
                     );
                   })}
@@ -515,14 +565,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
         {/* Actions */}
         {allowClear && (
           <div data-part="clear-field">
-            <button
-              type="button"
-              data-part="clear-button"
-              onClick={handleClear}
-              disabled={disabled}
-            >
-              {clearLabel}
-            </button>
+            <ClearButton label={clearLabel} disabled={disabled} onClear={handleClear} />
           </div>
         )}
       </div>
@@ -537,7 +580,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           else if (ref) ref.current = node;
         }}
         data-part="root"
-        className={`rottay-colorpicker rottay-colorpicker--modern ${className || ''}`}
+        className={`ds-color-picker ds-color-picker--modern ${className || ''}`}
         style={style}
         onKeyDown={handleRootKeyDown}
         /* Hover disclosure spans the field AND the panel. A trigger-scoped
@@ -553,7 +596,8 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             Enter/space/ArrowDown operate it even in hover mode. */}
         <div
           ref={triggerRef}
-          data-part="trigger"
+          {...partAttributes('trigger', triggerState.state)}
+          {...triggerState.handlers}
           data-disabled={disabled ? 'true' : undefined}
           data-open={isOpen || undefined}
           role="button"
@@ -570,7 +614,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             data-part="swatch"
             data-size={size}
             data-empty={!currentValue || undefined}
-            style={{ '--ds-colorpicker-swatch-color': currentValue || 'var(--ds-color-white)' } as React.CSSProperties}
+            style={currentValue ? ({ '--ds-color-picker-swatch-color': currentValue } as React.CSSProperties) : undefined}
           />
           {displayText && <span data-part="display-text">{displayText}</span>}
         </div>
