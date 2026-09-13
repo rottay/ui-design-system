@@ -86,7 +86,7 @@ export function InputGroup({
 
   return (
     <div
-      className={`rottay-input-group ${className}`.trim()}
+      className={`ds-input-group ${className}`.trim()}
       data-part="group"
       data-size={size}
       data-compact={compact ? 'true' : 'false'}

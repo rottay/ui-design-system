@@ -357,10 +357,22 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
       '--ds-button-primary-bg-hover',
       '--ds-button-primary-border',
     ]);
+    // The field family cuts restate their focus, caret and progress ink as relations to the same seed.
     expect(primaryReach.filter(FAMILIES.inputs)).toEqual([
       '--ds-input-border-focus',
       '--ds-input-caret-color',
+      '--ds-input-number-border-focus',
+      '--ds-input-number-caret',
+      '--ds-input-number-shadow-focus',
+      '--ds-input-number-stepper-color-hover',
       '--ds-input-shadow-focus',
+      '--ds-otp-input-caret-color',
+      '--ds-otp-input-slot-border-focus',
+      '--ds-otp-input-slot-shadow-focus',
+      '--ds-otp-input-slot-shadow-focus-error',
+      '--ds-password-input-strength-good',
+      '--ds-tag-input-border-focus',
+      '--ds-tag-input-caret',
     ]);
     // The background seed is a separate authority and gains nothing here: cards
     // still reach their ground through the alias chain, not through the primary

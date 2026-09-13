@@ -48,6 +48,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import type { InputNumberProps } from '../../contracts';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { isComposingKey, partAttributes, resolveSubmitIntent, useInteractionState } from '@/foundation/behavior';
 import {
   ChevronUpIcon,
   ChevronDownIcon,
@@ -69,6 +70,33 @@ const governedFlashMs = (el: HTMLElement): number => {
 };
 
 /** Decimal places incl. exponent notation (1e-7 -> 7); "1e-7" as 0 would round a tiny step to zero. */
+interface StepperButtonProps {
+  direction: 'up' | 'down';
+  disabled: boolean;
+  label: string;
+  onStep: () => void;
+}
+
+/** One stepper; its hover, press and focus are decided by the interaction kernel. */
+function StepperButton({ direction, disabled, label, onStep }: StepperButtonProps) {
+  const { state, handlers } = useInteractionState({ disabled });
+  const Icon = direction === 'up' ? ChevronUpIcon : ChevronDownIcon;
+  return (
+    <button
+      type="button"
+      {...partAttributes('stepper-button', state)}
+      {...handlers}
+      data-direction={direction}
+      onClick={onStep}
+      disabled={disabled || undefined}
+      tabIndex={-1}
+      aria-label={label}
+    >
+      <Icon size={12} aria-hidden />
+    </button>
+  );
+}
+
 const decimalsOf = (n: number): number => {
   if (!Number.isFinite(n)) return 0;
   const parsed = /^-?\d*\.?(\d*)(?:[eE]([+-]?\d+))?$/.exec(String(n));
@@ -290,9 +318,10 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
 
     /** APG spinbutton keyboard set, gated by the `keyboard` contract prop:
      *  Arrow Up/Down step, Page Up/Down step ×10, Home/End jump to min/max.
-     *  Enter fires onPressEnter regardless. preventDefault avoids native scroll. */
+     *  Enter commits through onPressEnter unless an IME is composing. */
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
+      if (isComposingKey(e)) return;
+      if (resolveSubmitIntent(e) === 'submit') {
         onPressEnter?.(e);
       }
       if (!keyboard) return;
@@ -365,6 +394,8 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     const draftDescribesValue = draft !== null && parseNumber(draft) === committedNumeric;
     const renderedValue = draftDescribesValue ? draft : formatValue(currentValue);
 
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
+
     const sizeKey = toCanonicalSize(size) ?? 'md';
     const hasTrailing = Boolean(suffix) || (controls && !disabled && !readOnly);
 
@@ -387,7 +418,12 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             onAnimationEnd={handleBoundsAnimationEnd}
             type="number"
             className={`ds-input-number ds-input-number--modern ${className}`}
-            data-part="root"
+            {...partAttributes('root', interaction)}
+            onPointerEnter={interactionHandlers.onPointerEnter}
+            onPointerLeave={interactionHandlers.onPointerLeave}
+            onPointerDown={interactionHandlers.onPointerDown}
+            onPointerUp={interactionHandlers.onPointerUp}
+            onFocus={interactionHandlers.onFocus}
             data-size={sizeKey}
             data-status={status ?? 'default'}
             data-disabled={disabled ? 'true' : 'false'}
@@ -404,7 +440,10 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             placeholder={placeholder}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            onBlur={handleBlur}
+            onBlur={(event) => {
+              interactionHandlers.onBlur(event);
+              handleBlur();
+            }}
             autoFocus={autoFocus}
             id={id}
             name={name}
@@ -419,34 +458,18 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             {suffix && <span data-part="suffix">{suffix}</span>}
             {controls && !disabled && !readOnly && (
               <div data-part="steppers">
-                <button
-                  type="button"
-                  data-part="stepper-button"
-                  data-direction="up"
-                  onClick={() => handleStep('up')}
-                  disabled={atMax || undefined}
-                  tabIndex={-1}
-                  aria-label={tOr('input_number.increase', 'Increase')}
-                >
-                  <ChevronUpIcon size={12} aria-hidden />
-                  {/* Test-pinned legacy glyph: real-engines.test.tsx queries
-                      getByText('▲') until it is migrated to role queries
-                      (debt: swap to getByRole('button', { name })). Hidden by
-                      the skin; the visible affordance is the chevron icon. */}
-                  <span data-part="stepper-legacy-glyph" aria-hidden="true">▲</span>
-                </button>
-                <button
-                  type="button"
-                  data-part="stepper-button"
-                  data-direction="down"
-                  onClick={() => handleStep('down')}
-                  disabled={atMin || undefined}
-                  tabIndex={-1}
-                  aria-label={tOr('input_number.decrease', 'Decrease')}
-                >
-                  <ChevronDownIcon size={12} aria-hidden />
-                  <span data-part="stepper-legacy-glyph" aria-hidden="true">▼</span>
-                </button>
+                <StepperButton
+                  direction="up"
+                  disabled={atMax}
+                  label={tOr('input_number.increase', 'Increase')}
+                  onStep={() => handleStep('up')}
+                />
+                <StepperButton
+                  direction="down"
+                  disabled={atMin}
+                  label={tOr('input_number.decrease', 'Decrease')}
+                  onStep={() => handleStep('down')}
+                />
               </div>
             )}
           </div>

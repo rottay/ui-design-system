@@ -1,201 +1,119 @@
 /**
  * Modern TagInput skin.
  *
- * The React engine owns semantics and stamps the public anatomy; this file
- * owns the container's visual decisions so a vertical or DB-backed tenant
- * never needs private selectors. Chip paint is NOT owned here: tags are the
- * composed public `Tag` primitive (`tag.css` owns their fill/frame/close
- * chrome, one paint owner per part).
- *
- * Cascade position (the P-47 preflight fight, current contract): this file is
- * imported into `layer(rottay-engines)`, which the cross-framework cascade
- * contract in `entrypoints/base.css` sorts AFTER `rottay-framework` (the
- * bundled Tailwind artifact, preflight included). Skin rules therefore beat
- * preflight and every framework utility by layer ownership, while still
- * yielding to a caller's inline `style` and to the tenant/personality layers
- * above.
- *
- * SCOPE ROOT is `.ds-tag-input.ds-tag-input--modern[data-part='root']`,
- * carrying `data-size` ('sm'|'md'|'lg'), `data-error` ('true'|'false') and
- * `data-disabled`. `input` is a descendant of root; the composed chips are
- * `Tag` subtrees. `error-message` is a DOM NEPHEW of root: the JSX wraps it
- * in a `[data-part='error-wrapper']` div that is itself a sibling of root
- * (both children of the `.ds-tag-input-shell` outer) -- selected via the
- * general sibling combinator plus one descendant hop through that wrapper.
- *
- * Hover lives on `:hover` gated `:not([data-disabled='true'])`; the focus
- * ring is `:focus-within` on the container (the inline input itself is
- * `outline: none`, so the container carries the visible focus posture).
- *
- * SPECIFICITY (P-48): the container's `border` paints a color, so its rules
- * reach (0,4,0) with two DISTINCT attributes -- `[data-part='root']` plus
- * the always-stamped `[data-size]` (or `[data-error]` on the error rule).
- * Attribute repetition is forbidden (4th-tanda law); the count of
- * `[data-part='root'][data-part='root']` selectors here is zero. Everything
- * else here is non-border paint (background, color, border-radius) and wins
- * unlayered at (0,3,0).
- *
- * PHASE-B SECOND PASS 2 (2026-07-31, P2-14): the error message leaves the
- * raw `var(--ds-color-error)` + `line-height: 16px` literal for the
- * certified `--ds-input-error-message-color`/`-font-weight` +
- * `--ds-input-helper-line-height` grammar (the xs raw error ink measured
- * 4.25:1 on bithire's canvas, sub-AA); under forced-colors the error frame
- * re-expresses as DASHED so it stays distinct from the rest frame once
- * system colors force the hue away (OTPInput precedent), and the shell
- * wrapper gains the stable `data-part='field'` hook in the engine.
+ * Paints the container keyed on `[data-part]`, `data-size`, `data-error`,
+ * `data-disabled`, `data-rejected` and the kernel's `data-state`. Chip paint
+ * belongs to the composed `Tag`; this file only sets its ink channel.
  */
 
-.ds-tag-input-shell.ds-tag-input-shell--modern {
+.ds-tag-input-shell.ds-tag-input-shell--modern[data-part='field'] {
   display: flex;
   flex-direction: column;
   inline-size: 100%;
 }
 
 .ds-tag-input.ds-tag-input--modern[data-part='root'] {
+  --ds-tag-primary-ink: var(--ds-tag-input-chip-ink, var(--ds-color-text-on-primary));
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: calc(var(--ds-tag-input-gap, 4px) * var(--ds-density-effective-scale));
-  padding-block: calc(var(--ds-tag-input-padding-y, 4px) * var(--ds-density-effective-scale));
-  padding-inline: calc(var(--ds-tag-input-padding-x, 8px) * var(--ds-density-effective-scale));
-  border-radius: var(--ds-radius-md);
-  /* Same channel alignment as input-number.css: the certified Input
-     family's `--ds-input-bg` (TMM resolves it light, measured #FFFEFB);
-     the generic `--ds-color-bg-input` resolves near-black under TMM's
-     dark-text theme (1.29:1 on the inline input text, axe-reproduced). */
-  background: var(--ds-input-bg, var(--ds-surface-control));
-  /* The whole container is the click target that focuses the inline input:
-     the text cursor says so even over the gaps between chips. */
+  gap: calc(var(--ds-tag-input-gap, var(--ds-spacing-1)) * var(--ds-density-effective-scale));
+  padding-block: calc(var(--ds-tag-input-padding-y, var(--ds-spacing-1)) * var(--ds-density-effective-scale));
+  padding-inline: calc(var(--ds-tag-input-padding-x, var(--ds-spacing-2)) * var(--ds-density-effective-scale));
+  border-radius: var(--ds-tag-input-radius, var(--ds-radius-md));
+  background: var(--ds-tag-input-bg, var(--ds-material-control-background));
   cursor: text;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-tag-input-transition-duration, var(--ds-motion-fast)) var(--ds-tag-input-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-tag-input-transition-duration, var(--ds-motion-fast)) var(--ds-tag-input-transition-timing, var(--ds-motion-ease-out));
 }
 
-/* Governed channel usage (K2-V Pass-2): the composed primary Tags' SOLID
-   treatment reads `--ds-tag-primary-ink` (tag.css falls back to
-   `--ds-color-text-on-primary`, which TMM sets near-black — 3.57:1 on its
-   teal primary, axe-reproduced). Setting the R0 ink channel on OUR
-   container scopes the fix to this composition without touching Tag:
-   white is the documented R0 solid-ink fallback and measures 5.50:1 on the
-   TMM primary. The OUTLINED treatment consumes the separate
-   `--ds-tag-primary-outlined-ink` channel and is unaffected (BitHire's
-   outlined chips keep their primary ink). */
-.ds-tag-input.ds-tag-input--modern[data-part='root'] {
-  --ds-tag-primary-ink: var(--ds-color-white);
+.ds-tag-input.ds-tag-input--modern[data-part='root'] > [data-part='tag-chip'] {
+  max-inline-size: 100%;
 }
 
-/* Public size geometry (density-scaled, physical px channels). */
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='sm'] {
-  min-block-size: calc(var(--ds-tag-input-sm-height, 32px) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
+  min-block-size: calc(var(--ds-tag-input-sm-height, var(--ds-input-sm-height)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='md'] {
-  min-block-size: calc(var(--ds-tag-input-md-height, 40px) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
+  min-block-size: calc(var(--ds-tag-input-md-height, var(--ds-input-md-height)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='lg'] {
-  min-block-size: calc(var(--ds-tag-input-lg-height, 48px) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
+  min-block-size: calc(var(--ds-tag-input-lg-height, var(--ds-input-lg-height)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
 }
 
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-tag-input-border-width, var(--ds-edge-standard-width)) solid var(--ds-tag-input-border, var(--ds-color-border));
 }
 @media (hover: hover) {
-  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:where(:hover):not([data-disabled='true']):not([data-error='true']) {
+  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:is([data-state~='hovered'], :hover):not([data-disabled='true']):not([data-error='true']) {
     border-color: var(--ds-tag-input-border-hover, var(--ds-material-control-border-hover));
   }
 }
-/* Touch/active equivalent of the hover border (4th-tanda law). */
-.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:active:not([data-disabled='true']):not([data-error='true']) {
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:is([data-state~='pressed'], :active):not([data-disabled='true']):not([data-error='true']) {
   border-color: var(--ds-tag-input-border-hover, var(--ds-material-control-border-hover));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true'] {
-  border: 1px solid var(--ds-color-error);
+  border-color: var(--ds-tag-input-error-border, var(--ds-color-error));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
   border-color: var(--ds-tag-input-border-focus, var(--ds-color-primary));
-  /* The fallback is --ds-shadow-focus-ring, not --ds-focus-ring: only the
-     former is re-declared by tenant artifacts, so the offset-ring channel
-     left this family's focus frozen at the default theme while every sibling
-     picker followed the tenant. */
   box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-shadow-focus-ring));
 }
-/* Rejection feedback (duplicate / maxTags / validateTag add-refusals): a
-   transient warning frame + halo while the engine stamps `data-rejected`.
-   Never hue-only -- the reason is announced through the polite live region
-   and the draft text is kept for correction. Placed after the focus grammar
-   so the flash wins the tie during the beat, then transitions back out on
-   the governed channels (reduced motion lands in each state directly). */
+/* A refused tag flashes the warning frame while the reason is announced; never hue alone. */
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected] {
-  /* AUT-1 absorbed: the same warning-over-neutral-well ink the callout uses,
-     now read from the foundation authority instead of a local twin. The
-     fallback is the pre-authority mix verbatim. NOT --ds-color-on-warning:
-     that is ink on a SOLID fill and would flatten this to a neutral. */
-  --_ds-tag-input-rejected-ink: var(--ds-color-warning-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
-  border-color: var(--_ds-tag-input-rejected-ink);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--_ds-tag-input-rejected-ink) 24%, transparent);
+  border-color: var(--ds-tag-input-rejected-ink, var(--ds-color-warning));
+  box-shadow: 0 0 0 var(--ds-tag-input-rejected-halo-width, var(--ds-focus-ring-width))
+    color-mix(in srgb, var(--ds-tag-input-rejected-ink, var(--ds-color-warning)) 24%, transparent);
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-disabled='true'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-tag-input-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
 
 .ds-tag-input.ds-tag-input--modern [data-part='input'] {
   flex: 1;
-  min-inline-size: var(--ds-tag-input-input-min-width, 60px);
+  min-inline-size: var(--ds-tag-input-input-min-width, var(--ds-spacing-16));
   padding: 0;
   outline: none;
   background: transparent;
   border: none;
-  color: var(--ds-color-text-primary);
-  caret-color: var(--ds-input-border-focus, var(--ds-color-primary));
-  /* The UA control font is not a semantic role: inherit the family/weight
-     and take the certified Input scale per size (below), so typed text,
-     chips and the Input family share one typography grammar. */
+  color: var(--ds-tag-input-ink, var(--ds-color-text-primary));
+  caret-color: var(--ds-tag-input-caret, var(--ds-color-primary));
   font-family: inherit;
   font-weight: inherit;
-  line-height: var(--ds-line-height-normal);
+  line-height: var(--ds-tag-input-line-height, var(--ds-line-height-normal));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='sm'] [data-part='input'] {
-  font-size: var(--ds-input-sm-font-size);
+  font-size: var(--ds-tag-input-sm-font-size, var(--ds-font-size-sm));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='md'] [data-part='input'] {
-  font-size: var(--ds-input-md-font-size);
+  font-size: var(--ds-tag-input-md-font-size, var(--ds-font-size-sm));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='lg'] [data-part='input'] {
-  font-size: var(--ds-input-lg-font-size);
+  font-size: var(--ds-tag-input-lg-font-size, var(--ds-font-size-base));
 }
-/* Placeholder, entered text and disabled ink stay visibly distinct: muted
-   placeholder on the certified channel, primary entered text (above),
-   disabled through the container's opacity + not-allowed posture. */
 .ds-tag-input.ds-tag-input--modern [data-part='input']::placeholder {
-  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
-  opacity: var(--ds-input-placeholder-opacity);
+  color: var(--ds-tag-input-placeholder, var(--ds-color-text-muted));
+  opacity: var(--ds-tag-input-placeholder-opacity, 1);
 }
-.ds-tag-input.ds-tag-input--modern [data-part='input']:disabled {
+.ds-tag-input.ds-tag-input--modern [data-part='input'][disabled] {
   cursor: not-allowed;
 }
 
 .ds-tag-input.ds-tag-input--modern ~ [data-part='error-wrapper'] {
-  margin-block-start: var(--ds-tag-input-error-gap, 4px);
+  margin-block-start: var(--ds-tag-input-error-gap, var(--ds-spacing-1));
 }
 .ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message'] {
-  font-size: var(--ds-font-size-xs);
-  /* Certified Input error-message grammar (P2-14): the raw error channel at
-     xs size fails AA on governed-source canvases (bithire #C5504C on
-     #F4F8FB = 4.25:1, measured by the OTP lane), so the ink/weight/leading
-     consume the same `--ds-input-error-message-*` + helper channels the
-     certified Input and PasswordInput already read -- no more raw
-     `var(--ds-color-error)` text or `line-height: 16px` literal. */
-  line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
-  color: var(--ds-input-error-message-color, var(--ds-color-error));
-  font-weight: var(--ds-input-error-message-font-weight, var(--ds-font-weight-medium));
+  font-size: var(--ds-tag-input-error-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-tag-input-error-line-height, var(--ds-line-height-snug));
+  color: var(--ds-tag-input-error-ink, var(--ds-color-error));
+  font-weight: var(--ds-tag-input-error-font-weight, var(--ds-font-weight-medium));
 }
 
-/* Coarse-pointer floor: physical px, never rem (the fluid 15px root erodes
-   rem floors at narrow widths -- measured on the live bundle, Axe R0). */
 @media (pointer: coarse) {
   .ds-tag-input.ds-tag-input--modern[data-part='root'] {
-    min-block-size: var(--ds-tag-input-touch-target-min, 44px);
+    min-block-size: var(--ds-tag-input-touch-target-min, var(--ds-touch-target-min));
   }
 }
 
@@ -205,35 +123,22 @@
   }
 }
 
-/* Forced colors (system colors only): washes and hues are forced away, so
-   the container frame, the keyboard ring and the error state read through
-   system-color boundaries; the error message travels as TEXT (shape, not
-   hue). */
+/* Forced colors: the frame, ring and error read through system colours; the error frame turns dashed. */
 @media (forced-colors: active) {
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size] {
     border-color: ButtonText;
   }
-  /* Error re-expresses as a DASHED frame (form, not hue -- the OTPInput
-     precedent): a solid ButtonText frame would be indistinguishable from
-     rest once system colors force the hue away. The message travels as
-     TEXT below, so the state is never hue-only. */
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true'] {
     border-color: ButtonText;
     border-style: dashed;
   }
-  .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
-    box-shadow: none;
-  }
-  /* The rejection flash keeps a system-color silhouette (hue washes are
-     forced away); the live region carries the reason as text. */
+  .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within,
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected] {
-    outline: 2px solid Highlight;
+    outline: var(--ds-focus-ring-width) solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:active:not([data-disabled='true']) {
+  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:is([data-state~='pressed'], :active):not([data-disabled='true']) {
     border-color: Highlight;
   }
   .ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message'] {

@@ -72,7 +72,6 @@ export const chromeDeriver: FamilyDeriver = {
     "--ds-icon-*",
     "--ds-image-*",
     "--ds-input-*",
-    "--ds-inputnumber-*",
     "--ds-layout-*",
     "--ds-list-*",
     "--ds-listing-*",

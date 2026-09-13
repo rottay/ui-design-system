@@ -37,54 +37,54 @@
 
 .ds-input-number.ds-input-number--rustic[data-part='root'] {
   outline: none;
-  color: var(--ds-inputnumber-color);
-  background-color: var(--ds-inputnumber-bg);
+  color: var(--ds-input-number-color);
+  background-color: var(--ds-input-number-bg);
   box-shadow: none;
   border-radius: var(--ds-input-number-radius);
 }
 .ds-input-number.ds-input-number--rustic[data-part='root'][data-disabled='true'] {
-  background-color: var(--ds-inputnumber-bg-disabled);
+  background-color: var(--ds-input-number-bg-disabled);
 }
 .ds-input-number.ds-input-number--rustic[data-part='root']:focus {
-  box-shadow: var(--ds-inputnumber-shadow-focus);
+  box-shadow: var(--ds-input-number-shadow-focus);
 }
 
 .ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-inputnumber-border);
+  border: 1px solid var(--ds-input-number-border);
 }
 .ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root']:focus:not([data-status='error']):not([data-status='warning']) {
-  border: 1px solid var(--ds-inputnumber-border-focus);
+  border: 1px solid var(--ds-input-number-border-focus);
 }
 .ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'][data-status='warning'] {
-  border: 1px solid var(--ds-inputnumber-warning-border);
+  border: 1px solid var(--ds-input-number-warning-border);
 }
 .ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'][data-status='error'] {
-  border: 1px solid var(--ds-inputnumber-error-border);
+  border: 1px solid var(--ds-input-number-error-border);
 }
 
 [data-part='addon-before'][data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--rustic[data-part='root']) {
-  background-color: var(--ds-inputnumber-addon-bg);
-  border: 1px solid var(--ds-inputnumber-addon-border);
+  background-color: var(--ds-input-number-addon-bg);
+  border: 1px solid var(--ds-input-number-addon-border);
   border-right: none;
-  border-radius: var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius);
-  color: var(--ds-inputnumber-addon-color);
+  border-radius: var(--ds-input-number-corner-radius) 0 0 var(--ds-input-number-corner-radius);
+  color: var(--ds-input-number-addon-color);
 }
 div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-part='addon-after'][data-part='addon-after'] {
-  background-color: var(--ds-inputnumber-addon-bg);
-  border: 1px solid var(--ds-inputnumber-addon-border);
+  background-color: var(--ds-input-number-addon-bg);
+  border: 1px solid var(--ds-input-number-addon-border);
   border-left: none;
-  border-radius: 0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0;
-  color: var(--ds-inputnumber-addon-color);
+  border-radius: 0 var(--ds-input-number-corner-radius) var(--ds-input-number-corner-radius) 0;
+  color: var(--ds-input-number-addon-color);
 }
 
 [data-part='prefix']:has(~ .ds-input-number.ds-input-number--rustic[data-part='root']) {
-  color: var(--ds-inputnumber-affix-color);
+  color: var(--ds-input-number-affix-color);
 }
 .ds-input-number.ds-input-number--rustic[data-part='root'] ~ [data-part='suffix'] {
-  color: var(--ds-inputnumber-affix-color);
+  color: var(--ds-input-number-affix-color);
 }
 
 .ds-input-number.ds-input-number--rustic[data-part='root'] ~ * [data-part='stepper-button'] {
-  background: var(--ds-inputnumber-control-bg);
-  color: var(--ds-inputnumber-control-color);
+  background: var(--ds-input-number-control-bg);
+  color: var(--ds-input-number-control-color);
 }

@@ -1,0 +1,25 @@
+/**
+ * Form Component Tokens - Rottay Design System
+ *
+ * Structural constants of the form family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/form`.
+ */
+
+:root {
+  --ds-form-label-gap: var(--ds-spacing-1);
+  --ds-form-label-letter-spacing: var(--ds-input-label-letter-spacing);
+  --ds-form-label-line-height: 1.35;
+  --ds-form-label-font-size-sm: var(--ds-form-field-sm-label-font-size);
+  --ds-form-label-font-size-md: var(--ds-form-field-label-font-size);
+  --ds-form-label-font-size-lg: var(--ds-form-field-lg-label-font-size);
+  --ds-form-badge-font-size: 10px;
+  --ds-form-badge-letter-spacing: 0.055em;
+  --ds-form-badge-line-height: 1.3;
+  --ds-form-tooltip-font-size: 11px;
+  --ds-form-message-min-height: 20px;
+  --ds-form-message-gap: var(--ds-spacing-1);
+  --ds-form-supporting-line-height: 1.45;
+  --ds-form-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-form-transition-duration: var(--ds-input-transition-duration);
+  --ds-form-transition-timing: var(--ds-input-transition-timing);
+}

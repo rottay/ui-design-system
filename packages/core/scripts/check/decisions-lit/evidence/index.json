@@ -1,8 +1,8 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-13T15:27:59.145Z",
+  "producedAt": "2026-09-13T18:35:46.280Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
-  "measuredHeadline": "measured on the 8-family sample: 18/22 move at least one sampled family",
+  "measuredHeadline": "measured on the 7-family sample: 18/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
     "newDecisions": 0,
@@ -12,7 +12,6 @@
       "card",
       "flex",
       "grid",
-      "input",
       "skeleton",
       "space",
       "stack"
@@ -22,7 +21,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-13T15:25:22.973Z"
+      "builtAt": "2026-09-13T18:32:40.747Z"
     },
     "sources": {
       "door": {
@@ -30,8 +29,8 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 771,
-        "digest": "d0910e03c0d0976d789b8e65cb7cc2ef87af55c03324d052c48c3348b171efec"
+        "fileCount": 788,
+        "digest": "51d11607f5af5fc6d3efb6eb9bb2ed934f27757ec1974c26c1fb555d18c14790"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
@@ -50,7 +49,6 @@
         "matched": [
           "card-modern-md",
           "button-modern-md",
-          "input-modern-md",
           "skeleton-card-line",
           "skeleton-form-action",
           "token-readout",
@@ -63,8 +61,16 @@
           "stack-modern-numeric-gap",
           "space-modern-numeric-gap"
         ],
-        "unmatched": [],
-        "bundleSha": "24879102086f58e3951e227e54c9b9c012a3ef3b6bc7c635f37df6fdc20cf3c6",
+        "unmatched": [
+          {
+            "id": "input-modern-md",
+            "missing": [
+              ".rottay-input.rottay-input--modern {",
+              ".rottay-input.rottay-input--modern[data-size='md']:not([data-size-responsive])"
+            ]
+          }
+        ],
+        "bundleSha": "6887b9862a8468ae6782f67aa10dd8f06404da68fd23117c55aa205118974b33",
         "bundleMode": "fresh",
         "theme": "dark"
       },
@@ -72,7 +78,6 @@
         "matched": [
           "card-modern-md",
           "button-modern-md",
-          "input-modern-md",
           "skeleton-card-line",
           "skeleton-form-action",
           "token-readout",
@@ -85,8 +90,16 @@
           "stack-modern-numeric-gap",
           "space-modern-numeric-gap"
         ],
-        "unmatched": [],
-        "bundleSha": "66ff43f1752ee08ab180ec05ccd0b775fc1c0479dc02c44b671c4700c0c666a2",
+        "unmatched": [
+          {
+            "id": "input-modern-md",
+            "missing": [
+              ".rottay-input.rottay-input--modern {",
+              ".rottay-input.rottay-input--modern[data-size='md']:not([data-size-responsive])"
+            ]
+          }
+        ],
+        "bundleSha": "0b4dd2dc582542d76fc44d7e5449098148c4801f64c0cd69987b85af259c7d7e",
         "bundleMode": "fresh",
         "theme": "light"
       },
@@ -94,7 +107,6 @@
         "matched": [
           "card-modern-md",
           "button-modern-md",
-          "input-modern-md",
           "skeleton-card-line",
           "skeleton-form-action",
           "token-readout",
@@ -107,8 +119,16 @@
           "stack-modern-numeric-gap",
           "space-modern-numeric-gap"
         ],
-        "unmatched": [],
-        "bundleSha": "fdb3c5f30bccd1ac3c5515e2ba880ead5dc1990c0685e1baa9db4b54f98093cf",
+        "unmatched": [
+          {
+            "id": "input-modern-md",
+            "missing": [
+              ".rottay-input.rottay-input--modern {",
+              ".rottay-input.rottay-input--modern[data-size='md']:not([data-size-responsive])"
+            ]
+          }
+        ],
+        "bundleSha": "e9af7dd0d00e79b911c373c074d36c3804c879750897371236761ea02e9ad0df",
         "bundleMode": "fresh",
         "theme": "light"
       }
@@ -142,7 +162,7 @@
       {
         "id": "shape.radius-scale",
         "kind": "recorded-none-moved",
-        "detail": "button-modern-md, card-modern-md, input-modern-md, skeleton-card-line, skeleton-form-action"
+        "detail": "button-modern-md, card-modern-md, skeleton-card-line, skeleton-form-action"
       },
       {
         "id": "spacing.rhythm",
@@ -185,8 +205,7 @@
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
         "movedFamilies": [
-          "card-modern-md",
-          "input-modern-md"
+          "card-modern-md"
         ],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -218,8 +237,7 @@
         "artifactBytesDiffer": true,
         "movedFamilies": [
           "button-modern-md",
-          "card-modern-md",
-          "input-modern-md"
+          "card-modern-md"
         ],
         "movedChannelCount": 1,
         "excludedIn": []
@@ -231,8 +249,7 @@
         "artifactBytesDiffer": true,
         "movedFamilies": [
           "button-modern-md",
-          "card-modern-md",
-          "input-modern-md"
+          "card-modern-md"
         ],
         "movedChannelCount": 3,
         "excludedIn": []
@@ -247,7 +264,6 @@
           "card-modern-md",
           "flex-modern-preset-gap",
           "grid-modern-preset-gap",
-          "input-modern-md",
           "space-modern-preset-gap",
           "stack-modern-preset-gap"
         ],
@@ -282,7 +298,6 @@
         "movedFamilies": [
           "button-modern-md",
           "card-modern-md",
-          "input-modern-md",
           "skeleton-card-line",
           "skeleton-form-action"
         ],
@@ -439,7 +454,6 @@
           "card-modern-md",
           "flex-modern-preset-gap",
           "grid-modern-preset-gap",
-          "input-modern-md",
           "skeleton-card-line",
           "skeleton-form-action",
           "space-modern-preset-gap",
@@ -455,8 +469,7 @@
         "artifactBytesDiffer": true,
         "movedFamilies": [
           "button-modern-md",
-          "card-modern-md",
-          "input-modern-md"
+          "card-modern-md"
         ],
         "movedChannelCount": 7,
         "excludedIn": []
@@ -565,8 +578,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -578,9 +590,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base"
@@ -596,8 +605,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -613,9 +621,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base",
@@ -638,7 +643,6 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
-        "input-modern-md",
         "space-modern-preset-gap",
         "stack-modern-preset-gap"
       ],
@@ -656,9 +660,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-size"
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
@@ -755,7 +756,6 @@
       "movedFamilies": [
         "button-modern-md",
         "card-modern-md",
-        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
@@ -769,9 +769,6 @@
           "border-bottom-right-radius"
         ],
         "button-modern-md/root": [
-          "border-top-left-radius"
-        ],
-        "input-modern-md/root": [
           "border-top-left-radius"
         ],
         "skeleton-card-line/line": [
@@ -1124,7 +1121,6 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
-        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action",
         "space-modern-preset-gap",
@@ -1151,9 +1147,6 @@
           "min-height",
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "skeleton-card-line/line": [
           "border-top-left-radius"
@@ -1261,8 +1254,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -1278,9 +1270,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base",
@@ -1402,8 +1391,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -1415,9 +1403,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base"
@@ -1433,8 +1418,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -1450,9 +1434,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base",
@@ -1475,7 +1456,6 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
-        "input-modern-md",
         "space-modern-preset-gap",
         "stack-modern-preset-gap"
       ],
@@ -1493,9 +1473,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-size"
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
@@ -1592,7 +1569,6 @@
       "movedFamilies": [
         "button-modern-md",
         "card-modern-md",
-        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
@@ -1606,9 +1582,6 @@
           "border-bottom-right-radius"
         ],
         "button-modern-md/root": [
-          "border-top-left-radius"
-        ],
-        "input-modern-md/root": [
           "border-top-left-radius"
         ],
         "skeleton-card-line/line": [
@@ -1951,7 +1924,6 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
-        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action",
         "space-modern-preset-gap",
@@ -1983,10 +1955,6 @@
           "min-height",
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "border-top-left-radius",
-          "font-family"
         ],
         "skeleton-card-line/line": [
           "border-top-left-radius"
@@ -2070,8 +2038,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -2087,9 +2054,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base",
@@ -2175,17 +2139,13 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
           "color"
         ],
         "card-modern-md/title": [
-          "color"
-        ],
-        "input-modern-md/root": [
           "color"
         ]
       },
@@ -2213,8 +2173,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -2226,9 +2185,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base"
@@ -2244,8 +2200,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -2261,9 +2216,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base",
@@ -2286,7 +2238,6 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
-        "input-modern-md",
         "space-modern-preset-gap",
         "stack-modern-preset-gap"
       ],
@@ -2308,9 +2259,6 @@
           "min-height",
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-size"
         ],
         "token-readout/tokens": [
           "--ds-font-size-xs",
@@ -2416,7 +2364,6 @@
       "movedFamilies": [
         "button-modern-md",
         "card-modern-md",
-        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
@@ -2430,9 +2377,6 @@
           "border-bottom-right-radius"
         ],
         "button-modern-md/root": [
-          "border-top-left-radius"
-        ],
-        "input-modern-md/root": [
           "border-top-left-radius"
         ],
         "skeleton-card-line/line": [
@@ -2778,7 +2722,6 @@
         "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
-        "input-modern-md",
         "skeleton-card-line",
         "skeleton-form-action",
         "space-modern-preset-gap",
@@ -2804,9 +2747,6 @@
           "min-height",
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "skeleton-card-line/line": [
           "border-top-left-radius"
@@ -2916,8 +2856,7 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
-        "input-modern-md"
+        "card-modern-md"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -2933,9 +2872,6 @@
         "button-modern-md/hitbox": [
           "inline-size",
           "width"
-        ],
-        "input-modern-md/root": [
-          "font-family"
         ],
         "token-readout/tokens": [
           "--ds-font-family-base",

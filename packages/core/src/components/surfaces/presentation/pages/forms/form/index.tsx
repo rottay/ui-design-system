@@ -127,7 +127,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
     <ActionDock
       mode="fixed"
       position="bottom"
-      className="ds-form__action-dock"
+      className="ds-form-surface__action-dock"
       data-testid="form-surface-action-dock"
       aria-label={tSurfaceOr('form.actions_aria', 'Form actions')}
     >
@@ -144,7 +144,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
   // common create/edit screen layout without explicit configuration.
   const formContent = (
     <Grid
-      className={['ds-surface ds-form', actionsSticky ? 'ds-form--sticky-actions' : undefined]
+      className={['ds-surface ds-form-surface', actionsSticky ? 'ds-form-surface--sticky-actions' : undefined]
         .filter(Boolean)
         .join(' ')}
       data-part="root"
@@ -167,7 +167,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
 
               {config.presentation.error && (
                 <Box data-part="error-banner" role="alert">
-                  <Card className="ds-form__error-card" variant={profileDefaults.cardVariant}>
+                  <Card className="ds-form-surface__error-card" variant={profileDefaults.cardVariant}>
                     <Card.Body>{config.presentation.error}</Card.Body>
                   </Card>
                 </Box>
@@ -203,7 +203,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
 
       {showAside && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
-          <Card className="ds-form__aside-card" variant={profileDefaults.cardVariant}>
+          <Card className="ds-form-surface__aside-card" variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.aside}</Card.Body>
           </Card>
         </Grid.Item>

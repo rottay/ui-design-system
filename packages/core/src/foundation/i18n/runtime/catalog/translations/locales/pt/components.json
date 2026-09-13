@@ -1550,5 +1550,11 @@
   },
   "locale_switcher": {
     "panel_aria": "Idiomas"
+  },
+  "otp": {
+    "digit_label": "Dígito {index} de {length}"
+  },
+  "textarea": {
+    "count_limit": "{count}/{max}"
   }
 }

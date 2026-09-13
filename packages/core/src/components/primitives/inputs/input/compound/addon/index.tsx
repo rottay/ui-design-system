@@ -71,7 +71,7 @@ export function InputAddon({
 }: InputAddonProps): React.ReactElement {
   return (
     <span
-      className={`rottay-input-addon ds-input-addon rottay-input-addon--${position} ${className}`}
+      className={`ds-input-addon ds-input-addon--${position} ${className}`.trim()}
       data-part="root"
       data-variant={variant}
       data-position={position}

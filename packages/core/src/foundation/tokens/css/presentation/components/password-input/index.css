@@ -1,0 +1,22 @@
+/**
+ * PasswordInput Component Tokens - Rottay Design System
+ *
+ * Structural constants of the password-input family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/password-input`.
+ */
+
+:root {
+  --ds-password-input-gap: var(--ds-input-gap);
+  --ds-password-input-message-gap: var(--ds-input-message-gap);
+  --ds-password-input-action-size: var(--ds-input-action-size);
+  --ds-password-input-xs-radius: var(--ds-input-xs-radius);
+  --ds-password-input-sm-radius: var(--ds-input-sm-radius);
+  --ds-password-input-md-radius: var(--ds-input-md-radius);
+  --ds-password-input-lg-radius: var(--ds-input-lg-radius);
+  --ds-password-input-xl-radius: var(--ds-input-xl-radius);
+  --ds-password-input-shadow: var(--ds-input-shadow-rest), var(--ds-input-inset-shadow, none);
+  --ds-password-input-touch-target-min: var(--ds-touch-target-min, 2.75rem);
+  --ds-password-input-strength-gap: var(--ds-border-width-2);
+  --ds-password-input-strength-track-height: var(--ds-spacing-1);
+  --ds-password-input-strength-track-radius: var(--ds-radius-full);
+}

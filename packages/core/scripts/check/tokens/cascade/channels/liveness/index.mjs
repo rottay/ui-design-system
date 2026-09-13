@@ -1333,7 +1333,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // to leave the emitting control unnamed.
   [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
-  [/^--ds-(button|checkbox|radio|toggle|segmented)-/, (m) => `chrome.${m[1]}`],
+  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form)-/, (m) => `chrome.${m[1]}`],
 ]);
 
 export function classifySemanticOwner(name) {

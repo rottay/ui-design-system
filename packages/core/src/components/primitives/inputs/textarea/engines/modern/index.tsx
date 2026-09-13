@@ -29,6 +29,7 @@
 import React, { useState, useCallback, useRef, useId, useEffect, useLayoutEffect } from 'react';
 import type { TextareaProps } from '../../contracts';
 import { TEXTAREA_DEFAULTS } from '../../contracts';
+import { partAttributes, resolveSubmitIntent, useFieldAction, useInteractionState } from '@/foundation/behavior';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { composeRefs } from '@/components/primitives/foundation/compose-refs';
@@ -36,6 +37,15 @@ import { composeRefs } from '@/components/primitives/foundation/compose-refs';
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
+
+function TextareaClearButton({ label, onClear }: { label: string; onClear: () => void }): React.ReactElement {
+  const { state, handlers } = useFieldAction();
+  return (
+    <button type="button" {...partAttributes('clear-button', state)} {...handlers} onClick={onClear} aria-label={label}>
+      <ActionCloseIcon decorative size="sm" />
+    </button>
+  );
+}
 
 /**
  * Modern (pure DS tokens) implementation of Textarea.
@@ -79,8 +89,11 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     'data-testid': dataTestId,
     ...rest
   } = props;
+  const { onKeyDown: callerKeyDown, ...nativeRest } = rest as typeof rest & {
+    onKeyDown?: React.KeyboardEventHandler<HTMLTextAreaElement>;
+  };
 
-  const translation = useOptionalTranslation('common');
+  const translation = useOptionalTranslation();
   const generatedId = useId();
   const controlId = id || `textarea-modern-${generatedId.replace(/:/g, '')}`;
   const countId = `${controlId}-count`;
@@ -105,13 +118,23 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     onChange?.(e.target.value, e);
   }, [isControlled, onChange]);
 
+  const { state: interaction, handlers } = useInteractionState({ disabled });
+
   const handleFocus = useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {
+    handlers.onFocus(e);
     onFocus?.(e);
-  }, [onFocus]);
+  }, [handlers, onFocus]);
 
   const handleBlur = useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {
+    handlers.onBlur(e);
     onBlur?.(e);
-  }, [onBlur]);
+  }, [handlers, onBlur]);
+
+  // Shift+Enter keeps its newline and an IME confirming a candidate never submits.
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    callerKeyDown?.(e);
+    if (resolveSubmitIntent(e, { multiline: true }) === 'submit') onPressEnter?.();
+  }, [callerKeyDown, onPressEnter]);
 
   const handleClear = useCallback(() => {
     if (!isControlled) {
@@ -122,7 +145,7 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     textareaRef.current?.focus();
   }, [isControlled, onChange, onClear]);
 
-  const callerDescribedBy = (rest as { 'aria-describedby'?: string })['aria-describedby'];
+  const callerDescribedBy = (nativeRest as { 'aria-describedby'?: string })['aria-describedby'];
   const describedBy =
     [callerDescribedBy, showCount ? countId : undefined].filter(Boolean).join(' ') || undefined;
 
@@ -139,6 +162,11 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         : currentValue.length / maxLength >= 0.9
           ? 'warning'
           : undefined;
+
+  const countText = maxLength
+    ? translation?.tOr('components.textarea.count_limit', '{count}/{max}', { count: currentValue.length, max: maxLength })
+      ?? `${currentValue.length}/${maxLength}`
+    : String(currentValue.length);
 
   // autoSize: grow with the content and cap at maxRows (contract: true |
   // {minRows,maxRows}). Runtime-measured geometry is the one sanctioned
@@ -213,7 +241,12 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         ref={setTextarea}
         id={controlId}
         className="ds-textarea ds-textarea--modern"
-        data-part="root"
+        {...partAttributes('root', interaction)}
+        onPointerEnter={handlers.onPointerEnter}
+        onPointerLeave={handlers.onPointerLeave}
+        onPointerDown={handlers.onPointerDown}
+        onPointerUp={handlers.onPointerUp}
+        onPointerCancel={handlers.onPointerUp}
         data-variant={variant}
         data-size={size}
         data-status={statusKey}
@@ -231,15 +264,13 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') onPressEnter?.();
-        }}
+        onKeyDown={handleKeyDown}
         name={name}
         autoComplete={autoComplete}
         autoFocus={autoFocus}
         aria-invalid={isError || undefined}
         aria-required={required || undefined}
-        {...rest}
+        {...nativeRest}
         // The count is the field's remaining-budget support text. Unlinked, a
         // screen-reader user reached the limit with no warning: the control
         // never carried it, and the live region only fires on a change the
@@ -249,15 +280,7 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       />
 
       {showClearButton && (
-        <button
-          type="button"
-          data-part="clear-button"
-          onClick={handleClear}
-          onPointerDown={(event) => event.preventDefault()}
-          aria-label={translation?.t('clear') ?? 'Clear'}
-        >
-          <ActionCloseIcon decorative size="sm" />
-        </button>
+        <TextareaClearButton label={translation?.tOr('common.clear', 'Clear') ?? 'Clear'} onClear={handleClear} />
       )}
 
       {showCount && (
@@ -267,8 +290,7 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           data-count-state={countState}
           aria-live="polite"
         >
-          {currentValue.length}
-          {maxLength ? `/${maxLength}` : ''}
+          {countText}
         </div>
       )}
     </div>

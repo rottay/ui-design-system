@@ -5,21 +5,19 @@
  * owns every visual decision through documented `--ds-input-*` channels so a
  * vertical or DB-backed tenant never needs private selectors.
  *
- * PAINT IS KEYED ON THE CLASS, NEVER ON `data-part`. The engine writes
- * `data-part={caller ?? 'root'}` (P-79: the caller's part wins), so a
- * `[data-part='root']` predicate silently drops the whole skin for every
- * composer that labels the field for its own selectors. That is what happened:
- * 82 selectors here carried the predicate and reached none of the six families
- * that pass a part. `rottay-input rottay-input--modern` is written in exactly
- * one place in the source tree, only onto the shell, and the caller's own
- * className lands on the `.rottay-input-field` wrapper instead — so the class
- * pair is a unique identity no caller can move or suppress. Button's skin
- * keys the same way. Anatomy parts stay selectable as DESCENDANTS of that
- * shell (`[data-part='affix-prefix']` and friends); they are the engine's,
- * not the caller's.
+ * PAINT IS KEYED ON THE CLASS, NEVER ON THE SHELL'S `data-part`. The engine
+ * writes `data-part={caller ?? 'root'}` (the caller's part wins), so a
+ * `[data-part='root']` predicate would drop the skin for every composer that
+ * labels the field. `ds-input-shell ds-input-shell--modern` is written only onto
+ * the shell and the caller's className lands on the `.ds-input-field` wrapper,
+ * so the class pair is an identity no caller can move. Anatomy parts stay
+ * selectable as descendants of that shell; they are the engine's.
+ *
+ * State is decided once by the interaction kernel (`data-state`); every rule
+ * that also names a platform pseudo-class pairs it with its kernel twin.
  */
 
-.rottay-input-field[data-part='field'] {
+.ds-input-field[data-part='field'] {
   container: ds-input-field / inline-size;
   display: grid;
   inline-size: 100%;
@@ -31,7 +29,7 @@
   scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
-.rottay-input.rottay-input--modern {
+.ds-input-shell.ds-input-shell--modern {
   --ds-input-resolved-radius: var(
     --ds-input-responsive-radius,
     var(--ds-radius-input, var(--ds-radius-md))
@@ -83,9 +81,9 @@
    compound branch the shell is the addon-shell <div> and only this inner
    control is transparent and chrome-free; in the standalone branch the shell
    IS the <input>, so this rule must never select the shell node itself -- when
-   it did (`input.rottay-input...`), the outline variant lost its
+   it did (`input.ds-input-shell...`), the outline variant lost its
    border/surface/shadow at rest (K1-B01). */
-.rottay-input.rottay-input--modern > .rottay-input__control {
+.ds-input-shell.ds-input-shell--modern > .ds-input-control {
   min-inline-size: 0;
   inline-size: 100%;
   color: inherit;
@@ -103,25 +101,25 @@
 
 /* Standalone branch: the shell <input> keeps the base rule's border, surface
    and shadow -- only UA chrome resets live here, never paint declarations. */
-input.rottay-input.rottay-input--modern {
+input.ds-input-shell.ds-input-shell--modern {
   padding: 0;
   text-align: start;
 }
 
-.rottay-input.rottay-input--modern > .rottay-input__control::placeholder,
-input.rottay-input.rottay-input--modern::placeholder {
+.ds-input-shell.ds-input-shell--modern > .ds-input-control::placeholder,
+input.ds-input-shell.ds-input-shell--modern::placeholder {
   color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
   opacity: var(--ds-input-placeholder-opacity);
 }
 
-.rottay-input.rottay-input--modern > .rottay-input__control::selection,
-input.rottay-input.rottay-input--modern::selection {
+.ds-input-shell.ds-input-shell--modern > .ds-input-control::selection,
+input.ds-input-shell.ds-input-shell--modern::selection {
   color: var(--ds-input-selection-color, var(--ds-input-color, var(--ds-color-text-primary)));
   background: var(--ds-input-selection-bg);
 }
 
-.rottay-input.rottay-input--modern [data-part='affix-prefix'],
-.rottay-input.rottay-input--modern [data-part='affix-suffix'] {
+.ds-input-shell.ds-input-shell--modern [data-part='affix-prefix'],
+.ds-input-shell.ds-input-shell--modern [data-part='affix-suffix'] {
   box-sizing: border-box;
   display: inline-grid;
   flex: 0 0 auto;
@@ -143,9 +141,9 @@ input.rottay-input.rottay-input--modern::selection {
   line-height: 1;
 }
 
-.rottay-input.rottay-input--modern [data-part='clear-button'],
-.rottay-input.rottay-input--modern [data-part='visibility-toggle'],
-.rottay-input.rottay-input--modern [data-part='search-button'] {
+.ds-input-shell.ds-input-shell--modern [data-part='clear-button'],
+.ds-input-shell.ds-input-shell--modern [data-part='visibility-toggle'],
+.ds-input-shell.ds-input-shell--modern [data-part='search-button'] {
   box-sizing: border-box;
   display: inline-grid;
   flex: 0 0 auto;
@@ -173,44 +171,44 @@ input.rottay-input.rottay-input--modern::selection {
     transform var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
 }
 
-.rottay-input.rottay-input--modern [data-part='search-button'] {
+.ds-input-shell.ds-input-shell--modern [data-part='search-button'] {
   color: var(
     --ds-input-search-icon-color,
     var(--ds-input-clear-color, var(--ds-input-affix-color))
   );
 }
 
-.rottay-input.rottay-input--modern [data-part='clear-button']:where(:hover, :focus-visible),
-.rottay-input.rottay-input--modern [data-part='visibility-toggle']:where(:hover, :focus-visible),
-.rottay-input.rottay-input--modern [data-part='search-button']:where(:hover, :focus-visible) {
+.ds-input-shell.ds-input-shell--modern [data-part='clear-button']:is([data-state~='hovered'], [data-state~='focus-visible'], :hover, :focus-visible),
+.ds-input-shell.ds-input-shell--modern [data-part='visibility-toggle']:is([data-state~='hovered'], [data-state~='focus-visible'], :hover, :focus-visible),
+.ds-input-shell.ds-input-shell--modern [data-part='search-button']:is([data-state~='hovered'], [data-state~='focus-visible'], :hover, :focus-visible) {
   color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
   background: var(--ds-input-clear-bg-hover, var(--ds-surface-inset));
   border-color: var(--ds-input-clear-border-hover, var(--ds-color-border-subtle));
   box-shadow: var(--ds-input-action-shadow-hover);
 }
 
-.rottay-input.rottay-input--modern [data-part='clear-button']:focus-visible,
-.rottay-input.rottay-input--modern [data-part='visibility-toggle']:focus-visible,
-.rottay-input.rottay-input--modern [data-part='search-button']:focus-visible {
+.ds-input-shell.ds-input-shell--modern [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-input-shell.ds-input-shell--modern [data-part='visibility-toggle']:is([data-state~='focus-visible'], :focus-visible),
+.ds-input-shell.ds-input-shell--modern [data-part='search-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: 0;
   box-shadow: var(--ds-input-action-focus-ring, var(--ds-focus-ring));
 }
 
-.rottay-input.rottay-input--modern [data-part='clear-button']:active,
-.rottay-input.rottay-input--modern [data-part='visibility-toggle']:active,
-.rottay-input.rottay-input--modern [data-part='search-button']:active {
-  transform: var(--ds-input-action-active-transform, scale(0.94));
+.ds-input-shell.ds-input-shell--modern [data-part='clear-button']:is([data-state~='pressed'], :active),
+.ds-input-shell.ds-input-shell--modern [data-part='visibility-toggle']:is([data-state~='pressed'], :active),
+.ds-input-shell.ds-input-shell--modern [data-part='search-button']:is([data-state~='pressed'], :active) {
+  transform: var(--ds-input-action-active-transform, scale(var(--ds-state-press-scale)));
 }
 
-.rottay-input.rottay-input--modern [data-part='clear-button']:disabled,
-.rottay-input.rottay-input--modern [data-part='visibility-toggle']:disabled,
-.rottay-input.rottay-input--modern [data-part='search-button']:disabled {
+.ds-input-shell.ds-input-shell--modern [data-part='clear-button']:is([data-state~='disabled'], :disabled),
+.ds-input-shell.ds-input-shell--modern [data-part='visibility-toggle']:is([data-state~='disabled'], :disabled),
+.ds-input-shell.ds-input-shell--modern [data-part='search-button']:is([data-state~='disabled'], :disabled) {
   cursor: var(--ds-input-disabled-cursor);
-  opacity: var(--ds-input-action-disabled-opacity, 0.45);
+  opacity: var(--ds-input-action-disabled-opacity, var(--ds-state-disabled-opacity));
   pointer-events: none;
 }
 
-.rottay-input.rottay-input--modern [data-part='loading-indicator'] {
+.ds-input-shell.ds-input-shell--modern [data-part='loading-indicator'] {
   display: inline-grid;
   flex: 0 0 auto;
   place-items: center;
@@ -224,7 +222,7 @@ input.rottay-input.rottay-input--modern::selection {
   color: var(--ds-input-loading-color, var(--ds-input-border-focus, var(--ds-color-primary)));
 }
 
-.rottay-input.rottay-input--modern [data-part='loading-indicator'] svg {
+.ds-input-shell.ds-input-shell--modern [data-part='loading-indicator'] svg {
   inline-size: 100%;
   block-size: 100%;
   fill: none;
@@ -245,7 +243,7 @@ input.rottay-input.rottay-input--modern::selection {
    the base rule's min-block-size) instead of a fixed block-size, so the
    control can grow past its step when type scales (zoom posture) while the
    coarse block recomputes the touch floor against the SAME relay. */
-.rottay-input.rottay-input--modern[data-size='xs']:not([data-size-responsive]) {
+.ds-input-shell.ds-input-shell--modern[data-size='xs']:not([data-size-responsive]) {
   /* Control step first for every size, matching Button and the root rule above
      — which already read --ds-radius-input ahead of the ramp, so these size
      rules were also contradicting their own file. R1 Cohort 1 put the ramp
@@ -265,7 +263,7 @@ input.rottay-input.rottay-input--modern::selection {
   line-height: var(--ds-input-xs-line-height);
 }
 
-.rottay-input.rottay-input--modern[data-size='sm']:not([data-size-responsive]) {
+.ds-input-shell.ds-input-shell--modern[data-size='sm']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-sm)));
   --_ds-input-resolved-gap: var(--ds-input-sm-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
@@ -276,7 +274,7 @@ input.rottay-input.rottay-input--modern::selection {
   line-height: var(--ds-input-sm-line-height);
 }
 
-.rottay-input.rottay-input--modern[data-size='md']:not([data-size-responsive]) {
+.ds-input-shell.ds-input-shell--modern[data-size='md']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius, var(--ds-radius-md)));
   --_ds-input-resolved-gap: var(--ds-input-md-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
@@ -287,7 +285,7 @@ input.rottay-input.rottay-input--modern::selection {
   line-height: var(--ds-input-md-line-height);
 }
 
-.rottay-input.rottay-input--modern[data-size='lg']:not([data-size-responsive]) {
+.ds-input-shell.ds-input-shell--modern[data-size='lg']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius, var(--ds-radius-lg)));
   --_ds-input-resolved-gap: var(--ds-input-lg-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
@@ -298,7 +296,7 @@ input.rottay-input.rottay-input--modern::selection {
   line-height: var(--ds-input-lg-line-height);
 }
 
-.rottay-input.rottay-input--modern[data-size='xl']:not([data-size-responsive]) {
+.ds-input-shell.ds-input-shell--modern[data-size='xl']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-xl-radius, var(--ds-input-xl-border-radius, var(--ds-radius-xl)));
   --_ds-input-resolved-gap: var(--ds-input-xl-gap, var(--ds-input-affix-gap));
   --_ds-input-resolved-height: calc(
@@ -310,12 +308,12 @@ input.rottay-input.rottay-input--modern::selection {
 }
 
 /* Variants */
-.rottay-input.rottay-input--modern[data-variant='filled'] {
+.ds-input-shell.ds-input-shell--modern[data-variant='filled'] {
   background: var(--ds-input-filled-bg, var(--ds-surface-inset));
   border-color: var(--ds-input-filled-border, transparent);
 }
 
-.rottay-input.rottay-input--modern[data-variant='flushed'] {
+.ds-input-shell.ds-input-shell--modern[data-variant='flushed'] {
   padding-inline: 0;
   background: transparent;
   border-width: 0 0 var(--ds-input-border-width);
@@ -323,7 +321,7 @@ input.rottay-input.rottay-input--modern::selection {
   box-shadow: none;
 }
 
-.rottay-input.rottay-input--modern[data-variant='unstyled'] {
+.ds-input-shell.ds-input-shell--modern[data-variant='unstyled'] {
   block-size: auto;
   /* Chrome-free means no height floor either: the base rule's relay-driven
      min-block-size is cancelled here (this variant selector outranks it). */
@@ -336,55 +334,55 @@ input.rottay-input.rottay-input--modern::selection {
 }
 
 /* Interaction and semantic states */
-.rottay-input.rottay-input--modern[data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-hover, var(--ds-input-bg));
   border-color: var(--ds-input-border-hover, var(--ds-material-control-border-hover));
   box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest)), var(--ds-input-inset-shadow, none);
 }
 
-.rottay-input.rottay-input--modern[data-variant='filled'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
+.ds-input-shell.ds-input-shell--modern[data-variant='filled'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
   background: var(--ds-input-filled-bg-hover, var(--ds-input-bg-hover));
 }
 
-.rottay-input.rottay-input--modern[data-state~='focused']:not([data-disabled='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-focus, var(--ds-input-bg));
   border-color: var(--ds-input-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-input-shadow-focus, var(--ds-focus-ring));
 }
 
-.rottay-input.rottay-input--modern[data-variant='filled'][data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
+.ds-input-shell.ds-input-shell--modern[data-variant='filled'][data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
   background: var(--ds-input-filled-bg-focus, var(--ds-input-bg-focus));
 }
 
-.rottay-input.rottay-input--modern[data-invalid='true']:not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-invalid='true']:not([data-variant='unstyled']) {
   color: var(--ds-input-error-color, var(--ds-input-color));
   background: var(--ds-input-error-bg, var(--ds-input-bg));
   border-color: var(--ds-input-error-border, var(--ds-color-error));
 }
 
-.rottay-input.rottay-input--modern[data-invalid='true'][data-state~='focused']:not([data-disabled='true']) {
+.ds-input-shell.ds-input-shell--modern[data-invalid='true'][data-state~='focused']:not([data-disabled='true']) {
   box-shadow: var(--ds-input-error-shadow-focus, var(--ds-input-shadow-focus));
 }
 
-.rottay-input.rottay-input--modern[data-warning='true']:not([data-invalid='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-warning='true']:not([data-invalid='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-warning-bg, var(--ds-input-bg));
   border-color: var(--ds-input-warning-border, var(--ds-color-warning));
 }
 
-.rottay-input.rottay-input--modern[data-warning='true'][data-state~='focused']:not([data-invalid='true']):not([data-disabled='true']) {
+.ds-input-shell.ds-input-shell--modern[data-warning='true'][data-state~='focused']:not([data-invalid='true']):not([data-disabled='true']) {
   box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-input-shadow-focus));
 }
 
-.rottay-input.rottay-input--modern[data-success='true']:not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-success='true']:not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-success-bg, var(--ds-input-bg));
   border-color: var(--ds-input-success-border, var(--ds-color-success));
 }
 
-.rottay-input.rottay-input--modern[data-success='true'][data-state~='focused']:not([data-disabled='true']) {
+.ds-input-shell.ds-input-shell--modern[data-success='true'][data-state~='focused']:not([data-disabled='true']) {
   box-shadow: var(--ds-input-success-shadow-focus, var(--ds-input-shadow-focus));
 }
 
-.rottay-input.rottay-input--modern[data-readonly='true']:not([data-disabled='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-readonly='true']:not([data-disabled='true']):not([data-variant='unstyled']) {
   color: var(--ds-input-readonly-color, var(--ds-input-color));
   background: var(--ds-input-readonly-bg, var(--ds-input-bg));
   border-color: var(--ds-input-readonly-border, var(--ds-input-border));
@@ -392,33 +390,29 @@ input.rottay-input.rottay-input--modern::selection {
   cursor: var(--ds-input-readonly-cursor);
 }
 
-.rottay-input.rottay-input--modern[data-disabled='true'] {
+.ds-input-shell.ds-input-shell--modern[data-disabled='true'] {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
-  /* --ds-surface-disabled is an OPTIONAL foundation surface: nothing declares
-     it, so a bare read here would be invalid at computed-value time and the
-     background would fall back to `initial` (transparent). The terminal chain
-     is the one Select already authors for the same state. */
-  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
+  background: var(--ds-input-bg-disabled, var(--ds-material-control-background-disabled));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   box-shadow: var(--ds-input-shadow-disabled, none);
   cursor: var(--ds-input-disabled-cursor);
   opacity: var(--ds-input-disabled-opacity);
 }
 
-.rottay-input.rottay-input--modern[data-disabled='true'] * {
+.ds-input-shell.ds-input-shell--modern[data-disabled='true'] * {
   cursor: inherit;
 }
 
-.rottay-input.rottay-input--modern[data-loading='true'] [data-part='clear-button'],
-.rottay-input.rottay-input--modern[data-loading='true'] [data-part='visibility-toggle'],
-.rottay-input.rottay-input--modern[data-loading='true'] [data-part='search-button'] {
+.ds-input-shell.ds-input-shell--modern[data-loading='true'] [data-part='clear-button'],
+.ds-input-shell.ds-input-shell--modern[data-loading='true'] [data-part='visibility-toggle'],
+.ds-input-shell.ds-input-shell--modern[data-loading='true'] [data-part='search-button'] {
   pointer-events: none;
   opacity: 0;
 }
 
 /* Browser chrome */
-.rottay-input.rottay-input--modern > .rottay-input__control:-webkit-autofill,
-input.rottay-input.rottay-input--modern:-webkit-autofill {
+.ds-input-shell.ds-input-shell--modern > .ds-input-control:-webkit-autofill,
+input.ds-input-shell.ds-input-shell--modern:-webkit-autofill {
   -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-input-color));
   caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color));
   box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-input-bg)) inset;
@@ -427,8 +421,8 @@ input.rottay-input.rottay-input--modern:-webkit-autofill {
 /* Standard :autofill (Firefox and engines tracking the spec) reads the same
    channels as the WebKit rule above, so the autofilled posture cannot drift
    across browsers. */
-.rottay-input.rottay-input--modern > .rottay-input__control:autofill,
-input.rottay-input.rottay-input--modern:autofill {
+.ds-input-shell.ds-input-shell--modern > .ds-input-control:autofill,
+input.ds-input-shell.ds-input-shell--modern:autofill {
   caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color));
   box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-input-bg)) inset;
 }
@@ -437,36 +431,36 @@ input.rottay-input.rottay-input--modern:autofill {
    cancel button re-implements `clearable` (untokenized, unlabeled, wrong
    icon profile) and the number spinners compete with the InputNumber
    family's own steppers. */
-.rottay-input.rottay-input--modern > .rottay-input__control::-webkit-search-cancel-button,
-input.rottay-input.rottay-input--modern::-webkit-search-cancel-button {
+.ds-input-shell.ds-input-shell--modern > .ds-input-control::-webkit-search-cancel-button,
+input.ds-input-shell.ds-input-shell--modern::-webkit-search-cancel-button {
   -webkit-appearance: none;
   appearance: none;
 }
 
-.rottay-input.rottay-input--modern > .rottay-input__control::-webkit-outer-spin-button,
-.rottay-input.rottay-input--modern > .rottay-input__control::-webkit-inner-spin-button,
-input.rottay-input.rottay-input--modern::-webkit-outer-spin-button,
-input.rottay-input.rottay-input--modern::-webkit-inner-spin-button {
+.ds-input-shell.ds-input-shell--modern > .ds-input-control::-webkit-outer-spin-button,
+.ds-input-shell.ds-input-shell--modern > .ds-input-control::-webkit-inner-spin-button,
+input.ds-input-shell.ds-input-shell--modern::-webkit-outer-spin-button,
+input.ds-input-shell.ds-input-shell--modern::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.rottay-input.rottay-input--modern > .rottay-input__control[type='number'],
-input.rottay-input.rottay-input--modern[type='number'] {
+.ds-input-shell.ds-input-shell--modern > .ds-input-control[type='number'],
+input.ds-input-shell.ds-input-shell--modern[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
 
 /* Messages remain in logical flow: no absolute text, no collisions in long
    locales, and correct alignment in RTL. */
-.rottay-input-field[data-part='field'] > [data-part='count'],
-.rottay-input-field[data-part='field'] > [data-part='error-message'] {
+.ds-input-field[data-part='field'] > [data-part='count'],
+.ds-input-field[data-part='field'] > [data-part='error-message'] {
   margin: 0;
   font-size: var(--ds-input-helper-font-size, var(--ds-font-size-xs));
   line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
 }
 
-.rottay-input-field[data-part='field'] > [data-part='count'] {
+.ds-input-field[data-part='field'] > [data-part='count'] {
   justify-self: end;
   /* CONTRAST LAW (R0/Axe): muted counter ink fails WCAG AA on the control
      surface on governed sources (bithire `--ds-input-count-color: #71869A` =
@@ -477,23 +471,23 @@ input.rottay-input.rottay-input--modern[type='number'] {
   font-variant-numeric: tabular-nums;
 }
 
-.rottay-input-field[data-part='field'] > [data-part='count'][data-invalid='true'] {
+.ds-input-field[data-part='field'] > [data-part='count'][data-invalid='true'] {
   /* State hues follow the solid-fill contrast grammar: raw 500-level hues fail
      on light surfaces, so the fallback deepens toward the tenant-safe dark
      neutral ramp (`--ds-color-neutral-900`) (error >= 5.7:1). */
   color: var(--ds-input-count-color-error, var(--ds-input-error-color, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)));
 }
 
-.rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='warning'],
-.rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
+.ds-input-field[data-part='field'] > [data-part='count'][data-count-state='warning'],
+.ds-input-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
   color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
 }
 
-.rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
+.ds-input-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
   font-weight: var(--ds-input-count-limit-font-weight, var(--ds-font-weight-semibold));
 }
 
-.rottay-input-field[data-part='field'] > [data-part='error-message'] {
+.ds-input-field[data-part='field'] > [data-part='error-message'] {
   display: flex;
   align-items: flex-start;
   gap: var(--ds-spacing-1);
@@ -523,7 +517,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
    SAME validation anatomy as FormField/Form.Item (icon + text + border +
    role="alert") -- shape and announcement, never hue alone. The icon is
    optically centered on the first line box of the message. */
-.rottay-input-field[data-part='field'] > [data-part='error-message'] [data-part='error-icon'] {
+.ds-input-field[data-part='field'] > [data-part='error-message'] [data-part='error-icon'] {
   flex: none;
   inline-size: var(--ds-icon-size-status, 14px);
   block-size: var(--ds-icon-size-status, 14px);
@@ -535,17 +529,17 @@ input.rottay-input.rottay-input--modern[type='number'] {
   );
 }
 
-.rottay-input-field[data-part='field'] > [data-part='error-message'] [data-part='error-text'] {
+.ds-input-field[data-part='field'] > [data-part='error-message'] [data-part='error-text'] {
   min-inline-size: 0;
 }
 
 @container ds-input-field (inline-size < 18rem) {
-  .rottay-input.rottay-input--modern {
+  .ds-input-shell.ds-input-shell--modern {
     --_ds-input-resolved-gap: var(--ds-input-compact-gap, var(--ds-spacing-1));
   }
 
-  .rottay-input.rottay-input--modern [data-part='affix-prefix'],
-  .rottay-input.rottay-input--modern [data-part='affix-suffix'] {
+  .ds-input-shell.ds-input-shell--modern [data-part='affix-prefix'],
+  .ds-input-shell.ds-input-shell--modern [data-part='affix-suffix'] {
     min-inline-size: calc(
       var(--ds-input-affix-size-compact, var(--ds-input-affix-size)) * var(--ds-density-effective-scale)
     );
@@ -553,7 +547,7 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 @media (pointer: coarse) {
-  .rottay-input.rottay-input--modern {
+  .ds-input-shell.ds-input-shell--modern {
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
        fluid root at narrow widths (measured on the live bundle, Axe R0).
        The floor is recomputed against the SAME resolved-height relay the
@@ -565,9 +559,9 @@ input.rottay-input.rottay-input--modern[type='number'] {
     );
   }
 
-  .rottay-input.rottay-input--modern [data-part='clear-button'],
-  .rottay-input.rottay-input--modern [data-part='visibility-toggle'],
-  .rottay-input.rottay-input--modern [data-part='search-button'] {
+  .ds-input-shell.ds-input-shell--modern [data-part='clear-button'],
+  .ds-input-shell.ds-input-shell--modern [data-part='visibility-toggle'],
+  .ds-input-shell.ds-input-shell--modern [data-part='search-button'] {
     min-inline-size: var(--ds-input-touch-target-min);
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
        fluid root at narrow widths (measured on the live bundle, Axe R0). */
@@ -576,27 +570,27 @@ input.rottay-input.rottay-input--modern[type='number'] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-input.rottay-input--modern,
-  .rottay-input.rottay-input--modern [data-part='clear-button'],
-  .rottay-input.rottay-input--modern [data-part='visibility-toggle'],
-  .rottay-input.rottay-input--modern [data-part='search-button'] {
+  .ds-input-shell.ds-input-shell--modern,
+  .ds-input-shell.ds-input-shell--modern [data-part='clear-button'],
+  .ds-input-shell.ds-input-shell--modern [data-part='visibility-toggle'],
+  .ds-input-shell.ds-input-shell--modern [data-part='search-button'] {
     transition: none;
   }
 
   /* Reduced motion lands the error message directly in its final state. */
-  .rottay-input-field[data-part='field'] > [data-part='error-message'] {
+  .ds-input-field[data-part='field'] > [data-part='error-message'] {
     animation: none;
   }
 
   /* Keep a slowed spin rather than a frozen frame so the loading posture
      stays legible; the duration derives from the loading channel. */
-  .rottay-input.rottay-input--modern [data-part='loading-indicator'] svg {
+  .ds-input-shell.ds-input-shell--modern [data-part='loading-indicator'] svg {
     animation-duration: calc(var(--ds-input-loading-duration) * 2.5);
   }
 }
 
 @media (forced-colors: active) {
-  .rottay-input.rottay-input--modern {
+  .ds-input-shell.ds-input-shell--modern {
     forced-color-adjust: auto;
     background: Field;
     color: FieldText;
@@ -606,31 +600,24 @@ input.rottay-input.rottay-input--modern[type='number'] {
   /* Invalid is never color-only: with hues forced away, the error frame gets
      heavier (shape signal) on top of the engine's error icon + role="alert"
      message + aria-invalid anatomy. */
-  .rottay-input.rottay-input--modern[data-invalid='true'] {
+  .ds-input-shell.ds-input-shell--modern[data-invalid='true'] {
     border-width: 2px;
   }
 
-  .rottay-input.rottay-input--modern[data-state~='focused'] {
+  .ds-input-shell.ds-input-shell--modern[data-state~='focused'] {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
 
-  .rottay-input.rottay-input--modern[data-disabled='true'] {
+  .ds-input-shell.ds-input-shell--modern[data-disabled='true'] {
     color: GrayText;
     border-color: GrayText;
   }
 
-  .rottay-input.rottay-input--modern [data-part='clear-button']:focus-visible,
-  .rottay-input.rottay-input--modern [data-part='visibility-toggle']:focus-visible,
-  .rottay-input.rottay-input--modern [data-part='search-button']:focus-visible {
+  .ds-input-shell.ds-input-shell--modern [data-part='clear-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-input-shell.ds-input-shell--modern [data-part='visibility-toggle']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-input-shell.ds-input-shell--modern [data-part='search-button']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
-  }
-}
-
-/* ---- C2b a11y floor: coarse-pointer inputs keep the 44px target. ---- */
-@media (hover: none), (pointer: coarse) {
-  .rottay-input-shell--modern [data-part='control'] {
-    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

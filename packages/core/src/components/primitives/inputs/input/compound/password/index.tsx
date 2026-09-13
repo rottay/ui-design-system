@@ -56,6 +56,7 @@
 "use client";
 
 import { useState } from "react";
+import { partAttributes, useFieldAction } from "@/foundation/behavior";
 import type { InputPasswordProps } from "../../contracts";
 import { BaseInput } from "../../engines";
 import { ActionRevealIcon } from "@/graphics/icons/semantic/generated/roles/action-reveal";
@@ -91,14 +92,16 @@ export const InputPassword = (props: InputPasswordProps) => {
   } = props;
 
   const [visible, setVisible] = useState(false);
+  const toggleDisabled = Boolean(inputProps.disabled || inputProps.loading);
+  const action = useFieldAction({ disabled: toggleDisabled });
 
   const toggleButton = visibilityToggle ? (
     <button
       type="button"
-      data-part="visibility-toggle"
+      {...partAttributes("visibility-toggle", action.state)}
+      {...action.handlers}
       onClick={() => setVisible((current) => !current)}
-      onPointerDown={(event) => event.preventDefault()}
-      disabled={Boolean(inputProps.disabled || inputProps.loading)}
+      disabled={toggleDisabled}
       aria-label={
         visible
           ? translation?.t("hide_password") ?? "Hide password"

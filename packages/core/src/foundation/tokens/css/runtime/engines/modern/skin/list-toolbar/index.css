@@ -912,7 +912,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__search-section[data-part='search-section']
-  .rottay-input-field[data-part='field'] {
+  .ds-input-field[data-part='field'] {
   background: var(--ds-search-bg, transparent);
   border-radius: var(--ds-search-radius, var(--ds-toolbar-radius, var(--ds-radius-sm, 6px)));
   box-shadow: var(--ds-search-shadow, none);
@@ -920,7 +920,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__search-section[data-part='search-section']
-  .rottay-input.rottay-input--modern[data-part='root'] {
+  .ds-input-shell.ds-input-shell--modern[data-part='root'] {
   block-size: var(--ds-toolbar-search-height, var(--ds-button-sm-height, 2rem));
   font-size: var(--ds-toolbar-search-font-size, var(--ds-button-sm-font-size, 0.8125rem));
 }
@@ -1302,7 +1302,7 @@
      to this toolbar; the Input primitive keeps its default density elsewhere. */
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__search-section
-    .rottay-input-field[data-part='field'] {
+    .ds-input-field[data-part='field'] {
     min-block-size: var(--ds-toolbar-touch-target, 2.75rem);
   }
 }

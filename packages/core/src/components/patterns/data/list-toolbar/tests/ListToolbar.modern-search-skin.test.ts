@@ -52,14 +52,14 @@ describe('ListToolbar modern — toolbar search is skin-owned', () => {
 
   it('the skin owns the W10 control geometry law for the toolbar search', () => {
     expect(MODERN_SKIN).toMatch(
-      /\.rottay-input\.rottay-input--modern\[data-part=['"]root['"]\]\s*\{[^}]*block-size:\s*var\(--ds-toolbar-search-height/
+      /\.ds-input-shell\.ds-input-shell--modern\[data-part=['"]root['"]\]\s*\{[^}]*block-size:\s*var\(--ds-toolbar-search-height/
     );
     expect(MODERN_SKIN).toContain('--ds-toolbar-search-font-size');
   });
 
   it('the field wrapper surface channels are painted by the skin, not inline', () => {
     expect(MODERN_SKIN).toMatch(
-      /\.rottay-input-field\[data-part=['"]field['"]\]\s*\{[^}]*--ds-search-bg/
+      /\.ds-input-field\[data-part=['"]field['"]\]\s*\{[^}]*--ds-search-bg/
     );
   });
 });

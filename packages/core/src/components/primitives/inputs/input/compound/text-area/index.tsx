@@ -69,6 +69,7 @@ import React, {
   useState,
 } from 'react';
 
+import { partAttributes, resolveSubmitIntent, useInteractionState } from '@/foundation/behavior';
 import type { InputTextAreaProps } from '../../contracts';
 import {
   generateResponsiveCSS,
@@ -151,7 +152,7 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
     // Dual-mode value management: when controlledValue is defined the parent
     // owns state; otherwise internal state tracks the value for uncontrolled usage.
     const [internalValue, setInternalValue] = useState(defaultValue ?? '');
-    const [isFocused, setIsFocused] = useState(false);
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const reactId = useId();
@@ -223,25 +224,24 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
 
     const handleFocus = useCallback(
       (event: React.FocusEvent<HTMLTextAreaElement>) => {
-        setIsFocused(true);
+        interactionHandlers.onFocus(event);
         onFocus?.(event as never);
       },
-      [onFocus]
+      [interactionHandlers, onFocus]
     );
 
     const handleBlur = useCallback(
       (event: React.FocusEvent<HTMLTextAreaElement>) => {
-        setIsFocused(false);
+        interactionHandlers.onBlur(event);
         onBlur?.(event as never);
       },
-      [onBlur]
+      [interactionHandlers, onBlur]
     );
 
-    // Intercept bare Enter (no Shift) for form submission or chat-send patterns.
-    // Shift+Enter still inserts a newline as expected in multi-line inputs.
+    // Shift+Enter keeps inserting a newline; Enter confirming an IME candidate never submits.
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
+        if (resolveSubmitIntent(event, { multiline: true }) === 'submit') {
           onPressEnter?.(event as never);
         }
 
@@ -250,25 +250,12 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       [onKeyDown, onPressEnter]
     );
 
-    // Build BEM-style class list. Boolean entries (e.g. `isFocused && '...'`)
-    // produce `false` when inactive, which filter(Boolean) strips out.
-    const containerClasses = [
-      'rottay-textarea',
-      'ds-input-textarea',
-      `rottay-textarea--${resolvedSize}`,
-      `rottay-textarea--${variant}`,
-      isFocused && 'rottay-textarea--focused',
-      hasError && 'rottay-textarea--error',
-      disabled && 'rottay-textarea--disabled',
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
     return (
       <div
-        className={containerClasses}
-        data-part="root"
+        className={`ds-input-textarea ${className}`.trim()}
+        {...partAttributes('root', interaction)}
+        onPointerEnter={interactionHandlers.onPointerEnter}
+        onPointerLeave={interactionHandlers.onPointerLeave}
         data-size={resolvedSize}
         data-size-responsive={sizeIsResponsive ? 'true' : undefined}
         data-variant={variant}

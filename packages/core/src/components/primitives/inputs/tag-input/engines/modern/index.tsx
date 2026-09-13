@@ -29,6 +29,7 @@ import type { TagInputProps } from '../../contracts';
 import { TAGINPUT_DEFAULTS } from '../../contracts';
 import { Tag } from '../../../../facade';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { isComposingKey, partAttributes, useInteractionState } from '@/foundation/behavior';
 
 /** Rejection reasons that stay silent in the value contract but must surface
  *  as feedback (duplicate / max-count / custom-validation refusals). */
@@ -162,6 +163,7 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
   }, [value, onChange, onRemove]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isComposingKey(e)) return;
     if (e.key === 'Enter' || e.key === separator) {
       e.preventDefault();
       // A refused tag keeps the typed text so the user can correct it instead
@@ -184,6 +186,8 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
     }
   }, [separator, addTags]);
 
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
+
   const rejectionMessage = rejection
     ? `${tOr(`taginput.feedback_${rejection.reason}`, {
         duplicate: 'Tag already exists',
@@ -197,7 +201,8 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
       {/* Container mimics an input but uses flex-wrap so chips flow naturally */}
       <div
         className="ds-tag-input ds-tag-input--modern"
-        data-part="root"
+        {...partAttributes('root', interaction)}
+        {...interactionHandlers}
         data-size={size}
         data-error={error ? 'true' : 'false'}
         data-disabled={disabled ? 'true' : 'false'}
@@ -243,7 +248,7 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
           visible posture is the transient `data-rejected` frame on the root;
           this region is the non-color, non-visual channel. Empties itself
           after the beat so identical refusals re-announce. */}
-      <VisuallyHidden data-part="feedback" role="status" aria-live="polite">
+      <VisuallyHidden role="status" aria-live="polite">
         {rejectionMessage}
       </VisuallyHidden>
       {error && errorMessage && (

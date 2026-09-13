@@ -64,6 +64,13 @@
   layer(rottay-components);
 @import "../../../presentation/components/button/index.css" layer(rottay-components);
 @import "../../../presentation/components/input/index.css" layer(rottay-components);
+@import "../../../presentation/components/textarea/index.css" layer(rottay-components);
+@import "../../../presentation/components/password-input/index.css" layer(rottay-components);
+@import "../../../presentation/components/otp-input/index.css" layer(rottay-components);
+@import "../../../presentation/components/tag-input/index.css" layer(rottay-components);
+@import "../../../presentation/components/input-number/index.css" layer(rottay-components);
+@import "../../../presentation/components/form-field/index.css" layer(rottay-components);
+@import "../../../presentation/components/form/index.css" layer(rottay-components);
 @import "../../../presentation/components/card/index.css" layer(rottay-components);
 @import "../../../presentation/components/modal/index.css" layer(rottay-components);
 @import "../../../presentation/components/checkbox/index.css" layer(rottay-components);
@@ -170,8 +177,6 @@
 @import "../../../runtime/engines/rustic/skin/otp-input/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/form/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/form/index.css" layer(rottay-engines);
-@import "../../../runtime/engines/modern/skin/input-residual/index.css"
-  layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/input-residual/index.css"
   layer(rottay-engines);
 @import "../../../presentation/components/skin/radio-group/index.css"

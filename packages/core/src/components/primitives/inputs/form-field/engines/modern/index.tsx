@@ -145,7 +145,7 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
             <div
               data-part="message-region"
               data-reserve-message="true"
-              style={{ '--_ds-form-field-message-lines': reserveMessageLines } as React.CSSProperties}
+              style={{ '--ds-form-field-message-lines': reserveMessageLines } as React.CSSProperties}
             >
               {messageContent}
             </div>

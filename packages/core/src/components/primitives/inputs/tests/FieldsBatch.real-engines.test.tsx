@@ -93,6 +93,25 @@ function bColumn(selector: string): number {
   return classes + attrs + pseudos + notArgs;
 }
 
+/** A selector list split on its own commas, never on the commas inside `:is()` or `:not()`. */
+function splitTopLevelCommas(selector: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const char of selector) {
+    if (char === '(') depth += 1;
+    if (char === ')') depth -= 1;
+    if (char === ',' && depth === 0) {
+      parts.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  parts.push(current);
+  return parts;
+}
+
 /** True if the declaration block sets a border COLOR (paints), not a `none`/`0` reset. */
 function paintsBorder(body: string): boolean {
   const re =
@@ -119,7 +138,7 @@ describe.each(Object.keys(SKINS))('fields skin %s -- structural contract', (labe
     const offenders: string[] = [];
     for (const { selector, body } of rules) {
       if (!paintsBorder(body)) continue;
-      for (const part of selector.split(',')) {
+      for (const part of splitTopLevelCommas(selector)) {
         if (bColumn(part) < 4) offenders.push(part.trim());
       }
     }

@@ -1177,7 +1177,7 @@ describe("table-toolbar -- data-part contract (workspace-chrome anatomy)", () =>
       expect(searchInputPaintNode).not.toBeNull();
       if (engine === "modern") {
         expect(
-          searchInputPaintNode.matches(".rottay-input.rottay-input--modern")
+          searchInputPaintNode.matches(".ds-input-shell.ds-input-shell--modern")
         ).toBe(true);
       } else {
         expect(
@@ -1258,7 +1258,7 @@ describe("search-command-bar -- data-part contract (workspace-chrome anatomy)", 
       expect(commandInputPaintNode).not.toBeNull();
       if (engine === "modern") {
         expect(
-          commandInputPaintNode.matches(".rottay-input.rottay-input--modern")
+          commandInputPaintNode.matches(".ds-input-shell.ds-input-shell--modern")
         ).toBe(true);
       } else {
         expect(

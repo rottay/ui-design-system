@@ -1,0 +1,25 @@
+/**
+ * Textarea Component Tokens - Rottay Design System
+ *
+ * Structural constants of the textarea family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/textarea`.
+ */
+
+:root {
+  --ds-textarea-transition-duration: var(--ds-input-transition-duration);
+  --ds-textarea-transition-timing: var(--ds-input-transition-timing);
+  --ds-textarea-min-block-size: var(--ds-touch-target-min);
+  --ds-textarea-message-gap: var(--ds-spacing-1);
+  --ds-textarea-sm-line-height: var(--ds-line-height-snug);
+  --ds-textarea-md-line-height: var(--ds-line-height-normal);
+  --ds-textarea-lg-line-height: var(--ds-line-height-normal);
+
+  /* The clear action and the reserve beside it read the same three pieces. */
+  --ds-textarea-clear-offset: 0.375rem;
+  --ds-textarea-clear-size: var(--ds-icon-md-size);
+  --ds-textarea-clear-gap: 0.125rem;
+
+  --ds-textarea-count-line-height: var(--ds-type-caption-line-height);
+  --ds-textarea-count-limit-font-weight: var(--ds-font-weight-semibold);
+  --ds-textarea-grip-size: 0.625rem;
+}

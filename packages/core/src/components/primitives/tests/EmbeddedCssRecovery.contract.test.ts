@@ -421,10 +421,10 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     // One rule, two selectors (the wrapped control and the standalone `<input>`
     // branch) -- both resolve to the same declaration map, so both are checked.
     expect(
-      ruleContract(RELOCATED.inputModern, '.rottay-input.rottay-input--modern > .rottay-input__control::placeholder')
+      ruleContract(RELOCATED.inputModern, '.ds-input-shell.ds-input-shell--modern > .ds-input-control::placeholder')
     ).toEqual(inputPlaceholder);
     expect(
-      ruleContract(RELOCATED.inputModern, 'input.rottay-input.rottay-input--modern::placeholder')
+      ruleContract(RELOCATED.inputModern, 'input.ds-input-shell.ds-input-shell--modern::placeholder')
     ).toEqual(inputPlaceholder);
     expect(ruleContract(SKINS.formPlaceholders, '.rottay-select__search-input::placeholder')).toEqual({
       color: 'var(--ds-color-text-muted)',

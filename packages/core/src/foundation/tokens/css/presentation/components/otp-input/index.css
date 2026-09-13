@@ -1,0 +1,28 @@
+/**
+ * OtpInput Component Tokens - Rottay Design System
+ *
+ * Structural constants of the otp-input family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/otp-input`.
+ */
+
+:root {
+  --ds-otp-input-transition-duration: var(--ds-input-transition-duration);
+  --ds-otp-input-transition-timing: var(--ds-input-transition-timing);
+  --ds-otp-input-slot-gap: var(--ds-spacing-2);
+  --ds-otp-input-slot-radius: var(--ds-radius-md);
+  --ds-otp-input-slot-font-weight: var(--ds-font-weight-bold);
+  --ds-otp-input-keyline-width: var(--ds-border-width-2);
+
+  /* Slot caps; the skin multiplies density and the control-height decision. */
+  --ds-otp-input-slot-sm-size: 2.25rem;
+  --ds-otp-input-slot-md-size: 2.75rem;
+  --ds-otp-input-slot-lg-size: 3.25rem;
+  --ds-otp-input-slot-sm-font-size: calc(1rem * var(--ds-type-scale, 1));
+  --ds-otp-input-slot-md-font-size: calc(1.25rem * var(--ds-type-scale, 1));
+  --ds-otp-input-slot-lg-font-size: calc(1.5rem * var(--ds-type-scale, 1));
+
+  --ds-otp-input-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-otp-input-error-gap: var(--ds-spacing-1);
+  --ds-otp-input-error-font-size: var(--ds-font-size-xs);
+  --ds-otp-input-error-line-height: var(--ds-line-height-snug);
+}

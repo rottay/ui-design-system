@@ -196,6 +196,18 @@
       "reason": "misma ley de pass-through data-part que classic — sancionado",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/components/primitives/inputs/form/engines/rustic/index.tsx": {
+      "blob": "f12f8c9eb3a6ad23646a0c0d66b282faae52be78cce915352c54127a249e3eb6",
+      "relocationDigest": "cd65732e5b64f0c58f1da2ac46568c878a0422b47ac861db3aa3527322365f1f",
+      "reason": "WO-FAM-02 lot FAM02-C3 rustic-form-shared-runtime (DT-adjudicated, audit/102-resumption-2026-09-12 codex-response-fam02-deltas): Rustic Form's state, validation and useForm move to the shared owner form/runtime/{state,validation} that Modern renders from (F-78). Initial markup stays byte-identical across the six rendered layouts and Rustic keeps its components validation catalog. The shared runtime changes exactly these Rustic behaviours, nothing else: (1) an unmounted Form.Item unregisters its rules and errors, so a removed field no longer blocks submit; (2) the instance validateFields validates the registered rules and rejects with errorFields, and scrollToField scrolls the field into view (smooth, center) instead of a no-op; (3) a user change marks the field touched, which makes the hasFeedback success icon reachable and, through the same touched gate, re-runs a dependent field's rules when its dependency changes. Evidence: form/tests/Form.rustic-runtime.test.tsx (6/6 on this state, 6/6 red on 7dc65733a).",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx": {
+      "blob": "6382dad976114b759260777c6f15aa82a8fe0beb7e75683be357021e440044c2",
+      "relocationDigest": "13e1eb113e64366a6c073d61bb93e5c3f837ebbb8665f6f908400acc786ca437",
+      "reason": "WO-FAM-02 lot FAM02-C3 input-number-namespace-rename (DT-adjudicated): mechanical rename of every --ds-inputnumber-* read to --ds-input-number-*, the one family namespace the vertical chrome emission and neutral theme floors now produce. The single non-textual consequence: the corner-radius floor read inside the Rustic inline --ds-input-number-radius value and the addon corners becomes --ds-input-number-corner-radius (declared in themes/default as var(--ds-radius-md)), because the renamed inline property would otherwise reference itself. No other token, selector, markup or behaviour changes.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/components/primitives/inputs/mentions/engines/classic/index.tsx": {
       "blob": "58f81e2da73a10c16b0b591782d5babe1033f9929ad59a351d5a218839827121",
       "relocationDigest": "dcdf85abcba4f4aba12149cb970a7ea390633840ec91093393d5323a4a4f7ddc",
@@ -422,6 +434,12 @@
       "blob": "32ebb3ac47f514025f80f9557a30db57b39ce98a2b2c548b5ff759c44232d1d0",
       "relocationDigest": "34f2606cc50616c07b7f70b901a522fcc57595ee26fe5d1dc1b231da092de012",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css": {
+      "blob": "3b04aac8ae66c94d1a71a151a09f1d5c231f7dab9d720dd5d0fcce359cf22e80",
+      "relocationDigest": "b0e1f50a5ae452439f4468a7ff7326b65b06a17486a3bfb58e88525b3cc3f316",
+      "reason": "WO-FAM-02 lot FAM02-C3 input-number-namespace-rename (DT-adjudicated): mechanical rename of every --ds-inputnumber-* read to --ds-input-number-*, the one family namespace the vertical chrome emission and neutral theme floors now produce. The single non-textual consequence: the corner-radius floor read inside the Rustic inline --ds-input-number-radius value and the addon corners becomes --ds-input-number-corner-radius (declared in themes/default as var(--ds-radius-md)), because the renamed inline property would otherwise reference itself. No other token, selector, markup or behaviour changes.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/modal/index.css": {
