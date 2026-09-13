@@ -843,6 +843,22 @@ function collectContractFailures(contracts) {
     }
   }
 
+  // The R7 scope types the same baselines; an unchecked copy drifts in silence,
+  // so it is compared with the live authorities, never with another copy.
+  const r7Scope = contracts.rounds?.rounds?.find((round) => round.id === 'R7')?.scope;
+  if (r7Scope && standardIds && r7Scope.standardControlsBaseline !== standardIds.length) {
+    failures.push(
+      'rounds/index.json R7 scope standardControlsBaseline must equal the live capability registry: the registry declares ' +
+        `${standardIds.length} active Standard controls, rounds/index.json says ${JSON.stringify(r7Scope.standardControlsBaseline ?? null)}`,
+    );
+  }
+  if (r7Scope && expert !== null && r7Scope.expertExactAllowlistBaseline !== expert.count) {
+    failures.push(
+      'rounds/index.json R7 scope expertExactAllowlistBaseline must equal the live TENANT_THEME_OVERRIDE_TOKENS reach: the source declares ' +
+        `${expert.count} names, rounds/index.json says ${JSON.stringify(r7Scope.expertExactAllowlistBaseline ?? null)}`,
+    );
+  }
+
   // The customization-model contract was DELETED by WO-CAT-02: the typed
   // catalog (`src/contracts/theme/runtime/catalog`) is the only list of
   // controls, and the gate that keeps it that way is `theme-single-listing`.

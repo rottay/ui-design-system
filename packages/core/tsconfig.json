@@ -35,5 +35,7 @@
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/examples.tsx", "**/*.md", "**/__test_imports.ts", "**/fixtures/**"]
+  // Provisional bithire identity candidates are probe-ground fixtures the showroom
+  // reads from source; like tests/**, they never reach the published declarations.
+  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/examples.tsx", "**/*.md", "**/__test_imports.ts", "**/fixtures/**", "**/tests/**", "src/foundation/presets/candidates/**"]
 }

@@ -18,7 +18,7 @@
 //   2. Size ratchet (decrease-only): the total unpacked size and entry count
 //      may only shrink relative to the baseline. Growth fails; a genuine
 //      shrink re-seeds the baseline via `--write`.
-//   3. Forbidden PATHS: no `fixtures/` segment, no tenant proof-fixture name
+//   3. Forbidden PATHS: no `fixtures/` or `tests/` segment, no tenant proof-fixture name
 //      (themanagementmiami / torture-*), no `lucide` -- except paths on the
 //      reviewed lucide allowlist (the ban-rule subtree + the honesty contract).
 //   4. Forbidden CONTENT: the bytes of every shipped file are scanned for
@@ -173,8 +173,12 @@ export function auditPackInventory({
 
   // (3) forbidden PATHS
   for (const { path } of pack.files) {
-    if (path.split('/').includes('fixtures')) {
+    const segments = path.split('/');
+    if (segments.includes('fixtures')) {
       failures.push(`fixture path shipped in pack: ${path} (fixtures must never ship)`);
+    }
+    if (segments.includes('tests')) {
+      failures.push(`test path shipped in pack: ${path} (tests/** must never ship)`);
     }
     const lower = path.toLowerCase();
     for (const token of forbiddenTokens.all) {

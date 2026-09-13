@@ -75,6 +75,12 @@ test('a shipped fixtures/ path fails', () => {
   assert.match(failures.join('\n'), /fixture path shipped/);
 });
 
+test('a shipped tests/ path fails', () => {
+  const p = pack(['dist/foundation/tokens/css/foundation/responsive/tests/projection/index.d.ts']);
+  const { failures } = audit(p, { baseline: baselineFrom(p) });
+  assert.match(failures.join('\n'), /test path shipped/);
+});
+
 test('a tenant proof-fixture token in a packed PATH fails', () => {
   const p = pack(['dist/foundation/themanagementmiami/index.js']);
   const { failures } = audit(p, { baseline: baselineFrom(p) });
