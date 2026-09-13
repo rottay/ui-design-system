@@ -5084,6 +5084,11 @@
      "at": "2026-09-12 18:47",
      "by": "Kimi K3",
      "note": "G103-01 (audit/103-day-direction-2026-09-12/gates.md, REPRODUCED in-memory fixture): a pin on a channel with no reads/terminal makes the FULL analyzer return ok=true (failures=[]), conflating ownership with effect. Obligation: keep the blocking ownership gate AND its independent projection, but non-LIVE rows must remain failures of the full check (or an explicit separate effect result); a pin yields ownership PASS + full-liveness still FAIL. Add the negative/positive pair. Note: the real-tree full check stays red with the 5 known failures; the 44 pins stay visible; no false discharge occurred. No re-audit of the 44."
+    },
+    {
+     "at": "2026-09-13 15:15",
+     "by": "Kimi K3",
+     "note": "FREEZE-GATE HYGIENE FINDING (2026-09-13, found during FAM-02 audit): scripts/check/engine/lifecycle/freeze --check exits 1 with 35 UNAUTHORIZED frozen-engine changes vs the sealed base ef269d71. Composition: 3 are WO-FAM-01's switch deletions (D-16; DT audit miss — the freeze gate was not in the FAM-01 audit checklist; DT records their --authorize exceptions after the FAM-02 merge) and 32 are older pre-existing changes from earlier lots (tenant-preview, badge, card, image and others; relocation-era). The 32 need a triage lot: authorize-with-reason the legitimate ones (relocation/refactor era) or revert; the gate must not stay red as background noise because red-as-normal hides new violations. Routed to the next hygiene lot; registered here because it is an acceptance-instrument honesty issue."
     }
    ]
   },
