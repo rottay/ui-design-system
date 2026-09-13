@@ -159,24 +159,24 @@ function skinBelongsToFamily(file, family) {
 }
 
 /**
- * A prefixed skin is only a COMPOUND when nothing else claims its name. It is a
- * sibling family when a component owner directory carries that name
- * (`input-number` beside `input`, `form-field` beside `form`), and it is another
- * owner's paint when it selects no class the family's own sources name
- * (`form-header` is the FormHeader structure's). Both are reported, never
- * silently dropped, and the pinned `skinFiles` denominator still moves if the
- * split ever changes.
+ * A prefixed skin leaves the family's measurement only when it selects no class
+ * of the family: every family class it selects must belong to the skin's own
+ * name (`input-number` beside `input`) and be unnamed by the family's sources.
+ * A directory with the skin's name never discharges a rule that paints the
+ * measured family, and every exclusion is reported.
  */
 function foreignCompoundReason(file, family, ownerNames, familyClassTokens) {
   const owner = basename(dirname(file));
   if (owner === family) return undefined;
-  if (ownerNames.has(owner)) return `sibling family \`${owner}\` has its own component owner`;
-  const selected = [...analyzeSkin(file).classTokens].filter((token) => {
+  const underName = (token, name) => {
     const remainder = token.slice(token.indexOf('-') + 1);
-    return remainder === family || remainder.startsWith(`${family}-`);
-  });
-  if (selected.some((token) => familyClassTokens.has(token))) return undefined;
-  return `selects no class the family's sources name (${JSON.stringify(selected.slice(0, 4))})`;
+    return remainder === name || remainder.startsWith(`${name}-`) || remainder.startsWith(`${name}_`);
+  };
+  const selected = [...analyzeSkin(file).classTokens].filter((token) => underName(token, family));
+  const targetsFamily = selected.filter((token) => familyClassTokens.has(token) || !underName(token, owner));
+  if (targetsFamily.length > 0) return undefined;
+  const sibling = ownerNames.has(owner) ? `sibling family \`${owner}\` has its own component owner; ` : '';
+  return `${sibling}selects no class of the family (${JSON.stringify(selected.slice(0, 4))})`;
 }
 
 function walkFiles(dir, predicate, found = []) {
@@ -1242,6 +1242,9 @@ function main() {
     process.exit(1);
   }
   for (const measured of measurements) {
+    for (const foreign of measured.detail.foreignSkins ?? []) {
+      console.log(`family-cut EXCLUDED -- ${measured.family}: ${foreign.skin} (${foreign.reason})`);
+    }
     const ratchets = Object.entries(measured.ratchets)
       .map(([key, value]) => `${key}=${value}`)
       .join(' ');

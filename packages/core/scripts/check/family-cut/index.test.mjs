@@ -917,16 +917,45 @@ test('CONTROL: a prefixed skin that selects a class the family names is its comp
   });
 });
 
-test('PLANT: a prefixed skin whose name is a sibling owner is that family, not a compound', () => {
+const plantSiblingOwner = (sandbox) => {
+  const sibling = join(sandbox, 'src/components/primitives/inputs/button-planted');
+  mkdirSync(sibling, { recursive: true });
+  writeFileSync(join(sibling, 'index.tsx'), 'export const Planted = () => <span className="ds-button-planted" data-part="root" />;\n');
+};
+
+test('CONTROL: a sibling owner\'s skin that paints only its own classes is excluded, and the exclusion is reported', () => {
   withResolvedSandbox((sandbox) => {
-    plantPrefixedSkin(sandbox);
-    const sibling = join(sandbox, 'src/components/primitives/inputs/button-planted');
-    mkdirSync(sibling, { recursive: true });
-    writeFileSync(join(sibling, 'index.tsx'), 'export const Planted = () => null;\n');
+    plantSiblingOwner(sandbox);
+    const skin = join(sandbox, 'src/foundation/tokens/css/runtime/engines/modern/skin/button-planted/index.css');
+    mkdirSync(dirname(skin), { recursive: true });
+    writeFileSync(skin, ".ds-button-planted[data-part='root'] { color: var(--ds-button-planted-unproduced, var(--ds-color-primary)); }\n");
   }, {}, (findings, resolved) => {
-    assert.ok(!resolved.skins.some((file) => file.includes('button-planted')), 'the sibling family is not measured here');
-    assert.match(resolved.foreignSkins[0].reason, /sibling family/u);
+    assert.ok(!resolved.skins.some((file) => file.includes('button-planted')), 'the sibling-only skin is not the button family');
+    assert.match(resolved.foreignSkins[0].reason, /sibling family `button-planted`/u);
     assert.deepEqual(findings, []);
+  });
+});
+
+test('PLANT: a sibling owner directory never discharges a skin that paints the measured family', () => {
+  withResolvedSandbox((sandbox) => {
+    plantSiblingOwner(sandbox);
+    plantPrefixedSkin(sandbox);
+  }, {}, (findings, resolved) => {
+    assert.ok(resolved.skins.some((file) => file.includes('button-planted')), 'paint on .ds-button-group stays measured');
+    assert.equal(resolved.foreignSkins.length, 0);
+    expectFinding(findings, 'denominator `skinFiles` moved', 'the retained skin enters the census');
+  });
+});
+
+test('PLANT: a sibling-named Modern skin reading an unproduced channel on the measured root turns the family red', () => {
+  withResolvedSandbox((sandbox) => {
+    plantSiblingOwner(sandbox);
+    const skin = join(sandbox, 'src/foundation/tokens/css/runtime/engines/modern/skin/button-planted/index.css');
+    mkdirSync(dirname(skin), { recursive: true });
+    writeFileSync(skin, ".ds-button.ds-button--modern[data-part='root'] {\n  color: var(--ds-button-audit-unproduced, var(--ds-color-primary));\n}\n");
+  }, {}, (findings, resolved) => {
+    assert.ok(resolved.skins.some((file) => file.includes('button-planted')));
+    expectFinding(findings, grew('readWithoutProducer'), 'the unproduced read is the button family\'s debt');
   });
 });
 
