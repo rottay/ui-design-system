@@ -4,8 +4,8 @@
  * the compound renders one group shell under every engine; each option is the
  * real `Checkbox` facade (one anatomy, one a11y contract, one engine skin).
  *
- * SCOPE ROOT is `.rottay-checkbox-group[data-part='root']`, carrying
- * `rottay-checkbox-group--<direction>`, `data-direction`, `data-spacing`
+ * SCOPE ROOT is `.ds-checkbox-group[data-part='root']`, carrying
+ * `ds-checkbox-group--<direction>`, `data-direction`, `data-spacing`
  * ('sm'|'md'|'lg') and `data-disabled`. Each option slot stamps
  * `[data-part='option']` with `data-checked`/`data-disabled`; the control
  * inside is painted by its own engine skin, never here.
@@ -19,7 +19,7 @@
  */
 
 /* Root shell ------------------------------------------------------------- */
-.rottay-checkbox-group[data-part='root'] {
+.ds-checkbox-group[data-part='root'] {
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-3);
@@ -27,25 +27,25 @@
   max-inline-size: 100%;
 }
 
-.rottay-checkbox-group[data-part='root'][data-direction='horizontal'] {
+.ds-checkbox-group[data-part='root'][data-direction='horizontal'] {
   flex-direction: row;
   flex-wrap: wrap;
 }
 
 /* Spacing rhythm: the `spacing` prop picks a governed density-scaled role,
    never a literal pixel ladder. */
-.rottay-checkbox-group[data-part='root'][data-spacing='sm'] {
+.ds-checkbox-group[data-part='root'][data-spacing='sm'] {
   gap: var(--ds-spacing-2);
 }
-.rottay-checkbox-group[data-part='root'][data-spacing='md'] {
+.ds-checkbox-group[data-part='root'][data-spacing='md'] {
   gap: var(--ds-spacing-3);
 }
-.rottay-checkbox-group[data-part='root'][data-spacing='lg'] {
+.ds-checkbox-group[data-part='root'][data-spacing='lg'] {
   gap: var(--ds-spacing-4);
 }
 
 /* Option slot: shrink-safe in wrapped horizontal rows and narrow columns. */
-.rottay-checkbox-group [data-part='option'] {
+.ds-checkbox-group [data-part='option'] {
   min-inline-size: 0;
   max-inline-size: 100%;
 }

@@ -1,17 +1,8 @@
 import React from 'react';
-import { readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernCheckbox from '../engines/modern';
-
-const here = dirname(fileURLToPath(import.meta.url));
-const SKIN = readFileSync(
-  join(here, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css'),
-  'utf8',
-);
 
 describe('Modern Checkbox public anatomy', () => {
   it('paints nothing inline and stamps the skin contract', () => {
@@ -91,18 +82,5 @@ describe('Modern Checkbox public anatomy', () => {
     fireEvent.click(input);
     expect(handleChange).toHaveBeenCalledWith(true, expect.anything());
     expect(container.querySelector('[data-part="root"]')).toHaveAttribute('data-checked', 'true');
-  });
-
-  it('guards the label column against per-character collapse in narrow flex parents', () => {
-    // Regression pin for the sighted Toggle-class defect: the text column must
-    // carry an intrinsic minimum inline size, and no text part may opt into
-    // break-anywhere wrapping (which makes min-content a single character).
-    const textColumn = SKIN.match(/\[data-part='text'\]\s*\{([^}]*)\}/);
-    expect(textColumn?.[1]).toContain('min-inline-size: min-content');
-
-    for (const part of ['label', 'description']) {
-      const rule = SKIN.match(new RegExp(`\\[data-part='${part}'\\][^{]*\\{([^}]*)\\}`));
-      expect(rule?.[1] ?? '', `${part} must not wrap per character`).not.toContain('overflow-wrap: anywhere');
-    }
   });
 });

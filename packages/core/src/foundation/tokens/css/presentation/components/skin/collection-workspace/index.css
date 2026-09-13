@@ -982,7 +982,7 @@
 /* Layout only. Fill, text, edge, corner and the coarse-pointer touch floor stay
    on primitive/inputs/button so the tenant's control ramps keep reaching it. */
 .ds-surface.ds-collection-workspace
-  .rottay-button.ds-collection-workspace__sticky-primary-action {
+  [data-variant].ds-collection-workspace__sticky-primary-action {
   min-inline-size: 0;
   flex: 1 1 auto;
   justify-content: center;

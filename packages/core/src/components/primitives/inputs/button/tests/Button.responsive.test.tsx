@@ -90,10 +90,10 @@ describe('ModernButton responsive size', () => {
       const { container } = render(
         <ModernButton size="sm">Small</ModernButton>
       );
-      const button = container.querySelector('.rottay-button--modern');
+      const button = container.querySelector('.ds-button--modern');
       expect(button).toBeInTheDocument();
       expect(button?.className).not.toContain('btn-sm');
-      expect(button?.className).toContain('rottay-button');
+      expect(button?.className).toContain('ds-button');
       expect(responsiveCss(container)).toBe('');
     });
   });
@@ -112,8 +112,8 @@ describe('ModernButton responsive size', () => {
       expect(button?.className).not.toContain('btn-sm');
       expect(button?.className).not.toContain('btn-lg');
       // Should still contain variant and base classes
-      expect(button?.className).toContain('rottay-button');
-      expect(button?.className).toContain('rottay-button--modern');
+      expect(button?.className).toContain('ds-button');
+      expect(button?.className).toContain('ds-button--modern');
     });
 
     it('contains height, padding, and font-size in generated CSS', () => {

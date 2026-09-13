@@ -92,7 +92,7 @@ describe('legacy duration aliases drain onto the canonical cadence', () => {
 describe('modern skin micro-interactions honor reduced motion', () => {
   const checkbox = read('runtime/engines/modern/skin/checkbox/index.css');
   const select = read('runtime/engines/modern/skin/select/index.css');
-  const switchCss = read('runtime/engines/modern/skin/switch/index.css');
+  const toggleCss = read('runtime/engines/modern/skin/toggle/index.css');
 
   it('checkbox settle is a compositor-only keyframe with a reduced-motion guard', () => {
     expect(checkbox).toContain('@keyframes ds-checkbox-settle');
@@ -105,9 +105,9 @@ describe('modern skin micro-interactions honor reduced motion', () => {
   });
 
   it('press-scale extends the shared interaction-state token, not a literal', () => {
-    expect(checkbox).toContain(':active:not([data-disabled=\'true\'])');
+    expect(checkbox).toContain(":is([data-state~='pressed'], :active):not([data-disabled='true'])");
     expect(checkbox).toContain('scale(var(--ds-state-press-scale))');
-    expect(switchCss).toContain('scale(var(--ds-state-press-scale))');
+    expect(toggleCss).toContain('scale(var(--ds-state-press-scale))');
   });
 
   it('select open-tick transitions ride the motion canon and never animate `all`', () => {

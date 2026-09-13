@@ -8,7 +8,7 @@ import { waitFor } from '@testing-library/react';
 
 import { Radio } from '../radio';
 import { Checkbox } from '../checkbox';
-import { Switch } from '../switch';
+import { Switch } from '../toggle';
 import { Slider } from '../slider';
 import { OTPInput } from '../otp-input';
 import { Button } from '../button';
@@ -44,8 +44,6 @@ const SKINS: Record<string, string> = {
   'rustic/input-number': read('runtime/engines/rustic/skin/input-number/index.css'),
   'modern/password-input': read('runtime/engines/modern/skin/password-input/index.css'),
   'rustic/password-input': read('runtime/engines/rustic/skin/password-input/index.css'),
-  'modern/switch': read('runtime/engines/modern/skin/switch/index.css'),
-  'rustic/switch': read('runtime/engines/rustic/skin/switch/index.css'),
   'modern/toggle': read('runtime/engines/modern/skin/toggle/index.css'),
   'rustic/toggle': read('runtime/engines/rustic/skin/toggle/index.css'),
   'modern/radio': read('runtime/engines/modern/skin/radio/index.css'),
@@ -147,16 +145,6 @@ const NC: Record<string, string> = Object.fromEntries(
 );
 
 describe('fields skins -- per-component interaction + keyframe pins', () => {
-  it('Switch modern: track hover keyed on data-checked + focus ring from the input :focus-visible', () => {
-    expect(/\[data-checked='true'\]:hover:not\(\[data-disabled='true'\]\)[^{]*\[data-part='track'\]/.test(NC['modern/switch'])).toBe(true);
-    expect(/input:focus-visible ~ \[data-part='track'\]/.test(NC['modern/switch'])).toBe(true);
-  });
-
-  it('Switch rustic: renames the spinner keyframe to ds-switch-spin and does not redefine the global spin', () => {
-    expect(/@keyframes\s+ds-switch-spin\b/.test(NC['rustic/switch'])).toBe(true);
-    expect(/@keyframes\s+spin\b/.test(NC['rustic/switch'])).toBe(false);
-  });
-
   it('Radio: modern keys a :hover on the circle; rustic invents no hover (asymmetry preserved)', () => {
     expect(/:hover[^{]*\[data-part='circle'\]/.test(NC['modern/radio'])).toBe(true);
     expect(/:hover/.test(NC['rustic/radio'])).toBe(false);

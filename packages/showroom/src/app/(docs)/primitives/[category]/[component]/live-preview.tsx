@@ -91,7 +91,6 @@ import {
   Statistic,
   Stepper,
   Steps,
-  Switch,
   Table,
   Tabs,
   Tag,
@@ -1187,12 +1186,6 @@ The parser is a **bounded** CommonMark subset, so no parser ships to the page.
     <Box style={{ width: 260 }}>
       <Slider defaultValue={50} />
     </Box>
-  ),
-  'switch': (
-    <Flex gap={16} align="center">
-      <Switch />
-      <Switch defaultChecked />
-    </Flex>
   ),
   'tag-input': <TagInputPreview />,
   'textarea': (

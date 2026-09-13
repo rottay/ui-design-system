@@ -95,7 +95,6 @@ const inputs: PrimitiveEntry[] = [
   { slug: 'radio', name: 'Radio', category: 'inputs', description: 'Single selection from a group of options', engines: allEngines },
   { slug: 'select', name: 'Select', category: 'inputs', description: 'Dropdown selection with search and multi-select', engines: allEngines },
   { slug: 'slider', name: 'Slider', category: 'inputs', description: 'Range slider for numeric value selection', engines: allEngines },
-  { slug: 'switch', name: 'Switch', category: 'inputs', description: 'Toggle switch for binary on/off states', engines: allEngines },
   { slug: 'tag-input', name: 'TagInput', category: 'inputs', description: 'Multi-value input rendered as removable tags', engines: allEngines },
   { slug: 'textarea', name: 'Textarea', category: 'inputs', description: 'Multi-line text input with auto-resize', engines: allEngines },
   { slug: 'time-picker', name: 'TimePicker', category: 'inputs', description: 'Time selection control with hour/minute/second', engines: allEngines },

@@ -6,7 +6,7 @@
  * never duplicate palette, focus, disabled or motion paint from button.css.
  */
 
-.rottay-button.rottay-button--modern.rottay-button-icon.ds-button-icon[data-icon-only='true'] {
+.ds-button.ds-button--modern.ds-button-icon[data-icon-only='true'] {
   flex: 0 0 auto;
   min-inline-size: calc(
     var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
@@ -14,7 +14,7 @@
   padding: 0;
 }
 
-.rottay-button.rottay-button--modern.rottay-button-icon.ds-button-icon [data-part='content'] {
+.ds-button.ds-button--modern.ds-button-icon [data-part='content'] {
   inline-size: 100%;
   block-size: 100%;
 }

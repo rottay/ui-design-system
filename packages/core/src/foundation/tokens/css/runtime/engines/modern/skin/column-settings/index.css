@@ -155,7 +155,7 @@
 }
 
 /* ---- pin toggle: small ghost target by default, 44px under coarse ---- */
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'] .rottay-button {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'] .ds-button {
   flex: 0 0 auto;
 }
 
@@ -189,7 +189,7 @@
   padding-inline: var(--ds-column-settings-footer-padding-inline, 12px);
   border-block-start: 1px solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='footer'] .rottay-button {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='footer'] .ds-button {
   inline-size: 100%;
   justify-content: center;
   color: var(--ds-color-text-muted);

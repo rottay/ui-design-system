@@ -132,38 +132,38 @@
 
 /* ---- quick action button: shared radius/outline + per-variant base and merged
         hover/focus (gated `:not(:disabled)`, matching `!action.disabled`). ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .rottay-button {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
   outline: none;
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
   border: 1px solid var(--ds-color-primary);
   box-shadow: var(--ds-elevation-1);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:active:not(:disabled) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:focus:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:active:not(:disabled) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
   box-shadow: var(--ds-elevation-2);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button {
   background: transparent;
   color: var(--ds-color-error-600);
   border: 1px solid var(--ds-color-error-200);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:active:not(:disabled) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:focus:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:active:not(:disabled) {
   background: var(--ds-color-error-50);
   border-color: var(--ds-color-error-300);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button {
   background: transparent;
   color: var(--ds-color-text-secondary);
   border: 1px solid var(--ds-color-border);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:active:not(:disabled) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:focus:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:active:not(:disabled) {
   background: var(--ds-color-neutral-50);
   color: var(--ds-color-text-primary);
   border-color: var(--ds-color-neutral-300);
@@ -293,7 +293,7 @@
   display: contents;
 }
 
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .rottay-button {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
   flex-shrink: 0;
 }
 
@@ -464,18 +464,18 @@
     transform: translateY(-1px) scale(1.025);
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:hover:not(:disabled) {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:hover:not(:disabled) {
     background: var(--ds-color-primary-600);
     border-color: var(--ds-color-primary-600);
     box-shadow: var(--ds-elevation-2);
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:hover:not(:disabled) {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:hover:not(:disabled) {
     background: var(--ds-color-error-50);
     border-color: var(--ds-color-error-300);
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:hover:not(:disabled) {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:hover:not(:disabled) {
     background: var(--ds-color-neutral-50);
     color: var(--ds-color-text-primary);
     border-color: var(--ds-color-neutral-300);
@@ -526,7 +526,7 @@
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .rottay-button {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

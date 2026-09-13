@@ -1,32 +1,18 @@
 /**
  * @fileoverview Modern engine for Toggle - Rottay Design System
- * @description Premium toggle painted entirely by the modern skin, with a
- * native `<input type="checkbox" role="switch">` for accessibility and form
- * participation.
+ * @description The one binary switch of the design system (D-16): a native
+ * `<input type="checkbox" role="switch">` painted entirely by the modern skin.
  *
  * @remarks
  * Every visual decision lives in the modern skin
  * (`foundation/tokens/css/runtime/engines/modern/skin/toggle/index.css`), keyed on
- * the `data-*` contract this component stamps: `data-size`, `data-color`,
- * `data-checked`, `data-error`, `data-disabled`, `data-loading`, and
- * `data-label-placement`. Geometry consumes the canonical
- * `--ds-toggle-{size}-*` channels multiplied by the three-plane density
- * channel `--ds-density-effective-scale`; the thumb travel is a pure CSS
- * `calc()` flipped under `:dir(rtl)`, so RTL needs no runtime branch.
+ * the anatomy this component stamps: `data-part`, the interaction `data-state`
+ * decided by the behavior kernel, and `data-size`, `data-color`,
+ * `data-checked`, `data-error`, `data-disabled`, `data-loading`,
+ * `data-standalone` and `data-label-placement`.
  *
- * State never reads through track color alone (Phase B law): the thumb
- * travels AND a governed state glyph (`action.confirm` / `action.close` from
- * the icon facade, `decorative`, skin-sized via the
- * `--_ds-toggle-state-icon-size` proto) docks on the side opposite the
- * thumb. The busy state is the governed border-spinner idiom
- * (`ds-foundation-spin`, skin-painted) docked inside the thumb -- the raw
- * inline SVG is gone. The contract's switch semantics (`role="switch"`,
- * `aria-checked`) are pinned by tests and stay untouched.
- *
- * @example
- * ```tsx
- * <Toggle engine="modern" color="primary" size="lg" label="Enable feature" />
- * ```
+ * A busy toggle stays a tab stop: it is `aria-disabled` and `aria-busy`, and
+ * an activation while busy is reverted and commits no value.
  *
  * @module ModernToggle
  * @category Inputs
@@ -35,24 +21,16 @@
 
 'use client';
 
-import React, { useState, useCallback, useId } from 'react';
+import React, { forwardRef, useCallback, useId, useState } from 'react';
+
+import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import type { ToggleProps } from '../../contracts';
 import { TOGGLE_DEFAULTS } from '../../contracts';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { ActionConfirmIcon } from '@/graphics/icons/semantic/generated/roles/action-confirm';
 
-/**
- * Modern (pure DS tokens) implementation of Toggle.
- *
- * Supports controlled and uncontrolled modes, label placement (start/end), a
- * description line beneath the label, helper and error text anatomy, state
- * labels, and a loading indicator. The error state repaints the track through
- * `data-error` and wires `aria-describedby`, never through inline paint.
- *
- * @param props - Standard ToggleProps shared across all engines.
- * @returns A field wrapper containing the labeled switch anatomy.
- */
-export default function ModernToggle(props: ToggleProps): React.ReactElement {
+const ModernToggle = forwardRef<HTMLInputElement, ToggleProps>((props, ref) => {
   const {
     size = TOGGLE_DEFAULTS.size,
     color = TOGGLE_DEFAULTS.color,
@@ -77,8 +55,14 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     id: providedId,
     value,
     autoFocus,
+    tabIndex,
+    engine: _engine,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
     ...rest
   } = props;
+  void _engine;
 
   const generatedId = useId();
   const inputId = providedId || `toggle-modern-${generatedId.replace(/:/g, '')}`;
@@ -87,46 +71,48 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
   const labelId = `${inputId}-label`;
   const descriptionId = `${inputId}-description`;
 
-  // Dual-mode state: controlled when `checked` prop is provided, uncontrolled otherwise
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
-  const isDisabled = disabled || loading;
+  const isInert = disabled || loading;
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isControlled) {
-      setInternalChecked(e.target.checked);
-    }
-    onChange?.(e.target.checked, e);
-  }, [isControlled, onChange]);
+  const { state: interaction, handlers } = useInteractionState({ disabled: isInert });
+
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    if (loading) return;
+    if (!isControlled) setInternalChecked(event.target.checked);
+    onChange?.(event.target.checked, event);
+  }, [isControlled, loading, onChange]);
+
+  const handleClick = useCallback((event: React.MouseEvent<HTMLInputElement>) => {
+    if (loading) event.preventDefault();
+  }, [loading]);
+
+  const pressKey = (event: React.KeyboardEvent<HTMLInputElement>, down: boolean) => {
+    if (event.key !== ' ') return;
+    if (down) handlers.onPointerDown(event as unknown as React.PointerEvent);
+    else handlers.onPointerUp(event as unknown as React.PointerEvent);
+  };
 
   const displayLabel = label || children;
   const stateLabel = isChecked ? checkedLabel : uncheckedLabel;
   const hasText = Boolean(displayLabel || description || stateLabel);
-  // Merge, never replace: `{...rest}` lands after these attributes, so a
-  // caller's `aria-describedby` would otherwise void the switch's own.
   const describedBy = Array.from(
     new Set(
       [
         description ? descriptionId : undefined,
         error && errorMessage ? errorId : undefined,
         !error && helperText ? helperId : undefined,
-        (rest as Record<string, unknown>)['aria-describedby'] as string | undefined,
+        ariaDescribedBy,
       ]
         .filter((token): token is string => Boolean(token))
         .flatMap((token) => token.split(/\s+/))
         .filter(Boolean),
     ),
   ).join(' ') || undefined;
-  // Description and state label live inside the <label>; without an explicit
-  // name source the name absorbs them and mutates on every toggle.
-  // A caller-supplied name wins: aria-labelledby outranks aria-label, so
-  // emitting ours would silently void an explicit one arriving via ...rest.
-  const callerNamed =
-    (rest as Record<string, unknown>)['aria-label'] !== undefined ||
-    (rest as Record<string, unknown>)['aria-labelledby'] !== undefined;
-  const labelledBy =
-    !callerNamed && displayLabel && (description || stateLabel) ? labelId : undefined;
+  const callerNamed = ariaLabel !== undefined || ariaLabelledBy !== undefined;
+  const labelledBy = ariaLabelledBy
+    ?? (!callerNamed && displayLabel && description ? labelId : undefined);
 
   return (
     <div
@@ -136,55 +122,56 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     >
       <label
         className="ds-toggle ds-toggle--modern"
-        data-part="root"
-        data-size={size}
+        {...partAttributes('root', interaction)}
+        data-size={toCanonicalSize(size) ?? TOGGLE_DEFAULTS.size}
         data-color={color}
         data-checked={isChecked ? 'true' : 'false'}
         data-error={error ? 'true' : 'false'}
-        data-disabled={isDisabled ? 'true' : 'false'}
+        data-disabled={isInert ? 'true' : 'false'}
         data-loading={loading ? 'true' : 'false'}
+        data-standalone={displayLabel || description ? 'false' : 'true'}
         data-label-placement={labelPlacement}
+        onPointerEnter={handlers.onPointerEnter}
+        onPointerLeave={handlers.onPointerLeave}
+        onPointerDown={handlers.onPointerDown}
+        onPointerUp={handlers.onPointerUp}
+        onPointerCancel={handlers.onPointerUp}
       >
         <input
+          ref={ref}
+          {...rest}
           id={inputId}
           type="checkbox"
           role="switch"
           name={name}
           value={value}
           checked={isChecked}
-          disabled={isDisabled}
+          disabled={disabled}
           required={required}
+          tabIndex={tabIndex}
           onChange={handleChange}
+          onClick={handleClick}
+          onFocus={handlers.onFocus}
+          onBlur={handlers.onBlur}
+          onKeyDown={(event) => pressKey(event, true)}
+          onKeyUp={(event) => pressKey(event, false)}
           autoFocus={autoFocus}
           aria-checked={isChecked}
           aria-invalid={error || undefined}
           aria-required={required || undefined}
           aria-busy={loading || undefined}
+          aria-disabled={loading || undefined}
+          aria-label={ariaLabel}
           aria-labelledby={labelledBy}
-          {...rest}
-          /* Merged above from the caller's token plus the switch's own ids, so
-             it must land AFTER the spread that would otherwise replace it. */
           aria-describedby={describedBy}
         />
         <span data-part="track" aria-hidden="true">
           <span data-part="thumb">
-            {/* Loading: the governed border-spinner idiom (ds-foundation-spin,
-                skin-painted -- the raw inline SVG is gone). It docks INSIDE the
-                thumb so the busy state stays physically attached to the moving
-                part and the track geometry never shifts. */}
             {loading && <span data-part="loading-indicator" />}
           </span>
-          {/* State icon (Phase B): checked/unchecked reads unmistakably through
-              position + governed glyph, never track color alone. The skin
-              docks it on the side opposite the thumb, scales it with the size
-              channel and hides it at xs where no glyph stays legible. */}
           {!loading && (
             <span data-part="state-icon" data-on={isChecked ? 'true' : 'false'}>
-              {isChecked ? (
-                <ActionConfirmIcon decorative size={10} />
-              ) : (
-                <ActionCloseIcon decorative size={10} />
-              )}
+              {isChecked ? <ActionConfirmIcon decorative /> : <ActionCloseIcon decorative />}
             </span>
           )}
         </span>
@@ -194,7 +181,7 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
               <span id={labelId} data-part="label">{displayLabel}</span>
             )}
             {stateLabel && (
-              <span data-part="state-label">{stateLabel}</span>
+              <span data-part="state-label" aria-hidden="true">{stateLabel}</span>
             )}
             {description && (
               <span id={descriptionId} data-part="description">{description}</span>
@@ -216,6 +203,8 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
       )}
     </div>
   );
-}
+});
 
 ModernToggle.displayName = 'ModernToggle';
+
+export default ModernToggle;

@@ -188,7 +188,7 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     // The root is synchronous so a lazy primitive facade can never blank the
     // whole preview; nested engine facades may settle on the next task.
     await waitFor(() => {
-      expect(queryAll(root, '.rottay-button--modern')).toHaveLength(4);
+      expect(queryAll(root, '.ds-button--modern')).toHaveLength(4);
     });
     const scopeAttribute = root.getAttributeNames().find((attribute) => attribute.startsWith('data-preview-'));
     expect(scopeAttribute).toBeDefined();
@@ -196,7 +196,7 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     expect(container.querySelector('style')?.textContent).toContain('--ds-color-primary: #4f46e5;');
 
     for (const variant of ['primary', 'secondary', 'default', 'ghost']) {
-      expect(queryAll(root, `.rottay-button--modern[data-variant="${variant}"]`)).toHaveLength(1);
+      expect(queryAll(root, `.ds-button--modern[data-variant="${variant}"]`)).toHaveLength(1);
     }
     expect(queryAll(root, '.rottay-input--modern[data-part="input"]')).toHaveLength(2);
     expect(queryAll(root, '.rottay-input--modern[data-part="input"][data-invalid="true"]')).toHaveLength(1);
@@ -219,7 +219,7 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     const compactRoot = container.querySelector('.ds-pattern-branding-preview-sandbox') as HTMLElement;
     expect(compactRoot).toHaveAttribute('data-state', 'compact');
     await waitFor(() => {
-      expect(queryAll(compactRoot, '.rottay-button--modern')).toHaveLength(4);
+      expect(queryAll(compactRoot, '.ds-button--modern')).toHaveLength(4);
     });
     expect(queryAll(compactRoot, '.ds-card--modern[data-variant="elevated"]')).toHaveLength(0);
     expect(queryAll(compactRoot, '[data-part="table"]')).toHaveLength(0);

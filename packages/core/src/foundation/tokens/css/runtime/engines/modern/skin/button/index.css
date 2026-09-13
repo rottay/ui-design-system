@@ -48,15 +48,7 @@
    Anatomy and geometry
    ------------------------------------------------------------------------- */
 
-.rottay-button.rottay-button--modern[data-variant] {
-  /* Modern's material vocabulary, DECLARED in modern's own scope rather than
-     smuggled in through a fallback arm. The base owner declares the generic
-     `--ds-shadow-sm`; an engine with a richer vocabulary overrides it here, so
-     rustic keeps the generic scale by inheritance instead of by fallback. */
-  --ds-button-primary-shadow: var(--ds-material-control-shadow);
-  --ds-button-secondary-shadow: var(--ds-material-control-shadow);
-  --ds-button-default-shadow: var(--ds-material-control-shadow);
-
+.ds-button.ds-button--modern[data-variant] {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
   /* The CONTROL step first, the surface ramp as fallback. R1 Cohort 1 had this
      inverted for a reason that has since been removed: the family channel was
@@ -138,7 +130,7 @@
    layer of the material stack it rides the governed `--ds-effect-intensity`
    dial: at 0 the sheen disappears while base, border, state channels and the
    focus ring keep the hierarchy intact. */
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='primary'],
     [data-variant='secondary'],
     [data-variant='default'],
@@ -164,32 +156,32 @@
     var(--ds-button-transition-timing);
 }
 
-.rottay-button.rottay-button--modern [data-part='content'],
-.rottay-button.rottay-button--modern [data-part='busy-content'],
-.rottay-button.rottay-button--modern [data-part='content-frame'],
-.rottay-button.rottay-button--modern [data-part='icon'],
-.rottay-button.rottay-button--modern [data-part='prefix'],
-.rottay-button.rottay-button--modern [data-part='suffix'] {
+.ds-button.ds-button--modern [data-part='content'],
+.ds-button.ds-button--modern [data-part='busy-content'],
+.ds-button.ds-button--modern [data-part='content-frame'],
+.ds-button.ds-button--modern [data-part='icon'],
+.ds-button.ds-button--modern [data-part='prefix'],
+.ds-button.ds-button--modern [data-part='suffix'] {
   display: inline-flex;
   min-inline-size: 0;
   align-items: center;
   justify-content: center;
 }
 
-.rottay-button.rottay-button--modern [data-part='content'],
-.rottay-button.rottay-button--modern [data-part='busy-content'],
-.rottay-button.rottay-button--modern [data-part='content-frame'] {
+.ds-button.ds-button--modern [data-part='content'],
+.ds-button.ds-button--modern [data-part='busy-content'],
+.ds-button.ds-button--modern [data-part='content-frame'] {
   position: relative;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above);
 }
 
-.rottay-button.rottay-button--modern [data-part='content'],
-.rottay-button.rottay-button--modern [data-part='busy-content'] {
+.ds-button.ds-button--modern [data-part='content'],
+.ds-button.ds-button--modern [data-part='busy-content'] {
   gap: inherit;
   max-inline-size: 100%;
 }
 
-.rottay-button.rottay-button--modern [data-part='label'] {
+.ds-button.ds-button--modern [data-part='label'] {
   min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -208,7 +200,7 @@
    an owner sets a padding, the part grows by 2×padding while the svg keeps
    the resolved optical size, so the plate adds material around the glyph
    instead of shrinking it. */
-.rottay-button.rottay-button--modern [data-part='icon'] {
+.ds-button.ds-button--modern [data-part='icon'] {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -226,7 +218,7 @@
     var(--ds-button-transition-timing);
 }
 
-.rottay-button.rottay-button--modern [data-part='icon'] > svg {
+.ds-button.ds-button--modern [data-part='icon'] > svg {
   inline-size: var(--ds-button-resolved-icon-size);
   block-size: var(--ds-button-resolved-icon-size);
 }
@@ -239,7 +231,7 @@
    case only; an owner who sets those protos on the part itself still wins.
    The wash deepens on hover for continuity, and collapses under reduced
    transparency like the rest of the translucent stack. */
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='ghost'],
     [data-variant='text'],
     [data-variant='link']
@@ -250,7 +242,7 @@
 }
 
 @media (hover: hover) {
-  .rottay-button.rottay-button--modern:is(
+  .ds-button.ds-button--modern:is(
       [data-variant='ghost'],
       [data-variant='text'],
       [data-variant='link']
@@ -259,7 +251,7 @@
   }
 }
 
-.rottay-button.rottay-button--modern [data-part='spinner'] {
+.ds-button.ds-button--modern [data-part='spinner'] {
   flex: 0 0 var(--ds-button-resolved-icon-size);
   inline-size: var(--ds-button-resolved-icon-size);
   block-size: var(--ds-button-resolved-icon-size);
@@ -267,12 +259,12 @@
   animation: ds-button-spin var(--ds-button-spinner-duration) linear infinite;
 }
 
-.rottay-button.rottay-button--modern [data-part='spinner-track'],
-.rottay-button.rottay-button--modern [data-part='spinner-indicator'] {
+.ds-button.ds-button--modern [data-part='spinner-track'],
+.ds-button.ds-button--modern [data-part='spinner-indicator'] {
   stroke-width: var(--ds-button-spinner-stroke-width);
 }
 
-.rottay-button.rottay-button--modern [data-part='spinner-track'] {
+.ds-button.ds-button--modern [data-part='spinner-track'] {
   opacity: var(--ds-button-spinner-track-opacity);
 }
 
@@ -280,7 +272,7 @@
    the frame takes the MAX of their widths rather than the sum. With the rows in
    normal inline flow they would sit side by side and the frame would be twice as
    wide as either state. */
-.rottay-button.rottay-button--modern [data-part='content-frame'] {
+.ds-button.ds-button--modern [data-part='content-frame'] {
   position: relative;
   display: grid;
   grid-template-areas: 'state';
@@ -296,18 +288,18 @@
   gap: inherit;
 }
 
-.rottay-button.rottay-button--modern [data-part='content'][data-layer='reserve'] {
+.ds-button.ds-button--modern [data-part='content'][data-layer='reserve'] {
   grid-area: state;
   visibility: hidden;
 }
 
-.rottay-button.rottay-button--modern [data-part='content'][data-state='hidden'] {
+.ds-button.ds-button--modern [data-part='content'][data-state='hidden'] {
   position: absolute;
   opacity: 0;
   pointer-events: none;
 }
 
-.rottay-button.rottay-button--modern [data-part='content-frame'] > [data-part='busy-content'] {
+.ds-button.ds-button--modern [data-part='content-frame'] > [data-part='busy-content'] {
   position: absolute;
   inset: 0;
   overflow: hidden;
@@ -318,7 +310,7 @@
    presentation/components/visually-hidden.css) — this family no longer keeps
    a local clip rule for it. */
 
-.rottay-button.rottay-button--modern[data-full-width='true'] {
+.ds-button.ds-button--modern[data-full-width='true'] {
   display: flex;
   inline-size: 100%;
   min-block-size: max(
@@ -332,12 +324,12 @@
   white-space: normal;
 }
 
-.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='content'],
-.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='content-frame'] {
+.ds-button.ds-button--modern[data-full-width='true'] [data-part='content'],
+.ds-button.ds-button--modern[data-full-width='true'] [data-part='content-frame'] {
   inline-size: 100%;
 }
 
-.rottay-button.rottay-button--modern[data-full-width='true'] [data-part='label'] {
+.ds-button.ds-button--modern[data-full-width='true'] [data-part='label'] {
   overflow-wrap: anywhere;
   text-overflow: clip;
 }
@@ -376,7 +368,7 @@
    Size and shape
    ------------------------------------------------------------------------- */
 
-.rottay-button.rottay-button--modern[data-size='xs']:not([data-size-responsive]) {
+.ds-button.ds-button--modern[data-size='xs']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-xs-icon-size);
   --_ds-button-resolved-radius: var(--ds-button-xs-radius, var(--ds-radius-sm));
   --ds-button-resolved-height: var(--ds-button-xs-height);
@@ -389,7 +381,7 @@
   line-height: var(--ds-button-xs-line-height);
 }
 
-.rottay-button.rottay-button--modern[data-size='sm']:not([data-size-responsive]) {
+.ds-button.ds-button--modern[data-size='sm']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-sm-icon-size);
   --_ds-button-resolved-radius: var(--ds-button-sm-radius, var(--ds-radius-sm));
   --ds-button-resolved-height: var(--ds-button-sm-height);
@@ -402,7 +394,7 @@
   line-height: var(--ds-button-sm-line-height);
 }
 
-.rottay-button.rottay-button--modern[data-size='md']:not([data-size-responsive]) {
+.ds-button.ds-button--modern[data-size='md']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
   --_ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
   --ds-button-resolved-height: var(--ds-button-md-height);
@@ -415,7 +407,7 @@
   line-height: var(--ds-button-md-line-height);
 }
 
-.rottay-button.rottay-button--modern[data-size='lg']:not([data-size-responsive]) {
+.ds-button.ds-button--modern[data-size='lg']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-lg-icon-size);
   --_ds-button-resolved-radius: var(--ds-button-lg-radius, var(--ds-radius-lg));
   --ds-button-resolved-height: var(--ds-button-lg-height);
@@ -428,7 +420,7 @@
   line-height: var(--ds-button-lg-line-height);
 }
 
-.rottay-button.rottay-button--modern[data-size='xl']:not([data-size-responsive]) {
+.ds-button.ds-button--modern[data-size='xl']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-xl-icon-size);
   --_ds-button-resolved-radius: var(--ds-button-xl-radius, var(--ds-radius-xl));
   --ds-button-resolved-height: var(--ds-button-xl-height);
@@ -441,8 +433,8 @@
   line-height: var(--ds-button-xl-line-height);
 }
 
-.rottay-button.rottay-button--modern[data-shape='circle'],
-.rottay-button.rottay-button--modern[data-icon-only='true'] {
+.ds-button.ds-button--modern[data-shape='circle'],
+.ds-button.ds-button--modern[data-icon-only='true'] {
   /* Never let a flex or grid parent stretch an icon plate: its silhouette is
      the resolved square (or the tenant's shape), not the row's tallest
      sibling. */
@@ -451,30 +443,30 @@
   padding-inline: 0;
 }
 
-.rottay-button.rottay-button--modern[data-shape='circle'] {
+.ds-button.ds-button--modern[data-shape='circle'] {
   inline-size: calc(
     var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   border-radius: var(--ds-radius-full);
 }
 
-.rottay-button.rottay-button--modern[data-shape='round'] {
+.ds-button.ds-button--modern[data-shape='round'] {
   border-radius: var(--ds-radius-full);
 }
 
-.rottay-button.rottay-button--modern[data-shape='default'][data-radius='none'] {
+.ds-button.ds-button--modern[data-shape='default'][data-radius='none'] {
   border-radius: 0;
 }
-.rottay-button.rottay-button--modern[data-shape='default'][data-radius='sm'] {
+.ds-button.ds-button--modern[data-shape='default'][data-radius='sm'] {
   border-radius: var(--ds-radius-sm);
 }
-.rottay-button.rottay-button--modern[data-shape='default'][data-radius='md'] {
+.ds-button.ds-button--modern[data-shape='default'][data-radius='md'] {
   border-radius: var(--ds-radius-md);
 }
-.rottay-button.rottay-button--modern[data-shape='default'][data-radius='lg'] {
+.ds-button.ds-button--modern[data-shape='default'][data-radius='lg'] {
   border-radius: var(--ds-radius-lg);
 }
-.rottay-button.rottay-button--modern[data-shape='default'][data-radius='full'] {
+.ds-button.ds-button--modern[data-shape='default'][data-radius='full'] {
   border-radius: var(--ds-radius-full);
 }
 
@@ -496,27 +488,27 @@
    The `~=` attribute selector matches token membership, exactly like a class
    list, so a lone child correctly receives both exterior radii.
    ------------------------------------------------------------------------- */
-.rottay-button.rottay-button--modern[data-connected='true'] {
+.ds-button.ds-button--modern[data-connected='true'] {
   border-radius: 0;
 }
 
-.rottay-button-group[data-orientation='horizontal']
-  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='first'] {
+.ds-button-group[data-orientation='horizontal']
+  > .ds-button.ds-button--modern[data-connected='true'][data-group-position~='first'] {
   border-start-start-radius: var(--_ds-button-resolved-radius);
   border-end-start-radius: var(--_ds-button-resolved-radius);
 }
-.rottay-button-group[data-orientation='horizontal']
-  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='last'] {
+.ds-button-group[data-orientation='horizontal']
+  > .ds-button.ds-button--modern[data-connected='true'][data-group-position~='last'] {
   border-start-end-radius: var(--_ds-button-resolved-radius);
   border-end-end-radius: var(--_ds-button-resolved-radius);
 }
-.rottay-button-group[data-orientation='vertical']
-  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='first'] {
+.ds-button-group[data-orientation='vertical']
+  > .ds-button.ds-button--modern[data-connected='true'][data-group-position~='first'] {
   border-start-start-radius: var(--_ds-button-resolved-radius);
   border-start-end-radius: var(--_ds-button-resolved-radius);
 }
-.rottay-button-group[data-orientation='vertical']
-  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position~='last'] {
+.ds-button-group[data-orientation='vertical']
+  > .ds-button.ds-button--modern[data-connected='true'][data-group-position~='last'] {
   border-end-start-radius: var(--_ds-button-resolved-radius);
   border-end-end-radius: var(--_ds-button-resolved-radius);
 }
@@ -524,8 +516,8 @@
 /* Governed seam: the shared 1px edge inside a joined quiet cluster reads the
    EXISTING divider channel (no new token) instead of whichever border wins
    the overlap. Solid variants keep their own border as the seam. */
-.rottay-button-group[data-orientation='horizontal']
-  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position]:is(
+.ds-button-group[data-orientation='horizontal']
+  > .ds-button.ds-button--modern[data-connected='true'][data-group-position]:is(
     [data-variant='default'],
     [data-variant='outline'],
     [data-variant='dashed'],
@@ -533,8 +525,8 @@
   ):not([data-group-position~='first']):not([data-disabled='true']) {
   border-inline-start-color: var(--ds-button-group-divider-color);
 }
-.rottay-button-group[data-orientation='vertical']
-  > .rottay-button.rottay-button--modern[data-connected='true'][data-group-position]:is(
+.ds-button-group[data-orientation='vertical']
+  > .ds-button.ds-button--modern[data-connected='true'][data-group-position]:is(
     [data-variant='default'],
     [data-variant='outline'],
     [data-variant='dashed'],
@@ -593,42 +585,42 @@
    Variant paint. Each state has an explicit tenant-authored channel.
    ------------------------------------------------------------------------- */
 
-.rottay-button.rottay-button--modern[data-variant='primary'] {
+.ds-button.ds-button--modern[data-variant='primary'] {
   background-color: var(--ds-button-primary-bg);
   color: var(--ds-button-primary-color);
   border-color: var(--ds-button-primary-border);
   box-shadow: var(--ds-button-primary-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='secondary'] {
+.ds-button.ds-button--modern[data-variant='secondary'] {
   background-color: var(--ds-button-secondary-bg);
   color: var(--ds-button-secondary-color);
   border-color: var(--ds-button-secondary-border);
   box-shadow: var(--ds-button-secondary-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline']) {
+.ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline']) {
   background-color: var(--ds-button-default-bg);
   color: var(--ds-button-default-color);
   border-color: var(--ds-button-default-border);
   box-shadow: var(--ds-button-default-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='ghost'] {
+.ds-button.ds-button--modern[data-variant='ghost'] {
   background-color: var(--ds-button-ghost-bg);
   color: var(--ds-button-ghost-color);
   border-color: var(--ds-button-ghost-border);
   box-shadow: var(--ds-button-ghost-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='text'] {
+.ds-button.ds-button--modern[data-variant='text'] {
   background-color: var(--ds-button-text-bg);
   color: var(--ds-button-text-color);
   border-color: var(--ds-button-text-border);
   box-shadow: var(--ds-button-text-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='dashed'] {
+.ds-button.ds-button--modern[data-variant='dashed'] {
   background-color: var(--ds-button-dashed-bg);
   color: var(--ds-button-dashed-color);
   border-color: var(--ds-button-dashed-border);
@@ -636,35 +628,35 @@
   box-shadow: var(--ds-button-dashed-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='danger'] {
+.ds-button.ds-button--modern[data-variant='danger'] {
   background-color: var(--ds-button-error-bg);
   color: var(--ds-button-error-color);
   border-color: var(--ds-button-error-border);
   box-shadow: var(--ds-button-error-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='success'] {
+.ds-button.ds-button--modern[data-variant='success'] {
   background-color: var(--ds-button-success-bg);
   color: var(--ds-button-success-color);
   border-color: var(--ds-button-success-border);
   box-shadow: var(--ds-button-success-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='warning'] {
+.ds-button.ds-button--modern[data-variant='warning'] {
   background-color: var(--ds-button-warning-bg);
   color: var(--ds-button-warning-color);
   border-color: var(--ds-button-warning-border);
   box-shadow: var(--ds-button-warning-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='info'] {
+.ds-button.ds-button--modern[data-variant='info'] {
   background-color: var(--ds-button-info-bg);
   color: var(--ds-button-info-color);
   border-color: var(--ds-button-info-border);
   box-shadow: var(--ds-button-info-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='ai'] {
+.ds-button.ds-button--modern[data-variant='ai'] {
   background-color: var(--ds-button-ai-bg);
   background-image: var(--ds-button-ai-texture);
   color: var(--ds-button-ai-color);
@@ -672,7 +664,7 @@
   box-shadow: var(--ds-button-ai-shadow, var(--ds-material-control-shadow));
 }
 
-.rottay-button.rottay-button--modern[data-variant='link'] {
+.ds-button.ds-button--modern[data-variant='link'] {
   background-color: var(--ds-button-link-bg);
   color: var(--ds-button-link-color);
   border-color: var(--ds-button-link-border);
@@ -681,13 +673,13 @@
   text-underline-offset: var(--ds-button-link-underline-offset);
 }
 
-.rottay-button.rottay-button--modern[data-gradient='true'] {
+.ds-button.ds-button--modern[data-gradient='true'] {
   background-image: var(--ds-button-gradient);
   background-position: 0% 50%;
   background-size: 180% 180%;
 }
 
-.rottay-button.rottay-button--modern[data-bordered='true']:is(
+.ds-button.ds-button--modern[data-bordered='true']:is(
     [data-variant='ghost'],
     [data-variant='text'],
     [data-variant='link']
@@ -695,7 +687,7 @@
   border-color: var(--ds-button-bordered-border);
 }
 
-.rottay-button.rottay-button--modern[data-shadow='true']:not([data-state~='hovered']):not(
+.ds-button.ds-button--modern[data-shadow='true']:not([data-state~='hovered']):not(
     [data-state~='pressed']
   ) {
   box-shadow: var(--ds-button-elevated-shadow, var(--ds-material-control-shadow));
@@ -720,7 +712,7 @@
        identical currentColor-derived rest wash
      retirementCriteria: a governed --ds-material-control-* quiet-rest role
        ships and every private consumer migrates to it in one lot */
-.rottay-button.rottay-button--modern:is([data-variant='ghost'], [data-variant='text']) {
+.ds-button.ds-button--modern:is([data-variant='ghost'], [data-variant='text']) {
   background-color: var(
     --_ds-button-quiet-rest-wash,
     color-mix(in srgb, currentColor 7%, transparent)
@@ -743,103 +735,103 @@
    ------------------------------------------------------------------------- */
 
 @media (hover: hover) {
-  .rottay-button.rottay-button--modern[data-state~='hovered']:not([data-disabled='true']):not(
+  .ds-button.ds-button--modern[data-state~='hovered']:not([data-disabled='true']):not(
       [data-loading='true']
     ):not([data-pending='true']):not([data-variant='link']):not([data-variant='text']):not(
-      .rottay-button-group[data-connected='true'] > *
+      .ds-button-group[data-connected='true'] > *
     ) {
     transform: var(--ds-button-hover-transform);
     filter: var(--ds-button-hover-filter);
   }
 
-  .rottay-button.rottay-button--modern[data-state~='hovered']::before {
+  .ds-button.ds-button--modern[data-state~='hovered']::before {
     opacity: calc(
       var(--ds-button-surface-highlight-hover-opacity) * var(--ds-effect-intensity)
     );
   }
 
-  .rottay-button.rottay-button--modern[data-state~='hovered'] [data-part='icon'] {
+  .ds-button.ds-button--modern[data-state~='hovered'] [data-part='icon'] {
     transform: var(--ds-button-icon-hover-transform);
   }
 
-  .rottay-button.rottay-button--modern[data-variant='primary'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='primary'][data-state~='hovered'] {
     background-color: var(--ds-button-primary-bg-hover);
     color: var(--ds-button-primary-color-hover);
     border-color: var(--ds-button-primary-border-hover);
     box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='secondary'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='secondary'][data-state~='hovered'] {
     background-color: var(--ds-button-secondary-bg-hover);
     color: var(--ds-button-secondary-color-hover);
     border-color: var(--ds-button-secondary-border-hover);
     box-shadow: var(--ds-button-secondary-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='hovered'] {
+  .ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='hovered'] {
     background-color: var(--ds-button-default-bg-hover);
     color: var(--ds-button-default-color-hover);
     border-color: var(--ds-button-default-border-hover);
     box-shadow: var(--ds-button-default-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='ghost'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='ghost'][data-state~='hovered'] {
     background-color: var(--ds-button-ghost-bg-hover);
     color: var(--ds-button-ghost-color-hover);
     border-color: var(--ds-button-ghost-border-hover);
     box-shadow: var(--ds-button-ghost-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='text'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='text'][data-state~='hovered'] {
     background-color: var(--ds-button-text-bg-hover);
     color: var(--ds-button-text-color-hover);
     border-color: var(--ds-button-text-border-hover);
     box-shadow: var(--ds-button-text-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='dashed'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='dashed'][data-state~='hovered'] {
     background-color: var(--ds-button-dashed-bg-hover);
     color: var(--ds-button-dashed-color-hover);
     border-color: var(--ds-button-dashed-border-hover);
     box-shadow: var(--ds-button-dashed-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='danger'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='danger'][data-state~='hovered'] {
     background-color: var(--ds-button-error-bg-hover);
     color: var(--ds-button-error-color-hover);
     border-color: var(--ds-button-error-border-hover);
     box-shadow: var(--ds-button-error-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='success'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='success'][data-state~='hovered'] {
     background-color: var(--ds-button-success-bg-hover);
     color: var(--ds-button-success-color-hover);
     border-color: var(--ds-button-success-border-hover);
     box-shadow: var(--ds-button-success-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='warning'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='warning'][data-state~='hovered'] {
     background-color: var(--ds-button-warning-bg-hover);
     color: var(--ds-button-warning-color-hover);
     border-color: var(--ds-button-warning-border-hover);
     box-shadow: var(--ds-button-warning-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='info'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='info'][data-state~='hovered'] {
     background-color: var(--ds-button-info-bg-hover);
     color: var(--ds-button-info-color-hover);
     border-color: var(--ds-button-info-border-hover);
     box-shadow: var(--ds-button-info-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='ai'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='ai'][data-state~='hovered'] {
     background-color: var(--ds-button-ai-bg-hover);
     color: var(--ds-button-ai-color-hover);
     border-color: var(--ds-button-ai-border-hover);
     box-shadow: var(--ds-button-ai-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .rottay-button.rottay-button--modern[data-variant='link'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='link'][data-state~='hovered'] {
     background-color: var(--ds-button-link-bg-hover);
     color: var(--ds-button-link-color-hover);
     border-color: var(--ds-button-link-border-hover);
@@ -847,110 +839,110 @@
     text-decoration: var(--ds-button-link-text-decoration-hover);
   }
 
-  .rottay-button.rottay-button--modern[data-gradient='true'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-gradient='true'][data-state~='hovered'] {
     background-position: 100% 50%;
   }
 
-  .rottay-button.rottay-button--modern[data-shadow='true'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-shadow='true'][data-state~='hovered'] {
     box-shadow: var(--ds-button-elevated-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 }
 
-.rottay-button.rottay-button--modern[data-state~='pressed']:not(
-    .rottay-button-group[data-connected='true'] > *
+.ds-button.ds-button--modern[data-state~='pressed']:not(
+    .ds-button-group[data-connected='true'] > *
   ) {
   transform: var(--ds-button-active-transform);
   filter: var(--ds-button-active-filter);
 }
 
-.rottay-button.rottay-button--modern[data-state~='pressed']::before {
+.ds-button.ds-button--modern[data-state~='pressed']::before {
   opacity: calc(
     var(--ds-button-surface-highlight-active-opacity) * var(--ds-effect-intensity)
   );
 }
 
-.rottay-button.rottay-button--modern[data-state~='pressed'] [data-part='icon'] {
+.ds-button.ds-button--modern[data-state~='pressed'] [data-part='icon'] {
   transform: var(--ds-button-icon-active-transform);
 }
 
-.rottay-button.rottay-button--modern[data-variant='primary'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='primary'][data-state~='pressed'] {
   background-color: var(--ds-button-primary-bg-active);
   color: var(--ds-button-primary-color-active);
   border-color: var(--ds-button-primary-border-active);
   box-shadow: var(--ds-button-primary-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='secondary'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='secondary'][data-state~='pressed'] {
   background-color: var(--ds-button-secondary-bg-active);
   color: var(--ds-button-secondary-color-active);
   border-color: var(--ds-button-secondary-border-active);
   box-shadow: var(--ds-button-secondary-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='pressed'] {
+.ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='pressed'] {
   background-color: var(--ds-button-default-bg-active);
   color: var(--ds-button-default-color-active);
   border-color: var(--ds-button-default-border-active);
   box-shadow: var(--ds-button-default-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='ghost'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='ghost'][data-state~='pressed'] {
   background-color: var(--ds-button-ghost-bg-active);
   color: var(--ds-button-ghost-color-active);
   border-color: var(--ds-button-ghost-border-active);
   box-shadow: var(--ds-button-ghost-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='text'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='text'][data-state~='pressed'] {
   background-color: var(--ds-button-text-bg-active);
   color: var(--ds-button-text-color-active);
   border-color: var(--ds-button-text-border-active);
   box-shadow: var(--ds-button-text-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='dashed'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='dashed'][data-state~='pressed'] {
   background-color: var(--ds-button-dashed-bg-active);
   color: var(--ds-button-dashed-color-active);
   border-color: var(--ds-button-dashed-border-active);
   box-shadow: var(--ds-button-dashed-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='danger'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='danger'][data-state~='pressed'] {
   background-color: var(--ds-button-error-bg-active);
   color: var(--ds-button-error-color-active);
   border-color: var(--ds-button-error-border-active);
   box-shadow: var(--ds-button-error-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='success'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='success'][data-state~='pressed'] {
   background-color: var(--ds-button-success-bg-active);
   color: var(--ds-button-success-color-active);
   border-color: var(--ds-button-success-border-active);
   box-shadow: var(--ds-button-success-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='warning'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='warning'][data-state~='pressed'] {
   background-color: var(--ds-button-warning-bg-active);
   color: var(--ds-button-warning-color-active);
   border-color: var(--ds-button-warning-border-active);
   box-shadow: var(--ds-button-warning-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='info'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='info'][data-state~='pressed'] {
   background-color: var(--ds-button-info-bg-active);
   color: var(--ds-button-info-color-active);
   border-color: var(--ds-button-info-border-active);
   box-shadow: var(--ds-button-info-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='ai'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='ai'][data-state~='pressed'] {
   background-color: var(--ds-button-ai-bg-active);
   color: var(--ds-button-ai-color-active);
   border-color: var(--ds-button-ai-border-active);
   box-shadow: var(--ds-button-ai-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.rottay-button.rottay-button--modern[data-variant='link'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='link'][data-state~='pressed'] {
   background-color: var(--ds-button-link-bg-active);
   color: var(--ds-button-link-color-active);
   border-color: var(--ds-button-link-border-active);
@@ -973,7 +965,7 @@
    excluded explicitly: inert always dims to the disabled tokens.
    ------------------------------------------------------------------------- */
 
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='ghost'],
     [data-variant='text'],
     [data-variant='link']
@@ -981,7 +973,7 @@
   color: var(--ds-button-error-border);
 }
 
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='default'],
     [data-variant='outline'],
     [data-variant='dashed']
@@ -991,7 +983,7 @@
 }
 
 @media (hover: hover) {
-  .rottay-button.rottay-button--modern:is(
+  .ds-button.ds-button--modern:is(
       [data-variant='ghost'],
       [data-variant='text'],
       [data-variant='link'],
@@ -1003,7 +995,7 @@
     color: var(--ds-button-error-border-hover);
   }
 
-  .rottay-button.rottay-button--modern:is(
+  .ds-button.ds-button--modern:is(
       [data-variant='default'],
       [data-variant='outline'],
       [data-variant='dashed']
@@ -1012,7 +1004,7 @@
   }
 }
 
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='ghost'],
     [data-variant='text'],
     [data-variant='link'],
@@ -1024,7 +1016,7 @@
   color: var(--ds-button-error-border-active);
 }
 
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='default'],
     [data-variant='outline'],
     [data-variant='dashed']
@@ -1048,13 +1040,13 @@
    forced-colors maps it to the SelectedItem pair below.
    ------------------------------------------------------------------------- */
 
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='default'],
     [data-variant='outline'],
     [data-variant='dashed'],
     [data-variant='secondary'],
     [data-variant='ghost']
-  ):is([aria-pressed='true'], [aria-current='true'], [data-state~='selected']):not(
+  ):is([aria-pressed='true'], [aria-current='true']):not(
     [data-disabled='true']
   ) {
   background-color: var(
@@ -1065,23 +1057,23 @@
   color: var(--ds-color-primary);
 }
 
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='text'],
     [data-variant='link']
-  ):is([aria-pressed='true'], [aria-current='true'], [data-state~='selected']):not(
+  ):is([aria-pressed='true'], [aria-current='true']):not(
     [data-disabled='true']
   ) {
   color: var(--ds-color-primary);
 }
 
-.rottay-button.rottay-button--modern:is(
+.ds-button.ds-button--modern:is(
     [data-variant='primary'],
     [data-variant='danger'],
     [data-variant='success'],
     [data-variant='warning'],
     [data-variant='info'],
     [data-variant='ai']
-  ):is([aria-pressed='true'], [aria-current='true'], [data-state~='selected']):not(
+  ):is([aria-pressed='true'], [aria-current='true']):not(
     [data-disabled='true']
   ) {
   outline: var(--ds-button-border-width-focus) solid currentColor;
@@ -1090,7 +1082,7 @@
   );
 }
 
-.rottay-button.rottay-button--modern[data-variant]:is(
+.ds-button.ds-button--modern[data-variant]:is(
     [data-state~='focus-visible'],
     :focus-visible
   ) {
@@ -1099,7 +1091,7 @@
   box-shadow: var(--ds-button-focus-ring);
 }
 
-.rottay-button.rottay-button--modern[data-pulse='true']:not([data-disabled='true']):not(
+.ds-button.ds-button--modern[data-pulse='true']:not([data-disabled='true']):not(
     [data-loading='true']
   ):not([data-pending='true']) {
   animation: ds-button-pulse-modern var(--ds-motion-attention)
@@ -1117,12 +1109,9 @@
   }
 }
 
-/* feedback.press recipe owns the press timing policy, including reduced motion. */
-.rottay-button.rottay-button--modern[data-recipe='feedback.press'][data-recipe-state='animated'] {
-  --ds-button-transition-duration: var(--ds-recipe-enter);
-  --ds-button-transition-timing: var(--ds-recipe-curve);
-}
-.rottay-button.rottay-button--modern[data-recipe='feedback.press'][data-recipe-state='final'] {
+/* feedback.press recipe owns the press timing policy: the engine stamps its
+   animated timing onto the button channels, and the final state drops it. */
+.ds-button.ds-button--modern[data-recipe='feedback.press'][data-recipe-state='final'] {
   transition: none;
 }
 
@@ -1130,7 +1119,7 @@
    Inert, touch and accessibility modes
    ------------------------------------------------------------------------- */
 
-.rottay-button.rottay-button--modern[data-disabled='true'] {
+.ds-button.ds-button--modern[data-disabled='true'] {
   cursor: var(--ds-button-disabled-cursor);
   background: var(--ds-button-disabled-bg);
   color: var(--ds-button-disabled-color);
@@ -1141,11 +1130,11 @@
   filter: none;
 }
 
-.rottay-button.rottay-button--modern[data-disabled='true']::before {
+.ds-button.ds-button--modern[data-disabled='true']::before {
   opacity: 0;
 }
 
-.rottay-button.rottay-button--modern:is([data-loading='true'], [data-pending='true']) {
+.ds-button.ds-button--modern:is([data-loading='true'], [data-pending='true']) {
   cursor: var(--ds-button-loading-cursor);
 }
 
@@ -1153,13 +1142,13 @@
    exists inside the `@media (hover: hover)` block above, and the pressed
    posture is the tactile feedback on these devices. */
 @media (hover: none), (pointer: coarse) {
-  .rottay-button.rottay-button--modern[data-variant] {
+  .ds-button.ds-button--modern[data-variant] {
     min-block-size: var(--ds-button-touch-target-min);
   }
 
   /* Icon-only and circle buttons pin their inline size, so the 44px block
      minimum alone would squash them into ovals on coarse pointers. */
-  .rottay-button.rottay-button--modern:is(
+  .ds-button.ds-button--modern:is(
       [data-icon-only='true'],
       [data-shape='circle']
     ) {
@@ -1168,13 +1157,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-button.rottay-button--modern[data-variant],
-  .rottay-button.rottay-button--modern [data-part='icon'] {
+  .ds-button.ds-button--modern[data-variant],
+  .ds-button.ds-button--modern [data-part='icon'] {
     transition: none;
   }
 
-  .rottay-button.rottay-button--modern[data-pulse='true'],
-  .rottay-button.rottay-button--modern [data-part='spinner'] {
+  .ds-button.ds-button--modern[data-pulse='true'],
+  .ds-button.ds-button--modern [data-part='spinner'] {
     animation: none;
   }
 }
@@ -1186,13 +1175,13 @@
    state channels, which are solid already. State opacity rules on ::before
    keep running harmlessly against an empty layer. */
 @media (prefers-reduced-transparency: reduce) {
-  .rottay-button.rottay-button--modern[data-variant] {
+  .ds-button.ds-button--modern[data-variant] {
     --ds-button-surface-highlight: none;
   }
 
   /* The quiet icon-only rest well is translucent too: it collapses with the
      stack and the control reads by its variant channels. */
-  .rottay-button.rottay-button--modern:is(
+  .ds-button.ds-button--modern:is(
       [data-variant='ghost'],
       [data-variant='text'],
       [data-variant='link']
@@ -1201,13 +1190,13 @@
   }
 
   /* The quiet-range rest wash (F2, G2) is the same translucent stack. */
-  .rottay-button.rottay-button--modern:is([data-variant='ghost'], [data-variant='text']) {
+  .ds-button.ds-button--modern:is([data-variant='ghost'], [data-variant='text']) {
     --_ds-button-quiet-rest-wash: none;
   }
 }
 
 @media (forced-colors: active) {
-  .rottay-button.rottay-button--modern[data-variant] {
+  .ds-button.ds-button--modern[data-variant] {
     forced-color-adjust: auto;
     background: ButtonFace;
     color: ButtonText;
@@ -1215,11 +1204,11 @@
     box-shadow: none;
   }
 
-  .rottay-button.rottay-button--modern[data-variant]::before {
+  .ds-button.ds-button--modern[data-variant]::before {
     display: none;
   }
 
-  .rottay-button.rottay-button--modern[data-variant]:is(
+  .ds-button.ds-button--modern[data-variant]:is(
       [data-state~='focus-visible'],
       :focus-visible
     ) {
@@ -1227,7 +1216,7 @@
     outline-offset: var(--ds-button-focus-ring-offset);
   }
 
-  .rottay-button.rottay-button--modern[data-disabled='true'] {
+  .ds-button.ds-button--modern[data-disabled='true'] {
     color: GrayText;
     border-color: GrayText;
   }
@@ -1235,10 +1224,9 @@
   /* Selected/current survives the system palette: the toggle reads as a
      selected item, not as a painted-over button. The inset keyline on solid
      variants resolves to SelectedItemText through currentColor. */
-  .rottay-button.rottay-button--modern:is(
+  .ds-button.ds-button--modern:is(
       [aria-pressed='true'],
-      [aria-current='true'],
-      [data-state~='selected']
+      [aria-current='true']
     ) {
     background: SelectedItem;
     color: SelectedItemText;
@@ -1248,17 +1236,17 @@
   /* Quiet destructive keeps a non-color consequence signal when semantic
      reds collapse: a heavier frame marks the action as destructive. The
      border-box sizing keeps the control's outer geometry unchanged. */
-  .rottay-button.rottay-button--modern[data-tone='danger'] {
+  .ds-button.ds-button--modern[data-tone='danger'] {
     border-width: var(--ds-button-border-width-focus);
   }
 
-  .rottay-button.rottay-button--modern [data-part='spinner'] {
+  .ds-button.ds-button--modern [data-part='spinner'] {
     color: ButtonText;
   }
 }
 
 @media print {
-  .rottay-button.rottay-button--modern[data-variant] {
+  .ds-button.ds-button--modern[data-variant] {
     background: transparent;
     color: CanvasText;
     border-color: CanvasText;

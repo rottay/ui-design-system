@@ -1267,7 +1267,7 @@ const OVERLAY: BrandThemeModeOverlay = {
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
          */
-        descriptionColor: "var(--ds-color-text-muted)",
+        descriptionColor: "var(--ds-color-text-secondary)",
         /**
          * @domicile seed
          * @governor dial: token-overrides
@@ -1401,7 +1401,7 @@ const OVERLAY: BrandThemeModeOverlay = {
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
          */
-        descriptionColor: "var(--ds-color-text-muted)",
+        descriptionColor: "var(--ds-color-text-secondary)",
         /**
          * @domicile seed
          * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
@@ -6389,7 +6389,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      descriptionColor: '#6B6B72',
+      descriptionColor: 'var(--ds-color-text-secondary)',
       /**
        * @domicile seed
        * @governor dial: token-overrides
@@ -6533,7 +6533,7 @@ const CHROME: BrandChrome = {
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)
        */
-      descriptionColor: '#6B6B72',
+      descriptionColor: 'var(--ds-color-text-secondary)',
       /**
        * @domicile seed
        * @governor dial en F4B (sin control atribuido en mapa-familia-canales F4A-3a)

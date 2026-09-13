@@ -3,7 +3,7 @@
 /**
  * @fileoverview Modern engine for the FilterPanel pattern.
  * Renders a configurable panel of filter controls by COMPOSING public DS
- * primitives (Select / Input / InputNumber / Switch / Checkbox / Button /
+ * primitives (Select / Input / InputNumber / Toggle / Checkbox / Button /
  * Badge / Spinner) — the pattern never recreates an input, button, badge or
  * spinner with its own HTML/CSS. Layout geometry and the pattern's own paint
  * live in the unlayered modern filter-panel skin (no DaisyUI, no Tailwind),
@@ -60,7 +60,7 @@ import { TimeScheduleIcon } from '@/graphics/icons/semantic/generated/roles/time
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import ModernSwitch from '../../../../../primitives/inputs/switch/engines/modern';
+import ModernToggle from '../../../../../primitives/inputs/toggle/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/checkbox/engines/modern';
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
 import ModernInput from '../../../../../primitives/inputs/input/engines/modern';
@@ -242,8 +242,8 @@ function renderFilterControl(
       );
     case 'boolean':
       return (
-        <ModernSwitch
-          size="small"
+        <ModernToggle
+          size="sm"
           checked={!!value}
           onChange={(checked) => onChange(filter.key, checked)}
           aria-label={filter.label}

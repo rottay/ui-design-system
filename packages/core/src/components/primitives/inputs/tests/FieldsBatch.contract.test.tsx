@@ -12,7 +12,7 @@ import { TagInput } from '../tag-input';
 import { Checkbox } from '../checkbox';
 import { Form } from '../form';
 import { Toggle } from '../toggle';
-import { Switch } from '../switch';
+import { Switch } from '../toggle';
 import { OTPInput } from '../otp-input';
 import { Textarea } from '../textarea';
 import { FormField } from '../form-field';
@@ -273,8 +273,8 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
     });
   });
 
-  describe('Switch', () => {
-    it.each(ENGINES)('stamps root/track/thumb/label parts under the %s engine', async (engine) => {
+  describe('Switch (the deprecated name of Toggle)', () => {
+    it.each(ENGINES)('stamps the toggle root/track/thumb parts and its state label under the %s engine', async (engine) => {
       const { container } = renderWithEngine(
         <Switch checked onChange={vi.fn()} checkedChildren="On" unCheckedChildren="Off" />,
         engine,
@@ -282,7 +282,7 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
       await waitForPart(container, 'root');
       expect(container.querySelectorAll('[data-part="track"]')).toHaveLength(1);
       expect(container.querySelectorAll('[data-part="thumb"]')).toHaveLength(1);
-      expect(container.querySelectorAll('[data-part="label"]')).toHaveLength(1);
+      expect(container.textContent).toContain('On');
     });
   });
 

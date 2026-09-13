@@ -46,7 +46,7 @@
  *
  * console.log(RADIO_DEFAULTS.size);  // 'md'
  * console.log(RADIO_DEFAULTS.color); // 'primary'
- * console.log(COLOR_MAP.success.bg); // 'var(--ds-color-success, #52c41a)'
+ * console.log(COLOR_MAP.success.bg); // 'var(--ds-color-success)'
  * ```
  *
  * @see {@link Radio} for the main component
@@ -307,42 +307,42 @@ export const SIZE_MAP_NUMERIC: Record<RadioSize, number> = {
 
 /**
  * Color configuration mapping for each radio variant.
- * References CSS custom properties with hardcoded fallback values.
+ * References CSS custom properties only.
  *
  * @constant
  * @property {string} bg - Background color when selected
  * @property {string} border - Border color when selected
- * @property {string} dot - Inner dot color (always white)
+ * @property {string} dot - Inner dot color (the on-primary ink)
  */
 export const COLOR_MAP: Record<RadioVariant, { bg: string; border: string; dot: string }> = {
   default: {
-    bg: 'var(--ds-color-neutral-600, #4b5563)',
-    border: 'var(--ds-color-neutral-600, #4b5563)',
-    dot: '#ffffff',
+    bg: 'var(--ds-color-neutral-600)',
+    border: 'var(--ds-color-neutral-600)',
+    dot: 'var(--ds-color-text-on-primary)',
   },
   primary: {
-    bg: 'var(--ds-color-primary-500, #1890ff)',
-    border: 'var(--ds-color-primary-500, #1890ff)',
-    dot: '#ffffff',
+    bg: 'var(--ds-color-primary-500)',
+    border: 'var(--ds-color-primary-500)',
+    dot: 'var(--ds-color-text-on-primary)',
   },
   secondary: {
-    bg: 'var(--ds-color-secondary-500, #6b7280)',
-    border: 'var(--ds-color-secondary-500, #6b7280)',
-    dot: '#ffffff',
+    bg: 'var(--ds-color-secondary-500)',
+    border: 'var(--ds-color-secondary-500)',
+    dot: 'var(--ds-color-text-on-primary)',
   },
   success: {
-    bg: 'var(--ds-color-success-500, #52c41a)',
-    border: 'var(--ds-color-success-500, #52c41a)',
-    dot: '#ffffff',
+    bg: 'var(--ds-color-success-500)',
+    border: 'var(--ds-color-success-500)',
+    dot: 'var(--ds-color-text-on-primary)',
   },
   warning: {
-    bg: 'var(--ds-color-warning-500, #faad14)',
-    border: 'var(--ds-color-warning-500, #faad14)',
-    dot: '#ffffff',
+    bg: 'var(--ds-color-warning-500)',
+    border: 'var(--ds-color-warning-500)',
+    dot: 'var(--ds-color-text-on-primary)',
   },
   error: {
-    bg: 'var(--ds-color-error-500, #ff4d4f)',
-    border: 'var(--ds-color-error-500, #ff4d4f)',
-    dot: '#ffffff',
+    bg: 'var(--ds-color-error-500)',
+    border: 'var(--ds-color-error-500)',
+    dot: 'var(--ds-color-text-on-primary)',
   },
 };

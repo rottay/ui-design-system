@@ -13,26 +13,26 @@
 
   /* XS - Extra Small (14px) */
   --ds-radio-xs-size: 0.875rem;         /* 14px */
-  --ds-radio-xs-font-size: 0.75rem;     /* 12px */
+  --ds-radio-xs-font-size: var(--ds-font-size-xs);
   --ds-radio-xs-border-width: 1.5px;
 
   /* SM - Small (16px) */
   --ds-radio-sm-size: 1rem;             /* 16px */
-  --ds-radio-sm-font-size: 0.8125rem;   /* 13px */
+  --ds-radio-sm-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
   --ds-radio-sm-border-width: 1.5px;
 
   /* MD - Medium (18px - Default) */
   --ds-radio-md-size: 1.125rem;         /* 18px */
-  --ds-radio-md-font-size: 0.875rem;    /* 14px */
-  --ds-radio-md-border-width: var(--ds-border-width-2, 2px);
+  --ds-radio-md-font-size: var(--ds-font-size-sm);
+  --ds-radio-md-border-width: var(--ds-border-width-2);
 
   /* LG - Large (20px) */
-  --ds-radio-lg-font-size: 1rem;        /* 16px */
-  --ds-radio-lg-border-width: var(--ds-border-width-2, 2px);
+  --ds-radio-lg-font-size: var(--ds-font-size-base);
+  --ds-radio-lg-border-width: var(--ds-border-width-2);
 
   /* XL - Extra Large (24px) */
-  --ds-radio-xl-font-size: 1.125rem;    /* 18px */
-  --ds-radio-xl-border-width: var(--ds-border-width-2, 2px);
+  --ds-radio-xl-font-size: var(--ds-font-size-lg);
+  --ds-radio-xl-border-width: var(--ds-border-width-2);
 
   /* Size-agnostic default. The base component rule sizes an unqualified
      radio, so it needs a rung to read; this DERIVES from md rather than
@@ -45,42 +45,45 @@
      ======================================================================== */
 
   /* Default variant (neutral) */
-  --ds-radio-default-bg: var(--ds-color-neutral-600, #4b5563);
-  --ds-radio-default-border: var(--ds-color-neutral-600, #4b5563);
-  --ds-radio-default-dot: #ffffff;
+  --ds-radio-default-bg: var(--ds-color-neutral-600);
+  --ds-radio-default-border: var(--ds-color-neutral-600);
+  --ds-radio-default-dot: var(--ds-color-text-on-primary);
 
   /* Primary variant */
-  --ds-radio-primary-bg: var(--ds-color-primary, #1890ff);
-  --ds-radio-primary-border: var(--ds-color-primary, #1890ff);
-  --ds-radio-primary-dot: #ffffff;
+  --ds-radio-primary-bg: var(--ds-color-primary);
+  --ds-radio-primary-border: var(--ds-color-primary);
+  --ds-radio-primary-dot: var(--ds-color-text-on-primary);
 
   /* Secondary variant */
-  --ds-radio-secondary-bg: var(--ds-color-secondary, #6b7280);
-  --ds-radio-secondary-border: var(--ds-color-secondary, #6b7280);
-  --ds-radio-secondary-dot: #ffffff;
+  --ds-radio-secondary-bg: var(--ds-color-secondary);
+  --ds-radio-secondary-border: var(--ds-color-secondary);
+  --ds-radio-secondary-dot: var(--ds-color-text-on-primary);
 
   /* Success variant */
-  --ds-radio-success-bg: var(--ds-color-success, #52c41a);
-  --ds-radio-success-border: var(--ds-color-success, #52c41a);
-  --ds-radio-success-dot: #ffffff;
+  --ds-radio-success-bg: var(--ds-color-success);
+  --ds-radio-success-border: var(--ds-color-success);
+  --ds-radio-success-dot: var(--ds-color-text-on-primary);
 
   /* Warning variant */
-  --ds-radio-warning-bg: var(--ds-color-warning, #faad14);
-  --ds-radio-warning-border: var(--ds-color-warning, #faad14);
-  --ds-radio-warning-dot: #ffffff;
+  --ds-radio-warning-bg: var(--ds-color-warning);
+  --ds-radio-warning-border: var(--ds-color-warning);
+  --ds-radio-warning-dot: var(--ds-color-text-on-primary);
 
   /* Error variant */
-  --ds-radio-error-bg: var(--ds-color-error, #ff4d4f);
-  --ds-radio-error-border: var(--ds-color-error, #ff4d4f);
-  --ds-radio-error-dot: #ffffff;
+  --ds-radio-error-bg: var(--ds-color-error);
+  --ds-radio-error-border: var(--ds-color-error);
+  --ds-radio-error-dot: var(--ds-color-text-on-primary);
 
   /* ========================================================================
      STATES
      Visual indicators for different states
      ======================================================================== */
   --ds-radio-unchecked-bg: transparent;
-  --ds-radio-unchecked-border: var(--ds-color-border, #d9d9d9);
-  --ds-radio-disabled-opacity: 0.5;
+  --ds-radio-unchecked-border: var(--ds-color-border);
+  --ds-radio-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-radio-disabled-cursor: not-allowed;
+  --ds-radio-border-width: var(--ds-border-width-2);
+  --ds-radio-label-line-height: var(--ds-line-height-snug);
 
   /* ========================================================================
      DOT
@@ -92,21 +95,24 @@
      SPACING
      Spacing between radio and label
      ======================================================================== */
-  --ds-radio-label-gap: 8px;
+  --ds-radio-label-gap: var(--ds-spacing-2);
+  --ds-radio-text-gap: calc(var(--ds-spacing-1) / 2);
+  --ds-radio-row-padding-block: var(--ds-spacing-1);
+  --ds-radio-touch-target-min: var(--ds-touch-target-min);
 
   /* ========================================================================
      TRANSITIONS
      Animation timing for state changes
      ======================================================================== */
-  --ds-radio-transition-duration: 0.2s;
-  --ds-radio-transition-timing: ease-in-out;
+  --ds-radio-transition-duration: var(--ds-motion-feedback);
+  --ds-radio-transition-timing: var(--ds-motion-ease-out);
   --ds-radio-transition: all var(--ds-radio-transition-duration) var(--ds-radio-transition-timing);
 
   /* ========================================================================
      FOCUS
      Focus ring settings
      ======================================================================== */
-  --ds-radio-focus-ring-width: var(--ds-focus-ring-width, 2px);
-  --ds-radio-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
-  --ds-radio-focus-ring-color: var(--ds-color-primary, #1890ff);
+  --ds-radio-focus-ring-width: var(--ds-focus-ring-width);
+  --ds-radio-focus-ring-offset: var(--ds-focus-ring-offset);
+  --ds-radio-focus-ring-color: var(--ds-focus-ring-color);
 }

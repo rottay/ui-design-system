@@ -219,10 +219,18 @@ const FIRST_PARTY = [
  * channel and keep the digests they had, which is what makes this a
  * one-channel move rather than a re-baseline.
  */
+/**
+ * WO-FAM-01 re-anchored all three, ADDITIVE plus two intentional value moves,
+ * measured: the five family-cut derivers add rottay 1307 -> 1357 base keys
+ * (+50), bithire 1283 -> 1355 (+72), evnto 584 -> 649 (+65), removed 0; every
+ * added key is a `--ds-{button,checkbox,radio,toggle,segmented}-*` relation.
+ * The only moved values are rottay's radio and toggle descriptions, now the
+ * secondary ink in both modes, so the light block no longer restates them.
+ */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "fbab8014fb93f804b2e0a35f725813315a0723041fc4d097cab477eda935df93",
-  bithire: "cdb9f666b20d007e00b59bb3cd873cd7e86338deede53c6b2990ef82ed1651a2",
-  evnto: "44d5f4fc6b99ed465f59278adc9a035a0c9c300d2c9f8c23a0740248c87ce68d",
+  rottay: "57702fc3dc7a38e9678859c5ac12020907a674ff182cfd64b03a4ded6d77b6c6",
+  bithire: "5119e16aaf9812cffdfeb50b9af04503a5cf7f0f29c03d14162ccc5d25661f06",
+  evnto: "178906bd4de3c0cc6785447f23eecbd07f38057ef9e99199ccb5c6f41a7eb569",
 };
 
 /**

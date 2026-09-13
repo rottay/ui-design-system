@@ -107,7 +107,6 @@ const primitives: NavSection = {
         { slug: 'radio', label: 'Radio', path: '/primitives/inputs/radio' },
         { slug: 'select', label: 'Select', path: '/primitives/inputs/select' },
         { slug: 'slider', label: 'Slider', path: '/primitives/inputs/slider' },
-        { slug: 'switch', label: 'Switch', path: '/primitives/inputs/switch' },
         { slug: 'tag-input', label: 'TagInput', path: '/primitives/inputs/tag-input' },
         { slug: 'textarea', label: 'Textarea', path: '/primitives/inputs/textarea' },
         { slug: 'time-picker', label: 'TimePicker', path: '/primitives/inputs/time-picker' },

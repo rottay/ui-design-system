@@ -87,6 +87,9 @@ const patch = (sandbox, relativePath, replace) => {
 };
 
 const MODERN_TSX = 'src/components/primitives/inputs/button/engines/modern/index.tsx';
+/** The calibration family's pins: a drill grows one of them by exactly one. */
+const PIN = readBaseline().families[FAMILY];
+const grew = (key) => `\`${key}\` GREW from ${PIN[key]} to ${PIN[key] + 1}`;
 const MODERN_SKIN = 'src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css';
 
 // ---------------------------------------------------------------------------
@@ -167,7 +170,7 @@ test('CONTROL: an inline block of only `--ds-*` custom properties is NOT a viola
 test('PLANT: a `--ds-button-x` read with no producer grows the ratchet', () => {
   withPlantedFamily(
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.rottay-button--planted { color: var(--ds-button-x, #ff0000); }\n`),
+      `${text}\n.ds-button--planted { color: var(--ds-button-x, #ff0000); }\n`),
     (findings, measured) => {
       assert.ok(
         measured.detail.readWithoutProducer.includes('--ds-button-x'),
@@ -175,7 +178,7 @@ test('PLANT: a `--ds-button-x` read with no producer grows the ratchet', () => {
       );
       expectFinding(
         findings,
-        '`readWithoutProducer` GREW from 34 to 35',
+        grew('readWithoutProducer'),
         'a name the skin reads that nobody writes must grow the ratchet and turn the gate red',
       );
     },
@@ -187,7 +190,7 @@ test('CONTROL: the same `--ds-button-x` WITH a producer does not grow the ratche
   // appearance of a new name.
   withPlantedFamily(
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.rottay-button--planted { color: var(--ds-button-x, #ff0000); }\n`),
+      `${text}\n.ds-button--planted { color: var(--ds-button-x, #ff0000); }\n`),
     () => {},
   );
   const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-control-'));
@@ -198,7 +201,7 @@ test('CONTROL: the same `--ds-button-x` WITH a producer does not grow the ratche
       cpSync(join(ROOT, relativePath), target, { recursive: true });
     }
     patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.rottay-button--planted { color: var(--ds-button-x, #ff0000); }\n`);
+      `${text}\n.ds-button--planted { color: var(--ds-button-x, #ff0000); }\n`);
     const measured = measureFamily(resolveFamily(FAMILY, sandbox), {
       producers: new Set([...PRODUCERS, '--ds-button-x']),
     });
@@ -227,7 +230,7 @@ test('PLANT: a colour literal in the family source is BLOCKING', () => {
 test('PLANT: an `--ant-*` read in the family skin is BLOCKING (F-67)', () => {
   withPlantedFamily(
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.rottay-button--planted { color: var(--ant-primary-color); }\n`),
+      `${text}\n.ds-button--planted { color: var(--ant-primary-color); }\n`),
     (findings) => expectFinding(findings, 'BLOCKING `--ant-primary-color`', 'an Ant private variable is not a channel here'),
   );
 });
@@ -237,7 +240,7 @@ test('PLANT: a second class vocabulary grows the namespace ratchet (F-66)', () =
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) => `${text}\n.rt-button--planted { color: inherit; }\n`),
     (findings, measured) => {
       assert.ok(measured.detail.vocabularies.includes('rt'), 'the planted vocabulary is counted');
-      expectFinding(findings, '`classVocabularies` GREW from 2 to 3', 'one family, one namespace');
+      expectFinding(findings, grew('classVocabularies'), 'one family, one namespace');
     },
   );
 });
@@ -248,7 +251,7 @@ test('PLANT: a `data-part` nobody paints grows the contract census (F-67)', () =
       text.replace("    'data-variant': effectiveVariant,", "    'data-part': 'planted-orphan',\n    'data-variant': effectiveVariant,")),
     (findings, measured) => {
       assert.ok(measured.detail.partsStampedNotConsumed.includes('planted-orphan'));
-      expectFinding(findings, '`partsStampedNotConsumed` GREW from 2 to 3', 'an attribute with no reader is not a contract');
+      expectFinding(findings, grew('partsStampedNotConsumed'), 'an attribute with no reader is not a contract');
     },
   );
 });
@@ -256,18 +259,18 @@ test('PLANT: a `data-part` nobody paints grows the contract census (F-67)', () =
 test('PLANT: a skin rule on a `data-state` nobody stamps grows the census', () => {
   withPlantedFamily(
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.rottay-button[data-state~='planted'] { color: inherit; }\n`),
-    (findings) => expectFinding(findings, '`statesConsumedNotStamped` GREW from 1 to 2', 'paint that can never match is dead paint'),
+      `${text}\n.ds-button[data-state~='planted'] { color: inherit; }\n`),
+    (findings) => expectFinding(findings, grew('statesConsumedNotStamped'), 'paint that can never match is dead paint'),
   );
 });
 
 test('PLANT: a bare state pseudo-class with no `data-state` twin grows the census (F-37)', () => {
   withPlantedFamily(
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.rottay-button--planted:hover { color: inherit; }\n`),
+      `${text}\n.ds-button--planted:hover { color: inherit; }\n`),
     (findings) => expectFinding(
       findings,
-      '`unpairedStatePseudoSelectors` GREW from 1 to 2',
+      grew('unpairedStatePseudoSelectors'),
       'one place decides when a part is hovered',
     ),
   );
@@ -276,7 +279,7 @@ test('PLANT: a bare state pseudo-class with no `data-state` twin grows the censu
 test('CONTROL: the same pseudo-class PAIRED with its `data-state` twin is governed', () => {
   withPlantedFamily(
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.rottay-button--planted:is([data-state~='hovered'], :hover) { color: inherit; }\n`),
+      `${text}\n.ds-button--planted:is([data-state~='hovered'], :hover) { color: inherit; }\n`),
     (findings) => expectNoFinding(
       findings,
       '`unpairedStatePseudoSelectors` GREW',
@@ -767,7 +770,11 @@ test('SHAPE: a family with no pin is refused rather than skipped', () => {
 test('SHAPE: a shrinking ratchet is reported so the pin follows the tree DOWN', () => {
   const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
   const inflated = { ...readBaseline().families[FAMILY], readWithoutProducer: 99 };
-  expectFinding(judgeFamily(measured, inflated), '`readWithoutProducer` SHRANK from 99 to 34', 'good news still has to be written down');
+  expectFinding(
+    judgeFamily(measured, inflated),
+    `\`readWithoutProducer\` SHRANK from 99 to ${measured.ratchets.readWithoutProducer}`,
+    'good news still has to be written down',
+  );
 });
 
 test('SHAPE: a moved denominator is reported before any ratchet is touched', () => {

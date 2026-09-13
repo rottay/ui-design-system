@@ -185,7 +185,7 @@ describe('SelectionPreviewRail data-part contract', () => {
 
       let button: Element | null = null;
       await waitFor(() => {
-        button = container.querySelector('.rottay-button');
+        button = container.querySelector('.rottay-button, .ds-button');
         expect(button).not.toBeNull();
       });
 

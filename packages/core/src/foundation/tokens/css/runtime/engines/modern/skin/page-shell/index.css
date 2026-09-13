@@ -419,7 +419,7 @@
 .ds-pattern-page-shell.ds-engine-modern [data-part='back'] {
   display: contents;
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button {
+.ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .ds-button {
   flex-shrink: 0;
 }
 
@@ -735,7 +735,7 @@
 
   /* The dissolved lead's controls must not stretch to the track: the back
      button keeps its natural box at the inline-start edge. */
-  .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .ds-button {
     align-self: flex-start;
   }
 
@@ -812,7 +812,7 @@
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 
-  .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .ds-button {
     min-block-size: var(--ds-touch-target-min, 44px);
     min-inline-size: var(--ds-touch-target-min, 44px);
   }

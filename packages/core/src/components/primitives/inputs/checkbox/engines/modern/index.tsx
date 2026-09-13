@@ -28,60 +28,34 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
+import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import type { CheckboxProps } from '../../contracts';
-import { CHECKBOX_DEFAULTS, SIZE_MAP_NUMERIC } from '../../contracts';
+import { CHECKBOX_DEFAULTS } from '../../contracts';
 import { useCheckboxGroup } from '../../runtime/group-context';
 
 /* ------------------------------------------------------------------ */
 /*  SVG icons                                                          */
 /* ------------------------------------------------------------------ */
 
-/** Crisp checkmark -- 2px stroke, round caps, centered in a 12x12 viewBox.
- *  The constant viewBox keeps the stroke proportional at every rendered
- *  size; geometry and motion live in the skin (`data-part='checkmark'`). */
-const CheckIcon = ({ size }: { size: number }) => {
-  const svgSize = Math.max(10, Math.round(size * 0.6));
-  return (
-    <svg
-      data-part="checkmark"
-      width={svgSize}
-      height={svgSize}
-      viewBox="0 0 12 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M2.5 6.5L5 9L9.5 3.5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-};
+/** Crisp checkmark in a 12x12 viewBox; the skin sizes it from the box. */
+const CheckIcon = () => (
+  <svg data-part="checkmark" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false">
+    <path
+      d="M2.5 6.5L5 9L9.5 3.5"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
-/** Dash for indeterminate state -- centered horizontal bar. */
-const IndeterminateIcon = ({ size }: { size: number }) => {
-  const svgSize = Math.max(10, Math.round(size * 0.6));
-  return (
-    <svg
-      data-part="checkmark"
-      width={svgSize}
-      height={svgSize}
-      viewBox="0 0 12 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M3 6H9"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-};
+/** Dash for the indeterminate state. */
+const IndeterminateIcon = () => (
+  <svg data-part="checkmark" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false">
+    <path d="M3 6H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
@@ -158,8 +132,12 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     onChange?.(newChecked, e);
   }, [groupControlled, group, value, isControlled, onChange]);
 
-  // Numeric fallback for SVG icon sizing (cannot use CSS vars in SVG attributes)
-  const boxSizeNumeric = SIZE_MAP_NUMERIC[size] ?? SIZE_MAP_NUMERIC.md;
+  const { state: interaction, handlers } = useInteractionState({ disabled });
+  const pressKey = (event: React.KeyboardEvent<HTMLInputElement>, down: boolean) => {
+    if (event.key !== ' ') return;
+    if (down) handlers.onPointerDown(event as unknown as React.PointerEvent);
+    else handlers.onPointerUp(event as unknown as React.PointerEvent);
+  };
 
   const active = isChecked || indeterminate;
   const displayLabel = label || children;
@@ -185,7 +163,12 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     <div className={className} style={style}>
       <label
         className="ds-checkbox ds-checkbox--modern"
-        data-part="root"
+        {...partAttributes('root', interaction)}
+        onPointerEnter={handlers.onPointerEnter}
+        onPointerLeave={handlers.onPointerLeave}
+        onPointerDown={handlers.onPointerDown}
+        onPointerUp={handlers.onPointerUp}
+        onPointerCancel={handlers.onPointerUp}
         data-size={size}
         data-color={color}
         data-radius={radius}
@@ -211,6 +194,10 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           required={required}
           autoFocus={autoFocus}
           onChange={handleChange}
+          onFocus={handlers.onFocus}
+          onBlur={handlers.onBlur}
+          onKeyDown={(event) => pressKey(event, true)}
+          onKeyUp={(event) => pressKey(event, false)}
           aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-invalid={error || undefined}
           aria-label={ariaLabel}
@@ -220,11 +207,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
 
         {/* Custom visual indicator */}
         <span data-part="box" aria-hidden="true">
-          {active && (
-            indeterminate
-              ? <IndeterminateIcon size={boxSizeNumeric} />
-              : <CheckIcon size={boxSizeNumeric} />
-          )}
+          {active && (indeterminate ? <IndeterminateIcon /> : <CheckIcon />)}
         </span>
 
         {(displayLabel || description) && (

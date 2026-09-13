@@ -81,9 +81,9 @@
 'use client';
 
 import React, { useState, useCallback, useMemo, useId } from 'react';
-import type { CSSProperties } from 'react';
+import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import type { RadioGroupProps, RadioOption } from '../../contracts';
-import { RADIO_GROUP_DEFAULTS, COLOR_MAP } from '../../contracts';
+import { RADIO_GROUP_DEFAULTS } from '../../contracts';
 import {
   RadioGroupContext,
   useRadioGroup,
@@ -95,6 +95,44 @@ import { Radio } from '../..';
 export { useRadioGroup };
 
 export interface RadioGroupComponentProps extends RadioGroupProps {}
+
+interface SegmentOptionProps {
+  readonly option: RadioOption;
+  readonly name: string;
+  readonly checked: boolean;
+  readonly disabled: boolean;
+  readonly onSelect: (value: string | number) => void;
+}
+
+/** A segment: the clipped native radio plus its text, with its state decided by the interaction kernel. */
+function SegmentOption({ option, name, checked, disabled, onSelect }: SegmentOptionProps) {
+  const { state, handlers } = useInteractionState({ disabled });
+  return (
+    <label
+      data-testid={`radio-option-${option.value}`}
+      {...partAttributes('option', state)}
+      data-checked={checked ? 'true' : 'false'}
+      data-disabled={disabled ? 'true' : 'false'}
+      onPointerEnter={handlers.onPointerEnter}
+      onPointerLeave={handlers.onPointerLeave}
+      onPointerDown={handlers.onPointerDown}
+      onPointerUp={handlers.onPointerUp}
+      onPointerCancel={handlers.onPointerUp}
+    >
+      <input
+        type="radio"
+        name={name}
+        value={option.value}
+        checked={checked}
+        disabled={disabled}
+        onChange={() => onSelect(option.value)}
+        onFocus={handlers.onFocus}
+        onBlur={handlers.onBlur}
+      />
+      <span data-part="option-label">{option.label}</span>
+    </label>
+  );
+}
 
 export function RadioGroup({
   value: controlledValue,
@@ -138,19 +176,6 @@ export function RadioGroup({
     onChange: handleChange,
   }), [currentValue, name, disabled, size, color, handleChange]);
 
-  // Segmented mode paints its checked state from the per-group color variant,
-  // carried once on the root via the established uncounted runtime channels
-  // (`--ds-rg-color-*` is configuration, not inline paint). Standard mode
-  // needs no channels: each option facade paints its own `data-color`.
-  const rootStyle: CSSProperties | undefined = buttonStyle
-    ? ({
-        '--ds-rg-color-border': (COLOR_MAP[color] || COLOR_MAP.primary).border,
-        '--ds-rg-color-bg': (COLOR_MAP[color] || COLOR_MAP.primary).bg,
-        '--ds-rg-color-dot': (COLOR_MAP[color] || COLOR_MAP.primary).dot,
-        ...style,
-      } as CSSProperties)
-    : style;
-
   // Render options if provided
   const renderOptions = () => {
     if (!options || options.length === 0) return null;
@@ -160,30 +185,16 @@ export function RadioGroup({
     // group name for native APG arrow-key roving) plus its text. All paint,
     // density and state grammar lives in radio-group.css.
     if (buttonStyle) {
-      return options.map((option: RadioOption) => {
-        const isChecked = currentValue === option.value;
-        const isDisabled = disabled || option.disabled;
-
-        return (
-          <label
-            key={String(option.value)}
-            data-testid={`radio-option-${option.value}`}
-            data-part="option"
-            data-checked={isChecked ? 'true' : 'false'}
-            data-disabled={isDisabled ? 'true' : 'false'}
-          >
-            <input
-              type="radio"
-              name={name}
-              value={option.value}
-              checked={isChecked}
-              disabled={isDisabled}
-              onChange={() => handleChange(option.value)}
-            />
-            <span data-part="option-label">{option.label}</span>
-          </label>
-        );
-      });
+      return options.map((option: RadioOption) => (
+        <SegmentOption
+          key={String(option.value)}
+          option={option}
+          name={name}
+          checked={currentValue === option.value}
+          disabled={Boolean(disabled || option.disabled)}
+          onSelect={handleChange}
+        />
+      ));
     }
 
     // Standard mode composes the real Radio facade: the option slot keeps
@@ -228,8 +239,9 @@ export function RadioGroup({
         data-size={size}
         data-disabled={disabled || undefined}
         data-button-style={buttonStyle}
-        className={`rottay-radio-group rottay-radio-group--${direction} ${buttonStyle ? 'rottay-radio-group--button' : ''} ${className}`}
-        style={rootStyle}
+        data-color={buttonStyle ? color : undefined}
+        className={`ds-radio-group ds-radio-group--${direction} ${buttonStyle ? 'ds-radio-group--button' : ''} ${className}`}
+        style={style}
         role="radiogroup"
         aria-label={translation?.t('radio.group') ?? 'Radio group'}
       >

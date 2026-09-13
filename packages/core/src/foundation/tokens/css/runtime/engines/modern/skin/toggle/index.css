@@ -28,6 +28,9 @@
  * no 16px-track glyph stays legible. The busy state is the border-spinner
  * idiom (`ds-foundation-spin`) docked INSIDE the thumb.
  *
+ * STATE is decided once, by the interaction kernel stamped on the root as
+ * `data-state`; each state rule pairs it with its platform pseudo-class.
+ *
  * SPECIFICITY (P-48): the only border-painted rules are inside
  * `@media (forced-colors)`, which the structural contract strips before
  * measuring; every other rule wins unlayered at (0,3,0) or higher.
@@ -42,7 +45,7 @@
   display: grid;
   inline-size: 100%;
   min-inline-size: 0;
-  gap: var(--ds-toggle-message-gap, var(--ds-input-message-gap, var(--ds-spacing-1)));
+  gap: var(--ds-toggle-message-gap, var(--ds-spacing-1));
 }
 
 /* Root row ------------------------------------------------------------- */
@@ -55,7 +58,7 @@
   /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-toggle-touch-target-min, var(--ds-touch-target-min, 44px));
+  min-block-size: var(--ds-toggle-touch-target-min, var(--ds-touch-target-min));
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -117,48 +120,50 @@
 
 /* Track fill: checked color per variant channel; error overrides all. */
 .ds-toggle.ds-toggle--modern[data-checked='true'] [data-part='track'] {
-  background-color: var(--ds-toggle-checked-bg, var(--ds-toggle-primary-bg-checked, var(--ds-color-primary)));
+  --_ds-toggle-fill: var(--ds-toggle-track-bg-checked, var(--ds-color-primary));
+  background-color: var(--_ds-toggle-fill);
 }
 .ds-toggle.ds-toggle--modern[data-color='default'][data-checked='true'] [data-part='track'] {
-  background-color: var(--ds-toggle-default-bg-checked, var(--ds-color-primary));
+  --_ds-toggle-fill: var(--ds-toggle-default-bg-checked, var(--ds-color-primary));
 }
 .ds-toggle.ds-toggle--modern[data-color='secondary'][data-checked='true'] [data-part='track'] {
-  background-color: var(--ds-toggle-secondary-bg-checked, var(--ds-color-secondary));
+  --_ds-toggle-fill: var(--ds-toggle-secondary-bg-checked, var(--ds-color-secondary));
 }
 .ds-toggle.ds-toggle--modern[data-color='success'][data-checked='true'] [data-part='track'] {
-  background-color: var(--ds-toggle-success-bg-checked, var(--ds-color-success));
+  --_ds-toggle-fill: var(--ds-toggle-success-bg-checked, var(--ds-color-success));
 }
 .ds-toggle.ds-toggle--modern[data-color='warning'][data-checked='true'] [data-part='track'] {
-  background-color: var(--ds-toggle-warning-bg-checked, var(--ds-color-warning));
+  --_ds-toggle-fill: var(--ds-toggle-warning-bg-checked, var(--ds-color-warning));
 }
 .ds-toggle.ds-toggle--modern[data-color='error'][data-checked='true'] [data-part='track'] {
-  background-color: var(--ds-toggle-error-bg-checked, var(--ds-color-error));
+  --_ds-toggle-fill: var(--ds-toggle-error-bg-checked, var(--ds-color-error));
 }
 /* Error overrides all: the repeated `[data-error]` reaches (0,5,0) -- the
    same plane the per-variant rules live on -- so the invalid frame wins the
    tie by source order instead of losing to a checked variant fill (a green
    "success" track must never survive `data-error='true'`). */
 .ds-toggle.ds-toggle--modern[data-error='true'][data-error='true'] [data-part='track'] {
-  background-color: var(--ds-toggle-error-track-bg, var(--ds-color-error));
+  --_ds-toggle-fill: var(--ds-toggle-error-track-bg, var(--ds-color-error));
+  background-color: var(--_ds-toggle-fill);
 }
 
 /* hover (not disabled): quiet tone shift, unchecked and checked. Pointer-fine
    only (hover law): touch feedback is the :active repaint below plus the
    thumb's press dip, never a sticky wash. */
 @media (hover: hover) {
-  .ds-toggle.ds-toggle--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
+  .ds-toggle.ds-toggle--modern[data-checked='false']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='track'] {
     background-color: var(--ds-toggle-track-bg-hover, var(--ds-color-border));
   }
-  .ds-toggle.ds-toggle--modern[data-checked='true']:hover:not([data-disabled='true']):not([data-error='true']) [data-part='track'] {
-    filter: var(--ds-toggle-checked-hover-filter, brightness(1.06));
+  .ds-toggle.ds-toggle--modern[data-checked='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']):not([data-error='true']) [data-part='track'] {
+    background-color: color-mix(in srgb, var(--_ds-toggle-fill), var(--ds-color-text-primary) var(--ds-toggle-hover-shift, var(--ds-state-hover-shift)));
   }
 }
 
 /* Touch/keyboard parity: the unchecked track repaints on press with the same
    governed channel; the checked press equivalent is the thumb dip below
    (already per-state, including its RTL branch). */
-.ds-toggle.ds-toggle--modern[data-checked='false']:active:not([data-disabled='true']) [data-part='track'] {
-  background-color: var(--ds-toggle-track-bg-active, var(--ds-toggle-track-bg-hover, var(--ds-color-border)));
+.ds-toggle.ds-toggle--modern[data-checked='false']:is([data-state~='pressed'], :active):not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-toggle-track-bg-active, var(--ds-color-border));
 }
 
 /* disabled: the whole control quiets, semantics stay on the input. */
@@ -166,7 +171,8 @@
   opacity: var(--ds-toggle-disabled-opacity);
 }
 
-/* focus ring from the hidden input's :focus-visible. */
+/* focus ring: the kernel's keyboard focus, with the hidden input's own :focus-visible as fallback. */
+.ds-toggle.ds-toggle--modern[data-state~='focus-visible'] [data-part='track'],
 .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
   outline: var(--ds-toggle-focus-ring-width) solid var(--ds-toggle-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-toggle-focus-ring-offset);
@@ -203,14 +209,14 @@
 }
 
 /* press: the thumb dips while holding its travel position. */
-.ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='false'] [data-part='thumb'] {
+.ds-toggle.ds-toggle--modern:is([data-state~='pressed'], :active):not([data-disabled='true'])[data-checked='false'] [data-part='thumb'] {
   transform: translateX(0) scale(var(--ds-state-press-scale));
 }
-.ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
+.ds-toggle.ds-toggle--modern:is([data-state~='pressed'], :active):not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
   transform: translateX(calc(var(--ds-toggle-resolved-track-w) - var(--ds-toggle-resolved-track-h))) scale(var(--ds-state-press-scale));
 }
-.ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='true']:dir(rtl) [data-part='thumb'],
-[dir='rtl'] .ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
+.ds-toggle.ds-toggle--modern:is([data-state~='pressed'], :active):not([data-disabled='true'])[data-checked='true']:dir(rtl) [data-part='thumb'],
+[dir='rtl'] .ds-toggle.ds-toggle--modern:is([data-state~='pressed'], :active):not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
   transform: translateX(calc((var(--ds-toggle-resolved-track-w) - var(--ds-toggle-resolved-track-h)) * -1)) scale(var(--ds-state-press-scale));
 }
 
@@ -259,7 +265,7 @@
 .ds-toggle.ds-toggle--modern [data-part='text'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-toggle-text-gap, 0.125rem);
+  gap: var(--ds-toggle-text-gap);
   /* Never crushable below the longest word: with `min-inline-size: 0` the
      column's min-content is a single character under `overflow-wrap`, and any
      narrow flex parent (a horizontal Stack, a toolbar row) would wrap the
@@ -270,7 +276,7 @@
 
 .ds-toggle.ds-toggle--modern [data-part='label'] {
   color: var(--ds-toggle-label-color, var(--ds-color-text-primary));
-  font-size: var(--ds-toggle-label-font-size, var(--ds-font-size-sm));
+  font-size: var(--ds-toggle-md-label-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-toggle-label-font-weight, var(--ds-font-weight-medium));
   line-height: var(--ds-toggle-label-line-height, var(--ds-line-height-snug));
   /* No `hyphens: auto` here: with hyphenation the column's min-content shrinks
@@ -280,28 +286,28 @@
 }
 
 /* Label type scales with the track size, on the canonical channels. */
-.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-xs-label-font-size)); }
-.ds-toggle.ds-toggle--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-sm-label-font-size)); }
-.ds-toggle.ds-toggle--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-md-label-font-size)); }
-.ds-toggle.ds-toggle--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-lg-label-font-size)); }
-.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-toggle-label-font-size, var(--ds-toggle-xl-label-font-size)); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-toggle-xs-label-font-size, var(--ds-font-size-xs)); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-toggle-sm-label-font-size, var(--ds-font-size-sm)); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-toggle-md-label-font-size); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-toggle-lg-label-font-size, var(--ds-font-size-base)); }
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-toggle-xl-label-font-size, var(--ds-font-size-lg)); }
 .ds-toggle.ds-toggle--modern[data-error='true'] [data-part='label'] {
-  color: var(--ds-toggle-error-label-color, var(--ds-color-error));
+  color: var(--ds-toggle-error-label-color, var(--ds-color-error-ink));
 }
 .ds-toggle.ds-toggle--modern[data-disabled='true'] [data-part='label'] {
   color: var(--ds-color-text-disabled);
 }
 
 .ds-toggle.ds-toggle--modern [data-part='state-label'] {
-  color: var(--ds-toggle-state-label-color, var(--ds-color-text-secondary));
-  font-size: var(--ds-toggle-state-label-font-size, var(--ds-font-size-xs));
-  line-height: var(--ds-toggle-state-label-line-height, var(--ds-line-height-snug));
+  color: var(--ds-toggle-state-label-color, var(--ds-type-color-muted));
+  font-size: var(--ds-toggle-state-label-font-size, var(--ds-type-caption-font-size));
+  line-height: var(--ds-toggle-state-label-line-height, var(--ds-type-caption-line-height));
 }
 
 .ds-toggle.ds-toggle--modern [data-part='description'] {
-  color: var(--ds-toggle-description-color, var(--ds-color-text-muted));
-  font-size: var(--ds-toggle-description-font-size, var(--ds-font-size-xs));
-  line-height: var(--ds-toggle-description-line-height, var(--ds-line-height-snug));
+  color: var(--ds-toggle-description-color, var(--ds-type-color-muted));
+  font-size: var(--ds-toggle-description-font-size, var(--ds-type-caption-font-size));
+  line-height: var(--ds-toggle-description-line-height, var(--ds-type-caption-line-height));
   hyphens: auto;
   overflow-wrap: break-word;
 }
@@ -320,7 +326,7 @@
   block-size: calc(var(--ds-toggle-resolved-thumb) * 0.55);
   border: 2px solid var(--ds-toggle-loading-track-color, var(--ds-color-border-secondary));
   border-top-color: var(--ds-toggle-loading-arc-color, var(--ds-color-primary));
-  border-radius: 50%;
+  border-radius: var(--ds-radius-full);
   animation: ds-foundation-spin var(--ds-toggle-loading-duration, var(--ds-motion-glacial)) linear infinite;
 }
 
@@ -330,19 +336,19 @@
 .ds-toggle-field[data-part='field'] > [data-part='helper-text'],
 .ds-toggle-field[data-part='field'] > [data-part='error-message'] {
   margin: 0;
-  font-size: var(--ds-toggle-helper-font-size, var(--ds-input-helper-font-size, var(--ds-font-size-xs)));
-  line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
+  font-size: var(--ds-toggle-helper-font-size, var(--ds-type-caption-font-size));
+  line-height: var(--ds-type-caption-line-height);
   hyphens: auto;
   overflow-wrap: break-word;
 }
 
 .ds-toggle-field[data-part='field'] > [data-part='helper-text'] {
-  color: var(--ds-toggle-helper-color, var(--ds-color-text-secondary));
+  color: var(--ds-toggle-helper-color, var(--ds-type-color-muted));
 }
 
 .ds-toggle-field[data-part='field'] > [data-part='error-message'] {
-  color: var(--ds-toggle-error-message-color, var(--ds-color-error));
-  font-weight: var(--ds-input-error-message-font-weight, var(--ds-font-weight-medium));
+  color: var(--ds-toggle-error-message-color, var(--ds-color-error-ink));
+  font-weight: var(--ds-font-weight-medium);
 }
 
 /* hidden accessibility input (visually clipped): the whole clip idiom lives
@@ -362,10 +368,12 @@
 
 @media (pointer: coarse) {
   .ds-toggle.ds-toggle--modern[data-part='root'] {
-    /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
-     root at narrow widths (measured on the live bundle, Axe R0) — the 44px
-     coarse-touch law is physical. */
-  min-block-size: var(--ds-toggle-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-toggle-touch-target-min, var(--ds-touch-target-min));
+  }
+  /* A switch with no text of its own holds the floor on the inline axis too. */
+  .ds-toggle.ds-toggle--modern[data-part='root'][data-standalone='true'] {
+    min-inline-size: var(--ds-toggle-touch-target-min, var(--ds-touch-target-min));
+    justify-content: center;
   }
 }
 
@@ -417,6 +425,7 @@
     border-color: ButtonText;
     border-top-color: Highlight;
   }
+  .ds-toggle.ds-toggle--modern[data-state~='focus-visible'] [data-part='track'],
   .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
     outline-color: Highlight;
   }

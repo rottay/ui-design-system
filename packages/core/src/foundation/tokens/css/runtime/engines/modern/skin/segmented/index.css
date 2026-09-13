@@ -13,7 +13,7 @@
  * is no `join`/`btn` hook to preserve and no `theme.css` block to reconcile
  * against; this is a clean greenfield skin.
  *
- * SCOPE ROOT carries `rottay-segmented rottay-segmented--modern` +
+ * SCOPE ROOT carries `ds-segmented ds-segmented--modern` +
  * `role='radiogroup'`; each option button carries `data-part='option'` +
  * `data-selected` + `data-disabled`. Option rules are anchored under the root
  * scope — `option` is shared vocabulary and must never be matched bare.
@@ -76,12 +76,12 @@
  * single-axis-reading verdict) is removed.
  */
 
-.rottay-segmented.rottay-segmented--modern[role='radiogroup'] {
+.ds-segmented.ds-segmented--modern[role='radiogroup'] {
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-segmented-gap, 2px);
+  gap: var(--ds-segmented-gap);
   min-width: 0;
-  padding: var(--ds-segmented-padding, 4px);
+  padding: var(--ds-segmented-padding);
   /* Narrow frames: the group scrolls inside its container instead of clipping
      options without an affordance (pagination.css's controls-row precedent).
      The 4px track padding matches the full focus-ring extent (offset 2px +
@@ -129,19 +129,19 @@
     background-position var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
 
-.rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup'] {
+.ds-segmented.ds-segmented--modern[role='radiogroup'][role='radiogroup'] {
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid)
     var(--ds-segmented-border, var(--ds-material-control-border, var(--ds-color-border)));
 }
 
-.rottay-segmented.rottay-segmented--modern[role='radiogroup']::-webkit-scrollbar {
+.ds-segmented.ds-segmented--modern[role='radiogroup']::-webkit-scrollbar {
   display: none;
 }
 
 /* Root hover is gated to hover-capable pointers (lane law); the option-level
    `:active` press below is the touch counterpart of the hover treatment. */
 @media (hover: hover) {
-  .rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup']:hover {
+  .ds-segmented.ds-segmented--modern[role='radiogroup'][role='radiogroup']:is([data-state~='hovered'], :hover) {
     border-color: var(
       --ds-segmented-border-hover,
       var(--ds-material-control-border-hover, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)))
@@ -205,7 +205,7 @@
   }
 }
 
-.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-block='true'] {
+.ds-segmented.ds-segmented--modern[role='radiogroup'][data-block='true'] {
   width: 100%;
 }
 
@@ -217,7 +217,7 @@
    segmented tokens already derive from these same button steps (R1 unit 1);
    this fallback chain makes the same ladder the DEFAULT for any tenant that
    authors nothing here at all. */
-.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='small'] {
+.ds-segmented.ds-segmented--modern[role='radiogroup'][data-size='small'] {
   --ds-segmented-current-height: var(--ds-segmented-sm-height, var(--ds-button-sm-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-sm-padding-x, var(--ds-button-sm-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-sm-font-size, var(--ds-button-sm-font-size));
@@ -227,7 +227,7 @@
   --ds-segmented-current-radius: var(--ds-segmented-sm-radius, var(--ds-segmented-item-radius, var(--ds-button-sm-radius)));
 }
 
-.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='middle'] {
+.ds-segmented.ds-segmented--modern[role='radiogroup'][data-size='middle'] {
   --ds-segmented-current-height: var(--ds-segmented-md-height, var(--ds-button-md-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-md-padding-x, var(--ds-button-md-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-md-font-size, var(--ds-button-md-font-size));
@@ -237,7 +237,7 @@
   --ds-segmented-current-radius: var(--ds-segmented-md-radius, var(--ds-segmented-item-radius, var(--ds-button-md-radius)));
 }
 
-.rottay-segmented.rottay-segmented--modern[role='radiogroup'][data-size='large'] {
+.ds-segmented.ds-segmented--modern[role='radiogroup'][data-size='large'] {
   --ds-segmented-current-height: var(--ds-segmented-lg-height, var(--ds-button-lg-height));
   --ds-segmented-current-padding-x: var(--ds-segmented-lg-padding-x, var(--ds-button-lg-padding-x));
   --ds-segmented-current-font-size: var(--ds-segmented-lg-font-size, var(--ds-button-lg-font-size));
@@ -247,7 +247,7 @@
   --ds-segmented-current-radius: var(--ds-segmented-lg-radius, var(--ds-segmented-item-radius, var(--ds-button-lg-radius)));
 }
 
-.rottay-segmented--modern[role='radiogroup'] [data-part='option'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='option'] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -256,8 +256,8 @@
   min-width: 0;
   /* Long options truncate against a bound instead of stretching the whole
      track into scroll; block mode already constrains via flex. */
-  max-inline-size: var(--ds-segmented-item-max-inline-size, 16rem);
-  height: var(--ds-segmented-current-height);
+  max-inline-size: var(--ds-segmented-item-max-inline-size);
+  height: calc(var(--ds-segmented-current-height) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   padding: 0 var(--ds-segmented-current-padding-x);
   border: none;
   border-radius: var(--ds-segmented-current-radius);
@@ -279,18 +279,18 @@
    reads as a second visible frame around the track's own boundary (F6, one
    dominant border per region, G4). Edge width/style ride the same grammar as
    every other control edge instead of a crude 1px/solid literal. */
-.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
   border: var(--ds-edge-standard-width, 1px) var(--ds-edge-standard-style, solid) transparent;
 }
 
-.rottay-segmented--modern[role='radiogroup'][data-block='true'] [data-part='option'] {
+.ds-segmented--modern[role='radiogroup'][data-block='true'] [data-part='option'] {
   flex: 1 1 0;
   /* Block mode fills the track: the 16rem truncation cap (a scroll-mode
      bound) must not keep two options from stretching a wide container. */
   max-inline-size: none;
 }
 
-.rottay-segmented--modern[role='radiogroup'] [data-part='icon'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='icon'] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -304,20 +304,20 @@
      transform/background-color transition was dead weight. */
 }
 
-.rottay-segmented--modern[role='radiogroup'] [data-part='label'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='label'] {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'] {
   background: var(--ds-segmented-item-bg);
   color: var(--ds-segmented-item-color, var(--ds-color-text-secondary));
 }
 
 @media (hover: hover) {
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'][data-state~='hovered'] {
+  .ds-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'][data-state~='hovered'] {
     /* `--ds-color-bg-hover` is a dark inset under both first-party themes
        (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
        from the paired card chrome instead (measured: text-primary on
@@ -336,7 +336,7 @@
 }
 
 /* A held press settles the option back onto the track with a tactile dip. */
-.rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true'])[data-state~='pressed'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true'])[data-state~='pressed'] {
   transform: translateY(0) scale(var(--ds-state-press-scale));
 }
 
@@ -349,7 +349,7 @@
    gradient was unreachable on both shipped grounds -- they always author
    `--ds-segmented-item-bg-selected` -- and a gradient is not a color this
    control's grammar needs, G9). */
-.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
   background: var(--ds-segmented-item-bg-selected, var(--ds-card-bg, var(--ds-color-bg-elevated)));
   color: var(--ds-segmented-item-color-selected, var(--ds-color-text-primary));
   font-weight: var(--ds-segmented-item-font-weight-selected, var(--ds-font-weight-semibold));
@@ -359,7 +359,7 @@
      unselected options only. The option carries the whole signal: the icon
      keeps the option's ink instead of growing a second tinted/lifted surface
      of its own (single-axis reading). */
-  transform: var(--ds-segmented-item-transform-selected, none);
+  transform: var(--ds-segmented-item-transform-selected);
 }
 
 /* One focus grammar (F12, item 10): the canonical double ring, the same one
@@ -367,19 +367,19 @@
    ring is the exact class W8 already retired from Button
    (`Button.contrast-focus-ring.test.tsx`). No per-family focus channel
    survives; both controls read `--ds-focus-ring` directly. */
-.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-state~='focus-visible'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='option'][data-state~='focus-visible'] {
   box-shadow: var(--ds-focus-ring);
 }
 
-.rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
-  opacity: var(--ds-button-disabled-opacity);
+.ds-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
+  opacity: var(--ds-segmented-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'] {
-    min-block-size: var(--ds-segmented-touch-target-min, var(--ds-touch-target-min, 44px));
+  .ds-segmented--modern[role='radiogroup'] [data-part='option'] {
+    min-block-size: var(--ds-segmented-touch-target-min, var(--ds-touch-target-min));
   }
 }
 
@@ -388,36 +388,36 @@
         Opacity is stripped in this mode: disabled options remap to the
         GrayText system color so the track itself keeps its ButtonText frame. ---- */
 @media (forced-colors: active) {
-  .rottay-segmented.rottay-segmented--modern[role='radiogroup'][role='radiogroup'] {
+  .ds-segmented.ds-segmented--modern[role='radiogroup'][role='radiogroup'] {
     border-color: ButtonText;
   }
 
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
+  .ds-segmented--modern[role='radiogroup'] [data-part='option'][data-part='option'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }
 
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
+  .ds-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='true'] {
     background: Highlight;
     color: HighlightText;
   }
 
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
+  .ds-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-segmented.rottay-segmented--modern[role='radiogroup'],
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'],
-  .rottay-segmented--modern[role='radiogroup'] [data-part='icon'] {
+  .ds-segmented.ds-segmented--modern[role='radiogroup'],
+  .ds-segmented--modern[role='radiogroup'] [data-part='option'],
+  .ds-segmented--modern[role='radiogroup'] [data-part='icon'] {
     transition: none;
   }
 
   /* The lifts/dips are motion too: without their transitions they would fire
      instantly on every hover/press, which is worse than a calm frame. */
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'][data-state~='hovered'],
-  .rottay-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true'])[data-state~='pressed'] {
+  .ds-segmented--modern[role='radiogroup'] [data-part='option'][data-selected='false'][data-state~='hovered'],
+  .ds-segmented--modern[role='radiogroup'] [data-part='option']:not([data-disabled='true'])[data-state~='pressed'] {
     transform: none;
   }
 }

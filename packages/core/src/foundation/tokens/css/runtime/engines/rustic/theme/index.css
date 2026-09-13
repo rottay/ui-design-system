@@ -440,58 +440,6 @@
 }
 
 /* =============================================================================
-   SWITCH / TOGGLE - .ds-switch
-   ============================================================================= */
-
-.ds-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
-.ds-switch__track {
-  position: relative;
-  width: var(--ds-switch-width);
-  height: var(--ds-switch-height);
-  background-color: var(--ds-switch-bg);
-  border-radius: var(--ds-radius-full);
-  transition: var(--ds-transition-fast);
-}
-
-.ds-switch__thumb {
-  position: absolute;
-  top: 50%;
-  left: 2px;
-  transform: translateY(-50%);
-  width: var(--ds-switch-thumb-size);
-  height: var(--ds-switch-thumb-size);
-  background-color: var(--ds-switch-thumb-bg);
-  border-radius: 50%;
-  box-shadow: var(--ds-switch-thumb-shadow);
-  transition: var(--ds-transition-fast);
-}
-
-.ds-switch__input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.ds-switch__input:checked + .ds-switch__track {
-  background-color: var(--ds-switch-checked-bg);
-}
-
-.ds-switch__input:checked + .ds-switch__track .ds-switch__thumb {
-  left: calc(100% - var(--ds-switch-thumb-size) - 2px);
-}
-
-.ds-switch__input:focus-visible + .ds-switch__track {
-  box-shadow: var(--ds-switch-focus-ring);
-}
-
-/* =============================================================================
    CARD - .ds-card
    ============================================================================= */
 

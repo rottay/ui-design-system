@@ -126,7 +126,7 @@ const BUILD_RECIPES = [
   },
   {
     title: 'Settings and authoring',
-    components: ['Form', 'FormField', 'Select', 'Switch', 'Alert'],
+    components: ['Form', 'FormField', 'Select', 'Toggle', 'Alert'],
     description:
       'Use these when you need validation detail and local field control without inventing custom form chrome.',
   },

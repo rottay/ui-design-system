@@ -106,6 +106,9 @@ import {
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
+import { deriveCheckboxChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/checkbox";
+import { deriveRadioChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/radio";
+import { deriveToggleChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toggle";
 
 const DEFAULT_CSS = join(
   process.cwd(),
@@ -1231,7 +1234,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the paint did not move", () =>
   });
 
   it.each(
-    T2_ROSTER.map((row) => [`${row.mode} ${row.name}`, row] as const)
+    T2_ROSTER.filter((row) => !supersededByFamilyCut(row)).map((row) => [`${row.mode} ${row.name}`, row] as const)
   )("%s paints exactly what the removed line painted", (_label, row) => {
     const found = lookup(row.mode, row.name);
     expect(found, `${row.mode} ${row.name} resolves to nothing`).not.toBeNull();
@@ -1240,9 +1243,10 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the paint did not move", () =>
     expect(after).toBe(bare(row.value));
   });
 
-  it("repaints all 682 pre-image tuples, survivors included, with no exception", () => {
+  it("repaints every pre-image tuple outside the named family-cut supersessions", () => {
     const broken: string[] = [];
-    for (const row of PRE_IMAGE) {
+    expect(PRE_IMAGE.filter(supersededByFamilyCut)).toHaveLength(4);
+    for (const row of PRE_IMAGE.filter((entry) => !supersededByFamilyCut(entry))) {
       const found = lookup(row.mode, row.name);
       const after = found ? resolveValue(row.mode, found.value) : null;
       if (after !== bare(row.value))
@@ -1251,20 +1255,32 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the paint did not move", () =>
     expect(broken).toEqual([]);
   });
 
+  it("reads the superseded descriptions on the secondary ink", () => {
+    for (const row of PRE_IMAGE.filter(supersededByFamilyCut)) {
+      const found = lookup(row.mode, row.name) as Resolution;
+      expect(resolveValue(row.mode, found.value)).toBe(
+        resolveValue(row.mode, "var(--ds-color-text-secondary)")
+      );
+    }
+  });
+
   it("names the layer each drained tuple now paints from", () => {
     const census: Record<string, number> = {};
-    for (const row of T2_ROSTER) {
+    for (const row of T2_ROSTER.filter((entry) => !supersededByFamilyCut(entry))) {
       const found = lookup(row.mode, row.name) as Resolution;
       census[found.source] = (census[found.source] ?? 0) + 1;
     }
     // Nothing falls back to the extension: the family left the stylesheet.
     expect(census.extension).toBeUndefined();
-    expect(census["tenant-compiled"]).toBe(CENSUS.migrateTuples + 27);
+    const superseded = T2_ROSTER.filter(supersededByFamilyCut);
+    const supersededMigrate = superseded.filter((row) => row.disposition === "migrate").length;
+    const supersededDelete = superseded.length - supersededMigrate;
+    expect(census["tenant-compiled"]).toBe(CENSUS.migrateTuples - supersededMigrate + 27);
     expect(
       Object.entries(census)
         .filter(([source]) => source !== "tenant-compiled")
         .reduce((total, [, count]) => total + count, 0)
-    ).toBe(41 - 27);
+    ).toBe(41 - supersededDelete - 27);
   });
 });
 
@@ -1468,6 +1484,25 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the typed shape is closed and 
   });
 });
 
+/**
+ * WO-FAM-01 supersedes four tuples of the signed pre-image on purpose: the
+ * radio and toggle descriptions moved to the secondary ink after axe measured
+ * them below 4.5:1.
+ */
+const READABLE_DESCRIPTIONS = new Set([
+  "--ds-radio-description-color",
+  "--ds-toggle-description-color",
+]);
+const supersededByFamilyCut = (row: { name: string }): boolean =>
+  READABLE_DESCRIPTIONS.has(row.name);
+
+/** Channels a family-cut deriver states as a decision relation when no vertical authors them. */
+const FAMILY_RELATIONS: Readonly<Record<string, string>> = {
+  ...deriveCheckboxChannels(),
+  ...deriveRadioChannels(),
+  ...deriveToggleChannels(),
+};
+
 describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports", () => {
   const PROBE = "#010203";
   const pairs = FAMILIES.flatMap((family) =>
@@ -1490,8 +1525,8 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports"
       expect(compileDocument(document)[channel]).toBe(PROBE);
 
       // Static transport: remove the field from both mode authorities and the
-      // channel must disappear. If it survives, something else emits it and
-      // the field was never the authority.
+      // channel must fall back to its family deriver's decision relation, or
+      // disappear. Anything else is a second author the field never outranked.
       const clone = structuredClone(rottayBrandTheme);
       const body = (clone.chrome.controls as unknown as Controls)[prop];
       const light = lightControlsOf(clone)[prop];
@@ -1508,7 +1543,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports"
         ...stripped.cssVariables,
         ...(strippedLight?.cssVariables ?? {}),
       };
-      expect(effective[channel]).toBeUndefined();
+      expect(effective[channel]).toBe(FAMILY_RELATIONS[channel]);
     }
   );
 
@@ -1613,10 +1648,11 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the DB documents of the thirte
     expect(delta).toEqual({ "--ds-upload-dragger-bg-hover": "#123456" });
   });
 
-  it("compiles the light document to 126 entries, each byte-equal to the static light artifact", () => {
+  it("compiles the light document to 124 entries, each byte-equal to the static light artifact", () => {
     const delta = compileDocument(asDocument(lightProjected));
     const names = Object.keys(delta).sort();
-    expect(names).toHaveLength(126);
+    // 126 until WO-FAM-01 put both radio and toggle descriptions on one mode-agnostic ink.
+    expect(names).toHaveLength(126 - READABLE_DESCRIPTIONS.size);
     for (const name of names) {
       expect(t2Names).toContain(name);
       expect(delta[name]).toBe(EMITTED.light[name]);
@@ -1655,10 +1691,10 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the DB documents of the thirte
           dark?.disposition === "migrate" &&
           (light?.disposition === "migrate" || name in REDERIVED) &&
           bare(emittedToday(dark)) === bare(light ? emittedToday(light) : "")
-        );
+        ) || READABLE_DESCRIPTIONS.has(name);
       })
       .sort();
-    expect(identical).toHaveLength(22);
+    expect(identical).toHaveLength(22 + READABLE_DESCRIPTIONS.size);
     expect(omitted).toEqual(identical);
   });
 });

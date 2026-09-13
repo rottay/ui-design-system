@@ -2341,6 +2341,7 @@
           "motion"
         ],
         "Switch": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "TAB_PANEL_TRANSITION_CLASS": [
@@ -3793,6 +3794,7 @@
       ],
       "symbols": {
         "Switch": [
+          "@phosphor-icons/react",
           "antd"
         ]
       },

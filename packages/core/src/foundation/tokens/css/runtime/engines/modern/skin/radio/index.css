@@ -20,8 +20,8 @@
  * surfaces. Color-independent clarity: the dot also scales 0 -> 1, so state
  * never relies on hue alone.
  *
- * Hover lives on `:hover` gated `:not([data-disabled='true'])`; the focus
- * ring derives from `input:focus-visible ~ [data-part='circle']`.
+ * State is decided once, by the interaction kernel stamped on the root as
+ * `data-state`; each state rule pairs it with its platform pseudo-class.
  *
  * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via
  * `[data-checked]` (+ `:hover`) beyond the two root classes +
@@ -39,7 +39,7 @@
   /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-radio-touch-target-min, var(--ds-touch-target-min, 44px));
+  min-block-size: var(--ds-radio-touch-target-min, var(--ds-touch-target-min));
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -51,7 +51,7 @@
 }
 
 .ds-radio.ds-radio--modern[data-part='root'][data-disabled='true'] {
-  cursor: var(--ds-radio-disabled-cursor, not-allowed);
+  cursor: var(--ds-radio-disabled-cursor);
 }
 
 /* Indicator ------------------------------------------------------------ */
@@ -61,7 +61,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border-radius: 50%;
+  border-radius: var(--ds-radius-full);
   background-color: transparent;
   transition:
     border-color var(--ds-radio-transition-duration, var(--ds-motion-fast)) var(--ds-motion-ease-out),
@@ -97,16 +97,16 @@
 }
 
 /* press: the circle dips on pointer-press, mirroring the checkbox. */
-.ds-radio.ds-radio--modern:active:not([data-disabled='true']) [data-part='circle'] {
+.ds-radio.ds-radio--modern:is([data-state~='pressed'], :active):not([data-disabled='true']) [data-part='circle'] {
   transform: scale(var(--ds-state-press-scale));
 }
 
 /* ring border: unchecked, checked. */
 .ds-radio.ds-radio--modern[data-checked='false'] [data-part='circle'] {
-  border: var(--ds-radio-border-width, 2px) solid var(--ds-radio-border, var(--ds-color-border-secondary));
+  border: var(--ds-radio-border-width) solid var(--ds-radio-border, var(--ds-color-border-secondary));
 }
 .ds-radio.ds-radio--modern[data-checked='true'] [data-part='circle'] {
-  border: var(--ds-radio-border-width, 2px) solid var(--ds-radio-checked-border, var(--ds-color-primary));
+  border: var(--ds-radio-border-width) solid var(--ds-radio-checked-border, var(--ds-color-primary));
 }
 
 /* Color grammar: the color prop picks the canonical per-variant channels. */
@@ -144,34 +144,34 @@
    error (`:not`) so the error frame never disappears under the pointer
    (input.css invalid precedent). Touch parity on :active below. */
 @media (hover: hover) {
-  .ds-radio.ds-radio--modern[data-checked='false']:not([data-error='true']):hover:not([data-disabled='true']) [data-part='circle'] {
+  .ds-radio.ds-radio--modern[data-checked='false']:not([data-error='true']):is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='circle'] {
     border-color: var(
       --ds-radio-border-hover,
       color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary))
     );
     background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
   }
-  .ds-radio.ds-radio--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  .ds-radio.ds-radio--modern[data-checked='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='circle'] {
     border-color: var(--ds-color-primary-hover);
   }
-  .ds-radio.ds-radio--modern[data-color='default'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  .ds-radio.ds-radio--modern[data-color='default'][data-checked='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='circle'] {
     border-color: color-mix(in srgb, var(--ds-radio-default-bg, var(--ds-color-neutral-600)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-radio.ds-radio--modern[data-color='secondary'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  .ds-radio.ds-radio--modern[data-color='secondary'][data-checked='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='circle'] {
     border-color: color-mix(in srgb, var(--ds-radio-secondary-bg, var(--ds-color-secondary)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-radio.ds-radio--modern[data-color='success'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  .ds-radio.ds-radio--modern[data-color='success'][data-checked='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='circle'] {
     border-color: color-mix(in srgb, var(--ds-radio-success-bg, var(--ds-color-success)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-radio.ds-radio--modern[data-color='warning'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  .ds-radio.ds-radio--modern[data-color='warning'][data-checked='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='circle'] {
     border-color: color-mix(in srgb, var(--ds-radio-warning-bg, var(--ds-color-warning)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-radio.ds-radio--modern[data-color='error'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  .ds-radio.ds-radio--modern[data-color='error'][data-checked='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='circle'] {
     border-color: color-mix(in srgb, var(--ds-radio-error-bg, var(--ds-color-error)) 82%, var(--ds-color-neutral-900));
   }
 }
 /* Touch equivalent of the unchecked hover while the row is pressed. */
-.ds-radio.ds-radio--modern[data-checked='false']:not([data-error='true']):active:not([data-disabled='true']) [data-part='circle'] {
+.ds-radio.ds-radio--modern[data-checked='false']:not([data-error='true']):is([data-state~='pressed'], :active):not([data-disabled='true']) [data-part='circle'] {
   border-color: var(
     --ds-radio-border-hover,
     color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary))
@@ -179,7 +179,8 @@
   background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
 
-/* focus ring from the hidden input's :focus-visible. */
+/* focus ring: the kernel's keyboard focus, with the hidden input's own :focus-visible as fallback. */
+.ds-radio.ds-radio--modern[data-state~='focus-visible'] [data-part='circle'],
 .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
   outline: var(--ds-radio-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
   outline-offset: var(--ds-radio-focus-ring-offset, var(--ds-focus-ring-offset));
@@ -199,7 +200,7 @@
 .ds-radio.ds-radio--modern [data-part='dot'] {
   inline-size: calc(var(--ds-radio-dot-scale) * 100%);
   block-size: calc(var(--ds-radio-dot-scale) * 100%);
-  border-radius: 50%;
+  border-radius: var(--ds-radius-full);
   background-color: var(--ds-radio-checked-dot, var(--ds-color-primary));
   transform: scale(0);
   transition: transform var(--ds-radio-transition-duration, var(--ds-motion-fast)) var(--ds-motion-ease-out);
@@ -224,7 +225,7 @@
 .ds-radio.ds-radio--modern [data-part='text'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-radio-text-gap, 0.125rem);
+  gap: var(--ds-radio-text-gap);
   /* Never crushable below the longest word: with `min-inline-size: 0` the
      column's min-content is a single character under `overflow-wrap`, and any
      narrow flex parent (a horizontal Stack, a toolbar row) would wrap the
@@ -235,7 +236,7 @@
 
 .ds-radio.ds-radio--modern [data-part='label'] {
   color: var(--ds-radio-label-color, var(--ds-color-text-primary));
-  font-size: var(--ds-radio-label-font-size, var(--ds-font-size-sm));
+  font-size: var(--ds-radio-md-font-size, var(--ds-font-size-sm));
   line-height: var(--ds-radio-label-line-height, var(--ds-line-height-snug));
   /* No `hyphens: auto` here: with hyphenation the column's min-content shrinks
      to a hyphenated segment and the label breaks mid-word under a squeeze. */
@@ -243,19 +244,19 @@
 }
 
 /* Label type scales with the indicator size, on the canonical channels. */
-.ds-radio.ds-radio--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-xs-font-size)); }
-.ds-radio.ds-radio--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-sm-font-size)); }
-.ds-radio.ds-radio--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-md-font-size)); }
-.ds-radio.ds-radio--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-lg-font-size)); }
-.ds-radio.ds-radio--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-radio-label-font-size, var(--ds-radio-xl-font-size)); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-radio-xs-font-size, var(--ds-font-size-xs)); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-radio-sm-font-size, var(--ds-font-size-sm)); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-radio-md-font-size); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-radio-lg-font-size, var(--ds-font-size-base)); }
+.ds-radio.ds-radio--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-radio-xl-font-size, var(--ds-font-size-lg)); }
 .ds-radio.ds-radio--modern[data-disabled='true'] [data-part='label'] {
   color: var(--ds-color-text-disabled);
 }
 
 .ds-radio.ds-radio--modern [data-part='description'] {
-  color: var(--ds-radio-description-color, var(--ds-color-text-muted));
-  font-size: var(--ds-radio-description-font-size, var(--ds-font-size-xs));
-  line-height: var(--ds-radio-description-line-height, var(--ds-line-height-snug));
+  color: var(--ds-radio-description-color, var(--ds-type-color-muted));
+  font-size: var(--ds-radio-description-font-size, var(--ds-type-caption-font-size));
+  line-height: var(--ds-radio-description-line-height, var(--ds-type-caption-line-height));
   hyphens: auto;
   overflow-wrap: break-word;
 }
@@ -282,7 +283,7 @@
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-radio-touch-target-min, var(--ds-touch-target-min, 44px));
+  min-block-size: var(--ds-radio-touch-target-min, var(--ds-touch-target-min));
   }
 }
 

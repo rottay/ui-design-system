@@ -226,7 +226,7 @@
     },
     "./primitives/switch": {
       "maxReachableModules": 17,
-      "maxSourceBytes": 83908
+      "maxSourceBytes": 84662
     },
     "./primitives/table": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-INV-04 (F-46), one responsive mechanism — two ceilings UP and two DOWN, all four measured. UP: ./runtime/responsive maxSourceBytes 58600 -> 59317 (+717), the facade publishing the single ResponsiveValue resolution beside the hooks; ./primitives/responsive maxSourceBytes 12972 -> 14072 (+1100), Show/Hide/ResponsiveSlot reading the closed visibility-boundary vocabulary from the contract instead of building media queries locally, with the useId-scoped stylesheet each instance used to inject now gone. DOWN: ./runtime/responsive maxReachableModules 12 -> 11 (the provider-less fallback stopped pulling the generic useMediaQuery into the breakpoint hook's graph); ./primitives/responsive maxReachableModules 6 -> 5 (one boundary contract instead of a per-family visibility runtime).",
-  "lastMoveKind": "decrece-solo — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 0 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-FAM-01 (D-16), Switch merges into Toggle -- one ceiling UP, measured. ./primitives/switch maxSourceBytes 83908 -> 84662 (+754): the subpath now resolves the one binary switch family (the Toggle facade, its contract carrying the deprecated Switch types, and the Switch alias compound; 15 modules) instead of a second family of its own. The legacy size normalization lives in the dynamically loaded engine, so the common kernel (14214 bytes) stays out of the static graph; ./primitives/toggle measures the same 84662 under its unchanged 88375 anchor.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

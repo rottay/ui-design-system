@@ -15,8 +15,8 @@
  * `checkmark`, `text`, `label`, `description` are descendants; the hidden
  * `<input>` is a sibling of `box`.
  *
- * Hover lives on `:hover` gated `:not([data-disabled='true'])`; the focus
- * ring derives from `input:focus-visible ~ [data-part='box']`.
+ * State is decided once, by the interaction kernel stamped on the root as
+ * `data-state`; each state rule pairs it with its platform pseudo-class.
  *
  * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via a state
  * attribute (or the repeated `[data-part='box']`) beyond the two root
@@ -49,7 +49,7 @@
   /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min, 44px));
+  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min));
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -67,7 +67,7 @@
 }
 
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-disabled='true'] {
-  cursor: var(--ds-checkbox-disabled-cursor, not-allowed);
+  cursor: var(--ds-checkbox-disabled-cursor);
 }
 
 /* Indicator ------------------------------------------------------------ */
@@ -126,7 +126,7 @@
    choreography (--ds-state-press-scale) to the checkbox. The box transitions
    transform on --ds-motion-fast, which zeroes under reduced motion, so the
    dip settles back on release without a bespoke rule. */
-.ds-checkbox.ds-checkbox--modern:active:not([data-disabled='true']) [data-part='box'] {
+.ds-checkbox.ds-checkbox--modern:is([data-state~='pressed'], :active):not([data-disabled='true']) [data-part='box'] {
   transform: scale(var(--ds-state-press-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-standalone='true'] [data-part='box'] {
@@ -135,7 +135,7 @@
 
 /* box border: normal (base), standalone (not active), active. */
 .ds-checkbox.ds-checkbox--modern [data-part='box'][data-part='box'] {
-  border: var(--ds-checkbox-border-width, 2px) solid var(--ds-checkbox-border, var(--ds-color-border-secondary));
+  border: var(--ds-checkbox-border-width) solid var(--ds-checkbox-border, var(--ds-color-border-secondary));
 }
 .ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']) [data-part='box'] {
   border-color: color-mix(in srgb, var(--ds-checkbox-border, var(--ds-color-border)) 88%, var(--ds-surface-panel) 12%);
@@ -187,47 +187,48 @@
    frame never disappears under the pointer (input.css invalid precedent).
    Touch parity lives on the :active rules below. */
 @media (hover: hover) {
-  .ds-checkbox.ds-checkbox--modern[data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+  .ds-checkbox.ds-checkbox--modern[data-active='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='box'] {
     border-color: var(--ds-color-primary-hover);
     background-color: var(--ds-color-primary-hover);
   }
-  .ds-checkbox.ds-checkbox--modern[data-color='default'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+  .ds-checkbox.ds-checkbox--modern[data-color='default'][data-active='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='box'] {
     border-color: color-mix(in srgb, var(--ds-checkbox-default-bg, var(--ds-color-neutral-600)) 82%, var(--ds-color-neutral-900));
     background-color: color-mix(in srgb, var(--ds-checkbox-default-bg, var(--ds-color-neutral-600)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-checkbox.ds-checkbox--modern[data-color='secondary'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+  .ds-checkbox.ds-checkbox--modern[data-color='secondary'][data-active='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='box'] {
     border-color: color-mix(in srgb, var(--ds-checkbox-secondary-bg, var(--ds-color-secondary)) 82%, var(--ds-color-neutral-900));
     background-color: color-mix(in srgb, var(--ds-checkbox-secondary-bg, var(--ds-color-secondary)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-checkbox.ds-checkbox--modern[data-color='success'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+  .ds-checkbox.ds-checkbox--modern[data-color='success'][data-active='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='box'] {
     border-color: color-mix(in srgb, var(--ds-checkbox-success-bg, var(--ds-color-success)) 82%, var(--ds-color-neutral-900));
     background-color: color-mix(in srgb, var(--ds-checkbox-success-bg, var(--ds-color-success)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-checkbox.ds-checkbox--modern[data-color='warning'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+  .ds-checkbox.ds-checkbox--modern[data-color='warning'][data-active='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='box'] {
     border-color: color-mix(in srgb, var(--ds-checkbox-warning-bg, var(--ds-color-warning)) 82%, var(--ds-color-neutral-900));
     background-color: color-mix(in srgb, var(--ds-checkbox-warning-bg, var(--ds-color-warning)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-checkbox.ds-checkbox--modern[data-color='error'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+  .ds-checkbox.ds-checkbox--modern[data-color='error'][data-active='true']:is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='box'] {
     border-color: color-mix(in srgb, var(--ds-checkbox-error-bg, var(--ds-color-error)) 82%, var(--ds-color-neutral-900));
     background-color: color-mix(in srgb, var(--ds-checkbox-error-bg, var(--ds-color-error)) 82%, var(--ds-color-neutral-900));
   }
-  .ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']):not([data-error='true']):hover:not([data-disabled='true']) [data-part='box'] {
+  .ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']):not([data-error='true']):is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='box'] {
     border-color: var(--ds-color-text-secondary);
     background-color: color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%);
   }
-  .ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):not([data-error='true']):hover:not([data-disabled='true']) [data-part='box'] {
+  .ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):not([data-error='true']):is([data-state~='hovered'], :hover):not([data-disabled='true']) [data-part='box'] {
     border-color: color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary));
     background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
   }
 }
 /* Touch equivalent of the unchecked hover: the same strengthening shows
    while the row is pressed, so coarse pointers get identical state parity. */
-.ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):not([data-error='true']):active:not([data-disabled='true']) [data-part='box'] {
+.ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):not([data-error='true']):is([data-state~='pressed'], :active):not([data-disabled='true']) [data-part='box'] {
   border-color: color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary));
   background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
 
-/* focus ring from the hidden input's :focus-visible. */
+/* focus ring: the kernel's keyboard focus, with the hidden input's own :focus-visible as fallback. */
+.ds-checkbox.ds-checkbox--modern[data-state~='focus-visible'] [data-part='box'],
 .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
   outline: var(--ds-checkbox-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-checkbox-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
   outline-offset: var(--ds-checkbox-focus-ring-offset, var(--ds-focus-ring-offset));
@@ -241,6 +242,8 @@
 /* Checkmark ------------------------------------------------------------- */
 .ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {
   display: block;
+  inline-size: var(--ds-checkbox-checkmark-size, var(--ds-icon-xs-size));
+  block-size: var(--ds-checkbox-checkmark-size, var(--ds-icon-xs-size));
   transform: scale(1);
   animation: ds-checkbox-settle var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
@@ -258,7 +261,7 @@
 .ds-checkbox.ds-checkbox--modern [data-part='text'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-checkbox-text-gap, 0.125rem);
+  gap: var(--ds-checkbox-text-gap);
   /* Never crushable below the longest word: with `min-inline-size: 0` the
      column's min-content is a single character under `overflow-wrap`, and any
      narrow flex parent (a horizontal Stack, a toolbar row) would wrap the
@@ -269,7 +272,7 @@
 
 .ds-checkbox.ds-checkbox--modern [data-part='label'] {
   color: var(--ds-checkbox-label-color, var(--ds-color-text-primary));
-  font-size: var(--ds-checkbox-label-font-size, var(--ds-font-size-sm));
+  font-size: var(--ds-checkbox-md-font-size, var(--ds-font-size-sm));
   line-height: var(--ds-checkbox-label-line-height, var(--ds-line-height-snug));
   /* No `hyphens: auto` here: with hyphenation the column's min-content shrinks
      to a hyphenated segment and the label breaks mid-word under a squeeze. */
@@ -277,19 +280,19 @@
 }
 
 /* Label type scales with the indicator size, on the canonical channels. */
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-checkbox-label-font-size, var(--ds-checkbox-xs-font-size)); }
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-checkbox-label-font-size, var(--ds-checkbox-sm-font-size)); }
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-checkbox-label-font-size, var(--ds-checkbox-md-font-size)); }
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-checkbox-label-font-size, var(--ds-checkbox-lg-font-size)); }
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-checkbox-label-font-size, var(--ds-checkbox-xl-font-size)); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xs'] [data-part='label'] { font-size: var(--ds-checkbox-xs-font-size, var(--ds-font-size-xs)); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='sm'] [data-part='label'] { font-size: var(--ds-checkbox-sm-font-size, var(--ds-font-size-sm)); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='md'] [data-part='label'] { font-size: var(--ds-checkbox-md-font-size); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='lg'] [data-part='label'] { font-size: var(--ds-checkbox-lg-font-size, var(--ds-font-size-base)); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xl'] [data-part='label'] { font-size: var(--ds-checkbox-xl-font-size, var(--ds-font-size-lg)); }
 .ds-checkbox.ds-checkbox--modern[data-disabled='true'] [data-part='label'] {
   color: var(--ds-color-text-disabled);
 }
 
 .ds-checkbox.ds-checkbox--modern [data-part='description'] {
-  color: var(--ds-checkbox-description-color, var(--ds-color-text-muted));
-  font-size: var(--ds-checkbox-description-font-size, var(--ds-font-size-xs));
-  line-height: var(--ds-checkbox-description-line-height, var(--ds-line-height-snug));
+  color: var(--ds-checkbox-description-color, var(--ds-type-color-muted));
+  font-size: var(--ds-checkbox-description-font-size, var(--ds-type-caption-font-size));
+  line-height: var(--ds-checkbox-description-line-height, var(--ds-type-caption-line-height));
   hyphens: auto;
   overflow-wrap: break-word;
 }
@@ -317,14 +320,14 @@
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min, 44px));
+  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min));
   }
   .ds-checkbox.ds-checkbox--modern[data-part='root'][data-standalone='true'] {
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px fluid
      root at narrow widths (measured on the live bundle, Axe R0) — the 44px
      coarse-touch law is physical. */
-  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min, 44px));
-    min-inline-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min, 44px));
+  min-block-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min));
+    min-inline-size: var(--ds-checkbox-touch-target-min, var(--ds-touch-target-min));
     justify-content: center;
   }
 }

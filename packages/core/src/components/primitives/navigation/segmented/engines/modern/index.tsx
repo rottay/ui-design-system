@@ -316,6 +316,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     // It also ran in `useEffect`, i.e. after paint, so the reveal was a visible
     // jump. It is a layout effect now.
     const rootRef = React.useRef<HTMLDivElement | null>(null);
+    const { state: rootInteraction, handlers: rootHandlers } = useInteractionState({ disabled });
 
     // Identity of the option set, not its object identity: a parent that
     // rebuilds the array every render must not retrigger, but a real change to
@@ -396,9 +397,11 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     return (
       <div
         ref={setRoot}
-        className={`rottay-segmented rottay-segmented--modern ${className}`.trim()}
+        className={`ds-segmented ds-segmented--modern ${className}`.trim()}
         style={style}
-        data-part={dataPart ?? "root"}
+        {...partAttributes(dataPart ?? "root", rootInteraction)}
+        onPointerEnter={rootHandlers.onPointerEnter}
+        onPointerLeave={rootHandlers.onPointerLeave}
         data-size={size}
         data-block={block || undefined}
         data-disabled={disabled || undefined}

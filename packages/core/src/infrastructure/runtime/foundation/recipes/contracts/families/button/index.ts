@@ -44,7 +44,7 @@ export type ButtonRecipeSizeValue = (typeof BUTTON_SIZE_VALUES)[number];
 
 const axisFromDomain = <const Value extends string>(values: readonly Value[]) =>
   Object.fromEntries(
-    [...values].map((value) => [value, { root: `rottay-button--${value}` }])
+    [...values].map((value) => [value, { root: `ds-button--${value}` }])
   ) as Record<Value, { root: string }>;
 
 /**
@@ -54,19 +54,19 @@ const axisFromDomain = <const Value extends string>(values: readonly Value[]) =>
  */
 export const BUTTON_RECIPE_DEFINITION = {
   name: 'button',
-  slots: { root: ['rottay-button', 'rottay-button--modern'] },
+  slots: { root: ['ds-button', 'ds-button--modern'] },
   axes: {
     variant: axisFromDomain(BUTTON_VARIANT_VALUES),
     size: axisFromDomain(BUTTON_SIZE_VALUES),
     shape: axisFromDomain(BUTTON_SHAPE_VALUES),
-    block: { true: { root: 'rottay-button--block' } },
-    loading: { true: { root: 'rottay-button--loading' } },
-    pending: { true: { root: 'rottay-button--pending' } },
-    disabled: { true: { root: 'rottay-button--disabled' } },
-    shadow: { true: { root: 'rottay-button--shadow' } },
-    gradient: { true: { root: 'rottay-button--gradient' } },
-    pulse: { true: { root: 'rottay-button--pulse' } },
-    bordered: { true: { root: 'rottay-button--bordered' } },
+    block: { true: { root: 'ds-button--block' } },
+    loading: { true: { root: 'ds-button--loading' } },
+    pending: { true: { root: 'ds-button--pending' } },
+    disabled: { true: { root: 'ds-button--disabled' } },
+    shadow: { true: { root: 'ds-button--shadow' } },
+    gradient: { true: { root: 'ds-button--gradient' } },
+    pulse: { true: { root: 'ds-button--pulse' } },
+    bordered: { true: { root: 'ds-button--bordered' } },
   },
   defaults: {},
 };

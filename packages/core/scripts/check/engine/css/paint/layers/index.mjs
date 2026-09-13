@@ -1238,7 +1238,6 @@ const FROZEN_ENGINE_HEADER_DEBT = [
   "runtime/engines/rustic/skin/step-wizard/index.css",
   "runtime/engines/rustic/skin/stepper/index.css",
   "runtime/engines/rustic/skin/steps/index.css",
-  "runtime/engines/rustic/skin/switch/index.css",
   "runtime/engines/rustic/skin/table/index.css",
   "runtime/engines/rustic/skin/tabs/index.css",
   "runtime/engines/rustic/skin/tag-input/index.css",

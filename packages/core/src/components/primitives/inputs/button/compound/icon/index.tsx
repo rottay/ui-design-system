@@ -138,7 +138,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
     const control = (
       <ModernButton
         ref={ref as React.ForwardedRef<HTMLButtonElement | HTMLAnchorElement>}
-        className={`rottay-button-icon ds-button-icon ${className}`}
+        className={`ds-button-icon ${className}`}
         size={size}
         variant={variant}
         shape="default"
