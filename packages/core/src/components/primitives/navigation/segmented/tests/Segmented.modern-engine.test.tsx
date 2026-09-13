@@ -20,7 +20,7 @@ describe('Modern Segmented public anatomy', () => {
       />
     );
 
-    const root = container.querySelector('.rottay-segmented--modern[data-part="root"]') as HTMLElement;
+    const root = container.querySelector('.ds-segmented--modern[data-part="root"]') as HTMLElement;
     expect(root).toHaveAttribute('data-size', 'large');
     expect(root.style.cssText).toBe('');
 

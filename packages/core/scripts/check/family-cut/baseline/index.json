@@ -89,6 +89,27 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 1,
       "cutNote": "WO-FAM-01: Switch and Toggle are one family (D-16); Toggle keeps the richer contract and absorbs Switch's busy semantics, click value, ref and accessible-name paths, and Switch survives only as a deprecated alias compound. Decision relations by derivation/chrome/toggle, constants by presentation/components/toggle; one ds-toggle vocabulary and one --ds-toggle-* namespace read by the skin. fanOutUnreached=1 is recipe-profile: no toggle axis exists and its only channel is provenance owned by WO-DER-06."
+    },
+    "segmented": {
+      "cut": "WO-FAM-01",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 76,
+        "classTokens": 2,
+        "partsStamped": 4,
+        "partsConsumed": 3
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- option geometry, frame, depth, hover and selected weight by derivation/chrome/segmented, structural constants by presentation/components/segmented; root hover decided by the interaction kernel; one ds-segmented vocabulary. partsStampedNotConsumed=1 is `root`, the default part a composite may rename (P-79), so the skin anchors on role=radiogroup and the part is read by the anatomy skeleton renderer instead; held for adjudication rather than fabricating a reader."
     }
   }
 }

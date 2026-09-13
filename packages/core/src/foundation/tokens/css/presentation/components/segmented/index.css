@@ -1,0 +1,17 @@
+/**
+ * Segmented Component Tokens - Rottay Design System
+ *
+ * Structural constants of the segmented control. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/segmented`.
+ */
+
+:root {
+  --ds-segmented-gap: calc(var(--ds-spacing-1) / 2);
+  --ds-segmented-padding: var(--ds-spacing-1);
+  --ds-segmented-item-max-inline-size: 16rem;
+  --ds-segmented-item-transform-selected: none;
+  --ds-segmented-icon-radius: var(--ds-radius-xs);
+  --ds-segmented-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-segmented-disabled-cursor: not-allowed;
+  --ds-segmented-touch-target-min: var(--ds-touch-target-min);
+}
