@@ -761,9 +761,51 @@ function localDeclarationsNamed(scope, name) {
 }
 
 /**
+ * True only when `name` is React's `useMemo` imported from `react` and nothing
+ * else in the module declares that name, so a local or shadowing helper fails closed.
+ */
+function isUnshadowedReactUseMemo(name, sourceFile) {
+  let reactImport = 0;
+  let otherBindings = 0;
+  function visit(candidate) {
+    if (ts.isImportSpecifier(candidate) && candidate.name.text === name) {
+      const clause = candidate.parent?.parent?.parent;
+      const fromReact =
+        clause &&
+        ts.isImportDeclaration(clause) &&
+        ts.isStringLiteral(clause.moduleSpecifier) &&
+        clause.moduleSpecifier.text === "react" &&
+        !clause.importClause?.isTypeOnly &&
+        !candidate.isTypeOnly &&
+        (candidate.propertyName ?? candidate.name).text === "useMemo";
+      if (fromReact) reactImport += 1;
+      else otherBindings += 1;
+    } else if (
+      (ts.isVariableDeclaration(candidate) ||
+        ts.isParameter(candidate) ||
+        ts.isBindingElement(candidate) ||
+        ts.isFunctionDeclaration(candidate) ||
+        ts.isFunctionExpression(candidate) ||
+        ts.isClassDeclaration(candidate) ||
+        ts.isImportClause(candidate) ||
+        ts.isNamespaceImport(candidate) ||
+        ts.isImportEqualsDeclaration(candidate)) &&
+      candidate.name &&
+      ts.isIdentifier(candidate.name) &&
+      candidate.name.text === name
+    ) {
+      otherBindings += 1;
+    }
+    ts.forEachChild(candidate, visit);
+  }
+  visit(sourceFile);
+  return reactImport === 1 && otherBindings === 0;
+}
+
+/**
  * The value a certified prop-bag path returns must itself be proven free of
  * `style`: a literal bag, a local binding or a same-module helper whose every
- * return is proven, or React's `useMemo` over one. Anything unresolved fails closed.
+ * return is proven, or the unshadowed React `useMemo` over one. Anything unresolved fails closed.
  */
 function isProvenNonStyleValue(node, context, seen = new Set()) {
   const expression = unwrapExpression(node);
@@ -784,7 +826,7 @@ function isProvenNonStyleValue(node, context, seen = new Set()) {
   if (ts.isCallExpression(expression)) {
     const callee = unwrapExpression(expression.expression);
     if (!callee || !ts.isIdentifier(callee)) return false;
-    if (callee.text === "useMemo") {
+    if (isUnshadowedReactUseMemo(callee.text, context.sourceFile)) {
       const factory = unwrapExpression(expression.arguments[0]);
       if (!factory || !ts.isFunctionLike(factory)) return false;
       const returned = returnExpressionsForContract(factory);

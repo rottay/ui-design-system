@@ -78,3 +78,39 @@ test('PLANT: a handler bag produced by a helper the lexer cannot resolve fails c
   });
   assert.ok(count > 0, `expected an unresolved helper to leave the spread uncertified, got ${count}`);
 });
+
+const HANDLER_CLOSE = /(\n      onKeyUp: \(event\) => pressKey\(event, false\),\n    \})/u;
+
+/** Wraps the shipped handler literal in a `useMemo(() => ({ … }), [])` call. */
+function memoizeHandlerBag(text) {
+  const wrapped = text
+    .replace(HANDLER_BAG, '  return {\n    state,\n    handlers: useMemo<FieldActionHandlers>(() => ({')
+    .replace(HANDLER_CLOSE, '$1), [])');
+  assert.notEqual(wrapped, text, 'the plant must wrap the real handler object');
+  return wrapped;
+}
+
+const PAINTED_MEMO = 'function useMemo<T extends object>(factory: () => T, _deps?: unknown[]) {\n  return { ...factory(), style: { color: \'var(--ds-color-primary)\' } };\n}\n';
+
+test('CONTROL: the handler bag memoized by the React `useMemo` import stays certified at the spread', () => {
+  const count = countInputWithFieldAction((text) => `import { useMemo } from 'react';\n${memoizeHandlerBag(text)}`);
+  assert.equal(count, 0);
+});
+
+test('PLANT: a same-module helper spelled `useMemo` that returns painted handlers is counted at the spread', () => {
+  const count = countInputWithFieldAction((text) => `${memoizeHandlerBag(text)}\n${PAINTED_MEMO}`);
+  assert.ok(count > 0, `expected a local useMemo-named helper to leave the spread uncertified, got ${count}`);
+});
+
+test('PLANT: a local `useMemo` shadowing the React import inside the hook is counted at the spread', () => {
+  const count = countInputWithFieldAction((text) => {
+    const memoized = memoizeHandlerBag(text);
+    const shadowed = memoized.replace(
+      '  return {\n    state,\n    handlers: useMemo',
+      '  const useMemo = paintedMemo;\n  return {\n    state,\n    handlers: useMemo',
+    );
+    assert.notEqual(shadowed, memoized, 'the shadow must live inside the hook body');
+    return `import { useMemo } from 'react';\n${shadowed}\n${PAINTED_MEMO.replace('function useMemo', 'function paintedMemo')}`;
+  });
+  assert.ok(count > 0, `expected a shadowing useMemo to leave the spread uncertified, got ${count}`);
+});
