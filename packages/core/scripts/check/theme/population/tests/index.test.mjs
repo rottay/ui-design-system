@@ -20,8 +20,10 @@ import {
   AXES,
   AXIS_IDS,
   catalogRevision,
+  checkPilotPopulation,
   checkPopulationFloor,
   declaredProperties,
+  pilotPopulation,
   familyAxisDeclarations,
   populationReport,
   readChannels,
@@ -35,16 +37,20 @@ const ROOT = findPackageRoot(HERE);
 const SKIN_ROOT = 'src/foundation/tokens/css/runtime/engines/modern/skin';
 const CATALOG = 'src/contracts/theme/runtime/catalog/index.ts';
 const FLOOR = join(ROOT, 'scripts/check/theme/population/baseline/index.json');
+const ROSTER = 'scripts/check/family-cut/baseline/index.json';
+const PILOT_PIN = join(ROOT, 'scripts/check/theme/population/pilot/index.json');
 
 const sandboxes = [];
 after(() => { for (const dir of sandboxes) rmSync(dir, { recursive: true, force: true }); });
 
-/** A sandbox carrying only what the population walk reads: skins and the catalog. */
+/** A sandbox carrying only what the population walk reads: skins, the catalog and the family-cut roster. */
 function sandbox() {
   const dir = mkdtempSync(join(tmpdir(), 'evi02-population-'));
   sandboxes.push(dir);
   mkdirSync(join(dir, SKIN_ROOT), { recursive: true });
   cpSync(join(ROOT, SKIN_ROOT), join(dir, SKIN_ROOT), { recursive: true });
+  mkdirSync(join(dir, dirname(ROSTER)), { recursive: true });
+  cpSync(join(ROOT, ROSTER), join(dir, ROSTER));
   mkdirSync(join(dir, 'src/contracts/theme/runtime/catalog'), { recursive: true });
   cpSync(join(ROOT, CATALOG), join(dir, CATALOG));
   return dir;
@@ -176,5 +182,49 @@ describe('theme population drills — a shrunken denominator is refused', () => 
       assert.ok(AXES[axis].authored.length > 0, `${axis}: no authored vocabulary`);
       assert.ok(AXES[axis].computed.length > 0, `${axis}: no computed vocabulary`);
     }
+  });
+});
+
+describe('theme population — the pilot population of WO-EVI-05', () => {
+  it('is the WO-FAM-01 roster with the axes each family declares, and matches its publication', () => {
+    const pilot = pilotPopulation();
+    assert.deepEqual(Object.keys(pilot.families), ['button', 'checkbox', 'radio', 'segmented', 'toggle']);
+    const fleet = populationReport();
+    for (const [family, axes] of Object.entries(pilot.families)) {
+      for (const axis of axes) {
+        assert.ok(fleet.axes.find((entry) => entry.axis === axis).families.includes(family), `${family}/${axis} is not a fleet declaration`);
+      }
+    }
+    assert.deepEqual(checkPilotPopulation(ROOT, undefined, PILOT_PIN, { revision: true }).failures, []);
+  });
+
+  it('MUTANT: a pilot family whose skin stops declaring an axis no longer matches the publication', () => {
+    const dir = sandbox();
+    const skin = join(dir, SKIN_ROOT, 'radio/index.css');
+    writeFileSync(skin, readFileSync(skin, 'utf8').replace(/transition(-duration)?\s*:[^;]*;/gu, ''));
+    const { failures } = checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN);
+    assert.ok(failures.some((line) => line.startsWith('radio: published axes')), failures.join(' | '));
+    assert.ok(failures.includes('motion: published pilot denominator 5 != 4'), failures.join(' | '));
+  });
+
+  it('MUTANT: a family leaving the cut roster, or a rostered family with no skin, is named', () => {
+    const dir = sandbox();
+    const rosterPath = join(dir, ROSTER);
+    const roster = JSON.parse(readFileSync(rosterPath, 'utf8'));
+    delete roster.families.segmented;
+    roster.families.phantom = { cut: 'WO-FAM-01' };
+    writeFileSync(rosterPath, JSON.stringify(roster));
+    const { failures } = checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN);
+    assert.ok(failures.includes('segmented: published in the pilot population and no longer in the WO-FAM-01 roster'));
+    assert.ok(failures.includes('phantom: rostered in WO-FAM-01 with no Modern skin, so it declares no axis to measure'));
+  });
+
+  it('MUTANT: a publication at another catalog revision is refused only when the revision is asked for', () => {
+    const dir = sandbox();
+    const pinPath = join(dir, 'pilot.json');
+    writeFileSync(pinPath, JSON.stringify({ ...JSON.parse(readFileSync(PILOT_PIN, 'utf8')), catalogRevision: '0000000000000000' }));
+    assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), pinPath).failures, []);
+    assert.ok(checkPilotPopulation(dir, catalogIn(dir), pinPath, { revision: true }).failures
+      .some((line) => line.startsWith('catalog revision')));
   });
 });

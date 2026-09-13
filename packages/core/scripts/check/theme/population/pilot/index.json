@@ -1,0 +1,58 @@
+{
+  "purpose": "The pilot population of WO-EVI-05: the families of the WO-FAM-01 cut, the kit rule 4 axes each declares in its own Modern skin, and the catalog revision the pilot run was measured at. Pilot denominators only; a fleet claim may not cite them.",
+  "scope": "pilot",
+  "publishedOn": "2026-09-13",
+  "cut": "WO-FAM-01",
+  "catalogRevision": "2a25f7c6068407fb",
+  "decisionRows": 29,
+  "families": {
+    "button": [
+      "shape",
+      "typography",
+      "rhythm",
+      "depth",
+      "states",
+      "motion"
+    ],
+    "checkbox": [
+      "shape",
+      "typography",
+      "rhythm",
+      "depth",
+      "states",
+      "motion"
+    ],
+    "radio": [
+      "shape",
+      "typography",
+      "rhythm",
+      "depth",
+      "states",
+      "motion"
+    ],
+    "segmented": [
+      "shape",
+      "typography",
+      "rhythm",
+      "depth",
+      "states",
+      "motion"
+    ],
+    "toggle": [
+      "shape",
+      "typography",
+      "rhythm",
+      "depth",
+      "states",
+      "motion"
+    ]
+  },
+  "denominators": {
+    "shape": 5,
+    "typography": 5,
+    "rhythm": 5,
+    "depth": 5,
+    "states": 5,
+    "motion": 5
+  }
+}

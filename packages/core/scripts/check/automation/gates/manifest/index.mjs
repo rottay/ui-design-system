@@ -371,8 +371,8 @@ export const CI_GATES = Object.freeze([
     excluded: {
       reason:
         'NOT a softened law and not a widened baseline: the gate is green on this tree today (palette-only '
-        + 'control at 0 % on every evidential cell, 3 verticals x 2 modes, run 2026-09-11; the emphasis-only '
-        + 'control is NON-EVIDENTIAL while the states positive reads 0, with its limits published in the run '
+        + 'control at 0 % on 36 of 36 evidential cells and emphasis-only control at 0 % on 12 of 12 evidential '
+        + 'cells, 3 verticals x 2 modes, run 2026-09-13, with the states-axis limits published in the run '
         + 'artifact) and its drill stays '
         + 'BLOCKING. What is missing is CI wiring this lot may not do: the `core` job ("Core Library"), whose two '
         + '"Quality gates (manifest-driven, ...)" steps run this inventory, installs no browser, and only the '

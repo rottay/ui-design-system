@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * axis-difference — the per-axis tenant-difference probe of
  * `roadmap/kit-2026-09.md` section 5 rule 4, measured in a browser.
@@ -80,8 +79,11 @@ import {
 import {
   AXES,
   AXIS_IDS,
+  EXCLUDED_GROUP,
+  axisControls,
   axisPopulations,
   catalogRevision,
+  groupControls,
   skinFamilies,
   stripCssComments,
 } from '../population/index.mjs';
@@ -351,12 +353,21 @@ export function effectiveVariables(artifact, theme) {
   return { ...artifact.variables, ...(delta?.variables ?? {}) };
 }
 
-/** The page HTML: the bundle, the scope attributes, and one node per family. */
-export function sceneHtml({ css, vertical, theme, elements }) {
+/**
+ * The page HTML: the bundle, the scope attributes, and one node per family.
+ *
+ * A family with a MOUNT is measured on its own server-rendered anatomy instead
+ * of the one element read off its skin: a skin that paints a part below the
+ * root (a checkbox box, a segmented option) is invisible to a single element.
+ */
+export function sceneHtml({ css, vertical, theme, elements, mounts = null }) {
   const attributes = rootAttributesToHtml(rootAttributes({ vertical, theme }));
   const nodes = [...elements]
-    .filter(([, element]) => element !== null)
+    .filter(([family, element]) => element !== null || mounts?.[family] !== undefined)
     .map(([family, element]) => {
+      if (mounts?.[family] !== undefined) {
+        return `<div data-axis-family="${family}" data-axis-mount="">${mounts[family].markup}</div>`;
+      }
       const classAttribute = element.classes.join(' ');
       const extra = Object.entries(element.attributes)
         .map(([name, value]) => ` ${name}="${value}"`)
@@ -379,73 +390,97 @@ export function sceneHtml({ css, vertical, theme, elements }) {
  * answer honestly. The `:hover` half is NAMED in the artifact as unmeasured
  * rather than implied.
  */
-export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected']);
+export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected', 'focus-visible']);
 
 /**
  * WHAT THIS PROBE CANNOT SEE ON THE STATES AXIS, measured rather than asserted.
  *
- * The states positive reads 0 % on every vertical and both modes, and a zero is
- * the one reading that has two completely different causes: the decision moves
- * nothing, or the instrument cannot see what it moved. This block is the second
- * half, enumerated, so the zero is publishable without being read as either.
+ * A zero on this axis has two causes that read alike: the decision moves
+ * nothing, or the instrument cannot see what it moved. This block enumerates
+ * the second, so a low fleet reading is publishable without being read as the
+ * first. It also bounds NEGATIVE CONTROL 2: that control is evidence in a cell
+ * only where the states positive, and `states.emphasis` alone, moved there.
  *
- * It also settles what the run may claim about NEGATIVE CONTROL 2. That control
- * is "two documents differing only in `states.emphasis` give 0 % on shape and
- * typography" -- but a control is evidence only if the same decision MOVED
- * something IN THE SAME CELL. Wherever the states positive is zero, that cell's
- * 0 % on shape and typography is compatible with the decision reaching no
- * family at all, so the run marks that cell non-evidential and says why. A run
- * that claimed both controls green would be crediting a reading that cost
- * nothing.
+ * Measured 2026-09-13 over the Modern skin corpus and the 28 channels catalog
+ * rows `states.emphasis` and `states.focus-style` produce, after the axis gained
+ * the non-chromatic longhands state channels paint and the `focus-visible`
+ * stamp (WO-EVI-05):
  *
- * Measured 2026-09-11 over the 275 Modern skin families and the 28 channels
- * catalog rows `states.emphasis` and `states.focus-style` produce:
+ *  - 16 of the 28 have ZERO readers in any Modern skin, among them
+ *    `--ds-state-active-shift`, `--ds-state-selected-shift`,
+ *    `--ds-state-disabled-mix` and the three `--ds-material-*-focus-ring`.
+ *  - 7 are read only to paint `background`/`background-color`, which is colour
+ *    and excluded from the six axes by the rule itself.
+ *  - 5 paint inside the vocabulary: `--ds-state-press-scale` (17 skins,
+ *    `transform`), `--ds-state-disabled-opacity` (5, `opacity`),
+ *    `--ds-focus-ring` (24, `box-shadow`), `--ds-focus-ring-width` (73,
+ *    `outline`/`box-shadow`) and `--ds-focus-ring-offset` (56, `outline-offset`).
+ *  - The declaration side: of the 156 families in the states population, 133
+ *    declare the axis through pseudo-classes ONLY, 19 through `[data-state=`
+ *    and 4 through a state channel alone. A stamped attribute cannot produce
+ *    `:hover` or `:focus-visible`, so the whole-page scene reaches 23 of 156
+ *    before a single value is compared.
  *
- *  - 15 of the 28 have ZERO readers in any Modern skin, the four `*-shift`
- *    channels and `--ds-state-disabled-mix` among them. Nothing at all paints
- *    them, in any state.
- *  - Of the 13 that are read, 9 paint a property OUTSIDE this probe's
- *    vocabulary and are invisible to it by construction: `--ds-state-press-scale`
- *    (18 readers) paints `transform`, `--ds-state-disabled-opacity` (4) paints
- *    `opacity`, `--ds-focus-ring-offset` (57) paints `outline-offset`, and the
- *    six live `--ds-material-*-background-*` channels paint `background`. The
- *    six axes of kit rule 4 are non-chromatic and name none of these longhands.
- *  - The remaining 4 -- `--ds-focus-ring` (24 readers), `--ds-focus-ring-width`
- *    (74), `--ds-material-panel-focus-ring` (1), `--ds-material-control-focus-ring`
- *    (1) -- do paint `box-shadow`, which IS read. Every one of those reads is
- *    behind a focus condition: 33 of the 34 rules that carry one select on
- *    `:focus-visible`, `[data-focused]` or `[data-state~='focused']`, and the
- *    34th is a `@keyframes` stop. `focused` is not in `STATE_VARIANTS`, and a
- *    stamped attribute cannot produce `:focus-visible` anyway -- that needs real
- *    keyboard focus, one element at a time.
- *  - The declaration side agrees: of the 157 families in the states population,
- *    134 declare the axis through pseudo-classes ONLY, 19 through `[data-state=`
- *    and 4 through a state channel alone. So the half of the rule this scene can
- *    answer covers 19 families of 157 before a single value is compared.
- *
- * None of this is a reason to soften the axis. It is the reason the axis is
- * published at 0 % WITH its limits instead of being quietly dropped, and it
- * names exactly what would have to change for the number to mean something: a
- * per-element hover/focus pass, and skins that read the state channels.
+ * What would have to change for the fleet number to cover the axis: a
+ * per-element pointer/keyboard pass, and skins that pair their pseudo-classes
+ * with the stamped state (the family cuts do this).
  */
 export const STATES_AXIS_LIMITS = Object.freeze({
-  measuredOn: '2026-09-11',
-  channels: { total: 28, withoutReaders: 15, outsideProbeVocabulary: 9, paintingBoxShadow: 4 },
-  focusReads: { rules: 34, focusGuarded: 33, keyframeStop: 1 },
-  declarations: { population: 157, pseudoClassOnly: 134, byDataState: 19, byChannelOnly: 4 },
+  measuredOn: '2026-09-13',
+  channels: { total: 28, withoutReaders: 16, paintingColourOnly: 7, paintingInsideVocabulary: 5 },
+  declarations: { population: 156, pseudoClassOnly: 133, byDataState: 19, byChannelOnly: 4 },
   stampedStates: [...STATE_VARIANTS],
   unreachable: [
-    'the four --ds-state-*-shift channels and --ds-state-disabled-mix have no reader in any Modern skin',
-    '--ds-state-press-scale paints transform and --ds-state-disabled-opacity paints opacity; neither longhand '
-    + 'belongs to any of the six non-chromatic axes',
-    'the four focus channels that do paint box-shadow apply only under :focus-visible / [data-focused] / '
-    + "[data-state~='focused']; this probe stamps hovered, pressed and selected, and never takes real focus",
-    ':hover is not simulated, so 134 of the 157 states families declare the axis in a way this scene never enters',
+    '16 of the 28 states channels have no reader in any Modern skin',
+    '7 states channels paint only background colour, which the six non-chromatic axes exclude',
+    ':hover and :focus-visible are not simulated, so 133 of the 156 states families declare the axis in a way '
+    + 'this scene never enters',
   ],
 });
 
 /** The negative control the states-axis limits make vacuous wherever that axis reads zero. */
 export const STATES_DEPENDENT_CONTROL = 'states-emphasis-only';
+
+/** The ids of the two negative controls of kit rule 4, as shipped. */
+export const NEGATIVE_CONTROLS = Object.freeze(
+  SCENARIOS.filter((scenario) => scenario.kind === 'negative').map((scenario) => scenario.id),
+);
+
+const sameValue = (left, right) => JSON.stringify(left) === JSON.stringify(right);
+
+/**
+ * The scenarios of kit rule 4 cut from a PAIR of complete tenant documents.
+ *
+ * Each positive keeps `base` and takes `other`'s rows of exactly one axis group;
+ * the two negative controls take `other`'s colour group, and its
+ * `states.emphasis` alone, carrying the witnesses the shipped controls declare.
+ * A cut in which the two documents agree moves nothing by construction and is
+ * refused rather than published as a zero.
+ */
+export function pairScenarios({
+  base,
+  other,
+  controls = axisControls(),
+  colour = groupControls(EXCLUDED_GROUP),
+}) {
+  const cut = (id, rows) => {
+    const b = { ...base };
+    for (const row of rows) {
+      if (Object.hasOwn(other, row)) b[row] = other[row];
+      else delete b[row];
+    }
+    if (rows.every((row) => sameValue(base[row], b[row]))) {
+      throw new Error(`axis-difference: the pair agrees on every row of ${id} (${rows.join(', ')}), so it cannot measure it`);
+    }
+    return { ...SCENARIOS.find((scenario) => scenario.id === id), a: base, b };
+  };
+  const palette = cut('palette-only', colour);
+  return [
+    ...AXIS_IDS.map((axis) => cut(axis, controls.get(axis))),
+    { ...palette, witness: { ...palette.witness, control: `${EXCLUDED_GROUP} group` } },
+    cut('states-emphasis-only', ['states.emphasis']),
+  ];
+}
 
 /** The controls that may not be credited without a witness bound to the cell. */
 export const WITNESSED_CONTROLS = Object.freeze(
@@ -465,12 +500,28 @@ const readComputed = (properties) => {
   // under two different palettes with 4 nodes on the page and different with 3,
   // which is a reading that describes nothing.
   void document.documentElement.offsetHeight;
+  // A stamped state starts the skin's transitions, and a reading taken while one
+  // runs is a frame of it: a document then differs from itself on `transform`.
+  // Each is moved to its end state; one that never ends is held at its start.
+  for (const animation of document.getAnimations()) {
+    try {
+      animation.finish();
+    } catch {
+      animation.pause();
+      animation.currentTime = 0;
+    }
+  }
   const out = {};
   for (const node of document.querySelectorAll('[data-axis-family]')) {
     const family = node.getAttribute('data-axis-family');
-    const computed = getComputedStyle(node);
+    // A mounted family reads every element of its anatomy, in document order,
+    // so a move on any part is a move of the family.
+    const targets = node.hasAttribute('data-axis-mount') ? [...node.querySelectorAll('*')] : [node];
+    const styles = targets.map((target) => getComputedStyle(target));
     const values = {};
-    for (const property of properties) values[property] = computed.getPropertyValue(property);
+    for (const property of properties) {
+      values[property] = styles.map((style) => style.getPropertyValue(property)).join(' | ');
+    }
     out[family] = values;
   }
   return out;
@@ -487,8 +538,22 @@ const applyVariables = (variables) => {
 
 const stampState = (state) => {
   for (const node of document.querySelectorAll('[data-axis-family]')) {
-    if (state === null) node.removeAttribute('data-state');
-    else node.setAttribute('data-state', state);
+    if (!node.hasAttribute('data-axis-mount')) {
+      if (state === null) node.removeAttribute('data-state');
+      else node.setAttribute('data-state', state);
+      continue;
+    }
+    // Real anatomy already carries its resting state tokens, and the skins
+    // match with `~=`, so the probed state is ADDED to them and later restored.
+    for (const target of node.querySelectorAll(':scope > *, [data-part]')) {
+      if (!target.hasAttribute('data-axis-rest-state')) {
+        target.setAttribute('data-axis-rest-state', target.getAttribute('data-state') ?? '');
+      }
+      const rest = target.getAttribute('data-axis-rest-state');
+      const next = state === null ? rest : `${rest} ${state}`.trim();
+      if (next === '') target.removeAttribute('data-state');
+      else target.setAttribute('data-state', next);
+    }
   }
 };
 
@@ -877,16 +942,32 @@ export async function run({
    * between a document and itself is reporting noise, and no amount of
    * unit-testing the comparator would catch it. */
   scenarios = SCENARIOS,
+  /* family -> { markup }: the family's own server-rendered anatomy, measured in
+   * place of the single element read off its skin. */
+  mounts = null,
+  /* The same export of the same compiler, handed in by a runner that reads the
+   * source tree instead of `dist/`; absent, the published door is imported. */
+  compile: compileOverride = null,
 } = {}) {
-  const module = await import(pathToFileURL(resolve(root, COMPILER_MODULE)).href);
-  const compile = module[COMPILER_EXPORT];
+  const compile = compileOverride
+    ?? (await import(pathToFileURL(resolve(root, COMPILER_MODULE)).href))[COMPILER_EXPORT];
   if (typeof compile !== 'function') {
     throw new Error(`axis-difference: ${COMPILER_MODULE} exports no callable ${COMPILER_EXPORT}`);
   }
 
   const elements = familyElements(root, families);
-  const mountable = [...elements].filter(([, element]) => element !== null).map(([family]) => family);
-  const unmountable = [...elements].filter(([, element]) => element === null).map(([family]) => family);
+  for (const family of Object.keys(mounts ?? {})) {
+    if (!elements.has(family)) {
+      throw new Error(`axis-difference: a mount was supplied for ${family}, which has no Modern skin family`);
+    }
+  }
+  const isMounted = (family) => mounts?.[family] !== undefined;
+  const mountable = [...elements]
+    .filter(([family, element]) => element !== null || isMounted(family))
+    .map(([family]) => family);
+  const unmountable = [...elements]
+    .filter(([family, element]) => element === null && !isMounted(family))
+    .map(([family]) => family);
   const populations = axisPopulations(root);
   const properties = allProperties();
   const effective = (axis) => populations
@@ -904,7 +985,7 @@ export async function run({
       const bundle = await resolveBundle({ vertical, mode: 'fresh' });
       for (const theme of themes) {
         const page = await context.newPage();
-        await page.setContent(sceneHtml({ css: bundle.css, vertical, theme, elements }), {
+        await page.setContent(sceneHtml({ css: bundle.css, vertical, theme, elements, mounts }), {
           waitUntil: 'load',
         });
         for (const scenario of scenarios) {
@@ -995,6 +1076,7 @@ export async function run({
               moved: moved.length,
               percent: denominator.length === 0 ? 0 : (moved.length / denominator.length) * 100,
               movedFamilies: moved.slice(0, 12),
+              movedIds: moved.map((entry) => entry.family),
             });
           }
         }
@@ -1016,6 +1098,7 @@ export async function run({
     familiesFiltered: families !== null,
     families: {
       mountable: mountable.length,
+      mounted: Object.keys(mounts ?? {}).sort(),
       unmountable,
       pinnedUnmountable: [...UNMOUNTABLE_FAMILIES],
       excludedUnsettled: [...UNSETTLED_FAMILIES],
@@ -1023,6 +1106,7 @@ export async function run({
       newlyUnsettled: [...newlyUnsettled].sort(),
     },
     populations: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis).length])),
+    effectiveFamilies: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis)])),
     // THE DENOMINATOR, RECONCILED. `populations` above is the EFFECTIVE bottom
     // of every fraction this run publishes; `declaredPopulations` is the pinned
     // set `check/theme/population` owns. The two differ, and a reader who only
@@ -1062,9 +1146,10 @@ export async function run({
  * The one negative control this run may carry with NO standing cell, and the
  * only one.
  *
- * `states-emphasis-only` is vacuous for a reason that is measured rather than
- * assumed -- every line of `STATES_AXIS_LIMITS` -- and dropping the control
- * instead of publishing it vacuous would hide that measurement. Every OTHER
+ * `states-emphasis-only` stands only where the states positive moves, and the
+ * limits in `STATES_AXIS_LIMITS` bound how often that can be on the fleet;
+ * dropping the control instead of publishing it vacuous would hide that
+ * measurement. Every OTHER
  * negative control must keep at least one evidential cell, because a control
  * that has gone wholly vacuous is indistinguishable from a control that was
  * never run, and a run with no negative control has nothing holding its
@@ -1214,6 +1299,73 @@ export function evaluate(result, {
     }
   }
   return failures;
+}
+
+/**
+ * The pilot verdict of `WO-EVI-05`, on top of `evaluate`: every family of the
+ * pilot population moves in every measured cell on every axis it declares, and
+ * both negative controls stand on every cell. No threshold is read -- the pilot
+ * denominators are not the fleet's -- and no control may be vacuous.
+ */
+export function evaluatePilot(result, pilot) {
+  const failures = evaluate(result, { vacuityPermitted: [] });
+  const members = Object.keys(pilot.families ?? {});
+  if (members.length === 0) failures.push('the pilot population names no family');
+  if (result.revision.digest !== pilot.catalogRevision) {
+    failures.push(
+      `the run measured catalog ${result.revision.digest} and the pilot population is published at `
+      + `${pilot.catalogRevision}; re-publish both at one revision`,
+    );
+  }
+  for (const axis of AXIS_IDS) {
+    const declared = members.filter((family) => pilot.families[family].includes(axis)).length;
+    if (pilot.denominators?.[axis] !== declared) {
+      failures.push(`${axis}: pilot denominator ${pilot.denominators?.[axis]} != ${declared} declaring families`);
+    }
+  }
+  for (const family of members) {
+    for (const axis of pilot.families[family]) {
+      if (!(result.effectiveFamilies?.[axis] ?? []).includes(family)) {
+        failures.push(`${family}: declares ${axis} and is outside the measured ${axis} denominator (unmountable or unsettled)`);
+        continue;
+      }
+      const positives = result.cells.filter((cell) => cell.kind === 'positive' && cell.axis === axis);
+      if (positives.length === 0) failures.push(`${family}: declares ${axis} and no positive cell measured it`);
+      for (const cell of positives) {
+        if (!cell.evidential) {
+          failures.push(`${family}: the ${axis} positive in ${cell.vertical}/${cell.theme} is NON-EVIDENTIAL`);
+        } else if (!cell.movedIds.includes(family)) {
+          failures.push(`${family}: declares ${axis} and did not move on it in ${cell.vertical}/${cell.theme}`);
+        }
+      }
+    }
+  }
+  for (const control of NEGATIVE_CONTROLS) {
+    const own = result.cells.filter((cell) => cell.scenario === control);
+    if (own.length === 0) failures.push(`NEGATIVE CONTROL ${control}: not run`);
+    for (const cell of own.filter((entry) => !entry.evidential)) {
+      failures.push(
+        `NEGATIVE CONTROL ${control} ${cell.vertical}/${cell.theme} ${cell.axis}: NON-EVIDENTIAL — `
+        + `${cell.nonEvidentialReason ?? 'its pair compiles to an empty delta'}`,
+      );
+    }
+  }
+  return failures;
+}
+
+/** Pilot family `moved/denominator` per positive cell, labelled as the pilot's so it cannot pass for a fleet figure. */
+export function pilotReadings(result, pilot) {
+  return result.cells.filter((cell) => cell.kind === 'positive').map((cell) => {
+    const declaring = Object.keys(pilot.families).filter((family) => pilot.families[family].includes(cell.axis));
+    return {
+      scope: 'pilot',
+      vertical: cell.vertical,
+      theme: cell.theme,
+      axis: cell.axis,
+      moved: declaring.filter((family) => cell.movedIds.includes(family)).length,
+      denominator: declaring.length,
+    };
+  });
 }
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];

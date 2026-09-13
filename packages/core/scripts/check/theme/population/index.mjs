@@ -32,6 +32,7 @@
  * Usage:
  *   node scripts/check/theme/population/index.mjs          the published report
  *   node scripts/check/theme/population/index.mjs --json    the same, machine-readable
+ *   node scripts/check/theme/population/index.mjs --pilot   the WO-EVI-05 pilot population against its pin
  */
 
 import { createHash } from 'node:crypto';
@@ -102,7 +103,15 @@ export const AXES = Object.freeze({
   states: {
     group: 'states',
     authored: [],
-    computed: [],
+    /**
+     * The non-chromatic longhands the state channels paint, read ONLY under a
+     * stamped state and never at rest. Measured on the WO-FAM-01 skins
+     * (2026-09-13): `--ds-state-press-scale` paints `transform`,
+     * `--ds-state-disabled-opacity` paints `opacity`, and the focus-ring width
+     * and offset paint `outline-*`. Without them the axis read the resting
+     * geometry under a state and could not see a state move at all.
+     */
+    computed: ['transform', 'opacity', 'outline-style', 'outline-width', 'outline-offset'],
     /**
      * States is the one axis whose declaration is not a property name. A
      * family declares it consumes states by having a rule that only applies in
@@ -168,6 +177,11 @@ export function axisControls(sourcePath = CATALOG_SOURCE) {
     if (axis) byAxis.get(axis).push(row.id);
   }
   return byAxis;
+}
+
+/** The catalog row ids of one kit group, in kit order; how a pair is cut along a group outside the six axes. */
+export function groupControls(group, sourcePath = CATALOG_SOURCE) {
+  return readThemeCatalog(sourcePath).filter((row) => row.group === group).map((row) => row.id);
 }
 
 const MODERN_SKIN_ROOT = 'src/foundation/tokens/css/runtime/engines/modern/skin';
@@ -317,6 +331,88 @@ export function populationLine(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE)
     + `${report.skinFamilies} modern skin families; per-axis denominators — ${axes}`;
 }
 
+/**
+ * The PILOT population of `WO-EVI-05`: the families of one family cut, the axes
+ * each declares, and the catalog revision both were read at.
+ *
+ * Membership is read from the family-cut roster (`cut` names the owning work
+ * order), and each family's axes from the same skin declarations every fleet
+ * denominator uses, so the pilot is a subset of the fleet population and never
+ * a second listing of it. Its denominators are the pilot's alone: a fleet claim
+ * may not cite them (`WO-EVI-05`, Do NOT).
+ */
+export const PILOT_CUT = 'WO-FAM-01';
+export const FAMILY_CUT_ROSTER = 'scripts/check/family-cut/baseline/index.json';
+export const PILOT_PIN_PATH = join(HERE, 'pilot/index.json');
+
+export function pilotPopulation(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, cut = PILOT_CUT) {
+  const roster = JSON.parse(readFileSync(join(root, FAMILY_CUT_ROSTER), 'utf8')).families ?? {};
+  const members = Object.keys(roster).filter((family) => roster[family].cut === cut).sort();
+  const declarations = familyAxisDeclarations(root, sourcePath);
+  const revision = catalogRevision(sourcePath);
+  const families = Object.fromEntries(members.map((family) => [
+    family,
+    AXIS_IDS.filter((axis) => Object.hasOwn(declarations.get(family)?.axes ?? {}, axis)),
+  ]));
+  return {
+    scope: 'pilot',
+    cut,
+    catalogRevision: revision.digest,
+    decisionRows: revision.decisionRows,
+    families,
+    withoutSkin: members.filter((family) => !declarations.has(family)),
+    denominators: Object.fromEntries(
+      AXIS_IDS.map((axis) => [axis, members.filter((family) => families[family].includes(axis)).length]),
+    ),
+  };
+}
+
+/**
+ * The published pilot population against the tree. Families, axes and
+ * denominators must match exactly; the revision is compared only when asked,
+ * because the pin names the revision the last pilot RUN was measured at and a
+ * catalog edit elsewhere makes that run stale rather than this structure wrong.
+ */
+export function checkPilotPopulation(
+  root = DEFAULT_ROOT,
+  sourcePath = CATALOG_SOURCE,
+  pinPath = PILOT_PIN_PATH,
+  { revision = false } = {},
+) {
+  const live = pilotPopulation(root, sourcePath);
+  const pin = JSON.parse(readFileSync(pinPath, 'utf8'));
+  const failures = [];
+  if (Object.keys(live.families).length === 0) {
+    failures.push(`${live.cut}: the family-cut roster names no family, so the pilot population is empty`);
+  }
+  for (const family of live.withoutSkin) {
+    failures.push(`${family}: rostered in ${live.cut} with no Modern skin, so it declares no axis to measure`);
+  }
+  if (pin.cut !== live.cut) failures.push(`pinned cut ${pin.cut} != ${live.cut}`);
+  const names = [...new Set([...Object.keys(pin.families ?? {}), ...Object.keys(live.families)])].sort();
+  for (const family of names) {
+    const pinned = pin.families?.[family];
+    const measured = live.families[family];
+    if (pinned === undefined) failures.push(`${family}: in the ${live.cut} roster and not in the published pilot population`);
+    else if (measured === undefined) failures.push(`${family}: published in the pilot population and no longer in the ${live.cut} roster`);
+    else if (pinned.join(',') !== measured.join(',')) {
+      failures.push(`${family}: published axes [${pinned.join(', ')}] != declared [${measured.join(', ')}]`);
+    }
+  }
+  for (const axis of AXIS_IDS) {
+    if (pin.denominators?.[axis] !== live.denominators[axis]) {
+      failures.push(`${axis}: published pilot denominator ${pin.denominators?.[axis]} != ${live.denominators[axis]}`);
+    }
+  }
+  if (revision && pin.catalogRevision !== live.catalogRevision) {
+    failures.push(
+      `catalog revision ${live.catalogRevision} != published ${pin.catalogRevision}: the pilot run and its `
+      + 'population must be re-published together at the revision they were measured at',
+    );
+  }
+  return { live, pin, failures };
+}
+
 export const FLOOR_PATH = join(HERE, 'baseline/index.json');
 
 /**
@@ -374,7 +470,19 @@ export function checkPopulationFloor(root = DEFAULT_ROOT, sourcePath = CATALOG_S
 }
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
-if (isMain && process.argv.includes('--check')) {
+if (isMain && process.argv.includes('--pilot')) {
+  const { live, failures } = checkPilotPopulation(DEFAULT_ROOT, CATALOG_SOURCE, PILOT_PIN_PATH, {
+    revision: process.argv.includes('--check'),
+  });
+  if (process.argv.includes('--json')) console.log(JSON.stringify(live, null, 2));
+  console.log(`pilot population (${live.cut}) — catalog ${live.catalogRevision}, ${Object.keys(live.families).length} families; `
+    + `pilot denominators — ${AXIS_IDS.map((axis) => `${axis} ${live.denominators[axis]}`).join(', ')}`);
+  for (const [family, axes] of Object.entries(live.families)) console.log(`  ${family.padEnd(11)} ${axes.join(', ')}`);
+  if (failures.length > 0) {
+    for (const failure of failures) console.error(`theme-population pilot FAIL — ${failure}`);
+    process.exit(1);
+  }
+} else if (isMain && process.argv.includes('--check')) {
   const { report, failures } = checkPopulationFloor();
   console.log(populationLine());
   if (failures.length > 0) {
