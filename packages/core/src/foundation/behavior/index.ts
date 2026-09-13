@@ -14,3 +14,9 @@ export type {
   UseInteractionStateOptions,
   UseInteractionStateResult,
 } from './runtime/interaction-state';
+
+export { isComposingKey, resolveSubmitIntent } from './runtime/submit-intent';
+export type { SubmitIntent, SubmitIntentOptions, SubmitKeyEvent } from './runtime/submit-intent';
+
+export { useFieldAction } from './composition/field-action';
+export type { FieldAction, FieldActionHandlers } from './composition/field-action';

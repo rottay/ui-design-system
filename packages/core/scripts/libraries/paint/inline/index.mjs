@@ -337,6 +337,15 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
           transparentArgs: [],
         },
       ],
+      [
+        "useFieldAction",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set(["handlers"]),
+          transparentArgs: [],
+        },
+      ],
     ]),
   ],
   [
