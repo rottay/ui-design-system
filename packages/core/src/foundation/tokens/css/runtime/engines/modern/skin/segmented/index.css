@@ -124,9 +124,9 @@
      genuinely paints a keyline on every ground, and that one is relocated. */
   box-shadow: var(--ds-segmented-shadow, var(--ds-shadow-xs));
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-position var(--ds-motion-normal) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out),
+    background-position var(--ds-motion-reveal, var(--ds-motion-normal)) var(--ds-motion-ease-out);
 }
 
 .ds-segmented.ds-segmented--modern[role='radiogroup'][role='radiogroup'] {
@@ -268,11 +268,11 @@
   line-height: var(--ds-segmented-current-line-height);
   cursor: pointer;
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out);
 }
 
 /* Reserved for forced-colors (below): kept transparent at rest so it never
