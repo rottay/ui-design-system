@@ -738,13 +738,94 @@ function isProvenNonStylePropBag(node) {
   return true;
 }
 
-function returnedExpressionHasPath(node, path) {
+/** Every `const name = …` and `function name` declared anywhere inside `scope`. */
+function localDeclarationsNamed(scope, name) {
+  const found = [];
+  function visit(candidate) {
+    if (
+      ts.isVariableDeclaration(candidate) &&
+      ts.isIdentifier(candidate.name) &&
+      candidate.name.text === name
+    ) {
+      found.push(candidate);
+    } else if (
+      ts.isFunctionDeclaration(candidate) &&
+      candidate.name?.text === name
+    ) {
+      found.push(candidate);
+    }
+    ts.forEachChild(candidate, visit);
+  }
+  visit(scope);
+  return found;
+}
+
+/**
+ * The value a certified prop-bag path returns must itself be proven free of
+ * `style`: a literal bag, a local binding or a same-module helper whose every
+ * return is proven, or React's `useMemo` over one. Anything unresolved fails closed.
+ */
+function isProvenNonStyleValue(node, context, seen = new Set()) {
+  const expression = unwrapExpression(node);
+  if (!expression || seen.has(expression)) return false;
+  const nextSeen = new Set(seen).add(expression);
+  if (ts.isConditionalExpression(expression)) {
+    return (
+      isProvenNonStyleValue(expression.whenTrue, context, nextSeen) &&
+      isProvenNonStyleValue(expression.whenFalse, context, nextSeen)
+    );
+  }
+  if (ts.isObjectLiteralExpression(expression)) {
+    return isProvenNonStylePropBag(expression);
+  }
+  if (ts.isIdentifier(expression)) {
+    return isProvenNonStyleBinding(expression.text, context, nextSeen);
+  }
+  if (ts.isCallExpression(expression)) {
+    const callee = unwrapExpression(expression.expression);
+    if (!callee || !ts.isIdentifier(callee)) return false;
+    if (callee.text === "useMemo") {
+      const factory = unwrapExpression(expression.arguments[0]);
+      if (!factory || !ts.isFunctionLike(factory)) return false;
+      const returned = returnExpressionsForContract(factory);
+      return (
+        returned.length > 0 &&
+        returned.every((value) => isProvenNonStyleValue(value, context, nextSeen))
+      );
+    }
+    const helpers = localDeclarationsNamed(context.sourceFile, callee.text);
+    if (helpers.length !== 1) return false;
+    const helper = ts.isVariableDeclaration(helpers[0])
+      ? unwrapExpression(helpers[0].initializer)
+      : helpers[0];
+    if (!helper || !ts.isFunctionLike(helper)) return false;
+    const returned = returnExpressionsForContract(helper);
+    return (
+      returned.length > 0 &&
+      returned.every((value) => isProvenNonStyleValue(value, context, nextSeen))
+    );
+  }
+  return false;
+}
+
+function isProvenNonStyleBinding(name, context, seen) {
+  const inFunction = localDeclarationsNamed(context.functionNode, name);
+  const declarations = inFunction.length > 0
+    ? inFunction
+    : localDeclarationsNamed(context.sourceFile, name);
+  if (declarations.length !== 1) return false;
+  const declaration = declarations[0];
+  if (!ts.isVariableDeclaration(declaration) || !declaration.initializer) return false;
+  return isProvenNonStyleValue(declaration.initializer, context, seen);
+}
+
+function returnedExpressionHasPath(node, path, context) {
   const expression = unwrapExpression(node);
   if (!expression) return false;
   if (ts.isConditionalExpression(expression)) {
     return (
-      returnedExpressionHasPath(expression.whenTrue, path) &&
-      returnedExpressionHasPath(expression.whenFalse, path)
+      returnedExpressionHasPath(expression.whenTrue, path, context) &&
+      returnedExpressionHasPath(expression.whenFalse, path, context)
     );
   }
   if (path.length === 0) return isProvenNonStylePropBag(expression);
@@ -757,9 +838,17 @@ function returnedExpressionHasPath(node, path) {
       staticPropertyName(candidate.name) === path[0]
   );
   if (!property) return false;
-  if (path.length === 1) return true;
+  if (path.length === 1) {
+    if (ts.isPropertyAssignment(property)) {
+      return isProvenNonStyleValue(property.initializer, context);
+    }
+    if (ts.isShorthandPropertyAssignment(property)) {
+      return isProvenNonStyleBinding(property.name.text, context, new Set());
+    }
+    return false;
+  }
   if (ts.isPropertyAssignment(property)) {
-    return returnedExpressionHasPath(property.initializer, path.slice(1));
+    return returnedExpressionHasPath(property.initializer, path.slice(1), context);
   }
   return false;
 }
@@ -840,7 +929,10 @@ function certifiedProducerContract(entry, fileName) {
       !hasNonStylePropBagHazard(symbol.node) &&
       [...contract.nonStylePaths].every((path) =>
         returned.every((value) =>
-          returnedExpressionHasPath(value, path === "" ? [] : path.split("."))
+          returnedExpressionHasPath(value, path === "" ? [] : path.split("."), {
+            sourceFile: symbol.sourceFile,
+            functionNode: symbol.node,
+          })
         )
       );
   } else if (contract.ownership === "zeroPaint") {
