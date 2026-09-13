@@ -26,16 +26,13 @@ const here = dirname(fileURLToPath(import.meta.url));
 const CSS = join(here, '../../../../foundation/tokens/css');
 const read = (p: string) => readFileSync(join(CSS, p), 'utf8');
 
+/** Modern transfer, color-picker, time-picker and date-picker are measured by the family-cut gate and proven in a browser (WO-FAM-03). */
 const SKINS: Record<string, string> = {
   'modern/upload': read('runtime/engines/modern/skin/upload/index.css'),
   'rustic/upload': read('runtime/engines/rustic/skin/upload/index.css'),
-  'modern/transfer': read('runtime/engines/modern/skin/transfer/index.css'),
   'rustic/transfer': read('runtime/engines/rustic/skin/transfer/index.css'),
-  'modern/color-picker': read('runtime/engines/modern/skin/color-picker/index.css'),
   'rustic/color-picker': read('runtime/engines/rustic/skin/color-picker/index.css'),
-  'modern/time-picker': read('runtime/engines/modern/skin/time-picker/index.css'),
   'rustic/time-picker': read('runtime/engines/rustic/skin/time-picker/index.css'),
-  'modern/date-picker': read('runtime/engines/modern/skin/date-picker/index.css'),
   'rustic/date-picker': read('runtime/engines/rustic/skin/date-picker/index.css'),
   'modern/progress': read('runtime/engines/modern/skin/progress/index.css'),
   'rustic/progress': read('runtime/engines/rustic/skin/progress/index.css'),
@@ -100,30 +97,23 @@ describe.each(Object.keys(SKINS))('pickers skin %s -- structural contract', (lab
 });
 
 describe('pickers skins -- portal posture + keyframe + hatch pins', () => {
-  it('DatePicker/TimePicker panels are scoped on their own engine-tagged panel class (standalone, not under a trigger root)', () => {
-    expect(/\.rottay-datepicker-panel--modern[^,{]*\[data-part='panel'\]/.test(NC['modern/date-picker'])).toBe(true);
+  it('DatePicker rustic panel is scoped on its own engine-tagged panel class', () => {
     expect(/\.rottay-datepicker-panel--rustic\b/.test(NC['rustic/date-picker'])).toBe(true);
-    expect(/\.rottay-timepicker__panel\b/.test(NC['modern/time-picker'])).toBe(true);
   });
 
-  it('ColorPicker preserves the portal asymmetry: rustic dropdown standalone, modern in-tree', () => {
+  it('ColorPicker rustic dropdown stays standalone', () => {
     // rustic portals -> a self-sufficient dropdown class scopes its rules.
     expect(/\.rottay-colorpicker__dropdown\b/.test(NC['rustic/color-picker'])).toBe(true);
-    // modern is in-tree -> its dropdown rules hang off the component root, never a portaled dropdown class.
-    expect(/\.rottay-colorpicker__dropdown\b/.test(NC['modern/color-picker'])).toBe(false);
   });
 
   it('renames the per-mount keyframes into the skins (ds-date-picker-*/ds-time-picker-*), never the old names', () => {
-    expect(/@keyframes\s+ds-date-picker-slide-in\b/.test(NC['modern/date-picker'])).toBe(true);
     expect(/@keyframes\s+ds-date-picker-panel-in\b/.test(NC['rustic/date-picker'])).toBe(true);
-    expect(/@keyframes\s+ds-time-picker-slide-in\b/.test(NC['modern/time-picker'])).toBe(true);
     const all = Object.values(NC).join('\n');
     expect(/@keyframes\s+rottay-select-slide-in\b/.test(all)).toBe(false);
     expect(/@keyframes\s+rottay-dp-panel-in\b/.test(all)).toBe(false);
   });
 
   it('routes the runtime swatch/progress colours through a custom-property hatch', () => {
-    expect(/var\(--ds-colorpicker-swatch-color\)/.test(NC['modern/color-picker'])).toBe(true);
     expect(/var\(--ds-colorpicker-swatch-color\)/.test(NC['rustic/color-picker'])).toBe(true);
     // Upload composes Progress; the runtime override therefore travels through
     // Progress's canonical hatch instead of duplicating an Upload-only one.

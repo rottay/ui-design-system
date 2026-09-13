@@ -1,0 +1,23 @@
+/**
+ * Transfer Component Tokens - Rottay Design System
+ *
+ * Structural constants of the transfer family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/transfer`.
+ */
+
+:root {
+  --ds-transfer-gap: var(--ds-spacing-2);
+  --ds-transfer-list-width: 12.5rem;
+  --ds-transfer-list-max-height: 15rem;
+  --ds-transfer-radius: var(--ds-radius-lg);
+  --ds-transfer-item-radius: var(--ds-radius-md);
+  --ds-transfer-search-radius: var(--ds-radius-md);
+  --ds-transfer-search-icon-inset: 1.75rem;
+  --ds-transfer-title-font-weight: var(--ds-font-weight-medium);
+  --ds-transfer-transition-duration: var(--ds-input-transition-duration);
+  --ds-transfer-transition-timing: var(--ds-input-transition-timing);
+  --ds-transfer-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-transfer-pagination-size: 1.5rem;
+  --ds-transfer-move-size: var(--ds-input-sm-height);
+  --ds-transfer-touch-target-min: var(--ds-input-touch-target-min, var(--ds-touch-target-min));
+}

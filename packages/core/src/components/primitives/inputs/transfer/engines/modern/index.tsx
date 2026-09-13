@@ -17,7 +17,10 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useRef } from 'react';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { isTypeaheadKey, resolveListboxTarget, resolveTypeaheadTarget } from '../../../../runtime/collection/listbox';
+import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 import { VisuallyHidden } from '../../../../foundation';
 import type { TransferProps, TransferItem } from '../../contracts';
 import { TRANSFER_DEFAULTS } from '../../contracts';
@@ -69,6 +72,64 @@ interface TransferListProps {
  *  an explicit pageSize. Matches the Ant Design Transfer default. */
 const DEFAULT_PAGE_SIZE = 10;
 
+type TransferButtonPart = 'move-button' | 'pagination-button' | 'panel-item-remove';
+
+interface TransferButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  part: TransferButtonPart;
+}
+
+/** A ghost button of the transfer whose hover, press, focus and disabled state the interaction kernel decides. */
+function TransferButton({ part, disabled, onFocus, onBlur, children, ...rest }: TransferButtonProps) {
+  const button = useInteractionState({ disabled });
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      {...rest}
+      {...partAttributes(part, button.state)}
+      onPointerEnter={button.handlers.onPointerEnter}
+      onPointerLeave={button.handlers.onPointerLeave}
+      onPointerDown={button.handlers.onPointerDown}
+      onPointerUp={button.handlers.onPointerUp}
+      onFocus={(event) => {
+        button.handlers.onFocus(event);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        button.handlers.onBlur(event);
+        onBlur?.(event);
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+interface TransferRowProps {
+  disabled: boolean;
+  selectable: boolean;
+  selected: boolean;
+  children: React.ReactNode;
+}
+
+function TransferRow({ disabled, selectable, selected, children }: TransferRowProps) {
+  const row = useInteractionState({ disabled: disabled || !selectable });
+  return (
+    <div
+      {...partAttributes('panel-item', row.state)}
+      onPointerEnter={row.handlers.onPointerEnter}
+      onPointerLeave={row.handlers.onPointerLeave}
+      onPointerDown={row.handlers.onPointerDown}
+      onPointerUp={row.handlers.onPointerUp}
+      data-selectable={selectable ? undefined : 'false'}
+      data-selected={(selectable && selected) || undefined}
+      data-disabled={disabled || undefined}
+    >
+      {children}
+    </div>
+  );
+}
+
 /**
  * Internal panel component that renders one side (source or target) of the
  * Transfer. Includes optional search, select-all checkbox, paginated item
@@ -95,6 +156,35 @@ const TransferList: React.FC<TransferListProps> = ({
 }) => {
   const tOr = useTransferTranslation();
   const [currentPage, setCurrentPage] = useState(1);
+  const search = useInteractionState({ disabled });
+  const typeaheadRef = useRef<TypeaheadState>({ buffer: '', lastKeyTime: 0 });
+
+  // Arrows, edges, pages and type-ahead walk the panel's checkboxes through the listbox kernel.
+  const handleListKeyDown = (event: React.KeyboardEvent<HTMLUListElement>) => {
+    const controls = Array.from(event.currentTarget.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'));
+    const current = controls.indexOf(event.target as HTMLInputElement);
+    if (current < 0) return;
+    const isItemSelectable = (index: number) => !controls[index]?.disabled;
+    const target = resolveListboxTarget(event.key, { activeIndex: current, itemCount: controls.length, isItemSelectable, wrap: false });
+    if (target !== null) {
+      event.preventDefault();
+      if (target >= 0) controls[target]?.focus();
+      return;
+    }
+    if (!isTypeaheadKey(event)) return;
+    const result = resolveTypeaheadTarget(typeaheadRef.current, event.key, {
+      activeIndex: current,
+      itemCount: controls.length,
+      isItemSelectable,
+      getItemText: (index) => controls[index]?.closest('[data-part="panel-item"]')?.textContent ?? undefined,
+      now: Date.now(),
+    });
+    typeaheadRef.current = result.state;
+    if (result.index >= 0) {
+      event.preventDefault();
+      controls[result.index]?.focus();
+    }
+  };
 
   const filteredItems = useMemo(() => {
     if (!searchValue || !filterOption) return items;
@@ -188,13 +278,19 @@ const TransferList: React.FC<TransferListProps> = ({
 
       {/* Search */}
       {showSearch && (
-        <div>
+        <div data-part="panel-search-field">
           <span data-part="panel-search-icon" aria-hidden="true">
             <ActionSearchIcon decorative size={14} />
           </span>
           <input
             type="text"
-            data-part="panel-search"
+            {...partAttributes('panel-search', search.state)}
+            onPointerEnter={search.handlers.onPointerEnter}
+            onPointerLeave={search.handlers.onPointerLeave}
+            onPointerDown={search.handlers.onPointerDown}
+            onPointerUp={search.handlers.onPointerUp}
+            onFocus={search.handlers.onFocus}
+            onBlur={search.handlers.onBlur}
             placeholder={locale?.searchPlaceholder || tOr('transfer.search_placeholder', 'Search')}
             aria-label={locale?.searchPlaceholder || tOr('transfer.search_placeholder', 'Search')}
             value={searchValue}
@@ -215,14 +311,14 @@ const TransferList: React.FC<TransferListProps> = ({
           <ul
             role={selectable ? 'group' : 'list'}
             aria-label={typeof title === 'string' ? title : undefined}
+            onKeyDown={selectable ? handleListKeyDown : undefined}
           >
             {paginatedItems.map((item) => (
-              <li key={item.key}>
-                <div
-                  data-part="panel-item"
-                  data-selectable={selectable ? undefined : 'false'}
-                  data-selected={(selectable && selectedKeys.has(item.key)) || undefined}
-                  data-disabled={disabled || item.disabled || undefined}
+              <li key={item.key} role={selectable ? 'none' : undefined}>
+                <TransferRow
+                  disabled={Boolean(disabled || item.disabled)}
+                  selectable={selectable}
+                  selected={selectedKeys.has(item.key)}
                 >
                   {selectable ? (
                     <span
@@ -243,9 +339,8 @@ const TransferList: React.FC<TransferListProps> = ({
                     </span>
                   )}
                   {onRemoveItem && (
-                    <button
-                      type="button"
-                      data-part="panel-item-remove"
+                    <TransferButton
+                      part="panel-item-remove"
                       disabled={disabled || item.disabled}
                       aria-label={tOr('transfer.remove_item', `Remove ${item.title}`, {
                         item: item.title,
@@ -267,9 +362,9 @@ const TransferList: React.FC<TransferListProps> = ({
                       }}
                     >
                       <ActionCloseIcon decorative size={12} />
-                    </button>
+                    </TransferButton>
                   )}
-                </div>
+                </TransferRow>
               </li>
             ))}
           </ul>
@@ -286,27 +381,25 @@ const TransferList: React.FC<TransferListProps> = ({
       {/* Pagination */}
       {pagination && totalPages > 1 && (
         <div data-part="panel-pagination">
-          <button
-            type="button"
-            data-part="pagination-button"
+          <TransferButton
+            part="pagination-button"
             disabled={disabled || currentPage <= 1}
             aria-label={tOr('pagination.previous', 'Previous page')}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           >
             <NavigationBackIcon decorative size={14} />
-          </button>
-          <span>
+          </TransferButton>
+          <span data-part="pagination-status">
             {currentPage} / {totalPages}
           </span>
-          <button
-            type="button"
-            data-part="pagination-button"
+          <TransferButton
+            part="pagination-button"
             disabled={disabled || currentPage >= totalPages}
             aria-label={tOr('pagination.next', 'Next page')}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           >
             <NavigationForwardIcon decorative size={14} />
-          </button>
+          </TransferButton>
         </div>
       )}
     </div>
@@ -451,7 +544,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
         ref={ref}
         data-part="root"
         data-disabled={disabled || undefined}
-        className={`rottay-transfer rottay-transfer--modern ${className || ''}`}
+        className={`ds-transfer ds-transfer--modern ${className || ''}`}
         style={style}
       >
         <TransferList
@@ -473,9 +566,8 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
         />
 
         <div data-part="operations">
-          <button
-            type="button"
-            data-part="move-button"
+          <TransferButton
+            part="move-button"
             data-direction="right"
             disabled={disabled || sourceSelectedKeys.size === 0}
             aria-label={tOr('transfer.move_to_target', 'Move to target')}
@@ -484,11 +576,10 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
             {operations![0] === TRANSFER_DEFAULTS.operations?.[0]
               ? <NavigationForwardIcon decorative size={16} />
               : operations![0]}
-          </button>
+          </TransferButton>
           {!oneWay && (
-            <button
-              type="button"
-              data-part="move-button"
+            <TransferButton
+              part="move-button"
               data-direction="left"
               disabled={disabled || targetSelectedKeys.size === 0}
               aria-label={tOr('transfer.move_to_source', 'Move to source')}
@@ -497,7 +588,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
               {operations![1] === TRANSFER_DEFAULTS.operations?.[1]
                 ? <NavigationBackIcon decorative size={16} />
                 : operations![1]}
-            </button>
+            </TransferButton>
           )}
         </div>
 

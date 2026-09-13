@@ -1,6 +1,3 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import React from 'react';
 import { fireEvent, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
@@ -84,30 +81,5 @@ describe('Transfer modern - select-all scope under search', () => {
 
     const [sourceSelection] = handleSelectChange.mock.calls[handleSelectChange.mock.calls.length - 1] as [string[], string[]];
     expect(sourceSelection).toEqual(['alpha']);
-  });
-});
-
-describe('Modern Transfer narrow-viewport containment', () => {
-  it('sizes the root as shrinkable panel tracks so two panels fit a 390px viewport', () => {
-    const SKIN = readFileSync(
-      join(
-        dirname(fileURLToPath(import.meta.url)),
-        '../../../../../foundation/tokens/css/runtime/engines/modern/skin/transfer/index.css'
-      ),
-      'utf8'
-    ).replace(/\/\*[\s\S]*?\*\//g, '');
-
-    const root = SKIN.match(/\[data-part='root'\]\s*\{[^}]*\}/)?.[0] ?? '';
-    expect(root).toContain('display: grid');
-    expect(root).toContain('grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr)');
-    expect(root).toContain('inline-size: fit-content');
-    expect(root).toContain('max-inline-size: 100%');
-    expect(root).not.toContain('display: flex');
-
-    const panel = SKIN.match(/\[data-part='panel'\]\s*\{[^}]*\}/)?.[0] ?? '';
-    expect(panel).toContain('inline-size: var(--ds-transfer-list-width, 200px)');
-    expect(panel).toContain('min-inline-size: 0');
-    // desktop keeps the tenant width; 100% is what lets it shrink when narrow
-    expect(panel).toContain('max-inline-size: 100%');
   });
 });
