@@ -5155,7 +5155,13 @@
     "audit-2026-09-05"
    ],
    "notes": "OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (A2-vs-fleet scope, recommendations lot R4). wave 4; gate of milestone A2-pilot in PROGRAM_MILESTONES. Pilot instrument + drills + the pilot cut's families green; explicitly NOT the fleet >= 80 % threshold, which stays WO-EVI-02 and now gates milestone B. | 2026-09-10: pilot certifies one bounded cut end to end on all applicable axes + the two agreed negative controls; distinct from EVI-02 fleet certification (six non-chromatic axes, standing threshold). Does not wait for D-30; uses candidate variants as provisional tenants.",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-09-13 11:39",
+     "by": "Kimi K3",
+     "note": "INSTRUMENT LANDED be08f3c16 (writer d62e8e11a+209854c71 Opus daniel; audit Kimi ACCEPT; Codex ACCEPT on the instrument as core). MET: instrument end-to-end with drills red on planted mutants; both negative controls 0% on the pilot pair (product-dense vs warm-humanist, provisional bithire variants) in both directions and modes; pilot population published (population/pilot/index.json, catalog 2a25f7c6068407fb, 5 families, denominators 5/axis pilot-only). NOT MET, WO STAYS OPEN: 5/30 (family,axis) cells red with measured causes, asserted exactly as NOT_YET_GREEN (any new red fails; a fixed pair must leave the list): radio/shape (--ds-radius-full circle), toggle/shape (pill track/thumb; control-height is not shape per kit rule 4), checkbox/depth + radio/depth (fixed 2px border, no resting shadow), segmented/rhythm (option padding reads literal --ds-button-md-padding-x without the density scale). Awaits ONE consolidated owner decision: axis-applicability re-declaration (radio/toggle shape, checkbox/radio depth) vs visual changes; segmented/rhythm density fix changes default paint in bithire/evnto (owner visual sign-off or route to DER-06)."
+    }
+   ],
    "claimedBy": "opus",
    "claimedAt": "2026-09-13",
    "doneAt": null,
