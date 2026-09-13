@@ -107,6 +107,7 @@ import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
 import { deriveCheckboxChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/checkbox";
+import { deriveInputNumberChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input-number";
 import { deriveRadioChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/radio";
 import { deriveToggleChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toggle";
 
@@ -927,12 +928,19 @@ interface Resolution {
  * `var()` lookups always read the full stack, because the derivation the
  * deleted line echoed is allowed to be a tenant channel.
  */
+/** The roster keeps its signed pre-image names; the input-number family now answers to one namespace. */
+const currentName = (name: string): string => name.replace(/^--ds-inputnumber-/u, "--ds-input-number-");
+
+/** Input-number deletes whose floor the family deriver now restates at the tenant scope. */
+const INPUT_NUMBER_RELATION_RESTATEMENTS = 1;
+
 function lookup(
   mode: Mode,
-  name: string,
+  preImageName: string,
   skipTenantFor?: string
 ): Resolution | null {
-  if (name !== skipTenantFor) {
+  const name = currentName(preImageName);
+  if (preImageName !== skipTenantFor) {
     // EXCISED (SEV-2): the "extension" resolution tier. `live` was searched
     // first here, so an extension row would have shadowed the compiled value.
     // With the file gone the compiled artifact is the only tenant author, which
@@ -947,6 +955,8 @@ function lookup(
   const component = COMPONENT_FLOORS[name];
   if (component !== undefined)
     return { value: component, source: COMPONENT_FLOOR_SOURCE[name] as string };
+  const relation = deriveInputNumberChannels()[name];
+  if (relation !== undefined) return { value: relation, source: "derivation/chrome/input-number" };
   return null;
 }
 
@@ -1275,12 +1285,12 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the paint did not move", () =>
     const superseded = T2_ROSTER.filter(supersededByFamilyCut);
     const supersededMigrate = superseded.filter((row) => row.disposition === "migrate").length;
     const supersededDelete = superseded.length - supersededMigrate;
-    expect(census["tenant-compiled"]).toBe(CENSUS.migrateTuples - supersededMigrate + 27);
+    expect(census["tenant-compiled"]).toBe(CENSUS.migrateTuples - supersededMigrate + 27 + INPUT_NUMBER_RELATION_RESTATEMENTS);
     expect(
       Object.entries(census)
         .filter(([source]) => source !== "tenant-compiled")
         .reduce((total, [, count]) => total + count, 0)
-    ).toBe(41 - supersededDelete - 27);
+    ).toBe(41 - supersededDelete - 27 - INPUT_NUMBER_RELATION_RESTATEMENTS);
   });
 });
 
@@ -1302,8 +1312,10 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the 41 deletes were derivation
       const floor = lookup(row.mode, row.name, row.name) as Resolution;
       census[floor.source] = (census[floor.source] ?? 0) + 1;
     }
+    // WO-FAM-02 moved two input-number floors from the neutral default theme into its family relations.
     expect(census).toEqual({
-      "default.css": 36,
+      "default.css": 34,
+      "derivation/chrome/input-number": 2,
       "components/checkbox/index.css": 1,
       "components/radio/index.css": 1,
       "components/select/index.css": 2,
@@ -1317,11 +1329,11 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the 41 deletes were derivation
     // the restatement is machinery, not evidence.
     const restated = deleteRows.filter(
       (row) =>
-        row.mode === "light" && EMITTED.light[row.name] !== undefined
+        row.mode === "light" && EMITTED.light[currentName(row.name)] !== undefined
     );
     expect(restated).toHaveLength(27);
     for (const row of restated) {
-      expect(resolveValue("light", EMITTED.light[row.name])).toBe(
+      expect(resolveValue("light", EMITTED.light[currentName(row.name)])).toBe(
         resolveValue("light", emittedToday(row))
       );
     }
@@ -1336,10 +1348,10 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the 41 deletes were derivation
     expect(xm).toHaveLength(8);
     for (const row of xm) {
       expect(
-        compiled.cssVariables[row.name],
+        compiled.cssVariables[currentName(row.name)],
         `${row.name} authored in the dark body`
-      ).toBeUndefined();
-      expect(lightBlock?.cssVariables[row.name]).toBeDefined();
+      ).toBe(FAMILY_RELATIONS[currentName(row.name)]);
+      expect(lightBlock?.cssVariables[currentName(row.name)]).toBeDefined();
     }
   });
 
@@ -1499,6 +1511,7 @@ const supersededByFamilyCut = (row: { name: string }): boolean =>
 /** Channels a family-cut deriver states as a decision relation when no vertical authors them. */
 const FAMILY_RELATIONS: Readonly<Record<string, string>> = {
   ...deriveCheckboxChannels(),
+  ...deriveInputNumberChannels(),
   ...deriveRadioChannels(),
   ...deriveToggleChannels(),
 };
@@ -1522,7 +1535,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports"
       const document = buildDocument(prop, field, PROBE);
       const validated = validateTenantThemeDocument(document);
       expect(validated.success, `${prop}.${field} rejected`).toBe(true);
-      expect(compileDocument(document)[channel]).toBe(PROBE);
+      expect(compileDocument(document)[currentName(channel)]).toBe(PROBE);
 
       // Static transport: remove the field from both mode authorities and the
       // channel must fall back to its family deriver's decision relation, or
@@ -1543,7 +1556,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports"
         ...stripped.cssVariables,
         ...(strippedLight?.cssVariables ?? {}),
       };
-      expect(effective[channel]).toBe(FAMILY_RELATIONS[channel]);
+      expect(effective[currentName(channel)]).toBe(FAMILY_RELATIONS[currentName(channel)]);
     }
   );
 
@@ -1654,7 +1667,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the DB documents of the thirte
     // 126 until WO-FAM-01 put both radio and toggle descriptions on one mode-agnostic ink.
     expect(names).toHaveLength(126 - READABLE_DESCRIPTIONS.size);
     for (const name of names) {
-      expect(t2Names).toContain(name);
+      expect(t2Names.map(currentName)).toContain(name);
       expect(delta[name]).toBe(EMITTED.light[name]);
     }
   });
@@ -1664,7 +1677,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the DB documents of the thirte
     const channels = FAMILIES.flatMap((family) =>
       family.fields.map(([, channel]) => channel)
     );
-    const omitted = channels.filter((channel) => !(channel in delta)).sort();
+    const omitted = channels.filter((channel) => !(currentName(channel) in delta)).sort();
     const identical = t2Names
       .filter((name) => {
         const dark = T2_ROSTER.find(
@@ -1861,7 +1874,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - causality", () => {
         candidate.mode === "dark" &&
         EMITTED.dark[candidate.name] !== undefined
     ) as RosterRow;
-    expect(bare(row.value)).toBe(bare(EMITTED.dark[row.name] as string));
+    expect(bare(row.value)).toBe(bare(EMITTED.dark[currentName(row.name)] as string));
     // The foundation tranche-repaired select channels are still compiled, which is why a
     // reinsertion would have been a restatement rather than a new authority.
     for (const name of T1_REPAIRED_SELECT) {
@@ -1904,8 +1917,8 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - causality", () => {
     // the restatement were authored in the body instead of `modes.light`, the
     // dark tuple would repaint and the paint proof above would go red.
     expect(bare(row.value)).not.toBe(bare(darkRow.value));
-    expect(bare(EMITTED.dark[row.name] as string)).toBe(bare(darkRow.value));
-    expect(bare(EMITTED.light[row.name] as string)).toBe(bare(row.value));
+    expect(bare(EMITTED.dark[currentName(row.name)] as string)).toBe(bare(darkRow.value));
+    expect(bare(EMITTED.light[currentName(row.name)] as string)).toBe(bare(row.value));
   });
 
   it("a dropped light delta lets the dark body bleed into light", () => {
@@ -1933,8 +1946,8 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - causality", () => {
       ...bled.cssVariables,
       ...(bledLight?.cssVariables ?? {}),
     };
-    expect(effective[row.name]).toBe(bled.cssVariables[row.name]);
-    expect(bare(effective[row.name] as string)).not.toBe(bare(row.value));
+    expect(effective[currentName(row.name)]).toBe(bled.cssVariables[currentName(row.name)]);
+    expect(bare(effective[currentName(row.name)] as string)).not.toBe(bare(row.value));
   });
 });
 

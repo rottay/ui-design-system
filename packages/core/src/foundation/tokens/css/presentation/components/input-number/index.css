@@ -1,0 +1,47 @@
+/**
+ * InputNumber Component Tokens - Rottay Design System
+ *
+ * Structural constants of the input-number family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/input-number`.
+ */
+
+:root {
+  --ds-input-number-sm-height: var(--ds-input-sm-height);
+  --ds-input-number-md-height: var(--ds-input-md-height);
+  --ds-input-number-lg-height: var(--ds-input-lg-height);
+  --ds-input-number-sm-padding-x: var(--ds-input-sm-padding-x);
+  --ds-input-number-md-padding-x: var(--ds-input-md-padding-x);
+  --ds-input-number-lg-padding-x: var(--ds-input-lg-padding-x);
+  --ds-input-number-sm-padding-y: var(--ds-input-sm-padding-y);
+  --ds-input-number-md-padding-y: var(--ds-input-md-padding-y);
+  --ds-input-number-lg-padding-y: var(--ds-input-lg-padding-y);
+  --ds-input-number-sm-font-size: var(--ds-input-sm-font-size);
+  --ds-input-number-md-font-size: var(--ds-input-md-font-size);
+  --ds-input-number-lg-font-size: var(--ds-input-lg-font-size);
+  --ds-input-number-sm-radius: var(--ds-input-sm-radius);
+  --ds-input-number-md-radius: var(--ds-input-md-radius);
+  --ds-input-number-lg-radius: var(--ds-input-lg-radius);
+  --ds-input-number-border-width: var(--ds-input-border-width);
+  --ds-input-number-border-style: var(--ds-input-border-style);
+  --ds-input-number-transition-duration: var(--ds-input-transition-duration);
+  --ds-input-number-transition-timing: var(--ds-input-transition-timing);
+  --ds-input-number-prefix-inset: var(--ds-spacing-2);
+  --ds-input-number-prefix-space: var(--ds-spacing-8);
+  --ds-input-number-trailing-inset: var(--ds-spacing-2);
+  --ds-input-number-trailing-space: var(--ds-spacing-16);
+  --ds-input-number-trailing-gap: var(--ds-spacing-1);
+  --ds-input-number-addon-padding-x: var(--ds-spacing-2);
+  --ds-input-number-addon-padding-y: var(--ds-spacing-1);
+  --ds-input-number-addon-radius: var(--ds-input-addon-radius);
+  --ds-input-number-addon-font-weight: var(--ds-input-addon-font-weight);
+  --ds-input-number-group-overlap: calc(-1 * var(--ds-input-border-width));
+  --ds-input-number-stepper-height: var(--ds-spacing-4);
+  --ds-input-number-stepper-padding-x: var(--ds-spacing-1);
+  --ds-input-number-stepper-font-size: var(--ds-font-size-xs);
+  --ds-input-number-stepper-radius: var(--ds-radius-sm);
+  --ds-input-number-stepper-active-transform: scale(var(--ds-state-press-scale));
+  --ds-input-number-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-input-number-disabled-cursor: not-allowed;
+  --ds-input-number-focus-z: var(--ds-z-index-relative-above);
+  --ds-input-number-touch-target-min: var(--ds-touch-target-min, 2.75rem);
+}

@@ -37,8 +37,8 @@ describe('InputNumber real engine coverage', () => {
     expect(screen.getByText('$')).toBeInTheDocument();
     expect(screen.getByText('kg')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('▲'));
-    fireEvent.click(screen.getByText('▲'));
+    fireEvent.click(screen.getByRole('button', { name: 'Increase' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Increase' }));
     fireEvent.keyDown(input, { key: 'ArrowDown' });
     fireEvent.keyDown(input, { key: 'Enter' });
     fireEvent.change(input, { target: { value: '' } });
@@ -63,8 +63,8 @@ describe('InputNumber real engine coverage', () => {
     );
 
     expect(screen.getByRole('spinbutton')).toHaveValue(5);
-    expect(screen.queryByText('▲')).not.toBeInTheDocument();
-    expect(screen.queryByText('▼')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Increase' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Decrease' })).not.toBeInTheDocument();
   });
 
   it('modern engine stamps skin-owned anatomy with no inline paint and localized stepper names', () => {

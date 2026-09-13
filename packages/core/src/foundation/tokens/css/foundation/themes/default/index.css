@@ -1383,45 +1383,24 @@
   --ds-datepicker-separator-color: #a3a3a3;
 
   /* ─────────────────────────────────────────────────────────────────────────────
-     INPUTNUMBER
+     INPUT NUMBER
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* InputNumber Base */
-  --ds-inputnumber-bg: #ffffff;
-  --ds-inputnumber-bg-disabled: var(--ds-material-control-background-disabled);
-  --ds-inputnumber-color: #171717;
-  --ds-inputnumber-border: #e5e5e5;
-  --ds-inputnumber-border-focus: #171717;
-  --ds-inputnumber-radius: var(--ds-radius-md);
-  --ds-inputnumber-shadow-focus: 0 0 0 1px #171717;
-  --ds-inputnumber-transition: var(--ds-transition-fast);
-
-  /* InputNumber Status */
-  --ds-inputnumber-error-border: #ef4444;
-  --ds-inputnumber-warning-border: #f59e0b;
+  --ds-input-number-corner-radius: var(--ds-radius-md);
+  --ds-input-number-transition: var(--ds-transition-fast);
 
   /* InputNumber Sizes */
-  --ds-inputnumber-sm-padding: 0.25rem 0.5rem;
-  --ds-inputnumber-sm-font-size: var(--ds-font-size-xs);
-  --ds-inputnumber-sm-width: 100px;
-  --ds-inputnumber-md-padding: 0.5rem 0.75rem;
-  --ds-inputnumber-md-font-size: var(--ds-font-size-sm);
-  --ds-inputnumber-md-width: 120px;
-  --ds-inputnumber-lg-padding: 0.75rem 1rem;
-  --ds-inputnumber-lg-font-size: var(--ds-font-size-base);
-  --ds-inputnumber-lg-width: 140px;
+  --ds-input-number-sm-padding: 0.25rem 0.5rem;
+  --ds-input-number-sm-width: 100px;
+  --ds-input-number-md-padding: 0.5rem 0.75rem;
+  --ds-input-number-md-width: 120px;
+  --ds-input-number-lg-padding: 0.75rem 1rem;
+  --ds-input-number-lg-width: 140px;
 
   /* InputNumber Controls */
-  --ds-inputnumber-control-bg: transparent;
-  --ds-inputnumber-control-color: #737373;
-
-  /* InputNumber Addon */
-  --ds-inputnumber-addon-bg: #fafafa;
-  --ds-inputnumber-addon-border: #e5e5e5;
-  --ds-inputnumber-addon-color: #525252;
-
-  /* InputNumber Prefix/Suffix */
-  --ds-inputnumber-affix-color: #a3a3a3;
+  --ds-input-number-control-bg: transparent;
+  --ds-input-number-control-color: #737373;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      TEXTAREA

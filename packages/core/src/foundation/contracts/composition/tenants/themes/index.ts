@@ -1621,7 +1621,7 @@ export interface BrandControlsChrome {
    *
    * The field name is the camelCase of the channel suffix; the lowering keeps
    * each family's HISTORICAL channel spelling, which is why `datePicker`
-   * lowers to `--ds-datepicker-*`, `inputNumber` to `--ds-inputnumber-*` and
+   * lowers to `--ds-datepicker-*`, `inputNumber` to `--ds-input-number-*` and
    * `timePicker` to `--ds-timepicker-*`. The contract reads in the repo's
    * casing; the stylesheet keeps the name its readers already consume.
    */
@@ -1831,39 +1831,39 @@ export interface BrandDatePickerChrome {
 
 /**
  * Numeric stepper. Shares the field grammar with `input` but owns addon,
- * affix and stepper-control ink of its own. Lowers to `--ds-inputnumber-*`.
+ * affix and stepper-control ink of its own. Lowers to `--ds-input-number-*`.
  *
  * There is no `controlBg` field: the extension declared
- * `--ds-inputnumber-control-bg: transparent` in both modes, which is exactly
+ * `--ds-input-number-control-bg: transparent` in both modes, which is exactly
  * what the cascade already resolves. Typing a field for it would create an
  * authority for a value nobody is authoring.
  */
 export interface BrandInputNumberChrome {
-  /** `--ds-inputnumber-addon-bg` */
+  /** `--ds-input-number-addon-bg` */
   addonBg?: string;
-  /** `--ds-inputnumber-addon-border` */
+  /** `--ds-input-number-addon-border` */
   addonBorder?: string;
-  /** `--ds-inputnumber-addon-color` */
+  /** `--ds-input-number-addon-color` */
   addonColor?: string;
-  /** `--ds-inputnumber-affix-color` */
+  /** `--ds-input-number-affix-color` */
   affixColor?: string;
-  /** `--ds-inputnumber-bg` */
+  /** `--ds-input-number-bg` */
   bg?: string;
-  /** `--ds-inputnumber-bg-disabled` */
+  /** `--ds-input-number-bg-disabled` */
   bgDisabled?: string;
-  /** `--ds-inputnumber-border` */
+  /** `--ds-input-number-border` */
   border?: string;
-  /** `--ds-inputnumber-border-focus` */
+  /** `--ds-input-number-border-focus` */
   borderFocus?: string;
-  /** `--ds-inputnumber-color` */
+  /** `--ds-input-number-color` */
   color?: string;
-  /** `--ds-inputnumber-control-color` */
+  /** `--ds-input-number-control-color` */
   controlColor?: string;
-  /** `--ds-inputnumber-error-border` */
+  /** `--ds-input-number-error-border` */
   errorBorder?: string;
-  /** `--ds-inputnumber-shadow-focus` */
+  /** `--ds-input-number-shadow-focus` */
   shadowFocus?: string;
-  /** `--ds-inputnumber-warning-border` */
+  /** `--ds-input-number-warning-border` */
   warningBorder?: string;
 }
 

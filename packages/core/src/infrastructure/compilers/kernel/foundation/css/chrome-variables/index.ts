@@ -2213,25 +2213,25 @@ export function chromeToVariables(
     // inputnumber
     if (c.inputNumber) {
       const nu = c.inputNumber;
-      if (nu.addonBg) vars["--ds-inputnumber-addon-bg"] = nu.addonBg;
+      if (nu.addonBg) vars["--ds-input-number-addon-bg"] = nu.addonBg;
       if (nu.addonBorder)
-        vars["--ds-inputnumber-addon-border"] = nu.addonBorder;
-      if (nu.addonColor) vars["--ds-inputnumber-addon-color"] = nu.addonColor;
-      if (nu.affixColor) vars["--ds-inputnumber-affix-color"] = nu.affixColor;
-      if (nu.bg) vars["--ds-inputnumber-bg"] = nu.bg;
-      if (nu.bgDisabled) vars["--ds-inputnumber-bg-disabled"] = nu.bgDisabled;
-      if (nu.border) vars["--ds-inputnumber-border"] = nu.border;
+        vars["--ds-input-number-addon-border"] = nu.addonBorder;
+      if (nu.addonColor) vars["--ds-input-number-addon-color"] = nu.addonColor;
+      if (nu.affixColor) vars["--ds-input-number-affix-color"] = nu.affixColor;
+      if (nu.bg) vars["--ds-input-number-bg"] = nu.bg;
+      if (nu.bgDisabled) vars["--ds-input-number-bg-disabled"] = nu.bgDisabled;
+      if (nu.border) vars["--ds-input-number-border"] = nu.border;
       if (nu.borderFocus)
-        vars["--ds-inputnumber-border-focus"] = nu.borderFocus;
-      if (nu.color) vars["--ds-inputnumber-color"] = nu.color;
+        vars["--ds-input-number-border-focus"] = nu.borderFocus;
+      if (nu.color) vars["--ds-input-number-color"] = nu.color;
       if (nu.controlColor)
-        vars["--ds-inputnumber-control-color"] = nu.controlColor;
+        vars["--ds-input-number-control-color"] = nu.controlColor;
       if (nu.errorBorder)
-        vars["--ds-inputnumber-error-border"] = nu.errorBorder;
+        vars["--ds-input-number-error-border"] = nu.errorBorder;
       if (nu.shadowFocus)
-        vars["--ds-inputnumber-shadow-focus"] = nu.shadowFocus;
+        vars["--ds-input-number-shadow-focus"] = nu.shadowFocus;
       if (nu.warningBorder)
-        vars["--ds-inputnumber-warning-border"] = nu.warningBorder;
+        vars["--ds-input-number-warning-border"] = nu.warningBorder;
     }
 
     // radio

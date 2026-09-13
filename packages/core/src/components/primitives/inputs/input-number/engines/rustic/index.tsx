@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview InputNumber Rustic Engine - Rottay Design System.
- * Pure HTML/CSS implementation using CSS custom properties (--ds-inputnumber-*)
+ * Pure HTML/CSS implementation using CSS custom properties (--ds-input-number-*)
  * so theming is driven entirely by tenant-level token overrides, with zero
  * dependency on Ant Design or Tailwind at runtime.
  *
@@ -26,23 +26,23 @@ import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/c
  * Size configuration referencing CSS variables for each size tier, keyed by
  * the canonical `sm | md | lg` step -- `toCanonicalSize` resolves any
  * accepted spelling before lookup. Tenants override the underlying
- * --ds-inputnumber-* tokens to control sizing.
+ * --ds-input-number-* tokens to control sizing.
  */
 const SIZE_CONFIG: Record<'sm' | 'md' | 'lg', { padding: string; fontSize: string; width: string }> = {
   sm: {
-    padding: 'var(--ds-inputnumber-sm-padding)',
-    fontSize: 'var(--ds-inputnumber-sm-font-size)',
-    width: 'var(--ds-inputnumber-sm-width)',
+    padding: 'var(--ds-input-number-sm-padding)',
+    fontSize: 'var(--ds-input-number-sm-font-size)',
+    width: 'var(--ds-input-number-sm-width)',
   },
   md: {
-    padding: 'var(--ds-inputnumber-md-padding)',
-    fontSize: 'var(--ds-inputnumber-md-font-size)',
-    width: 'var(--ds-inputnumber-md-width)',
+    padding: 'var(--ds-input-number-md-padding)',
+    fontSize: 'var(--ds-input-number-md-font-size)',
+    width: 'var(--ds-input-number-md-width)',
   },
   lg: {
-    padding: 'var(--ds-inputnumber-lg-padding)',
-    fontSize: 'var(--ds-inputnumber-lg-font-size)',
-    width: 'var(--ds-inputnumber-lg-width)',
+    padding: 'var(--ds-input-number-lg-padding)',
+    fontSize: 'var(--ds-input-number-lg-font-size)',
+    width: 'var(--ds-input-number-lg-width)',
   },
 };
 
@@ -194,12 +194,12 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       paddingLeft: prefix ? '28px' : undefined,
       paddingRight: suffix || controls ? (controls ? '36px' : '28px') : undefined,
       fontSize: sizeConfig.fontSize,
-      transition: 'var(--ds-inputnumber-transition)',
+      transition: 'var(--ds-input-number-transition)',
       width: sizeConfig.width,
       cursor: disabled ? 'not-allowed' : 'text',
       opacity: disabled ? 0.6 : 1,
       ...({
-        '--ds-input-number-radius': addonBefore && addonAfter ? '0' : addonBefore ? '0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0' : addonAfter ? 'var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius)' : 'var(--ds-inputnumber-radius)',
+        '--ds-input-number-radius': addonBefore && addonAfter ? '0' : addonBefore ? '0 var(--ds-input-number-corner-radius) var(--ds-input-number-corner-radius) 0' : addonAfter ? 'var(--ds-input-number-corner-radius) 0 0 var(--ds-input-number-corner-radius)' : 'var(--ds-input-number-corner-radius)',
       } as React.CSSProperties),
     };
 
