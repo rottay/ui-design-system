@@ -246,9 +246,9 @@ export const modernThemeAdapter = defineEngineAdapter({
           "--ds-color-info",
         ],
         family: {
-          minimumRead: 46,
+          minimumRead: 36,
           reason:
-            "83 declared names are the ramp, tint and on-tone family derived from four authored seeds; the floor is decrease-only",
+            "83 declared names are the ramp, tint and on-tone family derived from four authored seeds; the floor is decrease-only. WO-FAM-04 lowered it 46 -> 36 because ten names stopped being read BY THE ENGINE SURFACE while staying derived: the family cuts put a family channel between the skin and the ramp, which is the routing the family-cut contract requires. --ds-tint-{info,success,warning,error}-4 were read by skin/callout, now --ds-alert-<tone>-wash-subtle; --ds-tint-{info,success,warning,error}-12 by skin/notification and skin/toast, now --ds-notifier-<tone>-well; --ds-color-warning-500 and --ds-color-error-500 by skin/confirm-dialog, now --ds-confirm-dialog-{warning,danger}-icon-*. Every one is still produced by its deriver and still reaches paint through that channel",
         },
       },
     },
