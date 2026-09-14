@@ -106,6 +106,7 @@ import {
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
+import { FROZEN_ENGINE_COMPAT_CHANNELS } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
 import { deriveAutoCompleteChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/auto-complete";
 import { deriveCheckboxChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/checkbox";
 import { deriveDatePickerChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/date-picker";
@@ -1709,9 +1710,15 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the DB documents of the thirte
 
   it("compiles the light document to 124 entries, each byte-equal to the static light artifact", () => {
     const delta = compileDocument(asDocument(lightProjected));
-    const names = Object.keys(delta).sort();
+    const compat = Object.keys(delta).filter((name) => name in FROZEN_ENGINE_COMPAT_CHANNELS).sort();
+    const names = Object.keys(delta).filter((name) => !compat.includes(name)).sort();
     // 126 until WO-FAM-01 put both radio and toggle descriptions on one mode-agnostic ink.
     expect(names).toHaveLength(126 - READABLE_DESCRIPTIONS.size);
+    // The frozen skins' pre-cut names restate their family twin, never a value of their own.
+    expect(compat).toHaveLength(29);
+    for (const legacy of compat) {
+      expect(delta[legacy]).toBe(delta[FROZEN_ENGINE_COMPAT_CHANNELS[legacy as `--ds-${string}`]]);
+    }
     for (const name of names) {
       expect(t2Names.map(currentName)).toContain(name);
       expect(delta[name]).toBe(EMITTED.light[name]);

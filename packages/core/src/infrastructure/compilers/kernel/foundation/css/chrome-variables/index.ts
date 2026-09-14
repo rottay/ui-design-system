@@ -1258,11 +1258,9 @@ function setSurfaceChromeVars(
   if (surface.cardGridBg)
     vars["--ds-surface-card-grid-bg"] = surface.cardGridBg;
   if (surface.popoverShadow) {
-    // One authored elevation, spelled by the shadow scale and the picker panels;
-    // the frozen Rustic date panel still reads its pre-cut name.
+    // One authored elevation, spelled by the shadow scale and the picker panels.
     vars["--ds-shadow-popover"] = surface.popoverShadow;
     vars["--ds-date-picker-panel-shadow"] = surface.popoverShadow;
-    vars["--ds-datepicker-panel-shadow"] = surface.popoverShadow;
     vars["--ds-time-picker-panel-shadow"] = surface.popoverShadow;
   }
   if (surface.cardCoverOverlayBg)
@@ -1277,6 +1275,46 @@ function setSurfaceChromeVars(
   if (surface.pageShellSubtitleColor)
     vars["--ds-page-shell-subtitle-color"] = surface.pageShellSubtitleColor;
 }
+
+/**
+ * Pre-cut channel names the frozen Classic and Rustic skins still read, each
+ * restated from the family channel a vertical authored under its current name.
+ */
+export const FROZEN_ENGINE_COMPAT_CHANNELS: Readonly<Record<`--ds-${string}`, `--ds-${string}`>> = {
+  "--ds-autocomplete-bg": "--ds-auto-complete-bg",
+  "--ds-autocomplete-border": "--ds-auto-complete-border",
+  "--ds-autocomplete-border-focus": "--ds-auto-complete-border-focus",
+  "--ds-autocomplete-clear-color": "--ds-auto-complete-clear-color",
+  "--ds-autocomplete-dropdown-bg": "--ds-auto-complete-dropdown-bg",
+  "--ds-autocomplete-dropdown-shadow": "--ds-auto-complete-dropdown-shadow",
+  "--ds-autocomplete-empty-color": "--ds-auto-complete-empty-color",
+  "--ds-autocomplete-error-border": "--ds-auto-complete-error-border",
+  "--ds-autocomplete-option-bg-hover": "--ds-auto-complete-option-bg-hover",
+  "--ds-autocomplete-warning-border": "--ds-auto-complete-warning-border",
+  "--ds-datepicker-bg": "--ds-date-picker-bg",
+  "--ds-datepicker-bg-disabled": "--ds-date-picker-bg-disabled",
+  "--ds-datepicker-border": "--ds-date-picker-border",
+  "--ds-datepicker-border-focus": "--ds-date-picker-border-focus",
+  "--ds-datepicker-clear-color": "--ds-date-picker-clear-color",
+  "--ds-datepicker-color": "--ds-date-picker-color",
+  "--ds-datepicker-error-border": "--ds-date-picker-error-border",
+  "--ds-datepicker-icon-color": "--ds-date-picker-icon-color",
+  "--ds-datepicker-panel-shadow": "--ds-date-picker-panel-shadow",
+  "--ds-datepicker-separator-color": "--ds-date-picker-separator-color",
+  "--ds-datepicker-shadow-focus": "--ds-date-picker-shadow-focus",
+  "--ds-datepicker-warning-border": "--ds-date-picker-warning-border",
+  "--ds-timepicker-bg": "--ds-time-picker-bg",
+  "--ds-timepicker-bg-disabled": "--ds-time-picker-bg-disabled",
+  "--ds-timepicker-border": "--ds-time-picker-border",
+  "--ds-timepicker-border-focus": "--ds-time-picker-border-focus",
+  "--ds-timepicker-clear-color": "--ds-time-picker-clear-color",
+  "--ds-timepicker-color": "--ds-time-picker-color",
+  "--ds-timepicker-error-border": "--ds-time-picker-error-border",
+  "--ds-timepicker-icon-color": "--ds-time-picker-icon-color",
+  "--ds-timepicker-separator-color": "--ds-time-picker-separator-color",
+  "--ds-timepicker-shadow-focus": "--ds-time-picker-shadow-focus",
+  "--ds-timepicker-warning-border": "--ds-time-picker-warning-border",
+};
 
 /**
  * Map a chrome object (BrandTheme.chrome or TenantAppearanceAdvanced.chrome)
@@ -3004,6 +3042,10 @@ export function chromeToVariables(
       chrome[family] as Record<string, string> | undefined,
       mapping as Readonly<Record<string, string>>
     );
+  }
+
+  for (const [legacy, current] of Object.entries(FROZEN_ENGINE_COMPAT_CHANNELS)) {
+    if (vars[current] !== undefined) vars[legacy] = vars[current];
   }
 
   // Last, over the composed map: one owner for the law, and a radius channel

@@ -245,10 +245,17 @@ const FIRST_PARTY = [
  * now emit under the family namespaces with the same values, and bithire's
  * `--ds-timepicker-panel-shadow` emits as `--ds-time-picker-panel-shadow`.
  */
+/**
+ * WO-FAM-03 compatibility re-anchored all three, measured: rottay restates its
+ * twenty-nine authored `--ds-{autocomplete,datepicker,timepicker}-*` values
+ * under the pre-cut names the frozen skins read (base 1683 -> 1712, and the
+ * light block's twins), moved 0; bithire and evnto change key order only, as
+ * `--ds-datepicker-panel-shadow` is now written after the chrome blocks.
+ */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "06f6e8e77bb691ccf257db21366fb5f70d62d7c52a3af64f0798694e6727f18b",
-  bithire: "98025acdc8418af093c628a60c2266fd3bbcd8e9196e5eb4c4c5c296b95085d2",
-  evnto: "989b8f9dfab2e90ad57e0b0f6fed32aeee3ab8e133aa1bc28f51a979e3f7525b",
+  rottay: "9e6f03498386d6a23684f0d5c3416b3cdc2fa00367bd42359f0174f98d4d58dc",
+  bithire: "267469bb3b368d6319b60051855f1374b3585fbbc6c5c246c36866b4610b7dd4",
+  evnto: "a316c99df6dd212fb8fd900bbe8f6397290d1643809f5c81672e7b7ce363c74f",
 };
 
 /**

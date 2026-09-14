@@ -13,6 +13,7 @@ import type {
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { brandThemeToChromeVariables } from "../../../foundation/chrome";
+import { FROZEN_ENGINE_COMPAT_CHANNELS } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
 
 /**
  * The one family at rank `verticalOverride`.
@@ -58,7 +59,6 @@ export const chromeDeriver: FamilyDeriver = {
     "--ds-compact-*",
     "--ds-control-*",
     "--ds-date-picker-*",
-    "--ds-datepicker-panel-shadow",
     "--ds-descriptions-*",
     "--ds-detail-*",
     "--ds-divider-*",
@@ -124,6 +124,7 @@ export const chromeDeriver: FamilyDeriver = {
     "--ds-watermark-*",
     "--ds-workspace-*",
     "--ds-z-*",
+    ...(Object.keys(FROZEN_ENGINE_COMPAT_CHANNELS) as `--ds-${string}`[]),
   ],
   derive: (context) =>
     deriveChromeChannels(
