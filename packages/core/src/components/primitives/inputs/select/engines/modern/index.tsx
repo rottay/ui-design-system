@@ -202,18 +202,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   // Responsive sizes ride the skin's own trigger channels, so the scalar and responsive paths share one geometry.
   if (isResponsiveValue(sizeProp)) {
-    for (const [channel, key] of [
-      ['--ds-select-trigger-responsive-height', 'height'],
-      ['--ds-select-trigger-responsive-padding-x', 'padding-x'],
-      ['--ds-select-trigger-responsive-font-size', 'font-size'],
-      ['--ds-select-trigger-responsive-line-height', 'line-height'],
-    ] as const) {
-      responsiveEntries.push({
-        cssProperty: channel,
-        value: sizeProp,
-        resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-${key})`,
-      } as ResponsivePropEntry<any>);
-    }
+    responsiveEntries.push(
+      { cssProperty: '--ds-select-trigger-responsive-height', value: sizeProp, resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-height)` },
+      { cssProperty: '--ds-select-trigger-responsive-padding-x', value: sizeProp, resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-padding-x)` },
+      { cssProperty: '--ds-select-trigger-responsive-font-size', value: sizeProp, resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-font-size)` },
+      { cssProperty: '--ds-select-trigger-responsive-line-height', value: sizeProp, resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-line-height)` },
+    );
   }
 
   const responsiveCSS = generateResponsiveCSS(responsiveEntries);
@@ -383,6 +377,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     reveal: virtualEnabled ? revealVirtualRow : undefined,
   });
   const { activeIndex, setActiveIndex, nextSelectableFrom, listState: panelState } = listbox;
+  const listboxProps = listbox.getListboxProps();
 
   const virtualPanelState = resolveComboboxListState({
     open: isOpen,
@@ -847,10 +842,16 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     if (item.type === 'group-header') return renderGroupLabel(item, idx);
     const option = item.option!;
     const isSelected = internalValue.includes(option.value);
+    const optionProps = listbox.getOptionProps(idx, { selected: isSelected, disabled: option.disabled });
     return (
       <div
         key={option.value}
-        {...listbox.getOptionProps(idx, { selected: isSelected, disabled: option.disabled })}
+        role={optionProps.role}
+        id={optionProps.id}
+        aria-selected={optionProps['aria-selected']}
+        aria-disabled={optionProps['aria-disabled']}
+        data-active={optionProps['data-active']}
+        onMouseEnter={optionProps.onMouseEnter}
         data-part="option"
         data-selected={isSelected || undefined}
         data-disabled={option.disabled || undefined}
@@ -1029,7 +1030,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
             <div
               ref={listRef}
-              {...listbox.getListboxProps()}
+              role={listboxProps.role}
+              id={listboxProps.id}
+              aria-busy={listboxProps['aria-busy']}
+              aria-multiselectable={listboxProps['aria-multiselectable']}
               data-part="option-list"
               data-virtual={virtualEnabled || undefined}
               style={virtualEnabled ? ({ '--ds-select-virtual-height': `${containerHeight}px` } as React.CSSProperties) : undefined}
