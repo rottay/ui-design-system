@@ -107,11 +107,11 @@
 }
 
 .ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='backdrop'][data-open='true'] {
-  animation: ds-modal-backdrop-enter var(--ds-modal-enter-duration) var(--ds-modal-enter-curve) both;
+  animation: ds-modal-backdrop-enter var(--ds-modal-enter-duration, var(--ds-motion-reveal)) var(--ds-modal-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='backdrop'][data-open='false'] {
-  animation: ds-modal-backdrop-exit var(--ds-modal-exit-duration) var(--ds-modal-enter-curve) both;
+  animation: ds-modal-backdrop-exit var(--ds-modal-exit-duration, var(--ds-motion-reveal)) var(--ds-modal-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] {
@@ -124,7 +124,7 @@
   inline-size: var(--ds-modal-width-md);
   max-inline-size: var(--ds-modal-max-inline-size);
   max-block-size: var(--ds-modal-max-block-size);
-  border-radius: var(--ds-modal-radius, var(--ds-radius-lg));
+  border-radius: var(--ds-modal-radius, var(--ds-radius-xl));
   background-color: var(--ds-modal-bg, var(--ds-material-overlay-background));
   background-image:
     linear-gradient(
@@ -209,11 +209,11 @@
 }
 
 .ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='surface'][data-open='true'] {
-  animation: ds-modal-enter var(--ds-modal-enter-duration) var(--ds-modal-enter-curve) both;
+  animation: ds-modal-enter var(--ds-modal-enter-duration, var(--ds-motion-reveal)) var(--ds-modal-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='surface'][data-open='false'] {
-  animation: ds-modal-exit var(--ds-modal-exit-duration) var(--ds-modal-enter-curve) both;
+  animation: ds-modal-exit var(--ds-modal-exit-duration, var(--ds-motion-reveal)) var(--ds-modal-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 /* Fullscreen tracks the dynamic viewport and keeps controls clear of the device safe areas. */
@@ -247,21 +247,21 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--ds-modal-header-gap);
-  padding-block: var(--ds-modal-section-padding-block);
-  padding-inline: var(--ds-modal-section-padding-inline);
+  gap: var(--ds-modal-header-gap, var(--ds-spacing-3));
+  padding-block: var(--ds-modal-section-padding-block, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-modal-section-padding-inline, calc(var(--ds-spacing-6) * var(--ds-density-effective-scale)));
   flex-shrink: 0;
   background-color: var(--ds-modal-header-bg, var(--ds-modal-bg));
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-divider='true'] > [data-part='header'][data-part='header'] {
-  border-block-end: var(--ds-modal-divider-width) var(--ds-edge-standard-style)
+  border-block-end: var(--ds-modal-divider-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
     var(--ds-modal-header-border, var(--ds-color-border-subtle));
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='heading-group'] {
   display: grid;
-  gap: var(--ds-modal-heading-gap);
+  gap: var(--ds-modal-heading-gap, var(--ds-spacing-1));
   flex: 1 1 auto;
   min-inline-size: 0;
 }
@@ -293,7 +293,7 @@
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--ds-color-border-secondary) transparent;
-  padding: var(--ds-modal-body-padding-lg);
+  padding: var(--ds-modal-body-padding-lg, calc(var(--ds-spacing-6) * var(--ds-density-effective-scale)));
   color: var(--ds-modal-body-color, var(--ds-color-text-secondary));
   font-family: var(--ds-type-body-font-family);
   font-size: var(--ds-type-body-font-size);
@@ -301,40 +301,40 @@
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-padding='none'] > [data-part='body'] {
-  padding: var(--ds-modal-body-padding-none);
+  padding: var(--ds-modal-body-padding-none, var(--ds-spacing-0));
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-padding='sm'] > [data-part='body'] {
-  padding: var(--ds-modal-body-padding-sm);
+  padding: var(--ds-modal-body-padding-sm, calc(var(--ds-spacing-3) * var(--ds-density-effective-scale)));
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-padding='md'] > [data-part='body'] {
-  padding: var(--ds-modal-body-padding-md);
+  padding: var(--ds-modal-body-padding-md, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--ds-modal-footer-gap);
-  padding-block: var(--ds-modal-section-padding-block);
-  padding-inline: var(--ds-modal-section-padding-inline);
+  gap: var(--ds-modal-footer-gap, calc(var(--ds-spacing-2) * var(--ds-density-effective-scale)));
+  padding-block: var(--ds-modal-section-padding-block, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-modal-section-padding-inline, calc(var(--ds-spacing-6) * var(--ds-density-effective-scale)));
   flex-shrink: 0;
   background-color: var(--ds-modal-footer-bg, var(--ds-modal-bg));
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-divider='true'] > [data-part='footer'][data-part='footer'] {
-  border-block-start: var(--ds-modal-divider-width) var(--ds-edge-standard-style)
+  border-block-start: var(--ds-modal-divider-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
     var(--ds-modal-footer-border, var(--ds-color-border-subtle));
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'] {
   position: relative;
-  min-block-size: var(--ds-modal-action-height);
-  padding-block: var(--ds-modal-action-padding-block);
-  padding-inline: var(--ds-modal-action-padding-inline);
+  min-block-size: var(--ds-modal-action-height, var(--ds-button-md-height));
+  padding-block: var(--ds-modal-action-padding-block, var(--ds-spacing-2));
+  padding-inline: var(--ds-modal-action-padding-inline, var(--ds-spacing-4));
   cursor: pointer;
-  border-radius: var(--ds-modal-action-radius);
+  border-radius: var(--ds-modal-action-radius, var(--ds-radius-md));
   font-family: var(--ds-type-label-font-family);
   font-size: var(--ds-type-label-font-size);
   font-weight: var(--ds-type-label-font-weight);
@@ -342,11 +342,11 @@
   line-height: var(--ds-type-label-line-height);
   outline: none;
   transition:
-    background-color var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
-    border-color var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
-    box-shadow var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
-    opacity var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
-    transform var(--ds-modal-transition-duration) var(--ds-modal-transition-timing);
+    background-color var(--ds-modal-transition-duration, var(--ds-motion-feedback)) var(--ds-modal-transition-timing, var(--ds-motion-ease-out)),
+    border-color var(--ds-modal-transition-duration, var(--ds-motion-feedback)) var(--ds-modal-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-modal-transition-duration, var(--ds-motion-feedback)) var(--ds-modal-transition-timing, var(--ds-motion-ease-out)),
+    opacity var(--ds-modal-transition-duration, var(--ds-motion-feedback)) var(--ds-modal-transition-timing, var(--ds-motion-ease-out)),
+    transform var(--ds-modal-transition-duration, var(--ds-motion-feedback)) var(--ds-modal-transition-timing, var(--ds-motion-ease-out));
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'][data-part='action'][data-action='cancel'] {
@@ -395,12 +395,12 @@
   position: absolute;
   inset: 0;
   margin: auto;
-  inline-size: var(--ds-modal-spinner-size);
-  block-size: var(--ds-modal-spinner-size);
+  inline-size: var(--ds-modal-spinner-size, var(--ds-icon-sm-size));
+  block-size: var(--ds-modal-spinner-size, var(--ds-icon-sm-size));
   border-radius: var(--ds-radius-full);
-  border: var(--ds-modal-spinner-stroke) var(--ds-edge-standard-style) currentColor;
+  border: var(--ds-modal-spinner-stroke, var(--ds-border-width-2)) var(--ds-edge-standard-style) currentColor;
   border-block-start-color: transparent;
-  animation: ds-foundation-spin var(--ds-modal-spinner-duration) linear infinite;
+  animation: ds-foundation-spin var(--ds-modal-spinner-duration, var(--ds-motion-glacial)) linear infinite;
 }
 
 .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button'] {
@@ -418,9 +418,9 @@
   color: var(--ds-modal-close-color, var(--ds-color-text-secondary));
   outline: none;
   transition:
-    background-color var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
-    color var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
-    box-shadow var(--ds-modal-transition-duration) var(--ds-modal-transition-timing);
+    background-color var(--ds-modal-transition-duration, var(--ds-motion-feedback)) var(--ds-modal-transition-timing, var(--ds-motion-ease-out)),
+    color var(--ds-modal-transition-duration, var(--ds-motion-feedback)) var(--ds-modal-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-modal-transition-duration, var(--ds-motion-feedback)) var(--ds-modal-transition-timing, var(--ds-motion-ease-out));
 }
 
 @media (hover: hover) {

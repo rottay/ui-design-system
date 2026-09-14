@@ -30,7 +30,7 @@
   --ds-drawer-icon-radius: var(--ds-radius-md);
   --ds-drawer-close-size: 2.25rem;
   --ds-drawer-close-radius: var(--ds-radius-md);
-  --ds-drawer-body-padding-none: 0;
+  --ds-drawer-body-padding-none: var(--ds-spacing-0);
   --ds-drawer-body-padding-sm: var(--ds-spacing-3);
   --ds-drawer-body-padding-md: var(--ds-spacing-4);
   --ds-drawer-body-padding-lg: var(--ds-spacing-6);

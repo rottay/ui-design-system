@@ -31,8 +31,8 @@
   --ds-tour-action-padding-inline: 0.75rem;
   --ds-tour-action-radius: var(--ds-radius-md);
   --ds-tour-action-lift: -1px;
-  --ds-tour-focus-ring-width: 2px;
-  --ds-tour-focus-ring-offset: 2px;
+  --ds-tour-focus-ring-width: var(--ds-focus-ring-width);
+  --ds-tour-focus-ring-offset: var(--ds-focus-ring-offset);
   --ds-tour-enter-duration: var(--ds-motion-reveal);
   --ds-tour-enter-curve: var(--ds-motion-ease-enter);
   --ds-tour-transition-duration: var(--ds-motion-feedback);

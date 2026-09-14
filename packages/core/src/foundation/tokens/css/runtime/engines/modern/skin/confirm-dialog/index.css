@@ -62,7 +62,7 @@
   );
   backdrop-filter: var(--ds-confirm-dialog-overlay-backdrop, var(--ds-glass-backdrop-filter));
   -webkit-backdrop-filter: var(--ds-confirm-dialog-overlay-backdrop, var(--ds-glass-backdrop-filter));
-  animation: ds-confirm-dialog-backdrop-enter var(--ds-confirm-dialog-enter-duration) var(--ds-confirm-dialog-enter-curve) both;
+  animation: ds-confirm-dialog-backdrop-enter var(--ds-confirm-dialog-enter-duration, var(--ds-motion-reveal)) var(--ds-confirm-dialog-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] > [data-part='surface'] {
@@ -72,12 +72,12 @@
   inline-size: var(--ds-confirm-dialog-inline-size);
   max-inline-size: min(
     var(--ds-confirm-dialog-max-inline-size),
-    calc(100dvw - var(--ds-confirm-dialog-viewport-gutter) - var(--ds-confirm-dialog-viewport-gutter))
+    calc(100dvw - var(--ds-confirm-dialog-viewport-gutter, var(--ds-spacing-4)) - var(--ds-confirm-dialog-viewport-gutter, var(--ds-spacing-4)))
   );
-  max-block-size: calc(100dvh - var(--ds-confirm-dialog-viewport-breathing));
+  max-block-size: calc(100dvh - var(--ds-confirm-dialog-viewport-breathing, var(--ds-spacing-8)));
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--ds-confirm-dialog-padding);
+  padding: var(--ds-confirm-dialog-padding, calc(var(--ds-spacing-6) * var(--ds-density-effective-scale)));
   border-radius: var(--ds-confirm-dialog-radius, var(--ds-radius-lg));
   background-color: var(--ds-confirm-dialog-bg, var(--ds-material-overlay-background));
   background-image: linear-gradient(
@@ -87,7 +87,7 @@
   box-shadow:
     inset 0 1px 0 var(--ds-confirm-dialog-keyline, var(--ds-color-border-subtle)),
     var(--ds-confirm-dialog-shadow, var(--ds-elevation-4));
-  animation: ds-confirm-dialog-enter var(--ds-confirm-dialog-enter-duration) var(--ds-confirm-dialog-enter-curve) both;
+  animation: ds-confirm-dialog-enter var(--ds-confirm-dialog-enter-duration, var(--ds-motion-reveal)) var(--ds-confirm-dialog-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 /* The colored frame repeats its part to clear the tenant border-color floor. */
@@ -99,7 +99,7 @@
 .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] [data-part='content'] {
   display: flex;
   align-items: flex-start;
-  gap: var(--ds-confirm-dialog-content-gap);
+  gap: var(--ds-confirm-dialog-content-gap, var(--ds-spacing-3));
 }
 
 .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] [data-part='copy'] {
@@ -108,7 +108,7 @@
 }
 
 .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] [data-part='title'] {
-  margin: 0 0 var(--ds-confirm-dialog-title-gap);
+  margin: 0 0 var(--ds-confirm-dialog-title-gap, var(--ds-spacing-2));
   overflow-wrap: anywhere;
   text-wrap: balance;
   color: var(--ds-confirm-dialog-title-color, var(--ds-color-text-primary));
@@ -140,27 +140,27 @@
 
 .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] > [data-part='surface'][data-variant='info'] [data-part='icon'] {
   background: var(--ds-confirm-dialog-info-icon-bg, var(--ds-color-bg-secondary));
-  box-shadow: inset 0 0 0 var(--ds-confirm-dialog-icon-ring-width) var(--ds-confirm-dialog-info-icon-ring, var(--ds-color-border-subtle));
+  box-shadow: inset 0 0 0 var(--ds-confirm-dialog-icon-ring-width, var(--ds-border-width-1)) var(--ds-confirm-dialog-info-icon-ring, var(--ds-color-border-subtle));
   color: var(--ds-confirm-dialog-info-icon-color, var(--ds-color-primary));
 }
 
 .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] > [data-part='surface'][data-variant='warning'] [data-part='icon'] {
   background: var(--ds-confirm-dialog-warning-icon-bg, var(--ds-color-bg-secondary));
-  box-shadow: inset 0 0 0 var(--ds-confirm-dialog-icon-ring-width) var(--ds-confirm-dialog-warning-icon-ring, var(--ds-color-border-subtle));
+  box-shadow: inset 0 0 0 var(--ds-confirm-dialog-icon-ring-width, var(--ds-border-width-1)) var(--ds-confirm-dialog-warning-icon-ring, var(--ds-color-border-subtle));
   color: var(--ds-confirm-dialog-warning-icon-color, var(--ds-color-warning));
 }
 
 .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] > [data-part='surface'][data-variant='danger'] [data-part='icon'] {
   background: var(--ds-confirm-dialog-danger-icon-bg, var(--ds-color-bg-secondary));
-  box-shadow: inset 0 0 0 var(--ds-confirm-dialog-icon-ring-width) var(--ds-confirm-dialog-danger-icon-ring, var(--ds-color-border-subtle));
+  box-shadow: inset 0 0 0 var(--ds-confirm-dialog-icon-ring-width, var(--ds-border-width-1)) var(--ds-confirm-dialog-danger-icon-ring, var(--ds-color-border-subtle));
   color: var(--ds-confirm-dialog-danger-icon-color, var(--ds-color-error));
 }
 
 .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] [data-part='footer'] {
   display: flex;
   justify-content: flex-end;
-  gap: var(--ds-confirm-dialog-footer-gap);
-  margin-block-start: var(--ds-confirm-dialog-footer-offset);
+  gap: var(--ds-confirm-dialog-footer-gap, var(--ds-spacing-2));
+  margin-block-start: var(--ds-confirm-dialog-footer-offset, var(--ds-spacing-4));
 }
 
 /* On a narrow panel the actions stack at full width instead of compressing. */

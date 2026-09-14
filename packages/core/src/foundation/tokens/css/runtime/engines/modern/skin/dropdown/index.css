@@ -90,7 +90,7 @@
     var(--ds-dropdown-bg, var(--ds-material-overlay-background));
   box-shadow: var(--_ds-dropdown-layer-step-shadow, var(--ds-dropdown-shadow, var(--ds-elevation-3)));
   transform-origin: center top;
-  animation: ds-dropdown-enter var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing) both;
+  animation: ds-dropdown-enter var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)) both;
 }
 
 .ds-dropdown-surface[data-part='surface'][data-open='false'] {
@@ -108,14 +108,14 @@
 
 /* In-tree placement: one block end and one logical inline edge; centring stays physical. */
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true']) {
-  inset-block-start: calc(100% + var(--ds-dropdown-gap));
+  inset-block-start: calc(100% + var(--ds-dropdown-gap, var(--ds-spacing-2)));
   left: 50%;
   translate: -50% 0;
 }
 
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement^='top'] {
   inset-block-start: auto;
-  inset-block-end: calc(100% + var(--ds-dropdown-gap));
+  inset-block-end: calc(100% + var(--ds-dropdown-gap, var(--ds-spacing-2)));
 }
 
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement$='Left'] {
@@ -152,7 +152,7 @@
 
 /* Inside a modal the menu steps one rung up the elevation ramp. */
 .ds-modal.ds-modal--modern .ds-dropdown-surface[data-part='surface'] {
-  --_ds-dropdown-layer-step-shadow: var(--ds-elevation-5);
+  --_ds-dropdown-layer-step-shadow: var(--ds-elevation-5, 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent));
 }
 
 /* The colored frame repeats its part to clear the tenant border-color floor. */
@@ -186,8 +186,8 @@
 .ds-dropdown-surface[data-part='surface'] [data-part='item'][data-part='item'] {
   position: relative;
   display: grid;
-  grid-template-columns: var(--ds-dropdown-indicator-size) auto minmax(0, 1fr) auto;
-  gap: var(--ds-dropdown-item-track-gap);
+  grid-template-columns: var(--ds-dropdown-indicator-size, var(--ds-icon-sm-size)) auto minmax(0, 1fr) auto;
+  gap: var(--ds-dropdown-item-track-gap, var(--ds-spacing-sm));
   inline-size: 100%;
   min-block-size: var(--ds-dropdown-item-height);
   padding: var(--ds-dropdown-item-padding-y) var(--ds-dropdown-item-padding-x);
@@ -205,11 +205,11 @@
   cursor: pointer;
   outline: none;
   transition:
-    color var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing),
-    border-color var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing),
-    background var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing),
-    box-shadow var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing),
-    transform var(--ds-dropdown-transition-duration) var(--ds-ease-spring);
+    color var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)),
+    border-color var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)),
+    background var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)),
+    box-shadow var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)),
+    transform var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-ease-spring);
 }
 
 .ds-dropdown-surface[data-part='surface'] [data-part='item']::after {
@@ -221,8 +221,8 @@
   opacity: 0;
   transform: translateX(-40%);
   transition:
-    opacity var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing),
-    transform var(--ds-dropdown-sweep-duration) var(--ds-dropdown-transition-timing);
+    opacity var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)),
+    transform var(--ds-dropdown-sweep-duration, var(--ds-motion-reveal)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard));
   pointer-events: none;
 }
 
@@ -241,7 +241,7 @@
 }
 
 .ds-dropdown-surface[data-part='surface'] [data-part='item']:is([data-state~='pressed'], :active):not([data-state~='disabled']) {
-  transform: scale(var(--ds-dropdown-press-scale));
+  transform: scale(var(--ds-dropdown-press-scale, var(--ds-state-press-scale)));
 }
 
 /* The hover sweep rides the effect dial like every decorative effect. */
@@ -284,13 +284,13 @@
 
 .ds-dropdown-surface[data-part='surface'] [data-part='selection-indicator'] {
   grid-column: 1;
-  inline-size: var(--ds-dropdown-indicator-size);
+  inline-size: var(--ds-dropdown-indicator-size, var(--ds-icon-sm-size));
   color: var(--ds-dropdown-selection-color, var(--ds-color-primary));
   opacity: 0;
   transform: scale(var(--ds-dropdown-selection-scale));
   transition:
-    opacity var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing),
-    transform var(--ds-dropdown-transition-duration) var(--ds-ease-spring);
+    opacity var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)),
+    transform var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-ease-spring);
 }
 
 .ds-dropdown-surface[data-part='surface'] [data-selected='true'] [data-part='selection-indicator'] {
@@ -303,11 +303,11 @@
   inline-size: var(--ds-dropdown-icon-well-size);
   block-size: var(--ds-dropdown-icon-well-size);
   color: var(--ds-dropdown-icon-color, currentColor);
-  border-radius: var(--ds-dropdown-icon-radius);
+  border-radius: var(--ds-dropdown-icon-radius, var(--ds-radius-md));
   background: var(--ds-dropdown-icon-bg, transparent);
   transition:
-    background var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing),
-    transform var(--ds-dropdown-transition-duration) var(--ds-ease-spring);
+    background var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)),
+    transform var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-ease-spring);
 }
 
 .ds-dropdown-surface[data-part='surface'] [data-part='item']:is([data-state~='hovered'], :hover) [data-part='icon'] {
@@ -335,7 +335,7 @@
   block-size: var(--ds-dropdown-submenu-indicator-size);
   border-radius: var(--ds-radius-full);
   background: var(--ds-dropdown-submenu-indicator-bg, transparent);
-  transition: transform var(--ds-dropdown-transition-duration) var(--ds-ease-spring);
+  transition: transform var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-ease-spring);
 }
 
 .ds-dropdown-surface[data-part='surface'] [data-submenu-open='true'] > [data-part='item'] [data-part='submenu-indicator'] {
@@ -383,7 +383,7 @@
     linear-gradient(var(--ds-dropdown-surface-lift, var(--ds-elevation-surface-3)), var(--ds-dropdown-surface-lift, var(--ds-elevation-surface-3))),
     var(--ds-dropdown-bg, var(--ds-material-overlay-background));
   box-shadow: var(--_ds-dropdown-layer-step-shadow, var(--ds-dropdown-shadow, var(--ds-elevation-3)));
-  animation: ds-dropdown-enter var(--ds-dropdown-transition-duration) var(--ds-dropdown-transition-timing) both;
+  animation: ds-dropdown-enter var(--ds-dropdown-transition-duration, var(--ds-motion-feedback)) var(--ds-dropdown-transition-timing, var(--ds-motion-ease-standard)) both;
 }
 
 .ds-dropdown-surface[data-part='surface'] [data-part='submenu']::before {

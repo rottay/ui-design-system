@@ -19,7 +19,7 @@
   inset: 0;
   z-index: var(--ds-tour-layer);
   background-color: var(--ds-tour-mask-color);
-  animation: ds-tour-enter var(--ds-tour-enter-duration) var(--ds-tour-enter-curve) both;
+  animation: ds-tour-enter var(--ds-tour-enter-duration, var(--ds-motion-reveal)) var(--ds-tour-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] > [data-part='spotlight'] {
@@ -32,13 +32,13 @@
   border-radius: var(--ds-tour-radius, var(--ds-radius-lg));
   pointer-events: none;
   box-shadow: 0 0 0 var(--ds-tour-spotlight-spread) var(--ds-tour-mask-color);
-  animation: ds-tour-enter var(--ds-tour-enter-duration) var(--ds-tour-enter-curve) both;
+  animation: ds-tour-enter var(--ds-tour-enter-duration, var(--ds-motion-reveal)) var(--ds-tour-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface'] {
   z-index: calc(var(--ds-tour-layer) + 2);
   box-sizing: border-box;
-  padding: var(--ds-tour-surface-padding);
+  padding: var(--ds-tour-surface-padding, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
   max-inline-size: var(--ds-tour-surface-max-width);
   font-family: var(--ds-tour-font-family, var(--ds-type-body-font-family));
   background: var(--ds-tour-surface-bg, var(--ds-material-card-background));
@@ -49,7 +49,7 @@
   overflow-wrap: anywhere;
   word-break: normal;
   outline: none;
-  animation: ds-tour-enter var(--ds-tour-enter-duration) var(--ds-tour-enter-curve) both;
+  animation: ds-tour-enter var(--ds-tour-enter-duration, var(--ds-motion-reveal)) var(--ds-tour-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 /* A step without a target sits centered in the viewport. */
@@ -67,19 +67,19 @@
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-type='primary'] {
-  border: var(--ds-tour-primary-border-width) var(--ds-edge-standard-style)
+  border: var(--ds-tour-primary-border-width, calc(var(--ds-edge-standard-width) * 2)) var(--ds-edge-standard-style)
     var(--ds-tour-primary-border-color, var(--ds-color-primary));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface']:focus-within {
-  outline: var(--ds-tour-focus-ring-width) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-focus-ring-color));
-  outline-offset: var(--ds-tour-focus-ring-offset);
+  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-focus-ring-color));
+  outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='close-button'] {
   position: absolute;
-  inset-block-start: var(--ds-tour-close-offset);
-  inset-inline-end: var(--ds-tour-close-offset);
+  inset-block-start: var(--ds-tour-close-offset, var(--ds-spacing-2));
+  inset-inline-end: var(--ds-tour-close-offset, var(--ds-spacing-2));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -93,13 +93,13 @@
   color: var(--ds-tour-close-ink, var(--ds-color-text-secondary));
   outline: none;
   transition:
-    color var(--ds-tour-transition-duration) var(--ds-tour-transition-timing),
-    background-color var(--ds-tour-transition-duration) var(--ds-tour-transition-timing),
-    box-shadow var(--ds-tour-transition-duration) var(--ds-tour-transition-timing);
+    color var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard)),
+    background-color var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard)),
+    box-shadow var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='cover'] {
-  margin-block-end: var(--ds-tour-cover-gap);
+  margin-block-end: var(--ds-tour-cover-gap, var(--ds-spacing-3));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='title'] {
@@ -113,7 +113,7 @@
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='description'] {
   margin: 0;
-  margin-block-start: var(--ds-tour-section-gap);
+  margin-block-start: var(--ds-tour-section-gap, var(--ds-spacing-2));
   color: var(--ds-tour-description-ink, var(--ds-color-text-secondary));
 }
 
@@ -121,12 +121,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-block-start: var(--ds-tour-footer-gap);
+  margin-block-start: var(--ds-tour-footer-gap, var(--ds-spacing-4));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='indicators'] {
   display: flex;
-  gap: var(--ds-tour-indicator-gap);
+  gap: var(--ds-tour-indicator-gap, var(--ds-spacing-1));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='indicator'] {
@@ -135,8 +135,8 @@
   border-radius: var(--ds-radius-full);
   background: var(--ds-tour-indicator-bg, var(--ds-surface-panel));
   transition:
-    background-color var(--ds-tour-transition-duration) var(--ds-tour-transition-timing),
-    inline-size var(--ds-tour-transition-duration) var(--ds-tour-transition-timing);
+    background-color var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard)),
+    inline-size var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='indicator'][data-current='true'] {
@@ -146,7 +146,7 @@
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='actions'] {
   display: flex;
-  gap: var(--ds-tour-section-gap);
+  gap: var(--ds-tour-section-gap, var(--ds-spacing-2));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='action'] {
@@ -155,14 +155,14 @@
   padding-inline: var(--ds-tour-action-padding-inline);
   cursor: pointer;
   font-size: var(--ds-tour-action-font-size, var(--ds-type-label-font-size));
-  border-radius: var(--ds-tour-action-radius);
+  border-radius: var(--ds-tour-action-radius, var(--ds-radius-md));
   border: none;
   outline: none;
   transition:
-    color var(--ds-tour-transition-duration) var(--ds-tour-transition-timing),
-    background-color var(--ds-tour-transition-duration) var(--ds-tour-transition-timing),
-    box-shadow var(--ds-tour-transition-duration) var(--ds-tour-transition-timing),
-    transform var(--ds-tour-transition-duration) var(--ds-tour-transition-timing);
+    color var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard)),
+    background-color var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard)),
+    box-shadow var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard)),
+    transform var(--ds-tour-transition-duration, var(--ds-motion-feedback)) var(--ds-tour-transition-timing, var(--ds-motion-ease-standard));
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] [data-part='action'][data-action='prev'] {
@@ -176,8 +176,8 @@
 }
 
 .ds-tour.ds-tour--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-tour-focus-ring-width) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-focus-ring-color));
-  outline-offset: var(--ds-tour-focus-ring-offset);
+  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-focus-ring-color));
+  outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
 }
 
 @media (hover: hover) {

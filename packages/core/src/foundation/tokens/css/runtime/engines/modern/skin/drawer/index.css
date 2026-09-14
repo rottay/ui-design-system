@@ -78,11 +78,11 @@
 }
 
 .ds-drawer-backdrop[data-part='backdrop'][data-motion='animated'][data-open='true'] {
-  animation: ds-drawer-backdrop-enter var(--ds-drawer-enter-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-backdrop-enter var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer-backdrop[data-part='backdrop'][data-motion='animated'][data-open='false'] {
-  animation: ds-drawer-backdrop-exit var(--ds-drawer-exit-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-backdrop-exit var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer-trap {
@@ -201,11 +201,11 @@
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='left'], [data-placement='right'])[data-custom-width='true'] {
-  inline-size: var(--ds-drawer-width);
+  inline-size: var(--ds-drawer-width, var(--ds-drawer-size-md));
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='top'], [data-placement='bottom'])[data-custom-height='true'] {
-  block-size: var(--ds-drawer-height);
+  block-size: var(--ds-drawer-height, var(--ds-drawer-size-md));
 }
 
 /* The edge flush against the viewport carries no frame. */
@@ -241,37 +241,37 @@
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='left'] {
-  animation: ds-drawer-enter-left var(--ds-drawer-enter-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-enter-left var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-placement='left'] {
-  animation: ds-drawer-exit-left var(--ds-drawer-exit-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-exit-left var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='right'] {
-  animation: ds-drawer-enter-right var(--ds-drawer-enter-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-enter-right var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-placement='right'] {
-  animation: ds-drawer-exit-right var(--ds-drawer-exit-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-exit-right var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='top'] {
-  animation: ds-drawer-enter-top var(--ds-drawer-enter-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-enter-top var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-placement='top'] {
-  animation: ds-drawer-exit-top var(--ds-drawer-exit-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-exit-top var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='bottom'],
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-presentation='fullscreen'] {
-  animation: ds-drawer-enter-bottom var(--ds-drawer-enter-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-enter-bottom var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-placement='bottom'],
 .ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-presentation='fullscreen'] {
-  animation: ds-drawer-exit-bottom var(--ds-drawer-exit-duration) var(--ds-drawer-enter-curve) both;
+  animation: ds-drawer-exit-bottom var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] {
@@ -279,10 +279,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-drawer-section-gap);
-  min-block-size: var(--ds-drawer-section-min-height);
-  padding-block: var(--ds-drawer-section-padding-block);
-  padding-inline: var(--ds-drawer-section-padding-inline);
+  gap: var(--ds-drawer-section-gap, var(--ds-spacing-3));
+  min-block-size: var(--ds-drawer-section-min-height, calc(4.5rem * var(--ds-density-effective-scale)));
+  padding-block: var(--ds-drawer-section-padding-block, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-drawer-section-padding-inline, calc(clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) * var(--ds-density-effective-scale)));
   flex-shrink: 0;
   background: transparent;
 }
@@ -296,10 +296,10 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--ds-drawer-footer-gap);
-  min-block-size: var(--ds-drawer-section-min-height);
-  padding-block: var(--ds-drawer-section-padding-block);
-  padding-inline: var(--ds-drawer-section-padding-inline);
+  gap: var(--ds-drawer-footer-gap, calc(var(--ds-spacing-2) * var(--ds-density-effective-scale)));
+  min-block-size: var(--ds-drawer-section-min-height, calc(4.5rem * var(--ds-density-effective-scale)));
+  padding-block: var(--ds-drawer-section-padding-block, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-drawer-section-padding-inline, calc(clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) * var(--ds-density-effective-scale)));
   flex-shrink: 0;
   background: var(--ds-drawer-footer-bg, var(--ds-color-bg-secondary));
   backdrop-filter: var(--ds-drawer-footer-backdrop, var(--ds-glass-backdrop-filter));
@@ -316,7 +316,7 @@
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: var(--ds-drawer-section-gap);
+  gap: var(--ds-drawer-section-gap, var(--ds-spacing-3));
   flex: 1 1 auto;
   min-inline-size: 0;
 }
@@ -328,7 +328,7 @@
   flex: 0 0 auto;
   inline-size: var(--ds-drawer-icon-size);
   block-size: var(--ds-drawer-icon-size);
-  border-radius: var(--ds-drawer-icon-radius);
+  border-radius: var(--ds-drawer-icon-radius, var(--ds-radius-md));
   background: var(--ds-drawer-icon-bg, var(--ds-color-bg-primary));
   box-shadow: inset 0 1px 0 var(--ds-drawer-icon-highlight, var(--ds-color-bg-elevated));
   color: var(--ds-drawer-icon-color, var(--ds-color-primary));
@@ -356,7 +356,7 @@
   min-block-size: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--ds-drawer-section-padding-inline);
+  padding: var(--ds-drawer-section-padding-inline, calc(clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) * var(--ds-density-effective-scale)));
   background: var(--ds-drawer-body-bg, transparent);
   color: var(--ds-drawer-body-color, var(--ds-color-text-primary));
   font-family: var(--ds-type-body-font-family);
@@ -379,14 +379,14 @@
   padding: 0;
   cursor: pointer;
   border: none;
-  border-radius: var(--ds-drawer-close-radius);
+  border-radius: var(--ds-drawer-close-radius, var(--ds-radius-md));
   background-color: transparent;
   color: var(--ds-drawer-close-color, var(--ds-color-text-secondary));
   outline: none;
   transition:
-    background-color var(--ds-drawer-transition-duration) var(--ds-drawer-transition-timing),
-    color var(--ds-drawer-transition-duration) var(--ds-drawer-transition-timing),
-    box-shadow var(--ds-drawer-transition-duration) var(--ds-drawer-transition-timing);
+    background-color var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out)),
+    color var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out));
 }
 
 @media (hover: hover) {

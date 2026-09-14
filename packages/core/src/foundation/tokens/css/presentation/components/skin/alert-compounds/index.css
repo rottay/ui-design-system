@@ -7,7 +7,7 @@
  */
 
 .ds-alert-description[data-part='description'] {
-  margin-block-start: var(--ds-alert-copy-gap);
+  margin-block-start: var(--ds-alert-copy-gap, var(--ds-spacing-1));
   max-inline-size: var(--ds-alert-description-measure);
   color: var(--ds-alert-description-color, var(--ds-color-text-secondary));
   font-family: var(--ds-alert-description-font-family, var(--ds-type-supporting-font-family));

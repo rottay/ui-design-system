@@ -32,6 +32,6 @@
   --ds-alert-enter-curve: var(--ds-motion-ease-enter);
   --ds-alert-transition-duration: var(--ds-motion-feedback);
   --ds-alert-transition-curve: var(--ds-motion-ease-standard);
-  --ds-alert-focus-ring-width: 2px;
+  --ds-alert-focus-ring-width: var(--ds-focus-ring-width);
   --ds-alert-touch-target-min: var(--ds-touch-target-min);
 }

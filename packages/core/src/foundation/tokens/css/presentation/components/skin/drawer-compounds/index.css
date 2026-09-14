@@ -10,9 +10,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-drawer-section-gap);
-  padding-block: var(--ds-drawer-section-padding-block);
-  padding-inline: var(--ds-drawer-body-padding-lg);
+  gap: var(--ds-drawer-section-gap, var(--ds-spacing-3));
+  padding-block: var(--ds-drawer-section-padding-block, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-drawer-body-padding-lg, var(--ds-spacing-6));
   flex-shrink: 0;
 }
 
@@ -42,14 +42,14 @@
   cursor: pointer;
   background: transparent;
   border: none;
-  border-radius: var(--ds-drawer-close-radius);
+  border-radius: var(--ds-drawer-close-radius, var(--ds-radius-md));
   color: var(--ds-drawer-close-color, var(--ds-color-text-secondary));
   outline: none;
   transition:
-    color var(--ds-drawer-transition-duration) var(--ds-drawer-transition-timing),
-    background-color var(--ds-drawer-transition-duration) var(--ds-drawer-transition-timing),
-    box-shadow var(--ds-drawer-transition-duration) var(--ds-drawer-transition-timing),
-    transform var(--ds-drawer-transition-duration) var(--ds-drawer-transition-timing);
+    color var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out)),
+    background-color var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out)),
+    transform var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out));
 }
 
 @media (hover: hover) {
@@ -60,7 +60,7 @@
 }
 
 .ds-drawer-close[data-part='close-button']:is([data-state~='pressed'], :active) {
-  transform: scale(var(--ds-drawer-press-scale));
+  transform: scale(var(--ds-drawer-press-scale, var(--ds-state-press-scale)));
   background-color: var(--ds-drawer-close-bg-hover, var(--ds-material-control-background-hover));
   color: var(--ds-drawer-close-color-hover, var(--ds-color-text-primary));
 }
@@ -98,30 +98,30 @@
   min-block-size: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: var(--ds-drawer-body-padding-lg);
+  padding: var(--ds-drawer-body-padding-lg, var(--ds-spacing-6));
   background-color: var(--ds-drawer-body-bg, transparent);
   color: var(--ds-drawer-body-color, var(--ds-color-text-primary));
 }
 
 .ds-drawer-body[data-part='body'][data-padding='none'] {
-  padding: var(--ds-drawer-body-padding-none);
+  padding: var(--ds-drawer-body-padding-none, var(--ds-spacing-0));
 }
 
 .ds-drawer-body[data-part='body'][data-padding='sm'] {
-  padding: var(--ds-drawer-body-padding-sm);
+  padding: var(--ds-drawer-body-padding-sm, var(--ds-spacing-3));
 }
 
 .ds-drawer-body[data-part='body'][data-padding='md'] {
-  padding: var(--ds-drawer-body-padding-md);
+  padding: var(--ds-drawer-body-padding-md, var(--ds-spacing-4));
 }
 
 .ds-drawer-footer[data-part='footer'] {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--ds-drawer-section-gap);
-  padding-block: var(--ds-drawer-section-padding-block);
-  padding-inline: var(--ds-drawer-body-padding-lg);
+  gap: var(--ds-drawer-section-gap, var(--ds-spacing-3));
+  padding-block: var(--ds-drawer-section-padding-block, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-drawer-body-padding-lg, var(--ds-spacing-6));
   flex-shrink: 0;
   background-color: var(--ds-drawer-footer-bg, var(--ds-color-bg-secondary));
 }

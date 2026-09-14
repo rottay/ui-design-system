@@ -11,7 +11,7 @@
 @keyframes ds-hover-card-enter {
   from {
     opacity: 0;
-    transform: var(--ds-hover-card-closed-transform);
+    transform: var(--ds-hover-card-closed-transform, translate3d(0, calc(0px - var(--ds-hover-card-motion-offset)), 0) scale(var(--ds-hover-card-motion-scale)));
   }
   to {
     opacity: 1;
@@ -26,7 +26,7 @@
   }
   to {
     opacity: 0;
-    transform: var(--ds-hover-card-closed-transform);
+    transform: var(--ds-hover-card-closed-transform, translate3d(0, calc(0px - var(--ds-hover-card-motion-offset)), 0) scale(var(--ds-hover-card-motion-scale)));
   }
 }
 
@@ -40,12 +40,12 @@
   z-index: var(--ds-hover-card-layer, var(--ds-z-index-popover));
   box-sizing: border-box;
   inline-size: var(--ds-hover-card-width);
-  max-inline-size: calc(100dvw - var(--ds-hover-card-viewport-gutter) - var(--ds-hover-card-viewport-gutter));
+  max-inline-size: calc(100dvw - var(--ds-hover-card-viewport-gutter, var(--ds-spacing-4)) - var(--ds-hover-card-viewport-gutter, var(--ds-spacing-4)));
   max-block-size: var(--ds-hover-card-max-block-size);
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-width: var(--ds-hover-card-scrollbar-width);
-  padding: var(--ds-hover-card-padding);
+  padding: var(--ds-hover-card-padding, var(--ds-spacing-4));
   border-radius: var(--ds-hover-card-radius, var(--ds-radius-xl));
   transform-origin: center top;
   background:
@@ -62,11 +62,11 @@
 }
 
 .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-open='true'] {
-  animation: ds-hover-card-enter var(--ds-hover-card-enter-duration) var(--ds-hover-card-enter-curve) both;
+  animation: ds-hover-card-enter var(--ds-hover-card-enter-duration, var(--ds-motion-reveal)) var(--ds-hover-card-enter-curve, var(--ds-motion-ease-out)) both;
 }
 
 .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-open='false'] {
-  animation: ds-hover-card-exit var(--ds-hover-card-enter-duration) var(--ds-hover-card-enter-curve) both;
+  animation: ds-hover-card-exit var(--ds-hover-card-enter-duration, var(--ds-motion-reveal)) var(--ds-hover-card-enter-curve, var(--ds-motion-ease-out)) both;
 }
 
 .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-placement^='top'] {

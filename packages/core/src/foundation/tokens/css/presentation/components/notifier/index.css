@@ -40,12 +40,12 @@
   --ds-notifier-control-padding-inline: var(--ds-spacing-3);
   --ds-notifier-control-lift: -1px;
   --ds-notifier-clickable-lift: -2px;
-  --ds-notifier-lifetime-size: 2px;
-  --ds-notifier-spinner-size: 1rem;
-  --ds-notifier-spinner-width: 2px;
+  --ds-notifier-lifetime-size: var(--ds-border-width-2);
+  --ds-notifier-spinner-size: var(--ds-icon-sm-size);
+  --ds-notifier-spinner-width: var(--ds-border-width-2);
   --ds-notifier-travel: 0.75rem;
   --ds-notifier-scale-step: 0.05;
-  --ds-notifier-focus-ring-width: 2px;
+  --ds-notifier-focus-ring-width: var(--ds-focus-ring-width);
   --ds-notifier-enter-duration: var(--ds-motion-reveal);
   --ds-notifier-enter-curve: var(--ds-motion-ease-enter);
   --ds-notifier-exit-duration: var(--ds-motion-feedback);

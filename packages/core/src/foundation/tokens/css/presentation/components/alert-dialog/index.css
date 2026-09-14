@@ -18,7 +18,7 @@
   --ds-alert-dialog-footer-gap: var(--ds-spacing-2);
   --ds-alert-dialog-footer-offset: var(--ds-spacing-4);
   --ds-alert-dialog-icon-size: 2.5rem;
-  --ds-alert-dialog-icon-ring-width: 1px;
+  --ds-alert-dialog-icon-ring-width: var(--ds-border-width-1);
   --ds-alert-dialog-enter-y: 0.5rem;
   --ds-alert-dialog-enter-scale: 0.97;
   --ds-alert-dialog-enter-duration: var(--ds-motion-reveal);

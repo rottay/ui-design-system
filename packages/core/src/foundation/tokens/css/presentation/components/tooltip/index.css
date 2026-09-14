@@ -64,7 +64,7 @@
   --ds-tooltip-shortcut-key-border-width: var(--ds-edge-standard-width);
   --ds-tooltip-shortcut-key-radius: var(--ds-radius-sm);
   --ds-tooltip-shortcut-key-type: var(--ds-type-code);
-  --ds-tooltip-content-padding-block: 0.5rem;
-  --ds-tooltip-content-padding-inline: 0.75rem;
+  --ds-tooltip-content-padding-block: var(--ds-spacing-2);
+  --ds-tooltip-content-padding-inline: var(--ds-spacing-3);
   --ds-tooltip-content-arrow-offset: calc(var(--ds-tooltip-arrow-size) / -2 - 1px);
 }

@@ -64,16 +64,16 @@
   display: grid;
   inline-size: max-content;
   min-inline-size: min(var(--ds-popover-min-width), calc(100dvi - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
-  max-inline-size: min(var(--ds-popover-max-width-current), calc(100dvi - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
+  max-inline-size: min(var(--ds-popover-max-width-current, var(--ds-popover-bordered-max-width, var(--ds-popover-max-width))), calc(100dvi - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
   max-block-size: min(var(--ds-popover-max-height), calc(100dvb - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
   overflow: visible;
-  border: var(--ds-popover-edge-width-current) var(--ds-edge-standard-style) var(--ds-popover-edge-current);
+  border: var(--ds-popover-edge-width-current, var(--ds-popover-bordered-border-width, var(--ds-edge-standard-width))) var(--ds-edge-standard-style) var(--ds-popover-edge-current, var(--ds-popover-bordered-border, var(--ds-color-border-primary)));
   border-radius: var(--ds-popover-radius-current);
   background:
     linear-gradient(var(--ds-popover-surface-lift, var(--ds-elevation-surface-3)), var(--ds-popover-surface-lift, var(--ds-elevation-surface-3))),
-    var(--ds-popover-surface-current);
-  box-shadow: var(--_ds-popover-layer-step-shadow, var(--ds-popover-shadow-current));
-  color: var(--ds-popover-ink-current);
+    var(--ds-popover-surface-current, var(--ds-popover-bordered-background, var(--ds-material-overlay-background)));
+  box-shadow: var(--_ds-popover-layer-step-shadow, var(--ds-popover-shadow-current, var(--ds-popover-bordered-shadow, var(--ds-elevation-3))));
+  color: var(--ds-popover-ink-current, var(--ds-popover-bordered-foreground, var(--ds-color-text-primary)));
   font-family: var(--ds-type-body-font-family);
   text-align: start;
   text-wrap: pretty;
@@ -82,12 +82,12 @@
   direction: inherit;
   unicode-bidi: plaintext;
   transform-origin: center bottom;
-  animation: ds-popover-enter var(--ds-popover-enter-duration) var(--ds-popover-enter-easing) both;
+  animation: ds-popover-enter var(--ds-popover-enter-duration, var(--ds-motion-reveal)) var(--ds-popover-enter-easing, var(--ds-motion-ease-enter)) both;
   will-change: opacity, transform;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-custom-max-width='true'] {
-  max-inline-size: min(var(--ds-popover-instance-max-width), calc(100dvi - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
+  max-inline-size: min(var(--ds-popover-instance-max-width, var(--ds-popover-max-width)), calc(100dvi - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
 }
 
 /* The recipe motif scales with the effect dial on its own slot. */
@@ -116,8 +116,8 @@
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-open='false'] {
   pointer-events: none;
   animation-name: ds-popover-exit;
-  animation-duration: var(--ds-popover-exit-duration);
-  animation-timing-function: var(--ds-popover-exit-easing);
+  animation-duration: var(--ds-popover-exit-duration, var(--ds-motion-feedback));
+  animation-timing-function: var(--ds-popover-exit-easing, var(--ds-motion-ease-exit));
 }
 
 @starting-style {
@@ -200,26 +200,26 @@
 
 /* Inside a modal the surface steps one rung up the elevation ramp. */
 .ds-modal.ds-modal--modern .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
-  --_ds-popover-layer-step-shadow: var(--ds-elevation-5);
+  --_ds-popover-layer-step-shadow: var(--ds-elevation-5, 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent));
 }
 
 /* A top-layer surface neutralizes the UA popover chrome explicitly. */
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'][data-ds-position-strategy='anchor-css'] {
   overflow: visible;
-  border: var(--ds-popover-edge-width-current) var(--ds-edge-standard-style) var(--ds-popover-edge-current);
+  border: var(--ds-popover-edge-width-current, var(--ds-popover-bordered-border-width, var(--ds-edge-standard-width))) var(--ds-edge-standard-style) var(--ds-popover-edge-current, var(--ds-popover-bordered-border, var(--ds-color-border-primary)));
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='title'] {
   position: relative;
   z-index: 1;
-  padding-block: var(--ds-popover-title-padding-block);
-  padding-inline: var(--ds-popover-padding-inline-current);
+  padding-block: var(--ds-popover-title-padding-block, var(--ds-spacing-sm));
+  padding-inline: var(--ds-popover-padding-inline-current, var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md)));
   border-block-end: var(--ds-popover-title-divider-width) var(--ds-edge-standard-style)
     var(--ds-popover-title-divider, var(--ds-color-border-subtle));
   border-start-start-radius: inherit;
   border-start-end-radius: inherit;
   background: var(--ds-popover-title-background, none);
-  color: var(--ds-popover-ink-current);
+  color: var(--ds-popover-ink-current, var(--ds-popover-bordered-foreground, var(--ds-color-text-primary)));
   font: var(--ds-popover-title-type, var(--ds-type-label));
   letter-spacing: var(--ds-popover-title-letter-spacing, var(--ds-type-label-letter-spacing));
   text-wrap: balance;
@@ -229,14 +229,14 @@
   position: relative;
   z-index: 1;
   min-inline-size: 0;
-  max-block-size: var(--ds-popover-body-max-height-current);
+  max-block-size: var(--ds-popover-body-max-height-current, var(--ds-popover-body-max-height));
   padding-block: var(--ds-popover-padding-block-current);
-  padding-inline: var(--ds-popover-padding-inline-current);
+  padding-inline: var(--ds-popover-padding-inline-current, var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md)));
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
   scrollbar-width: var(--ds-popover-body-scrollbar-width);
-  color: var(--ds-popover-muted-ink-current);
+  color: var(--ds-popover-muted-ink-current, var(--ds-popover-bordered-muted-foreground, var(--ds-color-text-secondary)));
   font: var(--ds-popover-body-type, var(--ds-type-supporting));
 }
 
@@ -255,16 +255,16 @@
   z-index: 0;
   inline-size: var(--ds-popover-arrow-size);
   block-size: var(--ds-popover-arrow-size);
-  border: var(--ds-popover-edge-width-current) var(--ds-edge-standard-style) var(--ds-popover-edge-current);
+  border: var(--ds-popover-edge-width-current, var(--ds-popover-bordered-border-width, var(--ds-edge-standard-width))) var(--ds-edge-standard-style) var(--ds-popover-edge-current, var(--ds-popover-bordered-border, var(--ds-color-border-primary)));
   background:
     linear-gradient(var(--ds-popover-surface-lift, var(--ds-elevation-surface-3)), var(--ds-popover-surface-lift, var(--ds-elevation-surface-3))),
-    var(--ds-popover-surface-current);
+    var(--ds-popover-surface-current, var(--ds-popover-bordered-background, var(--ds-material-overlay-background)));
   transform: rotate(45deg);
   transition:
-    inset-block-start var(--ds-popover-arrow-duration) var(--ds-motion-ease-move),
-    inset-block-end var(--ds-popover-arrow-duration) var(--ds-motion-ease-move),
-    inset-inline-start var(--ds-popover-arrow-duration) var(--ds-motion-ease-move),
-    inset-inline-end var(--ds-popover-arrow-duration) var(--ds-motion-ease-move);
+    inset-block-start var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    inset-block-end var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    inset-inline-start var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    inset-inline-end var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='arrow'][data-part='arrow']::before {

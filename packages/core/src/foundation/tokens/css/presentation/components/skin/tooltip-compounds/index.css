@@ -8,8 +8,8 @@
 
 .ds-tooltip-content[data-part='content'] {
   position: relative;
-  padding-block: var(--ds-tooltip-content-padding-block);
-  padding-inline: var(--ds-tooltip-content-padding-inline);
+  padding-block: var(--ds-tooltip-content-padding-block, var(--ds-spacing-2));
+  padding-inline: var(--ds-tooltip-content-padding-inline, var(--ds-spacing-3));
   border-radius: var(--ds-tooltip-radius, var(--ds-radius-sm));
   background-color: var(--ds-tooltip-bg, var(--ds-color-text-primary));
   box-shadow: var(--ds-tooltip-shadow, var(--ds-shadow-md));
@@ -26,21 +26,21 @@
 }
 
 .ds-tooltip-content[data-part='content'][data-side='top'] > [data-part='arrow'] {
-  inset-block-end: var(--ds-tooltip-content-arrow-offset);
-  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size));
+  inset-block-end: var(--ds-tooltip-content-arrow-offset, calc(var(--ds-tooltip-arrow-size) / -2 - 1px));
+  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
 }
 
 .ds-tooltip-content[data-part='content'][data-side='bottom'] > [data-part='arrow'] {
-  inset-block-start: var(--ds-tooltip-content-arrow-offset);
-  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size));
+  inset-block-start: var(--ds-tooltip-content-arrow-offset, calc(var(--ds-tooltip-arrow-size) / -2 - 1px));
+  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
 }
 
 .ds-tooltip-content[data-part='content'][data-side='left'] > [data-part='arrow'] {
-  inset-inline-end: var(--ds-tooltip-content-arrow-offset);
-  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size));
+  inset-inline-end: var(--ds-tooltip-content-arrow-offset, calc(var(--ds-tooltip-arrow-size) / -2 - 1px));
+  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
 }
 
 .ds-tooltip-content[data-part='content'][data-side='right'] > [data-part='arrow'] {
-  inset-inline-start: var(--ds-tooltip-content-arrow-offset);
-  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size));
+  inset-inline-start: var(--ds-tooltip-content-arrow-offset, calc(var(--ds-tooltip-arrow-size) / -2 - 1px));
+  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
 }

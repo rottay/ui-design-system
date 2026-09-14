@@ -308,12 +308,11 @@
   --ds-modal-width-4xl: 1280px;
   --ds-modal-width-5xl: 1440px;
   --ds-modal-width-full: 95dvw;
-  --ds-modal-radius: var(--ds-radius-lg);
   --ds-modal-section-padding-block: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
   --ds-modal-section-padding-inline: calc(var(--ds-spacing-6) * var(--ds-density-effective-scale));
   --ds-modal-header-gap: var(--ds-spacing-3);
   --ds-modal-heading-gap: var(--ds-spacing-1);
-  --ds-modal-body-padding-none: 0;
+  --ds-modal-body-padding-none: var(--ds-spacing-0);
   --ds-modal-body-padding-sm: calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
   --ds-modal-body-padding-md: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
   --ds-modal-body-padding-lg: calc(var(--ds-spacing-6) * var(--ds-density-effective-scale));
@@ -327,8 +326,8 @@
   --ds-modal-action-radius: var(--ds-radius-md);
   --ds-modal-action-lift: -1px;
   --ds-modal-action-disabled-opacity: var(--ds-state-disabled-opacity);
-  --ds-modal-spinner-size: 1rem;
-  --ds-modal-spinner-stroke: 2px;
+  --ds-modal-spinner-size: var(--ds-icon-sm-size);
+  --ds-modal-spinner-stroke: var(--ds-border-width-2);
   --ds-modal-spinner-duration: var(--ds-motion-glacial);
   --ds-modal-touch-target-min: var(--ds-touch-target-min);
 }

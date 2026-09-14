@@ -13,7 +13,7 @@
 @keyframes ds-alert-enter {
   from {
     opacity: 0;
-    transform: translateY(calc(var(--ds-alert-travel) * var(--ds-motion-intensity)))
+    transform: translateY(calc(var(--ds-alert-travel, var(--ds-motion-offset-in)) * var(--ds-motion-intensity)))
       scale(calc(1 - var(--ds-alert-scale-step) * var(--ds-motion-intensity)));
   }
   to {
@@ -23,7 +23,6 @@
 }
 
 .ds-alert.ds-alert--modern[data-part='root'] {
-  --ds-alert-accent: var(--ds-alert-info-accent, var(--ds-color-info));
   --ds-alert-ink: var(--ds-alert-info-ink, var(--ds-color-info));
   --ds-alert-wash: var(--ds-alert-info-wash, var(--ds-color-bg-elevated));
   --ds-alert-well: var(--ds-alert-info-well, var(--ds-color-bg-elevated));
@@ -37,52 +36,49 @@
   box-sizing: border-box;
   inline-size: 100%;
   align-items: flex-start;
-  gap: var(--ds-alert-gap);
+  gap: var(--ds-alert-gap, var(--ds-spacing-3));
   overflow: hidden;
   padding: var(--ds-alert-responsive-padding, var(--ds-alert-surface-padding));
   color: var(--ds-alert-color, var(--ds-color-text-primary));
-  background-color: var(--ds-alert-wash);
-  background-image: var(--ds-alert-texture, none);
-  border: var(--ds-alert-border-width) var(--ds-alert-border-style) var(--ds-alert-edge);
-  border-radius: var(--ds-alert-surface-radius);
-  box-shadow: var(--ds-alert-keyline, none), var(--ds-alert-shadow, none);
-  animation: ds-alert-enter var(--ds-alert-enter-duration) var(--ds-alert-enter-curve) both;
+  background-color: var(--ds-alert-wash, var(--ds-alert-info-wash, var(--ds-color-bg-elevated)));
+  background-image: var(--ds-alert-texture, var(--ds-gradient-surface));
+  border: var(--ds-alert-border-width, var(--ds-edge-standard-width)) var(--ds-alert-border-style, var(--ds-edge-standard-style)) var(--ds-alert-edge, var(--ds-alert-info-edge, var(--ds-color-border)));
+  border-radius: var(--ds-alert-surface-radius, var(--ds-radius-md));
+  box-shadow: var(--ds-alert-keyline, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(35% * var(--ds-effect-intensity)), transparent)), var(--ds-alert-shadow, var(--ds-elevation-1));
+  animation: ds-alert-enter var(--ds-alert-enter-duration, var(--ds-motion-reveal)) var(--ds-alert-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-alert.ds-alert--modern[data-part='root'][data-compact='true'] {
-  gap: var(--ds-alert-compact-gap);
-  padding: var(--ds-alert-compact-padding);
+  gap: var(--ds-alert-compact-gap, var(--ds-spacing-2));
+  padding: var(--ds-alert-compact-padding, calc(var(--ds-spacing-2) * var(--ds-density-effective-scale)) calc(var(--ds-spacing-3) * var(--ds-density-effective-scale)));
 }
 
 .ds-alert.ds-alert--modern[data-part='root'][data-tone='success'] {
-  --ds-alert-accent: var(--ds-alert-success-accent);
-  --ds-alert-ink: var(--ds-alert-success-ink);
-  --ds-alert-wash: var(--ds-alert-success-wash);
-  --ds-alert-well: var(--ds-alert-success-well);
-  --ds-alert-edge: var(--ds-alert-success-edge);
-  --ds-alert-well-edge: var(--ds-alert-success-well-edge);
-  --ds-alert-control-edge: var(--ds-alert-success-control-edge);
-  --ds-alert-control-edge-hover: var(--ds-alert-success-control-edge-hover);
+  --ds-alert-ink: var(--ds-alert-success-ink, var(--ds-color-success-ink));
+  --ds-alert-wash: var(--ds-alert-success-wash, color-mix(in oklab, var(--ds-color-success) 8%, var(--ds-color-bg-primary)));
+  --ds-alert-well: var(--ds-alert-success-well, color-mix(in srgb, var(--ds-color-success) 11%, var(--ds-color-bg-elevated)));
+  --ds-alert-edge: var(--ds-alert-success-edge, color-mix(in srgb, var(--ds-color-success) 30%, var(--ds-color-border)));
+  --ds-alert-well-edge: var(--ds-alert-success-well-edge, color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border)));
+  --ds-alert-control-edge: var(--ds-alert-success-control-edge, color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border)));
+  --ds-alert-control-edge-hover: var(--ds-alert-success-control-edge-hover, color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-border)));
 }
 .ds-alert.ds-alert--modern[data-part='root'][data-tone='warning'] {
-  --ds-alert-accent: var(--ds-alert-warning-accent);
-  --ds-alert-ink: var(--ds-alert-warning-ink);
-  --ds-alert-wash: var(--ds-alert-warning-wash);
-  --ds-alert-well: var(--ds-alert-warning-well);
-  --ds-alert-edge: var(--ds-alert-warning-edge);
-  --ds-alert-well-edge: var(--ds-alert-warning-well-edge);
-  --ds-alert-control-edge: var(--ds-alert-warning-control-edge);
-  --ds-alert-control-edge-hover: var(--ds-alert-warning-control-edge-hover);
+  --ds-alert-ink: var(--ds-alert-warning-ink, var(--ds-color-warning-ink));
+  --ds-alert-wash: var(--ds-alert-warning-wash, color-mix(in oklab, var(--ds-color-warning) 8%, var(--ds-color-bg-primary)));
+  --ds-alert-well: var(--ds-alert-warning-well, color-mix(in srgb, var(--ds-color-warning) 11%, var(--ds-color-bg-elevated)));
+  --ds-alert-edge: var(--ds-alert-warning-edge, color-mix(in srgb, var(--ds-color-warning) 30%, var(--ds-color-border)));
+  --ds-alert-well-edge: var(--ds-alert-warning-well-edge, color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border)));
+  --ds-alert-control-edge: var(--ds-alert-warning-control-edge, color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border)));
+  --ds-alert-control-edge-hover: var(--ds-alert-warning-control-edge-hover, color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-border)));
 }
 .ds-alert.ds-alert--modern[data-part='root'][data-tone='error'] {
-  --ds-alert-accent: var(--ds-alert-error-accent);
-  --ds-alert-ink: var(--ds-alert-error-ink);
-  --ds-alert-wash: var(--ds-alert-error-wash);
-  --ds-alert-well: var(--ds-alert-error-well);
-  --ds-alert-edge: var(--ds-alert-error-edge);
-  --ds-alert-well-edge: var(--ds-alert-error-well-edge);
-  --ds-alert-control-edge: var(--ds-alert-error-control-edge);
-  --ds-alert-control-edge-hover: var(--ds-alert-error-control-edge-hover);
+  --ds-alert-ink: var(--ds-alert-error-ink, var(--ds-color-error-ink));
+  --ds-alert-wash: var(--ds-alert-error-wash, color-mix(in oklab, var(--ds-color-error) 8%, var(--ds-color-bg-primary)));
+  --ds-alert-well: var(--ds-alert-error-well, color-mix(in srgb, var(--ds-color-error) 11%, var(--ds-color-bg-elevated)));
+  --ds-alert-edge: var(--ds-alert-error-edge, color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border)));
+  --ds-alert-well-edge: var(--ds-alert-error-well-edge, color-mix(in srgb, var(--ds-color-error) 34%, var(--ds-color-border)));
+  --ds-alert-control-edge: var(--ds-alert-error-control-edge, color-mix(in srgb, var(--ds-color-error) 26%, var(--ds-color-border)));
+  --ds-alert-control-edge-hover: var(--ds-alert-error-control-edge-hover, color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-border)));
 }
 
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='icon'] {
@@ -92,39 +88,39 @@
   box-sizing: border-box;
   inline-size: var(--ds-alert-well-size);
   block-size: var(--ds-alert-well-size);
-  color: var(--ds-alert-ink);
-  background: var(--ds-alert-well);
-  border: var(--ds-alert-hairline-width) var(--ds-alert-border-style) var(--ds-alert-well-edge);
-  border-radius: var(--ds-alert-well-radius);
-  box-shadow: var(--ds-alert-well-keyline, none);
+  color: var(--ds-alert-ink, var(--ds-alert-info-ink, var(--ds-color-info)));
+  background: var(--ds-alert-well, var(--ds-alert-info-well, var(--ds-color-bg-elevated)));
+  border: var(--ds-alert-hairline-width, var(--ds-edge-hairline-width)) var(--ds-alert-border-style, var(--ds-edge-standard-style)) var(--ds-alert-well-edge, var(--ds-alert-info-well-edge, var(--ds-color-border)));
+  border-radius: var(--ds-alert-well-radius, var(--ds-radius-md));
+  box-shadow: var(--ds-alert-well-keyline, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent));
 }
 
 .ds-alert.ds-alert--modern[data-part='root'][data-compact='true'] > [data-part='icon'] {
   inline-size: var(--ds-alert-compact-well-size);
   block-size: var(--ds-alert-compact-well-size);
-  border-radius: var(--ds-alert-compact-well-radius);
+  border-radius: var(--ds-alert-compact-well-radius, var(--ds-radius-sm));
 }
 
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='content'] {
   display: grid;
   flex: 1 1 auto;
   align-self: center;
-  gap: var(--ds-alert-copy-gap);
+  gap: var(--ds-alert-copy-gap, var(--ds-spacing-1));
   min-inline-size: 0;
 }
 
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='content'] > [data-part='title'] {
-  color: var(--ds-alert-title-color);
-  font-family: var(--ds-alert-title-font-family);
-  font-size: var(--ds-alert-title-font-size);
-  font-weight: var(--ds-alert-title-font-weight);
-  line-height: var(--ds-alert-title-line-height);
-  letter-spacing: var(--ds-alert-title-letter-spacing);
+  color: var(--ds-alert-title-color, var(--ds-color-text-primary));
+  font-family: var(--ds-alert-title-font-family, var(--ds-type-label-font-family));
+  font-size: var(--ds-alert-title-font-size, var(--ds-type-label-font-size));
+  font-weight: var(--ds-alert-title-font-weight, var(--ds-font-weight-semibold));
+  line-height: var(--ds-alert-title-line-height, var(--ds-type-label-line-height));
+  letter-spacing: var(--ds-alert-title-letter-spacing, var(--ds-letter-spacing-heading));
   overflow-wrap: break-word;
 }
 
 .ds-alert.ds-alert--modern[data-part='root']:is([data-tone='warning'], [data-tone='error']) > [data-part='content'] > [data-part='title'] {
-  font-weight: var(--ds-alert-title-urgent-font-weight);
+  font-weight: var(--ds-alert-title-urgent-font-weight, var(--ds-font-weight-bold));
 }
 
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='content'] > [data-part='description'] {
@@ -141,12 +137,12 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--ds-alert-actions-gap);
-  margin-block-start: var(--ds-alert-copy-gap);
-  padding: var(--ds-alert-actions-padding);
-  background: var(--ds-alert-actions-bg);
-  border: var(--ds-alert-hairline-width) var(--ds-alert-border-style) var(--ds-alert-control-edge);
-  border-radius: var(--ds-alert-actions-radius);
+  gap: var(--ds-alert-actions-gap, var(--ds-spacing-2));
+  margin-block-start: var(--ds-alert-copy-gap, var(--ds-spacing-1));
+  padding: var(--ds-alert-actions-padding, var(--ds-spacing-2));
+  background: var(--ds-alert-actions-bg, color-mix(in srgb, var(--ds-color-bg-elevated) 60%, transparent));
+  border: var(--ds-alert-hairline-width, var(--ds-edge-hairline-width)) var(--ds-alert-border-style, var(--ds-edge-standard-style)) var(--ds-alert-control-edge, var(--ds-alert-info-control-edge, var(--ds-color-border)));
+  border-radius: var(--ds-alert-actions-radius, var(--ds-radius-md));
 }
 
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button'] {
@@ -155,42 +151,42 @@
   flex: 0 0 auto;
   place-items: center;
   box-sizing: border-box;
-  inline-size: var(--ds-alert-close-size);
-  block-size: var(--ds-alert-close-size);
+  inline-size: var(--ds-alert-close-size, calc(2rem * var(--ds-control-height-scale)));
+  block-size: var(--ds-alert-close-size, calc(2rem * var(--ds-control-height-scale)));
   padding: 0;
   cursor: pointer;
-  color: var(--ds-alert-close-color);
-  background: var(--ds-alert-close-bg);
-  border: var(--ds-alert-hairline-width) var(--ds-alert-border-style) var(--ds-alert-control-edge);
-  border-radius: var(--ds-alert-close-radius);
-  box-shadow: var(--ds-alert-close-shadow);
+  color: var(--ds-alert-close-color, var(--ds-color-text-secondary));
+  background: var(--ds-alert-close-bg, color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent));
+  border: var(--ds-alert-hairline-width, var(--ds-edge-hairline-width)) var(--ds-alert-border-style, var(--ds-edge-standard-style)) var(--ds-alert-control-edge, var(--ds-alert-info-control-edge, var(--ds-color-border)));
+  border-radius: var(--ds-alert-close-radius, var(--ds-radius-md));
+  box-shadow: var(--ds-alert-close-shadow, var(--ds-shadow-xs));
   transition-property: background-color, border-color, color, transform, box-shadow;
-  transition-duration: var(--ds-alert-transition-duration);
-  transition-timing-function: var(--ds-alert-transition-curve);
+  transition-duration: var(--ds-alert-transition-duration, var(--ds-motion-feedback));
+  transition-timing-function: var(--ds-alert-transition-curve, var(--ds-motion-ease-standard));
 }
 
 /* An invisible centered hit area meets the touch floor without growing the control. */
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']::after {
   content: '';
   position: absolute;
-  inset: min(0px, calc((100% - var(--ds-alert-touch-target-min)) / 2));
+  inset: min(0px, calc((100% - var(--ds-alert-touch-target-min, var(--ds-touch-target-min))) / 2));
 }
 
 @media (hover: hover) {
   .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='hovered'], :hover) {
-    color: var(--ds-alert-close-color-hover);
-    background: var(--ds-alert-wash);
-    border-color: var(--ds-alert-control-edge-hover);
+    color: var(--ds-alert-close-color-hover, var(--ds-color-text-primary));
+    background: var(--ds-alert-wash, var(--ds-alert-info-wash, var(--ds-color-bg-elevated)));
+    border-color: var(--ds-alert-control-edge-hover, var(--ds-alert-info-control-edge-hover, var(--ds-color-border)));
   }
 }
 
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='pressed'], :active) {
-  transform: scale(var(--ds-alert-press-scale));
+  transform: scale(var(--ds-alert-press-scale, var(--ds-state-press-scale)));
 }
 
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
-  box-shadow: var(--ds-alert-focus-ring);
+  box-shadow: var(--ds-alert-focus-ring, var(--ds-focus-ring));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -215,6 +211,6 @@
   }
 
   .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-alert-focus-ring-width) solid Highlight;
+    outline: var(--ds-alert-focus-ring-width, var(--ds-focus-ring-width)) solid Highlight;
   }
 }

@@ -62,7 +62,7 @@
   );
   backdrop-filter: var(--ds-alert-dialog-overlay-backdrop, var(--ds-glass-backdrop-filter));
   -webkit-backdrop-filter: var(--ds-alert-dialog-overlay-backdrop, var(--ds-glass-backdrop-filter));
-  animation: ds-alert-dialog-backdrop-enter var(--ds-alert-dialog-enter-duration) var(--ds-alert-dialog-enter-curve) both;
+  animation: ds-alert-dialog-backdrop-enter var(--ds-alert-dialog-enter-duration, var(--ds-motion-reveal)) var(--ds-alert-dialog-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
@@ -72,12 +72,12 @@
   inline-size: var(--ds-alert-dialog-inline-size);
   max-inline-size: min(
     var(--ds-alert-dialog-max-inline-size),
-    calc(100dvw - var(--ds-alert-dialog-viewport-gutter) - var(--ds-alert-dialog-viewport-gutter))
+    calc(100dvw - var(--ds-alert-dialog-viewport-gutter, var(--ds-spacing-4)) - var(--ds-alert-dialog-viewport-gutter, var(--ds-spacing-4)))
   );
-  max-block-size: calc(100dvh - var(--ds-alert-dialog-viewport-breathing));
+  max-block-size: calc(100dvh - var(--ds-alert-dialog-viewport-breathing, var(--ds-spacing-8)));
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--ds-alert-dialog-padding);
+  padding: var(--ds-alert-dialog-padding, calc(var(--ds-spacing-6) * var(--ds-density-effective-scale)));
   border-radius: var(--ds-alert-dialog-radius, var(--ds-radius-lg));
   background-color: var(--ds-alert-dialog-bg, var(--ds-material-overlay-background));
   background-image: linear-gradient(
@@ -87,7 +87,7 @@
   box-shadow:
     inset 0 1px 0 var(--ds-alert-dialog-keyline, var(--ds-color-border-subtle)),
     var(--ds-alert-dialog-shadow, var(--ds-elevation-4));
-  animation: ds-alert-dialog-enter var(--ds-alert-dialog-enter-duration) var(--ds-alert-dialog-enter-curve) both;
+  animation: ds-alert-dialog-enter var(--ds-alert-dialog-enter-duration, var(--ds-motion-reveal)) var(--ds-alert-dialog-enter-curve, var(--ds-motion-ease-enter)) both;
 }
 
 /* The colored frame repeats its part to clear the tenant border-color floor. */
@@ -99,7 +99,7 @@
 .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='content'] {
   display: flex;
   align-items: flex-start;
-  gap: var(--ds-alert-dialog-content-gap);
+  gap: var(--ds-alert-dialog-content-gap, var(--ds-spacing-3));
 }
 
 .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='copy'] {
@@ -108,7 +108,7 @@
 }
 
 .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='title'] {
-  margin: 0 0 var(--ds-alert-dialog-title-gap);
+  margin: 0 0 var(--ds-alert-dialog-title-gap, var(--ds-spacing-2));
   overflow-wrap: anywhere;
   text-wrap: balance;
   color: var(--ds-alert-dialog-title-color, var(--ds-color-text-primary));
@@ -140,15 +140,15 @@
 
 .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='icon'] {
   background: var(--ds-alert-dialog-icon-bg, var(--ds-color-bg-secondary));
-  box-shadow: inset 0 0 0 var(--ds-alert-dialog-icon-ring-width) var(--ds-alert-dialog-icon-ring, var(--ds-color-border-subtle));
+  box-shadow: inset 0 0 0 var(--ds-alert-dialog-icon-ring-width, var(--ds-border-width-1)) var(--ds-alert-dialog-icon-ring, var(--ds-color-border-subtle));
   color: var(--ds-alert-dialog-icon-color, var(--ds-color-error));
 }
 
 .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='footer'] {
   display: flex;
   justify-content: flex-end;
-  gap: var(--ds-alert-dialog-footer-gap);
-  margin-block-start: var(--ds-alert-dialog-footer-offset);
+  gap: var(--ds-alert-dialog-footer-gap, var(--ds-spacing-2));
+  margin-block-start: var(--ds-alert-dialog-footer-offset, var(--ds-spacing-4));
 }
 
 /* On a narrow panel the actions stack at full width instead of compressing. */

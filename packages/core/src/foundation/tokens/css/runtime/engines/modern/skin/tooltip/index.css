@@ -35,18 +35,18 @@
   z-index: var(--ds-tooltip-instance-z-index, var(--ds-z-index-tooltip));
   box-sizing: border-box;
   inline-size: max-content;
-  max-inline-size: min(var(--ds-tooltip-max-width-current), calc(100dvi - var(--ds-tooltip-viewport-gap) - var(--ds-tooltip-viewport-gap)));
+  max-inline-size: min(var(--ds-tooltip-max-width-current, var(--ds-tooltip-bordered-max-width, var(--ds-tooltip-max-width))), calc(100dvi - var(--ds-tooltip-viewport-gap) - var(--ds-tooltip-viewport-gap)));
   padding-block: var(--ds-tooltip-padding-block-current);
   padding-inline: var(--ds-tooltip-padding-inline-current);
   overflow: visible;
-  border: var(--ds-tooltip-edge-width-current) var(--ds-edge-standard-style) var(--ds-tooltip-edge-current);
+  border: var(--ds-tooltip-edge-width-current, var(--ds-tooltip-bordered-border-width, var(--ds-edge-standard-width))) var(--ds-edge-standard-style) var(--ds-tooltip-edge-current, var(--ds-tooltip-bordered-border, var(--ds-color-border-primary)));
   border-radius: var(--ds-tooltip-radius-current);
-  background: var(--ds-tooltip-surface-current);
-  box-shadow: var(--ds-tooltip-shadow-current);
-  color: var(--ds-tooltip-ink-current);
-  font: var(--ds-tooltip-type-current);
+  background: var(--ds-tooltip-surface-current, var(--ds-tooltip-bordered-background, var(--ds-material-overlay-background)));
+  box-shadow: var(--ds-tooltip-shadow-current, var(--ds-tooltip-bordered-shadow, var(--ds-elevation-3)));
+  color: var(--ds-tooltip-ink-current, var(--ds-tooltip-bordered-foreground, var(--ds-color-text-primary)));
+  font: var(--ds-tooltip-type-current, var(--ds-tooltip-type, var(--ds-type-caption)));
   font-variant-numeric: var(--ds-type-caption-font-variant-numeric);
-  letter-spacing: var(--ds-type-caption-letter-spacing);
+  letter-spacing: var(--ds-type-caption-letter-spacing, var(--ds-letter-spacing-normal));
   text-align: start;
   text-transform: var(--ds-type-caption-text-transform);
   text-wrap: pretty;
@@ -60,13 +60,13 @@
   transform: var(--ds-tooltip-closed-transform);
   transform-origin: center bottom;
   transition:
-    opacity var(--ds-tooltip-exit-duration) var(--ds-tooltip-exit-easing),
-    transform var(--ds-tooltip-exit-duration) var(--ds-tooltip-exit-easing);
+    opacity var(--ds-tooltip-exit-duration, var(--ds-motion-feedback)) var(--ds-tooltip-exit-easing, var(--ds-motion-ease-exit)),
+    transform var(--ds-tooltip-exit-duration, var(--ds-motion-feedback)) var(--ds-tooltip-exit-easing, var(--ds-motion-ease-exit));
   will-change: opacity, transform;
 }
 
 .ds-tooltip-bubble.ds-tooltip-bubble[data-part='bubble'][data-custom-max-width='true'] {
-  max-inline-size: min(var(--ds-tooltip-instance-max-width), calc(100dvi - var(--ds-tooltip-viewport-gap) - var(--ds-tooltip-viewport-gap)));
+  max-inline-size: min(var(--ds-tooltip-instance-max-width, var(--ds-tooltip-max-width)), calc(100dvi - var(--ds-tooltip-viewport-gap) - var(--ds-tooltip-viewport-gap)));
 }
 
 /* A code-owned material layer lets a brand add quiet grain or light without pseudo chrome of its own. */
@@ -184,8 +184,8 @@
   opacity: 1;
   transform: none;
   transition:
-    opacity var(--ds-tooltip-enter-duration) var(--ds-tooltip-enter-easing),
-    transform var(--ds-tooltip-enter-duration) var(--ds-tooltip-enter-easing);
+    opacity var(--ds-tooltip-enter-duration, var(--ds-motion-feedback)) var(--ds-tooltip-enter-easing, var(--ds-motion-ease-enter)),
+    transform var(--ds-tooltip-enter-duration, var(--ds-motion-feedback)) var(--ds-tooltip-enter-easing, var(--ds-motion-ease-enter));
 }
 
 .ds-tooltip-bubble.ds-tooltip-bubble[data-part='bubble'][data-open='true'][data-interactive='true'] {
@@ -238,14 +238,14 @@
 /* A top-layer bubble neutralizes the UA popover overflow and keeps its own frame. */
 .ds-tooltip-bubble.ds-tooltip-bubble[data-part='bubble'][data-ds-position-strategy='anchor-css'] {
   overflow: visible;
-  border: var(--ds-tooltip-edge-width-current) var(--ds-edge-standard-style) var(--ds-tooltip-edge-current);
+  border: var(--ds-tooltip-edge-width-current, var(--ds-tooltip-bordered-border-width, var(--ds-edge-standard-width))) var(--ds-edge-standard-style) var(--ds-tooltip-edge-current, var(--ds-tooltip-bordered-border, var(--ds-color-border-primary)));
 }
 
 .ds-tooltip-bubble[data-part='bubble'] [data-part='shortcut-row'] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-tooltip-shortcut-gap);
+  gap: var(--ds-tooltip-shortcut-gap, var(--ds-spacing-sm));
   min-inline-size: 0;
 }
 
@@ -266,7 +266,7 @@
   padding-inline: var(--ds-tooltip-shortcut-key-padding-inline);
   border: var(--ds-tooltip-shortcut-key-border-width) var(--ds-edge-standard-style)
     var(--ds-tooltip-shortcut-key-border, currentColor);
-  border-radius: var(--ds-tooltip-shortcut-key-radius);
+  border-radius: var(--ds-tooltip-shortcut-key-radius, var(--ds-radius-sm));
   background: var(--ds-tooltip-shortcut-key-background, transparent);
   box-shadow: var(--ds-tooltip-shortcut-key-shadow, none);
   color: currentColor;
@@ -280,15 +280,15 @@
   z-index: 0;
   inline-size: var(--ds-tooltip-arrow-size);
   block-size: var(--ds-tooltip-arrow-size);
-  border: var(--ds-tooltip-edge-width-current) var(--ds-edge-standard-style) var(--ds-tooltip-edge-current);
-  background: var(--ds-tooltip-surface-current);
+  border: var(--ds-tooltip-edge-width-current, var(--ds-tooltip-bordered-border-width, var(--ds-edge-standard-width))) var(--ds-edge-standard-style) var(--ds-tooltip-edge-current, var(--ds-tooltip-bordered-border, var(--ds-color-border-primary)));
+  background: var(--ds-tooltip-surface-current, var(--ds-tooltip-bordered-background, var(--ds-material-overlay-background)));
   background-image: var(--ds-tooltip-texture-current);
   transform: rotate(45deg);
   transition:
-    inset-block-start var(--ds-tooltip-arrow-duration) var(--ds-motion-ease-move),
-    inset-block-end var(--ds-tooltip-arrow-duration) var(--ds-motion-ease-move),
-    inset-inline-start var(--ds-tooltip-arrow-duration) var(--ds-motion-ease-move),
-    inset-inline-end var(--ds-tooltip-arrow-duration) var(--ds-motion-ease-move);
+    inset-block-start var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    inset-block-end var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    inset-inline-start var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    inset-inline-end var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-has-arrow='true'][data-placement*='-'] {
@@ -296,29 +296,29 @@
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='top'] > [data-part='arrow'] {
-  inset-block-end: var(--ds-tooltip-arrow-overlap);
-  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size));
+  inset-block-end: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
+  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
   border-block-start: 0;
   border-inline-start: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='bottom'] > [data-part='arrow'] {
-  inset-block-start: var(--ds-tooltip-arrow-overlap);
-  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size));
+  inset-block-start: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
+  inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
   border-block-end: 0;
   border-inline-end: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='left'] > [data-part='arrow'] {
-  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size));
-  inset-inline-end: var(--ds-tooltip-arrow-overlap);
+  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
+  inset-inline-end: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
   border-block-end: 0;
   border-inline-start: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='right'] > [data-part='arrow'] {
-  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size));
-  inset-inline-start: var(--ds-tooltip-arrow-overlap);
+  inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
+  inset-inline-start: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
   border-block-start: 0;
   border-inline-end: 0;
 }
@@ -344,8 +344,8 @@
   inset-inline: auto;
   inset-inline-start: clamp(
     var(--ds-tooltip-arrow-edge-offset),
-    calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size)),
-    calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size) - var(--ds-tooltip-arrow-half-size))
+    calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))),
+    calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))
   );
 }
 
@@ -353,8 +353,8 @@
   inset-block: auto;
   inset-block-start: clamp(
     var(--ds-tooltip-arrow-edge-offset),
-    calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size)),
-    calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size) - var(--ds-tooltip-arrow-half-size))
+    calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))),
+    calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))
   );
 }
 
