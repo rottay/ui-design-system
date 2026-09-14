@@ -4586,7 +4586,7 @@
    "lane": "family-cuts",
    "order": 4,
    "size": "XL",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4601,7 +4601,9 @@
    "notes": "wave 4; closes F-77, F-21, F-39",
    "claimedBy": "opus",
    "claimedAt": "2026-09-13",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-09-13",
+   "evidence": "Family cut of 9 selection/picker families (select, auto-complete, cascader, tree-select, mentions, transfer, date-picker, time-picker, color-picker) landed as abef7c429. Family-cut gate exit 0, 22 cuts hold, each family 0 read-without-producer/legacy/parts/states/pseudo violations, 1 class vocabulary. New shared kernels runtime/collection/listbox (single scanSelectable owner in combobox, rank ladder enforced by structure audit with reverse-edge drill) and foundation/calendar with display-calendar adoption. Browser causality + RTL/i18n + skeleton + axe suites 130/130 exit 0. Liveness --check-dispositions exit 0; freeze set identical to base (32 known). decisions-lit fresh + check exit 0; contract-changeset --base=f015d31a8 exit 0; tsc exit 0; changeset major. Frozen-engine compat channels (33) derived-from-reads tested with deletion-mutation proof. Codex core review: 7 deltas, final OVERALL ACCEPT (audit/102-resumption-2026-09-12/codex-response-fam03-deltas*.md). Select fanOutUnreached=1 (recipe-profile) is owned by WO-DER-06."
   },
   {
    "id": "WO-FAM-04",
