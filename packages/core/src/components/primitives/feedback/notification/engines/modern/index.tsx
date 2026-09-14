@@ -16,7 +16,7 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
 import type {
   NotificationConfig,
   NotificationInstance,
@@ -67,6 +67,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 }) => {
   const [notifications, setNotifications] = useState<InternalNotification[]>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
+  const revisionRef = useRef(0);
 
   // The stacks portal to the shared top-layer root, re-entering the tenant and
   // direction scope read from the provider's inline anchor.
@@ -104,6 +105,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         closable: config.closable ?? NOTIFICATION_DEFAULTS.closable,
         role: config.role,
         placement: config.placement || placement,
+        revision: ++revisionRef.current,
       };
       setNotifications((prev) => {
         const existing = prev.findIndex((n) => config.key && n.key === config.key);
@@ -193,6 +195,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   closable = NOTIFICATION_DEFAULTS.closable,
   role,
   onRemove,
+  revision,
 }) => {
   const i18n = useOptionalTranslation('components');
   return (
@@ -212,6 +215,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       onActivate={onClick}
       announce={role ?? (type === 'error' || type === 'warning' ? 'alert' : 'status')}
       itemKey={id}
+      revision={revision}
       className={className}
       style={style}
     />

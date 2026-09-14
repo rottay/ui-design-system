@@ -16,6 +16,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
 import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
+import { isComposingKey } from '@/foundation/behavior/runtime/submit-intent';
 import { StatusInfoIcon } from '@/graphics/icons/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
@@ -94,6 +95,7 @@ export function NotifierItem({
   style,
   'data-testid': dataTestId,
   itemKey,
+  revision,
 }: NotifierItemProps): React.ReactElement {
   const exit = useNotifierExit<HTMLDivElement>(() => onExited?.());
   const { begin, cancel } = exit;
@@ -107,12 +109,13 @@ export function NotifierItem({
   useEffect(() => {
     if (open) cancel();
     else begin();
-  }, [open, begin, cancel]);
+  }, [open, revision, begin, cancel]);
 
   const countdown = useNotifierCountdown({
     durationMs: duration,
     running: open && !exit.leaving,
     pauseOnHover,
+    revision,
     onExpire: dismiss,
   });
 
@@ -127,7 +130,7 @@ export function NotifierItem({
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Escape') {
-      if (closable && dismissOnEscape) dismiss();
+      if (closable && dismissOnEscape && !isComposingKey(event)) dismiss();
       return;
     }
     if (clickable && event.currentTarget === event.target && (event.key === 'Enter' || event.key === ' ')) {

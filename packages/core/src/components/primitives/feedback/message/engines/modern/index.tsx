@@ -48,6 +48,7 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
 }) => {
   const [messages, setMessages] = useState<InternalMessage[]>([]);
   const stackRef = useRef<HTMLDivElement>(null);
+  const revisionRef = useRef(0);
 
   const overlay = useFieldOverlay({
     kind: 'toast',
@@ -109,6 +110,7 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
         style: config.style,
         closable: config.closable,
         closeIcon: config.closeIcon,
+        revision: ++revisionRef.current,
       };
       setMessages((prev) => {
         const existing = prev.findIndex((m) => config.key && m.key === config.key);
@@ -209,6 +211,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   closable,
   closeIcon,
   onRemove,
+  revision,
 }) => {
   const i18n = useOptionalTranslation('common');
   return (
@@ -230,6 +233,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       announce="alert"
       live="polite"
       itemKey={id}
+      revision={revision}
       className={className}
       style={style}
     />

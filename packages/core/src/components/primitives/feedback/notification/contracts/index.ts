@@ -351,6 +351,9 @@ export interface NotificationItemProps {
 
   /** Internal callback to remove notification from state */
   onRemove?: (id: string) => void;
+
+  /** Internal: increases on each keyed replacement; a new revision cancels a pending exit and restarts the lifetime */
+  revision?: number;
 }
 
 // ============================================================================

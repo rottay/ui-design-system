@@ -88,6 +88,8 @@ export interface NotifierItemProps {
   'data-testid'?: string;
   /** Identity a stack owner reads to find the surface holding focus. */
   itemKey?: string;
+  /** Increases when a keyed update refreshes the surface in place: a pending exit is cancelled and the lifetime restarts in full. */
+  revision?: number;
 }
 
 export interface NotifierStackProps {

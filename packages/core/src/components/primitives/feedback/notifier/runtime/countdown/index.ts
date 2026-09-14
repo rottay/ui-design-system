@@ -23,6 +23,8 @@ export interface NotifierCountdownOptions {
   running: boolean;
   /** Whether the pointer holds the budget; keyboard focus always holds it. */
   pauseOnHover: boolean;
+  /** Changes when the surface is refreshed in place; the lifetime restarts in full. */
+  revision?: number;
   onExpire: () => void;
 }
 
@@ -40,6 +42,7 @@ export function useNotifierCountdown({
   durationMs,
   running,
   pauseOnHover,
+  revision,
   onExpire,
 }: NotifierCountdownOptions): NotifierCountdown {
   const [pointerInside, setPointerInside] = useState(false);
@@ -50,11 +53,11 @@ export function useNotifierCountdown({
   const expireRef = useRef(onExpire);
   expireRef.current = onExpire;
 
-  const previousDurationRef = useRef(durationMs);
-  if (previousDurationRef.current !== durationMs) {
-    previousDurationRef.current = durationMs;
+  // A new lifetime, a refresh in place or a stop replaces the whole budget.
+  // A pause only settles what the running timer used, against its own budget.
+  useEffect(() => {
     remainingRef.current = durationMs;
-  }
+  }, [durationMs, revision, running]);
 
   useEffect(() => {
     if (!running || durationMs <= 0 || paused) return;
@@ -64,12 +67,7 @@ export function useNotifierCountdown({
       clearTimeout(timer);
       remainingRef.current = Math.max(0, remainingRef.current - (Date.now() - startedAtRef.current));
     };
-  }, [running, durationMs, paused]);
-
-  useEffect(() => {
-    if (running) return;
-    remainingRef.current = durationMs;
-  }, [running, durationMs]);
+  }, [running, durationMs, paused, revision]);
 
   const pointerEnter = useCallback(() => setPointerInside(true), []);
   const pointerLeave = useCallback(() => setPointerInside(false), []);
