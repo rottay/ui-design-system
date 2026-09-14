@@ -79,9 +79,11 @@
 .ds-segmented.ds-segmented--modern[role='radiogroup'] {
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-segmented-gap);
+  /* The density decision multiplies every spacing step here, the same law the
+     option height and Button's own padding already obey. */
+  gap: calc(var(--ds-segmented-gap) * var(--ds-density-effective-scale, 1));
   min-width: 0;
-  padding: var(--ds-segmented-padding);
+  padding: calc(var(--ds-segmented-padding) * var(--ds-density-effective-scale, 1));
   /* Narrow frames: the group scrolls inside its container instead of clipping
      options without an affordance (pagination.css's controls-row precedent).
      The 4px track padding matches the full focus-ring extent (offset 2px +
@@ -252,13 +254,13 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  gap: var(--ds-segmented-current-gap);
+  gap: calc(var(--ds-segmented-current-gap) * var(--ds-density-effective-scale, 1));
   min-width: 0;
   /* Long options truncate against a bound instead of stretching the whole
      track into scroll; block mode already constrains via flex. */
   max-inline-size: var(--ds-segmented-item-max-inline-size);
   height: calc(var(--ds-segmented-current-height) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
-  padding: 0 var(--ds-segmented-current-padding-x);
+  padding: 0 calc(var(--ds-segmented-current-padding-x) * var(--ds-density-effective-scale, 1));
   border: none;
   border-radius: var(--ds-segmented-current-radius);
   outline: none;

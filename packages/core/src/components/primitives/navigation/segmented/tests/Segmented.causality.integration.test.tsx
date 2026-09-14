@@ -37,6 +37,9 @@ describeCausality({
   markup,
   targets: [
     { id: 'trackPadding', selector: ROOT, property: 'padding-top' },
+    { id: 'trackGap', selector: ROOT, property: 'column-gap' },
+    { id: 'optionPadding', selector: SELECTED, property: 'padding-left' },
+    { id: 'optionGap', selector: SELECTED, property: 'column-gap' },
     { id: 'optionRadius', selector: SELECTED, property: 'border-top-left-radius' },
     { id: 'optionHeight', selector: SELECTED, property: 'height' },
     { id: 'optionFont', selector: SELECTED, property: 'font-size' },
@@ -47,7 +50,12 @@ describeCausality({
     { id: 'trackDepth', selector: ROOT, property: 'box-shadow', attributes: { 'data-state': 'hovered' } },
   ],
   decisions: {
-    'density.mode': { value: 'compact', moves: ['trackPadding'], holds: 'selectedWeight', in: ['rottay', 'evnto'] },
+    'density.mode': {
+      value: 'compact',
+      moves: ['trackPadding', 'trackGap', 'optionPadding', 'optionGap'],
+      holds: 'selectedWeight',
+      in: VERTICALS,
+    },
     'shape.radius-scale': { value: 1.2, moves: ['optionRadius'], holds: 'selectedWeight', in: ['rottay', 'evnto'] },
     'shape.control-height': { value: 'tall', moves: ['optionHeight'], holds: 'selectedWeight', in: ['rottay', 'evnto'] },
     'typography.scale': { value: 1.08, moves: ['optionFont'], holds: 'selectedWeight', in: ['rottay', 'evnto'] },
