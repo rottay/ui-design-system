@@ -25,7 +25,7 @@ import React, {
 } from 'react';
 
 import { arrayValueAt } from '@/foundation/kernel/collections';
-import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
+import { isComposingKey, partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
 import type { SelectProps, SelectOption, SelectSize } from '../../contracts';
 import { SELECT_DEFAULTS } from '../../contracts';
 import {
@@ -475,6 +475,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     (e: React.KeyboardEvent) => {
       // Async postures live inside an already-open panel, never behind a fresh open.
       if (disabled || (loading && !isOpen)) return;
+      // While an IME composes, Enter confirms the candidate and the arrows walk
+      // the candidate window; none of those keys reach the selection.
+      if (isComposingKey(e)) return;
       if (!isOpen) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
