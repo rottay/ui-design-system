@@ -31,6 +31,7 @@ import { datePickerChromeDeriver } from "./chrome/date-picker";
 import { colorPickerChromeDeriver } from "./chrome/color-picker";
 import { modalChromeDeriver } from "./chrome/modal";
 import { drawerChromeDeriver } from "./chrome/drawer";
+import { sheetChromeDeriver } from "./chrome/sheet";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
 import { toggleChromeDeriver } from "./chrome/toggle";
@@ -104,6 +105,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   colorPickerChromeDeriver,
   modalChromeDeriver,
   drawerChromeDeriver,
+  sheetChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

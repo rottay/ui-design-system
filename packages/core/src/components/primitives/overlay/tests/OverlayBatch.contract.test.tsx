@@ -465,7 +465,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           engine,
         );
 
-        const rootSelector = `.rottay-sheet--${engine}[data-part='root']`;
+        const rootSelector = engine === 'modern' ? ".ds-sheet--modern[data-part='root']" : `.rottay-sheet--${engine}[data-part='root']`;
         const root = await waitForDocumentSurface(rootSelector);
 
         // Both engines escape ancestor clipping. Modern uses the shared portal

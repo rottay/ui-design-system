@@ -10,6 +10,7 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
+import type { Adapt, OverlayAdaptation } from '../../../../../foundation/contracts/kernel/adaptation';
 
 /** Side from which the sheet slides in */
 export type SheetSide = 'bottom' | 'left' | 'right';
@@ -79,6 +80,11 @@ export interface SheetProps extends EngineAwareProps {
   initialFocus?: string | HTMLElement | null;
   /** Focus target after the sheet closes (all engines when restoration is enabled). */
   finalFocus?: string | HTMLElement | null;
+  /**
+   * Per-posture presentation deltas. A side sheet takes the whole dynamic
+   * viewport on a phone; a bottom sheet keeps its bottom posture everywhere.
+   */
+  adapt?: Adapt<OverlayAdaptation>;
 }
 
 /**
