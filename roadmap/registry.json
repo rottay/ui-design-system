@@ -4536,7 +4536,7 @@
    "lane": "family-cuts",
    "order": 2,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4568,8 +4568,8 @@
      "note": "R107-RUN-01 LANDED on r4-recon (89510502f): one cancelPress path in useInteractionState — pointer leave/cancel/up, blur and the transition into disabled all end the press; Button drops its local compensation. Audited by kimi-admin: the three audit-107 probes flip green on the candidate and integrated branch (verified through a null-tolerant tmp copy because the fixed idle control drops data-state entirely — original audit files untouched); 269/269 across interaction-state, field-action, checkbox, radio, toggle, button; tsc clean; changeset included. WO STAYS OPEN for the G107-01-adjudicated --ds-radius-button obligation (DECLARED_CHANNEL_DOES_NOT_PAINT; paint route strongly preferred, retirement only with the der-03 changeset honored; radius-scale/height are not the terminal), now dispatched to the same writer on wo-fix-fam01."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-14",
+   "evidence": "RE-CLOSED after R107-RUN-01 + the G107-01 radius-button obligation, audited by kimi-admin on r4-recon. (1) 89510502f: one cancelPress path in useInteractionState (pointer leave/cancel/up, blur, disabled-transition); the three audit-107 probes flip green on candidate and integrated branch (null-tolerant tmp copy — the fixed idle control drops data-state entirely; originals untouched); 269/269 kernel+controls; tsc clean. (2) 36d135d44 + 05ee86dd8 + 12ff2f696 + 1d62cf753/644a570df: --ds-radius-button now sits between the per-size --ds-button-*-radius live path and the surface ramp (initial, not a seeded default, so the five ramp steps are not flattened; the two fallback-less readers name var(--ds-radius-md) explicitly); silhouette-reach 18/18; button suite 142/142 (160/160 with the reach file); the liveness instrument itself reports the channel LIVE_MODERN_PAINTED and the pin is discharged in-commit (census 51 -> 50 tracked in the META test); entrypoint budgets re-anchored through the gate's official door with measured causes (radio/modal/message +408 = the interaction-state kernel growth, writer-verified, not the CSS lot). DER-03's cycle refusal untouched; BitHire's authored per-size precedence preserved. STANDING ROUTED CELLS (not pass cells, exact record per G107-05): partsStampedNotConsumed=1 on Button and Segmented; fanOutUnreached=1 on Button/Checkbox/Radio/Toggle (recipe-profile) owned by WO-DER-06; Segmented density/radius/height/type causality arms omit BitHire and the segmented/rhythm pilot pair lives in WO-EVI-05; the shared axe roster covers four of six vertical/mode combinations; the evnto/dark contrast (2.27:1) stays with WO-DER-06."
   },
   {
    "id": "WO-FAM-02",
