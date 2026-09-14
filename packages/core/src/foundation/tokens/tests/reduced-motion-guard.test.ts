@@ -139,6 +139,18 @@ const REDUCED_MOTION_TRIPLE: readonly RegExp[] = [
   /animation-iteration-count:\s*1\s*!important/,
 ];
 
+/** The preludes of the rules inside a reduce block that PERFORM the collapse. A block may hold
+ *  more than one: a file that collapses a transition and an animation under different preludes
+ *  writes one rule per prelude, and naming the animation longhands on a selector that only
+ *  transitions would be an absentee owner in the other direction. A rule that substitutes paint
+ *  under `reduce` -- a flat fill standing in for a sweep -- collapses nothing and is deliberately
+ *  not read as a guard entry, so it can neither satisfy this direction nor inflate it. */
+function guardedSelectors(block: string): string[] {
+  return [...block.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter((rule) => REDUCED_MOTION_TRIPLE.some((shape) => shape.test(rule[2])))
+    .flatMap((rule) => splitSelectorList(rule[1]));
+}
+
 /** The shape a reduce guard must NOT take. `transition: none` / `animation: none` removes the
  *  motion rather than shortening it, so `transitionend`/`animationend` never fire and anything
  *  sequenced on those events stalls forever. The longhand triple above is the reason this is a
@@ -189,13 +201,14 @@ describe("R5 motion batch -- the guarded roster is exactly the 23 motion-owning 
        written to forbid one family at a time; here it is enforced for the whole roster.
 
        An ARRAY, never a `Set`: deduplicating `guarded` would make a selector repeated inside one
-       prelude indistinguishable from a selector written once, and the repeat is precisely the
-       defect this direction exists to catch. `productive` is already a Set by construction -- one
-       rule per selector is the CSS, not an assumption being smuggled in here.
+       prelude -- or across two collapse rules -- indistinguishable from a selector written once,
+       and the repeat is precisely the defect this direction exists to catch. `productive` is
+       already a Set by construction -- one rule per selector is the CSS, not an assumption being
+       smuggled in here.
 
        The per-family rows further down are not made redundant by this: they pin WHICH selectors
        each file owns, while this one only pins that the two sides agree. */
-    const guarded = splitSelectorList(block.slice(0, block.indexOf("{")));
+    const guarded = guardedSelectors(block);
     expect(guarded.sort()).toEqual([...productive].sort());
   });
 });
