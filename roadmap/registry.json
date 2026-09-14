@@ -4613,7 +4613,7 @@
    "lane": "family-cuts",
    "order": 4,
    "size": "XL",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4645,8 +4645,8 @@
      "note": "WRITER FOLLOW-UPS from the R107-FAM-02 lot (claude-admin, bounded-scope deferrals, audited): (1) handleSearchInput token separators can still commit from a change event whose text arrives mid-composition — a change-event path the submit-intent authority does not reach; obligation of THIS WO (Select family), registered for its next bounded lot. (2) Escape during composition still closes the panel — not dispatched through Select keydown at all; owned by the shared capture-phase Escape router in components/primitives/runtime/overlay/layer-stack/index.ts:220; routed to WO-FAM-04 as the overlay-runtime owner. Neither is closed by the IME guard; neither is a new backlog entry."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-14",
+   "evidence": "RE-CLOSED after R107-FAM-02 + separator follow-up, audited by kimi-admin on r4-recon: b768259e5 guards the whole commit path with the shared isComposingKey authority (audit-107 Select probe red-on-pin to green-on-candidate; integrated probe suite confirms); 2818c96d1 gates token-separator commits on composition state with compositionstart/end tracking and the Firefox flagged-input case handled at compositionend. Select suite 74/74 (66 + 8 new IME/separator cases) on the integrated branch; family-cut CLI exit 0; no contract delta. STANDING ROUTED CELLS (not pass cells, exact record per G107-05): select fanOutUnreached=1 recipe-profile owned by WO-DER-06; causality in-restricted arms (focus style bithire/evnto, border style rottay/evnto, motion dial evnto) are the probed scope, omitted arms are not pass cells; the Escape-during-composition overlay router obligation lives in WO-FAM-04."
   },
   {
    "id": "WO-FAM-04",
