@@ -468,8 +468,8 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'standard',
       status: 'active',
       evidence: {
-        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css',
-        symbol: 'var(--ds-glass',
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css',
+        symbol: 'var(--ds-effect-intensity',
       },
       scope: 'tenant',
       owner: 'design-system',
