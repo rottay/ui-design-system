@@ -38,9 +38,9 @@ describe('Drawer advanced engine coverage', () => {
     expect(container.querySelector('[data-part="header-icon"]')).toBeInTheDocument();
     expect(container.querySelector('[data-part="heading-group"]')).toBeInTheDocument();
     expect(container.querySelector('[data-part="surface"]')).toHaveAttribute('data-has-footer', 'true');
-    expect(container.querySelector('.rottay-drawer')?.getAttribute('style') ?? '').toContain('height: 520px');
+    expect(container.querySelector('.ds-drawer')).toHaveAttribute('data-placement', 'top');
 
-    fireEvent.click(container.querySelector('.rottay-drawer-overlay') as HTMLDivElement);
+    fireEvent.click(container.querySelector('.ds-drawer-backdrop') as HTMLDivElement);
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onOpenChange).toHaveBeenCalledWith(false);
 
@@ -66,10 +66,12 @@ describe('Drawer advanced engine coverage', () => {
       </ModernDrawer>
     );
 
-    expect(container.querySelector('.rottay-drawer-overlay')).toBeNull();
+    expect(container.querySelector('.ds-drawer-backdrop')).toBeNull();
     expect(screen.queryByLabelText('Close')).not.toBeInTheDocument();
     expect(screen.queryByText('Footer actions')).not.toBeInTheDocument();
-    expect(container.querySelector('.rottay-drawer')?.getAttribute('style') ?? '').toContain('width: 420px');
+    const custom = container.querySelector('.ds-drawer') as HTMLElement;
+    expect(custom).toHaveAttribute('data-custom-width', 'true');
+    expect(custom.style.getPropertyValue('--ds-drawer-width')).toBe('420px');
   });
 
   it('covers rustic placement sizing, mask opacity, overlay/escape guards, and footer visibility branches', () => {

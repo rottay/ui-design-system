@@ -174,6 +174,7 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   swatch: 'round',
   'tree-node-toggle': 'round',
   'close-button': 'round',
+  'header-icon': 'round',
   spinner: 'omit',
   checkmark: 'omit',
   dot: 'omit',

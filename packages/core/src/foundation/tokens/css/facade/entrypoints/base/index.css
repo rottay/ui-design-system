@@ -73,6 +73,7 @@
 @import "../../../presentation/components/form/index.css" layer(rottay-components);
 @import "../../../presentation/components/card/index.css" layer(rottay-components);
 @import "../../../presentation/components/modal/index.css" layer(rottay-components);
+@import "../../../presentation/components/drawer/index.css" layer(rottay-components);
 @import "../../../presentation/components/checkbox/index.css" layer(rottay-components);
 @import "../../../presentation/components/radio/index.css" layer(rottay-components);
 @import "../../../presentation/components/segmented/index.css" layer(rottay-components);

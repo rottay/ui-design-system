@@ -50,6 +50,7 @@
 
 import type { EngineAwareProps, BaseComponentProps } from '../../../../../foundation/contracts';
 import type { ReactNode } from 'react';
+import type { Adapt, OverlayAdaptation } from '../../../../../foundation/contracts/kernel/adaptation';
 
 // ============================================================================
 // Type Definitions
@@ -261,6 +262,12 @@ export interface DrawerProps extends BaseComponentProps, EngineAwareProps {
    * @default 0.45
    */
   maskOpacity?: number;
+
+  /**
+   * Per-posture presentation deltas. The drawer slides in from its edge by
+   * default and takes the whole dynamic viewport on a phone.
+   */
+  adapt?: Adapt<OverlayAdaptation>;
 }
 
 // ============================================================================

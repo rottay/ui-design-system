@@ -1,0 +1,41 @@
+/**
+ * Drawer Component Tokens - Rottay Design System
+ *
+ * Structural constants of the drawer family and the defaults of its runtime
+ * channels. Its decision relations are emitted by the compiler family
+ * `derivation/chrome/drawer`.
+ */
+
+:root {
+  --ds-drawer-layer: var(--ds-z-index-drawer);
+  --ds-drawer-overlay-opacity: 0.8;
+  --ds-drawer-enter-duration: var(--ds-motion-reveal);
+  --ds-drawer-exit-duration: var(--ds-motion-reveal);
+  --ds-drawer-enter-curve: var(--ds-motion-ease-enter);
+  --ds-drawer-size-sm: 256px;
+  --ds-drawer-size-md: 378px;
+  --ds-drawer-size-lg: 520px;
+  --ds-drawer-size-xl: 736px;
+  --ds-drawer-size-full: 100%;
+  --ds-drawer-width: var(--ds-drawer-size-md);
+  --ds-drawer-height: var(--ds-drawer-size-md);
+  --ds-drawer-radius: var(--ds-radius-lg);
+  --ds-drawer-border-width: var(--ds-edge-standard-width);
+  --ds-drawer-section-min-height: calc(4.5rem * var(--ds-density-effective-scale));
+  --ds-drawer-section-padding-block: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-drawer-section-padding-inline: calc(clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) * var(--ds-density-effective-scale));
+  --ds-drawer-section-gap: var(--ds-spacing-3);
+  --ds-drawer-footer-gap: calc(var(--ds-spacing-2) * var(--ds-density-effective-scale));
+  --ds-drawer-icon-size: 2.25rem;
+  --ds-drawer-icon-radius: var(--ds-radius-md);
+  --ds-drawer-close-size: 2.25rem;
+  --ds-drawer-close-radius: var(--ds-radius-md);
+  --ds-drawer-body-padding-none: 0;
+  --ds-drawer-body-padding-sm: var(--ds-spacing-3);
+  --ds-drawer-body-padding-md: var(--ds-spacing-4);
+  --ds-drawer-body-padding-lg: var(--ds-spacing-6);
+  --ds-drawer-press-scale: var(--ds-state-press-scale);
+  --ds-drawer-transition-duration: var(--ds-motion-feedback);
+  --ds-drawer-transition-timing: var(--ds-motion-ease-out);
+  --ds-drawer-touch-target-min: var(--ds-touch-target-min);
+}

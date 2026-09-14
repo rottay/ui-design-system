@@ -211,7 +211,7 @@ export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
             ref.current = node;
           }
         }}
-        className={`rottay-focus-trap ${className}`}
+        className={`ds-focus-trap ${className}`.trim()}
         style={containerStyle}
         onKeyDown={active ? handleKeyDown : undefined}
         data-focus-trap-active={active}

@@ -146,6 +146,9 @@ const RENDERS_INLINE = /render:\s*'inline'/;
 /** Fixed-positioned either by its own shell or by the kernel's measurement. */
 const FIXED_POSITION = /position:\s*'fixed'|overlay\.positionStyle/;
 
+/** In-tree families whose fixed shell geometry is skin-owned, never inline. */
+const SKIN_POSITIONED = new Set(['feedback/drawer']);
+
 /** The traits a source must show -- and must NOT show -- for each door. */
 const DOOR_TRAITS: Record<OverlayDoor, { panel: boolean; portal: boolean; inline: boolean }> = {
   'field-overlay-panel': { panel: true, portal: false, inline: false },
@@ -281,6 +284,10 @@ describe('useFieldOverlay adoption', () => {
       'overlay/hover-card',
     ]);
     for (const family of inTree) {
+      if (SKIN_POSITIONED.has(family)) {
+        expect(host(family), `${family} must leave its shell geometry to the skin`).not.toMatch(FIXED_POSITION);
+        continue;
+      }
       expect(host(family), `${family} must stay fixed-positioned in tree`).toMatch(
         FIXED_POSITION,
       );
