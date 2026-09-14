@@ -98,6 +98,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const composingRef = useRef(false);
   const composedDraftRef = useRef('');
+  const composedEchoRef = useRef<{ index: number; chars: string } | null>(null);
 
   const [internalValues, setInternalValues] = useState<string[]>(
     () => (controlledValue || '').split('').concat(Array(length).fill('')).slice(0, length)
@@ -166,6 +167,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
    */
   const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (isComposingKey(e)) return;
+    composedEchoRef.current = null;
     if (e.key === 'Backspace') {
       e.preventDefault();
       const newValues = [...values];
@@ -201,6 +203,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
 
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     e.preventDefault();
+    composedEchoRef.current = null;
     distribute(acceptedChars(e.clipboardData.getData('text').trim()).slice(0, length), 0);
   }, [acceptedChars, distribute, length]);
 
@@ -228,10 +231,17 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
             onFocus={(e) => { e.target.select(); }}
-            onCompositionStart={() => { composingRef.current = true; composedDraftRef.current = ''; }}
+            onCompositionStart={() => {
+              composingRef.current = true;
+              composedDraftRef.current = '';
+              composedEchoRef.current = null;
+            }}
             onCompositionEnd={(e) => {
               composingRef.current = false;
-              commitInput(index, e.data || composedDraftRef.current || e.currentTarget.value);
+              const confirmed = e.data || composedDraftRef.current || e.currentTarget.value;
+              composedDraftRef.current = '';
+              composedEchoRef.current = { index, chars: acceptedChars(confirmed).join('') };
+              commitInput(index, confirmed);
             }}
             onChange={(e) => {
               // A half-composed candidate is not a character yet; composition end commits it.
@@ -239,6 +249,11 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
                 composedDraftRef.current = e.target.value;
                 return;
               }
+              // The `input` a browser fires after `compositionend` re-delivers the
+              // character compositionend already committed; only that echo is dropped.
+              const echo = composedEchoRef.current;
+              composedEchoRef.current = null;
+              if (echo && echo.index === index && echo.chars === acceptedChars(e.target.value).join('')) return;
               commitInput(index, e.target.value);
             }}
             onKeyDown={(e) => handleKeyDown(index, e)}

@@ -22,6 +22,67 @@ describe('Modern OTPInput under an IME', () => {
     expect(onComplete).not.toHaveBeenCalled();
   });
 
+  /**
+   * Ordering assumption, stated because the exact OS/IME sequence is not
+   * universally proven: a browser may deliver the confirmed character as
+   * `compositionend` followed by a terminal non-composing `input`, or as an
+   * `input` still flagged `isComposing` followed by `compositionend`. Either
+   * order must produce exactly one commit.
+   */
+  it('commits once when a terminal non-composing input follows compositionend', () => {
+    const onChange = vi.fn();
+    const onComplete = vi.fn();
+    render(<ModernOTPInput length={2} onChange={onChange} onComplete={onComplete} />);
+    const first = screen.getByLabelText('Digit 1 of 2');
+
+    fireEvent.compositionStart(first);
+    fireEvent.change(first, { target: { value: '\uff11' } });
+    fireEvent.compositionEnd(first, { data: '\uff11' });
+    fireEvent.input(first, {
+      target: { value: '\uff11' },
+      data: '\uff11',
+      inputType: 'insertCompositionText',
+      isComposing: false,
+    });
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith('1');
+    expect(onComplete).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(screen.getByLabelText('Digit 2 of 2'));
+  });
+
+  it('still commits a corrected character typed into the slot the composition left', () => {
+    const onChange = vi.fn();
+    render(<ModernOTPInput length={2} onChange={onChange} />);
+    const first = screen.getByLabelText('Digit 1 of 2');
+
+    fireEvent.compositionStart(first);
+    fireEvent.change(first, { target: { value: '\uff11' } });
+    fireEvent.compositionEnd(first, { data: '\uff11' });
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    fireEvent.keyDown(first, { key: '9' });
+    fireEvent.change(first, { target: { value: '9' } });
+
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith('9');
+  });
+
+  it('still distributes a multi-character autofill delivered after a composition', () => {
+    const onChange = vi.fn();
+    const onComplete = vi.fn();
+    render(<ModernOTPInput length={2} onChange={onChange} onComplete={onComplete} />);
+    const first = screen.getByLabelText('Digit 1 of 2');
+
+    fireEvent.compositionStart(first);
+    fireEvent.change(first, { target: { value: '\uff11' } });
+    fireEvent.compositionEnd(first, { data: '\uff11' });
+    fireEvent.change(first, { target: { value: '12' } });
+
+    expect(onChange).toHaveBeenLastCalledWith('12');
+    expect(onComplete).toHaveBeenCalledWith('12');
+  });
+
   it('never completes the code from a half-composed character', () => {
     const onComplete = vi.fn();
     render(<ModernOTPInput length={2} type="alphanumeric" value="a" onComplete={onComplete} onChange={() => {}} />);
