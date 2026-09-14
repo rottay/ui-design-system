@@ -120,12 +120,9 @@ describe('Modal', () => {
       );
 
       const phoneSurface = screen.getByRole('dialog');
-      expect(phoneSurface).toHaveAttribute('data-fullscreen', 'true');
-      expect(phoneSurface).toHaveAttribute('data-adaptive-fullscreen', 'true');
-      expect(phoneSurface.style.width).toBe('var(--ds-viewport-inline-size)');
-      expect(phoneSurface.style.position).toBe('fixed');
-      expect(phoneSurface.style.margin).toBe('0px');
-      expect(phoneSurface.style.getPropertyValue('--ds-modal-surface-radius')).toBe('0');
+      expect(phoneSurface).toHaveAttribute('data-presentation', 'fullscreen');
+      expect(phoneSurface).toHaveAttribute('data-posture', 'phone');
+      expect(phoneSurface.style.position).toBe('');
 
       rerender(
         <ResponsiveContext.Provider value={DESKTOP_RESPONSIVE_CONTEXT}>
@@ -136,9 +133,8 @@ describe('Modal', () => {
       );
 
       const explicitSurface = screen.getByRole('dialog');
-      expect(explicitSurface).toHaveAttribute('data-fullscreen', 'true');
-      expect(explicitSurface).toHaveAttribute('data-adaptive-fullscreen', 'false');
-      expect(explicitSurface.style.height).toBe('var(--ds-viewport-block-size)');
+      expect(explicitSurface).toHaveAttribute('data-presentation', 'fullscreen');
+      expect(explicitSurface).toHaveAttribute('data-posture', 'desktop');
     });
   });
 

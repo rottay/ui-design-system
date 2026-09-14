@@ -48,7 +48,7 @@ async function waitForPart(container: HTMLElement, part: string): Promise<Elemen
  * absence (which previously conflated placement with component identity). */
 async function waitForDocumentModalSurface(): Promise<HTMLElement> {
   const selector = [
-    '.rottay-modal-root--modern [data-part="surface"]',
+    '.ds-modal--modern [data-part="surface"]',
     '.rottay-modal-root--rustic [data-part="surface"]',
   ].join(', ');
   await waitFor(() => {

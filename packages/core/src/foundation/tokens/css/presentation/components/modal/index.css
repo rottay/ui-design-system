@@ -41,7 +41,6 @@
      OVERLAY/BACKDROP
      Background overlay behind the modal
      ======================================================================== */
-  --ds-modal-overlay-bg: var(--ds-color-alpha-black-50);
   --ds-modal-overlay-backdrop-filter: blur(4px);
   --ds-modal-overlay-z-index: var(--ds-z-index-modal-backdrop);
 
@@ -68,11 +67,8 @@
      evnto dark would move from bare white to #2A2820. That is an intended fix
      for a latent "white modal on a dark theme" defect, and it needs a sighted
      look before it lands. Reported rather than absorbed silently. */
-  --ds-modal-bg: var(--ds-color-white);
-  --ds-modal-color: var(--ds-color-neutral-900);
   --ds-modal-border-radius: var(--ds-radius-xl);
-  --ds-modal-border-width: var(--ds-border-width-0, 0);
-  --ds-modal-border-color: transparent;
+  --ds-modal-border-width: var(--ds-edge-standard-width);
   /* NOT DELEGATED -- DEFERRED, and Modal's shadow causal cell is STRUCK for this
      round. This default briefly read
      `var(--ds-material-overlay-shadow, var(--ds-shadow-modal))` under adjudicated
@@ -85,7 +81,6 @@
      and neither dialog can currently be isolated: their surfaces scroll, so a
      pseudo does not anchor, and they have no tight wrapper of equal geometry to
      carry the depth instead. */
-  --ds-modal-shadow: var(--ds-shadow-modal);
 
   /* Padding variants */
   --ds-modal-padding: var(--ds-spacing-6, 1.5rem);              /* 24px - Default */
@@ -109,17 +104,12 @@
   --ds-modal-header-padding-bottom: var(--ds-spacing-4, 1rem);
   --ds-modal-header-border-width: var(--ds-border-width-1, 1px);
   --ds-modal-header-border-color: var(--ds-color-neutral-200);
-  --ds-modal-header-bg: transparent;
 
   /* Title */
-  --ds-modal-title-font-size: var(--ds-font-size-xl);
-  --ds-modal-title-font-weight: var(--ds-font-weight-semibold);
   --ds-modal-title-line-height: var(--ds-line-height-tight);
-  --ds-modal-title-color: var(--ds-color-neutral-900);
 
   /* Subtitle */
   --ds-modal-subtitle-font-size: var(--ds-font-size-sm);
-  --ds-modal-subtitle-color: var(--ds-color-neutral-600);
   --ds-modal-subtitle-margin-top: var(--ds-spacing-1, 0.25rem);
 
   /* ========================================================================
@@ -128,7 +118,6 @@
      ======================================================================== */
   --ds-modal-body-padding: var(--ds-modal-padding);
   --ds-modal-body-padding-y: var(--ds-spacing-6, 1.5rem);
-  --ds-modal-body-color: var(--ds-color-neutral-700);
   --ds-modal-body-font-size: var(--ds-font-size-base);
   --ds-modal-body-line-height: var(--ds-line-height-normal);
   --ds-modal-body-max-height: calc(100dvh - 12rem); /* Scrollable body */
@@ -141,9 +130,8 @@
   --ds-modal-footer-padding-top: var(--ds-spacing-4, 1rem);
   --ds-modal-footer-border-width: var(--ds-border-width-1, 1px);
   --ds-modal-footer-border-color: var(--ds-color-neutral-200);
-  --ds-modal-footer-bg: var(--ds-color-neutral-50);
   --ds-modal-footer-justify: flex-end;
-  --ds-modal-footer-gap: 0.75rem;
+  --ds-modal-footer-gap: calc(var(--ds-spacing-2) * var(--ds-density-effective-scale));
 
   /* ========================================================================
      CLOSE BUTTON
@@ -151,9 +139,6 @@
      ======================================================================== */
   --ds-modal-close-size: 2rem;             /* 32px */
   --ds-modal-close-icon-size: 1.25rem;     /* 20px */
-  --ds-modal-close-color: var(--ds-color-neutral-500);
-  --ds-modal-close-color-hover: var(--ds-color-neutral-700);
-  --ds-modal-close-bg-hover: var(--ds-material-control-background-hover);
   --ds-modal-close-border-radius: var(--ds-radius-md);
   --ds-modal-close-position-top: 1rem;
   --ds-modal-close-position-right: 1rem;
@@ -273,7 +258,6 @@
      ACCESSIBILITY
      Focus trap and keyboard navigation
      ======================================================================== */
-  --ds-modal-focus-ring: var(--ds-shadow-focus-ring);
   --ds-modal-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-modal-focus-outline: none;
 
@@ -290,7 +274,7 @@
      DIVIDER
      Internal modal dividers
      ======================================================================== */
-  --ds-modal-divider-width: 1px;
+  --ds-modal-divider-width: var(--ds-edge-standard-width);
   --ds-modal-divider-color: var(--ds-color-neutral-200);
   --ds-modal-divider-margin-y: var(--ds-spacing-4, 1rem);
 
@@ -301,4 +285,50 @@
   --ds-modal-glass-bg: rgba(255, 255, 255, 0.9);
   --ds-modal-glass-backdrop-filter: blur(12px) saturate(180%);
   --ds-modal-glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  /* ========================================================================
+     MODERN ANATOMY - layer, scrim, panel, sections and actions
+     ======================================================================== */
+  --ds-modal-layer: var(--ds-z-index-modal);
+  --ds-modal-overlay-strength: 45%;
+  --ds-modal-enter-duration: var(--ds-motion-reveal);
+  --ds-modal-exit-duration: var(--ds-motion-reveal);
+  --ds-modal-enter-curve: var(--ds-motion-ease-enter);
+  --ds-modal-enter-y: 0px;
+  --ds-modal-enter-scale: 0.95;
+  --ds-modal-placement-offset: 10dvh;
+  --ds-modal-max-inline-size: 90dvw;
+  --ds-modal-max-block-size: 85dvh;
+  --ds-modal-width-xs: 360px;
+  --ds-modal-width-sm: 440px;
+  --ds-modal-width-md: 560px;
+  --ds-modal-width-lg: 720px;
+  --ds-modal-width-xl: 900px;
+  --ds-modal-width-2xl: 960px;
+  --ds-modal-width-3xl: 1120px;
+  --ds-modal-width-4xl: 1280px;
+  --ds-modal-width-5xl: 1440px;
+  --ds-modal-width-full: 95dvw;
+  --ds-modal-radius: var(--ds-radius-lg);
+  --ds-modal-section-padding-block: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-modal-section-padding-inline: calc(var(--ds-spacing-6) * var(--ds-density-effective-scale));
+  --ds-modal-header-gap: var(--ds-spacing-3);
+  --ds-modal-heading-gap: var(--ds-spacing-1);
+  --ds-modal-body-padding-none: 0;
+  --ds-modal-body-padding-sm: calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
+  --ds-modal-body-padding-md: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-modal-body-padding-lg: calc(var(--ds-spacing-6) * var(--ds-density-effective-scale));
+  --ds-modal-close-size-sm: 1.5rem;
+  --ds-modal-close-size-lg: 2.5rem;
+  --ds-modal-transition-duration: var(--ds-motion-feedback);
+  --ds-modal-transition-timing: var(--ds-motion-ease-out);
+  --ds-modal-action-height: var(--ds-button-md-height);
+  --ds-modal-action-padding-block: var(--ds-spacing-2);
+  --ds-modal-action-padding-inline: var(--ds-spacing-4);
+  --ds-modal-action-radius: var(--ds-radius-md);
+  --ds-modal-action-lift: -1px;
+  --ds-modal-action-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-modal-spinner-size: 1rem;
+  --ds-modal-spinner-stroke: 2px;
+  --ds-modal-spinner-duration: var(--ds-motion-glacial);
+  --ds-modal-touch-target-min: var(--ds-touch-target-min);
 }

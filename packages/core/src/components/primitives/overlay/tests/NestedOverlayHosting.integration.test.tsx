@@ -86,9 +86,9 @@ const MENU_ITEMS = [
  * pinned here, which keys off the published host. */
 async function waitForModalDialog(): Promise<HTMLDialogElement> {
   await waitFor(() => {
-    expect(document.querySelector('dialog.rottay-modal--modern')).not.toBeNull();
+    expect(document.querySelector('dialog.ds-modal--modern')).not.toBeNull();
   });
-  return document.querySelector('dialog.rottay-modal--modern') as HTMLDialogElement;
+  return document.querySelector('dialog.ds-modal--modern') as HTMLDialogElement;
 }
 
 /** Waits for a document-level node matching `selector`. Selectors are always

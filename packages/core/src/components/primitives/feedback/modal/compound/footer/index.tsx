@@ -63,22 +63,6 @@
 
 import React, { forwardRef } from 'react';
 import type { ModalFooterProps } from '../../contracts';
-import { PADDING_MAP } from '../../contracts';
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-/**
- * Maps alignment prop values to CSS justify-content values.
- * @internal
- */
-const ALIGN_MAP: Record<string, string> = {
-  start: 'flex-start',
-  center: 'center',
-  end: 'flex-end',
-  'space-between': 'space-between',
-};
 
 // ============================================================================
 // Component
@@ -130,36 +114,6 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
     } = props;
 
     // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    /**
-     * Instance styles for the footer section: the prop-driven decisions
-     * resolve inline — `align` (ALIGN_MAP contract enum), `padding`
-     * (PADDING_MAP contract enum) — plus the `divider` hatch the skin
-     * consumes (the "off" branch resolves to the same explicit `none` React
-     * used to set inline; the divider color resolves from the semantic
-     * border channel, never a hardcoded neutral). The stable frame (flex,
-     * alignment, gap, shrink) lives in modal-compounds.css
-     * `[data-part='footer']`.
-     */
-    const footerStyle: React.CSSProperties = {
-      // Layout - alignment is a contract enum (ALIGN_MAP)
-      justifyContent: ALIGN_MAP[align] || 'flex-end',
-
-      // Spacing - uses PADDING_MAP for consistency
-      padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-
-      // Visual - optional top border for separation
-      '--ds-modal-footer-divider': divider
-        ? '1px solid var(--ds-modal-footer-border, var(--ds-color-border-subtle))'
-        : 'none',
-
-      // Merge user styles (takes precedence)
-      ...style,
-    } as React.CSSProperties;
-
-    // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
@@ -167,8 +121,11 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
       <div
         ref={ref}
         data-part="footer"
-        className={`rottay-modal-footer ${className}`.trim()}
-        style={footerStyle}
+        data-divider={divider ? 'true' : 'false'}
+        data-align={align}
+        data-padding={padding}
+        className={`ds-modal-footer ${className}`.trim()}
+        style={style}
       >
         {children}
       </div>

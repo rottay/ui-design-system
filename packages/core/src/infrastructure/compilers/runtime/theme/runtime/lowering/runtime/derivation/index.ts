@@ -29,6 +29,7 @@ import { transferChromeDeriver } from "./chrome/transfer";
 import { timePickerChromeDeriver } from "./chrome/time-picker";
 import { datePickerChromeDeriver } from "./chrome/date-picker";
 import { colorPickerChromeDeriver } from "./chrome/color-picker";
+import { modalChromeDeriver } from "./chrome/modal";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
 import { toggleChromeDeriver } from "./chrome/toggle";
@@ -100,6 +101,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   timePickerChromeDeriver,
   datePickerChromeDeriver,
   colorPickerChromeDeriver,
+  modalChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

@@ -239,7 +239,7 @@
    the portal without any component knowing the tenant or the stack. The
    step targets rung 5: the modal chamber's own floor moved to rung 4, so
    rung 4 here would sit the menu level with its parent panel. */
-.rottay-overlay-modal-shell--modern
+.ds-modal.ds-modal--modern
   .rottay-dropdown__surface[data-part='surface'] {
   --_ds-dropdown-layer-step-shadow: var(--ds-elevation-5, var(--ds-elevation-4, var(--ds-elevation-3)));
 }

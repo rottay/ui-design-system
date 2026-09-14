@@ -309,7 +309,7 @@
 @import "../../../runtime/engines/rustic/skin/link/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/menu/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/menu/index.css" layer(rottay-engines);
-@import "../../../runtime/engines/modern/skin/overlay-modal/index.css"
+@import "../../../runtime/engines/modern/skin/modal/index.css"
   layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/pagination/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/pagination/index.css" layer(rottay-engines);

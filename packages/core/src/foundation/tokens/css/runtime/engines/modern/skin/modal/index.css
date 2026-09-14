@@ -1,0 +1,493 @@
+/**
+ * Modern Modal skin.
+ *
+ * The portaled native dialog is `ds-modal ds-modal--modern[data-part='root']`
+ * and carries the resolved `data-presentation` (`floating | fullscreen`) and
+ * `data-posture`. Backdrop, surface and sections are matched through direct
+ * children so a composed `Modal.Header`/`Body`/`Footer` keeps its own rules.
+ * Every channel is written by `derivation/chrome/modal` or
+ * `presentation/components/modal`.
+ */
+
+@keyframes ds-modal-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ds-modal-backdrop-exit {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes ds-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-modal-enter-y)) scale(var(--ds-modal-enter-scale));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ds-modal-exit {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(var(--ds-modal-enter-y)) scale(var(--ds-modal-enter-scale));
+  }
+}
+
+@keyframes ds-modal-rise {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+
+@keyframes ds-modal-fall {
+  from { transform: none; }
+  to { transform: translateY(100%); }
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ds-modal-layer, var(--ds-z-index-modal));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: var(--ds-viewport-inline-size);
+  block-size: var(--ds-viewport-block-size);
+  max-inline-size: var(--ds-viewport-inline-size);
+  max-block-size: var(--ds-viewport-block-size);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: var(--ds-modal-color, var(--ds-color-text-primary));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-placement='top'] {
+  align-items: flex-start;
+  padding-block-start: var(--ds-modal-placement-offset);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-placement='bottom'] {
+  align-items: flex-end;
+  padding-block-end: var(--ds-modal-placement-offset);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-presentation='fullscreen'] {
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'] {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--ds-modal-overlay-bg, var(--ds-color-bg-overlay));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'][data-scrim='custom'] {
+  background-color: color-mix(in srgb, var(--ds-color-black) var(--ds-modal-overlay-strength), transparent);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'][data-blur='true'] {
+  background-image: linear-gradient(
+    var(--ds-modal-overlay-tint, var(--ds-glass-scrim-tint)),
+    var(--ds-modal-overlay-tint, var(--ds-glass-scrim-tint))
+  );
+  backdrop-filter: var(--ds-modal-overlay-backdrop, var(--ds-glass-backdrop-filter));
+  -webkit-backdrop-filter: var(--ds-modal-overlay-backdrop, var(--ds-glass-backdrop-filter));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='backdrop'][data-open='true'] {
+  animation: ds-modal-backdrop-enter var(--ds-modal-enter-duration) var(--ds-modal-enter-curve) both;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='backdrop'][data-open='false'] {
+  animation: ds-modal-backdrop-exit var(--ds-modal-exit-duration) var(--ds-modal-enter-curve) both;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  inline-size: var(--ds-modal-width-md);
+  max-inline-size: var(--ds-modal-max-inline-size);
+  max-block-size: var(--ds-modal-max-block-size);
+  border-radius: var(--ds-modal-radius, var(--ds-radius-lg));
+  background-color: var(--ds-modal-bg, var(--ds-material-overlay-background));
+  background-image:
+    linear-gradient(
+      var(--ds-modal-surface-lift, var(--ds-elevation-surface-4)),
+      var(--ds-modal-surface-lift, var(--ds-elevation-surface-4))
+    ),
+    var(--ds-modal-texture, var(--ds-gradient-surface));
+  color: var(--ds-modal-color, var(--ds-color-text-primary));
+  outline: none;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='xs'] {
+  inline-size: var(--ds-modal-width-xs);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='sm'] {
+  inline-size: var(--ds-modal-width-sm);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='lg'] {
+  inline-size: var(--ds-modal-width-lg);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='xl'] {
+  inline-size: var(--ds-modal-width-xl);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='2xl'] {
+  inline-size: var(--ds-modal-width-2xl);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='3xl'] {
+  inline-size: var(--ds-modal-width-3xl);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='4xl'] {
+  inline-size: var(--ds-modal-width-4xl);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='5xl'] {
+  inline-size: var(--ds-modal-width-5xl);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-size='full'] {
+  inline-size: var(--ds-modal-width-full);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='none'] {
+  border-radius: 0;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='sm'] {
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='md'] {
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='xl'] {
+  border-radius: var(--ds-radius-xl);
+}
+
+/* The colored frame repeats its part to clear the tenant border-color floor. */
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-part='surface'] {
+  border: var(--ds-modal-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-modal-border-color, var(--ds-color-border-subtle));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-shadow='true'] {
+  box-shadow: var(--ds-modal-shadow, var(--ds-elevation-4));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-shadow='true']::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 var(--ds-modal-keyline, var(--ds-color-border-subtle));
+  pointer-events: none;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='surface'][data-open='true'] {
+  animation: ds-modal-enter var(--ds-modal-enter-duration) var(--ds-modal-enter-curve) both;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-motion='animated'] > [data-part='surface'][data-open='false'] {
+  animation: ds-modal-exit var(--ds-modal-exit-duration) var(--ds-modal-enter-curve) both;
+}
+
+/* Fullscreen tracks the dynamic viewport and keeps controls clear of the device safe areas. */
+.ds-modal.ds-modal--modern[data-part='root'][data-presentation='fullscreen'] > [data-part='surface'][data-part='surface'] {
+  inline-size: 100%;
+  max-inline-size: none;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-presentation='fullscreen'] > [data-part='surface']::before {
+  content: none;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-presentation='fullscreen'][data-motion='animated'] > [data-part='surface'][data-open='true'] {
+  animation-name: ds-modal-rise;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'][data-presentation='fullscreen'][data-motion='animated'] > [data-part='surface'][data-open='false'] {
+  animation-name: ds-modal-fall;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-modal-header-gap);
+  padding-block: var(--ds-modal-section-padding-block);
+  padding-inline: var(--ds-modal-section-padding-inline);
+  flex-shrink: 0;
+  background-color: var(--ds-modal-header-bg, var(--ds-modal-bg));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-divider='true'] > [data-part='header'][data-part='header'] {
+  border-block-end: var(--ds-modal-divider-width) var(--ds-edge-standard-style)
+    var(--ds-modal-header-border, var(--ds-color-border-subtle));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='heading-group'] {
+  display: grid;
+  gap: var(--ds-modal-heading-gap);
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] [data-part='title'] {
+  display: block;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  color: var(--ds-modal-title-color, var(--ds-color-text-primary));
+  font-family: var(--ds-modal-title-font-family, var(--ds-type-section-title-font-family));
+  font-size: var(--ds-modal-title-font-size, var(--ds-type-section-title-font-size));
+  font-weight: var(--ds-modal-title-font-weight, var(--ds-type-section-title-font-weight));
+  letter-spacing: var(--ds-type-section-title-letter-spacing);
+  line-height: var(--ds-type-section-title-line-height);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] [data-part='description'] {
+  color: var(--ds-modal-subtitle-color, var(--ds-color-text-secondary));
+  font-family: var(--ds-type-supporting-font-family);
+  font-size: var(--ds-type-supporting-font-size);
+  line-height: var(--ds-type-supporting-line-height);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='body'] {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
+  padding: var(--ds-modal-body-padding-lg);
+  color: var(--ds-modal-body-color, var(--ds-color-text-secondary));
+  font-family: var(--ds-type-body-font-family);
+  font-size: var(--ds-type-body-font-size);
+  line-height: var(--ds-type-body-line-height);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-padding='none'] > [data-part='body'] {
+  padding: var(--ds-modal-body-padding-none);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-padding='sm'] > [data-part='body'] {
+  padding: var(--ds-modal-body-padding-sm);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-padding='md'] > [data-part='body'] {
+  padding: var(--ds-modal-body-padding-md);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-modal-footer-gap);
+  padding-block: var(--ds-modal-section-padding-block);
+  padding-inline: var(--ds-modal-section-padding-inline);
+  flex-shrink: 0;
+  background-color: var(--ds-modal-footer-bg, var(--ds-modal-bg));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-divider='true'] > [data-part='footer'][data-part='footer'] {
+  border-block-start: var(--ds-modal-divider-width) var(--ds-edge-standard-style)
+    var(--ds-modal-footer-border, var(--ds-color-border-subtle));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'] {
+  position: relative;
+  min-block-size: var(--ds-modal-action-height);
+  padding-block: var(--ds-modal-action-padding-block);
+  padding-inline: var(--ds-modal-action-padding-inline);
+  cursor: pointer;
+  border-radius: var(--ds-modal-action-radius);
+  font-family: var(--ds-type-label-font-family);
+  font-size: var(--ds-type-label-font-size);
+  font-weight: var(--ds-type-label-font-weight);
+  letter-spacing: var(--ds-type-label-letter-spacing);
+  line-height: var(--ds-type-label-line-height);
+  outline: none;
+  transition:
+    background-color var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
+    border-color var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
+    box-shadow var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
+    opacity var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
+    transform var(--ds-modal-transition-duration) var(--ds-modal-transition-timing);
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'][data-part='action'][data-action='cancel'] {
+  border: var(--ds-modal-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-modal-cancel-border, var(--ds-material-control-border));
+  background: var(--ds-modal-cancel-bg, var(--ds-material-control-background));
+  color: var(--ds-modal-cancel-color, var(--ds-color-text-primary));
+  box-shadow: var(--ds-modal-cancel-shadow, var(--ds-material-control-shadow));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'][data-part='action'][data-action='ok'] {
+  border: var(--ds-modal-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-modal-ok-border, var(--ds-color-primary));
+  background-color: var(--ds-modal-ok-bg, var(--ds-color-primary));
+  background-image: var(--ds-modal-ok-texture, var(--ds-gradient-primary));
+  color: var(--ds-modal-ok-color, var(--ds-color-text-on-primary));
+  box-shadow: var(--ds-modal-ok-shadow, var(--ds-shadow-xs));
+}
+
+@media (hover: hover) {
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action']:is([data-state~='hovered'], :hover):not([data-state~='disabled']) {
+    transform: translateY(var(--ds-modal-action-lift));
+    box-shadow: var(--ds-modal-action-shadow-hover, var(--ds-shadow-md));
+  }
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action']:is([data-state~='pressed'], :active):not([data-state~='disabled']) {
+  transform: none;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow: var(--ds-modal-focus-ring, var(--ds-focus-ring));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action']:is([data-state~='disabled'], :disabled) {
+  cursor: wait;
+  opacity: var(--ds-modal-action-disabled-opacity, var(--ds-state-disabled-opacity));
+}
+
+/* The label is painted transparent, never hidden, so the button keeps its accessible name. */
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'][data-loading='true'] [data-part='action-label'] {
+  color: transparent;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'] [data-part='spinner'] {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: var(--ds-modal-spinner-size);
+  block-size: var(--ds-modal-spinner-size);
+  border-radius: var(--ds-radius-full);
+  border: var(--ds-modal-spinner-stroke) var(--ds-edge-standard-style) currentColor;
+  border-block-start-color: transparent;
+  animation: ds-foundation-spin var(--ds-modal-spinner-duration) linear infinite;
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-modal-close-size);
+  block-size: var(--ds-modal-close-size);
+  flex-shrink: 0;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--ds-modal-close-border-radius, var(--ds-radius-md));
+  background-color: transparent;
+  color: var(--ds-modal-close-color, var(--ds-color-text-secondary));
+  outline: none;
+  transition:
+    background-color var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
+    color var(--ds-modal-transition-duration) var(--ds-modal-transition-timing),
+    box-shadow var(--ds-modal-transition-duration) var(--ds-modal-transition-timing);
+}
+
+@media (hover: hover) {
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button']:is([data-state~='hovered'], :hover) {
+    background-color: var(--ds-modal-close-bg-hover, var(--ds-material-control-background-hover));
+    color: var(--ds-modal-close-color-hover, var(--ds-color-text-primary));
+  }
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button']:is([data-state~='pressed'], :active) {
+  background-color: var(--ds-modal-close-bg-hover, var(--ds-material-control-background-hover));
+  color: var(--ds-modal-close-color-hover, var(--ds-color-text-primary));
+}
+
+.ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow: var(--ds-modal-focus-ring, var(--ds-focus-ring));
+}
+
+@media (pointer: coarse) {
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'],
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button'] {
+    min-inline-size: var(--ds-modal-touch-target-min, var(--ds-touch-target-min));
+    min-block-size: var(--ds-modal-touch-target-min, var(--ds-touch-target-min));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'],
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] {
+    animation: none;
+  }
+
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'],
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button'] {
+    transition: none;
+  }
+
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'] [data-part='spinner'] {
+    animation: none;
+  }
+}
+
+/* Without transparency the glass retires and the scrim becomes opaque. */
+@media (prefers-reduced-transparency: reduce) {
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='backdrop'] {
+    background-color: var(--ds-modal-overlay-bg, var(--ds-color-bg-primary));
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-part='surface'] {
+    border: 1px solid CanvasText;
+  }
+
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button'] {
+    border: 1px solid ButtonText;
+  }
+
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action'] {
+    border-color: ButtonText;
+  }
+
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='footer'] > [data-part='action']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'] > [data-part='header'] > [data-part='close-button']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: 2px solid Highlight;
+  }
+}

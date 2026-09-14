@@ -131,7 +131,7 @@ async function expectTenantScopeSurvivedPortal(surface: HTMLElement): Promise<vo
  * `<dialog>`, while Rustic's root is the portaled fixed-position shell. */
 function modalSurfaceSelector(engine: 'modern' | 'rustic'): string {
   return engine === 'modern'
-    ? ".rottay-overlay-modal-shell--modern [data-part='surface']"
+    ? ".ds-modal--modern [data-part='surface']"
     : ".rottay-modal-root--rustic [data-part='surface']";
 }
 
@@ -163,8 +163,8 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         if (engine === 'modern') {
           // Modern renders a real root (<dialog>) distinct from both the
           // backdrop and the surface.
-          expect(document.querySelectorAll(".rottay-overlay-modal-shell--modern[data-part='root']").length).toBe(1);
-          expect(document.querySelectorAll(".rottay-overlay-modal-shell--modern [data-part='backdrop']").length).toBe(1);
+          expect(document.querySelectorAll(".ds-modal--modern[data-part='root']").length).toBe(1);
+          expect(document.querySelectorAll(".ds-modal--modern [data-part='backdrop']").length).toBe(1);
         } else {
           // Rustic uses its root shell as the scrim. It deliberately has no
           // second backdrop node, but still exposes one canonical root.

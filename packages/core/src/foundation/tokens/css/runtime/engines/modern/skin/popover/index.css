@@ -521,7 +521,7 @@
  * and only the unauthored default gains the step. The step targets rung 5:
  * the modal chamber's own floor moved to rung 4 (overlay-modal.css), so
  * rung 4 here would sit the contextual surface level with its parent. */
-.rottay-overlay-modal-shell--modern
+.ds-modal.ds-modal--modern
   .rottay-popover--modern[data-part="trigger"]
   > [data-part="surface"][data-part="surface"] {
   --_ds-popover-layer-step-shadow: var(
