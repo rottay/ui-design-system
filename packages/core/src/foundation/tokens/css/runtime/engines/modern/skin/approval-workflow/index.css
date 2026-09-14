@@ -219,7 +219,7 @@
 
 /* The current pending dot pulses for attention (was `animate-pulse`). */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending'] {
-  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 720ms))
+  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 
@@ -387,7 +387,7 @@
 
 /* --- Skeleton (geometry was Tailwind; the pulse was `animate-pulse`) ----------- */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 720ms))
+  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 

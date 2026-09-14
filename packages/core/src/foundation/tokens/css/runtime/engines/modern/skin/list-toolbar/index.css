@@ -115,7 +115,7 @@
       var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out)),
     box-shadow var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out)),
-    background-position var(--ds-motion-feedback, var(--ds-motion-deliberate, 360ms))
+    background-position var(--ds-motion-feedback, var(--ds-motion-deliberate, 320ms))
       var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out));
   /* Entry decoration is opt-in. Toolbars remount frequently while navigating;
      automatic movement here is distracting rather than informative. */
@@ -191,7 +191,7 @@
   background-size: 42% 100%;
   background-repeat: no-repeat;
   animation: ds-list-toolbar-busy
-    calc(var(--ds-motion-deliberate, 360ms) * 3)
+    calc(var(--ds-motion-deliberate, 320ms) * 3)
     linear infinite;
 }
 

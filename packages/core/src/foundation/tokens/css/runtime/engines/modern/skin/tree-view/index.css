@@ -46,7 +46,7 @@
   gap: var(--ds-tree-view-skeleton-gap, var(--ds-spacing-2, 8px));
   padding: var(--ds-tree-view-skeleton-padding, var(--ds-spacing-5, 20px));
   animation: ds-tree-view-skeleton-pulse
-    var(--ds-tree-view-skeleton-duration, var(--ds-motion-deliberate, 720ms))
+    var(--ds-tree-view-skeleton-duration, var(--ds-motion-deliberate, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 
