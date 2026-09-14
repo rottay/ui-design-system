@@ -103,16 +103,18 @@ const MOUNTS: Record<string, { markup: string }> = {
  * asserts it exactly, so a new red fails and a cured pair must leave it.
  */
 const NOT_YET_GREEN: Record<string, string> = {
-  'checkbox/depth':
-    'the box edge is a fixed --ds-checkbox-border-width (--ds-border-width-2) and the box paints no box-shadow at rest',
-  'radio/depth':
-    'the circle edge is a fixed --ds-radio-border-width (--ds-border-width-2) and paints no box-shadow at rest',
-  'radio/shape': 'circle and dot are var(--ds-radius-full), a geometric identity no shape decision moves',
-  'toggle/shape':
-    'track and thumb are full-radius pills; shape.control-height moves block-size, which kit rule 4 does not count as shape',
-  'segmented/rhythm':
-    'track padding and gap are fixed, and option padding-x reads the bithire-authored --ds-button-md-padding-x '
-    + 'without the density scale the button multiplies it by',
+  'radio/shape':
+    'ADJUDICATED, not a wiring gap (WO-EVI-05 progressLog, 2026-09-14): every radius the bare radio '
+    + 'paints is a semantic identity, so no shape decision may lawfully move it. The circle is round '
+    + 'because round means single-choice (skin/radio/index.css:64) and the dot is bound to it (:203); '
+    + 'the family stamps no frame part for a corner to govern; the focus ring is an outline, which '
+    + 'follows the circle rather than carrying a radius of its own; and the touch target is a height, '
+    + 'which kit rule 4 does not count as shape. The family therefore declares an axis it cannot '
+    + 'satisfy without breaking what the control means. Correcting the declaration is a shared-core '
+    + 'contract decision pending above the DT -- the population is DERIVED from the skin, so a '
+    + 'withdrawal needs a semantic-identity exclusion in the population owner, not an edit here. The '
+    + 'future lawful owner is named: the Radio.Group button-style option corner '
+    + '(presentation/components/skin/radio-group/index.css:92), pending a Modern skin owner.',
 };
 
 const decisionsOf = (id: string) =>
