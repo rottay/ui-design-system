@@ -19,7 +19,7 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useId, useState } from 'react';
+import React, { useCallback, useId, useState } from 'react';
 import type { AlertDialogProps } from '../../contracts';
 import { ALERT_DIALOG_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -29,7 +29,7 @@ import {
   FieldOverlayPanel,
   useFieldOverlay,
 } from '../../../../runtime/overlay/field-overlay';
-import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
+import { TopLayerHostProvider, useTopLayerDialog } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 
 /**
@@ -129,37 +129,9 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
     [setPanel],
   );
 
-  // Promote to the native top layer while open. Unmounting on close releases
-  // it; the layer-stack restores focus to the previously focused element.
-  useEffect(() => {
-    if (!dialogEl) return;
-    if (open && !dialogEl.open) {
-      dialogEl.showModal();
-    }
-  }, [open, dialogEl]);
-
-  // `showModal()` puts this dialog in the browser TOP LAYER, which paints
-  // above every normal-flow node regardless of z-index. A descendant overlay
-  // portaling to the shared `#rottay-portal-root` would land there as a
-  // SIBLING of this dialog and be occluded. Publishing a host INSIDE the
-  // dialog keeps those overlays in the same top-layer subtree; `display:
-  // contents` keeps it out of the dialog's flex layout so it adds no box.
-  const [topLayerHost, setTopLayerHost] = useState<HTMLElement | null>(null);
-  useEffect(() => {
-    if (!open || !dialogEl) {
-      setTopLayerHost(null);
-      return;
-    }
-    const host = document.createElement('div');
-    host.setAttribute('data-rottay-toplayer-host', 'true');
-    host.style.display = 'contents';
-    dialogEl.appendChild(host);
-    setTopLayerHost(host);
-    return () => {
-      host.remove();
-      setTopLayerHost(null);
-    };
-  }, [open, dialogEl]);
+  // Promote to the native top layer while open and keep descendant portals in
+  // its subtree. Unmounting on close releases it; the layer stack restores focus.
+  const topLayerHost = useTopLayerDialog(dialogEl, { open });
 
   // The dialog box spans the viewport; clicks landing on the dialog element
   // itself are backdrop clicks. Guarded by closeOnBackdropClick (default false).
@@ -179,7 +151,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
       {/* Unified portal anchor (P2): the lane-wide
           `[data-part='anchor']:not([class])` rule owns `display: contents`,
           so no inline style is declared here. */}
-      <span ref={setAnchorEl} data-part="anchor" />
+      <span ref={setAnchorEl} data-part="anchor" className="ds-alert-dialog-anchor" />
       {open ? (
         <FieldOverlayPanel overlay={overlay}>
             <TopLayerHostProvider host={topLayerHost}>
@@ -187,29 +159,12 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
               {...panelProps}
               ref={setDialogNode}
               data-part="root"
-              className={`rottay-alert-dialog rottay-alert-dialog--modern ${className}`}
-              style={{
-                /* Reset native dialog styling: full-viewport flex container */
-                position: 'fixed',
-                inset: 0,
-                width: 'var(--ds-viewport-inline-size)',
-                height: 'var(--ds-viewport-block-size)',
-                maxWidth: 'var(--ds-viewport-inline-size)',
-                maxHeight: 'var(--ds-viewport-block-size)',
-                margin: 0,
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                ...panelProps.style,
-                ...style,
-              }}
+              className={`ds-alert-dialog ds-alert-dialog--modern ${className}`.trim()}
+              style={{ ...panelProps.style, ...style }}
               data-testid={dataTestId}
               onClick={handleBackdropClick}
               onClose={handleDialogClose}
             >
-              {/* Geometry (fixed full-viewport box, no pointer events) lives
-                  in the skin's backdrop rule next to the scrim paint. */}
               <div data-part="backdrop" />
               <div
                 data-part="surface"

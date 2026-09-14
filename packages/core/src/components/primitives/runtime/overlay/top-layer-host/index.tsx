@@ -28,7 +28,7 @@
  * component contract.
  */
 
-import React, { createContext, useContext, type ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 /**
  * The element portaled descendants must render into, or `null` when the
@@ -75,3 +75,50 @@ export function TopLayerHostProvider({
 }
 
 TopLayerHostProvider.displayName = 'TopLayerHostProvider';
+
+export interface TopLayerDialogOptions {
+  /** Whether the dialog should be promoted into the top layer. */
+  open: boolean;
+  /** Whether descendants get a host inside the dialog. @default open */
+  hosted?: boolean;
+  /** Runs right before `showModal()`, while focus is still on the invoker. */
+  beforePromote?: () => void;
+  /** Runs once per promotion, after `showModal()`. */
+  onPromote?: () => void;
+}
+
+/**
+ * Promotes a native `<dialog>` with `showModal()` while open and publishes a
+ * host inside it, so descendant portals stay in its top-layer subtree. The
+ * host is a `display: contents` child, so it adds no box to the dialog.
+ */
+export function useTopLayerDialog(
+  dialog: HTMLDialogElement | null,
+  { open, hosted = open, beforePromote, onPromote }: TopLayerDialogOptions,
+): Element | null {
+  useEffect(() => {
+    if (!dialog || !open || dialog.open) return;
+    beforePromote?.();
+    dialog.showModal();
+    onPromote?.();
+  }, [open, dialog, beforePromote, onPromote]);
+
+  const [host, setHost] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!hosted || !dialog) {
+      setHost(null);
+      return undefined;
+    }
+    const element = document.createElement('div');
+    element.setAttribute('data-rottay-toplayer-host', 'true');
+    element.style.display = 'contents';
+    dialog.appendChild(element);
+    setHost(element);
+    return () => {
+      element.remove();
+      setHost(null);
+    };
+  }, [hosted, dialog]);
+
+  return host;
+}

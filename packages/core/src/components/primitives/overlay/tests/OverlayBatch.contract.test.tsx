@@ -255,7 +255,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         // stays in-tree (checkpoint contract P4, per-ENGINE).
         const surface =
           engine === 'modern'
-            ? await waitForDocumentSurface(".rottay-confirm-dialog--modern [data-part='surface']")
+            ? await waitForDocumentSurface(".ds-confirm-dialog--modern [data-part='surface']")
             : await waitForPart(container, 'surface');
         expect(container.contains(surface)).toBe(engine === 'rustic');
         expect(surface.getAttribute('data-open')).toBe('true');
@@ -268,9 +268,9 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           // Modern fuses backdrop onto the <dialog> it promotes to the top
           // layer; the surface is a descendant of that same dialog.
           const backdrop = document.querySelector(
-            ".rottay-confirm-dialog--modern[data-part='backdrop']",
+            ".ds-confirm-dialog--modern[data-part='root']",
           ) as HTMLDialogElement;
-          expect(document.querySelectorAll(".rottay-confirm-dialog--modern[data-part='backdrop']")).toHaveLength(1);
+          expect(document.querySelectorAll(".ds-confirm-dialog--modern[data-part='root']")).toHaveLength(1);
           expect(backdrop.tagName).toBe('DIALOG');
           expect(backdrop.open).toBe(true);
           expect(backdrop.contains(surface)).toBe(true);
@@ -301,7 +301,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
       // the render container, rustic's is not.
       const surface =
         engine === 'modern'
-          ? await waitForDocumentSurface(".rottay-confirm-dialog--modern [data-part='surface']")
+          ? await waitForDocumentSurface(".ds-confirm-dialog--modern [data-part='surface']")
           : await waitForPart(container, 'surface');
       const confirmAction = surface.querySelector("[data-part='action'][data-action='confirm']") as HTMLElement;
       expect(confirmAction.getAttribute('data-loading')).toBe('true');
@@ -352,7 +352,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         // stays in-tree (checkpoint contract P4, per-ENGINE).
         const surface =
           engine === 'modern'
-            ? await waitForDocumentSurface(".rottay-alert-dialog--modern [data-part='surface']")
+            ? await waitForDocumentSurface(".ds-alert-dialog--modern [data-part='surface']")
             : await waitForPart(container, 'surface');
         expect(container.contains(surface)).toBe(engine === 'rustic');
         expect(surface.getAttribute('data-open')).toBe('true');
@@ -366,9 +366,9 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           // `[data-ds-root][data-vertical]`, so the scope must cross with it.
           await expectTenantScopeSurvivedPortal(surface);
 
-          expect(document.querySelectorAll(".rottay-alert-dialog--modern[data-part='root']")).toHaveLength(1);
+          expect(document.querySelectorAll(".ds-alert-dialog--modern[data-part='root']")).toHaveLength(1);
           const root = document.querySelector(
-            ".rottay-alert-dialog--modern[data-part='root']",
+            ".ds-alert-dialog--modern[data-part='root']",
           ) as HTMLDialogElement;
           // The root is the element promoted to the browser top layer, and
           // the whole overlay lives inside it.
@@ -382,8 +382,8 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           // the Daisy classes must NOT come back — their return would mean
           // someone re-introduced the removed dependency instead of using
           // the skin.
-          expect(root.className).toContain('rottay-alert-dialog');
-          expect(root.className).toContain('rottay-alert-dialog--modern');
+          expect(root.className).toContain('ds-alert-dialog');
+          expect(root.className).toContain('ds-alert-dialog--modern');
           expect(root.className).not.toContain('modal-open');
           const backdropEl = root.querySelector("[data-part='backdrop']") as HTMLElement;
           expect(backdropEl).not.toBeNull();

@@ -19,7 +19,7 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useId, useState } from 'react';
+import React, { useCallback, useId, useState } from 'react';
 import type { ConfirmDialogProps, ConfirmDialogVariant } from '../../contracts';
 import { CONFIRM_DIALOG_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -31,7 +31,7 @@ import {
   FieldOverlayPanel,
   useFieldOverlay,
 } from '../../../../runtime/overlay/field-overlay';
-import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
+import { TopLayerHostProvider, useTopLayerDialog } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 
 /**
@@ -165,35 +165,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
 
   // Promote to the native top layer while open. Unmounting on close releases
   // it; the layer-stack restores focus to the previously focused element.
-  useEffect(() => {
-    if (!dialogEl) return;
-    if (open && !dialogEl.open) {
-      dialogEl.showModal();
-    }
-  }, [open, dialogEl]);
-
-  // `showModal()` puts this dialog in the browser TOP LAYER, which paints
-  // above every normal-flow node regardless of z-index. A descendant overlay
-  // portaling to the shared `#rottay-portal-root` would land there as a
-  // SIBLING of this dialog and be occluded. Publishing a host INSIDE the
-  // dialog keeps those overlays in the same top-layer subtree; `display:
-  // contents` keeps it out of the dialog's flex layout so it adds no box.
-  const [topLayerHost, setTopLayerHost] = useState<HTMLElement | null>(null);
-  useEffect(() => {
-    if (!open || !dialogEl) {
-      setTopLayerHost(null);
-      return;
-    }
-    const host = document.createElement('div');
-    host.setAttribute('data-rottay-toplayer-host', 'true');
-    host.style.display = 'contents';
-    dialogEl.appendChild(host);
-    setTopLayerHost(host);
-    return () => {
-      host.remove();
-      setTopLayerHost(null);
-    };
-  }, [open, dialogEl]);
+  const topLayerHost = useTopLayerDialog(dialogEl, { open });
 
   // The dialog box spans the viewport; clicks landing on the dialog element
   // itself are backdrop clicks and dismiss via onCancel (always allowed,
@@ -211,39 +183,22 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
 
   return (
     <>
-      <span ref={setAnchorEl} data-part="anchor" />
+      <span ref={setAnchorEl} data-part="anchor" className="ds-confirm-dialog-anchor" />
       {open ? (
         <FieldOverlayPanel overlay={overlay}>
             <TopLayerHostProvider host={topLayerHost}>
             <dialog
               {...panelProps}
               ref={setDialogNode}
-              data-part="backdrop"
-              className={`rottay-confirm-dialog--modern ${className}`}
-              style={{
-                /* Reset native dialog styling: full-viewport flex container */
-                position: 'fixed',
-                inset: 0,
-                width: 'var(--ds-viewport-inline-size)',
-                height: 'var(--ds-viewport-block-size)',
-                maxWidth: 'var(--ds-viewport-inline-size)',
-                maxHeight: 'var(--ds-viewport-block-size)',
-                margin: 0,
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                ...panelProps.style,
-                ...style,
-              }}
+              data-part="root"
+              className={`ds-confirm-dialog ds-confirm-dialog--modern ${className}`.trim()}
+              style={{ ...panelProps.style, ...style }}
               data-testid={dataTestId}
               onClick={handleBackdropClick}
               onClose={handleDialogClose}
             >
-              {/* Backdrop delegates dismiss to onCancel (always allowed, unlike
-                  AlertDialog). Geometry drained to the skin (Pass-2 P0, the
-                  AlertDialog drain's parity): full-viewport absolute, click-transparent. */}
-              <div data-part="scrim" />
+              {/* A backdrop click always cancels, unlike AlertDialog. */}
+              <div data-part="backdrop" />
               <div
                 data-part="surface"
                 data-open="true"

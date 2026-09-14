@@ -32,6 +32,8 @@ import { colorPickerChromeDeriver } from "./chrome/color-picker";
 import { modalChromeDeriver } from "./chrome/modal";
 import { drawerChromeDeriver } from "./chrome/drawer";
 import { sheetChromeDeriver } from "./chrome/sheet";
+import { alertDialogChromeDeriver } from "./chrome/alert-dialog";
+import { confirmDialogChromeDeriver } from "./chrome/confirm-dialog";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
 import { toggleChromeDeriver } from "./chrome/toggle";
@@ -106,6 +108,8 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   modalChromeDeriver,
   drawerChromeDeriver,
   sheetChromeDeriver,
+  alertDialogChromeDeriver,
+  confirmDialogChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

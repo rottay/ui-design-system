@@ -1,0 +1,26 @@
+/**
+ * ConfirmDialog Component Tokens - Rottay Design System
+ *
+ * Structural constants of the confirm-dialog family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/confirm-dialog`.
+ */
+
+:root {
+  --ds-confirm-dialog-radius: var(--ds-radius-lg);
+  --ds-confirm-dialog-border-width: var(--ds-edge-standard-width);
+  --ds-confirm-dialog-inline-size: 91.6667%;
+  --ds-confirm-dialog-max-inline-size: 24rem;
+  --ds-confirm-dialog-viewport-gutter: var(--ds-spacing-4);
+  --ds-confirm-dialog-viewport-breathing: var(--ds-spacing-8);
+  --ds-confirm-dialog-padding: calc(var(--ds-spacing-6) * var(--ds-density-effective-scale));
+  --ds-confirm-dialog-content-gap: var(--ds-spacing-3);
+  --ds-confirm-dialog-title-gap: var(--ds-spacing-2);
+  --ds-confirm-dialog-footer-gap: var(--ds-spacing-2);
+  --ds-confirm-dialog-footer-offset: var(--ds-spacing-4);
+  --ds-confirm-dialog-icon-size: 2.5rem;
+  --ds-confirm-dialog-icon-ring-width: 1px;
+  --ds-confirm-dialog-enter-y: 0.5rem;
+  --ds-confirm-dialog-enter-scale: 0.97;
+  --ds-confirm-dialog-enter-duration: var(--ds-motion-reveal);
+  --ds-confirm-dialog-enter-curve: var(--ds-motion-ease-enter);
+}

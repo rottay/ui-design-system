@@ -88,6 +88,7 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'weekday-row': 'pass',
   'heading-group': 'pass',
   'handle-area': 'pass',
+  copy: 'pass',
   trigger: 'block',
   control: 'block',
   input: 'block',

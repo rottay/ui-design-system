@@ -22,7 +22,7 @@ import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { usePortalScope } from '../../../../runtime/overlay/portal-scope';
-import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
+import { TopLayerHostProvider, useTopLayerDialog } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -213,18 +213,18 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   });
   const layer = zIndex === undefined ? overlayLayer.zIndex : String(zIndex);
 
-  // Keyed on `dialogEl`, not on `open` alone: the element arrives a commit
-  // after `open` flips. The `!dialog.open` guard keeps promotion single, since
-  // showModal() on an already-open dialog throws.
-  useEffect(() => {
-    const dialog = dialogEl;
-    if (!dialog) return;
-    if (open && !dialog.open) {
-      restoreTargetRef.current = document.activeElement as HTMLElement | null;
-      dialog.showModal();
-      onOpen?.();
-    }
-  }, [open, dialogEl, onOpen]);
+  // Promotion is keyed on the attached element, which arrives a commit after
+  // `open` flips; the host is withdrawn as soon as the modal stops being the
+  // active top layer, even while its exit animation plays.
+  const rememberInvoker = useCallback(() => {
+    restoreTargetRef.current = document.activeElement as HTMLElement | null;
+  }, []);
+  const topLayerHost = useTopLayerDialog(dialogEl, {
+    open,
+    hosted: open && shouldRender,
+    beforePromote: rememberInvoker,
+    onPromote: onOpen,
+  });
 
   // Unmounting an open dialog skips the close steps, so the browser never
   // restores focus. Guarded on `dialog.open` so it cannot fight a real close().
@@ -237,27 +237,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     const stranded = !active || active === document.body || dialog.contains(active);
     if (stranded) target.focus();
   }, []);
-
-  // `showModal()` promotes this dialog into the browser top layer. A host
-  // published INSIDE the dialog keeps descendant overlays in the same top-layer
-  // subtree instead of occluded siblings in the shared portal root.
-  const [topLayerHost, setTopLayerHost] = useState<HTMLElement | null>(null);
-  useEffect(() => {
-    const dialog = dialogEl;
-    if (!open || !shouldRender || !dialog) {
-      setTopLayerHost(null);
-      return;
-    }
-    const host = document.createElement('div');
-    host.setAttribute('data-rottay-toplayer-host', 'true');
-    host.style.display = 'contents';
-    dialog.appendChild(host);
-    setTopLayerHost(host);
-    return () => {
-      host.remove();
-      setTopLayerHost(null);
-    };
-  }, [open, shouldRender, dialogEl]);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === e.currentTarget && backdropClosable) {

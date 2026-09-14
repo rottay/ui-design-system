@@ -1,301 +1,210 @@
 /**
- * Modern AlertDialog skin (WO-SKIN-04 checkpoint P; Quiet Premium uplift).
+ * Modern AlertDialog skin.
  *
- * LAYER: `layer(rottay-engines)`. The canonical order lives in
- * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
- * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
- * component base and is in turn overridden by the structure and surface tiers;
- * the unlayered compiled tenant artifact wins over all of them.
- *
- * SINGLE PAINT OWNER. The engine stamps `data-part`s and structural geometry
- * only; every color, elevation, typography and interaction state channel is
- * declared here through semantic `--ds-*` tokens.
- *
- * BACKDROP (spec section 5): glass is sanctioned on overlay backdrops only.
- * The scrim keeps the tenant `--ds-overlay-bg` fill and gains the frost tint +
- * blur from the `--ds-glass-*` family, both scaling with
- * `--ds-effect-intensity` (a zero-intensity tenant collapses to a plain scrim).
- *
- * SURFACE (spec section 3): high overlay elevation via `--ds-modal-shadow`,
- * plus the dark-aware luminance step (`--ds-elevation-surface-4` lift layer —
- * inert where `--ds-elevation-lift-strength` is 0) and a hairline
- * `--ds-color-border-subtle` edge so the panel reads on dark surfaces.
- *
- * MOTION (spec section 2): the panel and backdrop enter on the shared
- * `--ds-motion-normal` / `--ds-motion-ease-out` cadence with engine-namespaced
- * keyframes. There is no EXIT animation by design: the engine unmounts the
- * dialog synchronously when `open` flips false (a behavior its test contract
- * pins), so only the entrance is choreographed. Reduced motion collapses the
- * entrance to an instant fade and kills every interactive transition.
- *
- * SPECIFICITY (P-48): any rule painting a border COLOR reaches b >= 4 to clear
- * the tenant artifacts' unlayered `*` border-color floor at (0,3,1); the
- * target's own `data-part` is repeated to buy the extra attributes.
- * Color-free resets are exempt.
- *
- * PORTAL: this engine portals through the shared `#rottay-portal-root`; the
- * scope class anchors every rule, so the selectors are position-independent.
- *
- * SCOPE: `rottay-alert-dialog--modern`. NOT `ds-popover` / `ds-dropdown` — those two
- * names carry DORMANT entrance-animation rules in personality.css that match nothing
- * today (P3); adopting either would hand this component an animation it has never had.
- *
- * LAYOUT (Pass-B): the content row + copy column are skin-owned — the
- * engine's last utility classes (`flex gap-3 items-start`, `flex-1`) are
- * drained onto `data-part='content'` / `data-part='copy'`, the same grammar
- * ConfirmDialog already stamps.
- *
- * RESILIENCE (Pass-B): the title WRAPS (balanced, anywhere) instead of
- * truncating with an ellipsis — an alert's headline is the information, not
- * chrome; the surface caps its block size against the dynamic viewport and
- * scrolls its own overflow instead of clipping actions off-screen.
- *
- * DENSITY (Pass-B): PortalScope carries `data-density` across the portal, so
- * compact/spacious postures step the section padding deliberately (the
- * tenant `--ds-modal-padding` stays the comfortable default).
+ * The portaled native dialog is `ds-alert-dialog ds-alert-dialog--modern[data-part='root']`;
+ * its backdrop and `role='alertdialog'` surface are direct children. The
+ * actions compose the Button primitive, which paints its own states; this skin
+ * owns the chamber, the copy and the action row. Every channel is written by
+ * `derivation/chrome/alert-dialog` or `presentation/components/alert-dialog`.
  */
 
-/* ---- entrance keyframes: engine-namespaced so a future rustic twin cannot
-        collide on the name. ---- */
-@keyframes ds-alert-dialog-backdrop-enter-modern {
+@keyframes ds-alert-dialog-backdrop-enter {
   from { opacity: 0; }
-  to   { opacity: 1; }
+  to { opacity: 1; }
 }
-@keyframes ds-alert-dialog-enter-modern {
+
+@keyframes ds-alert-dialog-enter {
   from {
     opacity: 0;
-    transform: translateY(var(--ds-alert-dialog-motion-offset, 0.5rem))
-      scale(var(--ds-alert-dialog-motion-scale, 0.97));
+    transform: translateY(var(--ds-alert-dialog-enter-y)) scale(var(--ds-alert-dialog-enter-scale));
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
   }
 }
 
-/* ---- dialog element: UA-chrome reset. Geometry (fixed, inset 0,
-        viewport-sized, flex-centred) stays inline in the engine. ---- */
-.rottay-alert-dialog.rottay-alert-dialog--modern[data-part='root'] {
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: var(--ds-viewport-inline-size);
+  block-size: var(--ds-viewport-block-size);
+  max-inline-size: var(--ds-viewport-inline-size);
+  max-block-size: var(--ds-viewport-block-size);
+  margin: 0;
+  padding: 0;
+  border: none;
   background-color: transparent;
   color: inherit;
   overflow: clip;
   overscroll-behavior: contain;
 }
 
-/* `showModal()` generates a native `::backdrop`; the component paints its own
-   scrim part instead, so the UA one stays hidden. */
-.rottay-alert-dialog.rottay-alert-dialog--modern[data-part='root']::backdrop {
+/* The component paints its own scrim, so the native backdrop stays hidden. */
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root']::backdrop {
   display: none;
 }
 
-/* ---- backdrop: scrim + the sanctioned glass layer. Geometry drained from
-        the engine's former inline statics (Pass-2 P0): the fixed
-        full-viewport box behind the surface, inert to the pointer (the
-        dialog element itself is the backdrop-click hit target). ---- */
-.rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
   position: fixed;
   inset: 0;
-  pointer-events: none;
-  /* The authored tenant veil wins; the 40% alpha floor keeps a bare tree
-     dimmed (confirm-dialog.css's parity fallback). */
-  background-color: var(--ds-overlay-bg, var(--ds-color-alpha-black-40));
-  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
-  backdrop-filter: var(--ds-glass-backdrop-filter, var(--ds-modal-overlay-backdrop));
-  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter, var(--ds-modal-overlay-backdrop));
-  animation: ds-alert-dialog-backdrop-enter-modern var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
-  /* The scrim stays behind the surface and its own text invisible. */
   z-index: -1;
+  pointer-events: none;
   color: transparent;
+  background-color: var(--ds-alert-dialog-overlay-bg, var(--ds-color-bg-overlay));
+  background-image: linear-gradient(
+    var(--ds-alert-dialog-overlay-glass, var(--ds-glass-scrim-tint)),
+    var(--ds-alert-dialog-overlay-glass, var(--ds-glass-scrim-tint))
+  );
+  backdrop-filter: var(--ds-alert-dialog-overlay-backdrop, var(--ds-glass-backdrop-filter));
+  -webkit-backdrop-filter: var(--ds-alert-dialog-overlay-backdrop, var(--ds-glass-backdrop-filter));
+  animation: ds-alert-dialog-backdrop-enter var(--ds-alert-dialog-enter-duration) var(--ds-alert-dialog-enter-curve) both;
 }
 
-/* ---- surface: the decision chamber's material (fill + dark lift +
-        elevation), shared with the Modal it blocks alongside: the fill reads
-        the chamber chain (--ds-modal-bg first) so an alert never resolves a
-        different hue from the modal it may replace, and the shadow reads the
-        authored --ds-modal-shadow with a rung-4 floor (previously declared
-        with NO fallback — a tree without the tenant artifact dropped the
-        shadow entirely, leaving the blocking panel edgeless against the
-        scrim). The zenith keyline is the family's common light model. ---- */
-.rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-  /* The lift overlay is its own layer directly above the fill so the fallback
-     chain stays untouched; it is inert until a dark surface raises
-     --ds-elevation-lift-strength, where the near-invisible shadow ramp needs
-     the luminance step. Level 4 matches the overlay elevation band.
-     `position: relative` is drained from the engine's former inline static
-     (Pass-2 P0): it keeps the panel painting above the -1 backdrop layer. */
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
   position: relative;
-  background-color: var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
-  background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4));
-  border-radius: var(--ds-modal-radius, var(--ds-radius-lg));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent),
-    var(--ds-modal-shadow, var(--ds-elevation-4));
-  inline-size: var(--ds-alert-dialog-width, 91.6667%);
+  container: ds-alert-dialog / inline-size;
+  box-sizing: border-box;
+  inline-size: var(--ds-alert-dialog-inline-size);
   max-inline-size: min(
-    var(--ds-alert-dialog-max-width, 24rem),
-    calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4))
+    var(--ds-alert-dialog-max-inline-size),
+    calc(100dvw - var(--ds-alert-dialog-viewport-gutter) - var(--ds-alert-dialog-viewport-gutter))
   );
-  /* Cap against the DYNAMIC viewport with breathing room at both edges: a
-     100dvh cap lets the panel kiss the viewport chrome on short/mobile
-     screens and can push the actions out of reach. */
-  max-block-size: calc(100dvh - var(--ds-spacing-8));
-  max-block-size: calc(100dvh - var(--ds-spacing-8));
+  max-block-size: calc(100dvh - var(--ds-alert-dialog-viewport-breathing));
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--ds-modal-padding, var(--ds-spacing-6));
-  animation: ds-alert-dialog-enter-modern var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
-}
-.rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'][role='alertdialog'] {
-  /* Same overlay material register as ContextMenu/Popconfirm: the role channel
-     directly, with the shipped subtle edge as terminal fallback. No new public
-     family token is minted for this edge. */
-  border: 1px solid var(--ds-material-overlay-border, var(--ds-color-border-subtle));
-}
-
-/* Density postures: deliberate padding steps, not a uniform scale. The
-   comfortable default keeps reading the tenant `--ds-modal-padding`. The
-   attribute lives on the PortalScope wrapper the engine portals through, so
-   the ancestor axis is the honest selector. */
-[data-density='compact'] .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-  padding: var(--ds-spacing-4);
-}
-[data-density='spacious'] .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-  padding: var(--ds-spacing-8);
+  padding: var(--ds-alert-dialog-padding);
+  border-radius: var(--ds-alert-dialog-radius, var(--ds-radius-lg));
+  background-color: var(--ds-alert-dialog-bg, var(--ds-material-overlay-background));
+  background-image: linear-gradient(
+    var(--ds-alert-dialog-surface-lift, var(--ds-elevation-surface-4)),
+    var(--ds-alert-dialog-surface-lift, var(--ds-elevation-surface-4))
+  );
+  box-shadow:
+    inset 0 1px 0 var(--ds-alert-dialog-keyline, var(--ds-color-border-subtle)),
+    var(--ds-alert-dialog-shadow, var(--ds-elevation-4));
+  animation: ds-alert-dialog-enter var(--ds-alert-dialog-enter-duration) var(--ds-alert-dialog-enter-curve) both;
 }
 
-/* ---- content row + copy column (drained from the engine's former
-        `flex gap-3 items-start` / `flex-1` utilities) ---- */
-.rottay-alert-dialog--modern[data-part='root'] [data-part='content'] {
+/* The colored frame repeats its part to clear the tenant border-color floor. */
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='surface'][data-part='surface'] {
+  border: var(--ds-alert-dialog-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-alert-dialog-border-color, var(--ds-color-border-subtle));
+}
+
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='content'] {
   display: flex;
   align-items: flex-start;
-  gap: var(--ds-spacing-3);
+  gap: var(--ds-alert-dialog-content-gap);
 }
-.rottay-alert-dialog--modern[data-part='root'] [data-part='copy'] {
+
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='copy'] {
   flex: 1;
   min-inline-size: 0;
 }
 
-/* ---- copy: typography is skin-owned (the engine stamps parts only) ---- */
-.rottay-alert-dialog--modern[data-part='root'] [data-part='title'] {
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='title'] {
+  margin: 0 0 var(--ds-alert-dialog-title-gap);
   overflow-wrap: anywhere;
   text-wrap: balance;
-  margin-block-end: var(--ds-spacing-2);
-  color: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: var(--ds-font-size-lg);
-  font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-heading);
-  line-height: var(--ds-line-height-tight);
-}
-.rottay-alert-dialog--modern[data-part='root'] [data-part='description'] {
-  overflow-wrap: anywhere;
-  color: var(--ds-color-text-secondary);
-  font-family: var(--ds-font-family-base);
-  font-size: var(--ds-font-size-sm);
-  line-height: var(--ds-line-height-relaxed);
+  color: var(--ds-alert-dialog-title-color, var(--ds-color-text-primary));
+  font-family: var(--ds-alert-dialog-title-font-family, var(--ds-type-section-title-font-family));
+  font-size: var(--ds-alert-dialog-title-font-size, var(--ds-type-section-title-font-size));
+  font-weight: var(--ds-alert-dialog-title-font-weight, var(--ds-type-section-title-font-weight));
+  letter-spacing: var(--ds-type-section-title-letter-spacing);
+  line-height: var(--ds-type-section-title-line-height);
 }
 
-/* ---- icon: error-tinted circle (destructive tone via semantic channels).
-        The inset keyline keeps the well framed when the 10% tint washes out
-        (low effect intensity, cheap displays); forced-colors reframes it
-        with a system border below. ---- */
-.rottay-alert-dialog--modern[data-part='root'] [data-part='icon'] {
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='description'] {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ds-alert-dialog-description-color, var(--ds-color-text-secondary));
+  font-family: var(--ds-type-supporting-font-family);
+  font-size: var(--ds-type-supporting-font-size);
+  line-height: var(--ds-type-supporting-line-height);
+}
+
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='icon'] {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  inline-size: var(--ds-alert-dialog-icon-size, 2.5rem);
-  block-size: var(--ds-alert-dialog-icon-size, 2.5rem);
+  inline-size: var(--ds-alert-dialog-icon-size);
+  block-size: var(--ds-alert-dialog-icon-size);
   border-radius: var(--ds-radius-full);
-  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-error) 22%, transparent);
-  color: var(--ds-color-error);
 }
 
-/* ---- footer: end-aligned action row. The cancel action composes the Button
-        primitive (ghost): chrome, hover/active/focus, disabled, the coarse
-        44px floor and forced-colors are all owned by the primitive's own
-        skin — this file keeps only the row layout and the narrow stacking. ---- */
-.rottay-alert-dialog--modern[data-part='root'] [data-part='footer'] {
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='icon'] {
+  background: var(--ds-alert-dialog-icon-bg, var(--ds-color-bg-secondary));
+  box-shadow: inset 0 0 0 var(--ds-alert-dialog-icon-ring-width) var(--ds-alert-dialog-icon-ring, var(--ds-color-border-subtle));
+  color: var(--ds-alert-dialog-icon-color, var(--ds-color-error));
+}
+
+.ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='footer'] {
   display: flex;
   justify-content: flex-end;
-  margin-block-start: var(--ds-modal-footer-padding);
-  gap: var(--ds-modal-footer-gap);
+  gap: var(--ds-alert-dialog-footer-gap);
+  margin-block-start: var(--ds-alert-dialog-footer-offset);
 }
 
-/* The surface is the container: on narrow panels the actions stack
-   full-width instead of compressing into an unreadable end-aligned row. */
-.rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-  container: ds-alert-dialog / inline-size;
-}
-
+/* On a narrow panel the actions stack at full width instead of compressing. */
 @container ds-alert-dialog (max-width: 20rem) {
-  .rottay-alert-dialog--modern[data-part='root'] [data-part='footer'] {
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='footer'] {
     flex-direction: column;
     align-items: stretch;
   }
-  .rottay-alert-dialog--modern[data-part='root'] [data-part='footer'] > * {
+
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='footer'] > [data-part='action'] {
     inline-size: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'],
-  .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-    animation-duration: 1ms;
-    animation-timing-function: linear;
-    transform: none;
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='backdrop'],
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
+    animation: none;
   }
 }
 
-/* The runtime motion switch (not just the OS media query) retires the
-   entrance too — popover.css's `data-ds-motion` idiom, which this skin was
-   missing: a tenant-driven reduced-motion posture previously left the
-   entrance choreographed. */
-html[data-ds-motion='reduced']
-  .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'],
-html[data-ds-motion='reduced']
-  .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-  animation-duration: 1ms;
-  animation-timing-function: linear;
-  transform: none;
-}
-
-/* Reduced transparency: the glass layer retires entirely — no blur, no frost
-   tint (overlay-modal.css's law, which this skin was missing). The authored
-   scrim fill stays; it is a flat veil, not a see-through panel. */
 @media (prefers-reduced-transparency: reduce) {
-  .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
     background-image: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 }
 
-/* Forced colors: the scrim, lift, elevation and shadow rings vanish, so the
-   surface keeps a framed system boundary and the copy/icon re-assert in
-   system colors. The scrim keeps a see-through system mix (a solid Canvas
-   would hide the page entirely). */
 @media (forced-colors: active) {
-  .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
     background-color: color-mix(in srgb, CanvasText 35%, transparent);
     background-image: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'][role='alertdialog'] {
+
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] > [data-part='surface'][data-part='surface'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .rottay-alert-dialog--modern[data-part='root'] [data-part='icon'] {
+
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='icon'] {
     border: 1px solid ButtonText;
     background: Canvas;
+    box-shadow: none;
     color: CanvasText;
   }
-  .rottay-alert-dialog--modern[data-part='root'] [data-part='description'] {
+
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='description'] {
     color: CanvasText;
   }
+}
+
+/* The inline portal anchor only feeds the lineage snapshot and never creates a box. */
+.ds-alert-dialog-anchor[data-part='anchor'] {
+  display: contents;
 }
