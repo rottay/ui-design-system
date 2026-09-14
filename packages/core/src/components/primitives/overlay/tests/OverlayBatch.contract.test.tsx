@@ -615,7 +615,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
 
         const surfaceSelector =
           engine === 'modern'
-            ? ".rottay-dropdown--modern [data-part='surface']"
+            ? ".ds-dropdown--modern [data-part='surface']"
             : ".rottay-dropdown--rustic[data-part='surface']";
         const surface =
           engine === 'modern'

@@ -165,13 +165,13 @@ describe('Nested overlays inside an open modern Modal', () => {
     );
 
     const dialog = await waitForModalDialog();
-    const surface = await waitForDocumentNode(".rottay-dropdown--modern [data-part='surface']");
+    const surface = await waitForDocumentNode(".ds-dropdown--modern [data-part='surface']");
 
     expectHostedInsideDialog(dialog, surface);
     // Dropdown modern keeps its surface in-tree unless the consumer supplies
     // `getPopupContainer`, so the surface must be a descendant of its own
     // trigger container -- no portal hop at all.
-    const triggerContainer = document.querySelector('.rottay-dropdown--modern') as HTMLElement;
+    const triggerContainer = document.querySelector('.ds-dropdown--modern') as HTMLElement;
     expect(triggerContainer.contains(surface)).toBe(true);
   });
 
