@@ -1,0 +1,23 @@
+/**
+ * HoverCard Component Tokens - Rottay Design System
+ *
+ * Structural constants of the hover-card family and the default of its layer
+ * channel. Its decision relations are emitted by the compiler family
+ * `derivation/chrome/hover-card`.
+ */
+
+:root {
+  --ds-hover-card-layer: var(--ds-z-index-popover);
+  --ds-hover-card-width: 18rem;
+  --ds-hover-card-viewport-gutter: var(--ds-spacing-4);
+  --ds-hover-card-max-block-size: min(60dvh, 24rem);
+  --ds-hover-card-scrollbar-width: thin;
+  --ds-hover-card-padding: var(--ds-spacing-4);
+  --ds-hover-card-radius: var(--ds-radius-xl);
+  --ds-hover-card-border-width: var(--ds-edge-standard-width);
+  --ds-hover-card-motion-offset: 0.25rem;
+  --ds-hover-card-motion-scale: 0.975;
+  --ds-hover-card-enter-duration: var(--ds-motion-reveal);
+  --ds-hover-card-enter-curve: var(--ds-motion-ease-out);
+  --ds-hover-card-touch-target: var(--ds-touch-target-min);
+}

@@ -653,7 +653,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
 
         const surfaceSelector =
           engine === 'modern'
-            ? ".rottay-hover-card--modern [data-part='surface']"
+            ? ".ds-hover-card--modern [data-part='surface']"
             : ".rottay-hover-card--rustic[data-part='surface']";
         const surface =
           engine === 'modern'
