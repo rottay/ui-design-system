@@ -3,14 +3,13 @@
 /**
  * @fileoverview Tour Modern Engine - Rottay Design System
  * @description Modern (token-driven) implementation of the Tour component.
- * Self-contained `rottay-tour--modern` tree painted by the unlayered skin
- * `tour.css`; no DaisyUI or utility-framework classes.
+ * The `ds-tour` tree stamps anatomy, anchoring and the measured spotlight
+ * channels; the modern tour skin paints every part from the family channels.
  *
  * @remarks
  * The Modern engine provides:
- * - A self-contained `rottay-tour--modern` tree: no DaisyUI classes and no
- *   utility-framework classes (K4-A drained the last Tailwind utilities and
- *   static inline chrome into the unlayered skin `tour.css`)
+ * - A `ds-tour` tree with no inline paint: the spotlight rect travels as
+ *   `--ds-tour-spotlight-*` channels and the layer band as `--ds-tour-layer`
  * - Portal rendering via the shared `runtime/overlay/portal` substrate
  * - Box-shadow spotlight technique
  *
@@ -19,7 +18,6 @@
  * - The step surface is positioned by the shared overlay runtime
  *   (`runtime/overlay/positioning`), pinned to its measured branch
  * - The spotlight cutout is measured by `Tour/runtime/spotlight-rect`
- * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
  * - Step indicators/actions are skin-owned, keyed on data-part; close/prev/next
  *   copy uses the common locale (`close`/`previous`/`next`), `Finish` resolves
  *   through the same channel (`common.finish`, landed in the en/es/ar/fr
@@ -62,6 +60,22 @@ import {
 import { useTourSpotlightRect } from '../../runtime/spotlight-rect';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { resolveNavigationIntent } from '../../../../runtime/collection/roving-focus';
+
+/** A tour button whose hover, press and focus ring the interaction kernel decides. */
+function TourButton({
+  part,
+  children,
+  ...rest
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { part: 'close-button' | 'action' }) {
+  const interaction = useInteractionState({ disabled: rest.disabled });
+  return (
+    <button type="button" {...rest} {...partAttributes(part, interaction.state)} {...interaction.handlers}>
+      {children}
+    </button>
+  );
+}
 
 /** Breathing room the spotlight cutout keeps around the target element. */
 const SPOTLIGHT_PADDING = 8;
@@ -174,14 +188,15 @@ const ModernTourChrome = ({
         return;
       }
     }
-    const rtl = portalScope.direction === 'rtl';
-    const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
-    const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
-    if (e.key === forwardKey) {
+    const intent = resolveNavigationIntent(e.key, {
+      orientation: 'horizontal',
+      rtl: portalScope.direction === 'rtl',
+    });
+    if (intent === 'next') {
       e.preventDefault();
       // Advances the step; on the last step this is Finish (onNext's own contract).
       onNext();
-    } else if (e.key === backwardKey && currentStep > 0) {
+    } else if (intent === 'previous' && currentStep > 0) {
       e.preventDefault();
       onPrev();
     }
@@ -223,16 +238,13 @@ const ModernTourChrome = ({
   const maskStyle = typeof mask === 'object' ? mask.style : {};
   // Written as a statement, not a ternary: `mask.color : <default>` reads as an
   // object key `color:` to the inline-paint lexer and counts as a phantom site.
-  let maskColor: string | undefined = 'var(--ds-color-alpha-black-50)';
-  if (typeof mask === 'object') {
-    maskColor = mask.color;
-  }
+  const maskColor = typeof mask === 'object' ? mask.color : undefined;
 
   return (
     <div
       ref={forwardedRef}
       data-part="root"
-      className={`rottay-tour--modern ${className || ''}`}
+      className={`ds-tour ds-tour--modern ${className || ''}`.trim()}
       // Re-enter the tenant/locale scope the portal escaped (read from the
       // target or the in-tree scope marker; empty outside a DS provider). The
       // snapshot comes from the shared `runtime/overlay/portal-scope` reader,
@@ -242,18 +254,13 @@ const ModernTourChrome = ({
       {...portalScope.scope}
       dir={portalScope.direction}
       lang={portalScope.language}
-      // The mask colour is consumer-supplied and templated into the spotlight's
-      // box-shadow, which also carries runtime geometry; the skin reads this
-      // custom property (not a paint key) for both surfaces. Left unset when the
-      // caller passes a `mask` object with no `color`, exactly as before: the
-      // dependent declarations then drop, painting no scrim and no cutout.
-      // The contract's root `style` spreads FIRST (rustic sibling idiom): the
-      // tenant-scope snapshot and the runtime z-index/mask channel keep
-      // precedence over caller paint.
-      style={{ ...style, ...portalScope.variables, zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
+      style={{
+        ...style,
+        ...portalScope.variables,
+        '--ds-tour-layer': String(zIndex),
+        ...(maskColor === undefined ? null : { '--ds-tour-mask-color': maskColor }),
+      } as React.CSSProperties}
     >
-      {/* Mask. Fixed full-viewport positioning is skin-owned; only the
-          consumer's mask.style spread stays inline (public API). */}
       {mask && (
         <div
           data-part="backdrop"
@@ -264,31 +271,19 @@ const ModernTourChrome = ({
         />
       )}
 
-      {/* Spotlight: a huge box-shadow creates the "cutout" mask effect around the target.
-          The 9999px spread covers the entire viewport while the element itself stays transparent.
-          The scrim IS the mask: with mask={false} nothing may veil the page
-          (classic/antd parity), so the whole cutout is gated on `mask` -- a
-          plain boolean used to ship a 50%-black veil over the app anyway.
-          Geometry is measured viewport geometry (getBoundingClientRect) and stays inline;
-          fixed positioning/radius/pointer-events are skin-owned. */}
+      {/* The cutout is the mask: with mask={false} nothing may veil the page. */}
       {mask && spotlightRect && (
         <div
           data-part="spotlight"
           style={{
-            top: spotlightRect.top,
-            left: spotlightRect.left,
-            width: spotlightRect.width,
-            height: spotlightRect.height,
-            zIndex: zIndex + 1,
-          }}
+            '--ds-tour-spotlight-top': `${spotlightRect.top}px`,
+            '--ds-tour-spotlight-left': `${spotlightRect.left}px`,
+            '--ds-tour-spotlight-width': `${spotlightRect.width}px`,
+            '--ds-tour-spotlight-height': `${spotlightRect.height}px`,
+          } as React.CSSProperties}
         />
       )}
 
-      {/* Step popover: placed by the shared overlay runtime when a target
-          exists (bottom-centered, flip + clamp), centered in the viewport
-          otherwise (the skin's translate centres it -- direction-neutral).
-          The runtime's positioning keys spread last so they win. Chrome
-          (padding/max-inline-size) is skin-owned. */}
       <div
         {...layerProps}
         ref={setSurfaceEl}
@@ -309,20 +304,10 @@ const ModernTourChrome = ({
         aria-describedby={[descriptionId, progressId].filter(Boolean).join(' ')}
         tabIndex={-1}
         onKeyDown={handleSurfaceKeyDown}
-        style={{
-          zIndex: zIndex + 2,
-          ...(targetEl
-            ? overlay.positionStyle
-            : { position: 'fixed' as const, top: '50%', left: '50%' }),
-        }}
+        style={targetEl ? overlay.positionStyle : undefined}
       >
-        {/* Close button: geometry is skin-owned (logical inset-inline-end so
-            it mirrors to the far corner under RTL); the glyph is the governed
-            ActionCloseIcon (Modal/Toast/Notification pattern), decorative --
-            the button carries the accessible name. */}
-        <button
-          type="button"
-          data-part="close-button"
+        <TourButton
+          part="close-button"
           onClick={onClose}
           /* `t` echoes the key back when the catalog lacks it, so a host app
              shipping a partial `common` namespace labelled this button the
@@ -331,7 +316,7 @@ const ModernTourChrome = ({
           aria-label={translation?.tOr('close', 'Close') ?? 'Close'}
         >
           <ActionCloseIcon decorative size={16} />
-        </button>
+        </TourButton>
 
         {/* Content */}
         {step?.cover && <div data-part="cover">{step.cover}</div>}
@@ -348,7 +333,7 @@ const ModernTourChrome = ({
               its name (dots are decorative; numbers are not localized) */}
           {/* A describedby target contributes its text, not its aria-label, so
               the counter has to exist as real text to be announced at all. */}
-          <span id={progressId} data-part="progress-text" className="ds-visually-hidden">
+          <span id={progressId} className="ds-visually-hidden">
             {stepProgressLabel}
           </span>
           <div data-part="indicators" role="img" aria-label={stepProgressLabel}>
@@ -368,23 +353,13 @@ const ModernTourChrome = ({
               keeps the shipped label byte-identical. */}
           <div data-part="actions">
             {currentStep > 0 && (
-              <button
-                type="button"
-                data-part="action"
-                data-action="prev"
-                onClick={onPrev}
-              >
+              <TourButton part="action" data-action="prev" onClick={onPrev}>
                 {translation?.tOr('previous', 'Previous') ?? 'Previous'}
-              </button>
+              </TourButton>
             )}
-            <button
-              type="button"
-              data-part="action"
-              data-action="next"
-              onClick={onNext}
-            >
+            <TourButton part="action" data-action="next" onClick={onNext}>
               {currentStep === steps.length - 1 ? (translation?.tOr('finish', 'Finish') ?? 'Finish') : (translation?.tOr('next', 'Next') ?? 'Next')}
-            </button>
+            </TourButton>
           </div>
         </div>
       </div>
@@ -500,7 +475,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     // the measured branch.
     return (
       <>
-        <span ref={setScopeMarkerEl} data-part="scope-marker" hidden aria-hidden="true" />
+        <span ref={setScopeMarkerEl} hidden aria-hidden="true" />
         <Portal>
           <OverlayPortalBoundary>
             <ModernTourChrome

@@ -81,6 +81,7 @@
 @import "../../../presentation/components/hover-card/index.css" layer(rottay-components);
 @import "../../../presentation/components/dropdown/index.css" layer(rottay-components);
 @import "../../../presentation/components/tooltip/index.css" layer(rottay-components);
+@import "../../../presentation/components/tour/index.css" layer(rottay-components);
 @import "../../../presentation/components/checkbox/index.css" layer(rottay-components);
 @import "../../../presentation/components/radio/index.css" layer(rottay-components);
 @import "../../../presentation/components/segmented/index.css" layer(rottay-components);

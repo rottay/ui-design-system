@@ -129,6 +129,10 @@ async function expectTenantScopeSurvivedPortal(surface: HTMLElement): Promise<vo
 /** Per-engine surface selector for the canonical Modal owner. Both engines
  * stamp a distinct root and nested surface; Modern's root is the native
  * `<dialog>`, while Rustic's root is the portaled fixed-position shell. */
+function tourRoot(engine: 'modern' | 'rustic'): string {
+  return engine === 'modern' ? '.ds-tour--modern' : '.rottay-tour--rustic';
+}
+
 function modalSurfaceSelector(engine: 'modern' | 'rustic'): string {
   return engine === 'modern'
     ? ".ds-modal--modern [data-part='surface']"
@@ -200,19 +204,19 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           engine,
         );
 
-        const surface = await waitForDocumentSurface(`.rottay-tour--${engine} [data-part='surface']`);
+        const surface = await waitForDocumentSurface(`${tourRoot(engine)} [data-part='surface']`);
         // Portal posture: Tour portals in BOTH engines, via a direct
         // createPortal (not the shared Portal util) -- checkpoint contract P4.
         expect(container.contains(surface)).toBe(false);
         expect(surface.getAttribute('data-open')).toBe('true');
         expect(surface.getAttribute('data-type')).toBe('primary');
 
-        expect(document.querySelectorAll(`.rottay-tour--${engine}[data-part='root']`).length).toBe(1);
-        expect(document.querySelectorAll(`.rottay-tour--${engine} [data-part='backdrop']`).length).toBe(1);
+        expect(document.querySelectorAll(`${tourRoot(engine)}[data-part='root']`).length).toBe(1);
+        expect(document.querySelectorAll(`${tourRoot(engine)} [data-part='backdrop']`).length).toBe(1);
         // No `target` prop resolves to a real element, so no cutout rect is
         // measured and the spotlight (which only renders when a cutout was
         // measured) must be absent.
-        expect(document.querySelectorAll(`.rottay-tour--${engine} [data-part='spotlight']`)).toHaveLength(0);
+        expect(document.querySelectorAll(`${tourRoot(engine)} [data-part='spotlight']`)).toHaveLength(0);
 
         expect(surface.querySelectorAll("[data-part='title']")).toHaveLength(1);
         expect(surface.querySelectorAll("[data-part='description']")).toHaveLength(1);

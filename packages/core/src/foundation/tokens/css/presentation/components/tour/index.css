@@ -1,0 +1,41 @@
+/**
+ * Tour Component Tokens - Rottay Design System
+ *
+ * Structural constants of the tour family and the defaults of its runtime
+ * channels. Its decision relations are emitted by the compiler family
+ * `derivation/chrome/tour`.
+ */
+
+:root {
+  --ds-tour-layer: 1001;
+  --ds-tour-mask-color: var(--ds-color-alpha-black-50);
+  --ds-tour-spotlight-top: 0px;
+  --ds-tour-spotlight-left: 0px;
+  --ds-tour-spotlight-width: 0px;
+  --ds-tour-spotlight-height: 0px;
+  --ds-tour-spotlight-spread: 9999px;
+  --ds-tour-radius: var(--ds-radius-lg);
+  --ds-tour-border-width: var(--ds-edge-standard-width);
+  --ds-tour-primary-border-width: calc(var(--ds-edge-standard-width) * 2);
+  --ds-tour-surface-padding: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-tour-surface-max-width: 24rem;
+  --ds-tour-close-offset: var(--ds-spacing-2);
+  --ds-tour-close-size: 1.75rem;
+  --ds-tour-section-gap: var(--ds-spacing-2);
+  --ds-tour-footer-gap: var(--ds-spacing-4);
+  --ds-tour-cover-gap: var(--ds-spacing-3);
+  --ds-tour-indicator-gap: var(--ds-spacing-1);
+  --ds-tour-indicator-size: 0.5rem;
+  --ds-tour-indicator-current-size: 1rem;
+  --ds-tour-action-height: 2rem;
+  --ds-tour-action-padding-inline: 0.75rem;
+  --ds-tour-action-radius: var(--ds-radius-md);
+  --ds-tour-action-lift: -1px;
+  --ds-tour-focus-ring-width: 2px;
+  --ds-tour-focus-ring-offset: 2px;
+  --ds-tour-enter-duration: var(--ds-motion-reveal);
+  --ds-tour-enter-curve: var(--ds-motion-ease-enter);
+  --ds-tour-transition-duration: var(--ds-motion-feedback);
+  --ds-tour-transition-timing: var(--ds-motion-ease-standard);
+  --ds-tour-touch-target-min: var(--ds-touch-target-min);
+}
