@@ -190,7 +190,7 @@
     },
     "./primitives/radio": {
       "maxReachableModules": 47,
-      "maxSourceBytes": 157925
+      "maxSourceBytes": 158333
     },
     "./primitives/responsive": {
       "maxReachableModules": 5,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-FAM-04: ./primitives/modal 31 -> 52 modules (168791 -> 185473 bytes): the public ModalCloseButton compound names its dismiss from the active catalog through useOptionalTranslation (the i18n context and its locale catalogs, 25 modules) and decides hover, press and focus through the anatomy and interaction-state kernels imported by leaf; ./primitives/message 54 -> 63 modules (256096 -> 265545 bytes): the statically imported Modern message engine is now the message role of the Notifier (its contracts, countdown and exit kernels, item and stack, 6 modules) plus the anatomy and interaction-state kernels and the neutral tone glyph. Both are the shared kernels and the one Notifier owner the cut adopts instead of re-implementing. ./primitives/message then moves 265545 -> 266142 (+597 source bytes, reachable modules unchanged at 63): the Notifier countdown holds its lifetime for pointer hover and keyboard focus as INDEPENDENT pause reasons (WCAG 2.2.1), which is +506 bytes in the countdown kernel, and the narrowed pauseOnHover contract is stated on the item props, +91 bytes.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 2 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-FAM-01 / R107-RUN-01: radio's graph carries the shared interaction-state kernel, and the press-cancellation lifecycle grew it (cancelPress plus the disabled-transition guard, 28dec8d73) -- 157925 -> 158333, +408 source bytes, exactly the growth of foundation/behavior/runtime/interaction-state/index.ts (4134 -> 4542 bytes); reachable modules unchanged under the 47 anchor. Measured, and NOT the --ds-radius-button paint-route correction (8fdbda3d0): this gate walks TypeScript import/export edges only, so that lot's CSS carries no bytes into any entrypoint, and its single TS edit (tokens/ts/foundation/base/borders, +21) is not in radio's graph -- were it reachable the measurement would be 158354. Prior move (WO-FAM-04): ./primitives/modal 31 -> 52 modules (168791 -> 185473 bytes) through the i18n catalogs and the anatomy/interaction-state kernels imported by leaf; ./primitives/message 54 -> 63 modules (256096 -> 265545) as the Notifier's message role, then 265545 -> 266142 (+597) for the countdown independent pause reasons (WCAG 2.2.1).",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
