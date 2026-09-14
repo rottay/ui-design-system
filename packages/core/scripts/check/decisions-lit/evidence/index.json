@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-14T04:08:32.773Z",
+  "producedAt": "2026-09-14T18:55:12.916Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 7-family sample: 18/22 move at least one sampled family",
   "denominators": {
@@ -21,7 +21,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-14T04:04:08.344Z"
+      "builtAt": "2026-09-14T16:24:28.355Z"
     },
     "sources": {
       "door": {
@@ -30,18 +30,18 @@
           "src/infrastructure/compilers"
         ],
         "fileCount": 826,
-        "digest": "23eaa6f6515bdba8609a8644efae16033a879955062af3fb733685cf27ecb963"
+        "digest": "de8ee3a5331431dd0dbe79c425ade8dceaf808346c241dc83b30dd8f99cecb9e"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "1e6a180bddf6dc4ca4ad468f8f96e5ced628c7fd13d8bd449306aaa9370f2646"
+        "digest": "46839b5568a8b9ce958dc7e79e271440b92332dd8c0aaf1e6966d5b8581778a9"
       }
     },
     "browser": {
       "specifier": "@playwright/test",
       "root": "packages/showroom/package.json",
-      "resolved": "../../Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+      "resolved": "../ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
       "browserVersion": "149.0.7827.55"
     },
     "roster": {
@@ -70,7 +70,7 @@
             ]
           }
         ],
-        "bundleSha": "0c145462d1fac47366a6db45a768b57fd1e5782c0a3ed680e41910b8271fd21d",
+        "bundleSha": "fa73023e08753232fe2908571be8f180025fd42807427463606166f3c7c06792",
         "bundleMode": "fresh",
         "theme": "dark"
       },
@@ -99,7 +99,7 @@
             ]
           }
         ],
-        "bundleSha": "8aef8530535e63a365bccfa2518d43473a6b5b8ccb7383b57a080c538800a906",
+        "bundleSha": "1e03620ea11add3aafb7da52a5a20dfc5e80fba3fe39b132ad4df8b9c98b8ce1",
         "bundleMode": "fresh",
         "theme": "light"
       },
@@ -128,7 +128,7 @@
             ]
           }
         ],
-        "bundleSha": "80cfd6c90929bdbe6a67bea5127a15cc672e23e502549cf3b41edef608333690",
+        "bundleSha": "9243e1d3c27137fa6250be1b1fb9a87ff74e9d84f40479afe55fa6a82df1bfa5",
         "bundleMode": "fresh",
         "theme": "light"
       }
@@ -783,7 +783,6 @@
           "--ds-card-border-radius",
           "--ds-card-radius",
           "--ds-input-md-border-radius",
-          "--ds-radius-button",
           "--ds-radius-lg",
           "--ds-radius-md",
           "--ds-radius-scale",
@@ -797,7 +796,6 @@
         "--ds-card-border-radius",
         "--ds-card-radius",
         "--ds-input-md-border-radius",
-        "--ds-radius-button",
         "--ds-radius-lg",
         "--ds-radius-md",
         "--ds-radius-scale",
@@ -2391,7 +2389,6 @@
           "--ds-card-border-radius",
           "--ds-card-radius",
           "--ds-input-md-border-radius",
-          "--ds-radius-button",
           "--ds-radius-lg",
           "--ds-radius-md",
           "--ds-radius-scale",
@@ -2405,7 +2402,6 @@
         "--ds-card-border-radius",
         "--ds-card-radius",
         "--ds-input-md-border-radius",
-        "--ds-radius-button",
         "--ds-radius-lg",
         "--ds-radius-md",
         "--ds-radius-scale",
