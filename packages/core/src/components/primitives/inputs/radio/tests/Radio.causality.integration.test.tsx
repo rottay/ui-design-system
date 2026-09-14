@@ -39,6 +39,7 @@ describeCausality({
     { id: 'dot', selector: `${CHECKED} [data-part='dot']`, property: 'background-color' },
     { id: 'errorRing', selector: `${ERROR} [data-part='circle']`, property: 'border-top-color' },
     { id: 'size', selector: `${CHECKED} [data-part='circle']`, property: 'inline-size' },
+    { id: 'edge', selector: `${PLAIN} [data-part='circle']`, property: 'border-top-width' },
     { id: 'labelSize', selector: `${CHECKED} [data-part='label']`, property: 'font-size' },
     { id: 'press', selector: `${PLAIN} [data-part='circle']`, property: 'transform', attributes: { 'data-state': 'pressed' }, attributesOn: PLAIN },
     { id: 'focusRing', selector: `${PLAIN} [data-part='circle']`, property: 'outline-width', attributes: { 'data-state': 'focus-visible' }, attributesOn: PLAIN },
@@ -47,6 +48,7 @@ describeCausality({
   decisions: {
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['ring', 'dot'], holds: 'size', in: VERTICALS },
     'palette.status-seeds': { value: { error: '#B00020' }, moves: ['errorRing'], holds: 'dot', in: VERTICALS },
+    'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'dot', in: VERTICALS },
     'density.mode': { value: 'compact', moves: ['size'], holds: 'dot', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['labelSize'], holds: 'dot', in: VERTICALS },
     'states.emphasis': { value: 'strong', moves: ['press'], holds: 'dot', in: VERTICALS },

@@ -82,7 +82,9 @@
   --ds-radio-unchecked-border: var(--ds-color-border);
   --ds-radio-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-radio-disabled-cursor: not-allowed;
-  --ds-radio-border-width: var(--ds-border-width-2);
+  /* A double-weight edge, as on the checkbox box: the circle is deliberately
+     heavier than a field, stated as 2x the governed edge, not as 2px. */
+  --ds-radio-border-width: calc(var(--ds-edge-standard-width, 1px) * 2);
   --ds-radio-label-line-height: var(--ds-line-height-snug);
 
   /* ========================================================================
