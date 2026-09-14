@@ -1,0 +1,60 @@
+/**
+ * Popover Component Tokens - Rottay Design System
+ *
+ * Structural constants of the popover family, per recipe and density, and the
+ * defaults of its runtime channels. Its decision relations are emitted by the
+ * compiler family `derivation/chrome/popover`.
+ */
+
+:root {
+  --ds-popover-instance-z-index: var(--ds-z-index-popover);
+  --ds-popover-instance-max-width: var(--ds-popover-max-width);
+  --ds-popover-arrow-anchor-offset: 50%;
+  --ds-popover-bordered-border-width: var(--ds-edge-standard-width);
+  --ds-popover-bordered-radius: var(--ds-radius-lg);
+  --ds-popover-bordered-max-width: var(--ds-popover-max-width);
+  --ds-popover-bordered-padding-block: var(--ds-spacing-md);
+  --ds-popover-bordered-padding-inline: var(--ds-spacing-md);
+  --ds-popover-bordered-title-gap: var(--ds-popover-title-gap);
+  --ds-popover-minimal-border-width: var(--ds-edge-standard-width);
+  --ds-popover-minimal-radius: var(--ds-radius-md);
+  --ds-popover-minimal-max-width: 18rem;
+  --ds-popover-minimal-padding-block: var(--ds-spacing-sm);
+  --ds-popover-minimal-padding-inline: var(--ds-spacing-sm);
+  --ds-popover-inverse-radius: var(--ds-radius-lg);
+  --ds-popover-rich-radius: var(--ds-radius-xl);
+  --ds-popover-rich-max-width: 28rem;
+  --ds-popover-rich-padding-block: var(--ds-spacing-lg);
+  --ds-popover-rich-padding-inline: var(--ds-spacing-lg);
+  --ds-popover-compact-padding-block: var(--ds-spacing-xs);
+  --ds-popover-compact-padding-inline: var(--ds-spacing-sm);
+  --ds-popover-compact-title-gap: var(--ds-spacing-xs);
+  --ds-popover-compact-max-height: 22rem;
+  --ds-popover-comfortable-padding-block: var(--ds-spacing-md);
+  --ds-popover-comfortable-padding-inline: var(--ds-spacing-md);
+  --ds-popover-spacious-padding-block: var(--ds-spacing-lg);
+  --ds-popover-spacious-padding-inline: var(--ds-spacing-lg);
+  --ds-popover-spacious-title-gap: var(--ds-spacing-md);
+  --ds-popover-min-width: 12rem;
+  --ds-popover-max-width: 24rem;
+  --ds-popover-max-height: 32rem;
+  --ds-popover-body-max-height: 26rem;
+  --ds-popover-viewport-gap: 0.75rem;
+  --ds-popover-touch-target: var(--ds-touch-target-min);
+  --ds-popover-arrow-size: 0.6875rem;
+  --ds-popover-arrow-edge-offset: 1.25rem;
+  --ds-popover-title-gap: var(--ds-spacing-sm);
+  --ds-popover-title-divider-width: var(--ds-edge-standard-width);
+  --ds-popover-title-padding-block: var(--ds-spacing-sm);
+  --ds-popover-title-type: var(--ds-type-label);
+  --ds-popover-title-letter-spacing: var(--ds-type-label-letter-spacing);
+  --ds-popover-body-type: var(--ds-type-supporting);
+  --ds-popover-body-scrollbar-width: thin;
+  --ds-popover-motion-distance: 0.25rem;
+  --ds-popover-motion-scale: 0.975;
+  --ds-popover-enter-duration: var(--ds-motion-reveal);
+  --ds-popover-enter-easing: var(--ds-motion-ease-enter);
+  --ds-popover-exit-duration: var(--ds-motion-feedback);
+  --ds-popover-exit-easing: var(--ds-motion-ease-exit);
+  --ds-popover-arrow-duration: var(--ds-motion-feedback);
+}

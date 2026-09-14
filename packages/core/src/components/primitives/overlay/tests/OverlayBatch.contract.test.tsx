@@ -558,7 +558,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
 
         const surfaceSelector =
           engine === 'modern'
-            ? ".rottay-popover--modern [data-part='surface']"
+            ? ".ds-popover--modern [data-part='surface']"
             : ".rottay-popover--rustic[data-part='surface']";
         const surface = await waitForDocumentSurface(surfaceSelector);
 

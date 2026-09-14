@@ -77,6 +77,7 @@
 @import "../../../presentation/components/sheet/index.css" layer(rottay-components);
 @import "../../../presentation/components/alert-dialog/index.css" layer(rottay-components);
 @import "../../../presentation/components/confirm-dialog/index.css" layer(rottay-components);
+@import "../../../presentation/components/popover/index.css" layer(rottay-components);
 @import "../../../presentation/components/checkbox/index.css" layer(rottay-components);
 @import "../../../presentation/components/radio/index.css" layer(rottay-components);
 @import "../../../presentation/components/segmented/index.css" layer(rottay-components);

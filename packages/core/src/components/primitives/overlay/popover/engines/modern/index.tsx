@@ -780,7 +780,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         data-collision-adjusted={
           resolvedPlacement !== preferredOverlayPlacement ? 'true' : undefined
         }
-        data-recipe={recipe}
+        data-variant={recipe}
+        data-custom-max-width={maxWidth === undefined ? undefined : 'true'}
         data-density={density ?? portalScope['data-density']}
         data-has-title={Boolean(title)}
         data-has-arrow={Boolean(arrow)}
@@ -826,8 +827,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         data-trigger={Array.from(triggers).join(' ')}
         data-density={density}
         data-touch-behavior={touchBehavior}
-        className={`rottay-popover--modern${className ? ` ${className}` : ''}`}
-        style={{ position: 'relative', display: 'inline-flex', ...style }}
+        className={`ds-popover ds-popover--modern${className ? ` ${className}` : ''}`}
+        style={style}
         onClick={handleClick}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
@@ -844,14 +845,14 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           <Portal>
             <OverlayPortalBoundary>
               <div
-                className="rottay-popover--modern"
+                className="ds-popover ds-popover--modern"
                 data-part="trigger"
                 data-portal-scope="true"
                 dir={direction}
                 lang={language}
                 {...portalScope}
                 data-density={density ?? portalScope['data-density']}
-                style={{ display: 'contents', ...portalVariables }}
+                style={portalVariables}
               >
                 {surfaceNode}
               </div>

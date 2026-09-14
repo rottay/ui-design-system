@@ -194,6 +194,7 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   anchor: 'omit',
   backdrop: 'omit',
   handle: 'omit',
+  arrow: 'omit',
   'caps-lock-hint': 'omit',
   'required-mark': 'omit',
   steppers: 'omit',

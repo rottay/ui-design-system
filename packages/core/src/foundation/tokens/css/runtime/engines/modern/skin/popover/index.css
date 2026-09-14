@@ -1,45 +1,29 @@
 /**
- * Modern Popover — token-owned contextual surface.
+ * Modern Popover skin.
  *
- * The engine owns stable anatomy and behavior. Brands can independently tune
- * material, type, density, geometry, arrow craft and motion without an app
- * reconstructing the component.
- *
- * Material stack (governed six layers): the opaque base fill and the
- * elevation lift live on the surface background; the tenant motif (layer 3)
- * rides a private `::before` decoration slot whose opacity is the governed
- * `--ds-effect-intensity` dial -- at 0 the decoration dissolves while fill,
- * edge, elevation and focus ring keep the hierarchy. Layer 2 (the bounded
- * tint/sheen) is deliberately EMPTY on this family: the surface already
- * declares the intensity-governed zenith keyline in its own box-shadow, and
- * a second top-light on the same surface is what OVL-PV-01 struck. Glass is deliberately ABSENT: this is a panel, and the
- * lane's grammar sanctions backdrop blur on overlay backdrops only
- * (hover-card.css precedent). Because the shared overlay material channel
- * may still resolve translucent, `prefers-reduced-transparency` forces an
- * opaque fill instead of a see-through panel.
- *
- * Pass P2 (Phase B segunda pasada): the arrow paints the same elevation-lift
- * layer as the surface and its motif moves to an intensity-governed
- * `::before` slot, so neither a dark lift nor `effectIntensity: 0` seams at
- * the joint; the forced-colors arrow rule ties the base specificity so the
- * system-color treatment actually wins.
+ * The trigger wrapper is `ds-popover ds-popover--modern[data-part='trigger']`;
+ * the surface is its direct child, in-tree under anchor positioning or inside a
+ * portal scope wrapper of the same class under measured positioning. The
+ * surface resolves one of four material recipes and three densities into local
+ * `-current` values, and every channel it reads is written by
+ * `derivation/chrome/popover` or `presentation/components/popover`.
  */
 
-@keyframes ds-popover-enter-modern {
+@keyframes ds-popover-enter {
   from {
     opacity: 0;
     transform: var(--ds-popover-closed-transform);
   }
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: none;
   }
 }
 
-@keyframes ds-popover-exit-modern {
+@keyframes ds-popover-exit {
   from {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: none;
   }
   to {
     opacity: 0;
@@ -47,170 +31,50 @@
   }
 }
 
-.rottay-popover--modern[data-part="trigger"] {
+.ds-popover.ds-popover--modern[data-part='trigger'] {
   position: relative;
   display: inline-flex;
   max-inline-size: 100%;
 }
 
-/* The measured branch projects tenant scope into the shared portal and keeps
- * the same direct-child styling contract without app-owned overlay chrome. */
-.rottay-popover--modern[data-part="trigger"][data-portal-scope="true"] {
+/* The measured branch re-stamps the tenant scope in the portal without adding a box. */
+.ds-popover.ds-popover--modern[data-part='trigger'][data-portal-scope='true'] {
   display: contents;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-part="surface"] {
-  --ds-popover-surface: var(
-    --ds-popover-bordered-background,
-    var(
-      --ds-material-overlay-background,
-      var(--ds-popover-bg, var(--ds-surface-overlay, var(--ds-surface-card)))
-    )
-  );
-  --ds-popover-ink: var(
-    --ds-popover-bordered-foreground,
-    var(--ds-material-overlay-foreground, var(--ds-color-text-primary))
-  );
-  --ds-popover-muted-ink: var(
-    --ds-popover-bordered-muted-foreground,
-    var(--ds-color-text-secondary)
-  );
-  --ds-popover-edge: var(
-    --ds-popover-bordered-border,
-    var(
-      --ds-material-overlay-border,
-      var(--ds-popover-border-color, var(--ds-color-border-primary))
-    )
-  );
-  --ds-popover-edge-width: var(--ds-popover-bordered-border-width, 1px);
-  --ds-popover-radius-current: var(
-    --ds-popover-bordered-radius,
-    var(--ds-popover-radius, var(--ds-radius-lg))
-  );
-  --ds-popover-shadow-current: var(
-    --ds-popover-bordered-shadow,
-    var(
-      --ds-material-overlay-shadow,
-      var(
-        --ds-popover-shadow,
-        var(
-          --_ds-popover-layer-step-shadow,
-          var(--ds-elevation-3, var(--ds-shadow-lg))
-        )
-      )
-    )
-  );
-  --ds-popover-texture-current: var(
-    --ds-popover-bordered-texture,
-    var(--ds-material-overlay-texture, none)
-  );
-  /* OVL-PV-01 (R1 Cohort 1, option A): the family sheen that used to sit here
-     -- a 150deg gradient carried by a private --ds-popover-highlight-current
-     channel -- is DELETED, not gated. The surface below declares the
-     intensity-governed zenith keyline in its own box-shadow, so this was a
-     SECOND top-light on the same surface, and stacked decorative gradients are
-     the exact smell both tenant directions forbid. It is the third
-     engine-authored sheen struck in this cohort; the dropdown 145deg sweep and
-     the popover title sheen went first. The private -current channel is removed
-     with it -- here, in every recipe, and at the two accessibility guards --
-     because an unused private var is census bait and a reintroduction seam.
-     BitHire loses a 5% currentColor sheen on popovers; the inverse and rich
-     recipes lose their 8%/7% variants. Declared, accepted, in-round deltas. If
-     a sighted look wants the top-light stronger it retunes the zenith keyline,
-     never a second gradient. */
-  --ds-popover-padding-block-current: var(
-    --ds-popover-bordered-padding-block,
-    var(--ds-spacing-md)
-  );
-  --ds-popover-padding-inline-current: var(
-    --ds-popover-bordered-padding-inline,
-    var(--ds-spacing-md)
-  );
-  --ds-popover-title-gap-current: var(
-    --ds-popover-bordered-title-gap,
-    var(--ds-popover-title-gap, var(--ds-spacing-sm))
-  );
-  --ds-popover-max-width-current: var(
-    --ds-popover-bordered-max-width,
-    var(--ds-popover-max-width, 24rem)
-  );
-  --ds-popover-closed-transform: translate3d(
-      0,
-      var(--ds-popover-motion-distance, 0.25rem),
-      0
-    )
-    scale(var(--ds-popover-motion-scale, 0.975));
-
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
+  --ds-popover-surface-current: var(--ds-popover-bordered-background, var(--ds-material-overlay-background));
+  --ds-popover-ink-current: var(--ds-popover-bordered-foreground, var(--ds-color-text-primary));
+  --ds-popover-muted-ink-current: var(--ds-popover-bordered-muted-foreground, var(--ds-color-text-secondary));
+  --ds-popover-edge-current: var(--ds-popover-bordered-border, var(--ds-color-border-primary));
+  --ds-popover-edge-width-current: var(--ds-popover-bordered-border-width, var(--ds-edge-standard-width));
+  --ds-popover-radius-current: var(--ds-popover-bordered-radius, var(--ds-radius-lg));
+  --ds-popover-shadow-current: var(--ds-popover-bordered-shadow, var(--ds-elevation-3));
+  --ds-popover-texture-current: var(--ds-popover-bordered-texture, none);
+  --ds-popover-padding-block-current: var(--ds-popover-bordered-padding-block, var(--ds-spacing-md));
+  --ds-popover-padding-inline-current: var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md));
+  --ds-popover-title-gap-current: var(--ds-popover-bordered-title-gap, var(--ds-spacing-sm));
+  --ds-popover-max-width-current: var(--ds-popover-bordered-max-width, var(--ds-popover-max-width));
+  --ds-popover-body-max-height-current: var(--ds-popover-body-max-height);
+  --ds-popover-closed-transform: translate3d(0, var(--ds-popover-motion-distance), 0) scale(var(--ds-popover-motion-scale));
   position: fixed;
   isolation: isolate;
-  z-index: var(
-    --ds-popover-instance-z-index,
-    var(--ds-z-popover, var(--ds-z-index-popover))
-  );
+  z-index: var(--ds-popover-instance-z-index, var(--ds-z-index-popover));
   box-sizing: border-box;
   display: grid;
   inline-size: max-content;
-  min-inline-size: min(
-    var(--ds-popover-min-width, 12rem),
-    calc(
-      100dvw - var(--ds-popover-viewport-gap, 0.75rem) -
-        var(--ds-popover-viewport-gap, 0.75rem)
-    )
-  );
-  min-inline-size: min(
-    var(--ds-popover-min-width, 12rem),
-    calc(
-      100dvi - var(--ds-popover-viewport-gap, 0.75rem) -
-        var(--ds-popover-viewport-gap, 0.75rem)
-    )
-  );
-  max-inline-size: min(
-    var(--ds-popover-instance-max-width, var(--ds-popover-max-width-current)),
-    calc(
-      100dvw - var(--ds-popover-viewport-gap, 0.75rem) -
-        var(--ds-popover-viewport-gap, 0.75rem)
-    )
-  );
-  max-inline-size: min(
-    var(--ds-popover-instance-max-width, var(--ds-popover-max-width-current)),
-    calc(
-      100dvi - var(--ds-popover-viewport-gap, 0.75rem) -
-        var(--ds-popover-viewport-gap, 0.75rem)
-    )
-  );
-  max-block-size: min(
-    var(--ds-popover-max-height, 32rem),
-    calc(
-      100dvb - var(--ds-popover-viewport-gap, 0.75rem) -
-        var(--ds-popover-viewport-gap, 0.75rem)
-    )
-  );
+  min-inline-size: min(var(--ds-popover-min-width), calc(100dvi - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
+  max-inline-size: min(var(--ds-popover-max-width-current), calc(100dvi - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
+  max-block-size: min(var(--ds-popover-max-height), calc(100dvb - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
   overflow: visible;
-  border: var(--ds-popover-edge-width) solid var(--ds-popover-edge);
+  border: var(--ds-popover-edge-width-current) var(--ds-edge-standard-style) var(--ds-popover-edge-current);
   border-radius: var(--ds-popover-radius-current);
-  /* The surface-lift overlay is its own layer directly above the fill so the
-     tenant material chain in --ds-popover-surface stays untouched; it is inert
-     until a dark surface raises --ds-elevation-lift-strength, where the
-     near-invisible shadow ramp needs the luminance step. Level 3 matches the
-     --ds-elevation-3 shadow this surface declares. The bounded tint and motif
-     layers moved to the ::before decoration slot below so the governed
-     --ds-effect-intensity dial can dissolve them without flattening this
-     base/lift hierarchy. */
   background:
-    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-popover-surface);
-  /* WHOLE-VALUE ISOLATION, state 1 of 2 on this family. The depth chain is the
-     SOLE box-shadow. --ds-popover-shadow-current forwards transitively to
-     --ds-material-overlay-shadow (through --ds-popover-bordered-shadow), so the
-     keyline riding beside it as a comma-list item meant an authored `none`
-     expanded to `inset <literal>, none` -- invalid, voiding the declaration and
-     amputating this panel's depth. The forwarding is why a resolver that only
-     greps for a literal --ds-material-* occurrence misses this site. The
-     keyline moved to the decoration slot below. */
-  box-shadow: var(--ds-popover-shadow-current);
-  color: var(--ds-popover-ink);
-  font-family: var(--ds-font-family-base);
+    linear-gradient(var(--ds-popover-surface-lift, var(--ds-elevation-surface-3)), var(--ds-popover-surface-lift, var(--ds-elevation-surface-3))),
+    var(--ds-popover-surface-current);
+  box-shadow: var(--_ds-popover-layer-step-shadow, var(--ds-popover-shadow-current));
+  color: var(--ds-popover-ink-current);
+  font-family: var(--ds-type-body-font-family);
   text-align: start;
   text-wrap: pretty;
   overflow-wrap: anywhere;
@@ -218,676 +82,315 @@
   direction: inherit;
   unicode-bidi: plaintext;
   transform-origin: center bottom;
-  animation: ds-popover-enter-modern
-    var(--ds-popover-enter-duration, var(--ds-motion-calm))
-    var(--ds-popover-enter-easing, var(--ds-motion-ease-enter)) both;
+  animation: ds-popover-enter var(--ds-popover-enter-duration) var(--ds-popover-enter-easing) both;
   will-change: opacity, transform;
 }
 
-/* Material layer 3 (the tenant motif) rides this private decoration slot
- * instead of the surface background so the governed --ds-effect-intensity
- * dial scales it directly: at 0 the decoration dissolves while the opaque
- * fill, lift layer, edge, elevation and focus ring keep the hierarchy
- * (button.css/card.css idiom). The slot carries the motif ONLY -- the layer-2
- * sheen it used to stack underneath was struck by OVL-PV-01, since the
- * surface's own zenith keyline already supplies the top-light. Title, body
- * and the arrow paint above it; it never intercepts pointer input. */
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-part="surface"]::before {
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-custom-max-width='true'] {
+  max-inline-size: min(var(--ds-popover-instance-max-width), calc(100dvi - var(--ds-popover-viewport-gap) - var(--ds-popover-viewport-gap)));
+}
+
+/* The recipe motif scales with the effect dial on its own slot. */
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface']::before {
+  content: '';
   position: absolute;
   z-index: 0;
   inset: 0;
   border-radius: inherit;
   background-image: var(--ds-popover-texture-current);
-  content: "";
   opacity: var(--ds-effect-intensity);
   pointer-events: none;
 }
 
-/* Decoration slot for the zenith keyline, deliberately SEPARATE from the motif
-   slot above. The motif slot scales its whole layer by `opacity:
-   var(--ds-effect-intensity)`, and this keyline already scales its own alpha by
-   the same dial inside the color-mix -- sharing one slot would apply the
-   intensity twice and darken the hairline at every setting below 1. That is the
-   two-authorities defect in dial space: one dial applied twice. Keeping the
-   slots separate is load-bearing, so do NOT merge them in a future cleanup; the
-   shipped intensity-linearity probe fails if anyone does.
-   The value is an INSET LITERAL and must stay one (FAB-05): it does NOT read
-   --ds-material-overlay-highlight, whose reads were deliberately removed across
-   the overlay four, dropping its consumer count there to zero -- a channel
-   being retired, not a capability lost. The DECLARED VALUE is exactly what it
-   carried inside the surface's shadow list. `z-index: -1` inside the stacking
-   context the surface isolates reproduces the inset shadow's paint order, and
-   one slot on the base surface covers every state including the
-   collision-adjusted one.
-   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
-   is. A pseudo's inset shadow is drawn against a different box and radius than
-   the surface's own, so on any surface with BOTH a border and a radius -- which
-   this one has -- the corner arcs diverge (measured in Chromium; the delta grows
-   with radius and with device pixel ratio, and radius compensation reduces but
-   does not close it). This relocation is an IN-SCOPE VISUAL DELTA awaiting
-   adjudication, NOT mechanical isolation.
-   The surface is NON-SCROLLING (`overflow: visible`; the body is the
-   scrollport), which is the precondition that makes a pseudo anchor-correct
-   here. */
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-part="surface"]::after {
+/* The zenith keyline already scales by the effect dial, so it must not share the motif slot. */
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface']::after {
+  content: '';
   position: absolute;
   z-index: -1;
   inset: 0;
   border-radius: inherit;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
-  content: "";
+  box-shadow: inset 0 1px 0 var(--ds-popover-keyline, var(--ds-color-border-subtle));
   pointer-events: none;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-open="false"] {
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-open='false'] {
   pointer-events: none;
-  animation-name: ds-popover-exit-modern;
-  animation-duration: var(
-    --ds-popover-exit-duration,
-    var(--ds-motion-feedback)
-  );
-  animation-timing-function: var(
-    --ds-popover-exit-easing,
-    var(--ds-motion-ease-exit)
-  );
+  animation-name: ds-popover-exit;
+  animation-duration: var(--ds-popover-exit-duration);
+  animation-timing-function: var(--ds-popover-exit-easing);
 }
 
 @starting-style {
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"][data-open="true"] {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-open='true'] {
     opacity: 0;
     transform: var(--ds-popover-closed-transform);
   }
 }
 
-/* Directional choreography originates at the trigger-facing edge. */
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-placement^="bottom"] {
-  --ds-popover-closed-transform: translate3d(
-      0,
-      calc(0px - var(--ds-popover-motion-distance, 0.25rem)),
-      0
-    )
-    scale(var(--ds-popover-motion-scale, 0.975));
-
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='bottom'] {
+  --ds-popover-closed-transform: translate3d(0, calc(0px - var(--ds-popover-motion-distance)), 0) scale(var(--ds-popover-motion-scale));
   transform-origin: center top;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-placement^="left"] {
-  --ds-popover-closed-transform: translate3d(
-      var(--ds-popover-motion-distance, 0.25rem),
-      0,
-      0
-    )
-    scale(var(--ds-popover-motion-scale, 0.975));
-
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='left'] {
+  --ds-popover-closed-transform: translate3d(var(--ds-popover-motion-distance), 0, 0) scale(var(--ds-popover-motion-scale));
   transform-origin: right center;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-placement^="right"] {
-  --ds-popover-closed-transform: translate3d(
-      calc(0px - var(--ds-popover-motion-distance, 0.25rem)),
-      0,
-      0
-    )
-    scale(var(--ds-popover-motion-scale, 0.975));
-
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='right'] {
+  --ds-popover-closed-transform: translate3d(calc(0px - var(--ds-popover-motion-distance)), 0, 0) scale(var(--ds-popover-motion-scale));
   transform-origin: left center;
 }
 
-/* Bounded recipes expose meaningful white-label choices without forking DOM. */
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-recipe="minimal"] {
-  --ds-popover-surface: var(
-    --ds-popover-minimal-background,
-    var(--ds-material-overlay-background, var(--ds-surface-overlay))
-  );
-  --ds-popover-ink: var(
-    --ds-popover-minimal-foreground,
-    var(--ds-color-text-primary)
-  );
-  --ds-popover-muted-ink: var(
-    --ds-popover-minimal-muted-foreground,
-    var(--ds-color-text-secondary)
-  );
-  --ds-popover-edge: var(--ds-popover-minimal-border, transparent);
-  --ds-popover-edge-width: var(--ds-popover-minimal-border-width, 1px);
-  --ds-popover-radius-current: var(
-    --ds-popover-minimal-radius,
-    var(--ds-radius-md)
-  );
-  --ds-popover-shadow-current: var(
-    --ds-popover-minimal-shadow,
-    var(--ds-shadow-md)
-  );
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-variant='minimal'] {
+  --ds-popover-surface-current: var(--ds-popover-minimal-background, var(--ds-material-overlay-background));
+  --ds-popover-ink-current: var(--ds-popover-minimal-foreground, var(--ds-color-text-primary));
+  --ds-popover-muted-ink-current: var(--ds-popover-minimal-muted-foreground, var(--ds-color-text-secondary));
+  --ds-popover-edge-current: var(--ds-popover-minimal-border, var(--ds-color-border-subtle));
+  --ds-popover-edge-width-current: var(--ds-popover-minimal-border-width, var(--ds-edge-standard-width));
+  --ds-popover-radius-current: var(--ds-popover-minimal-radius, var(--ds-radius-md));
+  --ds-popover-shadow-current: var(--ds-popover-minimal-shadow, var(--ds-shadow-md));
   --ds-popover-texture-current: var(--ds-popover-minimal-texture, none);
-  --ds-popover-padding-block-current: var(
-    --ds-popover-minimal-padding-block,
-    var(--ds-spacing-sm)
-  );
-  --ds-popover-padding-inline-current: var(
-    --ds-popover-minimal-padding-inline,
-    var(--ds-spacing-sm)
-  );
-  --ds-popover-max-width-current: var(--ds-popover-minimal-max-width, 18rem);
+  --ds-popover-padding-block-current: var(--ds-popover-minimal-padding-block, var(--ds-spacing-sm));
+  --ds-popover-padding-inline-current: var(--ds-popover-minimal-padding-inline, var(--ds-spacing-sm));
+  --ds-popover-max-width-current: var(--ds-popover-minimal-max-width, var(--ds-popover-max-width));
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-recipe="inverse"] {
-  --ds-popover-surface: var(
-    --ds-popover-inverse-background,
-    var(--ds-color-text-primary)
-  );
-  /* The inverse surface paints on --ds-color-text-primary, so its ink is the inverse role. */
-  --ds-popover-ink: var(
-    --ds-popover-inverse-foreground,
-    var(--ds-color-text-inverse)
-  );
-  --ds-popover-muted-ink: var(
-    --ds-popover-inverse-muted-foreground,
-    color-mix(in srgb, var(--ds-popover-ink) 72%, transparent)
-  );
-  --ds-popover-edge: var(
-    --ds-popover-inverse-border,
-    color-mix(in srgb, var(--ds-popover-ink) 18%, transparent)
-  );
-  --ds-popover-radius-current: var(
-    --ds-popover-inverse-radius,
-    var(--ds-radius-lg)
-  );
-  --ds-popover-shadow-current: var(
-    --ds-popover-inverse-shadow,
-    var(--ds-shadow-xl)
-  );
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-variant='inverse'] {
+  --ds-popover-surface-current: var(--ds-popover-inverse-background, var(--ds-color-text-primary));
+  --ds-popover-ink-current: var(--ds-popover-inverse-foreground, var(--ds-color-text-inverse));
+  --ds-popover-muted-ink-current: var(--ds-popover-inverse-muted-foreground, var(--ds-color-text-inverse));
+  --ds-popover-edge-current: var(--ds-popover-inverse-border, var(--ds-color-text-inverse));
+  --ds-popover-radius-current: var(--ds-popover-inverse-radius, var(--ds-radius-lg));
+  --ds-popover-shadow-current: var(--ds-popover-inverse-shadow, var(--ds-shadow-xl));
   --ds-popover-texture-current: var(--ds-popover-inverse-texture, none);
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-recipe="rich"] {
-  --ds-popover-surface: var(
-    --ds-popover-rich-background,
-    var(--ds-material-raised-background, var(--ds-surface-raised))
-  );
-  --ds-popover-ink: var(
-    --ds-popover-rich-foreground,
-    var(--ds-color-text-primary)
-  );
-  --ds-popover-muted-ink: var(
-    --ds-popover-rich-muted-foreground,
-    var(--ds-color-text-secondary)
-  );
-  --ds-popover-edge: var(
-    --ds-popover-rich-border,
-    var(--ds-material-raised-border, var(--ds-color-border-secondary))
-  );
-  --ds-popover-radius-current: var(
-    --ds-popover-rich-radius,
-    var(--ds-radius-xl, var(--ds-radius-lg))
-  );
-  --ds-popover-shadow-current: var(
-    --ds-popover-rich-shadow,
-    var(--ds-material-raised-shadow, var(--ds-shadow-xl))
-  );
-  --ds-popover-texture-current: var(
-    --ds-popover-rich-texture,
-    var(--ds-material-raised-texture, none)
-  );
-  --ds-popover-padding-block-current: var(
-    --ds-popover-rich-padding-block,
-    var(--ds-spacing-lg)
-  );
-  --ds-popover-padding-inline-current: var(
-    --ds-popover-rich-padding-inline,
-    var(--ds-spacing-lg)
-  );
-  --ds-popover-max-width-current: var(--ds-popover-rich-max-width, 28rem);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-variant='rich'] {
+  --ds-popover-surface-current: var(--ds-popover-rich-background, var(--ds-material-raised-background));
+  --ds-popover-ink-current: var(--ds-popover-rich-foreground, var(--ds-color-text-primary));
+  --ds-popover-muted-ink-current: var(--ds-popover-rich-muted-foreground, var(--ds-color-text-secondary));
+  --ds-popover-edge-current: var(--ds-popover-rich-border, var(--ds-color-border-secondary));
+  --ds-popover-radius-current: var(--ds-popover-rich-radius, var(--ds-radius-xl));
+  --ds-popover-shadow-current: var(--ds-popover-rich-shadow, var(--ds-shadow-xl));
+  --ds-popover-texture-current: var(--ds-popover-rich-texture, none);
+  --ds-popover-padding-block-current: var(--ds-popover-rich-padding-block, var(--ds-spacing-lg));
+  --ds-popover-padding-inline-current: var(--ds-popover-rich-padding-inline, var(--ds-spacing-lg));
+  --ds-popover-max-width-current: var(--ds-popover-rich-max-width, var(--ds-popover-max-width));
 }
 
-/* Material recipe and density are intentionally orthogonal. The density
- * attribute is copied through the portal boundary, so DB-driven tenants and
- * static vertical themes preserve geometry in either positioning strategy. */
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-density="compact"] {
-  --ds-popover-padding-block-current: var(
-    --ds-popover-compact-padding-block,
-    var(--ds-spacing-xs)
-  );
-  --ds-popover-padding-inline-current: var(
-    --ds-popover-compact-padding-inline,
-    var(--ds-spacing-sm)
-  );
-  --ds-popover-title-gap-current: var(
-    --ds-popover-compact-title-gap,
-    var(--ds-popover-title-gap, var(--ds-spacing-xs))
-  );
-  --ds-popover-body-max-height: var(--ds-popover-compact-max-height, 22rem);
+/* Recipe and density are orthogonal: density only retunes the padding rhythm. */
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='compact'] {
+  --ds-popover-padding-block-current: var(--ds-popover-compact-padding-block, var(--ds-spacing-xs));
+  --ds-popover-padding-inline-current: var(--ds-popover-compact-padding-inline, var(--ds-spacing-sm));
+  --ds-popover-title-gap-current: var(--ds-popover-compact-title-gap, var(--ds-spacing-xs));
+  --ds-popover-body-max-height-current: var(--ds-popover-compact-max-height, var(--ds-popover-body-max-height));
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-density="comfortable"] {
-  --ds-popover-padding-block-current: var(
-    --ds-popover-comfortable-padding-block,
-    var(--ds-spacing-md)
-  );
-  --ds-popover-padding-inline-current: var(
-    --ds-popover-comfortable-padding-inline,
-    var(--ds-spacing-md)
-  );
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='comfortable'] {
+  --ds-popover-padding-block-current: var(--ds-popover-comfortable-padding-block, var(--ds-spacing-md));
+  --ds-popover-padding-inline-current: var(--ds-popover-comfortable-padding-inline, var(--ds-spacing-md));
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-density="spacious"] {
-  --ds-popover-padding-block-current: var(
-    --ds-popover-spacious-padding-block,
-    var(--ds-spacing-lg)
-  );
-  --ds-popover-padding-inline-current: var(
-    --ds-popover-spacious-padding-inline,
-    var(--ds-spacing-lg)
-  );
-  --ds-popover-title-gap-current: var(
-    --ds-popover-spacious-title-gap,
-    var(--ds-popover-title-gap, var(--ds-spacing-md))
-  );
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='spacious'] {
+  --ds-popover-padding-block-current: var(--ds-popover-spacious-padding-block, var(--ds-spacing-lg));
+  --ds-popover-padding-inline-current: var(--ds-popover-spacious-padding-inline, var(--ds-spacing-lg));
+  --ds-popover-title-gap-current: var(--ds-popover-spacious-title-gap, var(--ds-spacing-md));
 }
 
-/* WHOLE-VALUE ISOLATION, state 2 of 2. This state carried the SAME defect as
-   the base surface, with a narrower trigger, and a state-scoped fix that only
-   held in the default state would have been the same defect wearing a
-   condition. --ds-popover-collision-shadow is declared NOWHERE in the repo, so
-   its fallback always resolves to --ds-popover-shadow-current, which forwards
-   on to --ds-material-overlay-shadow: an authored `none` therefore expanded to
-   `inset <literal>, none` here too. Depth is now the sole box-shadow; the
-   decoration slot supplies the keyline in every state, so this state needs no
-   keyline of its own. */
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-collision-adjusted="true"] {
-  box-shadow: var(
-    --ds-popover-collision-shadow,
-    var(--ds-popover-shadow-current)
-  );
+/* Inside a modal the surface steps one rung up the elevation ramp. */
+.ds-modal.ds-modal--modern .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
+  --_ds-popover-layer-step-shadow: var(--ds-elevation-5);
 }
 
-/* Nested-layer grammar: a popover that opens INSIDE a modal (the modal's
- * top-layer host keeps the surface in the dialog's subtree) steps one rung
- * up the elevation ramp so the layering reads without a z-index war. The
- * private bridge slots into the base shadow chain AFTER every authored
- * channel, so a tenant shadow or a deliberate material recipe still wins
- * and only the unauthored default gains the step. The step targets rung 5:
- * the modal chamber's own floor moved to rung 4 (overlay-modal.css), so
- * rung 4 here would sit the contextual surface level with its parent. */
-.ds-modal.ds-modal--modern
-  .rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-part="surface"] {
-  --_ds-popover-layer-step-shadow: var(
-    --ds-elevation-5,
-    var(--ds-elevation-4, var(--ds-elevation-3, var(--ds-shadow-lg)))
-  );
-}
-
-/* Top-layer popovers must neutralize UA chrome explicitly. */
-.rottay-popover--modern.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-part="surface"][data-ds-position-strategy="anchor-css"] {
+/* A top-layer surface neutralizes the UA popover chrome explicitly. */
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'][data-ds-position-strategy='anchor-css'] {
   overflow: visible;
-  border: var(--ds-popover-edge-width) solid var(--ds-popover-edge);
+  border: var(--ds-popover-edge-width-current) var(--ds-edge-standard-style) var(--ds-popover-edge-current);
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"]
-  > [data-part="title"] {
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='title'] {
   position: relative;
   z-index: 1;
-  padding-block: var(--ds-popover-title-padding-block, var(--ds-spacing-sm));
-  padding-inline: var(
-    --ds-popover-title-padding-inline,
-    var(--ds-popover-padding-inline-current)
-  );
-  border-block-end: var(--ds-popover-title-divider-width, 1px) solid
-    var(
-      --ds-popover-title-divider,
-      color-mix(in srgb, var(--ds-popover-edge) 74%, transparent)
-    );
+  padding-block: var(--ds-popover-title-padding-block);
+  padding-inline: var(--ds-popover-padding-inline-current);
+  border-block-end: var(--ds-popover-title-divider-width) var(--ds-edge-standard-style)
+    var(--ds-popover-title-divider, var(--ds-color-border-subtle));
   border-start-start-radius: inherit;
   border-start-end-radius: inherit;
-  /* OVL-PV-02: the TITLE sheen crosses title content, which contentSafeZone
-     forbids even for sanctioned motifs, and it mixes from --ds-color-primary
-     rather than currentColor so it tints toward the brand hue on a surface the
-     ledger wants monochrome. Same remedy: the tenant-reachable role channel goes
-     between the family channel and the literal, so a direction that forbids
-     glossy gradients can turn it off without a component branch. */
-  /* TITLE SHEEN DELETED, symmetric with the dropdown sweep ruling. Two laws
-     converge here. ONE CHANNEL, ONE PAINT SITE PER FAMILY: the panel already
-     consumes the texture channel for its pseudo-element and arrow, so a nested
-     part re-reading a tenant channel paints it twice. And a third decoration on
-     top of keyline plus texture is the stacked-decoration smell both tenant
-     directions forbid — the same reason the dropdown sweep went. The title now
-     reads NO tenant channel at all; it inherits the surface's resolved material.
-     If a BitHire title sheen is wanted back it returns engine-owned and
-     image-typed inside the existing texture-current stack, alpha scaled by
-     --ds-effect-intensity so the ledger zeroes it — never as a new channel and
-     never crossing text at full alpha. */
   background: var(--ds-popover-title-background, none);
-  color: var(--ds-popover-title-color, var(--ds-popover-ink));
-  font: var(
-    --ds-popover-title-type,
-    var(
-      --ds-type-label,
-      var(--ds-font-weight-semibold) var(--ds-font-size-sm) /
-        var(--ds-line-height-snug) var(--ds-font-family-heading)
-    )
-  );
-  letter-spacing: var(
-    --ds-popover-title-letter-spacing,
-    var(--ds-letter-spacing-heading)
-  );
+  color: var(--ds-popover-ink-current);
+  font: var(--ds-popover-title-type, var(--ds-type-label));
+  letter-spacing: var(--ds-popover-title-letter-spacing, var(--ds-type-label-letter-spacing));
   text-wrap: balance;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"]
-  > [data-part="body"] {
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='body'] {
   position: relative;
   z-index: 1;
   min-inline-size: 0;
-  max-block-size: var(--ds-popover-body-max-height, 26rem);
+  max-block-size: var(--ds-popover-body-max-height-current);
   padding-block: var(--ds-popover-padding-block-current);
   padding-inline: var(--ds-popover-padding-inline-current);
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
-  /* quiet scrollbar: thin track alongside the stable gutter, so long content
-     scrolls without chrome weight (list-toolbar precedent) */
-  scrollbar-width: var(--ds-popover-body-scrollbar-width, thin);
-  color: var(--ds-popover-content-color, var(--ds-popover-muted-ink));
-  font: var(
-    --ds-popover-body-type,
-    var(
-      --ds-type-body-sm,
-      var(--ds-font-weight-normal) var(--ds-font-size-sm) /
-        var(--ds-line-height-relaxed) var(--ds-font-family-base)
-    )
-  );
+  scrollbar-width: var(--ds-popover-body-scrollbar-width);
+  color: var(--ds-popover-muted-ink-current);
+  font: var(--ds-popover-body-type, var(--ds-type-supporting));
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"]:not([data-has-title="true"])
-  > [data-part="body"] {
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface']:not([data-has-title='true']) > [data-part='body'] {
   border-radius: inherit;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"]:focus-visible,
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"]:focus-within {
-  outline: var(--ds-focus-ring-width) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface']:focus-within {
+  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-focus-ring-color);
   outline-offset: var(--ds-focus-ring-offset);
 }
 
-/* Arrow paint derives from the same local material as the surface. The fill
-   carries the SAME elevation-lift layer the surface declares, so a dark theme
-   with a raised lift strength does not seam a darker arrow against a lifted
-   panel at the joint. The tenant motif moves to the arrow's own `::before`
-   decoration slot (the surface's idiom): it scales by the governed
-   `--ds-effect-intensity` dial exactly like the surface's, so
-   `effectIntensity: 0` dissolves the motif on both sides of the joint instead
-   of leaving a textured arrow against a flattened panel. */
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"]
-  > [data-part="arrow"][data-part="arrow"] {
+/* The arrow carries the surface's own fill and lift so the joint never seams. */
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='arrow'][data-part='arrow'] {
   position: absolute;
   z-index: 0;
-  inline-size: var(--ds-popover-arrow-size, 0.6875rem);
-  block-size: var(--ds-popover-arrow-size, 0.6875rem);
-  border: var(--ds-popover-edge-width) solid var(--ds-popover-edge);
+  inline-size: var(--ds-popover-arrow-size);
+  block-size: var(--ds-popover-arrow-size);
+  border: var(--ds-popover-edge-width-current) var(--ds-edge-standard-style) var(--ds-popover-edge-current);
   background:
-    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-popover-surface);
+    linear-gradient(var(--ds-popover-surface-lift, var(--ds-elevation-surface-3)), var(--ds-popover-surface-lift, var(--ds-elevation-surface-3))),
+    var(--ds-popover-surface-current);
   transform: rotate(45deg);
-  transition: inset-block-start var(--ds-motion-feedback)
-      var(--ds-motion-ease-move),
-    inset-block-end var(--ds-motion-feedback) var(--ds-motion-ease-move),
-    inset-inline-start var(--ds-motion-feedback) var(--ds-motion-ease-move),
-    inset-inline-end var(--ds-motion-feedback) var(--ds-motion-ease-move);
+  transition:
+    inset-block-start var(--ds-popover-arrow-duration) var(--ds-motion-ease-move),
+    inset-block-end var(--ds-popover-arrow-duration) var(--ds-motion-ease-move),
+    inset-inline-start var(--ds-popover-arrow-duration) var(--ds-motion-ease-move),
+    inset-inline-end var(--ds-popover-arrow-duration) var(--ds-motion-ease-move);
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"]
-  > [data-part="arrow"][data-part="arrow"]::before {
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='arrow'][data-part='arrow']::before {
+  content: '';
   position: absolute;
   inset: 0;
   background-image: var(--ds-popover-texture-current);
-  content: "";
   opacity: var(--ds-effect-intensity);
   pointer-events: none;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-placement^="top"]
-  > [data-part="arrow"] {
-  inset-block-end: calc(var(--ds-popover-arrow-size, 0.6875rem) / -2);
-  inset-inline-start: calc(50% - var(--ds-popover-arrow-size, 0.6875rem) / 2);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='top'] > [data-part='arrow'] {
+  inset-block-end: calc(var(--ds-popover-arrow-size) / -2);
+  inset-inline-start: calc(50% - var(--ds-popover-arrow-size) / 2);
   border-block-start: 0;
   border-inline-start: 0;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-placement^="bottom"]
-  > [data-part="arrow"] {
-  inset-block-start: calc(var(--ds-popover-arrow-size, 0.6875rem) / -2);
-  inset-inline-start: calc(50% - var(--ds-popover-arrow-size, 0.6875rem) / 2);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='bottom'] > [data-part='arrow'] {
+  inset-block-start: calc(var(--ds-popover-arrow-size) / -2);
+  inset-inline-start: calc(50% - var(--ds-popover-arrow-size) / 2);
   border-block-end: 0;
   border-inline-end: 0;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-placement^="left"]
-  > [data-part="arrow"] {
-  inset-block-start: calc(50% - var(--ds-popover-arrow-size, 0.6875rem) / 2);
-  inset-inline-end: calc(var(--ds-popover-arrow-size, 0.6875rem) / -2);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='left'] > [data-part='arrow'] {
+  inset-block-start: calc(50% - var(--ds-popover-arrow-size) / 2);
+  inset-inline-end: calc(var(--ds-popover-arrow-size) / -2);
   border-block-end: 0;
   border-inline-start: 0;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-placement^="right"]
-  > [data-part="arrow"] {
-  inset-block-start: calc(50% - var(--ds-popover-arrow-size, 0.6875rem) / 2);
-  inset-inline-start: calc(var(--ds-popover-arrow-size, 0.6875rem) / -2);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='right'] > [data-part='arrow'] {
+  inset-block-start: calc(50% - var(--ds-popover-arrow-size) / 2);
+  inset-inline-start: calc(var(--ds-popover-arrow-size) / -2);
   border-block-start: 0;
   border-inline-end: 0;
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-start"][data-placement^="top"]
-  > [data-part="arrow"],
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-start"][data-placement^="bottom"]
-  > [data-part="arrow"] {
-  inset-inline-start: var(--ds-popover-arrow-edge-offset, 1.25rem);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-arrow-centered='false']:is([data-placement^='top'], [data-placement^='bottom'])[data-placement$='-start'] > [data-part='arrow'] {
+  inset-inline-start: var(--ds-popover-arrow-edge-offset);
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-end"][data-placement^="top"]
-  > [data-part="arrow"],
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-end"][data-placement^="bottom"]
-  > [data-part="arrow"] {
-  inset-inline: auto var(--ds-popover-arrow-edge-offset, 1.25rem);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-arrow-centered='false']:is([data-placement^='top'], [data-placement^='bottom'])[data-placement$='-end'] > [data-part='arrow'] {
+  inset-inline: auto var(--ds-popover-arrow-edge-offset);
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-start"][data-placement^="left"]
-  > [data-part="arrow"],
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-start"][data-placement^="right"]
-  > [data-part="arrow"] {
-  inset-block-start: var(--ds-popover-arrow-edge-offset, 1.25rem);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-arrow-centered='false']:is([data-placement^='left'], [data-placement^='right'])[data-placement$='-start'] > [data-part='arrow'] {
+  inset-block-start: var(--ds-popover-arrow-edge-offset);
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-end"][data-placement^="left"]
-  > [data-part="arrow"],
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-centered="false"][data-placement$="-end"][data-placement^="right"]
-  > [data-part="arrow"] {
-  inset-block: auto var(--ds-popover-arrow-edge-offset, 1.25rem);
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-arrow-centered='false']:is([data-placement^='left'], [data-placement^='right'])[data-placement$='-end'] > [data-part='arrow'] {
+  inset-block: auto var(--ds-popover-arrow-edge-offset);
 }
 
-/* JS measurement and post-collision geometry publish the anchor's real
- * cross-axis center. This higher-fidelity position wins over the preferred
- * alignment offsets above, but remains clamped away from rounded corners. */
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-tracked="true"][data-placement^="top"]
-  > [data-part="arrow"],
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-tracked="true"][data-placement^="bottom"]
-  > [data-part="arrow"] {
+/* A measured anchor offset points the arrow at the trigger, clamped inside the rounded edge. */
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-arrow-tracked='true']:is([data-placement^='top'], [data-placement^='bottom']) > [data-part='arrow'] {
   inset-inline: auto;
   inset-inline-start: clamp(
-    var(--ds-popover-arrow-edge-offset, 1.25rem),
-    calc(
-      var(--ds-popover-arrow-anchor-offset) -
-        var(--ds-popover-arrow-size, 0.6875rem) / 2
-    ),
-    calc(
-      100% - var(--ds-popover-arrow-edge-offset, 1.25rem) -
-        var(--ds-popover-arrow-size, 0.6875rem)
-    )
+    var(--ds-popover-arrow-edge-offset),
+    calc(var(--ds-popover-arrow-anchor-offset) - var(--ds-popover-arrow-size) / 2),
+    calc(100% - var(--ds-popover-arrow-edge-offset) - var(--ds-popover-arrow-size))
   );
 }
 
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-tracked="true"][data-placement^="left"]
-  > [data-part="arrow"],
-.rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-arrow-tracked="true"][data-placement^="right"]
-  > [data-part="arrow"] {
+.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-arrow-tracked='true']:is([data-placement^='left'], [data-placement^='right']) > [data-part='arrow'] {
   inset-block: auto;
   inset-block-start: clamp(
-    var(--ds-popover-arrow-edge-offset, 1.25rem),
-    calc(
-      var(--ds-popover-arrow-anchor-offset) -
-        var(--ds-popover-arrow-size, 0.6875rem) / 2
-    ),
-    calc(
-      100% - var(--ds-popover-arrow-edge-offset, 1.25rem) -
-        var(--ds-popover-arrow-size, 0.6875rem)
-    )
+    var(--ds-popover-arrow-edge-offset),
+    calc(var(--ds-popover-arrow-anchor-offset) - var(--ds-popover-arrow-size) / 2),
+    calc(100% - var(--ds-popover-arrow-edge-offset) - var(--ds-popover-arrow-size))
   );
 }
 
 @media (pointer: coarse) {
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"]
-    > [data-part="body"]
-    :where(button, [role="button"], a, input, select, textarea) {
-    min-block-size: var(--ds-popover-touch-target, 2.75rem);
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='body'] :where(button, [role='button'], a, input, select, textarea) {
+    min-block-size: var(--ds-popover-touch-target, var(--ds-touch-target-min));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"][data-part="surface"] {
-    animation-duration: 1ms;
-    animation-timing-function: linear;
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
+    animation: none;
     transform: none;
     will-change: auto;
   }
 
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"]
-    > [data-part="arrow"] {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='arrow'] {
     transition: none;
   }
 }
 
-html[data-ds-motion="reduced"]
-  .rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"][data-part="surface"] {
-  animation-duration: 1ms;
-  animation-timing-function: linear;
-  transform: none;
-  will-change: auto;
-}
-
-html[data-ds-motion="reduced"]
-  .rottay-popover--modern[data-part="trigger"]
-  > [data-part="surface"]
-  > [data-part="arrow"] {
-  transition: none;
-}
-
-/* Reduced transparency: the shared overlay material channel
- * (--ds-material-overlay-background) may resolve translucent, and a tenant
- * may do the same through the recipe channels. Users who request reduced
- * transparency get an opaque fill instead of a see-through panel
- * (semantic-surface.css idiom): the decoration layers drop out and the
- * hierarchy rides the opaque fill, edge and elevation. The inverse recipe
- * keeps its deliberately opaque dark fill. */
 @media (prefers-reduced-transparency: reduce) {
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"][data-part="surface"] {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
     --ds-popover-texture-current: none;
   }
 
-  /* The arrow inherits the redefined custom properties from the surface, so
-     its fill and motif follow without a second declaration.
-     The family's own opaque fill still wins: `--ds-popover-bg` is a declared
-     solid a tenant owns, so the guard must not overwrite it.
-     `--ds-material-overlay-opaque` replaces only the ad-hoc surface pick that
-     used to close this chain. */
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"][data-part="surface"]:not([data-recipe="inverse"]) {
-    --ds-popover-surface: var(--ds-popover-bg, var(--ds-material-overlay-opaque, var(--ds-surface-card)));
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface']:not([data-variant='inverse']) {
+    --ds-popover-surface-current: var(--ds-popover-opaque-background, var(--ds-material-overlay-opaque));
   }
 }
 
 @media (forced-colors: active) {
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"][data-part="surface"] {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
     --ds-popover-texture-current: none;
-
     border-color: CanvasText;
     background: Canvas;
     box-shadow: none;
     color: CanvasText;
   }
 
-  /* The keyline moved to the decoration slot, so the reset above no longer
-     reaches it. Cleared explicitly so the forced palette stays as flat as it
-     was when both shadows shared one declaration. */
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"][data-part="surface"]::after {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface']::after {
     box-shadow: none;
   }
 
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"]
-    > [data-part="title"] {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='title'] {
     border-color: CanvasText;
     background: Canvas;
     color: CanvasText;
   }
 
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"]
-    > [data-part="body"] {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='body'] {
     color: CanvasText;
   }
 
-  /* Doubled data-part ties the base arrow rule's (0,5,0) so the system-color
-     treatment actually lands (later source wins): the fill flattens to Canvas
-     -- resetting the elevation-lift background-image with it -- and the frame
-     keeps a system color. */
-  .rottay-popover--modern[data-part="trigger"]
-    > [data-part="surface"]
-    > [data-part="arrow"][data-part="arrow"] {
+  .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='arrow'][data-part='arrow'] {
     border-color: CanvasText;
     background: Canvas;
   }
