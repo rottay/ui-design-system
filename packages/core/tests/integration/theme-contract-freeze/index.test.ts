@@ -805,18 +805,22 @@ describe("channel minting and CSS text have declared owners", () => {
     expect(CHILD_STYLE_SINKS).not.toContain("components/planted/index.tsx");
   });
 
+  // One owner composes the WHOLE document -- banner, unlayered base rule,
+  // mode rules, `auto` media copy. Two spellings of one format is a drift
+  // that surfaces as a mounted artifact the resolver refuses for no reason.
+  const ARTIFACT_BANNER = /TenantThemeArtifact v1 \| \$\{/;
+  // The mode half is the COMPOSITION in every spelling that writes it: a
+  // literal prelude, a templated one, and the mode-selector machinery.
+  const MODE_RULE_COMPOSITION =
+    /@media \(prefers-color-scheme: (?:\$\{[^}]*\}|light|dark)\)|modeSelector\(/;
+
   it("emission is the ONLY productive composer of a tenant artifact", () => {
-    // One owner composes the WHOLE document -- banner, unlayered base rule,
-    // mode rules, `auto` media copy. Two spellings of one format is a drift
-    // that surfaces as a mounted artifact the resolver refuses for no reason.
-    const ARTIFACT_BANNER = /TenantThemeArtifact v1 \| \$\{/;
-    const PREFERS_DARK_COMPOSITION = /@media \(prefers-color-scheme: dark\) \{/;
     // RAW source: the banner IS a CSS comment, so a comment stripper deletes
     // the very marker this rule is about.
     const composers = productionSources("")
       .filter((file) => {
         const source = readFileSync(file, "utf8");
-        return ARTIFACT_BANNER.test(source) && PREFERS_DARK_COMPOSITION.test(source);
+        return ARTIFACT_BANNER.test(source) && MODE_RULE_COMPOSITION.test(source);
       })
       .map(rel)
       .sort();
@@ -824,17 +828,24 @@ describe("channel minting and CSS text have declared owners", () => {
   });
 
   it("MUTANT: a second artifact composer is caught", () => {
-    const ARTIFACT_BANNER = /TenantThemeArtifact v1 \| \$\{/;
-    const PREFERS_DARK_COMPOSITION = /@media \(prefers-color-scheme: dark\) \{/;
-    const planted =
+    const planted = (modeComposition: string) =>
       "const css = [`/* TenantThemeArtifact v1 | ${version} | ${digest} */`," +
-      "`@media (prefers-color-scheme: dark) {`].join('');";
-    expect(ARTIFACT_BANNER.test(planted)).toBe(true);
-    expect(PREFERS_DARK_COMPOSITION.test(planted)).toBe(true);
+      `\`${modeComposition}\`].join('');`;
+    for (const modeComposition of [
+      "@media (prefers-color-scheme: dark) {",
+      "@media (prefers-color-scheme: ${block.mode}) {",
+      "modeSelector(block.mode)",
+    ]) {
+      expect(ARTIFACT_BANNER.test(planted(modeComposition))).toBe(true);
+      expect(MODE_RULE_COMPOSITION.test(planted(modeComposition))).toBe(true);
+    }
     // and prose about the format is not a finding: BOTH markers are required,
     // and a sentence naming the banner interpolates nothing.
     const prose = "// the artifact banner is TenantThemeArtifact v1 | version | digest";
     expect(ARTIFACT_BANNER.test(prose)).toBe(false);
+    // the second marker carries its own weight: the mode machinery WITHOUT a
+    // banner is the contracts owner that also has it, and is not a composer.
+    expect(ARTIFACT_BANNER.test("const rule = modeSelector(block.mode);")).toBe(false);
   });
 
   it("the retired kernel grammar owner is physically gone", () => {
