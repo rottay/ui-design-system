@@ -1,7 +1,8 @@
 /**
  * The alert family (Callout folded in) in a real browser: every decision its
- * paint consumes moves the surface with a negative control; the dismiss stays
- * at the inline end under RTL, and language, loading and accessibility hold.
+ * paint consumes moves the surface with a negative control; the folded callout
+ * keeps its own lighter weight, the dismiss stays at the inline end under RTL,
+ * and language, loading and accessibility hold.
  */
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -39,6 +40,17 @@ const markup = [
     </ModernCallout>,
   )}</div>`,
 ].join('');
+
+/** Computed value of a custom property that resolves to nothing. */
+const TRANSPARENT = 'rgba(0, 0, 0, 0)';
+
+/** Each alert tone beside the callout spelling that maps onto it. */
+const CALLOUT_TONES = [
+  { alert: 'info', callout: 'info' },
+  { alert: 'success', callout: 'success' },
+  { alert: 'warning', callout: 'warning' },
+  { alert: 'error', callout: 'danger' },
+] as const;
 
 const ROOT = "#alert [data-part='root']";
 const CLOSE = "#alert [data-part='close-button']";
@@ -88,24 +100,55 @@ describe('alert direction, callout fold, language, loading and accessibility', (
     expect(Number(r.rtlClose)).toBeLessThan(Number(r.rtlTitle));
   }, 60_000);
 
-  it('paints a callout as the same surface as an alert of its tone', async () => {
+  it('paints a callout on the subtle wash of its tone, where the alert keeps the standard one', async () => {
+    // Each reference node declares nothing but one family channel, so the
+    // assertion compares resolved paint against resolved paint: it states which
+    // step of the ramp the surface is on without naming the colour that step
+    // happens to produce for this tenant.
+    const references = CALLOUT_TONES.map(
+      ({ alert }) =>
+        `<div id="sub-${alert}" style="background-color: var(--ds-alert-${alert}-wash-subtle)"></div>` +
+        `<div id="std-${alert}" style="background-color: var(--ds-alert-${alert}-wash)"></div>`,
+    ).join('');
+    const surfaces = CALLOUT_TONES.map(
+      ({ alert, callout }) =>
+        `<div id="a-${alert}">${alertMarkup({ type: alert, closable: false })}</div>` +
+        `<div id="c-${alert}">${renderToStaticMarkup(
+          <ModernCallout tone={callout} title="Review pending">
+            Two approvals are outstanding.
+          </ModernCallout>,
+        )}</div>`,
+    ).join('');
+
     const result = await measureArms({
       vertical: 'bithire',
-      markup: `<div id="a">${alertMarkup({ type: 'info', closable: false })}</div><div id="c">${renderToStaticMarkup(
-        <ModernCallout tone="info" title="Review pending">Two approvals are outstanding.</ModernCallout>,
-      )}</div>`,
+      markup: `${references}${surfaces}`,
       arms: { base: {} },
-      targets: [
-        { id: 'alertBg', selector: "#a [data-part='root']", property: 'background-color' },
-        { id: 'calloutBg', selector: "#c [data-part='root']", property: 'background-color' },
-        { id: 'alertTitle', selector: "#a [data-part='title']", property: 'font-size' },
-        { id: 'calloutTitle', selector: "#c [data-part='title']", property: 'font-size' },
-      ],
+      targets: CALLOUT_TONES.flatMap(({ alert }) => [
+        { id: `${alert}Subtle`, selector: `#sub-${alert}`, property: 'background-color' },
+        { id: `${alert}Standard`, selector: `#std-${alert}`, property: 'background-color' },
+        { id: `${alert}CalloutBg`, selector: `#c-${alert} [data-part='root']`, property: 'background-color' },
+        { id: `${alert}AlertBg`, selector: `#a-${alert} [data-part='root']`, property: 'background-color' },
+        { id: `${alert}CalloutInk`, selector: `#c-${alert} [data-part='title']`, property: 'color' },
+        { id: `${alert}AlertInk`, selector: `#a-${alert} [data-part='title']`, property: 'color' },
+      ]),
     });
     const r = result.base!;
-    expect(r.calloutBg).toBe(r.alertBg);
-    expect(r.calloutTitle).toBe(r.alertTitle);
-  }, 60_000);
+
+    for (const { alert } of CALLOUT_TONES) {
+      // An undeclared channel computes to transparent, which would make every
+      // comparison below pass against nothing.
+      expect(r[`${alert}Subtle`], `${alert} subtle channel`).not.toBe(TRANSPARENT);
+      expect(r[`${alert}Standard`], `${alert} standard channel`).not.toBe(TRANSPARENT);
+      expect(r[`${alert}Subtle`], `${alert} ramp steps`).not.toBe(r[`${alert}Standard`]);
+
+      expect(r[`${alert}CalloutBg`], `${alert} callout`).toBe(r[`${alert}Subtle`]);
+      expect(r[`${alert}AlertBg`], `${alert} alert`).toBe(r[`${alert}Standard`]);
+      expect(r[`${alert}AlertBg`], `${alert} alert is not subtle`).not.toBe(r[`${alert}Subtle`]);
+
+      expect(r[`${alert}CalloutInk`], `${alert} ink`).toBe(r[`${alert}AlertInk`]);
+    }
+  }, 120_000);
 
   it('names its dismiss from the active catalog and describes it with the message', () => {
     render(
