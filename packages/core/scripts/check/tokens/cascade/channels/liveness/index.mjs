@@ -1518,14 +1518,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     channels: Object.freeze(['--ds-color-error-900', '--ds-color-success-900']),
   }),
   Object.freeze({
-    owner: 'WO-FAM-01',
-    classification: LIVENESS.readNoProductiveTerminal,
-    registered: '2026-09-14',
-    reason:
-      'governance knownDefect DECLARED_CHANNEL_DOES_NOT_PAINT: the Modern button skin paints --ds-button-md-radius and never this channel, and neither --ds-radius-scale nor the control height is its terminal; a resolution lot is in flight on wo-fix-fam01, so the pin discharges or moves with that lot result and WO-FAM-01 stays OPEN until it lands -- the channel paints through the button cut, or retires with its producers removed and the reference-cycle changeset honored',
-    channels: Object.freeze(['--ds-radius-button']),
-  }),
-  Object.freeze({
     owner: 'WO-FAM-04',
     classification: LIVENESS.readNoProductiveTerminal,
     registered: '2026-09-14',
