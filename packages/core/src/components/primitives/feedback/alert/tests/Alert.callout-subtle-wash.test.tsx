@@ -48,13 +48,14 @@ describe('the folded callout washes a step lighter than the alert surface', () =
   });
 
   it.each(TONES)('resolves the %s subtle wash to step 4, never step 8', (tone) => {
-    // The chained fallback is what the analyzer follows to a terminal; a
-    // hand-written color-mix here would paint the same pixel and leave the
-    // ramp step unread.
+    // The skin reads the FAMILY channel and mirrors step 4 in its own fallback.
+    // Reaching past it to --ds-tint-<tone>-4 would paint the same pixel and is
+    // what the family-cut contract refuses by name (readWithoutProducer).
     expect(SKIN).toContain(
-      `--ds-alert-wash: var(--ds-alert-${tone}-wash-subtle, var(--ds-tint-${tone}-4));`,
+      `--ds-alert-wash: var(--ds-alert-${tone}-wash-subtle, color-mix(in oklab, var(--ds-color-${tone}) 4%, var(--ds-color-bg-primary)));`,
     );
     expect(SKIN).toContain(`--ds-alert-wash: var(--ds-alert-${tone}-wash,`);
+    expect(SKIN).not.toMatch(new RegExp(`wash-subtle,[^;]*--ds-color-${tone}\\) 8%`));
   });
 
   it('declares every subtle channel it paints, on step 4 of its own tone', () => {
