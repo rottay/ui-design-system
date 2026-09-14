@@ -287,12 +287,9 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           e.stopPropagation();
           setIsOpen(false);
           break;
-        case 'ArrowDown':
-        case 'ArrowUp':
-        case 'Home':
-        case 'End':
+        default:
+          // Arrows, edges and pages: every key the listbox kernel resolves.
           listbox.navigate(e);
-          break;
       }
     };
 
