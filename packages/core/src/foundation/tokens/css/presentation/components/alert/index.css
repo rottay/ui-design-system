@@ -21,7 +21,7 @@
   --ds-alert-compact-well-size: 2rem;
   --ds-alert-well-radius: var(--ds-radius-md);
   --ds-alert-compact-well-radius: var(--ds-radius-sm);
-  --ds-alert-close-size: calc(2rem * var(--ds-control-height-scale));
+  --ds-alert-close-size: calc(2rem * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-alert-close-radius: var(--ds-radius-md);
   --ds-alert-actions-gap: var(--ds-spacing-2);
   --ds-alert-actions-padding: var(--ds-spacing-2);

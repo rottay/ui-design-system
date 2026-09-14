@@ -166,8 +166,8 @@
   flex: 0 0 auto;
   place-items: center;
   box-sizing: border-box;
-  inline-size: var(--ds-alert-close-size, calc(2rem * var(--ds-control-height-scale)));
-  block-size: var(--ds-alert-close-size, calc(2rem * var(--ds-control-height-scale)));
+  inline-size: var(--ds-alert-close-size);
+  block-size: var(--ds-alert-close-size);
   padding: 0;
   cursor: pointer;
   color: var(--ds-alert-close-color, var(--ds-color-text-secondary));
