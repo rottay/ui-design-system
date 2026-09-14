@@ -67,7 +67,8 @@
 
 import React, { forwardRef } from 'react';
 import type { ModalCloseButtonProps } from '../../../contracts';
-import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
+import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 

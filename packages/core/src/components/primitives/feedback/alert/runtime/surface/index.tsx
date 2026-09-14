@@ -15,7 +15,8 @@
  */
 
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
+import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
   generateResponsiveCSS,

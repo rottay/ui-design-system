@@ -14,7 +14,8 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
-import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
+import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
 import { StatusInfoIcon } from '@/graphics/icons/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';

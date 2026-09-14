@@ -348,6 +348,37 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
       ],
     ]),
   ],
+  // The two producers above are DEFINED in these leaf owners and only
+  // re-exported by the barrel, so a file importing them by leaf resolves to a
+  // module the registry did not name and both prop bags fall opaque.
+  [
+    "foundation/behavior/kernel/anatomy/index",
+    new Map([
+      [
+        "partAttributes",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    "foundation/behavior/runtime/interaction-state/index",
+    new Map([
+      [
+        "useInteractionState",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set(["handlers"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
   [
     "infrastructure/runtime/foundation/density/index",
     new Map([
