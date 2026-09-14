@@ -5217,6 +5217,11 @@
      "at": "2026-09-14 09:50",
      "by": "kimi-admin",
      "note": "G107-03 LANDED on r4-recon as a99475804 (+ cherry-pick): the seven transparent-wrapper drills now plant through the TSX AST at the real style sites; strict precondition plus a no-op guard retained; five mutants proven red, controls green bare and with a runtime channel. Independently verified by kimi-admin: suite 62/62 (was 55/62) and the family-cut CLI exit 0 with byte-identical ratchet output before/after. Instrument-only; the WO stays open for the registered B (held pending FAM-04 integration) and C (population reconciliation) lots."
+    },
+    {
+     "at": "2026-09-14 11:46",
+     "by": "kimi-admin",
+     "note": "INSTRUMENT DEBT (found in the FAM-04 integration audit, red already at pin 25d245167, same staleness class as G107-03): theme-contract-freeze \"emission is the ONLY productive composer\" finds ZERO composers because its detector requires the literal /@media (prefers-color-scheme: dark) {/, a spelling WO-DER-05 (ff65f13c8) templated into `@media (prefers-color-scheme: ${block.mode}) {` when modes became decision-derived. The emission owner still composes the whole document (banner at emission/index.ts:158, mode rules at :145-155); the detector cannot see it. Bounded lot E (wo-fix-gates): repair the detector against the current composition structure, keep the second-composer MUTANT drill red, prove green on the real emission owner; no assertion weakening."
     }
    ]
   },
