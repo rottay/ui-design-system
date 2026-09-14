@@ -12,7 +12,7 @@
 @keyframes ds-mentions-dropdown-enter {
   from {
     opacity: 0;
-    transform: translateY(var(--ds-mentions-enter-offset));
+    transform: translateY(var(--ds-mentions-enter-offset, var(--ds-spacing-1)));
   }
   to {
     opacity: 1;
@@ -33,7 +33,7 @@
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'] {
   inline-size: 100%;
   padding: var(--ds-input-md-padding-y) var(--ds-input-md-padding-x);
-  font-size: var(--ds-input-md-font-size);
+  font-size: var(--ds-input-md-font-size, var(--ds-font-size-sm));
   font-family: var(--ds-mentions-font-family, var(--ds-font-family-base));
   border: var(--ds-mentions-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
     var(--ds-mentions-border, var(--ds-material-control-border));
@@ -43,9 +43,9 @@
   caret-color: var(--ds-mentions-caret, var(--ds-color-primary));
   outline: none;
   transition:
-    border-color var(--ds-mentions-transition-duration) var(--ds-mentions-transition-timing),
-    background-color var(--ds-mentions-transition-duration) var(--ds-mentions-transition-timing),
-    box-shadow var(--ds-mentions-transition-duration) var(--ds-mentions-transition-timing);
+    border-color var(--ds-mentions-transition-duration, var(--ds-input-transition-duration)) var(--ds-mentions-transition-timing, var(--ds-input-transition-timing)),
+    background-color var(--ds-mentions-transition-duration, var(--ds-input-transition-duration)) var(--ds-mentions-transition-timing, var(--ds-input-transition-timing)),
+    box-shadow var(--ds-mentions-transition-duration, var(--ds-input-transition-duration)) var(--ds-mentions-transition-timing, var(--ds-input-transition-timing));
 }
 
 /* The auto-size measurement arrives as runtime channels; the skin applies them. */
@@ -119,7 +119,7 @@
   list-style: none;
   margin: 0;
   padding: var(--ds-mentions-dropdown-padding, var(--ds-spacing-1));
-  max-block-size: var(--ds-mentions-dropdown-max-height);
+  max-block-size: var(--ds-mentions-dropdown-max-height, var(--ds-spacing-48));
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--ds-mentions-scrollbar-thumb, var(--ds-color-border)) transparent;
@@ -128,7 +128,7 @@
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-mentions-dropdown-bg, var(--ds-material-overlay-background));
   box-shadow: var(--ds-mentions-dropdown-shadow, var(--ds-elevation-3));
-  animation: ds-mentions-dropdown-enter var(--ds-mentions-transition-duration) var(--ds-motion-ease-enter) both;
+  animation: ds-mentions-dropdown-enter var(--ds-mentions-transition-duration, var(--ds-input-transition-duration)) var(--ds-motion-ease-enter) both;
 }
 
 .ds-mentions.ds-mentions--modern.ds-mentions-panel[data-part='dropdown'][data-part='dropdown'] {
@@ -148,7 +148,7 @@
   display: block;
   inline-size: 100%;
   min-inline-size: 0;
-  padding: var(--ds-mentions-option-padding);
+  padding: var(--ds-mentions-option-padding, var(--ds-spacing-2) var(--ds-spacing-3));
   border-radius: var(--ds-mentions-option-radius, var(--ds-radius-md));
   background: transparent;
   color: var(--ds-mentions-option-ink, var(--ds-color-text-primary));
@@ -157,8 +157,8 @@
   overflow-wrap: break-word;
   cursor: pointer;
   transition:
-    background-color var(--ds-mentions-transition-duration) var(--ds-mentions-transition-timing),
-    color var(--ds-mentions-transition-duration) var(--ds-mentions-transition-timing);
+    background-color var(--ds-mentions-transition-duration, var(--ds-input-transition-duration)) var(--ds-mentions-transition-timing, var(--ds-input-transition-timing)),
+    color var(--ds-mentions-transition-duration, var(--ds-input-transition-duration)) var(--ds-mentions-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-mentions.ds-mentions--modern[data-part='dropdown'] [data-part='option'][data-part='option'] {
@@ -197,10 +197,10 @@
   block-size: var(--ds-mentions-spinner-size);
   margin-inline-end: var(--ds-mentions-spinner-gap);
   vertical-align: var(--ds-mentions-spinner-offset);
-  border: var(--ds-mentions-spinner-stroke) solid var(--ds-mentions-spinner-track, var(--ds-color-border));
+  border: var(--ds-mentions-spinner-stroke, var(--ds-border-width-2)) solid var(--ds-mentions-spinner-track, var(--ds-color-border));
   border-block-start-color: var(--ds-mentions-spinner-ink, var(--ds-color-primary));
   border-radius: var(--ds-radius-full);
-  animation: ds-mentions-loading-spin var(--ds-mentions-spinner-duration) linear infinite;
+  animation: ds-mentions-loading-spin var(--ds-mentions-spinner-duration, calc(var(--ds-motion-slow) * 2)) linear infinite;
 }
 
 @media (pointer: coarse) {

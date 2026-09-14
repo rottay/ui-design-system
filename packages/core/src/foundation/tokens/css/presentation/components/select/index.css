@@ -284,6 +284,5 @@
   --ds-select-virtual-total: auto;
   --ds-select-virtual-offset: 0;
   --ds-select-virtual-row: auto;
-  --ds-select-touch-target-min: var(--ds-touch-target-min);
   --ds-select-tag-remove-touch-min: 1.5rem;
 }

@@ -35,7 +35,7 @@
   gap: var(--ds-select-trigger-gap, var(--ds-spacing-2));
   min-block-size: calc(
     var(--ds-select-trigger-responsive-height, var(--ds-select-trigger-height)) * var(--ds-density-effective-scale) *
-      var(--ds-control-height-scale)
+      var(--ds-control-height-scale, 1)
   );
   padding-inline: var(--ds-select-trigger-responsive-padding-x, var(--ds-select-trigger-padding-x));
   color: var(--ds-select-color, var(--ds-color-text-primary));
@@ -48,10 +48,10 @@
   cursor: pointer;
   outline: none;
   transition:
-    border-color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    background-color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    box-shadow var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    color var(--ds-select-transition-duration) var(--ds-select-transition-timing);
+    border-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    background-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    box-shadow var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing));
 }
 
 /* The native <select> keeps its own box: flex would break its chrome in WebKit. */
@@ -75,42 +75,42 @@
 
 /* Per-size geometry follows the input field grammar so a Select beside an Input reads as one family. */
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xs'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-xs-height);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-xs-padding-x);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-xs-font-size);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-xs-line-height);
+  --ds-select-trigger-height: var(--ds-select-trigger-xs-height, var(--ds-input-xs-height));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-xs-padding-x, var(--ds-input-xs-padding-x));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-xs-font-size, var(--ds-input-xs-font-size));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-xs-line-height, var(--ds-input-xs-line-height));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='sm'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-sm-height);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-sm-padding-x);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-sm-font-size);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-sm-line-height);
+  --ds-select-trigger-height: var(--ds-select-trigger-sm-height, var(--ds-input-sm-height));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-sm-padding-x, var(--ds-input-sm-padding-x));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-sm-font-size, var(--ds-input-sm-font-size));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-sm-line-height, var(--ds-input-sm-line-height));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='md'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-md-height);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-md-padding-x);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-md-font-size);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-md-line-height);
+  --ds-select-trigger-height: var(--ds-select-trigger-md-height, var(--ds-input-md-height));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-md-padding-x, var(--ds-input-md-padding-x));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-md-font-size, var(--ds-input-md-font-size));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-md-line-height, var(--ds-input-md-line-height));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='lg'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-lg-height);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-lg-padding-x);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-lg-font-size);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-lg-line-height);
+  --ds-select-trigger-height: var(--ds-select-trigger-lg-height, var(--ds-input-lg-height));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-lg-padding-x, var(--ds-input-lg-padding-x));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-lg-font-size, var(--ds-input-lg-font-size));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-lg-line-height, var(--ds-input-lg-line-height));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xl'] [data-part='trigger'] {
-  --ds-select-trigger-height: var(--ds-select-trigger-xl-height);
-  --ds-select-trigger-padding-x: var(--ds-select-trigger-xl-padding-x);
-  --ds-select-trigger-font-size: var(--ds-select-trigger-xl-font-size);
-  --ds-select-trigger-line-height: var(--ds-select-trigger-xl-line-height);
+  --ds-select-trigger-height: var(--ds-select-trigger-xl-height, var(--ds-input-xl-height));
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-xl-padding-x, var(--ds-input-xl-padding-x));
+  --ds-select-trigger-font-size: var(--ds-select-trigger-xl-font-size, var(--ds-input-xl-font-size));
+  --ds-select-trigger-line-height: var(--ds-select-trigger-xl-line-height, var(--ds-input-xl-line-height));
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
@@ -217,9 +217,9 @@
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
   display: inline-flex;
-  min-block-size: calc(var(--ds-select-tag-height) * var(--ds-density-effective-scale));
+  min-block-size: calc(var(--ds-select-tag-height, var(--ds-spacing-6)) * var(--ds-density-effective-scale));
   max-inline-size: var(--ds-select-tag-max-width);
-  padding: var(--ds-select-tag-padding);
+  padding: var(--ds-select-tag-padding, 0 var(--ds-spacing-2));
   align-items: center;
   gap: var(--ds-select-tag-gap, var(--ds-spacing-1));
   color: var(--ds-select-tag-color, var(--ds-color-text-primary));
@@ -261,10 +261,10 @@
   background: transparent;
   cursor: pointer;
   transition:
-    color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    background-color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    border-color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    transform var(--ds-select-transition-duration) var(--ds-select-transition-timing);
+    color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    background-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    border-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    transform var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'][data-part='tag-remove'],
@@ -295,8 +295,8 @@
   color: var(--ds-select-arrow-color, var(--ds-color-text-muted));
   transform: rotate(var(--ds-select-arrow-rotate));
   transition:
-    color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    transform var(--ds-select-transition-duration) var(--ds-select-transition-timing);
+    color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    transform var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-open='true'] [data-part='arrow-icon'] {
@@ -357,7 +357,7 @@
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'][data-part='loading-spinner'],
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] [data-part='loading-spinner'][data-part='loading-spinner'] {
-  border: var(--ds-select-loading-stroke) solid var(--ds-select-loading-track, var(--ds-color-border));
+  border: var(--ds-select-loading-stroke, calc(var(--ds-input-loading-stroke) * 1px)) solid var(--ds-select-loading-track, var(--ds-color-border));
   border-top-color: var(--ds-select-loading-color, var(--ds-color-primary));
   border-radius: var(--ds-radius-full);
 }
@@ -365,7 +365,7 @@
 /* Portaled panel */
 
 .ds-select-shell__dropdown.ds-select-shell__dropdown[data-part='dropdown'] {
-  --ds-select-enter-y: calc(var(--ds-select-enter-distance) * -1);
+  --ds-select-enter-y: calc(var(--ds-select-enter-distance, var(--ds-spacing-1)) * -1);
   isolation: isolate;
   inline-size: var(--ds-select-dropdown-inline-size, auto);
   min-inline-size: min(var(--ds-select-dropdown-min-width), calc(100dvw - var(--ds-spacing-4)));
@@ -376,13 +376,13 @@
   font-family: var(--ds-select-font-family, var(--ds-font-family-base));
   border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-lg));
   background:
-    var(--ds-select-dropdown-texture),
+    var(--ds-select-dropdown-texture, none),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-select-dropdown-bg, var(--ds-material-overlay-background));
   box-shadow: var(--ds-select-dropdown-shadow, var(--ds-elevation-3));
   backdrop-filter: var(--ds-select-backdrop-filter);
   transform-origin: center top;
-  animation: ds-select-appear var(--ds-select-transition-duration) var(--ds-motion-ease-out);
+  animation: ds-select-appear var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-motion-ease-out);
 }
 
 .ds-select-shell__dropdown.ds-select-shell__dropdown[data-part='dropdown'][data-part='dropdown'] {
@@ -391,7 +391,7 @@
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'][data-placement='top'] {
-  --ds-select-enter-y: var(--ds-select-enter-distance);
+  --ds-select-enter-y: var(--ds-select-enter-distance, var(--ds-spacing-1));
   transform-origin: center bottom;
 }
 
@@ -407,9 +407,9 @@
   border-radius: var(--ds-select-search-radius, var(--ds-radius-md));
   background: var(--ds-select-search-bg, var(--ds-material-inset-background));
   transition:
-    border-color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    background-color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    box-shadow var(--ds-select-transition-duration) var(--ds-select-transition-timing);
+    border-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    background-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    box-shadow var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
@@ -515,7 +515,7 @@
   display: flex;
   inline-size: 100%;
   min-block-size: calc(
-    var(--ds-select-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale)
+    var(--ds-select-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
   padding: var(--ds-select-option-padding-y, var(--ds-spacing-2)) var(--ds-select-option-padding-x, var(--ds-spacing-3));
   align-items: center;
@@ -532,9 +532,9 @@
   outline: none;
   user-select: none;
   transition:
-    color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    border-color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    background-color var(--ds-select-transition-duration) var(--ds-select-transition-timing);
+    color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    border-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    background-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
@@ -571,8 +571,8 @@
   border-radius: var(--ds-radius-sm);
   background: var(--ds-material-control-background);
   transition:
-    border-color var(--ds-select-transition-duration) var(--ds-select-transition-timing),
-    background-color var(--ds-select-transition-duration) var(--ds-select-transition-timing);
+    border-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
+    background-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'][data-part='option-checkbox'] {
@@ -593,7 +593,7 @@
   color: var(--ds-color-primary);
   border-radius: var(--ds-radius-md);
   background: var(--ds-select-option-icon-bg, transparent);
-  transition: background-color var(--ds-select-transition-duration) var(--ds-select-transition-timing);
+  transition: background-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true'] [data-part='option-icon'] {
@@ -631,8 +631,8 @@
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-check'] {
   display: inline-grid;
   flex: none;
-  inline-size: var(--ds-select-option-check-size);
-  block-size: var(--ds-select-option-check-size);
+  inline-size: var(--ds-select-option-check-size, var(--ds-spacing-6));
+  block-size: var(--ds-select-option-check-size, var(--ds-spacing-6));
   place-items: center;
   color: var(--ds-color-primary);
   border-radius: var(--ds-radius-full);
@@ -670,15 +670,15 @@
     min-block-size: max(
       calc(
         var(--ds-select-trigger-responsive-height, var(--ds-select-trigger-height)) * var(--ds-density-effective-scale) *
-          var(--ds-control-height-scale)
+          var(--ds-control-height-scale, 1)
       ),
-      var(--ds-select-touch-target-min, var(--ds-touch-target-min))
+      var(--ds-touch-target-min)
     );
   }
 
   .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'] {
-    min-inline-size: var(--ds-select-touch-target-min, var(--ds-touch-target-min));
-    min-block-size: var(--ds-select-touch-target-min, var(--ds-touch-target-min));
+    min-inline-size: var(--ds-touch-target-min);
+    min-block-size: var(--ds-touch-target-min);
   }
 
   /* A tag remove meets the smaller WCAG 2.5.8 target: a 44px floor would blow the chip up. */
@@ -689,8 +689,8 @@
 
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
     min-block-size: max(
-      calc(var(--ds-select-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale)),
-      var(--ds-select-touch-target-min, var(--ds-touch-target-min))
+      calc(var(--ds-select-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)),
+      var(--ds-touch-target-min)
     );
   }
 }

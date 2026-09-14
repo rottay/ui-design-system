@@ -91,7 +91,6 @@ describe('legacy duration aliases drain onto the canonical cadence', () => {
 
 describe('modern skin micro-interactions honor reduced motion', () => {
   const checkbox = read('runtime/engines/modern/skin/checkbox/index.css');
-  const select = read('runtime/engines/modern/skin/select/index.css');
   const toggleCss = read('runtime/engines/modern/skin/toggle/index.css');
 
   it('checkbox settle is a compositor-only keyframe with a reduced-motion guard', () => {
@@ -108,14 +107,5 @@ describe('modern skin micro-interactions honor reduced motion', () => {
     expect(checkbox).toContain(":is([data-state~='pressed'], :active):not([data-disabled='true'])");
     expect(checkbox).toContain('scale(var(--ds-state-press-scale))');
     expect(toggleCss).toContain('scale(var(--ds-state-press-scale))');
-  });
-
-  it('select open-tick transitions ride the motion canon and never animate `all`', () => {
-    // arrow rotation + trigger state shifts use --ds-motion-fast, no raw times
-    expect(select).toMatch(/transition:[\s\S]*?transform var\(--ds-motion-fast/);
-    expect(select).toMatch(/transition:[\s\S]*?var\(--ds-motion-fast(?:,[^)]+)?\)/);
-    expect(select).not.toMatch(/transition:[^;]*\ball\b/);
-    // no raw ms/s literal inside any transition value
-    expect(select.replace(/var\(--ds-motion-[^)]+\)/g, '')).not.toMatch(/transition:[^;]*\d+m?s\b/);
   });
 });

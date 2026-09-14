@@ -11,7 +11,7 @@
 @keyframes ds-auto-complete-slide-in {
   from {
     opacity: 0;
-    transform: translateY(var(--ds-auto-complete-enter-y)) scale(var(--ds-motion-scale-in));
+    transform: translateY(var(--ds-auto-complete-enter-y, calc(var(--ds-spacing-1) * -1))) scale(var(--ds-motion-scale-in));
   }
   to {
     opacity: 1;
@@ -39,30 +39,30 @@
   font-family: var(--ds-auto-complete-font-family, var(--ds-font-family-base));
   outline: none;
   transition:
-    border-color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing),
-    background-color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing),
-    box-shadow var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing);
+    border-color var(--ds-auto-complete-transition-duration, var(--ds-input-transition-duration)) var(--ds-auto-complete-transition-timing, var(--ds-input-transition-timing)),
+    background-color var(--ds-auto-complete-transition-duration, var(--ds-input-transition-duration)) var(--ds-auto-complete-transition-timing, var(--ds-input-transition-timing)),
+    box-shadow var(--ds-auto-complete-transition-duration, var(--ds-input-transition-duration)) var(--ds-auto-complete-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-size='sm'] [data-part='input'] {
-  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   padding-block: var(--ds-spacing-1);
   padding-inline: var(--ds-input-sm-padding-x);
-  font-size: var(--ds-input-sm-font-size);
+  font-size: var(--ds-input-sm-font-size, var(--ds-type-supporting-font-size));
 }
 
 .ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-size='md'] [data-part='input'] {
-  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
-  padding-block: var(--ds-auto-complete-md-padding-y);
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
+  padding-block: var(--ds-auto-complete-md-padding-y, calc(var(--ds-spacing-3) / 2));
   padding-inline: var(--ds-input-md-padding-x);
-  font-size: var(--ds-input-md-font-size);
+  font-size: var(--ds-input-md-font-size, var(--ds-font-size-sm));
 }
 
 .ds-auto-complete.ds-auto-complete--modern[data-part='root'][data-size='lg'] [data-part='input'] {
-  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-input-lg-padding-x);
-  font-size: var(--ds-input-lg-font-size);
+  font-size: var(--ds-input-lg-font-size, var(--ds-font-size-base));
 }
 
 .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input']::placeholder {
@@ -128,7 +128,7 @@
 
 /* A long value never runs under the clear action. */
 .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='input-wrapper']:has([data-part='clear-button']) [data-part='input'] {
-  padding-inline-end: var(--ds-auto-complete-clear-reserve);
+  padding-inline-end: var(--ds-auto-complete-clear-reserve, var(--ds-spacing-8));
 }
 
 .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button'] {
@@ -136,8 +136,8 @@
   inset-inline-end: var(--ds-spacing-2);
   inset-block-start: 50%;
   transform: translateY(-50%);
-  inline-size: var(--ds-auto-complete-clear-size);
-  block-size: var(--ds-auto-complete-clear-size);
+  inline-size: var(--ds-auto-complete-clear-size, var(--ds-spacing-6));
+  block-size: var(--ds-auto-complete-clear-size, var(--ds-spacing-6));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -147,7 +147,7 @@
   color: var(--ds-auto-complete-clear-color, var(--ds-color-text-muted));
   border: none;
   border-radius: var(--ds-radius-full);
-  transition: color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing);
+  transition: color var(--ds-auto-complete-transition-duration, var(--ds-input-transition-duration)) var(--ds-auto-complete-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-auto-complete.ds-auto-complete--modern[data-part='root'] [data-part='clear-button']:is([data-state~='hovered'], :hover),
@@ -164,7 +164,7 @@
   --ds-auto-complete-enter-y: calc(var(--ds-spacing-1) * -1);
   margin: 0;
   padding: var(--ds-spacing-1);
-  max-block-size: var(--ds-auto-complete-dropdown-max-height);
+  max-block-size: var(--ds-auto-complete-dropdown-max-height, var(--ds-spacing-60));
   overflow-y: auto;
   list-style: none;
   scrollbar-width: thin;
@@ -180,7 +180,7 @@
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-auto-complete-dropdown-bg, var(--ds-material-overlay-background));
   box-shadow: var(--ds-auto-complete-dropdown-shadow, var(--ds-elevation-2));
-  animation: ds-auto-complete-slide-in var(--ds-auto-complete-transition-duration) var(--ds-motion-ease-out);
+  animation: ds-auto-complete-slide-in var(--ds-auto-complete-transition-duration, var(--ds-input-transition-duration)) var(--ds-motion-ease-out);
 }
 
 .ds-auto-complete.ds-auto-complete--modern.ds-auto-complete-panel[data-part='dropdown'][data-part='dropdown'] {
@@ -202,20 +202,20 @@
   align-items: center;
   box-sizing: border-box;
   inline-size: 100%;
-  min-block-size: calc(var(--ds-auto-complete-option-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale));
+  min-block-size: calc(var(--ds-auto-complete-option-height, var(--ds-spacing-9)) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   padding-block: var(--ds-spacing-1);
   padding-inline: var(--ds-spacing-2);
   border-radius: var(--ds-radius-sm);
   background: transparent;
   color: var(--ds-auto-complete-option-ink, var(--ds-color-text-secondary));
-  font-size: var(--ds-input-sm-font-size);
+  font-size: var(--ds-input-sm-font-size, var(--ds-type-supporting-font-size));
   text-align: start;
   cursor: pointer;
   overflow: hidden;
   transition:
-    color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing),
-    border-color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing),
-    background-color var(--ds-auto-complete-transition-duration) var(--ds-auto-complete-transition-timing);
+    color var(--ds-auto-complete-transition-duration, var(--ds-input-transition-duration)) var(--ds-auto-complete-transition-timing, var(--ds-input-transition-timing)),
+    border-color var(--ds-auto-complete-transition-duration, var(--ds-input-transition-duration)) var(--ds-auto-complete-transition-timing, var(--ds-input-transition-timing)),
+    background-color var(--ds-auto-complete-transition-duration, var(--ds-input-transition-duration)) var(--ds-auto-complete-transition-timing, var(--ds-input-transition-timing));
 }
 
 .ds-auto-complete.ds-auto-complete--modern[data-part='dropdown'] [data-part='option'][data-part='option'] {
