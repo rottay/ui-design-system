@@ -1502,25 +1502,36 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     channels: Object.freeze(['--ds-experience-profile', '--ds-recipe-profile']),
   }),
   Object.freeze({
-    owner: 'WO-FAM-01..13',
+    owner: 'WO-DER-06',
     classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-11',
+    registered: '2026-09-14',
     reason:
-      'the surfaces cuts own the reader; connfix a5da15828 connected the decision, so what is missing is the consumer side of the cut',
+      'no consumer reads it anywhere in the repository: the catalog bars surfaces.border-style from emitting it and the elevation border deriver refuses it by name, while the channel the productive skins actually compose is --ds-edge-standard-style; the pin clears when the preset conversion wires a proven stylesheet or style-query reader, or retires the channel and removes its producers in the same commit',
     channels: Object.freeze(['--ds-elevation-border-style']),
   }),
   Object.freeze({
-    owner: 'WO-FAM-01..13',
+    owner: 'WO-FAM-06',
     classification: LIVENESS.readNoProductiveTerminal,
-    registered: '2026-09-11',
+    registered: '2026-09-14',
     reason:
-      'each of these is read inside a private custom property that no family declares a terminal for; the consumer adoption that closes the chain belongs to the family cuts',
-    channels: Object.freeze([
-      '--ds-color-error-900',
-      '--ds-color-success-900',
-      '--ds-radius-button',
-      '--ds-z-index-base',
-    ]),
+      'card presentation composes each of these into --ds-card-error-title-color and --ds-card-success-title-color, and the chain dies in a TS token map nothing imports; the 900 steps are the dark-mode on-status inks, so the pin clears when the card cut paints the title-color terminal or retires the private chain with a contrast-conscious replacement -- never by deleting the step to reach green',
+    channels: Object.freeze(['--ds-color-error-900', '--ds-color-success-900']),
+  }),
+  Object.freeze({
+    owner: 'WO-FAM-01',
+    classification: LIVENESS.readNoProductiveTerminal,
+    registered: '2026-09-14',
+    reason:
+      'governance knownDefect DECLARED_CHANNEL_DOES_NOT_PAINT: the Modern button skin paints --ds-button-md-radius and never this channel, and neither --ds-radius-scale nor the control height is its terminal; a resolution lot is in flight on wo-fix-fam01, so the pin discharges or moves with that lot result and WO-FAM-01 stays OPEN until it lands -- the channel paints through the button cut, or retires with its producers removed and the reference-cycle changeset honored',
+    channels: Object.freeze(['--ds-radius-button']),
+  }),
+  Object.freeze({
+    owner: 'WO-FAM-04',
+    classification: LIVENESS.readNoProductiveTerminal,
+    registered: '2026-09-14',
+    reason:
+      'it is the floor of the single enforced z-scale, and its only chain is --ds-z-index-alert = calc(var(--ds-z-index-base) + 1) dying in a TS mirror nothing imports; alert belongs to this cut, so the pin clears when the alert band terminal lands through the FAM-04 alert owner or the indirection retires with the single-scale test updated, and the scale invariant stays enforced either way',
+    channels: Object.freeze(['--ds-z-index-base']),
   }),
   Object.freeze({
     owner: 'WO-EVI-02',
