@@ -325,8 +325,8 @@ const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : us
  * React 18 drops an unknown boolean attribute and React 19 drops the empty string,
  * so the presence form is the only `inert` both supported peer majors serialize.
  */
-const INERT: Readonly<Record<string, string>> = Object.freeze({ inert: 'inert' });
-const INTERACTIVE: Readonly<Record<string, string>> = Object.freeze({});
+const INERT: Readonly<Record<string, string>> = { inert: 'inert' };
+const INTERACTIVE: Readonly<Record<string, string>> = {};
 
 export interface AnatomySkeletonProps {
   /** While true the component is replaced by the skeleton built from its anatomy. @default true */
