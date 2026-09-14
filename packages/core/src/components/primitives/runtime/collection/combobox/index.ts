@@ -156,6 +156,26 @@ export interface ComboboxFoundation {
 }
 
 /**
+ * The first selectable row strictly past `from` in `direction`, or -1. With
+ * `wrap` the scan cycles past the edges; without it, it stops at them.
+ */
+export function scanSelectable(
+  from: number,
+  direction: 1 | -1,
+  itemCount: number,
+  isItemSelectable: ((index: number) => boolean) | undefined,
+  wrap: boolean,
+): number {
+  for (let step = 1; step <= itemCount; step += 1) {
+    const raw = from + direction * step;
+    if (!wrap && (raw < 0 || raw >= itemCount)) return -1;
+    const candidate = ((raw % itemCount) + itemCount) % itemCount;
+    if (!isItemSelectable || isItemSelectable(candidate)) return candidate;
+  }
+  return -1;
+}
+
+/**
  * Shared combobox state machine and ARIA wiring.
  *
  * @example
@@ -229,13 +249,8 @@ export function useComboboxFoundation(options: ComboboxFoundationOptions): Combo
 
   const nextSelectableFrom = useCallback(
     (from: number, direction: 1 | -1): number => {
-      if (itemCount === 0) return -1;
       const start = from < 0 ? (direction === 1 ? -1 : itemCount) : from;
-      for (let step = 1; step <= itemCount; step += 1) {
-        const candidate = (start + direction * step + itemCount * step) % itemCount;
-        if (!isItemSelectable || isItemSelectable(candidate)) return candidate;
-      }
-      return -1;
+      return scanSelectable(start, direction, itemCount, isItemSelectable, true);
     },
     [itemCount, isItemSelectable]
   );

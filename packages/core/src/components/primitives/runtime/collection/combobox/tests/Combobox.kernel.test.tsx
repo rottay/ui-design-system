@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { act, render, renderHook, screen } from '@testing-library/react';
 
-import { resolveComboboxListState, useComboboxFoundation } from '..';
+import { resolveComboboxListState, scanSelectable, useComboboxFoundation } from '..';
 import type { ComboboxFoundationOptions } from '..';
 
 const OPTIONS: ComboboxFoundationOptions = {
@@ -245,5 +245,17 @@ describe('useComboboxFoundation aria', () => {
     const activeId = input.getAttribute('aria-activedescendant');
     expect(activeId).toBe('listbox-1-option-1');
     expect(document.getElementById(activeId as string)).toHaveTextContent('Row 1');
+  });
+});
+
+describe('scanSelectable', () => {
+  const selectable = (index: number) => index !== 2;
+
+  it('is the one selectable-row scan: it skips disabled rows, cycles with wrap and stops at the edge without it', () => {
+    expect(scanSelectable(1, 1, 5, selectable, false)).toBe(3);
+    expect(scanSelectable(4, 1, 5, selectable, true)).toBe(0);
+    expect(scanSelectable(4, 1, 5, selectable, false)).toBe(-1);
+    expect(scanSelectable(0, -1, 5, selectable, true)).toBe(4);
+    expect(scanSelectable(-1, 1, 0, selectable, true)).toBe(-1);
   });
 });

@@ -10,6 +10,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 import {
+  scanSelectable,
   useComboboxFoundation,
   type ComboboxFoundation,
   type ComboboxFoundationOptions,
@@ -33,22 +34,6 @@ export interface ListboxNavigationOptions {
   readonly wrap?: boolean;
   /** @default LISTBOX_PAGE_SIZE */
   readonly pageSize?: number;
-}
-
-function scanSelectable(
-  from: number,
-  direction: 1 | -1,
-  itemCount: number,
-  isItemSelectable: ((index: number) => boolean) | undefined,
-  wrap: boolean,
-): number {
-  for (let step = 1; step <= itemCount; step += 1) {
-    const raw = from + direction * step;
-    if (!wrap && (raw < 0 || raw >= itemCount)) return -1;
-    const candidate = ((raw % itemCount) + itemCount) % itemCount;
-    if (!isItemSelectable || isItemSelectable(candidate)) return candidate;
-  }
-  return -1;
 }
 
 /**
@@ -134,14 +119,16 @@ export function resolveTypeaheadTarget(
   const character = key.toLowerCase();
   const repeated = prefix.length > 1 && [...prefix].every((letter) => letter === prefix[0]);
 
-  const find = (query: string, start: number): number => {
-    for (let step = 0; step < itemCount; step += 1) {
-      const index = (((start + step) % itemCount) + itemCount) % itemCount;
-      if (isItemSelectable && !isItemSelectable(index)) continue;
-      if ((getItemText(index) ?? '').trim().toLowerCase().startsWith(query)) return index;
-    }
-    return -1;
-  };
+  const find = (query: string, start: number): number =>
+    scanSelectable(
+      start - 1,
+      1,
+      itemCount,
+      (index) =>
+        (!isItemSelectable || isItemSelectable(index)) &&
+        (getItemText(index) ?? '').trim().toLowerCase().startsWith(query),
+      true,
+    );
 
   if (itemCount === 0) return { state: advanced.state, index: -1 };
   const growing = prefix.length > 1 && !repeated;
