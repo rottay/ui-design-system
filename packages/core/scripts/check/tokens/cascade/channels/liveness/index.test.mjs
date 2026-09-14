@@ -1403,20 +1403,20 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 51 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 50 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    51,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the drawer pin the Drawer cut discharged: 33 + 13 + 4 + 1',
+    50,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
     [LIVENESS.authorableUnprovenEffect]: 33,
     [LIVENESS.unreadEmittedNoRoute]: 13,
-    [LIVENESS.readNoProductiveTerminal]: 4,
+    [LIVENESS.readNoProductiveTerminal]: 3,
     [LIVENESS.readUnproven]: 1,
   });
   for (const pin of index.values()) {
