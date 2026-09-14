@@ -42,6 +42,17 @@ describe('useFieldAction', () => {
     expect(clear.getAttribute('data-state')).toContain('hovered');
   });
 
+  it('cancels a Space press when focus leaves before the keyup', () => {
+    render(<Field />);
+    const clear = screen.getByRole('button', { name: 'Clear' });
+    fireEvent.focus(clear);
+    fireEvent.keyDown(clear, { key: ' ' });
+    expect(clear.getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.blur(clear);
+    expect(clear.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
   it('reports nothing for a disabled action', () => {
     render(<Field disabled />);
     const clear = screen.getByRole('button', { name: 'Clear' });

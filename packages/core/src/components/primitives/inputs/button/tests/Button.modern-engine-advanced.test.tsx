@@ -140,3 +140,42 @@ describe('ModernButton advanced engine coverage', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('ModernButton press lifecycle', () => {
+  it('cancels a keyboard press when focus leaves before the keyup', () => {
+    render(<ModernButton>Save</ModernButton>);
+    const button = screen.getByRole('button', { name: /save/i });
+
+    fireEvent.focus(button);
+    fireEvent.keyDown(button, { key: ' ' });
+    expect(button.getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.blur(button);
+    expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('still forwards a caller onBlur while cancelling the press', () => {
+    const handleBlur = vi.fn();
+    render(<ModernButton onBlur={handleBlur}>Save</ModernButton>);
+    const button = screen.getByRole('button', { name: /save/i });
+
+    fireEvent.focus(button);
+    fireEvent.keyDown(button, { key: ' ' });
+    fireEvent.blur(button);
+
+    expect(handleBlur).toHaveBeenCalledTimes(1);
+    expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('does not resurrect a press interrupted by the busy state', () => {
+    const { rerender } = render(<ModernButton>Save</ModernButton>);
+    const button = screen.getByRole('button', { name: /save/i });
+
+    fireEvent.pointerDown(button);
+    expect(button.getAttribute('data-state')).toContain('pressed');
+
+    rerender(<ModernButton loading>Save</ModernButton>);
+    rerender(<ModernButton>Save</ModernButton>);
+    expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+});

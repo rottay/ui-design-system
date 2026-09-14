@@ -74,3 +74,64 @@ describe('Modern Radio public anatomy', () => {
     expect(container.querySelector('[data-part="root"]')).toHaveAttribute('data-checked', 'true');
   });
 });
+
+describe('Modern Radio press lifecycle', () => {
+  const parts = (container: HTMLElement) => ({
+    root: container.querySelector('[data-part="root"]') as HTMLElement,
+    input: container.querySelector('input[type="radio"]') as HTMLInputElement,
+  });
+
+  it('cancels a Space press when focus leaves before the keyup', () => {
+    const { container } = render(<ModernRadio label="Pro plan" value="pro" />);
+    const { root, input } = parts(container);
+
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: ' ' });
+    expect(root.getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.blur(input);
+    expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('changes value exactly once when the interrupted press is retried', () => {
+    const handleChange = vi.fn();
+    const { container } = render(<ModernRadio label="Pro plan" value="pro" onChange={handleChange} />);
+    const { root, input } = parts(container);
+
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: ' ' });
+    fireEvent.blur(input);
+    expect(handleChange).not.toHaveBeenCalled();
+
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: ' ' });
+    fireEvent.click(input);
+    fireEvent.keyUp(input, { key: ' ' });
+
+    expect(handleChange).toHaveBeenCalledOnce();
+    expect(input.checked).toBe(true);
+    expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('cancels the press when the pointer is cancelled mid-gesture', () => {
+    const { container } = render(<ModernRadio label="Pro plan" value="pro" />);
+    const { root } = parts(container);
+
+    fireEvent.pointerDown(root);
+    expect(root.getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.pointerCancel(root);
+    expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('does not resurrect a press interrupted by disabling the control', () => {
+    const { container, rerender } = render(<ModernRadio label="Pro plan" value="pro" />);
+    const { root } = parts(container);
+
+    fireEvent.pointerDown(root);
+    rerender(<ModernRadio label="Pro plan" value="pro" disabled />);
+    rerender(<ModernRadio label="Pro plan" value="pro" />);
+
+    expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+});

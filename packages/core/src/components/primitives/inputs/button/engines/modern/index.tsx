@@ -503,11 +503,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       (onKeyUp as unknown as React.KeyboardEventHandler<Element> | undefined)?.(event);
     },
     onFocus: chain(interactionHandlers.onFocus, onFocus as never),
-    onBlur: (event: React.FocusEvent<Element>) => {
-      interactionHandlers.onPointerUp(event as unknown as React.PointerEvent);
-      interactionHandlers.onBlur(event);
-      (onBlur as unknown as React.FocusEventHandler<Element> | undefined)?.(event);
-    },
+    onBlur: chain(interactionHandlers.onBlur, onBlur as never),
   };
 
   const anatomyProps = {

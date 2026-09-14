@@ -17,7 +17,14 @@ import { useInteractionState } from '..';
 function Probe({ disabled = false }: { disabled?: boolean }) {
   const { state, handlers } = useInteractionState({ disabled });
   return (
-    <button type="button" disabled={disabled} {...partAttributes('trigger', state)} {...handlers}>
+    <button
+      type="button"
+      disabled={disabled}
+      {...partAttributes('trigger', state)}
+      {...handlers}
+      onKeyDown={(event) => event.key === ' ' && handlers.onPointerDown(event as never)}
+      onKeyUp={(event) => event.key === ' ' && handlers.onPointerUp(event as never)}
+    >
       probe
     </button>
   );
@@ -70,6 +77,50 @@ describe('the part carries its own state on the DOM', () => {
     fireEvent.pointerDown(trigger());
     fireEvent.pointerLeave(trigger());
     expect(trigger().getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+});
+
+describe('a press that can no longer complete is cancelled', () => {
+  it('cancels a keyboard press when focus leaves before the keyup', () => {
+    // The keyup lands on whatever took the focus, so this part will never see
+    // the end of its own press.
+    render(<Probe />);
+    fireEvent.focus(trigger());
+    fireEvent.keyDown(trigger(), { key: ' ' });
+    expect(trigger().getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.blur(trigger());
+    expect(trigger()).not.toHaveAttribute('data-state');
+  });
+
+  it('cancels a pointer press when focus leaves mid-press', () => {
+    render(<Probe />);
+    fireEvent.pointerDown(trigger());
+    fireEvent.focus(trigger());
+    fireEvent.blur(trigger());
+    expect(trigger().getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('does not resurrect the press when the part is disabled mid-press and enabled again', () => {
+    const { rerender } = render(<Probe />);
+    fireEvent.pointerDown(trigger());
+    expect(trigger().getAttribute('data-state')).toContain('pressed');
+
+    rerender(<Probe disabled />);
+    expect(trigger().getAttribute('data-state')).toBe('disabled');
+
+    rerender(<Probe />);
+    expect(trigger().getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('rings the next keyboard focus after a press the pointer abandoned', () => {
+    // The abandoned press must not keep claiming that the focus about to
+    // arrive came from a pointer.
+    render(<Probe />);
+    fireEvent.pointerDown(trigger());
+    fireEvent.pointerLeave(trigger());
+    fireEvent.focus(trigger());
+    expect(trigger().getAttribute('data-state')).toContain('focus-visible');
   });
 });
 

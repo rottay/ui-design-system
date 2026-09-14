@@ -61,12 +61,24 @@ export function useInteractionState(
     if (!disabled) setHovered(true);
   }, [disabled]);
 
-  const onPointerLeave = useCallback(() => {
-    setHovered(false);
-    // A pointer that leaves mid-press cancels the press: the click will not
-    // fire, so the part must not keep painting as if it will.
+  /** Every way a press ends with no click: leave, cancel, blur, disable. */
+  const cancelPress = useCallback(() => {
+    pointerDownRef.current = false;
     setPressed(false);
   }, []);
+
+  // A part disabled mid-press never sees the pointerup or keyup that ends the
+  // gesture, so cancel it rather than latch a press until the part returns.
+  const [wasDisabled, setWasDisabled] = useState(disabled);
+  if (disabled !== wasDisabled) {
+    setWasDisabled(disabled);
+    if (disabled) cancelPress();
+  }
+
+  const onPointerLeave = useCallback(() => {
+    setHovered(false);
+    cancelPress();
+  }, [cancelPress]);
 
   const onPointerDown = useCallback(() => {
     if (disabled) return;
@@ -74,10 +86,7 @@ export function useInteractionState(
     setPressed(true);
   }, [disabled]);
 
-  const onPointerUp = useCallback(() => {
-    pointerDownRef.current = false;
-    setPressed(false);
-  }, []);
+  const onPointerUp = cancelPress;
 
   const onFocus = useCallback(() => {
     if (disabled) return;
@@ -95,8 +104,10 @@ export function useInteractionState(
   const onBlur = useCallback(() => {
     setFocused(false);
     setFocusVisible(false);
-    pointerDownRef.current = false;
-  }, []);
+    // Focus is gone, so the keyup that would end a keyboard press lands on
+    // whatever took it and never here.
+    cancelPress();
+  }, [cancelPress]);
 
   const state = useMemo<InteractionState>(
     () => ({

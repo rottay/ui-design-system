@@ -105,3 +105,64 @@ describe('Modern Toggle public anatomy', () => {
     expect(container.querySelector('[data-part="root"]')).toHaveAttribute('data-checked', 'true');
   });
 });
+
+describe('Modern Toggle press lifecycle', () => {
+  const parts = (container: HTMLElement) => ({
+    root: container.querySelector('[data-part="root"]') as HTMLElement,
+    input: container.querySelector('input[role="switch"]') as HTMLInputElement,
+  });
+
+  it('cancels a Space press when focus leaves before the keyup', () => {
+    const { container } = render(<ModernToggle label="Notifications" />);
+    const { root, input } = parts(container);
+
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: ' ' });
+    expect(root.getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.blur(input);
+    expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('changes value exactly once when the interrupted press is retried', () => {
+    const handleChange = vi.fn();
+    const { container } = render(<ModernToggle label="Notifications" onChange={handleChange} />);
+    const { root, input } = parts(container);
+
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: ' ' });
+    fireEvent.blur(input);
+    expect(handleChange).not.toHaveBeenCalled();
+
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: ' ' });
+    fireEvent.click(input);
+    fireEvent.keyUp(input, { key: ' ' });
+
+    expect(handleChange).toHaveBeenCalledTimes(1);
+    expect(handleChange).toHaveBeenCalledWith(true, expect.anything());
+    expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('cancels the press when the pointer is cancelled mid-gesture', () => {
+    const { container } = render(<ModernToggle label="Notifications" />);
+    const { root } = parts(container);
+
+    fireEvent.pointerDown(root);
+    expect(root.getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.pointerCancel(root);
+    expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('does not resurrect a press interrupted by the loading state', () => {
+    const { container, rerender } = render(<ModernToggle label="Notifications" />);
+    const { root } = parts(container);
+
+    fireEvent.pointerDown(root);
+    rerender(<ModernToggle label="Notifications" loading />);
+    rerender(<ModernToggle label="Notifications" />);
+
+    expect(root.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+});
