@@ -1,20 +1,20 @@
-/** Modern Alert: semantic, framed feedback surface with tenant-authored tenor.
+/**
+ * Modern Alert skin (Callout folded in).
  *
- * STATE LANGUAGE (lifecycle-feedback canon): the alert is the IN-FLOW member of
- * the single urgency grammar shared with Toast and Notification — one accent
- * channel per tone drives four coordinated, never-color-only cues: the glyph
- * well (shape + tint + frame), the framed surface (edge-grammar width/style),
- * the quiet accent wash, and the label's severity WEIGHT ramp (warning/error
- * read heavier than info/success). Travel depth and entry cadence respond to
- * the tenant motion dial (--ds-motion-intensity, fallback 1 = the historical
- * render) so a calm technical posture and an expressive editorial one diverge
- * on the same DOM. */
+ * The in-flow status surface `ds-alert ds-alert--modern[data-part='root']`:
+ * an icon well, a content column (title, description, compound children and
+ * the callout action tray) and an optional dismiss whose state the interaction
+ * kernel decides. `data-tone` picks the accent, ink, wash and edges;
+ * `data-compact` tightens the rhythm, and a responsive `compact` arrives on the
+ * runtime `--ds-alert-responsive-padding`. Every channel is written by
+ * `derivation/chrome/alert` or `presentation/components/alert`.
+ */
 
-@keyframes ds-alert-enter-modern {
+@keyframes ds-alert-enter {
   from {
     opacity: 0;
-    transform: translateY(calc(var(--ds-motion-offset-in) * var(--ds-motion-intensity, 1)))
-      scale(calc(1 - 0.01 * var(--ds-motion-intensity, 1)));
+    transform: translateY(calc(var(--ds-alert-travel) * var(--ds-motion-intensity)))
+      scale(calc(1 - var(--ds-alert-scale-step) * var(--ds-motion-intensity)));
   }
   to {
     opacity: 1;
@@ -22,253 +22,199 @@
   }
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-part='root'] {
+.ds-alert.ds-alert--modern[data-part='root'] {
+  --ds-alert-accent: var(--ds-alert-info-accent, var(--ds-color-info));
+  --ds-alert-ink: var(--ds-alert-info-ink, var(--ds-color-info));
+  --ds-alert-wash: var(--ds-alert-info-wash, var(--ds-color-bg-elevated));
+  --ds-alert-well: var(--ds-alert-info-well, var(--ds-color-bg-elevated));
+  --ds-alert-edge: var(--ds-alert-info-edge, var(--ds-color-border));
+  --ds-alert-well-edge: var(--ds-alert-info-well-edge, var(--ds-color-border));
+  --ds-alert-control-edge: var(--ds-alert-info-control-edge, var(--ds-color-border));
+  --ds-alert-control-edge-hover: var(--ds-alert-info-control-edge-hover, var(--ds-color-border));
   position: relative;
   isolation: isolate;
   display: flex;
+  box-sizing: border-box;
   inline-size: 100%;
   align-items: flex-start;
-  gap: var(--ds-alert-gap, clamp(var(--ds-spacing-sm), 1.4vw, var(--ds-spacing-md)));
+  gap: var(--ds-alert-gap);
   overflow: hidden;
-  /* The responsive-compact engine writes `--ds-alert-responsive-padding`; an
-     undefined channel (tenant never set `--ds-alert-padding`) resolves to
-     guaranteed-invalid and the clamp default takes over. */
-  padding: var(
-    --ds-alert-responsive-padding,
-    var(--ds-alert-padding, clamp(var(--ds-spacing-md), 2vw, var(--ds-spacing-lg)))
-  );
-  border: var(--ds-alert-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) color-mix(in srgb, var(--ds-alert-tone) 30%, var(--ds-color-border));
-  border-radius: var(--ds-alert-radius, var(--ds-radius-lg));
-  background-color: var(--_ds-alert-wash);
-  background-image: var(--ds-gradient-surface);
-  /* Optical-edge keyline scales with the governed effect-intensity dial: at 0
-     the decoration dissolves while the tone wash, frame and type hierarchy
-     carry the severity on their own (card.css material law). */
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(35% * var(--ds-effect-intensity)), transparent),
-    var(--ds-alert-shadow, var(--ds-shadow-sm));
-  color: var(--ds-color-text-primary);
-  animation: ds-alert-enter-modern var(--ds-motion-calm, var(--ds-motion-normal)) var(--ds-ease-standard, var(--ds-motion-ease-out)) both;
-  transition:
-    border-color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    transform var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out));
+  padding: var(--ds-alert-responsive-padding, var(--ds-alert-surface-padding));
+  color: var(--ds-alert-color, var(--ds-color-text-primary));
+  background-color: var(--ds-alert-wash);
+  background-image: var(--ds-alert-texture, none);
+  border: var(--ds-alert-border-width) var(--ds-alert-border-style) var(--ds-alert-edge);
+  border-radius: var(--ds-alert-surface-radius);
+  box-shadow: var(--ds-alert-keyline, none), var(--ds-alert-shadow, none);
+  animation: ds-alert-enter var(--ds-alert-enter-duration) var(--ds-alert-enter-curve) both;
 }
 
-/* A passive feedback surface must not lift on hover: the only interactive
-   part of an alert is its action, and false affordance is worse than none.
-   (`--ds-alert-shadow-hover` remains available to tenants composing an
-   interactive alert surface of their own.) */
-
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-compact='true'] {
-  gap: var(--ds-spacing-sm);
-  padding: var(--ds-alert-compact-padding, var(--ds-spacing-sm) var(--ds-spacing-md));
+.ds-alert.ds-alert--modern[data-part='root'][data-compact='true'] {
+  gap: var(--ds-alert-compact-gap);
+  padding: var(--ds-alert-compact-padding);
 }
 
-/* Per-tone accent + severity ink relay (the Callout AUT-1 authority, family
-   adoption): the glyph reads the AA-measured `--ds-color-{tone}-ink` -- info's
-   ink is the raw hue by construction; warning/error/success deepen toward the
-   tenant neutral because the raw hue reads ~2.2:1 on the tinted well, under
-   the 3:1 floor for a semantic glyph. Frames and washes keep the raw tone
-   (decorative, not signal). Fallbacks are the raw tone: a bundle without the
-   authority paints exactly as before. */
-/* The two washes come off the tenant's semantic tint ramp rather than a local
-   percentage: `--ds-tint-<tone>-8` is how a tenant states how heavy a status
-   surface reads, and every status family draws its fill from the same step so
-   they move together. Each fallback is that site's pre-ramp mix and fires only
-   where the ramp is undeclared (a bundle with no tenant artifact), so the
-   untenanted render is unchanged. The two channels stay separate because their
-   fallbacks differ (7% at rest, 9% under the action's hover). */
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='info'] {
-  --ds-alert-tone: var(--ds-color-info);
-  --_ds-alert-tone-ink: var(--ds-color-info-ink, var(--ds-alert-tone));
-  --_ds-alert-wash: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface)));
-  --_ds-alert-action-wash-hover: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface)));
+.ds-alert.ds-alert--modern[data-part='root'][data-tone='success'] {
+  --ds-alert-accent: var(--ds-alert-success-accent);
+  --ds-alert-ink: var(--ds-alert-success-ink);
+  --ds-alert-wash: var(--ds-alert-success-wash);
+  --ds-alert-well: var(--ds-alert-success-well);
+  --ds-alert-edge: var(--ds-alert-success-edge);
+  --ds-alert-well-edge: var(--ds-alert-success-well-edge);
+  --ds-alert-control-edge: var(--ds-alert-success-control-edge);
+  --ds-alert-control-edge-hover: var(--ds-alert-success-control-edge-hover);
+}
+.ds-alert.ds-alert--modern[data-part='root'][data-tone='warning'] {
+  --ds-alert-accent: var(--ds-alert-warning-accent);
+  --ds-alert-ink: var(--ds-alert-warning-ink);
+  --ds-alert-wash: var(--ds-alert-warning-wash);
+  --ds-alert-well: var(--ds-alert-warning-well);
+  --ds-alert-edge: var(--ds-alert-warning-edge);
+  --ds-alert-well-edge: var(--ds-alert-warning-well-edge);
+  --ds-alert-control-edge: var(--ds-alert-warning-control-edge);
+  --ds-alert-control-edge-hover: var(--ds-alert-warning-control-edge-hover);
+}
+.ds-alert.ds-alert--modern[data-part='root'][data-tone='error'] {
+  --ds-alert-accent: var(--ds-alert-error-accent);
+  --ds-alert-ink: var(--ds-alert-error-ink);
+  --ds-alert-wash: var(--ds-alert-error-wash);
+  --ds-alert-well: var(--ds-alert-error-well);
+  --ds-alert-edge: var(--ds-alert-error-edge);
+  --ds-alert-well-edge: var(--ds-alert-error-well-edge);
+  --ds-alert-control-edge: var(--ds-alert-error-control-edge);
+  --ds-alert-control-edge-hover: var(--ds-alert-error-control-edge-hover);
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='success'] {
-  --ds-alert-tone: var(--ds-color-success);
-  --_ds-alert-tone-ink: var(--ds-color-success-ink, var(--ds-alert-tone));
-  --_ds-alert-wash: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface)));
-  --_ds-alert-action-wash-hover: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface)));
-}
-
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='warning'] {
-  --ds-alert-tone: var(--ds-color-warning);
-  --_ds-alert-tone-ink: var(--ds-color-warning-ink, var(--ds-alert-tone));
-  --_ds-alert-wash: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface)));
-  --_ds-alert-action-wash-hover: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface)));
-}
-
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='error'] {
-  --ds-alert-tone: var(--ds-color-error);
-  --_ds-alert-tone-ink: var(--ds-color-error-ink, var(--ds-alert-tone));
-  --_ds-alert-wash: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface)));
-  --_ds-alert-action-wash-hover: var(--ds-tint-error-8, color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface)));
-}
-
-.rottay-alert-shell.rottay-alert-shell--modern > .rottay-alert-shell__icon[data-part='icon'][data-part='icon'] {
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='icon'] {
   display: grid;
-  inline-size: var(--ds-alert-icon-well-size, 2.5rem);
-  block-size: var(--ds-alert-icon-well-size, 2.5rem);
   flex: 0 0 auto;
   place-items: center;
-  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-alert-tone) 34%, var(--ds-color-border));
-  border-radius: var(--ds-alert-icon-well-radius, var(--ds-radius-md));
-  /* The lifted ground enters color-mix() as `--ds-color-bg-elevated`, never as
-     a `--ds-surface-*` role: a surface role may carry a gradient (BitHire's
-     raised role does), and one gradient argument invalidates the whole
-     declaration, leaving the well with no fill at all. */
-  background: color-mix(in srgb, var(--ds-alert-tone) 11%, var(--ds-color-bg-elevated));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent);
-  /* The glyph carries the severity INK, never the raw hue: on a tinted well
-     the raw warning/error/success hues fall under the 3:1 glyph floor. */
-  color: var(--_ds-alert-tone-ink, var(--ds-alert-tone));
+  box-sizing: border-box;
+  inline-size: var(--ds-alert-well-size);
+  block-size: var(--ds-alert-well-size);
+  color: var(--ds-alert-ink);
+  background: var(--ds-alert-well);
+  border: var(--ds-alert-hairline-width) var(--ds-alert-border-style) var(--ds-alert-well-edge);
+  border-radius: var(--ds-alert-well-radius);
+  box-shadow: var(--ds-alert-well-keyline, none);
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern[data-compact='true'] > .rottay-alert-shell__icon[data-part='icon'][data-part='icon'] {
-  inline-size: 2rem;
-  block-size: 2rem;
-  border-radius: var(--ds-radius-sm);
+.ds-alert.ds-alert--modern[data-part='root'][data-compact='true'] > [data-part='icon'] {
+  inline-size: var(--ds-alert-compact-well-size);
+  block-size: var(--ds-alert-compact-well-size);
+  border-radius: var(--ds-alert-compact-well-radius);
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern > .rottay-alert-shell__content[data-part='content'] {
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='content'] {
   display: grid;
-  min-inline-size: 0;
   flex: 1 1 auto;
-  gap: var(--ds-spacing-xs);
   align-self: center;
+  gap: var(--ds-alert-copy-gap);
+  min-inline-size: 0;
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern .rottay-alert-shell__content[data-part='content'] > [data-part='label'] {
-  color: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: var(--ds-alert-label-size, var(--ds-font-size-sm));
-  font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-heading);
-  line-height: var(--ds-line-height-tight);
-  /* Long-copy resilience: unbroken strings (URLs, long ES/AR compounds) wrap
-     inside the content grid track instead of protruding past the action. */
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='content'] > [data-part='title'] {
+  color: var(--ds-alert-title-color);
+  font-family: var(--ds-alert-title-font-family);
+  font-size: var(--ds-alert-title-font-size);
+  font-weight: var(--ds-alert-title-font-weight);
+  line-height: var(--ds-alert-title-line-height);
+  letter-spacing: var(--ds-alert-title-letter-spacing);
   overflow-wrap: break-word;
 }
 
-/* Severity weight ramp (state language): warning/error escalate the label to
-   bold so urgency reads in TYPE, never in hue alone — the same ramp Toast and
-   Notification apply to their titles. Info/success keep the semibold voice. */
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='warning'] .rottay-alert-shell__content[data-part='content'] > [data-part='label'],
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='error'] .rottay-alert-shell__content[data-part='content'] > [data-part='label'] {
-  font-weight: var(--ds-font-weight-bold);
+.ds-alert.ds-alert--modern[data-part='root']:is([data-tone='warning'], [data-tone='error']) > [data-part='content'] > [data-part='title'] {
+  font-weight: var(--ds-alert-title-urgent-font-weight);
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern .rottay-alert-shell__content[data-part='content'] > [data-part='description'] {
-  max-inline-size: var(--ds-alert-description-width, 72ch);
-  color: var(--ds-color-text-secondary);
-  font-family: var(--ds-font-family-base);
-  font-size: var(--ds-alert-description-size, var(--ds-font-size-sm));
-  line-height: var(--ds-line-height-relaxed);
-  overflow-wrap: break-word;
-}
-
-/* The composed Alert.Description compound matches the description rule above
-   (same data-part, same paint), but the content grid's `gap` already owns the
-   vertical rhythm here: the compound skin's standalone margin floor is zeroed
-   so both description forms keep identical spacing. */
-.rottay-alert-shell--modern .rottay-alert-shell__content[data-part='content'] > .rottay-alert-description[data-part='description'] {
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='content'] > [data-part='description'] {
+  max-inline-size: var(--ds-alert-description-measure);
   margin-block-start: 0;
+  color: var(--ds-alert-description-color);
+  font-family: var(--ds-alert-description-font-family);
+  font-size: var(--ds-alert-description-font-size);
+  line-height: var(--ds-alert-description-line-height);
+  overflow-wrap: break-word;
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern > [data-part='action'][data-part='action'] {
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='content'] > [data-part='actions'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-alert-actions-gap);
+  margin-block-start: var(--ds-alert-copy-gap);
+  padding: var(--ds-alert-actions-padding);
+  background: var(--ds-alert-actions-bg);
+  border: var(--ds-alert-hairline-width) var(--ds-alert-border-style) var(--ds-alert-control-edge);
+  border-radius: var(--ds-alert-actions-radius);
+}
+
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button'] {
+  position: relative;
   display: inline-grid;
-  inline-size: var(--ds-control-height-sm, 2rem);
-  block-size: var(--ds-control-height-sm, 2rem);
   flex: 0 0 auto;
   place-items: center;
+  box-sizing: border-box;
+  inline-size: var(--ds-alert-close-size);
+  block-size: var(--ds-alert-close-size);
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--ds-alert-tone) 26%, var(--ds-color-border));
-  border-radius: var(--ds-radius-md);
-  background: color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
-  color: var(--ds-color-text-secondary);
   cursor: pointer;
-  box-shadow: var(--ds-shadow-xs);
-  transition:
-    background-color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    border-color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    transform var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out));
+  color: var(--ds-alert-close-color);
+  background: var(--ds-alert-close-bg);
+  border: var(--ds-alert-hairline-width) var(--ds-alert-border-style) var(--ds-alert-control-edge);
+  border-radius: var(--ds-alert-close-radius);
+  box-shadow: var(--ds-alert-close-shadow);
+  transition-property: background-color, border-color, color, transform, box-shadow;
+  transition-duration: var(--ds-alert-transition-duration);
+  transition-timing-function: var(--ds-alert-transition-curve);
 }
 
-/* Hover only where hover exists: no sticky tinted button on touch pointers
-   (the button.css idiom, pre-flag 8). */
+/* An invisible centered hit area meets the touch floor without growing the control. */
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']::after {
+  content: '';
+  position: absolute;
+  inset: min(0px, calc((100% - var(--ds-alert-touch-target-min)) / 2));
+}
+
 @media (hover: hover) {
-  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:hover {
-    border-color: color-mix(in srgb, var(--ds-alert-tone) 45%, var(--ds-color-border));
-    background: var(--_ds-alert-action-wash-hover);
-    color: var(--ds-color-text-primary);
+  .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='hovered'], :hover) {
+    color: var(--ds-alert-close-color-hover);
+    background: var(--ds-alert-wash);
+    border-color: var(--ds-alert-control-edge-hover);
   }
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:active {
-  transform: var(--ds-alert-action-active-transform, scale(0.94));
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='pressed'], :active) {
+  transform: scale(var(--ds-alert-press-scale));
 }
 
-/* ---- coarse pointers: the dismiss control keeps its compact 2rem visual
-        size but meets the governed 44px touch floor through an invisible
-        centered hit area (Callout/Badge idiom) -- growing the button
-        physically would break the banner's leading/center alignment. ---- */
-@media (pointer: coarse) {
-  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action'] {
-    position: relative;
-  }
-  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']::after {
-    content: '';
-    position: absolute;
-    inset: calc(50% - var(--ds-touch-target-min) / 2);
-    border-radius: var(--ds-radius-md);
-  }
-}
-
-.rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:focus-visible {
-  outline: 0;
-  box-shadow: var(--ds-alert-action-focus-ring, var(--ds-focus-ring));
+.ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: none;
+  box-shadow: var(--ds-alert-focus-ring);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone] {
+  .ds-alert.ds-alert--modern[data-part='root'] {
     animation: none;
-    transition: none;
   }
 
-  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:hover,
-  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:active {
-    transform: none;
+  .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button'] {
+    transition: none;
   }
 }
 
-/* Forced colors: tone washes are stripped, so severity must survive on the
-   semantic icon (CanvasText) and the framed surface — never on authored hue.
-   System colors only. */
 @media (forced-colors: active) {
-  .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone] {
-    forced-color-adjust: auto;
-    border-color: ButtonText;
-    background: Canvas;
-    box-shadow: none;
-  }
-
-  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > .rottay-alert-shell__icon[data-part='icon'] {
-    border-color: ButtonText;
-    background: Canvas;
-    box-shadow: none;
+  .ds-alert.ds-alert--modern[data-part='root'],
+  .ds-alert.ds-alert--modern[data-part='root'] > [data-part='icon'],
+  .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button'],
+  .ds-alert.ds-alert--modern[data-part='root'] > [data-part='content'] > [data-part='actions'] {
     color: CanvasText;
-  }
-
-  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action'] {
+    background: Canvas;
     border-color: ButtonText;
     box-shadow: none;
   }
 
-  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .ds-alert.ds-alert--modern[data-part='root'] > [data-part='close-button']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-alert-focus-ring-width) solid Highlight;
   }
 }

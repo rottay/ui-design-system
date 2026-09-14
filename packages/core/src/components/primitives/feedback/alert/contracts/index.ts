@@ -205,6 +205,12 @@ export interface AlertProps extends BaseComponentProps, EngineAwareProps {
    */
   children?: ReactNode;
 
+  /**
+   * Controls rendered in a tray under the copy (the former Callout action).
+   * Rendered by the Modern engine.
+   */
+  action?: ReactNode;
+
   // ---------------------------------------------------------------------------
   // Behavior
   // ---------------------------------------------------------------------------

@@ -1,0 +1,37 @@
+/**
+ * Alert Component Tokens - Rottay Design System
+ *
+ * Structural constants of the alert family (callout folded in) and the
+ * defaults of its runtime channels. Its decision relations are emitted by the
+ * compiler family `derivation/chrome/alert`.
+ */
+
+:root {
+  --ds-alert-surface-padding: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-alert-compact-padding: calc(var(--ds-spacing-2) * var(--ds-density-effective-scale)) calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
+  --ds-alert-surface-radius: var(--ds-radius-md);
+  --ds-alert-border-width: var(--ds-edge-standard-width);
+  --ds-alert-border-style: var(--ds-edge-standard-style);
+  --ds-alert-hairline-width: var(--ds-edge-hairline-width);
+  --ds-alert-gap: var(--ds-spacing-3);
+  --ds-alert-compact-gap: var(--ds-spacing-2);
+  --ds-alert-copy-gap: var(--ds-spacing-1);
+  --ds-alert-description-measure: 72ch;
+  --ds-alert-well-size: 2.5rem;
+  --ds-alert-compact-well-size: 2rem;
+  --ds-alert-well-radius: var(--ds-radius-md);
+  --ds-alert-compact-well-radius: var(--ds-radius-sm);
+  --ds-alert-close-size: calc(2rem * var(--ds-control-height-scale));
+  --ds-alert-close-radius: var(--ds-radius-md);
+  --ds-alert-actions-gap: var(--ds-spacing-2);
+  --ds-alert-actions-padding: var(--ds-spacing-2);
+  --ds-alert-actions-radius: var(--ds-radius-md);
+  --ds-alert-travel: var(--ds-motion-offset-in);
+  --ds-alert-scale-step: 0.01;
+  --ds-alert-enter-duration: var(--ds-motion-reveal);
+  --ds-alert-enter-curve: var(--ds-motion-ease-enter);
+  --ds-alert-transition-duration: var(--ds-motion-feedback);
+  --ds-alert-transition-curve: var(--ds-motion-ease-standard);
+  --ds-alert-focus-ring-width: 2px;
+  --ds-alert-touch-target-min: var(--ds-touch-target-min);
+}

@@ -40,6 +40,7 @@ import { dropdownChromeDeriver } from "./chrome/dropdown";
 import { tooltipChromeDeriver } from "./chrome/tooltip";
 import { tourChromeDeriver } from "./chrome/tour";
 import { notifierChromeDeriver } from "./chrome/notifier";
+import { alertChromeDeriver } from "./chrome/alert";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
 import { toggleChromeDeriver } from "./chrome/toggle";
@@ -122,6 +123,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   tooltipChromeDeriver,
   tourChromeDeriver,
   notifierChromeDeriver,
+  alertChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

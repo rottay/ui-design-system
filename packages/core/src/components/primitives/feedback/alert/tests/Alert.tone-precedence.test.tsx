@@ -64,8 +64,8 @@ describe('Alert tone precedence (real engines)', () => {
     const root = container.querySelector('[data-part="root"]');
     expect(root).toHaveAttribute('role', 'alert');
     expect(root).toHaveAttribute('data-has-icon', 'true');
-    expect(root).toHaveAttribute('data-has-description', 'true');
-    expect(root).toHaveAttribute('data-closable', 'true');
+    expect(container.querySelector('[data-part="description"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="close-button"]')).not.toBeNull();
     expect(container.querySelector('[data-icon-name="status.info"]')).not.toBeNull();
     expect(container.querySelector('[data-part="content"]')).not.toBeNull();
     expect(container.querySelector('[data-icon-name="action.close"]')).not.toBeNull();

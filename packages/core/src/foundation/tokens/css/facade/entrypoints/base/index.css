@@ -83,6 +83,7 @@
 @import "../../../presentation/components/tooltip/index.css" layer(rottay-components);
 @import "../../../presentation/components/tour/index.css" layer(rottay-components);
 @import "../../../presentation/components/notifier/index.css" layer(rottay-components);
+@import "../../../presentation/components/alert/index.css" layer(rottay-components);
 @import "../../../presentation/components/checkbox/index.css" layer(rottay-components);
 @import "../../../presentation/components/radio/index.css" layer(rottay-components);
 @import "../../../presentation/components/segmented/index.css" layer(rottay-components);
@@ -366,7 +367,6 @@
 @import "../../../runtime/engines/rustic/skin/avatar/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/calendar/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/calendar/index.css" layer(rottay-engines);
-@import "../../../runtime/engines/modern/skin/callout/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/callout/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/carousel/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/carousel/index.css" layer(rottay-engines);

@@ -75,28 +75,28 @@ export const CALLOUT_COLORS: Record<CalloutVariant, {
   icon: string;
 }> = {
   info: {
-    bg: 'var(--ds-color-info-50, #eff6ff)',
-    border: 'var(--ds-color-info-200, #bfdbfe)',
-    text: 'var(--ds-color-info-800, #1e40af)',
-    icon: 'var(--ds-color-info-500, #3b82f6)',
+    bg: 'var(--ds-color-info-50)',
+    border: 'var(--ds-color-info-200)',
+    text: 'var(--ds-color-info-800)',
+    icon: 'var(--ds-color-info-500)',
   },
   warning: {
-    bg: 'var(--ds-color-warning-50, #fffbeb)',
-    border: 'var(--ds-color-warning-200, #fde68a)',
-    text: 'var(--ds-color-warning-800, #92400e)',
-    icon: 'var(--ds-color-warning-500, #f59e0b)',
+    bg: 'var(--ds-color-warning-50)',
+    border: 'var(--ds-color-warning-200)',
+    text: 'var(--ds-color-warning-800)',
+    icon: 'var(--ds-color-warning-500)',
   },
   error: {
-    bg: 'var(--ds-color-error-50, #fef2f2)',
-    border: 'var(--ds-color-error-200, #fecaca)',
-    text: 'var(--ds-color-error-800, #991b1b)',
-    icon: 'var(--ds-color-error-500, #ef4444)',
+    bg: 'var(--ds-color-error-50)',
+    border: 'var(--ds-color-error-200)',
+    text: 'var(--ds-color-error-800)',
+    icon: 'var(--ds-color-error-500)',
   },
   success: {
-    bg: 'var(--ds-color-success-50, #f0fdf4)',
-    border: 'var(--ds-color-success-200, #bbf7d0)',
-    text: 'var(--ds-color-success-800, #166534)',
-    icon: 'var(--ds-color-success-500, #22c55e)',
+    bg: 'var(--ds-color-success-50)',
+    border: 'var(--ds-color-success-200)',
+    text: 'var(--ds-color-success-800)',
+    icon: 'var(--ds-color-success-500)',
   },
 };
 

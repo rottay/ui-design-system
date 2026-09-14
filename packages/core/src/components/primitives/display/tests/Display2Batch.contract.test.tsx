@@ -477,10 +477,11 @@ describe('Display2 (data display) data-part contract (WO-SKIN-05 checkpoint D2)'
         const root = await waitForPart(container, 'root');
         expect(root.getAttribute('data-tone')).toBe('error');
         expect(container.querySelector('[data-part="icon"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="body"]')).not.toBeNull();
+        // Modern folds Callout into the alert surface: the copy column is `content`, the tray `actions`.
+        expect(container.querySelector(engine === 'modern' ? '[data-part="content"]' : '[data-part="body"]')).not.toBeNull();
         expect(container.querySelector('[data-part="title"]')).not.toBeNull();
         expect(container.querySelector('[data-part="description"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="action"]')).not.toBeNull();
+        expect(container.querySelector(engine === 'modern' ? '[data-part="actions"]' : '[data-part="action"]')).not.toBeNull();
         expect(container.querySelector('[data-part="close-button"]')).not.toBeNull();
       },
     );
