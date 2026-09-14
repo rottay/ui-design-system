@@ -5172,6 +5172,11 @@
      "at": "2026-09-14 10:19",
      "by": "kimi-admin",
      "note": "G107-02 LANDED on r4-recon (45fc052a6): fleet population baseline reconciled with the FAM-01..03/14 renames and merges — 275->273 families, per-axis numbers exactly the audit-107 table (shape 220, typography 183, rhythm 215, depth 196, states 158, motion 203); old population preserved in the commit message and previousPin block; toast-compounds motion provenance recorded (entered at fe4eabadb WO-INV-05 via two animation:none kill switches; vocabulary question belongs to the motion vocabulary, not this pin; toast-compounds retires with WO-FAM-04, which republishes the population again). Audited by kimi-admin: population suite 15/15 on the lot worktree and on r4-recon after cherry-pick; the five shrink drills and both negative pilot drills stay green; no threshold or D1 minimum touched. G107-01 pin re-adjudication (Lot B) remains HELD until the FAM-04 integration lands, because the FAM-04 draft edits the same CHANNEL_DISPOSITIONS block."
+    },
+    {
+     "at": "2026-09-14 10:58",
+     "by": "kimi-admin",
+     "note": "PRE-EXISTING MAIN DEBT (detected during the FAM-04 integration audit, red already at pin 25d245167): engine-audit scale.fallbackParityViolations=5 vs baseline 0 — the skins approval-workflow, list-toolbar and tree-view declare motion fallbacks of 720ms against the resolved --ds-motion-deliberate 320ms (modern/skin/*/index.css). NOT from the FAM-04 branch or the correction wave (git log over those skins is empty for the range). Resolution criterion: each fallback corrected to the resolved value with its family verified, picked up by the family cut that owns the skin (FAM-06/08/10 at claim time); no baseline reseed and no widening. The separate fleet.inlinePaint hit on the skeleton anatomy-renderer is owned by the FAM-14 lot now dispatched on wo-fix-fam14."
     }
    ]
   },
