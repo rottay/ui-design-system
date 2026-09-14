@@ -4607,6 +4607,11 @@
      "at": "2026-09-14 10:06",
      "by": "kimi-admin",
      "note": "R107-FAM-01 + R107-FAM-03 LANDED on r4-recon (0be1b2864 one-state-owner form runtime; be6e39cc2 OTP single-commit composition). Audited by kimi-admin: adversarial audit-107 probes flip exactly the two Form cases and the OTP case green on the candidate and on the integrated branch; 14 form/otp files 126/126 in the lot worktree, 192/192 combined form+otp+select on r4-recon; tsc --noEmit clean; no public contract delta (contracts/index.ts untouched); writer boundaries honored (isFieldsTouched/getFieldsError argument-ignoring left as before; foreign FormInstance note recorded). WO STAYS OPEN for the registered third follow-up (R107-FAM-04: validation options type/len/whitespace/warningOnly, numeric/array min-max, Form.List value operations — bounded lots with contract+runtime cases; no silent removal of public options)."
+    },
+    {
+     "at": "2026-09-14 18:53",
+     "by": "kimi-admin",
+     "note": "Post-107 Codex audit adds P107-FAM-03 (families.md): full/selective resetFields loses Form.Item initialValue (runtime/state/index.tsx:180-205 reads only root initialValues; item defaults seeded at 330-336 never stored as reset defaults). Acceptance: single store keeps effective field reset defaults, root defaults keep documented precedence, prove full+selective reset, untouched neighbors, unregistration/remount. R107-FAM-04 (validation options + Form.List operations) remains open scope; store unification did not implement it."
     }
    ],
    "doneAt": null,
@@ -4659,7 +4664,7 @@
    "lane": "family-cuts",
    "order": 5,
    "size": "L",
-   "status": "done",
+   "status": "todo",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4671,9 +4676,9 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "Account seats 2026-09-14 (owner): writer = claude-admin (real Opus, admin@rottay.com, verified claude-opus-5); the daniel/default profile is no longer used for programme work. Recovery checkpoint preserved at refs/checkpoints/fam04-2026-09-14-head (=0866afe18) and refs/checkpoints/fam04-2026-09-14-worktree (=f8c9894c7).",
-   "claimedBy": "claude-admin",
-   "claimedAt": "2026-09-13",
+   "notes": "Post-107 Codex audit (audit/post-107-checkpoint-2026-09-14/families.md): three bounded lifecycle defects in the unified Notifier. P107-FAM-01: same-key refresh during manual/timed exit is removed by the previous exit callback (notification/engines/modern/index.tsx:108-113 keeps React key; notifier/runtime/exit/index.ts:41-51 fires the stale removal). P107-FAM-02: replacing duration subtracts old elapsed from the new budget (runtime/countdown/index.ts:53-56 render-reset vs effect cleanup at 63-65). P107-FAM-04: NotifierItem local Escape handler (presentation/item/index.tsx:128-131) dismisses during IME composition; shared layer-stack router repair does not cover the consumer-local branch. Nine prior counterexamples stay green; do not reimplement them.",
+   "claimedBy": null,
+   "claimedAt": null,
    "progressLog": [
     {
      "at": "2026-09-14 09:30",
@@ -4699,10 +4704,15 @@
      "at": "2026-09-14 12:14",
      "by": "kimi-admin",
      "note": "ACCEPTANCE LOTS LANDED on r4-recon, audited by kimi-admin: (1) eb390ee9e --ds-z-index-base: alert declares no stacking anywhere, so the band terminal could only be invented — indirection retired to the literal step 1 (the --ds-z-index-message pattern), the channel RE-ADJUDICATED to unreadEmittedNoRoute (the floor of a z-scale is declared, never read; clears only if the canonical roster drops the floor); liveness suite 108/108, census tracked. (2) 3082d0dfb + 00138ac1f + 010b98cd0 --ds-tint-4: the fold had painted every callout a step DARKER (step 8 vs its historical step 4) — alert gains a subtle emphasis, the deriver produces --ds-alert-<tone>-wash-subtle on step 4 (LIVE_MODERN_PAINTED at skin background-color), the folded Callout asks for it; the ramp step re-owned to WO-EVI-02 with step 12 (a cut skin may not read a compiler ramp step directly — readWithoutProducer — and the graph cannot follow the legal deriver-value route; the causal-gates lane owns proving it); alert census 129 -> 133 anchored. (3) 4bf42753f Escape router: the capture-phase Escape router yields to isComposingKey — a composed Escape cancels the IME candidate, not the surface; plain Escape still dismisses; covered at the router + select-in-popover + dropdown; modal deliberately absent (native dialog cancel already withholds during composition); message entrypoint re-anchored for the guard (8bbd3d466). Integration lesson recorded: one mid-flight state (the 49060f9f0 test expectation) was picked before the writer finished verification; its own 58e4b5159 correction landed immediately after — integrate only on the writer completion signal from here. Suites on r4-recon: alert 57/57, layer-stack+z-index+alert+callout+notifier 131/131, liveness 108/108 (50 pins), hooks/PUBAPI green. WO-FAM-04 remaining before closure: the milestone checkpoint evidence + EVI-05 cells are separate WOs; this WO now awaits the checkpoint receipt."
+    },
+    {
+     "at": "2026-09-14 18:53",
+     "by": "reopen",
+     "note": "REOPENED from done. Reason: concrete notification lifecycle defects reproduced at pin 3dd32ac68 by independent audit. Prior claimedBy=claude-admin claimedAt=2026-09-13 doneAt=2026-09-14. Prior evidence (verbatim): DONE after the serialized milestone checkpoint (pinned 605c5bf34 + sweep repairs), audited by kimi-admin. The cut: modal, drawer, sheet, alert-dialog, confirm-dialog, popover, dropdown, hover-card, tooltip, tour, the D-17 unified Notifier (toast/notification/message roles) and alert with Callout folded in — chrome derivers emit every component channel from decisions, Modern skins consume roles/material/derived shadows/radius-full/z-scale/[data-state], TSX carries no visual values, one ds-<family> namespace per family, shared kernels consumed (overlay, interaction-state, submit-intent, layer-stack, direction, anatomy skeleton). Acceptance gate: read-without-producer exit 0 (debt 1685 -> 1362, 0 new unproduced reads); top-hardcodes-curated 0 for the cut's skins (paint-layer debt shrank 4 rows); contract census 0 mismatches with the adjudicated shared-compound notes on tour/notifier recorded in the family-cut baseline; causality sweep 429/429 across FAM-01..04 on the packed build including the folded-callout subtle-wash contract and the modal/popover elevation-surface pins; axe legs green inside the gated rosters with the known registered exceptions; no rottay-* class emitted (suppliers contract and changeset record the renames). Amendment R4: adapt?: Adapt<OverlayAdaptation> on modal/drawer/sheet with data-posture SSR-projected (ssr-viewport-hint 93/93); WO-FAM-14 done and the cut's loading states build from the anatomy renderer (browser 12/12 + 66/66). Corrections landed pre-close: R107-DRAFT-01 Notifier independent pause reasons (adversarial probes green, 22/22), Escape-during-composition guard in the layer-stack (router + select-in-popover + dropdown), --ds-z-index-base re-adjudicated (alert declares no stacking; literal step; scale invariant enforced), --ds-tint-4 given a legal painting reader (--ds-alert-<tone>-wash-subtle, LIVE_MODERN_PAINTED) with the ramp step re-owned to WO-EVI-02, dismiss two-factor control-height spelling, alert/message/radio entrypoint budgets anchored through the gate's official door with measured causes. Checkpoint: full suite 18184/16 with the 16 = exactly the pre-existing base-red set (verified test-by-test vs the base fixture), RUNTIME-01 receipt PASS, mount 24/24, consumer 29/29, axis-difference 62/62, pilot instrument 4/4. STANDING ROUTED CELLS (not pass cells): the tint-12/tint-4 deriver-value-to-skin extraction route belongs to WO-EVI-02's instrument; segmented/rhythm and the other EVI-05 cells stay in WO-EVI-05; the frozen-skin compat channels restate only when current chrome is authored. Prior notes (verbatim): Account seats 2026-09-14 (owner): writer = claude-admin (real Opus, admin@rottay.com, verified claude-opus-5); the daniel/default profile is no longer used for programme work. Recovery checkpoint preserved at refs/checkpoints/fam04-2026-09-14-head (=0866afe18) and refs/checkpoints/fam04-2026-09-14-worktree (=f8c9894c7)."
     }
    ],
-   "doneAt": "2026-09-14",
-   "evidence": "DONE after the serialized milestone checkpoint (pinned 605c5bf34 + sweep repairs), audited by kimi-admin. The cut: modal, drawer, sheet, alert-dialog, confirm-dialog, popover, dropdown, hover-card, tooltip, tour, the D-17 unified Notifier (toast/notification/message roles) and alert with Callout folded in — chrome derivers emit every component channel from decisions, Modern skins consume roles/material/derived shadows/radius-full/z-scale/[data-state], TSX carries no visual values, one ds-<family> namespace per family, shared kernels consumed (overlay, interaction-state, submit-intent, layer-stack, direction, anatomy skeleton). Acceptance gate: read-without-producer exit 0 (debt 1685 -> 1362, 0 new unproduced reads); top-hardcodes-curated 0 for the cut's skins (paint-layer debt shrank 4 rows); contract census 0 mismatches with the adjudicated shared-compound notes on tour/notifier recorded in the family-cut baseline; causality sweep 429/429 across FAM-01..04 on the packed build including the folded-callout subtle-wash contract and the modal/popover elevation-surface pins; axe legs green inside the gated rosters with the known registered exceptions; no rottay-* class emitted (suppliers contract and changeset record the renames). Amendment R4: adapt?: Adapt<OverlayAdaptation> on modal/drawer/sheet with data-posture SSR-projected (ssr-viewport-hint 93/93); WO-FAM-14 done and the cut's loading states build from the anatomy renderer (browser 12/12 + 66/66). Corrections landed pre-close: R107-DRAFT-01 Notifier independent pause reasons (adversarial probes green, 22/22), Escape-during-composition guard in the layer-stack (router + select-in-popover + dropdown), --ds-z-index-base re-adjudicated (alert declares no stacking; literal step; scale invariant enforced), --ds-tint-4 given a legal painting reader (--ds-alert-<tone>-wash-subtle, LIVE_MODERN_PAINTED) with the ramp step re-owned to WO-EVI-02, dismiss two-factor control-height spelling, alert/message/radio entrypoint budgets anchored through the gate's official door with measured causes. Checkpoint: full suite 18184/16 with the 16 = exactly the pre-existing base-red set (verified test-by-test vs the base fixture), RUNTIME-01 receipt PASS, mount 24/24, consumer 29/29, axis-difference 62/62, pilot instrument 4/4. STANDING ROUTED CELLS (not pass cells): the tint-12/tint-4 deriver-value-to-skin extraction route belongs to WO-EVI-02's instrument; segmented/rhythm and the other EVI-05 cells stay in WO-EVI-05; the frozen-skin compat channels restate only when current chrome is authored."
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-FAM-05",
@@ -5712,7 +5722,7 @@
    "lane": "family-cuts",
    "order": 15,
    "size": "M",
-   "status": "done",
+   "status": "todo",
    "dependsOn": [
     "WO-DER-01",
     "WO-INV-05"
@@ -5721,7 +5731,7 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "One bounded lot; renderer and anatomy integrations retained. Extend geometry observation to measured descendants and relevant layout changes with observer cleanup; stop skeleton loops when loading ends (short handover transition allowed) and resume on re-entry with reduced-motion static throughout; verify React 18 SSR + hydration keyboard isolation beside React 19 with a peer-compatible inert binding — do not narrow the peer range. Acceptance per audit/107-restart-2026-09-14/runtime-and-pilot.md: browser focal proves copied bones catch up with constant wrapper bounds, getAnimations subtree shows no running loop after handover, and React 18 shows no attribute warning or hydration mismatch.",
+   "notes": "Post-107 Codex audit R108-RUN-01 (audit/post-107-checkpoint-2026-09-14/runtime.md): anatomy-renderer observes mutations only inside source subtree plus html dir; per-element ResizeObservers miss size-neutral inherited changes. Three Chromium counterexamples at pin 3dd32ac68 (skeleton-geometry-probe.cjs): ancestor custom property radius change (4px→20px copied stale), scoped ancestor dir=ltr→rtl (x stale), stylesheet translateX(17px) (position stale); both positive controls pass. Adjudicate the supported invalidation surface, repair provider/ancestor cases (css-color-resolution paint-owner contract: ancestor class/style/tenant attrs), no polling, single renderer, no observer loops; red-before/green-after browser cases with observed box sizes constant. Prior 74/74 unit + React 18.3.1/19.2.5 inert evidence stays valid.",
    "progressLog": [
     {
      "at": "2026-09-14 09:30",
@@ -5732,12 +5742,17 @@
      "at": "2026-09-14 10:18",
      "by": "kimi-admin",
      "note": "ROUTED follow-up from the audited R107-RUN-04 lot (writer-reported, scope-disciplined): other components still bind boolean inert={true} (e.g. primitives/overlay/popover/engines/modern:772), which only React 19 serialises. Bounded survey lot: enumerate every boolean-inert binding, switch each to the presence form (inert={\"inert\"} pattern from b42a0bb53 / 0c717cd76) with SSR + hydration proof per consumer; peer range stays ^18||^19. Owner: this WO as the inert-pattern owner. Not started."
+    },
+    {
+     "at": "2026-09-14 18:53",
+     "by": "reopen",
+     "note": "REOPENED from done. Reason: residual geometry invalidation gap reproduced in Chromium by independent audit. Prior claimedBy=claude-admin claimedAt=2026-09-14 doneAt=2026-09-14. Prior evidence (verbatim): RE-CLOSED after R107-RUN-02/03/04, audited by kimi-admin on r4-recon (3321708ea geometry observation, 39a7c3572 animation shutdown, 0c717cd76 peer-compatible inert). Evidence reproduced by the auditor: skeleton suite 66/66 (11 new tests, 7 red against the pre-lot renderer and 3 against the pre-lot skin per the writer's keep-* snapshots); Chromium focal 12/12 — descendant/stylesheet/font geometry catch-up with constant wrapper bounds, part add/remove, direction change, no running loop after handover with resume on re-entry, reduced-motion static, inert isolation (not focusable/hit-testable while loading, restored after); React-major leg on REAL react@18.3.1 + react@19.2.5: SSR emits the presence-form inert on both, absent when not loading, zero hydration recoverable errors. Renderer and all anatomy integrations retained; no per-family shapes; no polling; peer range unchanged. ROUTED (not closed here): the cross-component boolean-inert survey registered in this log. Prior notes (verbatim): One bounded lot; renderer and anatomy integrations retained. Extend geometry observation to measured descendants and relevant layout changes with observer cleanup; stop skeleton loops when loading ends (short handover transition allowed) and resume on re-entry with reduced-motion static throughout; verify React 18 SSR + hydration keyboard isolation beside React 19 with a peer-compatible inert binding — do not narrow the peer range. Acceptance per audit/107-restart-2026-09-14/runtime-and-pilot.md: browser focal proves copied bones catch up with constant wrapper bounds, getAnimations subtree shows no running loop after handover, and React 18 shows no attribute warning or hydration mismatch."
     }
    ],
-   "claimedBy": "claude-admin",
-   "claimedAt": "2026-09-14",
-   "doneAt": "2026-09-14",
-   "evidence": "RE-CLOSED after R107-RUN-02/03/04, audited by kimi-admin on r4-recon (3321708ea geometry observation, 39a7c3572 animation shutdown, 0c717cd76 peer-compatible inert). Evidence reproduced by the auditor: skeleton suite 66/66 (11 new tests, 7 red against the pre-lot renderer and 3 against the pre-lot skin per the writer's keep-* snapshots); Chromium focal 12/12 — descendant/stylesheet/font geometry catch-up with constant wrapper bounds, part add/remove, direction change, no running loop after handover with resume on re-entry, reduced-motion static, inert isolation (not focusable/hit-testable while loading, restored after); React-major leg on REAL react@18.3.1 + react@19.2.5: SSR emits the presence-form inert on both, absent when not loading, zero hydration recoverable errors. Renderer and all anatomy integrations retained; no per-family shapes; no polling; peer range unchanged. ROUTED (not closed here): the cross-component boolean-inert survey registered in this log."
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null
   }
  ],
  "traceability": {
