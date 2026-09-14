@@ -5640,7 +5640,7 @@
    "lane": "family-cuts",
    "order": 15,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01",
     "WO-INV-05"
@@ -5655,12 +5655,17 @@
      "at": "2026-09-14 09:30",
      "by": "reopen",
      "note": "REOPENED from done. Reason: R107-RUN-02/03/04 (audit 107): the anatomy renderer ResizeObserves only the source wrapper and MutationObserves child-list/data-part — not descendant sizes, computed radius or font readiness (strong inference, browser focal owed); infinite pulse/shimmer loops survive loading end because selectors key on data-animation but not data-loading (strong inference); loading isolation uses boolean inert, tested only on React 19 while peers allow ^18, and React 18 removes unknown boolean attributes (compatibility risk, not locally executed).. Prior claimedBy=daniel claimedAt=2026-09-12 doneAt=2026-09-13. Prior evidence (verbatim): LANDED 23eec22fc (writer cea31faca, Opus claude-opus-5 daniel profile). One anatomy-derived renderer (AnatomySkeleton) reads the stamped data-part anatomy and paints bones by role; the nine hand-made compounds + compound skin deleted without compat; shimmer only --ds-motion-*; reduced-motion = static flat surface; family-cut arm anatomy-derived-skeleton flipped OWED->BLOCKING as the WO's own close act. Independent audit Kimi K3 (temporary Fable substitution; design seat excepted by owner 2026-09-13, debrief delta): skeleton suite 63/63, 4 gate drills green (planted hand-made skeleton BLOCKING, planted shimmer keyframe BLOCKING, composing family green, arm holds on live tree), 7 family-cut suite reds verified IDENTICAL set at base 2583f10da, liveness 106/106 + dispositions 44/44, reduced-motion guard 53/53, decisions-lit regenerated + :check exit 0, baseline lowerings with set-difference justifications, grep survivors = only frozen AntD comments, changeset major. Design review: Codex ACCEPT (debrief delta addendum), Kimi ACCEPT (conflict declared), Fable excepted by owner. Flags routed: BrandMotion.pulseSpeed no longer drives skeleton cadence (tenant dial still scales; declared in changeset); ds-skeleton-* keyframes remain for frozen Rustic + table/stats-grid skins (their cuts migrate them). Combined-candidate checks on main 3f1405c1c: liveness 0, dispositions 0, family-cut gate 0, decisions-lit:check 0, contract-changeset 0. Prior notes (verbatim): OWNER-RATIFIED 2026-09-08 (GO del owner post-checkpoint DER-02): activated 1:1 per anti-sprawl law; need identified by the 2026-09-08 re-audit (missing skeleton owner; family-cut-template.md 4.2 and family-cut/index.mjs:106-109 both reported UNASSIGNED). wave 3; must close BEFORE WO-FAM-01 closes and therefore before A2-pilot, and the same clause blocks every later cut. Stated as a per-cut close condition in WO-FAM-01..13 rather than as registry edges, so a cut may start in parallel and only its closure waits. Flipping the anatomy-derived-skeleton arm OWED->BLOCKING is this WO's own close act."
+    },
+    {
+     "at": "2026-09-14 10:18",
+     "by": "kimi-admin",
+     "note": "ROUTED follow-up from the audited R107-RUN-04 lot (writer-reported, scope-disciplined): other components still bind boolean inert={true} (e.g. primitives/overlay/popover/engines/modern:772), which only React 19 serialises. Bounded survey lot: enumerate every boolean-inert binding, switch each to the presence form (inert={\"inert\"} pattern from b42a0bb53 / 0c717cd76) with SSR + hydration proof per consumer; peer range stays ^18||^19. Owner: this WO as the inert-pattern owner. Not started."
     }
    ],
    "claimedBy": "claude-admin",
    "claimedAt": "2026-09-14",
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-14",
+   "evidence": "RE-CLOSED after R107-RUN-02/03/04, audited by kimi-admin on r4-recon (3321708ea geometry observation, 39a7c3572 animation shutdown, 0c717cd76 peer-compatible inert). Evidence reproduced by the auditor: skeleton suite 66/66 (11 new tests, 7 red against the pre-lot renderer and 3 against the pre-lot skin per the writer's keep-* snapshots); Chromium focal 12/12 — descendant/stylesheet/font geometry catch-up with constant wrapper bounds, part add/remove, direction change, no running loop after handover with resume on re-entry, reduced-motion static, inert isolation (not focusable/hit-testable while loading, restored after); React-major leg on REAL react@18.3.1 + react@19.2.5: SSR emits the presence-form inert on both, absent when not loading, zero hydration recoverable errors. Renderer and all anatomy integrations retained; no per-family shapes; no polling; peer range unchanged. ROUTED (not closed here): the cross-component boolean-inert survey registered in this log."
   }
  ],
  "traceability": {
