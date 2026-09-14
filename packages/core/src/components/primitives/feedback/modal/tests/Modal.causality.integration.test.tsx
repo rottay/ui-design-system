@@ -1,7 +1,8 @@
 /**
  * The modal family in a real browser: every decision its paint consumes moves
- * the dialog with a negative control; the fullscreen presentation takes the
- * dynamic viewport, the header mirrors under RTL, and language, loading and
+ * the dialog with a negative control; the surface composes the elevation-surface
+ * wash over its own fill, the fullscreen presentation takes the dynamic
+ * viewport, the header mirrors under RTL, and language, loading and
  * accessibility hold.
  */
 import React from 'react';
@@ -99,6 +100,30 @@ describeCausality({
 });
 
 describe('modal posture, direction, language, loading and accessibility', () => {
+  // The wash is a separate background layer from the fill, so a skin that drops
+  // it still paints a plausible surface; the reference node declares only the wash.
+  it('composes the elevation-surface wash above its own fill', async () => {
+    const reference =
+      '<div id="wash" style="background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4));"></div>';
+    const result = await measureArms({
+      vertical: 'rottay',
+      markup: `${reference}<div id="dialog">${markup}</div>`,
+      arms: { base: {} },
+      targets: [
+        { id: 'wash', selector: '#wash', property: 'background-image' },
+        { id: 'lift', selector: `#dialog ${SURFACE}`, property: '--ds-elevation-surface-4' },
+        { id: 'surfaceImage', selector: `#dialog ${SURFACE}`, property: 'background-image' },
+        { id: 'surfaceFill', selector: `#dialog ${SURFACE}`, property: 'background-color' },
+      ],
+    });
+    const r = result.base!;
+    expect(r.lift.trim()).not.toBe('');
+    expect(r.wash).toMatch(/^linear-gradient\(/);
+    expect(r.surfaceImage.slice(0, r.wash.length)).toBe(r.wash);
+    expect(r.surfaceImage.length).toBeGreaterThan(r.wash.length);
+    expect(r.surfaceFill).not.toBe('rgba(0, 0, 0, 0)');
+  }, 60_000);
+
   it('takes the whole dynamic viewport in the fullscreen presentation and floats otherwise', async () => {
     const floating = dialogMarkup({ children: 'Body copy' });
     const fullscreen = dialogMarkup({ children: 'Body copy' }, PHONE);

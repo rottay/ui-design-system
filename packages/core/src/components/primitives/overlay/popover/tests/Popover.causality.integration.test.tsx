@@ -1,7 +1,8 @@
 /**
  * The popover family in a real browser: every decision its paint consumes moves
- * the surface with a negative control; a recipe swaps the material, the copy
- * mirrors under RTL, and loading and accessibility hold.
+ * the surface with a negative control; the surface composes the elevation-surface
+ * wash over its own fill, a recipe swaps the material, the copy mirrors under
+ * RTL, and loading and accessibility hold.
  */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
@@ -56,6 +57,29 @@ describeCausality({
 });
 
 describe('popover recipe, direction, loading and accessibility', () => {
+  // The wash is a separate background layer from the fill, so a skin that drops
+  // it still paints a plausible surface; the reference node declares only the wash.
+  it('composes the elevation-surface wash above its own fill', async () => {
+    const reference =
+      '<div id="wash" style="background-image: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));"></div>';
+    const result = await measureArms({
+      vertical: 'rottay',
+      markup: `${reference}<div id="popover">${markup}</div>`,
+      arms: { base: {} },
+      targets: [
+        { id: 'wash', selector: '#wash', property: 'background-image' },
+        { id: 'lift', selector: `#popover ${SURFACE}`, property: '--ds-elevation-surface-3' },
+        { id: 'surfaceImage', selector: `#popover ${SURFACE}`, property: 'background-image' },
+        { id: 'surfaceFill', selector: `#popover ${SURFACE}`, property: 'background-color' },
+      ],
+    });
+    const r = result.base!;
+    expect(r.lift.trim()).not.toBe('');
+    expect(r.wash).toMatch(/^linear-gradient\(/);
+    expect(r.surfaceImage.slice(0, r.wash.length)).toBe(r.wash);
+    expect(r.surfaceFill).not.toBe('rgba(0, 0, 0, 0)');
+  }, 60_000);
+
   it('swaps the material with the recipe the surface stamps', async () => {
     const result = await measureArms({
       vertical: 'evnto',
