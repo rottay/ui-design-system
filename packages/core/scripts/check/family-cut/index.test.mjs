@@ -17,6 +17,8 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
 
+import ts from 'typescript';
+
 import { collectSkinFiles } from '../../libraries/engine/skins/files/index.mjs';
 import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.mjs';
 import { collectChannelProducers } from '../../libraries/tokens/producers/index.mjs';
@@ -452,27 +454,67 @@ const patchTests = (sandbox, replace) => {
   }
 };
 
-/** The two real `style={interactiveStyle}` sites of the Modern button. */
-const wrapBothStyleSites = (wrap) => (text) => {
-  const wrapped = text.replaceAll('style={interactiveStyle}', `style={${wrap}}`);
-  assert.equal(
-    (wrapped.match(new RegExp(`style=\\{${wrap.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}\\}`, 'gu')) ?? []).length,
-    2,
-    'the drill must rewrite both real style sites, or it proves nothing',
-  );
-  return wrapped;
+/**
+ * Every real `style={…}` attribute of a file, read from its AST: a drill pinned
+ * to one written shape stops planting the day the source is refactored.
+ */
+const styleSites = (text, file = MODERN_TSX) => {
+  const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const sites = [];
+  const visit = (node) => {
+    if (ts.isJsxAttribute(node)
+      && node.name.getText(source) === 'style'
+      && node.initializer
+      && ts.isJsxExpression(node.initializer)
+      && node.initializer.expression) {
+      const expression = node.initializer.expression;
+      sites.push({
+        start: expression.getStart(source),
+        end: expression.getEnd(),
+        text: expression.getText(source),
+      });
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  return sites;
 };
 
-for (const [label, wrap] of [
-  ['an `as` cast', "{ ...interactiveStyle, color: 'red' } as React.CSSProperties"],
-  ['a parenthesis', "({ ...interactiveStyle, color: 'red' })"],
-  ['a `satisfies`', "{ ...interactiveStyle, color: 'red' } satisfies React.CSSProperties"],
-  ['a parenthesised cast', "(({ ...interactiveStyle, color: 'red' }) as React.CSSProperties)"],
-  ['a spread of a literal', "{ ...interactiveStyle, ...{ color: 'red' } }"],
-]) {
+/** Rewrites every real `style={…}` site of the Modern button through `wrap`. */
+const plantAtEveryStyleSite = (wrap) => (text) => {
+  const sites = styleSites(text);
+  assert.equal(sites.length, 2, `the Modern button has two \`style\` sites; the drill found ${sites.length}`);
+  let planted = text;
+  for (const site of [...sites].reverse()) {
+    planted = `${planted.slice(0, site.start)}${wrap(site.text)}${planted.slice(site.end)}`;
+  }
+  assert.notEqual(planted, text, 'a wrapper that rewrites nothing plants nothing, and proves nothing');
+  assert.deepEqual(
+    styleSites(planted).map((site) => site.text),
+    sites.map((site) => wrap(site.text)),
+    'the drill must rewrite both real style sites, or it proves nothing',
+  );
+  return planted;
+};
+
+/** The planted expression: the site's own style value, plus what `extra` adds. */
+const merged = (style, extra) => `{ ${[`...(${style})`, ...extra].join(', ')} }`;
+
+const TRANSPARENT_WRAPPERS = [
+  ['an `as` cast', (style, extra) => `${merged(style, extra)} as React.CSSProperties`],
+  ['a parenthesis', (style, extra) => `(${merged(style, extra)})`],
+  ['a `satisfies`', (style, extra) => `${merged(style, extra)} satisfies React.CSSProperties`],
+  ['a parenthesised cast', (style, extra) => `((${merged(style, extra)}) as React.CSSProperties)`],
+  ['a spread of a literal', (style, extra) => `{ ...(${style}), ...{ ${extra.join(', ')} } }`],
+];
+
+const AUTHORED_PAINT = ["color: 'red'"];
+const RUNTIME_CHANNEL = ["'--ds-button-planted': pressMotion.variables['--ds-recipe-enter']"];
+
+for (const [label, wrap] of TRANSPARENT_WRAPPERS) {
   test(`PLANT: authored paint behind ${label} is still BLOCKING`, () => {
     withPlantedFamily(
-      (sandbox) => patch(sandbox, MODERN_TSX, wrapBothStyleSites(wrap)),
+      (sandbox) => patch(sandbox, MODERN_TSX, plantAtEveryStyleSite((style) => wrap(style, AUTHORED_PAINT))),
       (findings, measured) => {
         expectFinding(
           findings,
@@ -489,28 +531,38 @@ for (const [label, wrap] of [
   });
 }
 
-test('CONTROL: the same wrapper WITHOUT authored paint is not a violation', () => {
+test('CONTROL: the same wrappers WITHOUT authored paint are not a violation', () => {
   // Without this the drills above would pass for the wrong reason: the gate
-  // could be refusing casts rather than refusing paint.
-  withPlantedFamily(
-    (sandbox) => patch(
-      sandbox,
-      MODERN_TSX,
-      wrapBothStyleSites('{ ...interactiveStyle } as React.CSSProperties'),
-    ),
-    (findings) => expectNoFinding(findings, 'BLOCKING inline paint', 'a cast is not itself a paint decision'),
-  );
+  // could be refusing wrappers rather than refusing paint.
+  for (const [label, wrap] of TRANSPARENT_WRAPPERS) {
+    withPlantedFamily(
+      (sandbox) => patch(sandbox, MODERN_TSX, plantAtEveryStyleSite((style) => wrap(style, []))),
+      (findings, measured) => {
+        assert.deepEqual(measured.blocking.inlineStyleViolations, [], `${label} is not itself a paint decision`);
+        expectNoFinding(findings, 'BLOCKING inline paint', `${label} is not itself a paint decision`);
+      },
+    );
+  }
 });
 
-test('CONTROL: a runtime `--ds-*` channel behind a cast is still allowed inline', () => {
-  withPlantedFamily(
-    (sandbox) => patch(
-      sandbox,
-      MODERN_TSX,
-      wrapBothStyleSites("{ ...interactiveStyle, '--ds-button-planted': pressMotion.duration } as React.CSSProperties"),
-    ),
-    (findings) => expectNoFinding(findings, 'BLOCKING inline paint', 'a runtime-computed channel may travel inline'),
-  );
+test('CONTROL: a runtime `--ds-*` channel behind each wrapper is still allowed inline', () => {
+  for (const [label, wrap] of TRANSPARENT_WRAPPERS) {
+    withPlantedFamily(
+      (sandbox) => patch(sandbox, MODERN_TSX, plantAtEveryStyleSite((style) => wrap(style, RUNTIME_CHANNEL))),
+      (findings, measured) => {
+        assert.deepEqual(
+          measured.blocking.inlineStyleViolations,
+          [],
+          `a runtime-computed channel behind ${label} may travel inline`,
+        );
+        expectNoFinding(
+          findings,
+          'BLOCKING inline paint',
+          `a runtime-computed channel behind ${label} may travel inline`,
+        );
+      },
+    );
+  }
 });
 
 test('the calibration family has executable a11y evidence, not matching text', () => {
