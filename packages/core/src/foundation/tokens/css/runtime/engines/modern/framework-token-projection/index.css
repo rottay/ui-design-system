@@ -40,7 +40,7 @@
   /* DaisyUI 5 structural vocabulary. Do not reintroduce the removed Daisy 4
      `--rounded-*`, `--animation-*`, `--btn-focus-scale` or `--tab-*` names. */
   --radius-selector: var(--ds-radius-sm);
-  --radius-field: var(--ds-radius-button);
+  --radius-field: var(--ds-radius-button, var(--ds-radius-md));
   --radius-box: var(--ds-radius-lg);
   --size-selector: var(--ds-spacing-1);
   --size-field: var(--ds-spacing-1);

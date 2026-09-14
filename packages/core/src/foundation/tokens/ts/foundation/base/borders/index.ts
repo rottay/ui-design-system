@@ -32,7 +32,7 @@ export const radius = {
   '3xl': 'var(--ds-radius-3xl)',
   full: 'var(--ds-radius-full)',
   // Component-specific
-  button: 'var(--ds-radius-button)',
+  button: 'var(--ds-radius-button, var(--ds-radius-md))',
   input: 'var(--ds-radius-input)',
   card: 'var(--ds-radius-card)',
   modal: 'var(--ds-radius-modal)',

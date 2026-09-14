@@ -24,7 +24,9 @@
      ======================================================================== */
 
   /* Component-specific radius */
-  --ds-radius-button: var(--ds-radius-md);
+  /* `initial` means NO silhouette decided: a value here would shadow the
+     per-size control ramp every button size resolves underneath it. */
+  --ds-radius-button: initial;
   --ds-radius-input: var(--ds-radius-md);
   --ds-radius-card: var(--ds-radius-lg);
   --ds-radius-modal: var(--ds-radius-xl);
