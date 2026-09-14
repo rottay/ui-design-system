@@ -55,6 +55,8 @@ export interface AlertSurfaceProps {
   /** A change of this key brings a dismissed surface back. */
   dismissKey?: string | number | null;
   announce: 'alert' | 'status';
+  /** `subtle` washes one tint step lighter; it is what the folded Callout is. */
+  emphasis?: 'standard' | 'subtle';
   className?: string;
   style?: React.CSSProperties;
 }
@@ -89,6 +91,7 @@ export function AlertSurface({
   onClose,
   dismissKey = null,
   announce,
+  emphasis = 'standard',
   className,
   style,
 }: AlertSurfaceProps): React.ReactElement | null {
@@ -139,6 +142,7 @@ export function AlertSurface({
       ref={rootRef}
       data-part="root"
       data-tone={tone}
+      data-emphasis={emphasis === 'subtle' ? 'subtle' : undefined}
       data-compact={compactIsResponsive ? 'responsive' : compact === true ? 'true' : 'false'}
       data-has-icon={showIcon ? 'true' : 'false'}
       className={`ds-alert ds-alert--modern ${className ?? ''}`.trim()}

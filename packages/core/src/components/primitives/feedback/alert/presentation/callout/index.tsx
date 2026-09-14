@@ -50,6 +50,7 @@ export default function ModernCallout({
   return (
     <AlertSurface
       tone={variant}
+      emphasis="subtle"
       title={title}
       description={children}
       icon={icon}

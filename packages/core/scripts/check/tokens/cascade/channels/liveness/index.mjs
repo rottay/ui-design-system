@@ -1530,16 +1530,17 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     classification: LIVENESS.authorableUnprovenEffect,
     registered: '2026-09-14',
     reason:
-      'since the toast and notification Modern skins folded into the Notifier, step 12 of the status tints is read only inside derivation/chrome/notifier (the tone icon wells the notifier skin paints); the liveness graph does not follow a family deriver value into the skin terminal that paints it, so the causal-gates lane owns proving that route',
-    channels: Object.freeze(['--ds-tint-error-12', '--ds-tint-info-12', '--ds-tint-success-12', '--ds-tint-warning-12']),
-  }),
-  Object.freeze({
-    owner: 'WO-FAM-04',
-    classification: LIVENESS.authorableUnprovenEffect,
-    registered: '2026-09-14',
-    reason:
-      'step 4 of the status tints lost its only reader when this cut folded Callout into Alert, and the folded alert surface washes at step 8; the pin clears only when this cut gives step 4 a painting reader or retires the step from the status tint fan-out',
-    channels: Object.freeze(['--ds-tint-error-4', '--ds-tint-info-4', '--ds-tint-success-4', '--ds-tint-warning-4']),
+      'the same instrument gap on two steps of the status ramp: step 12 is read inside derivation/chrome/notifier (the tone icon wells the notifier skin paints) and step 4 inside derivation/chrome/alert (--ds-alert-<tone>-wash-subtle, the lighter wash the folded Callout kept, which measures LIVE_MODERN_PAINTED at skin/alert background-color). The liveness graph does not follow a family deriver VALUE into the skin terminal that paints it, and the family-cut contract forbids the alternative -- a cut family skin may not read a compiler-emitted ramp step directly, which is readWithoutProducer. So the route is real on both steps and only the graph cannot see it; the causal-gates lane owns proving it',
+    channels: Object.freeze([
+      '--ds-tint-error-4',
+      '--ds-tint-info-4',
+      '--ds-tint-success-4',
+      '--ds-tint-warning-4',
+      '--ds-tint-error-12',
+      '--ds-tint-info-12',
+      '--ds-tint-success-12',
+      '--ds-tint-warning-12',
+    ]),
   }),
   Object.freeze({
     owner: 'WO-DER-06',

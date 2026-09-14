@@ -81,6 +81,21 @@
   --ds-alert-control-edge-hover: var(--ds-alert-error-control-edge-hover, color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-border)));
 }
 
+/* The folded Callout is the lighter-weight notice of this family: it washes at
+   step 4 of the tint ramp where the alert surface washes at step 8. */
+.ds-alert.ds-alert--modern[data-part='root'][data-emphasis='subtle'] {
+  --ds-alert-wash: var(--ds-alert-info-wash-subtle, color-mix(in oklab, var(--ds-color-info) 4%, var(--ds-color-bg-primary)));
+}
+.ds-alert.ds-alert--modern[data-part='root'][data-emphasis='subtle'][data-tone='success'] {
+  --ds-alert-wash: var(--ds-alert-success-wash-subtle, color-mix(in oklab, var(--ds-color-success) 4%, var(--ds-color-bg-primary)));
+}
+.ds-alert.ds-alert--modern[data-part='root'][data-emphasis='subtle'][data-tone='warning'] {
+  --ds-alert-wash: var(--ds-alert-warning-wash-subtle, color-mix(in oklab, var(--ds-color-warning) 4%, var(--ds-color-bg-primary)));
+}
+.ds-alert.ds-alert--modern[data-part='root'][data-emphasis='subtle'][data-tone='error'] {
+  --ds-alert-wash: var(--ds-alert-error-wash-subtle, color-mix(in oklab, var(--ds-color-error) 4%, var(--ds-color-bg-primary)));
+}
+
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='icon'] {
   display: grid;
   flex: 0 0 auto;

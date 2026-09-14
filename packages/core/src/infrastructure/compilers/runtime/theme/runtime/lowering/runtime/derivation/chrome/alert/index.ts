@@ -41,6 +41,7 @@ export const alertChromeDeriver: FamilyDeriver = {
     "--ds-alert-actions-bg",
     "--ds-alert-info-ink",
     "--ds-alert-info-wash",
+    "--ds-alert-info-wash-subtle",
     "--ds-alert-info-well",
     "--ds-alert-info-edge",
     "--ds-alert-info-well-edge",
@@ -48,6 +49,7 @@ export const alertChromeDeriver: FamilyDeriver = {
     "--ds-alert-info-control-edge-hover",
     "--ds-alert-success-ink",
     "--ds-alert-success-wash",
+    "--ds-alert-success-wash-subtle",
     "--ds-alert-success-well",
     "--ds-alert-success-edge",
     "--ds-alert-success-well-edge",
@@ -55,6 +57,7 @@ export const alertChromeDeriver: FamilyDeriver = {
     "--ds-alert-success-control-edge-hover",
     "--ds-alert-warning-ink",
     "--ds-alert-warning-wash",
+    "--ds-alert-warning-wash-subtle",
     "--ds-alert-warning-well",
     "--ds-alert-warning-edge",
     "--ds-alert-warning-well-edge",
@@ -62,6 +65,7 @@ export const alertChromeDeriver: FamilyDeriver = {
     "--ds-alert-warning-control-edge-hover",
     "--ds-alert-error-ink",
     "--ds-alert-error-wash",
+    "--ds-alert-error-wash-subtle",
     "--ds-alert-error-well",
     "--ds-alert-error-edge",
     "--ds-alert-error-well-edge",
@@ -98,6 +102,7 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-actions-bg"] = "color-mix(in srgb, var(--ds-color-bg-elevated) 60%, transparent)";
   vars["--ds-alert-info-ink"] = "var(--ds-color-info-ink)";
   vars["--ds-alert-info-wash"] = "var(--ds-tint-info-8)";
+  vars["--ds-alert-info-wash-subtle"] = "var(--ds-tint-info-4)";
   vars["--ds-alert-info-well"] = "color-mix(in srgb, var(--ds-color-info) 11%, var(--ds-color-bg-elevated))";
   vars["--ds-alert-info-edge"] = "color-mix(in srgb, var(--ds-color-info) 30%, var(--ds-color-border))";
   vars["--ds-alert-info-well-edge"] = "color-mix(in srgb, var(--ds-color-info) 34%, var(--ds-color-border))";
@@ -105,6 +110,7 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-info-control-edge-hover"] = "color-mix(in srgb, var(--ds-color-info) 45%, var(--ds-color-border))";
   vars["--ds-alert-success-ink"] = "var(--ds-color-success-ink)";
   vars["--ds-alert-success-wash"] = "var(--ds-tint-success-8)";
+  vars["--ds-alert-success-wash-subtle"] = "var(--ds-tint-success-4)";
   vars["--ds-alert-success-well"] = "color-mix(in srgb, var(--ds-color-success) 11%, var(--ds-color-bg-elevated))";
   vars["--ds-alert-success-edge"] = "color-mix(in srgb, var(--ds-color-success) 30%, var(--ds-color-border))";
   vars["--ds-alert-success-well-edge"] = "color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border))";
@@ -112,6 +118,7 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-success-control-edge-hover"] = "color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-border))";
   vars["--ds-alert-warning-ink"] = "var(--ds-color-warning-ink)";
   vars["--ds-alert-warning-wash"] = "var(--ds-tint-warning-8)";
+  vars["--ds-alert-warning-wash-subtle"] = "var(--ds-tint-warning-4)";
   vars["--ds-alert-warning-well"] = "color-mix(in srgb, var(--ds-color-warning) 11%, var(--ds-color-bg-elevated))";
   vars["--ds-alert-warning-edge"] = "color-mix(in srgb, var(--ds-color-warning) 30%, var(--ds-color-border))";
   vars["--ds-alert-warning-well-edge"] = "color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border))";
@@ -119,6 +126,7 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-warning-control-edge-hover"] = "color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-border))";
   vars["--ds-alert-error-ink"] = "var(--ds-color-error-ink)";
   vars["--ds-alert-error-wash"] = "var(--ds-tint-error-8)";
+  vars["--ds-alert-error-wash-subtle"] = "var(--ds-tint-error-4)";
   vars["--ds-alert-error-well"] = "color-mix(in srgb, var(--ds-color-error) 11%, var(--ds-color-bg-elevated))";
   vars["--ds-alert-error-edge"] = "color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border))";
   vars["--ds-alert-error-well-edge"] = "color-mix(in srgb, var(--ds-color-error) 34%, var(--ds-color-border))";
