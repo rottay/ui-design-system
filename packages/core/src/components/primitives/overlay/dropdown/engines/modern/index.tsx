@@ -61,14 +61,25 @@ function callerSurfaceStyle(
   portaled: boolean,
 ): React.CSSProperties | undefined {
   if (!style) return undefined;
-  const { position: _position, zIndex: _zIndex, ...rest } = style;
-  const claimed = portaled
-    ? ['top', 'left']
-    : [
-        placement.startsWith('top') ? 'bottom' : 'top',
-        ...(placement.endsWith('Right') ? ['insetInlineEnd'] : placement.endsWith('Left') ? ['insetInlineStart'] : ['left', 'translate']),
-      ];
-  return Object.fromEntries(Object.entries(rest).filter(([key]) => !claimed.includes(key))) as React.CSSProperties;
+  const {
+    position: _position,
+    zIndex: _zIndex,
+    top,
+    bottom,
+    left,
+    insetInlineStart,
+    insetInlineEnd,
+    translate,
+    ...rest
+  } = style;
+  if (portaled) return { ...rest, bottom, insetInlineStart, insetInlineEnd, translate };
+  const blockEdge = placement.startsWith('top') ? { top } : { bottom };
+  const inlineEdge = placement.endsWith('Right')
+    ? { insetInlineStart, left, translate }
+    : placement.endsWith('Left')
+      ? { insetInlineEnd, left, translate }
+      : { insetInlineStart, insetInlineEnd };
+  return { ...rest, ...blockEdge, ...inlineEdge };
 }
 
 /**

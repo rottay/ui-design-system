@@ -50,7 +50,8 @@
 
 import type { EngineAwareProps, BaseComponentProps } from '../../../../../foundation/contracts';
 import type { ReactNode } from 'react';
-import type { Adapt, OverlayAdaptation } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { OverlayAdaptation } from '../../../../../foundation/contracts/kernel/adaptation/composition/families/overlay';
 
 // ============================================================================
 // Type Definitions

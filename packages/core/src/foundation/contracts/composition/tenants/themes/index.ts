@@ -3065,7 +3065,7 @@ export interface BrandMenuChrome {
   submenuBg?: string;
 }
 
-/** Transient message chrome: surface, elevation and close affordance. */
+/** Transient message chrome: surface, elevation and close affordance. Lowers to `--ds-notifier-message-*`. */
 export interface BrandMessageChrome {
   bg?: string;
   closeColor?: string;
@@ -3073,7 +3073,7 @@ export interface BrandMessageChrome {
   shadow?: string;
 }
 
-/** Notification chrome: surface, elevation and title paint. */
+/** Notification chrome: surface, elevation and title paint. Lowers to `--ds-notifier-notification-*`. */
 export interface BrandNotificationChrome {
   bg?: string;
   shadow?: string;

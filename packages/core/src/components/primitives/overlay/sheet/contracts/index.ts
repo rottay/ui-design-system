@@ -10,7 +10,8 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
-import type { Adapt, OverlayAdaptation } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { OverlayAdaptation } from '../../../../../foundation/contracts/kernel/adaptation/composition/families/overlay';
 
 /** Side from which the sheet slides in */
 export type SheetSide = 'bottom' | 'left' | 'right';

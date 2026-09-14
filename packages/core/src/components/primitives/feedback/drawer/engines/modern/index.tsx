@@ -18,7 +18,7 @@ import { DRAWER_DEFAULTS } from '../../contracts';
 import {
   OVERLAY_ADAPTATION_DEFAULTS,
   type ResolvedOverlayAdaptation,
-} from '../../../../../../foundation/contracts/kernel/adaptation';
+} from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/overlay';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { usePresence } from '@/graphics/motion/react/runtime';
