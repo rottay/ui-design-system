@@ -92,7 +92,9 @@
   --ds-checkbox-unchecked-border: var(--ds-color-border);
   --ds-checkbox-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-checkbox-disabled-cursor: not-allowed;
-  --ds-checkbox-border-width: var(--ds-border-width-2);
+  /* A double-weight edge: the box is deliberately heavier than a field, so it
+     states that as 2x the governed edge rather than as a fixed 2px. */
+  --ds-checkbox-border-width: calc(var(--ds-edge-standard-width, 1px) * 2);
   --ds-checkbox-label-line-height: var(--ds-line-height-snug);
   --ds-checkbox-checkmark-size: max(0.625rem, 75%);
 
