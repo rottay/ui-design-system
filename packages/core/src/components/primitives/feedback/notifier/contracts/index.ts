@@ -66,6 +66,7 @@ export interface NotifierItemProps {
   /** Lifetime in milliseconds; 0 keeps the surface until it is dismissed. */
   duration: number;
   showProgress?: boolean;
+  /** The pointer holds the lifetime; keyboard focus holds it either way. @default true */
   pauseOnHover?: boolean;
   /** `false` plays the exit and then reports `onExited`. @default true */
   open?: boolean;

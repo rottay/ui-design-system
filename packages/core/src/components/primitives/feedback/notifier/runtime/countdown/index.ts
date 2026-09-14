@@ -5,6 +5,9 @@
  * budget while the pointer or keyboard focus is inside the surface (WCAG 2.2.1)
  * and resumes from where it stopped, never from the start.
  *
+ * Pointer and focus are independent reasons to hold the budget: the countdown
+ * runs again only once every applicable reason is gone.
+ *
  * @module Notifier/Runtime/Countdown
  * @category Feedback
  * @package @rottay/design-system
@@ -18,6 +21,7 @@ export interface NotifierCountdownOptions {
   durationMs: number;
   /** Stops the countdown, e.g. while the surface is leaving. */
   running: boolean;
+  /** Whether the pointer holds the budget; keyboard focus always holds it. */
   pauseOnHover: boolean;
   onExpire: () => void;
 }
@@ -38,7 +42,9 @@ export function useNotifierCountdown({
   pauseOnHover,
   onExpire,
 }: NotifierCountdownOptions): NotifierCountdown {
-  const [paused, setPaused] = useState(false);
+  const [pointerInside, setPointerInside] = useState(false);
+  const [focusInside, setFocusInside] = useState(false);
+  const paused = (pauseOnHover && pointerInside) || focusInside;
   const remainingRef = useRef(durationMs);
   const startedAtRef = useRef(0);
   const expireRef = useRef(onExpire);
@@ -65,17 +71,20 @@ export function useNotifierCountdown({
     remainingRef.current = durationMs;
   }, [running, durationMs]);
 
-  const pause = useCallback(() => setPaused(true), []);
-  const resume = useCallback(() => setPaused(false), []);
-  const resumeWhenFocusLeaves = useCallback((event: React.FocusEvent<HTMLElement>) => {
+  const pointerEnter = useCallback(() => setPointerInside(true), []);
+  const pointerLeave = useCallback(() => setPointerInside(false), []);
+  const focusEnter = useCallback(() => setFocusInside(true), []);
+  const focusLeave = useCallback((event: React.FocusEvent<HTMLElement>) => {
     const next = event.relatedTarget as Node | null;
-    if (!next || !event.currentTarget.contains(next)) setPaused(false);
+    if (!next || !event.currentTarget.contains(next)) setFocusInside(false);
   }, []);
+
+  const focusHandlers = { onFocus: focusEnter, onBlur: focusLeave };
 
   return {
     paused,
     handlers: pauseOnHover
-      ? { onMouseEnter: pause, onMouseLeave: resume, onFocus: pause, onBlur: resumeWhenFocusLeaves }
-      : {},
+      ? { onMouseEnter: pointerEnter, onMouseLeave: pointerLeave, ...focusHandlers }
+      : focusHandlers,
   };
 }
