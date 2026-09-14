@@ -178,11 +178,11 @@
     },
     "./primitives/message": {
       "maxReachableModules": 63,
-      "maxSourceBytes": 266142
+      "maxSourceBytes": 266550
     },
     "./primitives/modal": {
       "maxReachableModules": 52,
-      "maxSourceBytes": 185473
+      "maxSourceBytes": 185881
     },
     "./primitives/progress": {
       "maxReachableModules": 20,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-FAM-01 / R107-RUN-01: radio's graph carries the shared interaction-state kernel, and the press-cancellation lifecycle grew it (cancelPress plus the disabled-transition guard, 28dec8d73) -- 157925 -> 158333, +408 source bytes, exactly the growth of foundation/behavior/runtime/interaction-state/index.ts (4134 -> 4542 bytes); reachable modules unchanged under the 47 anchor. Measured, and NOT the --ds-radius-button paint-route correction (8fdbda3d0): this gate walks TypeScript import/export edges only, so that lot's CSS carries no bytes into any entrypoint, and its single TS edit (tokens/ts/foundation/base/borders, +21) is not in radio's graph -- were it reachable the measurement would be 158354. Prior move (WO-FAM-04): ./primitives/modal 31 -> 52 modules (168791 -> 185473 bytes) through the i18n catalogs and the anatomy/interaction-state kernels imported by leaf; ./primitives/message 54 -> 63 modules (256096 -> 265545) as the Notifier's message role, then 265545 -> 266142 (+597) for the countdown independent pause reasons (WCAG 2.2.1).",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "integration: the shared interaction-state kernel grew +408 bytes with the press-cancellation lifecycle (28dec8d73, 4134 -> 4542) and reaches modal and message through their FAM-04 graphs -- ./primitives/message 266142 -> 266550 and ./primitives/modal 185473 -> 185881, exactly +408 each, reachable modules unchanged. Prior moves stand: WO-FAM-04 modal 31 -> 52 modules (168791 -> 185473) and message 54 -> 63 modules (256096 -> 265545 -> 266142, the countdown pause reasons), and WO-FAM-01 radio 157925 -> 158333 for the same kernel growth.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
 }
