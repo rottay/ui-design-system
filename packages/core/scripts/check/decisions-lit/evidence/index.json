@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-14T01:03:38.367Z",
+  "producedAt": "2026-09-14T04:08:32.773Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 7-family sample: 18/22 move at least one sampled family",
   "denominators": {
@@ -21,7 +21,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-14T01:01:41.013Z"
+      "builtAt": "2026-09-14T04:04:08.344Z"
     },
     "sources": {
       "door": {
@@ -29,8 +29,8 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 805,
-        "digest": "6c7423a1c39960a28218c63ddb47af3200da042f784d4737b0860601ca750d19"
+        "fileCount": 826,
+        "digest": "23eaa6f6515bdba8609a8644efae16033a879955062af3fb733685cf27ecb963"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
@@ -70,7 +70,7 @@
             ]
           }
         ],
-        "bundleSha": "c91b466752be70c4abcdd237cf5177b1e0b5daafa6a2f3a45ccd9cccbf5e6d16",
+        "bundleSha": "0c145462d1fac47366a6db45a768b57fd1e5782c0a3ed680e41910b8271fd21d",
         "bundleMode": "fresh",
         "theme": "dark"
       },
@@ -99,7 +99,7 @@
             ]
           }
         ],
-        "bundleSha": "e92e31b18a5008a788960d1b2faf740f73f69651fa9ca225ab95acdf2eaf8183",
+        "bundleSha": "8aef8530535e63a365bccfa2518d43473a6b5b8ccb7383b57a080c538800a906",
         "bundleMode": "fresh",
         "theme": "light"
       },
@@ -128,7 +128,7 @@
             ]
           }
         ],
-        "bundleSha": "a0338423b8218ab136249735f26a7983f8a9444783150cb7edde0eb49df17d15",
+        "bundleSha": "80cfd6c90929bdbe6a67bea5127a15cc672e23e502549cf3b41edef608333690",
         "bundleMode": "fresh",
         "theme": "light"
       }

@@ -160,6 +160,14 @@ export const UI_LAYER_RANKS = Object.freeze({
  * infrastructure macro root.
  */
 export const SCOPED_OWNER_RANKS = Object.freeze({
+  // One Notifier owns the transient announcement surface; Toast, Notification
+  // and Message are its role entry points and compose it, never the reverse.
+  'components/primitives/feedback': Object.freeze({
+    notifier: 0,
+    message: 1,
+    notification: 1,
+    toast: 1,
+  }),
   // The collection kernels are a ladder: listbox composes the combobox
   // foundation, roving focus and type-ahead into one shared listbox law.
   'components/primitives/runtime/collection': Object.freeze({
