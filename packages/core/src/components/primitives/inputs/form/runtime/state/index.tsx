@@ -10,7 +10,7 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
@@ -30,6 +30,10 @@ export function toFieldKey(name: FieldName | undefined): string {
 export function readOwnRecordValue<T>(record: FieldRecord<T>, key: string): T | undefined {
   if (!Object.prototype.hasOwnProperty.call(record, key)) return undefined;
   return Reflect.get(record, key) as T;
+}
+
+function hasOwnRecordKey(record: object, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(record, key);
 }
 
 function writeOwnRecordValue<T>(record: FieldRecord<T>, key: string, value: T): void {
@@ -79,72 +83,172 @@ export function useFormContext(): FormContextValue | null {
   return useContext(FormContext);
 }
 
+/**
+ * What a mounted form lends its instance: the declared initial values, the
+ * registered rules, real validation, and the rendered `<form>` element.
+ */
+interface MountedForm {
+  initialValues: () => FieldRecord<unknown>;
+  rules: () => FieldRecord<FormRule[] | undefined>;
+  validateField: (name: string, rules?: FormRule[]) => Promise<string[]>;
+  element: () => HTMLFormElement | null;
+}
+
+/**
+ * The single store behind one form. The public instance and the rendered
+ * fields both read and write these records, so a getter can never disagree
+ * with what is on screen. Records are replaced, never mutated in place, so a
+ * memo keyed on their identity still sees every change.
+ */
+interface FormStore {
+  values: FieldRecord<unknown>;
+  errors: FieldRecord<string[]>;
+  touched: FieldRecord<boolean>;
+  validating: FieldRecord<boolean>;
+  version: number;
+  listeners: Set<() => void>;
+  host: MountedForm | null;
+}
+
+function createFormStore(): FormStore {
+  return { values: {}, errors: {}, touched: {}, validating: {}, version: 0, listeners: new Set(), host: null };
+}
+
+function notifyStore(store: FormStore): void {
+  store.version += 1;
+  store.listeners.forEach((listener) => listener());
+}
+
+/** The store is keyed off the instance, so the public shape stays the contract's. */
+const FORM_STORES = new WeakMap<object, FormStore>();
+
+function formStoreOf(instance: FormInstance<never> | FormInstance<unknown> | object): FormStore {
+  const existing = FORM_STORES.get(instance);
+  if (existing) return existing;
+  const store = createFormStore();
+  FORM_STORES.set(instance, store);
+  return store;
+}
+
+/** Adds the initial values of fields nobody has written yet; safe to repeat. */
+function seedInitialValues(store: FormStore, initialValues: FieldRecord<unknown>): void {
+  const missing = Object.keys(initialValues).filter((key) => !hasOwnRecordKey(store.values, key));
+  if (missing.length === 0) return;
+  const next = { ...store.values };
+  missing.forEach((key) => writeOwnRecordValue(next, key, readOwnRecordValue(initialValues, key)));
+  store.values = next;
+}
+
 type InternalFormInstance<T> = FormInstance<T> & {
   __subscribe?: (listener: () => void) => () => void;
   __getValues?: () => FieldRecord<unknown>;
 };
 
+function findField(form: HTMLFormElement | null, key: string): Element | null {
+  return form?.querySelector(`[id="form-${key}"]`) || form?.querySelector(`[name="${key}"]`) || null;
+}
+
 /**
- * A stable FormInstance. State lives in refs so the instance identity never
- * changes; a mounted form wraps its methods to keep React state in sync.
+ * A stable FormInstance over the form's single store, so its identity never
+ * changes and its getters report what the mounted form renders.
  */
 export function useForm<T = unknown>(): [FormInstance<T>] {
-  const valuesRef = useRef<FieldRecord<unknown>>({});
-  const errorsRef = useRef<FieldRecord<string[]>>({});
-  const touchedRef = useRef<FieldRecord<boolean>>({});
-  const listenersRef = useRef<Set<() => void>>(new Set());
+  const storeRef = useRef<FormStore | null>(null);
+  storeRef.current ??= createFormStore();
 
   const instance = useMemo<InternalFormInstance<T>>(() => {
-    const notify = () => listenersRef.current.forEach((listener) => listener());
-    return {
-      getFieldValue: (name) => readOwnRecordValue(valuesRef.current, toFieldKey(name)),
+    const store = storeRef.current as FormStore;
+    const created: InternalFormInstance<T> = {
+      getFieldValue: (name) => readOwnRecordValue(store.values, toFieldKey(name)),
       getFieldsValue: (nameList) => {
-        if (!nameList) return valuesRef.current as T;
+        if (!nameList) return store.values as T;
         const result: FieldRecord<unknown> = {};
         nameList.forEach((name) => {
           const key = toFieldKey(name);
-          writeOwnRecordValue(result, key, readOwnRecordValue(valuesRef.current, key));
+          writeOwnRecordValue(result, key, readOwnRecordValue(store.values, key));
         });
         return result as T;
       },
       setFieldValue: (name, value) => {
-        writeOwnRecordValue(valuesRef.current, toFieldKey(name), value);
-        notify();
+        store.values = copyWithOwnRecordValue(store.values, toFieldKey(name), value);
+        notifyStore(store);
       },
       setFieldsValue: (values) => {
-        Object.assign(valuesRef.current, values);
-        notify();
+        store.values = { ...store.values, ...(values as FieldRecord<unknown>) };
+        notifyStore(store);
       },
       resetFields: (fields) => {
+        const initial = store.host?.initialValues() ?? {};
         if (fields) {
+          const values = { ...store.values };
+          const errors = { ...store.errors };
+          const touched = { ...store.touched };
+          const validating = { ...store.validating };
           fields.forEach((name) => {
             const key = toFieldKey(name);
-            deleteOwnRecordValue(valuesRef.current, key);
-            deleteOwnRecordValue(errorsRef.current, key);
-            deleteOwnRecordValue(touchedRef.current, key);
+            deleteOwnRecordValue(values, key);
+            deleteOwnRecordValue(errors, key);
+            deleteOwnRecordValue(touched, key);
+            deleteOwnRecordValue(validating, key);
+            if (hasOwnRecordKey(initial, key)) writeOwnRecordValue(values, key, readOwnRecordValue(initial, key));
           });
+          store.values = values;
+          store.errors = errors;
+          store.touched = touched;
+          store.validating = validating;
         } else {
-          valuesRef.current = {};
-          errorsRef.current = {};
-          touchedRef.current = {};
+          store.values = { ...initial };
+          store.errors = {};
+          store.touched = {};
+          store.validating = {};
         }
-        notify();
+        notifyStore(store);
       },
-      validateFields: async () => valuesRef.current as T,
-      submit: () => {},
-      isFieldTouched: (name) => Boolean(readOwnRecordValue(touchedRef.current, toFieldKey(name))),
-      isFieldsTouched: () => Object.values(touchedRef.current).some(Boolean),
-      getFieldError: (name) => readOwnRecordValue(errorsRef.current, toFieldKey(name)) ?? [],
+      validateFields: (async (nameList?: FieldName[]) => {
+        const host = store.host;
+        if (!host) return store.values as T;
+        const rules = host.rules();
+        const names = nameList ? nameList.map(toFieldKey) : Object.keys(rules);
+        const entries = await Promise.all(
+          names.map(async (key) => [key, await host.validateField(key, readOwnRecordValue(rules, key))] as const),
+        );
+        const failed = entries.filter(([, fieldErrors]) => fieldErrors.length > 0);
+        if (failed.length > 0) {
+          throw {
+            values: store.values,
+            errorFields: failed.map(([fieldName, fieldErrors]) => ({ name: fieldName, errors: fieldErrors })),
+            outOfDate: false,
+          };
+        }
+        return store.values as T;
+      }) as FormInstance<T>['validateFields'],
+      submit: () => {
+        const element = store.host?.element();
+        if (!element) return;
+        if (element.requestSubmit) {
+          element.requestSubmit();
+          return;
+        }
+        element.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      },
+      isFieldTouched: (name) => Boolean(readOwnRecordValue(store.touched, toFieldKey(name))),
+      isFieldsTouched: () => Object.values(store.touched).some(Boolean),
+      getFieldError: (name) => readOwnRecordValue(store.errors, toFieldKey(name)) ?? [],
       getFieldsError: () =>
-        Object.entries(errorsRef.current).map(([name, errors]) => ({ name, errors })) as FieldData[],
-      isFieldValidating: () => false,
-      scrollToField: () => {},
-      __subscribe: (listener) => {
-        listenersRef.current.add(listener);
-        return () => listenersRef.current.delete(listener);
+        Object.entries(store.errors).map(([name, errors]) => ({ name, errors })) as FieldData[],
+      isFieldValidating: (name) => Boolean(readOwnRecordValue(store.validating, toFieldKey(name))),
+      scrollToField: (name, scrollOptions) => {
+        findField(store.host?.element() ?? null, toFieldKey(name))
+          ?.scrollIntoView(scrollOptions ?? { behavior: 'smooth', block: 'center' });
       },
-      __getValues: () => ({ ...valuesRef.current }),
+      __subscribe: (listener) => {
+        store.listeners.add(listener);
+        return () => { store.listeners.delete(listener); };
+      },
+      __getValues: () => ({ ...store.values }),
     };
+    FORM_STORES.set(created, store);
+    return created;
   }, []);
 
   return [instance];
@@ -169,10 +273,6 @@ export interface FormRuntime {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
-function findField(form: HTMLFormElement | null, key: string): Element | null {
-  return form?.querySelector(`[id="form-${key}"]`) || form?.querySelector(`[name="${key}"]`) || null;
-}
-
 /** The state, validation and submission of one mounted form. */
 export function useFormRuntime(options: FormRuntimeOptions): FormRuntime {
   const catalog = options.catalog ?? VALIDATION_CATALOG;
@@ -188,137 +288,97 @@ export function useFormRuntime(options: FormRuntimeOptions): FormRuntime {
   } = options;
   const [internalForm] = useForm();
   const resolvedForm = form ?? internalForm;
+  const store = formStoreOf(resolvedForm);
   const formRef = useRef<HTMLFormElement | null>(null);
-
-  const [values, setValues] = useState<FieldRecord<unknown>>(initialValues as FieldRecord<unknown>);
-  const [errors, setErrors] = useState<FieldRecord<string[]>>({});
-  const [touched, setTouchedState] = useState<FieldRecord<boolean>>({});
-  const [validating, setValidating] = useState<FieldRecord<boolean>>({});
   const fieldRulesRef = useRef<FieldRecord<FormRule[] | undefined>>({});
-  const valuesRef = useRef<FieldRecord<unknown>>(initialValues as FieldRecord<unknown>);
 
-  const commitValues = useCallback((next: FieldRecord<unknown>) => {
-    valuesRef.current = next;
-    setValues(next);
-  }, []);
+  seedInitialValues(store, initialValues as FieldRecord<unknown>);
+
+  const subscribe = useCallback((listener: () => void) => {
+    store.listeners.add(listener);
+    return () => { store.listeners.delete(listener); };
+  }, [store]);
+  const readVersion = useCallback(() => store.version, [store]);
+  useSyncExternalStore(subscribe, readVersion, readVersion);
 
   const getFieldRules = useCallback(
     (fieldName: string) => readOwnRecordValue(fieldRulesRef.current, fieldName),
     [],
   );
 
-  // A programmatic change through the public instance also moves React state.
-  useEffect(() => {
-    const { setFieldsValue, setFieldValue, resetFields, submit } = resolvedForm;
-
-    resolvedForm.setFieldsValue = (next) => {
-      setFieldsValue.call(resolvedForm, next);
-      commitValues({ ...valuesRef.current, ...(next as FieldRecord<unknown>) });
-    };
-    resolvedForm.setFieldValue = (name, value) => {
-      setFieldValue.call(resolvedForm, name, value);
-      commitValues(copyWithOwnRecordValue(valuesRef.current, toFieldKey(name), value));
-    };
-    resolvedForm.resetFields = (fields) => {
-      resetFields.call(resolvedForm, fields);
-      if (fields) {
-        setValues((previous) => {
-          const next = { ...previous };
-          fields.forEach((field) => deleteOwnRecordValue(next, toFieldKey(field)));
-          valuesRef.current = next;
-          return next;
-        });
-      } else {
-        commitValues(initialValues as FieldRecord<unknown>);
-      }
-    };
-    resolvedForm.submit = () => {
-      if (formRef.current?.requestSubmit) {
-        formRef.current.requestSubmit();
-        return;
-      }
-      formRef.current?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    };
-
-    return () => {
-      resolvedForm.setFieldsValue = setFieldsValue;
-      resolvedForm.setFieldValue = setFieldValue;
-      resolvedForm.resetFields = resetFields;
-      resolvedForm.submit = submit;
-    };
-  }, [resolvedForm, initialValues, commitValues]);
-
   const setValue = useCallback((fieldName: string, value: unknown) => {
-    const next = copyWithOwnRecordValue(valuesRef.current, fieldName, value);
-    commitValues(next);
-    onValuesChange?.(copyWithOwnRecordValue({}, fieldName, value) as Partial<unknown>, next as unknown);
-  }, [commitValues, onValuesChange]);
+    store.values = copyWithOwnRecordValue(store.values, fieldName, value);
+    notifyStore(store);
+    onValuesChange?.(copyWithOwnRecordValue({}, fieldName, value) as Partial<unknown>, store.values as unknown);
+  }, [store, onValuesChange]);
 
   const setError = useCallback((fieldName: string, fieldErrors: string[]) => {
-    setErrors((previous) => copyWithOwnRecordValue(previous, fieldName, fieldErrors));
-  }, []);
+    store.errors = copyWithOwnRecordValue(store.errors, fieldName, fieldErrors);
+    notifyStore(store);
+  }, [store]);
 
   const setTouched = useCallback((fieldName: string, isTouched: boolean) => {
-    setTouchedState((previous) => copyWithOwnRecordValue(previous, fieldName, isTouched));
-  }, []);
+    store.touched = copyWithOwnRecordValue(store.touched, fieldName, isTouched);
+    notifyStore(store);
+  }, [store]);
+
+  const setValidating = useCallback((fieldName: string, isValidating: boolean) => {
+    store.validating = copyWithOwnRecordValue(store.validating, fieldName, isValidating);
+    notifyStore(store);
+  }, [store]);
 
   const registerField = useCallback((fieldName: string, initialValue?: unknown, rules?: FormRule[]) => {
     writeOwnRecordValue(fieldRulesRef.current, fieldName, rules);
-    if (initialValue !== undefined && readOwnRecordValue(values, fieldName) === undefined) {
-      commitValues(copyWithOwnRecordValue(valuesRef.current, fieldName, initialValue));
+    if (initialValue !== undefined && readOwnRecordValue(store.values, fieldName) === undefined) {
+      store.values = copyWithOwnRecordValue(store.values, fieldName, initialValue);
+      notifyStore(store);
     }
-  }, [values, commitValues]);
+  }, [store]);
 
   const unregisterField = useCallback((fieldName: string) => {
     deleteOwnRecordValue(fieldRulesRef.current, fieldName);
-    setErrors((previous) => {
-      if (readOwnRecordValue(previous, fieldName) === undefined) return previous;
-      const next = { ...previous };
-      deleteOwnRecordValue(next, fieldName);
-      return next;
-    });
-  }, []);
+    if (readOwnRecordValue(store.errors, fieldName) === undefined) return;
+    const next = { ...store.errors };
+    deleteOwnRecordValue(next, fieldName);
+    store.errors = next;
+    notifyStore(store);
+  }, [store]);
 
   const messages = useMemo(() => catalog.create(t), [catalog, t]);
 
   const validateField = useCallback(async (fieldName: string, rules?: FormRule[]): Promise<string[]> => {
     if (!rules || rules.length === 0) return [];
-    setValidating((previous) => copyWithOwnRecordValue(previous, fieldName, true));
-    const fieldErrors = await validateRules(rules, readOwnRecordValue(valuesRef.current, fieldName), messages, fieldName);
-    setValidating((previous) => copyWithOwnRecordValue(previous, fieldName, false));
+    setValidating(fieldName, true);
+    const fieldErrors = await validateRules(rules, readOwnRecordValue(store.values, fieldName), messages, fieldName);
+    setValidating(fieldName, false);
     setError(fieldName, fieldErrors);
     return fieldErrors;
-  }, [messages, setError]);
+  }, [store, messages, setError, setValidating]);
 
-  // The bare instance owns no rules registry; a mounted form supplies real validation and scrolling.
+  // The bare instance owns no rules registry; a mounted form lends it real
+  // validation, submission and scrolling for as long as it stays in the tree.
+  const initialValuesRef = useRef(initialValues as FieldRecord<unknown>);
+  const validateFieldRef = useRef(validateField);
   useEffect(() => {
-    const { validateFields, scrollToField } = resolvedForm;
+    initialValuesRef.current = initialValues as FieldRecord<unknown>;
+    validateFieldRef.current = validateField;
+  });
 
-    resolvedForm.validateFields = (async (nameList?: FieldName[]) => {
-      const names = nameList ? nameList.map(toFieldKey) : Object.keys(fieldRulesRef.current);
-      const entries = await Promise.all(
-        names.map(async (fieldName) => [fieldName, await validateField(fieldName, getFieldRules(fieldName))] as const),
-      );
-      const failed = entries.filter(([, fieldErrors]) => fieldErrors.length > 0);
-      if (failed.length > 0) {
-        throw {
-          values: valuesRef.current,
-          errorFields: failed.map(([fieldName, fieldErrors]) => ({ name: fieldName, errors: fieldErrors })),
-          outOfDate: false,
-        };
-      }
-      return valuesRef.current;
-    }) as FormInstance['validateFields'];
+  const hostRef = useRef<MountedForm | null>(null);
+  hostRef.current ??= {
+    initialValues: () => initialValuesRef.current,
+    rules: () => fieldRulesRef.current,
+    validateField: (fieldName, rules) => validateFieldRef.current(fieldName, rules),
+    element: () => formRef.current,
+  };
 
-    resolvedForm.scrollToField = (name, scrollOptions) => {
-      findField(formRef.current, toFieldKey(name))?.scrollIntoView(scrollOptions ?? { behavior: 'smooth', block: 'center' });
-    };
-
+  useEffect(() => {
+    const host = hostRef.current;
+    store.host = host;
     return () => {
-      resolvedForm.validateFields = validateFields;
-      resolvedForm.scrollToField = scrollToField;
+      if (store.host === host) store.host = null;
     };
-  }, [resolvedForm, validateField, getFieldRules]);
+  }, [store]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -330,10 +390,10 @@ export function useFormRuntime(options: FormRuntimeOptions): FormRuntime {
       .map(([fieldName, fieldErrors]) => ({ name: fieldName, errors: fieldErrors }));
 
     if (errorFields.length === 0) {
-      onFinish?.(valuesRef.current as unknown);
+      onFinish?.(store.values as unknown);
       return;
     }
-    onFinishFailed?.({ values: valuesRef.current as unknown, errorFields, outOfDate: false });
+    onFinishFailed?.({ values: store.values as unknown, errorFields, outOfDate: false });
     const first = errorFields[0]?.name;
     if (scrollToFirstError && first !== undefined) {
       findField(formRef.current, toFieldKey(first))?.scrollIntoView(
@@ -342,6 +402,7 @@ export function useFormRuntime(options: FormRuntimeOptions): FormRuntime {
     }
   };
 
+  const { values, errors, touched, validating } = store;
   const { layout, size, labelAlign, disabled, colon, requiredMark, hasFeedback } = presentation;
   const contextValue = useMemo<FormContextValue>(() => ({
     values,

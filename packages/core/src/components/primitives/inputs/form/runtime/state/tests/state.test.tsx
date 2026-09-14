@@ -68,3 +68,91 @@ describe('the shared form runtime', () => {
     expect(rustic!.style.flexDirection).toBe('column');
   });
 });
+
+describe('the rendered form and the public FormInstance read one state owner', () => {
+  const ENGINES = [['modern', ModernForm], ['rustic', RusticForm]] as const;
+
+  it.each(ENGINES)(
+    '%s: initial values, user edits, programmatic edits, errors and both resets agree',
+    async (_engine, Engine) => {
+      const F = Engine as typeof ModernForm;
+      const ref = React.createRef<FormInstance>();
+      const { container } = en(
+        <F ref={ref} initialValues={{ city: 'Quito', country: 'EC' }}>
+          <F.Item name="city" label="City"><input aria-label="City" /></F.Item>
+          <F.Item name="country" label="Country"><input aria-label="Country" /></F.Item>
+          <F.Item name="email" label="Email" rules={[{ required: true, message: 'Required email' }]}>
+            <input aria-label="Email" />
+          </F.Item>
+        </F>,
+      );
+      const instance = ref.current!;
+      const city = screen.getByLabelText('City');
+      const country = screen.getByLabelText('Country');
+
+      expect(city).toHaveValue('Quito');
+      expect(instance.getFieldValue('city')).toBe('Quito');
+      expect(instance.getFieldsValue()).toEqual({ city: 'Quito', country: 'EC' });
+      expect(instance.isFieldTouched('city')).toBe(false);
+      expect(instance.isFieldsTouched()).toBe(false);
+
+      fireEvent.change(city, { target: { value: 'Lima' } });
+      expect(city).toHaveValue('Lima');
+      expect(instance.getFieldValue('city')).toBe('Lima');
+      expect(instance.isFieldTouched('city')).toBe(true);
+      expect(instance.isFieldsTouched()).toBe(true);
+
+      act(() => instance.setFieldValue('country', 'PE'));
+      expect(country).toHaveValue('PE');
+      expect(instance.getFieldValue('country')).toBe('PE');
+
+      act(() => instance.setFieldsValue({ country: 'CL' }));
+      expect(country).toHaveValue('CL');
+      expect(instance.getFieldValue('country')).toBe('CL');
+
+      await act(async () => { await instance.validateFields().catch(() => {}); });
+      expect(screen.getAllByText('Required email').length).toBeGreaterThan(0);
+      expect(instance.getFieldError('email')).toEqual(['Required email']);
+      expect(instance.getFieldsError()).toContainEqual({ name: 'email', errors: ['Required email'] });
+
+      act(() => instance.resetFields(['email']));
+      expect(screen.queryByText('Required email')).toBeNull();
+      expect(instance.getFieldError('email')).toEqual([]);
+      expect(city).toHaveValue('Lima');
+      expect(instance.getFieldValue('city')).toBe('Lima');
+
+      act(() => instance.resetFields());
+      expect(city).toHaveValue('Quito');
+      expect(country).toHaveValue('EC');
+      expect(instance.getFieldValue('city')).toBe('Quito');
+      expect(instance.getFieldsValue()).toEqual({ city: 'Quito', country: 'EC' });
+      expect(instance.isFieldTouched('city')).toBe(false);
+      expect(container.querySelector('[data-part="feedback-icon"]')).toBeNull();
+    },
+  );
+
+  it.each(ENGINES)('%s: the validating window is visible to the instance and to the field', async (_engine, Engine) => {
+    const F = Engine as typeof ModernForm;
+    const ref = React.createRef<FormInstance>();
+    let release: (() => void) | undefined;
+    const pending = new Promise<void>((resolve) => { release = resolve; });
+    const { container } = en(
+      <F ref={ref} hasFeedback>
+        <F.Item name="handle" label="Handle" rules={[{ validator: async () => { await pending; } }]}>
+          <input aria-label="Handle" />
+        </F.Item>
+      </F>,
+    );
+    const instance = ref.current!;
+    expect(instance.isFieldValidating('handle')).toBe(false);
+
+    let settled: Promise<unknown> | undefined;
+    await act(async () => { settled = instance.validateFields().catch(() => {}); });
+    expect(instance.isFieldValidating('handle')).toBe(true);
+    expect(container.querySelector('[data-part="feedback-icon"]')).toHaveAttribute('data-status', 'validating');
+
+    await act(async () => { release!(); await settled; });
+    expect(instance.isFieldValidating('handle')).toBe(false);
+    expect(container.querySelector('[data-part="feedback-icon"][data-status="validating"]')).toBeNull();
+  });
+});
