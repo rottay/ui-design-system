@@ -1,0 +1,365 @@
+{
+  "runner": "skeleton geometry-invalidation scene",
+  "ranAt": "2026-09-14T23:06:44.274Z",
+  "renderer": {
+    "source": "working-tree",
+    "revision": "cb792de04eaf0942d5ddb016c6f5ec00874d71b7",
+    "path": "src/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.tsx"
+  },
+  "chromium": "149.0.7827.55",
+  "pageErrors": [],
+  "summary": {
+    "passed": 18,
+    "failed": 0,
+    "observations": 1
+  },
+  "assertions": [
+    {
+      "scene": "geometry",
+      "name": "G1 ancestor style attribute changes the inherited radius, boxes held",
+      "pass": true,
+      "before": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 0,
+        "boneX": 0,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      },
+      "after": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 0,
+        "boneX": 0,
+        "partRadius": "20px",
+        "boneRadius": "20px"
+      }
+    },
+    {
+      "scene": "geometry",
+      "name": "G1c positive control: a source mutation reads the current radius",
+      "pass": true,
+      "after": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 0,
+        "boneX": 0,
+        "partRadius": "20px",
+        "boneRadius": "20px"
+      }
+    },
+    {
+      "scene": "geometry",
+      "name": "G2 scoped ancestor dir ltr->rtl moves the part, boxes held",
+      "pass": true,
+      "before": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 0,
+        "boneX": 0,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      },
+      "after": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 1224,
+        "boneX": 1224,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      }
+    },
+    {
+      "scene": "geometry",
+      "name": "G2c positive control: a source mutation reads the current position",
+      "pass": true,
+      "after": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 1224,
+        "boneX": 1224,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      }
+    },
+    {
+      "scene": "geometry",
+      "name": "G3 ancestor class gates a stylesheet transform, boxes held",
+      "pass": true,
+      "before": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 0,
+        "boneX": 0,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      },
+      "after": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 17,
+        "boneX": 17,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      }
+    },
+    {
+      "scene": "geometry",
+      "name": "G4r next supported ancestor signal (data-theme) catches the bone up",
+      "pass": true,
+      "before": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 17,
+        "boneX": 0,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      },
+      "after": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 17,
+        "boneX": 17,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      }
+    },
+    {
+      "scene": "regression",
+      "name": "A1 descendant resize with constant wrapper bounds",
+      "pass": true,
+      "wrapper": [
+        [
+          8,
+          8,
+          352,
+          180
+        ],
+        [
+          8,
+          8,
+          352,
+          180
+        ]
+      ],
+      "title": [
+        120,
+        200
+      ]
+    },
+    {
+      "scene": "regression",
+      "name": "A2 stylesheet-driven descendant resize, wrapper unchanged",
+      "pass": true,
+      "trigger": [
+        100,
+        260
+      ],
+      "wrapper": [
+        8,
+        8,
+        352,
+        180
+      ]
+    },
+    {
+      "scene": "regression",
+      "name": "A3 a delayed font settles and the text bone catches up, wrapper unchanged",
+      "pass": true,
+      "font": {
+        "status": "loaded",
+        "loaded": "loaded"
+      },
+      "text": [
+        154,
+        106
+      ],
+      "wrapper": [
+        8,
+        8,
+        352,
+        180
+      ]
+    },
+    {
+      "scene": "regression",
+      "name": "A4 part removal and insertion",
+      "pass": true,
+      "present": true,
+      "removed": true,
+      "back": true
+    },
+    {
+      "scene": "regression",
+      "name": "A5 direction change on the document element",
+      "pass": true,
+      "iconX": [
+        16,
+        312
+      ]
+    },
+    {
+      "scene": "regression",
+      "name": "B1 shimmer loop runs while loading",
+      "pass": true,
+      "running": [
+        "ds-foundation-shimmer",
+        "ds-foundation-shimmer",
+        "ds-foundation-shimmer",
+        "ds-foundation-shimmer",
+        "ds-foundation-shimmer"
+      ]
+    },
+    {
+      "scene": "regression",
+      "name": "B2 no skeleton loop after loading ends and the handover completes",
+      "pass": true,
+      "loading": "false",
+      "animations": []
+    },
+    {
+      "scene": "regression",
+      "name": "B3 a later loading cycle resumes the loop",
+      "pass": true,
+      "running": [
+        "ds-foundation-shimmer",
+        "ds-foundation-shimmer",
+        "ds-foundation-shimmer",
+        "ds-foundation-shimmer",
+        "ds-foundation-shimmer"
+      ]
+    },
+    {
+      "scene": "regression",
+      "name": "B4 the pulse loop stops the same way",
+      "pass": true,
+      "loadingRunning": [
+        "ds-foundation-pulse",
+        "ds-foundation-pulse",
+        "ds-foundation-pulse",
+        "ds-foundation-pulse",
+        "ds-foundation-pulse"
+      ],
+      "doneRunning": []
+    },
+    {
+      "scene": "regression",
+      "name": "C1 while loading the control is neither focusable nor hit-testable",
+      "pass": true,
+      "focused": false,
+      "hit": false,
+      "inertAncestor": true
+    },
+    {
+      "scene": "regression",
+      "name": "C2 normal behaviour returns once loading ends",
+      "pass": true,
+      "focused": true,
+      "hit": true,
+      "inertAncestor": false
+    },
+    {
+      "scene": "regression",
+      "name": "D1 reduced motion is static throughout",
+      "pass": true,
+      "loading": [],
+      "done": []
+    }
+  ],
+  "observations": [
+    {
+      "scene": "geometry",
+      "name": "G4 stylesheet-only move with no attribute and no box change (declared bound)",
+      "before": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 0,
+        "boneX": 0,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      },
+      "after": {
+        "wrapper": [
+          1264,
+          100
+        ],
+        "partSize": [
+          40,
+          40
+        ],
+        "partX": 17,
+        "boneX": 0,
+        "partRadius": "4px",
+        "boneRadius": "4px"
+      },
+      "covered": false,
+      "summary": "part x 0 -> 17, bone x 0; covered=false"
+    }
+  ]
+}

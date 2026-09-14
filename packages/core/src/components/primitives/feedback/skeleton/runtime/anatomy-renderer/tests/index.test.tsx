@@ -8,8 +8,10 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ModernButton from '../../../../../inputs/button/engines/modern';
+import { PROVIDER_PAINT_ATTRIBUTE_FILTER } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
 import {
   AnatomySkeleton,
+  SKELETON_ANCESTOR_INVALIDATION_ATTRIBUTES,
   SKELETON_PART_ROLES,
   readAnatomyBones,
   resolvePartRole,
@@ -371,6 +373,201 @@ describe('AnatomySkeleton keeps the bones on the geometry it copied', () => {
 
     expect(observer.disconnected).toBe(1);
     expect(observer.observed.size).toBe(0);
+  });
+});
+
+/** A provider root above the skeleton: the ancestor surface the renderer must watch. */
+function ProviderScope({ children }: { children: React.ReactNode }) {
+  return (
+    <section data-testid="scope" dir="ltr">
+      {children}
+    </section>
+  );
+}
+
+const boneChannel = (container: HTMLElement, part: string, channel: string) =>
+  container
+    .querySelector<HTMLElement>(`[data-source-part='${part}']`)!
+    .style.getPropertyValue(`--ds-skeleton-bone-${channel}`);
+
+const settle = () =>
+  act(
+    () =>
+      new Promise<void>((resolve) => {
+        setTimeout(resolve, 30);
+      }),
+  );
+
+const NativeMutationObserver = globalThis.MutationObserver;
+
+/** A MutationObserver that records every observe call and still observes for real. */
+class RecordingMutationObserver extends NativeMutationObserver {
+  static instances: RecordingMutationObserver[] = [];
+
+  readonly observations: Array<{ target: Node; options?: MutationObserverInit }> = [];
+
+  disconnected = 0;
+
+  constructor(callback: MutationCallback) {
+    super(callback);
+    RecordingMutationObserver.instances.push(this);
+  }
+
+  override observe(target: Node, options?: MutationObserverInit) {
+    this.observations.push({ target, options });
+    super.observe(target, options);
+  }
+
+  override disconnect() {
+    this.disconnected += 1;
+    super.disconnect();
+  }
+}
+
+describe('AnatomySkeleton re-reads the bones on the paint-owner surface above the source', () => {
+  it('declares the ancestor surface as the paint-owner attributes plus dir', () => {
+    expect(SKELETON_ANCESTOR_INVALIDATION_ATTRIBUTES).toEqual([...PROVIDER_PAINT_ATTRIBUTE_FILTER, 'dir']);
+    expect(SKELETON_ANCESTOR_INVALIDATION_ATTRIBUTES).toEqual(
+      expect.arrayContaining(['class', 'style', 'data-tenant', 'data-theme', 'data-skin', 'dir']),
+    );
+  });
+
+  it('catches up when an ancestor style attribute changes an inherited radius and no box moves', async () => {
+    // happy-dom drops a `var()` shorthand assigned through the style object, so the part's
+    // radius is authored as markup, exactly as a family's stamped anatomy reaches the DOM.
+    const { container } = render(
+      <ProviderScope>
+        <AnatomySkeleton>
+          <div
+            data-rect="0,0,320,200"
+            dangerouslySetInnerHTML={{
+              __html: "<span data-part='trigger' data-rect='16,140,120,44' style='border-radius: var(--test-radius, 4px)'></span>",
+            }}
+          />
+        </AnatomySkeleton>
+      </ProviderScope>,
+    );
+    expect(boneChannel(container, 'trigger', 'radius')).toBe('4px');
+
+    screen.getByTestId('scope').style.setProperty('--test-radius', '20px');
+
+    await waitFor(() => expect(boneChannel(container, 'trigger', 'radius')).toBe('20px'));
+    expect(boneChannel(container, 'trigger', 'width')).toBe('120px');
+    expect(boneChannel(container, 'trigger', 'height')).toBe('44px');
+  });
+
+  it('catches up when a scoped ancestor flips dir while the document element stays untouched', async () => {
+    const { container } = render(
+      <ProviderScope>
+        <AnatomySkeleton>
+          <FixtureFamily anatomy={CARD_LIKE} />
+        </AnatomySkeleton>
+      </ProviderScope>,
+    );
+    expect(boneChannel(container, 'icon', 'x')).toBe('16px');
+    movedRects.set('16,16,24,24', '280,16,24,24');
+
+    screen.getByTestId('scope').setAttribute('dir', 'rtl');
+
+    await waitFor(() => expect(boneChannel(container, 'icon', 'x')).toBe('280px'));
+    expect(document.documentElement.hasAttribute('dir')).toBe(false);
+  });
+
+  it.each([
+    ['class', 'shifted'],
+    ['data-theme', 'dark'],
+    ['data-tenant', 'acme'],
+  ])('catches up when a provider root above the source changes %s', async (attribute, value) => {
+    const { container } = render(
+      <ProviderScope>
+        <AnatomySkeleton>
+          <FixtureFamily anatomy={CARD_LIKE} />
+        </AnatomySkeleton>
+      </ProviderScope>,
+    );
+    expect(boneChannel(container, 'trigger', 'x')).toBe('16px');
+    movedRects.set('16,140,120,44', '33,140,120,44');
+
+    screen.getByTestId('scope').setAttribute(attribute, value);
+
+    await waitFor(() => expect(boneChannel(container, 'trigger', 'x')).toBe('33px'));
+    expect(boneChannel(container, 'trigger', 'width')).toBe('120px');
+  });
+
+  it('ignores an ancestor attribute outside the surface, then catches up on the next supported signal', async () => {
+    const { container } = render(
+      <ProviderScope>
+        <AnatomySkeleton>
+          <FixtureFamily anatomy={CARD_LIKE} />
+        </AnatomySkeleton>
+      </ProviderScope>,
+    );
+    await settle();
+    movedRects.set('16,140,120,44', '33,140,120,44');
+    const scope = screen.getByTestId('scope');
+
+    scope.setAttribute('data-audit-refresh', 'true');
+    await settle();
+    expect(boneChannel(container, 'trigger', 'x')).toBe('16px');
+
+    scope.setAttribute('data-skin', 'quiet');
+    await waitFor(() => expect(boneChannel(container, 'trigger', 'x')).toBe('33px'));
+  });
+
+  describe('observer shape', () => {
+    beforeEach(() => {
+      RecordingMutationObserver.instances = [];
+      globalThis.MutationObserver = RecordingMutationObserver;
+    });
+
+    afterEach(() => {
+      globalThis.MutationObserver = NativeMutationObserver;
+    });
+
+    it('watches the source as a subtree and each ancestor on its own attributes only, never the document', () => {
+      const { container, rerender } = render(
+        <ProviderScope>
+          <AnatomySkeleton>
+            <FixtureFamily anatomy={CARD_LIKE} />
+          </AnatomySkeleton>
+        </ProviderScope>,
+      );
+      const source = container.querySelector<HTMLElement>("[data-part='source']")!;
+      const observer = RecordingMutationObserver.instances.find((instance) =>
+        instance.observations.some((observation) => observation.target === source),
+      )!;
+      expect(observer).toBeDefined();
+
+      const sourceWatch = observer.observations.filter((observation) => observation.target === source);
+      expect(sourceWatch).toHaveLength(1);
+      expect(sourceWatch[0].options).toMatchObject({ subtree: true, childList: true, attributes: true, characterData: true });
+
+      const ancestors: Element[] = [];
+      for (let node = source.parentElement; node; node = node.parentElement) ancestors.push(node);
+      expect(ancestors).toContain(screen.getByTestId('scope'));
+      expect(ancestors).toContain(document.documentElement);
+
+      const ancestorWatch = observer.observations.filter((observation) => observation.target !== source);
+      expect(new Set(ancestorWatch.map((observation) => observation.target))).toEqual(new Set(ancestors));
+      for (const { target, options } of ancestorWatch) {
+        expect(target.nodeType).toBe(Node.ELEMENT_NODE);
+        expect(options?.subtree).toBeFalsy();
+        expect(options?.childList).toBeFalsy();
+        expect(options?.characterData).toBeFalsy();
+        expect(options?.attributes).toBe(true);
+        expect(options?.attributeFilter).toEqual([...SKELETON_ANCESTOR_INVALIDATION_ATTRIBUTES]);
+      }
+      expect(ancestorWatch.some((observation) => observation.target === document)).toBe(false);
+
+      rerender(
+        <ProviderScope>
+          <AnatomySkeleton loading={false}>
+            <FixtureFamily anatomy={CARD_LIKE} />
+          </AnatomySkeleton>
+        </ProviderScope>,
+      );
+      expect(observer.disconnected).toBe(1);
+    });
   });
 });
 

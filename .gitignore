@@ -36,6 +36,9 @@ test-artifacts/craft/cra-15/.run/
 !test-artifacts/gates/
 test-artifacts/gates/*
 .gat07/
+# WO-FAM-14 R108-RUN-01 red-before/green-after browser proof for the skeleton
+# ancestor-invalidation repair — same authoritative-evidence class as GAT-07.
+!test-artifacts/skeleton-r108/
 # Playwright visual-regression run output (baselines under e2e/visual/__screenshots__/ ARE committed)
 packages/showroom/test-results/
 packages/showroom/playwright-report/

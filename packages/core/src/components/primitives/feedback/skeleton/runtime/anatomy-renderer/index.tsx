@@ -9,6 +9,7 @@ import React, { forwardRef, useCallback, useEffect, useLayoutEffect, useRef, use
 import type { CSSProperties, ReactNode } from 'react';
 
 import { useOptionalTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
+import { PROVIDER_PAINT_ATTRIBUTE_FILTER } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
 import { resolveSkeletonPersonalityDefaults } from '@/foundation/tokens/ts/runtime/personality';
 import type { SkeletonAnimation } from '../../contracts';
 
@@ -310,6 +311,15 @@ export function readAnatomyBones(source: HTMLElement): AnatomyBone[] {
   return readAnatomy(source).bones;
 }
 
+/**
+ * Ancestor attributes whose change re-reads every bone: the paint-owner surface plus `dir`.
+ * A stylesheet-only move with no attribute and no box change has no DOM signal, so it is not covered.
+ */
+export const SKELETON_ANCESTOR_INVALIDATION_ATTRIBUTES: readonly string[] = Object.freeze([
+  ...PROVIDER_PAINT_ATTRIBUTE_FILTER,
+  'dir',
+]);
+
 const sameBones = (left: AnatomyBone[], right: AnatomyBone[]) =>
   left.length === right.length
   && left.every((bone, index) => {
@@ -389,8 +399,13 @@ export const AnatomySkeleton = forwardRef<HTMLDivElement, AnatomySkeletonProps>(
       // Any attribute can move a part through an attribute selector and any text edit can
       // reflow a line, so the whole source subtree is watched, not `data-part` alone.
       mutation?.observe(source, { childList: true, subtree: true, attributes: true, characterData: true });
-      // Direction is authored on the document element, above anything the source can observe.
-      mutation?.observe(owner.documentElement, { attributes: true, attributeFilter: ['dir'] });
+      // A provider root, a scoped `dir` or an inherited custom property lands on an ancestor's own
+      // attributes, so each ancestor is watched by itself; the document is never watched as a subtree.
+      const ancestorWatch = { attributes: true, attributeFilter: [...SKELETON_ANCESTOR_INVALIDATION_ATTRIBUTES] };
+      for (let ancestor = source.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        mutation?.observe(ancestor, ancestorWatch);
+      }
+      mutation?.observe(owner.documentElement, ancestorWatch);
       const fonts: FontFaceSet | undefined = owner.fonts;
       let watching = true;
       const remeasure = () => {
