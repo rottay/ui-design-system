@@ -251,6 +251,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const openedOnMatchRef = useRef(false);
   /** A keyboard open reveals the row it lands on; a pointer open never scrolls. */
   const openedByKeyboardRef = useRef(false);
+  /** An IME owns the filter input between compositionstart and compositionend. */
+  const composingRef = useRef(false);
 
   const trigger = useInteractionState({ disabled });
 
@@ -432,36 +434,55 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     [multiple, onChange, onClear, setActiveIndex]
   );
 
+  /** Tokenizes a trailing separator, reporting whether it consumed the filter text. */
+  const commitSeparatorToken = useCallback(
+    (rawValue: string) => {
+      if (!multiple || !tokenSeparators || tokenSeparators.length === 0) return false;
+      const lastChar = rawValue.slice(-1);
+      if (!tokenSeparators.includes(lastChar)) return false;
+      const token = rawValue.slice(0, -1).trim();
+      if (!token) return false;
+
+      const matchOption = allOptions.find(
+        (opt) => getLabelText(opt.label).toLowerCase() === token.toLowerCase() || String(opt.value) === token
+      );
+      if (matchOption && !internalValue.includes(matchOption.value)) {
+        const newValue = [...internalValue, matchOption.value];
+        setInternalValue(newValue);
+        const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
+        onChange?.(newValue, selectedOpts);
+      }
+      setSearchValue('');
+      onSearch?.('');
+      return true;
+    },
+    [tokenSeparators, multiple, allOptions, internalValue, onChange, onSearch]
+  );
+
   const handleSearchInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = e.target.value;
+      // A separator inside a live candidate is IME punctuation, not a token
+      // boundary: the candidate stays editable until composition ends.
+      const composing = composingRef.current || Boolean((e.nativeEvent as InputEvent).isComposing);
 
-      if (tokenSeparators && tokenSeparators.length > 0 && multiple) {
-        const lastChar = rawValue.slice(-1);
-        if (tokenSeparators.includes(lastChar)) {
-          const token = rawValue.slice(0, -1).trim();
-          if (token) {
-            const matchOption = allOptions.find(
-              (opt) => getLabelText(opt.label).toLowerCase() === token.toLowerCase() || String(opt.value) === token
-            );
-            if (matchOption && !internalValue.includes(matchOption.value)) {
-              const newValue = [...internalValue, matchOption.value];
-              setInternalValue(newValue);
-              const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
-              onChange?.(newValue, selectedOpts);
-            }
-            setSearchValue('');
-            onSearch?.('');
-            return;
-          }
-        }
-      }
+      if (!composing && commitSeparatorToken(rawValue)) return;
 
       setSearchValue(rawValue);
       onSearch?.(rawValue);
       setActiveIndex(-1);
     },
-    [tokenSeparators, multiple, allOptions, internalValue, onChange, onSearch, setActiveIndex]
+    [commitSeparatorToken, onSearch, setActiveIndex]
+  );
+
+  const handleSearchCompositionEnd = useCallback(
+    (e: React.CompositionEvent<HTMLInputElement>) => {
+      composingRef.current = false;
+      // Firefox delivers the confirmed text on an input event still flagged as
+      // composing, so the separator is tokenized from the settled value here.
+      commitSeparatorToken(e.currentTarget.value);
+    },
+    [commitSeparatorToken]
   );
 
   const commitActive = useCallback(() => {
@@ -1017,6 +1038,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   data-part="search-input"
                   value={searchValue}
                   onChange={handleSearchInput}
+                  onCompositionStart={() => {
+                    composingRef.current = true;
+                  }}
+                  onCompositionEnd={handleSearchCompositionEnd}
                   placeholder={tOr('select.search', EN_FALLBACK.search)}
                   onClick={(e) => e.stopPropagation()}
                   autoFocus
