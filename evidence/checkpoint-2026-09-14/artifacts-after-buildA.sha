@@ -1,0 +1,8 @@
+5b35085d6cd18ae1198715753e088d684ae70c76d6ed9d09e6ca6d14c2b81a9c  packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css
+4aff42c02f53dcff2868d15951267328ab07b75844d12c8f0a4c94c24f075fba  packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css
+4600b19b9a1e34b0f75a73b16c7f3f65b6b672739aafe87fa2b184d67ba3f2fa  packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css
+f05c727235b1d476f2953907d0abe6126ed8a48f4bf542028396fe3f92d7873a  packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.ts
+6ed30891b804ec1e5ad4b72fd73b252a42026dccce5d33075bfdaf165cc97e58  packages/core/artifacts/generated/css/all-verticals/index.css
+42adcf1a13b016ffa11552698eb165eb2ceb473c5bf046dd4af4e3e8968ea866  packages/core/artifacts/generated/css/verticals/bithire/index.css
+700bbe6197129a227f6f0ab71ba79cd0b4f388adbf59e7a1dbfe4a3770164855  packages/core/artifacts/generated/css/verticals/evnto/index.css
+ba1d352b283fa1278d757075192bf62eade573a9139707d0e6a8fa68f7a2556e  packages/core/artifacts/generated/css/verticals/rottay/index.css
