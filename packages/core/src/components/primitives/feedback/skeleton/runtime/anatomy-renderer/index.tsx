@@ -233,19 +233,28 @@ export interface AnatomyBone {
   radius?: string;
 }
 
+/** One traversal: the bones to paint, and every element whose box produced them. */
+interface AnatomyReading {
+  bones: AnatomyBone[];
+  /** The elements the traversal read, so their size can be watched for drift. */
+  measured: Element[];
+}
+
 /**
- * Reads the stamped anatomy under `source` into bones, in document order.
+ * Reads the stamped anatomy under `source`, in document order.
  * Elements without a `data-part` are transparent: their parts are still read.
  */
-export function readAnatomyBones(source: HTMLElement): AnatomyBone[] {
+function readAnatomy(source: HTMLElement): AnatomyReading {
   const origin = source.getBoundingClientRect();
   const view = source.ownerDocument.defaultView;
   const bones: AnatomyBone[] = [];
+  const measured: Element[] = [];
 
   const visit = (element: Element) => {
     const part = element.getAttribute('data-part');
     const role = part === null ? 'pass' : resolvePartRole(part);
     if (role === 'omit') return;
+    measured.push(element);
     if (part !== null && role !== 'pass') {
       const rect = element.getBoundingClientRect();
       const radius = view?.getComputedStyle(element).borderRadius;
@@ -264,7 +273,12 @@ export function readAnatomyBones(source: HTMLElement): AnatomyBone[] {
   };
 
   for (const child of Array.from(source.children)) visit(child);
-  return bones;
+  return { bones, measured };
+}
+
+/** The bones of the stamped anatomy under `source`, in document order. */
+export function readAnatomyBones(source: HTMLElement): AnatomyBone[] {
+  return readAnatomy(source).bones;
 }
 
 const sameBones = (left: AnatomyBone[], right: AnatomyBone[]) =>
@@ -298,10 +312,30 @@ export const AnatomySkeleton = forwardRef<HTMLDivElement, AnatomySkeletonProps>(
     const resolvedAnimation = animation ?? (tokens ? resolveSkeletonPersonalityDefaults(tokens).animation : 'wave');
     const animationStyle = resolvedAnimation === false ? undefined : resolvedAnimation === 'pulse' ? 'pulse' : 'shimmer';
 
+    const geometryRef = useRef<{ resize: ResizeObserver | null; observed: Set<Element> }>({
+      resize: null,
+      observed: new Set(),
+    });
+
     const measure = useCallback(() => {
       const source = sourceRef.current;
       if (!source) return;
-      const next = readAnatomyBones(source);
+      const { bones: next, measured } = readAnatomy(source);
+      const geometry = geometryRef.current;
+      if (geometry.resize) {
+        const live = new Set<Element>(measured);
+        live.add(source);
+        for (const element of geometry.observed) {
+          if (live.has(element)) continue;
+          geometry.resize.unobserve(element);
+          geometry.observed.delete(element);
+        }
+        for (const element of live) {
+          if (geometry.observed.has(element)) continue;
+          geometry.observed.add(element);
+          geometry.resize.observe(element);
+        }
+      }
       setBones((current) => (current && sameBones(current, next) ? current : next));
     }, []);
 
@@ -312,12 +346,30 @@ export const AnatomySkeleton = forwardRef<HTMLDivElement, AnatomySkeletonProps>(
     useEffect(() => {
       const source = sourceRef.current;
       if (!loading || !source) return undefined;
-      const resize = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
-      resize?.observe(source);
+      const owner = source.ownerDocument;
+      const geometry = geometryRef.current;
+      geometry.resize = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
       const mutation = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(measure);
-      mutation?.observe(source, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-part'] });
+      // Any attribute can move a part through an attribute selector and any text edit can
+      // reflow a line, so the whole source subtree is watched, not `data-part` alone.
+      mutation?.observe(source, { childList: true, subtree: true, attributes: true, characterData: true });
+      // Direction is authored on the document element, above anything the source can observe.
+      mutation?.observe(owner.documentElement, { attributes: true, attributeFilter: ['dir'] });
+      const fonts: FontFaceSet | undefined = owner.fonts;
+      let watching = true;
+      const remeasure = () => {
+        if (watching) measure();
+      };
+      fonts?.addEventListener?.('loadingdone', remeasure);
+      void fonts?.ready?.then(remeasure, () => undefined);
+      // Seeds the resize targets: the layout effect above measured before this observer existed.
+      measure();
       return () => {
-        resize?.disconnect();
+        watching = false;
+        fonts?.removeEventListener?.('loadingdone', remeasure);
+        geometry.resize?.disconnect();
+        geometry.resize = null;
+        geometry.observed.clear();
         mutation?.disconnect();
       };
     }, [loading, measure]);

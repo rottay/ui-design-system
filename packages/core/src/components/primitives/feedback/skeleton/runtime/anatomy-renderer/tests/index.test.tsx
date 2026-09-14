@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ModernButton from '../../../../../inputs/button/engines/modern';
@@ -43,11 +43,18 @@ const sourceParts = (container: HTMLElement) =>
     (bone) => `${bone.dataset.sourcePart}:${bone.dataset.bone}`,
   );
 
+/**
+ * Rects a test moves without touching the DOM, keyed by the element's declared
+ * `data-rect`. A layout that changes with no mutation is exactly what a
+ * `data-part`-only observer cannot see.
+ */
+const movedRects = new Map<string, string>();
+
 beforeEach(() => {
+  movedRects.clear();
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
-    const [x, y, width, height] = (this.closest('[data-rect]')?.getAttribute('data-rect') ?? '0,0,0,0')
-      .split(',')
-      .map(Number);
+    const declared = this.closest('[data-rect]')?.getAttribute('data-rect') ?? '0,0,0,0';
+    const [x, y, width, height] = (movedRects.get(declared) ?? declared).split(',').map(Number);
     return { x, y, left: x, top: y, width, height, right: x + width, bottom: y + height, toJSON: () => ({}) } as DOMRect;
   });
 });
@@ -154,6 +161,215 @@ describe('AnatomySkeleton builds the loading state from the stamped data-part an
       ['text', 'line', 50, 10],
     ]);
     host.remove();
+  });
+});
+
+/** A ResizeObserver the test drives, so the observed set and the callback are both readable. */
+class RecordingResizeObserver {
+  static last: RecordingResizeObserver | undefined;
+
+  readonly observed = new Set<Element>();
+
+  disconnected = 0;
+
+  constructor(readonly callback: () => void) {
+    RecordingResizeObserver.last = this;
+  }
+
+  observe(element: Element) {
+    this.observed.add(element);
+  }
+
+  unobserve(element: Element) {
+    this.observed.delete(element);
+  }
+
+  disconnect() {
+    this.observed.clear();
+    this.disconnected += 1;
+  }
+}
+
+const observedParts = () =>
+  [...(RecordingResizeObserver.last?.observed ?? [])].map((element) => element.getAttribute('data-part') ?? '(unstamped)');
+
+const boneWidth = (container: HTMLElement, part: string) =>
+  container
+    .querySelector<HTMLElement>(`[data-source-part='${part}']`)!
+    .style.getPropertyValue('--ds-skeleton-bone-width');
+
+describe('AnatomySkeleton keeps the bones on the geometry it copied', () => {
+  let previous: typeof ResizeObserver;
+
+  beforeEach(() => {
+    previous = globalThis.ResizeObserver;
+    RecordingResizeObserver.last = undefined;
+    globalThis.ResizeObserver = RecordingResizeObserver as unknown as typeof ResizeObserver;
+  });
+
+  afterEach(() => {
+    globalThis.ResizeObserver = previous;
+  });
+
+  it('observes the source wrapper and every element it measures, and nothing it omits', () => {
+    render(
+      <AnatomySkeleton>
+        <FixtureFamily anatomy={CARD_LIKE} />
+      </AnatomySkeleton>,
+    );
+    const parts = observedParts();
+    expect(parts).toContain('source');
+    expect(parts).toEqual(expect.arrayContaining(['root', 'header', 'icon', 'title', 'trigger']));
+    expect(parts).not.toContain('spinner');
+    expect(parts).not.toContain('label');
+  });
+
+  it('catches up when a descendant resizes and the wrapper bounds do not change', () => {
+    const { container } = render(
+      <AnatomySkeleton>
+        <FixtureFamily anatomy={CARD_LIKE} />
+      </AnatomySkeleton>,
+    );
+    expect(boneWidth(container, 'title')).toBe('200px');
+    const observer = RecordingResizeObserver.last!;
+    expect(observer.observed.has(container.querySelector("[data-part='title']")!)).toBe(true);
+
+    movedRects.set('48,16,200,24', '48,16,120,24');
+    act(() => {
+      observer.callback();
+    });
+
+    expect(boneWidth(container, 'title')).toBe('120px');
+    expect(boneWidth(container, 'root')).toBe('320px');
+  });
+
+  it('catches up when a descendant changes class with no data-part mutation', async () => {
+    const { container } = render(
+      <AnatomySkeleton>
+        <FixtureFamily anatomy={CARD_LIKE} />
+      </AnatomySkeleton>,
+    );
+    movedRects.set('16,140,120,44', '16,140,240,44');
+    container.querySelector<HTMLElement>("[data-part='trigger']")!.classList.add('is-wide');
+
+    await waitFor(() => expect(boneWidth(container, 'trigger')).toBe('240px'));
+  });
+
+  it('catches up when the document direction flips', async () => {
+    const { container } = render(
+      <AnatomySkeleton>
+        <FixtureFamily anatomy={CARD_LIKE} />
+      </AnatomySkeleton>,
+    );
+    movedRects.set('16,16,24,24', '280,16,24,24');
+    document.documentElement.setAttribute('dir', 'rtl');
+
+    try {
+      await waitFor(() =>
+        expect(
+          container
+            .querySelector<HTMLElement>("[data-source-part='icon']")!
+            .style.getPropertyValue('--ds-skeleton-bone-x'),
+        ).toBe('280px'),
+      );
+    } finally {
+      document.documentElement.removeAttribute('dir');
+    }
+  });
+
+  /** Stands in for `document.fonts`, whose readiness the test controls. */
+  const withFontFaceSet = async (
+    run: (fonts: EventTarget, settle: () => void) => Promise<void>,
+  ) => {
+    let settle = () => {};
+    const fonts = new EventTarget() as EventTarget & { ready: Promise<unknown> };
+    fonts.ready = new Promise<void>((resolve) => {
+      settle = resolve;
+    });
+    const descriptor = Object.getOwnPropertyDescriptor(document, 'fonts');
+    Object.defineProperty(document, 'fonts', { value: fonts, configurable: true });
+    try {
+      await run(fonts, settle);
+    } finally {
+      if (descriptor) Object.defineProperty(document, 'fonts', descriptor);
+      else delete (document as unknown as { fonts?: unknown }).fonts;
+    }
+  };
+
+  it('catches up when a delayed font finishes loading', async () => {
+    await withFontFaceSet(async (fonts) => {
+      const { container } = render(
+        <AnatomySkeleton>
+          <FixtureFamily anatomy={CARD_LIKE} />
+        </AnatomySkeleton>,
+      );
+      movedRects.set('48,16,200,24', '48,16,164,24');
+      act(() => {
+        fonts.dispatchEvent(new Event('loadingdone'));
+      });
+
+      expect(boneWidth(container, 'title')).toBe('164px');
+    });
+  });
+
+  it('catches up when font readiness resolves after the first measure', async () => {
+    await withFontFaceSet(async (_fonts, settle) => {
+      const { container } = render(
+        <AnatomySkeleton>
+          <FixtureFamily anatomy={CARD_LIKE} />
+        </AnatomySkeleton>,
+      );
+      expect(boneWidth(container, 'title')).toBe('200px');
+      movedRects.set('48,16,200,24', '48,16,148,24');
+      settle();
+
+      await waitFor(() => expect(boneWidth(container, 'title')).toBe('148px'));
+    });
+  });
+
+  it('drops a removed part from the watch and picks up an inserted one', () => {
+    const { rerender } = render(
+      <AnatomySkeleton>
+        <FixtureFamily anatomy={CARD_LIKE} />
+      </AnatomySkeleton>,
+    );
+    expect(observedParts()).toContain('icon');
+
+    rerender(
+      <AnatomySkeleton>
+        <FixtureFamily
+          anatomy={[
+            {
+              part: 'root',
+              rect: [0, 0, 320, 200],
+              children: [{ part: 'cover', rect: [0, 0, 320, 96] }],
+            },
+          ]}
+        />
+      </AnatomySkeleton>,
+    );
+
+    expect(observedParts()).toContain('cover');
+    expect(observedParts()).not.toContain('icon');
+  });
+
+  it('stops watching once loading ends', () => {
+    const { rerender } = render(
+      <AnatomySkeleton loading>
+        <FixtureFamily anatomy={CARD_LIKE} />
+      </AnatomySkeleton>,
+    );
+    const observer = RecordingResizeObserver.last!;
+    expect(observer.observed.size).toBeGreaterThan(1);
+
+    rerender(
+      <AnatomySkeleton loading={false}>
+        <FixtureFamily anatomy={CARD_LIKE} />
+      </AnatomySkeleton>,
+    );
+
+    expect(observer.disconnected).toBe(1);
+    expect(observer.observed.size).toBe(0);
   });
 });
 
