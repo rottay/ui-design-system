@@ -4561,6 +4561,11 @@
      "at": "2026-09-14 09:40",
      "by": "kimi-admin",
      "note": "G107-05 EXACT-CELLS (audit 107, gates-and-readiness.md): closure shorthand census=0 is inexact — the family-cut CLI reports partsStampedNotConsumed=1 on Button and Segmented and fanOutUnreached=1 on Button/Checkbox/Radio/Toggle (recipe-profile debt routed to WO-DER-06). Segmented density/radius/height/type causality tests omit the BitHire vertical, and the EVI-05 instrument records BitHire rhythm as failed — the pending pair segmented/rhythm is tracked in WO-EVI-05. The shared axe roster covers four selected vertical/mode combinations (rottay/dark, bithire/light, bithire/dark, evnto/light), not all six; the evnto/dark text-link contrast problem (2.27:1) stays routed to WO-DER-06 and no axe exclusion certifies general quality. These cells remain obligations of this WO and its recipients; a green shorthand never waives them."
+    },
+    {
+     "at": "2026-09-14 10:14",
+     "by": "kimi-admin",
+     "note": "R107-RUN-01 LANDED on r4-recon (89510502f): one cancelPress path in useInteractionState — pointer leave/cancel/up, blur and the transition into disabled all end the press; Button drops its local compensation. Audited by kimi-admin: the three audit-107 probes flip green on the candidate and integrated branch (verified through a null-tolerant tmp copy because the fixed idle control drops data-state entirely — original audit files untouched); 269/269 across interaction-state, field-action, checkbox, radio, toggle, button; tsc clean; changeset included. WO STAYS OPEN for the G107-01-adjudicated --ds-radius-button obligation (DECLARED_CHANNEL_DOES_NOT_PAINT; paint route strongly preferred, retirement only with the der-03 changeset honored; radius-scale/height are not the terminal), now dispatched to the same writer on wo-fix-fam01."
     }
    ],
    "doneAt": null,
