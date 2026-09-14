@@ -252,11 +252,15 @@ describe('environment-toggle -- data-part contract (navigation-pattern anatomy)'
     fireEvent.click(container.querySelector('[data-testid="env-option-prod"]') as Element);
 
     if (engine === 'modern') {
-      // ConfirmDialog owns a portaled, native top-layer contract in Modern.
+      // ConfirmDialog owns a portaled, native top-layer contract in Modern. The
+      // ds-confirm-dialog cut split what used to be one node: the <dialog> is the
+      // LAYER and carries the overlay attributes as data-part="root", and the
+      // click-to-cancel backdrop is its own child beneath it.
       await waitFor(() => {
         expect(document.querySelector('[data-part="surface"][role="alertdialog"]')).not.toBeNull();
       });
-      expect(document.querySelector('[data-part="backdrop"][data-overlay-kind="modal"]')).not.toBeNull();
+      expect(document.querySelector('[data-part="root"][data-overlay-kind="modal"]')).not.toBeNull();
+      expect(document.querySelector('[data-part="backdrop"]')).not.toBeNull();
       expect(document.querySelector('[data-part="action"][data-action="cancel"]')).not.toBeNull();
       expect(document.querySelector('[data-part="action"][data-action="confirm"]')).not.toBeNull();
     } else {
