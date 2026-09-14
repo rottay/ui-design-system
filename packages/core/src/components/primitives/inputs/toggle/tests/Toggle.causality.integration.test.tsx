@@ -39,6 +39,8 @@ describeCausality({
     { id: 'hoverFill', selector: `${ON} [data-part='track']`, property: 'background-color', attributes: { 'data-state': 'hovered' }, attributesOn: ON },
     { id: 'press', selector: `${OFF} [data-part='thumb']`, property: 'transform', attributes: { 'data-state': 'pressed' }, attributesOn: OFF },
     { id: 'ring', selector: `${OFF} [data-part='track']`, property: 'outline-width', attributes: { 'data-state': 'focus-visible' }, attributesOn: OFF },
+    { id: 'trackRadius', selector: `${ON} [data-part='track']`, property: 'border-top-left-radius' },
+    { id: 'thumbRadius', selector: `${ON} [data-part='thumb']`, property: 'border-top-left-radius' },
     { id: 'width', selector: `${ON} [data-part='track']`, property: 'inline-size' },
     { id: 'height', selector: `${ON} [data-part='track']`, property: 'block-size' },
     { id: 'labelSize', selector: `${ON} [data-part='label']`, property: 'font-size' },
@@ -51,6 +53,7 @@ describeCausality({
     'states.emphasis': { value: 'strong', moves: ['hoverFill', 'press'], holds: 'fill', in: VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['ring'], holds: 'fill', in: VERTICALS },
     'density.mode': { value: 'compact', moves: ['width'], holds: 'fill', in: VERTICALS },
+    'shape.button-style': { value: 'sharp', moves: ['trackRadius', 'thumbRadius'], holds: 'height', in: VERTICALS },
     'shape.control-height': { value: 'tall', moves: ['height'], holds: 'fill', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['labelSize'], holds: 'fill', in: VERTICALS },
     'surfaces.elevation-posture': { value: 'elevated', moves: ['thumbDepth'], holds: 'fill', in: ['bithire', 'evnto'] },
@@ -59,6 +62,24 @@ describeCausality({
 });
 
 describe('toggle travel, direction, floors and accessibility in a real browser', () => {
+  it('stays a full pill on every vertical when no silhouette is chosen', async () => {
+    // The silhouette governs the corner, but the DEFAULT is the switch's own
+    // identity: an undecided tenant must still get a pill, not a ramp step.
+    for (const vertical of VERTICALS) {
+      const resting = await measureArms({
+        vertical,
+        markup,
+        arms: { base: {} },
+        targets: [
+          { id: 'track', selector: `${ON} [data-part='track']`, property: 'border-top-left-radius' },
+          { id: 'thumb', selector: `${ON} [data-part='thumb']`, property: 'border-top-left-radius' },
+        ],
+      });
+      expect(resting.base!.track, vertical).toBe('9999px');
+      expect(resting.base!.thumb, vertical).toBe('9999px');
+    }
+  }, 60_000);
+
   it('travels the thumb toward the inline end in both directions', async () => {
     const pair = renderToStaticMarkup(
       <div>

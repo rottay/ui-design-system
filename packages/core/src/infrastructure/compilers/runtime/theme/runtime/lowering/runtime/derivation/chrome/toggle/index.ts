@@ -1,16 +1,27 @@
 /**
  * @fileoverview The toggle family (Switch is its deprecated name): its track on
- * the palette and state decisions, its thumb on the elevation decision, and its
- * supporting text on the caption type role.
+ * the palette and state decisions, its thumb on the elevation decision, its
+ * supporting text on the caption type role, and the corner of both track and
+ * thumb on the silhouette decision -- a pill until a tenant states otherwise.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/toggle
  * @category Compilers
  * @package @rottay/design-system
  */
 
+import type { BrandSurfaces } from "@/foundation/contracts/composition/tenants/themes";
+
 import type { FamilyDeriver } from "../../../../foundation/contract";
 
 const TRACK = "var(--ds-toggle-track-bg, var(--ds-color-border-secondary))";
+
+/**
+ * The switch is a pill by identity, so the corner follows the silhouette only
+ * when a tenant STATES one: reading the button channel unconditionally would
+ * hand the switch a vertical's authored button corner nobody asked it for.
+ */
+const PILL = "var(--ds-radius-full)";
+const SILHOUETTE = "var(--ds-radius-button, var(--ds-radius-full))";
 
 /** A vertical's own toggle chrome outranks every relation stated here. */
 export const toggleChromeDeriver: FamilyDeriver = {
@@ -18,11 +29,14 @@ export const toggleChromeDeriver: FamilyDeriver = {
   rank: "derived",
   consumes: [
     "palette.*",
+    "surfaces.buttonStyle",
     "surfaces.stateEmphasis",
     "surfaces.elevation",
     "typography.roles",
   ],
   produces: [
+    "--ds-toggle-track-border-radius",
+    "--ds-toggle-dot-border-radius",
     "--ds-toggle-track-bg",
     "--ds-toggle-track-bg-checked",
     "--ds-toggle-track-bg-hover",
@@ -41,11 +55,17 @@ export const toggleChromeDeriver: FamilyDeriver = {
     "--ds-toggle-loading-arc-color",
     "--ds-toggle-loading-track-color",
   ],
-  derive: () => deriveToggleChannels(),
+  derive: (context) => deriveToggleChannels(context.theme.surfaces?.buttonStyle),
 };
 
-export function deriveToggleChannels(): Record<string, string> {
+export function deriveToggleChannels(
+  buttonStyle?: BrandSurfaces["buttonStyle"]
+): Record<string, string> {
   const vars: Record<string, string> = {};
+  // Track and thumb turn together, or the thumb misfits its own well.
+  const corner = buttonStyle ? SILHOUETTE : PILL;
+  vars["--ds-toggle-track-border-radius"] = corner;
+  vars["--ds-toggle-dot-border-radius"] = corner;
   vars["--ds-toggle-track-bg"] = "var(--ds-color-border-secondary)";
   vars["--ds-toggle-track-bg-checked"] = "var(--ds-color-primary)";
   vars["--ds-toggle-track-bg-hover"] = `color-mix(in srgb, ${TRACK}, var(--ds-color-text-primary) var(--ds-state-hover-shift))`;
