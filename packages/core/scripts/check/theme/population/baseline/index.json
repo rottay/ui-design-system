@@ -2,14 +2,46 @@
   "purpose": "The per-axis denominator of the by-axis tenant-difference probe (kit-2026-09 section 5 rule 4), pinned so it cannot be shrunk to reach a threshold (WO-EVI-02 R4 amendment 3).",
   "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets.",
   "catalogRevision": "2a25f7c6068407fb",
-  "pinnedOn": "2026-09-11",
-  "skinFamilies": 275,
+  "pinnedOn": "2026-09-14",
+  "skinFamilies": 273,
   "axes": {
-    "shape": 221,
+    "shape": 220,
     "typography": 183,
-    "rhythm": 216,
-    "depth": 197,
-    "states": 157,
-    "motion": 202
+    "rhythm": 215,
+    "depth": 196,
+    "states": 158,
+    "motion": 203
+  },
+  "provenance": {
+    "reconciles": "G107-02",
+    "computedFrom": "a99475804",
+    "computedOn": "2026-09-14",
+    "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed against the same computation over the previous pin's tree",
+    "previousPin": {
+      "pinnedOn": "2026-09-11",
+      "sourceCommit": "8ae756faa",
+      "skinFamilies": 275,
+      "axes": { "shape": 221, "typography": 183, "rhythm": 216, "depth": 197, "states": 157, "motion": 202 }
+    },
+    "membershipMoves": {
+      "renamesAndMerges": [
+        "skeleton-compounds -> skeleton-anatomy (FAM-14)",
+        "autocomplete -> auto-complete (FAM-02)",
+        "switch merged into Toggle behind a deprecated prop adapter (FAM-01)",
+        "input-residual merged (FAM-03)",
+        "select-compounds added by the FAM-02 cut",
+        "form-field added by the FAM-03 cut"
+      ],
+      "unrelatedAxisMove": "toast-compounds entered `motion` at fe4eabadb (WO-INV-05, 2026-09-12): the family is neither renamed nor merged, and declared no axis at the previous pin. Its two `animation: none !important` reduced-motion kill switches are read as a motion declaration. Whether a suppression declares an axis is open and owned by the motion vocabulary, not by this pin; if it is ruled out, `motion` returns to 202 and this file is republished in that commit.",
+      "byAxis": {
+        "skinFamilies": { "removed": ["autocomplete", "input-residual", "skeleton-compounds", "switch"], "added": ["auto-complete", "skeleton-anatomy"] },
+        "shape": { "removed": ["autocomplete", "skeleton-compounds", "switch"], "added": ["auto-complete", "skeleton-anatomy"] },
+        "typography": { "removed": ["autocomplete", "switch"], "added": ["auto-complete", "select-compounds"] },
+        "rhythm": { "removed": ["autocomplete", "skeleton-compounds", "switch"], "added": ["auto-complete", "select-compounds"] },
+        "depth": { "removed": ["autocomplete", "skeleton-compounds", "switch"], "added": ["auto-complete", "skeleton-anatomy"] },
+        "states": { "removed": ["autocomplete", "switch"], "added": ["auto-complete", "form-field", "select-compounds"] },
+        "motion": { "removed": ["autocomplete", "switch"], "added": ["auto-complete", "skeleton-anatomy", "toast-compounds"] }
+      }
+    }
   }
 }
