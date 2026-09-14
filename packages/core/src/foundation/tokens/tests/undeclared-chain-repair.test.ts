@@ -47,8 +47,8 @@ describe("R5 chain repair -- retired names stay retired", () => {
   it("keeps the popover and tooltip inverse ink on a declared role", () => {
     const popover = readFileSync(join(CSS_ROOT, "runtime/engines/modern/skin/popover/index.css"), "utf8");
     const tooltip = readFileSync(join(CSS_ROOT, "runtime/engines/modern/skin/tooltip/index.css"), "utf8");
-    expect(popover).toMatch(/--ds-popover-ink:\s*var\(\s*--ds-popover-inverse-foreground,\s*var\(--ds-color-text-inverse\)/);
-    expect(tooltip).toMatch(/var\(--ds-color-text-inverse,\s*var\(--ds-tooltip-color\)\)/);
+    expect(popover).toMatch(/--ds-popover-ink-current:\s*var\(\s*--ds-popover-inverse-foreground,\s*var\(--ds-color-text-inverse\)/);
+    expect(tooltip).toMatch(/--ds-tooltip-ink-current:\s*var\(\s*--ds-tooltip-inverse-foreground,\s*var\(--ds-color-text-inverse\)/);
   });
 
   it("keeps the avatar-group ring on a tenant-causal role instead of dropping the border", () => {

@@ -155,8 +155,8 @@ describe('AUT-1 tone-ink authority — LIGHT leg (per shipped bundle)', () => {
       expect(hasConsumer(path, '--ds-color-error-ink'), path).toBe(true);
       expect(hasConsumer(path, '--ds-color-success-ink'), path).toBe(true);
       const text = readFileSync(resolve(HERE, '../../../../../../..', path), 'utf8');
-      // The callout relay and the tag-input family relation for its rejection ink are the two twins.
-      expect(text).toContain('--_ds-callout-tone-ink');
+      // The alert family relation (Callout folded into Alert) and the tag-input relation for its rejection ink are the two twins.
+      expect(text).toContain('--ds-alert-warning-ink: var(--ds-color-warning-ink)');
       expect(text).toContain('--ds-tag-input-rejected-ink: var(--ds-color-warning-ink)');
     }
   });

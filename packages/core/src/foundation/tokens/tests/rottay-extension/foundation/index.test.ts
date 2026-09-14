@@ -99,6 +99,7 @@ import { lowerBrandThemeFixture, lowerTheme } from "@tests/support/theme-lowerin
 import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import { evntoBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/evnto";
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
+import { deriveTooltipChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip";
 
 const DEFAULT_CSS = join(
   process.cwd(),
@@ -2188,8 +2189,21 @@ const COH1_SUPERSEDED_FLOOR_KEYS = new Set([
   "dark|--ds-color-alpha-success-10",
   "dark|--ds-color-alpha-warning-10",
 ]);
+/**
+ * WO-FAM-04 relates the tooltip tone bubbles to rottay's own palette: the dark
+ * error bubble paints rottay's dark error seed and its ink the dark on-primary,
+ * instead of the foundation red and white the deleted lines resolved to.
+ */
+const TOOLTIP_TONE_SUPERSEDED_KEYS = new Set([
+  "dark|--ds-tooltip-error-bg",
+  "dark|--ds-tooltip-error-color",
+  "dark|--ds-tooltip-success-color",
+  "dark|--ds-tooltip-warning-color",
+]);
 const deleteRowsPreCoh1Floor = deleteRows.filter(
-  (row) => !COH1_SUPERSEDED_FLOOR_KEYS.has(row.mode + "|" + row.name)
+  (row) =>
+    !COH1_SUPERSEDED_FLOOR_KEYS.has(row.mode + "|" + row.name) &&
+    !TOOLTIP_TONE_SUPERSEDED_KEYS.has(row.mode + "|" + row.name)
 );
 
 describe("ROTTAY EXTENSION FOUNDATION DRAIN - census", () => {
@@ -2488,6 +2502,15 @@ describe("ROTTAY EXTENSION FOUNDATION DRAIN - the deleted channels were derivati
  * own dark seed instead of the generic foundation red/blue -- a minimal,
  * intended delta, not a regression.
  */
+describe("tooltip tone bubbles — the four superseded dark rows now read the tooltip family relation", () => {
+  it.each([...TOOLTIP_TONE_SUPERSEDED_KEYS])("%s is the family relation, resolved on rottay's dark palette", (key) => {
+    const [mode, name] = key.split("|") as [Mode, string];
+    const relation = deriveTooltipChannels()[name];
+    expect(relation).toMatch(/^var\(--ds-color-(error|text-on-primary)\)$/);
+    expect(resolveValue(mode, EMITTED[mode][name] ?? relation)).toBe(resolveValue(mode, relation));
+  });
+});
+
 describe("status-tint floor — the four superseded dark alpha-10 rows now derive from rottay's own seed", () => {
   const EXPECTED_FORMULA: Record<string, string> = {
     "--ds-color-alpha-error-10":

@@ -332,24 +332,10 @@
         "--ds-modal-md-width",
         "--ds-modal-padding",
         "--ds-modal-sm-width",
-        "--ds-modal-title-font-size",
         "--ds-modal-xl-width",
         "--ds-modal-xs-width"
       ],
-      "different": [
-        "--ds-modal-bg",
-        "--ds-modal-body-color",
-        "--ds-modal-close-bg-hover",
-        "--ds-modal-close-color",
-        "--ds-modal-close-color-hover",
-        "--ds-modal-color",
-        "--ds-modal-footer-bg",
-        "--ds-modal-overlay-bg",
-        "--ds-modal-shadow",
-        "--ds-modal-subtitle-color",
-        "--ds-modal-title-color",
-        "--ds-modal-title-font-weight"
-      ]
+      "different": []
     },
     "patterns/index.css": {
       "same": [],
@@ -484,6 +470,71 @@
         "channel": "--ds-button-primary-shadow-hover",
         "formerOwner": "button/index.css",
         "reason": "The root default was retired in favour of an in-place fallback at the only reader: runtime/engines/modern/skin/button/index.css declares box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-material-control-shadow-hover)), so the channel resolves without a component-layer declaration. It is still declared by a tenant artifact (facade/artifacts/evnto/index.css), which is the tenant layer and outside this law. Verified: zero declarations across presentation/ and foundation/."
+      },
+      {
+        "channel": "--ds-modal-title-font-size",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-bg",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-body-color",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-close-bg-hover",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-close-color",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-close-color-hover",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-color",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-footer-bg",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-overlay-bg",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-shadow",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-subtitle-color",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-title-color",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
+      },
+      {
+        "channel": "--ds-modal-title-font-weight",
+        "formerOwner": "modal/index.css",
+        "reason": "WO-FAM-04 retired the component-layer default: the channel is a decision relation written by derivation/chrome/modal at the tenant scope, and the Modern modal skin names its root in the read, so no presentation or foundation :root declaration restates it. Verified: zero declarations across presentation/components and foundation/themes/default."
       }
     ]
   }

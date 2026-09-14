@@ -11,8 +11,9 @@
  * locks (a) the lift ramp derivation, (b) that the shadow ramp is untouched,
  * (c) that --ds-shadow-primary is brand-derived and never dresses the neutral
  * ramp, (d) that the interpolable --ds-elevation-lift hover dial is not declared
- * at rest in the theme, and (e) that the modern card/modal/popover skins honor
- * the surface layer they declare. Source parsing only, no DOM.
+ * at rest in the theme, and (e) that the modern card skin honors the surface
+ * layer it declares. Source parsing only, no DOM; the modal and popover lift is
+ * proven by their family causality probes.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -25,12 +26,6 @@ const DEFAULT_CSS = fromRoot(
 );
 const CARD_CSS = fromRoot(
   "src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-);
-const MODAL_CSS = fromRoot(
-  "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css",
-);
-const POPOVER_CSS = fromRoot(
-  "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
 );
 
 const DARK_SELECTOR = ":root[data-theme='dark']";
@@ -126,36 +121,5 @@ describe("modern skins honor the surface layer they declare", () => {
     );
     expect(CARD_CSS).toMatch(/transition:[\s\S]*--ds-elevation-lift /);
     expect(CARD_CSS).toContain("--ds-elevation-lift: 1;");
-  });
-
-  it("modal composes the elevation-surface layer without touching its bg fill", () => {
-    expect(MODAL_CSS).toMatch(
-      /background-image:\s*linear-gradient\(var\(--ds-elevation-surface-4\), var\(--ds-elevation-surface-4\)\)/,
-    );
-    expect(MODAL_CSS).toContain(
-      // C0 re-pin: the middle fallback is the OVERLAY material role, not the
-      // card one. The skin states the reason in place: hoisting the overlay
-      // role above --ds-modal-bg would resolve unconditionally (it is declared
-      // on :root and in the BitHire artifact) and override the modal grounds
-      // Rottay and BitHire author, so it stays in the fallback position until
-      // the :root default is retired. Pinning the card role here asserted a
-      // chain the skin deliberately does not have.
-      "background-color: var(--ds-modal-bg, var(--ds-material-overlay-background, var(--ds-surface-card)))",
-    );
-  });
-
-  // The popover fill is routed through the tenant material chain
-  // (--ds-popover-bordered-background -> --ds-material-overlay-background), so
-  // the card fill is pinned where it still lives: as the terminal fallback of
-  // --ds-popover-surface. The lift layer must sit inside the same background
-  // declaration as that fill and directly above it -- [^;] keeps the match from
-  // crossing into another declaration.
-  it("popover composes the elevation-surface layer over its card fill", () => {
-    expect(POPOVER_CSS).toContain(
-      "var(--ds-popover-bg, var(--ds-surface-overlay, var(--ds-surface-card)))",
-    );
-    expect(POPOVER_CSS).toMatch(
-      /background:[^;]*linear-gradient\(\s*var\(--ds-elevation-surface-3\),\s*var\(--ds-elevation-surface-3\)\s*\),\s*var\(--ds-popover-surface\)\s*;/,
-    );
   });
 });

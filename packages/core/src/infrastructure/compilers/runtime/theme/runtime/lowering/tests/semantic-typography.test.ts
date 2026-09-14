@@ -252,10 +252,20 @@ const FIRST_PARTY = [
  * light block's twins), moved 0; bithire and evnto change key order only, as
  * `--ds-datepicker-panel-shadow` is now written after the chrome blocks.
  */
+/**
+ * WO-FAM-04 re-anchored all three, ADDITIVE, measured: the twelve overlay and
+ * feedback family derivers add rottay 1712 -> 2092 base keys, bithire 1737 ->
+ * 2133, evnto 1038 -> 1449, removed 0, moved 0; every added key is a
+ * `--ds-{modal,drawer,sheet,alert-dialog,confirm-dialog,popover,dropdown,
+ * hover-card,tooltip,tour,notifier,alert}-*` relation. The authored message and
+ * notification chrome now also emits as `--ds-notifier-{message,notification}-*`
+ * (rottay's light block 697 -> 704 carries the seven twins), with the pre-cut
+ * names the frozen skins read restated at the same values.
+ */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "9e6f03498386d6a23684f0d5c3416b3cdc2fa00367bd42359f0174f98d4d58dc",
-  bithire: "267469bb3b368d6319b60051855f1374b3585fbbc6c5c246c36866b4610b7dd4",
-  evnto: "a316c99df6dd212fb8fd900bbe8f6397290d1643809f5c81672e7b7ce363c74f",
+  rottay: "edfd945fe63abf7cd74469206a40262c0bc716c5995ca11de39071800decc264",
+  bithire: "168d239e85f3dcfce633f7cd0c07609f7a454a01b9346a28d13174064c3c3f3a",
+  evnto: "bf47bcb7ea6b28b84108ae2ef73f9b0bab5fa05e959cca134bddd2bae31b6fc3",
 };
 
 /**

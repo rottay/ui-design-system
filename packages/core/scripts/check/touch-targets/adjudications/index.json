@@ -167,12 +167,7 @@
       "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
     },
     {
-      "key": "notification/index.css :: .rottay-notification--modern :: [data-part='close-button']",
-      "kind": "exempt",
-      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
-    },
-    {
-      "key": "notification/index.css :: .rottay-notification--modern :: [data-part='root']",
+      "key": "notifier/index.css :: .ds-notifier.ds-notifier--modern :: [data-part='root']",
       "kind": "exempt",
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
     },
@@ -197,11 +192,6 @@
       "key": "pattern-timeline/index.css :: .ds-pattern-timeline.ds-engine-modern :: [data-part='item-card']",
       "kind": "exempt",
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
-    },
-    {
-      "key": "popover/index.css :: .rottay-popover--modern :: [data-part=\"surface\"]",
-      "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
     },
     {
       "key": "pricing-table/index.css :: .ds-pattern-pricing-table.ds-engine-modern :: .ds-pricing-table__feature-label",
@@ -413,11 +403,6 @@
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
-      "key": "src/components/primitives/feedback/notification/engines/modern/index.tsx :: div :: [data-part='root']",
-      "kind": "exempt",
-      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row notification.css :: .rottay-notification--modern :: [data-part='root'])"
-    },
-    {
       "key": "src/components/primitives/feedback/rate/engines/modern/index.tsx :: input :: dynamic",
       "kind": "debt",
       "owner": "design-system/D1-floors",
@@ -570,7 +555,7 @@
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
-      "key": "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx :: dialog :: [data-part='backdrop']",
+      "key": "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx :: dialog :: [data-part='root']",
       "kind": "debt",
       "owner": "design-system/D1-floors",
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
@@ -702,11 +687,6 @@
       "key": "toggle/index.css :: .ds-toggle.ds-toggle--modern :: input",
       "kind": "exempt",
       "reason": "visually-hidden native control: the input is clipped to 1px (sr-only) and carries semantics only; the tap target is the painted sibling part, adjudicated on its own row"
-    },
-    {
-      "key": "tour/index.css :: .rottay-tour--modern :: [data-part='surface']",
-      "kind": "exempt",
-      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
     },
     {
       "key": "transfer/index.css :: .rottay-transfer.rottay-transfer--modern :: [data-part='panel-item']",
