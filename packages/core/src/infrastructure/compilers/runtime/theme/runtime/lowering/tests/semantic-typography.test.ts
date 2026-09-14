@@ -88,6 +88,17 @@ const FIRST_PARTY = [
  * carries is per-leaf chained resolution + rest-identical + a two-line artifact
  * diff.
  *
+ * SUBTLE-WASH re-anchor, ALL THREE (WO-FAM-04 acceptance, same protocol): the
+ * alert deriver produces four new channels, --ds-alert-{info,success,warning,
+ * error}-wash-subtle, the step-4 wash the folded Callout kept. Real added
+ * content, no zero-pixel claim, and ADDITIVE ONLY -- measured by withdrawing
+ * exactly those four rows from the deriver and recompiling: all three leg-A
+ * digests then return to the pins above byte-for-byte (edfd945f..., 168d239e...,
+ * bf47bcb7...), which is only possible if nothing else moved. Per-vertical the
+ * emitted keyset goes rottay 2092 -> 2096, bithire 2133 -> 2137, evnto
+ * 1449 -> 1453: added 4, removed 0, moved 0 in every one, the same four names
+ * each carrying var(--ds-tint-<tone>-4).
+ *
  * SHAPE-BASE re-anchor, ROTTAY ONLY: `applyModeOverlay` now completes the chrome
  * merge base to the canonical shape, so an overlay-ONLY key lands in its shape
  * slot instead of being appended after the authored base keys. That closed the
@@ -263,9 +274,9 @@ const FIRST_PARTY = [
  * names the frozen skins read restated at the same values.
  */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "edfd945fe63abf7cd74469206a40262c0bc716c5995ca11de39071800decc264",
-  bithire: "168d239e85f3dcfce633f7cd0c07609f7a454a01b9346a28d13174064c3c3f3a",
-  evnto: "bf47bcb7ea6b28b84108ae2ef73f9b0bab5fa05e959cca134bddd2bae31b6fc3",
+  rottay: "ca0a6c20bc503939b4142c08f7e25fd07138a222968f95120fe065bc3135b864",
+  bithire: "68f0be020bdf6970ad2ea4f60d1004a4c2fc9c2ccfcbed61eb79817d1f504948",
+  evnto: "3bfe8d9655b7c9bcf4b3fcd31f662f58fe3ade815b504a3d538e67d09a83a680",
 };
 
 /**
