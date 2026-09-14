@@ -4633,6 +4633,11 @@
      "at": "2026-09-14 09:40",
      "by": "kimi-admin",
      "note": "G107-05 EXACT-CELLS (audit 107): select fanOutUnreached=1 (recipe-profile) recorded for WO-DER-06; the Select causality decision table restricts tested verticals with in (focus style on bithire/evnto, border style on rottay/evnto, motion dial on evnto) — the omitted arms are not PASS cells and remain pending decision x family x vertical/mode cells. The shared helper demonstrates computed CSS from source-rendered markup with manually stamped states; it does not hydrate the component or exercise open-popup keyboard paths or a packaged import."
+    },
+    {
+     "at": "2026-09-14 09:48",
+     "by": "kimi-admin",
+     "note": "WRITER FOLLOW-UPS from the R107-FAM-02 lot (claude-admin, bounded-scope deferrals, audited): (1) handleSearchInput token separators can still commit from a change event whose text arrives mid-composition — a change-event path the submit-intent authority does not reach; obligation of THIS WO (Select family), registered for its next bounded lot. (2) Escape during composition still closes the panel — not dispatched through Select keydown at all; owned by the shared capture-phase Escape router in components/primitives/runtime/overlay/layer-stack/index.ts:220; routed to WO-FAM-04 as the overlay-runtime owner. Neither is closed by the IME guard; neither is a new backlog entry."
     }
    ],
    "doneAt": null,
@@ -4669,6 +4674,11 @@
      "at": "2026-09-14 09:30",
      "by": "kimi-admin",
      "note": "RECOVERY CHECKPOINT 2026-09-14 (R107-REC-01): worktree /Users/daniel/Developer/rottay-worktrees/fam04-opus, branch wo-fam-04, HEAD 0866afe18 = 11 commits over main 25d245167 (modal, drawer, sheet, alert/confirm dialogs, popover, hover-card, dropdown, tooltip, tour, unified notifier, alert with callout folded). Uncommitted integration draft (79 tracked entries + changeset + alert presentation owner) preserved as commit f8c9894c7 under refs/checkpoints/fam04-2026-09-14-worktree; porcelain and index hashes verified unchanged after capture; node_modules links excluded. State matches audit-107 recovery-snapshot.json. NEXT verifiable step: fix R107-DRAFT-01 (Notifier pointer/focus as independent pause reasons; keyboard pause independent of pauseOnHover; resume only when no reason remains, retaining remaining time), then exact-candidate audit, focal tests and integration. NOT done; the eleven units are not redispatched. Uncommitted baseline increases (entrypoint budgets, family-cut baseline, liveness adjustments) are reviewed one by one at integration, never replayed wholesale."
+    },
+    {
+     "at": "2026-09-14 09:48",
+     "by": "kimi-admin",
+     "note": "ROUTED from the audited R107-FAM-02 lot: Escape during IME composition closes overlay panels because the shared capture-phase Escape router (components/primitives/runtime/overlay/layer-stack/index.ts:220) acts without a composition guard. Owner: this WO as the overlay-runtime owner. Acceptance for its bounded lot: Escape with isComposing/keyCode 229 does not dismiss the top layer; a normal Escape still does; Select/popover/dropdown consumers covered. Not part of the Notifier correction in flight."
     }
    ]
   },
@@ -5177,6 +5187,11 @@
      "at": "2026-09-14 09:40",
      "by": "kimi-admin",
      "note": "G107-01/G107-02 FOLLOW-UP LOTS on wo-fix-gates (after the drill repair): (B) implement the six-channel pin re-adjudication registered in WO-EVI-02 (2026-09-14 DT decision) inside CHANNEL_DISPOSITIONS — split the two WO-FAM-01..13 groups into per-owner groups with reason + exit condition each; acceptance: liveness suite 108/108 AND the done-owner negative fixture stays red; ownership green independent of effect green (the six rows keep their non-LIVE effect verdicts). (C) G107-02 fleet population reconciliation: recompute the population from current source, verify the membership diff equals exactly the audit-107 table (out: skeleton-compounds, autocomplete, input-residual, switch; in: skeleton-anatomy, auto-complete, select-compounds, form-field — no more, no less), republish the baseline with pin/run provenance together; thresholds and D1 minima unchanged; no denominator shrink to pass an axis; acceptance: population suite 15/15 with the mapping recorded in the commit message."
+    },
+    {
+     "at": "2026-09-14 09:50",
+     "by": "kimi-admin",
+     "note": "G107-03 LANDED on r4-recon as a99475804 (+ cherry-pick): the seven transparent-wrapper drills now plant through the TSX AST at the real style sites; strict precondition plus a no-op guard retained; five mutants proven red, controls green bare and with a runtime channel. Independently verified by kimi-admin: suite 62/62 (was 55/62) and the family-cut CLI exit 0 with byte-identical ratchet output before/after. Instrument-only; the WO stays open for the registered B (held pending FAM-04 integration) and C (population reconciliation) lots."
     }
    ]
   },
