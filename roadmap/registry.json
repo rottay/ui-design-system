@@ -4669,7 +4669,7 @@
    "lane": "family-cuts",
    "order": 5,
    "size": "L",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4682,8 +4682,8 @@
     "audit-2026-09-05"
    ],
    "notes": "Post-107 Codex audit (audit/post-107-checkpoint-2026-09-14/families.md): three bounded lifecycle defects in the unified Notifier. P107-FAM-01: same-key refresh during manual/timed exit is removed by the previous exit callback (notification/engines/modern/index.tsx:108-113 keeps React key; notifier/runtime/exit/index.ts:41-51 fires the stale removal). P107-FAM-02: replacing duration subtracts old elapsed from the new budget (runtime/countdown/index.ts:53-56 render-reset vs effect cleanup at 63-65). P107-FAM-04: NotifierItem local Escape handler (presentation/item/index.tsx:128-131) dismisses during IME composition; shared layer-stack router repair does not cover the consumer-local branch. Nine prior counterexamples stay green; do not reimplement them.",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "claude-admin",
+   "claimedAt": "2026-09-14",
    "progressLog": [
     {
      "at": "2026-09-14 09:30",
@@ -4716,8 +4716,8 @@
      "note": "REOPENED from done. Reason: concrete notification lifecycle defects reproduced at pin 3dd32ac68 by independent audit. Prior claimedBy=claude-admin claimedAt=2026-09-13 doneAt=2026-09-14. Prior evidence (verbatim): DONE after the serialized milestone checkpoint (pinned 605c5bf34 + sweep repairs), audited by kimi-admin. The cut: modal, drawer, sheet, alert-dialog, confirm-dialog, popover, dropdown, hover-card, tooltip, tour, the D-17 unified Notifier (toast/notification/message roles) and alert with Callout folded in — chrome derivers emit every component channel from decisions, Modern skins consume roles/material/derived shadows/radius-full/z-scale/[data-state], TSX carries no visual values, one ds-<family> namespace per family, shared kernels consumed (overlay, interaction-state, submit-intent, layer-stack, direction, anatomy skeleton). Acceptance gate: read-without-producer exit 0 (debt 1685 -> 1362, 0 new unproduced reads); top-hardcodes-curated 0 for the cut's skins (paint-layer debt shrank 4 rows); contract census 0 mismatches with the adjudicated shared-compound notes on tour/notifier recorded in the family-cut baseline; causality sweep 429/429 across FAM-01..04 on the packed build including the folded-callout subtle-wash contract and the modal/popover elevation-surface pins; axe legs green inside the gated rosters with the known registered exceptions; no rottay-* class emitted (suppliers contract and changeset record the renames). Amendment R4: adapt?: Adapt<OverlayAdaptation> on modal/drawer/sheet with data-posture SSR-projected (ssr-viewport-hint 93/93); WO-FAM-14 done and the cut's loading states build from the anatomy renderer (browser 12/12 + 66/66). Corrections landed pre-close: R107-DRAFT-01 Notifier independent pause reasons (adversarial probes green, 22/22), Escape-during-composition guard in the layer-stack (router + select-in-popover + dropdown), --ds-z-index-base re-adjudicated (alert declares no stacking; literal step; scale invariant enforced), --ds-tint-4 given a legal painting reader (--ds-alert-<tone>-wash-subtle, LIVE_MODERN_PAINTED) with the ramp step re-owned to WO-EVI-02, dismiss two-factor control-height spelling, alert/message/radio entrypoint budgets anchored through the gate's official door with measured causes. Checkpoint: full suite 18184/16 with the 16 = exactly the pre-existing base-red set (verified test-by-test vs the base fixture), RUNTIME-01 receipt PASS, mount 24/24, consumer 29/29, axis-difference 62/62, pilot instrument 4/4. STANDING ROUTED CELLS (not pass cells): the tint-12/tint-4 deriver-value-to-skin extraction route belongs to WO-EVI-02's instrument; segmented/rhythm and the other EVI-05 cells stay in WO-EVI-05; the frozen-skin compat channels restate only when current chrome is authored. Prior notes (verbatim): Account seats 2026-09-14 (owner): writer = claude-admin (real Opus, admin@rottay.com, verified claude-opus-5); the daniel/default profile is no longer used for programme work. Recovery checkpoint preserved at refs/checkpoints/fam04-2026-09-14-head (=0866afe18) and refs/checkpoints/fam04-2026-09-14-worktree (=f8c9894c7)."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-14",
+   "evidence": "RE-CLOSED after the post-107 bounded corrections, all in the single shared Notifier owner. N1 INTEGRATED (009715266, audited): P107-FAM-01 keyed refresh during manual/timed exit cancels the stale exit (providers stamp a monotonic revision; obsolete callback cannot remove the refresh), P107-FAM-02 replaced duration grants a full new budget (explicit re-arm effect; pause settling stays charged to the old timer), P107-FAM-04 local Escape yields to IME composition via the shared isComposingKey authority (plain Escape still dismisses; message stays dismissOnEscape=false). Evidence: post-107 Codex probes 15/15 (9 prior + 6 new regression cases), feedback focal suites 179 passed/16 skipped, committed test matrix for refresh/duration/Escape across roles; no per-role duplication. Wave hygiene closed with 242927b91 (alert subtle-wash test type error back to the zero baseline). Prior FAM-04 acceptance (integration, overlays, Alert/Callout fold, 12 chrome derivers, checkpoint preservation 81/81) stands; the z-index-base pin no longer names this WO (structural-constant adjudication, 0867fb986)."
   },
   {
    "id": "WO-FAM-05",
