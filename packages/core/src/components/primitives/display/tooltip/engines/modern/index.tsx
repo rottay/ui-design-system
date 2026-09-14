@@ -849,11 +849,12 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       tabIndex={interactive ? -1 : undefined}
       dir={direction}
       lang={language}
-      className="rottay-tooltip-bubble rottay-tooltip-bubble--modern"
+      className="ds-tooltip-bubble"
       data-part="bubble"
       {...(strategy === "js" ? portalScope : {})}
       data-tone={color}
-      data-recipe={recipe}
+      data-variant={recipe}
+      data-custom-max-width={maxWidth === undefined ? undefined : "true"}
       data-density={density ?? portalScope["data-density"]}
       data-placement={resolvedPlacement}
       data-preferred-placement={placement}
@@ -913,12 +914,10 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   return (
     <div
       ref={setWrapperRef}
-      className={`rottay-tooltip-root rottay-tooltip-root--modern${
-        className ? ` ${className}` : ""
-      }`}
+      className={`ds-tooltip ds-tooltip--modern${className ? ` ${className}` : ""}`}
       data-part="root"
       data-disabled={disabled ? "true" : "false"}
-      data-state={isVisible ? "open" : "closed"}
+      data-open={isVisible ? "true" : "false"}
       data-trigger={Array.from(triggers).join(" ")}
       data-density={density}
       style={style}

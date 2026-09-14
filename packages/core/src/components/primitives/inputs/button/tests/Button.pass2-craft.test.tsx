@@ -48,7 +48,7 @@ describe('ModernButton Pass 2 craft contract', () => {
     expect(button).toHaveAttribute('data-icon-only', 'true');
     expect(button).toHaveAttribute('data-shape', 'default');
     expect(button).not.toHaveAttribute('title');
-    expect(button.closest('.rottay-tooltip-root')).toBeInTheDocument();
+    expect(button.closest('.ds-tooltip')).toBeInTheDocument();
   });
 
   it('keeps connected group geometry logical, tokenized and free of inline paint', () => {

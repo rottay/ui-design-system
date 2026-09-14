@@ -298,7 +298,7 @@ describe("ModernTooltip", () => {
     );
 
     const tooltip = screen.getByRole("tooltip");
-    expect(tooltip).toHaveAttribute("data-recipe", "rich");
+    expect(tooltip).toHaveAttribute("data-variant", "rich");
     expect(tooltip).toHaveAttribute("dir", "rtl");
     expect(tooltip).toHaveAttribute("lang", "ar");
   });

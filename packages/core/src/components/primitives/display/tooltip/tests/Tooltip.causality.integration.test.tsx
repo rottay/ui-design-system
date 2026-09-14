@@ -1,0 +1,129 @@
+/**
+ * The tooltip family in a real browser: every decision its paint consumes moves
+ * the bubble with a negative control; a recipe and a tone swap its material, its
+ * copy follows the reading direction, and loading and accessibility hold.
+ */
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+
+import { readAnatomyBones } from '@/components/primitives/feedback/skeleton/runtime/anatomy-renderer';
+import ModernTooltip from '../engines/modern';
+import type { TooltipProps } from '../contracts';
+import {
+  AXE_SCOPES,
+  FIRST_PARTY_VERTICALS as VERTICALS,
+  auditAxe,
+  describeCausality,
+  measureArms,
+  seriousFindings,
+} from '@tests/support/family-causality';
+
+function bubbleMarkup(props: Partial<TooltipProps> = {}): string {
+  const view = render(
+    <ModernTooltip visible content="Copied to clipboard" shortcut="mod+c" {...props}>
+      <button type="button">Copy</button>
+    </ModernTooltip>,
+  );
+  const html = document.querySelector("[data-part='bubble']")!.outerHTML;
+  view.unmount();
+  return html;
+}
+
+const markup = bubbleMarkup();
+
+const BUBBLE = "[data-part='bubble']";
+
+describeCausality({
+  family: 'tooltip',
+  markup,
+  targets: [
+    { id: 'radius', selector: BUBBLE, property: 'border-top-left-radius' },
+    { id: 'edge', selector: BUBBLE, property: 'border-top-width' },
+    { id: 'type', selector: BUBBLE, property: 'font-size' },
+    { id: 'shadow', selector: BUBBLE, property: 'box-shadow' },
+    { id: 'duration', selector: BUBBLE, property: 'transition-duration' },
+  ],
+  decisions: {
+    'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'type', in: VERTICALS },
+    'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: ['evnto'] },
+    'typography.scale': { value: 1.08, moves: ['type'], holds: 'radius', in: VERTICALS },
+    'surfaces.elevation-posture': { value: 'elevated', moves: ['shadow'], holds: 'radius', in: ['evnto'] },
+    'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },
+  },
+});
+
+describe('tooltip recipe, tone, direction, loading and accessibility', () => {
+  it('moves a primary-tone bubble with the palette seeds and holds a default bubble', async () => {
+    const tones = `<div id="primary">${bubbleMarkup({ color: 'primary' })}</div><div id="default">${markup}</div>`;
+    const readings = await measureArms({
+      vertical: 'evnto',
+      markup: tones,
+      arms: { base: {}, seeded: { 'palette.seeds': { primary: '#2F6B9A' } } },
+      targets: [
+        { id: 'primaryFill', selector: `#primary ${BUBBLE}`, property: 'background-color' },
+        { id: 'defaultFill', selector: `#default ${BUBBLE}`, property: 'background-color' },
+      ],
+    });
+    expect(readings.seeded!.primaryFill).not.toBe(readings.base!.primaryFill);
+    expect(readings.seeded!.defaultFill).toBe(readings.base!.defaultFill);
+  }, 60_000);
+
+  it('swaps the material with the recipe the bubble stamps', async () => {
+    const readings = await measureArms({
+      vertical: 'bithire',
+      markup: `<div id="bordered">${markup}</div><div id="inverse">${bubbleMarkup({ recipe: 'inverse' })}</div>`,
+      arms: { base: {} },
+      targets: [
+        { id: 'borderedInk', selector: `#bordered ${BUBBLE}`, property: 'color' },
+        { id: 'inverseInk', selector: `#inverse ${BUBBLE}`, property: 'color' },
+      ],
+    });
+    expect(readings.base!.inverseInk).not.toBe(readings.base!.borderedInk);
+  }, 60_000);
+
+  it('lays the shortcut keys at the inline end in both directions', async () => {
+    const readings = await measureArms({
+      vertical: 'rottay',
+      markup,
+      arms: { base: {} },
+      targets: [
+        { id: 'ltrContent', selector: "[data-part='content']", property: '@rect.left', dir: 'ltr' },
+        { id: 'ltrKeys', selector: "[data-part='shortcut-chips']", property: '@rect.left', dir: 'ltr' },
+        { id: 'rtlContent', selector: "[data-part='content']", property: '@rect.left', dir: 'rtl' },
+        { id: 'rtlKeys', selector: "[data-part='shortcut-chips']", property: '@rect.left', dir: 'rtl' },
+      ],
+    });
+    const r = readings.base!;
+    expect(Number(r.ltrKeys)).toBeGreaterThan(Number(r.ltrContent));
+    expect(Number(r.rtlKeys)).toBeLessThan(Number(r.rtlContent));
+  }, 60_000);
+
+  it('describes its trigger with the bubble text', () => {
+    render(
+      <ModernTooltip visible content="Copied to clipboard">
+        <button type="button">Copy</button>
+      </ModernTooltip>,
+    );
+    expect(screen.getByRole('button', { name: 'Copy' })).toHaveAccessibleDescription('Copied to clipboard');
+  });
+
+  it('builds its loading state from its own anatomy', () => {
+    render(
+      <ModernTooltip visible content="Copied to clipboard" shortcut="mod+c">
+        <button type="button">Copy</button>
+      </ModernTooltip>,
+    );
+    const bones = readAnatomyBones(document.querySelector<HTMLElement>("[data-part='bubble']")!.parentElement!);
+    expect(bones.map((bone) => `${bone.part}:${bone.role}`)).toEqual(expect.arrayContaining(['bubble:frame']));
+    expect(bones.some((bone) => bone.part === 'shortcut-key')).toBe(false);
+  });
+
+  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+    const gallery = `<button type="button" aria-describedby="${markup.match(/id="([^"]+)"/)?.[1]}">Copy</button>${markup}${bubbleMarkup({ recipe: 'rich', color: 'primary' })}`;
+    for (const scope of AXE_SCOPES) {
+      const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
+      expect(findings, `${scope.vertical} ${scope.theme}`).toEqual([]);
+    }
+  }, 180_000);
+});
