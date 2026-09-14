@@ -292,6 +292,13 @@ const sameBones = (left: AnatomyBone[], right: AnatomyBone[]) =>
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
+/**
+ * React 18 drops an unknown boolean attribute and React 19 drops the empty string,
+ * so the presence form is the only `inert` both supported peer majors serialize.
+ */
+const INERT: Readonly<Record<string, string>> = Object.freeze({ inert: 'inert' });
+const INTERACTIVE: Readonly<Record<string, string>> = Object.freeze({});
+
 export interface AnatomySkeletonProps {
   /** While true the component is replaced by the skeleton built from its anatomy. @default true */
   loading?: boolean;
@@ -389,7 +396,7 @@ export const AnatomySkeleton = forwardRef<HTMLDivElement, AnatomySkeletonProps>(
           ref={sourceRef}
           data-part="source"
           aria-hidden={loading || undefined}
-          inert={loading ? true : undefined}
+          {...(loading ? INERT : INTERACTIVE)}
         >
           {children}
         </div>

@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -387,6 +388,39 @@ describe('AnatomySkeleton loading contract', () => {
     expect(source.hasAttribute('inert')).toBe(true);
     expect(root.querySelector("[data-part='bones']")).toHaveAttribute('aria-hidden', 'true');
     expect(screen.queryByRole('button', { name: 'Save changes' })).toBeNull();
+  });
+
+  it('binds inert in the presence form both peer React majors serialize', () => {
+    const { container, rerender } = render(
+      <AnatomySkeleton>
+        <ModernButton>Save changes</ModernButton>
+      </AnatomySkeleton>,
+    );
+    const source = () => container.querySelector<HTMLElement>("[data-part='source']")!;
+    // React 19 normalises the presence form to ''; React 18 keeps the value it was given.
+    expect(['', 'inert']).toContain(source().getAttribute('inert'));
+    expect(source().inert).toBe(true);
+
+    rerender(
+      <AnatomySkeleton loading={false}>
+        <ModernButton>Save changes</ModernButton>
+      </AnatomySkeleton>,
+    );
+    expect(source().hasAttribute('inert')).toBe(false);
+  });
+
+  it('serialises inert on the server and keeps the control out of the tab order', () => {
+    const markup = renderToStaticMarkup(
+      <AnatomySkeleton>
+        <ModernButton>Save changes</ModernButton>
+      </AnatomySkeleton>,
+    );
+    expect(markup).toMatch(/data-part="source"[^>]*\sinert(="[^"]*")?/);
+    expect(renderToStaticMarkup(
+      <AnatomySkeleton loading={false}>
+        <ModernButton>Save changes</ModernButton>
+      </AnatomySkeleton>,
+    )).not.toMatch(/\sinert[=\s>]/);
   });
 
   it('hands the real component back once loading ends', () => {
