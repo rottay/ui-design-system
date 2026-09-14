@@ -39,7 +39,6 @@ export const alertChromeDeriver: FamilyDeriver = {
     "--ds-alert-press-scale",
     "--ds-alert-focus-ring",
     "--ds-alert-actions-bg",
-    "--ds-alert-info-accent",
     "--ds-alert-info-ink",
     "--ds-alert-info-wash",
     "--ds-alert-info-well",
@@ -47,7 +46,6 @@ export const alertChromeDeriver: FamilyDeriver = {
     "--ds-alert-info-well-edge",
     "--ds-alert-info-control-edge",
     "--ds-alert-info-control-edge-hover",
-    "--ds-alert-success-accent",
     "--ds-alert-success-ink",
     "--ds-alert-success-wash",
     "--ds-alert-success-well",
@@ -55,7 +53,6 @@ export const alertChromeDeriver: FamilyDeriver = {
     "--ds-alert-success-well-edge",
     "--ds-alert-success-control-edge",
     "--ds-alert-success-control-edge-hover",
-    "--ds-alert-warning-accent",
     "--ds-alert-warning-ink",
     "--ds-alert-warning-wash",
     "--ds-alert-warning-well",
@@ -63,7 +60,6 @@ export const alertChromeDeriver: FamilyDeriver = {
     "--ds-alert-warning-well-edge",
     "--ds-alert-warning-control-edge",
     "--ds-alert-warning-control-edge-hover",
-    "--ds-alert-error-accent",
     "--ds-alert-error-ink",
     "--ds-alert-error-wash",
     "--ds-alert-error-well",
@@ -100,7 +96,6 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-press-scale"] = "var(--ds-state-press-scale)";
   vars["--ds-alert-focus-ring"] = "var(--ds-focus-ring)";
   vars["--ds-alert-actions-bg"] = "color-mix(in srgb, var(--ds-color-bg-elevated) 60%, transparent)";
-  vars["--ds-alert-info-accent"] = "var(--ds-color-info)";
   vars["--ds-alert-info-ink"] = "var(--ds-color-info-ink)";
   vars["--ds-alert-info-wash"] = "var(--ds-tint-info-8)";
   vars["--ds-alert-info-well"] = "color-mix(in srgb, var(--ds-color-info) 11%, var(--ds-color-bg-elevated))";
@@ -108,7 +103,6 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-info-well-edge"] = "color-mix(in srgb, var(--ds-color-info) 34%, var(--ds-color-border))";
   vars["--ds-alert-info-control-edge"] = "color-mix(in srgb, var(--ds-color-info) 26%, var(--ds-color-border))";
   vars["--ds-alert-info-control-edge-hover"] = "color-mix(in srgb, var(--ds-color-info) 45%, var(--ds-color-border))";
-  vars["--ds-alert-success-accent"] = "var(--ds-color-success)";
   vars["--ds-alert-success-ink"] = "var(--ds-color-success-ink)";
   vars["--ds-alert-success-wash"] = "var(--ds-tint-success-8)";
   vars["--ds-alert-success-well"] = "color-mix(in srgb, var(--ds-color-success) 11%, var(--ds-color-bg-elevated))";
@@ -116,7 +110,6 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-success-well-edge"] = "color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border))";
   vars["--ds-alert-success-control-edge"] = "color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border))";
   vars["--ds-alert-success-control-edge-hover"] = "color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-border))";
-  vars["--ds-alert-warning-accent"] = "var(--ds-color-warning)";
   vars["--ds-alert-warning-ink"] = "var(--ds-color-warning-ink)";
   vars["--ds-alert-warning-wash"] = "var(--ds-tint-warning-8)";
   vars["--ds-alert-warning-well"] = "color-mix(in srgb, var(--ds-color-warning) 11%, var(--ds-color-bg-elevated))";
@@ -124,7 +117,6 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-warning-well-edge"] = "color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border))";
   vars["--ds-alert-warning-control-edge"] = "color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border))";
   vars["--ds-alert-warning-control-edge-hover"] = "color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-border))";
-  vars["--ds-alert-error-accent"] = "var(--ds-color-error)";
   vars["--ds-alert-error-ink"] = "var(--ds-color-error-ink)";
   vars["--ds-alert-error-wash"] = "var(--ds-tint-error-8)";
   vars["--ds-alert-error-well"] = "color-mix(in srgb, var(--ds-color-error) 11%, var(--ds-color-bg-elevated))";

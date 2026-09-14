@@ -61,7 +61,6 @@ export const notifierChromeDeriver: FamilyDeriver = {
     "--ds-notifier-gradient-well",
     "--ds-notifier-spinner-track",
     "--ds-notifier-spinner-head",
-    "--ds-notifier-neutral-accent",
     "--ds-notifier-neutral-ink",
     "--ds-notifier-neutral-wash",
     "--ds-notifier-neutral-well",
@@ -70,7 +69,6 @@ export const notifierChromeDeriver: FamilyDeriver = {
     "--ds-notifier-neutral-well-edge",
     "--ds-notifier-neutral-rule",
     "--ds-notifier-neutral-lifetime",
-    "--ds-notifier-primary-accent",
     "--ds-notifier-primary-ink",
     "--ds-notifier-primary-wash",
     "--ds-notifier-primary-well",
@@ -79,7 +77,6 @@ export const notifierChromeDeriver: FamilyDeriver = {
     "--ds-notifier-primary-well-edge",
     "--ds-notifier-primary-rule",
     "--ds-notifier-primary-lifetime",
-    "--ds-notifier-secondary-accent",
     "--ds-notifier-secondary-ink",
     "--ds-notifier-secondary-wash",
     "--ds-notifier-secondary-well",
@@ -88,7 +85,6 @@ export const notifierChromeDeriver: FamilyDeriver = {
     "--ds-notifier-secondary-well-edge",
     "--ds-notifier-secondary-rule",
     "--ds-notifier-secondary-lifetime",
-    "--ds-notifier-info-accent",
     "--ds-notifier-info-ink",
     "--ds-notifier-info-wash",
     "--ds-notifier-info-well",
@@ -97,7 +93,6 @@ export const notifierChromeDeriver: FamilyDeriver = {
     "--ds-notifier-info-well-edge",
     "--ds-notifier-info-rule",
     "--ds-notifier-info-lifetime",
-    "--ds-notifier-success-accent",
     "--ds-notifier-success-ink",
     "--ds-notifier-success-wash",
     "--ds-notifier-success-well",
@@ -106,7 +101,6 @@ export const notifierChromeDeriver: FamilyDeriver = {
     "--ds-notifier-success-well-edge",
     "--ds-notifier-success-rule",
     "--ds-notifier-success-lifetime",
-    "--ds-notifier-warning-accent",
     "--ds-notifier-warning-ink",
     "--ds-notifier-warning-wash",
     "--ds-notifier-warning-well",
@@ -115,7 +109,6 @@ export const notifierChromeDeriver: FamilyDeriver = {
     "--ds-notifier-warning-well-edge",
     "--ds-notifier-warning-rule",
     "--ds-notifier-warning-lifetime",
-    "--ds-notifier-error-accent",
     "--ds-notifier-error-ink",
     "--ds-notifier-error-wash",
     "--ds-notifier-error-well",
@@ -124,7 +117,6 @@ export const notifierChromeDeriver: FamilyDeriver = {
     "--ds-notifier-error-well-edge",
     "--ds-notifier-error-rule",
     "--ds-notifier-error-lifetime",
-    "--ds-notifier-loading-accent",
     "--ds-notifier-loading-ink",
     "--ds-notifier-loading-wash",
     "--ds-notifier-loading-well",
@@ -182,7 +174,6 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-gradient-well"] = "color-mix(in srgb, var(--ds-color-text-on-primary) 14%, transparent)";
   vars["--ds-notifier-spinner-track"] = "var(--ds-color-border)";
   vars["--ds-notifier-spinner-head"] = "var(--ds-color-primary)";
-  vars["--ds-notifier-neutral-accent"] = "var(--ds-color-primary)";
   vars["--ds-notifier-neutral-ink"] = "var(--ds-color-primary)";
   vars["--ds-notifier-neutral-wash"] = "var(--ds-tint-8)";
   vars["--ds-notifier-neutral-well"] = "var(--ds-tint-12)";
@@ -191,7 +182,6 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-neutral-well-edge"] = "color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-neutral-rule"] = "color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-neutral-lifetime"] = "color-mix(in srgb, var(--ds-color-primary) 74%, transparent)";
-  vars["--ds-notifier-primary-accent"] = "var(--ds-color-primary)";
   vars["--ds-notifier-primary-ink"] = "var(--ds-color-primary)";
   vars["--ds-notifier-primary-wash"] = "var(--ds-tint-8)";
   vars["--ds-notifier-primary-well"] = "var(--ds-tint-12)";
@@ -200,7 +190,6 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-primary-well-edge"] = "color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-primary-rule"] = "color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-primary-lifetime"] = "color-mix(in srgb, var(--ds-color-primary) 74%, transparent)";
-  vars["--ds-notifier-secondary-accent"] = "var(--ds-color-secondary)";
   vars["--ds-notifier-secondary-ink"] = "var(--ds-color-secondary)";
   vars["--ds-notifier-secondary-wash"] = "color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-color-bg-primary))";
   vars["--ds-notifier-secondary-well"] = "color-mix(in srgb, var(--ds-color-secondary) 11%, var(--ds-color-bg-primary))";
@@ -209,7 +198,6 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-secondary-well-edge"] = "color-mix(in srgb, var(--ds-color-secondary) 26%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-secondary-rule"] = "color-mix(in srgb, var(--ds-color-secondary) 16%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-secondary-lifetime"] = "color-mix(in srgb, var(--ds-color-secondary) 74%, transparent)";
-  vars["--ds-notifier-info-accent"] = "var(--ds-color-info)";
   vars["--ds-notifier-info-ink"] = "var(--ds-color-info-ink)";
   vars["--ds-notifier-info-wash"] = "var(--ds-tint-info-8)";
   vars["--ds-notifier-info-well"] = "var(--ds-tint-info-12)";
@@ -218,7 +206,6 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-info-well-edge"] = "color-mix(in srgb, var(--ds-color-info) 26%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-info-rule"] = "color-mix(in srgb, var(--ds-color-info) 16%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-info-lifetime"] = "color-mix(in srgb, var(--ds-color-info) 74%, transparent)";
-  vars["--ds-notifier-success-accent"] = "var(--ds-color-success)";
   vars["--ds-notifier-success-ink"] = "var(--ds-color-success-ink)";
   vars["--ds-notifier-success-wash"] = "var(--ds-tint-success-8)";
   vars["--ds-notifier-success-well"] = "var(--ds-tint-success-12)";
@@ -227,7 +214,6 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-success-well-edge"] = "color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-success-rule"] = "color-mix(in srgb, var(--ds-color-success) 16%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-success-lifetime"] = "color-mix(in srgb, var(--ds-color-success) 74%, transparent)";
-  vars["--ds-notifier-warning-accent"] = "var(--ds-color-warning)";
   vars["--ds-notifier-warning-ink"] = "var(--ds-color-warning-ink)";
   vars["--ds-notifier-warning-wash"] = "var(--ds-tint-warning-8)";
   vars["--ds-notifier-warning-well"] = "var(--ds-tint-warning-12)";
@@ -236,7 +222,6 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-warning-well-edge"] = "color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-warning-rule"] = "color-mix(in srgb, var(--ds-color-warning) 16%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-warning-lifetime"] = "color-mix(in srgb, var(--ds-color-warning) 74%, transparent)";
-  vars["--ds-notifier-error-accent"] = "var(--ds-color-error)";
   vars["--ds-notifier-error-ink"] = "var(--ds-color-error-ink)";
   vars["--ds-notifier-error-wash"] = "var(--ds-tint-error-8)";
   vars["--ds-notifier-error-well"] = "var(--ds-tint-error-12)";
@@ -245,7 +230,6 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-error-well-edge"] = "color-mix(in srgb, var(--ds-color-error) 26%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-error-rule"] = "color-mix(in srgb, var(--ds-color-error) 16%, var(--ds-color-border-subtle))";
   vars["--ds-notifier-error-lifetime"] = "color-mix(in srgb, var(--ds-color-error) 74%, transparent)";
-  vars["--ds-notifier-loading-accent"] = "var(--ds-color-primary)";
   vars["--ds-notifier-loading-ink"] = "var(--ds-color-primary)";
   vars["--ds-notifier-loading-wash"] = "var(--ds-tint-8)";
   vars["--ds-notifier-loading-well"] = "var(--ds-tint-8)";
