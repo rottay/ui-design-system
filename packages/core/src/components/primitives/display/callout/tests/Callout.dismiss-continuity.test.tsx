@@ -12,7 +12,7 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import ModernCallout from '../engines/modern';
+import ModernCallout from '../../../feedback/alert/presentation/callout';
 
 describe('Callout modern -- dismissal never strands focus', () => {
   it('keyboard dismiss lands focus on the next focusable element, not <body>', () => {

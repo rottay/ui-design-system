@@ -9,13 +9,14 @@
  * responsive padding channel on the `ds-alert` anatomy and leaves every visual
  * decision to the modern alert skin.
  *
- * @module Alert/Presentation/Surface
+ * @module Alert/Runtime/Surface
  * @category Feedback
  * @package @rottay/design-system
  */
 
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
+import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
   generateResponsiveCSS,

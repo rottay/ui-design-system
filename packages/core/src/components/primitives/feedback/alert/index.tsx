@@ -22,6 +22,8 @@ import { AlertDescription } from './compound';
 
 export { type AlertProps, type AlertType, ALERT_DEFAULTS } from './contracts';
 export { AlertDescription };
+/** Callout is folded into Alert: its Modern engine is the alert surface, loaded on demand. */
+export const loadModernCallout = () => import('./presentation/callout');
 export type { AlertDescriptionProps } from './compound';
 
 /**

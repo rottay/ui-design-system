@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 
-import ModernCallout from '../engines/modern';
+import ModernCallout from '../../../feedback/alert/presentation/callout';
 import { renderWithEngine } from '@tests/support/engine';
 
 describe('Callout modern engine (folded into Alert)', () => {

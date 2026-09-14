@@ -15,7 +15,7 @@ import React from 'react';
 import type { AlertProps, AlertType } from '../../contracts';
 import { ALERT_DEFAULTS, TONE_TO_ALERT_TYPE } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { AlertSurface } from '../../presentation/surface';
+import { AlertSurface } from '../../runtime/surface';
 
 export default function ModernAlert(props: AlertProps): React.ReactElement | null {
   const i18n = useOptionalTranslation('common');

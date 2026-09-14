@@ -22,6 +22,7 @@
 
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { CalloutProps } from './contracts';
+import { loadModernCallout } from '../../feedback/alert';
 
 export {
   type CalloutProps,
@@ -35,7 +36,7 @@ export {
 /** @deprecated Callout is folded into Alert: use `<Alert message description action />`. */
 export const Callout = createEngineComponent<CalloutProps>('Callout', {
   classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
+  modern: loadModernCallout,
   rustic: () => import('./engines/rustic'),
 });
 

@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 import { readAnatomyBones } from '@/components/primitives/feedback/skeleton/runtime/anatomy-renderer';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import ModernAlert from '../engines/modern';
-import ModernCallout from '../../../display/callout/engines/modern';
+import ModernCallout from '../presentation/callout';
 import type { AlertProps } from '../contracts';
 import {
   AXE_SCOPES,
