@@ -4612,6 +4612,11 @@
      "at": "2026-09-14 18:53",
      "by": "kimi-admin",
      "note": "Post-107 Codex audit adds P107-FAM-03 (families.md): full/selective resetFields loses Form.Item initialValue (runtime/state/index.tsx:180-205 reads only root initialValues; item defaults seeded at 330-336 never stored as reset defaults). Acceptance: single store keeps effective field reset defaults, root defaults keep documented precedence, prove full+selective reset, untouched neighbors, unregistration/remount. R107-FAM-04 (validation options + Form.List operations) remains open scope; store unification did not implement it."
+    },
+    {
+     "at": "2026-09-14 19:26",
+     "by": "kimi-admin",
+     "note": "N2 INTEGRATED (11230e84c, audited): P107-FAM-03 fixed in the single store — it now retains per-field reset defaults (registerField stores/clears, unregisterField drops), reset fills root initialValues first (documented precedence, contracts updated) then item defaults. Evidence: form suite 141/141 (16 files), post-107 Codex probes 15/15 incl. both reset scopes. WO stays open for R107-FAM-04 (validation options type/len/whitespace/warningOnly, numeric/array min-max, Form.List operations) — next bounded lot in the same lane."
     }
    ],
    "doneAt": null,
@@ -5219,6 +5224,11 @@
      "at": "2026-09-14 19:00",
      "by": "kimi-admin",
      "note": "SCOPE CORRECTION (Codex post-107 audit, evidence.md/runtime.md R108-RUN-02) over entries 12-13 above; history stays append-only, this entry is the authoritative scope statement and points at durable evidence: evidence/checkpoint-2026-09-14/ (README + recovered files + FILES.sha256). (1) The 429/429 family causality sweep is SOURCE/computed-style causality (tests/support/family-causality imports the source server entrypoint and source facade CSS); it is NOT packed-package or hydration proof — the 'packed build' grouping is corrected. (2) axis-difference 62/62 and the EVI-05 instrument ran real Chromium over source implementations with a fresh in-memory recomposed bundle — causal computed-style evidence, not a packed install. (3) Mount 24/24 and consumer 29/29 resolve to SOURCE via the repo vitest aliases; counts alone do not promote them to packed proof. (4) RUNTIME-01 receipt: PARTIALLY CORROBORATED — identical 8-row A/B SHA manifests cover generated CSS + generated source runtime module, not dist/styles.css, dist JS blocks, tarball or mount output; full command logs not recovered. (5) The 18,184/16 milestone suite is REPORTED, not verified: final raw JSON not recovered; the inherited-red 16 identities ARE verified by exact set intersection of the two preserved failure lists; candidate-only initial reds = 12 deterministic wave cases + 1 ChartTheme timeout (phrasing corrected); base-only 21 = missing dist/modern-engine.css environment mismatch. (6) decisions-lit publication is stale at pin 3dd32ac68; refresh via the official measured workflow at the next stable candidate. (7) engine-audit 3,310 counters incl. fallbackParity 0: independently re-executed by Codex — VERIFIED. Next serialized milestone re-establishes (4)/(5) as verified with full provenance."
+    },
+    {
+     "at": "2026-09-14 19:30",
+     "by": "kimi-admin",
+     "note": "G107-01 RESIDUAL RESOLVED (0867fb986, audited): --ds-z-index-base re-registered as STRUCTURAL_CONSTANT — a third liveness partition measured every run from the declaration site (deriveCanonicalZScaleRoster, PostCSS, bare-literal :root bands), pinned to the z-index-single-scale invariant instead of a work order, retired only with the roster. Blocking legs green: suite 129/129, --check-dispositions OK. The liveness open-owner guard no longer fails on done owners (107/108 -> 129/129). PRE-EXISTING findings observed while verifying, registered here per audit: (1) the full --check leg stays red on standing findings — R1 artifact (artifacts/quality/programs/modern-rescue/R1/channel-liveness.json) NEVER emitted, three unresolved emission patterns, and 54 chart/visualization consumer sites whose family-inventory rows drifted; none from the 0867fb986 change, all printed by design; the chart inventory drift needs its lane routing. (2) typecheck:tests gate REGRESSED at pin 3dd32ac68 (10 errors > baseline 0): TS2554 x1 Alert.callout-subtle-wash.test.tsx:62 (FAM-04 subtle-wash wave leftover, fix in flight), TS2345 x1 tenant-divergence-matrix.test.ts:191 (semantic-typography wave leftover, routed to fix-gates), TS2322 x8 axis-difference-pilot/index.test.tsx run() call sites (folded into the WO-EVI-05 implementation lot now running). (3) read-without-producer baseline drift 4504->4508 traced to the four reviewed --ds-alert-*-wash-subtle reads from 3082d0dfb; republication with provenance in flight (N4b)."
     }
    ]
   },
@@ -5727,7 +5737,7 @@
    "lane": "family-cuts",
    "order": 15,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01",
     "WO-INV-05"
@@ -5754,10 +5764,10 @@
      "note": "REOPENED from done. Reason: residual geometry invalidation gap reproduced in Chromium by independent audit. Prior claimedBy=claude-admin claimedAt=2026-09-14 doneAt=2026-09-14. Prior evidence (verbatim): RE-CLOSED after R107-RUN-02/03/04, audited by kimi-admin on r4-recon (3321708ea geometry observation, 39a7c3572 animation shutdown, 0c717cd76 peer-compatible inert). Evidence reproduced by the auditor: skeleton suite 66/66 (11 new tests, 7 red against the pre-lot renderer and 3 against the pre-lot skin per the writer's keep-* snapshots); Chromium focal 12/12 — descendant/stylesheet/font geometry catch-up with constant wrapper bounds, part add/remove, direction change, no running loop after handover with resume on re-entry, reduced-motion static, inert isolation (not focusable/hit-testable while loading, restored after); React-major leg on REAL react@18.3.1 + react@19.2.5: SSR emits the presence-form inert on both, absent when not loading, zero hydration recoverable errors. Renderer and all anatomy integrations retained; no per-family shapes; no polling; peer range unchanged. ROUTED (not closed here): the cross-component boolean-inert survey registered in this log. Prior notes (verbatim): One bounded lot; renderer and anatomy integrations retained. Extend geometry observation to measured descendants and relevant layout changes with observer cleanup; stop skeleton loops when loading ends (short handover transition allowed) and resume on re-entry with reduced-motion static throughout; verify React 18 SSR + hydration keyboard isolation beside React 19 with a peer-compatible inert binding — do not narrow the peer range. Acceptance per audit/107-restart-2026-09-14/runtime-and-pilot.md: browser focal proves copied bones catch up with constant wrapper bounds, getAnimations subtree shows no running loop after handover, and React 18 shows no attribute warning or hydration mismatch."
     }
    ],
-   "claimedBy": null,
-   "claimedAt": null,
-   "doneAt": null,
-   "evidence": null
+   "claimedBy": "claude-admin",
+   "claimedAt": "2026-09-14",
+   "doneAt": "2026-09-14",
+   "evidence": "N3 INTEGRATED (d06babee7, audited by kimi-admin): R108-RUN-01 repaired — each ancestor observed on its own attributes via the shared PROVIDER_PAINT_ATTRIBUTE_FILTER + dir (never document subtree, no polling, observers disconnect on load end, sameBones loop guard). Codex post-107 geometry probe at HEAD: both provider/ancestor counterexamples GREEN (ancestor custom-property radius, scoped ancestor dir) + both positive controls; the stylesheet-only size-neutral move is the DECLARED BOUND pinned in code and tests (no DOM signal — outside the paint-owner contract; the audit's explicit-bound option, DT-adjudicated). Skeleton suite 82/82 (74 prior + 8 new). Red-before/green-after Chromium evidence committed at test-artifacts/skeleton-r108/. Prior React 18.3.1/19.2.5 inert evidence stands; cross-component boolean-inert survey remains routed separately as registered."
   }
  ],
  "traceability": {
