@@ -440,16 +440,31 @@ describe('the shimmer rides the motion vocabulary', () => {
   });
 
   it('paints every drawn bone through the shimmer and the pulse', () => {
-    expect(css).toContain(".ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame'])");
-    expect(css).toContain(".ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame'])");
+    expect(css).toContain(".ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame'])");
+    expect(css).toContain(".ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame'])");
+  });
+
+  it('gates every animation declaration on the loading state, so a finished loader runs no loop', () => {
+    const animating = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .map((rule) => ({ selectors: rule[1].trim(), body: rule[2] }))
+      .filter((rule) => /(?:^|[;\s])animation[a-z-]*\s*:/.test(rule.body))
+      .filter((rule) => !/animation\s*:\s*none/.test(rule.body));
+
+    expect(animating.length).toBeGreaterThan(0);
+    for (const rule of animating) {
+      for (const selector of rule.selectors.split(',')) {
+        expect(selector.trim(), rule.body.trim()).toContain("[data-loading='true']");
+      }
+    }
+    expect(css).not.toMatch(/\[data-loading='false'\][^{}]*\{[^{}]*animation/);
   });
 
   it('is a static surface under reduced motion, not a slower shimmer', () => {
     const media = /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/.exec(css);
     expect(media).not.toBeNull();
     const block = media![1];
-    const shimmer = ".ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame'])";
-    const pulse = ".ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame'])";
+    const shimmer = ".ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame'])";
+    const pulse = ".ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame'])";
     expect(block).toContain(shimmer);
     expect(block).toContain(pulse);
     expect(block).toContain('animation-iteration-count: 1 !important;');

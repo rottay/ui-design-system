@@ -11,6 +11,8 @@
  * `ds-foundation-shimmer` keyframes with `--ds-motion-attention` and
  * `--ds-motion-ease-in-out`; no keyframe is declared for the skeleton. Under
  * reduced motion the bones hold a static flat surface, not a slower shimmer.
+ * Every animation declaration is gated on `data-loading='true'`: a loader that
+ * has finished runs no loop at all, and only the opacity handover is left.
  *
  * SPECIFICITY (P-48): fills and radii clear preflight at (0,3,0)+; the frame
  * paints a border colour, so it reaches (0,4,0) to clear the tenant
@@ -79,14 +81,14 @@
 }
 
 /* ---- pulse: opacity over the flat fill ---- */
-.ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
-.ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after {
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'][data-measured='false']::after {
   animation: ds-foundation-pulse calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite;
 }
 
 /* ---- shimmer: the sweeping gradient ---- */
-.ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
-.ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'][data-measured='false']::after {
   background: var(
     --ds-skeleton-wave-gradient,
     linear-gradient(
@@ -105,8 +107,8 @@
 }
 
 /* ---- RTL: the sweep runs against the reading direction by default ---- */
-:dir(rtl) .ds-skeleton-anatomy[data-part='root'] [data-part='bone'],
-.ds-skeleton-anatomy[data-part='root'] [data-part='bone']:dir(rtl) {
+:dir(rtl) .ds-skeleton-anatomy[data-part='root'][data-loading='true'] [data-part='bone'],
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'] [data-part='bone']:dir(rtl) {
   animation-direction: reverse;
 }
 
@@ -115,19 +117,20 @@
    collapsed frame a static surface, not a paused sweep. */
 @media (prefers-reduced-motion: reduce) {
   .ds-skeleton-anatomy[data-part='root'] > [data-part='source'],
-  .ds-skeleton-anatomy[data-part='root'] > [data-part='bones'],
-  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
-  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
-  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
-  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+  .ds-skeleton-anatomy[data-part='root'] > [data-part='bones'] {
     transition-duration: 0.01ms !important;
+  }
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'][data-measured='false']::after,
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'][data-measured='false']::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
-  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
-  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
-  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
-  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'][data-measured='false']::after,
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'][data-measured='false']::after {
     background: var(
       --ds-skeleton-bg,
       var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
@@ -135,10 +138,10 @@
   }
 }
 
-html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
-html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
-html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
-html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'][data-measured='false']::after,
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'][data-measured='false']::after {
   background: var(
     --ds-skeleton-bg,
     var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
