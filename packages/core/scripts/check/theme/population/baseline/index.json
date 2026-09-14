@@ -3,44 +3,48 @@
   "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets.",
   "catalogRevision": "2a25f7c6068407fb",
   "pinnedOn": "2026-09-14",
-  "skinFamilies": 273,
+  "skinFamilies": 270,
   "axes": {
-    "shape": 220,
-    "typography": 183,
-    "rhythm": 215,
-    "depth": 196,
-    "states": 158,
-    "motion": 203
+    "shape": 217,
+    "typography": 181,
+    "rhythm": 213,
+    "depth": 193,
+    "states": 155,
+    "motion": 200
   },
   "provenance": {
-    "reconciles": "G107-02",
-    "computedFrom": "a99475804",
+    "reconciles": "G107-02, second pass -- the WO-FAM-04 skin folds",
+    "sourceCommit": "ce05c3d41",
+    "computedFrom": "f9e13791a",
     "computedOn": "2026-09-14",
-    "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed against the same computation over the previous pin's tree",
+    "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed family by family against the same computation over the previous pin's tree",
     "previousPin": {
-      "pinnedOn": "2026-09-11",
-      "sourceCommit": "8ae756faa",
-      "skinFamilies": 275,
-      "axes": { "shape": 221, "typography": 183, "rhythm": 216, "depth": 197, "states": 157, "motion": 202 }
+      "pinnedOn": "2026-09-14",
+      "sourceCommit": "2bd1d7799",
+      "skinFamilies": 273,
+      "axes": { "shape": 220, "typography": 183, "rhythm": 215, "depth": 196, "states": 158, "motion": 203 }
     },
     "membershipMoves": {
-      "renamesAndMerges": [
-        "skeleton-compounds -> skeleton-anatomy (FAM-14)",
-        "autocomplete -> auto-complete (FAM-02)",
-        "switch merged into Toggle behind a deprecated prop adapter (FAM-01)",
-        "input-residual merged (FAM-03)",
-        "select-compounds added by the FAM-02 cut",
-        "form-field added by the FAM-03 cut"
+      "folds": [
+        "toast + notification + message -> notifier, one family with three roles (a4a8b6f2e)",
+        "callout -> alert, folded into the existing alert namespace (0866afe18)",
+        "overlay-modal -> modal, namespace rename by the modal cut (75d77e375)",
+        "tooltip-compounds rewritten onto the ds-tooltip channels by the tooltip cut (179da599a): it gained padding-block/padding-inline and a font shorthand, so it enters `typography` and `rhythm` without moving in or out of the corpus"
       ],
-      "unrelatedAxisMove": "toast-compounds entered `motion` at fe4eabadb (WO-INV-05, 2026-09-12): the family is neither renamed nor merged, and declared no axis at the previous pin. Its two `animation: none !important` reduced-motion kill switches are read as a motion declaration. Whether a suppression declares an axis is open and owned by the motion vocabulary, not by this pin; if it is ruled out, `motion` returns to 202 and this file is republished in that commit.",
+      "namespacesAdded": ["modal", "notifier"],
+      "rewrittenInPlace": ["alert", "tooltip", "popover", "drawer", "sheet", "dropdown"],
       "byAxis": {
-        "skinFamilies": { "removed": ["autocomplete", "input-residual", "skeleton-compounds", "switch"], "added": ["auto-complete", "skeleton-anatomy"] },
-        "shape": { "removed": ["autocomplete", "skeleton-compounds", "switch"], "added": ["auto-complete", "skeleton-anatomy"] },
-        "typography": { "removed": ["autocomplete", "switch"], "added": ["auto-complete", "select-compounds"] },
-        "rhythm": { "removed": ["autocomplete", "skeleton-compounds", "switch"], "added": ["auto-complete", "select-compounds"] },
-        "depth": { "removed": ["autocomplete", "skeleton-compounds", "switch"], "added": ["auto-complete", "skeleton-anatomy"] },
-        "states": { "removed": ["autocomplete", "switch"], "added": ["auto-complete", "form-field", "select-compounds"] },
-        "motion": { "removed": ["autocomplete", "switch"], "added": ["auto-complete", "skeleton-anatomy", "toast-compounds"] }
+        "skinFamilies": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] },
+        "shape": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] },
+        "typography": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier", "tooltip-compounds"] },
+        "rhythm": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier", "tooltip-compounds"] },
+        "depth": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] },
+        "states": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] },
+        "motion": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] }
+      },
+      "carriedForward": {
+        "priorPass": "the FAM-01/02/03/14 renames and merges reconciled at 2bd1d7799: skeleton-compounds -> skeleton-anatomy, autocomplete -> auto-complete, switch merged into Toggle behind a deprecated prop adapter, input-residual merged, select-compounds and form-field added by the FAM-02/03 cuts",
+        "toastCompoundsMotion": "toast-compounds entered `motion` at fe4eabadb (WO-INV-05) on two `animation: none !important` reduced-motion kill switches and is still in it here. Whether a suppression declares an axis is open and owned by the motion vocabulary, not by this pin; if it is ruled out, `motion` drops by one and this file is republished in that commit."
       }
     }
   }
