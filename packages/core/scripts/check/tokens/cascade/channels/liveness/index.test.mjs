@@ -612,6 +612,13 @@ test('classifySemanticOwner covers every declared rule and role-suffixes the tin
   assert.equal(classifySemanticOwner('--ds-toggle-track-bg-checked'), 'chrome.toggle');
   assert.equal(classifySemanticOwner('--ds-input-number-border-focus'), 'chrome.input-number');
   assert.equal(classifySemanticOwner('--ds-form-field-label-color'), 'chrome.form-field');
+  assert.equal(classifySemanticOwner('--ds-select-option-bg-selected'), 'chrome.select');
+  assert.equal(classifySemanticOwner('--ds-tree-select-level'), 'chrome.tree-select');
+  assert.equal(classifySemanticOwner('--ds-auto-complete-dropdown-bg'), 'chrome.auto-complete');
+  assert.equal(classifySemanticOwner('--ds-date-picker-cell-bg-selected'), 'chrome.date-picker');
+  assert.equal(classifySemanticOwner('--ds-time-picker-panel-bg'), 'chrome.time-picker');
+  assert.equal(classifySemanticOwner('--ds-color-picker-panel-bg'), 'chrome.color-picker');
+  assert.equal(classifySemanticOwner('--ds-color-primary'), 'palette');
   assert.equal(classifySemanticOwner('--ds-rhythm-scale'), 'surfaces.rhythm');
   assert.equal(classifySemanticOwner('--ds-motion-calm'), 'motion');
   assert.equal(classifySemanticOwner('--ds-motion-ease-enter'), 'motion.easing');

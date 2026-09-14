@@ -1619,11 +1619,10 @@ export interface BrandControlsChrome {
    * common `chromeToVariables` lowering emits the same names for the static
    * `BrandTheme` transport and the DB `TenantThemeDocument` transport.
    *
-   * The field name is the camelCase of the channel suffix; the lowering keeps
-   * each family's HISTORICAL channel spelling, which is why `datePicker`
-   * lowers to `--ds-datepicker-*`, `inputNumber` to `--ds-input-number-*` and
-   * `timePicker` to `--ds-timepicker-*`. The contract reads in the repo's
-   * casing; the stylesheet keeps the name its readers already consume.
+   * The field name is the camelCase of the channel suffix, and the lowering
+   * names each channel after its family folder: `autocomplete` lowers to
+   * `--ds-auto-complete-*`, `datePicker` to `--ds-date-picker-*`,
+   * `inputNumber` to `--ds-input-number-*` and `timePicker` to `--ds-time-picker-*`.
    */
   autocomplete?: BrandAutocompleteChrome;
   checkbox?: BrandCheckboxChrome;
@@ -1742,25 +1741,25 @@ export interface BrandSelectChrome {
  * paint different panels and the extension declared both separately.
  */
 export interface BrandAutocompleteChrome {
-  /** `--ds-autocomplete-bg` */
+  /** `--ds-auto-complete-bg` */
   bg?: string;
-  /** `--ds-autocomplete-border` */
+  /** `--ds-auto-complete-border` */
   border?: string;
-  /** `--ds-autocomplete-border-focus` */
+  /** `--ds-auto-complete-border-focus` */
   borderFocus?: string;
-  /** `--ds-autocomplete-clear-color` */
+  /** `--ds-auto-complete-clear-color` */
   clearColor?: string;
-  /** `--ds-autocomplete-dropdown-bg` */
+  /** `--ds-auto-complete-dropdown-bg` */
   dropdownBg?: string;
-  /** `--ds-autocomplete-dropdown-shadow` */
+  /** `--ds-auto-complete-dropdown-shadow` */
   dropdownShadow?: string;
-  /** `--ds-autocomplete-empty-color` */
+  /** `--ds-auto-complete-empty-color` */
   emptyColor?: string;
-  /** `--ds-autocomplete-error-border` */
+  /** `--ds-auto-complete-error-border` */
   errorBorder?: string;
-  /** `--ds-autocomplete-option-bg-hover` */
+  /** `--ds-auto-complete-option-bg-hover` */
   optionBgHover?: string;
-  /** `--ds-autocomplete-warning-border` */
+  /** `--ds-auto-complete-warning-border` */
   warningBorder?: string;
 }
 
@@ -1799,33 +1798,33 @@ export interface BrandCheckboxChrome {
 
 /**
  * Date field. A field-shaped control with an icon, a range separator and a
- * clear affordance the plain input has no term for. Lowers to the historical
- * `--ds-datepicker-*` spelling.
+ * clear affordance the plain input has no term for. Lowers to the
+ * `--ds-date-picker-*` family namespace.
  */
 export interface BrandDatePickerChrome {
-  /** `--ds-datepicker-bg` */
+  /** `--ds-date-picker-bg` */
   bg?: string;
-  /** `--ds-datepicker-bg-disabled` */
+  /** `--ds-date-picker-bg-disabled` */
   bgDisabled?: string;
-  /** `--ds-datepicker-border` */
+  /** `--ds-date-picker-border` */
   border?: string;
-  /** `--ds-datepicker-border-focus` */
+  /** `--ds-date-picker-border-focus` */
   borderFocus?: string;
-  /** `--ds-datepicker-border-hover` */
+  /** `--ds-date-picker-border-hover` */
   borderHover?: string;
-  /** `--ds-datepicker-clear-color` */
+  /** `--ds-date-picker-clear-color` */
   clearColor?: string;
-  /** `--ds-datepicker-color` */
+  /** `--ds-date-picker-color` */
   color?: string;
-  /** `--ds-datepicker-error-border` */
+  /** `--ds-date-picker-error-border` */
   errorBorder?: string;
-  /** `--ds-datepicker-icon-color` */
+  /** `--ds-date-picker-icon-color` */
   iconColor?: string;
-  /** `--ds-datepicker-separator-color` */
+  /** `--ds-date-picker-separator-color` */
   separatorColor?: string;
-  /** `--ds-datepicker-shadow-focus` */
+  /** `--ds-date-picker-shadow-focus` */
   shadowFocus?: string;
-  /** `--ds-datepicker-warning-border` */
+  /** `--ds-date-picker-warning-border` */
   warningBorder?: string;
 }
 
@@ -1962,30 +1961,30 @@ export interface BrandSwitchChrome {
 
 /**
  * Time field. Same shape as `datePicker`, different family, own channels.
- * Lowers to the historical `--ds-timepicker-*` spelling.
+ * Lowers to the `--ds-time-picker-*` family namespace.
  */
 export interface BrandTimePickerChrome {
-  /** `--ds-timepicker-bg` */
+  /** `--ds-time-picker-bg` */
   bg?: string;
-  /** `--ds-timepicker-bg-disabled` */
+  /** `--ds-time-picker-bg-disabled` */
   bgDisabled?: string;
-  /** `--ds-timepicker-border` */
+  /** `--ds-time-picker-border` */
   border?: string;
-  /** `--ds-timepicker-border-focus` */
+  /** `--ds-time-picker-border-focus` */
   borderFocus?: string;
-  /** `--ds-timepicker-clear-color` */
+  /** `--ds-time-picker-clear-color` */
   clearColor?: string;
-  /** `--ds-timepicker-color` */
+  /** `--ds-time-picker-color` */
   color?: string;
-  /** `--ds-timepicker-error-border` */
+  /** `--ds-time-picker-error-border` */
   errorBorder?: string;
-  /** `--ds-timepicker-icon-color` */
+  /** `--ds-time-picker-icon-color` */
   iconColor?: string;
-  /** `--ds-timepicker-separator-color` */
+  /** `--ds-time-picker-separator-color` */
   separatorColor?: string;
-  /** `--ds-timepicker-shadow-focus` */
+  /** `--ds-time-picker-shadow-focus` */
   shadowFocus?: string;
-  /** `--ds-timepicker-warning-border` */
+  /** `--ds-time-picker-warning-border` */
   warningBorder?: string;
 }
 

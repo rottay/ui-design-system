@@ -160,6 +160,14 @@ export const UI_LAYER_RANKS = Object.freeze({
  * infrastructure macro root.
  */
 export const SCOPED_OWNER_RANKS = Object.freeze({
+  // The collection kernels are a ladder: listbox composes the combobox
+  // foundation, roving focus and type-ahead into one shared listbox law.
+  'components/primitives/runtime/collection': Object.freeze({
+    combobox: 0,
+    'roving-focus': 0,
+    typeahead: 0,
+    listbox: 1,
+  }),
   'foundation/contracts': Object.freeze({
     ambient: 0,
     kernel: 0,

@@ -106,10 +106,15 @@ import {
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
+import { deriveAutoCompleteChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/auto-complete";
 import { deriveCheckboxChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/checkbox";
+import { deriveDatePickerChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/date-picker";
 import { deriveInputNumberChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input-number";
 import { deriveRadioChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/radio";
+import { deriveSelectChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/select";
+import { deriveTimePickerChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/time-picker";
 import { deriveToggleChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toggle";
+import { deriveTransferChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/transfer";
 
 const DEFAULT_CSS = join(
   process.cwd(),
@@ -928,8 +933,13 @@ interface Resolution {
  * `var()` lookups always read the full stack, because the derivation the
  * deleted line echoed is allowed to be a tenant channel.
  */
-/** The roster keeps its signed pre-image names; the input-number family now answers to one namespace. */
-const currentName = (name: string): string => name.replace(/^--ds-inputnumber-/u, "--ds-input-number-");
+/** The roster keeps its signed pre-image names; each cut family now answers to one namespace. */
+const currentName = (name: string): string =>
+  name
+    .replace(/^--ds-inputnumber-/u, "--ds-input-number-")
+    .replace(/^--ds-autocomplete-/u, "--ds-auto-complete-")
+    .replace(/^--ds-datepicker-/u, "--ds-date-picker-")
+    .replace(/^--ds-timepicker-/u, "--ds-time-picker-");
 
 /** Input-number deletes whose floor the family deriver now restates at the tenant scope. */
 const INPUT_NUMBER_RELATION_RESTATEMENTS = 1;
@@ -955,8 +965,8 @@ function lookup(
   const component = COMPONENT_FLOORS[name];
   if (component !== undefined)
     return { value: component, source: COMPONENT_FLOOR_SOURCE[name] as string };
-  const relation = deriveInputNumberChannels()[name];
-  if (relation !== undefined) return { value: relation, source: "derivation/chrome/input-number" };
+  const relation = FAMILY_RELATIONS[name];
+  if (relation !== undefined) return { value: relation, source: FAMILY_RELATION_SOURCE[name] as string };
   return null;
 }
 
@@ -1255,7 +1265,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the paint did not move", () =>
 
   it("repaints every pre-image tuple outside the named family-cut supersessions", () => {
     const broken: string[] = [];
-    expect(PRE_IMAGE.filter(supersededByFamilyCut)).toHaveLength(4);
+    expect(PRE_IMAGE.filter(supersededByFamilyCut)).toHaveLength(4 + PALETTE_ERROR_FRAMES.size);
     for (const row of PRE_IMAGE.filter((entry) => !supersededByFamilyCut(entry))) {
       const found = lookup(row.mode, row.name);
       const after = found ? resolveValue(row.mode, found.value) : null;
@@ -1265,8 +1275,17 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the paint did not move", () =>
     expect(broken).toEqual([]);
   });
 
+  it("reads the superseded error frames on the palette's error tone", () => {
+    const frames = PRE_IMAGE.filter((row) => PALETTE_ERROR_FRAMES.has(`${row.mode}|${row.name}`));
+    expect(frames).toHaveLength(PALETTE_ERROR_FRAMES.size);
+    for (const row of frames) {
+      const found = lookup(row.mode, row.name) as Resolution;
+      expect(resolveValue(row.mode, found.value)).toBe(resolveValue(row.mode, "var(--ds-color-error)"));
+    }
+  });
+
   it("reads the superseded descriptions on the secondary ink", () => {
-    for (const row of PRE_IMAGE.filter(supersededByFamilyCut)) {
+    for (const row of PRE_IMAGE.filter((entry) => READABLE_DESCRIPTIONS.has(entry.name))) {
       const found = lookup(row.mode, row.name) as Resolution;
       expect(resolveValue(row.mode, found.value)).toBe(
         resolveValue(row.mode, "var(--ds-color-text-secondary)")
@@ -1295,7 +1314,7 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the paint did not move", () =>
 });
 
 describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the 41 deletes were derivations, not paint", () => {
-  it.each(deleteRows.map((row) => [`${row.mode} ${row.name}`, row] as const))(
+  it.each(deleteRows.filter((row) => !supersededByFamilyCut(row)).map((row) => [`${row.mode} ${row.name}`, row] as const))(
     "%s still resolves to what the line said, without the tenant layer",
     (_label, row) => {
       const floor = lookup(row.mode, row.name, row.name);
@@ -1312,10 +1331,13 @@ describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - the 41 deletes were derivation
       const floor = lookup(row.mode, row.name, row.name) as Resolution;
       census[floor.source] = (census[floor.source] ?? 0) + 1;
     }
-    // WO-FAM-02 moved two input-number floors from the neutral default theme into its family relations.
+    // WO-FAM-02 and WO-FAM-03 moved input-number, auto-complete, date-picker and time-picker floors into their family relations.
     expect(census).toEqual({
-      "default.css": 34,
+      "default.css": 27,
       "derivation/chrome/input-number": 2,
+      "derivation/chrome/auto-complete": 3,
+      "derivation/chrome/date-picker": 2,
+      "derivation/chrome/time-picker": 2,
       "components/checkbox/index.css": 1,
       "components/radio/index.css": 1,
       "components/select/index.css": 2,
@@ -1505,16 +1527,40 @@ const READABLE_DESCRIPTIONS = new Set([
   "--ds-radio-description-color",
   "--ds-toggle-description-color",
 ]);
-const supersededByFamilyCut = (row: { name: string }): boolean =>
-  READABLE_DESCRIPTIONS.has(row.name);
+/**
+ * WO-FAM-03 relates the select and picker error frames to the palette's error
+ * tone, so rottay dark paints its own dark error instead of the neutral floor.
+ */
+const PALETTE_ERROR_FRAMES = new Set([
+  "dark|--ds-select-error-border",
+  "dark|--ds-autocomplete-error-border",
+  "dark|--ds-datepicker-error-border",
+  "dark|--ds-timepicker-error-border",
+]);
+const supersededByFamilyCut = (row: { mode: string; name: string }): boolean =>
+  READABLE_DESCRIPTIONS.has(row.name) || PALETTE_ERROR_FRAMES.has(`${row.mode}|${row.name}`);
 
 /** Channels a family-cut deriver states as a decision relation when no vertical authors them. */
-const FAMILY_RELATIONS: Readonly<Record<string, string>> = {
-  ...deriveCheckboxChannels(),
-  ...deriveInputNumberChannels(),
-  ...deriveRadioChannels(),
-  ...deriveToggleChannels(),
-};
+const FAMILY_DERIVATIONS: ReadonlyArray<readonly [string, Record<string, string>]> = [
+  ["checkbox", deriveCheckboxChannels()],
+  ["input-number", deriveInputNumberChannels()],
+  ["radio", deriveRadioChannels()],
+  ["toggle", deriveToggleChannels()],
+  ["select", deriveSelectChannels()],
+  ["auto-complete", deriveAutoCompleteChannels()],
+  ["transfer", deriveTransferChannels()],
+  ["date-picker", deriveDatePickerChannels()],
+  ["time-picker", deriveTimePickerChannels()],
+];
+const FAMILY_RELATIONS: Readonly<Record<string, string>> = Object.assign(
+  {},
+  ...FAMILY_DERIVATIONS.map(([, channels]) => channels)
+);
+const FAMILY_RELATION_SOURCE: Readonly<Record<string, string>> = Object.fromEntries(
+  FAMILY_DERIVATIONS.flatMap(([family, channels]) =>
+    Object.keys(channels).map((name) => [name, `derivation/chrome/${family}`] as const)
+  )
+);
 
 describe("ROTTAY EXTENSION CONTROL-FAMILY DRAIN - one lowering, both transports", () => {
   const PROBE = "#010203";

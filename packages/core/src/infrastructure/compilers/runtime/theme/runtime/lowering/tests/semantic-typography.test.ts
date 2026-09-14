@@ -235,10 +235,20 @@ const FIRST_PARTY = [
  * rottay's twelve authored `--ds-inputnumber-*` keys (and their light-block
  * twins) now emit as `--ds-input-number-*` with the same values.
  */
+/**
+ * WO-FAM-03 re-anchored all three, ADDITIVE plus three renames, measured: the
+ * nine selection family derivers add rottay 1469 -> 1683 base keys, bithire
+ * 1485 -> 1737, evnto 786 -> 1038, moved 0; every added key is a `--ds-{select,
+ * auto-complete,cascader,tree-select,mentions,transfer,date-picker,time-picker,
+ * color-picker}-*` relation. rottay's thirty-one authored `--ds-autocomplete-*`,
+ * `--ds-datepicker-*` and `--ds-timepicker-*` keys (and their light-block twins)
+ * now emit under the family namespaces with the same values, and bithire's
+ * `--ds-timepicker-panel-shadow` emits as `--ds-time-picker-panel-shadow`.
+ */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "907fc7f61edf951a8e678aaaf48ef8c1d1ae658525224a2b631da7278d551002",
-  bithire: "9d83f98ac773f39dc7fa5a8ce2b63d51ad40098a5a31162d52ed98cd9503a3ae",
-  evnto: "97c224884c30c1f9f5577715a8076f3612466aefdbdd37d18513adf489689f2e",
+  rottay: "06f6e8e77bb691ccf257db21366fb5f70d62d7c52a3af64f0798694e6727f18b",
+  bithire: "98025acdc8418af093c628a60c2266fd3bbcd8e9196e5eb4c4c5c296b95085d2",
+  evnto: "989b8f9dfab2e90ad57e0b0f6fed32aeee3ab8e133aa1bc28f51a979e3f7525b",
 };
 
 /**

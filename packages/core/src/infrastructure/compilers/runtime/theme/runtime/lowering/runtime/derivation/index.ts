@@ -20,6 +20,15 @@ import { tagInputChromeDeriver } from "./chrome/tag-input";
 import { inputNumberChromeDeriver } from "./chrome/input-number";
 import { formFieldChromeDeriver } from "./chrome/form-field";
 import { formChromeDeriver } from "./chrome/form";
+import { selectChromeDeriver } from "./chrome/select";
+import { autoCompleteChromeDeriver } from "./chrome/auto-complete";
+import { mentionsChromeDeriver } from "./chrome/mentions";
+import { cascaderChromeDeriver } from "./chrome/cascader";
+import { treeSelectChromeDeriver } from "./chrome/tree-select";
+import { transferChromeDeriver } from "./chrome/transfer";
+import { timePickerChromeDeriver } from "./chrome/time-picker";
+import { datePickerChromeDeriver } from "./chrome/date-picker";
+import { colorPickerChromeDeriver } from "./chrome/color-picker";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
 import { toggleChromeDeriver } from "./chrome/toggle";
@@ -82,6 +91,15 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   inputNumberChromeDeriver,
   formFieldChromeDeriver,
   formChromeDeriver,
+  selectChromeDeriver,
+  autoCompleteChromeDeriver,
+  mentionsChromeDeriver,
+  cascaderChromeDeriver,
+  treeSelectChromeDeriver,
+  transferChromeDeriver,
+  timePickerChromeDeriver,
+  datePickerChromeDeriver,
+  colorPickerChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-13T19:26:43.115Z",
+  "producedAt": "2026-09-14T00:13:36.660Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 7-family sample: 18/22 move at least one sampled family",
   "denominators": {
@@ -21,7 +21,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-13T19:23:54.042Z"
+      "builtAt": "2026-09-14T00:10:11.655Z"
     },
     "sources": {
       "door": {
@@ -29,8 +29,8 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 788,
-        "digest": "f57c7b100d35bda8bae4f2a2504a159c829b5bed6d2b82115eca292d437c6f8e"
+        "fileCount": 805,
+        "digest": "152a264fd1e6c8b821183295a43e319d0643cd4d5a5bb729f905d3c7b3894a4a"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
@@ -41,7 +41,7 @@
     "browser": {
       "specifier": "@playwright/test",
       "root": "packages/showroom/package.json",
-      "resolved": "../ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
+      "resolved": "../../Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.js",
       "browserVersion": "149.0.7827.55"
     },
     "roster": {
@@ -70,7 +70,7 @@
             ]
           }
         ],
-        "bundleSha": "b8e6221649d460c91d407c26f0167cfa910a7c46835109f11eea72035766d98d",
+        "bundleSha": "7676bba2e42a9e08b089d18596feaa0be879a3e53e272ef213a081a6a74586ae",
         "bundleMode": "fresh",
         "theme": "dark"
       },
@@ -99,7 +99,7 @@
             ]
           }
         ],
-        "bundleSha": "b879a75da3d745a3db65bdbf1b8b4f7339982b67a695d54e36e849bd3d732d8a",
+        "bundleSha": "e92e31b18a5008a788960d1b2faf740f73f69651fa9ca225ab95acdf2eaf8183",
         "bundleMode": "fresh",
         "theme": "light"
       },
@@ -128,7 +128,7 @@
             ]
           }
         ],
-        "bundleSha": "a39d28320dfd2362a973b2a9527f42810f327c421e1a76a1114b80f4da52feab",
+        "bundleSha": "a0338423b8218ab136249735f26a7983f8a9444783150cb7edde0eb49df17d15",
         "bundleMode": "fresh",
         "theme": "light"
       }

@@ -1258,11 +1258,12 @@ function setSurfaceChromeVars(
   if (surface.cardGridBg)
     vars["--ds-surface-card-grid-bg"] = surface.cardGridBg;
   if (surface.popoverShadow) {
-    // One authored elevation, three vocabularies: the shadow-scale name plus
-    // the two picker panels that spell the same decision per-component.
+    // One authored elevation, spelled by the shadow scale and the picker panels;
+    // the frozen Rustic date panel still reads its pre-cut name.
     vars["--ds-shadow-popover"] = surface.popoverShadow;
+    vars["--ds-date-picker-panel-shadow"] = surface.popoverShadow;
     vars["--ds-datepicker-panel-shadow"] = surface.popoverShadow;
-    vars["--ds-timepicker-panel-shadow"] = surface.popoverShadow;
+    vars["--ds-time-picker-panel-shadow"] = surface.popoverShadow;
   }
   if (surface.cardCoverOverlayBg)
     vars["--ds-card-cover-overlay-bg"] = surface.cardCoverOverlayBg;
@@ -2152,21 +2153,21 @@ export function chromeToVariables(
     // autocomplete
     if (c.autocomplete) {
       const ac = c.autocomplete;
-      if (ac.bg) vars["--ds-autocomplete-bg"] = ac.bg;
-      if (ac.border) vars["--ds-autocomplete-border"] = ac.border;
+      if (ac.bg) vars["--ds-auto-complete-bg"] = ac.bg;
+      if (ac.border) vars["--ds-auto-complete-border"] = ac.border;
       if (ac.borderFocus)
-        vars["--ds-autocomplete-border-focus"] = ac.borderFocus;
-      if (ac.clearColor) vars["--ds-autocomplete-clear-color"] = ac.clearColor;
-      if (ac.dropdownBg) vars["--ds-autocomplete-dropdown-bg"] = ac.dropdownBg;
+        vars["--ds-auto-complete-border-focus"] = ac.borderFocus;
+      if (ac.clearColor) vars["--ds-auto-complete-clear-color"] = ac.clearColor;
+      if (ac.dropdownBg) vars["--ds-auto-complete-dropdown-bg"] = ac.dropdownBg;
       if (ac.dropdownShadow)
-        vars["--ds-autocomplete-dropdown-shadow"] = ac.dropdownShadow;
-      if (ac.emptyColor) vars["--ds-autocomplete-empty-color"] = ac.emptyColor;
+        vars["--ds-auto-complete-dropdown-shadow"] = ac.dropdownShadow;
+      if (ac.emptyColor) vars["--ds-auto-complete-empty-color"] = ac.emptyColor;
       if (ac.errorBorder)
-        vars["--ds-autocomplete-error-border"] = ac.errorBorder;
+        vars["--ds-auto-complete-error-border"] = ac.errorBorder;
       if (ac.optionBgHover)
-        vars["--ds-autocomplete-option-bg-hover"] = ac.optionBgHover;
+        vars["--ds-auto-complete-option-bg-hover"] = ac.optionBgHover;
       if (ac.warningBorder)
-        vars["--ds-autocomplete-warning-border"] = ac.warningBorder;
+        vars["--ds-auto-complete-warning-border"] = ac.warningBorder;
     }
 
     // checkbox
@@ -2194,20 +2195,20 @@ export function chromeToVariables(
     // datepicker
     if (c.datePicker) {
       const dp = c.datePicker;
-      if (dp.bg) vars["--ds-datepicker-bg"] = dp.bg;
-      if (dp.bgDisabled) vars["--ds-datepicker-bg-disabled"] = dp.bgDisabled;
-      if (dp.border) vars["--ds-datepicker-border"] = dp.border;
-      if (dp.borderFocus) vars["--ds-datepicker-border-focus"] = dp.borderFocus;
-      if (dp.borderHover) vars["--ds-datepicker-border-hover"] = dp.borderHover;
-      if (dp.clearColor) vars["--ds-datepicker-clear-color"] = dp.clearColor;
-      if (dp.color) vars["--ds-datepicker-color"] = dp.color;
-      if (dp.errorBorder) vars["--ds-datepicker-error-border"] = dp.errorBorder;
-      if (dp.iconColor) vars["--ds-datepicker-icon-color"] = dp.iconColor;
+      if (dp.bg) vars["--ds-date-picker-bg"] = dp.bg;
+      if (dp.bgDisabled) vars["--ds-date-picker-bg-disabled"] = dp.bgDisabled;
+      if (dp.border) vars["--ds-date-picker-border"] = dp.border;
+      if (dp.borderFocus) vars["--ds-date-picker-border-focus"] = dp.borderFocus;
+      if (dp.borderHover) vars["--ds-date-picker-border-hover"] = dp.borderHover;
+      if (dp.clearColor) vars["--ds-date-picker-clear-color"] = dp.clearColor;
+      if (dp.color) vars["--ds-date-picker-color"] = dp.color;
+      if (dp.errorBorder) vars["--ds-date-picker-error-border"] = dp.errorBorder;
+      if (dp.iconColor) vars["--ds-date-picker-icon-color"] = dp.iconColor;
       if (dp.separatorColor)
-        vars["--ds-datepicker-separator-color"] = dp.separatorColor;
-      if (dp.shadowFocus) vars["--ds-datepicker-shadow-focus"] = dp.shadowFocus;
+        vars["--ds-date-picker-separator-color"] = dp.separatorColor;
+      if (dp.shadowFocus) vars["--ds-date-picker-shadow-focus"] = dp.shadowFocus;
       if (dp.warningBorder)
-        vars["--ds-datepicker-warning-border"] = dp.warningBorder;
+        vars["--ds-date-picker-warning-border"] = dp.warningBorder;
     }
 
     // inputnumber
@@ -2296,19 +2297,19 @@ export function chromeToVariables(
     // timepicker
     if (c.timePicker) {
       const tp = c.timePicker;
-      if (tp.bg) vars["--ds-timepicker-bg"] = tp.bg;
-      if (tp.bgDisabled) vars["--ds-timepicker-bg-disabled"] = tp.bgDisabled;
-      if (tp.border) vars["--ds-timepicker-border"] = tp.border;
-      if (tp.borderFocus) vars["--ds-timepicker-border-focus"] = tp.borderFocus;
-      if (tp.clearColor) vars["--ds-timepicker-clear-color"] = tp.clearColor;
-      if (tp.color) vars["--ds-timepicker-color"] = tp.color;
-      if (tp.errorBorder) vars["--ds-timepicker-error-border"] = tp.errorBorder;
-      if (tp.iconColor) vars["--ds-timepicker-icon-color"] = tp.iconColor;
+      if (tp.bg) vars["--ds-time-picker-bg"] = tp.bg;
+      if (tp.bgDisabled) vars["--ds-time-picker-bg-disabled"] = tp.bgDisabled;
+      if (tp.border) vars["--ds-time-picker-border"] = tp.border;
+      if (tp.borderFocus) vars["--ds-time-picker-border-focus"] = tp.borderFocus;
+      if (tp.clearColor) vars["--ds-time-picker-clear-color"] = tp.clearColor;
+      if (tp.color) vars["--ds-time-picker-color"] = tp.color;
+      if (tp.errorBorder) vars["--ds-time-picker-error-border"] = tp.errorBorder;
+      if (tp.iconColor) vars["--ds-time-picker-icon-color"] = tp.iconColor;
       if (tp.separatorColor)
-        vars["--ds-timepicker-separator-color"] = tp.separatorColor;
-      if (tp.shadowFocus) vars["--ds-timepicker-shadow-focus"] = tp.shadowFocus;
+        vars["--ds-time-picker-separator-color"] = tp.separatorColor;
+      if (tp.shadowFocus) vars["--ds-time-picker-shadow-focus"] = tp.shadowFocus;
       if (tp.warningBorder)
-        vars["--ds-timepicker-warning-border"] = tp.warningBorder;
+        vars["--ds-time-picker-warning-border"] = tp.warningBorder;
     }
 
     // toggle

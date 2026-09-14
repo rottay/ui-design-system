@@ -278,6 +278,204 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-02: pinned owner src/components/primitives/inputs/form (the name is shared with the FormHeader structure, which keeps its own skin); both engines render from runtime/{state,validation}; FORM_DEFAULTS.layout is vertical (D-22); adapt/data-posture through useAdaptation; FormSurface answers to ds-form-surface so the form vocabulary is the primitive's alone."
+    },
+    "select": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/select",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 7,
+        "channelsRead": 221,
+        "classTokens": 4,
+        "partsStamped": 37,
+        "partsConsumed": 37
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 1,
+      "cutNote": "WO-FAM-03: every channel the Modern skin reads is written -- field and dropdown relations by derivation/chrome/select, structural constants by presentation/components/select; keyboard and type-ahead come from runtime/collection/listbox, the dropdown from useFieldOverlay, and clear, tag-remove and search decide state through the interaction and field-action kernels; one ds-select vocabulary (the rottay-select option and optgroup compounds answer to ds-select-option/ds-select-optgroup). fanOutUnreached=1 stays for adjudication: recipe-profile, whose only channel is provenance owned by WO-DER-06."
+    },
+    "auto-complete": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/auto-complete",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 102,
+        "classTokens": 3,
+        "partsStamped": 10,
+        "partsConsumed": 10
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/auto-complete and presentation/components/auto-complete; the skin folder and the vocabulary are ds-auto-complete, so the family name, the skin and the channel namespace agree; options walk through runtime/collection/listbox and Enter commits through resolveSubmitIntent."
+    },
+    "cascader": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/cascader",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 98,
+        "classTokens": 3,
+        "partsStamped": 19,
+        "partsConsumed": 19
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/cascader and presentation/components/cascader; columns walk through runtime/collection/listbox with roving focus across columns, the dropdown rides useFieldOverlay, and option rows decide state through the interaction kernel."
+    },
+    "tree-select": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/tree-select",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 105,
+        "classTokens": 3,
+        "partsStamped": 20,
+        "partsConsumed": 20
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/tree-select and presentation/components/tree-select; tree rows walk through runtime/collection/listbox and roving focus, the indent is the --ds-tree-select-level runtime channel, and the copy renders with an English floor without a provider."
+    },
+    "mentions": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/mentions",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 93,
+        "classTokens": 3,
+        "partsStamped": 7,
+        "partsConsumed": 7
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/mentions and presentation/components/mentions; suggestions walk through runtime/collection/listbox (disabled rows are skipped), composition keys never commit through isComposingKey, and autosize writes --ds-mentions-autosize-* runtime channels instead of inline paint."
+    },
+    "transfer": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/transfer",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 70,
+        "classTokens": 2,
+        "partsStamped": 18,
+        "partsConsumed": 21
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/transfer and presentation/components/transfer; panel rows walk through runtime/collection/listbox and move, select-all and pagination controls decide state through the interaction kernel; one ds-transfer vocabulary. Transfer opens no overlay, so useFieldOverlay does not apply."
+    },
+    "date-picker": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/date-picker",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 128,
+        "classTokens": 6,
+        "partsStamped": 20,
+        "partsConsumed": 23
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/date-picker and presentation/components/date-picker; the grid, week start, weekday order, day labels and grid keyboard come from the calendar kernel (foundation/calendar), the panel from useFieldOverlay, and triggers, navigation, cells, Today and clear decide state through the interaction and field-action kernels; one ds-date-picker vocabulary."
+    },
+    "time-picker": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/time-picker",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 100,
+        "classTokens": 5,
+        "partsStamped": 15,
+        "partsConsumed": 17
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/time-picker and presentation/components/time-picker; columns walk through runtime/collection/listbox and hop in the reading direction, the panel rides useFieldOverlay with the contract placements mapped onto the kernel, and cells, Now and clear decide state through the interaction and field-action kernels; one ds-time-picker vocabulary."
+    },
+    "color-picker": {
+      "cut": "WO-FAM-03",
+      "owner": "src/components/primitives/inputs/color-picker",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 97,
+        "classTokens": 4,
+        "partsStamped": 18,
+        "partsConsumed": 18
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: channels written by derivation/chrome/color-picker and presentation/components/color-picker, with the swatch and preset colours carried as --ds-color-picker-* user-data channels; the trigger, fields, presets and clear decide state through the interaction kernel and every contract placement maps onto useFieldOverlay; one ds-color-picker vocabulary."
     }
   }
 }

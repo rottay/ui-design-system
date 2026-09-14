@@ -77,6 +77,14 @@
 @import "../../../presentation/components/radio/index.css" layer(rottay-components);
 @import "../../../presentation/components/segmented/index.css" layer(rottay-components);
 @import "../../../presentation/components/select/index.css" layer(rottay-components);
+@import "../../../presentation/components/auto-complete/index.css" layer(rottay-components);
+@import "../../../presentation/components/mentions/index.css" layer(rottay-components);
+@import "../../../presentation/components/cascader/index.css" layer(rottay-components);
+@import "../../../presentation/components/tree-select/index.css" layer(rottay-components);
+@import "../../../presentation/components/transfer/index.css" layer(rottay-components);
+@import "../../../presentation/components/time-picker/index.css" layer(rottay-components);
+@import "../../../presentation/components/date-picker/index.css" layer(rottay-components);
+@import "../../../presentation/components/color-picker/index.css" layer(rottay-components);
 @import "../../../presentation/components/tag/index.css" layer(rottay-components);
 @import "../../../presentation/components/toggle/index.css" layer(rottay-components);
 @import "../../../presentation/components/icon/index.css" layer(rottay-components);
@@ -212,7 +220,7 @@
 @import "../../../runtime/engines/rustic/skin/date-picker/index.css"
   layer(rottay-engines);
 /* Dropdown family (WO-SKIN-02 checkpoint B). */
-@import "../../../runtime/engines/modern/skin/autocomplete/index.css"
+@import "../../../runtime/engines/modern/skin/auto-complete/index.css"
   layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/autocomplete/index.css"
   layer(rottay-engines);

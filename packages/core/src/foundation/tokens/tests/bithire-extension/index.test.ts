@@ -478,11 +478,14 @@ describe("BITHIRE EXTENSION DRAIN · the table is the file that was drained", ()
 
 // ── 3. PARITY ──────────────────────────────────────────────────────────────
 
+/** The drain ledger keeps its signed names; the time-picker family now answers to one namespace. */
+const currentName = (name: string): string => name.replace(/^--ds-timepicker-/u, "--ds-time-picker-");
+
 describe("BITHIRE EXTENSION DRAIN · the common lowering emits every drained channel", () => {
   it.each(DRAINED.map((row) => [row.family, row.scope, row.name, row] as const))(
     "%s · %s · %s",
     (_family, scope, name, row) => {
-      const emitted = scope === "dark" ? DARK[name] : BASE[name];
+      const emitted = scope === "dark" ? DARK[currentName(name)] : BASE[currentName(name)];
       expect(emitted, `${name} is not emitted at all`).toBeDefined();
 
       const forward = ALIAS_FORWARDS[name];
@@ -508,7 +511,7 @@ describe("BITHIRE EXTENSION DRAIN · the common lowering emits every drained cha
 
   it("exactly 13 channels moved their string, and they are the recorded 13", () => {
     const moved = DRAINED.filter((row) => {
-      const emitted = row.scope === "dark" ? DARK[row.name] : BASE[row.name];
+      const emitted = row.scope === "dark" ? DARK[currentName(row.name)] : BASE[currentName(row.name)];
       return bare(emitted) !== bare(row.extension);
     }).map((row) => row.name);
     expect(moved.sort()).toEqual(
@@ -522,7 +525,7 @@ describe("BITHIRE EXTENSION DRAIN · the common lowering emits every drained cha
 describe("BITHIRE EXTENSION DRAIN · dark keeps the paint it already had", () => {
   it("every formerly light-only paint channel carries an explicit dark pin", () => {
     const pinned: Record<string, string> = {};
-    for (const name of Object.keys(DARK_PINS)) pinned[name] = DARK[name];
+    for (const name of Object.keys(DARK_PINS)) pinned[name] = DARK[currentName(name)];
     expect(pinned).toEqual(DARK_PINS);
   });
 

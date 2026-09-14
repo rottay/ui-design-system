@@ -24,7 +24,8 @@ const LEDGER_PATH = resolve(
 );
 const ENTRYPOINT = resolve(CSS_ROOT, "facade/entrypoints/base/index.css");
 
-const FOUNDATION_CHANNEL = /^--ds-(?:color|spacing|radius|shadow|font|motion|z-index)-/;
+/** The color-picker family namespace shares the palette prefix and is a component channel. */
+const FOUNDATION_CHANNEL = /^--ds-(?:color(?!-picker-)|spacing|radius|shadow|font|motion|z-index)-/;
 
 interface OwnerRows {
   same: string[];

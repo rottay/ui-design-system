@@ -1286,6 +1286,8 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-tint-(success|warning|error|info)-/, (m) => `palette.tint-ramp.${m[1]}`],
   [/^--ds-tint-/, () => 'palette.tint-ramp.primary'],
   [/^--ds-chart-/, () => 'charts'],
+  // The color-picker family namespace shares the palette prefix, so it resolves first.
+  [/^--ds-color-picker-/, () => 'chrome.color-picker'],
   [/^--ds-color-/, () => 'palette'],
   [/^--ds-material-/, () => 'surfaces.material'],
   [/^--ds-surface-/, () => 'surfaces'],
@@ -1333,7 +1335,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // to leave the emitting control unnamed.
   [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
-  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form)-/, (m) => `chrome.${m[1]}`],
+  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker)-/, (m) => `chrome.${m[1]}`],
 ]);
 
 export function classifySemanticOwner(name) {

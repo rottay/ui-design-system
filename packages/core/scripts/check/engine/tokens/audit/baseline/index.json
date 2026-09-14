@@ -3285,5 +3285,8 @@
   "runtimeSvgPaint.primitives/inputs/form/runtime/state/index.tsx": 0,
   "runtimeSvgPaint.primitives/inputs/form/runtime/validation/index.ts": 0,
   "embeddedCssPaint.primitives/inputs/form/runtime/state/index.tsx": 0,
-  "embeddedCssPaint.primitives/inputs/form/runtime/validation/index.ts": 0
+  "embeddedCssPaint.primitives/inputs/form/runtime/validation/index.ts": 0,
+  "fleet.inlinePaint.primitives/runtime/collection/listbox/index.ts": 0,
+  "runtimeSvgPaint.primitives/runtime/collection/listbox/index.ts": 0,
+  "embeddedCssPaint.primitives/runtime/collection/listbox/index.ts": 0
 }

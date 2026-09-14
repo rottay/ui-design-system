@@ -73,6 +73,8 @@ export function collectStampedPartsFromSource(src) {
   for (const m of src.matchAll(/\.attr\(\s*["']data-part["']\s*,\s*["']([a-z0-9-]+)["']\s*\)/gi)) stamped.add(m[1]);
   // A `part` prop forwarded onto a data-part by the receiving component.
   for (const m of src.matchAll(/\bpart\s*=\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
+  // The anatomy kernel stamps `data-part` from its first argument: `partAttributes('trigger', state)`.
+  for (const m of src.matchAll(/\bpartAttributes\(\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
   return stamped;
 }
 
