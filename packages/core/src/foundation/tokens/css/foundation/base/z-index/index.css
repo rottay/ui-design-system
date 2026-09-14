@@ -72,7 +72,10 @@
      rather than a calc() so the fallback-parity gate can compare a skin's
      fallback against it; a calc() resolves to nothing it can check. */
   --ds-z-index-message: 1790;
-  --ds-z-index-alert: calc(var(--ds-z-index-base) + 1);
+  /* An alert orders one step above page content. Written as the literal
+     step for the same reason as the message band above: a calc() resolves
+     to nothing the fallback-parity gate can compare a skin's fallback to. */
+  --ds-z-index-alert: 1;
   --ds-z-index-banner: var(--ds-z-index-sticky);
 
   /* Forms */

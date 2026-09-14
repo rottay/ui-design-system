@@ -1415,8 +1415,8 @@ test('META: the SHIPPED table is the registered set -- 50 channels, one owner ea
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
     [LIVENESS.authorableUnprovenEffect]: 33,
-    [LIVENESS.unreadEmittedNoRoute]: 13,
-    [LIVENESS.readNoProductiveTerminal]: 3,
+    [LIVENESS.unreadEmittedNoRoute]: 14,
+    [LIVENESS.readNoProductiveTerminal]: 2,
     [LIVENESS.readUnproven]: 1,
   });
   for (const pin of index.values()) {

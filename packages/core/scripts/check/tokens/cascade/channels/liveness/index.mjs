@@ -1519,10 +1519,10 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
   }),
   Object.freeze({
     owner: 'WO-FAM-04',
-    classification: LIVENESS.readNoProductiveTerminal,
+    classification: LIVENESS.unreadEmittedNoRoute,
     registered: '2026-09-14',
     reason:
-      'it is the floor of the single enforced z-scale, and its only chain is --ds-z-index-alert = calc(var(--ds-z-index-base) + 1) dying in a TS mirror nothing imports; alert belongs to this cut, so the pin clears when the alert band terminal lands through the FAM-04 alert owner or the indirection retires with the single-scale test updated, and the scale invariant stays enforced either way',
+      're-adjudicated from readNoProductiveTerminal when this cut took the second of its two exit routes: the alert family declares no stacking at all -- no z-index in its skin, its presentation channels or its owner, and no placement in its contract -- so the alert-band terminal could only have been invented, and the indirection --ds-z-index-alert = calc(var(--ds-z-index-base) + 1) retired to the literal step instead, the way --ds-z-index-message already had. The floor of a z-scale is declared, never read: reading a zero band is the same as declaring no stacking. It stays emitted because the single-scale invariant requires every canonical band present in one owner, which z-index-single-scale enforces, so the pin clears only if that canonical roster drops the floor',
     channels: Object.freeze(['--ds-z-index-base']),
   }),
   Object.freeze({

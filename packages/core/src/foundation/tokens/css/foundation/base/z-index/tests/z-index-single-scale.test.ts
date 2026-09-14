@@ -110,16 +110,18 @@ describe('one z-index scale', () => {
     // compare a skin's fallback against a value it can resolve to a scalar.
     expect(owner).toContain('--ds-z-index-message: 1790;');
     expect(owner).toContain('--ds-z-index-affix: 100;');
+    expect(owner).toContain('--ds-z-index-alert: 1;');
+    expect(owner).not.toMatch(/--ds-z-index-alert:\s*calc\(/);
   });
 
   it('keeps every Modern skin fallback equal to what the scale resolves', () => {
     const skinRoot = 'src/foundation/tokens/css/runtime/engines/modern/skin';
-    expect(
-      readFileSync(resolve(process.cwd(), `${skinRoot}/notification/index.css`), 'utf8'),
-    ).toContain('z-index: var(--ds-z-notification, 1800);');
-    expect(
-      readFileSync(resolve(process.cwd(), `${skinRoot}/message/index.css`), 'utf8'),
-    ).toContain('z-index: var(--ds-z-message, 1790);');
+    // The notification and message skins folded into the one Notifier skin,
+    // which takes its band from the scale through its own deriver channel, so
+    // there is no fallback literal left here to drift out of parity.
+    const notifier = readFileSync(resolve(process.cwd(), `${skinRoot}/notifier/index.css`), 'utf8');
+    expect(notifier).toContain('z-index: var(--ds-notifier-layer, var(--ds-z-index-toast));');
+    expect(notifier).not.toMatch(/z-index:\s*\d/);
   });
 
   it('detects a planted second scale', () => {
