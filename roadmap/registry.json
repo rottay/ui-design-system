@@ -4689,6 +4689,11 @@
      "at": "2026-09-14 09:48",
      "by": "kimi-admin",
      "note": "ROUTED from the audited R107-FAM-02 lot: Escape during IME composition closes overlay panels because the shared capture-phase Escape router (components/primitives/runtime/overlay/layer-stack/index.ts:220) acts without a composition guard. Owner: this WO as the overlay-runtime owner. Acceptance for its bounded lot: Escape with isComposing/keyCode 229 does not dismiss the top layer; a normal Escape still does; Select/popover/dropdown consumers covered. Not part of the Notifier correction in flight."
+    },
+    {
+     "at": "2026-09-14 11:04",
+     "by": "kimi-admin",
+     "note": "MERGED to r4-recon as ce05c3d41 (thirteen lots: eleven family units + R107-DRAFT-01 Notifier pause correction + elevation-surface causality repair + integration bookkeeping). Auditor: kimi-admin. Evidence on the merged tree: twelve-family + correction-wave suites 954/954; adversarial audit-107 probes 7/7 green; family-cut CLI exit 0 with the twelve new rows; family-cut suite 62/62; RWP exit 0 (1362/4504, debt down 323); structure/public-api/paint/csssource/hooks gates green; tsc clean. Named remaining reds with owners, none hidden: liveness 107/108 until the G107-01 re-adjudication lot lands (dispatched, wo-fix-gates); population 14/15 until the FAM-04 fold reconciliation lands (same writer, Lot D); engine-audit rows = pre-existing fallbackParity main debt (routed to FAM-06/08/10 at claim time) and skeleton inlinePaint=1 (FAM-14 lot on wo-fix-fam14); decisions-lit evidence republishes at the post-merge checkpoint. WO stays in-progress: its acceptance closes with (a) the liveness/population follow-ups, (b) the z-index-base alert-band exit condition it owns per the G107-01 adjudication, (c) the tint-4 reader-or-retire it owns, (d) the checkpoint evidence, and (e) the Escape-during-composition overlay router obligation routed from the FAM-03 lot."
     }
    ]
   },
