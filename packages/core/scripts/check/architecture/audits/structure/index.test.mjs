@@ -125,6 +125,12 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
   // place, so it must stay complete rather than track the entries someone
   // happened to touch.
   assert.deepEqual(SCOPED_OWNER_RANKS, {
+    'components/primitives/runtime/collection': {
+      combobox: 0,
+      'roving-focus': 0,
+      typeahead: 0,
+      listbox: 1,
+    },
     'foundation/contracts': {
       ambient: 0,
       kernel: 0,
@@ -248,8 +254,8 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
 
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
-  assert.equal(owners.length, 23);
-  assert.equal(rankedChildren.length, 86);
+  assert.equal(owners.length, 25);
+  assert.equal(rankedChildren.length, 94);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(
@@ -530,6 +536,31 @@ test('Toast provider consumes its method registry without making UI peers global
     assert(ids.has(
       `local-layer-inversion:${owner}/method-registry/index.ts->${owner}/provider/index.ts`,
     ));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('the listbox kernel composes the collection kernels, and a kernel below it cannot reach back up', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'components/primitives/runtime/collection';
+    write(resolve(sourceRoot, `${owner}/combobox/index.ts`), "import { listbox } from '../listbox';\nexport const combobox = listbox;\n");
+    write(resolve(sourceRoot, `${owner}/roving-focus/index.ts`), 'export const rovingFocus = true;\n');
+    write(resolve(sourceRoot, `${owner}/typeahead/index.ts`), 'export const typeahead = true;\n');
+    write(
+      resolve(sourceRoot, `${owner}/listbox/index.ts`),
+      "import { combobox } from '../combobox';\nimport { rovingFocus } from '../roving-focus';\nimport { typeahead } from '../typeahead';\nexport const listbox = [combobox, rovingFocus, typeahead];\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    for (const kernel of ['combobox', 'roving-focus', 'typeahead']) {
+      assert(!ids.has(`sibling-owner-dependency:${owner}/listbox/index.ts->${owner}/${kernel}/index.ts`));
+      assert(!ids.has(`local-layer-inversion:${owner}/listbox/index.ts->${owner}/${kernel}/index.ts`));
+    }
+    assert(ids.has(`local-layer-inversion:${owner}/combobox/index.ts->${owner}/listbox/index.ts`));
   } finally {
     rmSync(packageRoot, { recursive: true, force: true });
   }
