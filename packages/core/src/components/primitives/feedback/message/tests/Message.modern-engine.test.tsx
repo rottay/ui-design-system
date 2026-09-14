@@ -4,7 +4,7 @@
  * The stack container is the polite live region (role="log",
  * aria-live="polite", rustic parity); each item keeps role="alert" with a
  * polite announcement posture. Dismissal and expiry route through the skin's
- * exit animation (data-state='exit') before the node is removed, so the stack
+ * exit animation (data-open='false') before the node is removed, so the stack
  * never witnesses an abrupt disappearance.
  */
 import React from 'react';
@@ -28,7 +28,8 @@ describe('Message modern engine live region + lifecycle', () => {
     );
 
     const stack = screen.getByRole('log');
-    expect(stack).toHaveAttribute('data-part', 'stack-container');
+    expect(stack).toHaveAttribute('data-part', 'stack');
+    expect(stack).toHaveAttribute('data-variant', 'message');
     expect(stack).toHaveAttribute('aria-live', 'polite');
     expect(stack).toHaveAttribute('data-placement', 'top');
   });
@@ -42,7 +43,8 @@ describe('Message modern engine live region + lifecycle', () => {
     const item = screen.getByRole('alert');
     expect(item).toHaveAttribute('aria-live', 'polite');
     expect(item).toHaveAttribute('data-tone', 'success');
-    expect(item).toHaveAttribute('data-state', 'enter');
+    expect(item).toHaveAttribute('data-open', 'true');
+    expect(item).toHaveAttribute('data-variant', 'message');
   });
 
   it('dismiss stamps the exit state before removal (no abrupt disappearance)', () => {
@@ -55,9 +57,9 @@ describe('Message modern engine live region + lifecycle', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
 
-    // Exit animation in flight: node still mounted, stamped data-state='exit'.
+    // Exit animation in flight: node still mounted, stamped data-open='false'.
     const exiting = screen.getByRole('alert');
-    expect(exiting).toHaveAttribute('data-state', 'exit');
+    expect(exiting).toHaveAttribute('data-open', 'false');
     expect(onRemove).not.toHaveBeenCalled();
 
     act(() => {
@@ -77,7 +79,7 @@ describe('Message modern engine live region + lifecycle', () => {
     act(() => {
       vi.advanceTimersByTime(1000);
     });
-    expect(screen.getByRole('alert')).toHaveAttribute('data-state', 'exit');
+    expect(screen.getByRole('alert')).toHaveAttribute('data-open', 'false');
     expect(onRemove).not.toHaveBeenCalled();
 
     act(() => {
@@ -92,7 +94,7 @@ describe('Message modern engine live region + lifecycle', () => {
       'modern',
     );
 
-    expect(container.querySelector('[data-icon="spinner"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="spinner"]')).not.toBeNull();
     expect(screen.getByRole('alert')).toHaveAttribute('data-tone', 'loading');
   });
 });

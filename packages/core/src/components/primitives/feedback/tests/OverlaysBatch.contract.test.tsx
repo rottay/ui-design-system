@@ -207,7 +207,9 @@ describe('Overlays-family data-part contract (WO-SKIN-03 checkpoint O)', () => {
         expect(container.querySelectorAll('[data-part="body"]')).toHaveLength(1);
         expect(container.querySelectorAll('[data-part="action"]')).toHaveLength(1);
         expect(container.querySelectorAll('[data-part="close-button"]')).toHaveLength(1);
-        expect(container.querySelectorAll('[data-part="progress-bar"]')).toHaveLength(1);
+        // The Modern toast is the Notifier's toast role, whose lifetime part is `progress`.
+        const lifetimePart = engine === 'modern' ? 'progress' : 'progress-bar';
+        expect(container.querySelectorAll(`[data-part="${lifetimePart}"]`)).toHaveLength(1);
       },
     );
 
@@ -232,7 +234,7 @@ describe('Overlays-family data-part contract (WO-SKIN-03 checkpoint O)', () => {
       fireEvent.click(getByRole('button', { name: 'trigger' }));
 
       const stackContainer = await waitFor(() => {
-        const el = document.querySelector('[data-part="stack-container"]');
+        const el = document.querySelector(engine === 'modern' ? '[data-part="stack"]' : '[data-part="stack-container"]');
         expect(el).not.toBeNull();
         return el as HTMLElement;
       });
@@ -240,7 +242,7 @@ describe('Overlays-family data-part contract (WO-SKIN-03 checkpoint O)', () => {
       // Portal posture: Toast.Container portals to document.body regardless
       // of engine (checkpoint contract decision 1).
       expect(container.contains(stackContainer)).toBe(false);
-      expect(stackContainer.getAttribute('data-placement')).toBe('top-right');
+      expect(stackContainer.getAttribute('data-placement')).toBe(engine === 'modern' ? 'top-end' : 'top-right');
       await waitFor(() => {
         expect(stackContainer.querySelectorAll('[data-part="root"]').length).toBeGreaterThan(0);
       });
@@ -292,7 +294,8 @@ describe('Overlays-family data-part contract (WO-SKIN-03 checkpoint O)', () => {
         expect(container.querySelectorAll('[data-part="icon"]')).toHaveLength(1);
         expect(container.querySelectorAll('[data-part="title"]')).toHaveLength(1);
         expect(container.querySelectorAll('[data-part="description"]')).toHaveLength(1);
-        expect(container.querySelectorAll('[data-part="action"]')).toHaveLength(1);
+        // The Modern notification is the Notifier's notification role: caller actions sit in `actions`.
+        expect(container.querySelectorAll(engine === 'modern' ? '[data-part="actions"]' : '[data-part="action"]')).toHaveLength(1);
         expect(container.querySelectorAll('[data-part="close-button"]')).toHaveLength(1);
       },
     );

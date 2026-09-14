@@ -135,8 +135,8 @@ describe('Message', () => {
     // Reactivated against the modern engine: the classic engine delegates
     // auto-close to Ant Design's CSS-animation-driven removal, which
     // happy-dom cannot observe. The modern engine runs the lifecycle on
-    // plain timers: expiry stamps data-state='exit' for one 160ms skin exit
-    // cadence, then removes the node.
+    // plain timers: expiry stamps data-open='false' for the governed exit
+    // window, then removes the node.
     it('auto closes after duration', () => {
       vi.useFakeTimers();
       let messageApi: any;
@@ -154,11 +154,11 @@ describe('Message', () => {
       expect(screen.getByText('Quick')).toBeInTheDocument();
 
       // Expiry begins the exit lifecycle: the node stays mounted, stamped
-      // data-state='exit', until the skin's 160ms exit cadence elapses.
+      // data-open='false', until the governed exit window elapses.
       act(() => {
         vi.advanceTimersByTime(500);
       });
-      expect(screen.getByRole('alert')).toHaveAttribute('data-state', 'exit');
+      expect(screen.getByRole('alert')).toHaveAttribute('data-open', 'false');
 
       act(() => {
         vi.advanceTimersByTime(160);

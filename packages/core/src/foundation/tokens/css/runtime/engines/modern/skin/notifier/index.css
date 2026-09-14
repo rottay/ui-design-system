@@ -1,0 +1,493 @@
+/**
+ * Modern Notifier skin.
+ *
+ * One announcement surface, `ds-notifier ds-notifier--modern[data-part='root']`,
+ * with three roles on `data-variant`: `toast` (title, copy, inline controls),
+ * `notification` (title, copy, caller actions under a rule, an optional
+ * activatable card) and `message` (one status line). `data-tone` picks the
+ * accent, ink, wash and edges; `data-open='false'` plays the exit; the
+ * lifetime bar drains over the runtime `--ds-notifier-lifetime` and freezes on
+ * `data-paused`. Stacks, `ds-notifier-stack[data-part='stack']`, sit on the
+ * runtime `--ds-notifier-layer` at their logical edge. Every channel is written
+ * by `derivation/chrome/notifier` or `presentation/components/notifier`.
+ */
+
+@keyframes ds-notifier-enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--ds-notifier-travel-direction, -1) * var(--ds-notifier-travel) * var(--ds-motion-intensity)))
+      scale(calc(1 - var(--ds-notifier-scale-step) * var(--ds-motion-intensity)));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-notifier-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--ds-notifier-travel-direction, -1) * var(--ds-notifier-travel) * var(--ds-motion-intensity)))
+      scale(calc(1 - var(--ds-notifier-scale-step) * var(--ds-motion-intensity)));
+  }
+}
+
+@keyframes ds-notifier-drain {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* ---- Stack ---- */
+
+.ds-notifier-stack[data-part='stack'] {
+  --ds-notifier-travel-direction: -1;
+  position: fixed;
+  z-index: var(--ds-notifier-layer);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-notifier-stack-gap);
+  box-sizing: border-box;
+  inline-size: min(var(--ds-notifier-stack-width), calc(100dvw - var(--ds-notifier-stack-gutter) * 2));
+  pointer-events: none;
+}
+
+.ds-notifier-stack[data-part='stack'][data-variant='toast'] { --ds-notifier-stack-width: var(--ds-notifier-toast-width); }
+.ds-notifier-stack[data-part='stack'][data-variant='notification'] { --ds-notifier-stack-width: var(--ds-notifier-notification-width); }
+.ds-notifier-stack[data-part='stack'][data-variant='message'] {
+  --ds-notifier-stack-width: var(--ds-notifier-message-width);
+  align-items: center;
+  gap: var(--ds-notifier-message-stack-gap);
+}
+
+.ds-notifier-stack[data-part='stack'][data-placement^='top'] { top: var(--ds-notifier-stack-offset); }
+.ds-notifier-stack[data-part='stack'][data-placement^='bottom'] {
+  --ds-notifier-travel-direction: 1;
+  bottom: var(--ds-notifier-stack-offset);
+}
+.ds-notifier-stack[data-part='stack'][data-variant='toast'][data-placement^='bottom'] { flex-direction: column-reverse; }
+.ds-notifier-stack[data-part='stack'][data-placement$='start'] { inset-inline-start: var(--ds-notifier-stack-gutter); }
+.ds-notifier-stack[data-part='stack'][data-placement$='end'] { inset-inline-end: var(--ds-notifier-stack-gutter); }
+.ds-notifier-stack[data-part='stack']:is([data-placement='top'], [data-placement='bottom']) {
+  inset-inline: 0;
+  margin-inline: auto;
+}
+
+.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'] {
+  pointer-events: auto;
+  transition: transform var(--ds-notifier-transition-duration) var(--ds-notifier-transition-curve);
+}
+.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-depth='1'] {
+  transform: scale(calc(1 - var(--ds-notifier-stack-recede))) translateY(calc(var(--ds-notifier-travel-direction) * var(--ds-notifier-stack-step)));
+}
+.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-depth='2'] {
+  transform: scale(calc(1 - var(--ds-notifier-stack-recede) * 2)) translateY(calc(var(--ds-notifier-travel-direction) * var(--ds-notifier-stack-step) * 2));
+}
+.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-open='false'] {
+  pointer-events: none;
+  animation: ds-notifier-exit var(--ds-notifier-exit-duration) var(--ds-notifier-exit-curve) both;
+}
+
+/* ---- Surface ---- */
+
+.ds-notifier.ds-notifier--modern[data-part='root'] {
+  --ds-notifier-surface-bg: var(--ds-notifier-toast-bg, var(--ds-material-overlay-background));
+  --ds-notifier-surface-shadow: var(--ds-notifier-toast-shadow, var(--ds-elevation-3));
+  --ds-notifier-accent: var(--ds-notifier-neutral-accent, var(--ds-color-primary));
+  --ds-notifier-ink: var(--ds-notifier-neutral-ink, var(--ds-color-primary));
+  --ds-notifier-wash: var(--ds-notifier-neutral-wash, var(--ds-notifier-surface-bg));
+  --ds-notifier-well: var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg));
+  --ds-notifier-edge: var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color));
+  --ds-notifier-edge-strong: var(--ds-notifier-neutral-edge-strong, var(--ds-notifier-border-color));
+  --ds-notifier-well-edge: var(--ds-notifier-neutral-well-edge, var(--ds-notifier-border-color));
+  --ds-notifier-rule: var(--ds-notifier-neutral-rule, var(--ds-notifier-border-color));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-neutral-lifetime, var(--ds-color-primary));
+  position: relative;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  overflow: hidden;
+  pointer-events: auto;
+  color: var(--ds-notifier-color, var(--ds-color-text-primary));
+  background: linear-gradient(
+    var(--ds-notifier-sheen-angle),
+    var(--ds-notifier-wash),
+    var(--ds-notifier-surface-bg) var(--ds-notifier-sheen-stop)
+  );
+  border: var(--ds-notifier-border-width) var(--ds-notifier-border-style) var(--ds-notifier-edge);
+  border-radius: var(--ds-notifier-radius);
+  box-shadow: var(--ds-notifier-surface-shadow);
+  animation: ds-notifier-enter var(--ds-notifier-enter-duration) var(--ds-notifier-enter-curve) both;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='notification'] {
+  --ds-notifier-surface-bg: var(--ds-notifier-notification-bg, var(--ds-material-overlay-background));
+  --ds-notifier-surface-shadow: var(--ds-notifier-notification-shadow, var(--ds-elevation-3));
+  --ds-notifier-accent: var(--ds-notifier-info-accent, var(--ds-color-info));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] {
+  --ds-notifier-surface-bg: var(--ds-notifier-message-bg, var(--ds-material-overlay-background));
+  --ds-notifier-surface-shadow: var(--ds-notifier-message-shadow, var(--ds-elevation-3));
+  inline-size: auto;
+  min-inline-size: min(var(--ds-notifier-message-min-width), calc(100dvw - var(--ds-notifier-stack-gutter) * 2));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-open='false'] {
+  pointer-events: none;
+  animation: ds-notifier-exit var(--ds-notifier-exit-duration) var(--ds-notifier-exit-curve) both;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-elevated='false'] { box-shadow: none; }
+.ds-notifier.ds-notifier--modern[data-part='root'][data-radius='none'] { border-radius: 0; }
+.ds-notifier.ds-notifier--modern[data-part='root'][data-radius='sm'] { border-radius: var(--ds-radius-sm); }
+.ds-notifier.ds-notifier--modern[data-part='root'][data-radius='md'] { border-radius: var(--ds-radius-md); }
+.ds-notifier.ds-notifier--modern[data-part='root'][data-radius='lg'] { border-radius: var(--ds-radius-lg); }
+
+/* ---- Tones ---- */
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='primary'] {
+  --ds-notifier-accent: var(--ds-notifier-primary-accent);
+  --ds-notifier-ink: var(--ds-notifier-primary-ink);
+  --ds-notifier-wash: var(--ds-notifier-primary-wash);
+  --ds-notifier-well: var(--ds-notifier-primary-well);
+  --ds-notifier-edge: var(--ds-notifier-primary-edge);
+  --ds-notifier-edge-strong: var(--ds-notifier-primary-edge-strong);
+  --ds-notifier-well-edge: var(--ds-notifier-primary-well-edge);
+  --ds-notifier-rule: var(--ds-notifier-primary-rule);
+  --ds-notifier-lifetime-ink: var(--ds-notifier-primary-lifetime);
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='secondary'] {
+  --ds-notifier-accent: var(--ds-notifier-secondary-accent);
+  --ds-notifier-ink: var(--ds-notifier-secondary-ink);
+  --ds-notifier-wash: var(--ds-notifier-secondary-wash);
+  --ds-notifier-well: var(--ds-notifier-secondary-well);
+  --ds-notifier-edge: var(--ds-notifier-secondary-edge);
+  --ds-notifier-edge-strong: var(--ds-notifier-secondary-edge-strong);
+  --ds-notifier-well-edge: var(--ds-notifier-secondary-well-edge);
+  --ds-notifier-rule: var(--ds-notifier-secondary-rule);
+  --ds-notifier-lifetime-ink: var(--ds-notifier-secondary-lifetime);
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='info'] {
+  --ds-notifier-accent: var(--ds-notifier-info-accent);
+  --ds-notifier-ink: var(--ds-notifier-info-ink);
+  --ds-notifier-wash: var(--ds-notifier-info-wash);
+  --ds-notifier-well: var(--ds-notifier-info-well);
+  --ds-notifier-edge: var(--ds-notifier-info-edge);
+  --ds-notifier-edge-strong: var(--ds-notifier-info-edge-strong);
+  --ds-notifier-well-edge: var(--ds-notifier-info-well-edge);
+  --ds-notifier-rule: var(--ds-notifier-info-rule);
+  --ds-notifier-lifetime-ink: var(--ds-notifier-info-lifetime);
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='success'] {
+  --ds-notifier-accent: var(--ds-notifier-success-accent);
+  --ds-notifier-ink: var(--ds-notifier-success-ink);
+  --ds-notifier-wash: var(--ds-notifier-success-wash);
+  --ds-notifier-well: var(--ds-notifier-success-well);
+  --ds-notifier-edge: var(--ds-notifier-success-edge);
+  --ds-notifier-edge-strong: var(--ds-notifier-success-edge-strong);
+  --ds-notifier-well-edge: var(--ds-notifier-success-well-edge);
+  --ds-notifier-rule: var(--ds-notifier-success-rule);
+  --ds-notifier-lifetime-ink: var(--ds-notifier-success-lifetime);
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='warning'] {
+  --ds-notifier-accent: var(--ds-notifier-warning-accent);
+  --ds-notifier-ink: var(--ds-notifier-warning-ink);
+  --ds-notifier-wash: var(--ds-notifier-warning-wash);
+  --ds-notifier-well: var(--ds-notifier-warning-well);
+  --ds-notifier-edge: var(--ds-notifier-warning-edge);
+  --ds-notifier-edge-strong: var(--ds-notifier-warning-edge-strong);
+  --ds-notifier-well-edge: var(--ds-notifier-warning-well-edge);
+  --ds-notifier-rule: var(--ds-notifier-warning-rule);
+  --ds-notifier-lifetime-ink: var(--ds-notifier-warning-lifetime);
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='error'] {
+  --ds-notifier-accent: var(--ds-notifier-error-accent);
+  --ds-notifier-ink: var(--ds-notifier-error-ink);
+  --ds-notifier-wash: var(--ds-notifier-error-wash);
+  --ds-notifier-well: var(--ds-notifier-error-well);
+  --ds-notifier-edge: var(--ds-notifier-error-edge);
+  --ds-notifier-edge-strong: var(--ds-notifier-error-edge-strong);
+  --ds-notifier-well-edge: var(--ds-notifier-error-well-edge);
+  --ds-notifier-rule: var(--ds-notifier-error-rule);
+  --ds-notifier-lifetime-ink: var(--ds-notifier-error-lifetime);
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='loading'] {
+  --ds-notifier-accent: var(--ds-notifier-loading-accent);
+  --ds-notifier-ink: var(--ds-notifier-loading-ink);
+  --ds-notifier-wash: var(--ds-notifier-loading-wash);
+  --ds-notifier-well: var(--ds-notifier-loading-well);
+  --ds-notifier-edge: var(--ds-notifier-loading-edge);
+  --ds-notifier-edge-strong: var(--ds-notifier-loading-edge-strong);
+  --ds-notifier-well-edge: var(--ds-notifier-loading-well-edge);
+  --ds-notifier-rule: var(--ds-notifier-loading-rule);
+  --ds-notifier-lifetime-ink: var(--ds-notifier-loading-lifetime);
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='gradient'] {
+  --ds-notifier-well: var(--ds-notifier-gradient-well);
+  --ds-notifier-edge: var(--ds-notifier-gradient-edge);
+  --ds-notifier-well-edge: var(--ds-notifier-gradient-edge);
+  --ds-notifier-ink: currentColor;
+  --ds-notifier-description-color: currentColor;
+  color: var(--ds-notifier-gradient-color);
+  background: var(--ds-notifier-gradient-bg);
+}
+
+/* ---- Anatomy ---- */
+
+.ds-notifier.ds-notifier--modern[data-part='root'] > [data-part='layout'] {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--ds-notifier-gap);
+  padding: var(--ds-notifier-padding);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] > [data-part='layout'] {
+  align-items: center;
+  padding-block: var(--ds-notifier-message-padding-block);
+  padding-inline: var(--ds-notifier-message-padding-inline);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='icon'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-notifier-well-size);
+  block-size: var(--ds-notifier-well-size);
+  box-sizing: border-box;
+  color: var(--ds-notifier-ink);
+  background: var(--ds-notifier-well);
+  border: var(--ds-notifier-hairline-width) var(--ds-notifier-border-style) var(--ds-notifier-well-edge);
+  border-radius: var(--ds-notifier-well-radius);
+  box-shadow: var(--ds-notifier-well-keyline);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] [data-part='icon'] {
+  inline-size: var(--ds-notifier-message-well-size);
+  block-size: var(--ds-notifier-message-well-size);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='spinner'] {
+  display: inline-block;
+  inline-size: var(--ds-notifier-spinner-size);
+  block-size: var(--ds-notifier-spinner-size);
+  box-sizing: border-box;
+  border: var(--ds-notifier-spinner-width) var(--ds-notifier-border-style) var(--ds-notifier-spinner-track);
+  border-block-start-color: var(--ds-notifier-spinner-head);
+  border-radius: var(--ds-radius-full);
+  animation: ds-foundation-spin var(--ds-notifier-spin-duration) linear infinite;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='body'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-notifier-copy-gap);
+  min-inline-size: 0;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='title'] {
+  font-family: var(--ds-notifier-title-font-family);
+  font-size: var(--ds-notifier-title-font-size);
+  font-weight: var(--ds-notifier-title-font-weight);
+  line-height: var(--ds-notifier-title-line-height);
+  letter-spacing: var(--ds-notifier-title-letter-spacing);
+  overflow-wrap: break-word;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='notification'] [data-part='title'] {
+  color: var(--ds-notifier-notification-title-color, var(--ds-notifier-color));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root']:is([data-tone='warning'], [data-tone='error']) [data-part='title'] {
+  font-weight: var(--ds-notifier-title-urgent-font-weight);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] [data-part='title'] {
+  font-family: inherit;
+  font-size: var(--ds-notifier-message-font-size);
+  font-weight: var(--ds-notifier-message-font-weight);
+  letter-spacing: normal;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message']:is([data-tone='warning'], [data-tone='error']) [data-part='title'] {
+  font-weight: var(--ds-notifier-message-urgent-font-weight);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='description'], [data-part='content']) {
+  color: var(--ds-notifier-description-color);
+  font-family: var(--ds-notifier-description-font-family);
+  font-size: var(--ds-notifier-description-font-size);
+  line-height: var(--ds-notifier-description-line-height);
+  overflow-wrap: break-word;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='actions'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-notifier-control-gap);
+  margin-block-start: var(--ds-notifier-gap);
+  padding-block-start: var(--ds-notifier-gap);
+  border-block-start: var(--ds-notifier-hairline-width) var(--ds-notifier-border-style) var(--ds-notifier-rule);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='controls'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-notifier-control-gap);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  block-size: var(--ds-notifier-control-size);
+  cursor: pointer;
+  color: var(--ds-notifier-control-color);
+  background: var(--ds-notifier-control-bg);
+  border: var(--ds-notifier-hairline-width) var(--ds-notifier-border-style) var(--ds-notifier-control-border);
+  border-radius: var(--ds-notifier-control-radius);
+  font: inherit;
+  transition-property: transform, background-color, border-color, box-shadow, color;
+  transition-duration: var(--ds-notifier-transition-duration);
+  transition-timing-function: var(--ds-notifier-transition-curve);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='action'] {
+  padding-inline: var(--ds-notifier-control-padding-inline);
+  font-size: var(--ds-notifier-control-font-size);
+  font-weight: var(--ds-notifier-control-font-weight);
+  background: var(--ds-notifier-well);
+  border-color: var(--ds-notifier-edge);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='close-button'] {
+  inline-size: var(--ds-notifier-control-size);
+  padding: 0;
+  color: var(--ds-notifier-close-color);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] [data-part='close-button'] {
+  inline-size: var(--ds-notifier-message-control-size);
+  block-size: var(--ds-notifier-message-control-size);
+  color: var(--ds-notifier-message-close-color, var(--ds-notifier-close-color));
+}
+
+/* An invisible centered hit area meets the touch floor without growing the control. */
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button'])::after {
+  content: '';
+  position: absolute;
+  inset-block: min(0px, calc((100% - var(--ds-notifier-touch-target-min)) / 2));
+  inset-inline: min(0px, calc((100% - var(--ds-notifier-touch-target-min)) / 2));
+}
+
+@media (hover: hover) {
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='hovered'], :hover) {
+    transform: translateY(var(--ds-notifier-control-lift));
+    color: var(--ds-notifier-close-color-hover);
+    background-color: var(--ds-notifier-control-bg-hover);
+    border-color: var(--ds-notifier-edge-strong);
+    box-shadow: var(--ds-notifier-control-shadow-hover);
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] [data-part='close-button']:is([data-state~='hovered'], :hover) {
+    color: var(--ds-notifier-message-close-color-hover, var(--ds-notifier-close-color-hover));
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true']:is([data-state~='hovered'], :hover) {
+    transform: translateY(var(--ds-notifier-clickable-lift));
+    border-color: var(--ds-notifier-edge-strong);
+    box-shadow: var(--ds-notifier-clickable-shadow-hover);
+  }
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='pressed'], :active) {
+  transform: scale(var(--ds-notifier-press-scale));
+  background-color: var(--ds-notifier-control-bg-hover);
+  border-color: var(--ds-notifier-edge-strong);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true'] {
+  cursor: pointer;
+  transition-property: transform, box-shadow, border-color;
+  transition-duration: var(--ds-notifier-transition-duration);
+  transition-timing-function: var(--ds-notifier-transition-curve);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true']:is([data-state~='pressed'], :active) {
+  transform: translateY(0);
+  border-color: var(--ds-notifier-edge-strong);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='focus-visible'], :focus-visible),
+.ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: none;
+  box-shadow: var(--ds-notifier-focus-ring);
+}
+
+/* ---- Lifetime ---- */
+
+.ds-notifier.ds-notifier--modern[data-part='root'] > [data-part='progress'] {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: var(--ds-notifier-lifetime-size);
+  background: var(--ds-notifier-lifetime-ink);
+  transform-origin: left center;
+  animation: ds-notifier-drain var(--ds-notifier-lifetime) linear both;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root']:dir(rtl) > [data-part='progress'] {
+  transform-origin: right center;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-paused='true'] > [data-part='progress'] {
+  animation-play-state: paused;
+}
+
+/* ---- Platform postures ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-notifier.ds-notifier--modern[data-part='root'],
+  .ds-notifier.ds-notifier--modern[data-part='root'][data-open='false'],
+  .ds-notifier.ds-notifier--modern[data-part='root'] > [data-part='progress'],
+  .ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-open='false'] {
+    animation: none;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']),
+  .ds-notifier-stack[data-part='stack'] > [data-part='stack-item'] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-notifier.ds-notifier--modern[data-part='root'],
+  .ds-notifier.ds-notifier--modern[data-part='root'] [data-part='icon'],
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']) {
+    color: CanvasText;
+    background: Canvas;
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] [data-part='actions'] {
+    border-block-start-color: ButtonText;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='focus-visible'], :focus-visible),
+  .ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-notifier-focus-ring-width) solid Highlight;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] > [data-part='progress'] {
+    background: Highlight;
+  }
+}

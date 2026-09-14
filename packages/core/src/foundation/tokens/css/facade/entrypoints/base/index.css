@@ -82,6 +82,7 @@
 @import "../../../presentation/components/dropdown/index.css" layer(rottay-components);
 @import "../../../presentation/components/tooltip/index.css" layer(rottay-components);
 @import "../../../presentation/components/tour/index.css" layer(rottay-components);
+@import "../../../presentation/components/notifier/index.css" layer(rottay-components);
 @import "../../../presentation/components/checkbox/index.css" layer(rottay-components);
 @import "../../../presentation/components/radio/index.css" layer(rottay-components);
 @import "../../../presentation/components/segmented/index.css" layer(rottay-components);
@@ -270,16 +271,13 @@
 @import "../../../runtime/engines/rustic/skin/drawer/index.css" layer(rottay-engines);
 @import "../../../presentation/components/skin/drawer-compounds/index.css"
   layer(rottay-components);
-@import "../../../runtime/engines/modern/skin/toast/index.css" layer(rottay-engines);
+@import "../../../runtime/engines/modern/skin/notifier/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/toast/index.css" layer(rottay-engines);
 @import "../../../presentation/components/skin/toast-compounds/index.css"
   layer(rottay-components);
 @import "../../../presentation/components/skin/toast-animation-keyframes/index.css"
   layer(rottay-components);
-@import "../../../runtime/engines/modern/skin/message/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/message/index.css" layer(rottay-engines);
-@import "../../../runtime/engines/modern/skin/notification/index.css"
-  layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/notification/index.css"
   layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/result/index.css" layer(rottay-engines);
