@@ -245,10 +245,19 @@ full certification for every lot; it does not waive a WO's substantive acceptanc
 criteria or final certification. State and dependencies remain in the existing
 registry; denominator definitions and authorities are unchanged.
 
-- **Writer and auditor:** Opus (Daniel profile when using Claude) or Kimi may
-  implement a bounded lot. Every lot needs an independent code auditor; nobody
-  approves their own implementation. Verify actual model/profile/session identity,
-  never a terminal label. Kimi remains DT/integrator.
+- **Writer and auditor (account seats, owner 2026-09-14):** the writer seat is
+  `claude-admin` (profile `~/.claude-admin`, account admin@rottay.com) running the
+  real Opus model; Kimi runs as `kimi-admin` and is DT, coordinator and the
+  independent code auditor and integrator of every Opus lot. The default/Daniel profile
+  (`claude-daniel`) is not used for programme work, and no other account may be
+  consumed without owner authorization. Nobody approves their own implementation:
+  if Kimi exceptionally writes product code under an explicit write-set, that code
+  requires another independent auditor before integration. The ordinary
+  implement/audit/integrate cycle does not wait for Fable or Codex, and no ACCEPT
+  may be fabricated in their name; the shared-core review rule below is unchanged
+  and still binds where it applies. Verify the executable, profile, effective
+  account and real model identifier before each dispatch, never a terminal label.
+  Kimi remains DT/integrator.
 - **Before shared-core design is adopted:** Codex, Fable and Kimi review the SAME
   debrief: WO, base, proposed contract, owners/write set, invariants, alternatives
   and executable acceptance. Core means catalog/permissions, precedence, derivation
@@ -539,16 +548,21 @@ until `WO-CON-04`'s amended acceptance repairs it. The work-order burn-down move
 for the same reason; no obligation was deleted, and every reopened work order carries its
 prior evidence verbatim in its `progressLog` reopen record.
 
-**OWNER-PENDING — absolute fan-out floors (blocking, not annotating).** The kit's
-`broad-scope` rows carry an absolute minimum of families "fixed in the catalog"; that
-consolidated floor decision is reserved to the owner and has not landed (marker:
-`roadmap/kit-2026-09.md` §5 rule 1). Until it does, the certification claims that
-depend on unfixed minima are **BLOCKED, not merely annotated**: `WO-EVI-02`'s fleet
-by-axis acceptance, **milestone B**, and the fleet side of the former A2. A gate may
-not be reported green, and those claims may not be certified, by choosing a floor
-inside the programme. Existing explicit minima (the D-27 kit rows, the catalog-fixed
-broad-scope minima and `WO-DER-02`'s `states.emphasis ≥ 10 families` lane gate) stand
-verbatim and are not reopened by this marker.
+**Fan-out floors — DECIDED 2026-09-10 (`roadmap/kit-2026-09.md` §5b).** The
+consolidated absolute fan-out floors are no longer owner-pending: D1 fixes **20 real
+families per `states` control** with the applicable population fixed and justified per
+control (no synthetic probe or best-of-vertical reading; D1 gates the family-cut wave
+and fleet certification that consume it, not the close of a root WO whose family
+adoption was formally assigned to the cuts); D2 keeps the material-arm `ratioFloor`
+0.85 as **transitory regression protection, not final certification** (the gate trips
+on a drop of six or more governed channels); D3 **rejects** the ≥4/6-axis pilot
+shortcut — `WO-EVI-05` keeps all applicable axes and both negative controls, and
+`WO-EVI-02` keeps the six non-chromatic axes and its standing threshold. Existing
+explicit minima (the D-27 kit rows, the catalog-fixed broad-scope minima and
+`WO-DER-02`'s `states.emphasis ≥ 10 families` lane gate) stand verbatim. With the
+minima decided, `WO-EVI-02`'s fleet by-axis acceptance and milestone B are **no longer
+blocked by unfixed minima; they remain blocked on their evidence**, which the decision
+does not supply. A gate may still not be reported green by choosing a friendlier floor.
 
 ### Dispositions of the 26 pre-existing open work orders (2026-09-05)
 
