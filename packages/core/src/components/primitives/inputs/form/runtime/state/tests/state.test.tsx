@@ -156,3 +156,149 @@ describe('the rendered form and the public FormInstance read one state owner', (
     expect(container.querySelector('[data-part="feedback-icon"][data-status="validating"]')).toBeNull();
   });
 });
+
+describe('reset restores the effective field defaults', () => {
+  const ENGINES = [['modern', ModernForm], ['rustic', RusticForm]] as const;
+
+  it.each(ENGINES)('%s: a full and a selective reset both restore a Form.Item initialValue', (_engine, Engine) => {
+    const F = Engine as typeof ModernForm;
+    const ref = React.createRef<FormInstance>();
+    en(
+      <F ref={ref}>
+        <F.Item name="city" label="City" initialValue="Quito"><input aria-label="City" /></F.Item>
+      </F>,
+    );
+    const instance = ref.current!;
+    const city = screen.getByLabelText('City');
+    expect(city).toHaveValue('Quito');
+    expect(instance.getFieldValue('city')).toBe('Quito');
+
+    fireEvent.change(city, { target: { value: 'Lima' } });
+    expect(instance.getFieldValue('city')).toBe('Lima');
+    act(() => instance.resetFields(['city']));
+    expect(city).toHaveValue('Quito');
+    expect(instance.getFieldValue('city')).toBe('Quito');
+    expect(instance.isFieldTouched('city')).toBe(false);
+
+    fireEvent.change(city, { target: { value: 'Lima' } });
+    act(() => instance.resetFields());
+    expect(city).toHaveValue('Quito');
+    expect(instance.getFieldsValue()).toEqual({ city: 'Quito' });
+    expect(instance.isFieldsTouched()).toBe(false);
+  });
+
+  it.each(ENGINES)('%s: the form initialValues entry wins over the item initialValue at mount and on reset', (_engine, Engine) => {
+    const F = Engine as typeof ModernForm;
+    const ref = React.createRef<FormInstance>();
+    en(
+      <F ref={ref} initialValues={{ city: 'Cusco' }}>
+        <F.Item name="city" label="City" initialValue="Quito"><input aria-label="City" /></F.Item>
+        <F.Item name="country" label="Country" initialValue="EC"><input aria-label="Country" /></F.Item>
+      </F>,
+    );
+    const instance = ref.current!;
+    const city = screen.getByLabelText('City');
+    const country = screen.getByLabelText('Country');
+    expect(city).toHaveValue('Cusco');
+    expect(country).toHaveValue('EC');
+    expect(instance.getFieldsValue()).toEqual({ city: 'Cusco', country: 'EC' });
+
+    fireEvent.change(city, { target: { value: 'Lima' } });
+    fireEvent.change(country, { target: { value: 'PE' } });
+    act(() => instance.resetFields());
+    expect(city).toHaveValue('Cusco');
+    expect(country).toHaveValue('EC');
+    expect(instance.getFieldsValue()).toEqual({ city: 'Cusco', country: 'EC' });
+
+    fireEvent.change(city, { target: { value: 'Lima' } });
+    act(() => instance.resetFields(['city']));
+    expect(city).toHaveValue('Cusco');
+    expect(instance.getFieldValue('city')).toBe('Cusco');
+  });
+
+  it.each(ENGINES)('%s: a selective reset leaves the neighbouring edit and its touched state alone', (_engine, Engine) => {
+    const F = Engine as typeof ModernForm;
+    const ref = React.createRef<FormInstance>();
+    en(
+      <F ref={ref}>
+        <F.Item name="city" label="City" initialValue="Quito"><input aria-label="City" /></F.Item>
+        <F.Item name="country" label="Country" initialValue="EC"><input aria-label="Country" /></F.Item>
+      </F>,
+    );
+    const instance = ref.current!;
+    const city = screen.getByLabelText('City');
+    const country = screen.getByLabelText('Country');
+
+    fireEvent.change(city, { target: { value: 'Lima' } });
+    fireEvent.change(country, { target: { value: 'PE' } });
+    act(() => instance.resetFields(['city']));
+    expect(city).toHaveValue('Quito');
+    expect(country).toHaveValue('PE');
+    expect(instance.getFieldsValue()).toEqual({ city: 'Quito', country: 'PE' });
+    expect(instance.isFieldTouched('city')).toBe(false);
+    expect(instance.isFieldTouched('country')).toBe(true);
+  });
+
+  it.each(ENGINES)('%s: a reset clears the failed validation and validates the restored default', async (_engine, Engine) => {
+    const F = Engine as typeof ModernForm;
+    const ref = React.createRef<FormInstance>();
+    en(
+      <F ref={ref}>
+        <F.Item name="city" label="City" initialValue="Quito" rules={[{ required: true, message: 'City is required' }]}>
+          <input aria-label="City" />
+        </F.Item>
+      </F>,
+    );
+    const instance = ref.current!;
+    const city = screen.getByLabelText('City');
+
+    fireEvent.change(city, { target: { value: '' } });
+    await act(async () => { await instance.validateFields().catch(() => {}); });
+    expect(screen.getAllByText('City is required').length).toBeGreaterThan(0);
+    expect(instance.getFieldError('city')).toEqual(['City is required']);
+
+    act(() => instance.resetFields(['city']));
+    expect(screen.queryByText('City is required')).toBeNull();
+    expect(instance.getFieldError('city')).toEqual([]);
+    expect(city).toHaveValue('Quito');
+    expect(instance.isFieldTouched('city')).toBe(false);
+    await expect(instance.validateFields()).resolves.toEqual({ city: 'Quito' });
+  });
+
+  it.each(ENGINES)('%s: a remounted field keeps its preserved edit and registers its default for the next reset', (_engine, Engine) => {
+    const F = Engine as typeof ModernForm;
+    const ref = React.createRef<FormInstance>();
+    function Harness() {
+      const [show, setShow] = React.useState(true);
+      return (
+        <>
+          <button type="button" onClick={() => setShow((current) => !current)}>Toggle</button>
+          <F ref={ref}>
+            {show && <F.Item name="city" label="City" initialValue="Quito"><input aria-label="City" /></F.Item>}
+          </F>
+        </>
+      );
+    }
+    en(<Harness />);
+    const instance = ref.current!;
+    const toggle = screen.getByRole('button', { name: 'Toggle' });
+
+    fireEvent.change(screen.getByLabelText('City'), { target: { value: 'Lima' } });
+    fireEvent.click(toggle);
+    expect(screen.queryByLabelText('City')).toBeNull();
+    expect(instance.getFieldValue('city')).toBe('Lima');
+
+    fireEvent.click(toggle);
+    expect(screen.getByLabelText('City')).toHaveValue('Lima');
+    act(() => instance.resetFields());
+    expect(screen.getByLabelText('City')).toHaveValue('Quito');
+    expect(instance.getFieldValue('city')).toBe('Quito');
+
+    fireEvent.click(toggle);
+    act(() => instance.resetFields());
+    expect(instance.getFieldValue('city')).toBeUndefined();
+    fireEvent.click(toggle);
+    expect(screen.getByLabelText('City')).toHaveValue('Quito');
+    expect(instance.getFieldValue('city')).toBe('Quito');
+  });
+});

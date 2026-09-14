@@ -50,6 +50,12 @@ function deleteOwnRecordValue(record: object, key: string): void {
   Reflect.deleteProperty(record, key);
 }
 
+function copyWithoutOwnRecordKey<T>(record: FieldRecord<T>, key: string): FieldRecord<T> {
+  const next = { ...record };
+  deleteOwnRecordValue(next, key);
+  return next;
+}
+
 /** Form-wide presentation every item reads from context. */
 export interface FormPresentation {
   layout: FormLayout;
@@ -71,7 +77,7 @@ export interface FormContextValue extends FormPresentation {
   setError: (name: string, errors: string[]) => void;
   setTouched: (name: string, touched: boolean) => void;
   registerField: (name: string, initialValue?: unknown, rules?: FormRule[]) => void;
-  /** Drops a field's rules and errors when its item leaves the tree, so a removed control cannot keep failing submit. */
+  /** Drops a field's rules, reset default and errors when its item leaves the tree, so a removed control cannot keep failing submit. */
   unregisterField: (name: string) => void;
   validateField: (name: string, rules?: FormRule[]) => Promise<string[]>;
   getFieldRules: (name: string) => FormRule[] | undefined;
@@ -105,13 +111,15 @@ interface FormStore {
   errors: FieldRecord<string[]>;
   touched: FieldRecord<boolean>;
   validating: FieldRecord<boolean>;
+  /** The `initialValue` each mounted item declared: a field's reset value when the form's `initialValues` say nothing. */
+  defaults: FieldRecord<unknown>;
   version: number;
   listeners: Set<() => void>;
   host: MountedForm | null;
 }
 
 function createFormStore(): FormStore {
-  return { values: {}, errors: {}, touched: {}, validating: {}, version: 0, listeners: new Set(), host: null };
+  return { values: {}, errors: {}, touched: {}, validating: {}, defaults: {}, version: 0, listeners: new Set(), host: null };
 }
 
 function notifyStore(store: FormStore): void {
@@ -137,6 +145,14 @@ function seedInitialValues(store: FormStore, initialValues: FieldRecord<unknown>
   const next = { ...store.values };
   missing.forEach((key) => writeOwnRecordValue(next, key, readOwnRecordValue(initialValues, key)));
   store.values = next;
+}
+
+/** Fills the slots the form's own `initialValues` left undefined with the items' registered `initialValue`s. */
+function fillFieldDefaults(values: FieldRecord<unknown>, defaults: FieldRecord<unknown>, keys: string[]): void {
+  keys.forEach((key) => {
+    if (readOwnRecordValue(values, key) !== undefined || !hasOwnRecordKey(defaults, key)) return;
+    writeOwnRecordValue(values, key, readOwnRecordValue(defaults, key));
+  });
 }
 
 type InternalFormInstance<T> = FormInstance<T> & {
@@ -180,24 +196,27 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
       resetFields: (fields) => {
         const initial = store.host?.initialValues() ?? {};
         if (fields) {
+          const keys = fields.map(toFieldKey);
           const values = { ...store.values };
           const errors = { ...store.errors };
           const touched = { ...store.touched };
           const validating = { ...store.validating };
-          fields.forEach((name) => {
-            const key = toFieldKey(name);
+          keys.forEach((key) => {
             deleteOwnRecordValue(values, key);
             deleteOwnRecordValue(errors, key);
             deleteOwnRecordValue(touched, key);
             deleteOwnRecordValue(validating, key);
             if (hasOwnRecordKey(initial, key)) writeOwnRecordValue(values, key, readOwnRecordValue(initial, key));
           });
+          fillFieldDefaults(values, store.defaults, keys);
           store.values = values;
           store.errors = errors;
           store.touched = touched;
           store.validating = validating;
         } else {
-          store.values = { ...initial };
+          const values = { ...initial };
+          fillFieldDefaults(values, store.defaults, Object.keys(store.defaults));
+          store.values = values;
           store.errors = {};
           store.touched = {};
           store.validating = {};
@@ -329,7 +348,14 @@ export function useFormRuntime(options: FormRuntimeOptions): FormRuntime {
 
   const registerField = useCallback((fieldName: string, initialValue?: unknown, rules?: FormRule[]) => {
     writeOwnRecordValue(fieldRulesRef.current, fieldName, rules);
-    if (initialValue !== undefined && readOwnRecordValue(store.values, fieldName) === undefined) {
+    if (initialValue === undefined) {
+      if (hasOwnRecordKey(store.defaults, fieldName)) store.defaults = copyWithoutOwnRecordKey(store.defaults, fieldName);
+      return;
+    }
+    if (!Object.is(readOwnRecordValue(store.defaults, fieldName), initialValue)) {
+      store.defaults = copyWithOwnRecordValue(store.defaults, fieldName, initialValue);
+    }
+    if (readOwnRecordValue(store.values, fieldName) === undefined) {
       store.values = copyWithOwnRecordValue(store.values, fieldName, initialValue);
       notifyStore(store);
     }
@@ -337,10 +363,9 @@ export function useFormRuntime(options: FormRuntimeOptions): FormRuntime {
 
   const unregisterField = useCallback((fieldName: string) => {
     deleteOwnRecordValue(fieldRulesRef.current, fieldName);
+    if (hasOwnRecordKey(store.defaults, fieldName)) store.defaults = copyWithoutOwnRecordKey(store.defaults, fieldName);
     if (readOwnRecordValue(store.errors, fieldName) === undefined) return;
-    const next = { ...store.errors };
-    deleteOwnRecordValue(next, fieldName);
-    store.errors = next;
+    store.errors = copyWithoutOwnRecordKey(store.errors, fieldName);
     notifyStore(store);
   }, [store]);
 

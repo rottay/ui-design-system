@@ -205,7 +205,7 @@ export interface FormInstance<T = unknown> {
   setFieldValue: (name: string | number | (string | number)[], value: unknown) => void;
   /** Merges partial values into the form state */
   setFieldsValue: (values: Partial<T>) => void;
-  /** Resets fields to their initial values. Pass no args to reset all. */
+  /** Resets fields to their initial values: the form's `initialValues` entry, else the item's `initialValue`. Pass no args to reset all. */
   resetFields: (fields?: (string | number | (string | number)[])[]) => void;
   /** Validates fields and returns the values. Rejects if validation fails. */
   validateFields: (nameList?: (string | number | (string | number)[])[]) => Promise<T>;
@@ -301,7 +301,7 @@ export interface FormItemProps {
   validateStatus?: '' | 'success' | 'warning' | 'error' | 'validating';
   /** Whether to show feedback icon */
   hasFeedback?: boolean;
-  /** Initial value */
+  /** Initial value; a form `initialValues` entry for the same name wins, at mount and on `resetFields`. */
   initialValue?: unknown;
   /** Whether to preserve value when field removed */
   preserve?: boolean;
