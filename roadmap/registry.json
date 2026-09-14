@@ -4597,6 +4597,11 @@
      "at": "2026-09-14 09:40",
      "by": "kimi-admin",
      "note": "G107-05 EXACT-CELLS (audit 107): closure shorthand census 0 is inexact — the family-cut CLI reports partsConsumedNotStamped=1 on Input and fanOutUnreached=1 on Input (recipe-profile to WO-DER-06). Input causality omits states.emphasis, states.focus-style and surfaces.elevation-posture, whose inert paths the done evidence acknowledges — those decision x family x vertical/mode cells stay pending and are NOT demonstrated by routing them to DER-06. The Input a11y test filters a known color-contrast finding on BitHire dark Invalid (1.08:1) before asserting empty; a green test is therefore not zero serious findings and the exception must leave with the same lot that resolves the contrast through the canonical compiler/skin route. The bithire dark invalid-input contrast defect stays routed to DER-06/surfaces per the earlier registration."
+    },
+    {
+     "at": "2026-09-14 10:06",
+     "by": "kimi-admin",
+     "note": "R107-FAM-01 + R107-FAM-03 LANDED on r4-recon (0be1b2864 one-state-owner form runtime; be6e39cc2 OTP single-commit composition). Audited by kimi-admin: adversarial audit-107 probes flip exactly the two Form cases and the OTP case green on the candidate and on the integrated branch; 14 form/otp files 126/126 in the lot worktree, 192/192 combined form+otp+select on r4-recon; tsc --noEmit clean; no public contract delta (contracts/index.ts untouched); writer boundaries honored (isFieldsTouched/getFieldsError argument-ignoring left as before; foreign FormInstance note recorded). WO STAYS OPEN for the registered third follow-up (R107-FAM-04: validation options type/len/whitespace/warningOnly, numeric/array min-max, Form.List value operations — bounded lots with contract+runtime cases; no silent removal of public options)."
     }
    ],
    "doneAt": null,
