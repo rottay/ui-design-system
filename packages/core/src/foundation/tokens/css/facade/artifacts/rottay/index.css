@@ -48,6 +48,7 @@
   --ds-alert-error-icon: #EF4444;
   --ds-alert-error-ink: var(--ds-color-error-ink);
   --ds-alert-error-wash: var(--ds-tint-error-8);
+  --ds-alert-error-wash-subtle: var(--ds-tint-error-4);
   --ds-alert-error-well: color-mix(in srgb, var(--ds-color-error) 11%, var(--ds-color-bg-elevated));
   --ds-alert-error-well-edge: color-mix(in srgb, var(--ds-color-error) 34%, var(--ds-color-border));
   --ds-alert-focus-ring: var(--ds-focus-ring);
@@ -60,6 +61,7 @@
   --ds-alert-info-icon: #3B82F6;
   --ds-alert-info-ink: var(--ds-color-info-ink);
   --ds-alert-info-wash: var(--ds-tint-info-8);
+  --ds-alert-info-wash-subtle: var(--ds-tint-info-4);
   --ds-alert-info-well: color-mix(in srgb, var(--ds-color-info) 11%, var(--ds-color-bg-elevated));
   --ds-alert-info-well-edge: color-mix(in srgb, var(--ds-color-info) 34%, var(--ds-color-border));
   --ds-alert-keyline: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(35% * var(--ds-effect-intensity)), transparent);
@@ -74,6 +76,7 @@
   --ds-alert-success-icon: #22C55E;
   --ds-alert-success-ink: var(--ds-color-success-ink);
   --ds-alert-success-wash: var(--ds-tint-success-8);
+  --ds-alert-success-wash-subtle: var(--ds-tint-success-4);
   --ds-alert-success-well: color-mix(in srgb, var(--ds-color-success) 11%, var(--ds-color-bg-elevated));
   --ds-alert-success-well-edge: color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border));
   --ds-alert-texture: var(--ds-gradient-surface);
@@ -93,6 +96,7 @@
   --ds-alert-warning-icon: #F59E0B;
   --ds-alert-warning-ink: var(--ds-color-warning-ink);
   --ds-alert-warning-wash: var(--ds-tint-warning-8);
+  --ds-alert-warning-wash-subtle: var(--ds-tint-warning-4);
   --ds-alert-warning-well: color-mix(in srgb, var(--ds-color-warning) 11%, var(--ds-color-bg-elevated));
   --ds-alert-warning-well-edge: color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border));
   --ds-alert-well-keyline: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent);

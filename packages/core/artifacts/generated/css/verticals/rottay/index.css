@@ -1019,7 +1019,9 @@
      ======================================================================== */
 
   /* Component-specific radius */
-  --ds-radius-button: var(--ds-radius-md);
+  /* `initial` means NO silhouette decided: a value here would shadow the
+     per-size control ramp every button size resolves underneath it. */
+  --ds-radius-button: initial;
   --ds-radius-input: var(--ds-radius-md);
   --ds-radius-card: var(--ds-radius-lg);
   --ds-radius-modal: var(--ds-radius-xl);
@@ -1180,7 +1182,10 @@
      rather than a calc() so the fallback-parity gate can compare a skin's
      fallback against it; a calc() resolves to nothing it can check. */
   --ds-z-index-message: 1790;
-  --ds-z-index-alert: calc(var(--ds-z-index-base) + 1);
+  /* An alert orders one step above page content. Written as the literal
+     step for the same reason as the message band above: a calc() resolves
+     to nothing the fallback-parity gate can compare a skin's fallback to. */
+  --ds-z-index-alert: 1;
   --ds-z-index-banner: var(--ds-z-index-sticky);
 
   /* Forms */
@@ -6549,7 +6554,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-xs-icon-size: 0.75rem;       /* 12px */
   --ds-button-xs-gap: 0.25rem;             /* 4px */
   --ds-button-xs-border-radius: var(--ds-radius-sm);
-  --ds-button-xs-radius: var(--ds-button-xs-border-radius);
+  --ds-button-xs-radius: var(
+    --ds-radius-button,
+    var(--ds-button-xs-border-radius)
+  );
 
   /* SM - Small */
   --ds-button-sm-height: 2rem;             /* 32px */
@@ -6561,7 +6569,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-sm-icon-size: 1rem;          /* 16px */
   --ds-button-sm-gap: 0.375rem;            /* 6px */
   --ds-button-sm-border-radius: var(--ds-radius-md);
-  --ds-button-sm-radius: var(--ds-button-sm-border-radius);
+  --ds-button-sm-radius: var(
+    --ds-radius-button,
+    var(--ds-button-sm-border-radius)
+  );
 
   /* MD - Medium (Default) */
   --ds-button-md-height: 2.5rem;           /* 40px */
@@ -6573,7 +6584,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-md-icon-size: 1.125rem;       /* 18px */
   --ds-button-md-gap: 0.4375rem;            /* 7px */
   --ds-button-md-border-radius: var(--ds-radius-md);
-  --ds-button-md-radius: var(--ds-button-md-border-radius);
+  --ds-button-md-radius: var(
+    --ds-radius-button,
+    var(--ds-button-md-border-radius)
+  );
 
   /* LG - Large */
   --ds-button-lg-height: 3rem;             /* 48px */
@@ -6585,7 +6599,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-lg-icon-size: 1.25rem;       /* 20px */
   --ds-button-lg-gap: 0.625rem;            /* 10px */
   --ds-button-lg-border-radius: var(--ds-radius-lg);
-  --ds-button-lg-radius: var(--ds-button-lg-border-radius);
+  --ds-button-lg-radius: var(
+    --ds-radius-button,
+    var(--ds-button-lg-border-radius)
+  );
 
   /* XL - Extra Large */
   --ds-button-xl-height: 3.5rem;           /* 56px */
@@ -6597,7 +6614,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-button-xl-icon-size: 1.5rem;         /* 24px */
   --ds-button-xl-gap: 0.75rem;             /* 12px */
   --ds-button-xl-border-radius: var(--ds-radius-lg);
-  --ds-button-xl-radius: var(--ds-button-xl-border-radius);
+  --ds-button-xl-radius: var(
+    --ds-radius-button,
+    var(--ds-button-xl-border-radius)
+  );
 
   /* Default size */
   --ds-button-gap: var(--ds-button-md-gap);
@@ -21117,7 +21137,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   /* DaisyUI 5 structural vocabulary. Do not reintroduce the removed Daisy 4
      `--rounded-*`, `--animation-*`, `--btn-focus-scale` or `--tab-*` names. */
   --radius-selector: var(--ds-radius-sm);
-  --radius-field: var(--ds-radius-button);
+  --radius-field: var(--ds-radius-button, var(--ds-radius-md));
   --radius-box: var(--ds-radius-lg);
   --size-selector: var(--ds-spacing-1);
   --size-field: var(--ds-spacing-1);
@@ -47493,6 +47513,21 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   --ds-alert-control-edge-hover: var(--ds-alert-error-control-edge-hover, color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-border)));
 }
 
+/* The folded Callout is the lighter-weight notice of this family: it washes at
+   step 4 of the tint ramp where the alert surface washes at step 8. */
+.ds-alert.ds-alert--modern[data-part='root'][data-emphasis='subtle'] {
+  --ds-alert-wash: var(--ds-alert-info-wash-subtle, color-mix(in oklab, var(--ds-color-info) 4%, var(--ds-color-bg-primary)));
+}
+.ds-alert.ds-alert--modern[data-part='root'][data-emphasis='subtle'][data-tone='success'] {
+  --ds-alert-wash: var(--ds-alert-success-wash-subtle, color-mix(in oklab, var(--ds-color-success) 4%, var(--ds-color-bg-primary)));
+}
+.ds-alert.ds-alert--modern[data-part='root'][data-emphasis='subtle'][data-tone='warning'] {
+  --ds-alert-wash: var(--ds-alert-warning-wash-subtle, color-mix(in oklab, var(--ds-color-warning) 4%, var(--ds-color-bg-primary)));
+}
+.ds-alert.ds-alert--modern[data-part='root'][data-emphasis='subtle'][data-tone='error'] {
+  --ds-alert-wash: var(--ds-alert-error-wash-subtle, color-mix(in oklab, var(--ds-color-error) 4%, var(--ds-color-bg-primary)));
+}
+
 .ds-alert.ds-alert--modern[data-part='root'] > [data-part='icon'] {
   display: grid;
   flex: 0 0 auto;
@@ -48903,6 +48938,8 @@ html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern 
  * `ds-foundation-shimmer` keyframes with `--ds-motion-attention` and
  * `--ds-motion-ease-in-out`; no keyframe is declared for the skeleton. Under
  * reduced motion the bones hold a static flat surface, not a slower shimmer.
+ * Every animation declaration is gated on `data-loading='true'`: a loader that
+ * has finished runs no loop at all, and only the opacity handover is left.
  *
  * SPECIFICITY (P-48): fills and radii clear preflight at (0,3,0)+; the frame
  * paints a border colour, so it reaches (0,4,0) to clear the tenant
@@ -48971,14 +49008,14 @@ html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern 
 }
 
 /* ---- pulse: opacity over the flat fill ---- */
-.ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
-.ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after {
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'][data-measured='false']::after {
   animation: ds-foundation-pulse calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite;
 }
 
 /* ---- shimmer: the sweeping gradient ---- */
-.ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
-.ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'][data-measured='false']::after {
   background: var(
     --ds-skeleton-wave-gradient,
     linear-gradient(
@@ -48997,8 +49034,8 @@ html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern 
 }
 
 /* ---- RTL: the sweep runs against the reading direction by default ---- */
-:dir(rtl) .ds-skeleton-anatomy[data-part='root'] [data-part='bone'],
-.ds-skeleton-anatomy[data-part='root'] [data-part='bone']:dir(rtl) {
+:dir(rtl) .ds-skeleton-anatomy[data-part='root'][data-loading='true'] [data-part='bone'],
+.ds-skeleton-anatomy[data-part='root'][data-loading='true'] [data-part='bone']:dir(rtl) {
   animation-direction: reverse;
 }
 
@@ -49007,19 +49044,20 @@ html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern 
    collapsed frame a static surface, not a paused sweep. */
 @media (prefers-reduced-motion: reduce) {
   .ds-skeleton-anatomy[data-part='root'] > [data-part='source'],
-  .ds-skeleton-anatomy[data-part='root'] > [data-part='bones'],
-  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
-  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
-  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
-  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+  .ds-skeleton-anatomy[data-part='root'] > [data-part='bones'] {
     transition-duration: 0.01ms !important;
+  }
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'][data-measured='false']::after,
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'][data-measured='false']::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
-  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
-  .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
-  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
-  .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'][data-measured='false']::after,
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+  .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'][data-measured='false']::after {
     background: var(
       --ds-skeleton-bg,
       var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
@@ -49027,10 +49065,10 @@ html[data-ds-motion='reduced'] .rottay-skeleton-wrapper.rottay-skeleton--modern 
   }
 }
 
-html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
-html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='pulse'][data-measured='false']::after,
-html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
-html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-animation='shimmer'][data-measured='false']::after {
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'] [data-part='bone']:not([data-bone='frame']),
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='pulse'][data-measured='false']::after,
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'] [data-part='bone']:not([data-bone='frame']),
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loading='true'][data-animation='shimmer'][data-measured='false']::after {
   background: var(
     --ds-skeleton-bg,
     var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
@@ -119590,6 +119628,7 @@ html[lang]:lang(ar) {
   --ds-alert-error-icon: #EF4444;
   --ds-alert-error-ink: var(--ds-color-error-ink);
   --ds-alert-error-wash: var(--ds-tint-error-8);
+  --ds-alert-error-wash-subtle: var(--ds-tint-error-4);
   --ds-alert-error-well: color-mix(in srgb, var(--ds-color-error) 11%, var(--ds-color-bg-elevated));
   --ds-alert-error-well-edge: color-mix(in srgb, var(--ds-color-error) 34%, var(--ds-color-border));
   --ds-alert-focus-ring: var(--ds-focus-ring);
@@ -119602,6 +119641,7 @@ html[lang]:lang(ar) {
   --ds-alert-info-icon: #3B82F6;
   --ds-alert-info-ink: var(--ds-color-info-ink);
   --ds-alert-info-wash: var(--ds-tint-info-8);
+  --ds-alert-info-wash-subtle: var(--ds-tint-info-4);
   --ds-alert-info-well: color-mix(in srgb, var(--ds-color-info) 11%, var(--ds-color-bg-elevated));
   --ds-alert-info-well-edge: color-mix(in srgb, var(--ds-color-info) 34%, var(--ds-color-border));
   --ds-alert-keyline: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(35% * var(--ds-effect-intensity)), transparent);
@@ -119616,6 +119656,7 @@ html[lang]:lang(ar) {
   --ds-alert-success-icon: #22C55E;
   --ds-alert-success-ink: var(--ds-color-success-ink);
   --ds-alert-success-wash: var(--ds-tint-success-8);
+  --ds-alert-success-wash-subtle: var(--ds-tint-success-4);
   --ds-alert-success-well: color-mix(in srgb, var(--ds-color-success) 11%, var(--ds-color-bg-elevated));
   --ds-alert-success-well-edge: color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border));
   --ds-alert-texture: var(--ds-gradient-surface);
@@ -119635,6 +119676,7 @@ html[lang]:lang(ar) {
   --ds-alert-warning-icon: #F59E0B;
   --ds-alert-warning-ink: var(--ds-color-warning-ink);
   --ds-alert-warning-wash: var(--ds-tint-warning-8);
+  --ds-alert-warning-wash-subtle: var(--ds-tint-warning-4);
   --ds-alert-warning-well: color-mix(in srgb, var(--ds-color-warning) 11%, var(--ds-color-bg-elevated));
   --ds-alert-warning-well-edge: color-mix(in srgb, var(--ds-color-warning) 34%, var(--ds-color-border));
   --ds-alert-well-keyline: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent);
