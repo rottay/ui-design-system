@@ -29,6 +29,7 @@
  */
 
 import { useCallback, useEffect, useId, useRef, useSyncExternalStore } from 'react';
+import { isComposingKey } from '@/foundation/behavior/runtime/submit-intent';
 
 // ---------------------------------------------------------------------------
 // Public contract
@@ -224,6 +225,9 @@ let escapeListenerActive = false;
 
 function handleDocumentKeydown(event: KeyboardEvent): void {
   if (event.key !== 'Escape') return;
+  // While an IME owns the keystroke, Escape cancels the candidate, not the
+  // overlay: dismissing here would close the surface the user is typing into.
+  if (isComposingKey(event)) return;
   for (let i = layers.length - 1; i >= 0; i -= 1) {
     const layer = layers[i];
     if (!layer.modal) continue;
