@@ -114,6 +114,19 @@ import {
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
+import { FROZEN_ENGINE_COMPAT_CHANNELS } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
+import { deriveDrawerChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/drawer";
+import { deriveDropdownChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/dropdown";
+
+/** Channels a WO-FAM-04 family deriver states as a decision relation when no vertical authors them. */
+const FAMILY_RELATIONS: Readonly<Record<string, string>> = {
+  ...deriveDrawerChannels(),
+  ...deriveDropdownChannels(),
+};
+
+/** A frozen skin's pre-cut name restates its family twin; the twin is the channel, the name is compatibility. */
+const isCompatTwin = (name: string, delta: Readonly<Record<string, string>>): boolean =>
+  Object.entries(FROZEN_ENGINE_COMPAT_CHANNELS).some(([legacy, current]) => current === name && legacy in delta);
 
 const DEFAULT_CSS = join(
   process.cwd(),
@@ -1974,7 +1987,8 @@ describe("ROTTAY EXTENSION COMPONENT-FAMILY DRAIN - one lowering, both transport
         ...stripped.cssVariables,
         ...(strippedLight?.cssVariables ?? {}),
       };
-      expect(effective[channel]).toBeUndefined();
+      // A WO-FAM-04 family relation restates the channel from decisions once the vertical stops authoring it.
+      expect(effective[channel]).toBe(FAMILY_RELATIONS[channel]);
     }
   );
 
@@ -2087,7 +2101,8 @@ describe("ROTTAY EXTENSION COMPONENT-FAMILY DRAIN - the DB documents of the twen
         },
       };
       const delta = compileDocument(asDocument(chrome));
-      if (Object.keys(delta).length !== 1 || delta[channel] !== "#010203") {
+      const own = Object.keys(delta).filter((name) => !isCompatTwin(name, delta));
+      if (own.length !== 1 || delta[channel] !== "#010203") {
         wrong.push(`${family.prop}.${field}: ${JSON.stringify(delta)}`);
       }
     }
@@ -2096,7 +2111,16 @@ describe("ROTTAY EXTENSION COMPONENT-FAMILY DRAIN - the DB documents of the twen
 
   it("compiles the light document within the compiled-variable guard", () => {
     const delta = compileDocument(asDocument(lightDocumentChrome));
-    const names = Object.keys(delta).sort();
+    const twins = Object.keys(delta).filter((name) => isCompatTwin(name, delta));
+    const names = Object.keys(delta).filter((name) => !twins.includes(name)).sort();
+    // The notifier renamed the message and notification channels; each pre-cut name keeps its value.
+    expect(twins).toHaveLength(7);
+    for (const twin of twins) {
+      const legacy = Object.keys(FROZEN_ENGINE_COMPAT_CHANNELS).find(
+        (name) => FROZEN_ENGINE_COMPAT_CHANNELS[name as `--ds-${string}`] === twin
+      ) as string;
+      expect(delta[twin]).toBe(delta[legacy]);
+    }
     expect(names).toHaveLength(CENSUS.lightLeaves);
     for (const name of names) {
       expect(t3Names).toContain(name);

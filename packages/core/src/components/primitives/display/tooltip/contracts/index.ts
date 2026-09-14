@@ -325,13 +325,21 @@ export const TOOLTIP_DEFAULTS = {
   interactive: false,
 };
 
+/** Absolute offsets of a bubble around its trigger, per placement. */
+export interface TooltipPlacementOffsets {
+  readonly top?: string;
+  readonly right?: string;
+  readonly bottom?: string;
+  readonly left?: string;
+  readonly transform?: string;
+}
+
 /**
- * Placement to CSS position mapping.
+ * Placement to position offsets.
  *
- * Maps each of the 12 tooltip placement options to the inline CSS
- * positioning properties needed to render the tooltip relative to
- * its trigger element. Used by engine implementations to calculate
- * the absolute position of the tooltip container.
+ * Maps each of the 12 tooltip placement options to the offsets the frozen
+ * Rustic engine applies around its trigger. The Modern engine positions its
+ * bubble through the shared overlay kernel and does not read this map.
  *
  * Placement naming convention:
  * - `{side}` - centered along the given side.
@@ -340,7 +348,7 @@ export const TOOLTIP_DEFAULTS = {
  *
  * @constant
  */
-export const PLACEMENT_MAP: Record<string, React.CSSProperties> = {
+export const PLACEMENT_MAP: Record<string, TooltipPlacementOffsets> = {
   top: { bottom: "100%", left: "50%", transform: "translateX(-50%)" },
   "top-start": { bottom: "100%", left: "0" },
   "top-end": { bottom: "100%", right: "0" },

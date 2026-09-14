@@ -67,25 +67,13 @@
 
 import React, { forwardRef } from 'react';
 import type { ModalCloseButtonProps } from '../../../contracts';
+import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
+import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 
-// ============================================================================
-// Constants
-// ============================================================================
-
-/**
- * Size mappings for the close button.
- * Defines button dimensions and governed icon sizes for each variant.
- * @internal
- */
-const SIZE_MAP: Record<'sm' | 'md' | 'lg', { size: string; icon: number }> = {
-  /** Small - 24px button, 14px icon */
-  sm: { size: '24px', icon: 14 },
-  /** Medium - 32px button, 18px icon (default) */
-  md: { size: '32px', icon: 18 },
-  /** Large - 40px button, 22px icon */
-  lg: { size: '40px', icon: 22 },
-};
+/** Governed icon size per close-button size. */
+const ICON_SIZE: Record<'sm' | 'md' | 'lg', number> = { sm: 14, md: 18, lg: 22 };
 
 // ============================================================================
 // Component
@@ -128,35 +116,10 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
       size = 'md',
       className = '',
       style = {},
-      'aria-label': ariaLabel = 'Close modal',
+      'aria-label': ariaLabel,
     } = props;
-
-    // -------------------------------------------------------------------------
-    // Size Configuration
-    // -------------------------------------------------------------------------
-
-    const sizeConfig = SIZE_MAP[size] || SIZE_MAP.md;
-
-    // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    /**
-     * Instance styles for the close button: only the square size resolves
-     * inline (SIZE_MAP contract enum — sanctioned instance geometry). The
-     * stable frame (flex centering, cursor, shrink) and the hover/color
-     * transition live in the compound skin
-     * (modal-compounds.css `[data-part='close-button']`), which consumes pure
-     * `--ds-motion-*` channels — no literal duration fallbacks.
-     */
-    const buttonStyle: React.CSSProperties = {
-      // Dimensions - based on size prop
-      width: sizeConfig.size,
-      height: sizeConfig.size,
-
-      // Merge user styles (takes precedence)
-      ...style,
-    };
+    const i18n = useOptionalTranslation('components');
+    const interaction = useInteractionState();
 
     // -------------------------------------------------------------------------
     // Render
@@ -166,16 +129,18 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
       <button
         ref={ref}
         type="button"
-        data-part="close-button"
-        className={`rottay-modal-close ${className}`.trim()}
-        style={buttonStyle}
+        {...partAttributes('close-button', interaction.state)}
+        {...interaction.handlers}
+        data-size={size}
+        className={`ds-modal-close ${className}`.trim()}
+        style={style}
         onClick={onClose}
-        aria-label={ariaLabel}
+        aria-label={ariaLabel ?? i18n?.tOr('modal.close', 'Close') ?? 'Close'}
       >
         {/* Governed icon role (action.close): tenant icon treatment, sizing
             and stroke follow the icon profile; decorative — the button's
             aria-label owns the accessible name. */}
-        <ActionCloseIcon decorative size={sizeConfig.icon} />
+        <ActionCloseIcon decorative size={ICON_SIZE[size] ?? ICON_SIZE.md} />
       </button>
     );
   }

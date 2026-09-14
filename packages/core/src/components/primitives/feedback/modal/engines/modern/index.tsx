@@ -1,16 +1,8 @@
 /**
  * @fileoverview Canonical Modal Modern Engine - Rottay Design System.
- * Premium overlay modal using the native HTML <dialog> element for built-in
- * top-layer stacking and browser focus trapping. Features backdrop blur,
- * scale+opacity entrance animation, scrollbar-width compensation, and
- * polished header/body/footer sections with DS token-driven styling.
- *
- * Wave 2B: Unified overlay family visual language -- shared backdrop, surface,
- * border, and motion tokens with Drawer and Sheet modern engines.
- *
- * Wave 4: Adaptive fullscreen on mobile -- modals automatically expand to
- * fill the viewport on screens < 640px for a native app-like experience.
- * Controlled via the `adaptiveFullscreen` prop (default: true).
+ * The native `<dialog>` promoted with `showModal()` owns top-layer stacking and
+ * focus trapping. The engine stamps anatomy, presence and the resolved posture;
+ * the modern modal skin paints every section from the family channels.
  *
  * @module Modal/Engines/Modern
  * @category Feedback
@@ -19,78 +11,64 @@
 
 'use client';
 
-import React, { useEffect, useState, useCallback, useRef, useId } from 'react';
+import React, { useEffect, useState, useCallback, useRef, useId, useMemo } from 'react';
 import type { ModalProps } from '../../contracts';
-import { MODAL_DEFAULTS, PADDING_MAP } from '../../contracts';
+import { MODAL_DEFAULTS } from '../../contracts';
+import {
+  OVERLAY_ADAPTATION_DEFAULTS,
+  type ResolvedOverlayAdaptation,
+} from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/overlay';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { usePortalScope } from '../../../../runtime/overlay/portal-scope';
-import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
+import { TopLayerHostProvider, useTopLayerDialog } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
-import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
-// ============================================================================
-// Constants
-// ============================================================================
+const FLOATING: ResolvedOverlayAdaptation = { presentation: 'floating' };
+const FULLSCREEN: ResolvedOverlayAdaptation = { presentation: 'fullscreen' };
 
-/** Shared overlay motion duration. */
-const MOTION_DURATION = 'var(--ds-motion-normal)';
-const MOTION_EASING = 'var(--ds-motion-ease-out)';
-
-const RADIUS_MAP = {
-  none: '0',
-  sm: 'var(--ds-radius-sm)',
-  md: 'var(--ds-radius-md)',
-  lg: 'var(--ds-radius-lg)',
-  xl: 'var(--ds-radius-xl)',
-} as const;
-
-function getOverlayBackground(overlayOpacity: number): string {
-  const clampedPercent = Math.min(Math.max(overlayOpacity, 0), 1) * 100;
-  return `color-mix(in srgb, var(--ds-color-black) ${clampedPercent}%, transparent)`;
-}
-
-// ============================================================================
-// Close Button (shared visual)
-// ============================================================================
-
-function CloseButton({ onClick, label }: { onClick: () => void; label: string }) {
+/** A modal button whose hover, press and focus ring the interaction kernel decides. */
+function ModalButton({
+  part,
+  disabled,
+  children,
+  ...rest
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { part: 'close-button' | 'action' }) {
+  const interaction = useInteractionState({ disabled });
   return (
-    <button
-      type="button"
-      data-part="close-button"
-      onClick={onClick}
-      aria-label={label}
-    >
-      <ActionCloseIcon decorative size={16} />
+    <button type="button" disabled={disabled} {...rest} {...partAttributes(part, interaction.state)} {...interaction.handlers}>
+      {children}
     </button>
   );
 }
 
-// ============================================================================
-// Component
-// ============================================================================
+/**
+ * Caller style may repaint the panel but never strands its geometry: `position`
+ * always belongs to the engine, and the fullscreen pin owns `top`/`left` too.
+ */
+function callerPanelStyle(style: React.CSSProperties, fullscreen: boolean): React.CSSProperties {
+  const { position: _position, ...rest } = style;
+  if (!fullscreen) return rest;
+  const { top: _top, left: _left, ...unpinned } = rest;
+  return unpinned;
+}
 
 /**
  * Modern engine implementation of Modal using the native <dialog> API.
  * Leverages showModal()/close() for built-in top-layer stacking and browser
- * focus trapping. Compensates for scrollbar layout shift.
+ * focus trapping.
  */
 export default function ModernModal(props: ModalProps): React.ReactElement | null {
   // Optional channel with an English floor: the modal renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
-  // The ok/cancel action labels live in the `common` namespace (common.ok /
-  // common.cancel ship for en/es/ar); the `components` namespace only carries
-  // modal.close. Resolving against `common` keeps the English floor verbatim
-  // while letting es/ar locales actually translate the generated actions.
   const i18nCommon = useOptionalTranslation('common');
-
-  const isMobile = usePhoneBreakpoint();
 
   const {
     open = false,
@@ -120,6 +98,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     placement = 'center',
     fullScreen = false,
     adaptiveFullscreen = MODAL_DEFAULTS.adaptiveFullscreen ?? true,
+    adapt,
     preventScroll = MODAL_DEFAULTS.preventScroll ?? true,
     radius = MODAL_DEFAULTS.radius ?? 'lg',
     shadow = MODAL_DEFAULTS.shadow ?? true,
@@ -158,21 +137,32 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   // Inline anchor: the component's DOM position carries the tenant/locale/
   // density lineage that `usePortalScope` snapshots and re-stamps directly on
-  // the portaled <dialog> (the same contract <PortalScope> gives a wrapper,
-  // without adding a node above the dialog — the top-layer nesting contract
-  // pins `dialog.parentElement` to the shared portal root).
+  // the portaled <dialog>, without adding a node above it (the top-layer
+  // nesting contract pins `dialog.parentElement` to the shared portal root).
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
   const portalScope = usePortalScope(anchorEl);
 
-  /** Whether the modal should render as fullscreen on the current viewport. */
-  const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
+  const { adaptation, postureAttribute } = useAdaptation(adapt, {
+    base: fullScreen ? FULLSCREEN : FLOATING,
+    defaults: adaptiveFullscreen && !fullScreen ? OVERLAY_ADAPTATION_DEFAULTS : undefined,
+  });
+  const fullscreen = adaptation.presentation === 'fullscreen';
 
-  // overlay.modal recipe (motion canon): durations/geometry for the panel and
-  // backdrop keyframes resolve from the stamped `--ds-recipe-*` variables.
-  // Under reduced motion the resolver returns the settled state and this
-  // engine declares NO animation at all, so usePresence unmounts immediately.
+  // overlay.modal recipe (motion canon): the skin plays the panel and backdrop
+  // keyframes on the recipe's timing, and declares none when it resolves final.
   const overlayMotion = useMotionRecipePresentation('overlay.modal');
   const motionIsFinal = disableAnimation || overlayMotion.recipe.state === 'final';
+  const motionChannels = useMemo(
+    () =>
+      ({
+        '--ds-modal-enter-duration': overlayMotion.variables['--ds-recipe-enter'],
+        '--ds-modal-exit-duration': overlayMotion.variables['--ds-recipe-exit'],
+        '--ds-modal-enter-curve': overlayMotion.variables['--ds-recipe-curve'],
+        '--ds-modal-enter-y': overlayMotion.variables['--ds-recipe-y'],
+        '--ds-modal-enter-scale': overlayMotion.variables['--ds-recipe-scale-from'],
+      }) as React.CSSProperties,
+    [overlayMotion.variables],
+  );
 
   const handleCancel = useCallback(() => {
     onClose?.();
@@ -184,12 +174,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   // The <dialog> mounts inside <Portal>, which renders null until its own
   // mount effect resolves a container, so the element does not exist on the
-  // commit where `open` first becomes true. A plain ref cannot express that:
-  // it would still be null when an `[open]`-keyed effect runs, and nothing
-  // afterwards would retrigger it. A callback ref turns "the element
-  // attached" into a render-visible signal that the effects below can depend
-  // on. `dialogRef` stays as the imperative handle for callbacks that read
-  // the element outside render (usePresence's onExitComplete).
+  // commit where `open` first becomes true. A callback ref turns "the element
+  // attached" into a render-visible signal the effects below depend on.
   const [dialogEl, setDialogEl] = useState<HTMLDialogElement | null>(null);
   // React nulls `dialogRef` before passive cleanups run, so the teardown cannot
   // read it; `lastDialogRef` records only a real node and survives detachment.
@@ -203,10 +189,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   const restoreTargetRef = useRef<HTMLElement | null>(null);
 
   // Presence: `open` flipping false keeps the dialog mounted and open in the
-  // native top layer until the PANEL's own exit animation (ref'd below)
-  // finishes; only then does the dialog actually leave the top layer (see
-  // onExitComplete). This is what lets the panel/backdrop fade+scale out
-  // instead of the native <dialog> disappearing the instant `open` changes.
+  // native top layer until the panel's own exit animation finishes; only then
+  // does the dialog actually leave the top layer.
   const { shouldRender, dataState, ref: presenceRef } = usePresence(open, {
     onExitComplete: () => {
       if (dialogRef.current?.open) dialogRef.current.close();
@@ -216,12 +200,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   useModalInertSiblings(shouldRender);
 
   // Shared overlay contract. `modal: false` because a native <dialog> promoted
-  // with showModal() receives Escape as its own `cancel` event, so this engine
-  // must not also claim the router's Escape slot. The scroll lock IS the
-  // kernel's: it is ref-counted, so a lower drawer stays locked when this
-  // modal closes. Registration follows `shouldRender`, keeping the page locked
-  // through the exit animation. An explicit `zIndex` prop still wins;
-  // MODAL_DEFAULTS.zIndex stays exported for API stability.
+  // with showModal() receives Escape as its own `cancel` event. The scroll lock
+  // IS the kernel's: it is ref-counted, so a lower drawer stays locked when
+  // this modal closes. An explicit `zIndex` prop still wins over the band.
   const overlayLayer = useFieldOverlay({
     kind: 'modal',
     open: shouldRender,
@@ -230,33 +211,20 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     lockScroll: preventScroll,
     restoreFocus: false,
   });
-  const resolvedZIndex = zIndex ?? overlayLayer.zIndex;
+  const layer = zIndex === undefined ? overlayLayer.zIndex : String(zIndex);
 
-  // Open the native <dialog> when `open` becomes true. Keyed on `dialogEl`,
-  // not on `open` alone: the element arrives a commit after `open` flips, so
-  // an `[open]`-only effect would run against a null ref and never fire again
-  // -- the dialog would stay out of the top layer for its whole lifetime.
-  // The `!dialog.open` guard keeps promotion single: showModal() on an
-  // already-open dialog throws InvalidStateError, and re-opening during the
-  // exit animation must not re-promote a dialog that never left.
-  // Closing is deliberately NOT symmetric here -- see the usePresence
-  // onExitComplete above, which calls dialog.close() only after the CSS exit
-  // animation finishes, not synchronously with `open` flipping false.
-  useEffect(() => {
-    const dialog = dialogEl;
-    if (!dialog) return;
-    if (open && !dialog.open) {
-      // Native <dialog> restores focus on close() only, so record the invoker
-      // for an unmount that skips close().
-      restoreTargetRef.current = document.activeElement as HTMLElement | null;
-      dialog.showModal();
-      // Lifecycle parity with the shared contract: the promotion is the one
-      // moment the modal becomes visible, so `onOpen` fires exactly once per
-      // open session (the `!dialog.open` guard also suppresses re-fires when
-      // a re-open mid-exit never left the top layer).
-      onOpen?.();
-    }
-  }, [open, dialogEl, onOpen]);
+  // Promotion is keyed on the attached element, which arrives a commit after
+  // `open` flips; the host is withdrawn as soon as the modal stops being the
+  // active top layer, even while its exit animation plays.
+  const rememberInvoker = useCallback(() => {
+    restoreTargetRef.current = document.activeElement as HTMLElement | null;
+  }, []);
+  const topLayerHost = useTopLayerDialog(dialogEl, {
+    open,
+    hosted: open && shouldRender,
+    beforePromote: rememberInvoker,
+    onPromote: onOpen,
+  });
 
   // Unmounting an open dialog skips the close steps, so the browser never
   // restores focus. Guarded on `dialog.open` so it cannot fight a real close().
@@ -270,37 +238,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     if (stranded) target.focus();
   }, []);
 
-  // `showModal()` promotes this dialog into the browser TOP LAYER, which
-  // paints above every normal-flow node regardless of z-index. A descendant
-  // overlay portaling to the shared `#rottay-portal-root` would land there as
-  // a SIBLING of this dialog and be occluded. Publishing a host INSIDE the
-  // dialog keeps those overlays in the same top-layer subtree; `display:
-  // contents` keeps the host out of the dialog's flex layout so it adds no
-  // box. Descendants resolve it through React context, so no component needs
-  // to plumb an anchor.
-  const [topLayerHost, setTopLayerHost] = useState<HTMLElement | null>(null);
-  useEffect(() => {
-    // Gated on `shouldRender` as well as `open`: usePresence keeps the dialog
-    // mounted through the exit animation, so the host must be withdrawn as
-    // soon as the modal stops being the active top layer.
-    const dialog = dialogEl;
-    if (!open || !shouldRender || !dialog) {
-      setTopLayerHost(null);
-      return;
-    }
-    const host = document.createElement('div');
-    host.setAttribute('data-rottay-toplayer-host', 'true');
-    host.style.display = 'contents';
-    dialog.appendChild(host);
-    setTopLayerHost(host);
-    return () => {
-      host.remove();
-      setTopLayerHost(null);
-    };
-  }, [open, shouldRender, dialogEl]);
-
-  // -- backdrop click ---------------------------------------------------------
-
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === e.currentTarget && backdropClosable) {
       handleCancel();
@@ -311,254 +248,138 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     if (open) handleCancel();
   };
 
-  // -- derived values ---------------------------------------------------------
-
-  /** Whether the panel should behave as fullscreen (explicit or adaptive). */
-  const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
-
-  const panelRadius = effectiveFullscreen
-    ? '0'
-    : RADIUS_MAP[radius] || 'var(--ds-radius-lg)';
-
-  const contentPadding = PADDING_MAP[padding] || PADDING_MAP.lg;
   const resolvedFooter = hideFooter
     ? null
     : footer ?? ((onOk || onCancel) ? (
       <>
         {onCancel && (
-          <button
-            type="button"
-            data-part="action"
-            data-action="cancel"
-            onClick={handleCancel}
-          >
+          <ModalButton part="action" data-action="cancel" onClick={handleCancel}>
             {resolvedCancelText}
-          </button>
+          </ModalButton>
         )}
         {onOk && (
-          <button
-            type="button"
-            data-part="action"
+          <ModalButton
+            part="action"
             data-action="ok"
             data-loading={confirmLoading ? 'true' : 'false'}
             disabled={confirmLoading}
             aria-busy={confirmLoading || undefined}
             onClick={onOk}
           >
-            {/* Loading affordance: the skin paints a governed ring on the
-                spinner part and keeps the label painted-invisible (never
-                `visibility:hidden`, so the accessible name survives). The
-                ring is aria-hidden; `aria-busy` carries the state. */}
             {confirmLoading && <span data-part="spinner" aria-hidden="true" />}
             <span data-part="action-label">{resolvedOkText}</span>
-          </button>
+          </ModalButton>
         )}
       </>
     ) : null);
 
-  // Stays mounted while the exit animation plays (usePresence); only unmounts
-  // once dataState has been 'closed' long enough for that animation to finish.
+  const scrim =
+    overlayOpacity == null
+      ? undefined
+      : ({ '--ds-modal-overlay-strength': `${Math.min(Math.max(overlayOpacity, 0), 1) * 100}%` } as React.CSSProperties);
+
   // The anchor must render even while closed: it is the component's own DOM
   // position, the lineage source the portal scope snapshot reads from.
   return (
     <>
       <span ref={setAnchorEl} data-part="anchor" />
       {!shouldRender ? null : (
-    <Portal>
-      {/* Inside <Portal> on purpose: the dialog's own portal must NOT resolve
-          into a host that lives inside itself. Descendants still see it. */}
-      <TopLayerHostProvider host={topLayerHost}>
-      <dialog
-        ref={attachDialog}
-        id={id}
-        data-testid={dataTestId}
-        data-part="root"
-        // Tenant/locale/density scope re-stamped on the portaled root itself
-        // (the <PortalScope> wrapper contract, minus a wrapper node): tenant
-        // selectors like `[data-tenant]`, `dir`/`lang` and inline `--ds-*`
-        // overrides keep resolving as if the dialog had never left the
-        // trigger's ancestry.
-        data-portal-scope="true"
-        {...portalScope.scope}
-        dir={portalScope.direction}
-        lang={portalScope.language}
-        data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
-        data-adaptive-fullscreen={isAdaptiveFullscreen ? 'true' : 'false'}
-        className="rottay-modal-root--modern rottay-modal rottay-modal--modern rottay-overlay-modal-shell--modern"
-        aria-modal="true"
-        aria-label={ariaLabel}
-        /* A custom `header` replaces the built-in title, so the heading group carries the name. */
-        aria-labelledby={!ariaLabel && (header || title) ? titleId : undefined}
-        aria-describedby={describedBy}
-        {...overlayMotion.attributes}
-        style={{
-          // Re-stamped lineage `--ds-*` overrides first; the engine's own
-          // geometry keys below always win on collision.
-          ...portalScope.variables,
-          ...overlayMotion.variables,
-          /* Reset native dialog styling */
-          position: 'fixed',
-          inset: 0,
-          width: 'var(--ds-viewport-inline-size)',
-          height: 'var(--ds-viewport-block-size)',
-          maxWidth: 'var(--ds-viewport-inline-size)',
-          maxHeight: 'var(--ds-viewport-block-size)',
-          margin: 0,
-          padding: 0,
-          display: 'flex',
-          alignItems: isAdaptiveFullscreen
-            ? 'stretch'
-            : effectivePlacement === 'top' ? 'flex-start' : effectivePlacement === 'bottom' ? 'flex-end' : 'center',
-          justifyContent: isAdaptiveFullscreen ? 'stretch' : 'center',
-          paddingTop: isAdaptiveFullscreen ? undefined : effectivePlacement === 'top' ? '10vh' : undefined,
-          paddingBottom: isAdaptiveFullscreen ? undefined : effectivePlacement === 'bottom' ? '10vh' : undefined,
-          zIndex: resolvedZIndex,
-          // Compatibility channel retained on the semantic dialog root while
-          // the canonical skin consumes `--ds-overlay-modal-radius` from the
-          // surface below.
-          ['--ds-modal-surface-radius' as any]: panelRadius,
-        }}
-        onClick={handleBackdropClick}
-        onCancel={(event) => {
-          event.preventDefault();
-          if (closeOnEscape) handleCancel();
-        }}
-        onClose={handleDialogClose}
-      >
-        {/* ---- Backdrop ---- */}
-        {showBackdrop && (
-          <div
-            data-part="backdrop"
-            data-blur={blurBackdrop !== false ? 'true' : 'false'}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              ['--ds-modal-instance-overlay-bg' as any]: overlayOpacity == null
-                ? undefined
-                : getOverlayBackground(overlayOpacity),
-              animation: motionIsFinal
-                ? undefined
-                : dataState === 'open'
-                  ? `ds-overlay-modal-backdrop-enter-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
-                  : `ds-overlay-modal-backdrop-exit-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
-              pointerEvents: 'none',
-            }}
-          />
-        )}
-
-        {/* ---- Panel ---- */}
-        <div
-          ref={presenceRef}
-          data-part="surface"
-          data-open={dataState === 'open' ? 'true' : 'false'}
-          data-size={size}
-          data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
-          data-adaptive-fullscreen={isAdaptiveFullscreen ? 'true' : 'false'}
-          data-shadow={shadow ? 'true' : 'false'}
-          data-divider={divider ? 'true' : 'false'}
-          data-has-header={Boolean(title || description || header || closable) ? 'true' : 'false'}
-          data-has-footer={resolvedFooter ? 'true' : 'false'}
-          role="document"
-          onClick={(e) => e.stopPropagation()}
-          className={className}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            // The radius folds a size enum (RADIUS_MAP) and the fullscreen
-            // override into one value; the skin reads it (not a paint key).
-            ['--ds-overlay-modal-radius' as any]: panelRadius,
-            ['--ds-modal-section-border' as any]: divider
-              ? '1px solid var(--ds-modal-border-color, var(--ds-color-border-subtle))'
-              : 'none',
-            // Motion choreography: the desktop posture keeps the scale+fade
-            // recipe; the adaptive-fullscreen (phone) posture borrows the
-            // Sheet grammar — a bottom slide-up on the same overlay.modal
-            // recipe timing — instead of appearing with no motion at all.
-            // Reduced motion (or disableAnimation) declares NO animation and
-            // the presence hook lands directly on the settled state.
-            animation: motionIsFinal
-              ? undefined
-              : dataState === 'open'
-                ? `${isAdaptiveFullscreen ? 'ds-overlay-modal-sheet-enter-modern' : 'ds-overlay-modal-enter-modern'} var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
-                : `${isAdaptiveFullscreen ? 'ds-overlay-modal-sheet-exit-modern' : 'ds-overlay-modal-exit-modern'} var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
-            overflow: 'hidden',
-            ...style,
-            // FAB-17: THE ENGINE'S POSITIONING BLOCK MERGES LAST. An overlay's
-            // position is ANATOMY, not customization surface -- a Modal that is
-            // not fixed/relative is not a Modal. `style` is a public,
-            // unrestricted CSSProperties hatch, and this engine COMPUTES
-            // geometry against the position it sets: the adaptive-fullscreen
-            // posture pins top/left to 0, which only means anything on a fixed
-            // element. A caller passing `position: static` strands that offset
-            // and the chamber renders at flow position. That is true of the
-            // component as it stands today, and it is the load-bearing reason
-            // for this ordering.
-            // A relocated keyline pseudo would ALSO be re-anchored by such an
-            // override, but that is a secondary consequence and deliberately
-            // NOT the justification: FAB-12 ruled byte-identical keyline
-            // relocation off a bordered, radiused box unachievable, so the
-            // decoration slot may not survive adjudication. This ordering must
-            // not depend on it, and does not.
-            // Popover already merged its positionStyle last -- this aligns the
-            // outliers with their own family's protected members.
-            position: isAdaptiveFullscreen ? 'fixed' : 'relative',
-            ...(isAdaptiveFullscreen ? { top: 0, left: 0 } : {}),
-          }}
-        >
-          {/* ---- Header ----. Layout AND paint live in the modern skin
-              (overlay-modal.css); the engine stamps parts only. */}
-          {(title || description || header || closable) && (
-            <div data-part="header">
-              <div data-part="heading-group" id={header ? titleId : undefined}>
-                {header || (
-                  <>
-                    {title && (
-                      <div
-                        id={titleId}
-                        data-part="title"
-                      >
-                        {title}
-                      </div>
-                    )}
-                    {description && (
-                      <div
-                        id={descriptionId}
-                        data-part="description"
-                      >
-                        {description}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-              {closable && (
-                <CloseButton onClick={handleCancel} label={i18n?.tOr('modal.close', 'Close') ?? 'Close'} />
+        <Portal>
+          <TopLayerHostProvider host={topLayerHost}>
+            <dialog
+              ref={attachDialog}
+              id={id}
+              data-testid={dataTestId}
+              data-part="root"
+              data-portal-scope="true"
+              {...portalScope.scope}
+              dir={portalScope.direction}
+              lang={portalScope.language}
+              data-presentation={adaptation.presentation}
+              data-posture={postureAttribute}
+              data-placement={effectivePlacement}
+              data-motion={motionIsFinal ? 'final' : 'animated'}
+              className="ds-modal ds-modal--modern"
+              aria-modal="true"
+              aria-label={ariaLabel}
+              aria-labelledby={!ariaLabel && (header || title) ? titleId : undefined}
+              aria-describedby={describedBy}
+              {...overlayMotion.attributes}
+              style={{
+                ...portalScope.variables,
+                ...motionChannels,
+                '--ds-modal-layer': layer,
+              } as React.CSSProperties}
+              onClick={handleBackdropClick}
+              onCancel={(event) => {
+                event.preventDefault();
+                if (closeOnEscape) handleCancel();
+              }}
+              onClose={handleDialogClose}
+            >
+              {showBackdrop && (
+                <div
+                  data-part="backdrop"
+                  data-open={dataState === 'open' ? 'true' : 'false'}
+                  data-blur={blurBackdrop !== false ? 'true' : 'false'}
+                  data-scrim={scrim ? 'custom' : undefined}
+                  style={scrim}
+                />
               )}
-            </div>
-          )}
 
-          {/* ---- Body ---- */}
-          <div
-            data-part="body"
-            style={{
-              flex: '1 1 auto',
-              overflowY: 'auto',
-              padding: contentPadding,
-            }}
-          >
-            {children}
-          </div>
+              <div
+                ref={presenceRef}
+                data-part="surface"
+                data-open={dataState === 'open' ? 'true' : 'false'}
+                data-size={size}
+                data-radius={radius}
+                data-padding={padding}
+                data-shadow={shadow ? 'true' : 'false'}
+                data-divider={divider ? 'true' : 'false'}
+                data-has-header={Boolean(title || description || header || closable) ? 'true' : 'false'}
+                data-has-footer={resolvedFooter ? 'true' : 'false'}
+                role="document"
+                onClick={(e) => e.stopPropagation()}
+                className={className || undefined}
+                style={callerPanelStyle(style, fullscreen)}
+              >
+                {(title || description || header || closable) && (
+                  <div data-part="header">
+                    <div data-part="heading-group" id={header ? titleId : undefined}>
+                      {header || (
+                        <>
+                          {title && (
+                            <div id={titleId} data-part="title">
+                              {title}
+                            </div>
+                          )}
+                          {description && (
+                            <div id={descriptionId} data-part="description">
+                              {description}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                    {closable && (
+                      <ModalButton
+                        part="close-button"
+                        onClick={handleCancel}
+                        aria-label={i18n?.tOr('modal.close', 'Close') ?? 'Close'}
+                      >
+                        <ActionCloseIcon decorative size={16} />
+                      </ModalButton>
+                    )}
+                  </div>
+                )}
 
-          {/* ---- Footer ----. Layout lives in the skin. */}
-          {resolvedFooter && (
-            <div data-part="footer">
-              {resolvedFooter}
-            </div>
-          )}
-        </div>
-      </dialog>
-      </TopLayerHostProvider>
-    </Portal>
+                <div data-part="body">{children}</div>
+
+                {resolvedFooter && <div data-part="footer">{resolvedFooter}</div>}
+              </div>
+            </dialog>
+          </TopLayerHostProvider>
+        </Portal>
       )}
     </>
   );

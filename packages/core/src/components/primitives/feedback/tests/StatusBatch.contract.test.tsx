@@ -50,9 +50,10 @@ describe('Status-family data-part contract (WO-SKIN-03 checkpoint S)', () => {
         const root = await waitForPart(container, 'root');
         expect(root.getAttribute('data-tone')).toBe('warning');
         expect(container.querySelectorAll('[data-part="icon"]')).toHaveLength(1);
-        expect(container.querySelectorAll('[data-part="label"]')).toHaveLength(1);
+        // The Modern alert names its message line `title` and its dismiss `close-button`.
+        expect(container.querySelectorAll(engine === 'modern' ? '[data-part="title"]' : '[data-part="label"]')).toHaveLength(1);
         expect(container.querySelectorAll('[data-part="description"]')).toHaveLength(1);
-        expect(container.querySelectorAll('[data-part="action"]')).toHaveLength(1);
+        expect(container.querySelectorAll(engine === 'modern' ? '[data-part="close-button"]' : '[data-part="action"]')).toHaveLength(1);
       },
     );
 
@@ -65,6 +66,7 @@ describe('Status-family data-part contract (WO-SKIN-03 checkpoint S)', () => {
         expect(container.querySelectorAll('[data-part="icon"]')).toHaveLength(0);
         expect(container.querySelectorAll('[data-part="description"]')).toHaveLength(0);
         expect(container.querySelectorAll('[data-part="action"]')).toHaveLength(0);
+        expect(container.querySelectorAll('[data-part="close-button"]')).toHaveLength(0);
       },
     );
   });

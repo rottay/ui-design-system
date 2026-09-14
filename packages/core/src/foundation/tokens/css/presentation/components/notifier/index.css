@@ -1,0 +1,57 @@
+/**
+ * Notifier Component Tokens - Rottay Design System
+ *
+ * Structural constants of the notifier family (toast, notification and
+ * message roles) and the defaults of its runtime channels. Its decision
+ * relations are emitted by the compiler family `derivation/chrome/notifier`.
+ */
+
+:root {
+  --ds-notifier-layer: var(--ds-z-index-toast);
+  --ds-notifier-lifetime: 0ms;
+  --ds-notifier-stack-offset: var(--ds-spacing-4);
+  --ds-notifier-stack-gutter: var(--ds-spacing-4);
+  --ds-notifier-stack-gap: var(--ds-spacing-3);
+  --ds-notifier-message-stack-gap: var(--ds-spacing-2);
+  --ds-notifier-stack-recede: 0.035;
+  --ds-notifier-stack-step: 5px;
+  --ds-notifier-toast-width: 28rem;
+  --ds-notifier-notification-width: 26rem;
+  --ds-notifier-message-width: 34rem;
+  --ds-notifier-message-min-width: 20rem;
+  --ds-notifier-radius: var(--ds-radius-lg);
+  --ds-notifier-border-width: var(--ds-edge-standard-width);
+  --ds-notifier-border-style: var(--ds-edge-standard-style);
+  --ds-notifier-hairline-width: var(--ds-edge-hairline-width);
+  --ds-notifier-padding: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-notifier-message-padding-block: calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
+  --ds-notifier-message-padding-inline: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-notifier-gap: var(--ds-spacing-3);
+  --ds-notifier-copy-gap: var(--ds-spacing-1);
+  --ds-notifier-sheen-angle: 135deg;
+  --ds-notifier-sheen-stop: 60%;
+  --ds-notifier-well-size: 2.25rem;
+  --ds-notifier-message-well-size: 1.875rem;
+  --ds-notifier-well-radius: var(--ds-radius-md);
+  --ds-notifier-control-size: 2rem;
+  --ds-notifier-message-control-size: 1.875rem;
+  --ds-notifier-control-radius: var(--ds-radius-md);
+  --ds-notifier-control-gap: var(--ds-spacing-2);
+  --ds-notifier-control-padding-inline: var(--ds-spacing-3);
+  --ds-notifier-control-lift: -1px;
+  --ds-notifier-clickable-lift: -2px;
+  --ds-notifier-lifetime-size: var(--ds-border-width-2);
+  --ds-notifier-spinner-size: var(--ds-icon-sm-size);
+  --ds-notifier-spinner-width: var(--ds-border-width-2);
+  --ds-notifier-travel: 0.75rem;
+  --ds-notifier-scale-step: 0.05;
+  --ds-notifier-focus-ring-width: var(--ds-focus-ring-width);
+  --ds-notifier-enter-duration: var(--ds-motion-reveal);
+  --ds-notifier-enter-curve: var(--ds-motion-ease-enter);
+  --ds-notifier-exit-duration: var(--ds-motion-feedback);
+  --ds-notifier-exit-curve: var(--ds-motion-ease-exit);
+  --ds-notifier-transition-duration: var(--ds-motion-feedback);
+  --ds-notifier-transition-curve: var(--ds-motion-ease-standard);
+  --ds-notifier-spin-duration: var(--ds-motion-glacial);
+  --ds-notifier-touch-target-min: var(--ds-touch-target-min);
+}

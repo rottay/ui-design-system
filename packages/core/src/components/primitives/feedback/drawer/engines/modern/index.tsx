@@ -2,24 +2,25 @@
 
 /**
  * @fileoverview Drawer Modern Engine - Rottay Design System
- * @description Premium slide-in drawer panel with backdrop blur, directional
- * slide animation, and polished header/body/footer layout. Uses DS tokens for
- * surfaces, elevation, motion, and radii. Narrow viewports are served by the
- * inline dynamic-viewport clamp (`--ds-viewport-inline-size` / `--ds-viewport-block-size`): a size preset that does
- * not fit the viewport degrades to full-bleed instead of overflowing (never a
- * squeezed panel with horizontal scroll).
- *
- * Wave 2B: Unified overlay family visual language -- shared backdrop, surface,
- * border, and motion tokens with Modal and Sheet modern engines.
+ * @description Slide-in panel on the shared overlay contract. The engine stamps
+ * anatomy, presence, placement and the resolved posture; the modern drawer
+ * skin paints the scrim, the panel, its sections and its motion from the
+ * family channels.
  *
  * @module Drawer/Engines/Modern
  * @category Feedback
  * @package @rottay/design-system
  */
 
-import React, { useEffect, useCallback, useId } from 'react';
+import React, { useCallback, useId, useMemo } from 'react';
 import type { DrawerProps, DrawerSize } from '../../contracts';
 import { DRAWER_DEFAULTS } from '../../contracts';
+import {
+  OVERLAY_ADAPTATION_DEFAULTS,
+  type ResolvedOverlayAdaptation,
+} from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/overlay';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
@@ -28,48 +29,31 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { LayoutSidebarStartIcon } from '@/graphics/icons/semantic/generated/roles/layout-sidebar-start';
 
-// ============================================================================
-// Constants
-// ============================================================================
+const FLOATING: ResolvedOverlayAdaptation = { presentation: 'floating' };
 
-/** Shared overlay motion tokens. */
-const MOTION_DURATION = 'var(--ds-motion-normal)';
-const MOTION_EASING = 'var(--ds-motion-ease-out)';
+/** A numeric extent is px; a string passes through as authored. */
+function extent(value: number | string | undefined): string | undefined {
+  if (value === undefined) return undefined;
+  return typeof value === 'number' ? `${value}px` : value;
+}
 
-/** Enter animation name lookup by placement. Keyframes ship in the modern Drawer skin. */
-const SLIDE_ANIMATION: Record<string, string> = {
-  left: 'ds-drawer-slide-left-modern',
-  right: 'ds-drawer-slide-right-modern',
-  top: 'ds-drawer-slide-top-modern',
-  bottom: 'ds-drawer-slide-bottom-modern',
-};
-
-/** Exit animation name lookup by placement -- mirrors SLIDE_ANIMATION. */
-const SLIDE_OUT_ANIMATION: Record<string, string> = {
-  left: 'ds-drawer-slide-out-left-modern',
-  right: 'ds-drawer-slide-out-right-modern',
-  top: 'ds-drawer-slide-out-top-modern',
-  bottom: 'ds-drawer-slide-out-bottom-modern',
-};
-
-/** Premium size presets shared with the public Drawer contract. */
-const SIZE_MAP: Record<DrawerSize, string> = {
-  sm: '256px',
-  md: '378px',
-  lg: '520px',
-  xl: '736px',
-  full: '100%',
-};
-
-// ============================================================================
-// Close Button (shared visual with Modal/Sheet)
-// ============================================================================
+/**
+ * Caller style may repaint the panel but never strands it: the fixed position,
+ * the viewport edges and the layer band belong to the engine.
+ */
+function callerPanelStyle(style: React.CSSProperties | undefined): React.CSSProperties | undefined {
+  if (!style) return undefined;
+  const { position: _position, zIndex: _zIndex, top: _top, right: _right, bottom: _bottom, left: _left, inset: _inset, ...rest } = style;
+  return rest;
+}
 
 function CloseButton({ onClick, label }: { onClick: () => void; label: string }) {
+  const interaction = useInteractionState();
   return (
     <button
       type="button"
-      data-part="close-button"
+      {...partAttributes('close-button', interaction.state)}
+      {...interaction.handlers}
       onClick={onClick}
       aria-label={label}
     >
@@ -78,16 +62,9 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
   );
 }
 
-// ============================================================================
-// Component
-// ============================================================================
-
 export default function ModernDrawer(props: DrawerProps): React.ReactElement {
-  // Optional channel: the drawer keeps its standalone rendering contract and
-  // falls back to the English accessibility floor when no I18nProvider is
-  // mounted (never a hard useTranslation crash). The close label lives at
-  // components.drawer.close (shipped for en/es/ar), the same key the Sheet
-  // modern engine consumes.
+  // Optional channel: the drawer renders standalone and falls back to the
+  // English accessibility floor when no I18nProvider is mounted.
   const i18n = useOptionalTranslation('components');
   const {
     open,
@@ -106,6 +83,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     closeOnEscape = DRAWER_DEFAULTS.closeOnEscape,
     mask = DRAWER_DEFAULTS.mask,
     maskOpacity,
+    adapt,
     className = '',
     style,
     id,
@@ -116,23 +94,18 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   const generatedTitleId = useId();
   const titleId = `${id || generatedTitleId}-title`;
 
-  // -- handlers ---------------------------------------------------------------
-
   const handleClose = useCallback(() => {
     onClose?.();
     onOpenChange?.(false);
   }, [onClose, onOpenChange]);
 
-  // Presence: `open` flipping false keeps the drawer mounted (dataState
-  // 'closed') until its own slide-out animation finishes, instead of
-  // vanishing the instant `open` changes.
+  // Presence: `open` flipping false keeps the drawer mounted until its own
+  // slide-out animation finishes.
   const { shouldRender, dataState, ref: presenceRef } = usePresence(open ?? false);
 
-  // Shared overlay contract: canonical `--ds-z-drawer` band with a stack
-  // offset, the single Escape router (top-most blocking layer only), and the
-  // ref-counted body scroll lock. Registration follows `shouldRender` so the
-  // page behind stays locked through the slide-out animation, and the refcount
-  // keeps it locked when an alert-dialog stacked on top of this drawer closes.
+  // Shared overlay contract: the drawer band with a stack offset, the single
+  // Escape router and the ref-counted scroll lock, registered through the
+  // slide-out so the page behind stays locked until the panel has left.
   const overlayLayer = useFieldOverlay({
     kind: 'drawer',
     open: shouldRender,
@@ -143,218 +116,108 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     ...(closeOnEscape ? { onDismiss: handleClose } : {}),
   });
 
-  // overlay.sheet recipe (motion canon): a drawer is a side panel, so its
-  // enter/exit timing resolves from the sheet recipe's stamped `--ds-recipe-*`
-  // variables. The slide travel stays the skin's anatomical 100%. Under
-  // reduced motion the resolver returns the settled state, no animation is
-  // declared, and usePresence unmounts immediately on close.
+  const { adaptation, postureAttribute } = useAdaptation(adapt, {
+    base: FLOATING,
+    defaults: OVERLAY_ADAPTATION_DEFAULTS,
+  });
+
+  // overlay.sheet recipe: a drawer is a side panel, so its enter/exit timing
+  // resolves from the sheet recipe; the skin declares no animation when final.
   const overlayMotion = useMotionRecipePresentation('overlay.sheet');
   const motionIsFinal = overlayMotion.recipe.state === 'final';
 
-  // -- early return -----------------------------------------------------------
+  const panelChannels = useMemo(
+    () =>
+      ({
+        '--ds-drawer-layer': overlayLayer.zIndex,
+        '--ds-drawer-enter-duration': overlayMotion.variables['--ds-recipe-enter'],
+        '--ds-drawer-exit-duration': overlayMotion.variables['--ds-recipe-exit'],
+        '--ds-drawer-enter-curve': overlayMotion.variables['--ds-recipe-curve'],
+        ...(width === undefined ? null : { '--ds-drawer-width': extent(width) }),
+        ...(height === undefined ? null : { '--ds-drawer-height': extent(height) }),
+        ...callerPanelStyle(style),
+      }) as React.CSSProperties,
+    [overlayLayer.zIndex, overlayMotion.variables, width, height, style],
+  );
+
+  const scrimChannels = useMemo(
+    () =>
+      ({
+        '--ds-drawer-layer': overlayLayer.zIndex,
+        '--ds-drawer-enter-duration': overlayMotion.variables['--ds-recipe-enter'],
+        '--ds-drawer-exit-duration': overlayMotion.variables['--ds-recipe-exit'],
+        '--ds-drawer-enter-curve': overlayMotion.variables['--ds-recipe-curve'],
+        ...(maskOpacity == null ? null : { '--ds-drawer-overlay-opacity': maskOpacity }),
+      }) as React.CSSProperties,
+    [overlayLayer.zIndex, overlayMotion.variables, maskOpacity],
+  );
 
   if (!shouldRender) return <></>;
 
-  // -- size calculations ------------------------------------------------------
-
-  const drawerSize = size as DrawerSize;
-  const isHorizontal = placement === 'left' || placement === 'right';
-  const resolvedWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : '100%');
-  const resolvedHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : '100%');
-  const animationName =
-    (dataState === 'open' ? SLIDE_ANIMATION[placement as string] : SLIDE_OUT_ANIMATION[placement as string]) ||
-    (dataState === 'open' ? SLIDE_ANIMATION.right : SLIDE_OUT_ANIMATION.right);
-
-  // -- position styles --------------------------------------------------------
-
-  // Surface paint (fill, the four border longhands, elevation, the per-placement
-  // radius, and the zeroed flush edge) is keyed on `data-placement` in the modern
-  // Drawer skin. Only geometry is assembled here.
-  const getPositionStyles = (): React.CSSProperties => {
-    const base: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: 'column',
-      ...overlayMotion.variables,
-      animation: motionIsFinal
-        ? undefined
-        : dataState === 'open'
-          ? `${animationName} var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
-          : `${animationName} var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
-      overflow: 'hidden',
-      ...style,
-      // FAB-17: THE ENGINE'S POSITIONING BLOCK MERGES LAST. A drawer's fixed
-      // positioning is ANATOMY, not customization surface -- a drawer that is
-      // not fixed is not a drawer. `style` is a public, unrestricted
-      // CSSProperties hatch, and the switch below COMPUTES a viewport-edge
-      // rect against this position: top/left/right/bottom plus a dynamic-viewport
-      // span, which only pin to the viewport on a fixed element. A caller
-      // passing `position: static` strands that rect and the panel renders in
-      // flow. That is true of the component as it stands today, and it is the
-      // load-bearing reason for this ordering.
-      // A relocated keyline pseudo would ALSO be re-anchored by such an
-      // override, but that is a secondary consequence and deliberately NOT the
-      // justification: FAB-12 ruled byte-identical keyline relocation off a
-      // bordered, radiused box unachievable, so the decoration slot may not
-      // survive adjudication. This ordering must not depend on it, and does
-      // not. Popover already merged its positionStyle last -- this aligns the
-      // outliers with their own family's protected members.
-      //
-      // The placement COORDINATES were already safe: the switch below spreads
-      // `...base` and then adds top/left/width/height, so they always outrank
-      // caller style. Only `position` and the owned `zIndex` were exposed.
-      position: 'fixed',
-      // Tokenized overlay stack (spec section 9): the panel sits one tier
-      // above the backdrop via the drawer/overlay pair, not a `zBase + 1`
-      // magic-number offset. The layer manager supplies the canonical drawer
-      // band (equal to --ds-z-drawer for a lone drawer) plus a stack offset.
-      zIndex: overlayLayer.zIndex,
-    };
-
-    switch (placement) {
-      case 'left':
-        return {
-          ...base,
-          top: 0,
-          left: 0,
-          width: resolvedWidth,
-          height: 'var(--ds-viewport-block-size)',
-          maxWidth: 'var(--ds-viewport-inline-size)',
-        };
-      case 'right':
-        return {
-          ...base,
-          top: 0,
-          right: 0,
-          width: resolvedWidth,
-          height: 'var(--ds-viewport-block-size)',
-          maxWidth: 'var(--ds-viewport-inline-size)',
-        };
-      case 'top':
-        return {
-          ...base,
-          top: 0,
-          left: 0,
-          width: 'var(--ds-viewport-inline-size)',
-          height: resolvedHeight,
-          maxHeight: 'var(--ds-viewport-block-size)',
-        };
-      case 'bottom':
-        return {
-          ...base,
-          bottom: 0,
-          left: 0,
-          width: 'var(--ds-viewport-inline-size)',
-          height: resolvedHeight,
-          maxHeight: 'var(--ds-viewport-block-size)',
-        };
-      default:
-        return base;
-    }
-  };
-
-  // -- render -----------------------------------------------------------------
+  const motion = motionIsFinal ? 'final' : 'animated';
 
   return (
     <>
-      {/* Backdrop overlay with blur. Scrim + glass layer (spec section 5) are
-          painted by the modern Drawer skin; the skin's unlayered backdrop-filter
-          is what keeps personality.css's `.rottay-drawer-overlay` blur(4px)
-          override off this engine, exactly as the inline filter used to. */}
       {mask && (
         <div
           data-part="backdrop"
-          className="rottay-drawer-overlay rottay-drawer-backdrop--modern"
+          data-open={dataState === 'open' ? 'true' : 'false'}
+          data-motion={motion}
+          className="ds-drawer-backdrop"
           onClick={closeOnOverlayClick && closable !== false ? handleClose : undefined}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            // The scrim rides THIS layer's band, one tier under its own panel
-            // (the rustic engine's `zIndex` / `zIndex + 1` pair). A fixed
-            // `--ds-z-overlay` sat below every drawer band, so a second drawer's
-            // scrim rendered under the first drawer's panel: the panel below
-            // stayed undimmed and kept swallowing the clicks meant for the
-            // scrim.
-            zIndex: `calc(${overlayLayer.zIndex} - 1)`,
-            // maskOpacity rides the same --ds-drawer-overlay-opacity hatch the
-            // rustic engine stamps; the modern skin's scrim consumes it with
-            // the pre-existing 0.8 fill as its default (unset = unchanged).
-            ...(maskOpacity != null
-              ? ({ '--ds-drawer-overlay-opacity': maskOpacity } as React.CSSProperties)
-              : null),
-            ...overlayMotion.variables,
-            animation: motionIsFinal
-              ? undefined
-              : dataState === 'open'
-                ? `ds-drawer-backdrop-fade-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
-                : `ds-drawer-backdrop-fade-out-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
-          }}
+          style={scrimChannels}
         />
       )}
 
-      {/* Drawer panel. The shared FocusTrap owns the modal focus contract the
-          layer stack deliberately delegates (initial focus into the panel,
-          Tab/Shift+Tab cycling, restore to the trigger on deactivate — the
-          layer's own restoreFocus stays off to avoid a double restore). The
-          wrapper is display:contents so it adds no layout box. */}
-      <FocusTrap
-        active={dataState === 'open'}
-        autoFocus
-        restoreFocus
-        style={{ display: 'contents' }}
-      >
-      <div
-        ref={presenceRef}
-        id={id}
-        data-testid={dataTestId}
-        data-part="surface"
-        {...overlayMotion.attributes}
-        data-placement={placement}
-        data-size={drawerSize}
-        data-has-title={title ? 'true' : 'false'}
-        data-has-footer={!hideFooter && footer ? 'true' : 'false'}
-        data-open={dataState === 'open' ? 'true' : 'false'}
-        role="dialog"
-        aria-modal="true"
-        aria-label={ariaLabel}
-        aria-labelledby={!ariaLabel && title ? titleId : undefined}
-        aria-describedby={ariaDescribedBy}
-        className={`rottay-drawer rottay-drawer-${placement} rottay-drawer--modern ${className}`.trim()}
-        style={getPositionStyles()}
-      >
-        {/* ---- Header ---- */}
-        {(title || closable) && (
-          <div data-part="header">
-            <div data-part="heading-group">
-              {title && (
-                <>
-                  <span data-part="header-icon" aria-hidden="true">
-                    <LayoutSidebarStartIcon decorative size={18} />
-                  </span>
-                  {/* The dialog's title is a heading (the rustic engine's
-                      <h3>), carried as a role so no UA heading margin lands
-                      inside the skin-owned header band. */}
-                  <div id={titleId} data-part="title" role="heading" aria-level={2}>
-                    {title}
-                  </div>
-                </>
-              )}
+      {/* The shared FocusTrap owns initial focus, Tab cycling and the restore
+          to the trigger; its wrapper adds no layout box. */}
+      <FocusTrap active={dataState === 'open'} autoFocus restoreFocus className="ds-drawer-trap">
+        <div
+          ref={presenceRef}
+          id={id}
+          data-testid={dataTestId}
+          data-part="surface"
+          {...overlayMotion.attributes}
+          data-placement={placement}
+          data-size={size}
+          data-custom-width={width === undefined ? undefined : 'true'}
+          data-custom-height={height === undefined ? undefined : 'true'}
+          data-presentation={adaptation.presentation}
+          data-posture={postureAttribute}
+          data-motion={motion}
+          data-has-title={title ? 'true' : 'false'}
+          data-has-footer={!hideFooter && footer ? 'true' : 'false'}
+          data-open={dataState === 'open' ? 'true' : 'false'}
+          role="dialog"
+          aria-modal="true"
+          aria-label={ariaLabel}
+          aria-labelledby={!ariaLabel && title ? titleId : undefined}
+          aria-describedby={ariaDescribedBy}
+          className={`ds-drawer ds-drawer--modern ${className}`.trim()}
+          style={panelChannels}
+        >
+          {(title || closable) && (
+            <div data-part="header">
+              <div data-part="heading-group">
+                {title && (
+                  <>
+                    <span data-part="header-icon" aria-hidden="true">
+                      <LayoutSidebarStartIcon decorative size={18} />
+                    </span>
+                    <div id={titleId} data-part="title" role="heading" aria-level={2}>
+                      {title}
+                    </div>
+                  </>
+                )}
+              </div>
+              {closable && <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />}
             </div>
-            {closable && <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />}
-          </div>
-        )}
+          )}
 
-        {/* ---- Body ---- */}
-        <div data-part="body">
-          {children}
+          <div data-part="body">{children}</div>
+
+          {!hideFooter && footer && <div data-part="footer">{footer}</div>}
         </div>
-
-        {/* ---- Footer ---- */}
-        {!hideFooter && footer && (
-          <div data-part="footer">
-            {footer}
-          </div>
-        )}
-      </div>
       </FocusTrap>
     </>
   );

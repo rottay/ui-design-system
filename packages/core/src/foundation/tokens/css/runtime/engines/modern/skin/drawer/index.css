@@ -1,524 +1,479 @@
 /**
- * Modern Drawer skin (WO-SKIN-03 checkpoint O).
+ * Modern Drawer skin.
  *
- * LAYER: `layer(rottay-engines)`. The canonical order lives in
- * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
- * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
- * component base and is in turn overridden by the structure and surface tiers;
- * the unlayered compiled tenant artifact wins over all of them.
- *
- * ===========================================================================
- * PERSONALITY FLOOR (the load-bearing constraint in this file)
- * ===========================================================================
- * `runtime/personality.css` is imported `layer(rottay-personality)` and carries
- * two rules that match this engine's own class names:
- *
- *   .rottay-drawer          -> transition: transform ...            spec (0,1,0)
- *   .rottay-drawer-overlay  -> transition: opacity ...              spec (0,1,0)
- *                              backdrop-filter: blur(4px)
- *                              -webkit-backdrop-filter: blur(4px)
- *
- * Both are LAYERED, and an unlayered declaration outranks EVERY layer regardless
- * of specificity. So the backdrop rule below (unlayered, b=2) beats the layered
- * blur(4px) on `backdrop-filter` / `-webkit-backdrop-filter` -- reproducing
- * exactly what the inline filter did before this migration. If the token
- * `--ds-glass-backdrop-filter` is unset, the declaration is invalid at computed
- * value time and resolves to `none`; it does NOT fall back to the personality
- * rule, which is again what the inline value did. The floor to clear is (0,1,0);
- * this file sits above it by construction, not by escalation.
- *
- * The `transition` channels on both rules are personality's alone -- this engine
- * never set them inline and this skin does not declare them, so those rules stay
- * live, unchanged.
- *
- * WHAT THIS FILE MUST NOT DO: the rustic engine shares the `.rottay-drawer-overlay`
- * class and sets NO backdrop-filter of its own, so personality's blur(4px) is its
- * only blur and is genuinely LIVE there. Every rule here is keyed on the
- * `--modern` scope class; nothing may be keyed on the bare shared class, or
- * rustic's blur would be overridden out of existence.
- * ===========================================================================
- *
- * SPECIFICITY (P-48): the surface's border COLOR rule reaches b >= 4 to clear the
- * tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
- * border-color floor at (0,3,1); the per-placement flush-edge rules sit one unit
- * above it so the zeroed width wins over the base 1px. Border longhands stay
- * LONGHAND (never collapsed into a `border:` shorthand): the flush edge zeroes a
- * single side, and an undefined `--ds-color-border-subtle` must drop only the
- * color channel, exactly as the inline longhands did.
- *
- * DIRECT-CHILD COMBINATORS keep engine section paint off a composed
- * `Drawer.Header`/`Body`/`Footer` compound, which reuses the same `data-part`
- * names inside the body and carries its own skin.
+ * The in-tree panel is `ds-drawer ds-drawer--modern[data-part='surface']`,
+ * fixed to the viewport edge its physical `data-placement` names; the scrim is
+ * `ds-drawer-backdrop`. The panel carries the resolved `data-presentation`
+ * (`floating | fullscreen`) and `data-posture`. Sections are matched through
+ * direct children so a composed `Drawer.Header`/`Body`/`Footer` keeps its own
+ * rules. Every channel is written by `derivation/chrome/drawer` or
+ * `presentation/components/drawer`.
  */
 
-/* ---- backdrop: scrim + glass. Outranks personality's blur(4px), as the inline
-        filter did. The scrim alpha consumes the --ds-drawer-overlay-opacity
-        hatch (the maskOpacity prop, rustic parity); unset, it keeps the 0.8
-        strength this rule has always painted. The TINT now composes from the
-        family's scrim-material protos over a dim ink (sheet.css/modal
-        coherence): the raw canvas fill it used before lightened the page in
-        light themes (a milky veil) while the modal dimmed it. Unset protos
-        keep a plain dim; a profile's --_ds-modal-scrim-tint retints
-        every overlay veil from one place (warm editorial vs cold
-        operational). ---- */
-.rottay-drawer-backdrop--modern[data-part='backdrop'] {
+@keyframes ds-drawer-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ds-drawer-backdrop-exit {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes ds-drawer-enter-left {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+
+@keyframes ds-drawer-exit-left {
+  from { transform: none; }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes ds-drawer-enter-right {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+
+@keyframes ds-drawer-exit-right {
+  from { transform: none; }
+  to { transform: translateX(100%); }
+}
+
+@keyframes ds-drawer-enter-top {
+  from { transform: translateY(-100%); }
+  to { transform: none; }
+}
+
+@keyframes ds-drawer-exit-top {
+  from { transform: none; }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes ds-drawer-enter-bottom {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+
+@keyframes ds-drawer-exit-bottom {
+  from { transform: none; }
+  to { transform: translateY(100%); }
+}
+
+.ds-drawer-backdrop[data-part='backdrop'] {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--ds-drawer-layer, var(--ds-z-index-drawer)) - 1);
   background-color: color-mix(
     in srgb,
-    var(--_ds-modal-scrim-tint, var(--ds-color-black)) calc(var(--ds-drawer-overlay-opacity, 0.8) * 100%),
+    var(--ds-drawer-overlay-tint, var(--ds-color-black)) calc(var(--ds-drawer-overlay-opacity) * 100%),
     transparent
   );
-  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
-  backdrop-filter: var(--ds-glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+  background-image: linear-gradient(
+    var(--ds-drawer-overlay-glass, var(--ds-glass-scrim-tint)),
+    var(--ds-drawer-overlay-glass, var(--ds-glass-scrim-tint))
+  );
+  backdrop-filter: var(--ds-drawer-overlay-backdrop, var(--ds-glass-backdrop-filter));
+  -webkit-backdrop-filter: var(--ds-drawer-overlay-backdrop, var(--ds-glass-backdrop-filter));
 }
 
-/* ---- panel surface: fill + elevation + the default (right-placement) radius,
-        which the per-placement rules below override. Completed with the two
-        family marks this panel lacked (sheet.css parity): the dark-aware
-        luminance lift at level 4 (matching its elevation band; inert where
-        --ds-elevation-lift-strength is 0) and the common-light zenith keyline
-        (card.css's C-03 recipe, scaled by --ds-effect-intensity) composed with
-        the tenant elevation. ---- */
-/* SEMANTIC GROUP: overlay. (R1 Cohort 1)
+.ds-drawer-backdrop[data-part='backdrop'][data-motion='animated'][data-open='true'] {
+  animation: ds-drawer-backdrop-enter var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
 
-   A drawer panel is an OVERLAY surface, and the design system already ships a
-   governed role vocabulary for that group. `popover.css` consumes it; this
-   family did not, so a tenant that authored the overlay role reached the popover
-   and not the drawer — four members of one group painting the same ground four
-   different ways.
+.ds-drawer-backdrop[data-part='backdrop'][data-motion='animated'][data-open='false'] {
+  animation: ds-drawer-backdrop-exit var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
 
-   --ds-material-overlay-texture, -highlight, -shadow and -border are
-   tenant-writable AND not declared on `:root`, so their var() fallbacks
-   genuinely fire: today's paint is preserved byte-for-byte and each becomes
-   causal the moment a tenant authors it. The split was recorded in
-   cohort-1-role-adoptability.json.
+.ds-drawer-trap {
+  display: contents;
+}
 
-   --ds-material-overlay-background is the ONE deliberate exception, added
-   after the same audit found it declared-but-dead here. It IS declared on
-   `:root` (foundation/themes/default/index.css) as var(--ds-surface-overlay), so the
-   fallback arm on the ground gradient's mid stop below is dead and the role
-   resolves in every theme. Without that, a tenant could not move this panel's
-   ground at all. Under the default theme the role and the literal both resolve
-   to --ds-color-bg-elevated, so the band is unchanged; a tenant that splits
-   --ds-surface-overlay from --ds-surface-card (BitHire does, in dark) now has
-   the drawer follow the overlay side, with popover, dropdown and modal. */
-.rottay-drawer--modern[data-part='surface'] {
-  max-width: 100dvw;
+.ds-drawer.ds-drawer--modern[data-part='surface'] {
+  position: fixed;
+  z-index: var(--ds-drawer-layer, var(--ds-z-index-drawer));
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  inline-size: var(--ds-drawer-size-md);
+  block-size: var(--ds-viewport-block-size);
+  max-inline-size: var(--ds-viewport-inline-size);
   background:
-    var(--ds-material-overlay-texture, none),
-    linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4)),
+    var(--ds-drawer-texture, none),
+    linear-gradient(
+      var(--ds-drawer-surface-lift, var(--ds-elevation-surface-4)),
+      var(--ds-drawer-surface-lift, var(--ds-elevation-surface-4))
+    ),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-color-primary) 2%) 0%,
-      var(--ds-material-overlay-background, var(--ds-surface-card)) 32%,
-      var(--ds-color-bg-primary) 100%
+      var(--ds-drawer-ground-top, var(--ds-color-bg-primary)) 0%,
+      var(--ds-drawer-bg, var(--ds-material-overlay-background)) 32%,
+      var(--ds-drawer-ground-end, var(--ds-color-bg-primary)) 100%
     );
-  /* WHOLE-VALUE ISOLATION. The depth chain is the SOLE box-shadow of this
-     panel. --ds-material-overlay-highlight used to ride here as a second list
-     entry, which was a defect: the channel is publicly none-capable, and in CSS
-     `none` is legal only as a WHOLE box-shadow value, so a tenant authoring it
-     produced `box-shadow: none, <depth>` -- an invalid declaration that voids
-     the ENTIRE value and silently amputated the panel's depth. The keyline
-     moved to the decoration pseudo below, where it is a whole-value read and an
-     authored `none` can only switch the keyline off. */
-  box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-4, var(--ds-elevation-3)));
-  border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
-  isolation: isolate;
+  box-shadow: var(--ds-drawer-shadow, var(--ds-elevation-4));
+  color: var(--ds-drawer-body-color, var(--ds-color-text-primary));
 }
 
-/* Decoration slot: carries the intensity-governed zenith keyline (card.css's
-   common light model, shared by every elevated overlay layer) as its SOLE
-   box-shadow, so the none-capable role channel sits in a whole-value position
-   and can never invalidate the depth stack next door. The value is an INSET
-   LITERAL and must stay one (FAB-05): it does NOT read
-   --ds-material-overlay-highlight, whose reads were deliberately removed from
-   this family, dropping its consumer count across the overlay four to zero --
-   a channel being retired, not a capability lost. The DECLARED VALUE is the same
-   literal this rung carried inside the surface list, and `z-index: -1`
-   reproduces an inset shadow's paint order -- above the panel's own fill and
-   lift layers, below the header, body and footer -- inside the stacking context
-   the rule above already isolates.
-   BUT THE PAINTED RESULT IS NOT EQUIVALENT, and this comment must not claim it
-   is. A pseudo's inset shadow is drawn against a different box and radius than
-   the surface's own, so on any surface with BOTH a border and a radius -- which
-   this one has -- the corner arcs diverge (measured in Chromium; the delta grows
-   with radius and with device pixel ratio, and radius compensation reduces but
-   does not close it). This relocation is an IN-SCOPE VISUAL DELTA awaiting
-   adjudication, NOT mechanical isolation. The panel is NON-SCROLLING
-   (the body is the scrollport), which is the precondition that makes a pseudo
-   anchor-correct here. The slot paints no fill of its own and never intercepts
-   pointer input. */
-.rottay-drawer--modern[data-part='surface']::before {
+.ds-drawer.ds-drawer--modern[data-part='surface']::before {
   content: '';
   position: absolute;
   z-index: -1;
   inset: 0;
   border-radius: inherit;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity, 1)), transparent);
+  box-shadow: inset 0 1px 0 var(--ds-drawer-keyline, var(--ds-color-border-subtle));
   pointer-events: none;
 }
 
-.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'] {
-  border-top-width: 1px;
-  border-right-width: 1px;
-  border-bottom-width: 1px;
-  border-left-width: 1px;
-  /* EDGE AXIS adoption (R1 Cohort 1). Width and style come from the edge axis,
-     colour from the overlay role. Both tenants now emit the edge axis -- TMM
-     ruled, BitHire hairline -- so this was the divergence receipt's last silent
-     axis and it is the same chain the field group just adopted. */
-  border-style: var(--ds-edge-standard-style, solid);
-  border-color: var(--ds-material-overlay-border, var(--ds-color-border-subtle));
+/* The colored frame repeats its part to clear the tenant border-color floor. */
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'] {
+  border-width: var(--ds-drawer-border-width, var(--ds-edge-standard-width));
+  border-style: var(--ds-edge-standard-style);
+  border-color: var(--ds-drawer-border-color, var(--ds-color-border-subtle));
 }
 
-/* ---- rounded on the inward-facing edge only; the sliding edge sits flush.
-        Placement is a PHYSICAL contract side ('left'|'right' is the screen
-        edge, not a logical one -- it must NOT mirror under RTL), so the flush
-        edge's safe-area pad uses the physical env() inset of that same edge
-        (sheet.css's sanctioned physical safe-area idiom). ---- */
-.rottay-drawer--modern[data-part='surface'][data-placement='left'] {
-  border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
+/* Placement is a physical screen edge and does not mirror under RTL. */
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='left'] {
+  top: 0;
+  left: 0;
+  border-radius: 0 var(--ds-drawer-radius, var(--ds-radius-lg)) var(--ds-drawer-radius, var(--ds-radius-lg)) 0;
   padding-left: env(safe-area-inset-left, 0px);
 }
-.rottay-drawer--modern[data-part='surface'][data-placement='right'] {
-  border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='right'] {
+  top: 0;
+  right: 0;
+  border-radius: var(--ds-drawer-radius, var(--ds-radius-lg)) 0 0 var(--ds-drawer-radius, var(--ds-radius-lg));
   padding-right: env(safe-area-inset-right, 0px);
 }
-.rottay-drawer--modern[data-part='surface'][data-placement='top'] {
-  border-radius: 0 0 var(--ds-radius-lg) var(--ds-radius-lg);
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='top'],
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='bottom'] {
+  left: 0;
+  inline-size: var(--ds-viewport-inline-size);
+  block-size: var(--ds-drawer-size-md);
+  max-block-size: var(--ds-viewport-block-size);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='top'] {
+  top: 0;
+  border-radius: 0 0 var(--ds-drawer-radius, var(--ds-radius-lg)) var(--ds-drawer-radius, var(--ds-radius-lg));
   padding-block-start: env(safe-area-inset-top, 0px);
 }
-.rottay-drawer--modern[data-part='surface'][data-placement='bottom'] {
-  border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='bottom'] {
+  bottom: 0;
+  border-radius: var(--ds-drawer-radius, var(--ds-radius-lg)) var(--ds-drawer-radius, var(--ds-radius-lg)) 0 0;
   padding-block-end: env(safe-area-inset-bottom, 0px);
 }
 
-/* ---- no border on the edge flush against the viewport ---- */
-.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='left'] {
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='left'], [data-placement='right'])[data-size='sm'] {
+  inline-size: var(--ds-drawer-size-sm);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='left'], [data-placement='right'])[data-size='lg'] {
+  inline-size: var(--ds-drawer-size-lg);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='left'], [data-placement='right'])[data-size='xl'] {
+  inline-size: var(--ds-drawer-size-xl);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='left'], [data-placement='right'])[data-size='full'] {
+  inline-size: var(--ds-drawer-size-full);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='top'], [data-placement='bottom'])[data-size='sm'] {
+  block-size: var(--ds-drawer-size-sm);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='top'], [data-placement='bottom'])[data-size='lg'] {
+  block-size: var(--ds-drawer-size-lg);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='top'], [data-placement='bottom'])[data-size='xl'] {
+  block-size: var(--ds-drawer-size-xl);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='top'], [data-placement='bottom'])[data-size='full'] {
+  block-size: var(--ds-drawer-size-full);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='left'], [data-placement='right'])[data-custom-width='true'] {
+  inline-size: var(--ds-drawer-width, var(--ds-drawer-size-md));
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface']:is([data-placement='top'], [data-placement='bottom'])[data-custom-height='true'] {
+  block-size: var(--ds-drawer-height, var(--ds-drawer-size-md));
+}
+
+/* The edge flush against the viewport carries no frame. */
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-placement='left'] {
   border-left-width: 0;
 }
-.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='right'] {
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-placement='right'] {
   border-right-width: 0;
 }
-.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='top'] {
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-placement='top'] {
   border-top-width: 0;
 }
-.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='bottom'] {
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-placement='bottom'] {
   border-bottom-width: 0;
 }
 
-/* ---- header / footer dividers ---- */
-.rottay-drawer--modern.rottay-drawer--modern > [data-part='header'][data-part='header'] {
-  border-bottom: 1px solid var(--ds-color-border-subtle);
+/* Fullscreen takes the whole dynamic viewport and keeps controls clear of the safe areas. */
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-presentation='fullscreen'][data-placement] {
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100dvh;
+  max-inline-size: none;
+  max-block-size: none;
+  border-width: 0;
+  border-radius: 0;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='left'] {
+  animation: ds-drawer-enter-left var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-placement='left'] {
+  animation: ds-drawer-exit-left var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='right'] {
+  animation: ds-drawer-enter-right var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-placement='right'] {
+  animation: ds-drawer-exit-right var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='top'] {
+  animation: ds-drawer-enter-top var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-placement='top'] {
+  animation: ds-drawer-exit-top var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='bottom'],
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-presentation='fullscreen'] {
+  animation: ds-drawer-enter-bottom var(--ds-drawer-enter-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-placement='bottom'],
+.ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='false'][data-presentation='fullscreen'] {
+  animation: ds-drawer-exit-bottom var(--ds-drawer-exit-duration, var(--ds-motion-reveal)) var(--ds-drawer-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-spacing-3);
-  /* Section rhythm rides the tenant density axis (the engine re-stamps the
-     anchor lineage on the portaled root): a compact product shortens the
-     chrome, a spacious one lets the panel breathe. At scale 1 every value is
-     byte-identical to the historical literals. */
-  min-height: calc(4.5rem * var(--ds-density-effective-scale, 1));
-  padding-block: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale, 1));
-  padding-inline: calc(
-    clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) *
-      var(--ds-density-effective-scale, 1)
-  );
+  gap: var(--ds-drawer-section-gap, var(--ds-spacing-3));
+  min-block-size: var(--ds-drawer-section-min-height, calc(4.5rem * var(--ds-density-effective-scale)));
+  padding-block: var(--ds-drawer-section-padding-block, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-drawer-section-padding-inline, calc(clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) * var(--ds-density-effective-scale)));
   flex-shrink: 0;
-  /* The header reads the panel's own material, like the modal's (family law,
-     spec section 5 -- no gradient makeup): the decorative 135deg brand band
-     is retired. Hierarchy rides the divider hairline, the title's type and
-     the footer rail below -- not a tinted wash. */
   background: transparent;
-  position: relative;
 }
-.rottay-drawer--modern.rottay-drawer--modern > [data-part='footer'][data-part='footer'] {
-  border-top: 1px solid var(--ds-color-border-subtle);
+
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'][data-part='header'] {
+  border-block-end: var(--ds-drawer-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-drawer-header-border, var(--ds-color-border-subtle));
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='footer'] {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: calc(var(--ds-spacing-2) * var(--ds-density-effective-scale, 1));
-  min-height: calc(4.5rem * var(--ds-density-effective-scale, 1));
-  padding-block: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale, 1));
-  padding-inline: calc(
-    clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) *
-      var(--ds-density-effective-scale, 1)
-  );
+  gap: var(--ds-drawer-footer-gap, calc(var(--ds-spacing-2) * var(--ds-density-effective-scale)));
+  min-block-size: var(--ds-drawer-section-min-height, calc(4.5rem * var(--ds-density-effective-scale)));
+  padding-block: var(--ds-drawer-section-padding-block, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-drawer-section-padding-inline, calc(clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) * var(--ds-density-effective-scale)));
   flex-shrink: 0;
-  background: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
-  /* Glass is OPT-IN through the family contract (sheet.css idiom): unset, the
-     declaration is invalid at computed-value time and resolves to none --
-     never a default blur (pre-flag 3: the old blur(8px) default is retired). */
-  backdrop-filter: var(--ds-glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+  background: var(--ds-drawer-footer-bg, var(--ds-color-bg-secondary));
+  backdrop-filter: var(--ds-drawer-footer-backdrop, var(--ds-glass-backdrop-filter));
+  -webkit-backdrop-filter: var(--ds-drawer-footer-backdrop, var(--ds-glass-backdrop-filter));
 }
 
-.rottay-drawer--modern > [data-part='header'] > [data-part='heading-group'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-3);
-  flex: 1 1 auto;
-  min-width: 0;
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='footer'][data-part='footer'] {
+  border-block-start: var(--ds-drawer-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-drawer-footer-border, var(--ds-color-border-subtle));
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] > [data-part='heading-group'] {
   position: relative;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-drawer-section-gap, var(--ds-spacing-3));
+  flex: 1 1 auto;
+  min-inline-size: 0;
 }
 
-.rottay-drawer--modern > [data-part='header'] [data-part='header-icon'] {
-  width: 2.25rem;
-  height: 2.25rem;
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='header-icon'] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  color: var(--ds-color-primary);
-  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-color-bg-primary));
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-subtle));
-  border-radius: var(--ds-radius-md);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 54%, transparent);
+  inline-size: var(--ds-drawer-icon-size);
+  block-size: var(--ds-drawer-icon-size);
+  border-radius: var(--ds-drawer-icon-radius, var(--ds-radius-md));
+  background: var(--ds-drawer-icon-bg, var(--ds-color-bg-primary));
+  box-shadow: inset 0 1px 0 var(--ds-drawer-icon-highlight, var(--ds-color-bg-elevated));
+  color: var(--ds-drawer-icon-color, var(--ds-color-primary));
 }
 
-.rottay-drawer--modern > [data-part='header'] [data-part='title'] {
-  color: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: var(--ds-font-size-lg);
-  font-weight: var(--ds-font-weight-semibold);
-  line-height: var(--ds-line-height-tight);
-  letter-spacing: var(--ds-letter-spacing-tight);
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='header-icon'][data-part='header-icon'] {
+  border: var(--ds-drawer-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-drawer-icon-border, var(--ds-color-border-subtle));
+}
+
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='title'] {
   min-inline-size: 0;
-  /* The family's title law is the modal's: a long title WRAPS with balanced
-     measure -- it never clips. Truncation without access to the full text is
-     a defect, not a layout strategy (the heading-group shrinks to 0 and the
-     close keeps its touch floor either way). */
   overflow-wrap: anywhere;
   text-wrap: balance;
+  color: var(--ds-drawer-title-color, var(--ds-color-text-primary));
+  font-family: var(--ds-drawer-title-font-family, var(--ds-type-section-title-font-family));
+  font-size: var(--ds-drawer-title-font-size, var(--ds-type-section-title-font-size));
+  font-weight: var(--ds-drawer-title-font-weight, var(--ds-type-section-title-font-weight));
+  letter-spacing: var(--ds-type-section-title-letter-spacing);
+  line-height: var(--ds-type-section-title-line-height);
 }
 
-.rottay-drawer--modern > [data-part='body'] {
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='body'] {
   flex: 1 1 auto;
-  /* Flex children refuse to shrink below their content box by default; without
-     the zero floor a tall body would push header/footer out of the panel
-     instead of scrolling inside its own region. */
   min-block-size: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: calc(
-    clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) *
-      var(--ds-density-effective-scale, 1)
-  );
-  color: var(--ds-color-text-primary);
+  padding: var(--ds-drawer-section-padding-inline, calc(clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6)) * var(--ds-density-effective-scale)));
+  background: var(--ds-drawer-body-bg, transparent);
+  color: var(--ds-drawer-body-color, var(--ds-color-text-primary));
+  font-family: var(--ds-type-body-font-family);
+  font-size: var(--ds-type-body-font-size);
+  line-height: var(--ds-type-body-line-height);
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--ds-color-border-secondary) transparent;
-  /* No decorative corner glow: the body is a reading surface; the panel's own
-     material carries the region (spec section 5 -- no gradient makeup). */
 }
 
-/* ---- close button: the overlay family's shared close grammar (modal /
-        sheet / modal-compounds idiom) — a ghost control at rest, a gated
-        hover wash for hover-capable pointers, the `:active` wash as the
-        touch equivalent, and the shared `--ds-focus-ring-*` keyboard ring.
-        The former framed button (border + fill + elevation-1) read as a
-        second action competing with the panel's real actions; the dismiss
-        affordance is chrome, not an action. Geometry stays the drawer's own
-        2.25rem square. ---- */
-.rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
-  width: 2.25rem;
-  height: 2.25rem;
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='close-button'] {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+  inline-size: var(--ds-drawer-close-size);
+  block-size: var(--ds-drawer-close-size);
+  padding: 0;
   cursor: pointer;
   border: none;
-  border-radius: var(--ds-radius-md);
+  border-radius: var(--ds-drawer-close-radius, var(--ds-radius-md));
   background-color: transparent;
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-drawer-close-color, var(--ds-color-text-secondary));
+  outline: none;
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out);
-  position: relative;
-  z-index: 1;
+    background-color var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out)),
+    color var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-drawer-transition-duration, var(--ds-motion-feedback)) var(--ds-drawer-transition-timing, var(--ds-motion-ease-out));
 }
+
 @media (hover: hover) {
-  .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:hover {
-    background-color: var(--ds-surface-highlight);
-    color: var(--ds-color-text-primary);
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='close-button']:is([data-state~='hovered'], :hover) {
+    background-color: var(--ds-drawer-close-bg-hover, var(--ds-material-control-background-hover));
+    color: var(--ds-drawer-close-color-hover, var(--ds-color-text-primary));
   }
 }
-.rottay-drawer--modern > [data-part='header'] [data-part='close-button']:active {
-  background-color: var(--ds-surface-highlight);
-  color: var(--ds-color-text-primary);
+
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='close-button']:is([data-state~='pressed'], :active) {
+  background-color: var(--ds-drawer-close-bg-hover, var(--ds-material-control-background-hover));
+  color: var(--ds-drawer-close-color-hover, var(--ds-color-text-primary));
 }
-.rottay-drawer--modern > [data-part='header'] [data-part='close-button']:focus-visible {
-  outline: var(--ds-focus-ring-width) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset);
+
+.ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='close-button']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow: var(--ds-drawer-focus-ring, var(--ds-focus-ring));
+}
+
+@media (pointer: coarse) {
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='close-button'] {
+    min-inline-size: var(--ds-drawer-touch-target-min, var(--ds-touch-target-min));
+    min-block-size: var(--ds-drawer-touch-target-min, var(--ds-touch-target-min));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
-    transition-duration: 0.01ms;
+  .ds-drawer-backdrop[data-part='backdrop'],
+  .ds-drawer.ds-drawer--modern[data-part='surface'] {
+    animation: none;
+  }
+
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='close-button'] {
+    transition: none;
   }
 }
 
-/* ---- coarse pointers: the close control meets the physical 44px floor
-        (physical px, never a rem floor -- the fluid root erodes rems). ---- */
-@media (pointer: coarse) {
-  .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
-    min-inline-size: var(--ds-drawer-close-touch-target, 44px);
-    min-block-size: var(--ds-drawer-close-touch-target, 44px);
-  }
-}
-
-/* ---- reduced transparency: the glass layer retires entirely. The scrim
-        re-asserts as an opaque fill (overlay-modal.css's law — nothing behind
-        the panel bleeds through; the modal's authored veil wins before the
-        canvas fill) and the footer's opt-in blur drops out while its
-        translucent mix becomes an opaque semantic fill. ---- */
 @media (prefers-reduced-transparency: reduce) {
-  .rottay-drawer-backdrop--modern[data-part='backdrop'] {
-    background-color: var(--ds-modal-overlay-bg, var(--ds-color-bg-primary));
+  .ds-drawer-backdrop[data-part='backdrop'] {
+    background-color: var(--ds-drawer-ground-end, var(--ds-color-bg-primary));
     background-image: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  .rottay-drawer--modern.rottay-drawer--modern > [data-part='footer'][data-part='footer'] {
+
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='footer'] {
     background: var(--ds-color-bg-secondary);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 }
 
-/* ---- forced colors: surface, frame, scrim and controls in system colors.
-        The scrim keeps a see-through system-color mix (a solid Canvas would
-        hide the page); the flush-edge zeroed borders stay zero. ---- */
 @media (forced-colors: active) {
-  .rottay-drawer-backdrop--modern[data-part='backdrop'] {
+  .ds-drawer-backdrop[data-part='backdrop'] {
     background-color: color-mix(in srgb, CanvasText 35%, transparent);
     background-image: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  .rottay-drawer.rottay-drawer--modern[data-part='surface'][data-placement] {
+
+  .ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-placement] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
     color: CanvasText;
   }
-  /* The zenith keyline lives on the decoration slot now, so the surface's own
-     `box-shadow: none` above no longer reaches it. The slot is reset here
-     explicitly to keep the forced palette exactly as flat as it was when both
-     shadows shared one declaration. */
-  .rottay-drawer.rottay-drawer--modern[data-part='surface'][data-placement]::before {
+
+  .ds-drawer.ds-drawer--modern[data-part='surface'][data-placement]::before {
     box-shadow: none;
   }
-  .rottay-drawer.rottay-drawer--modern[data-part='surface'] > [data-part='header'],
-  .rottay-drawer.rottay-drawer--modern[data-part='surface'] > [data-part='footer'] {
+
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'],
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='footer'] {
     border-color: ButtonText;
     background: Canvas;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  .rottay-drawer--modern > [data-part='header'] [data-part='header-icon'],
-  .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
+
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='header-icon'],
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='close-button'] {
     border: 1px solid ButtonText;
     background: Canvas;
     box-shadow: none;
     color: CanvasText;
   }
-  .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:focus-visible {
-    outline-color: Highlight;
-  }
-}
 
-/* ---- slide + fade keyframes, engine-namespaced (rustic has none, and must not
-        acquire one by name collision). ---- */
-@keyframes ds-drawer-backdrop-fade-modern {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes ds-drawer-backdrop-fade-out-modern {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-@keyframes ds-drawer-slide-left-modern {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-@keyframes ds-drawer-slide-out-left-modern {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-@keyframes ds-drawer-slide-right-modern {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-@keyframes ds-drawer-slide-out-right-modern {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
-@keyframes ds-drawer-slide-top-modern {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-@keyframes ds-drawer-slide-out-top-modern {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-100%);
-  }
-}
-@keyframes ds-drawer-slide-bottom-modern {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-@keyframes ds-drawer-slide-out-bottom-modern {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(100%);
-  }
-}
-
-/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
-   below the canonical --ds-touch-target-min channel; fine pointers keep the
-   authored size untouched. */
-@media (hover: none), (pointer: coarse) {
-  .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
-    min-block-size: var(--ds-touch-target-min, 44px);
+  .ds-drawer.ds-drawer--modern[data-part='surface'] > [data-part='header'] [data-part='close-button']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: 2px solid Highlight;
   }
 }

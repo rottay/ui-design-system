@@ -10,7 +10,7 @@
  * (checkpoint contract P4: HoverCard modern never portals). It applies NO
  * DaisyUI class and no utility-framework class of any kind: the trigger's
  * positioning context and the card's chrome come from this engine's own
- * skin, keyed on `rottay-hover-card--modern` (K4-A drained the last inline
+ * skin, keyed on `ds-hover-card--modern` (K4-A drained the last inline
  * `padding`/`width` geometry and the `relative inline-block` utilities).
  * `align: start/end` is LOGICAL along the inline axis and mirrors under
  * `dir="rtl"`.
@@ -41,6 +41,7 @@ import React, { useState, useRef, useCallback, useEffect, useId, isValidElement,
 import type { HoverCardProps } from '../../contracts';
 import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
 import { usePresence } from '@/graphics/motion/react/runtime';
 
 /**
@@ -188,10 +189,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       return placement;
     }
     if (!anchorEl) return placement;
-    const isRtl =
-      anchorEl.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
-      window.getComputedStyle(anchorEl).direction === 'rtl';
-    if (!isRtl) return placement;
+    if (!resolveReadingDirectionIsRtl(anchorEl)) return placement;
     return (placement.endsWith('-start')
       ? placement.replace('-start', '-end')
       : placement.replace('-end', '-start')) as ReturnType<typeof resolveOverlayPlacement>;
@@ -232,16 +230,13 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
         )
       : trigger;
 
-  // Card chrome (width, padding) is skin-owned (hover-card.css); only the
-  // z-index token channel, consumer overrides and measured positioning stay
-  // inline. overlayStyle still wins over the skin via the inline cascade.
-  const surfaceStyle: React.CSSProperties = {
-    zIndex: 'var(--ds-z-popover)',
+  // The band travels on the family layer channel; the measured positioning
+  // keys spread last so they win over a caller's overlayStyle.
+  const surfaceStyle = {
+    '--ds-hover-card-layer': overlay.zIndex,
     ...overlayStyle,
-    // Positioning keys come from the shared overlay runtime and spread last
-    // so they win over a caller's overlayStyle.
     ...overlay.positionStyle,
-  };
+  } as React.CSSProperties;
 
   return (
     <div
@@ -249,7 +244,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       data-part="trigger"
       data-open={isOpen ? 'true' : 'false'}
       data-disabled={disabled ? 'true' : undefined}
-      className={`rottay-hover-card--modern ${className || ''}`}
+      className={`ds-hover-card ds-hover-card--modern ${className || ''}`.trim()}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocus={handleFocus}

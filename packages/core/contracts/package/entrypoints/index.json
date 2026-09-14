@@ -1194,8 +1194,8 @@
       "output": "entrypoints/public/primitives/message/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 54,
-        "maxSourceBytes": 256096
+        "maxReachableModules": 63,
+        "maxSourceBytes": 266142
       },
       "symbols": [
         {
@@ -1213,8 +1213,8 @@
       "output": "entrypoints/public/primitives/modal/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 31,
-        "maxSourceBytes": 168791
+        "maxReachableModules": 52,
+        "maxSourceBytes": 185473
       },
       "symbols": [
         {

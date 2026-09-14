@@ -90,7 +90,7 @@ export const TooltipTrigger = forwardRef<HTMLElement, TooltipTriggerProps>(
     return (
       <span
         ref={ref as React.Ref<HTMLSpanElement>}
-        className={`rottay-tooltip-trigger ${className}`.trim()}
+        className={`ds-tooltip-trigger ${className}`.trim()}
         style={style}
         {...restProps}
       >

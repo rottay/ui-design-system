@@ -1,215 +1,115 @@
 /**
- * Modern HoverCard skin (WO-SKIN-04 checkpoint P; positioning adopted W6-C;
- * K4-A geometry drain 2026-07-24).
+ * Modern HoverCard skin.
  *
- * LAYER: `layer(rottay-engines)`. The canonical order lives in
- * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
- * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
- * component base and is in turn overridden by the structure and surface tiers;
- * the unlayered compiled tenant artifact wins over all of them.
- *
- * This engine applies NO DaisyUI class (its file header used to claim it rides
- * DaisyUI's `card` — it does not, and the comment is corrected) and NO
- * utility-framework class. Nothing in theme.css or personality.css matches any
- * element here.
- *
- * GEOMETRY (K4-A): the trigger's positioning context (`position: relative;
- * display: inline-block`, formerly Tailwind's `relative inline-block`
- * utilities) and the card chrome (`inline-size`/`padding`, formerly inline
- * `width: 288; padding: 16`) live here on family-local `--ds-hover-card-*`
- * channels with the shipped values as fallbacks.
- *
- * COHERENCE (Pass 2, K4-A): the surface shares the lane's overlay material
- * register with Dropdown and ContextMenu (same widget class): the subtle
- * primary-tinted gradient (sanctioned surface-tint role), tinted border,
- * elevation-3 and the `--ds-elevation-surface-3` dark-lift layer, unified at
- * radius-xl. Previously a flat `--ds-surface-card`/`border-subtle` card,
- * which read as a different system beside the Dropdown surface in the same
- * captures.
- *
- * MATERIAL (Quiet Premium alignment): the frosted-panel `backdrop-filter` is
- * RETIRED -- glass lives on overlay backdrops only (spec section 5), and this
- * is a panel. The former `white` literals in the fill gradient and the inset
- * top-light now resolve through the `--ds-elevation-surface-3` lift layer
- * (inert where `--ds-elevation-lift-strength` is 0).
- *
- * MOTION: `usePresence` in the engine keeps the card mounted through its own
- * exit, so BOTH directions are choreographed here -- enter and exit run on the
- * shared `--ds-motion-normal` / `--ds-motion-ease-out` cadence with
- * engine-namespaced keyframes keyed on `data-open`, each placement travelling
- * from/ toward its own edge via `--_ds-hover-card-closed-transform`
- * (popover.css idiom); reduced motion collapses both to an instant fade.
- * The card owns no inline animation, so the CSS rules below are the single
- * motion owner.
- *
- * PORTAL: this engine does NOT portal (rustic DOES) — the surface renders in-tree
- * as a child of the trigger wrapper in BOTH positioning branches: top-layer
- * promotion (anchor-css branch) is DOM-position-agnostic, so it needs no portal
- * escape hatch either, and the measured (js) branch keeps this engine's existing
- * non-portaled posture (checkpoint contract P4).
- *
- * POSITIONING: `position`/`top`/`left`/`position-anchor`/`position-area` etc. come
- * from `runtime/overlay/positioning`'s `useOverlayPosition` and stay inline —
- * genuine runtime data, not paint. `align: start/end` is logical along the
- * inline axis: the engine resolves the mirrored physical placement under RTL.
- *
- * SPECIFICITY (P-48): the card's colored border repeats its `data-part` to clear the
- * tenant `*` border-color floor at (0,3,1).
+ * The trigger wrapper is `ds-hover-card ds-hover-card--modern[data-part='trigger']`
+ * and the card is its in-tree `[data-part='surface']` child in both positioning
+ * branches. Presence keeps the card mounted through its exit, so both
+ * directions are choreographed here from its own edge. Every channel is written
+ * by `derivation/chrome/hover-card` or `presentation/components/hover-card`.
  */
 
-.rottay-hover-card--modern[data-part='trigger'] {
-  position: relative;
-  display: inline-block;
-}
-
-/* ---- entrance keyframe: engine-namespaced so a future rustic twin cannot
-        collide on the name. The travel resolves through
-        --_ds-hover-card-closed-transform so each placement enters from its own
-        edge (popover.css idiom); the base value matches the default
-        side='bottom'. ---- */
-@keyframes ds-hover-card-enter-modern {
+@keyframes ds-hover-card-enter {
   from {
     opacity: 0;
-    transform: var(--_ds-hover-card-closed-transform);
+    transform: var(--ds-hover-card-closed-transform, translate3d(0, calc(0px - var(--ds-hover-card-motion-offset)), 0) scale(var(--ds-hover-card-motion-scale)));
   }
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-}
-
-/* Exit mirrors the entrance: the card leaves toward the same edge it arrived
-   from (presence keeps it mounted until animationend). */
-@keyframes ds-hover-card-exit-modern {
-  from {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: var(--_ds-hover-card-closed-transform);
-  }
-}
-
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'] {
-  --_ds-hover-card-closed-transform: translate3d(
-      0,
-      calc(0px - var(--ds-hover-card-motion-offset, 0.25rem)),
-      0
-    )
-    scale(var(--ds-hover-card-motion-scale, 0.975));
-
-  inline-size: var(--ds-hover-card-width, 18rem);
-  max-inline-size: calc(100dvw - var(--ds-spacing-4) - var(--ds-spacing-4));
-  /* Rich content can run long: the card scrolls internally with a quiet thin
-     scrollbar instead of growing past the viewport. The anchor-css branch
-     keeps overflow: visible (UA [popover] reset below wins on specificity). */
-  max-block-size: var(--ds-hover-card-max-block-size, min(60vh, 24rem));
-  overflow: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: var(--ds-hover-card-scrollbar-width, thin);
-  padding: var(--ds-hover-card-padding, var(--ds-spacing-4));
-  border-radius: var(--ds-hover-card-radius, var(--ds-radius-xl));
-  transform-origin: center top;
-  /* The dark-aware luminance step is its own layer directly above the fill
-     (popover.css idiom): inert until a dark surface raises
-     --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
-     this surface declares. */
-  background:
-    var(--ds-material-overlay-texture, none),
-    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-material-overlay-background, var(--ds-surface-card));
-  box-shadow: var(
-    --ds-hover-card-shadow,
-    var(--ds-material-overlay-shadow, var(--ds-elevation-3))
-  );
-}
-/* Presence-driven choreography: the engine stamps data-open from dataState,
-   so enter/exit swap at the exact frame the close is requested (the exit
-   starts from wherever the enter reached). */
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-open='true'] {
-  animation: ds-hover-card-enter-modern var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
-}
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-open='false'] {
-  animation: ds-hover-card-exit-modern var(--ds-motion-normal)
-    var(--ds-motion-ease-out) both;
-}
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
-  border: var(--ds-hover-card-border-width, 1px) solid
-    var(--ds-hover-card-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
-}
-
-/* ---- direction-aware entrance: each placement travels from its own edge,
-        with the transform origin on the trigger-facing side. ---- */
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-placement^='top'] {
-  --_ds-hover-card-closed-transform: translate3d(
-      0,
-      var(--ds-hover-card-motion-offset, 0.25rem),
-      0
-    )
-    scale(var(--ds-hover-card-motion-scale, 0.975));
-  transform-origin: center bottom;
-}
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-placement^='left'] {
-  --_ds-hover-card-closed-transform: translate3d(
-      var(--ds-hover-card-motion-offset, 0.25rem),
-      0,
-      0
-    )
-    scale(var(--ds-hover-card-motion-scale, 0.975));
-  transform-origin: right center;
-}
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-placement^='right'] {
-  --_ds-hover-card-closed-transform: translate3d(
-      calc(0px - var(--ds-hover-card-motion-offset, 0.25rem)),
-      0,
-      0
-    )
-    scale(var(--ds-hover-card-motion-scale, 0.975));
-  transform-origin: left center;
-}
-
-/* ---- top-layer branch: the surface carries the `popover` attribute there, and
-        UA [popover] rules paint `border: solid` and clip via `overflow: auto`;
-        this surface owns neither. `data-ds-position-strategy` is stamped by the
-        engine alongside data-part. ---- */
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-ds-position-strategy='anchor-css'] {
-  border: 0;
-  overflow: visible;
-}
-
-/* Keyboard users landing inside the card (candidate peek links/actions) get
-   the family's visible ring on the surface frame; the content's own
-   components keep their own focus channels. */
-.rottay-hover-card--modern[data-part='trigger'] [data-part='surface']:focus-within {
-  outline: var(--ds-focus-ring-width) solid
-    var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset);
-}
-
-/* Coarse pointers: interactive content inside the card reaches the physical
-   44px floor via block-size only (popover.css idiom). */
-@media (pointer: coarse) {
-  .rottay-hover-card--modern[data-part='trigger']
-    [data-part='surface']
-    :where(button, [role='button'], a, input, select, textarea) {
-    min-block-size: var(--ds-hover-card-touch-target, 2.75rem);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'] {
-    animation-duration: 1ms;
-    animation-timing-function: linear;
     transform: none;
   }
 }
 
-/* Forced colors: the gradient fill, lift layer and depth are stripped; the
-   card keeps a visible system-color boundary. */
+@keyframes ds-hover-card-exit {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: var(--ds-hover-card-closed-transform, translate3d(0, calc(0px - var(--ds-hover-card-motion-offset)), 0) scale(var(--ds-hover-card-motion-scale)));
+  }
+}
+
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] {
+  position: relative;
+  display: inline-block;
+}
+
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'] {
+  --ds-hover-card-closed-transform: translate3d(0, calc(0px - var(--ds-hover-card-motion-offset)), 0) scale(var(--ds-hover-card-motion-scale));
+  z-index: var(--ds-hover-card-layer, var(--ds-z-index-popover));
+  box-sizing: border-box;
+  inline-size: var(--ds-hover-card-width);
+  max-inline-size: calc(100dvw - var(--ds-hover-card-viewport-gutter, var(--ds-spacing-4)) - var(--ds-hover-card-viewport-gutter, var(--ds-spacing-4)));
+  max-block-size: var(--ds-hover-card-max-block-size);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: var(--ds-hover-card-scrollbar-width);
+  padding: var(--ds-hover-card-padding, var(--ds-spacing-4));
+  border-radius: var(--ds-hover-card-radius, var(--ds-radius-xl));
+  transform-origin: center top;
+  background:
+    var(--ds-hover-card-texture, none),
+    linear-gradient(var(--ds-hover-card-surface-lift, var(--ds-elevation-surface-3)), var(--ds-hover-card-surface-lift, var(--ds-elevation-surface-3))),
+    var(--ds-hover-card-bg, var(--ds-material-overlay-background));
+  box-shadow: var(--ds-hover-card-shadow, var(--ds-elevation-3));
+}
+
+/* The colored frame repeats its part to clear the tenant border-color floor. */
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
+  border: var(--ds-hover-card-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
+    var(--ds-hover-card-border-color, var(--ds-color-border));
+}
+
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-open='true'] {
+  animation: ds-hover-card-enter var(--ds-hover-card-enter-duration, var(--ds-motion-reveal)) var(--ds-hover-card-enter-curve, var(--ds-motion-ease-out)) both;
+}
+
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-open='false'] {
+  animation: ds-hover-card-exit var(--ds-hover-card-enter-duration, var(--ds-motion-reveal)) var(--ds-hover-card-enter-curve, var(--ds-motion-ease-out)) both;
+}
+
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-placement^='top'] {
+  --ds-hover-card-closed-transform: translate3d(0, var(--ds-hover-card-motion-offset), 0) scale(var(--ds-hover-card-motion-scale));
+  transform-origin: center bottom;
+}
+
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-placement^='left'] {
+  --ds-hover-card-closed-transform: translate3d(var(--ds-hover-card-motion-offset), 0, 0) scale(var(--ds-hover-card-motion-scale));
+  transform-origin: right center;
+}
+
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-placement^='right'] {
+  --ds-hover-card-closed-transform: translate3d(calc(0px - var(--ds-hover-card-motion-offset)), 0, 0) scale(var(--ds-hover-card-motion-scale));
+  transform-origin: left center;
+}
+
+/* A top-layer card neutralizes the UA popover chrome it would otherwise inherit. */
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'][data-ds-position-strategy='anchor-css'] {
+  border: 0;
+  overflow: visible;
+}
+
+.ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface']:focus-within {
+  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-hover-card-focus-color, var(--ds-focus-ring-color));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+@media (pointer: coarse) {
+  .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'] :where(button, [role='button'], a, input, select, textarea) {
+    min-block-size: var(--ds-hover-card-touch-target, var(--ds-touch-target-min));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'] {
+    animation: none;
+    transform: none;
+  }
+}
+
 @media (forced-colors: active) {
-  .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-placement] {
+  .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'][data-placement] {
     border: 1px solid CanvasText;
   }
 }

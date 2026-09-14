@@ -32,6 +32,51 @@ import { injectToastStyles, getToastAnimationStyle } from '../../runtime/animati
 import { BaseToast } from '../../engines';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { usePresence } from '@/graphics/motion/react/runtime';
+import { useDeclaredEngine } from '@/infrastructure/runtime/engines/composition/react/provider';
+import { NotifierStack, type NotifierPlacement } from '../../../notifier';
+
+const NOTIFIER_PLACEMENTS: Record<ToastPosition, NotifierPlacement> = {
+  'top-left': 'top-start',
+  'top-center': 'top',
+  'top-right': 'top-end',
+  'bottom-left': 'bottom-start',
+  'bottom-center': 'bottom',
+  'bottom-right': 'bottom-end',
+};
+
+/**
+ * A Modern stack slot: the notifier skin plays the slot's exit and its depth
+ * recession; presence removes the toast once that exit has finished.
+ */
+function NotifierToastSlot({
+  visible,
+  depth,
+  onMouseEnter,
+  onMouseLeave,
+  onExited,
+  children,
+}: {
+  visible: boolean;
+  depth: number;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  onExited: () => void;
+  children: ReactNode;
+}): React.ReactElement {
+  const { ref } = usePresence(visible, { onExitComplete: onExited });
+  return (
+    <div
+      ref={ref}
+      data-part="stack-item"
+      data-depth={depth}
+      data-open={visible ? 'true' : 'false'}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      {children}
+    </div>
+  );
+}
 
 // ============================================================================
 // Stacking Physics
@@ -330,6 +375,7 @@ export function ToastContainer({
   renderToast,
 }: ToastContainerProps): React.ReactElement {
   const { toasts, config, dispatch } = useToastContext();
+  const notifier = useDeclaredEngine() === 'modern';
   const containerRef = useRef<HTMLDivElement>(null);
   const { prefersReducedMotion } = useBreakpoints();
   // The stack has no trigger to anchor to -- it is a standing surface mounted
@@ -442,6 +488,46 @@ export function ToastContainer({
   /**
    * Calculate container styles based on position and gap.
    */
+  if (notifier) {
+    return (
+      <>
+        <span ref={setScopeMarkerEl} hidden aria-hidden="true" />
+        <FieldOverlayPanel overlay={overlay}>
+          <NotifierStack
+            ref={containerRef}
+            role="toast"
+            placement={NOTIFIER_PLACEMENTS[position]}
+            layer={overlay.zIndex}
+            gap={gap}
+            className={className}
+            style={style}
+            data-overlay-layer={overlay.panelProps['data-overlay-layer']}
+            data-overlay-kind={overlay.panelProps['data-overlay-kind']}
+            aria-live="polite"
+            aria-atomic="false"
+          >
+            {renderedToasts.map((toast, index) => (
+              <NotifierToastSlot
+                key={toast.id}
+                visible={toast.visible}
+                depth={Math.min(renderedToasts.length - 1 - index, MAX_STACK_DEPTH)}
+                onMouseEnter={() => handlePause(toast.id)}
+                onMouseLeave={() => handleResume(toast.id)}
+                onExited={() => handleRemove(toast.id)}
+              >
+                {renderToast ? (
+                  renderToast(toast)
+                ) : (
+                  <BaseToast {...toast.options} visible={toast.visible} onClose={() => handleDismiss(toast.id)} />
+                )}
+              </NotifierToastSlot>
+            ))}
+          </NotifierStack>
+        </FieldOverlayPanel>
+      </>
+    );
+  }
+
   const containerStyle: CSSProperties = {
     ...getContainerPosition(position),
     gap: `${gap}px`,

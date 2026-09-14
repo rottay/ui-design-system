@@ -1335,7 +1335,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // to leave the emitting control unnamed.
   [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
-  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker)-/, (m) => `chrome.${m[1]}`],
+  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert)-/, (m) => `chrome.${m[1]}`],
 ]);
 
 export function classifySemanticOwner(name) {
@@ -1520,8 +1520,23 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-color-success-900',
       '--ds-radius-button',
       '--ds-z-index-base',
-      '--ds-z-index-drawer',
     ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    classification: LIVENESS.authorableUnprovenEffect,
+    registered: '2026-09-14',
+    reason:
+      'since the toast and notification Modern skins folded into the Notifier, step 12 of the status tints is read only inside derivation/chrome/notifier (the tone icon wells the notifier skin paints); the liveness graph does not follow a family deriver value into the skin terminal that paints it, so the causal-gates lane owns proving that route',
+    channels: Object.freeze(['--ds-tint-error-12', '--ds-tint-info-12', '--ds-tint-success-12', '--ds-tint-warning-12']),
+  }),
+  Object.freeze({
+    owner: 'WO-FAM-04',
+    classification: LIVENESS.authorableUnprovenEffect,
+    registered: '2026-09-14',
+    reason:
+      'step 4 of the status tints lost its only reader when this cut folded Callout into Alert, and the folded alert surface washes at step 8; the pin clears only when this cut gives step 4 a painting reader or retires the step from the status tint fan-out',
+    channels: Object.freeze(['--ds-tint-error-4', '--ds-tint-info-4', '--ds-tint-success-4', '--ds-tint-warning-4']),
   }),
   Object.freeze({
     owner: 'WO-DER-06',

@@ -37,26 +37,17 @@ function TransientGroup({ variant }: { variant: 'override' | 'control' }) {
             : 'CONTROL - channels unset, defaults resolve'
         }
       >
-        {/* Both skins scope their surface rule under the stack container, so a
-            bare item never matches it. */}
         <div data-testid={`lab-message-${variant}`}>
-          <div className="rottay-message-stack rottay-message-stack--modern" data-part="stack-container">
-            <MessageItem id="lab-message" content="Roster synchronised" type="success" />
-          </div>
+          <MessageItem id="lab-message" content="Roster synchronised" type="success" />
         </div>
 
         <div data-testid={`lab-notification-${variant}`}>
-          <div
-            className="rottay-notification-stack rottay-notification-stack--modern"
-            data-part="stack-container"
-          >
-            <NotificationItem
-              id="lab-notification"
-              message="Reconciliation complete"
-              description="Four reviewers were updated in this run."
-              type="info"
-            />
-          </div>
+          <NotificationItem
+            id="lab-notification"
+            message="Reconciliation complete"
+            description="Four reviewers were updated in this run."
+            type="info"
+          />
         </div>
 
         <div data-testid={`lab-toast-${variant}`}>

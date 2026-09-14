@@ -18,6 +18,8 @@ const FROZEN_ROOTS = [
 const CUT_RENAMES: ReadonlyArray<readonly [legacy: string, current: string]> = [
   ['--ds-autocomplete-', '--ds-auto-complete-'],
   ['--ds-datepicker-', '--ds-date-picker-'],
+  ['--ds-message-', '--ds-notifier-message-'],
+  ['--ds-notification-', '--ds-notifier-notification-'],
   ['--ds-timepicker-', '--ds-time-picker-'],
 ];
 
@@ -52,6 +54,8 @@ function emittedFamilyChannels(): Set<string> {
   const everyLeaf = new Proxy({}, { get: (_target, key) => (typeof key === 'string' ? '#010203' : undefined) });
   const chrome = {
     controls: { autocomplete: everyLeaf, datePicker: everyLeaf, timePicker: everyLeaf },
+    message: { bg: '#010203', closeColor: '#010203', closeColorHover: '#010203', shadow: '0 0 0 1px #010203' },
+    notification: { bg: '#010203', shadow: '0 0 0 1px #010203', titleColor: '#010203' },
     surface: { popoverShadow: '0 0 0 1px #010203' },
   } as unknown as BrandChrome;
   return new Set(Object.keys(chromeToVariables(chrome)));

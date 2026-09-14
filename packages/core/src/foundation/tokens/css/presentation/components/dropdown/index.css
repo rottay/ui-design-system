@@ -1,0 +1,52 @@
+/**
+ * Dropdown Component Tokens - Rottay Design System
+ *
+ * Structural constants of the dropdown family and the defaults of its runtime
+ * channels. Its decision relations are emitted by the compiler family
+ * `derivation/chrome/dropdown`.
+ */
+
+:root {
+  --ds-dropdown-layer: var(--ds-z-index-dropdown);
+  --ds-dropdown-position-top: auto;
+  --ds-dropdown-position-left: auto;
+  --ds-dropdown-arrow-anchor-offset: 50%;
+  --ds-dropdown-gap: var(--ds-spacing-2);
+  --ds-dropdown-viewport-gap: 0.5rem;
+  --ds-dropdown-min-width: 14rem;
+  --ds-dropdown-max-width: 22rem;
+  --ds-dropdown-border-width: var(--ds-edge-standard-width);
+  --ds-dropdown-menu-max-block-size: min(21rem, calc(100dvh - 2rem));
+  --ds-dropdown-item-gap: 0.2rem;
+  --ds-dropdown-item-height: calc(2.4rem * var(--ds-density-effective-scale));
+  --ds-dropdown-item-padding-y: calc(0.45rem * var(--ds-density-effective-scale));
+  --ds-dropdown-item-padding-x: 0.55rem;
+  --ds-dropdown-item-track-gap: var(--ds-spacing-sm);
+  --ds-dropdown-indicator-size: var(--ds-icon-sm-size);
+  --ds-dropdown-icon-well-size: 1.75rem;
+  --ds-dropdown-icon-radius: var(--ds-radius-md);
+  --ds-dropdown-icon-lift: 1.04;
+  --ds-dropdown-submenu-indicator-size: 1.5rem;
+  --ds-dropdown-submenu-nudge: 2px;
+  --ds-dropdown-submenu-offset: 0.48rem;
+  --ds-dropdown-submenu-inset: -0.42rem;
+  --ds-dropdown-group-margin-start: 0.35rem;
+  --ds-dropdown-group-margin-end: 0.15rem;
+  --ds-dropdown-group-padding-y: 0.38rem;
+  --ds-dropdown-group-padding-x: 0.6rem;
+  --ds-dropdown-divider-margin-y: 0.35rem;
+  --ds-dropdown-divider-margin-x: 0.3rem;
+  --ds-dropdown-arrow-size: 0.72rem;
+  --ds-dropdown-enter-y: 4px;
+  --ds-dropdown-exit-y: 3px;
+  --ds-dropdown-enter-scale: 0.975;
+  --ds-dropdown-exit-scale: 0.985;
+  --ds-dropdown-selection-scale: 0.72;
+  --ds-dropdown-sheen-opacity: 0.8;
+  --ds-dropdown-press-scale: var(--ds-state-press-scale);
+  --ds-dropdown-disabled-opacity: var(--ds-state-disabled-opacity);
+  --ds-dropdown-transition-duration: var(--ds-motion-feedback);
+  --ds-dropdown-transition-timing: var(--ds-motion-ease-standard);
+  --ds-dropdown-sweep-duration: var(--ds-motion-reveal);
+  --ds-dropdown-touch-target-min: var(--ds-touch-target-min);
+}

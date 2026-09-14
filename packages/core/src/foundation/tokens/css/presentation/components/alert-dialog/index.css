@@ -1,0 +1,26 @@
+/**
+ * AlertDialog Component Tokens - Rottay Design System
+ *
+ * Structural constants of the alert-dialog family. Its decision relations are
+ * emitted by the compiler family `derivation/chrome/alert-dialog`.
+ */
+
+:root {
+  --ds-alert-dialog-radius: var(--ds-radius-lg);
+  --ds-alert-dialog-border-width: var(--ds-edge-standard-width);
+  --ds-alert-dialog-inline-size: 91.6667%;
+  --ds-alert-dialog-max-inline-size: 24rem;
+  --ds-alert-dialog-viewport-gutter: var(--ds-spacing-4);
+  --ds-alert-dialog-viewport-breathing: var(--ds-spacing-8);
+  --ds-alert-dialog-padding: calc(var(--ds-spacing-6) * var(--ds-density-effective-scale));
+  --ds-alert-dialog-content-gap: var(--ds-spacing-3);
+  --ds-alert-dialog-title-gap: var(--ds-spacing-2);
+  --ds-alert-dialog-footer-gap: var(--ds-spacing-2);
+  --ds-alert-dialog-footer-offset: var(--ds-spacing-4);
+  --ds-alert-dialog-icon-size: 2.5rem;
+  --ds-alert-dialog-icon-ring-width: var(--ds-border-width-1);
+  --ds-alert-dialog-enter-y: 0.5rem;
+  --ds-alert-dialog-enter-scale: 0.97;
+  --ds-alert-dialog-enter-duration: var(--ds-motion-reveal);
+  --ds-alert-dialog-enter-curve: var(--ds-motion-ease-enter);
+}

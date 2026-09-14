@@ -177,12 +177,12 @@
       "maxSourceBytes": 87891
     },
     "./primitives/message": {
-      "maxReachableModules": 54,
-      "maxSourceBytes": 256096
+      "maxReachableModules": 63,
+      "maxSourceBytes": 266142
     },
     "./primitives/modal": {
-      "maxReachableModules": 31,
-      "maxSourceBytes": 168791
+      "maxReachableModules": 52,
+      "maxSourceBytes": 185473
     },
     "./primitives/progress": {
       "maxReachableModules": 20,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-FAM-02: the behavior kernel barrel radio imports now also carries resolveSubmitIntent and useFieldAction, the shared IME-safe submit and field-action kernels of the field family cut (155628 -> 157925, +2297 source bytes; reachable modules unchanged under the 47 anchor)",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "WO-FAM-04: ./primitives/modal 31 -> 52 modules (168791 -> 185473 bytes): the public ModalCloseButton compound names its dismiss from the active catalog through useOptionalTranslation (the i18n context and its locale catalogs, 25 modules) and decides hover, press and focus through the anatomy and interaction-state kernels imported by leaf; ./primitives/message 54 -> 63 modules (256096 -> 265545 bytes): the statically imported Modern message engine is now the message role of the Notifier (its contracts, countdown and exit kernels, item and stack, 6 modules) plus the anatomy and interaction-state kernels and the neutral tone glyph. Both are the shared kernels and the one Notifier owner the cut adopts instead of re-implementing. ./primitives/message then moves 265545 -> 266142 (+597 source bytes, reachable modules unchanged at 63): the Notifier countdown holds its lifetime for pointer hover and keyboard focus as INDEPENDENT pause reasons (WCAG 2.2.1), which is +506 bytes in the countdown kernel, and the narrowed pauseOnHover contract is stated on the item props, +91 bytes.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 2 subido(s), 0 sin ancla valida; maxSourceBytes: 2 subido(s), 0 sin ancla valida"
 }

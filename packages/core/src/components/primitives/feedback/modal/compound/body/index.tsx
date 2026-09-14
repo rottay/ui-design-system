@@ -62,7 +62,6 @@
 
 import React, { forwardRef } from 'react';
 import type { ModalBodyProps } from '../../contracts';
-import { PADDING_MAP } from '../../contracts';
 
 // ============================================================================
 // Component
@@ -111,24 +110,6 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
     } = props;
 
     // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    /**
-     * Instance styles for the body section: only the `padding` prop (a
-     * PADDING_MAP contract enum) resolves inline — sanctioned instance
-     * geometry. Flex growth and the scroll behavior are stable and live in
-     * the compound skin (modal-compounds.css `[data-part='body']`).
-     */
-    const bodyStyle: React.CSSProperties = {
-      // Spacing - uses PADDING_MAP for consistent sizing
-      padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-
-      // Merge user styles (takes precedence)
-      ...style,
-    };
-
-    // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
@@ -136,8 +117,9 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
       <div
         ref={ref}
         data-part="body"
-        className={`rottay-modal-body ${className}`.trim()}
-        style={bodyStyle}
+        data-padding={padding}
+        className={`ds-modal-body ${className}`.trim()}
+        style={style}
       >
         {children}
       </div>

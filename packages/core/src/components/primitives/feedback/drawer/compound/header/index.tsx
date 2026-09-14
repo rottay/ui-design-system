@@ -44,6 +44,8 @@ import React, { forwardRef } from 'react';
 import type { ReactNode } from 'react';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
+import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
+import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
 
 // ============================================================================
 // Types
@@ -85,7 +87,7 @@ export interface DrawerHeaderProps {
 
   /**
    * Additional CSS class names to apply to the header container.
-   * Merged with the default 'rottay-drawer-header' class.
+   * Merged with the default 'ds-drawer-header' class.
    */
   className?: string;
 
@@ -152,29 +154,7 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
     // en/es/ar): standalone compositions never crash nor echo a raw key.
     const i18n = useOptionalTranslation('components');
     const closeLabel = i18n?.tOr('drawer.close', 'Close') ?? 'Close';
-
-    // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    /**
-     * Layout and paint (flex row, padding, gap, title typography) live in
-     * drawer-compounds.css (the engine-agnostic compound skin). The only
-     * inline hatch is the per-instance `divider` decision the skin consumes;
-     * a caller's `style` still wins over both.
-     */
-    const headerStyle: React.CSSProperties = {
-      // The `divider` decision rides a hatch the skin consumes, so the "off"
-      // branch resolves to the same explicit `none` React used to set inline.
-      // `--ds-drawer-header-border` is a declared channel: bare var (no
-      // fallback) so the tenant default governs.
-      '--ds-drawer-header-divider': divider
-        ? '1px solid var(--ds-drawer-header-border)'
-        : 'none',
-
-      // Merge user styles (takes precedence)
-      ...style,
-    } as React.CSSProperties;
+    const close = useInteractionState();
 
     // -------------------------------------------------------------------------
     // Render
@@ -184,14 +164,14 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
       <div
         ref={ref}
         data-part="header"
-        className={`rottay-drawer-header ${className}`.trim()}
-        style={headerStyle}
-        // Semantic role for screen readers
-        role="heading"
-        aria-level={2}
+        data-divider={divider ? 'true' : 'false'}
+        className={`ds-drawer-header ${className}`.trim()}
+        style={style}
       >
         {/* Title container (layout + typography roles in the compound skin) */}
-        <div data-part="title">{children}</div>
+        <div data-part="title" role="heading" aria-level={2}>
+          {children}
+        </div>
 
         {/* Close button - only rendered if closable and onClose provided.
             Paint and interaction states live in drawer-compounds.css (the
@@ -200,10 +180,11 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
         {closable && onClose && (
           <button
             type="button"
-            data-part="close-button"
+            {...partAttributes('close-button', close.state)}
+            {...close.handlers}
             onClick={onClose}
             aria-label={closeLabel}
-            className="rottay-drawer-close"
+            className="ds-drawer-close"
           >
             <ActionCloseIcon decorative size={16} />
           </button>

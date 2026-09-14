@@ -80,14 +80,14 @@ describe('Message fallback and item coverage', () => {
 
     expect(screen.getByText('provider child')).toBeInTheDocument();
     expect(
-      container.querySelector('[data-part="stack-container"][data-placement="bottom"]')
+      container.querySelector('[data-part="stack"][data-placement="bottom"]')
     ).not.toBeNull();
     expect(screen.getByTestId('modern-custom-icon')).toBeInTheDocument();
     expect(screen.getByTestId('modern-close-icon')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     // The modern item plays its skin exit animation first (rustic parity);
-    // removal lands after the 160ms exit cadence.
+    // removal lands after the governed exit window.
     act(() => {
       vi.advanceTimersByTime(200);
     });

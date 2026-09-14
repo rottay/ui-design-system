@@ -29,6 +29,18 @@ import { transferChromeDeriver } from "./chrome/transfer";
 import { timePickerChromeDeriver } from "./chrome/time-picker";
 import { datePickerChromeDeriver } from "./chrome/date-picker";
 import { colorPickerChromeDeriver } from "./chrome/color-picker";
+import { modalChromeDeriver } from "./chrome/modal";
+import { drawerChromeDeriver } from "./chrome/drawer";
+import { sheetChromeDeriver } from "./chrome/sheet";
+import { alertDialogChromeDeriver } from "./chrome/alert-dialog";
+import { confirmDialogChromeDeriver } from "./chrome/confirm-dialog";
+import { popoverChromeDeriver } from "./chrome/popover";
+import { hoverCardChromeDeriver } from "./chrome/hover-card";
+import { dropdownChromeDeriver } from "./chrome/dropdown";
+import { tooltipChromeDeriver } from "./chrome/tooltip";
+import { tourChromeDeriver } from "./chrome/tour";
+import { notifierChromeDeriver } from "./chrome/notifier";
+import { alertChromeDeriver } from "./chrome/alert";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
 import { toggleChromeDeriver } from "./chrome/toggle";
@@ -100,6 +112,18 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   timePickerChromeDeriver,
   datePickerChromeDeriver,
   colorPickerChromeDeriver,
+  modalChromeDeriver,
+  drawerChromeDeriver,
+  sheetChromeDeriver,
+  alertDialogChromeDeriver,
+  confirmDialogChromeDeriver,
+  popoverChromeDeriver,
+  hoverCardChromeDeriver,
+  dropdownChromeDeriver,
+  tooltipChromeDeriver,
+  tourChromeDeriver,
+  notifierChromeDeriver,
+  alertChromeDeriver,
   seedsDeriver,
   recipesDeriver,
 ]);

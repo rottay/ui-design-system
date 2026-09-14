@@ -22,7 +22,7 @@ import { describe, expect, it } from 'vitest';
 
 import ModernPopover from '../engines/modern';
 
-const SURFACE = ".rottay-popover--modern [data-part='surface']";
+const SURFACE = ".ds-popover--modern [data-part='surface']";
 
 const CALLER_HATCH: React.CSSProperties = {
   position: 'static',

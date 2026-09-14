@@ -159,16 +159,16 @@ describe('Notification engine advanced coverage', () => {
 
     expect(screen.getByText('Resolve')).toBeInTheDocument();
     const modernItem = screen.getByText('Direct modern').closest('[data-part="root"]');
-    expect(modernItem).toHaveAttribute('data-tone', 'open');
-    expect(modernItem).toHaveAttribute('data-has-actions', 'true');
+    expect(modernItem).toHaveAttribute('data-tone', 'neutral');
+    expect(modernItem?.querySelector('[data-part="actions"]')).toBeInTheDocument();
     expect(modernItem).toHaveAttribute('data-clickable', 'true');
     expect(modernItem?.querySelector('[data-part="progress"]')).toBeInTheDocument();
     fireEvent.keyDown(modernItem as HTMLElement, { key: 'Enter' });
     expect(onClick).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
 
-    expect(onRemove).toHaveBeenCalledWith('modern-notification');
     expect(onClose).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(onRemove).toHaveBeenCalledWith('modern-notification'));
 
     modernNotification.success({ message: 'x' });
     modernNotification.error({ message: 'x' });

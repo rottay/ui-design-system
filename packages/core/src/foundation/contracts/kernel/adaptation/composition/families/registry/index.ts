@@ -58,6 +58,18 @@ export const LAYOUT_SENSITIVE_FAMILIES = Object.freeze([
     cut: 'WO-FAM-04',
   },
   {
+    family: 'drawer',
+    owner: 'src/components/primitives/feedback/drawer',
+    layoutSensitive: true,
+    cut: 'WO-FAM-04',
+  },
+  {
+    family: 'sheet',
+    owner: 'src/components/primitives/overlay/sheet',
+    layoutSensitive: true,
+    cut: 'WO-FAM-04',
+  },
+  {
     family: 'charts',
     owner: 'src/components/patterns/visualization/charts',
     layoutSensitive: true,

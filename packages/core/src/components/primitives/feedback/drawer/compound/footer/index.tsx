@@ -96,7 +96,7 @@ export interface DrawerFooterProps {
 
   /**
    * Additional CSS class names to apply to the footer container.
-   * Merged with the default 'rottay-drawer-footer' class.
+   * Merged with the default 'ds-drawer-footer' class.
    */
   className?: string;
 
@@ -176,27 +176,6 @@ export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
         : 'end';
 
     // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    /**
-     * The only inline hatch is the per-instance `divider` decision the skin
-     * consumes; a caller's `style` still wins over both.
-     */
-    const footerStyle: React.CSSProperties = {
-      // The `divider` decision rides a hatch the skin consumes, so the "off"
-      // branch resolves to the same explicit `none` React used to set inline.
-      // `--ds-drawer-footer-border` is a declared channel: bare var (no
-      // fallback) so the tenant default governs.
-      '--ds-drawer-footer-divider': divider
-        ? '1px solid var(--ds-drawer-footer-border)'
-        : 'none',
-
-      // Merge user styles (takes precedence)
-      ...style,
-    } as React.CSSProperties;
-
-    // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
@@ -205,8 +184,9 @@ export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
         ref={ref}
         data-part="footer"
         data-align={resolvedAlign}
-        className={`rottay-drawer-footer ${className}`.trim()}
-        style={footerStyle}
+        data-divider={divider ? 'true' : 'false'}
+        className={`ds-drawer-footer ${className}`.trim()}
+        style={style}
         // Semantic role for action area
         role="group"
         aria-label={actionsLabel}

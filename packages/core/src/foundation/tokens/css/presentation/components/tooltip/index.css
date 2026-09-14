@@ -1,0 +1,70 @@
+/**
+ * Tooltip Component Tokens - Rottay Design System
+ *
+ * Structural constants of the tooltip family, per recipe and density, and the
+ * defaults of its runtime channels. Its decision relations are emitted by the
+ * compiler family `derivation/chrome/tooltip`.
+ */
+
+:root {
+  --ds-tooltip-instance-z-index: var(--ds-z-index-tooltip);
+  --ds-tooltip-instance-max-width: var(--ds-tooltip-max-width);
+  --ds-tooltip-arrow-anchor-offset: 50%;
+  --ds-tooltip-arrow-edge-offset: 1rem;
+  --ds-tooltip-arrow-half-size: calc(var(--ds-tooltip-arrow-size) / 2);
+  --ds-tooltip-arrow-tip-length: 0.25rem;
+  --ds-tooltip-arrow-overlap: calc(0px - var(--ds-tooltip-arrow-tip-length));
+  --ds-tooltip-arrow-safe-min-inline-size: 2.5rem;
+  --ds-tooltip-bordered-border-width: var(--ds-edge-standard-width);
+  --ds-tooltip-bordered-max-width: var(--ds-tooltip-max-width);
+  --ds-tooltip-bordered-padding-block: 0.4375rem;
+  --ds-tooltip-bordered-padding-inline: 0.6875rem;
+  --ds-tooltip-bordered-radius: var(--ds-radius-md);
+  --ds-tooltip-minimal-border-width: var(--ds-edge-standard-width);
+  --ds-tooltip-minimal-max-width: 16rem;
+  --ds-tooltip-minimal-padding-block: 0.3125rem;
+  --ds-tooltip-minimal-padding-inline: 0.5rem;
+  --ds-tooltip-minimal-radius: var(--ds-radius-sm);
+  --ds-tooltip-inverse-border-width: var(--ds-edge-standard-width);
+  --ds-tooltip-inverse-max-width: 18rem;
+  --ds-tooltip-inverse-padding-block: 0.375rem;
+  --ds-tooltip-inverse-padding-inline: 0.625rem;
+  --ds-tooltip-inverse-radius: var(--ds-radius-md);
+  --ds-tooltip-rich-border-width: var(--ds-edge-standard-width);
+  --ds-tooltip-rich-max-width: 24rem;
+  --ds-tooltip-rich-padding-block: 0.6875rem;
+  --ds-tooltip-rich-padding-inline: 0.8125rem;
+  --ds-tooltip-rich-radius: var(--ds-radius-lg);
+  --ds-tooltip-rich-type: var(--ds-type-supporting);
+  --ds-tooltip-rich-letter-spacing: var(--ds-type-supporting-letter-spacing);
+  --ds-tooltip-compact-padding-block: 0.25rem;
+  --ds-tooltip-compact-padding-inline: 0.5rem;
+  --ds-tooltip-compact-type: var(--ds-type-caption);
+  --ds-tooltip-comfortable-padding-block: 0.4375rem;
+  --ds-tooltip-comfortable-padding-inline: 0.6875rem;
+  --ds-tooltip-spacious-padding-block: 0.6875rem;
+  --ds-tooltip-spacious-padding-inline: 0.875rem;
+  --ds-tooltip-spacious-type: var(--ds-type-supporting);
+  --ds-tooltip-type: var(--ds-type-caption);
+  --ds-tooltip-motion-distance: 0.1875rem;
+  --ds-tooltip-motion-scale: 0.97;
+  --ds-tooltip-enter-duration: var(--ds-motion-feedback);
+  --ds-tooltip-enter-easing: var(--ds-motion-ease-enter);
+  --ds-tooltip-exit-duration: var(--ds-motion-feedback);
+  --ds-tooltip-exit-easing: var(--ds-motion-ease-exit);
+  --ds-tooltip-arrow-duration: var(--ds-motion-feedback);
+  --ds-tooltip-texture-opacity: 1;
+  --ds-tooltip-touch-target: var(--ds-touch-target-min);
+  --ds-tooltip-viewport-gap: 0.5rem;
+  --ds-tooltip-shortcut-gap: var(--ds-spacing-sm);
+  --ds-tooltip-shortcut-chip-gap: 0.1875rem;
+  --ds-tooltip-shortcut-key-min-size: 1.35rem;
+  --ds-tooltip-shortcut-key-padding-block: 0.0625rem;
+  --ds-tooltip-shortcut-key-padding-inline: 0.3125rem;
+  --ds-tooltip-shortcut-key-border-width: var(--ds-edge-standard-width);
+  --ds-tooltip-shortcut-key-radius: var(--ds-radius-sm);
+  --ds-tooltip-shortcut-key-type: var(--ds-type-code);
+  --ds-tooltip-content-padding-block: var(--ds-spacing-2);
+  --ds-tooltip-content-padding-inline: var(--ds-spacing-3);
+  --ds-tooltip-content-arrow-offset: calc(var(--ds-tooltip-arrow-size) / -2 - 1px);
+}

@@ -95,7 +95,7 @@ export interface AlertDescriptionProps {
 
   /**
    * Additional CSS classes to apply.
-   * Merged with the base 'rottay-alert-description' class.
+   * Merged with the base 'ds-alert-description' class.
    */
   className?: string;
 
@@ -125,7 +125,7 @@ export interface AlertDescriptionProps {
  * - Long-copy wrapping inside the parent's content track
  *
  * **CSS Classes / parts:**
- * - `rottay-alert-description` + `data-part="description"`: stable hooks the
+ * - `ds-alert-description` + `data-part="description"`: stable hooks the
  *   engine-agnostic compound skin (`alert-compounds.css`) paints
  * - Additional classes from `className` prop are appended
  *
@@ -156,7 +156,7 @@ export const AlertDescription = forwardRef<HTMLDivElement, AlertDescriptionProps
     // secondary-ink color, the `--ds-alert-description-size` role chain and
     // long-copy wrapping. No inline literals; a caller's `style` still wins.
     return (
-      <div ref={ref} data-part="description" className={`rottay-alert-description ${className}`} style={style}>
+      <div ref={ref} data-part="description" className={`ds-alert-description ${className}`.trim()} style={style}>
         {children}
       </div>
     );

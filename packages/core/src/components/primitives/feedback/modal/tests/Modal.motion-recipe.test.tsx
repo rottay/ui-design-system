@@ -14,7 +14,7 @@ function modernDialog(): HTMLDialogElement {
 }
 
 describe('Modal overlay.modal motion recipe', () => {
-  it('modern engine stamps the animated recipe contract and recipe-driven animation', () => {
+  it('modern engine stamps the animated recipe contract on the family motion channels', () => {
     render(
       <I18nProvider locale="en">
         <ModernModal open onClose={vi.fn()} title="Recipe">
@@ -26,11 +26,12 @@ describe('Modal overlay.modal motion recipe', () => {
 
     expect(dialog).toHaveAttribute('data-recipe', 'overlay.modal');
     expect(dialog).toHaveAttribute('data-recipe-state', 'animated');
-    expect(dialog.style.getPropertyValue('--ds-recipe-enter')).not.toBe('0ms');
+    expect(dialog).toHaveAttribute('data-motion', 'animated');
+    expect(dialog.style.getPropertyValue('--ds-modal-enter-duration')).not.toBe('0ms');
 
     const surface = dialog.querySelector('[data-part="surface"]') as HTMLElement;
-    expect(surface.style.animation).toContain('ds-overlay-modal-enter-modern');
-    expect(surface.style.animation).toContain('var(--ds-recipe-enter');
+    expect(surface).toHaveAttribute('data-open', 'true');
+    expect(surface.style.animation).toBe('');
   });
 
   it('modern engine declares NO animation under reduced motion (final state)', () => {
@@ -46,7 +47,8 @@ describe('Modal overlay.modal motion recipe', () => {
     const dialog = modernDialog();
 
     expect(dialog).toHaveAttribute('data-recipe-state', 'final');
-    expect(dialog.style.getPropertyValue('--ds-recipe-enter')).toBe('0ms');
+    expect(dialog).toHaveAttribute('data-motion', 'final');
+    expect(dialog.style.getPropertyValue('--ds-modal-enter-duration')).toBe('0ms');
 
     const surface = dialog.querySelector('[data-part="surface"]') as HTMLElement;
     expect(surface.style.animation).toBe('');

@@ -430,12 +430,12 @@ const MENU_CHROME_VARIABLES = chromeVariableMap<BrandMenuChrome>("--ds-menu-", [
 ] as const);
 
 const MESSAGE_CHROME_VARIABLES = chromeVariableMap<BrandMessageChrome>(
-  "--ds-message-",
+  "--ds-notifier-message-",
   ["bg", "closeColor", "closeColorHover", "shadow"] as const
 );
 
 const NOTIFICATION_CHROME_VARIABLES =
-  chromeVariableMap<BrandNotificationChrome>("--ds-notification-", [
+  chromeVariableMap<BrandNotificationChrome>("--ds-notifier-notification-", [
     "bg",
     "shadow",
     "titleColor",
@@ -1303,6 +1303,13 @@ export const FROZEN_ENGINE_COMPAT_CHANNELS: Readonly<Record<`--ds-${string}`, `-
   "--ds-datepicker-separator-color": "--ds-date-picker-separator-color",
   "--ds-datepicker-shadow-focus": "--ds-date-picker-shadow-focus",
   "--ds-datepicker-warning-border": "--ds-date-picker-warning-border",
+  "--ds-message-bg": "--ds-notifier-message-bg",
+  "--ds-message-close-color": "--ds-notifier-message-close-color",
+  "--ds-message-close-color-hover": "--ds-notifier-message-close-color-hover",
+  "--ds-message-shadow": "--ds-notifier-message-shadow",
+  "--ds-notification-bg": "--ds-notifier-notification-bg",
+  "--ds-notification-shadow": "--ds-notifier-notification-shadow",
+  "--ds-notification-title-color": "--ds-notifier-notification-title-color",
   "--ds-timepicker-bg": "--ds-time-picker-bg",
   "--ds-timepicker-bg-disabled": "--ds-time-picker-bg-disabled",
   "--ds-timepicker-border": "--ds-time-picker-border",

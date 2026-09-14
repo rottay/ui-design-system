@@ -84,7 +84,7 @@ export interface DrawerBodyProps {
 
   /**
    * Additional CSS class names to apply to the body container.
-   * Merged with the default 'rottay-drawer-body' class.
+   * Merged with the default 'ds-drawer-body' class.
    */
   className?: string;
 
@@ -163,7 +163,7 @@ export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(
         ref={ref}
         data-part="body"
         data-padding={resolvedPadding}
-        className={`rottay-drawer-body ${className}`.trim()}
+        className={`ds-drawer-body ${className}`.trim()}
         style={style}
       >
         {children}

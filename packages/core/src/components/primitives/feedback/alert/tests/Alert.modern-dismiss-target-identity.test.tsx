@@ -34,10 +34,10 @@ describe('Modern Alert dismiss control identity', () => {
     );
   });
 
-  it('keeps the label element addressable even without a close button', () => {
+  it('keeps the title element addressable even without a close button', () => {
     render(<ModernAlert type="info" message="All good" />);
 
-    const label = document.querySelector('[data-part="label"]') as HTMLElement;
+    const label = document.querySelector('[data-part="title"]') as HTMLElement;
     expect(label.id).toBeTruthy();
   });
 });

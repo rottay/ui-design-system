@@ -41,7 +41,7 @@ describe("Popover modern engine advanced coverage", () => {
 
     // Chrome moved into the modern skin: the trigger wrapper carries the scope
     // class and open state; placement rides data-placement on the surface part.
-    const wrapper = container.querySelector(".rottay-popover--modern");
+    const wrapper = container.querySelector(".ds-popover--modern");
     expect(wrapper).not.toBeNull();
     expect(wrapper).toHaveAttribute("data-part", "trigger");
     expect(wrapper).toHaveAttribute("data-open", "false");
@@ -286,7 +286,7 @@ describe("Popover modern engine advanced coverage", () => {
     const surface = screen.getByRole("dialog");
     expect(surface).toHaveAttribute("dir", "rtl");
     expect(surface).toHaveAttribute("lang", "ar");
-    expect(surface).toHaveAttribute("data-recipe", "rich");
+    expect(surface).toHaveAttribute("data-variant", "rich");
     expect(surface).toHaveAttribute("data-density", "compact");
     expect(surface.closest('[data-tenant="the-management"]')).not.toBeNull();
     expect(surface.closest('[data-rottay-portal]')).not.toBeNull();

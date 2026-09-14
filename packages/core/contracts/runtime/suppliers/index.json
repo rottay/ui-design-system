@@ -1195,7 +1195,8 @@
           "motion"
         ],
         "Callout": [
-          "@phosphor-icons/react"
+          "@phosphor-icons/react",
+          "antd"
         ],
         "Card": [
           "@phosphor-icons/react",
@@ -1751,18 +1752,15 @@
         ],
         "notification": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "NotificationItem": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "NotificationProvider": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "NotificationSurface": [
           "@ant-design/icons",
@@ -2509,8 +2507,7 @@
         ],
         "useNotification": [
           "@phosphor-icons/react",
-          "antd",
-          "motion"
+          "antd"
         ],
         "useOptionalTokens": [
           "antd"

@@ -1,0 +1,489 @@
+/**
+ * Modern Notifier skin.
+ *
+ * One announcement surface, `ds-notifier ds-notifier--modern[data-part='root']`,
+ * with three roles on `data-variant`: `toast` (title, copy, inline controls),
+ * `notification` (title, copy, caller actions under a rule, an optional
+ * activatable card) and `message` (one status line). `data-tone` picks the
+ * accent, ink, wash and edges; `data-open='false'` plays the exit; the
+ * lifetime bar drains over the runtime `--ds-notifier-lifetime` and freezes on
+ * `data-paused`. Stacks, `ds-notifier-stack[data-part='stack']`, sit on the
+ * runtime `--ds-notifier-layer` at their logical edge. Every channel is written
+ * by `derivation/chrome/notifier` or `presentation/components/notifier`.
+ */
+
+@keyframes ds-notifier-enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--ds-notifier-travel-direction, -1) * var(--ds-notifier-travel) * var(--ds-motion-intensity)))
+      scale(calc(1 - var(--ds-notifier-scale-step) * var(--ds-motion-intensity)));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-notifier-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--ds-notifier-travel-direction, -1) * var(--ds-notifier-travel) * var(--ds-motion-intensity)))
+      scale(calc(1 - var(--ds-notifier-scale-step) * var(--ds-motion-intensity)));
+  }
+}
+
+@keyframes ds-notifier-drain {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* ---- Stack ---- */
+
+.ds-notifier-stack[data-part='stack'] {
+  --ds-notifier-travel-direction: -1;
+  position: fixed;
+  z-index: var(--ds-notifier-layer, var(--ds-z-index-toast));
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-notifier-stack-gap, var(--ds-spacing-3));
+  box-sizing: border-box;
+  inline-size: min(var(--ds-notifier-stack-width, var(--ds-notifier-toast-width)), calc(100dvw - var(--ds-notifier-stack-gutter, var(--ds-spacing-4)) * 2));
+  pointer-events: none;
+}
+
+.ds-notifier-stack[data-part='stack'][data-variant='toast'] { --ds-notifier-stack-width: var(--ds-notifier-toast-width); }
+.ds-notifier-stack[data-part='stack'][data-variant='notification'] { --ds-notifier-stack-width: var(--ds-notifier-notification-width); }
+.ds-notifier-stack[data-part='stack'][data-variant='message'] {
+  --ds-notifier-stack-width: var(--ds-notifier-message-width);
+  align-items: center;
+  gap: var(--ds-notifier-message-stack-gap, var(--ds-spacing-2));
+}
+
+.ds-notifier-stack[data-part='stack'][data-placement^='top'] { top: var(--ds-notifier-stack-offset, var(--ds-spacing-4)); }
+.ds-notifier-stack[data-part='stack'][data-placement^='bottom'] {
+  --ds-notifier-travel-direction: 1;
+  bottom: var(--ds-notifier-stack-offset, var(--ds-spacing-4));
+}
+.ds-notifier-stack[data-part='stack'][data-variant='toast'][data-placement^='bottom'] { flex-direction: column-reverse; }
+.ds-notifier-stack[data-part='stack'][data-placement$='start'] { inset-inline-start: var(--ds-notifier-stack-gutter, var(--ds-spacing-4)); }
+.ds-notifier-stack[data-part='stack'][data-placement$='end'] { inset-inline-end: var(--ds-notifier-stack-gutter, var(--ds-spacing-4)); }
+.ds-notifier-stack[data-part='stack']:is([data-placement='top'], [data-placement='bottom']) {
+  inset-inline: 0;
+  margin-inline: auto;
+}
+
+.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'] {
+  pointer-events: auto;
+  transition: transform var(--ds-notifier-transition-duration, var(--ds-motion-feedback)) var(--ds-notifier-transition-curve, var(--ds-motion-ease-standard));
+}
+.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-depth='1'] {
+  transform: scale(calc(1 - var(--ds-notifier-stack-recede))) translateY(calc(var(--ds-notifier-travel-direction) * var(--ds-notifier-stack-step)));
+}
+.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-depth='2'] {
+  transform: scale(calc(1 - var(--ds-notifier-stack-recede) * 2)) translateY(calc(var(--ds-notifier-travel-direction) * var(--ds-notifier-stack-step) * 2));
+}
+.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-open='false'] {
+  pointer-events: none;
+  animation: ds-notifier-exit var(--ds-notifier-exit-duration, var(--ds-motion-feedback)) var(--ds-notifier-exit-curve, var(--ds-motion-ease-exit)) both;
+}
+
+/* ---- Surface ---- */
+
+.ds-notifier.ds-notifier--modern[data-part='root'] {
+  --ds-notifier-surface-bg: var(--ds-notifier-toast-bg, var(--ds-material-overlay-background));
+  --ds-notifier-surface-shadow: var(--ds-notifier-toast-shadow, var(--ds-elevation-3));
+  --ds-notifier-ink: var(--ds-notifier-neutral-ink, var(--ds-color-primary));
+  --ds-notifier-wash: var(--ds-notifier-neutral-wash, var(--ds-notifier-surface-bg));
+  --ds-notifier-well: var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg));
+  --ds-notifier-edge: var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color));
+  --ds-notifier-edge-strong: var(--ds-notifier-neutral-edge-strong, var(--ds-notifier-border-color));
+  --ds-notifier-well-edge: var(--ds-notifier-neutral-well-edge, var(--ds-notifier-border-color));
+  --ds-notifier-rule: var(--ds-notifier-neutral-rule, var(--ds-notifier-border-color));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-neutral-lifetime, var(--ds-color-primary));
+  position: relative;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  overflow: hidden;
+  pointer-events: auto;
+  color: var(--ds-notifier-color, var(--ds-color-text-primary));
+  background: linear-gradient(
+    var(--ds-notifier-sheen-angle),
+    var(--ds-notifier-wash, var(--ds-notifier-neutral-wash, var(--ds-notifier-surface-bg))),
+    var(--ds-notifier-surface-bg) var(--ds-notifier-sheen-stop)
+  );
+  border: var(--ds-notifier-border-width, var(--ds-edge-standard-width)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-edge, var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color)));
+  border-radius: var(--ds-notifier-radius, var(--ds-radius-lg));
+  box-shadow: var(--ds-notifier-surface-shadow, var(--ds-notifier-toast-shadow, var(--ds-elevation-3)));
+  animation: ds-notifier-enter var(--ds-notifier-enter-duration, var(--ds-motion-reveal)) var(--ds-notifier-enter-curve, var(--ds-motion-ease-enter)) both;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='notification'] {
+  --ds-notifier-surface-bg: var(--ds-notifier-notification-bg, var(--ds-material-overlay-background));
+  --ds-notifier-surface-shadow: var(--ds-notifier-notification-shadow, var(--ds-elevation-3));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] {
+  --ds-notifier-surface-bg: var(--ds-notifier-message-bg, var(--ds-material-overlay-background));
+  --ds-notifier-surface-shadow: var(--ds-notifier-message-shadow, var(--ds-elevation-3));
+  inline-size: auto;
+  min-inline-size: min(var(--ds-notifier-message-min-width), calc(100dvw - var(--ds-notifier-stack-gutter, var(--ds-spacing-4)) * 2));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-open='false'] {
+  pointer-events: none;
+  animation: ds-notifier-exit var(--ds-notifier-exit-duration, var(--ds-motion-feedback)) var(--ds-notifier-exit-curve, var(--ds-motion-ease-exit)) both;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-elevated='false'] { box-shadow: none; }
+.ds-notifier.ds-notifier--modern[data-part='root'][data-radius='none'] { border-radius: 0; }
+.ds-notifier.ds-notifier--modern[data-part='root'][data-radius='sm'] { border-radius: var(--ds-radius-sm); }
+.ds-notifier.ds-notifier--modern[data-part='root'][data-radius='md'] { border-radius: var(--ds-radius-md); }
+.ds-notifier.ds-notifier--modern[data-part='root'][data-radius='lg'] { border-radius: var(--ds-radius-lg); }
+
+/* ---- Tones ---- */
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='primary'] {
+  --ds-notifier-ink: var(--ds-notifier-primary-ink, var(--ds-color-primary));
+  --ds-notifier-wash: var(--ds-notifier-primary-wash, color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-primary-well, color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary)));
+  --ds-notifier-edge: var(--ds-notifier-primary-edge, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border-subtle)));
+  --ds-notifier-edge-strong: var(--ds-notifier-primary-edge-strong, color-mix(in srgb, var(--ds-color-primary) 40%, var(--ds-color-border-subtle)));
+  --ds-notifier-well-edge: var(--ds-notifier-primary-well-edge, color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-subtle)));
+  --ds-notifier-rule: var(--ds-notifier-primary-rule, color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-border-subtle)));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-primary-lifetime, color-mix(in srgb, var(--ds-color-primary) 74%, transparent));
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='secondary'] {
+  --ds-notifier-ink: var(--ds-notifier-secondary-ink, var(--ds-color-secondary));
+  --ds-notifier-wash: var(--ds-notifier-secondary-wash, color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-secondary-well, color-mix(in srgb, var(--ds-color-secondary) 11%, var(--ds-color-bg-primary)));
+  --ds-notifier-edge: var(--ds-notifier-secondary-edge, color-mix(in srgb, var(--ds-color-secondary) 30%, var(--ds-color-border-subtle)));
+  --ds-notifier-edge-strong: var(--ds-notifier-secondary-edge-strong, color-mix(in srgb, var(--ds-color-secondary) 40%, var(--ds-color-border-subtle)));
+  --ds-notifier-well-edge: var(--ds-notifier-secondary-well-edge, color-mix(in srgb, var(--ds-color-secondary) 26%, var(--ds-color-border-subtle)));
+  --ds-notifier-rule: var(--ds-notifier-secondary-rule, color-mix(in srgb, var(--ds-color-secondary) 16%, var(--ds-color-border-subtle)));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-secondary-lifetime, color-mix(in srgb, var(--ds-color-secondary) 74%, transparent));
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='info'] {
+  --ds-notifier-ink: var(--ds-notifier-info-ink, var(--ds-color-info-ink));
+  --ds-notifier-wash: var(--ds-notifier-info-wash, color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-info-well, color-mix(in oklab, var(--ds-color-info) 12%, var(--ds-color-bg-primary)));
+  --ds-notifier-edge: var(--ds-notifier-info-edge, color-mix(in srgb, var(--ds-color-info) 30%, var(--ds-color-border-subtle)));
+  --ds-notifier-edge-strong: var(--ds-notifier-info-edge-strong, color-mix(in srgb, var(--ds-color-info) 40%, var(--ds-color-border-subtle)));
+  --ds-notifier-well-edge: var(--ds-notifier-info-well-edge, color-mix(in srgb, var(--ds-color-info) 26%, var(--ds-color-border-subtle)));
+  --ds-notifier-rule: var(--ds-notifier-info-rule, color-mix(in srgb, var(--ds-color-info) 16%, var(--ds-color-border-subtle)));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-info-lifetime, color-mix(in srgb, var(--ds-color-info) 74%, transparent));
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='success'] {
+  --ds-notifier-ink: var(--ds-notifier-success-ink, var(--ds-color-success-ink));
+  --ds-notifier-wash: var(--ds-notifier-success-wash, color-mix(in oklab, var(--ds-color-success) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-success-well, color-mix(in oklab, var(--ds-color-success) 12%, var(--ds-color-bg-primary)));
+  --ds-notifier-edge: var(--ds-notifier-success-edge, color-mix(in srgb, var(--ds-color-success) 30%, var(--ds-color-border-subtle)));
+  --ds-notifier-edge-strong: var(--ds-notifier-success-edge-strong, color-mix(in srgb, var(--ds-color-success) 40%, var(--ds-color-border-subtle)));
+  --ds-notifier-well-edge: var(--ds-notifier-success-well-edge, color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border-subtle)));
+  --ds-notifier-rule: var(--ds-notifier-success-rule, color-mix(in srgb, var(--ds-color-success) 16%, var(--ds-color-border-subtle)));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-success-lifetime, color-mix(in srgb, var(--ds-color-success) 74%, transparent));
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='warning'] {
+  --ds-notifier-ink: var(--ds-notifier-warning-ink, var(--ds-color-warning-ink));
+  --ds-notifier-wash: var(--ds-notifier-warning-wash, color-mix(in oklab, var(--ds-color-warning) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-warning-well, color-mix(in oklab, var(--ds-color-warning) 12%, var(--ds-color-bg-primary)));
+  --ds-notifier-edge: var(--ds-notifier-warning-edge, color-mix(in srgb, var(--ds-color-warning) 30%, var(--ds-color-border-subtle)));
+  --ds-notifier-edge-strong: var(--ds-notifier-warning-edge-strong, color-mix(in srgb, var(--ds-color-warning) 40%, var(--ds-color-border-subtle)));
+  --ds-notifier-well-edge: var(--ds-notifier-warning-well-edge, color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border-subtle)));
+  --ds-notifier-rule: var(--ds-notifier-warning-rule, color-mix(in srgb, var(--ds-color-warning) 16%, var(--ds-color-border-subtle)));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-warning-lifetime, color-mix(in srgb, var(--ds-color-warning) 74%, transparent));
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='error'] {
+  --ds-notifier-ink: var(--ds-notifier-error-ink, var(--ds-color-error-ink));
+  --ds-notifier-wash: var(--ds-notifier-error-wash, color-mix(in oklab, var(--ds-color-error) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-error-well, color-mix(in oklab, var(--ds-color-error) 12%, var(--ds-color-bg-primary)));
+  --ds-notifier-edge: var(--ds-notifier-error-edge, color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border-subtle)));
+  --ds-notifier-edge-strong: var(--ds-notifier-error-edge-strong, color-mix(in srgb, var(--ds-color-error) 40%, var(--ds-color-border-subtle)));
+  --ds-notifier-well-edge: var(--ds-notifier-error-well-edge, color-mix(in srgb, var(--ds-color-error) 26%, var(--ds-color-border-subtle)));
+  --ds-notifier-rule: var(--ds-notifier-error-rule, color-mix(in srgb, var(--ds-color-error) 16%, var(--ds-color-border-subtle)));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-error-lifetime, color-mix(in srgb, var(--ds-color-error) 74%, transparent));
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='loading'] {
+  --ds-notifier-ink: var(--ds-notifier-loading-ink, var(--ds-color-primary));
+  --ds-notifier-wash: var(--ds-notifier-loading-wash, color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-well: var(--ds-notifier-loading-well, color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary)));
+  --ds-notifier-edge: var(--ds-notifier-loading-edge, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border-subtle)));
+  --ds-notifier-edge-strong: var(--ds-notifier-loading-edge-strong, color-mix(in srgb, var(--ds-color-primary) 40%, var(--ds-color-border-subtle)));
+  --ds-notifier-well-edge: var(--ds-notifier-loading-well-edge, color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-subtle)));
+  --ds-notifier-rule: var(--ds-notifier-loading-rule, color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-border-subtle)));
+  --ds-notifier-lifetime-ink: var(--ds-notifier-loading-lifetime, color-mix(in srgb, var(--ds-color-primary) 74%, transparent));
+}
+.ds-notifier.ds-notifier--modern[data-part='root'][data-tone='gradient'] {
+  --ds-notifier-well: var(--ds-notifier-gradient-well, color-mix(in srgb, var(--ds-color-text-on-primary) 14%, transparent));
+  --ds-notifier-edge: var(--ds-notifier-gradient-edge, color-mix(in srgb, var(--ds-color-text-on-primary) 28%, transparent));
+  --ds-notifier-well-edge: var(--ds-notifier-gradient-edge, color-mix(in srgb, var(--ds-color-text-on-primary) 28%, transparent));
+  --ds-notifier-ink: currentColor;
+  --ds-notifier-description-color: currentColor;
+  color: var(--ds-notifier-gradient-color, var(--ds-color-text-on-primary));
+  background: var(--ds-notifier-gradient-bg, linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-secondary)));
+}
+
+/* ---- Anatomy ---- */
+
+.ds-notifier.ds-notifier--modern[data-part='root'] > [data-part='layout'] {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--ds-notifier-gap, var(--ds-spacing-3));
+  padding: var(--ds-notifier-padding, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] > [data-part='layout'] {
+  align-items: center;
+  padding-block: var(--ds-notifier-message-padding-block, calc(var(--ds-spacing-3) * var(--ds-density-effective-scale)));
+  padding-inline: var(--ds-notifier-message-padding-inline, calc(var(--ds-spacing-4) * var(--ds-density-effective-scale)));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='icon'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-notifier-well-size);
+  block-size: var(--ds-notifier-well-size);
+  box-sizing: border-box;
+  color: var(--ds-notifier-ink, var(--ds-notifier-neutral-ink, var(--ds-color-primary)));
+  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg)));
+  border: var(--ds-notifier-hairline-width, var(--ds-edge-hairline-width)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-well-edge, var(--ds-notifier-neutral-well-edge, var(--ds-notifier-border-color)));
+  border-radius: var(--ds-notifier-well-radius, var(--ds-radius-md));
+  box-shadow: var(--ds-notifier-well-keyline, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] [data-part='icon'] {
+  inline-size: var(--ds-notifier-message-well-size);
+  block-size: var(--ds-notifier-message-well-size);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='spinner'] {
+  display: inline-block;
+  inline-size: var(--ds-notifier-spinner-size, var(--ds-icon-sm-size));
+  block-size: var(--ds-notifier-spinner-size, var(--ds-icon-sm-size));
+  box-sizing: border-box;
+  border: var(--ds-notifier-spinner-width, var(--ds-border-width-2)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-spinner-track, var(--ds-color-border));
+  border-block-start-color: var(--ds-notifier-spinner-head, var(--ds-color-primary));
+  border-radius: var(--ds-radius-full);
+  animation: ds-foundation-spin var(--ds-notifier-spin-duration, var(--ds-motion-glacial)) linear infinite;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='body'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-notifier-copy-gap, var(--ds-spacing-1));
+  min-inline-size: 0;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='title'] {
+  font-family: var(--ds-notifier-title-font-family, var(--ds-type-label-font-family));
+  font-size: var(--ds-notifier-title-font-size, var(--ds-type-label-font-size));
+  font-weight: var(--ds-notifier-title-font-weight, var(--ds-font-weight-semibold));
+  line-height: var(--ds-notifier-title-line-height, var(--ds-type-label-line-height));
+  letter-spacing: var(--ds-notifier-title-letter-spacing, var(--ds-letter-spacing-heading));
+  overflow-wrap: break-word;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='notification'] [data-part='title'] {
+  color: var(--ds-notifier-notification-title-color, var(--ds-notifier-color));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root']:is([data-tone='warning'], [data-tone='error']) [data-part='title'] {
+  font-weight: var(--ds-notifier-title-urgent-font-weight, var(--ds-font-weight-bold));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] [data-part='title'] {
+  font-family: inherit;
+  font-size: var(--ds-notifier-message-font-size, var(--ds-type-body-font-size));
+  font-weight: var(--ds-notifier-message-font-weight, var(--ds-font-weight-medium));
+  letter-spacing: normal;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message']:is([data-tone='warning'], [data-tone='error']) [data-part='title'] {
+  font-weight: var(--ds-notifier-message-urgent-font-weight, var(--ds-font-weight-semibold));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='description'], [data-part='content']) {
+  color: var(--ds-notifier-description-color, var(--ds-color-text-secondary));
+  font-family: var(--ds-notifier-description-font-family, var(--ds-type-supporting-font-family));
+  font-size: var(--ds-notifier-description-font-size, var(--ds-type-supporting-font-size));
+  line-height: var(--ds-notifier-description-line-height, var(--ds-type-supporting-line-height));
+  overflow-wrap: break-word;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='actions'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-notifier-control-gap, var(--ds-spacing-2));
+  margin-block-start: var(--ds-notifier-gap, var(--ds-spacing-3));
+  padding-block-start: var(--ds-notifier-gap, var(--ds-spacing-3));
+  border-block-start: var(--ds-notifier-hairline-width, var(--ds-edge-hairline-width)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-rule, var(--ds-notifier-neutral-rule, var(--ds-notifier-border-color)));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='controls'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-notifier-control-gap, var(--ds-spacing-2));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  block-size: var(--ds-notifier-control-size);
+  cursor: pointer;
+  color: var(--ds-notifier-control-color, var(--ds-color-text-primary));
+  background: var(--ds-notifier-control-bg, color-mix(in srgb, var(--ds-material-overlay-background) 82%, transparent));
+  border: var(--ds-notifier-hairline-width, var(--ds-edge-hairline-width)) var(--ds-notifier-border-style, var(--ds-edge-standard-style)) var(--ds-notifier-control-border, var(--ds-color-border-subtle));
+  border-radius: var(--ds-notifier-control-radius, var(--ds-radius-md));
+  font: inherit;
+  transition-property: transform, background-color, border-color, box-shadow, color;
+  transition-duration: var(--ds-notifier-transition-duration, var(--ds-motion-feedback));
+  transition-timing-function: var(--ds-notifier-transition-curve, var(--ds-motion-ease-standard));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='action'] {
+  padding-inline: var(--ds-notifier-control-padding-inline, var(--ds-spacing-3));
+  font-size: var(--ds-notifier-control-font-size, var(--ds-type-label-font-size));
+  font-weight: var(--ds-notifier-control-font-weight, var(--ds-type-label-font-weight));
+  background: var(--ds-notifier-well, var(--ds-notifier-neutral-well, var(--ds-notifier-surface-bg)));
+  border-color: var(--ds-notifier-edge, var(--ds-notifier-neutral-edge, var(--ds-notifier-border-color)));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] [data-part='close-button'] {
+  inline-size: var(--ds-notifier-control-size);
+  padding: 0;
+  color: var(--ds-notifier-close-color);
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] [data-part='close-button'] {
+  inline-size: var(--ds-notifier-message-control-size);
+  block-size: var(--ds-notifier-message-control-size);
+  color: var(--ds-notifier-message-close-color, var(--ds-notifier-close-color));
+}
+
+@media (hover: hover) {
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='hovered'], :hover) {
+    transform: translateY(var(--ds-notifier-control-lift));
+    color: var(--ds-notifier-close-color-hover);
+    background-color: var(--ds-notifier-control-bg-hover, var(--ds-material-control-background-hover));
+    border-color: var(--ds-notifier-edge-strong, var(--ds-notifier-neutral-edge-strong, var(--ds-notifier-border-color)));
+    box-shadow: var(--ds-notifier-control-shadow-hover, var(--ds-elevation-1));
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'][data-variant='message'] [data-part='close-button']:is([data-state~='hovered'], :hover) {
+    color: var(--ds-notifier-message-close-color-hover, var(--ds-notifier-close-color-hover));
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true']:is([data-state~='hovered'], :hover) {
+    transform: translateY(var(--ds-notifier-clickable-lift));
+    border-color: var(--ds-notifier-edge-strong, var(--ds-notifier-neutral-edge-strong, var(--ds-notifier-border-color)));
+    box-shadow: var(--ds-notifier-clickable-shadow-hover, var(--ds-elevation-4));
+  }
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='pressed'], :active) {
+  transform: scale(var(--ds-notifier-press-scale, var(--ds-state-press-scale)));
+  background-color: var(--ds-notifier-control-bg-hover, var(--ds-material-control-background-hover));
+  border-color: var(--ds-notifier-edge-strong, var(--ds-notifier-neutral-edge-strong, var(--ds-notifier-border-color)));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true'] {
+  cursor: pointer;
+  transition-property: transform, box-shadow, border-color;
+  transition-duration: var(--ds-notifier-transition-duration, var(--ds-motion-feedback));
+  transition-timing-function: var(--ds-notifier-transition-curve, var(--ds-motion-ease-standard));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true']:is([data-state~='pressed'], :active) {
+  transform: translateY(0);
+  border-color: var(--ds-notifier-edge-strong, var(--ds-notifier-neutral-edge-strong, var(--ds-notifier-border-color)));
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='focus-visible'], :focus-visible),
+.ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: none;
+  box-shadow: var(--ds-notifier-focus-ring, var(--ds-focus-ring));
+}
+
+/* An invisible centered hit area meets the touch floor without growing the control. */
+@media (pointer: coarse) {
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']) {
+    position: relative;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button'])::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - var(--ds-notifier-touch-target-min, var(--ds-touch-target-min)) / 2);
+  }
+}
+
+/* ---- Lifetime ---- */
+
+.ds-notifier.ds-notifier--modern[data-part='root'] > [data-part='progress'] {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: var(--ds-notifier-lifetime-size, var(--ds-border-width-2));
+  background: var(--ds-notifier-lifetime-ink, var(--ds-notifier-neutral-lifetime, var(--ds-color-primary)));
+  transform-origin: left center;
+  animation: ds-notifier-drain var(--ds-notifier-lifetime) linear both;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root']:dir(rtl) > [data-part='progress'] {
+  transform-origin: right center;
+}
+
+.ds-notifier.ds-notifier--modern[data-part='root'][data-paused='true'] > [data-part='progress'] {
+  animation-play-state: paused;
+}
+
+/* ---- Platform postures ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-notifier.ds-notifier--modern[data-part='root'],
+  .ds-notifier.ds-notifier--modern[data-part='root'][data-open='false'],
+  .ds-notifier.ds-notifier--modern[data-part='root'] > [data-part='progress'],
+  .ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-open='false'] {
+    animation: none;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']),
+  .ds-notifier-stack[data-part='stack'] > [data-part='stack-item'] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-notifier.ds-notifier--modern[data-part='root'],
+  .ds-notifier.ds-notifier--modern[data-part='root'] [data-part='icon'],
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']) {
+    color: CanvasText;
+    background: Canvas;
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] [data-part='actions'] {
+    border-block-start-color: ButtonText;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] :is([data-part='action'], [data-part='close-button']):is([data-state~='focus-visible'], :focus-visible),
+  .ds-notifier.ds-notifier--modern[data-part='root'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-notifier-focus-ring-width, var(--ds-focus-ring-width)) solid Highlight;
+  }
+
+  .ds-notifier.ds-notifier--modern[data-part='root'] > [data-part='progress'] {
+    background: Highlight;
+  }
+}

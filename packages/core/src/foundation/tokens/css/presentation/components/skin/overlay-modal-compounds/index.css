@@ -91,6 +91,6 @@
 }
 
 /* ---- utils/FocusTrap: an unstyled wrapper whose only paint is the focus reset. ---- */
-.rottay-focus-trap {
+.ds-focus-trap {
   outline: none;
 }

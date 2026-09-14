@@ -80,43 +80,21 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
     } = props;
 
     // Content container styles using design system CSS variables
-    const contentStyles: React.CSSProperties = {
-      padding: 'var(--ds-tooltip-padding, 0.5rem 0.75rem)',
-      fontSize: 'var(--ds-tooltip-font-size, 0.8125rem)',
-      ...style,
-    };
-
     // Arrow positioning offsets keyed by tooltip side; each positions the arrow
     // on the opposite edge of the content box so it visually points toward the trigger
-    const arrowPositions: Record<string, React.CSSProperties> = {
-      top: { bottom: '-4px', left: '50%', marginLeft: '-4px' },
-      bottom: { top: '-4px', left: '50%', marginLeft: '-4px' },
-      left: { right: '-4px', top: '50%', marginTop: '-4px' },
-      right: { left: '-4px', top: '50%', marginTop: '-4px' },
-    };
-
     // Arrow rendered as a rotated square (45deg) to create a triangle-like pointer
-    const arrowStyles: React.CSSProperties = {
-      position: 'absolute',
-      width: 'var(--ds-tooltip-arrow-size, 6px)',
-      height: 'var(--ds-tooltip-arrow-size, 6px)',
-      ...arrowPositions[side],
-    };
-
     return (
       <div
         ref={ref}
-        className={`rottay-tooltip-content ${className}`.trim()}
-        style={contentStyles}
+        data-part="content"
+        data-side={side}
+        className={`ds-tooltip-content ${className}`.trim()}
+        style={style}
         {...restProps}
       >
         {children}
         {arrow && (
-          <div
-            className="rottay-tooltip-arrow"
-            style={arrowStyles}
-            aria-hidden="true"
-          />
+          <div data-part="arrow" aria-hidden="true" />
         )}
       </div>
     );

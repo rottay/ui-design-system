@@ -1,0 +1,36 @@
+/**
+ * Sheet Component Tokens - Rottay Design System
+ *
+ * Structural constants of the sheet family and the defaults of its runtime
+ * channels. Its decision relations are emitted by the compiler family
+ * `derivation/chrome/sheet`.
+ */
+
+:root {
+  --ds-sheet-layer: var(--ds-z-index-drawer);
+  --ds-sheet-panel-layer: 1;
+  --ds-sheet-enter-duration: var(--ds-motion-reveal);
+  --ds-sheet-exit-duration: var(--ds-motion-reveal);
+  --ds-sheet-enter-curve: var(--ds-motion-ease-enter);
+  --ds-sheet-max-height: 85dvh;
+  --ds-sheet-min-height: 30dvh;
+  --ds-sheet-side-width: 380px;
+  --ds-sheet-radius: var(--ds-radius-lg);
+  --ds-sheet-border-width: var(--ds-edge-standard-width);
+  --ds-sheet-handle-area-padding-block-start: var(--ds-spacing-3);
+  --ds-sheet-handle-area-padding-block-end: var(--ds-spacing-1);
+  --ds-sheet-handle-inline-size: 2.5rem;
+  --ds-sheet-handle-block-size: 0.25rem;
+  --ds-sheet-header-gap: var(--ds-spacing-3);
+  --ds-sheet-header-padding-block: calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
+  --ds-sheet-header-padding-inline: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-sheet-body-padding: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-sheet-footer-gap: var(--ds-spacing-2);
+  --ds-sheet-footer-padding-block: calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
+  --ds-sheet-footer-padding-inline: calc(var(--ds-spacing-4) * var(--ds-density-effective-scale));
+  --ds-sheet-close-size: 2rem;
+  --ds-sheet-close-radius: var(--ds-radius-md);
+  --ds-sheet-transition-duration: var(--ds-motion-feedback);
+  --ds-sheet-transition-timing: var(--ds-motion-ease-out);
+  --ds-sheet-touch-target-min: var(--ds-touch-target-min);
+}

@@ -129,9 +129,13 @@ async function expectTenantScopeSurvivedPortal(surface: HTMLElement): Promise<vo
 /** Per-engine surface selector for the canonical Modal owner. Both engines
  * stamp a distinct root and nested surface; Modern's root is the native
  * `<dialog>`, while Rustic's root is the portaled fixed-position shell. */
+function tourRoot(engine: 'modern' | 'rustic'): string {
+  return engine === 'modern' ? '.ds-tour--modern' : '.rottay-tour--rustic';
+}
+
 function modalSurfaceSelector(engine: 'modern' | 'rustic'): string {
   return engine === 'modern'
-    ? ".rottay-overlay-modal-shell--modern [data-part='surface']"
+    ? ".ds-modal--modern [data-part='surface']"
     : ".rottay-modal-root--rustic [data-part='surface']";
 }
 
@@ -163,8 +167,8 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         if (engine === 'modern') {
           // Modern renders a real root (<dialog>) distinct from both the
           // backdrop and the surface.
-          expect(document.querySelectorAll(".rottay-overlay-modal-shell--modern[data-part='root']").length).toBe(1);
-          expect(document.querySelectorAll(".rottay-overlay-modal-shell--modern [data-part='backdrop']").length).toBe(1);
+          expect(document.querySelectorAll(".ds-modal--modern[data-part='root']").length).toBe(1);
+          expect(document.querySelectorAll(".ds-modal--modern [data-part='backdrop']").length).toBe(1);
         } else {
           // Rustic uses its root shell as the scrim. It deliberately has no
           // second backdrop node, but still exposes one canonical root.
@@ -200,19 +204,19 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           engine,
         );
 
-        const surface = await waitForDocumentSurface(`.rottay-tour--${engine} [data-part='surface']`);
+        const surface = await waitForDocumentSurface(`${tourRoot(engine)} [data-part='surface']`);
         // Portal posture: Tour portals in BOTH engines, via a direct
         // createPortal (not the shared Portal util) -- checkpoint contract P4.
         expect(container.contains(surface)).toBe(false);
         expect(surface.getAttribute('data-open')).toBe('true');
         expect(surface.getAttribute('data-type')).toBe('primary');
 
-        expect(document.querySelectorAll(`.rottay-tour--${engine}[data-part='root']`).length).toBe(1);
-        expect(document.querySelectorAll(`.rottay-tour--${engine} [data-part='backdrop']`).length).toBe(1);
+        expect(document.querySelectorAll(`${tourRoot(engine)}[data-part='root']`).length).toBe(1);
+        expect(document.querySelectorAll(`${tourRoot(engine)} [data-part='backdrop']`).length).toBe(1);
         // No `target` prop resolves to a real element, so no cutout rect is
         // measured and the spotlight (which only renders when a cutout was
         // measured) must be absent.
-        expect(document.querySelectorAll(`.rottay-tour--${engine} [data-part='spotlight']`)).toHaveLength(0);
+        expect(document.querySelectorAll(`${tourRoot(engine)} [data-part='spotlight']`)).toHaveLength(0);
 
         expect(surface.querySelectorAll("[data-part='title']")).toHaveLength(1);
         expect(surface.querySelectorAll("[data-part='description']")).toHaveLength(1);
@@ -255,7 +259,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         // stays in-tree (checkpoint contract P4, per-ENGINE).
         const surface =
           engine === 'modern'
-            ? await waitForDocumentSurface(".rottay-confirm-dialog--modern [data-part='surface']")
+            ? await waitForDocumentSurface(".ds-confirm-dialog--modern [data-part='surface']")
             : await waitForPart(container, 'surface');
         expect(container.contains(surface)).toBe(engine === 'rustic');
         expect(surface.getAttribute('data-open')).toBe('true');
@@ -268,9 +272,9 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           // Modern fuses backdrop onto the <dialog> it promotes to the top
           // layer; the surface is a descendant of that same dialog.
           const backdrop = document.querySelector(
-            ".rottay-confirm-dialog--modern[data-part='backdrop']",
+            ".ds-confirm-dialog--modern[data-part='root']",
           ) as HTMLDialogElement;
-          expect(document.querySelectorAll(".rottay-confirm-dialog--modern[data-part='backdrop']")).toHaveLength(1);
+          expect(document.querySelectorAll(".ds-confirm-dialog--modern[data-part='root']")).toHaveLength(1);
           expect(backdrop.tagName).toBe('DIALOG');
           expect(backdrop.open).toBe(true);
           expect(backdrop.contains(surface)).toBe(true);
@@ -301,7 +305,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
       // the render container, rustic's is not.
       const surface =
         engine === 'modern'
-          ? await waitForDocumentSurface(".rottay-confirm-dialog--modern [data-part='surface']")
+          ? await waitForDocumentSurface(".ds-confirm-dialog--modern [data-part='surface']")
           : await waitForPart(container, 'surface');
       const confirmAction = surface.querySelector("[data-part='action'][data-action='confirm']") as HTMLElement;
       expect(confirmAction.getAttribute('data-loading')).toBe('true');
@@ -352,7 +356,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         // stays in-tree (checkpoint contract P4, per-ENGINE).
         const surface =
           engine === 'modern'
-            ? await waitForDocumentSurface(".rottay-alert-dialog--modern [data-part='surface']")
+            ? await waitForDocumentSurface(".ds-alert-dialog--modern [data-part='surface']")
             : await waitForPart(container, 'surface');
         expect(container.contains(surface)).toBe(engine === 'rustic');
         expect(surface.getAttribute('data-open')).toBe('true');
@@ -366,9 +370,9 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           // `[data-ds-root][data-vertical]`, so the scope must cross with it.
           await expectTenantScopeSurvivedPortal(surface);
 
-          expect(document.querySelectorAll(".rottay-alert-dialog--modern[data-part='root']")).toHaveLength(1);
+          expect(document.querySelectorAll(".ds-alert-dialog--modern[data-part='root']")).toHaveLength(1);
           const root = document.querySelector(
-            ".rottay-alert-dialog--modern[data-part='root']",
+            ".ds-alert-dialog--modern[data-part='root']",
           ) as HTMLDialogElement;
           // The root is the element promoted to the browser top layer, and
           // the whole overlay lives inside it.
@@ -382,8 +386,8 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           // the Daisy classes must NOT come back — their return would mean
           // someone re-introduced the removed dependency instead of using
           // the skin.
-          expect(root.className).toContain('rottay-alert-dialog');
-          expect(root.className).toContain('rottay-alert-dialog--modern');
+          expect(root.className).toContain('ds-alert-dialog');
+          expect(root.className).toContain('ds-alert-dialog--modern');
           expect(root.className).not.toContain('modal-open');
           const backdropEl = root.querySelector("[data-part='backdrop']") as HTMLElement;
           expect(backdropEl).not.toBeNull();
@@ -465,7 +469,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           engine,
         );
 
-        const rootSelector = `.rottay-sheet--${engine}[data-part='root']`;
+        const rootSelector = engine === 'modern' ? ".ds-sheet--modern[data-part='root']" : `.rottay-sheet--${engine}[data-part='root']`;
         const root = await waitForDocumentSurface(rootSelector);
 
         // Both engines escape ancestor clipping. Modern uses the shared portal
@@ -558,7 +562,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
 
         const surfaceSelector =
           engine === 'modern'
-            ? ".rottay-popover--modern [data-part='surface']"
+            ? ".ds-popover--modern [data-part='surface']"
             : ".rottay-popover--rustic[data-part='surface']";
         const surface = await waitForDocumentSurface(surfaceSelector);
 
@@ -615,7 +619,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
 
         const surfaceSelector =
           engine === 'modern'
-            ? ".rottay-dropdown--modern [data-part='surface']"
+            ? ".ds-dropdown--modern [data-part='surface']"
             : ".rottay-dropdown--rustic[data-part='surface']";
         const surface =
           engine === 'modern'
@@ -653,7 +657,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
 
         const surfaceSelector =
           engine === 'modern'
-            ? ".rottay-hover-card--modern [data-part='surface']"
+            ? ".ds-hover-card--modern [data-part='surface']"
             : ".rottay-hover-card--rustic[data-part='surface']";
         const surface =
           engine === 'modern'

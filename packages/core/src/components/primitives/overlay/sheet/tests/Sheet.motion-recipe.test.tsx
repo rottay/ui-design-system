@@ -13,21 +13,22 @@ function part(scope: string, name: string): HTMLElement {
 }
 
 describe('Sheet overlay.sheet motion recipe', () => {
-  it('modern engine stamps the animated recipe contract and recipe-driven animation', () => {
+  it('modern engine stamps the animated recipe contract on the family motion channels', () => {
     render(
       <ModernSheet open onOpenChange={vi.fn()} title="Recipe">
         body
       </ModernSheet>
     );
-    const root = document.body.querySelector('.rottay-sheet--modern') as HTMLElement;
+    const root = document.body.querySelector('.ds-sheet--modern') as HTMLElement;
 
     expect(root).toHaveAttribute('data-recipe', 'overlay.sheet');
     expect(root).toHaveAttribute('data-recipe-state', 'animated');
-    expect(root.style.getPropertyValue('--ds-recipe-enter')).not.toBe('0ms');
+    expect(root).toHaveAttribute('data-motion', 'animated');
+    expect(root.style.getPropertyValue('--ds-sheet-enter-duration')).not.toBe('0ms');
 
-    const surface = part('.rottay-sheet--modern', 'surface');
-    expect(surface.style.animation).toContain('ds-sheet-slide-bottom-modern');
-    expect(surface.style.animation).toContain('var(--ds-recipe-enter');
+    const surface = part('.ds-sheet--modern', 'surface');
+    expect(surface).toHaveAttribute('data-placement', 'bottom');
+    expect(surface.style.animation).toBe('');
   });
 
   it('modern engine declares NO animation under reduced motion (final state)', () => {
@@ -38,11 +39,12 @@ describe('Sheet overlay.sheet motion recipe', () => {
         </ModernSheet>
       </MotionProvider>
     );
-    const root = document.body.querySelector('.rottay-sheet--modern') as HTMLElement;
+    const root = document.body.querySelector('.ds-sheet--modern') as HTMLElement;
 
     expect(root).toHaveAttribute('data-recipe-state', 'final');
-    expect(part('.rottay-sheet--modern', 'surface').style.animation).toBe('');
-    expect(part('.rottay-sheet--modern', 'backdrop').style.animation).toBe('');
+    expect(root).toHaveAttribute('data-motion', 'final');
+    expect(part('.ds-sheet--modern', 'surface').style.animation).toBe('');
+    expect(part('.ds-sheet--modern', 'backdrop').style.animation).toBe('');
   });
 
   it('rustic engine wires the recipe contract and drops transitions when reduced', () => {

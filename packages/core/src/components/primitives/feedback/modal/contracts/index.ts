@@ -52,6 +52,8 @@
 import type { ReactNode, MouseEvent } from 'react';
 import type { BaseComponentProps, ModalSize, WithChildren } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
+import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { OverlayAdaptation } from '../../../../../foundation/contracts/kernel/adaptation/composition/families/overlay';
 
 export type { ModalSize };
 
@@ -354,6 +356,12 @@ export interface ModalProps extends BaseComponentProps, EngineAwareProps {
    * @default true
    */
   adaptiveFullscreen?: boolean;
+
+  /**
+   * Per-posture presentation deltas. The modal floats by default and takes the
+   * whole dynamic viewport on a phone; `adapt` states what differs.
+   */
+  adapt?: Adapt<OverlayAdaptation>;
 
   /**
    * Z-index for the modal and overlay.

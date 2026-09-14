@@ -240,7 +240,6 @@ export function UndoToast({
   return (
     <div
       data-part="root"
-      className="rottay-undo-toast"
       style={{ position: 'relative', display: 'inline-flex' }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

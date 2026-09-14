@@ -35,7 +35,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const MODERN_SURFACE_SELECTOR = ".rottay-hover-card--modern [data-part='surface']";
+const MODERN_SURFACE_SELECTOR = ".ds-hover-card--modern [data-part='surface']";
 const RUSTIC_SURFACE_SELECTOR = ".rottay-hover-card--rustic[data-part='surface']";
 const TRIGGER_SELECTOR = "[data-part='trigger']";
 

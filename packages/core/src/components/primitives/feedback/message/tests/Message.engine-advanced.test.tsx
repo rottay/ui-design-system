@@ -18,7 +18,6 @@ import {
   MessageItem as ModernMessageItem,
   MessageProvider as ModernMessageProvider,
   message as modernMessage,
-  setGlobalMessageHandler,
   useMessage as useModernMessage,
 } from '../engines/modern';
 import {
@@ -436,7 +435,7 @@ describe('Message engine advanced coverage', () => {
     expect(warnOnceInDev).toHaveBeenCalled();
   });
 
-  it('covers no-provider hook fallbacks and modern global handler wiring', () => {
+  it('covers no-provider hook fallbacks', () => {
     let modernApi: ReturnType<typeof useModernMessage>[0] | undefined;
     let rusticApi: ReturnType<typeof useRusticMessage>[0] | undefined;
 
@@ -470,10 +469,6 @@ describe('Message engine advanced coverage', () => {
 
     expect(typeof modernResult.then).toBe('function');
     expect(typeof rusticResult.then).toBe('function');
-
-    const setter = vi.fn();
-    setGlobalMessageHandler(setter);
-    expect(typeof setGlobalMessageHandler).toBe('function');
   });
 
   it('covers auto-close timers and default icon branches for direct message items', async () => {

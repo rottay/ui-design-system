@@ -3,9 +3,8 @@
  *
  * Renders the actual modern engine (no factory mock) through the shared
  * `renderWithEngine` helper so i18n/engine context match production. Covers
- * the premium anatomy contract, the Daisy drain (no `alert` structural class
- * remains -- the unlayered `skin/alert.css` owns all paint), tone surface,
- * and the dismiss lifecycle.
+ * the anatomy contract, the one `ds-alert` vocabulary, tone surface and the
+ * dismiss lifecycle.
  */
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
@@ -30,24 +29,19 @@ describe('Alert modern engine', () => {
     expect(root).toHaveAttribute('data-part', 'root');
     expect(root).toHaveAttribute('data-tone', 'warning');
     expect(root).toHaveAttribute('data-has-icon', 'true');
-    expect(root).toHaveAttribute('data-has-description', 'true');
-    expect(root).toHaveAttribute('data-closable', 'true');
     expect(container.querySelector('[data-part="icon"]')).not.toBeNull();
-    expect(container.querySelector('[data-part="label"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="title"]')).not.toBeNull();
     expect(container.querySelector('[data-part="description"]')).not.toBeNull();
-    expect(container.querySelector('[data-part="action"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="close-button"]')).not.toBeNull();
     expect(container.querySelector('[data-icon-name="status.warning"]')).not.toBeNull();
     expect(container.querySelector('[data-icon-name="action.close"]')).not.toBeNull();
   });
 
-  it('carries no DaisyUI structural class (drained: paint is skin-owned)', () => {
+  it('answers to the one ds-alert vocabulary', () => {
     renderWithEngine(<ModernAlert message="Token painted" />, 'modern');
 
     const root = screen.getByRole('alert');
-    expect(root.className).toContain('rottay-alert-shell--modern');
-    // The drained DaisyUI `alert` class must not reappear; the skin's
-    // `.rottay-alert-shell--modern` rules replace its grid/paint entirely.
-    expect(root.className.split(/\s+/)).not.toContain('alert');
+    expect(root.className).toBe('ds-alert ds-alert--modern');
   });
 
   it('honours tone precedence over the deprecated type prop', () => {
@@ -72,7 +66,7 @@ describe('Alert modern engine', () => {
 
     expect(container.querySelector('[data-part="icon"]')).toBeNull();
     expect(container.querySelector('[data-part="description"]')).toBeNull();
-    expect(container.querySelector('[data-part="action"]')).toBeNull();
+    expect(container.querySelector('[data-part="close-button"]')).toBeNull();
     expect(screen.getByRole('alert')).toHaveAttribute('data-has-icon', 'false');
   });
 

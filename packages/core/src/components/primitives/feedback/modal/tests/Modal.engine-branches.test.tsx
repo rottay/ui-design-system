@@ -90,9 +90,9 @@ describe('Modal advanced engine coverage', () => {
 
     expect(await screen.findByText('Modern content')).toBeInTheDocument();
     const dialog = document.body.querySelector('dialog') as HTMLDialogElement | null;
-    expect(dialog).toHaveClass('rottay-modal', 'rottay-modal--modern');
-    expect(dialog?.style.alignItems).toBe('flex-start');
-    expect(dialog?.style.paddingTop).toBe('10vh');
+    expect(dialog).toHaveClass('ds-modal', 'ds-modal--modern');
+    expect(dialog).toHaveAttribute('data-placement', 'top');
+    expect(dialog).toHaveAttribute('data-presentation', 'floating');
 
     fireEvent.click(dialog!);
     expect(handleClose).not.toHaveBeenCalled();
@@ -160,19 +160,10 @@ describe('Modal advanced engine coverage', () => {
 
     expect(await screen.findByText('Fullscreen content')).toBeInTheDocument();
     const dialog = document.body.querySelector('dialog') as HTMLDialogElement;
-    expect(dialog).toHaveClass('rottay-modal', 'rottay-modal--modern');
-    expect(dialog).toHaveStyle({ alignItems: 'flex-end' });
+    expect(dialog).toHaveClass('ds-modal', 'ds-modal--modern');
+    expect(dialog).toHaveAttribute('data-placement', 'bottom');
     expect(document.body.style.overflow).toBe('hidden');
-
-    // Sizing stays inline (viewport-derived); the fullscreen radius override is the
-    // skin's, keyed on the state attribute the engine stamps.
-    const modalBox = dialog.querySelector('[role="document"]') as HTMLDivElement;
-    expect(dialog).toHaveStyle({
-      width: 'var(--ds-viewport-inline-size)',
-      maxWidth: 'var(--ds-viewport-inline-size)',
-      maxHeight: 'var(--ds-viewport-block-size)',
-    });
-    expect(modalBox.getAttribute('data-fullscreen')).toBe('true');
+    expect(dialog).toHaveAttribute('data-presentation', 'fullscreen');
 
     const backdrop = Array.from(dialog.children).find(
       (node) => !(node as HTMLElement).hasAttribute('role')

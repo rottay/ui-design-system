@@ -1,17 +1,19 @@
 'use client';
 
 /**
- * @fileoverview Callout - Rich message box for info/warning/error/success states.
- * A richer alternative to Alert with title, icon, closable state, and action
- * slots. No compound sub-components -- a single engine-routed primitive.
+ * @fileoverview Callout - folded into Alert.
+ * Callout is Alert with a title, a body and an action tray; the Modern engine
+ * renders both through one alert surface.
  *
- * @example
+ * @example Migration
  * ```tsx
- * import { Callout } from '@rottay/design-system';
- *
- * <Callout variant="warning" title="Attention" closable>
+ * // Before
+ * <Callout tone="warning" title="Attention" action={<Button>Renew</Button>} closable>
  *   Your subscription expires in 3 days.
  * </Callout>
+ * // After
+ * <Alert tone="warning" message="Attention" description="Your subscription expires in 3 days."
+ *   action={<Button>Renew</Button>} closable />
  * ```
  *
  * @module Callout
@@ -20,6 +22,7 @@
 
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { CalloutProps } from './contracts';
+import { loadModernCallout } from '../../feedback/alert';
 
 export {
   type CalloutProps,
@@ -30,10 +33,10 @@ export {
   TONE_TO_CALLOUT_VARIANT,
 } from './contracts';
 
-/** Single engine-routed component with no compound sub-components. */
+/** @deprecated Callout is folded into Alert: use `<Alert message description action />`. */
 export const Callout = createEngineComponent<CalloutProps>('Callout', {
   classic: () => import('./engines/classic'),
-  modern: () => import('./engines/modern'),
+  modern: loadModernCallout,
   rustic: () => import('./engines/rustic'),
 });
 

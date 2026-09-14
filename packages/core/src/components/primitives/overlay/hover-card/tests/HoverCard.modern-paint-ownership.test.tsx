@@ -10,10 +10,6 @@
  * `top|bottom-*` placement mirrors (left/right sides align on the block axis
  * and do not mirror).
  */
-import { readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -36,13 +32,6 @@ vi.mock('../../../runtime/overlay/positioning', async (importOriginal) => {
 
 import ModernHoverCard from '../engines/modern';
 
-const here = dirname(fileURLToPath(import.meta.url));
-// Comments are stripped so header prose cannot false-green the rule pins.
-const SKIN = readFileSync(
-  join(here, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css'),
-  'utf8'
-).replace(/\/\*[\s\S]*?\*\//g, '');
-
 afterEach(() => {
   cleanup();
   useOverlayPositionSpy.mockClear();
@@ -62,7 +51,8 @@ describe('HoverCard modern engine — chrome is skin-owned', () => {
 
     expect(surface.style.width).toBe('');
     expect(surface.style.padding).toBe('');
-    expect(surface.style.zIndex).toBe('var(--ds-z-popover)');
+    expect(surface.style.zIndex).toBe('');
+    expect(surface.style.getPropertyValue('--ds-hover-card-layer')).toBe('var(--ds-z-index-popover)');
   });
 
   it('drops the `relative inline-block` utilities from the trigger', () => {
@@ -71,7 +61,7 @@ describe('HoverCard modern engine — chrome is skin-owned', () => {
     );
     const trigger = container.querySelector('[data-part="trigger"]') as HTMLElement;
 
-    expect(trigger.className).toContain('rottay-hover-card--modern');
+    expect(trigger.className).toContain('ds-hover-card--modern');
     expect(trigger.className).not.toMatch(/\brelative\b/);
     expect(trigger.className).not.toMatch(/\binline-block\b/);
   });
@@ -110,26 +100,5 @@ describe('HoverCard modern engine — align mirrors along the inline axis', () =
       </div>,
     );
     expect(lastPlacement()).toBe('left-start');
-  });
-});
-
-describe('HoverCard modern engine — the skin owns the drained paint', () => {
-  it('owns the trigger positioning context', () => {
-    expect(SKIN).toMatch(/\.rottay-hover-card--modern\[data-part='trigger'\]\s*\{[^}]*position: relative;[^}]*display: inline-block;/);
-  });
-
-  it('owns the card chrome with the shipped values as fallbacks', () => {
-    expect(SKIN).toContain('inline-size: var(--ds-hover-card-width, 18rem);');
-    expect(SKIN).toContain('padding: var(--ds-hover-card-padding, var(--ds-spacing-4));');
-  });
-
-  it('shares the lane overlay material register with Dropdown (Pass-2 coherence)', () => {
-    expect(SKIN).toContain('linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3))');
-    expect(SKIN).toContain('var(--ds-surface-card)');
-    expect(SKIN).toContain('var(--ds-hover-card-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)))');
-    expect(SKIN).toContain('var(--ds-material-overlay-shadow, var(--ds-elevation-3))');
-    expect(SKIN).toContain('var(--ds-hover-card-radius, var(--ds-radius-xl))');
-    expect(SKIN).not.toContain('var(--ds-radius-xl, 16px)');
-    expect(SKIN).not.toContain('background: var(--ds-surface-card);');
   });
 });

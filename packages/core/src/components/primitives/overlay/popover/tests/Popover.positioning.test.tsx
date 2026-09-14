@@ -37,7 +37,7 @@ afterEach(() => {
 
 // Modern keeps a scope wrapper around its surface in both strategies; the
 // measured branch projects that wrapper through the shared portal.
-const MODERN_SURFACE_SELECTOR = ".rottay-popover--modern [data-part='surface']";
+const MODERN_SURFACE_SELECTOR = ".ds-popover--modern [data-part='surface']";
 const RUSTIC_SURFACE_SELECTOR = ".rottay-popover--rustic[data-part='surface']";
 const TRIGGER_SELECTOR = "[data-part='trigger']";
 

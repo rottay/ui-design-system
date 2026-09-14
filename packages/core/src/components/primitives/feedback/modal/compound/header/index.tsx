@@ -102,27 +102,6 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
     } = props;
 
     // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    /**
-     * Instance styles for the header section: only the `divider` decision
-     * rides inline, as a hatch the skin consumes (the "off" branch resolves
-     * to the same explicit `none` React used to set inline; the divider color
-     * resolves from the semantic border channel, never a hardcoded neutral).
-     * Layout (flex, gap, padding, shrink) AND typography are skin-owned —
-     * modal-compounds.css `[data-part='header']` / `[data-part='title']`.
-     */
-    const headerStyle: React.CSSProperties = {
-      '--ds-modal-header-divider': divider
-        ? '1px solid var(--ds-modal-header-border, var(--ds-color-border-subtle))'
-        : 'none',
-
-      // Merge user styles (takes precedence)
-      ...style,
-    } as React.CSSProperties;
-
-    // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
@@ -130,8 +109,9 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
       <div
         ref={ref}
         data-part="header"
-        className={`rottay-modal-header ${className}`.trim()}
-        style={headerStyle}
+        data-divider={divider ? 'true' : 'false'}
+        className={`ds-modal-header ${className}`.trim()}
+        style={style}
       >
         {/* Title container (layout + typography skin-owned) */}
         <div data-part="title">{children}</div>

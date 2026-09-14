@@ -476,6 +476,258 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-03: channels written by derivation/chrome/color-picker and presentation/components/color-picker, with the swatch and preset colours carried as --ds-color-picker-* user-data channels; the trigger, fields, presets and clear decide state through the interaction kernel and every contract placement maps onto useFieldOverlay; one ds-color-picker vocabulary."
+    },
+    "modal": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 8,
+        "channelsRead": 145,
+        "classTokens": 6,
+        "partsStamped": 13,
+        "partsConsumed": 14
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: every channel the Modern skin reads is written -- panel, scrim, header/footer and action relations by derivation/chrome/modal, structural constants by presentation/components/modal; one ds-modal vocabulary (header/body/footer/close compounds answer to ds-modal-*); the native dialog is promoted by the shared top-layer dialog kernel, the close and footer actions decide state through the interaction kernel; adapt/data-posture through useAdaptation with the overlay adaptation (phone -> fullscreen, 100dvh)."
+    },
+    "drawer": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 7,
+        "channelsRead": 96,
+        "classTokens": 8,
+        "partsStamped": 9,
+        "partsConsumed": 9
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: panel, scrim and section relations by derivation/chrome/drawer, extents and motion defaults by presentation/components/drawer; one ds-drawer vocabulary (ds-drawer-backdrop, ds-drawer-trap, ds-drawer-* compounds); FocusTrap answers to ds-focus-trap; caller style never strands the panel (position, layer band and edges belong to the engine); adapt/data-posture through useAdaptation (phone -> fullscreen)."
+    },
+    "sheet": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 87,
+        "classTokens": 3,
+        "partsStamped": 10,
+        "partsConsumed": 10
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: relations by derivation/chrome/sheet, constants by presentation/components/sheet; one ds-sheet vocabulary; layer band on --ds-sheet-layer; adapt/data-posture through useAdaptation, with the fullscreen default only for side sheets (a bottom sheet is already the phone posture)."
+    },
+    "alert-dialog": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 67,
+        "classTokens": 3,
+        "partsStamped": 11,
+        "partsConsumed": 11
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: relations by derivation/chrome/alert-dialog, constants by presentation/components/alert-dialog; one ds-alert-dialog vocabulary; the native dialog is promoted by the shared top-layer dialog kernel; the tone palette constants carry no literal fallbacks."
+    },
+    "confirm-dialog": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 75,
+        "classTokens": 3,
+        "partsStamped": 11,
+        "partsConsumed": 11
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: relations by derivation/chrome/confirm-dialog, constants by presentation/components/confirm-dialog; one ds-confirm-dialog vocabulary; the native dialog is promoted by the shared top-layer dialog kernel and actions decide state through the interaction kernel."
+    },
+    "popover": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 132,
+        "classTokens": 2,
+        "partsStamped": 5,
+        "partsConsumed": 5
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: the four material recipes (bordered, minimal, inverse, rich) by derivation/chrome/popover, constants by presentation/components/popover; the recipe travels as data-variant and a caller max width as data-custom-max-width; one ds-popover vocabulary."
+    },
+    "dropdown": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 123,
+        "classTokens": 3,
+        "partsStamped": 14,
+        "partsConsumed": 14
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: surface and item relations by derivation/chrome/dropdown, constants by presentation/components/dropdown and the default theme's dropdown tokens; menu keyboard and type-ahead from runtime/collection/listbox, submenu keys from roving-focus navigation intent, items decide state through the interaction kernel; measured placement travels as --ds-dropdown-position-* channels; one ds-dropdown vocabulary."
+    },
+    "hover-card": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 35,
+        "classTokens": 2,
+        "partsStamped": 2,
+        "partsConsumed": 2
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: relations by derivation/chrome/hover-card, constants by presentation/components/hover-card; layer band on --ds-hover-card-layer; inline-axis placement mirrors through the shared reading-direction resolver; one ds-hover-card vocabulary."
+    },
+    "tooltip": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 6,
+        "channelsRead": 154,
+        "classTokens": 4,
+        "partsStamped": 7,
+        "partsConsumed": 7
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: the material recipes and tone bubbles by derivation/chrome/tooltip, constants by presentation/components/tooltip and the default theme's tooltip tokens; TooltipContent drains its inline chrome to the compound skin keyed on data-side; one ds-tooltip vocabulary (ds-tooltip-bubble, ds-tooltip-content, ds-tooltip-trigger)."
+    },
+    "tour": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 87,
+        "classTokens": 2,
+        "partsStamped": 11,
+        "partsConsumed": 13
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: card, title, indicator, action and focus relations by derivation/chrome/tour, constants and runtime-channel defaults by presentation/components/tour; the measured spotlight rect travels as --ds-tour-spotlight-* and the layer band as --ds-tour-layer; actions decide state through the interaction kernel and step keys resolve through the roving-focus navigation intent; one ds-tour vocabulary."
+    },
+    "notifier": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 6,
+        "channelsRead": 226,
+        "classTokens": 4,
+        "partsStamped": 12,
+        "partsConsumed": 15
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04 (D-17): one Notifier owner for the toast, notification and message roles -- Toast, Notification and Message keep their public contracts as role adapters of NotifierItem/NotifierStack under the Modern engine; role surfaces, type, controls and every tone by derivation/chrome/notifier, constants and runtime-channel defaults by presentation/components/notifier; lifetime and exit from the notifier countdown and exit kernels; one ds-notifier vocabulary (ds-notifier-stack). The toast, notification and message folders keep only their frozen engines and role entry points and are not separate cut families."
+    },
+    "alert": {
+      "cut": "WO-FAM-04",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 7,
+        "channelsRead": 129,
+        "classTokens": 3,
+        "partsStamped": 7,
+        "partsConsumed": 7
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-04: Callout is folded into Alert -- both Modern engines render feedback/alert/runtime/surface (Callout stays a deprecated role entry point); tone, surface, type and dismiss relations by derivation/chrome/alert, constants by presentation/components/alert; the dismiss decides state through the interaction kernel; one ds-alert vocabulary (the compound answers to ds-alert-description). callout is not a separate cut family."
     }
   }
 }

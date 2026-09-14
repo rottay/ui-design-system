@@ -1,28 +1,27 @@
 'use client';
 
 /**
- * @fileoverview Sheet Modern (Hermes) Engine - Rottay Design System.
- * Bottom sheet on mobile, side panel on desktop. Features a drag handle
- * indicator, backdrop blur, and recipe-driven slide-in/slide-out animations
- * (presence keeps the panel mounted through its exit, Drawer's idiom). The
- * engine stamps parts and dynamic channels only: static geometry (fixed
- * placement, per-side insets, flex/scroll anatomy) is skin-owned in
- * sheet.css, keyed on data-part/data-placement. Inline survives solely where
- * it is genuinely dynamic -- the tokenized z-index tiers, the recipe-driven
- * enter/exit animation (pinned by the motion-recipe contract) and consumer
- * style overrides. No DaisyUI or Tailwind class dependencies.
- *
- * Wave 2B: Unified overlay family visual language -- shared backdrop, surface,
- * border, and motion tokens with Modal and Drawer modern engines.
+ * @fileoverview Sheet Modern Engine - Rottay Design System.
+ * Bottom or side sheet on the shared overlay contract, with a drag handle
+ * indicator and recipe-driven slide motion (presence keeps the panel mounted
+ * through its exit). The engine stamps anatomy, placement, presence and the
+ * resolved posture; the modern sheet skin paints every part from the family
+ * channels.
  *
  * @module Sheet/Engines/Modern
  * @category Overlay
  * @package @rottay/design-system
  */
 
-import React, { useCallback, useId } from 'react';
+import React, { useCallback, useId, useMemo } from 'react';
 import type { SheetProps } from '../../contracts';
 import { SHEET_DEFAULTS } from '../../contracts';
+import {
+  OVERLAY_ADAPTATION_DEFAULTS,
+  type ResolvedOverlayAdaptation,
+} from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/overlay';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
@@ -31,38 +30,15 @@ import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 
-// ============================================================================
-// Constants
-// ============================================================================
-
-/** Shared overlay motion tokens. */
-const MOTION_DURATION = 'var(--ds-motion-normal)';
-const MOTION_EASING = 'var(--ds-motion-ease-out)';
-
-/** Animation name lookup by side. The keyframes live in the engine skin. */
-const SLIDE_ANIMATION: Record<string, string> = {
-  bottom: 'ds-sheet-slide-bottom-modern',
-  left: 'ds-sheet-slide-left-modern',
-  right: 'ds-sheet-slide-right-modern',
-};
-
-/** Exit lookup by side (Drawer's idiom): the panel leaves toward the same
- *  edge it entered from, on the recipe's `--ds-recipe-exit` cadence. */
-const SLIDE_OUT_ANIMATION: Record<string, string> = {
-  bottom: 'ds-sheet-slide-out-bottom-modern',
-  left: 'ds-sheet-slide-out-left-modern',
-  right: 'ds-sheet-slide-out-right-modern',
-};
-
-// ============================================================================
-// Close Button (shared visual with Modal/Drawer)
-// ============================================================================
+const FLOATING: ResolvedOverlayAdaptation = { presentation: 'floating' };
 
 function CloseButton({ onClick, label }: { onClick: () => void; label: string }) {
+  const interaction = useInteractionState();
   return (
     <button
       type="button"
-      data-part="close-button"
+      {...partAttributes('close-button', interaction.state)}
+      {...interaction.handlers}
       onClick={onClick}
       aria-label={label}
     >
@@ -71,21 +47,12 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
   );
 }
 
-// ============================================================================
-// Component
-// ============================================================================
-
 /**
- * Modern engine implementation of Sheet using pure DS token inline styles.
+ * Modern engine implementation of Sheet.
  *
- * - Bottom sheet on mobile (full-width, slides up from bottom)
- * - Side panel on desktop (left or right)
- * - Handle bar indicator at top for bottom sheets
- * - Title area below handle
- *
- * Locks body scroll while open (and through the exit animation), listens
- * for Escape key, and returns an empty fragment once presence reports the
- * exit finished so no DOM nodes remain in the tree.
+ * Locks body scroll while open (and through the exit animation), routes Escape
+ * through the shared layer stack, and returns an empty fragment once presence
+ * reports the exit finished so no DOM nodes remain in the tree.
  */
 export default function ModernSheet(props: SheetProps): React.ReactElement {
   // Optional channel with an English floor: the sheet renders standalone
@@ -102,6 +69,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     showOverlay = SHEET_DEFAULTS.showOverlay,
     closeOnEscape = SHEET_DEFAULTS.closeOnEscape,
     closeOnOverlayClick = SHEET_DEFAULTS.closeOnOverlayClick,
+    adapt,
     className,
     style,
     rootClassName,
@@ -126,30 +94,27 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
   const generatedTitleId = useId();
   const titleId = `${id || generatedTitleId}-title`;
 
-  // Presence (Drawer's idiom, composed): `open` flipping false keeps the
-  // sheet mounted (dataState 'closed') until its own slide-out animation
-  // finishes, instead of vanishing the instant `open` changes. Under reduced
-  // motion the recipe declares no animation and presence unmounts
-  // immediately.
+  // Presence: `open` flipping false keeps the sheet mounted until its own
+  // slide-out animation finishes.
   const { shouldRender, dataState, ref: presenceRef } = usePresence(open);
 
-  // overlay.sheet recipe (motion canon): entrance timing/easing resolve from
-  // the stamped `--ds-recipe-*` variables. The slide TRAVEL stays the skin's
-  // anatomical 100% (the panel enters from its own edge), so the recipe's
-  // distance dials are not what moves it; under reduced motion the resolver
-  // returns the settled state and this engine declares no animation at all.
+  // overlay.sheet recipe (motion canon): the skin plays the slide on the
+  // recipe's timing and declares no animation when it resolves final.
   const overlayMotion = useMotionRecipePresentation('overlay.sheet');
   const motionIsFinal = overlayMotion.recipe.state === 'final';
+
+  const { adaptation, postureAttribute } = useAdaptation(adapt, {
+    base: FLOATING,
+    defaults: side === 'bottom' ? undefined : OVERLAY_ADAPTATION_DEFAULTS,
+  });
 
   const handleClose = useCallback(() => {
     onOpenChange(false);
   }, [onOpenChange]);
 
-  // Shared overlay contract: the sheet tier of the canonical band scale plus a
-  // stack offset, the single Escape router, and the ref-counted body scroll
-  // lock. Gated on shouldRender (Drawer's posture) so the page behind does not
-  // reflow while the panel is still visibly sliding out. `restoreFocus` is off
-  // because the FocusTrap below already restores.
+  // Shared overlay contract: the sheet's layer band with a stack offset, the
+  // single Escape router and the ref-counted body scroll lock, held through
+  // the slide-out. `restoreFocus` is off because the FocusTrap below restores.
   const overlay = useFieldOverlay({
     kind: 'sheet',
     open: shouldRender,
@@ -160,68 +125,41 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     ...(closeOnEscape ? { onDismiss: handleClose } : {}),
   });
 
-  // Bail early when closed AND the exit finished -- no DOM footprint remains
+  const rootChannels = useMemo(
+    () =>
+      ({
+        '--ds-sheet-layer': overlay.zIndex,
+        '--ds-sheet-enter-duration': overlayMotion.variables['--ds-recipe-enter'],
+        '--ds-sheet-exit-duration': overlayMotion.variables['--ds-recipe-exit'],
+        '--ds-sheet-enter-curve': overlayMotion.variables['--ds-recipe-curve'],
+        ...style,
+        ...rootStyle,
+      }) as React.CSSProperties,
+    [overlay.zIndex, overlayMotion.variables, style, rootStyle],
+  );
+
   if (!shouldRender) return <></>;
 
   const isBottom = side === 'bottom';
-  const animationName =
-    (dataState === 'open' ? SLIDE_ANIMATION[side] : SLIDE_OUT_ANIMATION[side]) ||
-    (dataState === 'open' ? SLIDE_ANIMATION.bottom : SLIDE_OUT_ANIMATION.bottom);
-
-  // -- panel style ------------------------------------------------------------
-  // Static geometry (fixed placement, per-side insets, flex anatomy, scroll
-  // regions) is SKIN-OWNED, keyed on data-part/data-placement in sheet.css.
-  // Inline stays only for the genuinely dynamic channels: the tokenized stack
-  // tier (zIndex is the overlay-stack datum, sibling-pinned idiom), the
-  // recipe-driven enter/exit animation (pinned inline by the motion-recipe
-  // contract), and the consumer's panelStyle/surfaceStyle overrides, which
-  // still spread last and win over the skin.
-  const panelStyleResolved: React.CSSProperties = {
-    // Tokenized overlay stack (spec section 9): panel sits at the drawer
-    // tier, above the wrapper's overlay tier, instead of a magic 51.
-    zIndex: 'var(--ds-z-drawer)',
-    animation: motionIsFinal
-      ? undefined
-      : dataState === 'open'
-        ? `${animationName} var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
-        : `${animationName} var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
-    ...panelStyle,
-    ...surfaceStyle,
-  };
+  const surfaceOverrides = panelStyle || surfaceStyle ? { ...panelStyle, ...surfaceStyle } : undefined;
 
   return (
     <Portal>
-      {/* ---- Wrapper ---- */}
       <div
         data-part="root"
         {...overlayMotion.attributes}
-        className={`rottay-sheet--modern ${className || ''} ${rootClassName || ''}`}
-        style={{
-          ...overlayMotion.variables,
-          // Canonical band from the shared layer manager: the sheet tier plus
-          // a stack offset, so two stacked sheets order instead of tying. The
-          // fixed inset lives in the skin.
-          zIndex: overlay.zIndex,
-          ...style,
-          ...rootStyle,
-        }}
+        data-motion={motionIsFinal ? 'final' : 'animated'}
+        className={`ds-sheet ds-sheet--modern ${className || ''} ${rootClassName || ''}`.trim()}
+        style={rootChannels}
       >
-        {/* ---- Backdrop overlay ---- */}
         {showOverlay && (
           <div
             data-part="backdrop"
+            data-open={dataState === 'open' ? 'true' : 'false'}
             onClick={closeOnOverlayClick ? handleClose : undefined}
-            style={{
-              animation: motionIsFinal
-                ? undefined
-                : dataState === 'open'
-                  ? `ds-sheet-backdrop-fade-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING})`
-                  : `ds-sheet-backdrop-fade-out-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING})`,
-            }}
           />
         )}
 
-        {/* ---- Panel ---- */}
         <div
           ref={presenceRef}
           id={id}
@@ -234,8 +172,10 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
           data-part="surface"
           data-open={dataState === 'open' ? 'true' : 'false'}
           data-placement={side}
+          data-presentation={adaptation.presentation}
+          data-posture={postureAttribute}
           className={surfaceClassName || panelClassName || undefined}
-          style={panelStyleResolved}
+          style={surfaceOverrides}
         >
           <FocusTrap
             active={open}
@@ -243,55 +183,34 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             restoreFocus={restoreFocus}
             initialFocus={initialFocus}
             finalFocus={finalFocus}
-            className="rottay-sheet__focus-scope"
+            className="ds-sheet-focus-scope"
           >
-          {/* Handle bar -- bottom sheet only. Geometry lives in the skin;
-              the engine stamps parts only. */}
-          {isBottom && showHandle && (
-            <div data-part="handle-area">
-              <div data-part="handle" />
-            </div>
-          )}
-
-          {/* Header always renders (Drawer's `title || closable` rule —
-              Sheet's contract has no closable=false, so the panel must
-              always expose a visible dismiss control; a title-less sheet
-              previously trapped keyboard/AT users with no drawn close).
-              Layout and typography live in the modern Sheet skin; the engine
-              stamps parts only. A string title gets the native tooltip
-              affordance for the skin's ellipsis truncation. */}
-          <div data-part="header">
-            {title ? (
-              <div
-                id={titleId}
-                data-part="title"
-                title={typeof title === 'string' ? title : undefined}
-              >
-                {title}
+            {isBottom && showHandle && (
+              <div data-part="handle-area">
+                <div data-part="handle" />
               </div>
-            ) : null}
-            <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />
-          </div>
+            )}
 
-          {/* Scrollable content area. Flex/scroll anatomy lives in the skin;
-              a caller's bodyStyle still wins inline. */}
-          <div
-            data-part="body"
-            className={bodyClassName}
-            style={bodyStyle}
-          >
-            {children}
-          </div>
-
-          {footer != null && (
-            <div
-              data-part="footer"
-              className={footerClassName}
-              style={footerStyle}
-            >
-              {footer}
+            {/* The header always renders: Sheet has no closable=false, so the
+                panel always exposes a visible dismiss control. */}
+            <div data-part="header">
+              {title ? (
+                <div id={titleId} data-part="title" title={typeof title === 'string' ? title : undefined}>
+                  {title}
+                </div>
+              ) : null}
+              <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />
             </div>
-          )}
+
+            <div data-part="body" className={bodyClassName} style={bodyStyle}>
+              {children}
+            </div>
+
+            {footer != null && (
+              <div data-part="footer" className={footerClassName} style={footerStyle}>
+                {footer}
+              </div>
+            )}
           </FocusTrap>
         </div>
       </div>

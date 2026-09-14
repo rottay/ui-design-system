@@ -22,7 +22,10 @@ import type { ReactElement, ReactNode } from 'react';
 import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
-import { resolveTypeaheadPrefix } from '../../../../runtime/collection/typeahead';
+import { isTypeaheadKey, resolveListboxTarget, resolveTypeaheadTarget } from '../../../../runtime/collection/listbox';
+import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import {
   useFieldOverlay,
   type FieldOverlayDismissReason,
@@ -32,8 +35,6 @@ import { usePresence } from '@/graphics/motion/react/runtime';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 
-const MOTION_DURATION = 'var(--ds-motion-fast)';
-const MOTION_EASING = 'var(--ds-motion-ease-out)';
 const SURFACE_GAP = 8;
 
 /**
@@ -49,38 +50,36 @@ const SURFACE_GAP = 8;
 type PopupPosition = { top: number; left: number };
 
 /**
- * In-tree (non-portal) placement, declared with LOGICAL inline properties:
- * `*Left` anchors the reading-start edge and mirrors to the physical right
- * under `dir="rtl"` (and vice versa). The centred variant keeps physical
- * `left: 50%` + `translate: -50% 0` -- centring is direction-neutral, and a
- * logical `inset-inline-start: 50%` would misplace the surface in RTL because
- * the -50% self-translate does not mirror.
+ * Caller overlay style may repaint the surface but never strands it: `position`
+ * and the layer belong to the engine, and so do the coordinates the placement
+ * computes -- the measured `top`/`left` of a portaled surface, or the one block
+ * end and one inline edge an in-tree placement claims.
  */
-function inTreePlacementStyle(placement: DropdownPlacement): React.CSSProperties {
-  const isTop = placement.startsWith('top');
-  const isRight = placement.endsWith('Right');
-  const isLeft = placement.endsWith('Left');
-
-  return {
-    ...(isTop
-      ? { bottom: `calc(100% + ${SURFACE_GAP}px)` }
-      : { top: `calc(100% + ${SURFACE_GAP}px)` }),
-    ...(isRight
-      ? { insetInlineEnd: 0 }
-      : isLeft
-        ? { insetInlineStart: 0 }
-        : { left: '50%', translate: '-50% 0' }),
-  };
-}
-
-/**
- * Logical reading direction of the trigger context (nearest `[dir]` owner,
- * falling back to the computed style). Popover's readLocaleContext precedent.
- */
-function readTriggerDirection(anchor: HTMLElement): 'ltr' | 'rtl' {
-  const directionOwner = anchor.closest<HTMLElement>('[dir]');
-  if (directionOwner?.dir === 'rtl') return 'rtl';
-  return window.getComputedStyle(anchor).direction === 'rtl' ? 'rtl' : 'ltr';
+function callerSurfaceStyle(
+  style: React.CSSProperties | undefined,
+  placement: DropdownPlacement,
+  portaled: boolean,
+): React.CSSProperties | undefined {
+  if (!style) return undefined;
+  const {
+    position: _position,
+    zIndex: _zIndex,
+    top,
+    bottom,
+    left,
+    insetInlineStart,
+    insetInlineEnd,
+    translate,
+    ...rest
+  } = style;
+  if (portaled) return { ...rest, bottom, insetInlineStart, insetInlineEnd, translate };
+  const blockEdge = placement.startsWith('top') ? { top } : { bottom };
+  const inlineEdge = placement.endsWith('Right')
+    ? { insetInlineStart, left, translate }
+    : placement.endsWith('Left')
+      ? { insetInlineEnd, left, translate }
+      : { insetInlineStart, insetInlineEnd };
+  return { ...rest, ...blockEdge, ...inlineEdge };
 }
 
 /**
@@ -126,45 +125,41 @@ function describeTrigger(
  * its own items. Items stay natively tabbable buttons; this adds directional
  * movement without changing the tab order.
  */
+const menuTypeahead = new WeakMap<HTMLElement, TypeaheadState>();
+
 function handleMenuKeyDown(event: React.KeyboardEvent<HTMLUListElement>): void {
-  const { key } = event;
   const menu = event.currentTarget;
   const target = event.target as HTMLElement | null;
   if (!target || target.closest('[role="menu"]') !== menu) return;
+
   const items = Array.from(
-    menu.querySelectorAll<HTMLElement>(
-      ':scope > [data-part="item-shell"] > [data-part="item"]:not(:disabled)',
-    ),
+    menu.querySelectorAll<HTMLButtonElement>(':scope > [data-part="item-shell"] > [data-part="item"]'),
   );
   if (items.length === 0) return;
+  const current = target.closest<HTMLButtonElement>('[data-part="item"]');
+  const activeIndex = current ? items.indexOf(current) : -1;
+  const isItemSelectable = (index: number) => !items[index]?.disabled;
 
-  if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'Home' || key === 'End') {
+  const landing = resolveListboxTarget(event.key, { activeIndex, itemCount: items.length, isItemSelectable });
+  if (landing !== null) {
     event.preventDefault();
-    const currentIndex = items.indexOf(target.closest('[data-part="item"]') as HTMLElement);
-    let nextIndex = 0;
-    if (key === 'Home') nextIndex = 0;
-    else if (key === 'End') nextIndex = items.length - 1;
-    else if (currentIndex >= 0) {
-      nextIndex = (currentIndex + (key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
-    }
-    items[nextIndex]?.focus();
+    if (landing >= 0) items[landing]?.focus();
     return;
   }
 
-  // Typeahead: single printable characters, never a chord and never Space
-  // (Space stays the native button activation). The search starts AFTER the
-  // current item and wraps, so repeating a key cycles its matches.
-  if (key.length === 1 && key !== ' ' && !event.metaKey && !event.ctrlKey && !event.altKey) {
-    const prefix = resolveTypeaheadPrefix(menu, key);
-    const currentIndex = items.indexOf(target.closest('[data-part="item"]') as HTMLElement);
-    for (let step = 1; step <= items.length; step += 1) {
-      const candidate = items[(currentIndex + step) % items.length];
-      if (candidate?.textContent?.trim().toLowerCase().startsWith(prefix)) {
-        event.preventDefault();
-        candidate.focus();
-        return;
-      }
-    }
+  // Space stays the native button activation, so type-ahead never consumes it.
+  if (!isTypeaheadKey(event)) return;
+  const result = resolveTypeaheadTarget(menuTypeahead.get(menu) ?? { buffer: '', lastKeyTime: 0 }, event.key, {
+    activeIndex,
+    itemCount: items.length,
+    isItemSelectable,
+    getItemText: (index) => items[index]?.textContent ?? undefined,
+    now: Date.now(),
+  });
+  menuTypeahead.set(menu, result.state);
+  if (result.index >= 0) {
+    event.preventDefault();
+    items[result.index]?.focus();
   }
 }
 
@@ -201,6 +196,7 @@ const MenuItem: React.FC<{
 }> = ({ item, selectedKeys, selectable, onClick, depth = 0 }) => {
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const dismissChain = React.useContext(DropdownDismissChainContext);
+  const interaction = useInteractionState({ disabled: item.type === 'divider' || item.type === 'group' ? true : item.disabled });
 
   useEffect(() => {
     if (!submenuOpen || !dismissChain) return undefined;
@@ -245,7 +241,8 @@ const MenuItem: React.FC<{
       <button
         type="button"
         role="menuitem"
-        data-part="item"
+        {...partAttributes('item', interaction.state)}
+        {...interaction.handlers}
         data-tone={item.danger ? 'danger' : 'neutral'}
         data-disabled={item.disabled ? 'true' : undefined}
         data-selected={isSelected ? 'true' : undefined}
@@ -258,23 +255,15 @@ const MenuItem: React.FC<{
           activate();
         }}
         onKeyDown={(event) => {
-          // Submenu keys are LOGICAL: forward opens, backward closes. Forward
-          // is ArrowRight in LTR and ArrowLeft in RTL (Tabs precedent), so the
-          // reading direction is resolved from the item's context -- nearest
-          // `[dir]` owner first (Popover precedent), computed style as a
-          // fallback.
-          const isRtl =
-            event.currentTarget.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
-            window.getComputedStyle(event.currentTarget).direction === 'rtl';
-          const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
-          const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
-          if (event.key === forwardKey && hasChildren) {
+          // Submenu keys are logical: forward opens and backward closes in the reading direction.
+          if (!hasChildren) return;
+          const intent = resolveNavigationIntent(event.key, {
+            orientation: 'horizontal',
+            rtl: resolveReadingDirectionIsRtl(event.currentTarget),
+          });
+          if (intent === 'next' || intent === 'previous') {
             event.preventDefault();
-            setSubmenuOpen(true);
-          }
-          if (event.key === backwardKey && hasChildren) {
-            event.preventDefault();
-            setSubmenuOpen(false);
+            setSubmenuOpen(intent === 'next');
           }
         }}
       >
@@ -425,7 +414,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     // geometry is measured in physical viewport coordinates, so under RTL the
     // alignment mirrors (Popover's toPhysicalPlacement precedent) while the
     // stamped coordinates and the clamp below stay physical.
-    const mirrorInline = readTriggerDirection(containerRef.current) === 'rtl';
+    const mirrorInline = resolveReadingDirectionIsRtl(containerRef.current);
     const alignPhysicalEnd = mirrorInline ? isLeft : isRight;
     const alignPhysicalStart = mirrorInline ? isRight : isLeft;
 
@@ -605,65 +594,21 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       ref={setSurfaceRef}
       id={surfaceId}
       data-part="surface"
-      data-state={dataState}
       data-open={dataState === 'open' ? 'true' : 'false'}
       data-placement={surfacePlacement}
       data-arrow={arrow ? 'true' : undefined}
       data-arrow-tracked={arrow && arrowAnchorOffset ? 'true' : undefined}
       data-has-submenu={itemsHaveSubmenu(menu?.items) ? 'true' : undefined}
-      className={['rottay-dropdown__surface', overlayClassName].filter(Boolean).join(' ')}
+      data-portaled={portalHost ? 'true' : undefined}
+      data-measured={portalHost && !popupPosition ? 'false' : undefined}
+      className={['ds-dropdown-surface', overlayClassName].filter(Boolean).join(' ')}
       style={{
-        // Pre-measurement guard, deliberately BEFORE `...overlayStyle` so it
-        // remains caller-overridable: until the portal position is measured the
-        // surface must not flash at the origin. FAB-17's positioning block does
-        // not include `visibility`, so this is not part of the merge-last set.
-        ...(portalHost && !popupPosition ? { visibility: 'hidden' as const } : {}),
-        // Measured geometry bridge (private proto per the naming law): the
-        // trigger's center offset from the surface's inline-start edge.
-        ...(arrowAnchorOffset
-          ? ({ '--_ds-dropdown-arrow-anchor-offset': arrowAnchorOffset } as React.CSSProperties)
-          : {}),
-        // Direction-aware choreography: a surface opening ABOVE the trigger
-        // travels from below (and exits downward), mirroring the bottom
-        // placement's travel. Keyframes live in the modern skin.
-        animation: `${
-          dataState === 'open'
-            ? surfacePlacement.startsWith('top')
-              ? 'ds-dropdown-popover-enter-top-modern'
-              : 'ds-dropdown-popover-enter-modern'
-            : surfacePlacement.startsWith('top')
-              ? 'ds-dropdown-popover-exit-top-modern'
-              : 'ds-dropdown-popover-exit-modern'
-        } ${MOTION_DURATION} ${MOTION_EASING} both`,
-        ...overlayStyle,
-        // FAB-17: THE ENGINE'S POSITIONING BLOCK MERGES LAST. An overlay's
-        // position is ANATOMY, not customization surface -- a dropdown surface
-        // that is not absolutely positioned is not anchored to its trigger.
-        // `style` is a public, unrestricted CSSProperties hatch, and this
-        // engine MEASURES `popupPosition` at runtime and applies it as
-        // coordinates against the position it sets. A caller passing
-        // `position: static` strands the measured geometry and the menu renders
-        // in flow, detached from the trigger it is supposed to track. That is
-        // true of the component as it stands today, and it is the load-bearing
-        // reason for this ordering.
-        // A relocated keyline pseudo would ALSO be re-anchored by such an
-        // override, but that is a secondary consequence and deliberately NOT
-        // the justification: FAB-12 ruled byte-identical keyline relocation off
-        // a bordered, radiused box unachievable, so the decoration slot may not
-        // survive adjudication. This ordering must not depend on it, and does
-        // not. Popover already merged its positionStyle last -- this aligns the
-        // outliers with their own family's protected members.
-        position: 'absolute',
-        zIndex: 'var(--ds-z-dropdown)',
-        // MINIMIZED TO THE RULING. FAB-17 names the positioning block as
-        // "position, the placement coordinates it computes, and the z-index it
-        // owns" -- `visibility` is NOT in it. The pre-measurement guard is
-        // therefore hoisted ABOVE `...overlayStyle` (see the head of this
-        // object) so a caller can still control visibility, while only the
-        // coordinates stay last. Narrowing caller semantics further than the
-        // ruling adjudicated would be the implementer resolving scope again.
-        ...(portalHost ? (popupPosition ?? {}) : inTreePlacementStyle(placement)),
-      }}
+        ...callerSurfaceStyle(overlayStyle, placement, Boolean(portalHost)),
+        ...(arrowAnchorOffset ? { '--ds-dropdown-arrow-anchor-offset': arrowAnchorOffset } : null),
+        ...(portalHost && popupPosition
+          ? { '--ds-dropdown-position-top': `${popupPosition.top}px`, '--ds-dropdown-position-left': `${popupPosition.left}px` }
+          : null),
+      } as React.CSSProperties}
       onClick={(event) => event.stopPropagation()}
       onKeyDown={(event) => {
         // APG menu-button: Tab dismisses the menu and lets focus move on in
@@ -699,7 +644,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       data-open={isOpen ? 'true' : 'false'}
       data-placement={placement}
       data-disabled={disabled ? 'true' : undefined}
-      className={['rottay-dropdown', 'rottay-dropdown--modern', className].filter(Boolean).join(' ')}
+      className={['ds-dropdown', 'ds-dropdown--modern', className].filter(Boolean).join(' ')}
       // Static chrome (the relative anchor the in-tree surface positions
       // against, the inline-flex shrink-wrap) lives in the modern skin's
       // trigger rule; only the consumer's documented instance style stays.

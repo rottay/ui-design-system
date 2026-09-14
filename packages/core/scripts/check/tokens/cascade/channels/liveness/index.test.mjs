@@ -608,6 +608,13 @@ test('classifySemanticOwner covers every declared rule and role-suffixes the tin
   assert.equal(classifySemanticOwner('--ds-tint-success-4'), 'palette.tint-ramp.success');
   assert.equal(classifySemanticOwner('--ds-tint-4'), 'palette.tint-ramp.primary');
   assert.equal(classifySemanticOwner('--ds-color-primary'), 'palette');
+  assert.equal(classifySemanticOwner('--ds-modal-title-font-size'), 'chrome.modal');
+  assert.equal(classifySemanticOwner('--ds-sheet-layer'), 'chrome.sheet');
+  assert.equal(classifySemanticOwner('--ds-alert-dialog-icon-bg'), 'chrome.alert-dialog');
+  assert.equal(classifySemanticOwner('--ds-alert-warning-wash'), 'chrome.alert');
+  assert.equal(classifySemanticOwner('--ds-hover-card-layer'), 'chrome.hover-card');
+  assert.equal(classifySemanticOwner('--ds-notifier-message-bg'), 'chrome.notifier');
+  assert.equal(classifySemanticOwner('--ds-tour-surface-bg'), 'chrome.tour');
   assert.equal(classifySemanticOwner('--ds-radius-md'), 'surfaces.radius');
   assert.equal(classifySemanticOwner('--ds-toggle-track-bg-checked'), 'chrome.toggle');
   assert.equal(classifySemanticOwner('--ds-input-number-border-focus'), 'chrome.input-number');
@@ -1396,16 +1403,20 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 44 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 51 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
-  assert.equal(index.size, 44, 'the pin count is the audit-100 registration: 25 + 13 + 5 + 1');
+  assert.equal(
+    index.size,
+    51,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the drawer pin the Drawer cut discharged: 33 + 13 + 4 + 1',
+  );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
-    [LIVENESS.authorableUnprovenEffect]: 25,
+    [LIVENESS.authorableUnprovenEffect]: 33,
     [LIVENESS.unreadEmittedNoRoute]: 13,
-    [LIVENESS.readNoProductiveTerminal]: 5,
+    [LIVENESS.readNoProductiveTerminal]: 4,
     [LIVENESS.readUnproven]: 1,
   });
   for (const pin of index.values()) {

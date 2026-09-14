@@ -1,16 +1,11 @@
 /**
  * @fileoverview FAB-17 observable contract -- Drawer (modern engine).
  *
- * FAB-17 ruled that the engine's POSITIONING BLOCK merges AFTER caller `style`.
- * For Drawer the block is `position` plus the `zIndex` the overlay layer
- * manager owns. The per-placement switch then spreads `...base` and adds the
- * viewport-edge rect, so the placement COORDINATES already outranked caller
- * style; only `position` and the owned `zIndex` were exposed. The rect is
- * 100dvh/100dvw spans against viewport edges, which only pin on a fixed element.
- *
- * Both halves are load-bearing: the block must win, AND it must stay narrow --
- * caller paint survives, and the engine claims only the edges the chosen
- * placement actually owns.
+ * A drawer is fixed to a viewport edge on the overlay layer band, and `style`
+ * is a public, unrestricted hatch. The engine therefore drops the caller's
+ * `position`, `zIndex` and edge offsets before the hatch reaches the panel;
+ * the skin owns the rect and the panel carries the band as `--ds-drawer-layer`.
+ * Every other property the caller paints still wins.
  */
 import React from 'react';
 import { render } from '@testing-library/react';
@@ -34,9 +29,9 @@ const CALLER_HATCH: React.CSSProperties = {
 
 type Placement = 'left' | 'right' | 'top' | 'bottom';
 
-function renderDrawer(placement: Placement, style: React.CSSProperties): HTMLElement {
+function renderDrawer(placement: Placement): HTMLElement {
   render(
-    <ModernDrawer open placement={placement} style={style}>
+    <ModernDrawer open placement={placement} style={CALLER_HATCH}>
       body
     </ModernDrawer>,
   );
@@ -45,79 +40,35 @@ function renderDrawer(placement: Placement, style: React.CSSProperties): HTMLEle
   return surface as HTMLElement;
 }
 
-describe('FAB-17 / Drawer modern: engine positioning block wins over caller style', () => {
+describe('FAB-17 / Drawer modern: the caller never strands the panel', () => {
   it.each<Placement>(['left', 'right', 'top', 'bottom'])(
-    '%s placement: caller `position: static` loses to the engine `fixed`',
+    '%s placement: position, edges and layer never reach the panel',
     (placement) => {
-      const surface = renderDrawer(placement, CALLER_HATCH);
+      const surface = renderDrawer(placement);
 
-      expect(surface.style.position).toBe('fixed');
-      expect(surface.style.position).not.toBe('static');
+      expect(surface).toHaveAttribute('data-placement', placement);
+      expect(surface.style.position).toBe('');
+      expect(surface.style.zIndex).toBe('');
+      expect(surface.style.top).toBe('');
+      expect(surface.style.right).toBe('');
+      expect(surface.style.bottom).toBe('');
+      expect(surface.style.left).toBe('');
     },
   );
 
-  it.each<Placement>(['left', 'right', 'top', 'bottom'])(
-    '%s placement: the owned overlay-layer zIndex outranks the caller',
-    (placement) => {
-      const surface = renderDrawer(placement, CALLER_HATCH);
+  it('carries the overlay layer band as the family channel', () => {
+    const surface = renderDrawer('right');
 
-      // The layer manager supplies a tokenized band, never the caller's scalar.
-      expect(surface.style.getPropertyValue('z-index')).toBe('var(--ds-z-index-drawer)');
-      expect(surface.style.getPropertyValue('z-index')).not.toBe('4');
-    },
-  );
-
-  it('left placement: the engine rect claims the edges it computes', () => {
-    const surface = renderDrawer('left', CALLER_HATCH);
-
-    expect(surface.style.top).toBe('0px');
-    expect(surface.style.left).toBe('0px');
-    expect(surface.style.height).toBe('var(--ds-viewport-block-size)');
-  });
-
-  it('right placement: the engine rect claims the inline-end edge', () => {
-    const surface = renderDrawer('right', CALLER_HATCH);
-
-    expect(surface.style.top).toBe('0px');
-    expect(surface.style.right).toBe('0px');
-    expect(surface.style.right).not.toBe('777px');
-  });
-
-  it('bottom placement: the engine rect claims the block-end edge', () => {
-    const surface = renderDrawer('bottom', CALLER_HATCH);
-
-    expect(surface.style.bottom).toBe('0px');
-    expect(surface.style.left).toBe('0px');
-    expect(surface.style.bottom).not.toBe('666px');
+    expect(surface.style.getPropertyValue('--ds-drawer-layer')).toBe('var(--ds-z-index-drawer)');
   });
 });
 
-describe('FAB-17 / Drawer modern: the guard did NOT over-reach', () => {
-  it.each<Placement>(['left', 'right', 'top', 'bottom'])(
-    '%s placement: caller-supplied non-positioning paint still wins',
-    (placement) => {
-      const surface = renderDrawer(placement, CALLER_HATCH);
+describe('FAB-17 / Drawer modern: the guard does not over-reach', () => {
+  it.each<Placement>(['left', 'right', 'top', 'bottom'])('%s placement: caller paint still wins', (placement) => {
+    const surface = renderDrawer(placement);
 
-      expect(surface.style.background).toBe('rgb(1, 2, 3)');
-      expect(surface.style.padding).toBe('77px');
-      expect(surface.style.visibility).toBe('visible');
-    },
-  );
-
-  it('right placement leaves the edges it does NOT compute to the caller', () => {
-    // The `right` rect sets top/right/width/height only. An over-broad guard
-    // that spread a full four-edge inset would clobber these and this test
-    // would go red -- which is exactly its job.
-    const surface = renderDrawer('right', CALLER_HATCH);
-
-    expect(surface.style.left).toBe('888px');
-    expect(surface.style.bottom).toBe('666px');
-  });
-
-  it('left placement leaves the edges it does NOT compute to the caller', () => {
-    const surface = renderDrawer('left', CALLER_HATCH);
-
-    expect(surface.style.right).toBe('777px');
-    expect(surface.style.bottom).toBe('666px');
+    expect(surface.style.background).toBe('rgb(1, 2, 3)');
+    expect(surface.style.padding).toBe('77px');
+    expect(surface.style.visibility).toBe('visible');
   });
 });

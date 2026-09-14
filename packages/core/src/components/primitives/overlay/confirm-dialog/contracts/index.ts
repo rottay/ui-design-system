@@ -48,19 +48,19 @@ export interface ConfirmDialogProps extends EngineAwareProps {
 
 export const VARIANT_COLORS: Record<ConfirmDialogVariant, { icon: string; button: string; bg: string }> = {
   info: {
-    icon: 'var(--ds-color-primary-500, #1890ff)',
-    button: 'var(--ds-color-primary-500, #1890ff)',
-    bg: 'var(--ds-color-primary-50, #e6f7ff)',
+    icon: 'var(--ds-color-primary-500)',
+    button: 'var(--ds-color-primary-500)',
+    bg: 'var(--ds-color-primary-50)',
   },
   warning: {
-    icon: 'var(--ds-color-warning-500, #faad14)',
-    button: 'var(--ds-color-warning-500, #faad14)',
-    bg: 'var(--ds-color-warning-50, #fffbe6)',
+    icon: 'var(--ds-color-warning-500)',
+    button: 'var(--ds-color-warning-500)',
+    bg: 'var(--ds-color-warning-50)',
   },
   danger: {
-    icon: 'var(--ds-color-error-500, #ff4d4f)',
-    button: 'var(--ds-color-error-500, #ff4d4f)',
-    bg: 'var(--ds-color-error-50, #fff2f0)',
+    icon: 'var(--ds-color-error-500)',
+    button: 'var(--ds-color-error-500)',
+    bg: 'var(--ds-color-error-50)',
   },
 };
 

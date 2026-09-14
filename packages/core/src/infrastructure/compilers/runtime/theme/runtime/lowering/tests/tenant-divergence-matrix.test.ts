@@ -23,6 +23,7 @@ import {
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { FAMILY_DERIVERS } from '../runtime/derivation';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
@@ -178,9 +179,19 @@ describe('two tenants of the bithire vertical diverge on every bounded channel',
     // This guards the quality of the deterministic authoring/migration source.
     // Runtime-path truth is asserted independently below so this large source
     // delta cannot masquerade as evidence that the DB Appearance path ran.
-    const keys = new Set([...Object.keys(bithire.cssVariables), ...Object.keys(themanagement.cssVariables)]);
-    const differing = [...keys].filter((k) => bithire.cssVariables[k] !== themanagement.cssVariables[k]);
-    expect(differing.length / keys.size).toBeGreaterThan(0.5);
+    // A family deriver's relation is the same var() expression in every tenant by
+    // construction; it diverges in what it resolves to, not in its text, so an
+    // unchanged relation is not authored surface and stays out of the denominator.
+    const relations = new Set(
+      FAMILY_DERIVERS.filter((deriver) => deriver.rank === 'derived')
+        .flatMap((deriver) => deriver.produces)
+        .filter((name) => !name.includes('*')),
+    );
+    const keys = [...new Set([...Object.keys(bithire.cssVariables), ...Object.keys(themanagement.cssVariables)])].filter(
+      (k) => !(relations.has(k) && bithire.cssVariables[k] === themanagement.cssVariables[k]),
+    );
+    const differing = keys.filter((k) => bithire.cssVariables[k] !== themanagement.cssVariables[k]);
+    expect(differing.length / keys.length).toBeGreaterThan(0.5);
   });
 });
 

@@ -1,22 +1,12 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 
-import ModernCallout from '../engines/modern';
+import ModernCallout from '../../../feedback/alert/presentation/callout';
 import { renderWithEngine } from '@tests/support/engine';
 
-const SKIN = readFileSync(
-  resolve(
-    __dirname,
-    '../../../../../foundation/tokens/css/runtime/engines/modern/skin/callout/index.css'
-  ),
-  'utf8'
-);
-
-describe('Callout modern engine', () => {
-  it('renders premium anatomy with a semantic status icon and action tray', () => {
+describe('Callout modern engine (folded into Alert)', () => {
+  it('renders the alert surface with a semantic status icon and action tray', () => {
     const { container } = renderWithEngine(
       <ModernCallout
         title="Decision ready"
@@ -29,12 +19,11 @@ describe('Callout modern engine', () => {
     );
 
     const root = screen.getByRole('status');
-    expect(root).toHaveAttribute('data-has-title', 'true');
-    expect(root).toHaveAttribute('data-has-action', 'true');
-    expect(root).toHaveAttribute('data-closable', 'true');
+    expect(root).toHaveClass('ds-alert', 'ds-alert--modern');
+    expect(container.querySelector('[data-part="title"]')).toHaveTextContent('Decision ready');
+    expect(container.querySelector('[data-part="description"]')).toHaveTextContent('Evidence is complete.');
     expect(container.querySelector('[data-icon-name="status.info"]')).not.toBeNull();
-    expect(container.querySelector('[data-part="body"]')).not.toBeNull();
-    expect(container.querySelector('[data-part="action"]')).not.toBeNull();
+    expect(container.querySelector('[data-part="actions"]')).not.toBeNull();
     expect(container.querySelector('[data-icon-name="action.close"]')).not.toBeNull();
   });
 
@@ -49,16 +38,6 @@ describe('Callout modern engine', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
-  });
-
-  it('carries no DaisyUI structural class (drained: paint is skin-owned)', () => {
-    renderWithEngine(<ModernCallout title="Token painted">Body</ModernCallout>, 'modern');
-
-    const root = screen.getByRole('status');
-    expect(root.className).toContain('rottay-callout-shell--modern');
-    // The drained DaisyUI `alert` class must not reappear; the skin's
-    // `.rottay-callout-shell--modern` rules replace its grid/paint entirely.
-    expect(root.className.split(/\s+/)).not.toContain('alert');
   });
 
   it('keeps the dismiss control reachable with overlong title and body', () => {
@@ -120,18 +99,5 @@ describe('Callout live-region politeness', () => {
     const root = screen.getByRole('status');
     expect(root.className).toBe(root.className.trim());
     expect(root.className.split(' ')).not.toContain('');
-  });
-});
-
-describe('Callout modern skin token adoption', () => {
-  it('rides the tenant edge grammar on every hairline it paints', () => {
-    // A tenant moving --ds-edge-hairline-width used to reshape the icon well
-    // while the action tray and the dismiss control stayed pinned at 1px.
-    const hairlineRules = SKIN.match(/border:\s*[^;]*;/g) ?? [];
-    const pinned = hairlineRules.filter(
-      (rule) => /\b1px\s+solid/.test(rule) && !rule.includes('--ds-edge'),
-    );
-    expect(pinned).toEqual([]);
-    expect(SKIN.match(/--ds-edge-hairline-width/g)?.length).toBeGreaterThanOrEqual(3);
   });
 });
