@@ -91,6 +91,24 @@ function definedValue(css: string, varName: string): string | undefined {
   return new RegExp(`^\\s*${escaped}\\s*:([^;]+);`, 'm').exec(css)?.[1].trim();
 }
 
+/**
+ * A projection value resolves from canonical tokens when every name in it is a
+ * `--ds-*` channel and nothing else survives: a chain like
+ * `var(--ds-radius-button, var(--ds-radius-md))` passes, because the fallback
+ * is another governed channel rather than a hardcoded corner. What the rule is
+ * actually about is the literal -- `var(--ds-x, 8px)` leaves `8px` behind and
+ * still fails, at any depth.
+ */
+function resolvesFromCanonicalTokens(value: string | undefined): boolean {
+  if (value === undefined) return false;
+  if (!/^var\(\s*--ds-[a-z0-9-]+/.test(value)) return false;
+  const residue = value
+    .replace(/var\(/g, '')
+    .replace(/--ds-[a-z0-9-]+/g, '')
+    .replace(/[\s,)]/g, '');
+  return residue === '';
+}
+
 describe('modern engine bridge contract', () => {
   const themeCSS = existsSync(MODERN_THEME) ? readFileSync(MODERN_THEME, 'utf8') : '';
   const projectionCSS = existsSync(MODERN_PROJECTION)
@@ -161,9 +179,9 @@ describe('modern engine bridge contract', () => {
         const value = definedValue(projectionCSS, varName);
         expect(value, `"${varName}" is not defined in the projection`).toBeDefined();
         expect(
-          value,
+          resolvesFromCanonicalTokens(value),
           `"${varName}: ${value}" must resolve from a canonical --ds-* token, not a literal`,
-        ).toMatch(/^var\(--ds-[a-z0-9-]+\)$/);
+        ).toBe(true);
       },
     );
 
@@ -237,9 +255,9 @@ describe('modern engine bridge contract', () => {
           `Missing DaisyUI 5 structural variable "${varName}:" in the projection`,
         ).toBeDefined();
         expect(
-          value,
+          resolvesFromCanonicalTokens(value),
           `"${varName}: ${value}" must resolve from a canonical --ds-* token, not a literal`,
-        ).toMatch(/^var\(--ds-[a-z0-9-]+\)$/);
+        ).toBe(true);
       },
     );
 
