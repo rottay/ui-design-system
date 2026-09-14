@@ -91,6 +91,13 @@ function withViewport(width: number, run: () => void): void {
 }
 
 const FULLSCREEN_ATTRIBUTE = 'data-adaptive-fullscreen';
+/**
+ * The Modern modal carries its adaptive posture as an ENUM: the ds-modal cut
+ * replaced the boolean above with data-presentation="fullscreen" | "floating".
+ * The rustic engine still stamps the boolean, and every synthetic drill below
+ * keeps using it, so the recorder takes the carrier it should watch.
+ */
+const PRESENTATION_ATTRIBUTE = 'data-presentation';
 
 /** Markup that names the attribute, for the writers this recorder refuses. */
 const PLANTED_MARKUP = `<span ${FULLSCREEN_ATTRIBUTE}="true"></span>`;
@@ -433,7 +440,9 @@ afterAll(() => {
  */
 let restoreAttributeInterception: Restore | null = null;
 
-function recordAdaptiveFullscreen(): { stop: () => string[] } {
+function recordAdaptiveFullscreen(
+  carrierAttribute: string = FULLSCREEN_ATTRIBUTE,
+): { stop: () => string[] } {
   const seen: (string | null)[] = [];
   const observed = new Map<Element, string | null>();
   const readBack = Element.prototype.getAttribute;
@@ -445,13 +454,13 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   /** What `element` carries now, recorded on the writer's own stack. */
   const commit = (element: Element | null | undefined): void => {
     if (!element) return;
-    const value = readBack.call(element, FULLSCREEN_ATTRIBUTE);
+    const value = readBack.call(element, carrierAttribute);
     observed.set(element, value);
     push(value);
   };
   /** What `element` carries BEFORE the write about to run. */
   const carried = (element: Element | null | undefined): string | null =>
-    element ? readBack.call(element, FULLSCREEN_ATTRIBUTE) : null;
+    element ? readBack.call(element, carrierAttribute) : null;
   /**
    * The value an observed write is about to overwrite must be the value this
    * recorder last recorded for that element. Anything else went by unseen, and
@@ -465,14 +474,14 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   };
   const namesAttribute = (name: unknown): boolean => {
     const lowered = String(name).toLowerCase();
-    return lowered === FULLSCREEN_ATTRIBUTE || lowered.endsWith(`:${FULLSCREEN_ATTRIBUTE}`);
+    return lowered === carrierAttribute || lowered.endsWith(`:${carrierAttribute}`);
   };
   // The parser lowercases ASCII attribute names, so any case plants the carrier.
   const markupNamesAttribute = (markup: unknown): boolean =>
-    String(markup).toLowerCase().includes(FULLSCREEN_ATTRIBUTE);
+    String(markup).toLowerCase().includes(carrierAttribute);
   const refuse = (writer: string): never => {
     throw new Error(
-      `UNSUPPORTED-WRITER: ${writer} plants ${FULLSCREEN_ATTRIBUTE} through parsed markup, which this recorder cannot observe; it will not report a commit history it did not see`,
+      `UNSUPPORTED-WRITER: ${writer} plants ${carrierAttribute} through parsed markup, which this recorder cannot observe; it will not report a commit history it did not see`,
     );
   };
 
@@ -669,7 +678,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     return false;
   };
   const unsupported = (context: string, carrier: Element, where: string): void => {
-    const value = readBack.call(carrier, FULLSCREEN_ATTRIBUTE);
+    const value = readBack.call(carrier, carrierAttribute);
     breach ??=
       `UNSUPPORTED-CONTEXT: ${context} -- a surface carrying ${JSON.stringify(value)} ${where}, which this recorder does not observe; it will not report a commit history it did not see`;
   };
@@ -701,7 +710,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   /** Any carrier that can paint from inside a shadow tree refuses the drill. */
   const sweepShadowTrees = (): void => {
     for (const root of shadowRoots) {
-      for (const carrier of Array.from(root.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
+      for (const carrier of Array.from(root.querySelectorAll(`[${carrierAttribute}]`))) {
         if (!reachesWatchedDocument(carrier)) continue;
         unsupported('shadow tree', carrier, 'lives inside a shadow tree attached to this document');
       }
@@ -711,7 +720,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
   // Admission: what the document already carries is the first observed value,
   // unless it is carried somewhere this recorder cannot follow.
   collectShadowRoots(document.documentElement);
-  for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
+  for (const carrier of Array.from(document.querySelectorAll(`[${carrierAttribute}]`))) {
     if (inWatchedRealm(carrier)) commit(carrier);
     else fromForeignRealm(carrier);
   }
@@ -725,12 +734,12 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     if (!candidate || (candidate.nodeType !== 1 && candidate.nodeType !== 11)) return [];
     const root = candidate as Element;
     const own =
-      candidate.nodeType === 1 && readBack.call(root, FULLSCREEN_ATTRIBUTE) !== null ? [root] : [];
-    return [...own, ...Array.from(root.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))];
+      candidate.nodeType === 1 && readBack.call(root, carrierAttribute) !== null ? [root] : [];
+    return [...own, ...Array.from(root.querySelectorAll(`[${carrierAttribute}]`))];
   };
   /** A carrier that ENTERS the document must arrive carrying what we recorded. */
   const arrived = (carrier: Element): void => {
-    const value = readBack.call(carrier, FULLSCREEN_ATTRIBUTE);
+    const value = readBack.call(carrier, carrierAttribute);
     if (value === null || observed.get(carrier) === value) return;
     breach ??=
       `UNOBSERVED-CARRIER: a surface entered the document carrying ${JSON.stringify(value)} that this recorder never saw written to it; it was planted by a path it cannot observe`;
@@ -750,7 +759,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
           // check at `stop()` owns it. Anywhere else is a departure, whether it
           // went to a detached tree or straight into another document.
           if (inWatchedDocument(carrier)) continue;
-          departed(carrier, readBack.call(carrier, FULLSCREEN_ATTRIBUTE));
+          departed(carrier, readBack.call(carrier, carrierAttribute));
         }
       }
     }
@@ -926,7 +935,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
         // The map cannot name its element, but the attribute it is about to
         // replace can -- and it also carries the value being overwritten.
         const replaced = node && namesAttribute(node.name)
-          ? this.getNamedItem(FULLSCREEN_ATTRIBUTE)
+          ? this.getNamedItem(carrierAttribute)
           : null;
         const replacedOwner = replaced?.ownerElement ?? null;
         witness(replacedOwner, replaced ? replaced.value : null);
@@ -971,13 +980,13 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
     stop: () => {
       settleNow();
       sweepShadowTrees();
-      for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
+      for (const carrier of Array.from(document.querySelectorAll(`[${carrierAttribute}]`))) {
         if (!inWatchedRealm(carrier)) fromForeignRealm(carrier);
       }
       restore();
       if (breach) throw new Error(breach);
-      for (const carrier of Array.from(document.querySelectorAll(`[${FULLSCREEN_ATTRIBUTE}]`))) {
-        const settled = carrier.getAttribute(FULLSCREEN_ATTRIBUTE);
+      for (const carrier of Array.from(document.querySelectorAll(`[${carrierAttribute}]`))) {
+        const settled = carrier.getAttribute(carrierAttribute);
         if (!observed.has(carrier) || observed.get(carrier) !== settled) {
           throw new Error(
             `UNOBSERVED-CARRIER: a surface carries ${String(settled)} that this recorder never saw written to it; it is not observing every commit`,
@@ -986,7 +995,7 @@ function recordAdaptiveFullscreen(): { stop: () => string[] } {
       }
       if (seen.includes(null)) {
         throw new Error(
-          `${FULLSCREEN_ATTRIBUTE} was removed mid-history, which this instrument does not model`,
+          `${carrierAttribute} was removed mid-history, which this instrument does not model`,
         );
       }
       return seen as string[];
@@ -1244,7 +1253,7 @@ describe('adaptiveFullscreen on the first committed render', () => {
   it('renders a desktop request non-fullscreen, with no correcting frame', (ctx) => {
     ctx.skip(!RUNNER_IMPLEMENTS_DIALOGS, NO_DIALOGS_HERE);
     withViewport(1440, () => {
-      const recorder = recordAdaptiveFullscreen();
+      const recorder = recordAdaptiveFullscreen(PRESENTATION_ATTRIBUTE);
       render(
         <ResponsiveProvider ssrViewport="desktop">
           <ModernModal open onClose={() => {}} title="Desktop">
@@ -1253,14 +1262,19 @@ describe('adaptiveFullscreen on the first committed render', () => {
         </ResponsiveProvider>,
       );
 
-      expect(recorder.stop()).toEqual(['false']);
+      // ONE value, recorded on the writer's own stack: the posture is resolved
+      // in render (useAdaptation is a useMemo) and committed with the surface,
+      // so there is no second frame correcting it. A carrier that reached the
+      // document any other way makes `stop()` throw UNOBSERVED-CARRIER rather
+      // than return this list.
+      expect(recorder.stop()).toEqual(['floating']);
     });
   });
 
   it('still renders a phone request fullscreen', (ctx) => {
     ctx.skip(!RUNNER_IMPLEMENTS_DIALOGS, NO_DIALOGS_HERE);
     withViewport(390, () => {
-      const recorder = recordAdaptiveFullscreen();
+      const recorder = recordAdaptiveFullscreen(PRESENTATION_ATTRIBUTE);
       render(
         <ResponsiveProvider ssrViewport="phone">
           <ModernModal open onClose={() => {}} title="Phone">
@@ -1269,7 +1283,7 @@ describe('adaptiveFullscreen on the first committed render', () => {
         </ResponsiveProvider>,
       );
 
-      expect(recorder.stop()).toEqual(['true']);
+      expect(recorder.stop()).toEqual(['fullscreen']);
     });
   });
 
