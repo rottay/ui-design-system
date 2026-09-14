@@ -59,7 +59,7 @@ describe('the folded callout washes a step lighter than the alert surface', () =
   });
 
   it('declares every subtle channel it paints, on step 4 of its own tone', () => {
-    const vars = alertChromeDeriver.derive({} as never);
+    const vars = alertChromeDeriver.derive({} as never, {} as never);
     for (const tone of TONES) {
       expect(alertChromeDeriver.produces).toContain(`--ds-alert-${tone}-wash-subtle`);
       expect(vars[`--ds-alert-${tone}-wash-subtle`]).toBe(`var(--ds-tint-${tone}-4)`);

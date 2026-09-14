@@ -182,7 +182,7 @@ describe('two tenants of the bithire vertical diverge on every bounded channel',
     // A family deriver's relation is the same var() expression in every tenant by
     // construction; it diverges in what it resolves to, not in its text, so an
     // unchanged relation is not authored surface and stays out of the denominator.
-    const relations = new Set(
+    const relations = new Set<string>(
       FAMILY_DERIVERS.filter((deriver) => deriver.rank === 'derived')
         .flatMap((deriver) => deriver.produces)
         .filter((name) => !name.includes('*')),
