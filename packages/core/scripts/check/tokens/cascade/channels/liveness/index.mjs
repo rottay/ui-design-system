@@ -277,6 +277,16 @@ export const DEFAULT_CSS_ROOTS = Object.freeze([
   resolve(CORE_ROOT, 'src/foundation/tokens/css'),
   resolve(CORE_ROOT, 'src/components'),
 ]);
+/**
+ * The single declaration site of the `--ds-z-index-*` scale. The canonical
+ * roster is MEASURED from this file on every run (`deriveCanonicalZScaleRoster`),
+ * never listed by hand here; the z-index-single-scale invariant keeps every
+ * band declared there and nowhere else.
+ */
+export const DEFAULT_Z_INDEX_SCALE_OWNER = resolve(
+  CORE_ROOT,
+  'src/foundation/tokens/css/foundation/base/z-index/index.css',
+);
 export const DEFAULT_EVIDENCE_ROOT = resolve(
   CORE_ROOT,
   'artifacts/quality/programs/modern-rescue',
@@ -1350,6 +1360,12 @@ export function classifySemanticOwner(name) {
 /* 8. Liveness classification — no "dead" wording, but no protected bucket */
 /* ---------------------------------------------------------------------- */
 
+/**
+ * Three partitions, none of them protected: LIVE (a proven terminal chain),
+ * UNPROVEN (a standing effect finding that must carry a work-order pin) and
+ * STRUCTURAL (a measured constant that must carry an invariant pin). A row
+ * lands in exactly one, and every partition has a law that can turn it red.
+ */
 export const LIVENESS = Object.freeze({
   modernPainted: 'LIVE_MODERN_PAINTED',
   frozenEnginePainted: 'LIVE_FROZEN_ENGINE_PAINTED',
@@ -1359,6 +1375,7 @@ export const LIVENESS = Object.freeze({
   authorableUnprovenEffect: 'AUTHORABLE_UNPROVEN_EFFECT',
   unreadOverrideOnly: 'UNREAD_OVERRIDE_ONLY_NO_KNOWN_ROUTE',
   unreadEmittedNoRoute: 'UNREAD_EMITTED_NO_KNOWN_ROUTE',
+  structuralConstant: 'STRUCTURAL_CONSTANT',
 });
 
 /** The three (and only three) classifications that count as proven liveness. */
@@ -1385,6 +1402,51 @@ export const UNPROVEN_CLASSIFICATIONS = new Set([
   LIVENESS.unreadOverrideOnly,
   LIVENESS.unreadEmittedNoRoute,
 ]);
+
+/**
+ * The third partition: NEITHER proven liveness NOR an unproven effect.
+ *
+ * A structural constant is a channel whose contract is to be DECLARED, not
+ * read. The floor of the single z-index scale (`--ds-z-index-base: 0`) is what
+ * "no stacking" means, so a read of it would be a defect, not a terminal, and
+ * classifying it UNREAD_EMITTED_NO_KNOWN_ROUTE would register an effect that
+ * nothing owes. It is STILL NOT A PROTECTED BUCKET, and the difference from the
+ * "declaredReference never fails" design defect 3 removed is enforced, not
+ * asserted: membership is MEASURED from the declaration site on every run
+ * (`deriveCanonicalZScaleRoster`, never a list kept here); a measured row must
+ * carry a structural pin naming the invariant that sustains it, or it is a
+ * STOP NO-GO row (`adjudicateDispositions`); and every drift fails closed --
+ * a band that leaves the roster re-measures as UNREAD_EMITTED_NO_KNOWN_ROUTE
+ * and its pin drifts, a band that gains a reader measures LIVE and its pin is
+ * discharged. `assessChannelEffect` never counts it, because it is not an
+ * emission waiting for an effect. Precedence is untouched: paint, reads and
+ * the tenant allowlists all still win over roster membership, which only
+ * re-reads what would otherwise fall to the final unread-emitted fallback.
+ */
+export const STRUCTURAL_CLASSIFICATIONS = new Set([LIVENESS.structuralConstant]);
+
+/**
+ * The canonical z-scale roster, derived from the declaration site's text:
+ * every `--ds-z-index-*` declared directly under `:root` whose value is a
+ * bare unsigned integer literal -- the same `\d+` grammar the
+ * z-index-single-scale invariant reads a band with. Aliases (`var(...)`,
+ * `calc(...)`) are not bands and stay out. Parsed with PostCSS so a name
+ * inside a comment never counts. A parse error propagates: an unmeasurable
+ * roster is a broken measurement, never an empty one.
+ */
+export function deriveCanonicalZScaleRoster(cssText) {
+  const roster = new Set();
+  const root = postcss.parse(cssText);
+  root.walkRules((rule) => {
+    if (rule.selector.trim() !== ':root') return;
+    rule.walkDecls((decl) => {
+      if (decl.parent !== rule) return;
+      if (!decl.prop.startsWith('--ds-z-index-')) return;
+      if (/^\d+$/.test(decl.value.trim())) roster.add(decl.prop);
+    });
+  });
+  return roster;
+}
 
 /* ---------------------------------------------------------------------- */
 /* 8b. Disposition registry -- WHO owns every standing non-LIVE row       */
@@ -1419,6 +1481,13 @@ export const UNPROVEN_CLASSIFICATIONS = new Set([
  * A fourth, (d) DRIFTED, falls out of the same reading: a pin declares the
  * class it was registered against, so a row that moved from one non-LIVE class
  * to another is re-adjudicated by its owner rather than silently re-covered.
+ *
+ * A STRUCTURAL pin is the one pin that registers no obligation. It names an
+ * INVARIANT instead of an owner, because the row it covers is a measured
+ * structural constant (`STRUCTURAL_CLASSIFICATIONS`): nothing is owed but the
+ * roster law that keeps the band declared, and the same four laws apply to it
+ * (a missing pin, a stale pin, a discharged pin, a drifted pin all fail). It
+ * is retired in the same commit that retires the band from the canonical roster.
  *
  * WHY IN THE SCRIPT AND NOT IN A JSON FILE. `computeInputsDigest` already
  * covers this script's own source, so a pin edit invalidates the evidence
@@ -1518,11 +1587,11 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     channels: Object.freeze(['--ds-color-error-900', '--ds-color-success-900']),
   }),
   Object.freeze({
-    owner: 'WO-FAM-04',
-    classification: LIVENESS.unreadEmittedNoRoute,
+    invariant: 'z-index-single-scale',
+    classification: LIVENESS.structuralConstant,
     registered: '2026-09-14',
     reason:
-      're-adjudicated from readNoProductiveTerminal when this cut took the second of its two exit routes: the alert family declares no stacking at all -- no z-index in its skin, its presentation channels or its owner, and no placement in its contract -- so the alert-band terminal could only have been invented, and the indirection --ds-z-index-alert = calc(var(--ds-z-index-base) + 1) retired to the literal step instead, the way --ds-z-index-message already had. The floor of a z-scale is declared, never read: reading a zero band is the same as declaring no stacking. It stays emitted because the single-scale invariant requires every canonical band present in one owner, which z-index-single-scale enforces, so the pin clears only if that canonical roster drops the floor',
+      'a structural constant, not debt: --ds-z-index-base is the declared floor of the single z-index scale, the zero band that means no stacking, and a band is declared, never read -- reading the floor would be a defect, not a terminal. The obligation is the roster law, not a reader: every canonical band declared at the one declaration site must be present in one owner, which z-index-single-scale enforces and this instrument measures from that site on every run. The pin is retired only if the canonical roster drops the floor, in the same commit that retires the channel and this pin',
     channels: Object.freeze(['--ds-z-index-base']),
   }),
   Object.freeze({
@@ -1567,6 +1636,7 @@ export function buildDispositionIndex(dispositions = CHANNEL_DISPOSITIONS) {
       index.set(channel, {
         channel,
         owner: group.owner,
+        invariant: group.invariant,
         classification: group.classification,
         registered: group.registered,
         reason: group.reason,
@@ -1592,7 +1662,22 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
       `duplicate pin: ${channel} is registered more than once in CHANNEL_DISPOSITIONS -- a channel has exactly one owner`,
     );
   }
+  const isStructuralPin = (pin) => STRUCTURAL_CLASSIFICATIONS.has(pin.classification);
+  const pinAddress = (pin) => (isStructuralPin(pin) ? `invariant ${pin.invariant}` : pin.owner);
   for (const pin of index.values()) {
+    if (isStructuralPin(pin)) {
+      if (typeof pin.invariant !== 'string' || pin.invariant.trim() === '') {
+        failures.push(
+          `invalid structural pin: ${pin.channel} is registered as ${pin.classification} with no invariant -- a structural constant is sustained by a named invariant, not by a work order, and a pin that names neither registers nothing`,
+        );
+      }
+      if (pin.owner !== undefined) {
+        failures.push(
+          `invalid structural pin: ${pin.channel} is registered as ${pin.classification} and also names an owner "${pin.owner}" -- a structural constant owes no work; it names its invariant and nothing else`,
+        );
+      }
+      continue;
+    }
     if (!DISPOSITION_OWNER_PATTERN.test(pin.owner)) {
       failures.push(
         `invalid pin: ${pin.channel} is pinned to "${pin.owner}", which is not a work-order id -- a pin registers OWNERSHIP, and an owner that is not a work order owns nothing`,
@@ -1602,10 +1687,25 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
 
   const measured = new Map(channels.filter((row) => row.classification).map((row) => [row.name, row]));
   const pinned = [];
+  const structural = [];
   const unregistered = new Map();
+  const unpinnedStructural = [];
   for (const row of channels) {
-    if (!row.classification || !UNPROVEN_CLASSIFICATIONS.has(row.classification)) continue;
+    if (!row.classification) continue;
     const pin = index.get(row.name);
+    // The symmetric law for the third partition: a measured structural row is
+    // not a finding, but it is not free either -- it must carry a structural
+    // pin, and a drifted pin is accused once, below, against the PIN.
+    if (STRUCTURAL_CLASSIFICATIONS.has(row.classification)) {
+      if (pin !== undefined && pin.classification === row.classification) {
+        structural.push({ ...pin });
+        continue;
+      }
+      if (pin !== undefined) continue;
+      unpinnedStructural.push(row.name);
+      continue;
+    }
+    if (!UNPROVEN_CLASSIFICATIONS.has(row.classification)) continue;
     if (pin !== undefined && pin.classification === row.classification) {
       pinned.push({ ...pin });
       continue;
@@ -1617,6 +1717,11 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
     list.push(row.name);
     unregistered.set(row.classification, list);
   }
+  if (unpinnedStructural.length > 0) {
+    failures.push(
+      `STOP NO-GO: ${unpinnedStructural.length} channel(s) classified ${LIVENESS.structuralConstant} with NO registered structural pin (a measured structural constant must name the invariant that sustains it, or it is an unread emission wearing a different word) -- exact rows: ${unpinnedStructural.sort().join(', ')}`,
+    );
+  }
   for (const [classification, names] of unregistered) {
     failures.push(
       `STOP NO-GO: ${names.length} channel(s) classified ${classification} with NO registered owner (no proven terminal, no proven external evidence, no retirement, no pin) -- exact rows: ${names.sort().join(', ')}`,
@@ -1625,21 +1730,24 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
 
   for (const pin of index.values()) {
     const row = measured.get(pin.channel);
+    const address = pinAddress(pin);
     if (row === undefined) {
       failures.push(
-        `stale pin: ${pin.channel} is pinned to ${pin.owner} as ${pin.classification} and no longer exists in the measured universe -- the pin points at nothing; remove it in the same commit that removed the channel`,
+        `stale pin: ${pin.channel} is pinned to ${address} as ${pin.classification} and no longer exists in the measured universe -- the pin points at nothing; remove it in the same commit that removed the channel`,
       );
       continue;
     }
     if (LIVE_CLASSIFICATIONS.has(row.classification)) {
       failures.push(
-        `discharged pin: ${pin.channel} is pinned to ${pin.owner} as ${pin.classification} and now classifies ${row.classification} -- the work landed, so delete the pin; this table only shrinks`,
+        isStructuralPin(pin)
+          ? `discharged pin: ${pin.channel} is pinned to ${address} as ${pin.classification} and now classifies ${row.classification} -- a band that gained a reader is no longer a structural constant, so delete the pin; this table only shrinks`
+          : `discharged pin: ${pin.channel} is pinned to ${address} as ${pin.classification} and now classifies ${row.classification} -- the work landed, so delete the pin; this table only shrinks`,
       );
       continue;
     }
     if (row.classification !== pin.classification) {
       failures.push(
-        `drifted pin: ${pin.channel} is pinned to ${pin.owner} as ${pin.classification} and now measures ${row.classification} -- the debt changed shape; re-register it against the class it is actually in`,
+        `drifted pin: ${pin.channel} is pinned to ${address} as ${pin.classification} and now measures ${row.classification} -- the debt changed shape; re-register it against the class it is actually in`,
       );
     }
   }
@@ -1648,12 +1756,29 @@ export function adjudicateDispositions(channels, { dispositions = CHANNEL_DISPOS
   for (const entry of [...pinned].sort((a, b) => a.channel.localeCompare(b.channel))) {
     (byOwner[entry.owner] ??= []).push(entry.channel);
   }
-  return { failures, pinned, byOwner, registered: index.size };
+  const byInvariant = {};
+  for (const entry of [...structural].sort((a, b) => a.channel.localeCompare(b.channel))) {
+    (byInvariant[entry.invariant] ??= []).push(entry.channel);
+  }
+  const structuralPins = [...index.values()].filter(isStructuralPin).length;
+  return {
+    failures,
+    pinned,
+    structural,
+    byOwner,
+    byInvariant,
+    registered: index.size,
+    ownerPins: index.size - structuralPins,
+    structuralPins,
+  };
 }
 
 /**
  * The effect verdict, apart from ownership: a pin names who owes a terminal but
- * never supplies one, so every non-LIVE row stays an effect failure, pinned or not.
+ * never supplies one, so every UNPROVEN row stays an effect failure, pinned or
+ * not. A STRUCTURAL row is not counted: it is not an emission waiting for an
+ * effect, and its own law (measured membership plus a structural pin) is
+ * enforced by `adjudicateDispositions`, never relaxed here.
  */
 export function assessChannelEffect(channels) {
   const rows = [];
@@ -1676,7 +1801,9 @@ export function assessChannelEffect(channels) {
  * Exhaustive over the row shape this file ever constructs (universe =
  * declaredOverride ∪ declaredReference ∪ emitted, so at least one of
  * `declaredOverride`/`declaredReference`/emitted always holds) — every
- * branch below is reachable, none is dead code.
+ * branch below is reachable, none is dead code. `canonicalRosterMember` is
+ * read LAST, immediately before the unread-emitted fallback, so it can only
+ * re-read a row that no paint, read or tenant-allowlist signal claimed.
  */
 export function classifyLiveness({
   declaredOverride,
@@ -1686,6 +1813,7 @@ export function classifyLiveness({
   externalConsumerPainted,
   cssReadNoTerminal,
   tsReadOnly,
+  canonicalRosterMember = false,
 }) {
   if (dsModernPainted) {
     return {
@@ -1727,6 +1855,12 @@ export function classifyLiveness({
     return {
       classification: LIVENESS.unreadOverrideOnly,
       reason: 'declared on TENANT_THEME_OVERRIDE_TOKENS (a tenant-settable dial) with zero proven terminal and no reference-token declaration at all',
+    };
+  }
+  if (canonicalRosterMember) {
+    return {
+      classification: LIVENESS.structuralConstant,
+      reason: 'a canonical band of the single z-index scale, declared at its one declaration site and sustained by the z-index-single-scale invariant; a band is declared, never read by design (reading the floor is the same as declaring no stacking), so this is a structural constant, not an emission waiting for an effect',
     };
   }
   return {
@@ -1907,10 +2041,23 @@ export function analyzeChannelLiveness({
   previousArtifact = null,
   enforceArtifactFreshness = false,
   dispositions = CHANNEL_DISPOSITIONS,
+  zScaleOwnerPath = DEFAULT_Z_INDEX_SCALE_OWNER,
   drill = null,
 }) {
   const failures = [];
   const analysisLimitations = [];
+
+  // The canonical z-scale roster is measured from its declaration site once
+  // per run. An unreadable site is a broken measurement and fails by name; it
+  // is never an empty roster that quietly drifts every band to unread.
+  let canonicalZScaleRoster = new Set();
+  try {
+    canonicalZScaleRoster = deriveCanonicalZScaleRoster(readFileSync(zScaleOwnerPath, 'utf8'));
+  } catch (error) {
+    failures.push(
+      `z-scale owner unreadable: ${relative(CORE_ROOT, zScaleOwnerPath).split(sep).join('/')} could not be read or parsed (${error instanceof Error ? error.message : String(error)}) -- the canonical z-scale roster cannot be measured, so no channel may classify ${LIVENESS.structuralConstant} this run`,
+    );
+  }
 
   if (!Array.isArray(cssStylesheets) || cssStylesheets.length === 0) {
     failures.push('zero corpus: the authored CSS corpus (foundation/tokens/css/** + ui/**) resolved to zero stylesheets');
@@ -2136,6 +2283,7 @@ export function analyzeChannelLiveness({
       externalConsumerPainted,
       cssReadNoTerminal,
       tsReadOnly,
+      canonicalRosterMember: canonicalZScaleRoster.has(name),
     });
 
     const consumerSites = [
@@ -2270,12 +2418,17 @@ export function analyzeChannelLiveness({
     // every run. Nothing here is a count that went down.
     dispositions: {
       registered: adjudication.registered,
+      ownerPins: adjudication.ownerPins,
+      structuralPins: adjudication.structuralPins,
       pinnedRows: adjudication.pinned.length,
+      structuralRows: adjudication.structural.length,
       // The subset of `failures` the ownership law itself produced, so the
       // blocking leg can be exactly that law and nothing else.
       failures: adjudication.failures,
       byOwner: adjudication.byOwner,
+      byInvariant: adjudication.byInvariant,
       pinned: [...adjudication.pinned].sort((a, b) => a.channel.localeCompare(b.channel)),
+      structural: [...adjudication.structural].sort((a, b) => a.channel.localeCompare(b.channel)),
     },
     consumerRoots: consumerResults.map(({ consumerRoot, load }) => ({
       id: consumerRoot.id,
@@ -2456,10 +2609,16 @@ export function formatReport(gateRun, { effectBlocks = true } = {}) {
   // see the rows cannot tell the difference.
   if (result.dispositions) {
     lines.push(
-      `  pinned dispositions (ownership registered -- the debt is NOT resolved): ${result.dispositions.pinnedRows} row(s) of ${result.dispositions.registered} pin(s)`,
+      `  pinned dispositions (ownership registered -- the debt is NOT resolved): ${result.dispositions.pinnedRows} row(s) of ${result.dispositions.ownerPins ?? result.dispositions.registered} owner pin(s)`,
     );
     for (const [owner, names] of Object.entries(result.dispositions.byOwner)) {
       lines.push(`    ${owner} (${names.length}): ${names.join(', ')}`);
+    }
+    lines.push(
+      `  structural constants (measured from the declaration site, pinned to an invariant -- not owed, not protected): ${result.dispositions.structuralRows ?? 0} row(s) of ${result.dispositions.structuralPins ?? 0} structural pin(s)`,
+    );
+    for (const [invariant, names] of Object.entries(result.dispositions.byInvariant ?? {})) {
+      lines.push(`    ${invariant} (${names.length}): ${names.join(', ')}`);
     }
   }
   if (resolvedArtifactPath) {
@@ -2507,6 +2666,7 @@ const DISPOSITION_PRECONDITION_PREFIXES = Object.freeze([
   'zero corpus',
   'required consumerRoot missing',
   'unclassified output',
+  'z-scale owner unreadable',
 ]);
 
 /** Exactly the ownership law, plus the preconditions that make it readable. */

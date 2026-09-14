@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, sep } from 'node:path';
 
@@ -53,7 +53,10 @@ import {
   LIVENESS,
   LIVE_CLASSIFICATIONS,
   UNPROVEN_CLASSIFICATIONS,
+  STRUCTURAL_CLASSIFICATIONS,
   classifyLiveness,
+  deriveCanonicalZScaleRoster,
+  DEFAULT_Z_INDEX_SCALE_OWNER,
   // disposition registry -- ownership of every standing non-LIVE row
   CHANNEL_DISPOSITIONS,
   DISPOSITION_OWNER_PATTERN,
@@ -662,6 +665,7 @@ const BASE_CLASSIFY_INPUT = {
   externalConsumerPainted: false,
   cssReadNoTerminal: false,
   tsReadOnly: false,
+  canonicalRosterMember: false,
 };
 
 test('classifyLiveness: dsModernPainted wins over every other signal', () => {
@@ -711,20 +715,117 @@ test('classifyLiveness: emitted-only (neither declared list) is UNREAD_EMITTED_N
   assert.equal(classification, LIVENESS.unreadEmittedNoRoute);
 });
 
+test('classifyLiveness: a canonical roster member with no other signal is STRUCTURAL_CONSTANT -- neither LIVE nor UNPROVEN', () => {
+  const { classification, reason } = classifyLiveness({ ...BASE_CLASSIFY_INPUT, canonicalRosterMember: true });
+  assert.equal(classification, LIVENESS.structuralConstant);
+  assert.ok(STRUCTURAL_CLASSIFICATIONS.has(classification));
+  assert.ok(!LIVE_CLASSIFICATIONS.has(classification), 'a structural constant is not proven liveness');
+  assert.ok(!UNPROVEN_CLASSIFICATIONS.has(classification), 'a structural constant is not an unproven effect');
+  assert.match(reason, /single z-index scale/);
+  assert.match(reason, /one declaration site/);
+  assert.match(reason, /z-index-single-scale/);
+  assert.match(reason, /never read by design/);
+  assert.match(reason, /not an emission waiting for an effect/);
+});
+
+test('classifyLiveness: roster membership never outranks paint -- dsModernPainted + roster is LIVE_MODERN_PAINTED', () => {
+  const { classification } = classifyLiveness({ ...BASE_CLASSIFY_INPUT, dsModernPainted: true, canonicalRosterMember: true });
+  assert.equal(classification, LIVENESS.modernPainted);
+});
+
+test('classifyLiveness: roster membership never touches a tenant dial -- declaredOverride + roster is UNREAD_OVERRIDE_ONLY_NO_KNOWN_ROUTE', () => {
+  const { classification } = classifyLiveness({ ...BASE_CLASSIFY_INPUT, declaredOverride: true, canonicalRosterMember: true });
+  assert.equal(classification, LIVENESS.unreadOverrideOnly);
+});
+
+test('classifyLiveness: every pre-existing branch keeps its precedence over the roster; only the final fallback is re-read', () => {
+  const expected = [
+    ['dsFrozenOnlyPainted', LIVENESS.frozenEnginePainted],
+    ['externalConsumerPainted', LIVENESS.externalConsumerPainted],
+    ['cssReadNoTerminal', LIVENESS.readNoProductiveTerminal],
+    ['tsReadOnly', LIVENESS.readUnproven],
+    ['declaredReference', LIVENESS.authorableUnprovenEffect],
+  ];
+  for (const [signal, classification] of expected) {
+    const withRoster = classifyLiveness({ ...BASE_CLASSIFY_INPUT, [signal]: true, canonicalRosterMember: true });
+    const without = classifyLiveness({ ...BASE_CLASSIFY_INPUT, [signal]: true });
+    assert.equal(withRoster.classification, classification, `${signal} + roster`);
+    assert.equal(withRoster.classification, without.classification, `${signal}: the roster changed a verdict it must not touch`);
+  }
+});
+
 test('META: no LIVENESS classification constant contains the word "dead"', () => {
   for (const value of Object.values(LIVENESS)) {
     assert.ok(!/dead/i.test(value), `classification "${value}" must never contain the word "dead"`);
   }
 });
 
-test('META: LIVE_CLASSIFICATIONS and UNPROVEN_CLASSIFICATIONS partition every LIVENESS value with no overlap', () => {
+test('META: LIVE / UNPROVEN / STRUCTURAL partition every LIVENESS value into exactly one set with no overlap', () => {
   const all = Object.values(LIVENESS);
   for (const value of all) {
-    const inLive = LIVE_CLASSIFICATIONS.has(value);
-    const inUnproven = UNPROVEN_CLASSIFICATIONS.has(value);
-    assert.notEqual(inLive, inUnproven, `"${value}" must be in exactly one of LIVE_CLASSIFICATIONS / UNPROVEN_CLASSIFICATIONS`);
+    const memberships = [LIVE_CLASSIFICATIONS, UNPROVEN_CLASSIFICATIONS, STRUCTURAL_CLASSIFICATIONS].filter((set) => set.has(value)).length;
+    assert.equal(memberships, 1, `"${value}" must be in exactly one of LIVE / UNPROVEN / STRUCTURAL`);
   }
-  assert.equal(LIVE_CLASSIFICATIONS.size + UNPROVEN_CLASSIFICATIONS.size, all.length);
+  assert.equal(LIVE_CLASSIFICATIONS.size + UNPROVEN_CLASSIFICATIONS.size + STRUCTURAL_CLASSIFICATIONS.size, all.length);
+  assert.deepEqual([...STRUCTURAL_CLASSIFICATIONS], [LIVENESS.structuralConstant]);
+});
+
+/* ---------------------------------------------------------------------- */
+/* 8c. The canonical z-scale roster is measured, never listed             */
+/* ---------------------------------------------------------------------- */
+
+const ZSCALE_FIXTURE_WITH_FLOOR = `
+:root {
+  /* --ds-z-index-commented: 5; */
+  --ds-z-index-base: 0;
+  --ds-z-index-dropdown: 1000;
+  --ds-z-index-max: 9999;
+  --ds-z-index-navbar: var(--ds-z-index-fixed);
+  --ds-z-index-loading-overlay: calc(var(--ds-z-index-modal) + 100);
+  --ds-z-index-relative-below: -1;
+  --ds-z-dropdown: var(--ds-z-index-dropdown, 1000);
+  @media (min-width: 1px) { --ds-z-index-nested: 7; }
+}
+.not-root { --ds-z-index-elsewhere: 42; }
+`;
+
+test('deriveCanonicalZScaleRoster keeps only bare unsigned integer --ds-z-index-* declarations directly under :root', () => {
+  const roster = deriveCanonicalZScaleRoster(ZSCALE_FIXTURE_WITH_FLOOR);
+  assert.deepEqual([...roster].sort(), ['--ds-z-index-base', '--ds-z-index-dropdown', '--ds-z-index-max']);
+  assert.ok(!roster.has('--ds-z-index-navbar'), 'a var() alias is not a band');
+  assert.ok(!roster.has('--ds-z-index-loading-overlay'), 'a calc() alias is not a band');
+  assert.ok(!roster.has('--ds-z-index-relative-below'), 'a signed literal is not the \\d+ grammar the invariant reads');
+  assert.ok(!roster.has('--ds-z-index-commented'), 'a name inside a comment never counts');
+  assert.ok(!roster.has('--ds-z-index-nested'), 'a declaration inside a nested at-rule is not directly under :root');
+  assert.ok(!roster.has('--ds-z-index-elsewhere'), 'a declaration outside :root is not the scale');
+  assert.ok(!roster.has('--ds-z-dropdown'), 'the short alias namespace is not a band');
+});
+
+test('DRILL: a declaration site without the zero band yields a roster without it -- the roster is measured, not wired', () => {
+  const withoutFloor = ZSCALE_FIXTURE_WITH_FLOOR.replace('  --ds-z-index-base: 0;\n', '');
+  assert.ok(!withoutFloor.includes('--ds-z-index-base'), 'fixture precondition: the floor is gone from the text');
+  const roster = deriveCanonicalZScaleRoster(withoutFloor);
+  assert.ok(!roster.has('--ds-z-index-base'));
+  assert.deepEqual([...roster].sort(), ['--ds-z-index-dropdown', '--ds-z-index-max']);
+  assert.ok(deriveCanonicalZScaleRoster(ZSCALE_FIXTURE_WITH_FLOOR).has('--ds-z-index-base'), 'control: the same deriver sees the floor when it is declared');
+});
+
+test('deriveCanonicalZScaleRoster propagates a parse error rather than returning an empty roster', () => {
+  assert.throws(() => deriveCanonicalZScaleRoster(':root { --ds-z-index-base: 0; '));
+});
+
+test('LIVE: the real declaration site yields a roster that carries every band the single-scale invariant names and no alias', () => {
+  const roster = deriveCanonicalZScaleRoster(readFileSync(DEFAULT_Z_INDEX_SCALE_OWNER, 'utf8'));
+  for (const band of [
+    '--ds-z-index-base', '--ds-z-index-dropdown', '--ds-z-index-sticky', '--ds-z-index-fixed', '--ds-z-index-overlay',
+    '--ds-z-index-drawer', '--ds-z-index-modal', '--ds-z-index-popover', '--ds-z-index-tooltip', '--ds-z-index-notification',
+    '--ds-z-index-max',
+  ]) {
+    assert.ok(roster.has(band), `${band} must be measured from the real declaration site`);
+  }
+  assert.ok(!roster.has('--ds-z-index-navbar'));
+  assert.ok(!roster.has('--ds-z-index-loading-overlay'));
+  assert.ok(DEFAULT_Z_INDEX_SCALE_OWNER.endsWith(join('src', 'foundation', 'tokens', 'css', 'foundation', 'base', 'z-index', 'index.css')));
 });
 
 /* ---------------------------------------------------------------------- */
@@ -1309,16 +1410,22 @@ test('the same channel with a terminal read and no pin is ownership PASS and ful
   assert.equal(mayWriteArtifact(result), true);
 });
 
-test('the effect verdict names every non-LIVE row, pinned or not, and nothing LIVE', () => {
+test('the effect verdict names every UNPROVEN row, pinned or not, and nothing LIVE or STRUCTURAL', () => {
   const effect = assessChannelEffect([
     { name: '--ds-a', classification: LIVENESS.authorableUnprovenEffect },
     { name: '--ds-b', classification: LIVENESS.readUnproven },
     { name: '--ds-c', classification: [...LIVE_CLASSIFICATIONS][0] },
     { name: '--ds-d', classification: null },
+    { name: '--ds-z-index-base', classification: LIVENESS.structuralConstant },
   ]);
   assert.equal(effect.ok, false);
   assert.deepEqual(effect.rows, ['--ds-a', '--ds-b']);
   assert.equal(effect.failures.length, 2);
+  assert.deepEqual(
+    assessChannelEffect([{ name: '--ds-z-index-base', classification: LIVENESS.structuralConstant }]),
+    { ok: true, failures: [], rows: [] },
+    'a structural constant alone is not an effect finding',
+  );
 });
 
 test('RED (a): an UNREGISTERED non-LIVE row fails closed, named exactly', () => {
@@ -1387,6 +1494,196 @@ test('RED: a channel registered twice, or pinned to something that is not a work
   );
 });
 
+/* ---------------------------------------------------------------------- */
+/* The structural pin -- an invariant, not an owner, and the same four reds */
+/* ---------------------------------------------------------------------- */
+
+const FLOOR = '--ds-z-index-base';
+const structuralPin = (over = {}) => ({
+  invariant: 'z-index-single-scale',
+  classification: LIVENESS.structuralConstant,
+  registered: '2026-09-14',
+  reason: 'a planted structural registration, so the verdict stays reachable and the shipped table is never the fixture',
+  channels: [FLOOR],
+  ...over,
+});
+const structuralRow = (classification = LIVENESS.structuralConstant) => ({ name: FLOOR, classification });
+
+test('a structural pin and a measured structural row match: no failure, published under the invariant, never under an owner', () => {
+  const verdict = adjudicateDispositions([structuralRow()], { dispositions: [structuralPin()] });
+  assert.deepEqual(verdict.failures, []);
+  assert.equal(verdict.structural.length, 1);
+  assert.equal(verdict.structural[0].invariant, 'z-index-single-scale');
+  assert.deepEqual(verdict.byInvariant, { 'z-index-single-scale': [FLOOR] });
+  assert.deepEqual(verdict.byOwner, {});
+  assert.deepEqual(verdict.pinned, []);
+  assert.equal(verdict.registered, 1);
+  assert.equal(verdict.structuralPins, 1);
+  assert.equal(verdict.ownerPins, 0);
+});
+
+test('RED: a measured structural row with NO structural pin is a STOP NO-GO row -- the third partition is not free', () => {
+  const verdict = adjudicateDispositions([structuralRow()], { dispositions: [] });
+  assert.ok(
+    verdict.failures.some((f) => f.startsWith(`STOP NO-GO: 1 channel(s) classified ${LIVENESS.structuralConstant} with NO registered structural pin`)
+      && f.includes(FLOOR)),
+    verdict.failures.join(' | '),
+  );
+});
+
+test('RED: a structural pin without an invariant registers nothing, and one that also names an owner is a category error', () => {
+  const noInvariant = adjudicateDispositions([structuralRow()], { dispositions: [structuralPin({ invariant: undefined })] });
+  assert.ok(
+    noInvariant.failures.some((f) => f.startsWith(`invalid structural pin: ${FLOOR}`) && f.includes('with no invariant')),
+    noInvariant.failures.join(' | '),
+  );
+  const blankInvariant = adjudicateDispositions([structuralRow()], { dispositions: [structuralPin({ invariant: '   ' })] });
+  assert.ok(blankInvariant.failures.some((f) => f.startsWith(`invalid structural pin: ${FLOOR}`) && f.includes('with no invariant')));
+
+  const withOwner = adjudicateDispositions([structuralRow()], { dispositions: [structuralPin({ owner: 'WO-FAM-04' })] });
+  assert.ok(
+    withOwner.failures.some((f) => f.startsWith(`invalid structural pin: ${FLOOR}`) && f.includes('also names an owner')),
+    withOwner.failures.join(' | '),
+  );
+  assert.ok(
+    !withOwner.failures.some((f) => f.startsWith('invalid pin:')),
+    'a structural pin is never measured against the work-order pattern',
+  );
+});
+
+test('RED (drift, roster-drop): a structural pin whose band now measures UNREAD_EMITTED_NO_KNOWN_ROUTE is a DRIFTED pin, accused once', () => {
+  const verdict = adjudicateDispositions([structuralRow(LIVENESS.unreadEmittedNoRoute)], { dispositions: [structuralPin()] });
+  assert.ok(
+    verdict.failures.some((f) => f.startsWith(`drifted pin: ${FLOOR} is pinned to invariant z-index-single-scale as ${LIVENESS.structuralConstant}`)
+      && f.includes(`now measures ${LIVENESS.unreadEmittedNoRoute}`)),
+    verdict.failures.join(' | '),
+  );
+  assert.ok(!verdict.failures.some((f) => f.startsWith('STOP NO-GO')), 'accused once, against the pin');
+  assert.deepEqual(verdict.structural, []);
+});
+
+test('RED (drift, reader): a structural pin whose band now classifies LIVE is a DISCHARGED pin', () => {
+  const verdict = adjudicateDispositions([structuralRow(LIVENESS.modernPainted)], { dispositions: [structuralPin()] });
+  assert.ok(
+    verdict.failures.some((f) => f.startsWith(`discharged pin: ${FLOOR} is pinned to invariant z-index-single-scale`)
+      && f.includes('no longer a structural constant, so delete the pin')),
+    verdict.failures.join(' | '),
+  );
+});
+
+test('RED (drift, retirement): a structural pin whose band left the measured universe is a STALE pin', () => {
+  const verdict = adjudicateDispositions([], { dispositions: [structuralPin()] });
+  assert.ok(
+    verdict.failures.some((f) => f.startsWith(`stale pin: ${FLOOR} is pinned to invariant z-index-single-scale`)
+      && f.includes('no longer exists in the measured universe')),
+    verdict.failures.join(' | '),
+  );
+});
+
+test('RED: a WO-owned row that drifts INTO the structural class is accused once against its owner pin, never re-covered', () => {
+  const verdict = adjudicateDispositions([structuralRow()], {
+    dispositions: [{ owner: 'WO-FAM-04', classification: LIVENESS.unreadEmittedNoRoute, registered: '2026-09-14', reason: 'a planted owner pin for a band that is now measured structural', channels: [FLOOR] }],
+  });
+  assert.ok(
+    verdict.failures.some((f) => f.startsWith(`drifted pin: ${FLOOR} is pinned to WO-FAM-04`) && f.includes(`now measures ${LIVENESS.structuralConstant}`)),
+    verdict.failures.join(' | '),
+  );
+  assert.ok(!verdict.failures.some((f) => f.startsWith('STOP NO-GO')));
+});
+
+/**
+ * The same three drift paths through the ANALYZER, so the call-site wiring
+ * (roster measured from the declaration site, handed to the classifier) is
+ * what is proven, not only the pure functions.
+ */
+function zScaleAnalyzerArgs(ownerCss, overrides = {}) {
+  const workDir = mkdtempSync(join(tmpdir(), 'liveness-zscale-'));
+  const zScaleOwnerPath = join(workDir, 'z-index.css');
+  if (ownerCss !== null) writeFileSync(zScaleOwnerPath, ownerCss);
+  return {
+    workDir,
+    args: baseAnalyzerArgs({
+      tenantThemeSource: `
+        export const TENANT_THEME_OVERRIDE_TOKENS = ["--ds-color-primary"] as const;
+        export const TENANT_THEME_REFERENCE_TOKENS = new Set([...TENANT_THEME_OVERRIDE_TOKENS]);
+      `,
+      brandThemeSource: `vars["--ds-color-primary"] = "#111111"; vars["${FLOOR}"] = "0";`,
+      familyRows: [],
+      dispositions: [structuralPin()],
+      zScaleOwnerPath,
+      ...overrides,
+    }),
+  };
+}
+
+test('ANALYZER: an emitted, unread band declared at the measured site classifies STRUCTURAL_CONSTANT and its structural pin holds', () => {
+  const { workDir, args } = zScaleAnalyzerArgs(ZSCALE_FIXTURE_WITH_FLOOR);
+  const result = analyzeChannelLiveness(args);
+  const row = result.channels.find((entry) => entry.name === FLOOR);
+  assert.equal(row.reads.total, 0, 'fixture precondition: nothing reads the floor');
+  assert.equal(row.classification, LIVENESS.structuralConstant);
+  assert.deepEqual(dispositionFailures(result), []);
+  assert.deepEqual(result.dispositions.byInvariant, { 'z-index-single-scale': [FLOOR] });
+  assert.equal(result.dispositions.structuralRows, 1);
+  assert.equal(result.dispositions.pinnedRows, 0);
+  assert.deepEqual(result.effect, { ok: true, failures: [], rows: [] }, 'a structural constant is not an effect finding');
+  assert.equal(result.counts.byClassification[LIVENESS.structuralConstant], 1);
+  const report = formatReport({ ok: result.ok, failures: result.failures, evidenceNote: null, result, corpus: { cssFileCount: 1, tsFileCount: 1 }, resolvedArtifactPath: null });
+  assert.ok(report.includes(`z-index-single-scale (1): ${FLOOR}`), report);
+  rmSync(workDir, { recursive: true, force: true });
+});
+
+test('ANALYZER (drift, roster-drop): the floor leaves the declaration site -> UNREAD_EMITTED_NO_KNOWN_ROUTE and a drifted pin', () => {
+  const { workDir, args } = zScaleAnalyzerArgs(ZSCALE_FIXTURE_WITH_FLOOR.replace('  --ds-z-index-base: 0;\n', ''));
+  const result = analyzeChannelLiveness(args);
+  const row = result.channels.find((entry) => entry.name === FLOOR);
+  assert.equal(row.classification, LIVENESS.unreadEmittedNoRoute);
+  assert.ok(
+    dispositionFailures(result).some((f) => f.startsWith(`drifted pin: ${FLOOR} is pinned to invariant z-index-single-scale`)),
+    result.failures.join(' | '),
+  );
+  assert.ok(!result.failures.some((f) => f.startsWith('STOP NO-GO')), 'accused once, against the pin');
+  rmSync(workDir, { recursive: true, force: true });
+});
+
+test('ANALYZER (drift, reader): a terminal read of the floor -> LIVE and a discharged pin', () => {
+  const { workDir, args } = zScaleAnalyzerArgs(ZSCALE_FIXTURE_WITH_FLOOR, {
+    cssStylesheets: [css('src/foundation/tokens/css/theme.css', `:root { color: var(--ds-color-primary); } .x { z-index: var(${FLOOR}); }`)],
+  });
+  const result = analyzeChannelLiveness(args);
+  const row = result.channels.find((entry) => entry.name === FLOOR);
+  assert.ok(LIVE_CLASSIFICATIONS.has(row.classification), row.classification);
+  assert.ok(
+    dispositionFailures(result).some((f) => f.startsWith(`discharged pin: ${FLOOR} is pinned to invariant z-index-single-scale`)),
+    result.failures.join(' | '),
+  );
+  rmSync(workDir, { recursive: true, force: true });
+});
+
+test('ANALYZER (new band, no pin): a second measured structural band without a structural pin is STOP NO-GO', () => {
+  const { workDir, args } = zScaleAnalyzerArgs(ZSCALE_FIXTURE_WITH_FLOOR, {
+    brandThemeSource: `vars["--ds-color-primary"] = "#111111"; vars["${FLOOR}"] = "0"; vars["--ds-z-index-max"] = "9999";`,
+  });
+  const result = analyzeChannelLiveness(args);
+  assert.equal(result.channels.find((entry) => entry.name === '--ds-z-index-max').classification, LIVENESS.structuralConstant);
+  assert.ok(
+    dispositionFailures(result).some((f) => f.startsWith(`STOP NO-GO: 1 channel(s) classified ${LIVENESS.structuralConstant} with NO registered structural pin`)
+      && f.includes('--ds-z-index-max')
+      && !f.includes(`${FLOOR},`)),
+    result.failures.join(' | '),
+  );
+  rmSync(workDir, { recursive: true, force: true });
+});
+
+test('ANALYZER (broken measurement): an unreadable declaration site fails by name on the ownership leg and classifies nothing structural', () => {
+  const { workDir, args } = zScaleAnalyzerArgs(null);
+  const result = analyzeChannelLiveness(args);
+  assert.equal(result.channels.find((entry) => entry.name === FLOOR).classification, LIVENESS.unreadEmittedNoRoute);
+  assert.ok(dispositionFailures(result).some((f) => f.startsWith('z-scale owner unreadable:')), result.failures.join(' | '));
+  assert.equal(result.counts.byClassification[LIVENESS.structuralConstant], 0);
+  rmSync(workDir, { recursive: true, force: true });
+});
+
 test('dispositionFailures is the ownership law plus the preconditions that make it readable', () => {
   const result = {
     failures: [
@@ -1415,15 +1712,22 @@ test('META: the SHIPPED table is the registered set -- 50 channels, one owner ea
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
     [LIVENESS.authorableUnprovenEffect]: 33,
-    [LIVENESS.unreadEmittedNoRoute]: 14,
+    [LIVENESS.unreadEmittedNoRoute]: 13,
     [LIVENESS.readNoProductiveTerminal]: 2,
     [LIVENESS.readUnproven]: 1,
+    [LIVENESS.structuralConstant]: 1,
   });
   for (const pin of index.values()) {
-    assert.ok(UNPROVEN_CLASSIFICATIONS.has(pin.classification), `${pin.channel}: a pin may only register a non-LIVE class`);
-    assert.ok(DISPOSITION_OWNER_PATTERN.test(pin.owner), `${pin.channel}: "${pin.owner}" is not a work-order id`);
     assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(pin.registered), `${pin.channel}: a pin without a registration date is an excuse`);
     assert.ok(pin.reason.length > 40, `${pin.channel}: a pin without a stated obligation is an allowlist entry`);
+    if (STRUCTURAL_CLASSIFICATIONS.has(pin.classification)) {
+      assert.equal(pin.owner, undefined, `${pin.channel}: a structural pin names an invariant, never an owner`);
+      assert.ok(typeof pin.invariant === 'string' && pin.invariant.trim().length > 0, `${pin.channel}: a structural pin without an invariant registers nothing`);
+      continue;
+    }
+    assert.ok(UNPROVEN_CLASSIFICATIONS.has(pin.classification), `${pin.channel}: an owner pin may only register a non-LIVE class`);
+    assert.ok(DISPOSITION_OWNER_PATTERN.test(pin.owner), `${pin.channel}: "${pin.owner}" is not a work-order id`);
+    assert.equal(pin.invariant, undefined, `${pin.channel}: an owner pin does not also name an invariant`);
   }
   for (const group of CHANNEL_DISPOSITIONS) {
     assert.ok(Object.isFrozen(group) && Object.isFrozen(group.channels));
@@ -1446,11 +1750,35 @@ test('META: every pinned owner is a work order that is still OPEN in the roadmap
     return ids;
   };
   for (const group of CHANNEL_DISPOSITIONS) {
+    if (group.owner === undefined) continue;
     for (const id of expand(group.owner)) {
       assert.ok(statusOf.has(id), `${group.owner}: ${id} is not a work order in roadmap/registry.json`);
       assert.notEqual(statusOf.get(id), 'done', `${group.owner}: ${id} is already done and cannot own a standing finding`);
     }
   }
+});
+
+test('META: every structural pin names an invariant whose suite exists, and every channel it covers is measured in the roster of the real declaration site', () => {
+  // A structural pin is sustained by an invariant, not a work order: the
+  // invariant must be a real suite in the tree, and the band must actually be
+  // declared at the site that suite guards -- otherwise the pin is wired, not
+  // measured.
+  const suites = {
+    'z-index-single-scale': join(CORE_ROOT, 'src', 'foundation', 'tokens', 'css', 'foundation', 'base', 'z-index', 'tests', 'z-index-single-scale.test.ts'),
+  };
+  const roster = deriveCanonicalZScaleRoster(readFileSync(DEFAULT_Z_INDEX_SCALE_OWNER, 'utf8'));
+  const structuralGroups = CHANNEL_DISPOSITIONS.filter((group) => STRUCTURAL_CLASSIFICATIONS.has(group.classification));
+  assert.equal(structuralGroups.length, 1, 'exactly one structural pin group is registered today');
+  for (const group of structuralGroups) {
+    assert.equal(group.owner, undefined, 'a structural pin names no owner');
+    const suite = suites[group.invariant];
+    assert.ok(suite, `${group.invariant}: not a known invariant`);
+    assert.ok(existsSync(suite), `${group.invariant}: its suite is missing at ${suite}`);
+    for (const channel of group.channels) {
+      assert.ok(roster.has(channel), `${channel}: pinned structural but not measured in the canonical roster of the real declaration site`);
+    }
+  }
+  assert.deepEqual(structuralGroups[0].channels, ['--ds-z-index-base']);
 });
 
 test('DEFAULT_EVIDENCE_ROOT points at the semantic Modern Rescue evidence tree', () => {
