@@ -5,8 +5,8 @@
  * namespaces. The scale used to be split: the numeric bands lived in
  * `foundation/themes/default/index.css` while the derived component aliases
  * lived here under an empty "SCALE" header, and four short aliases
- * (`--ds-z-notification`, `--ds-z-message`, `--ds-z-floatbutton`,
- * `--ds-z-affix`) were read by skins but declared nowhere -- so they painted
+ * (`--ds-z-floatbutton`, `--ds-z-affix`, and the since-retired
+ * `--ds-z-notification` and `--ds-z-message`) were read by skins but declared nowhere -- so they painted
  * from their own fallback literals, which contradicted the bands they were
  * named after.
  *
@@ -67,14 +67,9 @@
 
   /* Feedback */
   --ds-z-index-toast: var(--ds-z-index-notification);
-  /* A message is the lighter-weight sibling of a notification and orders
-     immediately below it INSIDE the same band. Written as the literal step
-     rather than a calc() so the fallback-parity gate can compare a skin's
-     fallback against it; a calc() resolves to nothing it can check. */
-  --ds-z-index-message: 1790;
   /* An alert orders one step above page content. Written as the literal
-     step for the same reason as the message band above: a calc() resolves
-     to nothing the fallback-parity gate can compare a skin's fallback to. */
+     step rather than a calc() so the fallback-parity gate can compare a
+     skin's fallback against it; a calc() resolves to nothing it can check. */
   --ds-z-index-alert: 1;
   --ds-z-index-banner: var(--ds-z-index-sticky);
 
@@ -104,17 +99,14 @@
   --ds-z-popover: var(--ds-z-index-popover, 1600);
   --ds-z-tooltip: var(--ds-z-index-tooltip, 1700);
   --ds-z-toast: var(--ds-z-index-notification, 1800);
-  /* All four were read by Modern skins and declared nowhere, so each painted
-     from its own fallback literal. `--ds-z-notification` resolved to 1600 --
-     the POPOVER band -- and rendered UNDER a popover it must outrank; the
-     pair now sits inside the notification band. `--ds-z-floatbutton` and
-     `--ds-z-affix` keep the value their skin already resolved to, sourced
-     from the scale instead of a per-site literal; `--ds-z-affix`
-     additionally settles the skin (100) / engine TSX (10) disagreement in
-     favour of the skin. Every fallback literal below equals the value the
-     scale resolves, so `scale.fallbackParityViolations` stays at zero. */
-  --ds-z-notification: var(--ds-z-index-notification, 1800);
-  --ds-z-message: var(--ds-z-index-message, 1790);
+  /* Both were read by Modern skins and declared nowhere, so each painted
+     from its own fallback literal; they keep the value their skin already
+     resolved to, sourced from the scale instead of a per-site literal, and
+     `--ds-z-affix` settles the skin (100) / engine TSX (10) disagreement in
+     favour of the skin. The notifier reads its band through the layer stack,
+     so the `--ds-z-notification` / `--ds-z-message` aliases are retired.
+     Every fallback literal below equals the value the scale resolves, so
+     `scale.fallbackParityViolations` stays at zero. */
   --ds-z-floatbutton: var(--ds-z-index-dropdown, 1000);
   --ds-z-affix: var(--ds-z-index-affix, 100);
 

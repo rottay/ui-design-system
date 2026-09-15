@@ -17,7 +17,7 @@
   --ds-confirm-dialog-title-gap: var(--ds-spacing-2);
   --ds-confirm-dialog-footer-gap: var(--ds-spacing-2);
   --ds-confirm-dialog-footer-offset: var(--ds-spacing-4);
-  --ds-confirm-dialog-icon-size: 2.5rem;
+  --ds-confirm-dialog-icon-size: var(--ds-icon-size-feature);
   --ds-confirm-dialog-icon-ring-width: var(--ds-border-width-1);
   --ds-confirm-dialog-enter-y: 0.5rem;
   --ds-confirm-dialog-enter-scale: 0.97;

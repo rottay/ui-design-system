@@ -97,18 +97,20 @@ describe('one z-index scale', () => {
     expect([...undeclared].sort()).toEqual([]);
   });
 
-  it('sources the four formerly-undeclared aliases from the scale', () => {
+  it('sources the formerly-undeclared aliases from the scale, and keeps only the read ones', () => {
     const owner = stripComments(readFileSync(resolve(process.cwd(), SCALE_OWNER), 'utf8'));
     // Each was read by a Modern skin and declared nowhere, so each painted
-    // from its own fallback literal -- `--ds-z-notification` from 1600, the
-    // POPOVER band, under a popover it must outrank.
-    expect(owner).toContain('--ds-z-notification: var(--ds-z-index-notification, 1800);');
-    expect(owner).toContain('--ds-z-message: var(--ds-z-index-message, 1790);');
+    // from its own fallback literal. `--ds-z-notification` and `--ds-z-message`
+    // lost their last reader to the layer stack and are retired, not aliased.
+    expect(owner).not.toContain('--ds-z-notification:');
+    expect(owner).not.toContain('--ds-z-message:');
     expect(owner).toContain('--ds-z-floatbutton: var(--ds-z-index-dropdown, 1000);');
     expect(owner).toContain('--ds-z-affix: var(--ds-z-index-affix, 100);');
     // Named literal steps, not calc(): the fallback-parity gate can only
     // compare a skin's fallback against a value it can resolve to a scalar.
-    expect(owner).toContain('--ds-z-index-message: 1790;');
+    // The message step went with its alias: the layer stack has no message
+    // kind, so the notifier's message role stacks in the notification band.
+    expect(owner).not.toContain('--ds-z-index-message:');
     expect(owner).toContain('--ds-z-index-affix: 100;');
     expect(owner).toContain('--ds-z-index-alert: 1;');
     expect(owner).not.toMatch(/--ds-z-index-alert:\s*calc\(/);

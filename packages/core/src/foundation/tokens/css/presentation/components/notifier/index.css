@@ -46,8 +46,8 @@
   --ds-notifier-travel: 0.75rem;
   --ds-notifier-scale-step: 0.05;
   --ds-notifier-focus-ring-width: var(--ds-focus-ring-width);
-  --ds-notifier-enter-duration: var(--ds-motion-reveal);
-  --ds-notifier-enter-curve: var(--ds-motion-ease-enter);
+  --ds-notifier-enter-duration: var(--ds-toast-enter-duration, var(--ds-motion-reveal));
+  --ds-notifier-enter-curve: var(--ds-toast-enter-easing, var(--ds-motion-ease-enter));
   --ds-notifier-exit-duration: var(--ds-motion-feedback);
   --ds-notifier-exit-curve: var(--ds-motion-ease-exit);
   --ds-notifier-transition-duration: var(--ds-motion-feedback);

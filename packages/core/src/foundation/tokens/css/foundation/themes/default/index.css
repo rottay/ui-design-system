@@ -1169,7 +1169,6 @@
   --ds-tooltip-z-index: 1070;
   --ds-tooltip-arrow-size: 6px;
   --ds-tooltip-offset: 6px;
-  --ds-tooltip-transition: var(--ds-transition-fast);
 
   /* Tooltip Color Variants */
   --ds-tooltip-default-bg: #171717;
@@ -1356,7 +1355,6 @@
   --ds-datepicker-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-datepicker-color: #171717;
   --ds-datepicker-border: #e5e5e5;
-  --ds-datepicker-border-hover: var(--ds-material-control-border-hover);
   --ds-datepicker-border-focus: #171717;
   --ds-datepicker-radius: var(--ds-radius-md);
   --ds-datepicker-shadow-focus: 0 0 0 1px #171717;
@@ -1783,10 +1781,6 @@
   --ds-menu-item-danger-color: var(--ds-color-error);
   --ds-menu-submenu-bg: var(--ds-color-bg-secondary);
   --ds-menu-submenu-indent: 1.5rem;
-  --ds-menu-group-title-padding: 0.5rem 1rem 0.25rem;
-  --ds-menu-group-title-font-size: var(--ds-font-size-xs);
-  --ds-menu-group-title-font-weight: var(--ds-font-weight-semibold);
-  --ds-menu-divider-margin: 0.5rem 0;
   --ds-menu-focus-ring-color: var(--ds-color-primary);
   --ds-menu-dark-bg: var(--ds-color-neutral-900);
   --ds-menu-dark-item-color: var(--ds-color-alpha-white-70);
