@@ -1138,8 +1138,8 @@
  * namespaces. The scale used to be split: the numeric bands lived in
  * `foundation/themes/default/index.css` while the derived component aliases
  * lived here under an empty "SCALE" header, and four short aliases
- * (`--ds-z-notification`, `--ds-z-message`, `--ds-z-floatbutton`,
- * `--ds-z-affix`) were read by skins but declared nowhere -- so they painted
+ * (`--ds-z-floatbutton`, `--ds-z-affix`, and the since-retired
+ * `--ds-z-notification` and `--ds-z-message`) were read by skins but declared nowhere -- so they painted
  * from their own fallback literals, which contradicted the bands they were
  * named after.
  *
@@ -1200,14 +1200,9 @@
 
   /* Feedback */
   --ds-z-index-toast: var(--ds-z-index-notification);
-  /* A message is the lighter-weight sibling of a notification and orders
-     immediately below it INSIDE the same band. Written as the literal step
-     rather than a calc() so the fallback-parity gate can compare a skin's
-     fallback against it; a calc() resolves to nothing it can check. */
-  --ds-z-index-message: 1790;
   /* An alert orders one step above page content. Written as the literal
-     step for the same reason as the message band above: a calc() resolves
-     to nothing the fallback-parity gate can compare a skin's fallback to. */
+     step rather than a calc() so the fallback-parity gate can compare a
+     skin's fallback against it; a calc() resolves to nothing it can check. */
   --ds-z-index-alert: 1;
   --ds-z-index-banner: var(--ds-z-index-sticky);
 
@@ -1237,17 +1232,14 @@
   --ds-z-popover: var(--ds-z-index-popover, 1600);
   --ds-z-tooltip: var(--ds-z-index-tooltip, 1700);
   --ds-z-toast: var(--ds-z-index-notification, 1800);
-  /* All four were read by Modern skins and declared nowhere, so each painted
-     from its own fallback literal. `--ds-z-notification` resolved to 1600 --
-     the POPOVER band -- and rendered UNDER a popover it must outrank; the
-     pair now sits inside the notification band. `--ds-z-floatbutton` and
-     `--ds-z-affix` keep the value their skin already resolved to, sourced
-     from the scale instead of a per-site literal; `--ds-z-affix`
-     additionally settles the skin (100) / engine TSX (10) disagreement in
-     favour of the skin. Every fallback literal below equals the value the
-     scale resolves, so `scale.fallbackParityViolations` stays at zero. */
-  --ds-z-notification: var(--ds-z-index-notification, 1800);
-  --ds-z-message: var(--ds-z-index-message, 1790);
+  /* Both were read by Modern skins and declared nowhere, so each painted
+     from its own fallback literal; they keep the value their skin already
+     resolved to, sourced from the scale instead of a per-site literal, and
+     `--ds-z-affix` settles the skin (100) / engine TSX (10) disagreement in
+     favour of the skin. The notifier reads its band through the layer stack,
+     so the `--ds-z-notification` / `--ds-z-message` aliases are retired.
+     Every fallback literal below equals the value the scale resolves, so
+     `scale.fallbackParityViolations` stays at zero. */
   --ds-z-floatbutton: var(--ds-z-index-dropdown, 1000);
   --ds-z-affix: var(--ds-z-index-affix, 100);
 
@@ -2255,7 +2247,6 @@
 
   /* Card Shadows - Visible depth */
   --ds-card-shadow: var(--ds-shadow-sm);
-  --ds-card-shadow-elevated: var(--ds-shadow-lg);
 
   /* Card Header */
   --ds-card-header-border: #e5e5e5;
@@ -2436,7 +2427,6 @@
   --ds-tooltip-z-index: 1070;
   --ds-tooltip-arrow-size: 6px;
   --ds-tooltip-offset: 6px;
-  --ds-tooltip-transition: var(--ds-transition-fast);
 
   /* Tooltip Color Variants */
   --ds-tooltip-default-bg: #171717;
@@ -2623,7 +2613,6 @@
   --ds-datepicker-bg-disabled: var(--ds-material-control-background-disabled);
   --ds-datepicker-color: #171717;
   --ds-datepicker-border: #e5e5e5;
-  --ds-datepicker-border-hover: var(--ds-material-control-border-hover);
   --ds-datepicker-border-focus: #171717;
   --ds-datepicker-radius: var(--ds-radius-md);
   --ds-datepicker-shadow-focus: 0 0 0 1px #171717;
@@ -3050,10 +3039,6 @@
   --ds-menu-item-danger-color: var(--ds-color-error);
   --ds-menu-submenu-bg: var(--ds-color-bg-secondary);
   --ds-menu-submenu-indent: 1.5rem;
-  --ds-menu-group-title-padding: 0.5rem 1rem 0.25rem;
-  --ds-menu-group-title-font-size: var(--ds-font-size-xs);
-  --ds-menu-group-title-font-weight: var(--ds-font-weight-semibold);
-  --ds-menu-divider-margin: 0.5rem 0;
   --ds-menu-focus-ring-color: var(--ds-color-primary);
   --ds-menu-dark-bg: var(--ds-color-neutral-900);
   --ds-menu-dark-item-color: var(--ds-color-alpha-white-70);
@@ -8607,7 +8592,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-alert-dialog-title-gap: var(--ds-spacing-2);
   --ds-alert-dialog-footer-gap: var(--ds-spacing-2);
   --ds-alert-dialog-footer-offset: var(--ds-spacing-4);
-  --ds-alert-dialog-icon-size: 2.5rem;
+  --ds-alert-dialog-icon-size: var(--ds-icon-size-feature);
   --ds-alert-dialog-icon-ring-width: var(--ds-border-width-1);
   --ds-alert-dialog-enter-y: 0.5rem;
   --ds-alert-dialog-enter-scale: 0.97;
@@ -8636,7 +8621,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-confirm-dialog-title-gap: var(--ds-spacing-2);
   --ds-confirm-dialog-footer-gap: var(--ds-spacing-2);
   --ds-confirm-dialog-footer-offset: var(--ds-spacing-4);
-  --ds-confirm-dialog-icon-size: 2.5rem;
+  --ds-confirm-dialog-icon-size: var(--ds-icon-size-feature);
   --ds-confirm-dialog-icon-ring-width: var(--ds-border-width-1);
   --ds-confirm-dialog-enter-y: 0.5rem;
   --ds-confirm-dialog-enter-scale: 0.97;
@@ -8955,8 +8940,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-notifier-travel: 0.75rem;
   --ds-notifier-scale-step: 0.05;
   --ds-notifier-focus-ring-width: var(--ds-focus-ring-width);
-  --ds-notifier-enter-duration: var(--ds-motion-reveal);
-  --ds-notifier-enter-curve: var(--ds-motion-ease-enter);
+  --ds-notifier-enter-duration: var(--ds-toast-enter-duration, var(--ds-motion-reveal));
+  --ds-notifier-enter-curve: var(--ds-toast-enter-easing, var(--ds-motion-ease-enter));
   --ds-notifier-exit-duration: var(--ds-motion-feedback);
   --ds-notifier-exit-curve: var(--ds-motion-ease-exit);
   --ds-notifier-transition-duration: var(--ds-motion-feedback);
@@ -25379,58 +25364,17 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * Modern Card skin.
  *
  * Imported into the canonical `rottay-engines` layer. React owns semantics and
- * publishes a finite data contract; this file owns all state paint. BrandTheme
- * and DB-backed TenantTheme change the public `--ds-card-*` channels without
- * requiring product selectors or tenant branches.
+ * publishes a finite data contract; this file owns all state paint through the
+ * public `--ds-card-*` channels, which `derivation/chrome/card` and the card
+ * constants produce and BrandTheme / TenantTheme move.
  *
- * The rules read the `data-*` contract the component stamps. Rest, hover and the
- * keyboard focus ring are photographed per tenant per engine by
- * `packages/showroom/e2e/visual/states.spec.ts`; the clickable card that carries
- * the ring renders behind `?interactive=1`, so no flagship baseline sees it.
+ * Two behaviours stated by name rather than by rule order: a toned card's
+ * border does not react to hover (`:not([data-tone])`), and keyboard focus is
+ * an outline, so it never erases a tenant's depth or selected-state shadow.
  *
- * Two behaviours the object this replaces expressed by ORDER, and this file
- * expresses by name, because order is not a contract a reader can check:
- *
- *   - a toned card's border does not react to hover. The tone was spread last, so
- *     it overwrote the hover border colour. Here the hover rule says
- *     `:not([data-tone])` and means it.
- *   - keyboard focus is an outline, so it cannot erase a tenant's chosen depth
- *     or selected-state shadow. Variant elevation remains independently tunable.
- *
- * Phase B (second premium pass) additions:
- *
- *   - nested-material grammar: every radius rule publishes the resolved corner
- *     as `--_ds-card-radius-current`; the body re-publishes a derived
- *     `--_ds-card-nest-radius` (parent radius minus a bounded inset) so a card
- *     rendered inside another card's body gets CONCENTRIC corners instead of
- *     two unrelated rounded rectangles. The shared premium contract supplies
- *     the resting floor through `--ds-premium-card-min-height`.
- *   - title/action baseline alignment in this engine's own header.
- *   - the elevated variant carries an intensity-scaled optical top keyline
- *     (material layer 4) composed with the tenant shadow.
- *   - `--ds-premium-card-footer-border` is consumed as the quiet default of
- *     the actions-rail divider (the tenant `--ds-card-footer-border` still
- *     wins when emitted).
- *
- * Phase C0 (material-grammar canary) additions:
- *
- *   - nest-radius law matured: the inset is now bounded by max(governed
- *     `--ds-radius-nest-inset`, parent radius * `--ds-radius-nest-ratio`)
- *     instead of a raw 8px, so
- *     nested corners stay concentric across the tenant radius scale
- *     (contained-radius tenants no longer derive near-square children) and
- *     `radius: none` still derives 0.
- *   - protected content zones: the engine header reads the tenant
- *     `--ds-card-header-bg` band and the actions rail keeps the tenant
- *     `--ds-card-footer-bg`, both wearing the concentric nest radius; the
- *     token floor for both channels is `transparent`, so unauthored tenants
- *     render byte-identical. Toned cards keep owning their fill. Proto
- *     escape hatches: `--_ds-card-header-zone-bg/-inset`,
- *     `--_ds-card-actions-zone-bg/-inset` (exact current-render
- *     fallbacks).
- *   - reduced-transparency degradation for the loading scrim (opaque
- *     `--ds-material-overlay-opaque` counterpart), and forced-colors
- *     silencing of the zone bands so planes re-express as system borders.
+ * The `:not(.ds-card-header)` guard on the header rules is load-bearing: the
+ * Card.Header compound stamps the same `data-part='header'` and `'title'` and
+ * paints from `presentation/components/skin/card-compounds`.
  */
 
 /* base */
@@ -25443,10 +25387,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   isolation: isolate;
   color: var(--ds-card-color, var(--ds-color-text-primary));
   transform: translateY(0);
-  /* --ds-elevation-lift (registered <number>) rises to 1 on hover;
-     --ds-card-elevation-surface reads it so the elevated surface tint cross-fades
-     instead of snapping. Both are inert while --ds-elevation-lift-strength is 0
-     (light surfaces), so this paints nothing until a dark surface raises the dial. */
+  /* --ds-elevation-lift (registered <number>) rises to 1 on hover so the
+     elevated surface tint cross-fades instead of snapping. */
   --ds-elevation-lift: 0;
   --ds-card-elevation-surface: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * (1 + var(--ds-elevation-lift)) * 1%), transparent);
   transition:
@@ -25457,13 +25399,13 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
     --ds-elevation-lift var(--ds-card-transition-duration) var(--ds-card-transition-timing);
 }
 
-/* A full-surface state wash gives every material a coherent interaction cue.
-   It is deliberately uniform: semantic tone never becomes a side rail. */
+/* A full-surface state wash gives every material one interaction cue;
+   semantic tone never becomes a side rail. */
 .ds-card.ds-card--modern[data-part='root']::after {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: var(--ds-z-index-relative-base);
   pointer-events: none;
   border-radius: inherit;
   background: var(--ds-card-state-overlay);
@@ -25471,17 +25413,15 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   transition: opacity var(--ds-card-transition-duration) var(--ds-card-transition-timing);
 }
 
-/* Hover paint exists only where the pointer can hover (`@media (hover:
-   hover)`). On touch the behavior core still stamps `hovered` during a tap;
-   the pressed posture below is the tactile equivalent (the same gate the
-   Button skin documents). */
+/* Hover paint exists only where the pointer can hover; on touch the pressed
+   posture below is the tactile equivalent. */
 @media (hover: hover) {
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-state~='disabled']) {
     color: var(--ds-card-color-hover, var(--ds-card-color));
-    transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform, translateY(-1px)));
+    transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform));
   }
 
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true'])::after {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-state~='disabled'])::after {
     opacity: var(--ds-card-state-overlay-hover-opacity);
   }
 }
@@ -25496,8 +25436,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   -webkit-tap-highlight-color: transparent;
 }
 
-/* radius: each rule also publishes the resolved corner so nested surfaces can
-   derive a concentric radius (see the nesting grammar at the end of the file) */
+/* radius: each rule publishes the resolved corner so nested surfaces derive
+   a concentric radius */
 .ds-card.ds-card--modern[data-part='root'][data-radius='none'] {
   border-radius: 0;
   --_ds-card-radius-current: 0px;
@@ -25523,37 +25463,34 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
   background-color: var(--ds-card-elevated-bg, var(--ds-card-bg, var(--ds-material-card-background, var(--ds-surface-card))));
   background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-elevated-border-width, var(--ds-edge-hairline-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-card-border);
-  /* material layer 4 (optical edge): an intensity-scaled inset top keyline
-     composed with the tenant elevation. At --ds-effect-intensity: 0 the
-     keyline dissolves while the shadow channel keeps the hierarchy. The
-     hover/selected shadows replace this list wholesale — their stronger
-     frame subsumes the keyline. */
+  border: var(--ds-card-elevated-border-width, var(--ds-edge-hairline-width)) var(--ds-edge-standard-style) var(--ds-card-border);
+  /* optical edge: an intensity-scaled inset top keyline composed with the
+     tenant elevation; the hover/selected shadows replace this list wholesale */
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent),
+    inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent),
     var(--ds-card-elevated-shadow, var(--ds-card-shadow));
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'] {
   background-color: var(--ds-card-bordered-bg, var(--ds-card-bg, var(--ds-material-card-background, var(--ds-surface-card))));
   background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width, 1px))) var(--ds-edge-standard-style, solid) var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
+  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width))) var(--ds-edge-standard-style) var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
   box-shadow: var(--ds-card-bordered-shadow);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='filled'] {
   background-color: var(--ds-card-flat-bg, var(--ds-card-bg, var(--ds-surface-panel)));
   background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-flat-border-width) solid var(--ds-card-border);
+  border: var(--ds-card-flat-border-width) var(--ds-edge-standard-style) var(--ds-card-border);
   box-shadow: var(--ds-card-flat-shadow);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='ghost'] {
   background-color: var(--ds-card-ghost-bg);
   background-image: none;
-  border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color));
+  border: 0 var(--ds-edge-standard-style) var(--ds-card-border, var(--ds-card-ghost-border-color));
   box-shadow: var(--ds-card-ghost-shadow);
 }
 
-/* Orthogonal frame/elevation switches. Variant chooses the material; these
-   explicit props decide whether its frame and depth are visible. */
+/* Variant chooses the material; these explicit props decide whether its
+   frame and depth are visible. */
 .ds-card.ds-card--modern[data-part='root'][data-bordered='true']:not([data-variant='ghost']) {
   border-width: var(--ds-card-border-width);
   border-style: var(--ds-card-border-style);
@@ -25568,83 +25505,99 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   box-shadow: none;
 }
 
-/* The shared hover fill is a white-label state channel, independent from the
-   selected/pressed terminal states below. Semantic tones retain their hue and
-   use the state wash instead. Gated to hover-capable pointers (see above). */
 @media (hover: hover) {
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-tone]):not([data-selected='true']):not([data-disabled='true']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-tone]):not([data-selected='true']):not([data-state~='disabled']) {
     background-color: var(--ds-card-bg-hover, var(--ds-material-card-background-hover, var(--ds-card-bg)));
   }
 
-  /* hover, only on an interactive card, and only where the variant answers */
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='disabled']) {
     --ds-elevation-lift: 1;
   }
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']):not([data-shadowed='false']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='disabled']):not([data-shadowed='false']) {
     box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
   }
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]):not([data-disabled='true']) {
-    border-color: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]):not([data-state~='disabled']) {
+    border-color: var(--ds-card-outlined-border-hover);
   }
 }
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true']) {
-  transform: var(--ds-card-active-transform, translateY(0) scale(0.995));
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']) {
+  transform: var(--ds-card-active-transform);
   color: var(--ds-card-color-active, var(--ds-card-color));
   background-color: var(--ds-card-bg-active, var(--ds-material-card-background-active, var(--ds-card-bg)));
   border-color: var(--ds-card-border-active, var(--ds-card-border-hover, var(--ds-card-border)));
 }
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true']):not([data-shadowed='false']) {
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']):not([data-shadowed='false']) {
   box-shadow: var(--ds-card-shadow-active, var(--ds-card-shadow));
 }
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true'])::after {
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled'])::after {
   opacity: var(--ds-card-state-overlay-active-opacity);
 }
 
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true']) {
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']) {
   color: var(--ds-card-color-selected, var(--ds-card-color));
   background-color: var(--ds-card-bg-selected, var(--ds-material-card-background-selected, var(--ds-card-bg)));
   border-color: var(--ds-card-border-selected, var(--ds-color-primary));
-  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) solid var(--ds-card-border-selected, var(--ds-color-primary));
+  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) var(--ds-edge-standard-style) var(--ds-card-border-selected, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true']):not([data-shadowed='false']) {
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']):not([data-shadowed='false']) {
   box-shadow: var(--ds-card-shadow-selected, var(--ds-card-focus-ring));
 }
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true'])::after {
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled'])::after {
   opacity: var(--ds-card-state-overlay-selected-opacity);
 }
 
-/* Focus is an outline, so it never destroys tenant elevation or selection. */
-.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-disabled='true']) {
-  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-card-focus-ring-color, var(--ds-focus-ring-color));
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
+  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-card-focus-ring-color, var(--ds-focus-ring-color));
   outline-offset: var(--ds-card-focus-ring-offset);
 }
 
-/* colour tone: it wins the border and the fill, and it suppresses the surface tint */
+/* colour tone: it wins the border, the fill and the title ink, and it
+   suppresses the surface tint */
 .ds-card.ds-card--modern[data-part='root'][data-tone='primary'] {
-  border-color: var(--ds-card-primary-border-color, var(--ds-color-primary));
-  background-color: var(--ds-card-primary-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-primary-border-color);
+  background-color: var(--ds-card-primary-bg);
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='success'] {
-  border-color: var(--ds-card-success-border-color, var(--ds-color-success));
-  background-color: var(--ds-card-success-bg, color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-success-border-color);
+  background-color: var(--ds-card-success-bg);
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='warning'] {
-  border-color: var(--ds-card-warning-border-color, var(--ds-color-warning));
-  background-color: var(--ds-card-warning-bg, color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-warning-border-color);
+  background-color: var(--ds-card-warning-bg);
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='error'] {
-  border-color: var(--ds-card-error-border-color, var(--ds-color-error));
-  background-color: var(--ds-card-error-bg, color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-error-border-color);
+  background-color: var(--ds-card-error-bg);
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='info'] {
-  border-color: var(--ds-card-info-border-color, var(--ds-color-info));
-  background-color: var(--ds-card-info-bg, color-mix(in srgb, var(--ds-color-info) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-info-border-color);
+  background-color: var(--ds-card-info-bg);
   background-image: none;
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='primary'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='primary'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-primary-title-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='success'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='success'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-success-title-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='warning'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='warning'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-warning-title-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='error'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='error'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-error-title-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='info'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='info'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-info-title-color);
 }
 
 /* Explicit frame suppression remains authoritative after semantic tones. */
@@ -25653,152 +25606,92 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* Selection stays legible on semantic materials without becoming a side rail. */
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-disabled='true']) {
-  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) solid var(--ds-card-border-selected, var(--ds-color-primary));
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']) {
+  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) var(--ds-edge-standard-style) var(--ds-card-border-selected, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-disabled='true']):not([data-shadowed='false']) {
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']):not([data-shadowed='false']) {
   box-shadow: var(--ds-card-shadow-selected, var(--ds-card-focus-ring));
 }
 
-/* ===========================================================================
- * WO-SKIN-05 checkpoint D1 — everything the ARC-07 migration left inline: the
- * loading state, and the header/body/actions text and rules.
- *
- * Loading shares the exact same root contract as the ready state. `data-loading`
- * distinguishes the placeholder cover from the real cover wrapper, keeping
- * radius, tenant material and accessibility state stable while content resolves.
- *
- * The `:not(.rottay-card-header)` guard on the header is equally load-bearing.
- * `Card.Header` is a compound a caller can drop into `children`, where it lands as
- * a direct child of `[data-part='body']` — exactly where this engine renders its
- * OWN header. Both stamp `data-part='header'` and `data-part='title'`, and their
- * token fallback chains differ, so without the guard this rule would repaint the
- * compound. The compound has its own file: components/skin/card-compounds.css.
- *
- * SPECIFICITY (P-48): the header and actions rules carry a border colour and must
- * clear the tenant's unlayered `*` border-color floor at (0,3,1); their selector
- * chains are far past it. They stay SHORTHANDS because preflight zeroes
- * `border-width` on every element.
- * ======================================================================== */
-
-/* ---- loading: the cover placeholder (a fill the real cover wrapper never has) ---- */
+/* ---- loading: the reserved anatomy under a frosted spinner scrim; the cover
+        placeholder holds the geometry the real cover will take ---- */
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] > [data-part='cover'] {
-  height: var(--ds-card-cover-height, var(--ds-card-cover-min-height));
+  min-block-size: var(--ds-card-cover-min-height);
   opacity: var(--ds-card-loading-cover-opacity);
   background-color: var(--ds-surface-inset);
 }
-
-/* ---- loading: the four skeleton bars share one fill and one radius; only their
-        widths and heights differ, and those stay inline ---- */
-.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton'] [data-part='skeleton-bar'] {
-  background-color: var(--ds-card-skeleton-bg, var(--ds-surface-inset));
-  background-image: linear-gradient(
-    100deg,
-    transparent 18%,
-    var(--ds-card-skeleton-highlight) 48%,
-    transparent 78%
-  );
-  background-size: 220% 100%;
-  border-radius: var(--ds-card-skeleton-radius, var(--ds-radius-sm));
-  animation: ds-card-skeleton-sweep var(--ds-card-skeleton-duration, var(--ds-motion-glacial)) var(--ds-card-transition-timing) infinite;
+.ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
+  position: relative;
+  min-block-size: var(--ds-card-loading-min-height);
+  padding: var(--ds-card-instance-padding, var(--_ds-card-padding-current));
 }
-.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-card-skeleton-gap, var(--ds-spacing-3));
-  opacity: var(--ds-card-loading-skeleton-opacity);
-}
-.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton-stack'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-card-skeleton-stack-gap, var(--ds-spacing-2));
-  margin-block-start: var(--ds-card-skeleton-stack-margin-top, var(--ds-spacing-1));
-}
-
-/* ---- loading: the frosted spinner scrim ---- */
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above);
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 1;
   backdrop-filter: blur(var(--ds-card-loading-backdrop-blur));
   -webkit-backdrop-filter: blur(var(--ds-card-loading-backdrop-blur));
-  background-color: var(--ds-card-loading-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 60%, transparent));
+  background-color: var(--ds-card-loading-overlay-bg);
   border-radius: inherit;
-  transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 }
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='spinner'] {
   display: block;
-  width: var(--ds-card-spinner-size);
-  height: var(--ds-card-spinner-size);
-  border: var(--ds-card-spinner-stroke) solid var(--ds-card-spinner-track, var(--ds-color-border));
+  inline-size: var(--ds-card-spinner-size);
+  block-size: var(--ds-card-spinner-size);
+  border: var(--ds-card-spinner-stroke) var(--ds-edge-standard-style) var(--ds-card-spinner-track, var(--ds-color-border));
   border-block-start-color: var(--ds-card-spinner-color, var(--ds-color-primary));
-  border-radius: 50%;
-  animation: ds-card-spinner-rotate var(--ds-card-spinner-duration, var(--ds-motion-glacial)) linear infinite;
+  border-radius: var(--ds-radius-full);
+  animation: ds-card-spin var(--ds-card-spinner-duration, var(--ds-motion-glacial)) linear infinite;
 }
 
 /* ---- body ---- */
 .ds-card.ds-card--modern[data-part='root'] {
-  --ds-card-padding-current: calc(var(--ds-card-padding-md, var(--ds-card-md-padding)) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-card-padding-current: calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='none'] {
-  --ds-card-padding-current: 0;
+  --_ds-card-padding-current: 0px;
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='sm'] {
-  --ds-card-padding-current: calc(var(--ds-card-padding-sm, var(--ds-card-sm-padding)) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-card-padding-current: calc(var(--ds-card-padding-sm, var(--ds-card-sm-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='lg'] {
-  --ds-card-padding-current: calc(var(--ds-card-padding-lg, var(--ds-card-lg-padding)) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-card-padding-current: calc(var(--ds-card-padding-lg, var(--ds-card-lg-padding)) * var(--ds-rhythm-effective-scale, 1));
+}
+.ds-card.ds-card--modern[data-part='root'][data-padding='xl'] {
+  --_ds-card-padding-current: calc(var(--ds-card-padding-xl, var(--ds-card-xl-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 
-/* size axis: density scaling of the header copy and body text. `md`/`lg` keep
-   the baseline above; compact sizes de-escalate, amplified sizes scale up.
-   The `-current` channels leave the tenant's explicit `--ds-card-*-font-size`
-   untouched as each rule's fallback, so BrandTheme still wins by default. */
+/* size axis: compact sizes de-escalate the copy, amplified sizes scale it up;
+   the tenant's explicit --ds-card-*-font-size stays each rule's fallback */
 .ds-card.ds-card--modern[data-part='root'][data-size='xs'],
 .ds-card.ds-card--modern[data-part='root'][data-size='sm'] {
-  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-sm, var(--ds-font-size-base));
-  --_ds-card-body-font-size-current: var(--ds-card-body-font-size-sm, var(--ds-font-size-sm));
+  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-sm);
+  --_ds-card-body-font-size-current: var(--ds-card-body-font-size-sm);
 }
 .ds-card.ds-card--modern[data-part='root'][data-size='xl'],
 .ds-card.ds-card--modern[data-part='root'][data-size='2xl'],
 .ds-card.ds-card--modern[data-part='root'][data-size='3xl'] {
-  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-lg, var(--ds-font-size-xl));
+  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-lg);
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] {
   min-inline-size: 0;
-  padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
+  padding: var(--ds-card-instance-padding, var(--_ds-card-padding-current));
   color: var(--ds-card-body-color);
   font-size: var(--_ds-card-body-font-size-current, var(--ds-card-body-font-size));
   line-height: var(--ds-card-body-line-height);
   overflow-wrap: anywhere;
-  /* Nested-material grammar: the corner a card nested in this body should
-     wear. Concentric derivation — the parent's resolved radius minus a
-     bounded inset. The inset is the SMALLER of the body padding (the true
-     distance between the two strokes) and the LARGER of the governed
-     `--ds-radius-nest-inset` floor and `--ds-radius-nest-ratio` of the
-     parent radius, so the nested corner keeps visibly related curvature
-     across the whole radius-scale instead of collapsing to a square on
-     contained-radius tenants (a 10px parent used to derive a 2px child; it
-     now derives a concentric 5px). Both operands are what `shape.nesting`
-     states: at their resting 4px/0.5 this is the law as written, and at
-     0px/0 the inset collapses and the nested corner IS the parent's. Each is
-     read through a card channel that falls back to the governed root, which
-     is the §1.6 cascade shape: the card may bend the law for itself without
-     restating either value. `radius: none` still derives 0. Published on the body
-     (not the root) so a nested card — and any SemanticSurface landing in
-     this body — reads the PARENT's value through inheritance while its own
-     body recomputes for the next level down. */
+  /* Nested-material grammar: the corner an inner region of this body wears,
+     concentric with the card's own resolved radius (`shape.nesting`). */
   --_ds-card-nest-radius: max(
     0px,
     calc(
       var(--_ds-card-radius-current, var(--ds-card-radius)) -
         min(
-          var(--ds-card-instance-padding, var(--ds-card-padding-current, 0px)),
+          var(--ds-card-instance-padding, var(--_ds-card-padding-current, 0px)),
           max(
             var(--ds-card-nest-inset, var(--ds-radius-nest-inset)),
             calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-card-nest-ratio, var(--ds-radius-nest-ratio)))
@@ -25807,26 +25700,19 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
     )
   );
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
-  position: relative;
-  min-block-size: var(--ds-card-skeleton-min-height, 120px);
-  padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
-}
 .ds-card.ds-card--modern[data-part='root'] > [data-part='cover'] {
   overflow: hidden;
   line-height: 0;
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='cover'] > [data-part='cover-image'] {
   display: block;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   object-fit: var(--ds-card-cover-object-fit, var(--ds-card-media-object-fit));
   object-position: var(--ds-card-cover-object-position);
 }
 
-/* ---- cover that failed to load: the engine drops the dead `img` and keeps the
-        wrapper, so the reserved geometry holds and the gap reads as the same
-        quiet inset material the loading placeholder already uses ---- */
+/* a cover that failed keeps its wrapper as the same quiet inset material */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='cover'][data-error='true'] {
   background-color: var(--ds-surface-inset);
 }
@@ -25853,53 +25739,39 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   flex: 999 1 var(--ds-card-body-inline-min-size);
 }
 
-/* ---- this engine's OWN header (never the Card.Header compound) ---- */
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+/* ---- this engine's own header (never the Card.Header compound) ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) {
   display: flex;
-  /* title copy and the trailing actions share one text baseline instead of
-     hanging from unrelated top edges; in the stacked container composition
-     below the cross axis stretches instead. */
   align-items: baseline;
   justify-content: space-between;
   gap: var(--ds-card-header-gap, var(--ds-card-header-actions-gap));
 }
-/* Protected header zone: the engine header finally reads the tenant's
-   `--ds-card-header-bg` (chrome.cardComponent.headerBg), the channel the
-   Card.Header compound already painted. The `background` shorthand accepts
-   both authored forms — a color (The Management's warm paper tint) and a
-   gradient (BitHire's cool 112° band) — while the token floor is
-   `transparent`, so a tenant that never authors the channel renders
-   byte-identical to before. The zone wears the concentric nest radius this
-   card's body publishes, so a painted band reads as ONE bounded region
-   related to the card corner, never a second unrelated rectangle. A
-   semantically toned card owns its fill; the zone yields to the tone. The
-   `--_ds-card-header-zone-*` privates are the documented escape
-   hatch (kill the band, or give it inset) with an exact current-render
-   fallback. */
-.ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+/* the tenant header band wears the concentric nest radius; a toned card owns
+   its fill, so the band yields to the tone */
+.ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.ds-card-header) {
   position: relative;
   border-radius: var(--_ds-card-nest-radius);
   padding-inline: var(--_ds-card-header-zone-inset, 0px);
   padding-block-start: var(--_ds-card-header-zone-inset, 0px);
   background: var(--_ds-card-header-zone-bg, var(--ds-card-header-bg, transparent));
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header)[data-divider='true'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header)[data-divider='true'] {
   padding-block-end: var(--ds-card-header-padding-bottom);
   margin-block-end: var(--ds-card-header-padding-bottom);
-  border-block-end: var(--ds-card-header-border-width) solid var(--ds-card-header-border, var(--ds-color-border));
+  border-block-end: var(--ds-card-header-border-width) var(--ds-edge-standard-style) var(--ds-card-header-border, var(--ds-color-border));
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='extra'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='extra'] {
   flex: 0 0 auto;
   max-inline-size: 100%;
   margin-inline-start: var(--ds-card-header-actions-gap);
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='title'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'] {
   margin: 0;
-  color: var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)));
+  color: var(--ds-card-title-color, var(--ds-card-header-ink));
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--_ds-card-title-font-size-current, var(--ds-card-title-font-size));
   font-weight: var(--ds-card-title-font-weight);
@@ -25908,7 +25780,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='description'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='description'] {
   color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary));
   font-size: var(--ds-card-subtitle-font-size);
   line-height: var(--ds-card-body-line-height);
@@ -25916,28 +25788,17 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='description'][data-has-title='true'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='description'][data-has-title='true'] {
   margin-block-start: var(--ds-card-subtitle-margin-top);
 }
 
-/* ---- actions rail (layout was inline in the engine until the R2+R3 pass;
-        the skin now owns the row: flex, wrap, justify, gap and rhythm) ---- */
+/* ---- actions rail ---- */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: var(--ds-card-actions-justify, flex-end);
-  /* the tenant footer border wins when emitted; the shared premium contract
-     supplies the quieter default hairline */
-  border-block-start: var(--ds-card-footer-border-width) solid var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-color-border)));
-  /* Protected footer zone: the tenant `--ds-card-footer-bg`
-     (chrome.cardComponent.footerBg — The Management authors warm paper) was
-     already painted here; it now also wears the concentric nest radius, so
-     a tinted rail reads as a bounded region related to the card corner
-     instead of a square-edged strip. The token floor is `transparent`, so
-     default tenants render byte-identical. `--_ds-card-actions-zone-inset`
-     is the documented hatch for a tenant that wants the rail inset from
-     its controls; 0px preserves the current geometry exactly. */
+  justify-content: var(--_ds-card-actions-justify, flex-end);
+  border-block-start: var(--ds-card-footer-border-width) var(--ds-edge-standard-style) var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-color-border)));
   border-radius: var(--_ds-card-nest-radius);
   background: var(--_ds-card-actions-zone-bg, var(--ds-card-footer-bg, transparent));
   gap: var(--ds-card-actions-gap, var(--ds-spacing-2));
@@ -25948,24 +25809,22 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] > * {
   max-inline-size: 100%;
 }
-/* empty-region safety: with no header and no content, the rail is the body's
-   only region — its rhythm margin must not become a phantom top gap. */
+/* with no header and no content the rail is the body's only region */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions']:first-child {
   margin-block-start: 0;
 }
 
 @container ds-card (max-width: 28rem) {
   .ds-card.ds-card--modern[data-part='root'] {
-    --ds-card-actions-justify: stretch;
+    --_ds-card-actions-justify: stretch;
   }
 
-  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) {
     flex-direction: column;
-    /* stacked composition: full-width regions, no cross-axis baseline hunt */
     align-items: stretch;
   }
 
-  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='extra'] {
+  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='extra'] {
     inline-size: 100%;
     margin-inline-start: 0;
   }
@@ -25982,88 +25841,58 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   }
 }
 
-/* ===========================================================================
- * Anatomy variants (W4-A). `cardComponent.anatomy` in the tenant chrome compiles
- * to a `data-anatomy-card` attribute on the DS root; the closed vocabulary lives
- * in TENANT_THEME_ANATOMY_VARIANTS and is enforced by anatomy-variant-gate.mjs.
- * `default`/absent selects the base rendering above and needs no rule here.
- *
- * Each block prefixes the anatomy attribute onto the base root chain and REPEATS
- * `[data-part='root']`, reaching (0,5,0): one attribute over the (0,4,0)
- * variant/tone/radius rules it governs, so it wins in the same unlayered origin
- * without `!important`. Anatomy is a cross-variant frame treatment; the
- * per-instance variant still colours within the frame the anatomy defines. State
- * rules (hover/focus at (0,6,0)+) intentionally still react on top of the frame.
- * ======================================================================== */
-
-/* framed: an explicit full border + surface shadow, uniform across variants. The
-   shadow/radius reach every framed card; the neutral border is added only to an
-   untoned card, so a toned card keeps its tone frame. */
+/* Anatomy variants: `cardComponent.anatomy` compiles to `data-anatomy-card`
+   on the DS root. The repeated `[data-part='root']` outranks the variant,
+   tone and radius rules it governs; state rules still react on top. */
 [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border-radius: var(--ds-card-radius);
   box-shadow: var(--ds-card-shadow, var(--ds-elevation-1));
 }
 [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root']:not([data-tone]) {
-  border: var(--ds-card-border-width) solid var(--ds-card-border, var(--ds-color-border-subtle));
+  border: var(--ds-card-border-width) var(--ds-edge-standard-style) var(--ds-card-border, var(--ds-color-border-subtle));
 }
 
-/* underline: no side/top borders, one block-end hairline, tighter radius, no lift. */
 [data-anatomy-card='underline'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border: 0;
-  border-block-end: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
+  border-block-end: var(--ds-card-underline-border-width) var(--ds-edge-standard-style) var(--ds-card-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-card-radius-sm);
   box-shadow: none;
 }
 
-/* ghost: no frame at rest; an interactive ghost card tints only on hover
-   (gated to hover-capable pointers like every other hover paint above). The
-   protected zones honor the same contract: a ghost card is structural
-   grouping, so the header band and footer rail do not paint at rest
-   (their proto overrides can still force them back on). */
 [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border: 0;
   box-shadow: none;
   background-color: transparent;
   background-image: none;
 }
-[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.ds-card-header) {
   background: var(--_ds-card-header-zone-bg, none);
 }
 [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
   background: var(--_ds-card-actions-zone-bg, none);
 }
 @media (hover: hover) {
-  [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
+  [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-state~='disabled']) {
     background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
   }
 }
 
-/* Nesting: a card rendered inside another card's body is grouping, not a new
-   surface — it keeps its frame but drops depth at rest so nested composition
-   cannot stack elevations. At (0,7,0) this beats the at-rest variant and
-   anatomy depth rules; the hover rule (0,8,0) still lifts on interaction, and
-   the selected/hover state treatments keep their outline and wash.
-
-   RETIRED (spacing.rhythm concentric ruling): the corner used to DERIVE from
-   the parent body's `--_ds-card-nest-radius`. The subject here is a whole
-   Card's `[data-part='root']`, so that was a component's own/outer radius
-   tracking rhythm — forbidden "even when that component can be nested". A
-   nested card now keeps its own resolved corner; only genuinely inner parts of
-   the padded body (header zone, actions zone) stay concentric. */
+/* A card nested in another card's body is grouping, not a new surface: it
+   keeps its frame and its own corner but drops depth at rest. */
 .ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size] {
-  box-shadow: var(--ds-card-nested-shadow, none);
+  box-shadow: var(--ds-card-nested-shadow);
   border-radius: var(--_ds-card-radius-current, var(--ds-card-radius));
 }
 
-/* Instance-level suppression and unavailable state are terminal even when a
-   tenant selects a stronger anatomy recipe. */
+/* Instance-level suppression and the unavailable state are terminal even
+   under a stronger anatomy recipe. */
 .ds-card.ds-card--modern[data-part='root'][data-bordered='false'] {
   border-color: transparent;
 }
 .ds-card.ds-card--modern[data-part='root'][data-shadowed='false'] {
   box-shadow: none;
 }
-.ds-card.ds-card--modern[data-part='root'][data-disabled='true'] {
+.ds-card.ds-card--modern[data-part='root'][data-state~='disabled'] {
   cursor: var(--ds-card-disabled-cursor);
   opacity: var(--ds-card-disabled-opacity, var(--ds-state-disabled-opacity));
   color: var(--ds-card-color-disabled, var(--ds-color-text-disabled));
@@ -26074,17 +25903,12 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   transform: none;
   pointer-events: none;
 }
-.ds-card.ds-card--modern[data-part='root'][data-disabled='true']::after {
+.ds-card.ds-card--modern[data-part='root'][data-state~='disabled']::after {
   opacity: 0;
 }
 
-@keyframes ds-card-spinner-rotate {
+@keyframes ds-card-spin {
   to { transform: rotate(1turn); }
-}
-
-@keyframes ds-card-skeleton-sweep {
-  from { background-position: 120% 0; }
-  to { background-position: -120% 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -26092,26 +25916,17 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   .ds-card.ds-card--modern[data-part='root'] *,
   .ds-card.ds-card--modern[data-part='root']::after {
     scroll-behavior: auto;
-    transition-duration: 0.01ms;
+    animation: none;
+    transition: none;
   }
 
   .ds-card.ds-card--modern[data-part='root'] {
     transform: none;
   }
-
-  .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='spinner'] {
-    animation: none;
-  }
-
-  .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton-bar'] {
-    animation: none;
-    background-image: none;
-  }
 }
 
-/* Reduced transparency: the frosted loading scrim collapses to the opaque
-   overlay counterpart — the same authority the SemanticSurface RT block
-   chains to — never to a see-through card. */
+/* Reduced transparency: the frosted scrim collapses to the opaque overlay
+   material, never to a see-through card. */
 @media (prefers-reduced-transparency: reduce) {
   .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
     backdrop-filter: none;
@@ -26122,42 +25937,35 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 @media (forced-colors: active) {
   .ds-card.ds-card--modern[data-part='root'] {
-    border: 1px solid CanvasText;
+    border: var(--ds-edge-hairline-width) solid CanvasText;
     background: Canvas;
     color: CanvasText;
     box-shadow: none;
   }
 
-  /* Protected zones re-express as structure, not paint: tenant band
-     gradients would survive the system color enforcement (background
-     images are not forced), so they are explicitly silenced here. The
-     regions keep their rhythm and the hairlines below re-express them. The
-     header selector mirrors the zone rule's `:not([data-tone])` so this
-     silence still wins by source order at matching specificity. */
-  .ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.rottay-card-header),
+  /* tenant band gradients survive the system colour pass, so the protected
+     zones re-express as structure, not paint */
+  .ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.ds-card-header),
   .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
     background: none;
   }
 
   .ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible'] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: var(--ds-focus-ring-width);
   }
 
   .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'] {
     border-color: Highlight;
-    outline: 2px solid Highlight;
-    outline-offset: -2px;
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: calc(-1 * var(--ds-focus-ring-width));
   }
 
-  /* Unavailable cards carry their state in `opacity` and a disabled ink token,
-     and forced colors honours neither — the card re-read as fully live. The
-     system inactive colour is the only signal that survives (the same law the
-     Typography skin applies to a disabled link). It is placed after the
-     selected rule so an unavailable selected card still reads unavailable. */
-  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'],
-  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] [data-part='title'],
-  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] [data-part='description'] {
+  /* opacity and the disabled ink do not survive forced colours; the system
+     inactive colour is the only signal left, placed after selection */
+  .ds-card.ds-card--modern[data-part='root'][data-state~='disabled'],
+  .ds-card.ds-card--modern[data-part='root'][data-state~='disabled'] [data-part='title'],
+  .ds-card.ds-card--modern[data-part='root'][data-state~='disabled'] [data-part='description'] {
     border-color: GrayText;
     color: GrayText;
     outline-color: GrayText;
@@ -58946,7 +58754,7 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
   box-sizing: border-box;
   min-inline-size: 0;
   max-inline-size: var(--ds-tabs-item-max-width);
-  block-size: calc(var(--_ds-tabs-current-height) * var(--ds-control-height-scale, 1));
+  block-size: var(--_ds-tabs-current-height);
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -59349,7 +59157,7 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
 /* Coarse pointers keep the physical floor the touch decision states. */
 @media (hover: none), (pointer: coarse) {
   .ds-tabs--modern[data-part='root'] [data-part='tab-button'] {
-    min-block-size: max(var(--ds-tabs-touch-target-min, var(--ds-touch-target-min)), calc(var(--_ds-tabs-current-height) * var(--ds-control-height-scale, 1)));
+    min-block-size: max(var(--ds-tabs-touch-target-min, var(--ds-touch-target-min)), var(--_ds-tabs-current-height));
   }
 
   .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']) {
@@ -80208,119 +80016,97 @@ html[data-ds-motion='reduced']
 }
 @layer rottay-components {
 /**
- * Card compound skin — Card.Header, Card.Footer, Card.Image (WO-SKIN-05 D1).
+ * Card compound skin -- Card.Header, Card.Body, Card.Footer, Card.Image.
  *
- * Imported by the canonical engine bundle. Compounds expose stable anatomy;
- * this file owns their paint through public `--ds-card-*` channels.
+ * Imported by the canonical engine bundle. Each compound has one render tree
+ * shared by every engine, so they share one file; paint flows through the
+ * public `--ds-card-*` channels produced by `derivation/chrome/card` and the
+ * card constants.
  *
- * ENGINE-AGNOSTIC: each compound has one render tree shared by every engine, so they
- * share one file rather than an engine pair.
+ * The classname is the ownership boundary, not the `data-part`: both Card
+ * engines render their own `data-part='header'`, `'title'`, `'actions'` and
+ * `'cover'`, and a compound dropped into a Card's `children` sits beside them.
+ * Every selector here is anchored on the compound's own class, and the engine
+ * skins carry the mirror guard (`:not(.ds-card-header)`).
  *
- * THE CLASSNAME IS THE OWNERSHIP BOUNDARY, not the `data-part`. Both Card engines
- * render their OWN `data-part='header'`, `'title'`, `'actions'` and `'cover'`
- * elements with different token fallback chains, and a compound dropped into a
- * Card's `children` sits right beside them in the tree. Every selector here is
- * anchored on the compound's own classname, which no engine element wears; the
- * engines' skins carry the mirror-image guard (`:not(.rottay-card-header)`).
+ * Rules carrying a border colour repeat the `data-part` to clear the tenant's
+ * unlayered `*` border-color floor; the frames stay shorthands because the
+ * preflight zeroes `border-width` on every element.
  *
- * SPECIFICITY (P-48): each rule carrying a border colour must clear the tenant's
- * unlayered `*` border-color floor at (0,3,1); the repeated `data-part` buys the
- * fourth unit. The `none` resets are colour-free and exempt. The frames stay
- * SHORTHANDS because preflight zeroes `border-width` on every element.
- *
- * `--ds-card-image-radius` is the hatch for `RADIUS_MAP[radius] || radius`, whose
- * else-branch passes the caller's raw string through — an open value no rule can
- * enumerate. The per-position corner longhands override it, which is the order the
- * object's spreads had.
- *
- * KEYFRAME: Card.Image's per-mount `<style>` injected `rottay-card-image-spin`; the
- * copy here is renamed into the `ds-` vocabulary the skins share.
- *
- * Values transcribed verbatim from `compound/{Header,Footer,Image}/index.tsx`.
+ * The image corner longhands stay physical per position on purpose: the pair
+ * a position rounds is the geometry, and the shape membership is measured
+ * through the `border-radius` shorthand on the wrapper.
  */
 
 /* ---- Card.Header ---- */
-.rottay-card-header[data-part='header'][data-part='header'] {
+.ds-card-header[data-part='header'][data-part='header'] {
   position: relative;
-  /* layout moved from the compound's inline styles (P2): the skin owns the
-     row composition and the gap; the padding axis is keyed on data-padding
-     below so every engine renders the identical geometry. */
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--ds-card-header-gap);
   min-inline-size: 0;
-  min-height: var(--ds-card-header-min-height);
-  /* RETIRED (spacing.rhythm concentric ruling): this rule used to read the
-     card's `--_ds-card-nest-radius` so a painted tenant band wore the card
-     corner. Its selector is a bare compound — it proves nothing about being
-     inside a card and leans entirely on the private happening to inherit — so
-     the ruling's "demonstrably inner geometry" clause refuses it. The engine's
-     own header keeps the concentric corner because its selector DOES prove
-     containment (`> [data-part='body'] > [data-part='header']`). Removing the
-     declaration restores the pre-nest render exactly: the 0px fallback was the
-     effective value in every engine except a Modern card. */
-  border-bottom: none;
+  min-block-size: var(--ds-card-header-min-height);
+  border-block-end: none;
   background: var(--ds-card-header-bg);
   background-position: 0% 50%;
   background-size: 180% 180%;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent);
+  box-shadow: inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent);
   transition:
     background-position var(--ds-motion-deliberate) var(--ds-motion-ease-enter),
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 }
 
-.rottay-card-header[data-padding='none'] {
+.ds-card-header[data-padding='none'] {
   padding: 0;
 }
-.rottay-card-header[data-padding='sm'] {
+.ds-card-header[data-padding='sm'] {
   padding: var(--ds-card-header-padding-sm);
 }
-.rottay-card-header[data-padding='md'] {
+.ds-card-header[data-padding='md'] {
   padding: var(--ds-card-header-padding);
 }
-.rottay-card-header[data-padding='lg'] {
+.ds-card-header[data-padding='lg'] {
   padding: var(--ds-card-header-padding-lg);
 }
 
-.rottay-card-header > .rottay-card-header-content {
+.ds-card-header > [data-part='content'] {
   display: flex;
   align-items: center;
   gap: var(--ds-card-header-gap);
   flex: 1;
   min-inline-size: 0;
 }
-.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text {
+.ds-card-header > [data-part='content'] > [data-part='header-main'] {
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-1);
   flex: 1;
   min-inline-size: 0;
 }
-.rottay-card-header > .rottay-card-header-content > .rottay-card-header-avatar {
+.ds-card-header > [data-part='content'] > [data-part='avatar'] {
   flex-shrink: 0;
 }
-.rottay-card-header > .rottay-card-header-extra {
+.ds-card-header > [data-part='extra'] {
   display: flex;
   align-items: center;
   flex-shrink: 0;
   gap: var(--ds-card-header-actions-gap);
 }
 
-/* Hover paint is gated to hover-capable pointers: on touch the behavior core
-   still stamps `hovered` during a tap, and the card's pressed posture is the
-   tactile equivalent (same law as the Button skin). */
+/* Hover paint exists only where the pointer can hover; the card's pressed
+   posture is the tactile equivalent. */
 @media (hover: hover) {
-  .ds-card[data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) .rottay-card-header[data-part='header'][data-part='header'] {
+  .ds-card[data-interactive='true'][data-state~='hovered']:not([data-state~='disabled']) .ds-card-header[data-part='header'][data-part='header'] {
     background-position: 100% 50%;
   }
 }
-.rottay-card-header[data-part='header'][data-part='header'][data-divider='true'] {
-  border-bottom: var(--ds-card-header-border-width) solid var(--ds-card-header-border, var(--ds-card-border, var(--ds-color-border)));
+.ds-card-header[data-part='header'][data-part='header'][data-divider='true'] {
+  border-block-end: var(--ds-card-header-border-width) var(--ds-edge-standard-style) var(--ds-card-header-border, var(--ds-card-border, var(--ds-color-border)));
 }
-.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='title'] {
-  color: var(--ds-card-title-color, var(--ds-color-text-primary));
+.ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-title-color, var(--ds-card-header-ink));
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-card-title-font-size);
   font-weight: var(--ds-card-title-font-weight);
@@ -80330,7 +80116,7 @@ html[data-ds-motion='reduced']
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
-.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='subtitle'] {
+.ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='subtitle'] {
   color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary));
   font-size: var(--ds-card-subtitle-font-size);
   line-height: var(--ds-card-body-line-height);
@@ -80339,206 +80125,200 @@ html[data-ds-motion='reduced']
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }
-.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='eyebrow'] {
-  color: var(--ds-card-header-color, var(--ds-color-text-muted));
+.ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='eyebrow'] {
+  color: var(--ds-card-header-eyebrow-color);
   font-family: var(--ds-font-family-mono);
   font-size: var(--ds-card-header-eyebrow-size);
   font-weight: var(--ds-font-weight-semibold);
   letter-spacing: var(--ds-card-header-eyebrow-tracking);
-  line-height: 1.2;
-  /* C1 overline grammar (C-07/C-12): the case follows the tenant's label
-     personality instead of a hardcoded technical uppercase. The overline
-     channel leads (an expressive profile that authors it wins), then the
-     label-transform channel (authored labelStyle: technical sentence vs
-     editorial capitalize), then the historical uppercase. Family stays on the
-     tenant mono pack, which already diverges (technical mono vs editorial
-     mono) — the overline is a voice, not a costume. */
+  line-height: var(--ds-type-label-line-height);
+  /* the overline follows the tenant's label voice, never a fixed uppercase */
   text-transform: var(
     --ds-page-header-eyebrow-text-transform,
     var(--ds-typography-label-transform, uppercase)
   );
 }
-.rottay-card-header > .rottay-card-header-content > [data-part='icon'][data-part='icon'] {
+.ds-card-header > [data-part='content'] > [data-part='icon'][data-part='icon'] {
   display: inline-grid;
   flex: 0 0 auto;
-  width: var(--ds-card-header-icon-size);
-  height: var(--ds-card-header-icon-size);
+  inline-size: var(--ds-card-header-icon-size);
+  block-size: var(--ds-card-header-icon-size);
   place-items: center;
-  border: 1px solid var(--ds-card-header-icon-border, var(--ds-card-border, var(--ds-color-border)));
+  border: var(--ds-edge-hairline-width) var(--ds-edge-standard-style) var(--ds-card-header-icon-border, var(--ds-card-border, var(--ds-color-border)));
   border-radius: var(--ds-card-header-icon-radius, var(--ds-radius-lg));
   background: var(--ds-card-header-icon-bg, var(--ds-surface-card));
   color: var(--ds-card-header-icon-color, var(--ds-color-primary));
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
-    0 8px 18px -14px color-mix(in srgb, currentColor 52%, transparent);
+    inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+    var(--ds-card-header-icon-shadow);
   transition:
     transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 }
 @media (hover: hover) {
-  .ds-card[data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) .rottay-card-header > .rottay-card-header-content > [data-part='icon'] {
-    transform: translateY(-1px) scale(1.025);
+  .ds-card[data-interactive='true'][data-state~='hovered']:not([data-state~='disabled']) .ds-card-header > [data-part='content'] > [data-part='icon'] {
+    transform: var(--ds-card-header-icon-lift);
     box-shadow:
-      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 94%, transparent),
-      0 10px 22px -14px color-mix(in srgb, currentColor 64%, transparent);
+      inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) 94%, transparent),
+      var(--ds-card-header-icon-shadow-hover);
   }
 }
-.rottay-card-header > [data-part='extra'][data-part='extra'] {
+.ds-card-header > [data-part='extra'][data-part='extra'] {
   max-inline-size: 100%;
-  min-height: var(--ds-control-height-sm, 32px);
+  min-block-size: var(--ds-card-header-extra-min-height);
   padding: var(--ds-card-header-extra-padding);
-  border: 1px solid var(--ds-card-header-extra-border, var(--ds-card-header-border, var(--ds-card-border, var(--ds-color-border))));
+  border: var(--ds-edge-hairline-width) var(--ds-edge-standard-style) var(--ds-card-header-extra-border, var(--ds-card-header-border, var(--ds-card-border, var(--ds-color-border))));
   border-radius: var(--ds-card-header-extra-radius, var(--ds-radius-lg));
   background: var(--ds-card-header-extra-bg, var(--ds-surface-card));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
+  box-shadow: inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   overflow-inline: auto;
 }
 
-.rottay-card-header > .rottay-card-header-content,
-.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text,
-.rottay-card-footer[data-part='footer'][data-part='footer'],
-.rottay-card-body[data-part='body'][data-part='body'] {
+.ds-card-header > [data-part='content'],
+.ds-card-header > [data-part='content'] > [data-part='header-main'],
+.ds-card-footer[data-part='footer'][data-part='footer'],
+.ds-card-body[data-part='body'][data-part='body'] {
   min-inline-size: 0;
   overflow-wrap: anywhere;
 }
 
-.rottay-card-body[data-part='body'][data-part='body'] {
+/* ---- Card.Body ---- */
+.ds-card-body[data-part='body'][data-part='body'] {
   color: var(--ds-card-body-color, var(--ds-color-text-primary));
   font-size: var(--ds-card-body-font-size, var(--ds-font-size-base));
   line-height: var(--ds-card-body-line-height, var(--ds-line-height-normal));
 }
-
-/* Body layout moved from the compound's inline styles (P2): the flex posture
-   fills the card's available block space; the padding axis is keyed on
-   data-padding so every engine renders the identical geometry. */
-.rottay-card-body[data-part='body'] {
+.ds-card-body[data-part='body'] {
   flex: 1;
 }
-.rottay-card-body[data-padding='none'] {
+.ds-card-body[data-padding='none'] {
   padding: 0;
 }
-.rottay-card-body[data-padding='sm'] {
+.ds-card-body[data-padding='sm'] {
   padding: var(--ds-card-body-padding-sm);
 }
-.rottay-card-body[data-padding='md'] {
+.ds-card-body[data-padding='md'] {
   padding: var(--ds-card-body-padding);
 }
-.rottay-card-body[data-padding='lg'] {
+.ds-card-body[data-padding='lg'] {
   padding: var(--ds-card-body-padding-lg);
 }
 
 /* ---- Card.Footer ---- */
-.rottay-card-footer[data-part='footer'][data-part='footer'] {
-  /* layout moved from the compound's inline styles (P2): row composition and
-     gap here; justification follows data-align, inset follows data-padding. */
+.ds-card-footer[data-part='footer'][data-part='footer'] {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--ds-card-footer-actions-gap);
-  border-top: none;
+  border-block-start: none;
   background: var(--ds-card-footer-bg);
   color: var(--ds-card-footer-color, var(--ds-color-text-secondary));
 }
-.rottay-card-footer[data-align='start'] {
+.ds-card-footer[data-align='start'] {
   justify-content: flex-start;
 }
-.rottay-card-footer[data-align='center'] {
+.ds-card-footer[data-align='center'] {
   justify-content: center;
 }
-.rottay-card-footer[data-align='end'] {
+.ds-card-footer[data-align='end'] {
   justify-content: flex-end;
 }
-.rottay-card-footer[data-align='space-between'] {
+.ds-card-footer[data-align='space-between'] {
   justify-content: space-between;
 }
-.rottay-card-footer[data-padding='none'] {
+.ds-card-footer[data-padding='none'] {
   padding: 0;
 }
-.rottay-card-footer[data-padding='sm'] {
+.ds-card-footer[data-padding='sm'] {
   padding: var(--ds-card-footer-padding-sm);
 }
-.rottay-card-footer[data-padding='md'] {
+.ds-card-footer[data-padding='md'] {
   padding: var(--ds-card-footer-padding);
 }
-.rottay-card-footer[data-padding='lg'] {
+.ds-card-footer[data-padding='lg'] {
   padding: var(--ds-card-footer-padding-lg);
 }
-.rottay-card-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
-  /* tenant footer border first; the shared premium contract supplies the
-     quieter default hairline */
-  border-top: var(--ds-card-footer-border-width) solid var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-card-border, var(--ds-color-border))));
+.ds-card-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
+  border-block-start: var(--ds-card-footer-border-width) var(--ds-edge-standard-style) var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-card-border, var(--ds-color-border))));
 }
-/* the actions subgroup is a bounded well — the same grammar the header extra
-   slot already wears — so footer controls read as one grouped unit instead
-   of floating loose. Paint comes from the shared premium action-well
-   channels; both default to a whisper over the card's own fill. */
-.rottay-card-footer > .rottay-card-footer-actions {
-  /* row layout moved from the compound's inline styles (P2) */
+/* the actions subgroup is a bounded well, the same grammar as the header
+   extra slot, so footer controls read as one unit */
+.ds-card-footer > [data-part='actions'][data-part='actions'] {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--ds-card-footer-actions-gap);
   min-inline-size: 0;
   max-inline-size: 100%;
-  padding: 3px; /* mirrors the header extra well inset */
-  border: 1px solid var(--ds-premium-card-action-border);
+  padding: var(--ds-card-footer-actions-inset);
+  border: var(--ds-edge-hairline-width) var(--ds-edge-standard-style) var(--ds-premium-card-action-border);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-premium-card-action-bg);
 }
-.rottay-card-footer > .rottay-card-footer-actions > * {
+.ds-card-footer > [data-part='actions'] > * {
   max-inline-size: 100%;
 }
 
-/* ---- Card.Image: radius, then the corner pair its position rounds.
-   The corner derives from the card's own resolved radius
-   (`--_ds-card-radius-current`, published by the modern engine's radius
-   rules) so a cover flush against the card edge is concentric with it —
-   never a second, unrelated rounding. Engines that do not publish the
-   private keep the historical `--ds-card-radius` fallback. ---- */
-.rottay-card-image[data-part='image'][data-part='image'] {
-  /* layout moved from the compound's inline styles (P2). The aspect ratio
-     reads the per-instance hook the compound stamps from its contract value;
-     unset, the declaration is inert and the ratio stays at the UA initial. */
+/* ---- Card.Image: the corner derives from the card's own resolved radius so
+   a cover flush against the card edge is concentric with it ---- */
+.ds-card-image[data-part='image'][data-part='image'] {
   position: relative;
   inline-size: 100%;
+  block-size: var(--ds-card-image-block-size);
   overflow: hidden;
   aspect-ratio: var(--ds-card-image-aspect-ratio);
-  border-radius: var(--ds-card-image-radius);
   --_ds-card-image-corner: var(--_ds-card-radius-current, var(--ds-card-radius));
 }
-.rottay-card-image[data-part='image'][data-part='image'][data-position='cover'] {
+.ds-card-image[data-part='image'][data-part='image'][data-sizing='aspect'] {
+  block-size: auto;
+}
+.ds-card-image[data-radius='none'] {
+  border-radius: 0;
+}
+.ds-card-image[data-radius='sm'] {
+  border-radius: var(--ds-card-image-radius-sm);
+}
+.ds-card-image[data-radius='md'] {
+  border-radius: var(--ds-card-image-radius-md);
+}
+.ds-card-image[data-radius='lg'] {
+  border-radius: var(--ds-card-image-radius-lg);
+}
+.ds-card-image[data-radius='inherit'] {
+  border-radius: inherit;
+}
+.ds-card-image[data-part='image'][data-part='image'][data-position='cover'] {
   position: absolute;
   inset: 0;
   block-size: 100%;
-  z-index: 0;
+  z-index: var(--ds-z-index-relative-base);
 }
-.rottay-card-image[data-part='image'][data-part='image'][data-position='top'] {
+.ds-card-image[data-part='image'][data-part='image'][data-position='top'] {
   border-top-left-radius: var(--_ds-card-image-corner);
   border-top-right-radius: var(--_ds-card-image-corner);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.rottay-card-image[data-part='image'][data-part='image'][data-position='bottom'] {
+.ds-card-image[data-part='image'][data-part='image'][data-position='bottom'] {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-left-radius: var(--_ds-card-image-corner);
   border-bottom-right-radius: var(--_ds-card-image-corner);
 }
-.rottay-card-image[data-part='image'][data-part='image'][data-position='start'] {
+.ds-card-image[data-part='image'][data-part='image'][data-position='start'] {
   border-start-start-radius: var(--_ds-card-image-corner);
   border-end-start-radius: var(--_ds-card-image-corner);
   border-start-end-radius: 0;
   border-end-end-radius: 0;
 }
-.rottay-card-image[data-part='image'][data-part='image'][data-position='end'] {
+.ds-card-image[data-part='image'][data-part='image'][data-position='end'] {
   border-start-start-radius: 0;
   border-end-start-radius: 0;
   border-start-end-radius: var(--_ds-card-image-corner);
   border-end-end-radius: var(--_ds-card-image-corner);
 }
 
-.rottay-card-image > img {
-  /* box layout moved from the compound's inline styles (P2) */
+.ds-card-image > [data-part='img'] {
   display: block;
   inline-size: 100%;
   block-size: 100%;
@@ -80547,64 +80327,78 @@ html[data-ds-motion='reduced']
   opacity: 0;
   transition: var(--ds-transition-fade);
 }
-.rottay-card-image[data-loaded='true'] > img {
+.ds-card-image[data-fit='cover'] > [data-part='img'] {
+  object-fit: cover;
+}
+.ds-card-image[data-fit='contain'] > [data-part='img'] {
+  object-fit: contain;
+}
+.ds-card-image[data-fit='fill'] > [data-part='img'] {
+  object-fit: fill;
+}
+.ds-card-image[data-fit='none'] > [data-part='img'] {
+  object-fit: none;
+}
+.ds-card-image[data-fit='scale-down'] > [data-part='img'] {
+  object-fit: scale-down;
+}
+.ds-card-image[data-loaded='true'] > [data-part='img'] {
   opacity: 1;
 }
 
 /* ---- Card.Image: the placeholder behind a loading or broken image ---- */
-/* Absolute regions moved from the compound's inline styles (P2): the logical
-   `inset: 0` shorthand replaces the old physical top/left/right/bottom set. */
-.rottay-card-image > [data-part='placeholder'] {
+.ds-card-image > [data-part='placeholder'] {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--ds-card-image-placeholder-bg, var(--ds-color-neutral-100));
-  color: var(--ds-card-image-placeholder-color, var(--ds-color-text-tertiary));
+  background-color: var(--ds-card-image-placeholder-fill);
+  color: var(--ds-card-image-placeholder-ink);
 }
-.rottay-card-image > [data-part='placeholder'] > [data-part='spinner'][data-part='spinner'] {
-  width: var(--ds-card-image-loading-size);
-  height: var(--ds-card-image-loading-size);
-  border: var(--ds-card-image-loading-stroke) solid var(--ds-card-image-loading-track, var(--ds-color-neutral-200));
-  border-top-color: var(--ds-card-image-loading-active, var(--ds-color-primary));
-  border-radius: 50%;
+.ds-card-image > [data-part='placeholder'] > [data-part='spinner'][data-part='spinner'] {
+  display: block;
+  inline-size: var(--ds-card-image-loading-size);
+  block-size: var(--ds-card-image-loading-size);
+  border: var(--ds-card-image-loading-stroke) var(--ds-edge-standard-style) var(--ds-card-image-loading-track, var(--ds-color-neutral-200));
+  border-block-start-color: var(--ds-card-image-loading-active, var(--ds-color-primary));
+  border-radius: var(--ds-radius-full);
   animation: ds-card-image-spin var(--ds-card-image-loading-duration) linear infinite;
 }
-.rottay-card-image > [data-part='placeholder'] > [data-part='error-icon'] {
-  width: var(--ds-card-image-error-icon-size);
-  height: var(--ds-card-image-error-icon-size);
+.ds-card-image > [data-part='placeholder'] > [data-part='error-icon'] {
+  inline-size: var(--ds-card-image-error-icon-size);
+  block-size: var(--ds-card-image-error-icon-size);
 }
 
 /* ---- Card.Image: the scrim that keeps overlay text readable ---- */
-.rottay-card-image > [data-part='gradient'] {
+.ds-card-image > [data-part='gradient'] {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above);
   background: var(--ds-card-cover-overlay-bg);
 }
 
 /* ---- Card.Image: the custom overlay content slot ---- */
-.rottay-card-image > [data-part='overlay'] {
+.ds-card-image > [data-part='overlay'] {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 @container ds-card (max-width: 28rem) {
-  .rottay-card-header[data-part='header'][data-part='header'] {
+  .ds-card-header[data-part='header'][data-part='header'] {
     flex-direction: column;
   }
 
-  .rottay-card-header > [data-part='extra'][data-part='extra'],
-  .rottay-card-footer > .rottay-card-footer-actions {
+  .ds-card-header > [data-part='extra'][data-part='extra'],
+  .ds-card-footer > [data-part='actions'][data-part='actions'] {
     inline-size: 100%;
   }
 
-  .rottay-card-footer > .rottay-card-footer-actions > * {
+  .ds-card-footer > [data-part='actions'] > * {
     flex: 1 1 auto;
   }
 }
@@ -80614,51 +80408,45 @@ html[data-ds-motion='reduced']
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-card-header[data-part='header'][data-part='header'] {
+  .ds-card-header[data-part='header'][data-part='header'],
+  .ds-card-header > [data-part='content'] > [data-part='icon'][data-part='icon'],
+  .ds-card-image > [data-part='img'] {
     transition: none;
   }
 
-  .rottay-card-header > .rottay-card-header-content > [data-part='icon'][data-part='icon'] {
-    transition: none;
-  }
-
-  .rottay-card-image > img {
-    transition: none;
-  }
-
-  .rottay-card-image > [data-part='placeholder'] > [data-part='spinner'][data-part='spinner'] {
+  .ds-card-image > [data-part='placeholder'] > [data-part='spinner'][data-part='spinner'] {
     animation: none;
   }
 }
 
 @media (forced-colors: active) {
-  /* the tenant band is a background image (gradients survive the system
-     color pass): silence it so header copy keeps system contrast */
-  .rottay-card-header[data-part='header'][data-part='header'] {
+  /* the tenant band is a background image, which survives the system colour
+     pass: silence it so header copy keeps system contrast */
+  .ds-card-header[data-part='header'][data-part='header'] {
     background: none;
     box-shadow: none;
   }
 
-  .rottay-card-header > .rottay-card-header-content > [data-part='icon'][data-part='icon'],
-  .rottay-card-header > [data-part='extra'][data-part='extra'],
-  .rottay-card-footer > .rottay-card-footer-actions {
+  .ds-card-header > [data-part='content'] > [data-part='icon'][data-part='icon'],
+  .ds-card-header > [data-part='extra'][data-part='extra'],
+  .ds-card-footer > [data-part='actions'][data-part='actions'] {
     border-color: CanvasText;
     background: Canvas;
     color: CanvasText;
     box-shadow: none;
   }
 
-  .rottay-card-image > [data-part='placeholder'] > [data-part='spinner'][data-part='spinner'] {
+  .ds-card-image > [data-part='placeholder'] > [data-part='spinner'][data-part='spinner'] {
     border-color: CanvasText;
     border-block-start-color: Highlight;
   }
 
-  .rottay-card-image > [data-part='placeholder'] {
+  .ds-card-image > [data-part='placeholder'] {
     background: Canvas;
     color: CanvasText;
   }
 
-  .rottay-card-image > [data-part='gradient'] {
+  .ds-card-image > [data-part='gradient'] {
     background: transparent;
   }
 }
@@ -117997,7 +117785,7 @@ html[lang]:lang(ar) {
  *
  * This file is a BUILD OUTPUT compiled from ONE authored source; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   foundation/tokens/ts/presentation/brand-themes/evnto/index.ts (compiled via compileTheme)
+ *   foundation/presets/verticals/evnto/document/index.json (compiled via compileTheme)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
@@ -118152,74 +117940,76 @@ html[lang]:lang(ar) {
   --ds-breakpoint-sm: 640px;
   --ds-breakpoint-xl: 1280px;
   --ds-breakpoint-xs: 0px;
-  --ds-button-ai-shadow: var(--ds-shadow-button-rest);
-  --ds-button-ai-shadow-active: var(--ds-shadow-button-rest);
-  --ds-button-ai-shadow-hover: var(--ds-shadow-button-hover);
-  --ds-button-dashed-shadow: none;
-  --ds-button-dashed-shadow-active: var(--ds-button-dashed-shadow);
-  --ds-button-dashed-shadow-hover: var(--ds-button-dashed-shadow);
-  --ds-button-default-bg: #FFFFFF;
-  --ds-button-default-bg-hover: #FAFAFA;
-  --ds-button-default-border: rgba(0, 0, 0, 0.1);
-  --ds-button-default-color: var(--ds-color-primary);
-  --ds-button-default-hover-bg: #FAFAFA;
-  --ds-button-default-shadow: var(--ds-shadow-button-rest);
-  --ds-button-default-shadow-active: var(--ds-shadow-button-rest);
-  --ds-button-default-shadow-hover: var(--ds-shadow-button-hover);
-  --ds-button-disabled-bg: #FAFAFA;
-  --ds-button-disabled-border: rgba(0, 0, 0, 0.06);
-  --ds-button-disabled-border-color: rgba(0, 0, 0, 0.06);
-  --ds-button-disabled-color: rgba(0, 0, 0, 0.25);
-  --ds-button-disabled-opacity: 0.4;
-  --ds-button-error-shadow: var(--ds-shadow-error-sm);
-  --ds-button-error-shadow-active: var(--ds-shadow-error-sm);
-  --ds-button-error-shadow-hover: var(--ds-shadow-error-sm);
+  --ds-button-ai-shadow: var(--ds-material-control-shadow);
+  --ds-button-ai-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-ai-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-dashed-shadow: var(--ds-material-control-shadow);
+  --ds-button-dashed-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-dashed-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-default-shadow: var(--ds-material-control-shadow);
+  --ds-button-default-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-default-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-error-shadow: var(--ds-material-control-shadow);
+  --ds-button-error-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-error-shadow-hover: var(--ds-material-control-shadow-hover);
   --ds-button-font-family: var(--ds-type-label-font-family);
   --ds-button-font-weight: var(--ds-type-label-font-weight);
-  --ds-button-ghost-bg: transparent;
-  --ds-button-ghost-bg-hover: rgba(0, 0, 0, 0.03);
-  --ds-button-ghost-color: #525252;
-  --ds-button-ghost-hover-bg: rgba(0, 0, 0, 0.03);
-  --ds-button-ghost-shadow: none;
-  --ds-button-ghost-shadow-active: var(--ds-button-ghost-shadow);
-  --ds-button-ghost-shadow-hover: var(--ds-button-ghost-shadow);
-  --ds-button-info-shadow: var(--ds-shadow-button-rest);
-  --ds-button-info-shadow-active: var(--ds-button-info-shadow);
-  --ds-button-info-shadow-hover: var(--ds-button-info-shadow);
-  --ds-button-link-shadow: none;
-  --ds-button-link-shadow-active: var(--ds-button-link-shadow);
-  --ds-button-link-shadow-hover: var(--ds-button-link-shadow);
-  --ds-button-primary-bg: var(--ds-color-primary);
-  --ds-button-primary-bg-hover: #262626;
-  --ds-button-primary-border: transparent;
-  --ds-button-primary-color: #ffffff;
-  --ds-button-primary-hover-bg: #262626;
-  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --ds-button-primary-shadow-active: var(--ds-shadow-button-rest);
-  --ds-button-primary-shadow-hover: var(--ds-shadow-button-hover);
-  --ds-button-secondary-bg: transparent;
-  --ds-button-secondary-bg-hover: rgba(0, 0, 0, 0.04);
-  --ds-button-secondary-border: rgba(0, 0, 0, 0.15);
-  --ds-button-secondary-color: #171717;
-  --ds-button-secondary-hover-bg: rgba(0, 0, 0, 0.04);
-  --ds-button-secondary-shadow: var(--ds-shadow-button-rest);
-  --ds-button-secondary-shadow-active: var(--ds-shadow-button-rest);
-  --ds-button-secondary-shadow-hover: var(--ds-shadow-button-hover);
-  --ds-button-success-shadow: var(--ds-shadow-success-sm);
-  --ds-button-success-shadow-active: var(--ds-button-success-shadow);
-  --ds-button-success-shadow-hover: var(--ds-button-success-shadow);
-  --ds-button-text-shadow: none;
-  --ds-button-text-shadow-active: var(--ds-button-text-shadow);
-  --ds-button-text-shadow-hover: var(--ds-button-text-shadow);
-  --ds-button-warning-shadow: var(--ds-shadow-warning-sm);
-  --ds-button-warning-shadow-active: var(--ds-button-warning-shadow);
-  --ds-button-warning-shadow-hover: var(--ds-button-warning-shadow);
-  --ds-card-bg: #ffffff;
-  --ds-card-border: var(--ds-color-border);
-  --ds-card-border-color: var(--ds-color-border);
-  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --ds-card-side-accent-soft: transparent;
+  --ds-button-ghost-shadow: var(--ds-material-control-shadow);
+  --ds-button-ghost-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-ghost-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-info-shadow: var(--ds-material-control-shadow);
+  --ds-button-info-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-info-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-lg-radius: var(--ds-radius-md, 8px);
+  --ds-button-link-shadow: var(--ds-material-control-shadow);
+  --ds-button-link-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-link-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-md-radius: var(--ds-radius-md, 8px);
+  --ds-button-primary-shadow: var(--ds-material-control-shadow);
+  --ds-button-primary-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-primary-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-secondary-shadow: var(--ds-material-control-shadow);
+  --ds-button-secondary-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-secondary-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-sm-radius: var(--ds-radius-md, 8px);
+  --ds-button-success-shadow: var(--ds-material-control-shadow);
+  --ds-button-success-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-success-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-text-shadow: var(--ds-material-control-shadow);
+  --ds-button-text-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-text-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-warning-shadow: var(--ds-material-control-shadow);
+  --ds-button-warning-shadow-active: var(--ds-material-control-shadow-active);
+  --ds-button-warning-shadow-hover: var(--ds-material-control-shadow-hover);
+  --ds-button-xl-radius: var(--ds-radius-md, 8px);
+  --ds-button-xs-radius: var(--ds-radius-md, 8px);
+  --ds-card-body-font-size-sm: var(--ds-type-supporting-font-size);
+  --ds-card-error-title-color: var(--ds-color-error-900);
+  --ds-card-footer-actions-inset: var(--ds-spacing-1);
+  --ds-card-header-extra-min-height: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-card-header-eyebrow-color: var(--ds-card-header-color, var(--ds-color-text-muted));
+  --ds-card-header-icon-lift: translateY(calc(-1 * var(--ds-edge-hairline-width))) scale(1.025);
+  --ds-card-header-icon-shadow: var(--ds-elevation-1);
+  --ds-card-header-icon-shadow-hover: var(--ds-elevation-2);
+  --ds-card-header-ink: var(--ds-card-header-color, var(--ds-color-text-primary));
+  --ds-card-image-aspect-ratio: auto;
+  --ds-card-image-block-size: var(--ds-card-image-height);
+  --ds-card-image-placeholder-fill: var(--ds-card-image-placeholder-bg, var(--ds-surface-inset));
+  --ds-card-image-placeholder-ink: var(--ds-card-image-placeholder-color, var(--ds-color-text-tertiary));
+  --ds-card-image-radius-lg: var(--ds-radius-lg);
+  --ds-card-image-radius-md: var(--ds-radius-md);
+  --ds-card-image-radius-sm: var(--ds-radius-sm);
+  --ds-card-info-title-color: var(--ds-color-info-900);
+  --ds-card-loading-min-height: calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1));
+  --ds-card-nested-shadow: none;
+  --ds-card-outlined-border-hover: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
+  --ds-card-padding-base: var(--ds-card-padding, var(--ds-card-md-padding));
+  --ds-card-primary-title-color: var(--ds-color-primary-900);
+  --ds-card-success-title-color: var(--ds-color-success-900);
+  --ds-card-title-font-size-lg: var(--ds-type-section-title-font-size);
+  --ds-card-title-font-size-sm: var(--ds-type-body-font-size);
+  --ds-card-underline-border-width: var(--ds-edge-hairline-width);
+  --ds-card-warning-title-color: var(--ds-color-warning-900);
   --ds-cascader-bg: var(--ds-input-bg, var(--ds-material-control-background));
   --ds-cascader-border: var(--ds-input-border, var(--ds-material-control-border));
   --ds-cascader-border-focus: var(--ds-color-primary);
@@ -118244,16 +118034,6 @@ html[lang]:lang(ar) {
   --ds-cascader-spinner-ink: var(--ds-color-primary);
   --ds-cascader-spinner-track: var(--ds-color-border);
   --ds-cascader-warning-border: var(--ds-color-warning);
-  --ds-chart-series-1: #935267;
-  --ds-chart-series-10: #B87CA4;
-  --ds-chart-series-2: #C27F68;
-  --ds-chart-series-3: #846324;
-  --ds-chart-series-4: #7A9F66;
-  --ds-chart-series-5: #237961;
-  --ds-chart-series-6: #42A2AC;
-  --ds-chart-series-7: #316F97;
-  --ds-chart-series-8: #828EC9;
-  --ds-chart-series-9: #755B93;
   --ds-checkbox-border: var(--ds-color-border-secondary);
   --ds-checkbox-check-color: var(--ds-color-text-on-primary);
   --ds-checkbox-checked-bg: var(--ds-color-primary);
@@ -118262,74 +118042,8 @@ html[lang]:lang(ar) {
   --ds-checkbox-description-line-height: var(--ds-type-caption-line-height);
   --ds-checkbox-error-border-color: var(--ds-color-error);
   --ds-checkbox-label-color: var(--ds-color-text-primary);
-  --ds-color-accent: #7A6A5A;
-  --ds-color-accent-hover: #5A4A3A;
-  --ds-color-alpha-error-10: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
-  --ds-color-alpha-error-20: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
-  --ds-color-alpha-info-10: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
-  --ds-color-alpha-success-10: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
-  --ds-color-alpha-success-20: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
-  --ds-color-alpha-warning-10: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
-  --ds-color-alpha-warning-20: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
-  --ds-color-background: #FFFFFF;
-  --ds-color-bg: #FFFFFF;
-  --ds-color-bg-elevated: #ffffff;
-  --ds-color-bg-input: #ffffff;
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.5);
-  --ds-color-bg-primary: #FFFFFF;
-  --ds-color-bg-secondary: #fafafa;
-  --ds-color-bg-tertiary: #f5f5f5;
-  --ds-color-border: rgba(0, 0, 0, 0.08);
-  --ds-color-border-focus: #171717;
-  --ds-color-border-primary: var(--ds-color-border);
-  --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
-  --ds-color-border-subtle: color-mix(in srgb, var(--ds-color-border) 66.667%, transparent);
-  --ds-color-border-tertiary: color-mix(in srgb, var(--ds-color-border) 66.667%, transparent);
-  --ds-color-error: #B91C1C;
-  --ds-color-error-100: #FFD1CA;
-  --ds-color-error-200: #FFA398;
-  --ds-color-error-300: #FE6F62;
-  --ds-color-error-400: #E24B41;
-  --ds-color-error-50: #FFFBFA;
-  --ds-color-error-500: #C12825;
-  --ds-color-error-600: #9C030C;
-  --ds-color-error-700: #710005;
-  --ds-color-error-800: #480002;
-  --ds-color-error-900: #230001;
-  --ds-color-error-bg: var(--ds-color-error-50);
-  --ds-color-error-border: color-mix(in srgb, var(--ds-color-error) 20%, transparent);
-  --ds-color-info: #475569;
-  --ds-color-info-100: #D4DEED;
-  --ds-color-info-200: #B4C1D3;
-  --ds-color-info-300: #95A4B9;
-  --ds-color-info-400: #79889D;
-  --ds-color-info-50: #FAFCFF;
-  --ds-color-info-500: #5E6D81;
-  --ds-color-info-600: #465365;
-  --ds-color-info-700: #2F3A49;
-  --ds-color-info-800: #1B232D;
-  --ds-color-info-900: #0A0E13;
-  --ds-color-info-bg: var(--ds-color-info-50);
-  --ds-color-info-border: color-mix(in srgb, var(--ds-color-info) 20%, transparent);
-  --ds-color-link: #171717;
-  --ds-color-link-hover: #525252;
-  --ds-color-link-visited: #737373;
-  --ds-color-neutral-100: #f5f5f5;
-  --ds-color-neutral-200: #e5e5e5;
-  --ds-color-neutral-300: #d4d4d4;
-  --ds-color-neutral-400: #a3a3a3;
-  --ds-color-neutral-50: #fafafa;
-  --ds-color-neutral-500: #737373;
-  --ds-color-neutral-600: #525252;
-  --ds-color-neutral-700: #404040;
-  --ds-color-neutral-800: #262626;
-  --ds-color-neutral-900: #171717;
   --ds-color-neutral-ink: #000000;
   --ds-color-neutral-paper: #ffffff;
-  --ds-color-on-error: #ffffff;
-  --ds-color-on-info: #ffffff;
-  --ds-color-on-success: #ffffff;
-  --ds-color-on-warning: #ffffff;
   --ds-color-picker-check-halo: color-mix(in srgb, var(--ds-color-neutral-900) 85%, transparent);
   --ds-color-picker-check-ink: var(--ds-color-white);
   --ds-color-picker-clear-bg-hover: var(--ds-material-inset-background, var(--ds-surface-inset));
@@ -118359,66 +118073,6 @@ html[lang]:lang(ar) {
   --ds-color-picker-swatch-shadow: var(--ds-elevation-1);
   --ds-color-picker-swatch-shadow-hover: var(--ds-elevation-2);
   --ds-color-picker-text-ink: var(--ds-color-text-primary);
-  --ds-color-primary: #171717;
-  --ds-color-primary-100: #DDDDDD;
-  --ds-color-primary-200: #BFBFBF;
-  --ds-color-primary-300: #A2A2A2;
-  --ds-color-primary-400: #868686;
-  --ds-color-primary-50: #FCFCFC;
-  --ds-color-primary-500: #6B6B6B;
-  --ds-color-primary-600: #515151;
-  --ds-color-primary-700: #393939;
-  --ds-color-primary-800: #222222;
-  --ds-color-primary-900: #0D0D0D;
-  --ds-color-primary-foreground: #ffffff;
-  --ds-color-primary-hover: #262626;
-  --ds-color-primary-rgb: 23, 23, 23;
-  --ds-color-secondary: #7A6A5A;
-  --ds-color-secondary-100: #E6DBD0;
-  --ds-color-secondary-200: #CBBDAF;
-  --ds-color-secondary-300: #AF9F90;
-  --ds-color-secondary-400: #948373;
-  --ds-color-secondary-50: #FFFBF7;
-  --ds-color-secondary-500: #786858;
-  --ds-color-secondary-600: #5D4F41;
-  --ds-color-secondary-700: #42372B;
-  --ds-color-secondary-800: #292018;
-  --ds-color-secondary-900: #110C08;
-  --ds-color-secondary-hover: #5A4A3A;
-  --ds-color-secondary-rgb: 122, 106, 90;
-  --ds-color-success: #15803D;
-  --ds-color-success-100: #B6EDC1;
-  --ds-color-success-200: #8AD49A;
-  --ds-color-success-300: #62B977;
-  --ds-color-success-400: #3D9D59;
-  --ds-color-success-50: #F5FFF6;
-  --ds-color-success-500: #18803E;
-  --ds-color-success-600: #00632B;
-  --ds-color-success-700: #00461C;
-  --ds-color-success-800: #002B0E;
-  --ds-color-success-900: #001204;
-  --ds-color-success-bg: var(--ds-color-success-50);
-  --ds-color-success-border: color-mix(in srgb, var(--ds-color-success) 20%, transparent);
-  --ds-color-text-disabled: #b3b3b3;
-  --ds-color-text-muted: #737373;
-  --ds-color-text-on-primary: #ffffff;
-  --ds-color-text-page: #3d3d3d;
-  --ds-color-text-primary: #111111;
-  --ds-color-text-secondary: #3d3d3d;
-  --ds-color-text-tertiary: #5c5c5c;
-  --ds-color-warning: #A16207;
-  --ds-color-warning-100: #FFD5AA;
-  --ds-color-warning-200: #EAB37B;
-  --ds-color-warning-300: #D29451;
-  --ds-color-warning-400: #B6762A;
-  --ds-color-warning-50: #FFFBF7;
-  --ds-color-warning-500: #985B00;
-  --ds-color-warning-600: #754500;
-  --ds-color-warning-700: #533000;
-  --ds-color-warning-800: #341C00;
-  --ds-color-warning-900: #170A00;
-  --ds-color-warning-bg: var(--ds-color-warning-50);
-  --ds-color-warning-border: color-mix(in srgb, var(--ds-color-warning) 20%, transparent);
   --ds-confirm-dialog-bg: var(--ds-modal-bg, var(--ds-material-overlay-background));
   --ds-confirm-dialog-border-color: var(--ds-color-border-subtle);
   --ds-confirm-dialog-danger-icon-bg: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
@@ -118441,14 +118095,7 @@ html[lang]:lang(ar) {
   --ds-confirm-dialog-warning-icon-bg: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
   --ds-confirm-dialog-warning-icon-color: var(--ds-color-warning);
   --ds-confirm-dialog-warning-icon-ring: color-mix(in srgb, var(--ds-color-warning) 22%, transparent);
-  --ds-control-brand-border: color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border));
-  --ds-control-brand-tint: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-control-surface));
-  --ds-control-brand-tint-hover: color-mix(in srgb, var(--ds-color-primary) 15%, var(--ds-control-surface));
-  --ds-control-ink: var(--ds-color-text-primary);
-  --ds-control-ink-muted: var(--ds-color-text-secondary);
-  --ds-control-on-brand: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
-  --ds-control-surface: var(--ds-surface-card-bg);
-  --ds-control-surface-raised: color-mix(in srgb, var(--ds-control-surface) 86%, var(--ds-surface-panel-bg));
+  --ds-control-height-scale: 1;
   --ds-date-picker-active-ring: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-primary);
   --ds-date-picker-band-bg: var(--ds-wash-band);
   --ds-date-picker-band-preview-bg: var(--ds-wash-band-preview);
@@ -118471,7 +118118,7 @@ html[lang]:lang(ar) {
   --ds-date-picker-nav-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
   --ds-date-picker-nav-ink: var(--ds-color-text-primary);
   --ds-date-picker-panel-bg: var(--ds-color-bg-elevated, var(--ds-material-overlay-background));
-  --ds-date-picker-panel-shadow: var(--ds-shadow-md);
+  --ds-date-picker-panel-shadow: var(--ds-shadow-popover, var(--ds-elevation-3));
   --ds-date-picker-placeholder: var(--ds-type-color-muted);
   --ds-date-picker-separator-color: var(--ds-color-text-secondary);
   --ds-date-picker-shadow-focus: var(--ds-focus-ring);
@@ -118484,8 +118131,8 @@ html[lang]:lang(ar) {
   --ds-date-picker-today-ring: var(--ds-color-primary);
   --ds-date-picker-warning-border: var(--ds-color-warning);
   --ds-date-picker-weekday-ink: var(--ds-type-color-muted);
-  --ds-datepicker-panel-shadow: var(--ds-shadow-md);
-  --ds-density-scale: 1.125;
+  --ds-density-mode-factor: 1;
+  --ds-density-scale: 1;
   --ds-drawer-bg: var(--ds-material-overlay-background);
   --ds-drawer-body-bg: transparent;
   --ds-drawer-body-color: var(--ds-color-text-primary);
@@ -118546,21 +118193,19 @@ html[lang]:lang(ar) {
   --ds-dropdown-submenu-indicator-bg: color-mix(in srgb, currentColor 6%, transparent);
   --ds-dropdown-surface-lift: var(--ds-elevation-surface-3);
   --ds-dropdown-texture: none;
-  --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
-  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --ds-effect-intensity: 1;
+  --ds-ease-exit: cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-edge-emphasis-width: 1px;
+  --ds-edge-hairline-width: 1px;
+  --ds-edge-standard-width: 1px;
+  --ds-effect-intensity: 0.2;
   --ds-focus-ring: 0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary), 0 0 0 calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)) var(--ds-focus-ring-color);
-  --ds-focus-ring-color: var(--ds-color-primary);
   --ds-focus-ring-offset: 2px;
   --ds-focus-ring-width: 2px;
-  --ds-font-family-base: var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
-  --ds-font-family-display: var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
-  --ds-font-family-heading: var(--ds-font-pack-geometric-display, 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif), "Noto Sans Arabic", sans-serif;
-  --ds-font-family-mono: var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace);
   --ds-font-weight-body: var(--ds-font-weight-normal);
   --ds-font-weight-bold: 700;
-  --ds-font-weight-display: 800;
-  --ds-font-weight-heading: 700;
+  --ds-font-weight-display: 700;
+  --ds-font-weight-heading: 600;
   --ds-font-weight-medium: 500;
   --ds-font-weight-normal: 400;
   --ds-font-weight-regular: var(--ds-font-weight-normal);
@@ -118592,19 +118237,10 @@ html[lang]:lang(ar) {
   --ds-hover-card-shadow: var(--ds-elevation-3);
   --ds-hover-card-surface-lift: var(--ds-elevation-surface-3);
   --ds-hover-card-texture: none;
-  --ds-icon-tile-border: var(--ds-surface-icon-border);
-  --ds-input-bg: #ffffff;
-  --ds-input-bg-disabled: #FAFAFA;
-  --ds-input-border: rgba(0, 0, 0, 0.12);
-  --ds-input-border-color-disabled: rgba(0, 0, 0, 0.06);
-  --ds-input-border-disabled: rgba(0, 0, 0, 0.06);
-  --ds-input-border-focus: #171717;
   --ds-input-caret-color: var(--ds-color-primary);
-  --ds-input-color-disabled: rgba(0, 0, 0, 0.25);
   --ds-input-color-placeholder: var(--ds-type-color-muted);
   --ds-input-count-color: var(--ds-type-color-muted);
   --ds-input-count-limit-font-weight: var(--ds-type-label-font-weight);
-  --ds-input-disabled-opacity: 0.4;
   --ds-input-filled-border: transparent;
   --ds-input-loading-color: var(--ds-color-primary);
   --ds-input-number-addon-bg: var(--ds-input-addon-bg);
@@ -118643,29 +118279,13 @@ html[lang]:lang(ar) {
   --ds-input-number-warning-border: var(--ds-input-warning-border);
   --ds-input-number-warning-shadow-focus: var(--ds-input-warning-shadow-focus);
   --ds-input-selection-bg: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
-  --ds-input-shadow-focus: 0 0 0 1px rgba(23, 23, 23, 0.2);
   --ds-input-shadow-rest: var(--ds-material-control-shadow);
-  --ds-layout-bg: var(--ds-color-bg-primary);
-  --ds-layout-header-backdrop: blur(10px);
-  --ds-layout-header-bg: rgba(255, 255, 255, 0.95);
-  --ds-layout-header-border: rgba(0, 0, 0, 0.06);
-  --ds-layout-sider-bg: var(--ds-sidebar-bg);
-  --ds-layout-sider-border: rgba(0, 0, 0, 0.06);
-  --ds-letter-spacing-body: 0;
-  --ds-letter-spacing-display: -0.025em;
-  --ds-letter-spacing-heading: -0.02em;
-  --ds-letter-spacing-mono: 0;
-  --ds-line-height-body: 1.6;
-  --ds-line-height-display: 1.1;
-  --ds-line-height-heading: 1.2;
-  --ds-line-height-relaxed: 1.75;
-  --ds-line-height-tight: 1.25;
   --ds-material-canvas-background: var(--ds-surface-canvas);
   --ds-material-canvas-foreground: var(--ds-color-text-primary);
   --ds-material-card-background: var(--ds-surface-card);
   --ds-material-card-background-active: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-card));
   --ds-material-card-background-disabled: color-mix(in srgb, var(--ds-surface-card) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel));
-  --ds-material-card-background-hover: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-elevated));
+  --ds-material-card-background-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-card));
   --ds-material-card-background-selected: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-selected-shift, 9%), var(--ds-surface-card));
   --ds-material-card-border: var(--ds-color-border-primary);
   --ds-material-card-border-active: var(--ds-color-primary);
@@ -118684,7 +118304,7 @@ html[lang]:lang(ar) {
   --ds-material-control-background: var(--ds-surface-control);
   --ds-material-control-background-active: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-control));
   --ds-material-control-background-disabled: color-mix(in srgb, var(--ds-surface-control) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel));
-  --ds-material-control-background-hover: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-elevated));
+  --ds-material-control-background-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-control));
   --ds-material-control-background-selected: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-selected-shift, 9%), var(--ds-surface-control));
   --ds-material-control-border: var(--ds-color-border-primary);
   --ds-material-control-border-active: var(--ds-color-primary);
@@ -118888,12 +118508,13 @@ html[lang]:lang(ar) {
   --ds-modal-title-font-size: var(--ds-type-section-title-font-size);
   --ds-modal-title-font-weight: var(--ds-type-section-title-font-weight);
   --ds-motion-attention: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
-  --ds-motion-calm: 350ms;
+  --ds-motion-calm: 200ms;
   --ds-motion-deliberate: 320ms;
   --ds-motion-disclosure: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
-  --ds-motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-motion-duration-scale: 1;
+  --ds-motion-ease-enter: cubic-bezier(0.4, 0, 0.2, 1);
   --ds-motion-ease-exit: var(--ds-ease-exit);
-  --ds-motion-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+  --ds-motion-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --ds-motion-ease-move: var(--ds-ease-standard);
   --ds-motion-ease-out: var(--ds-motion-ease-enter);
   --ds-motion-ease-standard: var(--ds-ease-standard);
@@ -118901,16 +118522,15 @@ html[lang]:lang(ar) {
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
   --ds-motion-glacial: calc(var(--ds-motion-deliberate) * 1.5625);
   --ds-motion-instant: 120ms;
-  --ds-motion-intensity: 1;
+  --ds-motion-intensity: 0.5;
   --ds-motion-normal: var(--ds-motion-calm);
-  --ds-motion-offset-in: -2px;
-  --ds-motion-panel-offset: 12px;
+  --ds-motion-offset-in: 0px;
+  --ds-motion-panel-offset: 8px;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
-  --ds-motion-scale-in: 0.98;
+  --ds-motion-scale-in: 1;
   --ds-motion-slow: var(--ds-motion-deliberate);
-  --ds-motion-spring-gentle: linear(0, 0.1044, 0.2935, 0.4779, 0.6288, 0.7427, 0.8246, 0.8819, 0.9212, 0.9478, 0.9655, 0.9773, 0.9851, 0.9902, 0.9936, 0.9958, 0.9973, 0.9982, 0.9988, 0.9992, 0.9995, 0.9997, 0.9998, 0.9999, 1);
   --ds-notifier-border-color: var(--ds-color-border-subtle);
   --ds-notifier-clickable-shadow-hover: var(--ds-elevation-4);
   --ds-notifier-close-color: var(--ds-color-text-secondary);
@@ -119031,9 +118651,6 @@ html[lang]:lang(ar) {
   --ds-otp-input-slot-color: var(--ds-color-text-primary);
   --ds-otp-input-slot-shadow-focus: var(--ds-input-shadow-focus, var(--ds-focus-ring));
   --ds-otp-input-slot-shadow-focus-error: var(--ds-input-error-shadow-focus, var(--ds-focus-ring));
-  --ds-overlay-heavy: rgba(0, 0, 0, 0.06);
-  --ds-overlay-light: rgba(0, 0, 0, 0.01);
-  --ds-overlay-medium: rgba(0, 0, 0, 0.03);
   --ds-pagination-border: var(--ds-color-border);
   --ds-pagination-color: var(--ds-color-text-primary);
   --ds-pagination-controls-bleed: var(--ds-spacing-1);
@@ -119123,16 +118740,6 @@ html[lang]:lang(ar) {
   --ds-posture-container-standard-max: 839px;
   --ds-posture-id: balanced;
   --ds-posture-span-bias: preferred;
-  --ds-premium-card-bg: var(--ds-material-card-background, var(--ds-card-bg));
-  --ds-premium-card-border: var(--ds-material-card-border, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-border-color)));
-  --ds-premium-card-border-hover: var(--ds-material-card-border-hover, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-material-card-border-strong, var(--ds-card-border-color))));
-  --ds-premium-card-footer-bg: color-mix(in srgb, var(--ds-color-bg-secondary) 72%, var(--ds-card-bg));
-  --ds-premium-card-header-bg: var(--ds-rich-card-header-bg);
-  --ds-premium-card-section-alt-bg: var(--ds-rich-card-section-alt-bg);
-  --ds-premium-card-section-bg: var(--ds-rich-card-section-bg);
-  --ds-premium-card-selected-border: var(--ds-material-card-border-selected, color-mix(in srgb, var(--ds-color-primary) 46%, var(--ds-material-card-border-strong, var(--ds-card-border-color))));
-  --ds-premium-card-selected-ring: var(--ds-material-card-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent));
-  --ds-premium-card-sheen: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-card-bg) 42%, transparent), transparent);
   --ds-radio-border: var(--ds-color-border-secondary);
   --ds-radio-checked-border: var(--ds-color-primary);
   --ds-radio-checked-dot: var(--ds-color-primary);
@@ -119141,12 +118748,11 @@ html[lang]:lang(ar) {
   --ds-radio-description-line-height: var(--ds-type-caption-line-height);
   --ds-radio-error-border-color: var(--ds-color-error);
   --ds-radio-label-color: var(--ds-color-text-primary);
-  --ds-radius-full: 9999px;
-  --ds-radius-lg-base: 18px;
-  --ds-radius-md-base: 14px;
+  --ds-radius-button: var(--ds-radius-md, 8px);
+  --ds-radius-nest-inset: 0px;
+  --ds-radius-nest-ratio: 0;
   --ds-radius-scale: 1;
-  --ds-radius-sm-base: 10px;
-  --ds-radius-xl-base: 24px;
+  --ds-rhythm-scale: 1;
   --ds-segmented-border: var(--ds-material-control-border);
   --ds-segmented-border-hover: var(--ds-material-control-border-hover);
   --ds-segmented-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift), var(--ds-card-bg, var(--ds-color-bg-secondary)));
@@ -119183,17 +118789,6 @@ html[lang]:lang(ar) {
   --ds-select-action-color-hover: var(--ds-color-text-primary);
   --ds-select-action-focus-ring: var(--ds-focus-ring);
   --ds-select-arrow-color-open: var(--ds-color-primary);
-  --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
-  --ds-select-bg-focus: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
-  --ds-select-bg-hover: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
-  --ds-select-border-color: var(--ds-color-neutral-300);
-  --ds-select-border-color-focus: var(--ds-color-primary-500);
-  --ds-select-border-color-hover: var(--ds-color-neutral-400);
-  --ds-select-color: var(--ds-color-neutral-900);
-  --ds-select-color-placeholder: var(--ds-color-neutral-400);
-  --ds-select-dropdown-bg: var(--ds-color-white);
-  --ds-select-dropdown-border-color: var(--ds-color-neutral-200);
-  --ds-select-dropdown-shadow: var(--ds-shadow-lg);
   --ds-select-dropdown-texture: var(--ds-material-overlay-texture, none);
   --ds-select-empty-bg: transparent;
   --ds-select-empty-border: var(--ds-color-border);
@@ -119205,14 +118800,10 @@ html[lang]:lang(ar) {
   --ds-select-group-color: var(--ds-color-text-muted);
   --ds-select-group-divider: var(--ds-color-border-subtle);
   --ds-select-loading-track: color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
-  --ds-select-option-bg-hover: var(--ds-color-neutral-100);
-  --ds-select-option-bg-selected: var(--ds-color-primary-50);
   --ds-select-option-border-hover: var(--ds-color-border-subtle);
   --ds-select-option-border-selected: color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border-subtle));
   --ds-select-option-check-bg: color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
-  --ds-select-option-color: var(--ds-color-neutral-900);
   --ds-select-option-color-hover: var(--ds-color-text-primary);
-  --ds-select-option-color-selected: var(--ds-color-primary-700);
   --ds-select-option-icon-bg: color-mix(in srgb, currentColor 7%, transparent);
   --ds-select-option-icon-bg-active: color-mix(in srgb, currentColor 11%, transparent);
   --ds-select-placeholder-color: var(--ds-type-color-muted);
@@ -119228,11 +118819,6 @@ html[lang]:lang(ar) {
   --ds-select-tag-count-bg: var(--ds-surface-canvas);
   --ds-select-warning-bg: var(--ds-select-bg, var(--ds-material-control-background));
   --ds-select-warning-border: var(--ds-color-warning);
-  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
-  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --ds-shadow-popover: var(--ds-shadow-md);
-  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
   --ds-sheet-bg: var(--ds-material-overlay-background);
   --ds-sheet-body-color: var(--ds-color-text-primary);
   --ds-sheet-border-color: var(--ds-color-border-subtle);
@@ -119256,27 +118842,10 @@ html[lang]:lang(ar) {
   --ds-sheet-title-font-family: var(--ds-type-section-title-font-family);
   --ds-sheet-title-font-size: var(--ds-type-section-title-font-size);
   --ds-sheet-title-font-weight: var(--ds-type-section-title-font-weight);
-  --ds-shell-grid-line: transparent;
-  --ds-shell-grid-size: 0px;
-  --ds-sidebar-bg: #fafafa;
-  --ds-sidebar-border: var(--ds-color-border);
-  --ds-sidebar-group-color: #737373;
-  --ds-sidebar-group-font-size: 11px;
-  --ds-sidebar-group-font-weight: 600;
-  --ds-sidebar-group-letter-spacing: 0.04em;
-  --ds-sidebar-group-margin-bottom: 4px;
-  --ds-sidebar-group-margin-top: 12px;
-  --ds-sidebar-group-padding-top: 12px;
-  --ds-sidebar-icon-size: 18px;
-  --ds-sidebar-item-bg-active: rgba(0, 0, 0, 0.06);
-  --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.03);
-  --ds-sidebar-item-color: #3d3d3d;
-  --ds-sidebar-item-color-active: #171717;
-  --ds-sidebar-item-font-size: 14px;
-  --ds-sidebar-item-font-weight: 400;
-  --ds-sidebar-item-font-weight-active: 500;
-  --ds-sidebar-item-indent: 8px;
-  --ds-sidebar-item-padding: 8px 12px;
+  --ds-sidebar-bg: var(--ds-color-bg-secondary);
+  --ds-sidebar-item-bg-active: var(--ds-color-primary-100);
+  --ds-sidebar-item-bg-hover: var(--ds-color-bg-hover);
+  --ds-sidebar-item-color-active: var(--ds-color-primary-900);
   --ds-sidebar-surface-aside-width: 20rem;
   --ds-sidebar-surface-collapsed-width: var(--ds-sidebar-collapsed-width, 5.5rem);
   --ds-sidebar-surface-divider: var(--ds-edge-standard-width) var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle));
@@ -119287,8 +118856,8 @@ html[lang]:lang(ar) {
   --ds-sidebar-surface-panel-gap: var(--ds-spacing-4);
   --ds-sidebar-surface-stacked-gap: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale));
   --ds-sidebar-surface-width: var(--ds-sidebar-width, 17.5rem);
-  --ds-sidebar-text: #171717;
-  --ds-sidebar-text-muted: #525252;
+  --ds-sidebar-text: var(--ds-color-text-primary);
+  --ds-sidebar-text-muted: var(--ds-color-text-muted);
   --ds-state-active-shift: 7%;
   --ds-state-disabled-mix: 82%;
   --ds-state-disabled-opacity: 0.6;
@@ -119366,19 +118935,6 @@ html[lang]:lang(ar) {
   --ds-stepper-touch-target-min: var(--ds-touch-target-min);
   --ds-stepper-vertical-gap: var(--ds-spacing-3);
   --ds-stepper-vertical-item-gap: var(--ds-spacing-4);
-  --ds-surface-card-grid-bg: linear-gradient(var(--ds-surface-card-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--ds-surface-card-grid-line) 1px, transparent 1px);
-  --ds-surface-card-grid-line: color-mix(in srgb, var(--ds-signal-card-accent, var(--ds-color-primary)) 5%, transparent);
-  --ds-surface-card-grid-size: var(--ds-premium-card-grid-size, 22px);
-  --ds-surface-chip-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg));
-  --ds-surface-icon-bg: linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card-bg)), color-mix(in srgb, var(--ds-color-secondary) 10%, var(--ds-surface-card-bg)));
-  --ds-surface-icon-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-surface-card-border));
-  --ds-surface-radius-md: var(--ds-radius-md);
-  --ds-surface-shadow: var(--ds-shadow-sm);
-  --ds-surface-shadow-hover: var(--ds-shadow-md);
-  --ds-table-header-bg: rgba(0, 0, 0, 0.02);
-  --ds-table-header-color: var(--ds-color-text-muted);
-  --ds-table-header-font-size: 0.75rem;
-  --ds-table-header-font-weight: 500;
   --ds-tabs-active-bg: linear-gradient(160deg, var(--ds-surface-card), color-mix(in srgb, var(--ds-surface-card) 93%, var(--ds-color-primary) 7%));
   --ds-tabs-active-highlight: linear-gradient(118deg, transparent 12%, color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent) 48%, transparent 76%);
   --ds-tabs-active-highlight-opacity: calc(0.44 * var(--ds-effect-intensity));
@@ -119431,7 +118987,7 @@ html[lang]:lang(ar) {
   --ds-tabs-item-max-width: 18rem;
   --ds-tabs-item-radius: var(--ds-radius-md);
   --ds-tabs-lg-font-size: var(--ds-font-size-base);
-  --ds-tabs-lg-height: var(--ds-spacing-10);
+  --ds-tabs-lg-height: calc(2.5rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-tabs-lg-icon-size: var(--ds-icon-md-size);
   --ds-tabs-lg-padding: 0 var(--ds-spacing-4);
   --ds-tabs-line-active-bg: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent));
@@ -119455,7 +119011,7 @@ html[lang]:lang(ar) {
   --ds-tabs-loading-stroke: var(--ds-border-width-2);
   --ds-tabs-loading-track: color-mix(in srgb, currentColor 22%, transparent);
   --ds-tabs-md-font-size: var(--ds-type-body-font-size);
-  --ds-tabs-md-height: var(--ds-spacing-9);
+  --ds-tabs-md-height: calc(2.25rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-tabs-md-icon-size: var(--ds-icon-sm-size);
   --ds-tabs-md-padding: 0 var(--ds-spacing-4);
   --ds-tabs-mobile-gap: var(--ds-spacing-0);
@@ -119500,7 +119056,7 @@ html[lang]:lang(ar) {
   --ds-tabs-segmented-active-shadow: var(--ds-tabs-active-shadow);
   --ds-tabs-segmented-list-bg: color-mix(in srgb, var(--ds-surface-inset) 94%, var(--ds-color-primary) 6%);
   --ds-tabs-sm-font-size: var(--ds-type-supporting-font-size);
-  --ds-tabs-sm-height: var(--ds-spacing-8);
+  --ds-tabs-sm-height: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-tabs-sm-icon-size: var(--ds-icon-sm-size);
   --ds-tabs-sm-padding: 0 var(--ds-spacing-3);
   --ds-tabs-touch-target-min: var(--ds-touch-target-min);
@@ -119612,39 +119168,14 @@ html[lang]:lang(ar) {
   --ds-time-picker-option-ink: var(--ds-color-text-primary);
   --ds-time-picker-option-ink-selected: var(--ds-color-text-on-primary);
   --ds-time-picker-panel-bg: var(--ds-color-bg-elevated, var(--ds-material-overlay-background));
-  --ds-time-picker-panel-shadow: var(--ds-shadow-md);
+  --ds-time-picker-panel-shadow: var(--ds-shadow-popover, var(--ds-elevation-3));
   --ds-time-picker-separator-color: var(--ds-color-text-secondary);
   --ds-time-picker-shadow-focus: var(--ds-focus-ring);
   --ds-time-picker-warning-border: var(--ds-color-warning);
-  --ds-tint-12: color-mix(in oklab, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
-  --ds-tint-16: color-mix(in oklab, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
-  --ds-tint-24: color-mix(in oklab, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
-  --ds-tint-4: color-mix(in oklab, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
-  --ds-tint-8: color-mix(in oklab, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
-  --ds-tint-error-12: color-mix(in oklab, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
-  --ds-tint-error-16: color-mix(in oklab, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
-  --ds-tint-error-24: color-mix(in oklab, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
-  --ds-tint-error-4: color-mix(in oklab, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
-  --ds-tint-error-8: color-mix(in oklab, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
-  --ds-tint-info-12: color-mix(in oklab, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
-  --ds-tint-info-16: color-mix(in oklab, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
-  --ds-tint-info-24: color-mix(in oklab, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
-  --ds-tint-info-4: color-mix(in oklab, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
-  --ds-tint-info-8: color-mix(in oklab, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
-  --ds-tint-success-12: color-mix(in oklab, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
-  --ds-tint-success-16: color-mix(in oklab, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
-  --ds-tint-success-24: color-mix(in oklab, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
-  --ds-tint-success-4: color-mix(in oklab, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
-  --ds-tint-success-8: color-mix(in oklab, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
-  --ds-tint-warning-12: color-mix(in oklab, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
-  --ds-tint-warning-16: color-mix(in oklab, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
-  --ds-tint-warning-24: color-mix(in oklab, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
-  --ds-tint-warning-4: color-mix(in oklab, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
-  --ds-tint-warning-8: color-mix(in oklab, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
   --ds-toggle-description-color: var(--ds-type-color-muted);
   --ds-toggle-description-font-size: var(--ds-type-caption-font-size);
   --ds-toggle-description-line-height: var(--ds-type-caption-line-height);
-  --ds-toggle-dot-border-radius: var(--ds-radius-full);
+  --ds-toggle-dot-border-radius: var(--ds-radius-button, var(--ds-radius-full));
   --ds-toggle-dot-shadow: var(--ds-elevation-1);
   --ds-toggle-error-label-color: var(--ds-color-error-ink);
   --ds-toggle-error-track-bg: var(--ds-color-error);
@@ -119659,7 +119190,7 @@ html[lang]:lang(ar) {
   --ds-toggle-track-bg-active: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-active-shift));
   --ds-toggle-track-bg-checked: var(--ds-color-primary);
   --ds-toggle-track-bg-hover: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-hover-shift));
-  --ds-toggle-track-border-radius: var(--ds-radius-full);
+  --ds-toggle-track-border-radius: var(--ds-radius-button, var(--ds-radius-full));
   --ds-tooltip-bordered-background: var(--ds-material-overlay-background);
   --ds-tooltip-bordered-border: var(--ds-color-border-primary);
   --ds-tooltip-bordered-foreground: var(--ds-color-text-primary);
@@ -119772,7 +119303,7 @@ html[lang]:lang(ar) {
   --ds-tree-select-warning-shadow-focus: var(--ds-input-warning-shadow-focus, var(--ds-focus-ring));
   --ds-type-body: var(--ds-type-body-font-weight) var(--ds-type-body-font-size)/var(--ds-type-body-line-height) var(--ds-type-body-font-family);
   --ds-type-body-font-family: var(--ds-font-family-base);
-  --ds-type-body-font-variant-numeric: normal;
+  --ds-type-body-font-variant-numeric: proportional-nums;
   --ds-type-body-font-weight: 400;
   --ds-type-body-letter-spacing: var(--ds-letter-spacing-body, 0);
   --ds-type-body-line-height: var(--ds-line-height-body, 1.6);
@@ -119780,7 +119311,7 @@ html[lang]:lang(ar) {
   --ds-type-caption: var(--ds-type-caption-font-weight) var(--ds-type-caption-font-size)/var(--ds-type-caption-line-height) var(--ds-type-caption-font-family);
   --ds-type-caption-font-family: var(--ds-font-family-base);
   --ds-type-caption-font-size: calc(0.6875rem * var(--ds-type-scale, 1));
-  --ds-type-caption-font-variant-numeric: normal;
+  --ds-type-caption-font-variant-numeric: proportional-nums;
   --ds-type-caption-font-weight: 400;
   --ds-type-caption-letter-spacing: 0.01em;
   --ds-type-caption-line-height: 1.35;
@@ -119788,7 +119319,7 @@ html[lang]:lang(ar) {
   --ds-type-code: var(--ds-type-code-font-weight) var(--ds-type-code-font-size)/var(--ds-type-code-line-height) var(--ds-type-code-font-family);
   --ds-type-code-font-family: var(--ds-font-family-mono);
   --ds-type-code-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
-  --ds-type-code-font-variant-numeric: tabular-nums;
+  --ds-type-code-font-variant-numeric: proportional-nums;
   --ds-type-code-font-weight: 400;
   --ds-type-code-letter-spacing: var(--ds-letter-spacing-mono, 0);
   --ds-type-code-line-height: 1.5;
@@ -119796,7 +119327,7 @@ html[lang]:lang(ar) {
   --ds-type-display: var(--ds-type-display-font-weight) var(--ds-type-display-font-size)/var(--ds-type-display-line-height) var(--ds-type-display-font-family);
   --ds-type-display-font-family: var(--ds-font-family-display, var(--ds-font-family-heading));
   --ds-type-display-font-size: calc(2rem * var(--ds-type-scale, 1));
-  --ds-type-display-font-variant-numeric: normal;
+  --ds-type-display-font-variant-numeric: proportional-nums;
   --ds-type-display-font-weight: 700;
   --ds-type-display-letter-spacing: var(--ds-letter-spacing-display, -0.03em);
   --ds-type-display-line-height: 1.1;
@@ -119804,15 +119335,15 @@ html[lang]:lang(ar) {
   --ds-type-label: var(--ds-type-label-font-weight) var(--ds-type-label-font-size)/var(--ds-type-label-line-height) var(--ds-type-label-font-family);
   --ds-type-label-font-family: var(--ds-font-family-base);
   --ds-type-label-font-size: calc(0.75rem * var(--ds-type-scale, 1));
-  --ds-type-label-font-variant-numeric: normal;
+  --ds-type-label-font-variant-numeric: proportional-nums;
   --ds-type-label-font-weight: 600;
   --ds-type-label-letter-spacing: 0.04em;
   --ds-type-label-line-height: 1.3;
-  --ds-type-label-text-transform: capitalize;
+  --ds-type-label-text-transform: none;
   --ds-type-numeric: var(--ds-type-numeric-font-weight) var(--ds-type-numeric-font-size)/var(--ds-type-numeric-line-height) var(--ds-type-numeric-font-family);
   --ds-type-numeric-font-family: var(--ds-font-family-heading);
   --ds-type-numeric-font-size: calc(1rem * var(--ds-type-scale, 1));
-  --ds-type-numeric-font-variant-numeric: tabular-nums lining-nums;
+  --ds-type-numeric-font-variant-numeric: proportional-nums lining-nums;
   --ds-type-numeric-font-weight: 600;
   --ds-type-numeric-letter-spacing: -0.01em;
   --ds-type-numeric-line-height: 1.2;
@@ -119820,7 +119351,7 @@ html[lang]:lang(ar) {
   --ds-type-page-title: var(--ds-type-page-title-font-weight) var(--ds-type-page-title-font-size)/var(--ds-type-page-title-line-height) var(--ds-type-page-title-font-family);
   --ds-type-page-title-font-family: var(--ds-font-family-heading);
   --ds-type-page-title-font-size: calc(1.5rem * var(--ds-type-scale, 1));
-  --ds-type-page-title-font-variant-numeric: normal;
+  --ds-type-page-title-font-variant-numeric: proportional-nums;
   --ds-type-page-title-font-weight: 700;
   --ds-type-page-title-letter-spacing: var(--ds-letter-spacing-heading, -0.02em);
   --ds-type-page-title-line-height: 1.16;
@@ -119829,7 +119360,7 @@ html[lang]:lang(ar) {
   --ds-type-section-title: var(--ds-type-section-title-font-weight) var(--ds-type-section-title-font-size)/var(--ds-type-section-title-line-height) var(--ds-type-section-title-font-family);
   --ds-type-section-title-font-family: var(--ds-font-family-heading);
   --ds-type-section-title-font-size: calc(1.125rem * var(--ds-type-scale, 1));
-  --ds-type-section-title-font-variant-numeric: normal;
+  --ds-type-section-title-font-variant-numeric: proportional-nums;
   --ds-type-section-title-font-weight: 600;
   --ds-type-section-title-letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
   --ds-type-section-title-line-height: 1.3;
@@ -119837,7 +119368,7 @@ html[lang]:lang(ar) {
   --ds-type-supporting: var(--ds-type-supporting-font-weight) var(--ds-type-supporting-font-size)/var(--ds-type-supporting-line-height) var(--ds-type-supporting-font-family);
   --ds-type-supporting-font-family: var(--ds-font-family-base);
   --ds-type-supporting-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
-  --ds-type-supporting-font-variant-numeric: normal;
+  --ds-type-supporting-font-variant-numeric: proportional-nums;
   --ds-type-supporting-font-weight: 400;
   --ds-type-supporting-letter-spacing: var(--ds-letter-spacing-body, 0);
   --ds-type-supporting-line-height: 1.5;
@@ -119858,99 +119389,5 @@ html[lang]:lang(ar) {
 /* === Compiled from Theme.modes.dark — do not edit === */
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark'], :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])).dark {
   color-scheme: dark;
-  --ds-button-default-bg: #1C1A16;
-  --ds-button-default-bg-hover: #24221C;
-  --ds-button-default-border: #2E2C24;
-  --ds-button-default-hover-bg: #24221C;
-  --ds-button-disabled-bg: #1C1A16;
-  --ds-button-disabled-border: #222018;
-  --ds-button-disabled-border-color: #222018;
-  --ds-button-disabled-color: #484838;
-  --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.04);
-  --ds-button-ghost-color: #A8A898;
-  --ds-button-ghost-hover-bg: rgba(255, 255, 255, 0.04);
-  --ds-button-primary-bg-hover: #F0F0E8;
-  --ds-button-primary-color: #131210;
-  --ds-button-primary-hover-bg: #F0F0E8;
-  --ds-button-secondary-bg-hover: #1C1A16;
-  --ds-button-secondary-border: var(--ds-color-border);
-  --ds-button-secondary-color: #A8A898;
-  --ds-button-secondary-hover-bg: #1C1A16;
-  --ds-card-bg: #1C1A16;
-  --ds-chart-series-1: #9F9C58;
-  --ds-chart-series-10: #8C712F;
-  --ds-chart-series-2: #4F8354;
-  --ds-chart-series-3: #4CAAA1;
-  --ds-chart-series-4: #3F7BA5;
-  --ds-chart-series-5: #8A93D0;
-  --ds-chart-series-6: #86659B;
-  --ds-chart-series-7: #C181A3;
-  --ds-chart-series-8: #A35E5D;
-  --ds-chart-series-9: #C58864;
-  --ds-color-accent: #A89880;
-  --ds-color-accent-hover: var(--ds-color-secondary-hover);
-  --ds-color-background: #131210;
-  --ds-color-bg: #131210;
-  --ds-color-bg-elevated: #2A2820;
-  --ds-color-bg-input: #131210;
-  --ds-color-bg-overlay: rgba(2, 6, 23, 0.88);
-  --ds-color-bg-primary: #131210;
-  --ds-color-bg-secondary: #1C1A16;
-  --ds-color-bg-tertiary: #24221C;
-  --ds-color-border: #2E2C24;
-  --ds-color-border-focus: #A89880;
-  --ds-color-border-secondary: #222018;
-  --ds-color-error-900: #FFF2F0;
-  --ds-color-info-900: #F0F6FE;
-  --ds-color-link: var(--ds-color-primary);
-  --ds-color-link-hover: var(--ds-color-primary-hover);
-  --ds-color-link-visited: var(--ds-color-neutral-600);
-  --ds-color-neutral-100: #111827;
-  --ds-color-neutral-200: #1f2937;
-  --ds-color-neutral-300: #334155;
-  --ds-color-neutral-400: #475569;
-  --ds-color-neutral-50: #0b1220;
-  --ds-color-neutral-500: #64748b;
-  --ds-color-neutral-600: #94a3b8;
-  --ds-color-neutral-700: #cbd5e1;
-  --ds-color-neutral-800: #e2e8f0;
-  --ds-color-neutral-900: #f8fafc;
-  --ds-color-primary: #E8E8E0;
-  --ds-color-primary-foreground: #131210;
-  --ds-color-primary-hover: #F0F0E8;
-  --ds-color-primary-rgb: 232, 232, 224;
-  --ds-color-secondary: #A89880;
-  --ds-color-secondary-hover: #B8A890;
-  --ds-color-secondary-rgb: 168, 152, 128;
-  --ds-color-success-900: #DFFFE4;
-  --ds-color-text-disabled: #484838;
-  --ds-color-text-muted: #686858;
-  --ds-color-text-on-primary: #131210;
-  --ds-color-text-page: #A8A898;
-  --ds-color-text-primary: #E8E8E0;
-  --ds-color-text-secondary: #A8A898;
-  --ds-color-text-tertiary: var(--ds-color-neutral-600);
-  --ds-color-warning-900: #FFF3E7;
-  --ds-focus-ring-color: var(--ds-color-primary-400);
-  --ds-input-bg: #131210;
-  --ds-input-bg-disabled: #1C1A16;
-  --ds-input-border: var(--ds-color-border);
-  --ds-input-border-color-disabled: #222018;
-  --ds-input-border-disabled: #222018;
-  --ds-input-color-disabled: var(--ds-color-text-disabled);
-  --ds-input-color-placeholder: #686858;
-  --ds-layout-header-bg: rgba(19, 18, 16, 0.92);
-  --ds-layout-header-border: #2E2C24;
-  --ds-layout-sider-border: #222018;
-  --ds-sidebar-bg: #0E0D0B;
-  --ds-sidebar-text: #A8A898;
-  --ds-table-border: #222018;
-  --ds-table-header-bg: #1C1A16;
-  --ds-table-header-color: #A8A898;
-}
-
-
-/* === evnto spring easing (precomputed linear() from the BrandTheme, useSpring) === */
-:is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
-  --ds-motion-spring: linear(0, 0.1067, 0.3233, 0.5657, 0.7683, 0.9205, 1.0127, 1.06, 1.0733, 1.0669, 1.0515, 1.0336, 1.0184, 1.007, 0.9996, 0.9958, 0.9946, 0.995, 0.9961, 0.9974, 0.9986, 0.9994, 1, 1.0003, 1);
+  --ds-sidebar-item-bg-active: var(--ds-color-primary-200);
 }

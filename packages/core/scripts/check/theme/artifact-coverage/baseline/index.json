@@ -2,22 +2,23 @@
   "purpose": "Per-family coverage of the compiled first-party artifacts, measured twice: against the UNION of the three (is any tenant able to reach this family) and against each artifact separately (is THIS tenant able to). Successor to the variant-parity / mirror-parity pair F-54 retired.",
   "direction": "Exact pins. uncovered may only fall, covered and families may only rise, and either way a move is red with the instruction to re-pin in the same commit. The unreachable lists are named sets, not counts. The per-artifact counters exist because the union cannot see a channel leaving ONE artifact while the other two still declare it.",
   "perArtifactNote": "coveredPerVertical is the per-artifact half of the same measurement; covered above is the union and coveredEveryVertical the intersection. Measured 2026-09-11: 402 of the union-covered reads rest on a channel at least one vertical does not declare.",
-  "pinnedOn": "2026-09-11",
-  "catalogRevision": "2a25f7c6068407fb",
+  "pinnedOn": "2026-09-15",
+  "provenance": "2026-09-15 (D6-2c-i): the artifacts compile from the neutral foundation + preset (renderFirstPartyArtifact, baselineSource neutral-preset). Measured on the regenerated artifacts: union covered 8302 -> 9825, every-artifact 7900 -> 9810, uncovered 2491 -> 1693, bithire 8251 -> 9825, evnto 7932 -> 9810, rottay 8013 -> 9810, reads 10793 -> 11518, catalog 2a25f7c6068407fb -> d50537e438bdbcfa. families stays pinned at 275: the tree measures 269 with and without these artifacts (identical run on the worktree's previous artifacts), so that move belongs to the in-flight card/tabs cut, not to this regeneration.",
+  "catalogRevision": "d50537e438bdbcfa",
   "verticals": {
-    "bithire": 4292,
-    "evnto": 4071,
-    "rottay": 4149
+    "bithire": 5982,
+    "evnto": 5944,
+    "rottay": 5943
   },
   "families": 275,
-  "reads": 10793,
-  "covered": 8302,
-  "uncovered": 2491,
-  "coveredEveryVertical": 7900,
+  "reads": 11518,
+  "covered": 9825,
+  "uncovered": 1693,
+  "coveredEveryVertical": 9810,
   "coveredPerVertical": {
-    "bithire": 8251,
-    "evnto": 7932,
-    "rottay": 8013
+    "bithire": 9825,
+    "evnto": 9810,
+    "rottay": 9810
   },
   "unreachableFamilies": [
     "carousel-compounds",

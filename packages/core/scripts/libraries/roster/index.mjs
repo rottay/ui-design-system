@@ -23,40 +23,24 @@ try {
   const rel = relative(coreRoot, modulePath).replaceAll('\\\\', '/');
   const id = rel.startsWith('../') ? '/@fs/' + modulePath : '/' + rel;
   const loaded = await server.ssrLoadModule(id);
-  const { springLinearEasing } = await server.ssrLoadModule(
-    '/src/infrastructure/compilers/kernel/foundation/motion/spring-easing/index.ts'
-  );
   const roster = loaded.FIRST_PARTY_VERTICAL_ROSTER;
   if (!Array.isArray(roster)) throw new Error('FIRST_PARTY_VERTICAL_ROSTER is not an array');
-  const themes = await server.ssrLoadModule(
-    '/src/foundation/tokens/ts/presentation/brand-themes/index.ts'
-  );
-  process.stdout.write(JSON.stringify(roster.map((row) => {
-    const motion = themes[row.slug + 'BrandTheme']?.motion;
-    const springEligible = motion
-      && typeof motion.springTension === 'number'
-      && typeof motion.springFriction === 'number'
-      && motion.useSpring !== false;
-    return {
-      slug: row.slug,
-      verticalKey: row.verticalKey,
-      themeId: row.themeId,
-      name: row.name,
-      themeSourcePath: row.themeSourcePath,
-      artifactPath: row.artifactPath,
-      bundleFile: row.bundleFile,
-      styleEntry: row.styleEntry,
-      selector: row.selector,
-      engine: row.engine,
-      fontPacks: row.fontPacks,
-      springTension: motion?.springTension,
-      springFriction: motion?.springFriction,
-      useSpring: motion?.useSpring,
-      springEasing: springEligible
-        ? springLinearEasing(motion.springTension, motion.springFriction)
-        : null,
-    };
-  })));
+  process.stdout.write(JSON.stringify(roster.map((row) => ({
+    slug: row.slug,
+    verticalKey: row.verticalKey,
+    themeId: row.themeId,
+    name: row.name,
+    themeSourcePath: row.themeSourcePath,
+    artifactPath: row.artifactPath,
+    bundleFile: row.bundleFile,
+    styleEntry: row.styleEntry,
+    selector: row.selector,
+    engine: row.engine,
+    fontPacks: row.fontPacks,
+    // The neutral foundation and the vertical presets author no spring, so no
+    // first-party bundle carries a precomputed easing.
+    springEasing: null,
+  }))));
 } finally {
   await server.close();
 }
@@ -103,14 +87,8 @@ export function validateExecutableRoster(rows, path = '<runtime>') {
     ) {
       fail(`row ${row.slug} fontPacks must be unique non-empty strings`, path);
     }
-    const springEligible = typeof row.springTension === 'number'
-      && typeof row.springFriction === 'number'
-      && row.useSpring !== false;
-    if (springEligible && (typeof row.springEasing !== 'string' || !row.springEasing.startsWith('linear('))) {
-      fail(`row ${row.slug} has no source-computed spring easing`, path);
-    }
-    if (!springEligible && row.springEasing !== null) {
-      fail(`row ${row.slug} has a spring easing despite being ineligible`, path);
+    if (row.springEasing !== null) {
+      fail(`row ${row.slug} carries a spring easing no first-party source authors`, path);
     }
     return Object.freeze({ ...row, fontPacks: Object.freeze([...row.fontPacks]) });
   }));

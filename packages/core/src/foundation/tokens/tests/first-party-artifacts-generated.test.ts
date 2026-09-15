@@ -2,7 +2,8 @@
  * Generated-artifact guard for every first-party vertical artifact (WO-TOK-01).
  *
  * Each committed `artifacts/<slug>/index.css` must be byte-identical to what the
- * generator produces from its ONE authored source (the compiled BrandTheme).
+ * generator produces from its ONE authored source (the vertical's preset
+ * document admitted over the neutral foundation).
  * This is the regenerate-and-diff rule that fails on ANY manual edit
  * to the artifact: hand-edit an artifact and this test goes red; regenerate
  * (`pnpm build:vertical-css`) and it goes green. It also proves regeneration is
@@ -23,31 +24,21 @@ import {
   GENERATED_ARTIFACT_BANNER,
 } from '@/infrastructure/compilers/runtime/tenant-css';
 import { brandModeSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from '../ts/presentation/brand-themes';
-import type { BrandTheme } from '../../contracts/composition/tenants/themes';
-import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
-import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACTS_DIR = resolve(TEST_DIR, '..', 'css/facade/artifacts');
 
-const BRAND_THEMES: Record<string, BrandTheme> = {
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
-  rottay: rottayBrandTheme,
-};
-
-function generate(slug: string): string {
+function render(slug: string): ReturnType<typeof renderFirstPartyArtifact> {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((entry) => entry.slug === slug);
   if (!spec) throw new Error(`no artifact spec for ${slug}`);
   return renderFirstPartyArtifact({
     spec,
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
-  }).css;
+  });
+}
+
+function generate(slug: string): string {
+  return render(slug).css;
 }
 
 function countInRuleSelectors(css: string, fragments: readonly string[]): number {
@@ -83,17 +74,17 @@ describe('first-party generated artifact scope ownership', () => {
   it.each(FIRST_PARTY_ARTIFACT_SPECS)(
     '$slug projects its complete static baseline onto the $verticalKey provider root only',
     (spec) => {
-      const generated = generate(spec.slug);
+      const { css: generated, compiled } = render(spec.slug);
       const ownRoot = `[data-ds-root][data-vertical='${spec.verticalKey}']`;
       // The authored owner arms are the base block's selector plus one block
-      // per mode the BrandTheme authors. A mode block is authored too — in
-      // `BrandTheme.modes` — so it counts here or the projection would look
-      // like it invented an owner. There is no third source of owner arms:
-      // that was the declared extension, and it is gone.
-      const modeSelectors = (BRAND_THEMES[spec.slug]?.modes
-        ? Object.keys(BRAND_THEMES[spec.slug].modes!)
-        : []
-      ).map((mode) => brandModeSelector(spec.slug, mode as 'light' | 'dark'));
+      // per mode the compile authors. A mode block is authored too — in
+      // `Theme.modes`, by the preset over the neutral foundation — so it
+      // counts here or the projection would look like it invented an owner.
+      // There is no third source of owner arms: that was the declared
+      // extension, and it is gone.
+      const modeSelectors = compiled.modeBlocks.map((block) =>
+        brandModeSelector(spec.slug, block.mode),
+      );
       const authoredSelectors = [
         `${spec.selector} {}`,
         ...modeSelectors.map((selector) => `${selector} {}`),

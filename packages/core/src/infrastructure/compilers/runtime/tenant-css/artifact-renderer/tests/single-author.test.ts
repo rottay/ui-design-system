@@ -16,7 +16,8 @@
  *   L1 the document-root ink is declared exactly once, and by CHANNEL
  *   L2 no mode block re-declares it
  *   L3 the output names one authored source and carries no extension section
- *   L4 a theme with no ink channel fails CLOSED, naming its slug
+ *   L4 a compile with no ink channel leaves the value to the foundation, by
+ *      name; a blank ink channel fails CLOSED, naming its slug
  *   L5 rendering is deterministic
  *   L6 the ink sits after `color-scheme` and before the custom properties
  *   L7 the ink channel is welded to the compiler's own emitted key
@@ -153,7 +154,10 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
     it('L3 · names one authored source and carries no extension section', () => {
       const css = render(spec);
 
-      expect(css).toContain(`${spec.authoredThemePath} (compiled via compileTheme)`);
+      expect(css).toContain(`${spec.presetDocumentPath} (compiled via compileTheme)`);
+      // The retired authority is not named: the preset over the neutral
+      // foundation is the one source the header may cite.
+      expect(css).not.toContain(spec.authoredThemePath);
       expect(css).toContain('compiled from ONE authored source');
       expect(css).not.toContain('two authored sources');
       expect(css).not.toContain('Declared artifact extension');
@@ -163,7 +167,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
       expect(css).not.toContain(' *   2. ');
     });
 
-    it('L4 · fails closed, naming the slug, when the theme carries no ink channel', () => {
+    it('L4 · leaves the ink to the foundation by name when the compile carries no ink channel, and refuses a blank one', () => {
       const compiled = lowerBrandThemeFixture({
         brandTheme: themeFor(spec),
         tenantSlug: spec.slug,
@@ -185,14 +189,23 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
         });
 
       // The compiler emits this channel CONDITIONALLY (it is written only when
-      // the palette authors `textPrimaryColor`), which is precisely why the
-      // renderer may not assume it. Missing and blank both refuse.
-      expect(renderWith(withoutInk)).toThrow(new RegExp(`${spec.slug}.*${INK_CHANNEL}`));
+      // the palette authors `textPrimaryColor`). Under the neutral foundation a
+      // structural preset authors no palette, so the first-party compile
+      // carries no ink channel at all (D6-2c-i, 2026-09-15): the artifact then
+      // declares the root ink by NAME only and the foundation's own default
+      // supplies the value. It never invents one -- a blank channel is refused
+      // rather than written, naming the slug.
+      const css = renderWith(withoutInk)();
+      expect(css.match(/^\s*color:.*$/gm) ?? []).toEqual([`  ${INK_DECLARATION}`]);
+      // The BASE block declares no ink channel; a mode block may still move it.
+      const baseBlock = css.split('/* === Compiled from Theme.modes.')[0] ?? css;
+      expect(baseBlock).not.toMatch(new RegExp(`^\\s*${INK_CHANNEL}:`, 'm'));
       expect(renderWith({ ...withoutInk, [INK_CHANNEL]: '   ' })).toThrow(
         new RegExp(`${spec.slug}.*${INK_CHANNEL}`),
       );
-      // No silent fallback: it refuses rather than inventing an ink.
-      expect(renderWith(withoutInk)).not.toThrow(/undefined/);
+      expect(renderWith({ ...withoutInk, [INK_CHANNEL]: '' })).toThrow(
+        new RegExp(`${spec.slug}.*${INK_CHANNEL}`),
+      );
       expect(renderWith(compiled.cssVariables)).not.toThrow();
     });
 

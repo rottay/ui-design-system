@@ -1,14 +1,15 @@
 /**
  * TS-to-CSS parity gate for every first-party vertical artifact (WO-TOK-01).
  *
- * Every variable emitted by `compileTheme(<slug>BrandTheme)` must exist,
+ * Every variable emitted by the neutral-preset compile of `<slug>` must exist,
  * with an equal value, somewhere in the committed artifact. The artifact is
  * allowed to define MORE variables than the compiler (the declared extension:
  * oklch bridge, color scales, semantic sets, dark-mode overrides) — parity is
- * one-directional (compiler is a subset of artifact). This fails when a
- * BrandTheme `.ts` file changes but the artifact is not regenerated, i.e. it
- * catches a stale/mixed identity before release. Parameterized over
- * FIRST_PARTY_ARTIFACT_SPECS so a newly registered slug is covered automatically.
+ * one-directional (compiler is a subset of artifact). This fails when a preset
+ * document or the neutral foundation changes but the artifact is not
+ * regenerated, i.e. it catches a stale/mixed identity before release.
+ * Parameterized over FIRST_PARTY_ARTIFACT_SPECS so a newly registered slug is
+ * covered automatically.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -19,21 +20,11 @@ import { describe, expect, it } from 'vitest';
 
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { FIRST_PARTY_ARTIFACT_SPECS } from '@/infrastructure/compilers/runtime/tenant-css';
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from '../ts/presentation/brand-themes';
-import type { BrandTheme } from '../../contracts/composition/tenants/themes';
+import { compileThemeIntent, staticThemeIntent } from '@/infrastructure/compilers/runtime/theme';
+import { bithireBrandTheme } from '../ts/presentation/brand-themes';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACTS_DIR = resolve(TEST_DIR, '..', 'css/facade/artifacts');
-
-const BRAND_THEMES: Record<string, BrandTheme> = {
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
-  rottay: rottayBrandTheme,
-};
 
 /** Map every CSS custom property in the artifact to the set of values declared for it. */
 function collectDeclaredValues(css: string): Map<string, Set<string>> {
@@ -58,18 +49,18 @@ function bareCssValue(value: string | undefined): string {
 }
 
 describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
-  '%s artifact to BrandTheme parity',
+  '%s artifact to neutral-preset compile parity',
   (slug) => {
-    const brandTheme = BRAND_THEMES[slug];
-    if (!brandTheme) throw new Error(`no BrandTheme registered in this test for slug ${slug}`);
-    const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });
+    const { compiled } = compileThemeIntent(staticThemeIntent(slug), {
+      baselineSource: 'neutral-preset',
+    });
     const declared = collectDeclaredValues(readFileSync(resolve(ARTIFACTS_DIR, `${slug}/index.css`), 'utf8'));
 
-    it('emits a non-trivial number of BrandTheme variables', () => {
+    it('emits a non-trivial number of compiled variables', () => {
       expect(Object.keys(compiled.cssVariables).length).toBeGreaterThan(100);
     });
 
-    it('projects every compiled BrandTheme variable into the artifact with an equal value', () => {
+    it('projects every compiled variable into the artifact with an equal value', () => {
       const mismatches: string[] = [];
 
       for (const [key, value] of Object.entries(compiled.cssVariables)) {

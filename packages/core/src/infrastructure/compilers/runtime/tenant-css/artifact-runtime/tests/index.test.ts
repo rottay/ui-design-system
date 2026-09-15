@@ -2,10 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { FIRST_PARTY_VERTICAL_SLUGS } from '@/foundation/contracts/kernel/verticals';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
-import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters';
+import { compileThemeIntent } from '@/infrastructure/compilers/runtime/theme';
 import { staticThemeIntent } from '@/infrastructure/compilers/runtime/theme/runtime/ingress';
-import { compileTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering';
-import { resolveTheme } from '@/infrastructure/compilers/runtime/theme/runtime/resolution';
 import {
   FIRST_PARTY_ARTIFACT_RUNTIME,
   firstPartyArtifactRecipeProfile,
@@ -19,15 +17,16 @@ import {
 // compile's runtime payload, which this module's runtime block ships and which
 // React reads, because a selection is not paint. The stylesheet carries no
 // selection channel, so the value the product resolves recipes from must be
-// the value the same compile computes today -- recomputed from the authored
-// theme here, through the published door, and compared to the shipped block.
+// the value the same compile computes today -- recomputed from the neutral
+// foundation and the vertical's preset here, through the published door, and
+// compared to the shipped block.
 // ---------------------------------------------------------------------------
-
-const modern = resolveAdapter('modern');
 
 /** The selection the current pipeline computes for a first-party vertical, and proof the stylesheet carries none. */
 function recipeProfileInArtifactBytes(slug: FirstPartyVerticalId): string | undefined {
-  const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
+  const { compiled } = compileThemeIntent(staticThemeIntent(slug), {
+    baselineSource: 'neutral-preset',
+  });
   expect(compiled.cssVariables['--ds-recipe-profile'], `${slug} emits no selection channel`).toBeUndefined();
   return compiled.runtime.recipeProfile;
 }
@@ -45,9 +44,11 @@ describe('first-party artifact runtime block', () => {
     }
 
     // Anti-cheat: an all-undefined roster would satisfy the identity above for
-    // free, so at least two verticals must declare, and declare DIFFERENTLY.
-    expect(declared.length).toBeGreaterThanOrEqual(2);
-    expect(new Set(declared.map((row) => row.split(':')[1])).size).toBeGreaterThanOrEqual(2);
+    // free, and so would a block that mirrored one constant. The presets decide
+    // differently -- one selects a profile, the structural-neutral ones select
+    // none -- so both branches of the identity are exercised.
+    expect(declared.length).toBeGreaterThanOrEqual(1);
+    expect(declared.length).toBeLessThan(FIRST_PARTY_VERTICAL_SLUGS.length);
   });
 
   it('covers the roster exactly, and resolves nothing for a foreign slug', () => {

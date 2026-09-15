@@ -2,18 +2,19 @@
  * Regenerate first-party vertical artifacts from their authored source.
  *
  * Each artifact (`src/foundation/tokens/css/facade/artifacts/<slug>/index.css`) is a BUILD OUTPUT:
- *   index.css = compileThemeIntent(staticThemeIntent(<slug>))
+ *   index.css = compileThemeIntent(staticThemeIntent(<slug>), { baselineSource: 'neutral-preset' })
  *
  * The SAME compile has a non-CSS half, and it is written here too:
  *   src/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.ts
- *     = compileThemeIntent(staticThemeIntent(<slug>)).compiled.runtime
+ *     = compileThemeIntent(staticThemeIntent(<slug>), { baselineSource: 'neutral-preset' }).compiled.runtime
  * A code-owned vertical has no artifact row for the runtime to read, so the
  * governed recipe selection would otherwise have to be re-derived from the
- * authored theme by a second reader. One compile, two outputs, one gate.
+ * authored preset by a second reader. One compile, two outputs, one gate.
  *
- * The brand compiler owns every theme variable the artifact carries (palette,
+ * The theme compiler owns every theme variable the artifact carries (palette,
  * typography, surfaces, chrome) and every mode block, so the artifact is a pure
- * projection of ONE authored source. There is no second authored input to merge:
+ * projection of ONE authored source: the vertical's preset document admitted
+ * over the neutral foundation. There is no second authored input to merge:
  * an artifact with two authors is an artifact whose value can be decided by
  * whichever author is read last, which is exactly the drift this generator exists
  * to make impossible.
@@ -50,33 +51,29 @@ const verifyDist = process.argv.includes('--verify-dist');
 /** The compiler modules the generator reads, loaded from one compile root. */
 async function loadCompiler(compilerRoot) {
   const load = (key) => import(pathToFileURL(resolve(compilerRoot, `${COMPILER_MODULES[key]}.js`)).href);
-  const [ground, contrast, renderer, brandThemes, roster] = await Promise.all(
-    ['ground', 'brandingContrast', 'artifactRenderer', 'brandThemes', 'roster'].map(load),
+  const [ground, contrast, renderer, roster] = await Promise.all(
+    ['ground', 'brandingContrast', 'artifactRenderer', 'roster'].map(load),
   );
   return {
-    isDarkSurfaceTheme: ground.isDarkSurfaceTheme,
+    LIGHT_DEFAULT_GROUND: ground.LIGHT_DEFAULT_GROUND,
+    DARK_DEFAULT_GROUND: ground.DARK_DEFAULT_GROUND,
     apcaContrast: contrast.apcaContrast,
     APCA_BODY_TEXT_MIN_LC: contrast.APCA_BODY_TEXT_MIN_LC,
     renderFirstPartyArtifact: renderer.renderFirstPartyArtifact,
     FIRST_PARTY_ARTIFACT_SPECS: renderer.FIRST_PARTY_ARTIFACT_SPECS,
     REGENERATE_COMMAND: renderer.FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
     FIRST_PARTY_VERTICAL_ROSTER: roster.FIRST_PARTY_VERTICAL_ROSTER,
-    BRAND_THEMES: brandThemes,
   };
 }
 
 /** First-party artifacts this generator owns (spec is the shared source of truth). */
-function firstPartyArtifacts({ FIRST_PARTY_VERTICAL_ROSTER, FIRST_PARTY_ARTIFACT_SPECS, BRAND_THEMES }) {
+function firstPartyArtifacts({ FIRST_PARTY_VERTICAL_ROSTER, FIRST_PARTY_ARTIFACT_SPECS }) {
   const artifacts = FIRST_PARTY_VERTICAL_ROSTER.map((row, index) => {
     const spec = FIRST_PARTY_ARTIFACT_SPECS[index];
     if (!spec || spec.slug !== row.slug) {
       throw new Error(`First-party artifact order drift at index ${index}: ${spec?.slug ?? '<missing>'} !== ${row.slug}`);
     }
-    const theme = BRAND_THEMES[`${row.slug}BrandTheme`];
-    if (!theme || theme.id !== row.slug) {
-      throw new Error(`First-party roster mismatch: theme.id ${theme?.id} !== slug ${row.slug}`);
-    }
-    return { ...spec, brandTheme: theme };
+    return spec;
   });
   if (artifacts.length !== FIRST_PARTY_ARTIFACT_SPECS.length) {
     throw new Error('First-party artifact projection length differs from the roster');
@@ -113,12 +110,13 @@ function renderFirstPartyArtifactRuntimeModule(rows, regenerateCommand) {
     ' *',
     ' * This file is a BUILD OUTPUT of the SAME compile that writes',
     ' * `src/foundation/tokens/css/facade/artifacts/<slug>/index.css`:',
-    ' *   block = compileThemeIntent(staticThemeIntent(<slug>)).compiled.runtime',
+    " *   block = compileThemeIntent(staticThemeIntent(<slug>), { baselineSource: 'neutral-preset' })",
+    ' *     .compiled.runtime',
     ' *',
     ' * WHY IT EXISTS. A code-owned vertical ships its CSS inside `styles.css`, so',
     ' * the runtime has no artifact row to read the non-CSS half off — and a',
     ' * governed SELECTION is not paint, so no stylesheet can hand it to React.',
-    ' * The runtime used to re-derive that selection from the authored BrandTheme,',
+    ' * The runtime used to re-derive that selection from the authored theme,',
     ' * which made the artifact and the product two independent readers of one',
     ' * decision. This is the artifact\'s own block, materialized for import',
     ' * exactly as its variables are materialized for loading.',
@@ -224,23 +222,25 @@ function checkRampApcaAgainstGround({ apcaContrast, APCA_BODY_TEXT_MIN_LC }, sco
   return failures;
 }
 
-function checkGeneratedRampApca(compiler, slug, brandTheme, compiled) {
-  // A theme's ground for the mode it compiles is always its own
-  // `palette.backgroundColor`. When a theme omits it, the fallback is keyed
-  // to the theme's DECLARED default mode (`brandTheme.appearance.defaultMode
-  // === 'dark'`, via isDarkSurfaceTheme) rather than inferred from which
-  // palette fields happen to be populated -- these two literals are the
-  // compiler's own DARK_DEFAULT_GROUND / LIGHT_DEFAULT_GROUND.
+function checkGeneratedRampApca(compiler, slug, compiled) {
+  // A compile's ground for the mode it compiles is the ground it emits:
+  // `--ds-color-bg-primary` in the base block. When a compile carries none,
+  // the fallback is keyed to its DECLARED color scheme rather than inferred
+  // from which channels happen to be populated -- the compiler's own
+  // DARK_DEFAULT_GROUND / LIGHT_DEFAULT_GROUND.
   const baseGround =
-    brandTheme.palette?.backgroundColor ??
-    (compiler.isDarkSurfaceTheme(brandTheme) ? '#0A0A0A' : '#FFFFFF');
+    compiled.cssVariables['--ds-color-bg-primary'] ??
+    (compiled.colorScheme === 'dark' ? compiler.DARK_DEFAULT_GROUND : compiler.LIGHT_DEFAULT_GROUND);
   const failures = checkRampApcaAgainstGround(compiler, slug, slug, baseGround, compiled.cssVariables);
 
   // A mode block ships its own ramp on its own ground. Checking authored ramps
   // only against the base ground would clear a dark ramp for the light canvas
-  // it never appears on -- and miss the pairing that actually renders.
+  // it never appears on -- and miss the pairing that actually renders. A block
+  // that leaves the ground to the foundation renders on that mode's default.
   for (const block of compiled.modeBlocks ?? []) {
-    const modeGround = block.cssVariables['--ds-color-bg-primary'] ?? baseGround;
+    const modeGround =
+      block.cssVariables['--ds-color-bg-primary'] ??
+      (block.colorScheme === 'dark' ? compiler.DARK_DEFAULT_GROUND : compiler.LIGHT_DEFAULT_GROUND);
     const shipped = { ...compiled.cssVariables, ...block.cssVariables };
     failures.push(...checkRampApcaAgainstGround(compiler, `${slug}|${block.mode}`, `${slug} (${block.mode} mode)`, modeGround, shipped));
   }
@@ -263,7 +263,7 @@ function compileArtifacts(compiler) {
       spec,
       regenerateCommand: compiler.REGENERATE_COMMAND,
     });
-    apcaFailures.push(...checkGeneratedRampApca(compiler, spec.slug, spec.brandTheme, compiled));
+    apcaFailures.push(...checkGeneratedRampApca(compiler, spec.slug, compiled));
     return { slug: spec.slug, css, compiled, runtime: compiled.runtime };
   });
 

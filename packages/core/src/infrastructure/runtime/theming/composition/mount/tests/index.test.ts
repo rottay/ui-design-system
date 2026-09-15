@@ -147,10 +147,11 @@ describe('mountTenantTheme — static first-party verticals', () => {
     const rottay = await mountTenantTheme(staticThemeIntent('rottay'));
     const bithire = await mountTenantTheme(staticThemeIntent('bithire'));
 
-    // Two verticals with deliberately different profiles; the attribute is what
-    // makes that difference reach the first paint.
-    expect(rottay.rootAttributes['data-recipe-profile']).toBe('rottay/technical-sharp@1');
-    expect(bithire.rootAttributes['data-recipe-profile']).toBe('rottay/network-professional@1');
+    // One vertical whose preset selects a profile and one whose structural
+    // preset selects none; the attribute is what makes that difference reach
+    // the first paint, and its absence is as much a projection as its value.
+    expect(rottay.rootAttributes['data-recipe-profile']).toBeUndefined();
+    expect(bithire.rootAttributes['data-recipe-profile']).toBe('rottay/technical-sharp@1');
   });
 
   /**
@@ -171,7 +172,10 @@ describe('mountTenantTheme — static first-party verticals', () => {
       if (shipped) declared.push(shipped);
     }
 
-    expect(new Set(declared).size).toBeGreaterThanOrEqual(2);
+    // Both branches of the identity are exercised: a vertical that ships a
+    // selection and one that ships none.
+    expect(declared.length).toBeGreaterThanOrEqual(1);
+    expect(declared.length).toBeLessThan(FIRST_PARTY_VERTICAL_SLUGS.length);
   });
 
   it('projects the request viewport and motion posture the app declared', async () => {

@@ -50,6 +50,13 @@ export interface FirstPartyArtifactSpec {
   selector: string;
   /** Path to the authored theme, relative to `packages/core/src`. */
   authoredThemePath: string;
+  /**
+   * Path to the vertical's preset document, relative to `packages/core/src`.
+   *
+   * The artifact compiles from this document admitted over the neutral
+   * foundation, so it is the source the generated header names.
+   */
+  presetDocumentPath: string;
 }
 
 /**
@@ -66,6 +73,10 @@ export interface FirstPartyArtifactSpec {
  */
 function artifactRootSelector(slug: FirstPartyVerticalId): string {
   return `html[data-tenant='${slug}']`;
+}
+
+function presetDocumentPath(slug: FirstPartyVerticalId): string {
+  return `foundation/presets/verticals/${slug}/document/index.json`;
 }
 
 /**
@@ -88,6 +99,7 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] =
         verticalKey: row.verticalKey,
         displayName: row.name,
         authoredThemePath: row.themeSourcePath,
+        presetDocumentPath: presetDocumentPath(row.slug),
         selector: artifactRootSelector(row.slug),
       }),
     ),
@@ -137,17 +149,17 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
 
   // The document-root ink is artifact-format semantics, not theme content: this
   // file is the top-level stylesheet a host page loads, so it owns the root
-  // chrome declaration. It is welded to the channel NAME and never to a value —
+  // chrome declaration. It is welded to the channel NAME and never to a value:
   // a DB tenant moves the same ink by moving --ds-color-text-primary through the
-  // shared compileTheme lowering, with no slug branch and no second authority
-  // here. Fail closed rather than paint an unauthored root: a literal fallback
-  // would silently become a second theme author for every theme that lost the
-  // channel, which is the exact failure this severance exists to end.
+  // shared compileTheme lowering, and a compile that leaves the channel to the
+  // DS foundation paints the foundation's own default through the same var().
+  // The artifact never authors the value itself: a blank channel is refused
+  // rather than declared, because it would be an ink nobody authored.
   const rootInk = compiledCssVariables['--ds-color-text-primary'];
-  if (!rootInk || rootInk.trim() === '') {
+  if (rootInk !== undefined && rootInk.trim() === '') {
     throw new Error(
-      `renderVerticalArtifact: ${tenantSlug} has no compiled --ds-color-text-primary; ` +
-        'the artifact cannot author the document root ink without it.',
+      `renderVerticalArtifact: ${tenantSlug} compiled a blank --ds-color-text-primary; ` +
+        'the artifact cannot author the document root ink in its place.',
     );
   }
 
@@ -174,7 +186,7 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     ),
   ].join('\n');
 
-  // One block per authored non-default mode, from BrandTheme.modes. Each holds
+  // One block per authored non-default mode, from Theme.modes. Each holds
   // only the channels that mode moves; the base block above still supplies the
   // rest. These used to be hand-written blocks in the declared extension source,
   // which made that source a second theme author for every state but the default
@@ -211,7 +223,8 @@ export interface RenderFirstPartyArtifactInput {
 }
 
 /**
- * Compile a first-party BrandTheme and render its artifact in one call.
+ * Compile a first-party vertical over the neutral foundation and render its
+ * artifact in one call.
  *
  * The build script, the parity tests and the gates each used to assemble
  * {@link RenderVerticalArtifactInput} by hand from the same spec. Three copies
@@ -225,18 +238,21 @@ export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): 
   compiled: ThemeCompilation;
 } {
   const { spec, regenerateCommand } = input;
-  // The intent NAMES the vertical; the baseline and the engine are both read
-  // off that one roster row. The theme used to arrive as an input and the
-  // engine as `spec.engine`, which let the two disagree -- a caller could
-  // render one vertical's theme under another's spec and the artifact header
-  // would say the spec's name over the theme's channels.
-  const { compiled } = compileThemeIntent(staticThemeIntent(spec.verticalKey, spec.slug));
+  // The intent NAMES the vertical; the engine is read off that one roster row
+  // and the baseline is the neutral foundation with the vertical's preset
+  // admitted over it. The theme used to arrive as an input and the engine as
+  // `spec.engine`, which let the two disagree -- a caller could render one
+  // vertical's theme under another's spec and the artifact header would say
+  // the spec's name over the theme's channels.
+  const { compiled } = compileThemeIntent(staticThemeIntent(spec.verticalKey, spec.slug), {
+    baselineSource: 'neutral-preset',
+  });
   return {
     compiled,
     css: renderVerticalArtifact({
       tenantSlug: spec.slug,
       verticalKey: spec.verticalKey,
-      authoredThemePath: spec.authoredThemePath,
+      authoredThemePath: spec.presetDocumentPath,
       displayName: spec.displayName,
       selector: spec.selector,
       compiledCssVariables: compiled.cssVariables,

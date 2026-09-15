@@ -1,15 +1,14 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-15T00:52:51.383Z",
+  "producedAt": "2026-09-15T13:44:34.027Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
-  "measuredHeadline": "measured on the 7-family sample: 18/22 move at least one sampled family",
+  "measuredHeadline": "measured on the 6-family sample: 14/22 move at least one sampled family",
   "denominators": {
     "todayControlCatalog": 22,
     "newDecisions": 0,
     "kitRows": 29,
     "measuredFamilySample": [
       "button",
-      "card",
       "flex",
       "grid",
       "skeleton",
@@ -21,7 +20,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-15T00:51:25.102Z"
+      "builtAt": "2026-09-15T13:42:29.390Z"
     },
     "sources": {
       "door": {
@@ -29,13 +28,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 826,
-        "digest": "f017c8147bec3e8e0d2a2fa3e059f00a8d47733f00f0462be406b906c8fdb590"
+        "fileCount": 842,
+        "digest": "288a07055c594aa8ba7e1f2a7c67a98511ac8b0428f8e7c1cc26ef7acab46fb4"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "46839b5568a8b9ce958dc7e79e271440b92332dd8c0aaf1e6966d5b8581778a9"
+        "digest": "751d4cb630f14b75c062f5638f885f26d85bc353aa0b0ccc87a18376d5046467"
       }
     },
     "browser": {
@@ -47,7 +46,6 @@
     "roster": {
       "rottay": {
         "matched": [
-          "card-modern-md",
           "button-modern-md",
           "skeleton-card-line",
           "skeleton-form-action",
@@ -63,6 +61,12 @@
         ],
         "unmatched": [
           {
+            "id": "card-modern-md",
+            "missing": [
+              "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)"
+            ]
+          },
+          {
             "id": "input-modern-md",
             "missing": [
               ".rottay-input.rottay-input--modern {",
@@ -70,13 +74,12 @@
             ]
           }
         ],
-        "bundleSha": "8bd55a284be75e071360d938227794ce014f8ca388c337ea49a5e062be992354",
+        "bundleSha": "8e7e4d46df1e223d169f1c21ce3cc80994d9d6c71e1e5ce0ae59e6af1dd0bc81",
         "bundleMode": "fresh",
         "theme": "dark"
       },
       "bithire": {
         "matched": [
-          "card-modern-md",
           "button-modern-md",
           "skeleton-card-line",
           "skeleton-form-action",
@@ -92,6 +95,12 @@
         ],
         "unmatched": [
           {
+            "id": "card-modern-md",
+            "missing": [
+              "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)"
+            ]
+          },
+          {
             "id": "input-modern-md",
             "missing": [
               ".rottay-input.rottay-input--modern {",
@@ -99,13 +108,12 @@
             ]
           }
         ],
-        "bundleSha": "cee17837e5519ff349eee61444b9bc8e5f00c5b354cd9c70db25e3e82c51f3cb",
+        "bundleSha": "743ae29d32b08e5c91b4e2f885f959756e5d0286ae600088b378f7cc89aa25ee",
         "bundleMode": "fresh",
         "theme": "light"
       },
       "evnto": {
         "matched": [
-          "card-modern-md",
           "button-modern-md",
           "skeleton-card-line",
           "skeleton-form-action",
@@ -121,6 +129,12 @@
         ],
         "unmatched": [
           {
+            "id": "card-modern-md",
+            "missing": [
+              "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)"
+            ]
+          },
+          {
             "id": "input-modern-md",
             "missing": [
               ".rottay-input.rottay-input--modern {",
@@ -128,7 +142,7 @@
             ]
           }
         ],
-        "bundleSha": "8990df063606feacf7d69655e64f67df9aba04ff5325704a43437f2560e25304",
+        "bundleSha": "7c9db5afe41dbe93938ad83652c99efe93a6a72fc59c1ee2be0a6d42e1b76fac",
         "bundleMode": "fresh",
         "theme": "light"
       }
@@ -147,7 +161,7 @@
     "lit": 7,
     "partial": 16,
     "inert": 6,
-    "measuredLit": 18,
+    "measuredLit": 14,
     "discrepancies": [
       {
         "id": "palette.status-seeds",
@@ -162,7 +176,7 @@
       {
         "id": "shape.radius-scale",
         "kind": "recorded-none-moved",
-        "detail": "button-modern-md, card-modern-md, skeleton-card-line, skeleton-form-action"
+        "detail": "button-modern-md, skeleton-card-line, skeleton-form-action"
       },
       {
         "id": "spacing.rhythm",
@@ -184,8 +198,7 @@
         "recordedClass": "full",
         "artifactBytesDiffer": true,
         "movedFamilies": [
-          "button-modern-md",
-          "card-modern-md"
+          "button-modern-md"
         ],
         "movedChannelCount": 6,
         "excludedIn": []
@@ -204,9 +217,7 @@
         "tier": "standard",
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
-        "movedFamilies": [
-          "card-modern-md"
-        ],
+        "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
       },
@@ -236,8 +247,7 @@
         "recordedClass": "full",
         "artifactBytesDiffer": true,
         "movedFamilies": [
-          "button-modern-md",
-          "card-modern-md"
+          "button-modern-md"
         ],
         "movedChannelCount": 1,
         "excludedIn": []
@@ -248,8 +258,7 @@
         "recordedClass": "full",
         "artifactBytesDiffer": true,
         "movedFamilies": [
-          "button-modern-md",
-          "card-modern-md"
+          "button-modern-md"
         ],
         "movedChannelCount": 3,
         "excludedIn": []
@@ -261,7 +270,6 @@
         "artifactBytesDiffer": true,
         "movedFamilies": [
           "button-modern-md",
-          "card-modern-md",
           "flex-modern-preset-gap",
           "grid-modern-preset-gap",
           "space-modern-preset-gap",
@@ -297,7 +305,6 @@
         "artifactBytesDiffer": true,
         "movedFamilies": [
           "button-modern-md",
-          "card-modern-md",
           "skeleton-card-line",
           "skeleton-form-action"
         ],
@@ -309,9 +316,7 @@
         "tier": "pro",
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
-        "movedFamilies": [
-          "card-modern-md"
-        ],
+        "movedFamilies": [],
         "movedChannelCount": 2,
         "excludedIn": []
       },
@@ -371,9 +376,7 @@
         "tier": "standard",
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
-        "movedFamilies": [
-          "card-modern-md"
-        ],
+        "movedFamilies": [],
         "movedChannelCount": 3,
         "excludedIn": []
       },
@@ -393,9 +396,7 @@
         "tier": "standard",
         "recordedClass": "partial",
         "artifactBytesDiffer": true,
-        "movedFamilies": [
-          "card-modern-md"
-        ],
+        "movedFamilies": [],
         "movedChannelCount": 1,
         "excludedIn": []
       },
@@ -451,7 +452,6 @@
         "artifactBytesDiffer": true,
         "movedFamilies": [
           "button-modern-md",
-          "card-modern-md",
           "flex-modern-preset-gap",
           "grid-modern-preset-gap",
           "skeleton-card-line",
@@ -459,7 +459,7 @@
           "space-modern-preset-gap",
           "stack-modern-preset-gap"
         ],
-        "movedChannelCount": 35,
+        "movedChannelCount": 34,
         "excludedIn": []
       },
       {
@@ -468,8 +468,7 @@
         "recordedClass": "full",
         "artifactBytesDiffer": true,
         "movedFamilies": [
-          "button-modern-md",
-          "card-modern-md"
+          "button-modern-md"
         ],
         "movedChannelCount": 7,
         "excludedIn": []
@@ -478,9 +477,9 @@
         "id": "recipe-profile",
         "tier": "pro",
         "recordedClass": "none",
-        "artifactBytesDiffer": true,
+        "artifactBytesDiffer": false,
         "movedFamilies": [],
-        "movedChannelCount": 1,
+        "movedChannelCount": 0,
         "excludedIn": []
       },
       {
@@ -577,13 +576,9 @@
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -604,17 +599,9 @@
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -640,20 +627,12 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
         "space-modern-preset-gap",
         "stack-modern-preset-gap"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-size"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-size"
-        ],
         "button-modern-md/root": [
           "font-size"
         ],
@@ -755,19 +734,10 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
         "button-modern-md/root": [
           "border-top-left-radius"
         ],
@@ -783,6 +753,7 @@
           "--ds-card-border-radius",
           "--ds-card-radius",
           "--ds-input-md-border-radius",
+          "--ds-radius-button",
           "--ds-radius-lg",
           "--ds-radius-md",
           "--ds-radius-scale",
@@ -796,6 +767,7 @@
         "--ds-card-border-radius",
         "--ds-card-radius",
         "--ds-input-md-border-radius",
+        "--ds-radius-button",
         "--ds-radius-lg",
         "--ds-radius-md",
         "--ds-radius-scale",
@@ -807,14 +779,8 @@
       "id": "shape.nesting",
       "vertical": "rottay",
       "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
+      "movedFamilies": [],
       "movedTargets": {
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
         "token-readout/tokens": [
           "--ds-radius-nest-inset",
           "--ds-radius-nest-ratio"
@@ -965,13 +931,8 @@
       "id": "surfaces.elevation-posture",
       "vertical": "rottay",
       "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
+      "movedFamilies": [],
       "movedTargets": {
-        "card-modern-md/root": [
-          "box-shadow"
-        ],
         "token-readout/tokens": [
           "--ds-elevation-1",
           "--ds-elevation-2",
@@ -1013,13 +974,8 @@
       "id": "surfaces.effect-intensity",
       "vertical": "rottay",
       "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
+      "movedFamilies": [],
       "movedTargets": {
-        "card-modern-md/root": [
-          "background-image"
-        ],
         "token-readout/tokens": [
           "--ds-effect-intensity"
         ]
@@ -1116,7 +1072,6 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
         "skeleton-card-line",
@@ -1125,15 +1080,6 @@
         "stack-modern-preset-gap"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "box-shadow",
-          "background-image",
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
         "button-modern-md/root": [
           "border-top-left-radius",
           "font-family"
@@ -1165,7 +1111,6 @@
           "--ds-elevation-2",
           "--ds-elevation-3",
           "--ds-elevation-lift-strength",
-          "--ds-experience-profile",
           "--ds-font-family-base",
           "--ds-font-family-heading",
           "--ds-input-md-border-radius",
@@ -1222,7 +1167,6 @@
         "--ds-elevation-2",
         "--ds-elevation-3",
         "--ds-elevation-lift-strength",
-        "--ds-experience-profile",
         "--ds-font-family-base",
         "--ds-font-family-heading",
         "--ds-input-md-border-radius",
@@ -1251,17 +1195,9 @@
       "vertical": "rottay",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -1290,16 +1226,10 @@
     {
       "id": "recipe-profile",
       "vertical": "rottay",
-      "artifactBytesDiffer": true,
+      "artifactBytesDiffer": false,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-recipe-profile"
-        ]
-      },
-      "movedChannels": [
-        "--ds-recipe-profile"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "chrome.anatomy",
@@ -1322,13 +1252,9 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "border-top-color"
-        ],
         "button-modern-md/root": [
           "background-color",
           "border-top-color"
@@ -1388,13 +1314,9 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -1415,17 +1337,9 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -1451,20 +1365,12 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
         "space-modern-preset-gap",
         "stack-modern-preset-gap"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-size"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-size"
-        ],
         "button-modern-md/root": [
           "font-size"
         ],
@@ -1566,19 +1472,10 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
         "button-modern-md/root": [
           "border-top-left-radius"
         ],
@@ -1620,14 +1517,8 @@
       "id": "shape.nesting",
       "vertical": "bithire",
       "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
+      "movedFamilies": [],
       "movedTargets": {
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
         "token-readout/tokens": [
           "--ds-radius-nest-inset",
           "--ds-radius-nest-ratio"
@@ -1663,16 +1554,8 @@
       "id": "shape.control-height",
       "vertical": "bithire",
       "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "button-modern-md"
-      ],
+      "movedFamilies": [],
       "movedTargets": {
-        "button-modern-md/hitbox": [
-          "block-size",
-          "height",
-          "min-block-size",
-          "min-height"
-        ],
         "token-readout/tokens": [
           "--ds-control-height-scale"
         ]
@@ -1694,10 +1577,6 @@
       ],
       "movedTargets": {
         "button-modern-md/hitbox": [
-          "block-size",
-          "height",
-          "min-block-size",
-          "min-height",
           "inline-size",
           "width"
         ],
@@ -1919,7 +1798,6 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
         "skeleton-card-line",
@@ -1928,29 +1806,11 @@
         "stack-modern-preset-gap"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "border-top-left-radius",
-          "border-bottom-right-radius",
-          "background-image",
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
         "button-modern-md/root": [
           "border-top-left-radius",
           "font-family"
         ],
         "button-modern-md/hitbox": [
-          "block-size",
-          "height",
-          "min-block-size",
-          "min-height",
           "inline-size",
           "width"
         ],
@@ -1969,8 +1829,10 @@
           "--ds-density-global-effective-scale",
           "--ds-density-mode-factor",
           "--ds-edge-emphasis-width",
+          "--ds-elevation-1",
+          "--ds-elevation-2",
+          "--ds-elevation-3",
           "--ds-elevation-lift-strength",
-          "--ds-experience-profile",
           "--ds-font-family-base",
           "--ds-font-family-heading",
           "--ds-input-md-border-radius",
@@ -2014,8 +1876,10 @@
         "--ds-density-global-effective-scale",
         "--ds-density-mode-factor",
         "--ds-edge-emphasis-width",
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
         "--ds-elevation-lift-strength",
-        "--ds-experience-profile",
         "--ds-font-family-base",
         "--ds-font-family-heading",
         "--ds-input-md-border-radius",
@@ -2035,17 +1899,9 @@
       "vertical": "bithire",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -2072,16 +1928,10 @@
     {
       "id": "recipe-profile",
       "vertical": "bithire",
-      "artifactBytesDiffer": true,
+      "artifactBytesDiffer": false,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-recipe-profile"
-        ]
-      },
-      "movedChannels": [
-        "--ds-recipe-profile"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "chrome.anatomy",
@@ -2136,17 +1986,8 @@
       "id": "palette.neutral-temperature",
       "vertical": "evnto",
       "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
-      "movedTargets": {
-        "card-modern-md/root": [
-          "color"
-        ],
-        "card-modern-md/title": [
-          "color"
-        ]
-      },
+      "movedFamilies": [],
+      "movedTargets": {},
       "movedChannels": []
     },
     {
@@ -2170,13 +2011,9 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -2197,17 +2034,9 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -2233,20 +2062,12 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
         "space-modern-preset-gap",
         "stack-modern-preset-gap"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-size"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-size"
-        ],
         "button-modern-md/root": [
           "font-size"
         ],
@@ -2361,19 +2182,10 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "skeleton-card-line",
         "skeleton-form-action"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
         "button-modern-md/root": [
           "border-top-left-radius"
         ],
@@ -2389,6 +2201,7 @@
           "--ds-card-border-radius",
           "--ds-card-radius",
           "--ds-input-md-border-radius",
+          "--ds-radius-button",
           "--ds-radius-lg",
           "--ds-radius-md",
           "--ds-radius-scale",
@@ -2402,6 +2215,7 @@
         "--ds-card-border-radius",
         "--ds-card-radius",
         "--ds-input-md-border-radius",
+        "--ds-radius-button",
         "--ds-radius-lg",
         "--ds-radius-md",
         "--ds-radius-scale",
@@ -2413,14 +2227,8 @@
       "id": "shape.nesting",
       "vertical": "evnto",
       "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
+      "movedFamilies": [],
       "movedTargets": {
-        "card-modern-md/nested-region": [
-          "border-top-left-radius",
-          "border-bottom-right-radius"
-        ],
         "token-readout/tokens": [
           "--ds-radius-nest-inset",
           "--ds-radius-nest-ratio"
@@ -2614,13 +2422,8 @@
       "id": "surfaces.effect-intensity",
       "vertical": "evnto",
       "artifactBytesDiffer": true,
-      "movedFamilies": [
-        "card-modern-md"
-      ],
+      "movedFamilies": [],
       "movedTargets": {
-        "card-modern-md/root": [
-          "background-image"
-        ],
         "token-readout/tokens": [
           "--ds-effect-intensity"
         ]
@@ -2715,7 +2518,6 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
-        "card-modern-md",
         "flex-modern-preset-gap",
         "grid-modern-preset-gap",
         "skeleton-card-line",
@@ -2724,14 +2526,6 @@
         "stack-modern-preset-gap"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "background-image",
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
         "button-modern-md/root": [
           "border-top-left-radius",
           "font-family"
@@ -2763,7 +2557,6 @@
           "--ds-elevation-2",
           "--ds-elevation-3",
           "--ds-elevation-lift-strength",
-          "--ds-experience-profile",
           "--ds-font-family-base",
           "--ds-font-family-heading",
           "--ds-input-md-border-radius",
@@ -2821,7 +2614,6 @@
         "--ds-elevation-2",
         "--ds-elevation-3",
         "--ds-elevation-lift-strength",
-        "--ds-experience-profile",
         "--ds-font-family-base",
         "--ds-font-family-heading",
         "--ds-input-md-border-radius",
@@ -2851,17 +2643,9 @@
       "vertical": "evnto",
       "artifactBytesDiffer": true,
       "movedFamilies": [
-        "button-modern-md",
-        "card-modern-md"
+        "button-modern-md"
       ],
       "movedTargets": {
-        "card-modern-md/root": [
-          "font-family"
-        ],
-        "card-modern-md/title": [
-          "letter-spacing",
-          "font-family"
-        ],
         "button-modern-md/root": [
           "font-family"
         ],
@@ -2892,16 +2676,10 @@
     {
       "id": "recipe-profile",
       "vertical": "evnto",
-      "artifactBytesDiffer": true,
+      "artifactBytesDiffer": false,
       "movedFamilies": [],
-      "movedTargets": {
-        "token-readout/tokens": [
-          "--ds-recipe-profile"
-        ]
-      },
-      "movedChannels": [
-        "--ds-recipe-profile"
-      ]
+      "movedTargets": {},
+      "movedChannels": []
     },
     {
       "id": "chrome.anatomy",

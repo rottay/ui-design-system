@@ -370,10 +370,20 @@ describe('freshly rendered first-party artifacts', () => {
     '--ds-font-family-mono',
   ];
 
-  it.each(SLUGS)('%s declares every font family channel', (slug) => {
+  /**
+   * Verticals whose preset authors a typeface. Measured 2026-09-15 (D6-2c-i)
+   * on artifacts compiled from the neutral foundation + preset: bithire
+   * declares all three channels; the structural presets of rottay and evnto
+   * author none, so the successor of every font family channel there is the
+   * foundation default, and a fresh artifact must not declare it.
+   */
+  const FONT_AUTHORING_VERTICALS = ['bithire'];
+
+  it.each(SLUGS)('%s declares every font family channel it authors, and none it leaves to the foundation', (slug) => {
     const css = freshArtifactCss(slug);
+    const authors = FONT_AUTHORING_VERTICALS.includes(slug);
     for (const channel of FONT_CHANNELS) {
-      expect(css, `${slug} is missing ${channel}`).toContain(`${channel}:`);
+      expect(css.includes(`${channel}:`), `${slug} ${channel}`).toBe(authors);
     }
   });
 

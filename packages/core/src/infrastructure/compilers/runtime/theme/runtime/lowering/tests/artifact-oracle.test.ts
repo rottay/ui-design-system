@@ -4,9 +4,9 @@
  * The artifacts are tracked build outputs produced before this pipeline
  * existed, so they are the one oracle in the repository that this code cannot
  * have written. Every compiled channel and every mode-block channel the
- * artifact declares must still compile to the same value from the same authored
- * theme; a lowering that quietly changed a derivation shows up here as a value
- * diff rather than as a passing self-comparison.
+ * artifact declares must still compile to the same value from the same neutral
+ * foundation and preset; a lowering that quietly changed a derivation shows up
+ * here as a value diff rather than as a passing self-comparison.
  */
 
 import { readFileSync } from "node:fs";
@@ -15,20 +15,21 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
+import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
 
-import { resolveTheme } from "../../resolution";
 import { staticThemeIntent } from "../../ingress";
-import { resolveAdapter } from "../../../presentation/adapters";
-import { compileTheme } from "..";
 
 const ARTIFACTS = resolve(
   dirname(fileURLToPath(import.meta.url)),
   "../../../../../../../foundation/tokens/css/facade/artifacts"
 );
-const modern = resolveAdapter("modern");
 const SLUGS: readonly FirstPartyVerticalId[] = ["rottay", "bithire", "evnto"];
+
+/** The compile the artifact generator runs: the preset over the neutral foundation. */
+function compiledFor(slug: FirstPartyVerticalId) {
+  return compileThemeIntent(staticThemeIntent(slug), { baselineSource: "neutral-preset" }).compiled;
+}
 
 /** Every `--ds-*` declaration inside the artifact block whose selector matches. */
 function declarations(css: string, selectorTest: (selector: string) => boolean) {
@@ -52,7 +53,7 @@ describe("the lowering reproduces the committed artifact channels", () => {
     const css = readFileSync(resolve(ARTIFACTS, slug, "index.css"), "utf-8");
 
     it(`${slug}: every base-block channel compiles to the artifact's value`, () => {
-      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
+      const compiled = compiledFor(slug);
       const artifact = declarations(
         css,
         (selector) => selector.includes(`data-tenant='${slug}'`) && !selector.includes("data-theme")
@@ -67,7 +68,7 @@ describe("the lowering reproduces the committed artifact channels", () => {
     });
 
     it(`${slug}: every artifact channel is still produced by the lowering`, () => {
-      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
+      const compiled = compiledFor(slug);
       const artifact = declarations(
         css,
         (selector) => selector.includes(`data-tenant='${slug}'`) && !selector.includes("data-theme")
@@ -79,7 +80,7 @@ describe("the lowering reproduces the committed artifact channels", () => {
     });
 
     it(`${slug}: each authored mode block compiles to the artifact's mode values`, () => {
-      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
+      const compiled = compiledFor(slug);
       for (const block of compiled.modeBlocks) {
         const artifact = declarations(
           css,

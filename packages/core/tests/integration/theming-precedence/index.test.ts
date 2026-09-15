@@ -22,7 +22,10 @@
  *   2. THE SUCCESSOR, and it is measured from a FRESH COMPILE. The eighteen
  *      channels the retired block declared are pinned below by name, and every
  *      one of them is accounted for against artifacts rendered in-process from
- *      the authored BrandTheme sources. Nothing here reads a committed
+ *      the neutral foundation with each vertical's preset admitted over it.
+ *      A channel a structural preset leaves to the foundation default is
+ *      pinned per vertical as unsucceeded, never rounded into "authored".
+ *      Nothing here reads a committed
  *      `index.css`, a `styles/` file or any other byte on disk: a stale
  *      artifact would otherwise let this file certify a channel the current
  *      compiler no longer authors.
@@ -98,8 +101,10 @@ const RETIRED_EMERGENCY_CHANNELS = [
 ] as const;
 
 /**
- * Retired channels a fresh artifact declares under that exact name, in every
- * first-party vertical. These are the ones the successor covers outright.
+ * Retired channels a fresh artifact declares under that exact name when the
+ * vertical's preset authors the family. Under the neutral compile a structural
+ * preset leaves a family to the foundation default instead; that vertical's
+ * members of this list are then pinned by name in UNSUCCEEDED_BY_VERTICAL.
  */
 const SUCCEEDED_DIRECTLY = [
   '--ds-color-primary',
@@ -130,17 +135,71 @@ const SUCCEEDED_BY_SEED: Record<string, readonly string[]> = {
 };
 
 /**
+ * Retired channels no first-party artifact authors under any name: the legacy
+ * flat aliases of `--ds-color-text-*`. Rottay used to author them from its
+ * BrandTheme; no preset does, so all three resolve from the base layer alone.
+ */
+const UNSUCCEEDED_EVERYWHERE = ['--ds-text-primary', '--ds-text-secondary'] as const;
+
+/**
  * Retired channels with NO successor in the artifact, pinned per vertical
- * rather than averaged away. `--ds-text-*` are the legacy flat aliases of
- * `--ds-color-text-*`; only rottay still authors them, so in bithire and evnto
- * these two names resolve from the base layer alone. If a vertical's membership
- * here changes, that is a real change in who owns the channel and this leg is
- * where it has to be re-stated.
+ * rather than averaged away. Measured 2026-09-15 (D6-2c-i) on artifacts
+ * compiled from the neutral foundation + preset: the structural presets of
+ * rottay and evnto author no palette and no typeface, so all ten direct
+ * successors resolve from the foundation default (`themes/default`); bithire's
+ * seeds derive its primary/secondary ramps and its ground, and leave the
+ * secondary ground, the border and both inks to the foundation. If a
+ * vertical's membership here changes, that is a real change in who owns the
+ * channel and this leg is where it has to be re-stated.
  */
 const UNSUCCEEDED_BY_VERTICAL: Record<string, readonly string[]> = {
-  rottay: [],
-  bithire: ['--ds-text-primary', '--ds-text-secondary'],
-  evnto: ['--ds-text-primary', '--ds-text-secondary'],
+  rottay: [
+    '--ds-color-bg-primary',
+    '--ds-color-bg-secondary',
+    '--ds-color-border',
+    '--ds-color-primary',
+    '--ds-color-primary-500',
+    '--ds-color-secondary',
+    '--ds-color-secondary-500',
+    '--ds-color-text-primary',
+    '--ds-color-text-secondary',
+    '--ds-font-family-base',
+    ...UNSUCCEEDED_EVERYWHERE,
+  ],
+  bithire: [
+    '--ds-color-bg-secondary',
+    '--ds-color-border',
+    '--ds-color-text-primary',
+    '--ds-color-text-secondary',
+    ...UNSUCCEEDED_EVERYWHERE,
+  ],
+  evnto: [
+    '--ds-color-bg-primary',
+    '--ds-color-bg-secondary',
+    '--ds-color-border',
+    '--ds-color-primary',
+    '--ds-color-primary-500',
+    '--ds-color-secondary',
+    '--ds-color-secondary-500',
+    '--ds-color-text-primary',
+    '--ds-color-text-secondary',
+    '--ds-font-family-base',
+    ...UNSUCCEEDED_EVERYWHERE,
+  ],
+};
+
+/**
+ * Seeds a vertical leaves to the foundation under the neutral compile, so the
+ * channel they compute has no successor in that artifact either. Measured
+ * 2026-09-15: no preset authors a radius seed, so `--ds-radius-sm` and
+ * `--ds-radius-md` resolve from the foundation's own `*-base` defaults in all
+ * three verticals; `--ds-radius-scale` and `--ds-density-scale` are still
+ * declared by every artifact.
+ */
+const UNSUCCEEDED_SEEDS_BY_VERTICAL: Record<string, readonly string[]> = {
+  rottay: ['--ds-radius-sm-base', '--ds-radius-md-base'],
+  bithire: ['--ds-radius-sm-base', '--ds-radius-md-base'],
+  evnto: ['--ds-radius-sm-base', '--ds-radius-md-base'],
 };
 
 const BRAND_THEMES: Record<string, BrandTheme> = {
@@ -257,31 +316,50 @@ describe('the retired block is pinned by name, not by count', () => {
     const accounted = [
       ...SUCCEEDED_DIRECTLY,
       ...Object.keys(SUCCEEDED_BY_SEED),
-      ...UNSUCCEEDED_BY_VERTICAL.bithire,
+      ...UNSUCCEEDED_EVERYWHERE,
     ].sort();
     expect(accounted).toEqual([...RETIRED_EMERGENCY_CHANNELS].sort());
+
+    // A vertical may leave a direct successor or a seed to the foundation; it
+    // may never name a channel outside the partition above.
+    const leavable: readonly string[] = [...SUCCEEDED_DIRECTLY, ...UNSUCCEEDED_EVERYWHERE];
+    const seeds = Object.values(SUCCEEDED_BY_SEED).flat();
+    for (const slug of Object.keys(UNSUCCEEDED_BY_VERTICAL)) {
+      for (const channel of UNSUCCEEDED_BY_VERTICAL[slug] ?? []) {
+        expect(leavable, `${slug} ${channel}`).toContain(channel);
+      }
+      for (const seed of UNSUCCEEDED_SEEDS_BY_VERTICAL[slug] ?? []) {
+        expect(seeds, `${slug} ${seed}`).toContain(seed);
+      }
+    }
   });
 });
 
 describe('the successor authors the retired channels, measured fresh', () => {
-  it.each(SLUGS)('%s authors every directly succeeded channel', (slug) => {
+  it.each(SLUGS)('%s authors every directly succeeded channel it does not leave to the foundation', (slug) => {
     const declared = freshlyDeclaredChannels(slug);
+    const left = new Set(UNSUCCEEDED_BY_VERTICAL[slug] ?? []);
 
     // Non-vacuity: a renderer that produced nothing would satisfy every
     // `not.toContain` below and most of the emptiness checks above.
     expect(declared.size).toBeGreaterThan(200);
-    expect(SUCCEEDED_DIRECTLY.filter((channel) => !declared.has(channel))).toEqual([]);
+    expect(
+      SUCCEEDED_DIRECTLY.filter((channel) => !left.has(channel) && !declared.has(channel)),
+    ).toEqual([]);
   });
 
-  it.each(SLUGS)('%s authors the seed for every channel it no longer writes flat', (slug) => {
+  it.each(SLUGS)('%s authors the seed for every channel it no longer writes flat, or leaves it by name', (slug) => {
     const declared = freshlyDeclaredChannels(slug);
+    const leftSeeds = new Set(UNSUCCEEDED_SEEDS_BY_VERTICAL[slug] ?? []);
 
     for (const [channel, seeds] of Object.entries(SUCCEEDED_BY_SEED)) {
       // The flat channel is genuinely absent -- this is not a channel the
       // artifact writes twice. It is computed downstream from these seeds.
       expect(declared.has(channel), `${slug} unexpectedly writes ${channel} flat`).toBe(false);
       for (const seed of seeds) {
-        expect(declared.has(seed), `${slug} is missing ${seed}, the seed for ${channel}`).toBe(true);
+        // Exact both ways: a seed pinned as left to the foundation is absent,
+        // every other seed is declared.
+        expect(declared.has(seed), `${slug} ${seed}, the seed for ${channel}`).toBe(!leftSeeds.has(seed));
       }
     }
   });

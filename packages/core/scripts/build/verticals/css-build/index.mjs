@@ -43,12 +43,9 @@ import { fileURLToPath } from "node:url";
 
 import { wrapModernFrameworkLayer } from "../../../libraries/engine/framework/index.mjs";
 
-// Spring precompute inputs (TASK S item 2). Imported from dist, like
-// build-vertical-artifacts.mjs, so this script runs after `tsc && vite build`
-// (build:vertical-css sequences it).
-import { springLinearEasing } from "../../../../dist/infrastructure/compilers/kernel/foundation/motion/spring-easing/index.js";
+// The roster is imported from dist, like build-vertical-artifacts.mjs, so this
+// script runs after `tsc && vite build` (build:vertical-css sequences it).
 import { FIRST_PARTY_VERTICAL_ROSTER } from "../../../../dist/foundation/presets/verticals/roster/index.js";
-import * as brandThemes from "../../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js";
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -260,10 +257,6 @@ for (const match of baseCssWithoutComments.matchAll(/@layer\s+([a-z0-9-]+)\s*\{/
 // the bundle basename, because the roster derives all three from one field.
 const CSS_SOURCE_PREFIX = "foundation/tokens/css/";
 const verticals = FIRST_PARTY_VERTICAL_ROSTER.map((row) => {
-  const theme = brandThemes[`${row.slug}BrandTheme`];
-  if (!theme || theme.id !== row.slug) {
-    throw new Error(`First-party roster mismatch: theme.id ${theme?.id} !== slug ${row.slug}`);
-  }
   if (!row.artifactPath.startsWith(CSS_SOURCE_PREFIX)) {
     throw new Error(`First-party artifact path is outside the CSS source root: ${row.artifactPath}`);
   }
@@ -271,7 +264,6 @@ const verticals = FIRST_PARTY_VERTICAL_ROSTER.map((row) => {
     name: row.slug,
     tenantFile: row.artifactPath.slice(CSS_SOURCE_PREFIX.length),
     fontPacks: [...row.fontPacks],
-    theme,
     selector: row.selector,
   };
 });
@@ -289,44 +281,6 @@ function fontPackBundle(fontPacks) {
       return readFile(fontPackPath).replaceAll("url('./", "url('./fonts/");
     })
     .join("\n");
-}
-
-// --ds-motion-spring precompute (TASK S item 2). The base --ds-motion-spring
-// (foundation/animations/transitions/index.css) is a cubic-bezier approximation. The
-// tenant-artifact path already emits a generated linear() for
-// --ds-motion-spring-gentle, but NOT for the primary --ds-motion-spring: that
-// only rides the tenant/DB compile path (TenantThemeDocument ->
-// compileTenantThemeConfig, infrastructure/compilers/composition/tenant-theme),
-// which the static first-party artifact build does not render. Here the
-// first-party build derives the primary spring from each theme's own
-// tension/friction and injects a tenant-scoped override, honoring useSpring --
-// bithire (useSpring: false) is skipped and keeps the foundation default. The
-// eligibility test mirrors isSpringEligible() in the brand-theme compiler; the
-// selector mirrors the tenant artifact's own :is(...) root so the override lands
-// on the same element as the tenant's other tokens. Injected UNLAYERED after the
-// tenant CSS, so it wins the base :root cubic-bezier by specificity + source
-// order.
-function springOverrideBlock(vertical) {
-  const { name, selector, theme } = vertical;
-  const motion = theme.motion;
-  if (
-    !motion ||
-    typeof motion.springTension !== "number" ||
-    typeof motion.springFriction !== "number" ||
-    motion.useSpring === false
-  ) {
-    return null;
-  }
-  const easing = springLinearEasing(
-    motion.springTension,
-    motion.springFriction
-  );
-  return [
-    `/* === ${name} spring easing (precomputed linear() from the BrandTheme, useSpring) === */`,
-    `${selector} {`,
-    `  --ds-motion-spring: ${easing};`,
-    `}`,
-  ].join("\n");
 }
 
 if (!check) {
@@ -363,7 +317,6 @@ for (const vertical of verticals) {
   // DaisyUI is gone, and it was never the reason this had to be unlayered.
   // See infrastructure/runtime/theming/foundation/cascade-layers:
   // TENANT_PAINT_IS_UNLAYERED.
-  const springBlock = springOverrideBlock(vertical);
   const verticalFontPacks = fontPackBundle(fontPacks);
   const bundle = [
     `/* @rottay/design-system - ${name} vertical bundle */`,
@@ -380,7 +333,6 @@ for (const vertical of verticals) {
     "",
     `/* === ${name} tenant overrides (unlayered, wins by specificity + source order) === */`,
     tenantCss,
-    ...(springBlock ? ["", springBlock] : []),
   ].join("\n");
 
   // Verify no cross-tenant or cross-provider-root contamination.
@@ -432,13 +384,6 @@ const allTenantsCss = verticals
   })
   .join("\n");
 
-// Each per-tenant spring override is scoped to its own tenant root, so the
-// all-tenants bundle can carry every eligible one without cross-tenant bleed.
-const allSpringBlocks = verticals
-  .map((vertical) => springOverrideBlock(vertical))
-  .filter(Boolean)
-  .join("\n\n");
-
 // The development/Storybook bundle can render every first-party vertical, so
 // it also carries the union of their declared font packs. Deduplication keeps a
 // future shared pack from being emitted more than once.
@@ -462,13 +407,6 @@ const stylesBundle = [
   "",
   `/* === All tenant overrides (unlayered, wins by specificity + source order) === */`,
   allTenantsCss,
-  ...(allSpringBlocks
-    ? [
-        "",
-        `/* === Precomputed spring easings (per-tenant, useSpring) === */`,
-        allSpringBlocks,
-      ]
-    : []),
 ].join("\n");
 
 if (check) {

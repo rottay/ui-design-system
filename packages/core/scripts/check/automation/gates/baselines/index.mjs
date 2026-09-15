@@ -284,22 +284,13 @@ export const ANONYMOUS_LEDGERS = Object.freeze([
  * growth.
  */
 export const PINNED_APCA_PAIRS = Object.freeze([
-  'rottay|--ds-color-success-900',
-  'rottay|--ds-color-warning-900',
-  'rottay|--ds-color-error-900',
-  'rottay|--ds-color-info-900',
-  'bithire|dark|--ds-color-accent-900',
-  'bithire|dark|--ds-color-success-900',
-  'bithire|dark|--ds-color-warning-900',
-  'bithire|dark|--ds-color-error-900',
-  'bithire|dark|--ds-color-info-900',
-  'evnto|dark|--ds-color-primary-900',
-  'evnto|dark|--ds-color-secondary-900',
-  'evnto|dark|--ds-color-accent-900',
-  'evnto|dark|--ds-color-success-900',
-  'evnto|dark|--ds-color-warning-900',
-  'evnto|dark|--ds-color-error-900',
-  'evnto|dark|--ds-color-info-900',
+  // 2026-09-15 (D6-2c-i): the artifacts compile from the neutral foundation +
+  // preset; build:vertical-artifacts measures 0 pairings below the body floor,
+  // so the 16 former entries (rottay base success/warning/error/info -900;
+  // bithire dark accent/success/warning/error/info -900; evnto dark
+  // primary/secondary/accent/success/warning/error/info -900) left the ledger
+  // under the decrease-only rule and leave this set with it. A ramp a preset
+  // authors later is measured against its own ground and re-adjudicated.
 ]);
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
