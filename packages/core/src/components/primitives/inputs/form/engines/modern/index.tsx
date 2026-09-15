@@ -120,7 +120,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   const { label, extra, help, hidden, tooltip, children, className = '', style } = props;
   const item = useFormItem(props);
   const { layout, requiredMark, labelAlign } = item.context;
-  const { fieldErrors, hasError, isWarning, isRequired, showColon, showFeedback, feedbackStatus } = item;
+  const { fieldErrors, fieldWarnings, hasError, isWarning, isRequired, showColon, showFeedback, feedbackStatus } = item;
   // The label's htmlFor must track the control the item ACTUALLY points at:
   // a child with its own `id` wins over the generated one.
   const firstChildProvidedId = React.Children.toArray(children).reduce<string | undefined>(
@@ -132,8 +132,9 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
   if (hidden) return null;
 
+  const message = help || fieldErrors[0] || fieldWarnings[0];
   const childrenWithProps = bindFormItemControls(children, item, {
-    describedBy: help || fieldErrors.length > 0 || extra ? messageId : undefined,
+    describedBy: message || extra ? messageId : undefined,
   });
 
   // Layout (horizontal label split, label/field geometry, message rhythm) is
@@ -176,7 +177,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
             <FeedbackIcon status={feedbackStatus} />
           )}
         </div>
-        {(help || fieldErrors.length > 0) && (
+        {message && (
           <div data-part="message" id={messageId} role={hasError ? 'alert' : undefined}>
             {/* Error posture rides shape + live announcement, never hue alone:
                 same governed status.error idiom as FormField's error-icon. */}
@@ -184,12 +185,12 @@ const FormItem: React.FC<FormItemProps> = (props) => {
               <StatusErrorIcon decorative size={13} data-part="error-icon" />
             )}
             <span data-part="help-text" data-error={hasError ? 'true' : 'false'} data-tone={isWarning && !hasError ? 'warning' : undefined}>
-              {help || fieldErrors[0]}
+              {message}
             </span>
           </div>
         )}
         {extra && (
-          <div data-part="message" id={!help && fieldErrors.length === 0 ? messageId : undefined}>
+          <div data-part="message" id={!message ? messageId : undefined}>
             <span data-part="extra-text">{extra}</span>
           </div>
         )}

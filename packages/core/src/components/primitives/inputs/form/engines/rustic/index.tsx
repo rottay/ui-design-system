@@ -67,7 +67,7 @@ import React, { useImperativeHandle } from 'react';
 import type { FormProps, FormItemProps, FormErrorListProps, FormInstance } from '../../contracts';
 import { FORM_DEFAULTS } from '../../contracts';
 import { FormContext, bindFormItemControls, composeForm, useForm, useFormErrors, useFormItem, useFormRoot } from '../../runtime/state';
-import type { ValidationCatalog } from '../../runtime/validation';
+import { FALLBACK_TRANSLATE_OR, type ValidationCatalog } from '../../runtime/validation';
 
 export { useForm };
 
@@ -196,11 +196,32 @@ const styles = {
  */
 const RUSTIC_CATALOG: ValidationCatalog = {
   namespace: 'components',
-  create: (t) => ({
+  create: (t, tOr = FALLBACK_TRANSLATE_OR) => ({
     required: (name) => t('form.required_with_name', { name }),
     minLength: (min) => t('form.min_length', { min }),
     maxLength: (max) => t('form.max_length', { max }),
     pattern: () => t('form.invalid_format'),
+    length: (len) => tOr('form.length', `Must be exactly ${len} characters`, { len }),
+    minValue: (min) => tOr('form.min_value', `Minimum value is ${min}`, { min }),
+    maxValue: (max) => tOr('form.max_value', `Maximum value is ${max}`, { max }),
+    minItems: (min) => tOr('form.min_items', `Must have at least ${min} items`, { min }),
+    maxItems: (max) => tOr('form.max_items', `Must have at most ${max} items`, { max }),
+    type: (type) => {
+      switch (type) {
+        case 'email':
+          return tOr('form.email', 'Must be a valid email');
+        case 'url':
+          return tOr('form.url', 'Must be a valid URL');
+        case 'number':
+          return tOr('form.number', 'Must be a number');
+        case 'boolean':
+          return tOr('form.boolean', 'Must be true or false');
+        case 'array':
+          return tOr('form.array', 'Must be a list');
+        default:
+          return tOr('form.string', 'Must be text');
+      }
+    },
   }),
 };
 
@@ -247,7 +268,9 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   const {
     context: { layout, requiredMark },
     fieldErrors,
+    fieldWarnings,
     hasError,
+    isWarning,
     isRequired,
     showColon,
     showFeedback,
@@ -273,6 +296,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   };
 
   const childrenWithProps = bindFormItemControls(children, item);
+  const message = help || fieldErrors[0] || fieldWarnings[0];
 
   return (
     <div className={`ds-form-item ds-form-item--rustic ${className}`} data-part="item" style={itemStyle}>
@@ -291,8 +315,16 @@ const FormItem: React.FC<FormItemProps> = (props) => {
             <RusticFeedbackIcon status={feedbackStatus} />
           )}
         </div>
-        {(help || fieldErrors.length > 0) && (
-          <div data-part="help-text" data-error={hasError ? 'true' : 'false'} data-status={validateStatus} style={helpStyle}>{help || fieldErrors[0]}</div>
+        {message && (
+          <div
+            data-part="help-text"
+            data-error={hasError ? 'true' : 'false'}
+            data-status={validateStatus}
+            data-tone={isWarning && !hasError ? 'warning' : undefined}
+            style={helpStyle}
+          >
+            {message}
+          </div>
         )}
         {extra && <div data-part="extra-text" style={styles.extra}>{extra}</div>}
       </div>
