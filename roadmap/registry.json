@@ -5366,6 +5366,11 @@
      "at": "2026-09-14 18:06",
      "by": "kimi-admin",
      "note": "INSTRUMENT FLIP landed (0dd8e74bf, audited): NOT_YET_GREEN now names exactly the adjudicated radio/shape pair with its semantic cause, and the instrument passes 4/4 on r4-recon asserting precisely that remainder in both themes and both orientations — the truthful intermediate state: four cells resolved by propagation (with the commits named in the rerun entry), one cell awaiting the owner-level declaration decision. The instrument, the two negative controls, the mutant drill and the population check are otherwise untouched. A2-pilot is NOT claimed: it completes when the radio declaration contract is decided above the DT and the instrument reads 30/30."
+    },
+    {
+     "at": "2026-09-14 20:02",
+     "by": "kimi-admin",
+     "note": "E5 IMPLEMENTED + AUDITED (2d537ae85): the reviewed semantic-identity exclusion withdraws the bare radio from the shape axis. Closed registry pinned to verbatim selector+property+value on the byProperty path only, admitted set pinned to exactly radio/shape; shape vocabulary gains the four physical longhands with membership unchanged (proven: 217->216 is exactly -1); notApplicable published end-to-end (populationReport/populationLine/pilotReadings/pins); pilot pin 29 decision rows with shape 4 applicable + 1 N/A bound to exclusionsRevision 34bd866512177f9b; fleet floor 217->216 by reviewed exclusion. Auditor-rerun evidence: population 31/31 (16 new drills: value drift, duplicate rule, comment-stripped existence, no-effect entry, admitted-set pin, duplicates/overlap), axis-difference 62/62, pilot 6/6 Chromium both modes/orientations with failures [] and exactly one N/A, negative controls 0, severed mutant detected, radio-group continuity drill mounts the real button-style option and measures its corner. typecheck:tests pilot file back to 0. Core review round 1: Codex CHANGES + Fable CHANGES with conditions; all conditions landed; confirmation round dispatched to both reviewers with the compliance package — the WO closes when both ACCEPTs are recorded and the serialized milestone checkpoint passes."
     }
    ],
    "claimedBy": "claude-admin",
