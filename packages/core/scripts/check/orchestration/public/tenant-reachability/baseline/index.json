@@ -430,7 +430,6 @@
     "--ds-switch-checked-bg",
     "--ds-switch-checked-bg-hover",
     "--ds-switch-focus-ring",
-    "--ds-switch-label-color",
     "--ds-switch-thumb-bg",
     "--ds-switch-thumb-shadow",
     "--ds-tag-border",

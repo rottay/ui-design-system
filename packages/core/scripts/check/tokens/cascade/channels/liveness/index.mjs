@@ -1512,7 +1512,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-color-accent-800',
       '--ds-color-accent-900',
       '--ds-color-info-300',
-      '--ds-color-text-page',
       '--ds-glass-bg',
       '--ds-glass-border',
       '--ds-overlay-heavy',
