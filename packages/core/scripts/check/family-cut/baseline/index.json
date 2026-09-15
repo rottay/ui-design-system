@@ -23,8 +23,8 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 1,
-      "cutNote": "WO-FAM-01: the 32 shadow channels and the label weight/family are emitted by derivation/chrome/button; the press recipe timing is stamped onto the button channels; one `ds-` vocabulary. Two pins stay above 0 for adjudication, never by a fabricated reader: partsStampedNotConsumed=1 is `trigger`, the default root part a composite may rename (P-79), so the skin anchors on `[data-variant]` and the part is read by the anatomy skeleton renderer instead; fanOutUnreached=1 is `recipe-profile`, whose only channel `--ds-recipe-profile` is provenance owned by WO-DER-06 while the profile reaches the button through the runtime."
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-01: the 32 shadow channels and the label weight/family are emitted by derivation/chrome/button; the press recipe timing is stamped onto the button channels; one `ds-` vocabulary. One pin stays above 0 for adjudication, never by a fabricated reader: partsStampedNotConsumed=1 is `trigger`, the default root part a composite may rename (P-79), so the skin anchors on `[data-variant]` and the part is read by the anatomy skeleton renderer instead. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
     },
     "checkbox": {
       "cut": "WO-FAM-01",
@@ -44,8 +44,8 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 1,
-      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/checkbox, structural constants by presentation/components/checkbox; state decided by the interaction kernel on the root; one ds- vocabulary. fanOutUnreached=1 is recipe-profile: RecipeProfileDefaultsByFamily declares no checkbox axis and its only channel is provenance owned by WO-DER-06."
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/checkbox, structural constants by presentation/components/checkbox; state decided by the interaction kernel on the root; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
     },
     "radio": {
       "cut": "WO-FAM-01",
@@ -65,8 +65,8 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 1,
-      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/radio, structural constants by presentation/components/radio; state decided by the interaction kernel on the root and on each Radio.Group segment; the segment colour resolves from data-color, never from inline channels; one ds- vocabulary. fanOutUnreached=1 is recipe-profile: RecipeProfileDefaultsByFamily declares no radio axis and its only channel is provenance owned by WO-DER-06."
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/radio, structural constants by presentation/components/radio; state decided by the interaction kernel on the root and on each Radio.Group segment; the segment colour resolves from data-color, never from inline channels; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
     },
     "toggle": {
       "cut": "WO-FAM-01",
@@ -86,8 +86,8 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 1,
-      "cutNote": "WO-FAM-01: Switch and Toggle are one family (D-16); Toggle keeps the richer contract and absorbs Switch's busy semantics, click value, ref and accessible-name paths, and Switch survives only as a deprecated alias compound. Decision relations by derivation/chrome/toggle, constants by presentation/components/toggle; one ds-toggle vocabulary and one --ds-toggle-* namespace read by the skin. fanOutUnreached=1 is recipe-profile: no toggle axis exists and its only channel is provenance owned by WO-DER-06."
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-01: Switch and Toggle are one family (D-16); Toggle keeps the richer contract and absorbs Switch's busy semantics, click value, ref and accessible-name paths, and Switch survives only as a deprecated alias compound. Decision relations by derivation/chrome/toggle, constants by presentation/components/toggle; one ds-toggle vocabulary and one --ds-toggle-* namespace read by the skin. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
     },
     "segmented": {
       "cut": "WO-FAM-01",
@@ -128,8 +128,8 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 1,
-      "cutNote": "WO-FAM-02: every channel the Modern skin reads is written -- field relations by derivation/chrome/input, structural constants by presentation/components/input; clear, search and reveal actions decide state through the field-action kernel; one ds-input vocabulary (the rottay-input classes and the comment-only input-residual skin are gone). Two pins stay above 0 for adjudication, never by a fabricated stamp: partsConsumedNotStamped=1 is `trigger`, the Select trigger part the input-compounds skin composes inside a compact Input.Group (select is WO-FAM-03's family); fanOutUnreached=1 is recipe-profile, whose only channel is provenance owned by WO-DER-06."
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-02: every channel the Modern skin reads is written -- field relations by derivation/chrome/input, structural constants by presentation/components/input; clear, search and reveal actions decide state through the field-action kernel; one ds-input vocabulary (the rottay-input classes and the comment-only input-residual skin are gone). One pin stays above 0 for adjudication, never by a fabricated stamp: partsConsumedNotStamped=1 is `trigger`, the Select trigger part the input-compounds skin composes inside a compact Input.Group (select is WO-FAM-03's family). WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
     },
     "textarea": {
       "cut": "WO-FAM-02",
@@ -298,8 +298,8 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 1,
-      "cutNote": "WO-FAM-03: every channel the Modern skin reads is written -- field and dropdown relations by derivation/chrome/select, structural constants by presentation/components/select; keyboard and type-ahead come from runtime/collection/listbox, the dropdown from useFieldOverlay, and clear, tag-remove and search decide state through the interaction and field-action kernels; one ds-select vocabulary (the rottay-select option and optgroup compounds answer to ds-select-option/ds-select-optgroup). fanOutUnreached=1 stays for adjudication: recipe-profile, whose only channel is provenance owned by WO-DER-06."
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-03: every channel the Modern skin reads is written -- field and dropdown relations by derivation/chrome/select, structural constants by presentation/components/select; keyboard and type-ahead come from runtime/collection/listbox, the dropdown from useFieldOverlay, and clear, tag-remove and search decide state through the interaction and field-action kernels; one ds-select vocabulary (the rottay-select option and optgroup compounds answer to ds-select-option/ds-select-optgroup). WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
     },
     "auto-complete": {
       "cut": "WO-FAM-03",
@@ -749,6 +749,69 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-05 lot 1: surface, row, current-marker, icon, panel, group and divider relations by derivation/chrome/menu (92 --ds-menu-* channels on the spacing ramp, the type roles, the elevation scale and the produced --ds-sidebar-* roots); skin/menu paints the engine tree and skin/menu-compounds the compounds, both on one ds-menu vocabulary; rows, triggers and compounds decide state through the interaction kernel; keyboard and the RTL-aware disclosure axis from runtime/collection/roving-focus; the submenu compound is a menuitem row with a data-open track, no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
+    },
+    "tabs": {
+      "cut": "WO-FAM-05",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 6,
+        "channelsRead": 171,
+        "classTokens": 2,
+        "partsStamped": 13,
+        "partsConsumed": 13
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-05 lot 2: rail, list, destination, indicator, badge, overflow controls and panel relations by derivation/chrome/tabs (128 --ds-tabs-* channels on the spacing ramp, the type roles, the tab roots, the elevation scale and the intent cadences, --ds-tabs-motion-easing on --ds-motion-ease-standard); skin/tabs paints the engine tree on one ds-tabs vocabulary and keys its four trays on data-variant with the line/card aliases; destinations, overflow controls and the panel decide state through the interaction kernel; keyboard walks through runtime/collection/roving-focus intents on both axes; the indicator's measured offset and scale are the only inline channels; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
+    },
+    "breadcrumb": {
+      "cut": "WO-FAM-05",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 5,
+        "channelsRead": 63,
+        "classTokens": 3,
+        "partsStamped": 8,
+        "partsConsumed": 8
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-05 lot 2: trail, crumb, current cell, link ink, icon, separator, ellipsis and overflow-trigger relations by derivation/chrome/breadcrumb (43 --ds-breadcrumb-* channels on the spacing ramp, the supporting type role, the card material and the elevation scale); skin/breadcrumb paints the engine tree and skin/breadcrumb-compounds the Breadcrumb.Item compound, both on one ds-breadcrumb vocabulary; crumbs, the overflow trigger and the compound link decide state through the interaction kernel; the compound carries no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
+    },
+    "pagination": {
+      "cut": "WO-FAM-05",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 63,
+        "classTokens": 2,
+        "partsStamped": 12,
+        "partsConsumed": 12
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-05 lot 2: toolbar, joined controls, current page, range readout, quick jumper and size changer relations by derivation/chrome/pagination (42 --ds-pagination-* channels on the spacing ramp, the body and supporting type roles, the card material and the focus ring; the former --_ds-pagination-* prototokens are produced channels now); skin/pagination paints the engine tree on one ds-pagination vocabulary; nav and page buttons, the jumper input and the native size select decide state through the interaction kernel; the ellipsis is inert readout and no longer a pointer target; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
     }
   }
 }

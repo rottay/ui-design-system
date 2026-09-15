@@ -900,7 +900,6 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     consumes: [],
     produces: {
       channels: [
-        "--ds-experience-profile",
         "--ds-letter-spacing-heading",
         "--ds-edge-standard-width",
         "--ds-material-canvas-texture",
@@ -986,7 +985,7 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
       brandTheme: "recipes.profile",
     },
     consumes: [],
-    produces: { channels: ["--ds-recipe-profile"], rootAttributes: [] },
+    produces: { channels: [], rootAttributes: [] },
     minimumFamilies: {
       kind: "declared-fan-out",
       families: [
@@ -1003,7 +1002,7 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
       ],
     },
     envelope: "locked-by-default",
-    effect: "css-channels",
+    effect: "data-only",
     defaultBehavior: "no profile: family recipe defaults apply",
   },
   {

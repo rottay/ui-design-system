@@ -1,15 +1,18 @@
 /**
  * Recipe-profile single resolution path.
  *
- * The selection exists in TWO places at runtime: the React context published by
- * `RecipeProfileProvider`, and a `--ds-recipe-profile` custom property the brand
- * and tenant-theme compilers write into every artifact. Two representations of
- * one decision is exactly the shape a second authority takes.
+ * The selection (a profile id) travels ONE way: the compiler validates it into
+ * the runtime payload, the artifact runtime block and the provider carry it as
+ * data, and components read the React context published by
+ * `RecipeProfileProvider`. The catalog row is `data-only`: it declares no
+ * channel, so no compiler mints `--ds-recipe-profile` and no production source
+ * names it. Two representations of one decision is exactly the shape a second
+ * authority takes, and this suite pins that the second one does not exist.
  *
- * The truth this suite pins is that the CSS variable is INERT — a provenance
- * label carried by the artifact, never a resolution input. Components read the
- * context and nothing else, so an artifact whose variable disagrees with the
- * mounted context cannot move a single component.
+ * A custom property of that name can still appear in a document -- a stale
+ * artifact, an author's hand -- and the truth pinned here is that it is INERT:
+ * components read the context and nothing else, so a planted variable that
+ * disagrees with the mounted context cannot move a single component.
  *
  * `recipe-profile.integration.test.tsx` already proves the context path itself
  * (static BrandTheme selection, DB Appearance override, fail-closed on an
@@ -23,6 +26,7 @@ import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { themeControl } from '@/contracts/theme/runtime/catalog';
 import ModernButton from '@/components/primitives/inputs/button/engines/modern';
 import { RecipeProfileProvider } from '..';
 
@@ -30,29 +34,6 @@ const RECIPE_PROFILE_VARIABLE = '--ds-recipe-profile';
 const PROFILE_ID = 'rottay/technical-sharp@1';
 const SOURCE_ROOT = resolve(process.cwd(), 'src');
 const STYLE_ID = 'planted-recipe-profile-variable';
-
-/**
- * Files allowed to mention the variable: the emitter, the admission that
- * exempts the emitted channel from the general value parser, its two
- * declarative owners, and the three engine adapters — which name it only inside
- * the evidence string that states no engine surface reads it. A mention there
- * is the opposite of a consumer: it is the recorded proof of absence.
- *
- * `composition/tenant-theme` left the list in WO-CAT-03: the exemption it named
- * moved with the rest of the admission to the compile door, so the DB terminal
- * no longer mentions the channel at all. `contracts/theme/runtime/catalog` is
- * WO-CAT-02's typed catalog, which DECLARES the channel as the row's fan-out;
- * declaring what a control produces is not reading it.
- */
-const ALLOWED_MENTIONS = [
-  'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.ts',
-  'infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.ts',
-  'contracts/theme/runtime/catalog/index.ts',
-  'foundation/contracts/composition/tenants/capabilities/index.ts',
-  'infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts',
-  'infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts',
-  'infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.ts',
-];
 
 function isProductionSource(path: string): boolean {
   if (!path.endsWith('.ts') && !path.endsWith('.tsx')) return false;
@@ -97,10 +78,9 @@ afterEach(() => {
 });
 
 describe('recipe profile — one resolution path', () => {
-  it('is emitted by the compilers, so the census is not looking for nothing', () => {
-    // Anti-cheat for the census below: the variable must actually exist in
-    // compiled output, otherwise "nobody reads it" is a statement about a
-    // string that was never written.
+  it('is no longer emitted by the compilers: the selection is a runtime payload, not a channel', () => {
+    // The census below is not looking for nothing: a valid selection still
+    // resolves, and it reaches the product through the payload alone.
     const compiled = lowerBrandThemeFixture({
       brandTheme: {
         id: 'recipe-profile-probe',
@@ -110,14 +90,25 @@ describe('recipe profile — one resolution path', () => {
       tenantSlug: 'recipe-profile-probe',
     });
 
-    expect(compiled.cssVariables[RECIPE_PROFILE_VARIABLE]).toBe(`"${PROFILE_ID}"`);
+    expect(compiled.recipeProfile).toBe(PROFILE_ID);
+    expect(compiled.cssVariables[RECIPE_PROFILE_VARIABLE]).toBeUndefined();
     expect(SOURCES.length).toBeGreaterThan(1500);
   });
 
-  it('is mentioned only by its contract owner and emitters, never by a consumer', () => {
+  it('is declared by the catalog as data-only: the row produces no channel', () => {
+    const row = themeControl('recipe-profile');
+    expect(row.effect).toBe('data-only');
+    expect([...row.produces.channels]).toEqual([]);
+    expect(row.minimumFamilies.kind).toBe('declared-fan-out');
+  });
+
+  it('is named by no production source, so no consumer can exist', () => {
     // A reader would have to name the variable to read it — `var()`,
     // `getPropertyValue`, or a computed-style probe all require the literal.
-    expect(MENTIONS.sort()).toEqual([...ALLOWED_MENTIONS].sort());
+    // The compilers dropped the emitter, the admission exemption and the
+    // adapters' evidence strings, and the catalog row declares no channel, so
+    // the census measures exactly what the data-only row states: nothing.
+    expect(MENTIONS).toEqual([]);
   });
 
   it('moves no component when the artifact disagrees with the mounted context', () => {

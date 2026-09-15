@@ -28,6 +28,7 @@ import {
   analyzeSkin,
   analyzeSource,
   collectFindings,
+  fanOutFor,
   judgeFamily,
   measureFamily,
   readBaseline,
@@ -1021,4 +1022,32 @@ test('PLANT: a prefixed skin that selects no class the family names is another o
     assert.match(resolved.foreignSkins[0].reason, /selects no class/u);
     assert.deepEqual(findings, []);
   });
+});
+
+test('CONTROL: a data-only row that declares the family and produces no channel is not a fan-out claim', () => {
+  const catalog = [{
+    id: 'recipe-profile',
+    effect: 'data-only',
+    produces: { channels: [], rootAttributes: [] },
+    minimumFamilies: { kind: 'declared-fan-out', families: [FAMILY] },
+  }];
+  assert.deepEqual(fanOutFor(FAMILY, new Set(), catalog), []);
+});
+
+test('PLANT: emptying produces.channels alone does not close the claim -- a css-channels row with no channel is still unreached', () => {
+  const catalog = [{
+    id: 'recipe-profile',
+    effect: 'css-channels',
+    produces: { channels: [], rootAttributes: [] },
+    minimumFamilies: { kind: 'declared-fan-out', families: [FAMILY] },
+  }];
+  const rows = fanOutFor(FAMILY, new Set(), catalog);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].unreached, true);
+});
+
+test('LIVE: the real recipe-profile row is data-only, so no family under the cut carries it as an unreached claim', () => {
+  for (const family of Object.keys(readBaseline().families)) {
+    assert.deepEqual(fanOutFor(family, new Set()).filter((row) => row.control === 'recipe-profile'), [], family);
+  }
 });

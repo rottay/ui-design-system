@@ -839,6 +839,9 @@ export function fanOutFor(family, readNames, catalog = readThemeCatalog()) {
   for (const row of catalog) {
     const minimum = row.minimumFamilies ?? {};
     if (minimum.kind !== 'declared-fan-out') continue;
+    // A data-only row reaches its families as runtime data, not as a cascade
+    // channel, so it cannot be an unreached fan-out claim.
+    if (row.effect === 'data-only') continue;
     if (!(minimum.families ?? []).includes(family)) continue;
     const channels = row.produces?.channels ?? [];
     const reached = channels.filter((channel) => readNames.has(channel));
