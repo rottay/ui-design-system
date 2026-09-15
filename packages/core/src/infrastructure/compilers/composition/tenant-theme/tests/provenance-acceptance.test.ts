@@ -478,6 +478,40 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *   1229  medido hoy
      * --ds-material-raised-foreground sigue removido: es el unico de los tres del
      * Lote F que si era duplicado sin ruta de override que proteger. */
+    /* Family-cut wave, measured commit by commit on isolated copies of the tree
+     * (2026-09-14), with the same `lowerTheme` call the assertion below makes.
+     * Every row is one commit and the parent of every row measures exactly the
+     * previous row, so nothing between rows moved and the sums close with no
+     * residue. Cells are added/removed keys per vertical, rottay / bithire /
+     * evnto; a rename counts on both sides. This test has no --write mode: the pins
+     * are inline, so this table is the procedure.
+     *   1307 / 1283 /  584  anchor ff65f13c8 (WO-DER-05), the pins this table starts from
+     *         +1      +36       +2  327c190d1  button (WO-FAM-01)
+     *         +5       +8       +8  89e4920a5  checkbox
+     *         +3       +8       +8  85e8dc70b  radio
+     *        +11      +16      +16  e31c1174e  toggle
+     *        +28       +3      +29  3c41c9dcc  segmented
+     *         +2       +1       +2  9d924e9f2  controls fix: toggle-hover, segmented-item
+     *    +12/-12       +0       +0  82c900730  input-number rename: rottay's authored --ds-inputnumber-* emit as --ds-input-number-* (WO-FAM-02)
+     *       +112     +130     +137  cbce5ba71  field derivers wired: input, textarea, password-input, otp-input, tag-input, input-number, form-field, form
+     *   +245/-31  +253/-1  +253/-1  bebfa7d3e  selection derivers wired: select, auto-complete, cascader, tree-select, mentions, transfer, date-picker, time-picker, color-picker; rottay drops the 31 pre-cut autocomplete/datepicker/timepicker names, bithire and evnto drop --ds-timepicker-panel-shadow (WO-FAM-03)
+     *        +29       +0       +0  6b1bd546a  29 pre-cut picker names restated for the frozen skins, rottay only
+     *        +19      +19      +34  75d77e375  modal (WO-FAM-04)
+     *        +23      +29      +29  dc770e967  drawer
+     *        +23      +23      +23  37063a7ed  sheet
+     *        +38      +38      +38  a9e48ebc1  alert-dialog 16 + confirm-dialog 22
+     *        +29      +29      +29  0d154c0d4  popover
+     *         +6       +6       +6  008fb6609  hover-card
+     *        +27      +31      +31  c6be7d3bd  dropdown
+     *        +34      +40      +40  179da599a  tooltip
+     *        +23      +23      +23  b43b9b7e9  tour
+     *       +115     +115     +115  a4a8b6f2e  notifier (toast, notification, message roles)
+     *        +55      +55      +55  0866afe18  alert with Callout folded in
+     *     +0/-12   +0/-12   +0/-12  85bc5edc9  bare-var accent channels retired: alert 4 + notifier 8
+     *         +4       +4       +4  3082d0dfb  --ds-alert-<tone>-wash-subtle
+     *         +2       +2       +2  04e835647  --ds-toggle-{track,dot}-border-radius
+     *   2098 / 2139 / 1455  measured today (51aea6509)
+     * Totals: rottay +846/-55, bithire +869/-13, evnto +884/-13. */
     const counts: Record<Vertical, number> = {
       // COH-1 (2026-08-30): 1192 -> 1196. `deriveStatusTintFloor` now
       // explicitly emits `--ds-color-alpha-{success,warning,error,info}-10`
@@ -513,7 +547,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // `--ds-color-neutral-ink` and `--ds-color-neutral-paper`, the monochrome
       // ramp's own anchors, read by `foundation/monochrome`. No surviving value
       // moved: the -8 is a keyset move, not a paint move.
-      rottay: 1307,
+      // Family-cut wave (measured, 2026-09-14): rottay 1307 -> 2098, added 846, removed
+      // 55, commit by commit in the table above.
+      rottay: 2098,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -536,7 +572,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // `--ds-color-neutral-ink` and `--ds-color-neutral-paper`, the monochrome
       // ramp's own anchors, read by `foundation/monochrome`. No surviving value
       // moved: the -8 is a keyset move, not a paint move.
-      bithire: 1283,
+      // Family-cut wave (measured, 2026-09-14): bithire 1283 -> 2139, added 869, removed
+      // 13, commit by commit in the table above.
+      bithire: 2139,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -562,7 +600,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // `--ds-color-neutral-ink` and `--ds-color-neutral-paper`, the monochrome
       // ramp's own anchors, read by `foundation/monochrome`. No surviving value
       // moved: the -8 is a keyset move, not a paint move.
-      evnto: 584,
+      // Family-cut wave (measured, 2026-09-14): evnto 584 -> 1455, added 884, removed
+      // 13, commit by commit in the table above.
+      evnto: 1455,
     };
     for (const vertical of VERTICALS) {
       expect(
